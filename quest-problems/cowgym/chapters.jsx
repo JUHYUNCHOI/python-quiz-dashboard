@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getCowGymSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -394,7 +395,7 @@ export function makeCowGymCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeCowGymCh3(E) {
+export function makeCowGymCh3(E, lang = "py") {
   return [
     // 3-1: Read input and build rank array
     {
@@ -504,12 +505,11 @@ export function makeCowGymCh3(E) {
     },
     // 3-5: Complete code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution! Read ranks, check all pairs, print the count.",
-        "전체 풀이야! 순위 읽기, 모든 쌍 확인, 개수 출력."),
-      label: t(E, "Complete Solution", "전체 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getCowGymSections(E),
     },
   ];
 }

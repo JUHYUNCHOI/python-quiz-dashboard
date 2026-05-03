@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getShellGameSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -373,7 +374,7 @@ export function makeShellCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeShellCh3(E) {
+export function makeShellCh3(E, lang = "py") {
   return [
     // 3-1: Read input
     {
@@ -483,12 +484,11 @@ export function makeShellCh3(E) {
     },
     // 3-5: Complete code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Finally, after all 3 starts, print the best score. Here's the complete solution!",
-        "마지막으로 3가지 시작 위치를 모두 시도한 후 최고 점수를 출력해. 전체 풀이!"),
-      label: t(E, "Complete Solution", "전체 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getShellGameSections(E),
     },
   ];
 }

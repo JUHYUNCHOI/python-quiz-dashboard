@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
-import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
+import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
+import { Mcc21SimpleMathProgressiveCode, downloadMcc21SimpleMathPDF, getMcc21SimpleMathSections } from "./components";
 import { makeMcc21SimpleMathCh1, makeMcc21SimpleMathCh2 } from "./chapters";
 
 const A = "#f97316";
@@ -17,134 +18,144 @@ export default function Mcc21SimpleMathApp(props = {}) {
     return "ko";
   });
   const E = lang === "en";
+  const [codeLang, setCodeLang] = useState("py");
   const [tab, setTab] = useState(0);
-  const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
   const [si, setSi] = useState(0);
+  const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
   const [ch1Q, setCh1Q] = useState(() => makeMcc21SimpleMathCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeMcc21SimpleMathCh2(false));
+  const [ch2Q, setCh2Q] = useState(() => makeMcc21SimpleMathCh2(false, "py"));
 
-  const TABS = E
-    ? ["\ud83d\udccb Problem", "\u26a1 Code"]
-    : ["\ud83d\udccb \ubb38\uc81c", "\u26a1 \ucf54\ub4dc"];
+  useEffect(() => {
+    setCh2Q(prev => makeMcc21SimpleMathCh2(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+  }, [codeLang, E]);
 
+  useEffect(() => {
+    if ((propLang === "ko" || propLang === "en") && propLang !== lang) switchLang(propLang);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propLang]);
+
+  const TABS = E ? ["📋 Problem", "⚡ Code"] : ["📋 문제", "⚡ 코드"];
   const setters = { 0: setCh1Q, 1: setCh2Q };
-  const states  = { 0: ch1Q,    1: ch2Q };
-  const makers  = { 0: makeMcc21SimpleMathCh1, 1: makeMcc21SimpleMathCh2 };
+  const states  = { 0: ch1Q, 1: ch2Q };
+  const makers  = { 0: makeMcc21SimpleMathCh1, 1: (e) => makeMcc21SimpleMathCh2(e, codeLang) };
 
   const switchLang = nl => {
     const ne = nl === "en"; setLang(nl); setSi(0);
-    for (const k of [0,1]) setters[k](makers[k](ne));
+    for (const k of [0, 1]) setters[k](makers[k](ne));
   };
   const changeTab = idx => {
     setTab(idx); setSi(0);
     setVisitedTabs(prev => { const n = new Set(prev); n.add(idx); return n; });
     setters[idx](makers[idx](E));
   };
-  useEffect(() => {
-    if ((propLang === "ko" || propLang === "en") && propLang !== lang) switchLang(propLang);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propLang]);
 
+  const steps = states[tab], cur = Math.min(si, steps.length - 1), step = steps[cur];
 
-  const steps = states[tab];
-  const cur = Math.min(si, steps.length - 1);
-  const step = steps[cur];
-
-  const handleAnswer = optIdx => {
+  const handleAnswer = i => {
     if (step.answered != null) return;
-    const setter = setters[tab], state = states[tab];
-    const u = [...state]; u[cur] = { ...u[cur], answered: optIdx };
-    setter(u);
+    const u = [...states[tab]]; u[cur] = { ...u[cur], answered: i };
+    setters[tab](u);
   };
-
   const handleSolve = () => {
-    const setter = setters[tab], state = states[tab];
-    const u = [...state]; u[cur] = { ...u[cur], solved: true };
-    setter(u);
+    const u = [...states[tab]]; u[cur] = { ...u[cur], solved: true };
+    setters[tab](u);
   };
 
-  const isBlocked = (step.type === "quiz" && step.answered == null) || (step.type === "input" && !step.solved);
-  const canNext = cur < steps.length - 1;  // isBlocked 무시 — 자유 진행
+  const showAnswerHint = (step.type === "quiz" && step.answered == null) || (step.type === "input" && !step.solved);
+  const canNext = cur < steps.length - 1;
   const next = () => { if (canNext) { setSi(cur + 1); window.scrollTo({ top: 0, behavior: "smooth" }); } };
   const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
+
+  const showCodeControls = tab === 1;
 
   const renderContent = () => {
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
-    if (step.type === "code") return <CodeReveal label={step.label} lines={step.code} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
+    if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
+    if (step.type === "progressive") return <Mcc21SimpleMathProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     return null;
   };
 
   return (
-    <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-        <h1 style={{ fontSize: 16, fontWeight: 800, color: A, margin: 0, fontFamily: "'Jua',sans-serif" }}>{"\ud83d\udd22"} Simple Math</h1>
-        <div style={{ display: "flex", gap: 2, background: C.card, borderRadius: 8, border: `1.5px solid ${C.border}`, padding: 2 }}>
-          {[["ko", "\ud83c\uddf0\ud83c\uddf7"], ["en", "\ud83c\uddfa\ud83c\uddf8"]].map(([v, flag]) =>
-            <button key={v} onClick={() => switchLang(v)} style={{
-              background: lang === v ? C.accent : "transparent", border: "none", borderRadius: 6,
-              padding: "4px 8px", cursor: "pointer", fontSize: 14, color: lang === v ? "#fff" : C.dim,
-            }}>{flag}</button>
+    <div>
+      <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto", padding: "0 12px" }}>
+        <div style={{ height: 3, background: "#e5e7eb", borderRadius: 2, marginTop: 8, marginBottom: 10, overflow: "hidden" }}>
+          <div style={{ height: "100%", background: A, borderRadius: 2, width: `${((cur + 1) / steps.length) * 100}%`, transition: "width .3s" }} />
+        </div>
+
+        <div style={{ display: "flex", gap: 8, marginBottom: 12, alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 3, overflowX: "auto", paddingBottom: 4, flex: 1 }}>
+            {TABS.map((label, i) => {
+              const isCurrent = i === tab;
+              const isVisited = visitedTabs.has(i) && !isCurrent;
+              return (
+                <button key={i} onClick={() => changeTab(i)} style={{
+                  flex: "0 0 auto", borderRadius: 8, padding: "6px 10px", cursor: "pointer",
+                  fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
+                  background: isCurrent ? A : (isVisited ? "#f3f4f6" : "transparent"),
+                  border: `1.5px solid ${isCurrent ? A : (isVisited ? "#cbd5e1" : C.border)}`,
+                  color: isCurrent ? "#fff" : (isVisited ? "#475569" : C.dim),
+                  display: "flex", alignItems: "center", gap: 4,
+                }}>
+                  {isVisited && <span style={{ fontSize: 10 }}>✓</span>}
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+          {showCodeControls && (
+            <div style={{ display: "flex", gap: 0, alignItems: "stretch", flexShrink: 0 }}>
+              <select value={codeLang} onChange={e => setCodeLang(e.target.value)} title={t(E, "Code language", "코드 언어")} style={{
+                background: "#fff", color: A, border: `1.5px solid ${A}`,
+                borderRadius: "8px 0 0 8px", borderRight: "none",
+                padding: "4px 6px", fontSize: 12, fontWeight: 800, cursor: "pointer",
+              }}>
+                <option value="py">🐍 Py</option>
+                <option value="cpp">💻 C++</option>
+              </select>
+              <button onClick={() => downloadMcc21SimpleMathPDF(E, getMcc21SimpleMathSections(E), codeLang)} style={{
+                background: A, color: "#fff", border: `1.5px solid ${A}`,
+                borderRadius: "0 8px 8px 0",
+                padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800,
+              }}>📄 PDF</button>
+            </div>
           )}
         </div>
+
+        {step.narr && <Narration key={`mcc-${tab}-${cur}-${lang}`} text={step.narr} />}
+
+        <div style={{
+          background: C.card, borderRadius: 14, border: `2px solid ${C.border}`,
+          marginBottom: 10, boxShadow: "0 2px 10px rgba(0,0,0,.04)", overflow: "hidden",
+        }}>
+          {renderContent()}
+        </div>
+        <div style={{ height: 70 }} />
       </div>
-
-      <div style={{ display: "flex", gap: 3, marginBottom: 12, overflowX: "auto", paddingBottom: 4 }}>
-        {TABS.map((label, i) => {
-          const isCurrent = i === tab;
-          const isVisited = visitedTabs.has(i) && !isCurrent;
-          return (
-            <button key={i} onClick={() => changeTab(i)} style={{
-              flex: "0 0 auto", borderRadius: 8, padding: "6px 10px", cursor: "pointer",
-              fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
-              background: isCurrent ? A : (isVisited ? `${A}20` : "transparent"),
-              border: `1.5px solid ${isCurrent ? A : (isVisited ? `${A}60` : C.border)}`,
-              color: isCurrent ? "#fff" : (isVisited ? A : C.dim),
-              display: "flex", alignItems: "center", gap: 4,
-            }}>{isVisited && <span style={{ fontSize: 10 }}>✓</span>}{label}</button>
-          );
-        })}
-      </div>
-
-      {step.narr && <Narration key={`m21sm-${tab}-${cur}-${lang}`} text={step.narr} />}
-
-      <div style={{
-        background: C.card, borderRadius: 14, border: `2px solid ${C.border}`,
-        marginBottom: 10, boxShadow: "0 2px 10px rgba(0,0,0,.04)", overflow: "hidden",
-      }}>
-        {renderContent()}
-      </div>
-
-      <div style={{ height: 70 }} />
 
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "6px 16px 12px", zIndex: 100 }}>
-        <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto" }}>
-          {isBlocked && (
-            <div style={{ textAlign: "center", fontSize: 13, color: C.carry, fontWeight: 700, marginBottom: 4, animation: "pulse 1.5s ease infinite" }}>
-              {E ? "\ud83d\udca1 Tip: try answering above" : "\ud83d\udca1 \ud301: \uc704\uc5d0\uc11c \ub2f5\ud574\ubcf4\uba74 \uc88b\uc544\uc694"}
+        <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto", padding: "0 12px" }}>
+          {showAnswerHint && (
+            <div style={{ textAlign: "center", fontSize: 11, color: C.dim, fontWeight: 600, marginBottom: 4 }}>
+              {t(E, "💡 Tip: try answering above. (You can skip too — →)", "💡 팁: 위에서 답해보면 좋아요. (그냥 넘어가도 OK — →)")}
             </div>
           )}
           <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center" }}>
             <button onClick={prev} disabled={cur === 0} style={{
-              background: cur === 0 ? "#e5e7eb" : C.card,
-              border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+              background: cur === 0 ? "#e5e7eb" : C.card, border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
               borderRadius: 9, padding: "10px 22px", fontSize: 14, fontWeight: 800,
               cursor: cur === 0 ? "default" : "pointer", color: cur === 0 ? "#b0b5c3" : A,
-            }}>{"\u2190"}</button>
+            }}>←</button>
             <span style={{ fontSize: 12, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", minWidth: 56, textAlign: "center" }}>
               {cur + 1}/{steps.length}
             </span>
             <button onClick={next} disabled={!canNext} style={{
-              background: !canNext ? "#e5e7eb" : A,
-              border: `2px solid ${!canNext ? "#e5e7eb" : A}`,
+              background: !canNext ? "#e5e7eb" : A, border: `2px solid ${!canNext ? "#e5e7eb" : A}`,
               borderRadius: 9, padding: "10px 22px", fontSize: 14, fontWeight: 800,
               cursor: !canNext ? "default" : "pointer", color: !canNext ? "#b0b5c3" : "#fff",
-            }}>{"\u2192"}</button>
-          </div>
-          <div style={{ marginTop: 6, height: 3, background: "#e5e7eb", borderRadius: 2 }}>
-            <div style={{ height: "100%", background: A, borderRadius: 2, width: `${((cur + 1) / steps.length) * 100}%`, transition: "width .3s" }} />
+            }}>→</button>
           </div>
         </div>
       </div>

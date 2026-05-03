@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getGuessAnimalSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -87,7 +88,7 @@ export function makeGuessAnimalCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeGuessAnimalCh2(E) {
+export function makeGuessAnimalCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
@@ -108,12 +109,11 @@ export function makeGuessAnimalCh2(E) {
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the pairwise comparison solution!",
-        "쌍별 비교 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getGuessAnimalSections(E),
     },
   ];
 }

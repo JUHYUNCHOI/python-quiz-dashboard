@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getFjFarmsSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -83,7 +84,7 @@ export function makeFjFarmsCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeFjFarmsCh2(E) {
+export function makeFjFarmsCh2(E, lang = "py") {
   return [
     // 2-1: Approach reveal
     {
@@ -121,12 +122,11 @@ export function makeFjFarmsCh2(E) {
     },
     // 2-2: Full code reveal
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution! Binary search on days with sorting to check ranking. 🎉",
-        "전체 풀이 코드야! 날짜에 대해 이분 탐색하고 정렬로 순위를 확인해. 🎉"),
-      code: SOLUTION_CODE,
-      label: t(E, "Show complete code", "전체 코드 보기"),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getFjFarmsSections(E),
     },
   ];
 }

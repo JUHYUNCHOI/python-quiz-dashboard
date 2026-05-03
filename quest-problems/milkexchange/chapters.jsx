@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMilkExchangeSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -122,7 +123,7 @@ export function makeMilkExCh1(E) {
 /* ================================================================
    Chapter 2: Code (2 steps)
    ================================================================ */
-export function makeMilkExCh2(E) {
+export function makeMilkExCh2(E, lang = "py") {
   return [
     // 2-1: Key insight
     {
@@ -149,12 +150,11 @@ export function makeMilkExCh2(E) {
     },
     // 2-2: Solution code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the simulation code! We cap the steps at 2N since it stabilizes by then.",
-        "시뮬레이션 코드야! 2N에서 안정화되니까 단계를 2N으로 제한해."),
-      label: t(E, "Milk Exchange Solution", "우유 교환 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMilkExchangeSections(E),
     },
   ];
 }

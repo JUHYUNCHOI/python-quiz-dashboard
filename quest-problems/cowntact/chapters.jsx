@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getCowntactSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -81,7 +82,7 @@ export function makeCowntactCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeCowntactCh2(E) {
+export function makeCowntactCh2(E, lang = "py") {
   return [
     // 2-1: Approach reveal
     {
@@ -129,12 +130,11 @@ export function makeCowntactCh2(E) {
     },
     // 2-2: Full code reveal
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution! Just scan and count consecutive 1-groups. 🎉",
-        "전체 풀이 코드야! 연속된 1-그룹을 스캔하고 세면 돼. 🎉"),
-      code: SOLUTION_CODE,
-      label: t(E, "Show complete code", "전체 코드 보기"),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getCowntactSections(E),
     },
   ];
 }

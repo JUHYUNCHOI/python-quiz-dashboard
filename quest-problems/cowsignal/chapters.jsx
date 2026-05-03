@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getCowSignalSections } from "./components";
 
 export const SOLUTION_CODE = [
   "M, N, K = map(int, input().split())",
@@ -417,7 +418,7 @@ export function makeCowSignalCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드 빌드 (8 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeCowSignalCh3(E) {
+export function makeCowSignalCh3(E, lang = "py") {
   return [
     // 3-1 입력 읽기
     {
@@ -543,12 +544,11 @@ export function makeCowSignalCh3(E) {
 
     // 3-8 완전한 코드
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution! Just 7 lines: read → loop → print. Beautiful! 🎉",
-        "완전한 솔루션! 7줄뿐: 읽기 → 루프 → 출력. 아름다워! 🎉"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getCowSignalSections(E),
     },
   ];
 }

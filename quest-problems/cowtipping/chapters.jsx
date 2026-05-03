@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getCowTipSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -90,7 +91,7 @@ export function makeCowTipCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeCowTipCh2(E) {
+export function makeCowTipCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
@@ -111,12 +112,11 @@ export function makeCowTipCh2(E) {
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the greedy toggle solution!",
-        "그리디 토글 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getCowTipSections(E),
     },
   ];
 }

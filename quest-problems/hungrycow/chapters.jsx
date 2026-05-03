@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getHungryCowSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -131,15 +132,14 @@ export function makeHungryCowCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code
    ═══════════════════════════════════════════════════════════════ */
-export function makeHungryCowCh2(E) {
+export function makeHungryCowCh2(E, lang = "py") {
   return [
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the solution. We process deliveries in order and track stock/eaten counts.",
-        "\ud480\uc774\uc57c. \ubc30\ub2ec\uc744 \uc21c\uc11c\ub300\ub85c \ucc98\ub9ac\ud558\uba70 \uc7ac\uace0/\uba39\uc740 \uc218\ub97c \ucd94\uc801\ud574."),
-      label: t(E, "\ud83d\udc0d Full Solution", "\ud83d\udc0d \uc804\uccb4 \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getHungryCowSections(E),
     },
     {
       type: "quiz",

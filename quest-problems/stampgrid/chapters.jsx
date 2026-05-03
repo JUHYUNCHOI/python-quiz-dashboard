@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getStampGridSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -132,15 +133,14 @@ export function makeStampCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code
    ═══════════════════════════════════════════════════════════════ */
-export function makeStampCh2(E) {
+export function makeStampCh2(E, lang = "py") {
   return [
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the solution outline. The key is the rotate90 function and trying all positions/rotations.",
-        "\ud480\uc774 \uac1c\uc694\uc57c. \ud575\uc2ec\uc740 rotate90 \ud568\uc218\uc640 \ubaa8\ub4e0 \uc704\uce58/\ud68c\uc804 \uc2dc\ub3c4."),
-      label: t(E, "\ud83d\udc0d Full Solution", "\ud83d\udc0d \uc804\uccb4 \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getStampGridSections(E),
     },
     {
       type: "quiz",

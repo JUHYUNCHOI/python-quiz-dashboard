@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getRotShiftSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -123,15 +124,14 @@ export function makeRotShiftCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code
    ═══════════════════════════════════════════════════════════════ */
-export function makeRotShiftCh2(E) {
+export function makeRotShiftCh2(E, lang = "py") {
   return [
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the simulation solution. We track each cow's position and apply rotate + shift each step.",
-        "\uc2dc\ubbac\ub808\uc774\uc158 \ud480\uc774\uc57c. \uac01 \uc18c\uc758 \uc704\uce58\ub97c \ucd94\uc801\ud558\uace0 \ub9e4 \ub2e8\uacc4 \ud68c\uc804 + \uc774\ub3d9\uc744 \uc801\uc6a9\ud574."),
-      label: t(E, "\ud83d\udc0d Full Solution", "\ud83d\udc0d \uc804\uccb4 \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getRotShiftSections(E),
     },
     {
       type: "quiz",

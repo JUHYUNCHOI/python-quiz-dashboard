@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getClockFenceSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -91,7 +92,7 @@ export function makeClockCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeClockCh2(E) {
+export function makeClockCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
@@ -112,12 +113,11 @@ export function makeClockCh2(E) {
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the turn-counting solution!",
-        "회전 카운팅 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getClockFenceSections(E),
     },
   ];
 }

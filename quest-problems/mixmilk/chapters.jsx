@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMixMilkSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -447,7 +448,7 @@ export function makeMixMilkCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeMixMilkCh3(E) {
+export function makeMixMilkCh3(E, lang = "py") {
   return [
     // 3-1: Step 1 — Read input
     {
@@ -572,12 +573,11 @@ export function makeMixMilkCh3(E) {
     },
     // 3-5: Complete code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Add the output at the end: print each bucket's final milk. That's the complete solution!",
-        "마지막에 출력 추가: 각 양동이의 최종 우유량을 출력해. 이게 전체 풀이!"),
-      label: t(E, "Complete Solution", "전체 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMixMilkSections(E),
     },
   ];
 }

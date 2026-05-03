@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMcc21GlassSections } from "./components";
 
 export const SOLUTION_CODE = [
   "import math",
@@ -414,7 +415,7 @@ export function makeMcc21GlassCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드 빌드 (8 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeMcc21GlassCh3(E) {
+export function makeMcc21GlassCh3(E, lang = "py") {
   return [
     // 3-1 import math
     {
@@ -527,12 +528,11 @@ export function makeMcc21GlassCh3(E) {
 
     // 3-8 전체 코드
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "The complete solution — just 5 lines! Import math, read N, print (N-1)!. Beautifully simple! 🎉",
-        "완전한 솔루션 — 단 5줄! math 임포트, N 읽기, (N-1)! 출력. 아름답게 간단! 🎉"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMcc21GlassSections(E),
     },
   ];
 }

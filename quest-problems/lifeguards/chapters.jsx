@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getLifeguardsSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -111,7 +112,7 @@ export function makeLifeguardsCh1(E) {
 /* ---------------------------------------------------------------
    Chapter 2: Code (2 steps)
    --------------------------------------------------------------- */
-export function makeLifeguardsCh2(E) {
+export function makeLifeguardsCh2(E, lang = "py") {
   return [
     // 2-1: reveal
     {
@@ -132,12 +133,11 @@ export function makeLifeguardsCh2(E) {
     },
     // 2-2: code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the brute-force sweep line solution!",
-        "브루트포스 스위프 라인 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getLifeguardsSections(E),
     },
   ];
 }

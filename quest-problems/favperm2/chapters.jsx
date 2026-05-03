@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getFavPerm2Sections } from "./components";
 
 /* ================================================================
    SOLUTION CODE — Reconstruct lex-smallest permutation from hints
@@ -524,7 +525,7 @@ export function makeFavPerm2Ch2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드 빌드 (8 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeFavPerm2Ch3(E) {
+export function makeFavPerm2Ch3(E, lang = "py") {
   return [
     // 3-1 입력 읽기
     {
@@ -654,12 +655,11 @@ export function makeFavPerm2Ch3(E) {
 
     // 3-8 전체 코드
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution! Read → find missing → reverse-process hints → output. 🎉",
-        "완전한 솔루션! 읽기 → 빠진 수 찾기 → 힌트 역처리 → 출력. 🎉"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getFavPerm2Sections(E),
     },
   ];
 }

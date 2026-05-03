@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMoolooSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -120,15 +121,14 @@ export function makeMoolooCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code
    ═══════════════════════════════════════════════════════════════ */
-export function makeMoolooCh2(E) {
+export function makeMoolooCh2(E, lang = "py") {
   return [
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the greedy solution. We scan sorted days and group close ones into single subscriptions.",
-        "\uadf8\ub9ac\ub514 \ud480\uc774\uc57c. \uc815\ub82c\ub41c \ub0a0\uc9dc\ub97c \uc2a4\uce94\ud558\uba70 \uac00\uae4c\uc6b4 \ub0a0\ub4e4\uc744 \ud558\ub098\uc758 \uad6c\ub3c5\uc73c\ub85c \ubb36\uc5b4."),
-      label: t(E, "\ud83d\udc0d Full Solution", "\ud83d\udc0d \uc804\uccb4 \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMoolooSections(E),
     },
     {
       type: "quiz",

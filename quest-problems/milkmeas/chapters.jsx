@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMilkMeasSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -97,7 +98,7 @@ export function makeMilkMeasCh1(E) {
 /* ---------------------------------------------------------------
    Chapter 2: Code (2 steps)
    --------------------------------------------------------------- */
-export function makeMilkMeasCh2(E) {
+export function makeMilkMeasCh2(E, lang = "py") {
   return [
     // 2-1: reveal
     {
@@ -118,12 +119,11 @@ export function makeMilkMeasCh2(E) {
     },
     // 2-2: code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the simulation solution!",
-        "시뮬레이션 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMilkMeasSections(E),
     },
   ];
 }

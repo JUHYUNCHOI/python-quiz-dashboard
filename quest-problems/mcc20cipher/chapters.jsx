@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMcc20CipherSections } from "./components";
 
 export const SOLUTION_CODE = [
   "cipher = input().strip()",
@@ -71,7 +72,7 @@ export function makeMcc20CipherCh1(E) {
   ];
 }
 
-export function makeMcc20CipherCh2(E) {
+export function makeMcc20CipherCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -90,10 +91,11 @@ export function makeMcc20CipherCh2(E) {
         </div>),
     },
     {
-      type: "code",
-      narr: t(E, "Here's the cipher solution!", "암호 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMcc20CipherSections(E),
     },
   ];
 }

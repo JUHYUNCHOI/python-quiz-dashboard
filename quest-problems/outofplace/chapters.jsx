@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getOutOfPlaceSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -88,7 +89,7 @@ export function makeOutOfPlaceCh1(E) {
 /* ---------------------------------------------------------------
    Chapter 2: Code (2 steps)
    --------------------------------------------------------------- */
-export function makeOutOfPlaceCh2(E) {
+export function makeOutOfPlaceCh2(E, lang = "py") {
   return [
     // 2-1: reveal
     {
@@ -109,12 +110,11 @@ export function makeOutOfPlaceCh2(E) {
     },
     // 2-2: code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the clean sort-and-compare solution!",
-        "정렬 후 비교하는 깔끔한 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getOutOfPlaceSections(E),
     },
   ];
 }

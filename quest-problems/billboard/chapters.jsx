@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getBillboardSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -335,7 +336,7 @@ export function makeBillboardCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeBillboardCh3(E) {
+export function makeBillboardCh3(E, lang = "py") {
   return [
     // 3-1: Step 1 — area function
     {
@@ -425,12 +426,11 @@ export function makeBillboardCh3(E) {
 
     // 3-5: Complete code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution! Just two helper functions + three lines of main logic. O(1) time — no loops needed! 🎉",
-        "완전한 솔루션! 보조 함수 2개 + 메인 로직 3줄. O(1) 시간 — 루프 필요 없어! 🎉"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getBillboardSections(E),
     },
   ];
 }

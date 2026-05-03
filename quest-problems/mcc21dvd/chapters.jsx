@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMcc21DvdSections } from "./components";
 
 export const SOLUTION_CODE = [
   "W, H = map(int, input().split())",
@@ -68,7 +69,7 @@ export function makeMcc21DvdCh1(E) {
   ];
 }
 
-export function makeMcc21DvdCh2(E) {
+export function makeMcc21DvdCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -87,10 +88,11 @@ export function makeMcc21DvdCh2(E) {
         </div>),
     },
     {
-      type: "code",
-      narr: t(E, "Here's the simulation solution!", "시뮬레이션 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMcc21DvdSections(E),
     },
   ];
 }

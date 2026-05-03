@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMcc20KittySections } from "./components";
 
 export const SOLUTION_CODE = [
   "N = int(input())",
@@ -431,7 +432,7 @@ export function makeMcc20KittyCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드 빌드 (8 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeMcc20KittyCh3(E) {
+export function makeMcc20KittyCh3(E, lang = "py") {
   return [
     // 3-1 기저 처리
     {
@@ -552,12 +553,11 @@ export function makeMcc20KittyCh3(E) {
 
     // 3-8 전체 코드
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution — just 7 lines! Read N, handle base case, loop with 3 variables. Done! 🎉",
-        "완전한 솔루션 — 단 7줄! N 읽고, 기저 처리, 변수 3개로 반복. 끝! 🎉"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMcc20KittySections(E),
     },
   ];
 }

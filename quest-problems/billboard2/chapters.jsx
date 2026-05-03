@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getBillboard2Sections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -106,7 +107,7 @@ export function makeBillboard2Ch1(E) {
 /* ---------------------------------------------------------------
    Chapter 2: Code (2 steps)
    --------------------------------------------------------------- */
-export function makeBillboard2Ch2(E) {
+export function makeBillboard2Ch2(E, lang = "py") {
   return [
     // 2-1: reveal
     {
@@ -127,12 +128,11 @@ export function makeBillboard2Ch2(E) {
     },
     // 2-2: code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution with all edge cases!",
-        "모든 엣지 케이스를 포함한 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getBillboard2Sections(E),
     },
   ];
 }

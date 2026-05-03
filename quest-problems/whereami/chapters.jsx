@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getWhereAmISections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -483,7 +484,7 @@ export function makeWhereAmICh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeWhereAmICh3(E) {
+export function makeWhereAmICh3(E, lang = "py") {
   return [
     // 3-1: Step 1 — Read input
     {

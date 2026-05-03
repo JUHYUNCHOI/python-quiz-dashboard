@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMooLangSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -111,15 +112,14 @@ export function makeMooLangCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code
    ═══════════════════════════════════════════════════════════════ */
-export function makeMooLangCh2(E) {
+export function makeMooLangCh2(E, lang = "py") {
   return [
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the Python solution. We iterate over possible transitive sentence counts and maximize total words.",
-        "\ud30c\uc774\uc36c \ud480\uc774\uc57c. \uac00\ub2a5\ud55c \ud0c0\ub3d9\uc0ac \ubb38\uc7a5 \uc218\ub97c \ubc18\ubcf5\ud558\uba70 \ucd1d \ub2e8\uc5b4\ub97c \ucd5c\ub300\ud654\ud574."),
-      label: t(E, "\ud83d\udc0d Full Solution", "\ud83d\udc0d \uc804\uccb4 \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMooLangSections(E),
     },
     {
       type: "quiz",

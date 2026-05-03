@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getCandyCaneSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -84,7 +85,7 @@ export function makeCandyCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeCandyCh2(E) {
+export function makeCandyCh2(E, lang = "py") {
   return [
     // 2-1: Approach reveal
     {
@@ -106,12 +107,11 @@ export function makeCandyCh2(E) {
     },
     // 2-2: Full code reveal
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution! Simulate each candy cane with all cows in order. 🎉",
-        "전체 풀이 코드야! 각 캔디 케인을 모든 소 순서대로 시뮬레이션해. 🎉"),
-      code: SOLUTION_CODE,
-      label: t(E, "Show complete code", "전체 코드 보기"),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getCandyCaneSections(E),
     },
   ];
 }

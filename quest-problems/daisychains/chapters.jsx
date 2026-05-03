@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getDaisyChainsSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -418,7 +419,7 @@ export function makeDaisyCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeDaisyCh3(E) {
+export function makeDaisyCh3(E, lang = "py") {
   return [
     // 3-1: Step 1 — Read input
     {

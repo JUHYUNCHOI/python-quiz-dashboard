@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getFeb23Sections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -121,15 +122,14 @@ export function makeFebCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code
    ═══════════════════════════════════════════════════════════════ */
-export function makeFebCh2(E) {
+export function makeFebCh2(E, lang = "py") {
   return [
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full Python solution! We use bitmask to try all F assignments and a set to collect distinct excitement values.",
-        "전체 파이썬 풀이야! 비트마스크로 모든 F 할당을 시도하고, 집합으로 서로 다른 흥분도를 모아."),
-      label: t(E, "🐍 Full Solution", "🐍 전체 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getFeb23Sections(E),
     },
     {
       type: "quiz",

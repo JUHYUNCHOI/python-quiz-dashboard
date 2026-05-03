@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMcc21MenuSections } from "./components";
 
 export const SOLUTION_CODE = [
   "import sys",
@@ -74,7 +75,7 @@ export function makeMcc21MenuCh1(E) {
   ];
 }
 
-export function makeMcc21MenuCh2(E) {
+export function makeMcc21MenuCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -93,10 +94,11 @@ export function makeMcc21MenuCh2(E) {
         </div>),
     },
     {
-      type: "code",
-      narr: t(E, "Here's the tree traversal solution!", "트리 순회 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMcc21MenuSections(E),
     },
   ];
 }

@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getSubseqMedianSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -136,7 +137,7 @@ export function makeSubseqMedianCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeSubseqMedianCh2(E) {
+export function makeSubseqMedianCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
@@ -157,12 +158,11 @@ export function makeSubseqMedianCh2(E) {
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full DP solution for Increasing Subsequence Median Sum!",
-        "증가 부분수열 중앙값 합의 전체 DP 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getSubseqMedianSections(E),
     },
   ];
 }

@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getProductivitySections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -112,7 +113,7 @@ export function makeProdCh1(E) {
 /* ================================================================
    Chapter 2: Code (2 steps)
    ================================================================ */
-export function makeProdCh2(E) {
+export function makeProdCh2(E, lang = "py") {
   return [
     // 2-1: Binary search approach
     {
@@ -139,12 +140,11 @@ export function makeProdCh2(E) {
     },
     // 2-2: Solution code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the clean solution using Python's bisect module!",
-        "파이썬의 bisect 모듈을 사용한 깔끔한 풀이야!"),
-      label: t(E, "Max Productivity Solution", "최대 생산성 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getProductivitySections(E),
     },
   ];
 }

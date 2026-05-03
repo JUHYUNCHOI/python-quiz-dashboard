@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMcc21CarrotsSections } from "./components";
 
 export const SOLUTION_CODE = [
   "N = int(input())",
@@ -70,7 +71,7 @@ export function makeMcc21CarrotsCh1(E) {
   ];
 }
 
-export function makeMcc21CarrotsCh2(E) {
+export function makeMcc21CarrotsCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -89,10 +90,11 @@ export function makeMcc21CarrotsCh2(E) {
         </div>),
     },
     {
-      type: "code",
-      narr: t(E, "Here's the brute force solution!", "브루트포스 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMcc21CarrotsSections(E),
     },
   ];
 }

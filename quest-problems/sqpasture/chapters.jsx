@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getSqPastureSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -130,7 +131,7 @@ export function makeSqPastureCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeSqPastureCh2(E) {
+export function makeSqPastureCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -197,12 +198,11 @@ export function makeSqPastureCh2(E) {
         </div>),
     },
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Complete solution! Read 2 rectangles → bounding box → square → area. Only 8 lines! 🎉",
-        "완전한 솔루션! 직사각형 2개 읽기 → 바운딩 박스 → 정사각형 → 면적. 8줄뿐! 🎉"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getSqPastureSections(E),
     },
   ];
 }

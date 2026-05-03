@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMcc21MarblesSections } from "./components";
 
 export const SOLUTION_CODE = [
   "N = int(input())",
@@ -67,7 +68,7 @@ export function makeMcc21MarblesCh1(E) {
   ];
 }
 
-export function makeMcc21MarblesCh2(E) {
+export function makeMcc21MarblesCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -86,10 +87,11 @@ export function makeMcc21MarblesCh2(E) {
         </div>),
     },
     {
-      type: "code",
-      narr: t(E, "Here's the solution!", "풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMcc21MarblesSections(E),
     },
   ];
 }

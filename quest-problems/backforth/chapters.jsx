@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getBackForthSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -98,7 +99,7 @@ export function makeBackForthCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeBackForthCh2(E) {
+export function makeBackForthCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
@@ -119,12 +120,11 @@ export function makeBackForthCh2(E) {
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the brute force enumeration solution!",
-        "브루트 포스 열거 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getBackForthSections(E),
     },
   ];
 }

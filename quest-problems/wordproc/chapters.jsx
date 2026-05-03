@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getWordProcSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -387,7 +388,7 @@ export function makeWordProcCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeWordProcCh3(E) {
+export function makeWordProcCh3(E, lang = "py") {
   return [
     // 3-1: Read input
     {
@@ -497,12 +498,11 @@ export function makeWordProcCh3(E) {
     },
     // 3-5: Complete code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Don't forget the last line! After the loop, cur_line may still have words. Flush it, then print all lines.",
-        "마지막 줄을 잊지 마! 루프 후에 cur_line에 아직 단어가 있을 수 있어. 출력하고 모든 줄을 프린트해."),
-      label: t(E, "Complete Solution", "전체 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getWordProcSections(E),
     },
   ];
 }

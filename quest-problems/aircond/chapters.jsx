@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getAirCondSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -105,7 +106,7 @@ export function makeAirCondCh1(E) {
 /* ===============================================================
    Chapter 2: Code (2 steps)
    =============================================================== */
-export function makeAirCondCh2(E) {
+export function makeAirCondCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
@@ -126,12 +127,11 @@ export function makeAirCondCh2(E) {
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the bitmask enumeration solution!",
-        "비트마스크 열거 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getAirCondSections(E),
     },
   ];
 }
