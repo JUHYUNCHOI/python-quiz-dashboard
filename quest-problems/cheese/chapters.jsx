@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { highlight } from "@/components/quest/shared";
+import { getCheeseSections } from "./components";
 
 /* ================================================================
    HELPERS
@@ -113,18 +114,15 @@ export const USER_CODE_CLEAN = [
    ═══════════════════════════════════════════════════════════════ */
 export function makeCheeseCh1(E) {
   return [
-    // 1-1: 호기심 먼저! 질문으로 시작
+    // 1-1: 호기심 먼저! (타이틀/USACO 메타는 breadcrumb 와 중복이라 제거)
     {
       type: "reveal",
       narr: t(E,
         "Here's a cube made of cheese cubes, like a Rubik's cube! What happens if you keep removing blocks one by one? Let's find out! 👀",
         "치즈 조각으로 만든 큐브가 있어! 루빅큐브처럼! 여기서 블록을 계속 빼면 무슨 일이 생길까? 알아보자! 👀"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🧀</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cheese Block</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2024 December Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 12, padding: 14, fontSize: 14, color: C.text, lineHeight: 1.9, textAlign: "center" }}>
             {t(E,
               "N×N×N cheese cube → remove blocks → check: can a chopstick fit through? 🥢",
               "N×N×N 치즈 큐브 → 블록을 빼 → 젓가락이 통과할 수 있을까? 🥢")}
@@ -515,13 +513,56 @@ export function makeCheeseCh4(E) {
     },
 
     // 4-3: 구체적 숫자 체감
+    // 4-3: USACO 제출 결과 시각화 (추상 숫자 대신 그림으로 체감)
     {
-      type: "input",
+      type: "reveal",
       narr: t(E,
-        "N=1000: each removal checks 3 million rows × 1000 cells = 3 billion operations. At 100 million ops/sec, how many seconds per removal?",
-        "N=1000: 매번 300만 줄 × 1000칸 = 30억 연산. 1초에 1억 번이면 제거 1개에 몇 초?"),
-      question: t(E, "3 billion ÷ 100 million = ? seconds", "30억 ÷ 1억 = ? 초"),
-      answer: 30,
+        "Submit this brute solution to USACO: first few cases pass slowly, rest all time out:",
+        "이 브루트 코드를 USACO 에 제출하면: 앞 몇 개는 간신히 통과, 나머지는 다 시간초과:"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 8, textAlign: "center" }}>
+            {t(E, "USACO submission — judge results", "USACO 제출 결과 — 채점")}
+          </div>
+          <div style={{
+            background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14,
+            display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center",
+          }}>
+            {[
+              { n: 1,  pass: true,  label: "12ms" },
+              { n: 2,  pass: true,  label: "98ms" },
+              { n: 3,  pass: true,  label: "1.2s" },
+              { n: 4,  pass: false }, { n: 5,  pass: false }, { n: 6,  pass: false },
+              { n: 7,  pass: false }, { n: 8,  pass: false }, { n: 9,  pass: false },
+              { n: 10, pass: false }, { n: 11, pass: false }, { n: 12, pass: false },
+            ].map(c => (
+              <div key={c.n} style={{
+                width: 56, padding: "8px 4px", borderRadius: 8, textAlign: "center",
+                background: c.pass ? C.okBg : C.noBg,
+                border: `1.5px solid ${c.pass ? C.okBd : C.noBd}`,
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                <div style={{ fontSize: 20, fontWeight: 900, color: c.pass ? C.ok : C.no, lineHeight: 1 }}>
+                  {c.pass ? "✓" : "t"}
+                </div>
+                {c.label && (
+                  <div style={{ fontSize: 9, color: C.dim, marginTop: 4 }}>{c.label}</div>
+                )}
+                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>#{c.n}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
+            ❌ {t(E,
+              "9 out of 12 cases TLE. Even passing ones at 1.2s are near the limit.",
+              "12 개 중 9 개 TLE. 통과한 것들도 1.2초로 한계 근처.")}
+          </div>
+          <div style={{ marginTop: 8, padding: "8px 12px", background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 11, color: C.dim, lineHeight: 1.6 }}>
+            {t(E,
+              "N=1000, Q=200K: per query = 3M rows × 1000 cells = 3B ops. At 100M ops/sec → 30s/query × 200K = ~70 days. 😱",
+              "N=1000, Q=20만: 쿼리당 = 300만 줄 × 1000칸 = 30억 연산. 1억 ops/sec → 쿼리당 30초 × 20만 = ~70 일. 😱")}
+          </div>
+        </div>),
     },
 
     // 4-4: 비교 — 한눈에
@@ -555,7 +596,7 @@ export function makeCheeseCh4(E) {
    
    변경: 용어를 쉬운 말로 먼저 설명한 뒤 코드
    ═══════════════════════════════════════════════════════════════ */
-export function makeCheeseCh5(E) {
+export function makeCheeseCh5(E, lang = "py") {
   return [
     // 5-1: 자료구조 — 쉬운 비유
     {
@@ -625,25 +666,15 @@ export function makeCheeseCh5(E) {
         "N! 그 줄의 블록이 전부 빠짐 → 완전히 빔 → 젓가락 들어감!"),
     },
 
-    // 5-4: 원본 코드
-    {
-      type: "code",
-      narr: t(E,
-        "Here's the code! Let's read it line by line.",
-        "코드를 보자! 한 줄씩 읽어볼게."),
-      code: USER_CODE_ORIG,
-      label: t(E, "Show original code", "원본 코드 보기"),
-    },
-
-    // 5-5: 코드 읽기 퀴즈
+    // 5-4: 코드 읽기 퀴즈 — 변수 이름의 의미
     {
       type: "quiz",
       narr: t(E,
-        "In the code, xy_dict[(x,y)] tracks removals for one specific row. Which direction?",
-        "코드에서 xy_dict[(x,y)]는 특정 줄의 제거 수를 세. 어떤 방향?"),
+        "Quick check before code: xy[(x,y)] tracks removals for one specific row. Which direction?",
+        "코드 보기 전 짧은 확인: xy[(x,y)]는 특정 줄의 제거 수를 세. 어떤 방향?"),
       question: t(E,
-        "xy_dict[(x,y)] counts removals on which row?",
-        "xy_dict[(x,y)]는 어떤 방향의 줄?"),
+        "xy[(x,y)] counts removals on which row?",
+        "xy[(x,y)]는 어떤 방향의 줄?"),
       hint: t(E, "If x and y are fixed, which axis is the row along?", "x와 y가 고정이면 줄이 뻗는 축은?"),
       options: [
         t(E, "z-direction (x,y fixed → z varies)", "z-방향 (x,y 고정 → z가 변함)"),
@@ -655,32 +686,13 @@ export function makeCheeseCh5(E) {
         "xy 쌍 → z-방향 줄! 쌍이 어떤 2축이 고정인지 알려줘."),
     },
 
-    // 5-6: 불필요한 +1 — 아이가 발견하게
+    // 5-5: 인터랙티브 코드 위젯 (4 부분 + Python/C++ 토글 + PDF)
     {
-      type: "quiz",
+      type: "progressive",
       narr: t(E,
-        "Look at lines 20-21: after count += 1, there's xy_dict[(x,y)] += 1. This pushes the counter past N so == N won't trigger again. But think — can the SAME block be removed twice?",
-        "20-21번 줄을 봐: count += 1 뒤에 xy_dict[(x,y)] += 1이 있어. 카운터를 N 위로 올려서 == N이 다시 안 되게 하는 거야. 근데 생각해봐 — 같은 블록이 두 번 빠질 수 있어?"),
-      question: t(E,
-        "Can the same block be removed twice?",
-        "같은 블록이 두 번 제거될 수 있어?"),
-      options: [
-        t(E, "No! Each block only once → counter hits N exactly once → extra +1 is unnecessary!", "아니! 블록은 한 번만 → 카운터는 N에 딱 한 번 → 추가 +1은 불필요!"),
-        t(E, "Yes, need the safety check", "응, 안전장치가 필요해"),
-      ], correct: 0,
-      explain: t(E,
-        "Each block is unique! The extra +1 doesn't hurt but isn't needed. Good defensive thinking though! 👍",
-        "블록은 유일해! 추가 +1이 해롭진 않지만 불필요해. 방어적 사고는 좋지만! 👍"),
-    },
-
-    // 5-7: 정리 버전
-    {
-      type: "code",
-      narr: t(E,
-        "Clean version — same idea, no unnecessary +1, loop instead of repeating 3 times:",
-        "정리 버전 — 같은 아이디어, 불필요한 +1 없이, 3번 반복 대신 루프:"),
-      code: USER_CODE_CLEAN,
-      label: t(E, "Show clean version", "정리 버전 보기"),
+        "Pick a part to see code + reasoning. Toggle Python ↔ C++. Save as PDF for later.",
+        "버튼 눌러서 부분별 코드 + 이유 확인. Python ↔ C++ 토글. PDF 저장 가능."),
+      sections: getCheeseSections(E),
     },
 
     // 5-8: 최종 정리
