@@ -49,6 +49,8 @@ import {
   // C++ Korean lessons 15-22
   cppLesson15Data, cppLesson16Data, cppLesson17Data, cppLesson18Data,
   cppLesson19Data, cppLesson20Data, cppLesson21Data, cppLesson22Data, cppLesson23Data,
+  // C++ cpp-24: Pre-algorithm setup (mini-lesson)
+  cppLesson24Data,
   // C++ lesson 23 English
   cppLesson23EnData,
   // C++ checkpoint lessons (Korean)
@@ -67,6 +69,8 @@ import {
   // C++ English lessons 15-22
   cppLesson15EnData, cppLesson16EnData, cppLesson17EnData, cppLesson18EnData,
   cppLesson19EnData, cppLesson20EnData, cppLesson21EnData, cppLesson22EnData,
+  // C++ cpp-24 EN
+  cppLesson24EnData,
   // C++ English project lessons
   cppLessonP1EnData, cppLessonP2EnData, cppLessonP3EnData,
   // Pseudocode Korean lessons
@@ -123,7 +127,7 @@ export const lessonsData: Record<string, LessonData> = {
   "cpp-16": cppLesson16Data, "cpp-ck5": cppLessonCk5Data, "cpp-17": cppLesson17Data, "cpp-18": cppLesson18Data,
   "cpp-ck6": cppLessonCk6Data, "cpp-ck7": cppLessonCk7Data, "cpp-ck8": cppLessonCk8Data,
   "cpp-ck9": cppLessonCk9Data, "cpp-ck10": cppLessonCk10Data,
-  "cpp-19": cppLesson19Data, "cpp-20": cppLesson20Data,
+  "cpp-19": cppLesson19Data, "cpp-20": cppLesson20Data, "cpp-24": cppLesson24Data,
   // C++ projects
   "cpp-p1": cppLessonP1Data, "cpp-p2": cppLessonP2Data, "cpp-p3": cppLessonP3Data,
   // Pseudocode Part 1
@@ -259,6 +263,7 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "cpp-ck10": { ko: cppLessonCk10Data, en: cppLessonCk10EnData },
   "cpp-19": { ko: cppLesson19Data, en: cppLesson19EnData },
   "cpp-20": { ko: cppLesson20Data, en: cppLesson20EnData },
+  "cpp-24": { ko: cppLesson24Data, en: cppLesson24EnData },
   // C++ projects
   "cpp-p1": { ko: cppLessonP1Data, en: cppLessonP1EnData },
   "cpp-p2": { ko: cppLessonP2Data, en: cppLessonP2EnData },

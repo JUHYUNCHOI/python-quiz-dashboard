@@ -21,33 +21,23 @@ export const cppLesson19EnData: LessonData = {
         {
           id: "ch0-notice",
           type: "explain",
-          title: "⚡ Fast I/O — must learn before algorithms",
-          content: `This lesson is **part of the main track**. You should hit this once before moving on to algorithms (BFS/DFS, DP, etc.).
+          title: "📌 This lesson is **reference** — fine to skip",
+          content: `This lesson is **reference material**. The essential setup before algorithms (\`bits/stdc++.h\` + Fast I/O lines) is covered in a small dedicated lesson **cpp-24**. Memorize that and move on.
 
-### Why now?
+### When to read this lesson?
 
-Algorithm problems often have **hundreds of thousands** of input lines. Plain \`cin >> x\` will hit **Time Limit Exceeded**. Adding just two lines at the top of main makes it ~3-5× faster:
+| Situation | Where to look |
+|---|---|
+| Essential setup before algorithms (3 lines to memorize) | → **cpp-24** (5 min) |
+| Old USACO with \`.in\` / \`.out\` files | → here (File I/O) |
+| Want deeper Fast I/O detail | → here (Fast I/O) |
 
-\`\`\`cpp
-ios::sync_with_stdio(false);
-cin.tie(nullptr);
-\`\`\`
+Modern Baekjoon / Codeforces / USACO Open all use standard I/O (\`cin\` / \`cout\`). File I/O is rarely needed, so **skipping this is fine**.
 
-This is **Fast I/O**. Almost every USACO / Codeforces / Baekjoon solution starts with this. Skip it now and you'll be confused later when you see it everywhere.
+### So now?
 
-### What this lesson covers
-
-| Tool | When to use | Importance |
-|---|---|---|
-| ⚡ **Fast I/O** (\`sync_with_stdio(false)\`) | Almost all algorithm problems | 🔥 Essential |
-| 📄 **File I/O** (\`ifstream\` / \`freopen\`) | Old USACO with \`.in\` / \`.out\` files | Nice to know |
-
-**Memorize Fast I/O before moving on.** File I/O you can revisit when you meet the official USACO judge — but a quick first read here builds the intuition.
-
-### Order
-
-1. File I/O (freopen, getline) — quick skim
-2. **Fast I/O — the key part. Memorize this.**`
+- **Skip it** — next lesson isn't gated on this
+- **Browse if curious** — content stays here`
         }
       ]
     },
