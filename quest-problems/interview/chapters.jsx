@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getInterviewSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -186,7 +187,7 @@ export function makeInterviewCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드
    ═══════════════════════════════════════════════════════════════ */
-export function makeInterviewCh3(E) {
+export function makeInterviewCh3(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -225,12 +226,12 @@ export function makeInterviewCh3(E) {
         "최소 종료 = 5. 카운터 0과 2 모두 5니까 베시는 둘 중 하나!"),
     },
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution using heapq!",
-        "heapq를 사용한 전체 솔루션!"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+      sections: getInterviewSections(E),
+      _legacyCode: SOLUTION_CODE,
     },
   ];
 }
