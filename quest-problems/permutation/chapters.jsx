@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getPermSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -238,7 +239,7 @@ export function makePermCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드
    ═══════════════════════════════════════════════════════════════ */
-export function makePermCh3(E) {
+export function makePermCh3(E, lang = "py") {
   return [
     // 3-1: Complexity
     {
@@ -278,14 +279,13 @@ export function makePermCh3(E) {
         "h[i]=0 means |perm[i]-perm[i+1]|=0, so they're equal. But permutations have all distinct values — contradiction!",
         "h[i]=0이면 |perm[i]-perm[i+1]|=0, 같은 값. 하지만 순열은 모든 값이 달라 — 모순!"),
     },
-    // 3-3: Code
+    // 3-3: Progressive code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution! Try each start value, greedily pick + or -, check validity.",
-        "완전한 솔루션! 각 시작값을 시도하고, 탐욕적으로 + 또는 -를 선택, 유효성 확인."),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "Solution code — read it part by part. Toggle Python ↔ C++ in header, save as PDF.",
+        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글, PDF 저장 가능."),
+      sections: getPermSections(E),
     },
   ];
 }
