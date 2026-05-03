@@ -239,10 +239,11 @@ export default function CurriculumPage() {
         { id: "cpp-15", title: t("17. pair & tuple", "17. pair & tuple"), description: t("두 값을 묶는 상자 — .first/.second 접근", "Bundle two values — .first/.second access"), duration: t("20분", "20 min"), hasQuiz: true },
         { id: "cpp-23", title: t("18. sort 마스터", "18. sort Master"), description: t("sort(), 람다로 커스텀 정렬, stable_sort", "sort(), custom sorting with lambda, stable_sort"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-16", title: "19. map & set", description: t("key-value 저장, 자동 정렬 컨테이너", "Key-value storage, auto-sorted containers"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-19", title: t("20. Fast I/O & 파일 I/O ⚡", "20. Fast I/O & File I/O ⚡"), description: t("ios::sync_with_stdio(false) — 알고리즘 시작 전 꼭! freopen 도 같이.", "ios::sync_with_stdio(false) — must-have before algorithms! Plus freopen."), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-24", title: t("20. 🚀 알고리즘 시작 전 셋업", "20. 🚀 Pre-Algorithm Setup"), description: t("3 줄 외우기 — bits/stdc++.h + Fast I/O. 5 분.", "Memorize 3 lines — bits/stdc++.h + Fast I/O. 5 min."), duration: t("5분", "5 min") },
         { id: "cpp-17", title: t("21. STL 탐색 함수 📌 참고용", "21. STL Search Functions 📌 Reference"), description: t("이미 다른 레슨에서 대부분 다룸 — 정리/심화로 보면 OK", "Mostly covered in earlier lessons — view as a recap/extension"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
         { id: "cpp-18", title: t("22. stack & queue 📌 참고용", "22. stack & queue 📌 Reference"), description: t("Algorithm Lab 의 BFS/DFS 시작 직전에 돌아와서 보기", "Come back here right before starting BFS/DFS in Algorithm Lab"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
-        { id: "cpp-20", title: t("23. CP 실전 팁 📌 참고용", "23. CP Practical Tips 📌 Reference"), description: t("나중에 필요할 때 돌아오기 — 지금 건너뛰어도 OK", "Come back when needed — fine to skip for now"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-19", title: t("23. 파일 I/O & Fast I/O 심화 📌 참고용", "23. File I/O & Fast I/O Deep Dive 📌 Reference"), description: t("Fast I/O 핵심은 cpp-24 에 있음 — 여기는 파일 I/O + 심화", "Fast I/O essentials are in cpp-24 — this is File I/O + deep dive"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-20", title: t("24. CP 실전 팁 📌 참고용", "24. CP Practical Tips 📌 Reference"), description: t("typedef, 매크로, 비트마스크 등 — 필요할 때 돌아오기", "typedef, macros, bitmask, etc. — come back when needed"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
         { id: "cpp-p3", title: t("🏆 USACO 모의전 (Part 3 종합)", "🏆 USACO Mock Contest (Part 3 Capstone)"), description: t("pair / sort / map / stack — 3 문제로 진짜 USACO 풀이 체험", "pair / sort / map / stack — 3 problems for real USACO experience"), duration: t("30분", "30 min"), isProject: true },
       ],
     },
@@ -573,7 +574,7 @@ export default function CurriculumPage() {
   // 여정 맵 진도 계산
   const cppLessonIds = ["cpp-1","cpp-2","cpp-3","cpp-4","cpp-5","cpp-6","cpp-7","cpp-8",
     "cpp-9","cpp-21","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-22",
-    "cpp-15","cpp-23","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20"]
+    "cpp-15","cpp-23","cpp-16","cpp-24","cpp-17","cpp-18","cpp-19","cpp-20"]
   const cppLessonsDone = cppLessonIds.filter(id => completedLessons.has(id)).length
   const practiceUnlocked = isTeacher || cppLessonsDone >= 8
   const algoUnlocked = isTeacher || practiceProblemsDone >= 40
@@ -1404,10 +1405,10 @@ export default function CurriculumPage() {
                             : null
 
                           // 🎉 메인 트랙 졸업 마일스톤 카드
-                          // 메인 트랙: cpp-15, cpp-23, cpp-16, cpp-19 (Fast I/O 필수)
+                          // 메인 트랙: cpp-15, cpp-23, cpp-16, cpp-24 (필수 셋업)
                           // cpp-17 이 첫 optional 레슨이라 그 직전에 노출
                           const showMainTrackMilestone = isCpp && lesson.id === "cpp-17" && part.id === "cpp-part3"
-                          const cpp16Done = completedLessons.has("cpp-16") && completedLessons.has("cpp-19")
+                          const cpp16Done = completedLessons.has("cpp-16") && completedLessons.has("cpp-24")
 
                           return (
                             <Fragment key={lesson.id}>
@@ -1423,8 +1424,8 @@ export default function CurriculumPage() {
                                       </h3>
                                       <p className="text-xs sm:text-sm text-gray-700 leading-relaxed mb-3">
                                         {t(
-                                          "여기까지 (map & set + Fast I/O) 면 USACO Bronze 80% 를 풀 수 있어요. 아래는 심화/참고용 — 필요할 때 와도 OK!",
-                                          "Up to here (map & set + Fast I/O) you can solve ~80% of USACO Bronze. Lessons below are for reference — come back when needed!"
+                                          "여기까지 (map & set + 알고리즘 셋업) 면 USACO Bronze 80% 를 풀 수 있어요. 아래는 심화/참고용 — 필요할 때 와도 OK!",
+                                          "Up to here (map & set + algo setup) you can solve ~80% of USACO Bronze. Lessons below are for reference — come back when needed!"
                                         )}
                                       </p>
                                       <div className="flex flex-wrap gap-2">

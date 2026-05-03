@@ -114,6 +114,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   // 복습 페이지에서 진입했는지 확인
   const fromReview = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("from") === "review"
 
+  // 선생님이 학생 시점으로 전환 (프로필에서 설정, localStorage 저장).
   const teacherAsStudent = typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
   const effectiveTeacher = isTeacher && !teacherAsStudent
 
@@ -276,6 +277,130 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     syncProgress(progressData)
   }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress, progressLoaded, effectiveTeacher])
 
+  // ── 선생님 자료 창 (/teach/[lessonId]) 과 위치 동기화 ─────────────────────
+  // 선생님이 학생 화면을 넘길 때마다 별도 창의 자료가 따라오도록 localStorage 에 기록.
+  // 학생 화면에만 영향 없음 — 키 별도, 다른 창에서만 읽음.
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    try {
+      localStorage.setItem(
+        `lesson-position-${lessonId}`,
+        JSON.stringify({ chapter: currentChapter, step: currentStep, ts: Date.now() })
+      )
+    } catch {}
+  }, [lessonId, currentChapter, currentStep])
+
+  // ── 선생님 전용: 본문 직접 클릭으로 강조 토글 ─────────────────────────────
+  // 선생님이 줌으로 학생 화면 공유 중에 직접 클릭한 **문장** (sentence) 에 노란 강조.
+  // 코드 블록(PRE) 은 통째로 강조 (코드는 문장 단위가 어색).
+  // 같은 곳 다시 누르면 강조 해제. 페이지 넘기면 자동 리셋 (DOM 교체됨).
+  // 학생 인터랙션 (버튼/입력/링크 등) 은 건드리지 않음.
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (!effectiveTeacher) return
+    const root = document.querySelector("[data-learn-content]") as HTMLElement | null
+    if (!root) return
+
+    // 텍스트 단위 강조 가능한 블록 (sentence 단위로 쪼갬)
+    const TEXT_BLOCKS = new Set(["P", "H1", "H2", "H3", "H4", "H5", "H6", "LI", "BLOCKQUOTE", "TD", "TH"])
+    // 통째로 강조할 블록 (코드 등)
+    const FULL_BLOCKS = new Set(["PRE"])
+    // 클릭 무시할 인터랙티브 태그
+    const SKIP = new Set(["BUTTON", "INPUT", "TEXTAREA", "A", "SELECT", "LABEL"])
+
+    /** 문장 끝을 나타내는 정규식 — . ! ? 다음에 공백/끝/따옴표 등이 오는 경우 */
+    const SENTENCE_END_RE = /[.!?。！？](?=\s|$|["'”’」』])/g
+
+    /** 텍스트 노드의 주어진 offset 을 포함하는 문장의 [start, end) 범위 반환 */
+    function findSentenceRange(text: string, offset: number): [number, number] {
+      let start = 0
+      let end = text.length
+      const matches: number[] = [] // 문장 끝 위치 (구두점 다음)
+      let m: RegExpExecArray | null
+      SENTENCE_END_RE.lastIndex = 0
+      while ((m = SENTENCE_END_RE.exec(text)) !== null) {
+        matches.push(m.index + m[0].length)
+      }
+      for (const boundary of matches) {
+        if (boundary <= offset) start = boundary
+        else { end = boundary; break }
+      }
+      // 앞쪽 공백 제거
+      while (start < end && /\s/.test(text[start])) start++
+      return [start, end]
+    }
+
+    const handler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null
+      if (!target) return
+
+      // 1) 이미 강조된 <mark> 클릭 시 → 해제 (text 만 남기고 mark 제거)
+      if (target.tagName === "MARK" && target.classList.contains("teach-highlight-active")) {
+        const parent = target.parentNode
+        if (parent) {
+          while (target.firstChild) parent.insertBefore(target.firstChild, target)
+          parent.removeChild(target)
+          parent.normalize()
+        }
+        return
+      }
+
+      // 2) 인터랙티브 요소는 무시
+      let el: HTMLElement | null = target
+      while (el && el !== root) {
+        if (SKIP.has(el.tagName)) return
+        if (FULL_BLOCKS.has(el.tagName)) {
+          // 코드 블록 통째로 강조 토글
+          if (el.classList.contains("teach-highlight-active")) {
+            el.classList.remove("teach-highlight-active")
+          } else {
+            void el.offsetWidth
+            el.classList.add("teach-highlight-active")
+          }
+          return
+        }
+        if (TEXT_BLOCKS.has(el.tagName)) {
+          // 문장 단위 강조 — caretRangeFromPoint 로 클릭 위치의 텍스트 노드 찾음
+          // (TS 타입에 caretRangeFromPoint 가 없어서 any cast)
+          const docAny = document as unknown as { caretRangeFromPoint?: (x: number, y: number) => Range | null }
+          const caret = docAny.caretRangeFromPoint?.(e.clientX, e.clientY)
+          if (caret && caret.startContainer.nodeType === Node.TEXT_NODE) {
+            const textNode = caret.startContainer as Text
+            const offset = caret.startOffset
+            const text = textNode.data
+            const [s, eIdx] = findSentenceRange(text, offset)
+            if (eIdx > s) {
+              try {
+                const range = document.createRange()
+                range.setStart(textNode, s)
+                range.setEnd(textNode, eIdx)
+                const mark = document.createElement("mark")
+                mark.className = "teach-highlight-active"
+                mark.style.cssText = "padding:0;background:transparent;color:inherit;"
+                range.surroundContents(mark)
+                return
+              } catch {
+                // surroundContents 가 element 경계 넘으면 실패 — 통째로 fallback
+              }
+            }
+          }
+          // fallback: 단락 통째로
+          if (el.classList.contains("teach-highlight-active")) {
+            el.classList.remove("teach-highlight-active")
+          } else {
+            void el.offsetWidth
+            el.classList.add("teach-highlight-active")
+          }
+          return
+        }
+        el = el.parentElement
+      }
+    }
+    root.addEventListener("click", handler)
+    return () => root.removeEventListener("click", handler)
+  // currentChapter/Step 바뀌면 DOM 이 새로 그려지니 다시 바인드.
+  }, [effectiveTeacher, currentChapter, currentStep])
+
   // ── 스텝 방문 로그 (선생님 제외, 진도 로드 후에만) ─────────────────────────
   useEffect(() => {
     if (!user || isTeacher || !step || !lesson || !progressLoaded) return
@@ -377,6 +502,27 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }, [completedSteps, step?.id, play, isIGCSE, effectiveTeacher, isAlreadyDone, t])
 
   const closeSuccessOverlay = useCallback(() => { setShowSuccess(false) }, [])
+
+  // 키보드 단축키 — early return 위쪽에 둬야 hook 순서 위반 X
+  // goNext / goPrev 는 아래에서 정의되므로 ref 로 우회 (handler 호출 시점엔 ref 채워져 있음)
+  const goNextRef = useRef<() => void>(() => {})
+  const goPrevRef = useRef<() => void>(() => {})
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (showChapterComplete || showLessonComplete || showChapterList) return
+      const cmdOrCtrl = e.metaKey || e.ctrlKey
+      if (!cmdOrCtrl || e.shiftKey || e.altKey) return
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault()
+        goNextRef.current()
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault()
+        goPrevRef.current()
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [showChapterComplete, showLessonComplete, showChapterList])
 
   if (authLoading || !user) return null
 
@@ -529,6 +675,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       restoreCompletedStepState(prevStep)
     }
   }
+
+  // 키보드 useEffect 의 ref 동기화 — goNext/goPrev 가 위에서 정의되었으므로 ref 에 할당
+  goNextRef.current = goNext
+  goPrevRef.current = goPrev
 
   const handleQuizAnswer = (idx: number) => {
     if (selectedAnswer !== null) return
@@ -897,6 +1047,25 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <div className="hidden md:flex items-center justify-between gap-2 mb-1.5">
               <ProgrammingLanguageToggle current={currentProgrammingLang} className="shrink-0" />
               <div className="flex items-center gap-1.5 shrink-0">
+                {effectiveTeacher && (
+                  <button
+                    onClick={() => {
+                      // 새 창으로 열기 — 학생 화면 공유에 영향 없음.
+                      // 선생님 본인 화면에서만 보임. 페이지 넘기면 자동 동기화.
+                      const w = 720
+                      const h = Math.min(900, typeof window !== "undefined" ? window.innerHeight : 900)
+                      window.open(
+                        `/teach/${lessonId}`,
+                        `teach-${lessonId}`,
+                        `width=${w},height=${h},menubar=no,toolbar=no`
+                      )
+                    }}
+                    className="px-2.5 py-1 rounded-lg text-xs font-bold border bg-white text-purple-700 border-purple-300 hover:bg-purple-50 transition-colors"
+                    title={t("선생님 자료를 새 창에서 열기 (페이지 넘기면 자동 동기화)", "Open teacher notes in new window (auto-syncs as you navigate)")}
+                  >
+                    📖 {t("선생님 자료", "Teacher Notes")}
+                  </button>
+                )}
                 <LanguageToggle />
                 {gamification.dailyStreak > 0 && (
                   <StreakWidget streak={analyzeStreak(gamification.dailyStreak)} t={t} compact />
@@ -1052,7 +1221,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
         {/* 메인 콘텐츠 */}
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
-          <div className="relative bg-white rounded-2xl p-6 pb-28 md:p-10 md:pb-28 shadow-sm">
+          <div data-learn-content className="relative bg-white rounded-2xl p-6 pb-28 md:p-10 md:pb-28 shadow-sm">
             {/* 선생님 전용 편집 버튼 */}
             {effectiveTeacher && mergedStep && (
               <button
@@ -1114,18 +1283,21 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 : t("👆 위 내용을 완료해야 넘어갈 수 있어요", "👆 Complete the step above to continue")}
             </p>
           )}
-          <div className="flex gap-3 md:gap-4 justify-center">
+          <div className="flex gap-3 md:gap-4 justify-between max-w-2xl mx-auto">
             <button onClick={goPrev} disabled={currentStep === 0 && currentChapter === 0}
+              title={t("이전 (⌘← / Ctrl←)", "Prev (⌘← / Ctrl←)")}
               className={cn("flex items-center justify-center gap-1 rounded-xl font-bold transition-colors min-h-[44px]", "px-5 py-3 md:px-6 md:py-3",
                 (currentStep > 0 || currentChapter > 0) ? "bg-gray-100 hover:bg-gray-200 text-gray-700" : "invisible")}>
               <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
               <span className="text-sm md:text-base">{t("이전", "Prev")}</span>
+              <span className="hidden md:inline text-[10px] font-normal opacity-50 ml-1">⌘←</span>
             </button>
             {(() => {
               const isLastStepOfLastChapter = currentChapter === lesson.chapters.length - 1 && currentStep === chapter.steps.length - 1
               const isLastStepOfChapter = currentStep === chapter.steps.length - 1
               return (
                 <button onClick={goNext} disabled={!canGoNext()}
+                  title={canGoNext() ? t("다음 (⌘→ / Ctrl→)", "Next (⌘→ / Ctrl→)") : ""}
                   className={cn("flex items-center justify-center gap-1 rounded-xl font-bold transition-colors min-h-[44px]",
                     isLastStepOfLastChapter && canGoNext()
                       ? "px-6 py-3 md:px-8 md:py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg animate-pulse"
@@ -1135,9 +1307,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                     isLastStepOfLastChapter ? (
                       <><span className="text-sm md:text-base">🎉</span><span className="text-sm md:text-base">{t("레슨 완료!", "Finish!")}</span></>
                     ) : isLastStepOfChapter ? (
-                      <><ChevronRight className="w-4 h-4 md:w-5 md:h-5 animate-bounce" /><span className="text-sm md:text-base">{t("챕터 완료", "End Chapter")}</span></>
+                      <><ChevronRight className="w-4 h-4 md:w-5 md:h-5 animate-bounce" /><span className="text-sm md:text-base">{t("챕터 완료", "End Chapter")}</span><span className="hidden md:inline text-[10px] font-normal opacity-60 ml-1">⌘→</span></>
                     ) : (
-                      <><ChevronRight className="w-4 h-4 md:w-5 md:h-5 animate-bounce" /><span className="text-sm md:text-base">{t("다음", "Next")}</span></>
+                      <><ChevronRight className="w-4 h-4 md:w-5 md:h-5 animate-bounce" /><span className="text-sm md:text-base">{t("다음", "Next")}</span><span className="hidden md:inline text-[10px] font-normal opacity-60 ml-1">⌘→</span></>
                     )
                   ) : (
                     <><Lock className="w-4 h-4 md:w-5 md:h-5" /><span className="text-xs md:text-sm">{t("완료 필요", "Complete first")}</span></>
