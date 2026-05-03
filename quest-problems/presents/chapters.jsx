@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getPresentsSections } from "./components";
 
 export const SOLUTION_CODE = [
   "N, Q = map(int, input().split())",
@@ -81,7 +82,7 @@ export function makePresentsCh1(E) {
   ];
 }
 
-export function makePresentsCh2(E) {
+export function makePresentsCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -99,10 +100,11 @@ export function makePresentsCh2(E) {
         </div>),
     },
     {
-      type: "code",
-      narr: t(E, "Direct simulation with Python list!", "파이썬 리스트로 직접 시뮬레이션!"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Now build the simulation step by step. Each section reveals one piece.",
+        "시뮬레이션을 단계별로 만들어보자. 각 섹션마다 한 조각씩."),
+      sections: getPresentsSections(E),
     },
   ];
 }
