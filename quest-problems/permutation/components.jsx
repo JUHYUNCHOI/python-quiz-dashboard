@@ -1,8 +1,313 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#7c5cfc";
+
+/* ═══════════════════════════════════════════════════════════════
+   PermSim — 학생이 시작값을 골라 그리디 알고리즘을 한 단계씩 따라가는 위젯.
+   - 6 가지 (start, h) 케이스 중 선택
+   - 각 케이스: 시작값 → 매 i 마다 + 또는 - 시도 → 성공/실패 추적
+   - 실패 시 어디서/왜 막혔는지 보여줌
+   ═══════════════════════════════════════════════════════════════ */
+
+// 기본 예시: N=4, h=[2,3,2]. start 별 결과:
+//   1: 1→3→6(✗)→4→? 1+2=3 ok, 3+3=6 ✗, 3-3=0 ✗ → 실패
+//   2: 2+2=4 ok, 4+3=7 ✗, 4-3=1 ok, 1+2=3 ok → [2,4,1,3] ✓
+//   3: 3+2=5 ✗, 3-2=1 ok, 1+3=4 ok, 4+2=6 ✗, 4-2=2 ok → [3,1,4,2] ✓
+//   4: 4+2=6 ✗, 4-2=2 ok, 2+3=5 ✗, 2-3=-1 ✗ → 실패
+function simulateGreedy(N, h, start) {
+  const perm = [start];
+  const used = new Set([start]);
+  const trace = [{ i: 0, perm: [...perm], used: new Set(used), tried: [], picked: start, ok: true }];
+  for (let i = 0; i < N - 1; i++) {
+    const cur = perm[i];
+    const plus = cur + h[i];
+    const minus = cur - h[i];
+    const tryPlus  = { val: plus,  ok: plus  >= 1 && plus  <= N && !used.has(plus) };
+    const tryMinus = { val: minus, ok: minus >= 1 && minus <= N && !used.has(minus) };
+    let picked = null;
+    if (tryPlus.ok)       picked = plus;
+    else if (tryMinus.ok) picked = minus;
+    if (picked === null) {
+      trace.push({ i: i + 1, perm: [...perm], used: new Set(used), tried: [tryPlus, tryMinus], picked: null, ok: false });
+      return { success: false, trace };
+    }
+    perm.push(picked);
+    used.add(picked);
+    trace.push({ i: i + 1, perm: [...perm], used: new Set(used), tried: [tryPlus, tryMinus], picked, ok: true });
+  }
+  return { success: true, trace };
+}
+
+export function PermSim({ E }) {
+  const N = 4;
+  const h = [2, 3, 2];
+  const [start, setStart] = useState(3);
+  const [si, setSi] = useState(0);
+
+  const { success, trace } = simulateGreedy(N, h, start);
+  const cur = Math.min(si, trace.length - 1);
+  const step = trace[cur];
+
+  const cellStyle = (filled, justPicked, conflict) => ({
+    width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
+    borderRadius: 8, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+    background: justPicked ? "#fef3c7" : (filled ? "#ede9fe" : "#fff"),
+    border: `2px solid ${conflict ? "#dc2626" : (justPicked ? "#f59e0b" : (filled ? A : "#e5e7eb"))}`,
+    color: conflict ? "#dc2626" : (justPicked ? "#92400e" : (filled ? A : "#cbd5e1")),
+    transition: "all .2s",
+  });
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* start 선택 */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: C.dim, alignSelf: "center", marginRight: 4 }}>
+          {t(E, "start =", "시작값 =")}
+        </span>
+        {[1, 2, 3, 4].map(s => {
+          const r = simulateGreedy(N, h, s);
+          return (
+            <button key={s} onClick={() => { setStart(s); setSi(0); }} style={{
+              padding: "5px 12px", borderRadius: 8, border: `2px solid ${s === start ? A : C.border}`,
+              background: s === start ? A : "transparent", color: s === start ? "#fff" : C.dim,
+              fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+            }}>
+              {s} <span style={{ fontSize: 10, marginLeft: 2 }}>{r.success ? "✓" : "✗"}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 11, color: C.dim, textAlign: "center" }}>
+        N = 4, h = [2, 3, 2]
+      </div>
+
+      {/* perm 배열 시각화 */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 8 }}>
+        {Array.from({ length: N }).map((_, idx) => {
+          const filled = idx < step.perm.length;
+          const justPicked = idx === step.i && step.ok && step.picked !== null;
+          return (
+            <div key={idx} style={cellStyle(filled, justPicked, false)}>
+              {filled ? step.perm[idx] : "?"}
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 12, fontFamily: "'JetBrains Mono',monospace" }}>
+        perm[]
+      </div>
+
+      {/* 시도 결과 */}
+      {step.tried && step.tried.length > 0 && (
+        <div style={{ background: step.ok ? "#f0fdf4" : "#fef2f2", border: `1.5px solid ${step.ok ? "#86efac" : "#fca5a5"}`, borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: step.ok ? "#16a34a" : "#dc2626", marginBottom: 6 }}>
+            {t(E, `Step ${cur}: pick perm[${step.i}]`, `${cur}단계: perm[${step.i}] 결정`)}
+          </div>
+          <div style={{ fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.8 }}>
+            <div>
+              + {h[step.i - 1]} = <b>{step.tried[0].val}</b>{" "}
+              <span style={{ color: step.tried[0].ok ? "#16a34a" : "#dc2626", fontWeight: 800 }}>
+                {step.tried[0].ok ? "✓ ok" : (step.tried[0].val < 1 || step.tried[0].val > N ? `✗ out of range` : `✗ already used`)}
+              </span>
+            </div>
+            <div>
+              − {h[step.i - 1]} = <b>{step.tried[1].val}</b>{" "}
+              <span style={{ color: step.tried[1].ok ? "#16a34a" : "#dc2626", fontWeight: 800 }}>
+                {step.tried[1].ok ? "✓ ok" : (step.tried[1].val < 1 || step.tried[1].val > N ? `✗ out of range` : `✗ already used`)}
+              </span>
+            </div>
+            <div style={{ marginTop: 4, fontWeight: 800, color: step.ok ? "#16a34a" : "#dc2626" }}>
+              → {step.ok ? `${t(E, "pick", "선택")}: ${step.picked}` : t(E, "둘 다 안 됨 — start 실패!", "둘 다 안 됨 — start 실패!")}
+            </div>
+          </div>
+        </div>
+      )}
+      {(!step.tried || step.tried.length === 0) && cur === 0 && (
+        <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: "#92400e", textAlign: "center", fontWeight: 700 }}>
+          {t(E, `Start = ${start}. Click → to step through the greedy.`, `시작값 = ${start}. → 눌러서 그리디를 한 단계씩 따라가봐.`)}
+        </div>
+      )}
+
+      {/* 결과 박스 (마지막 단계) */}
+      {cur === trace.length - 1 && (
+        <div style={{
+          background: success ? "#dcfce7" : "#fee2e2",
+          border: `2px solid ${success ? "#16a34a" : "#dc2626"}`,
+          borderRadius: 10, padding: "10px 12px", marginBottom: 10, textAlign: "center",
+          fontSize: 13, fontWeight: 800, color: success ? "#15803d" : "#7f1d1d",
+        }}>
+          {success
+            ? t(E, `✅ Success! perm = [${trace[trace.length-1].perm.join(", ")}]`, `✅ 성공! perm = [${trace[trace.length-1].perm.join(", ")}]`)
+            : t(E, `❌ Start = ${start} fails. Try a different start!`, `❌ 시작값 = ${start} 실패. 다른 시작값 시도!`)}
+        </div>
+      )}
+
+      {/* 네비 */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === 0 ? "#b0b5c3" : A, cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+          {cur + 1} / {trace.length}
+        </span>
+        <button onClick={() => setSi(Math.min(trace.length - 1, cur + 1))} disabled={cur === trace.length - 1} style={{
+          background: cur === trace.length - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === trace.length - 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === trace.length - 1 ? "#b0b5c3" : "#fff", cursor: cur === trace.length - 1 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PermRunner — 학생이 직접 N + h 입력 → 모든 start 시도하며 라이브 진행
+   ═══════════════════════════════════════════════════════════════ */
+export function PermRunner({ E }) {
+  const [nInput, setNInput] = useState("4");
+  const [hInput, setHInput] = useState("2 3 2");
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState(null);
+  const [liveStart, setLiveStart] = useState(0);
+  const [liveStep, setLiveStep] = useState(0);
+  const [livePerm, setLivePerm] = useState([]);
+  const alive = useRef(false);
+  const startTimeRef = useRef(0);
+
+  const run = () => {
+    const N = parseInt(nInput);
+    const h = hInput.trim().split(/\s+/).map(Number);
+    if (!N || N < 2 || N > 1000 || h.length !== N - 1 || h.some(x => isNaN(x) || x < 1 || x >= N)) {
+      setResult({ error: t(E, "Invalid input. N ≥ 2, h has N-1 values, 1 ≤ h[i] < N.", "잘못된 입력. N ≥ 2, h 는 N-1 개, 1 ≤ h[i] < N.") });
+      return;
+    }
+    setRunning(true); setResult(null);
+    setLiveStart(1); setLiveStep(0); setLivePerm([1]);
+    alive.current = true;
+    startTimeRef.current = performance.now();
+
+    let start = 1;
+    const tryStart = () => {
+      if (!alive.current) {
+        setResult({ stopped: true, lastStart: start, elapsed: performance.now() - startTimeRef.current });
+        setRunning(false);
+        return;
+      }
+      if (start > N) {
+        setResult({ found: false, elapsed: performance.now() - startTimeRef.current });
+        setRunning(false);
+        return;
+      }
+      const perm = [start];
+      const used = new Set([start]);
+      let valid = true;
+      for (let i = 0; i < N - 1; i++) {
+        const cur = perm[i];
+        const plus = cur + h[i];
+        const minus = cur - h[i];
+        if (plus >= 1 && plus <= N && !used.has(plus)) { perm.push(plus); used.add(plus); }
+        else if (minus >= 1 && minus <= N && !used.has(minus)) { perm.push(minus); used.add(minus); }
+        else { valid = false; break; }
+      }
+      setLiveStart(start); setLiveStep(perm.length); setLivePerm(perm);
+      if (valid) {
+        setResult({ found: true, perm, start, elapsed: performance.now() - startTimeRef.current });
+        setRunning(false);
+        return;
+      }
+      start += 1;
+      // delay so student can see progression — bigger delay for small N
+      const delay = N <= 10 ? 250 : (N <= 100 ? 30 : 5);
+      setTimeout(tryStart, delay);
+    };
+    setTimeout(tryStart, 100);
+  };
+  const stop = () => { alive.current = false; };
+
+  const fmtTime = (ms) => ms < 1000 ? `${ms.toFixed(0)}ms` : `${(ms / 1000).toFixed(2)}s`;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 8, marginBottom: 10 }}>
+        <input value={nInput} onChange={e => setNInput(e.target.value)} disabled={running}
+          placeholder="N" style={{
+            padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`,
+            fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+            color: A, textAlign: "center",
+          }} />
+        <input value={hInput} onChange={e => setHInput(e.target.value)} disabled={running}
+          placeholder="h (space-separated)" style={{
+            padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`,
+            fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+            color: A,
+          }} />
+      </div>
+      <button onClick={running ? stop : run} style={{
+        width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
+        fontSize: 14, fontWeight: 800, marginBottom: 10,
+        background: running ? "#dc2626" : A, color: "#fff",
+      }}>
+        {running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run greedy", "▶ 그리디 실행")}
+      </button>
+
+      {running && (
+        <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", color: C.dim, fontWeight: 700, marginBottom: 4 }}>
+            <span>{t(E, "trying", "시도")}: <span style={{ color: A, fontWeight: 900 }}>start = {liveStart}</span></span>
+            <span>{t(E, "filled", "채움")}: <span style={{ color: A, fontWeight: 900 }}>{liveStep}</span></span>
+          </div>
+          <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+            {livePerm.map((v, i) => (
+              <div key={i} style={{
+                minWidth: 28, padding: "2px 6px", borderRadius: 5,
+                background: "#ede9fe", border: `1.5px solid ${A}`, color: A,
+                fontSize: 11, fontWeight: 800, textAlign: "center",
+              }}>{v}</div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {result && result.error && (
+        <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>
+          {result.error}
+        </div>
+      )}
+      {result && result.found && (
+        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px" }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 4 }}>
+            {t(E, `✅ Found at start = ${result.start} (${fmtTime(result.elapsed)})`, `✅ 시작값 = ${result.start} 에서 성공 (${fmtTime(result.elapsed)})`)}
+          </div>
+          <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: A }}>
+            perm = [{result.perm.join(", ")}]
+          </div>
+        </div>
+      )}
+      {result && result.found === false && !result.stopped && (
+        <div style={{ background: "#fef2f2", border: "2px solid #dc2626", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 13, fontWeight: 700 }}>
+          {t(E, `❌ No valid permutation. Output: -1 (${fmtTime(result.elapsed)})`, `❌ 유효한 순열 없음. 출력: -1 (${fmtTime(result.elapsed)})`)}
+        </div>
+      )}
+      {result && result.stopped && (
+        <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 12px", color: "#92400e", fontSize: 12, fontWeight: 700 }}>
+          {t(E, `⏹ Stopped at start = ${result.lastStart} (${fmtTime(result.elapsed)})`, `⏹ 시작값 = ${result.lastStart} 에서 중지 (${fmtTime(result.elapsed)})`)}
+        </div>
+      )}
+
+      {/* 복잡도 추정 */}
+      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div>O(N²) per test case · C++ ≈ 10⁸ ops/sec</div>
+        <div>N = 100 → ~0.1ms · N = 1,000 → ~10ms · N = 10,000 → ~1s · N = 100,000 → ~100s</div>
+      </div>
+    </div>
+  );
+}
 
 /* ═══════════════════════════════════════════════════════════════
    getPermSections — 단계별 코드 + Python/C++ + reasoning

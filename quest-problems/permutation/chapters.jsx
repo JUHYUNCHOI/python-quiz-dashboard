@@ -156,30 +156,37 @@ export function makePermCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePermCh2(E) {
   return [
-    // 2-1: Strategy
+    // 2-1: First idea — natural greedy
     {
       type: "reveal",
       narr: t(E,
-        "Our approach: try each possible starting value (1 to N), then greedily pick + or - at each step. If we get a valid permutation, output it!",
-        "전략: 시작값을 1~N까지 하나씩 시도하고, 매 단계에서 + 또는 -를 탐욕적으로 선택. 유효한 순열이 나오면 출력!"),
+        "First thought: if we know perm[0], then perm[1] = perm[0] ± h[0] — only two choices. So pick a starting value, then greedily pick + or - at each step. Sounds simple!",
+        "첫 생각: perm[0]을 알면 perm[1] = perm[0] ± h[0] — 두 가지뿐. 시작값을 정하고 매 단계 +/− 중 하나를 그리디로 골라. 간단해 보이지?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text }}>
             <div style={{ fontWeight: 800, color: C.accent, marginBottom: 6 }}>
-              {t(E, "🔍 Greedy Strategy", "🔍 탐욕 전략")}
+              {t(E, "💡 Natural First Idea", "💡 자연스러운 첫 아이디어")}
             </div>
             {t(E,
-              "1. Try start = 1, 2, ..., N\n2. For each step: try perm[i]+h[i] first\n3. If valid (1≤val≤N, not used) → pick it\n4. Otherwise try perm[i]-h[i]\n5. If neither works → this start fails, try next",
-              "1. 시작값 = 1, 2, ..., N 시도\n2. 매 단계: perm[i]+h[i]를 먼저 시도\n3. 유효하면 (1≤값≤N, 미사용) → 선택\n4. 아니면 perm[i]-h[i] 시도\n5. 둘 다 안되면 → 이 시작값 실패, 다음 시도")}
+              "Try every start = 1, 2, ..., N. For each step: prefer + (or any rule). If +h is in [1, N] and unused, take it. Otherwise try −h. If both fail, this start is bad — try the next one.",
+              "시작값 = 1, 2, ..., N 다 시도. 매 단계: +h 먼저 (또는 정해진 규칙). +h가 [1, N] 안이고 미사용이면 선택. 아니면 −h 시도. 둘 다 실패면 이 시작값은 안 됨 — 다음 시도.")}
           </div>
         </div>),
     },
-    // 2-2: Trace example
+    // 2-2: Interactive sim
+    {
+      type: "sim",
+      narr: t(E,
+        "Try it! N=4, h=[2,3,2]. Pick a starting value below and step through the greedy. Notice that some starts fail and some succeed.",
+        "직접 해봐! N=4, h=[2,3,2]. 아래에서 시작값을 골라 그리디를 한 단계씩 따라가봐. 어떤 시작값은 실패하고 어떤 건 성공해."),
+    },
+    // 2-3: Static trace example
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace N=4, h=[2,3,2]. Start=3: 3→3+2=5(>4, no!)→3-2=1(ok!) → 1+3=4(ok!) → 4+2=6(no!)→4-2=2(ok!). Result: [3,1,4,2] ✅",
-        "추적! N=4, h=[2,3,2]. Start=3: 3→3+2=5(>4, 안됨!)→3-2=1(ok!) → 1+3=4(ok!) → 4+2=6(안됨!)→4-2=2(ok!). 결과: [3,1,4,2] ✅"),
+        "Recap: with start=3, the trace is 3→1→4→2 = [3,1,4,2] ✅. With start=1, we get stuck at step 2. With start=4, we get stuck at step 3.",
+        "정리: 시작값=3이면 3→1→4→2 = [3,1,4,2] ✅. 시작값=1은 2단계에서 막히고, 시작값=4는 3단계에서 막혀."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -203,7 +210,7 @@ export function makePermCh2(E) {
           </div>
         </div>),
     },
-    // 2-3: Quiz
+    // 2-4: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -286,6 +293,13 @@ export function makePermCh3(E, lang = "py") {
         "Solution code — read it part by part. Toggle Python ↔ C++ in header, save as PDF.",
         "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글, PDF 저장 가능."),
       sections: getPermSections(E),
+    },
+    // 3-4: Live runner
+    {
+      type: "runner",
+      narr: t(E,
+        "Now run it yourself. Enter N and h, watch the greedy try each start. Stop anytime.",
+        "이제 직접 돌려봐. N과 h 입력하고, 그리디가 시작값을 하나씩 시도하는 걸 봐. 언제든 중지 가능."),
     },
   ];
 }

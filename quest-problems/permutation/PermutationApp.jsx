@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { PermProgressiveCode, downloadPermPDF, getPermSections } from "./components";
+import { PermProgressiveCode, downloadPermPDF, getPermSections, PermSim, PermRunner } from "./components";
 import { makePermCh1, makePermCh2, makePermCh3 } from "./chapters";
 
 const A = "#7c5cfc";
@@ -77,6 +77,8 @@ export default function PermutationApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <PermProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <PermSim E={E} />;
+    if (step.type === "runner") return <PermRunner E={E} />;
     return null;
   };
 
