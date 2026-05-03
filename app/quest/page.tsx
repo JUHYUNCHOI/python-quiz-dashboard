@@ -244,7 +244,10 @@ export default function QuestPage() {
     setLoaded(true)
   }, [])
 
-  const isUnlocked = isTeacher || algoTopicsDone >= ALGO_UNLOCK_THRESHOLD
+  // 잠금 해제 — 모두 풀린 상태로 (이전: 알고리즘 토픽 8개 완료 조건)
+  const isUnlocked = true
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _unused = algoTopicsDone >= ALGO_UNLOCK_THRESHOLD || isTeacher
 
   const totalProblems = SECTIONS.reduce((acc, s) => acc + s.problems.length, 0)
   const totalSolved = SECTIONS.reduce(
