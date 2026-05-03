@@ -68,8 +68,16 @@ export default function WordApp(props = {}) {
   };
 
   const isBlocked = (step.type === "quiz" && step.answered == null) || (step.type === "input" && !step.solved);
-  const canNext = cur < steps.length - 1;  // isBlocked 무시 — 자유 진행
-  const next = () => { if (canNext) { setSi(cur + 1); window.scrollTo({ top: 0, behavior: "smooth" }); } };
+  const canNext = cur < steps.length - 1 || tab < TABS.length - 1;  // jump tabs at end
+  const next = () => {
+    if (cur < steps.length - 1) {
+      setSi(cur + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (tab < TABS.length - 1) {
+      changeTab(tab + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
   const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
   const renderContent = () => {

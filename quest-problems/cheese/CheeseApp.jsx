@@ -90,8 +90,16 @@ export default function CheeseApp(props = {}) {
     (step.type === "quiz" && step.answered == null) ||
     (step.type === "input" && !step.solved);
 
-  const canNext = cur < steps.length - 1;
-  const next = () => { if (canNext) { setSi(cur + 1); window.scrollTo({ top: 0, behavior: "smooth" }); } };
+  const canNext = cur < steps.length - 1 || tab < TABS.length - 1;
+  const next = () => {
+    if (cur < steps.length - 1) {
+      setSi(cur + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (tab < TABS.length - 1) {
+      changeTab(tab + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
   const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
   // 코드 컨트롤은 코드 탭(4)에서만

@@ -104,9 +104,19 @@ export default function RoundingApp(props = {}) {
     ((tab >= 1) && step.type === "quiz" && step.answered == null) ||
     ((tab >= 1) && step.type === "input" && !step.solved);
 
-  const canNext = cur < steps.length - 1;
+  const canNext = cur < steps.length - 1 || tab < TABS.length - 1;
 
   const next = () => {
+    if (cur < steps.length - 1) {
+      setSi(cur + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (tab < TABS.length - 1) {
+      changeTab(tab + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
     if (!canNext) return;
     setSi(cur + 1);
     window.scrollTo({ top: 0, behavior: "smooth" });
