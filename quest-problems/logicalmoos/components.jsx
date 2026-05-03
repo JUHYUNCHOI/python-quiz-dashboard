@@ -1,8 +1,106 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#0284c7";
+
+/* ═══════════════════════════════════════════════════════════════
+   LogicalMoosSim — boolean expression evaluator with grouping
+   ═══════════════════════════════════════════════════════════════ */
+const _LM_PRESETS = [
+  ["true", "and", "false", "or", "true"],
+  ["true", "or", "false", "and", "false"],
+  ["false", "and", "true", "and", "true", "or", "false"],
+  ["true", "or", "true", "and", "false", "or", "false", "and", "true"],
+];
+
+function _evaluate(tokens) {
+  let result = false;
+  let group = (tokens[0] === "true");
+  const groups = [group];
+  for (let i = 1; i < tokens.length; i += 2) {
+    const op = tokens[i];
+    const v = (tokens[i+1] === "true");
+    if (op === "and") {
+      group = group && v;
+      groups[groups.length - 1] = group;
+    } else {
+      result = result || group;
+      group = v;
+      groups.push(group);
+    }
+  }
+  return { result: result || group, groups };
+}
+
+export function LogicalMoosSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const tokens = _LM_PRESETS[pi];
+  const { result, groups } = _evaluate(tokens);
+
+  // For visualization: highlight AND-chains
+  let chainIdx = 0;
+  const tokenChainMap = [chainIdx];
+  for (let i = 1; i < tokens.length; i += 2) {
+    if (tokens[i] === "or") chainIdx++;
+    tokenChainMap.push(chainIdx);   // op token
+    tokenChainMap.push(chainIdx);   // value token
+  }
+  const chainColors = ["#dbeafe", "#dcfce7", "#fef3c7", "#fee2e2", "#ede9fe"];
+  const chainBorders = ["#3b82f6", "#16a34a", "#f59e0b", "#dc2626", "#8b5cf6"];
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_LM_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => setPi(i)} style={{
+            padding: "4px 8px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>case {i+1}</button>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {tokens.map((tok, i) => {
+          const cIdx = tokenChainMap[i] % chainColors.length;
+          return (
+            <div key={i} style={{
+              padding: "6px 10px", borderRadius: 6, fontSize: 12, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+              background: chainColors[cIdx], border: `2px solid ${chainBorders[cIdx]}`, color: chainBorders[cIdx],
+            }}>{tok}</div>
+          );
+        })}
+      </div>
+      <div style={{ textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 10 }}>
+        {t(E, "Same color = same AND-chain (broken by OR)", "같은 색 = 같은 AND-체인 (OR로 끊김)")}
+      </div>
+
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7 }}>
+        {t(E, "AND-chain results:", "AND-체인 결과:")}
+        <div style={{ marginTop: 4 }}>
+          [{groups.map(g => g ? "T" : "F").join(", ")}]
+        </div>
+        <div style={{ marginTop: 4 }}>
+          OR all → <b style={{ color: result ? "#16a34a" : "#dc2626" }}>{result ? "true" : "false"}</b>
+        </div>
+      </div>
+
+      <div style={{ background: result ? "#dcfce7" : "#fef2f2", border: `2px solid ${result ? "#16a34a" : "#dc2626"}`, borderRadius: 10, padding: "10px 12px", color: result ? "#15803d" : "#7f1d1d", fontSize: 14, fontWeight: 900, textAlign: "center" }}>
+        ✅ result = {result ? "TRUE" : "FALSE"}
+      </div>
+    </div>
+  );
+}
+
+export function LogicalMoosRunner({ E }) {
+  return (
+    <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
+      {t(E, "Use the Sim above to see how AND-chains group via OR. Per-query brute force in code section.",
+            "위 Sim에서 OR로 AND-체인이 어떻게 묶이는지 봐. 쿼리당 brute force는 코드 섹션 참고.")}
+    </div>
+  );
+}
 
 /* Section 1: Read N, Q + words */
 const LM_INPUT_PY = [

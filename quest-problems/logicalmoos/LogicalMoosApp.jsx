@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { LogicalMoosProgressiveCode, downloadLogicalMoosPDF, getLogicalMoosSections } from "./components";
+import { LogicalMoosProgressiveCode, downloadLogicalMoosPDF, getLogicalMoosSections, LogicalMoosSim } from "./components";
 import { makeLogicalCh1, makeLogicalCh2 } from "./chapters";
 
 const A = "#2563eb";
@@ -75,6 +75,7 @@ export default function LogicalMoosApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <LogicalMoosProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <LogicalMoosSim E={E} />;
     return null;
   };
 

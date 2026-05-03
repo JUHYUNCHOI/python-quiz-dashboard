@@ -78,6 +78,12 @@ export function makeLogicalCh1(E) {
         "'false and true or true'. 위치 1-3을 'true'로 교체. 결과 = 'true or true' = ?. 답이 true? (1=예,0=아니)"),
       answer: 1,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Same color = same AND-chain. OR splits chains. Final = OR of all chains.",
+        "같은 색 = 같은 AND-체인. OR이 체인을 끊음. 최종 = 모든 체인 OR."),
+    },
   ];
 }
 
