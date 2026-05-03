@@ -255,18 +255,41 @@ export function BruteRunner({ E }) {
   const [running, setRunning] = useState(false);
   const [results, setResults] = useState(null);
   const [progress, setProgress] = useState(0);
+  // 라이브 표시용 — 실행 중에 현재 위치 + 누적 카운트 보여줌
+  const [liveCurrent, setLiveCurrent] = useState(0);
+  const [liveCount, setLiveCount] = useState(0);
   const alive = useRef(false);
   const startTimeRef = useRef(0);
 
   const run = () => {
     const N = Math.min(Math.max(parseInt(n) || 10, 10), 100000);
     setN(N); setRunning(true); setResults(null); setProgress(0);
+    setLiveCurrent(2); setLiveCount(0);
     alive.current = true;
     startTimeRef.current = performance.now();
     const found = []; let idx = 2;
+
+    // 실제로 brute "체감" 되도록 batch + delay 조정.
+    // 60fps 기준 1 tick = 16ms. batch 를 작게 잡아 N 에 비례해서 시간 걸림.
+    // N = 100      → ~3 ticks × 16ms = ~50ms  (작은 N 은 빨리)
+    // N = 1,000    → ~25 ticks × 16ms = ~400ms
+    // N = 10,000   → ~250 ticks × 16ms = ~4초
+    // N = 100,000  → ~2500 ticks × 16ms = ~40초 (학생이 stop 누르고 싶을 만큼)
+    const BATCH = 40;        // 배치당 검사할 x 개수 — 작게 잡아 진짜 동작감
+    const TICK_MS = 16;      // 60fps
+
     const tick = () => {
-      if (!alive.current) { setRunning(false); return; }
-      const end = Math.min(idx + 500, N + 1);
+      if (!alive.current) {
+        // 학생이 멈춤 — 그때까지 결과 보존
+        const elapsed = performance.now() - startTimeRef.current;
+        setResults({
+          found, total: found.length, N, elapsedMs: elapsed,
+          partial: true, checkedUpTo: idx - 1,
+        });
+        setRunning(false);
+        return;
+      }
+      const end = Math.min(idx + BATCH, N + 1);
       for (; idx < end; idx++) {
         if (idx >= 10) {
           const b = calcBessie(idx), e = calcElsie(idx);
@@ -274,17 +297,25 @@ export function BruteRunner({ E }) {
         }
       }
       setProgress(Math.floor((idx - 2) / (N - 1) * 100));
+      // 라이브 업데이트 — 학생이 진행되는 거 눈으로 봄
+      setLiveCurrent(idx - 1);
+      setLiveCount(found.length);
+
       if (idx > N) {
         const elapsed = performance.now() - startTimeRef.current;
         setRunning(false);
-        setResults({ found, total: found.length, N, elapsedMs: elapsed });
+        setResults({
+          found, total: found.length, N, elapsedMs: elapsed,
+          partial: false, checkedUpTo: N,
+        });
         alive.current = false;
+      } else {
+        setTimeout(tick, TICK_MS);
       }
-      else setTimeout(tick, N > 5000 ? 1 : 16);
     };
     setTimeout(tick, 50);
   };
-  const stop = () => { alive.current = false; setRunning(false); };
+  const stop = () => { alive.current = false; };
 
   // USACO 추정: 브라우저는 setTimeout 으로 인해 인위적으로 늦어졌으니
   // CPU 연산 시간만 추정 — N 당 ~10 연산 (Bessie + Elsie 각각의 자릿수 루프)
@@ -325,19 +356,43 @@ export function BruteRunner({ E }) {
 
       {running && (
         <div style={{ marginBottom: 12 }}>
-          <div style={{ height: 6, background: "#e5e7eb", borderRadius: 3, overflow: "hidden" }}>
-            <div style={{ height: "100%", background: C.accent, borderRadius: 3, width: `${progress}%`, transition: "width .1s" }} />
+          {/* progress bar */}
+          <div style={{ height: 8, background: "#e5e7eb", borderRadius: 4, overflow: "hidden" }}>
+            <div style={{ height: "100%", background: C.accent, borderRadius: 4, width: `${progress}%`, transition: "width .1s" }} />
           </div>
-          <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 4 }}>{progress}%</div>
+          {/* 라이브 상태 — 학생이 진행 체감 */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 6, fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>
+            <span style={{ color: C.dim, fontWeight: 700 }}>
+              {t(E, "checking", "확인 중")} <span style={{ color: C.accent, fontWeight: 900 }}>x = {liveCurrent.toLocaleString()}</span>
+            </span>
+            <span style={{ color: C.dim, fontWeight: 700 }}>
+              {t(E, "found so far", "지금까지")}: <span style={{ color: C.no, fontWeight: 900 }}>{liveCount.toLocaleString()}</span>
+            </span>
+            <span style={{ color: C.dim, fontWeight: 700 }}>{progress}%</span>
+          </div>
         </div>
       )}
 
       {results && (
         <div>
           <div style={{ textAlign: "center", padding: "12px 0", marginBottom: 10 }}>
-            <div style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>{t(E, `2 ~ ${results.N} checked`, `2 ~ ${results.N} 확인 완료`)}</div>
+            {results.partial ? (
+              <>
+                <div style={{ fontSize: 11, color: C.no, fontWeight: 800, letterSpacing: 0.5 }}>
+                  ⏸ {t(E, "STOPPED EARLY", "중간에 멈춤")}
+                </div>
+                <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginTop: 2 }}>
+                  {t(E, `checked 2 ~ ${results.checkedUpTo.toLocaleString()} of ${results.N.toLocaleString()}`,
+                      `2 ~ ${results.checkedUpTo.toLocaleString()} 까지 확인 (목표 ${results.N.toLocaleString()})`)}
+                </div>
+              </>
+            ) : (
+              <div style={{ fontSize: 11, color: C.ok, fontWeight: 800 }}>
+                ✓ {t(E, `2 ~ ${results.N} fully checked`, `2 ~ ${results.N} 전부 확인`)}
+              </div>
+            )}
             <div style={{ fontSize: 36, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>{results.total}</div>
-            <div style={{ fontSize: 12, color: C.dim }}>{t(E, "different x found", "개 (답이 다른 x)")}</div>
+            <div style={{ fontSize: 12, color: C.dim }}>{t(E, "different x found (so far)", "개 (지금까지 발견)")}</div>
           </div>
 
           {/* 실제 측정 시간 (브라우저) — 가장 명확한 timing 신호 */}
