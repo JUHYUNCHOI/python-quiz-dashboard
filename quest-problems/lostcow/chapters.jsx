@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getLostCowSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -93,7 +94,7 @@ export function makeLostCowCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeLostCowCh2(E) {
+export function makeLostCowCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
@@ -112,14 +113,13 @@ export function makeLostCowCh2(E) {
           </div>
         </div>),
     },
-    // 2-2: Code
+    // 2-2: Progressive code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full simulation solution!",
-        "시뮬레이션 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Now build the zigzag simulation step by step.",
+        "지그재그 시뮬레이션을 단계별로 만들자."),
+      sections: getLostCowSections(E),
     },
   ];
 }
