@@ -98,24 +98,11 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const { profile } = useAuth()
   const meta = PROBLEM_MAP.get(problemId)
 
-  // ── 잠금 체크: 알고 토픽 8개 미만이면 /quest로 리다이렉트 ──
-  const [lockChecked, setLockChecked] = useState(false)
-  useEffect(() => {
-    const isTeacher = profile?.role === "teacher"
-    if (isTeacher) { setLockChecked(true); return }
-    try {
-      const algoCompleted = JSON.parse(localStorage.getItem("algo-completed") || "[]") as string[]
-      const algoCompletedSet = new Set(algoCompleted)
-      const topicsDone = ALL_TOPICS.filter(topic =>
-        topic.problems.some((p: { id: string }) => algoCompletedSet.has(p.id))
-      ).length
-      if (topicsDone < ALGO_UNLOCK_THRESHOLD) {
-        router.replace("/quest")
-        return
-      }
-    } catch { /* ignore */ }
-    setLockChecked(true)
-  }, [profile, router])
+  // 잠금 해제 — 모든 학생이 바로 접근 가능 (이전엔 알고 토픽 8개 완료 조건이라
+  // 첫 클릭은 profile 로딩 전이라서 /quest 로 튕겨나감 + 새로고침도 같은 이유로 튕김.)
+  const [lockChecked] = useState(true)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _unused = { profile, router, ALGO_UNLOCK_THRESHOLD, ALL_TOPICS }
 
   // ⚠️ 모든 hook 호출은 early return 앞에 있어야 함 (Rules of Hooks).
   // useQuestSolved 가 아래에 있던 시절: lockChecked=false → return null → hook 개수
@@ -248,7 +235,8 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         <main className={splitView ? "flex-1 md:w-1/2 min-w-0 overflow-auto" : "flex-1 min-w-0"}>
           {LazyComp ? (
             <Suspense fallback={<ProblemLoadingSpinner />}>
-              <LazyComp key={lang} />
+              {/* lang 을 prop 으로 직접 넘김 — window._questLang race 방지 */}
+              <LazyComp key={lang} lang={lang} />
             </Suspense>
           ) : (
             <div className="flex flex-col items-center justify-center gap-4 py-24 px-6 text-center">
