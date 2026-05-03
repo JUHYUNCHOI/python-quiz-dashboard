@@ -110,6 +110,12 @@ export function makePalindromeCh1(E) {
         "8은 한 자리 수라 회문이야. 8개 전부 가져갈 수 있어!"),
       answer: 1,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Watch the DP table fill bottom-up. Green = Bessie wins, red = Elsie wins.",
+        "DP 테이블이 아래에서 위로 채워지는 걸 봐. 초록 = 베시 승, 빨강 = 엘시 승."),
+    },
   ];
 }
 
@@ -148,6 +154,12 @@ export function makePalindromeCh2(E, lang = "py") {
         "Now build the game-theory DP step by step.",
         "게임 이론 DP를 단계별로 만들자."),
       sections: getPalindromeSections(E),
+    },
+    {
+      type: "runner",
+      narr: t(E,
+        "Try your own S. Watch the DP build to find the winner.",
+        "직접 S 시도. DP가 만들어지면서 승자를 찾는 걸 봐."),
     },
   ];
 }

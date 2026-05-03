@@ -1,8 +1,162 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#9333ea";
+
+/* ═══════════════════════════════════════════════════════════════
+   PalindromeSim — DP table for can_win[n], step through fill
+   ═══════════════════════════════════════════════════════════════ */
+function _isPalindrome(n) { const s = String(n); return s === s.split("").reverse().join(""); }
+function _palisUpTo(S) { const out = []; for (let p = 1; p <= S; p++) if (_isPalindrome(p)) out.push(p); return out; }
+const _PA_PRESETS = [4, 8, 10, 22];
+
+export function PalindromeSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [si, setSi] = useState(0);
+  const S = _PA_PRESETS[pi];
+  const palis = _palisUpTo(S);
+  const canWin = [false];
+  const reasons = [null];
+  for (let n = 1; n <= S; n++) {
+    let win = false;
+    let reason = null;
+    for (const p of palis) {
+      if (p > n) break;
+      if (!canWin[n - p]) { win = true; reason = p; break; }
+    }
+    canWin.push(win);
+    reasons.push(reason);
+  }
+  const cur = Math.min(si, S);
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
+        {_PA_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>S = {p}</button>
+        ))}
+      </div>
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "8px 12px", marginBottom: 10, fontSize: 11, color: C.dim, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+        palindromes ≤ S: [{palis.join(", ")}]
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(S+1, 12)}, 1fr)`, gap: 4, marginBottom: 12 }}>
+        {Array.from({ length: S + 1 }, (_, n) => {
+          const filled = n <= cur;
+          const isCur = n === cur;
+          return (
+            <div key={n} style={{
+              padding: "4px 0", borderRadius: 6, textAlign: "center",
+              background: !filled ? "#f3f4f6" : (isCur ? "#fef3c7" : (canWin[n] ? "#dcfce7" : "#fee2e2")),
+              border: `2px solid ${!filled ? "#e5e7eb" : (isCur ? "#f59e0b" : (canWin[n] ? "#86efac" : "#fca5a5"))}`,
+              fontSize: 10, color: !filled ? "#9ca3af" : (canWin[n] ? "#15803d" : "#7f1d1d"),
+              fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+            }}>
+              <div>n={n}</div>
+              <div>{filled ? (canWin[n] ? "B" : "E") : "?"}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+        {cur === 0 ? (
+          t(E, "n = 0: empty pile, player to move LOSES. can_win[0] = E.",
+                "n = 0: 빈 더미, 둘 차례면 짐. can_win[0] = E.")
+        ) : canWin[cur] ? (
+          t(E, `n = ${cur}: take palindrome ${reasons[cur]} → leaves opponent at n = ${cur - reasons[cur]} (E). Bessie wins!`,
+                `n = ${cur}: 회문 ${reasons[cur]} 가져감 → 상대 n = ${cur - reasons[cur]} (E). 베시 승!`)
+        ) : (
+          t(E, `n = ${cur}: every palindrome p ≤ ${cur} leaves opponent in B. Bessie LOSES.`,
+                `n = ${cur}: 모든 회문 p ≤ ${cur}이 상대 B 상태로. 베시 패.`)
+        )}
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: cur === 0 ? "#b0b5c3" : A,
+          cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur} / {S}</span>
+        <button onClick={() => setSi(Math.min(S, cur + 1))} disabled={cur === S} style={{
+          background: cur === S ? "#e5e7eb" : A, border: `2px solid ${cur === S ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === S ? "#b0b5c3" : "#fff", cursor: cur === S ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+export function PalindromeRunner({ E }) {
+  const [sIn, setSIn] = useState("22");
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState(null);
+  const [liveN, setLiveN] = useState(0);
+  const alive = useRef(false);
+
+  const run = () => {
+    const S = parseInt(sIn);
+    if (!S || S < 1 || S > 100000) {
+      setResult({ error: t(E, "Invalid: S must be a positive integer ≤ 10⁵.", "잘못된 입력: S는 양의 정수, 최대 10⁵.") });
+      return;
+    }
+    setRunning(true); setResult(null); setLiveN(0);
+    alive.current = true;
+    const palis = _palisUpTo(S);
+    const cw = [false];
+    let n = 1;
+    const tick = () => {
+      if (!alive.current) { setResult({ stopped: true, lastN: n }); setRunning(false); return; }
+      if (n > S) {
+        setResult({ done: true, winner: cw[S] ? "B" : "E" });
+        setRunning(false); return;
+      }
+      let win = false;
+      for (const p of palis) {
+        if (p > n) break;
+        if (!cw[n - p]) { win = true; break; }
+      }
+      cw.push(win);
+      setLiveN(n);
+      n++;
+      const delay = S <= 50 ? 100 : (S <= 1000 ? 5 : 1);
+      setTimeout(tick, delay);
+    };
+    setTimeout(tick, 100);
+  };
+  const stop = () => { alive.current = false; };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <input value={sIn} onChange={e => setSIn(e.target.value)} disabled={running} placeholder="S"
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box", textAlign: "center" }} />
+      <button onClick={running ? stop : run} style={{
+        width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
+        fontSize: 14, fontWeight: 800, marginBottom: 10,
+        background: running ? "#dc2626" : A, color: "#fff",
+      }}>{running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Build DP", "▶ DP 만들기")}</button>
+      {(running || result?.done) && (
+        <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", textAlign: "center" }}>
+          building can_win[{liveN}]...
+        </div>
+      )}
+      {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
+      {result?.done && (
+        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 16, fontWeight: 900, textAlign: "center" }}>
+          ✅ Winner: {result.winner}
+        </div>
+      )}
+      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div>O(S · |palis|) · palindromes are sparse so this is fast</div>
+      </div>
+    </div>
+  );
+}
 
 /* Section 1: helpers — is_palindrome + list of palindromes */
 const PA_HELPER_PY = [
