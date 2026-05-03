@@ -124,23 +124,23 @@ export function makeCheeseCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 12, padding: 14, fontSize: 14, color: C.text, lineHeight: 1.9, textAlign: "center" }}>
             {t(E,
-              "N×N×N cheese cube → remove blocks → check: can a chopstick fit through? 🥢",
-              "N×N×N 치즈 큐브 → 블록을 빼 → 젓가락이 통과할 수 있을까? 🥢")}
+              "N×N×N cheese cube → remove blocks → check: can a 1×1×N rod fit through? 📏",
+              "N×N×N 치즈 큐브 → 블록을 빼 → 막대가 통과할 수 있을까? 📏")}
           </div>
         </div>),
     },
-    // 1-2: 막대 = 젓가락 비유
+    // 1-2: 막대 = 막대 비유
     {
       type: "reveal",
       narr: t(E,
-        "After each removal, we check: can we slide a long chopstick through the cheese? The chopstick is 1×1×N — it goes through the entire cube!",
-        "블록을 뺄 때마다 확인해: 긴 젓가락을 치즈에 쭉 통과시킬 수 있을까? 젓가락은 1×1×N — 큐브를 관통하는 길이야!"),
+        "After each removal, we check: can we slide a long rod through the cheese? The rod is 1×1×N — it goes through the entire cube!",
+        "블록을 뺄 때마다 확인해: 긴 막대를 치즈에 쭉 통과시킬 수 있을까? 막대는 1×1×N — 큐브를 관통하는 길이야!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 14, padding: 14, textAlign: "center" }}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>🥢</div>
+            <div style={{ fontSize: 32, marginBottom: 8 }}>📏</div>
             <div style={{ fontSize: 14, fontWeight: 800, color: "#92400e", marginBottom: 8 }}>
-              {t(E, "Chopstick = 1×1×N stick", "젓가락 = 1×1×N 막대")}
+              {t(E, "Rod = 1×1×N brick", "📏 막대 (1×1×N brick)")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8 }}>
               {t(E,
@@ -154,11 +154,11 @@ export function makeCheeseCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "So the chopstick needs a clear tunnel. How many cells must be empty for it to fit?",
-        "젓가락이 들어가려면 터널이 뚫려야 해. 몇 칸이 비어야 할까?"),
+        "So the rod needs a clear tunnel. How many cells must be empty for it to fit?",
+        "막대가 들어가려면 터널이 뚫려야 해. 몇 칸이 비어야 할까?"),
       question: t(E,
-        "For the chopstick to fit through, how many cells on the row must be empty?",
-        "젓가락이 통과하려면, 그 줄에서 몇 칸이 비어야 해?"),
+        "For the rod to fit through, how many cells on the row must be empty?",
+        "막대가 통과하려면, 그 줄에서 몇 칸이 비어야 해?"),
       options: [
         t(E, "Just 1 cell", "1칸만"),
         t(E, "More than half", "절반 이상"),
@@ -172,8 +172,8 @@ export function makeCheeseCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The chopstick can go in 3 directions — think of it like poking through the cube from 3 sides!",
-        "젓가락은 3방향으로 꽂을 수 있어 — 큐브를 3면에서 찌르는 거라고 생각해!"),
+        "The rod can go in 3 directions — think of it like poking through the cube from 3 sides!",
+        "막대는 3방향으로 꽂을 수 있어 — 큐브를 3면에서 찌르는 거라고 생각해!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 12 }}>
@@ -204,8 +204,85 @@ export function makeCheeseCh1(E) {
         "2×2×2 큐브: 방향당 4줄 × 3방향 = 총 몇 줄?"),
       options: ["4", "8", "12", "24"], correct: 2,
       explain: t(E,
-        "12 rows total! That's every possible place a chopstick could fit.",
-        "총 12줄! 젓가락이 들어갈 수 있는 모든 자리야."),
+        "12 rows total! That's every possible place a 1×1×N rod could fit.",
+        "총 12줄! 막대가 들어갈 수 있는 모든 자리야."),
+    },
+
+    // 1-6: 입출력 형식 + 제약 (USACO 원문 충실)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now the actual problem format: read N (cube size) and Q (number of carve operations), then Q lines of (x, y, z). After EACH carve, output the count.",
+        "실제 문제 형식: N (큐브 크기) 와 Q (제거 횟수) 를 읽고, Q 줄에 (x, y, z) 들어옴. 매 제거 후 답 한 줄씩 출력."),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N Q</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line)", "(첫 줄)")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x y z</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "× Q lines", "× Q 줄")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "After EACH carve: print the count of rows where a 1×1×N rod fits.",
+                  "각 제거 후: 막대가 들어가는 줄의 개수 출력 (한 줄씩 Q 줄).")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>2 ≤ N ≤ 1000</div>
+              <div>1 ≤ Q ≤ 200,000 (= 2 × 10⁵)</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 4 }}>0 ≤ x, y, z &lt; N</div>
+            </div>
+          </div>
+        </div>),
+    },
+
+    // 1-7: Sample I/O 미리보기 — 다음 탭(시뮬) 에서 같은 케이스 직접 돌릴 거란 다리
+    {
+      type: "reveal",
+      narr: t(E,
+        "Here's the sample input/output we'll trace by hand in the Sim tab:",
+        "다음 시뮬 탭에서 직접 돌려볼 샘플 입출력:"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            {/* Input */}
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
+                <div><span style={{ color: "#fbbf24" }}>2</span> <span style={{ color: "#fbbf24" }}>5</span> <span style={{ color: "#94a3b8", fontSize: 10 }}> {t(E, "// N=2, Q=5", "// N=2, Q=5")}</span></div>
+                <div>0 0 0</div>
+                <div>1 1 1</div>
+                <div>0 1 0</div>
+                <div>1 0 0</div>
+                <div>1 1 0</div>
+              </div>
+            </div>
+            {/* Output */}
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
+                <div>0</div>
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div style={{ color: "#34d399", fontWeight: 900 }}>5 ←!</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 12, padding: "10px 12px", background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, fontSize: 12, color: "#92400e", lineHeight: 1.7, fontWeight: 600 }}>
+            🤔 {t(E,
+              "Notice the JUMP: 0 → 0 → 1 → 2 → 5. Why does the last carve add +3 at once? That's the magic we'll uncover. Hit 'Sim' next!",
+              "주목: 0 → 0 → 1 → 2 → 5. 왜 마지막 제거가 한꺼번에 +3 추가? 그게 우리가 풀 마법이야. '시뮬' 탭으로!")}
+          </div>
+        </div>),
     },
   ];
 }
@@ -231,11 +308,11 @@ export function makeCheeseCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Did you notice? The answer was 0, 0, 1, 2... then suddenly jumped to 5! Three chopsticks fit at once! Why?",
-        "봤지? 답이 0, 0, 1, 2... 였다가 갑자기 5로 뛰었어! 젓가락 3개가 한꺼번에 들어갔어! 왜 그런 걸까?"),
+        "Did you notice? The answer was 0, 0, 1, 2... then suddenly jumped to 5! Three rods fit at once! Why?",
+        "봤지? 답이 0, 0, 1, 2... 였다가 갑자기 5로 뛰었어! 막대 3개가 한꺼번에 들어갔어! 왜 그런 걸까?"),
       question: t(E,
-        "Why did 3 chopsticks suddenly fit at the same time?",
-        "왜 갑자기 젓가락 3개가 동시에 들어간 거야?"),
+        "Why did 3 rods suddenly fit at the same time?",
+        "왜 갑자기 막대 3개가 동시에 들어간 거야?"),
       options: [
         t(E, "That last block was blocking 3 different rows at once!", "그 마지막 블록이 3개의 다른 줄을 동시에 막고 있었으니까!"),
         t(E, "The cube got smaller", "큐브가 작아져서"),
@@ -358,8 +435,8 @@ export function makeCheeseCh3(E) {
         t(E, "Whether it's half empty", "절반이 비었는지"),
       ], correct: 0,
       explain: t(E,
-        "Count removals on each row! When count = N → the row is fully empty → chopstick fits! We call this a 'counter'.",
-        "각 줄에서 제거된 수를 세! 그 수 = N이면 → 줄이 전부 빔 → 젓가락 들어감! 이걸 '카운터'라고 불러."),
+        "Count removals on each row! When count = N → the row is fully empty → rod fits! We call this a 'counter'.",
+        "각 줄에서 제거된 수를 세! 그 수 = N이면 → 줄이 전부 빔 → 막대 들어감! 이걸 '카운터'라고 불러."),
     },
 
     // 3-5: 카운터 개념 정리 — 쉬운 말로
@@ -386,7 +463,7 @@ export function makeCheeseCh3(E) {
               ))}
             </div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 8 }}>
-              {t(E, "N=2: when counter hits 2 → row is clear! 🥢", "N=2: 카운터가 2가 되면 → 줄이 뚫려! 🥢")}
+              {t(E, "N=2: when counter hits 2 → row is clear! 📏", "N=2: 카운터가 2가 되면 → 줄이 뚫려! 📏")}
             </div>
           </div>
         </div>),
@@ -416,7 +493,7 @@ export function makeCheeseCh3(E) {
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 2.2 }}>
             <div style={{ color: C.dim }}>{t(E, "Removals so far:", "지금까지 제거:")} (0,0,0), (1,1,1), (0,1,0)</div>
             <div style={{ marginTop: 8, background: C.okBg, border: `1.5px solid ${C.okBd}`, borderRadius: 8, padding: "6px 12px", fontWeight: 700, color: C.ok }}>
-              {t(E, "y-row (0,_,0): counter = 2 = N → opened! 🥢", "y-줄 (0,_,0): 카운터 = 2 = N → 뚫렸어! 🥢")}
+              {t(E, "y-row (0,_,0): counter = 2 = N → opened! 📏", "y-줄 (0,_,0): 카운터 = 2 = N → 뚫렸어! 📏")}
             </div>
             <div style={{ marginTop: 4, color: C.dim, fontSize: 11 }}>
               {t(E, "Total open rows: 1 (after 3rd removal) → 2 (after 4th)", "뚫린 줄: 1개(3번째 후) → 2개(4번째 후)")}
@@ -451,7 +528,7 @@ export function makeCheeseCh3(E) {
           <div style={{ fontSize: 13, lineHeight: 2.2, color: C.text }}>
             <div>① {t(E, "Each row has a counter, starting at 0", "각 줄마다 카운터, 0에서 시작")}</div>
             <div>② {t(E, "Remove block → 3 counters go up by 1", "블록 제거 → 카운터 3개가 +1")}</div>
-            <div>③ {t(E, "Counter = N → row is clear → chopstick fits! 🥢", "카운터 = N → 줄이 빔 → 젓가락 들어감! 🥢")}</div>
+            <div>③ {t(E, "Counter = N → row is clear → rod fits! 📏", "카운터 = N → 줄이 빔 → 막대 들어감! 📏")}</div>
           </div>
           <div style={{ marginTop: 10, padding: "8px 12px", background: C.okBg, borderRadius: 8, fontWeight: 800, color: C.ok, textAlign: "center", fontSize: 13 }}>
             {t(E, "3 operations per removal — lightning fast! ⚡", "제거마다 연산 3번 — 번개처럼 빨라! ⚡")}
@@ -655,15 +732,15 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "The counter goes up by 1 each removal. When does the chopstick fit?",
-        "카운터가 제거마다 1씩 올라가. 젓가락이 들어가는 때는?"),
+        "The counter goes up by 1 each removal. When does the rod fit?",
+        "카운터가 제거마다 1씩 올라가. 막대가 들어가는 때는?"),
       question: t(E,
-        "Chopstick fits when counter reaches…?",
-        "카운터가 몇이 되면 젓가락이 들어가?"),
+        "Rod fits when counter reaches…?",
+        "카운터가 몇이 되면 막대가 들어가?"),
       options: ["0", "N/2", "N", "N²"], correct: 2,
       explain: t(E,
-        "N! All blocks removed from that row → completely empty → chopstick fits!",
-        "N! 그 줄의 블록이 전부 빠짐 → 완전히 빔 → 젓가락 들어감!"),
+        "N! All blocks removed from that row → completely empty → rod fits!",
+        "N! 그 줄의 블록이 전부 빠짐 → 완전히 빔 → 막대 들어감!"),
     },
 
     // 5-4: 코드 읽기 퀴즈 — 변수 이름의 의미
@@ -693,6 +770,59 @@ export function makeCheeseCh5(E, lang = "py") {
         "Pick a part to see code + reasoning. Toggle Python ↔ C++. Save as PDF for later.",
         "버튼 눌러서 부분별 코드 + 이유 확인. Python ↔ C++ 토글. PDF 저장 가능."),
       sections: getCheeseSections(E),
+    },
+
+    // 5-6: 샘플 입력 변수 trace — 시뮬에서 본 것과 코드 변수 연결
+    {
+      type: "reveal",
+      narr: t(E,
+        "Trace: how the code's xy/yz/xz variables change as the sample input runs through. Match this to the Sim tab!",
+        "trace: 샘플 입력이 들어오면 코드의 xy/yz/xz 변수가 어떻게 바뀌는지. 시뮬 탭에서 본 거랑 같아!"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 8, textAlign: "center" }}>
+            {t(E, "Sample: N=2, Q=5", "샘플: N=2, Q=5")}
+          </div>
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", fontSize: 11 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "30px 70px 1fr 50px 60px", padding: "6px 8px", background: "#fef3c7", borderBottom: `1.5px solid ${C.border}`, fontWeight: 800, color: "#92400e", fontFamily: "'JetBrains Mono',monospace" }}>
+              <span>i</span>
+              <span>(x,y,z)</span>
+              <span>{t(E, "key updates", "키 업데이트")}</span>
+              <span style={{ textAlign: "right" }}>{t(E, "+count", "+count")}</span>
+              <span style={{ textAlign: "right" }}>{t(E, "print", "print")}</span>
+            </div>
+            {[
+              { i: 1, c: "(0,0,0)", upd: "xy[(0,0)]=1, yz[(0,0)]=1, xz[(0,0)]=1", hits: 0, total: 0, note: t(E, "all <2", "다 <2") },
+              { i: 2, c: "(1,1,1)", upd: "xy[(1,1)]=1, yz[(1,1)]=1, xz[(1,1)]=1", hits: 0, total: 0, note: t(E, "all <2", "다 <2") },
+              { i: 3, c: "(0,1,0)", upd: "xy[(0,1)]=1, yz[(1,0)]=1, xz[(0,0)]=2 ✓", hits: 1, total: 1, note: t(E, "xz hit N!", "xz 가 N!") },
+              { i: 4, c: "(1,0,0)", upd: "xy[(1,0)]=1, yz[(0,0)]=2 ✓, xz[(1,0)]=1", hits: 1, total: 2, note: t(E, "yz hit N!", "yz 가 N!") },
+              { i: 5, c: "(1,1,0)", upd: "xy[(1,1)]=2 ✓, yz[(1,0)]=2 ✓, xz[(1,0)]=2 ✓", hits: 3, total: 5, note: t(E, "all 3 hit N! 🤯", "셋 다 N! 🤯") },
+            ].map((r, idx) => (
+              <div key={idx} style={{
+                display: "grid", gridTemplateColumns: "30px 70px 1fr 50px 60px",
+                padding: "7px 8px",
+                borderBottom: idx < 4 ? "1px solid #f1f5f9" : "none",
+                background: r.hits >= 3 ? "#fef3c7" : (r.hits > 0 ? "#ecfdf5" : "#fff"),
+                fontFamily: "'JetBrains Mono',monospace",
+                fontSize: 11, alignItems: "center",
+              }}>
+                <span style={{ fontWeight: 800, color: C.dim }}>{r.i}</span>
+                <span style={{ fontWeight: 700, color: C.text }}>{r.c}</span>
+                <span style={{ fontSize: 10, color: C.text }}>{r.upd}</span>
+                <span style={{ textAlign: "right", fontWeight: 800, color: r.hits > 0 ? "#10b981" : C.dim }}>+{r.hits}</span>
+                <span style={{ textAlign: "right", fontWeight: 900, color: C.accent, fontSize: 13 }}>{r.total}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 10, padding: "8px 10px", background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 8, fontSize: 11, color: "#9a3412", lineHeight: 1.7 }}>
+            👀 {t(E,
+              "Last row: ONE block (1,1,0) made 3 different counters reach N at the same time → +3 in one go. That's the 'jump' you saw in the sim.",
+              "마지막 줄: 블록 1 개 (1,1,0) 가 3 개의 카운터를 동시에 N 으로 → 한 번에 +3. 시뮬에서 본 '점프' 가 이거.")}
+          </div>
+          <div style={{ marginTop: 6, padding: "8px 10px", background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 8, fontSize: 11, color: "#065f46", lineHeight: 1.7, fontFamily: "'JetBrains Mono',monospace" }}>
+            ✓ {t(E, "Output column matches sample output: 0, 0, 1, 2, 5", "출력 칼럼이 샘플 출력과 일치: 0, 0, 1, 2, 5")}
+          </div>
+        </div>),
     },
 
     // 5-8: 최종 정리

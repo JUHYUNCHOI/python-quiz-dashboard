@@ -199,13 +199,16 @@ export function CheeseBruteRunner({ E }) {
 /* --- Interactive Simulator --- */
 export function CheeseSim2({ E }) {
   const N = 2;
+  // 샘플 input: 2 5 / 0 0 0 / 1 1 1 / 0 1 0 / 1 0 0 / 1 1 0
   const order = [[0,0,0],[1,1,1],[0,1,0],[1,0,0],[1,1,0]];
-  const expectedAns = [0,0,1,2,5];
+  const expectedAns = [0,0,1,2,5];   // 샘플 output
 
+  // mkGrid: [N x N], 시작값 N (그 줄에 남은 블록 수)
   const mkGrid = () => Array.from({length:N}, ()=>Array(N).fill(N));
   const initState = () => ({
     step: 0, xy: mkGrid(), yz: mkGrid(), xz: mkGrid(),
     total: 0, history: [], carved: [], lastCarved: null,
+    lastTouched: { xy: null, yz: null, xz: null },
   });
 
   const [state, setState] = useState(initState);
@@ -217,36 +220,85 @@ export function CheeseSim2({ E }) {
     const yz = state.yz.map(r=>[...r]);
     const xz = state.xz.map(r=>[...r]);
     let newHits = 0;
-    const details = [];
-    xy[x][y] -= 1; if (xy[x][y] === 0) { newHits++; details.push("z"); }
-    yz[y][z] -= 1; if (yz[y][z] === 0) { newHits++; details.push("x"); }
-    xz[x][z] -= 1; if (xz[x][z] === 0) { newHits++; details.push("y"); }
+    xy[x][y] -= 1; if (xy[x][y] === 0) newHits++;
+    yz[y][z] -= 1; if (yz[y][z] === 0) newHits++;
+    xz[x][z] -= 1; if (xz[x][z] === 0) newHits++;
     const newTotal = state.total + newHits;
     setState({
       step: state.step + 1, xy, yz, xz, total: newTotal,
-      history: [...state.history, { coord: [x,y,z], hits: newHits, total: newTotal, details }],
+      history: [...state.history, { coord: [x,y,z], hits: newHits, total: newTotal }],
       carved: [...state.carved, [x,y,z]], lastCarved: [x,y,z],
+      lastTouched: { xy: [x, y], yz: [y, z], xz: [x, z] },
     });
   };
 
   const reset = () => setState(initState());
   const cur = state.step < order.length ? order[state.step] : null;
+  const matches = state.step > 0 && state.total === expectedAns[state.step - 1];
+
+  // 미니 격자 — N×N counter visualization
+  const renderGrid = (grid, label, axis, color, touched) => (
+    <div style={{ textAlign: "center" }}>
+      <div style={{ fontSize: 10, fontWeight: 800, color, marginBottom: 4, fontFamily: "'JetBrains Mono',monospace" }}>{label}</div>
+      <div style={{ display: "inline-grid", gridTemplateColumns: `repeat(${N}, 28px)`, gap: 2 }}>
+        {grid.flatMap((row, i) => row.map((v, j) => {
+          const isTouch = touched && touched[0] === i && touched[1] === j;
+          const isHit  = v === 0;
+          return (
+            <div key={`${i}-${j}`} style={{
+              width: 28, height: 28, borderRadius: 5,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 13, fontWeight: 800,
+              fontFamily: "'JetBrains Mono',monospace",
+              background: isHit ? "#10b98120" : (isTouch ? `${color}30` : "#f8f9fc"),
+              border: `1.5px solid ${isHit ? "#10b981" : (isTouch ? color : C.border)}`,
+              color: isHit ? "#10b981" : (isTouch ? color : C.text),
+              transition: "all .2s",
+            }}>{v}</div>
+          );
+        }))}
+      </div>
+      <div style={{ fontSize: 9, color: C.dim, marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>{axis}</div>
+    </div>
+  );
 
   return (
     <div style={{ padding: "12px 8px" }}>
       <Cube3D N={N} carved={state.carved} E={E} />
 
-      {/* Answer display */}
+      {/* Answer + Sample I/O 매칭 표시 */}
       {state.step > 0 && (
         <div style={{ textAlign: "center", marginBottom: 12 }}>
           <div style={{ fontSize: 13, color: C.dim, fontWeight: 600, marginBottom: 2 }}>
-            {E ? "Bricks that fit:" : "들어갈 수 있는 막대:"}
+            {E ? "Rods that fit:" : "들어갈 수 있는 막대:"}
           </div>
-          <div style={{ fontSize: 36, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.accent }}>
+          <div style={{ fontSize: 36, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: matches ? "#10b981" : C.accent }}>
             {state.total}
           </div>
+          {matches && (
+            <div style={{ fontSize: 11, color: "#10b981", fontWeight: 700, marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>
+              ✓ {t(E, `matches sample output line ${state.step}`, `샘플 출력 ${state.step}번째 줄과 일치`)}
+            </div>
+          )}
         </div>
       )}
+
+      {/* 카운터 3 격자 — 코드의 xy/yz/xz 값을 눈으로 */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 8px", marginBottom: 12 }}>
+        <div style={{ fontSize: 10, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 8, letterSpacing: 0.5 }}>
+          {t(E, "ROW BLOCKS REMAINING (3 directions)", "각 줄의 남은 블록 수 (3 방향)")}
+        </div>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          {renderGrid(state.xy, "xy", "z-axis", "#ef4444", state.lastTouched.xy)}
+          {renderGrid(state.yz, "yz", "x-axis", "#22c55e", state.lastTouched.yz)}
+          {renderGrid(state.xz, "xz", "y-axis", "#3b82f6", state.lastTouched.xz)}
+        </div>
+        <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginTop: 6, lineHeight: 1.5 }}>
+          {t(E,
+            "Each cell = blocks left in that row. Reaches 0 → row is empty → +1 to total!",
+            "각 칸 = 그 줄에 남은 블록 수. 0이 되면 → 줄이 빔 → 총합 +1!")}
+        </div>
+      </div>
 
       <div style={{ textAlign: "center", marginTop: 14 }}>
         {cur && (
@@ -263,8 +315,8 @@ export function CheeseSim2({ E }) {
               boxShadow: "0 3px 12px #fbbf2440",
             }}>{"🧀"} {E ? "Carve!" : "제거!"}</button>
           ) : (
-            <div style={{ fontSize: 16, fontWeight: 800, color: C.ok }}>
-              {"🎉"} {E ? "All 5 answers match!" : "5개 전부 정답!"}
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#10b981" }}>
+              {"🎉"} {E ? "All 5 outputs match the sample!" : "5개 전부 샘플 출력과 일치!"}
             </div>
           )}
           <button onClick={reset} style={{
@@ -704,11 +756,11 @@ export function downloadCheesePDF(E, sections, lang = "py") {
 <!-- 1. 문제 -->
 <h2>1. ${t(E, "Problem", "문제")}</h2>
 <p>${t(E,
-  "An N×N×N cheese cube. Q removals — each removes one block at (x,y,z). After each removal, count how many 1×1×N rows are now completely empty (a chopstick can fit through).",
-  "N×N×N 치즈 큐브. Q 번 제거 — 각 제거는 (x,y,z) 의 블록 하나를 뺌. 제거 후, 1×1×N 줄 중 전부 비어 있는 줄이 몇 개인지 (젓가락이 통과할 수 있는 줄) 출력.")}</p>
+  "An N×N×N cheese cube. Q removals — each removes one block at (x,y,z). After each removal, count how many 1×1×N rows are now completely empty (a 1×1×N rod can fit through).",
+  "N×N×N 치즈 큐브. Q 번 제거 — 각 제거는 (x,y,z) 의 블록 하나를 뺌. 제거 후, 1×1×N 줄 중 전부 비어 있는 줄이 몇 개인지 (막대가 통과할 수 있는 줄) 출력.")}</p>
 
 <div class="box">
-  <b>🥢 ${t(E, "Chopstick condition", "젓가락 조건")}</b>:
+  <b>📏 ${t(E, "Rod condition", "막대 조건")}</b>:
   ${t(E, "A row of N cells must be ENTIRELY empty. Even one block left = no fit.",
         "N 칸 한 줄이 전부 비어야 함. 1 개라도 남으면 못 들어감.")}
 </div>
@@ -775,7 +827,7 @@ ${codeBlock(bruteCode)}
 <ul>
   <li>${t(E, "Counter starts at 0.", "카운터 0 에서 시작.")}</li>
   <li>${t(E, "Block removed → that row's counter += 1.", "블록 제거 → 그 줄의 카운터 += 1.")}</li>
-  <li>${t(E, "Counter == N → row fully empty → chopstick fits!", "카운터 == N → 줄 완전히 빔 → 젓가락 들어감!")}</li>
+  <li>${t(E, "Counter == N → row fully empty → rod fits!", "카운터 == N → 줄 완전히 빔 → 막대 들어감!")}</li>
 </ul>
 
 <h3>${t(E, "Why 3 counters per removal?", "왜 제거당 3 카운터?")}</h3>
