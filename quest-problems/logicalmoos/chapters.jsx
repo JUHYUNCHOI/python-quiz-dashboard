@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getLogicalMoosSections } from "./components";
 
 export const SOLUTION_CODE = [
   "N, Q = map(int, input().split())",
@@ -80,7 +81,7 @@ export function makeLogicalCh1(E) {
   ];
 }
 
-export function makeLogicalCh2(E) {
+export function makeLogicalCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -88,10 +89,11 @@ export function makeLogicalCh2(E) {
       content: (<div style={{ padding: 16, textAlign: "center" }}><div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(NQ)</div></div>),
     },
     {
-      type: "code",
-      narr: t(E, "Try both replacements, evaluate each!", "두 교체를 시도, 각각 평가!"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Now build the brute-force evaluator step by step.",
+        "완전탐색 평가기를 단계별로 만들자."),
+      sections: getLogicalMoosSections(E),
     },
   ];
 }
