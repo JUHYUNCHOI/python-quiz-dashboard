@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getHpsSections } from "./components";
 
 export const SOLUTION_CODE = [
   "N, M = map(int, input().split())",
@@ -91,7 +92,7 @@ export function makeHpsCh1(E) {
   ];
 }
 
-export function makeHpsCh2(E) {
+export function makeHpsCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -105,10 +106,11 @@ export function makeHpsCh2(E) {
         </div>),
     },
     {
-      type: "code",
-      narr: t(E, "Complete brute force solution!", "완전탐색 솔루션!"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Now build the brute force step by step. Each section reveals one piece.",
+        "완전탐색을 단계별로 만들어보자. 각 섹션마다 한 조각씩."),
+      sections: getHpsSections(E),
     },
   ];
 }
