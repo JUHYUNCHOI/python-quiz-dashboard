@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getCowPhotosSections } from "./components";
 
 export const SOLUTION_CODE = [
   "T = int(input())",
@@ -73,7 +74,7 @@ export function makeCowPhotosCh1(E) {
   ];
 }
 
-export function makeCowPhotosCh2(E) {
+export function makeCowPhotosCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -85,10 +86,11 @@ export function makeCowPhotosCh2(E) {
         </div>),
     },
     {
-      type: "code",
-      narr: t(E, "Frequency-based greedy solution!", "빈도 기반 탐욕 솔루션!"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Now build the frequency-based solution step by step.",
+        "빈도 기반 솔루션을 단계별로 만들자."),
+      sections: getCowPhotosSections(E),
     },
   ];
 }
