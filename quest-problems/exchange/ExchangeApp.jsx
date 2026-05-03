@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { makeExchangeCh1, makeExchangeCh2 } from "./chapters";
 
 const A = "#2563eb";
 
-export default function ExchangeApp() {
-  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("language") === "en") ? "en" : "ko");
+export default function ExchangeApp(props = {}) {
+  const propLang = props.lang;
+  const [lang, setLang] = useState(() => {
+    if (propLang === "ko" || propLang === "en") return propLang;
+    if (typeof window !== "undefined") {
+      if (window._questLang === "en") return "en";
+      if (window._questLang === "ko") return "ko";
+      if (window.localStorage?.getItem("language") === "en") return "en";
+    }
+    return "ko";
+  });
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);
@@ -21,6 +30,11 @@ export default function ExchangeApp() {
 
   const switchLang = nl => { const ne = nl === "en"; setLang(nl); setSi(0); for (const k of [0,1]) setters[k](makers[k](ne)); };
   const changeTab = idx => { setTab(idx); setSi(0); setters[idx](makers[idx](E)); };
+  useEffect(() => {
+    if ((propLang === "ko" || propLang === "en") && propLang !== lang) switchLang(propLang);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propLang]);
+
 
   const steps = states[tab], cur = Math.min(si, steps.length - 1), step = steps[cur];
   const handleAnswer = i => { if (step.answered != null) return; const u = [...states[tab]]; u[cur] = { ...u[cur], answered: i }; setters[tab](u); };

@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { makeMcc15ChocoCh1, makeMcc15ChocoCh2 } from "./chapters";
 
 const A = "#8b5cf6";
 
-export default function Mcc15ChocoApp() {
-  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("language") === "en") ? "en" : "ko");
+export default function Mcc15ChocoApp(props = {}) {
+  const propLang = props.lang;
+  const [lang, setLang] = useState(() => {
+    if (propLang === "ko" || propLang === "en") return propLang;
+    if (typeof window !== "undefined") {
+      if (window._questLang === "en") return "en";
+      if (window._questLang === "ko") return "ko";
+      if (window.localStorage?.getItem("language") === "en") return "en";
+    }
+    return "ko";
+  });
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);
@@ -30,6 +39,11 @@ export default function Mcc15ChocoApp() {
     setTab(idx); setSi(0);
     setters[idx](makers[idx](E));
   };
+  useEffect(() => {
+    if ((propLang === "ko" || propLang === "en") && propLang !== lang) switchLang(propLang);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propLang]);
+
 
   const steps = states[tab];
   const cur = Math.min(si, steps.length - 1);

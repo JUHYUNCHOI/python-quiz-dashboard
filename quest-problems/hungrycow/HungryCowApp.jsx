@@ -1,15 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { makeHungryCowCh1, makeHungryCowCh2 } from "./chapters";
 const A = "#d97706";
-export default function HungryCowApp() {
-  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("language") === "en") ? "en" : "ko"); const E = lang === "en"; const [tab, setTab] = useState(0); const [si, setSi] = useState(0);
+export default function HungryCowApp(props = {}) {
+  const propLang = props.lang;
+  const [lang, setLang] = useState(() => {
+    if (propLang === "ko" || propLang === "en") return propLang;
+    if (typeof window !== "undefined") {
+      if (window._questLang === "en") return "en";
+      if (window._questLang === "ko") return "ko";
+      if (window.localStorage?.getItem("language") === "en") return "en";
+    }
+    return "ko";
+  }); const E = lang === "en"; const [tab, setTab] = useState(0); const [si, setSi] = useState(0);
   const [ch1Q, setCh1Q] = useState(() => makeHungryCowCh1(false)); const [ch2Q, setCh2Q] = useState(() => makeHungryCowCh2(false));
   const TABS = E ? ["\ud83d\udccb Problem", "\u26a1 Code"] : ["\ud83d\udccb \ubb38\uc81c", "\u26a1 \ucf54\ub4dc"];
   const setters = { 0: setCh1Q, 1: setCh2Q }, states = { 0: ch1Q, 1: ch2Q }, makers = { 0: makeHungryCowCh1, 1: makeHungryCowCh2 };
   const switchLang = nl => { const ne = nl === "en"; setLang(nl); setSi(0); for (const k of [0,1]) setters[k](makers[k](ne)); };
   const changeTab = idx => { setTab(idx); setSi(0); setters[idx](makers[idx](E)); };
+  useEffect(() => {
+    if ((propLang === "ko" || propLang === "en") && propLang !== lang) switchLang(propLang);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propLang]);
+
   const steps = states[tab], cur = Math.min(si, steps.length - 1), step = steps[cur];
   const handleAnswer = i => { if (step.answered != null) return; const u = [...states[tab]]; u[cur] = { ...u[cur], answered: i }; setters[tab](u); };
   const handleSolve = () => { const u = [...states[tab]]; u[cur] = { ...u[cur], solved: true }; setters[tab](u); };
