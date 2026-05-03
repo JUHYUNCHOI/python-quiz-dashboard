@@ -1,8 +1,162 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ═══════════════════════════════════════════════════════════════
+   CowPhotosSim — show counts per breed, pair/peak choice
+   ═══════════════════════════════════════════════════════════════ */
+const _CP_PRESETS = [
+  [1,2,2,3,3,3],
+  [1,1,2,2,3,3],
+  [3,3,2,1],
+  [4,4,4,2,2,1,1],
+];
+
+export function CowPhotosSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [si, setSi] = useState(0);
+  const h = _CP_PRESETS[pi];
+  const freq = {};
+  for (const x of h) freq[x] = (freq[x] || 0) + 1;
+  const keys = Object.keys(freq).map(Number).sort((a,b) => a-b);
+  // Phases: 0 show heights, 1 show counts, 2 show palindrome shape
+  const cur = Math.min(si, 2);
+  const pairs = keys.filter(k => freq[k] >= 2).length;
+  const ans = 2 * pairs + (keys.length > 0 ? 1 : 0);
+
+  // Build palindrome arrangement (for visualization)
+  const pairKeys = keys.filter(k => freq[k] >= 2);
+  let peakKey = pairKeys.length > 0 ? pairKeys[Math.floor(pairKeys.length / 2)] : keys[0];
+  // alternative: any value not in pairKeys
+  const noPairKey = keys.find(k => freq[k] === 1);
+  if (noPairKey !== undefined) peakKey = noPairKey;
+  // arrange: sorted pairs ascending then peak then descending
+  const left = pairKeys.filter(k => k !== peakKey).sort((a,b) => a-b);
+  const arr = [...left, peakKey, ...left.slice().reverse()];
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_CP_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
+            padding: "4px 8px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>[{p.join(",")}]</button>
+        ))}
+      </div>
+
+      {cur === 0 && (
+        <div>
+          <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 6, fontWeight: 700 }}>
+            {t(E, "Heights:", "키:")}
+          </div>
+          <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
+            {h.map((v, i) => (
+              <div key={i} style={{
+                width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: 6, fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                background: "#fff", border: `2px solid ${A}`, color: A,
+              }}>{v}</div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {cur === 1 && (
+        <div>
+          <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 6, fontWeight: 700 }}>
+            {t(E, "Counter (frequency map):", "Counter (빈도맵):")}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, maxWidth: 220, margin: "0 auto" }}>
+            {keys.map(k => (
+              <div key={k} style={{
+                display: "flex", justifyContent: "space-between", padding: "5px 10px", borderRadius: 6,
+                background: freq[k] >= 2 ? "#dcfce7" : "#fef3c7",
+                border: `1.5px solid ${freq[k] >= 2 ? "#86efac" : "#fbbf24"}`,
+                fontSize: 12, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                <span>breed {k}</span>
+                <span>count = {freq[k]} {freq[k] >= 2 ? "✓ pair" : "(only 1)"}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, fontWeight: 800, color: A }}>
+            pairs = {pairs}, ans = 2 × {pairs} + 1 = {ans}
+          </div>
+        </div>
+      )}
+
+      {cur === 2 && (
+        <div>
+          <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 6, fontWeight: 700 }}>
+            {t(E, "Palindrome arrangement:", "팰린드롬 배열:")}
+          </div>
+          <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
+            {arr.map((v, i) => {
+              const isPeak = i === Math.floor(arr.length / 2);
+              return (
+                <div key={i} style={{
+                  width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+                  borderRadius: 6, fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                  background: isPeak ? "#fef3c7" : "#dcfce7",
+                  border: `2px solid ${isPeak ? "#f59e0b" : "#16a34a"}`,
+                  color: isPeak ? "#92400e" : "#15803d",
+                }}>{v}</div>
+              );
+            })}
+          </div>
+          <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, fontWeight: 800, color: "#15803d" }}>
+            ✅ length = {arr.length}
+          </div>
+        </div>
+      )}
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 12 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: cur === 0 ? "#b0b5c3" : A,
+          cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / 3</span>
+        <button onClick={() => setSi(Math.min(2, cur + 1))} disabled={cur === 2} style={{
+          background: cur === 2 ? "#e5e7eb" : A, border: `2px solid ${cur === 2 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === 2 ? "#b0b5c3" : "#fff", cursor: cur === 2 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+export function CowPhotosRunner({ E }) {
+  const [hIn, setHIn] = useState("1 2 2 3 3 3");
+  const [result, setResult] = useState(null);
+  const run = () => {
+    const h = hIn.trim().split(/\s+/).map(Number);
+    if (h.some(isNaN) || h.length === 0) {
+      setResult({ error: t(E, "Invalid: enter integers.", "잘못된 입력: 정수.") });
+      return;
+    }
+    const f = {};
+    for (const x of h) f[x] = (f[x] || 0) + 1;
+    let pairs = 0;
+    for (const k in f) if (f[k] >= 2) pairs++;
+    const ans = 2 * pairs + (Object.keys(f).length > 0 ? 1 : 0);
+    setResult({ done: true, pairs, ans });
+  };
+  return (
+    <div style={{ padding: 14 }}>
+      <input value={hIn} onChange={e => setHIn(e.target.value)} placeholder="heights"
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
+      <button onClick={run} style={{ width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer", fontSize: 14, fontWeight: 800, marginBottom: 10, background: A, color: "#fff" }}>▶ {t(E, "Compute", "계산")}</button>
+      {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
+      {result?.done && (<div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 14, fontWeight: 900, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>pairs = {result.pairs} → ans = {result.ans}</div>)}
+    </div>
+  );
+}
 
 /* Section 1: Read T test cases + heights */
 const CP_INPUT_PY = [

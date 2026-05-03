@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { CowPhotosProgressiveCode, downloadCowPhotosPDF, getCowPhotosSections } from "./components";
+import { CowPhotosProgressiveCode, downloadCowPhotosPDF, getCowPhotosSections, CowPhotosSim, CowPhotosRunner } from "./components";
 import { makeCowPhotosCh1, makeCowPhotosCh2 } from "./chapters";
 
 const A = "#d97706";
@@ -75,6 +75,8 @@ export default function CowPhotosApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <CowPhotosProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <CowPhotosSim E={E} />;
+    if (step.type === "runner") return <CowPhotosRunner E={E} />;
     return null;
   };
 

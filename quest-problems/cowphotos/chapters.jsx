@@ -71,6 +71,12 @@ export function makeCowPhotosCh1(E) {
       question: t(E, "Max valid photo length for [3,3,2,1]?", "[3,3,2,1]의 최대 유효 사진 길이?"),
       answer: 1,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "3 phases: heights → Counter → final palindrome arrangement.",
+        "3단계: 키 → Counter → 최종 팰린드롬 배열."),
+    },
   ];
 }
 
@@ -91,6 +97,10 @@ export function makeCowPhotosCh2(E, lang = "py") {
         "Now build the frequency-based solution step by step.",
         "빈도 기반 솔루션을 단계별로 만들자."),
       sections: getCowPhotosSections(E),
+    },
+    {
+      type: "runner",
+      narr: t(E, "Try your own heights.", "직접 키 시도."),
     },
   ];
 }
