@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getBalancedSections } from "./components";
 
 export const SOLUTION_CODE = [
   "T = int(input())",
@@ -144,7 +145,7 @@ export function makeBalancedCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드
    ═══════════════════════════════════════════════════════════════ */
-export function makeBalancedCh3(E) {
+export function makeBalancedCh3(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -165,12 +166,11 @@ export function makeBalancedCh3(E) {
         </div>),
     },
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "The simplest USACO solution you'll ever see! 😄",
-        "가장 간단한 USACO 솔루션! 😄"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "The simplest USACO solution you'll ever see! 😄 Toggle Python ↔ C++ in header.",
+        "가장 간단한 USACO 솔루션! 😄 헤더에서 Python ↔ C++ 토글."),
+      sections: getBalancedSections(E),
     },
   ];
 }
