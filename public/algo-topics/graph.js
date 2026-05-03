@@ -149,6 +149,15 @@ var graphTopic = {
                 <p class="hero-sub">정점과 간선으로 이루어진 그래프를 빠짐없이 탐색하는 방법을 배웁니다</p>\
             </div>\
 \
+            <!-- 시작 전 — 도구 준비 (cpp-18 안내) -->\
+            <div class="concept-section" style="border-left: 4px solid #fbbf24; background: #fffbeb;">\
+                <div class="concept-section-title"><span class="section-num" style="background:#fbbf24">📌</span> 시작 전 — 도구 준비</div>\
+                <div class="analogy-box">\
+                    BFS 는 <strong>queue</strong>, DFS 는 <strong>stack 또는 재귀</strong>를 써요. 아직 익숙하지 않다면 <a href="/learn/cpp-18" style="color:#b45309;text-decoration:underline;font-weight:bold;">C++ 레슨 18 (stack &amp; queue)</a> 5 분만 훑고 와도 충분해요. 함수 사용법만 보면 돼요 (push / pop / front / top).<br><br>\
+                    이미 알고 있다면 그대로 진행 OK!\
+                </div>\
+            </div>\
+\
             <!-- ① 그래프란? -->\
             <div class="concept-section">\
                 <div class="concept-section-title"><span class="section-num">1</span> 그래프란?</div>\

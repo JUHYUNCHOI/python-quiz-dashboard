@@ -96,9 +96,8 @@ auto p3 = make_pair("Park", 77);             // auto 로 타입 생략
         {
           id: "ch1-pair-unpack",
           type: "explain",
-          component: "structuredBindingsVisualizer",
-          title: "🎁 pair 풀어 담기 — \`.first/.second\` vs structured bindings",
-          content: `지금까지 pair 두 값을 \`.first\` / \`.second\` 로 꺼냈어요:
+          title: "🎁 pair 두 값 꺼내기 — \`.first/.second\`",
+          content: `pair 두 값은 **\`.first\`, \`.second\`** 로 꺼내요. 이게 기본이고, 이 레슨에서 계속 쓸 형태예요.
 
 \`\`\`cpp
 pair<string, int> p = {"Kim", 95};
@@ -106,44 +105,9 @@ cout << p.first;    // "Kim"
 cout << p.second;   // 95
 \`\`\`
 
-여러 번 쓰거나 **의미 있는 이름** 으로 받고 싶을 때, **C++17 부터는 한 줄로 풀어 담을 수 있어요**:
-
-\`\`\`cpp
-auto [name, score] = p;
-cout << name;    // "Kim"
-cout << score;   // 95
-\`\`\`
-
-이게 \`auto\` 옆에 \`[name, score]\` — **structured bindings** 라고 불러요. "**구조** (structure) 가 있는 묶음 (pair / tuple / struct) 을 여러 변수에 **bind** 해주는 문법" — 이름의 어원이 그거예요.
-
-(어디서 들어본 것 같죠? 다음 챕터의 tuple 에서도 똑같이 등장해요. pair 에서 미리 손에 익혀두면 거기서 자연스럽게 이어져요.)
-
-### 어떤 걸 쓰지?
-
-| 패턴 | 언제 |
-|---|---|
-| \`p.first\`, \`p.second\` | 한두 번만 접근, 단순할 때 |
-| \`auto [name, score] = p;\` | 여러 번 사용 / **의미 있는 이름** 필요 ⭐ |
-| \`for (auto& [name, score] : v)\` | range-for 로 vector<pair> 순회 — 진짜 자주! ⭐⭐ |
-
-### 미리보기 — vector<pair> 순회 비교
-
-\`\`\`cpp
-vector<pair<string, int>> students = {{"Kim", 95}, {"Lee", 88}};
-
-// .first / .second 방식
-for (auto& s : students) {
-    cout << s.first << ": " << s.second << endl;
-}
-
-// structured bindings 방식 ⭐
-for (auto& [name, score] : students) {
-    cout << name << ": " << score << endl;
-    //      ↑ '.first 가 뭐였더라' 헤맬 일 없음
-}
-\`\`\`
-
-> 💡 다음 페이지부터 \`.first/.second\` 와 \`auto [name, score]\` 둘 다 자연스럽게 섞어 써요. 본인 편한 쪽 선택.`
+> 📌 **참고 — 모던 C++ (C++17) 의 한 줄 문법**
+>
+> 코드를 더 깔끔하게 쓰고 싶을 땐 \`auto [name, score] = p;\` 한 줄로도 가능해요. 이걸 *structured bindings* 라고 불러요. 다만 지금은 알 필요 X — \`.first/.second\` 만 손에 익혀도 충분합니다. 나중에 자연스럽게 다시 만나면 그때 익혀요.`
         },
         {
           id: "ch1-pair-mini",
@@ -227,11 +191,9 @@ tuple<string, int, double> t = {"Kim", 15, 3.8};
 //                              이름   나이  학점
 \`\`\`
 
-### 값 꺼내는 방법 두 가지
+### 값 꺼내기 — \`get<인덱스>(t)\`
 
-값 꺼낼 땐 \`.first/.second\` 같은 이름이 더 이상 안 통해요 (셋 이상이니까). 대신 둘 중 골라 써요:
-
-**① 하나씩 꺼내기** — \`get<인덱스>(t)\`
+3 개 이상이라 \`.first/.second\` 같은 이름은 더 이상 안 통해요. 대신 **\`get<N>(t)\`** 형태:
 
 \`\`\`cpp
 cout << get<0>(t);   // "Kim"
@@ -239,33 +201,15 @@ cout << get<1>(t);   // 15
 cout << get<2>(t);   // 3.8
 \`\`\`
 
-\`get<0>(t)\` 는 **\`<>\` 안에 인덱스, \`()\` 안에 tuple**. 처음 보면 이상하지만 의미는 \`t[0]\` 이랑 같아요. 한 가지 차이: \`<>\` 안의 숫자는 **컴파일 시점에 정해진 상수만** 가능. 변수 \`i\` 를 넣어 \`get<i>(t)\` 는 안 돼요.
+\`<>\` 안에는 **인덱스**, \`()\` 안에는 tuple. 의미는 \`t[0]\`, \`t[1]\` 이랑 같아요. 처음엔 어색하지만 익숙해지면 자연스러워요.
 
-**② ⭐ 한 번에 풀어 담기 — structured bindings (C++17+)**
+> ⚠️ \`<>\` 안의 숫자는 **컴파일 시점 상수** 만 OK — 변수 \`i\` 로 \`get<i>(t)\` 는 안 돼요.
 
-\`\`\`cpp
-auto [name, age, gpa] = t;
-\`\`\`
+> 📌 **참고 — 한 줄로 풀어 담기 (C++17)**
+>
+> 모던 C++ 에선 \`auto [name, age, gpa] = t;\` 한 줄로도 가능해요. 파이썬의 \`name, age, gpa = t\` 와 발상 같음. 지금은 \`get<N>(t)\` 만 써도 충분 — 자연스럽게 다시 만나면 그때 익혀요.
 
-이름이 좀 어렵죠? **structured bindings** = "**구조** (structure) 가 있는 묶음 (tuple/pair 등) 을 여러 변수에 **묶어주는(bind)** 문법" 이라 그렇게 불러요. 풀어쓰면 정말 단순해요:
-
-- \`auto [name, age, gpa] = t;\` 한 줄이
-- \`name\`, \`age\`, \`gpa\` **세 변수를 새로 만들고**
-- tuple 의 0 / 1 / 2 번째 값을 각각 **자동으로 담아줘요**
-
-파이썬의 \`name, age, gpa = t\` 랑 발상이 같아요. 차이는 C++ 은 \`auto [ ]\` 로 감싼다는 것 정도.
-
-> 💡 어디 써요?
-> - **pair / tuple**: \`auto [a, b] = p;\`
-> - **struct**: \`auto [x, y] = point;\` (멤버가 public 이면 OK)
-> - **map 순회**: \`for (auto& [key, value] : myMap)\` ← 이게 정말 자주 보여요 (다음 레슨)
-> - **함수 다중 리턴**: \`auto [a, b] = getValues();\`
-
-**tuple 의 가독성 단점이 이 문법 덕에 많이 사라졌어요.** 모던 코드에선 이게 기본.
-
-> 💡 옛날 책이나 오래된 코드에서 \`tie(name, age, gpa) = t;\` 를 만나면 "아 옛날 방식의 ②번이구나" 정도로 알아보고 넘기면 돼요. 직접 쓸 일은 없어요. 단, **\`tie\` 자체는 다음 페이지에서 다른 용도(비교 패턴)로 다시 만나요** — 거긴 지금도 정석이에요.
-
-다음 페이지에서 — tuple 이 진짜로 쓰이는 자리, 그리고 struct/pair 와의 선택 가이드 봐요 👇`,
+다음 페이지에서 — tuple 이 진짜로 쓰이는 자리, 그리고 struct / pair 와의 선택 가이드 봐요 👇`,
         },
         {
           id: "ch1-tuple-usage",
@@ -273,15 +217,20 @@ auto [name, age, gpa] = t;
           title: "🤔 tuple, 실전에서 얼마나 써요?",
           content: `pair 만큼 자주는 아니에요. 하지만 **무시할 정도는 아니에요.** 자주 보는 패턴 세 가지:
 
-### 1. 함수에서 여러 값 리턴 + structured bindings (자주)
+### 1. 함수에서 여러 값 한꺼번에 리턴 (자주)
 
 \`\`\`cpp
 tuple<int, int, string> getStudent() { ... }
 
-auto [age, score, name] = getStudent();   // 모던 C++ 의 흔한 패턴
+auto t = getStudent();
+int age   = get<0>(t);
+int score = get<1>(t);
+string name = get<2>(t);
 \`\`\`
 
-여러 값을 한 번에 리턴할 때, 이름까지 짓기 귀찮으면 tuple 로 묶어 보내고 받는 쪽에서 \`auto [a,b,c] = ...\` 로 바로 풀어요.
+여러 값을 한 번에 리턴할 때, 이름 붙인 struct 만들기 귀찮으면 tuple 로 묶어 보내고 받는 쪽에서 \`get<N>\` 로 꺼내요.
+
+> 📌 모던 C++ 에선 \`auto [a, b, c] = getStudent();\` 한 줄로도 가능 — *structured bindings*. 지금은 알 필요 X.
 
 ### 2. \`tie()\` 로 사전식 비교 (정석 패턴)
 
@@ -308,7 +257,7 @@ queue<tuple<int, int, int>> q;   // (x, y, distance)
 |---|---|
 | 2 개 묶기 | **pair** |
 | **자주 다룰 데이터**, 의미 있는 이름 필요 | **struct** (\`.name\` 이 \`get<0>\` 보다 명확) |
-| 함수에서 잠깐 여러 값 리턴 | **tuple** (특히 structured bindings 와) |
+| 함수에서 잠깐 여러 값 리턴 | **tuple** |
 | struct 멤버 비교 | **tuple + tie** |
 
 > 💡 한 줄 정리: pair 가 가장 흔하고, 자주 다룰 데이터는 struct, 그 외 잠깐 쓰는 묶음에는 tuple. 셋이 역할이 살짝 겹쳐서 헷갈리기 쉬운데 — 코드 짜다 보면 자연스럽게 손에 익어요.`,
@@ -327,7 +276,7 @@ queue<tuple<int, int, int>> q;   // (x, y, distance)
 getStudent() → ("Kim", 15, 3.8)   →  Kim: 자격 없음 (나이 부족)
 \`\`\`
 
-> 💡 함수 결과를 structured bindings 으로 받고 (\`auto [name, age, gpa] = ...\`), 조건 판단 후 출력. **각 값에 **이름** 이 붙어서 코드가 읽기 쉬워지는 게 structured bindings 의 진짜 가치.**`,
+> 💡 함수 결과를 \`auto t = getStudent();\` 로 받고, \`get<0>(t)\`, \`get<1>(t)\`, \`get<2>(t)\` 로 각각 꺼내서 조건 판단 후 출력.`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
@@ -338,7 +287,7 @@ tuple<string, int, double> getStudent() {
 }
 
 int main() {
-    // 👇 함수 결과를 structured bindings 으로 받고
+    // 👇 auto t = getStudent(); 로 받고, get<0>/get<1>/get<2> 로 각 값 꺼내기
     //    age >= 16 && gpa >= 3.5 면 "이름: 자격 있음", 아니면 "이름: 자격 없음" 출력
 
 
@@ -354,37 +303,40 @@ tuple<string, int, double> getStudent() {
 }
 
 int main() {
-    auto [name, age, gpa] = getStudent();
+    auto t = getStudent();
+    string name = get<0>(t);
+    int age = get<1>(t);
+    double gpa = get<2>(t);
     if (age >= 16 && gpa >= 3.5) cout << name << ": 자격 있음";
     else cout << name << ": 자격 없음";
 
     return 0;
 }`,
-          hint: "auto [name, age, gpa] = getStudent(); — 한 줄로 풀고. if (age >= 16 && gpa >= 3.5) cout << name << \": 자격 있음\"; else cout << name << \": 자격 없음\";",
+          hint: "auto t = getStudent(); 로 받고, get<0>(t)/get<1>(t)/get<2>(t) 로 각각 꺼내서 if 로 판단.",
           expectedOutput: `Kim: 자격 없음`
         },
         {
           id: "ch1-tuple-mini2",
           type: "practice" as const,
-          title: "✋ 잠깐 — 두 학생 비교, 학점 높은 쪽 출력",
-          content: `**상황**: 두 함수가 각각 학생 한 명의 (이름, 학점) 을 돌려줘요. **학점이 더 높은 학생의 이름** 을 출력하세요.
+          title: "✋ 잠깐 — 두 학생 중 학점 높은 쪽",
+          content: `학생 두 명 각각의 (이름, 학점) 이 tuple 로 묶여 있어요. **학점이 더 높은 학생의 이름** 을 출력하세요.
 
-\`\`\`
-studentA() → ("Kim", 3.8)
-studentB() → ("Lee", 3.5)
+\`\`\`cpp
+tuple<string, double> a = {"Kim", 3.8};
+tuple<string, double> b = {"Lee", 3.5};
 \`\`\`
 
-> 💡 두 번 \`auto [name, gpa] = func()\` 으로 받고, gpa 비교 후 이름 출력.`,
+> 💡 \`get<0>(a)\` = 이름, \`get<1>(a)\` = 학점. 학점 비교 후 이름 출력.`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
 using namespace std;
 
-tuple<string, double> studentA() { return {"Kim", 3.8}; }
-tuple<string, double> studentB() { return {"Lee", 3.5}; }
-
 int main() {
-    // 👇 두 함수 호출 + structured bindings + 학점 더 높은 사람 이름 출력
+    tuple<string, double> a = {"Kim", 3.8};
+    tuple<string, double> b = {"Lee", 3.5};
+
+    // 👇 학점 (get<1>) 더 높은 쪽의 이름 (get<0>) 출력
 
 
     return 0;
@@ -394,19 +346,16 @@ int main() {
 #include <string>
 using namespace std;
 
-tuple<string, double> studentA() { return {"Kim", 3.8}; }
-tuple<string, double> studentB() { return {"Lee", 3.5}; }
-
 int main() {
-    auto [nameA, gpaA] = studentA();
-    auto [nameB, gpaB] = studentB();
+    tuple<string, double> a = {"Kim", 3.8};
+    tuple<string, double> b = {"Lee", 3.5};
 
-    if (gpaA > gpaB) cout << nameA;
-    else cout << nameB;
+    if (get<1>(a) > get<1>(b)) cout << get<0>(a);
+    else cout << get<0>(b);
 
     return 0;
 }`,
-          hint: "auto [nameA, gpaA] = studentA(); auto [nameB, gpaB] = studentB(); 두 번. 그 다음 if (gpaA > gpaB) cout << nameA; else cout << nameB;",
+          hint: "if (get<1>(a) > get<1>(b)) cout << get<0>(a); else cout << get<0>(b);",
           expectedOutput: `Kim`
         },
         {

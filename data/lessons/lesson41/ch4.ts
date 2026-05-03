@@ -84,6 +84,37 @@ class Monster:
 - □ s(self)가 뭔지 이해했다
 
 @핵심: 클래스는 **틀**, 객체는 **찍어낸 것**, s는 **나 자신**!`
+    },
+    {
+      id: "ch4-5",
+      type: "mission",
+      title: "🏆 미션 — 처음부터 BankAccount 클래스!",
+      task: `이번엔 **틀 없이** 처음부터 작성! 은행 계좌 클래스를 만들어요.
+
+**요구사항:**
+1. \`BankAccount\` 클래스 정의 — 속성: \`owner\` (소유자 이름), \`balance\` (잔액)
+2. \`'Alice'\` 이름으로 잔액 1000 인 계좌 \`acc\` 생성
+3. 잔액에서 300 빼기 (출금)
+4. \`Alice의 잔액: 700\` 형식으로 출력
+
+⏱️ 5 분 도전!`,
+      initialCode: `# 👇 처음부터 작성하세요
+# 1. class BankAccount: 정의
+# 2. __init__ 으로 owner, balance 받아 저장
+# 3. acc = BankAccount('Alice', 1000) 으로 객체 만들기
+# 4. acc.balance 에서 300 빼서 다시 저장
+# 5. f'{acc.owner}의 잔액: {acc.balance}' 출력
+`,
+      expectedOutput: "Alice의 잔액: 700",
+      hint: "class BankAccount: 부터 시작! __init__(s, owner, balance) 매개변수 3 개. 그 안에 s.owner = owner, s.balance = balance.",
+      hint2: `class BankAccount:
+    def __init__(s, owner, balance):
+        s.owner = owner
+        s.balance = balance
+
+acc = BankAccount('Alice', 1000)
+acc.balance = acc.balance - 300
+print(f'{acc.owner}의 잔액: {acc.balance}')`
     }
   ]
 }

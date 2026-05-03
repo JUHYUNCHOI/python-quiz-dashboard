@@ -78,7 +78,7 @@ export function PythonRunner({
   onError,
   readOnly = false,
   showExpectedOutput = false,
-  minHeight = "100px",
+  minHeight = "220px",
   requireCodeChange = true,
   storageKey,
   isStepDone = false,
@@ -193,6 +193,15 @@ export function PythonRunner({
       highlightRef.current.scrollLeft = textareaRef.current.scrollLeft
     }
   }, [])
+
+  // 줄 수 기반 minHeight 계산 (C++ runner 와 동일 패턴)
+  // ⚠️ useEffect 로 style.height 동적 변경하면 두 레이어 어긋나 커서 정렬 깨짐.
+  // 그래서 render 시점에 한 번 계산해서 두 레이어 style 에 동시 적용.
+  // minHeight prop 은 floor — 코드 줄 수가 많으면 그만큼 늘어남.
+  // 줄당 32px (15px font * 1.8 leading = 27px + 5px buffer), padding 48px (p-4 16px*2 + 여유)
+  const lineCount = useMemo(() => code.split("\n").length, [code])
+  const minPx = minHeight ? parseInt(minHeight) : 100
+  const editorMinHeight = `${Math.max(minPx, lineCount * 32 + 48)}px`
 
   const runCode = useCallback(async () => {
     if (!isPyodideReady || !pyodideInstance) {
@@ -442,7 +451,7 @@ export function PythonRunner({
             ref={highlightRef}
             aria-hidden="true"
             className="absolute inset-0 font-mono p-3 md:p-4 overflow-hidden pointer-events-none text-[13px] md:text-[15px] leading-[1.8]"
-            style={{ minHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
+            style={{ minHeight: editorMinHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
           >
             <pre className="font-mono text-[13px] md:text-[15px] leading-[1.8] m-0 p-0 whitespace-pre" style={{ tabSize: 4 }}>
               {highlightedCode}
@@ -468,10 +477,10 @@ export function PythonRunner({
             placeholder={t("Python 코드 입력...", "Enter Python code...")}
             wrap="off"
             className={cn(
-              "w-full bg-transparent font-mono p-3 md:p-4 resize-none focus:outline-none placeholder:text-gray-600 relative z-10 whitespace-pre overflow-auto",
+              "w-full bg-transparent font-mono p-3 md:p-4 resize-none focus:outline-none placeholder:text-gray-600 relative z-10 whitespace-pre overflow-x-auto overflow-y-hidden",
               "text-[13px] md:text-[15px] leading-[1.8] text-transparent caret-white selection:bg-blue-500/40"
             )}
-            style={{ minHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
+            style={{ minHeight: editorMinHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
             spellCheck={false}
           />
         </div>

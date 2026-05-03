@@ -50,7 +50,7 @@ if age >= 13 and age < 19:
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Check if the score is between 80 and 100 (inclusive)!",
-          initialCode: "score = 85\n\n# Connect two conditions with and\nif score >= 80 ___ score <= 100:\n    print(\"Pass!\")\nelse:\n    print(\"Fail\")",
+          initialCode: "score = 85\n\n# Pass only when both conditions are true\nif score >= 80 ___ score <= 100:\n    print(\"Pass!\")\nelse:\n    print(\"Fail\")",
           expectedOutput: "Pass!",
           hint: "Connect the two conditions with and!",
           hint2: "score >= 80 and score <= 100"
@@ -79,7 +79,7 @@ if day == "Saturday" or day == "Sunday":
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "If VIP or has a coupon, give a discount!",
-          initialCode: "is_vip = False\nhas_coupon = True\n\n# Connect with or\nif is_vip ___ has_coupon:\n    print(\"10% discount!\")\nelse:\n    print(\"Full price\")",
+          initialCode: "is_vip = False\nhas_coupon = True\n\n# Discount applies if either is true\nif is_vip ___ has_coupon:\n    print(\"10% discount!\")\nelse:\n    print(\"Full price\")",
           expectedOutput: "10% discount!",
           hint: "With or, only one condition needs to be true!",
           hint2: "is_vip or has_coupon"
@@ -122,7 +122,7 @@ if not is_raining:
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "If not logged in, print a message!",
-          initialCode: "is_logged_in = False\n\n# Use not to reverse the condition!\nif ___ is_logged_in:\n    print(\"Please log in\")",
+          initialCode: "is_logged_in = False\n\n# Recall the operator that flips a condition\nif ___ is_logged_in:\n    print(\"Please log in\")",
           expectedOutput: "Please log in",
           hint: "Use the operator that reverses a condition!",
           hint2: "not is_logged_in"
@@ -215,7 +215,7 @@ if "z" not in "hello":
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Use the in operator to check if a character is contained!",
-          initialCode: "word = \"python\"\n\n# Use in to check if it's contained\nif \"y\" ___ word:\n    print(\"y is in the word!\")\nelse:\n    print(\"y is not here\")",
+          initialCode: "word = \"python\"\n\n# Check whether the character belongs in the string\nif \"y\" ___ word:\n    print(\"y is in the word!\")\nelse:\n    print(\"y is not here\")",
           expectedOutput: "y is in the word!",
           hint: "Use in to check if a character is in the string!",
           hint2: "\"y\" in word"

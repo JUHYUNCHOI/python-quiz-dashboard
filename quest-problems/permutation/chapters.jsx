@@ -64,7 +64,7 @@ export function makePermCh1(E) {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>Farmer John's Favorite Permutation</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #1</div>
+          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
           <div style={{ marginTop: 12, background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "Given hints h[i] = |perm[i] - perm[i+1]|, reconstruct the permutation of 1..N or say it's impossible!",

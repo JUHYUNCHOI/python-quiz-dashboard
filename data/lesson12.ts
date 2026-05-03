@@ -50,7 +50,7 @@ if age >= 13 and age < 19:
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "점수가 80 이상 100 이하인지 확인하세요!",
-          initialCode: "score = 85\n\n# 두 조건을 and로 연결하세요\nif score >= 80 ___ score <= 100:\n    print(\"합격!\")\nelse:\n    print(\"불합격\")",
+          initialCode: "score = 85\n\n# 두 조건이 모두 참일 때만 합격이에요\nif score >= 80 ___ score <= 100:\n    print(\"합격!\")\nelse:\n    print(\"불합격\")",
           expectedOutput: "합격!",
           hint: "and로 두 조건을 연결!",
           hint2: "score >= 80 and score <= 100"
@@ -79,7 +79,7 @@ if day == "토요일" or day == "일요일":
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "VIP이거나 쿠폰이 있으면 할인!",
-          initialCode: "is_vip = False\nhas_coupon = True\n\n# or로 연결하세요\nif is_vip ___ has_coupon:\n    print(\"10% 할인!\")\nelse:\n    print(\"정가\")",
+          initialCode: "is_vip = False\nhas_coupon = True\n\n# 둘 중 하나만 참이어도 할인이에요\nif is_vip ___ has_coupon:\n    print(\"10% 할인!\")\nelse:\n    print(\"정가\")",
           expectedOutput: "10% 할인!",
           hint: "or로 두 조건 중 하나만 참이면 됨!",
           hint2: "is_vip or has_coupon"
@@ -122,7 +122,7 @@ if not is_raining:
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "로그인 안 했으면 메시지 출력!",
-          initialCode: "is_logged_in = False\n\n# not으로 조건을 반대로!\nif ___ is_logged_in:\n    print(\"로그인이 필요합니다\")",
+          initialCode: "is_logged_in = False\n\n# 조건을 반대로 뒤집는 연산자를 떠올려봐\nif ___ is_logged_in:\n    print(\"로그인이 필요합니다\")",
           expectedOutput: "로그인이 필요합니다",
           hint: "조건을 반대로 만드는 연산자를 사용하세요!",
           hint2: "not is_logged_in"
@@ -214,8 +214,8 @@ if "z" not in "hello":
           id: "try5",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
-          task: "in 연산자로 포함 여부 확인!",
-          initialCode: "word = \"python\"\n\n# in으로 포함 여부 확인\nif \"y\" ___ word:\n    print(\"y가 포함되어 있어요!\")\nelse:\n    print(\"y가 없어요\")",
+          task: "문자열 안에 어떤 글자가 들어있는지 확인해보세요!",
+          initialCode: "word = \"python\"\n\n# 문자가 문자열 안에 있는지 확인하는 연산자!\nif \"y\" ___ word:\n    print(\"y가 포함되어 있어요!\")\nelse:\n    print(\"y가 없어요\")",
           expectedOutput: "y가 포함되어 있어요!",
           hint: "in으로 문자 포함 여부 확인!",
           hint2: "\"y\" in word"

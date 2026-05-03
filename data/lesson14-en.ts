@@ -62,7 +62,7 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Print numbers from 1 to 5!",
-          initialCode: "num = 1\n# Repeat while num is 5 or less\nwhile ___:\n    print(num)\n    num = num + 1",
+          initialCode: "num = 1\n# Write the condition that says when to keep going\nwhile ___:\n    print(num)\n    num = num + 1",
           expectedOutput: "1\n2\n3\n4\n5",
           hint: "Write a condition where num is 5 or less!",
           hint2: "while num <= 5:"
@@ -210,7 +210,7 @@ while money > 0:     # While there's money
           type: "tryit",
           title: "🖥️ Keep Adding Until Over 100!",
           task: "Add numbers from 1 and stop when the sum exceeds 100!",
-          initialCode: "total = 0\nnum = 1\n\n# Repeat while total is 100 or less\nwhile ___:\n    total = total + num\n    num = num + 1\n\nprint(f\"Total: {total}\")\nprint(f\"Last number: {num - 1}\")",
+          initialCode: "total = 0\nnum = 1\n\n# Stop the loop before the total grows past some limit\nwhile ___:\n    total = total + num\n    num = num + 1\n\nprint(f\"Total: {total}\")\nprint(f\"Last number: {num - 1}\")",
           expectedOutput: "Total: 105\nLast number: 14",
           hint: "Write a condition where total is 100 or less!",
           hint2: "while total <= 100:"

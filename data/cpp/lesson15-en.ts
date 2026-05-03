@@ -96,9 +96,8 @@ All three give the same result, so pick whichever you like. The first form (\`{a
         {
           id: "ch1-pair-unpack",
           type: "explain",
-          component: "structuredBindingsVisualizer",
-          title: "🎁 Unpacking a pair — \`.first/.second\` vs structured bindings",
-          content: `So far we've been pulling values out with \`.first\` and \`.second\`:
+          title: "🎁 Reading the two values — \`.first/.second\`",
+          content: `Pull a pair's two values out with **\`.first\`** and **\`.second\`**. That's the basic form, and what we'll use throughout this lesson.
 
 \`\`\`cpp
 pair<string, int> p = {"Kim", 95};
@@ -106,42 +105,9 @@ cout << p.first;    // "Kim"
 cout << p.second;   // 95
 \`\`\`
 
-When you'll use the values multiple times — or want **meaningful names** — **C++17 lets you unpack in one line**:
-
-\`\`\`cpp
-auto [name, score] = p;
-cout << name;    // "Kim"
-cout << score;   // 95
-\`\`\`
-
-That \`auto\` + \`[name, score]\` is called **structured bindings**. The name comes from "**bind**ing the parts of a **structured** bundle (pair / tuple / struct) to multiple variables." (Same syntax shows up again in the tuple chapter — practicing it here makes that transition smooth.)
-
-### Which to use?
-
-| Pattern | When |
-|---|---|
-| \`p.first\`, \`p.second\` | One or two accesses, simple |
-| \`auto [name, score] = p;\` | Many uses / want **meaningful names** ⭐ |
-| \`for (auto& [name, score] : v)\` | range-for over vector<pair> — extremely common! ⭐⭐ |
-
-### Preview — comparing vector<pair> iteration
-
-\`\`\`cpp
-vector<pair<string, int>> students = {{"Kim", 95}, {"Lee", 88}};
-
-// .first / .second style
-for (auto& s : students) {
-    cout << s.first << ": " << s.second << endl;
-}
-
-// structured bindings style ⭐
-for (auto& [name, score] : students) {
-    cout << name << ": " << score << endl;
-    //      ↑ no "wait, was that .first or .second?" moment
-}
-\`\`\`
-
-> 💡 The next pages mix both styles. Pick whichever reads better in context.`
+> 📌 **Side note — modern C++ (C++17) one-liner**
+>
+> If you want even cleaner code, \`auto [name, score] = p;\` declares both variables in one line. This is called *structured bindings*. You don't need it now — \`.first/.second\` is enough. We'll naturally meet this syntax again later, no need to memorize it today.`
         },
         {
           id: "ch1-pair-mini",
@@ -225,11 +191,9 @@ tuple<string, int, double> t = {"Kim", 15, 3.8};
 //                              name   age   gpa
 \`\`\`
 
-### Two ways to read values out
+### Reading values out — \`get<index>(t)\`
 
-\`.first/.second\` no longer cuts it (3+ values). Pick one of these:
-
-**① Read one at a time** — \`get<index>(t)\`
+With 3+ values, \`.first/.second\` no longer works. Use **\`get<N>(t)\`**:
 
 \`\`\`cpp
 cout << get<0>(t);   // "Kim"
@@ -237,31 +201,13 @@ cout << get<1>(t);   // 15
 cout << get<2>(t);   // 3.8
 \`\`\`
 
-\`get<0>(t)\` — the **index goes inside \`<>\`, the tuple inside \`()\`**. Looks weird at first, but it just means \`t[0]\`. One catch: the number inside \`<>\` must be a **compile-time constant** — you can't put a variable \`i\` and write \`get<i>(t)\`.
+The **index goes inside \`<>\`**, the **tuple inside \`()\`**. Looks weird at first, but it just means \`t[0]\`, \`t[1]\`, etc.
 
-**② ⭐ Unpack all at once — structured bindings (C++17+)**
+> ⚠️ The number inside \`<>\` must be a **compile-time constant**. You can't write \`get<i>(t)\` with a variable \`i\`.
 
-\`\`\`cpp
-auto [name, age, gpa] = t;
-\`\`\`
-
-The name sounds fancy, but the idea is simple: **structured bindings** = "syntax that **binds** a structured bundle (tuple / pair / struct) to multiple **named** variables." In plain English:
-
-- The single line \`auto [name, age, gpa] = t;\`
-- **declares three new variables** \`name\`, \`age\`, \`gpa\`
-- and **assigns** the tuple's 0 / 1 / 2 values to them respectively
-
-Same idea as Python's \`name, age, gpa = t\`. Difference: C++ wraps the names in \`auto [ ]\`.
-
-> 💡 Where it's used:
-> - **pair / tuple**: \`auto [a, b] = p;\`
-> - **struct**: \`auto [x, y] = point;\` (public members work)
-> - **map iteration**: \`for (auto& [key, value] : myMap)\` ← extremely common (next lesson)
-> - **multi-value return**: \`auto [a, b] = getValues();\`
-
-**This single feature fixed most of tuple's readability problems.** It's the default in modern code.
-
-> 💡 You may run into the older \`tie(name, age, gpa) = t;\` in legacy code or older books — it does the same thing as ②. Recognize it and move on; you don't need to write it. **But the \`tie\` keyword itself shows up again next page in a different (and still current) role: comparison.**
+> 📌 **Side note — one-liner unpack (C++17)**
+>
+> Modern C++ also supports \`auto [name, age, gpa] = t;\` to declare all three variables in one line — same idea as Python's \`name, age, gpa = t\`. This is called *structured bindings*. You don't need it now — \`get<N>(t)\` is enough. We'll meet it naturally later.
 
 Next page — where tuple actually shows up, and how to choose between struct/pair/tuple 👇`,
         },
@@ -271,15 +217,20 @@ Next page — where tuple actually shows up, and how to choose between struct/pa
           title: "🤔 How often is tuple used in practice?",
           content: `Less often than pair. But **not negligibly.** Three patterns you'll see:
 
-### 1. Returning multiple values + structured bindings (common)
+### 1. Returning multiple values from a function (common)
 
 \`\`\`cpp
 tuple<int, int, string> getStudent() { ... }
 
-auto [age, score, name] = getStudent();   // standard modern-C++ pattern
+auto t = getStudent();
+int age   = get<0>(t);
+int score = get<1>(t);
+string name = get<2>(t);
 \`\`\`
 
-When a function needs to return several values and you don't want to define a whole struct just for that, tuple-with-structured-bindings is the go-to.
+When a function needs to return several values and you don't want to define a whole struct, tuple is the quick path. Use \`get<N>\` to read each one out.
+
+> 📌 Modern C++ also lets you write \`auto [a, b, c] = getStudent();\` in one line — *structured bindings*. Don't worry about it now.
 
 ### 2. \`tie()\` for lexicographic comparison (idiomatic)
 
@@ -306,7 +257,7 @@ For grid traversal, "current position + extra info" gets tossed into a queue as 
 |---|---|
 | 2 values | **pair** |
 | **Data you'll work with often**, named fields matter | **struct** (\`.name\` beats \`get<0>\`) |
-| Just returning multiple values | **tuple** (especially with structured bindings) |
+| Just returning multiple values | **tuple** |
 | Comparing struct members | **tuple + tie** |
 
 > 💡 One line: pair shows up most, struct is best for data you keep handling, and tuple covers quick bundles in between. They overlap a bit, but with practice the right choice becomes second nature.`,
@@ -325,7 +276,7 @@ If eligible, print \`Kim: eligible\`. Otherwise \`Kim: not eligible\`.
 getStudent() → ("Kim", 15, 3.8)   →  Kim: not eligible (age too low)
 \`\`\`
 
-> 💡 Receive with structured bindings (\`auto [name, age, gpa] = ...\`), then check the condition and print. **The real value of structured bindings: each piece gets a **name**, so the conditional reads naturally.**`,
+> 💡 Receive with \`auto t = getStudent();\`, then read each value with \`get<0>(t)\`, \`get<1>(t)\`, \`get<2>(t)\` and check the condition.`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
@@ -336,7 +287,7 @@ tuple<string, int, double> getStudent() {
 }
 
 int main() {
-    // 👇 Unpack with structured bindings.
+    // 👇 auto t = getStudent(); then pull out values with get<0>/get<1>/get<2>
     //    If age >= 16 && gpa >= 3.5 → "name: eligible", else "name: not eligible"
 
 
@@ -352,37 +303,40 @@ tuple<string, int, double> getStudent() {
 }
 
 int main() {
-    auto [name, age, gpa] = getStudent();
+    auto t = getStudent();
+    string name = get<0>(t);
+    int age = get<1>(t);
+    double gpa = get<2>(t);
     if (age >= 16 && gpa >= 3.5) cout << name << ": eligible";
     else cout << name << ": not eligible";
 
     return 0;
 }`,
-          hint: "auto [name, age, gpa] = getStudent(); — unpack. Then if (age >= 16 && gpa >= 3.5) cout << name << \": eligible\"; else cout << name << \": not eligible\";",
+          hint: "auto t = getStudent(); then string name = get<0>(t); int age = get<1>(t); double gpa = get<2>(t); — then if/else.",
           expectedOutput: `Kim: not eligible`
         },
         {
           id: "ch1-tuple-mini2",
           type: "practice" as const,
-          title: "✋ Quick — compare two students, print the higher GPA",
-          content: `**Scenario**: Two functions each return a student's (name, gpa). Print **the name of the student with the higher GPA**.
+          title: "✋ Quick — pick the student with the higher GPA",
+          content: `Two students' (name, gpa) are bundled as tuples. Print **the name of the student with the higher GPA**.
 
-\`\`\`
-studentA() → ("Kim", 3.8)
-studentB() → ("Lee", 3.5)
+\`\`\`cpp
+tuple<string, double> a = {"Kim", 3.8};
+tuple<string, double> b = {"Lee", 3.5};
 \`\`\`
 
-> 💡 Two \`auto [name, gpa] = func()\` calls, then compare gpa and print the matching name.`,
+> 💡 \`get<0>(a)\` = name, \`get<1>(a)\` = gpa. Compare and print the right name.`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
 using namespace std;
 
-tuple<string, double> studentA() { return {"Kim", 3.8}; }
-tuple<string, double> studentB() { return {"Lee", 3.5}; }
-
 int main() {
-    // 👇 Call both, unpack each, print whichever has the higher gpa
+    tuple<string, double> a = {"Kim", 3.8};
+    tuple<string, double> b = {"Lee", 3.5};
+
+    // 👇 Print the name (get<0>) of whichever has the higher gpa (get<1>)
 
 
     return 0;
@@ -392,19 +346,16 @@ int main() {
 #include <string>
 using namespace std;
 
-tuple<string, double> studentA() { return {"Kim", 3.8}; }
-tuple<string, double> studentB() { return {"Lee", 3.5}; }
-
 int main() {
-    auto [nameA, gpaA] = studentA();
-    auto [nameB, gpaB] = studentB();
+    tuple<string, double> a = {"Kim", 3.8};
+    tuple<string, double> b = {"Lee", 3.5};
 
-    if (gpaA > gpaB) cout << nameA;
-    else cout << nameB;
+    if (get<1>(a) > get<1>(b)) cout << get<0>(a);
+    else cout << get<0>(b);
 
     return 0;
 }`,
-          hint: "auto [nameA, gpaA] = studentA(); auto [nameB, gpaB] = studentB(); — two of those. Then if (gpaA > gpaB) cout << nameA; else cout << nameB;",
+          hint: "if (get<1>(a) > get<1>(b)) cout << get<0>(a); else cout << get<0>(b);",
           expectedOutput: `Kim`
         },
         {

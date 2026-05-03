@@ -1,38 +1,43 @@
 import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
-import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
-import { CodeCompare3, BruteRunner } from "./components";
+import { Narration, Quiz, NumInput, CodeReveal, CodeBlock } from "@/components/quest/shared";
+import { CodeCompare3, BruteRunner, SpeedScale, ProgressiveCode, downloadFullPDF } from "./components";
+
 import {
-  makeCh1, buildSimSteps, makePatternSteps, makeBruteSteps, makeOptSteps,
-  FindPView, FindPExplainView, DigitsView, ResultView, CompareView,
-  SIM_CASES,
+  makeCh1, makePatternSteps, makeBruteSteps, makeOptSteps, getOptSections,
 } from "./chapters";
 
 export default function RoundingApp() {
   // --- Language ---
   const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("language") === "en") ? "en" : "ko");
   const E = lang === "en";
+  // 코드 언어 — 인앱 코드 + PDF 모두 적용 (Python / C++)
+  const [codeLang, setCodeLang] = useState("py");
+
+  // codeLang 바뀌면 brute 스텝 새로 빌드 (답변 진행 상태는 보존)
+  useEffect(() => {
+    setBruteQ(prev => makeBruteSteps(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+  }, [codeLang, E]);
 
   // --- Navigation ---
   const [tab, setTab] = useState(0);
   const [si, setSi]   = useState(0);
-  const [simCase, setSimCase] = useState(0);
-  const [splash, setSplash]   = useState(null);
 
   // --- Quiz state (mutable copies for answered tracking) ---
   const [patternQ, setPatternQ] = useState(() => makePatternSteps(false));
-  const [bruteQ, setBruteQ]     = useState(() => makeBruteSteps(false));
+  const [bruteQ, setBruteQ]     = useState(() => makeBruteSteps(false, "py"));
   const [optQ, setOptQ]         = useState(() => makeOptSteps(false));
 
   // --- Tab labels ---
+  // 학생 사고 흐름: 문제 (시뮬 포함) → 풀어보기 (브루트→TLE→누적합) → 패턴 → 최적화
   const TABS = E
-    ? ["📋 Problem", "🔄 Sim", "💡 Pattern", "🐍 Code", "⚡ Optimize"]
-    : ["📋 문제", "🔄 시뮬", "💡 패턴", "🐍 코드", "⚡ 최적화"];
+    ? ["📋 Problem", "🤔 Try Solving", "💡 Pattern", "⚡ Optimize"]
+    : ["📋 문제", "🤔 풀어보기", "💡 패턴", "⚡ 최적화"];
 
   // --- Build steps ---
   const ch1   = makeCh1(E);
-  const sim   = buildSimSteps(SIM_CASES[simCase].num, E);
-  const all   = [ch1, sim, patternQ, bruteQ, optQ];
+  // 탭 순서: 0=문제, 1=풀어보기(브루트), 2=패턴, 3=최적화
+  const all   = [ch1, bruteQ, patternQ, optQ];
   const steps = all[tab];
   const cur   = Math.min(si, steps.length - 1);
   const step  = steps[cur];
@@ -40,144 +45,147 @@ export default function RoundingApp() {
   // --- Actions ---
   const switchLang = nl => {
     const ne = nl === "en";
-    setLang(nl); setSi(0); setSplash(null);
-    setPatternQ(makePatternSteps(ne));
-    setBruteQ(makeBruteSteps(ne));
-    setOptQ(makeOptSteps(ne));
+    setLang(nl);
+    // 새 언어로 퀴즈 텍스트 다시 빌드 — 단, 답변 진행 상태(answered/solved) 는 보존.
+    setPatternQ(prev => makePatternSteps(ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+    setBruteQ(prev => makeBruteSteps(ne, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+    setOptQ(prev => makeOptSteps(ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   };
   const changeTab = idx => {
-    setTab(idx); setSi(0); setSplash(null);
+    setTab(idx); setSi(0);
+    // 탭 순서: 0=문제, 1=풀어보기, 2=패턴, 3=최적화
+    if (idx === 1) setBruteQ(makeBruteSteps(E, codeLang));
     if (idx === 2) setPatternQ(makePatternSteps(E));
-    if (idx === 3) setBruteQ(makeBruteSteps(E));
-    if (idx === 4) setOptQ(makeOptSteps(E));
+    if (idx === 3) setOptQ(makeOptSteps(E));
   };
-  const changeCase = i => { setSimCase(i); setSi(0); setSplash(null); };
 
   // --- Quiz/input answer handler ---
   const handleAnswer = optIdx => {
     if (step.answered != null) return;
     const update = arr => { const u = [...arr]; u[cur] = { ...u[cur], answered: optIdx }; return u; };
+    if (tab === 1) setBruteQ(update(bruteQ));
     if (tab === 2) setPatternQ(update(patternQ));
-    if (tab === 3) setBruteQ(update(bruteQ));
-    if (tab === 4) setOptQ(update(optQ));
+    if (tab === 3) setOptQ(update(optQ));
   };
   const handleSolve = () => {
     const update = arr => { const u = [...arr]; u[cur] = { ...u[cur], solved: true }; return u; };
-    if (tab === 3) setBruteQ(update(bruteQ));
-    if (tab === 4) setOptQ(update(optQ));
+    if (tab === 1) setBruteQ(update(bruteQ));
+    if (tab === 3) setOptQ(update(optQ));
   };
 
   // --- Navigation logic ---
-  const isBlocked =
-    ((tab >= 2) && step.type === "quiz" && step.answered == null) ||
-    ((tab >= 3) && step.type === "input" && !step.solved);
+  // 문제 안 풀어도 자유롭게 넘어갈 수 있음 (강제 차단 X).
+  // 단, "👆 먼저 답해봐!" 안내는 미응답 시 부드럽게 띄움.
+  const isBlocked = false;
+  const showAnswerHint =
+    ((tab >= 1) && step.type === "quiz" && step.answered == null) ||
+    ((tab >= 1) && step.type === "input" && !step.solved);
 
-  const canNext = !isBlocked && cur < steps.length - 1;
+  const canNext = cur < steps.length - 1;
 
   const next = () => {
     if (!canNext) return;
-    const ni = cur + 1;
-    if (tab === 1 && steps[ni]?.phase === "splash") {
-      setSplash({ who: steps[ni].who, method: steps[ni].method });
-      setSi(ni + 1);
-    } else setSi(ni);
+    setSi(cur + 1);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const prev = () => {
-    setSplash(null);
-    let ni = cur - 1;
-    if (tab === 1) { while (ni >= 0 && steps[ni].phase === "splash") ni--; }
-    setSi(Math.max(0, ni));
+    setSi(Math.max(0, cur - 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // --- Narration color by context ---
-  const nc = tab === 1 ? (
-    step.phase?.startsWith("bessie") ? { c: C.bessie, bg: C.bessieBg, bd: C.bessieBd } :
-    step.phase?.startsWith("elsie")  ? { c: C.elsie,  bg: C.elsieBg,  bd: C.elsieBd } :
-    step.phase === "compare" ? (step.isDiff
-      ? { c: C.no, bg: C.noBg, bd: C.noBd }
-      : { c: C.ok, bg: C.okBg, bd: C.okBd }) :
-    { c: C.accent, bg: C.accentBg, bd: C.accentBd }
-  ) : { c: C.accent, bg: C.accentBg, bd: C.accentBd };
+  // --- Narration color (단순화 — 모든 탭 공통 accent) ---
+  const nc = { c: C.accent, bg: C.accentBg, bd: C.accentBd };
 
   // --- Render step content ---
   const renderContent = () => {
-    // Ch1
+    // Ch1 (문제 + 시뮬 포함)
     if (tab === 0) return step.content;
 
-    // Ch2 Sim
-    if (tab === 1) {
-      if (step.phase === "findP")         return <FindPView step={step} />;
-      if (step.phase === "findP_explain")  return <FindPExplainView step={step} />;
-      if (step.phase === "bessie" || step.phase === "elsie") return <DigitsView step={step} E={E} />;
-      if (step.phase === "bessie_result" || step.phase === "elsie_result") return <ResultView step={step} />;
-      if (step.phase === "compare")        return <CompareView step={step} />;
-    }
-
-    // Ch3/4/5 universal types
+    // 풀어보기 / 패턴 / 최적화 — 공통 타입
     if (step.type === "quiz")   return <Quiz {...step} onAnswer={handleAnswer} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "input")  return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "code")     return <CodeReveal label={step.label} lines={step.code} />;
+    if (step.type === "codeShow") return (
+      <div style={{ padding: 14 }}>
+        {step.banner && (
+          <div style={{
+            background: step.bannerBg || C.accentBg,
+            border: `2px solid ${step.bannerBd || C.accentBd}`,
+            borderRadius: 10, padding: "8px 12px", marginBottom: 10,
+            fontSize: 12, fontWeight: 800, color: step.bannerColor || C.accent,
+            textAlign: "center",
+          }}>{step.banner}</div>
+        )}
+        {step.why && step.why.length > 0 && (
+          <div style={{
+            background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10,
+            padding: "10px 12px", marginBottom: 10,
+          }}>
+            <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
+              💡 {t(E, "Why this way?", "왜 이렇게?")}
+            </div>
+            {step.why.map((line, i) => (
+              <div key={i} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
+                <span style={{ color: C.accent, fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span>{line}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        <CodeBlock lines={step.code} />
+      </div>
+    );
     if (step.type === "compare3") return <CodeCompare3 E={E} />;
     if (step.type === "runner")   return <BruteRunner E={E} />;
+    if (step.type === "scale")    return <SpeedScale E={E} />;
+    if (step.type === "progressive") return <ProgressiveCode E={E} sections={step.sections} />;
 
     return null;
   };
 
   return (
     <div>
-
-      {/* --- Splash screen (Bessie/Elsie intro) --- */}
-      {splash && (
-        <div onClick={() => setSplash(null)} style={{
-          position: "fixed", top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, cursor: "pointer",
-          background: splash.who === "bessie"
-            ? "linear-gradient(160deg,#fdf2f8,#fce7f3,#fbcfe8)"
-            : "linear-gradient(160deg,#f0fdf4,#dcfce7,#bbf7d0)",
-          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-          animation: "fadeIn .25s",
-        }}>
-          <div style={{ fontSize: 100, animation: "bounceIn .5s cubic-bezier(.34,1.56,.64,1)" }}>
-            {splash.who === "bessie" ? "🐄" : "🐮"}
-          </div>
-          <div style={{
-            fontSize: 42, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", marginTop: 12,
-            color: splash.who === "bessie" ? C.bessie : C.elsie,
-            animation: "bounceIn .5s cubic-bezier(.34,1.56,.64,1) .1s both",
-          }}>
-            {splash.who === "bessie" ? "Bessie" : "Elsie"}
-          </div>
-          <div style={{
-            marginTop: 20, padding: "16px 28px", background: "rgba(255,255,255,.7)", borderRadius: 16,
-            border: `2px solid ${splash.who === "bessie" ? C.bessieBd : C.elsieBd}`,
-            fontSize: 16, fontWeight: 700, textAlign: "center",
-            color: splash.who === "bessie" ? C.bessie : C.elsie,
-            lineHeight: 1.8, whiteSpace: "pre-line",
-            animation: "bounceIn .5s cubic-bezier(.34,1.56,.64,1) .2s both",
-          }}>{splash.method}</div>
-          <div style={{
-            marginTop: 36, fontSize: 14, fontWeight: 600,
-            color: splash.who === "bessie" ? "#e879a0" : "#6ee7a0",
-            animation: "pulse 1.5s ease infinite .6s",
-          }}>
-            {t(E, "Tap to start →", "탭하여 시작 →")}
-          </div>
-        </div>
-      )}
-
-      <div style={{ maxWidth: 440, margin: "0 auto" }}>
-        {/* --- Header + Language toggle --- */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+      <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto", padding: "0 12px" }}>
+        {/* --- Header + PDF + Language toggle --- */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, gap: 8 }}>
           <h1 style={{ fontSize: 16, fontWeight: 800, color: C.accent, margin: 0, fontFamily: "'Jua',sans-serif" }}>🔄 Roundabout Rounding</h1>
-          <div style={{ display: "flex", gap: 2, background: C.card, borderRadius: 8, border: `1.5px solid ${C.border}`, padding: 2 }}>
-            {[["ko","🇰🇷"],["en","🇺🇸"]].map(([v, flag]) => (
-              <button key={v} onClick={() => switchLang(v)} style={{
-                background: lang === v ? C.accent : "transparent", border: "none", borderRadius: 6,
-                padding: "4px 8px", cursor: "pointer", fontSize: 14, color: lang === v ? "#fff" : C.dim,
-              }}>{flag}</button>
-            ))}
+          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            {/* 코드 언어 선택 — 인앱 + PDF 모두 영향 */}
+            <div style={{ display: "flex", gap: 0, alignItems: "stretch" }}>
+              <select
+                value={codeLang}
+                onChange={e => setCodeLang(e.target.value)}
+                title={t(E, "Choose code language (in-app + PDF)", "코드 언어 선택 (인앱 코드 + PDF 모두)")}
+                style={{
+                  background: "#fff", color: C.accent, border: `1.5px solid ${C.accent}`,
+                  borderRadius: "8px 0 0 8px", borderRight: "none",
+                  padding: "4px 6px", fontSize: 12, fontWeight: 800, cursor: "pointer",
+                }}>
+                <option value="py">🐍 Py</option>
+                <option value="cpp">💻 C++</option>
+              </select>
+              <button
+                onClick={() => downloadFullPDF(E, getOptSections(E), codeLang)}
+                title={t(E, "Download full study guide (problem + brute + pattern + optimal)",
+                            "전체 풀이 다운로드 (문제 + 브루트 + 패턴 + 최적화)")}
+                style={{
+                  background: C.accent, color: "#fff", border: `1.5px solid ${C.accent}`,
+                  borderRadius: "0 8px 8px 0",
+                  padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800,
+                  display: "flex", alignItems: "center", gap: 4,
+                }}>
+                📄 PDF
+              </button>
+            </div>
+            <div style={{ display: "flex", gap: 2, background: C.card, borderRadius: 8, border: `1.5px solid ${C.border}`, padding: 2 }}>
+              {[["ko","🇰🇷"],["en","🇺🇸"]].map(([v, flag]) => (
+                <button key={v} onClick={() => switchLang(v)} style={{
+                  background: lang === v ? C.accent : "transparent", border: "none", borderRadius: 6,
+                  padding: "4px 8px", cursor: "pointer", fontSize: 14, color: lang === v ? "#fff" : C.dim,
+                }}>{flag}</button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -194,24 +202,8 @@ export default function RoundingApp() {
           ))}
         </div>
 
-        {/* --- Sim case selector --- */}
-        {tab === 1 && (
-          <div style={{ display: "flex", gap: 4, marginBottom: 10, justifyContent: "center", flexWrap: "wrap" }}>
-            {SIM_CASES.map((cs, i) => (
-              <button key={i} onClick={() => changeCase(i)} style={{
-                background: i === simCase ? C.card : "transparent",
-                border: `2px solid ${i === simCase ? C.accent : C.border}`,
-                borderRadius: 8, padding: "4px 8px", cursor: "pointer",
-              }}>
-                <span style={{ fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: i === simCase ? C.accent : C.dim }}>{cs.num}</span>
-                <span style={{ fontSize: 9, marginLeft: 2, fontWeight: 700, color: cs.diff ? C.no : C.ok }}>{cs.diff ? "❌" : "✅"}</span>
-              </button>
-            ))}
-          </div>
-        )}
-
         {/* --- Narration --- */}
-        {step.narr && <Narration key={`${tab}-${cur}-${simCase}-${lang}`} text={step.narr} color={nc.c} bg={nc.bg} bd={nc.bd} />}
+        {step.narr && <Narration key={`${tab}-${cur}-${lang}`} text={step.narr} color={nc.c} bg={nc.bg} bd={nc.bd} />}
 
         {/* --- Content card --- */}
         <div style={{
@@ -226,10 +218,11 @@ export default function RoundingApp() {
 
       {/* Fixed bottom navigation */}
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "6px 16px 12px", zIndex: 100 }}>
-        <div style={{ maxWidth: 440, margin: "0 auto" }}>
-          {isBlocked && (
-            <div style={{ textAlign: "center", fontSize: 13, color: C.carry, fontWeight: 700, marginBottom: 4, animation: "pulse 1.5s ease infinite" }}>
-              {t(E, "👆 Answer first!", "👆 먼저 답해봐!")}
+        <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto", padding: "0 12px" }}>
+          {showAnswerHint && (
+            <div style={{ textAlign: "center", fontSize: 11, color: C.dim, fontWeight: 600, marginBottom: 4 }}>
+              {t(E, "💡 Tip: try answering above. (You can skip too — →)",
+                  "💡 팁: 위에서 답해보면 좋아요. (그냥 넘어가도 OK — →)")}
             </div>
           )}
           <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center" }}>

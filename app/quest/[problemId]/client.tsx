@@ -4,8 +4,8 @@ import { useState, useEffect, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
-import { ChevronLeft, ChevronRight, CheckCircle, Loader2 } from "lucide-react"
-import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, type ProblemMeta } from "./data"
+import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink, Columns2, X, ZoomIn, ZoomOut } from "lucide-react"
+import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, getOriginalProblemUrl, type ProblemMeta } from "./data"
 import { PROBLEM_LOADERS } from "./loaders"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
@@ -123,6 +123,11 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   // 동일하게 호출되도록 보장.
   const { solved, markSolved } = useQuestSolved(problemId)
 
+  // 반반 스크린: 좌=튜토리얼, 우=USACO 원본 문제 iframe
+  const [splitView, setSplitView] = useState(false)
+  const [iframeBlocked, setIframeBlocked] = useState(false)
+  const [iframeZoom, setIframeZoom] = useState(1) // 0.5 ~ 1.5
+
   if (!lockChecked) return null
 
   // Sync synchronously so lazy-loaded App components initialize with correct lang
@@ -157,7 +162,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
 
       {/* Breadcrumb: USACO · Dec 2024 Bronze #2 + done button */}
       <div className="bg-white border-b-2 border-black px-3 py-2 sticky top-[57px] z-30 flex items-center gap-2">
-        <Link href="/quest" className="text-gray-400 hover:text-gray-700 flex-shrink-0">
+        <Link href="/quest" className="text-gray-400 hover:text-gray-700 flex-shrink-0" title={t("문제 목록", "Problem list")}>
           <ChevronLeft size={18} />
         </Link>
         <div className="flex-1 min-w-0">
@@ -165,6 +170,32 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           <span className="text-gray-300 mx-1.5">·</span>
           <span className="text-xs font-semibold text-gray-700 truncate">{meta.sub}</span>
         </div>
+        {/* 원래 문제 — 반반 스크린 토글 (md 이상) + 새 탭 열기 */}
+        <button
+          onClick={() => {
+            setIframeBlocked(false)
+            setSplitView(v => !v)
+          }}
+          className={`hidden md:flex flex-shrink-0 items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-md border transition-colors ${
+            splitView
+              ? "bg-amber-100 border-amber-400 text-amber-800"
+              : "text-gray-500 hover:text-amber-700 border-gray-200 hover:border-amber-300 hover:bg-amber-50"
+          }`}
+          title={t("원본 문제를 옆에 띄우기", "Show original problem side-by-side")}
+        >
+          <Columns2 size={11} />
+          <span>{splitView ? t("닫기", "Close") : t("원래 문제", "Original")}</span>
+        </button>
+        <a
+          href={getOriginalProblemUrl(meta)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-shrink-0 flex items-center gap-1 text-[11px] font-semibold text-gray-500 hover:text-amber-700 px-2 py-1 rounded-md border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-colors"
+          title={t("새 탭에서 원본 문제 열기", "Open original problem in new tab")}
+        >
+          <ExternalLink size={11} />
+          <span className="md:hidden">{t("원래 문제", "Original")}</span>
+        </a>
         {solved ? (
           <div className="flex items-center gap-1 bg-green-50 border border-green-300 rounded-full px-2 py-0.5 flex-shrink-0">
             <CheckCircle size={12} className="text-green-600" />
@@ -180,48 +211,166 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         )}
       </div>
 
-      {/* Problem App — key=lang forces remount so useState initializer re-runs with new lang */}
-      <main className="flex-1">
-        {LazyComp ? (
-          <Suspense fallback={<ProblemLoadingSpinner />}>
-            <LazyComp key={lang} />
-          </Suspense>
-        ) : (
-          <div className="flex flex-col items-center justify-center gap-4 py-24 px-6 text-center">
-            <div className="text-5xl">🚧</div>
-            <div className="text-base font-bold text-gray-700">{t("튜토리얼 준비 중입니다", "Tutorial coming soon")}</div>
-          </div>
-        )}
+      {/* Prev / Next problem — 위쪽으로 이동. App 내부의 step ←→ 와 헷갈리지 않도록.
+          이전엔 페이지 하단에 있어서 App 의 fixed bottom nav (step 이동) 와 한 화면에 같이 노출 → 학생 혼동. */}
+      <div className="bg-amber-50/40 border-b border-amber-200 px-3 py-2 flex gap-2">
+        {prevProblem ? (
+          <button
+            onClick={() => router.push(`/quest/${prevProblem.id}`)}
+            className="flex-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-amber-300 bg-white text-xs font-semibold text-gray-700 hover:bg-amber-50 transition-colors min-w-0"
+          >
+            <ChevronLeft size={14} className="flex-shrink-0 text-amber-600" />
+            <div className="text-left min-w-0">
+              <div className="text-[9px] text-gray-400 font-medium leading-none">{t("이전 문제", "Prev problem")}</div>
+              <div className="truncate leading-tight">{prevProblem.title}</div>
+            </div>
+          </button>
+        ) : <div className="flex-1" />}
 
-        {/* Prev / Next problem — below App's own step nav */}
-        <div className="flex gap-3 px-4 pt-3 pb-6 bg-white border-t-2 border-black" style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}>
-          {prevProblem ? (
-            <button
-              onClick={() => router.push(`/quest/${prevProblem.id}`)}
-              className="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 border-black bg-white text-sm font-bold text-gray-700 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none transition-all"
-            >
-              <ChevronLeft size={16} className="flex-shrink-0" />
-              <div className="text-left min-w-0">
-                <div className="text-[10px] text-gray-400 font-medium">{t("이전 문제", "Prev problem")}</div>
-                <div className="truncate text-xs font-bold">{prevProblem.title}</div>
-              </div>
-            </button>
-          ) : <div className="flex-1" />}
+        {nextProblem ? (
+          <button
+            onClick={() => router.push(`/quest/${nextProblem.id}`)}
+            className="flex-1 flex items-center justify-end gap-1.5 px-2.5 py-1.5 rounded-lg border border-amber-300 bg-white text-xs font-semibold text-gray-700 hover:bg-amber-50 transition-colors min-w-0"
+          >
+            <div className="text-right min-w-0">
+              <div className="text-[9px] text-gray-400 font-medium leading-none">{t("다음 문제", "Next problem")}</div>
+              <div className="truncate leading-tight">{nextProblem.title}</div>
+            </div>
+            <ChevronRight size={14} className="flex-shrink-0 text-amber-600" />
+          </button>
+        ) : <div className="flex-1" />}
+      </div>
 
-          {nextProblem ? (
-            <button
-              onClick={() => router.push(`/quest/${nextProblem.id}`)}
-              className="flex-1 flex items-center justify-end gap-2 px-3 py-2.5 rounded-xl border-2 border-black bg-white text-sm font-bold text-gray-700 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none transition-all"
-            >
-              <div className="text-right min-w-0">
-                <div className="text-[10px] text-gray-400 font-medium">{t("다음 문제", "Next problem")}</div>
-                <div className="truncate text-xs font-bold">{nextProblem.title}</div>
+      {/* Problem App + (옵션) 원본 문제 iframe 반반 스크린.
+          md 이상에서만 split. 모바일은 너무 좁아서 토글 버튼 자체를 숨김. */}
+      <div className="flex-1 flex min-h-0">
+        {/* key=lang forces remount so useState initializer re-runs with new lang */}
+        <main className={splitView ? "flex-1 md:w-1/2 min-w-0 overflow-auto" : "flex-1 min-w-0"}>
+          {LazyComp ? (
+            <Suspense fallback={<ProblemLoadingSpinner />}>
+              <LazyComp key={lang} />
+            </Suspense>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-4 py-24 px-6 text-center">
+              <div className="text-5xl">🚧</div>
+              <div className="text-base font-bold text-gray-700">{t("튜토리얼 준비 중입니다", "Tutorial coming soon")}</div>
+            </div>
+          )}
+        </main>
+
+        {splitView && (() => {
+          const originalUrl = getOriginalProblemUrl(meta)
+          // Google 검색 fallback (url 필드 비어있을 때) → iframe 차단되므로 친절한 안내 UI
+          const isGoogleFallback = originalUrl.startsWith("https://www.google.com/search")
+          return (
+            <aside className="hidden md:flex flex-1 md:w-1/2 min-w-0 border-l-2 border-black bg-white flex-col">
+              <div className="flex items-center gap-1.5 px-2 py-1.5 border-b border-gray-300 bg-amber-50 flex-shrink-0">
+                {/* URL 박스 — 클릭하면 새 탭에서 열림 */}
+                <a
+                  href={originalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 min-w-0 flex items-center gap-1.5 px-2 py-1 rounded-md bg-white border border-gray-300 hover:border-amber-400 hover:bg-amber-50 transition-colors group"
+                  title={t("새 탭에서 원본 문제 열기", "Open original in new tab")}
+                >
+                  <ExternalLink size={11} className="text-amber-700 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                  <span className="text-[11px] text-gray-600 truncate font-mono">{originalUrl.replace(/^https?:\/\//, "")}</span>
+                </a>
+                {/* Zoom 컨트롤 */}
+                {!isGoogleFallback && !iframeBlocked && (
+                  <div className="flex items-center gap-0.5 flex-shrink-0 border border-gray-300 rounded-md bg-white">
+                    <button
+                      onClick={() => setIframeZoom(z => Math.max(0.5, +(z - 0.1).toFixed(2)))}
+                      disabled={iframeZoom <= 0.5}
+                      className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-l-md"
+                      title={t("축소", "Zoom out")}
+                    >
+                      <ZoomOut size={13} />
+                    </button>
+                    <button
+                      onClick={() => setIframeZoom(1)}
+                      className="px-1 text-[10px] font-semibold text-gray-600 hover:bg-amber-100 min-w-[2.5rem]"
+                      title={t("100% 로 리셋", "Reset to 100%")}
+                    >
+                      {Math.round(iframeZoom * 100)}%
+                    </button>
+                    <button
+                      onClick={() => setIframeZoom(z => Math.min(1.5, +(z + 0.1).toFixed(2)))}
+                      disabled={iframeZoom >= 1.5}
+                      className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-r-md"
+                      title={t("확대", "Zoom in")}
+                    >
+                      <ZoomIn size={13} />
+                    </button>
+                  </div>
+                )}
+                <button
+                  onClick={() => setSplitView(false)}
+                  className="text-gray-500 hover:text-gray-800 p-1 hover:bg-gray-200 rounded-md flex-shrink-0"
+                  title={t("닫기", "Close")}
+                >
+                  <X size={14} />
+                </button>
               </div>
-              <ChevronRight size={16} className="flex-shrink-0" />
-            </button>
-          ) : <div className="flex-1" />}
-        </div>
-      </main>
+              {isGoogleFallback || iframeBlocked ? (
+                <div className="flex-1 flex flex-col items-center justify-center gap-3 p-6 text-center">
+                  <div className="text-3xl">{isGoogleFallback ? "🔗" : "🚫"}</div>
+                  <div className="text-sm font-bold text-gray-700">
+                    {isGoogleFallback
+                      ? t("이 문제는 원본 링크가 아직 등록되지 않았어요", "Original link not registered yet")
+                      : t("이 페이지는 옆에 띄울 수 없어요", "This page can't be embedded")}
+                  </div>
+                  <div className="text-xs text-gray-500 max-w-xs">
+                    {isGoogleFallback
+                      ? t("Google에서 직접 검색해서 찾아볼 수 있어요.", "You can search Google to find it.")
+                      : t("새 탭에서 열어주세요.", "Open it in a new tab instead.")}
+                  </div>
+                  <a
+                    href={originalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-semibold text-white bg-amber-500 hover:bg-amber-600 px-3 py-1.5 rounded-md flex items-center gap-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)]"
+                  >
+                    <ExternalLink size={11} />
+                    {isGoogleFallback ? t("Google 검색 열기", "Open Google search") : t("새 탭에서 열기", "Open in new tab")}
+                  </a>
+                </div>
+              ) : (
+                // 확대 시 scrollWrapper 가 자동으로 스크롤바 띄움 → 모두가 아는 패턴.
+                // 별도 pan 모드/단축키 없이 휠/트랙패드/스크롤바로 자연스럽게 이동.
+                //
+                // 레이아웃 트릭:
+                //   sizedBox: zoom 비율로 layout 크기 늘림 (zoom>1 일 때 wrapper 보다 커짐)
+                //   iframe: sizedBox 안에 100%×100% 로 넣고 transform: scale(zoom) 으로 시각 확대
+                //   → 결과적으로 iframe 시각 크기 = sizedBox layout 크기 → wrapper 가 정확히 그만큼 스크롤
+                <div className="flex-1 overflow-auto bg-white">
+                  <div
+                    style={{
+                      width: `${iframeZoom * 100}%`,
+                      height: `${iframeZoom * 100}%`,
+                      // zoom < 1 일 때는 sizedBox 가 wrapper 보다 작아서 빈 공간 생김 → 그대로 OK
+                    }}
+                  >
+                    <iframe
+                      key={meta.id}
+                      src={originalUrl}
+                      style={{
+                        width: `${100 / iframeZoom}%`,
+                        height: `${100 / iframeZoom}%`,
+                        transform: `scale(${iframeZoom})`,
+                        transformOrigin: "top left",
+                        border: 0,
+                      }}
+                      onError={() => setIframeBlocked(true)}
+                      title={t("원본 문제", "Original problem")}
+                    />
+                  </div>
+                </div>
+              )}
+            </aside>
+          )
+        })()}
+      </div>
     </div>
   )
 }

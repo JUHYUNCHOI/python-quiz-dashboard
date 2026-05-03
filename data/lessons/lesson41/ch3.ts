@@ -107,6 +107,67 @@ print(f'마법사 HP: {mage.hp}') # 80 (안 바뀜!)
       ],
       choices: ["s, item_name, price", "item_name, price", "item_name", "price", "Item", "item", "name"],
       expectedOutput: "검: 500원"
+    },
+    {
+      id: "ch3-4",
+      type: "tryit",
+      title: "✋ 직접 — Player 에 데미지 주기",
+      task: "Player 객체를 만들고 hp 를 30 깎은 뒤 출력하세요!",
+      initialCode: `class Player:
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+
+p = Player('영웅', 100)
+
+# 👇 p 의 hp 에서 30 을 빼고 다시 저장하세요
+p.___ = p.___ - ___
+
+print(f'{p.name}: HP {p.hp}')`,
+      expectedOutput: "영웅: HP 70",
+      hint: "객체.속성 = 새 값 형태로 속성을 바꿔요.",
+      hint2: "hp / hp / 30"
+    },
+    {
+      id: "ch3-5",
+      type: "predict",
+      title: "💭 a 만 깎았는데 b 는?",
+      code: `class Hero:
+    def __init__(s, hp):
+        s.hp = hp
+
+a = Hero(100)
+b = Hero(100)
+a.hp = a.hp - 50
+print(a.hp, b.hp)`,
+      options: ["50 50", "100 100", "50 100", "에러"],
+      answer: 2,
+      explanation: "a 와 b 는 서로 완전히 다른 객체! a.hp 만 50 으로 바뀌고 b.hp 는 그대로 100. 한 객체의 속성을 바꿔도 다른 객체엔 영향 없어요."
+    },
+    {
+      id: "ch3-6",
+      type: "mission",
+      title: "🏆 미션 — 두 학생 점수 관리",
+      task: "Student 클래스를 만들고 학생 두 명을 만들어서, 첫 번째 학생만 점수를 +10 한 뒤 두 명 모두 출력하세요. 두 객체가 독립적인 걸 직접 확인해봐요.",
+      initialCode: `# 1) Student 클래스 — 이름 name, 점수 score
+# 2) alice = Student('Alice', 85)
+#    bob   = Student('Bob', 90)
+# 3) alice 점수만 10 점 올리고
+# 4) 'Alice: 95' 와 'Bob: 90' 두 줄 출력
+
+`,
+      expectedOutput: "Alice: 95\nBob: 90",
+      hint: "객체.속성 = 객체.속성 + 10 으로 한 명만 올려요. bob 은 안 건드려도 그대로!",
+      hint2: `class Student:
+    def __init__(s, name, score):
+        s.name = name
+        s.score = score
+
+alice = Student('Alice', 85)
+bob = Student('Bob', 90)
+alice.score = alice.score + 10
+print(f'{alice.name}: {alice.score}')
+print(f'{bob.name}: {bob.score}')`
     }
   ]
 }

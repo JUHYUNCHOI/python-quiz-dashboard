@@ -40,7 +40,7 @@ export function makeCheckupsCh1(E) {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐮</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Cow Checkups</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2025 Bronze #1</div>
+          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
           <div style={{ marginTop: 12, background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "Two arrays a[] and b[] of length N. Count positions where a[i]==b[i]. Then find max matches by rearranging b.",

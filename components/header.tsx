@@ -15,6 +15,11 @@ export function Header() {
 
   const displayName = profile?.display_name || t("학습자", "Learner")
 
+  // /quest/[problemId] 안에서는 글로벌 언어 토글 숨김.
+  // 161 문제 App 들이 lang 변경 시 step 0 으로 리셋되어 학생 진행 사라짐.
+  // 학생이 문제 들어가기 전에 언어 정해두는 것을 강제.
+  const isInQuestProblem = /^\/quest\/[^/]+/.test(pathname || "")
+
   return (
     <header className="sticky top-0 z-40 border-b border-orange-100 bg-white/80 backdrop-blur-sm">
       <div className="container mx-auto flex items-center justify-between px-4 py-3 md:py-4">
@@ -27,21 +32,23 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-2 md:gap-4">
-          {/* 언어 선택 탭 */}
-          <div className="flex items-center rounded-full bg-gray-100 p-0.5 text-xs font-bold">
-            <button
-              onClick={() => setLang('ko')}
-              className={`px-2.5 py-1.5 rounded-full transition-colors ${lang === 'ko' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-            >
-              🇰🇷 KO
-            </button>
-            <button
-              onClick={() => setLang('en')}
-              className={`px-2.5 py-1.5 rounded-full transition-colors ${lang === 'en' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-            >
-              🇺🇸 EN
-            </button>
-          </div>
+          {/* 언어 선택 탭 — /quest/[problemId] 페이지에서는 숨김 (App 리셋 방지) */}
+          {!isInQuestProblem && (
+            <div className="flex items-center rounded-full bg-gray-100 p-0.5 text-xs font-bold">
+              <button
+                onClick={() => setLang('ko')}
+                className={`px-2.5 py-1.5 rounded-full transition-colors ${lang === 'ko' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+              >
+                🇰🇷 KO
+              </button>
+              <button
+                onClick={() => setLang('en')}
+                className={`px-2.5 py-1.5 rounded-full transition-colors ${lang === 'en' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+              >
+                🇺🇸 EN
+              </button>
+            </div>
+          )}
 
           {!isLoading && !isAuthenticated ? (
             <Link

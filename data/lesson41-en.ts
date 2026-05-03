@@ -78,6 +78,20 @@ With one cutter, you can make 100, even 1000 cookies!
           ],
           answer: 1,
           explanation: "A class (cutter) stamps out objects (cookies)! One cutter can make many cookies!"
+        },
+        {
+          id: "ch1-4",
+          type: "predict",
+          title: "💭 Which one scales to 30 characters?",
+          content: "If you needed to create 30 characters, which approach is cleaner?\n\n**Approach A — variables only:**\n```python\nname1, hp1 = 'Hero', 100\nname2, hp2 = 'Mage', 80\n# ... 28 more\n```\n\n**Approach B — using a class:**\n```python\nclass Character:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\nhero = Character('Hero', 100)\nmage = Character('Mage', 80)\n# ... same pattern 28 times\n```",
+          options: [
+            "A — variables are more direct",
+            "B — same structure repeated cleanly",
+            "Both are similar",
+            "A is shorter"
+          ],
+          answer: 1,
+          explanation: "B! Defining the class once lets you stamp out 30 or 100 characters with one line each. No need to track 60 individual variables."
         }
       ]
     },
@@ -222,6 +236,42 @@ Note: Usually written as \`self\`, but this course uses \`s\`!
           ],
           choices: ["class", "def", "__init__", "__main__", "s", "self", "dog"],
           expectedOutput: "Buddy"
+        },
+        {
+          id: "ch2-6",
+          type: "tryit",
+          title: "✋ Build it — Pet class",
+          task: "Complete the Pet class so the dog object works!",
+          initialCode: `class Pet:
+    def __init__(s, name, age):
+        s.___ = name
+        s.age = ___
+
+dog = Pet('Buddy', 3)
+print(f'{dog.name}: {dog.age} years old')`,
+          expectedOutput: "Buddy: 3 years old",
+          hint: "Store each parameter on the object using s.attr = parameter.",
+          hint2: "name / age"
+        },
+        {
+          id: "ch2-7",
+          type: "mission",
+          title: "🏆 Mission — Dog class from scratch",
+          task: "No blanks this time! Build a Dog class (with name and breed) and create snoopy = Dog('snoopy', 'Beagle'), then print 'snoopy: Beagle'.",
+          initialCode: `# 1) Define Dog class (two attributes: name, breed)
+# 2) snoopy = Dog('snoopy', 'Beagle')
+# 3) Print as 'snoopy: Beagle'
+
+`,
+          expectedOutput: "snoopy: Beagle",
+          hint: "class then __init__(s, name, breed). Inside: s.name = name, s.breed = breed.",
+          hint2: `class Dog:
+    def __init__(s, name, breed):
+        s.name = name
+        s.breed = breed
+
+snoopy = Dog('snoopy', 'Beagle')
+print(f'{snoopy.name}: {snoopy.breed}')`
         }
       ]
     },
@@ -332,6 +382,67 @@ Other objects are not affected! Each object is **completely independent**!
           ],
           choices: ["s, item_name, price", "item_name, price", "item_name", "price", "Item", "item", "name"],
           expectedOutput: "Sword: 500 gold"
+        },
+        {
+          id: "ch3-4",
+          type: "tryit",
+          title: "✋ Build it — Player takes damage",
+          task: "Create a Player object, reduce its hp by 30, then print the result.",
+          initialCode: `class Player:
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+
+p = Player('Hero', 100)
+
+# 👇 subtract 30 from p.hp and store it back
+p.___ = p.___ - ___
+
+print(f'{p.name}: HP {p.hp}')`,
+          expectedOutput: "Hero: HP 70",
+          hint: "Use object.attribute = new value to update an attribute.",
+          hint2: "hp / hp / 30"
+        },
+        {
+          id: "ch3-5",
+          type: "predict",
+          title: "💭 We changed a — what happens to b?",
+          code: `class Hero:
+    def __init__(s, hp):
+        s.hp = hp
+
+a = Hero(100)
+b = Hero(100)
+a.hp = a.hp - 50
+print(a.hp, b.hp)`,
+          options: ["50 50", "100 100", "50 100", "Error"],
+          answer: 2,
+          explanation: "a and b are completely separate objects! Only a.hp becomes 50 — b.hp is still 100. Changing one object's attribute never affects another object."
+        },
+        {
+          id: "ch3-6",
+          type: "mission",
+          title: "🏆 Mission — Two students, independent scores",
+          task: "Build a Student class, create two students, raise the first one's score by 10, then print both. See for yourself that they're independent.",
+          initialCode: `# 1) Student class — name and score
+# 2) alice = Student('Alice', 85)
+#    bob   = Student('Bob', 90)
+# 3) Raise alice's score by 10
+# 4) Print 'Alice: 95' and 'Bob: 90' (two lines)
+
+`,
+          expectedOutput: "Alice: 95\nBob: 90",
+          hint: "obj.attr = obj.attr + 10 raises only that one. Don't touch bob — he stays 90.",
+          hint2: `class Student:
+    def __init__(s, name, score):
+        s.name = name
+        s.score = score
+
+alice = Student('Alice', 85)
+bob = Student('Bob', 90)
+alice.score = alice.score + 10
+print(f'{alice.name}: {alice.score}')
+print(f'{bob.name}: {bob.score}')`
         }
       ]
     },
@@ -419,6 +530,37 @@ class Monster:
 - [ ] You understand what s (self) means
 
 @Key point: A class is a **cutter**, an object is **what's stamped out**, and s is **myself**!`
+        },
+        {
+          id: "ch4-5",
+          type: "mission",
+          title: "🏆 Mission — BankAccount class from scratch!",
+          task: `This time **start from a blank file**! Build a bank-account class.
+
+**Requirements:**
+1. Define class \`BankAccount\` with attributes \`owner\` (name) and \`balance\` (amount)
+2. Create an account \`acc\` for \`'Alice'\` with balance 1000
+3. Withdraw 300 (subtract from balance)
+4. Print in format \`Alice's balance: 700\`
+
+⏱️ 5-minute challenge!`,
+          initialCode: `# 👇 Write everything from scratch
+# 1. Define class BankAccount
+# 2. In __init__, accept owner and balance, store on s
+# 3. acc = BankAccount('Alice', 1000)
+# 4. Subtract 300 from acc.balance, store back
+# 5. Print using f-string: Alice's balance: 700
+`,
+          expectedOutput: "Alice's balance: 700",
+          hint: "Start with class BankAccount: then __init__(s, owner, balance) with three parameters. Inside, write s.owner = owner and s.balance = balance.",
+          hint2: `class BankAccount:
+    def __init__(s, owner, balance):
+        s.owner = owner
+        s.balance = balance
+
+acc = BankAccount('Alice', 1000)
+acc.balance = acc.balance - 300
+print(f"{acc.owner}'s balance: {acc.balance}")`
         }
       ]
     }

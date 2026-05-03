@@ -238,10 +238,10 @@ export function highlight(line: string): React.ReactNode[] {
     else if (/^["']/.test(tok))
       parts.push(<span key={m.index} style={{ color: "#34d399" }}>{tok}</span>)
     else
-      parts.push(<span key={m.index} style={{ color: "#e2e8f0" }}>{tok}</span>)
+      parts.push(<span key={m.index} style={{ color: "#f8fafc" }}>{tok}</span>)
   }
   if (comment)
-    parts.push(<span key="cmt" style={{ color: "#6b7280", fontStyle: "italic" }}>{comment}</span>)
+    parts.push(<span key="cmt" style={{ color: "#94a3b8", fontStyle: "italic" }}>{comment}</span>)
   return parts
 }
 
@@ -253,10 +253,10 @@ interface CodeBlockProps {
 
 export function CodeBlock({ lines }: CodeBlockProps) {
   return (
-    <div className="bg-gray-900 rounded-xl px-2 py-3 overflow-x-auto text-xs leading-relaxed font-mono">
+    <div className="bg-gray-900 rounded-xl px-3 py-3 overflow-x-auto text-[13px] leading-relaxed font-mono">
       {lines.map((l, i) => (
         <div key={i} className="flex min-h-5">
-          <span className="text-gray-500 w-7 text-right mr-2.5 flex-shrink-0 select-none text-[10px]">
+          <span className="text-gray-500 w-7 text-right mr-2.5 flex-shrink-0 select-none text-[11px]">
             {i + 1}
           </span>
           <span style={{ whiteSpace: "pre" }}>{highlight(l)}</span>

@@ -74,6 +74,25 @@ Remove: 1→2→3  (in order!)
           options: ["C→B→A", "A→B→C", "B→A→C", "Random"],
           answer: 1,
           explanation: "FIFO! The first item added, A, comes out first. A→B→C"
+        },
+        {
+          id: "pred-fifo",
+          type: "predict",
+          title: "💭 Standing in line — who's first out?",
+          code: "from collections import deque\nq = deque()\nq.append('🐶')   # enqueue\nq.append('🐱')\nq.append('🐰')\nprint(q.popleft())   # dequeue: ?",
+          options: ["🐶", "🐱", "🐰", "Error"],
+          answer: 0,
+          explanation: "FIFO! 🐶 lined up first, so 🐶 leaves first. No cutting."
+        },
+        {
+          id: "try-fifo",
+          type: "tryit",
+          title: "✋ Try it — handle customers via a queue",
+          task: "Line up 3 customers (Alice, Bob, Carol) in a deque, then serve them in order — print the first two.",
+          initialCode: "from collections import deque\nq = deque()\n\n# Add 3 customers to the back of the queue\nq.___('Alice')\nq.___('Bob')\nq.___('Carol')\n\n# Serve from the front — print twice\nprint(q.___())\nprint(q.___())",
+          expectedOutput: "Alice\nBob",
+          hint: "Add with .append, take from the front with .popleft (FIFO).",
+          hint2: "append / append / append / popleft / popleft"
         }
       ]
     },
@@ -102,6 +121,20 @@ dequeue(): [1,2,3] → [2,3] (returns 1)
 - **front**: Peek at the front item (without removing)
 - **isEmpty**: Check if the queue is empty
 - **size**: Get the number of items`
+        },
+        {
+          id: "pred-list-slow",
+          type: "predict",
+          title: "💭 What if we used a list as a queue?",
+          content: "Using a list as a queue:\n```python\nqueue = []\nqueue.append(item)   # add\nqueue.pop(0)         # remove from the front\n```\nWith 10,000 elements, how long does **one** \\`pop(0)\\` call take?",
+          options: [
+            "O(1) — instant",
+            "O(log n) — fast",
+            "O(n) — every other element shifts forward by one slot",
+            "Lists can't do this"
+          ],
+          answer: 2,
+          explanation: "pop(0) removes the front item, then **every other element shifts left by one** — that's O(n). Slow for queues! That's why deque exists (next page)."
         },
         {
           id: "deque-explain",

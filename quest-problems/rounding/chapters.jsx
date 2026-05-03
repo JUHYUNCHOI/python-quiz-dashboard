@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
+import { CodeBlock } from "@/components/quest/shared";
 
 /* ================================================================
    HELPERS
@@ -47,26 +49,145 @@ export const SIM_CASES = [
 // ═══════════════════════════════════════════════
 export function makeCh1(E) {
   return [
-    // 1-1: Title
-    { type: "reveal", narr: t(E, "USACO 2024 December Bronze — Problem 1!", "USACO 2024 December Bronze 첫 번째 문제야! 같이 풀어보자!"),
+    // 1-1: 문제 설명 + 구체 예시 (x=48)
+    { type: "reveal", narr: t(E, "Two cows (Bessie and Elsie) have different rounding methods. The same number can give different answers — and we count how many such numbers exist.", "두 소 (Bessie 와 Elsie) 의 반올림 방식이 서로 달라서, 같은 수에 대해 답이 다르게 나올 수 있어요. 그런 수가 몇 개인지 세는 문제예요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 40, marginBottom: 8 }}>🏆</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: C.accent }}>Roundabout Rounding</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2024 December Bronze #1</div>
+        <div style={{ padding: 16 }}>
+          {/* 제목 */}
+          <div style={{ textAlign: "center", marginBottom: 16 }}>
+            <div style={{ fontSize: 32, marginBottom: 2 }}>🏆</div>
+            <div style={{ fontSize: 17, fontWeight: 900, color: C.accent }}>Roundabout Rounding</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>USACO 2024 December Bronze #1</div>
+          </div>
+
+          {/* 구체 예시 — x=48 */}
+          <div style={{ background: "#fff7ed", border: `2px solid #fdba74`, borderRadius: 12, padding: 14, marginBottom: 14 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#c2410c", marginBottom: 8 }}>📌 {t(E, "Example", "예시")}</div>
+            <div style={{ textAlign: "center", marginBottom: 10 }}>
+              <span style={{ fontSize: 13, color: C.dim }}>{t(E, "Round ", "수 ")}</span>
+              <span style={{ fontSize: 28, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>48</span>
+              <span style={{ fontSize: 13, color: C.dim }}>{t(E, " — what do they say?", " 을 두 소 (Bessie 와 Elsie) 가 반올림하면?")}</span>
+            </div>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+              <div style={{ flex: 1, background: C.bessieBg, border: `2px solid ${C.bessieBd}`, borderRadius: 10, padding: "12px 6px", textAlign: "center" }}>
+                <div style={{ fontSize: 26 }}>🐄</div>
+                <div style={{ fontSize: 11, fontWeight: 800, color: C.bessie, fontFamily: "'JetBrains Mono',monospace", marginBottom: 4 }}>Bessie</div>
+                <div style={{ fontSize: 22, fontWeight: 900, color: C.bessie, fontFamily: "'JetBrains Mono',monospace" }}>0</div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", fontSize: 18, color: C.no, fontWeight: 900 }}>≠</div>
+              <div style={{ flex: 1, background: C.elsieBg, border: `2px solid ${C.elsieBd}`, borderRadius: 10, padding: "12px 6px", textAlign: "center" }}>
+                <div style={{ fontSize: 26 }}>🐮</div>
+                <div style={{ fontSize: 11, fontWeight: 800, color: C.elsie, fontFamily: "'JetBrains Mono',monospace", marginBottom: 4 }}>Elsie</div>
+                <div style={{ fontSize: 22, fontWeight: 900, color: C.elsie, fontFamily: "'JetBrains Mono',monospace" }}>100</div>
+              </div>
+            </div>
+            <div style={{ marginTop: 10, textAlign: "center", fontSize: 12, color: "#c2410c", fontWeight: 700 }}>
+              {t(E, "Same number, different answers!", "같은 48 인데 답이 달라요!")}
+            </div>
+          </div>
+
+          {/* 우리가 풀 문제 */}
+          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 14 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: C.accent, marginBottom: 6 }}>❓ {t(E, "Our task", "우리가 풀 문제")}</div>
+            <div style={{ fontSize: 14, color: C.text, lineHeight: 1.7 }}>
+              {t(E, "Given N, count how many numbers between 2 and N have ", "N 이 주어지면, 2 부터 N 까지 수 중에서 ")}
+              <strong style={{ color: C.no }}>{t(E, "different Bessie/Elsie answers", "두 소 (Bessie 와 Elsie) 의 답이 다른 수")}</strong>
+              {t(E, ".", " 가 몇 개인지 세요.")}
+            </div>
+          </div>
         </div>
       ),
     },
-    // 1-2: What's given
-    { type: "reveal", narr: t(E, "Bessie has rounding homework! Round positive integers to powers of 10.", "Bessie가 반올림 숙제를 하고 있어! 숫자를 깔끔한 수(10, 100, 1000 등)로 반올림하는 거야."),
+    // 1-2: 입력 / 출력 / 예시 (이해 우선)
+    { type: "reveal", narr: t(E, "Input is one number N. Output is the count of numbers in 2..N where Bessie and Elsie disagree.", "입력은 숫자 N 하나. 출력은 2 부터 N 까지 중에서 Bessie 와 Elsie 의 답이 다른 수의 개수예요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: C.accent, marginBottom: 8 }}>{t(E, "📋 Given", "📋 주어진 것")}</div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 2 }}>
-              {t(E, "A number x (2 to N)", "수 x (2부터 N까지)")}<br />
-              {t(E, "Find the nearest \"clean\" number (10, 100, 1000...)", "x보다 크거나 같은 깔끔한 수 (10, 100, 1000...) 찾기")}<br />
-              {t(E, "Round x to that number!", "그 수로 반올림!")}
+        <div style={{ padding: 16, fontSize: 14, lineHeight: 1.8 }}>
+          {/* 입력 */}
+          <div style={{ marginBottom: 14 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace" }}>
+              <span style={{ fontSize: 16, fontWeight: 900, color: C.accent }}>N</span>
+              <span style={{ fontSize: 12, color: C.dim, marginLeft: 8 }}>{t(E, "(1 ~ 10⁹)", "(1 부터 10⁹ 까지)")}</span>
+            </div>
+          </div>
+
+          {/* 출력 */}
+          <div style={{ marginBottom: 14 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+                {t(E, "Among ", "")}
+                <strong style={{ fontFamily: "'JetBrains Mono',monospace" }}>2, 3, …, N</strong>
+                {t(E, ", how many give different answers from ", " 중에서, ")}
+                <strong style={{ color: C.bessie }}>Bessie</strong>
+                {t(E, " and ", " 와 ")}
+                <strong style={{ color: C.elsie }}>Elsie</strong>
+                {t(E, "?", " 의 답이 다른 수의 개수")}
+              </div>
+            </div>
+          </div>
+
+          {/* 구체 예시 */}
+          <div style={{ background: "#fff7ed", border: `2px solid #fdba74`, borderRadius: 10, padding: 14 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#c2410c", marginBottom: 8 }}>📌 {t(E, "Example", "예시")}</div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2, color: C.text }}>
+              <div>{t(E, "Input:", "입력:")}  <strong>N = 100</strong></div>
+              <div>{t(E, "Output:", "출력:")} <strong style={{ color: "#c2410c", fontSize: 18 }}>5</strong></div>
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.6 }}>
+              {t(E, "→ Among 2~100, Bessie and Elsie disagree on 5 numbers (we'll see which ones later).",
+                  "→ 2 부터 100 사이 수 중에서, 두 답이 다른 수가 5 개라는 뜻이에요. (어떤 5 개인지는 뒤에서!)")}
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    // 1-2b: P 의 조건 → 관찰 → 발견 (자릿수)
+    { type: "reveal", narr: t(E, "Finding P is the key for this problem. So what's the condition for P? Let's observe.", "이 문제는 P 를 구하는 게 핵심이에요. 그럼 P 의 조건은 뭘까요? 함께 관찰해봐요."),
+      content: (
+        <div style={{ padding: 16, fontSize: 14, lineHeight: 1.85 }}>
+          {/* 1단계: P 의 조건 */}
+          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 14, marginBottom: 12, textAlign: "center" }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: C.accent, marginBottom: 8 }}>
+              📐 {t(E, "P's condition", "P 의 조건")}
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>
+              10<sup>P</sup> &gt; x
+            </div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
+              {t(E, "(smallest such P)", "(을 만족하는 가장 작은 P)")}
+            </div>
+          </div>
+
+          {/* 2단계: 관찰 표 */}
+          <div style={{ fontSize: 12, fontWeight: 800, color: C.dim, marginBottom: 4 }}>
+            🔍 {t(E, "Calculate P for a few x — look closely", "🔍 몇 개 x 로 P 계산해보기 — 자세히 관찰")}
+          </div>
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
+            {[
+              { x: 7,    d: 1, calc: "10¹=10 > 7" },
+              { x: 48,   d: 2, calc: "10²=100 > 48" },
+              { x: 445,  d: 3, calc: "10³=1000 > 445" },
+              { x: 4459, d: 4, calc: "10⁴=10000 > 4459" },
+            ].map((row, i) => (
+              <div key={i} style={{
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                padding: "7px 14px", marginBottom: 4, borderRadius: 8,
+                background: "#f8f9fc", border: `1.5px solid ${C.border}`,
+              }}>
+                <span style={{ fontWeight: 800, color: C.text, minWidth: 50 }}>{row.x}</span>
+                <span style={{ color: C.dim, fontSize: 11 }}>{row.calc}</span>
+                <span style={{ fontWeight: 800, color: C.accent }}>P = {row.d}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* 3단계: 발견 — 자릿수! */}
+          <div style={{ background: "#fef3c7", border: `2px solid #fcd34d`, borderRadius: 10, padding: 12, marginTop: 12 }}>
+            <div style={{ fontSize: 13, color: "#a16207", fontWeight: 700, lineHeight: 1.7 }}>
+              💡 {t(E, "Discovery! Looking carefully, you'll notice ", "발견! 자세히 관찰하다 보면, ")}
+              <strong style={{ fontSize: 14 }}>P = {t(E, "the digit count of x", "x 의 자릿수")}</strong>
+              {t(E, ".", " 라는 걸 알 수 있어요.")}
             </div>
           </div>
         </div>
@@ -96,17 +217,26 @@ export function makeCh1(E) {
         </div>
       ),
     },
-    // 1-4: Example 48
-    { type: "reveal", narr: t(E, "Example: rounding 48 to 10² — different results!", "예시: 48을 10²로 반올림하면 — 결과가 다르다!"),
+    // 1-4: Example 48 — 인라인 시뮬 (직접 단계별 클릭)
+    { type: "reveal", narr: t(E, "Example: x=48. Click → to step through Bessie's and Elsie's reasoning.",
+                                "예시: x=48. 아래에서 → 버튼을 눌러가며 Bessie / Elsie 의 과정을 단계별로 따라가봐요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2.2 }}>
-            <div style={{ color: C.dim, marginBottom: 4 }}>48 → 10² {t(E, "rounding", "반올림")} (P=2)</div>
-            <div style={{ color: C.bessie }}>🐄 {t(E, "tens", "10의 자리")}=4 → 4&lt;5 → <strong>0</strong></div>
-            <div style={{ color: C.elsie }}>🐮 8≥5→50, 5≥5→<strong>100</strong></div>
-            <div style={{ marginTop: 8, padding: "6px 12px", background: C.noBg, borderRadius: 8, color: C.no, fontWeight: 800, textAlign: "center" }}>
-              ❌ 0 vs 100 — {t(E, "Different!", "다르다!")}
-            </div>
+        <div style={{ padding: 12 }}>
+          <InlineSim x={48} E={E} />
+        </div>
+      ),
+    },
+
+    // 1-5: 다른 숫자도 — 6 가지 케이스 비교
+    { type: "reveal", narr: t(E,
+      "48 isn't the only one. Try other numbers: some agree, some disagree. Spot anything?",
+      "48 만 그런 게 아니에요. 다른 숫자도 골라봐요. ✅ 같은 것도 있고 ❌ 다른 것도 있어요. 뭔가 보이나요?"),
+      content: (
+        <div style={{ padding: 12 }}>
+          <Multi6Sim E={E} />
+          <div style={{ marginTop: 10, padding: "8px 10px", background: C.accentBg, border: `1.5px dashed ${C.accentBd}`, borderRadius: 10, fontSize: 12, color: C.accent, fontWeight: 700, textAlign: "center", lineHeight: 1.6 }}>
+            🔍 {t(E, "Notice: ❌ ones (48, 445, 4459) all start with 4. Coincidence?",
+                  "관찰: ❌ 인 수 (48, 445, 4459) 는 모두 4 로 시작해요. 우연일까요?")}
           </div>
         </div>
       ),
@@ -122,6 +252,26 @@ export function makeCh1(E) {
             </div>
           </div>
           <div style={{ marginTop: 12, fontSize: 13, color: C.dim }}>T {t(E, "test cases", "개 테스트케이스")}, N ≤ 10⁹</div>
+        </div>
+      ),
+    },
+    // 1-6: 구체적 예시 — N=100
+    { type: "reveal", narr: t(E, "Concrete example: N=100. Check x=2,3,...,100 (99 values total). Answer is 5.", "구체적 예시: N=100이면 x=2부터 100까지 (총 99개) 모두 확인. 답은 5개!"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
+            <div style={{ background: C.accentBg, borderRadius: 10, padding: 12, marginBottom: 10, border: `1.5px solid ${C.accentBd}` }}>
+              <div style={{ fontWeight: 800, color: C.accent, marginBottom: 6 }}>{t(E, "N = 100", "N = 100")}</div>
+              <div style={{ fontSize: 12, color: C.text }}>{t(E, "Check x = 2, 3, 4, ..., 100 (99 numbers)", "x = 2, 3, 4, ..., 100 (총 99 개) 검사")}</div>
+            </div>
+            <div style={{ background: C.noBg, borderRadius: 10, padding: 12, border: `1.5px solid ${C.noBd}` }}>
+              <div style={{ fontWeight: 800, color: C.no, marginBottom: 6 }}>{t(E, "Different answers (5):", "결과가 다른 수 (5개):")}</div>
+              <div style={{ fontSize: 14, fontWeight: 800, color: C.no, textAlign: "center" }}>45, 46, 47, 48, 49</div>
+            </div>
+            <div style={{ marginTop: 10, fontSize: 11, color: C.dim, lineHeight: 1.6 }}>
+              {t(E, "Other 94 numbers (2~44, 50~100): both give same result, so not counted.", "나머지 94개 (2~44, 50~100): 두 사람 결과 같음 → 카운트 X")}
+            </div>
+          </div>
         </div>
       ),
     },
@@ -263,57 +413,98 @@ export function makePatternSteps(E) {
         </div>),
     },
     // 3-5: 4+1=5 threshold
-    { type: "quiz",
-      narr: t(E, "Key! Carry (+1) hits digit 4 → becomes 5.", "핵심! 4에 carry(+1) → 5가 돼."),
-      question: t(E, "Does 5 meet the threshold (≥5)?", "5는 반올림 기준(≥5)을 넘을까?"),
-      options: t(E, ["Yes! 5≥5 → only Elsie rounds up → different!", "No, 5<5"], ["넘는다! 5≥5 → Elsie만 올림 → 달라진다!", "안 넘는다"]),
-      correct: 0,
-      explain: t(E, "5≥5 → Elsie rounds up, Bessie didn't → different!", "5≥5 → Elsie만 올려서 달라져!"),
-    },
-    // 3-6: What about 3+1=4?
-    { type: "quiz",
-      narr: t(E, "What about 38? First digit 3, carry → 3+1=4", "38은? 첫째 3, carry → 3+1=4"),
-      question: t(E, "Does 4 meet ≥5?", "4는 ≥5를 넘을까?"),
-      options: t(E, ["No. 4<5 → same result ✅", "Yes. 4≥5 → different"], ["안 넘는다. 4<5 → 같다 ✅", "넘는다 → 달라진다"]),
-      correct: 0,
-      explain: t(E, "3+1=4, 4<5 → no round up. Same result! ✅", "3+1=4, 4<5 → 안 올라감. 같다! ✅"),
-    },
-    // 3-7: What about 5~9?
-    { type: "quiz",
-      narr: t(E, "What if the first digit is 5 or higher? Bessie sees 5→ rounds up. Elsie also rounds up.", "첫째가 5 이상이면? Bessie도 5→올림. Elsie도 올림."),
-      question: t(E, "First digit ≥5: Bessie and Elsie same or different?", "첫째 ≥5: Bessie와 Elsie 같을까 다를까?"),
-      options: t(E, ["Same ✅ (both round up)", "Different ❌"], ["같다 ✅ (둘 다 올림)", "다르다 ❌"]),
-      correct: 0,
-      explain: t(E, "Both round up → same result! Only first=4 causes trouble.", "둘 다 올리니까 같아! 첫째=4일 때만 문제."),
-    },
-    // 3-8: Summary table by first digit
+    // 3-5 (NEW): 첫째 자리별 — 한 표로 모두 비교
     { type: "reveal",
-      narr: t(E, "Let's organize by first digit:", "첫째 자리별로 정리해보자:"),
+      narr: t(E,
+        "Let's see what happens for each first digit when Elsie's carry reaches it.",
+        "Elsie 의 carry 가 첫째 자리에 닿았을 때 어떻게 되는지 — 첫째 자리별로 한눈에 봐요."),
       content: (
-        <div style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:13, lineHeight:2.4 }}>
-          <div style={{ color:C.dim }}>1~3: +1 → 2~4 → <span style={{ color:C.ok, fontWeight:700 }}>{t(E,"<5 → same ✅","5 안 넘음 → 같다 ✅")}</span></div>
-          <div style={{ background:C.carryBg, borderRadius:8, padding:"4px 10px", fontWeight:800, color:C.carry }}>
-            4: +1 → 5 → <span style={{ color:C.no }}>{t(E,"≥5 → different! ❌","5 넘음 → 달라진다! ❌")}</span>
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: C.dim, marginBottom: 8 }}>
+            {t(E, "Compare: Bessie (first digit only) vs Elsie (after carry)", "비교: Bessie (첫째 자리 그대로) vs Elsie (carry 받은 후)")}
           </div>
-          <div style={{ color:C.dim }}>5~9: {t(E,"both round up →","둘 다 올려서 →")} <span style={{ color:C.ok, fontWeight:700 }}>{t(E,"same ✅","같다 ✅")}</span></div>
-          <div style={{ marginTop:10, padding:"8px 12px", background:C.accentBg, borderRadius:8, color:C.accent, fontWeight:700, textAlign:"center", fontSize:12 }}>
-            {t(E, "Only first digit = 4 causes different results!", "첫째 자리가 4일 때만 결과가 달라져!")}
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr 60px", padding: "8px 10px", background: "#f8f9fc", borderBottom: `1.5px solid ${C.border}`, fontSize: 11, fontWeight: 800, color: C.dim }}>
+              <span>{t(E, "first", "첫째")}</span>
+              <span>🐄 Bessie</span>
+              <span>🐮 Elsie (+1)</span>
+              <span style={{ textAlign: "right" }}>?</span>
+            </div>
+            {[
+              { f: "1~3", b: "<5 → 0", e: "+1 → 2~4, 여전히 <5 → 0",  same: true  },
+              { f: "4",    b: "<5 → 0", e: "+1 → 5, 이제 ≥5 → 10ᴾ", same: false },
+              { f: "5~9", b: "≥5 → 10ᴾ", e: "이미 올림 → 10ᴾ",         same: true  },
+            ].map((row, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "60px 1fr 1fr 60px",
+                padding: "10px 10px", borderBottom: i < 2 ? `1px solid ${C.border}` : "none",
+                background: row.same ? C.okBg : C.noBg,
+                color: row.same ? C.ok : C.no,
+                fontWeight: 700,
+              }}>
+                <span style={{ fontWeight: 900, fontSize: 14 }}>{row.f}</span>
+                <span style={{ fontSize: 11 }}>{row.b}</span>
+                <span style={{ fontSize: 11 }}>{row.e}</span>
+                <span style={{ textAlign: "right", fontWeight: 900, fontSize: 16 }}>{row.same ? "✓" : "❌"}</span>
+              </div>
+            ))}
           </div>
-        </div>),
+          <div style={{ marginTop: 12, padding: "10px 12px", background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, fontSize: 13, color: C.accent, fontWeight: 800, textAlign: "center" }}>
+            💡 {t(E, "Only first digit = 4 makes the answers differ!", "첫째 자리 = 4 일 때만 답이 달라져요!")}
+          </div>
+        </div>
+      ),
     },
 
-    // 3-9: Carry propagation — 445 vs 435
-    { type: "quiz",
+    // 3-9: Carry propagation — 445 vs 435 (시각적 비교)
+    { type: "reveal",
       narr: t(E,
-        "But just first=4 isn't enough! Carry must REACH the first digit. Compare 445 vs 435.",
-        "근데 첫째=4만으로는 부족해! carry가 첫째까지 도달해야 해. 445 vs 435를 비교해봐."),
-      question: t(E, "445 is ❌ but 435 is ✅. Why?", "445는 ❌인데 435는 ✅. 왜?"),
-      hint: t(E, "Middle digit: 4 vs 3", "중간 자리: 4 vs 3"),
-      options: t(E,
-        ["445: mid 4+1→5≥5 propagates! / 435: mid 3+1→4<5 stops!", "445 is bigger", "Odd vs even"],
-        ["445: 중간 4+1→5≥5 전파! / 435: 중간 3+1→4<5 멈춤!", "445가 더 크니까", "홀짝 차이"]),
-      correct: 0,
-      explain: t(E, "Middle must be ≥4 for carry to keep going!", "중간이 ≥4여야 carry가 계속 전파돼!"),
+        "But first=4 alone isn't enough! Carry must REACH the first digit. Compare 445 vs 435 side by side.",
+        "근데 첫째=4 만으로는 부족해요! carry 가 첫째까지 도달해야 해요. 445 와 435 를 나란히 비교해봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* 두 수 나란히 비교 */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+            {/* 445 */}
+            <div style={{ background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 12, padding: 12 }}>
+              <div style={{ textAlign: "center", fontSize: 22, fontWeight: 900, color: C.no, fontFamily: "'JetBrains Mono',monospace", marginBottom: 8 }}>
+                445
+              </div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9, color: C.text }}>
+                <div>마지막: <strong style={{ color: C.carry }}>5</strong> ≥5 → carry ↑</div>
+                <div>중간:    <strong style={{ color: C.no }}>4</strong>+1=<strong style={{ color: C.no }}>5</strong>, 5≥5 → carry ↑</div>
+                <div>첫째:    <strong style={{ color: C.no }}>4</strong>+1=<strong style={{ color: C.no }}>5</strong>, 5≥5 → 1000</div>
+              </div>
+              <div style={{ marginTop: 10, padding: "6px 10px", background: "#fff", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: C.text }}>
+                Bessie: 0 / Elsie: 1000
+              </div>
+              <div style={{ marginTop: 8, textAlign: "center", fontSize: 16, fontWeight: 900, color: C.no }}>❌ 다름</div>
+            </div>
+
+            {/* 435 */}
+            <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 12, padding: 12 }}>
+              <div style={{ textAlign: "center", fontSize: 22, fontWeight: 900, color: C.ok, fontFamily: "'JetBrains Mono',monospace", marginBottom: 8 }}>
+                435
+              </div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9, color: C.text }}>
+                <div>마지막: <strong style={{ color: C.carry }}>5</strong> ≥5 → carry ↑</div>
+                <div>중간:    <strong style={{ color: C.ok }}>3</strong>+1=<strong style={{ color: C.ok }}>4</strong>, 4&lt;5 → <strong style={{ color: C.ok }}>멈춤!</strong></div>
+                <div>첫째:    <strong>4</strong> 그대로 (carry 안 옴) → 0</div>
+              </div>
+              <div style={{ marginTop: 10, padding: "6px 10px", background: "#fff", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: C.text }}>
+                Bessie: 0 / Elsie: 0
+              </div>
+              <div style={{ marginTop: 8, textAlign: "center", fontSize: 16, fontWeight: 900, color: C.ok }}>✓ 같음</div>
+            </div>
+          </div>
+
+          {/* 결론 */}
+          <div style={{ padding: "12px 14px", background: "#fef3c7", border: `2px solid #fcd34d`, borderRadius: 10, fontSize: 13, color: "#a16207", fontWeight: 700, lineHeight: 1.7, textAlign: "center" }}>
+            💡 {t(E, "Middle digit must be ≥4 — only then carry keeps going up to the first digit.",
+                  "중간 자리가 ≥4 여야 carry 가 첫째까지 계속 올라가요.")}
+          </div>
+        </div>
+      ),
     },
     // 3-9: Complete condition
     { type: "reveal",
@@ -327,18 +518,113 @@ export function makePatternSteps(E) {
           </div>
         </div>),
     },
+    // 3-9b: 슬롯으로 개수 세기 (곱셈 원리 — 시각)
+    { type: "reveal",
+      narr: t(E,
+        "Each digit position is a slot. Multiply the choices per slot to get the total — like a slot machine!",
+        "각 자리는 슬롯이에요. 슬롯마다 가능한 수를 모두 곱하면 전체 개수가 나와요 — 슬롯머신처럼요!"),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* 2자리 시각 */}
+          <div style={{ marginBottom: 14 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: C.dim, marginBottom: 6 }}>{t(E, "2-digit", "2자리")}</div>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, fontFamily: "'JetBrains Mono',monospace" }}>
+              <div style={{ background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10, padding: "10px 14px", textAlign: "center", minWidth: 80 }}>
+                <div style={{ fontSize: 11, color: C.no, fontWeight: 700 }}>{t(E, "first", "첫째")}</div>
+                <div style={{ fontSize: 18, fontWeight: 900, color: C.no }}>4</div>
+                <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>1{t(E, " choice", "가지")}</div>
+              </div>
+              <span style={{ fontSize: 18, color: C.dim, fontWeight: 800 }}>×</span>
+              <div style={{ background: C.lookBg, border: `2px solid ${C.lookBd}`, borderRadius: 10, padding: "10px 14px", textAlign: "center", minWidth: 80 }}>
+                <div style={{ fontSize: 11, color: C.look, fontWeight: 700 }}>{t(E, "last", "마지막")}</div>
+                <div style={{ fontSize: 14, fontWeight: 900, color: C.look }}>5~9</div>
+                <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>5{t(E, " choices", "가지")}</div>
+              </div>
+              <span style={{ fontSize: 18, color: C.dim, fontWeight: 800 }}>=</span>
+              <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, padding: "10px 14px", textAlign: "center", minWidth: 60 }}>
+                <div style={{ fontSize: 22, fontWeight: 900, color: C.accent }}>5</div>
+              </div>
+            </div>
+          </div>
+
+          {/* 3자리 시각 */}
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 800, color: C.dim, marginBottom: 6 }}>{t(E, "3-digit", "3자리")}</div>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, fontFamily: "'JetBrains Mono',monospace", flexWrap: "wrap" }}>
+              <div style={{ background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10, padding: "10px 12px", textAlign: "center", minWidth: 70 }}>
+                <div style={{ fontSize: 10, color: C.no, fontWeight: 700 }}>{t(E, "first", "첫째")}</div>
+                <div style={{ fontSize: 16, fontWeight: 900, color: C.no }}>4</div>
+                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>1{t(E, "", "가지")}</div>
+              </div>
+              <span style={{ fontSize: 16, color: C.dim, fontWeight: 800 }}>×</span>
+              <div style={{ background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 10, padding: "10px 12px", textAlign: "center", minWidth: 70 }}>
+                <div style={{ fontSize: 10, color: C.carry, fontWeight: 700 }}>{t(E, "middle", "중간")}</div>
+                <div style={{ fontSize: 14, fontWeight: 900, color: C.carry }}>4~9</div>
+                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>6{t(E, "", "가지")}</div>
+              </div>
+              <span style={{ fontSize: 16, color: C.dim, fontWeight: 800 }}>×</span>
+              <div style={{ background: C.lookBg, border: `2px solid ${C.lookBd}`, borderRadius: 10, padding: "10px 12px", textAlign: "center", minWidth: 70 }}>
+                <div style={{ fontSize: 10, color: C.look, fontWeight: 700 }}>{t(E, "last", "마지막")}</div>
+                <div style={{ fontSize: 14, fontWeight: 900, color: C.look }}>5~9</div>
+                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>5{t(E, "", "가지")}</div>
+              </div>
+              <span style={{ fontSize: 16, color: C.dim, fontWeight: 800 }}>=</span>
+              <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, padding: "10px 12px", textAlign: "center", minWidth: 60 }}>
+                <div style={{ fontSize: 20, fontWeight: 900, color: C.accent }}>30</div>
+              </div>
+            </div>
+          </div>
+
+          {/* 왜 마지막은 5~9, 중간은 4~9 인가 */}
+          <div style={{ marginTop: 14, padding: "12px 14px", background: "#fef3c7", border: `1.5px solid #fcd34d`, borderRadius: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#a16207", marginBottom: 8 }}>
+              🤔 {t(E, "Wait — why is last 5~9 but middle 4~9?", "잠깐 — 왜 마지막은 5~9 인데 중간은 4~9 일까?")}
+            </div>
+            <div style={{ fontSize: 12, color: "#78350f", lineHeight: 1.85 }}>
+              <div style={{ marginBottom: 4 }}>
+                <strong style={{ color: C.look }}>마지막 자리</strong>{t(E, " — STARTS the carry.", " — carry 를 시작 시켜야 해요.")}
+              </div>
+              <div style={{ paddingLeft: 14, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, lineHeight: 1.7 }}>
+                <div>5 → ≥5 → carry 시작 ✓</div>
+                <div>4 → 4&lt;5 → carry 안 시작 ❌</div>
+                <div style={{ color: C.look, fontWeight: 700 }}>그래서 5~9 (5가지)</div>
+              </div>
+              <div style={{ marginTop: 8, marginBottom: 4 }}>
+                <strong style={{ color: C.carry }}>중간 자리</strong>{t(E, " — RECEIVES carry (+1), must propagate further.", " — carry 받아서 (+1) 다음 자리로 넘겨줘야 해요.")}
+              </div>
+              <div style={{ paddingLeft: 14, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, lineHeight: 1.7 }}>
+                <div>4 → +1 → 5 → ≥5 → 다음으로 ✓</div>
+                <div>3 → +1 → 4 → 4&lt;5 → 멈춤 ❌</div>
+                <div style={{ color: C.carry, fontWeight: 700 }}>그래서 4~9 (6가지)</div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 10, padding: "10px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 10, fontSize: 12, color: C.accent, fontWeight: 700, lineHeight: 1.7 }}>
+            💡 {t(E, "Each slot is independent → multiply choices per slot.",
+                  "각 슬롯은 독립적이라 → 슬롯마다 가능한 수를 곱하면 끝!")}
+          </div>
+        </div>
+      ),
+    },
+
     // 3-10: Count 2-digit
     { type: "quiz",
-      narr: t(E, "Now let's COUNT! 2-digit: first=4, last=5~9.", "이제 세자! 2자리: 첫째=4, 마지막=5~9."),
-      question: t(E, "How many 2-digit numbers? (45,46,47,48,49)", "2자리 수 몇 개? (45,46,47,48,49)"),
-      options: t(E, ["4","5","6","10"], ["4개","5개","6개","10개"]),
+      narr: t(E,
+        "Apply it: 2-digit slot machine.",
+        "직접 세보기: 2자리 슬롯머신."),
+      question: t(E, "1 × 5 = ?", "1 × 5 = ?"),
+      hint: t(E, "First digit slot: 1. Last digit slot: 5.", "첫째 슬롯: 1, 마지막 슬롯: 5."),
+      options: t(E, ["4","5","6","10"], ["4","5","6","10"]),
       correct: 1,
-      explain: t(E, "45~49 → 5!", "45~49 → 5개!"),
+      explain: t(E, "5! That's 45, 46, 47, 48, 49.", "5개! 즉 45, 46, 47, 48, 49."),
     },
     // 3-11: Count 3-digit
     { type: "input",
-      narr: t(E, "3-digit: first=4, middle=4~9 (6), last=5~9 (5).", "3자리: 첫째=4, 중간=4~9(6), 마지막=5~9(5)."),
-      question: t(E, "How many 3-digit? 1 × 6 × 5 = ?", "3자리 몇 개? 1 × 6 × 5 = ?"),
+      narr: t(E,
+        "Now 3-digit. One more slot in the middle (4~9, 6 choices).",
+        "이제 3자리. 중간 슬롯이 하나 더 (4~9, 6가지)."),
+      question: t(E, "1 × 6 × 5 = ?", "1 × 6 × 5 = ?"),
       answer: 30,
     },
     // 3-12: Formula
@@ -365,49 +651,779 @@ export function makePatternSteps(E) {
 
 
 // ═══════════════════════════════════════════════
-// Chapter 4: 🐍 Brute Force Verification (4 steps)
-// Removed old 4-2~4-6 (48 hand calculation, duplicated sim tab)
+// Chapter 4: 🐍 Brute Force — 학생이 자연스럽게 떠올리는 흐름
+//   1. 입력 받기 (T, N)
+//   2. 메인 루프: 각 x 마다 두 답 비교 → 카운트
+//   3. Bessie 함수 정의 (한 번만 보고 결정)
+//   4. Elsie 함수 정의 (한 자리씩 올라가며 결정)
+//   5. 전체 코드 합치기
+//   6. 돌려보기 → N 작게는 빠름, 크게는 느림
+//   7. 누적합으로 빠르게
+//   8. 속도 비교 (SpeedScale)
+//   9. 그래도 N=10⁹ 한계 → 패턴 챕터로
 // ═══════════════════════════════════════════════
-export function makeBruteSteps(E) {
+
+// 공통 단계: P 구하기 (자릿수)
+const BF_P = [
+  "# 두 함수 모두 먼저 P 가 필요해요",
+  "# P = x 의 자릿수",
+  "",
+  "x = 48",
+  "P = len(str(x))     # → 2",
+  "",
+  "x = 4459",
+  "P = len(str(x))     # → 4",
+];
+const BF_P_CPP = [
+  "// 두 함수 모두 먼저 P 가 필요해요",
+  "// P = x 의 자릿수",
+  "",
+  "long long x = 48;",
+  "int P = (int)to_string(x).size();   // → 2",
+  "",
+  "x = 4459;",
+  "P = (int)to_string(x).size();       // → 4",
+];
+
+// Elsie 분석 — 한 자리씩 어떻게 다루는지 작은 조각으로
+const BF_ELSIE_DIGIT = [
+  "# pos 번째 자리 숫자 어떻게 가져오지?",
+  "# (1자리=ones, 2자리=tens, 3자리=hundreds, ...)",
+  "",
+  "cur = 4459          # 예시",
+  "",
+  "# pos=1 (ones)",
+  "d = (cur // 10**0) % 10      # 4459 % 10 = 9",
+  "",
+  "# pos=2 (tens)",
+  "d = (cur // 10**1) % 10      # 445 % 10 = 5",
+  "",
+  "# pos=3 (hundreds)",
+  "d = (cur // 10**2) % 10      # 44 % 10 = 4",
+];
+const BF_ELSIE_DIGIT_CPP = [
+  "// pos 번째 자리 숫자 어떻게 가져오지?",
+  "// (10^(pos-1) 로 나눠서 그 자리를 ones 위치까지 내리고, % 10)",
+  "",
+  "long long cur = 4459;       // 예시",
+  "",
+  "// pos=1 (ones)",
+  "int d = (cur / 1) % 10;     // 4459 % 10 = 9",
+  "",
+  "// pos=2 (tens)",
+  "d = (cur / 10) % 10;        // 445 % 10 = 5",
+  "",
+  "// pos=3 (hundreds)",
+  "d = (cur / 100) % 10;       // 44 % 10 = 4",
+];
+
+const BF_ELSIE_CARRY = [
+  "# 그 자리가 ≥5 면 다음 자리로 +1 올림",
+  "cur += 10**pos",
+  "",
+  "# 그 자리 이하는 0 으로 (잘라내기)",
+  "cur = (cur // 10**pos) * 10**pos",
+  "",
+  "# 예: cur=58, pos=1",
+  "# 58 → +10 → 68 → //10*10 → 60",
+  "# (1의자리 8 이 ≥5 라서 올라가고, 1의자리 자체는 0)",
+];
+const BF_ELSIE_CARRY_CPP = [
+  "// 그 자리가 ≥5 면 다음 자리로 +1 올림",
+  "long long pw = 1;            // 10^pos 미리 계산",
+  "for (int i = 0; i < pos; i++) pw *= 10;",
+  "",
+  "cur += pw;                   // 위 자리 +1",
+  "cur = (cur / pw) * pw;       // 그 자리 이하는 0",
+  "",
+  "// 예: cur=58, pos=1, pw=10",
+  "// 58 → +10 → 68 → /10*10 → 60",
+  "// (1의자리 8 이 ≥5 라서 올라가고, 1의자리 자체는 0)",
+];
+
+// 1단계: 입력만 받기
+const BF_INPUT = [
+  "import sys",
+  "input = sys.stdin.readline",
+  "",
+  "T = int(input())          # 테스트케이스 개수",
+  "for _ in range(T):",
+  "    N = int(input())      # 매 테스트마다 N",
+  "    # ... 이제 2 ~ N 의 답을 구해야 함",
+];
+const BF_INPUT_CPP = [
+  "#include <bits/stdc++.h>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
+  "",
+  "    int T; cin >> T;            // 테스트케이스 개수",
+  "    while (T--) {",
+  "        long long N; cin >> N;  // 매 테스트마다 N",
+  "        // ... 이제 2 ~ N 의 답을 구해야 함",
+  "    }",
+  "}",
+];
+
+// 2단계: 메인 루프 + 카운트 (Bessie/Elsie 는 아직 정의 안 함, 호출만)
+const BF_MAIN = [
+  "T = int(input())",
+  "for _ in range(T):",
+  "    N = int(input())",
+  "    count = 0",
+  "",
+  "    for x in range(2, N+1):       # 2 부터 N 까지 모든 x",
+  "        b = Bessie(x)             # Bessie 의 답",
+  "        e = Elsie(x)              # Elsie 의 답",
+  "        if b != e:                # 답이 다르면",
+  "            count += 1            # 카운트!",
+  "",
+  "    print(count)",
+];
+const BF_MAIN_CPP = [
+  "int T; cin >> T;",
+  "while (T--) {",
+  "    long long N; cin >> N;",
+  "    long long count = 0;",
+  "",
+  "    for (long long x = 2; x <= N; x++) {  // 2 부터 N 까지 모든 x",
+  "        long long b = Bessie(x);          // Bessie 의 답",
+  "        long long e = Elsie(x);           // Elsie 의 답",
+  "        if (b != e) count++;              // 다르면 카운트!",
+  "    }",
+  "",
+  "    cout << count << \"\\n\";",
+  "}",
+];
+
+// 3단계: Bessie 함수 정의
+const BF_BESSIE = [
+  "def Bessie(x):",
+  "    s = str(x)              # 문자열로",
+  "    P = len(s)              # P = 자릿수",
+  "",
+  "    # 첫째 자리만 본다",
+  "    first_digit = int(s[0])",
+  "",
+  "    if first_digit >= 5:",
+  "        return 10**P        # ≥5 → 올림",
+  "    else:",
+  "        return 0            # <5 → 0",
+];
+const BF_BESSIE_CPP = [
+  "long long pw10(int n) {                  // 10^n 헬퍼",
+  "    long long r = 1;",
+  "    for (int i = 0; i < n; i++) r *= 10;",
+  "    return r;",
+  "}",
+  "",
+  "long long Bessie(long long x) {",
+  "    string s = to_string(x);             // 문자열로",
+  "    int P = (int)s.size();               // P = 자릿수",
+  "",
+  "    // 첫째 자리만 본다",
+  "    int first_digit = s[0] - '0';",
+  "",
+  "    if (first_digit >= 5) {",
+  "        return pw10(P);                  // ≥5 → 올림",
+  "    } else {",
+  "        return 0;                        // <5 → 0",
+  "    }",
+  "}",
+];
+
+// 4단계: Elsie 함수 정의
+const BF_ELSIE = [
+  "def Elsie(x):",
+  "    P = len(str(x))",
+  "    cur = x",
+  "",
+  "    # 1자리부터 P자리까지 순서대로",
+  "    for pos in range(1, P+1):",
+  "        # 그 자리의 숫자",
+  "        d = (cur // 10**(pos-1)) % 10",
+  "",
+  "        # ≥5 면 올림",
+  "        if d >= 5:",
+  "            cur += 10**pos",
+  "",
+  "        # 그 자리 이하 0으로",
+  "        cur = (cur // 10**pos) * 10**pos",
+  "",
+  "    return cur",
+];
+const BF_ELSIE_CPP = [
+  "long long Elsie(long long x) {",
+  "    int P = (int)to_string(x).size();",
+  "    long long cur = x;",
+  "",
+  "    // 1자리부터 P자리까지 순서대로",
+  "    for (int pos = 1; pos <= P; pos++) {",
+  "        // 그 자리의 숫자",
+  "        int d = (cur / pw10(pos - 1)) % 10;",
+  "",
+  "        // ≥5 면 올림",
+  "        if (d >= 5) cur += pw10(pos);",
+  "",
+  "        // 그 자리 이하 0으로",
+  "        cur = (cur / pw10(pos)) * pw10(pos);",
+  "    }",
+  "    return cur;",
+  "}",
+];
+
+// 5단계: 전체 코드 합치기
+const BF_FULL = [
+  "import sys",
+  "input = sys.stdin.readline",
+  "",
+  "def Bessie(x):",
+  "    s = str(x)",
+  "    P = len(s)",
+  "    first_digit = int(s[0])",
+  "    if first_digit >= 5:",
+  "        return 10**P",
+  "    else:",
+  "        return 0",
+  "",
+  "def Elsie(x):",
+  "    P = len(str(x))",
+  "    cur = x",
+  "    for pos in range(1, P+1):",
+  "        d = (cur // 10**(pos-1)) % 10",
+  "        if d >= 5:",
+  "            cur += 10**pos",
+  "        cur = (cur // 10**pos) * 10**pos",
+  "    return cur",
+  "",
+  "T = int(input())",
+  "for _ in range(T):",
+  "    N = int(input())",
+  "    count = 0",
+  "    for x in range(2, N+1):",
+  "        b = Bessie(x)",
+  "        e = Elsie(x)",
+  "        if b != e:",
+  "            count += 1",
+  "    print(count)",
+];
+const BF_FULL_CPP = [
+  "#include <bits/stdc++.h>",
+  "using namespace std;",
+  "",
+  "long long pw10(int n) {",
+  "    long long r = 1;",
+  "    for (int i = 0; i < n; i++) r *= 10;",
+  "    return r;",
+  "}",
+  "",
+  "long long Bessie(long long x) {",
+  "    string s = to_string(x);",
+  "    int P = (int)s.size();",
+  "    int first_digit = s[0] - '0';",
+  "    if (first_digit >= 5) return pw10(P);",
+  "    else return 0;",
+  "}",
+  "",
+  "long long Elsie(long long x) {",
+  "    int P = (int)to_string(x).size();",
+  "    long long cur = x;",
+  "    for (int pos = 1; pos <= P; pos++) {",
+  "        int d = (cur / pw10(pos - 1)) % 10;",
+  "        if (d >= 5) cur += pw10(pos);",
+  "        cur = (cur / pw10(pos)) * pw10(pos);",
+  "    }",
+  "    return cur;",
+  "}",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
+  "    int T; cin >> T;",
+  "    while (T--) {",
+  "        long long N; cin >> N;",
+  "        long long count = 0;",
+  "        for (long long x = 2; x <= N; x++) {",
+  "            if (Bessie(x) != Elsie(x)) count++;",
+  "        }",
+  "        cout << count << \"\\n\";",
+  "    }",
+  "}",
+];
+
+const BF_DP = [
+  "import sys",
+  "input = sys.stdin.readline",
+  "",
+  "def Bessie(x):",
+  "    s = str(x)",
+  "    P = len(s)",
+  "    if int(s[0]) >= 5:",
+  "        return 10**P",
+  "    return 0",
+  "",
+  "def Elsie(x):",
+  "    P = len(str(x))",
+  "    cur = x",
+  "    for pos in range(1, P+1):",
+  "        d = (cur // 10**(pos-1)) % 10",
+  "        if d >= 5:",
+  "            cur += 10**pos",
+  "        cur = (cur // 10**pos) * 10**pos",
+  "    return cur",
+  "",
+  "# 누적합 — 필요한 만큼만 계산해서 저장. 다음 테스트는 거기부터 이어서.",
+  "ans = [0, 0]   # ans[x] = 2 ~ x 까지의 답",
+  "",
+  "T = int(input())",
+  "for _ in range(T):",
+  "    N = int(input())",
+  "",
+  "    # 부족한 만큼만 새로 채움",
+  "    while len(ans) <= N:",
+  "        x = len(ans)",
+  "        b = Bessie(x)",
+  "        e = Elsie(x)",
+  "        if b != e:",
+  "            ans.append(ans[-1] + 1)",
+  "        else:",
+  "            ans.append(ans[-1])",
+  "",
+  "    print(ans[N])   # 이미 계산된 건 즉시",
+];
+const BF_DP_CPP = [
+  "#include <bits/stdc++.h>",
+  "using namespace std;",
+  "",
+  "long long pw10(int n) {",
+  "    long long r = 1;",
+  "    for (int i = 0; i < n; i++) r *= 10;",
+  "    return r;",
+  "}",
+  "",
+  "long long Bessie(long long x) {",
+  "    string s = to_string(x);",
+  "    int P = (int)s.size();",
+  "    if (s[0] - '0' >= 5) return pw10(P);",
+  "    return 0;",
+  "}",
+  "",
+  "long long Elsie(long long x) {",
+  "    int P = (int)to_string(x).size();",
+  "    long long cur = x;",
+  "    for (int pos = 1; pos <= P; pos++) {",
+  "        int d = (cur / pw10(pos - 1)) % 10;",
+  "        if (d >= 5) cur += pw10(pos);",
+  "        cur = (cur / pw10(pos)) * pw10(pos);",
+  "    }",
+  "    return cur;",
+  "}",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
+  "",
+  "    // 누적합 — 필요한 만큼만 계산해서 저장",
+  "    vector<long long> ans = {0, 0};   // ans[x] = 2 ~ x 까지의 답",
+  "",
+  "    int T; cin >> T;",
+  "    while (T--) {",
+  "        long long N; cin >> N;",
+  "",
+  "        // 부족한 만큼만 새로 채움",
+  "        while ((long long)ans.size() <= N) {",
+  "            long long x = ans.size();",
+  "            long long b = Bessie(x), e = Elsie(x);",
+  "            if (b != e) ans.push_back(ans.back() + 1);",
+  "            else ans.push_back(ans.back());",
+  "        }",
+  "",
+  "        cout << ans[N] << \"\\n\";   // 이미 계산된 건 즉시",
+  "    }",
+  "}",
+];
+
+export function makeBruteSteps(E, lang = "py") {
+  const pick = (py, cpp) => lang === "py" ? py : cpp;
+  // 코드 위 작은 라벨
+  const Label = ({ text }) => (
+    <div style={{ marginBottom: 6, fontSize: 11, fontWeight: 800, color: C.dim, letterSpacing: 0.3 }}>
+      {text}
+    </div>
+  );
+
+  // 4-2 의 짧은 메인 루프 발췌
+  const MAIN_SNIPPET_PY = [
+    "for x in range(2, N+1):       # 2 부터 N 까지",
+    "    b = Bessie(x)             # Bessie 의 답",
+    "    e = Elsie(x)              # Elsie 의 답",
+    "    if b != e:                # 다르면",
+    "        count += 1            # 카운트!",
+    "",
+    "print(count)",
+  ];
+  const MAIN_SNIPPET_CPP = [
+    "for (long long x = 2; x <= N; x++) {  // 2 부터 N 까지",
+    "    long long b = Bessie(x);          // Bessie 의 답",
+    "    long long e = Elsie(x);           // Elsie 의 답",
+    "    if (b != e) count++;              // 다르면 카운트!",
+    "}",
+    "",
+    "cout << count << \"\\n\";",
+  ];
+
   return [
-    // 4-1: Idea + sample
+    // 4-1: 입력 받기
     { type: "reveal",
       narr: t(E,
-        "We found the pattern! But let's verify with brute force. Sample: N=100, answer=5 (those are 45~49).",
-        "패턴을 알아냈어! 브루트포스로 검증하자. 예제: N=100, 답=5 (45~49가 해당)."),
+        "Step 1: read the input. T test cases, each gives one N.",
+        "1단계: 입력부터 받아요. T 개의 테스트케이스, 각각 N 이 하나씩."),
       content: (
-        <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2.2 }}>
-          <div style={{ display: "flex", gap: 16 }}>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E,"Sample","예제")}</div>
-              <div style={{ background: "#f8f9fc", borderRadius: 8, padding: "8px 12px", border: `1.5px solid ${C.border}` }}>N = 100 → <strong style={{ color: C.ok }}>5</strong></div>
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E,"Those 5","해당 5개")}</div>
-              <div style={{ background: C.noBg, borderRadius: 8, padding: "8px 12px", border: `1.5px solid ${C.noBd}`, fontWeight: 800, color: C.no }}>45, 46, 47, 48, 49</div>
-            </div>
-          </div>
-        </div>),
+        <div style={{ padding: 16 }}>
+          <Label text={t(E, "Step 1: Input", "1단계: 입력 받기")} />
+          <CodeBlock lines={pick(BF_INPUT, BF_INPUT_CPP)} />
+        </div>
+      ),
     },
-    // 4-2: Runner
+
+    // 4-2: Bessie/Elsie 계산법 호출 + count 비교
+    { type: "reveal",
+      narr: t(E,
+        "Step 2: for each x from 2 to N, get both answers and count where they differ.",
+        "2단계: 결국엔 Bessie / Elsie 의 계산법이 필요해요. 두 값을 비교해서 다르면 카운트!"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <Label text={t(E, "Step 2: Compare and count", "2단계: 두 값 비교 → 카운트")} />
+          <CodeBlock lines={pick(MAIN_SNIPPET_PY, MAIN_SNIPPET_CPP)} />
+          <div style={{ marginTop: 10, padding: "8px 10px", background: C.carryBg, border: `1.5px solid ${C.carryBd}`, borderRadius: 8, fontSize: 12, color: C.carry, fontWeight: 700, lineHeight: 1.6 }}>
+            🤔 {t(E, "But Bessie() and Elsie() don't exist yet. Time to write them — but first…",
+                  "근데 Bessie() 랑 Elsie() 가 아직 없어요. 만들기 전에 — 잠깐!")}
+          </div>
+        </div>
+      ),
+    },
+
+    // 4-3: 회고 quiz — 자연스러운 사고 흐름
+    { type: "quiz",
+      narr: t(E,
+        "Now we need Bessie() and Elsie(). Hmm — both decide based on P, right? So P first. How did we compute P again?",
+        "이제 Bessie() 랑 Elsie() 를 만들어야 해요. 근데 둘 다 결국 P 를 보고 결정하잖아요? 그럼 P 부터 짚고 가야 해요. 챕터 1 에서 P 어떻게 구했었더라?"),
+      question: t(E, "What was P?", "P 는 무엇이었나요?"),
+      hint: t(E, "Look at x and just count something simple…", "x 를 보고 뭔가 단순한 걸 세면 돼요…"),
+      options: t(E,
+        ["First digit of x", "Number of digits of x", "Last digit of x", "Sum of digits of x"],
+        ["x 의 첫째 자리", "x 의 자릿수", "x 의 마지막 자리", "x 의 자릿수 합"]),
+      correct: 1,
+      explain: t(E, "Right! P = number of digits = len(str(x)). Now both functions can use it.",
+                    "맞아요! P = 자릿수 = len(str(x)). 이제 두 함수가 이걸 쓸 수 있어요."),
+    },
+
+    // 4-4: P 구하기 (코드)
+    { type: "reveal",
+      narr: t(E,
+        "Step 3: P = len(str(x)). Both functions will start with this line.",
+        "3단계: P = len(str(x)). 두 함수 모두 이 한 줄로 시작해요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <Label text={t(E, "Step 3: Compute P", "3단계: P 구하기")} />
+          <CodeBlock lines={pick(BF_P, BF_P_CPP)} />
+          <div style={{ marginTop: 10, padding: "8px 10px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 8, fontSize: 12, color: C.accent, fontWeight: 700, lineHeight: 1.6 }}>
+            👉 {t(E, "Now Bessie's logic →", "P 를 알았으니 — 다음은 Bessie →")}
+          </div>
+        </div>
+      ),
+    },
+
+    // 4-5: Bessie 함수
+    { type: "reveal",
+      narr: t(E,
+        "Step 4: Bessie just looks at the first digit. ≥5 → 10ᴾ. Else → 0.",
+        "4단계: Bessie 는 첫째 자리 하나만 봐요. ≥5 면 10ᴾ, 아니면 0."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <Label text={t(E, "Step 4: Bessie 🐄", "4단계: Bessie 구하기 🐄")} />
+          <CodeBlock lines={pick(BF_BESSIE, BF_BESSIE_CPP)} />
+          <div style={{ marginTop: 10, padding: "8px 10px", background: C.bessieBg, border: `1.5px solid ${C.bessieBd}`, borderRadius: 8, fontSize: 12, color: C.bessie, fontWeight: 700, lineHeight: 1.6 }}>
+            🐄 {t(E, "First digit only — done in one step!", "첫째 자리 하나만 — 한 방에 끝!")}
+          </div>
+        </div>
+      ),
+    },
+
+    // 4-6: Elsie 분석 — pos 자리 숫자 추출 (트릭 1)
+    { type: "reveal",
+      narr: t(E,
+        "Step 5: Elsie checks each digit from 1st to P-th. First trick — extract the pos-th digit.",
+        "5단계: Elsie 는 1자리부터 P자리까지 하나씩 봐요. 트릭 1 — pos 번째 자리 숫자 뽑기."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <Label text={t(E, "Step 5: Elsie 🐮 — Trick 1: extract digit", "5단계: Elsie 🐮 — 트릭 1: 자리 숫자 추출")} />
+          <CodeBlock lines={pick(BF_ELSIE_DIGIT, BF_ELSIE_DIGIT_CPP)} />
+          <div style={{ marginTop: 10, padding: "8px 10px", background: C.elsieBg, border: `1.5px solid ${C.elsieBd}`, borderRadius: 8, fontSize: 12, color: C.elsie, fontWeight: 700, lineHeight: 1.6 }}>
+            🐮 {t(E, "// 10**(pos-1) shifts that digit to ones place, then % 10 grabs it.",
+                  "// 10**(pos-1) 로 그 자리를 ones 위치까지 내리고, % 10 으로 끄집어내요.")}
+          </div>
+        </div>
+      ),
+    },
+
+    // 4-7: Elsie 분석 — 올림 + 자리 이하 0 (트릭 2)
+    { type: "reveal",
+      narr: t(E,
+        "Trick 2 — if digit ≥5, carry up. Then zero out that position.",
+        "트릭 2 — 그 자리가 ≥5 면 위로 +1 올림. 그리고 그 자리 이하는 0 으로."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <Label text={t(E, "Step 5: Elsie 🐮 — Trick 2: carry + clear", "5단계: Elsie 🐮 — 트릭 2: 올림 + 자리 이하 0")} />
+          <CodeBlock lines={pick(BF_ELSIE_CARRY, BF_ELSIE_CARRY_CPP)} />
+          <div style={{ marginTop: 10, padding: "8px 10px", background: C.elsieBg, border: `1.5px solid ${C.elsieBd}`, borderRadius: 8, fontSize: 12, color: C.elsie, fontWeight: 700, lineHeight: 1.6 }}>
+            🐮 {t(E, "Add 10**pos to carry. Then divide+multiply by 10**pos to clear lower digits.",
+                  "10**pos 더하면 위 자리에 +1. 10**pos 로 나누고 다시 곱하면 아래 자릿수가 0.")}
+          </div>
+        </div>
+      ),
+    },
+
+    // 4-8: Elsie 함수 완성
+    { type: "reveal",
+      narr: t(E,
+        "Combine the tricks into Elsie. Loop pos = 1 to P.",
+        "두 트릭을 합쳐서 Elsie 함수 완성. pos 를 1 부터 P 까지 반복."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <Label text={t(E, "Step 5: Elsie 🐮 — full function", "5단계: Elsie 🐮 — 함수 완성")} />
+          <CodeBlock lines={pick(BF_ELSIE, BF_ELSIE_CPP)} />
+          <div style={{ marginTop: 10, padding: "8px 10px", background: C.elsieBg, border: `1.5px solid ${C.elsieBd}`, borderRadius: 8, fontSize: 12, color: C.elsie, fontWeight: 700, lineHeight: 1.6 }}>
+            🐮 {t(E, "One digit at a time, with possible carry up.", "한 자리씩, 올림이 위로 전파될 수 있어요.")}
+          </div>
+        </div>
+      ),
+    },
+
+    // 4-9: 전체 코드 합치기
+    { type: "reveal",
+      narr: t(E,
+        "Step 6: put it all together — input + loop + Bessie + Elsie.",
+        "6단계: 다 합쳐요 — 입력 + 루프 + Bessie + Elsie."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <Label text={t(E, "Step 6: Full code", "6단계: 전체 코드")} />
+          <CodeBlock lines={pick(BF_FULL, BF_FULL_CPP)} />
+          <div style={{ marginTop: 10, padding: "8px 10px", background: C.okBg, border: `1.5px solid ${C.okBd}`, borderRadius: 8, fontSize: 12, color: C.ok, fontWeight: 700, lineHeight: 1.6 }}>
+            ✅ {t(E, "Works! Next: run it.", "작동해요! 다음 페이지에서 직접 돌려봐요.")}
+          </div>
+        </div>
+      ),
+    },
+
+    // 4-9: 돌려보기 — 짧고 중립적 narration. 학생이 직접 체감.
     { type: "runner",
       narr: t(E,
-        "Try it! Enter N and run the brute force. Try N=10000+ to feel the slowness!",
-        "N을 넣고 실행해봐! N=10000 이상 넣어서 느린 걸 체감해봐!"),
+        "Try various N — start small, go big. Notice anything?",
+        "N 을 다양하게 키워가며 돌려보세요. 뭔가 느껴지나요?"),
     },
-    // 4-3: How slow?
-    { type: "input",
+
+    // 4-9b: USACO 제출 결과 — 일부만 통과, 나머지 TLE
+    { type: "reveal",
       narr: t(E,
-        "N=10⁹ means checking 1 billion numbers. At ~10⁸/sec, how many seconds?",
-        "N=10⁹이면 10억 개 확인. 초당 ~10⁸개면 몇 초?"),
-      question: t(E, "10⁹ ÷ 10⁸ = ? seconds", "10⁹ ÷ 10⁸ = ? 초"),
-      answer: 10,
+        "Submit to USACO and you get this — first few cases pass (barely), rest time out. So I thought of prefix sum.",
+        "USACO 에 제출하면 이런 결과가 나와요. 앞 몇 개는 (간신히) 통과, 나머지는 다 시간 초과. 그래서 누적합을 떠올린 거예요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <Label text={t(E, "USACO submission — judge results", "USACO 제출 결과 — 채점 결과")} />
+          <div style={{
+            background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14,
+            display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center",
+          }}>
+            {[
+              { n: 1,  pass: true,  label: "100ms" },
+              { n: 2,  pass: true,  label: "1674ms" },
+              { n: 3,  pass: true,  label: "1676ms" },
+              { n: 4,  pass: true,  label: "1661ms" },
+              { n: 5,  pass: false }, { n: 6,  pass: false }, { n: 7,  pass: false },
+              { n: 8,  pass: false }, { n: 9,  pass: false }, { n: 10, pass: false },
+              { n: 11, pass: false }, { n: 12, pass: false }, { n: 13, pass: false },
+            ].map(c => (
+              <div key={c.n} style={{
+                width: 56, padding: "8px 4px", borderRadius: 8, textAlign: "center",
+                background: c.pass ? C.okBg : C.noBg,
+                border: `1.5px solid ${c.pass ? C.okBd : C.noBd}`,
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                <div style={{ fontSize: 20, fontWeight: 900, color: c.pass ? C.ok : C.no, lineHeight: 1 }}>
+                  {c.pass ? "✓" : "t"}
+                </div>
+                {c.label && (
+                  <div style={{ fontSize: 9, color: C.dim, marginTop: 4 }}>{c.label}</div>
+                )}
+                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>#{c.n}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
+            ❌ {t(E, "Cases 5~13: TLE. The first 4 barely pass at 1.6s — way too close to the limit.",
+                  "케이스 5~13: 시간 초과 (TLE). 통과한 4 개도 1.6 초로 제한 시간에 아슬아슬.")}
+          </div>
+          <div style={{ marginTop: 8, padding: "10px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 10, fontSize: 13, color: C.accent, fontWeight: 700, lineHeight: 1.7, textAlign: "center" }}>
+            💡 {t(E, "So I thought: what if we save what we computed? → Prefix sum!",
+                  "그래서 생각했어요 — 한 번 계산한 거 저장해두면? → 누적합!")}
+          </div>
+        </div>
+      ),
     },
-    // 4-4: Code comparison (3 levels)
-    { type: "compare3",
+
+    // 4-10: 누적합 — 시각적으로 (x 막대 + ans 누적 + 여러 질문 즉답)
+    { type: "reveal",
       narr: t(E,
-        "10 sec is too slow! (limit ≈ 1~2s) But let's see the code — from idea to real code.",
-        "10초는 너무 느려! (보통 1~2초 제한) 코드를 보자 — 아이디어에서 실제 코드까지."),
+        "Build an array once, then every query reads it instantly.",
+        "배열 한 번만 만들어놓으면 — 어떤 질문이 와도 즉답!"),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* 핵심 아이디어 한 줄 */}
+          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, padding: 10, marginBottom: 14, textAlign: "center" }}>
+            <div style={{ fontSize: 13, color: C.text, fontWeight: 700 }}>
+              <strong style={{ color: C.accent }}>ans[x]</strong> = 2 ~ x {t(E, "에서 답이 다른 수 개수", "에서 답이 다른 수 개수")}
+            </div>
+          </div>
+
+          {/* 시각화: x 별 ✓/❌ + 누적합 */}
+          <Label text={t(E, "Visualize for N=50", "예: N=50 까지 만들어보기")} />
+          {(() => {
+            const xs = [2, 3, "…", 43, 44, 45, 46, 47, 48, 49, 50];
+            const diff = { 45: true, 46: true, 47: true, 48: true, 49: true };
+            // 누적합 계산
+            let running = 0;
+            const cells = xs.map(x => {
+              if (x === "…") return { x, ans: "…", diff: false, isPlace: true };
+              if (diff[x]) running++;
+              return { x, ans: running, diff: !!diff[x] };
+            });
+            return (
+              <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: 10, marginBottom: 12, overflowX: "auto" }}>
+                <div style={{ display: "flex", gap: 4, justifyContent: "center", minWidth: "fit-content" }}>
+                  {cells.map((c, i) => (
+                    <div key={i} style={{ width: 44, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+                      {/* x 라벨 */}
+                      <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>x={c.x}</div>
+                      {/* 답이 다른가? */}
+                      <div style={{
+                        marginTop: 2, fontSize: 16, fontWeight: 900, padding: "4px 0", borderRadius: 6,
+                        background: c.isPlace ? "transparent" : (c.diff ? C.noBg : C.okBg),
+                        color: c.isPlace ? C.dim : (c.diff ? C.no : C.ok),
+                      }}>{c.isPlace ? "…" : (c.diff ? "❌" : "✓")}</div>
+                      {/* ans 값 */}
+                      <div style={{
+                        marginTop: 4, fontSize: 14, fontWeight: 900, color: C.accent,
+                        padding: "3px 0", background: C.accentBg, borderRadius: 5,
+                      }}>{c.ans}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: "flex", gap: 16, justifyContent: "center", marginTop: 8, fontSize: 10, color: C.dim }}>
+                  <span>↑ 답이 다른가?</span>
+                  <span style={{ color: C.accent, fontWeight: 700 }}>↑ ans (누적)</span>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* 여러 질문이 즉답 */}
+          <Label text={t(E, "Now any query is instant", "이제 어떤 질문이 와도 즉답")} />
+          <div style={{ background: C.okBg, border: `1.5px solid ${C.okBd}`, borderRadius: 10, padding: 12, marginBottom: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
+            <div>{t(E, "Query", "질문")} N=10  →  ans[10]  = <strong style={{ color: C.ok }}>0</strong>  <span style={{ color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "(instant)", "(즉시)")}</span></div>
+            <div>{t(E, "Query", "질문")} N=47  →  ans[47]  = <strong style={{ color: C.ok }}>3</strong>  <span style={{ color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "(instant)", "(즉시)")}</span></div>
+            <div>{t(E, "Query", "질문")} N=50  →  ans[50]  = <strong style={{ color: C.ok }}>5</strong>  <span style={{ color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "(instant)", "(즉시)")}</span></div>
+          </div>
+          <div style={{ marginBottom: 12, padding: "8px 12px", background: C.accentBg, border: `1.5px dashed ${C.accentBd}`, borderRadius: 8, fontSize: 12, color: C.accent, fontWeight: 700, lineHeight: 1.7, textAlign: "center" }}>
+            👉 {t(E, "T queries, but only build the array ONCE!", "T 개 질문 와도 배열은 한 번만 만들면 끝!")}
+          </div>
+
+          {/* 코드 */}
+          <Label text={t(E, "Code", "코드")} />
+          <CodeBlock lines={pick(BF_DP, BF_DP_CPP)} />
+        </div>
+      ),
+    },
+
+    // 4-12: 누적합 제출 결과 — 더 통과하지만 여전히 TLE
+    { type: "reveal",
+      narr: t(E,
+        "Submit prefix sum and… 6 cases pass instead of 4. Better, but still TLE on the rest.",
+        "누적합으로 제출하면 — 4 개 → 6 개로 늘어요. 좋아졌지만 나머지는 여전히 시간 초과."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <Label text={t(E, "Prefix sum submission", "누적합 제출 결과")} />
+          <div style={{
+            background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14,
+            display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center",
+          }}>
+            {[
+              { n: 1,  pass: true,  label: "87ms" },
+              { n: 2,  pass: true,  label: "75ms" },
+              { n: 3,  pass: true,  label: "75ms" },
+              { n: 4,  pass: true,  label: "74ms" },
+              { n: 5,  pass: true,  label: "920ms" },
+              { n: 6,  pass: true,  label: "3719ms" },
+              { n: 7,  pass: false }, { n: 8,  pass: false }, { n: 9,  pass: false },
+              { n: 10, pass: false }, { n: 11, pass: false }, { n: 12, pass: false },
+              { n: 13, pass: false },
+            ].map(c => (
+              <div key={c.n} style={{
+                width: 56, padding: "8px 4px", borderRadius: 8, textAlign: "center",
+                background: c.pass ? C.okBg : C.noBg,
+                border: `1.5px solid ${c.pass ? C.okBd : C.noBd}`,
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                <div style={{ fontSize: 20, fontWeight: 900, color: c.pass ? C.ok : C.no, lineHeight: 1 }}>
+                  {c.pass ? "✓" : "t"}
+                </div>
+                {c.label && (
+                  <div style={{ fontSize: 9, color: C.dim, marginTop: 4 }}>{c.label}</div>
+                )}
+                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>#{c.n}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 10, padding: "10px 12px", background: C.okBg, border: `1.5px solid ${C.okBd}`, borderRadius: 10, fontSize: 12, color: C.ok, fontWeight: 700, lineHeight: 1.6 }}>
+            ✅ {t(E, "Pass: 4 → 6. Cases 1~4 are super fast (cached), 5 fits in 1s.",
+                  "통과: 4 → 6 개. 케이스 1~4 는 초고속 (캐시 효과), 5 는 1초 안에 끝.")}
+          </div>
+          <div style={{ marginTop: 8, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 12, color: C.no, fontWeight: 700, lineHeight: 1.6 }}>
+            ❌ {t(E, "Cases 7~13: still TLE. Why? When N=10⁹ comes, even building the array takes too long.",
+                  "케이스 7~13: 여전히 TLE. 왜? N=10⁹ 가 오면 배열 만드는 자체가 너무 오래 걸려요.")}
+          </div>
+        </div>
+      ),
+    },
+
+    // 4-13: 결론 — 정말 스마트한 방법이 필요 → 패턴 챕터로
+    { type: "reveal",
+      narr: t(E,
+        "Conclusion: counting one by one is the limit. We need a smarter idea — count without iterating. That comes from finding a pattern.",
+        "결론: 하나씩 세는 건 한계예요. 정말 스마트한 방법 — 안 돌리고 그냥 세기 — 가 필요해요. 그건 패턴을 찾으면 가능해져요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ padding: "10px 12px", background: "#f8f9fc", border: `1.5px solid ${C.border}`, borderRadius: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: C.dim }}>🐢 {t(E, "Brute force: 4 / 13 pass", "브루트포스: 4 / 13 통과")}</div>
+            </div>
+            <div style={{ padding: "10px 12px", background: "#f8f9fc", border: `1.5px solid ${C.border}`, borderRadius: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: C.dim }}>💾 {t(E, "Prefix sum: 6 / 13 pass — better, still TLE on big N", "누적합: 6 / 13 통과 — 좋아졌지만 큰 N 은 TLE")}</div>
+            </div>
+            <div style={{ padding: "12px 14px", background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, textAlign: "center", marginTop: 4 }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: C.accent, lineHeight: 1.6 }}>
+                💡 {t(E, "Real fix: don't iterate at all. Count using a formula!", "진짜 해결: 안 돌리고 공식으로 세기!")}
+              </div>
+              <div style={{ fontSize: 12, color: C.accent, marginTop: 6, fontWeight: 600 }}>
+                {t(E, "But what formula? → Find the pattern in the next chapter!",
+                    "그런데 어떤 공식? → 다음 챕터 (💡 패턴) 에서 발견!")}
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
     },
   ];
 }
@@ -416,127 +1432,570 @@ export function makeBruteSteps(E) {
 // ═══════════════════════════════════════════════
 // Chapter 5: ⚡ Optimization (10 steps)
 // ═══════════════════════════════════════════════
+// 1단계: 입력받기 + 셋업 (주석 없이 깨끗하게)
+const OPT_INPUT = [
+  "import sys",
+  "input = sys.stdin.readline",
+  "",
+  "T = int(input())",
+  "for _ in range(T):",
+  "    N = int(input())",
+  "    if N < 10:",
+  "        print(0)",
+  "        continue",
+  "",
+  "    s = str(N)",
+  "    D = len(s)",
+  "    result = 0",
+];
+
+// 2단계: 쉬운 부분
+const OPT_EASY = [
+  "    for d in range(2, D):",
+  "        result += 5 * (6 ** (d - 2))",
+];
+
+// 3단계: 어려운 부분
+const OPT_TRICKY = [
+  "    first = int(s[0])",
+  "",
+  "    if first > 4:",
+  "        result += 5 * (6 ** (D - 2))",
+  "",
+  "    elif first == 4:",
+  "        for i in range(1, D):",
+  "            digit = int(s[i])",
+  "",
+  "            if i < D - 1:",
+  "                if digit >= 4:",
+  "                    extra = digit - 4",
+  "                    rem = D - i - 2",
+  "                    result += extra * (6 ** rem) * 5",
+  "                if digit < 4:",
+  "                    break",
+  "            else:",
+  "                if digit >= 5:",
+  "                    result += digit - 5 + 1",
+  "",
+  "    print(result)",
+];
+
+// 전체 — 위 3개 합친 것
 const OPT_CODE = [
-  "def count_diff(N):",
-  "  if N < 10:",
-  "    return 0",
-  "  s = str(N)",
-  "  D = len(s)",
-  "  result = 0",
+  ...OPT_INPUT,
   "",
-  "  # 2-digit ~ (D-1)-digit: full formula",
-  "  for d in range(2, D):",
-  "    result += 5 * (6 ** (d - 2))",
+  ...OPT_EASY,
   "",
-  "  # D-digit: count up to N only",
-  "  first = int(s[0])",
-  "  if first > 4:",
-  "    result += 5 * (6 ** (D - 2))",
-  "  elif first == 4:",
-  "    for i in range(1, D):",
-  "      digit = int(s[i])",
-  "      if i < D - 1:  # middle digit",
-  "        if digit >= 4:",
-  "          extra = digit - 4",
-  "          rem = D - i - 2",
-  "          result += extra*(6**rem)*5 if rem>=0 else extra*5",
-  "        if digit < 4:",
-  "          break",
-  "      else:  # last digit",
-  "        if digit >= 5:",
-  "          result += digit - 5 + 1",
-  "  return result",
+  ...OPT_TRICKY,
+];
+
+// ─── C++ 버전 ─────────────────────────────────────
+const OPT_INPUT_CPP = [
+  "#include <bits/stdc++.h>",
+  "using namespace std;",
+  "",
+  "long long p6[20];",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
+  "",
+  "    p6[0] = 1;",
+  "    for (int i = 1; i < 20; i++) p6[i] = p6[i-1] * 6;",
+  "",
+  "    int T; cin >> T;",
+  "    while (T--) {",
+  "        long long N; cin >> N;",
+  "        if (N < 10) { cout << 0 << \"\\n\"; continue; }",
+  "",
+  "        string s = to_string(N);",
+  "        int D = (int)s.size();",
+  "        long long result = 0;",
+];
+
+const OPT_EASY_CPP = [
+  "        for (int d = 2; d < D; d++)",
+  "            result += 5 * p6[d - 2];",
+];
+
+const OPT_TRICKY_CPP = [
+  "        int first = s[0] - '0';",
+  "",
+  "        if (first > 4) {",
+  "            result += 5 * p6[D - 2];",
+  "        } else if (first == 4) {",
+  "            for (int i = 1; i < D; i++) {",
+  "                int digit = s[i] - '0';",
+  "",
+  "                if (i < D - 1) {",
+  "                    if (digit >= 4) {",
+  "                        long long extra = digit - 4;",
+  "                        int rem = D - i - 2;",
+  "                        result += extra * p6[rem] * 5;",
+  "                    }",
+  "                    if (digit < 4) break;",
+  "                } else {",
+  "                    if (digit >= 5) result += digit - 5 + 1;",
+  "                }",
+  "            }",
+  "        }",
+  "",
+  "        cout << result << \"\\n\";",
+  "    }",
+  "    return 0;",
+  "}",
+];
+
+const OPT_CODE_CPP = [
+  ...OPT_INPUT_CPP,
+  "",
+  ...OPT_EASY_CPP,
+  "",
+  ...OPT_TRICKY_CPP,
 ];
 
 export function makeOptSteps(E) {
   return [
+    // 5-0: 부드러운 도입 — 공식이 뭘 뜻하는지 구체 숫자로 보여주기
+    { type: "reveal",
+      narr: t(E,
+        "Recap: pattern chapter formula = 5 × 6^(d−2). It tells us, for each digit-count d, how many numbers in that range give different Bessie/Elsie answers.",
+        "패턴 챕터에서 찾은 공식: 5 × 6ᵈ⁻². 이게 뜻하는 건 — d 자리 수 중에서 베시랑 엘시 답이 다른 게 몇 개인지."),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* 공식 카드 */}
+          <div style={{ background: "linear-gradient(135deg,#4f46e5,#6366f1)", borderRadius: 12, padding: "14px 16px", textAlign: "center", marginBottom: 12 }}>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,.75)", fontWeight: 700, marginBottom: 4 }}>
+              {t(E, "From the pattern chapter", "패턴 챕터에서")}
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 900, color: "#fff", fontFamily: "'JetBrains Mono',monospace" }}>
+              5 × 6<sup>d−2</sup>
+            </div>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,.75)", marginTop: 4 }}>
+              {t(E, "= count of differing d-digit numbers", "= d 자리에서 답이 다른 수의 개수")}
+            </div>
+          </div>
+
+          {/* 구체 숫자: d=2,3,4,5 가 뭐가 되는지 */}
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", marginBottom: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+            <div style={{ padding: "8px 12px", background: "#f8f9fc", borderBottom: `1.5px solid ${C.border}`, fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center" }}>
+              {t(E, "What the formula actually gives", "공식에 숫자 넣어보기")}
+            </div>
+            {[
+              { d: 2, calc: "5 × 6⁰ = 5 × 1",   ans: 5,    ex: "45~49" },
+              { d: 3, calc: "5 × 6¹ = 5 × 6",   ans: 30,   ex: "445, 467, 489 ..." },
+              { d: 4, calc: "5 × 6² = 5 × 36",  ans: 180,  ex: "4456, 4789 ..." },
+              { d: 5, calc: "5 × 6³ = 5 × 216", ans: 1080, ex: "..." },
+            ].map((row, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "60px 1fr 70px",
+                padding: "7px 12px", borderBottom: i < 3 ? `1px solid ${C.border}` : "none",
+                background: i % 2 === 0 ? "#fff" : "#fafbff",
+              }}>
+                <span style={{ fontWeight: 800, color: C.accent }}>d={row.d}</span>
+                <span style={{ fontSize: 12, color: C.text }}>{row.calc} <span style={{ color: C.dim, fontSize: 10 }}>({row.ex})</span></span>
+                <span style={{ textAlign: "right", fontWeight: 900, color: C.ok }}>{row.ans}{t(E, "", "개")}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* 이제 뭘 할까 */}
+          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, padding: 12 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+              {t(E, "Plan:", "계획:")}
+              <div style={{ marginTop: 8, paddingLeft: 14, color: C.text, fontSize: 12, lineHeight: 1.9 }}>
+                <div>1. {t(E, "Verify formula gives 5, 30 for d=2,3", "공식이 d=2,3 에서 5, 30 나오는지 확인")}</div>
+                <div>2. {t(E, "Sum up all digit counts (e.g. N=1000)", "자릿수별로 다 합치기 (예: N=1000)")}</div>
+                <div>3. {t(E, "Handle tricky N like 473", "473 같은 N 처리")}</div>
+                <div>4. {t(E, "Build the code piece by piece", "코드를 한 조각씩 쌓기")}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+
+    // 5-1a: 2자리 시각 — 실제로 어떤 수들인지
+    { type: "reveal",
+      narr: t(E,
+        "2-digit numbers where Bessie ≠ Elsie. Look — they're all 4_ with last ≥5.",
+        "2자리에서 답이 다른 수들. 보면 — 다 4_ 이고 마지막이 ≥5."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 14, fontFamily: "'JetBrains Mono',monospace" }}>
+            {[45, 46, 47, 48, 49].map(n => (
+              <div key={n} style={{
+                background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10,
+                padding: "10px 14px", fontSize: 22, fontWeight: 900, color: C.ok,
+              }}>{n}</div>
+            ))}
+          </div>
+          <div style={{ textAlign: "center", fontSize: 13, color: C.dim, fontWeight: 700, marginBottom: 10 }}>
+            👉 {t(E, "5 numbers total", "전부 5개")}
+          </div>
+          <div style={{
+            background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10,
+            padding: 12, textAlign: "center", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
+              {t(E, "Formula check (d=2)", "공식 확인 (d=2)")}
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 900, color: C.accent }}>
+              5 × 6<sup>2−2</sup> = 5 × 6<sup>0</sup> = 5 × 1
+            </div>
+          </div>
+        </div>
+      ),
+    },
     // 5-1: 2-digit formula
     { type: "input",
-      narr: t(E, "Let's use the formula! 5 × 6^(d−2). For 2-digit:", "공식을 써보자! 5 × 6^(d−2). 2자리:"),
+      narr: t(E, "So how many 2-digit numbers?", "2자리는 몇 개?"),
       question: "5 × 6⁰ = 5 × 1 = ?", answer: 5,
+    },
+    // 5-2a: 3자리 시각 — 4xx 패턴
+    { type: "reveal",
+      narr: t(E,
+        "3-digit: first=4 fixed, middle 4~9 (6 choices), last 5~9 (5 choices).",
+        "3자리: 첫째=4 고정, 중간 4~9 (6가지), 마지막 5~9 (5가지)."),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* 슬롯 시각화 */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 14, fontFamily: "'JetBrains Mono',monospace" }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10, padding: "10px 14px", fontSize: 22, fontWeight: 900, color: C.no }}>4</div>
+              <div style={{ fontSize: 10, color: C.no, fontWeight: 700, marginTop: 4 }}>{t(E, "fixed", "고정")}</div>
+              <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>1</div>
+            </div>
+            <div style={{ alignSelf: "center", fontSize: 18, color: C.dim, fontWeight: 800 }}>×</div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 10, padding: "10px 14px", fontSize: 22, fontWeight: 900, color: C.carry }}>?</div>
+              <div style={{ fontSize: 10, color: C.carry, fontWeight: 700, marginTop: 4 }}>4~9</div>
+              <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>6</div>
+            </div>
+            <div style={{ alignSelf: "center", fontSize: 18, color: C.dim, fontWeight: 800 }}>×</div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ background: C.lookBg, border: `2px solid ${C.lookBd}`, borderRadius: 10, padding: "10px 14px", fontSize: 22, fontWeight: 900, color: C.look }}>?</div>
+              <div style={{ fontSize: 10, color: C.look, fontWeight: 700, marginTop: 4 }}>5~9</div>
+              <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>5</div>
+            </div>
+          </div>
+
+          {/* 예시 몇 개 */}
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: 10, marginBottom: 10 }}>
+            <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, marginBottom: 6, textAlign: "center" }}>
+              {t(E, "Examples", "예시")}
+            </div>
+            <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700, color: C.text }}>
+              {["445", "447", "456", "468", "479", "495", "...", "498"].map((s, i) => (
+                <span key={i} style={{ padding: "3px 8px", background: C.okBg, borderRadius: 6, color: C.ok }}>{s}</span>
+              ))}
+            </div>
+          </div>
+
+          <div style={{
+            background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10,
+            padding: 12, textAlign: "center", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
+              {t(E, "Formula (d=3)", "공식 (d=3)")}
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 900, color: C.accent }}>
+              5 × 6<sup>3−2</sup> = 5 × 6<sup>1</sup> = 5 × 6
+            </div>
+          </div>
+        </div>
+      ),
     },
     // 5-2: 3-digit
     { type: "input",
-      narr: t(E, "3-digit numbers:", "3자리:"),
+      narr: t(E, "So how many 3-digit?", "3자리는 몇 개?"),
       question: "5 × 6¹ = ?", answer: 30,
     },
-    // 5-3: N=1000 total
-    { type: "input",
-      narr: t(E, "N=1000 → only 2+3 digit. Total?", "N=1000 → 2자리+3자리만. 합계?"),
-      question: "5 + 30 = ?", answer: 35,
-    },
-    // 5-4: Strategy — split by digit count
+    // 5-3: N=1000 total — 자릿수별 분석 + 합계
     { type: "reveal",
       narr: t(E,
-        "But what if N isn't a round number like 1000? We split the counting!",
-        "근데 N이 1000처럼 딱 떨어지지 않으면? 나눠서 세자!"),
+        "Now N=1000. Break it down by digit count.",
+        "N=1000 일 때, 자릿수별로 몇 개씩인지 따져봐요."),
       content: (
-        <div style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:13 }}>
-          <div style={{ background:C.accentBg, borderRadius:10, padding:12, border:`1.5px solid ${C.accentBd}` }}>
-            <div style={{ fontWeight:800, color:C.accent, marginBottom:8 }}>{t(E,"Strategy","전략")}</div>
-            <div style={{ color:C.text, lineHeight:2.2 }}>
-              <div>① {t(E,"Shorter numbers: 2-digit ~ (D-1)-digit","짧은 수: 2자리 ~ (D-1)자리")}</div>
-              <div style={{ paddingLeft:16, color:C.ok, fontWeight:700 }}>→ {t(E,"full formula 5×6^(d-2)","공식 그대로 5×6^(d-2)")}</div>
-              <div>② {t(E,"Same length as N: D-digit numbers ≤ N","N과 같은 자릿수: D자리 수 ≤ N")}</div>
-              <div style={{ paddingLeft:16, color:C.carry, fontWeight:700 }}>→ {t(E,"careful counting, digit by digit!","자릿수 하나씩 조심히 세기!")}</div>
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "70px 1fr 60px", padding: "8px 12px", background: "#f8f9fc", borderBottom: `1.5px solid ${C.border}`, fontSize: 11, fontWeight: 800, color: C.dim }}>
+              <span>{t(E, "digits", "자릿수")}</span>
+              <span>{t(E, "what counts", "어떤 게 셈에 들어가나")}</span>
+              <span style={{ textAlign: "right" }}>{t(E, "count", "개수")}</span>
+            </div>
+            {[
+              { d: t(E, "1-digit", "1자리"), what: t(E, "(only 1 digit — no carry possible)", "(자리 하나뿐 → carry 못 함)"), count: 0, ok: false },
+              { d: t(E, "2-digit", "2자리"), what: "45 46 47 48 49", count: 5, ok: true },
+              { d: t(E, "3-digit", "3자리"), what: t(E, "4xx pattern (5 × 6¹)", "4xx 패턴 (5 × 6¹)"), count: 30, ok: true },
+              { d: t(E, "4-digit", "4자리"), what: t(E, "only 1000, starts with 1 ≠ 4", "1000 만 있고, 첫째=1 ≠ 4"), count: 0, ok: false },
+            ].map((row, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "70px 1fr 60px",
+                padding: "8px 12px", borderBottom: i < 3 ? `1px solid ${C.border}` : "none",
+                background: row.ok ? C.okBg : "#fafafa",
+                color: row.ok ? C.ok : C.dim,
+              }}>
+                <span style={{ fontWeight: 800 }}>{row.d}</span>
+                <span style={{ fontSize: 12 }}>{row.what}</span>
+                <span style={{ textAlign: "right", fontWeight: 800 }}>{row.count}</span>
+              </div>
+            ))}
+            <div style={{
+              display: "grid", gridTemplateColumns: "70px 1fr 60px",
+              padding: "10px 12px", background: C.accentBg, borderTop: `2px solid ${C.accentBd}`,
+              color: C.accent, fontWeight: 900,
+            }}>
+              <span>{t(E, "Sum", "합계")}</span>
+              <span style={{ fontSize: 11, fontWeight: 700 }}>0 + 5 + 30 + 0</span>
+              <span style={{ textAlign: "right", fontSize: 16 }}>= ?</span>
             </div>
           </div>
-          <div style={{ marginTop:10, fontSize:12, color:C.dim, lineHeight:1.6 }}>
-            {t(E, "Example: N=473 (D=3). Part ①: all 2-digit (5). Part ②: 3-digit ≤ 473 only.", "예: N=473 (D=3). ①: 2자리 전부 (5개). ②: 3자리는 473까지만.")}
-          </div>
-        </div>),
+        </div>
+      ),
     },
-    // 5-5: N=473 intro
+    // 5-3b: 합계 한번 더 묻기
+    { type: "input",
+      narr: t(E, "So total for N=1000 is:", "그래서 N=1000 의 합계는:"),
+      question: "5 + 30 = ?",
+      hint: t(E, "1-digit and 4-digit (1000) contribute 0.", "1자리와 4자리 (1000) 는 0개씩."),
+      answer: 35,
+    },
+    // (코드 단계는 5-7 의 ProgressiveCode 위젯에서 한꺼번에 인터랙티브하게 보여줌)
+    // 5-4: 전략 — 더 친절하게 (구체 예시 N=473 으로)
     { type: "reveal",
-      narr: t(E, "Let's try Part ② for N=473. First digit is 4 — we're in the danger zone!", "②를 해보자. N=473, 첫째=4 — 위험 구간이야!"),
+      narr: t(E,
+        "What if N = 473? Not round like 1000. Trick: split into two parts — easy + tricky.",
+        "N 이 473 처럼 딱 떨어지지 않으면 어떻게 할까요? 두 부분으로 나누면 돼요 — 쉬운 부분 + 어려운 부분."),
       content: (
-        <div style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:13 }}>
-          <div style={{ display:"flex", gap:16 }}>
-            <div style={{ flex:1, background:C.okBg, borderRadius:8, padding:"8px 12px", border:`1.5px solid ${C.okBd}` }}>
-              <div style={{ fontSize:11, color:C.ok, fontWeight:700 }}>① {t(E,"2-digit","2자리")}</div>
-              <div style={{ fontWeight:800, color:C.ok }}>5 ✅</div>
+        <div style={{ padding: 16, fontSize: 14, lineHeight: 1.85 }}>
+          {/* N=473 시각 */}
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>{t(E, "Example", "예시")}</div>
+            <div style={{ fontSize: 28, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1 }}>N = 473</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>{t(E, "473 is 3-digit", "473 은 3자리")}</div>
+          </div>
+
+          {/* 부분 ① — 쉬운 부분 */}
+          <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 12, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: C.ok, marginBottom: 6 }}>
+              😊 {t(E, "Part 1: short numbers (1, 2-digit)", "쉬운 부분: 짧은 수 (1자리, 2자리)")}
             </div>
-            <div style={{ flex:1, background:C.carryBg, borderRadius:8, padding:"8px 12px", border:`1.5px solid ${C.carryBd}` }}>
-              <div style={{ fontSize:11, color:C.carry, fontWeight:700 }}>② {t(E,"3-digit ≤ 473","3자리 ≤ 473")}</div>
-              <div style={{ fontWeight:800, color:C.carry }}>🤔</div>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+              {t(E, "All 2-digit ones — count them all with the formula:", "2자리는 다 포함되니까 — 공식 그대로:")}
+              <div style={{ marginTop: 6, padding: "6px 10px", background: "#fff", borderRadius: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: C.ok, fontWeight: 800, textAlign: "center" }}>
+                5 × 6⁰ = 5{t(E, " (45~49)", "개 (45~49)")}
+              </div>
             </div>
           </div>
-        </div>),
+
+          {/* 부분 ② — 어려운 부분 */}
+          <div style={{ background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, marginBottom: 12 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>
+              🤔 {t(E, "Part 2: same digit count as N (3-digit, ≤ 473)", "어려운 부분: N 과 같은 자릿수 (3자리, ≤ 473)")}
+            </div>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+              {t(E, "Can't use the formula directly (it counts ALL 3-digit). We have to be careful — only count up to 473.",
+                  "3자리 수 전부가 아니라 473 까지만 세야 해요. 공식 못 써요 — 자릿수 하나씩 조심히!")}
+            </div>
+          </div>
+
+          {/* 합치면 */}
+          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, padding: 12, textAlign: "center" }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+              {t(E, "Final answer = ", "최종 답 = ")}
+              <strong style={{ color: C.ok }}>{t(E, "Part 1", "쉬운 부분")}</strong>
+              {" + "}
+              <strong style={{ color: C.carry }}>{t(E, "Part 2", "어려운 부분")}</strong>
+            </div>
+            <div style={{ marginTop: 6, fontSize: 11, color: C.dim }}>
+              👉 {t(E, "Next pages: tackle Part 2 step by step.",
+                    "다음 페이지부터: 어려운 부분 차근차근 해볼게요.")}
+            </div>
+          </div>
+        </div>
+      ),
     },
-    // 5-5: Middle digits below N's
+    // 5-5: N=473 의 어려운 부분 — 표로 한눈에 (퀴즈 4개 → 시각 1개로)
+    { type: "reveal",
+      narr: t(E,
+        "Part 2 for N=473: count 4__ numbers ≤ 473. Let's tabulate by middle digit.",
+        "어려운 부분: 4__ 형태 (3자리, ≤ 473) 를 세요. 중간 자리 별로 표로 정리해봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* 슬롯 구조 보여주기 */}
+          <div style={{ textAlign: "center", marginBottom: 12 }}>
+            <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>{t(E, "Form", "형태")}</div>
+            <div style={{ display: "inline-flex", gap: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 900 }}>
+              <span style={{ color: C.no, padding: "4px 10px", background: C.noBg, borderRadius: 6, border: `2px solid ${C.noBd}` }}>4</span>
+              <span style={{ color: C.carry, padding: "4px 10px", background: C.carryBg, borderRadius: 6, border: `2px solid ${C.carryBd}` }}>?</span>
+              <span style={{ color: C.look, padding: "4px 10px", background: C.lookBg, borderRadius: 6, border: `2px solid ${C.lookBd}` }}>?</span>
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
+              {t(E, "first=4 (fixed), middle 4~9, last 5~9, AND ≤ 473",
+                  "첫째=4 (고정), 중간 4~9, 마지막 5~9, 그리고 ≤ 473")}
+            </div>
+          </div>
+
+          {/* 표 — 중간 자리별 케이스 */}
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", marginBottom: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 60px", padding: "8px 12px", background: "#f8f9fc", borderBottom: `1.5px solid ${C.border}`, fontSize: 11, fontWeight: 800, color: C.dim }}>
+              <span>{t(E, "middle", "중간")}</span>
+              <span>{t(E, "numbers", "수들")}</span>
+              <span style={{ textAlign: "right" }}>{t(E, "count", "개수")}</span>
+            </div>
+            {[
+              { mid: 4, nums: "445 446 447 448 449", count: 5, ok: true },
+              { mid: 5, nums: "455 456 457 458 459", count: 5, ok: true },
+              { mid: 6, nums: "465 466 467 468 469", count: 5, ok: true },
+              { mid: 7, nums: t(E, "need ≥5 AND ≤3 → impossible", "마지막은 ≥5 AND ≤3 → 불가능"), count: 0, ok: false, special: true },
+              { mid: 8, nums: t(E, "480~ > 473 ❌", "480~ > 473 ❌"), count: 0, ok: false },
+              { mid: 9, nums: t(E, "490~ > 473 ❌", "490~ > 473 ❌"), count: 0, ok: false },
+            ].map((row, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "60px 1fr 60px",
+                padding: "7px 12px", borderBottom: i < 5 ? `1px solid ${C.border}` : "none",
+                background: row.ok ? C.okBg : (row.special ? C.carryBg : "#fafafa"),
+                color: row.ok ? C.ok : (row.special ? C.carry : C.dim),
+              }}>
+                <span style={{ fontWeight: 800 }}>{row.mid}</span>
+                <span style={{ fontSize: 12 }}>{row.nums}</span>
+                <span style={{ textAlign: "right", fontWeight: 800 }}>{row.count}</span>
+              </div>
+            ))}
+            <div style={{
+              display: "grid", gridTemplateColumns: "60px 1fr 60px",
+              padding: "10px 12px", background: C.accentBg, borderTop: `2px solid ${C.accentBd}`,
+              color: C.accent, fontWeight: 900,
+            }}>
+              <span>{t(E, "Sum", "합계")}</span>
+              <span></span>
+              <span style={{ textAlign: "right", fontSize: 16 }}>15</span>
+            </div>
+          </div>
+
+          {/* 두 부분 합치기 시각 */}
+          <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", flexWrap: "wrap", fontFamily: "'JetBrains Mono',monospace" }}>
+            <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 8, padding: "8px 14px", textAlign: "center" }}>
+              <div style={{ fontSize: 10, color: C.ok, fontWeight: 700 }}>{t(E, "Part 1 (2-digit)", "쉬운 부분 (2자리)")}</div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: C.ok }}>5</div>
+            </div>
+            <span style={{ fontSize: 18, color: C.dim, fontWeight: 800 }}>+</span>
+            <div style={{ background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 8, padding: "8px 14px", textAlign: "center" }}>
+              <div style={{ fontSize: 10, color: C.carry, fontWeight: 700 }}>{t(E, "Part 2 (3-digit)", "어려운 부분 (3자리)")}</div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: C.carry }}>15</div>
+            </div>
+            <span style={{ fontSize: 18, color: C.dim, fontWeight: 800 }}>=</span>
+            <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 8, padding: "8px 14px", textAlign: "center" }}>
+              <div style={{ fontSize: 10, color: C.accent, fontWeight: 700 }}>{t(E, "Total", "전체")}</div>
+              <div style={{ fontSize: 22, fontWeight: 900, color: C.accent }}>?</div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+
+    // 5-6: 합계 한 번만 묻기
     { type: "input",
       narr: t(E,
-        "N=473 starts with 4 → 4xx zone. Middle of N is 7. How many valid middle (4~9) below 7?",
-        "N=473은 4로 시작 → 4xx 구간. N의 중간=7. 유효한 중간(4~9) 중 7 미만은?"),
-      question: t(E, "Middle digits 4, 5, 6 (all < 7). Count = ?", "중간 자릿수 4, 5, 6 (전부 7 미만). 몇 개?"), answer: 3,
+        "Combine: easy part (2-digit) = 5, tricky part (3-digit, ≤473) = 15. Total?",
+        "합쳐요: 쉬운 부분 (2자리) = 5, 어려운 부분 (3자리, ≤473) = 15. 합계?"),
+      question: "5 + 15 = ?",
+      hint: t(E, "Part 1 + Part 2.", "쉬운 부분 + 어려운 부분."),
+      answer: 20,
     },
-    // 5-6: Multiply
-    { type: "input",
-      narr: t(E, "Each gets full last-digit range (5~9 = 5).", "각각에 마지막(5~9) 5가지."),
-      question: "3 × 5 = ?", answer: 15,
-    },
-    // 5-7: Middle=7, last check
-    { type: "input",
+    // 5-7: 인터랙티브 코드 위젯 (Python/C++ 토글 + PDF 다운로드)
+    { type: "progressive",
       narr: t(E,
-        "Middle=7 (same as N): last digit of N=3. Valid last ≥5 AND ≤3?",
-        "중간=7(N과 같을 때): N의 마지막=3. ≥5이면서 ≤3인 건?"),
-      question: t(E, "How many digits both ≥5 and ≤3?", "≥5이면서 ≤3인 수?"), answer: 0,
+        "Pick a part to see its code + reasoning. Toggle Python ↔ C++. Save as PDF for later.",
+        "버튼 눌러서 부분별 코드 + 이유 확인. Python ↔ C++ 토글. PDF 저장해서 나중에 보기."),
+      sections: getOptSections(E),
     },
-    // 5-8: Total
-    { type: "input",
-      narr: t(E, "Total for N=473:", "N=473 합계:"),
-      question: t(E, "2-dig(5) + 3-dig(15+0) = ?", "2자리(5) + 3자리(15+0) = ?"), answer: 20,
-    },
-    // 5-9: Verify
-    { type: "runner",
-      narr: t(E, "Verify! Run N=473. Does it show 20?", "검증! N=473 돌려봐. 20 나올까?"),
-    },
-    // 5-10: Code
-    { type: "code",
-      narr: t(E, "O(log N) solution! Same logic you did by hand.", "O(log N) 풀이! 네가 손으로 한 것과 같은 로직."),
-      code: OPT_CODE,
-      label: t(E, "Show optimized code", "최적화 코드 보기"),
-    },
+  ];
+}
+
+// Optimization 섹션 (ProgressiveCode 위젯 + 헤더 PDF 버튼 둘 다에서 사용)
+export function getOptSections(E) {
+  return [
+        {
+          label: t(E, "📦 1. Input + Setup", "📦 1. 입력 + 셋업"),
+          color: C.accent, bgColor: C.accentBg,
+          py: OPT_INPUT, cpp: OPT_INPUT_CPP,
+          why: [
+            t(E,
+              "Fast input (sys.stdin.readline / ios::sync_with_stdio false) — important when T is big.",
+              "빠른 입력 (sys.stdin.readline / ios::sync_with_stdio false) — T 가 크면 필수."),
+            t(E,
+              "N < 10 means N is 1-digit. No tens place to carry into → answer is 0. Skip early.",
+              "N < 10 이면 1자리. carry 할 10의자리가 없어서 답 0. 미리 빠짐."),
+            t(E,
+              "D = digit count of N. Both the formula and the tricky case need D.",
+              "D = N 의 자릿수. 공식도 어려운 부분도 D 가 필요."),
+            t(E,
+              "result = 0 — running counter we'll add to in steps 2 and 3.",
+              "result = 0 — 2단계, 3단계에서 계속 더해갈 카운터."),
+          ],
+        },
+        {
+          label: t(E, "✅ 2. Easy Part", "✅ 2. 쉬운 부분"),
+          color: C.ok, bgColor: C.okBg,
+          py: OPT_EASY, cpp: OPT_EASY_CPP,
+          why: [
+            t(E,
+              "Loop d = 2 to D−1: any number with FEWER digits than N is automatically ≤ N → formula safe.",
+              "d = 2 부터 D−1 까지: N 보다 자릿수 적은 수는 무조건 ≤ N → 공식 그대로 안전."),
+            t(E,
+              "Stop BEFORE D: D-digit numbers may exceed N (e.g. N=473, 800 > 473). That's step 3's job.",
+              "D 직전까지만: D 자리는 N 을 넘을 수도 있음 (예: N=473, 800 > 473). 그건 3단계 담당."),
+            t(E,
+              "5 × 6^(d−2) = pattern formula. first=4 (1 choice) × middle d−2 digits each 4~9 (6 choices) × last 5~9 (5 choices).",
+              "5 × 6^(d−2) = 패턴 공식. 첫째=4 (1) × 중간 d−2 자리 각각 4~9 (6) × 마지막 5~9 (5)."),
+          ],
+        },
+        {
+          label: t(E, "🤔 3. Tricky Part", "🤔 3. 어려운 부분"),
+          color: C.carry, bgColor: C.carryBg,
+          py: OPT_TRICKY, cpp: OPT_TRICKY_CPP,
+          why: [
+            t(E,
+              "Look at first = first digit of N. Three cases.",
+              "first = N 의 첫째 자리. 3 가지 경우로 나눔."),
+            t(E,
+              "first > 4 (5~9): every 4xxxx pattern < N. Use full formula 5 × 6^(D−2) directly.",
+              "first > 4 (5~9): 모든 4xxxx 패턴 < N. 공식 5 × 6^(D−2) 통째로 사용."),
+            t(E,
+              "first == 4: matches pattern. Walk digits one-by-one, careful not to exceed N.",
+              "first == 4: 패턴과 일치. 자리 하나씩 따라가면서 N 안 넘게 조심."),
+            t(E,
+              "Middle digit ≥ 4: digits 4..digit−1 are free (extra × remaining slots × 5 last-choices). Then 'lock in' and continue.",
+              "중간 자리 ≥ 4: 4..digit−1 은 자유 (extra × 남은 자리 × 마지막 5). 그리고 '확정' 후 다음 자리로."),
+            t(E,
+              "if digit < 4: break. Pattern needs middle ≥ 4 but N's digit is smaller → can't fit anymore.",
+              "if digit < 4: break. 패턴은 중간 ≥ 4 필요한데 N 의 그 자리가 더 작음 → 더 못 넣음."),
+            t(E,
+              "Last digit: pattern needs ≥ 5. Count 5,6,…,digit (= digit − 5 + 1 numbers).",
+              "마지막 자리: ≥ 5 필요. 5,6,…,digit 셈 (= digit − 5 + 1 개)."),
+            t(E,
+              "first < 4 (e.g. 1,2,3): every 4xxxx > N → 0 contribution. Add nothing.",
+              "first < 4 (예: 1,2,3): 모든 4xxxx > N → 0. 아무것도 안 더함."),
+          ],
+        },
+        {
+          label: t(E, "🎯 Full Code", "🎯 전체 코드"),
+          color: C.accent, bgColor: C.accentBg,
+          py: OPT_CODE, cpp: OPT_CODE_CPP,
+          why: [
+            t(E,
+              "Each query touches D = log10(N) digits at most. T queries → O(T · log N).",
+              "쿼리 하나당 D = log10(N) 자리만 봄. T 쿼리 → O(T · log N)."),
+            t(E,
+              "Brute was O(T · N). For N = 10⁹: ~10 ops vs ~10⁹ ops per query — speedup ≈ 10⁸×.",
+              "브루트는 O(T · N). N = 10⁹ 면: 쿼리당 ~10 연산 vs ~10⁹. 약 10⁸ 배 빠름."),
+            t(E,
+              "Tip: download as PDF (button above) for offline study.",
+              "팁: 위 PDF 버튼 눌러서 다운받으면 오프라인에서도 공부 가능."),
+          ],
+        },
   ];
 }
 
@@ -686,15 +2145,133 @@ export function ResultView({ step }) {
 export function CompareView({ step }) {
   const borderCol = step.isDiff ? C.noBd : C.okBd;
   const numCol    = step.isDiff ? C.no  : C.ok;
+  const cards = [
+    { emoji: "🐄", name: "Bessie", val: step.bessie, bg: C.bessieBg, nameCol: C.bessie },
+    { emoji: "🐮", name: "Elsie",  val: step.elsie,  bg: C.elsieBg,  nameCol: C.elsie  },
+  ];
   return (
     <div style={{ padding: "20px 16px", textAlign: "center" }}>
       <div style={{ display: "flex", justifyContent: "center", gap: 16, fontFamily: "'JetBrains Mono',monospace" }}>
-        {[["🐄", step.bessie, C.bessieBg], ["🐮", step.elsie, C.elsieBg]].map(([emoji, val, bg], i) => (
-          <div key={i} style={{ background: bg, borderRadius: 14, padding: "12px 20px", border: `2px solid ${borderCol}` }}>
-            <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 4 }}>{emoji}</div>
-            <div style={{ fontSize: 36, fontWeight: 800, color: numCol }}>{val}</div>
+        {cards.map((c, i) => (
+          <div key={i} style={{ background: c.bg, borderRadius: 14, padding: "10px 22px", border: `2px solid ${borderCol}` }}>
+            <div style={{ fontSize: 22, marginBottom: 0 }}>{c.emoji}</div>
+            <div style={{ fontSize: 12, fontWeight: 900, color: c.nameCol, marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>{c.name}</div>
+            <div style={{ fontSize: 36, fontWeight: 800, color: numCol }}>{c.val}</div>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+
+/* ════════════════════════════════════════════
+   Multi6Sim — 6 가지 SIM_CASES 중 선택해서 InlineSim 으로 보여줌.
+   (이전 별도 시뮬 탭의 핵심을 챕터 1 안으로 흡수)
+   ════════════════════════════════════════════ */
+export function Multi6Sim({ E }) {
+  const [caseIdx, setCaseIdx] = useState(0);
+  const cs = SIM_CASES[caseIdx];
+  return (
+    <div>
+      {/* 6 케이스 선택 */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
+        {SIM_CASES.map((c, i) => (
+          <button
+            key={i}
+            onClick={() => setCaseIdx(i)}
+            style={{
+              background: i === caseIdx ? C.card : "transparent",
+              border: `2px solid ${i === caseIdx ? C.accent : C.border}`,
+              borderRadius: 8, padding: "5px 10px", cursor: "pointer",
+              transition: "all .15s",
+            }}
+          >
+            <span style={{ fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: i === caseIdx ? C.accent : C.dim }}>
+              {c.num}
+            </span>
+            <span style={{ fontSize: 10, marginLeft: 3, fontWeight: 700, color: c.diff ? C.no : C.ok }}>
+              {c.diff ? "❌" : "✅"}
+            </span>
+          </button>
+        ))}
+      </div>
+      {/* 선택한 케이스의 인라인 시뮬 — key 로 리셋 */}
+      <InlineSim key={caseIdx} x={cs.num} E={E} />
+    </div>
+  );
+}
+
+
+/* ════════════════════════════════════════════
+   InlineSim — chapter 1 안에서 x=48 의 시뮬을
+   직접 단계별로 보여주는 mini-sim. splash 는 제외.
+   ════════════════════════════════════════════ */
+export function InlineSim({ x = 48, E }) {
+  const all = buildSimSteps(x, E);
+  // splash (전체화면 등장 효과) 는 인라인에서 제외
+  const steps = all.filter(s => s.phase !== "splash");
+  const [si, setSi] = useState(0);
+  const cur = Math.min(si, steps.length - 1);
+  const step = steps[cur];
+
+  const renderStep = () => {
+    if (step.phase === "findP")          return <FindPView step={step} />;
+    if (step.phase === "findP_explain")  return <FindPExplainView step={step} />;
+    if (step.phase === "bessie" || step.phase === "elsie") return <DigitsView step={step} E={E} />;
+    if (step.phase === "bessie_result" || step.phase === "elsie_result") return <ResultView step={step} />;
+    if (step.phase === "compare")        return <CompareView step={step} />;
+    return null;
+  };
+
+  // 단계 배경색 — 어느 파트인지 시각적으로 구분
+  const bg =
+    step.phase?.startsWith("bessie") ? C.bessieBg :
+    step.phase?.startsWith("elsie")  ? C.elsieBg  :
+    step.phase === "compare"         ? (step.isDiff ? C.noBg : C.okBg) :
+    "#f8f9fc";
+
+  return (
+    <div style={{ background: C.card, border: `2px solid ${C.border}`, borderRadius: 12, overflow: "hidden" }}>
+      {/* narration */}
+      {step.narr && (
+        <div style={{
+          padding: "10px 14px", fontSize: 13, fontWeight: 700, color: C.text,
+          background: bg, borderBottom: `1.5px solid ${C.border}`,
+        }}>{step.narr}</div>
+      )}
+      {/* 단계 본문 */}
+      <div style={{ minHeight: 180 }}>
+        {renderStep()}
+      </div>
+      {/* 네비게이션 */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+        padding: "10px 12px", borderTop: `1.5px solid ${C.border}`, background: "#f8f9fc",
+      }}>
+        <button
+          onClick={() => setSi(Math.max(0, cur - 1))}
+          disabled={cur === 0}
+          style={{
+            background: cur === 0 ? "#e5e7eb" : C.card,
+            border: `2px solid ${cur === 0 ? "#e5e7eb" : C.accent}`,
+            borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 800,
+            color: cur === 0 ? "#b0b5c3" : C.accent, cursor: cur === 0 ? "default" : "pointer",
+          }}
+        >←</button>
+        <span style={{ fontSize: 12, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", minWidth: 50, textAlign: "center" }}>
+          {cur + 1} / {steps.length}
+        </span>
+        <button
+          onClick={() => setSi(Math.min(steps.length - 1, cur + 1))}
+          disabled={cur === steps.length - 1}
+          style={{
+            background: cur === steps.length - 1 ? "#e5e7eb" : C.accent,
+            border: `2px solid ${cur === steps.length - 1 ? "#e5e7eb" : C.accent}`,
+            borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 800,
+            color: cur === steps.length - 1 ? "#b0b5c3" : "#fff", cursor: cur === steps.length - 1 ? "default" : "pointer",
+          }}
+        >→</button>
       </div>
     </div>
   );
