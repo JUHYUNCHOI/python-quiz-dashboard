@@ -68,16 +68,57 @@ export function makeCowntraceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows shake hooves at events.\nOne cow (patient zero) starts infected and can spread the disease up to K times.\nFind which cows could be patient zero, and the min/max K.", "소들이 행사에서 발굽을 맞대. 한 마리(환자 제로)가 감염 시작, 최대 K번 전파 가능. 환자 제로 후보와 최소/최대 K를 구해요."),
+        "N cows attended events; T timestamps recorded that two specific cows shook hooves at that time. EXACTLY ONE cow started infected ('patient zero') and infects others on hoof-shake — but each infected cow only infects others up to K more times.\nGiven the final infected/healthy state, count how many cows could possibly be patient zero, and find the minimum / maximum K consistent with the data.",
+        "N마리 소가 행사에 참석했고, 어떤 시각에 두 소가 발굽을 맞댔다는 기록 T개가 있어요. 정확히 1마리만 처음 감염 ('환자 제로') 이고, 발굽을 맞대면 감염을 옮길 수 있어요 — 단, 한 번 감염된 소는 최대 K 마리에게만 옮겨요.\n최종 감염/건강 상태가 주어졌을 때, 환자 제로가 될 수 있는 소의 수와 일관성 있는 K 의 최소·최대 값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd0d"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cowntact Tracing</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Simulate for each possible patient zero with each K.\nCheck if the resulting infected set matches the given final state.",
-              "핵심: 각 환자 제로 후보와 K에 대해 시뮬레이션.\n결과 감염 집합이 주어진 최종 상태와 일치하는지 확인.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd0d"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cowntact Tracing</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "N cows and T timestamped hoof-shakes", "N마리 소와 T개의 시각별 발굽-맞댐 기록")}</b>
+                  {t(E, " (each says: at time t, cows i and j shook hooves).",
+                        " 이 있어요 (각 기록: 시각 t 에 i 와 j 가 맞댐).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Exactly one cow is ", "정확히 1마리가 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "patient zero", "환자 제로")}</b>
+                  {t(E, " (started infected). Infected cows can pass it on through hoof-shakes, but each infected cow infects others ", " (처음 감염). 감염된 소는 발굽-맞댐으로 전파 가능하지만, 각 감염된 소는 최대 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "at most K more times", "K번까지만 전파")}</b>
+                  {t(E, ".", " 가능.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given the ", "최종 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "final infected/healthy state of every cow", "각 소의 감염/건강 상태")}</b>
+                  {t(E, ".", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print three numbers: ", "세 수를 출력: ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "(1) candidates for patient zero, (2) min K consistent, (3) max K consistent (or 'Infinity')", "(1) 환자 제로 후보 수, (2) 가능한 K 최솟값, (3) K 최댓값 (또는 'Infinity')")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

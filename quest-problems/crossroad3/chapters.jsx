@@ -34,16 +34,59 @@ export function makeCrossRd3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows arrive at a gate, each with an arrival time and a duration to pass through.\nProcess them FIFO (first come, first served).\nFind when the last cow finishes!", "N마리 소가 문에 도착해, 각각 도착 시간과 통과 시간이 있어요. FIFO (선착순)로 처리해요. 마지막 소가 끝나는 시간을 구해요!"),
+        "N cows arrive at a single gate, each with an arrival time a[i] and a passage duration d[i]. The gate processes cows in arrival order (FIFO) — one at a time. If a cow arrives while the gate is busy, she queues; once it's her turn, she takes d[i] seconds to pass through.\nPrint the time the LAST cow finishes passing.",
+        "N마리 소가 한 개의 문에 도착해요. 각자 도착 시각 a[i] 와 통과 시간 d[i] 를 가져요. 문은 도착 순서 (FIFO) 로 한 마리씩 처리해요. 문이 사용 중일 때 도착한 소는 줄을 서고, 자기 차례에 d[i] 초 걸려 통과해요.\n마지막 소가 통과를 끝내는 시각을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udeaa"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Cross the Road III</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Sort by arrival time.\nTrack when the gate becomes free. If a cow arrives after the gate is free, start immediately. Otherwise, wait in queue.",
-              "핵심: 도착 시간으로 정렬해요.\n문이 비는 시간을 추적해요.\n소가 문이 빈 후에 도착하면 바로 시작.\n아니면 대기열에서 기다려.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udeaa"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Cross the Road III</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "N cows arriving at a single gate", "한 개의 문에 도착하는 N마리 소")}</b>
+                  {t(E, " — each with an arrival time ", " 가 있고, 도착 시각 ")}
+                  <code style={{ background: "#ede9fe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>a[i]</code>
+                  {t(E, " and a passage duration ", " 와 통과 시간 ")}
+                  <code style={{ background: "#ede9fe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>d[i]</code>
+                  {t(E, ".", " 을 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The gate processes cows ", "문은 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "FIFO (first come, first served)", "FIFO (선착순)")}</b>
+                  {t(E, " — one at a time, taking d[i] seconds for cow i.",
+                        " 로 한 마리씩 처리, i번 소는 d[i] 초 걸려요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "If a cow arrives while the gate is busy, she ", "문이 사용 중일 때 도착한 소는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "queues until her turn", "자기 차례까지 대기")}</b>
+                  {t(E, ".", "해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "time the last cow finishes passing", "마지막 소가 통과를 끝내는 시각")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

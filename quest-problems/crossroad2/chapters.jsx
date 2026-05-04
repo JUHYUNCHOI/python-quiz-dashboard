@@ -41,16 +41,56 @@ export function makeCrossRd2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "26 cows (A-Z) walk around a circular road, each crossing it exactly twice.\nTwo cows' paths cross if their crossing points alternate on the circle (like chords that intersect).\nCount crossing pairs!", "26마리 소 (A-Z)가 원형 도로를 돌아다니며 각각 정확히 2번 횡단해요.\n두 소의 횡단 지점이 원 위에서 번갈아 나오면 (교차하는 현처럼) 경로가 교차해요.\n교차하는 쌍을 세!"),
+        "26 cows labeled A..Z walk around a circular road, each crossing it EXACTLY TWICE. We're given the cyclic sequence of letters at the 52 crossing points (each letter appears exactly twice).\nTwo cows' paths intersect if their two crossing points INTERLEAVE around the circle (like A..B..A..B). Count the number of intersecting cow-pairs.",
+        "26마리 소 (A..Z) 가 원형 도로를 돌면서 각자 정확히 2번 횡단해요. 52개의 횡단 지점에 등장하는 글자의 원형 수열이 주어져요 (각 글자가 정확히 2번 등장).\n두 소의 경로가 '교차' 한다는 건, 그들의 두 횡단 지점이 원 위에서 서로 엇갈려 나타날 때 (예: A..B..A..B). 교차하는 소-쌍의 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cross the Road II</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Find the two positions of each cow.\nTwo cows cross iff their positions interleave: A..B..A..B. Check all pairs.",
-              "핵심: 각 소의 두 위치를 찾아요.\n두 소가 교차하려면 위치가 번갈아 나와야 해: A..B..A..B. 모든 쌍을 확인해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cross the Road II</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#f97316" }}>{t(E, "26 cows (A..Z) walk around a circular road", "26마리 소 (A..Z) 가 원형 도로 위를 걸어요")}</b>
+                  {t(E, " — each crosses it exactly twice (so 52 crossing points total).",
+                        " — 각자 정확히 2번 횡단해서 총 52개의 횡단 지점.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given the ", "")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "cyclic sequence of 52 letters at the crossing points", "횡단 지점 52개의 글자 원형 수열")}</b>
+                  {t(E, " (each letter appears twice).",
+                        " 이 주어져요 (각 글자 2번씩).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Two cow paths ", "두 소의 경로가 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "intersect", "교차")}</b>
+                  {t(E, " if their crossing points interleave around the circle (e.g., A..B..A..B), like two chords that cross.",
+                        " 한다는 건, 두 소의 횡단 지점이 원에서 엇갈리게 나타날 때 (A..B..A..B), 교차하는 두 현 같은 형태.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of intersecting cow-pairs", "교차하는 소-쌍의 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

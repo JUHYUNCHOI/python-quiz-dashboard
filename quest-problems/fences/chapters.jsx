@@ -26,16 +26,60 @@ export function makeFencesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A grassy field needs fencing!\nCan you figure out the cheapest column to build a full fence?\nLet's find out!\n🏗️", "풀밭에 울타리를 세워야 해요! 가장 적은 비용으로 울타리를 완성할 열을 찾을 수 있을까? 알아보자! 🏗️"),
+        "An N × M grid is filled with grass (.) and fences (#). FJ wants to pick ONE column and convert every cell in that column to a fence (#). Each grass-to-fence conversion costs 1.\nPrint the minimum total cost over all possible column choices.",
+        "N × M 격자가 풀 (.) 과 울타리 (#) 로 채워져 있어요. FJ 가 한 개의 열을 골라 그 열의 모든 칸을 울타리 (#) 로 바꾸려고 해요. 풀 → 울타리 한 칸당 비용 1.\n어떤 열을 골랐을 때 가장 적은 총 비용이 드는지 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🏗️</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Building Fences</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "N×M grid of grass (.) and fences (#) → pick ONE column → make it ALL fences → minimize cost!",
-              "N×M 그리드에 풀(.)과 울타리(#) → 열 하나를 골라 → 전부 울타리로 → 최소 비용!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🏗️</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Building Fences</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P1</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "An ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "N × M grid", "N × M 격자")}</b>
+                  {t(E, " of ", " 가 ")}
+                  <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>.</code>
+                  {t(E, " (grass) and ", " (풀) 와 ")}
+                  <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>#</code>
+                  {t(E, " (fence).", " (울타리) 로 채워져 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ picks ", "FJ 가 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "ONE column", "한 개의 열")}</b>
+                  {t(E, " and converts every cell in that column to a fence (#).",
+                        " 을 골라 그 열의 모든 칸을 울타리 (#) 로 바꿔요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each ", "각 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "grass-to-fence conversion costs 1", "풀 → 울타리 변환은 비용 1")}</b>
+                  {t(E, " (already-fence cells cost 0).",
+                        " (이미 울타리인 칸은 비용 0).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum total cost over all column choices", "어떤 열을 골랐을 때 드는 최소 총 비용")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

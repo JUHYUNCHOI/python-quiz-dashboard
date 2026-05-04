@@ -55,16 +55,49 @@ export function makeCowCollegeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John is setting tuition for cow college!\nEach cow has a maximum she can pay.\nSet one price to maximize total revenue.\nLet's figure it out!", "농부 존이 소 대학 등록금을 정해요! 각 소가 낼 수 있는 최대 금액이 있어요. 하나의 가격을 정해서 총 수입을 최대화해보자!"),
+        "FJ runs a cow college. Each of N cows has a maximum tuition c[i] she's willing to pay. FJ sets ONE tuition price P; every cow with c[i] ≥ P enrolls and pays exactly P, the rest pay 0.\nPrint the MAX possible total revenue (and a price that achieves it).",
+        "FJ 가 소 대학을 운영해요. N마리 소 각자에게는 낼 수 있는 최대 등록금 c[i] 가 있어요. FJ 가 등록금 P 를 단 하나 정하면, c[i] ≥ P 인 소만 등록해서 정확히 P 를 내고, 나머지는 0.\n가능한 최대 총 수입과 그것을 달성하는 가격을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\uD83C\uDF93"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow College</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "N cows, each with a max tuition.\nSet ONE tuition price. Revenue = price x (cows who can afford it). Maximize revenue!",
-              "N마리의 소, 각각 최대 등록금.\n등록금을 하나로 정해요.\n수입 = 가격 x (지불 가능한 소 수). 수입 최대화!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\uD83C\uDF93"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow College</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#d97706" }}>{t(E, "N cows", "N마리 소")}</b>
+                  {t(E, ", each with a maximum tuition ", " 가 있고, 각자 최대 등록금 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>c[i]</code>
+                  {t(E, " she's willing to pay.", " 를 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ picks ", "FJ 가 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "ONE tuition price P", "단 하나의 등록금 P")}</b>
+                  {t(E, " — every cow with c[i] ≥ P pays P, the rest pay 0.",
+                        " 를 정하면, c[i] ≥ P 인 소만 P 를 내고 나머지는 0.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum total revenue and a price P that achieves it", "최대 총 수입과 그것을 만드는 가격 P")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

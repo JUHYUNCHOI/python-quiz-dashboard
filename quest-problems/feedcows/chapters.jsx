@@ -37,16 +37,58 @@ export function makeFeedCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows of breed G or H stand in a line.\nPlace grass patches (type G or H).\nEach cow must have a matching patch within K positions.\nMinimize the number of patches!", "N마리의 소가 G 또는 H 품종으로 줄 서 있어요. 풀 패치 (G 또는 H 타입)를 놓아요. 각 소는 K 위치 이내에 맞는 패치가 있어야 해요. 패치 수를 최소화해요!"),
+        "N cows of breed G or H stand at distinct positions on a number line. FJ places grass patches (each patch is type G or H) on integer positions. Each cow must have a SAME-BREED patch within distance K of her — and a single patch can satisfy any number of cows of its breed within K.\nFind the MINIMUM number of patches needed.",
+        "N마리 소가 G 또는 H 품종으로 수직선의 서로 다른 정수 위치에 서있어요. FJ 가 풀 패치 (각 G 또는 H) 를 정수 위치에 놓아요. 각 소는 자기 품종과 같은 패치가 거리 K 이내에 있어야 해요 — 한 패치는 거리 K 이내의 같은 품종 소들을 모두 만족시켜요.\n필요한 최소 패치 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf3e"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Feeding the Cows</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Greedy left to right.\nWhen a cow isn't covered, place a patch at position i+K (as far right as possible) to cover the maximum range [i, i+K] for that breed.",
-              "핵심: 왼쪽에서 오른쪽으로 그리디.\n소가 커버되지 않으면, 최대 범위 [i, i+K]를 커버하도록 위치 i+K에 패치를 놓아 (가능한 한 오른쪽에).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf3e"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Feeding the Cows</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ 에게 ")}
+                  <b style={{ color: "#059669" }}>{t(E, "N cows", "N마리 소")}</b>
+                  {t(E, ", each of breed ", " 가 있고, 각 소는 품종 ")}
+                  <b style={{ color: "#7c3aed" }}>G or H</b>
+                  {t(E, ", at distinct integer positions on a number line.",
+                        " 이며 수직선 위 서로 다른 정수 위치에 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ places grass patches ", "FJ 는 풀 패치 (각각 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "(each patch is type G or H)", "G 또는 H 종류)")}</b>
+                  {t(E, " on integer positions.", " 를 정수 위치에 놓아요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each cow must have a ", "각 소는 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "same-breed patch within distance K", "자기 품종과 같은 패치가 거리 K 이내")}</b>
+                  {t(E, " — one patch can serve many cows of its breed within K.",
+                        " 에 있어야 해요 — 한 패치가 K 이내의 같은 품종 소들을 모두 만족.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of patches needed", "필요한 최소 패치 수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

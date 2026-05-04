@@ -25,16 +25,47 @@ export function makeGiftsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You have N gifts to distribute among K people as evenly as possible.\nSome people may get one extra gift.\nHow many people get an extra?", "N개의 선물을 K명에게 최대한 고르게 나눠야 해요. 일부는 선물을 하나 더 받을 수 있어요. 몇 명이 추가 선물을 받을까?"),
+        "There are N gifts to distribute among K people as evenly as possible — every person gets at least N/K (integer division), and some get one extra to use up the leftover.\nPrint how many people receive an EXTRA gift.",
+        "N개의 선물을 K명에게 최대한 고르게 나눠줘요 — 모두가 최소 N/K (정수 나눗셈) 개를 받고, 일부는 남은 선물을 위해 1개 더 받아요.\n추가 선물을 받는 사람의 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf81"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Gifts</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P2</div>
-          <div style={{ marginTop: 12, background: "#fef3c7", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Use division and modulo.\nN // K gives the base amount per person. N % K gives how many people receive one extra.",
-              "핵심: 나눗셈과 나머지를 사용해요.\nN // K는 1인당 기본 수량.\nN % K는 추가 선물을 받는 사람 수.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf81"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Gifts</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P2</div>
+          </div>
+
+          <div style={{ background: "#fef3c7", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#d97706" }}>{t(E, "N gifts and K people", "N개의 선물과 K명")}</b>
+                  {t(E, ".", "이 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Distribute the gifts ", "선물을 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "as evenly as possible", "최대한 고르게")}</b>
+                  {t(E, " — every person gets the base count, and some get one extra to cover the leftover.",
+                        " 나눠요 — 모두가 기본 개수를 받고, 일부가 남은 만큼 1개 더 받아요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "how many people receive an extra gift", "추가 선물을 받는 사람의 수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
