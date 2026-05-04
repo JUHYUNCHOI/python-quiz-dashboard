@@ -65,16 +65,49 @@ export function makeModernArtCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "An N*N canvas has 9 colors painted as rectangles, one on top of another.\nWhich colors could have been painted first?\nA color not visible at all could have been first (painted over entirely).", "N*N 캔버스에 9가지 색이 직사각형으로 겹쳐 칠해져 있어요. 어떤 색이 처음에 칠해졌을 수 있을까? 전혀 안 보이는 색도 처음일 수 있어 (완전히 덮여서)."),
+        "An N×N canvas was painted by stacking 9 axis-aligned rectangles of colors 1..9, one painting on top of another (later paintings cover earlier ones).\nWe see the FINAL canvas. Print which colors COULD have been the very first painting (i.e., are NOT forced to be painted over a different visible color).",
+        "N × N 캔버스에 1..9 색의 9개 축에 평행한 직사각형 페인트가 한 번씩 차례로 칠해져요 (나중 페인트가 앞 페인트를 덮음).\n최종 캔버스가 주어졌을 때, 가장 먼저 칠해졌을 수 있는 색들 — 즉 다른 보이는 색 위에 칠해질 필요가 없는 색들 — 을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfa8"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Modern Art</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Find each color's bounding box.\nA color can be first if its bounding box is not entirely contained inside another color's bounding box. Colors not on canvas can always be first.",
-              "핵심: 각 색의 바운딩 박스를 구해요.\n한 색의 바운딩 박스가 다른 색의 바운딩 박스 안에 완전히 포함되지 않으면 처음일 수 있어요.\n캔버스에 없는 색은 항상 처음일 수 있어요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfa8"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Modern Art</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "An ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "N × N canvas", "N × N 캔버스")}</b>
+                  {t(E, " was painted by stacking ", " 에 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "9 axis-aligned rectangles of colors 1..9", "1..9 색의 9개 축에 평행한 직사각형")}</b>
+                  {t(E, " — each later painting covers earlier ones beneath it.",
+                        " 가 차례로 칠해졌고, 나중 페인트가 앞 페인트를 덮어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given the ", "")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "final canvas after all 9 paintings", "9번의 페인트가 끝난 최종 캔버스")}</b>
+                  {t(E, ".", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print every color that ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "could possibly have been the FIRST painted", "가장 먼저 칠해졌을 수 있는 모든 색")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

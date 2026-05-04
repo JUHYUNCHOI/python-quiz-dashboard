@@ -42,16 +42,55 @@ export function makeSleepyHerdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Three cows stand on a number line.\nYou can only move an endpoint cow to a position between the other two (not to the other end).\nFind the minimum and maximum number of moves to make them consecutive.", "세 마리 소가 수직선에 서 있어요.\n끝에 있는 소만 다른 두 소 사이로 옮길 수 있어 (반대쪽 끝으로는 안 돼).\n연속된 위치로 만드는 최소/최대 이동 횟수를 구해요!"),
+        "Three cows stand at distinct positions on a number line. The only allowed move: take ONE of the two ENDPOINT cows and place her at any unoccupied position STRICTLY BETWEEN the other two. The goal is to make all three positions CONSECUTIVE integers.\nPrint two numbers: the MIN and MAX possible number of moves to reach a consecutive configuration.",
+        "세 마리 소가 수직선의 서로 다른 위치에 있어요. 허용된 동작: 양 끝의 두 소 중 한 마리를 골라, 다른 두 소 사이의 비어있는 위치에 놓기. 세 소의 위치가 연속한 정수가 될 때까지 반복.\n도달까지 가능한 이동 횟수의 최솟값과 최댓값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude34"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Sleepy Cow Herding</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Sort positions.\nMax = total_span - 2 (move one step at a time). Min depends on gaps: both gaps 1 -> 0, any gap <= 2 -> 1, otherwise 2.",
-              "핵심: 위치 정렬.\n최대 = 전체범위 - 2 (한 칸씩 이동). 최소는 간격에 따라: 둘 다 1이면 0, 하나가 2 이하면 1, 아니면 2.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude34"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Sleepy Cow Herding</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#d97706" }}>{t(E, "3 cows at distinct integer positions", "서로 다른 정수 위치의 3마리 소")}</b>
+                  {t(E, " on a number line.", " 가 수직선에 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One move: take one of the ", "한 번의 이동: 양 끝의 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "two endpoint cows", "두 소 중 한 마리")}</b>
+                  {t(E, " and place her at any unoccupied integer ", "를 골라 다른 두 소 사이의 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "STRICTLY BETWEEN the other two", "비어있는 정수 위치")}</b>
+                  {t(E, ".", "에 놓기.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Goal: ", "목표: ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "all three positions become CONSECUTIVE integers", "세 소의 위치가 연속한 정수가 되도록")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MIN and MAX possible number of moves", "이동 횟수의 최솟값과 최댓값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

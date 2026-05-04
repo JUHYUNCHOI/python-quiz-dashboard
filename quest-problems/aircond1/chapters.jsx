@@ -56,16 +56,50 @@ export function makeAirCond1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N stalls with current and preferred temperatures.\nEach command adjusts a consecutive range by +1 or -1.\nFind the minimum number of commands!", "N개 칸에 현재 온도와 원하는 온도가 있어요. 각 명령은 연속 구간을 +1 또는 -1 조절해요. 최소 명령 수를 구해요!"),
+        "FJ has N stalls in a row, each with a current temperature p[i] and a target temperature q[i]. One AC command adjusts EVERY stall in some contiguous range by +1 OR by -1.\nPrint the MINIMUM number of AC commands to make every p[i] equal q[i].",
+        "FJ 에게 한 줄로 늘어선 N 개 축사가 있고, 각자 현재 온도 p[i] 와 목표 온도 q[i] 를 가져요. AC 명령 한 번은 어떤 연속한 구간의 모든 축사를 동시에 +1 또는 -1 만큼 조절해요.\n모든 p[i] 가 q[i] 와 같아지도록 만드는 최소 AC 명령 횟수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf21\ufe0f"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Air Cownditioning</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Compute diff d[i] = preferred[i] - current[i].\nThe answer equals the sum of all positive increases in the diff array (like the painting/histogram problem).",
-              "핵심: 차이 d[i] = preferred[i] - current[i] 계산.\n답은 차이 배열에서 양의 증가분의 합 (페인팅/히스토그램 문제와 같아).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf21\ufe0f"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Air Cownditioning</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ 에게 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "N stalls in a row", "한 줄로 늘어선 N 개 축사")}</b>
+                  {t(E, " — each with current temperature ", " 가 있고, 각자 현재 온도 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>p[i]</code>
+                  {t(E, " and target ", " 와 목표 온도 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>q[i]</code>
+                  {t(E, ".", " 를 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One AC command: adjust EVERY stall in a ", "AC 명령 한 번: 어떤 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "contiguous range by +1 OR -1", "연속한 구간을 동시에 +1 또는 -1")}</b>
+                  {t(E, ".", " 만큼 조절.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of AC commands to make every p[i] = q[i]", "모든 p[i] = q[i] 가 되도록 만드는 최소 AC 명령 횟수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
