@@ -35,16 +35,48 @@ export function makeGenomicsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N spotted cows and N plain cows each have M-character genomes.\nCount positions where spotted and plain cows have completely different characters (no overlap).", "점박이 소 N마리와 무늬 없는 소 N마리가 각각 M글자 유전체를 가져요. 점박이와 무늬 없는 소의 문자가 완전히 다른 (겹침 없는) 위치 수를 세!"),
+        "FJ has N spotted cows and N plain cows; each cow has an M-letter genome over {A, C, G, T}.\nA position j is 'distinguishing' if the set of letters appearing at column j among spotted cows DOES NOT INTERSECT the set among plain cows.\nCount how many positions are distinguishing.",
+        "FJ 에게 점박이 소 N마리와 무늬 없는 소 N마리가 있고, 각 소는 {A, C, G, T} 로 된 M글자 유전체를 가져요.\n어떤 위치 j 가 '구별 가능' 이려면, j 열에서 점박이 소들이 갖는 글자의 집합과 무늬 없는 소들의 집합이 겹치지 않아야 해요.\n구별 가능한 위치의 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddec"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Bovine Genomics</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: For each position j, collect the set of characters from spotted cows and plain cows.\nIf the two sets have no intersection, that position can distinguish them.",
-              "핵심: 각 위치 j에서 점박이 소의 문자 집합과 무늬 없는 소의 문자 집합을 모아요.\n두 집합이 교집합이 없으면 그 위치로 구별 가능해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddec"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Bovine Genomics</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ 에게 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N spotted cows and N plain cows", "점박이 소 N마리와 무늬 없는 소 N마리")}</b>
+                  {t(E, ", each with an M-letter genome over A/C/G/T.",
+                        " 가 있고, 각 소는 A/C/G/T 로 된 M글자 유전체를 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Position j is ", "위치 j 가 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "distinguishing", "'구별 가능'")}</b>
+                  {t(E, " if the set of letters at column j across spotted cows does NOT intersect the set across plain cows.",
+                        " 인 건, j 열에서 점박이 소들의 글자 집합과 무늬 없는 소들의 집합이 겹치지 않을 때.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of distinguishing positions", "구별 가능한 위치의 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

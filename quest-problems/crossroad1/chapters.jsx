@@ -34,16 +34,57 @@ export function makeCrossRd1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We observe 10 cows over time, each seen on side 0 or side 1 of the road.\nCount the total number of crossings (when a cow changes sides between observations).", "10마리 소를 시간에 따라 관찰해, 각각 도로의 0번 또는 1번 쪽에 있어요. 관찰 사이에 소가 쪽을 바꾼 총 횟수 (횡단 횟수)를 세!"),
+        "FJ has 10 cows, each labeled 1..10. Over N observations he records (cow_id, side) where side ∈ {0, 1}. Each observation says which side of the road that cow was on at that moment.\nA 'crossing' happens between two consecutive observations of the SAME cow when her side changes. Count the total number of crossings across all cows.",
+        "FJ 에게 1..10 번호의 10마리 소가 있어요. N개의 관찰을 하는 동안 (소 번호, 쪽) 을 기록해요 — 쪽 ∈ {0, 1}. 각 관찰은 그 시점에 그 소가 도로의 어느 쪽이었는지 알려줘요.\n같은 소를 연속으로 관찰했을 때 쪽이 바뀌면 '횡단' 1번. 모든 소를 합쳐 횡단 총 횟수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cross the Road I</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Track each cow's last known side.\nWhen we see it on a different side, that's a crossing. Simple simulation!",
-              "핵심: 각 소의 마지막으로 알려진 쪽을 추적해요.\n다른 쪽에서 보이면 그게 횡단이예요. 단순 시뮬레이션!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cross the Road I</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ 에게 ")}
+                  <b style={{ color: "#d97706" }}>{t(E, "10 cows", "10마리 소")}</b>
+                  {t(E, " (1..10) along a road with two sides (0 and 1).",
+                        " (1..10) 가 있고, 도로의 두 쪽 (0 과 1) 을 오갈 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "He logs ", "그는 시간 순서대로 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "N observations in time order", "N개의 관찰")}</b>
+                  {t(E, " — each is (cow_id, side).",
+                        " — 각 관찰은 (소 번호, 쪽).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "crossing", "횡단")}</b>
+                  {t(E, " happens when consecutive observations of the same cow show DIFFERENT sides.",
+                        " 은 같은 소의 연속된 두 관찰에서 쪽이 바뀔 때 1번.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "total number of crossings", "횡단 총 횟수")}</b>
+                  {t(E, " across all cows.", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

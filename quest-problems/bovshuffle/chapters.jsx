@@ -39,16 +39,55 @@ export function makeShuffleCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A permutation is applied 3 times to cows.\nGiven the final ordering, find the original ordering by applying the inverse permutation 3 times.", "순열을 소들에게 3번 적용해요. 최종 순서가 주어지면 역순열을 3번 적용해서 원래 순서를 구해요."),
+        "N cows stand in a line. A 'shuffle' is a permutation that moves each cow at position i to position shuffle[i]. The shuffle has been applied THREE times in a row, and we're given the final lineup.\nRecover the original lineup before any shuffles.",
+        "한 줄로 선 N마리 소가 있어요. '셔플' 은 위치 i 의 소를 shuffle[i] 위치로 옮기는 순열이에요. 이 셔플이 연속으로 세 번 적용된 뒤의 줄이 주어져요.\n셔플이 일어나기 전 원래 줄을 복원해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Bovine Shuffle</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: The shuffle maps position i to position shuffle[i].\nTo undo it, build the inverse permutation and apply it 3 times to the final result.",
-              "핵심: 셔플은 위치 i를 shuffle[i]로 매핑해요.\n되돌리려면 역순열을 만들어 최종 결과에 3번 적용해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Bovine Shuffle</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#f97316" }}>{t(E, "N cows in a line", "한 줄로 선 N마리 소")}</b>
+                  {t(E, ".", " 가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "shuffle permutation", "셔플 순열")}</b>
+                  {t(E, " is given — it moves the cow at position i to position shuffle[i].",
+                        " 가 주어져요 — 위치 i 의 소를 shuffle[i] 위치로 옮겨요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given the lineup ", "주어지는 줄은 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "AFTER 3 shuffles", "셔플 3 번 후")}</b>
+                  {t(E, ".", " 의 모습이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "original lineup before any shuffles", "셔플 전 원래 줄")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -46,12 +46,51 @@ export function makeCowSignalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The cows need to send a signal!\nThey have a small picture, and they want to make it BIGGER.\nLet's learn how!\n📡", "소들이 신호를 보내야 해요! 작은 그림이 있는데, 크게 만들고 싶어. 어떻게 하는지 배우자! 📡"),
+        "FJ has a tiny M×N picture (a grid of characters) for the Cow-Signal. He wants to scale it UP by an integer factor K — each character becomes a K×K block of itself.\nPrint the enlarged (M·K) × (N·K) picture.",
+        "FJ 에게 M×N 의 작은 그림 (글자 격자) Cow-Signal 이 있어요. 정수 배율 K 로 확대 — 각 글자가 K×K 블록으로 커져요.\n(M·K) × (N·K) 크기로 확대된 그림을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>📡</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>The Cow-Signal</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #3</div>
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>📡</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>The Cow-Signal</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Given a tiny ", "")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "M × N picture", "M × N 그림")}</b>
+                  {t(E, " (each cell is some character).",
+                        " (각 칸이 하나의 글자) 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Scale it up by an integer factor ", "정수 배율 ")}
+                  <b style={{ color: "#7c3aed" }}>K</b>
+                  {t(E, " — each character becomes a ", " 로 확대 — 각 글자가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "K × K block", "K × K 블록")}</b>
+                  {t(E, " of that same character.",
+                        " (같은 글자로 채움) 이 돼요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the resulting ", "확대된 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "(M·K) × (N·K) enlarged picture", "(M·K) × (N·K) 그림")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>),
     },
 

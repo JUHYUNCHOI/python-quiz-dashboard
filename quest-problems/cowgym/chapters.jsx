@@ -102,16 +102,48 @@ export function makeCowGymCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "K gymnastics sessions!\nIn each, N cows are ranked from best to worst.\nWe need to find pairs of cows where one ALWAYS beats the other in EVERY session.", "K번의 체조 세션! 각 세션에서 N마리 소가 순위를 매겨져. 모든 세션에서 한 소가 항상 다른 소를 이기는 쌍을 찾아야 해요."),
+        "There are K gymnastics sessions; in each session, N cows are ranked best to worst (a permutation of cow IDs).\nA pair of cows (i, j) is 'consistent' if one of them ranks higher than the other in EVERY single session — same direction every time.\nCount the number of consistent pairs.",
+        "K개의 체조 세션이 있고, 각 세션에서 N마리 소가 1등부터 N등까지 순위 매겨져요 (ID 의 순열).\n두 소 (i, j) 가 '일관된 쌍' 이려면 — 모든 세션에서 한쪽이 항상 다른 쪽보다 위에 있어야 해요 (방향이 매번 같아야).\n일관된 쌍의 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"🤸"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow Gymnastics</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "A 'consistent pair' (i, j) means cow i ALWAYS ranks above cow j (or vice versa) in ALL K sessions.\nCount all such pairs!",
-              "'일관된 쌍' (i, j)은 소 i가 모든 K세션에서 항상 소 j보다 위(또는 반대)인 것.\n그런 쌍을 모두 세!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🤸"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow Gymnastics</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#d97706" }}>{t(E, "K gymnastics sessions", "K개의 체조 세션")}</b>
+                  {t(E, " — each session ranks all N cows from best to worst (a permutation).",
+                        " 이 있고, 각 세션은 N마리 소를 1등부터 N등까지 매겨요 (순열).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A pair ", "두 소 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "(i, j) is 'consistent'", "(i, j) 가 '일관된 쌍'")}</b>
+                  {t(E, " if one of them ranks higher than the other in EVERY session (same direction every time).",
+                        " 인 건, 모든 세션에서 한쪽이 다른 쪽보다 위 (매번 같은 방향).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of consistent pairs", "일관된 쌍의 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -45,16 +45,48 @@ export function makeBackForthCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "2 barns with 10 buckets each (1000 total milk per barn).\nOver 4 days, alternate carrying one bucket between barns.\nCount distinct possible final amounts in barn 1.", "각 10개 양동이를 가진 2개의 헛간 (헛간당 총 우유 1000). 4일 동안 번갈아 양동이 하나를 옮겨. 헛간 1의 가능한 최종 우유량의 수를 구해요!"),
+        "Two barns each have 10 buckets of milk (1000 gallons total per barn). Over 4 days, FJ and his sister alternate carrying ONE bucket between barns: day 1 FJ moves one from barn 1 → 2, day 2 sister moves one from barn 2 → 1, day 3 FJ again, day 4 sister.\nCount the number of DISTINCT possible total milk amounts in barn 1 after the 4 days.",
+        "두 헛간에 각각 10개의 우유 양동이가 있어요 (헛간당 총 1000 갤런). 4일 동안 FJ 와 동생이 번갈아 양동이를 1개씩 옮겨요: 1일차 FJ 가 헛간 1 → 2 로 1개, 2일차 동생이 헛간 2 → 1 로 1개, 3일차 FJ, 4일차 동생.\n4일 후 헛간 1 에 남은 가능한 우유 총량의 서로 다른 값의 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"🔄"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Back and Forth</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Enumerate all possible choices! 10 choices per day, 4 days.\nBut bucket counts change each day. Use brute force / recursion with sets to track distinct outcomes.",
-              "핵심: 가능한 모든 선택을 열거해요!\n하루 10개 선택, 4일.\n하지만 양동이 수가 매일 변해요.\n브루트 포스 / 재귀 + set으로 고유한 결과 추적.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🔄"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Back and Forth</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Two barns each have ", "두 헛간에 ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "10 buckets of milk", "각 10개의 우유 양동이")}</b>
+                  {t(E, " (1000 gallons total per barn). Each bucket has its own amount.",
+                        " 가 있어요 (헛간당 총 1000 갤런). 양동이마다 양이 정해져 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Over ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "4 days, FJ and his sister alternate", "4일 동안 FJ 와 동생이 번갈아")}</b>
+                  {t(E, ": day 1 FJ moves a bucket 1→2, day 2 sister moves one 2→1, day 3 FJ, day 4 sister.",
+                        ": 1일차 FJ 가 양동이 1개 1→2, 2일차 동생이 1개 2→1, 3일차 FJ, 4일차 동생.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of distinct possible total milk amounts in barn 1 after 4 days", "4일 후 헛간 1 의 가능한 우유 총량 (서로 다른 값) 의 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

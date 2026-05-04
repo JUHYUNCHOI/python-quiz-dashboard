@@ -35,16 +35,49 @@ export function makeBlockGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has N boards, each with a word on front and back.\nShe needs letter blocks to spell any visible configuration.\nFor each board, she sees either the front or back word.\nFind the minimum total blocks needed.", "베시에게 N개의 판이 있고, 각 판의 앞뒤에 단어가 있어요.\n어떤 구성이든 철자를 만들 수 있는 글자 블록이 필요해요.\n각 판에서 앞면 또는 뒷면 단어를 봐요.\n필요한 최소 총 블록 수를 구해요."),
+        "Bessie has N alphabet blocks; each block has a word printed on its FRONT face and a word on its BACK face. To 'spell' a word using a block, the block must contain enough letter cubes for that word.\nFor each letter A..Z, find the minimum number of letter cubes Bessie needs so that she can spell EITHER the front or back word of every block — the answer is one count per letter.",
+        "베시에게 N개의 알파벳 판이 있고, 각 판의 앞면과 뒷면에 각각 단어가 적혀있어요. 어떤 단어를 만들려면 그 글자만큼의 글자 큐브가 필요해요.\n각 알파벳 A..Z 에 대해, 베시가 모든 판의 앞면 또는 뒷면 단어 중 하나를 만들 수 있도록 보유해야 할 글자 큐브의 최소 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udde9"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Block Game</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: For each board, count letters in front and back words.\nTake max per letter. Sum across all boards for the total blocks needed.",
-              "핵심: 각 판에서 앞면과 뒷면 단어의 글자 수를 세.\n글자별 최댓값을 취해요.\n모든 판에 대해 합산하면 필요한 총 블록 수예요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udde9"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Block Game</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie has ", "베시에게 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "N alphabet blocks", "N개의 알파벳 판")}</b>
+                  {t(E, " — each block has a word on its FRONT and a word on its BACK.",
+                        " 가 있어요 — 각 판의 앞면과 뒷면에 각각 단어가 적혀있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "She wants enough ", "그녀는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "letter cubes", "글자 큐브")}</b>
+                  {t(E, " (one cube per letter occurrence) so she can spell ", " (글자 1개당 큐브 1개) 를 가지고 있어서, 각 판마다 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "either side's word", "앞면 또는 뒷면 단어")}</b>
+                  {t(E, " for every block.", " 중 하나를 만들 수 있어야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print, for each letter A..Z, the ", "각 알파벳 A..Z 에 대해, ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of cubes of that letter required", "필요한 그 알파벳 큐브의 최소 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
