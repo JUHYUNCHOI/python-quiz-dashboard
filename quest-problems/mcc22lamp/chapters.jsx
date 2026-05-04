@@ -44,16 +44,45 @@ export function makeMcc22LampCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N lamps are all initially OFF.\nYou perform M toggle operations, each toggling lamps in a range [L, R].\nCount how many lamps are ON at the end!", "N개의 램프가 모두 꺼져 있어요. M번의 토글 연산을 수행하는데, 각각 범위 [L, R]의 램프를 토글해요. 마지막에 켜진 램프 수를 세어!"),
+        "N lamps numbered 1..N are all OFF initially. M toggle operations are applied; each operation has a range [L, R] and toggles every lamp in that range (ON↔OFF).\nPrint how many lamps are ON after all operations.",
+        "1..N 번호의 N 개 램프가 모두 꺼진 상태로 시작해요. M 번의 토글 연산이 있고, 각 연산은 범위 [L, R] 의 모든 램프를 토글 (ON ↔ OFF) 해요.\n모든 연산 후 켜진 램프의 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Lamp</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P6</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Use a difference array to count toggles per lamp.\nA lamp is ON if toggled an odd number of times. Prefix sum gives the toggle count for each lamp.",
-              "핵심: 차분 배열로 램프별 토글 횟수를 세어.\n홀수 번 토글된 램프가 켜져 있어요.\n누적합으로 각 램프의 토글 횟수를 구해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca1"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Lamp</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P6</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "N lamps numbered 1..N, all OFF initially", "1..N 번호의 N 개 램프, 모두 꺼진 상태로 시작")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "M operations apply, each ", "M 번의 연산, 각각 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "toggles every lamp in a range [L, R]", "범위 [L, R] 의 모든 램프를 토글")}</b>
+                  {t(E, " (ON ↔ OFF).", " (ON ↔ OFF).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of lamps that are ON after all operations", "모든 연산 후 켜진 램프의 수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

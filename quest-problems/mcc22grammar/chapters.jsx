@@ -51,16 +51,47 @@ export function makeMcc22GrammarCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We have a grammar graph where nodes are words (WE, THEY, DONT, KNOW, THAT) and directed edges define valid transitions.\nGiven a sentence, check if each consecutive pair follows an edge in the graph!", "단어(WE, THEY, DONT, KNOW, THAT)가 노드이고 방향 간선이 유효한 전환을 정의하는 문법 그래프가 있어요.\n문장이 주어지면, 연속된 단어 쌍이 그래프의 간선을 따르는지 확인해요!"),
+        "A 'grammar' is a directed graph: nodes are words and a directed edge X → Y means \"after word X, word Y is allowed\". A sentence is valid if every consecutive word pair (X, Y) has an edge X → Y.\nFor each input sentence, print VALID or INVALID.",
+        "'문법' 은 단어가 노드인 방향 그래프예요. X → Y 의 방향 간선은 \"단어 X 다음에 단어 Y 가 올 수 있다\" 는 뜻. 문장이 유효하려면 모든 연속 단어 쌍 (X, Y) 에 X → Y 간선이 있어야 해요.\n각 입력 문장에 대해 VALID 또는 INVALID 를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcd6"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Grammar</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Build an adjacency list from the grammar edges.\nFor each sentence, check that every consecutive word pair has a valid edge. Simple graph traversal / edge lookup.",
-              "핵심: 문법 간선으로 인접 리스트를 만들어요.\n각 문장에서 연속된 단어 쌍이 유효한 간선인지 확인해요.\n간단한 그래프 탐색 / 간선 조회.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcd6"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Grammar</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P1</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "grammar is a directed graph of words", "문법은 단어들로 이뤄진 방향 그래프")}</b>
+                  {t(E, ". An edge X → Y means \"Y can follow X\".",
+                        " 예요. X → Y 간선은 \"X 다음에 Y\" 가능.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A sentence is ", "문장이 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "VALID if every consecutive (X, Y) has an edge X → Y", "유효하려면 모든 연속 (X, Y) 가 간선 X → Y 를 가져야")}</b>
+                  {t(E, ".", " 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "For each input sentence, print ", "각 입력 문장에 대해 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "VALID or INVALID", "VALID 또는 INVALID")}</b>
+                  {t(E, ".", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -43,16 +43,38 @@ export function makeMcc22BirthdayCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Plan a cat's birthday party!\nN cats each have availability for certain time slots.\nFind the time slot where the maximum number of cats can attend!", "고양이 생일 파티를 계획해요! N마리 고양이는 각각 특정 시간대에 참석 가능해요. 최대한 많은 고양이가 참석할 수 있는 시간대를 찾아요!"),
+        "We're planning a cat's birthday party. N cats each list which TIME SLOTS they're available for.\nPrint the MAXIMUM number of cats that can attend a single time slot (over all slots).",
+        "고양이 생일 파티를 계획해요. N 마리 고양이가 각자 참석 가능한 시간대 목록을 제출해요.\n모든 시간대 중에서 한 시간대에 가장 많은 고양이가 참석할 수 있는 인원을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf82"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cats' Birthday</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P4</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: For each time slot, count how many cats are available.\nThe answer is the maximum count across all slots. Simple counting / scheduling problem.",
-              "핵심: 각 시간대별로 참석 가능한 고양이 수를 세어.\n모든 시간대 중 최대 수가 답.\n간단한 카운팅 / 스케줄링 문제.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf82"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cats' Birthday</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P4</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Plan a party for ", "")}
+                  <b style={{ color: "#f97316" }}>{t(E, "N cats; each lists time slots she's available", "N 마리 고양이; 각자 참석 가능한 시간대 목록")}</b>
+                  {t(E, ".", " 을 제출해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MAX number of cats that can attend a single time slot", "한 시간대에 참석할 수 있는 최대 고양이 수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

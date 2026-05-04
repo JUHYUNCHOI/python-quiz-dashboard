@@ -51,16 +51,46 @@ export function makeMcc22AliensCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N aliens each have a type: T (truth-teller) or F (liar).\nEach alien makes a claim about another alien's type.\nCheck if the assignment is consistent!", "N명의 외계인은 각각 T(진실) 또는 F(거짓말쟁이) 타입이예요. 각 외계인은 다른 외계인의 타입에 대해 주장해요. 할당이 일관된지 확인해요!"),
+        "N aliens are each labeled T (truth-teller) or F (liar). Each makes a claim about another alien's type. Truth-tellers always tell the truth; liars always lie.\nCheck whether the given type assignment is consistent with all claims — print Y or N.",
+        "N 명의 외계인이 각자 T (진실) 또는 F (거짓말쟁이) 로 라벨돼 있어요. 각 외계인이 다른 외계인의 타입에 대해 주장해요. 진실형은 항상 참, 거짓말쟁이는 항상 거짓.\n주어진 타입 할당이 모든 주장과 일관된지 Y 또는 N 으로 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc7d"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Aliens</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: A truth-teller's claim must match reality.\nA liar's claim must contradict reality. Check each alien's claim against the given type assignment.",
-              "핵심: 진실형의 주장은 현실과 일치해야 해요.\n거짓말쟁이의 주장은 현실과 모순돼야 해요.\n각 외계인의 주장을 주어진 타입 할당과 비교해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc7d"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Aliens</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "N aliens are each labeled ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "T (truth-teller) or F (liar)", "T (진실) 또는 F (거짓말쟁이)")}</b>
+                  {t(E, ".", " 로 라벨돼 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each makes a claim about another alien's type — ", "각 외계인이 다른 외계인의 타입에 대해 주장 — ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "T always tells truth, F always lies", "T 는 항상 참, F 는 항상 거짓")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "Y if all claims are consistent with the given assignment, else N", "주어진 할당이 모든 주장과 일관되면 Y, 아니면 N")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

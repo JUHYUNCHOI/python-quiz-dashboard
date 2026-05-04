@@ -44,16 +44,47 @@ export function makeMcc22MazeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a grid maze with walls and open cells, find the shortest path from the top-left corner to the bottom-right corner using BFS!", "벽과 빈 칸이 있는 격자 미로에서 BFS를 사용해 왼쪽 위에서 오른쪽 아래까지 최단 경로를 찾아요!"),
+        "An R × C grid maze: each cell is a wall (#) or open (.). Move only between adjacent open cells (up/down/left/right). Each step counts as 1.\nPrint the SHORTEST distance from the top-left cell (0, 0) to the bottom-right cell (R−1, C−1), or −1 if unreachable.",
+        "R × C 격자 미로: 각 칸이 벽 (#) 또는 열림 (.) 이에요. 인접한 열린 칸 사이만 이동 (상하좌우). 한 걸음 = 1.\n좌상단 (0, 0) 에서 우하단 (R−1, C−1) 까지의 최단 거리를 출력해요. 도달 불가면 −1."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udff0"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Maze</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P3</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: BFS on a grid.\nStart at (0,0), explore neighbors (up/down/left/right). First time reaching (R-1,C-1) gives the shortest distance.",
-              "핵심: 격자에서 BFS. (0,0)에서 시작, 이웃(상하좌우) 탐색.\n(R-1,C-1)에 처음 도달하면 최단 거리.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udff0"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Maze</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P3</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "An ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "R × C grid maze of walls (#) and open cells (.)", "벽 (#) 과 열린 칸 (.) 으로 된 R × C 격자 미로")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Move only between ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "adjacent open cells (up/down/left/right)", "인접한 열린 칸 (상하좌우)")}</b>
+                  {t(E, ". Each step counts as 1.",
+                        " 으로만 이동, 한 걸음 = 1.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "SHORTEST distance from (0, 0) to (R−1, C−1)", "(0, 0) 에서 (R−1, C−1) 까지의 최단 거리")}</b>
+                  {t(E, ", or −1 if unreachable.", " 를 출력해요. 도달 불가면 −1.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
