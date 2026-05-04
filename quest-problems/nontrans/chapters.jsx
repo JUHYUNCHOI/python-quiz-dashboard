@@ -144,15 +144,36 @@ export function makeNonTransCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Since die sides range 1-10, we only need to check sorted combinations: C(10+3,4) = 715 possibilities.\nWith 16 comparisons each, very fast!", "주사위 면이 1-10이니 정렬된 조합만 확인: C(10+3,4) = 715가지. 각각 16번 비교, 매우 빨라요!"),
+        "Each die face is in 1..10, so we can brute-force C: 4 sorted faces give only C(10+3, 4) = 715 unique dice. For each candidate, count win pairs B vs C and C vs A — keep one where both directions exceed half.",
+        "각 면이 1..10 이므로 C 를 완전탐색: 정렬된 4 면은 C(10+3, 4) = 715 가지. 각 후보마다 B vs C, C vs A 의 승 쌍을 세고, 양방향 모두 절반을 넘는 C 를 채택."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(10^4 x 16)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Brute force all possible die C with sorted sides (c1 <= c2 <= c3 <= c4).\nCheck if B beats C and C beats A.",
-              "정렬된 면(c1 <= c2 <= c3 <= c4)으로 가능한 주사위 C를 전부 시도.\nB가 C를 이기고 C가 A를 이기는지 확인.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Enumerate all 4-side combinations", "가능한 4 면 조합 모두 열거"), code: "for c in combinations_with_replacement(range(1,11), 4):", color: "#dc2626" },
+              { n: 2, label: t(E, "Compare B vs C", "B vs C 비교"), code: "b_wins = sum(1 for x in B for y in c if x > y)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Compare C vs A", "C vs A 비교"), code: "c_wins = sum(1 for x in c for y in A if x > y)", color: "#0891b2" },
+              { n: 4, label: t(E, "Both must beat 8 (>half of 16)", "둘 다 8 (16 의 절반) 초과 필요"), code: "if b_wins > 8 and c_wins > 8: print(c); break", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(715 · 16)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "715 dice candidates × 16 outcome comparisons", "715 가지 주사위 × 16 결과 비교")}</div>
           </div>
         </div>),
     },

@@ -124,15 +124,36 @@ export function makeBucketListCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Create start/end events, sort them, sweep through. O(N log N) for sorting.", "시작/끝 이벤트 생성, 정렬, 스위프. 정렬에 O(N log N)."),
+        "Convert each cow's interval into two events: at day s add +b buckets, at day t+1 subtract b. Sort all events by time, sweep through accumulating active buckets, and track the running maximum.",
+        "각 소의 구간을 두 이벤트로 변환: s 일에 +b 양동이, t+1 일에 −b. 모든 이벤트를 시간순 정렬, 활성 양동이 누적하면서 스윕, 누적 최댓값 추적."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "For each cow, add +b event at start time and -b event at end+1.\nSort all events by time, sweep through accumulating buckets, track the max.",
-              "각 소에 대해 시작 시간에 +b 이벤트, 끝+1에 -b 이벤트 추가.\n시간순 정렬, 스위프하며 양동이 누적, 최대값 추적.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Create +b / −b events", "+b / −b 이벤트 생성"), code: "events += [(s, +b), (t+1, -b) for each cow]", color: "#f97316" },
+              { n: 2, label: t(E, "Sort by time", "시간순 정렬"), code: "events.sort()", color: "#0891b2" },
+              { n: 3, label: t(E, "Sweep, accumulate", "스윕, 누적"), code: "cur = 0;  for time, delta in events: cur += delta", color: "#7c3aed" },
+              { n: 4, label: t(E, "Track running max", "최댓값 추적"), code: "best = max(best, cur);  print(best)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort 2N events + linear sweep", "2N 이벤트 정렬 + 선형 스윕")}</div>
           </div>
         </div>),
     },

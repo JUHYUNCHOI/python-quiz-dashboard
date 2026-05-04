@@ -127,15 +127,36 @@ export function makeStallingCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort both arrays, then use two pointers to count choices. O(N log N) time!", "두 배열 정렬 후 투 포인터로 선택지를 세. O(N log N) 시간!"),
+        "Sort cows and stalls by height (ascending). Process the TALLEST cow first; she can use any stall whose limit is ≥ her height. Each subsequent (smaller) cow has all the previous stalls plus more — but minus those already taken by taller cows.",
+        "소와 축사를 키 오름차순 정렬. 가장 큰 소부터 처리 — 자기 키 ≥ 인 축사 중 아무거나 사용 가능. 다음 (더 작은) 소는 앞의 축사 + 추가 가능한 것 − 이미 배정된 (큰 소가 차지한) 수."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Sort cows and stalls.\nFor each cow (ascending), count stalls with sufficient height. Multiply available choices minus already assigned.",
-              "소와 축사를 정렬해요.\n각 소(오름차순)에 대해 높이가 충분한 축사를 세고 이미 배정된 것을 빼서 곱해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Sort both lists", "둘 다 정렬"), code: "cows.sort();  stalls.sort()", color: "#059669" },
+              { n: 2, label: t(E, "Process tallest cow first", "가장 큰 소부터 처리"), code: "for i in range(N-1, -1, -1):  cow = cows[i]", color: "#0891b2" },
+              { n: 3, label: t(E, "Count usable stalls", "사용 가능 축사 세기"), code: "available = (#stalls ≥ cow) − (cows already placed)", color: "#7c3aed" },
+              { n: 4, label: t(E, "Multiply choices", "선택지 곱하기"), code: "answer *= available", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + linear sweep", "정렬 + 선형 스윕")}</div>
           </div>
         </div>),
     },

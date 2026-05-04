@@ -119,19 +119,40 @@ export function makeOutOfPlaceCh1(E) {
    --------------------------------------------------------------- */
 export function makeOutOfPlaceCh2(E, lang = "py") {
   return [
-    // 2-1: reveal
+    // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Sort the array, count differing positions. Answer = diff - 1. O(N log N) time!", "배열을 정렬하고 다른 위치 수를 세. 답 = diff - 1. O(N log N) 시간!"),
+        "Sort a copy of the array. Compare to the original — the moved cow creates a CONTIGUOUS block of mismatches. The number of adjacent swaps to fix is (block length − 1).",
+        "배열의 사본을 정렬하고 원본과 비교 — 옮겨진 소 때문에 연속된 불일치 블록이 생겨요. 필요한 인접 스왑 수 = (블록 길이 − 1)."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Sort a copy, compare element by element.\nThe misplaced cow creates a contiguous block of differences. Swaps needed = block length - 1.",
-              "사본을 정렬하고 요소별로 비교해요.\n잘못 놓인 소는 연속된 차이 블록을 만들어요.\n필요한 스왑 = 블록 길이 - 1.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Make sorted copy", "정렬한 사본 만들기"), code: "sorted_a = sorted(a)", color: "#059669" },
+              { n: 2, label: t(E, "Count mismatches", "불일치 세기"), code: "diff = sum(1 for i in range(N) if a[i] != sorted_a[i])", color: "#0891b2" },
+              { n: 3, label: t(E, "All sorted? answer is 0", "이미 정렬됨? 답은 0"), code: "if diff == 0: print(0)", color: "#7c3aed" },
+              { n: 4, label: t(E, "Otherwise diff − 1", "아니면 diff − 1"), code: "else: print(diff - 1)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + linear comparison", "정렬 + 선형 비교")}</div>
           </div>
         </div>),
     },

@@ -141,15 +141,36 @@ export function makeRaceCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try all possible peak speeds.\nFor each, compute total distance and time for accel + decel phases.\nO(sqrt(K)) per query.", "모든 가능한 최고 속도를 시도. 각각에 대해 가속 + 감속 단계의 총 거리와 시간 계산. 쿼리당 O(sqrt(K))."),
+        "Optimal strategy: accelerate to some peak speed P, then decelerate to ≤ X. Distance covered = (1+2+…+P) for accel + (P+(P−1)+…+(X+1)) for decel. Find smallest P so total ≥ K, and total time = P + (P − X).",
+        "최적 전략: 어떤 최고 속도 P 까지 가속, 그 후 X 이하로 감속. 거리 = 가속 (1+2+…+P) + 감속 (P+(P−1)+…+(X+1)). 총 거리 ≥ K 가 되는 가장 작은 P 를 찾으면 총 시간 = P + (P − X)."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>{"O(\u221aK)"}</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Accelerate from 0 to peak speed P: distance = 1+2+...+P = P(P+1)/2.\nDecelerate from P to X: distance = P+(P-1)+...+(X+1). Find optimal P such that total distance ≥ K.",
-              "0에서 최고 속도 P까지 가속: 거리 = 1+2+...+P = P(P+1)/2.\nP에서 X까지 감속: 거리 = P+(P-1)+...+(X+1). 총 거리 ≥ K가 되는 최적 P를 찾아요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Try peak speed P = X, X+1, …", "최고 속도 P = X, X+1, … 시도"), code: "for P in range(X, large):", color: "#059669" },
+              { n: 2, label: t(E, "Distance covered at peak P", "최고 P 일 때 이동 거리"), code: "d = P*(P+1)//2 + (P+X)*(P-X)//2", color: "#0891b2" },
+              { n: 3, label: t(E, "Stop when d ≥ K", "d ≥ K 가 되면 중단"), code: "if d ≥ K: break", color: "#7c3aed" },
+              { n: 4, label: t(E, "Time = accel + decel", "시간 = 가속 + 감속"), code: "print(P + (P - X))", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(√K)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "peak speed grows like √K", "최고 속도는 √K 처럼 증가")}</div>
           </div>
         </div>),
     },
