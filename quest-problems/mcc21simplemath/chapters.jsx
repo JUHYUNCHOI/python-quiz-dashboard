@@ -27,16 +27,51 @@ export function makeMcc21SimpleMathCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given N, P and array A.\nPerform operations depending on P: P=1 addition, P=2 multiplication, P=3 floor division.\nCompute the result!", "N, P와 배열 A가 주어져. P에 따라 연산 수행: P=1 덧셈, P=2 곱셈, P=3 나눗셈(내림). 결과를 계산해요!"),
+        "An integer P (1, 2, or 3) and an array A of N integers are given.\nApply the operation across A in left-to-right order: P=1 → sum, P=2 → product, P=3 → sequential floor-division. Print the result.",
+        "정수 P (1, 2, 또는 3) 와 N 개의 정수 배열 A 가 주어져요.\nA 에 대해 왼쪽부터 오른쪽으로 연산 적용: P=1 → 합, P=2 → 곱, P=3 → 순차 정수 나눗셈. 결과를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Simple Math</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P5</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Branch on P.\nP=1: sum all. P=2: multiply all. P=3: sequential floor division from left to right.",
-              "핵심: P에 따라 분기.\nP=1: 모두 더하기.\nP=2: 모두 곱하기.\nP=3: 왼쪽에서 오른쪽으로 순차 나눗셈.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Simple Math</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P5</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Given an ", "")}
+                  <b style={{ color: "#f97316" }}>{t(E, "operation code P (1, 2, 3) and array A of N integers", "연산 코드 P (1, 2, 3) 와 N 개의 정수 배열 A")}</b>
+                  {t(E, ".", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Apply left-to-right: ", "왼쪽부터 오른쪽으로 적용: ")}
+                  <b style={{ color: "#7c3aed" }}>P=1</b>
+                  {t(E, " sum all, ", " 합, ")}
+                  <b style={{ color: "#7c3aed" }}>P=2</b>
+                  {t(E, " product, ", " 곱, ")}
+                  <b style={{ color: "#7c3aed" }}>P=3</b>
+                  {t(E, " sequential floor-division.",
+                        " 순차 정수 나눗셈.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "result of the operation across the array", "배열에 대한 연산의 결과")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

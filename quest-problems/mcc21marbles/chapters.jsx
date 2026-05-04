@@ -22,16 +22,46 @@ export function makeMcc21MarblesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N marbles are distributed among boxes.\nMove marbles between adjacent boxes to equalize.\nFind the minimum number of operations.", "N개의 구슬이 상자에 분배되어 있어요. 인접한 상자 사이로 구슬을 옮겨서 같게 만들어요. 최소 이동 횟수를 구해요!"),
+        "N boxes in a row hold m[1..N] marbles. The total is divisible by N. One operation: move ONE marble from a box to an adjacent box (left or right).\nPrint the MINIMUM number of operations to equalize all boxes (each box ends with total/N marbles).",
+        "한 줄로 늘어선 N 개의 상자에 m[1..N] 개의 구슬이 있어요. 총합이 N 으로 나누어떨어져요. 한 번의 연산: 구슬 1 개를 인접한 상자 (왼쪽 또는 오른쪽) 로 옮기기.\n모든 상자를 같은 개수 (total/N) 로 만드는 데 필요한 최소 연산 횟수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd34"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Marbles and Boxes</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P3</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Calculate the target per box (total/N).\nCount excess marbles; each move transfers one marble. Total moves = sum of abs(excess) / 2.",
-              "핵심: 상자당 목표 계산 (total/N). 초과 구슬 수 세기; 각 이동은 구슬 1개 전달.\n총 이동 = |초과| 합 / 2.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd34"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Marbles and Boxes</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P3</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#dc2626" }}>{t(E, "N boxes in a row with m[1..N] marbles", "한 줄의 N 개 상자에 m[1..N] 개의 구슬")}</b>
+                  {t(E, " (total is divisible by N).",
+                        " (총합이 N 으로 나누어떨어짐) 가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One operation: ", "한 번의 연산: ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "move 1 marble to an adjacent box", "구슬 1 개를 인접한 상자로 옮기기")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum operations to make every box have the same count", "모든 상자를 같은 개수로 만드는 최소 연산 횟수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

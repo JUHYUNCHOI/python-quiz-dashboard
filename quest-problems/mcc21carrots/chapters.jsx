@@ -26,16 +26,49 @@ export function makeMcc21CarrotsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A rabbit has N baskets of carrots.\nPick 3 baskets so that the total number of carrots is divisible by a given number.\nUse brute force to check all combinations!", "토끼가 N개의 바구니에 당근을 가지고 있어요. 3개의 바구니를 골라서 당근 합이 특정 수로 나누어떨어지게 해요! 모든 조합을 확인하는 브루트포스를 써요!"),
+        "A rabbit has N baskets, basket i with c[i] carrots, and a target divisor D. Pick 3 distinct baskets whose carrot total is divisible by D.\nPrint how many such triples exist.",
+        "토끼에게 N 개의 바구니가 있고, i 번 바구니에 c[i] 당근, 목표 약수 D 가 주어져요. 합이 D 로 나누어떨어지는 서로 다른 3 개 바구니를 골라요.\n그런 삼중조합의 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udd55"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Carrots</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Try all C(N,3) combinations of 3 baskets.\nCheck if their sum is divisible by the target. Brute force O(N^3).",
-              "핵심: 3개 바구니의 모든 C(N,3) 조합을 시도해요.\n합이 목표로 나누어떨어지는지 확인.\n브루트포스 O(N^3).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udd55"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Carrots</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P1</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A rabbit has ", "토끼에게 ")}
+                  <b style={{ color: "#059669" }}>{t(E, "N baskets with c[i] carrots each", "각 c[i] 당근의 N 개 바구니")}</b>
+                  {t(E, " and a divisor ", " 와 약수 ")}
+                  <b style={{ color: "#7c3aed" }}>D</b>
+                  {t(E, ".", " 가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Pick ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "3 distinct baskets", "서로 다른 3 개 바구니")}</b>
+                  {t(E, " whose carrot total is divisible by D.",
+                        " 를 골라 합이 D 로 나누어떨어지도록.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of such valid triples", "그런 삼중조합의 개수")}</b>
+                  {t(E, ".", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
