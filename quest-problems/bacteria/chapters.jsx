@@ -41,16 +41,58 @@ export function makeBacteriaCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N patches of bacteria have deviation values.\nA sprayer from the right applies a triangular pattern: at power L, the rightmost patch gets L, the next gets L-1, etc.\nFind the minimum number of applications to zero everything out!", "N개의 세균 패치에 편차값이 있어요.\n오른쪽에서 분무기를 쏘면 삼각형 패턴으로 적용돼: 파워 L이면 맨 오른쪽이 L, 그 다음이 L-1, ...\n모든 값을 0으로 만드는 최소 횟수를 구해요!"),
+        "FJ has N patches of bacteria with positive/negative pH-deviation values.\nA sprayer of power L applied to position i raises patch i by L, patch i+1 by L−1, ..., down to patch i+L−1 by 1 (triangular fall-off).\nFind the MINIMUM number of sprays needed to zero out every patch.",
+        "FJ에게 N개의 세균 패치가 있고, 각 패치에는 양수/음수 편차값이 있어요.\n파워 L의 분무를 위치 i에 쓰면 패치 i는 L, i+1은 L−1, ..., i+L−1은 1 만큼 더해져요 (오른쪽으로 갈수록 감소).\n모든 패치를 0으로 만드는 데 필요한 분무의 최소 횟수를 구해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udda0"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Balancing Bacteria</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Process left to right.\nEach spray from the right creates a triangular effect. Use greedy + prefix sums to track cumulative spray effects.",
-              "핵심: 왼쪽에서 오른쪽으로 처리.\n오른쪽에서의 분무는 삼각형 효과를 만들어요.\n그리디 + 누적합으로 분무 효과를 추적해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udda0"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Balancing Bacteria</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ에게 ")}
+                  <b style={{ color: "#059669" }}>{t(E, "N patches in a row", "한 줄로 늘어선 N개의 패치")}</b>
+                  {t(E, " with deviation values ", "가 있어요. 각 패치의 편차값 ")}
+                  <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>a[1..N]</code>
+                  {t(E, " (positive or negative).", " (양수 또는 음수)이 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A spray with ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "power L at position i", "파워 L의 분무를 위치 i에 쏘면")}</b>
+                  {t(E, " adds L to a[i], L−1 to a[i+1], ..., 1 to a[i+L−1] (triangular).",
+                        " a[i]에 L, a[i+1]에 L−1, ..., a[i+L−1]에 1 이 더해져요 (삼각형 모양).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Power can also be ", "파워는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "negative", "음수")}</b>
+                  {t(E, " (subtract instead of add). Each spray counts as ONE operation regardless of |L|.",
+                        "도 가능해요 (더하기 대신 빼기). 분무 한 번은 |L|와 관계없이 1번으로 계산해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of sprays", "필요한 분무의 최소 횟수")}</b>
+                  {t(E, " to make every a[i] equal 0.", "를 출력해요. 모든 a[i]가 0이 되도록.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -34,16 +34,57 @@ export function makeCandyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows love candy canes!\nEach candy cane hangs from above, and cows eat from the bottom up to their height.\nLet's figure out how this works!\n🍬", "소들은 캔디 케인을 좋아해요! 캔디 케인은 위에서 걸려 있고, 소들은 아래부터 자기 키만큼 먹어. 어떻게 동작하는지 알아보자! 🍬"),
+        "FJ has N cows and hangs M candy canes from above, one at a time. For each cane, every cow walks up in order and eats the bottom of the cane up to her own height — and GROWS by the amount she ate.\nAfter all canes, print each cow's final height.",
+        "FJ에게 N마리 소가 있고, M개의 캔디 케인을 위에서 한 개씩 매달아요. 각 캔디마다 모든 소가 차례로 다가가, 자기 키까지 캔디 아랫부분을 먹고, 먹은 양만큼 키가 커져요.\n모든 캔디가 끝난 뒤 각 소의 최종 키를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🍬</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Candy Cane Feast</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "N cows,\nM candy canes. Each cane hung from top. Cows eat bottom up to their height, then grow by amount eaten!",
-              "N마리 소, M개 캔디 케인.\n캔디는 위에서 매달려 있어요.\n소들은 아래부터 자기 키까지 먹고, 먹은 만큼 키가 커져!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🍬</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Candy Cane Feast</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ에게 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "N cows", "N마리 소")}</b>
+                  {t(E, " in a fixed order, each starting with some height.",
+                        "가 정해진 순서로 서있고, 각 소는 시작 키를 가지고 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "He hangs ", "FJ가 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "M candy canes", "M개 캔디 케인")}</b>
+                  {t(E, " one at a time. Each cane goes from height 0 (touches ground) up to its own height.",
+                        "을 위에서 하나씩 매달아요. 각 캔디는 바닥(높이 0)부터 자기 높이까지 매달려 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "For each cane, every cow walks up in order: she eats the bottom up to her own height, and ", "각 캔디마다 모든 소가 차례로 다가가요. 자기 키까지 아랫부분을 먹고, ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "grows by the amount she ate", "먹은 만큼 키가 커져요")}</b>
+                  {t(E, ". (If the bottom is already higher than her, she eats nothing.)",
+                        ". (캔디 아래가 자기 키보다 위에 있으면 못 먹어요.)")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "After all M candy canes, print each cow's ", "M개 캔디가 끝난 뒤, 각 소의 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "final height", "최종 키")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

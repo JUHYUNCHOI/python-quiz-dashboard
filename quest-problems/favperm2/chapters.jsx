@@ -98,12 +98,59 @@ export function makeFavPerm2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer Nhoj takes a permutation and dismantles it step by step, leaving hints.\nYour job: figure out the original permutation from those hints!\n🧩", "농부 Nhoj가 순열을 하나씩 분해하면서 힌트를 남겨. 네 일: 힌트로 원래 순열을 알아내기! 🧩"),
+        "Farmer Nhoj had a permutation of 1..N. He dismantled it one element at a time, writing down what he saw at each step — leaving a sequence of hints.\nYour job: rebuild ANY permutation that could have produced those hints, or report -1.",
+        "농부 Nhoj가 1..N의 순열을 가지고 있었어요. 한 원소씩 분해하면서 매 단계에 본 것을 적어두었어요 — 그 적은 것이 힌트의 수열이에요.\n그 힌트를 만들 수 있었던 순열 중 하나를 복원해요. 불가능하면 -1."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🧩</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>FJ's Fav Permutation II</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🧩</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>FJ's Fav Permutation II</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Nhoj had a ", "Nhoj가 ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "permutation of 1..N", "1..N의 순열")}</b>
+                  {t(E, " (each number 1 to N appears exactly once).",
+                        "을 가지고 있었어요 (1부터 N까지 각각 한 번씩).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "He dismantled it step by step: ", "한 단계씩 분해했어요 — ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "if first > last, write the 2nd element and remove the 1st", "맨 앞 > 맨 끝이면 둘째 값을 적고 첫 번째를 제거")}</b>
+                  {t(E, "; otherwise write the 2nd-to-last element and remove the last.",
+                        "; 아니면 뒤에서 둘째 값을 적고 마지막을 제거.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Repeating until 1 element is left gives a sequence of ", "끝에 1개가 남을 때까지 반복하면 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "N − 1 hints", "N − 1개의 힌트")}</b>
+                  {t(E, " — the input.", "가 만들어져요 — 그게 입력이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "any valid original permutation", "유효한 원래 순열")}</b>
+                  {t(E, ", or ", "을 하나 출력해요. 불가능하면 ")}
+                  <b style={{ color: "#dc2626" }}>-1</b>
+                  {t(E, " if no permutation matches the hints.", " 출력.")}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>),
     },
 
