@@ -139,19 +139,40 @@ export function makeBillboard2Ch1(E) {
    --------------------------------------------------------------- */
 export function makeBillboard2Ch2(E, lang = "py") {
   return [
-    // 2-1: reveal
+    // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Check if the feed covers a full side of the billboard.\nIf so, tarp = remaining strip.\nOtherwise, tarp = entire billboard area.\nO(1) time!", "사료가 광고판의 한 변 전체를 덮는지 확인해요. 그렇다면 타프 = 남은 띠. 아니면 타프 = 전체 광고판 면적. O(1) 시간!"),
+        "The remaining (visible) part of the lawnmower billboard is rectangular ONLY if the feed billboard fully covers one of its full SIDES (left/right/top/bottom strip). Otherwise the visible part is L-shaped or has a hole — and the smallest rectangle that covers it is the whole lawnmower billboard.",
+        "잔디깎이 광고판의 보이는 부분이 직사각형이 되는 건 사료 광고판이 한 쪽 변 전체 (왼/오/위/아래 띠) 를 덮을 때뿐이에요. 그 외에는 L 자 모양이나 구멍이 있어서 — 그걸 덮는 가장 작은 직사각형은 전체 광고판이에요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Clamp the feed rectangle to billboard bounds.\nCheck 4 cases: feed covers left/right/top/bottom full strip. If none match, tarp = entire billboard.",
-              "사료 직사각형을 광고판 범위로 클램프해요.\n4가지 경우 확인: 사료가 왼/오/위/아래 전체 띠를 덮는지.\n해당 없으면 타프 = 전체 광고판.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Clamp feed to lawnmower bounds", "사료를 잔디깎이 범위로 클램프"), code: "f = intersect(feed, lawn)", color: "#dc2626" },
+              { n: 2, label: t(E, "Does feed cover left/right strip?", "왼/오 변 전체 덮나?"), code: "if f.y1==lawn.y1 and f.y2==lawn.y2: ...", color: "#7c3aed" },
+              { n: 3, label: t(E, "Does feed cover top/bottom strip?", "위/아래 변 전체 덮나?"), code: "or f.x1==lawn.x1 and f.x2==lawn.x2: tarp = remaining strip", color: "#0891b2" },
+              { n: 4, label: t(E, "Otherwise tarp = whole lawn", "아니면 타프 = 전체 잔디깎이"), code: "else: tarp_area = lawn.area", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(1)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant-time geometric case analysis", "상수 시간 기하 케이스 분석")}</div>
           </div>
         </div>),
     },

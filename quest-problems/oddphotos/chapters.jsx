@@ -154,15 +154,36 @@ export function makeOddPhotosCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Greedily assign cows: even group uses 1 even or 2 odds, odd group uses 1 odd. O(N) time!", "그리디로 소 배정: 짝수 그룹은 짝수 1개 또는 홀수 2개, 홀수 그룹은 홀수 1개. O(N) 시간!"),
+        "Group sums alternate EVEN, ODD, EVEN, ODD, ... An EVEN-sum group needs 1 even cow OR 2 odd cows. An ODD-sum group needs 1 odd cow. Greedily count groups using available odd/even counts.",
+        "그룹 합이 EVEN, ODD, EVEN, ODD, ... 로 번갈아 가요. EVEN 그룹은 짝수 1마리 OR 홀수 2마리 필요. ODD 그룹은 홀수 1마리 필요. 보유한 홀/짝 개수로 그리디하게 그룹 수 세기."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Count odd and even IDs.\nGreedily form groups alternating even/odd sums until we can't continue.",
-              "홀수/짝수 ID 개수를 세고 짝수/홀수 합을 번갈아 그리디로 그룹을 만들어요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Count odd and even cows", "홀수/짝수 소 세기"), code: "odds = sum(1 for x in a if x%2);  evens = N - odds", color: "#2563eb" },
+              { n: 2, label: t(E, "EVEN group: prefer 1 even", "EVEN 그룹: 짝수 1마리 우선"), code: "if evens > 0: evens -= 1  else: odds -= 2", color: "#7c3aed" },
+              { n: 3, label: t(E, "ODD group: needs 1 odd", "ODD 그룹: 홀수 1마리"), code: "if odds > 0: odds -= 1  else: stop", color: "#dc2626" },
+              { n: 4, label: t(E, "Alternate until exhausted", "교대로 자원이 떨어질 때까지"), code: "groups += 1; toggle EVEN/ODD; loop", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "count odds/evens once + linear group counting", "홀/짝 한 번 카운트 + 선형 그룹 세기")}</div>
           </div>
         </div>),
     },
