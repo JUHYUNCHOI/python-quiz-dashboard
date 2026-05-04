@@ -33,16 +33,50 @@ export function makeBucketListCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows each need some buckets during a time interval.\nFind the minimum total buckets needed at any point in time.", "N마리 소가 각각 시간 구간 동안 양동이가 필요해요. 어느 시점에서든 필요한 최소 총 양동이 수를 구해요!"),
+        "FJ has N cows. Cow i needs b[i] buckets each day during her time interval [s, t]. Buckets are SHARED between cows whose intervals don't overlap.\nPrint the MINIMUM number of buckets FJ must own to cover every cow on every day.",
+        "FJ 에게 N마리 소가 있어요. i번 소는 자기 시간 구간 [s, t] 동안 매일 b[i] 개의 양동이가 필요해요. 시간 구간이 겹치지 않는 소들끼리는 양동이를 공유할 수 있어요.\n모든 소를 매일 만족시키는 데 FJ 가 가져야 할 양동이의 최소 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"🪣"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Bucket List</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Sweep line!\nAt each time point, sum up active cows' bucket needs. The answer is the maximum over all time points. Use events: +b at start, -b after end.",
-              "핵심: 스위프 라인!\n각 시점에서 활성 소들의 양동이 필요량 합산.\n답은 모든 시점에서의 최대값.\n이벤트 사용: 시작에 +b, 끝 후에 -b.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🪣"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Bucket List</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ 에게 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "N cows", "N마리 소")}</b>
+                  {t(E, ". Cow i is active during day interval ", "가 있어요. i번 소는 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>[s, t]</code>
+                  {t(E, " and needs ", " 동안 매일 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>b</code>
+                  {t(E, " buckets each of those days.", " 개의 양동이가 필요해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#0891b2" }}>{t(E, "Buckets can be reused across cows", "양동이는 소들 사이에 재사용 가능")}</b>
+                  {t(E, " whose active intervals don't overlap (a cow that's done releases her buckets for someone else).",
+                        " — 활성 시간이 겹치지 않으면 (먼저 끝난 소의 양동이를 다음 소가 씀).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of buckets", "양동이의 최소 수")}</b>
+                  {t(E, " FJ must own.", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -46,16 +46,57 @@ export function makeNonTransCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given two 4-sided dice A and B where A beats B (more likely to roll higher), can we find a die C such that B beats C and C beats A?\nThis is the non-transitive property!", "A가 B를 이기는(더 높은 값을 굴릴 확률이 높은) 4면 주사위 A, B가 주어질 때, B가 C를 이기고 C가 A를 이기는 주사위 C를 찾을 수 있을까?\n이것이 비이행성이예요!"),
+        "We're given two 4-sided dice A and B (each side a value in 1..10), and A beats B (more (a, b) outcomes have a > b than a < b).\nFind a 4-sided die C (sides also in 1..10) such that B beats C AND C beats A — or report no such die exists.",
+        "각 면이 1..10 사이 값인 4면 주사위 A, B 가 주어지고, A 가 B 를 이겨요 (a > b 인 (a, b) 결과가 a < b 인 결과보다 많음).\nB 가 C 를 이기고 C 가 A 를 이기는 4면 주사위 C (면도 1..10) 를 찾아요. 없으면 보고."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfb2"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Non-Transitive Dice</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: 'A beats B' means more (a,b) pairs have a>b than a<b.\nBrute force all C with sides 1-10 (only 10^4 combinations since we can sort).",
-              "핵심: 'A가 B를 이긴다'는 a>b인 (a,b) 쌍이 a<b인 쌍보다 많다는 뜻.\nC의 면을 1-10으로 브루트포스 (정렬하면 10^4 조합).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfb2"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Non-Transitive Dice</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "two 4-sided dice A and B", "두 개의 4면 주사위 A 와 B")}</b>
+                  {t(E, " — each face is an integer in [1, 10] (faces can repeat).",
+                        " 가 주어져요 — 각 면은 [1, 10] 정수 (값이 중복 가능).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "Die X beats die Y", "주사위 X 가 Y 를 이긴다")}</b>
+                  {t(E, " if among the 16 (x, y) outcomes, more have x > y than y > x.",
+                        "는 건, 16가지 (x, y) 결과 중 x > y 가 y > x 보다 많을 때.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're told ", "조건: ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "A beats B", "A 가 B 를 이김")}</b>
+                  {t(E, ". Find a 4-sided die C (faces in [1, 10]) such that ", ". 4면 주사위 C (면 ∈ [1, 10]) 를 찾되 ")}
+                  <b style={{ color: "#16a34a" }}>{t(E, "B beats C and C beats A", "B 가 C 를 이기고, C 가 A 를 이기도록")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the four faces of C, or ", "C 의 네 면을 출력해요. 그런 C 가 존재하지 않으면 ")}
+                  <b style={{ color: "#15803d" }}>'no'</b>
+                  {t(E, " if no such C exists.", " 출력.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

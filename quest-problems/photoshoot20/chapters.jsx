@@ -30,16 +30,49 @@ export function makePhoto20Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given b[i] = a[i] + a[i+1] for a permutation a of 1..N, find the lexicographically smallest permutation a.\nTry each possible a[0] from 1 to N and derive the rest!", "순열 a의 b[i] = a[i] + a[i+1]이 주어질 때, 사전순으로 가장 작은 순열 a를 구해요. a[0]을 1부터 N까지 시도하고 나머지를 유도해요!"),
+        "Bessie wrote down a permutation a of 1..N, then computed b[i] = a[i] + a[i+1] for i = 0 to N−2 — and only b survived.\nGiven b, recover the lexicographically SMALLEST permutation a that could have produced it.",
+        "베시가 1..N의 순열 a를 적은 뒤, b[i] = a[i] + a[i+1] (i = 0 ~ N−2) 을 계산했어요 — 그런데 a 는 사라지고 b 만 남았어요.\nb 를 보고, 그것을 만들 수 있었던 순열 a 중 사전순으로 가장 작은 것을 복원해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"📸"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Photoshoot</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Try a[0] = 1, 2, ...,\nN. For each, compute a[i+1] = b[i] - a[i]. Check if result is a valid permutation of 1..N. First valid one is lex-smallest.",
-              "핵심: a[0] = 1, 2, ..., N을 시도.\n각각에 대해 a[i+1] = b[i] - a[i] 계산.\n결과가 1..N의 유효한 순열인지 확인.\n첫 번째 유효한 것이 사전순 최소.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"📸"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Photoshoot</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There exists a hidden ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "permutation a of 1..N", "1..N의 순열 a")}</b>
+                  {t(E, " (each number appears once).",
+                        " 가 숨겨져 있어요 (각 수가 한 번씩).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given ", "주어지는 건 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "b[0..N−2]", "b[0..N−2]")}</b>
+                  {t(E, " where ", " 인데, ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>b[i] = a[i] + a[i+1]</code>
+                  {t(E, ".", " 이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest permutation a", "사전순으로 가장 작은 순열 a")}</b>
+                  {t(E, " that fits the b array.", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

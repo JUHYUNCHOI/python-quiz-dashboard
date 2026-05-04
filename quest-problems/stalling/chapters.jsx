@@ -37,16 +37,50 @@ export function makeStallingCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows and N stalls, each with height limits.\nCount the number of valid assignments where every cow fits in its stall!", "N마리 소와 N개 축사, 각각 높이 제한이 있어요. 모든 소가 축사에 들어가는 유효한 배정 수를 세!"),
+        "There are N cows (each with a height) and N stalls (each with a maximum height limit). Each stall can hold AT MOST ONE cow, and a cow can be assigned to a stall only if her height is ≤ the stall's limit.\nCount the number of valid one-to-one assignments of cows to stalls.",
+        "N마리 소(각자 키)와 N개 축사(각자 최대 키 제한)가 있어요. 각 축사에 한 마리만 배정할 수 있고, 소의 키가 축사 제한 이하일 때만 그 축사에 배정 가능해요.\n소-축사 일대일 배정의 유효한 가짓수를 세요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Just Stalling</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Sort both cows and stalls by height.\nFor each cow (smallest first), count available stalls. Multiply the choices together.",
-              "핵심: 소와 축사를 높이순 정렬.\n각 소(작은 것부터)에 대해 가용 축사 수를 세. 선택지를 곱해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Just Stalling</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "N cows", "N마리 소")}</b>
+                  {t(E, " (each with a height) and ", "와 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "N stalls", "N개 축사")}</b>
+                  {t(E, " (each with a maximum height limit).",
+                        " 가 있어요. 각자 키와 축사 최대 키 제한이 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each stall holds ", "각 축사에 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "at most one cow", "최대 1마리만 배정")}</b>
+                  {t(E, ", and a cow fits only if her height ≤ the stall limit.",
+                        " 가능해요. 소는 자기 키 ≤ 축사 제한 일 때만 그 축사에 들어가요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of valid one-to-one assignments", "유효한 일대일 배정 가짓수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

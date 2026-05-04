@@ -50,16 +50,62 @@ export function makeBrigadeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "On a 10x10 grid there's a lake (L), a barn (B), and a rock (R).\nCows form a bucket brigade to pass water from lake to barn.\nFind the minimum number of cows needed, avoiding the rock!", "10x10 격자에 호수(L), 헛간(B), 바위(R)가 있어요.\n소들이 호수에서 헛간까지 물을 전달하는 버킷 릴레이를 만들어요.\n바위를 피해서 필요한 최소 소 수를 구해요!"),
+        "On a 10×10 grid there's exactly one lake L, one barn B, and one rock R; every other cell is empty.\nCows stand on empty cells, holding hands in a chain that connects L to B (each adjacent step in the chain shares an edge — up/down/left/right). Cows can NOT stand on the rock.\nFind the MINIMUM number of cows needed.",
+        "10×10 격자에 호수 L, 헛간 B, 바위 R 이 정확히 하나씩 있고 나머지 칸은 비어있어요.\n소들이 빈 칸에 서서 손을 잡고 L 과 B 를 이어요 (체인의 인접한 두 소는 상하좌우로 붙어있어야 함). 바위 위에는 설 수 없어요.\n필요한 소의 최소 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udea3"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Bucket Brigade</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: BFS on the grid from lake to barn, avoiding the rock.\nThe answer is the shortest path length minus 1 (lake and barn are endpoints, not cows).",
-              "핵심: 호수에서 헛간까지 BFS. 바위를 피해서 최단 경로를 구하고,\n답은 경로 길이 - 1 (호수와 헛간은 끝점이라 소가 아님).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udea3"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Bucket Brigade</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "10×10 grid", "10×10 격자")}</b>
+                  {t(E, " contains exactly one ", "에 ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>L</code>
+                  {t(E, " (lake), one ", " (호수), ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>B</code>
+                  {t(E, " (barn), and one ", " (헛간), ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>R</code>
+                  {t(E, " (rock).", " (바위) 가 정확히 하나씩 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Cows form a ", "소들이 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "chain of empty cells from L to B", "L 과 B 를 잇는 빈 칸들의 체인")}</b>
+                  {t(E, " (each adjacent pair in the chain shares an up/down/left/right edge).",
+                        " 을 만들어요 (체인의 인접한 두 소는 상하좌우로 붙어있음).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Cows ", "소는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "cannot stand on the rock", "바위 위에 설 수 없어요")}</b>
+                  {t(E, " (and don't stand on L or B themselves).",
+                        " (L, B 위에도 안 섬).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of cows", "필요한 최소 소 수")}</b>
+                  {t(E, " in the chain.", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -100,16 +100,56 @@ export function makeWordProcCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A word processor needs to format text into lines!\nEach line can hold at most K characters of words (spaces between words don't count toward the limit).", "워드 프로세서가 텍스트를 줄로 나눠야 해요! 각 줄에 최대 K글자의 단어를 담을 수 있어 (단어 사이 공백은 제한에 포함되지 않아)."),
+        "A word processor receives N words in order. Each line can hold at most K LETTERS of words (spaces don't count). Each word, in order, is added to the current line if it still fits — otherwise it goes onto a NEW line.\nPrint the document one line per row, words separated by single spaces.",
+        "워드 프로세서가 N개 단어를 순서대로 받아요. 각 줄에는 단어의 글자 수 합이 최대 K까지 들어갈 수 있어요 (공백은 안 셈). 각 단어는 순서대로, 현재 줄에 들어가면 그 줄에 추가, 안 들어가면 새 줄을 시작해요.\n결과 문서를 한 줄씩 출력해요 (단어 사이는 공백 1개)."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"📝"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Word Processor</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "N words, max K characters per line.\nFit as many words as possible on each line (greedy), then start a new line!",
-              "N개 단어, 줄당 최대 K글자.\n각 줄에 가능한 많은 단어를 넣고 (그리디), 그 다음 새 줄 시작!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"📝"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Word Processor</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You're given ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "N words in order", "순서대로 N개의 단어")}</b>
+                  {t(E, ".", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each line holds at most ", "각 줄에 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "K letters total", "글자 수 합이 최대 K")}</b>
+                  {t(E, " (spaces between words don't count).",
+                        " 까지 들어가요 (단어 사이 공백은 안 셈).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Process words in order: each word ", "단어를 순서대로: 각 단어가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "joins the current line if it still fits", "현재 줄에 들어가면 그 줄에 추가")}</b>
+                  {t(E, ", otherwise it starts a NEW line.",
+                        ", 안 들어가면 새 줄을 시작해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the resulting document, ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "one line per row, words separated by single spaces", "한 줄씩, 단어 사이 공백 1개")}</b>
+                  {t(E, ".", " 로 결과 문서를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

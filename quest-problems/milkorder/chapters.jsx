@@ -60,16 +60,54 @@ export function makeMilkOrderCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows must be ordered for milking.\nSome have hierarchy constraints (A before B) and some have fixed positions.\nFind the earliest possible position for cow 1!", "N마리 소의 착유 순서를 정해야 해요. 일부는 순서 제약 (A가 B보다 먼저)이 있고 일부는 고정 위치가 있어요. 소 1번의 가능한 가장 빠른 위치를 구해요!"),
+        "FJ wants a valid milking order of his N cows. Two kinds of rules exist: (1) hierarchy — a list saying these M cows must appear in this relative order, and (2) some cows have FIXED positions in the line.\nAmong all valid orders, print the EARLIEST possible position of cow #1.",
+        "FJ 가 N마리 소의 유효한 착유 순서를 정하려고 해요. 두 종류의 규칙이 있어요: (1) 위계 — 어떤 M마리 소는 이 상대 순서를 지켜야 함, (2) 어떤 소들은 줄에서 고정된 위치를 가짐.\n모든 유효한 순서 중에서 1번 소가 가장 일찍 설 수 있는 위치를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Milking Order</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Build a directed graph from hierarchy constraints.\nUse topological sort to find earliest valid position for cow 1.",
-              "핵심: 순서 제약으로 방향 그래프 구축.\n위상 정렬로 소 1번의 가장 빠른 유효 위치 찾기.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Milking Order</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ 에게 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N cows to put in a milking order", "착유 순서를 정해야 할 N마리 소")}</b>
+                  {t(E, " (1..N).", " (1..N) 가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "Hierarchy constraint", "위계 제약")}</b>
+                  {t(E, ": a list of M cows that must appear in this exact relative order in the line.",
+                        ": M마리 소의 목록이 주어지고, 이들은 줄에서 이 상대 순서로 등장해야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#dc2626" }}>{t(E, "Fixed positions", "고정 위치")}</b>
+                  {t(E, ": some cows have a specified spot in the line.",
+                        ": 어떤 소들은 줄에서 정해진 위치를 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Among all valid orders, print the ", "모든 유효한 순서 중에서 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "earliest possible position of cow 1", "1번 소의 가능한 가장 이른 위치")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

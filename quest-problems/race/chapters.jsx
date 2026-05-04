@@ -45,16 +45,55 @@ export function makeRaceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A cow runs K meters.\nEach second, speed changes by +1 or -1.\nMust end at speed ≤ X.\nFind minimum time.\nStrategy: accelerate then decelerate!", "소가 K미터를 달려. 매초 속도가 +1 또는 -1 변해요. 끝날 때 속도 ≤ X. 최소 시간을 구해요. 전략: 가속 후 감속!"),
+        "A cow starts at speed 0 and must run a total distance of K meters. Each second, her speed goes UP by 1 OR DOWN by 1. The speed when she crosses the K-meter mark must be ≤ X.\nFor each query (K, X), print the MINIMUM number of seconds needed.",
+        "한 소가 속도 0에서 시작해서 총 K미터를 달려요. 매초 속도가 +1 또는 −1 만큼 변해요. K미터를 지나는 순간의 속도는 X 이하여야 해요.\n각 쿼리 (K, X)에 대해 필요한 최소 초 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"🏃"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Race</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Accelerate to some peak speed, then decelerate to reach speed ≤ X by the end.\nThe distance covered is the sum of speeds each second. Find the optimal peak speed.",
-              "핵심: 어떤 최고 속도까지 가속한 후 감속하여 끝에 속도 ≤ X에 도달.\n이동 거리는 매초 속도의 합.\n최적 최고 속도를 찾아요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🏃"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Race</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A cow starts at speed 0 and must run a total of ", "한 소가 속도 0 에서 시작해 총 ")}
+                  <b style={{ color: "#059669" }}>{t(E, "K meters", "K미터")}</b>
+                  {t(E, ".", " 를 달려요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each second, her speed ", "매초 속도가 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "changes by +1 or −1", "+1 또는 −1")}</b>
+                  {t(E, ". She covers (her current speed) meters that second.",
+                        " 만큼 변해요. 그 초에 (현재 속도) 미터를 이동해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Her speed when she crosses the K-meter mark must be ", "K미터를 지나는 순간의 속도는 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "≤ X", "≤ X")}</b>
+                  {t(E, ".", " 이어야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "For each query (K, X), print the ", "각 쿼리 (K, X) 에 대해 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of seconds", "필요한 최소 초 수")}</b>
+                  {t(E, " needed to finish.", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
