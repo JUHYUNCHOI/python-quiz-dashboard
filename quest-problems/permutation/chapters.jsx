@@ -55,19 +55,86 @@ export const SOLUTION_CODE = [
    ═══════════════════════════════════════════════════════════════ */
 export function makePermCh1(E) {
   return [
-    // 1-1: Title
+    // 1-1: Title + the actual problem
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a favorite permutation of 1..N, but he only gave us hints!\nCan we reconstruct it?\n🔢", "FJ가 좋아하는 1~N 순열이 있는데, 힌트만 줬어! 복원할 수 있을까? 🔢"),
+        "FJ has a secret list of cows.\nHe won't show it — just tells us the GAPS between neighbors.\nCan we figure out the original list?",
+        "FJ는 소들의 비밀 리스트를 가지고 있어.\n순서는 안 알려주고 — 이웃 사이의 간격만 알려줘.\n원래 리스트를 알아낼 수 있을까?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>Farmer John's Favorite Permutation</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
-          <div style={{ marginTop: 12, background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Given hints h[i] = abs(perm[i] - perm[i+1]),\nreconstruct the permutation of 1..N or say it's impossible!", "힌트 h[i] = abs(perm[i] - perm[i+1]) 가 주어지면,\n1~N 순열을 복원하거나 불가능하다고 판별해!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>Farmer John's Favorite Permutation</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
+          </div>
+
+          {/* The story — what's actually given */}
+          <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 12, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 8 }}>
+              📖 {t(E, "The Story", "문제 상황")}
+            </div>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+              {t(E, "FJ has a ", "FJ는 ")}
+              <b style={{ color: "#7c5cfc" }}>{t(E, "favorite permutation", "좋아하는 순열")}</b>
+              {t(E, " of numbers ", " (숫자 ")}
+              <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 800 }}>1..N</code>
+              {t(E, " — each number appears exactly once.\nBut he only gives you the ", "을 한 번씩 사용).\n그런데 그가 주는 건 ")}
+              <b style={{ background: "#fde68a", padding: "1px 6px", borderRadius: 4, color: "#7c2d12" }}>{t(E, "gaps between neighbors", "이웃 사이 간격")}</b>
+              {t(E, ".\nYour job: rebuild the original permutation, or say it's ", "뿐.\n할 일: 원래 순열 복원, 아니면 ")}
+              <b style={{ color: "#dc2626" }}>{t(E, "impossible", "불가능")}</b>
+              {t(E, ".", " 판정.")}
+            </div>
+          </div>
+
+          {/* Concrete example — perm + gaps visualized */}
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", marginBottom: 8, textAlign: "center" }}>
+              {t(E, "Example: hidden perm = ", "예: 숨겨진 perm = ")} [3, 1, 4, 2]
+            </div>
+            {/* perm row with gap labels */}
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 0, flexWrap: "wrap" }}>
+              {[3, 1, 4, 2].map((v, i) => (
+                <span key={`g${i}`} style={{ display: "inline-flex", alignItems: "center" }}>
+                  <span style={{
+                    width: 36, height: 36, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                    borderRadius: 8, background: "#fff", border: "2px solid #7c5cfc", color: "#7c5cfc",
+                    fontWeight: 900, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
+                  }}>{v}</span>
+                  {i < 3 && (
+                    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", margin: "0 4px" }}>
+                      <span style={{ fontSize: 9, color: "#9ca3af", marginBottom: 1 }}>gap</span>
+                      <span style={{
+                        padding: "2px 6px", borderRadius: 5, background: "#fef3c7", border: "1.5px solid #f59e0b",
+                        color: "#92400e", fontSize: 11, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+                      }}>{Math.abs([3,1,4,2][i] - [3,1,4,2][i+1])}</span>
+                    </span>
+                  )}
+                </span>
+              ))}
+            </div>
+            <div style={{ marginTop: 8, textAlign: "center", fontSize: 12, color: "#5b21b6", fontFamily: "'JetBrains Mono',monospace" }}>
+              {t(E, "FJ tells you only:", "FJ가 알려주는 건:")} <b style={{ background: "#fde68a", padding: "1px 6px", borderRadius: 4, color: "#7c2d12" }}>h = [2, 3, 2]</b>
+            </div>
+            <div style={{ marginTop: 6, textAlign: "center", fontSize: 11, color: "#5b21b6" }}>
+              {t(E, "You must guess perm[] from h[] alone!", "h[]만으로 perm[]을 맞춰야 해!")}
+            </div>
+          </div>
+
+          {/* The formal definition */}
+          <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 12 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+              📐 {t(E, "Formally", "수식으로")}
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#15803d", textAlign: "center", lineHeight: 1.8 }}>
+              <span style={{ background: "#fde68a", padding: "2px 6px", borderRadius: 4 }}>h[i]</span>
+              {" = "}
+              <span style={{ background: "#dbeafe", padding: "2px 6px", borderRadius: 4, color: "#1e3a8a" }}>abs(</span>
+              <span style={{ color: "#7c5cfc" }}>perm[i]</span>
+              {" − "}
+              <span style={{ color: "#7c5cfc" }}>perm[i+1]</span>
+              <span style={{ background: "#dbeafe", padding: "2px 6px", borderRadius: 4, color: "#1e3a8a" }}>)</span>
+            </div>
           </div>
         </div>),
     },
