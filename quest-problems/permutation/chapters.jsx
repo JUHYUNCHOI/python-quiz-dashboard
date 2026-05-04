@@ -49,8 +49,8 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John had a secret favorite permutation. His rival Farmer Nhoj dismantled it one element at a time, writing down a hint each step. From those hints, rebuild the smallest permutation that John could have started with.",
-        "Farmer John 에게 비밀 favorite 순열이 있었어요. 라이벌 농부 Nhoj 가 그걸 한 원소씩 분해하면서 매 단계마다 힌트를 적었어요. 그 힌트들로 John 이 가지고 있었을 수 있는 가장 작은 순열을 복원해요."),
+        "Farmer John has a permutation p of 1..N. Farmer Nhoj broke into the barn and disassembled it. To not be too cruel, he left hints. From those hints, reconstruct the lex-smallest p consistent with them, or report -1 if Nhoj must have made a mistake.",
+        "Farmer John 에게 1..N 의 순열 p 가 있어요. Farmer Nhoj 가 헛간에 들어가서 그걸 분해했어요. 너무 잔인하지 않으려고 힌트를 남겼어요. 그 힌트들로 일관된 사전순으로 가장 작은 p 를 복원하거나, Nhoj 가 실수했음이 분명하면 -1 을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -65,56 +65,50 @@ export function makePermCh1(E) {
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
-              {/* fact 1 */}
+              {/* fact 1 — John has p */}
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Farmer ", "농부 ")}
-                  <b style={{ color: "#7c5cfc" }}>John</b>
-                  {t(E, " had a ", " 에게 ")}
-                  <b style={{ color: "#9a3412" }}>{t(E, "secret permutation p of 1..N", "비밀 순열 p (1..N 의 순열)")}</b>
-                  {t(E, ".", "이 있었어요.")}
+                  {t(E, "Farmer John has a ", "Farmer John 에게 ")}
+                  <b style={{ color: "#9a3412" }}>{t(E, "permutation p of length N", "길이 N 의 순열 p")}</b>
+                  {t(E, ", containing each integer 1..N exactly once.", " 가 있어요 (1부터 N 까지 각 정수가 정확히 한 번씩).")}
                 </div>
               </div>
-              {/* fact 2 — the dismantling rule */}
+              {/* fact 2 — Nhoj broke in */}
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Farmer ", "농부 ")}
-                  <b style={{ color: "#dc2626" }}>Nhoj</b>
-                  {t(E, " (John spelled backward!) repeatedly ", " (John 을 거꾸로!) 가 매 단계 ")}
-                  <b style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 3, color: "#7c2d12" }}>
-                    {t(E, "compared the FIRST and LAST", "첫 원소와 마지막 원소를 비교")}
-                  </b>
-                  {t(E, " elements:", " 했어요:")}
+                  {t(E, "Farmer Nhoj ", "Farmer Nhoj 가 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "broke into the barn and disassembled p", "헛간에 들어가서 p 를 분해")}</b>
+                  {t(E, ". To not be too cruel, he left hints — at each step (while more than 1 element remains in p):",
+                        "했어요. 너무 잔인하지 않으려고 힌트를 남겼어요 — 매 단계 (p 에 원소가 1 개 초과로 남아있는 동안):")}
                   <div style={{ marginTop: 6, marginLeft: 6, fontSize: 12, color: "#475569", lineHeight: 1.7 }}>
-                    {t(E, "↳ if first > last: ", "↳ 첫 > 마지막 이면: ")}
-                    <b style={{ color: "#dc2626" }}>{t(E, "write the 2nd element, remove the FIRST", "둘째 원소를 적고 첫 원소 제거")}</b><br/>
-                    {t(E, "↳ otherwise: ", "↳ 그 외 (첫 < 마지막): ")}
-                    <b style={{ color: "#7c3aed" }}>{t(E, "write the 2nd-to-last, remove the LAST", "끝에서 둘째 원소를 적고 마지막 원소 제거")}</b>
+                    {t(E, "↳ if p′₁ > p′ₙ: ", "↳ p′₁ > p′ₙ 이면: ")}
+                    <b style={{ color: "#dc2626" }}>{t(E, "write p′₂, remove p′₁", "p′₂ 를 적고 p′₁ 제거")}</b><br/>
+                    {t(E, "↳ otherwise: ", "↳ 그 외: ")}
+                    <b style={{ color: "#7c3aed" }}>{t(E, "write p′ₙ₋₁, remove p′ₙ", "p′ₙ₋₁ 을 적고 p′ₙ 제거")}</b>
                   </div>
                 </div>
               </div>
-              {/* fact 3 */}
+              {/* fact 3 — N-1 hints total */}
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Nhoj repeats until ", "Nhoj 가 원소가 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "1 element remains", "1 개 남을 때까지")}</b>
-                  {t(E, ", producing a sequence of N−1 hints — that's the input ", " 반복했고, N−1 개의 힌트 수열을 만들었어요 — 그게 입력 ")}
-                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>h[0..N−2]</code>
-                  {t(E, ".", " 예요.")}
+                  {t(E, "At the end, Nhoj will have written ", "끝에는 Nhoj 가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "N−1 integers h₁, h₂, …, h_{N−1}", "N−1 개의 정수 h₁, h₂, …, h_{N−1}")}</b>
+                  {t(E, ", in that order — that's the input.", " 을 그 순서대로 적어둬요 — 그게 입력이에요.")}
                 </div>
               </div>
               {/* fact 4 — your job */}
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest permutation John could have started with", "John 이 가지고 있었을 수 있는 사전순으로 가장 작은 순열")}</b>
-                  {t(E, " (the one that produces the given h), or ", " 을 출력해요 (주어진 h 를 만드는 순열). 가능한 순열이 없으면 ")}
+                  {t(E, "Reconstruct the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically minimum p consistent with the hints", "힌트와 일관된 사전순으로 가장 작은 p")}</b>
+                  {t(E, ", or determine that Nhoj must have made a mistake (print ",
+                        " 를 복원하거나, Nhoj 가 실수했음이 분명하면 ")}
                   <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 3, color: "#991b1b", fontWeight: 800 }}>-1</code>
-                  {t(E, " if none exists.", ".")}
+                  {t(E, ").", " 출력.")}
                 </div>
               </div>
             </div>
