@@ -151,15 +151,36 @@ export function makeLeadersCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Find leaders for each breed, then check all pairs. Overall O(N + G_leaders * H_leaders).", "각 품종의 리더를 찾고, 모든 쌍을 확인해요. 전체 O(N + G리더 * H리더)."),
+        "Find each breed's first and last position. A 'big leader' covers her breed's full span. Then count pairs: (a) pairs of two big leaders, plus (b) pairs where one big leader contains the other breed's first cow.",
+        "각 품종의 첫 위치와 마지막 위치를 찾아요. '큰 리더' 는 자기 품종 전체를 커버하는 소. 쌍 세기: (a) 큰 리더 두 마리 쌍 + (b) 큰 리더 한 마리가 상대 품종의 첫 소를 자기 범위에 담은 쌍."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N + L_G * L_H)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Step 1: Find first/last occurrence of each breed.\nStep 2: Find all leaders (cows whose range covers their breed's last position). Step 3: Count valid pairs.",
-              "1단계: 각 품종의 첫/마지막 위치 찾기.\n2단계: 모든 리더 찾기 (범위가 품종의 마지막 위치를 커버하는 소). 3단계: 유효한 쌍 세기.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "First / last of each breed", "각 품종의 첫/마지막 위치"), code: "first[G], last[G], first[H], last[H]", color: "#dc2626" },
+              { n: 2, label: t(E, "Find big leaders", "큰 리더 찾기"), code: "big_G = cows whose range covers [first[G], last[G]]", color: "#7c3aed" },
+              { n: 3, label: t(E, "Count both-big pairs", "양쪽 모두 큰 리더 쌍 세기"), code: "both_count = len(big_G) × len(big_H)", color: "#0891b2" },
+              { n: 4, label: t(E, "Add one-side covers-other pairs", "한쪽이 상대를 덮는 쌍 추가"), code: "add cows whose range covers other breed's first cow", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant work per cow after one scan", "한 번 스캔 후 소당 상수 시간")}</div>
           </div>
         </div>),
     },
