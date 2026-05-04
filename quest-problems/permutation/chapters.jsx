@@ -150,19 +150,65 @@ export function makePermCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePermCh2(E) {
   return [
-    // 2-1: First idea — natural greedy
+    // 2-1: From the formula → 2 choices → greedy idea
     {
       type: "reveal",
       narr: t(E,
-        "First thought: if we know perm[0], then perm[1] = perm[0] ± h[0] — only two choices.\nSo pick a starting value, then greedily pick + or - at each step.\nSounds simple!", "첫 생각: perm[0]을 알면 perm[1] = perm[0] ± h[0] — 두 가지뿐.\n시작값을 정하고 매 단계 +/− 중 하나를 그리디로 골라.\n간단해 보이지?"),
+        "Where does the algorithm come from? Start from the formula.",
+        "공식부터 출발하면 알고리즘이 자연스럽게 나와요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text }}>
-            <div style={{ fontWeight: 800, color: C.accent, marginBottom: 6 }}>
-              {t(E, "💡 Natural First Idea", "💡 자연스러운 첫 아이디어")}
+          {/* Step A: the given formula */}
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+              {t(E, "1️⃣  What we're given", "1️⃣  주어진 것")}
             </div>
-            {t(E,
-              "Try every start = 1, 2, ..., N.\nFor each step: prefer + (or any rule). If +h is in [1, N] and unused, take it. Otherwise try −h. If both fail, this start is bad — try the next one.", "시작값 = 1, 2, ..., N 다 시도.\n매 단계: +h 먼저 (또는 정해진 규칙). +h가 [1, N] 안이고 미사용이면 선택. 아니면 −h 시도. 둘 다 실패면 이 시작값은 안 됨 — 다음 시도.")}
+            <div style={{ fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#5b21b6", textAlign: "center" }}>
+              h[i] = abs(perm[i] − perm[i+1])
+            </div>
+          </div>
+
+          {/* Step B: rearrange to find perm[i+1] */}
+          <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+              {t(E, "2️⃣  Rearrange — only 2 possible values for perm[i+1]", "2️⃣  변형 — perm[i+1]의 가능값은 단 2개")}
+            </div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center", marginTop: 6 }}>
+              <div style={{ padding: "6px 12px", borderRadius: 8, background: "#dcfce7", border: "1.5px solid #16a34a", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#15803d" }}>
+                perm[i] + h[i]
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 800, color: "#15803d" }}>{t(E, "OR", "또는")}</div>
+              <div style={{ padding: "6px 12px", borderRadius: 8, background: "#dcfce7", border: "1.5px solid #16a34a", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#15803d" }}>
+                perm[i] − h[i]
+              </div>
+            </div>
+            <div style={{ fontSize: 11, color: "#15803d", textAlign: "center", marginTop: 6 }}>
+              {t(E, "(because abs removes the sign)", "(abs가 부호를 지우니까)")}
+            </div>
+          </div>
+
+          {/* Step C: pick start, then greedy chain */}
+          <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 12, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
+              {t(E, "3️⃣  But what's perm[0]? Try every value 1..N", "3️⃣  근데 perm[0]은? 1부터 N까지 다 시도")}
+            </div>
+            <div style={{ fontSize: 12, color: "#7c2d12", lineHeight: 1.6, whiteSpace: "pre-line" }}>
+              {t(E,
+                "For each start in 1..N:\n  • set perm[0] = start\n  • for each step, try + first, then − (whichever is in [1, N] and unused)\n  • if both fail, give up on this start and try the next",
+                "각 시작값 1..N에 대해:\n  • perm[0] = start로 설정\n  • 단계마다 +를 먼저 시도, 안 되면 − ([1, N] 안이고 미사용인 것)\n  • 둘 다 실패하면 이 시작값 포기, 다음 시도")}
+            </div>
+          </div>
+
+          {/* Why this is natural */}
+          <div style={{ background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.accent, marginBottom: 4 }}>
+              {t(E, "💡 Why is this natural?", "💡 왜 자연스러울까?")}
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              {t(E,
+                "Once you fix perm[0], the rest is forced (only ± each step). So we only need to guess perm[0] — N choices.",
+                "perm[0]을 정하면 나머지는 강제 (매 단계 ±뿐). 그래서 perm[0]만 추측하면 됨 — N가지.")}
+            </div>
           </div>
         </div>),
     },
