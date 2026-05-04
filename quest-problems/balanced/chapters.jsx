@@ -41,22 +41,49 @@ export function makeBalancedCh1(E) {
         "A balanced bracket string has matching pairs.\n'(())' is balanced, '(()' is not.\nA subsequence can skip characters!", "균형 괄호 문자열은 쌍이 맞아야 해. '(())'는 균형, '(()'는 아님. 부분수열은 문자를 건너뛸 수 있어!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#f97316", marginBottom: 10 }}>
-              {t(E, "Examples", "예시")}
-            </div>
-            <div style={{ fontSize: 13, fontFamily: "'JetBrains Mono',monospace", lineHeight: 2.2, color: C.text }}>
-              <div>N=3, M=2: <span style={{ color: C.accent, fontWeight: 800 }}>"((())"</span></div>
-              <div>{t(E, "→ Balanced subseq: ", "→ 균형 부분수열: ")}
-                <span style={{ color: C.ok, fontWeight: 800 }}>"(())"</span>
-                {t(E, " length = 4", " 길이 = 4")}
-              </div>
-              <div style={{ marginTop: 8 }}>N=1, M=5: <span style={{ color: C.accent, fontWeight: 800 }}>"())))))"</span></div>
-              <div>{t(E, "→ Balanced subseq: ", "→ 균형 부분수열: ")}
-                <span style={{ color: C.ok, fontWeight: 800 }}>"()"</span>
-                {t(E, " length = 2", " 길이 = 2")}
-              </div>
-            </div>
+          {/* Two side-by-side example cards */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            {[
+              { N: 3, M: 2, matched: [1, 2, 3, 4], len: 4 },     // ((()) — match indices 1,2 with 3,4
+              { N: 1, M: 5, matched: [0, 1], len: 2 },           // ()))))) — match index 0 with 1
+            ].map((ex, i) => {
+              const chars = "(".repeat(ex.N) + ")".repeat(ex.M);
+              const matchedSet = new Set(ex.matched);
+              return (
+                <div key={i} style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 10 }}>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
+                    N={ex.N}, M={ex.M}
+                  </div>
+                  {/* Bracket visualization */}
+                  <div style={{ display: "flex", gap: 3, justifyContent: "center", marginBottom: 8 }}>
+                    {chars.split("").map((ch, idx) => {
+                      const isMatched = matchedSet.has(idx);
+                      const isOpen = ch === "(";
+                      return (
+                        <div key={idx} style={{
+                          width: 22, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                          borderRadius: 5, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                          background: isMatched ? (isOpen ? "#fef3c7" : "#dbeafe") : "#f3f4f6",
+                          border: `2px solid ${isMatched ? (isOpen ? "#f59e0b" : "#3b82f6") : "#cbd5e1"}`,
+                          color: isMatched ? (isOpen ? "#92400e" : "#1e3a8a") : "#9ca3af",
+                        }}>{ch}</div>
+                      );
+                    })}
+                  </div>
+                  {/* Result */}
+                  <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 4 }}>
+                    {t(E, `matched = ${ex.matched.length} brackets`, `매칭 = ${ex.matched.length}개`)}
+                  </div>
+                  <div style={{ textAlign: "center", fontSize: 14, fontWeight: 900, color: "#16a34a", fontFamily: "'JetBrains Mono',monospace" }}>
+                    {t(E, `length = ${ex.len}`, `길이 = ${ex.len}`)}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center" }}>
+            {t(E, "🟡 = matched '('  ·  🔵 = matched ')'  ·  ⬜ = leftover (skipped)",
+                  "🟡 = 매칭된 '('  ·  🔵 = 매칭된 ')'  ·  ⬜ = 남는 것 (건너뜀)")}
           </div>
         </div>),
     },

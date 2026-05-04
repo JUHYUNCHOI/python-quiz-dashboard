@@ -71,9 +71,61 @@ export function makeMooin3Ch1(E) {
       explain: t(E, "s[i]≠s[j] ✓ and s[j]=s[k] ✓. That's a moo!", "s[i]≠s[j] ✓ 그리고 s[j]=s[k] ✓. moo야!"),
     },
     {
-      type: "input",
+      type: "reveal",
       narr: t(E,
-        "s='abba', range [1,4].\nTriplets: (1,2,3)='abb' → value=(2-1)×(3-2)=1.\n(1,3,4)='bba'?\ns[1]='a'≠s[3]='b', s[3]='b'=s[4]='a'?\nNo.\n(1,2,4)='aba'?\ns[2]≠s[4].\nTry (1,3,4): s[1]='a', s[3]='b', s[4]='a' → s[3]≠s[4].\nMax?", "s='abba', 범위 [1,4]. (1,2,3)='abb' → 값=(2-1)×(3-2)=1. 최대값은?"),
+        "Try every triplet (i, j, k) in range [1, 4] of s='abba'.\nOnly one is a valid 'moo'.",
+        "s='abba', 범위 [1, 4]의 모든 트리플 (i, j, k)을 시도.\n유효한 'moo'는 단 하나."),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* string visualization */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 10, color: "#7c5cfc", fontWeight: 700, textAlign: "center", marginBottom: 4 }}>
+              s = 'abba'
+            </div>
+            <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
+              {"abba".split("").map((ch, i) => {
+                const idx = i + 1;
+                return (
+                  <div key={i} style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 9, color: "#9ca3af", marginBottom: 2 }}>idx={idx}</div>
+                    <div style={{
+                      width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+                      borderRadius: 6, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                      background: "#fff", border: `2px solid #7c5cfc`, color: "#7c5cfc",
+                    }}>{ch}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          {/* triplet candidates table */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            {[
+              { ijk: [1,2,3], chars: "abb", note: "s[i]≠s[j] ✓, s[j]=s[k] ✓", val: "(2-1)×(3-2) = 1", ok: true },
+              { ijk: [1,2,4], chars: "aba", note: "s[j]=s[k]? b≠a ✗", val: "—", ok: false },
+              { ijk: [1,3,4], chars: "aba", note: "s[j]=s[k]? b≠a ✗", val: "—", ok: false },
+              { ijk: [2,3,4], chars: "bba", note: "s[i]≠s[j]? b=b ✗", val: "—", ok: false },
+            ].map((t, i) => (
+              <div key={i} style={{
+                background: t.ok ? "#dcfce7" : "#f8fafc",
+                border: `1.5px solid ${t.ok ? "#86efac" : "#e5e7eb"}`,
+                borderRadius: 6, padding: "6px 10px",
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                fontSize: 11, fontFamily: "'JetBrains Mono',monospace", flexWrap: "wrap", gap: 4,
+              }}>
+                <span style={{ fontWeight: 800, color: t.ok ? "#15803d" : "#64748b" }}>
+                  ({t.ijk.join(",")}) = '{t.chars}'
+                </span>
+                <span style={{ color: t.ok ? "#15803d" : "#64748b" }}>{t.note}</span>
+                <span style={{ fontWeight: 800, color: t.ok ? "#15803d" : "#cbd5e1" }}>{t.val}</span>
+              </div>
+            ))}
+          </div>
+        </div>),
+    },
+    {
+      type: "input",
+      narr: t(E, "What's the max value?", "최대값은?"),
       question: t(E, "Max value for s='abba', range [1,4]?", "s='abba', 범위 [1,4]의 최대값?"),
       answer: 1,
     },
