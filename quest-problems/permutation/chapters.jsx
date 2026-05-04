@@ -124,52 +124,80 @@ export function makePermCh1(E) {
             </div>
           </div>
 
-          {/* Step 1: FJ has secret perm */}
+          {/* Combined visual: cows in a line with number tags + gaps above */}
           <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
-              1️⃣ {t(E, "FJ's secret list (he won't show it)", "FJ의 비밀 리스트 (안 보여줌)")}
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+              1️⃣ {t(E, "Example with N = 4", "예시: N = 4")}
             </div>
-            <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
-              {[3, 1, 4, 2].map((v, i) => (
-                <div key={i} style={{
-                  width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 8, background: "#7c5cfc", color: "#fff",
-                  fontWeight: 900, fontSize: 22, fontFamily: "'JetBrains Mono',monospace",
-                  boxShadow: "0 2px 4px rgba(0,0,0,.1)",
-                }}>{v}</div>
-              ))}
+            <div style={{ fontSize: 11, color: "#5b21b6", marginBottom: 12 }}>
+              {t(E, "Imagine FJ lined up 4 cows — each wearing a number tag.",
+                    "FJ가 4마리 소를 줄 세웠어요 — 각 소가 번호표를 달고 있어요.")}
             </div>
-            <div style={{ textAlign: "center", marginTop: 8, fontSize: 11, color: "#5b21b6" }}>
-              perm = [3, 1, 4, 2]   {t(E, "(uses 1, 2, 3, 4 each once)", "(1, 2, 3, 4 각 1번씩)")}
-            </div>
-          </div>
 
-          {/* Step 2: gaps */}
-          <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
-              2️⃣ {t(E, "He computes the gaps (only difference between neighbors)", "이웃 사이 간격만 계산해서 알려줌")}
-            </div>
-            {/* gap calculations */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#7c2d12" }}>
-              {[
-                { a: 3, b: 1, gap: 2 },
-                { a: 1, b: 4, gap: 3 },
-                { a: 4, b: 2, gap: 2 },
-              ].map((row, i) => (
-                <div key={i} style={{ background: "#fff", padding: "6px 10px", borderRadius: 6, border: "1.5px solid #fbbf24", textAlign: "center" }}>
-                  abs(<b style={{ color: "#5b21b6" }}>{row.a}</b> − <b style={{ color: "#5b21b6" }}>{row.b}</b>) = <b style={{ background: "#fde68a", padding: "1px 6px", borderRadius: 3 }}>{row.gap}</b>
+            {/* Visual: cows + tags + gaps above */}
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 0, padding: "8px 0" }}>
+              {[3, 1, 4, 2].map((v, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-end" }}>
+                  {/* Cow + tag column */}
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 56 }}>
+                    <div style={{ fontSize: 32, lineHeight: 1 }}>🐄</div>
+                    <div style={{
+                      marginTop: 2, padding: "3px 0", width: 36, textAlign: "center",
+                      borderRadius: 6, background: "#7c5cfc", color: "#fff",
+                      fontWeight: 900, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
+                    }}>{v}</div>
+                  </div>
+                  {/* Gap badge between cows (skip after last) */}
+                  {i < 3 && (
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 36 }}>
+                      <div style={{ fontSize: 9, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>
+                        {t(E, "gap", "차이")}
+                      </div>
+                      <div style={{
+                        padding: "3px 6px", borderRadius: 12,
+                        background: "#fef3c7", border: "1.5px solid #fbbf24",
+                        color: "#7c2d12", fontWeight: 800, fontSize: 12, fontFamily: "'JetBrains Mono',monospace",
+                      }}>
+                        {Math.abs([3,1,4,2][i] - [3,1,4,2][i+1])}
+                      </div>
+                      <div style={{ marginTop: 4, height: 22, fontSize: 18, color: "#9ca3af" }}>↑↓</div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
-            <div style={{ textAlign: "center", marginTop: 10, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#92400e" }}>
-              → h = <span style={{ background: "#fde68a", padding: "2px 8px", borderRadius: 4 }}>[2, 3, 2]</span>
+
+            {/* Two reads: secret list vs what FJ tells you */}
+            <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              <div style={{ background: "#fff", border: "2px solid #c4b5fd", borderRadius: 8, padding: "8px 10px" }}>
+                <div style={{ fontSize: 10, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+                  🙈 {t(E, "Secret (you DON'T see)", "비밀 (안 보여요)")}
+                </div>
+                <div style={{ fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#5b21b6", textAlign: "center" }}>
+                  perm = [3, 1, 4, 2]
+                </div>
+                <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginTop: 2 }}>
+                  {t(E, "the cow tags in order", "소들의 번호표 (순서대로)")}
+                </div>
+              </div>
+              <div style={{ background: "#fff", border: "2px solid #fbbf24", borderRadius: 8, padding: "8px 10px" }}>
+                <div style={{ fontSize: 10, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
+                  👀 {t(E, "Given (this IS your input)", "주어짐 (입력으로 받음)")}
+                </div>
+                <div style={{ fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#92400e", textAlign: "center" }}>
+                  h = [2, 3, 2]
+                </div>
+                <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginTop: 2 }}>
+                  {t(E, "abs(3−1), abs(1−4), abs(4−2)", "abs(3−1), abs(1−4), abs(4−2)")}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Step 3: input/output */}
+          {/* Your job — what to do given h */}
           <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 800, color: "#15803d", marginBottom: 10 }}>
-              3️⃣ {t(E, "Your job", "당신의 임무")}
+              2️⃣ {t(E, "Your job", "할 일")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 8, alignItems: "center" }}>
               <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
@@ -184,7 +212,7 @@ export function makePermCh1(E) {
             </div>
             <div style={{ marginTop: 10, fontSize: 12, color: "#15803d", textAlign: "center", lineHeight: 1.6 }}>
               {t(E, "Multiple perms can give the same h — just find ONE valid perm, or print -1 if none exists.",
-                    "여러 perm이 같은 h를 만들 수 있어 — 유효한 perm 하나만 찾으면 OK. 없으면 -1 출력.")}
+                    "여러 perm이 같은 h를 만들 수 있어요 — 유효한 perm 하나만 찾으면 OK. 없으면 -1 출력해요.")}
             </div>
           </div>
         </div>),
