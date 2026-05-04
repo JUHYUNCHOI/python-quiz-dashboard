@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, Suspense, lazy } from "react"
+import { useState, useEffect, useRef, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
@@ -114,6 +114,55 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const [splitView, setSplitView] = useState(false)
   const [iframeBlocked, setIframeBlocked] = useState(false)
   const [iframeZoom, setIframeZoom] = useState(1) // 0.5 ~ 1.5
+  // Split ratio: 0.2 ~ 0.8 (left panel width fraction). Persists in localStorage.
+  const [splitRatio, setSplitRatio] = useState(0.5)
+  const splitContainerRef = useRef<HTMLDivElement>(null)
+  const draggingRef = useRef(false)
+
+  // Load saved ratio
+  useEffect(() => {
+    try {
+      const saved = parseFloat(localStorage.getItem("quest-split-ratio") || "0.5")
+      if (saved >= 0.2 && saved <= 0.8) setSplitRatio(saved)
+    } catch {}
+  }, [])
+
+  // Drag handlers
+  useEffect(() => {
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      if (!draggingRef.current || !splitContainerRef.current) return
+      const rect = splitContainerRef.current.getBoundingClientRect()
+      const clientX = "touches" in e ? e.touches[0].clientX : (e as MouseEvent).clientX
+      const ratio = (clientX - rect.left) / rect.width
+      const clamped = Math.max(0.2, Math.min(0.8, ratio))
+      setSplitRatio(clamped)
+    }
+    const onUp = () => {
+      if (draggingRef.current) {
+        draggingRef.current = false
+        document.body.style.cursor = ""
+        document.body.style.userSelect = ""
+        try { localStorage.setItem("quest-split-ratio", String(splitRatio)) } catch {}
+      }
+    }
+    window.addEventListener("mousemove", onMove)
+    window.addEventListener("touchmove", onMove)
+    window.addEventListener("mouseup", onUp)
+    window.addEventListener("touchend", onUp)
+    return () => {
+      window.removeEventListener("mousemove", onMove)
+      window.removeEventListener("touchmove", onMove)
+      window.removeEventListener("mouseup", onUp)
+      window.removeEventListener("touchend", onUp)
+    }
+  }, [splitRatio])
+
+  const startDrag = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault()
+    draggingRef.current = true
+    document.body.style.cursor = "col-resize"
+    document.body.style.userSelect = "none"
+  }
 
   if (!lockChecked) return null
 
@@ -229,10 +278,14 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
       </div>
 
       {/* Problem App + (옵션) 원본 문제 iframe 반반 스크린.
-          md 이상에서만 split. 모바일은 너무 좁아서 토글 버튼 자체를 숨김. */}
-      <div className="flex-1 flex min-h-0">
+          md 이상에서만 split. 모바일은 너무 좁아서 토글 버튼 자체를 숨김.
+          splitView 일 때 가운데 draggable divider 로 비율 조절 가능. */}
+      <div ref={splitContainerRef} className="flex-1 flex min-h-0">
         {/* key=lang forces remount so useState initializer re-runs with new lang */}
-        <main className={splitView ? "flex-1 md:w-1/2 min-w-0 overflow-auto" : "flex-1 min-w-0"}>
+        <main
+          className={splitView ? "min-w-0 overflow-auto" : "flex-1 min-w-0"}
+          style={splitView ? { flex: `0 0 calc(${splitRatio * 100}% - 4px)` } : undefined}
+        >
           {LazyComp ? (
             <Suspense fallback={<ProblemLoadingSpinner />}>
               {/* lang 을 prop 으로 직접 넘김 — window._questLang race 방지 */}
@@ -246,12 +299,28 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           )}
         </main>
 
+        {/* Resizer handle — only shown in split view, md+ */}
+        {splitView && (
+          <div
+            onMouseDown={startDrag}
+            onTouchStart={startDrag}
+            onDoubleClick={() => setSplitRatio(0.5)}
+            className="hidden md:flex flex-shrink-0 w-2 cursor-col-resize bg-gray-200 hover:bg-amber-300 active:bg-amber-400 transition-colors items-center justify-center group select-none"
+            title={t("드래그해서 비율 조절 (더블클릭: 50/50)", "Drag to resize (double-click: reset to 50/50)")}
+          >
+            <div className="w-0.5 h-8 bg-gray-400 group-hover:bg-amber-700 rounded-full transition-colors" />
+          </div>
+        )}
+
         {splitView && (() => {
           const originalUrl = getOriginalProblemUrl(meta)
           // Google 검색 fallback (url 필드 비어있을 때) → iframe 차단되므로 친절한 안내 UI
           const isGoogleFallback = originalUrl.startsWith("https://www.google.com/search")
           return (
-            <aside className="hidden md:flex flex-1 md:w-1/2 min-w-0 border-l-2 border-black bg-white flex-col">
+            <aside
+              className="hidden md:flex min-w-0 border-l-2 border-black bg-white flex-col"
+              style={{ flex: `0 0 calc(${(1 - splitRatio) * 100}% - 4px)` }}
+            >
               <div className="flex items-center gap-1.5 px-2 py-1.5 border-b border-gray-300 bg-amber-50 flex-shrink-0">
                 {/* URL 박스 — 클릭하면 새 탭에서 열림 */}
                 <a
