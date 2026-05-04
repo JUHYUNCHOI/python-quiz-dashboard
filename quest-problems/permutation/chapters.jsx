@@ -280,22 +280,66 @@ export function makePermCh1(E) {
         "|5 - 1| = 4. h[1] is the diff between perm[1]=5 and perm[2]=1.",
         "|5 - 1| = 4. h[1]은 perm[1]=5와 perm[2]=1의 차이예요."),
     },
-    // 1-4: Quiz — reconstruction idea
+    // 1-4a: Reveal — reconstruction idea visualized
+    {
+      type: "reveal",
+      narr: t(E,
+        "Once we know perm[i], the next value perm[i+1] has only 2 choices.",
+        "perm[i]를 알면, 다음 값 perm[i+1]은 단 2가지 선택뿐이에요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 14 }}>
+            {/* Given */}
+            <div style={{ fontSize: 12, fontWeight: 800, color: C.accent, marginBottom: 6 }}>
+              {t(E, "Suppose we know:", "지금 아는 것:")}
+            </div>
+            <div style={{ display: "flex", gap: 14, justifyContent: "center", marginBottom: 14, flexWrap: "wrap" }}>
+              <div style={{ background: "#fff", border: "2px solid #c4b5fd", borderRadius: 8, padding: "6px 12px", fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#5b21b6" }}>
+                perm[i] = 3
+              </div>
+              <div style={{ background: "#fff", border: "2px solid #fbbf24", borderRadius: 8, padding: "6px 12px", fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#92400e" }}>
+                h[i] = 2
+              </div>
+            </div>
+
+            {/* Branching */}
+            <div style={{ fontSize: 12, fontWeight: 800, color: C.accent, marginBottom: 6, textAlign: "center" }}>
+              {t(E, "Then perm[i+1] is one of:", "그러면 perm[i+1]은 둘 중 하나:")}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 2 }}>{t(E, "Add h[i]", "h[i] 더하기")}</div>
+                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>3 + 2 = <span style={{ background: "#86efac", padding: "1px 6px", borderRadius: 4 }}>5</span></div>
+              </div>
+              <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 2 }}>{t(E, "Subtract h[i]", "h[i] 빼기")}</div>
+                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>3 − 2 = <span style={{ background: "#86efac", padding: "1px 6px", borderRadius: 4 }}>1</span></div>
+              </div>
+            </div>
+            <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center" }}>
+              {t(E, "Why? abs(perm[i] − perm[i+1]) = h[i] means the difference is +h or −h.",
+                    "왜? abs(perm[i] − perm[i+1]) = h[i] 이므로 차이는 +h 또는 −h.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-4b: Quiz — same idea, different numbers
     {
       type: "quiz",
       narr: t(E,
-        "To reconstruct: if we know perm[i] and h[i], then perm[i+1] = perm[i] + h[i] or perm[i] - h[i].\nTwo choices each step!", "복원하려면: perm[i]와 h[i]를 알면, perm[i+1] = perm[i] + h[i] 또는 perm[i] - h[i]. 매 단계 2가지 선택!"),
+        "Now your turn — pick the right pair.",
+        "이제 직접 — 맞는 쌍을 골라보세요."),
       question: t(E,
-        "If perm[0] = 3 and h[0] = 2, what are the possible values for perm[1]?",
-        "perm[0] = 3이고 h[0] = 2이면, perm[1]의 가능한 값은?"),
+        "If perm[0] = 4 and h[0] = 3, what are the possible values for perm[1]?",
+        "perm[0] = 4, h[0] = 3이면, perm[1]의 가능한 값은?"),
       options: [
+        t(E, "1 or 7", "1 또는 7"),
+        t(E, "3 or 5", "3 또는 5"),
         t(E, "1 or 5", "1 또는 5"),
-        t(E, "2 or 4", "2 또는 4"),
-        t(E, "1 or 3", "1 또는 3"),
-        t(E, "5 only", "5만"),
+        t(E, "7 only", "7만"),
       ],
       correct: 0,
-      explain: t(E, "3+2=5 or 3-2=1. Both are candidates!", "3+2=5 또는 3-2=1. 둘 다 후보예요!"),
+      explain: t(E, "4 + 3 = 7  or  4 − 3 = 1.", "4 + 3 = 7  또는  4 − 3 = 1."),
     },
     // 1-5: Input
     {
