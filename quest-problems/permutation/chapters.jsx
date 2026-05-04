@@ -69,6 +69,23 @@ export function makePermCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
           </div>
 
+          {/* Scenario — WHY does FJ give us gaps? */}
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 8 }}>
+              🤔 {t(E, "Wait, why give us GAPS instead of the actual list?", "잠깐, 왜 진짜 리스트가 아니라 간격을 줘?")}
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
+              {t(E, "FJ wrote down his favorite arrangement of cows (each cow has a unique ID from 1 to N).\n",
+                    "FJ가 좋아하는 소 배치를 적었어 (각 소는 1..N 중 하나의 고유 ID).\n")}
+              <b style={{ color: "#9a3412" }}>{t(E, "But he tore the paper", "근데 종이가 찢어짐")}</b>
+              {t(E, " — only the “gaps between adjacent IDs” survived.\nThis is just how the puzzle is given. ",
+                    " — “이웃 ID 차이”만 살아남았어.\n그냥 이렇게 문제가 주어졌다고 생각하면 돼. ")}
+              <b style={{ background: "#fef3c7", padding: "1px 6px", borderRadius: 4, color: "#7c2d12" }}>
+                {t(E, "Your job: rebuild the original list.", "할 일: 원래 리스트 복원.")}
+              </b>
+            </div>
+          </div>
+
           {/* Step 1: FJ has secret perm */}
           <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
