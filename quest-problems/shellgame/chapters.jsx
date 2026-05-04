@@ -97,10 +97,10 @@ export function makeShellCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🐚"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Shell Game</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "N swaps happen. Each swap tells us: swap shells A and B, then guess G. We don't know where the pebble starts!",
-              "N번의 스왑이 일어나. 각 스왑마다: 컵 A와 B를 교환하고, G를 추측. 조약돌이 어디서 시작하는지 몰라!")}
+              "N swaps happen.\nEach swap tells us: swap shells A and B, then guess G. We don't know where the pebble starts!",
+              "N번의 스왑이 일어나.\n각 스왑마다: 컵 A와 B를 교환하고, G를 추측.\n조약돌이 어디서 시작하는지 몰라!")}
           </div>
         </div>),
     },
@@ -123,10 +123,9 @@ export function makeShellCh1(E) {
           <div style={{ paddingTop: 16 }}>
             <ShellRow shells={[1, 2, 3]} pebble={2} label={t(E, "After: pebble STILL at 2!", "이후: 조약돌 여전히 2번!")} E={E} />
           </div>
-          <div style={{ marginTop: 10, background: "#fef2f2", borderRadius: 10, padding: 10, border: "2px solid #fca5a5", fontSize: 12, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 10, background: "#fef2f2", borderRadius: 10, padding: 10, border: "2px solid #fca5a5", fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "The pebble was at 2. We swapped 1 and 3. Since the pebble wasn't under 1 or 3, it doesn't move!",
-              "조약돌은 2번에 있었어. 1번과 3번을 교환했어. 조약돌이 1번이나 3번 아래에 없었으니 이동하지 않아!")}
+              "The pebble was at 2.\nWe swapped 1 and 3. Since the pebble wasn't under 1 or 3, it doesn't move!", "조약돌은 2번에 있었어.\n1번과 3번을 교환했어. 조약돌이 1번이나 3번 아래에 없었으니 이동하지 않아!")}
           </div>
         </div>),
     },
@@ -386,10 +385,9 @@ export function makeShellCh3(E, lang = "py") {
             ]}
             highlight={[0, 1, 2, 3, 4]}
           />
-          <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
+          <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5, whiteSpace: "pre-line" }}>
             {t(E,
-              "Store all swaps as tuples (a, b, g) in a list. We'll replay these for each starting position.",
-              "모든 스왑을 튜플 (a, b, g)로 리스트에 저장. 각 시작 위치마다 이걸 다시 재생할 거야.")}
+              "Store all swaps as tuples (a, b, g) in a list.\nWe'll replay these for each starting position.", "모든 스왑을 튜플 (a, b, g)로 리스트에 저장.\n각 시작 위치마다 이걸 다시 재생할 거야.")}
           </div>
         </div>),
     },

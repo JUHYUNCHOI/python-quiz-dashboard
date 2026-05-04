@@ -30,10 +30,10 @@ export function makeTichuCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udccf"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Tichu</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P4</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key formula: C(N, 2) = N * (N-1) / 2. This counts the number of unique pairs from N items.",
-              "핵심 공식: C(N, 2) = N * (N-1) / 2. N개 항목에서 고유한 쌍의 수를 세는 공식이야.")}
+              "Key formula: C(N, 2) = N * (N-1) / 2.\nThis counts the number of unique pairs from N items.",
+              "핵심 공식: C(N, 2) = N * (N-1) / 2.\nN개 항목에서 고유한 쌍의 수를 세는 공식이야.")}
           </div>
         </div>),
     },
@@ -87,10 +87,10 @@ export function makeTichuCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Direct formula: C(N,2) = N*(N-1)//2. No loops needed, just one calculation.",
-              "직접 공식: C(N,2) = N*(N-1)//2. 반복문 필요 없이 계산 한 번이면 돼.")}
+              "Direct formula: C(N,2) = N*(N-1)//2.\nNo loops needed, just one calculation.",
+              "직접 공식: C(N,2) = N*(N-1)//2.\n반복문 필요 없이 계산 한 번이면 돼.")}
           </div>
         </div>),
     },

@@ -61,10 +61,10 @@ export function makeCowCollegeCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\uD83C\uDF93"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow College</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "N cows, each with a max tuition. Set ONE tuition price. Revenue = price x (cows who can afford it). Maximize revenue!",
-              "N마리의 소, 각각 최대 등록금. 등록금을 하나로 정해. 수입 = 가격 x (지불 가능한 소 수). 수입 최대화!")}
+              "N cows, each with a max tuition.\nSet ONE tuition price. Revenue = price x (cows who can afford it). Maximize revenue!",
+              "N마리의 소, 각각 최대 등록금.\n등록금을 하나로 정해.\n수입 = 가격 x (지불 가능한 소 수). 수입 최대화!")}
           </div>
         </div>),
     },
@@ -98,11 +98,9 @@ export function makeCowCollegeCh1(E) {
             {/* Revenue idea */}
             <div style={{
               background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10,
-              padding: 10, fontSize: 13, color: C.text, lineHeight: 1.8,
-            }}>
+              padding: 10, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
-                "If we set tuition = $4, which cows can pay? Those with max >= 4: cows with $6, $6, $4. That's 3 cows. Revenue = 4 x 3 = 12.",
-                "등록금 = $4로 정하면 누가 낼 수 있을까? 최대 >= 4인 소: $6, $6, $4. 3마리. 수입 = 4 x 3 = 12.")}
+                "If we set tuition = $4, which cows can pay?\nThose with max >= 4: cows with $6, $6, $4. That's 3 cows. Revenue = 4 x 3 = 12.", "등록금 = $4로 정하면 누가 낼 수 있을까?\n최대 >= 4인 소: $6, $6, $4. 3마리. 수입 = 4 x 3 = 12.")}
             </div>
           </div>
         );
@@ -153,8 +151,7 @@ export function makeCowCollegeCh1(E) {
                 {t(E, "Tuition = c[1] = $4", "등록금 = c[1] = $4")}
               </div>
               {t(E,
-                "Cows from index 1 onward (green bars) can all pay! Count = N - i = 4 - 1 = 3. Revenue = 4 x 3 = 12",
-                "인덱스 1부터 끝까지(초록 막대) 모두 지불 가능! 수 = N - i = 4 - 1 = 3. 수입 = 4 x 3 = 12")}
+                "Cows from index 1 onward (green bars) can all pay!\nCount = N - i = 4 - 1 = 3. Revenue = 4 x 3 = 12", "인덱스 1부터 끝까지(초록 막대) 모두 지불 가능!\n수 = N - i = 4 - 1 = 3. 수입 = 4 x 3 = 12")}
             </div>
           </div>
         );
@@ -367,10 +364,10 @@ export function makeCowCollegeCh2(E) {
           <div style={{ fontSize: 20, fontWeight: 900, color: "#d97706", fontFamily: "'JetBrains Mono', monospace" }}>
             O(N log N)
           </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sorting takes O(N log N). The single sweep is O(N). Since O(N log N) > O(N), total = O(N log N). For N up to 100,000, this runs instantly!",
-              "정렬은 O(N log N). 스윕 한 번은 O(N). O(N log N) > O(N)이므로 총 = O(N log N). N이 100,000까지여도 즉시 실행!")}
+              "Sorting takes O(N log N).\nThe single sweep is O(N). Since O(N log N) > O(N), total = O(N log N). For N up to 100,000, this runs instantly!",
+              "정렬은 O(N log N).\n스윕 한 번은 O(N). O(N log N) > O(N)이므로 총 = O(N log N). N이 100,000까지여도 즉시 실행!")}
           </div>
         </div>),
     },

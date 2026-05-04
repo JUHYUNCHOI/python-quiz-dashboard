@@ -48,10 +48,10 @@ export function makePhoto2Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"📷"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Photoshoot 2</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Count inversions - cows not in the correct relative order need to be moved. Track the maximum position seen so far.",
-              "핵심: 역전 세기 - 올바른 상대 순서가 아닌 소는 이동 필요. 지금까지 본 최대 위치 추적.")}
+              "Key: Count inversions - cows not in the correct relative order need to be moved.\nTrack the maximum position seen so far.",
+              "핵심: 역전 세기 - 올바른 상대 순서가 아닌 소는 이동 필요.\n지금까지 본 최대 위치 추적.")}
           </div>
         </div>),
     },
@@ -104,10 +104,10 @@ export function makePhoto2Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Build position map for current order. Scan target order left to right, tracking max position. Any cow with position < max is an inversion and needs moving.",
-              "현재 순서의 위치 맵 생성. 목표 순서를 왼쪽에서 오른쪽으로 스캔, 최대 위치 추적. 위치 < 최댓값인 소는 역전이라 이동 필요.")}
+              "Build position map for current order.\nScan target order left to right, tracking max position. Any cow with position < max is an inversion and needs moving.",
+              "현재 순서의 위치 맵 생성.\n목표 순서를 왼쪽에서 오른쪽으로 스캔, 최대 위치 추적.\n위치 < 최댓값인 소는 역전이라 이동 필요.")}
           </div>
         </div>),
     },

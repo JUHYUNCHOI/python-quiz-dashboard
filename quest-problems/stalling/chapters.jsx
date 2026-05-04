@@ -43,10 +43,10 @@ export function makeStallingCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Just Stalling</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Sort both cows and stalls by height. For each cow (smallest first), count available stalls. Multiply the choices together.",
-              "핵심: 소와 축사를 높이순 정렬. 각 소(작은 것부터)에 대해 가용 축사 수를 세. 선택지를 곱해.")}
+              "Key: Sort both cows and stalls by height.\nFor each cow (smallest first), count available stalls. Multiply the choices together.",
+              "핵심: 소와 축사를 높이순 정렬.\n각 소(작은 것부터)에 대해 가용 축사 수를 세. 선택지를 곱해.")}
           </div>
         </div>),
     },
@@ -98,10 +98,10 @@ export function makeStallingCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sort cows and stalls. For each cow (ascending), count stalls with sufficient height. Multiply available choices minus already assigned.",
-              "소와 축사를 정렬해. 각 소(오름차순)에 대해 높이가 충분한 축사를 세고 이미 배정된 것을 빼서 곱해.")}
+              "Sort cows and stalls.\nFor each cow (ascending), count stalls with sufficient height. Multiply available choices minus already assigned.",
+              "소와 축사를 정렬해.\n각 소(오름차순)에 대해 높이가 충분한 축사를 세고 이미 배정된 것을 빼서 곱해.")}
           </div>
         </div>),
     },

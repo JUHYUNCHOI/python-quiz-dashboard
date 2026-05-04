@@ -76,10 +76,10 @@ export function makeHps17Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u270a"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Hoof, Paper, Scissors</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: There are 3! = 6 ways to map {1,2,3} to {H,P,S}. For each mapping and each FJ gesture choice, count wins. Take the maximum.",
-              "핵심: {1,2,3}을 {H,P,S}에 매핑하는 방법은 3! = 6가지. 각 매핑과 FJ 제스처 선택마다 승수를 세고 최댓값을 취해.")}
+              "Key: There are 3! = 6 ways to map {1,2,3} to {H,P,S}.\nFor each mapping and each FJ gesture choice, count wins. Take the maximum.",
+              "핵심: {1,2,3}을 {H,P,S}에 매핑하는 방법은 3! = 6가지.\n각 매핑과 FJ 제스처 선택마다 승수를 세고 최댓값을 취해.")}
           </div>
         </div>),
     },
@@ -132,10 +132,10 @@ export function makeHps17Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Brute force: 6 mappings x 3 FJ choices x N rounds. Since 18 is constant, it's O(N).",
-              "브루트포스: 6가지 매핑 x 3가지 FJ 선택 x N 라운드. 18은 상수이므로 O(N).")}
+              "Brute force: 6 mappings x 3 FJ choices x N rounds.\nSince 18 is constant, it's O(N).",
+              "브루트포스: 6가지 매핑 x 3가지 FJ 선택 x N 라운드.\n18은 상수이므로 O(N).")}
           </div>
         </div>),
     },

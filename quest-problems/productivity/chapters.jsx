@@ -39,10 +39,10 @@ export function makeProdCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>📊</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Max Productivity</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Maximizing Productivity</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "N farms, each closes at time c_i. Bessie wakes at time S, arrives at farm i at time t_i + S. She can visit farm i only if t_i + S < c_i. Given Q queries (S, V): can she visit >= V farms?",
-              "N개 농장, 각각 시간 c_i에 닫혀. 베시는 시간 S에 일어나서, 농장 i에 t_i + S에 도착. t_i + S < c_i일 때만 방문 가능. Q개 쿼리 (S, V): V개 이상 방문 가능?")}
+              "N farms, each closes at time c_i. Bessie wakes at time S, arrives at farm i at time t_i + S. She can visit farm i only if t_i + S < c_i. Given Q queries (S,\nV): can she visit >= V farms?",
+              "N개 농장, 각각 시간 c_i에 닫혀.\n베시는 시간 S에 일어나서, 농장 i에 t_i + S에 도착.\nt_i + S < c_i일 때만 방문 가능.\nQ개 쿼리 (S, V): V개 이상 방문 가능?")}
           </div>
         </div>),
     },
@@ -64,10 +64,9 @@ export function makeProdCh1(E) {
                 S {"<"} d_i
               </div>
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {t(E,
-                "d_i = c_i - t_i is the latest Bessie can wake up and still visit farm i. Sort d[], then for each query S, binary search to count how many d_i > S!",
-                "d_i = c_i - t_i는 베시가 농장 i를 방문할 수 있는 가장 늦은 기상 시간이야. d[]를 정렬한 후, 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 세!")}
+                "d_i = c_i - t_i is the latest Bessie can wake up and still visit farm i.\nSort d[], then for each query S, binary search to count how many d_i > S!", "d_i = c_i - t_i는 베시가 농장 i를 방문할 수 있는 가장 늦은 기상 시간이야.\nd[]를 정렬한 후, 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 세!")}
             </div>
           </div>
         </div>),

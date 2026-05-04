@@ -39,10 +39,10 @@ export function makeAbcsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Do You Know Your ABCs?</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Sort the 7 numbers. The largest is always A+B+C. The smallest is A. The second smallest is B. Then C = (A+B+C) - A - B.",
-              "핵심: 7개 숫자를 정렬해. 가장 큰 수는 항상 A+B+C. 가장 작은 수는 A. 두 번째로 작은 수는 B. C = (A+B+C) - A - B.")}
+              "Key: Sort the 7 numbers.\nThe largest is always A+B+C. The smallest is A. The second smallest is B. Then C = (A+B+C) - A - B.",
+              "핵심: 7개 숫자를 정렬해.\n가장 큰 수는 항상 A+B+C. 가장 작은 수는 A. 두 번째로 작은 수는 B. C = (A+B+C) - A - B.")}
           </div>
         </div>),
     },
@@ -94,10 +94,10 @@ export function makeAbcsCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sort 7 numbers. Largest = A+B+C. Smallest = A. Second smallest = B. C = A+B+C - A - B. Done!",
-              "7개 정렬. 가장 큰 수 = A+B+C. 가장 작은 수 = A. 두 번째 = B. C = A+B+C - A - B. 끝!")}
+              "Sort 7 numbers.\nLargest = A+B+C. Smallest = A. Second smallest = B. C = A+B+C - A - B. Done!",
+              "7개 정렬.\n가장 큰 수 = A+B+C. 가장 작은 수 = A. 두 번째 = B. C = A+B+C - A - B. 끝!")}
           </div>
         </div>),
     },

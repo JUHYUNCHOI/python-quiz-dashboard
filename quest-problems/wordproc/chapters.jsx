@@ -106,10 +106,10 @@ export function makeWordProcCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"📝"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Word Processor</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "N words, max K characters per line. Fit as many words as possible on each line (greedy), then start a new line!",
-              "N개 단어, 줄당 최대 K글자. 각 줄에 가능한 많은 단어를 넣고 (그리디), 그 다음 새 줄 시작!")}
+              "N words, max K characters per line.\nFit as many words as possible on each line (greedy), then start a new line!",
+              "N개 단어, 줄당 최대 K글자.\n각 줄에 가능한 많은 단어를 넣고 (그리디), 그 다음 새 줄 시작!")}
           </div>
         </div>),
     },

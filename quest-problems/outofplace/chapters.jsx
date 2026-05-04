@@ -41,10 +41,10 @@ export function makeOutOfPlaceCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Out of Place</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2018 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Compare the original array with its sorted version. Count positions that differ. The answer is (number of differing positions) - 1.",
-              "핵심: 원래 배열과 정렬된 버전을 비교해. 다른 위치 수를 세. 답 = (다른 위치 수) - 1.")}
+              "Key: Compare the original array with its sorted version.\nCount positions that differ. The answer is (number of differing positions) - 1.",
+              "핵심: 원래 배열과 정렬된 버전을 비교해.\n다른 위치 수를 세. 답 = (다른 위치 수) - 1.")}
           </div>
         </div>),
     },
@@ -97,10 +97,10 @@ export function makeOutOfPlaceCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sort a copy, compare element by element. The misplaced cow creates a contiguous block of differences. Swaps needed = block length - 1.",
-              "사본을 정렬하고 요소별로 비교해. 잘못 놓인 소는 연속된 차이 블록을 만들어. 필요한 스왑 = 블록 길이 - 1.")}
+              "Sort a copy, compare element by element.\nThe misplaced cow creates a contiguous block of differences. Swaps needed = block length - 1.",
+              "사본을 정렬하고 요소별로 비교해.\n잘못 놓인 소는 연속된 차이 블록을 만들어.\n필요한 스왑 = 블록 길이 - 1.")}
           </div>
         </div>),
     },

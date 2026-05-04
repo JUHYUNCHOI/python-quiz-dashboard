@@ -47,10 +47,10 @@ export function makeCrossRd2Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cross the Road II</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Find the two positions of each cow. Two cows cross iff their positions interleave: A..B..A..B. Check all pairs.",
-              "핵심: 각 소의 두 위치를 찾아. 두 소가 교차하려면 위치가 번갈아 나와야 해: A..B..A..B. 모든 쌍을 확인해.")}
+              "Key: Find the two positions of each cow.\nTwo cows cross iff their positions interleave: A..B..A..B. Check all pairs.",
+              "핵심: 각 소의 두 위치를 찾아.\n두 소가 교차하려면 위치가 번갈아 나와야 해: A..B..A..B. 모든 쌍을 확인해.")}
           </div>
         </div>),
     },
@@ -103,10 +103,10 @@ export function makeCrossRd2Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Record the two positions of each cow letter. For every pair of cows, check if their positions interleave (a1 < b1 < a2 < b2 or b1 < a1 < b2 < a2).",
-              "각 소 문자의 두 위치를 기록해. 모든 소 쌍에 대해 위치가 번갈아 나오는지 확인 (a1 < b1 < a2 < b2 또는 b1 < a1 < b2 < a2).")}
+              "Record the two positions of each cow letter.\nFor every pair of cows, check if their positions interleave (a1 < b1 < a2 < b2 or b1 < a1 < b2 < a2).",
+              "각 소 문자의 두 위치를 기록해.\n모든 소 쌍에 대해 위치가 번갈아 나오는지 확인 (a1 < b1 < a2 < b2 또는 b1 < a1 < b2 < a2).")}
           </div>
         </div>),
     },

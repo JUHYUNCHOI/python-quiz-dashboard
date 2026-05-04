@@ -35,10 +35,10 @@ export function makeXorStringCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2295"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>XOR The String</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P6</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: XOR truth table: 0^0=0, 0^1=1, 1^0=1, 1^1=0. Same bits give 0, different bits give 1.",
-              "핵심: XOR 진리표: 0^0=0, 0^1=1, 1^0=1, 1^1=0. 같은 비트는 0, 다른 비트는 1.")}
+              "Key: XOR truth table: 0^0=0, 0^1=1, 1^0=1, 1^1=0.\nSame bits give 0, different bits give 1.",
+              "핵심: XOR 진리표: 0^0=0, 0^1=1, 1^0=1, 1^1=0. 같은 비트는 0,\n다른 비트는 1.")}
           </div>
         </div>),
     },
@@ -90,10 +90,10 @@ export function makeXorStringCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Compare characters at each position. If they match, output '0'. If they differ, output '1'. Linear scan.",
-              "각 위치의 문자를 비교해. 같으면 '0', 다르면 '1'을 출력. 선형 스캔.")}
+              "Compare characters at each position.\nIf they match, output '0'. If they differ, output '1'. Linear scan.",
+              "각 위치의 문자를 비교해.\n같으면 '0', 다르면 '1'을 출력. 선형 스캔.")}
           </div>
         </div>),
     },

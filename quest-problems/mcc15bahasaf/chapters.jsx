@@ -42,10 +42,10 @@ export function makeMcc15BahasaCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udde3\ufe0f"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Bahasa F</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P3</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Iterate through each character. If it's a consonant (not a vowel), replace it with 'f'. Vowels are a, e, i, o, u.",
-              "핵심: 각 문자를 순회해. 자음이면 (모음이 아니면) 'f'로 교체. 모음은 a, e, i, o, u.")}
+              "Key: Iterate through each character.\nIf it's a consonant (not a vowel), replace it with 'f'. Vowels are a, e, i, o, u.",
+              "핵심: 각 문자를 순회해.\n자음이면 (모음이 아니면) 'f'로 교체. 모음은 a, e, i, o, u.")}
           </div>
         </div>),
     },
@@ -99,7 +99,7 @@ export function makeMcc15BahasaCh2(E, lang = "py") {
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
-              "For each character, check if it's a vowel. If not, replace with 'f'. Simple linear scan.",
+              "For each character, check if it's a vowel.\nIf not, replace with 'f'. Simple linear scan.",
               "각 문자마다 모음인지 확인. 아니면 'f'로 교체. 간단한 선형 스캔.")}
           </div>
         </div>),

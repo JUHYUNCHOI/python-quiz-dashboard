@@ -35,10 +35,10 @@ export function makeCornerCoverCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcd0"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Corner Cover</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: A rectangle has 4 corners. A line (1xM or Nx1) has 2 endpoints. A single cell has 1 corner. Count them!",
-              "핵심: 직사각형은 꼭짓점이 4개. 직선(1xM 또는 Nx1)은 끝점이 2개. 한 셀은 꼭짓점이 1개. 세어봐!")}
+              "Key: A rectangle has 4 corners.\nA line (1xM or Nx1) has 2 endpoints. A single cell has 1 corner. Count them!",
+              "핵심: 직사각형은 꼭짓점이 4개.\n직선(1xM 또는 Nx1)은 끝점이 2개.\n한 셀은 꼭짓점이 1개.\n세어봐!")}
           </div>
         </div>),
     },
@@ -91,10 +91,10 @@ export function makeCornerCoverCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Three cases: single cell (1), line (2), rectangle (4). Just check the dimensions!",
-              "세 가지 경우: 한 셀(1), 직선(2), 직사각형(4). 차원만 확인하면 돼!")}
+              "Three cases: single cell (1), line (2), rectangle (4).\nJust check the dimensions!",
+              "세 가지 경우: 한 셀(1), 직선(2), 직사각형(4).\n차원만 확인하면 돼!")}
           </div>
         </div>),
     },

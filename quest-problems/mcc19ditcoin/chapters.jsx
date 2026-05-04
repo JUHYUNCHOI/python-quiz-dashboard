@@ -42,10 +42,10 @@ export function makeMcc19DitcoinCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>💰</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Ditcoin</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P4</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Compute suffix max of prices. Sell all coins when today's price equals suffix max (no better future price).",
-              "핵심: 가격의 접미사 최댓값 계산. 오늘 가격이 접미사 최댓값과 같으면(더 좋은 미래 가격 없음) 모든 코인 판매.")}
+              "Key: Compute suffix max of prices.\nSell all coins when today's price equals suffix max (no better future price).",
+              "핵심: 가격의 접미사 최댓값 계산.\n오늘 가격이 접미사 최댓값과 같으면(더 좋은 미래 가격 없음) 모든 코인 판매.")}
           </div>
         </div>),
     },
@@ -98,10 +98,10 @@ export function makeMcc19DitcoinCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Two passes: 1) Build suffix max array. 2) Scan left to right, accumulate coins, sell when price = suffix max.",
-              "두 번 순회: 1) 접미사 최댓값 배열 구축. 2) 왼쪽에서 오른쪽으로 코인 누적, 가격 = 접미사 최댓값일 때 판매.")}
+              "Two passes: 1) Build suffix max array. 2) Scan left to right,\naccumulate coins, sell when price = suffix max.",
+              "두 번 순회: 1) 접미사 최댓값 배열 구축.\n2) 왼쪽에서 오른쪽으로 코인 누적, 가격 = 접미사 최댓값일 때 판매.")}
           </div>
         </div>),
     },

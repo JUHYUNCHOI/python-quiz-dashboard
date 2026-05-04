@@ -56,10 +56,10 @@ export function makeLeadersCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc51"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Leaders</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: For each breed, find cows whose range covers all of that breed. Then check valid pairs where one leader covers the other.",
-              "핵심: 각 품종에서 범위가 해당 품종 전체를 커버하는 소를 찾아. 그 다음 한 리더가 다른 리더를 커버하는 유효한 쌍을 확인해.")}
+              "Key: For each breed, find cows whose range covers all of that breed.\nThen check valid pairs where one leader covers the other.",
+              "핵심: 각 품종에서 범위가 해당 품종 전체를 커버하는 소를 찾아.\n그 다음 한 리더가 다른 리더를 커버하는 유효한 쌍을 확인해.")}
           </div>
         </div>),
     },
@@ -111,10 +111,10 @@ export function makeLeadersCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N + L_G * L_H)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Step 1: Find first/last occurrence of each breed. Step 2: Find all leaders (cows whose range covers their breed's last position). Step 3: Count valid pairs.",
-              "1단계: 각 품종의 첫/마지막 위치 찾기. 2단계: 모든 리더 찾기 (범위가 품종의 마지막 위치를 커버하는 소). 3단계: 유효한 쌍 세기.")}
+              "Step 1: Find first/last occurrence of each breed.\nStep 2: Find all leaders (cows whose range covers their breed's last position). Step 3: Count valid pairs.",
+              "1단계: 각 품종의 첫/마지막 위치 찾기.\n2단계: 모든 리더 찾기 (범위가 품종의 마지막 위치를 커버하는 소). 3단계: 유효한 쌍 세기.")}
           </div>
         </div>),
     },

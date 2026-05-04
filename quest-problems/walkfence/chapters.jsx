@@ -54,10 +54,10 @@ export function makeWalkCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🚶</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Walking Along a Fence</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Rectilinear polygon fence. Each cow walks the shorter way around. Compute distance for each cow!",
-              "직각 다각형 울타리. 각 소는 더 짧은 방향으로 걸어. 각 소의 거리를 계산!")}
+              "Rectilinear polygon fence.\nEach cow walks the shorter way around. Compute distance for each cow!",
+              "직각 다각형 울타리.\n각 소는 더 짧은 방향으로 걸어. 각 소의 거리를 계산!")}
           </div>
         </div>),
     },

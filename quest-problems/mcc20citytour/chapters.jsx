@@ -39,10 +39,10 @@ export function makeMcc20CityTourCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfd9\ufe0f"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>City Tour</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: BFS from starting position. Visit all reachable cells with value 1. Count visited cells.",
-              "핵심: 시작 위치에서 BFS. 값이 1인 도달 가능한 모든 셀 방문. 방문한 셀 수 세기.")}
+              "Key: BFS from starting position.\nVisit all reachable cells with value 1. Count visited cells.",
+              "핵심: 시작 위치에서 BFS.\n값이 1인 도달 가능한 모든 셀 방문. 방문한 셀 수 세기.")}
           </div>
         </div>),
     },
@@ -86,10 +86,10 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(R*C)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Use deque for BFS. Check 4 directions. Mark visited to avoid revisiting. Count all reached cells.",
-              "BFS에 deque 사용. 4방향 확인. 방문 표시로 재방문 방지. 도달한 모든 셀 카운트.")}
+              "Use deque for BFS.\nCheck 4 directions. Mark visited to avoid revisiting. Count all reached cells.",
+              "BFS에 deque 사용.\n4방향 확인. 방문 표시로 재방문 방지. 도달한 모든 셀 카운트.")}
           </div>
         </div>),
     },

@@ -49,7 +49,7 @@ export function makeDontBeLastCh1(E) {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "Key: Sum each cow's milk, sort unique totals, find the second-smallest value, then check if exactly one cow has that amount.",
-              "핵심: 각 소의 우유 합산, 고유 합계 정렬, 두 번째로 작은 값 찾기, 그 양을 가진 소가 정확히 한 마리인지 확인.")}
+              "핵심: 각 소의 우유 합산,\n고유 합계 정렬,\n두 번째로 작은 값 찾기, 그 양을 가진 소가 정확히 한 마리인지 확인.")}
           </div>
         </div>),
     },
@@ -101,10 +101,10 @@ export function makeDontBeLastCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sum milk per cow using a dictionary. Get sorted unique totals. If fewer than 2 unique values, output 'Tie'. Otherwise check if exactly one cow has the second value.",
-              "딕셔너리로 소별 우유 합산. 고유 합계 정렬. 고유값이 2개 미만이면 'Tie'. 아니면 두 번째 값을 가진 소가 정확히 1마리인지 확인.")}
+              "Sum milk per cow using a dictionary.\nGet sorted unique totals. If fewer than 2 unique values, output 'Tie'. Otherwise check if exactly one cow has the second value.",
+              "딕셔너리로 소별 우유 합산.\n고유 합계 정렬.\n고유값이 2개 미만이면 'Tie'. 아니면 두 번째 값을 가진 소가 정확히 1마리인지 확인.")}
           </div>
         </div>),
     },

@@ -45,10 +45,10 @@ export function makeLostCowCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>The Lost Cow</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Simulate the zigzag. From x, go to x+1, then x-2, then x+4, then x-8... Stop when you pass y. Track total distance.",
-              "핵심: 지그재그를 시뮬레이션해. x에서 x+1, x-2, x+4, x-8... y를 지나갈 때 멈춰. 총 거리를 추적해.")}
+              "Key: Simulate the zigzag.\nFrom x, go to x+1, then x-2, then x+4, then x-8... Stop when you pass y. Track total distance.",
+              "핵심: 지그재그를 시뮬레이션해.\nx에서 x+1, x-2, x+4, x-8... y를 지나갈 때 멈춰.\n총 거리를 추적해.")}
           </div>
         </div>),
     },

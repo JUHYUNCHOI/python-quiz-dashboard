@@ -28,10 +28,10 @@ export function makeMcc21MarblesCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd34"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Marbles and Boxes</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P3</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Calculate the target per box (total/N). Count excess marbles; each move transfers one marble. Total moves = sum of |excess| / 2.",
-              "핵심: 상자당 목표 계산 (total/N). 초과 구슬 수 세기; 각 이동은 구슬 1개 전달. 총 이동 = |초과| 합 / 2.")}
+              "Key: Calculate the target per box (total/N).\nCount excess marbles; each move transfers one marble. Total moves = sum of |excess| / 2.",
+              "핵심: 상자당 목표 계산 (total/N). 초과 구슬 수 세기; 각 이동은 구슬 1개 전달.\n총 이동 = |초과| 합 / 2.")}
           </div>
         </div>),
     },
@@ -75,10 +75,10 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Compute target = total / N. Sum |a[i] - target| for all i, then divide by 2 (each move fixes two boxes).",
-              "target = total / N 계산. 모든 i에 대해 |a[i] - target| 합산, 2로 나누기 (각 이동이 두 상자 수정).")}
+              "Compute target = total / N.\nSum |a[i] - target| for all i, then divide by 2 (each move fixes two boxes).",
+              "target = total / N 계산.\n모든 i에 대해 |a[i] - target| 합산, 2로 나누기 (각 이동이 두 상자 수정).")}
           </div>
         </div>),
     },

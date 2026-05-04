@@ -58,10 +58,10 @@ export function makeEvolutionCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddec"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cow Evolution</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Two characteristics 'cross' if there exist populations with {A only}, {B only}, and {A and B}. If any pair crosses, the answer is 'no'.",
-              "핵심: 두 특성이 '교차'하려면 {A만}, {B만}, {A와 B} 모두 가진 집단이 존재해야 해. 교차하는 쌍이 있으면 답은 'no'.")}
+              "Key: Two characteristics 'cross' if there exist populations with {A only}, {B only}, and {A and B}.\nIf any pair crosses, the answer is 'no'.",
+              "핵심: 두 특성이 '교차'하려면 {A만}, {B만}, {A와 B} 모두 가진 집단이 존재해야 해.\n교차하는 쌍이 있으면 답은 'no'.")}
           </div>
         </div>),
     },
@@ -113,10 +113,10 @@ export function makeEvolutionCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>{"O(C\u00b2 \u00d7 N)"}</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "For each pair of characteristics (A, B), check if populations with {A only}, {B only}, and {A,B} all exist. If any such triple exists, output 'no'.",
-              "각 특성 쌍 (A, B)에 대해 {A만}, {B만}, {A,B} 모두 가진 집단이 존재하는지 확인. 그런 쌍이 있으면 'no' 출력.")}
+              "For each pair of characteristics (A,\nB), check if populations with {A only}, {B only}, and {A,B} all exist. If any such triple exists, output 'no'.",
+              "각 특성 쌍 (A, B)에 대해 {A만}, {B만}, {A,B} 모두 가진 집단이 존재하는지 확인.\n그런 쌍이 있으면 'no' 출력.")}
           </div>
         </div>),
     },

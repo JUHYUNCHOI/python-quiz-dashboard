@@ -35,10 +35,10 @@ export function makeRectanglesCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u25ac"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Rectangles</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P5</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Formula: C(N+1, 2) * C(M+1, 2). An N x M grid has (N+1) horizontal lines and (M+1) vertical lines. Pick 2 of each!",
-              "공식: C(N+1, 2) * C(M+1, 2). N x M 격자에는 (N+1)개 수평선과 (M+1)개 수직선이 있어. 각각 2개씩 고르면 돼!")}
+              "Formula: C(N+1, 2) * C(M+1, 2).\nAn N x M grid has (N+1) horizontal lines and (M+1) vertical lines. Pick 2 of each!",
+              "공식: C(N+1, 2) * C(M+1, 2). N x M 격자에는 (N+1)개 수평선과 (M+1)개 수직선이 있어.\n각각 2개씩 고르면 돼!")}
           </div>
         </div>),
     },
@@ -92,10 +92,10 @@ export function makeRectanglesCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Use the combination formula C(n,2) = n*(n-1)/2. Multiply for horizontal and vertical choices.",
-              "조합 공식 C(n,2) = n*(n-1)/2 사용. 수평과 수직 선택을 곱해.")}
+              "Use the combination formula C(n,2) = n*(n-1)/2.\nMultiply for horizontal and vertical choices.",
+              "조합 공식 C(n,2) = n*(n-1)/2 사용.\n수평과 수직 선택을 곱해.")}
           </div>
         </div>),
     },

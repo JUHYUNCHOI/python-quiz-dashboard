@@ -52,10 +52,10 @@ export function makeTrianglesCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcd0"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Triangles</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: For each point as the right-angle corner, find the farthest point on the same x (height) and same y (width). Area = width * height / 2.",
-              "핵심: 각 점을 직각 꼭짓점으로, 같은 x의 가장 먼 점(높이)과 같은 y의 가장 먼 점(너비)을 찾아. 넓이 = 너비 * 높이 / 2.")}
+              "Key: For each point as the right-angle corner, find the farthest point on the same x (height) and same y (width).\nArea = width * height / 2.",
+              "핵심: 각 점을 직각 꼭짓점으로, 같은 x의 가장 먼 점(높이)과 같은 y의 가장 먼 점(너비)을 찾아.\n넓이 = 너비 * 높이 / 2.")}
           </div>
         </div>),
     },
@@ -108,10 +108,10 @@ export function makeTrianglesCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N^2)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each point, find max vertical distance (same x) and max horizontal distance (same y). The product gives 2 * area. Take the maximum over all points.",
-              "각 점에서 최대 수직 거리(같은 x)와 최대 수평 거리(같은 y)를 찾아. 곱이 2 * 넓이. 모든 점 중 최대값.")}
+              "For each point, find max vertical distance (same x) and max horizontal distance (same y).\nThe product gives 2 * area. Take the maximum over all points.",
+              "각 점에서 최대 수직 거리(같은 x)와 최대 수평 거리(같은 y)를 찾아.\n곱이 2 * 넓이.\n모든 점 중 최대값.")}
           </div>
         </div>),
     },

@@ -58,10 +58,10 @@ export function makeBillboardCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🪧</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Blocked Billboard</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, textAlign: "left" }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, textAlign: "left" , whiteSpace: "pre-line" }}>
             {t(E,
-              "Given: Two rectangular billboards + one rectangular truck. All rectangles have sides parallel to axes. Find: Total visible billboard area.",
-              "주어진 것: 직사각형 광고판 2개 + 직사각형 트럭 1개. 모두 축에 평행. 구할 것: 보이는 총 광고판 면적.")}
+              "Given: Two rectangular billboards + one rectangular truck.\nAll rectangles have sides parallel to axes. Find: Total visible billboard area.",
+              "주어진 것: 직사각형 광고판 2개 + 직사각형 트럭 1개.\n모두 축에 평행.\n구할 것: 보이는 총 광고판 면적.")}
           </div>
         </div>),
     },

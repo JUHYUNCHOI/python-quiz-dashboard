@@ -56,10 +56,10 @@ export function makeBrigadeCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udea3"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Bucket Brigade</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: BFS on the grid from lake to barn, avoiding the rock. The answer is the shortest path length minus 1 (lake and barn are endpoints, not cows).",
-              "핵심: 호수에서 헛간까지 BFS. 바위를 피해서 최단 경로를 구하고, 답은 경로 길이 - 1 (호수와 헛간은 끝점이라 소가 아님).")}
+              "Key: BFS on the grid from lake to barn, avoiding the rock.\nThe answer is the shortest path length minus 1 (lake and barn are endpoints, not cows).",
+              "핵심: 호수에서 헛간까지 BFS. 바위를 피해서 최단 경로를 구하고,\n답은 경로 길이 - 1 (호수와 헛간은 끝점이라 소가 아님).")}
           </div>
         </div>),
     },
@@ -113,10 +113,10 @@ export function makeBrigadeCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "BFS from lake to barn on the grid, skip the rock cell. Answer = shortest_path_length - 1.",
-              "격자에서 호수에서 헛간까지 BFS, 바위 셀은 건너뛰어. 답 = 최단경로길이 - 1.")}
+              "BFS from lake to barn on the grid, skip the rock cell.\nAnswer = shortest_path_length - 1.",
+              "격자에서 호수에서 헛간까지 BFS, 바위 셀은 건너뛰어.\n답 = 최단경로길이 - 1.")}
           </div>
         </div>),
     },

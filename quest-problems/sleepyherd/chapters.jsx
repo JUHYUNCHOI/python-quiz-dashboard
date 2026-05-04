@@ -48,10 +48,10 @@ export function makeSleepyHerdCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude34"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Sleepy Cow Herding</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Sort positions. Max = total_span - 2 (move one step at a time). Min depends on gaps: both gaps 1 -> 0, any gap <= 2 -> 1, otherwise 2.",
-              "핵심: 위치 정렬. 최대 = 전체범위 - 2 (한 칸씩 이동). 최소는 간격에 따라: 둘 다 1이면 0, 하나가 2 이하면 1, 아니면 2.")}
+              "Key: Sort positions.\nMax = total_span - 2 (move one step at a time). Min depends on gaps: both gaps 1 -> 0, any gap <= 2 -> 1, otherwise 2.",
+              "핵심: 위치 정렬.\n최대 = 전체범위 - 2 (한 칸씩 이동). 최소는 간격에 따라: 둘 다 1이면 0, 하나가 2 이하면 1, 아니면 2.")}
           </div>
         </div>),
     },
@@ -105,10 +105,10 @@ export function makeSleepyHerdCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sort a, b, c. Max = (c-a)-2. Min: if both gaps are 1 -> 0; if either gap <= 2 -> 1; else 2.",
-              "a, b, c 정렬. 최대 = (c-a)-2. 최소: 두 간격 모두 1이면 0; 하나라도 2 이하면 1; 아니면 2.")}
+              "Sort a, b, c.\nMax = (c-a)-2. Min: if both gaps are 1 -> 0; if either gap <= 2 -> 1; else 2.",
+              "a, b, c 정렬.\n최대 = (c-a)-2. 최소: 두 간격 모두 1이면 0; 하나라도 2 이하면 1; 아니면 2.")}
           </div>
         </div>),
     },

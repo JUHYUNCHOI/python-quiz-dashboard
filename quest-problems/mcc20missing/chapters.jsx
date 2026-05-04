@@ -32,10 +32,10 @@ export function makeMcc20MissingCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2753"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Missing Number</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P5</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Take absolute values to ignore sign changes. Find which number from 1..N is not present. Sum all missing candidates.",
-              "핵심: 절대값으로 부호 변경 무시. 1..N에서 없는 숫자 찾기. 빠진 후보 모두 합산.")}
+              "Key: Take absolute values to ignore sign changes.\nFind which number from 1..N is not present. Sum all missing candidates.",
+              "핵심: 절대값으로 부호 변경 무시.\n1..N에서 없는 숫자 찾기. 빠진 후보 모두 합산.")}
           </div>
         </div>),
     },
@@ -79,10 +79,10 @@ export function makeMcc20MissingCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Build a set of |a[i]|. Check each number 1..N. If not in set, add to answer.",
-              "|a[i]|의 집합 구축. 1..N의 각 숫자 확인. 집합에 없으면 답에 추가.")}
+              "Build a set of |a[i]|.\nCheck each number 1..N. If not in set, add to answer.",
+              "|a[i]|의 집합 구축.\n1..N의 각 숫자 확인. 집합에 없으면 답에 추가.")}
           </div>
         </div>),
     },

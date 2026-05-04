@@ -36,10 +36,10 @@ export function makePhoto20Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"📸"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Photoshoot</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Try a[0] = 1, 2, ..., N. For each, compute a[i+1] = b[i] - a[i]. Check if result is a valid permutation of 1..N. First valid one is lex-smallest.",
-              "핵심: a[0] = 1, 2, ..., N을 시도. 각각에 대해 a[i+1] = b[i] - a[i] 계산. 결과가 1..N의 유효한 순열인지 확인. 첫 번째 유효한 것이 사전순 최소.")}
+              "Key: Try a[0] = 1, 2, ...,\nN. For each, compute a[i+1] = b[i] - a[i]. Check if result is a valid permutation of 1..N. First valid one is lex-smallest.",
+              "핵심: a[0] = 1, 2, ..., N을 시도.\n각각에 대해 a[i+1] = b[i] - a[i] 계산.\n결과가 1..N의 유효한 순열인지 확인.\n첫 번째 유효한 것이 사전순 최소.")}
           </div>
         </div>),
     },
@@ -91,10 +91,10 @@ export function makePhoto20Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>{"O(N\u00b2)"}</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each candidate a[0], compute a[i+1] = b[i] - a[i]. Check if all values form a valid permutation (all in 1..N, no duplicates). Return the first valid one.",
-              "각 후보 a[0]에 대해 a[i+1] = b[i] - a[i] 계산. 모든 값이 유효한 순열을 이루는지 확인 (1..N 내, 중복 없음). 첫 번째 유효한 것 반환.")}
+              "For each candidate a[0], compute a[i+1] = b[i] - a[i].\nCheck if all values form a valid permutation (all in 1..N, no duplicates). Return the first valid one.",
+              "각 후보 a[0]에 대해 a[i+1] = b[i] - a[i] 계산.\n모든 값이 유효한 순열을 이루는지 확인 (1..N 내, 중복 없음). 첫 번째 유효한 것 반환.")}
           </div>
         </div>),
     },

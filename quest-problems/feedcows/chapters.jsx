@@ -43,10 +43,10 @@ export function makeFeedCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf3e"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Feeding the Cows</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Greedy left to right. When a cow isn't covered, place a patch at position i+K (as far right as possible) to cover the maximum range [i, i+K] for that breed.",
-              "핵심: 왼쪽에서 오른쪽으로 그리디. 소가 커버되지 않으면, 최대 범위 [i, i+K]를 커버하도록 위치 i+K에 패치를 놓아 (가능한 한 오른쪽에).")}
+              "Key: Greedy left to right.\nWhen a cow isn't covered, place a patch at position i+K (as far right as possible) to cover the maximum range [i, i+K] for that breed.",
+              "핵심: 왼쪽에서 오른쪽으로 그리디.\n소가 커버되지 않으면, 최대 범위 [i, i+K]를 커버하도록 위치 i+K에 패치를 놓아 (가능한 한 오른쪽에).")}
           </div>
         </div>),
     },
@@ -98,10 +98,10 @@ export function makeFeedCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Track the rightmost covered position for each breed separately. When a cow of breed B at position i is not covered (i > last_B), place a patch at i and set last_B = i + K.",
-              "각 품종별로 가장 오른쪽 커버 위치를 추적해. 위치 i의 품종 B 소가 미커버 (i > last_B)면, i에 패치를 놓고 last_B = i + K로 설정.")}
+              "Track the rightmost covered position for each breed separately.\nWhen a cow of breed B at position i is not covered (i > last_B), place a patch at i and set last_B = i + K.",
+              "각 품종별로 가장 오른쪽 커버 위치를 추적해.\n위치 i의 품종 B 소가 미커버 (i > last_B)면, i에 패치를 놓고 last_B = i + K로 설정.")}
           </div>
         </div>),
     },

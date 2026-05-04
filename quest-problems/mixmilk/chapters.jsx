@@ -101,10 +101,10 @@ export function makeMixMilkCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🥛"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mixing Milk</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Each bucket has a CAPACITY (max it can hold) and some initial milk. We simulate 100 pour operations!",
-              "각 양동이에는 용량(최대 보관량)과 초기 우유량이 있어. 100번의 붓기를 시뮬레이션해!")}
+              "Each bucket has a CAPACITY (max it can hold) and some initial milk.\nWe simulate 100 pour operations!",
+              "각 양동이에는 용량(최대 보관량)과 초기 우유량이 있어.\n100번의 붓기를 시뮬레이션해!")}
           </div>
         </div>),
     },

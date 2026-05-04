@@ -49,10 +49,10 @@ export function makeMcc22CardSharkCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udccf"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Card Shark</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P5</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Sort cards descending. Players alternate picking from the top. First player gets cards at indices 0, 2, 4, ... Greedy optimal strategy.",
-              "핵심: 카드를 내림차순 정렬. 플레이어가 번갈아 위에서 가져가. 첫 번째 플레이어는 인덱스 0, 2, 4, ...의 카드를 가져가. 그리디 최적 전략.")}
+              "Key: Sort cards descending.\nPlayers alternate picking from the top. First player gets cards at indices 0, 2, 4, ... Greedy optimal strategy.",
+              "핵심: 카드를 내림차순 정렬.\n플레이어가 번갈아 위에서 가져가.\n첫 번째 플레이어는 인덱스 0, 2, 4, ...의 카드를 가져가.\n그리디 최적 전략.")}
           </div>
         </div>),
     },
@@ -105,10 +105,10 @@ export function makeMcc22CardSharkCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Sort cards in descending order. Player 1 takes odd-indexed cards (0, 2, 4, ...), Player 2 takes even-indexed. Sum Player 1's cards.",
-              "카드를 내림차순으로 정렬. 플레이어 1이 홀수 인덱스(0, 2, 4, ...), 플레이어 2가 짝수 인덱스. 플레이어 1의 카드 합산.")}
+              "Sort cards in descending order. Player 1 takes odd-indexed cards (0, 2, 4, ...),\nPlayer 2 takes even-indexed. Sum Player 1's cards.",
+              "카드를 내림차순으로 정렬.\n플레이어 1이 홀수 인덱스(0, 2, 4, ...), 플레이어 2가 짝수 인덱스.\n플레이어 1의 카드 합산.")}
           </div>
         </div>),
     },

@@ -47,10 +47,10 @@ export function makeAcow1Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcda"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Acowdemia I</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Sort papers by citations. Binary search on h. For each candidate h, check if we can boost enough papers using L extra citations.",
-              "핵심: 인용수로 논문을 정렬. h를 이분 탐색. 각 후보 h에 대해 L개의 추가 인용으로 충분한 논문을 올릴 수 있는지 확인.")}
+              "Key: Sort papers by citations.\nBinary search on h. For each candidate h, check if we can boost enough papers using L extra citations.",
+              "핵심: 인용수로 논문을 정렬.\nh를 이분 탐색.\n각 후보 h에 대해 L개의 추가 인용으로 충분한 논문을 올릴 수 있는지 확인.")}
           </div>
         </div>),
     },
@@ -103,10 +103,10 @@ export function makeAcow1Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sort ascending. Binary search on h. For a candidate h, the last h papers need at least h citations each. Sum up the deficit and compare with L.",
-              "오름차순 정렬. h를 이분 탐색. 후보 h에 대해 마지막 h개 논문이 각각 h 이상 인용 필요. 부족분의 합을 L과 비교.")}
+              "Sort ascending.\nBinary search on h. For a candidate h, the last h papers need at least h citations each. Sum up the deficit and compare with L.",
+              "오름차순 정렬.\nh를 이분 탐색.\n후보 h에 대해 마지막 h개 논문이 각각 h 이상 인용 필요.\n부족분의 합을 L과 비교.")}
           </div>
         </div>),
     },

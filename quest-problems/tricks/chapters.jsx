@@ -323,8 +323,7 @@ export function makeTricksCh3(E) {
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
             {t(E,
-              "(2,1) and (1,2) are the same bag! min/max ensures consistent ordering.",
-              "(2,1)과 (1,2)는 같은 봉지야! min/max로 항상 작은 수가 앞에 오게 정리해.")}
+              "(2,1) and (1,2) are the same bag! min/max ensures consistent ordering.", "(2,1)과 (1,2)는 같은 봉지야!\nmin/max로 항상 작은 수가 앞에 오게 정리해.")}
           </div>
           <CodeSnippet
             lines={[

@@ -61,10 +61,10 @@ export function makeWalkHomeCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfe0"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Walking Home</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: DP with state (row, col, direction, changes_left). K <= 3 so the state space is manageable: N^2 * 2 * (K+1).",
-              "핵심: DP 상태 (행, 열, 방향, 남은 전환 수). K <= 3이므로 상태 공간 관리 가능: N^2 * 2 * (K+1).")}
+              "Key: DP with state (row, col, direction, changes_left).\nK <= 3 so the state space is manageable: N^2 * 2 * (K+1).",
+              "핵심: DP 상태 (행,\n열,\n방향, 남은 전환 수). K <= 3이므로 상태 공간 관리 가능: N^2 * 2 * (K+1).")}
           </div>
         </div>),
     },
@@ -117,10 +117,10 @@ export function makeWalkHomeCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N^2 * K)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "At each cell, try moving right or down. If direction changes from previous, increment change counter. Prune when changes > K.",
-              "각 셀에서 오른쪽 또는 아래로 이동 시도. 이전과 방향이 바뀌면 전환 카운터 증가. 전환 > K이면 가지치기.")}
+              "At each cell, try moving right or down.\nIf direction changes from previous, increment change counter. Prune when changes > K.",
+              "각 셀에서 오른쪽 또는 아래로 이동 시도.\n이전과 방향이 바뀌면 전환 카운터 증가.\n전환 > K이면 가지치기.")}
           </div>
         </div>),
     },

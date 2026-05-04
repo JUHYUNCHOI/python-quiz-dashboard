@@ -41,10 +41,10 @@ export function makeBlockGameCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udde9"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Block Game</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: For each board, count letters in front and back words. Take max per letter. Sum across all boards for the total blocks needed.",
-              "핵심: 각 판에서 앞면과 뒷면 단어의 글자 수를 세. 글자별 최댓값을 취해. 모든 판에 대해 합산하면 필요한 총 블록 수야.")}
+              "Key: For each board, count letters in front and back words.\nTake max per letter. Sum across all boards for the total blocks needed.",
+              "핵심: 각 판에서 앞면과 뒷면 단어의 글자 수를 세.\n글자별 최댓값을 취해.\n모든 판에 대해 합산하면 필요한 총 블록 수야.")}
           </div>
         </div>),
     },
@@ -96,10 +96,10 @@ export function makeBlockGameCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N * L)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Use Counter for each word. For each board, take max(front_count, back_count) per letter and add to global needs. Final answer is sum of all global needs.",
-              "각 단어에 Counter 사용. 각 판에서 글자별 max(앞면 개수, 뒷면 개수)를 구해 전역 필요량에 더해. 최종 답은 전역 필요량의 합.")}
+              "Use Counter for each word.\nFor each board, take max(front_count, back_count) per letter and add to global needs. Final answer is sum of all global needs.",
+              "각 단어에 Counter 사용.\n각 판에서 글자별 max(앞면 개수, 뒷면 개수)를 구해 전역 필요량에 더해.\n최종 답은 전역 필요량의 합.")}
           </div>
         </div>),
     },

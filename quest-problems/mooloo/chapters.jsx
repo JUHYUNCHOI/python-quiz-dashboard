@@ -44,10 +44,10 @@ export function makeMoolooCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcfa"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Watching Mooloo</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "N specific days Bessie wants to watch. Each subscription costs d+K for d consecutive days. Find minimum total cost to cover all N days.",
-              "N\uac1c \ud2b9\uc815 \ub0a0\uc5d0 \ubcf4\uace0 \uc2f6\uc74c. \uac01 \uad6c\ub3c5\uc740 d\uc77c \uc5f0\uc18d\uc73c\ub85c d+K \ube44\uc6a9. \ubaa8\ub4e0 N\uc77c\uc744 \ucee4\ubc84\ud558\ub294 \ucd5c\uc18c \ube44\uc6a9.")}
+              "N specific days Bessie wants to watch.\nEach subscription costs d+K for d consecutive days. Find minimum total cost to cover all N days.",
+              "N\uac1c \ud2b9\uc815 \ub0a0\uc5d0 \ubcf4\uace0 \uc2f6\uc74c.\n\uac01 \uad6c\ub3c5\uc740 d\uc77c \uc5f0\uc18d\uc73c\ub85c d+K \ube44\uc6a9. \ubaa8\ub4e0 N\uc77c\uc744 \ucee4\ubc84\ud558\ub294 \ucd5c\uc18c \ube44\uc6a9.")}
           </div>
         </div>),
     },

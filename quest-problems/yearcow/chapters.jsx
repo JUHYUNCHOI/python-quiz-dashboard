@@ -49,10 +49,10 @@ export function makeYearCowCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc02"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Year of the Cow</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: The zodiac cycle is 12 years. 'Previous X year' means go back 1-12 years to find that animal. Chain the relationships to compute total offset.",
-              "핵심: 십이지 주기는 12년. '이전 X년'은 그 동물을 찾기 위해 1-12년 뒤로 가는 것. 관계를 연결해서 총 오프셋을 계산.")}
+              "Key: The zodiac cycle is 12 years. 'Previous X year' means go back 1-12 years to find that animal.\nChain the relationships to compute total offset.",
+              "핵심: 십이지 주기는 12년.\n'이전 X년'은 그 동물을 찾기 위해 1-12년 뒤로 가는 것.\n관계를 연결해서 총 오프셋을 계산.")}
           </div>
         </div>),
     },
@@ -105,10 +105,10 @@ export function makeYearCowCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Keep a running year offset. For each 'previous/next Animal' clue, compute the modular distance in the 12-animal cycle (never 0, use 12 instead).",
-              "연도 오프셋을 누적. 각 '이전/다음 동물' 단서에 대해 12동물 주기에서 모듈러 거리 계산 (0이면 12 사용).")}
+              "Keep a running year offset.\nFor each 'previous/next Animal' clue, compute the modular distance in the 12-animal cycle (never 0, use 12 instead).",
+              "연도 오프셋을 누적.\n각 '이전/다음 동물' 단서에 대해 12동물 주기에서 모듈러 거리 계산 (0이면 12 사용).")}
           </div>
         </div>),
     },

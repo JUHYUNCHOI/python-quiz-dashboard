@@ -40,10 +40,10 @@ export function makeCrossRd3Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udeaa"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Cross the Road III</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Sort by arrival time. Track when the gate becomes free. If a cow arrives after the gate is free, start immediately. Otherwise, wait in queue.",
-              "핵심: 도착 시간으로 정렬해. 문이 비는 시간을 추적해. 소가 문이 빈 후에 도착하면 바로 시작. 아니면 대기열에서 기다려.")}
+              "Key: Sort by arrival time.\nTrack when the gate becomes free. If a cow arrives after the gate is free, start immediately. Otherwise, wait in queue.",
+              "핵심: 도착 시간으로 정렬해.\n문이 비는 시간을 추적해.\n소가 문이 빈 후에 도착하면 바로 시작.\n아니면 대기열에서 기다려.")}
           </div>
         </div>),
     },
@@ -96,10 +96,10 @@ export function makeCrossRd3Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sort by arrival. Track current_time (when gate becomes free). For each cow: if current_time < arrival, jump to arrival. Then add duration. Final current_time is the answer.",
-              "도착순 정렬. current_time (문이 비는 시간)을 추적해. 각 소: current_time < 도착이면 도착으로 점프. 그 다음 소요시간 추가. 최종 current_time이 답.")}
+              "Sort by arrival.\nTrack current_time (when gate becomes free). For each cow: if current_time < arrival, jump to arrival. Then add duration. Final current_time is the answer.",
+              "도착순 정렬.\ncurrent_time (문이 비는 시간)을 추적해.\n각 소: current_time < 도착이면 도착으로 점프.\n그 다음 소요시간 추가.\n최종 current_time이 답.")}
           </div>
         </div>),
     },

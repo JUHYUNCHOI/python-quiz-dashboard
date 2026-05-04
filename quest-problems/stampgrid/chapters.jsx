@@ -54,10 +54,10 @@ export function makeStampCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcee"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Stamp Grid</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "N\u00d7N grid (desired pattern). K\u00d7K stamp (can rotate 0/90/180/270\u00b0). Place stamp at any valid position, any rotation. Can we match the pattern exactly?",
-              "N\u00d7N \uadf8\ub9ac\ub4dc (\uc6d0\ud558\ub294 \ud328\ud134). K\u00d7K \ub3c4\uc7a5 (0/90/180/270\u00b0 \ud68c\uc804 \uac00\ub2a5). \uc5b4\ub5a4 \uc704\uce58, \uc5b4\ub5a4 \ud68c\uc804\uc73c\ub85c\ub4e0 \ubc30\uce58. \ud328\ud134\uc744 \uc815\ud655\ud788 \ub9cc\ub4e4 \uc218 \uc788\ub098?")}
+              "N\u00d7N grid (desired pattern).\nK\u00d7K stamp (can rotate 0/90/180/270\u00b0). Place stamp at any valid position, any rotation. Can we match the pattern exactly?",
+              "N\u00d7N \uadf8\ub9ac\ub4dc (\uc6d0\ud558\ub294 \ud328\ud134). K\u00d7K \ub3c4\uc7a5 (0/90/180/270\u00b0 \ud68c\uc804 \uac00\ub2a5). \uc5b4\ub5a4 \uc704\uce58,\n\uc5b4\ub5a4 \ud68c\uc804\uc73c\ub85c\ub4e0 \ubc30\uce58. \ud328\ud134\uc744 \uc815\ud655\ud788 \ub9cc\ub4e4 \uc218 \uc788\ub098?")}
           </div>
         </div>),
     },
@@ -82,7 +82,7 @@ export function makeStampCh1(E) {
               ))}
             </div>
             <div style={{ textAlign: "center", fontSize: 12, fontWeight: 700, color: "#059669", marginTop: 10 }}>
-              {t(E, "Same stamp, 4 orientations!", "\uac19\uc740 \ub3c4\uc7a5, 4\uac00\uc9c0 \ubc29\ud5a5!")}
+              {t(E, "Same stamp, 4 orientations!", "\uac19\uc740 \ub3c4\uc7a5,\n4\uac00\uc9c0 \ubc29\ud5a5!")}
             </div>
           </div>
         </div>),

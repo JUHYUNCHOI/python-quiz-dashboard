@@ -62,10 +62,10 @@ export function makeAirCond1Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf21\ufe0f"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Air Cownditioning</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Compute diff d[i] = preferred[i] - current[i]. The answer equals the sum of all positive increases in the diff array (like the painting/histogram problem).",
-              "핵심: 차이 d[i] = preferred[i] - current[i] 계산. 답은 차이 배열에서 양의 증가분의 합 (페인팅/히스토그램 문제와 같아).")}
+              "Key: Compute diff d[i] = preferred[i] - current[i].\nThe answer equals the sum of all positive increases in the diff array (like the painting/histogram problem).",
+              "핵심: 차이 d[i] = preferred[i] - current[i] 계산.\n답은 차이 배열에서 양의 증가분의 합 (페인팅/히스토그램 문제와 같아).")}
           </div>
         </div>),
     },
@@ -118,10 +118,10 @@ export function makeAirCond1Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Extend diff with 0 at both ends. Answer = sum of max(0, d[i] - d[i-1]) for all i. Each positive jump means we need new commands.",
-              "diff 양쪽 끝에 0 추가. 답 = 모든 i에 대해 max(0, d[i] - d[i-1])의 합. 양의 점프마다 새 명령이 필요해.")}
+              "Extend diff with 0 at both ends.\nAnswer = sum of max(0, d[i] - d[i-1]) for all i. Each positive jump means we need new commands.",
+              "diff 양쪽 끝에 0 추가.\n답 = 모든 i에 대해 max(0, d[i] - d[i-1])의 합.\n양의 점프마다 새 명령이 필요해.")}
           </div>
         </div>),
     },

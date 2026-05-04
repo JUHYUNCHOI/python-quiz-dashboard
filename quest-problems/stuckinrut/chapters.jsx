@@ -61,10 +61,10 @@ export function makeStuckCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Stuck in a Rut</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: For each N-cow and E-cow pair, compute intersection time. Process events in time order. A stopped cow can't stop others.",
-              "핵심: 각 북쪽/동쪽 소 쌍에 대해 교차 시간 계산. 시간순으로 이벤트 처리. 멈춘 소는 다른 소를 멈출 수 없어.")}
+              "Key: For each N-cow and E-cow pair, compute intersection time.\nProcess events in time order. A stopped cow can't stop others.",
+              "핵심: 각 북쪽/동쪽 소 쌍에 대해 교차 시간 계산.\n시간순으로 이벤트 처리.\n멈춘 소는 다른 소를 멈출 수 없어.")}
           </div>
         </div>),
     },
@@ -116,10 +116,10 @@ export function makeStuckCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N\u00b2 log N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Enumerate all N-cow/E-cow pairs to find intersections. Sort by time. Process in order: first collision wins, stopped cows are ignored.",
-              "모든 북쪽/동쪽 소 쌍을 열거해 교차점을 찾아. 시간순 정렬. 순서대로 처리: 먼저 충돌한 것이 이기고 멈춘 소는 무시.")}
+              "Enumerate all N-cow/E-cow pairs to find intersections.\nSort by time. Process in order: first collision wins, stopped cows are ignored.",
+              "모든 북쪽/동쪽 소 쌍을 열거해 교차점을 찾아.\n시간순 정렬.\n순서대로 처리: 먼저 충돌한 것이 이기고 멈춘 소는 무시.")}
           </div>
         </div>),
     },

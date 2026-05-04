@@ -59,10 +59,9 @@ export function makeDaisyCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\uD83C\uDF3C"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: C.carry }}>Daisy Chains</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #2</div>
-          <div style={{ marginTop: 12, background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "N flowers with petal counts. Count the number of contiguous subarrays where at least one flower has exactly the average petal count of that subarray.",
-              "N개의 꽃에 꽃잎 수가 있어. 부분 배열의 평균 꽃잎 수와 정확히 같은 꽃이 하나라도 있는 연속 부분 배열의 수를 세.")}
+              "N flowers with petal counts.\nCount the number of contiguous subarrays where at least one flower has exactly the average petal count of that subarray.", "N개의 꽃에 꽃잎 수가 있어.\n부분 배열의 평균 꽃잎 수와 정확히 같은 꽃이 하나라도 있는 연속 부분 배열의 수를 세.")}
           </div>
         </div>),
     },
@@ -465,10 +464,9 @@ export function makeDaisyCh3(E, lang = "py") {
             ]}
             highlight={[3, 4, 5, 6, 7]}
           />
-          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
+          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6, whiteSpace: "pre-line" }}>
             {t(E,
-              "count tracks valid subarrays. s accumulates the sum as we extend j. No need to recompute from scratch!",
-              "count는 유효한 부분 배열 수. s는 j를 확장하며 합을 누적. 처음부터 다시 계산할 필요 없어!")}
+              "count tracks valid subarrays. s accumulates the sum as we extend j.\nNo need to recompute from scratch!", "count는 유효한 부분 배열 수.\ns는 j를 확장하며 합을 누적. 처음부터 다시 계산할 필요 없어!")}
           </div>
         </div>),
     },
@@ -502,8 +500,7 @@ export function makeDaisyCh3(E, lang = "py") {
           />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E,
-              "s % length == 0 checks if avg is an integer. avg in p[i:j+1] checks if any flower in the subarray has that petal count.",
-              "s % length == 0으로 평균이 정수인지 확인. avg in p[i:j+1]로 부분 배열 내 꽃이 그 꽃잎 수를 가지는지 확인.")}
+              "s % length == 0 checks if avg is an integer. avg in p[i:j+1] checks if any flower in the subarray has that petal count.", "s % length == 0으로 평균이 정수인지 확인.\navg in p[i:j+1]로 부분 배열 내 꽃이 그 꽃잎 수를 가지는지 확인.")}
           </div>
         </div>),
     },

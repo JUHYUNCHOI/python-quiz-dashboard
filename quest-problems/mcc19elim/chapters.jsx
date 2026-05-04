@@ -41,10 +41,10 @@ export function makeMcc19ElimCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Elimination</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P5</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Sliding window — maintain a window with at most K zeros. Track the maximum window length.",
-              "핵심: 슬라이딩 윈도우 — 최대 K개의 0을 포함하는 윈도우 유지. 최대 윈도우 길이 추적.")}
+              "Key: Sliding window — maintain a window with at most K zeros.\nTrack the maximum window length.",
+              "핵심: 슬라이딩 윈도우 — 최대 K개의 0을 포함하는 윈도우 유지.\n최대 윈도우 길이 추적.")}
           </div>
         </div>),
     },
@@ -97,10 +97,10 @@ export function makeMcc19ElimCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sliding window with two pointers. Each element is visited at most twice (once by right, once by left). Track zero count in window.",
-              "투 포인터 슬라이딩 윈도우. 각 원소는 최대 두 번 방문(right 한 번, left 한 번). 윈도우 내 0 개수 추적.")}
+              "Sliding window with two pointers.\nEach element is visited at most twice (once by right, once by left). Track zero count in window.",
+              "투 포인터 슬라이딩 윈도우.\n각 원소는 최대 두 번 방문(right 한 번, left 한 번). 윈도우 내 0 개수 추적.")}
           </div>
         </div>),
     },

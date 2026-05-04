@@ -52,10 +52,10 @@ export function makeComfyCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Comfortable Cows</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: When adding a cow, only the new cow and its 4 neighbors can change comfort status. Use a set for O(1) lookups.",
-              "핵심: 소를 추가할 때 새 소와 4개의 이웃만 편안함 상태가 바뀔 수 있어. O(1) 조회를 위해 집합 사용.")}
+              "Key: When adding a cow, only the new cow and its 4 neighbors can change comfort status.\nUse a set for O(1) lookups.",
+              "핵심: 소를 추가할 때 새 소와 4개의 이웃만 편안함 상태가 바뀔 수 있어.\nO(1) 조회를 위해 집합 사용.")}
           </div>
         </div>),
     },
@@ -107,10 +107,10 @@ export function makeComfyCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Each cow addition triggers at most 5 comfort checks (itself + 4 neighbors). Total work is O(5N) = O(N).",
-              "각 소 추가는 최대 5번의 편안함 확인 (자신 + 이웃 4). 총 작업량은 O(5N) = O(N).")}
+              "Each cow addition triggers at most 5 comfort checks (itself + 4 neighbors).\nTotal work is O(5N) = O(N).",
+              "각 소 추가는 최대 5번의 편안함 확인 (자신 + 이웃 4).\n총 작업량은 O(5N) = O(N).")}
           </div>
         </div>),
     },

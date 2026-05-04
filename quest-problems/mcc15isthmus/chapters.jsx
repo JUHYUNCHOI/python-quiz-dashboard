@@ -58,10 +58,10 @@ export function makeMcc15IsthmusCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26f0\ufe0f"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Isthmus</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P4</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: For each position i (from K to N-K-1), check if the K neighbors on each side form a strictly monotone sequence. If increasing then decreasing = peak. If decreasing then increasing = valley.",
-              "핵심: 각 위치 i (K부터 N-K-1까지)에서 양쪽 K개 이웃이 순단조 수열인지 확인. 증가 후 감소 = 봉우리. 감소 후 증가 = 골짜기.")}
+              "Key: For each position i (from K to N-K-1), check if the K neighbors on each side form a strictly monotone sequence.\nIf increasing then decreasing = peak. If decreasing then increasing = valley.",
+              "핵심: 각 위치 i (K부터 N-K-1까지)에서 양쪽 K개 이웃이 순단조 수열인지 확인.\n증가 후 감소 = 봉우리.\n감소 후 증가 = 골짜기.")}
           </div>
         </div>),
     },
@@ -115,10 +115,10 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N*K)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each candidate position, verify K neighbors on each side are strictly increasing (or decreasing). Break early if condition fails.",
-              "각 후보 위치에서 양쪽 K개 이웃이 순증가(또는 순감소)인지 확인. 조건 실패 시 조기 종료.")}
+              "For each candidate position, verify K neighbors on each side are strictly increasing (or decreasing).\nBreak early if condition fails.",
+              "각 후보 위치에서 양쪽 K개 이웃이 순증가(또는 순감소)인지 확인.\n조건 실패 시 조기 종료.")}
           </div>
         </div>),
     },

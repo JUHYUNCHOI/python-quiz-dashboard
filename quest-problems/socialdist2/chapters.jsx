@@ -58,10 +58,10 @@ export function makeSocDist2Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udda0"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Social Distancing II</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Use healthy cows to bound max R. Then count clusters of sick cows separated by gaps > 2R.",
-              "핵심: 건강한 소로 최대 R을 제한. 간격 > 2R인 감염 소 클러스터 수를 세.")}
+              "Key: Use healthy cows to bound max R.\nThen count clusters of sick cows separated by gaps > 2R.",
+              "핵심: 건강한 소로 최대 R을 제한.\n간격 > 2R인 감염 소 클러스터 수를 세.")}
           </div>
         </div>),
     },
@@ -114,10 +114,10 @@ export function makeSocDist2Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "1) Sort by position. 2) For each healthy cow, compute distance to nearest sick cow to bound R. 3) Count clusters of sick cows with gaps > 2R.",
-              "1) 위치로 정렬. 2) 건강한 소마다 가장 가까운 감염 소까지 거리로 R 제한. 3) 간격 > 2R인 감염 클러스터 세기.")}
+              "1) Sort by position. 2) For each healthy cow,\ncompute distance to nearest sick cow to bound R. 3) Count clusters of sick cows with gaps > 2R.",
+              "1) 위치로 정렬.\n2) 건강한 소마다 가장 가까운 감염 소까지 거리로 R 제한.\n3) 간격 > 2R인 감염 클러스터 세기.")}
           </div>
         </div>),
     },

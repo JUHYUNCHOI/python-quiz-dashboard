@@ -59,10 +59,9 @@ export function makeWhereAmICh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"📍"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: C.carry }}>Where Am I?</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #2</div>
-          <div style={{ marginTop: 12, background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Given a string of N mailbox labels (A-Z), find the minimum K such that every substring of length K is unique.",
-              "N개의 우편함 라벨 문자열(A-Z)이 주어질 때, 길이 K인 모든 부분문자열이 고유한 최소 K를 구해.")}
+              "Given a string of N mailbox labels (A-Z),\nfind the minimum K such that every substring of length K is unique.", "N개의 우편함 라벨 문자열(A-Z)이 주어질 때,\n길이 K인 모든 부분문자열이 고유한 최소 K를 구해.")}
           </div>
         </div>),
     },
@@ -368,8 +367,7 @@ export function makeWhereAmICh2(E) {
             </div>
             <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
               {t(E,
-                "Set = {AB, BA}. When we try \"AB\" again, it's already there! So K=2 has duplicates.",
-                "Set = {AB, BA}. \"AB\"를 다시 넣으려 하면 이미 있어! 그래서 K=2는 중복이 있어.")}
+                "Set = {AB, BA}.\nWhen we try \"AB\" again, it's already there! So K=2 has duplicates.", "Set = {AB, BA}.\n\"AB\"를 다시 넣으려 하면 이미 있어! 그래서 K=2는 중복이 있어.")}
             </div>
           </div>
         );
@@ -445,10 +443,9 @@ export function makeWhereAmICh2(E) {
           <div style={{ fontSize: 20, fontWeight: 900, color: C.carry, fontFamily: "'JetBrains Mono', monospace" }}>
             O(N{"\u00b2"})
           </div>
-          <div style={{ marginTop: 12, background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Outer loop: K from 1 to N (max N iterations). Inner loop: check N-K+1 substrings. With hash set, each check is O(1). Total: O(N^2). N <= 100, so this is fast enough!",
-              "바깥 반복: K를 1부터 N까지 (최대 N번). 안쪽 반복: N-K+1개 부분문자열 확인. 해시 집합으로 각 확인 O(1). 총: O(N^2). N <= 100이라 충분히 빨라!")}
+              "Outer loop: K from 1 to N (max N iterations).\nInner loop: check N-K+1 substrings. With hash set, each check is O(1). Total: O(N^2). N <= 100, so this is fast enough!", "바깥 반복: K를 1부터 N까지 (최대 N번).\n안쪽 반복: N-K+1개 부분문자열 확인. 해시 집합으로 각 확인 O(1). 총: O(N^2). N <= 100이라 충분히 빨라!")}
           </div>
         </div>),
     },

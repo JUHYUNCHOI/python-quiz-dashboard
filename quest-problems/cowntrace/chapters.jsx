@@ -74,10 +74,10 @@ export function makeCowntraceCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd0d"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cowntact Tracing</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Simulate for each possible patient zero with each K. Check if the resulting infected set matches the given final state.",
-              "핵심: 각 환자 제로 후보와 K에 대해 시뮬레이션. 결과 감염 집합이 주어진 최종 상태와 일치하는지 확인.")}
+              "Key: Simulate for each possible patient zero with each K.\nCheck if the resulting infected set matches the given final state.",
+              "핵심: 각 환자 제로 후보와 K에 대해 시뮬레이션.\n결과 감염 집합이 주어진 최종 상태와 일치하는지 확인.")}
           </div>
         </div>),
     },
@@ -130,10 +130,10 @@ export function makeCowntraceCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N * T^2)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each cow (N), try each K (0..T), simulate all T events. Compare final infected set with expected. Track min/max K per valid patient zero.",
-              "각 소(N)에 대해 K(0..T)를 시도, T개 이벤트 시뮬레이션. 최종 감염 집합 비교. 유효한 환자 제로별 최소/최대 K 추적.")}
+              "For each cow (N), try each K (0..T), simulate all T events.\nCompare final infected set with expected. Track min/max K per valid patient zero.",
+              "각 소(N)에 대해 K(0..T)를 시도, T개 이벤트 시뮬레이션.\n최종 감염 집합 비교.\n유효한 환자 제로별 최소/최대 K 추적.")}
           </div>
         </div>),
     },

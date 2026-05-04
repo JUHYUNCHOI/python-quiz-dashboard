@@ -47,10 +47,10 @@ export function makeTttCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u274C"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Team Tic Tac Toe</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Check all 8 lines (3 rows, 3 cols, 2 diagonals). If a line has 1 unique letter -> individual winner. If 2 unique letters -> team winner.",
-              "핵심: 8개 줄 (3행, 3열, 2대각선) 모두 확인. 줄에 고유 문자 1개 -> 개인 우승. 고유 문자 2개 -> 팀 우승.")}
+              "Key: Check all 8 lines (3 rows, 3 cols, 2 diagonals).\nIf a line has 1 unique letter -> individual winner. If 2 unique letters -> team winner.",
+              "핵심: 8개 줄 (3행, 3열, 2대각선) 모두 확인.\n줄에 고유 문자 1개 -> 개인 우승.\n고유 문자 2개 -> 팀 우승.")}
           </div>
         </div>),
     },
@@ -104,10 +104,10 @@ export function makeTttCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each of 8 lines, put the 3 cells in a set. Size 1 = individual winner, size 2 = team winner. Use sets to avoid duplicates.",
-              "8개 줄 각각에서 3칸을 집합에 넣어. 크기 1 = 개인 우승, 크기 2 = 팀 우승. 집합으로 중복 방지.")}
+              "For each of 8 lines, put the 3 cells in a set.\nSize 1 = individual winner, size 2 = team winner. Use sets to avoid duplicates.",
+              "8개 줄 각각에서 3칸을 집합에 넣어.\n크기 1 = 개인 우승, 크기 2 = 팀 우승.\n집합으로 중복 방지.")}
           </div>
         </div>),
     },

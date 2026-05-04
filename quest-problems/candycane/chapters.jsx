@@ -40,10 +40,10 @@ export function makeCandyCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🍬</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Candy Cane Feast</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "N cows, M candy canes. Each cane hung from top. Cows eat bottom up to their height, then grow by amount eaten!",
-              "N마리 소, M개 캔디 케인. 캔디는 위에서 매달려 있어. 소들은 아래부터 자기 키까지 먹고, 먹은 만큼 키가 커져!")}
+              "N cows,\nM candy canes. Each cane hung from top. Cows eat bottom up to their height, then grow by amount eaten!",
+              "N마리 소, M개 캔디 케인.\n캔디는 위에서 매달려 있어.\n소들은 아래부터 자기 키까지 먹고, 먹은 만큼 키가 커져!")}
           </div>
         </div>),
     },

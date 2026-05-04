@@ -34,7 +34,7 @@ export function makeMcc20CipherCh1(E) {
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P1</div>
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
-              "Key: Build encode and decode dictionaries from the cipher. To decode, reverse the mapping.",
+              "Key: Build encode and decode dictionaries from the cipher.\nTo decode, reverse the mapping.",
               "핵심: 암호에서 인코딩/디코딩 딕셔너리 구축. 디코딩은 매핑을 뒤집어.")}
           </div>
         </div>),
@@ -79,10 +79,10 @@ export function makeMcc20CipherCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Create encode/decode dictionaries from the 26-char cipher key. Iterate through the encoded string and map each character back.",
-              "26자 암호 키에서 인코드/디코드 딕셔너리 생성. 인코딩된 문자열을 순회하며 각 문자를 역매핑.")}
+              "Create encode/decode dictionaries from the 26-char cipher key.\nIterate through the encoded string and map each character back.",
+              "26자 암호 키에서 인코드/디코드 딕셔너리 생성.\n인코딩된 문자열을 순회하며 각 문자를 역매핑.")}
           </div>
         </div>),
     },

@@ -57,10 +57,10 @@ export function makeTameHerdCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Taming the Herd</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: 0 in the log means a breakout happened that day. Count the 0s to find breakout count. Handle missing entries (-1) by checking consistency.",
-              "핵심: 로그의 0은 그날 탈출 발생. 0의 개수가 탈출 횟수. 누락 항목(-1)은 일관성 확인으로 처리.")}
+              "Key: 0 in the log means a breakout happened that day.\nCount the 0s to find breakout count. Handle missing entries (-1) by checking consistency.",
+              "핵심: 로그의 0은 그날 탈출 발생.\n0의 개수가 탈출 횟수. 누락 항목(-1)은 일관성 확인으로 처리.")}
           </div>
         </div>),
     },
@@ -113,10 +113,10 @@ export function makeTameHerdCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Single pass: track previous known value. Each 0 is a breakout. Validate that non-zero values are consistent (each should be previous + 1 or start a new sequence).",
-              "한 번 순회: 이전 알려진 값 추적. 각 0은 탈출. 0이 아닌 값의 일관성 검증 (이전 + 1이거나 새 시퀀스 시작).")}
+              "Single pass: track previous known value.\nEach 0 is a breakout. Validate that non-zero values are consistent (each should be previous + 1 or start a new sequence).",
+              "한 번 순회: 이전 알려진 값 추적.\n각 0은 탈출.\n0이 아닌 값의 일관성 검증 (이전 + 1이거나 새 시퀀스 시작).")}
           </div>
         </div>),
     },

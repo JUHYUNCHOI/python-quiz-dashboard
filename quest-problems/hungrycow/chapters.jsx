@@ -49,10 +49,10 @@ export function makeHungryCowCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Hungry Cow</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Bessie eats 1 haybale/day (if she has any). N deliveries on specific days with specific amounts. Count total days she eats in T days.",
-              "\ubca0\uc2dc\ub294 \ud558\ub8e8\uc5d0 \uac74\ucd08 1\uac1c \uba39\uc74c (\uc788\uc73c\uba74). N\ubc88 \ubc30\ub2ec\uc774 \ud2b9\uc815 \ub0a0\uc5d0 \ud2b9\uc815 \uc591\uc73c\ub85c \ub3c4\ucc29. T\uc77c \ub3d9\uc548 \ucd1d \uba87 \uc77c \uba39\ub294\uc9c0 \uacc4\uc0b0.")}
+              "Bessie eats 1 haybale/day (if she has any).\nN deliveries on specific days with specific amounts. Count total days she eats in T days.",
+              "\ubca0\uc2dc\ub294 \ud558\ub8e8\uc5d0 \uac74\ucd08 1\uac1c \uba39\uc74c (\uc788\uc73c\uba74).\nN\ubc88 \ubc30\ub2ec\uc774 \ud2b9\uc815 \ub0a0\uc5d0 \ud2b9\uc815 \uc591\uc73c\ub85c \ub3c4\ucc29. T\uc77c \ub3d9\uc548 \ucd1d \uba87 \uc77c \uba39\ub294\uc9c0 \uacc4\uc0b0.")}
           </div>
         </div>),
     },
@@ -81,7 +81,7 @@ export function makeHungryCowCh1(E) {
               ))}
             </div>
             <div style={{ textAlign: "center", fontSize: 12, fontWeight: 700, color: "#059669", marginTop: 8 }}>
-              {t(E, "2 bales on day 1 \u2192 eats day 1, 2 \u2192 total = 2", "1\uc77c\uc5d0 2\uac1c \u2192 1\uc77c, 2\uc77c \uba39\uc74c \u2192 \ucd1d = 2")}
+              {t(E, "2 bales on day 1 \u2192 eats day 1, 2 \u2192 total = 2", "1\uc77c\uc5d0 2\uac1c \u2192 1\uc77c,\n2\uc77c \uba39\uc74c \u2192 \ucd1d = 2")}
             </div>
           </div>
         </div>),

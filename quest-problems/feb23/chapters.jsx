@@ -41,10 +41,10 @@ export function makeFebCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔤</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>FEB</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "String of B, E, F chars. F can be B or E. Count consecutive same-char pairs = excitement. Find all possible excitement levels!",
-              "B, E, F로 이루어진 문자열. F는 B 또는 E가 될 수 있어. 연속 같은 문자 쌍 = 흥분도. 가능한 흥분도의 개수를 구해!")}
+              "String of B,\nE,\nF chars. F can be B or E. Count consecutive same-char pairs = excitement. Find all possible excitement levels!",
+              "B, E, F로 이루어진 문자열.\nF는 B 또는 E가 될 수 있어.\n연속 같은 문자 쌍 = 흥분도.\n가능한 흥분도의 개수를 구해!")}
           </div>
         </div>),
     },

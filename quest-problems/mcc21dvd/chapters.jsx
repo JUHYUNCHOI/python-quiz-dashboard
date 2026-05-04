@@ -29,10 +29,10 @@ export function makeMcc21DvdCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcc0"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>DVD Screensaver</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Simulate step by step. At each step move (dx,dy). If hitting a wall, reverse the corresponding direction.",
-              "핵심: 한 단계씩 시뮬레이션. 매 단계 (dx,dy) 이동. 벽에 부딪히면 해당 방향 반전.")}
+              "Key: Simulate step by step.\nAt each step move (dx,dy). If hitting a wall, reverse the corresponding direction.",
+              "핵심: 한 단계씩 시뮬레이션.\n매 단계 (dx,dy) 이동. 벽에 부딪히면 해당 방향 반전.")}
           </div>
         </div>),
     },
@@ -78,7 +78,7 @@ export function makeMcc21DvdCh2(E, lang = "py") {
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(T)</div>
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
-              "Loop T times. Each step: move position, check boundaries, flip direction if needed.",
+              "Loop T times.\nEach step: move position, check boundaries, flip direction if needed.",
               "T번 반복. 매 단계: 위치 이동, 경계 확인, 필요하면 방향 반전.")}
           </div>
         </div>),

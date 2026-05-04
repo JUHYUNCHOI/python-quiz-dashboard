@@ -58,10 +58,10 @@ export function makeAirCondCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2744\ufe0f"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Air Cownditioning II</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Since M <= 10, we can try all 2^M subsets (at most 1024). For each subset, check if all cows are satisfied and track the minimum cost.",
-              "핵심: M <= 10이므로, 모든 2^M 부분집합을 시도할 수 있어 (최대 1024개). 각 부분집합에 대해 모든 소가 만족되는지 확인하고 최소 비용을 추적해.")}
+              "Key: Since M <= 10, we can try all 2^M subsets (at most 1024).\nFor each subset, check if all cows are satisfied and track the minimum cost.",
+              "핵심: M <= 10이므로,\n모든 2^M 부분집합을 시도할 수 있어 (최대 1024개). 각 부분집합에 대해 모든 소가 만족되는지 확인하고 최소 비용을 추적해.")}
           </div>
         </div>),
     },
@@ -114,10 +114,10 @@ export function makeAirCondCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(2^M * N * S)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Bitmask enumeration: iterate over all subsets using a bitmask from 0 to 2^M - 1. For each subset, sum up cooling contributions and verify all cows are satisfied.",
-              "비트마스크 열거: 0부터 2^M - 1까지 비트마스크로 모든 부분집합을 순회해. 각 부분집합에서 냉방 기여를 합산하고 모든 소가 만족되는지 확인.")}
+              "Bitmask enumeration: iterate over all subsets using a bitmask from 0 to 2^M - 1.\nFor each subset, sum up cooling contributions and verify all cows are satisfied.",
+              "비트마스크 열거: 0부터 2^M - 1까지 비트마스크로 모든 부분집합을 순회해.\n각 부분집합에서 냉방 기여를 합산하고 모든 소가 만족되는지 확인.")}
           </div>
         </div>),
     },

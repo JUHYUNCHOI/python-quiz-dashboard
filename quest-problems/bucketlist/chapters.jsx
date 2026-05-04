@@ -39,10 +39,10 @@ export function makeBucketListCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🪣"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Bucket List</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Sweep line! At each time point, sum up active cows' bucket needs. The answer is the maximum over all time points. Use events: +b at start, -b after end.",
-              "핵심: 스위프 라인! 각 시점에서 활성 소들의 양동이 필요량 합산. 답은 모든 시점에서의 최대값. 이벤트 사용: 시작에 +b, 끝 후에 -b.")}
+              "Key: Sweep line!\nAt each time point, sum up active cows' bucket needs. The answer is the maximum over all time points. Use events: +b at start, -b after end.",
+              "핵심: 스위프 라인!\n각 시점에서 활성 소들의 양동이 필요량 합산.\n답은 모든 시점에서의 최대값.\n이벤트 사용: 시작에 +b, 끝 후에 -b.")}
           </div>
         </div>),
     },
@@ -95,10 +95,10 @@ export function makeBucketListCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each cow, add +b event at start time and -b event at end+1. Sort all events by time, sweep through accumulating buckets, track the max.",
-              "각 소에 대해 시작 시간에 +b 이벤트, 끝+1에 -b 이벤트 추가. 시간순 정렬, 스위프하며 양동이 누적, 최대값 추적.")}
+              "For each cow, add +b event at start time and -b event at end+1.\nSort all events by time, sweep through accumulating buckets, track the max.",
+              "각 소에 대해 시작 시간에 +b 이벤트, 끝+1에 -b 이벤트 추가.\n시간순 정렬, 스위프하며 양동이 누적, 최대값 추적.")}
           </div>
         </div>),
     },

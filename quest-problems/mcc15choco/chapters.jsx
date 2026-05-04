@@ -38,10 +38,10 @@ export function makeMcc15ChocoCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf6b"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Chocolate Bars</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P5</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Use a stack. Push each bar. If the top of the stack equals the current bar, pop and add 2*size to the total. This greedily removes adjacent equal pairs.",
-              "핵심: 스택 사용. 각 바를 푸시. 스택 top이 현재 바와 같으면 팝하고 2*크기를 총합에 더해. 인접한 같은 쌍을 탐욕적으로 제거.")}
+              "Key: Use a stack.\nPush each bar. If the top of the stack equals the current bar, pop and add 2*size to the total. This greedily removes adjacent equal pairs.",
+              "핵심: 스택 사용.\n각 바를 푸시.\n스택 top이 현재 바와 같으면 팝하고 2*크기를 총합에 더해.\n인접한 같은 쌍을 탐욕적으로 제거.")}
           </div>
         </div>),
     },
@@ -95,10 +95,10 @@ export function makeMcc15ChocoCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Stack-based greedy: scan left to right. If the current bar matches the stack top, pop and accumulate. Otherwise push. Each element is handled at most twice.",
-              "스택 기반 그리디: 왼쪽에서 오른쪽으로 스캔. 현재 바가 스택 top과 같으면 팝하고 누적. 아니면 push. 각 원소는 최대 2번 처리.")}
+              "Stack-based greedy: scan left to right.\nIf the current bar matches the stack top, pop and accumulate. Otherwise push. Each element is handled at most twice.",
+              "스택 기반 그리디: 왼쪽에서 오른쪽으로 스캔.\n현재 바가 스택 top과 같으면 팝하고 누적.\n아니면 push. 각 원소는 최대 2번 처리.")}
           </div>
         </div>),
     },

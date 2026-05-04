@@ -45,10 +45,10 @@ export function makePalindromeCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🎲</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Palindrome Game</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Palindrome Stone Game</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "S stones in a pile. Each turn: remove a palindrome number of stones (1, 2, 3, ..., 9, 11, 22, 121, ...). The player who faces an empty pile LOSES!",
-              "S개의 돌이 있어. 매 턴: 회문 수만큼 돌을 가져가 (1, 2, 3, ..., 9, 11, 22, 121, ...). 빈 더미를 마주하는 플레이어가 져!")}
+              "S stones in a pile.\nEach turn: remove a palindrome number of stones (1, 2, 3, ..., 9, 11, 22, 121, ...). The player who faces an empty pile LOSES!",
+              "S개의 돌이 있어.\n매 턴: 회문 수만큼 돌을 가져가 (1, 2, 3, ..., 9, 11, 22, 121, ...). 빈 더미를 마주하는 플레이어가 져!")}
           </div>
         </div>),
     },
@@ -68,10 +68,9 @@ export function makePalindromeCh1(E) {
                 <div key={i} style={{ background: "#fff", border: "2px solid #fca5a5", borderRadius: 8, padding: "4px 10px", fontSize: 14, fontWeight: 700, color: "#dc2626" }}>{n}</div>
               ))}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {t(E,
-                "All single digits (1-9) are palindromes. 10 is NOT (01 != 10). You must remove at least 1 stone per turn.",
-                "모든 한 자리 수(1-9)는 회문이야. 10은 아니야 (01 != 10). 매 턴 최소 1개는 가져가야 해.")}
+                "All single digits (1-9) are palindromes. 10 is NOT (01 != 10).\nYou must remove at least 1 stone per turn.", "모든 한 자리 수(1-9)는 회문이야.\n10은 아니야 (01 != 10). 매 턴 최소 1개는 가져가야 해.")}
             </div>
           </div>
         </div>),

@@ -68,10 +68,10 @@ export function makeTrafficCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude97"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Measuring Traffic</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Constraint propagation. Forward pass computes end flow range. Backward pass computes start flow range. On-ramps add, off-ramps subtract (reversed going backward).",
-              "핵심: 제약 전파. 순방향 패스로 끝 유량 범위 계산. 역방향 패스로 시작 유량 범위 계산. 진입로는 더하고 출구로는 빼 (역방향은 반대).")}
+              "Key: Constraint propagation.\nForward pass computes end flow range. Backward pass computes start flow range. On-ramps add, off-ramps subtract (reversed going backward).",
+              "핵심: 제약 전파.\n순방향 패스로 끝 유량 범위 계산.\n역방향 패스로 시작 유량 범위 계산.\n진입로는 더하고 출구로는 빼 (역방향은 반대).")}
           </div>
         </div>),
     },
@@ -125,10 +125,10 @@ export function makeTrafficCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Forward pass: start with first sensor range, apply on/off ramps, intersect with sensor ranges. Backward pass: same in reverse. Two O(N) passes.",
-              "순방향: 첫 센서 범위에서 시작, on/off 적용, 센서 범위와 교차. 역방향: 반대로. O(N) 패스 두 번.")}
+              "Forward pass: start with first sensor range, apply on/off ramps, intersect with sensor ranges.\nBackward pass: same in reverse. Two O(N) passes.",
+              "순방향: 첫 센서 범위에서 시작, on/off 적용, 센서 범위와 교차.\n역방향: 반대로.\nO(N) 패스 두 번.")}
           </div>
         </div>),
     },

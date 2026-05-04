@@ -55,10 +55,10 @@ export function makeHpsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>✊✋✌️</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Hoof Paper Scissors Minus One</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "N symbols with win/lose/draw chart. Each player shows 2 symbols. After seeing all 4, each picks 1. Count Bessie's winning pairs!",
-              "N개 기호와 승/패/무 차트. 각 플레이어가 2개를 보여줌. 4개를 다 본 후 1개 선택. 베시의 승리 쌍을 세자!")}
+              "N symbols with win/lose/draw chart.\nEach player shows 2 symbols. After seeing all 4, each picks 1. Count Bessie's winning pairs!",
+              "N개 기호와 승/패/무 차트.\n각 플레이어가 2개를 보여줌.\n4개를 다 본 후 1개 선택.\n베시의 승리 쌍을 세자!")}
           </div>
         </div>),
     },

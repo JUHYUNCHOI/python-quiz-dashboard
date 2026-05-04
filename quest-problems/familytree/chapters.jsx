@@ -63,10 +63,10 @@ export function makeFamilyTreeCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf33"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Family Tree</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Build ancestor chain for cow A with depths. Walk up from cow B to find LCA. Compare depths to classify: mother, ancestor, child, descendant, siblings, or unrelated.",
-              "핵심: 소 A의 조상 체인을 깊이와 함께 구축. 소 B에서 올라가며 LCA 찾기. 깊이 비교로 분류: 어미, 조상, 자식, 후손, 형제, 무관.")}
+              "Key: Build ancestor chain for cow A with depths.\nWalk up from cow B to find LCA. Compare depths to classify: mother, ancestor, child, descendant, siblings, or unrelated.",
+              "핵심: 소 A의 조상 체인을 깊이와 함께 구축.\n소 B에서 올라가며 LCA 찾기.\n깊이 비교로 분류: 어미, 조상, 자식, 후손, 형제, 무관.")}
           </div>
         </div>),
     },
@@ -119,10 +119,10 @@ export function makeFamilyTreeCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Store A's ancestors in a dictionary with depths. Walk up from B checking if we hit any of A's ancestors. The depths tell us the relationship type.",
-              "A의 조상을 깊이와 함께 딕셔너리에 저장. B에서 올라가며 A의 조상과 만나는지 확인. 깊이로 관계 유형 판별.")}
+              "Store A's ancestors in a dictionary with depths.\nWalk up from B checking if we hit any of A's ancestors. The depths tell us the relationship type.",
+              "A의 조상을 깊이와 함께 딕셔너리에 저장.\nB에서 올라가며 A의 조상과 만나는지 확인.\n깊이로 관계 유형 판별.")}
           </div>
         </div>),
     },

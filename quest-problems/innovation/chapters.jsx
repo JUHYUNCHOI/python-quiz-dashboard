@@ -39,10 +39,10 @@ export function makeInnovationCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Innovation</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P3</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Greedy approach: sort tasks by duration ascending. Pick tasks in order until time runs out. This maximizes the count!",
-              "그리디 접근: 작업을 소요 시간 오름차순으로 정렬. 시간이 다 될 때까지 순서대로 선택. 이게 최대 개수!")}
+              "Greedy approach: sort tasks by duration ascending.\nPick tasks in order until time runs out. This maximizes the count!",
+              "그리디 접근: 작업을 소요 시간 오름차순으로 정렬.\n시간이 다 될 때까지 순서대로 선택. 이게 최대 개수!")}
           </div>
         </div>),
     },
@@ -96,10 +96,10 @@ export function makeInnovationCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sort tasks by duration. Iterate and accumulate durations. Stop when time budget is exceeded.",
-              "작업을 소요 시간으로 정렬. 순회하며 시간을 누적. 시간 예산을 초과하면 중단.")}
+              "Sort tasks by duration.\nIterate and accumulate durations. Stop when time budget is exceeded.",
+              "작업을 소요 시간으로 정렬.\n순회하며 시간을 누적. 시간 예산을 초과하면 중단.")}
           </div>
         </div>),
     },

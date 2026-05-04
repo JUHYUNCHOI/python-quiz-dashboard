@@ -36,10 +36,10 @@ export function makeUdderedCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd24"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Uddered but not Herd</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Scan through the heard string. Track position in the custom alphabet. When the next letter's position is <= current letter's position, start a new cycle.",
-              "핵심: 들은 문자열을 스캔해. 커스텀 알파벳에서의 위치를 추적해. 다음 글자 위치가 현재 위치 이하이면 새 사이클을 시작해.")}
+              "Key: Scan through the heard string.\nTrack position in the custom alphabet. When the next letter's position is <= current letter's position, start a new cycle.",
+              "핵심: 들은 문자열을 스캔해.\n커스텀 알파벳에서의 위치를 추적해.\n다음 글자 위치가 현재 위치 이하이면 새 사이클을 시작해.")}
           </div>
         </div>),
     },
@@ -91,10 +91,10 @@ export function makeUdderedCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Map each letter to its position in the custom alphabet. Scan the heard string: if next position <= current position, start a new cycle.",
-              "각 글자를 커스텀 알파벳에서의 위치로 매핑해. 들은 문자열 스캔: 다음 위치 <= 현재 위치면 새 사이클 시작.")}
+              "Map each letter to its position in the custom alphabet.\nScan the heard string: if next position <= current position, start a new cycle.",
+              "각 글자를 커스텀 알파벳에서의 위치로 매핑해.\n들은 문자열 스캔: 다음 위치 <= 현재 위치면 새 사이클 시작.")}
           </div>
         </div>),
     },

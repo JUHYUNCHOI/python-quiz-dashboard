@@ -320,8 +320,7 @@ export function makeCheeseCh1(E) {
           </div>
           <div style={{ marginTop: 12, padding: "10px 12px", background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, fontSize: 12, color: "#92400e", lineHeight: 1.7, fontWeight: 600 }}>
             🤔 {t(E,
-              "Notice the JUMP: 0 → 0 → 1 → 2 → 5. Why does the last carve add +3 at once? That's the magic we'll uncover. Hit 'Sim' next!",
-              "주목: 0 → 0 → 1 → 2 → 5. 왜 마지막 제거가 한꺼번에 +3 추가? 그게 우리가 풀 마법이야. '시뮬' 탭으로!")}
+              "Notice the JUMP: 0 → 0 → 1 → 2 → 5.\nWhy does the last carve add +3 at once? That's the magic we'll uncover. Hit 'Sim' next!", "주목: 0 → 0 → 1 → 2 → 5.\n왜 마지막 제거가 한꺼번에 +3 추가? 그게 우리가 풀 마법이야. '시뮬' 탭으로!")}
           </div>
         </div>),
     },
@@ -615,10 +614,9 @@ export function makeCheeseCh4(E) {
               "9 out of 12 cases TLE. Even passing ones at 1.2s are near the limit.",
               "12 개 중 9 개 TLE. 통과한 것들도 1.2초로 한계 근처.")}
           </div>
-          <div style={{ marginTop: 8, padding: "8px 12px", background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 11, color: C.dim, lineHeight: 1.6 }}>
+          <div style={{ marginTop: 8, padding: "8px 12px", background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 11, color: C.dim, lineHeight: 1.6, whiteSpace: "pre-line" }}>
             {t(E,
-              "N=1000, Q=200K: per query = 3M rows × 1000 cells = 3B ops. At 100M ops/sec → 30s/query × 200K = ~70 days. 😱",
-              "N=1000, Q=20만: 쿼리당 = 300만 줄 × 1000칸 = 30억 연산. 1억 ops/sec → 쿼리당 30초 × 20만 = ~70 일. 😱")}
+              "N=1000, Q=200K: per query = 3M rows × 1000 cells = 3B ops.\nAt 100M ops/sec → 30s/query × 200K = ~70 days. 😱", "N=1000, Q=20만: 쿼리당 = 300만 줄 × 1000칸 = 30억 연산.\n1억 ops/sec → 쿼리당 30초 × 20만 = ~70 일. 😱")}
           </div>
         </div>),
     },
@@ -868,8 +866,7 @@ export function makeCheeseCh5(E, lang = "py") {
           </div>
           <div style={{ marginTop: 10, padding: "8px 10px", background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 8, fontSize: 11, color: "#9a3412", lineHeight: 1.7 }}>
             👀 {t(E,
-              "Last row: ONE block (1,1,0) made 3 different counters reach N at the same time → +3 in one go. That's the 'jump' you saw in the sim.",
-              "마지막 줄: 블록 1 개 (1,1,0) 가 3 개의 카운터를 동시에 N 으로 → 한 번에 +3. 시뮬에서 본 '점프' 가 이거.")}
+              "Last row: ONE block (1,1,0) made 3 different counters reach N at the same time → +3 in one go.\nThat's the 'jump' you saw in the sim.", "마지막 줄: 블록 1 개 (1,1,0) 가 3 개의 카운터를 동시에 N 으로 → 한 번에 +3.\n시뮬에서 본 '점프' 가 이거.")}
           </div>
           <div style={{ marginTop: 6, padding: "8px 10px", background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 8, fontSize: 11, color: "#065f46", lineHeight: 1.7, fontFamily: "'JetBrains Mono',monospace" }}>
             ✓ {t(E, "Output column matches sample output: 0, 0, 1, 2, 5", "출력 칼럼이 샘플 출력과 일치: 0, 0, 1, 2, 5")}

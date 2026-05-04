@@ -59,10 +59,10 @@ export function makeMcc19PalCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔄</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Palindrome</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P6</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Palindromes of length L are determined by the first ceil(L/2) digits. Count how many exist per length, then construct the N-th one.",
-              "핵심: 길이 L의 회문은 처음 ceil(L/2)자리로 결정돼. 길이별 개수를 세고 N번째를 구성해.")}
+              "Key: Palindromes of length L are determined by the first ceil(L/2) digits.\nCount how many exist per length, then construct the N-th one.",
+              "핵심: 길이 L의 회문은 처음 ceil(L/2)자리로 결정돼.\n길이별 개수를 세고 N번째를 구성해.")}
           </div>
         </div>),
     },
@@ -115,10 +115,10 @@ export function makeMcc19PalCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(log N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each length L: (K-1) × K^(ceil(L/2)-1) palindromes exist. Skip lengths until we find the right one, then construct from first half digits.",
-              "각 길이 L: (K-1) × K^(ceil(L/2)-1)개의 회문이 존재. 맞는 길이를 찾을 때까지 건너뛰고 앞 절반 숫자로 구성.")}
+              "For each length L: (K-1) × K^(ceil(L/2)-1) palindromes exist.\nSkip lengths until we find the right one, then construct from first half digits.",
+              "각 길이 L: (K-1) × K^(ceil(L/2)-1)개의 회문이 존재.\n맞는 길이를 찾을 때까지 건너뛰고 앞 절반 숫자로 구성.")}
           </div>
         </div>),
     },

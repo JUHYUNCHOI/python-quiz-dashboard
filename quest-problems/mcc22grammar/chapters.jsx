@@ -57,10 +57,10 @@ export function makeMcc22GrammarCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcd6"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Grammar</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Build an adjacency list from the grammar edges. For each sentence, check that every consecutive word pair has a valid edge. Simple graph traversal / edge lookup.",
-              "핵심: 문법 간선으로 인접 리스트를 만들어. 각 문장에서 연속된 단어 쌍이 유효한 간선인지 확인해. 간단한 그래프 탐색 / 간선 조회.")}
+              "Key: Build an adjacency list from the grammar edges.\nFor each sentence, check that every consecutive word pair has a valid edge. Simple graph traversal / edge lookup.",
+              "핵심: 문법 간선으로 인접 리스트를 만들어.\n각 문장에서 연속된 단어 쌍이 유효한 간선인지 확인해.\n간단한 그래프 탐색 / 간선 조회.")}
           </div>
         </div>),
     },
@@ -112,10 +112,10 @@ export function makeMcc22GrammarCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(E + sum of L)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Store edges in adjacency list. For each sentence, iterate through consecutive pairs and check if the edge exists. Linear in total input size.",
-              "간선을 인접 리스트에 저장. 각 문장에서 연속 쌍을 순회하며 간선 존재 여부 확인. 전체 입력 크기에 선형.")}
+              "Store edges in adjacency list.\nFor each sentence, iterate through consecutive pairs and check if the edge exists. Linear in total input size.",
+              "간선을 인접 리스트에 저장.\n각 문장에서 연속 쌍을 순회하며 간선 존재 여부 확인.\n전체 입력 크기에 선형.")}
           </div>
         </div>),
     },

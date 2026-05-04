@@ -65,10 +65,10 @@ export function makeOddPhotosCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf8"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Even More Odd Photos</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Count odd and even IDs. Group 1 needs even sum (use 1 even or 2 odds). Group 2 needs odd sum (use 1 odd). Alternate greedily.",
-              "핵심: 홀수/짝수 ID 개수를 세. 그룹 1은 짝수 합 (짝수 1개 또는 홀수 2개). 그룹 2는 홀수 합 (홀수 1개). 그리디로 번갈아.")}
+              "Key: Count odd and even IDs.\nGroup 1 needs even sum (use 1 even or 2 odds). Group 2 needs odd sum (use 1 odd). Alternate greedily.",
+              "핵심: 홀수/짝수 ID 개수를 세.\n그룹 1은 짝수 합 (짝수 1개 또는 홀수 2개). 그룹 2는 홀수 합 (홀수 1개). 그리디로 번갈아.")}
           </div>
         </div>),
     },
@@ -122,7 +122,7 @@ export function makeOddPhotosCh2(E, lang = "py") {
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N)</div>
           <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
-              "Count odd and even IDs. Greedily form groups alternating even/odd sums until we can't continue.",
+              "Count odd and even IDs.\nGreedily form groups alternating even/odd sums until we can't continue.",
               "홀수/짝수 ID 개수를 세고 짝수/홀수 합을 번갈아 그리디로 그룹을 만들어.")}
           </div>
         </div>),

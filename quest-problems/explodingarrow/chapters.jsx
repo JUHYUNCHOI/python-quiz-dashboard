@@ -62,10 +62,10 @@ export function makeExplodingArrowCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca5"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Exploding Arrow</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P5</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Use BFS/DFS to simulate chain reactions. Each arrow points to the next one in its direction. Track visited arrows to avoid cycles.",
-              "핵심: BFS/DFS로 연쇄 반응을 시뮬레이션해. 각 화살은 자기 방향의 다음 화살을 가리켜. 방문한 화살을 추적해서 순환을 피해.")}
+              "Key: Use BFS/DFS to simulate chain reactions.\nEach arrow points to the next one in its direction. Track visited arrows to avoid cycles.",
+              "핵심: BFS/DFS로 연쇄 반응을 시뮬레이션해.\n각 화살은 자기 방향의 다음 화살을 가리켜.\n방문한 화살을 추적해서 순환을 피해.")}
           </div>
         </div>),
     },
@@ -118,10 +118,10 @@ export function makeExplodingArrowCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>BFS Simulation</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Store arrow positions in a hash map. BFS from the first arrow, following each arrow's direction to find the next target.",
-              "화살 위치를 해시맵에 저장. 첫 번째 화살에서 BFS, 각 화살의 방향을 따라 다음 대상을 찾아.")}
+              "Store arrow positions in a hash map.\nBFS from the first arrow, following each arrow's direction to find the next target.",
+              "화살 위치를 해시맵에 저장.\n첫 번째 화살에서 BFS, 각 화살의 방향을 따라 다음 대상을 찾아.")}
           </div>
         </div>),
     },

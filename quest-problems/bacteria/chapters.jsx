@@ -47,10 +47,10 @@ export function makeBacteriaCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udda0"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Balancing Bacteria</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Process left to right. Each spray from the right creates a triangular effect. Use greedy + prefix sums to track cumulative spray effects.",
-              "핵심: 왼쪽에서 오른쪽으로 처리. 오른쪽에서의 분무는 삼각형 효과를 만들어. 그리디 + 누적합으로 분무 효과를 추적해.")}
+              "Key: Process left to right.\nEach spray from the right creates a triangular effect. Use greedy + prefix sums to track cumulative spray effects.",
+              "핵심: 왼쪽에서 오른쪽으로 처리.\n오른쪽에서의 분무는 삼각형 효과를 만들어.\n그리디 + 누적합으로 분무 효과를 추적해.")}
           </div>
         </div>),
     },
@@ -102,10 +102,10 @@ export function makeBacteriaCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Greedy: at each position, compute the current value (original + spray effects). If nonzero, spray to cancel it. Track effects with a prefix sum array.",
-              "그리디: 각 위치에서 현재 값 계산 (원래 + 분무 효과). 0이 아니면 분무로 상쇄. 누적합 배열로 효과 추적.")}
+              "Greedy: at each position, compute the current value (original + spray effects).\nIf nonzero, spray to cancel it. Track effects with a prefix sum array.",
+              "그리디: 각 위치에서 현재 값 계산 (원래 + 분무 효과). 0이 아니면 분무로 상쇄.\n누적합 배열로 효과 추적.")}
           </div>
         </div>),
     },

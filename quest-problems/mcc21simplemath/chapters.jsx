@@ -33,10 +33,10 @@ export function makeMcc21SimpleMathCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Simple Math</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P5</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Branch on P. P=1: sum all. P=2: multiply all. P=3: sequential floor division from left to right.",
-              "핵심: P에 따라 분기. P=1: 모두 더하기. P=2: 모두 곱하기. P=3: 왼쪽에서 오른쪽으로 순차 나눗셈.")}
+              "Key: Branch on P.\nP=1: sum all. P=2: multiply all. P=3: sequential floor division from left to right.",
+              "핵심: P에 따라 분기.\nP=1: 모두 더하기.\nP=2: 모두 곱하기.\nP=3: 왼쪽에서 오른쪽으로 순차 나눗셈.")}
           </div>
         </div>),
     },
@@ -80,10 +80,10 @@ export function makeMcc21SimpleMathCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Use if-elif to branch on P. Iterate through the array once for each operation type.",
-              "if-elif로 P에 따라 분기. 각 연산 유형별로 배열을 한 번 순회.")}
+              "Use if-elif to branch on P.\nIterate through the array once for each operation type.",
+              "if-elif로 P에 따라 분기.\n각 연산 유형별로 배열을 한 번 순회.")}
           </div>
         </div>),
     },

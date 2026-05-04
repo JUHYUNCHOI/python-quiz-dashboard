@@ -38,10 +38,10 @@ export function makeMcc20KnightCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u265e"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Knight</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P4</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: BFS with 8 possible knight moves. Each move is an L-shape (2+1 or 1+2). BFS gives shortest path.",
-              "핵심: 8가지 나이트 이동으로 BFS. 각 이동은 L자 (2+1 또는 1+2). BFS가 최단 경로 제공.")}
+              "Key: BFS with 8 possible knight moves.\nEach move is an L-shape (2+1 or 1+2). BFS gives shortest path.",
+              "핵심: 8가지 나이트 이동으로 BFS.\n각 이동은 L자 (2+1 또는 1+2). BFS가 최단 경로 제공.")}
           </div>
         </div>),
     },
@@ -85,10 +85,10 @@ export function makeMcc20KnightCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N^2)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Use deque for BFS. 8 possible moves per position. Track distances in a 2D array. Stop when reaching target.",
-              "BFS에 deque 사용. 위치당 8가지 이동. 2D 배열로 거리 추적. 목표 도달 시 중단.")}
+              "Use deque for BFS.\n8 possible moves per position. Track distances in a 2D array. Stop when reaching target.",
+              "BFS에 deque 사용.\n위치당 8가지 이동. 2D 배열로 거리 추적. 목표 도달 시 중단.")}
           </div>
         </div>),
     },

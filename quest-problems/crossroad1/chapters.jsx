@@ -40,10 +40,10 @@ export function makeCrossRd1Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cross the Road I</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Track each cow's last known side. When we see it on a different side, that's a crossing. Simple simulation!",
-              "핵심: 각 소의 마지막으로 알려진 쪽을 추적해. 다른 쪽에서 보이면 그게 횡단이야. 단순 시뮬레이션!")}
+              "Key: Track each cow's last known side.\nWhen we see it on a different side, that's a crossing. Simple simulation!",
+              "핵심: 각 소의 마지막으로 알려진 쪽을 추적해.\n다른 쪽에서 보이면 그게 횡단이야. 단순 시뮬레이션!")}
           </div>
         </div>),
     },
@@ -96,10 +96,10 @@ export function makeCrossRd1Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Use a dictionary mapping cow ID to its last known side. For each observation, if the cow was seen before on a different side, increment crossings.",
-              "소 ID를 마지막으로 알려진 쪽에 매핑하는 딕셔너리를 사용해. 각 관찰에서 소가 이전에 다른 쪽에서 보였으면 횡단 횟수를 증가시켜.")}
+              "Use a dictionary mapping cow ID to its last known side.\nFor each observation, if the cow was seen before on a different side, increment crossings.",
+              "소 ID를 마지막으로 알려진 쪽에 매핑하는 딕셔너리를 사용해.\n각 관찰에서 소가 이전에 다른 쪽에서 보였으면 횡단 횟수를 증가시켜.")}
           </div>
         </div>),
     },

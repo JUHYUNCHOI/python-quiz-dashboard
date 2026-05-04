@@ -52,10 +52,10 @@ export function makeNonTransCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfb2"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Non-Transitive Dice</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: 'A beats B' means more (a,b) pairs have a>b than a<b. Brute force all C with sides 1-10 (only 10^4 combinations since we can sort).",
-              "핵심: 'A가 B를 이긴다'는 a>b인 (a,b) 쌍이 a<b인 쌍보다 많다는 뜻. C의 면을 1-10으로 브루트포스 (정렬하면 10^4 조합).")}
+              "Key: 'A beats B' means more (a,b) pairs have a>b than a<b.\nBrute force all C with sides 1-10 (only 10^4 combinations since we can sort).",
+              "핵심: 'A가 B를 이긴다'는 a>b인 (a,b) 쌍이 a<b인 쌍보다 많다는 뜻.\nC의 면을 1-10으로 브루트포스 (정렬하면 10^4 조합).")}
           </div>
         </div>),
     },
@@ -108,10 +108,10 @@ export function makeNonTransCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(10^4 x 16)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Brute force all possible die C with sorted sides (c1 <= c2 <= c3 <= c4). Check if B beats C and C beats A.",
-              "정렬된 면(c1 <= c2 <= c3 <= c4)으로 가능한 주사위 C를 전부 시도. B가 C를 이기고 C가 A를 이기는지 확인.")}
+              "Brute force all possible die C with sorted sides (c1 <= c2 <= c3 <= c4).\nCheck if B beats C and C beats A.",
+              "정렬된 면(c1 <= c2 <= c3 <= c4)으로 가능한 주사위 C를 전부 시도.\nB가 C를 이기고 C가 A를 이기는지 확인.")}
           </div>
         </div>),
     },

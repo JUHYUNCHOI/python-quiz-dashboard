@@ -75,10 +75,10 @@ export function makeRevEngCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd27"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Reverse Engineering</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: If two identical inputs have different outputs, it's a LIE. Otherwise, check if some single variable position can separate all outputs using if arr[pos]==0 return A else return B.",
-              "핵심: 동일한 입력이 다른 출력을 가지면 LIE. 아니면, if arr[pos]==0 return A else return B 형태로 모든 출력을 분리할 수 있는 변수 위치가 있는지 확인해.")}
+              "Key: If two identical inputs have different outputs, it's a LIE.\nOtherwise, check if some single variable position can separate all outputs using if arr[pos]==0 return A else return B.",
+              "핵심: 동일한 입력이 다른 출력을 가지면 LIE. 아니면,\nif arr[pos]==0 return A else return B 형태로 모든 출력을 분리할 수 있는 변수 위치가 있는지 확인해.")}
           </div>
         </div>),
     },
@@ -130,10 +130,10 @@ export function makeRevEngCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N * M)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Step 1: Check if any two identical inputs have different outputs (LIE). Step 2: For each position pos and each polarity, check if the program 'if arr[pos]==0 return A else return B' is consistent with all test cases.",
-              "1단계: 동일한 입력이 다른 출력을 가지는지 확인 (LIE). 2단계: 각 위치 pos와 각 극성에 대해, 'if arr[pos]==0 return A else return B' 프로그램이 모든 테스트 케이스와 일관되는지 확인.")}
+              "Step 1: Check if any two identical inputs have different outputs (LIE).\nStep 2: For each position pos and each polarity, check if the program 'if arr[pos]==0 return A else return B' is consistent with all test cases.",
+              "1단계: 동일한 입력이 다른 출력을 가지는지 확인 (LIE). 2단계: 각 위치 pos와 각 극성에 대해,\n'if arr[pos]==0 return A else return B' 프로그램이 모든 테스트 케이스와 일관되는지 확인.")}
           </div>
         </div>),
     },

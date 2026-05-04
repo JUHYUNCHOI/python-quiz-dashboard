@@ -32,10 +32,10 @@ export function makeMcc21CarrotsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udd55"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Carrots</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Try all C(N,3) combinations of 3 baskets. Check if their sum is divisible by the target. Brute force O(N^3).",
-              "핵심: 3개 바구니의 모든 C(N,3) 조합을 시도해. 합이 목표로 나누어떨어지는지 확인. 브루트포스 O(N^3).")}
+              "Key: Try all C(N,3) combinations of 3 baskets.\nCheck if their sum is divisible by the target. Brute force O(N^3).",
+              "핵심: 3개 바구니의 모든 C(N,3) 조합을 시도해.\n합이 목표로 나누어떨어지는지 확인.\n브루트포스 O(N^3).")}
           </div>
         </div>),
     },
@@ -78,10 +78,10 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N^3)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Three nested loops pick every triple (i, j, k). Check if a[i]+a[j]+a[k] is divisible by the target. Print and break when found.",
-              "삼중 반복문으로 모든 (i, j, k) 조합 선택. a[i]+a[j]+a[k]가 목표로 나누어떨어지는지 확인. 찾으면 출력하고 중단.")}
+              "Three nested loops pick every triple (i, j, k).\nCheck if a[i]+a[j]+a[k] is divisible by the target. Print and break when found.",
+              "삼중 반복문으로 모든 (i, j, k) 조합 선택.\na[i]+a[j]+a[k]가 목표로 나누어떨어지는지 확인.\n찾으면 출력하고 중단.")}
           </div>
         </div>),
     },

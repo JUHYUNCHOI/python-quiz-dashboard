@@ -40,10 +40,10 @@ export function makeGuessAnimalCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🐾"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Guess the Animal</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: The max 'yes' answers equals the max number of shared characteristics between any pair of animals. Find the pair sharing the most traits!",
-              "핵심: 최대 '예' 답변 수 = 임의의 동물 쌍 간 최대 공통 특성 수. 가장 많은 특성을 공유하는 쌍을 찾아!")}
+              "Key: The max 'yes' answers equals the max number of shared characteristics between any pair of animals.\nFind the pair sharing the most traits!",
+              "핵심: 최대 '예' 답변 수 = 임의의 동물 쌍 간 최대 공통 특성 수.\n가장 많은 특성을 공유하는 쌍을 찾아!")}
           </div>
         </div>),
     },
@@ -96,10 +96,10 @@ export function makeGuessAnimalCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>{"O(N\u00B2 \u00B7 K)"}</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each pair (i, j), compute |traits_i AND traits_j| using set intersection. Track the maximum across all pairs.",
-              "각 쌍 (i, j)에 대해 set 교집합으로 |traits_i AND traits_j| 계산. 모든 쌍에서 최대값 추적.")}
+              "For each pair (i, j), compute |traits_i AND traits_j| using set intersection.\nTrack the maximum across all pairs.",
+              "각 쌍 (i, j)에 대해 set 교집합으로 |traits_i AND traits_j| 계산.\n모든 쌍에서 최대값 추적.")}
           </div>
         </div>),
     },

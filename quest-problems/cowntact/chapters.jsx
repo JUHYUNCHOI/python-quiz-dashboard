@@ -37,10 +37,10 @@ export function makeCowntactCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🦠</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>Cowntact Tracing 2</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "N cows in a line. Infection spreads to adjacent each night. Given final state (0s and 1s), find min initially infected.",
-              "N마리 소가 줄 서 있어. 감염이 매일 밤 양옆으로 퍼져. 최종 상태(0과 1)가 주어지면 처음 감염된 최소 수를 찾아.")}
+              "N cows in a line.\nInfection spreads to adjacent each night. Given final state (0s and 1s), find min initially infected.",
+              "N마리 소가 줄 서 있어.\n감염이 매일 밤 양옆으로 퍼져.\n최종 상태(0과 1)가 주어지면 처음 감염된 최소 수를 찾아.")}
           </div>
         </div>),
     },

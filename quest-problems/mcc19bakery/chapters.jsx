@@ -38,10 +38,10 @@ export function makeMcc19BakeryCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🥖</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Bakery</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Sort items by price descending. Group into sets of 4. In each group, the 2nd cheapest (4th in sorted order) is free.",
-              "핵심: 가격 내림차순 정렬. 4개씩 묶어. 각 그룹에서 2번째로 싼 것(정렬 순서로 4번째)이 무료.")}
+              "Key: Sort items by price descending.\nGroup into sets of 4. In each group, the 2nd cheapest (4th in sorted order) is free.",
+              "핵심: 가격 내림차순 정렬.\n4개씩 묶어. 각 그룹에서 2번째로 싼 것(정렬 순서로 4번째)이 무료.")}
           </div>
         </div>),
     },
@@ -94,10 +94,10 @@ export function makeMcc19BakeryCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Greedy: sort descending, group by 4. The 4th element in each group (2nd cheapest) is free. Sum everything except those.",
-              "그리디: 내림차순 정렬, 4개씩 묶기. 각 그룹의 4번째(2번째로 싼 것)가 무료. 그것만 빼고 합산.")}
+              "Greedy: sort descending, group by 4.\nThe 4th element in each group (2nd cheapest) is free. Sum everything except those.",
+              "그리디: 내림차순 정렬, 4개씩 묶기.\n각 그룹의 4번째(2번째로 싼 것)가 무료. 그것만 빼고 합산.")}
           </div>
         </div>),
     },

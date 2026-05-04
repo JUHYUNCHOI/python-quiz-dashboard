@@ -51,10 +51,10 @@ export function makeHerdleCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udfe9"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Herdle</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Count greens first (exact matches). Then for remaining cells, match breeds up to available count to get yellows.",
-              "핵심: 먼저 초록(정확한 일치)을 세고, 남은 셀에서 품종별로 가능한 수만큼 매칭해서 노란색을 구해.")}
+              "Key: Count greens first (exact matches).\nThen for remaining cells, match breeds up to available count to get yellows.",
+              "핵심: 먼저 초록(정확한 일치)을 세고,\n남은 셀에서 품종별로 가능한 수만큼 매칭해서 노란색을 구해.")}
           </div>
         </div>),
     },
@@ -107,10 +107,10 @@ export function makeHerdleCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(1) per test</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "First pass: count greens and collect remaining breeds. Second pass: match remaining breeds for yellows using min of available counts.",
-              "첫 번째 패스: 초록 세고 남은 품종 수집. 두 번째 패스: 남은 품종의 최솟값으로 노랑 매칭.")}
+              "First pass: count greens and collect remaining breeds.\nSecond pass: match remaining breeds for yellows using min of available counts.",
+              "첫 번째 패스: 초록 세고 남은 품종 수집.\n두 번째 패스: 남은 품종의 최솟값으로 노랑 매칭.")}
           </div>
         </div>),
     },

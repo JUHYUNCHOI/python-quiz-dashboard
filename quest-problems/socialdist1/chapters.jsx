@@ -74,10 +74,10 @@ export function makeSocDist1Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude37"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Social Distancing I</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Binary search on minimum distance D. For each D, greedily check if we can place all cows with at least D spacing.",
-              "핵심: 최소 거리 D에 대해 이분 탐색. 각 D에 대해 그리디하게 소를 배치할 수 있는지 확인.")}
+              "Key: Binary search on minimum distance D.\nFor each D, greedily check if we can place all cows with at least D spacing.",
+              "핵심: 최소 거리 D에 대해 이분 탐색.\n각 D에 대해 그리디하게 소를 배치할 수 있는지 확인.")}
           </div>
         </div>),
     },
@@ -130,10 +130,10 @@ export function makeSocDist1Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Binary search on answer D. For each D, scan sorted stalls left-to-right, greedily placing cows whenever the gap is >= D.",
-              "답 D에 대해 이분 탐색. 각 D에 대해 정렬된 축사를 왼쪽부터 스캔, 간격이 D 이상이면 그리디로 소 배치.")}
+              "Binary search on answer D.\nFor each D, scan sorted stalls left-to-right, greedily placing cows whenever the gap is >= D.",
+              "답 D에 대해 이분 탐색.\n각 D에 대해 정렬된 축사를 왼쪽부터 스캔, 간격이 D 이상이면 그리디로 소 배치.")}
           </div>
         </div>),
     },

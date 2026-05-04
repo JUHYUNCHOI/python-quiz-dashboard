@@ -33,10 +33,10 @@ export function makeMcc19CandyCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🍬</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Candy</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P3</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Simulate the elimination process. Each round removes people at odd positions until one remains.",
-              "핵심: 탈락 과정을 시뮬레이션. 매 라운드 홀수 위치를 제거해서 한 명 남을 때까지.")}
+              "Key: Simulate the elimination process.\nEach round removes people at odd positions until one remains.",
+              "핵심: 탈락 과정을 시뮬레이션.\n매 라운드 홀수 위치를 제거해서 한 명 남을 때까지.")}
           </div>
         </div>),
     },
@@ -89,10 +89,10 @@ export function makeMcc19CandyCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Simulation: repeatedly filter out odd-indexed positions. N + N/2 + N/4 + ... = O(N).",
-              "시뮬레이션: 홀수 인덱스를 반복적으로 필터링. N + N/2 + N/4 + ... = O(N).")}
+              "Simulation: repeatedly filter out odd-indexed positions.\nN + N/2 + N/4 + ... = O(N).",
+              "시뮬레이션: 홀수 인덱스를 반복적으로 필터링.\nN + N/2 + N/4 + ... = O(N).")}
           </div>
         </div>),
     },

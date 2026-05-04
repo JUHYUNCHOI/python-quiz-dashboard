@@ -42,10 +42,10 @@ export function makeHoneyCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf6f"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Honey</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Greedy approach - sort hives by honey amount in descending order. Use trips on the largest hives first to maximize collection.",
-              "핵심: 그리디 접근 - 벌집을 꿀 양 내림차순으로 정렬. 가장 큰 벌집부터 왕복을 사용해서 수집량을 최대화.")}
+              "Key: Greedy approach - sort hives by honey amount in descending order.\nUse trips on the largest hives first to maximize collection.",
+              "핵심: 그리디 접근 - 벌집을 꿀 양 내림차순으로 정렬.\n가장 큰 벌집부터 왕복을 사용해서 수집량을 최대화.")}
           </div>
         </div>),
     },
@@ -97,10 +97,10 @@ export function makeHoneyCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Greedy: sort descending. For each hive, compute trips needed = ceil(honey/M). Use min(trips_needed, trips_left) trips, collecting min(honey, trips_used * M).",
-              "그리디: 내림차순 정렬. 각 벌집에 대해 필요한 왕복 = ceil(honey/M). min(필요 왕복, 남은 왕복)만큼 사용, min(honey, 사용 왕복 * M) 수집.")}
+              "Greedy: sort descending.\nFor each hive, compute trips needed = ceil(honey/M). Use min(trips_needed, trips_left) trips, collecting min(honey, trips_used * M).",
+              "그리디: 내림차순 정렬.\n각 벌집에 대해 필요한 왕복 = ceil(honey/M). min(필요 왕복, 남은 왕복)만큼 사용, min(honey, 사용 왕복 * M) 수집.")}
           </div>
         </div>),
     },

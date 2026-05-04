@@ -30,10 +30,10 @@ export function makeMobileGameCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mobile Game</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Given N levels with scores, play all levels and compute the total score. Simple summation!",
-              "N개 레벨의 점수가 주어지면, 모든 레벨을 플레이하고 총 점수를 계산해. 단순 합산!")}
+              "Given N levels with scores, play all levels and compute the total score.\nSimple summation!",
+              "N개 레벨의 점수가 주어지면,\n모든 레벨을 플레이하고 총 점수를 계산해. 단순 합산!")}
           </div>
         </div>),
     },
@@ -89,7 +89,7 @@ export function makeMobileGameCh2(E, lang = "py") {
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N)</div>
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
-              "Read the list of scores and use sum() to get the total. One pass through the array.",
+              "Read the list of scores and use sum() to get the total.\nOne pass through the array.",
               "점수 목록을 읽고 sum()으로 총합을 구해. 배열을 한 번만 순회.")}
           </div>
         </div>),

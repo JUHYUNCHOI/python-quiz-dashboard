@@ -62,10 +62,10 @@ export function makeHoofballCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26BD"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Hoofball</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Each cow passes to nearest neighbor. Count 'sources' (cows no one passes to) - each needs its own ball. Handle mutual-pass sinks too.",
-              "핵심: 각 소는 가장 가까운 이웃에게 패스. '소스'(아무도 패스하지 않는 소) 수 세기 - 각각 공 필요. 상호 패스 싱크도 처리.")}
+              "Key: Each cow passes to nearest neighbor.\nCount 'sources' (cows no one passes to) - each needs its own ball. Handle mutual-pass sinks too.",
+              "핵심: 각 소는 가장 가까운 이웃에게 패스.\n'소스'(아무도 패스하지 않는 소) 수 세기 - 각각 공 필요.\n상호 패스 싱크도 처리.")}
           </div>
         </div>),
     },
@@ -118,10 +118,10 @@ export function makeHoofballCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sort positions. For each cow, find nearest neighbor (left or right). Count cows that no one targets (sources). Handle mutual pass pairs as sinks.",
-              "위치 정렬. 각 소에서 가장 가까운 이웃 찾기 (왼쪽 또는 오른쪽). 아무도 타겟하지 않는 소 세기 (소스). 상호 패스 쌍은 싱크로 처리.")}
+              "Sort positions.\nFor each cow, find nearest neighbor (left or right). Count cows that no one targets (sources). Handle mutual pass pairs as sinks.",
+              "위치 정렬.\n각 소에서 가장 가까운 이웃 찾기 (왼쪽 또는 오른쪽). 아무도 타겟하지 않는 소 세기 (소스). 상호 패스 쌍은 싱크로 처리.")}
           </div>
         </div>),
     },

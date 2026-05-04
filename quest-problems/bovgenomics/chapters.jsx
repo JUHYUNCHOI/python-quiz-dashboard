@@ -41,10 +41,10 @@ export function makeGenomicsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddec"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Bovine Genomics</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: For each position j, collect the set of characters from spotted cows and plain cows. If the two sets have no intersection, that position can distinguish them.",
-              "핵심: 각 위치 j에서 점박이 소의 문자 집합과 무늬 없는 소의 문자 집합을 모아. 두 집합이 교집합이 없으면 그 위치로 구별 가능해.")}
+              "Key: For each position j, collect the set of characters from spotted cows and plain cows.\nIf the two sets have no intersection, that position can distinguish them.",
+              "핵심: 각 위치 j에서 점박이 소의 문자 집합과 무늬 없는 소의 문자 집합을 모아.\n두 집합이 교집합이 없으면 그 위치로 구별 가능해.")}
           </div>
         </div>),
     },
@@ -96,10 +96,10 @@ export function makeGenomicsCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N*M)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each column j, build set of spotted chars and set of plain chars. If their intersection is empty, increment the answer.",
-              "각 열 j에서 점박이 문자 집합과 무늬 없는 문자 집합을 만들어. 교집합이 비어 있으면 답을 증가시켜.")}
+              "For each column j, build set of spotted chars and set of plain chars.\nIf their intersection is empty, increment the answer.",
+              "각 열 j에서 점박이 문자 집합과 무늬 없는 문자 집합을 만들어.\n교집합이 비어 있으면 답을 증가시켜.")}
           </div>
         </div>),
     },

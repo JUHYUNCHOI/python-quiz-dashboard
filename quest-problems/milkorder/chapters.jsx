@@ -66,10 +66,10 @@ export function makeMilkOrderCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Milking Order</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Build a directed graph from hierarchy constraints. Use topological sort to find earliest valid position for cow 1.",
-              "핵심: 순서 제약으로 방향 그래프 구축. 위상 정렬로 소 1번의 가장 빠른 유효 위치 찾기.")}
+              "Key: Build a directed graph from hierarchy constraints.\nUse topological sort to find earliest valid position for cow 1.",
+              "핵심: 순서 제약으로 방향 그래프 구축.\n위상 정렬로 소 1번의 가장 빠른 유효 위치 찾기.")}
           </div>
         </div>),
     },

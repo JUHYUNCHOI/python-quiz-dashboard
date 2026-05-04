@@ -42,10 +42,10 @@ export function makeMadSciCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddea"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Mad Scientist</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Count the number of contiguous blocks where A and B differ. Each block needs exactly one flip.",
-              "핵심: A와 B가 다른 연속 블록의 수를 세. 각 블록은 정확히 한 번의 뒤집기가 필요.")}
+              "Key: Count the number of contiguous blocks where A and B differ.\nEach block needs exactly one flip.",
+              "핵심: A와 B가 다른 연속 블록의 수를 세.\n각 블록은 정확히 한 번의 뒤집기가 필요.")}
           </div>
         </div>),
     },
@@ -98,10 +98,10 @@ export function makeMadSciCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Scan A and B in parallel. Each time we enter a new block where A[i] != B[i], increment the counter. That's the answer!",
-              "A와 B를 동시에 스캔. A[i] != B[i]인 새로운 블록에 들어갈 때마다 카운터 증가. 그게 답!")}
+              "Scan A and B in parallel.\nEach time we enter a new block where A[i] != B[i], increment the counter. That's the answer!",
+              "A와 B를 동시에 스캔.\nA[i] != B[i]인 새로운 블록에 들어갈 때마다 카운터 증가. 그게 답!")}
           </div>
         </div>),
     },

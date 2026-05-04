@@ -59,10 +59,10 @@ export function makeDroughtCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfdc\ufe0f"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Drought</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Process left to right. For each target value, greedily reduce from left. The leftmost cow determines how many times to feed pair (0,1), which affects cow 1, and so on.",
-              "핵심: 왼쪽에서 오른쪽으로 처리. 각 목표값에 대해 왼쪽부터 그리디하게 줄여. 맨 왼쪽 소가 쌍(0,1)의 먹이 횟수를 결정하고, 이것이 소 1에 영향을 줘.")}
+              "Key: Process left to right.\nFor each target value, greedily reduce from left. The leftmost cow determines how many times to feed pair (0,1), which affects cow 1, and so on.",
+              "핵심: 왼쪽에서 오른쪽으로 처리.\n각 목표값에 대해 왼쪽부터 그리디하게 줄여.\n맨 왼쪽 소가 쌍(0,1)의 먹이 횟수를 결정하고, 이것이 소 1에 영향을 줘.")}
           </div>
         </div>),
     },
@@ -115,10 +115,10 @@ export function makeDroughtCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N * max_val)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each target t, compute d[i] = a[i] - t. Process left to right: feed pair (i, i+1) exactly d[i] times, then d[i+1] -= d[i]. If any d goes negative or last d != 0, impossible.",
-              "각 목표 t에 대해 d[i] = a[i] - t 계산. 왼→오 처리: 쌍(i, i+1)에 d[i]번 먹이, d[i+1] -= d[i]. d가 음수가 되거나 마지막 d != 0이면 불가능.")}
+              "For each target t, compute d[i] = a[i] - t.\nProcess left to right: feed pair (i, i+1) exactly d[i] times, then d[i+1] -= d[i]. If any d goes negative or last d != 0, impossible.",
+              "각 목표 t에 대해 d[i] = a[i] - t 계산.\n왼→오 처리: 쌍(i, i+1)에 d[i]번 먹이, d[i+1] -= d[i]. d가 음수가 되거나 마지막 d != 0이면 불가능.")}
           </div>
         </div>),
     },

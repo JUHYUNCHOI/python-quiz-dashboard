@@ -43,10 +43,10 @@ export function makeCowTipCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cow Tipping</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Process from bottom-right to top-left. If cell (i,j) is 1, we MUST toggle rectangle (0,0)-(i,j). This greedy approach gives the minimum.",
-              "핵심: 오른쪽 아래에서 왼쪽 위로 처리. 셀 (i,j)가 1이면 직사각형 (0,0)-(i,j)를 반드시 토글해야 해. 이 그리디가 최솟값을 줘.")}
+              "Key: Process from bottom-right to top-left.\nIf cell (i,j) is 1, we MUST toggle rectangle (0,0)-(i,j). This greedy approach gives the minimum.",
+              "핵심: 오른쪽 아래에서 왼쪽 위로 처리.\n셀 (i,j)가 1이면 직사각형 (0,0)-(i,j)를 반드시 토글해야 해.\n이 그리디가 최솟값을 줘.")}
           </div>
         </div>),
     },
@@ -99,10 +99,10 @@ export function makeCowTipCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N^4)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Greedy from bottom-right: each cell determines if a toggle is needed. The toggle affects O(N^2) cells. Total: O(N^2) cells x O(N^2) per toggle = O(N^4). N <= 10 makes this fast.",
-              "오른쪽 아래에서 그리디: 각 셀이 토글 필요 여부 결정. 토글은 O(N^2) 셀에 영향. 총: O(N^2) 셀 x O(N^2) 토글 = O(N^4). N <= 10이라 빨라.")}
+              "Greedy from bottom-right: each cell determines if a toggle is needed.\nThe toggle affects O(N^2) cells. Total: O(N^2) cells x O(N^2) per toggle = O(N^4). N <= 10 makes this fast.",
+              "오른쪽 아래에서 그리디: 각 셀이 토글 필요 여부 결정.\n토글은 O(N^2) 셀에 영향.\n총: O(N^2) 셀 x O(N^2) 토글 = O(N^4). N <= 10이라 빨라.")}
           </div>
         </div>),
     },

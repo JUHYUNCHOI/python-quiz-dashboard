@@ -139,10 +139,10 @@ export function makeReachCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐉</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: A }}>Reachability Queries</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P5</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "N cities, M roads → some roads are damaged → apocalypse at time K destroys damaged roads → how many cities reachable from city 1?",
-              "도시 N개, 도로 M개 → 일부 도로 손상 → 시간 K에 아포칼립스 발생, 손상 도로 파괴 → 도시 1에서 몇 개 도시에 갈 수 있어?")}
+              "N cities,\nM roads → some roads are damaged → apocalypse at time K destroys damaged roads → how many cities reachable from city 1?",
+              "도시 N개,\n도로 M개 → 일부 도로 손상 → 시간 K에 아포칼립스 발생,\n손상 도로 파괴 → 도시 1에서 몇 개 도시에 갈 수 있어?")}
           </div>
         </div>),
     },

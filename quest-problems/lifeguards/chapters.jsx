@@ -65,10 +65,10 @@ export function makeLifeguardsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfca"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Lifeguards</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2018 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Fire the lifeguard whose unique coverage (time only they cover) is smallest. That way we lose the least coverage.",
-              "핵심: 고유 커버리지(자기만 담당하는 시간)가 가장 작은 인명구조원을 해고해. 그래야 커버리지 손실이 최소야.")}
+              "Key: Fire the lifeguard whose unique coverage (time only they cover) is smallest.\nThat way we lose the least coverage.",
+              "핵심: 고유 커버리지(자기만 담당하는 시간)가 가장 작은 인명구조원을 해고해.\n그래야 커버리지 손실이 최소야.")}
           </div>
         </div>),
     },
@@ -120,10 +120,10 @@ export function makeLifeguardsCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N^2 log N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each guard to skip, build events from remaining shifts, sort, and sweep to compute coverage. Take the maximum.",
-              "각 인명구조원을 건너뛰고 남은 근무에서 이벤트를 만들어 정렬, 스위프해서 커버리지 계산. 최대값을 취해.")}
+              "For each guard to skip, build events from remaining shifts, sort, and sweep to compute coverage.\nTake the maximum.",
+              "각 인명구조원을 건너뛰고 남은 근무에서 이벤트를 만들어 정렬, 스위프해서 커버리지 계산.\n최대값을 취해.")}
           </div>
         </div>),
     },

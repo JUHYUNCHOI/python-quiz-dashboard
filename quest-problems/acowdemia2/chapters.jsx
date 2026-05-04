@@ -41,10 +41,10 @@ export function makeAcow2Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc68\u200d\ud83d\udd2c"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Acowdemia II</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: For each pair, track if one always appears before the other. If A before B in all shared papers and not vice versa, A is more senior.",
-              "핵심: 각 쌍에 대해 한쪽이 항상 앞에 나타나는지 추적. 모든 공동 논문에서 A가 B 앞이고 반대는 없으면 A가 더 선임.")}
+              "Key: For each pair, track if one always appears before the other. If A before B in all shared papers and not vice versa,\nA is more senior.",
+              "핵심: 각 쌍에 대해 한쪽이 항상 앞에 나타나는지 추적.\n모든 공동 논문에서 A가 B 앞이고 반대는 없으면 A가 더 선임.")}
           </div>
         </div>),
     },
@@ -96,10 +96,10 @@ export function makeAcow2Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N^2 * M)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Track a boolean matrix: before[a][b] = true if a appeared before b in any paper. If before[a][b] and not before[b][a], a is more senior.",
-              "불리언 행렬 추적: before[a][b] = 어떤 논문에서 a가 b 앞에 나타났으면 true. before[a][b]이고 before[b][a]가 아니면, a가 더 선임.")}
+              "Track a boolean matrix: before[a][b] = true if a appeared before b in any paper.\nIf before[a][b] and not before[b][a], a is more senior.",
+              "불리언 행렬 추적: before[a][b] = 어떤 논문에서 a가 b 앞에 나타났으면 true. before[a][b]이고 before[b][a]가 아니면,\na가 더 선임.")}
           </div>
         </div>),
     },

@@ -79,10 +79,10 @@ export function makeInterviewCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Bessie's Interview</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Silver #1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "K counters, N cows in line. Each cow goes to the first available counter. Find all possible counters for the last cow!",
-              "K개 카운터, N마리 소가 줄 서있어. 각 소는 가장 먼저 비는 카운터로! 마지막 소가 갈 수 있는 카운터를 모두 찾아!")}
+              "K counters,\nN cows in line. Each cow goes to the first available counter. Find all possible counters for the last cow!",
+              "K개 카운터, N마리 소가 줄 서있어.\n각 소는 가장 먼저 비는 카운터로!\n마지막 소가 갈 수 있는 카운터를 모두 찾아!")}
           </div>
         </div>),
     },

@@ -34,10 +34,10 @@ export function makeCollatzCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Collatz Conjecture</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Rule: if N is even, N = N/2. If N is odd, N = 3N+1. Count how many steps until N becomes 1.",
-              "규칙: N이 짝수면 N = N/2. N이 홀수면 N = 3N+1. N이 1이 될 때까지 몇 단계인지 세.")}
+              "Rule: if N is even,\nN = N/2. If N is odd,\nN = 3N+1. Count how many steps until N becomes 1.",
+              "규칙: N이 짝수면 N = N/2.\nN이 홀수면 N = 3N+1. N이 1이 될 때까지 몇 단계인지 세.")}
           </div>
         </div>),
     },
@@ -91,10 +91,10 @@ export function makeCollatzCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(steps)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Just simulate: check even/odd, apply the rule, increment counter. Loop until N=1.",
-              "시뮬레이션: 짝수/홀수 확인, 규칙 적용, 카운터 증가. N=1이 될 때까지 반복.")}
+              "Just simulate: check even/odd, apply the rule, increment counter.\nLoop until N=1.",
+              "시뮬레이션: 짝수/홀수 확인, 규칙 적용, 카운터 증가.\nN=1이 될 때까지 반복.")}
           </div>
         </div>),
     },

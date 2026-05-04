@@ -35,10 +35,10 @@ export function makeMcc21MenuCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udccb"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Smallest Menu Ever</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P6</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Build a tree from parent-child relationships. Use DFS/recursion to count all nodes.",
-              "핵심: 부모-자식 관계로 트리 구축. DFS/재귀로 모든 노드 수 세기.")}
+              "Key: Build a tree from parent-child relationships.\nUse DFS/recursion to count all nodes.",
+              "핵심: 부모-자식 관계로 트리 구축.\nDFS/재귀로 모든 노드 수 세기.")}
           </div>
         </div>),
     },
@@ -82,10 +82,10 @@ export function makeMcc21MenuCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Use defaultdict for adjacency list. Recursive DFS counts all nodes in the tree.",
-              "인접 리스트에 defaultdict 사용. 재귀 DFS로 트리의 모든 노드 수 세기.")}
+              "Use defaultdict for adjacency list.\nRecursive DFS counts all nodes in the tree.",
+              "인접 리스트에 defaultdict 사용.\n재귀 DFS로 트리의 모든 노드 수 세기.")}
           </div>
         </div>),
     },

@@ -55,10 +55,10 @@ export function makeCannonCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca5"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cannonball</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Simulate: track position, direction, power. Jump pads reverse + boost. Targets break if power >= value. Stop when off-line or in a loop.",
-              "시뮬레이션: 위치, 방향, 파워 추적. 점프패드는 반전 + 부스트. 타겟은 파워 >= 값이면 파괴. 범위 밖이거나 루프면 종료.")}
+              "Simulate: track position, direction, power.\nJump pads reverse + boost. Targets break if power >= value. Stop when off-line or in a loop.",
+              "시뮬레이션: 위치, 방향, 파워 추적.\n점프패드는 반전 + 부스트.\n타겟은 파워 >= 값이면 파괴.\n범위 밖이거나 루프면 종료.")}
           </div>
         </div>),
     },
@@ -110,10 +110,10 @@ export function makeCannonCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N{"\u00b2"}) Simulation</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "State = (position, direction, power). If we revisit a state, we're in a loop \u2192 stop. Otherwise process jump pad or target and move.",
-              "상태 = (위치, 방향, 파워). 같은 상태를 재방문하면 루프 \u2192 종료. 아니면 점프패드/타겟 처리 후 이동.")}
+              "State = (position, direction, power).\nIf we revisit a state, we're in a loop \u2192 stop. Otherwise process jump pad or target and move.",
+              "상태 = (위치, 방향, 파워). 같은 상태를 재방문하면 루프 \u2192 종료.\n아니면 점프패드/타겟 처리 후 이동.")}
           </div>
         </div>),
     },

@@ -56,10 +56,10 @@ export function makeTrainsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude82"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Trains</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P4</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: This is a shortest path problem on a weighted grid. Use Dijkstra's algorithm with cell population as edge weight. Blocked cells (-1) cannot be traversed.",
-              "핵심: 가중 격자에서의 최단 경로 문제. 셀 인구수를 간선 가중치로 사용해 다익스트라 알고리즘 적용. 차단된 셀(-1)은 통과 불가.")}
+              "Key: This is a shortest path problem on a weighted grid.\nUse Dijkstra's algorithm with cell population as edge weight. Blocked cells (-1) cannot be traversed.",
+              "핵심: 가중 격자에서의 최단 경로 문제.\n셀 인구수를 간선 가중치로 사용해 다익스트라 알고리즘 적용.\n차단된 셀(-1)은 통과 불가.")}
           </div>
         </div>),
     },
@@ -111,10 +111,10 @@ export function makeTrainsCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N\u00b2 log N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Dijkstra: start from A with cost = grid[A]. For each neighbor, new cost = current + grid[neighbor]. Skip blocked cells (-1). Use min-heap for efficiency.",
-              "다익스트라: A에서 시작, 비용 = grid[A]. 각 이웃에 대해 새 비용 = 현재 + grid[이웃]. 차단 셀(-1) 건너뛰기. 효율을 위해 최소 힙 사용.")}
+              "Dijkstra: start from A with cost = grid[A].\nFor each neighbor, new cost = current + grid[neighbor]. Skip blocked cells (-1). Use min-heap for efficiency.",
+              "다익스트라: A에서 시작, 비용 = grid[A]. 각 이웃에 대해 새 비용 = 현재 + grid[이웃]. 차단 셀(-1) 건너뛰기.\n효율을 위해 최소 힙 사용.")}
           </div>
         </div>),
     },

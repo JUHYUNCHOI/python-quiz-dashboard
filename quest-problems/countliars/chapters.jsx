@@ -53,10 +53,10 @@ export function makeLiarsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🤥"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Counting Liars</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Try each possible position for Bessie. Count how many claims are contradicted. The minimum across all positions is the answer.",
-              "핵심: 베시의 가능한 각 위치를 시도. 모순되는 주장 수 세기. 모든 위치 중 최솟값이 답.")}
+              "Key: Try each possible position for Bessie.\nCount how many claims are contradicted. The minimum across all positions is the answer.",
+              "핵심: 베시의 가능한 각 위치를 시도.\n모순되는 주장 수 세기. 모든 위치 중 최솟값이 답.")}
           </div>
         </div>),
     },
@@ -111,7 +111,7 @@ export function makeLiarsCh2(E, lang = "py") {
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N log N)</div>
           <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
-              "Sort claims by position. Use prefix sums to quickly count contradictions for each candidate position.",
+              "Sort claims by position.\nUse prefix sums to quickly count contradictions for each candidate position.",
               "주장을 위치별로 정렬. 누적합으로 각 후보 위치의 모순을 빠르게 계산.")}
           </div>
         </div>),

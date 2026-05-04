@@ -376,8 +376,7 @@ export function makeFencesCh3(E) {
           <CodeSnippet lines={["N, M = map(int, input().split())"]} highlight={[0]} />
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
             {t(E,
-              "input().split() reads \"4 5\" → [\"4\", \"5\"], map(int, ...) makes them numbers.",
-              "input().split()은 \"4 5\" → [\"4\", \"5\"]로 나누고, map(int, ...)로 숫자로 바꿔.")}
+              "input().split() reads \"4 5\" → [\"4\",\n\"5\"], map(int, ...) makes them numbers.", "input().split()은 \"4 5\" → [\"4\",\n\"5\"]로 나누고, map(int, ...)로 숫자로 바꿔.")}
           </div>
         </div>),
     },
@@ -391,10 +390,9 @@ export function makeFencesCh3(E) {
           <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", marginBottom: 6 }}>
             {t(E, "Step 2: Prepare the count list", "2단계: 카운트 리스트 준비")}
           </div>
-          <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
+          <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6, whiteSpace: "pre-line" }}>
             {t(E,
-              "5 columns → count = [0, 0, 0, 0, 0]. Each slot will store how many dots that column has.",
-              "5열이면 → count = [0, 0, 0, 0, 0]. 각 칸에 그 열의 점 수를 저장할 거야.")}
+              "5 columns → count = [0, 0, 0, 0, 0].\nEach slot will store how many dots that column has.", "5열이면 → count = [0, 0, 0, 0, 0].\n각 칸에 그 열의 점 수를 저장할 거야.")}
           </div>
           <CodeSnippet
             lines={["N, M = map(int, input().split())", "count = [0] * M"]}

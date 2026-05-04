@@ -52,10 +52,10 @@ export function makeAlchemyCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"⚗️"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Alchemy</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Greedy from top down. To make metal N, recursively try to gather ingredients. Use each metal at most once.",
-              "핵심: 위에서 아래로 그리디. 금속 N을 만들려면 재료를 재귀적으로 모아. 각 금속은 최대 한 번 사용.")}
+              "Key: Greedy from top down.\nTo make metal N, recursively try to gather ingredients. Use each metal at most once.",
+              "핵심: 위에서 아래로 그리디.\n금속 N을 만들려면 재료를 재귀적으로 모아. 각 금속은 최대 한 번 사용.")}
           </div>
         </div>),
     },
@@ -108,10 +108,10 @@ export function makeAlchemyCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N * K)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Recursively try to make metal N. For each attempt, gather ingredients top-down. If any ingredient is missing, the attempt fails.",
-              "재귀적으로 금속 N 만들기 시도. 각 시도에서 재료를 위에서 아래로 모아. 재료가 하나라도 없으면 실패.")}
+              "Recursively try to make metal N.\nFor each attempt, gather ingredients top-down. If any ingredient is missing, the attempt fails.",
+              "재귀적으로 금속 N 만들기 시도.\n각 시도에서 재료를 위에서 아래로 모아. 재료가 하나라도 없으면 실패.")}
           </div>
         </div>),
     },

@@ -108,10 +108,10 @@ export function makeCowGymCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🤸"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow Gymnastics</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "A 'consistent pair' (i, j) means cow i ALWAYS ranks above cow j (or vice versa) in ALL K sessions. Count all such pairs!",
-              "'일관된 쌍' (i, j)은 소 i가 모든 K세션에서 항상 소 j보다 위(또는 반대)인 것. 그런 쌍을 모두 세!")}
+              "A 'consistent pair' (i, j) means cow i ALWAYS ranks above cow j (or vice versa) in ALL K sessions.\nCount all such pairs!",
+              "'일관된 쌍' (i, j)은 소 i가 모든 K세션에서 항상 소 j보다 위(또는 반대)인 것.\n그런 쌍을 모두 세!")}
           </div>
         </div>),
     },

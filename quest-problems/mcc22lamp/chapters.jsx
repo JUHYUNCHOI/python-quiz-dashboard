@@ -50,10 +50,10 @@ export function makeMcc22LampCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Lamp</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P6</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Use a difference array to count toggles per lamp. A lamp is ON if toggled an odd number of times. Prefix sum gives the toggle count for each lamp.",
-              "핵심: 차분 배열로 램프별 토글 횟수를 세어. 홀수 번 토글된 램프가 켜져 있어. 누적합으로 각 램프의 토글 횟수를 구해.")}
+              "Key: Use a difference array to count toggles per lamp.\nA lamp is ON if toggled an odd number of times. Prefix sum gives the toggle count for each lamp.",
+              "핵심: 차분 배열로 램프별 토글 횟수를 세어.\n홀수 번 토글된 램프가 켜져 있어.\n누적합으로 각 램프의 토글 횟수를 구해.")}
           </div>
         </div>),
     },
@@ -106,10 +106,10 @@ export function makeMcc22LampCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N + M)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Difference array trick: for toggle(L,R), increment diff[L] and decrement diff[R+1]. Prefix sum gives total toggles per position. Count positions with odd toggle count.",
-              "차분 배열 트릭: toggle(L,R)에서 diff[L]++ 하고 diff[R+1]-- 해. 누적합으로 위치별 총 토글 횟수를 구하고, 홀수인 위치를 세어.")}
+              "Difference array trick: for toggle(L,R), increment diff[L] and decrement diff[R+1].\nPrefix sum gives total toggles per position. Count positions with odd toggle count.",
+              "차분 배열 트릭: toggle(L,R)에서 diff[L]++ 하고 diff[R+1]-- 해.\n누적합으로 위치별 총 토글 횟수를 구하고, 홀수인 위치를 세어.")}
           </div>
         </div>),
     },

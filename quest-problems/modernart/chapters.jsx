@@ -71,10 +71,10 @@ export function makeModernArtCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfa8"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Modern Art</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Find each color's bounding box. A color can be first if its bounding box is not entirely contained inside another color's bounding box. Colors not on canvas can always be first.",
-              "핵심: 각 색의 바운딩 박스를 구해. 한 색의 바운딩 박스가 다른 색의 바운딩 박스 안에 완전히 포함되지 않으면 처음일 수 있어. 캔버스에 없는 색은 항상 처음일 수 있어.")}
+              "Key: Find each color's bounding box.\nA color can be first if its bounding box is not entirely contained inside another color's bounding box. Colors not on canvas can always be first.",
+              "핵심: 각 색의 바운딩 박스를 구해.\n한 색의 바운딩 박스가 다른 색의 바운딩 박스 안에 완전히 포함되지 않으면 처음일 수 있어.\n캔버스에 없는 색은 항상 처음일 수 있어.")}
           </div>
         </div>),
     },
@@ -126,10 +126,10 @@ export function makeModernArtCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>{"O(N\u00b2)"}</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Scan the canvas to find bounding boxes. For each visible color, check if its box is entirely inside another's. Also count non-visible colors (they can always be first).",
-              "캔버스를 스캔해서 바운딩 박스를 찾아. 각 보이는 색에 대해 박스가 다른 색 안에 완전히 포함되는지 확인. 안 보이는 색도 세 (항상 처음일 수 있으니까).")}
+              "Scan the canvas to find bounding boxes.\nFor each visible color, check if its box is entirely inside another's. Also count non-visible colors (they can always be first).",
+              "캔버스를 스캔해서 바운딩 박스를 찾아.\n각 보이는 색에 대해 박스가 다른 색 안에 완전히 포함되는지 확인.\n안 보이는 색도 세 (항상 처음일 수 있으니까).")}
           </div>
         </div>),
     },

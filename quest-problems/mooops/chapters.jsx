@@ -49,10 +49,10 @@ export function makeMooOpsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc2e"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Moo Operations</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: The final string is \"MOO\" (length 3). We need to find a substring of length 3 where the middle character is 'O', then compute cost of deletions + flips. The middle character can never be changed (only first/last can flip).",
-              "핵심: 최종 문자열은 \"MOO\" (길이 3). 중간 문자가 'O'인 길이 3 부분문자열을 찾고, 삭제 + 뒤집기 비용을 계산해. 중간 문자는 절대 바꿀 수 없어 (첫/마지막만 뒤집기 가능).")}
+              "Key: The final string is \"MOO\" (length 3).\nWe need to find a substring of length 3 where the middle character is 'O', then compute cost of deletions + flips. The middle character can never be changed (only first/last can flip).",
+              "핵심: 최종 문자열은 \"MOO\" (길이 3). 중간 문자가 'O'인 길이 3 부분문자열을 찾고, 삭제 + 뒤집기 비용을 계산해.\n중간 문자는 절대 바꿀 수 없어 (첫/마지막만 뒤집기 가능).")}
           </div>
         </div>),
     },
@@ -105,10 +105,10 @@ export function makeMooOpsCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N) per query</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each position i where s[i+1]=='O': cost = i (delete left) + (n-i-3) (delete right) + flip costs for s[i] and s[i+2]. Take the minimum over all valid i.",
-              "s[i+1]=='O'인 각 위치 i에 대해: 비용 = i (왼쪽 삭제) + (n-i-3) (오른쪽 삭제) + s[i]와 s[i+2]의 뒤집기 비용. 모든 유효한 i에서 최솟값을 취해.")}
+              "For each position i where s[i+1]=='O': cost = i (delete left) + (n-i-3) (delete right) + flip costs for s[i] and s[i+2].\nTake the minimum over all valid i.",
+              "s[i+1]=='O'인 각 위치 i에 대해: 비용 = i (왼쪽 삭제) + (n-i-3) (오른쪽 삭제) + s[i]와 s[i+2]의 뒤집기 비용.\n모든 유효한 i에서 최솟값을 취해.")}
           </div>
         </div>),
     },

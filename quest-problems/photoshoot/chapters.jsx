@@ -45,10 +45,10 @@ export function makePhotoshootCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"📸"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Photoshoot</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Count how many G cows are at even 1-indexed positions. Use prefix reversals to move G's into even positions.",
-              "핵심: 1-인덱스 짝수 위치에 G 소가 몇 마리인지 세기. 접두사 뒤집기로 G를 짝수 위치로 이동.")}
+              "Key: Count how many G cows are at even 1-indexed positions.\nUse prefix reversals to move G's into even positions.",
+              "핵심: 1-인덱스 짝수 위치에 G 소가 몇 마리인지 세기.\n접두사 뒤집기로 G를 짝수 위치로 이동.")}
           </div>
         </div>),
     },
@@ -101,10 +101,10 @@ export function makePhotoshootCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Scan the string, count G's at even 1-indexed positions. Prefix reversals can optimally place G's at even spots.",
-              "문자열 스캔, 1-인덱스 짝수 위치의 G 개수 세기. 접두사 뒤집기로 G를 짝수 자리에 최적 배치.")}
+              "Scan the string, count G's at even 1-indexed positions.\nPrefix reversals can optimally place G's at even spots.",
+              "문자열 스캔, 1-인덱스 짝수 위치의 G 개수 세기.\n접두사 뒤집기로 G를 짝수 자리에 최적 배치.")}
           </div>
         </div>),
     },

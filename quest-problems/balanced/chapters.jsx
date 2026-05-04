@@ -28,10 +28,10 @@ export function makeBalancedCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔗</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Balanced Subsequences</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "String = '(' × N + ')' × M. Find the length of the longest balanced bracket subsequence!",
-              "문자열 = '(' × N + ')' × M. 가장 긴 균형 괄호 부분수열의 길이를 구해!")}
+              "String = '(' × N + ')' × M.\nFind the length of the longest balanced bracket subsequence!",
+              "문자열 = '(' × N + ')' × M.\n가장 긴 균형 괄호 부분수열의 길이를 구해!")}
           </div>
         </div>),
     },

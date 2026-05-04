@@ -39,10 +39,10 @@ export function makeCowPhotosCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>📸</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>More Cow Photos</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Bitonic (↑ then ↓) + Symmetric (palindrome) + No adjacent duplicates. Find max cows that fit!",
-              "바이토닉 (↑ 후 ↓) + 대칭 (팰린드롬) + 인접 중복 금지. 맞는 최대 소 수를 찾아!")}
+              "Bitonic (↑ then ↓) + Symmetric (palindrome) + No adjacent duplicates.\nFind max cows that fit!",
+              "바이토닉 (↑ 후 ↓) + 대칭 (팰린드롬) + 인접 중복 금지.\n맞는 최대 소 수를 찾아!")}
           </div>
         </div>),
     },

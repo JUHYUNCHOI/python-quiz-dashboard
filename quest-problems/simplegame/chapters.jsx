@@ -33,10 +33,10 @@ export function makeSimpleGameCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfae"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Simple Game</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P4</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: This is a classic Nim game. Losing positions are multiples of 4. If N % 4 == 0, the second player wins; otherwise, the first player wins.",
-              "핵심: 이것은 고전적인 님 게임이야. 지는 위치는 4의 배수야. N % 4 == 0이면 후수 승, 아니면 선수 승.")}
+              "Key: This is a classic Nim game.\nLosing positions are multiples of 4. If N % 4 == 0, the second player wins; otherwise, the first player wins.",
+              "핵심: 이것은 고전적인 님 게임이야.\n지는 위치는 4의 배수야.\nN % 4 == 0이면 후수 승, 아니면 선수 승.")}
           </div>
         </div>),
     },
@@ -88,9 +88,9 @@ export function makeSimpleGameCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Game theory insight: in a take-away game with moves {1,2,3}, losing positions are exactly multiples of 4.",
+              "Game theory insight: in a take-away game with moves {1,2,3},\nlosing positions are exactly multiples of 4.",
               "게임 이론: 이동이 {1,2,3}인 가져가기 게임에서 지는 위치는 정확히 4의 배수야.")}
           </div>
         </div>),

@@ -45,10 +45,10 @@ export function makeRevegCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf31"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Great Revegetation</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Greedy graph coloring. Process pastures 1 to N, assign the smallest color (1-4) not used by constrained neighbors.",
-              "핵심: 그리디 그래프 색칠. 목초지 1부터 N까지 처리하며, 제약된 이웃이 쓰지 않는 가장 작은 색(1-4)을 배정.")}
+              "Key: Greedy graph coloring.\nProcess pastures 1 to N, assign the smallest color (1-4) not used by constrained neighbors.",
+              "핵심: 그리디 그래프 색칠.\n목초지 1부터 N까지 처리하며, 제약된 이웃이 쓰지 않는 가장 작은 색(1-4)을 배정.")}
           </div>
         </div>),
     },
@@ -102,10 +102,10 @@ export function makeRevegCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>{"O(N \u00d7 M)"}</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Process pastures in order 1..N. For each, find colors used by already-colored neighbors, pick the smallest unused. Since there are 4 colors and the graph is sparse, this always works.",
-              "목초지를 1..N 순서로 처리. 이미 색칠된 이웃의 색을 확인하고 안 쓴 가장 작은 색 선택. 4색이고 그래프가 희소해서 항상 가능.")}
+              "Process pastures in order 1..N.\nFor each, find colors used by already-colored neighbors, pick the smallest unused. Since there are 4 colors and the graph is sparse, this always works.",
+              "목초지를 1..N 순서로 처리.\n이미 색칠된 이웃의 색을 확인하고 안 쓴 가장 작은 색 선택.\n4색이고 그래프가 희소해서 항상 가능.")}
           </div>
         </div>),
     },

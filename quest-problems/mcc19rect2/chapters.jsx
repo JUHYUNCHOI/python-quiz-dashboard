@@ -35,10 +35,10 @@ export function makeMcc19Rect2Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>▭</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Rectangle 2</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P7</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: In a rectangle, the 4 x-coords form 2 pairs. XOR cancels pairs: a XOR a = 0. So x4 = x1 XOR x2 XOR x3. Same for y.",
-              "핵심: 직사각형에서 4개의 x좌표는 2쌍을 형성. XOR은 쌍을 상쇄: a XOR a = 0. 그래서 x4 = x1 XOR x2 XOR x3. y도 마찬가지.")}
+              "Key: In a rectangle, the 4 x-coords form 2 pairs.\nXOR cancels pairs: a XOR a = 0. So x4 = x1 XOR x2 XOR x3. Same for y.",
+              "핵심: 직사각형에서 4개의 x좌표는 2쌍을 형성.\nXOR은 쌍을 상쇄: a XOR a = 0. 그래서 x4 = x1 XOR x2 XOR x3. y도 마찬가지.")}
           </div>
         </div>),
     },
@@ -91,10 +91,10 @@ export function makeMcc19Rect2Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "XOR property: a ^ a = 0, a ^ 0 = a. In a rectangle, each unique x/y appears twice. XOR of all 4 = 0, so missing = XOR of known 3.",
-              "XOR 성질: a ^ a = 0, a ^ 0 = a. 직사각형에서 각 고유 x/y는 2번 등장. 4개의 XOR = 0이므로 빠진 것 = 알려진 3개의 XOR.")}
+              "XOR property: a ^ a = 0, a ^ 0 = a.\nIn a rectangle, each unique x/y appears twice. XOR of all 4 = 0, so missing = XOR of known 3.",
+              "XOR 성질: a ^ a = 0, a ^ 0 = a. 직사각형에서 각 고유 x/y는 2번 등장.\n4개의 XOR = 0이므로 빠진 것 = 알려진 3개의 XOR.")}
           </div>
         </div>),
     },

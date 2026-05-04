@@ -59,10 +59,10 @@ export function makeBillboard2Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udea7"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Blocked Billboard II</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2018 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: The tarp must be a rectangle. If the feed billboard covers a full side strip, the remaining exposed area is a rectangle (smaller tarp). If it covers an interior strip or corner, the exposed area is L-shaped, so the tarp must cover the entire billboard.",
-              "핵심: 타프는 직사각형이어야 해. 사료 광고판이 한 쪽 변 전체를 덮으면 남은 노출 부분이 직사각형(작은 타프). 내부 띠나 모서리를 덮으면 L자 모양이라 타프가 전체 광고판을 덮어야 해.")}
+              "Key: The tarp must be a rectangle.\nIf the feed billboard covers a full side strip, the remaining exposed area is a rectangle (smaller tarp). If it covers an interior strip or corner, the exposed area is L-shaped, so the tarp must cover the entire billboard.",
+              "핵심: 타프는 직사각형이어야 해.\n사료 광고판이 한 쪽 변 전체를 덮으면 남은 노출 부분이 직사각형(작은 타프). 내부 띠나 모서리를 덮으면 L자 모양이라 타프가 전체 광고판을 덮어야 해.")}
           </div>
         </div>),
     },
@@ -115,10 +115,10 @@ export function makeBillboard2Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Clamp the feed rectangle to billboard bounds. Check 4 cases: feed covers left/right/top/bottom full strip. If none match, tarp = entire billboard.",
-              "사료 직사각형을 광고판 범위로 클램프해. 4가지 경우 확인: 사료가 왼/오/위/아래 전체 띠를 덮는지. 해당 없으면 타프 = 전체 광고판.")}
+              "Clamp the feed rectangle to billboard bounds.\nCheck 4 cases: feed covers left/right/top/bottom full strip. If none match, tarp = entire billboard.",
+              "사료 직사각형을 광고판 범위로 클램프해.\n4가지 경우 확인: 사료가 왼/오/위/아래 전체 띠를 덮는지.\n해당 없으면 타프 = 전체 광고판.")}
           </div>
         </div>),
     },

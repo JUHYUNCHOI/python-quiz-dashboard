@@ -52,10 +52,10 @@ export function makeSleepCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"😴"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Sleeping in Class</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: The final equal value must be a divisor of the total sum. Try each divisor and check if we can partition into equal segments.",
-              "핵심: 최종 동일 값은 총합의 약수여야 해. 각 약수를 시도하고 동일 구간으로 나눌 수 있는지 확인.")}
+              "Key: The final equal value must be a divisor of the total sum.\nTry each divisor and check if we can partition into equal segments.",
+              "핵심: 최종 동일 값은 총합의 약수여야 해.\n각 약수를 시도하고 동일 구간으로 나눌 수 있는지 확인.")}
           </div>
         </div>),
     },
@@ -108,10 +108,10 @@ export function makeSleepCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N * d(S))</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each divisor d of total sum S: greedily accumulate periods. If running sum equals d, start new segment. Count merges = N - segments.",
-              "총합 S의 각 약수 d에 대해: 그리디로 시간 누적. 누적합이 d면 새 구간 시작. 합치기 = N - 구간 수.")}
+              "For each divisor d of total sum S: greedily accumulate periods.\nIf running sum equals d, start new segment. Count merges = N - segments.",
+              "총합 S의 각 약수 d에 대해: 그리디로 시간 누적.\n누적합이 d면 새 구간 시작.\n합치기 = N - 구간 수.")}
           </div>
         </div>),
     },

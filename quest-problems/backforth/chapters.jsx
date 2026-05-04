@@ -51,10 +51,10 @@ export function makeBackForthCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🔄"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Back and Forth</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Enumerate all possible choices! 10 choices per day, 4 days. But bucket counts change each day. Use brute force / recursion with sets to track distinct outcomes.",
-              "핵심: 가능한 모든 선택을 열거해! 하루 10개 선택, 4일. 하지만 양동이 수가 매일 변해. 브루트 포스 / 재귀 + set으로 고유한 결과 추적.")}
+              "Key: Enumerate all possible choices! 10 choices per day, 4 days.\nBut bucket counts change each day. Use brute force / recursion with sets to track distinct outcomes.",
+              "핵심: 가능한 모든 선택을 열거해!\n하루 10개 선택, 4일.\n하지만 양동이 수가 매일 변해.\n브루트 포스 / 재귀 + set으로 고유한 결과 추적.")}
           </div>
         </div>),
     },
@@ -107,10 +107,10 @@ export function makeBackForthCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>{"O(10 \u00B7 11\u00B3)"}</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Day 1: 10 choices from barn1. Day 2: 11 choices from barn2 (got 1 extra). Day 3: 11 from barn1. Day 4: 11 from barn2. Total ~13,310 combinations.",
-              "1일차: 헛간1에서 10개 선택. 2일차: 헛간2에서 11개 (1개 추가). 3일차: 헛간1에서 11개. 4일차: 헛간2에서 11개. 총 ~13,310 조합.")}
+              "Day 1: 10 choices from barn1.\nDay 2: 11 choices from barn2 (got 1 extra). Day 3: 11 from barn1. Day 4: 11 from barn2. Total ~13,310 combinations.",
+              "1일차: 헛간1에서 10개 선택.\n2일차: 헛간2에서 11개 (1개 추가). 3일차: 헛간1에서 11개.\n4일차: 헛간2에서 11개.\n총 ~13,310 조합.")}
           </div>
         </div>),
     },

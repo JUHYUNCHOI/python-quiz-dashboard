@@ -45,10 +45,10 @@ export function makeClockCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Clockwise Fence</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Count right turns minus left turns. If positive, the path is clockwise. Map directions to numbers (N=0, E=1, S=2, W=3) and check transitions.",
-              "핵심: 오른쪽 회전 - 왼쪽 회전을 계산. 양수이면 시계 방향. 방향을 숫자로 매핑(N=0, E=1, S=2, W=3)하고 전환을 확인.")}
+              "Key: Count right turns minus left turns. If positive, the path is clockwise. Map directions to numbers (N=0,\nE=1,\nS=2, W=3) and check transitions.",
+              "핵심: 오른쪽 회전 - 왼쪽 회전을 계산.\n양수이면 시계 방향.\n방향을 숫자로 매핑(N=0, E=1, S=2, W=3)하고 전환을 확인.")}
           </div>
         </div>),
     },
@@ -100,10 +100,10 @@ export function makeClockCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each consecutive pair of directions, compute (next - cur) mod 4. If 1 = right turn, if 3 = left turn. Compare totals.",
-              "연속 방향 쌍마다 (다음 - 현재) mod 4 계산. 1이면 오른쪽 회전, 3이면 왼쪽 회전. 합계 비교.")}
+              "For each consecutive pair of directions, compute (next - cur) mod 4.\nIf 1 = right turn, if 3 = left turn. Compare totals.",
+              "연속 방향 쌍마다 (다음 - 현재) mod 4 계산.\n1이면 오른쪽 회전, 3이면 왼쪽 회전. 합계 비교.")}
           </div>
         </div>),
     },

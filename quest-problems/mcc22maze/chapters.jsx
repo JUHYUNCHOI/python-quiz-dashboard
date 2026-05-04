@@ -50,10 +50,10 @@ export function makeMcc22MazeCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udff0"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Maze</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P3</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: BFS on a grid. Start at (0,0), explore neighbors (up/down/left/right). First time reaching (R-1,C-1) gives the shortest distance.",
-              "핵심: 격자에서 BFS. (0,0)에서 시작, 이웃(상하좌우) 탐색. (R-1,C-1)에 처음 도달하면 최단 거리.")}
+              "Key: BFS on a grid.\nStart at (0,0), explore neighbors (up/down/left/right). First time reaching (R-1,C-1) gives the shortest distance.",
+              "핵심: 격자에서 BFS. (0,0)에서 시작, 이웃(상하좌우) 탐색.\n(R-1,C-1)에 처음 도달하면 최단 거리.")}
           </div>
         </div>),
     },
@@ -106,10 +106,10 @@ export function makeMcc22MazeCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(R * C)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "BFS with a queue. Mark visited cells with their distance. Each cell is enqueued and dequeued at most once.",
-              "큐를 이용한 BFS. 방문한 칸에 거리를 기록. 각 칸은 최대 한 번 큐에 들어가고 나와.")}
+              "BFS with a queue.\nMark visited cells with their distance. Each cell is enqueued and dequeued at most once.",
+              "큐를 이용한 BFS.\n방문한 칸에 거리를 기록. 각 칸은 최대 한 번 큐에 들어가고 나와.")}
           </div>
         </div>),
     },

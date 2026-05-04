@@ -39,10 +39,10 @@ export function makeBitcoinCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u20bf"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Bitcoin</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P3</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: For small N, brute force O(N^2) checking all pairs. For larger N, convex hull + rotating calipers can optimize to O(N log N).",
-              "핵심: 작은 N에서는 모든 쌍을 확인하는 O(N^2) 브루트포스. 큰 N에서는 볼록 껍질 + 회전 캘리퍼스로 O(N log N) 최적화 가능.")}
+              "Key: For small N, brute force O(N^2) checking all pairs.\nFor larger N, convex hull + rotating calipers can optimize to O(N log N).",
+              "핵심: 작은 N에서는 모든 쌍을 확인하는 O(N^2) 브루트포스.\n큰 N에서는 볼록 껍질 + 회전 캘리퍼스로 O(N log N) 최적화 가능.")}
           </div>
         </div>),
     },
@@ -94,10 +94,10 @@ export function makeBitcoinCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N\u00b2)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each pair (i, j), compute dx^2 + dy^2 and keep the maximum. Simple nested loop over all pairs.",
-              "각 쌍 (i, j)에 대해 dx^2 + dy^2을 계산하고 최대값 유지. 모든 쌍에 대한 간단한 이중 루프.")}
+              "For each pair (i, j), compute dx^2 + dy^2 and keep the maximum.\nSimple nested loop over all pairs.",
+              "각 쌍 (i, j)에 대해 dx^2 + dy^2을 계산하고 최대값 유지.\n모든 쌍에 대한 간단한 이중 루프.")}
           </div>
         </div>),
     },

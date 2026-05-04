@@ -41,10 +41,10 @@ export function makeSecretCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd10"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Secret</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P5</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: To check if b is a rotation of a, use the classic trick: concatenate a with itself (a+a), then check if b is a contiguous subsequence of a+a.",
-              "핵심: b가 a의 회전인지 확인하려면, 클래식 트릭 사용: a를 자기 자신과 이어붙이고 (a+a), b가 a+a의 연속 부분 수열인지 확인.")}
+              "Key: To check if b is a rotation of a,\nuse the classic trick: concatenate a with itself (a+a), then check if b is a contiguous subsequence of a+a.",
+              "핵심: b가 a의 회전인지 확인하려면,\n클래식 트릭 사용: a를 자기 자신과 이어붙이고 (a+a), b가 a+a의 연속 부분 수열인지 확인.")}
           </div>
         </div>),
     },
@@ -96,10 +96,10 @@ export function makeSecretCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N\u00b2)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Concatenate a+a (length 2N). Check each starting position i (0 to N-1) whether a+a[i:i+N] equals b. If any match found, output YES.",
-              "a+a 이어붙이기 (길이 2N). 각 시작 위치 i (0 ~ N-1)에서 a+a[i:i+N]이 b와 같은지 확인. 일치하면 YES 출력.")}
+              "Concatenate a+a (length 2N).\nCheck each starting position i (0 to N-1) whether a+a[i:i+N] equals b. If any match found, output YES.",
+              "a+a 이어붙이기 (길이 2N). 각 시작 위치 i (0 ~ N-1)에서 a+a[i:i+N]이 b와 같은지 확인.\n일치하면 YES 출력.")}
           </div>
         </div>),
     },

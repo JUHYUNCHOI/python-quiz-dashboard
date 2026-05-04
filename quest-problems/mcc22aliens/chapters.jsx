@@ -57,10 +57,10 @@ export function makeMcc22AliensCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc7d"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Aliens</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: A truth-teller's claim must match reality. A liar's claim must contradict reality. Check each alien's claim against the given type assignment.",
-              "핵심: 진실형의 주장은 현실과 일치해야 해. 거짓말쟁이의 주장은 현실과 모순돼야 해. 각 외계인의 주장을 주어진 타입 할당과 비교해.")}
+              "Key: A truth-teller's claim must match reality.\nA liar's claim must contradict reality. Check each alien's claim against the given type assignment.",
+              "핵심: 진실형의 주장은 현실과 일치해야 해.\n거짓말쟁이의 주장은 현실과 모순돼야 해.\n각 외계인의 주장을 주어진 타입 할당과 비교해.")}
           </div>
         </div>),
     },
@@ -112,10 +112,10 @@ export function makeMcc22AliensCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Iterate through each alien. If T-type, check claim matches reality. If F-type, check claim contradicts reality. One pass through all aliens.",
-              "각 외계인을 순회. T타입이면 주장이 현실과 일치하는지, F타입이면 모순되는지 확인. 모든 외계인을 한 번 순회.")}
+              "Iterate through each alien.\nIf T-type, check claim matches reality. If F-type, check claim contradicts reality. One pass through all aliens.",
+              "각 외계인을 순회.\nT타입이면 주장이 현실과 일치하는지, F타입이면 모순되는지 확인.\n모든 외계인을 한 번 순회.")}
           </div>
         </div>),
     },

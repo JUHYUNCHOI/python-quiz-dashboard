@@ -49,10 +49,10 @@ export function makeMcc22BirthdayCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf82"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cats' Birthday</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P4</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: For each time slot, count how many cats are available. The answer is the maximum count across all slots. Simple counting / scheduling problem.",
-              "핵심: 각 시간대별로 참석 가능한 고양이 수를 세어. 모든 시간대 중 최대 수가 답. 간단한 카운팅 / 스케줄링 문제.")}
+              "Key: For each time slot, count how many cats are available.\nThe answer is the maximum count across all slots. Simple counting / scheduling problem.",
+              "핵심: 각 시간대별로 참석 가능한 고양이 수를 세어.\n모든 시간대 중 최대 수가 답.\n간단한 카운팅 / 스케줄링 문제.")}
           </div>
         </div>),
     },
@@ -105,10 +105,10 @@ export function makeMcc22BirthdayCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N * T)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Iterate over all time slots, for each count how many cats list it as available. Track the maximum. Could also use a frequency array for O(N + T).",
-              "모든 시간대를 순회하며 각 시간대에 참석 가능한 고양이 수 세기. 최대값 추적. 빈도 배열을 쓰면 O(N + T)도 가능.")}
+              "Iterate over all time slots, for each count how many cats list it as available.\nTrack the maximum. Could also use a frequency array for O(N + T).",
+              "모든 시간대를 순회하며 각 시간대에 참석 가능한 고양이 수 세기.\n최대값 추적.\n빈도 배열을 쓰면 O(N + T)도 가능.")}
           </div>
         </div>),
     },

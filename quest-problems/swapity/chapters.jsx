@@ -57,10 +57,10 @@ export function makeSwapityCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Swapity Swap</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Simulate one round to get the permutation. Find the cycle length. Then K mod cycle gives the effective number of rounds.",
-              "핵심: 한 라운드를 시뮬레이션해서 순열을 구해. 순환 길이를 찾고, K mod 순환 = 실제 라운드 수.")}
+              "Key: Simulate one round to get the permutation.\nFind the cycle length. Then K mod cycle gives the effective number of rounds.",
+              "핵심: 한 라운드를 시뮬레이션해서 순열을 구해.\n순환 길이를 찾고, K mod 순환 = 실제 라운드 수.")}
           </div>
         </div>),
     },
@@ -113,10 +113,10 @@ export function makeSwapityCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N * cycle)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "1) Simulate one round of reversals to get the permutation. 2) Repeatedly apply until identity to find cycle length. 3) K mod cycle = effective rounds. Apply that many times.",
-              "1) 한 라운드 뒤집기를 시뮬레이션해서 순열 구함. 2) 항등까지 반복 적용해 순환 길이 찾기. 3) K mod 순환 = 실제 라운드. 그만큼 적용.")}
+              "1) Simulate one round of reversals to get the permutation. 2) Repeatedly apply until identity to find cycle length. 3) K mod cycle = effective rounds.\nApply that many times.",
+              "1) 한 라운드 뒤집기를 시뮬레이션해서 순열 구함.\n2) 항등까지 반복 적용해 순환 길이 찾기.\n3) K mod 순환 = 실제 라운드.\n그만큼 적용.")}
           </div>
         </div>),
     },

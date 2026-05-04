@@ -62,10 +62,10 @@ export function makeLivestockCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🐄"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Livestock Lineup</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Each constraint is an edge. Max degree 2 means the graph forms chains. Traverse chains in alphabetical order, inserting unconstrained cows alphabetically between chains.",
-              "핵심: 각 조건은 간선. 최대 차수 2이므로 그래프는 체인을 형성. 체인을 알파벳 순서로 탐색하고, 제약 없는 소는 체인 사이에 알파벳순으로 삽입.")}
+              "Key: Each constraint is an edge.\nMax degree 2 means the graph forms chains. Traverse chains in alphabetical order, inserting unconstrained cows alphabetically between chains.",
+              "핵심: 각 조건은 간선.\n최대 차수 2이므로 그래프는 체인을 형성.\n체인을 알파벳 순서로 탐색하고, 제약 없는 소는 체인 사이에 알파벳순으로 삽입.")}
           </div>
         </div>),
     },
@@ -118,10 +118,10 @@ export function makeLivestockCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sort cows alphabetically. Iterate in order: if a cow is unvisited and is a chain start (degree ≤ 1), traverse the chain. This greedily produces the lex-smallest ordering.",
-              "소를 알파벳순 정렬. 순서대로 반복: 소가 미방문이고 체인 시작(차수 ≤ 1)이면 체인 탐색. 이 그리디가 사전순 최소 순서를 생성.")}
+              "Sort cows alphabetically.\nIterate in order: if a cow is unvisited and is a chain start (degree ≤ 1), traverse the chain. This greedily produces the lex-smallest ordering.",
+              "소를 알파벳순 정렬.\n순서대로 반복: 소가 미방문이고 체인 시작(차수 ≤ 1)이면 체인 탐색.\n이 그리디가 사전순 최소 순서를 생성.")}
           </div>
         </div>),
     },

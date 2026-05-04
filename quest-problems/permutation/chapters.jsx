@@ -65,10 +65,9 @@ export function makePermCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>Farmer John's Favorite Permutation</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
-          <div style={{ marginTop: 12, background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Given hints h[i] = |perm[i] - perm[i+1]|, reconstruct the permutation of 1..N or say it's impossible!",
-              "힌트 h[i] = |perm[i] - perm[i+1]| 가 주어지면, 1~N 순열을 복원하거나 불가능하다고 판별해!")}
+              "Given hints h[i] = |perm[i] - perm[i+1]|,\nreconstruct the permutation of 1..N or say it's impossible!", "힌트 h[i] = |perm[i] - perm[i+1]| 가 주어지면,\n1~N 순열을 복원하거나 불가능하다고 판별해!")}
           </div>
         </div>),
     },
@@ -163,8 +162,7 @@ export function makePermCh2(E) {
               {t(E, "💡 Natural First Idea", "💡 자연스러운 첫 아이디어")}
             </div>
             {t(E,
-              "Try every start = 1, 2, ..., N. For each step: prefer + (or any rule). If +h is in [1, N] and unused, take it. Otherwise try −h. If both fail, this start is bad — try the next one.",
-              "시작값 = 1, 2, ..., N 다 시도. 매 단계: +h 먼저 (또는 정해진 규칙). +h가 [1, N] 안이고 미사용이면 선택. 아니면 −h 시도. 둘 다 실패면 이 시작값은 안 됨 — 다음 시도.")}
+              "Try every start = 1, 2, ..., N.\nFor each step: prefer + (or any rule). If +h is in [1, N] and unused, take it. Otherwise try −h. If both fail, this start is bad — try the next one.", "시작값 = 1, 2, ..., N 다 시도.\n매 단계: +h 먼저 (또는 정해진 규칙). +h가 [1, N] 안이고 미사용이면 선택. 아니면 −h 시도. 둘 다 실패면 이 시작값은 안 됨 — 다음 시도.")}
           </div>
         </div>),
     },

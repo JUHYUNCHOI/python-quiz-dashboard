@@ -28,10 +28,10 @@ export function makePresentsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🎁</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Stack of Presents</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2025 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Stack of presents (top to bottom). For each query, count presents above the target. Remove the target after finding it!",
-              "선물 더미 (위→아래). 각 쿼리에서 목표 위의 선물 수를 세고, 찾은 후 제거!")}
+              "Stack of presents (top to bottom).\nFor each query, count presents above the target. Remove the target after finding it!",
+              "선물 더미 (위→아래).\n각 쿼리에서 목표 위의 선물 수를 세고, 찾은 후 제거!")}
           </div>
         </div>),
     },

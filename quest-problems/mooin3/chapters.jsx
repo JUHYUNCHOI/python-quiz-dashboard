@@ -48,10 +48,9 @@ export function makeMooin3Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>It's Mooin' Time III</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #3</div>
-          <div style={{ marginTop: 12, background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "String s, Q queries [l,r]. Find max (j-i)×(k-j) where s[i]≠s[j]=s[k] and l≤i<j<k≤r.",
-              "문자열 s, Q개 쿼리 [l,r]. s[i]≠s[j]=s[k]이고 l≤i<j<k≤r인 (j-i)×(k-j) 최대값.")}
+              "String s, Q queries [l,r].\nFind max (j-i)×(k-j) where s[i]≠s[j]=s[k] and l≤i<j<k≤r.", "문자열 s, Q개 쿼리 [l,r].\ns[i]≠s[j]=s[k]이고 l≤i<j<k≤r인 (j-i)×(k-j) 최대값.")}
           </div>
         </div>),
     },

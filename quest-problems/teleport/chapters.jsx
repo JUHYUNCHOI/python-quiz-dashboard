@@ -35,10 +35,10 @@ export function makeTeleportCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf00"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Teleportation</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Compare 3 options: direct |a-b|, via teleporter a->x then y->b, or a->y then x->b. Take the minimum!",
-              "핵심: 3가지 비교: 직접 |a-b|, 텔레포터 경유 a->x에서 y->b, 또는 a->y에서 x->b. 최솟값 선택!")}
+              "Key: Compare 3 options: direct |a-b|, via teleporter a->x then y->b, or a->y then x->b.\nTake the minimum!",
+              "핵심: 3가지 비교: 직접 |a-b|,\n텔레포터 경유 a->x에서 y->b,\n또는 a->y에서 x->b. 최솟값 선택!")}
           </div>
         </div>),
     },
@@ -91,10 +91,10 @@ export function makeTeleportCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Three paths: direct, a->x teleport y->b, a->y teleport x->b. Just compare absolute differences!",
-              "세 경로: 직접, a->x 텔레포트 y->b, a->y 텔레포트 x->b. 절댓값 차이만 비교!")}
+              "Three paths: direct, a->x teleport y->b, a->y teleport x->b.\nJust compare absolute differences!",
+              "세 경로: 직접, a->x 텔레포트 y->b, a->y 텔레포트 x->b.\n절댓값 차이만 비교!")}
           </div>
         </div>),
     },

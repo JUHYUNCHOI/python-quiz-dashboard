@@ -50,10 +50,10 @@ export function makeMilkMeasCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcca"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Milk Measurement</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Simulate day by day. Track the set of cows with maximum milk. Each time this set changes, increment the counter.",
-              "핵심: 날마다 시뮬레이션해. 최대 우유를 가진 소의 집합을 추적해. 이 집합이 바뀔 때마다 카운터를 증가시켜.")}
+              "Key: Simulate day by day.\nTrack the set of cows with maximum milk. Each time this set changes, increment the counter.",
+              "핵심: 날마다 시뮬레이션해.\n최대 우유를 가진 소의 집합을 추적해.\n이 집합이 바뀔 때마다 카운터를 증가시켜.")}
           </div>
         </div>),
     },
@@ -106,10 +106,10 @@ export function makeMilkMeasCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sort events by day. For each event, update milk and recompute leaders. Compare with previous leader set.",
-              "이벤트를 날짜별 정렬. 각 이벤트마다 우유 업데이트하고 리더 재계산. 이전 리더 집합과 비교.")}
+              "Sort events by day.\nFor each event, update milk and recompute leaders. Compare with previous leader set.",
+              "이벤트를 날짜별 정렬.\n각 이벤트마다 우유 업데이트하고 리더 재계산. 이전 리더 집합과 비교.")}
           </div>
         </div>),
     },

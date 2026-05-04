@@ -128,8 +128,7 @@ export function makeCh1(E) {
               <div>{t(E, "Output:", "출력:")} <strong style={{ color: "#c2410c", fontSize: 18 }}>5</strong></div>
             </div>
             <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.6 }}>
-              {t(E, "→ Among 2~100, Bessie and Elsie disagree on 5 numbers (we'll see which ones later).",
-                  "→ 2 부터 100 사이 수 중에서, 두 답이 다른 수가 5 개라는 뜻이에요. (어떤 5 개인지는 뒤에서!)")}
+              {t(E, "→ Among 2~100, Bessie and Elsie disagree on 5 numbers (we'll see which ones later).", "→ 2 부터 100 사이 수 중에서, 두 답이 다른 수가 5 개라는 뜻이에요.\n(어떤 5 개인지는 뒤에서!)")}
             </div>
           </div>
         </div>
@@ -1142,8 +1141,7 @@ export function makeBruteSteps(E, lang = "py") {
           <Label text={t(E, "Step 5: Elsie 🐮 — Trick 1: extract digit", "5단계: Elsie 🐮 — 트릭 1: 자리 숫자 추출")} />
           <CodeBlock lines={pick(BF_ELSIE_DIGIT, BF_ELSIE_DIGIT_CPP)} />
           <div style={{ marginTop: 10, padding: "8px 10px", background: C.elsieBg, border: `1.5px solid ${C.elsieBd}`, borderRadius: 8, fontSize: 12, color: C.elsie, fontWeight: 700, lineHeight: 1.6 }}>
-            🐮 {t(E, "// 10**(pos-1) shifts that digit to ones place, then % 10 grabs it.",
-                  "// 10**(pos-1) 로 그 자리를 ones 위치까지 내리고, % 10 으로 끄집어내요.")}
+            🐮 {t(E, "// 10**(pos-1) shifts that digit to ones place, then % 10 grabs it.", "// 10**(pos-1) 로 그 자리를 ones 위치까지 내리고,\n% 10 으로 끄집어내요.")}
           </div>
         </div>
       ),
@@ -1158,8 +1156,7 @@ export function makeBruteSteps(E, lang = "py") {
           <Label text={t(E, "Step 5: Elsie 🐮 — Trick 2: carry + clear", "5단계: Elsie 🐮 — 트릭 2: 올림 + 자리 이하 0")} />
           <CodeBlock lines={pick(BF_ELSIE_CARRY, BF_ELSIE_CARRY_CPP)} />
           <div style={{ marginTop: 10, padding: "8px 10px", background: C.elsieBg, border: `1.5px solid ${C.elsieBd}`, borderRadius: 8, fontSize: 12, color: C.elsie, fontWeight: 700, lineHeight: 1.6 }}>
-            🐮 {t(E, "Add 10**pos to carry. Then divide+multiply by 10**pos to clear lower digits.",
-                  "10**pos 더하면 위 자리에 +1. 10**pos 로 나누고 다시 곱하면 아래 자릿수가 0.")}
+            🐮 {t(E, "Add 10**pos to carry.\nThen divide+multiply by 10**pos to clear lower digits.", "10**pos 더하면 위 자리에 +1.\n10**pos 로 나누고 다시 곱하면 아래 자릿수가 0.")}
           </div>
         </div>
       ),
@@ -1238,8 +1235,7 @@ export function makeBruteSteps(E, lang = "py") {
             ))}
           </div>
           <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
-            ❌ {t(E, "Cases 5~13: TLE. The first 4 barely pass at 1.6s — way too close to the limit.",
-                  "케이스 5~13: 시간 초과 (TLE). 통과한 4 개도 1.6 초로 제한 시간에 아슬아슬.")}
+            ❌ {t(E, "Cases 5~13: TLE.\nThe first 4 barely pass at 1.6s — way too close to the limit.", "케이스 5~13: 시간 초과 (TLE).\n통과한 4 개도 1.6 초로 제한 시간에 아슬아슬.")}
           </div>
           <div style={{ marginTop: 8, padding: "10px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 10, fontSize: 13, color: C.accent, fontWeight: 700, lineHeight: 1.7, textAlign: "center" }}>
             💡 {t(E, "So I thought: what if we save what we computed? → Prefix sum!",
@@ -1364,8 +1360,7 @@ export function makeBruteSteps(E, lang = "py") {
                   "통과: 4 → 6 개. 케이스 1~4 는 초고속 (캐시 효과), 5 는 1초 안에 끝.")}
           </div>
           <div style={{ marginTop: 8, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 12, color: C.no, fontWeight: 700, lineHeight: 1.6 }}>
-            ❌ {t(E, "Cases 7~13: still TLE. Why? When N=10⁹ comes, even building the array takes too long.",
-                  "케이스 7~13: 여전히 TLE. 왜? N=10⁹ 가 오면 배열 만드는 자체가 너무 오래 걸려요.")}
+            ❌ {t(E, "Cases 7~13: still TLE.\nWhy? When N=10⁹ comes, even building the array takes too long.", "케이스 7~13: 여전히 TLE.\n왜? N=10⁹ 가 오면 배열 만드는 자체가 너무 오래 걸려요.")}
           </div>
         </div>
       ),
@@ -1761,9 +1756,8 @@ export function makeOptSteps(E) {
             <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>
               🤔 {t(E, "Part 2: same digit count as N (3-digit, ≤ 473)", "어려운 부분: N 과 같은 자릿수 (3자리, ≤ 473)")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-              {t(E, "Can't use the formula directly (it counts ALL 3-digit). We have to be careful — only count up to 473.",
-                  "3자리 수 전부가 아니라 473 까지만 세야 해요. 공식 못 써요 — 자릿수 하나씩 조심히!")}
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+              {t(E, "Can't use the formula directly (it counts ALL 3-digit).\nWe have to be careful — only count up to 473.", "3자리 수 전부가 아니라 473 까지만 세야 해요.\n공식 못 써요 — 자릿수 하나씩 조심히!")}
             </div>
           </div>
 

@@ -36,10 +36,10 @@ export function makeMcc15RectCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u25ad"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Rectangle</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Use XOR trick! x4 = x1 ^ x2 ^ x3, y4 = y1 ^ y2 ^ y3. Since each coordinate appears twice except the missing one, XOR cancels pairs and leaves the answer.",
-              "핵심: XOR 트릭! x4 = x1 ^ x2 ^ x3, y4 = y1 ^ y2 ^ y3. 각 좌표가 빠진 것 빼고 2번 나타나니까, XOR로 쌍이 소거되고 답만 남아.")}
+              "Key: Use XOR trick! x4 = x1 ^ x2 ^ x3, y4 = y1 ^ y2 ^ y3. Since each coordinate appears twice except the missing one,\nXOR cancels pairs and leaves the answer.",
+              "핵심: XOR 트릭!\nx4 = x1 ^ x2 ^ x3, y4 = y1 ^ y2 ^ y3. 각 좌표가 빠진 것 빼고 2번 나타나니까, XOR로 쌍이 소거되고 답만 남아.")}
           </div>
         </div>),
     },
@@ -93,10 +93,10 @@ export function makeMcc15RectCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(1) per case</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For an axis-aligned rectangle, each x and y value appears exactly twice. XOR of all three gives the missing one because a ^ a = 0 and a ^ 0 = a.",
-              "축 정렬 직사각형에서 각 x, y 값은 정확히 2번 나타나. 세 값의 XOR이 빠진 값을 주는 이유는 a ^ a = 0이고 a ^ 0 = a이기 때문이야.")}
+              "For an axis-aligned rectangle, each x and y value appears exactly twice.\nXOR of all three gives the missing one because a ^ a = 0 and a ^ 0 = a.",
+              "축 정렬 직사각형에서 각 x, y 값은 정확히 2번 나타나.\n세 값의 XOR이 빠진 값을 주는 이유는 a ^ a = 0이고 a ^ 0 = a이기 때문이야.")}
           </div>
         </div>),
     },

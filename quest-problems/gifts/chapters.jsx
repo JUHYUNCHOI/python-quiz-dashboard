@@ -31,10 +31,10 @@ export function makeGiftsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf81"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Gifts</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P2</div>
-          <div style={{ marginTop: 12, background: "#fef3c7", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fef3c7", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Use division and modulo. N // K gives the base amount per person. N % K gives how many people receive one extra.",
-              "핵심: 나눗셈과 나머지를 사용해. N // K는 1인당 기본 수량. N % K는 추가 선물을 받는 사람 수.")}
+              "Key: Use division and modulo.\nN // K gives the base amount per person. N % K gives how many people receive one extra.",
+              "핵심: 나눗셈과 나머지를 사용해.\nN // K는 1인당 기본 수량.\nN % K는 추가 선물을 받는 사람 수.")}
           </div>
         </div>),
     },

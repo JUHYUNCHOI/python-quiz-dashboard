@@ -45,10 +45,10 @@ export function makeShuffleCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Bovine Shuffle</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: The shuffle maps position i to position shuffle[i]. To undo it, build the inverse permutation and apply it 3 times to the final result.",
-              "핵심: 셔플은 위치 i를 shuffle[i]로 매핑해. 되돌리려면 역순열을 만들어 최종 결과에 3번 적용해.")}
+              "Key: The shuffle maps position i to position shuffle[i].\nTo undo it, build the inverse permutation and apply it 3 times to the final result.",
+              "핵심: 셔플은 위치 i를 shuffle[i]로 매핑해.\n되돌리려면 역순열을 만들어 최종 결과에 3번 적용해.")}
           </div>
         </div>),
     },
@@ -101,10 +101,10 @@ export function makeShuffleCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Inverse permutation: inv[shuffle[i]] = i. Then apply: new[i] = old[inv[i]] for each of 3 rounds.",
-              "역순열: inv[shuffle[i]] = i. 그런 다음 적용: new[i] = old[inv[i]]를 3라운드 반복.")}
+              "Inverse permutation: inv[shuffle[i]] = i.\nThen apply: new[i] = old[inv[i]] for each of 3 rounds.",
+              "역순열: inv[shuffle[i]] = i.\n그런 다음 적용: new[i] = old[inv[i]]를 3라운드 반복.")}
           </div>
         </div>),
     },

@@ -418,8 +418,8 @@ export function makeCowSignalCh3(E, lang = "py") {
             <span style={{ color: "#c084fc" }}>input</span>
             <span style={{ color: "#e2e8f0" }}>().split())</span>
           </div>
-          <div style={{ marginTop: 8, fontSize: 12, color: C.dim }}>
-            {t(E, "input().split() reads '2 3 2' → ['2','3','2']. map(int, ...) converts to integers.", "input().split()이 '2 3 2' → ['2','3','2'] 읽고. map(int, ...)이 정수로 변환.")}
+          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, whiteSpace: "pre-line" }}>
+            {t(E, "input().split() reads '2 3 2' → ['2','3','2']. map(int,\n...) converts to integers.", "input().split()이 '2 3 2' → ['2','3','2'] 읽고.\nmap(int, ...)이 정수로 변환.")}
           </div>
         </div>),
     },

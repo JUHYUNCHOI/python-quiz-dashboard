@@ -45,10 +45,10 @@ export function makeMilkExCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🥛</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Milk Exchange</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Milk Exchange</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "N cows in a circle, each with milk and a capacity limit. Every minute: pass 1L left or right. Overflow is lost! Find total milk after M minutes.",
-              "N마리 소가 원형으로, 각각 우유와 용량 제한이 있어. 매분: 1L를 왼쪽 또는 오른쪽으로 전달. 넘치면 버려져! M분 후 총 우유량을 구해.")}
+              "N cows in a circle, each with milk and a capacity limit.\nEvery minute: pass 1L left or right. Overflow is lost! Find total milk after M minutes.",
+              "N마리 소가 원형으로, 각각 우유와 용량 제한이 있어.\n매분: 1L를 왼쪽 또는 오른쪽으로 전달.\n넘치면 버려져!\nM분 후 총 우유량을 구해.")}
           </div>
         </div>),
     },

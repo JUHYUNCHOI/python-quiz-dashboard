@@ -52,10 +52,10 @@ export function makeLonelyPhotoCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf8"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Lonely Photo</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: For each cow, count how many substrings (length >= 3) make it the only one of its type. Count opposite-type cows on left and right.",
-              "핵심: 각 소에 대해, 그 소가 자기 타입 유일인 부분 문자열(길이 >= 3) 수를 세. 왼쪽과 오른쪽의 반대 타입 소 수를 세면 돼.")}
+              "Key: For each cow, count how many substrings (length >= 3) make it the only one of its type.\nCount opposite-type cows on left and right.",
+              "핵심: 각 소에 대해, 그 소가 자기 타입 유일인 부분 문자열(길이 >= 3) 수를 세.\n왼쪽과 오른쪽의 반대 타입 소 수를 세면 돼.")}
           </div>
         </div>),
     },

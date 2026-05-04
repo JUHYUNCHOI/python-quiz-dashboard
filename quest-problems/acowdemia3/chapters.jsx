@@ -61,10 +61,10 @@ export function makeAcow3Ch1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Acowdemia III</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: This is a matching problem. Grass cells connect cow pairs. Each grass can mediate at most one friendship. Use greedy or bipartite matching.",
-              "핵심: 이것은 매칭 문제야. 풀 칸이 소 쌍을 연결해. 각 풀은 최대 하나의 우정만 중재. 그리디 또는 이분 매칭 사용.")}
+              "Key: This is a matching problem.\nGrass cells connect cow pairs. Each grass can mediate at most one friendship. Use greedy or bipartite matching.",
+              "핵심: 이것은 매칭 문제야.\n풀 칸이 소 쌍을 연결해.\n각 풀은 최대 하나의 우정만 중재.\n그리디 또는 이분 매칭 사용.")}
           </div>
         </div>),
     },
@@ -117,10 +117,10 @@ export function makeAcow3Ch2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Bipartite Matching</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Build a graph: each grass cell connects to its adjacent cows. Find maximum matching where each grass mediates at most one cow pair.",
-              "그래프 구성: 각 풀 칸이 인접한 소들에 연결. 각 풀이 최대 하나의 소 쌍만 중재하는 최대 매칭 찾기.")}
+              "Build a graph: each grass cell connects to its adjacent cows.\nFind maximum matching where each grass mediates at most one cow pair.",
+              "그래프 구성: 각 풀 칸이 인접한 소들에 연결.\n각 풀이 최대 하나의 소 쌍만 중재하는 최대 매칭 찾기.")}
           </div>
         </div>),
     },

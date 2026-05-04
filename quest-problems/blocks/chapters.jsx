@@ -56,10 +56,10 @@ export function makeBlocksCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🧱"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Blocks</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Try all permutations of blocks to positions (4! = 24). For each, check if the required letter exists on that block's faces.",
-              "핵심: 블록을 위치에 배치하는 모든 순열 시도 (4! = 24). 각각에 대해 필요한 글자가 블록 면에 있는지 확인.")}
+              "Key: Try all permutations of blocks to positions (4! = 24).\nFor each, check if the required letter exists on that block's faces.",
+              "핵심: 블록을 위치에 배치하는 모든 순열 시도 (4!\n= 24). 각각에 대해 필요한 글자가 블록 면에 있는지 확인.")}
           </div>
         </div>),
     },
@@ -112,10 +112,10 @@ export function makeBlocksCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N * 24 * L)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each word: try all permutations of 4 blocks. For each permutation, check if position i's required letter exists on the assigned block. Early exit on mismatch.",
-              "각 단어: 4개 블록의 모든 순열 시도. 각 순열에서 위치 i에 필요한 글자가 배정된 블록에 있는지 확인. 불일치 시 조기 종료.")}
+              "For each word: try all permutations of 4 blocks.\nFor each permutation, check if position i's required letter exists on the assigned block. Early exit on mismatch.",
+              "각 단어: 4개 블록의 모든 순열 시도.\n각 순열에서 위치 i에 필요한 글자가 배정된 블록에 있는지 확인.\n불일치 시 조기 종료.")}
           </div>
         </div>),
     },

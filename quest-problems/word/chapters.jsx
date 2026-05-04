@@ -388,8 +388,7 @@ export function makeWordCh3(E) {
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
             {t(E,
-              "Counter turns each word into a letter → count dictionary.",
-              "Counter('adb')라고 하면 {'a':1, 'd':1, 'b':1} 이런 식으로 글자별 개수를 세줘.")}
+              "Counter turns each word into a letter → count dictionary.", "Counter('adb')라고 하면 {'a':1,\n'd':1, 'b':1} 이런 식으로 글자별 개수를 세줘.")}
           </div>
           <CodeSnippet
             lines={[

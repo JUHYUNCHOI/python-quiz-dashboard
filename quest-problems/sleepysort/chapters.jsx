@@ -35,10 +35,10 @@ export function makeSleepySortCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"😴"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Sleepy Cow Sorting</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Find the longest already-sorted suffix from the right. The answer is N minus the length of that suffix. Those suffix cows never need to move!",
-              "핵심: 오른쪽부터 이미 정렬된 가장 긴 접미사를 찾아. 답은 N에서 그 접미사 길이를 빼면 돼. 접미사 소들은 움직일 필요 없어!")}
+              "Key: Find the longest already-sorted suffix from the right.\nThe answer is N minus the length of that suffix. Those suffix cows never need to move!",
+              "핵심: 오른쪽부터 이미 정렬된 가장 긴 접미사를 찾아.\n답은 N에서 그 접미사 길이를 빼면 돼.\n접미사 소들은 움직일 필요 없어!")}
           </div>
         </div>),
     },
@@ -91,10 +91,10 @@ export function makeSleepySortCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Scan right to left: while a[k-1] < a[k], extend the sorted suffix. The break point k gives the answer directly.",
-              "오른쪽에서 왼쪽으로 스캔: a[k-1] < a[k]인 동안 정렬된 접미사 확장. 끊기는 지점 k가 바로 답이야.")}
+              "Scan right to left: while a[k-1] < a[k], extend the sorted suffix.\nThe break point k gives the answer directly.",
+              "오른쪽에서 왼쪽으로 스캔: a[k-1] < a[k]인 동안 정렬된 접미사 확장.\n끊기는 지점 k가 바로 답이야.")}
           </div>
         </div>),
     },

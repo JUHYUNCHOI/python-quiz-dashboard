@@ -39,10 +39,10 @@ export function makeFjFarmsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>🌱</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>FJ Actually Farms</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "N plants with initial heights h and growth rates a. Find min days d so that height ranking matches target t. Binary search on d!",
-              "N개 식물, 초기 키 h와 성장률 a. 키 순서가 목표 t와 일치하는 최소 날 d를 찾아. d에 대해 이분 탐색!")}
+              "N plants with initial heights h and growth rates a.\nFind min days d so that height ranking matches target t. Binary search on d!",
+              "N개 식물, 초기 키 h와 성장률 a. 키 순서가 목표 t와 일치하는 최소 날 d를 찾아.\nd에 대해 이분 탐색!")}
           </div>
         </div>),
     },

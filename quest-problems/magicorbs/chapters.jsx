@@ -33,10 +33,10 @@ export function makeMagicOrbsCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd2e"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Magical Orbs</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P3</div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Greedy approach - sort by value descending and pick the top K. No complex DP needed!",
-              "핵심: 그리디 접근 - 값 내림차순 정렬 후 상위 K개를 골라. 복잡한 DP 필요 없어!")}
+              "Key: Greedy approach - sort by value descending and pick the top K.\nNo complex DP needed!",
+              "핵심: 그리디 접근 - 값 내림차순 정렬 후 상위 K개를 골라.\n복잡한 DP 필요 없어!")}
           </div>
         </div>),
     },
@@ -89,10 +89,10 @@ export function makeMagicOrbsCh2(E, lang = "py") {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Greedy: sort descending, pick top K values. The sorting dominates at O(N log N).",
-              "그리디: 내림차순 정렬, 상위 K개 선택. 정렬이 O(N log N)으로 지배적.")}
+              "Greedy: sort descending, pick top K values.\nThe sorting dominates at O(N log N).",
+              "그리디: 내림차순 정렬, 상위 K개 선택.\n정렬이 O(N log N)으로 지배적.")}
           </div>
         </div>),
     },
