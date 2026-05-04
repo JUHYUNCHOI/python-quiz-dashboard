@@ -59,8 +59,8 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a secret list of cows.\nHe won't show it — just tells us the GAPS between neighbors.\nCan we figure out the original list?",
-        "FJ는 소들의 비밀 리스트를 가지고 있어.\n순서는 안 알려주고 — 이웃 사이의 간격만 알려줘.\n원래 리스트를 알아낼 수 있을까?"),
+        "FJ has a secret list. He only tells us the gaps between neighbors. We have to rebuild the list.",
+        "FJ에게 비밀 리스트가 있어. 이웃 간격만 알려줘. 우리가 리스트를 복원해야 해."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -69,71 +69,67 @@ export function makePermCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
           </div>
 
-          {/* The story — what's actually given */}
-          <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 12, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 8 }}>
-              📖 {t(E, "The Story", "문제 상황")}
+          {/* Step 1: FJ has secret perm */}
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              1️⃣ {t(E, "FJ's secret list (he won't show it)", "FJ의 비밀 리스트 (안 보여줌)")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-              {t(E, "FJ has a ", "FJ는 ")}
-              <b style={{ color: "#7c5cfc" }}>{t(E, "favorite permutation", "좋아하는 순열")}</b>
-              {t(E, " of numbers ", " (숫자 ")}
-              <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 800 }}>1..N</code>
-              {t(E, " — each number appears exactly once.\nBut he only gives you the ", "을 한 번씩 사용).\n그런데 그가 주는 건 ")}
-              <b style={{ background: "#fde68a", padding: "1px 6px", borderRadius: 4, color: "#7c2d12" }}>{t(E, "gaps between neighbors", "이웃 사이 간격")}</b>
-              {t(E, ".\nYour job: rebuild the original permutation, or say it's ", "뿐.\n할 일: 원래 순열 복원, 아니면 ")}
-              <b style={{ color: "#dc2626" }}>{t(E, "impossible", "불가능")}</b>
-              {t(E, ".", " 판정.")}
-            </div>
-          </div>
-
-          {/* Concrete example — perm + gaps visualized */}
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", marginBottom: 8, textAlign: "center" }}>
-              {t(E, "Example: hidden perm = ", "예: 숨겨진 perm = ")} [3, 1, 4, 2]
-            </div>
-            {/* perm row with gap labels */}
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 0, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
               {[3, 1, 4, 2].map((v, i) => (
-                <span key={`g${i}`} style={{ display: "inline-flex", alignItems: "center" }}>
-                  <span style={{
-                    width: 36, height: 36, display: "inline-flex", alignItems: "center", justifyContent: "center",
-                    borderRadius: 8, background: "#fff", border: "2px solid #7c5cfc", color: "#7c5cfc",
-                    fontWeight: 900, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
-                  }}>{v}</span>
-                  {i < 3 && (
-                    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", margin: "0 4px" }}>
-                      <span style={{ fontSize: 9, color: "#9ca3af", marginBottom: 1 }}>gap</span>
-                      <span style={{
-                        padding: "2px 6px", borderRadius: 5, background: "#fef3c7", border: "1.5px solid #f59e0b",
-                        color: "#92400e", fontSize: 11, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
-                      }}>{Math.abs([3,1,4,2][i] - [3,1,4,2][i+1])}</span>
-                    </span>
-                  )}
-                </span>
+                <div key={i} style={{
+                  width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
+                  borderRadius: 8, background: "#7c5cfc", color: "#fff",
+                  fontWeight: 900, fontSize: 22, fontFamily: "'JetBrains Mono',monospace",
+                  boxShadow: "0 2px 4px rgba(0,0,0,.1)",
+                }}>{v}</div>
               ))}
             </div>
-            <div style={{ marginTop: 8, textAlign: "center", fontSize: 12, color: "#5b21b6", fontFamily: "'JetBrains Mono',monospace" }}>
-              {t(E, "FJ tells you only:", "FJ가 알려주는 건:")} <b style={{ background: "#fde68a", padding: "1px 6px", borderRadius: 4, color: "#7c2d12" }}>h = [2, 3, 2]</b>
-            </div>
-            <div style={{ marginTop: 6, textAlign: "center", fontSize: 11, color: "#5b21b6" }}>
-              {t(E, "You must guess perm[] from h[] alone!", "h[]만으로 perm[]을 맞춰야 해!")}
+            <div style={{ textAlign: "center", marginTop: 8, fontSize: 11, color: "#5b21b6" }}>
+              perm = [3, 1, 4, 2]   {t(E, "(uses 1, 2, 3, 4 each once)", "(1, 2, 3, 4 각 1번씩)")}
             </div>
           </div>
 
-          {/* The formal definition */}
-          <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 12 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-              📐 {t(E, "Formally", "수식으로")}
+          {/* Step 2: gaps */}
+          <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              2️⃣ {t(E, "He computes the gaps (only difference between neighbors)", "이웃 사이 간격만 계산해서 알려줌")}
             </div>
-            <div style={{ fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#15803d", textAlign: "center", lineHeight: 1.8 }}>
-              <span style={{ background: "#fde68a", padding: "2px 6px", borderRadius: 4 }}>h[i]</span>
-              {" = "}
-              <span style={{ background: "#dbeafe", padding: "2px 6px", borderRadius: 4, color: "#1e3a8a" }}>abs(</span>
-              <span style={{ color: "#7c5cfc" }}>perm[i]</span>
-              {" − "}
-              <span style={{ color: "#7c5cfc" }}>perm[i+1]</span>
-              <span style={{ background: "#dbeafe", padding: "2px 6px", borderRadius: 4, color: "#1e3a8a" }}>)</span>
+            {/* gap calculations */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#7c2d12" }}>
+              {[
+                { a: 3, b: 1, gap: 2 },
+                { a: 1, b: 4, gap: 3 },
+                { a: 4, b: 2, gap: 2 },
+              ].map((row, i) => (
+                <div key={i} style={{ background: "#fff", padding: "6px 10px", borderRadius: 6, border: "1.5px solid #fbbf24", textAlign: "center" }}>
+                  abs(<b style={{ color: "#5b21b6" }}>{row.a}</b> − <b style={{ color: "#5b21b6" }}>{row.b}</b>) = <b style={{ background: "#fde68a", padding: "1px 6px", borderRadius: 3 }}>{row.gap}</b>
+                </div>
+              ))}
+            </div>
+            <div style={{ textAlign: "center", marginTop: 10, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#92400e" }}>
+              → h = <span style={{ background: "#fde68a", padding: "2px 8px", borderRadius: 4 }}>[2, 3, 2]</span>
+            </div>
+          </div>
+
+          {/* Step 3: input/output */}
+          <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#15803d", marginBottom: 10 }}>
+              3️⃣ {t(E, "Your job", "당신의 임무")}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 8, alignItems: "center" }}>
+              <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
+                <div style={{ fontSize: 10, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>{t(E, "GIVEN", "받는 것")}</div>
+                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>h = [2, 3, 2]</div>
+              </div>
+              <div style={{ fontSize: 22, color: "#15803d", textAlign: "center", fontWeight: 900 }}>→</div>
+              <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
+                <div style={{ fontSize: 10, fontWeight: 800, color: "#15803d", marginBottom: 4 }}>{t(E, "FIND", "찾을 것")}</div>
+                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>perm = [?, ?, ?, ?]</div>
+              </div>
+            </div>
+            <div style={{ marginTop: 10, fontSize: 12, color: "#15803d", textAlign: "center", lineHeight: 1.6 }}>
+              {t(E, "Multiple perms can give the same h — just find ONE valid perm, or print -1 if none exists.",
+                    "여러 perm이 같은 h를 만들 수 있어 — 유효한 perm 하나만 찾으면 OK. 없으면 -1 출력.")}
             </div>
           </div>
         </div>),
