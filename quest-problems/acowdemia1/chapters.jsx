@@ -41,16 +41,59 @@ export function makeAcow1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie wants to maximize her h-index!\nShe has N papers and can add L extra citations.\nThe h-index is the largest h such that at least h papers have at least h citations.", "Bessie가 h-index를 최대화하고 싶어!\nN개의 논문이 있고 L개의 추가 인용을 넣을 수 있어요.\nh-index는 최소 h개의 논문이 각각 h 이상의 인용을 가지는 최대 h야."),
+        "Bessie has N papers with citation counts c[i]. Her h-index is the largest h such that at least h of her papers have ≥ h citations.\nShe can ADD a total of L extra citations distributed across her papers (each extra citation goes to one paper). What's the MAXIMUM h-index she can achieve?",
+        "베시에게 인용수 c[i] 인 N개의 논문이 있어요. 그녀의 h-index 는 인용수가 h 이상인 논문이 h개 이상인 가장 큰 h 예요.\n그녀는 추가 인용을 총 L개 까지 자유롭게 (한 인용은 한 논문에) 더할 수 있어요. 만들 수 있는 h-index 의 최댓값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcda"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Acowdemia I</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Sort papers by citations.\nBinary search on h. For each candidate h, check if we can boost enough papers using L extra citations.",
-              "핵심: 인용수로 논문을 정렬.\nh를 이분 탐색.\n각 후보 h에 대해 L개의 추가 인용으로 충분한 논문을 올릴 수 있는지 확인.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcda"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Acowdemia I</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie has ", "베시에게 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "N papers with citation counts", "인용수가 주어진 N개의 논문")}</b>
+                  {t(E, " ", " ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>c[i]</code>
+                  {t(E, ".", " 가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Her ", "그녀의 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "h-index", "h-index")}</b>
+                  {t(E, " is the largest h such that ", " 는 인용수가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "at least h papers have ≥ h citations", "h 이상인 논문이 h개 이상")}</b>
+                  {t(E, ".", " 일 때의 가장 큰 h 예요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "She can add a ", "그녀는 ")}
+                  <b style={{ color: "#16a34a" }}>{t(E, "total of L extra citations", "총 L개의 추가 인용")}</b>
+                  {t(E, " distributed however she likes across her papers.",
+                        " 을 자유롭게 분배해 추가할 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum possible h-index", "달성 가능한 h-index 의 최댓값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

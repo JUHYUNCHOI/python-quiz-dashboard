@@ -35,16 +35,61 @@ export function makeFebCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie sends text messages using only B, E, and F.\nLet's figure out how many excitement levels are possible!\n🔤", "베시는 B, E, F만 사용해서 메시지를 보내! 가능한 흥분 수준이 몇 개인지 알아보자! 🔤"),
+        "Bessie texts using only the letters B, E, and F. The 'excitement' of a message is the number of adjacent same-letter pairs (e.g., BBE has 1: the BB). Each F is a wildcard — it can become either B or E.\nFor a given message, print how many DISTINCT excitement values are possible across all ways of assigning F's.",
+        "베시는 B, E, F 만 사용해 문자를 보내요. 메시지의 '흥분도' 는 인접한 같은 글자 쌍의 수예요 (예: BBE 의 흥분도는 1, BB 부분). 각 F 는 와일드카드 — B 또는 E 어느 쪽으로든 결정될 수 있어요.\n주어진 메시지에 대해 F 들의 모든 결정 방식에 걸쳐 만들어질 수 있는 서로 다른 흥분도 값의 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🔤</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>FEB</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "String of B,\nE,\nF chars. F can be B or E. Count consecutive same-char pairs = excitement. Find all possible excitement levels!",
-              "B, E, F로 이루어진 문자열.\nF는 B 또는 E가 될 수 있어요.\n연속 같은 문자 쌍 = 흥분도.\n가능한 흥분도의 개수를 구해요!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🔤</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>FEB</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie's message is a string over ", "베시의 메시지는 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "{B, E, F}", "{B, E, F}")}</b>
+                  {t(E, ".", " 문자열이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The ", "메시지의 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "excitement", "흥분도")}</b>
+                  {t(E, " is the number of ", " 는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "adjacent same-letter pairs", "인접한 같은 글자 쌍의 수")}</b>
+                  {t(E, " (e.g., ", " (예: ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>BBE</code>
+                  {t(E, " → 1).", " → 1).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each ", "")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>F</code>
+                  {t(E, " is a ", " 은 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "wildcard", "와일드카드")}</b>
+                  {t(E, " — independently chooses to be B or E.",
+                        " — 각자 B 또는 E 가 될 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of distinct excitement values possible", "가능한 서로 다른 흥분도 값의 개수")}</b>
+                  {t(E, " over all F-assignments.", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

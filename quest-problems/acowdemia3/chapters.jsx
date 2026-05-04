@@ -55,16 +55,57 @@ export function makeAcow3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows on a grid can become friends if they share an adjacent grass cell.\nEach grass cell can only mediate one friendship.\nMaximize the number of friendships!", "격자 위의 소들은 인접한 풀 칸을 공유하면 친구가 될 수 있어요. 각 풀 칸은 하나의 우정만 중재할 수 있어요. 우정의 수를 최대화해요!"),
+        "On a grid, every cell is either a cow (C) or grass (G). Two cows become friends through a SHARED grass cell adjacent to both (up/down/left/right).\nEach grass cell can mediate AT MOST ONE friendship. Print the maximum number of friendships possible.",
+        "격자 위 각 칸은 소 (C) 또는 풀 (G) 이에요. 두 소가 친구가 되려면, 둘 모두에 상하좌우로 인접한 같은 풀 칸이 있어야 해요.\n각 풀 칸은 최대 1쌍의 우정만 중재해요. 만들 수 있는 우정의 최대 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Acowdemia III</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: This is a matching problem.\nGrass cells connect cow pairs. Each grass can mediate at most one friendship. Use greedy or bipartite matching.",
-              "핵심: 이것은 매칭 문제예요.\n풀 칸이 소 쌍을 연결해요.\n각 풀은 최대 하나의 우정만 중재.\n그리디 또는 이분 매칭 사용.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Acowdemia III</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A grid where each cell is ", "각 칸이 ")}
+                  <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>C</code>
+                  {t(E, " (cow) or ", " (소) 또는 ")}
+                  <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>G</code>
+                  {t(E, " (grass).", " (풀) 인 격자가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Two cows become ", "두 소가 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "friends through a shared grass cell", "공유된 풀 칸을 통해 친구")}</b>
+                  {t(E, " adjacent to both (up/down/left/right).",
+                        " 가 돼요 (그 풀이 두 소 모두에게 상하좌우로 인접).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each grass cell ", "각 풀 칸은 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "mediates at most ONE friendship", "최대 1쌍의 우정만 중재")}</b>
+                  {t(E, ".", " 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum number of friendships", "만들 수 있는 우정의 최대 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -57,16 +57,48 @@ export function makeFamilyTreeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given mother-child relationships between cows, classify the relationship between two specific cows.\nBuild ancestor chains and find the Lowest Common Ancestor (LCA)!", "소들 간 모녀 관계가 주어지면, 특정 두 소의 관계를 분류해요. 조상 체인을 만들고 최소 공통 조상(LCA)을 찾아요!"),
+        "FJ tracks cow mother-child relationships. Given two specific cows X and Y, classify their relationship from the family tree:\nmother / grand-mother / great-...-grand-mother (and the reverse: daughter / grand-daughter / great-...-grand-daughter), siblings, cousins, or unrelated.",
+        "FJ 가 소들의 모녀 관계를 추적해요. 특정 두 소 X 와 Y 가 주어지면 가계도에서 둘의 관계를 분류해요:\n엄마 / 할머니 / great-...-할머니 (반대 방향은 딸 / 손녀 / ...), 자매, 사촌, 또는 관계 없음."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf33"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Family Tree</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Build ancestor chain for cow A with depths.\nWalk up from cow B to find LCA. Compare depths to classify: mother, ancestor, child, descendant, siblings, or unrelated.",
-              "핵심: 소 A의 조상 체인을 깊이와 함께 구축.\n소 B에서 올라가며 LCA 찾기.\n깊이 비교로 분류: 어미, 조상, 자식, 후손, 형제, 무관.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf33"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Family Tree</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has a list of ", "FJ 에게 ")}
+                  <b style={{ color: "#059669" }}>{t(E, "mother → child relationships", "엄마 → 자식 관계 목록")}</b>
+                  {t(E, " among cows (a forest of family trees).",
+                        " 이 있어요 (가계도들의 숲).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given two cows ", "두 소 ")}
+                  <b style={{ color: "#7c3aed" }}>X, Y</b>
+                  {t(E, " — figure out their family relationship.",
+                        " 가 주어져요 — 둘의 가계 관계를 분류해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print one of: ", "다음 중 하나를 출력: ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "(great-)mother / (great-)daughter / siblings / cousins / NOT_RELATED", "(great-)엄마 / (great-)딸 / 자매 / 사촌 / NOT_RELATED")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

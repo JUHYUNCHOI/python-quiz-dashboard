@@ -47,16 +47,50 @@ export function makeFactoryCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There are N stations connected by N-1 one-way conveyor belts (a tree).\nFind a station that every other station can reach, or output -1.", "N개의 스테이션이 N-1개의 단방향 컨베이어 벨트로 연결돼 (트리). 모든 다른 스테이션에서 도달 가능한 스테이션을 찾거나, -1을 출력해요!"),
+        "FJ has a milk factory with N stations connected by N−1 one-way conveyor belts (so the underlying graph is a tree).\nFind a single station that EVERY other station can reach by following the conveyors. Print that station's number, or −1 if none exists.",
+        "FJ 에게 N개의 스테이션과 N−1개의 단방향 컨베이어 벨트로 이뤄진 우유 공장이 있어요 (구조는 트리).\n다른 모든 스테이션에서 컨베이어를 따라 도달할 수 있는 단 하나의 스테이션을 찾아요. 그 번호를 출력하고, 없으면 −1."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfed"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Milk Factory</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: For each candidate station, check if all other stations can reach it by traversing the reverse graph. Since it's a tree with N-1 edges,\nBFS/DFS works.",
-              "핵심: 각 후보 스테이션에 대해 역방향 그래프를 탐색해서 모든 다른 스테이션이 도달 가능한지 확인.\n트리라서 BFS/DFS로 해결.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfed"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Milk Factory</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ's factory has ", "공장에 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N stations", "N개의 스테이션")}</b>
+                  {t(E, " connected by ", "이 있고, ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "N−1 one-way conveyor belts", "N−1개의 단방향 컨베이어 벨트")}</b>
+                  {t(E, " (the underlying graph is a tree).", "로 연결돼 있어요 (구조는 트리).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We want a ", "")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "central station C", "중심 스테이션 C")}</b>
+                  {t(E, " such that ", " — ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "every other station can reach C", "다른 모든 스테이션에서 C 로 도달 가능")}</b>
+                  {t(E, " by following the conveyor directions.", " (컨베이어 방향대로).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print such a station's number, or ", "그런 스테이션의 번호를 출력해요. 없으면 ")}
+                  <b style={{ color: "#dc2626" }}>−1</b>
+                  {t(E, ".", " 출력.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -35,16 +35,48 @@ export function makeAcow2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "In academic papers, author order can indicate seniority.\nIf author A always appears before author B in every paper they co-author, A may be more senior.", "학술 논문에서 저자 순서는 선임 여부를 나타낼 수 있어요. 저자 A가 공동 저술한 모든 논문에서 항상 B 앞에 나타나면, A가 더 선임일 수 있어요."),
+        "K papers are each authored by some subset of N total cow-researchers, written in a particular order.\nCow A is more senior than cow B if (a) they share at least one paper, and (b) on every shared paper A's name appears BEFORE B's. Count how many ordered pairs (A, B) satisfy this 'definitely senior' relation.",
+        "K개의 논문이 각각 N명의 소-연구자 중 일부에 의해 정해진 순서로 작성되어 있어요.\n소 A 가 소 B 보다 확실히 선임이라는 건, (a) 둘이 함께 쓴 논문이 적어도 하나 있고, (b) 그 모든 공동 논문에서 A 의 이름이 B 보다 앞에 나올 때예요. '확실히 선임' 관계를 만족하는 순서쌍 (A, B) 의 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc68\u200d\ud83d\udd2c"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Acowdemia II</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: For each pair, track if one always appears before the other. If A before B in all shared papers and not vice versa,\nA is more senior.",
-              "핵심: 각 쌍에 대해 한쪽이 항상 앞에 나타나는지 추적.\n모든 공동 논문에서 A가 B 앞이고 반대는 없으면 A가 더 선임.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc68\u200d\ud83d\udd2c"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Acowdemia II</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N cow-researchers and K papers", "N명의 소-연구자와 K개의 논문")}</b>
+                  {t(E, " — each paper has an ordered list of authors.",
+                        " 이 있고, 각 논문은 정해진 순서의 저자 목록을 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Cow ", "소 ")}
+                  <b style={{ color: "#7c3aed" }}>A is 'definitely senior' to B</b>
+                  {t(E, " if they share at least one paper AND in every shared paper A's name appears before B's.",
+                        " 인 조건: 둘이 함께 쓴 논문이 1개 이상 있고, 그 모든 공동 논문에서 A 가 B 보다 앞에 등장.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of ordered pairs (A, B) where A is definitely senior to B", "A 가 B 보다 확실히 선임인 순서쌍 (A, B) 의 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

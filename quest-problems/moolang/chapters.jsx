@@ -32,16 +32,61 @@ export function makeMooLangCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The Moo Language has simple grammar rules.\nLet's learn how to form sentences and maximize the number of words used!\n\ud83d\udcdd", "무 언어에는 간단한 문법 규칙이 있어요. 문장을 만들고 사용하는 단어 수를 최대화하는 법을 배우자! \ud83d\udcdd"),
+        "The Moo Language has nouns, intransitive verbs, transitive verbs, and conjunctions. Sentences are either 'noun + intransitive verb' (2 words) or 'noun + transitive verb + noun + ...' (with extra nouns separated by commas, transitive needs ≥1 object).\nGiven word counts and a sentence-period budget P plus a comma budget C, MAXIMIZE the total number of words used.",
+        "무 언어에는 명사, 자동사, 타동사, 접속사가 있어요. 문장은 두 가지: '명사 + 자동사' (2단어) 또는 '명사 + 타동사 + 명사 + ...' (목적어를 쉼표로 추가, 타동사 1개당 목적어 ≥ 1).\n각 종류 단어 개수와 마침표 예산 P, 쉼표 예산 C 가 주어졌을 때, 사용 단어 수의 최댓값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcdd"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Moo Language</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Two sentence types:\n\u2022 noun + intransitive_verb (2 words)\n\u2022 noun + transitive_verb + noun (3 words)\nMaximize total words used!",
-              "\ub450 \ubb38\uc7a5 \uc720\ud615:\n\u2022 \uba85\uc0ac + \uc790\ub3d9\uc0ac (2\ub2e8\uc5b4)\n\u2022 \uba85\uc0ac + \ud0c0\ub3d9\uc0ac + \uba85\uc0ac (3\ub2e8\uc5b4)\n\ucd1d \ub2e8\uc5b4 \uc218\ub97c \ucd5c\ub300\ud654!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcdd"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Moo Language</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We have a ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "word inventory", "단어 재고")}</b>
+                  {t(E, " — counts of nouns, intransitive verbs, transitive verbs, and conjunctions.",
+                        " 가 주어져요 — 명사, 자동사, 타동사, 접속사의 개수.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each sentence is either:", "각 문장은 다음 중 하나:")}
+                  <div style={{ marginTop: 6, marginLeft: 8, fontSize: 12, color: "#475569" }}>
+                    <b style={{ color: "#7c3aed" }}>{t(E, "(A)", "(A)")}</b> {t(E, " noun + intransitive verb  (2 words)", " 명사 + 자동사  (2 단어)")}<br/>
+                    <b style={{ color: "#dc2626" }}>{t(E, "(B)", "(B)")}</b> {t(E, " noun + transitive verb + noun (+ ',' + noun ...)  (3+ words)", " 명사 + 타동사 + 명사 (+ ',' + 명사 ...)  (3 단어 이상)")}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Two sentences can be ", "두 문장을 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "joined by a conjunction", "접속사로 연결")}</b>
+                  {t(E, " (counts as 1 sentence using 1 conjunction). At most ", " 가능 (한 문장으로 셈, 접속사 1개 사용). 마침표는 ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>P</code>
+                  {t(E, " periods and ", " 개, 쉼표는 ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>C</code>
+                  {t(E, " commas may be used.", " 개까지 사용 가능.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum total number of words", "사용 단어 수의 최댓값")}</b>
+                  {t(E, " usable.", " 을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
