@@ -221,27 +221,48 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A permutation of 1..N means each number from 1 to N appears exactly once.\nFor example, [3,1,4,2] is a permutation of 1..4.", "1~N의 순열이란 1부터 N까지 각 숫자가 정확히 한 번씩 나오는 것! 예: [3,1,4,2]는 1~4의 순열이예요."),
+        "A permutation uses each number from 1 to N exactly once — no missing, no duplicates.",
+        "순열은 1부터 N까지 각 숫자를 정확히 1번씩만 사용해요 — 빠지거나 중복되면 안 돼요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: C.accent, marginBottom: 10 }}>
-              {t(E, "Example: perm = [3, 1, 4, 2]", "예시: perm = [3, 1, 4, 2]")}
-            </div>
-            <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 12 }}>
-              {[3,1,4,2].map((v, i) => (
-                <div key={i} style={{
-                  width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 8, fontSize: 20, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
-                  background: "#fff", border: `2.5px solid ${C.accentBd}`, color: C.accent,
-                }}>{v}</div>
-              ))}
-            </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8, textAlign: "center" }}>
-              {t(E,
-                "Hints: |3-1|=2, |1-4|=3, |4-2|=2 → h = [2, 3, 2]",
-                "힌트: |3-1|=2, |1-4|=3, |4-2|=2 → h = [2, 3, 2]")}
-            </div>
+          <div style={{ fontSize: 12, color: C.dim, textAlign: "center", marginBottom: 10 }}>
+            {t(E, "For N = 4, which lists are valid permutations?", "N = 4일 때, 어떤 리스트가 순열일까요?")}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { arr: [3,1,4,2], ok: true,  reason: t(E, "uses 1, 2, 3, 4 — each exactly once", "1, 2, 3, 4 — 각 1번씩 사용") },
+              { arr: [1,2,3,4], ok: true,  reason: t(E, "sorted, but still a permutation", "정렬되어 있지만 순열 맞음") },
+              { arr: [3,1,1,2], ok: false, reason: t(E, "1 appears twice, 4 missing", "1이 두 번 나옴, 4가 없음") },
+              { arr: [1,2,3,5], ok: false, reason: t(E, "5 isn't in 1..4 (4 missing)", "5는 1..4 범위 밖 (4가 없음)") },
+            ].map((row, i) => (
+              <div key={i} style={{
+                background: row.ok ? "#dcfce7" : "#fee2e2",
+                border: `2px solid ${row.ok ? "#86efac" : "#fca5a5"}`,
+                borderRadius: 10, padding: "8px 12px",
+                display: "grid", gridTemplateColumns: "30px 1fr 1.5fr", gap: 10, alignItems: "center",
+              }}>
+                {/* check/cross */}
+                <div style={{ fontSize: 18, fontWeight: 900, color: row.ok ? "#15803d" : "#991b1b", textAlign: "center" }}>
+                  {row.ok ? "✓" : "✗"}
+                </div>
+                {/* the list */}
+                <div style={{ display: "flex", gap: 3 }}>
+                  {row.arr.map((v, j) => (
+                    <div key={j} style={{
+                      width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                      borderRadius: 5, fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+                      background: "#fff",
+                      border: `1.5px solid ${row.ok ? "#16a34a" : "#dc2626"}`,
+                      color: row.ok ? "#15803d" : "#991b1b",
+                    }}>{v}</div>
+                  ))}
+                </div>
+                {/* reason */}
+                <div style={{ fontSize: 11.5, color: row.ok ? "#15803d" : "#991b1b", lineHeight: 1.4 }}>
+                  {row.reason}
+                </div>
+              </div>
+            ))}
           </div>
         </div>),
     },
