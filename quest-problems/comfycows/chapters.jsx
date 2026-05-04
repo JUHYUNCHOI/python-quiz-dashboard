@@ -134,15 +134,36 @@ export function makeComfyCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Use a hash set for cow positions.\nWhen adding a cow, update comfort for it and its 4 neighbors.\nO(N) total!", "소 위치에 해시 집합 사용. 소를 추가할 때 그 소와 4개 이웃의 편안함 갱신. 총 O(N)!"),
+        "Maintain a SET of cow positions and a current comfort count. When a new cow is added, only the new cow + her 4 neighbors can change comfort status — recheck just those 5 cells.",
+        "소 위치 집합 (SET) 과 현재 편안한 소의 수를 유지. 새 소가 추가되면 그 소 + 4 이웃 만이 편안 상태가 바뀔 수 있으니 그 5 칸만 재확인."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Each cow addition triggers at most 5 comfort checks (itself + 4 neighbors).\nTotal work is O(5N) = O(N).",
-              "각 소 추가는 최대 5번의 편안함 확인 (자신 + 이웃 4).\n총 작업량은 O(5N) = O(N).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Add new cow to position set", "새 소를 위치 집합에 추가"), code: "positions.add((r, c))", color: "#f97316" },
+              { n: 2, label: t(E, "For new cow + 4 neighbors", "새 소 + 4 이웃에 대해"), code: "for cell in [new] + neighbors:", color: "#7c3aed" },
+              { n: 3, label: t(E, "Recompute comfort for each cell", "각 칸의 편안 여부 재계산"), code: "new_comfort = sum(neighbor in positions for neighbor of cell) == 3", color: "#0891b2" },
+              { n: 4, label: t(E, "Update count, print", "카운트 갱신, 출력"), code: "comfort_count += delta;  print(comfort_count)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "5 cells re-checked per addition (constant work)", "추가마다 5 칸 재확인 (상수 작업)")}</div>
           </div>
         </div>),
     },

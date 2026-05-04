@@ -147,15 +147,36 @@ export function makeAirCond1Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Compute the diff array, then sum positive jumps (with boundaries at 0). O(N) time!", "차이 배열 계산 후, 양의 점프(경계는 0)를 합산. O(N) 시간!"),
+        "Compute d[i] = q[i] − p[i] (the change needed). The minimum number of range +1/−1 commands equals the sum of POSITIVE jumps in d (extended with 0 at both ends).",
+        "d[i] = q[i] − p[i] (필요한 변화) 를 계산. 최소 범위 +1/−1 명령 수는 d (양 끝에 0 추가) 에서 양의 점프의 합과 같아요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Extend diff with 0 at both ends.\nAnswer = sum of max(0, d[i] - d[i-1]) for all i. Each positive jump means we need new commands.",
-              "diff 양쪽 끝에 0 추가.\n답 = 모든 i에 대해 max(0, d[i] - d[i-1])의 합.\n양의 점프마다 새 명령이 필요해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Compute diff array", "차이 배열 계산"), code: "d[i] = q[i] − p[i]", color: "#f97316" },
+              { n: 2, label: t(E, "Pad with 0 at both ends", "양 끝에 0 추가"), code: "d = [0] + d + [0]", color: "#7c3aed" },
+              { n: 3, label: t(E, "Sum positive jumps", "양의 점프 합산"), code: "ans = sum(max(0, d[i] − d[i-1]))", color: "#0891b2" },
+              { n: 4, label: t(E, "Print", "출력"), code: "print(ans)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan over the diff array", "차이 배열 한 번 선형 스캔")}</div>
           </div>
         </div>),
     },

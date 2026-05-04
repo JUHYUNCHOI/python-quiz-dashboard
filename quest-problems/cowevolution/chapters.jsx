@@ -141,15 +141,36 @@ export function makeEvolutionCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Check all pairs of characteristics against all populations.\nO(C^2 * N) where C = total characteristics.", "모든 특성 쌍을 모든 집단에 대해 확인. O(C^2 * N), C = 전체 특성 수."),
+        "Two characteristics A, B 'cross' (preventing a valid tree) if some population has just {A}, another has just {B}, and another has both {A, B}. Brute-force check every pair of characteristics.",
+        "두 특성 A, B 가 '교차' 하면 (유효한 트리 불가) — 어떤 집단은 {A 만}, 어떤 집단은 {B 만}, 어떤 집단은 {A, B} 둘 다. 모든 특성 쌍을 완전 탐색."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>{"O(C\u00b2 \u00d7 N)"}</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "For each pair of characteristics (A,\nB), check if populations with {A only}, {B only}, and {A,B} all exist. If any such triple exists, output 'no'.",
-              "각 특성 쌍 (A, B)에 대해 {A만}, {B만}, {A,B} 모두 가진 집단이 존재하는지 확인.\n그런 쌍이 있으면 'no' 출력.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Build set of populations", "집단 집합 구축"), code: "pops = [set(traits) for each population]", color: "#059669" },
+              { n: 2, label: t(E, "For every pair (A, B)", "모든 쌍 (A, B)"), code: "for A, B in combinations(all_traits, 2):", color: "#0891b2" },
+              { n: 3, label: t(E, "Check the three witness sets", "세 가지 증인 집단 확인"), code: "has_A_only, has_B_only, has_both = ...", color: "#7c3aed" },
+              { n: 4, label: t(E, "Print no if all three exist", "셋 다 있으면 no 출력"), code: "if all three: print('no'); break  else: print('yes')", color: "#dc2626" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(C² · N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "C² trait pairs × N populations", "C² 특성 쌍 × N 집단")}</div>
           </div>
         </div>),
     },

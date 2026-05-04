@@ -86,15 +86,36 @@ export function makeCollatzCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simple simulation: keep applying the rules until N becomes 1.\nThe number of steps varies but is always finite (conjectured).", "단순 시뮬레이션: N이 1이 될 때까지 규칙을 계속 적용해요. 단계 수는 달라지지만 항상 유한해 (추측)."),
+        "Pure simulation: while N ≠ 1, if N is even divide by 2, else multiply by 3 and add 1. Count the number of steps.",
+        "순수 시뮬레이션: N ≠ 1 인 동안, N 이 짝수면 2 로 나누고, 홀수면 3 을 곱한 뒤 1 더하기. 단계 수를 세요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(steps)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Just simulate: check even/odd, apply the rule, increment counter.\nLoop until N=1.",
-              "시뮬레이션: 짝수/홀수 확인, 규칙 적용, 카운터 증가.\nN=1이 될 때까지 반복.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Initialize counter", "카운터 초기화"), code: "steps = 0", color: "#059669" },
+              { n: 2, label: t(E, "While N != 1, branch on parity", "N != 1 동안 짝/홀로 분기"), code: "while N != 1: ...", color: "#0891b2" },
+              { n: 3, label: t(E, "Apply Collatz rule", "Collatz 규칙 적용"), code: "N = N // 2 if N % 2 == 0 else 3*N + 1", color: "#7c3aed" },
+              { n: 4, label: t(E, "Print step count", "단계 수 출력"), code: "steps += 1;  print(steps)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(steps)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "varies per N (Collatz conjectured to always terminate)", "N 마다 다름 (Collatz 추측: 항상 종료)")}</div>
           </div>
         </div>),
     },
