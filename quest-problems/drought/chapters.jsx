@@ -155,15 +155,36 @@ export function makeDroughtCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try all possible target values (0 to min).\nFor each, greedily process left to right.\nO(N * max_value).", "가능한 모든 목표값(0부터 최솟값까지) 시도. 각각 왼쪽에서 오른쪽으로 그리디 처리. O(N * 최댓값)."),
+        "For each candidate final value t (0 to min(a)), compute d[i] = a[i] − t. Walk left to right: pair (i, i+1) MUST be fed exactly d[i] times to zero a[i], so d[i+1] -= d[i]. If any d goes negative or last d ≠ 0, this t is impossible.",
+        "가능한 최종 값 t (0 부터 min(a)) 마다 d[i] = a[i] − t 계산. 왼쪽부터 오른쪽: 쌍 (i, i+1) 은 a[i] 를 0 으로 만들기 위해 정확히 d[i] 번 먹여야 하니 d[i+1] -= d[i]. d 가 음수가 되거나 마지막 d ≠ 0 이면 그 t 는 불가능."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N * max_val)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "For each target t, compute d[i] = a[i] - t.\nProcess left to right: feed pair (i, i+1) exactly d[i] times, then d[i+1] -= d[i]. If any d goes negative or last d != 0, impossible.",
-              "각 목표 t에 대해 d[i] = a[i] - t 계산.\n왼→오 처리: 쌍(i, i+1)에 d[i]번 먹이, d[i+1] -= d[i]. d가 음수가 되거나 마지막 d != 0이면 불가능.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Try every target t in 0..min(a)", "가능한 t 마다 시도 (0..min(a))"), code: "for t in range(min(a)+1): ...", color: "#d97706" },
+              { n: 2, label: t(E, "Compute initial deficits", "초기 부족분 계산"), code: "d = [a[i] − t for i in range(N)]", color: "#0891b2" },
+              { n: 3, label: t(E, "Greedy left → right", "왼→오 그리디"), code: "for i in range(N−1): if d[i]<0: fail; ops += d[i]; d[i+1] −= d[i]", color: "#7c3aed" },
+              { n: 4, label: t(E, "Check final, take min ops", "마지막 검사, 최소 ops 채택"), code: "if d[N−1] == 0: best = min(best, ops)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N · max_val)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "for each candidate t, scan N cows", "t 후보마다 N마리 스캔")}</div>
           </div>
         </div>),
     },

@@ -142,15 +142,36 @@ export function makeMooOpsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try every position as the start of \"MOO\".\nCheck if middle is 'O'.\nCompute deletion + flip cost.\nO(N) per query!", "모든 위치를 \"MOO\"의 시작으로 시도해요. 중간이 'O'인지 확인. 삭제 + 뒤집기 비용 계산. 쿼리당 O(N)!"),
+        "The middle character of the final 'MOO' can never be flipped (only first/last can). So scan every position i where s[i+1]='O', then compute (deletes from left) + (deletes from right) + (any flips needed for s[i] and s[i+2]).",
+        "최종 'MOO' 의 가운데 글자는 절대 뒤집을 수 없어요 (맨 앞/뒤만 가능). 그래서 s[i+1]='O' 인 모든 i 를 스캔하고, (왼쪽 삭제 수) + (오른쪽 삭제 수) + (s[i] 와 s[i+2] 의 뒤집기 비용) 을 계산해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N) per query</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "For each position i where s[i+1]=='O': cost = i (delete left) + (n-i-3) (delete right) + flip costs for s[i] and s[i+2].\nTake the minimum over all valid i.",
-              "s[i+1]=='O'인 각 위치 i에 대해: 비용 = i (왼쪽 삭제) + (n-i-3) (오른쪽 삭제) + s[i]와 s[i+2]의 뒤집기 비용.\n모든 유효한 i에서 최솟값을 취해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Find candidate centers (s[i+1]='O')", "가운데 후보 찾기 (s[i+1]='O')"), code: "for i in range(N-2): if s[i+1]=='O': ...", color: "#059669" },
+              { n: 2, label: t(E, "Cost: deletions from each side", "비용: 양쪽 삭제 수"), code: "del_cost = i + (N - i - 3)", color: "#0891b2" },
+              { n: 3, label: t(E, "Cost: flip first/last if needed", "비용: 양 끝 뒤집기 (필요 시)"), code: "flip = (s[i]!='M') + (s[i+2]!='O')", color: "#7c3aed" },
+              { n: 4, label: t(E, "Take MIN over all centers; -1 if none", "모든 후보 중 MIN; 없으면 -1"), code: "ans = min(del_cost + flip)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass over the string", "문자열 한 번 순회")}</div>
           </div>
         </div>),
     },
