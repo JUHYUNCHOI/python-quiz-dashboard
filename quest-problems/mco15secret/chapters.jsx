@@ -112,15 +112,36 @@ export function makeSecretCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Concatenate a with itself and search for b.\nNaive search is O(N^2), but KMP can do O(N).\nFor this problem, O(N^2) is fine.", "a를 자기 자신과 이어붙이고 b를 찾아요. 단순 검색은 O(N^2)이지만, KMP로 O(N) 가능. 이 문제에서는 O(N^2)이면 충분해요."),
+        "Classic trick: B is a circular rotation of A iff B is a substring of A+A. So just check 'B in A+A'.",
+        "고전 트릭: B 가 A 의 순환 회전 iff B 가 A+A 의 부분 문자열. 그러므로 'B in A+A' 만 확인."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N\u00b2)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Concatenate a+a (length 2N).\nCheck each starting position i (0 to N-1) whether a+a[i:i+N] equals b. If any match found, output YES.",
-              "a+a 이어붙이기 (길이 2N). 각 시작 위치 i (0 ~ N-1)에서 a+a[i:i+N]이 b와 같은지 확인.\n일치하면 YES 출력.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read strings A and B", "문자열 A, B 읽기"), code: "A = input();  B = input()", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Length check", "길이 확인"), code: "if len(A) != len(B): print('NO'); exit", color: "#7c3aed" },
+              { n: 3, label: t(E, "Substring search in A+A", "A+A 부분 문자열 검색"), code: "is_rot = (B in A + A)", color: "#0891b2" },
+              { n: 4, label: t(E, "Print YES or NO", "YES 또는 NO 출력"), code: "print('YES' if is_rot else 'NO')", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "Python's 'in' operator + length-2N string", "Python in 연산 + 길이 2N 문자열")}</div>
           </div>
         </div>),
     },

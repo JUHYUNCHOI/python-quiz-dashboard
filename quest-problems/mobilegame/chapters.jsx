@@ -113,15 +113,36 @@ export function makeMobileGameCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simply read all scores and sum them up. O(N) time complexity.", "모든 점수를 읽고 합산하면 돼요. O(N) 시간 복잡도."),
+        "Read all N level scores; total score = sum of the scores. One-line in Python.",
+        "N 개의 레벨 점수 읽기; 총 점수 = 점수의 합. Python 한 줄."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Read the list of scores and use sum() to get the total.\nOne pass through the array.",
-              "점수 목록을 읽고 sum()으로 총합을 구해요. 배열을 한 번만 순회.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read N", "N 읽기"), code: "N = int(input())", color: "#d97706" },
+              { n: 2, label: t(E, "Read scores", "점수 읽기"), code: "scores = list(map(int, input().split()))", color: "#7c3aed" },
+              { n: 3, label: t(E, "Sum them", "합산"), code: "total = sum(scores)", color: "#0891b2" },
+              { n: 4, label: t(E, "Print total", "total 출력"), code: "print(total)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass to sum", "선형 한 번 합산")}</div>
           </div>
         </div>),
     },

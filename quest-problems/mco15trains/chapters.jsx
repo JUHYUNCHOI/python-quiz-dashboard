@@ -137,15 +137,36 @@ export function makeTrainsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Dijkstra's algorithm on an N*N grid.\nEach cell is a node, edges go to 4 neighbors.\nO(N^2 log N) with a priority queue.", "N*N 격자에서 다익스트라 알고리즘. 각 셀이 노드, 4이웃으로 간선. 우선순위 큐를 사용해 O(N^2 log N)."),
+        "Dijkstra on the N×N grid: start at A with cost grid[A], expand to non-blocked neighbors, accumulate population costs in a min-heap. Stop at B.",
+        "N×N 격자 다익스트라: A 에서 비용 grid[A] 로 시작, 차단되지 않은 이웃으로 확장, 인구 비용을 최소 힙에 누적. B 에서 중단."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N\u00b2 log N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Dijkstra: start from A with cost = grid[A].\nFor each neighbor, new cost = current + grid[neighbor]. Skip blocked cells (-1). Use min-heap for efficiency.",
-              "다익스트라: A에서 시작, 비용 = grid[A]. 각 이웃에 대해 새 비용 = 현재 + grid[이웃]. 차단 셀(-1) 건너뛰기.\n효율을 위해 최소 힙 사용.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Init priority queue with A", "우선순위 큐 A 로 시작"), code: "heap = [(grid[A], A)];  dist[A] = grid[A]", color: "#2563eb" },
+              { n: 2, label: t(E, "Pop min-cost cell", "최소 비용 칸 pop"), code: "while heap: cost, cell = heappop(heap)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Relax 4 neighbors", "4 이웃 완화"), code: "for n in non-blocked neighbors: new = cost + grid[n]; if new < dist[n]: push", color: "#0891b2" },
+              { n: 4, label: t(E, "Print dist[B]", "dist[B] 출력"), code: "print(dist[B])", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N² log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N² cells in priority queue", "N² 칸을 우선순위 큐에")}</div>
           </div>
         </div>),
     },

@@ -154,15 +154,36 @@ export function makeTrafficCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Two linear passes over the segments. O(N) time!", "구간에 대해 두 번의 선형 패스. O(N) 시간!"),
+        "Constraint propagation in two passes. Forward: start with [0, ∞), apply on-ramps (+k) and off-ramps (−k clamped), intersect with each sensor range to get end-flow range. Backward: reverse the whole thing.",
+        "두 번 패스로 제약 전파. 순방향: [0, ∞) 에서 시작, 진입로 (+k) 와 출구로 (−k, 0 으로 클램프) 적용, 각 센서 범위와 교차해 끝 유량 범위. 역방향: 반대로."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Forward pass: start with first sensor range, apply on/off ramps, intersect with sensor ranges.\nBackward pass: same in reverse. Two O(N) passes.",
-              "순방향: 첫 센서 범위에서 시작, on/off 적용, 센서 범위와 교차.\n역방향: 반대로.\nO(N) 패스 두 번.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Forward sweep", "순방향 스윕"), code: "cur = [0, INF];  for seg in segments: apply seg, intersect with sensor", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Final = end flow range", "최종 = 끝 유량 범위"), code: "end_range = cur", color: "#7c3aed" },
+              { n: 3, label: t(E, "Backward sweep", "역방향 스윕"), code: "cur = end_range;  for seg in reversed: undo + intersect", color: "#0891b2" },
+              { n: 4, label: t(E, "Print start and end ranges", "시작·끝 범위 출력"), code: "print(start_range);  print(end_range)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "two linear passes over N segments", "N 구간 선형 두 번")}</div>
           </div>
         </div>),
     },
