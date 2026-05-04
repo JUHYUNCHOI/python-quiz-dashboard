@@ -100,15 +100,36 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Calculate target value, then sum absolute differences. O(N) time.", "목표값 계산 후 절대 차이 합산. O(N) 시간."),
+        "Each box should end at target = total/N. Walk left to right tracking the running prefix imbalance — each unit of imbalance must be moved across that boundary, contributing 1 to the answer.",
+        "각 상자가 target = total/N 이 되어야 해요. 왼쪽부터 오른쪽으로 누적 불균형을 추적 — 단위 불균형 각각이 그 경계를 건너야 하므로 답에 1 기여."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Compute target = total / N.\nSum abs(a[i] - target) for all i, then divide by 2 (each move fixes two boxes).",
-              "target = total / N 계산.\n모든 i에 대해 abs(a[i] - target) 합산, 2로 나누기 (각 이동이 두 상자 수정).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Compute target value", "목표값 계산"), code: "target = sum(m) // N", color: "#dc2626" },
+              { n: 2, label: t(E, "Sweep, accumulate diff", "스윕, 차이 누적"), code: "cur = 0;  for i: cur += m[i] - target", color: "#7c3aed" },
+              { n: 3, label: t(E, "Add absolute diff to answer", "|cur| 를 답에 추가"), code: "ops += abs(cur)", color: "#0891b2" },
+              { n: 4, label: t(E, "Print total ops", "총 ops 출력"), code: "print(ops)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear sweep", "선형 한 번 스윕")}</div>
           </div>
         </div>),
     },

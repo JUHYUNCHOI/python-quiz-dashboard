@@ -102,15 +102,36 @@ export function makeMcc21DvdCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simulate each step. Check wall collisions and reverse direction. O(T) time.", "각 단계를 시뮬레이션해요. 벽 충돌 확인하고 방향 반전. O(T) 시간."),
+        "Simulate T steps. Each step: tentative move (x + dx, y + dy). If would cross a wall, flip the corresponding component before applying.",
+        "T 단계 시뮬레이션. 매 단계: 가상 이동 (x + dx, y + dy). 벽을 넘어가면 해당 성분을 먼저 부호 반전 후 적용."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(T)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Loop T times.\nEach step: move position, check boundaries, flip direction if needed.",
-              "T번 반복. 매 단계: 위치 이동, 경계 확인, 필요하면 방향 반전.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Init position and velocity", "위치와 속도 초기화"), code: "x, y = start;  dx, dy = ±1, ±1", color: "#d97706" },
+              { n: 2, label: t(E, "For T steps, attempt move", "T 단계 동안 이동 시도"), code: "for _ in range(T):", color: "#7c3aed" },
+              { n: 3, label: t(E, "Bounce off walls", "벽에서 튕기기"), code: "if x+dx out of [0,W-1]: dx = -dx;  same for dy", color: "#0891b2" },
+              { n: 4, label: t(E, "Apply move; print final", "이동 적용; 최종 출력"), code: "x += dx; y += dy;  print(x, y)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(T)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "T simulation steps", "T 단계 시뮬레이션")}</div>
           </div>
         </div>),
     },

@@ -110,15 +110,36 @@ export function makeMcc21SimpleMathCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simple branching based on P. O(N) for each operation.", "P에 따른 간단한 분기. 각 연산 O(N)."),
+        "Branch on P: P=1 sum (use sum()); P=2 product (multiply through); P=3 sequential floor division (start with A[0], floor-divide by each subsequent value).",
+        "P 로 분기: P=1 합 (sum() 사용); P=2 곱 (모두 곱); P=3 순차 정수 나눗셈 (A[0] 시작, 이어지는 값으로 정수 나눗셈)."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Use if-elif to branch on P.\nIterate through the array once for each operation type.",
-              "if-elif로 P에 따라 분기.\n각 연산 유형별로 배열을 한 번 순회.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read N, P, A", "N, P, A 읽기"), code: "N, P = ...; A = list(...)", color: "#f97316" },
+              { n: 2, label: t(E, "P=1 → sum", "P=1 → 합"), code: "if P==1: print(sum(A))", color: "#0891b2" },
+              { n: 3, label: t(E, "P=2 → product", "P=2 → 곱"), code: "elif P==2: result = 1; for x: result *= x", color: "#7c3aed" },
+              { n: 4, label: t(E, "P=3 → floor div left to right", "P=3 → 왼→오 정수 나눗셈"), code: "else: result = A[0]; for x in A[1:]: result //= x;  print(result)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass over the array", "배열 한 번 순회")}</div>
           </div>
         </div>),
     },

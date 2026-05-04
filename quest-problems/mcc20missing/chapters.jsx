@@ -106,15 +106,36 @@ export function makeMcc20MissingCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Use set of absolute values to find missing numbers. O(N) time.", "절대값의 집합으로 빠진 숫자 찾기. O(N) 시간."),
+        "Take absolute values to undo sign flips. Build a set of present values; missing values are 1..N not in the set. Sum all missing candidates.",
+        "절대값으로 부호 반전 무시. 존재하는 값의 집합 구축; 1..N 중 집합에 없는 것이 빠진 값. 후보 모두 합산."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Build a set of abs(a[i]).\nCheck each number 1..N. If not in set, add to answer.",
-              "abs(a[i])의 집합 구축.\n1..N의 각 숫자 확인. 집합에 없으면 답에 추가.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read N-1 (possibly signed) values", "N-1 개 (부호 가능) 값 읽기"), code: "vals = list(map(int, input().split()))", color: "#f97316" },
+              { n: 2, label: t(E, "Build set of |v|", "|v| 집합 구축"), code: "present = {abs(v) for v in vals}", color: "#7c3aed" },
+              { n: 3, label: t(E, "Sum missing in 1..N", "1..N 중 빠진 합산"), code: "missing_sum = sum(x for x in range(1, N+1) if x not in present)", color: "#0891b2" },
+              { n: 4, label: t(E, "Print sum", "합 출력"), code: "print(missing_sum)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "build set + scan 1..N", "집합 구축 + 1..N 스캔")}</div>
           </div>
         </div>),
     },

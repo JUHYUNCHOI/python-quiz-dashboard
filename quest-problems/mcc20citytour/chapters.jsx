@@ -112,15 +112,36 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "BFS from start, visiting all connected cells. O(R*C) time.", "시작점에서 BFS, 연결된 모든 셀 방문. O(R*C) 시간."),
+        "BFS from the starting building. From each cell visit its 4 adjacent neighbors that are buildings (1) and not yet visited. Count all visited cells.",
+        "시작 건물에서 BFS. 각 칸에서 인접 4 이웃 중 건물 (1) 이고 미방문인 것 방문. 방문한 모든 칸 카운트."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(R*C)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Use deque for BFS.\nCheck 4 directions. Mark visited to avoid revisiting. Count all reached cells.",
-              "BFS에 deque 사용.\n4방향 확인. 방문 표시로 재방문 방지. 도달한 모든 셀 카운트.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Init queue with start", "시작점으로 큐 초기화"), code: "queue = [start];  visited = {start}", color: "#d97706" },
+              { n: 2, label: t(E, "BFS pop and explore", "BFS pop 후 탐색"), code: "while queue: r, c = queue.pop(0)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Visit unvisited building neighbors", "미방문 건물 이웃 방문"), code: "for dr, dc in 4 dirs: if grid[nr][nc]==1 and (nr,nc) not in visited: visit", color: "#0891b2" },
+              { n: 4, label: t(E, "Print count", "개수 출력"), code: "print(len(visited))", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(R · C)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "each cell visited at most once", "각 칸 최대 한 번 방문")}</div>
           </div>
         </div>),
     },
