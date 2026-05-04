@@ -102,14 +102,14 @@ export function makeLostCowCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simulate the zigzag.\nEach step doubles, so we find y within O(log(|x-y|)) steps.\nVery fast!", "지그재그를 시뮬레이션해. 매 스텝마다 두 배로 커지니까 O(log(|x-y|)) 스텝 안에 y를 찾아. 매우 빠르지!"),
+        "Simulate the zigzag.\nEach step doubles, so we find y within O(log(abs(x-y))) steps.\nVery fast!", "지그재그를 시뮬레이션해. 매 스텝마다 두 배로 커지니까 O(log(abs(x-y))) 스텝 안에 y를 찾아. 매우 빠르지!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
               { n: 1, label: t(E, "Init state", "초기화"), code: "pos = x,  direction = 1,  step = 1,  total = 0", color: "#dc2626" },
               { n: 2, label: t(E, "Compute target", "목표 계산"), code: "target = pos + direction · step", color: "#0891b2" },
-              { n: 3, label: t(E, "Check if y is on this leg", "y가 이번 다리?"), code: "if min(pos, target) \u2264 y \u2264 max(pos, target): total += |y \u2212 pos|; break", color: "#16a34a" },
+              { n: 3, label: t(E, "Check if y is on this leg", "y가 이번 다리?"), code: "if min(pos, target) \u2264 y \u2264 max(pos, target): total += abs(y \u2212 pos); break", color: "#16a34a" },
               { n: 4, label: t(E, "Otherwise: walk + flip + double", "아니면: 진행 + 반전 + 2배"), code: "total += step;  pos = target;  direction *= \u22121;  step *= 2", color: "#7c3aed" },
             ].map((step, i) => (
               <div key={i} style={{
@@ -126,7 +126,7 @@ export function makeLostCowCh2(E, lang = "py") {
           </div>
           <div style={{ marginTop: 12, background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
             <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(log |x \u2212 y|)</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(log abs(x \u2212 y))</div>
             <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "step doubles each leg", "다리마다 step 2배")}</div>
           </div>
         </div>),

@@ -101,7 +101,7 @@ export function makeWalkCh2(E, lang = "py") {
               { n: 1, label: t(E, "Read posts", "코너 읽기"), code: "posts = [(x0,y0), (x1,y1), ...]", color: "#16a34a" },
               { n: 2, label: t(E, "Cumulative perimeter", "누적 둘레"), code: "cum[i] = distance from post 0 to post i", color: "#0891b2" },
               { n: 3, label: t(E, "Find each cow's position", "소 위치 찾기"), code: "find_pos(x, y) → distance along perimeter", color: "#8b5cf6" },
-              { n: 4, label: t(E, "Pick shorter side", "짧은 쪽"), code: "answer = min(|d1 − d2|, perimeter − |d1 − d2|)", color: "#dc2626" },
+              { n: 4, label: t(E, "Pick shorter side", "짧은 쪽"), code: "answer = min(abs(d1 − d2), perimeter − abs(d1 − d2))", color: "#dc2626" },
             ].map((step, i) => (
               <div key={i} style={{
                 display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",

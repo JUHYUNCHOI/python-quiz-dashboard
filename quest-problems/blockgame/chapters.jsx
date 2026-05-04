@@ -74,8 +74,8 @@ export function makeBlockGameCh1(E) {
         "Total blocks for 1 board: front='AB', back='CD'?",
         "판 1개 총 블록 수: 앞='AB', 뒤='CD'?"),
       hint: t(E,
-        "max(|AB|, |CD|) = max(2, 2) = 2.",
-        "max(|AB|, |CD|) = max(2, 2) = 2."),
+        "max(abs(AB), abs(CD)) = max(2, 2) = 2.",
+        "max(abs(AB), abs(CD)) = max(2, 2) = 2."),
       answer: 2,
     },
   ];

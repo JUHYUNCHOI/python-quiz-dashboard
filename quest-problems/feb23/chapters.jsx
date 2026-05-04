@@ -12,7 +12,7 @@ export const SOLUTION_CODE = [
   "f_positions = [i for i, c in enumerate(s) if c == 'F']",
   "n_f = len(f_positions)",
   "",
-  "# try all 2^|F| assignments",
+  "# try all 2^abs(F) assignments",
   "for mask in range(1 << n_f):",
   "    arr = list(s)",
   "    for j in range(n_f):",
@@ -105,8 +105,8 @@ export function makeFebCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
-                "1. Find all F positions\n2. Try all 2^|F| assignments (B or E)\n3. For each, count consecutive same pairs\n4. Collect distinct excitement values\n5. Answer = size of that set",
-                "1. F 위치 찾기\n2. 모든 2^|F| 할당 시도 (B 또는 E)\n3. 각각에서 연속 같은 쌍 세기\n4. 서로 다른 흥분도 모으기\n5. 답 = 집합의 크기")}
+                "1. Find all F positions\n2. Try all 2^abs(F) assignments (B or E)\n3. For each, count consecutive same pairs\n4. Collect distinct excitement values\n5. Answer = size of that set",
+                "1. F 위치 찾기\n2. 모든 2^abs(F) 할당 시도 (B 또는 E)\n3. 각각에서 연속 같은 쌍 세기\n4. 서로 다른 흥분도 모으기\n5. 답 = 집합의 크기")}
             </div>
           </div>
         </div>),

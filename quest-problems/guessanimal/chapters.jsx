@@ -98,8 +98,8 @@ export function makeGuessAnimalCh2(E, lang = "py") {
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>{"O(N\u00B2 \u00B7 K)"}</div>
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "For each pair (i, j), compute |traits_i AND traits_j| using set intersection.\nTrack the maximum across all pairs.",
-              "각 쌍 (i, j)에 대해 set 교집합으로 |traits_i AND traits_j| 계산.\n모든 쌍에서 최대값 추적.")}
+              "For each pair (i, j), compute abs(traits_i AND traits_j) using set intersection.\nTrack the maximum across all pairs.",
+              "각 쌍 (i, j)에 대해 set 교집합으로 abs(traits_i AND traits_j) 계산.\n모든 쌍에서 최대값 추적.")}
           </div>
         </div>),
     },

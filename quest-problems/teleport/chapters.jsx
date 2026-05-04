@@ -37,8 +37,8 @@ export function makeTeleportCh1(E) {
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #1</div>
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: Compare 3 options: direct |a-b|, via teleporter a->x then y->b, or a->y then x->b.\nTake the minimum!",
-              "핵심: 3가지 비교: 직접 |a-b|,\n텔레포터 경유 a->x에서 y->b,\n또는 a->y에서 x->b. 최솟값 선택!")}
+              "Key: Compare 3 options: direct abs(a-b), via teleporter a->x then y->b, or a->y then x->b.\nTake the minimum!",
+              "핵심: 3가지 비교: 직접 abs(a-b),\n텔레포터 경유 a->x에서 y->b,\n또는 a->y에서 x->b. 최솟값 선택!")}
           </div>
         </div>),
     },

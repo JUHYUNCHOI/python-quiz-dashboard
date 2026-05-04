@@ -35,8 +35,8 @@ export function makeMcc19RectCh1(E) {
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P1</div>
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Key: The list is non-decreasing, so min |a[i]-a[i+1]| = min(a[i+1]-a[i]).\nOne pass O(N).",
-              "핵심: 리스트가 비내림차순이라 min |a[i]-a[i+1]| = min(a[i+1]-a[i]).\n한 번 순회 O(N).")}
+              "Key: The list is non-decreasing, so min abs(a[i]-a[i+1]) = min(a[i+1]-a[i]).\nOne pass O(N).",
+              "핵심: 리스트가 비내림차순이라 min abs(a[i]-a[i+1]) = min(a[i+1]-a[i]).\n한 번 순회 O(N).")}
           </div>
         </div>),
     },

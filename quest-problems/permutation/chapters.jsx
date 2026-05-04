@@ -17,7 +17,7 @@ export const SOLUTION_CODE = [
   "    ok = True",
   "    # positions with 0 hint: perm[i+1] = perm[i]±0 impossible,",
   "    # means perm[i+1] not constrained by diff",
-  "    # Actually: h[i] = |perm[i]-perm[i+1]|",
+  "    # Actually: h[i] = abs(perm[i]-perm[i+1])",
   "    # Strategy: start with perm[0], then perm[i+1]=perm[i]±h[i]",
   "",
   "    # Try all starting values",
@@ -67,7 +67,7 @@ export function makePermCh1(E) {
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
           <div style={{ marginTop: 12, background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "Given hints h[i] = |perm[i] - perm[i+1]|,\nreconstruct the permutation of 1..N or say it's impossible!", "힌트 h[i] = |perm[i] - perm[i+1]| 가 주어지면,\n1~N 순열을 복원하거나 불가능하다고 판별해!")}
+              "Given hints h[i] = abs(perm[i] - perm[i+1]),\nreconstruct the permutation of 1..N or say it's impossible!", "힌트 h[i] = abs(perm[i] - perm[i+1]) 가 주어지면,\n1~N 순열을 복원하거나 불가능하다고 판별해!")}
           </div>
         </div>),
     },
@@ -103,7 +103,7 @@ export function makePermCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The hint h[i] tells us the absolute difference between consecutive elements.\nSo h[i] = |perm[i] - perm[i+1]|.", "힌트 h[i]는 연속 원소의 절댓값 차이야. h[i] = |perm[i] - perm[i+1]|."),
+        "The hint h[i] tells us the absolute difference between consecutive elements.\nSo h[i] = abs(perm[i] - perm[i+1]).", "힌트 h[i]는 연속 원소의 절댓값 차이야. h[i] = abs(perm[i] - perm[i+1])."),
       question: t(E,
         "If perm = [2, 5, 1, 4, 3], what is h[1] (0-indexed)?",
         "perm = [2, 5, 1, 4, 3]이면, h[1] (0-indexed)은?"),
@@ -284,8 +284,8 @@ export function makePermCh3(E, lang = "py") {
       ],
       correct: 0,
       explain: t(E,
-        "h[i]=0 means |perm[i]-perm[i+1]|=0, so they're equal. But permutations have all distinct values — contradiction!",
-        "h[i]=0이면 |perm[i]-perm[i+1]|=0, 같은 값. 하지만 순열은 모든 값이 달라 — 모순!"),
+        "h[i]=0 means abs(perm[i]-perm[i+1])=0, so they're equal. But permutations have all distinct values — contradiction!",
+        "h[i]=0이면 abs(perm[i]-perm[i+1])=0, 같은 값. 하지만 순열은 모든 값이 달라 — 모순!"),
     },
     // 3-3: Progressive code
     {

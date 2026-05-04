@@ -81,8 +81,8 @@ export function makeMcc20MissingCh2(E, lang = "py") {
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Build a set of |a[i]|.\nCheck each number 1..N. If not in set, add to answer.",
-              "|a[i]|의 집합 구축.\n1..N의 각 숫자 확인. 집합에 없으면 답에 추가.")}
+              "Build a set of abs(a[i]).\nCheck each number 1..N. If not in set, add to answer.",
+              "abs(a[i])의 집합 구축.\n1..N의 각 숫자 확인. 집합에 없으면 답에 추가.")}
           </div>
         </div>),
     },

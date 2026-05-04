@@ -150,8 +150,8 @@ export function makePalindromeCh2(E, lang = "py") {
           </div>
           <div style={{ marginTop: 10, background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
             <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "\u23f1 Complexity", "\u23f1 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(S \u00b7 |palis|)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "palindromes are sparse, so |palis| is small", "회문은 드물어 |palis|는 작음")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(S \u00b7 abs(palis))</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "palindromes are sparse, so abs(palis) is small", "회문은 드물어 abs(palis)는 작음")}</div>
           </div>
         </div>),
     },
