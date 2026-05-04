@@ -49,8 +49,8 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer Nhoj had a secret permutation. He dismantled it one element at a time, writing down a hint each step. From those hints, rebuild the smallest possible original permutation.",
-        "농부 Nhoj 에게 비밀 순열이 있었어요. 한 원소씩 분해하며 매 단계마다 힌트를 적었어요. 그 힌트들로 원래의 가장 작은 순열을 복원해요."),
+        "Farmer John had a secret favorite permutation. His rival Farmer Nhoj dismantled it one element at a time, writing down a hint each step. From those hints, rebuild the smallest permutation that John could have started with.",
+        "Farmer John 에게 비밀 favorite 순열이 있었어요. 라이벌 농부 Nhoj 가 그걸 한 원소씩 분해하면서 매 단계마다 힌트를 적었어요. 그 힌트들로 John 이 가지고 있었을 수 있는 가장 작은 순열을 복원해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -69,7 +69,9 @@ export function makePermCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Nhoj had a ", "Nhoj 에게 ")}
+                  {t(E, "Farmer ", "농부 ")}
+                  <b style={{ color: "#7c5cfc" }}>John</b>
+                  {t(E, " had a ", " 에게 ")}
                   <b style={{ color: "#9a3412" }}>{t(E, "secret permutation p of 1..N", "비밀 순열 p (1..N 의 순열)")}</b>
                   {t(E, ".", "이 있었어요.")}
                 </div>
@@ -78,7 +80,9 @@ export function makePermCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "He repeatedly ", "그는 매 단계 ")}
+                  {t(E, "Farmer ", "농부 ")}
+                  <b style={{ color: "#dc2626" }}>Nhoj</b>
+                  {t(E, " (John spelled backward!) repeatedly ", " (John 을 거꾸로!) 가 매 단계 ")}
                   <b style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 3, color: "#7c2d12" }}>
                     {t(E, "compared the FIRST and LAST", "첫 원소와 마지막 원소를 비교")}
                   </b>
@@ -95,7 +99,7 @@ export function makePermCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "He repeats until ", "원소가 ")}
+                  {t(E, "Nhoj repeats until ", "Nhoj 가 원소가 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "1 element remains", "1 개 남을 때까지")}</b>
                   {t(E, ", producing a sequence of N−1 hints — that's the input ", " 반복했고, N−1 개의 힌트 수열을 만들었어요 — 그게 입력 ")}
                   <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>h[0..N−2]</code>
@@ -107,8 +111,8 @@ export function makePermCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest permutation", "사전순으로 가장 작은 순열")}</b>
-                  {t(E, " that produces the given h, or ", " 을 출력해요. 가능한 순열이 없으면 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest permutation John could have started with", "John 이 가지고 있었을 수 있는 사전순으로 가장 작은 순열")}</b>
+                  {t(E, " (the one that produces the given h), or ", " 을 출력해요 (주어진 h 를 만드는 순열). 가능한 순열이 없으면 ")}
                   <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 3, color: "#991b1b", fontWeight: 800 }}>-1</code>
                   {t(E, " if none exists.", ".")}
                 </div>
@@ -123,24 +127,27 @@ export function makePermCh1(E) {
             </div>
           </div>
 
-          {/* Forward direction summary — Nhoj makes h from p */}
+          {/* Forward direction summary — Nhoj dismantles John's p to make h */}
           <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>
-              ⚙️ {t(E, "Nhoj's direction (forward)", "Nhoj 가 한 일 (정방향)")}
+              ⚙️ {t(E, "Forward (what Nhoj did to John's permutation)", "정방향 (Nhoj 가 John 의 순열에 한 일)")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 8, alignItems: "center" }}>
-              <div style={{ background: "#fff", border: "2px solid #c4b5fd", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
-                <div style={{ fontSize: 10, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
-                  {t(E, "secret p (Nhoj knows)", "비밀 p (Nhoj 만 앎)")}
+              <div style={{ background: "#fff", border: "2px solid #7c5cfc", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
+                <div style={{ fontSize: 10, fontWeight: 800, color: "#7c5cfc", marginBottom: 4 }}>
+                  🤠 {t(E, "John's secret p", "John 의 비밀 p")}
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#5b21b6" }}>
+                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c5cfc" }}>
                   [3, 1, 2, 4]
                 </div>
               </div>
-              <div style={{ fontSize: 22, color: "#5b21b6", textAlign: "center", fontWeight: 900 }}>→</div>
+              <div style={{ fontSize: 18, color: "#dc2626", textAlign: "center", fontWeight: 900 }}>
+                <div style={{ fontSize: 16, lineHeight: 1 }}>👹</div>
+                <div style={{ fontSize: 9, color: "#dc2626", fontWeight: 700, marginTop: 2 }}>Nhoj</div>
+              </div>
               <div style={{ background: "#fff", border: "2px solid #fbbf24", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 10, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
-                  {t(E, "hints he writes", "그가 적은 힌트")}
+                  ✏️ {t(E, "hints Nhoj wrote", "Nhoj 가 적은 힌트")}
                 </div>
                 <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#92400e" }}>
                   h = [2, 1, 1]
@@ -148,15 +155,15 @@ export function makePermCh1(E) {
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
-              {t(E, "(We see the next page how p produces h, step by step.)",
-                    "(다음 페이지에서 p 가 어떻게 h 를 만드는지 한 단계씩 봐요.)")}
+              {t(E, "(Next page: see how Nhoj's process turns John's p into h, step by step.)",
+                    "(다음 페이지: Nhoj 의 과정이 John 의 p 를 어떻게 h 로 바꾸는지 한 단계씩 봐요.)")}
             </div>
           </div>
 
           {/* Your job — reverse direction */}
           <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 800, color: "#15803d", marginBottom: 8 }}>
-              🎯 {t(E, "Your job (reverse)", "할 일 (역방향)")}
+              🎯 {t(E, "Your job (reverse — recover John's permutation)", "할 일 (역방향 — John 의 순열 복원)")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 8, alignItems: "center" }}>
               <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
@@ -165,13 +172,13 @@ export function makePermCh1(E) {
               </div>
               <div style={{ fontSize: 22, color: "#15803d", textAlign: "center", fontWeight: 900 }}>→</div>
               <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
-                <div style={{ fontSize: 10, fontWeight: 800, color: "#15803d", marginBottom: 4 }}>{t(E, "FIND p", "p 찾기")}</div>
+                <div style={{ fontSize: 10, fontWeight: 800, color: "#15803d", marginBottom: 4 }}>{t(E, "FIND John's p", "John 의 p 찾기")}</div>
                 <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>[?, ?, ?, ?]</div>
               </div>
             </div>
             <div style={{ marginTop: 10, fontSize: 11, color: "#15803d", textAlign: "center", lineHeight: 1.5 }}>
-              {t(E, "Multiple p's can produce the same h — find the LEXICOGRAPHICALLY SMALLEST one (or -1).",
-                    "같은 h 를 만드는 p 가 여러 개일 수 있어요 — 사전순으로 가장 작은 것 (또는 -1) 을 찾아요.")}
+              {t(E, "Multiple p's can produce the same h — find John's LEXICOGRAPHICALLY SMALLEST possible p (or -1).",
+                    "같은 h 를 만드는 p 가 여러 개일 수 있어요 — John 의 순열 중 사전순으로 가장 작은 것 (또는 -1) 을 찾아요.")}
             </div>
           </div>
         </div>),
@@ -180,8 +187,8 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's run Nhoj's process on p = [3, 1, 2, 4] step by step. Each row shows the remaining elements, who's first vs last, what gets written, and what gets removed.",
-        "p = [3, 1, 2, 4] 에 Nhoj 과정을 한 단계씩 적용해봐요. 각 줄은 남은 원소들, 첫과 마지막, 적은 값, 제거된 값을 보여줘요."),
+        "Suppose John's secret was p = [3, 1, 2, 4]. Watch Nhoj dismantle it step by step. Each row shows the remaining elements, who's first vs last, what Nhoj writes, and what he removes.",
+        "John 의 비밀이 p = [3, 1, 2, 4] 라고 가정해봐요. Nhoj 가 이걸 한 단계씩 분해하는 걸 봐요. 각 줄은 남은 원소들, 첫과 마지막, Nhoj 가 적는 값, 제거하는 값을 보여줘요."),
       content: (() => {
         // Build the trace of dismantling [3, 1, 2, 4]
         const trace = (() => {
@@ -204,7 +211,7 @@ export function makePermCh1(E) {
         return (
           <div style={{ padding: 16 }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 4 }}>
-              ✏️ {t(E, "Hand-simulate: p = [3, 1, 2, 4]", "손으로 따라가기: p = [3, 1, 2, 4]")}
+              ✏️ {t(E, "Hand-simulate Nhoj on John's p = [3, 1, 2, 4]", "손으로 따라가기: Nhoj 가 John 의 p = [3, 1, 2, 4] 를 분해")}
             </div>
             <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 12 }}>
               {t(E, "Compare ⬅first and last➡. Bigger end loses (×). The element NEXT to it gets written ✏️.",
@@ -413,12 +420,28 @@ export function makePermCh1(E) {
             🐢 {t(E, "Idea 1: Try every permutation (brute force)", "아이디어 1: 모든 순열 다 시도 (브루트포스)")}
           </div>
 
-          {/* Pseudocode */}
-          <div style={{ background: "#1f2937", color: "#e5e7eb", borderRadius: 10, padding: 12, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7, marginBottom: 12 }}>
-            <div><span style={{ color: "#60a5fa" }}>for</span> p <span style={{ color: "#60a5fa" }}>in</span> permutations(1..N):</div>
-            <div style={{ marginLeft: 20 }}>h_test = dismantle(p)</div>
-            <div style={{ marginLeft: 20 }}><span style={{ color: "#60a5fa" }}>if</span> h_test == h:</div>
-            <div style={{ marginLeft: 40 }}><span style={{ color: "#60a5fa" }}>print</span>(p);  <span style={{ color: "#60a5fa" }}>break</span></div>
+          {/* Pseudocode — show what we actually need to write */}
+          <div style={{ background: "#1f2937", color: "#e5e7eb", borderRadius: 10, padding: 12, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7, marginBottom: 8 }}>
+            {/* import */}
+            <div><span style={{ color: "#60a5fa" }}>from</span> itertools <span style={{ color: "#60a5fa" }}>import</span> permutations</div>
+            <div style={{ height: 8 }} />
+            {/* dismantle helper */}
+            <div><span style={{ color: "#60a5fa" }}>def</span> <span style={{ color: "#fbbf24" }}>dismantle</span>(p):</div>
+            <div style={{ marginLeft: 20 }}>p = list(p);  h = []</div>
+            <div style={{ marginLeft: 20 }}><span style={{ color: "#60a5fa" }}>while</span> len(p) {">"} 1:</div>
+            <div style={{ marginLeft: 40 }}><span style={{ color: "#60a5fa" }}>if</span> p[0] {">"} p[-1]: h.append(p[1]);  p.pop(0)</div>
+            <div style={{ marginLeft: 40 }}><span style={{ color: "#60a5fa" }}>else</span>: h.append(p[-2]);  p.pop()</div>
+            <div style={{ marginLeft: 20 }}><span style={{ color: "#60a5fa" }}>return</span> h</div>
+            <div style={{ height: 8 }} />
+            {/* main: try every perm in lex order */}
+            <div><span style={{ color: "#60a5fa" }}>for</span> p <span style={{ color: "#60a5fa" }}>in</span> permutations(<span style={{ color: "#a78bfa" }}>range</span>(1, N+1)):</div>
+            <div style={{ marginLeft: 20 }}><span style={{ color: "#60a5fa" }}>if</span> dismantle(p) == h:</div>
+            <div style={{ marginLeft: 40 }}><span style={{ color: "#60a5fa" }}>print</span>(*p);  <span style={{ color: "#60a5fa" }}>break</span></div>
+            <div><span style={{ color: "#60a5fa" }}>else</span>: <span style={{ color: "#60a5fa" }}>print</span>(-1)  <span style={{ color: "#9ca3af" }}># no perm matched</span></div>
+          </div>
+          <div style={{ fontSize: 11, color: C.dim, marginBottom: 12, fontStyle: "italic" }}>
+            {t(E, "↳ We need both imports: permutations from itertools, and a dismantle() helper that runs Nhoj's process.",
+                  "↳ 두 가지가 필요해요: itertools 의 permutations 임포트 + Nhoj 과정을 돌리는 dismantle() 함수.")}
           </div>
 
           {/* Why it works */}
@@ -443,7 +466,7 @@ export function makePermCh1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 12px", fontSize: 11, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
               <div style={{ color: "#7c2d12" }}>N=2 → 2! = 2</div><div style={{ color: C.dim }}>{t(E, "instant", "즉시")}</div>
               <div style={{ color: "#7c2d12" }}>N=4 → 4! = 24</div><div style={{ color: C.dim }}>{t(E, "instant", "즉시")}</div>
-              <div style={{ color: "#7c2d12" }}>N=8 → 8! = 40,320</div><div style={{ color: C.dim }}>{t(E, "fast (&lt; 1s)", "빠름 (&lt; 1초)")}</div>
+              <div style={{ color: "#7c2d12" }}>N=8 → 8! = 40,320</div><div style={{ color: C.dim }}>{t(E, "fast (< 1s)", "빠름 (< 1초)")}</div>
             </div>
           </div>
         </div>),
