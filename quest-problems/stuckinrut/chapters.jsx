@@ -143,15 +143,36 @@ export function makeStuckCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Check all N-cow vs E-cow pairs for intersections.\nSort events by time.\nO(N^2 log N) total!", "모든 북쪽/동쪽 소 쌍의 교차를 확인. 이벤트를 시간순 정렬. 총 O(N^2 log N)!"),
+        "Enumerate every N-cow / E-cow pair and compute their potential collision time. Sort events by time. Process: a cow that's already stopped doesn't trigger; the other is the one who arrives later — she stops.",
+        "모든 N-소 / E-소 쌍을 열거해 잠재적 충돌 시각 계산. 시간순 정렬. 처리: 이미 멈춘 소는 발동 X; 다른 한 마리 (더 늦게 도착) 가 멈춤."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N\u00b2 log N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Enumerate all N-cow/E-cow pairs to find intersections.\nSort by time. Process in order: first collision wins, stopped cows are ignored.",
-              "모든 북쪽/동쪽 소 쌍을 열거해 교차점을 찾아요.\n시간순 정렬.\n순서대로 처리: 먼저 충돌한 것이 이기고 멈춘 소는 무시.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Compute collision time per pair", "쌍마다 충돌 시각 계산"), code: "for n_cow in N_cows: for e_cow in E_cows: t = ...", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Sort events by time", "이벤트 시간순 정렬"), code: "events.sort(key=lambda e: e.time)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Process events in order", "순서대로 처리"), code: "for e in events: if both cows still moving: later cow stops", color: "#0891b2" },
+              { n: 4, label: t(E, "Print cells per cow", "소별 칸 수 출력"), code: "print(cells[cow] for cow)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N² log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "all pairs × sort", "모든 쌍 × 정렬")}</div>
           </div>
         </div>),
     },

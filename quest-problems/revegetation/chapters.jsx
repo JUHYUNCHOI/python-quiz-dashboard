@@ -130,15 +130,36 @@ export function makeRevegCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Greedy coloring: for each pasture, check its constraints. O(N * M) in the worst case.", "그리디 색칠: 각 목초지의 제약을 확인. 최악의 경우 O(N * M)."),
+        "Greedy: process pastures 1, 2, …, N in order. For each, look at the colors already used by ALREADY-colored neighbors, and pick the SMALLEST color in {1,2,3,4} that's not in that set.",
+        "그리디: 목초지를 1, 2, …, N 순서로 처리. 각 목초지에서, 이미 색칠된 이웃의 색을 확인하고 그 집합에 없는 {1,2,3,4} 중 가장 작은 색 선택."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>{"O(N \u00d7 M)"}</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Process pastures in order 1..N.\nFor each, find colors used by already-colored neighbors, pick the smallest unused. Since there are 4 colors and the graph is sparse, this always works.",
-              "목초지를 1..N 순서로 처리.\n이미 색칠된 이웃의 색을 확인하고 안 쓴 가장 작은 색 선택.\n4색이고 그래프가 희소해서 항상 가능.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Build constraint graph", "제약 그래프 구축"), code: "adj = {p: set of neighbors}", color: "#f97316" },
+              { n: 2, label: t(E, "Process pasture 1..N", "1..N 순서 처리"), code: "for p in range(1, N+1):", color: "#7c3aed" },
+              { n: 3, label: t(E, "Find smallest unused color", "안 쓴 가장 작은 색"), code: "used = {color[n] for n in adj[p] if n < p};  color[p] = min({1,2,3,4} - used)", color: "#0891b2" },
+              { n: 4, label: t(E, "Output color string", "색 문자열 출력"), code: "print(''.join(str(c) for c in color[1..N]))", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N + M)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "linear in pastures + constraints", "목초지 + 제약에 선형")}</div>
           </div>
         </div>),
     },

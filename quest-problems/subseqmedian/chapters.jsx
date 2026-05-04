@@ -140,15 +140,36 @@ export function makeSubseqMedianCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each element, count how many good subsequences have it as the median using DP.\nMatch equal-length increasing subsequences on the left and right.\nO(N^2) or O(N^2 log N).", "각 원소에 대해 DP로 그 원소가 중앙값인 좋은 부분수열의 개수를 세.\n왼쪽과 오른쪽에서 같은 길이의 증가 부분수열을 매칭해요.\nO(N^2) 또는 O(N^2 log N)."),
+        "For every element v at index i, the good subsequences where v is the median come from picking equal-length increasing chains on both sides — k smaller-element chains on the left, k larger-element chains on the right.",
+        "각 위치 i 의 원소 v 가 중앙값인 좋은 부분수열은, 양쪽에서 같은 길이의 증가 사슬을 선택 — 왼쪽에서 v 보다 작은 원소들의 길이 k 사슬, 오른쪽에서 v 보다 큰 원소들의 길이 k 사슬."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N\u00b2) DP</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "For each element v at index i: count strictly increasing subsequences of length k among elements < v to the left, and length k among elements > v to the right.\nMultiply and sum over all k to get v's contribution.",
-              "각 원소 v(인덱스 i)에 대해: 왼쪽에서 v보다 작은 원소들의 길이 k 증가 부분수열 수, 오른쪽에서 v보다 큰 원소들의 길이 k 증가 부분수열 수를 세.\nk에 대해 곱하고 합하면 v의 기여도예요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "For each element v at index i", "각 (i, v)"), code: "for i, v in enumerate(A):", color: "#059669" },
+              { n: 2, label: t(E, "Count left-k chains of < v", "왼쪽 < v 의 길이 k 사슬"), code: "L[k] = count of length-k inc seqs in A[:i] using values < v", color: "#0891b2" },
+              { n: 3, label: t(E, "Count right-k chains of > v", "오른쪽 > v 의 길이 k 사슬"), code: "R[k] = count of length-k inc seqs in A[i+1:] using values > v", color: "#7c3aed" },
+              { n: 4, label: t(E, "Sum v · L[k] · R[k] over all k", "모든 k 에 대해 합산"), code: "ans = (ans + v * sum(L[k] * R[k] for k)) % MOD;  print(ans)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N²)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "two DP passes per element", "원소마다 두 번의 DP")}</div>
           </div>
         </div>),
     },

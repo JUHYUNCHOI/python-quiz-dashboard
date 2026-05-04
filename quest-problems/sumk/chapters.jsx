@@ -108,15 +108,36 @@ export function makeSumKCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Loop through each element, compute x^K, and add to result.\nO(N * log K) with fast exponentiation, or O(N * K) with naive approach.", "각 원소를 순회하며 x^K를 계산하고 결과에 더해요. 빠른 거듭제곱으로 O(N * log K), 단순 방법으로 O(N * K)."),
+        "Iterate the array; for each element x, add x**K to the running total. Python's ** uses fast exponentiation.",
+        "배열을 순회; 각 원소 x 마다 x**K 를 누적. Python 의 ** 는 빠른 거듭제곱 사용."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Python's ** operator handles exponentiation efficiently.\nJust iterate and accumulate.",
-              "Python의 ** 연산자가 거듭제곱을 효율적으로 처리해요.\n순회하며 누적하면 돼요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read N, K, array", "N, K, 배열 읽기"), code: "N, K = ...; A = list(...)", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Init total = 0", "total = 0 초기화"), code: "total = 0", color: "#7c3aed" },
+              { n: 3, label: t(E, "For each x, add x**K", "각 x 마다 x**K 누적"), code: "for x in A: total += x ** K", color: "#0891b2" },
+              { n: 4, label: t(E, "Print total", "total 출력"), code: "print(total)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N · log K)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "fast exponentiation per element", "원소마다 빠른 거듭제곱")}</div>
           </div>
         </div>),
     },

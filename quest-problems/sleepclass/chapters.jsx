@@ -142,15 +142,36 @@ export function makeSleepCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try each divisor of total sum.\nFor each, scan array to check partition.\nO(N * d(S)) where d(S) = number of divisors.", "총합의 각 약수를 시도. 각각에 대해 배열 스캔으로 분할 확인. O(N * d(S)), d(S) = 약수 개수."),
+        "The final equal value MUST divide the total sum S. For each divisor d of S, greedily walk the array accumulating; whenever running sum == d, start a new segment. The smallest 'merges = N − segments' wins.",
+        "최종 동일 값은 총합 S 의 약수여야 함. S 의 각 약수 d 에 대해, 배열을 누적하며 그리디 — 누적 == d 가 되면 새 구간 시작. 가장 작은 '합치기 = N − 구간 수' 가 답."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N * d(S))</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "For each divisor d of total sum S: greedily accumulate periods.\nIf running sum equals d, start new segment. Count merges = N - segments.",
-              "총합 S의 각 약수 d에 대해: 그리디로 시간 누적.\n누적합이 d면 새 구간 시작.\n합치기 = N - 구간 수.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Compute total S", "총합 S 계산"), code: "S = sum(a)", color: "#059669" },
+              { n: 2, label: t(E, "For each divisor d of S", "S 의 각 약수 d"), code: "for d in divisors(S):", color: "#7c3aed" },
+              { n: 3, label: t(E, "Greedy partition", "그리디 분할"), code: "cur = 0; segs = 0;  for x in a: cur += x; if cur == d: segs += 1; cur = 0; elif cur > d: invalid", color: "#0891b2" },
+              { n: 4, label: t(E, "Min merges = N − max segments", "최소 합치기 = N − 최대 구간"), code: "print(N - best_segs)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N · d(S))</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "scan for each divisor of total", "총합 약수마다 스캔")}</div>
           </div>
         </div>),
     },
