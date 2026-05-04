@@ -19,8 +19,15 @@ export default function SubseqMedianApp(props = {}) {
   });
   const E = lang === "en";
   const [codeLang, setCodeLang] = useState("py");
-  const [tab, setTab] = useState(0);
-  const [si, setSi] = useState(0);
+  // Persist tab/si in localStorage so refresh keeps the student on the same step
+  const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";
+  const _loadPos = () => {
+    if (typeof window === "undefined") return { tab: 0, si: 0 };
+    try { return JSON.parse(window.localStorage.getItem(_posKey) || "{}"); } catch { return {}; }
+  };
+  const _initial = _loadPos();
+  const [tab, setTab] = useState(typeof _initial.tab === "number" ? _initial.tab : 0);
+  const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
   const [ch1Q, setCh1Q] = useState(() => makeSubseqMedianCh1(false));
@@ -29,6 +36,12 @@ export default function SubseqMedianApp(props = {}) {
   useEffect(() => {
     setCh2Q(prev => makeSubseqMedianCh2(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   }, [codeLang, E]);
+
+  // Save tab + si to localStorage on every change
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+  }, [tab, si, _posKey]);
 
   useEffect(() => {
     if ((propLang === "ko" || propLang === "en") && propLang !== lang) switchLang(propLang);

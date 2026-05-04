@@ -31,6 +31,12 @@ export default function RoundingApp(props = {}) {
   }, [codeLang, E]);
 
   // 글로벌 헤더 언어 prop 변경 → 인앱 lang 동기화
+  // Save tab + si to localStorage on every change
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+  }, [tab, si, _posKey]);
+
   useEffect(() => {
     if ((propLang === "ko" || propLang === "en") && propLang !== lang) {
       switchLang(propLang);
@@ -39,8 +45,15 @@ export default function RoundingApp(props = {}) {
   }, [propLang]);
 
   // --- Navigation ---
-  const [tab, setTab] = useState(0);
-  const [si, setSi]   = useState(0);
+  // Persist tab/si in localStorage so refresh keeps the student on the same step
+  const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";
+  const _loadPos = () => {
+    if (typeof window === "undefined") return { tab: 0, si: 0 };
+    try { return JSON.parse(window.localStorage.getItem(_posKey) || "{}"); } catch { return {}; }
+  };
+  const _initial = _loadPos();
+  const [tab, setTab] = useState(typeof _initial.tab === "number" ? _initial.tab : 0);
+  const [si, setSi]   = useState(typeof _initial.si === "number" ? _initial.si : 0);
 
   // 학생이 가본 적 있는 탭 — 탭 라벨에 ✓ 표시 용
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
