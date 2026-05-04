@@ -29,16 +29,49 @@ export function makeTeleportCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John wants to go from position a to position b on a number line.\nThere's a teleporter between positions x and y.\nFind the minimum distance!", "농부 존이 수직선에서 위치 a에서 b로 가려 해요. 위치 x와 y 사이에 텔레포터가 있어요. 최소 거리를 구해요!"),
+        "FJ wants to go from position a to position b on a number line. There's a two-way teleporter linking positions x and y — using it instantly moves you between x and y at no walking cost.\nPrint the minimum total walking distance.",
+        "FJ 가 수직선의 위치 a 에서 b 로 가고 싶어요. 위치 x 와 y 를 잇는 양방향 텔레포터가 있어요 — 사용하면 걷는 거리 없이 즉시 x ↔ y 이동.\n걷는 거리의 최솟값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf00"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Teleportation</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Compare 3 options: direct abs(a-b), via teleporter a->x then y->b, or a->y then x->b.\nTake the minimum!",
-              "핵심: 3가지 비교: 직접 abs(a-b),\n텔레포터 경유 a->x에서 y->b,\n또는 a->y에서 x->b. 최솟값 선택!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf00"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Teleportation</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ travels from position ", "FJ 가 수직선의 위치 ")}
+                  <b style={{ color: "#d97706" }}>a</b>
+                  {t(E, " to position ", " 에서 ")}
+                  <b style={{ color: "#d97706" }}>b</b>
+                  {t(E, " on a number line.", " 로 가요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There's a ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "two-way teleporter linking x and y", "x 와 y 를 잇는 양방향 텔레포터")}</b>
+                  {t(E, " — using it costs ZERO walking distance.",
+                        " 가 있어요 — 사용하면 걷는 거리 0.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum total walking distance from a to b", "a 에서 b 까지 걷는 거리의 최솟값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

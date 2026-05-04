@@ -24,16 +24,47 @@ export function makeMobileGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A mobile game has N levels, each with a score.\nYou play through all levels and collect all scores.\nFind the total score!", "모바일 게임에 N개의 레벨이 있고, 각각 점수가 있어요. 모든 레벨을 플레이하고 점수를 모두 모아요. 총 점수를 구해요!"),
+        "A mobile game has N levels with scores s[1..N]. You play every level once and collect every score.\nPrint the total score (the sum of all s[i]).",
+        "모바일 게임에 N 개의 레벨이 있고, 각 레벨의 점수 s[1..N] 이 주어져요. 모든 레벨을 한 번씩 플레이해 모든 점수를 모아요.\n총 점수 (모든 s[i] 의 합) 를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mobile Game</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Given N levels with scores, play all levels and compute the total score.\nSimple summation!",
-              "N개 레벨의 점수가 주어지면,\n모든 레벨을 플레이하고 총 점수를 계산해요. 단순 합산!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf1"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mobile Game</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P2</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A mobile game has ", "")}
+                  <b style={{ color: "#d97706" }}>{t(E, "N levels with scores s[1..N]", "점수 s[1..N] 의 N 개 레벨")}</b>
+                  {t(E, ".", "이 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "play every level once", "모든 레벨을 한 번씩 플레이")}</b>
+                  {t(E, " and collect every score.",
+                        "해서 모든 점수를 모아요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "total score (sum of all s[i])", "총 점수 (모든 s[i] 의 합)")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
