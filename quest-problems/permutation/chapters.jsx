@@ -69,26 +69,58 @@ export function makePermCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
           </div>
 
-          {/* Scenario — what the problem actually is */}
+          {/* Scenario — clean bulleted facts */}
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
-            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.75 }}>
-              {t(E, "FJ has N cows lined up in his ", "FJ에게 N마리의 소가 ")}
-              <b style={{ color: "#9a3412" }}>{t(E, "favorite order", "좋아하는 순서")}</b>
-              {t(E, ".\nEach cow wears a number tag from 1 to N — every number appears exactly once (a ",
-                    "로 줄 서있어요.\n각 소는 1부터 N까지의 번호표를 달고 있어요 — 각 번호는 정확히 한 번만 등장해요 (")}
-              <b>{t(E, "permutation", "순열")}</b>
-              {t(E, ").\n\nFJ doesn't give you the actual numbers. Instead, he gives you ",
-                    ").\n\nFJ는 진짜 번호를 알려주지 않고, ")}
-              <b style={{ background: "#fef3c7", padding: "1px 6px", borderRadius: 4, color: "#7c2d12" }}>
-                {t(E, "the difference between every pair of adjacent cows", "이웃한 두 소의 번호 차이")}
-              </b>
-              {t(E, ".\n\nFrom these N−1 differences, find ONE possible original order of cows. If no such order exists, output ",
-                    "만 알려줘요.\n\n이 N−1개의 차이로부터 가능한 원래 순서 하나를 찾아요. 그런 순서가 없으면 ")}
-              <code style={{ background: "#fee2e2", padding: "1px 6px", borderRadius: 4, color: "#991b1b", fontWeight: 800 }}>-1</code>
-              {t(E, ".", "을 출력해요.")}
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              {/* fact 1 */}
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has N cows lined up in some ", "FJ에게 N마리의 소가 ")}
+                  <b style={{ color: "#9a3412" }}>{t(E, "secret order", "비밀 순서")}</b>
+                  {t(E, ".", "로 줄 서 있어요.")}
+                </div>
+              </div>
+              {/* fact 2 */}
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each cow wears a tag — numbers ", "각 소는 ")}
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>1, 2, ..., N</code>
+                  {t(E, " each used exactly once.", " 번호표를 1번씩만 사용해요.")}
+                </div>
+              </div>
+              {/* fact 3 */}
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ won't tell you the numbers. He only tells you ", "FJ는 번호를 안 알려주고, ")}
+                  <b style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 3, color: "#7c2d12" }}>
+                    {t(E, "the difference between adjacent cows", "이웃 소끼리의 번호 차이")}
+                  </b>
+                  {t(E, ".", "만 알려줘요.")}
+                </div>
+              </div>
+              {/* fact 4 — your job */}
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Find ONE possible original order. If impossible, print ",
+                        "가능한 원래 순서 하나를 찾아요. 불가능하면 ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 3, color: "#991b1b", fontWeight: 800 }}>-1</code>
+                  {t(E, ".", " 출력.")}
+                </div>
+              </div>
+            </div>
+
+            {/* Permutation definition box — separate so it doesn't break flow */}
+            <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #fdba74", borderRadius: 8, padding: "8px 10px", fontSize: 11, color: C.dim, lineHeight: 1.5 }}>
+              <b style={{ color: "#9a3412" }}>{t(E, "💬 What's a “permutation”?", "💬 “순열”이란?")}</b>{" "}
+              {t(E, "A list using each number 1..N exactly once. e.g. for N=4: [3,1,4,2] is one, [3,1,1,2] is not (1 used twice).",
+                    "1부터 N까지 각 숫자를 정확히 1번씩만 쓰는 리스트. 예: N=4일 때 [3,1,4,2]는 순열, [3,1,1,2]는 순열 아님 (1을 두 번 사용).")}
             </div>
           </div>
 
