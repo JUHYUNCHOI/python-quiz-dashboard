@@ -37,16 +37,50 @@ export function makeCowTipCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given an N x N grid of 0s and 1s, you can toggle all cells in any upper-left rectangle (from (0,0) to (i,j)).\nFind the minimum number of toggles to make everything 0.", "N x N 격자에 0과 1이 있어요.\n(0,0)에서 (i,j)까지의 왼쪽 위 직사각형의 모든 셀을 토글할 수 있어요.\n모든 셀을 0으로 만드는 최소 토글 횟수를 구해요."),
+        "FJ has an N×N grid of 0s and 1s — each cow is either upright (0) or tipped over (1). One operation: pick any cell (i, j) and FLIP every cell in the rectangle from (0, 0) to (i, j).\nFind the MINIMUM number of operations to turn the whole grid into all 0s.",
+        "FJ에게 0과 1로 채워진 N×N 격자가 있어요 — 각 소는 서있거나(0) 쓰러진(1) 상태예요. 한 번의 연산: 칸 (i, j)를 골라 (0, 0)부터 (i, j)까지의 직사각형 전체를 뒤집기.\n격자를 모두 0으로 만드는 최소 연산 횟수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cow Tipping</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Process from bottom-right to top-left.\nIf cell (i,j) is 1, we MUST toggle rectangle (0,0)-(i,j). This greedy approach gives the minimum.",
-              "핵심: 오른쪽 아래에서 왼쪽 위로 처리.\n셀 (i,j)가 1이면 직사각형 (0,0)-(i,j)를 반드시 토글해야 해요.\n이 그리디가 최솟값을 줘요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cow Tipping</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has an ", "FJ에게 ")}
+                  <b style={{ color: "#059669" }}>{t(E, "N×N grid of 0s and 1s", "0과 1로 채워진 N×N 격자")}</b>
+                  {t(E, " — each cow is either upright (0) or tipped over (1).",
+                        " 가 있어요 — 각 소는 서있거나(0) 쓰러진(1) 상태예요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One operation: pick any cell ", "한 번의 연산: 칸 ")}
+                  <b style={{ color: "#7c3aed" }}>(i, j)</b>
+                  {t(E, " and ", "을 골라 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "FLIP every cell in the rectangle (0, 0) to (i, j)", "(0, 0) ~ (i, j) 의 직사각형 안 모든 칸을 뒤집기")}</b>
+                  {t(E, " (0 ↔ 1).", " (0 ↔ 1).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "필요한 최소 연산 횟수")}</b>
+                  {t(E, " to turn the whole grid into all 0s.",
+                        " 를 출력해요. 격자를 모두 0으로 만드는 데.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -91,16 +91,57 @@ export function makeShellCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The classic shell game!\nA pebble is hidden under one of 3 shells.\nAfter each swap, someone guesses where it is.\nWe need to find the maximum possible correct guesses!", "고전 쉘 게임! 3개 컵 중 하나에 조약돌이 숨겨져 있어요. 각 스왑 후 누군가가 위치를 추측해요. 최대 정답 수를 찾아야 해요!"),
+        "The classic shell game: a pebble hides under one of 3 shells. There are N rounds; each round records (a, b, g) — Bessie swaps shells a and b, then Elsie guesses the pebble is under shell g.\nThe pebble's STARTING shell is unknown. Print the MAXIMUM possible number of correct Elsie guesses, taken over all 3 starting positions.",
+        "고전 컵 게임: 3개의 컵 중 하나에 조약돌이 숨겨져 있어요. N개의 라운드가 있고 각 라운드는 (a, b, g) — 베시가 컵 a와 b를 바꿔놓고, 엘시가 컵 g 아래에 조약돌이 있다고 추측해요.\n조약돌의 시작 위치는 알 수 없어요. 가능한 시작 위치 3가지 중 엘시의 정답 수가 최대가 되는 값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"🐚"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Shell Game</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "N swaps happen.\nEach swap tells us: swap shells A and B, then guess G. We don't know where the pebble starts!",
-              "N번의 스왑이 일어나.\n각 스왑마다: 컵 A와 B를 교환하고, G를 추측.\n조약돌이 어디서 시작하는지 몰라!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🐚"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Shell Game</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A pebble hides under ", "조약돌이 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "one of 3 shells (positions 1, 2, 3)", "3개 컵 중 하나 (위치 1, 2, 3)")}</b>
+                  {t(E, ".", " 아래 숨겨져 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "N rounds", "N개의 라운드")}</b>
+                  {t(E, " — each round gives ", "가 있고, 각 라운드는 ")}
+                  <b style={{ color: "#7c3aed" }}>(a, b, g)</b>
+                  {t(E, ": Bessie swaps shells a and b, then Elsie guesses shell g.",
+                        " — 베시가 컵 a와 b를 바꾸고, 엘시가 컵 g라고 추측해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The pebble's ", "조약돌의 ")}
+                  <b style={{ color: "#16a34a" }}>{t(E, "starting position is unknown", "시작 위치는 알 수 없음")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Try all 3 starting positions; print the ", "3가지 시작 위치를 모두 시도해, ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum number of correct Elsie guesses", "엘시의 정답 수의 최댓값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

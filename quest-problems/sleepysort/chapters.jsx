@@ -29,16 +29,54 @@ export function makeSleepySortCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows in a line.\nOnly the front cow can move backward to its correct position.\nFind the minimum number of moves to sort all cows.", "N마리 소가 줄 서 있어요. 맨 앞 소만 올바른 위치로 뒤로 이동 가능. 모든 소를 정렬하는 최소 이동 횟수를 구해요!"),
+        "N cows stand in a line with distinct IDs. The only allowed move: take the FRONT cow and reinsert her anywhere later in the line.\nFind the MINIMUM number of such moves needed to make the IDs sorted in increasing order.",
+        "한 줄로 선 N마리 소가 있고, 각자 서로 다른 ID를 가져요. 허용되는 움직임은 단 하나: 맨 앞 소를 빼서 줄의 더 뒤쪽 어딘가에 다시 끼워 넣기.\nID가 오름차순이 되도록 만드는 최소 움직임 횟수를 구해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"😴"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Sleepy Cow Sorting</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Find the longest already-sorted suffix from the right.\nThe answer is N minus the length of that suffix. Those suffix cows never need to move!",
-              "핵심: 오른쪽부터 이미 정렬된 가장 긴 접미사를 찾아요.\n답은 N에서 그 접미사 길이를 빼면 돼요.\n접미사 소들은 움직일 필요 없어요!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"😴"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Sleepy Cow Sorting</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N cows in a line", "한 줄로 선 N마리 소")}</b>
+                  {t(E, ", each with a distinct ID.", "가 있고, ID는 서로 달라요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each move: take the ", "한 번의 움직임: ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "front cow and reinsert her anywhere later", "맨 앞 소를 빼서 더 뒤쪽 어디든 다시 끼워 넣기")}</b>
+                  {t(E, " in the line.", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Goal: ", "목표: ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "sort the line by ID in increasing order", "ID 오름차순으로 정렬")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of moves", "필요한 최소 움직임 횟수")}</b>
+                  {t(E, " required.", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

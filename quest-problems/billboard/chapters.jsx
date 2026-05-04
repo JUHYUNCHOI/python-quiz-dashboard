@@ -52,16 +52,57 @@ export function makeBillboardCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two billboards stand along a road, but a truck is parked in front — blocking parts of them!\nHow much billboard area is still visible?\n🪧", "도로에 광고판 두 개가 서 있는데, 트럭이 앞에 주차해서 일부를 가려! 아직 보이는 광고판 면적은 얼마일까요? 🪧"),
+        "Along a road there are TWO axis-aligned rectangular billboards, plus ONE axis-aligned truck parked in front. The truck may cover parts of one or both billboards.\nThe billboards do NOT overlap each other. Print the TOTAL visible billboard area (sum across both billboards).",
+        "도로변에 축에 평행한 직사각형 광고판 2개와 그 앞에 주차된 축에 평행한 트럭 1대가 있어요. 트럭은 광고판의 일부를 가릴 수 있어요.\n두 광고판은 서로 겹치지 않아요. 트럭에 가려지지 않고 보이는 광고판 면적의 합을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🪧</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Blocked Billboard</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, textAlign: "left" , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Given: Two rectangular billboards + one rectangular truck.\nAll rectangles have sides parallel to axes. Find: Total visible billboard area.",
-              "주어진 것: 직사각형 광고판 2개 + 직사각형 트럭 1개.\n모두 축에 평행.\n구할 것: 보이는 총 광고판 면적.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🪧</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Blocked Billboard</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#d97706" }}>{t(E, "two axis-aligned rectangular billboards", "축에 평행한 직사각형 광고판 2개")}</b>
+                  {t(E, " along a road, plus ", "와, 그 앞에 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "one axis-aligned truck", "축에 평행한 트럭 1대")}</b>
+                  {t(E, " parked in front.", "가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each rectangle is given as ", "각 사각형은 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>(x1, y1, x2, y2)</code>
+                  {t(E, ".", " 좌표로 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The two billboards ", "두 광고판은 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "do NOT overlap each other", "서로 겹치지 않아요")}</b>
+                  {t(E, ".", ". 트럭만 광고판을 가릴 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "total visible billboard area", "보이는 광고판 면적의 합")}</b>
+                  {t(E, " (truck blocks may subtract from one or both billboards).",
+                        " 을 출력해요 (트럭이 광고판의 일부를 가릴 수 있음).")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

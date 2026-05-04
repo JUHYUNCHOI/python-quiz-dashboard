@@ -70,16 +70,56 @@ export function makeHps17Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ plays Hoof, Paper, Scissors against a cow for N rounds.\nThe cow's gestures (1, 2, 3) map to H, P, S but we don't know which is which.\nFJ uses a SINGLE gesture for ALL rounds.\nFind the maximum wins by trying all possible mappings.", "FJ가 소와 N라운드 동안 가위바위보(Hoof, Paper, Scissors)를 해요.\n소의 제스처(1, 2, 3)가 H, P, S에 대응하는데 어떤 대응인지 몰라.\nFJ는 모든 라운드에서 같은 제스처를 써요.\n모든 가능한 매핑을 시도해서 최대 승수를 구해요."),
+        "FJ plays Rock-Paper-Scissors against a cow for N rounds. The cow's gesture each round is recorded as 1, 2, or 3 — but we DON'T know which number maps to Hoof/Paper/Scissors.\nFJ must pick ONE gesture and use it for ALL N rounds. Print the maximum number of rounds FJ can win — over the best mapping AND the best FJ gesture.",
+        "FJ가 소와 N라운드 동안 가위바위보를 해요. 매 라운드 소의 제스처는 1, 2, 3 중 하나로 기록되지만, 어떤 숫자가 Hoof/Paper/Scissors 중 무엇인지 우리는 몰라요.\nFJ는 한 가지 제스처를 골라서 N라운드 내내 같은 것만 내야 해요. 가능한 매핑과 FJ 제스처 조합 중에서 FJ가 이길 수 있는 최대 라운드 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u270a"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Hoof, Paper, Scissors</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: There are 3! = 6 ways to map {1,2,3} to {H,P,S}.\nFor each mapping and each FJ gesture choice, count wins. Take the maximum.",
-              "핵심: {1,2,3}을 {H,P,S}에 매핑하는 방법은 3! = 6가지.\n각 매핑과 FJ 제스처 선택마다 승수를 세고 최댓값을 취해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u270a"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Hoof, Paper, Scissors</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ plays ", "FJ가 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N rounds of Hoof-Paper-Scissors", "N라운드 가위바위보")}</b>
+                  {t(E, " against a cow.", " 를 소와 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The cow's gestures are recorded as ", "소의 제스처는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "1, 2, or 3", "1, 2, 3 중 하나")}</b>
+                  {t(E, " — but we DON'T know which number means Hoof / Paper / Scissors.",
+                        "로 기록되지만, 어느 숫자가 Hoof/Paper/Scissors인지는 몰라요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ must use the ", "FJ는 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "same gesture for ALL N rounds", "N라운드 내내 같은 제스처")}</b>
+                  {t(E, ".", "만 내야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum number of rounds FJ can win", "FJ가 이길 수 있는 최대 라운드 수")}</b>
+                  {t(E, " (best over all 6 mappings and 3 FJ gestures).",
+                        "를 출력해요 (6가지 매핑과 3가지 제스처 조합 중 최선).")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

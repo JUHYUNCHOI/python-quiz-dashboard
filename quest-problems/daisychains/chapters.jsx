@@ -53,15 +53,51 @@ export function makeDaisyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has N flowers in a row, each with a petal count.\nShe picks a contiguous group and checks: does any flower have exactly the average number of petals?", "베시는 N개의 꽃을 한 줄로 갖고 있어요. 각 꽃에 꽃잎 수가 있어요. 연속된 그룹을 골라서 확인해: 꽃잎 수가 정확히 평균인 꽃이 있을까?"),
+        "Bessie has N flowers in a row, each with a petal count p[i]. For every contiguous subarray, compute the average petal count; the subarray is 'photogenic' if at least one flower in it has petal count exactly equal to the average.\nCount how many of the N·(N+1)/2 contiguous subarrays are photogenic.",
+        "베시에게 한 줄로 놓인 N개의 꽃이 있고, 각 꽃의 꽃잎 수 p[i]가 주어져요. 연속한 부분 배열을 고를 때마다 그 안의 평균 꽃잎 수를 계산해요. 그 부분 배열에 평균과 정확히 같은 꽃잎 수의 꽃이 1개라도 있으면 '예쁜' 부분 배열이에요.\nN·(N+1)/2 개의 연속 부분 배열 중 예쁜 것의 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\uD83C\uDF3C"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: C.carry }}>Daisy Chains</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #2</div>
-          <div style={{ marginTop: 12, background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "N flowers with petal counts.\nCount the number of contiguous subarrays where at least one flower has exactly the average petal count of that subarray.", "N개의 꽃에 꽃잎 수가 있어요.\n부분 배열의 평균 꽃잎 수와 정확히 같은 꽃이 하나라도 있는 연속 부분 배열의 수를 세.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\uD83C\uDF3C"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: C.carry }}>Daisy Chains</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #2</div>
+          </div>
+
+          <div style={{ background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: C.carry, fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie has ", "베시에게 ")}
+                  <b style={{ color: C.carry }}>{t(E, "N flowers in a row", "한 줄로 놓인 N개의 꽃")}</b>
+                  {t(E, ", each with petal count ", "이 있고, 각 꽃의 꽃잎 수 ")}
+                  <code style={{ background: "#f1f5f9", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>p[i]</code>
+                  {t(E, ".", "이 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: C.carry, fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "For each ", "각 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "contiguous subarray", "연속 부분 배열")}</b>
+                  {t(E, ", compute the ", " 마다 평균 꽃잎 수를 계산해요. 그 부분 배열에 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "average petal count", "평균과 정확히 같은 꽃잎 수")}</b>
+                  {t(E, " — the subarray is 'photogenic' if any flower in it has petal count equal to that average.",
+                        "의 꽃이 1개라도 있으면 그 부분 배열은 '예쁜' 부분 배열이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: `1px dashed ${C.carryBd}` }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of photogenic contiguous subarrays", "예쁜 연속 부분 배열의 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

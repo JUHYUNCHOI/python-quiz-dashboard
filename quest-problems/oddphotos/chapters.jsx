@@ -59,16 +59,55 @@ export function makeOddPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We need to partition cows into consecutive groups where group sums alternate between even and odd.\nMaximize the number of groups!", "소들을 연속 그룹으로 나눠서 그룹 합이 짝수/홀수로 번갈아가게 해야 해요. 그룹 수를 최대화해요!"),
+        "FJ has N cows in a line, each with an ID number. He wants to split the line into CONSECUTIVE groups such that the sum of IDs in group 1 is EVEN, group 2 is ODD, group 3 is EVEN, ... alternating.\nPrint the MAXIMUM number of groups possible.",
+        "FJ에게 한 줄로 선 N마리 소가 있고, 각자 ID 번호를 가져요. 줄을 연속한 묶음으로 나누되, 1번 묶음의 ID 합은 짝수, 2번은 홀수, 3번은 짝수 ... 처럼 번갈아 가야 해요.\n만들 수 있는 묶음의 최대 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf8"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Even More Odd Photos</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Count odd and even IDs.\nGroup 1 needs even sum (use 1 even or 2 odds). Group 2 needs odd sum (use 1 odd). Alternate greedily.",
-              "핵심: 홀수/짝수 ID 개수를 세.\n그룹 1은 짝수 합 (짝수 1개 또는 홀수 2개). 그룹 2는 홀수 합 (홀수 1개). 그리디로 번갈아.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf8"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Even More Odd Photos</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ에게 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N cows in a line", "한 줄로 선 N마리 소")}</b>
+                  {t(E, ", each with an ID number.", "가 있고, 각자 ID 번호를 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Split the line into ", "줄을 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "consecutive non-empty groups", "연속한 비어있지 않은 묶음")}</b>
+                  {t(E, " (group 1 from the left, then group 2, ...).",
+                        "으로 나눠요 (왼쪽부터 1번, 2번, ...).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Sum of IDs must be ", "각 묶음의 ID 합은 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "EVEN, ODD, EVEN, ODD, ... alternating", "짝수, 홀수, 짝수, 홀수 ... 로 번갈아")}</b>
+                  {t(E, " (group 1 must be EVEN).", " (1번 묶음은 짝수).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum possible number of groups", "만들 수 있는 묶음의 최대 수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
