@@ -38,8 +38,7 @@ export function makeRotShiftCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows stand in a circle. Some positions are 'active'. Each minute, cows at active positions rotate, then active positions shift! \ud83d\udd04",
-        "\uc18c\ub4e4\uc774 \uc6d0\ud615\uc73c\ub85c \uc11c \uc788\uc5b4. \uc77c\ubd80 \uc704\uce58\uac00 '\ud65c\uc131'. \ub9e4\ubd84 \ud65c\uc131 \uc704\uce58\uc758 \uc18c\ub4e4\uc774 \ud68c\uc804\ud558\uace0, \ud65c\uc131 \uc704\uce58\uac00 \uc774\ub3d9\ud574! \ud83d\udd04"),
+        "Cows stand in a circle.\nSome positions are 'active'.\nEach minute, cows at active positions rotate, then active positions shift!\n\ud83d\udd04", "\uc18c\ub4e4\uc774 \uc6d0\ud615\uc73c\ub85c \uc11c \uc788\uc5b4.\n\uc77c\ubd80 \uc704\uce58\uac00 '\ud65c\uc131'.\n\ub9e4\ubd84 \ud65c\uc131 \uc704\uce58\uc758 \uc18c\ub4e4\uc774 \ud68c\uc804\ud558\uace0, \ud65c\uc131 \uc704\uce58\uac00 \uc774\ub3d9\ud574!\n\ud83d\udd04"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
@@ -55,8 +54,7 @@ export function makeRotShiftCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's visualize with N=4, K=2, active=[0,1]. Rotation means: cow at pos 0 goes to pos 1, cow at pos 1 goes to pos 0 (swap for K=2).",
-        "N=4, K=2, active=[0,1]\uc73c\ub85c \uc2dc\uac01\ud654. \ud68c\uc804: \uc704\uce58 0\uc758 \uc18c\uac00 \uc704\uce58 1\ub85c, \uc704\uce58 1\uc758 \uc18c\uac00 \uc704\uce58 0\uc73c\ub85c (K=2\uc774\uba74 \uad50\ud658)."),
+        "Let's visualize with N=4, K=2, active=[0,1].\nRotation means: cow at pos 0 goes to pos 1, cow at pos 1 goes to pos 0 (swap for K=2).", "N=4, K=2, active=[0,1]\uc73c\ub85c \uc2dc\uac01\ud654.\n\ud68c\uc804: \uc704\uce58 0\uc758 \uc18c\uac00 \uc704\uce58 1\ub85c, \uc704\uce58 1\uc758 \uc18c\uac00 \uc704\uce58 0\uc73c\ub85c (K=2\uc774\uba74 \uad50\ud658)."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
@@ -83,8 +81,7 @@ export function makeRotShiftCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In the rotation step, cows cycle: A1\u2192A2\u2192...\u2192AK\u2192A1. Is this correct?",
-        "\ud68c\uc804 \ub2e8\uacc4\uc5d0\uc11c \uc18c\ub4e4\uc774 \uc21c\ud658: A1\u2192A2\u2192...\u2192AK\u2192A1. \ub9de\ub098?"),
+        "In the rotation step, cows cycle: A1\u2192A2\u2192...\u2192AK\u2192A1. Is this correct?", "\ud68c\uc804 \ub2e8\uacc4\uc5d0\uc11c \uc18c\ub4e4\uc774 \uc21c\ud658: A1\u2192A2\u2192...\u2192AK\u2192A1.\n\ub9de\ub098?"),
       question: t(E, "Rotation means A1\u2192A2\u2192...\u2192AK\u2192A1?", "\ud68c\uc804\uc740 A1\u2192A2\u2192...\u2192AK\u2192A1\uc744 \uc758\ubbf8?"),
       options: [t(E, "Yes", "\ub124"), t(E, "No", "\uc544\ub2c8\uc624")],
       correct: 0,
@@ -93,8 +90,7 @@ export function makeRotShiftCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "N=4, K=2, active=[0,1]. After 1 step:\n1. Rotate: cow0\u2192pos1, cow1\u2192pos0 (swap)\n2. Shift: active becomes [1,2]\nWhere is cow 0 now?",
-        "N=4, K=2, active=[0,1]. 1\ub2e8\uacc4 \ud6c4:\n1. \ud68c\uc804: cow0\u2192pos1, cow1\u2192pos0 (\uad50\ud658)\n2. \uc774\ub3d9: active\uac00 [1,2]\ub85c\nCow 0\uc740 \uc9c0\uae08 \uc5b4\ub514?"),
+        "N=4, K=2, active=[0,1]. After 1 step:\n1. Rotate: cow0\u2192pos1, cow1\u2192pos0 (swap)\n2. Shift: active becomes [1,2]\nWhere is cow 0 now?", "N=4, K=2, active=[0,1]. 1\ub2e8\uacc4 \ud6c4:\n1. \ud68c\uc804: cow0\u2192pos1, cow1\u2192pos0 (\uad50\ud658)\n2. \uc774\ub3d9: active\uac00 [1,2]\ub85c\nCow 0\uc740 \uc9c0\uae08 \uc5b4\ub514?"),
       question: t(E, "After 1 step, cow 0 is at position...?", "1\ub2e8\uacc4 \ud6c4 cow 0\uc758 \uc704\uce58\ub294?"),
       hint: t(E, "Cow 0 was at pos 0 (active), rotates to pos 1", "Cow 0\uc740 pos 0(\ud65c\uc131)\uc5d0 \uc788\uc5c8\uace0, pos 1\ub85c \ud68c\uc804"),
       answer: 1,
@@ -102,8 +98,7 @@ export function makeRotShiftCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Algorithm: Simply simulate each step. For large T, you can detect cycles, but for Bronze, direct simulation works!",
-        "\uc54c\uace0\ub9ac\uc998: \uac01 \ub2e8\uacc4\ub97c \ub2e8\uc21c\ud788 \uc2dc\ubbac\ub808\uc774\uc158. \ud070 T\uc5d0\ub294 \uc21c\ud658 \uac10\uc9c0\ub97c \ud560 \uc218 \uc788\uc9c0\ub9cc, \ube0c\ub860\uc988\ub294 \uc9c1\uc811 \uc2dc\ubbac\ub808\uc774\uc158\uc73c\ub85c \ucda9\ubd84!"),
+        "Algorithm: Simply simulate each step.\nFor large T, you can detect cycles, but for Bronze, direct simulation works!", "\uc54c\uace0\ub9ac\uc998: \uac01 \ub2e8\uacc4\ub97c \ub2e8\uc21c\ud788 \uc2dc\ubbac\ub808\uc774\uc158.\n\ud070 T\uc5d0\ub294 \uc21c\ud658 \uac10\uc9c0\ub97c \ud560 \uc218 \uc788\uc9c0\ub9cc, \ube0c\ub860\uc988\ub294 \uc9c1\uc811 \uc2dc\ubbac\ub808\uc774\uc158\uc73c\ub85c \ucda9\ubd84!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
@@ -129,15 +124,13 @@ export function makeRotShiftCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getRotShiftSections(E),
     },
     {
       type: "quiz",
       narr: t(E,
-        "After the rotation, what happens to the active positions?",
-        "\ud68c\uc804 \ud6c4 \ud65c\uc131 \uc704\uce58\ub294 \uc5b4\ub5bb\uac8c \ub420\uae4c?"),
+        "After the rotation, what happens to the active positions?", "\ud68c\uc804 \ud6c4 \ud65c\uc131 \uc704\uce58\ub294 \uc5b4\ub5bb\uac8c \ub420\uae4c?"),
       question: t(E, "After rotation, active positions...?", "\ud68c\uc804 \ud6c4 \ud65c\uc131 \uc704\uce58\ub294?"),
       options: [
         t(E, "Stay the same", "\uadf8\ub300\ub85c"),
@@ -150,8 +143,7 @@ export function makeRotShiftCh2(E, lang = "py") {
     {
       type: "input",
       narr: t(E,
-        "If N=6 and active position is currently 5, after shifting by +1 mod 6, what is its new position?",
-        "N=6\uc774\uace0 \ud65c\uc131 \uc704\uce58\uac00 \ud604\uc7ac 5\uc774\uba74, +1 mod 6 \uc774\ub3d9 \ud6c4 \uc0c8 \uc704\uce58\ub294?"),
+        "If N=6 and active position is currently 5, after shifting by +1 mod 6, what is its new position?", "N=6\uc774\uace0 \ud65c\uc131 \uc704\uce58\uac00 \ud604\uc7ac 5\uc774\uba74, +1 mod 6 \uc774\ub3d9 \ud6c4 \uc0c8 \uc704\uce58\ub294?"),
       question: t(E, "(5 + 1) mod 6 = ?", "(5 + 1) mod 6 = ?"),
       hint: t(E, "6 mod 6 = 0, wraps around!", "6 mod 6 = 0, \uc21c\ud658!"),
       answer: 0,

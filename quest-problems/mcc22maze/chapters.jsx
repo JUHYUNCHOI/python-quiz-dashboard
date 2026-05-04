@@ -44,8 +44,7 @@ export function makeMcc22MazeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a grid maze with walls and open cells, find the shortest path from the top-left corner to the bottom-right corner using BFS!",
-        "벽과 빈 칸이 있는 격자 미로에서 BFS를 사용해 왼쪽 위에서 오른쪽 아래까지 최단 경로를 찾아!"),
+        "Given a grid maze with walls and open cells, find the shortest path from the top-left corner to the bottom-right corner using BFS!", "벽과 빈 칸이 있는 격자 미로에서 BFS를 사용해 왼쪽 위에서 오른쪽 아래까지 최단 경로를 찾아!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udff0"}</div>
@@ -62,8 +61,7 @@ export function makeMcc22MazeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In a 2x2 empty maze (all cells open), starting at top-left (0,0), ending at bottom-right (1,1). What's the shortest path length?",
-        "2x2 빈 미로(모든 칸 열림)에서 왼쪽 위(0,0)에서 오른쪽 아래(1,1)까지. 최단 경로 길이는?"),
+        "In a 2x2 empty maze (all cells open), starting at top-left (0,0), ending at bottom-right (1,1).\nWhat's the shortest path length?", "2x2 빈 미로(모든 칸 열림)에서 왼쪽 위(0,0)에서 오른쪽 아래(1,1)까지. 최단 경로 길이는?"),
       question: t(E,
         "2x2 empty maze. Shortest path from (0,0) to (1,1)?",
         "2x2 빈 미로. (0,0)에서 (1,1)까지 최단 경로?"),
@@ -81,8 +79,7 @@ export function makeMcc22MazeCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "How many steps is the shortest path in a 2x2 empty maze?",
-        "2x2 빈 미로에서 최단 경로는 몇 단계?"),
+        "How many steps is the shortest path in a 2x2 empty maze?", "2x2 빈 미로에서 최단 경로는 몇 단계?"),
       question: t(E,
         "2x2 empty maze, (0,0) to (1,1). Shortest path = ? steps",
         "2x2 빈 미로, (0,0)에서 (1,1). 최단 경로 = ? 단계"),
@@ -104,8 +101,7 @@ export function makeMcc22MazeCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "BFS visits each cell at most once. Time complexity O(R * C).",
-        "BFS는 각 칸을 최대 한 번 방문. 시간 복잡도 O(R * C)."),
+        "BFS visits each cell at most once. Time complexity O(R * C).", "BFS는 각 칸을 최대 한 번 방문. 시간 복잡도 O(R * C)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -121,8 +117,7 @@ export function makeMcc22MazeCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc22MazeSections(E),
     },
   ];

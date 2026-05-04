@@ -35,8 +35,7 @@ export function makeFebCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie sends text messages using only B, E, and F. Let's figure out how many excitement levels are possible! 🔤",
-        "베시는 B, E, F만 사용해서 메시지를 보내! 가능한 흥분 수준이 몇 개인지 알아보자! 🔤"),
+        "Bessie sends text messages using only B, E, and F.\nLet's figure out how many excitement levels are possible!\n🔤", "베시는 B, E, F만 사용해서 메시지를 보내! 가능한 흥분 수준이 몇 개인지 알아보자! 🔤"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔤</div>
@@ -52,8 +51,7 @@ export function makeFebCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The excitement level is the number of positions where adjacent characters are the same. For example, 'BEEB' has 1 pair (E,E at positions 2-3).",
-        "흥분도는 인접한 문자가 같은 위치의 수야. 예를 들어 'BEEB'은 1쌍 (위치 2-3의 E,E)이 있어."),
+        "The excitement level is the number of positions where adjacent characters are the same.\nFor example, 'BEEB' has 1 pair (E,E at positions 2-3).", "흥분도는 인접한 문자가 같은 위치의 수야. 예를 들어 'BEEB'은 1쌍 (위치 2-3의 E,E)이 있어."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 14, padding: 14 }}>
@@ -80,8 +78,7 @@ export function makeFebCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's think about 'BEEF'. If F→B, we get 'BEEB' (excitement 1). If F→E, we get 'BEEE' (excitement 2). Got it?",
-        "'BEEF'를 생각해보자. F→B이면 'BEEB' (흥분도 1). F→E이면 'BEEE' (흥분도 2). 이해했지?"),
+        "Let's think about 'BEEF'.\nIf F→B, we get 'BEEB' (excitement 1).\nIf F→E, we get 'BEEE' (excitement 2).\nGot it?", "'BEEF'를 생각해보자. F→B이면 'BEEB' (흥분도 1). F→E이면 'BEEE' (흥분도 2). 이해했지?"),
       question: t(E, "What is the excitement of 'BEEE'?", "'BEEE'의 흥분도는?"),
       hint: t(E, "Count consecutive same pairs: B≠E, E=E, E=E", "연속 같은 쌍 세기: B≠E, E=E, E=E"),
       options: ["1", "2", "3"],
@@ -91,8 +88,7 @@ export function makeFebCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now try this: for the string 'BF', F can be B or E. If F→B: 'BB' has 1 match. If F→E: 'BE' has 0 matches. How many distinct excitement levels?",
-        "이제 해보자: 문자열 'BF'에서 F는 B 또는 E. F→B: 'BB'는 1쌍. F→E: 'BE'는 0쌍. 서로 다른 흥분도는 몇 개?"),
+        "Now try this: for the string 'BF', F can be B or E.\nIf F→B: 'BB' has 1 match.\nIf F→E: 'BE' has 0 matches.\nHow many distinct excitement levels?", "이제 해보자: 문자열 'BF'에서 F는 B 또는 E. F→B: 'BB'는 1쌍. F→E: 'BE'는 0쌍. 서로 다른 흥분도는 몇 개?"),
       question: t(E, "How many possible excitement levels for 'BF'?", "'BF'의 가능한 흥분도 개수는?"),
       hint: t(E, "F→B gives 1, F→E gives 0. Two distinct values!", "F→B는 1, F→E는 0. 서로 다른 값 2개!"),
       answer: 2,
@@ -100,8 +96,7 @@ export function makeFebCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The key insight: try all possible F assignments (2^count_of_F), compute excitement for each, then count distinct values!",
-        "핵심: 가능한 모든 F 할당(2^F개수)을 시도하고, 각각의 흥분도를 계산한 후, 서로 다른 값의 개수를 세!"),
+        "The key insight: try all possible F assignments (2^count_of_F), compute excitement for each, then count distinct values!", "핵심: 가능한 모든 F 할당(2^F개수)을 시도하고, 각각의 흥분도를 계산한 후, 서로 다른 값의 개수를 세!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 14, padding: 14 }}>
@@ -127,15 +122,13 @@ export function makeFebCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getFeb23Sections(E),
     },
     {
       type: "quiz",
       narr: t(E,
-        "Quick check: what data structure do we use to collect distinct excitement levels?",
-        "퀴즈: 서로 다른 흥분도를 모으는 데 어떤 자료구조를 쓸까?"),
+        "Quick check: what data structure do we use to collect distinct excitement levels?", "퀴즈: 서로 다른 흥분도를 모으는 데 어떤 자료구조를 쓸까?"),
       question: t(E, "Which data structure collects distinct values?", "서로 다른 값을 모으는 자료구조는?"),
       options: [t(E, "List", "리스트"), t(E, "Set", "집합"), t(E, "Dictionary", "딕셔너리")],
       correct: 1,
@@ -144,8 +137,7 @@ export function makeFebCh2(E, lang = "py") {
     {
       type: "input",
       narr: t(E,
-        "If the string has 3 F's, how many total assignments do we try?",
-        "문자열에 F가 3개면, 총 몇 가지 할당을 시도할까?"),
+        "If the string has 3 F's, how many total assignments do we try?", "문자열에 F가 3개면, 총 몇 가지 할당을 시도할까?"),
       question: t(E, "2^3 = ?", "2^3 = ?"),
       hint: t(E, "Each F has 2 choices: B or E", "각 F는 2가지 선택: B 또는 E"),
       answer: 8,

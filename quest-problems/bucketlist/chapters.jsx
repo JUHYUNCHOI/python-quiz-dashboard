@@ -33,8 +33,7 @@ export function makeBucketListCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows each need some buckets during a time interval. Find the minimum total buckets needed at any point in time.",
-        "N마리 소가 각각 시간 구간 동안 양동이가 필요해. 어느 시점에서든 필요한 최소 총 양동이 수를 구해!"),
+        "N cows each need some buckets during a time interval.\nFind the minimum total buckets needed at any point in time.", "N마리 소가 각각 시간 구간 동안 양동이가 필요해. 어느 시점에서든 필요한 최소 총 양동이 수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🪣"}</div>
@@ -51,8 +50,7 @@ export function makeBucketListCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cow 1 needs 3 buckets from t=1-5, cow 2 needs 2 buckets from t=3-8. At t=3, both are active: 3 + 2 = 5 buckets needed.",
-        "소 1은 t=1-5에 양동이 3개, 소 2는 t=3-8에 양동이 2개 필요. t=3에 둘 다 활성: 3 + 2 = 5개 필요."),
+        "Cow 1 needs 3 buckets from t=1-5, cow 2 needs 2 buckets from t=3-8.\nAt t=3, both are active: 3 + 2 = 5 buckets needed.", "소 1은 t=1-5에 양동이 3개, 소 2는 t=3-8에 양동이 2개 필요. t=3에 둘 다 활성: 3 + 2 = 5개 필요."),
       question: t(E,
         "Cow1: 3 buckets t=1-5, Cow2: 2 buckets t=3-8. Max buckets at any time?",
         "소1: 양동이3개 t=1-5, 소2: 양동이2개 t=3-8. 어느 시점에서 최대?"),
@@ -70,8 +68,7 @@ export function makeBucketListCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Cow 1: 3 buckets t=1-5, Cow 2: 2 buckets t=3-8. What's the max buckets needed at any time?",
-        "소 1: 양동이 3개 t=1-5, 소 2: 양동이 2개 t=3-8. 어느 시점에서 최대 양동이 수?"),
+        "Cow 1: 3 buckets t=1-5, Cow 2: 2 buckets t=3-8.\nWhat's the max buckets needed at any time?", "소 1: 양동이 3개 t=1-5, 소 2: 양동이 2개 t=3-8. 어느 시점에서 최대 양동이 수?"),
       question: t(E,
         "Max buckets needed at any time?",
         "어느 시점에서 최대 양동이 수?"),
@@ -93,8 +90,7 @@ export function makeBucketListCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Create start/end events, sort them, sweep through. O(N log N) for sorting.",
-        "시작/끝 이벤트 생성, 정렬, 스위프. 정렬에 O(N log N)."),
+        "Create start/end events, sort them, sweep through. O(N log N) for sorting.", "시작/끝 이벤트 생성, 정렬, 스위프. 정렬에 O(N log N)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -110,8 +106,7 @@ export function makeBucketListCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getBucketListSections(E),
     },
   ];

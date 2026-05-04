@@ -26,8 +26,7 @@ export function makeMcc20MissingCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A permutation of 1 to N with one number missing and some signs shuffled. Find the sum of all possible missing values.",
-        "1부터 N까지의 순열에서 하나가 빠지고 일부 부호가 바뀌었어. 가능한 빠진 값의 합을 구해!"),
+        "A permutation of 1 to N with one number missing and some signs shuffled.\nFind the sum of all possible missing values.", "1부터 N까지의 순열에서 하나가 빠지고 일부 부호가 바뀌었어. 가능한 빠진 값의 합을 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2753"}</div>
@@ -43,8 +42,7 @@ export function makeMcc20MissingCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Permutation of 1-3, given [1, 3]. Which number is missing?",
-        "1-3 순열, [1, 3]이 주어져. 빠진 숫자는?"),
+        "Permutation of 1-3, given [1, 3]. Which number is missing?", "1-3 순열, [1, 3]이 주어져. 빠진 숫자는?"),
       question: t(E,
         "Permutation of {1,2,3}, given [1,3]. Missing number?",
         "순열 {1,2,3}, [1,3] 주어짐. 빠진 숫자?"),
@@ -61,8 +59,7 @@ export function makeMcc20MissingCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Sum of possible missing values when missing number is 2?",
-        "빠진 숫자가 2일 때 가능한 빠진 값의 합?"),
+        "Sum of possible missing values when missing number is 2?", "빠진 숫자가 2일 때 가능한 빠진 값의 합?"),
       question: t(E,
         "Missing = {2}. Sum of possible missing values?",
         "빠진 = {2}. 가능한 빠진 값의 합?"),
@@ -77,8 +74,7 @@ export function makeMcc20MissingCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Use set of absolute values to find missing numbers. O(N) time.",
-        "절대값의 집합으로 빠진 숫자 찾기. O(N) 시간."),
+        "Use set of absolute values to find missing numbers. O(N) time.", "절대값의 집합으로 빠진 숫자 찾기. O(N) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -93,8 +89,7 @@ export function makeMcc20MissingCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc20MissingSections(E),
     },
   ];

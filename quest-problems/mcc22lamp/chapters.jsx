@@ -44,8 +44,7 @@ export function makeMcc22LampCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N lamps are all initially OFF. You perform M toggle operations, each toggling lamps in a range [L, R]. Count how many lamps are ON at the end!",
-        "N개의 램프가 모두 꺼져 있어. M번의 토글 연산을 수행하는데, 각각 범위 [L, R]의 램프를 토글해. 마지막에 켜진 램프 수를 세어!"),
+        "N lamps are all initially OFF.\nYou perform M toggle operations, each toggling lamps in a range [L, R].\nCount how many lamps are ON at the end!", "N개의 램프가 모두 꺼져 있어. M번의 토글 연산을 수행하는데, 각각 범위 [L, R]의 램프를 토글해. 마지막에 켜진 램프 수를 세어!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca1"}</div>
@@ -62,8 +61,7 @@ export function makeMcc22LampCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "5 lamps all OFF. Toggle 1-5 (all flip ON), then toggle 2-4 (lamps 2,3,4 flip back OFF). Which lamps are ON?",
-        "5개 램프 모두 꺼짐. 1-5 토글 (모두 켜짐), 그 다음 2-4 토글 (램프 2,3,4 다시 꺼짐). 어떤 램프가 켜져 있어?"),
+        "5 lamps all OFF.\nToggle 1-5 (all flip ON), then toggle 2-4 (lamps 2,3,4 flip back OFF).\nWhich lamps are ON?", "5개 램프 모두 꺼짐. 1-5 토글 (모두 켜짐), 그 다음 2-4 토글 (램프 2,3,4 다시 꺼짐). 어떤 램프가 켜져 있어?"),
       question: t(E,
         "After toggle(1-5) then toggle(2-4): which lamps are ON?",
         "toggle(1-5) 후 toggle(2-4): 어떤 램프가 켜져 있어?"),
@@ -81,8 +79,7 @@ export function makeMcc22LampCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "How many lamps are ON after toggle(1-5) then toggle(2-4)?",
-        "toggle(1-5) 후 toggle(2-4) 후 켜진 램프 수는?"),
+        "How many lamps are ON after toggle(1-5) then toggle(2-4)?", "toggle(1-5) 후 toggle(2-4) 후 켜진 램프 수는?"),
       question: t(E,
         "5 lamps, toggle(1-5), toggle(2-4). How many ON?",
         "램프 5개, toggle(1-5), toggle(2-4). 켜진 수?"),
@@ -104,8 +101,7 @@ export function makeMcc22LampCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Use difference array for range updates in O(1) each, then prefix sum in O(N). Total: O(N + M).",
-        "차분 배열로 범위 업데이트 각 O(1), 누적합 O(N). 총: O(N + M)."),
+        "Use difference array for range updates in O(1) each, then prefix sum in O(N).\nTotal: O(N + M).", "차분 배열로 범위 업데이트 각 O(1), 누적합 O(N). 총: O(N + M)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -121,8 +117,7 @@ export function makeMcc22LampCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc22LampSections(E),
     },
   ];

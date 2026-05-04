@@ -51,8 +51,7 @@ export function makeSwapityCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows in a line. Each round, apply M reversal operations. After K rounds (K up to 10^9), output the final order. Key insight: detect the cycle length!",
-        "N마리 소가 일렬로. 매 라운드 M개의 뒤집기 연산 적용. K라운드(K는 10^9까지) 후 최종 순서 출력. 핵심: 순환 길이 감지!"),
+        "N cows in a line.\nEach round, apply M reversal operations.\nAfter K rounds (K up to 10^9), output the final order.\nKey insight: detect the cycle length!", "N마리 소가 일렬로. 매 라운드 M개의 뒤집기 연산 적용. K라운드(K는 10^9까지) 후 최종 순서 출력. 핵심: 순환 길이 감지!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
@@ -69,8 +68,7 @@ export function makeSwapityCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "[1,2,3]: reverse pos 1-2 -> [2,1,3], then reverse pos 2-3 -> [2,3,1]. That's 1 round. After 3 rounds it returns to [1,2,3]. What's the cycle length?",
-        "[1,2,3]: 위치 1-2 뒤집기 -> [2,1,3], 위치 2-3 뒤집기 -> [2,3,1]. 1라운드. 3라운드 후 [1,2,3]으로 복귀. 순환 길이는?"),
+        "[1,2,3]: reverse pos 1-2 -> [2,1,3], then reverse pos 2-3 -> [2,3,1].\nThat's 1 round.\nAfter 3 rounds it returns to [1,2,3].\nWhat's the cycle length?", "[1,2,3]: 위치 1-2 뒤집기 -> [2,1,3], 위치 2-3 뒤집기 -> [2,3,1]. 1라운드. 3라운드 후 [1,2,3]으로 복귀. 순환 길이는?"),
       question: t(E,
         "[1,2,3] with reversals at (1-2) then (2-3). Cycle length?",
         "[1,2,3]에서 (1-2), (2-3) 뒤집기. 순환 길이?"),
@@ -88,8 +86,7 @@ export function makeSwapityCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For the example [1,2,3] with reversals (1-2) then (2-3), what is the cycle length?",
-        "예제 [1,2,3]에서 (1-2), (2-3) 뒤집기의 순환 길이는?"),
+        "For the example [1,2,3] with reversals (1-2) then (2-3), what is the cycle length?", "예제 [1,2,3]에서 (1-2), (2-3) 뒤집기의 순환 길이는?"),
       question: t(E,
         "[1,2,3], reverse(1-2) then reverse(2-3) each round. Cycle length?",
         "[1,2,3], 매 라운드 reverse(1-2) 후 reverse(2-3). 순환 길이?"),
@@ -111,8 +108,7 @@ export function makeSwapityCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Build permutation in O(N*M), find cycle in O(N*cycle), apply in O(N*eff). Cycle length is at most N!, but in practice small.",
-        "순열 구성 O(N*M), 순환 찾기 O(N*cycle), 적용 O(N*eff). 순환 길이는 최대 N!이지만 실제로 작아."),
+        "Build permutation in O(N*M), find cycle in O(N*cycle), apply in O(N*eff).\nCycle length is at most N!, but in practice small.", "순열 구성 O(N*M), 순환 찾기 O(N*cycle), 적용 O(N*eff). 순환 길이는 최대 N!이지만 실제로 작아."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -128,8 +124,7 @@ export function makeSwapityCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getSwapitySections(E),
     },
   ];

@@ -22,8 +22,7 @@ export function makeMcc21MarblesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N marbles are distributed among boxes. Move marbles between adjacent boxes to equalize. Find the minimum number of operations.",
-        "N개의 구슬이 상자에 분배되어 있어. 인접한 상자 사이로 구슬을 옮겨서 같게 만들어. 최소 이동 횟수를 구해!"),
+        "N marbles are distributed among boxes.\nMove marbles between adjacent boxes to equalize.\nFind the minimum number of operations.", "N개의 구슬이 상자에 분배되어 있어. 인접한 상자 사이로 구슬을 옮겨서 같게 만들어. 최소 이동 횟수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd34"}</div>
@@ -39,8 +38,7 @@ export function makeMcc21MarblesCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "2 boxes with [5, 3]. To equalize to [4, 4], how many marbles do we move?",
-        "상자 2개 [5, 3]. [4, 4]로 같게 만들려면 구슬 몇 개를 옮겨?"),
+        "2 boxes with [5, 3]. To equalize to [4, 4], how many marbles do we move?", "상자 2개 [5, 3]. [4, 4]로 같게 만들려면 구슬 몇 개를 옮겨?"),
       question: t(E,
         "Boxes [5, 3]. Move to [4, 4]. How many moves?",
         "상자 [5, 3]. [4, 4]로 이동. 몇 번?"),
@@ -57,8 +55,7 @@ export function makeMcc21MarblesCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Boxes [5, 3]. Minimum moves to equalize?",
-        "상자 [5, 3]. 같게 만드는 최소 이동 횟수?"),
+        "Boxes [5, 3]. Minimum moves to equalize?", "상자 [5, 3]. 같게 만드는 최소 이동 횟수?"),
       question: t(E,
         "Boxes = [5, 3]. Min moves to make equal?",
         "상자 = [5, 3]. 같게 만드는 최소 이동?"),
@@ -73,8 +70,7 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Calculate target value, then sum absolute differences. O(N) time.",
-        "목표값 계산 후 절대 차이 합산. O(N) 시간."),
+        "Calculate target value, then sum absolute differences. O(N) time.", "목표값 계산 후 절대 차이 합산. O(N) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -89,8 +85,7 @@ export function makeMcc21MarblesCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc21MarblesSections(E),
     },
   ];

@@ -40,8 +40,7 @@ export function makeDontBeLastCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Seven cows produce milk. Given a log of milk entries, find the cow with the second-lowest total production. If there's a tie for second-lowest, output 'Tie'.",
-        "일곱 마리 소가 우유를 생산해. 우유 기록 로그가 주어지면, 총 생산량이 두 번째로 적은 소를 찾아. 두 번째로 적은 양이 동률이면 'Tie'를 출력해."),
+        "Seven cows produce milk.\nGiven a log of milk entries, find the cow with the second-lowest total production.\nIf there's a tie for second-lowest, output 'Tie'.", "일곱 마리 소가 우유를 생산해. 우유 기록 로그가 주어지면, 총 생산량이 두 번째로 적은 소를 찾아. 두 번째로 적은 양이 동률이면 'Tie'를 출력해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udd5b"}</div>
@@ -58,8 +57,7 @@ export function makeDontBeLastCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "All 7 cows produce 0 milk except Bessie who produces 5. The minimum is 0 (six cows). The second-lowest distinct value is 5. Only Bessie has 5. What's the answer?",
-        "베시만 5를 생산하고 나머지 6마리는 0이야. 최솟값은 0 (6마리). 두 번째로 작은 고유값은 5. 베시만 5를 가져. 답은?"),
+        "All 7 cows produce 0 milk except Bessie who produces 5.\nThe minimum is 0 (six cows).\nThe second-lowest distinct value is 5.\nOnly Bessie has 5.\nWhat's the answer?", "베시만 5를 생산하고 나머지 6마리는 0이야. 최솟값은 0 (6마리). 두 번째로 작은 고유값은 5. 베시만 5를 가져. 답은?"),
       question: t(E,
         "6 cows produce 0, Bessie produces 5. Who is second-lowest?",
         "6마리는 0, 베시는 5. 두 번째로 적은 소는?"),
@@ -76,8 +74,7 @@ export function makeDontBeLastCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "The problem always uses exactly 7 named cows. How many cows are there in total?",
-        "이 문제에서는 항상 정확히 7마리의 이름 있는 소를 사용해. 총 몇 마리야?"),
+        "The problem always uses exactly 7 named cows. How many cows are there in total?", "이 문제에서는 항상 정확히 7마리의 이름 있는 소를 사용해. 총 몇 마리야?"),
       question: t(E,
         "How many named cows are in this problem?",
         "이 문제에서 이름 있는 소는 총 몇 마리?"),
@@ -99,8 +96,7 @@ export function makeDontBeLastCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "With only 7 cows, just sum each cow's milk, find unique sorted totals, and check the second value. O(N) where N is number of log entries.",
-        "소가 7마리뿐이니까, 각 소의 우유를 합산하고, 고유 합계를 정렬하고, 두 번째 값을 확인하면 돼. 로그 개수 N에 대해 O(N)."),
+        "With only 7 cows, just sum each cow's milk, find unique sorted totals, and check the second value.\nO(N) where N is number of log entries.", "소가 7마리뿐이니까, 각 소의 우유를 합산하고, 고유 합계를 정렬하고, 두 번째 값을 확인하면 돼. 로그 개수 N에 대해 O(N)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -116,8 +112,7 @@ export function makeDontBeLastCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getDontBeLastSections(E),
     },
   ];

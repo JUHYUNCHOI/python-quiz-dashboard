@@ -22,8 +22,7 @@ export function makePresentsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a stack of N presents. For each query, find how many presents must be removed to reach the target. 🎁",
-        "FJ에게 N개의 선물 더미가 있어. 각 쿼리마다 목표 선물에 도달하려면 몇 개를 제거해야 하는지 찾자. 🎁"),
+        "FJ has a stack of N presents.\nFor each query, find how many presents must be removed to reach the target.\n🎁", "FJ에게 N개의 선물 더미가 있어. 각 쿼리마다 목표 선물에 도달하려면 몇 개를 제거해야 하는지 찾자. 🎁"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🎁</div>
@@ -39,8 +38,7 @@ export function makePresentsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Stack = [3, 1, 4, 2]. Query: find 4. Must remove 3 and 1 (2 presents). Then 4 is taken out. Stack becomes [2].",
-        "스택 = [3, 1, 4, 2]. 쿼리: 4를 찾기. 3과 1을 제거해야 해 (2개). 4를 꺼내면 스택은 [2]."),
+        "Stack = [3, 1, 4, 2].\nQuery: find 4.\nMust remove 3 and 1 (2 presents).\nThen 4 is taken out.\nStack becomes [2].", "스택 = [3, 1, 4, 2]. 쿼리: 4를 찾기. 3과 1을 제거해야 해 (2개). 4를 꺼내면 스택은 [2]."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center" }}>
@@ -62,8 +60,7 @@ export function makePresentsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "After removing a present, it's gone from the stack forever. The remaining presents stay in their original order.",
-        "선물을 꺼내면 스택에서 영구히 사라져. 나머지 선물은 원래 순서 유지."),
+        "After removing a present, it's gone from the stack forever.\nThe remaining presents stay in their original order.", "선물을 꺼내면 스택에서 영구히 사라져. 나머지 선물은 원래 순서 유지."),
       question: t(E,
         "Stack = [5,3,1,4,2]. Find present 1. How many presents above it?",
         "스택 = [5,3,1,4,2]. 선물 1을 찾기. 위에 몇 개?"),
@@ -74,16 +71,14 @@ export function makePresentsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Stack = [5,3,1,4,2]. After finding 1 (remove 5,3,1), stack becomes [4,2]. Now find 2. How many above?",
-        "스택 = [5,3,1,4,2]. 1을 찾은 후 (5,3,1 제거), 스택은 [4,2]. 이제 2를 찾기. 위에 몇 개?"),
+        "Stack = [5,3,1,4,2].\nAfter finding 1 (remove 5,3,1), stack becomes [4,2].\nNow find 2.\nHow many above?", "스택 = [5,3,1,4,2]. 1을 찾은 후 (5,3,1 제거), 스택은 [4,2]. 이제 2를 찾기. 위에 몇 개?"),
       question: t(E, "Stack [4,2], find 2. Presents above?", "스택 [4,2], 2를 찾기. 위의 개수?"),
       answer: 1,
     },
     {
       type: "sim",
       narr: t(E,
-        "Step through find + pop for each query. Yellow = above target, green = target.",
-        "쿼리마다 찾기 + 제거 단계. 노랑 = 타겟 위, 초록 = 타겟."),
+        "Step through find + pop for each query. Yellow = above target, green = target.", "쿼리마다 찾기 + 제거 단계. 노랑 = 타겟 위, 초록 = 타겟."),
     },
   ];
 }
@@ -93,8 +88,7 @@ export function makePresentsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simple simulation: use a list, find index with .index(), print position, then pop. O(NQ) total.",
-        "간단한 시뮬레이션: 리스트에서 .index()로 위치 찾고, 출력하고, pop. 총 O(NQ)."),
+        "Simple simulation: use a list, find index with .index(), print position, then pop.\nO(NQ) total.", "간단한 시뮬레이션: 리스트에서 .index()로 위치 찾고, 출력하고, pop. 총 O(NQ)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
@@ -108,15 +102,13 @@ export function makePresentsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Now build the simulation step by step. Each section reveals one piece.",
-        "시뮬레이션을 단계별로 만들어보자. 각 섹션마다 한 조각씩."),
+        "Now build the simulation step by step. Each section reveals one piece.", "시뮬레이션을 단계별로 만들어보자. 각 섹션마다 한 조각씩."),
       sections: getPresentsSections(E),
     },
     {
       type: "runner",
       narr: t(E,
-        "Try your own stack and queries.",
-        "직접 스택과 쿼리 시도."),
+        "Try your own stack and queries.", "직접 스택과 쿼리 시도."),
     },
   ];
 }

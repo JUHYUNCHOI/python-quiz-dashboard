@@ -42,8 +42,7 @@ export function makeBadmintonCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Simulate a badminton match! Best of 3 games, first to 21 points wins each game. Given a string of A/B indicating who scored each rally, output the score per game and the overall winner.",
-        "배드민턴 경기를 시뮬레이션해! 3전 2선승제이고, 각 게임은 21점 먼저 따면 이겨. A/B로 구성된 문자열이 주어지면, 게임별 점수와 최종 승자를 출력해!"),
+        "Simulate a badminton match!\nBest of 3 games, first to 21 points wins each game.\nGiven a string of A/B indicating who scored each rally, output the score per game and the overall winner.", "배드민턴 경기를 시뮬레이션해! 3전 2선승제이고, 각 게임은 21점 먼저 따면 이겨. A/B로 구성된 문자열이 주어지면, 게임별 점수와 최종 승자를 출력해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udff8"}</div>
@@ -60,8 +59,7 @@ export function makeBadmintonCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In best-of-3, one player needs to win 2 games to win the match. If Player A wins the first two games, is a third game played?",
-        "3전 2선승제에서 한 선수가 매치를 이기려면 2게임을 이겨야 해. A가 처음 두 게임을 이기면 세 번째 게임을 하나?"),
+        "In best-of-3, one player needs to win 2 games to win the match.\nIf Player A wins the first two games, is a third game played?", "3전 2선승제에서 한 선수가 매치를 이기려면 2게임을 이겨야 해. A가 처음 두 게임을 이기면 세 번째 게임을 하나?"),
       question: t(E,
         "A wins first 2 games. Is a 3rd game played?",
         "A가 처음 2게임을 이김. 3번째 게임을 하나?"),
@@ -78,8 +76,7 @@ export function makeBadmintonCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If 42 consecutive A's are scored ('AAA...A'), A wins 21-0 twice. How many games are played?",
-        "42개의 연속 A가 입력되면 ('AAA...A'), A가 21-0으로 두 번 이겨. 총 몇 게임이 진행될까?"),
+        "If 42 consecutive A's are scored ('AAA...A'), A wins 21-0 twice.\nHow many games are played?", "42개의 연속 A가 입력되면 ('AAA...A'), A가 21-0으로 두 번 이겨. 총 몇 게임이 진행될까?"),
       question: t(E,
         "Input: 42 A's in a row. How many games are played total?",
         "입력: A가 42개 연속. 총 몇 게임이 진행되나?"),
@@ -101,8 +98,7 @@ export function makeBadmintonCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simple simulation: scan the string once, tracking scores and game results. O(N) time where N is the length of the string.",
-        "간단한 시뮬레이션: 문자열을 한 번 순회하며 점수와 게임 결과를 추적해. 문자열 길이 N에 대해 O(N) 시간."),
+        "Simple simulation: scan the string once, tracking scores and game results.\nO(N) time where N is the length of the string.", "간단한 시뮬레이션: 문자열을 한 번 순회하며 점수와 게임 결과를 추적해. 문자열 길이 N에 대해 O(N) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -118,8 +114,7 @@ export function makeBadmintonCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getBadmintonSections(E),
     },
   ];

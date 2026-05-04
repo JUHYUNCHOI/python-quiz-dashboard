@@ -42,8 +42,7 @@ export function makeMcc15EqCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given 3 numbers, place +, -, *, / between them to form a valid equation equal to a target. Try all 4^2 = 16 operator combinations!",
-        "숫자 3개가 주어지면 사이에 +, -, *, /를 넣어서 목표값과 같은 식을 만들어. 4^2 = 16가지 연산자 조합을 모두 시도해!"),
+        "Given 3 numbers, place +, -, *, / between them to form a valid equation equal to a target.\nTry all 4^2 = 16 operator combinations!", "숫자 3개가 주어지면 사이에 +, -, *, /를 넣어서 목표값과 같은 식을 만들어. 4^2 = 16가지 연산자 조합을 모두 시도해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2795"}</div>
@@ -60,8 +59,7 @@ export function makeMcc15EqCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "How many operator slots are there between 3 numbers? For example: a _ b _ c",
-        "숫자 3개 사이에 연산자 자리는 몇 개야? 예: a _ b _ c"),
+        "How many operator slots are there between 3 numbers? For example: a _ b _ c", "숫자 3개 사이에 연산자 자리는 몇 개야? 예: a _ b _ c"),
       question: t(E,
         "How many operator slots between 3 numbers?",
         "숫자 3개 사이의 연산자 자리는 몇 개?"),
@@ -80,8 +78,7 @@ export function makeMcc15EqCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "How many operator slots are there between 3 numbers?",
-        "숫자 3개 사이에 연산자 자리는 몇 개야?"),
+        "How many operator slots are there between 3 numbers?", "숫자 3개 사이에 연산자 자리는 몇 개야?"),
       question: t(E,
         "Number of operator slots between 3 numbers = ?",
         "숫자 3개 사이 연산자 자리 수 = ?"),
@@ -103,8 +100,7 @@ export function makeMcc15EqCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "With only 16 combinations to try per test case, brute force is O(1) per case!",
-        "테스트 케이스당 16가지 조합만 시도하면 되니까 케이스당 O(1)!"),
+        "With only 16 combinations to try per test case, brute force is O(1) per case!", "테스트 케이스당 16가지 조합만 시도하면 되니까 케이스당 O(1)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -120,8 +116,7 @@ export function makeMcc15EqCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc15EqSections(E),
     },
   ];

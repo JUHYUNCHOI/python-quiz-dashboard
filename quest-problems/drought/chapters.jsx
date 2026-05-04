@@ -53,8 +53,7 @@ export function makeDroughtCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows in a line. You can feed adjacent pairs: both decrease by 1. Make all cows equal with minimum operations, or report impossible.",
-        "N마리 소가 줄 서 있어. 인접한 쌍에게 먹이를 줄 수 있어: 둘 다 1 감소. 최소 횟수로 모든 소를 같게 만들거나, 불가능하면 보고해!"),
+        "N cows in a line.\nYou can feed adjacent pairs: both decrease by 1.\nMake all cows equal with minimum operations, or report impossible.", "N마리 소가 줄 서 있어. 인접한 쌍에게 먹이를 줄 수 있어: 둘 다 1 감소. 최소 횟수로 모든 소를 같게 만들거나, 불가능하면 보고해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfdc\ufe0f"}</div>
@@ -71,8 +70,7 @@ export function makeDroughtCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's think about [2, 2]. We can feed pair (0,1) to decrease both. Target 0 needs 2 feeds.",
-        "[2, 2]를 생각해보자. 쌍(0,1)에 먹이를 줘서 둘 다 줄일 수 있어. 목표 0이면 2번 먹이를 줘야 해."),
+        "Let's think about [2, 2].\nWe can feed pair (0,1) to decrease both.\nTarget 0 needs 2 feeds.", "[2, 2]를 생각해보자. 쌍(0,1)에 먹이를 줘서 둘 다 줄일 수 있어. 목표 0이면 2번 먹이를 줘야 해."),
       question: t(E,
         "[2, 2]: feeding pair (0,1) twice gives [0, 0]. How many operations?",
         "[2, 2]: 쌍(0,1)에 2번 먹이 주면 [0, 0]. 몇 번의 연산?"),
@@ -90,8 +88,7 @@ export function makeDroughtCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "[2, 2] needs how many operations to make all equal?",
-        "[2, 2]를 모두 같게 만드는 최소 연산 횟수는?"),
+        "[2, 2] needs how many operations to make all equal?", "[2, 2]를 모두 같게 만드는 최소 연산 횟수는?"),
       question: t(E,
         "a = [2, 2]. Min operations to make all equal?",
         "a = [2, 2]. 모두 같게 만드는 최소 연산 횟수?"),
@@ -113,8 +110,7 @@ export function makeDroughtCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try all possible target values (0 to min). For each, greedily process left to right. O(N * max_value).",
-        "가능한 모든 목표값(0부터 최솟값까지) 시도. 각각 왼쪽에서 오른쪽으로 그리디 처리. O(N * 최댓값)."),
+        "Try all possible target values (0 to min).\nFor each, greedily process left to right.\nO(N * max_value).", "가능한 모든 목표값(0부터 최솟값까지) 시도. 각각 왼쪽에서 오른쪽으로 그리디 처리. O(N * 최댓값)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -130,8 +126,7 @@ export function makeDroughtCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getDroughtSections(E),
     },
   ];

@@ -56,8 +56,7 @@ export function makeExplodingArrowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Arrows are placed on a grid, each pointing in a direction. When an arrow explodes, it triggers the next arrow in its direction. Count how many arrows explode in total!",
-        "화살이 격자 위에 놓여 있고, 각각 한 방향을 가리켜. 화살이 폭발하면 그 방향의 다음 화살을 연쇄 폭발시켜. 총 몇 개가 폭발할까?"),
+        "Arrows are placed on a grid, each pointing in a direction.\nWhen an arrow explodes, it triggers the next arrow in its direction.\nCount how many arrows explode in total!", "화살이 격자 위에 놓여 있고, 각각 한 방향을 가리켜. 화살이 폭발하면 그 방향의 다음 화살을 연쇄 폭발시켜. 총 몇 개가 폭발할까?"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca5"}</div>
@@ -74,8 +73,7 @@ export function makeExplodingArrowCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "3 arrows in a line, all pointing right: A -> B -> C. If A explodes first, how many total?",
-        "3개의 화살이 일렬로 모두 오른쪽을 가리켜: A -> B -> C. A가 먼저 폭발하면 총 몇 개?"),
+        "3 arrows in a line, all pointing right: A -> B -> C. If A explodes first, how many total?", "3개의 화살이 일렬로 모두 오른쪽을 가리켜: A -> B -> C. A가 먼저 폭발하면 총 몇 개?"),
       question: t(E,
         "3 arrows in a row, all pointing right. First one triggers. Total explosions?",
         "화살 3개가 일렬로 모두 오른쪽. 첫 번째가 발동. 총 폭발 수?"),
@@ -93,8 +91,7 @@ export function makeExplodingArrowCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "3 arrows in a chain, all triggering the next one. How many explode?",
-        "3개의 화살이 연쇄적으로 다음을 발동해. 몇 개가 폭발할까?"),
+        "3 arrows in a chain, all triggering the next one. How many explode?", "3개의 화살이 연쇄적으로 다음을 발동해. 몇 개가 폭발할까?"),
       question: t(E,
         "Chain of 3 arrows. How many explode total?",
         "화살 3개 체인. 총 몇 개 폭발?"),
@@ -116,8 +113,7 @@ export function makeExplodingArrowCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Use BFS with a position map for efficient lookups. O(N * max_range) time in worst case.",
-        "위치 맵으로 BFS를 사용해 효율적으로 탐색해. 최악의 경우 O(N * max_range) 시간."),
+        "Use BFS with a position map for efficient lookups. O(N * max_range) time in worst case.", "위치 맵으로 BFS를 사용해 효율적으로 탐색해. 최악의 경우 O(N * max_range) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -133,8 +129,7 @@ export function makeExplodingArrowCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getExplodingArrowSections(E),
     },
   ];

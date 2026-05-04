@@ -70,8 +70,7 @@ export function makeHps17Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ plays Hoof, Paper, Scissors against a cow for N rounds. The cow's gestures (1, 2, 3) map to H, P, S but we don't know which is which. FJ uses a SINGLE gesture for ALL rounds. Find the maximum wins by trying all possible mappings.",
-        "FJ가 소와 N라운드 동안 가위바위보(Hoof, Paper, Scissors)를 해. 소의 제스처(1, 2, 3)가 H, P, S에 대응하는데 어떤 대응인지 몰라. FJ는 모든 라운드에서 같은 제스처를 써. 모든 가능한 매핑을 시도해서 최대 승수를 구해."),
+        "FJ plays Hoof, Paper, Scissors against a cow for N rounds.\nThe cow's gestures (1, 2, 3) map to H, P, S but we don't know which is which.\nFJ uses a SINGLE gesture for ALL rounds.\nFind the maximum wins by trying all possible mappings.", "FJ가 소와 N라운드 동안 가위바위보(Hoof, Paper, Scissors)를 해.\n소의 제스처(1, 2, 3)가 H, P, S에 대응하는데 어떤 대응인지 몰라.\nFJ는 모든 라운드에서 같은 제스처를 써.\n모든 가능한 매핑을 시도해서 최대 승수를 구해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u270a"}</div>
@@ -88,8 +87,7 @@ export function makeHps17Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "How many permutations of {H, P, S} are there? This is 3 factorial.",
-        "{H, P, S}의 순열은 몇 가지야? 3 팩토리얼이지."),
+        "How many permutations of {H, P, S} are there? This is 3 factorial.", "{H, P, S}의 순열은 몇 가지야? 3 팩토리얼이지."),
       question: t(E,
         "How many permutations of 3 items (3!) exist?",
         "3개 항목의 순열(3!)은 몇 가지?"),
@@ -107,8 +105,7 @@ export function makeHps17Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "We try all permutations of {H, P, S}. How many permutations do we check?",
-        "{H, P, S}의 모든 순열을 시도해. 몇 가지 순열을 확인해?"),
+        "We try all permutations of {H, P, S}. How many permutations do we check?", "{H, P, S}의 모든 순열을 시도해. 몇 가지 순열을 확인해?"),
       question: t(E,
         "How many permutations do we try?",
         "몇 가지 순열을 시도해?"),
@@ -130,8 +127,7 @@ export function makeHps17Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try all 6 permutations, and for each try all 3 FJ choices. For each combo, scan N rounds. Total: O(18N) = O(N).",
-        "6가지 순열을 모두 시도하고, 각각에 대해 FJ의 3가지 선택을 시도해. 각 조합마다 N라운드를 스캔. 총: O(18N) = O(N)."),
+        "Try all 6 permutations, and for each try all 3 FJ choices.\nFor each combo, scan N rounds.\nTotal: O(18N) = O(N).", "6가지 순열을 모두 시도하고, 각각에 대해 FJ의 3가지 선택을 시도해. 각 조합마다 N라운드를 스캔. 총: O(18N) = O(N)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -147,8 +143,7 @@ export function makeHps17Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getHps17Sections(E),
     },
   ];

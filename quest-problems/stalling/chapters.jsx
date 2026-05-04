@@ -37,8 +37,7 @@ export function makeStallingCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows and N stalls, each with height limits. Count the number of valid assignments where every cow fits in its stall!",
-        "N마리 소와 N개 축사, 각각 높이 제한이 있어. 모든 소가 축사에 들어가는 유효한 배정 수를 세!"),
+        "N cows and N stalls, each with height limits.\nCount the number of valid assignments where every cow fits in its stall!", "N마리 소와 N개 축사, 각각 높이 제한이 있어. 모든 소가 축사에 들어가는 유효한 배정 수를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -55,8 +54,7 @@ export function makeStallingCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cows have heights [1,2] and stalls have limits [2,2]. How many valid arrangements?",
-        "소 높이 [1,2], 축사 제한 [2,2]일 때 유효한 배정 수는?"),
+        "Cows have heights [1,2] and stalls have limits [2,2]. How many valid arrangements?", "소 높이 [1,2], 축사 제한 [2,2]일 때 유효한 배정 수는?"),
       question: t(E,
         "Cows: [1,2], Stalls: [2,2]. How many valid arrangements?",
         "소: [1,2], 축사: [2,2]. 유효한 배정 수?"),
@@ -73,8 +71,7 @@ export function makeStallingCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Cows: [1,2], Stalls: [2,2]. How many valid arrangements?",
-        "소: [1,2], 축사: [2,2]. 유효한 배정은 몇 가지?"),
+        "Cows: [1,2], Stalls: [2,2]. How many valid arrangements?", "소: [1,2], 축사: [2,2]. 유효한 배정은 몇 가지?"),
       question: t(E,
         "Cows: [1,2], Stalls: [2,2]. Number of valid arrangements?",
         "소: [1,2], 축사: [2,2]. 유효한 배정 수?"),
@@ -96,8 +93,7 @@ export function makeStallingCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort both arrays, then use two pointers to count choices. O(N log N) time!",
-        "두 배열 정렬 후 투 포인터로 선택지를 세. O(N log N) 시간!"),
+        "Sort both arrays, then use two pointers to count choices. O(N log N) time!", "두 배열 정렬 후 투 포인터로 선택지를 세. O(N log N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -113,8 +109,7 @@ export function makeStallingCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getStallingSections(E),
     },
   ];

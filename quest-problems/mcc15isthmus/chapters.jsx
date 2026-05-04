@@ -52,8 +52,7 @@ export function makeMcc15IsthmusCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a sequence of heights, find peaks and valleys. A peak has K strictly increasing neighbors on the left and K strictly decreasing on the right. A valley is the opposite. Count total peaks + valleys!",
-        "높이 수열이 주어지면 봉우리와 골짜기를 찾아. 봉우리는 왼쪽 K개가 순증가, 오른쪽 K개가 순감소. 골짜기는 반대. 봉우리 + 골짜기 총 개수를 세!"),
+        "Given a sequence of heights, find peaks and valleys.\nA peak has K strictly increasing neighbors on the left and K strictly decreasing on the right.\nA valley is the opposite.\nCount total peaks + valleys!", "높이 수열이 주어지면 봉우리와 골짜기를 찾아. 봉우리는 왼쪽 K개가 순증가, 오른쪽 K개가 순감소. 골짜기는 반대. 봉우리 + 골짜기 총 개수를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26f0\ufe0f"}</div>
@@ -70,8 +69,7 @@ export function makeMcc15IsthmusCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Sequence [1, 3, 5, 3, 1] with K=2. Position 2 (value 5) has 2 increasing on the left (1<3<5) and 2 decreasing on the right (5>3>1). Is it a peak?",
-        "수열 [1, 3, 5, 3, 1]에서 K=2. 위치 2 (값 5)는 왼쪽 2개 증가 (1<3<5), 오른쪽 2개 감소 (5>3>1). 봉우리야?"),
+        "Sequence [1, 3, 5, 3, 1] with K=2.\nPosition 2 (value 5) has 2 increasing on the left (1<3<5) and 2 decreasing on the right (5>3>1).\nIs it a peak?", "수열 [1, 3, 5, 3, 1]에서 K=2. 위치 2 (값 5)는 왼쪽 2개 증가 (1<3<5), 오른쪽 2개 감소 (5>3>1). 봉우리야?"),
       question: t(E,
         "[1,3,5,3,1], K=2. How many peaks + valleys?",
         "[1,3,5,3,1], K=2. 봉우리 + 골짜기 개수?"),
@@ -90,8 +88,7 @@ export function makeMcc15IsthmusCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For [1,3,5,3,1] with K=2, how many peaks + valleys are there?",
-        "[1,3,5,3,1]에서 K=2일 때, 봉우리 + 골짜기는 몇 개?"),
+        "For [1,3,5,3,1] with K=2, how many peaks + valleys are there?", "[1,3,5,3,1]에서 K=2일 때, 봉우리 + 골짜기는 몇 개?"),
       question: t(E,
         "[1,3,5,3,1], K=2. Total peaks + valleys = ?",
         "[1,3,5,3,1], K=2. 봉우리 + 골짜기 총 수 = ?"),
@@ -113,8 +110,7 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each of N positions, we check up to K neighbors on each side. Total: O(N*K).",
-        "N개 위치 각각에서 양쪽 K개 이웃을 확인. 총: O(N*K)."),
+        "For each of N positions, we check up to K neighbors on each side. Total: O(N*K).", "N개 위치 각각에서 양쪽 K개 이웃을 확인. 총: O(N*K)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -130,8 +126,7 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc15IsthmusSections(E),
     },
   ];

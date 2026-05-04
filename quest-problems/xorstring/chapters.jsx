@@ -29,8 +29,7 @@ export function makeXorStringCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given two binary strings of equal length, compute their XOR. XOR returns 1 when bits differ, 0 when they match.",
-        "같은 길이의 두 이진 문자열이 주어졌을 때 XOR을 계산해. XOR은 비트가 다르면 1, 같으면 0을 반환해."),
+        "Given two binary strings of equal length, compute their XOR.\nXOR returns 1 when bits differ, 0 when they match.", "같은 길이의 두 이진 문자열이 주어졌을 때 XOR을 계산해. XOR은 비트가 다르면 1, 같으면 0을 반환해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2295"}</div>
@@ -47,8 +46,7 @@ export function makeXorStringCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "XOR basics: what is 1 XOR 1?",
-        "XOR 기초: 1 XOR 1은?"),
+        "XOR basics: what is 1 XOR 1?", "XOR 기초: 1 XOR 1은?"),
       question: t(E,
         "What is 1 XOR 1?",
         "1 XOR 1은?"),
@@ -65,8 +63,7 @@ export function makeXorStringCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "What is 1 XOR 1? Enter the result.",
-        "1 XOR 1은? 결과를 입력해."),
+        "What is 1 XOR 1? Enter the result.", "1 XOR 1은? 결과를 입력해."),
       question: t(E,
         "1 XOR 1 = ?",
         "1 XOR 1 = ?"),
@@ -88,8 +85,7 @@ export function makeXorStringCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simply iterate through both strings and XOR each pair of characters. O(N) time!",
-        "두 문자열을 순회하며 각 문자 쌍을 XOR하면 돼. O(N) 시간!"),
+        "Simply iterate through both strings and XOR each pair of characters. O(N) time!", "두 문자열을 순회하며 각 문자 쌍을 XOR하면 돼. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -105,8 +101,7 @@ export function makeXorStringCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getXorStringSections(E),
     },
   ];

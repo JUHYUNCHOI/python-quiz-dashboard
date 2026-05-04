@@ -41,8 +41,7 @@ export function makeTttCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A 3x3 tic-tac-toe grid is filled with cow letters A-Z. A cow wins individually if one letter fills an entire line. A team of exactly 2 cows wins if their two letters together fill a line. Count individual winners and team winners across all 8 lines.",
-        "3x3 틱택토 격자에 소 문자 A-Z가 채워져 있어. 한 문자가 한 줄을 모두 채우면 개인 우승, 정확히 2개 문자가 한 줄을 채우면 팀 우승이야. 8개 줄 모두에서 개인 우승자 수와 팀 우승자 수를 구해!"),
+        "A 3x3 tic-tac-toe grid is filled with cow letters A-Z.\nA cow wins individually if one letter fills an entire line.\nA team of exactly 2 cows wins if their two letters together fill a line.\nCount individual winners and team winners across all 8 lines.", "3x3 틱택토 격자에 소 문자 A-Z가 채워져 있어.\n한 문자가 한 줄을 모두 채우면 개인 우승, 정확히 2개 문자가 한 줄을 채우면 팀 우승이야.\n8개 줄 모두에서 개인 우승자 수와 팀 우승자 수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u274C"}</div>
@@ -59,8 +58,7 @@ export function makeTttCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Consider grid AAA / BBB / CCC. Each row is filled by one letter. How many individual winners are there?",
-        "격자 AAA / BBB / CCC를 생각해봐. 각 행이 한 문자로 채워져 있어. 개인 우승자는 몇 명이야?"),
+        "Consider grid AAA / BBB / CCC.\nEach row is filled by one letter.\nHow many individual winners are there?", "격자 AAA / BBB / CCC를 생각해봐. 각 행이 한 문자로 채워져 있어. 개인 우승자는 몇 명이야?"),
       question: t(E,
         "Grid: AAA / BBB / CCC. How many individual winners?",
         "격자: AAA / BBB / CCC. 개인 우승자 수는?"),
@@ -79,8 +77,7 @@ export function makeTttCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Same grid AAA / BBB / CCC. How many individual winners?",
-        "같은 격자 AAA / BBB / CCC. 개인 우승자는 몇 명?"),
+        "Same grid AAA / BBB / CCC. How many individual winners?", "같은 격자 AAA / BBB / CCC. 개인 우승자는 몇 명?"),
       question: t(E,
         "Grid AAA / BBB / CCC. Number of individual winners?",
         "격자 AAA / BBB / CCC. 개인 우승자 수는?"),
@@ -102,8 +99,7 @@ export function makeTttCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Check all 8 lines. For each line, count unique letters. Use sets to track winners. O(1) since grid is always 3x3!",
-        "8개 줄 모두 확인. 각 줄에서 고유 문자 수 세기. 집합으로 우승자 추적. 격자가 항상 3x3이니 O(1)!"),
+        "Check all 8 lines.\nFor each line, count unique letters.\nUse sets to track winners.\nO(1) since grid is always 3x3!", "8개 줄 모두 확인. 각 줄에서 고유 문자 수 세기. 집합으로 우승자 추적. 격자가 항상 3x3이니 O(1)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
@@ -119,8 +115,7 @@ export function makeTttCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getTeamTttSections(E),
     },
   ];

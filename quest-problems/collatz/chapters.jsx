@@ -28,8 +28,7 @@ export function makeCollatzCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The Collatz conjecture: start with any positive integer N. If even, divide by 2. If odd, multiply by 3 and add 1. Repeat until you reach 1. Count the steps!",
-        "콜라츠 추측: 양의 정수 N에서 시작해. 짝수면 2로 나누고, 홀수면 3을 곱하고 1을 더해. 1에 도달할 때까지 반복하고 단계 수를 세!"),
+        "The Collatz conjecture: start with any positive integer N.\nIf even, divide by 2.\nIf odd, multiply by 3 and add 1.\nRepeat until you reach 1.\nCount the steps!", "콜라츠 추측: 양의 정수 N에서 시작해. 짝수면 2로 나누고, 홀수면 3을 곱하고 1을 더해. 1에 도달할 때까지 반복하고 단계 수를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
@@ -46,8 +45,7 @@ export function makeCollatzCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's trace through N=6. The sequence is 6 -> 3 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1. How many steps?",
-        "N=6을 추적해보자. 수열은 6 -> 3 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1이야. 몇 단계일까?"),
+        "Let's trace through N=6.\nThe sequence is 6 -> 3 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1.\nHow many steps?", "N=6을 추적해보자. 수열은 6 -> 3 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1이야. 몇 단계일까?"),
       question: t(E,
         "N=6: 6->3->10->5->16->8->4->2->1. How many steps?",
         "N=6: 6->3->10->5->16->8->4->2->1. 몇 단계?"),
@@ -66,8 +64,7 @@ export function makeCollatzCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now try it yourself! How many steps does it take for N=6 to reach 1?",
-        "이제 직접 해보자! N=6이 1에 도달하려면 몇 단계가 필요할까?"),
+        "Now try it yourself! How many steps does it take for N=6 to reach 1?", "이제 직접 해보자! N=6이 1에 도달하려면 몇 단계가 필요할까?"),
       question: t(E,
         "How many Collatz steps for N=6?",
         "N=6의 콜라츠 단계 수는?"),
@@ -89,8 +86,7 @@ export function makeCollatzCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simple simulation: keep applying the rules until N becomes 1. The number of steps varies but is always finite (conjectured).",
-        "단순 시뮬레이션: N이 1이 될 때까지 규칙을 계속 적용해. 단계 수는 달라지지만 항상 유한해 (추측)."),
+        "Simple simulation: keep applying the rules until N becomes 1.\nThe number of steps varies but is always finite (conjectured).", "단순 시뮬레이션: N이 1이 될 때까지 규칙을 계속 적용해. 단계 수는 달라지지만 항상 유한해 (추측)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -106,8 +102,7 @@ export function makeCollatzCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getCollatzSections(E),
     },
   ];

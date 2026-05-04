@@ -32,8 +32,7 @@ export function makeMcc15ChocoCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You have a row of chocolate bars with different sizes. You can remove adjacent pairs of equal-size bars. Maximize the total length removed! Use a stack to greedily match pairs.",
-        "다양한 크기의 초콜릿 바가 한 줄로 있어. 같은 크기의 인접한 쌍을 제거할 수 있어. 제거한 총 길이를 최대화해! 스택으로 탐욕적으로 쌍을 매칭해."),
+        "You have a row of chocolate bars with different sizes.\nYou can remove adjacent pairs of equal-size bars.\nMaximize the total length removed!\nUse a stack to greedily match pairs.", "다양한 크기의 초콜릿 바가 한 줄로 있어. 같은 크기의 인접한 쌍을 제거할 수 있어. 제거한 총 길이를 최대화해! 스택으로 탐욕적으로 쌍을 매칭해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf6b"}</div>
@@ -50,8 +49,7 @@ export function makeMcc15ChocoCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Bars: [3, 3, 5, 5]. Remove (3,3) for length 6, then (5,5) for length 10. Total = 16. What's the total removed?",
-        "바: [3, 3, 5, 5]. (3,3) 제거하면 길이 6, 그 다음 (5,5) 제거하면 길이 10. 총 = 16. 총 제거 길이는?"),
+        "Bars: [3, 3, 5, 5].\nRemove (3,3) for length 6, then (5,5) for length 10.\nTotal = 16.\nWhat's the total removed?", "바: [3, 3, 5, 5]. (3,3) 제거하면 길이 6, 그 다음 (5,5) 제거하면 길이 10. 총 = 16. 총 제거 길이는?"),
       question: t(E,
         "Bars [3,3,5,5]. Total length removed?",
         "바 [3,3,5,5]. 제거한 총 길이?"),
@@ -70,8 +68,7 @@ export function makeMcc15ChocoCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For bars [3,3,5,5], what is the total length removed?",
-        "바 [3,3,5,5]에서 제거한 총 길이는?"),
+        "For bars [3,3,5,5], what is the total length removed?", "바 [3,3,5,5]에서 제거한 총 길이는?"),
       question: t(E,
         "Bars [3,3,5,5]. Total removed length = ?",
         "바 [3,3,5,5]. 제거한 총 길이 = ?"),
@@ -93,8 +90,7 @@ export function makeMcc15ChocoCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Each bar is pushed and popped at most once, so the stack solution is O(N)!",
-        "각 바는 최대 한 번 push/pop 되니까 스택 풀이는 O(N)!"),
+        "Each bar is pushed and popped at most once, so the stack solution is O(N)!", "각 바는 최대 한 번 push/pop 되니까 스택 풀이는 O(N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -110,8 +106,7 @@ export function makeMcc15ChocoCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc15ChocoSections(E),
     },
   ];

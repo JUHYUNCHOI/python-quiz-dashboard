@@ -42,8 +42,7 @@ export function makeLogicalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A boolean expression with 'and' and 'or'. Can we replace a substring to make it evaluate to a target value? 🧠",
-        "불리언 수식에 'and'와 'or'가 있어. 부분 문자열을 교체해서 목표값으로 만들 수 있을까? 🧠"),
+        "A boolean expression with 'and' and 'or'.\nCan we replace a substring to make it evaluate to a target value?\n🧠", "불리언 수식에 'and'와 'or'가 있어. 부분 문자열을 교체해서 목표값으로 만들 수 있을까? 🧠"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🧠</div>
@@ -59,8 +58,7 @@ export function makeLogicalCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "'false and true or true' → first evaluate 'and': false and true = false → 'false or true' → true!",
-        "'false and true or true' → 먼저 'and' 평가: false and true = false → 'false or true' → true!"),
+        "'false and true or true' → first evaluate 'and': false and true = false → 'false or true' → true!", "'false and true or true' → 먼저 'and' 평가: false and true = false → 'false or true' → true!"),
       question: t(E,
         "What does 'true or false and false' evaluate to?",
         "'true or false and false'의 결과는?"),
@@ -71,8 +69,7 @@ export function makeLogicalCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For each query: try replacing with 'true' and 'false'. If either makes the expression equal to target, answer Y.",
-        "각 쿼리: 'true'와 'false'로 교체 시도. 둘 중 하나라도 목표값이 되면 Y."),
+        "For each query: try replacing with 'true' and 'false'.\nIf either makes the expression equal to target, answer Y.", "각 쿼리: 'true'와 'false'로 교체 시도. 둘 중 하나라도 목표값이 되면 Y."),
       question: t(E,
         "'false and true or true'. Replace pos 1-3 with 'true'. Result = 'true or true' = ?. Is answer true? (1=yes,0=no)",
         "'false and true or true'. 위치 1-3을 'true'로 교체. 결과 = 'true or true' = ?. 답이 true? (1=예,0=아니)"),
@@ -81,8 +78,7 @@ export function makeLogicalCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Same color = same AND-chain. OR splits chains. Final = OR of all chains.",
-        "같은 색 = 같은 AND-체인. OR이 체인을 끊음. 최종 = 모든 체인 OR."),
+        "Same color = same AND-chain. OR splits chains. Final = OR of all chains.", "같은 색 = 같은 AND-체인. OR이 체인을 끊음. 최종 = 모든 체인 OR."),
     },
   ];
 }
@@ -97,8 +93,7 @@ export function makeLogicalCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Now build the brute-force evaluator step by step.",
-        "완전탐색 평가기를 단계별로 만들자."),
+        "Now build the brute-force evaluator step by step.", "완전탐색 평가기를 단계별로 만들자."),
       sections: getLogicalMoosSections(E),
     },
   ];

@@ -35,8 +35,7 @@ export function makeMcc19ElimCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a binary string, you can remove at most K zeros. Find the longest consecutive streak of 1s after removal. Classic sliding window!",
-        "이진 문자열에서 최대 K개의 0을 제거할 수 있어. 제거 후 가장 긴 연속 1의 길이를 구해. 전형적인 슬라이딩 윈도우!"),
+        "Given a binary string, you can remove at most K zeros.\nFind the longest consecutive streak of 1s after removal.\nClassic sliding window!", "이진 문자열에서 최대 K개의 0을 제거할 수 있어. 제거 후 가장 긴 연속 1의 길이를 구해. 전형적인 슬라이딩 윈도우!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
@@ -53,8 +52,7 @@ export function makeMcc19ElimCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "String = \"10110\", K=1. If we remove the 0 at position 2, we get \"11_10\" → \"1110\" streak of 4. Or remove pos 4: \"1011_\" → streak 3. Best is 4!",
-        "문자열 = \"10110\", K=1. 위치 2의 0을 제거하면 \"11_10\" → \"1110\" 연속 4. 위치 4 제거: \"1011_\" → 연속 3. 최선은 4!"),
+        "String = \"10110\", K=1.\nIf we remove the 0 at position 2, we get \"11_10\" → \"1110\" streak of 4.\nOr remove pos 4: \"1011_\" → streak 3.\nBest is 4!", "문자열 = \"10110\", K=1.\n위치 2의 0을 제거하면 \"11_10\" → \"1110\" 연속 4.\n위치 4 제거: \"1011_\" → 연속 3.\n최선은 4!"),
       question: t(E,
         "\"10110\", K=1. What's the longest 1-streak after removing one 0?",
         "\"10110\", K=1. 0 하나를 제거한 후 가장 긴 1-연속은?"),
@@ -72,8 +70,7 @@ export function makeMcc19ElimCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "\"10110\", K=1. Maximum consecutive 1s after removing at most 1 zero?",
-        "\"10110\", K=1. 최대 1개의 0을 제거한 후 최대 연속 1의 수?"),
+        "\"10110\", K=1. Maximum consecutive 1s after removing at most 1 zero?", "\"10110\", K=1. 최대 1개의 0을 제거한 후 최대 연속 1의 수?"),
       question: t(E,
         "\"10110\", K=1. Longest streak = ?",
         "\"10110\", K=1. 가장 긴 연속 = ?"),
@@ -95,8 +92,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Two pointers: expand right, shrink left when zero count exceeds K. O(N) time!",
-        "투 포인터: 오른쪽 확장, 0 개수가 K를 초과하면 왼쪽 축소. O(N) 시간!"),
+        "Two pointers: expand right, shrink left when zero count exceeds K. O(N) time!", "투 포인터: 오른쪽 확장, 0 개수가 K를 초과하면 왼쪽 축소. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
@@ -112,8 +108,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc19ElimSections(E),
     },
   ];

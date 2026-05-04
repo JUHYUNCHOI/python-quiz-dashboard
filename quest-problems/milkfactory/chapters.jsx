@@ -47,8 +47,7 @@ export function makeFactoryCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There are N stations connected by N-1 one-way conveyor belts (a tree). Find a station that every other station can reach, or output -1.",
-        "N개의 스테이션이 N-1개의 단방향 컨베이어 벨트로 연결돼 (트리). 모든 다른 스테이션에서 도달 가능한 스테이션을 찾거나, -1을 출력해!"),
+        "There are N stations connected by N-1 one-way conveyor belts (a tree).\nFind a station that every other station can reach, or output -1.", "N개의 스테이션이 N-1개의 단방향 컨베이어 벨트로 연결돼 (트리). 모든 다른 스테이션에서 도달 가능한 스테이션을 찾거나, -1을 출력해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfed"}</div>
@@ -65,8 +64,7 @@ export function makeFactoryCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Consider: edges 1->2 and 3->2. Which station is reachable from all others?",
-        "간선 1->2, 3->2가 있어. 모든 스테이션에서 도달 가능한 곳은?"),
+        "Consider: edges 1->2 and 3->2. Which station is reachable from all others?", "간선 1->2, 3->2가 있어. 모든 스테이션에서 도달 가능한 곳은?"),
       question: t(E,
         "Edges: 1->2, 3->2. Which station can all others reach?",
         "간선: 1->2, 3->2. 모든 스테이션이 도달 가능한 곳은?"),
@@ -85,8 +83,7 @@ export function makeFactoryCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "In the example above, what station number is the answer?",
-        "위 예제에서 답은 몇 번 스테이션일까?"),
+        "In the example above, what station number is the answer?", "위 예제에서 답은 몇 번 스테이션일까?"),
       question: t(E,
         "Edges: 1->2, 3->2. Answer station number?",
         "간선: 1->2, 3->2. 답 스테이션 번호는?"),
@@ -108,8 +105,7 @@ export function makeFactoryCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each of N candidates, BFS/DFS on the reverse graph takes O(N). Total: O(N^2).",
-        "N개 후보 각각에 대해 역방향 그래프 BFS/DFS는 O(N). 총: O(N^2)."),
+        "For each of N candidates, BFS/DFS on the reverse graph takes O(N). Total: O(N^2).", "N개 후보 각각에 대해 역방향 그래프 BFS/DFS는 O(N). 총: O(N^2)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -125,8 +121,7 @@ export function makeFactoryCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMilkFactorySections(E),
     },
   ];

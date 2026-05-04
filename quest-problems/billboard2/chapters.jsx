@@ -53,8 +53,7 @@ export function makeBillboard2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A lawnmower billboard is partially hidden by a cow feed billboard. We need the minimum axis-aligned rectangular tarp to cover the exposed part of the lawnmower billboard.",
-        "잔디 깎기 광고판이 소 사료 광고판에 의해 부분적으로 가려져 있어. 잔디 깎기 광고판의 노출된 부분을 덮을 최소 축 정렬 직사각형 타프를 구해야 해."),
+        "A lawnmower billboard is partially hidden by a cow feed billboard.\nWe need the minimum axis-aligned rectangular tarp to cover the exposed part of the lawnmower billboard.", "잔디 깎기 광고판이 소 사료 광고판에 의해 부분적으로 가려져 있어. 잔디 깎기 광고판의 노출된 부분을 덮을 최소 축 정렬 직사각형 타프를 구해야 해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udea7"}</div>
@@ -71,8 +70,7 @@ export function makeBillboard2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A 10x10 billboard (area 100). The feed billboard covers the top half entirely. What is the tarp area?",
-        "10x10 광고판(면적 100). 사료 광고판이 윗부분 절반을 완전히 덮어. 타프 면적은?"),
+        "A 10x10 billboard (area 100).\nThe feed billboard covers the top half entirely.\nWhat is the tarp area?", "10x10 광고판(면적 100). 사료 광고판이 윗부분 절반을 완전히 덮어. 타프 면적은?"),
       question: t(E,
         "Billboard 10x10=100. Feed covers the entire top half. Tarp area?",
         "광고판 10x10=100. 사료가 윗절반 전체를 덮음. 타프 면적은?"),
@@ -90,8 +88,7 @@ export function makeBillboard2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "Billboard is 6 wide, 3 tall (area 18). The feed billboard does NOT overlap at all. What is the tarp area?",
-        "광고판이 가로 6, 세로 3 (면적 18). 사료 광고판이 전혀 겹치지 않아. 타프 면적은?"),
+        "Billboard is 6 wide, 3 tall (area 18).\nThe feed billboard does NOT overlap at all.\nWhat is the tarp area?", "광고판이 가로 6, 세로 3 (면적 18). 사료 광고판이 전혀 겹치지 않아. 타프 면적은?"),
       question: t(E,
         "Billboard 6x3=18, no overlap with feed. Tarp area?",
         "광고판 6x3=18, 사료와 겹침 없음. 타프 면적은?"),
@@ -113,8 +110,7 @@ export function makeBillboard2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Check if the feed covers a full side of the billboard. If so, tarp = remaining strip. Otherwise, tarp = entire billboard area. O(1) time!",
-        "사료가 광고판의 한 변 전체를 덮는지 확인해. 그렇다면 타프 = 남은 띠. 아니면 타프 = 전체 광고판 면적. O(1) 시간!"),
+        "Check if the feed covers a full side of the billboard.\nIf so, tarp = remaining strip.\nOtherwise, tarp = entire billboard area.\nO(1) time!", "사료가 광고판의 한 변 전체를 덮는지 확인해. 그렇다면 타프 = 남은 띠. 아니면 타프 = 전체 광고판 면적. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -130,8 +126,7 @@ export function makeBillboard2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getBillboard2Sections(E),
     },
   ];

@@ -68,8 +68,7 @@ export function makeCowntraceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows shake hooves at events. One cow (patient zero) starts infected and can spread the disease up to K times. Find which cows could be patient zero, and the min/max K.",
-        "소들이 행사에서 발굽을 맞대. 한 마리(환자 제로)가 감염 시작, 최대 K번 전파 가능. 환자 제로 후보와 최소/최대 K를 구해."),
+        "Cows shake hooves at events.\nOne cow (patient zero) starts infected and can spread the disease up to K times.\nFind which cows could be patient zero, and the min/max K.", "소들이 행사에서 발굽을 맞대. 한 마리(환자 제로)가 감염 시작, 최대 K번 전파 가능. 환자 제로 후보와 최소/최대 K를 구해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd0d"}</div>
@@ -86,8 +85,7 @@ export function makeCowntraceCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If there's only 1 infected cow and no interactions happened, how many possible patient zeros are there?",
-        "감염 소가 1마리이고 상호작용이 없었다면, 환자 제로 후보는 몇 마리?"),
+        "If there's only 1 infected cow and no interactions happened, how many possible patient zeros are there?", "감염 소가 1마리이고 상호작용이 없었다면, 환자 제로 후보는 몇 마리?"),
       question: t(E,
         "1 infected cow, 0 interactions. How many possible patient zeros?",
         "감염 소 1마리, 상호작용 0번. 환자 제로 후보 수?"),
@@ -105,8 +103,7 @@ export function makeCowntraceCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "1 cow infected, no interactions. How many patient zero candidates?",
-        "감염 소 1마리, 상호작용 없음. 환자 제로 후보 수?"),
+        "1 cow infected, no interactions. How many patient zero candidates?", "감염 소 1마리, 상호작용 없음. 환자 제로 후보 수?"),
       question: t(E,
         "1 infected cow, 0 handshakes. Number of patient zero candidates?",
         "감염 소 1마리, 악수 0번. 환자 제로 후보 수?"),
@@ -128,8 +125,7 @@ export function makeCowntraceCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Brute force: try each cow as patient zero, simulate for each K. O(N * T * T) which is fine for Bronze constraints.",
-        "완전 탐색: 각 소를 환자 제로로, 각 K에 대해 시뮬레이션. O(N * T * T)로 Bronze 제한에 충분."),
+        "Brute force: try each cow as patient zero, simulate for each K.\nO(N * T * T) which is fine for Bronze constraints.", "완전 탐색: 각 소를 환자 제로로, 각 K에 대해 시뮬레이션. O(N * T * T)로 Bronze 제한에 충분."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -145,8 +141,7 @@ export function makeCowntraceCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getCowntraceSections(E),
     },
   ];

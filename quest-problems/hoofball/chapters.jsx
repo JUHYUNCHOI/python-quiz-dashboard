@@ -56,8 +56,7 @@ export function makeHoofballCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows stand on a number line and pass a ball to their nearest neighbor. Find the minimum number of balls needed so every cow gets at least one!",
-        "소들이 수직선 위에 서서 가장 가까운 이웃에게 공을 패스해. 모든 소가 최소 1개 공을 받으려면 최소 몇 개 공이 필요한지 구해!"),
+        "Cows stand on a number line and pass a ball to their nearest neighbor.\nFind the minimum number of balls needed so every cow gets at least one!", "소들이 수직선 위에 서서 가장 가까운 이웃에게 공을 패스해. 모든 소가 최소 1개 공을 받으려면 최소 몇 개 공이 필요한지 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26BD"}</div>
@@ -74,8 +73,7 @@ export function makeHoofballCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "3 cows at positions [1, 5, 10]. Cow at 5 passes to 1 (dist 4 < 5). Cow at 10 passes to 5 (dist 5). Cow at 1 passes to 5 (dist 4). Who never receives a pass?",
-        "3마리 소 위치 [1, 5, 10]. 5의 소는 1로 패스 (거리 4 < 5). 10의 소는 5로 패스 (거리 5). 1의 소는 5로 패스 (거리 4). 패스를 안 받는 소는?"),
+        "3 cows at positions [1, 5, 10].\nCow at 5 passes to 1 (dist 4 < 5).\nCow at 10 passes to 5 (dist 5).\nCow at 1 passes to 5 (dist 4).\nWho never receives a pass?", "3마리 소 위치 [1, 5, 10].\n5의 소는 1로 패스 (거리 4 < 5).\n10의 소는 5로 패스 (거리 5).\n1의 소는 5로 패스 (거리 4).\n패스를 안 받는 소는?"),
       question: t(E,
         "Positions [1,5,10]. How many balls needed?",
         "위치 [1,5,10]. 필요한 공 수는?"),
@@ -93,8 +91,7 @@ export function makeHoofballCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Positions [1, 5, 10]. How many balls are needed?",
-        "위치 [1, 5, 10]. 필요한 공 수는?"),
+        "Positions [1, 5, 10]. How many balls are needed?", "위치 [1, 5, 10]. 필요한 공 수는?"),
       question: t(E,
         "3 cows at [1, 5, 10]. Min balls needed?",
         "3마리 소 [1, 5, 10]. 최소 공 수?"),
@@ -116,8 +113,7 @@ export function makeHoofballCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort positions, compute pass targets, count sources. O(N log N) for sorting!",
-        "위치 정렬, 패스 대상 계산, 소스 세기. 정렬에 O(N log N)!"),
+        "Sort positions, compute pass targets, count sources. O(N log N) for sorting!", "위치 정렬, 패스 대상 계산, 소스 세기. 정렬에 O(N log N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
@@ -133,8 +129,7 @@ export function makeHoofballCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getHoofballSections(E),
     },
   ];

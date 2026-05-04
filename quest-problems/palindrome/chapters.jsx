@@ -39,8 +39,7 @@ export function makePalindromeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie and Elsie are playing a stone game! They take turns removing palindrome-number stones from a pile. Let's learn the rules! 🎲",
-        "베시와 엘시가 돌 게임을 해! 번갈아가며 회문 수만큼 돌을 가져가. 규칙을 알아보자! 🎲"),
+        "Bessie and Elsie are playing a stone game!\nThey take turns removing palindrome-number stones from a pile.\nLet's learn the rules!\n🎲", "베시와 엘시가 돌 게임을 해! 번갈아가며 회문 수만큼 돌을 가져가. 규칙을 알아보자! 🎲"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🎲</div>
@@ -57,8 +56,7 @@ export function makePalindromeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First, what's a palindrome number? It reads the same forwards and backwards! Like 121 or 7.",
-        "먼저, 회문 수가 뭘까? 앞에서 읽어도 뒤에서 읽어도 같은 수야! 121이나 7처럼."),
+        "First, what's a palindrome number?\nIt reads the same forwards and backwards!\nLike 121 or 7.", "먼저, 회문 수가 뭘까? 앞에서 읽어도 뒤에서 읽어도 같은 수야! 121이나 7처럼."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 14, padding: 14, textAlign: "center" }}>
@@ -82,8 +80,7 @@ export function makePalindromeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Quick check! Can you tell which numbers are palindromes?",
-        "빠른 확인! 어떤 수가 회문인지 알 수 있어?"),
+        "Quick check! Can you tell which numbers are palindromes?", "빠른 확인! 어떤 수가 회문인지 알 수 있어?"),
       question: t(E,
         "Is 121 a palindrome?",
         "121은 회문일까?"),
@@ -100,8 +97,7 @@ export function makePalindromeCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If S is a palindrome, Bessie can take ALL stones on her first turn and win! What about S=8?",
-        "S가 회문이면, 베시가 첫 턴에 돌을 전부 가져가서 이겨! S=8이면?"),
+        "If S is a palindrome, Bessie can take ALL stones on her first turn and win!\nWhat about S=8?", "S가 회문이면, 베시가 첫 턴에 돌을 전부 가져가서 이겨! S=8이면?"),
       question: t(E,
         "S=8. Bessie removes all 8 stones (8 is a palindrome!). Elsie faces 0 stones. Does Bessie win? (1=yes, 0=no)",
         "S=8. 베시가 8개 전부 가져가 (8은 회문!). 엘시는 0개를 마주해. 베시가 이겨? (1=예, 0=아니오)"),
@@ -113,8 +109,7 @@ export function makePalindromeCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Watch the DP table fill bottom-up. Green = Bessie wins, red = Elsie wins.",
-        "DP 테이블이 아래에서 위로 채워지는 걸 봐. 초록 = 베시 승, 빨강 = 엘시 승."),
+        "Watch the DP table fill bottom-up. Green = Bessie wins, red = Elsie wins.", "DP 테이블이 아래에서 위로 채워지는 걸 봐. 초록 = 베시 승, 빨강 = 엘시 승."),
     },
   ];
 }
@@ -128,8 +123,7 @@ export function makePalindromeCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The key insight: if S is a palindrome, Bessie wins immediately. Otherwise, we check game states recursively.",
-        "핵심: S가 회문이면 베시가 바로 이겨. 아니면 게임 상태를 재귀적으로 확인해."),
+        "The key insight: if S is a palindrome, Bessie wins immediately.\nOtherwise, we check game states recursively.", "핵심: S가 회문이면 베시가 바로 이겨. 아니면 게임 상태를 재귀적으로 확인해."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 14, padding: 14 }}>
@@ -151,15 +145,13 @@ export function makePalindromeCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Now build the game-theory DP step by step.",
-        "게임 이론 DP를 단계별로 만들자."),
+        "Now build the game-theory DP step by step.", "게임 이론 DP를 단계별로 만들자."),
       sections: getPalindromeSections(E),
     },
     {
       type: "runner",
       narr: t(E,
-        "Try your own S. Watch the DP build to find the winner.",
-        "직접 S 시도. DP가 만들어지면서 승자를 찾는 걸 봐."),
+        "Try your own S. Watch the DP build to find the winner.", "직접 S 시도. DP가 만들어지면서 승자를 찾는 걸 봐."),
     },
   ];
 }

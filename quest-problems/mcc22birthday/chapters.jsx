@@ -43,8 +43,7 @@ export function makeMcc22BirthdayCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Plan a cat's birthday party! N cats each have availability for certain time slots. Find the time slot where the maximum number of cats can attend!",
-        "고양이 생일 파티를 계획해! N마리 고양이는 각각 특정 시간대에 참석 가능해. 최대한 많은 고양이가 참석할 수 있는 시간대를 찾아!"),
+        "Plan a cat's birthday party!\nN cats each have availability for certain time slots.\nFind the time slot where the maximum number of cats can attend!", "고양이 생일 파티를 계획해! N마리 고양이는 각각 특정 시간대에 참석 가능해. 최대한 많은 고양이가 참석할 수 있는 시간대를 찾아!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf82"}</div>
@@ -61,8 +60,7 @@ export function makeMcc22BirthdayCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "3 cats, 2 time slots. Cat 1: slot 1 only. Cat 2: slots 1 and 2. Cat 3: slot 2 only. Which slot has the most cats?",
-        "고양이 3마리, 시간대 2개. 고양이 1: 시간대 1만. 고양이 2: 시간대 1, 2 모두. 고양이 3: 시간대 2만. 어느 시간대에 가장 많은 고양이?"),
+        "3 cats, 2 time slots.\nCat 1: slot 1 only.\nCat 2: slots 1 and 2.\nCat 3: slot 2 only.\nWhich slot has the most cats?", "고양이 3마리, 시간대 2개. 고양이 1: 시간대 1만. 고양이 2: 시간대 1, 2 모두. 고양이 3: 시간대 2만. 어느 시간대에 가장 많은 고양이?"),
       question: t(E,
         "Slot 1: cats 1,2 (2 cats). Slot 2: cats 2,3 (2 cats). Max attendance?",
         "시간대 1: 고양이 1,2 (2마리). 시간대 2: 고양이 2,3 (2마리). 최대 참석수?"),
@@ -80,8 +78,7 @@ export function makeMcc22BirthdayCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "What is the maximum number of cats that can attend in the above scenario?",
-        "위 시나리오에서 최대 참석 가능한 고양이 수는?"),
+        "What is the maximum number of cats that can attend in the above scenario?", "위 시나리오에서 최대 참석 가능한 고양이 수는?"),
       question: t(E,
         "3 cats, 2 slots. Max cats in one slot?",
         "고양이 3마리, 시간대 2개. 한 시간대 최대 고양이 수?"),
@@ -103,8 +100,7 @@ export function makeMcc22BirthdayCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each time slot, count available cats. O(N * T) total.",
-        "각 시간대별 가능한 고양이 수 세기. 총 O(N * T)."),
+        "For each time slot, count available cats. O(N * T) total.", "각 시간대별 가능한 고양이 수 세기. 총 O(N * T)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -120,8 +116,7 @@ export function makeMcc22BirthdayCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc22BirthdaySections(E),
     },
   ];

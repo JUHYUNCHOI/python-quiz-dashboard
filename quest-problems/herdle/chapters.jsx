@@ -45,8 +45,7 @@ export function makeHerdleCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A 3x3 grid Wordle for cow breeds! Given an answer grid and a guess grid, count green tiles (exact position match) and yellow tiles (right breed, wrong position).",
-        "3x3 소 품종 Wordle! 정답 그리드와 추측 그리드가 주어지면 초록 타일(정확한 위치 일치)과 노란 타일(맞는 품종, 틀린 위치)을 세!"),
+        "A 3x3 grid Wordle for cow breeds!\nGiven an answer grid and a guess grid, count green tiles (exact position match) and yellow tiles (right breed, wrong position).", "3x3 소 품종 Wordle! 정답 그리드와 추측 그리드가 주어지면 초록 타일(정확한 위치 일치)과 노란 타일(맞는 품종, 틀린 위치)을 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udfe9"}</div>
@@ -63,8 +62,7 @@ export function makeHerdleCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If the answer grid is all 'A' and the guess grid is also all 'A', every cell matches exactly!",
-        "정답 그리드가 전부 'A'이고 추측 그리드도 전부 'A'이면, 모든 셀이 정확히 일치해!"),
+        "If the answer grid is all 'A' and the guess grid is also all 'A', every cell matches exactly!", "정답 그리드가 전부 'A'이고 추측 그리드도 전부 'A'이면, 모든 셀이 정확히 일치해!"),
       question: t(E,
         "Answer grid: all 'A'. Guess grid: all 'A'. How many green and yellow tiles?",
         "정답 그리드: 전부 'A'. 추측 그리드: 전부 'A'. 초록과 노란 타일 수는?"),
@@ -82,8 +80,7 @@ export function makeHerdleCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Both grids are all 'A'. How many green tiles?",
-        "두 그리드가 모두 'A'야. 초록 타일은 몇 개?"),
+        "Both grids are all 'A'. How many green tiles?", "두 그리드가 모두 'A'야. 초록 타일은 몇 개?"),
       question: t(E,
         "Answer=all 'A', Guess=all 'A'. Green count?",
         "정답=전부 'A', 추측=전부 'A'. 초록 개수?"),
@@ -105,8 +102,7 @@ export function makeHerdleCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The grid is always 3x3, so we just iterate 9 cells twice. O(1) per test case!",
-        "그리드는 항상 3x3이니까 9개 셀을 두 번 순회하면 돼. 테스트 케이스당 O(1)!"),
+        "The grid is always 3x3, so we just iterate 9 cells twice. O(1) per test case!", "그리드는 항상 3x3이니까 9개 셀을 두 번 순회하면 돼. 테스트 케이스당 O(1)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -122,8 +118,7 @@ export function makeHerdleCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getHerdleSections(E),
     },
   ];

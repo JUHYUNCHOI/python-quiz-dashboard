@@ -35,8 +35,7 @@ export function makeSecretCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A password is encoded as a circular rotation. Given two encoded messages, determine if they could be rotations of the same original password.",
-        "비밀번호가 원형 회전으로 암호화돼. 두 개의 암호화된 메시지가 주어지면, 같은 원래 비밀번호의 회전인지 판별해."),
+        "A password is encoded as a circular rotation.\nGiven two encoded messages, determine if they could be rotations of the same original password.", "비밀번호가 원형 회전으로 암호화돼. 두 개의 암호화된 메시지가 주어지면, 같은 원래 비밀번호의 회전인지 판별해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd10"}</div>
@@ -53,8 +52,7 @@ export function makeSecretCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The classic rotation check: if we concatenate array a with itself (a+a), any rotation of a will appear as a contiguous subarray. Why does this work?",
-        "클래식 회전 검사: 배열 a를 자기 자신과 이어붙이면 (a+a), a의 모든 회전이 연속 부분 배열로 나타나. 왜 이게 되는 걸까?"),
+        "The classic rotation check: if we concatenate array a with itself (a+a), any rotation of a will appear as a contiguous subarray.\nWhy does this work?", "클래식 회전 검사: 배열 a를 자기 자신과 이어붙이면 (a+a), a의 모든 회전이 연속 부분 배열로 나타나. 왜 이게 되는 걸까?"),
       question: t(E,
         "Why does checking if b is in a+a work for rotation detection?",
         "b가 a+a에 있는지 확인하는 것이 왜 회전 검출에 효과적인가?"),
@@ -71,8 +69,7 @@ export function makeSecretCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "[1,2,3] and [2,3,1] - is [2,3,1] a rotation of [1,2,3]? Answer 1 for Yes, 0 for No.",
-        "[1,2,3]과 [2,3,1] - [2,3,1]은 [1,2,3]의 회전인가? Yes면 1, No면 0을 입력해."),
+        "[1,2,3] and [2,3,1] - is [2,3,1] a rotation of [1,2,3]? Answer 1 for Yes, 0 for No.", "[1,2,3]과 [2,3,1] - [2,3,1]은 [1,2,3]의 회전인가? Yes면 1, No면 0을 입력해."),
       question: t(E,
         "[1,2,3] and [2,3,1]: same rotation? (1=Yes, 0=No)",
         "[1,2,3]과 [2,3,1]: 같은 회전? (1=Yes, 0=No)"),
@@ -94,8 +91,7 @@ export function makeSecretCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Concatenate a with itself and search for b. Naive search is O(N^2), but KMP can do O(N). For this problem, O(N^2) is fine.",
-        "a를 자기 자신과 이어붙이고 b를 찾아. 단순 검색은 O(N^2)이지만, KMP로 O(N) 가능. 이 문제에서는 O(N^2)이면 충분해."),
+        "Concatenate a with itself and search for b.\nNaive search is O(N^2), but KMP can do O(N).\nFor this problem, O(N^2) is fine.", "a를 자기 자신과 이어붙이고 b를 찾아. 단순 검색은 O(N^2)이지만, KMP로 O(N) 가능. 이 문제에서는 O(N^2)이면 충분해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -111,8 +107,7 @@ export function makeSecretCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getSecretSections(E),
     },
   ];

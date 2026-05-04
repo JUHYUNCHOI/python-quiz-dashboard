@@ -27,8 +27,7 @@ export function makeMagicOrbsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There are N magical orbs, each with a power value. You can pick at most K orbs. Find the maximum total power you can collect!",
-        "N개의 마법 구슬이 있고, 각각 파워 값이 있어. 최대 K개를 고를 수 있어. 모을 수 있는 최대 총 파워를 구해!"),
+        "There are N magical orbs, each with a power value.\nYou can pick at most K orbs.\nFind the maximum total power you can collect!", "N개의 마법 구슬이 있고, 각각 파워 값이 있어. 최대 K개를 고를 수 있어. 모을 수 있는 최대 총 파워를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd2e"}</div>
@@ -45,8 +44,7 @@ export function makeMagicOrbsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Orbs with values [5, 3, 4], pick 2. Which two should you pick?",
-        "구슬 값이 [5, 3, 4]이고 2개를 골라야 해. 어떤 두 개를 골라야 할까?"),
+        "Orbs with values [5, 3, 4], pick 2. Which two should you pick?", "구슬 값이 [5, 3, 4]이고 2개를 골라야 해. 어떤 두 개를 골라야 할까?"),
       question: t(E,
         "Values [5, 3, 4], pick 2. Best choice?",
         "값 [5, 3, 4], 2개 선택. 최선의 선택은?"),
@@ -64,8 +62,7 @@ export function makeMagicOrbsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Orbs: [5, 3, 4], pick 2. What is the maximum sum?",
-        "구슬: [5, 3, 4], 2개 선택. 최대 합은?"),
+        "Orbs: [5, 3, 4], pick 2. What is the maximum sum?", "구슬: [5, 3, 4], 2개 선택. 최대 합은?"),
       question: t(E,
         "Values [5, 3, 4], K=2. Maximum total power?",
         "값 [5, 3, 4], K=2. 최대 총 파워?"),
@@ -87,8 +84,7 @@ export function makeMagicOrbsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort the array, then sum the first K elements. O(N log N) time!",
-        "배열 정렬 후 처음 K개를 합산해. O(N log N) 시간!"),
+        "Sort the array, then sum the first K elements. O(N log N) time!", "배열 정렬 후 처음 K개를 합산해. O(N log N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -104,8 +100,7 @@ export function makeMagicOrbsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMagicOrbsSections(E),
     },
   ];

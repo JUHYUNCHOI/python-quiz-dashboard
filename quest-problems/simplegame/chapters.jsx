@@ -27,8 +27,7 @@ export function makeSimpleGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two players take turns removing 1 to 3 stones from a pile of N stones. The player who takes the last stone wins. Who wins with optimal play?",
-        "두 플레이어가 번갈아 N개의 돌 더미에서 1~3개를 가져가. 마지막 돌을 가져가는 사람이 이겨. 최적의 플레이에서 누가 이길까?"),
+        "Two players take turns removing 1 to 3 stones from a pile of N stones.\nThe player who takes the last stone wins.\nWho wins with optimal play?", "두 플레이어가 번갈아 N개의 돌 더미에서 1~3개를 가져가. 마지막 돌을 가져가는 사람이 이겨. 최적의 플레이에서 누가 이길까?"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfae"}</div>
@@ -45,8 +44,7 @@ export function makeSimpleGameCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If N=5, the first player takes 1 stone, leaving 4. Now the opponent faces a multiple of 4 - a losing position!",
-        "N=5이면, 선수가 돌 1개를 가져가서 4개를 남겨. 상대는 4의 배수를 마주해 - 지는 위치야!"),
+        "If N=5, the first player takes 1 stone, leaving 4.\nNow the opponent faces a multiple of 4 - a losing position!", "N=5이면, 선수가 돌 1개를 가져가서 4개를 남겨. 상대는 4의 배수를 마주해 - 지는 위치야!"),
       question: t(E,
         "N=5. Who wins with optimal play?",
         "N=5. 최적 플레이에서 누가 이겨?"),
@@ -63,8 +61,7 @@ export function makeSimpleGameCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "N=8. Since 8 is a multiple of 4, who wins? Enter 1 for first player, 2 for second player.",
-        "N=8. 8은 4의 배수야. 누가 이겨? 선수면 1, 후수면 2를 입력해."),
+        "N=8. Since 8 is a multiple of 4, who wins? Enter 1 for first player, 2 for second player.", "N=8. 8은 4의 배수야. 누가 이겨? 선수면 1, 후수면 2를 입력해."),
       question: t(E,
         "N=8. Who wins? (1=first, 2=second)",
         "N=8. 누가 이겨? (1=선수, 2=후수)"),
@@ -86,8 +83,7 @@ export function makeSimpleGameCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just check N mod 4. O(1) time!",
-        "N mod 4만 확인하면 돼. O(1) 시간!"),
+        "Just check N mod 4. O(1) time!", "N mod 4만 확인하면 돼. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -103,8 +99,7 @@ export function makeSimpleGameCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getSimpleGameSections(E),
     },
   ];

@@ -43,8 +43,7 @@ export function makeMooOpsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Transform a string of M's and O's into exactly \"MOO\" using minimum operations. You can flip the first or last character, or delete the first or last character. Find the minimum operations or -1 if impossible!",
-        "M과 O로 이루어진 문자열을 최소 연산으로 정확히 \"MOO\"로 변환해. 첫 번째 또는 마지막 문자를 뒤집거나, 첫 번째 또는 마지막 문자를 삭제할 수 있어. 최소 연산 수 또는 불가능하면 -1을 구해!"),
+        "Transform a string of M's and O's into exactly \"MOO\" using minimum operations.\nYou can flip the first or last character, or delete the first or last character.\nFind the minimum operations or -1 if impossible!", "M과 O로 이루어진 문자열을 최소 연산으로 정확히 \"MOO\"로 변환해.\n첫 번째 또는 마지막 문자를 뒤집거나, 첫 번째 또는 마지막 문자를 삭제할 수 있어.\n최소 연산 수 또는 불가능하면 -1을 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc2e"}</div>
@@ -61,8 +60,7 @@ export function makeMooOpsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The string \"MOO\" already matches. How many operations are needed?",
-        "문자열 \"MOO\"는 이미 일치해. 몇 번의 연산이 필요할까?"),
+        "The string \"MOO\" already matches. How many operations are needed?", "문자열 \"MOO\"는 이미 일치해. 몇 번의 연산이 필요할까?"),
       question: t(E,
         "String is \"MOO\". How many operations needed?",
         "문자열이 \"MOO\"일 때. 필요한 연산 수는?"),
@@ -80,8 +78,7 @@ export function makeMooOpsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "String is \"MOOO\". We need to reduce it to \"MOO\". How many operations?",
-        "문자열이 \"MOOO\"야. \"MOO\"로 줄여야 해. 몇 번의 연산이 필요할까?"),
+        "String is \"MOOO\". We need to reduce it to \"MOO\". How many operations?", "문자열이 \"MOOO\"야. \"MOO\"로 줄여야 해. 몇 번의 연산이 필요할까?"),
       question: t(E,
         "String \"MOOO\". Min operations to make it \"MOO\"?",
         "문자열 \"MOOO\". \"MOO\"로 만드는 최소 연산 수?"),
@@ -103,8 +100,7 @@ export function makeMooOpsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try every position as the start of \"MOO\". Check if middle is 'O'. Compute deletion + flip cost. O(N) per query!",
-        "모든 위치를 \"MOO\"의 시작으로 시도해. 중간이 'O'인지 확인. 삭제 + 뒤집기 비용 계산. 쿼리당 O(N)!"),
+        "Try every position as the start of \"MOO\".\nCheck if middle is 'O'.\nCompute deletion + flip cost.\nO(N) per query!", "모든 위치를 \"MOO\"의 시작으로 시도해. 중간이 'O'인지 확인. 삭제 + 뒤집기 비용 계산. 쿼리당 O(N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -120,8 +116,7 @@ export function makeMooOpsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMooOpsSections(E),
     },
   ];

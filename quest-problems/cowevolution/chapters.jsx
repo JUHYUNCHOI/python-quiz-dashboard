@@ -52,8 +52,7 @@ export function makeEvolutionCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given N sub-populations each with a set of characteristics, determine if a valid evolutionary tree exists. A characteristic should evolve only once (not independently in separate branches).",
-        "N개의 하위 집단이 각각 특성 집합을 가지고 있어. 유효한 진화 트리가 존재하는지 판별해. 특성은 한 번만 진화해야 해 (별도 가지에서 독립적으로 진화하면 안 돼)."),
+        "Given N sub-populations each with a set of characteristics, determine if a valid evolutionary tree exists.\nA characteristic should evolve only once (not independently in separate branches).", "N개의 하위 집단이 각각 특성 집합을 가지고 있어.\n유효한 진화 트리가 존재하는지 판별해.\n특성은 한 번만 진화해야 해 (별도 가지에서 독립적으로 진화하면 안 돼)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddec"}</div>
@@ -70,8 +69,7 @@ export function makeEvolutionCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Two populations: {fly} and {swim}. No shared characteristics. Is a valid tree possible?",
-        "두 집단: {fly}와 {swim}. 공유 특성 없음. 유효한 트리가 가능할까?"),
+        "Two populations: {fly} and {swim}. No shared characteristics. Is a valid tree possible?", "두 집단: {fly}와 {swim}. 공유 특성 없음. 유효한 트리가 가능할까?"),
       question: t(E,
         "Populations {fly} and {swim}. Valid evolutionary tree?",
         "집단 {fly}와 {swim}. 유효한 진화 트리?"),
@@ -88,8 +86,7 @@ export function makeEvolutionCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For 2 populations with no crossing characteristics, the answer is 'yes'. Encode: yes=1, no=0. What is the answer?",
-        "교차 특성이 없는 2개 집단의 답은 'yes'야. yes=1, no=0으로 인코딩. 답은?"),
+        "For 2 populations with no crossing characteristics, the answer is 'yes'.\nEncode: yes=1, no=0.\nWhat is the answer?", "교차 특성이 없는 2개 집단의 답은 'yes'야. yes=1, no=0으로 인코딩. 답은?"),
       question: t(E,
         "Populations {fly}, {swim}. Valid tree? (1=yes, 0=no)",
         "집단 {fly}, {swim}. 유효한 트리? (1=yes, 0=no)"),
@@ -111,8 +108,7 @@ export function makeEvolutionCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Check all pairs of characteristics against all populations. O(C^2 * N) where C = total characteristics.",
-        "모든 특성 쌍을 모든 집단에 대해 확인. O(C^2 * N), C = 전체 특성 수."),
+        "Check all pairs of characteristics against all populations.\nO(C^2 * N) where C = total characteristics.", "모든 특성 쌍을 모든 집단에 대해 확인. O(C^2 * N), C = 전체 특성 수."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -128,8 +124,7 @@ export function makeEvolutionCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getCowEvolutionSections(E),
     },
   ];

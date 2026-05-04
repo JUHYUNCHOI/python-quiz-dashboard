@@ -55,8 +55,7 @@ export function makeWalkHomeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N x N grid. Move only right or down from (0,0) to (N-1,N-1). Avoid 'H' cells. At most K direction changes allowed. Count valid paths!",
-        "N x N 격자. (0,0)에서 (N-1,N-1)까지 오른쪽 또는 아래로만 이동. 'H' 칸은 피해. 방향 전환은 최대 K번. 유효한 경로 수를 세!"),
+        "N x N grid.\nMove only right or down from (0,0) to (N-1,N-1).\nAvoid 'H' cells.\nAt most K direction changes allowed.\nCount valid paths!", "N x N 격자. (0,0)에서 (N-1,N-1)까지 오른쪽 또는 아래로만 이동. 'H' 칸은 피해. 방향 전환은 최대 K번. 유효한 경로 수를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfe0"}</div>
@@ -73,8 +72,7 @@ export function makeWalkHomeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "2x2 empty grid, K=1. Paths from (0,0) to (1,1): 'DR' (down then right) and 'RD' (right then down). Both have exactly 1 direction change.",
-        "2x2 빈 격자, K=1. (0,0)에서 (1,1)까지: 'DR'(아래 후 오른쪽)과 'RD'(오른쪽 후 아래). 둘 다 방향 전환 1번."),
+        "2x2 empty grid, K=1.\nPaths from (0,0) to (1,1): 'DR' (down then right) and 'RD' (right then down).\nBoth have exactly 1 direction change.", "2x2 빈 격자, K=1. (0,0)에서 (1,1)까지: 'DR'(아래 후 오른쪽)과 'RD'(오른쪽 후 아래). 둘 다 방향 전환 1번."),
       question: t(E,
         "2x2 empty grid, K=1. How many valid paths?",
         "2x2 빈 격자, K=1. 유효한 경로 수는?"),
@@ -92,8 +90,7 @@ export function makeWalkHomeCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "2x2 empty grid, K=1. Count the paths!",
-        "2x2 빈 격자, K=1. 경로 수를 세봐!"),
+        "2x2 empty grid, K=1. Count the paths!", "2x2 빈 격자, K=1. 경로 수를 세봐!"),
       question: t(E,
         "2x2 grid, no obstacles, K=1. Number of paths?",
         "2x2 격자, 장애물 없음, K=1. 경로 수?"),
@@ -115,8 +112,7 @@ export function makeWalkHomeCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "DP with memoization. State space: N^2 * 2 directions * (K+1) changes. Since K <= 3, this is O(N^2 * 8) which is fast!",
-        "메모이제이션 DP. 상태 공간: N^2 * 2방향 * (K+1)전환. K <= 3이니 O(N^2 * 8)으로 빨라!"),
+        "DP with memoization.\nState space: N^2 * 2 directions * (K+1) changes.\nSince K <= 3, this is O(N^2 * 8) which is fast!", "메모이제이션 DP. 상태 공간: N^2 * 2방향 * (K+1)전환. K <= 3이니 O(N^2 * 8)으로 빨라!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -132,8 +128,7 @@ export function makeWalkHomeCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getWalkHomeSections(E),
     },
   ];

@@ -45,8 +45,7 @@ export function makeRaceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A cow runs K meters. Each second, speed changes by +1 or -1. Must end at speed ≤ X. Find minimum time. Strategy: accelerate then decelerate!",
-        "소가 K미터를 달려. 매초 속도가 +1 또는 -1 변해. 끝날 때 속도 ≤ X. 최소 시간을 구해. 전략: 가속 후 감속!"),
+        "A cow runs K meters.\nEach second, speed changes by +1 or -1.\nMust end at speed ≤ X.\nFind minimum time.\nStrategy: accelerate then decelerate!", "소가 K미터를 달려. 매초 속도가 +1 또는 -1 변해. 끝날 때 속도 ≤ X. 최소 시간을 구해. 전략: 가속 후 감속!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🏃"}</div>
@@ -63,8 +62,7 @@ export function makeRaceCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Example: K=1, X=1. Start at speed 0. Second 1: speed becomes 1, move 1 meter. Total = 1 = K. Speed is 1 ≤ X=1. Done in 1 second!",
-        "예시: K=1, X=1. 속도 0에서 시작. 1초: 속도 1, 1미터 이동. 총 = 1 = K. 속도 1 ≤ X=1. 1초에 완료!"),
+        "Example: K=1, X=1.\nStart at speed 0.\nSecond 1: speed becomes 1, move 1 meter.\nTotal = 1 = K.\nSpeed is 1 ≤ X=1.\nDone in 1 second!", "예시: K=1, X=1. 속도 0에서 시작. 1초: 속도 1, 1미터 이동. 총 = 1 = K. 속도 1 ≤ X=1. 1초에 완료!"),
       question: t(E,
         "K=1, X=1. Minimum time to cover 1 meter?",
         "K=1, X=1. 1미터를 이동하는 최소 시간?"),
@@ -82,8 +80,7 @@ export function makeRaceCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "K=1, X=1. What's the minimum number of seconds?",
-        "K=1, X=1. 최소 몇 초?"),
+        "K=1, X=1. What's the minimum number of seconds?", "K=1, X=1. 최소 몇 초?"),
       question: t(E,
         "K=1, X=1. Minimum seconds?",
         "K=1, X=1. 최소 초?"),
@@ -105,8 +102,7 @@ export function makeRaceCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try all possible peak speeds. For each, compute total distance and time for accel + decel phases. O(sqrt(K)) per query.",
-        "모든 가능한 최고 속도를 시도. 각각에 대해 가속 + 감속 단계의 총 거리와 시간 계산. 쿼리당 O(sqrt(K))."),
+        "Try all possible peak speeds.\nFor each, compute total distance and time for accel + decel phases.\nO(sqrt(K)) per query.", "모든 가능한 최고 속도를 시도. 각각에 대해 가속 + 감속 단계의 총 거리와 시간 계산. 쿼리당 O(sqrt(K))."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -122,8 +118,7 @@ export function makeRaceCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getRaceSections(E),
     },
   ];

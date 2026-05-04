@@ -30,8 +30,7 @@ export function makeUdderedCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie hears a string of letters. She knows the custom alphabet order. Each time the next letter comes before or at the current letter in the alphabet, she needs a new cycle. Count the minimum full cycles!",
-        "Bessie가 글자 문자열을 들어. 커스텀 알파벳 순서를 알고 있어. 다음 글자가 현재 글자보다 앞에 있으면 새 사이클이 필요해. 최소 사이클 수를 구해!"),
+        "Bessie hears a string of letters.\nShe knows the custom alphabet order.\nEach time the next letter comes before or at the current letter in the alphabet, she needs a new cycle.\nCount the minimum full cycles!", "Bessie가 글자 문자열을 들어. 커스텀 알파벳 순서를 알고 있어. 다음 글자가 현재 글자보다 앞에 있으면 새 사이클이 필요해. 최소 사이클 수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd24"}</div>
@@ -48,8 +47,7 @@ export function makeUdderedCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If the alphabet order is \"abc\" and the heard string is \"ac\", how many cycles do we need?",
-        "알파벳 순서가 \"abc\"이고 들은 문자열이 \"ac\"이면, 몇 사이클이 필요할까?"),
+        "If the alphabet order is \"abc\" and the heard string is \"ac\", how many cycles do we need?", "알파벳 순서가 \"abc\"이고 들은 문자열이 \"ac\"이면, 몇 사이클이 필요할까?"),
       question: t(E,
         "Alphabet: \"abc\", heard: \"ac\". How many cycles?",
         "알파벳: \"abc\", 들은 문자열: \"ac\". 몇 사이클?"),
@@ -66,8 +64,7 @@ export function makeUdderedCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Alphabet order is \"abc\", heard string is \"ca\". How many cycles?",
-        "알파벳 순서가 \"abc\", 들은 문자열이 \"ca\"야. 몇 사이클?"),
+        "Alphabet order is \"abc\", heard string is \"ca\". How many cycles?", "알파벳 순서가 \"abc\", 들은 문자열이 \"ca\"야. 몇 사이클?"),
       question: t(E,
         "Alphabet: \"abc\", heard: \"ca\". How many cycles needed?",
         "알파벳: \"abc\", 들은 문자열: \"ca\". 몇 사이클 필요?"),
@@ -89,8 +86,7 @@ export function makeUdderedCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Scan once through the string. Each time next letter is before or at current in order, increment cycle count. O(N) time!",
-        "문자열을 한 번 스캔해. 다음 글자가 현재 이하 위치면 사이클 카운트 증가. O(N) 시간!"),
+        "Scan once through the string.\nEach time next letter is before or at current in order, increment cycle count.\nO(N) time!", "문자열을 한 번 스캔해. 다음 글자가 현재 이하 위치면 사이클 카운트 증가. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -106,8 +102,7 @@ export function makeUdderedCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getUdderedSections(E),
     },
   ];

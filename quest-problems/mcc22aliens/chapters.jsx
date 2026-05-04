@@ -51,8 +51,7 @@ export function makeMcc22AliensCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N aliens each have a type: T (truth-teller) or F (liar). Each alien makes a claim about another alien's type. Check if the assignment is consistent!",
-        "N명의 외계인은 각각 T(진실) 또는 F(거짓말쟁이) 타입이야. 각 외계인은 다른 외계인의 타입에 대해 주장해. 할당이 일관된지 확인해!"),
+        "N aliens each have a type: T (truth-teller) or F (liar).\nEach alien makes a claim about another alien's type.\nCheck if the assignment is consistent!", "N명의 외계인은 각각 T(진실) 또는 F(거짓말쟁이) 타입이야. 각 외계인은 다른 외계인의 타입에 대해 주장해. 할당이 일관된지 확인해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc7d"}</div>
@@ -69,8 +68,7 @@ export function makeMcc22AliensCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If a T-type alien says 'alien 2 is T', and alien 2 IS type T, is this consistent?",
-        "T타입 외계인이 '외계인 2는 T'라고 말하고, 외계인 2가 실제로 T타입이면, 일관된 것일까?"),
+        "If a T-type alien says 'alien 2 is T', and alien 2 IS type T, is this consistent?", "T타입 외계인이 '외계인 2는 T'라고 말하고, 외계인 2가 실제로 T타입이면, 일관된 것일까?"),
       question: t(E,
         "T-type says 'alien 2 is T'. Alien 2 is indeed T. Consistent?",
         "T타입이 '외계인 2는 T'라고 말해. 외계인 2는 실제로 T야. 일관적일까?"),
@@ -87,8 +85,7 @@ export function makeMcc22AliensCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Is the above scenario consistent? Answer 1 for yes, 0 for no.",
-        "위 시나리오는 일관적인가? 예면 1, 아니면 0."),
+        "Is the above scenario consistent? Answer 1 for yes, 0 for no.", "위 시나리오는 일관적인가? 예면 1, 아니면 0."),
       question: t(E,
         "T-type says 'alien 2 is T', alien 2 is T. Consistent? (1=yes, 0=no)",
         "T타입이 '외계인2는 T' 주장, 외계인2는 T. 일관적? (1=예, 0=아니오)"),
@@ -110,8 +107,7 @@ export function makeMcc22AliensCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each alien, check if their claim is consistent with the type assignment. O(N) per test case.",
-        "각 외계인에 대해 주장이 타입 할당과 일관적인지 확인. 테스트 케이스당 O(N)."),
+        "For each alien, check if their claim is consistent with the type assignment.\nO(N) per test case.", "각 외계인에 대해 주장이 타입 할당과 일관적인지 확인. 테스트 케이스당 O(N)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -127,8 +123,7 @@ export function makeMcc22AliensCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc22AliensSections(E),
     },
   ];

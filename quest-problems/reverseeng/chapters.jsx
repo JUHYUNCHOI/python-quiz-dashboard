@@ -69,8 +69,7 @@ export function makeRevEngCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given M test cases of binary input arrays and their outputs (0 or 1), determine if a simple if/else program on one variable could produce all the outputs consistently. Print OK or LIE!",
-        "M개의 테스트 케이스 (이진 입력 배열과 출력 0 또는 1)가 주어져. 하나의 변수에 대한 간단한 if/else 프로그램이 모든 출력을 일관되게 생성할 수 있는지 판단해. OK 또는 LIE를 출력해!"),
+        "Given M test cases of binary input arrays and their outputs (0 or 1), determine if a simple if/else program on one variable could produce all the outputs consistently.\nPrint OK or LIE!", "M개의 테스트 케이스 (이진 입력 배열과 출력 0 또는 1)가 주어져.\n하나의 변수에 대한 간단한 if/else 프로그램이 모든 출력을 일관되게 생성할 수 있는지 판단해.\nOK 또는 LIE를 출력해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd27"}</div>
@@ -87,8 +86,7 @@ export function makeRevEngCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Input \"01\" gives output 1. Input \"01\" gives output 0. Same input, different output. What's the verdict?",
-        "입력 \"01\"이 출력 1. 입력 \"01\"이 출력 0. 같은 입력, 다른 출력. 판정은?"),
+        "Input \"01\" gives output 1.\nInput \"01\" gives output 0.\nSame input, different output.\nWhat's the verdict?", "입력 \"01\"이 출력 1. 입력 \"01\"이 출력 0. 같은 입력, 다른 출력. 판정은?"),
       question: t(E,
         "Input [0,1]->1 and [0,1]->0. Same input, different output. Result?",
         "입력 [0,1]->1 그리고 [0,1]->0. 같은 입력, 다른 출력. 결과?"),
@@ -105,8 +103,7 @@ export function makeRevEngCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Input [0]->1 and [1]->0. Can a program do this? Check: if arr[0]==0 return 1 else return 0. Works! Enter 1 for OK, 0 for LIE.",
-        "입력 [0]->1 그리고 [1]->0. 프로그램이 가능할까? 확인: if arr[0]==0 return 1 else return 0. 작동해! OK이면 1, LIE이면 0 입력."),
+        "Input [0]->1 and [1]->0.\nCan a program do this?\nCheck: if arr[0]==0 return 1 else return 0.\nWorks!\nEnter 1 for OK, 0 for LIE.", "입력 [0]->1 그리고 [1]->0.\n프로그램이 가능할까?\n확인: if arr[0]==0 return 1 else return 0.\n작동해!\nOK이면 1, LIE이면 0 입력."),
       question: t(E,
         "[0]->1, [1]->0. Is it OK? (1=OK, 0=LIE)",
         "[0]->1, [1]->0. OK일까? (1=OK, 0=LIE)"),
@@ -128,8 +125,7 @@ export function makeRevEngCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Check for contradictions first. Then try each variable position with both polarities. O(N * M^2) per test case.",
-        "먼저 모순을 확인. 그런 다음 각 변수 위치를 두 극성으로 시도. 테스트 케이스당 O(N * M^2)."),
+        "Check for contradictions first.\nThen try each variable position with both polarities.\nO(N * M^2) per test case.", "먼저 모순을 확인. 그런 다음 각 변수 위치를 두 극성으로 시도. 테스트 케이스당 O(N * M^2)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -145,8 +141,7 @@ export function makeRevEngCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getRevEngSections(E),
     },
   ];

@@ -57,8 +57,7 @@ export function makeFamilyTreeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given mother-child relationships between cows, classify the relationship between two specific cows. Build ancestor chains and find the Lowest Common Ancestor (LCA)!",
-        "소들 간 모녀 관계가 주어지면, 특정 두 소의 관계를 분류해. 조상 체인을 만들고 최소 공통 조상(LCA)을 찾아!"),
+        "Given mother-child relationships between cows, classify the relationship between two specific cows.\nBuild ancestor chains and find the Lowest Common Ancestor (LCA)!", "소들 간 모녀 관계가 주어지면, 특정 두 소의 관계를 분류해. 조상 체인을 만들고 최소 공통 조상(LCA)을 찾아!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf33"}</div>
@@ -75,8 +74,7 @@ export function makeFamilyTreeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If A is B's mother, how many generations are between them?",
-        "A가 B의 어미면, 둘 사이 세대 수는?"),
+        "If A is B's mother, how many generations are between them?", "A가 B의 어미면, 둘 사이 세대 수는?"),
       question: t(E,
         "A is B's mother. How many generations between them?",
         "A가 B의 어미. 둘 사이 세대 수는?"),
@@ -94,8 +92,7 @@ export function makeFamilyTreeCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "How many generations between a mother and her child?",
-        "어미와 자식 사이 세대 수는?"),
+        "How many generations between a mother and her child?", "어미와 자식 사이 세대 수는?"),
       question: t(E,
         "Generations between mother and child?",
         "어미와 자식 사이 세대 수?"),
@@ -117,8 +114,7 @@ export function makeFamilyTreeCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Build ancestor chain for one cow, then walk up from the other. O(N) time for each chain traversal!",
-        "한 소의 조상 체인을 만들고, 다른 소에서 올라가. 각 체인 순회 O(N) 시간!"),
+        "Build ancestor chain for one cow, then walk up from the other.\nO(N) time for each chain traversal!", "한 소의 조상 체인을 만들고, 다른 소에서 올라가. 각 체인 순회 O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
@@ -134,8 +130,7 @@ export function makeFamilyTreeCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getFamilyTreeSections(E),
     },
   ];

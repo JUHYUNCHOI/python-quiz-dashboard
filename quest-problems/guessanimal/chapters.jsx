@@ -34,8 +34,7 @@ export function makeGuessAnimalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Each animal has a set of characteristics. You ask yes/no questions. Find the maximum number of 'yes' answers before the animal can be uniquely identified.",
-        "각 동물은 특성 집합을 가져. 예/아니오 질문을 해. 동물을 유일하게 식별하기 전 최대 '예' 답변 수를 구해!"),
+        "Each animal has a set of characteristics.\nYou ask yes/no questions.\nFind the maximum number of 'yes' answers before the animal can be uniquely identified.", "각 동물은 특성 집합을 가져. 예/아니오 질문을 해. 동물을 유일하게 식별하기 전 최대 '예' 답변 수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🐾"}</div>
@@ -52,8 +51,7 @@ export function makeGuessAnimalCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Animal X has traits {A, B, C}. Animal Y has traits {A, B, D}. They share A and B. After 2 'yes' answers, we still can't tell them apart.",
-        "동물 X는 특성 {A, B, C}, 동물 Y는 {A, B, D}. A와 B를 공유해. '예' 2번 후에도 구분 불가."),
+        "Animal X has traits {A, B, C}.\nAnimal Y has traits {A, B, D}.\nThey share A and B.\nAfter 2 'yes' answers, we still can't tell them apart.", "동물 X는 특성 {A, B, C}, 동물 Y는 {A, B, D}. A와 B를 공유해. '예' 2번 후에도 구분 불가."),
       question: t(E,
         "Animals with traits {A,B,C} and {A,B,D}. Max 'yes' before unique ID?",
         "특성 {A,B,C}와 {A,B,D}인 동물. 유일하게 식별 전 최대 '예'?"),
@@ -71,8 +69,7 @@ export function makeGuessAnimalCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Two animals share traits A and B. What's the maximum number of 'yes' answers before identification?",
-        "두 동물이 특성 A와 B를 공유해. 식별 전 최대 '예' 답변 수는?"),
+        "Two animals share traits A and B.\nWhat's the maximum number of 'yes' answers before identification?", "두 동물이 특성 A와 B를 공유해. 식별 전 최대 '예' 답변 수는?"),
       question: t(E,
         "Shared traits = {A, B}. Max 'yes' answers?",
         "공통 특성 = {A, B}. 최대 '예' 답변 수?"),
@@ -94,8 +91,7 @@ export function makeGuessAnimalCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Check all pairs of animals, compute intersection size. O(N^2 * K) where K = max traits.",
-        "모든 동물 쌍을 확인하고 교집합 크기 계산. O(N^2 * K), K = 최대 특성 수."),
+        "Check all pairs of animals, compute intersection size. O(N^2 * K) where K = max traits.", "모든 동물 쌍을 확인하고 교집합 크기 계산. O(N^2 * K), K = 최대 특성 수."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -111,8 +107,7 @@ export function makeGuessAnimalCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getGuessAnimalSections(E),
     },
   ];

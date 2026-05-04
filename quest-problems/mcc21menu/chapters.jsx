@@ -29,8 +29,7 @@ export function makeMcc21MenuCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Build a nested menu tree. Add items to parent categories. Count total items using tree traversal / recursion.",
-        "중첩 메뉴 트리를 만들어. 부모 카테고리에 항목 추가. 트리 순회 / 재귀로 전체 항목 수를 세!"),
+        "Build a nested menu tree.\nAdd items to parent categories.\nCount total items using tree traversal / recursion.", "중첩 메뉴 트리를 만들어. 부모 카테고리에 항목 추가. 트리 순회 / 재귀로 전체 항목 수를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udccb"}</div>
@@ -46,8 +45,7 @@ export function makeMcc21MenuCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A menu with 3 layers: top has 2 items, each has 2 sub-items. Total items (excluding root)?",
-        "3층 메뉴: 상위 2개, 각각 하위 2개. 총 항목 수 (루트 제외)?"),
+        "A menu with 3 layers: top has 2 items, each has 2 sub-items.\nTotal items (excluding root)?", "3층 메뉴: 상위 2개, 각각 하위 2개. 총 항목 수 (루트 제외)?"),
       question: t(E,
         "Top layer: 2 items. Each has 2 sub-items. Total items?",
         "상위: 2개. 각각 하위 2개. 총 항목 수?"),
@@ -64,8 +62,7 @@ export function makeMcc21MenuCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "2 top-level items, each with 2 children. Total items?",
-        "상위 2개, 각각 자식 2개. 총 항목 수?"),
+        "2 top-level items, each with 2 children. Total items?", "상위 2개, 각각 자식 2개. 총 항목 수?"),
       question: t(E,
         "2 items + 2*2 sub-items = ?",
         "2개 항목 + 2*2개 하위 = ?"),
@@ -80,8 +77,7 @@ export function makeMcc21MenuCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Build tree with dictionary, then DFS to count. O(N) time.",
-        "딕셔너리로 트리 구축, DFS로 카운트. O(N) 시간."),
+        "Build tree with dictionary, then DFS to count. O(N) time.", "딕셔너리로 트리 구축, DFS로 카운트. O(N) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -96,8 +92,7 @@ export function makeMcc21MenuCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc21MenuSections(E),
     },
   ];

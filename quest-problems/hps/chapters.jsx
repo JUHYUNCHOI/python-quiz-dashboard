@@ -49,8 +49,7 @@ export function makeHpsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A twist on Rock-Paper-Scissors! Each player shows TWO symbols, then picks one after seeing all four. How many of Bessie's pairs guarantee a win? ✊✋✌️",
-        "가위바위보의 변형! 각 플레이어가 기호 2개를 보여주고, 4개를 다 본 후 하나를 선택. 베시의 어떤 쌍이 승리를 보장할까? ✊✋✌️"),
+        "A twist on Rock-Paper-Scissors!\nEach player shows TWO symbols, then picks one after seeing all four.\nHow many of Bessie's pairs guarantee a win?\n✊✋✌️", "가위바위보의 변형! 각 플레이어가 기호 2개를 보여주고, 4개를 다 본 후 하나를 선택. 베시의 어떤 쌍이 승리를 보장할까? ✊✋✌️"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>✊✋✌️</div>
@@ -66,8 +65,7 @@ export function makeHpsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Bessie wins if for BOTH of Elsie's symbols, at least one of Bessie's symbols can beat it. She picks optimally after seeing everything!",
-        "베시가 이기려면: 엘시의 두 기호 모두에 대해, 베시의 기호 중 하나가 이길 수 있어야 해. 모든 걸 본 후 최적으로 선택!"),
+        "Bessie wins if for BOTH of Elsie's symbols, at least one of Bessie's symbols can beat it.\nShe picks optimally after seeing everything!", "베시가 이기려면: 엘시의 두 기호 모두에 대해, 베시의 기호 중 하나가 이길 수 있어야 해. 모든 걸 본 후 최적으로 선택!"),
       question: t(E,
         "Bessie has (Rock, Paper). Elsie plays Scissors. Can Bessie win?",
         "베시가 (바위, 보)를 가짐. 엘시가 가위를 냄. 베시가 이길 수 있어?"),
@@ -81,8 +79,7 @@ export function makeHpsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "With N=3 (Rock/Paper/Scissors), Bessie has (Rock, Rock). Can she beat Scissors? Yes. Can she beat Paper? No. So this pair does NOT guarantee a win against (Paper, Scissors).",
-        "N=3 (가위바위보), 베시가 (바위, 바위). 가위를 이길 수 있어? 네. 보를 이길 수 있어? 아니. 그래서 이 쌍은 (보, 가위)에 대해 승리를 보장하지 않아."),
+        "With N=3 (Rock/Paper/Scissors), Bessie has (Rock, Rock).\nCan she beat Scissors?\nYes.\nCan she beat Paper?\nNo.\nSo this pair does NOT guarantee a win against (Paper, Scissors).", "N=3 (가위바위보), 베시가 (바위, 바위).\n가위를 이길 수 있어?\n네.\n보를 이길 수 있어?\n아니.\n그래서 이 쌍은 (보, 가위)에 대해 승리를 보장하지 않아."),
       question: t(E,
         "N=3 standard RPS. How many of Bessie's 9 possible pairs (a,b) can beat BOTH Rock and Paper?",
         "N=3 표준 가위바위보. 베시의 9가지 가능한 쌍 (a,b) 중 바위와 보 모두를 이길 수 있는 것은?"),
@@ -92,8 +89,7 @@ export function makeHpsCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Pick Bessie's (a, b) and Elsie's (s1, s2). See if Bessie can guarantee a win.",
-        "베시 (a, b), 엘시 (s1, s2) 골라서 베시가 승리 보장 가능한지 확인."),
+        "Pick Bessie's (a, b) and Elsie's (s1, s2). See if Bessie can guarantee a win.", "베시 (a, b), 엘시 (s1, s2) 골라서 베시가 승리 보장 가능한지 확인."),
     },
   ];
 }
@@ -103,8 +99,7 @@ export function makeHpsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Brute force: for each of Elsie's M pairs, check all N² of Bessie's pairs. O(M·N²) total.",
-        "완전탐색: 엘시의 M개 쌍 각각에 대해, 베시의 N²개 쌍을 모두 확인. 총 O(M·N²)."),
+        "Brute force: for each of Elsie's M pairs, check all N² of Bessie's pairs. O(M·N²) total.", "완전탐색: 엘시의 M개 쌍 각각에 대해, 베시의 N²개 쌍을 모두 확인. 총 O(M·N²)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(M·N²)</div>
@@ -114,8 +109,7 @@ export function makeHpsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Now build the brute force step by step. Each section reveals one piece.",
-        "완전탐색을 단계별로 만들어보자. 각 섹션마다 한 조각씩."),
+        "Now build the brute force step by step. Each section reveals one piece.", "완전탐색을 단계별로 만들어보자. 각 섹션마다 한 조각씩."),
       sections: getHpsSections(E),
     },
   ];

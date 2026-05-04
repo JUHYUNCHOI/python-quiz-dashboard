@@ -46,8 +46,7 @@ export function makeAlchemyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N metals with recipes that combine lower metals into higher ones. Maximize the amount of metal N you can create!",
-        "N개의 금속과 레시피로 낮은 금속을 합쳐 높은 금속을 만들어. 금속 N을 최대한 많이 만들어!"),
+        "N metals with recipes that combine lower metals into higher ones.\nMaximize the amount of metal N you can create!", "N개의 금속과 레시피로 낮은 금속을 합쳐 높은 금속을 만들어. 금속 N을 최대한 많이 만들어!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"⚗️"}</div>
@@ -64,8 +63,7 @@ export function makeAlchemyCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Recipe: metal 1 + metal 2 = metal 3. You have 2 of metal 1 and 1 of metal 2. Max metal 3?",
-        "레시피: 금속1 + 금속2 = 금속3. 금속1이 2개, 금속2가 1개. 최대 금속3은?"),
+        "Recipe: metal 1 + metal 2 = metal 3. You have 2 of metal 1 and 1 of metal 2. Max metal 3?", "레시피: 금속1 + 금속2 = 금속3. 금속1이 2개, 금속2가 1개. 최대 금속3은?"),
       question: t(E,
         "Recipe: 1+2->3. Have: 2x metal 1, 1x metal 2. Max metal 3?",
         "레시피: 1+2->3. 보유: 금속1 2개, 금속2 1개. 최대 금속3?"),
@@ -83,8 +81,7 @@ export function makeAlchemyCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Same setup: recipe 1+2->3, have 2x metal 1 and 1x metal 2. How many metal 3 can you make?",
-        "같은 설정: 레시피 1+2->3, 금속1 2개, 금속2 1개. 금속3을 몇 개 만들 수 있어?"),
+        "Same setup: recipe 1+2->3, have 2x metal 1 and 1x metal 2. How many metal 3 can you make?", "같은 설정: 레시피 1+2->3, 금속1 2개, 금속2 1개. 금속3을 몇 개 만들 수 있어?"),
       question: t(E,
         "Recipe: 1+2->3. Have 2x metal 1, 1x metal 2. Max metal 3?",
         "레시피: 1+2->3. 금속1 2개, 금속2 1개. 최대 금속3?"),
@@ -106,8 +103,7 @@ export function makeAlchemyCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Greedy recursive approach: try to make metal N, consuming ingredients. Repeat until impossible.",
-        "그리디 재귀 접근: 금속 N을 만들고, 재료 소모. 불가능할 때까지 반복."),
+        "Greedy recursive approach: try to make metal N, consuming ingredients.\nRepeat until impossible.", "그리디 재귀 접근: 금속 N을 만들고, 재료 소모. 불가능할 때까지 반복."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -123,8 +119,7 @@ export function makeAlchemyCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getAlchemySections(E),
     },
   ];

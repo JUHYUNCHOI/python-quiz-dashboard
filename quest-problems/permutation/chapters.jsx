@@ -59,8 +59,7 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a favorite permutation of 1..N, but he only gave us hints! Can we reconstruct it? 🔢",
-        "FJ가 좋아하는 1~N 순열이 있는데, 힌트만 줬어! 복원할 수 있을까? 🔢"),
+        "FJ has a favorite permutation of 1..N, but he only gave us hints!\nCan we reconstruct it?\n🔢", "FJ가 좋아하는 1~N 순열이 있는데, 힌트만 줬어! 복원할 수 있을까? 🔢"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
@@ -77,8 +76,7 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A permutation of 1..N means each number from 1 to N appears exactly once. For example, [3,1,4,2] is a permutation of 1..4.",
-        "1~N의 순열이란 1부터 N까지 각 숫자가 정확히 한 번씩 나오는 것! 예: [3,1,4,2]는 1~4의 순열이야."),
+        "A permutation of 1..N means each number from 1 to N appears exactly once.\nFor example, [3,1,4,2] is a permutation of 1..4.", "1~N의 순열이란 1부터 N까지 각 숫자가 정확히 한 번씩 나오는 것! 예: [3,1,4,2]는 1~4의 순열이야."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14 }}>
@@ -106,8 +104,7 @@ export function makePermCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The hint h[i] tells us the absolute difference between consecutive elements. So h[i] = |perm[i] - perm[i+1]|.",
-        "힌트 h[i]는 연속 원소의 절댓값 차이야. h[i] = |perm[i] - perm[i+1]|."),
+        "The hint h[i] tells us the absolute difference between consecutive elements.\nSo h[i] = |perm[i] - perm[i+1]|.", "힌트 h[i]는 연속 원소의 절댓값 차이야. h[i] = |perm[i] - perm[i+1]|."),
       question: t(E,
         "If perm = [2, 5, 1, 4, 3], what is h[1] (0-indexed)?",
         "perm = [2, 5, 1, 4, 3]이면, h[1] (0-indexed)은?"),
@@ -121,8 +118,7 @@ export function makePermCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "To reconstruct: if we know perm[i] and h[i], then perm[i+1] = perm[i] + h[i] or perm[i] - h[i]. Two choices each step!",
-        "복원하려면: perm[i]와 h[i]를 알면, perm[i+1] = perm[i] + h[i] 또는 perm[i] - h[i]. 매 단계 2가지 선택!"),
+        "To reconstruct: if we know perm[i] and h[i], then perm[i+1] = perm[i] + h[i] or perm[i] - h[i].\nTwo choices each step!", "복원하려면: perm[i]와 h[i]를 알면, perm[i+1] = perm[i] + h[i] 또는 perm[i] - h[i]. 매 단계 2가지 선택!"),
       question: t(E,
         "If perm[0] = 3 and h[0] = 2, what are the possible values for perm[1]?",
         "perm[0] = 3이고 h[0] = 2이면, perm[1]의 가능한 값은?"),
@@ -139,8 +135,7 @@ export function makePermCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Let's practice! perm = [?, ?, ?, ?] with N=4. h = [1, 2, 1]. If perm starts with 2, and we always pick +, what is perm[3]?",
-        "연습! perm = [?, ?, ?, ?], N=4. h = [1, 2, 1]. perm이 2로 시작하고 항상 +를 고르면, perm[3]은?"),
+        "Let's practice!\nperm = [?, ?, ?, ?] with N=4.\nh = [1, 2, 1].\nIf perm starts with 2, and we always pick +, what is perm[3]?", "연습! perm = [?, ?, ?, ?], N=4. h = [1, 2, 1]. perm이 2로 시작하고 항상 +를 고르면, perm[3]은?"),
       question: t(E,
         "perm[0]=2, h=[1,2,1], always pick +. perm[3]=?",
         "perm[0]=2, h=[1,2,1], 항상 + 선택. perm[3]=?"),
@@ -160,8 +155,7 @@ export function makePermCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First thought: if we know perm[0], then perm[1] = perm[0] ± h[0] — only two choices. So pick a starting value, then greedily pick + or - at each step. Sounds simple!",
-        "첫 생각: perm[0]을 알면 perm[1] = perm[0] ± h[0] — 두 가지뿐. 시작값을 정하고 매 단계 +/− 중 하나를 그리디로 골라. 간단해 보이지?"),
+        "First thought: if we know perm[0], then perm[1] = perm[0] ± h[0] — only two choices.\nSo pick a starting value, then greedily pick + or - at each step.\nSounds simple!", "첫 생각: perm[0]을 알면 perm[1] = perm[0] ± h[0] — 두 가지뿐.\n시작값을 정하고 매 단계 +/− 중 하나를 그리디로 골라.\n간단해 보이지?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text }}>
@@ -178,15 +172,13 @@ export function makePermCh2(E) {
     {
       type: "sim",
       narr: t(E,
-        "Try it! N=4, h=[2,3,2]. Pick a starting value below and step through the greedy. Notice that some starts fail and some succeed.",
-        "직접 해봐! N=4, h=[2,3,2]. 아래에서 시작값을 골라 그리디를 한 단계씩 따라가봐. 어떤 시작값은 실패하고 어떤 건 성공해."),
+        "Try it!\nN=4, h=[2,3,2].\nPick a starting value below and step through the greedy.\nNotice that some starts fail and some succeed.", "직접 해봐! N=4, h=[2,3,2]. 아래에서 시작값을 골라 그리디를 한 단계씩 따라가봐. 어떤 시작값은 실패하고 어떤 건 성공해."),
     },
     // 2-3: Static trace example
     {
       type: "reveal",
       narr: t(E,
-        "Recap: with start=3, the trace is 3→1→4→2 = [3,1,4,2] ✅. With start=1, we get stuck at step 2. With start=4, we get stuck at step 3.",
-        "정리: 시작값=3이면 3→1→4→2 = [3,1,4,2] ✅. 시작값=1은 2단계에서 막히고, 시작값=4는 3단계에서 막혀."),
+        "Recap: with start=3, the trace is 3→1→4→2 = [3,1,4,2] ✅.\nWith start=1, we get stuck at step 2.\nWith start=4, we get stuck at step 3.", "정리: 시작값=3이면 3→1→4→2 = [3,1,4,2] ✅. 시작값=1은 2단계에서 막히고, 시작값=4는 3단계에서 막혀."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -214,8 +206,7 @@ export function makePermCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "What happens when BOTH perm[i]+h[i] and perm[i]-h[i] are invalid (out of range or already used)?",
-        "perm[i]+h[i]와 perm[i]-h[i] 둘 다 유효하지 않으면 (범위 밖이거나 이미 사용)?"),
+        "What happens when BOTH perm[i]+h[i] and perm[i]-h[i] are invalid (out of range or already used)?", "perm[i]+h[i]와 perm[i]-h[i] 둘 다 유효하지 않으면 (범위 밖이거나 이미 사용)?"),
       question: t(E,
         "If both options fail at some step, what should we do?",
         "어떤 단계에서 두 옵션 모두 실패하면?"),
@@ -234,8 +225,7 @@ export function makePermCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "N=3, h=[1,1]. Try start=1: 1→1+1=2→2+1=3. Result: [1,2,3]. What is perm[2]?",
-        "N=3, h=[1,1]. 시작=1: 1→1+1=2→2+1=3. 결과: [1,2,3]. perm[2]는?"),
+        "N=3, h=[1,1]. Try start=1: 1→1+1=2→2+1=3. Result: [1,2,3]. What is perm[2]?", "N=3, h=[1,1]. 시작=1: 1→1+1=2→2+1=3. 결과: [1,2,3]. perm[2]는?"),
       question: t(E, "N=3, h=[1,1], start=1. perm[2]=?", "N=3, h=[1,1], 시작=1. perm[2]=?"),
       answer: 3,
     },
@@ -252,8 +242,7 @@ export function makePermCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Time complexity: O(N²) per test case — we try N starting values, each taking O(N). Since N ≤ 1000, this is fast enough!",
-        "시간복잡도: 테스트 케이스당 O(N²) — N개의 시작값을 시도하고, 각각 O(N). N ≤ 1000이니 충분히 빨라!"),
+        "Time complexity: O(N²) per test case — we try N starting values, each taking O(N).\nSince N ≤ 1000, this is fast enough!", "시간복잡도: 테스트 케이스당 O(N²) — N개의 시작값을 시도하고, 각각 O(N). N ≤ 1000이니 충분히 빨라!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: C.accent, marginBottom: 8 }}>
@@ -271,8 +260,7 @@ export function makePermCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "When h[i] = 0, perm[i+1] must equal perm[i]. But in a permutation, all values are distinct! So h[i]=0 means...",
-        "h[i] = 0이면, perm[i+1] = perm[i]이어야 해. 그런데 순열에선 모든 값이 다르잖아! h[i]=0이면..."),
+        "When h[i] = 0, perm[i+1] must equal perm[i].\nBut in a permutation, all values are distinct!\nSo h[i]=0 means...", "h[i] = 0이면, perm[i+1] = perm[i]이어야 해. 그런데 순열에선 모든 값이 다르잖아! h[i]=0이면..."),
       question: t(E,
         "If h[i] = 0 for some i, what can we conclude?",
         "어떤 i에서 h[i] = 0이면?"),
@@ -290,16 +278,14 @@ export function makePermCh3(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read it part by part. Toggle Python ↔ C++ in header, save as PDF.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글, PDF 저장 가능."),
+        "Solution code — read it part by part. Toggle Python ↔ C++ in header, save as PDF.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글, PDF 저장 가능."),
       sections: getPermSections(E),
     },
     // 3-4: Live runner
     {
       type: "runner",
       narr: t(E,
-        "Now run it yourself. Enter N and h, watch the greedy try each start. Stop anytime.",
-        "이제 직접 돌려봐. N과 h 입력하고, 그리디가 시작값을 하나씩 시도하는 걸 봐. 언제든 중지 가능."),
+        "Now run it yourself. Enter N and h, watch the greedy try each start. Stop anytime.", "이제 직접 돌려봐. N과 h 입력하고, 그리디가 시작값을 하나씩 시도하는 걸 봐. 언제든 중지 가능."),
     },
   ];
 }

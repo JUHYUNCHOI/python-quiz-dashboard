@@ -29,8 +29,7 @@ export function makeTeleportCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John wants to go from position a to position b on a number line. There's a teleporter between positions x and y. Find the minimum distance!",
-        "농부 존이 수직선에서 위치 a에서 b로 가려 해. 위치 x와 y 사이에 텔레포터가 있어. 최소 거리를 구해!"),
+        "Farmer John wants to go from position a to position b on a number line.\nThere's a teleporter between positions x and y.\nFind the minimum distance!", "농부 존이 수직선에서 위치 a에서 b로 가려 해. 위치 x와 y 사이에 텔레포터가 있어. 최소 거리를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf00"}</div>
@@ -47,8 +46,7 @@ export function makeTeleportCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "a=0, b=10, teleporter 3<->8. Direct distance is 10. Via teleporter: 0->3 teleport->8->10 = 3+2=5. Which is shorter?",
-        "a=0, b=10, 텔레포터 3<->8. 직접 거리는 10. 텔레포터 경유: 0->3 텔레포트->8->10 = 3+2=5. 어느 게 짧아?"),
+        "a=0, b=10, teleporter 3<->8.\nDirect distance is 10.\nVia teleporter: 0->3 teleport->8->10 = 3+2=5.\nWhich is shorter?", "a=0, b=10, 텔레포터 3<->8. 직접 거리는 10. 텔레포터 경유: 0->3 텔레포트->8->10 = 3+2=5. 어느 게 짧아?"),
       question: t(E,
         "a=0, b=10, teleporter 3<->8. Min distance?",
         "a=0, b=10, 텔레포터 3<->8. 최소 거리는?"),
@@ -66,8 +64,7 @@ export function makeTeleportCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "a=0, b=10, teleporter 3<->8. What's the minimum distance?",
-        "a=0, b=10, 텔레포터 3<->8. 최소 거리는?"),
+        "a=0, b=10, teleporter 3<->8. What's the minimum distance?", "a=0, b=10, 텔레포터 3<->8. 최소 거리는?"),
       question: t(E,
         "a=0, b=10, teleporter 3<->8. Minimum distance?",
         "a=0, b=10, 텔레포터 3<->8. 최소 거리?"),
@@ -89,8 +86,7 @@ export function makeTeleportCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just compute 3 values and take the min. O(1) time!",
-        "3개 값 계산하고 최솟값 선택. O(1) 시간!"),
+        "Just compute 3 values and take the min. O(1) time!", "3개 값 계산하고 최솟값 선택. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
@@ -106,8 +102,7 @@ export function makeTeleportCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getTeleportSections(E),
     },
   ];

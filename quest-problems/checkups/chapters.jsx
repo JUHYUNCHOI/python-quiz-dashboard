@@ -35,8 +35,7 @@ export function makeCheckupsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows with breed types. He checks them against Bessie's list. How many match? And what's the maximum possible? 🐮",
-        "FJ에게 N마리 소의 품종이 있어. 베시의 리스트와 비교해서 몇 개가 일치하는지, 최대 얼마나 일치시킬 수 있는지 찾자! 🐮"),
+        "FJ has N cows with breed types.\nHe checks them against Bessie's list.\nHow many match?\nAnd what's the maximum possible?\n🐮", "FJ에게 N마리 소의 품종이 있어. 베시의 리스트와 비교해서 몇 개가 일치하는지, 최대 얼마나 일치시킬 수 있는지 찾자! 🐮"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐮</div>
@@ -52,8 +51,7 @@ export function makeCheckupsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Example: a=[1,2,3,1], b=[1,3,2,1]. Current matches: positions 0 and 3 (both have 1). That's 2 matches!",
-        "예시: a=[1,2,3,1], b=[1,3,2,1]. 현재 일치: 위치 0과 3 (둘 다 1). 2개 일치!"),
+        "Example: a=[1,2,3,1], b=[1,3,2,1].\nCurrent matches: positions 0 and 3 (both have 1).\nThat's 2 matches!", "예시: a=[1,2,3,1], b=[1,3,2,1]. 현재 일치: 위치 0과 3 (둘 다 1). 2개 일치!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 14 }}>
@@ -88,8 +86,7 @@ export function makeCheckupsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "For max matches: count how many of each breed appear in a[] and b[]. For breed x, we can match min(count_a[x], count_b[x]) cows.",
-        "최대 일치: 각 품종이 a[]와 b[]에 몇 번 나오는지 세고. 품종 x에 대해 min(count_a[x], count_b[x])마리를 매칭."),
+        "For max matches: count how many of each breed appear in a[] and b[].\nFor breed x, we can match min(count_a[x], count_b[x]) cows.", "최대 일치: 각 품종이 a[]와 b[]에 몇 번 나오는지 세고. 품종 x에 대해 min(count_a[x], count_b[x])마리를 매칭."),
       question: t(E,
         "a=[1,1,2], b=[1,2,2]. Max matches by rearranging b?",
         "a=[1,1,2], b=[1,2,2]. b를 재배열한 최대 일치는?"),
@@ -102,16 +99,14 @@ export function makeCheckupsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "a=[3,3,3,3,3], b=[3,3,1,1,1]. How many current matches (same position)?",
-        "a=[3,3,3,3,3], b=[3,3,1,1,1]. 현재 일치 수 (같은 위치)?"),
+        "a=[3,3,3,3,3], b=[3,3,1,1,1]. How many current matches (same position)?", "a=[3,3,3,3,3], b=[3,3,1,1,1]. 현재 일치 수 (같은 위치)?"),
       question: t(E, "Matches at same positions?", "같은 위치에서 일치 수?"),
       answer: 2,
     },
     {
       type: "sim",
       narr: t(E,
-        "Step through both phases: scanning a[i] vs b[i] for current matches, then Counter-based max.",
-        "두 단계 따라가기: a[i] vs b[i] 스캔 (현재 일치), 그 다음 Counter 기반 최대."),
+        "Step through both phases: scanning a[i] vs b[i] for current matches, then Counter-based max.", "두 단계 따라가기: a[i] vs b[i] 스캔 (현재 일치), 그 다음 Counter 기반 최대."),
     },
   ];
 }
@@ -121,8 +116,7 @@ export function makeCheckupsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The solution uses Counter (frequency map). Count frequencies in both arrays, then sum min of each breed's counts.",
-        "솔루션은 Counter(빈도맵)를 써. 두 배열의 빈도를 세고, 각 품종 빈도의 min을 합산."),
+        "The solution uses Counter (frequency map).\nCount frequencies in both arrays, then sum min of each breed's counts.", "솔루션은 Counter(빈도맵)를 써. 두 배열의 빈도를 세고, 각 품종 빈도의 min을 합산."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text }}>
@@ -138,8 +132,7 @@ export function makeCheckupsCh2(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "Time complexity: counting frequencies is O(N), then iterating over breeds is at most O(N). Total: O(N)!",
-        "시간복잡도: 빈도 세기 O(N), 품종 순회 최대 O(N). 합계: O(N)!"),
+        "Time complexity: counting frequencies is O(N), then iterating over breeds is at most O(N).\nTotal: O(N)!", "시간복잡도: 빈도 세기 O(N), 품종 순회 최대 O(N). 합계: O(N)!"),
       question: t(E, "What data structure is best for counting frequencies?", "빈도 세기에 가장 좋은 자료구조는?"),
       options: [
         t(E, "Dictionary / Counter", "딕셔너리 / Counter"),
@@ -152,15 +145,13 @@ export function makeCheckupsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Let's build the solution step by step. Each section reveals one piece of the algorithm.",
-        "솔루션을 단계별로 만들어보자. 각 섹션마다 알고리즘 한 조각씩."),
+        "Let's build the solution step by step. Each section reveals one piece of the algorithm.", "솔루션을 단계별로 만들어보자. 각 섹션마다 알고리즘 한 조각씩."),
       sections: getCheckupsSections(E),
     },
     {
       type: "runner",
       narr: t(E,
-        "Try your own a, b arrays. Live scan + Counter-based max.",
-        "직접 a, b 배열 시도. 실시간 스캔 + Counter 기반 최대."),
+        "Try your own a, b arrays. Live scan + Counter-based max.", "직접 a, b 배열 시도. 실시간 스캔 + Counter 기반 최대."),
     },
   ];
 }

@@ -33,8 +33,7 @@ export function makeMcc20CityTourCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Fluffy explores a grid city, jumping to adjacent buildings. Count how many buildings Fluffy can visit using BFS.",
-        "Fluffy가 격자 도시를 탐험하며 인접 건물로 점프해. BFS로 방문할 수 있는 건물 수를 세!"),
+        "Fluffy explores a grid city, jumping to adjacent buildings.\nCount how many buildings Fluffy can visit using BFS.", "Fluffy가 격자 도시를 탐험하며 인접 건물로 점프해. BFS로 방문할 수 있는 건물 수를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfd9\ufe0f"}</div>
@@ -50,8 +49,7 @@ export function makeMcc20CityTourCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "3x3 grid all 1s, Fluffy at (1,1). How many buildings can Fluffy visit?",
-        "3x3 격자 전부 1, Fluffy가 (1,1)에 있어. 몇 개 건물 방문 가능?"),
+        "3x3 grid all 1s, Fluffy at (1,1). How many buildings can Fluffy visit?", "3x3 격자 전부 1, Fluffy가 (1,1)에 있어. 몇 개 건물 방문 가능?"),
       question: t(E,
         "3x3 grid, all buildings connected. Fluffy at center. How many can visit?",
         "3x3 격자, 모든 건물 연결. Fluffy 중앙. 몇 개 방문 가능?"),
@@ -68,8 +66,7 @@ export function makeMcc20CityTourCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "In a fully connected 3x3 grid, how many buildings can be visited?",
-        "완전 연결된 3x3 격자에서 몇 개 건물 방문 가능?"),
+        "In a fully connected 3x3 grid, how many buildings can be visited?", "완전 연결된 3x3 격자에서 몇 개 건물 방문 가능?"),
       question: t(E,
         "3x3 grid, all 1s. Total reachable buildings?",
         "3x3 격자, 전부 1. 도달 가능한 건물 수?"),
@@ -84,8 +81,7 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "BFS from start, visiting all connected cells. O(R*C) time.",
-        "시작점에서 BFS, 연결된 모든 셀 방문. O(R*C) 시간."),
+        "BFS from start, visiting all connected cells. O(R*C) time.", "시작점에서 BFS, 연결된 모든 셀 방문. O(R*C) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -100,8 +96,7 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc20CityTourSections(E),
     },
   ];

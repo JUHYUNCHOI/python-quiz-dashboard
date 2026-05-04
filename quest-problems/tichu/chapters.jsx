@@ -24,8 +24,7 @@ export function makeTichuCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Tichu is a card game. Given N cards in hand, how many ways can you pick 2 cards to play as a pair? This is a combinations problem: C(N, 2).",
-        "티추는 카드 게임이야. 손에 N장의 카드가 있을 때, 2장을 뽑아 페어로 낼 수 있는 방법은 몇 가지? 조합 문제: C(N, 2)."),
+        "Tichu is a card game.\nGiven N cards in hand, how many ways can you pick 2 cards to play as a pair?\nThis is a combinations problem: C(N, 2).", "티추는 카드 게임이야. 손에 N장의 카드가 있을 때, 2장을 뽑아 페어로 낼 수 있는 방법은 몇 가지? 조합 문제: C(N, 2)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udccf"}</div>
@@ -42,8 +41,7 @@ export function makeTichuCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If you have 5 cards, how many ways can you pick 2? C(5,2) = 5*4/2 = 10.",
-        "카드가 5장이면, 2장을 고르는 방법은? C(5,2) = 5*4/2 = 10."),
+        "If you have 5 cards, how many ways can you pick 2? C(5,2) = 5*4/2 = 10.", "카드가 5장이면, 2장을 고르는 방법은? C(5,2) = 5*4/2 = 10."),
       question: t(E,
         "N=5 cards. How many ways to pick 2? C(5,2) = ?",
         "N=5장. 2장을 고르는 방법 수? C(5,2) = ?"),
@@ -62,8 +60,7 @@ export function makeTichuCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Calculate C(5,2) yourself!",
-        "직접 C(5,2)를 계산해봐!"),
+        "Calculate C(5,2) yourself!", "직접 C(5,2)를 계산해봐!"),
       question: t(E,
         "N=5. Enter C(5,2):",
         "N=5. C(5,2)를 입력해:"),
@@ -85,8 +82,7 @@ export function makeTichuCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just compute the formula N*(N-1)/2. O(1) time!",
-        "공식 N*(N-1)/2를 계산하면 돼. O(1) 시간!"),
+        "Just compute the formula N*(N-1)/2. O(1) time!", "공식 N*(N-1)/2를 계산하면 돼. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -102,8 +98,7 @@ export function makeTichuCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getTichuSections(E),
     },
   ];

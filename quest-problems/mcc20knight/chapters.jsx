@@ -32,8 +32,7 @@ export function makeMcc20KnightCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A chess knight on an NxN grid. Find minimum moves to reach target using BFS. Knight moves in L-shapes.",
-        "NxN 격자의 체스 나이트. BFS로 목표까지 최소 이동 횟수. 나이트는 L자로 이동."),
+        "A chess knight on an NxN grid.\nFind minimum moves to reach target using BFS.\nKnight moves in L-shapes.", "NxN 격자의 체스 나이트. BFS로 목표까지 최소 이동 횟수. 나이트는 L자로 이동."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u265e"}</div>
@@ -49,8 +48,7 @@ export function makeMcc20KnightCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Knight at (0,0), target (1,2). This is one L-shaped move. How many moves?",
-        "나이트 (0,0), 목표 (1,2). L자 이동 1번. 몇 번?"),
+        "Knight at (0,0), target (1,2). This is one L-shaped move. How many moves?", "나이트 (0,0), 목표 (1,2). L자 이동 1번. 몇 번?"),
       question: t(E,
         "Knight at (0,0), target (1,2). Minimum moves?",
         "나이트 (0,0), 목표 (1,2). 최소 이동?"),
@@ -67,8 +65,7 @@ export function makeMcc20KnightCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Knight at (0,0), target (1,2). Min moves?",
-        "나이트 (0,0), 목표 (1,2). 최소 이동?"),
+        "Knight at (0,0), target (1,2). Min moves?", "나이트 (0,0), 목표 (1,2). 최소 이동?"),
       question: t(E,
         "(0,0) -> (1,2) in how many knight moves?",
         "(0,0) -> (1,2) 나이트 이동 몇 번?"),
@@ -83,8 +80,7 @@ export function makeMcc20KnightCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "BFS from start with 8 knight moves. O(N^2) time.",
-        "시작점에서 8가지 나이트 이동으로 BFS. O(N^2) 시간."),
+        "BFS from start with 8 knight moves. O(N^2) time.", "시작점에서 8가지 나이트 이동으로 BFS. O(N^2) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -99,8 +95,7 @@ export function makeMcc20KnightCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc20KnightSections(E),
     },
   ];

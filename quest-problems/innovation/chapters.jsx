@@ -33,8 +33,7 @@ export function makeInnovationCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You have H hours and N tasks with different durations. Maximize the number of tasks completed! Greedy: do the shortest tasks first.",
-        "H시간과 서로 다른 소요 시간의 N개 작업이 있어. 완료할 수 있는 작업 수를 최대화해! 그리디: 가장 짧은 작업부터 해."),
+        "You have H hours and N tasks with different durations.\nMaximize the number of tasks completed!\nGreedy: do the shortest tasks first.", "H시간과 서로 다른 소요 시간의 N개 작업이 있어. 완료할 수 있는 작업 수를 최대화해! 그리디: 가장 짧은 작업부터 해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca1"}</div>
@@ -51,8 +50,7 @@ export function makeInnovationCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "5 tasks need [2,3,1,4,2] hours. You have 8 hours. Sort: [1,2,2,3,4]. Take 1+2+2+3=8. How many tasks?",
-        "5개 작업이 [2,3,1,4,2]시간 필요해. 8시간 있어. 정렬: [1,2,2,3,4]. 1+2+2+3=8. 몇 개?"),
+        "5 tasks need [2,3,1,4,2] hours.\nYou have 8 hours.\nSort: [1,2,2,3,4].\nTake 1+2+2+3=8.\nHow many tasks?", "5개 작업이 [2,3,1,4,2]시간 필요해. 8시간 있어. 정렬: [1,2,2,3,4]. 1+2+2+3=8. 몇 개?"),
       question: t(E,
         "Tasks=[2,3,1,4,2], H=8. Max tasks completed?",
         "작업=[2,3,1,4,2], H=8. 최대 완료 작업 수?"),
@@ -71,8 +69,7 @@ export function makeInnovationCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Try it! Tasks=[2,3,1,4,2], H=8. How many tasks can you complete?",
-        "해보자! 작업=[2,3,1,4,2], H=8. 몇 개 작업을 완료할 수 있어?"),
+        "Try it! Tasks=[2,3,1,4,2], H=8. How many tasks can you complete?", "해보자! 작업=[2,3,1,4,2], H=8. 몇 개 작업을 완료할 수 있어?"),
       question: t(E,
         "Tasks=[2,3,1,4,2], H=8. Enter max tasks:",
         "작업=[2,3,1,4,2], H=8. 최대 작업 수 입력:"),
@@ -94,8 +91,7 @@ export function makeInnovationCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort the tasks (O(N log N)), then greedily pick from shortest. Total: O(N log N).",
-        "작업 정렬 (O(N log N)), 그리고 가장 짧은 것부터 그리디로 선택. 총: O(N log N)."),
+        "Sort the tasks (O(N log N)), then greedily pick from shortest. Total: O(N log N).", "작업 정렬 (O(N log N)), 그리고 가장 짧은 것부터 그리디로 선택. 총: O(N log N)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -111,8 +107,7 @@ export function makeInnovationCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getInnovationSections(E),
     },
   ];

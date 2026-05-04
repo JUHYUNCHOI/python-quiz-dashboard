@@ -29,8 +29,7 @@ export function makeRectanglesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given an N x M grid, count all axis-aligned rectangles. A rectangle is defined by choosing 2 horizontal and 2 vertical grid lines.",
-        "N x M 격자가 주어지면, 모든 축 정렬 직사각형을 세. 직사각형은 수평선 2개와 수직선 2개를 선택해서 정의돼."),
+        "Given an N x M grid, count all axis-aligned rectangles.\nA rectangle is defined by choosing 2 horizontal and 2 vertical grid lines.", "N x M 격자가 주어지면, 모든 축 정렬 직사각형을 세. 직사각형은 수평선 2개와 수직선 2개를 선택해서 정의돼."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u25ac"}</div>
@@ -47,8 +46,7 @@ export function makeRectanglesCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "For a 2x2 grid: C(3,2) * C(3,2) = 3 * 3 = 9 rectangles. Right?",
-        "2x2 격자: C(3,2) * C(3,2) = 3 * 3 = 9개 직사각형. 맞지?"),
+        "For a 2x2 grid: C(3,2) * C(3,2) = 3 * 3 = 9 rectangles. Right?", "2x2 격자: C(3,2) * C(3,2) = 3 * 3 = 9개 직사각형. 맞지?"),
       question: t(E,
         "2x2 grid. How many rectangles? C(3,2) * C(3,2) = ?",
         "2x2 격자. 직사각형 수? C(3,2) * C(3,2) = ?"),
@@ -67,8 +65,7 @@ export function makeRectanglesCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Calculate for a 2x2 grid yourself!",
-        "직접 2x2 격자를 계산해봐!"),
+        "Calculate for a 2x2 grid yourself!", "직접 2x2 격자를 계산해봐!"),
       question: t(E,
         "2x2 grid. Enter the number of rectangles:",
         "2x2 격자. 직사각형 수를 입력해:"),
@@ -90,8 +87,7 @@ export function makeRectanglesCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Pure math formula, no loops needed. O(1) time!",
-        "순수 수학 공식, 반복문 필요 없어. O(1) 시간!"),
+        "Pure math formula, no loops needed. O(1) time!", "순수 수학 공식, 반복문 필요 없어. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -107,8 +103,7 @@ export function makeRectanglesCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getRectanglesSections(E),
     },
   ];

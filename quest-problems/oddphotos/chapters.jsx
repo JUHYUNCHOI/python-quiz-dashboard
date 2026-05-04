@@ -59,8 +59,7 @@ export function makeOddPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We need to partition cows into consecutive groups where group sums alternate between even and odd. Maximize the number of groups!",
-        "소들을 연속 그룹으로 나눠서 그룹 합이 짝수/홀수로 번갈아가게 해야 해. 그룹 수를 최대화해!"),
+        "We need to partition cows into consecutive groups where group sums alternate between even and odd.\nMaximize the number of groups!", "소들을 연속 그룹으로 나눠서 그룹 합이 짝수/홀수로 번갈아가게 해야 해. 그룹 수를 최대화해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf8"}</div>
@@ -77,8 +76,7 @@ export function makeOddPhotosCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If all IDs are even like [2,4,6,8], the first group needs even sum. But the second group needs odd sum. Can we make an odd sum from even numbers?",
-        "모든 ID가 짝수인 [2,4,6,8]이면, 첫 그룹은 짝수 합이 필요해. 하지만 두 번째 그룹은 홀수 합이 필요해. 짝수만으로 홀수 합을 만들 수 있을까?"),
+        "If all IDs are even like [2,4,6,8], the first group needs even sum.\nBut the second group needs odd sum.\nCan we make an odd sum from even numbers?", "모든 ID가 짝수인 [2,4,6,8]이면, 첫 그룹은 짝수 합이 필요해. 하지만 두 번째 그룹은 홀수 합이 필요해. 짝수만으로 홀수 합을 만들 수 있을까?"),
       question: t(E,
         "IDs = [2,4,6,8]. Max groups with alternating even/odd sums?",
         "IDs = [2,4,6,8]. 짝수/홀수 합 번갈아하는 최대 그룹 수?"),
@@ -95,8 +93,7 @@ export function makeOddPhotosCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "With IDs = [2,4,6,8], what is the maximum number of groups?",
-        "IDs = [2,4,6,8]일 때, 최대 그룹 수는?"),
+        "With IDs = [2,4,6,8], what is the maximum number of groups?", "IDs = [2,4,6,8]일 때, 최대 그룹 수는?"),
       question: t(E,
         "IDs = [2,4,6,8]. Maximum groups?",
         "IDs = [2,4,6,8]. 최대 그룹 수?"),
@@ -118,8 +115,7 @@ export function makeOddPhotosCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Greedily assign cows: even group uses 1 even or 2 odds, odd group uses 1 odd. O(N) time!",
-        "그리디로 소 배정: 짝수 그룹은 짝수 1개 또는 홀수 2개, 홀수 그룹은 홀수 1개. O(N) 시간!"),
+        "Greedily assign cows: even group uses 1 even or 2 odds, odd group uses 1 odd. O(N) time!", "그리디로 소 배정: 짝수 그룹은 짝수 1개 또는 홀수 2개, 홀수 그룹은 홀수 1개. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -135,8 +131,7 @@ export function makeOddPhotosCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getOddPhotosSections(E),
     },
   ];

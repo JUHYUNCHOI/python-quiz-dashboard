@@ -33,8 +33,7 @@ export function makeProdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie wants to visit as many farms as possible! Each farm closes at a certain time, and she needs travel time to get there. Can she visit enough? 📊",
-        "베시가 최대한 많은 농장을 방문하고 싶어! 각 농장은 특정 시간에 닫히고, 가는 데 이동 시간이 필요해. 충분히 방문할 수 있을까? 📊"),
+        "Bessie wants to visit as many farms as possible!\nEach farm closes at a certain time, and she needs travel time to get there.\nCan she visit enough?\n📊", "베시가 최대한 많은 농장을 방문하고 싶어! 각 농장은 특정 시간에 닫히고, 가는 데 이동 시간이 필요해. 충분히 방문할 수 있을까? 📊"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>📊</div>
@@ -51,8 +50,7 @@ export function makeProdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The trick is to rearrange the condition! t_i + S < c_i means S < c_i - t_i. So precompute d_i = c_i - t_i!",
-        "핵심 트릭은 조건을 변환하는 거야! t_i + S < c_i는 S < c_i - t_i를 의미해. d_i = c_i - t_i를 미리 계산하면 돼!"),
+        "The trick is to rearrange the condition!\nt_i + S < c_i means S < c_i - t_i.\nSo precompute d_i = c_i - t_i!", "핵심 트릭은 조건을 변환하는 거야! t_i + S < c_i는 S < c_i - t_i를 의미해. d_i = c_i - t_i를 미리 계산하면 돼!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 14, padding: 14 }}>
@@ -78,8 +76,7 @@ export function makeProdCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's check: c=[10,5,8], t=[3,2,4], S=3. Which farms can Bessie visit?",
-        "확인해보자: c=[10,5,8], t=[3,2,4], S=3. 베시가 어떤 농장을 방문할 수 있어?"),
+        "Let's check: c=[10,5,8], t=[3,2,4], S=3. Which farms can Bessie visit?", "확인해보자: c=[10,5,8], t=[3,2,4], S=3. 베시가 어떤 농장을 방문할 수 있어?"),
       question: t(E,
         "c=[10,5,8], t=[3,2,4], S=3. Farm 1: 3+3=6<10 OK. Farm 2: 2+3=5, NOT <5. Farm 3: 4+3=7<8 OK. How many farms?",
         "c=[10,5,8], t=[3,2,4], S=3. 농장1: 3+3=6<10 OK. 농장2: 2+3=5, 5<5 아님. 농장3: 4+3=7<8 OK. 몇 개 농장?"),
@@ -97,8 +94,7 @@ export function makeProdCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now you try! Same example but count it yourself.",
-        "이제 직접 해봐! 같은 예제로 직접 세봐."),
+        "Now you try! Same example but count it yourself.", "이제 직접 해봐! 같은 예제로 직접 세봐."),
       question: t(E,
         "c=[10,5,8], t=[3,2,4], S=3. How many farms can Bessie visit? (strict inequality: t_i + S < c_i)",
         "c=[10,5,8], t=[3,2,4], S=3. 베시가 방문할 수 있는 농장 수는? (엄격한 부등식: t_i + S < c_i)"),
@@ -119,8 +115,7 @@ export function makeProdCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort d_i = c_i - t_i. For each query S, use binary search to find how many d_i > S. This is O(N log N + Q log N)!",
-        "d_i = c_i - t_i를 정렬해. 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 찾아. O(N log N + Q log N)이야!"),
+        "Sort d_i = c_i - t_i.\nFor each query S, use binary search to find how many d_i > S.\nThis is O(N log N + Q log N)!", "d_i = c_i - t_i를 정렬해. 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 찾아. O(N log N + Q log N)이야!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 14, padding: 14 }}>
@@ -142,8 +137,7 @@ export function makeProdCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getProductivitySections(E),
     },
   ];

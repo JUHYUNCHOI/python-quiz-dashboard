@@ -33,8 +33,7 @@ export function makeFjFarmsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John has plants that grow at different rates! We need to find the earliest day when the plants reach a specific height ranking. Let's dig in! 🌱",
-        "파머 존의 식물들은 다른 속도로 자라! 식물들이 특정 키 순서에 도달하는 가장 빠른 날을 찾아야 해. 알아보자! 🌱"),
+        "Farmer John has plants that grow at different rates!\nWe need to find the earliest day when the plants reach a specific height ranking.\nLet's dig in!\n🌱", "파머 존의 식물들은 다른 속도로 자라! 식물들이 특정 키 순서에 도달하는 가장 빠른 날을 찾아야 해. 알아보자! 🌱"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🌱</div>
@@ -51,8 +50,7 @@ export function makeFjFarmsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Each plant's height on day d is: h_i + a_i * d. If a plant starts at height 2 with growth rate 3, after 2 days it's 2 + 3*2 = 8!",
-        "d일 후 각 식물의 키는: h_i + a_i * d. 초기 키 2, 성장률 3이면, 2일 후 2 + 3*2 = 8!"),
+        "Each plant's height on day d is: h_i + a_i * d.\nIf a plant starts at height 2 with growth rate 3, after 2 days it's 2 + 3*2 = 8!", "d일 후 각 식물의 키는: h_i + a_i * d. 초기 키 2, 성장률 3이면, 2일 후 2 + 3*2 = 8!"),
       question: t(E,
         "Plant: h=2, a=3. After 2 days, height = 2 + 3×2 = ?",
         "식물: h=2, a=3. 2일 후 키 = 2 + 3×2 = ?"),
@@ -70,8 +68,7 @@ export function makeFjFarmsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Let's verify: plant with h=2, a=3, after 2 days. Enter the height!",
-        "확인해보자: h=2, a=3인 식물, 2일 후 키를 입력해!"),
+        "Let's verify: plant with h=2, a=3, after 2 days. Enter the height!", "확인해보자: h=2, a=3인 식물, 2일 후 키를 입력해!"),
       question: t(E,
         "h=2, a=3, d=2\nHeight = h + a × d = ?",
         "h=2, a=3, d=2\n키 = h + a × d = ?"),
@@ -90,8 +87,7 @@ export function makeFjFarmsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Binary search on day d! For each candidate d, compute all heights, sort them, and check if the ranking matches. O(N log N log D) total.",
-        "날짜 d에 대해 이분 탐색! 후보 d마다 모든 키를 계산하고, 정렬해서 순서가 맞는지 확인. 총 O(N log N log D)."),
+        "Binary search on day d!\nFor each candidate d, compute all heights, sort them, and check if the ranking matches.\nO(N log N log D) total.", "날짜 d에 대해 이분 탐색! 후보 d마다 모든 키를 계산하고, 정렬해서 순서가 맞는지 확인. 총 O(N log N log D)."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", marginBottom: 8 }}>
@@ -124,8 +120,7 @@ export function makeFjFarmsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getFjFarmsSections(E),
     },
   ];

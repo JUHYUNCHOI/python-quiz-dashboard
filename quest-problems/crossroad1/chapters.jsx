@@ -34,8 +34,7 @@ export function makeCrossRd1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We observe 10 cows over time, each seen on side 0 or side 1 of the road. Count the total number of crossings (when a cow changes sides between observations).",
-        "10마리 소를 시간에 따라 관찰해, 각각 도로의 0번 또는 1번 쪽에 있어. 관찰 사이에 소가 쪽을 바꾼 총 횟수 (횡단 횟수)를 세!"),
+        "We observe 10 cows over time, each seen on side 0 or side 1 of the road.\nCount the total number of crossings (when a cow changes sides between observations).", "10마리 소를 시간에 따라 관찰해, 각각 도로의 0번 또는 1번 쪽에 있어. 관찰 사이에 소가 쪽을 바꾼 총 횟수 (횡단 횟수)를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -52,8 +51,7 @@ export function makeCrossRd1Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A cow is seen at side 0, then later at side 1. How many crossings is that?",
-        "소가 0번 쪽에서 보이고, 나중에 1번 쪽에서 보여. 횡단 몇 번이야?"),
+        "A cow is seen at side 0, then later at side 1. How many crossings is that?", "소가 0번 쪽에서 보이고, 나중에 1번 쪽에서 보여. 횡단 몇 번이야?"),
       question: t(E,
         "Cow seen at side 0, then side 1. How many crossings?",
         "소가 0번 쪽, 그 다음 1번 쪽. 횡단 몇 번?"),
@@ -71,8 +69,7 @@ export function makeCrossRd1Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "A cow goes 0 -> 1. How many crossings?",
-        "소가 0 -> 1. 횡단 몇 번?"),
+        "A cow goes 0 -> 1. How many crossings?", "소가 0 -> 1. 횡단 몇 번?"),
       question: t(E,
         "Cow: side 0 then side 1. Total crossings?",
         "소: 0번 쪽 그 다음 1번 쪽. 총 횡단 횟수?"),
@@ -94,8 +91,7 @@ export function makeCrossRd1Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "One pass through observations with a dictionary to track last side. O(N) time!",
-        "관찰을 한 번 순회하면서 딕셔너리로 마지막 쪽을 추적해. O(N) 시간!"),
+        "One pass through observations with a dictionary to track last side. O(N) time!", "관찰을 한 번 순회하면서 딕셔너리로 마지막 쪽을 추적해. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -111,8 +107,7 @@ export function makeCrossRd1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getCrossRoad1Sections(E),
     },
   ];

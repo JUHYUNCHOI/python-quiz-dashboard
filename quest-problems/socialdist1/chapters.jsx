@@ -68,8 +68,7 @@ export function makeSocDist1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We have stalls in a row, some occupied by cows. We need to place more cows to maximize the minimum distance between any two occupied stalls. Binary search on the answer!",
-        "일렬로 놓인 축사에 소가 몇 마리 있어. 추가로 소를 넣어서 인접 소 사이 최소 거리를 최대화해야 해. 답에 대해 이분 탐색!"),
+        "We have stalls in a row, some occupied by cows.\nWe need to place more cows to maximize the minimum distance between any two occupied stalls.\nBinary search on the answer!", "일렬로 놓인 축사에 소가 몇 마리 있어. 추가로 소를 넣어서 인접 소 사이 최소 거리를 최대화해야 해. 답에 대해 이분 탐색!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude37"}</div>
@@ -86,8 +85,7 @@ export function makeSocDist1Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Stalls: \"1001\" means occupied at positions 0 and 3. We need to place 2 more cows. What's the minimum gap we can achieve?",
-        "축사: \"1001\"은 위치 0과 3에 소가 있어. 소 2마리를 더 넣어야 해. 달성할 수 있는 최소 간격은?"),
+        "Stalls: \"1001\" means occupied at positions 0 and 3.\nWe need to place 2 more cows.\nWhat's the minimum gap we can achieve?", "축사: \"1001\"은 위치 0과 3에 소가 있어. 소 2마리를 더 넣어야 해. 달성할 수 있는 최소 간격은?"),
       question: t(E,
         "Stalls \"10001\": occupied at 0 and 4. Place 2 cows in empty stalls 1,2,3. To maximize minimum distance, best placement?",
         "축사 \"10001\": 0과 4에 소. 빈 칸 1,2,3에 소 2마리 배치. 최소 거리 최대화하려면?"),
@@ -105,8 +103,7 @@ export function makeSocDist1Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "Stalls \"10001\": positions 0 and 4 occupied, place 2 more cows. What is the maximum possible minimum distance?",
-        "축사 \"10001\": 0과 4에 소, 2마리 추가. 가능한 최대 최소 거리는?"),
+        "Stalls \"10001\": positions 0 and 4 occupied, place 2 more cows.\nWhat is the maximum possible minimum distance?", "축사 \"10001\": 0과 4에 소, 2마리 추가. 가능한 최대 최소 거리는?"),
       question: t(E,
         "\"10001\": occupied at 0,4. Place 2 cows. Max of min distance?",
         "\"10001\": 0,4에 소. 2마리 추가. 최소 거리의 최대값?"),
@@ -128,8 +125,7 @@ export function makeSocDist1Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Binary search on distance D, then greedily place cows. O(N log N) total!",
-        "거리 D에 대해 이분 탐색, 그리디로 소 배치. 총 O(N log N)!"),
+        "Binary search on distance D, then greedily place cows. O(N log N) total!", "거리 D에 대해 이분 탐색, 그리디로 소 배치. 총 O(N log N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -145,8 +141,7 @@ export function makeSocDist1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getSocDist1Sections(E),
     },
   ];

@@ -35,8 +35,7 @@ export function makeBlockGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has N boards, each with a word on front and back. She needs letter blocks to spell any visible configuration. For each board, she sees either the front or back word. Find the minimum total blocks needed.",
-        "베시에게 N개의 판이 있고, 각 판의 앞뒤에 단어가 있어. 어떤 구성이든 철자를 만들 수 있는 글자 블록이 필요해. 각 판에서 앞면 또는 뒷면 단어를 봐. 필요한 최소 총 블록 수를 구해."),
+        "Bessie has N boards, each with a word on front and back.\nShe needs letter blocks to spell any visible configuration.\nFor each board, she sees either the front or back word.\nFind the minimum total blocks needed.", "베시에게 N개의 판이 있고, 각 판의 앞뒤에 단어가 있어.\n어떤 구성이든 철자를 만들 수 있는 글자 블록이 필요해.\n각 판에서 앞면 또는 뒷면 단어를 봐.\n필요한 최소 총 블록 수를 구해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udde9"}</div>
@@ -53,8 +52,7 @@ export function makeBlockGameCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "1 board: front = 'AB', back = 'CD'. We need blocks for either AB or CD. For front: A=1, B=1. For back: C=1, D=1. Max per letter: A=1, B=1, C=1, D=1. But we only see one side! So we need max(2 blocks for AB, 2 blocks for CD) = 2 total blocks.",
-        "판 1개: 앞 = 'AB', 뒤 = 'CD'. AB 또는 CD용 블록이 필요해. 앞: A=1, B=1. 뒤: C=1, D=1. 글자별 최대: A=1, B=1, C=1, D=1. 하지만 한 면만 보여! max(AB용 2블록, CD용 2블록) = 총 2블록."),
+        "1 board: front = 'AB', back = 'CD'.\nWe need blocks for either AB or CD.\nFor front: A=1, B=1.\nFor back: C=1, D=1.\nMax per letter: A=1, B=1, C=1, D=1.\nBut we only see one side!\nSo we need max(2 blocks for AB, 2 blocks for CD) = 2 total blocks.", "판 1개: 앞 = 'AB', 뒤 = 'CD'.\nAB 또는 CD용 블록이 필요해.\n앞: A=1, B=1.\n뒤: C=1, D=1.\n글자별 최대: A=1, B=1, C=1, D=1.\n하지만 한 면만 보여!\nmax(AB용 2블록, CD용 2블록) = 총 2블록."),
       question: t(E,
         "1 board with 'AB' front and 'CD' back. How many total blocks needed?",
         "앞면 'AB', 뒷면 'CD'인 판 1개. 총 몇 개 블록 필요?"),
@@ -71,8 +69,7 @@ export function makeBlockGameCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For 1 board with 'AB' on front and 'CD' on back, how many total blocks are needed?",
-        "앞면 'AB', 뒷면 'CD'인 판 1개에 총 몇 개 블록이 필요해?"),
+        "For 1 board with 'AB' on front and 'CD' on back, how many total blocks are needed?", "앞면 'AB', 뒷면 'CD'인 판 1개에 총 몇 개 블록이 필요해?"),
       question: t(E,
         "Total blocks for 1 board: front='AB', back='CD'?",
         "판 1개 총 블록 수: 앞='AB', 뒤='CD'?"),
@@ -94,8 +91,7 @@ export function makeBlockGameCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each board, count letters in both words and take the max per letter. Sum all maxes across boards. O(N * L) where L is word length.",
-        "각 판에서 양면 단어의 글자를 세고 글자별 최댓값을 취해. 모든 판의 최댓값을 합산. O(N * L), L은 단어 길이."),
+        "For each board, count letters in both words and take the max per letter.\nSum all maxes across boards.\nO(N * L) where L is word length.", "각 판에서 양면 단어의 글자를 세고 글자별 최댓값을 취해. 모든 판의 최댓값을 합산. O(N * L), L은 단어 길이."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -111,8 +107,7 @@ export function makeBlockGameCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getBlockGameSections(E),
     },
   ];

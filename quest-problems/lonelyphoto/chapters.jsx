@@ -46,8 +46,7 @@ export function makeLonelyPhotoCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A string of G's and H's. Count substrings of length >= 3 where exactly one cow is 'lonely' (the only one of its type).",
-        "G와 H로 이루어진 문자열. 길이 3 이상인 부분 문자열 중 정확히 1마리가 '외로운'(자기 타입이 유일한) 것의 개수를 세!"),
+        "A string of G's and H's.\nCount substrings of length >= 3 where exactly one cow is 'lonely' (the only one of its type).", "G와 H로 이루어진 문자열. 길이 3 이상인 부분 문자열 중 정확히 1마리가 '외로운'(자기 타입이 유일한) 것의 개수를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf8"}</div>
@@ -64,8 +63,7 @@ export function makeLonelyPhotoCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "'GHG' has length 3 with exactly 1 H. Is H lonely here?",
-        "'GHG'는 길이 3이고 H가 정확히 1마리. H가 외로운 걸까?"),
+        "'GHG' has length 3 with exactly 1 H. Is H lonely here?", "'GHG'는 길이 3이고 H가 정확히 1마리. H가 외로운 걸까?"),
       question: t(E,
         "In 'GHG', is the H a lonely cow?",
         "'GHG'에서 H는 외로운 소일까?"),
@@ -82,8 +80,7 @@ export function makeLonelyPhotoCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For 'GHGHG' (length 5), count all lonely substrings of length >= 3.",
-        "'GHGHG'(길이 5)에서 길이 3 이상인 외로운 부분 문자열 수를 세봐."),
+        "For 'GHGHG' (length 5), count all lonely substrings of length >= 3.", "'GHGHG'(길이 5)에서 길이 3 이상인 외로운 부분 문자열 수를 세봐."),
       question: t(E,
         "s = 'GHGHG'. How many lonely photos?",
         "s = 'GHGHG'. 외로운 사진 수는?"),
@@ -95,8 +92,7 @@ export function makeLonelyPhotoCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "For each i, see same-type run + opp_left/opp_right + the count formula contribution.",
-        "각 i마다 같은 타입 구간 + opp_left/opp_right + 카운트 공식 기여."),
+        "For each i, see same-type run + opp_left/opp_right + the count formula contribution.", "각 i마다 같은 타입 구간 + opp_left/opp_right + 카운트 공식 기여."),
     },
   ];
 }
@@ -111,8 +107,7 @@ export function makeLonelyPhotoCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each cow, count opposite-type cows on each side. Combine counts to find valid substrings. O(N) with prefix sums!",
-        "각 소에 대해 양쪽의 반대 타입 소 수를 세. 조합해서 유효한 부분 문자열을 찾아. 누적합으로 O(N)!"),
+        "For each cow, count opposite-type cows on each side.\nCombine counts to find valid substrings.\nO(N) with prefix sums!", "각 소에 대해 양쪽의 반대 타입 소 수를 세. 조합해서 유효한 부분 문자열을 찾아. 누적합으로 O(N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -128,15 +123,13 @@ export function makeLonelyPhotoCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Now build the run-length scan step by step.",
-        "구간 길이 스캔을 단계별로 만들자."),
+        "Now build the run-length scan step by step.", "구간 길이 스캔을 단계별로 만들자."),
       sections: getLonelyPhotoSections(E),
     },
     {
       type: "runner",
       narr: t(E,
-        "Try your own G/H string.",
-        "직접 G/H 문자열 시도."),
+        "Try your own G/H string.", "직접 G/H 문자열 시도."),
     },
   ];
 }

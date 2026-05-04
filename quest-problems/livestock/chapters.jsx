@@ -56,8 +56,7 @@ export function makeLivestockCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "8 cows with N adjacency constraints (\"X must be beside Y\"). Find the lexicographically smallest valid ordering. Model as a graph: constraints form chains since max degree is 2.",
-        "8마리 소에 N개 인접 조건 (\"X는 Y 옆에 있어야 함\"). 사전순 최소 유효 순서를 구해. 그래프로 모델링: 최대 차수가 2이므로 체인을 형성."),
+        "8 cows with N adjacency constraints (\"X must be beside Y\").\nFind the lexicographically smallest valid ordering.\nModel as a graph: constraints form chains since max degree is 2.", "8마리 소에 N개 인접 조건 (\"X는 Y 옆에 있어야 함\"). 사전순 최소 유효 순서를 구해. 그래프로 모델링: 최대 차수가 2이므로 체인을 형성."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🐄"}</div>
@@ -74,8 +73,7 @@ export function makeLivestockCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If there are 0 constraints, all 8 cows are free. The lexicographically smallest ordering is simply alphabetical order!",
-        "조건이 0개이면 8마리 소 모두 자유야. 사전순 최소 순서는 단순히 알파벳 순서!"),
+        "If there are 0 constraints, all 8 cows are free.\nThe lexicographically smallest ordering is simply alphabetical order!", "조건이 0개이면 8마리 소 모두 자유야. 사전순 최소 순서는 단순히 알파벳 순서!"),
       question: t(E,
         "0 constraints, 8 cows. How many cows in the lineup?",
         "조건 0개, 소 8마리. 줄에 소가 몇 마리?"),
@@ -93,8 +91,7 @@ export function makeLivestockCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "With 0 constraints, the answer is just alphabetical order. How many cows are there in total?",
-        "조건 0개이면 답은 알파벳 순서. 총 소는 몇 마리?"),
+        "With 0 constraints, the answer is just alphabetical order.\nHow many cows are there in total?", "조건 0개이면 답은 알파벳 순서. 총 소는 몇 마리?"),
       question: t(E,
         "How many cows total in Livestock Lineup?",
         "Livestock Lineup에서 총 소는 몇 마리?"),
@@ -116,8 +113,7 @@ export function makeLivestockCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Only 8 cows! Build adjacency graph, find chain endpoints, traverse chains. O(N) where N is small.",
-        "소가 8마리뿐! 인접 그래프를 만들고, 체인 끝점을 찾고, 체인을 탐색. N이 작으므로 O(N)."),
+        "Only 8 cows!\nBuild adjacency graph, find chain endpoints, traverse chains.\nO(N) where N is small.", "소가 8마리뿐! 인접 그래프를 만들고, 체인 끝점을 찾고, 체인을 탐색. N이 작으므로 O(N)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -133,8 +129,7 @@ export function makeLivestockCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getLivestockSections(E),
     },
   ];

@@ -52,8 +52,7 @@ export function makeAirCondCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows need cooling in their stall ranges. M air conditioning units are available (M is at most 10). Each AC has a range, power, and cost. Find the minimum cost subset of ACs that satisfies all cows!",
-        "N마리의 소가 각자의 축사 범위에서 냉방이 필요해. M개의 에어컨이 있어 (M은 최대 10). 각 에어컨은 범위, 파워, 비용이 있어. 모든 소를 만족시키는 최소 비용 에어컨 조합을 찾아!"),
+        "N cows need cooling in their stall ranges.\nM air conditioning units are available (M is at most 10).\nEach AC has a range, power, and cost.\nFind the minimum cost subset of ACs that satisfies all cows!", "N마리의 소가 각자의 축사 범위에서 냉방이 필요해.\nM개의 에어컨이 있어 (M은 최대 10).\n각 에어컨은 범위, 파워, 비용이 있어.\n모든 소를 만족시키는 최소 비용 에어컨 조합을 찾아!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2744\ufe0f"}</div>
@@ -70,8 +69,7 @@ export function makeAirCondCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If M = 10, how many subsets do we need to check in the worst case?",
-        "M = 10이면, 최악의 경우 몇 개의 부분집합을 확인해야 할까?"),
+        "If M = 10, how many subsets do we need to check in the worst case?", "M = 10이면, 최악의 경우 몇 개의 부분집합을 확인해야 할까?"),
       question: t(E,
         "M = 10 air conditioners. How many subsets to check?",
         "M = 10개의 에어컨. 확인할 부분집합 수는?"),
@@ -89,8 +87,7 @@ export function makeAirCondCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "1 cow needs 3 cooling in stalls 1-5. AC1 covers 1-5 with power 3, cost 10. AC2 covers 1-3 with power 5, cost 20. What's the minimum cost?",
-        "소 1마리가 축사 1-5에서 냉방 3이 필요해. AC1은 1-5 커버, 파워 3, 비용 10. AC2는 1-3 커버, 파워 5, 비용 20. 최소 비용은?"),
+        "1 cow needs 3 cooling in stalls 1-5.\nAC1 covers 1-5 with power 3, cost 10.\nAC2 covers 1-3 with power 5, cost 20.\nWhat's the minimum cost?", "소 1마리가 축사 1-5에서 냉방 3이 필요해. AC1은 1-5 커버, 파워 3, 비용 10. AC2는 1-3 커버, 파워 5, 비용 20. 최소 비용은?"),
       question: t(E,
         "1 cow needs cooling 3 in stalls 1-5. AC1: range 1-5, power 3, cost 10. AC2: range 1-3, power 5, cost 20. Min cost?",
         "소 1마리 냉방 3 필요 (축사 1-5). AC1: 범위 1-5, 파워 3, 비용 10. AC2: 범위 1-3, 파워 5, 비용 20. 최소 비용?"),
@@ -112,8 +109,7 @@ export function makeAirCondCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try all 2^M subsets. For each, compute cooling at each stall and check cows. O(2^M * (M + N) * stalls).",
-        "모든 2^M 부분집합을 시도해. 각각에 대해 축사별 냉방을 계산하고 소를 확인. O(2^M * (M + N) * 축사수)."),
+        "Try all 2^M subsets.\nFor each, compute cooling at each stall and check cows.\nO(2^M * (M + N) * stalls).", "모든 2^M 부분집합을 시도해. 각각에 대해 축사별 냉방을 계산하고 소를 확인. O(2^M * (M + N) * 축사수)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -129,8 +125,7 @@ export function makeAirCondCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getAirCondSections(E),
     },
   ];

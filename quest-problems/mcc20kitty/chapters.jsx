@@ -69,8 +69,7 @@ export function makeMcc20KittyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Meet the Kitty sequence! It's like Fibonacci, but adds THREE previous numbers instead of two. Let's learn it step by step! 🐱",
-        "Kitty 수열을 만나자! 피보나치처럼 생겼는데, 이전 두 개가 아니라 세 개를 더해. 하나씩 배우자! 🐱"),
+        "Meet the Kitty sequence!\nIt's like Fibonacci, but adds THREE previous numbers instead of two.\nLet's learn it step by step!\n🐱", "Kitty 수열을 만나자! 피보나치처럼 생겼는데, 이전 두 개가 아니라 세 개를 더해. 하나씩 배우자! 🐱"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐱</div>
@@ -83,8 +82,7 @@ export function makeMcc20KittyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You probably know Fibonacci: each number = sum of previous TWO. F(1)=1, F(2)=1, F(3)=2, F(4)=3, F(5)=5...",
-        "피보나치 알지? 각 숫자 = 이전 두 개의 합. F(1)=1, F(2)=1, F(3)=2, F(4)=3, F(5)=5..."),
+        "You probably know Fibonacci: each number = sum of previous TWO.\nF(1)=1, F(2)=1, F(3)=2, F(4)=3, F(5)=5...", "피보나치 알지? 각 숫자 = 이전 두 개의 합. F(1)=1, F(2)=1, F(3)=2, F(4)=3, F(5)=5..."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -102,8 +100,7 @@ export function makeMcc20KittyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Kitty Numbers (Tribonacci): each number = sum of previous THREE! K(n) = K(n-1) + K(n-2) + K(n-3). Base: K(1) = K(2) = K(3) = 1.",
-        "Kitty 수열 (트리보나치): 각 숫자 = 이전 세 개의 합! K(n) = K(n-1) + K(n-2) + K(n-3). 기저: K(1) = K(2) = K(3) = 1."),
+        "Kitty Numbers (Tribonacci): each number = sum of previous THREE!\nK(n) = K(n-1) + K(n-2) + K(n-3).\nBase: K(1) = K(2) = K(3) = 1.", "Kitty 수열 (트리보나치): 각 숫자 = 이전 세 개의 합!\nK(n) = K(n-1) + K(n-2) + K(n-3).\n기저: K(1) = K(2) = K(3) = 1."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
@@ -129,8 +126,7 @@ export function makeMcc20KittyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The base cases are simple: K(1) = 1, K(2) = 1, K(3) = 1. The first three Kitty numbers are all 1!",
-        "기저 조건은 간단: K(1) = 1, K(2) = 1, K(3) = 1. 처음 세 Kitty 수는 모두 1!"),
+        "The base cases are simple: K(1) = 1, K(2) = 1, K(3) = 1.\nThe first three Kitty numbers are all 1!", "기저 조건은 간단: K(1) = 1, K(2) = 1, K(3) = 1. 처음 세 Kitty 수는 모두 1!"),
       content: (
         <div style={{ padding: 16 }}>
           <VarCards vars={[
@@ -145,8 +141,7 @@ export function makeMcc20KittyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now K(4)! Add the three before it: K(3) + K(2) + K(1) = 1 + 1 + 1 = 3.",
-        "이제 K(4)! 앞의 세 개를 더해: K(3) + K(2) + K(1) = 1 + 1 + 1 = 3."),
+        "Now K(4)! Add the three before it: K(3) + K(2) + K(1) = 1 + 1 + 1 = 3.", "이제 K(4)! 앞의 세 개를 더해: K(3) + K(2) + K(1) = 1 + 1 + 1 = 3."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 12 }}>
@@ -178,8 +173,7 @@ export function makeMcc20KittyCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's verify you got it! K(4) = K(3) + K(2) + K(1).",
-        "확인하자! K(4) = K(3) + K(2) + K(1)."),
+        "Let's verify you got it! K(4) = K(3) + K(2) + K(1).", "확인하자! K(4) = K(3) + K(2) + K(1)."),
       question: t(E, "K(4) = 1 + 1 + 1 = ?", "K(4) = 1 + 1 + 1 = ?"),
       options: ["3", "2", "4", "1"],
       correct: 0,
@@ -190,8 +184,7 @@ export function makeMcc20KittyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "K(5) = K(4) + K(3) + K(2) = 3 + 1 + 1 = 5. See how it grows!",
-        "K(5) = K(4) + K(3) + K(2) = 3 + 1 + 1 = 5. 커지는 게 보이지!"),
+        "K(5) = K(4) + K(3) + K(2) = 3 + 1 + 1 = 5. See how it grows!", "K(5) = K(4) + K(3) + K(2) = 3 + 1 + 1 = 5. 커지는 게 보이지!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <SeqRow values={["1","1","1","3","5"]} highlight={4} label="K(1) → K(5)" />
@@ -205,8 +198,7 @@ export function makeMcc20KittyCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Your turn! K(6) = K(5) + K(4) + K(3) = 5 + 3 + 1 = ?",
-        "네 차례! K(6) = K(5) + K(4) + K(3) = 5 + 3 + 1 = ?"),
+        "Your turn! K(6) = K(5) + K(4) + K(3) = 5 + 3 + 1 = ?", "네 차례! K(6) = K(5) + K(4) + K(3) = 5 + 3 + 1 = ?"),
       question: t(E, "K(6) = 5 + 3 + 1 = ?", "K(6) = 5 + 3 + 1 = ?"),
       answer: 9,
     },
@@ -215,8 +207,7 @@ export function makeMcc20KittyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's the Kitty sequence up to K(10)! It grows fast — almost doubling each time.",
-        "K(10)까지의 Kitty 수열! 빠르게 증가해 — 거의 매번 두 배."),
+        "Here's the Kitty sequence up to K(10)! It grows fast — almost doubling each time.", "K(10)까지의 Kitty 수열! 빠르게 증가해 — 거의 매번 두 배."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -244,8 +235,7 @@ export function makeMcc20KittyCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "K(7) = K(6) + K(5) + K(4) = 9 + 5 + 3 = ?",
-        "K(7) = K(6) + K(5) + K(4) = 9 + 5 + 3 = ?"),
+        "K(7) = K(6) + K(5) + K(4) = 9 + 5 + 3 = ?", "K(7) = K(6) + K(5) + K(4) = 9 + 5 + 3 = ?"),
       question: t(E, "K(7) = 9 + 5 + 3 = ?", "K(7) = 9 + 5 + 3 = ?"),
       answer: 17,
     },
@@ -262,8 +252,7 @@ export function makeMcc20KittyCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Do we need to store ALL previous values? No! K(n) only uses the LAST THREE values. We just need 3 variables!",
-        "이전 값을 전부 저장해야 할까? 아니! K(n)은 마지막 세 값만 사용. 변수 3개면 충분!"),
+        "Do we need to store ALL previous values?\nNo!\nK(n) only uses the LAST THREE values.\nWe just need 3 variables!", "이전 값을 전부 저장해야 할까? 아니! K(n)은 마지막 세 값만 사용. 변수 3개면 충분!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
@@ -292,8 +281,7 @@ export function makeMcc20KittyCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Start with a=K(1)=1, b=K(2)=1, c=K(3)=1. These are our 'sliding window' of 3 values.",
-        "a=K(1)=1, b=K(2)=1, c=K(3)=1로 시작. 이게 우리의 '슬라이딩 윈도우' 3개 값."),
+        "Start with a=K(1)=1, b=K(2)=1, c=K(3)=1. These are our 'sliding window' of 3 values.", "a=K(1)=1, b=K(2)=1, c=K(3)=1로 시작. 이게 우리의 '슬라이딩 윈도우' 3개 값."),
       content: (
         <div style={{ padding: 16 }}>
           <VarCards vars={[
@@ -308,8 +296,7 @@ export function makeMcc20KittyCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "To compute K(4): new_c = a + b + c = 3. Then SHIFT: a←b, b←c, c←new_c. Now a=1, b=1, c=3. The window moved forward!",
-        "K(4) 계산: new_c = a + b + c = 3. 그리고 SHIFT: a←b, b←c, c←new_c. 이제 a=1, b=1, c=3. 윈도우가 앞으로!"),
+        "To compute K(4): new_c = a + b + c = 3.\nThen SHIFT: a←b, b←c, c←new_c.\nNow a=1, b=1, c=3.\nThe window moved forward!", "K(4) 계산: new_c = a + b + c = 3. 그리고 SHIFT: a←b, b←c, c←new_c. 이제 a=1, b=1, c=3. 윈도우가 앞으로!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
@@ -340,8 +327,7 @@ export function makeMcc20KittyCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "After computing K(4), we have a=1, b=1, c=3. To get K(5), we do a,b,c = b,c,a+b+c again. What's the new c?",
-        "K(4) 계산 후, a=1, b=1, c=3. K(5)를 구하려면 a,b,c = b,c,a+b+c. 새 c는?"),
+        "After computing K(4), we have a=1, b=1, c=3.\nTo get K(5), we do a,b,c = b,c,a+b+c again.\nWhat's the new c?", "K(4) 계산 후, a=1, b=1, c=3. K(5)를 구하려면 a,b,c = b,c,a+b+c. 새 c는?"),
       question: t(E, "a=1, b=1, c=3. New c = a+b+c = ?", "a=1, b=1, c=3. 새 c = a+b+c = ?"),
       options: ["5", "4", "3", "6"],
       correct: 0,
@@ -352,8 +338,7 @@ export function makeMcc20KittyCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace all the rolling updates from K(4) through K(7)!",
-        "K(4)부터 K(7)까지 모든 롤링 업데이트를 추적하자!"),
+        "Let's trace all the rolling updates from K(4) through K(7)!", "K(4)부터 K(7)까지 모든 롤링 업데이트를 추적하자!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -383,8 +368,7 @@ export function makeMcc20KittyCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Python magic: a, b, c = b, c, a+b+c does all three updates AT ONCE! No temp variable needed. It evaluates the right side first, then assigns.",
-        "파이썬의 마법: a, b, c = b, c, a+b+c가 세 업데이트를 동시에! 임시 변수 불필요. 오른쪽을 먼저 계산, 그다음 할당."),
+        "Python magic: a, b, c = b, c, a+b+c does all three updates AT ONCE!\nNo temp variable needed.\nIt evaluates the right side first, then assigns.", "파이썬의 마법: a, b, c = b, c, a+b+c가 세 업데이트를 동시에! 임시 변수 불필요. 오른쪽을 먼저 계산, 그다음 할당."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14 }}>
@@ -403,8 +387,7 @@ export function makeMcc20KittyCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Why can't we just write a=b; b=c; c=a+b+c one by one?",
-        "왜 a=b; b=c; c=a+b+c를 하나씩 쓰면 안 될까?"),
+        "Why can't we just write a=b; b=c; c=a+b+c one by one?", "왜 a=b; b=c; c=a+b+c를 하나씩 쓰면 안 될까?"),
       question: t(E,
         "If a=1,b=2,c=3: After 'a=b' → a=2. After 'b=c' → b=3. After 'c=a+b+c' → c=?",
         "a=1,b=2,c=3: 'a=b' 후 a=2. 'b=c' 후 b=3. 'c=a+b+c' → c=?"),
@@ -420,8 +403,7 @@ export function makeMcc20KittyCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "After i=7: a=5, b=9, c=17. Next iteration i=8: new c = a + b + c = ?",
-        "i=7 후: a=5, b=9, c=17. 다음 반복 i=8: 새 c = a + b + c = ?"),
+        "After i=7: a=5, b=9, c=17. Next iteration i=8: new c = a + b + c = ?", "i=7 후: a=5, b=9, c=17. 다음 반복 i=8: 새 c = a + b + c = ?"),
       question: t(E, "5 + 9 + 17 = ?", "5 + 9 + 17 = ?"),
       answer: 31,
     },
@@ -438,8 +420,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: Handle base cases. If N ≤ 3, the answer is always 1!",
-        "1단계: 기저 처리. N ≤ 3이면 답은 항상 1!"),
+        "Step 1: Handle base cases. If N ≤ 3, the answer is always 1!", "1단계: 기저 처리. N ≤ 3이면 답은 항상 1!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
@@ -455,8 +436,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "Why do we check N ≤ 3 separately?",
-        "왜 N ≤ 3을 따로 처리해?"),
+        "Why do we check N ≤ 3 separately?", "왜 N ≤ 3을 따로 처리해?"),
       question: t(E,
         "For the loop to make sense, we need at least i=4. If N≤3...",
         "루프가 의미있으려면 최소 i=4 필요. N≤3이면..."),
@@ -473,8 +453,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: For N ≥ 4, initialize a=1, b=1, c=1 (the base cases), then loop from 4 to N.",
-        "2단계: N ≥ 4이면, a=1, b=1, c=1 (기저값)으로 초기화하고 4부터 N까지 반복."),
+        "Step 2: For N ≥ 4, initialize a=1, b=1, c=1 (the base cases), then loop from 4 to N.", "2단계: N ≥ 4이면, a=1, b=1, c=1 (기저값)으로 초기화하고 4부터 N까지 반복."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
@@ -491,8 +470,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "range(4, N+1) iterates from 4 through N. Each iteration computes one more Kitty number.",
-        "range(4, N+1)은 4부터 N까지 반복. 매 반복마다 Kitty 수 하나 더 계산."),
+        "range(4, N+1) iterates from 4 through N. Each iteration computes one more Kitty number.", "range(4, N+1)은 4부터 N까지 반복. 매 반복마다 Kitty 수 하나 더 계산."),
       question: t(E,
         "N=6. How many times does the loop body execute?",
         "N=6. 루프 본문이 몇 번 실행돼?"),
@@ -505,8 +483,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "After the loop, c holds K(N)! That's because at each step, c becomes the latest Kitty number.",
-        "루프 후, c가 K(N)을 가지고 있어! 매 단계에서 c가 최신 Kitty 수가 되니까."),
+        "After the loop, c holds K(N)!\nThat's because at each step, c becomes the latest Kitty number.", "루프 후, c가 K(N)을 가지고 있어! 매 단계에서 c가 최신 Kitty 수가 되니까."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 12 }}>
@@ -524,8 +501,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Time: O(N) — one loop, N-3 iterations. Space: O(1) — just 3 variables, no array needed!",
-        "시간: O(N) — 루프 한 번, N-3번 반복. 공간: O(1) — 변수 3개뿐, 배열 불필요!"),
+        "Time: O(N) — one loop, N-3 iterations. Space: O(1) — just 3 variables, no array needed!", "시간: O(N) — 루프 한 번, N-3번 반복. 공간: O(1) — 변수 3개뿐, 배열 불필요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
@@ -545,8 +521,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "input",
       narr: t(E,
-        "K(8)=31, K(9)=57. K(10) = K(9)+K(8)+K(7) = 57+31+17 = ?",
-        "K(8)=31, K(9)=57. K(10) = K(9)+K(8)+K(7) = 57+31+17 = ?"),
+        "K(8)=31, K(9)=57. K(10) = K(9)+K(8)+K(7) = 57+31+17 = ?", "K(8)=31, K(9)=57. K(10) = K(9)+K(8)+K(7) = 57+31+17 = ?"),
       question: t(E, "57 + 31 + 17 = ?", "57 + 31 + 17 = ?"),
       answer: 105,
     },
@@ -555,8 +530,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc20KittySections(E),
     },
   ];

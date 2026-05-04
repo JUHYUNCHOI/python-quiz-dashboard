@@ -27,8 +27,7 @@ export function makeMcc19CandyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N people stand in a circle. Each round, people at odd positions are eliminated. Find who survives! This is a Josephus-like problem.",
-        "N명이 원형으로 서 있어. 매 라운드마다 홀수 위치의 사람이 탈락해. 누가 살아남는지 찾아! 요세푸스 변형 문제야."),
+        "N people stand in a circle.\nEach round, people at odd positions are eliminated.\nFind who survives!\nThis is a Josephus-like problem.", "N명이 원형으로 서 있어. 매 라운드마다 홀수 위치의 사람이 탈락해. 누가 살아남는지 찾아! 요세푸스 변형 문제야."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🍬</div>
@@ -45,8 +44,7 @@ export function makeMcc19CandyCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "N=4, positions [1,2,3,4]. Eliminate odd positions [1,3] → [2,4] remain. Then eliminate odd of remaining → [2] eliminated → 4 survives!",
-        "N=4, 위치 [1,2,3,4]. 홀수 위치 [1,3] 탈락 → [2,4] 남음. 남은 것 중 홀수 → [2] 탈락 → 4가 생존!"),
+        "N=4, positions [1,2,3,4].\nEliminate odd positions [1,3] → [2,4] remain.\nThen eliminate odd of remaining → [2] eliminated → 4 survives!", "N=4, 위치 [1,2,3,4]. 홀수 위치 [1,3] 탈락 → [2,4] 남음. 남은 것 중 홀수 → [2] 탈락 → 4가 생존!"),
       question: t(E,
         "N=4: after eliminating odd positions twice, who survives?",
         "N=4: 홀수 위치를 두 번 제거하면 누가 생존해?"),
@@ -64,8 +62,7 @@ export function makeMcc19CandyCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "With N=4, what is the starting position of the survivor?",
-        "N=4일 때, 생존자의 시작 위치는?"),
+        "With N=4, what is the starting position of the survivor?", "N=4일 때, 생존자의 시작 위치는?"),
       question: t(E,
         "N=4. Survivor's original position = ?",
         "N=4. 생존자의 원래 위치 = ?"),
@@ -87,8 +84,7 @@ export function makeMcc19CandyCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simulate each round: keep only even-indexed people. Each round halves the count. O(N) total work.",
-        "각 라운드를 시뮬레이션: 짝수 인덱스만 유지. 매 라운드 절반으로 줄어. 총 O(N) 작업."),
+        "Simulate each round: keep only even-indexed people.\nEach round halves the count.\nO(N) total work.", "각 라운드를 시뮬레이션: 짝수 인덱스만 유지. 매 라운드 절반으로 줄어. 총 O(N) 작업."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
@@ -104,8 +100,7 @@ export function makeMcc19CandyCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc19CandySections(E),
     },
   ];

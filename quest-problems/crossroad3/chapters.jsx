@@ -34,8 +34,7 @@ export function makeCrossRd3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows arrive at a gate, each with an arrival time and a duration to pass through. Process them FIFO (first come, first served). Find when the last cow finishes!",
-        "N마리 소가 문에 도착해, 각각 도착 시간과 통과 시간이 있어. FIFO (선착순)로 처리해. 마지막 소가 끝나는 시간을 구해!"),
+        "N cows arrive at a gate, each with an arrival time and a duration to pass through.\nProcess them FIFO (first come, first served).\nFind when the last cow finishes!", "N마리 소가 문에 도착해, 각각 도착 시간과 통과 시간이 있어. FIFO (선착순)로 처리해. 마지막 소가 끝나는 시간을 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udeaa"}</div>
@@ -52,8 +51,7 @@ export function makeCrossRd3Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cow A arrives at t=0, takes 5 sec. Cow B arrives at t=3, takes 2 sec. A finishes at t=5. B has to wait (arrived at 3 but gate busy until 5). When does B finish?",
-        "소 A는 t=0에 도착, 5초 소요. 소 B는 t=3에 도착, 2초 소요. A는 t=5에 끝나. B는 기다려야 해 (3에 도착했지만 문은 5까지 사용 중). B는 언제 끝나?"),
+        "Cow A arrives at t=0, takes 5 sec.\nCow B arrives at t=3, takes 2 sec.\nA finishes at t=5.\nB has to wait (arrived at 3 but gate busy until 5).\nWhen does B finish?", "소 A는 t=0에 도착, 5초 소요.\n소 B는 t=3에 도착, 2초 소요.\nA는 t=5에 끝나.\nB는 기다려야 해 (3에 도착했지만 문은 5까지 사용 중).\nB는 언제 끝나?"),
       question: t(E,
         "A: arrive=0, dur=5. B: arrive=3, dur=2. When does B finish?",
         "A: 도착=0, 소요=5. B: 도착=3, 소요=2. B는 언제 끝나?"),
@@ -71,8 +69,7 @@ export function makeCrossRd3Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "Same example: A(0,5), B(3,2). When does the last cow finish?",
-        "같은 예시: A(0,5), B(3,2). 마지막 소가 끝나는 시간?"),
+        "Same example: A(0,5), B(3,2). When does the last cow finish?", "같은 예시: A(0,5), B(3,2). 마지막 소가 끝나는 시간?"),
       question: t(E,
         "A arrives t=0, 5 sec. B arrives t=3, 2 sec. Last finish time?",
         "A 도착 t=0, 5초. B 도착 t=3, 2초. 마지막 끝나는 시간?"),
@@ -94,8 +91,7 @@ export function makeCrossRd3Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort cows by arrival time, then simulate the queue in one pass. O(N log N) for sorting!",
-        "도착 시간으로 소를 정렬하고, 한 번 순회로 큐를 시뮬레이션해. 정렬에 O(N log N)!"),
+        "Sort cows by arrival time, then simulate the queue in one pass. O(N log N) for sorting!", "도착 시간으로 소를 정렬하고, 한 번 순회로 큐를 시뮬레이션해. 정렬에 O(N log N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -111,8 +107,7 @@ export function makeCrossRd3Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getCrossRoad3Sections(E),
     },
   ];

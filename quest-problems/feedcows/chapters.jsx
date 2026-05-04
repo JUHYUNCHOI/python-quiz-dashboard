@@ -37,8 +37,7 @@ export function makeFeedCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows of breed G or H stand in a line. Place grass patches (type G or H). Each cow must have a matching patch within K positions. Minimize the number of patches!",
-        "N마리의 소가 G 또는 H 품종으로 줄 서 있어. 풀 패치 (G 또는 H 타입)를 놓아. 각 소는 K 위치 이내에 맞는 패치가 있어야 해. 패치 수를 최소화해!"),
+        "N cows of breed G or H stand in a line.\nPlace grass patches (type G or H).\nEach cow must have a matching patch within K positions.\nMinimize the number of patches!", "N마리의 소가 G 또는 H 품종으로 줄 서 있어. 풀 패치 (G 또는 H 타입)를 놓아. 각 소는 K 위치 이내에 맞는 패치가 있어야 해. 패치 수를 최소화해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf3e"}</div>
@@ -55,8 +54,7 @@ export function makeFeedCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "breeds = \"GH\", K = 0. Each cow can only reach its own position. How many patches needed?",
-        "breeds = \"GH\", K = 0. 각 소는 자기 위치만 도달 가능. 패치 몇 개 필요?"),
+        "breeds = \"GH\", K = 0.\nEach cow can only reach its own position.\nHow many patches needed?", "breeds = \"GH\", K = 0. 각 소는 자기 위치만 도달 가능. 패치 몇 개 필요?"),
       question: t(E,
         "\"GH\", K = 0. How many patches?",
         "\"GH\", K = 0. 패치 몇 개?"),
@@ -73,8 +71,7 @@ export function makeFeedCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "breeds = \"GGG\", K = 1. A patch at position 1 covers positions 0, 1, 2. How many patches minimum?",
-        "breeds = \"GGG\", K = 1. 위치 1의 패치는 위치 0, 1, 2를 커버해. 최소 패치 수는?"),
+        "breeds = \"GGG\", K = 1.\nA patch at position 1 covers positions 0, 1, 2.\nHow many patches minimum?", "breeds = \"GGG\", K = 1. 위치 1의 패치는 위치 0, 1, 2를 커버해. 최소 패치 수는?"),
       question: t(E,
         "\"GGG\", K = 1. Min patches?",
         "\"GGG\", K = 1. 최소 패치 수?"),
@@ -96,8 +93,7 @@ export function makeFeedCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Greedy scan left to right. When cow i is uncovered, place patch at i+K. O(N) time!",
-        "왼쪽에서 오른쪽으로 그리디 스캔. 소 i가 미커버면, i+K에 패치 배치. O(N) 시간!"),
+        "Greedy scan left to right. When cow i is uncovered, place patch at i+K. O(N) time!", "왼쪽에서 오른쪽으로 그리디 스캔. 소 i가 미커버면, i+K에 패치 배치. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -113,8 +109,7 @@ export function makeFeedCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getFeedCowsSections(E),
     },
   ];

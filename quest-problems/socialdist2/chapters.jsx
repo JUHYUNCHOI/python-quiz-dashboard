@@ -52,8 +52,7 @@ export function makeSocDist2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given cow positions and sick/healthy status, find the minimum number of initially infected cows. Healthy cows constrain the max spread radius R.",
-        "소의 위치와 감염/건강 상태가 주어져. 최초 감염 소의 최소 수를 구해. 건강한 소가 최대 전파 반경 R을 제한해."),
+        "Given cow positions and sick/healthy status, find the minimum number of initially infected cows.\nHealthy cows constrain the max spread radius R.", "소의 위치와 감염/건강 상태가 주어져. 최초 감염 소의 최소 수를 구해. 건강한 소가 최대 전파 반경 R을 제한해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udda0"}</div>
@@ -70,8 +69,7 @@ export function makeSocDist2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If all cows are sick and there are no healthy cows, what's the minimum number of initially infected cows?",
-        "모든 소가 감염되고 건강한 소가 없으면, 최초 감염 소의 최소 수는?"),
+        "If all cows are sick and there are no healthy cows, what's the minimum number of initially infected cows?", "모든 소가 감염되고 건강한 소가 없으면, 최초 감염 소의 최소 수는?"),
       question: t(E,
         "All cows sick, no healthy cows. Min initially infected?",
         "모든 소 감염, 건강한 소 없음. 최초 감염 최소 수?"),
@@ -89,8 +87,7 @@ export function makeSocDist2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "All cows are sick with no healthy cows. What is the minimum number of initially infected cows?",
-        "모든 소가 감염, 건강한 소 없음. 최초 감염 소의 최소 수는?"),
+        "All cows are sick with no healthy cows.\nWhat is the minimum number of initially infected cows?", "모든 소가 감염, 건강한 소 없음. 최초 감염 소의 최소 수는?"),
       question: t(E,
         "5 cows, all sick, 0 healthy. Min initially infected?",
         "소 5마리, 전부 감염, 건강 0마리. 최초 감염 최소 수?"),
@@ -112,8 +109,7 @@ export function makeSocDist2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort cows, find max R from healthy cows, count sick clusters. O(N log N)!",
-        "소 정렬, 건강한 소에서 최대 R 계산, 감염 클러스터 세기. O(N log N)!"),
+        "Sort cows, find max R from healthy cows, count sick clusters. O(N log N)!", "소 정렬, 건강한 소에서 최대 R 계산, 감염 클러스터 세기. O(N log N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -129,8 +125,7 @@ export function makeSocDist2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getSocDist2Sections(E),
     },
   ];

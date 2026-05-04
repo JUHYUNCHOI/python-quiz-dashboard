@@ -49,8 +49,7 @@ export function makeCannonCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie is a cannonball bouncing on a number line! Jump pads reverse her direction and add power. Targets break if her power is high enough. How many targets can she break?",
-        "베시가 수직선 위에서 대포알처럼 튀어다녀! 점프패드는 방향을 바꾸고 파워를 올려줘. 타겟은 파워가 충분하면 부서져. 몇 개를 부술 수 있을까?"),
+        "Bessie is a cannonball bouncing on a number line!\nJump pads reverse her direction and add power.\nTargets break if her power is high enough.\nHow many targets can she break?", "베시가 수직선 위에서 대포알처럼 튀어다녀! 점프패드는 방향을 바꾸고 파워를 올려줘. 타겟은 파워가 충분하면 부서져. 몇 개를 부술 수 있을까?"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca5"}</div>
@@ -67,8 +66,7 @@ export function makeCannonCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Quick check! If Bessie's power is 2 and she lands on a target with value 3, does it break?",
-        "확인! 베시의 파워가 2이고 값이 3인 타겟에 착지하면, 부서질까?"),
+        "Quick check!\nIf Bessie's power is 2 and she lands on a target with value 3, does it break?", "확인! 베시의 파워가 2이고 값이 3인 타겟에 착지하면, 부서질까?"),
       question: t(E,
         "Power = 2, target value = 3. Does the target break?",
         "파워 = 2, 타겟 값 = 3. 타겟이 부서질까?"),
@@ -85,8 +83,7 @@ export function makeCannonCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Bessie starts at position 2 with power 1, going right. What is her next position?",
-        "베시가 위치 2에서 파워 1, 오른쪽으로 출발해. 다음 위치는?"),
+        "Bessie starts at position 2 with power 1, going right. What is her next position?", "베시가 위치 2에서 파워 1, 오른쪽으로 출발해. 다음 위치는?"),
       question: t(E,
         "Position = 2, direction = right (+1). Next position?",
         "위치 = 2, 방향 = 오른쪽(+1). 다음 위치는?"),
@@ -108,8 +105,7 @@ export function makeCannonCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "We simulate step by step, tracking visited states to detect loops. Worst case O(N\u00b2) states since power can grow up to N.",
-        "한 단계씩 시뮬레이션하면서 방문 상태를 추적해 루프를 감지해. 최악 O(N\u00b2) 상태 (파워가 N까지 커질 수 있으니까)."),
+        "We simulate step by step, tracking visited states to detect loops.\nWorst case O(N\u00b2) states since power can grow up to N.", "한 단계씩 시뮬레이션하면서 방문 상태를 추적해 루프를 감지해. 최악 O(N\u00b2) 상태 (파워가 N까지 커질 수 있으니까)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -125,8 +121,7 @@ export function makeCannonCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getCannonballSections(E),
     },
   ];

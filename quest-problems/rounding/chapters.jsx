@@ -50,7 +50,7 @@ export const SIM_CASES = [
 export function makeCh1(E) {
   return [
     // 1-1: 문제 설명 + 구체 예시 (x=48). 타이틀/USACO 메타는 breadcrumb 와 중복이라 제거.
-    { type: "reveal", narr: t(E, "Two cows (Bessie and Elsie) have different rounding methods. The same number can give different answers — and we count how many such numbers exist.", "두 소 (Bessie 와 Elsie) 의 반올림 방식이 서로 달라서, 같은 수에 대해 답이 다르게 나올 수 있어요. 그런 수가 몇 개인지 세는 문제예요."),
+    { type: "reveal", narr: t(E, "Two cows (Bessie and Elsie) have different rounding methods.\nThe same number can give different answers — and we count how many such numbers exist.", "두 소 (Bessie 와 Elsie) 의 반올림 방식이 서로 달라서, 같은 수에 대해 답이 다르게 나올 수 있어요. 그런 수가 몇 개인지 세는 문제예요."),
       content: (
         <div style={{ padding: 16 }}>
           {/* 구체 예시 — x=48 */}
@@ -92,7 +92,7 @@ export function makeCh1(E) {
       ),
     },
     // 1-2: 입력 / 출력 / 예시 (이해 우선)
-    { type: "reveal", narr: t(E, "Input is one number N. Output is the count of numbers in 2..N where Bessie and Elsie disagree.", "입력은 숫자 N 하나. 출력은 2 부터 N 까지 중에서 Bessie 와 Elsie 의 답이 다른 수의 개수예요."),
+    { type: "reveal", narr: t(E, "Input is one number N.\nOutput is the count of numbers in 2..N where Bessie and Elsie disagree.", "입력은 숫자 N 하나. 출력은 2 부터 N 까지 중에서 Bessie 와 Elsie 의 답이 다른 수의 개수예요."),
       content: (
         <div style={{ padding: 16, fontSize: 14, lineHeight: 1.8 }}>
           {/* 입력 */}
@@ -211,8 +211,7 @@ export function makeCh1(E) {
       ),
     },
     // 1-4: Example 48 — 인라인 시뮬 (직접 단계별 클릭)
-    { type: "reveal", narr: t(E, "Example: x=48. Click → to step through Bessie's and Elsie's reasoning.",
-                                "예시: x=48. 아래에서 → 버튼을 눌러가며 Bessie / Elsie 의 과정을 단계별로 따라가봐요."),
+    { type: "reveal", narr: t(E, "Example: x=48. Click → to step through Bessie's and Elsie's reasoning.", "예시: x=48. 아래에서 → 버튼을 눌러가며 Bessie / Elsie 의 과정을 단계별로 따라가봐요."),
       content: (
         <div style={{ padding: 12 }}>
           <InlineSim x={48} E={E} />
@@ -222,8 +221,7 @@ export function makeCh1(E) {
 
     // 1-5: 다른 숫자도 — 6 가지 케이스 비교
     { type: "reveal", narr: t(E,
-      "48 isn't the only one. Try other numbers: some agree, some disagree. Spot anything?",
-      "48 만 그런 게 아니에요. 다른 숫자도 골라봐요. ✅ 같은 것도 있고 ❌ 다른 것도 있어요. 뭔가 보이나요?"),
+      "48 isn't the only one. Try other numbers: some agree, some disagree. Spot anything?", "48 만 그런 게 아니에요. 다른 숫자도 골라봐요. ✅ 같은 것도 있고 ❌ 다른 것도 있어요. 뭔가 보이나요?"),
       content: (
         <div style={{ padding: 12 }}>
           <Multi6Sim E={E} />
@@ -409,8 +407,7 @@ export function makePatternSteps(E) {
     // 3-5 (NEW): 첫째 자리별 — 한 표로 모두 비교
     { type: "reveal",
       narr: t(E,
-        "Let's see what happens for each first digit when Elsie's carry reaches it.",
-        "Elsie 의 carry 가 첫째 자리에 닿았을 때 어떻게 되는지 — 첫째 자리별로 한눈에 봐요."),
+        "Let's see what happens for each first digit when Elsie's carry reaches it.", "Elsie 의 carry 가 첫째 자리에 닿았을 때 어떻게 되는지 — 첫째 자리별로 한눈에 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: C.dim, marginBottom: 8 }}>
@@ -452,8 +449,7 @@ export function makePatternSteps(E) {
     // 3-9: Carry propagation — 445 vs 435 (시각적 비교)
     { type: "reveal",
       narr: t(E,
-        "But first=4 alone isn't enough! Carry must REACH the first digit. Compare 445 vs 435 side by side.",
-        "근데 첫째=4 만으로는 부족해요! carry 가 첫째까지 도달해야 해요. 445 와 435 를 나란히 비교해봐요."),
+        "But first=4 alone isn't enough!\nCarry must REACH the first digit.\nCompare 445 vs 435 side by side.", "근데 첫째=4 만으로는 부족해요! carry 가 첫째까지 도달해야 해요. 445 와 435 를 나란히 비교해봐요."),
       content: (
         <div style={{ padding: 16 }}>
           {/* 두 수 나란히 비교 */}
@@ -514,8 +510,7 @@ export function makePatternSteps(E) {
     // 3-9b: 슬롯으로 개수 세기 (곱셈 원리 — 시각)
     { type: "reveal",
       narr: t(E,
-        "Each digit position is a slot. Multiply the choices per slot to get the total — like a slot machine!",
-        "각 자리는 슬롯이에요. 슬롯마다 가능한 수를 모두 곱하면 전체 개수가 나와요 — 슬롯머신처럼요!"),
+        "Each digit position is a slot.\nMultiply the choices per slot to get the total — like a slot machine!", "각 자리는 슬롯이에요. 슬롯마다 가능한 수를 모두 곱하면 전체 개수가 나와요 — 슬롯머신처럼요!"),
       content: (
         <div style={{ padding: 16 }}>
           {/* 2자리 시각 */}
@@ -604,8 +599,7 @@ export function makePatternSteps(E) {
     // 3-10: Count 2-digit
     { type: "quiz",
       narr: t(E,
-        "Apply it: 2-digit slot machine.",
-        "직접 세보기: 2자리 슬롯머신."),
+        "Apply it: 2-digit slot machine.", "직접 세보기: 2자리 슬롯머신."),
       question: t(E, "1 × 5 = ?", "1 × 5 = ?"),
       hint: t(E, "First digit slot: 1. Last digit slot: 5.", "첫째 슬롯: 1, 마지막 슬롯: 5."),
       options: t(E, ["4","5","6","10"], ["4","5","6","10"]),
@@ -615,8 +609,7 @@ export function makePatternSteps(E) {
     // 3-11: Count 3-digit
     { type: "input",
       narr: t(E,
-        "Now 3-digit. One more slot in the middle (4~9, 6 choices).",
-        "이제 3자리. 중간 슬롯이 하나 더 (4~9, 6가지)."),
+        "Now 3-digit. One more slot in the middle (4~9, 6 choices).", "이제 3자리. 중간 슬롯이 하나 더 (4~9, 6가지)."),
       question: t(E, "1 × 6 × 5 = ?", "1 × 6 × 5 = ?"),
       answer: 30,
     },
@@ -1071,8 +1064,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-1: 입력 받기
     { type: "reveal",
       narr: t(E,
-        "Step 1: read the input. T test cases, each gives one N.",
-        "1단계: 입력부터 받아요. T 개의 테스트케이스, 각각 N 이 하나씩."),
+        "Step 1: read the input. T test cases, each gives one N.", "1단계: 입력부터 받아요. T 개의 테스트케이스, 각각 N 이 하나씩."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 1: Input", "1단계: 입력 받기")} />
@@ -1084,8 +1076,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-2: Bessie/Elsie 계산법 호출 + count 비교
     { type: "reveal",
       narr: t(E,
-        "Step 2: for each x from 2 to N, get both answers and count where they differ.",
-        "2단계: 결국엔 Bessie / Elsie 의 계산법이 필요해요. 두 값을 비교해서 다르면 카운트!"),
+        "Step 2: for each x from 2 to N, get both answers and count where they differ.", "2단계: 결국엔 Bessie / Elsie 의 계산법이 필요해요. 두 값을 비교해서 다르면 카운트!"),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 2: Compare and count", "2단계: 두 값 비교 → 카운트")} />
@@ -1101,8 +1092,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-3: 회고 quiz — 자연스러운 사고 흐름
     { type: "quiz",
       narr: t(E,
-        "Now we need Bessie() and Elsie(). Hmm — both decide based on P, right? So P first. How did we compute P again?",
-        "이제 Bessie() 랑 Elsie() 를 만들어야 해요. 근데 둘 다 결국 P 를 보고 결정하잖아요? 그럼 P 부터 짚고 가야 해요. 챕터 1 에서 P 어떻게 구했었더라?"),
+        "Now we need Bessie() and Elsie().\nHmm — both decide based on P, right?\nSo P first.\nHow did we compute P again?", "이제 Bessie() 랑 Elsie() 를 만들어야 해요.\n근데 둘 다 결국 P 를 보고 결정하잖아요?\n그럼 P 부터 짚고 가야 해요.\n챕터 1 에서 P 어떻게 구했었더라?"),
       question: t(E, "What was P?", "P 는 무엇이었나요?"),
       hint: t(E, "Look at x and just count something simple…", "x 를 보고 뭔가 단순한 걸 세면 돼요…"),
       options: t(E,
@@ -1116,8 +1106,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-4: P 구하기 (코드)
     { type: "reveal",
       narr: t(E,
-        "Step 3: P = len(str(x)). Both functions will start with this line.",
-        "3단계: P = len(str(x)). 두 함수 모두 이 한 줄로 시작해요."),
+        "Step 3: P = len(str(x)). Both functions will start with this line.", "3단계: P = len(str(x)). 두 함수 모두 이 한 줄로 시작해요."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 3: Compute P", "3단계: P 구하기")} />
@@ -1132,8 +1121,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-5: Bessie 함수
     { type: "reveal",
       narr: t(E,
-        "Step 4: Bessie just looks at the first digit. ≥5 → 10ᴾ. Else → 0.",
-        "4단계: Bessie 는 첫째 자리 하나만 봐요. ≥5 면 10ᴾ, 아니면 0."),
+        "Step 4: Bessie just looks at the first digit. ≥5 → 10ᴾ. Else → 0.", "4단계: Bessie 는 첫째 자리 하나만 봐요. ≥5 면 10ᴾ, 아니면 0."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 4: Bessie 🐄", "4단계: Bessie 구하기 🐄")} />
@@ -1148,8 +1136,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-6: Elsie 분석 — pos 자리 숫자 추출 (트릭 1)
     { type: "reveal",
       narr: t(E,
-        "Step 5: Elsie checks each digit from 1st to P-th. First trick — extract the pos-th digit.",
-        "5단계: Elsie 는 1자리부터 P자리까지 하나씩 봐요. 트릭 1 — pos 번째 자리 숫자 뽑기."),
+        "Step 5: Elsie checks each digit from 1st to P-th. First trick — extract the pos-th digit.", "5단계: Elsie 는 1자리부터 P자리까지 하나씩 봐요. 트릭 1 — pos 번째 자리 숫자 뽑기."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 5: Elsie 🐮 — Trick 1: extract digit", "5단계: Elsie 🐮 — 트릭 1: 자리 숫자 추출")} />
@@ -1165,8 +1152,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-7: Elsie 분석 — 올림 + 자리 이하 0 (트릭 2)
     { type: "reveal",
       narr: t(E,
-        "Trick 2 — if digit ≥5, carry up. Then zero out that position.",
-        "트릭 2 — 그 자리가 ≥5 면 위로 +1 올림. 그리고 그 자리 이하는 0 으로."),
+        "Trick 2 — if digit ≥5, carry up. Then zero out that position.", "트릭 2 — 그 자리가 ≥5 면 위로 +1 올림. 그리고 그 자리 이하는 0 으로."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 5: Elsie 🐮 — Trick 2: carry + clear", "5단계: Elsie 🐮 — 트릭 2: 올림 + 자리 이하 0")} />
@@ -1182,8 +1168,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-8: Elsie 함수 완성
     { type: "reveal",
       narr: t(E,
-        "Combine the tricks into Elsie. Loop pos = 1 to P.",
-        "두 트릭을 합쳐서 Elsie 함수 완성. pos 를 1 부터 P 까지 반복."),
+        "Combine the tricks into Elsie. Loop pos = 1 to P.", "두 트릭을 합쳐서 Elsie 함수 완성. pos 를 1 부터 P 까지 반복."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 5: Elsie 🐮 — full function", "5단계: Elsie 🐮 — 함수 완성")} />
@@ -1198,8 +1183,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-9: 전체 코드 합치기
     { type: "reveal",
       narr: t(E,
-        "Step 6: put it all together — input + loop + Bessie + Elsie.",
-        "6단계: 다 합쳐요 — 입력 + 루프 + Bessie + Elsie."),
+        "Step 6: put it all together — input + loop + Bessie + Elsie.", "6단계: 다 합쳐요 — 입력 + 루프 + Bessie + Elsie."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 6: Full code", "6단계: 전체 코드")} />
@@ -1214,15 +1198,13 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-9: 돌려보기 — 짧고 중립적 narration. 학생이 직접 체감.
     { type: "runner",
       narr: t(E,
-        "Try various N — start small, go big. Notice anything?",
-        "N 을 다양하게 키워가며 돌려보세요. 뭔가 느껴지나요?"),
+        "Try various N — start small, go big. Notice anything?", "N 을 다양하게 키워가며 돌려보세요. 뭔가 느껴지나요?"),
     },
 
     // 4-9b: USACO 제출 결과 — 일부만 통과, 나머지 TLE
     { type: "reveal",
       narr: t(E,
-        "Submit to USACO and you get this — first few cases pass (barely), rest time out. So I thought of prefix sum.",
-        "USACO 에 제출하면 이런 결과가 나와요. 앞 몇 개는 (간신히) 통과, 나머지는 다 시간 초과. 그래서 누적합을 떠올린 거예요."),
+        "Submit to USACO and you get this — first few cases pass (barely), rest time out.\nSo I thought of prefix sum.", "USACO 에 제출하면 이런 결과가 나와요. 앞 몇 개는 (간신히) 통과, 나머지는 다 시간 초과. 그래서 누적합을 떠올린 거예요."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "USACO submission — judge results", "USACO 제출 결과 — 채점 결과")} />
@@ -1270,8 +1252,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-10: 누적합 — 시각적으로 (x 막대 + ans 누적 + 여러 질문 즉답)
     { type: "reveal",
       narr: t(E,
-        "Build an array once, then every query reads it instantly.",
-        "배열 한 번만 만들어놓으면 — 어떤 질문이 와도 즉답!"),
+        "Build an array once, then every query reads it instantly.", "배열 한 번만 만들어놓으면 — 어떤 질문이 와도 즉답!"),
       content: (
         <div style={{ padding: 16 }}>
           {/* 핵심 아이디어 한 줄 */}
@@ -1343,8 +1324,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-12: 누적합 제출 결과 — 더 통과하지만 여전히 TLE
     { type: "reveal",
       narr: t(E,
-        "Submit prefix sum and… 6 cases pass instead of 4. Better, but still TLE on the rest.",
-        "누적합으로 제출하면 — 4 개 → 6 개로 늘어요. 좋아졌지만 나머지는 여전히 시간 초과."),
+        "Submit prefix sum and… 6 cases pass instead of 4. Better, but still TLE on the rest.", "누적합으로 제출하면 — 4 개 → 6 개로 늘어요. 좋아졌지만 나머지는 여전히 시간 초과."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Prefix sum submission", "누적합 제출 결과")} />
@@ -1394,8 +1374,7 @@ export function makeBruteSteps(E, lang = "py") {
     // 4-13: 결론 — 정말 스마트한 방법이 필요 → 패턴 챕터로
     { type: "reveal",
       narr: t(E,
-        "Conclusion: counting one by one is the limit. We need a smarter idea — count without iterating. That comes from finding a pattern.",
-        "결론: 하나씩 세는 건 한계예요. 정말 스마트한 방법 — 안 돌리고 그냥 세기 — 가 필요해요. 그건 패턴을 찾으면 가능해져요."),
+        "Conclusion: counting one by one is the limit.\nWe need a smarter idea — count without iterating.\nThat comes from finding a pattern.", "결론: 하나씩 세는 건 한계예요. 정말 스마트한 방법 — 안 돌리고 그냥 세기 — 가 필요해요. 그건 패턴을 찾으면 가능해져요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -1552,8 +1531,7 @@ export function makeOptSteps(E) {
     // 5-0: 부드러운 도입 — 공식이 뭘 뜻하는지 구체 숫자로 보여주기
     { type: "reveal",
       narr: t(E,
-        "Recap: pattern chapter formula = 5 × 6^(d−2). It tells us, for each digit-count d, how many numbers in that range give different Bessie/Elsie answers.",
-        "패턴 챕터에서 찾은 공식: 5 × 6ᵈ⁻². 이게 뜻하는 건 — d 자리 수 중에서 베시랑 엘시 답이 다른 게 몇 개인지."),
+        "Recap: pattern chapter formula = 5 × 6^(d−2).\nIt tells us, for each digit-count d, how many numbers in that range give different Bessie/Elsie answers.", "패턴 챕터에서 찾은 공식: 5 × 6ᵈ⁻². 이게 뜻하는 건 — d 자리 수 중에서 베시랑 엘시 답이 다른 게 몇 개인지."),
       content: (
         <div style={{ padding: 16 }}>
           {/* 공식 카드 */}
@@ -1611,8 +1589,7 @@ export function makeOptSteps(E) {
     // 5-1a: 2자리 시각 — 실제로 어떤 수들인지
     { type: "reveal",
       narr: t(E,
-        "2-digit numbers where Bessie ≠ Elsie. Look — they're all 4_ with last ≥5.",
-        "2자리에서 답이 다른 수들. 보면 — 다 4_ 이고 마지막이 ≥5."),
+        "2-digit numbers where Bessie ≠ Elsie. Look — they're all 4_ with last ≥5.", "2자리에서 답이 다른 수들. 보면 — 다 4_ 이고 마지막이 ≥5."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 14, fontFamily: "'JetBrains Mono',monospace" }}>
@@ -1648,8 +1625,7 @@ export function makeOptSteps(E) {
     // 5-2a: 3자리 시각 — 4xx 패턴
     { type: "reveal",
       narr: t(E,
-        "3-digit: first=4 fixed, middle 4~9 (6 choices), last 5~9 (5 choices).",
-        "3자리: 첫째=4 고정, 중간 4~9 (6가지), 마지막 5~9 (5가지)."),
+        "3-digit: first=4 fixed, middle 4~9 (6 choices), last 5~9 (5 choices).", "3자리: 첫째=4 고정, 중간 4~9 (6가지), 마지막 5~9 (5가지)."),
       content: (
         <div style={{ padding: 16 }}>
           {/* 슬롯 시각화 */}
@@ -1707,8 +1683,7 @@ export function makeOptSteps(E) {
     // 5-3: N=1000 total — 자릿수별 분석 + 합계
     { type: "reveal",
       narr: t(E,
-        "Now N=1000. Break it down by digit count.",
-        "N=1000 일 때, 자릿수별로 몇 개씩인지 따져봐요."),
+        "Now N=1000. Break it down by digit count.", "N=1000 일 때, 자릿수별로 몇 개씩인지 따져봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
@@ -1758,8 +1733,7 @@ export function makeOptSteps(E) {
     // 5-4: 전략 — 더 친절하게 (구체 예시 N=473 으로)
     { type: "reveal",
       narr: t(E,
-        "What if N = 473? Not round like 1000. Trick: split into two parts — easy + tricky.",
-        "N 이 473 처럼 딱 떨어지지 않으면 어떻게 할까요? 두 부분으로 나누면 돼요 — 쉬운 부분 + 어려운 부분."),
+        "What if N = 473? Not round like 1000. Trick: split into two parts — easy + tricky.", "N 이 473 처럼 딱 떨어지지 않으면 어떻게 할까요? 두 부분으로 나누면 돼요 — 쉬운 부분 + 어려운 부분."),
       content: (
         <div style={{ padding: 16, fontSize: 14, lineHeight: 1.85 }}>
           {/* N=473 시각 */}
@@ -1812,8 +1786,7 @@ export function makeOptSteps(E) {
     // 5-5: N=473 의 어려운 부분 — 표로 한눈에 (퀴즈 4개 → 시각 1개로)
     { type: "reveal",
       narr: t(E,
-        "Part 2 for N=473: count 4__ numbers ≤ 473. Let's tabulate by middle digit.",
-        "어려운 부분: 4__ 형태 (3자리, ≤ 473) 를 세요. 중간 자리 별로 표로 정리해봐요."),
+        "Part 2 for N=473: count 4__ numbers ≤ 473. Let's tabulate by middle digit.", "어려운 부분: 4__ 형태 (3자리, ≤ 473) 를 세요. 중간 자리 별로 표로 정리해봐요."),
       content: (
         <div style={{ padding: 16 }}>
           {/* 슬롯 구조 보여주기 */}
@@ -1891,8 +1864,7 @@ export function makeOptSteps(E) {
     // 5-6: 합계 한 번만 묻기
     { type: "input",
       narr: t(E,
-        "Combine: easy part (2-digit) = 5, tricky part (3-digit, ≤473) = 15. Total?",
-        "합쳐요: 쉬운 부분 (2자리) = 5, 어려운 부분 (3자리, ≤473) = 15. 합계?"),
+        "Combine: easy part (2-digit) = 5, tricky part (3-digit, ≤473) = 15. Total?", "합쳐요: 쉬운 부분 (2자리) = 5, 어려운 부분 (3자리, ≤473) = 15. 합계?"),
       question: "5 + 15 = ?",
       hint: t(E, "Part 1 + Part 2.", "쉬운 부분 + 어려운 부분."),
       answer: 20,
@@ -1900,8 +1872,7 @@ export function makeOptSteps(E) {
     // 5-7: 인터랙티브 코드 위젯 (Python/C++ 토글 + PDF 다운로드)
     { type: "progressive",
       narr: t(E,
-        "Pick a part to see its code + reasoning. Toggle Python ↔ C++. Save as PDF for later.",
-        "버튼 눌러서 부분별 코드 + 이유 확인. Python ↔ C++ 토글. PDF 저장해서 나중에 보기."),
+        "Pick a part to see its code + reasoning. Toggle Python ↔ C++. Save as PDF for later.", "버튼 눌러서 부분별 코드 + 이유 확인. Python ↔ C++ 토글. PDF 저장해서 나중에 보기."),
       sections: getOptSections(E),
     },
   ];

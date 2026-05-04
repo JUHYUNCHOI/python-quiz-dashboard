@@ -62,8 +62,7 @@ export function makeTrafficCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A highway has N segments with sensors giving flow ranges. Between segments, on-ramps add cars and off-ramps remove cars. Find the possible flow range at the start and end of the highway.",
-        "고속도로에 N개 구간이 있고 센서가 유량 범위를 알려줘. 구간 사이에 진입로(on-ramp)는 차를 추가하고 출구로(off-ramp)는 차를 빼. 고속도로 시작과 끝의 가능한 유량 범위를 구해!"),
+        "A highway has N segments with sensors giving flow ranges.\nBetween segments, on-ramps add cars and off-ramps remove cars.\nFind the possible flow range at the start and end of the highway.", "고속도로에 N개 구간이 있고 센서가 유량 범위를 알려줘.\n구간 사이에 진입로(on-ramp)는 차를 추가하고 출구로(off-ramp)는 차를 빼.\n고속도로 시작과 끝의 가능한 유량 범위를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude97"}</div>
@@ -80,8 +79,7 @@ export function makeTrafficCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If highway flow is [10,20] and an on-ramp adds [5,10] cars, what's the flow after?",
-        "고속도로 유량이 [10,20]이고 진입로가 [5,10]대를 추가하면 이후 유량은?"),
+        "If highway flow is [10,20] and an on-ramp adds [5,10] cars, what's the flow after?", "고속도로 유량이 [10,20]이고 진입로가 [5,10]대를 추가하면 이후 유량은?"),
       question: t(E,
         "Flow [10,20] + on-ramp [5,10] = ?",
         "유량 [10,20] + 진입로 [5,10] = ?"),
@@ -100,8 +98,7 @@ export function makeTrafficCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If the initial flow range is [10, 20], what is the maximum flow?",
-        "초기 유량 범위가 [10, 20]이면 최대 유량은?"),
+        "If the initial flow range is [10, 20], what is the maximum flow?", "초기 유량 범위가 [10, 20]이면 최대 유량은?"),
       question: t(E,
         "Flow range [10, 20]. Maximum?",
         "유량 범위 [10, 20]. 최대값?"),
@@ -123,8 +120,7 @@ export function makeTrafficCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Two linear passes over the segments. O(N) time!",
-        "구간에 대해 두 번의 선형 패스. O(N) 시간!"),
+        "Two linear passes over the segments. O(N) time!", "구간에 대해 두 번의 선형 패스. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -140,8 +136,7 @@ export function makeTrafficCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMeasTrafficSections(E),
     },
   ];

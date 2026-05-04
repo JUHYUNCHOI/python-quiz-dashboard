@@ -50,8 +50,7 @@ export function makeBlocksCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "4 cubes with 6 letters each. Spell words by choosing which block goes where and which face shows. Try all permutations!",
-        "4개의 큐브에 각 6개 글자. 어떤 블록을 어디에 놓고 어떤 면을 보여줄지 선택해서 단어를 만들어. 모든 순열을 시도!"),
+        "4 cubes with 6 letters each.\nSpell words by choosing which block goes where and which face shows.\nTry all permutations!", "4개의 큐브에 각 6개 글자. 어떤 블록을 어디에 놓고 어떤 면을 보여줄지 선택해서 단어를 만들어. 모든 순열을 시도!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🧱"}</div>
@@ -68,8 +67,7 @@ export function makeBlocksCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "4 blocks, word length 3. Pick 3 blocks from 4 and arrange them. How many ways?",
-        "4개 블록, 단어 길이 3. 4개 중 3개를 골라 배열. 몇 가지 방법?"),
+        "4 blocks, word length 3. Pick 3 blocks from 4 and arrange them. How many ways?", "4개 블록, 단어 길이 3. 4개 중 3개를 골라 배열. 몇 가지 방법?"),
       question: t(E,
         "C(4,3) * 3! = how many permutations?",
         "C(4,3) * 3! = 몇 가지 순열?"),
@@ -87,8 +85,7 @@ export function makeBlocksCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Block 1 has faces \"COWMOO\" (C,O,W,M,O,O). Can it show the letter 'C'? Yes=1, No=0",
-        "블록1의 면이 \"COWMOO\" (C,O,W,M,O,O). 글자 'C'를 보여줄 수 있어? 예=1, 아니오=0"),
+        "Block 1 has faces \"COWMOO\" (C,O,W,M,O,O). Can it show the letter 'C'? Yes=1, No=0", "블록1의 면이 \"COWMOO\" (C,O,W,M,O,O). 글자 'C'를 보여줄 수 있어? 예=1, 아니오=0"),
       question: t(E,
         "Block \"COWMOO\": can it show 'C'? (1=yes, 0=no)",
         "블록 \"COWMOO\": 'C'를 보여줄 수 있어? (1=예, 0=아니오)"),
@@ -110,8 +107,7 @@ export function makeBlocksCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "4! permutations * 6 faces each = small constant. For each word, brute force all block assignments. O(N * 4! * L).",
-        "4! 순열 * 각 6면 = 작은 상수. 각 단어에 대해 모든 블록 배치를 전수조사. O(N * 4! * L)."),
+        "4!\npermutations * 6 faces each = small constant.\nFor each word, brute force all block assignments.\nO(N * 4!\n* L).", "4! 순열 * 각 6면 = 작은 상수. 각 단어에 대해 모든 블록 배치를 전수조사. O(N * 4! * L)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -127,8 +123,7 @@ export function makeBlocksCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getBlocksSections(E),
     },
   ];

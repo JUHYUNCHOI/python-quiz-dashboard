@@ -98,8 +98,7 @@ export function makeFavPerm2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer Nhoj takes a permutation and dismantles it step by step, leaving hints. Your job: figure out the original permutation from those hints! 🧩",
-        "농부 Nhoj가 순열을 하나씩 분해하면서 힌트를 남겨. 네 일: 힌트로 원래 순열을 알아내기! 🧩"),
+        "Farmer Nhoj takes a permutation and dismantles it step by step, leaving hints.\nYour job: figure out the original permutation from those hints!\n🧩", "농부 Nhoj가 순열을 하나씩 분해하면서 힌트를 남겨. 네 일: 힌트로 원래 순열을 알아내기! 🧩"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🧩</div>
@@ -112,8 +111,7 @@ export function makeFavPerm2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A permutation of N is an arrangement of numbers 1 through N, each used exactly once. For example, [3, 1, 2, 4] is a permutation of 4.",
-        "N의 순열은 1부터 N까지 숫자를 각각 한 번씩 사용한 배열이야. 예: [3, 1, 2, 4]는 4의 순열."),
+        "A permutation of N is an arrangement of numbers 1 through N, each used exactly once.\nFor example, [3, 1, 2, 4] is a permutation of 4.", "N의 순열은 1부터 N까지 숫자를 각각 한 번씩 사용한 배열이야. 예: [3, 1, 2, 4]는 4의 순열."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#8b5cf6", marginBottom: 8 }}>
@@ -130,8 +128,7 @@ export function makeFavPerm2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Nhoj's dismantling process: Compare FIRST and LAST elements. If first > last, look at the 2nd element and remove the 1st. Otherwise, look at the 2nd-to-last and remove the last.",
-        "Nhoj의 분해 과정: 첫째와 마지막 비교. 첫째 > 마지막이면, 둘째를 보고 첫째를 제거. 아니면, 뒤에서 둘째를 보고 마지막을 제거."),
+        "Nhoj's dismantling process: Compare FIRST and LAST elements.\nIf first > last, look at the 2nd element and remove the 1st.\nOtherwise, look at the 2nd-to-last and remove the last.", "Nhoj의 분해 과정: 첫째와 마지막 비교. 첫째 > 마지막이면, 둘째를 보고 첫째를 제거. 아니면, 뒤에서 둘째를 보고 마지막을 제거."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -173,8 +170,7 @@ export function makeFavPerm2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace with [3, 1, 2, 4]! Step 1: First=3, Last=4. Is 3 > 4? No! So we write the 2nd-to-last (= 2) and remove the last (4).",
-        "[3, 1, 2, 4]로 추적! 1단계: 첫째=3, 마지막=4. 3 > 4? 아니! 뒤에서 둘째(= 2) 기록, 마지막(4) 제거."),
+        "Let's trace with [3, 1, 2, 4]!\nStep 1: First=3, Last=4.\nIs 3 > 4?\nNo!\nSo we write the 2nd-to-last (= 2) and remove the last (4).", "[3, 1, 2, 4]로 추적! 1단계: 첫째=3, 마지막=4. 3 > 4? 아니! 뒤에서 둘째(= 2) 기록, 마지막(4) 제거."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -199,8 +195,7 @@ export function makeFavPerm2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: Remaining [3, 1, 2]. First=3, Last=2. Is 3 > 2? Yes! Write the 2nd element (=1), remove the first (3).",
-        "2단계: 남은 [3, 1, 2]. 첫째=3, 마지막=2. 3 > 2? 네! 둘째(=1) 기록, 첫째(3) 제거."),
+        "Step 2: Remaining [3, 1, 2].\nFirst=3, Last=2.\nIs 3 > 2?\nYes!\nWrite the 2nd element (=1), remove the first (3).", "2단계: 남은 [3, 1, 2]. 첫째=3, 마지막=2. 3 > 2? 네! 둘째(=1) 기록, 첫째(3) 제거."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -225,8 +220,7 @@ export function makeFavPerm2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Step 3: Remaining [1, 2]. First=1, Last=2. 1 ≤ 2, so write 2nd-to-last (=1). Remove last. Only [1] left — done! Hints = [2, 1, 1].",
-        "3단계: 남은 [1, 2]. 첫째=1, 마지막=2. 1 ≤ 2이니 뒤에서 둘째(=1) 기록. 마지막 제거. [1]만 남음 — 끝! 힌트 = [2, 1, 1]."),
+        "Step 3: Remaining [1, 2].\nFirst=1, Last=2.\n1 ≤ 2, so write 2nd-to-last (=1).\nRemove last.\nOnly [1] left — done!\nHints = [2, 1, 1].", "3단계: 남은 [1, 2]. 첫째=1, 마지막=2. 1 ≤ 2이니 뒤에서 둘째(=1) 기록. 마지막 제거. [1]만 남음 — 끝! 힌트 = [2, 1, 1]."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -251,8 +245,7 @@ export function makeFavPerm2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "We just traced [3,1,2,4] → hints [2,1,1]. The problem gives us HINTS and asks for the ORIGINAL permutation!",
-        "[3,1,2,4] → 힌트 [2,1,1]을 추적했어. 문제는 힌트를 주고 원래 순열을 물어!"),
+        "We just traced [3,1,2,4] → hints [2,1,1].\nThe problem gives us HINTS and asks for the ORIGINAL permutation!", "[3,1,2,4] → 힌트 [2,1,1]을 추적했어. 문제는 힌트를 주고 원래 순열을 물어!"),
       question: t(E,
         "Given hints [2,1,1] and N=4, what's the original permutation?",
         "힌트 [2,1,1], N=4일 때 원래 순열은?"),
@@ -265,8 +258,7 @@ export function makeFavPerm2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Multiple permutations might produce the same hints. We want the LEXICOGRAPHICALLY SMALLEST one — like dictionary order for arrays!",
-        "여러 순열이 같은 힌트를 만들 수 있어. 사전순으로 가장 작은 걸 원해 — 배열의 사전 순서!"),
+        "Multiple permutations might produce the same hints.\nWe want the LEXICOGRAPHICALLY SMALLEST one — like dictionary order for arrays!", "여러 순열이 같은 힌트를 만들 수 있어. 사전순으로 가장 작은 걸 원해 — 배열의 사전 순서!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "center" }}>
@@ -295,8 +287,7 @@ export function makeFavPerm2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Lexicographic comparison: compare position by position. The first difference decides!",
-        "사전순 비교: 위치별로 비교. 첫 번째 차이가 결정!"),
+        "Lexicographic comparison: compare position by position. The first difference decides!", "사전순 비교: 위치별로 비교. 첫 번째 차이가 결정!"),
       question: t(E,
         "Which is lexicographically smaller: [1,3,2] or [1,2,4]?",
         "사전순으로 더 작은 것은: [1,3,2] vs [1,2,4]?"),
@@ -309,8 +300,7 @@ export function makeFavPerm2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "Each step removes one element, until one is left. So from N elements, we get N-1 hints!",
-        "각 단계에서 원소 하나를 제거, 하나 남을 때까지. N개 원소에서 N-1개 힌트!"),
+        "Each step removes one element, until one is left. So from N elements, we get N-1 hints!", "각 단계에서 원소 하나를 제거, 하나 남을 때까지. N개 원소에서 N-1개 힌트!"),
       question: t(E, "N=7. How many hints?", "N=7. 힌트 몇 개?"),
       answer: 6,
     },
@@ -327,8 +317,7 @@ export function makeFavPerm2Ch2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The key idea: work BACKWARDS! The last hint tells us about the final 2 elements. The second-to-last hint about the final 3, etc.",
-        "핵심 아이디어: 뒤에서부터! 마지막 힌트가 마지막 2개 원소에 대한 정보. 그 전 힌트가 마지막 3개, ..."),
+        "The key idea: work BACKWARDS!\nThe last hint tells us about the final 2 elements.\nThe second-to-last hint about the final 3, etc.", "핵심 아이디어: 뒤에서부터! 마지막 힌트가 마지막 2개 원소에 대한 정보. 그 전 힌트가 마지막 3개, ..."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16 }}>
@@ -351,8 +340,7 @@ export function makeFavPerm2Ch2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The last remaining element is NOT in the hints! It's the one number from 1..N that never appears as a hint. For N=4, hints=[2,1,1], the missing number is...",
-        "마지막 남은 원소는 힌트에 없어! 1..N 중 힌트에 한 번도 안 나온 숫자. N=4, 힌트=[2,1,1]이면 없는 숫자는..."),
+        "The last remaining element is NOT in the hints!\nIt's the one number from 1..N that never appears as a hint.\nFor N=4, hints=[2,1,1], the missing number is...", "마지막 남은 원소는 힌트에 없어! 1..N 중 힌트에 한 번도 안 나온 숫자. N=4, 힌트=[2,1,1]이면 없는 숫자는..."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 12 }}>
@@ -385,8 +373,7 @@ export function makeFavPerm2Ch2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Find the missing number! N=5, hints = [3, 2, 4, 1]. Numbers 1-5, which is missing?",
-        "빠진 숫자 찾기! N=5, 힌트 = [3, 2, 4, 1]. 1~5 중 뭐가 없어?"),
+        "Find the missing number! N=5, hints = [3, 2, 4, 1]. Numbers 1-5, which is missing?", "빠진 숫자 찾기! N=5, 힌트 = [3, 2, 4, 1]. 1~5 중 뭐가 없어?"),
       question: t(E, "Missing from hints [3, 2, 4, 1]?", "힌트 [3, 2, 4, 1]에서 빠진 것?"),
       options: ["5", "3", "1", "2"],
       correct: 0,
@@ -397,8 +384,7 @@ export function makeFavPerm2Ch2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Start with the last element (3). Then process hints in REVERSE. h[2]=1: this was written when 2 elements remained. It's the 'neighbor' of the element being removed.",
-        "마지막 원소(3)로 시작. 힌트를 역순으로 처리. h[2]=1: 2개 남았을 때 기록. 제거되는 원소의 '이웃'."),
+        "Start with the last element (3).\nThen process hints in REVERSE.\nh[2]=1: this was written when 2 elements remained.\nIt's the 'neighbor' of the element being removed.", "마지막 원소(3)로 시작. 힌트를 역순으로 처리. h[2]=1: 2개 남았을 때 기록. 제거되는 원소의 '이웃'."),
       content: (
         <div style={{ padding: 16 }}>
           <Trace steps={[
@@ -413,8 +399,7 @@ export function makeFavPerm2Ch2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "At each reverse step, the hint value was either the 2nd element (→ add new element at front) or 2nd-to-last (→ add new element at back). We need to figure out which!",
-        "각 역추적 단계에서, 힌트값이 둘째였는지 (→ 앞에 추가) 뒤에서 둘째였는지 (→ 뒤에 추가)를 알아내야 해!"),
+        "At each reverse step, the hint value was either the 2nd element (→ add new element at front) or 2nd-to-last (→ add new element at back).\nWe need to figure out which!", "각 역추적 단계에서, 힌트값이 둘째였는지 (→ 앞에 추가) 뒤에서 둘째였는지 (→ 뒤에 추가)를 알아내야 해!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -448,8 +433,7 @@ export function makeFavPerm2Ch2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Remember: if first > last → write 2nd. So in reverse: if the hint is currently 2nd in our array, the removed element was the front.",
-        "기억: 첫째 > 마지막 → 둘째 기록. 역으로: 힌트가 현재 배열의 둘째면, 제거된 원소는 앞이었어."),
+        "Remember: if first > last → write 2nd.\nSo in reverse: if the hint is currently 2nd in our array, the removed element was the front.", "기억: 첫째 > 마지막 → 둘째 기록. 역으로: 힌트가 현재 배열의 둘째면, 제거된 원소는 앞이었어."),
       question: t(E,
         "Current array [1, 3]. Hint value 1 is at position 0 (= 1st). Is it the 2nd element?",
         "현재 배열 [1, 3]. 힌트값 1은 위치 0 (= 첫째). 둘째 원소인가?"),
@@ -465,8 +449,7 @@ export function makeFavPerm2Ch2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Full reverse trace for hints [2,1,1], N=4! Start with missing number 3, then process h[2], h[1], h[0] in reverse.",
-        "힌트 [2,1,1], N=4의 전체 역추적! 빠진 숫자 3으로 시작, h[2], h[1], h[0]을 역순으로 처리."),
+        "Full reverse trace for hints [2,1,1], N=4!\nStart with missing number 3, then process h[2], h[1], h[0] in reverse.", "힌트 [2,1,1], N=4의 전체 역추적! 빠진 숫자 3으로 시작, h[2], h[1], h[0]을 역순으로 처리."),
       content: (
         <div style={{ padding: 16 }}>
           <Trace steps={[
@@ -486,8 +469,7 @@ export function makeFavPerm2Ch2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Sometimes no valid permutation exists! For example, N=2, hints=[1]. The only permutations of 2 are [1,2] and [2,1]. Let's check: [1,2] → 1≤2 → write 1. [2,1] → 2>1 → write 1. Both give hint [1]. But the missing number would also be... 1? That's impossible! So answer = -1.",
-        "가끔 유효한 순열이 없어! 예: N=2, 힌트=[1]. 2의 순열은 [1,2]와 [2,1]뿐. 확인: [1,2] → 1≤2 → 1기록. [2,1] → 2>1 → 1기록. 둘 다 힌트 [1]. 근데 빠진 숫자도... 1? 불가능! 답 = -1."),
+        "Sometimes no valid permutation exists!\nFor example, N=2, hints=[1].\nThe only permutations of 2 are [1,2] and [2,1].\nLet's check: [1,2] → 1≤2 → write 1.\n[2,1] → 2>1 → write 1.\nBoth give hint [1].\nBut the missing number would also be...\n1?\nThat's impossible!\nSo answer = -1.", "가끔 유효한 순열이 없어!\n예: N=2, 힌트=[1].\n2의 순열은 [1,2]와 [2,1]뿐.\n확인: [1,2] → 1≤2 → 1기록.\n[2,1] → 2>1 → 1기록.\n둘 다 힌트 [1].\n근데 빠진 숫자도...\n1?\n불가능!\n답 = -1."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14 }}>
@@ -506,8 +488,7 @@ export function makeFavPerm2Ch2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "When is the answer -1? When we can't find a valid missing number, or when the reconstruction leads to a contradiction.",
-        "답이 -1인 때: 유효한 빠진 숫자를 찾을 수 없거나, 복원 중 모순이 생길 때."),
+        "When is the answer -1?\nWhen we can't find a valid missing number, or when the reconstruction leads to a contradiction.", "답이 -1인 때: 유효한 빠진 숫자를 찾을 수 없거나, 복원 중 모순이 생길 때."),
       question: t(E,
         "N=3, hints=[1,2]. Numbers in hints: {1,2}. Missing = 3. Is this valid to start?",
         "N=3, 힌트=[1,2]. 힌트의 숫자: {1,2}. 빠진 것 = 3. 시작해도 되나?"),
@@ -531,8 +512,7 @@ export function makeFavPerm2Ch3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: Read T test cases. For each: read N and the N-1 hints.",
-        "1단계: T개 테스트 케이스 읽기. 각각: N과 N-1개 힌트 읽기."),
+        "Step 1: Read T test cases. For each: read N and the N-1 hints.", "1단계: T개 테스트 케이스 읽기. 각각: N과 N-1개 힌트 읽기."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
@@ -548,8 +528,7 @@ export function makeFavPerm2Ch3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: Find the missing number — the one from 1..N not in the hints. Use a set for fast lookup!",
-        "2단계: 빠진 숫자 찾기 — 1..N 중 힌트에 없는 것. set으로 빠르게 탐색!"),
+        "Step 2: Find the missing number — the one from 1..N not in the hints.\nUse a set for fast lookup!", "2단계: 빠진 숫자 찾기 — 1..N 중 힌트에 없는 것. set으로 빠르게 탐색!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
@@ -570,8 +549,7 @@ export function makeFavPerm2Ch3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "'x not in hint_set' checks if x is missing. Sets are much faster than lists for this!",
-        "'x not in hint_set'은 x가 없는지 확인. 이런 체크에 set이 list보다 훨씬 빨라!"),
+        "'x not in hint_set' checks if x is missing. Sets are much faster than lists for this!", "'x not in hint_set'은 x가 없는지 확인. 이런 체크에 set이 list보다 훨씬 빨라!"),
       question: t(E,
         "hint_set = {2, 1}. Is '3 not in hint_set' True or False?",
         "hint_set = {2, 1}. '3 not in hint_set'은 True? False?"),
@@ -584,8 +562,7 @@ export function makeFavPerm2Ch3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 3: Use a deque (double-ended queue) to efficiently add elements at front OR back! appendleft() for front, append() for back.",
-        "3단계: deque(양방향 큐)를 써서 앞이든 뒤든 효율적으로 추가! appendleft()은 앞, append()은 뒤."),
+        "Step 3: Use a deque (double-ended queue) to efficiently add elements at front OR back!\nappendleft() for front, append() for back.", "3단계: deque(양방향 큐)를 써서 앞이든 뒤든 효율적으로 추가! appendleft()은 앞, append()은 뒤."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
@@ -607,8 +584,7 @@ export function makeFavPerm2Ch3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 4: Process hints in reverse! For each hint, decide where to place it and the new element.",
-        "4단계: 힌트를 역순으로 처리! 각 힌트에 대해 어디에 놓을지 결정."),
+        "Step 4: Process hints in reverse!\nFor each hint, decide where to place it and the new element.", "4단계: 힌트를 역순으로 처리! 각 힌트에 대해 어디에 놓을지 결정."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
@@ -628,8 +604,7 @@ export function makeFavPerm2Ch3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "range(a, b, -1) counts down. range(3, -1, -1) gives us 3, 2, 1, 0.",
-        "range(a, b, -1)은 내림차순. range(3, -1, -1)은 3, 2, 1, 0."),
+        "range(a, b, -1) counts down. range(3, -1, -1) gives us 3, 2, 1, 0.", "range(a, b, -1)은 내림차순. range(3, -1, -1)은 3, 2, 1, 0."),
       question: t(E,
         "N=5. range(N-2, -1, -1) starts at... ?",
         "N=5. range(N-2, -1, -1)은 몇부터 시작?"),
@@ -642,8 +617,7 @@ export function makeFavPerm2Ch3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Time complexity: O(N) per test case — we process each hint once and deque operations are O(1). Total: O(T × N). Very efficient!",
-        "시간복잡도: 테스트 케이스당 O(N) — 각 힌트 한 번 처리, deque 연산은 O(1). 전체: O(T × N). 매우 효율적!"),
+        "Time complexity: O(N) per test case — we process each hint once and deque operations are O(1).\nTotal: O(T × N).\nVery efficient!", "시간복잡도: 테스트 케이스당 O(N) — 각 힌트 한 번 처리, deque 연산은 O(1). 전체: O(T × N). 매우 효율적!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(T × N)</div>
@@ -657,8 +631,7 @@ export function makeFavPerm2Ch3(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getFavPerm2Sections(E),
     },
   ];

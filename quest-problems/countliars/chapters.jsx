@@ -47,8 +47,7 @@ export function makeLiarsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows make claims about Bessie's position: 'G x' means position >= x, 'L x' means position <= x. Find the minimum number of liars!",
-        "N마리 소가 베시 위치를 주장해: 'G x'는 위치 >= x, 'L x'는 위치 <= x. 최소 거짓말쟁이 수를 구해!"),
+        "N cows make claims about Bessie's position: 'G x' means position >= x, 'L x' means position <= x.\nFind the minimum number of liars!", "N마리 소가 베시 위치를 주장해: 'G x'는 위치 >= x, 'L x'는 위치 <= x. 최소 거짓말쟁이 수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🤥"}</div>
@@ -65,8 +64,7 @@ export function makeLiarsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Claims: 'G 3' and 'L 5'. If Bessie is at position 4, how many liars?",
-        "주장: 'G 3'과 'L 5'. 베시가 위치 4에 있으면, 거짓말쟁이는 몇 명?"),
+        "Claims: 'G 3' and 'L 5'. If Bessie is at position 4, how many liars?", "주장: 'G 3'과 'L 5'. 베시가 위치 4에 있으면, 거짓말쟁이는 몇 명?"),
       question: t(E,
         "'G 3' (pos>=3) and 'L 5' (pos<=5). Bessie at 4. Liars?",
         "'G 3' (위치>=3)과 'L 5' (위치<=5). 베시 위치 4. 거짓말쟁이?"),
@@ -84,8 +82,7 @@ export function makeLiarsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Claims: 'G 3' and 'L 2'. What's the minimum number of liars?",
-        "주장: 'G 3'과 'L 2'. 최소 거짓말쟁이 수는?"),
+        "Claims: 'G 3' and 'L 2'. What's the minimum number of liars?", "주장: 'G 3'과 'L 2'. 최소 거짓말쟁이 수는?"),
       question: t(E,
         "'G 3' and 'L 2'. Min liars?",
         "'G 3'과 'L 2'. 최소 거짓말쟁이?"),
@@ -107,8 +104,7 @@ export function makeLiarsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try each claimed position, count contradictions. With sorting + prefix sums: O(N log N)!",
-        "각 주장 위치를 시도하고 모순 세기. 정렬 + 누적합: O(N log N)!"),
+        "Try each claimed position, count contradictions. With sorting + prefix sums: O(N log N)!", "각 주장 위치를 시도하고 모순 세기. 정렬 + 누적합: O(N log N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -124,8 +120,7 @@ export function makeLiarsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getCountLiarsSections(E),
     },
   ];

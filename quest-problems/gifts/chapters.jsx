@@ -25,8 +25,7 @@ export function makeGiftsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You have N gifts to distribute among K people as evenly as possible. Some people may get one extra gift. How many people get an extra?",
-        "N개의 선물을 K명에게 최대한 고르게 나눠야 해. 일부는 선물을 하나 더 받을 수 있어. 몇 명이 추가 선물을 받을까?"),
+        "You have N gifts to distribute among K people as evenly as possible.\nSome people may get one extra gift.\nHow many people get an extra?", "N개의 선물을 K명에게 최대한 고르게 나눠야 해. 일부는 선물을 하나 더 받을 수 있어. 몇 명이 추가 선물을 받을까?"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf81"}</div>
@@ -43,8 +42,7 @@ export function makeGiftsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "10 gifts among 3 people: each gets 3, with 1 left over. Who gets the extra?",
-        "선물 10개를 3명에게: 각각 3개씩, 1개 남아. 누가 추가 선물을 받을까?"),
+        "10 gifts among 3 people: each gets 3, with 1 left over. Who gets the extra?", "선물 10개를 3명에게: 각각 3개씩, 1개 남아. 누가 추가 선물을 받을까?"),
       question: t(E,
         "10 gifts, 3 people. Each gets 3 (total 9). How many leftover?",
         "선물 10개, 3명. 각각 3개씩 (총 9개). 남는 선물은?"),
@@ -62,8 +60,7 @@ export function makeGiftsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If you have 10 gifts and 3 people, how many people get an extra gift?",
-        "선물 10개와 3명이 있으면, 추가 선물을 받는 사람은 몇 명?"),
+        "If you have 10 gifts and 3 people, how many people get an extra gift?", "선물 10개와 3명이 있으면, 추가 선물을 받는 사람은 몇 명?"),
       question: t(E,
         "N=10, K=3. How many people get an extra gift?",
         "N=10, K=3. 추가 선물을 받는 사람은 몇 명?"),
@@ -85,8 +82,7 @@ export function makeGiftsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just one division and one modulo operation. O(1) time!",
-        "나눗셈 한 번, 나머지 한 번이면 돼. O(1) 시간!"),
+        "Just one division and one modulo operation. O(1) time!", "나눗셈 한 번, 나머지 한 번이면 돼. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -102,8 +98,7 @@ export function makeGiftsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getGiftsSections(E),
     },
   ];

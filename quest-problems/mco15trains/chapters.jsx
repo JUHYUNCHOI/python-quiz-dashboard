@@ -50,8 +50,7 @@ export function makeTrainsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "An N*N grid has population counts in each cell (-1 = blocked). Build train tracks from station A to station B moving in 4 directions. Minimize total displaced inhabitants along the path!",
-        "N*N 격자에 각 셀의 인구수가 있어 (-1 = 차단). 역 A에서 역 B까지 4방향으로 철도를 놓아. 경로상 총 이주 주민 수를 최소화해!"),
+        "An N*N grid has population counts in each cell (-1 = blocked).\nBuild train tracks from station A to station B moving in 4 directions.\nMinimize total displaced inhabitants along the path!", "N*N 격자에 각 셀의 인구수가 있어 (-1 = 차단). 역 A에서 역 B까지 4방향으로 철도를 놓아. 경로상 총 이주 주민 수를 최소화해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude82"}</div>
@@ -68,8 +67,7 @@ export function makeTrainsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "On a grid, you can move up, down, left, or right. How many directions of movement are allowed?",
-        "격자에서 위, 아래, 왼쪽, 오른쪽으로 이동 가능해. 몇 방향으로 이동할 수 있나?"),
+        "On a grid, you can move up, down, left, or right.\nHow many directions of movement are allowed?", "격자에서 위, 아래, 왼쪽, 오른쪽으로 이동 가능해. 몇 방향으로 이동할 수 있나?"),
       question: t(E,
         "How many directions can tracks be laid? (up/down/left/right)",
         "철도를 놓을 수 있는 방향은 몇 개? (상/하/좌/우)"),
@@ -86,8 +84,7 @@ export function makeTrainsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "On a grid, we move in 4 directions. How many directions?",
-        "격자에서 4방향으로 이동해. 몇 방향?"),
+        "On a grid, we move in 4 directions. How many directions?", "격자에서 4방향으로 이동해. 몇 방향?"),
       question: t(E,
         "Number of movement directions on the grid?",
         "격자에서 이동 가능한 방향 수?"),
@@ -109,8 +106,7 @@ export function makeTrainsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Dijkstra's algorithm on an N*N grid. Each cell is a node, edges go to 4 neighbors. O(N^2 log N) with a priority queue.",
-        "N*N 격자에서 다익스트라 알고리즘. 각 셀이 노드, 4이웃으로 간선. 우선순위 큐를 사용해 O(N^2 log N)."),
+        "Dijkstra's algorithm on an N*N grid.\nEach cell is a node, edges go to 4 neighbors.\nO(N^2 log N) with a priority queue.", "N*N 격자에서 다익스트라 알고리즘. 각 셀이 노드, 4이웃으로 간선. 우선순위 큐를 사용해 O(N^2 log N)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -126,8 +122,7 @@ export function makeTrainsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getTrainsSections(E),
     },
   ];

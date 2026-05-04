@@ -36,8 +36,7 @@ export function makeHoneyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A squirrel collects honey from N beehives using a pot that holds M ml. It can make at most K trips. Each trip: pick one hive, collect min(remaining, M). Maximize total honey collected!",
-        "다람쥐가 M ml 용량의 항아리로 N개 벌집에서 꿀을 모아. 최대 K번 왕복 가능. 매 왕복: 벌집 하나를 골라 min(남은양, M)만큼 수집. 총 꿀을 최대화해!"),
+        "A squirrel collects honey from N beehives using a pot that holds M ml.\nIt can make at most K trips.\nEach trip: pick one hive, collect min(remaining, M).\nMaximize total honey collected!", "다람쥐가 M ml 용량의 항아리로 N개 벌집에서 꿀을 모아.\n최대 K번 왕복 가능.\n매 왕복: 벌집 하나를 골라 min(남은양, M)만큼 수집.\n총 꿀을 최대화해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf6f"}</div>
@@ -54,8 +53,7 @@ export function makeHoneyCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Why do we sort the hives in descending order? Think about maximizing honey per trip.",
-        "왜 벌집을 내림차순으로 정렬할까? 왕복당 꿀 수집량 최대화를 생각해봐."),
+        "Why do we sort the hives in descending order? Think about maximizing honey per trip.", "왜 벌집을 내림차순으로 정렬할까? 왕복당 꿀 수집량 최대화를 생각해봐."),
       question: t(E,
         "Why sort hives descending by honey amount?",
         "왜 벌집을 꿀 양 내림차순으로 정렬하나?"),
@@ -72,8 +70,7 @@ export function makeHoneyCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If the pot holds M=10 ml and a hive has 25 ml of honey, how many trips are needed to collect all the honey from that hive?",
-        "항아리 용량 M=10 ml이고 벌집에 꿀이 25 ml 있으면, 그 벌집의 꿀을 다 모으려면 몇 번 왕복해야 할까?"),
+        "If the pot holds M=10 ml and a hive has 25 ml of honey, how many trips are needed to collect all the honey from that hive?", "항아리 용량 M=10 ml이고 벌집에 꿀이 25 ml 있으면, 그 벌집의 꿀을 다 모으려면 몇 번 왕복해야 할까?"),
       question: t(E,
         "Pot M=10, hive has 25 honey. Trips to empty it? (10+10+5)",
         "항아리 M=10, 벌집에 꿀 25. 다 모으려면 왕복 횟수? (10+10+5)"),
@@ -95,8 +92,7 @@ export function makeHoneyCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort the hives, then greedily assign trips. O(N log N) for sorting, O(N) for the greedy pass.",
-        "벌집을 정렬한 뒤, 그리디하게 왕복을 배정해. 정렬에 O(N log N), 그리디 패스에 O(N)."),
+        "Sort the hives, then greedily assign trips.\nO(N log N) for sorting, O(N) for the greedy pass.", "벌집을 정렬한 뒤, 그리디하게 왕복을 배정해. 정렬에 O(N log N), 그리디 패스에 O(N)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -112,8 +108,7 @@ export function makeHoneyCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getHoneySections(E),
     },
   ];

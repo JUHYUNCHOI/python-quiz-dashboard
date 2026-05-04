@@ -51,8 +51,7 @@ export function makeTameHerdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A herd breaks out periodically. A counter starts at 0 on breakout day and increments daily. Some log entries are missing (-1). Find the number of breakouts!",
-        "무리가 주기적으로 탈출해. 카운터가 탈출 날 0에서 시작해 매일 증가해. 일부 로그 항목이 누락(-1). 탈출 횟수를 구해!"),
+        "A herd breaks out periodically.\nA counter starts at 0 on breakout day and increments daily.\nSome log entries are missing (-1).\nFind the number of breakouts!", "무리가 주기적으로 탈출해. 카운터가 탈출 날 0에서 시작해 매일 증가해. 일부 로그 항목이 누락(-1). 탈출 횟수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -69,8 +68,7 @@ export function makeTameHerdCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Log: [0, 1, 2, 0, 1]. Breakouts happen on days with value 0. How many breakouts?",
-        "로그: [0, 1, 2, 0, 1]. 값 0인 날에 탈출 발생. 탈출 횟수는?"),
+        "Log: [0, 1, 2, 0, 1]. Breakouts happen on days with value 0. How many breakouts?", "로그: [0, 1, 2, 0, 1]. 값 0인 날에 탈출 발생. 탈출 횟수는?"),
       question: t(E,
         "Log [0, 1, 2, 0, 1]. How many breakouts?",
         "로그 [0, 1, 2, 0, 1]. 탈출 횟수는?"),
@@ -88,8 +86,7 @@ export function makeTameHerdCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Log: [0, 1, 2, 0, 1]. Count the breakouts (days with value 0).",
-        "로그: [0, 1, 2, 0, 1]. 탈출 횟수를 세봐 (값 0인 날)."),
+        "Log: [0, 1, 2, 0, 1]. Count the breakouts (days with value 0).", "로그: [0, 1, 2, 0, 1]. 탈출 횟수를 세봐 (값 0인 날)."),
       question: t(E,
         "Log [0, 1, 2, 0, 1]. Number of breakouts?",
         "로그 [0, 1, 2, 0, 1]. 탈출 횟수?"),
@@ -111,8 +108,7 @@ export function makeTameHerdCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Scan through the log once. Count zeros and validate consistency. O(N) time!",
-        "로그를 한 번 스캔. 0 세고 일관성 검증. O(N) 시간!"),
+        "Scan through the log once. Count zeros and validate consistency. O(N) time!", "로그를 한 번 스캔. 0 세고 일관성 검증. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
@@ -128,8 +124,7 @@ export function makeTameHerdCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getTameHerdSections(E),
     },
   ];

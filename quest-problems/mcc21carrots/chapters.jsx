@@ -26,8 +26,7 @@ export function makeMcc21CarrotsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A rabbit has N baskets of carrots. Pick 3 baskets so that the total number of carrots is divisible by a given number. Use brute force to check all combinations!",
-        "토끼가 N개의 바구니에 당근을 가지고 있어. 3개의 바구니를 골라서 당근 합이 특정 수로 나누어떨어지게 해! 모든 조합을 확인하는 브루트포스를 써!"),
+        "A rabbit has N baskets of carrots.\nPick 3 baskets so that the total number of carrots is divisible by a given number.\nUse brute force to check all combinations!", "토끼가 N개의 바구니에 당근을 가지고 있어. 3개의 바구니를 골라서 당근 합이 특정 수로 나누어떨어지게 해! 모든 조합을 확인하는 브루트포스를 써!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udd55"}</div>
@@ -43,8 +42,7 @@ export function makeMcc21CarrotsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Given baskets [3, 6, 9], their sum is 18. Is 18 divisible by 3?",
-        "바구니 [3, 6, 9]의 합은 18이야. 18은 3으로 나누어떨어질까?"),
+        "Given baskets [3, 6, 9], their sum is 18. Is 18 divisible by 3?", "바구니 [3, 6, 9]의 합은 18이야. 18은 3으로 나누어떨어질까?"),
       question: t(E,
         "Baskets [3, 6, 9]. Sum = 18. Is 18 divisible by 3?",
         "바구니 [3, 6, 9]. 합 = 18. 18은 3으로 나누어떨어져?"),
@@ -60,8 +58,7 @@ export function makeMcc21CarrotsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "What is the sum of baskets [3, 6, 9]?",
-        "바구니 [3, 6, 9]의 합은?"),
+        "What is the sum of baskets [3, 6, 9]?", "바구니 [3, 6, 9]의 합은?"),
       question: t(E,
         "Baskets = [3, 6, 9]. What is their sum?",
         "바구니 = [3, 6, 9]. 합은 얼마야?"),
@@ -76,8 +73,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Use triple nested loops to try all combinations. O(N^3) brute force.",
-        "삼중 반복문으로 모든 조합을 시도해. O(N^3) 브루트포스."),
+        "Use triple nested loops to try all combinations. O(N^3) brute force.", "삼중 반복문으로 모든 조합을 시도해. O(N^3) 브루트포스."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -92,8 +88,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc21CarrotsSections(E),
     },
   ];

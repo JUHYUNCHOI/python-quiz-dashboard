@@ -46,8 +46,7 @@ export function makeSleepCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Merge adjacent class periods until all are equal length. Find the minimum number of merges!",
-        "인접한 수업 시간을 합쳐서 모두 같은 길이로 만들어. 최소 합치기 횟수를 구해!"),
+        "Merge adjacent class periods until all are equal length.\nFind the minimum number of merges!", "인접한 수업 시간을 합쳐서 모두 같은 길이로 만들어. 최소 합치기 횟수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"😴"}</div>
@@ -64,8 +63,7 @@ export function makeSleepCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "[1,2,3,1,1,1] total=9. Target 3 means merge into [3,3,3]. How many merges?",
-        "[1,2,3,1,1,1] 총합=9. 목표 3이면 [3,3,3]으로 합치기. 합치기 몇 번?"),
+        "[1,2,3,1,1,1] total=9. Target 3 means merge into [3,3,3]. How many merges?", "[1,2,3,1,1,1] 총합=9. 목표 3이면 [3,3,3]으로 합치기. 합치기 몇 번?"),
       question: t(E,
         "[1,2,3,1,1,1] -> [3,3,3]. Merges needed?",
         "[1,2,3,1,1,1] -> [3,3,3]. 합치기 횟수?"),
@@ -83,8 +81,7 @@ export function makeSleepCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "[2,2,3] total=7. Only divisor that works is 7 itself (merge all). How many merges?",
-        "[2,2,3] 총합=7. 가능한 약수는 7뿐 (전부 합치기). 합치기 몇 번?"),
+        "[2,2,3] total=7. Only divisor that works is 7 itself (merge all). How many merges?", "[2,2,3] 총합=7. 가능한 약수는 7뿐 (전부 합치기). 합치기 몇 번?"),
       question: t(E,
         "[2,2,3] total=7. Min merges?",
         "[2,2,3] 총합=7. 최소 합치기?"),
@@ -106,8 +103,7 @@ export function makeSleepCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try each divisor of total sum. For each, scan array to check partition. O(N * d(S)) where d(S) = number of divisors.",
-        "총합의 각 약수를 시도. 각각에 대해 배열 스캔으로 분할 확인. O(N * d(S)), d(S) = 약수 개수."),
+        "Try each divisor of total sum.\nFor each, scan array to check partition.\nO(N * d(S)) where d(S) = number of divisors.", "총합의 각 약수를 시도. 각각에 대해 배열 스캔으로 분할 확인. O(N * d(S)), d(S) = 약수 개수."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -123,8 +119,7 @@ export function makeSleepCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getSleepClassSections(E),
     },
   ];

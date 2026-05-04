@@ -36,8 +36,7 @@ export function makeMcc15BahasaCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bahasa F is a language where every consonant in a word is replaced with the letter 'f'. Vowels (a, e, i, o, u) remain unchanged. Simple string processing!",
-        "Bahasa F는 단어의 모든 자음을 'f'로 바꾸는 언어야. 모음(a, e, i, o, u)은 그대로 유지돼. 간단한 문자열 처리!"),
+        "Bahasa F is a language where every consonant in a word is replaced with the letter 'f'.\nVowels (a, e, i, o, u) remain unchanged.\nSimple string processing!", "Bahasa F는 단어의 모든 자음을 'f'로 바꾸는 언어야. 모음(a, e, i, o, u)은 그대로 유지돼. 간단한 문자열 처리!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udde3\ufe0f"}</div>
@@ -54,8 +53,7 @@ export function makeMcc15BahasaCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Consonants are letters that are NOT vowels. The vowels are a, e, i, o, u. Is 'b' a consonant?",
-        "자음은 모음이 아닌 글자야. 모음은 a, e, i, o, u. 'b'는 자음일까?"),
+        "Consonants are letters that are NOT vowels.\nThe vowels are a, e, i, o, u.\nIs 'b' a consonant?", "자음은 모음이 아닌 글자야. 모음은 a, e, i, o, u. 'b'는 자음일까?"),
       question: t(E,
         "Vowels are a, e, i, o, u. Is 'b' a consonant? (1=Yes, 0=No)",
         "모음은 a, e, i, o, u. 'b'는 자음인가? (1=예, 0=아니오)"),
@@ -72,8 +70,7 @@ export function makeMcc15BahasaCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Is 'b' a consonant? Enter 1 for Yes, 0 for No.",
-        "'b'는 자음인가? 예는 1, 아니오는 0을 입력해."),
+        "Is 'b' a consonant? Enter 1 for Yes, 0 for No.", "'b'는 자음인가? 예는 1, 아니오는 0을 입력해."),
       question: t(E,
         "Is 'b' a consonant? (1=Yes, 0=No)",
         "'b'는 자음인가? (1=예, 0=아니오)"),
@@ -95,8 +92,7 @@ export function makeMcc15BahasaCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "We scan each character once, so it's O(N) where N is the length of the word.",
-        "각 문자를 한 번씩 보니까 단어 길이 N에 대해 O(N)이야."),
+        "We scan each character once, so it's O(N) where N is the length of the word.", "각 문자를 한 번씩 보니까 단어 길이 N에 대해 O(N)이야."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -112,8 +108,7 @@ export function makeMcc15BahasaCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc15BahasaSections(E),
     },
   ];

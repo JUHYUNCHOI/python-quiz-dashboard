@@ -56,8 +56,7 @@ export function makeAirCond1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N stalls with current and preferred temperatures. Each command adjusts a consecutive range by +1 or -1. Find the minimum number of commands!",
-        "N개 칸에 현재 온도와 원하는 온도가 있어. 각 명령은 연속 구간을 +1 또는 -1 조절해. 최소 명령 수를 구해!"),
+        "N stalls with current and preferred temperatures.\nEach command adjusts a consecutive range by +1 or -1.\nFind the minimum number of commands!", "N개 칸에 현재 온도와 원하는 온도가 있어. 각 명령은 연속 구간을 +1 또는 -1 조절해. 최소 명령 수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf21\ufe0f"}</div>
@@ -74,8 +73,7 @@ export function makeAirCond1Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Think of the diff array like a histogram. Each horizontal stroke covers a range. How many strokes do we need?",
-        "차이 배열을 히스토그램처럼 생각해. 각 수평 선은 구간을 커버해. 몇 개의 선이 필요할까?"),
+        "Think of the diff array like a histogram.\nEach horizontal stroke covers a range.\nHow many strokes do we need?", "차이 배열을 히스토그램처럼 생각해. 각 수평 선은 구간을 커버해. 몇 개의 선이 필요할까?"),
       question: t(E,
         "diff = [3, 3, 3]. How many commands needed? (One command covers all 3, repeated 3 times)",
         "diff = [3, 3, 3]. 필요한 명령 수? (하나의 명령이 3칸 모두 커버, 3번 반복)"),
@@ -93,8 +91,7 @@ export function makeAirCond1Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "diff = [3, 3, 3]. All same height. One wide stroke repeated 3 times.",
-        "diff = [3, 3, 3]. 높이가 모두 같아. 넓은 선 하나를 3번 반복."),
+        "diff = [3, 3, 3]. All same height. One wide stroke repeated 3 times.", "diff = [3, 3, 3]. 높이가 모두 같아. 넓은 선 하나를 3번 반복."),
       question: t(E,
         "diff = [3, 3, 3]. Min commands?",
         "diff = [3, 3, 3]. 최소 명령 수?"),
@@ -116,8 +113,7 @@ export function makeAirCond1Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Compute the diff array, then sum positive jumps (with boundaries at 0). O(N) time!",
-        "차이 배열 계산 후, 양의 점프(경계는 0)를 합산. O(N) 시간!"),
+        "Compute the diff array, then sum positive jumps (with boundaries at 0). O(N) time!", "차이 배열 계산 후, 양의 점프(경계는 0)를 합산. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -133,8 +129,7 @@ export function makeAirCond1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getAirCond1Sections(E),
     },
   ];

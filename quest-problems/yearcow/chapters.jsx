@@ -43,8 +43,7 @@ export function makeYearCowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The Chinese zodiac repeats every 12 years. Bessie knows relationships like 'my friend was born in the previous Dragon year'. Chain these to find the total age difference!",
-        "십이지는 12년마다 반복돼. Bessie는 '내 친구는 이전 용띠 해에 태어났어' 같은 관계를 알고 있어. 이들을 연결해서 총 나이 차이를 구해!"),
+        "The Chinese zodiac repeats every 12 years.\nBessie knows relationships like 'my friend was born in the previous Dragon year'.\nChain these to find the total age difference!", "십이지는 12년마다 반복돼. Bessie는 '내 친구는 이전 용띠 해에 태어났어' 같은 관계를 알고 있어. 이들을 연결해서 총 나이 차이를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc02"}</div>
@@ -61,8 +60,7 @@ export function makeYearCowCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The zodiac repeats every 12 years. 2021 is an Ox year. What is the previous Ox year?",
-        "십이지는 12년마다 반복돼. 2021년은 소띠 해야. 이전 소띠 해는?"),
+        "The zodiac repeats every 12 years. 2021 is an Ox year. What is the previous Ox year?", "십이지는 12년마다 반복돼. 2021년은 소띠 해야. 이전 소띠 해는?"),
       question: t(E,
         "Zodiac repeats every 12 years. Previous Ox year from 2021?",
         "십이지는 12년 주기. 2021년에서 이전 소띠 해는?"),
@@ -80,8 +78,7 @@ export function makeYearCowCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "How many animals are in the zodiac cycle?",
-        "십이지에는 동물이 몇 마리야?"),
+        "How many animals are in the zodiac cycle?", "십이지에는 동물이 몇 마리야?"),
       question: t(E,
         "How many animals in the zodiac cycle?",
         "십이지 주기에 동물 몇 마리?"),
@@ -103,8 +100,7 @@ export function makeYearCowCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Process each relationship. For 'previous Animal', compute how many years back (1-12). For 'next Animal', compute how many forward. O(N) time.",
-        "각 관계를 처리. '이전 동물'이면 몇 년 전인지 (1-12) 계산. '다음 동물'이면 앞으로 몇 년인지. O(N) 시간."),
+        "Process each relationship.\nFor 'previous Animal', compute how many years back (1-12).\nFor 'next Animal', compute how many forward.\nO(N) time.", "각 관계를 처리. '이전 동물'이면 몇 년 전인지 (1-12) 계산. '다음 동물'이면 앞으로 몇 년인지. O(N) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -120,8 +116,7 @@ export function makeYearCowCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getYearCowSections(E),
     },
   ];

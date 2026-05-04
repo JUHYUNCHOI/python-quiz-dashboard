@@ -46,8 +46,7 @@ export function makeComfyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows are added one by one to a 2D grid. A cow is 'comfortable' if it has exactly 3 neighbors (up/down/left/right). After each addition, count comfortable cows!",
-        "소들이 2D 격자에 하나씩 추가돼. 소가 정확히 3개의 이웃(상하좌우)이 있으면 '편안'해. 각 추가 후 편안한 소의 수를 세!"),
+        "Cows are added one by one to a 2D grid.\nA cow is 'comfortable' if it has exactly 3 neighbors (up/down/left/right).\nAfter each addition, count comfortable cows!", "소들이 2D 격자에 하나씩 추가돼. 소가 정확히 3개의 이웃(상하좌우)이 있으면 '편안'해. 각 추가 후 편안한 소의 수를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -64,8 +63,7 @@ export function makeComfyCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A cow at (1,1) has neighbors at (0,1), (2,1), (1,0). That's 3 neighbors. Is it comfortable?",
-        "소가 (1,1)에 있고 이웃이 (0,1), (2,1), (1,0)에 있어. 이웃이 3마리야. 편안할까?"),
+        "A cow at (1,1) has neighbors at (0,1), (2,1), (1,0).\nThat's 3 neighbors.\nIs it comfortable?", "소가 (1,1)에 있고 이웃이 (0,1), (2,1), (1,0)에 있어. 이웃이 3마리야. 편안할까?"),
       question: t(E,
         "Cow at (1,1) with 3 neighbors. Comfortable?",
         "(1,1)의 소, 이웃 3마리. 편안해?"),
@@ -82,8 +80,7 @@ export function makeComfyCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "A cow with exactly 3 neighbors is comfortable. Enter 1 for yes, 0 for no: is it comfortable?",
-        "이웃이 정확히 3마리인 소는 편안해. 편안하면 1, 아니면 0 입력:"),
+        "A cow with exactly 3 neighbors is comfortable.\nEnter 1 for yes, 0 for no: is it comfortable?", "이웃이 정확히 3마리인 소는 편안해. 편안하면 1, 아니면 0 입력:"),
       question: t(E,
         "Cow with exactly 3 neighbors: comfortable? (1=yes, 0=no)",
         "이웃 3마리인 소: 편안? (1=예, 0=아니오)"),
@@ -105,8 +102,7 @@ export function makeComfyCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Use a hash set for cow positions. When adding a cow, update comfort for it and its 4 neighbors. O(N) total!",
-        "소 위치에 해시 집합 사용. 소를 추가할 때 그 소와 4개 이웃의 편안함 갱신. 총 O(N)!"),
+        "Use a hash set for cow positions.\nWhen adding a cow, update comfort for it and its 4 neighbors.\nO(N) total!", "소 위치에 해시 집합 사용. 소를 추가할 때 그 소와 4개 이웃의 편안함 갱신. 총 O(N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -122,8 +118,7 @@ export function makeComfyCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getComfyCowsSections(E),
     },
   ];

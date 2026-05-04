@@ -50,8 +50,7 @@ export function makeLeadersCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows of breed G or H stand in a line. Each cow i has a range covering positions i to E_i. A leader of a breed must cover ALL cows of that breed, or the other leader must be within the first leader's range. Count valid leader pairs!",
-        "N마리의 소가 G 또는 H 품종으로 줄 서 있어. 각 소 i는 위치 i부터 E_i까지 커버해. 리더는 자기 품종의 모든 소를 커버하거나, 상대 리더가 자기 범위 안에 있어야 해. 유효한 리더 쌍의 수를 구해!"),
+        "N cows of breed G or H stand in a line.\nEach cow i has a range covering positions i to E_i.\nA leader of a breed must cover ALL cows of that breed, or the other leader must be within the first leader's range.\nCount valid leader pairs!", "N마리의 소가 G 또는 H 품종으로 줄 서 있어.\n각 소 i는 위치 i부터 E_i까지 커버해.\n리더는 자기 품종의 모든 소를 커버하거나, 상대 리더가 자기 범위 안에 있어야 해.\n유효한 리더 쌍의 수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc51"}</div>
@@ -68,8 +67,7 @@ export function makeLeadersCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If cow 1 is breed G and covers positions 1-4, and ALL G cows are within positions 1-4, is cow 1 a valid G leader?",
-        "소 1이 G 품종이고 위치 1-4를 커버하는데, 모든 G 소가 위치 1-4 안에 있다면, 소 1은 유효한 G 리더일까?"),
+        "If cow 1 is breed G and covers positions 1-4, and ALL G cows are within positions 1-4, is cow 1 a valid G leader?", "소 1이 G 품종이고 위치 1-4를 커버하는데, 모든 G 소가 위치 1-4 안에 있다면, 소 1은 유효한 G 리더일까?"),
       question: t(E,
         "Cow 1 (G) covers positions 1-4. All G cows are in positions 1-4. Is cow 1 a valid G leader?",
         "소 1 (G)이 위치 1-4 커버. 모든 G 소가 1-4에 있음. 소 1은 유효한 G 리더?"),
@@ -86,8 +84,7 @@ export function makeLeadersCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "breeds = \"GH\", ranges = [2, 2]. G is at position 0 (covers 0-1), H is at position 1 (covers 1-1). How many valid leader pairs?",
-        "breeds = \"GH\", ranges = [2, 2]. G는 위치 0 (0-1 커버), H는 위치 1 (1-1 커버). 유효한 리더 쌍은 몇 개?"),
+        "breeds = \"GH\", ranges = [2, 2].\nG is at position 0 (covers 0-1), H is at position 1 (covers 1-1).\nHow many valid leader pairs?", "breeds = \"GH\", ranges = [2, 2]. G는 위치 0 (0-1 커버), H는 위치 1 (1-1 커버). 유효한 리더 쌍은 몇 개?"),
       question: t(E,
         "breeds=\"GH\", E=[2,2]. How many valid leader pairs?",
         "breeds=\"GH\", E=[2,2]. 유효한 리더 쌍은 몇 개?"),
@@ -109,8 +106,7 @@ export function makeLeadersCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Find leaders for each breed, then check all pairs. Overall O(N + G_leaders * H_leaders).",
-        "각 품종의 리더를 찾고, 모든 쌍을 확인해. 전체 O(N + G리더 * H리더)."),
+        "Find leaders for each breed, then check all pairs. Overall O(N + G_leaders * H_leaders).", "각 품종의 리더를 찾고, 모든 쌍을 확인해. 전체 O(N + G리더 * H리더)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -126,8 +122,7 @@ export function makeLeadersCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getLeadersSections(E),
     },
   ];

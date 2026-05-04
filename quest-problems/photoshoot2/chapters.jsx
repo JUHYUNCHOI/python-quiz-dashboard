@@ -42,8 +42,7 @@ export function makePhoto2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Rearrange cows to match a target order by moving cows to the left. Find the minimum number of moves!",
-        "소를 왼쪽으로 이동시켜 목표 순서에 맞춰. 최소 이동 횟수를 구해!"),
+        "Rearrange cows to match a target order by moving cows to the left.\nFind the minimum number of moves!", "소를 왼쪽으로 이동시켜 목표 순서에 맞춰. 최소 이동 횟수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"📷"}</div>
@@ -60,8 +59,7 @@ export function makePhoto2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Current: [2,1], Target: [1,2]. Cow 1 needs to move left past cow 2. How many moves?",
-        "현재: [2,1], 목표: [1,2]. 소1이 소2 왼쪽으로 이동해야 해. 이동 횟수는?"),
+        "Current: [2,1], Target: [1,2]. Cow 1 needs to move left past cow 2. How many moves?", "현재: [2,1], 목표: [1,2]. 소1이 소2 왼쪽으로 이동해야 해. 이동 횟수는?"),
       question: t(E,
         "[2,1] -> [1,2]. How many moves?",
         "[2,1] -> [1,2]. 이동 몇 번?"),
@@ -79,8 +77,7 @@ export function makePhoto2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "Current: [2,1], Target: [1,2]. How many moves to rearrange?",
-        "현재: [2,1], 목표: [1,2]. 재배열하는 이동 횟수는?"),
+        "Current: [2,1], Target: [1,2]. How many moves to rearrange?", "현재: [2,1], 목표: [1,2]. 재배열하는 이동 횟수는?"),
       question: t(E,
         "[2,1] -> [1,2]. Min moves?",
         "[2,1] -> [1,2]. 최소 이동?"),
@@ -102,8 +99,7 @@ export function makePhoto2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Scan target order, track max position in current. If a cow's position is less than max, it needs moving. O(N)!",
-        "목표 순서를 스캔, 현재 배열의 최대 위치 추적. 소 위치가 최댓값보다 작으면 이동 필요. O(N)!"),
+        "Scan target order, track max position in current.\nIf a cow's position is less than max, it needs moving.\nO(N)!", "목표 순서를 스캔, 현재 배열의 최대 위치 추적. 소 위치가 최댓값보다 작으면 이동 필요. O(N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -119,8 +115,7 @@ export function makePhoto2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getPhotoshoot2Sections(E),
     },
   ];

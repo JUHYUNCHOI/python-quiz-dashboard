@@ -59,8 +59,7 @@ export function makeLifeguardsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N lifeguards have time shifts. We must fire exactly one to maximize the remaining total coverage (union of intervals).",
-        "N명의 인명구조원이 근무 시간이 있어. 정확히 한 명을 해고해서 남은 전체 커버리지(구간 합집합)를 최대화해야 해."),
+        "N lifeguards have time shifts.\nWe must fire exactly one to maximize the remaining total coverage (union of intervals).", "N명의 인명구조원이 근무 시간이 있어. 정확히 한 명을 해고해서 남은 전체 커버리지(구간 합집합)를 최대화해야 해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfca"}</div>
@@ -77,8 +76,7 @@ export function makeLifeguardsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Two shifts: [1,5] and [3,8]. If we fire the first guard, coverage = 3 to 8 = 5. If we fire the second, coverage = 1 to 5 = 4. Which gives max coverage?",
-        "두 근무: [1,5]와 [3,8]. 첫째를 해고하면 커버리지 = 3~8 = 5. 둘째를 해고하면 커버리지 = 1~5 = 4. 어느 쪽이 최대 커버리지?"),
+        "Two shifts: [1,5] and [3,8].\nIf we fire the first guard, coverage = 3 to 8 = 5.\nIf we fire the second, coverage = 1 to 5 = 4.\nWhich gives max coverage?", "두 근무: [1,5]와 [3,8]. 첫째를 해고하면 커버리지 = 3~8 = 5. 둘째를 해고하면 커버리지 = 1~5 = 4. 어느 쪽이 최대 커버리지?"),
       question: t(E,
         "Shifts [1,5] and [3,8]. Fire which guard for max coverage?",
         "근무 [1,5]와 [3,8]. 최대 커버리지를 위해 누구를 해고?"),
@@ -95,8 +93,7 @@ export function makeLifeguardsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Shifts [1,5] and [3,8]. What is the maximum remaining coverage after firing one guard?",
-        "근무 [1,5]와 [3,8]. 한 명 해고 후 최대 남은 커버리지는?"),
+        "Shifts [1,5] and [3,8]. What is the maximum remaining coverage after firing one guard?", "근무 [1,5]와 [3,8]. 한 명 해고 후 최대 남은 커버리지는?"),
       question: t(E,
         "Shifts [1,5] and [3,8]. Max coverage after firing one?",
         "근무 [1,5]와 [3,8]. 한 명 해고 후 최대 커버리지?"),
@@ -118,8 +115,7 @@ export function makeLifeguardsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try removing each guard, compute union coverage with sweep line. O(N^2 log N) for Bronze is fine!",
-        "각 인명구조원을 제거해보고 스위프 라인으로 합집합 커버리지 계산. Bronze에서 O(N^2 log N)이면 충분해!"),
+        "Try removing each guard, compute union coverage with sweep line.\nO(N^2 log N) for Bronze is fine!", "각 인명구조원을 제거해보고 스위프 라인으로 합집합 커버리지 계산. Bronze에서 O(N^2 log N)이면 충분해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -135,8 +131,7 @@ export function makeLifeguardsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getLifeguardsSections(E),
     },
   ];

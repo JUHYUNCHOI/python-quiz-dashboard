@@ -39,8 +39,7 @@ export function makeMilkExCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand in a circle. Each minute, every cow passes 1 liter of milk left or right. Let's understand this exchange! 🥛",
-        "N마리 소가 원형으로 서 있어. 매분 모든 소가 우유 1리터를 왼쪽 또는 오른쪽으로 전달해. 이 교환을 이해해보자! 🥛"),
+        "N cows stand in a circle.\nEach minute, every cow passes 1 liter of milk left or right.\nLet's understand this exchange!\n🥛", "N마리 소가 원형으로 서 있어. 매분 모든 소가 우유 1리터를 왼쪽 또는 오른쪽으로 전달해. 이 교환을 이해해보자! 🥛"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🥛</div>
@@ -57,8 +56,7 @@ export function makeMilkExCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Each cow simultaneously passes 1 liter. If a cow has 0 milk, it passes nothing. If receiving milk exceeds capacity, the overflow is lost forever!",
-        "모든 소가 동시에 1리터를 전달해. 우유가 0이면 아무것도 안 전달해. 받는 우유가 용량을 초과하면 넘치는 건 영원히 사라져!"),
+        "Each cow simultaneously passes 1 liter.\nIf a cow has 0 milk, it passes nothing.\nIf receiving milk exceeds capacity, the overflow is lost forever!", "모든 소가 동시에 1리터를 전달해. 우유가 0이면 아무것도 안 전달해. 받는 우유가 용량을 초과하면 넘치는 건 영원히 사라져!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 14, padding: 14, textAlign: "center" }}>
@@ -88,8 +86,7 @@ export function makeMilkExCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Think about what happens when two adjacent cows pass to each other!",
-        "두 이웃한 소가 서로에게 전달하면 어떻게 되는지 생각해봐!"),
+        "Think about what happens when two adjacent cows pass to each other!", "두 이웃한 소가 서로에게 전달하면 어떻게 되는지 생각해봐!"),
       question: t(E,
         "If cow A passes left and neighbor cow B passes right to cow A, what is cow A's net milk change from these two?",
         "소 A가 왼쪽으로, 이웃 소 B가 오른쪽으로 소 A에게 전달하면, 이 둘로 인한 소 A의 우유 순 변화는?"),
@@ -107,8 +104,7 @@ export function makeMilkExCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Let's try a simple case! 3 cows in a circle, all pass right, each starts with 2L, capacity 2.",
-        "간단한 예시를 해보자! 3마리 소가 원형으로, 모두 오른쪽으로 전달, 각각 2L로 시작, 용량 2."),
+        "Let's try a simple case!\n3 cows in a circle, all pass right, each starts with 2L, capacity 2.", "간단한 예시를 해보자! 3마리 소가 원형으로, 모두 오른쪽으로 전달, 각각 2L로 시작, 용량 2."),
       question: t(E,
         "3 cows, all pass right, milk=[2,2,2], capacity=[2,2,2]. After 1 minute, what is the total milk?",
         "3마리 소, 모두 오른쪽 전달, 우유=[2,2,2], 용량=[2,2,2]. 1분 후 총 우유량은?"),
@@ -129,8 +125,7 @@ export function makeMilkExCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "After enough steps, the distribution stabilizes. Milk flows toward 'sinks' where L and R directions meet. We only need to simulate up to 2N steps!",
-        "충분한 단계 후 분포가 안정돼. 우유는 L과 R 방향이 만나는 '싱크'로 흘러. 2N 단계만 시뮬레이션하면 돼!"),
+        "After enough steps, the distribution stabilizes.\nMilk flows toward 'sinks' where L and R directions meet.\nWe only need to simulate up to 2N steps!", "충분한 단계 후 분포가 안정돼. 우유는 L과 R 방향이 만나는 '싱크'로 흘러. 2N 단계만 시뮬레이션하면 돼!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 14, padding: 14 }}>
@@ -152,8 +147,7 @@ export function makeMilkExCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMilkExchangeSections(E),
     },
   ];

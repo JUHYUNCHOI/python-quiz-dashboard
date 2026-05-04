@@ -53,8 +53,7 @@ export function makeMcc19PalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Find the N-th palindrome in base K. Palindromes read the same forwards and backwards. Enumerate by length: first half determines the whole number!",
-        "K진법에서 N번째 회문수를 찾아. 회문은 앞뒤로 읽어도 같아. 길이별로 열거: 앞 절반이 전체를 결정해!"),
+        "Find the N-th palindrome in base K.\nPalindromes read the same forwards and backwards.\nEnumerate by length: first half determines the whole number!", "K진법에서 N번째 회문수를 찾아. 회문은 앞뒤로 읽어도 같아. 길이별로 열거: 앞 절반이 전체를 결정해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔄</div>
@@ -71,8 +70,7 @@ export function makeMcc19PalCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Base 10 palindromes in order: 1,2,3,...,9,11,22,...,99,101,... The first 9 are single digits. The 10th palindrome is?",
-        "10진법 회문 순서: 1,2,3,...,9,11,22,...,99,101,... 처음 9개는 한 자리. 10번째 회문은?"),
+        "Base 10 palindromes in order: 1,2,3,...,9,11,22,...,99,101,...\nThe first 9 are single digits.\nThe 10th palindrome is?", "10진법 회문 순서: 1,2,3,...,9,11,22,...,99,101,... 처음 9개는 한 자리. 10번째 회문은?"),
       question: t(E,
         "Base 10: what is the 10th palindrome?",
         "10진법: 10번째 회문은?"),
@@ -90,8 +88,7 @@ export function makeMcc19PalCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Base 10 palindromes: 1,2,...,9,11,22,... What is the 10th palindrome?",
-        "10진법 회문: 1,2,...,9,11,22,... 10번째 회문은?"),
+        "Base 10 palindromes: 1,2,...,9,11,22,... What is the 10th palindrome?", "10진법 회문: 1,2,...,9,11,22,... 10번째 회문은?"),
       question: t(E,
         "10th palindrome in base 10 = ?",
         "10진법 10번째 회문 = ?"),
@@ -113,8 +110,7 @@ export function makeMcc19PalCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Count palindromes per length, find which length contains N-th, construct it from the first half. O(log N) per query!",
-        "길이별 회문 개수를 세고, N번째가 포함된 길이를 찾아 앞 절반에서 구성. 쿼리당 O(log N)!"),
+        "Count palindromes per length, find which length contains N-th, construct it from the first half.\nO(log N) per query!", "길이별 회문 개수를 세고, N번째가 포함된 길이를 찾아 앞 절반에서 구성. 쿼리당 O(log N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
@@ -130,8 +126,7 @@ export function makeMcc19PalCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc19PalSections(E),
     },
   ];

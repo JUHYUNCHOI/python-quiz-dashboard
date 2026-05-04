@@ -42,8 +42,7 @@ export function makeMooin3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Find 'moo' triplets in a string! A 'moo' is (i,j,k) where s[i]≠s[j]=s[k]. Maximize (j-i)×(k-j) in each query range. 🐄",
-        "문자열에서 'moo' 삼중쌍 찾기! 'moo'는 s[i]≠s[j]=s[k]인 (i,j,k). 각 쿼리 범위에서 (j-i)×(k-j)를 최대화. 🐄"),
+        "Find 'moo' triplets in a string!\nA 'moo' is (i,j,k) where s[i]≠s[j]=s[k].\nMaximize (j-i)×(k-j) in each query range.\n🐄", "문자열에서 'moo' 삼중쌍 찾기! 'moo'는 s[i]≠s[j]=s[k]인 (i,j,k). 각 쿼리 범위에서 (j-i)×(k-j)를 최대화. 🐄"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
@@ -59,8 +58,7 @@ export function makeMooin3Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A 'moo' means: first character differs, but second and third match. Like 'abb', 'xzz', etc.",
-        "'moo'란: 첫 문자는 다르고, 둘째와 셋째는 같아. 예: 'abb', 'xzz' 등."),
+        "A 'moo' means: first character differs, but second and third match.\nLike 'abb', 'xzz', etc.", "'moo'란: 첫 문자는 다르고, 둘째와 셋째는 같아. 예: 'abb', 'xzz' 등."),
       question: t(E,
         "Which is a valid 'moo' triplet?",
         "유효한 'moo' 삼중쌍은?"),
@@ -75,16 +73,14 @@ export function makeMooin3Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "s='abba', range [1,4]. Triplets: (1,2,3)='abb' → value=(2-1)×(3-2)=1. (1,3,4)='bba'? s[1]='a'≠s[3]='b', s[3]='b'=s[4]='a'? No. (1,2,4)='aba'? s[2]≠s[4]. Try (1,3,4): s[1]='a', s[3]='b', s[4]='a' → s[3]≠s[4]. Max?",
-        "s='abba', 범위 [1,4]. (1,2,3)='abb' → 값=(2-1)×(3-2)=1. 최대값은?"),
+        "s='abba', range [1,4].\nTriplets: (1,2,3)='abb' → value=(2-1)×(3-2)=1.\n(1,3,4)='bba'?\ns[1]='a'≠s[3]='b', s[3]='b'=s[4]='a'?\nNo.\n(1,2,4)='aba'?\ns[2]≠s[4].\nTry (1,3,4): s[1]='a', s[3]='b', s[4]='a' → s[3]≠s[4].\nMax?", "s='abba', 범위 [1,4]. (1,2,3)='abb' → 값=(2-1)×(3-2)=1. 최대값은?"),
       question: t(E, "Max value for s='abba', range [1,4]?", "s='abba', 범위 [1,4]의 최대값?"),
       answer: 1,
     },
     {
       type: "sim",
       narr: t(E,
-        "Drag j and watch how best i (left, different) and best k (right, same) shift. Product (j-i)(k-j) shown live.",
-        "j를 드래그하면서 best i (왼쪽, 다름)와 best k (오른쪽, 같음)가 어떻게 변하는지 봐. 곱 (j-i)(k-j) 실시간."),
+        "Drag j and watch how best i (left, different) and best k (right, same) shift.\nProduct (j-i)(k-j) shown live.", "j를 드래그하면서 best i (왼쪽, 다름)와 best k (오른쪽, 같음)가 어떻게 변하는지 봐. 곱 (j-i)(k-j) 실시간."),
     },
   ];
 }
@@ -94,8 +90,7 @@ export function makeMooin3Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Key insight: for each middle position j, find the farthest left i with s[i]≠s[j], and farthest right k with s[k]=s[j]. Maximize the product!",
-        "핵심: 각 중간 위치 j에서, s[i]≠s[j]인 가장 먼 왼쪽 i와 s[k]=s[j]인 가장 먼 오른쪽 k를 찾아. 곱을 최대화!"),
+        "Key insight: for each middle position j, find the farthest left i with s[i]≠s[j], and farthest right k with s[k]=s[j].\nMaximize the product!", "핵심: 각 중간 위치 j에서, s[i]≠s[j]인 가장 먼 왼쪽 i와 s[k]=s[j]인 가장 먼 오른쪽 k를 찾아. 곱을 최대화!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(N × Q)</div>
@@ -105,8 +100,7 @@ export function makeMooin3Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Now build the brute-force solution step by step.",
-        "완전탐색을 단계별로 만들자."),
+        "Now build the brute-force solution step by step.", "완전탐색을 단계별로 만들자."),
       sections: getMooin3Sections(E),
     },
   ];

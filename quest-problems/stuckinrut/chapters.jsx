@@ -55,8 +55,7 @@ export function makeStuckCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows on a 2D grid move either North or East forever. When a cow reaches a cell already grazed by another, it stops. Find how many cells each cow grazes!",
-        "2D 격자 위의 소들이 북쪽 또는 동쪽으로 영원히 이동해. 다른 소가 이미 먹은 셀에 도달하면 멈춰. 각 소가 먹는 셀 수를 구해!"),
+        "Cows on a 2D grid move either North or East forever.\nWhen a cow reaches a cell already grazed by another, it stops.\nFind how many cells each cow grazes!", "2D 격자 위의 소들이 북쪽 또는 동쪽으로 영원히 이동해. 다른 소가 이미 먹은 셀에 도달하면 멈춰. 각 소가 먹는 셀 수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -73,8 +72,7 @@ export function makeStuckCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In this problem, cows can only move in two directions. What are they?",
-        "이 문제에서 소는 두 방향으로만 이동할 수 있어. 어떤 방향?"),
+        "In this problem, cows can only move in two directions. What are they?", "이 문제에서 소는 두 방향으로만 이동할 수 있어. 어떤 방향?"),
       question: t(E,
         "What two directions can cows move in this problem?",
         "이 문제에서 소가 이동할 수 있는 두 방향은?"),
@@ -91,8 +89,7 @@ export function makeStuckCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "How many possible directions are there in this problem?",
-        "이 문제에서 가능한 방향은 몇 가지야?"),
+        "How many possible directions are there in this problem?", "이 문제에서 가능한 방향은 몇 가지야?"),
       question: t(E,
         "How many movement directions exist in this problem?",
         "이 문제에서 이동 방향은 몇 가지?"),
@@ -114,8 +111,7 @@ export function makeStuckCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Check all N-cow vs E-cow pairs for intersections. Sort events by time. O(N^2 log N) total!",
-        "모든 북쪽/동쪽 소 쌍의 교차를 확인. 이벤트를 시간순 정렬. 총 O(N^2 log N)!"),
+        "Check all N-cow vs E-cow pairs for intersections.\nSort events by time.\nO(N^2 log N) total!", "모든 북쪽/동쪽 소 쌍의 교차를 확인. 이벤트를 시간순 정렬. 총 O(N^2 log N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -131,8 +127,7 @@ export function makeStuckCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getStuckInRutSections(E),
     },
   ];

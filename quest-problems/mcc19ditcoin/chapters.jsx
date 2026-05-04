@@ -36,8 +36,7 @@ export function makeMcc19DitcoinCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You earn 1 Ditcoin per day and know future prices. Decide when to sell to maximize profit. Greedy: sell when today's price is the best remaining!",
-        "매일 Ditcoin 1개를 벌고 미래 가격을 알아. 언제 팔지 결정해서 수익을 최대화해. 그리디: 오늘 가격이 남은 중 최고일 때 팔아!"),
+        "You earn 1 Ditcoin per day and know future prices.\nDecide when to sell to maximize profit.\nGreedy: sell when today's price is the best remaining!", "매일 Ditcoin 1개를 벌고 미래 가격을 알아. 언제 팔지 결정해서 수익을 최대화해. 그리디: 오늘 가격이 남은 중 최고일 때 팔아!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>💰</div>
@@ -54,8 +53,7 @@ export function makeMcc19DitcoinCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Prices = [3, 1, 5]. You earn 1 coin/day. When should you sell?",
-        "가격 = [3, 1, 5]. 하루에 코인 1개씩 벌어. 언제 팔아야 해?"),
+        "Prices = [3, 1, 5]. You earn 1 coin/day. When should you sell?", "가격 = [3, 1, 5]. 하루에 코인 1개씩 벌어. 언제 팔아야 해?"),
       question: t(E,
         "Prices [3, 1, 5]. Best strategy?",
         "가격 [3, 1, 5]. 최적 전략은?"),
@@ -73,8 +71,7 @@ export function makeMcc19DitcoinCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Prices = [3, 1, 5]. Sell all 3 coins at price 5. Total profit?",
-        "가격 = [3, 1, 5]. 코인 3개를 가격 5에 전부 판매. 총 수익은?"),
+        "Prices = [3, 1, 5]. Sell all 3 coins at price 5. Total profit?", "가격 = [3, 1, 5]. 코인 3개를 가격 5에 전부 판매. 총 수익은?"),
       question: t(E,
         "Prices [3, 1, 5]. Max profit = ?",
         "가격 [3, 1, 5]. 최대 수익 = ?"),
@@ -96,8 +93,7 @@ export function makeMcc19DitcoinCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Compute suffix max in one pass from right, then greedily sell. O(N) time!",
-        "오른쪽부터 한 번에 접미사 최댓값 계산, 그리디하게 판매. O(N) 시간!"),
+        "Compute suffix max in one pass from right, then greedily sell. O(N) time!", "오른쪽부터 한 번에 접미사 최댓값 계산, 그리디하게 판매. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
@@ -113,8 +109,7 @@ export function makeMcc19DitcoinCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc19DitcoinSections(E),
     },
   ];

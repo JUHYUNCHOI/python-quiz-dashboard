@@ -27,8 +27,7 @@ export function makeMcc19RectCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a non-decreasing list of N integers, find the minimum absolute difference between consecutive elements. Since it's sorted, we just check adjacent pairs!",
-        "비내림차순으로 정렬된 N개의 정수가 주어져. 연속된 원소 사이의 최소 절대 차이를 구해. 정렬되어 있으니 인접한 쌍만 확인하면 돼!"),
+        "Given a non-decreasing list of N integers, find the minimum absolute difference between consecutive elements.\nSince it's sorted, we just check adjacent pairs!", "비내림차순으로 정렬된 N개의 정수가 주어져. 연속된 원소 사이의 최소 절대 차이를 구해. 정렬되어 있으니 인접한 쌍만 확인하면 돼!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>📏</div>
@@ -45,8 +44,7 @@ export function makeMcc19RectCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "For the sorted list [1, 3, 5, 6], which consecutive pair has the smallest difference?",
-        "정렬된 리스트 [1, 3, 5, 6]에서 어떤 연속 쌍의 차이가 가장 작을까?"),
+        "For the sorted list [1, 3, 5, 6], which consecutive pair has the smallest difference?", "정렬된 리스트 [1, 3, 5, 6]에서 어떤 연속 쌍의 차이가 가장 작을까?"),
       question: t(E,
         "Sorted list [1, 3, 5, 6]. Which pair gives the minimum difference?",
         "정렬된 리스트 [1, 3, 5, 6]. 어떤 쌍이 최소 차이를 줘?"),
@@ -64,8 +62,7 @@ export function makeMcc19RectCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now compute it yourself! List = [1, 3, 5, 6]. What is the minimum difference?",
-        "이제 직접 계산해봐! 리스트 = [1, 3, 5, 6]. 최소 차이는?"),
+        "Now compute it yourself! List = [1, 3, 5, 6]. What is the minimum difference?", "이제 직접 계산해봐! 리스트 = [1, 3, 5, 6]. 최소 차이는?"),
       question: t(E,
         "Sorted list [1, 3, 5, 6]. Min difference = ?",
         "정렬된 리스트 [1, 3, 5, 6]. 최소 차이 = ?"),
@@ -87,8 +84,7 @@ export function makeMcc19RectCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Since the list is already sorted, we just scan once through adjacent pairs. O(N) time!",
-        "리스트가 이미 정렬되어 있으니 인접 쌍을 한 번만 훑으면 돼. O(N) 시간!"),
+        "Since the list is already sorted, we just scan once through adjacent pairs. O(N) time!", "리스트가 이미 정렬되어 있으니 인접 쌍을 한 번만 훑으면 돼. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
@@ -104,8 +100,7 @@ export function makeMcc19RectCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc19RectSections(E),
     },
   ];

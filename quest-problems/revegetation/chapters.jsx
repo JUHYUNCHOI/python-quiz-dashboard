@@ -39,8 +39,7 @@ export function makeRevegCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N pastures need grass from 4 types. Some cow pairs need different grass on their favorite pastures. Find the lexicographically smallest valid coloring.",
-        "N개의 목초지에 4종류 잔디 중 하나를 심어야 해. 일부 소 쌍은 좋아하는 목초지의 잔디가 달라야 해. 사전순으로 가장 작은 유효 배색을 찾아!"),
+        "N pastures need grass from 4 types.\nSome cow pairs need different grass on their favorite pastures.\nFind the lexicographically smallest valid coloring.", "N개의 목초지에 4종류 잔디 중 하나를 심어야 해. 일부 소 쌍은 좋아하는 목초지의 잔디가 달라야 해. 사전순으로 가장 작은 유효 배색을 찾아!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf31"}</div>
@@ -57,8 +56,7 @@ export function makeRevegCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "With 4 colors available and no constraints on pasture 1, what color does it get?",
-        "4가지 색이 있고 목초지 1에 제약이 없으면 어떤 색을 받을까?"),
+        "With 4 colors available and no constraints on pasture 1, what color does it get?", "4가지 색이 있고 목초지 1에 제약이 없으면 어떤 색을 받을까?"),
       question: t(E,
         "Pasture 1, no constraints. Which color (1-4)?",
         "목초지 1, 제약 없음. 어떤 색 (1-4)?"),
@@ -77,8 +75,7 @@ export function makeRevegCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "What color does pasture 1 get when there are no constraints?",
-        "제약이 없을 때 목초지 1의 색은?"),
+        "What color does pasture 1 get when there are no constraints?", "제약이 없을 때 목초지 1의 색은?"),
       question: t(E,
         "Smallest available color for unconstrained pasture?",
         "제약 없는 목초지에 배정되는 가장 작은 색?"),
@@ -100,8 +97,7 @@ export function makeRevegCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Greedy coloring: for each pasture, check its constraints. O(N * M) in the worst case.",
-        "그리디 색칠: 각 목초지의 제약을 확인. 최악의 경우 O(N * M)."),
+        "Greedy coloring: for each pasture, check its constraints. O(N * M) in the worst case.", "그리디 색칠: 각 목초지의 제약을 확인. 최악의 경우 O(N * M)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -117,8 +113,7 @@ export function makeRevegCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getRevegSections(E),
     },
   ];

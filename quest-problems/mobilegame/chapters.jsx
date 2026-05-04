@@ -24,8 +24,7 @@ export function makeMobileGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A mobile game has N levels, each with a score. You play through all levels and collect all scores. Find the total score!",
-        "모바일 게임에 N개의 레벨이 있고, 각각 점수가 있어. 모든 레벨을 플레이하고 점수를 모두 모아. 총 점수를 구해!"),
+        "A mobile game has N levels, each with a score.\nYou play through all levels and collect all scores.\nFind the total score!", "모바일 게임에 N개의 레벨이 있고, 각각 점수가 있어. 모든 레벨을 플레이하고 점수를 모두 모아. 총 점수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf1"}</div>
@@ -42,8 +41,7 @@ export function makeMobileGameCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If there are 3 levels with scores [10, 20, 30], what is the total score?",
-        "3개 레벨의 점수가 [10, 20, 30]이면, 총 점수는 얼마일까?"),
+        "If there are 3 levels with scores [10, 20, 30], what is the total score?", "3개 레벨의 점수가 [10, 20, 30]이면, 총 점수는 얼마일까?"),
       question: t(E,
         "Scores = [10, 20, 30]. Total score?",
         "점수 = [10, 20, 30]. 총 점수는?"),
@@ -62,8 +60,7 @@ export function makeMobileGameCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Try it yourself! What is the total score for levels [10, 20, 30]?",
-        "직접 해보자! 레벨 [10, 20, 30]의 총 점수는?"),
+        "Try it yourself! What is the total score for levels [10, 20, 30]?", "직접 해보자! 레벨 [10, 20, 30]의 총 점수는?"),
       question: t(E,
         "Scores = [10, 20, 30]. Enter the total:",
         "점수 = [10, 20, 30]. 총합을 입력해:"),
@@ -85,8 +82,7 @@ export function makeMobileGameCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simply read all scores and sum them up. O(N) time complexity.",
-        "모든 점수를 읽고 합산하면 돼. O(N) 시간 복잡도."),
+        "Simply read all scores and sum them up. O(N) time complexity.", "모든 점수를 읽고 합산하면 돼. O(N) 시간 복잡도."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -102,8 +98,7 @@ export function makeMobileGameCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMobileGameSections(E),
     },
   ];

@@ -46,8 +46,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The cows need to send a signal! They have a small picture, and they want to make it BIGGER. Let's learn how! 📡",
-        "소들이 신호를 보내야 해! 작은 그림이 있는데, 크게 만들고 싶어. 어떻게 하는지 배우자! 📡"),
+        "The cows need to send a signal!\nThey have a small picture, and they want to make it BIGGER.\nLet's learn how!\n📡", "소들이 신호를 보내야 해! 작은 그림이 있는데, 크게 만들고 싶어. 어떻게 하는지 배우자! 📡"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>📡</div>
@@ -60,8 +59,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The signal is drawn on a grid — like graph paper! Each square has either a dot '.' (empty) or an 'X' (filled). This grid has 2 rows and 3 columns.",
-        "신호는 그리드 위에 그려져 — 모눈종이처럼! 각 칸에는 점 '.' (빈칸) 또는 'X' (채워진 칸). 이 그리드는 2행 3열이야."),
+        "The signal is drawn on a grid — like graph paper!\nEach square has either a dot '.' (empty) or an 'X' (filled).\nThis grid has 2 rows and 3 columns.", "신호는 그리드 위에 그려져 — 모눈종이처럼! 각 칸에는 점 '.' (빈칸) 또는 'X' (채워진 칸). 이 그리드는 2행 3열이야."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#8b5cf6", marginBottom: 8 }}>
@@ -79,8 +77,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We're given three numbers: M (rows), N (columns), and K (how much to enlarge). K=2 means 'make everything 2 times bigger'!",
-        "세 숫자가 주어져: M (행 수), N (열 수), K (확대 배수). K=2는 '모든 걸 2배로 크게'라는 뜻!"),
+        "We're given three numbers: M (rows), N (columns), and K (how much to enlarge).\nK=2 means 'make everything 2 times bigger'!", "세 숫자가 주어져: M (행 수), N (열 수), K (확대 배수). K=2는 '모든 걸 2배로 크게'라는 뜻!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
@@ -107,8 +104,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Quick check! If M=2 and N=3, how many cells are in the original grid?",
-        "확인! M=2이고 N=3이면, 원본 그리드에 칸이 몇 개야?"),
+        "Quick check! If M=2 and N=3, how many cells are in the original grid?", "확인! M=2이고 N=3이면, 원본 그리드에 칸이 몇 개야?"),
       question: t(E, "2 rows × 3 columns = ? cells", "2행 × 3열 = ? 칸"),
       options: ["6", "5", "8"],
       correct: 0,
@@ -119,8 +115,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Enlarging by K means: each single cell becomes a K×K block of the SAME character. If K=2, one 'X' becomes four X's in a 2×2 square!",
-        "K배 확대란: 각 칸 하나가 같은 문자의 K×K 블록이 되는 것! K=2이면, 'X' 하나가 2×2 정사각형의 X 네 개가 돼!"),
+        "Enlarging by K means: each single cell becomes a K×K block of the SAME character.\nIf K=2, one 'X' becomes four X's in a 2×2 square!", "K배 확대란: 각 칸 하나가 같은 문자의 K×K 블록이 되는 것! K=2이면, 'X' 하나가 2×2 정사각형의 X 네 개가 돼!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20 }}>
@@ -150,8 +145,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The same rule applies to empty cells! One '.' becomes a K×K block of dots. So K=2 means one dot becomes four dots.",
-        "빈칸도 마찬가지야! '.' 하나가 K×K 블록의 점이 돼. K=2면 점 하나가 점 네 개가 돼."),
+        "The same rule applies to empty cells!\nOne '.' becomes a K×K block of dots.\nSo K=2 means one dot becomes four dots.", "빈칸도 마찬가지야! '.' 하나가 K×K 블록의 점이 돼. K=2면 점 하나가 점 네 개가 돼."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20 }}>
@@ -173,8 +167,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If K=3, each single cell becomes a 3×3 block. That's 9 copies of the same character!",
-        "K=3이면, 각 칸 하나가 3×3 블록이 돼. 같은 문자 9개!"),
+        "If K=3, each single cell becomes a 3×3 block. That's 9 copies of the same character!", "K=3이면, 각 칸 하나가 3×3 블록이 돼. 같은 문자 9개!"),
       question: t(E, "K=3. One 'X' becomes how many X's?", "K=3. 'X' 하나가 몇 개의 X가 돼?"),
       options: ["9", "3", "6", "12"],
       correct: 0,
@@ -185,8 +178,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now let's see the FULL picture! Original 2×3 grid with K=2 becomes a 4×6 grid. Every cell expanded!",
-        "이제 전체 그림을 보자! 원본 2×3 그리드가 K=2로 4×6 그리드가 돼. 모든 셀이 확장!"),
+        "Now let's see the FULL picture!\nOriginal 2×3 grid with K=2 becomes a 4×6 grid.\nEvery cell expanded!", "이제 전체 그림을 보자! 원본 2×3 그리드가 K=2로 4×6 그리드가 돼. 모든 셀이 확장!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: 20, flexWrap: "wrap" }}>
@@ -212,8 +204,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The output size is always M×K rows and N×K columns. Each dimension gets multiplied by K!",
-        "출력 크기는 항상 M×K 행, N×K 열이야. 각 차원에 K를 곱해!"),
+        "The output size is always M×K rows and N×K columns. Each dimension gets multiplied by K!", "출력 크기는 항상 M×K 행, N×K 열이야. 각 차원에 K를 곱해!"),
       question: t(E, "Original 5×4, K=3. Output size?", "원본 5×4, K=3. 출력 크기?"),
       options: [
         t(E, "15 rows × 12 columns", "15행 × 12열"),
@@ -228,8 +219,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Your turn! Original grid has 3 rows, K=4. How many rows in the output?",
-        "네 차례! 원본 그리드가 3행, K=4. 출력의 행 수는?"),
+        "Your turn! Original grid has 3 rows, K=4. How many rows in the output?", "네 차례! 원본 그리드가 3행, K=4. 출력의 행 수는?"),
       question: t(E, "3 × 4 = ?", "3 × 4 = ?"),
       answer: 12,
     },
@@ -246,8 +236,7 @@ export function makeCowSignalCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There are two stretches happening: HORIZONTAL (each character repeated K times in a row) and VERTICAL (each row printed K times). Let's see each one!",
-        "두 가지 확대가 일어나: 가로 (각 문자를 행에서 K번 반복)와 세로 (각 행을 K번 출력). 하나씩 보자!"),
+        "There are two stretches happening: HORIZONTAL (each character repeated K times in a row) and VERTICAL (each row printed K times).\nLet's see each one!", "두 가지 확대가 일어나: 가로 (각 문자를 행에서 K번 반복)와 세로 (각 행을 K번 출력). 하나씩 보자!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ display: "flex", justifyContent: "center", gap: 20 }}>
@@ -269,8 +258,7 @@ export function makeCowSignalCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "HORIZONTAL: Take one row 'X.X'. With K=2, each character is repeated 2 times: X→XX, .→.., X→XX. Result: 'XX..XX'!",
-        "가로: 행 하나 'X.X'를 가져와. K=2면 각 문자를 2번 반복: X→XX, .→.., X→XX. 결과: 'XX..XX'!"),
+        "HORIZONTAL: Take one row 'X.X'.\nWith K=2, each character is repeated 2 times: X→XX, .→.., X→XX.\nResult: 'XX..XX'!", "가로: 행 하나 'X.X'를 가져와. K=2면 각 문자를 2번 반복: X→XX, .→.., X→XX. 결과: 'XX..XX'!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
@@ -310,8 +298,7 @@ export function makeCowSignalCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "VERTICAL: After expanding horizontally, we print that same row K times! With K=2, 'XX..XX' appears twice.",
-        "세로: 가로 확대 후, 같은 행을 K번 출력! K=2면 'XX..XX'가 두 번 나와."),
+        "VERTICAL: After expanding horizontally, we print that same row K times!\nWith K=2, 'XX..XX' appears twice.", "세로: 가로 확대 후, 같은 행을 K번 출력! K=2면 'XX..XX'가 두 번 나와."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           {[0,1].map(r => (
@@ -336,8 +323,7 @@ export function makeCowSignalCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In Python, repeating a character is easy: 'X' * 3 = 'XXX'. String multiplication!",
-        "파이썬에서 문자 반복은 쉬워: 'X' * 3 = 'XXX'. 문자열 곱셈!"),
+        "In Python, repeating a character is easy: 'X' * 3 = 'XXX'. String multiplication!", "파이썬에서 문자 반복은 쉬워: 'X' * 3 = 'XXX'. 문자열 곱셈!"),
       question: t(E, "'.' * 4 = ?", "'.' * 4 = ?"),
       options: ["'....'", "'4.'", "4", "'.....'"],
       correct: 0,
@@ -348,8 +334,7 @@ export function makeCowSignalCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace the FULL process! Original: [['X','.','X'],['.','X','.']], K=2.",
-        "전체 과정을 추적하자! 원본: [['X','.','X'],['.','X','.']], K=2."),
+        "Let's trace the FULL process! Original: [['X','.','X'],['.','X','.']], K=2.", "전체 과정을 추적하자! 원본: [['X','.','X'],['.','X','.']], K=2."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -375,8 +360,7 @@ export function makeCowSignalCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "We need TWO kinds of loops: one to go through original rows, and one to repeat each row K times. Which does what?",
-        "두 종류의 루프가 필요해: 원본 행을 순회하는 것과, 각 행을 K번 반복하는 것. 어떤 게 뭘 할까?"),
+        "We need TWO kinds of loops: one to go through original rows, and one to repeat each row K times.\nWhich does what?", "두 종류의 루프가 필요해: 원본 행을 순회하는 것과, 각 행을 K번 반복하는 것. 어떤 게 뭘 할까?"),
       question: t(E,
         "Which loop makes each row appear K times vertically?",
         "각 행이 세로로 K번 나오게 하는 루프는?"),
@@ -392,8 +376,7 @@ export function makeCowSignalCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "For horizontal stretching, we build each output row by repeating each character K times. In code: grid[i][j] * K.",
-        "가로 확대는 각 출력 행을 만들 때 각 문자를 K번 반복. 코드: grid[i][j] * K."),
+        "For horizontal stretching, we build each output row by repeating each character K times.\nIn code: grid[i][j] * K.", "가로 확대는 각 출력 행을 만들 때 각 문자를 K번 반복. 코드: grid[i][j] * K."),
       question: t(E,
         "Row = '.X.', K=3. What's the expanded row?",
         "행 = '.X.', K=3. 확대된 행은?"),
@@ -406,8 +389,7 @@ export function makeCowSignalCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Original: 3 rows × 2 columns, K=3. Total output characters in ONE output row? Each original row has 2 chars, each repeated 3 times.",
-        "원본: 3행 × 2열, K=3. 출력 행 하나의 총 문자 수? 원본 행은 2문자, 각각 3번 반복."),
+        "Original: 3 rows × 2 columns, K=3.\nTotal output characters in ONE output row?\nEach original row has 2 chars, each repeated 3 times.", "원본: 3행 × 2열, K=3. 출력 행 하나의 총 문자 수? 원본 행은 2문자, 각각 3번 반복."),
       question: t(E, "2 chars × 3 = ?", "2문자 × 3 = ?"),
       answer: 6,
     },
@@ -424,8 +406,7 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: Read the numbers M, N, K. The first line has all three, separated by spaces.",
-        "1단계: 숫자 M, N, K를 읽어. 첫 줄에 세 개가 공백으로 구분되어 있어."),
+        "Step 1: Read the numbers M, N, K. The first line has all three, separated by spaces.", "1단계: 숫자 M, N, K를 읽어. 첫 줄에 세 개가 공백으로 구분되어 있어."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
@@ -447,8 +428,7 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: Read M lines for the grid. Each line is a string of '.' and 'X'.",
-        "2단계: 그리드로 M줄을 읽어. 각 줄은 '.'와 'X'의 문자열이야."),
+        "Step 2: Read M lines for the grid. Each line is a string of '.' and 'X'.", "2단계: 그리드로 M줄을 읽어. 각 줄은 '.'와 'X'의 문자열이야."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
@@ -466,8 +446,7 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "If grid = ['X.X', '.X.'], what is grid[0][2]? Remember: index starts at 0!",
-        "grid = ['X.X', '.X.']이면, grid[0][2]는? 인덱스는 0부터 시작!"),
+        "If grid = ['X.X', '.X.'], what is grid[0][2]? Remember: index starts at 0!", "grid = ['X.X', '.X.']이면, grid[0][2]는? 인덱스는 0부터 시작!"),
       question: t(E, "grid[0] = 'X.X'. grid[0][2] = ?", "grid[0] = 'X.X'. grid[0][2] = ?"),
       options: ["'X'", "'.'", "'.X'"],
       correct: 0,
@@ -478,8 +457,7 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 3: The output loop! Outer loop goes through each original row. Inner loop repeats it K times.",
-        "3단계: 출력 루프! 바깥 루프가 원본 행을 순회. 안쪽 루프가 K번 반복."),
+        "Step 3: The output loop!\nOuter loop goes through each original row.\nInner loop repeats it K times.", "3단계: 출력 루프! 바깥 루프가 원본 행을 순회. 안쪽 루프가 K번 반복."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
@@ -494,8 +472,7 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 4: Inside the loops, build each output row by repeating each character K times, then print it!",
-        "4단계: 루프 안에서, 각 문자를 K번 반복하여 출력 행을 만들고, 출력!"),
+        "Step 4: Inside the loops, build each output row by repeating each character K times, then print it!", "4단계: 루프 안에서, 각 문자를 K번 반복하여 출력 행을 만들고, 출력!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
@@ -516,8 +493,7 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "This is the core of the solution! grid[i][j] * K does the horizontal stretching.",
-        "이게 솔루션의 핵심이야! grid[i][j] * K가 가로 확대를 해."),
+        "This is the core of the solution! grid[i][j] * K does the horizontal stretching.", "이게 솔루션의 핵심이야! grid[i][j] * K가 가로 확대를 해."),
       question: t(E,
         "grid[0] = 'X.X', K=3. What does grid[0][1] * K produce?",
         "grid[0] = 'X.X', K=3. grid[0][1] * K의 결과는?"),
@@ -530,8 +506,7 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Time complexity: O(M × K × N × K) = O(MNK²). But that's exactly the output size — we can't do better! Each character in the output is written exactly once.",
-        "시간복잡도: O(M × K × N × K) = O(MNK²). 하지만 그게 정확히 출력 크기야 — 더 빨리 할 수 없어! 출력의 각 문자를 정확히 한 번 씀."),
+        "Time complexity: O(M × K × N × K) = O(MNK²).\nBut that's exactly the output size — we can't do better!\nEach character in the output is written exactly once.", "시간복잡도: O(M × K × N × K) = O(MNK²). 하지만 그게 정확히 출력 크기야 — 더 빨리 할 수 없어! 출력의 각 문자를 정확히 한 번 씀."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(MNK²)</div>
@@ -546,8 +521,7 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getCowSignalSections(E),
     },
   ];

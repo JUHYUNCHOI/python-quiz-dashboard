@@ -37,8 +37,7 @@ export function makeCowTipCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given an N x N grid of 0s and 1s, you can toggle all cells in any upper-left rectangle (from (0,0) to (i,j)). Find the minimum number of toggles to make everything 0.",
-        "N x N 격자에 0과 1이 있어. (0,0)에서 (i,j)까지의 왼쪽 위 직사각형의 모든 셀을 토글할 수 있어. 모든 셀을 0으로 만드는 최소 토글 횟수를 구해."),
+        "Given an N x N grid of 0s and 1s, you can toggle all cells in any upper-left rectangle (from (0,0) to (i,j)).\nFind the minimum number of toggles to make everything 0.", "N x N 격자에 0과 1이 있어.\n(0,0)에서 (i,j)까지의 왼쪽 위 직사각형의 모든 셀을 토글할 수 있어.\n모든 셀을 0으로 만드는 최소 토글 횟수를 구해."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -55,8 +54,7 @@ export function makeCowTipCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Consider grid [[1,0],[0,1]]. Process (1,1): it's 1, toggle (0,0)-(1,1). Then (1,0) and (0,1) need fixing. How many total operations?",
-        "격자 [[1,0],[0,1]]을 생각해봐. (1,1) 처리: 1이니까 (0,0)-(1,1) 토글. 그 다음 (1,0)과 (0,1)도 고쳐야 해. 총 몇 번?"),
+        "Consider grid [[1,0],[0,1]].\nProcess (1,1): it's 1, toggle (0,0)-(1,1).\nThen (1,0) and (0,1) need fixing.\nHow many total operations?", "격자 [[1,0],[0,1]]을 생각해봐. (1,1) 처리: 1이니까 (0,0)-(1,1) 토글. 그 다음 (1,0)과 (0,1)도 고쳐야 해. 총 몇 번?"),
       question: t(E,
         "Grid [[1,0],[0,1]]: how many toggle operations needed?",
         "격자 [[1,0],[0,1]]: 토글 연산 몇 번 필요?"),
@@ -74,8 +72,7 @@ export function makeCowTipCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For grid [[1,0],[0,1]], we showed 3 operations are needed. Enter that number.",
-        "격자 [[1,0],[0,1]]에서 3번 연산이 필요하다고 했어. 그 숫자를 입력해."),
+        "For grid [[1,0],[0,1]], we showed 3 operations are needed. Enter that number.", "격자 [[1,0],[0,1]]에서 3번 연산이 필요하다고 했어. 그 숫자를 입력해."),
       question: t(E,
         "Grid [[1,0],[0,1]]: minimum toggles?",
         "격자 [[1,0],[0,1]]: 최소 토글 횟수?"),
@@ -97,8 +94,7 @@ export function makeCowTipCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Process each cell from bottom-right. If it's 1, toggle the entire upper-left rectangle. O(N^4) in worst case but N <= 10 so it's fine.",
-        "오른쪽 아래부터 각 셀을 처리. 1이면 왼쪽 위 전체 직사각형을 토글. 최악 O(N^4)이지만 N <= 10이라 괜찮아."),
+        "Process each cell from bottom-right.\nIf it's 1, toggle the entire upper-left rectangle.\nO(N^4) in worst case but N <= 10 so it's fine.", "오른쪽 아래부터 각 셀을 처리. 1이면 왼쪽 위 전체 직사각형을 토글. 최악 O(N^4)이지만 N <= 10이라 괜찮아."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -114,8 +110,7 @@ export function makeCowTipCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getCowTipSections(E),
     },
   ];

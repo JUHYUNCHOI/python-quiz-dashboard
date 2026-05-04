@@ -31,8 +31,7 @@ export function makeCowntactCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows are getting sick! Infection spreads to adjacent cows each night. Given the final state, find the minimum number of cows that were initially infected! 🦠",
-        "소들이 아프고 있어! 감염이 매일 밤 옆 소에게 퍼져. 최종 상태가 주어지면, 처음에 감염된 소의 최소 수를 찾아! 🦠"),
+        "Cows are getting sick!\nInfection spreads to adjacent cows each night.\nGiven the final state, find the minimum number of cows that were initially infected!\n🦠", "소들이 아프고 있어! 감염이 매일 밤 옆 소에게 퍼져. 최종 상태가 주어지면, 처음에 감염된 소의 최소 수를 찾아! 🦠"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🦠</div>
@@ -49,8 +48,7 @@ export function makeCowntactCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Consider the string \"11111\". All 5 cows are infected. Could they all have come from just 1 cow in the middle? Yes! The center cow infects outward over time.",
-        "문자열 \"11111\"을 생각해봐. 5마리 모두 감염됐어. 가운데 1마리에서 시작했을 수 있을까? 그렇지! 가운데 소가 시간이 지나면서 양옆으로 퍼져."),
+        "Consider the string \"11111\".\nAll 5 cows are infected.\nCould they all have come from just 1 cow in the middle?\nYes!\nThe center cow infects outward over time.", "문자열 \"11111\"을 생각해봐. 5마리 모두 감염됐어. 가운데 1마리에서 시작했을 수 있을까? 그렇지! 가운데 소가 시간이 지나면서 양옆으로 퍼져."),
       question: t(E,
         "\"11111\" — what is the minimum number initially infected?",
         "\"11111\" — 처음에 감염된 최소 수는?"),
@@ -68,8 +66,7 @@ export function makeCowntactCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now consider \"01110110\". The 0s break the infected cows into separate groups. Group 1: positions 1-3 (\"111\"), Group 2: positions 5-6 (\"11\"). Each group needs at least 1 initial source!",
-        "이제 \"01110110\"을 봐. 0이 감염된 소들을 별도 그룹으로 나눠. 그룹1: 위치 1-3 (\"111\"), 그룹2: 위치 5-6 (\"11\"). 각 그룹은 최소 1마리 초기 감염이 필요해!"),
+        "Now consider \"01110110\".\nThe 0s break the infected cows into separate groups.\nGroup 1: positions 1-3 (\"111\"), Group 2: positions 5-6 (\"11\").\nEach group needs at least 1 initial source!", "이제 \"01110110\"을 봐.\n0이 감염된 소들을 별도 그룹으로 나눠.\n그룹1: 위치 1-3 (\"111\"), 그룹2: 위치 5-6 (\"11\").\n각 그룹은 최소 1마리 초기 감염이 필요해!"),
       question: t(E,
         "\"01110110\"\nHow many separate infected groups?",
         "\"01110110\"\n감염된 그룹이 몇 개야?"),
@@ -88,8 +85,7 @@ export function makeCowntactCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The key insight: each consecutive segment of 1s can be explained by a single initial infection. So the answer = number of separate groups of consecutive 1s!",
-        "핵심 통찰: 연속된 1의 각 세그먼트는 하나의 초기 감염으로 설명 가능. 답 = 연속된 1 그룹의 수!"),
+        "The key insight: each consecutive segment of 1s can be explained by a single initial infection.\nSo the answer = number of separate groups of consecutive 1s!", "핵심 통찰: 연속된 1의 각 세그먼트는 하나의 초기 감염으로 설명 가능. 답 = 연속된 1 그룹의 수!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", marginBottom: 8 }}>
@@ -132,8 +128,7 @@ export function makeCowntactCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getCowntactSections(E),
     },
   ];

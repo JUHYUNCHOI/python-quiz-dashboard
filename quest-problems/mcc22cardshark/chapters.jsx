@@ -43,8 +43,7 @@ export function makeMcc22CardSharkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A card game where players take turns picking the highest remaining card. Given N cards, find the optimal score for the first player!",
-        "카드 게임에서 플레이어가 번갈아 가며 남은 카드 중 가장 높은 카드를 가져가. N장의 카드가 주어지면 첫 번째 플레이어의 최적 점수를 구해!"),
+        "A card game where players take turns picking the highest remaining card.\nGiven N cards, find the optimal score for the first player!", "카드 게임에서 플레이어가 번갈아 가며 남은 카드 중 가장 높은 카드를 가져가. N장의 카드가 주어지면 첫 번째 플레이어의 최적 점수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udccf"}</div>
@@ -61,8 +60,7 @@ export function makeMcc22CardSharkCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cards are [1, 2, 3]. Both players play optimally (pick highest). Player 1 picks first. What does Player 1 get?",
-        "카드가 [1, 2, 3]이야. 두 플레이어 모두 최적으로 (가장 높은 것) 플레이해. 플레이어 1이 먼저 가져가. 플레이어 1은 무엇을 얻어?"),
+        "Cards are [1, 2, 3].\nBoth players play optimally (pick highest).\nPlayer 1 picks first.\nWhat does Player 1 get?", "카드가 [1, 2, 3]이야. 두 플레이어 모두 최적으로 (가장 높은 것) 플레이해. 플레이어 1이 먼저 가져가. 플레이어 1은 무엇을 얻어?"),
       question: t(E,
         "Cards [1,2,3]. P1 picks 3, P2 picks 2, P1 picks 1. P1's total?",
         "카드 [1,2,3]. P1이 3, P2가 2, P1이 1 가져가. P1의 합계?"),
@@ -80,8 +78,7 @@ export function makeMcc22CardSharkCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "With cards [1,2,3], what is Player 1's optimal score when picking highest first?",
-        "카드 [1,2,3]에서 가장 높은 것을 먼저 가져갈 때 플레이어 1의 최적 점수는?"),
+        "With cards [1,2,3], what is Player 1's optimal score when picking highest first?", "카드 [1,2,3]에서 가장 높은 것을 먼저 가져갈 때 플레이어 1의 최적 점수는?"),
       question: t(E,
         "Cards [1,2,3], pick highest each turn. P1's score?",
         "카드 [1,2,3], 매 턴 가장 높은 것 선택. P1의 점수?"),
@@ -103,8 +100,7 @@ export function makeMcc22CardSharkCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort the cards O(N log N), then alternate picks in O(N). Total: O(N log N).",
-        "카드 정렬 O(N log N), 번갈아 선택 O(N). 총: O(N log N)."),
+        "Sort the cards O(N log N), then alternate picks in O(N). Total: O(N log N).", "카드 정렬 O(N log N), 번갈아 선택 O(N). 총: O(N log N)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -120,8 +116,7 @@ export function makeMcc22CardSharkCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc22CardSharkSections(E),
     },
   ];

@@ -51,8 +51,7 @@ export function makeMcc22GrammarCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We have a grammar graph where nodes are words (WE, THEY, DONT, KNOW, THAT) and directed edges define valid transitions. Given a sentence, check if each consecutive pair follows an edge in the graph!",
-        "단어(WE, THEY, DONT, KNOW, THAT)가 노드이고 방향 간선이 유효한 전환을 정의하는 문법 그래프가 있어. 문장이 주어지면, 연속된 단어 쌍이 그래프의 간선을 따르는지 확인해!"),
+        "We have a grammar graph where nodes are words (WE, THEY, DONT, KNOW, THAT) and directed edges define valid transitions.\nGiven a sentence, check if each consecutive pair follows an edge in the graph!", "단어(WE, THEY, DONT, KNOW, THAT)가 노드이고 방향 간선이 유효한 전환을 정의하는 문법 그래프가 있어.\n문장이 주어지면, 연속된 단어 쌍이 그래프의 간선을 따르는지 확인해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcd6"}</div>
@@ -69,8 +68,7 @@ export function makeMcc22GrammarCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The grammar graph has edges: WE->DONT, WE->KNOW, THEY->DONT, THEY->KNOW, DONT->KNOW, KNOW->THAT, THAT->WE, THAT->THEY. Is the sentence 'WE KNOW' valid?",
-        "문법 그래프 간선: WE->DONT, WE->KNOW, THEY->DONT, THEY->KNOW, DONT->KNOW, KNOW->THAT, THAT->WE, THAT->THEY. 'WE KNOW' 문장은 유효할까?"),
+        "The grammar graph has edges: WE->DONT, WE->KNOW, THEY->DONT, THEY->KNOW, DONT->KNOW, KNOW->THAT, THAT->WE, THAT->THEY.\nIs the sentence 'WE KNOW' valid?", "문법 그래프 간선: WE->DONT, WE->KNOW, THEY->DONT, THEY->KNOW, DONT->KNOW, KNOW->THAT, THAT->WE, THAT->THEY.\n'WE KNOW' 문장은 유효할까?"),
       question: t(E,
         "WE can go to DONT or KNOW. Is 'WE KNOW' a valid sentence?",
         "WE는 DONT 또는 KNOW로 갈 수 있어. 'WE KNOW'는 유효한 문장일까?"),
@@ -87,8 +85,7 @@ export function makeMcc22GrammarCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Is 'WE KNOW' valid? Answer 1 for yes, 0 for no.",
-        "'WE KNOW'는 유효한가? 예면 1, 아니면 0을 입력해."),
+        "Is 'WE KNOW' valid? Answer 1 for yes, 0 for no.", "'WE KNOW'는 유효한가? 예면 1, 아니면 0을 입력해."),
       question: t(E,
         "Is 'WE KNOW' a valid sentence? (1=yes, 0=no)",
         "'WE KNOW'는 유효한 문장인가? (1=예, 0=아니오)"),
@@ -110,8 +107,7 @@ export function makeMcc22GrammarCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Build adjacency list O(E), then for each sentence of length L, check L-1 edges. Use a set for O(1) lookup per edge.",
-        "인접 리스트 구축 O(E), 길이 L인 각 문장에서 L-1개 간선 확인. 간선당 O(1) 조회를 위해 집합 사용."),
+        "Build adjacency list O(E), then for each sentence of length L, check L-1 edges.\nUse a set for O(1) lookup per edge.", "인접 리스트 구축 O(E), 길이 L인 각 문장에서 L-1개 간선 확인. 간선당 O(1) 조회를 위해 집합 사용."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -127,8 +123,7 @@ export function makeMcc22GrammarCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc22GrammarSections(E),
     },
   ];

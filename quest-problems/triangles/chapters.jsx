@@ -46,8 +46,7 @@ export function makeTrianglesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given N points, find the maximum area right triangle with legs parallel to the axes. Output 2 times the area (to avoid fractions).",
-        "N개의 점이 주어져. 축에 평행한 변을 가진 직각삼각형의 최대 넓이를 구해. 분수를 피하기 위해 넓이의 2배를 출력."),
+        "Given N points, find the maximum area right triangle with legs parallel to the axes.\nOutput 2 times the area (to avoid fractions).", "N개의 점이 주어져. 축에 평행한 변을 가진 직각삼각형의 최대 넓이를 구해. 분수를 피하기 위해 넓이의 2배를 출력."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcd0"}</div>
@@ -64,8 +63,7 @@ export function makeTrianglesCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Points: (0,0), (1,0), (0,2). The right angle is at (0,0). Base = 1, Height = 2. Area = 1. Output = 2 * area = ?",
-        "점: (0,0), (1,0), (0,2). 직각이 (0,0). 밑변 = 1, 높이 = 2. 넓이 = 1. 출력 = 2 * 넓이 = ?"),
+        "Points: (0,0), (1,0), (0,2).\nThe right angle is at (0,0).\nBase = 1, Height = 2.\nArea = 1.\nOutput = 2 * area = ?", "점: (0,0), (1,0), (0,2). 직각이 (0,0). 밑변 = 1, 높이 = 2. 넓이 = 1. 출력 = 2 * 넓이 = ?"),
       question: t(E,
         "Points (0,0),(1,0),(0,2). Right angle at origin. 2 * area = ?",
         "점 (0,0),(1,0),(0,2). 원점에서 직각. 2 * 넓이 = ?"),
@@ -83,8 +81,7 @@ export function makeTrianglesCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For points (0,0), (1,0), (0,2): what is 2 * max area?",
-        "점 (0,0), (1,0), (0,2)에 대해: 최대 넓이 * 2는?"),
+        "For points (0,0), (1,0), (0,2): what is 2 * max area?", "점 (0,0), (1,0), (0,2)에 대해: 최대 넓이 * 2는?"),
       question: t(E,
         "Points (0,0),(1,0),(0,2). Output 2 * max triangle area?",
         "점 (0,0),(1,0),(0,2). 최대 삼각형 넓이 * 2 출력?"),
@@ -106,8 +103,7 @@ export function makeTrianglesCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Group by x and y, then for each point check all vertical/horizontal neighbors. O(N^2) in worst case but fast enough.",
-        "x와 y로 그룹화, 각 점에서 수직/수평 이웃 확인. 최악 O(N^2)이지만 충분히 빨라."),
+        "Group by x and y, then for each point check all vertical/horizontal neighbors.\nO(N^2) in worst case but fast enough.", "x와 y로 그룹화, 각 점에서 수직/수평 이웃 확인. 최악 O(N^2)이지만 충분히 빨라."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -123,8 +119,7 @@ export function makeTrianglesCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getTrianglesSections(E),
     },
   ];

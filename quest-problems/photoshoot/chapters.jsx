@@ -39,8 +39,7 @@ export function makePhotoshootCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Arrange G (Guernsey) and H (Holstein) cows to maximize G at even positions. Use minimum prefix reversals to rearrange!",
-        "G(건지)와 H(홀스타인) 소를 배치해서 짝수 위치에 G를 최대화해! 최소 접두사 뒤집기로 재배열해!"),
+        "Arrange G (Guernsey) and H (Holstein) cows to maximize G at even positions.\nUse minimum prefix reversals to rearrange!", "G(건지)와 H(홀스타인) 소를 배치해서 짝수 위치에 G를 최대화해! 최소 접두사 뒤집기로 재배열해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"📸"}</div>
@@ -57,8 +56,7 @@ export function makePhotoshootCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's check: in \"GHHG\", how many G's are at even positions (1-indexed, even = 2,4)?",
-        "확인해보자: \"GHHG\"에서 짝수 위치(1-인덱스, 짝수=2,4)에 G가 몇 개야?"),
+        "Let's check: in \"GHHG\", how many G's are at even positions (1-indexed, even = 2,4)?", "확인해보자: \"GHHG\"에서 짝수 위치(1-인덱스, 짝수=2,4)에 G가 몇 개야?"),
       question: t(E,
         "\"GHHG\": pos 2 is H, pos 4 is G. How many G at even positions?",
         "\"GHHG\": 위치2는 H, 위치4는 G. 짝수 위치의 G 개수는?"),
@@ -76,8 +74,7 @@ export function makePhotoshootCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "In \"GHHG\", how many G's are at even 1-indexed positions?",
-        "\"GHHG\"에서 1-인덱스 짝수 위치에 G가 몇 개야?"),
+        "In \"GHHG\", how many G's are at even 1-indexed positions?", "\"GHHG\"에서 1-인덱스 짝수 위치에 G가 몇 개야?"),
       question: t(E,
         "\"GHHG\": How many G at even positions (2,4)?",
         "\"GHHG\": 짝수 위치(2,4)에 G가 몇 개?"),
@@ -99,8 +96,7 @@ export function makePhotoshootCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "We scan the string once to count G's at even positions. O(N) time!",
-        "문자열을 한 번 스캔해서 짝수 위치의 G를 세면 돼. O(N) 시간!"),
+        "We scan the string once to count G's at even positions. O(N) time!", "문자열을 한 번 스캔해서 짝수 위치의 G를 세면 돼. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -116,8 +112,7 @@ export function makePhotoshootCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getPhotoshootSections(E),
     },
   ];

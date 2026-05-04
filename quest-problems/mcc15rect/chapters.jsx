@@ -30,8 +30,7 @@ export function makeMcc15RectCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given 3 corners of an axis-aligned rectangle, find the 4th corner. The sides are parallel to the x and y axes, so each x-coordinate and y-coordinate appears exactly twice!",
-        "축에 정렬된 직사각형의 꼭짓점 3개가 주어지면 4번째 꼭짓점을 찾아. 변이 x축, y축에 평행하니까 각 x좌표와 y좌표가 정확히 2번씩 나타나!"),
+        "Given 3 corners of an axis-aligned rectangle, find the 4th corner.\nThe sides are parallel to the x and y axes, so each x-coordinate and y-coordinate appears exactly twice!", "축에 정렬된 직사각형의 꼭짓점 3개가 주어지면 4번째 꼭짓점을 찾아. 변이 x축, y축에 평행하니까 각 x좌표와 y좌표가 정확히 2번씩 나타나!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u25ad"}</div>
@@ -48,8 +47,7 @@ export function makeMcc15RectCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Three corners of an axis-aligned rectangle are (0,0), (2,0), (0,3). What is the 4th corner?",
-        "축 정렬 직사각형의 꼭짓점 3개가 (0,0), (2,0), (0,3)이야. 4번째 꼭짓점은?"),
+        "Three corners of an axis-aligned rectangle are (0,0), (2,0), (0,3).\nWhat is the 4th corner?", "축 정렬 직사각형의 꼭짓점 3개가 (0,0), (2,0), (0,3)이야. 4번째 꼭짓점은?"),
       question: t(E,
         "Corners: (0,0), (2,0), (0,3). 4th corner?",
         "꼭짓점: (0,0), (2,0), (0,3). 4번째 꼭짓점은?"),
@@ -68,8 +66,7 @@ export function makeMcc15RectCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For corners (0,0), (2,0), (0,3), what is the x-coordinate of the 4th corner?",
-        "꼭짓점 (0,0), (2,0), (0,3)일 때, 4번째 꼭짓점의 x좌표는?"),
+        "For corners (0,0), (2,0), (0,3), what is the x-coordinate of the 4th corner?", "꼭짓점 (0,0), (2,0), (0,3)일 때, 4번째 꼭짓점의 x좌표는?"),
       question: t(E,
         "Corners (0,0),(2,0),(0,3). x of 4th corner = ?",
         "꼭짓점 (0,0),(2,0),(0,3). 4번째 꼭짓점의 x좌표 = ?"),
@@ -91,8 +88,7 @@ export function makeMcc15RectCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The XOR trick gives us O(1) per test case. Super efficient!",
-        "XOR 트릭으로 테스트 케이스당 O(1)! 초효율적!"),
+        "The XOR trick gives us O(1) per test case. Super efficient!", "XOR 트릭으로 테스트 케이스당 O(1)! 초효율적!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -108,8 +104,7 @@ export function makeMcc15RectCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc15RectSections(E),
     },
   ];

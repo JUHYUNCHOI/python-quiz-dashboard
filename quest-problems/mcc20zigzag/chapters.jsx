@@ -32,8 +32,7 @@ export function makeMcc20ZigzagCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Count zig-zag subsequences of length K in a string. A zig-zag alternates between increasing and decreasing. Use DP!",
-        "문자열에서 길이 K의 지그재그 부분수열을 세. 지그재그는 증가와 감소를 번갈아. DP 사용!"),
+        "Count zig-zag subsequences of length K in a string.\nA zig-zag alternates between increasing and decreasing.\nUse DP!", "문자열에서 길이 K의 지그재그 부분수열을 세. 지그재그는 증가와 감소를 번갈아. DP 사용!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -49,8 +48,7 @@ export function makeMcc20ZigzagCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "String 'abc', how many subsequences of length 2? C(3,2) = 3: ab, ac, bc.",
-        "문자열 'abc', 길이 2 부분수열 몇 개? C(3,2) = 3: ab, ac, bc."),
+        "String 'abc', how many subsequences of length 2? C(3,2) = 3: ab, ac, bc.", "문자열 'abc', 길이 2 부분수열 몇 개? C(3,2) = 3: ab, ac, bc."),
       question: t(E,
         "String 'abc'. How many subsequences of length 2?",
         "문자열 'abc'. 길이 2 부분수열 몇 개?"),
@@ -67,8 +65,7 @@ export function makeMcc20ZigzagCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "How many length-2 subsequences of 'abc'?",
-        "'abc'의 길이 2 부분수열 개수?"),
+        "How many length-2 subsequences of 'abc'?", "'abc'의 길이 2 부분수열 개수?"),
       question: t(E,
         "C(3, 2) = ?",
         "C(3, 2) = ?"),
@@ -83,8 +80,7 @@ export function makeMcc20ZigzagCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "DP on subsequences with zig-zag condition. O(N^2 * K) time.",
-        "지그재그 조건의 부분수열 DP. O(N^2 * K) 시간."),
+        "DP on subsequences with zig-zag condition. O(N^2 * K) time.", "지그재그 조건의 부분수열 DP. O(N^2 * K) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -99,8 +95,7 @@ export function makeMcc20ZigzagCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc20ZigzagSections(E),
     },
   ];

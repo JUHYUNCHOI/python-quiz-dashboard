@@ -39,8 +39,7 @@ export function makeClockCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A fence path is described by a sequence of directions (N, E, S, W). Determine if the path goes clockwise (CW) or counter-clockwise (CCW) by counting right vs left turns!",
-        "울타리 경로가 방향 시퀀스(N, E, S, W)로 설명돼. 오른쪽 회전과 왼쪽 회전을 세서 시계 방향(CW)인지 반시계 방향(CCW)인지 판단해!"),
+        "A fence path is described by a sequence of directions (N, E, S, W).\nDetermine if the path goes clockwise (CW) or counter-clockwise (CCW) by counting right vs left turns!", "울타리 경로가 방향 시퀀스(N, E, S, W)로 설명돼. 오른쪽 회전과 왼쪽 회전을 세서 시계 방향(CW)인지 반시계 방향(CCW)인지 판단해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
@@ -57,8 +56,7 @@ export function makeClockCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The path 'NESW' makes a square: go North, then East, then South, then West. Each turn is a right turn. Is this clockwise?",
-        "경로 'NESW'는 정사각형: 북쪽, 동쪽, 남쪽, 서쪽. 각 회전이 오른쪽 회전이야. 시계 방향일까?"),
+        "The path 'NESW' makes a square: go North, then East, then South, then West.\nEach turn is a right turn.\nIs this clockwise?", "경로 'NESW'는 정사각형: 북쪽, 동쪽, 남쪽, 서쪽. 각 회전이 오른쪽 회전이야. 시계 방향일까?"),
       question: t(E,
         "'NESW' path: all right turns. Clockwise?",
         "'NESW' 경로: 모두 오른쪽 회전. 시계 방향?"),
@@ -75,8 +73,7 @@ export function makeClockCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For 'NESW': N->E is right, E->S is right, S->W is right, W->N is right. How many right turns total?",
-        "'NESW'에서: N->E 오른쪽, E->S 오른쪽, S->W 오른쪽, W->N 오른쪽. 오른쪽 회전 총 몇 번?"),
+        "For 'NESW': N->E is right, E->S is right, S->W is right, W->N is right.\nHow many right turns total?", "'NESW'에서: N->E 오른쪽, E->S 오른쪽, S->W 오른쪽, W->N 오른쪽. 오른쪽 회전 총 몇 번?"),
       question: t(E,
         "'NESW': right turns - left turns = ?",
         "'NESW': 오른쪽 회전 - 왼쪽 회전 = ?"),
@@ -98,8 +95,7 @@ export function makeClockCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Map each direction to 0-3. A right turn increases by 1 (mod 4), a left turn decreases by 1. Count and compare. O(N) time.",
-        "각 방향을 0-3으로 매핑. 오른쪽 회전은 1 증가(mod 4), 왼쪽 회전은 1 감소. 세고 비교. O(N) 시간."),
+        "Map each direction to 0-3.\nA right turn increases by 1 (mod 4), a left turn decreases by 1.\nCount and compare.\nO(N) time.", "각 방향을 0-3으로 매핑. 오른쪽 회전은 1 증가(mod 4), 왼쪽 회전은 1 감소. 세고 비교. O(N) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -115,8 +111,7 @@ export function makeClockCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getClockFenceSections(E),
     },
   ];

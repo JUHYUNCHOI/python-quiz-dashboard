@@ -33,8 +33,7 @@ export function makeCowPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Arrange cows in a bitonic, symmetric sequence with no adjacent duplicates. Maximize the number of cows in the photo! 📸",
-        "소들을 바이토닉, 대칭, 인접 중복 없는 배열로! 사진에 넣을 소의 수를 최대화! 📸"),
+        "Arrange cows in a bitonic, symmetric sequence with no adjacent duplicates.\nMaximize the number of cows in the photo!\n📸", "소들을 바이토닉, 대칭, 인접 중복 없는 배열로! 사진에 넣을 소의 수를 최대화! 📸"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>📸</div>
@@ -50,8 +49,7 @@ export function makeCowPhotosCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Example: heights [1,1,2,3]. Valid arrangement: [1,3,1] — bitonic ✓, symmetric ✓, no adjacent dups ✓. Length = 3.",
-        "예: 키 [1,1,2,3]. 유효한 배열: [1,3,1] — 바이토닉 ✓, 대칭 ✓, 인접 중복 없음 ✓. 길이 = 3."),
+        "Example: heights [1,1,2,3].\nValid arrangement: [1,3,1] — bitonic ✓, symmetric ✓, no adjacent dups ✓.\nLength = 3.", "예: 키 [1,1,2,3]. 유효한 배열: [1,3,1] — 바이토닉 ✓, 대칭 ✓, 인접 중복 없음 ✓. 길이 = 3."),
       question: t(E,
         "Which of these is a valid arrangement?",
         "유효한 배열은?"),
@@ -66,16 +64,14 @@ export function makeCowPhotosCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Heights = [3,3,2,1]. Can we use all 4? [1,3,3,1] has adjacent 3s. [1,3,1] works but only uses 3. Best length?",
-        "키 = [3,3,2,1]. 4개 다 쓸 수 있어? [1,3,3,1]은 인접 3. [1,3,1]은 되지만 3개만. 최대 길이?"),
+        "Heights = [3,3,2,1].\nCan we use all 4?\n[1,3,3,1] has adjacent 3s.\n[1,3,1] works but only uses 3.\nBest length?", "키 = [3,3,2,1]. 4개 다 쓸 수 있어? [1,3,3,1]은 인접 3. [1,3,1]은 되지만 3개만. 최대 길이?"),
       question: t(E, "Max valid photo length for [3,3,2,1]?", "[3,3,2,1]의 최대 유효 사진 길이?"),
       answer: 1,
     },
     {
       type: "sim",
       narr: t(E,
-        "3 phases: heights → Counter → final palindrome arrangement.",
-        "3단계: 키 → Counter → 최종 팰린드롬 배열."),
+        "3 phases: heights → Counter → final palindrome arrangement.", "3단계: 키 → Counter → 최종 팰린드롬 배열."),
     },
   ];
 }
@@ -94,8 +90,7 @@ export function makeCowPhotosCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Now build the frequency-based solution step by step.",
-        "빈도 기반 솔루션을 단계별로 만들자."),
+        "Now build the frequency-based solution step by step.", "빈도 기반 솔루션을 단계별로 만들자."),
       sections: getCowPhotosSections(E),
     },
     {

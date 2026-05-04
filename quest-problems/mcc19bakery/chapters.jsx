@@ -32,8 +32,7 @@ export function makeMcc19BakeryCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A bakery has a promotion: every 4th purchase, you get the 2nd cheapest item free. Given N items with prices, find the minimum cost to buy all items!",
-        "빵집에서 프로모션 중이야: 4번째 구매마다 2번째로 싼 아이템이 무료야. N개의 아이템 가격이 주어지면 모든 아이템을 사는 최소 비용을 구해!"),
+        "A bakery has a promotion: every 4th purchase, you get the 2nd cheapest item free.\nGiven N items with prices, find the minimum cost to buy all items!", "빵집에서 프로모션 중이야: 4번째 구매마다 2번째로 싼 아이템이 무료야. N개의 아이템 가격이 주어지면 모든 아이템을 사는 최소 비용을 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🥖</div>
@@ -50,8 +49,7 @@ export function makeMcc19BakeryCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If you buy 4 items costing [1, 2, 3, 4], which item is free under the promotion?",
-        "가격이 [1, 2, 3, 4]인 아이템 4개를 사면, 프로모션으로 어떤 아이템이 무료일까?"),
+        "If you buy 4 items costing [1, 2, 3, 4], which item is free under the promotion?", "가격이 [1, 2, 3, 4]인 아이템 4개를 사면, 프로모션으로 어떤 아이템이 무료일까?"),
       question: t(E,
         "4 items: costs [1, 2, 3, 4]. Which one is free (2nd cheapest)?",
         "4개 아이템: 가격 [1, 2, 3, 4]. 어떤 게 무료 (2번째로 싼 것)?"),
@@ -69,8 +67,7 @@ export function makeMcc19BakeryCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "4 items with costs [1, 2, 3, 4]. The 2nd cheapest (2) is free. What's the total cost?",
-        "가격 [1, 2, 3, 4]인 4개 아이템. 2번째로 싼 것(2)이 무료. 총 비용은?"),
+        "4 items with costs [1, 2, 3, 4]. The 2nd cheapest (2) is free. What's the total cost?", "가격 [1, 2, 3, 4]인 4개 아이템. 2번째로 싼 것(2)이 무료. 총 비용은?"),
       question: t(E,
         "Costs [1, 2, 3, 4], 2nd cheapest free. Total cost = ?",
         "가격 [1, 2, 3, 4], 2번째로 싼 것 무료. 총 비용 = ?"),
@@ -92,8 +89,7 @@ export function makeMcc19BakeryCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort descending, then skip every 4th item. O(N log N) for sorting!",
-        "내림차순 정렬 후 4번째마다 건너뛰어. 정렬에 O(N log N)!"),
+        "Sort descending, then skip every 4th item. O(N log N) for sorting!", "내림차순 정렬 후 4번째마다 건너뛰어. 정렬에 O(N log N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
@@ -109,8 +105,7 @@ export function makeMcc19BakeryCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc19BakerySections(E),
     },
   ];

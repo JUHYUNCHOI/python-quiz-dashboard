@@ -27,8 +27,7 @@ export function makeMcc21SimpleMathCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given N, P and array A. Perform operations depending on P: P=1 addition, P=2 multiplication, P=3 floor division. Compute the result!",
-        "N, P와 배열 A가 주어져. P에 따라 연산 수행: P=1 덧셈, P=2 곱셈, P=3 나눗셈(내림). 결과를 계산해!"),
+        "Given N, P and array A.\nPerform operations depending on P: P=1 addition, P=2 multiplication, P=3 floor division.\nCompute the result!", "N, P와 배열 A가 주어져. P에 따라 연산 수행: P=1 덧셈, P=2 곱셈, P=3 나눗셈(내림). 결과를 계산해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
@@ -44,8 +43,7 @@ export function makeMcc21SimpleMathCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "N=3, P=1, A=[2,3,4]. With addition, what is the sum?",
-        "N=3, P=1, A=[2,3,4]. 덧셈이면 합은?"),
+        "N=3, P=1, A=[2,3,4]. With addition, what is the sum?", "N=3, P=1, A=[2,3,4]. 덧셈이면 합은?"),
       question: t(E,
         "P=1 (addition), A=[2,3,4]. Result?",
         "P=1 (덧셈), A=[2,3,4]. 결과?"),
@@ -62,8 +60,7 @@ export function makeMcc21SimpleMathCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Compute the sum: 2 + 3 + 4 = ?",
-        "합 계산: 2 + 3 + 4 = ?"),
+        "Compute the sum: 2 + 3 + 4 = ?", "합 계산: 2 + 3 + 4 = ?"),
       question: t(E,
         "A = [2, 3, 4], P = 1. Sum = ?",
         "A = [2, 3, 4], P = 1. 합 = ?"),
@@ -78,8 +75,7 @@ export function makeMcc21SimpleMathCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simple branching based on P. O(N) for each operation.",
-        "P에 따른 간단한 분기. 각 연산 O(N)."),
+        "Simple branching based on P. O(N) for each operation.", "P에 따른 간단한 분기. 각 연산 O(N)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -94,8 +90,7 @@ export function makeMcc21SimpleMathCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc21SimpleMathSections(E),
     },
   ];

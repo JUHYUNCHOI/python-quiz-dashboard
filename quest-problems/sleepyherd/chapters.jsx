@@ -42,8 +42,7 @@ export function makeSleepyHerdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Three cows stand on a number line. You can only move an endpoint cow to a position between the other two (not to the other end). Find the minimum and maximum number of moves to make them consecutive.",
-        "세 마리 소가 수직선에 서 있어. 끝에 있는 소만 다른 두 소 사이로 옮길 수 있어 (반대쪽 끝으로는 안 돼). 연속된 위치로 만드는 최소/최대 이동 횟수를 구해!"),
+        "Three cows stand on a number line.\nYou can only move an endpoint cow to a position between the other two (not to the other end).\nFind the minimum and maximum number of moves to make them consecutive.", "세 마리 소가 수직선에 서 있어.\n끝에 있는 소만 다른 두 소 사이로 옮길 수 있어 (반대쪽 끝으로는 안 돼).\n연속된 위치로 만드는 최소/최대 이동 횟수를 구해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude34"}</div>
@@ -60,8 +59,7 @@ export function makeSleepyHerdCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Positions [4, 7, 9]. Move 4 to 8, getting [7, 8, 9]. How many moves was that?",
-        "위치 [4, 7, 9]. 4를 8로 옮기면 [7, 8, 9]. 몇 번 이동했을까?"),
+        "Positions [4, 7, 9]. Move 4 to 8, getting [7, 8, 9]. How many moves was that?", "위치 [4, 7, 9]. 4를 8로 옮기면 [7, 8, 9]. 몇 번 이동했을까?"),
       question: t(E,
         "Positions [4,7,9]. Min moves to make consecutive?",
         "위치 [4,7,9]. 연속으로 만드는 최소 이동 횟수?"),
@@ -80,8 +78,7 @@ export function makeSleepyHerdCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For positions [4,7,9], what is the minimum number of moves?",
-        "위치 [4,7,9]에서 최소 이동 횟수는?"),
+        "For positions [4,7,9], what is the minimum number of moves?", "위치 [4,7,9]에서 최소 이동 횟수는?"),
       question: t(E,
         "Positions [4,7,9]. Minimum moves?",
         "위치 [4,7,9]. 최소 이동 횟수?"),
@@ -103,8 +100,7 @@ export function makeSleepyHerdCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just sort 3 numbers and compute gaps. O(1) time!",
-        "3개 숫자 정렬하고 간격 계산. O(1) 시간!"),
+        "Just sort 3 numbers and compute gaps. O(1) time!", "3개 숫자 정렬하고 간격 계산. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -120,8 +116,7 @@ export function makeSleepyHerdCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getSleepyHerdSections(E),
     },
   ];

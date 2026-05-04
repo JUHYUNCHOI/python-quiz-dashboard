@@ -118,8 +118,7 @@ export function makeCheeseCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's a cube made of cheese cubes, like a Rubik's cube! What happens if you keep removing blocks one by one? Let's find out! 👀",
-        "치즈 조각으로 만든 큐브가 있어! 루빅큐브처럼! 여기서 블록을 계속 빼면 무슨 일이 생길까? 알아보자! 👀"),
+        "Here's a cube made of cheese cubes, like a Rubik's cube!\nWhat happens if you keep removing blocks one by one?\nLet's find out!\n👀", "치즈 조각으로 만든 큐브가 있어! 루빅큐브처럼! 여기서 블록을 계속 빼면 무슨 일이 생길까? 알아보자! 👀"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 12, padding: 14, fontSize: 14, color: C.text, lineHeight: 1.9, textAlign: "center" }}>
@@ -133,8 +132,7 @@ export function makeCheeseCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We try to slide a 1×1×N rod through one row. Look at these 4 cases — which one does the rod fit?",
-        "1×1×N 막대를 한 줄로 밀어 넣으려고 해. 4 가지 경우를 봐 — 어느 줄에 들어갈까?"),
+        "We try to slide a 1×1×N rod through one row.\nLook at these 4 cases — which one does the rod fit?", "1×1×N 막대를 한 줄로 밀어 넣으려고 해. 4 가지 경우를 봐 — 어느 줄에 들어갈까?"),
       content: (
         <div style={{ padding: 16 }}>
           {/* 막대 정의 */}
@@ -202,8 +200,7 @@ export function makeCheeseCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "So the rod needs a clear tunnel. How many cells must be empty for it to fit?",
-        "막대가 들어가려면 터널이 뚫려야 해. 몇 칸이 비어야 할까?"),
+        "So the rod needs a clear tunnel. How many cells must be empty for it to fit?", "막대가 들어가려면 터널이 뚫려야 해. 몇 칸이 비어야 할까?"),
       question: t(E,
         "For the rod to fit through, how many cells on the row must be empty?",
         "막대가 통과하려면, 그 줄에서 몇 칸이 비어야 해?"),
@@ -220,8 +217,7 @@ export function makeCheeseCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The rod can go in 3 directions — think of it like poking through the cube from 3 sides!",
-        "막대는 3방향으로 꽂을 수 있어 — 큐브를 3면에서 찌르는 거라고 생각해!"),
+        "The rod can go in 3 directions — think of it like poking through the cube from 3 sides!", "막대는 3방향으로 꽂을 수 있어 — 큐브를 3면에서 찌르는 거라고 생각해!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 12 }}>
@@ -245,8 +241,7 @@ export function makeCheeseCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In a 2×2×2 cube: each direction has rows. Left→Right has 2×2=4 rows. Same for other 2 directions.",
-        "2×2×2 큐브에서: 각 방향에 줄이 있어. 왼→오는 2×2=4줄. 나머지 2방향도 마찬가지."),
+        "In a 2×2×2 cube: each direction has rows.\nLeft→Right has 2×2=4 rows.\nSame for other 2 directions.", "2×2×2 큐브에서: 각 방향에 줄이 있어. 왼→오는 2×2=4줄. 나머지 2방향도 마찬가지."),
       question: t(E,
         "2×2×2 cube: 4 rows per direction × 3 directions = ?",
         "2×2×2 큐브: 방향당 4줄 × 3방향 = 총 몇 줄?"),
@@ -260,8 +255,7 @@ export function makeCheeseCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now the actual problem format: read N (cube size) and Q (number of carve operations), then Q lines of (x, y, z). After EACH carve, output the count.",
-        "실제 문제 형식: N (큐브 크기) 와 Q (제거 횟수) 를 읽고, Q 줄에 (x, y, z) 들어옴. 매 제거 후 답 한 줄씩 출력."),
+        "Now the actual problem format: read N (cube size) and Q (number of carve operations), then Q lines of (x, y, z).\nAfter EACH carve, output the count.", "실제 문제 형식: N (큐브 크기) 와 Q (제거 횟수) 를 읽고, Q 줄에 (x, y, z) 들어옴. 매 제거 후 답 한 줄씩 출력."),
       content: (
         <div style={{ padding: 16 }}>
           {/* INPUT */}
@@ -296,8 +290,7 @@ export function makeCheeseCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's the sample input/output we'll trace by hand in the Sim tab:",
-        "다음 시뮬 탭에서 직접 돌려볼 샘플 입출력:"),
+        "Here's the sample input/output we'll trace by hand in the Sim tab:", "다음 시뮬 탭에서 직접 돌려볼 샘플 입출력:"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
@@ -349,15 +342,13 @@ export function makeCheeseCh2(E) {
     {
       type: "cheeseSim2",
       narr: t(E,
-        "Try it yourself! Press 🧀 Carve to remove blocks one by one. Watch the number change. Something surprising will happen! 👀",
-        "직접 해봐! 🧀 제거 버튼을 눌러서 블록을 하나씩 빼봐. 숫자가 어떻게 바뀌는지 봐. 뭔가 놀라운 일이 생길 거야! 👀"),
+        "Try it yourself!\nPress 🧀 Carve to remove blocks one by one.\nWatch the number change.\nSomething surprising will happen!\n👀", "직접 해봐! 🧀 제거 버튼을 눌러서 블록을 하나씩 빼봐. 숫자가 어떻게 바뀌는지 봐. 뭔가 놀라운 일이 생길 거야! 👀"),
     },
     // 2-2: 놀라움 포착 → 질문
     {
       type: "quiz",
       narr: t(E,
-        "Did you notice? The answer was 0, 0, 1, 2... then suddenly jumped to 5! Three rods fit at once! Why?",
-        "봤지? 답이 0, 0, 1, 2... 였다가 갑자기 5로 뛰었어! 막대 3개가 한꺼번에 들어갔어! 왜 그런 걸까?"),
+        "Did you notice?\nThe answer was 0, 0, 1, 2...\nthen suddenly jumped to 5!\nThree rods fit at once!\nWhy?", "봤지? 답이 0, 0, 1, 2... 였다가 갑자기 5로 뛰었어! 막대 3개가 한꺼번에 들어갔어! 왜 그런 걸까?"),
       question: t(E,
         "Why did 3 rods suddenly fit at the same time?",
         "왜 갑자기 막대 3개가 동시에 들어간 거야?"),
@@ -374,8 +365,7 @@ export function makeCheeseCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "But the first block (0,0,0) didn't change anything — the answer stayed at 0. Why?",
-        "그런데 첫 번째 블록 (0,0,0)은 아무 변화가 없었어 — 답이 0 그대로였지. 왜?"),
+        "But the first block (0,0,0) didn't change anything — the answer stayed at 0. Why?", "그런데 첫 번째 블록 (0,0,0)은 아무 변화가 없었어 — 답이 0 그대로였지. 왜?"),
       question: t(E,
         "Why didn't removing the first block open up any rows?",
         "첫 블록을 빼도 왜 아무 줄도 안 뚫렸을까?"),
@@ -410,8 +400,7 @@ export function makeCheeseCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's look at what happened in the simulation more carefully:",
-        "시뮬에서 일어난 일을 자세히 정리해보자:"),
+        "Let's look at what happened in the simulation more carefully:", "시뮬에서 일어난 일을 자세히 정리해보자:"),
       content: (
         <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
           {[
@@ -439,8 +428,7 @@ export function makeCheeseCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "From the Brute tab you discovered: ① only 3 rows change per carve, ② row state = one number (carved count). Now let's verify by hand that this counter trick is exactly correct.",
-        "브루트 탭에서 발견한 것: ① carve 마다 3 줄만 변함, ② 줄 상태 = 숫자 1 개 (빠진 개수). 이제 손으로 검증 — 카운터 트릭이 정확한지."),
+        "From the Brute tab you discovered: ① only 3 rows change per carve, ② row state = one number (carved count).\nNow let's verify by hand that this counter trick is exactly correct.", "브루트 탭에서 발견한 것: ① carve 마다 3 줄만 변함, ② 줄 상태 = 숫자 1 개 (빠진 개수). 이제 손으로 검증 — 카운터 트릭이 정확한지."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 14, padding: 16, marginBottom: 12 }}>
@@ -474,8 +462,7 @@ export function makeCheeseCh3(E) {
     {
       type: "input",
       narr: t(E,
-        "Let's try it by hand! N=2. We remove (0,0,0). Its 3 counters each go from 0 to 1. But we need 2 to open a row. How many rows opened?",
-        "직접 손으로 해보자! N=2. (0,0,0)을 빼. 3개 카운터가 각각 0→1. 근데 줄이 뚫리려면 2가 필요해. 뚫린 줄은 몇 개?"),
+        "Let's try it by hand!\nN=2.\nWe remove (0,0,0).\nIts 3 counters each go from 0 to 1.\nBut we need 2 to open a row.\nHow many rows opened?", "직접 손으로 해보자! N=2. (0,0,0)을 빼. 3개 카운터가 각각 0→1. 근데 줄이 뚫리려면 2가 필요해. 뚫린 줄은 몇 개?"),
       question: t(E,
         "(0,0,0) removed. All 3 counters = 1. Need 2 to open. Rows opened?",
         "(0,0,0) 제거. 카운터 3개 전부 1. 2가 되어야 뚫림. 뚫린 줄?"),
@@ -487,8 +474,7 @@ export function makeCheeseCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "After 3 removals, some counters hit 2! For example, (0,0,0) and (0,1,0) share the y-row (x=0,z=0) — that counter reached 2, so 1 row opened!",
-        "3번 제거 후, 어떤 카운터는 2에 도달했어! 예를 들어 (0,0,0)과 (0,1,0)은 y-줄(x=0,z=0)을 공유해 — 그 카운터가 2가 돼서 1줄 뚫렸어!"),
+        "After 3 removals, some counters hit 2!\nFor example, (0,0,0) and (0,1,0) share the y-row (x=0,z=0) — that counter reached 2, so 1 row opened!", "3번 제거 후, 어떤 카운터는 2에 도달했어!\n예를 들어 (0,0,0)과 (0,1,0)은 y-줄(x=0,z=0)을 공유해 — 그 카운터가 2가 돼서 1줄 뚫렸어!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 2.2 }}>
@@ -507,8 +493,7 @@ export function makeCheeseCh3(E) {
     {
       type: "input",
       narr: t(E,
-        "Last one! Remove (1,1,0). This block sits on 3 rows, and all 3 counters hit 2 at the same time! Previous answer was 2. Now?",
-        "마지막! (1,1,0) 제거. 이 블록이 있는 3줄의 카운터가 동시에 2에 도달! 이전 답이 2였어. 이제는?"),
+        "Last one!\nRemove (1,1,0).\nThis block sits on 3 rows, and all 3 counters hit 2 at the same time!\nPrevious answer was 2.\nNow?", "마지막! (1,1,0) 제거. 이 블록이 있는 3줄의 카운터가 동시에 2에 도달! 이전 답이 2였어. 이제는?"),
       question: t(E,
         "Previous: 2 rows open. Now +3 more. Total: 2 + 3 = ?",
         "이전: 2줄 뚫림. 이제 +3개 추가. 합계: 2 + 3 = ?"),
@@ -519,8 +504,7 @@ export function makeCheeseCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "That's the whole trick! Instead of checking millions of rows, just update 3 counters each time!",
-        "이게 전부야! 수백만 줄을 확인하는 대신, 매번 카운터 3개만 업데이트!"),
+        "That's the whole trick!\nInstead of checking millions of rows, just update 3 counters each time!", "이게 전부야! 수백만 줄을 확인하는 대신, 매번 카운터 3개만 업데이트!"),
       content: (
         <div style={{ background: C.card, borderRadius: 14, padding: 16, border: "2px solid #d97706", boxShadow: "0 4px 16px rgba(217,119,6,.1)" }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
@@ -541,8 +525,7 @@ export function makeCheeseCh3(E) {
     {
       type: "quiz",
       narr: t(E,
-        "With the counter trick, each removal only needs 3 operations. For 200,000 removals, how fast is it?",
-        "카운터 트릭으로 매번 3번만 하면 돼. 20만 번 제거하면 얼마나 빠를까?"),
+        "With the counter trick, each removal only needs 3 operations.\nFor 200,000 removals, how fast is it?", "카운터 트릭으로 매번 3번만 하면 돼. 20만 번 제거하면 얼마나 빠를까?"),
       question: t(E,
         "Counter trick: 3 ops per removal. Total for Q removals?",
         "카운터 트릭: 제거당 3번. Q번이면 총?"),
@@ -567,16 +550,14 @@ export function makeCheeseCh4(E) {
     {
       type: "cheeseRunner",
       narr: t(E,
-        "The simplest idea: after each removal, check EVERY row. Try N=3, then N=10, then N=20. Feel the difference! 👀",
-        "가장 단순한 방법: 블록 뺄 때마다 모든 줄을 확인하는 거야. N=3, 그다음 N=10, N=20 해봐. 차이를 느껴봐! 👀"),
+        "The simplest idea: after each removal, check EVERY row.\nTry N=3, then N=10, then N=20.\nFeel the difference!\n👀", "가장 단순한 방법: 블록 뺄 때마다 모든 줄을 확인하는 거야. N=3, 그다음 N=10, N=20 해봐. 차이를 느껴봐! 👀"),
     },
 
     // 4-2: 느린 이유 — 체감한 후에 설명
     {
       type: "quiz",
       narr: t(E,
-        "Did you feel it getting slower? N=3 was instant, N=20 took a while. Why does it slow down so much?",
-        "느려지는 거 느꼈지? N=3은 순식간인데, N=20은 좀 걸렸어. 왜 이렇게 느려지는 걸까?"),
+        "Did you feel it getting slower?\nN=3 was instant, N=20 took a while.\nWhy does it slow down so much?", "느려지는 거 느꼈지? N=3은 순식간인데, N=20은 좀 걸렸어. 왜 이렇게 느려지는 걸까?"),
       question: t(E,
         "Why does the brute method get so slow as N grows?",
         "N이 커지면 왜 이렇게 느려져?"),
@@ -595,8 +576,7 @@ export function makeCheeseCh4(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Submit this brute solution to USACO: first few cases pass slowly, rest all time out:",
-        "이 브루트 코드를 USACO 에 제출하면: 앞 몇 개는 간신히 통과, 나머지는 다 시간초과:"),
+        "Submit this brute solution to USACO: first few cases pass slowly, rest all time out:", "이 브루트 코드를 USACO 에 제출하면: 앞 몇 개는 간신히 통과, 나머지는 다 시간초과:"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 8, textAlign: "center" }}>
@@ -647,8 +627,7 @@ export function makeCheeseCh4(E) {
     {
       type: "progressive",
       narr: t(E,
-        "OK so it's slow. What does the code actually look like? Read it part by part.",
-        "느리다는 건 알겠고. 그럼 코드는 어떻게 생겼을까? 부분별로 읽어봐."),
+        "OK so it's slow. What does the code actually look like? Read it part by part.", "느리다는 건 알겠고. 그럼 코드는 어떻게 생겼을까? 부분별로 읽어봐."),
       sections: getCheeseBruteSections(E),
     },
 
@@ -656,8 +635,7 @@ export function makeCheeseCh4(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Wait — every carve, we re-check ALL 3N² rows. But only ONE block changed. Did all rows really change?",
-        "잠깐 — 매번 carve 마다 모든 3N² 줄을 다시 검사해. 근데 변한 건 블록 1 개뿐이야. 정말 모든 줄이 바뀌었을까?"),
+        "Wait — every carve, we re-check ALL 3N² rows.\nBut only ONE block changed.\nDid all rows really change?", "잠깐 — 매번 carve 마다 모든 3N² 줄을 다시 검사해. 근데 변한 건 블록 1 개뿐이야. 정말 모든 줄이 바뀌었을까?"),
       question: t(E,
         "When you carve 1 block, how many rows could possibly change their state?",
         "블록 1 개를 빼면, 상태가 바뀔 수 있는 줄은 최대 몇 개?"),
@@ -679,8 +657,7 @@ export function makeCheeseCh4(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Great — only check the 3 affected rows. But to know if a row is empty, we still need its current state. How do we remember each row's state without re-scanning?",
-        "좋아 — 영향받는 3 줄만 검사. 근데 줄이 비었는지 알려면 그 줄의 현재 상태가 필요해. 매번 다시 스캔하지 않고 줄별 상태를 어떻게 기억?"),
+        "Great — only check the 3 affected rows.\nBut to know if a row is empty, we still need its current state.\nHow do we remember each row's state without re-scanning?", "좋아 — 영향받는 3 줄만 검사. 근데 줄이 비었는지 알려면 그 줄의 현재 상태가 필요해. 매번 다시 스캔하지 않고 줄별 상태를 어떻게 기억?"),
       question: t(E,
         "What's the smallest piece of info per row that tells us 'is this row empty yet?'",
         "줄마다 '이 줄 다 비었나?' 를 알려주는 가장 작은 정보는?"),
@@ -702,8 +679,7 @@ export function makeCheeseCh4(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You just designed the algorithm yourself! Two insights chained: (1) only 3 rows change per carve, (2) one number per row is enough.",
-        "방금 알고리즘을 직접 설계한 거야! 두 통찰의 연결: (1) 한 번에 3 줄만 변함, (2) 줄마다 숫자 1 개면 충분."),
+        "You just designed the algorithm yourself!\nTwo insights chained: (1) only 3 rows change per carve, (2) one number per row is enough.", "방금 알고리즘을 직접 설계한 거야! 두 통찰의 연결: (1) 한 번에 3 줄만 변함, (2) 줄마다 숫자 1 개면 충분."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "linear-gradient(135deg,#fef3c7,#fde68a)", border: "2px solid #f59e0b", borderRadius: 14, padding: 16, marginBottom: 12 }}>
@@ -729,8 +705,7 @@ export function makeCheeseCh4(E) {
     {
       type: "reveal",
       narr: t(E,
-        "30 seconds PER removal × 200,000 removals = 70 DAYS! \ud83d\ude31 This is way too slow. There must be a smarter way... let's find it in the next tab!",
-        "제거 1개에 30초 × 20만 개 = 70일! \ud83d\ude31 \uc774건 \ub108\ubb34 \ub290\ub824... \ub354 \ub611\ub611\ud55c \ubc29\ubc95\uc774 \uc788\uc744 \uac70\uc57c! \ub2e4\uc74c \ud0ed\uc5d0\uc11c \ucc3e\uc544\ubcf4\uc790!"),
+        "30 seconds PER removal × 200,000 removals = 70 DAYS!\n\ud83d\ude31 This is way too slow.\nThere must be a smarter way...\nlet's find it in the next tab!", "제거 1개에 30초 × 20만 개 = 70일!\n\ud83d\ude31 \uc774건 \ub108\ubb34 \ub290\ub824...\n\ub354 \ub611\ub611\ud55c \ubc29\ubc95\uc774 \uc788\uc744 \uac70\uc57c!\n\ub2e4\uc74c \ud0ed\uc5d0\uc11c \ucc3e\uc544\ubcf4\uc790!"),
       content: (
         <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, textAlign: "center", padding: 8 }}>
           <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
@@ -762,8 +737,7 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "We need to store counters for each row. Think of it like a notebook — for each row, write down how many blocks are gone.",
-        "각 줄의 카운터를 저장해야 해. 공책이라고 생각해 — 각 줄마다 '빠진 블록 수'를 적어두는 거야."),
+        "We need to store counters for each row.\nThink of it like a notebook — for each row, write down how many blocks are gone.", "각 줄의 카운터를 저장해야 해. 공책이라고 생각해 — 각 줄마다 '빠진 블록 수'를 적어두는 거야."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 14, padding: 14 }}>
@@ -786,8 +760,7 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "defaultdict(int) works like magic — if you ask for a key that doesn't exist, it gives you 0!",
-        "defaultdict(int)는 마법 같아 — 없는 키를 물어보면 자동으로 0을 줘!"),
+        "defaultdict(int) works like magic — if you ask for a key that doesn't exist, it gives you 0!", "defaultdict(int)는 마법 같아 — 없는 키를 물어보면 자동으로 0을 줘!"),
       content: (() => {
         const lines = [
           "from collections import defaultdict",
@@ -815,8 +788,7 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "The counter goes up by 1 each removal. When does the rod fit?",
-        "카운터가 제거마다 1씩 올라가. 막대가 들어가는 때는?"),
+        "The counter goes up by 1 each removal. When does the rod fit?", "카운터가 제거마다 1씩 올라가. 막대가 들어가는 때는?"),
       question: t(E,
         "Rod fits when counter reaches…?",
         "카운터가 몇이 되면 막대가 들어가?"),
@@ -830,8 +802,7 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "Quick check before code: xy[(x,y)] tracks removals for one specific row. Which direction?",
-        "코드 보기 전 짧은 확인: xy[(x,y)]는 특정 줄의 제거 수를 세. 어떤 방향?"),
+        "Quick check before code: xy[(x,y)] tracks removals for one specific row. Which direction?", "코드 보기 전 짧은 확인: xy[(x,y)]는 특정 줄의 제거 수를 세. 어떤 방향?"),
       question: t(E,
         "xy[(x,y)] counts removals on which row?",
         "xy[(x,y)]는 어떤 방향의 줄?"),
@@ -850,8 +821,7 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Pick a part to see code + reasoning. Toggle Python ↔ C++. Save as PDF for later.",
-        "버튼 눌러서 부분별 코드 + 이유 확인. Python ↔ C++ 토글. PDF 저장 가능."),
+        "Pick a part to see code + reasoning. Toggle Python ↔ C++. Save as PDF for later.", "버튼 눌러서 부분별 코드 + 이유 확인. Python ↔ C++ 토글. PDF 저장 가능."),
       sections: getCheeseSections(E),
     },
 
@@ -859,8 +829,7 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Trace: how the code's xy/yz/xz variables change as the sample input runs through. Match this to the Sim tab!",
-        "trace: 샘플 입력이 들어오면 코드의 xy/yz/xz 변수가 어떻게 바뀌는지. 시뮬 탭에서 본 거랑 같아!"),
+        "Trace: how the code's xy/yz/xz variables change as the sample input runs through.\nMatch this to the Sim tab!", "trace: 샘플 입력이 들어오면 코드의 xy/yz/xz 변수가 어떻게 바뀌는지. 시뮬 탭에서 본 거랑 같아!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 8, textAlign: "center" }}>
@@ -912,8 +881,7 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "That's it! The whole insight: don't re-check everything — just track what changes. 3 counters per removal = done! 🎉",
-        "이게 전부야! 핵심: 전부 다시 확인하지 마 — 바뀌는 것만 추적해. 제거당 카운터 3개 = 끝! 🎉"),
+        "That's it!\nThe whole insight: don't re-check everything — just track what changes.\n3 counters per removal = done!\n🎉", "이게 전부야! 핵심: 전부 다시 확인하지 마 — 바뀌는 것만 추적해. 제거당 카운터 3개 = 끝! 🎉"),
       content: (
         <div style={{ textAlign: "center", padding: 8 }}>
           <div style={{ background: "linear-gradient(135deg,#92400e,#d97706)", borderRadius: 14, padding: "20px 16px" }}>

@@ -48,8 +48,7 @@ export function makeWalkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows walk along a fence (polygon). Each takes the shorter route between start and end. Find distances! 🚶",
-        "소들이 울타리(다각형)를 따라 걸어. 각자 시작점에서 끝점까지 짧은 경로로! 거리를 구해! 🚶"),
+        "Cows walk along a fence (polygon).\nEach takes the shorter route between start and end.\nFind distances!\n🚶", "소들이 울타리(다각형)를 따라 걸어. 각자 시작점에서 끝점까지 짧은 경로로! 거리를 구해! 🚶"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🚶</div>
@@ -65,8 +64,7 @@ export function makeWalkCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "On a closed loop of perimeter L, the shorter distance between two points is min(d, L-d) where d is the distance going one way.",
-        "둘레 L인 폐곡선에서 두 점 사이 짧은 거리는 min(d, L-d). d는 한쪽 방향 거리."),
+        "On a closed loop of perimeter L, the shorter distance between two points is min(d, L-d) where d is the distance going one way.", "둘레 L인 폐곡선에서 두 점 사이 짧은 거리는 min(d, L-d). d는 한쪽 방향 거리."),
       question: t(E,
         "Perimeter = 8. Distance one way = 3. Shorter route?",
         "둘레 = 8. 한쪽 거리 = 3. 더 짧은 경로?"),
@@ -77,16 +75,14 @@ export function makeWalkCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Square fence: (0,0)→(2,0)→(2,2)→(0,2). Perimeter=8. Cow walks from (0,0) to (0,2). One way=2 (up), other=6 (around). Answer?",
-        "정사각 울타리: (0,0)→(2,0)→(2,2)→(0,2). 둘레=8. 소가 (0,0)에서 (0,2)로. 한쪽=2(위로), 다른쪽=6(돌아서). 답?"),
+        "Square fence: (0,0)→(2,0)→(2,2)→(0,2).\nPerimeter=8.\nCow walks from (0,0) to (0,2).\nOne way=2 (up), other=6 (around).\nAnswer?", "정사각 울타리: (0,0)→(2,0)→(2,2)→(0,2). 둘레=8. 소가 (0,0)에서 (0,2)로. 한쪽=2(위로), 다른쪽=6(돌아서). 답?"),
       question: t(E, "Shorter distance?", "더 짧은 거리?"),
       answer: 2,
     },
     {
       type: "sim",
       narr: t(E,
-        "3 fence shapes, 2 stages each: see total perimeter, then cow points + shorter side.",
-        "3가지 울타리 모양, 각 2단계: 총 둘레, 소 위치 + 짧은 쪽."),
+        "3 fence shapes, 2 stages each: see total perimeter, then cow points + shorter side.", "3가지 울타리 모양, 각 2단계: 총 둘레, 소 위치 + 짧은 쪽."),
     },
   ];
 }
@@ -101,8 +97,7 @@ export function makeWalkCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Now build the perimeter walker step by step.",
-        "둘레 거리 계산기를 단계별로 만들자."),
+        "Now build the perimeter walker step by step.", "둘레 거리 계산기를 단계별로 만들자."),
       sections: getWalkFenceSections(E),
     },
   ];

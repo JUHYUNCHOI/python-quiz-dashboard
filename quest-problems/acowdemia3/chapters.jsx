@@ -55,8 +55,7 @@ export function makeAcow3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows on a grid can become friends if they share an adjacent grass cell. Each grass cell can only mediate one friendship. Maximize the number of friendships!",
-        "격자 위의 소들은 인접한 풀 칸을 공유하면 친구가 될 수 있어. 각 풀 칸은 하나의 우정만 중재할 수 있어. 우정의 수를 최대화해!"),
+        "Cows on a grid can become friends if they share an adjacent grass cell.\nEach grass cell can only mediate one friendship.\nMaximize the number of friendships!", "격자 위의 소들은 인접한 풀 칸을 공유하면 친구가 될 수 있어. 각 풀 칸은 하나의 우정만 중재할 수 있어. 우정의 수를 최대화해!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -73,8 +72,7 @@ export function makeAcow3Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If 2 cows are both adjacent to 1 grass cell, what is the maximum number of friendships?",
-        "2마리의 소가 모두 1개의 풀 칸에 인접하면, 최대 우정 수는?"),
+        "If 2 cows are both adjacent to 1 grass cell, what is the maximum number of friendships?", "2마리의 소가 모두 1개의 풀 칸에 인접하면, 최대 우정 수는?"),
       question: t(E,
         "2 cows adjacent to 1 grass cell. Max friendships?",
         "2마리 소가 1개의 풀 칸에 인접. 최대 우정 수?"),
@@ -92,8 +90,7 @@ export function makeAcow3Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "2 cows adjacent to 1 grass cell. How many friendships at most?",
-        "2마리 소가 1개의 풀 칸에 인접. 최대 우정 수?"),
+        "2 cows adjacent to 1 grass cell. How many friendships at most?", "2마리 소가 1개의 풀 칸에 인접. 최대 우정 수?"),
       question: t(E,
         "2 cows, 1 shared grass cell. Max friendships?",
         "소 2마리, 공유 풀 칸 1개. 최대 우정 수?"),
@@ -115,8 +112,7 @@ export function makeAcow3Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Model as bipartite matching: grass cells on one side, cow pairs on the other. Use augmenting paths. O(R*C * sqrt(V)) time.",
-        "이분 매칭으로 모델링: 한쪽에 풀 칸, 다른 쪽에 소 쌍. 증가 경로 사용. O(R*C * sqrt(V)) 시간."),
+        "Model as bipartite matching: grass cells on one side, cow pairs on the other.\nUse augmenting paths.\nO(R*C * sqrt(V)) time.", "이분 매칭으로 모델링: 한쪽에 풀 칸, 다른 쪽에 소 쌍. 증가 경로 사용. O(R*C * sqrt(V)) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -132,8 +128,7 @@ export function makeAcow3Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getAcowdemia3Sections(E),
     },
   ];

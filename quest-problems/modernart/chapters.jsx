@@ -65,8 +65,7 @@ export function makeModernArtCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "An N*N canvas has 9 colors painted as rectangles, one on top of another. Which colors could have been painted first? A color not visible at all could have been first (painted over entirely).",
-        "N*N 캔버스에 9가지 색이 직사각형으로 겹쳐 칠해져 있어. 어떤 색이 처음에 칠해졌을 수 있을까? 전혀 안 보이는 색도 처음일 수 있어 (완전히 덮여서)."),
+        "An N*N canvas has 9 colors painted as rectangles, one on top of another.\nWhich colors could have been painted first?\nA color not visible at all could have been first (painted over entirely).", "N*N 캔버스에 9가지 색이 직사각형으로 겹쳐 칠해져 있어. 어떤 색이 처음에 칠해졌을 수 있을까? 전혀 안 보이는 색도 처음일 수 있어 (완전히 덮여서)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfa8"}</div>
@@ -83,8 +82,7 @@ export function makeModernArtCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If only 1 color is visible on the entire canvas, could it have been painted first?",
-        "캔버스에 1가지 색만 보이면, 그 색이 처음에 칠해졌을 수 있을까?"),
+        "If only 1 color is visible on the entire canvas, could it have been painted first?", "캔버스에 1가지 색만 보이면, 그 색이 처음에 칠해졌을 수 있을까?"),
       question: t(E,
         "Only 1 color visible on canvas. Could it be the first painted?",
         "캔버스에 1가지 색만 보여. 처음에 칠해졌을 수 있어?"),
@@ -101,8 +99,7 @@ export function makeModernArtCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If only 1 color is visible, answer 1 for 'yes it can be first'.",
-        "1가지 색만 보이면 '처음일 수 있다'에 대해 1로 답해."),
+        "If only 1 color is visible, answer 1 for 'yes it can be first'.", "1가지 색만 보이면 '처음일 수 있다'에 대해 1로 답해."),
       question: t(E,
         "Can 1 visible color be first? (1=yes, 0=no)",
         "보이는 색 1개가 처음일 수 있어? (1=예, 0=아니오)"),
@@ -124,8 +121,7 @@ export function makeModernArtCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Find bounding boxes in O(N^2), then compare all pairs of colors in O(9^2). Total O(N^2)!",
-        "바운딩 박스 찾기 O(N^2), 색 쌍 비교 O(9^2). 총 O(N^2)!"),
+        "Find bounding boxes in O(N^2), then compare all pairs of colors in O(9^2). Total O(N^2)!", "바운딩 박스 찾기 O(N^2), 색 쌍 비교 O(9^2). 총 O(N^2)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -141,8 +137,7 @@ export function makeModernArtCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getModernArtSections(E),
     },
   ];

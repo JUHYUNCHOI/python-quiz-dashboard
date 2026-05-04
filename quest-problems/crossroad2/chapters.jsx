@@ -41,8 +41,7 @@ export function makeCrossRd2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "26 cows (A-Z) walk around a circular road, each crossing it exactly twice. Two cows' paths cross if their crossing points alternate on the circle (like chords that intersect). Count crossing pairs!",
-        "26마리 소 (A-Z)가 원형 도로를 돌아다니며 각각 정확히 2번 횡단해. 두 소의 횡단 지점이 원 위에서 번갈아 나오면 (교차하는 현처럼) 경로가 교차해. 교차하는 쌍을 세!"),
+        "26 cows (A-Z) walk around a circular road, each crossing it exactly twice.\nTwo cows' paths cross if their crossing points alternate on the circle (like chords that intersect).\nCount crossing pairs!", "26마리 소 (A-Z)가 원형 도로를 돌아다니며 각각 정확히 2번 횡단해.\n두 소의 횡단 지점이 원 위에서 번갈아 나오면 (교차하는 현처럼) 경로가 교차해.\n교차하는 쌍을 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
@@ -59,8 +58,7 @@ export function makeCrossRd2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Pattern 'ABBA': A's endpoints are at positions 0 and 3, B's at 1 and 2. Do they cross? Pattern 'AABB': A at 0,1 and B at 2,3. Do they cross?",
-        "패턴 'ABBA': A의 끝점은 위치 0과 3, B는 1과 2. 교차해? 패턴 'AABB': A는 0,1이고 B는 2,3. 교차해?"),
+        "Pattern 'ABBA': A's endpoints are at positions 0 and 3, B's at 1 and 2.\nDo they cross?\nPattern 'AABB': A at 0,1 and B at 2,3.\nDo they cross?", "패턴 'ABBA': A의 끝점은 위치 0과 3, B는 1과 2. 교차해? 패턴 'AABB': A는 0,1이고 B는 2,3. 교차해?"),
       question: t(E,
         "Which pattern has crossing paths: ABBA or AABB?",
         "어떤 패턴이 교차하는 경로야: ABBA 아니면 AABB?"),
@@ -78,8 +76,7 @@ export function makeCrossRd2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "For the pattern 'ABBA', how many crossing pairs are there?",
-        "패턴 'ABBA'에서 교차하는 쌍은 몇 개야?"),
+        "For the pattern 'ABBA', how many crossing pairs are there?", "패턴 'ABBA'에서 교차하는 쌍은 몇 개야?"),
       question: t(E,
         "Pattern 'ABBA': how many crossing pairs?",
         "패턴 'ABBA': 교차하는 쌍 몇 개?"),
@@ -101,8 +98,7 @@ export function makeCrossRd2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Find positions in O(N), then check all pairs in O(26^2) = O(1). Total O(N)!",
-        "위치 찾기 O(N), 모든 쌍 확인 O(26^2) = O(1). 총 O(N)!"),
+        "Find positions in O(N), then check all pairs in O(26^2) = O(1). Total O(N)!", "위치 찾기 O(N), 모든 쌍 확인 O(26^2) = O(1). 총 O(N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -118,8 +114,7 @@ export function makeCrossRd2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getCrossRoad2Sections(E),
     },
   ];

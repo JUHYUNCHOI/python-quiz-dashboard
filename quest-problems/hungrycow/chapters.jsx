@@ -43,8 +43,7 @@ export function makeHungryCowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie eats 1 haybale per day. Deliveries arrive on specific days. How many days does she eat in T days? \ud83d\udc04",
-        "\ubca0\uc2dc\ub294 \ud558\ub8e8\uc5d0 \uac74\ucd08 1\uac1c\ub97c \uba39\uc5b4. \ubc30\ub2ec\uc774 \ud2b9\uc815 \ub0a0\uc5d0 \ub3c4\ucc29\ud574. T\uc77c \ub3d9\uc548 \uba87 \uc77c \uba39\uc744\uae4c? \ud83d\udc04"),
+        "Bessie eats 1 haybale per day.\nDeliveries arrive on specific days.\nHow many days does she eat in T days?\n\ud83d\udc04", "\ubca0\uc2dc\ub294 \ud558\ub8e8\uc5d0 \uac74\ucd08 1\uac1c\ub97c \uba39\uc5b4.\n\ubc30\ub2ec\uc774 \ud2b9\uc815 \ub0a0\uc5d0 \ub3c4\ucc29\ud574.\nT\uc77c \ub3d9\uc548 \uba87 \uc77c \uba39\uc744\uae4c?\n\ud83d\udc04"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -60,8 +59,7 @@ export function makeHungryCowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Example: 2 bales delivered on day 1, T=5. She eats day 1 and day 2, then runs out. Total = 2 days!",
-        "\uc608\uc2dc: 1\uc77c\uc5d0 \uac74\ucd08 2\uac1c \ubc30\ub2ec, T=5. 1\uc77c\uacfc 2\uc77c\uc5d0 \uba39\uace0 \ub5a8\uc5b4\uc9c0. \ucd1d = 2\uc77c!"),
+        "Example: 2 bales delivered on day 1, T=5.\nShe eats day 1 and day 2, then runs out.\nTotal = 2 days!", "\uc608\uc2dc: 1\uc77c\uc5d0 \uac74\ucd08 2\uac1c \ubc30\ub2ec, T=5.\n1\uc77c\uacfc 2\uc77c\uc5d0 \uba39\uace0 \ub5a8\uc5b4\uc9c0.\n\ucd1d = 2\uc77c!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 14, padding: 14 }}>
@@ -91,8 +89,7 @@ export function makeHungryCowCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If 2 bales are delivered on day 1 and T=5, how many days does Bessie eat?",
-        "1\uc77c\uc5d0 \uac74\ucd08 2\uac1c \ubc30\ub2ec, T=5\uc774\uba74 \ubca0\uc2dc\ub294 \uba87 \uc77c \uba39\uc744\uae4c?"),
+        "If 2 bales are delivered on day 1 and T=5, how many days does Bessie eat?", "1\uc77c\uc5d0 \uac74\ucd08 2\uac1c \ubc30\ub2ec, T=5\uc774\uba74 \ubca0\uc2dc\ub294 \uba87 \uc77c \uba39\uc744\uae4c?"),
       question: t(E, "2 bales on day 1, T=5 \u2192 days eaten?", "1\uc77c\uc5d0 2\uac1c, T=5 \u2192 \uba87 \uc77c \uba39\uc744\uae4c?"),
       options: ["1", "2", "5"],
       correct: 1,
@@ -101,8 +98,7 @@ export function makeHungryCowCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "10 bales on day 1, 10 bales on day 5, T=5. Day 1-4: eat from first delivery (4 bales). Day 5: new delivery + remaining stock. She has food every day!",
-        "1\uc77c\uc5d0 10\uac1c, 5\uc77c\uc5d0 10\uac1c, T=5. 1-4\uc77c: \uccab \ubc88\uc9f8 \ubc30\ub2ec\uc5d0\uc11c \uba39\uc74c (4\uac1c). 5\uc77c: \uc0c8 \ubc30\ub2ec + \ub0a8\uc740 \uc7ac\uace0. \ub9e4\uc77c \uba39\uc744 \uc218 \uc788\uc5b4!"),
+        "10 bales on day 1, 10 bales on day 5, T=5.\nDay 1-4: eat from first delivery (4 bales).\nDay 5: new delivery + remaining stock.\nShe has food every day!", "1\uc77c\uc5d0 10\uac1c, 5\uc77c\uc5d0 10\uac1c, T=5.\n1-4\uc77c: \uccab \ubc88\uc9f8 \ubc30\ub2ec\uc5d0\uc11c \uba39\uc74c (4\uac1c).\n5\uc77c: \uc0c8 \ubc30\ub2ec + \ub0a8\uc740 \uc7ac\uace0.\n\ub9e4\uc77c \uba39\uc744 \uc218 \uc788\uc5b4!"),
       question: t(E, "10 bales day 1, 10 bales day 5, T=5 \u2192 days eaten?", "1\uc77c 10\uac1c, 5\uc77c 10\uac1c, T=5 \u2192 \uba87 \uc77c?"),
       hint: t(E, "She has enough stock every day from 1 to 5", "1\uc77c\ubd80\ud130 5\uc77c\uae4c\uc9c0 \ub9e4\uc77c \uc7ac\uace0 \ucda9\ubd84"),
       answer: 5,
@@ -110,8 +106,7 @@ export function makeHungryCowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Strategy: Sort deliveries by day. Process gaps between deliveries, eating from stock. Simple simulation!",
-        "\uc804\ub7b5: \ubc30\ub2ec\uc744 \ub0a0\uc9dc\uc21c \uc815\ub82c. \ubc30\ub2ec \uc0ac\uc774 \uac04\uaca9\uc744 \ucc98\ub9ac\ud558\uba70 \uc7ac\uace0\uc5d0\uc11c \uba39\uc74c. \uac04\ub2e8\ud55c \uc2dc\ubbac\ub808\uc774\uc158!"),
+        "Strategy: Sort deliveries by day.\nProcess gaps between deliveries, eating from stock.\nSimple simulation!", "\uc804\ub7b5: \ubc30\ub2ec\uc744 \ub0a0\uc9dc\uc21c \uc815\ub82c.\n\ubc30\ub2ec \uc0ac\uc774 \uac04\uaca9\uc744 \ucc98\ub9ac\ud558\uba70 \uc7ac\uace0\uc5d0\uc11c \uba39\uc74c.\n\uac04\ub2e8\ud55c \uc2dc\ubbac\ub808\uc774\uc158!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 14, padding: 14 }}>
@@ -137,15 +132,13 @@ export function makeHungryCowCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.",
-        "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getHungryCowSections(E),
     },
     {
       type: "quiz",
       narr: t(E,
-        "Why do we sort deliveries by day?",
-        "\ubc30\ub2ec\uc744 \ub0a0\uc9dc\uc21c\uc73c\ub85c \uc815\ub82c\ud558\ub294 \uc774\uc720\ub294?"),
+        "Why do we sort deliveries by day?", "\ubc30\ub2ec\uc744 \ub0a0\uc9dc\uc21c\uc73c\ub85c \uc815\ub82c\ud558\ub294 \uc774\uc720\ub294?"),
       question: t(E, "Why sort deliveries?", "\ubc30\ub2ec\uc744 \uc815\ub82c\ud558\ub294 \uc774\uc720?"),
       options: [
         t(E, "To process chronologically", "\uc2dc\uac04\uc21c\uc73c\ub85c \ucc98\ub9ac"),
@@ -158,8 +151,7 @@ export function makeHungryCowCh2(E, lang = "py") {
     {
       type: "input",
       narr: t(E,
-        "3 bales on day 1, 2 bales on day 10, T=10. Days 1-3: eat 3. Gap to day 10 = 6 days, only 0 stock. Day 10: get 2, eat 1. Total = 3+1 = 4!",
-        "1\uc77c\uc5d0 3\uac1c, 10\uc77c\uc5d0 2\uac1c, T=10. 1-3\uc77c: 3\uac1c \uba39\uc74c. 10\uc77c\uae4c\uc9c0 \uac04\uaca9=6\uc77c, \uc7ac\uace0 0. 10\uc77c: 2\uac1c \ubc1b\uace0 1\uac1c \uba39\uc74c. \ucd1d = 3+1 = 4!"),
+        "3 bales on day 1, 2 bales on day 10, T=10.\nDays 1-3: eat 3.\nGap to day 10 = 6 days, only 0 stock.\nDay 10: get 2, eat 1.\nTotal = 3+1 = 4!", "1\uc77c\uc5d0 3\uac1c, 10\uc77c\uc5d0 2\uac1c, T=10.\n1-3\uc77c: 3\uac1c \uba39\uc74c.\n10\uc77c\uae4c\uc9c0 \uac04\uaca9=6\uc77c, \uc7ac\uace0 0.\n10\uc77c: 2\uac1c \ubc1b\uace0 1\uac1c \uba39\uc74c.\n\ucd1d = 3+1 = 4!"),
       question: t(E, "3 bales day 1, 2 bales day 10, T=10 \u2192 days eaten?", "1\uc77c 3\uac1c, 10\uc77c 2\uac1c, T=10 \u2192 \uba87 \uc77c?"),
       hint: t(E, "Stock runs out after day 3. Day 10 she gets more", "3\uc77c \ud6c4 \uc7ac\uace0 \uc18c\uc9c4. 10\uc77c\uc5d0 \ub354 \ubc1b\uc74c"),
       answer: 4,
