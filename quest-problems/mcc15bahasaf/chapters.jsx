@@ -124,15 +124,36 @@ export function makeMcc15BahasaCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "We scan each character once, so it's O(N) where N is the length of the word.", "각 문자를 한 번씩 보니까 단어 길이 N에 대해 O(N)이예요."),
+        "Scan each character; if it's a vowel keep it, otherwise replace with 'f'.",
+        "각 문자를 스캔; 모음이면 유지, 아니면 'f' 로 교체."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "For each character, check if it's a vowel.\nIf not, replace with 'f'. Simple linear scan.",
-              "각 문자마다 모음인지 확인. 아니면 'f'로 교체. 간단한 선형 스캔.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Define vowels", "모음 정의"), code: "vowels = set('aeiou')", color: "#dc2626" },
+              { n: 2, label: t(E, "Scan word characters", "단어 문자 스캔"), code: "for c in word:", color: "#7c3aed" },
+              { n: 3, label: t(E, "Keep vowels, else 'f'", "모음 유지, 그 외 'f'"), code: "output += c if c in vowels else 'f'", color: "#0891b2" },
+              { n: 4, label: t(E, "Print result", "결과 출력"), code: "print(output)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan over the word", "단어 한 번 선형 스캔")}</div>
           </div>
         </div>),
     },

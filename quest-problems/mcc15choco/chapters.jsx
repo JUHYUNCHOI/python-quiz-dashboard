@@ -121,15 +121,36 @@ export function makeMcc15ChocoCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Each bar is pushed and popped at most once, so the stack solution is O(N)!", "각 바는 최대 한 번 push/pop 되니까 스택 풀이는 O(N)!"),
+        "Use a stack: scan bars left to right. If the current bar equals the stack top, pop and add 2× size to the total. Otherwise push.",
+        "스택 사용: 바를 왼쪽부터 스캔. 현재 바가 스택 top 과 같으면 pop 하고 2 × 크기를 총합에 더함. 아니면 push."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Stack-based greedy: scan left to right.\nIf the current bar matches the stack top, pop and accumulate. Otherwise push. Each element is handled at most twice.",
-              "스택 기반 그리디: 왼쪽에서 오른쪽으로 스캔.\n현재 바가 스택 top과 같으면 팝하고 누적.\n아니면 push. 각 원소는 최대 2번 처리.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Init empty stack", "빈 스택"), code: "stack = []; total = 0", color: "#8b5cf6" },
+              { n: 2, label: t(E, "For each bar", "각 바마다"), code: "for size in bars:", color: "#7c3aed" },
+              { n: 3, label: t(E, "Match top? pop + add 2×", "top 과 같음? pop + 2× 더함"), code: "if stack and stack[-1] == size: stack.pop(); total += 2 * size", color: "#0891b2" },
+              { n: 4, label: t(E, "Else push", "아니면 push"), code: "else: stack.append(size);  print(total)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "each bar pushed/popped at most once", "각 바 최대 한 번 push/pop")}</div>
           </div>
         </div>),
     },

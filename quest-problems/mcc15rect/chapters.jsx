@@ -111,15 +111,36 @@ export function makeMcc15RectCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The XOR trick gives us O(1) per test case. Super efficient!", "XOR 트릭으로 테스트 케이스당 O(1)! 초효율적!"),
+        "In an axis-aligned rectangle, each x-coordinate appears exactly twice (left/right side). XOR-ing the 3 given x's leaves the missing one (since a ^ a = 0). Same for y.",
+        "축에 평행한 직사각형에서 각 x 좌표는 정확히 2 번 등장 (좌/우). 주어진 3 개 x 를 XOR 하면 빠진 1 개가 남아요 (a ^ a = 0). y 도 동일."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(1) per case</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "For an axis-aligned rectangle, each x and y value appears exactly twice.\nXOR of all three gives the missing one because a ^ a = 0 and a ^ 0 = a.",
-              "축 정렬 직사각형에서 각 x, y 값은 정확히 2번 나타나.\n세 값의 XOR이 빠진 값을 주는 이유는 a ^ a = 0이고 a ^ 0 = a이기 때문이예요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read 3 corners", "꼭짓점 3 개 읽기"), code: "corners = [(x1,y1),(x2,y2),(x3,y3)]", color: "#059669" },
+              { n: 2, label: t(E, "XOR all x values", "x 값 모두 XOR"), code: "x4 = x1 ^ x2 ^ x3", color: "#0891b2" },
+              { n: 3, label: t(E, "XOR all y values", "y 값 모두 XOR"), code: "y4 = y1 ^ y2 ^ y3", color: "#7c3aed" },
+              { n: 4, label: t(E, "Print 4th corner", "4 번째 꼭짓점 출력"), code: "print(x4, y4)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(1) per case</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant XOR operations", "상수 XOR 연산")}</div>
           </div>
         </div>),
     },

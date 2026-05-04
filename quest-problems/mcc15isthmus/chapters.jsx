@@ -148,15 +148,36 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each of N positions, we check up to K neighbors on each side. Total: O(N*K).", "N개 위치 각각에서 양쪽 K개 이웃을 확인. 총: O(N*K)."),
+        "For each candidate position i (where K ≤ i < N − K), check the K immediate neighbors on each side. PEAK: left K strictly increasing AND right K strictly decreasing. VALLEY: opposite.",
+        "각 후보 위치 i (K ≤ i < N − K) 마다 양쪽 K 개 이웃을 확인. PEAK: 왼쪽 K 순증가 AND 오른쪽 K 순감소. VALLEY: 반대."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N*K)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "For each candidate position, verify K neighbors on each side are strictly increasing (or decreasing).\nBreak early if condition fails.",
-              "각 후보 위치에서 양쪽 K개 이웃이 순증가(또는 순감소)인지 확인.\n조건 실패 시 조기 종료.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Iterate valid positions", "유효 위치 순회"), code: "for i in range(K, N-K):", color: "#2563eb" },
+              { n: 2, label: t(E, "Check K-strict-increasing left", "왼쪽 K 순증가 확인"), code: "left = all(h[i-K..i] strictly inc)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Check K-strict-decreasing right", "오른쪽 K 순감소 확인"), code: "right = all(h[i..i+K] strictly dec)", color: "#0891b2" },
+              { n: 4, label: t(E, "Count peaks + valleys", "PEAK + VALLEY 합산"), code: "count += peak or valley;  print(count)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N · K)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N positions × O(K) checks", "N 위치 × O(K) 검사")}</div>
           </div>
         </div>),
     },
