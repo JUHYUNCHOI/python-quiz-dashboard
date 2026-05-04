@@ -299,16 +299,24 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           )}
         </main>
 
-        {/* Resizer handle — only shown in split view, md+ */}
+        {/* Resizer handle — slim, modern. Subtle by default, shows grip on hover. */}
         {splitView && (
           <div
             onMouseDown={startDrag}
             onTouchStart={startDrag}
             onDoubleClick={() => setSplitRatio(0.5)}
-            className="hidden md:flex flex-shrink-0 w-2 cursor-col-resize bg-gray-200 hover:bg-amber-300 active:bg-amber-400 transition-colors items-center justify-center group select-none"
+            className="hidden md:flex flex-shrink-0 cursor-col-resize items-center justify-center group select-none relative"
+            style={{ width: 6 }}
             title={t("드래그해서 비율 조절 (더블클릭: 50/50)", "Drag to resize (double-click: reset to 50/50)")}
           >
-            <div className="w-0.5 h-8 bg-gray-400 group-hover:bg-amber-700 rounded-full transition-colors" />
+            {/* Hairline center line — barely visible */}
+            <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-gray-200 group-hover:bg-violet-300 group-active:bg-violet-400 transition-colors" />
+            {/* Grip dots — appear on hover */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
+              <div className="w-1 h-1 rounded-full bg-violet-500" />
+              <div className="w-1 h-1 rounded-full bg-violet-500" />
+              <div className="w-1 h-1 rounded-full bg-violet-500" />
+            </div>
           </div>
         )}
 
