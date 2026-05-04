@@ -134,15 +134,36 @@ export function makeCrossRd3Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort cows by arrival time, then simulate the queue in one pass. O(N log N) for sorting!", "도착 시간으로 소를 정렬하고, 한 번 순회로 큐를 시뮬레이션해요. 정렬에 O(N log N)!"),
+        "Sort cows by arrival time. Walk through them: track when the gate becomes free. If a cow arrives BEFORE the gate is free, she waits — gate-free advances by her duration. If after, she starts at her arrival.",
+        "도착 시간 순으로 정렬. 순회: 문이 비는 시간을 추적. 소가 문이 빈 시간 전에 도착하면 대기 — 문 비는 시간이 그녀의 소요시간 만큼 진행. 후에 도착하면 도착 시각에 시작."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Sort by arrival.\nTrack current_time (when gate becomes free). For each cow: if current_time < arrival, jump to arrival. Then add duration. Final current_time is the answer.",
-              "도착순 정렬.\ncurrent_time (문이 비는 시간)을 추적해요.\n각 소: current_time < 도착이면 도착으로 점프.\n그 다음 소요시간 추가.\n최종 current_time이 답.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Sort cows by arrival", "도착 시간 순 정렬"), code: "cows.sort(key=lambda c: c.arrival)", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Track gate-free time", "문 비는 시간 추적"), code: "gate_free = 0", color: "#7c3aed" },
+              { n: 3, label: t(E, "Process each cow", "각 소 처리"), code: "for c in cows: start = max(gate_free, c.arrival)", color: "#0891b2" },
+              { n: 4, label: t(E, "Update gate_free, output last", "gate_free 갱신, 마지막 출력"), code: "gate_free = start + c.duration;  print(gate_free)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + linear sweep", "정렬 + 선형 스윕")}</div>
           </div>
         </div>),
     },

@@ -138,15 +138,36 @@ export function makeCrossRd2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Find positions in O(N), then check all pairs in O(26^2) = O(1). Total O(N)!", "위치 찾기 O(N), 모든 쌍 확인 O(26^2) = O(1). 총 O(N)!"),
+        "Record the TWO crossing positions of each of the 26 cows. For every pair (A, B), their paths intersect iff their positions INTERLEAVE: a1 < b1 < a2 < b2 (or rotated).",
+        "26 마리 소 각각의 두 횡단 위치를 기록. 모든 쌍 (A, B) 에 대해, 위치가 엇갈리면 (a1 < b1 < a2 < b2 또는 회전한 형태) 경로가 교차."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Record the two positions of each cow letter.\nFor every pair of cows, check if their positions interleave (a1 < b1 < a2 < b2 or b1 < a1 < b2 < a2).",
-              "각 소 문자의 두 위치를 기록해요.\n모든 소 쌍에 대해 위치가 번갈아 나오는지 확인 (a1 < b1 < a2 < b2 또는 b1 < a1 < b2 < a2).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Record 2 positions per cow", "소마다 두 위치 기록"), code: "pos[letter] = (idx1, idx2)", color: "#f97316" },
+              { n: 2, label: t(E, "Iterate every cow pair", "모든 소 쌍 순회"), code: "for A, B in combinations(cows, 2):", color: "#7c3aed" },
+              { n: 3, label: t(E, "Check interleaving", "엇갈림 확인"), code: "if a1 < b1 < a2 < b2 or b1 < a1 < b2 < a2: count += 1", color: "#0891b2" },
+              { n: 4, label: t(E, "Print count", "개수 출력"), code: "print(count)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N + 26²)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single scan + constant pair check", "한 번 스캔 + 상수 쌍 검사")}</div>
           </div>
         </div>),
     },
