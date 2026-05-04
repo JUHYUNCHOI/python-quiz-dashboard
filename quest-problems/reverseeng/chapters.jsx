@@ -69,16 +69,47 @@ export function makeRevEngCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given M test cases of binary input arrays and their outputs (0 or 1), determine if a simple if/else program on one variable could produce all the outputs consistently.\nPrint OK or LIE!", "M개의 테스트 케이스 (이진 입력 배열과 출력 0 또는 1)가 주어져.\n하나의 변수에 대한 간단한 if/else 프로그램이 모든 출력을 일관되게 생성할 수 있는지 판단해요.\nOK 또는 LIE를 출력해요!"),
+        "M test cases are given; each test case has a binary input array of length N and an expected boolean output. We need to know whether SOME simple if/else program of the form 'if arr[i] == constant: output X else output Y' (depending on a SINGLE input position) could produce all the expected outputs.\nPrint OK if such a program exists, else LIE.",
+        "M 개의 테스트 케이스가 주어져요. 각 케이스는 길이 N 의 이진 입력 배열과 기대 출력 (0/1) 을 가져요. 어떤 'if arr[i] == 상수: X 출력 else Y 출력' 형태의 단순 if/else 프로그램 (단 하나의 입력 위치만 사용) 으로 모든 기대 출력을 만들 수 있는지 판단해요.\n그런 프로그램이 존재하면 OK, 아니면 LIE 를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd27"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Reverse Engineering</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: If two identical inputs have different outputs, it's a LIE.\nOtherwise, check if some single variable position can separate all outputs using if arr[pos]==0 return A else return B.",
-              "핵심: 동일한 입력이 다른 출력을 가지면 LIE. 아니면,\nif arr[pos]==0 return A else return B 형태로 모든 출력을 분리할 수 있는 변수 위치가 있는지 확인해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd27"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Reverse Engineering</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "M test cases", "M 개의 테스트 케이스")}</b>
+                  {t(E, "; each has a binary input array of length N and an expected boolean output.",
+                        "; 각 케이스는 길이 N 의 이진 입력 배열과 기대 출력 (0/1) 을 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Could a ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "simple if/else program on a SINGLE input position", "한 개의 입력 위치만 사용하는 단순 if/else 프로그램")}</b>
+                  {t(E, " (\"if arr[i] == c: X else Y\") explain all the outputs?",
+                        " (\"if arr[i] == c: X else Y\") 으로 모든 출력을 설명할 수 있을까요?")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "OK if such a program exists, else LIE", "그런 프로그램이 존재하면 OK, 아니면 LIE")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

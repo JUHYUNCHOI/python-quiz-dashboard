@@ -42,16 +42,46 @@ export function makePhoto2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Rearrange cows to match a target order by moving cows to the left.\nFind the minimum number of moves!", "소를 왼쪽으로 이동시켜 목표 순서에 맞춰. 최소 이동 횟수를 구해요!"),
+        "Bessie has N cows in some current order, and a target order. The only allowed move: pick ONE cow and move her to ANY position farther LEFT in the line.\nPrint the MINIMUM number of moves to transform the current order into the target order.",
+        "베시에게 N 마리 소가 어떤 현재 순서로 있고, 목표 순서가 주어져요. 허용된 동작은 단 하나: 한 소를 골라 줄에서 더 왼쪽 어디든 옮기기.\n현재 순서를 목표 순서로 만드는 최소 동작 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"📷"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Photoshoot 2</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Count inversions - cows not in the correct relative order need to be moved.\nTrack the maximum position seen so far.",
-              "핵심: 역전 세기 - 올바른 상대 순서가 아닌 소는 이동 필요.\n지금까지 본 최대 위치 추적.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"📷"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Photoshoot 2</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie has ", "베시에게 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "N cows in a current line and a target order", "N 마리 소의 현재 줄과 목표 순서")}</b>
+                  {t(E, ".", " 가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One move: pick a cow and ", "한 번의 동작: 소를 골라 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "move her to any position farther LEFT", "줄에서 더 왼쪽 어디든 옮기기")}</b>
+                  {t(E, " in the line.", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of moves to reach the target order", "목표 순서에 도달하기 위한 최소 동작 수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

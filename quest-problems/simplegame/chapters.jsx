@@ -27,16 +27,46 @@ export function makeSimpleGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two players take turns removing 1 to 3 stones from a pile of N stones.\nThe player who takes the last stone wins.\nWho wins with optimal play?", "두 플레이어가 번갈아 N개의 돌 더미에서 1~3개를 가져가요. 마지막 돌을 가져가는 사람이 이겨. 최적의 플레이에서 누가 이길까?"),
+        "Two players take turns removing 1, 2, or 3 stones from a pile of N stones. The player who takes the LAST stone wins. Both play OPTIMALLY.\nPrint who wins (FIRST or SECOND).",
+        "두 플레이어가 N 개의 돌 더미에서 1, 2, 또는 3 개를 번갈아 가져가요. 마지막 돌을 가져가는 사람이 이겨요. 둘 다 최선을 다 해요.\n승자 (FIRST 또는 SECOND) 를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfae"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Simple Game</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P4</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: This is a classic Nim game.\nLosing positions are multiples of 4. If N % 4 == 0, the second player wins; otherwise, the first player wins.",
-              "핵심: 이것은 고전적인 님 게임이예요.\n지는 위치는 4의 배수예요.\nN % 4 == 0이면 후수 승, 아니면 선수 승.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfae"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Simple Game</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P4</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#dc2626" }}>{t(E, "A pile of N stones; two players alternate", "N 개의 돌 더미; 두 플레이어가 번갈아")}</b>
+                  {t(E, ".", "")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "On a turn, take ", "자기 차례에 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "1, 2, or 3 stones", "1, 2, 또는 3 개의 돌")}</b>
+                  {t(E, " from the pile. The player taking the LAST stone wins.",
+                        " 을 가져가요. 마지막 돌을 가져가는 사람이 승.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "winner (FIRST or SECOND) under optimal play", "최선의 수일 때 승자 (FIRST 또는 SECOND)")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

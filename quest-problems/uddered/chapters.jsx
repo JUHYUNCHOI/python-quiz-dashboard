@@ -30,16 +30,48 @@ export function makeUdderedCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie hears a string of letters.\nShe knows the custom alphabet order.\nEach time the next letter comes before or at the current letter in the alphabet, she needs a new cycle.\nCount the minimum full cycles!", "Bessie가 글자 문자열을 들어. 커스텀 알파벳 순서를 알고 있어요. 다음 글자가 현재 글자보다 앞에 있으면 새 사이클이 필요해요. 최소 사이클 수를 구해요!"),
+        "Bessie has a custom 26-letter alphabet order. She hears a string S; each character must be read in order, but she has to FULLY recite the alphabet at least once between any two characters that move backward in her order (or stay the same).\nPrint the MINIMUM number of full alphabet recitations she needs to read all of S.",
+        "베시에게 26 글자의 커스텀 알파벳 순서가 있어요. 문자열 S 를 들으면 각 문자를 순서대로 읽어야 해요. 다만 두 인접 문자가 그녀의 순서에서 뒤로 가거나 같으면, 그 사이에 알파벳 전체를 적어도 한 번 외워야 해요.\nS 를 모두 읽기 위해 필요한 최소 알파벳 외우기 횟수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd24"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Uddered but not Herd</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Scan through the heard string.\nTrack position in the custom alphabet. When the next letter's position is <= current letter's position, start a new cycle.",
-              "핵심: 들은 문자열을 스캔해요.\n커스텀 알파벳에서의 위치를 추적해요.\n다음 글자 위치가 현재 위치 이하이면 새 사이클을 시작해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd24"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Uddered but not Herd</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie has a ", "베시에게 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "custom 26-letter alphabet order", "26 글자의 커스텀 알파벳 순서")}</b>
+                  {t(E, " (a permutation of a..z).",
+                        " (a..z 의 순열) 가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "She hears string S; she reads each letter in order. To read the next letter when it ", "S 문자열을 들으면 각 문자를 순서대로 읽어요. 다음 문자가 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "comes before or equals the current letter in her order", "그녀의 순서에서 현재 문자보다 앞이거나 같으면")}</b>
+                  {t(E, ", she must FULLY recite her alphabet first.",
+                        " 먼저 알파벳을 전체 외워야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MINIMUM number of full alphabet recitations needed to read all of S", "S 를 모두 읽기 위한 최소 알파벳 외우기 횟수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
