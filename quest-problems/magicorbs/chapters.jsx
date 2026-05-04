@@ -27,16 +27,48 @@ export function makeMagicOrbsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There are N magical orbs, each with a power value.\nYou can pick at most K orbs.\nFind the maximum total power you can collect!", "N개의 마법 구슬이 있고, 각각 파워 값이 있어요. 최대 K개를 고를 수 있어요. 모을 수 있는 최대 총 파워를 구해요!"),
+        "There are N magical orbs, each with a power value p[i]. You may pick AT MOST K orbs.\nPrint the MAXIMUM total power achievable.",
+        "N 개의 마법 구슬이 있고, 각자 파워 p[i] 를 가져요. 최대 K 개를 고를 수 있어요.\n달성 가능한 총 파워의 최댓값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd2e"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Magical Orbs</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P3</div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Greedy approach - sort by value descending and pick the top K.\nNo complex DP needed!",
-              "핵심: 그리디 접근 - 값 내림차순 정렬 후 상위 K개를 골라.\n복잡한 DP 필요 없어요!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd2e"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Magical Orbs</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P3</div>
+          </div>
+
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "N magical orbs", "N 개의 마법 구슬")}</b>
+                  {t(E, " with powers ", " 이 있고, 파워 ")}
+                  <code style={{ background: "#ede9fe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>p[i]</code>
+                  {t(E, ".", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You may pick ", "최대 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "AT MOST K orbs", "K 개의 구슬")}</b>
+                  {t(E, ".", " 을 고를 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum total power achievable", "총 파워의 최댓값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

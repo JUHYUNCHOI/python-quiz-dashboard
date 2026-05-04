@@ -36,16 +36,48 @@ export function makeMadSciCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two strings A and B of H's and G's.\nOne flip operation reverses a contiguous substring of B (swaps all H<->G in that range).\nFind the minimum flips to make B equal A.", "H와 G로 된 두 문자열 A, B. 한 번의 뒤집기로 B의 연속 부분 문자열의 H<->G를 교환. B를 A로 만드는 최소 뒤집기 수를 구해요."),
+        "Two strings A and B of length N over {H, G} are given. In one 'flip' operation you choose any contiguous substring of B and swap H↔G inside it.\nPrint the MINIMUM number of flip operations to make B equal A.",
+        "{H, G} 로 된 길이 N 의 두 문자열 A, B 가 주어져요. 한 번의 '뒤집기' 연산으로 B 의 연속한 부분 문자열을 골라 그 안의 H↔G 를 모두 교환해요.\nB 를 A 와 같게 만드는 데 필요한 최소 뒤집기 횟수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddea"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Mad Scientist</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Count the number of contiguous blocks where A and B differ.\nEach block needs exactly one flip.",
-              "핵심: A와 B가 다른 연속 블록의 수를 세.\n각 블록은 정확히 한 번의 뒤집기가 필요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddea"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Mad Scientist</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Two ", "두 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "strings A and B of length N", "길이 N 의 문자열 A, B")}</b>
+                  {t(E, " over the alphabet {H, G} are given.",
+                        " ({H, G} 로 구성) 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One flip operation: choose a ", "한 번의 뒤집기: ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "contiguous substring of B", "B 의 연속 부분 문자열")}</b>
+                  {t(E, " and swap H ↔ G inside it.",
+                        " 을 골라 그 안의 H ↔ G 를 모두 교환.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of flips to make B equal A", "B 를 A 와 같게 만드는 최소 뒤집기 수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

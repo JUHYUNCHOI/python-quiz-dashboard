@@ -33,16 +33,50 @@ export function makeInnovationCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You have H hours and N tasks with different durations.\nMaximize the number of tasks completed!\nGreedy: do the shortest tasks first.", "H시간과 서로 다른 소요 시간의 N개 작업이 있어요. 완료할 수 있는 작업 수를 최대화해요! 그리디: 가장 짧은 작업부터 해요."),
+        "You have H hours total and N tasks; task i takes t[i] hours. You may complete a task only if you spend its full duration on it.\nPrint the MAXIMUM number of tasks you can complete within H hours (any subset, in any order).",
+        "총 H 시간이 있고 N 개의 작업이 있어요. i번 작업은 t[i] 시간이 걸려요. 작업을 완료하려면 그 시간 전부를 써야 해요.\nH 시간 안에 완료할 수 있는 작업의 최대 개수를 출력해요 (어떤 부분집합이든, 순서 무관)."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Innovation</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P3</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Greedy approach: sort tasks by duration ascending.\nPick tasks in order until time runs out. This maximizes the count!",
-              "그리디 접근: 작업을 소요 시간 오름차순으로 정렬.\n시간이 다 될 때까지 순서대로 선택. 이게 최대 개수!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca1"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Innovation</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P3</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You have ", "총 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "H hours total", "H 시간")}</b>
+                  {t(E, " and ", " 가 있고, ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "N tasks", "N 개의 작업")}</b>
+                  {t(E, " — task i takes ", " — i번 작업은 ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>t[i]</code>
+                  {t(E, " hours.", " 시간 걸려요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A task counts as completed only if you spend its ", "작업을 완료하려면 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "FULL duration on it", "그 시간 전체")}</b>
+                  {t(E, ".", "를 써야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum number of tasks completable within H hours", "H 시간 안에 완료할 수 있는 작업의 최대 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

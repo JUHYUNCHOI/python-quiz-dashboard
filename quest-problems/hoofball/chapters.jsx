@@ -56,16 +56,47 @@ export function makeHoofballCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows stand on a number line and pass a ball to their nearest neighbor.\nFind the minimum number of balls needed so every cow gets at least one!", "소들이 수직선 위에 서서 가장 가까운 이웃에게 공을 패스해요. 모든 소가 최소 1개 공을 받으려면 최소 몇 개 공이 필요한지 구해요!"),
+        "N cows stand on a number line at distinct positions. When a cow has a ball, she immediately passes it to her closest neighbor (ties → pass right). Once a ball reaches a cow, she'll keep passing it forever.\nWe need to give out balls so EVERY cow eventually touches one. Print the MINIMUM number of starting balls needed.",
+        "N마리 소가 수직선 위 서로 다른 위치에 서있어요. 공을 가진 소는 즉시 가장 가까운 이웃에게 패스해요 (거리 같으면 오른쪽). 공이 어떤 소에 도달하면, 그 소도 영원히 패스를 이어가요.\n모든 소가 결국 공을 만지도록 처음에 공을 나눠줘요. 필요한 시작 공의 최소 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26BD"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Hoofball</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Each cow passes to nearest neighbor.\nCount 'sources' (cows no one passes to) - each needs its own ball. Handle mutual-pass sinks too.",
-              "핵심: 각 소는 가장 가까운 이웃에게 패스.\n'소스'(아무도 패스하지 않는 소) 수 세기 - 각각 공 필요.\n상호 패스 싱크도 처리.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26BD"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Hoofball</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#f97316" }}>{t(E, "N cows stand on a number line", "N마리 소가 수직선 위에 서있어요")}</b>
+                  {t(E, " at distinct positions.", " (서로 다른 위치).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "If a cow holds a ball, she ", "공을 가진 소는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "passes it to her CLOSEST neighbor", "가장 가까운 이웃에게 즉시 패스")}</b>
+                  {t(E, " (tie → right). Cows keep passing forever.",
+                        " (거리 같으면 오른쪽). 한 번 받은 소도 계속 패스해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of starting balls", "필요한 시작 공의 최소 개수")}</b>
+                  {t(E, " so every cow eventually touches one.",
+                        " 를 출력해요. 모든 소가 결국 공을 만지도록.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

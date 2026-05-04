@@ -44,16 +44,56 @@ export function makeMilkMeasCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Three cows start at 7 gallons.\nOver 100 days, milk production changes.\nCount how many times the display (set of leaders) changes.", "세 마리 소가 각각 7갤런으로 시작해요. 100일 동안 우유 생산량이 변해요. 디스플레이(리더 집합)가 몇 번 바뀌는지 세."),
+        "FJ has 3 cows (Bessie, Elsie, Mildred), each starting at 7 gallons of daily output. There are N daily change events: \"on day d, cow X's output changes by ±value\".\nA sign 'displays the leader(s)' — the set of cows currently producing the maximum. Print the number of times the displayed set changes over the whole period.",
+        "FJ 에게 3마리 소 (Bessie, Elsie, Mildred) 가 있고, 각자 매일 7 갤런 생산으로 시작해요. N 개의 날짜별 변동 이벤트가 있어요: \"d 일에 X 의 생산량이 ±값 만큼 변함\".\n간판이 '현재 리더 집합' 을 표시해요 — 즉 현재 최대 생산량 소들의 집합. 전 기간에 걸쳐 표시 집합이 바뀐 횟수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcca"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Milk Measurement</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Simulate day by day.\nTrack the set of cows with maximum milk. Each time this set changes, increment the counter.",
-              "핵심: 날마다 시뮬레이션해요.\n최대 우유를 가진 소의 집합을 추적해요.\n이 집합이 바뀔 때마다 카운터를 증가시켜.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcca"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Milk Measurement</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ 에게 ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "3 cows (Bessie, Elsie, Mildred)", "3마리 소 (Bessie, Elsie, Mildred)")}</b>
+                  {t(E, " — each starts at 7 gallons of daily output.",
+                        " 가 있고, 매일 생산량이 7 갤런으로 시작.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "N change events: ", "N 개의 변동 이벤트: ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "on day d, cow X's output changes by ±value", "d 일에 X 의 생산량이 ±값 만큼 변함")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A sign displays the ", "간판은 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "set of current leaders", "현재 리더 집합")}</b>
+                  {t(E, " (cows tied for the maximum output).",
+                        " (현재 최대 생산량인 소들) 을 표시해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of times the displayed set changes", "표시 집합이 바뀐 횟수")}</b>
+                  {t(E, " over the whole event sequence.", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

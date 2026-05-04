@@ -95,16 +95,55 @@ export function makeMixMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Three farmers each have a bucket of milk.\nThey pour milk between buckets in a fixed pattern: 1 to 2, then 2 to 3, then 3 to 1, repeating 100 times total.\nLet's understand how!", "세 농부가 각각 우유 양동이를 가지고 있어요.\n고정된 패턴으로 우유를 부어: 1에서 2로, 2에서 3으로, 3에서 1로, 총 100번 반복해요.\n어떻게 하는지 알아보자!"),
+        "Three farmers have buckets numbered 1, 2, 3 with given CAPACITIES and starting milk amounts. They perform 100 pour operations in fixed cycle: 1→2, 2→3, 3→1, 1→2, ...\nA pour transfers as much milk as possible from source to destination — bounded by source's milk and destination's free space.\nPrint the milk in each bucket after 100 pours.",
+        "세 농부에게 1, 2, 3 번 양동이가 있고, 각자 정해진 용량과 시작 우유량이 있어요. 100번의 붓기를 정해진 순환 순서로 해요: 1→2, 2→3, 3→1, 1→2, ...\n한 번의 붓기는 가능한 만큼 우유를 옮겨요 — 출발지의 양과 목적지의 남은 공간이 한계.\n100번 붓기 후 각 양동이의 우유량을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"🥛"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mixing Milk</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Each bucket has a CAPACITY (max it can hold) and some initial milk.\nWe simulate 100 pour operations!",
-              "각 양동이에는 용량(최대 보관량)과 초기 우유량이 있어요.\n100번의 붓기를 시뮬레이션해요!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🥛"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mixing Milk</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#d97706" }}>{t(E, "3 buckets numbered 1, 2, 3", "1, 2, 3 번 양동이")}</b>
+                  {t(E, " with given capacities and starting milk amounts.",
+                        " 가 있고, 각자 정해진 용량과 시작 우유량이 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "100 pours happen in a ", "100 번의 붓기를 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "fixed cycle: 1→2, 2→3, 3→1, 1→2, ...", "정해진 순환 순서: 1→2, 2→3, 3→1, 1→2, ...")}</b>
+                  {t(E, ".", " 로 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each pour moves ", "한 번의 붓기는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "as much milk as possible", "가능한 만큼")}</b>
+                  {t(E, " — bounded by source amount and destination's remaining capacity.",
+                        " — 출발지의 양과 목적지의 남은 공간이 한계.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "100 번 붓기 후 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "milk in each of the 3 buckets after 100 pours", "각 양동이의 우유량")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
