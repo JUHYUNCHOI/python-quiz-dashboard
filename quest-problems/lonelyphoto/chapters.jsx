@@ -109,13 +109,35 @@ export function makeLonelyPhotoCh2(E, lang = "py") {
       narr: t(E,
         "For each cow, count opposite-type cows on each side.\nCombine counts to find valid substrings.\nO(N) with prefix sums!", "각 소에 대해 양쪽의 반대 타입 소 수를 세. 조합해서 유효한 부분 문자열을 찾아. 누적합으로 O(N)!"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Skip same-type neighbors", "같은 타입 이웃 건너뛰기"), code: "left, right = same-type run lengths around i", color: "#2563eb" },
+              { n: 2, label: t(E, "Count opposite-type per side", "양쪽 반대 타입 수"), code: "opp_left = i \u2212 left,  opp_right = (N\u22121\u2212i) \u2212 right", color: "#0891b2" },
+              { n: 3, label: t(E, "Combine via 3 cases", "3가지 경우 조합"), code: "ans += opp_left\u00b7opp_right + max(0, opp_left\u22121) + max(0, opp_right\u22121)", color: "#dc2626" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 10, background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 8, padding: "8px 10px", fontSize: 11, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
+            <div style={{ fontWeight: 800, color: "#1e3a8a", marginBottom: 4 }}>{t(E, "🤔 Why these 3 terms?", "🤔 왜 3가지 항?")}</div>
             {t(E,
-              "For cow i: count opposite-type on left (opp_left) and right (opp_right). Lonely substrings = opp_left*opp_right + max(0,opp_left-1) + max(0,opp_right-1).",
-              "소 i에 대해: 왼쪽 반대 타입(opp_left)과 오른쪽 반대 타입(opp_right) 수를 세. 외로운 부분문자열 = opp_left*opp_right + max(0,opp_left-1) + max(0,opp_right-1).")}
+              "• opp_left × opp_right: at least 1 from each side\n• max(0, opp_left \u2212 1): 2+ from left, 0 from right\n• max(0, opp_right \u2212 1): 0 from left, 2+ from right",
+              "• opp_left × opp_right: 양쪽에서 최소 1개씩\n• max(0, opp_left \u2212 1): 왼쪽 2+, 오른쪽 0\n• max(0, opp_right \u2212 1): 왼쪽 0, 오른쪽 2+")}
+          </div>
+          <div style={{ marginTop: 10, background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N²)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "worst case (run scan per i)", "최악 (i마다 구간 스캔)")}</div>
           </div>
         </div>),
     },

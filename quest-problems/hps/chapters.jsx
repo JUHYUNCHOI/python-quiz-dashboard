@@ -99,11 +99,33 @@ export function makeHpsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Brute force: for each of Elsie's M pairs, check all N² of Bessie's pairs. O(M·N²) total.", "완전탐색: 엘시의 M개 쌍 각각에 대해, 베시의 N²개 쌍을 모두 확인. 총 O(M·N²)."),
+        "Brute force: for each Elsie pair, try every (a, b) for Bessie.\nKey: pair_beats(a, b, x) — Bessie picks the better of a/b after seeing x.",
+        "완전탐색: 엘시 쌍마다 베시의 모든 (a, b) 시도.\n핵심: pair_beats(a, b, x) — 베시는 x 본 후 a/b 중 더 나은 것 선택."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(M·N²)</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>{t(E, "M games × N² Bessie pairs", "M 게임 × N² 베시 쌍")}</div>
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read beats matrix", "승패 차트 읽기"), code: "beats[i][j] = '1' if i beats j", color: "#059669" },
+              { n: 2, label: t(E, "pair_beats helper", "헬퍼 함수"), code: "pair_beats(a, b, x) = beats[a][x]=='1' or beats[b][x]=='1'", color: "#0891b2" },
+              { n: 3, label: t(E, "Per Elsie query", "엘시 쿼리마다"), code: "for a in N: for b in N: if pair_beats(a,b,s1) and pair_beats(a,b,s2): count++", color: "#dc2626" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(M · N²)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "M queries × N² Bessie pairs", "M 쿼리 × N² 베시 쌍")}</div>
+          </div>
         </div>),
     },
     {

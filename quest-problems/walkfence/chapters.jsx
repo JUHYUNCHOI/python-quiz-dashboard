@@ -91,8 +91,36 @@ export function makeWalkCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
-      narr: t(E, "Find each point's position on the perimeter, compute distance, take min with complement.", "각 점의 둘레 위 위치를 찾고, 거리 계산, 보완값과 min."),
-      content: (<div style={{ padding: 16, textAlign: "center" }}><div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(NP)</div></div>),
+      narr: t(E,
+        "4 steps: cumulative perimeter, find each point's distance from post 0, take the shorter side.",
+        "4단계: 둘레 누적 거리 → 각 점의 코너 0 거리 찾기 → 짧은 쪽 선택."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read posts", "코너 읽기"), code: "posts = [(x0,y0), (x1,y1), ...]", color: "#16a34a" },
+              { n: 2, label: t(E, "Cumulative perimeter", "누적 둘레"), code: "cum[i] = distance from post 0 to post i", color: "#0891b2" },
+              { n: 3, label: t(E, "Find each cow's position", "소 위치 찾기"), code: "find_pos(x, y) → distance along perimeter", color: "#8b5cf6" },
+              { n: 4, label: t(E, "Pick shorter side", "짧은 쪽"), code: "answer = min(|d1 − d2|, perimeter − |d1 − d2|)", color: "#dc2626" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#16a34a" }}>O(N · P)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N cows × P posts to scan per query", "소 N마리 × 쿼리당 코너 P개 스캔")}</div>
+          </div>
+        </div>),
     },
     {
       type: "progressive",

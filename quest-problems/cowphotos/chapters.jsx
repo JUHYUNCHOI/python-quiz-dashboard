@@ -80,11 +80,34 @@ export function makeCowPhotosCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
-      narr: t(E, "Use frequency counting to greedily build the longest valid arrangement!", "빈도를 세서 탐욕적으로 가장 긴 유효 배열을 만들자!"),
+      narr: t(E,
+        "Each ring of the palindrome uses 2 cows of the same value (one on each side of the peak).\nA value can be a ring only if its count ≥ 2.",
+        "팰린드롬 각 링은 같은 값 2마리 사용 (피크 양쪽).\n빈도 ≥ 2인 값만 링이 될 수 있음."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(N)</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>{t(E, "Count frequencies + greedy", "빈도 세기 + 탐욕")}</div>
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Frequency count", "빈도 세기"), code: "freq = Counter(h)", color: "#d97706" },
+              { n: 2, label: t(E, "Count pair-eligible breeds", "페어 가능 품종 세기"), code: "pairs = sum(1 for c in freq.values() if c >= 2)", color: "#0891b2" },
+              { n: 3, label: t(E, "2 × pairs + peak", "2 × pairs + 피크"), code: "ans = 2 * pairs + (1 if any cow else 0)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass for Counter + breed loop", "Counter 한 번 + 품종 루프")}</div>
+          </div>
         </div>),
     },
     {

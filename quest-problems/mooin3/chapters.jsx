@@ -142,11 +142,34 @@ export function makeMooin3Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Key insight: for each middle position j, find the farthest left i with s[i]≠s[j], and farthest right k with s[k]=s[j].\nMaximize the product!", "핵심: 각 중간 위치 j에서, s[i]≠s[j]인 가장 먼 왼쪽 i와 s[k]=s[j]인 가장 먼 오른쪽 k를 찾아. 곱을 최대화!"),
+        "Fix j (middle), then maximize (j − i) × (k − j) by going as far as possible on each side.",
+        "j (중간) 고정 → 양쪽으로 최대한 멀리 가서 (j − i) × (k − j) 최대화."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(N × Q)</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>{t(E, "Fix j, scan left/right", "j 고정, 좌우 스캔")}</div>
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Per query, loop j", "쿼리당 j 순회"), code: "for j in range(l+1, r):", color: "#7c5cfc" },
+              { n: 2, label: t(E, "Best i (farthest left, different)", "최선 i (왼쪽 끝, 다름)"), code: "i = first idx in [l, j) where s[i] != s[j]", color: "#0891b2" },
+              { n: 3, label: t(E, "Best k (farthest right, same)", "최선 k (오른쪽 끝, 같음)"), code: "k = last idx in (j, r] where s[k] == s[j]", color: "#16a34a" },
+              { n: 4, label: t(E, "Update best product", "최댓값 갱신"), code: "best = max(best, (j − i) × (k − j))", color: "#dc2626" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c5cfc" }}>O(Q · N²)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "Q queries × O(N²) brute scan", "Q 쿼리 × O(N²) 완전탐색")}</div>
+          </div>
         </div>),
     },
     {
