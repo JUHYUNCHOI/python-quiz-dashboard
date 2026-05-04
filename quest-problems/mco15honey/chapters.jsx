@@ -36,16 +36,49 @@ export function makeHoneyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A squirrel collects honey from N beehives using a pot that holds M ml.\nIt can make at most K trips.\nEach trip: pick one hive, collect min(remaining, M).\nMaximize total honey collected!", "다람쥐가 M ml 용량의 항아리로 N개 벌집에서 꿀을 모아요.\n최대 K번 왕복 가능.\n매 왕복: 벌집 하나를 골라 min(남은양, M)만큼 수집.\n총 꿀을 최대화해요!"),
+        "A squirrel collects honey using a pot of capacity M ml. There are N beehives with given honey amounts h[1..N]. The squirrel can make AT MOST K trips. Each trip: visit ONE hive and take min(remaining honey there, M) into the pot.\nMaximize the TOTAL honey collected.",
+        "다람쥐가 용량 M ml 의 항아리로 꿀을 모아요. N 개의 벌집에 각자 꿀 양 h[1..N] 이 있어요. 다람쥐는 최대 K 번 왕복 가능. 매 왕복: 벌집 1 개를 방문해 min (그곳의 남은 꿀, M) 만큼 가져옴.\n수집한 꿀의 총량 최댓값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf6f"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Honey</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Greedy approach - sort hives by honey amount in descending order.\nUse trips on the largest hives first to maximize collection.",
-              "핵심: 그리디 접근 - 벌집을 꿀 양 내림차순으로 정렬.\n가장 큰 벌집부터 왕복을 사용해서 수집량을 최대화.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf6f"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Honey</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P2</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A squirrel has a ", "다람쥐가 ")}
+                  <b style={{ color: "#d97706" }}>{t(E, "pot of capacity M ml", "용량 M ml 의 항아리")}</b>
+                  {t(E, " and faces ", " 를 들고 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "N beehives with honey h[1..N]", "꿀 양 h[1..N] 을 가진 N 개의 벌집")}</b>
+                  {t(E, ".", " 을 만나요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "She can make at most ", "최대 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "K trips", "K 번 왕복")}</b>
+                  {t(E, "; each trip visits ONE hive and takes min (remaining honey there, M).",
+                        " 가능; 매 왕복: 벌집 1 개를 방문해 min (그곳의 남은 꿀, M) 만큼 가져옴.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM total honey collected", "수집한 꿀의 총량 최댓값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

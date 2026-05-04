@@ -42,16 +42,47 @@ export function makeBadmintonCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Simulate a badminton match!\nBest of 3 games, first to 21 points wins each game.\nGiven a string of A/B indicating who scored each rally, output the score per game and the overall winner.", "배드민턴 경기를 시뮬레이션해요! 3전 2선승제이고, 각 게임은 21점 먼저 따면 이겨. A/B로 구성된 문자열이 주어지면, 게임별 점수와 최종 승자를 출력해요!"),
+        "Two players A and B play badminton: best-of-3 games, each game won by the first to 21 points. You're given a string of A/B characters in order — each character is who won that rally.\nPrint each game's final score and the overall match winner.",
+        "두 선수 A 와 B 가 배드민턴: 3 전 2 선승제, 각 게임은 21 점 먼저 따면 승. 랠리 순서대로 A/B 가 적힌 문자열이 주어져요 — 각 문자는 그 랠리의 승자.\n각 게임의 최종 점수와 매치의 최종 승자를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udff8"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Badminton</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Scan through the string, tracking scores.\nWhen someone reaches 21, record the game result and reset. The first player to win 2 games wins the match.",
-              "핵심: 문자열을 순회하며 점수를 추적해요.\n21점에 도달하면 게임 결과를 기록하고 초기화.\n2게임을 먼저 이기는 선수가 매치 승리.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udff8"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Badminton</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P1</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#059669" }}>{t(E, "Two players A and B play badminton", "두 선수 A 와 B 가 배드민턴")}</b>
+                  {t(E, " — best-of-3 games; each game won by the first to ", " — 3 전 2 선승제; 각 게임은 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "21 points", "21 점")}</b>
+                  {t(E, " (no win-by-2).", " 먼저 (2 점 차 규칙 없음).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given the rally winners as a ", "랠리 승자가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "string of A/B characters in order", "순서대로 A/B 문자열")}</b>
+                  {t(E, ".", " 로 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "each game's final score and the overall match winner", "각 게임의 최종 점수와 매치 최종 승자")}</b>
+                  {t(E, ".", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

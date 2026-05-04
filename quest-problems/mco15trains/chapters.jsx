@@ -50,16 +50,47 @@ export function makeTrainsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "An N*N grid has population counts in each cell (-1 = blocked).\nBuild train tracks from station A to station B moving in 4 directions.\nMinimize total displaced inhabitants along the path!", "N*N 격자에 각 셀의 인구수가 있어 (-1 = 차단). 역 A에서 역 B까지 4방향으로 철도를 놓아요. 경로상 총 이주 주민 수를 최소화해요!"),
+        "An N × N grid has a population count in each cell (or −1 if blocked). Build a train path from cell A to cell B moving up/down/left/right between non-blocked cells. The cost of the path is the SUM of populations along it (every cell visited displaces its population).\nPrint the MINIMUM total displaced population.",
+        "N × N 격자에 각 칸의 인구 수가 있어요 (또는 −1 = 차단). 차단되지 않은 칸 사이에서 상하좌우로 칸 A 에서 칸 B 까지 철도 경로를 놓아요. 경로 비용 = 지나는 칸들의 인구 합 (방문한 모든 칸이 이주됨).\n이주 인구 총합의 최솟값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude82"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Trains</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P4</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: This is a shortest path problem on a weighted grid.\nUse Dijkstra's algorithm with cell population as edge weight. Blocked cells (-1) cannot be traversed.",
-              "핵심: 가중 격자에서의 최단 경로 문제.\n셀 인구수를 간선 가중치로 사용해 다익스트라 알고리즘 적용.\n차단된 셀(-1)은 통과 불가.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude82"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Trains</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P4</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "An ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N × N grid with populations per cell (or −1 if blocked)", "각 칸의 인구 수를 가진 N × N 격자 (−1 = 차단)")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Build a train path from cell ", "칸 A 에서 칸 B 까지 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "A to cell B moving up/down/left/right", "상하좌우로 이동하며 경로 놓기")}</b>
+                  {t(E, " between non-blocked cells. Cost = sum of populations along the path.",
+                        " (차단되지 않은 칸 사이). 비용 = 지나는 칸들의 인구 합.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MINIMUM total displaced population", "이주 인구 총합의 최솟값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
