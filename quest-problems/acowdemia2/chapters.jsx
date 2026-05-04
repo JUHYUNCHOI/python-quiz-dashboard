@@ -123,15 +123,36 @@ export function makeAcow2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each publication, record all pairwise orderings.\nThen check each pair.\nO(N^2 * M) time.", "각 논문에 대해 모든 쌍의 순서를 기록. 그런 다음 각 쌍을 확인. O(N^2 * M) 시간."),
+        "For every paper, mark before[a][b] = True if a appears before b somewhere in that paper. Cow A is 'definitely senior' to B iff before[A][B] is True AND before[B][A] is False. Sum over all (A, B).",
+        "모든 논문에서, 그 논문 안에서 a 가 b 보다 앞이면 before[a][b] = True. A 가 B 보다 '확실히 선임' 이면 before[A][B] 가 True 이고 before[B][A] 가 False. 모든 (A, B) 에 대해 합산."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N^2 * M)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Track a boolean matrix: before[a][b] = true if a appeared before b in any paper.\nIf before[a][b] and not before[b][a], a is more senior.",
-              "불리언 행렬 추적: before[a][b] = 어떤 논문에서 a가 b 앞에 나타났으면 true. before[a][b]이고 before[b][a]가 아니면,\na가 더 선임.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "For each paper, mark all (a, b) pairs", "각 논문에서 (a, b) 쌍 표시"), code: "for paper, for i < j: before[paper[i]][paper[j]] = True", color: "#2563eb" },
+              { n: 2, label: t(E, "Check every ordered pair", "모든 순서쌍 검사"), code: "for A in 1..N: for B in 1..N if A != B:", color: "#7c3aed" },
+              { n: 3, label: t(E, "Definitely senior?", "확실히 선임?"), code: "if before[A][B] and not before[B][A]: count += 1", color: "#0891b2" },
+              { n: 4, label: t(E, "Print count", "개수 출력"), code: "print(count)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N² + total authors)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "fill matrix once + scan all pairs", "행렬 한 번 채우기 + 모든 쌍 스캔")}</div>
           </div>
         </div>),
     },

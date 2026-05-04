@@ -164,6 +164,43 @@ export function makeFebCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeFebCh2(E, lang = "py") {
   return [
+    // 2-1: Complexity reveal
+    {
+      type: "reveal",
+      narr: t(E,
+        "An F can be B or E independently — but the excitement only depends on adjacent comparisons. So we DP: track distinct possible (last_letter, excitement_so_far) states as we scan left to right.",
+        "F 는 B 또는 E 가 될 수 있고 — 흥분도는 인접한 비교에만 의존. 그래서 DP: 왼쪽부터 스캔하며 가능한 (마지막 글자, 누적 흥분도) 상태를 추적."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Initialize state set with first letter", "첫 글자로 상태 집합 초기화"), code: "states = {('B', 0)} or {('E', 0)} or both for F", color: "#dc2626" },
+              { n: 2, label: t(E, "Scan letters i = 1..N-1", "i = 1..N-1 글자 스캔"), code: "for i in range(1, N): new_states = set()", color: "#7c3aed" },
+              { n: 3, label: t(E, "For each (prev, ex), try B and E", "각 (prev, ex) 에 B, E 시도"), code: "for letter in possible_letters(s[i]): new_ex = ex + (letter == prev)", color: "#0891b2" },
+              { n: 4, label: t(E, "Count distinct excitement values", "서로 다른 흥분도 개수 출력"), code: "print(len({ex for (_, ex) in states}))", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N²)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N positions × O(N) excitement values", "N 위치 × O(N) 흥분도 값")}</div>
+          </div>
+        </div>),
+    },
     {
       type: "progressive",
       narr: t(E,
