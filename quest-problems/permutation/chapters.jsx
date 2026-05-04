@@ -78,7 +78,7 @@ export function makePermCh1(E) {
               {t(E, "FJ has N cows lined up in his ", "FJ에게 N마리의 소가 ")}
               <b style={{ color: "#9a3412" }}>{t(E, "favorite order", "좋아하는 순서")}</b>
               {t(E, ".\nEach cow wears a number tag from 1 to N — every number appears exactly once (a ",
-                    "로 줄 서있어.\n각 소는 1부터 N까지의 번호표를 달고 있어 — 각 번호는 정확히 한 번만 등장 (")}
+                    "로 줄 서있어요.\n각 소는 1부터 N까지의 번호표를 달고 있어요 — 각 번호는 정확히 한 번만 등장해요 (")}
               <b>{t(E, "permutation", "순열")}</b>
               {t(E, ").\n\nFJ doesn't give you the actual numbers. Instead, he gives you ",
                     ").\n\nFJ는 진짜 번호를 알려주지 않고, ")}
@@ -86,9 +86,9 @@ export function makePermCh1(E) {
                 {t(E, "the difference between every pair of adjacent cows", "이웃한 두 소의 번호 차이")}
               </b>
               {t(E, ".\n\nFrom these N−1 differences, find ONE possible original order of cows. If no such order exists, output ",
-                    "만 알려줘.\n\n이 N−1개의 차이로부터 가능한 원래 순서 하나를 찾아. 그런 순서가 없으면 ")}
+                    "만 알려줘요.\n\n이 N−1개의 차이로부터 가능한 원래 순서 하나를 찾아요. 그런 순서가 없으면 ")}
               <code style={{ background: "#fee2e2", padding: "1px 6px", borderRadius: 4, color: "#991b1b", fontWeight: 800 }}>-1</code>
-              {t(E, ".", " 출력.")}
+              {t(E, ".", "을 출력해요.")}
             </div>
           </div>
 
