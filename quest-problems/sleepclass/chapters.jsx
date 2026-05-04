@@ -46,7 +46,7 @@ export function makeSleepCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Merge adjacent class periods until all are equal length.\nFind the minimum number of merges!", "인접한 수업 시간을 합쳐서 모두 같은 길이로 만들어. 최소 합치기 횟수를 구해!"),
+        "Merge adjacent class periods until all are equal length.\nFind the minimum number of merges!", "인접한 수업 시간을 합쳐서 모두 같은 길이로 만들어요. 최소 합치기 횟수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"😴"}</div>
@@ -55,7 +55,7 @@ export function makeSleepCh1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: The final equal value must be a divisor of the total sum.\nTry each divisor and check if we can partition into equal segments.",
-              "핵심: 최종 동일 값은 총합의 약수여야 해.\n각 약수를 시도하고 동일 구간으로 나눌 수 있는지 확인.")}
+              "핵심: 최종 동일 값은 총합의 약수여야 해요.\n각 약수를 시도하고 동일 구간으로 나눌 수 있는지 확인.")}
           </div>
         </div>),
     },
@@ -119,7 +119,7 @@ export function makeSleepCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getSleepClassSections(E),
     },
   ];

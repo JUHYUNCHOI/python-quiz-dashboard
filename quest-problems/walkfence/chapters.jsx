@@ -48,7 +48,7 @@ export function makeWalkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows walk along a fence (polygon).\nEach takes the shorter route between start and end.\nFind distances!\n🚶", "소들이 울타리(다각형)를 따라 걸어. 각자 시작점에서 끝점까지 짧은 경로로! 거리를 구해! 🚶"),
+        "Cows walk along a fence (polygon).\nEach takes the shorter route between start and end.\nFind distances!\n🚶", "소들이 울타리(다각형)를 따라 걸어. 각자 시작점에서 끝점까지 짧은 경로로! 거리를 구해요! 🚶"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🚶</div>

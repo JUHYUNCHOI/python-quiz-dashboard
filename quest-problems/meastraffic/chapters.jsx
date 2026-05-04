@@ -62,7 +62,7 @@ export function makeTrafficCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A highway has N segments with sensors giving flow ranges.\nBetween segments, on-ramps add cars and off-ramps remove cars.\nFind the possible flow range at the start and end of the highway.", "고속도로에 N개 구간이 있고 센서가 유량 범위를 알려줘.\n구간 사이에 진입로(on-ramp)는 차를 추가하고 출구로(off-ramp)는 차를 빼.\n고속도로 시작과 끝의 가능한 유량 범위를 구해!"),
+        "A highway has N segments with sensors giving flow ranges.\nBetween segments, on-ramps add cars and off-ramps remove cars.\nFind the possible flow range at the start and end of the highway.", "고속도로에 N개 구간이 있고 센서가 유량 범위를 알려줘요.\n구간 사이에 진입로(on-ramp)는 차를 추가하고 출구로(off-ramp)는 차를 빼.\n고속도로 시작과 끝의 가능한 유량 범위를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude97"}</div>
@@ -136,7 +136,7 @@ export function makeTrafficCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMeasTrafficSections(E),
     },
   ];

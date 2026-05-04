@@ -43,7 +43,7 @@ export function makeMcc22CardSharkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A card game where players take turns picking the highest remaining card.\nGiven N cards, find the optimal score for the first player!", "카드 게임에서 플레이어가 번갈아 가며 남은 카드 중 가장 높은 카드를 가져가. N장의 카드가 주어지면 첫 번째 플레이어의 최적 점수를 구해!"),
+        "A card game where players take turns picking the highest remaining card.\nGiven N cards, find the optimal score for the first player!", "카드 게임에서 플레이어가 번갈아 가며 남은 카드 중 가장 높은 카드를 가져가요. N장의 카드가 주어지면 첫 번째 플레이어의 최적 점수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udccf"}</div>
@@ -52,7 +52,7 @@ export function makeMcc22CardSharkCh1(E) {
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Sort cards descending.\nPlayers alternate picking from the top. First player gets cards at indices 0, 2, 4, ... Greedy optimal strategy.",
-              "핵심: 카드를 내림차순 정렬.\n플레이어가 번갈아 위에서 가져가.\n첫 번째 플레이어는 인덱스 0, 2, 4, ...의 카드를 가져가.\n그리디 최적 전략.")}
+              "핵심: 카드를 내림차순 정렬.\n플레이어가 번갈아 위에서 가져가요.\n첫 번째 플레이어는 인덱스 0, 2, 4, ...의 카드를 가져가요.\n그리디 최적 전략.")}
           </div>
         </div>),
     },
@@ -60,10 +60,10 @@ export function makeMcc22CardSharkCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cards are [1, 2, 3].\nBoth players play optimally (pick highest).\nPlayer 1 picks first.\nWhat does Player 1 get?", "카드가 [1, 2, 3]이야. 두 플레이어 모두 최적으로 (가장 높은 것) 플레이해. 플레이어 1이 먼저 가져가. 플레이어 1은 무엇을 얻어?"),
+        "Cards are [1, 2, 3].\nBoth players play optimally (pick highest).\nPlayer 1 picks first.\nWhat does Player 1 get?", "카드가 [1, 2, 3]이예요. 두 플레이어 모두 최적으로 (가장 높은 것) 플레이해요. 플레이어 1이 먼저 가져가요. 플레이어 1은 무엇을 얻어?"),
       question: t(E,
         "Cards [1,2,3]. P1 picks 3, P2 picks 2, P1 picks 1. P1's total?",
-        "카드 [1,2,3]. P1이 3, P2가 2, P1이 1 가져가. P1의 합계?"),
+        "카드 [1,2,3]. P1이 3, P2가 2, P1이 1 가져가요. P1의 합계?"),
       options: [
         t(E, "4 (3 + 1)", "4 (3 + 1)"),
         t(E, "3", "3"),
@@ -84,7 +84,7 @@ export function makeMcc22CardSharkCh1(E) {
         "카드 [1,2,3], 매 턴 가장 높은 것 선택. P1의 점수?"),
       hint: t(E,
         "P1 picks 3, P2 picks 2, P1 picks 1. Total = 3 + 1 = 4. Wait, but the problem says just pick highest -> 3. Answer is 3.",
-        "P1이 3을 가져가. 첫 선택의 값만 물어보면 3."),
+        "P1이 3을 가져가요. 첫 선택의 값만 물어보면 3."),
       answer: 3,
     },
   ];
@@ -116,7 +116,7 @@ export function makeMcc22CardSharkCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc22CardSharkSections(E),
     },
   ];

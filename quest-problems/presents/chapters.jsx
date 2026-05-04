@@ -22,7 +22,7 @@ export function makePresentsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a stack of N presents.\nFor each query, find how many presents must be removed to reach the target.\n🎁", "FJ에게 N개의 선물 더미가 있어. 각 쿼리마다 목표 선물에 도달하려면 몇 개를 제거해야 하는지 찾자. 🎁"),
+        "FJ has a stack of N presents.\nFor each query, find how many presents must be removed to reach the target.\n🎁", "FJ에게 N개의 선물 더미가 있어요. 각 쿼리마다 목표 선물에 도달하려면 몇 개를 제거해야 하는지 찾자. 🎁"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🎁</div>

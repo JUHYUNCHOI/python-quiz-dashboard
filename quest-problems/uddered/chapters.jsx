@@ -30,7 +30,7 @@ export function makeUdderedCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie hears a string of letters.\nShe knows the custom alphabet order.\nEach time the next letter comes before or at the current letter in the alphabet, she needs a new cycle.\nCount the minimum full cycles!", "Bessie가 글자 문자열을 들어. 커스텀 알파벳 순서를 알고 있어. 다음 글자가 현재 글자보다 앞에 있으면 새 사이클이 필요해. 최소 사이클 수를 구해!"),
+        "Bessie hears a string of letters.\nShe knows the custom alphabet order.\nEach time the next letter comes before or at the current letter in the alphabet, she needs a new cycle.\nCount the minimum full cycles!", "Bessie가 글자 문자열을 들어. 커스텀 알파벳 순서를 알고 있어요. 다음 글자가 현재 글자보다 앞에 있으면 새 사이클이 필요해요. 최소 사이클 수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd24"}</div>
@@ -39,7 +39,7 @@ export function makeUdderedCh1(E) {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Scan through the heard string.\nTrack position in the custom alphabet. When the next letter's position is <= current letter's position, start a new cycle.",
-              "핵심: 들은 문자열을 스캔해.\n커스텀 알파벳에서의 위치를 추적해.\n다음 글자 위치가 현재 위치 이하이면 새 사이클을 시작해.")}
+              "핵심: 들은 문자열을 스캔해요.\n커스텀 알파벳에서의 위치를 추적해요.\n다음 글자 위치가 현재 위치 이하이면 새 사이클을 시작해요.")}
           </div>
         </div>),
     },
@@ -86,7 +86,7 @@ export function makeUdderedCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Scan once through the string.\nEach time next letter is before or at current in order, increment cycle count.\nO(N) time!", "문자열을 한 번 스캔해. 다음 글자가 현재 이하 위치면 사이클 카운트 증가. O(N) 시간!"),
+        "Scan once through the string.\nEach time next letter is before or at current in order, increment cycle count.\nO(N) time!", "문자열을 한 번 스캔해요. 다음 글자가 현재 이하 위치면 사이클 카운트 증가. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -94,7 +94,7 @@ export function makeUdderedCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Map each letter to its position in the custom alphabet.\nScan the heard string: if next position <= current position, start a new cycle.",
-              "각 글자를 커스텀 알파벳에서의 위치로 매핑해.\n들은 문자열 스캔: 다음 위치 <= 현재 위치면 새 사이클 시작.")}
+              "각 글자를 커스텀 알파벳에서의 위치로 매핑해요.\n들은 문자열 스캔: 다음 위치 <= 현재 위치면 새 사이클 시작.")}
           </div>
         </div>),
     },
@@ -102,7 +102,7 @@ export function makeUdderedCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getUdderedSections(E),
     },
   ];

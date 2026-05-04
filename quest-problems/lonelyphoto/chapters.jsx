@@ -55,7 +55,7 @@ export function makeLonelyPhotoCh1(E) {
           <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: For each cow, count how many substrings (length >= 3) make it the only one of its type.\nCount opposite-type cows on left and right.",
-              "핵심: 각 소에 대해, 그 소가 자기 타입 유일인 부분 문자열(길이 >= 3) 수를 세.\n왼쪽과 오른쪽의 반대 타입 소 수를 세면 돼.")}
+              "핵심: 각 소에 대해, 그 소가 자기 타입 유일인 부분 문자열(길이 >= 3) 수를 세.\n왼쪽과 오른쪽의 반대 타입 소 수를 세면 돼요.")}
           </div>
         </div>),
     },
@@ -63,10 +63,10 @@ export function makeLonelyPhotoCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "'GHG' has length 3 with exactly 1 H. Is H lonely here?", "'GHG'는 길이 3이고 H가 정확히 1마리. H가 외로운 걸까?"),
+        "'GHG' has length 3 with exactly 1 H. Is H lonely here?", "'GHG'는 길이 3이고 H가 정확히 1마리. H가 외로운 걸까요?"),
       question: t(E,
         "In 'GHG', is the H a lonely cow?",
-        "'GHG'에서 H는 외로운 소일까?"),
+        "'GHG'에서 H는 외로운 소일까요?"),
       options: [
         t(E, "Yes, it's the only H among 2 G's", "맞아, G 2마리 사이에 H가 유일해"),
         t(E, "No, there must be exactly 1 G", "아니, G가 정확히 1마리여야 해"),
@@ -80,7 +80,7 @@ export function makeLonelyPhotoCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For 'GHGHG' (length 5), count all lonely substrings of length >= 3.", "'GHGHG'(길이 5)에서 길이 3 이상인 외로운 부분 문자열 수를 세봐."),
+        "For 'GHGHG' (length 5), count all lonely substrings of length >= 3.", "'GHGHG'(길이 5)에서 길이 3 이상인 외로운 부분 문자열 수를 세봐요."),
       question: t(E,
         "s = 'GHGHG'. How many lonely photos?",
         "s = 'GHGHG'. 외로운 사진 수는?"),
@@ -107,7 +107,7 @@ export function makeLonelyPhotoCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each cow, count opposite-type cows on each side.\nCombine counts to find valid substrings.\nO(N) with prefix sums!", "각 소에 대해 양쪽의 반대 타입 소 수를 세. 조합해서 유효한 부분 문자열을 찾아. 누적합으로 O(N)!"),
+        "For each cow, count opposite-type cows on each side.\nCombine counts to find valid substrings.\nO(N) with prefix sums!", "각 소에 대해 양쪽의 반대 타입 소 수를 세. 조합해서 유효한 부분 문자열을 찾아요. 누적합으로 O(N)!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

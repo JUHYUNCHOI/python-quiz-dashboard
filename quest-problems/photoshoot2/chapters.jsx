@@ -42,7 +42,7 @@ export function makePhoto2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Rearrange cows to match a target order by moving cows to the left.\nFind the minimum number of moves!", "소를 왼쪽으로 이동시켜 목표 순서에 맞춰. 최소 이동 횟수를 구해!"),
+        "Rearrange cows to match a target order by moving cows to the left.\nFind the minimum number of moves!", "소를 왼쪽으로 이동시켜 목표 순서에 맞춰. 최소 이동 횟수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"📷"}</div>
@@ -59,7 +59,7 @@ export function makePhoto2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Current: [2,1], Target: [1,2]. Cow 1 needs to move left past cow 2. How many moves?", "현재: [2,1], 목표: [1,2]. 소1이 소2 왼쪽으로 이동해야 해. 이동 횟수는?"),
+        "Current: [2,1], Target: [1,2]. Cow 1 needs to move left past cow 2. How many moves?", "현재: [2,1], 목표: [1,2]. 소1이 소2 왼쪽으로 이동해야 해요. 이동 횟수는?"),
       question: t(E,
         "[2,1] -> [1,2]. How many moves?",
         "[2,1] -> [1,2]. 이동 몇 번?"),
@@ -71,7 +71,7 @@ export function makePhoto2Ch1(E) {
       correct: 0,
       explain: t(E,
         "Correct! Move cow 1 to the left. Only 1 move needed.",
-        "맞아! 소 1을 왼쪽으로 이동. 1번만 필요해."),
+        "맞아! 소 1을 왼쪽으로 이동. 1번만 필요해요."),
     },
     // 1-3: Input
     {
@@ -115,7 +115,7 @@ export function makePhoto2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getPhotoshoot2Sections(E),
     },
   ];

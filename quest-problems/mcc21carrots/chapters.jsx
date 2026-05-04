@@ -26,7 +26,7 @@ export function makeMcc21CarrotsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A rabbit has N baskets of carrots.\nPick 3 baskets so that the total number of carrots is divisible by a given number.\nUse brute force to check all combinations!", "토끼가 N개의 바구니에 당근을 가지고 있어. 3개의 바구니를 골라서 당근 합이 특정 수로 나누어떨어지게 해! 모든 조합을 확인하는 브루트포스를 써!"),
+        "A rabbit has N baskets of carrots.\nPick 3 baskets so that the total number of carrots is divisible by a given number.\nUse brute force to check all combinations!", "토끼가 N개의 바구니에 당근을 가지고 있어요. 3개의 바구니를 골라서 당근 합이 특정 수로 나누어떨어지게 해요! 모든 조합을 확인하는 브루트포스를 써요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udd55"}</div>
@@ -35,17 +35,17 @@ export function makeMcc21CarrotsCh1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Try all C(N,3) combinations of 3 baskets.\nCheck if their sum is divisible by the target. Brute force O(N^3).",
-              "핵심: 3개 바구니의 모든 C(N,3) 조합을 시도해.\n합이 목표로 나누어떨어지는지 확인.\n브루트포스 O(N^3).")}
+              "핵심: 3개 바구니의 모든 C(N,3) 조합을 시도해요.\n합이 목표로 나누어떨어지는지 확인.\n브루트포스 O(N^3).")}
           </div>
         </div>),
     },
     {
       type: "quiz",
       narr: t(E,
-        "Given baskets [3, 6, 9], their sum is 18. Is 18 divisible by 3?", "바구니 [3, 6, 9]의 합은 18이야. 18은 3으로 나누어떨어질까?"),
+        "Given baskets [3, 6, 9], their sum is 18. Is 18 divisible by 3?", "바구니 [3, 6, 9]의 합은 18이예요. 18은 3으로 나누어떨어질까?"),
       question: t(E,
         "Baskets [3, 6, 9]. Sum = 18. Is 18 divisible by 3?",
-        "바구니 [3, 6, 9]. 합 = 18. 18은 3으로 나누어떨어져?"),
+        "바구니 [3, 6, 9]. 합 = 18. 18은 3으로 나누어떨어져요?"),
       options: [
         t(E, "Yes, 18 / 3 = 6", "맞아, 18 / 3 = 6"),
         t(E, "No, it has remainder", "아니, 나머지가 있어"),
@@ -53,7 +53,7 @@ export function makeMcc21CarrotsCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! 18 / 3 = 6 with no remainder.",
-        "맞아! 18 / 3 = 6, 나머지 없어."),
+        "맞아! 18 / 3 = 6, 나머지 없어요."),
     },
     {
       type: "input",
@@ -61,7 +61,7 @@ export function makeMcc21CarrotsCh1(E) {
         "What is the sum of baskets [3, 6, 9]?", "바구니 [3, 6, 9]의 합은?"),
       question: t(E,
         "Baskets = [3, 6, 9]. What is their sum?",
-        "바구니 = [3, 6, 9]. 합은 얼마야?"),
+        "바구니 = [3, 6, 9]. 합은 얼마예요?"),
       hint: t(E, "3 + 6 + 9 = ?", "3 + 6 + 9 = ?"),
       answer: 18,
     },
@@ -73,7 +73,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Use triple nested loops to try all combinations. O(N^3) brute force.", "삼중 반복문으로 모든 조합을 시도해. O(N^3) 브루트포스."),
+        "Use triple nested loops to try all combinations. O(N^3) brute force.", "삼중 반복문으로 모든 조합을 시도해요. O(N^3) 브루트포스."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -88,7 +88,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc21CarrotsSections(E),
     },
   ];

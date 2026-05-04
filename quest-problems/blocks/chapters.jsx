@@ -50,7 +50,7 @@ export function makeBlocksCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "4 cubes with 6 letters each.\nSpell words by choosing which block goes where and which face shows.\nTry all permutations!", "4개의 큐브에 각 6개 글자. 어떤 블록을 어디에 놓고 어떤 면을 보여줄지 선택해서 단어를 만들어. 모든 순열을 시도!"),
+        "4 cubes with 6 letters each.\nSpell words by choosing which block goes where and which face shows.\nTry all permutations!", "4개의 큐브에 각 6개 글자. 어떤 블록을 어디에 놓고 어떤 면을 보여줄지 선택해서 단어를 만들어요. 모든 순열을 시도!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🧱"}</div>
@@ -85,10 +85,10 @@ export function makeBlocksCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Block 1 has faces \"COWMOO\" (C,O,W,M,O,O). Can it show the letter 'C'? Yes=1, No=0", "블록1의 면이 \"COWMOO\" (C,O,W,M,O,O). 글자 'C'를 보여줄 수 있어? 예=1, 아니오=0"),
+        "Block 1 has faces \"COWMOO\" (C,O,W,M,O,O). Can it show the letter 'C'? Yes=1, No=0", "블록1의 면이 \"COWMOO\" (C,O,W,M,O,O). 글자 'C'를 보여줄 수 있어요? 예=1, 아니오=0"),
       question: t(E,
         "Block \"COWMOO\": can it show 'C'? (1=yes, 0=no)",
-        "블록 \"COWMOO\": 'C'를 보여줄 수 있어? (1=예, 0=아니오)"),
+        "블록 \"COWMOO\": 'C'를 보여줄 수 있어요? (1=예, 0=아니오)"),
       hint: t(E,
         "'C' is the first character of \"COWMOO\". Yes!",
         "'C'는 \"COWMOO\"의 첫 글자. 당연히 가능!"),
@@ -123,7 +123,7 @@ export function makeBlocksCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getBlocksSections(E),
     },
   ];

@@ -27,7 +27,7 @@ export function makeMcc19CandyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N people stand in a circle.\nEach round, people at odd positions are eliminated.\nFind who survives!\nThis is a Josephus-like problem.", "N명이 원형으로 서 있어. 매 라운드마다 홀수 위치의 사람이 탈락해. 누가 살아남는지 찾아! 요세푸스 변형 문제야."),
+        "N people stand in a circle.\nEach round, people at odd positions are eliminated.\nFind who survives!\nThis is a Josephus-like problem.", "N명이 원형으로 서 있어요. 매 라운드마다 홀수 위치의 사람이 탈락해요. 누가 살아남는지 찾아요! 요세푸스 변형 문제예요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🍬</div>
@@ -47,7 +47,7 @@ export function makeMcc19CandyCh1(E) {
         "N=4, positions [1,2,3,4].\nEliminate odd positions [1,3] → [2,4] remain.\nThen eliminate odd of remaining → [2] eliminated → 4 survives!", "N=4, 위치 [1,2,3,4]. 홀수 위치 [1,3] 탈락 → [2,4] 남음. 남은 것 중 홀수 → [2] 탈락 → 4가 생존!"),
       question: t(E,
         "N=4: after eliminating odd positions twice, who survives?",
-        "N=4: 홀수 위치를 두 번 제거하면 누가 생존해?"),
+        "N=4: 홀수 위치를 두 번 제거하면 누가 생존해요?"),
       options: [
         t(E, "Person 2", "2번"),
         t(E, "Person 4", "4번"),
@@ -100,7 +100,7 @@ export function makeMcc19CandyCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc19CandySections(E),
     },
   ];

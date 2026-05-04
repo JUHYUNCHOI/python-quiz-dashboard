@@ -29,7 +29,7 @@ export function makeMcc19Rect2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given 3 corners of an axis-aligned rectangle, find the 4th corner.\nKey insight: XOR!\nEach x-coordinate appears exactly twice, so x4 = x1 XOR x2 XOR x3.", "축에 정렬된 직사각형의 3개 꼭짓점이 주어지면 4번째를 찾아. 핵심: XOR! 각 x좌표는 정확히 2번 나타나니까 x4 = x1 XOR x2 XOR x3."),
+        "Given 3 corners of an axis-aligned rectangle, find the 4th corner.\nKey insight: XOR!\nEach x-coordinate appears exactly twice, so x4 = x1 XOR x2 XOR x3.", "축에 정렬된 직사각형의 3개 꼭짓점이 주어지면 4번째를 찾아요. 핵심: XOR! 각 x좌표는 정확히 2번 나타나니까 x4 = x1 XOR x2 XOR x3."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>▭</div>
@@ -86,7 +86,7 @@ export function makeMcc19Rect2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just XOR the three x-coordinates and XOR the three y-coordinates. O(1) time!", "세 x좌표를 XOR하고 세 y좌표를 XOR하면 돼. O(1) 시간!"),
+        "Just XOR the three x-coordinates and XOR the three y-coordinates. O(1) time!", "세 x좌표를 XOR하고 세 y좌표를 XOR하면 돼요. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
@@ -102,7 +102,7 @@ export function makeMcc19Rect2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc19Rect2Sections(E),
     },
   ];

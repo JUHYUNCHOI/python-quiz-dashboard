@@ -50,7 +50,7 @@ export function makeLeadersCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows of breed G or H stand in a line.\nEach cow i has a range covering positions i to E_i.\nA leader of a breed must cover ALL cows of that breed, or the other leader must be within the first leader's range.\nCount valid leader pairs!", "N마리의 소가 G 또는 H 품종으로 줄 서 있어.\n각 소 i는 위치 i부터 E_i까지 커버해.\n리더는 자기 품종의 모든 소를 커버하거나, 상대 리더가 자기 범위 안에 있어야 해.\n유효한 리더 쌍의 수를 구해!"),
+        "N cows of breed G or H stand in a line.\nEach cow i has a range covering positions i to E_i.\nA leader of a breed must cover ALL cows of that breed, or the other leader must be within the first leader's range.\nCount valid leader pairs!", "N마리의 소가 G 또는 H 품종으로 줄 서 있어요.\n각 소 i는 위치 i부터 E_i까지 커버해요.\n리더는 자기 품종의 모든 소를 커버하거나, 상대 리더가 자기 범위 안에 있어야 해요.\n유효한 리더 쌍의 수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc51"}</div>
@@ -59,7 +59,7 @@ export function makeLeadersCh1(E) {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: For each breed, find cows whose range covers all of that breed.\nThen check valid pairs where one leader covers the other.",
-              "핵심: 각 품종에서 범위가 해당 품종 전체를 커버하는 소를 찾아.\n그 다음 한 리더가 다른 리더를 커버하는 유효한 쌍을 확인해.")}
+              "핵심: 각 품종에서 범위가 해당 품종 전체를 커버하는 소를 찾아요.\n그 다음 한 리더가 다른 리더를 커버하는 유효한 쌍을 확인해요.")}
           </div>
         </div>),
     },
@@ -67,7 +67,7 @@ export function makeLeadersCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If cow 1 is breed G and covers positions 1-4, and ALL G cows are within positions 1-4, is cow 1 a valid G leader?", "소 1이 G 품종이고 위치 1-4를 커버하는데, 모든 G 소가 위치 1-4 안에 있다면, 소 1은 유효한 G 리더일까?"),
+        "If cow 1 is breed G and covers positions 1-4, and ALL G cows are within positions 1-4, is cow 1 a valid G leader?", "소 1이 G 품종이고 위치 1-4를 커버하는데, 모든 G 소가 위치 1-4 안에 있다면, 소 1은 유효한 G 리더일까요?"),
       question: t(E,
         "Cow 1 (G) covers positions 1-4. All G cows are in positions 1-4. Is cow 1 a valid G leader?",
         "소 1 (G)이 위치 1-4 커버. 모든 G 소가 1-4에 있음. 소 1은 유효한 G 리더?"),
@@ -78,7 +78,7 @@ export function makeLeadersCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! A leader only needs to cover all cows of its OWN breed. Cow 1 covers all G cows, so it's a valid G leader.",
-        "맞아! 리더는 자기 품종의 모든 소만 커버하면 돼. 소 1이 모든 G 소를 커버하니 유효한 G 리더야."),
+        "맞아! 리더는 자기 품종의 모든 소만 커버하면 돼요. 소 1이 모든 G 소를 커버하니 유효한 G 리더예요."),
     },
     // 1-3: Input
     {
@@ -90,7 +90,7 @@ export function makeLeadersCh1(E) {
         "breeds=\"GH\", E=[2,2]. 유효한 리더 쌍은 몇 개?"),
       hint: t(E,
         "G leader (cow 0) covers up to position 1. H leader (cow 1) covers up to position 1. Cow 0's range includes cow 1. That's 1 valid pair.",
-        "G 리더 (소 0)는 위치 1까지 커버. H 리더 (소 1)는 위치 1까지 커버. 소 0의 범위가 소 1을 포함해. 유효한 쌍 1개."),
+        "G 리더 (소 0)는 위치 1까지 커버. H 리더 (소 1)는 위치 1까지 커버. 소 0의 범위가 소 1을 포함해요. 유효한 쌍 1개."),
       answer: 1,
     },
   ];
@@ -106,7 +106,7 @@ export function makeLeadersCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Find leaders for each breed, then check all pairs. Overall O(N + G_leaders * H_leaders).", "각 품종의 리더를 찾고, 모든 쌍을 확인해. 전체 O(N + G리더 * H리더)."),
+        "Find leaders for each breed, then check all pairs. Overall O(N + G_leaders * H_leaders).", "각 품종의 리더를 찾고, 모든 쌍을 확인해요. 전체 O(N + G리더 * H리더)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -122,7 +122,7 @@ export function makeLeadersCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getLeadersSections(E),
     },
   ];

@@ -53,7 +53,7 @@ export function makeDaisyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has N flowers in a row, each with a petal count.\nShe picks a contiguous group and checks: does any flower have exactly the average number of petals?", "베시는 N개의 꽃을 한 줄로 갖고 있어. 각 꽃에 꽃잎 수가 있어. 연속된 그룹을 골라서 확인해: 꽃잎 수가 정확히 평균인 꽃이 있을까?"),
+        "Bessie has N flowers in a row, each with a petal count.\nShe picks a contiguous group and checks: does any flower have exactly the average number of petals?", "베시는 N개의 꽃을 한 줄로 갖고 있어요. 각 꽃에 꽃잎 수가 있어요. 연속된 그룹을 골라서 확인해: 꽃잎 수가 정확히 평균인 꽃이 있을까?"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\uD83C\uDF3C"}</div>
@@ -61,7 +61,7 @@ export function makeDaisyCh1(E) {
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #2</div>
           <div style={{ marginTop: 12, background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "N flowers with petal counts.\nCount the number of contiguous subarrays where at least one flower has exactly the average petal count of that subarray.", "N개의 꽃에 꽃잎 수가 있어.\n부분 배열의 평균 꽃잎 수와 정확히 같은 꽃이 하나라도 있는 연속 부분 배열의 수를 세.")}
+              "N flowers with petal counts.\nCount the number of contiguous subarrays where at least one flower has exactly the average petal count of that subarray.", "N개의 꽃에 꽃잎 수가 있어요.\n부분 배열의 평균 꽃잎 수와 정확히 같은 꽃이 하나라도 있는 연속 부분 배열의 수를 세.")}
           </div>
         </div>),
     },
@@ -69,7 +69,7 @@ export function makeDaisyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The average of a group is the sum divided by the count.\nFor example, flowers [2, 4, 6]: sum=12, count=3, average=4.", "그룹의 평균은 합을 개수로 나눈 거야. 예: 꽃 [2, 4, 6]: 합=12, 개수=3, 평균=4."),
+        "The average of a group is the sum divided by the count.\nFor example, flowers [2, 4, 6]: sum=12, count=3, average=4.", "그룹의 평균은 합을 개수로 나눈 거예요. 예: 꽃 [2, 4, 6]: 합=12, 개수=3, 평균=4."),
       content: (() => {
         const petals = [2, 4, 6];
         const colors = [C.bessie, C.carry, C.accent];
@@ -109,7 +109,7 @@ export function makeDaisyCh1(E) {
             <div style={{
               marginTop: 8, textAlign: "center", fontSize: 13, fontWeight: 800, color: C.ok,
             }}>
-              {t(E, "Flower with 4 petals exists! Valid subarray!", "꽃잎 4개인 꽃이 있어! 유효한 부분 배열!")}
+              {t(E, "Flower with 4 petals exists! Valid subarray!", "꽃잎 4개인 꽃이 있어요! 유효한 부분 배열!")}
             </div>
           </div>
         );
@@ -119,7 +119,7 @@ export function makeDaisyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Not every subarray works!\nThe average must be an integer AND some flower must have exactly that many petals.", "모든 부분 배열이 되는 건 아니야! 평균이 정수여야 하고 그 개수의 꽃잎을 가진 꽃이 있어야 해."),
+        "Not every subarray works!\nThe average must be an integer AND some flower must have exactly that many petals.", "모든 부분 배열이 되는 건 아니예요! 평균이 정수여야 하고 그 개수의 꽃잎을 가진 꽃이 있어야 해요."),
       content: (() => {
         const flowers = [1, 1, 2];
         return (
@@ -160,7 +160,7 @@ export function makeDaisyCh1(E) {
                 ❌ {t(E, "Subarray [1, 3]: avg = 2", "부분 배열 [1, 3]: 평균 = 2")}
               </div>
               <div style={{ fontSize: 12, color: C.text }}>
-                {t(E, "Any flower = 2? NO! Neither 1 nor 3 equals 2.", "꽃잎 = 2인 꽃? NO! 1도 3도 2가 아니야.")}
+                {t(E, "Any flower = 2? NO! Neither 1 nor 3 equals 2.", "꽃잎 = 2인 꽃? NO! 1도 3도 2가 아니예요.")}
               </div>
             </div>
           </div>
@@ -182,7 +182,7 @@ export function makeDaisyCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! avg = (1+1)/2 = 1, and both flowers have 1 petal. This subarray is valid!",
-        "정답! 평균 = (1+1)/2 = 1이고 두 꽃 모두 꽃잎이 1개. 유효한 부분 배열이야!"),
+        "정답! 평균 = (1+1)/2 = 1이고 두 꽃 모두 꽃잎이 1개. 유효한 부분 배열이예요!"),
     },
     // 1-5: Complete enumeration visual
     {
@@ -245,7 +245,7 @@ export function makeDaisyCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Flowers = [1, 1].\nSubarrays: [1], [1], [1,1].\nAll have average 1 and a flower with 1 petal.\nHow many valid?", "꽃 = [1, 1]. 부분 배열: [1], [1], [1,1]. 모두 평균 1이고 꽃잎 1개인 꽃이 있어. 유효한 수는?"),
+        "Flowers = [1, 1].\nSubarrays: [1], [1], [1,1].\nAll have average 1 and a flower with 1 petal.\nHow many valid?", "꽃 = [1, 1]. 부분 배열: [1], [1], [1,1]. 모두 평균 1이고 꽃잎 1개인 꽃이 있어요. 유효한 수는?"),
       question: t(E,
         "Flowers = [1, 1]. Count of valid subarrays?",
         "꽃 = [1, 1]. 유효한 부분 배열 수?"),
@@ -302,7 +302,7 @@ export function makeDaisyCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace through [1, 1, 2] step by step. Watch how i and j sweep through all pairs!", "[1, 1, 2]을 단계별로 추적해보자. i와 j가 모든 쌍을 어떻게 탐색하는지 봐!"),
+        "Let's trace through [1, 1, 2] step by step. Watch how i and j sweep through all pairs!", "[1, 1, 2]을 단계별로 추적해보자. i와 j가 모든 쌍을 어떻게 탐색하는지 봐요!"),
       content: (() => {
         const rows = [
           { i: 0, j: 0, sub: "p[0:1]=[1]",    s: 1, l: 1, avg: "1",    chk: "1 in [1]?", ok: true },
@@ -357,7 +357,7 @@ export function makeDaisyCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A key trick: we don't recompute the sum from scratch!\nAs j extends by 1, just add p[j] to the running sum.\nThis makes it O(1) per step.", "핵심 트릭: 합을 처음부터 다시 계산하지 않아! j가 1 늘어나면 p[j]만 러닝 합에 더해. 이러면 각 단계 O(1)이야."),
+        "A key trick: we don't recompute the sum from scratch!\nAs j extends by 1, just add p[j] to the running sum.\nThis makes it O(1) per step.", "핵심 트릭: 합을 처음부터 다시 계산하지 않아! j가 1 늘어나면 p[j]만 러닝 합에 더해요. 이러면 각 단계 O(1)이예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
@@ -392,13 +392,13 @@ export function makeDaisyCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Try [2, 2].\nSubarrays: [2] (avg=2, has 2, valid), [2] (avg=2, has 2, valid), [2,2] (avg=2, has 2, valid).\nHow many?", "[2, 2]를 해봐. 부분 배열: [2] (평균=2, 2있음, 유효), [2] (평균=2, 2있음, 유효), [2,2] (평균=2, 2있음, 유효). 몇 개?"),
+        "Try [2, 2].\nSubarrays: [2] (avg=2, has 2, valid), [2] (avg=2, has 2, valid), [2,2] (avg=2, has 2, valid).\nHow many?", "[2, 2]를 해봐요. 부분 배열: [2] (평균=2, 2있음, 유효), [2] (평균=2, 2있음, 유효), [2,2] (평균=2, 2있음, 유효). 몇 개?"),
       question: t(E,
         "Flowers = [2, 2]. Count of valid subarrays?",
         "꽃 = [2, 2]. 유효한 부분 배열 수?"),
       hint: t(E,
         "All 3 subarrays have average 2, and a flower with 2 petals exists. Answer: 3.",
-        "3개 부분 배열 모두 평균 2이고 꽃잎 2개인 꽃이 있어. 답: 3."),
+        "3개 부분 배열 모두 평균 2이고 꽃잎 2개인 꽃이 있어요. 답: 3."),
       answer: 3,
     },
   ];
@@ -445,7 +445,7 @@ export function makeDaisyCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Now the outer loop fixes start index i.\nFor each i, we reset the running sum to 0 and extend j forward.", "이제 바깥 반복이 시작 인덱스 i를 고정해. 각 i에서 러닝 합을 0으로 초기화하고 j를 앞으로 확장해."),
+        "Now the outer loop fixes start index i.\nFor each i, we reset the running sum to 0 and extend j forward.", "이제 바깥 반복이 시작 인덱스 i를 고정해요. 각 i에서 러닝 합을 0으로 초기화하고 j를 앞으로 확장해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>
@@ -466,7 +466,7 @@ export function makeDaisyCh3(E, lang = "py") {
           />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6, whiteSpace: "pre-line" }}>
             {t(E,
-              "count tracks valid subarrays. s accumulates the sum as we extend j.\nNo need to recompute from scratch!", "count는 유효한 부분 배열 수.\ns는 j를 확장하며 합을 누적. 처음부터 다시 계산할 필요 없어!")}
+              "count tracks valid subarrays. s accumulates the sum as we extend j.\nNo need to recompute from scratch!", "count는 유효한 부분 배열 수.\ns는 j를 확장하며 합을 누적. 처음부터 다시 계산할 필요 없어요!")}
           </div>
         </div>),
     },
@@ -511,7 +511,7 @@ export function makeDaisyCh3(E, lang = "py") {
         "Quick check: why do we check `s % length == 0` before computing the average?", "확인: 평균을 계산하기 전에 왜 `s % length == 0`을 확인할까?"),
       question: t(E,
         "Why check s % length == 0?",
-        "s % length == 0을 왜 확인해?"),
+        "s % length == 0을 왜 확인해요?"),
       options: [
         t(E, "To make the code run faster", "코드를 빠르게 하려고"),
         t(E, "Because avg must be integer (petal counts are integers)", "평균이 정수여야 하니까 (꽃잎 수가 정수)"),
@@ -520,13 +520,13 @@ export function makeDaisyCh3(E, lang = "py") {
       correct: 1,
       explain: t(E,
         "Right! Petal counts are integers, so the average must be an integer to match any flower. If sum isn't divisible by length, the average is a fraction and no flower can match!",
-        "맞아! 꽃잎 수가 정수니까 평균도 정수여야 어떤 꽃과 일치할 수 있어. 합이 길이로 나누어지지 않으면 평균이 분수라 일치하는 꽃이 없어!"),
+        "맞아! 꽃잎 수가 정수니까 평균도 정수여야 어떤 꽃과 일치할 수 있어요. 합이 길이로 나누어지지 않으면 평균이 분수라 일치하는 꽃이 없어요!"),
     },
     // 3-5: Step 4 — Print + full code
     {
       type: "reveal",
       narr: t(E,
-        "Finally, print the count. That's the complete solution!", "마지막으로 count를 출력해. 이게 전체 풀이야!"),
+        "Finally, print the count. That's the complete solution!", "마지막으로 count를 출력해요. 이게 전체 풀이예요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>

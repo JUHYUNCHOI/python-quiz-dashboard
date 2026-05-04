@@ -69,7 +69,7 @@ export function makeRevEngCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given M test cases of binary input arrays and their outputs (0 or 1), determine if a simple if/else program on one variable could produce all the outputs consistently.\nPrint OK or LIE!", "M개의 테스트 케이스 (이진 입력 배열과 출력 0 또는 1)가 주어져.\n하나의 변수에 대한 간단한 if/else 프로그램이 모든 출력을 일관되게 생성할 수 있는지 판단해.\nOK 또는 LIE를 출력해!"),
+        "Given M test cases of binary input arrays and their outputs (0 or 1), determine if a simple if/else program on one variable could produce all the outputs consistently.\nPrint OK or LIE!", "M개의 테스트 케이스 (이진 입력 배열과 출력 0 또는 1)가 주어져.\n하나의 변수에 대한 간단한 if/else 프로그램이 모든 출력을 일관되게 생성할 수 있는지 판단해요.\nOK 또는 LIE를 출력해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd27"}</div>
@@ -78,7 +78,7 @@ export function makeRevEngCh1(E) {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "Key: If two identical inputs have different outputs, it's a LIE.\nOtherwise, check if some single variable position can separate all outputs using if arr[pos]==0 return A else return B.",
-              "핵심: 동일한 입력이 다른 출력을 가지면 LIE. 아니면,\nif arr[pos]==0 return A else return B 형태로 모든 출력을 분리할 수 있는 변수 위치가 있는지 확인해.")}
+              "핵심: 동일한 입력이 다른 출력을 가지면 LIE. 아니면,\nif arr[pos]==0 return A else return B 형태로 모든 출력을 분리할 수 있는 변수 위치가 있는지 확인해요.")}
           </div>
         </div>),
     },
@@ -97,16 +97,16 @@ export function makeRevEngCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! If the same input produces different outputs, no deterministic program can be consistent. It's a LIE.",
-        "맞아! 같은 입력이 다른 출력을 만들면, 어떤 결정적 프로그램도 일관될 수 없어. LIE야."),
+        "맞아! 같은 입력이 다른 출력을 만들면, 어떤 결정적 프로그램도 일관될 수 없어요. LIE야."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "Input [0]->1 and [1]->0.\nCan a program do this?\nCheck: if arr[0]==0 return 1 else return 0.\nWorks!\nEnter 1 for OK, 0 for LIE.", "입력 [0]->1 그리고 [1]->0.\n프로그램이 가능할까?\n확인: if arr[0]==0 return 1 else return 0.\n작동해!\nOK이면 1, LIE이면 0 입력."),
+        "Input [0]->1 and [1]->0.\nCan a program do this?\nCheck: if arr[0]==0 return 1 else return 0.\nWorks!\nEnter 1 for OK, 0 for LIE.", "입력 [0]->1 그리고 [1]->0.\n프로그램이 가능할까?\n확인: if arr[0]==0 return 1 else return 0.\n작동해요!\nOK이면 1, LIE이면 0 입력."),
       question: t(E,
         "[0]->1, [1]->0. Is it OK? (1=OK, 0=LIE)",
-        "[0]->1, [1]->0. OK일까? (1=OK, 0=LIE)"),
+        "[0]->1, [1]->0. OK일까요? (1=OK, 0=LIE)"),
       hint: t(E,
         "if arr[0]==0 return 1, else return 0. This matches both test cases. Answer: 1 (OK).",
         "if arr[0]==0 return 1, else return 0. 두 테스트 케이스 모두 일치. 답: 1 (OK)."),
@@ -141,7 +141,7 @@ export function makeRevEngCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getRevEngSections(E),
     },
   ];

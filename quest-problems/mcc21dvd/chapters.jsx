@@ -23,7 +23,7 @@ export function makeMcc21DvdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A DVD logo bounces around a screen.\nSimulate its position after T steps.\nThe logo bounces off walls by reversing direction.", "DVD 로고가 화면에서 튕겨다녀. T번 이동 후 위치를 시뮬레이션해. 벽에 부딪히면 방향이 반전돼."),
+        "A DVD logo bounces around a screen.\nSimulate its position after T steps.\nThe logo bounces off walls by reversing direction.", "DVD 로고가 화면에서 튕겨다녀. T번 이동 후 위치를 시뮬레이션해요. 벽에 부딪히면 방향이 반전돼요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcc0"}</div>
@@ -39,7 +39,7 @@ export function makeMcc21DvdCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Screen 10x10, logo at (0,0) moving right-down. After 1 step, where is it?", "화면 10x10, 로고 (0,0)에서 오른쪽-아래로 이동. 1단계 후 어디에 있어?"),
+        "Screen 10x10, logo at (0,0) moving right-down. After 1 step, where is it?", "화면 10x10, 로고 (0,0)에서 오른쪽-아래로 이동. 1단계 후 어디에 있어요?"),
       question: t(E,
         "Screen 10x10, start (0,0), direction (1,1). Position after 1 step?",
         "화면 10x10, 시작 (0,0), 방향 (1,1). 1단계 후 위치?"),
@@ -71,7 +71,7 @@ export function makeMcc21DvdCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simulate each step. Check wall collisions and reverse direction. O(T) time.", "각 단계를 시뮬레이션해. 벽 충돌 확인하고 방향 반전. O(T) 시간."),
+        "Simulate each step. Check wall collisions and reverse direction. O(T) time.", "각 단계를 시뮬레이션해요. 벽 충돌 확인하고 방향 반전. O(T) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -86,7 +86,7 @@ export function makeMcc21DvdCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc21DvdSections(E),
     },
   ];

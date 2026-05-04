@@ -100,7 +100,7 @@ export function makeWordProcCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A word processor needs to format text into lines!\nEach line can hold at most K characters of words (spaces between words don't count toward the limit).", "워드 프로세서가 텍스트를 줄로 나눠야 해! 각 줄에 최대 K글자의 단어를 담을 수 있어 (단어 사이 공백은 제한에 포함되지 않아)."),
+        "A word processor needs to format text into lines!\nEach line can hold at most K characters of words (spaces between words don't count toward the limit).", "워드 프로세서가 텍스트를 줄로 나눠야 해요! 각 줄에 최대 K글자의 단어를 담을 수 있어 (단어 사이 공백은 제한에 포함되지 않아)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"📝"}</div>
@@ -117,7 +117,7 @@ export function makeWordProcCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The rule: when adding the next word would push the total character count past K, start a new line.\nSpaces DON'T count!\nOnly the sum of word lengths matters.", "규칙: 다음 단어를 추가하면 총 글자 수가 K를 초과할 때 새 줄을 시작해. 공백은 세지 않아! 단어 길이의 합만 중요해."),
+        "The rule: when adding the next word would push the total character count past K, start a new line.\nSpaces DON'T count!\nOnly the sum of word lengths matters.", "규칙: 다음 단어를 추가하면 총 글자 수가 K를 초과할 때 새 줄을 시작해요. 공백은 세지 않아! 단어 길이의 합만 중요해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 10 }}>
@@ -173,13 +173,13 @@ export function makeWordProcCh1(E) {
       correct: 1,
       explain: t(E,
         "Only word characters count! The K limit is the sum of word lengths, NOT counting spaces. This is explicitly stated in the problem!",
-        "단어 글자만 세! K 제한은 단어 길이의 합이고, 공백은 세지 않아. 이건 문제에서 명시적으로 나와 있어!"),
+        "단어 글자만 세! K 제한은 단어 길이의 합이고, 공백은 세지 않아. 이건 문제에서 명시적으로 나와 있어요!"),
     },
     // 1-4: Line fitting example
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace a bigger example!\nWords: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5.\nWe add words greedily until the next one doesn't fit.", "더 큰 예시를 추적해보자! 단어: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5. 다음 단어가 안 들어갈 때까지 그리디하게 추가해."),
+        "Let's trace a bigger example!\nWords: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5.\nWe add words greedily until the next one doesn't fit.", "더 큰 예시를 추적해보자! 단어: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5. 다음 단어가 안 들어갈 때까지 그리디하게 추가해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
@@ -240,7 +240,7 @@ export function makeWordProcCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Try it!\nWords [\"aaa\", \"bb\", \"cc\", \"d\"], K=4.\naaa(3) fits.\n3+bb(2)=5>4, new line.\nbb(2)+cc(2)=4<=4.\n4+d(1)=5>4, new line.\n3 lines!", "해봐!\n단어 [\"aaa\", \"bb\", \"cc\", \"d\"], K=4.\naaa(3) 들어감.\n3+bb(2)=5>4, 새 줄.\nbb(2)+cc(2)=4<=4.\n4+d(1)=5>4, 새 줄.\n3줄!"),
+        "Try it!\nWords [\"aaa\", \"bb\", \"cc\", \"d\"], K=4.\naaa(3) fits.\n3+bb(2)=5>4, new line.\nbb(2)+cc(2)=4<=4.\n4+d(1)=5>4, new line.\n3 lines!", "해봐요!\n단어 [\"aaa\", \"bb\", \"cc\", \"d\"], K=4.\naaa(3) 들어감.\n3+bb(2)=5>4, 새 줄.\nbb(2)+cc(2)=4<=4.\n4+d(1)=5>4, 새 줄.\n3줄!"),
       question: t(E,
         "Words [\"aaa\",\"bb\",\"cc\",\"d\"], K=4. How many output lines?",
         "단어 [\"aaa\",\"bb\",\"cc\",\"d\"], K=4. 출력 줄 수?"),
@@ -408,7 +408,7 @@ export function makeWordProcCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: We need to track the current line (list of words) and its total character count.\nPlus a list to collect all finished lines.", "2단계: 현재 줄(단어 리스트)과 총 글자 수를 추적해야 해. 완성된 줄을 모을 리스트도 필요해."),
+        "Step 2: We need to track the current line (list of words) and its total character count.\nPlus a list to collect all finished lines.", "2단계: 현재 줄(단어 리스트)과 총 글자 수를 추적해야 해요. 완성된 줄을 모을 리스트도 필요해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
@@ -480,13 +480,13 @@ export function makeWordProcCh3(E, lang = "py") {
       correct: 1,
       explain: t(E,
         "If cur_line is empty, we haven't added any word yet. We must add the current word even if it alone exceeds K (guaranteed not to happen by constraints, but good practice)!",
-        "cur_line이 비어있으면 아직 단어를 추가하지 않은 거야. 현재 단어를 반드시 추가해야 해!"),
+        "cur_line이 비어있으면 아직 단어를 추가하지 않은 거예요. 현재 단어를 반드시 추가해야 해요!"),
     },
     // 3-5: Complete code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getWordProcSections(E),
     },
   ];

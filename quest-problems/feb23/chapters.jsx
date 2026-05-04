@@ -44,14 +44,14 @@ export function makeFebCh1(E) {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "String of B,\nE,\nF chars. F can be B or E. Count consecutive same-char pairs = excitement. Find all possible excitement levels!",
-              "B, E, F로 이루어진 문자열.\nF는 B 또는 E가 될 수 있어.\n연속 같은 문자 쌍 = 흥분도.\n가능한 흥분도의 개수를 구해!")}
+              "B, E, F로 이루어진 문자열.\nF는 B 또는 E가 될 수 있어요.\n연속 같은 문자 쌍 = 흥분도.\n가능한 흥분도의 개수를 구해요!")}
           </div>
         </div>),
     },
     {
       type: "reveal",
       narr: t(E,
-        "The excitement level is the number of positions where adjacent characters are the same.\nFor example, 'BEEB' has 1 pair (E,E at positions 2-3).", "흥분도는 인접한 문자가 같은 위치의 수야. 예를 들어 'BEEB'은 1쌍 (위치 2-3의 E,E)이 있어."),
+        "The excitement level is the number of positions where adjacent characters are the same.\nFor example, 'BEEB' has 1 pair (E,E at positions 2-3).", "흥분도는 인접한 문자가 같은 위치의 수예요. 예를 들어 'BEEB'은 1쌍 (위치 2-3의 E,E)이 있어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 14, padding: 14 }}>
@@ -122,7 +122,7 @@ export function makeFebCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getFeb23Sections(E),
     },
     {
@@ -132,7 +132,7 @@ export function makeFebCh2(E, lang = "py") {
       question: t(E, "Which data structure collects distinct values?", "서로 다른 값을 모으는 자료구조는?"),
       options: [t(E, "List", "리스트"), t(E, "Set", "집합"), t(E, "Dictionary", "딕셔너리")],
       correct: 1,
-      explain: t(E, "A set automatically removes duplicates!", "집합은 자동으로 중복을 제거해!"),
+      explain: t(E, "A set automatically removes duplicates!", "집합은 자동으로 중복을 제거해요!"),
     },
     {
       type: "input",

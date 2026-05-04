@@ -65,7 +65,7 @@ export function makeExplodingArrowCh1(E) {
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Use BFS/DFS to simulate chain reactions.\nEach arrow points to the next one in its direction. Track visited arrows to avoid cycles.",
-              "핵심: BFS/DFS로 연쇄 반응을 시뮬레이션해.\n각 화살은 자기 방향의 다음 화살을 가리켜.\n방문한 화살을 추적해서 순환을 피해.")}
+              "핵심: BFS/DFS로 연쇄 반응을 시뮬레이션해요.\n각 화살은 자기 방향의 다음 화살을 가리켜.\n방문한 화살을 추적해서 순환을 피해요.")}
           </div>
         </div>),
     },
@@ -91,7 +91,7 @@ export function makeExplodingArrowCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "3 arrows in a chain, all triggering the next one. How many explode?", "3개의 화살이 연쇄적으로 다음을 발동해. 몇 개가 폭발할까?"),
+        "3 arrows in a chain, all triggering the next one. How many explode?", "3개의 화살이 연쇄적으로 다음을 발동해요. 몇 개가 폭발할까?"),
       question: t(E,
         "Chain of 3 arrows. How many explode total?",
         "화살 3개 체인. 총 몇 개 폭발?"),
@@ -113,7 +113,7 @@ export function makeExplodingArrowCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Use BFS with a position map for efficient lookups. O(N * max_range) time in worst case.", "위치 맵으로 BFS를 사용해 효율적으로 탐색해. 최악의 경우 O(N * max_range) 시간."),
+        "Use BFS with a position map for efficient lookups. O(N * max_range) time in worst case.", "위치 맵으로 BFS를 사용해 효율적으로 탐색해요. 최악의 경우 O(N * max_range) 시간."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -121,7 +121,7 @@ export function makeExplodingArrowCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Store arrow positions in a hash map.\nBFS from the first arrow, following each arrow's direction to find the next target.",
-              "화살 위치를 해시맵에 저장.\n첫 번째 화살에서 BFS, 각 화살의 방향을 따라 다음 대상을 찾아.")}
+              "화살 위치를 해시맵에 저장.\n첫 번째 화살에서 BFS, 각 화살의 방향을 따라 다음 대상을 찾아요.")}
           </div>
         </div>),
     },
@@ -129,7 +129,7 @@ export function makeExplodingArrowCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getExplodingArrowSections(E),
     },
   ];

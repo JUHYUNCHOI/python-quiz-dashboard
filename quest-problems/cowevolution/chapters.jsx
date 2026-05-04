@@ -52,7 +52,7 @@ export function makeEvolutionCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given N sub-populations each with a set of characteristics, determine if a valid evolutionary tree exists.\nA characteristic should evolve only once (not independently in separate branches).", "N개의 하위 집단이 각각 특성 집합을 가지고 있어.\n유효한 진화 트리가 존재하는지 판별해.\n특성은 한 번만 진화해야 해 (별도 가지에서 독립적으로 진화하면 안 돼)."),
+        "Given N sub-populations each with a set of characteristics, determine if a valid evolutionary tree exists.\nA characteristic should evolve only once (not independently in separate branches).", "N개의 하위 집단이 각각 특성 집합을 가지고 있어요.\n유효한 진화 트리가 존재하는지 판별해요.\n특성은 한 번만 진화해야 해 (별도 가지에서 독립적으로 진화하면 안 돼)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddec"}</div>
@@ -61,7 +61,7 @@ export function makeEvolutionCh1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Two characteristics 'cross' if there exist populations with {A only}, {B only}, and {A and B}.\nIf any pair crosses, the answer is 'no'.",
-              "핵심: 두 특성이 '교차'하려면 {A만}, {B만}, {A와 B} 모두 가진 집단이 존재해야 해.\n교차하는 쌍이 있으면 답은 'no'.")}
+              "핵심: 두 특성이 '교차'하려면 {A만}, {B만}, {A와 B} 모두 가진 집단이 존재해야 해요.\n교차하는 쌍이 있으면 답은 'no'.")}
           </div>
         </div>),
     },
@@ -80,7 +80,7 @@ export function makeEvolutionCh1(E) {
       correct: 0,
       explain: t(E,
         "No characteristics cross (fly and swim never appear together). A valid tree exists.",
-        "교차하는 특성이 없어 (fly와 swim이 함께 나타나지 않아). 유효한 트리가 존재해."),
+        "교차하는 특성이 없어 (fly와 swim이 함께 나타나지 않아). 유효한 트리가 존재해요."),
     },
     // 1-3: Input
     {
@@ -124,7 +124,7 @@ export function makeEvolutionCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getCowEvolutionSections(E),
     },
   ];

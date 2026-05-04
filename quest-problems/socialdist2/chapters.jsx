@@ -52,7 +52,7 @@ export function makeSocDist2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given cow positions and sick/healthy status, find the minimum number of initially infected cows.\nHealthy cows constrain the max spread radius R.", "소의 위치와 감염/건강 상태가 주어져. 최초 감염 소의 최소 수를 구해. 건강한 소가 최대 전파 반경 R을 제한해."),
+        "Given cow positions and sick/healthy status, find the minimum number of initially infected cows.\nHealthy cows constrain the max spread radius R.", "소의 위치와 감염/건강 상태가 주어져. 최초 감염 소의 최소 수를 구해요. 건강한 소가 최대 전파 반경 R을 제한해요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udda0"}</div>
@@ -125,7 +125,7 @@ export function makeSocDist2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getSocDist2Sections(E),
     },
   ];

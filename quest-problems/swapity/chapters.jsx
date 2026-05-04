@@ -60,7 +60,7 @@ export function makeSwapityCh1(E) {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Simulate one round to get the permutation.\nFind the cycle length. Then K mod cycle gives the effective number of rounds.",
-              "핵심: 한 라운드를 시뮬레이션해서 순열을 구해.\n순환 길이를 찾고, K mod 순환 = 실제 라운드 수.")}
+              "핵심: 한 라운드를 시뮬레이션해서 순열을 구해요.\n순환 길이를 찾고, K mod 순환 = 실제 라운드 수.")}
           </div>
         </div>),
     },
@@ -124,7 +124,7 @@ export function makeSwapityCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getSwapitySections(E),
     },
   ];

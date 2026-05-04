@@ -41,7 +41,7 @@ export function makeAcow1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie wants to maximize her h-index!\nShe has N papers and can add L extra citations.\nThe h-index is the largest h such that at least h papers have at least h citations.", "Bessie가 h-index를 최대화하고 싶어!\nN개의 논문이 있고 L개의 추가 인용을 넣을 수 있어.\nh-index는 최소 h개의 논문이 각각 h 이상의 인용을 가지는 최대 h야."),
+        "Bessie wants to maximize her h-index!\nShe has N papers and can add L extra citations.\nThe h-index is the largest h such that at least h papers have at least h citations.", "Bessie가 h-index를 최대화하고 싶어!\nN개의 논문이 있고 L개의 추가 인용을 넣을 수 있어요.\nh-index는 최소 h개의 논문이 각각 h 이상의 인용을 가지는 최대 h야."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcda"}</div>
@@ -58,7 +58,7 @@ export function makeAcow1Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Consider papers with citations [1, 3, 3, 100].\nWithout any extra citations, what is the h-index?", "인용수가 [1, 3, 3, 100]인 논문들이 있어. 추가 인용 없이 h-index는 얼마일까?"),
+        "Consider papers with citations [1, 3, 3, 100].\nWithout any extra citations, what is the h-index?", "인용수가 [1, 3, 3, 100]인 논문들이 있어요. 추가 인용 없이 h-index는 얼마일까요?"),
       question: t(E,
         "Papers [1, 3, 3, 100]. H-index without extra citations?",
         "논문 [1, 3, 3, 100]. 추가 인용 없이 h-index는?"),
@@ -76,7 +76,7 @@ export function makeAcow1Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "Papers [1, 3, 3, 100] with no extra citations. What is the h-index?", "논문 [1, 3, 3, 100]에 추가 인용이 없어. h-index는?"),
+        "Papers [1, 3, 3, 100] with no extra citations. What is the h-index?", "논문 [1, 3, 3, 100]에 추가 인용이 없어요. h-index는?"),
       question: t(E,
         "Papers [1, 3, 3, 100], L=0. H-index?",
         "논문 [1, 3, 3, 100], L=0. H-index는?"),
@@ -114,7 +114,7 @@ export function makeAcow1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getAcowdemia1Sections(E),
     },
   ];

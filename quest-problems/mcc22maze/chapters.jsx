@@ -44,7 +44,7 @@ export function makeMcc22MazeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a grid maze with walls and open cells, find the shortest path from the top-left corner to the bottom-right corner using BFS!", "벽과 빈 칸이 있는 격자 미로에서 BFS를 사용해 왼쪽 위에서 오른쪽 아래까지 최단 경로를 찾아!"),
+        "Given a grid maze with walls and open cells, find the shortest path from the top-left corner to the bottom-right corner using BFS!", "벽과 빈 칸이 있는 격자 미로에서 BFS를 사용해 왼쪽 위에서 오른쪽 아래까지 최단 경로를 찾아요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udff0"}</div>
@@ -73,7 +73,7 @@ export function makeMcc22MazeCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! In a grid, we can only move up/down/left/right. From (0,0) we go right to (0,1) then down to (1,1) = 2 steps.",
-        "맞아! 격자에서는 상하좌우만 이동 가능해. (0,0)에서 오른쪽 (0,1), 아래로 (1,1) = 2단계."),
+        "맞아! 격자에서는 상하좌우만 이동 가능해요. (0,0)에서 오른쪽 (0,1), 아래로 (1,1) = 2단계."),
     },
     // 1-3: Input
     {
@@ -109,7 +109,7 @@ export function makeMcc22MazeCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "BFS with a queue.\nMark visited cells with their distance. Each cell is enqueued and dequeued at most once.",
-              "큐를 이용한 BFS.\n방문한 칸에 거리를 기록. 각 칸은 최대 한 번 큐에 들어가고 나와.")}
+              "큐를 이용한 BFS.\n방문한 칸에 거리를 기록. 각 칸은 최대 한 번 큐에 들어가고 나와요.")}
           </div>
         </div>),
     },
@@ -117,7 +117,7 @@ export function makeMcc22MazeCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc22MazeSections(E),
     },
   ];

@@ -30,7 +30,7 @@ export function makeMcc15RectCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given 3 corners of an axis-aligned rectangle, find the 4th corner.\nThe sides are parallel to the x and y axes, so each x-coordinate and y-coordinate appears exactly twice!", "축에 정렬된 직사각형의 꼭짓점 3개가 주어지면 4번째 꼭짓점을 찾아. 변이 x축, y축에 평행하니까 각 x좌표와 y좌표가 정확히 2번씩 나타나!"),
+        "Given 3 corners of an axis-aligned rectangle, find the 4th corner.\nThe sides are parallel to the x and y axes, so each x-coordinate and y-coordinate appears exactly twice!", "축에 정렬된 직사각형의 꼭짓점 3개가 주어지면 4번째 꼭짓점을 찾아요. 변이 x축, y축에 평행하니까 각 x좌표와 y좌표가 정확히 2번씩 나타나!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u25ad"}</div>
@@ -47,7 +47,7 @@ export function makeMcc15RectCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Three corners of an axis-aligned rectangle are (0,0), (2,0), (0,3).\nWhat is the 4th corner?", "축 정렬 직사각형의 꼭짓점 3개가 (0,0), (2,0), (0,3)이야. 4번째 꼭짓점은?"),
+        "Three corners of an axis-aligned rectangle are (0,0), (2,0), (0,3).\nWhat is the 4th corner?", "축 정렬 직사각형의 꼭짓점 3개가 (0,0), (2,0), (0,3)이예요. 4번째 꼭짓점은?"),
       question: t(E,
         "Corners: (0,0), (2,0), (0,3). 4th corner?",
         "꼭짓점: (0,0), (2,0), (0,3). 4번째 꼭짓점은?"),
@@ -96,7 +96,7 @@ export function makeMcc15RectCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "For an axis-aligned rectangle, each x and y value appears exactly twice.\nXOR of all three gives the missing one because a ^ a = 0 and a ^ 0 = a.",
-              "축 정렬 직사각형에서 각 x, y 값은 정확히 2번 나타나.\n세 값의 XOR이 빠진 값을 주는 이유는 a ^ a = 0이고 a ^ 0 = a이기 때문이야.")}
+              "축 정렬 직사각형에서 각 x, y 값은 정확히 2번 나타나.\n세 값의 XOR이 빠진 값을 주는 이유는 a ^ a = 0이고 a ^ 0 = a이기 때문이예요.")}
           </div>
         </div>),
     },
@@ -104,7 +104,7 @@ export function makeMcc15RectCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc15RectSections(E),
     },
   ];

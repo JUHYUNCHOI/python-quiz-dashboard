@@ -29,7 +29,7 @@ export function makeMcc21MenuCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Build a nested menu tree.\nAdd items to parent categories.\nCount total items using tree traversal / recursion.", "중첩 메뉴 트리를 만들어. 부모 카테고리에 항목 추가. 트리 순회 / 재귀로 전체 항목 수를 세!"),
+        "Build a nested menu tree.\nAdd items to parent categories.\nCount total items using tree traversal / recursion.", "중첩 메뉴 트리를 만들어요. 부모 카테고리에 항목 추가. 트리 순회 / 재귀로 전체 항목 수를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udccb"}</div>
@@ -92,7 +92,7 @@ export function makeMcc21MenuCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc21MenuSections(E),
     },
   ];

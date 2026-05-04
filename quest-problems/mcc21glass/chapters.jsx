@@ -48,7 +48,7 @@ export function makeMcc21GlassCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We have N glass plates arranged in a circle.\nHow many different ways can we arrange them?\nLet's figure it out!\n🥛", "N개의 유리판이 원형으로 배열돼 있어. 몇 가지 다른 방법으로 배열할 수 있을까? 알아보자! 🥛"),
+        "We have N glass plates arranged in a circle.\nHow many different ways can we arrange them?\nLet's figure it out!\n🥛", "N개의 유리판이 원형으로 배열돼 있어요. 몇 가지 다른 방법으로 배열할 수 있을까? 알아보자! 🥛"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🥛</div>
@@ -98,7 +98,7 @@ export function makeMcc21GlassCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "In a circle, there's no 'start' or 'end'.\nRotating the entire arrangement gives the same circle.\nA-B-C, B-C-A, and C-A-B are all the same circular arrangement!", "원형에는 '시작'이나 '끝'이 없어. 전체 배열을 회전해도 같은 원이야. A-B-C, B-C-A, C-A-B은 모두 같은 원형 배열!"),
+        "In a circle, there's no 'start' or 'end'.\nRotating the entire arrangement gives the same circle.\nA-B-C, B-C-A, and C-A-B are all the same circular arrangement!", "원형에는 '시작'이나 '끝'이 없어요. 전체 배열을 회전해도 같은 원이예요. A-B-C, B-C-A, C-A-B은 모두 같은 원형 배열!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ display: "flex", justifyContent: "center", gap: 6, alignItems: "center" }}>
@@ -124,7 +124,7 @@ export function makeMcc21GlassCh1(E) {
         "4개의 원형: A-B-C-D. '같은' 회전은 몇 가지?"),
       options: ["4 (ABCD, BCDA, CDAB, DABC)", "3", "2", "1"],
       correct: 0,
-      explain: t(E, "N items in a circle → N rotations are all the same! ✅", "원형의 N개 항목 → N가지 회전이 모두 같아! ✅"),
+      explain: t(E, "N items in a circle → N rotations are all the same! ✅", "원형의 N개 항목 → N가지 회전이 모두 같아요! ✅"),
     },
 
     // 1-5 직선 순열: N!
@@ -161,7 +161,7 @@ export function makeMcc21GlassCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "For circles: every arrangement has N rotations that look the same.\nSo divide by N!\nCircle arrangements = N!/N = (N-1)!", "원형에서: 모든 배열에는 같아 보이는 N개 회전이 있어. N으로 나누면 돼! 원형 배열 = N!/N = (N-1)!"),
+        "For circles: every arrangement has N rotations that look the same.\nSo divide by N!\nCircle arrangements = N!/N = (N-1)!", "원형에서: 모든 배열에는 같아 보이는 N개 회전이 있어요. N으로 나누면 돼요! 원형 배열 = N!/N = (N-1)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
@@ -187,7 +187,7 @@ export function makeMcc21GlassCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "3 plates in a circle: (3-1)!\n= 2!\n= 2.\nThose 6 line arrangements become just 2 circle arrangements!", "원형에 유리판 3개: (3-1)! = 2! = 2. 6개의 직선 배열이 2개의 원형 배열이 돼!"),
+        "3 plates in a circle: (3-1)!\n= 2!\n= 2.\nThose 6 line arrangements become just 2 circle arrangements!", "원형에 유리판 3개: (3-1)! = 2! = 2. 6개의 직선 배열이 2개의 원형 배열이 돼요!"),
       question: t(E, "Circle arrangements of 3 plates = (3-1)! = ?", "유리판 3개의 원형 배열 = (3-1)! = ?"),
       options: ["2", "3", "6", "1"],
       correct: 0,
@@ -279,7 +279,7 @@ export function makeMcc21GlassCh2(E) {
       type: "quiz",
       narr: t(E,
         "Quick check! 0! is defined as 1 (special rule). 1! = 1.", "확인! 0!은 1로 정의 (특별 규칙). 1! = 1."),
-      question: t(E, "What is 0! ?", "0!은 뭐야?"),
+      question: t(E, "What is 0! ?", "0!은 뭐예요?"),
       options: ["1", "0", "undefined"],
       correct: 0,
       explain: t(E, "By convention, 0! = 1. This makes many formulas work nicely ✅", "관례상 0! = 1. 이러면 많은 공식이 깔끔 ✅"),
@@ -320,7 +320,7 @@ export function makeMcc21GlassCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Python has a built-in: math.factorial(n) computes n!\ninstantly.\nNo need to write our own loop!", "파이썬에 내장 함수: math.factorial(n)이 n!을 바로 계산. 루프 직접 짤 필요 없어!"),
+        "Python has a built-in: math.factorial(n) computes n!\ninstantly.\nNo need to write our own loop!", "파이썬에 내장 함수: math.factorial(n)이 n!을 바로 계산. 루프 직접 짤 필요 없어요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
@@ -403,7 +403,7 @@ export function makeMcc21GlassCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: Import the math module. It has our factorial function built-in!", "1단계: math 모듈 임포트. 팩토리얼 함수가 내장돼 있어!"),
+        "Step 1: Import the math module. It has our factorial function built-in!", "1단계: math 모듈 임포트. 팩토리얼 함수가 내장돼 있어요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
@@ -448,7 +448,7 @@ export function makeMcc21GlassCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "What does math.factorial(N-1) compute when N=4?", "N=4일 때 math.factorial(N-1)은 뭘 계산해?"),
+        "What does math.factorial(N-1) compute when N=4?", "N=4일 때 math.factorial(N-1)은 뭘 계산해요?"),
       question: t(E, "math.factorial(4-1) = math.factorial(3) = ?", "math.factorial(4-1) = math.factorial(3) = ?"),
       options: ["6", "24", "3", "12"],
       correct: 0,
@@ -459,7 +459,7 @@ export function makeMcc21GlassCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "We could also compute factorial ourselves with a loop!\nBut math.factorial is simpler and likely faster.", "루프로 직접 팩토리얼을 구할 수도 있어! 하지만 math.factorial이 더 간단하고 빠를 거야."),
+        "We could also compute factorial ourselves with a loop!\nBut math.factorial is simpler and likely faster.", "루프로 직접 팩토리얼을 구할 수도 있어요! 하지만 math.factorial이 더 간단하고 빠를 거예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
@@ -505,7 +505,7 @@ export function makeMcc21GlassCh3(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc21GlassSections(E),
     },
   ];

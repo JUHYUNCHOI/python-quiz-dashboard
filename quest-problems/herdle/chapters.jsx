@@ -54,7 +54,7 @@ export function makeHerdleCh1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Count greens first (exact matches).\nThen for remaining cells, match breeds up to available count to get yellows.",
-              "핵심: 먼저 초록(정확한 일치)을 세고,\n남은 셀에서 품종별로 가능한 수만큼 매칭해서 노란색을 구해.")}
+              "핵심: 먼저 초록(정확한 일치)을 세고,\n남은 셀에서 품종별로 가능한 수만큼 매칭해서 노란색을 구해요.")}
           </div>
         </div>),
     },
@@ -62,7 +62,7 @@ export function makeHerdleCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If the answer grid is all 'A' and the guess grid is also all 'A', every cell matches exactly!", "정답 그리드가 전부 'A'이고 추측 그리드도 전부 'A'이면, 모든 셀이 정확히 일치해!"),
+        "If the answer grid is all 'A' and the guess grid is also all 'A', every cell matches exactly!", "정답 그리드가 전부 'A'이고 추측 그리드도 전부 'A'이면, 모든 셀이 정확히 일치해요!"),
       question: t(E,
         "Answer grid: all 'A'. Guess grid: all 'A'. How many green and yellow tiles?",
         "정답 그리드: 전부 'A'. 추측 그리드: 전부 'A'. 초록과 노란 타일 수는?"),
@@ -86,7 +86,7 @@ export function makeHerdleCh1(E) {
         "정답=전부 'A', 추측=전부 'A'. 초록 개수?"),
       hint: t(E,
         "Every cell matches, so all 9 are green.",
-        "모든 셀이 일치하니까 9개 다 초록이야."),
+        "모든 셀이 일치하니까 9개 다 초록이예요."),
       answer: 9,
     },
   ];
@@ -102,7 +102,7 @@ export function makeHerdleCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The grid is always 3x3, so we just iterate 9 cells twice. O(1) per test case!", "그리드는 항상 3x3이니까 9개 셀을 두 번 순회하면 돼. 테스트 케이스당 O(1)!"),
+        "The grid is always 3x3, so we just iterate 9 cells twice. O(1) per test case!", "그리드는 항상 3x3이니까 9개 셀을 두 번 순회하면 돼요. 테스트 케이스당 O(1)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -118,7 +118,7 @@ export function makeHerdleCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getHerdleSections(E),
     },
   ];

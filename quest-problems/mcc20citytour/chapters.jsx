@@ -33,7 +33,7 @@ export function makeMcc20CityTourCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Fluffy explores a grid city, jumping to adjacent buildings.\nCount how many buildings Fluffy can visit using BFS.", "Fluffy가 격자 도시를 탐험하며 인접 건물로 점프해. BFS로 방문할 수 있는 건물 수를 세!"),
+        "Fluffy explores a grid city, jumping to adjacent buildings.\nCount how many buildings Fluffy can visit using BFS.", "Fluffy가 격자 도시를 탐험하며 인접 건물로 점프해요. BFS로 방문할 수 있는 건물 수를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfd9\ufe0f"}</div>
@@ -49,7 +49,7 @@ export function makeMcc20CityTourCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "3x3 grid all 1s, Fluffy at (1,1). How many buildings can Fluffy visit?", "3x3 격자 전부 1, Fluffy가 (1,1)에 있어. 몇 개 건물 방문 가능?"),
+        "3x3 grid all 1s, Fluffy at (1,1). How many buildings can Fluffy visit?", "3x3 격자 전부 1, Fluffy가 (1,1)에 있어요. 몇 개 건물 방문 가능?"),
       question: t(E,
         "3x3 grid, all buildings connected. Fluffy at center. How many can visit?",
         "3x3 격자, 모든 건물 연결. Fluffy 중앙. 몇 개 방문 가능?"),
@@ -61,7 +61,7 @@ export function makeMcc20CityTourCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! All 9 cells are connected, so BFS visits all of them.",
-        "맞아! 9개 셀 모두 연결돼 있어서 BFS가 전부 방문해."),
+        "맞아! 9개 셀 모두 연결돼 있어서 BFS가 전부 방문해요."),
     },
     {
       type: "input",
@@ -96,7 +96,7 @@ export function makeMcc20CityTourCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc20CityTourSections(E),
     },
   ];

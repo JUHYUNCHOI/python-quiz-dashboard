@@ -53,7 +53,7 @@ export function makeDroughtCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows in a line.\nYou can feed adjacent pairs: both decrease by 1.\nMake all cows equal with minimum operations, or report impossible.", "N마리 소가 줄 서 있어. 인접한 쌍에게 먹이를 줄 수 있어: 둘 다 1 감소. 최소 횟수로 모든 소를 같게 만들거나, 불가능하면 보고해!"),
+        "N cows in a line.\nYou can feed adjacent pairs: both decrease by 1.\nMake all cows equal with minimum operations, or report impossible.", "N마리 소가 줄 서 있어요. 인접한 쌍에게 먹이를 줄 수 있어: 둘 다 1 감소. 최소 횟수로 모든 소를 같게 만들거나, 불가능하면 보고해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfdc\ufe0f"}</div>
@@ -62,7 +62,7 @@ export function makeDroughtCh1(E) {
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Process left to right.\nFor each target value, greedily reduce from left. The leftmost cow determines how many times to feed pair (0,1), which affects cow 1, and so on.",
-              "핵심: 왼쪽에서 오른쪽으로 처리.\n각 목표값에 대해 왼쪽부터 그리디하게 줄여.\n맨 왼쪽 소가 쌍(0,1)의 먹이 횟수를 결정하고, 이것이 소 1에 영향을 줘.")}
+              "핵심: 왼쪽에서 오른쪽으로 처리.\n각 목표값에 대해 왼쪽부터 그리디하게 줄여.\n맨 왼쪽 소가 쌍(0,1)의 먹이 횟수를 결정하고, 이것이 소 1에 영향을 줘요.")}
           </div>
         </div>),
     },
@@ -70,7 +70,7 @@ export function makeDroughtCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's think about [2, 2].\nWe can feed pair (0,1) to decrease both.\nTarget 0 needs 2 feeds.", "[2, 2]를 생각해보자. 쌍(0,1)에 먹이를 줘서 둘 다 줄일 수 있어. 목표 0이면 2번 먹이를 줘야 해."),
+        "Let's think about [2, 2].\nWe can feed pair (0,1) to decrease both.\nTarget 0 needs 2 feeds.", "[2, 2]를 생각해보자. 쌍(0,1)에 먹이를 줘서 둘 다 줄일 수 있어요. 목표 0이면 2번 먹이를 줘야 해요."),
       question: t(E,
         "[2, 2]: feeding pair (0,1) twice gives [0, 0]. How many operations?",
         "[2, 2]: 쌍(0,1)에 2번 먹이 주면 [0, 0]. 몇 번의 연산?"),
@@ -82,7 +82,7 @@ export function makeDroughtCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! Each feed of pair (0,1) is one operation. We need 2 to reach [0,0].",
-        "맞아! 쌍(0,1)에 먹이 주는 것이 1번 연산. [0,0]에 도달하려면 2번 필요해."),
+        "맞아! 쌍(0,1)에 먹이 주는 것이 1번 연산. [0,0]에 도달하려면 2번 필요해요."),
     },
     // 1-3: Input
     {
@@ -126,7 +126,7 @@ export function makeDroughtCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getDroughtSections(E),
     },
   ];

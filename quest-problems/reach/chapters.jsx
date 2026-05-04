@@ -133,7 +133,7 @@ export function makeReachCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Reachability Queries!\nA dragon starts in city 1.\nSome roads are damaged and will break at time K.\nFor each K, how many cities can the dragon reach?\n🐉", "도달 가능성 문제! 용이 도시 1에서 출발해. 일부 도로가 손상되어 있어서 시간 K에 파괴돼. 각 K마다 용이 도달할 수 있는 도시는 몇 개일까? 🐉"),
+        "Reachability Queries!\nA dragon starts in city 1.\nSome roads are damaged and will break at time K.\nFor each K, how many cities can the dragon reach?\n🐉", "도달 가능성 문제! 용이 도시 1에서 출발해요. 일부 도로가 손상되어 있어서 시간 K에 파괴돼요. 각 K마다 용이 도달할 수 있는 도시는 몇 개일까요? 🐉"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐉</div>
@@ -142,7 +142,7 @@ export function makeReachCh1(E) {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N cities,\nM roads → some roads are damaged → apocalypse at time K destroys damaged roads → how many cities reachable from city 1?",
-              "도시 N개,\n도로 M개 → 일부 도로 손상 → 시간 K에 아포칼립스 발생,\n손상 도로 파괴 → 도시 1에서 몇 개 도시에 갈 수 있어?")}
+              "도시 N개,\n도로 M개 → 일부 도로 손상 → 시간 K에 아포칼립스 발생,\n손상 도로 파괴 → 도시 1에서 몇 개 도시에 갈 수 있어요?")}
           </div>
         </div>),
     },
@@ -150,7 +150,7 @@ export function makeReachCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's our sample: 5 cities, 6 roads.\nRed dashed lines are damaged roads.\nThey work for now, but will break at time K!", "예제를 보자! 도시 5개, 도로 6개야. 빨간 점선이 손상된 도로야. 지금은 쓸 수 있지만 시간 K가 되면 부서져!"),
+        "Here's our sample: 5 cities, 6 roads.\nRed dashed lines are damaged roads.\nThey work for now, but will break at time K!", "예제를 보자! 도시 5개, 도로 6개예요. 빨간 점선이 손상된 도로예요. 지금은 쓸 수 있지만 시간 K가 되면 부서져!"),
       content: (() => (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
@@ -172,13 +172,13 @@ export function makeReachCh1(E) {
     {
       type: "graphViz",
       narr: t(E,
-        "Here's the graph visually.\nCity 1 is the starting point (purple).\nThe numbers on roads are their lengths (travel time in minutes).", "그래프를 눈으로 보자! 도시 1이 출발점(보라색)이야. 도로 위의 숫자는 길이(이동 시간, 분 단위)야."),
+        "Here's the graph visually.\nCity 1 is the starting point (purple).\nThe numbers on roads are their lengths (travel time in minutes).", "그래프를 눈으로 보자! 도시 1이 출발점(보라색)이예요. 도로 위의 숫자는 길이(이동 시간, 분 단위)야."),
     },
     // 1-4: Apocalypse rules
     {
       type: "reveal",
       narr: t(E,
-        "The rules: Damaged roads break at time K.\nYou CAN'T start a damaged road at time K or later.\nAnd if you're on a damaged road when the apocalypse hits, you can't use it — UNLESS you arrive exactly at time K.", "규칙을 알아보자! 손상 도로는 시간 K에 부서져. K 이후에는 못 써. 이동 중에 K가 되면 안 되지만, 딱 K에 도착하면 괜찮아!"),
+        "The rules: Damaged roads break at time K.\nYou CAN'T start a damaged road at time K or later.\nAnd if you're on a damaged road when the apocalypse hits, you can't use it — UNLESS you arrive exactly at time K.", "규칙을 알아보자! 손상 도로는 시간 K에 부서져. K 이후에는 못 써요. 이동 중에 K가 되면 안 되지만, 딱 K에 도착하면 괜찮아!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
@@ -213,7 +213,7 @@ export function makeReachCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "K=6: The dragon is in city 1.\nRoad 1→2 is damaged (length 7).\nCan the dragon reach city 2 when K=6?", "K=6일 때: 용이 도시 1에 있어. 도로 1→2는 손상 도로(길이 7)야. K=6이면 도시 2에 갈 수 있을까?"),
+        "K=6: The dragon is in city 1.\nRoad 1→2 is damaged (length 7).\nCan the dragon reach city 2 when K=6?", "K=6일 때: 용이 도시 1에 있어요. 도로 1→2는 손상 도로(길이 7)야. K=6이면 도시 2에 갈 수 있을까?"),
       question: t(E,
         "K=6: Road 1→2 (damaged, length 7). Start=0, arrive=7. Can dragon use it?",
         "K=6: 도로 1→2 (손상, 길이 7). 출발=0, 도착=7.\n도착 시각 7 > K=6이니까..."),
@@ -224,7 +224,7 @@ export function makeReachCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! Arrive time 7 > K=6, so the damaged road can't be used. Only city 1 and city 5 (via safe road, length 18) are reachable.",
-        "정답! 도착 시각 7 > K=6이라 손상 도로를 못 써. 안전한 도로로 갈 수 있는 도시 1, 5만 도달 가능해 (답: 2개)."),
+        "정답! 도착 시각 7 > K=6이라 손상 도로를 못 써요. 안전한 도로로 갈 수 있는 도시 1, 5만 도달 가능해 (답: 2개)."),
     },
     // 1-6: Quiz — K=12
     {
@@ -247,7 +247,7 @@ export function makeReachCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "K=11: City 4 needs time 12 via 1→2→4 (7+5=12 > 11).\nIs there another path?\nAll roads to city 4 are damaged.\nSo how many cities are reachable?", "K=11: 도시 4까지 1→2→4 경로가 7+5=12분인데 12 > 11이라 불가! 도시 4로 가는 도로는 다 손상이야. 도달 가능한 도시는 몇 개?"),
+        "K=11: City 4 needs time 12 via 1→2→4 (7+5=12 > 11).\nIs there another path?\nAll roads to city 4 are damaged.\nSo how many cities are reachable?", "K=11: 도시 4까지 1→2→4 경로가 7+5=12분인데 12 > 11이라 불가! 도시 4로 가는 도로는 다 손상이예요. 도달 가능한 도시는 몇 개?"),
       question: t(E,
         "K=11: How many cities reachable? (city 4 needs 12 min)",
         "K=11일 때 도달 가능한 도시 수는?\n(도시 4는 최소 12분 걸림)"),
@@ -266,30 +266,30 @@ export function makeReachCh2(E) {
     {
       type: "reachSim",
       narr: t(E,
-        "Move the K slider and watch which cities become reachable!\nGreen = reachable, red = unreachable.\nSee how it changes!", "K 슬라이더를 움직여봐! 초록 = 도달 가능, 빨강 = 불가. K가 바뀌면 도달 가능한 도시가 어떻게 변하는지 보자!"),
+        "Move the K slider and watch which cities become reachable!\nGreen = reachable, red = unreachable.\nSee how it changes!", "K 슬라이더를 움직여봐요! 초록 = 도달 가능, 빨강 = 불가. K가 바뀌면 도달 가능한 도시가 어떻게 변하는지 보자!"),
     },
     // 2-2: Quiz — Key insight
     {
       type: "quiz",
       narr: t(E,
-        "Notice something? As K increases, you can reach MORE cities (or stay the same). Why?", "눈치챘어? K가 커지면 갈 수 있는 도시가 늘어나거나 같아! 왜 그럴까?"),
+        "Notice something? As K increases, you can reach MORE cities (or stay the same). Why?", "눈치챘어? K가 커지면 갈 수 있는 도시가 늘어나거나 같아요! 왜 그럴까?"),
       question: t(E,
         "Why does increasing K never decrease reachable cities?",
         "K가 커지면 도달 가능한 도시 수가 줄어들 수 있을까?"),
       options: [
-        t(E, "No! More time = more damaged roads usable", "없어! 시간이 많을수록 손상 도로를 더 쓸 수 있으니까"),
+        t(E, "No! More time = more damaged roads usable", "없어요! 시간이 많을수록 손상 도로를 더 쓸 수 있으니까"),
         t(E, "Yes, it could decrease", "있어, 줄어들 수도 있어"),
       ],
       correct: 0,
       explain: t(E,
         "Right! Larger K means more time before apocalypse → can use damaged roads for longer → can only reach MORE cities.",
-        "정답! K가 클수록 아포칼립스 전 시간이 많아 → 손상 도로를 더 오래 쓸 수 있어 → 도달 가능 도시는 늘어나기만 해!"),
+        "정답! K가 클수록 아포칼립스 전 시간이 많아 → 손상 도로를 더 오래 쓸 수 있어 → 도달 가능 도시는 늘어나기만 해요!"),
     },
     // 2-3: Dijkstra concept
     {
       type: "reveal",
       narr: t(E,
-        "The key algorithm is Dijkstra!\nIt finds shortest paths from city 1.\nThen for each damaged road, check if we can use it within time K.", "핵심 알고리즘은 다익스트라야! 도시 1에서 각 도시까지 최단 거리를 구해. 손상 도로는 출발 시각 < K, 도착 시각 ≤ K인 경우만 사용!"),
+        "The key algorithm is Dijkstra!\nIt finds shortest paths from city 1.\nThen for each damaged road, check if we can use it within time K.", "핵심 알고리즘은 다익스트라예요! 도시 1에서 각 도시까지 최단 거리를 구해요. 손상 도로는 출발 시각 < K, 도착 시각 ≤ K인 경우만 사용!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
@@ -315,7 +315,7 @@ export function makeReachCh2(E) {
     {
       type: "dijkstraTrace",
       narr: t(E,
-        "Let's trace Dijkstra on the full graph (all roads usable). Watch how distances update!", "전체 그래프에서 다익스트라를 따라가보자! (모든 도로 사용 가능) 거리가 어떻게 갱신되는지 봐!"),
+        "Let's trace Dijkstra on the full graph (all roads usable). Watch how distances update!", "전체 그래프에서 다익스트라를 따라가보자! (모든 도로 사용 가능) 거리가 어떻게 갱신되는지 봐요!"),
     },
     // 2-5: Input — verify sample answer
     {
@@ -448,7 +448,7 @@ export function makeReachCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Why does this work?\nDijkstra always processes the smallest distance first.\nSo when we reach a node, it's via the shortest path.\nFor damaged roads, we just add the time constraint.", "왜 이게 맞을까? 다익스트라는 항상 가장 짧은 거리부터 처리해. 그래서 노드에 도착하면 최단 경로로 온 거야. 손상 도로는 시간 제한만 추가하면 끝!"),
+        "Why does this work?\nDijkstra always processes the smallest distance first.\nSo when we reach a node, it's via the shortest path.\nFor damaged roads, we just add the time constraint.", "왜 이게 맞을까? 다익스트라는 항상 가장 짧은 거리부터 처리해요. 그래서 노드에 도착하면 최단 경로로 온 거예요. 손상 도로는 시간 제한만 추가하면 끝!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
@@ -495,13 +495,13 @@ export function makeReachCh3(E) {
       correct: 0,
       explain: t(E,
         "Right! Each query runs a full Dijkstra. For full marks, you'd need to optimize using offline processing.",
-        "정답! 각 쿼리마다 다익스트라를 돌려. 만점을 받으려면 오프라인 처리로 최적화해야 해!"),
+        "정답! 각 쿼리마다 다익스트라를 돌려. 만점을 받으려면 오프라인 처리로 최적화해야 해요!"),
     },
     // 3-6: Full code
     {
       type: "code",
       narr: t(E,
-        "Here's the complete solution! Read → Dijkstra per query → count reachable. 🐉", "전체 풀이 코드야! 순서: 입력 읽기 → 쿼리마다 다익스트라 → 도달 가능 수 세기. 🐉"),
+        "Here's the complete solution! Read → Dijkstra per query → count reachable. 🐉", "전체 풀이 코드예요! 순서: 입력 읽기 → 쿼리마다 다익스트라 → 도달 가능 수 세기. 🐉"),
       code: SOLUTION_CODE,
       label: t(E, "Show complete code", "전체 코드 보기"),
     },

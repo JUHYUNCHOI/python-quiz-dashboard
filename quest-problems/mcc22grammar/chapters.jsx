@@ -51,7 +51,7 @@ export function makeMcc22GrammarCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We have a grammar graph where nodes are words (WE, THEY, DONT, KNOW, THAT) and directed edges define valid transitions.\nGiven a sentence, check if each consecutive pair follows an edge in the graph!", "단어(WE, THEY, DONT, KNOW, THAT)가 노드이고 방향 간선이 유효한 전환을 정의하는 문법 그래프가 있어.\n문장이 주어지면, 연속된 단어 쌍이 그래프의 간선을 따르는지 확인해!"),
+        "We have a grammar graph where nodes are words (WE, THEY, DONT, KNOW, THAT) and directed edges define valid transitions.\nGiven a sentence, check if each consecutive pair follows an edge in the graph!", "단어(WE, THEY, DONT, KNOW, THAT)가 노드이고 방향 간선이 유효한 전환을 정의하는 문법 그래프가 있어요.\n문장이 주어지면, 연속된 단어 쌍이 그래프의 간선을 따르는지 확인해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcd6"}</div>
@@ -60,7 +60,7 @@ export function makeMcc22GrammarCh1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Build an adjacency list from the grammar edges.\nFor each sentence, check that every consecutive word pair has a valid edge. Simple graph traversal / edge lookup.",
-              "핵심: 문법 간선으로 인접 리스트를 만들어.\n각 문장에서 연속된 단어 쌍이 유효한 간선인지 확인해.\n간단한 그래프 탐색 / 간선 조회.")}
+              "핵심: 문법 간선으로 인접 리스트를 만들어요.\n각 문장에서 연속된 단어 쌍이 유효한 간선인지 확인해요.\n간단한 그래프 탐색 / 간선 조회.")}
           </div>
         </div>),
     },
@@ -71,7 +71,7 @@ export function makeMcc22GrammarCh1(E) {
         "The grammar graph has edges: WE->DONT, WE->KNOW, THEY->DONT, THEY->KNOW, DONT->KNOW, KNOW->THAT, THAT->WE, THAT->THEY.\nIs the sentence 'WE KNOW' valid?", "문법 그래프 간선: WE->DONT, WE->KNOW, THEY->DONT, THEY->KNOW, DONT->KNOW, KNOW->THAT, THAT->WE, THAT->THEY.\n'WE KNOW' 문장은 유효할까?"),
       question: t(E,
         "WE can go to DONT or KNOW. Is 'WE KNOW' a valid sentence?",
-        "WE는 DONT 또는 KNOW로 갈 수 있어. 'WE KNOW'는 유효한 문장일까?"),
+        "WE는 DONT 또는 KNOW로 갈 수 있어요. 'WE KNOW'는 유효한 문장일까요?"),
       options: [
         t(E, "Yes, WE->KNOW is a valid edge", "맞아, WE->KNOW는 유효한 간선이야"),
         t(E, "No, WE cannot reach KNOW", "아니, WE는 KNOW에 도달할 수 없어"),
@@ -79,19 +79,19 @@ export function makeMcc22GrammarCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! WE->KNOW is a direct edge in the grammar graph, so 'WE KNOW' is valid.",
-        "맞아! WE->KNOW는 문법 그래프의 직접 간선이니까 'WE KNOW'는 유효해."),
+        "맞아! WE->KNOW는 문법 그래프의 직접 간선이니까 'WE KNOW'는 유효해요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "Is 'WE KNOW' valid? Answer 1 for yes, 0 for no.", "'WE KNOW'는 유효한가? 예면 1, 아니면 0을 입력해."),
+        "Is 'WE KNOW' valid? Answer 1 for yes, 0 for no.", "'WE KNOW'는 유효한가? 예면 1, 아니면 0을 입력해요."),
       question: t(E,
         "Is 'WE KNOW' a valid sentence? (1=yes, 0=no)",
         "'WE KNOW'는 유효한 문장인가? (1=예, 0=아니오)"),
       hint: t(E,
         "WE can go to DONT or KNOW. Since WE->KNOW exists, it's valid!",
-        "WE는 DONT 또는 KNOW로 갈 수 있어. WE->KNOW가 존재하니까 유효해!"),
+        "WE는 DONT 또는 KNOW로 갈 수 있어요. WE->KNOW가 존재하니까 유효해요!"),
       answer: 1,
     },
   ];
@@ -123,7 +123,7 @@ export function makeMcc22GrammarCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc22GrammarSections(E),
     },
   ];

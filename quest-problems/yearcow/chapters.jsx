@@ -43,7 +43,7 @@ export function makeYearCowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The Chinese zodiac repeats every 12 years.\nBessie knows relationships like 'my friend was born in the previous Dragon year'.\nChain these to find the total age difference!", "십이지는 12년마다 반복돼. Bessie는 '내 친구는 이전 용띠 해에 태어났어' 같은 관계를 알고 있어. 이들을 연결해서 총 나이 차이를 구해!"),
+        "The Chinese zodiac repeats every 12 years.\nBessie knows relationships like 'my friend was born in the previous Dragon year'.\nChain these to find the total age difference!", "십이지는 12년마다 반복돼요. Bessie는 '내 친구는 이전 용띠 해에 태어났어' 같은 관계를 알고 있어요. 이들을 연결해서 총 나이 차이를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc02"}</div>
@@ -60,7 +60,7 @@ export function makeYearCowCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The zodiac repeats every 12 years. 2021 is an Ox year. What is the previous Ox year?", "십이지는 12년마다 반복돼. 2021년은 소띠 해야. 이전 소띠 해는?"),
+        "The zodiac repeats every 12 years. 2021 is an Ox year. What is the previous Ox year?", "십이지는 12년마다 반복돼요. 2021년은 소띠 해예요. 이전 소띠 해는?"),
       question: t(E,
         "Zodiac repeats every 12 years. Previous Ox year from 2021?",
         "십이지는 12년 주기. 2021년에서 이전 소띠 해는?"),
@@ -72,19 +72,19 @@ export function makeYearCowCh1(E) {
       correct: 0,
       explain: t(E,
         "2021 - 12 = 2009. The previous Ox year is always exactly 12 years before.",
-        "2021 - 12 = 2009. 이전 소띠 해는 항상 정확히 12년 전이야."),
+        "2021 - 12 = 2009. 이전 소띠 해는 항상 정확히 12년 전이예요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "How many animals are in the zodiac cycle?", "십이지에는 동물이 몇 마리야?"),
+        "How many animals are in the zodiac cycle?", "십이지에는 동물이 몇 마리예요?"),
       question: t(E,
         "How many animals in the zodiac cycle?",
         "십이지 주기에 동물 몇 마리?"),
       hint: t(E,
         "The Chinese zodiac has exactly 12 animals in its cycle.",
-        "십이지에는 정확히 12마리의 동물이 있어."),
+        "십이지에는 정확히 12마리의 동물이 있어요."),
       answer: 12,
     },
   ];
@@ -116,7 +116,7 @@ export function makeYearCowCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getYearCowSections(E),
     },
   ];

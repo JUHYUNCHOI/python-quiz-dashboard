@@ -34,7 +34,7 @@ export function makeCrossRd1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We observe 10 cows over time, each seen on side 0 or side 1 of the road.\nCount the total number of crossings (when a cow changes sides between observations).", "10마리 소를 시간에 따라 관찰해, 각각 도로의 0번 또는 1번 쪽에 있어. 관찰 사이에 소가 쪽을 바꾼 총 횟수 (횡단 횟수)를 세!"),
+        "We observe 10 cows over time, each seen on side 0 or side 1 of the road.\nCount the total number of crossings (when a cow changes sides between observations).", "10마리 소를 시간에 따라 관찰해, 각각 도로의 0번 또는 1번 쪽에 있어요. 관찰 사이에 소가 쪽을 바꾼 총 횟수 (횡단 횟수)를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -43,7 +43,7 @@ export function makeCrossRd1Ch1(E) {
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Track each cow's last known side.\nWhen we see it on a different side, that's a crossing. Simple simulation!",
-              "핵심: 각 소의 마지막으로 알려진 쪽을 추적해.\n다른 쪽에서 보이면 그게 횡단이야. 단순 시뮬레이션!")}
+              "핵심: 각 소의 마지막으로 알려진 쪽을 추적해요.\n다른 쪽에서 보이면 그게 횡단이예요. 단순 시뮬레이션!")}
           </div>
         </div>),
     },
@@ -51,7 +51,7 @@ export function makeCrossRd1Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A cow is seen at side 0, then later at side 1. How many crossings is that?", "소가 0번 쪽에서 보이고, 나중에 1번 쪽에서 보여. 횡단 몇 번이야?"),
+        "A cow is seen at side 0, then later at side 1. How many crossings is that?", "소가 0번 쪽에서 보이고, 나중에 1번 쪽에서 보여요. 횡단 몇 번이예요?"),
       question: t(E,
         "Cow seen at side 0, then side 1. How many crossings?",
         "소가 0번 쪽, 그 다음 1번 쪽. 횡단 몇 번?"),
@@ -63,7 +63,7 @@ export function makeCrossRd1Ch1(E) {
       correct: 0,
       explain: t(E,
         "Correct! The cow changed from side 0 to side 1, that's exactly 1 crossing.",
-        "맞아! 소가 0번 쪽에서 1번 쪽으로 바뀌었으니 정확히 1번 횡단이야."),
+        "맞아! 소가 0번 쪽에서 1번 쪽으로 바뀌었으니 정확히 1번 횡단이예요."),
     },
     // 1-3: Input
     {
@@ -91,7 +91,7 @@ export function makeCrossRd1Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "One pass through observations with a dictionary to track last side. O(N) time!", "관찰을 한 번 순회하면서 딕셔너리로 마지막 쪽을 추적해. O(N) 시간!"),
+        "One pass through observations with a dictionary to track last side. O(N) time!", "관찰을 한 번 순회하면서 딕셔너리로 마지막 쪽을 추적해요. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -99,7 +99,7 @@ export function makeCrossRd1Ch2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Use a dictionary mapping cow ID to its last known side.\nFor each observation, if the cow was seen before on a different side, increment crossings.",
-              "소 ID를 마지막으로 알려진 쪽에 매핑하는 딕셔너리를 사용해.\n각 관찰에서 소가 이전에 다른 쪽에서 보였으면 횡단 횟수를 증가시켜.")}
+              "소 ID를 마지막으로 알려진 쪽에 매핑하는 딕셔너리를 사용해요.\n각 관찰에서 소가 이전에 다른 쪽에서 보였으면 횡단 횟수를 증가시켜.")}
           </div>
         </div>),
     },
@@ -107,7 +107,7 @@ export function makeCrossRd1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getCrossRoad1Sections(E),
     },
   ];

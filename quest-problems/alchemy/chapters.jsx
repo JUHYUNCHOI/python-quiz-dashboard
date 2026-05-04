@@ -46,7 +46,7 @@ export function makeAlchemyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N metals with recipes that combine lower metals into higher ones.\nMaximize the amount of metal N you can create!", "N개의 금속과 레시피로 낮은 금속을 합쳐 높은 금속을 만들어. 금속 N을 최대한 많이 만들어!"),
+        "N metals with recipes that combine lower metals into higher ones.\nMaximize the amount of metal N you can create!", "N개의 금속과 레시피로 낮은 금속을 합쳐 높은 금속을 만들어요. 금속 N을 최대한 많이 만들어요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"⚗️"}</div>
@@ -55,7 +55,7 @@ export function makeAlchemyCh1(E) {
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Greedy from top down.\nTo make metal N, recursively try to gather ingredients. Use each metal at most once.",
-              "핵심: 위에서 아래로 그리디.\n금속 N을 만들려면 재료를 재귀적으로 모아. 각 금속은 최대 한 번 사용.")}
+              "핵심: 위에서 아래로 그리디.\n금속 N을 만들려면 재료를 재귀적으로 모아요. 각 금속은 최대 한 번 사용.")}
           </div>
         </div>),
     },
@@ -75,13 +75,13 @@ export function makeAlchemyCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! You need 1 of each ingredient. With 1x metal 2, you can only make 1x metal 3.",
-        "맞아! 각 재료가 1개씩 필요해. 금속2가 1개뿐이니 금속3은 1개만 만들 수 있어."),
+        "맞아! 각 재료가 1개씩 필요해요. 금속2가 1개뿐이니 금속3은 1개만 만들 수 있어요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "Same setup: recipe 1+2->3, have 2x metal 1 and 1x metal 2. How many metal 3 can you make?", "같은 설정: 레시피 1+2->3, 금속1 2개, 금속2 1개. 금속3을 몇 개 만들 수 있어?"),
+        "Same setup: recipe 1+2->3, have 2x metal 1 and 1x metal 2. How many metal 3 can you make?", "같은 설정: 레시피 1+2->3, 금속1 2개, 금속2 1개. 금속3을 몇 개 만들 수 있어요?"),
       question: t(E,
         "Recipe: 1+2->3. Have 2x metal 1, 1x metal 2. Max metal 3?",
         "레시피: 1+2->3. 금속1 2개, 금속2 1개. 최대 금속3?"),
@@ -111,7 +111,7 @@ export function makeAlchemyCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Recursively try to make metal N.\nFor each attempt, gather ingredients top-down. If any ingredient is missing, the attempt fails.",
-              "재귀적으로 금속 N 만들기 시도.\n각 시도에서 재료를 위에서 아래로 모아. 재료가 하나라도 없으면 실패.")}
+              "재귀적으로 금속 N 만들기 시도.\n각 시도에서 재료를 위에서 아래로 모아요. 재료가 하나라도 없으면 실패.")}
           </div>
         </div>),
     },
@@ -119,7 +119,7 @@ export function makeAlchemyCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getAlchemySections(E),
     },
   ];

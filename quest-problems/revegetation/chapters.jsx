@@ -39,7 +39,7 @@ export function makeRevegCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N pastures need grass from 4 types.\nSome cow pairs need different grass on their favorite pastures.\nFind the lexicographically smallest valid coloring.", "N개의 목초지에 4종류 잔디 중 하나를 심어야 해. 일부 소 쌍은 좋아하는 목초지의 잔디가 달라야 해. 사전순으로 가장 작은 유효 배색을 찾아!"),
+        "N pastures need grass from 4 types.\nSome cow pairs need different grass on their favorite pastures.\nFind the lexicographically smallest valid coloring.", "N개의 목초지에 4종류 잔디 중 하나를 심어야 해요. 일부 소 쌍은 좋아하는 목초지의 잔디가 달라야 해요. 사전순으로 가장 작은 유효 배색을 찾아요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf31"}</div>
@@ -69,7 +69,7 @@ export function makeRevegCh1(E) {
       correct: 0,
       explain: t(E,
         "Greedy assigns the smallest available color. With no constraints, that's 1.",
-        "그리디는 가장 작은 사용 가능한 색을 배정해. 제약이 없으면 1이야."),
+        "그리디는 가장 작은 사용 가능한 색을 배정해요. 제약이 없으면 1이예요."),
     },
     // 1-3: Input
     {
@@ -113,7 +113,7 @@ export function makeRevegCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getRevegSections(E),
     },
   ];

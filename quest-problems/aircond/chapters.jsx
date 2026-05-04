@@ -52,7 +52,7 @@ export function makeAirCondCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows need cooling in their stall ranges.\nM air conditioning units are available (M is at most 10).\nEach AC has a range, power, and cost.\nFind the minimum cost subset of ACs that satisfies all cows!", "N마리의 소가 각자의 축사 범위에서 냉방이 필요해.\nM개의 에어컨이 있어 (M은 최대 10).\n각 에어컨은 범위, 파워, 비용이 있어.\n모든 소를 만족시키는 최소 비용 에어컨 조합을 찾아!"),
+        "N cows need cooling in their stall ranges.\nM air conditioning units are available (M is at most 10).\nEach AC has a range, power, and cost.\nFind the minimum cost subset of ACs that satisfies all cows!", "N마리의 소가 각자의 축사 범위에서 냉방이 필요해요.\nM개의 에어컨이 있어 (M은 최대 10).\n각 에어컨은 범위, 파워, 비용이 있어요.\n모든 소를 만족시키는 최소 비용 에어컨 조합을 찾아요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2744\ufe0f"}</div>
@@ -61,7 +61,7 @@ export function makeAirCondCh1(E) {
           <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Since M <= 10, we can try all 2^M subsets (at most 1024).\nFor each subset, check if all cows are satisfied and track the minimum cost.",
-              "핵심: M <= 10이므로,\n모든 2^M 부분집합을 시도할 수 있어 (최대 1024개). 각 부분집합에 대해 모든 소가 만족되는지 확인하고 최소 비용을 추적해.")}
+              "핵심: M <= 10이므로,\n모든 2^M 부분집합을 시도할 수 있어 (최대 1024개). 각 부분집합에 대해 모든 소가 만족되는지 확인하고 최소 비용을 추적해요.")}
           </div>
         </div>),
     },
@@ -81,19 +81,19 @@ export function makeAirCondCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! 2^10 = 1024. Each AC is either included or not, giving 2^M subsets. This is very manageable!",
-        "맞아! 2^10 = 1024. 각 에어컨을 포함하거나 안 하거나, 2^M개의 부분집합이야. 충분히 처리 가능해!"),
+        "맞아! 2^10 = 1024. 각 에어컨을 포함하거나 안 하거나, 2^M개의 부분집합이예요. 충분히 처리 가능해요!"),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "1 cow needs 3 cooling in stalls 1-5.\nAC1 covers 1-5 with power 3, cost 10.\nAC2 covers 1-3 with power 5, cost 20.\nWhat's the minimum cost?", "소 1마리가 축사 1-5에서 냉방 3이 필요해. AC1은 1-5 커버, 파워 3, 비용 10. AC2는 1-3 커버, 파워 5, 비용 20. 최소 비용은?"),
+        "1 cow needs 3 cooling in stalls 1-5.\nAC1 covers 1-5 with power 3, cost 10.\nAC2 covers 1-3 with power 5, cost 20.\nWhat's the minimum cost?", "소 1마리가 축사 1-5에서 냉방 3이 필요해요. AC1은 1-5 커버, 파워 3, 비용 10. AC2는 1-3 커버, 파워 5, 비용 20. 최소 비용은?"),
       question: t(E,
         "1 cow needs cooling 3 in stalls 1-5. AC1: range 1-5, power 3, cost 10. AC2: range 1-3, power 5, cost 20. Min cost?",
         "소 1마리 냉방 3 필요 (축사 1-5). AC1: 범위 1-5, 파워 3, 비용 10. AC2: 범위 1-3, 파워 5, 비용 20. 최소 비용?"),
       hint: t(E,
         "AC1 alone covers stalls 1-5 with power 3 >= 3. Cost = 10. AC2 alone only covers 1-3, not 4-5. So AC1 alone works at cost 10.",
-        "AC1만으로 축사 1-5를 파워 3 >= 3으로 커버. 비용 = 10. AC2만으로는 1-3만 커버, 4-5는 안 돼. AC1 단독이 비용 10으로 작동."),
+        "AC1만으로 축사 1-5를 파워 3 >= 3으로 커버. 비용 = 10. AC2만으로는 1-3만 커버, 4-5는 안 돼요. AC1 단독이 비용 10으로 작동."),
       answer: 10,
     },
   ];
@@ -109,7 +109,7 @@ export function makeAirCondCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Try all 2^M subsets.\nFor each, compute cooling at each stall and check cows.\nO(2^M * (M + N) * stalls).", "모든 2^M 부분집합을 시도해. 각각에 대해 축사별 냉방을 계산하고 소를 확인. O(2^M * (M + N) * 축사수)."),
+        "Try all 2^M subsets.\nFor each, compute cooling at each stall and check cows.\nO(2^M * (M + N) * stalls).", "모든 2^M 부분집합을 시도해요. 각각에 대해 축사별 냉방을 계산하고 소를 확인. O(2^M * (M + N) * 축사수)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -117,7 +117,7 @@ export function makeAirCondCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Bitmask enumeration: iterate over all subsets using a bitmask from 0 to 2^M - 1.\nFor each subset, sum up cooling contributions and verify all cows are satisfied.",
-              "비트마스크 열거: 0부터 2^M - 1까지 비트마스크로 모든 부분집합을 순회해.\n각 부분집합에서 냉방 기여를 합산하고 모든 소가 만족되는지 확인.")}
+              "비트마스크 열거: 0부터 2^M - 1까지 비트마스크로 모든 부분집합을 순회해요.\n각 부분집합에서 냉방 기여를 합산하고 모든 소가 만족되는지 확인.")}
           </div>
         </div>),
     },
@@ -125,7 +125,7 @@ export function makeAirCondCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getAirCondSections(E),
     },
   ];

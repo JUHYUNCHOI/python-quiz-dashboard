@@ -37,7 +37,7 @@ export function makeStallingCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows and N stalls, each with height limits.\nCount the number of valid assignments where every cow fits in its stall!", "N마리 소와 N개 축사, 각각 높이 제한이 있어. 모든 소가 축사에 들어가는 유효한 배정 수를 세!"),
+        "N cows and N stalls, each with height limits.\nCount the number of valid assignments where every cow fits in its stall!", "N마리 소와 N개 축사, 각각 높이 제한이 있어요. 모든 소가 축사에 들어가는 유효한 배정 수를 세!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -46,7 +46,7 @@ export function makeStallingCh1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Sort both cows and stalls by height.\nFor each cow (smallest first), count available stalls. Multiply the choices together.",
-              "핵심: 소와 축사를 높이순 정렬.\n각 소(작은 것부터)에 대해 가용 축사 수를 세. 선택지를 곱해.")}
+              "핵심: 소와 축사를 높이순 정렬.\n각 소(작은 것부터)에 대해 가용 축사 수를 세. 선택지를 곱해요.")}
           </div>
         </div>),
     },
@@ -101,7 +101,7 @@ export function makeStallingCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Sort cows and stalls.\nFor each cow (ascending), count stalls with sufficient height. Multiply available choices minus already assigned.",
-              "소와 축사를 정렬해.\n각 소(오름차순)에 대해 높이가 충분한 축사를 세고 이미 배정된 것을 빼서 곱해.")}
+              "소와 축사를 정렬해요.\n각 소(오름차순)에 대해 높이가 충분한 축사를 세고 이미 배정된 것을 빼서 곱해요.")}
           </div>
         </div>),
     },
@@ -109,7 +109,7 @@ export function makeStallingCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getStallingSections(E),
     },
   ];

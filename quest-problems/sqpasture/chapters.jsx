@@ -29,7 +29,7 @@ export function makeSqPastureCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two rectangular pastures on a field.\nFJ wants to build the smallest square fence that contains BOTH of them.\nWhat's the area?\n⬜", "들판에 직사각형 목초지 두 개가 있어. FJ가 둘 다 포함하는 가장 작은 정사각형 울타리를 만들려 해. 면적은? ⬜"),
+        "Two rectangular pastures on a field.\nFJ wants to build the smallest square fence that contains BOTH of them.\nWhat's the area?\n⬜", "들판에 직사각형 목초지 두 개가 있어요. FJ가 둘 다 포함하는 가장 작은 정사각형 울타리를 만들려 해요. 면적은? ⬜"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>⬜</div>
@@ -45,7 +45,7 @@ export function makeSqPastureCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: Find the bounding box — the smallest rectangle that contains both pastures.\nThis uses min/max of all coordinates!", "1단계: 바운딩 박스를 찾아 — 두 목초지를 모두 포함하는 가장 작은 직사각형. 모든 좌표의 min/max를 써!"),
+        "Step 1: Find the bounding box — the smallest rectangle that contains both pastures.\nThis uses min/max of all coordinates!", "1단계: 바운딩 박스를 찾아 — 두 목초지를 모두 포함하는 가장 작은 직사각형. 모든 좌표의 min/max를 써요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
@@ -83,7 +83,7 @@ export function makeSqPastureCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: The bounding box might not be square!\nTo make it a square, take the LARGER of width and height as the side length.", "2단계: 바운딩 박스가 정사각형이 아닐 수 있어! 정사각형으로 만들려면, 가로와 세로 중 큰 쪽을 변의 길이로!"),
+        "Step 2: The bounding box might not be square!\nTo make it a square, take the LARGER of width and height as the side length.", "2단계: 바운딩 박스가 정사각형이 아닐 수 있어요! 정사각형으로 만들려면, 가로와 세로 중 큰 쪽을 변의 길이로!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 14, padding: 16 }}>
@@ -104,7 +104,7 @@ export function makeSqPastureCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The area of the square is side × side. Simple!", "정사각형의 면적 = 변 × 변. 간단해!"),
+        "The area of the square is side × side. Simple!", "정사각형의 면적 = 변 × 변. 간단해요!"),
       question: t(E,
         "Bounding box: width=5, height=3. Square side = max(5,3) = 5. Area?",
         "바운딩 박스: 가로=5, 세로=3. 정사각형 변 = max(5,3) = 5. 면적?"),
@@ -130,7 +130,7 @@ export function makeSqPastureCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The code is beautifully simple.\nRead 2 rectangles, find bounding box with min/max, compute square side, print area!", "코드가 아름답게 간단해. 직사각형 2개 읽고, min/max로 바운딩 박스 찾고, 정사각형 변 계산, 면적 출력!"),
+        "The code is beautifully simple.\nRead 2 rectangles, find bounding box with min/max, compute square side, print area!", "코드가 아름답게 간단해요. 직사각형 2개 읽고, min/max로 바운딩 박스 찾고, 정사각형 변 계산, 면적 출력!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
@@ -160,7 +160,7 @@ export function makeSqPastureCh2(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "Why min for x1,x3 but max for x2,x4?", "왜 x1,x3에는 min이고 x2,x4에는 max일까?"),
+        "Why min for x1,x3 but max for x2,x4?", "왜 x1,x3에는 min이고 x2,x4에는 max일까요?"),
       question: t(E,
         "x1,x3 are left edges, x2,x4 are right edges. To enclose both:",
         "x1,x3은 왼쪽 끝, x2,x4는 오른쪽 끝. 둘 다 포함하려면:"),
@@ -190,7 +190,7 @@ export function makeSqPastureCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getSqPastureSections(E),
     },
   ];

@@ -51,7 +51,7 @@ export function makeTameHerdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A herd breaks out periodically.\nA counter starts at 0 on breakout day and increments daily.\nSome log entries are missing (-1).\nFind the number of breakouts!", "무리가 주기적으로 탈출해. 카운터가 탈출 날 0에서 시작해 매일 증가해. 일부 로그 항목이 누락(-1). 탈출 횟수를 구해!"),
+        "A herd breaks out periodically.\nA counter starts at 0 on breakout day and increments daily.\nSome log entries are missing (-1).\nFind the number of breakouts!", "무리가 주기적으로 탈출해요. 카운터가 탈출 날 0에서 시작해 매일 증가해요. 일부 로그 항목이 누락(-1). 탈출 횟수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -92,7 +92,7 @@ export function makeTameHerdCh1(E) {
         "로그 [0, 1, 2, 0, 1]. 탈출 횟수?"),
       hint: t(E,
         "Count the zeros: positions 0 and 3 have value 0.",
-        "0의 개수: 위치 0과 3에 값 0이 있어."),
+        "0의 개수: 위치 0과 3에 값 0이 있어요."),
       answer: 2,
     },
   ];
@@ -124,7 +124,7 @@ export function makeTameHerdCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getTameHerdSections(E),
     },
   ];

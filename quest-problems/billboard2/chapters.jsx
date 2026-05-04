@@ -53,7 +53,7 @@ export function makeBillboard2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A lawnmower billboard is partially hidden by a cow feed billboard.\nWe need the minimum axis-aligned rectangular tarp to cover the exposed part of the lawnmower billboard.", "잔디 깎기 광고판이 소 사료 광고판에 의해 부분적으로 가려져 있어. 잔디 깎기 광고판의 노출된 부분을 덮을 최소 축 정렬 직사각형 타프를 구해야 해."),
+        "A lawnmower billboard is partially hidden by a cow feed billboard.\nWe need the minimum axis-aligned rectangular tarp to cover the exposed part of the lawnmower billboard.", "잔디 깎기 광고판이 소 사료 광고판에 의해 부분적으로 가려져 있어요. 잔디 깎기 광고판의 노출된 부분을 덮을 최소 축 정렬 직사각형 타프를 구해야 해요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udea7"}</div>
@@ -62,7 +62,7 @@ export function makeBillboard2Ch1(E) {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: The tarp must be a rectangle.\nIf the feed billboard covers a full side strip, the remaining exposed area is a rectangle (smaller tarp). If it covers an interior strip or corner, the exposed area is L-shaped, so the tarp must cover the entire billboard.",
-              "핵심: 타프는 직사각형이어야 해.\n사료 광고판이 한 쪽 변 전체를 덮으면 남은 노출 부분이 직사각형(작은 타프). 내부 띠나 모서리를 덮으면 L자 모양이라 타프가 전체 광고판을 덮어야 해.")}
+              "핵심: 타프는 직사각형이어야 해요.\n사료 광고판이 한 쪽 변 전체를 덮으면 남은 노출 부분이 직사각형(작은 타프). 내부 띠나 모서리를 덮으면 L자 모양이라 타프가 전체 광고판을 덮어야 해요.")}
           </div>
         </div>),
     },
@@ -82,7 +82,7 @@ export function makeBillboard2Ch1(E) {
       correct: 0,
       explain: t(E,
         "The feed covers the entire top side, so the exposed bottom half is a rectangle. Tarp = 10x5 = 50.",
-        "사료가 윗면 전체를 덮으니 노출된 아랫절반이 직사각형이야. 타프 = 10x5 = 50."),
+        "사료가 윗면 전체를 덮으니 노출된 아랫절반이 직사각형이예요. 타프 = 10x5 = 50."),
     },
     // 1-3: input
     {
@@ -94,7 +94,7 @@ export function makeBillboard2Ch1(E) {
         "광고판 6x3=18, 사료와 겹침 없음. 타프 면적은?"),
       hint: t(E,
         "No overlap means the entire billboard is exposed. Tarp = full area.",
-        "겹침이 없으면 전체 광고판이 노출돼. 타프 = 전체 면적."),
+        "겹침이 없으면 전체 광고판이 노출돼요. 타프 = 전체 면적."),
       answer: 18,
     },
   ];
@@ -110,7 +110,7 @@ export function makeBillboard2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Check if the feed covers a full side of the billboard.\nIf so, tarp = remaining strip.\nOtherwise, tarp = entire billboard area.\nO(1) time!", "사료가 광고판의 한 변 전체를 덮는지 확인해. 그렇다면 타프 = 남은 띠. 아니면 타프 = 전체 광고판 면적. O(1) 시간!"),
+        "Check if the feed covers a full side of the billboard.\nIf so, tarp = remaining strip.\nOtherwise, tarp = entire billboard area.\nO(1) time!", "사료가 광고판의 한 변 전체를 덮는지 확인해요. 그렇다면 타프 = 남은 띠. 아니면 타프 = 전체 광고판 면적. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -118,7 +118,7 @@ export function makeBillboard2Ch2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Clamp the feed rectangle to billboard bounds.\nCheck 4 cases: feed covers left/right/top/bottom full strip. If none match, tarp = entire billboard.",
-              "사료 직사각형을 광고판 범위로 클램프해.\n4가지 경우 확인: 사료가 왼/오/위/아래 전체 띠를 덮는지.\n해당 없으면 타프 = 전체 광고판.")}
+              "사료 직사각형을 광고판 범위로 클램프해요.\n4가지 경우 확인: 사료가 왼/오/위/아래 전체 띠를 덮는지.\n해당 없으면 타프 = 전체 광고판.")}
           </div>
         </div>),
     },
@@ -126,7 +126,7 @@ export function makeBillboard2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getBillboard2Sections(E),
     },
   ];

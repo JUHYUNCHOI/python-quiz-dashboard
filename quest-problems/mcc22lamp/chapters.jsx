@@ -44,7 +44,7 @@ export function makeMcc22LampCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N lamps are all initially OFF.\nYou perform M toggle operations, each toggling lamps in a range [L, R].\nCount how many lamps are ON at the end!", "N개의 램프가 모두 꺼져 있어. M번의 토글 연산을 수행하는데, 각각 범위 [L, R]의 램프를 토글해. 마지막에 켜진 램프 수를 세어!"),
+        "N lamps are all initially OFF.\nYou perform M toggle operations, each toggling lamps in a range [L, R].\nCount how many lamps are ON at the end!", "N개의 램프가 모두 꺼져 있어요. M번의 토글 연산을 수행하는데, 각각 범위 [L, R]의 램프를 토글해요. 마지막에 켜진 램프 수를 세어!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca1"}</div>
@@ -53,7 +53,7 @@ export function makeMcc22LampCh1(E) {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Use a difference array to count toggles per lamp.\nA lamp is ON if toggled an odd number of times. Prefix sum gives the toggle count for each lamp.",
-              "핵심: 차분 배열로 램프별 토글 횟수를 세어.\n홀수 번 토글된 램프가 켜져 있어.\n누적합으로 각 램프의 토글 횟수를 구해.")}
+              "핵심: 차분 배열로 램프별 토글 횟수를 세어.\n홀수 번 토글된 램프가 켜져 있어요.\n누적합으로 각 램프의 토글 횟수를 구해요.")}
           </div>
         </div>),
     },
@@ -61,10 +61,10 @@ export function makeMcc22LampCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "5 lamps all OFF.\nToggle 1-5 (all flip ON), then toggle 2-4 (lamps 2,3,4 flip back OFF).\nWhich lamps are ON?", "5개 램프 모두 꺼짐. 1-5 토글 (모두 켜짐), 그 다음 2-4 토글 (램프 2,3,4 다시 꺼짐). 어떤 램프가 켜져 있어?"),
+        "5 lamps all OFF.\nToggle 1-5 (all flip ON), then toggle 2-4 (lamps 2,3,4 flip back OFF).\nWhich lamps are ON?", "5개 램프 모두 꺼짐. 1-5 토글 (모두 켜짐), 그 다음 2-4 토글 (램프 2,3,4 다시 꺼짐). 어떤 램프가 켜져 있어요?"),
       question: t(E,
         "After toggle(1-5) then toggle(2-4): which lamps are ON?",
-        "toggle(1-5) 후 toggle(2-4): 어떤 램프가 켜져 있어?"),
+        "toggle(1-5) 후 toggle(2-4): 어떤 램프가 켜져 있어요?"),
       options: [
         t(E, "Lamps 1 and 5 (toggled once each)", "램프 1과 5 (각각 한 번 토글)"),
         t(E, "Lamps 2, 3, 4 (toggled twice)", "램프 2, 3, 4 (두 번 토글)"),
@@ -73,7 +73,7 @@ export function makeMcc22LampCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! Lamps 1 and 5 were toggled once (ON). Lamps 2,3,4 were toggled twice (OFF again). 2 lamps are ON.",
-        "맞아! 램프 1과 5는 한 번 토글 (켜짐). 램프 2,3,4는 두 번 토글 (다시 꺼짐). 2개의 램프가 켜져 있어."),
+        "맞아! 램프 1과 5는 한 번 토글 (켜짐). 램프 2,3,4는 두 번 토글 (다시 꺼짐). 2개의 램프가 켜져 있어요."),
     },
     // 1-3: Input
     {
@@ -109,7 +109,7 @@ export function makeMcc22LampCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Difference array trick: for toggle(L,R), increment diff[L] and decrement diff[R+1].\nPrefix sum gives total toggles per position. Count positions with odd toggle count.",
-              "차분 배열 트릭: toggle(L,R)에서 diff[L]++ 하고 diff[R+1]-- 해.\n누적합으로 위치별 총 토글 횟수를 구하고, 홀수인 위치를 세어.")}
+              "차분 배열 트릭: toggle(L,R)에서 diff[L]++ 하고 diff[R+1]-- 해요.\n누적합으로 위치별 총 토글 횟수를 구하고, 홀수인 위치를 세어.")}
           </div>
         </div>),
     },
@@ -117,7 +117,7 @@ export function makeMcc22LampCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc22LampSections(E),
     },
   ];

@@ -32,7 +32,7 @@ export function makeMooLangCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The Moo Language has simple grammar rules.\nLet's learn how to form sentences and maximize the number of words used!\n\ud83d\udcdd", "무 언어에는 간단한 문법 규칙이 있어. 문장을 만들고 사용하는 단어 수를 최대화하는 법을 배우자! \ud83d\udcdd"),
+        "The Moo Language has simple grammar rules.\nLet's learn how to form sentences and maximize the number of words used!\n\ud83d\udcdd", "무 언어에는 간단한 문법 규칙이 있어요. 문장을 만들고 사용하는 단어 수를 최대화하는 법을 배우자! \ud83d\udcdd"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcdd"}</div>
@@ -69,7 +69,7 @@ export function makeMooLangCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Is 'noun intransitive_verb' a valid sentence?", "'명사 자동사'는 유효한 문장일까?"),
+        "Is 'noun intransitive_verb' a valid sentence?", "'명사 자동사'는 유효한 문장일까요?"),
       question: t(E, "Is 'noun intransitive_verb' valid?", "'\uba85\uc0ac \uc790\ub3d9\uc0ac'\ub294 \uc720\ud6a8\ud55c \ubb38\uc7a5\uc778\uac00?"),
       options: [t(E, "Yes", "\ub124"), t(E, "No", "\uc544\ub2c8\uc624")],
       correct: 0,
@@ -112,7 +112,7 @@ export function makeMooLangCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMooLangSections(E),
     },
     {

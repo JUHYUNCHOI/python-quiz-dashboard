@@ -33,7 +33,7 @@ export function makeBucketListCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows each need some buckets during a time interval.\nFind the minimum total buckets needed at any point in time.", "N마리 소가 각각 시간 구간 동안 양동이가 필요해. 어느 시점에서든 필요한 최소 총 양동이 수를 구해!"),
+        "N cows each need some buckets during a time interval.\nFind the minimum total buckets needed at any point in time.", "N마리 소가 각각 시간 구간 동안 양동이가 필요해요. 어느 시점에서든 필요한 최소 총 양동이 수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🪣"}</div>
@@ -62,7 +62,7 @@ export function makeBucketListCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! From t=3 to t=5, both cows need buckets: 3 + 2 = 5. That's the maximum.",
-        "맞아! t=3부터 t=5까지 두 소 모두 양동이 필요: 3 + 2 = 5. 그게 최대값이야."),
+        "맞아! t=3부터 t=5까지 두 소 모두 양동이 필요: 3 + 2 = 5. 그게 최대값이예요."),
     },
     // 1-3: Input
     {
@@ -106,7 +106,7 @@ export function makeBucketListCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getBucketListSections(E),
     },
   ];

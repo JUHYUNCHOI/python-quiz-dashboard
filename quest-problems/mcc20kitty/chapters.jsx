@@ -69,7 +69,7 @@ export function makeMcc20KittyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Meet the Kitty sequence!\nIt's like Fibonacci, but adds THREE previous numbers instead of two.\nLet's learn it step by step!\n🐱", "Kitty 수열을 만나자! 피보나치처럼 생겼는데, 이전 두 개가 아니라 세 개를 더해. 하나씩 배우자! 🐱"),
+        "Meet the Kitty sequence!\nIt's like Fibonacci, but adds THREE previous numbers instead of two.\nLet's learn it step by step!\n🐱", "Kitty 수열을 만나자! 피보나치처럼 생겼는데, 이전 두 개가 아니라 세 개를 더해요. 하나씩 배우자! 🐱"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐱</div>
@@ -387,7 +387,7 @@ export function makeMcc20KittyCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Why can't we just write a=b; b=c; c=a+b+c one by one?", "왜 a=b; b=c; c=a+b+c를 하나씩 쓰면 안 될까?"),
+        "Why can't we just write a=b; b=c; c=a+b+c one by one?", "왜 a=b; b=c; c=a+b+c를 하나씩 쓰면 안 될까요?"),
       question: t(E,
         "If a=1,b=2,c=3: After 'a=b' → a=2. After 'b=c' → b=3. After 'c=a+b+c' → c=?",
         "a=1,b=2,c=3: 'a=b' 후 a=2. 'b=c' 후 b=3. 'c=a+b+c' → c=?"),
@@ -436,7 +436,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "Why do we check N ≤ 3 separately?", "왜 N ≤ 3을 따로 처리해?"),
+        "Why do we check N ≤ 3 separately?", "왜 N ≤ 3을 따로 처리해요?"),
       question: t(E,
         "For the loop to make sense, we need at least i=4. If N≤3...",
         "루프가 의미있으려면 최소 i=4 필요. N≤3이면..."),
@@ -473,7 +473,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
         "range(4, N+1) iterates from 4 through N. Each iteration computes one more Kitty number.", "range(4, N+1)은 4부터 N까지 반복. 매 반복마다 Kitty 수 하나 더 계산."),
       question: t(E,
         "N=6. How many times does the loop body execute?",
-        "N=6. 루프 본문이 몇 번 실행돼?"),
+        "N=6. 루프 본문이 몇 번 실행돼요?"),
       options: ["3 (i=4,5,6)", "6", "4", "2"],
       correct: 0,
       explain: t(E, "range(4, 7) = [4, 5, 6], 3 iterations ✅", "range(4, 7) = [4, 5, 6], 3번 반복 ✅"),
@@ -483,7 +483,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "After the loop, c holds K(N)!\nThat's because at each step, c becomes the latest Kitty number.", "루프 후, c가 K(N)을 가지고 있어! 매 단계에서 c가 최신 Kitty 수가 되니까."),
+        "After the loop, c holds K(N)!\nThat's because at each step, c becomes the latest Kitty number.", "루프 후, c가 K(N)을 가지고 있어요! 매 단계에서 c가 최신 Kitty 수가 되니까."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 12 }}>
@@ -530,7 +530,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc20KittySections(E),
     },
   ];

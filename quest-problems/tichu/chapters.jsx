@@ -24,7 +24,7 @@ export function makeTichuCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Tichu is a card game.\nGiven N cards in hand, how many ways can you pick 2 cards to play as a pair?\nThis is a combinations problem: C(N, 2).", "티추는 카드 게임이야. 손에 N장의 카드가 있을 때, 2장을 뽑아 페어로 낼 수 있는 방법은 몇 가지? 조합 문제: C(N, 2)."),
+        "Tichu is a card game.\nGiven N cards in hand, how many ways can you pick 2 cards to play as a pair?\nThis is a combinations problem: C(N, 2).", "티추는 카드 게임이예요. 손에 N장의 카드가 있을 때, 2장을 뽑아 페어로 낼 수 있는 방법은 몇 가지? 조합 문제: C(N, 2)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udccf"}</div>
@@ -33,7 +33,7 @@ export function makeTichuCh1(E) {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key formula: C(N, 2) = N * (N-1) / 2.\nThis counts the number of unique pairs from N items.",
-              "핵심 공식: C(N, 2) = N * (N-1) / 2.\nN개 항목에서 고유한 쌍의 수를 세는 공식이야.")}
+              "핵심 공식: C(N, 2) = N * (N-1) / 2.\nN개 항목에서 고유한 쌍의 수를 세는 공식이예요.")}
           </div>
         </div>),
     },
@@ -54,13 +54,13 @@ export function makeTichuCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! C(5,2) = 5*4/2 = 10 ways.",
-        "맞아! C(5,2) = 5*4/2 = 10가지야."),
+        "맞아! C(5,2) = 5*4/2 = 10가지예요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "Calculate C(5,2) yourself!", "직접 C(5,2)를 계산해봐!"),
+        "Calculate C(5,2) yourself!", "직접 C(5,2)를 계산해봐요!"),
       question: t(E,
         "N=5. Enter C(5,2):",
         "N=5. C(5,2)를 입력해:"),
@@ -82,7 +82,7 @@ export function makeTichuCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just compute the formula N*(N-1)/2. O(1) time!", "공식 N*(N-1)/2를 계산하면 돼. O(1) 시간!"),
+        "Just compute the formula N*(N-1)/2. O(1) time!", "공식 N*(N-1)/2를 계산하면 돼요. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -90,7 +90,7 @@ export function makeTichuCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Direct formula: C(N,2) = N*(N-1)//2.\nNo loops needed, just one calculation.",
-              "직접 공식: C(N,2) = N*(N-1)//2.\n반복문 필요 없이 계산 한 번이면 돼.")}
+              "직접 공식: C(N,2) = N*(N-1)//2.\n반복문 필요 없이 계산 한 번이면 돼요.")}
           </div>
         </div>),
     },
@@ -98,7 +98,7 @@ export function makeTichuCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getTichuSections(E),
     },
   ];

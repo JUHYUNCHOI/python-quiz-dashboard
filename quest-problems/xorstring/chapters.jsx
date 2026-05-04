@@ -29,7 +29,7 @@ export function makeXorStringCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given two binary strings of equal length, compute their XOR.\nXOR returns 1 when bits differ, 0 when they match.", "같은 길이의 두 이진 문자열이 주어졌을 때 XOR을 계산해. XOR은 비트가 다르면 1, 같으면 0을 반환해."),
+        "Given two binary strings of equal length, compute their XOR.\nXOR returns 1 when bits differ, 0 when they match.", "같은 길이의 두 이진 문자열이 주어졌을 때 XOR을 계산해요. XOR은 비트가 다르면 1, 같으면 0을 반환해요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2295"}</div>
@@ -57,13 +57,13 @@ export function makeXorStringCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! XOR of same bits is always 0. 1 XOR 1 = 0.",
-        "맞아! 같은 비트의 XOR은 항상 0이야. 1 XOR 1 = 0."),
+        "맞아! 같은 비트의 XOR은 항상 0이예요. 1 XOR 1 = 0."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "What is 1 XOR 1? Enter the result.", "1 XOR 1은? 결과를 입력해."),
+        "What is 1 XOR 1? Enter the result.", "1 XOR 1은? 결과를 입력해요."),
       question: t(E,
         "1 XOR 1 = ?",
         "1 XOR 1 = ?"),
@@ -85,7 +85,7 @@ export function makeXorStringCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simply iterate through both strings and XOR each pair of characters. O(N) time!", "두 문자열을 순회하며 각 문자 쌍을 XOR하면 돼. O(N) 시간!"),
+        "Simply iterate through both strings and XOR each pair of characters. O(N) time!", "두 문자열을 순회하며 각 문자 쌍을 XOR하면 돼요. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -93,7 +93,7 @@ export function makeXorStringCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Compare characters at each position.\nIf they match, output '0'. If they differ, output '1'. Linear scan.",
-              "각 위치의 문자를 비교해.\n같으면 '0', 다르면 '1'을 출력. 선형 스캔.")}
+              "각 위치의 문자를 비교해요.\n같으면 '0', 다르면 '1'을 출력. 선형 스캔.")}
           </div>
         </div>),
     },
@@ -101,7 +101,7 @@ export function makeXorStringCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getXorStringSections(E),
     },
   ];

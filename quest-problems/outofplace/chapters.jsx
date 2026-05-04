@@ -35,7 +35,7 @@ export function makeOutOfPlaceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "An array of cows where exactly one cow is out of place.\nFind the minimum number of adjacent swaps to sort the array.", "소 배열에서 정확히 한 마리가 잘못된 위치에 있어. 배열을 정렬하기 위한 최소 인접 스왑 횟수를 구해."),
+        "An array of cows where exactly one cow is out of place.\nFind the minimum number of adjacent swaps to sort the array.", "소 배열에서 정확히 한 마리가 잘못된 위치에 있어요. 배열을 정렬하기 위한 최소 인접 스왑 횟수를 구해요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
@@ -44,7 +44,7 @@ export function makeOutOfPlaceCh1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Compare the original array with its sorted version.\nCount positions that differ. The answer is (number of differing positions) - 1.",
-              "핵심: 원래 배열과 정렬된 버전을 비교해.\n다른 위치 수를 세. 답 = (다른 위치 수) - 1.")}
+              "핵심: 원래 배열과 정렬된 버전을 비교해요.\n다른 위치 수를 세. 답 = (다른 위치 수) - 1.")}
           </div>
         </div>),
     },
@@ -52,7 +52,7 @@ export function makeOutOfPlaceCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Array [1, 3, 2]. Sorted = [1, 2, 3]. Positions 1 and 2 differ. How many swaps?", "배열 [1, 3, 2]. 정렬 = [1, 2, 3]. 위치 1과 2가 달라. 스왑 몇 번?"),
+        "Array [1, 3, 2]. Sorted = [1, 2, 3]. Positions 1 and 2 differ. How many swaps?", "배열 [1, 3, 2]. 정렬 = [1, 2, 3]. 위치 1과 2가 달라요. 스왑 몇 번?"),
       question: t(E,
         "[1, 3, 2] -> sorted [1, 2, 3]. How many adjacent swaps needed?",
         "[1, 3, 2] -> 정렬 [1, 2, 3]. 인접 스왑 몇 번 필요?"),
@@ -70,7 +70,7 @@ export function makeOutOfPlaceCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "[1, 3, 2] needs how many adjacent swaps to sort?", "[1, 3, 2]를 정렬하려면 인접 스왑이 몇 번 필요해?"),
+        "[1, 3, 2] needs how many adjacent swaps to sort?", "[1, 3, 2]를 정렬하려면 인접 스왑이 몇 번 필요해요?"),
       question: t(E,
         "Min adjacent swaps to sort [1, 3, 2]?",
         "[1, 3, 2] 정렬에 필요한 최소 인접 스왑 수?"),
@@ -100,7 +100,7 @@ export function makeOutOfPlaceCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Sort a copy, compare element by element.\nThe misplaced cow creates a contiguous block of differences. Swaps needed = block length - 1.",
-              "사본을 정렬하고 요소별로 비교해.\n잘못 놓인 소는 연속된 차이 블록을 만들어.\n필요한 스왑 = 블록 길이 - 1.")}
+              "사본을 정렬하고 요소별로 비교해요.\n잘못 놓인 소는 연속된 차이 블록을 만들어요.\n필요한 스왑 = 블록 길이 - 1.")}
           </div>
         </div>),
     },
@@ -108,7 +108,7 @@ export function makeOutOfPlaceCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getOutOfPlaceSections(E),
     },
   ];

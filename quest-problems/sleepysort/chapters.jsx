@@ -29,7 +29,7 @@ export function makeSleepySortCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows in a line.\nOnly the front cow can move backward to its correct position.\nFind the minimum number of moves to sort all cows.", "N마리 소가 줄 서 있어. 맨 앞 소만 올바른 위치로 뒤로 이동 가능. 모든 소를 정렬하는 최소 이동 횟수를 구해!"),
+        "N cows in a line.\nOnly the front cow can move backward to its correct position.\nFind the minimum number of moves to sort all cows.", "N마리 소가 줄 서 있어요. 맨 앞 소만 올바른 위치로 뒤로 이동 가능. 모든 소를 정렬하는 최소 이동 횟수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"😴"}</div>
@@ -38,7 +38,7 @@ export function makeSleepySortCh1(E) {
           <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Find the longest already-sorted suffix from the right.\nThe answer is N minus the length of that suffix. Those suffix cows never need to move!",
-              "핵심: 오른쪽부터 이미 정렬된 가장 긴 접미사를 찾아.\n답은 N에서 그 접미사 길이를 빼면 돼.\n접미사 소들은 움직일 필요 없어!")}
+              "핵심: 오른쪽부터 이미 정렬된 가장 긴 접미사를 찾아요.\n답은 N에서 그 접미사 길이를 빼면 돼요.\n접미사 소들은 움직일 필요 없어요!")}
           </div>
         </div>),
     },
@@ -46,7 +46,7 @@ export function makeSleepySortCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "For [1, 2, 4, 3]: looking from the right, [3] is fine, but 4 > 3 breaks the order.\nThe sorted suffix has length 1.\nSo we move N - 1 = 3 cows.", "[1, 2, 4, 3]에서: 오른쪽부터 보면 [3]은 괜찮지만 4 > 3에서 순서가 깨져. 정렬된 접미사 길이는 1. 그래서 N - 1 = 3마리를 옮겨야 해."),
+        "For [1, 2, 4, 3]: looking from the right, [3] is fine, but 4 > 3 breaks the order.\nThe sorted suffix has length 1.\nSo we move N - 1 = 3 cows.", "[1, 2, 4, 3]에서: 오른쪽부터 보면 [3]은 괜찮지만 4 > 3에서 순서가 깨져. 정렬된 접미사 길이는 1. 그래서 N - 1 = 3마리를 옮겨야 해요."),
       question: t(E,
         "For [2, 1, 3, 4]: what is the length of the longest sorted suffix from the right?",
         "[2, 1, 3, 4]에서: 오른쪽부터 가장 긴 정렬된 접미사 길이는?"),
@@ -64,13 +64,13 @@ export function makeSleepySortCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If the array is already sorted [1, 2, 3, 4], the entire array is a sorted suffix.\nHow many moves?", "배열이 이미 정렬된 [1, 2, 3, 4]이면, 전체가 정렬된 접미사야. 이동 횟수는?"),
+        "If the array is already sorted [1, 2, 3, 4], the entire array is a sorted suffix.\nHow many moves?", "배열이 이미 정렬된 [1, 2, 3, 4]이면, 전체가 정렬된 접미사예요. 이동 횟수는?"),
       question: t(E,
         "[1, 2, 3, 4] already sorted. How many moves needed?",
         "[1, 2, 3, 4] 이미 정렬됨. 필요한 이동 횟수는?"),
       hint: t(E,
         "All cows are in order. Sorted suffix length = N. Answer = N - N = 0.",
-        "모든 소가 순서대로야. 정렬된 접미사 길이 = N. 답 = N - N = 0."),
+        "모든 소가 순서대로예요. 정렬된 접미사 길이 = N. 답 = N - N = 0."),
       answer: 0,
     },
   ];
@@ -86,7 +86,7 @@ export function makeSleepySortCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Scan from right to left to find where the sorted suffix breaks. O(N) time!", "오른쪽에서 왼쪽으로 스캔해서 정렬된 접미사가 끊기는 곳을 찾아. O(N) 시간!"),
+        "Scan from right to left to find where the sorted suffix breaks. O(N) time!", "오른쪽에서 왼쪽으로 스캔해서 정렬된 접미사가 끊기는 곳을 찾아요. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -94,7 +94,7 @@ export function makeSleepySortCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Scan right to left: while a[k-1] < a[k], extend the sorted suffix.\nThe break point k gives the answer directly.",
-              "오른쪽에서 왼쪽으로 스캔: a[k-1] < a[k]인 동안 정렬된 접미사 확장.\n끊기는 지점 k가 바로 답이야.")}
+              "오른쪽에서 왼쪽으로 스캔: a[k-1] < a[k]인 동안 정렬된 접미사 확장.\n끊기는 지점 k가 바로 답이예요.")}
           </div>
         </div>),
     },
@@ -102,7 +102,7 @@ export function makeSleepySortCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getSleepySortSections(E),
     },
   ];

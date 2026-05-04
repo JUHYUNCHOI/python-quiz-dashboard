@@ -35,7 +35,7 @@ export function makeMcc19ElimCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a binary string, you can remove at most K zeros.\nFind the longest consecutive streak of 1s after removal.\nClassic sliding window!", "이진 문자열에서 최대 K개의 0을 제거할 수 있어. 제거 후 가장 긴 연속 1의 길이를 구해. 전형적인 슬라이딩 윈도우!"),
+        "Given a binary string, you can remove at most K zeros.\nFind the longest consecutive streak of 1s after removal.\nClassic sliding window!", "이진 문자열에서 최대 K개의 0을 제거할 수 있어요. 제거 후 가장 긴 연속 1의 길이를 구해요. 전형적인 슬라이딩 윈도우!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
@@ -108,7 +108,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc19ElimSections(E),
     },
   ];

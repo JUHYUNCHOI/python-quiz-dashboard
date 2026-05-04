@@ -68,7 +68,7 @@ export function makeExchangeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand in a circle.\nEach round, every cow passes ALL her milk to the next cow clockwise.\nAfter many rounds, what happens?\n🥛", "N마리 소가 원형으로 서있어. 매 라운드마다 모든 소가 우유를 시계방향 다음 소에게 전달. 여러 라운드 후 어떻게 될까? 🥛"),
+        "N cows stand in a circle.\nEach round, every cow passes ALL her milk to the next cow clockwise.\nAfter many rounds, what happens?\n🥛", "N마리 소가 원형으로 서있어요. 매 라운드마다 모든 소가 우유를 시계방향 다음 소에게 전달. 여러 라운드 후 어떻게 될까요? 🥛"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🥛</div>
@@ -81,7 +81,7 @@ export function makeExchangeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's start with a simple example: 4 cows with milk amounts [5, 3, 8, 4].\nThey stand in a circle!", "간단한 예시부터: 우유가 [5, 3, 8, 4]인 4마리 소. 원형으로 서있어!"),
+        "Let's start with a simple example: 4 cows with milk amounts [5, 3, 8, 4].\nThey stand in a circle!", "간단한 예시부터: 우유가 [5, 3, 8, 4]인 4마리 소. 원형으로 서있어요!"),
       content: (
         <div style={{ padding: 16 }}>
           <CowCircle values={[5, 3, 8, 4]} size={140} />
@@ -158,7 +158,7 @@ export function makeExchangeCh1(E) {
             }}>20</div>
           </div>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#16a34a" }}>
-            {t(E, "Total stays 20 forever — milk is conserved!", "총량은 영원히 20 — 우유는 보존돼!")}
+            {t(E, "Total stays 20 forever — milk is conserved!", "총량은 영원히 20 — 우유는 보존돼요!")}
           </div>
         </div>),
     },
@@ -167,7 +167,7 @@ export function makeExchangeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "After INFINITE rounds, the milk distributes as evenly as possible.\nTotal 20 ÷ 4 cows = 5 each!\nEveryone gets the average.", "무한 라운드 후, 우유는 가능한 균등하게 분배. 총 20 ÷ 4마리 = 각 5! 모두 평균을 받아."),
+        "After INFINITE rounds, the milk distributes as evenly as possible.\nTotal 20 ÷ 4 cows = 5 each!\nEveryone gets the average.", "무한 라운드 후, 우유는 가능한 균등하게 분배. 총 20 ÷ 4마리 = 각 5! 모두 평균을 받아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20 }}>
@@ -234,7 +234,7 @@ export function makeExchangeCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "N=4, total=10. How many cows get avg+1? That's 10 % 4.", "N=4, 합계=10. 몇 마리가 avg+1을 받아? 10 % 4 계산."),
+        "N=4, total=10. How many cows get avg+1? That's 10 % 4.", "N=4, 합계=10. 몇 마리가 avg+1을 받아요? 10 % 4 계산."),
       question: t(E, "10 % 4 = ?", "10 % 4 = ?"),
       answer: 2,
     },
@@ -284,7 +284,7 @@ export function makeExchangeCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Each round is just a ROTATION of all milk values.\nCow i gets cow (i-1)'s milk.\nAfter N rounds, everything returns to the start!", "매 라운드는 모든 우유 값의 회전일 뿐. 소 i가 소 (i-1)의 우유를 받아. N라운드 후 모든 게 원래대로!"),
+        "Each round is just a ROTATION of all milk values.\nCow i gets cow (i-1)'s milk.\nAfter N rounds, everything returns to the start!", "매 라운드는 모든 우유 값의 회전일 뿐. 소 i가 소 (i-1)의 우유를 받아요. N라운드 후 모든 게 원래대로!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -509,7 +509,7 @@ export function makeExchangeCh3(E) {
     {
       type: "quiz",
       narr: t(E,
-        "[7] * 3 creates [7, 7, 7]. List multiplication repeats the list!", "[7] * 3은 [7, 7, 7]을 만들어. 리스트 곱셈은 리스트를 반복!"),
+        "[7] * 3 creates [7, 7, 7]. List multiplication repeats the list!", "[7] * 3은 [7, 7, 7]을 만들어요. 리스트 곱셈은 리스트를 반복!"),
       question: t(E, "[5] * 4 = ?", "[5] * 4 = ?"),
       options: ["[5, 5, 5, 5]", "[20]", "[5, 4]", "[5]"],
       correct: 0,

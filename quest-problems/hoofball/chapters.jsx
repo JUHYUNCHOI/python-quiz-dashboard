@@ -56,7 +56,7 @@ export function makeHoofballCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows stand on a number line and pass a ball to their nearest neighbor.\nFind the minimum number of balls needed so every cow gets at least one!", "소들이 수직선 위에 서서 가장 가까운 이웃에게 공을 패스해. 모든 소가 최소 1개 공을 받으려면 최소 몇 개 공이 필요한지 구해!"),
+        "Cows stand on a number line and pass a ball to their nearest neighbor.\nFind the minimum number of balls needed so every cow gets at least one!", "소들이 수직선 위에 서서 가장 가까운 이웃에게 공을 패스해요. 모든 소가 최소 1개 공을 받으려면 최소 몇 개 공이 필요한지 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26BD"}</div>
@@ -129,7 +129,7 @@ export function makeHoofballCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getHoofballSections(E),
     },
   ];

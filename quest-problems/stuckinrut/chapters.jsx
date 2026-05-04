@@ -55,7 +55,7 @@ export function makeStuckCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows on a 2D grid move either North or East forever.\nWhen a cow reaches a cell already grazed by another, it stops.\nFind how many cells each cow grazes!", "2D 격자 위의 소들이 북쪽 또는 동쪽으로 영원히 이동해. 다른 소가 이미 먹은 셀에 도달하면 멈춰. 각 소가 먹는 셀 수를 구해!"),
+        "Cows on a 2D grid move either North or East forever.\nWhen a cow reaches a cell already grazed by another, it stops.\nFind how many cells each cow grazes!", "2D 격자 위의 소들이 북쪽 또는 동쪽으로 영원히 이동해요. 다른 소가 이미 먹은 셀에 도달하면 멈춰요. 각 소가 먹는 셀 수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -64,7 +64,7 @@ export function makeStuckCh1(E) {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: For each N-cow and E-cow pair, compute intersection time.\nProcess events in time order. A stopped cow can't stop others.",
-              "핵심: 각 북쪽/동쪽 소 쌍에 대해 교차 시간 계산.\n시간순으로 이벤트 처리.\n멈춘 소는 다른 소를 멈출 수 없어.")}
+              "핵심: 각 북쪽/동쪽 소 쌍에 대해 교차 시간 계산.\n시간순으로 이벤트 처리.\n멈춘 소는 다른 소를 멈출 수 없어요.")}
           </div>
         </div>),
     },
@@ -72,7 +72,7 @@ export function makeStuckCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In this problem, cows can only move in two directions. What are they?", "이 문제에서 소는 두 방향으로만 이동할 수 있어. 어떤 방향?"),
+        "In this problem, cows can only move in two directions. What are they?", "이 문제에서 소는 두 방향으로만 이동할 수 있어요. 어떤 방향?"),
       question: t(E,
         "What two directions can cows move in this problem?",
         "이 문제에서 소가 이동할 수 있는 두 방향은?"),
@@ -89,13 +89,13 @@ export function makeStuckCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "How many possible directions are there in this problem?", "이 문제에서 가능한 방향은 몇 가지야?"),
+        "How many possible directions are there in this problem?", "이 문제에서 가능한 방향은 몇 가지예요?"),
       question: t(E,
         "How many movement directions exist in this problem?",
         "이 문제에서 이동 방향은 몇 가지?"),
       hint: t(E,
         "North and East. That's 2 directions.",
-        "북쪽과 동쪽. 2가지 방향이야."),
+        "북쪽과 동쪽. 2가지 방향이예요."),
       answer: 2,
     },
   ];
@@ -119,7 +119,7 @@ export function makeStuckCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Enumerate all N-cow/E-cow pairs to find intersections.\nSort by time. Process in order: first collision wins, stopped cows are ignored.",
-              "모든 북쪽/동쪽 소 쌍을 열거해 교차점을 찾아.\n시간순 정렬.\n순서대로 처리: 먼저 충돌한 것이 이기고 멈춘 소는 무시.")}
+              "모든 북쪽/동쪽 소 쌍을 열거해 교차점을 찾아요.\n시간순 정렬.\n순서대로 처리: 먼저 충돌한 것이 이기고 멈춘 소는 무시.")}
           </div>
         </div>),
     },
@@ -127,7 +127,7 @@ export function makeStuckCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getStuckInRutSections(E),
     },
   ];

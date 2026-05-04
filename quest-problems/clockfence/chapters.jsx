@@ -39,7 +39,7 @@ export function makeClockCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A fence path is described by a sequence of directions (N, E, S, W).\nDetermine if the path goes clockwise (CW) or counter-clockwise (CCW) by counting right vs left turns!", "울타리 경로가 방향 시퀀스(N, E, S, W)로 설명돼. 오른쪽 회전과 왼쪽 회전을 세서 시계 방향(CW)인지 반시계 방향(CCW)인지 판단해!"),
+        "A fence path is described by a sequence of directions (N, E, S, W).\nDetermine if the path goes clockwise (CW) or counter-clockwise (CCW) by counting right vs left turns!", "울타리 경로가 방향 시퀀스(N, E, S, W)로 설명돼요. 오른쪽 회전과 왼쪽 회전을 세서 시계 방향(CW)인지 반시계 방향(CCW)인지 판단해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
@@ -56,7 +56,7 @@ export function makeClockCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The path 'NESW' makes a square: go North, then East, then South, then West.\nEach turn is a right turn.\nIs this clockwise?", "경로 'NESW'는 정사각형: 북쪽, 동쪽, 남쪽, 서쪽. 각 회전이 오른쪽 회전이야. 시계 방향일까?"),
+        "The path 'NESW' makes a square: go North, then East, then South, then West.\nEach turn is a right turn.\nIs this clockwise?", "경로 'NESW'는 정사각형: 북쪽, 동쪽, 남쪽, 서쪽. 각 회전이 오른쪽 회전이예요. 시계 방향일까요?"),
       question: t(E,
         "'NESW' path: all right turns. Clockwise?",
         "'NESW' 경로: 모두 오른쪽 회전. 시계 방향?"),
@@ -111,7 +111,7 @@ export function makeClockCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getClockFenceSections(E),
     },
   ];

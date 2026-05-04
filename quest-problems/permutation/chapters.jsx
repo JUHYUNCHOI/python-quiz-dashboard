@@ -60,7 +60,7 @@ export function makePermCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has a secret list. He only tells us the gaps between neighbors. We have to rebuild the list.",
-        "FJ에게 비밀 리스트가 있어. 이웃 간격만 알려줘. 우리가 리스트를 복원해야 해."),
+        "FJ에게 비밀 리스트가 있어요. 이웃 간격만 알려줘요. 우리가 리스트를 복원해야 해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -161,7 +161,7 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A permutation of 1..N means each number from 1 to N appears exactly once.\nFor example, [3,1,4,2] is a permutation of 1..4.", "1~N의 순열이란 1부터 N까지 각 숫자가 정확히 한 번씩 나오는 것! 예: [3,1,4,2]는 1~4의 순열이야."),
+        "A permutation of 1..N means each number from 1 to N appears exactly once.\nFor example, [3,1,4,2] is a permutation of 1..4.", "1~N의 순열이란 1부터 N까지 각 숫자가 정확히 한 번씩 나오는 것! 예: [3,1,4,2]는 1~4의 순열이예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14 }}>
@@ -189,7 +189,7 @@ export function makePermCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The hint h[i] tells us the absolute difference between consecutive elements.\nSo h[i] = abs(perm[i] - perm[i+1]).", "힌트 h[i]는 연속 원소의 절댓값 차이야. h[i] = abs(perm[i] - perm[i+1])."),
+        "The hint h[i] tells us the absolute difference between consecutive elements.\nSo h[i] = abs(perm[i] - perm[i+1]).", "힌트 h[i]는 연속 원소의 절댓값 차이예요. h[i] = abs(perm[i] - perm[i+1])."),
       question: t(E,
         "If perm = [2, 5, 1, 4, 3], what is h[1] (0-indexed)?",
         "perm = [2, 5, 1, 4, 3]이면, h[1] (0-indexed)은?"),
@@ -197,7 +197,7 @@ export function makePermCh1(E) {
       correct: 1,
       explain: t(E,
         "|5 - 1| = 4. h[1] is the diff between perm[1]=5 and perm[2]=1.",
-        "|5 - 1| = 4. h[1]은 perm[1]=5와 perm[2]=1의 차이야."),
+        "|5 - 1| = 4. h[1]은 perm[1]=5와 perm[2]=1의 차이예요."),
     },
     // 1-4: Quiz — reconstruction idea
     {
@@ -214,7 +214,7 @@ export function makePermCh1(E) {
         t(E, "5 only", "5만"),
       ],
       correct: 0,
-      explain: t(E, "3+2=5 or 3-2=1. Both are candidates!", "3+2=5 또는 3-2=1. 둘 다 후보야!"),
+      explain: t(E, "3+2=5 or 3-2=1. Both are candidates!", "3+2=5 또는 3-2=1. 둘 다 후보예요!"),
     },
     // 1-5: Input
     {
@@ -302,7 +302,7 @@ export function makePermCh2(E) {
     {
       type: "sim",
       narr: t(E,
-        "Try it!\nN=4, h=[2,3,2].\nPick a starting value below and step through the greedy.\nNotice that some starts fail and some succeed.", "직접 해봐! N=4, h=[2,3,2]. 아래에서 시작값을 골라 그리디를 한 단계씩 따라가봐. 어떤 시작값은 실패하고 어떤 건 성공해."),
+        "Try it!\nN=4, h=[2,3,2].\nPick a starting value below and step through the greedy.\nNotice that some starts fail and some succeed.", "직접 해봐요! N=4, h=[2,3,2]. 아래에서 시작값을 골라 그리디를 한 단계씩 따라가봐요. 어떤 시작값은 실패하고 어떤 건 성공해요."),
     },
     // 2-3: Static trace example
     {
@@ -349,7 +349,7 @@ export function makePermCh2(E) {
       correct: 0,
       explain: t(E,
         "This starting value doesn't work. Move on to the next one. Only output -1 if ALL starting values fail!",
-        "이 시작값이 안 되는 거야. 다음 시작값으로! 모든 시작값이 실패할 때만 -1!"),
+        "이 시작값이 안 되는 거예요. 다음 시작값으로! 모든 시작값이 실패할 때만 -1!"),
     },
     // 2-4: Input
     {
@@ -372,7 +372,7 @@ export function makePermCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Time complexity: O(N²) per test case — we try N starting values, each taking O(N).\nSince N ≤ 1000, this is fast enough!", "시간복잡도: 테스트 케이스당 O(N²) — N개의 시작값을 시도하고, 각각 O(N). N ≤ 1000이니 충분히 빨라!"),
+        "Time complexity: O(N²) per test case — we try N starting values, each taking O(N).\nSince N ≤ 1000, this is fast enough!", "시간복잡도: 테스트 케이스당 O(N²) — N개의 시작값을 시도하고, 각각 O(N). N ≤ 1000이니 충분히 빨라요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -405,7 +405,7 @@ export function makePermCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "When h[i] = 0, perm[i+1] must equal perm[i].\nBut in a permutation, all values are distinct!\nSo h[i]=0 means...", "h[i] = 0이면, perm[i+1] = perm[i]이어야 해. 그런데 순열에선 모든 값이 다르잖아! h[i]=0이면..."),
+        "When h[i] = 0, perm[i+1] must equal perm[i].\nBut in a permutation, all values are distinct!\nSo h[i]=0 means...", "h[i] = 0이면, perm[i+1] = perm[i]이어야 해요. 그런데 순열에선 모든 값이 다르잖아요! h[i]=0이면..."),
       question: t(E,
         "If h[i] = 0 for some i, what can we conclude?",
         "어떤 i에서 h[i] = 0이면?"),
@@ -423,14 +423,14 @@ export function makePermCh3(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read it part by part. Toggle Python ↔ C++ in header, save as PDF.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글, PDF 저장 가능."),
+        "Solution code — read it part by part. Toggle Python ↔ C++ in header, save as PDF.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글, PDF 저장 가능."),
       sections: getPermSections(E),
     },
     // 3-4: Live runner
     {
       type: "runner",
       narr: t(E,
-        "Now run it yourself. Enter N and h, watch the greedy try each start. Stop anytime.", "이제 직접 돌려봐. N과 h 입력하고, 그리디가 시작값을 하나씩 시도하는 걸 봐. 언제든 중지 가능."),
+        "Now run it yourself. Enter N and h, watch the greedy try each start. Stop anytime.", "이제 직접 돌려봐요. N과 h 입력하고, 그리디가 시작값을 하나씩 시도하는 걸 봐요. 언제든 중지 가능."),
     },
   ];
 }

@@ -102,7 +102,7 @@ export function makeCowGymCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "K gymnastics sessions!\nIn each, N cows are ranked from best to worst.\nWe need to find pairs of cows where one ALWAYS beats the other in EVERY session.", "K번의 체조 세션! 각 세션에서 N마리 소가 순위를 매겨져. 모든 세션에서 한 소가 항상 다른 소를 이기는 쌍을 찾아야 해."),
+        "K gymnastics sessions!\nIn each, N cows are ranked from best to worst.\nWe need to find pairs of cows where one ALWAYS beats the other in EVERY session.", "K번의 체조 세션! 각 세션에서 N마리 소가 순위를 매겨져. 모든 세션에서 한 소가 항상 다른 소를 이기는 쌍을 찾아야 해요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🤸"}</div>
@@ -119,7 +119,7 @@ export function makeCowGymCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's an example with 3 cows and 2 sessions.\nThe table shows each cow's rank (position) in each session.\nLower rank = better performance!", "3마리 소와 2개 세션 예시야. 표는 각 소의 세션별 순위(위치)를 보여줘. 낮은 순위 = 더 좋은 성적!"),
+        "Here's an example with 3 cows and 2 sessions.\nThe table shows each cow's rank (position) in each session.\nLower rank = better performance!", "3마리 소와 2개 세션 예시예요. 표는 각 소의 세션별 순위(위치)를 보여줘요. 낮은 순위 = 더 좋은 성적!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
@@ -229,7 +229,7 @@ export function makeCowGymCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "With N=3 cows, how many total pairs do we need to check?\nWe check every unique pair (i, j) where i < j.", "N=3마리 소가 있으면, 총 몇 개의 쌍을 확인해야 할까? i < j인 모든 유일한 쌍 (i, j)을 확인해."),
+        "With N=3 cows, how many total pairs do we need to check?\nWe check every unique pair (i, j) where i < j.", "N=3마리 소가 있으면, 총 몇 개의 쌍을 확인해야 할까? i < j인 모든 유일한 쌍 (i, j)을 확인해요."),
       question: t(E,
         "N=3 cows. How many unique pairs to check?",
         "N=3마리 소. 확인할 유일한 쌍의 수?"),
@@ -251,7 +251,7 @@ export function makeCowGymCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First key insight: the input gives ORDER (who came 1st, 2nd, ...) but we need RANK (what position was cow X?).\nWe need to convert!", "첫 번째 핵심: 입력은 순서(누가 1등, 2등...)를 주지만 우리는 순위(소 X의 위치?)가 필요해. 변환해야 해!"),
+        "First key insight: the input gives ORDER (who came 1st, 2nd, ...) but we need RANK (what position was cow X?).\nWe need to convert!", "첫 번째 핵심: 입력은 순서(누가 1등, 2등...)를 주지만 우리는 순위(소 X의 위치?)가 필요해요. 변환해야 해요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
@@ -330,7 +330,7 @@ export function makeCowGymCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "For N cows, how many unique pairs are there? This determines our algorithm's complexity!", "N마리 소에 대해 유일한 쌍은 몇 개? 이것이 알고리즘의 복잡도를 결정해!"),
+        "For N cows, how many unique pairs are there? This determines our algorithm's complexity!", "N마리 소에 대해 유일한 쌍은 몇 개? 이것이 알고리즘의 복잡도를 결정해요!"),
       question: t(E,
         "N=4 cows. How many unique pairs?",
         "N=4마리 소. 유일한 쌍의 수?"),
@@ -348,7 +348,7 @@ export function makeCowGymCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "For each of the N*(N-1)/2 pairs, we check all K sessions.\nTotal: O(K * N^2).\nWith N<=20 and K<=10 from constraints, this is at most 10*400 = 4000 operations.\nVery fast!", "N*(N-1)/2개 쌍 각각에 대해 K개 세션을 확인.\n총: O(K * N^2).\n제약조건 N<=20, K<=10이면 최대 10*400 = 4000 연산.\n매우 빨라!"),
+        "For each of the N*(N-1)/2 pairs, we check all K sessions.\nTotal: O(K * N^2).\nWith N<=20 and K<=10 from constraints, this is at most 10*400 = 4000 operations.\nVery fast!", "N*(N-1)/2개 쌍 각각에 대해 K개 세션을 확인.\n총: O(K * N^2).\n제약조건 N<=20, K<=10이면 최대 10*400 = 4000 연산.\n매우 빨라요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -456,10 +456,10 @@ export function makeCowGymCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "We use all() to check every session. Why not any()? Think about what 'consistent' means!", "모든 세션을 확인하기 위해 all()을 사용해. 왜 any()가 아닐까? '일관'의 의미를 생각해봐!"),
+        "We use all() to check every session. Why not any()? Think about what 'consistent' means!", "모든 세션을 확인하기 위해 all()을 사용해요. 왜 any()가 아닐까? '일관'의 의미를 생각해봐요!"),
       question: t(E,
         "Why all() instead of any() for checking consistency?",
-        "일관성 확인에서 왜 any()가 아니라 all()일까?"),
+        "일관성 확인에서 왜 any()가 아니라 all()일까요?"),
       options: [
         t(E, "any() is slower", "any()가 더 느려서"),
         t(E, "Consistent means EVERY session, not just some", "일관은 일부가 아니라 모든 세션에서를 의미하니까"),
@@ -468,7 +468,7 @@ export function makeCowGymCh3(E, lang = "py") {
       correct: 1,
       explain: t(E,
         "Consistent means i beats j in ALL sessions, not just some! If even one session disagrees, the pair is inconsistent. That's why we need all()!",
-        "일관은 i가 일부가 아니라 모든 세션에서 j를 이기는 것! 한 세션이라도 다르면 비일관. 그래서 all()이 필요해!"),
+        "일관은 i가 일부가 아니라 모든 세션에서 j를 이기는 것! 한 세션이라도 다르면 비일관. 그래서 all()이 필요해요!"),
     },
     // 3-4: Why range starts at 1
     {
@@ -486,13 +486,13 @@ export function makeCowGymCh3(E, lang = "py") {
       correct: 2,
       explain: t(E,
         "Starting j at i+1 avoids both self-pairs (i,i) AND double-counting (1,2) vs (2,1). We only check each pair once!",
-        "j를 i+1부터 시작하면 자기 자신과의 쌍 (i,i)과 중복 (1,2) vs (2,1)을 모두 피해. 각 쌍을 한 번만 확인!"),
+        "j를 i+1부터 시작하면 자기 자신과의 쌍 (i,i)과 중복 (1,2) vs (2,1)을 모두 피해요. 각 쌍을 한 번만 확인!"),
     },
     // 3-5: Complete code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getCowGymSections(E),
     },
   ];

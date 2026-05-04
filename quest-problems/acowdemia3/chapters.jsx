@@ -55,7 +55,7 @@ export function makeAcow3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows on a grid can become friends if they share an adjacent grass cell.\nEach grass cell can only mediate one friendship.\nMaximize the number of friendships!", "격자 위의 소들은 인접한 풀 칸을 공유하면 친구가 될 수 있어. 각 풀 칸은 하나의 우정만 중재할 수 있어. 우정의 수를 최대화해!"),
+        "Cows on a grid can become friends if they share an adjacent grass cell.\nEach grass cell can only mediate one friendship.\nMaximize the number of friendships!", "격자 위의 소들은 인접한 풀 칸을 공유하면 친구가 될 수 있어요. 각 풀 칸은 하나의 우정만 중재할 수 있어요. 우정의 수를 최대화해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
@@ -64,7 +64,7 @@ export function makeAcow3Ch1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: This is a matching problem.\nGrass cells connect cow pairs. Each grass can mediate at most one friendship. Use greedy or bipartite matching.",
-              "핵심: 이것은 매칭 문제야.\n풀 칸이 소 쌍을 연결해.\n각 풀은 최대 하나의 우정만 중재.\n그리디 또는 이분 매칭 사용.")}
+              "핵심: 이것은 매칭 문제예요.\n풀 칸이 소 쌍을 연결해요.\n각 풀은 최대 하나의 우정만 중재.\n그리디 또는 이분 매칭 사용.")}
           </div>
         </div>),
     },
@@ -84,7 +84,7 @@ export function makeAcow3Ch1(E) {
       correct: 1,
       explain: t(E,
         "The 2 cows can become friends through the shared grass cell. That grass cell is used up, so max = 1.",
-        "2마리 소가 공유 풀 칸을 통해 친구가 될 수 있어. 그 풀 칸은 사용되어 최대 = 1."),
+        "2마리 소가 공유 풀 칸을 통해 친구가 될 수 있어요. 그 풀 칸은 사용되어 최대 = 1."),
     },
     // 1-3: Input
     {
@@ -128,7 +128,7 @@ export function makeAcow3Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getAcowdemia3Sections(E),
     },
   ];

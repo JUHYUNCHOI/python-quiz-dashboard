@@ -31,14 +31,14 @@ export function makeBalancedCh1(E) {
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "String = '(' × N + ')' × M.\nFind the length of the longest balanced bracket subsequence!",
-              "문자열 = '(' × N + ')' × M.\n가장 긴 균형 괄호 부분수열의 길이를 구해!")}
+              "문자열 = '(' × N + ')' × M.\n가장 긴 균형 괄호 부분수열의 길이를 구해요!")}
           </div>
         </div>),
     },
     {
       type: "reveal",
       narr: t(E,
-        "A balanced bracket string has matching pairs.\n'(())' is balanced, '(()' is not.\nA subsequence can skip characters!", "균형 괄호 문자열은 쌍이 맞아야 해. '(())'는 균형, '(()'는 아님. 부분수열은 문자를 건너뛸 수 있어!"),
+        "A balanced bracket string has matching pairs.\n'(())' is balanced, '(()' is not.\nA subsequence can skip characters!", "균형 괄호 문자열은 쌍이 맞아야 해요. '(())'는 균형, '(()'는 아님. 부분수열은 문자를 건너뛸 수 있어요!"),
       content: (
         <div style={{ padding: 16 }}>
           {/* Two side-by-side example cards */}
@@ -90,7 +90,7 @@ export function makeBalancedCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Since ALL '(' come before ALL ')', every '(' can be matched with a ')'.\nWe just need enough of each!", "모든 '('가 모든 ')' 앞에 오니까, 모든 '('는 ')'와 매칭할 수 있어. 각각 충분히 있기만 하면 돼!"),
+        "Since ALL '(' come before ALL ')', every '(' can be matched with a ')'.\nWe just need enough of each!", "모든 '('가 모든 ')' 앞에 오니까, 모든 '('는 ')'와 매칭할 수 있어요. 각각 충분히 있기만 하면 돼요!"),
       question: t(E,
         "For N=5, M=3, what's the longest balanced subsequence length?",
         "N=5, M=3이면, 가장 긴 균형 부분수열 길이는?"),
@@ -103,7 +103,7 @@ export function makeBalancedCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "The answer is simply 2 × min(N, M).\nSince all opening brackets are before closing ones, we can always match min(N,M) pairs!", "답은 간단히 2 × min(N, M). 여는 괄호가 모두 닫는 괄호 앞에 있으니, 항상 min(N,M)쌍을 매칭할 수 있어!"),
+        "The answer is simply 2 × min(N, M).\nSince all opening brackets are before closing ones, we can always match min(N,M) pairs!", "답은 간단히 2 × min(N, M). 여는 괄호가 모두 닫는 괄호 앞에 있으니, 항상 min(N,M)쌍을 매칭할 수 있어요!"),
       question: t(E, "N=100, M=42. Answer?", "N=100, M=42. 답은?"),
       answer: 84,
     },
@@ -184,7 +184,7 @@ export function makeBalancedCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "What if the string were mixed like '())((' instead of all '(' first?\nWould the answer still be 2×min(N,M)?", "만약 문자열이 '()((' 처럼 섞여있다면? 답이 여전히 2×min(N,M)일까?"),
+        "What if the string were mixed like '())((' instead of all '(' first?\nWould the answer still be 2×min(N,M)?", "만약 문자열이 '()((' 처럼 섞여있다면? 답이 여전히 2×min(N,M)일까요?"),
       question: t(E,
         "For the string '))((' (N=2 open, M=2 close but mixed), is the longest balanced subseq still 4?",
         "문자열 '))((' (N=2 열림, M=2 닫힘이지만 섞임)에서 가장 긴 균형 부분수열이 여전히 4?"),
@@ -196,7 +196,7 @@ export function makeBalancedCh2(E) {
       correct: 0,
       explain: t(E,
         "'))((': all ')' come first! No '(' is before any ')' so no matching possible. The ORDER matters — our problem guarantees all '(' first!",
-        "'))((': 모든 ')'가 먼저 와! '('가 ')' 앞에 없어서 매칭 불가. 순서가 중요해 — 우리 문제는 모든 '('가 먼저!"),
+        "'))((': 모든 ')'가 먼저 와요! '('가 ')' 앞에 없어서 매칭 불가. 순서가 중요해 — 우리 문제는 모든 '('가 먼저!"),
     },
     {
       type: "input",

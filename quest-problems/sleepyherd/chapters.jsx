@@ -42,7 +42,7 @@ export function makeSleepyHerdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Three cows stand on a number line.\nYou can only move an endpoint cow to a position between the other two (not to the other end).\nFind the minimum and maximum number of moves to make them consecutive.", "세 마리 소가 수직선에 서 있어.\n끝에 있는 소만 다른 두 소 사이로 옮길 수 있어 (반대쪽 끝으로는 안 돼).\n연속된 위치로 만드는 최소/최대 이동 횟수를 구해!"),
+        "Three cows stand on a number line.\nYou can only move an endpoint cow to a position between the other two (not to the other end).\nFind the minimum and maximum number of moves to make them consecutive.", "세 마리 소가 수직선에 서 있어요.\n끝에 있는 소만 다른 두 소 사이로 옮길 수 있어 (반대쪽 끝으로는 안 돼).\n연속된 위치로 만드는 최소/최대 이동 횟수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude34"}</div>
@@ -84,7 +84,7 @@ export function makeSleepyHerdCh1(E) {
         "위치 [4,7,9]. 최소 이동 횟수?"),
       hint: t(E,
         "Gap 7-9 is 2, so we can place the cow at 4 into position 8 in one move.",
-        "7-9 간격이 2이므로 4에 있는 소를 8로 1번에 옮길 수 있어."),
+        "7-9 간격이 2이므로 4에 있는 소를 8로 1번에 옮길 수 있어요."),
       answer: 1,
     },
   ];
@@ -116,7 +116,7 @@ export function makeSleepyHerdCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getSleepyHerdSections(E),
     },
   ];

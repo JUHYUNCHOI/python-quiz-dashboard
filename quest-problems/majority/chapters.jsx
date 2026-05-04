@@ -30,7 +30,7 @@ export function makeMajorityCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows each prefer a type of hay.\nFocus groups of 3 adjacent cows can convince the middle cow to switch.\nWhich hay types can become universal?\nLet's find out!", "N마리의 소가 각각 좋아하는 건초가 있어. 인접한 3마리 포커스 그룹이 가운데 소를 설득할 수 있어. 어떤 건초가 전체를 지배할 수 있을까?"),
+        "N cows each prefer a type of hay.\nFocus groups of 3 adjacent cows can convince the middle cow to switch.\nWhich hay types can become universal?\nLet's find out!", "N마리의 소가 각각 좋아하는 건초가 있어요. 인접한 3마리 포커스 그룹이 가운데 소를 설득할 수 있어요. 어떤 건초가 전체를 지배할 수 있을까?"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🗳️</div>
@@ -39,7 +39,7 @@ export function makeMajorityCh1(E) {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "Key insight: a hay type can become universal only if it appears in at least 2 adjacent positions somewhere in the line!",
-              "핵심: 건초 종류가 전체를 지배하려면, 줄 어딘가에 연속 2칸 이상 나와야 해!")}
+              "핵심: 건초 종류가 전체를 지배하려면, 줄 어딘가에 연속 2칸 이상 나와야 해요!")}
           </div>
         </div>),
     },
@@ -66,7 +66,7 @@ export function makeMajorityCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Count the adjacent pairs!\nIn [1, 1, 2, 3, 3], how many adjacent pairs share the same value?", "인접 쌍을 세봐! [1, 1, 2, 3, 3]에서 같은 값을 가진 인접 쌍은 몇 개?"),
+        "Count the adjacent pairs!\nIn [1, 1, 2, 3, 3], how many adjacent pairs share the same value?", "인접 쌍을 세봐요! [1, 1, 2, 3, 3]에서 같은 값을 가진 인접 쌍은 몇 개?"),
       question: t(E,
         "Array [1, 1, 2, 3, 3]: how many adjacent pairs have the same value?",
         "배열 [1, 1, 2, 3, 3]: 같은 값의 인접 쌍은 몇 개?"),
@@ -78,7 +78,7 @@ export function makeMajorityCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Pick a preset and step through the adjacent-pair scan.\nWatch which values get added to the result set.", "프리셋을 골라 인접 쌍 스캔을 한 단계씩. 어떤 값이 결과 집합에 추가되는지 봐."),
+        "Pick a preset and step through the adjacent-pair scan.\nWatch which values get added to the result set.", "프리셋을 골라 인접 쌍 스캔을 한 단계씩. 어떤 값이 결과 집합에 추가되는지 봐요."),
     },
   ];
 }
@@ -93,7 +93,7 @@ export function makeMajorityCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "We just scan once through the array checking adjacent pairs. That's O(N) time!", "배열을 한 번 쭉 훑으면서 인접 쌍만 확인하면 돼. O(N) 시간!"),
+        "We just scan once through the array checking adjacent pairs. That's O(N) time!", "배열을 한 번 쭉 훑으면서 인접 쌍만 확인하면 돼요. O(N) 시간!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

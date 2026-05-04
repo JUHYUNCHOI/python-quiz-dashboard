@@ -56,7 +56,7 @@ export function makeAirCond1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N stalls with current and preferred temperatures.\nEach command adjusts a consecutive range by +1 or -1.\nFind the minimum number of commands!", "N개 칸에 현재 온도와 원하는 온도가 있어. 각 명령은 연속 구간을 +1 또는 -1 조절해. 최소 명령 수를 구해!"),
+        "N stalls with current and preferred temperatures.\nEach command adjusts a consecutive range by +1 or -1.\nFind the minimum number of commands!", "N개 칸에 현재 온도와 원하는 온도가 있어요. 각 명령은 연속 구간을 +1 또는 -1 조절해요. 최소 명령 수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf21\ufe0f"}</div>
@@ -73,7 +73,7 @@ export function makeAirCond1Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Think of the diff array like a histogram.\nEach horizontal stroke covers a range.\nHow many strokes do we need?", "차이 배열을 히스토그램처럼 생각해. 각 수평 선은 구간을 커버해. 몇 개의 선이 필요할까?"),
+        "Think of the diff array like a histogram.\nEach horizontal stroke covers a range.\nHow many strokes do we need?", "차이 배열을 히스토그램처럼 생각해요. 각 수평 선은 구간을 커버해요. 몇 개의 선이 필요할까?"),
       question: t(E,
         "diff = [3, 3, 3]. How many commands needed? (One command covers all 3, repeated 3 times)",
         "diff = [3, 3, 3]. 필요한 명령 수? (하나의 명령이 3칸 모두 커버, 3번 반복)"),
@@ -91,7 +91,7 @@ export function makeAirCond1Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "diff = [3, 3, 3]. All same height. One wide stroke repeated 3 times.", "diff = [3, 3, 3]. 높이가 모두 같아. 넓은 선 하나를 3번 반복."),
+        "diff = [3, 3, 3]. All same height. One wide stroke repeated 3 times.", "diff = [3, 3, 3]. 높이가 모두 같아요. 넓은 선 하나를 3번 반복."),
       question: t(E,
         "diff = [3, 3, 3]. Min commands?",
         "diff = [3, 3, 3]. 최소 명령 수?"),
@@ -121,7 +121,7 @@ export function makeAirCond1Ch2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Extend diff with 0 at both ends.\nAnswer = sum of max(0, d[i] - d[i-1]) for all i. Each positive jump means we need new commands.",
-              "diff 양쪽 끝에 0 추가.\n답 = 모든 i에 대해 max(0, d[i] - d[i-1])의 합.\n양의 점프마다 새 명령이 필요해.")}
+              "diff 양쪽 끝에 0 추가.\n답 = 모든 i에 대해 max(0, d[i] - d[i-1])의 합.\n양의 점프마다 새 명령이 필요해요.")}
           </div>
         </div>),
     },
@@ -129,7 +129,7 @@ export function makeAirCond1Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getAirCond1Sections(E),
     },
   ];

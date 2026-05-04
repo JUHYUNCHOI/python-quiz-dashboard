@@ -53,7 +53,7 @@ export function makeMcc19PalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Find the N-th palindrome in base K.\nPalindromes read the same forwards and backwards.\nEnumerate by length: first half determines the whole number!", "K진법에서 N번째 회문수를 찾아. 회문은 앞뒤로 읽어도 같아. 길이별로 열거: 앞 절반이 전체를 결정해!"),
+        "Find the N-th palindrome in base K.\nPalindromes read the same forwards and backwards.\nEnumerate by length: first half determines the whole number!", "K진법에서 N번째 회문수를 찾아요. 회문은 앞뒤로 읽어도 같아요. 길이별로 열거: 앞 절반이 전체를 결정해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🔄</div>
@@ -62,7 +62,7 @@ export function makeMcc19PalCh1(E) {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Palindromes of length L are determined by the first ceil(L/2) digits.\nCount how many exist per length, then construct the N-th one.",
-              "핵심: 길이 L의 회문은 처음 ceil(L/2)자리로 결정돼.\n길이별 개수를 세고 N번째를 구성해.")}
+              "핵심: 길이 L의 회문은 처음 ceil(L/2)자리로 결정돼요.\n길이별 개수를 세고 N번째를 구성해요.")}
           </div>
         </div>),
     },
@@ -82,7 +82,7 @@ export function makeMcc19PalCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! 1-9 are the first 9 palindromes. The 10th is 11 (first 2-digit palindrome).",
-        "맞아! 1-9가 처음 9개 회문이야. 10번째는 11 (첫 번째 2자리 회문)."),
+        "맞아! 1-9가 처음 9개 회문이예요. 10번째는 11 (첫 번째 2자리 회문)."),
     },
     // 1-3: Input
     {
@@ -126,7 +126,7 @@ export function makeMcc19PalCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc19PalSections(E),
     },
   ];

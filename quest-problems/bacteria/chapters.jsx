@@ -41,7 +41,7 @@ export function makeBacteriaCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N patches of bacteria have deviation values.\nA sprayer from the right applies a triangular pattern: at power L, the rightmost patch gets L, the next gets L-1, etc.\nFind the minimum number of applications to zero everything out!", "N개의 세균 패치에 편차값이 있어.\n오른쪽에서 분무기를 쏘면 삼각형 패턴으로 적용돼: 파워 L이면 맨 오른쪽이 L, 그 다음이 L-1, ...\n모든 값을 0으로 만드는 최소 횟수를 구해!"),
+        "N patches of bacteria have deviation values.\nA sprayer from the right applies a triangular pattern: at power L, the rightmost patch gets L, the next gets L-1, etc.\nFind the minimum number of applications to zero everything out!", "N개의 세균 패치에 편차값이 있어요.\n오른쪽에서 분무기를 쏘면 삼각형 패턴으로 적용돼: 파워 L이면 맨 오른쪽이 L, 그 다음이 L-1, ...\n모든 값을 0으로 만드는 최소 횟수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udda0"}</div>
@@ -50,7 +50,7 @@ export function makeBacteriaCh1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Process left to right.\nEach spray from the right creates a triangular effect. Use greedy + prefix sums to track cumulative spray effects.",
-              "핵심: 왼쪽에서 오른쪽으로 처리.\n오른쪽에서의 분무는 삼각형 효과를 만들어.\n그리디 + 누적합으로 분무 효과를 추적해.")}
+              "핵심: 왼쪽에서 오른쪽으로 처리.\n오른쪽에서의 분무는 삼각형 효과를 만들어요.\n그리디 + 누적합으로 분무 효과를 추적해요.")}
           </div>
         </div>),
     },
@@ -58,7 +58,7 @@ export function makeBacteriaCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Understanding the spray pattern: if we spray at power 2 from the right, patch N gets 2, patch N-1 gets 1.\nIs this correct?", "분무 패턴 이해: 파워 2로 오른쪽에서 분무하면, 패치 N은 2, 패치 N-1은 1을 받아. 맞을까?"),
+        "Understanding the spray pattern: if we spray at power 2 from the right, patch N gets 2, patch N-1 gets 1.\nIs this correct?", "분무 패턴 이해: 파워 2로 오른쪽에서 분무하면, 패치 N은 2, 패치 N-1은 1을 받아요. 맞을까?"),
       question: t(E,
         "Spray power 2 from right: patch N gets 2, patch N-1 gets 1. True?",
         "파워 2로 오른쪽에서 분무: 패치 N은 2, 패치 N-1은 1. 맞아?"),
@@ -69,19 +69,19 @@ export function makeBacteriaCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! The spray creates a triangular pattern: power L at the rightmost, L-1 at the next, and so on.",
-        "맞아! 분무는 삼각형 패턴을 만들어: 맨 오른쪽에 L, 그 다음에 L-1, 이런 식이야."),
+        "맞아! 분무는 삼각형 패턴을 만들어: 맨 오른쪽에 L, 그 다음에 L-1, 이런 식이예요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "If a = [0, 5] (2 patches), how many sprays of power 5 do we need to fix the right patch?", "a = [0, 5] (패치 2개)이면, 오른쪽 패치를 고치려면 파워 5 분무가 몇 번 필요해?"),
+        "If a = [0, 5] (2 patches), how many sprays of power 5 do we need to fix the right patch?", "a = [0, 5] (패치 2개)이면, 오른쪽 패치를 고치려면 파워 5 분무가 몇 번 필요해요?"),
       question: t(E,
         "a = [0, 5]. Min sprays to make right patch 0? (Each spray adds -1 to right patch)",
         "a = [0, 5]. 오른쪽 패치를 0으로 만드는 최소 분무 횟수? (분무 1회 = 오른쪽에 -1)"),
       hint: t(E,
         "Each spray of power -1 reduces the right patch by 1. We need 5 sprays.",
-        "파워 -1의 분무 1회는 오른쪽 패치를 1 줄여줘. 5번 필요해."),
+        "파워 -1의 분무 1회는 오른쪽 패치를 1 줄여줘요. 5번 필요해요."),
       answer: 5,
     },
   ];
@@ -97,7 +97,7 @@ export function makeBacteriaCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Process from left to right using prefix sums to track spray effects. O(N) time!", "왼쪽에서 오른쪽으로 누적합을 이용해 분무 효과를 추적해. O(N) 시간!"),
+        "Process from left to right using prefix sums to track spray effects. O(N) time!", "왼쪽에서 오른쪽으로 누적합을 이용해 분무 효과를 추적해요. O(N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -113,7 +113,7 @@ export function makeBacteriaCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getBacteriaSections(E),
     },
   ];

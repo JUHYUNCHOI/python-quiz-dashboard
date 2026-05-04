@@ -56,7 +56,7 @@ export function makeLivestockCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "8 cows with N adjacency constraints (\"X must be beside Y\").\nFind the lexicographically smallest valid ordering.\nModel as a graph: constraints form chains since max degree is 2.", "8마리 소에 N개 인접 조건 (\"X는 Y 옆에 있어야 함\"). 사전순 최소 유효 순서를 구해. 그래프로 모델링: 최대 차수가 2이므로 체인을 형성."),
+        "8 cows with N adjacency constraints (\"X must be beside Y\").\nFind the lexicographically smallest valid ordering.\nModel as a graph: constraints form chains since max degree is 2.", "8마리 소에 N개 인접 조건 (\"X는 Y 옆에 있어야 함\"). 사전순 최소 유효 순서를 구해요. 그래프로 모델링: 최대 차수가 2이므로 체인을 형성."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🐄"}</div>
@@ -73,7 +73,7 @@ export function makeLivestockCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If there are 0 constraints, all 8 cows are free.\nThe lexicographically smallest ordering is simply alphabetical order!", "조건이 0개이면 8마리 소 모두 자유야. 사전순 최소 순서는 단순히 알파벳 순서!"),
+        "If there are 0 constraints, all 8 cows are free.\nThe lexicographically smallest ordering is simply alphabetical order!", "조건이 0개이면 8마리 소 모두 자유예요. 사전순 최소 순서는 단순히 알파벳 순서!"),
       question: t(E,
         "0 constraints, 8 cows. How many cows in the lineup?",
         "조건 0개, 소 8마리. 줄에 소가 몇 마리?"),
@@ -85,7 +85,7 @@ export function makeLivestockCh1(E) {
       correct: 2,
       explain: t(E,
         "Correct! All 8 cows must appear in the lineup regardless of constraints.",
-        "정답! 조건과 상관없이 모든 8마리 소가 줄에 나와야 해."),
+        "정답! 조건과 상관없이 모든 8마리 소가 줄에 나와야 해요."),
     },
     // 1-3: Input
     {
@@ -97,7 +97,7 @@ export function makeLivestockCh1(E) {
         "Livestock Lineup에서 총 소는 몇 마리?"),
       hint: t(E,
         "The problem always has exactly 8 cows.",
-        "이 문제는 항상 정확히 8마리 소가 있어."),
+        "이 문제는 항상 정확히 8마리 소가 있어요."),
       answer: 8,
     },
   ];
@@ -129,7 +129,7 @@ export function makeLivestockCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getLivestockSections(E),
     },
   ];

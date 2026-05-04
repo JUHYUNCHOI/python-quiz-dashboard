@@ -44,7 +44,7 @@ export function makeMilkMeasCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Three cows start at 7 gallons.\nOver 100 days, milk production changes.\nCount how many times the display (set of leaders) changes.", "세 마리 소가 각각 7갤런으로 시작해. 100일 동안 우유 생산량이 변해. 디스플레이(리더 집합)가 몇 번 바뀌는지 세."),
+        "Three cows start at 7 gallons.\nOver 100 days, milk production changes.\nCount how many times the display (set of leaders) changes.", "세 마리 소가 각각 7갤런으로 시작해요. 100일 동안 우유 생산량이 변해요. 디스플레이(리더 집합)가 몇 번 바뀌는지 세."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcca"}</div>
@@ -53,7 +53,7 @@ export function makeMilkMeasCh1(E) {
           <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Simulate day by day.\nTrack the set of cows with maximum milk. Each time this set changes, increment the counter.",
-              "핵심: 날마다 시뮬레이션해.\n최대 우유를 가진 소의 집합을 추적해.\n이 집합이 바뀔 때마다 카운터를 증가시켜.")}
+              "핵심: 날마다 시뮬레이션해요.\n최대 우유를 가진 소의 집합을 추적해요.\n이 집합이 바뀔 때마다 카운터를 증가시켜.")}
           </div>
         </div>),
     },
@@ -61,7 +61,7 @@ export function makeMilkMeasCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "All cows start at 7.\nDay 1: Bessie (cow 1) gets +5, now at 12.\nLeaders change from {all three} to {Bessie}.\nIs this 1 display change?", "모든 소가 7에서 시작. 1일차: 베시(소 1)가 +5, 이제 12. 리더가 {전부}에서 {베시}로 변경. 디스플레이 변경 1번이야?"),
+        "All cows start at 7.\nDay 1: Bessie (cow 1) gets +5, now at 12.\nLeaders change from {all three} to {Bessie}.\nIs this 1 display change?", "모든 소가 7에서 시작. 1일차: 베시(소 1)가 +5, 이제 12. 리더가 {전부}에서 {베시}로 변경. 디스플레이 변경 1번이예요?"),
       question: t(E,
         "Start: all at 7 (leaders = all). Bessie +5 -> 12. Leaders = {Bessie}. Display changes?",
         "시작: 모두 7 (리더 = 전부). 베시 +5 -> 12. 리더 = {베시}. 디스플레이 변경 횟수?"),
@@ -101,7 +101,7 @@ export function makeMilkMeasCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort changes by day, simulate. Track leader set with a frozenset. O(N log N) time!", "변경을 날짜순 정렬하고 시뮬레이션해. frozenset으로 리더 집합 추적. O(N log N) 시간!"),
+        "Sort changes by day, simulate. Track leader set with a frozenset. O(N log N) time!", "변경을 날짜순 정렬하고 시뮬레이션해요. frozenset으로 리더 집합 추적. O(N log N) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -117,7 +117,7 @@ export function makeMilkMeasCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMilkMeasSections(E),
     },
   ];

@@ -25,7 +25,7 @@ export function makeCheckupsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows with breed types.\nHe checks them against Bessie's list.\nHow many match?\nAnd what's the maximum possible?\n🐮", "FJ에게 N마리 소의 품종이 있어. 베시의 리스트와 비교해서 몇 개가 일치하는지, 최대 얼마나 일치시킬 수 있는지 찾자! 🐮"),
+        "FJ has N cows with breed types.\nHe checks them against Bessie's list.\nHow many match?\nAnd what's the maximum possible?\n🐮", "FJ에게 N마리 소의 품종이 있어요. 베시의 리스트와 비교해서 몇 개가 일치하는지, 최대 얼마나 일치시킬 수 있는지 찾자! 🐮"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐮</div>
@@ -106,7 +106,7 @@ export function makeCheckupsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Why min of each breed?\nIf a has 3 cows of breed 5 but b has only 1, you can match at most 1 (the bottleneck side).\nSum across all breeds.",
-        "왜 각 품종의 min일까?\na에 품종 5가 3마리, b에 1마리뿐이면 최대 1마리만 매칭 (적은 쪽이 한계).\n모든 품종 합산."),
+        "왜 각 품종의 min일까요?\na에 품종 5가 3마리, b에 1마리뿐이면 최대 1마리만 매칭 (적은 쪽이 한계).\n모든 품종 합산."),
       content: (
         <div style={{ padding: 16 }}>
           {/* Concrete Counter comparison */}

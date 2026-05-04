@@ -26,7 +26,7 @@ export function makeMcc20MissingCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A permutation of 1 to N with one number missing and some signs shuffled.\nFind the sum of all possible missing values.", "1부터 N까지의 순열에서 하나가 빠지고 일부 부호가 바뀌었어. 가능한 빠진 값의 합을 구해!"),
+        "A permutation of 1 to N with one number missing and some signs shuffled.\nFind the sum of all possible missing values.", "1부터 N까지의 순열에서 하나가 빠지고 일부 부호가 바뀌었어. 가능한 빠진 값의 합을 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2753"}</div>
@@ -89,7 +89,7 @@ export function makeMcc20MissingCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc20MissingSections(E),
     },
   ];

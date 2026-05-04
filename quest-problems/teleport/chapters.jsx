@@ -29,7 +29,7 @@ export function makeTeleportCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John wants to go from position a to position b on a number line.\nThere's a teleporter between positions x and y.\nFind the minimum distance!", "농부 존이 수직선에서 위치 a에서 b로 가려 해. 위치 x와 y 사이에 텔레포터가 있어. 최소 거리를 구해!"),
+        "Farmer John wants to go from position a to position b on a number line.\nThere's a teleporter between positions x and y.\nFind the minimum distance!", "농부 존이 수직선에서 위치 a에서 b로 가려 해요. 위치 x와 y 사이에 텔레포터가 있어요. 최소 거리를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf00"}</div>
@@ -102,7 +102,7 @@ export function makeTeleportCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getTeleportSections(E),
     },
   ];

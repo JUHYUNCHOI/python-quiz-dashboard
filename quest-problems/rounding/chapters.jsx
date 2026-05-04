@@ -186,7 +186,7 @@ export function makeCh1(E) {
       ),
     },
     // 1-3: Two methods
-    { type: "reveal", narr: t(E, "Two different rounding methods!", "Bessie와 Elsie가 반올림하는 방법이 서로 달라! 누가 맞을까?"),
+    { type: "reveal", narr: t(E, "Two different rounding methods!", "Bessie와 Elsie가 반올림하는 방법이 서로 달라요! 누가 맞을까?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", gap: 10 }}>
@@ -232,7 +232,7 @@ export function makeCh1(E) {
       ),
     },
     // 1-5: Goal
-    { type: "reveal", narr: t(E, "Goal: among 2 to N, count x where Bessie ≠ Elsie!", "목표: 2부터 N까지 수 중에서, Bessie랑 Elsie의 답이 다른 수가 몇 개인지 구해!"),
+    { type: "reveal", narr: t(E, "Goal: among 2 to N, count x where Bessie ≠ Elsie!", "목표: 2부터 N까지 수 중에서, Bessie랑 Elsie의 답이 다른 수가 몇 개인지 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ background: "linear-gradient(135deg,#4f46e5,#6366f1)", borderRadius: 16, padding: "20px 16px", boxShadow: "0 4px 20px rgba(79,70,229,.3)" }}>
@@ -343,8 +343,8 @@ export function buildSimSteps(x, E) {
   steps.push({ phase: "elsie_result", narr: t(E, "Elsie's result…", "Elsie의 결과는…"), result: eResult, number: x });
   steps.push({ phase: "compare",
     narr: isDiff
-      ? t(E, `❌ ${bResult} vs ${eResult} — Different!`, `❌ ${bResult} vs ${eResult} — 달라!`)
-      : t(E, `✅ Both ${bResult} — Same!`, `✅ 둘 다 ${bResult} — 같아!`),
+      ? t(E, `❌ ${bResult} vs ${eResult} — Different!`, `❌ ${bResult} vs ${eResult} — 달라요!`)
+      : t(E, `✅ Both ${bResult} — Same!`, `✅ 둘 다 ${bResult} — 같아요!`),
     bessie: bResult, elsie: eResult, isDiff });
 
   return steps;
@@ -372,18 +372,18 @@ export function makePatternSteps(E) {
     },
     // 3-2: Common feature
     { type: "quiz",
-      narr: t(E, "Look at only ❌: 48, 445, 4459", "❌인 수만 모아봤: 48, 445, 4459. 이 세 수의 공통점이 보여?"),
+      narr: t(E, "Look at only ❌: 48, 445, 4459", "❌인 수만 모아봤: 48, 445, 4459. 이 세 수의 공통점이 보여요?"),
       question: t(E, "What do these three have in common?", "이 세 수의 공통점은?"),
-      hint: t(E, "Look at the first digit!", "첫째 자리를 봐!"),
+      hint: t(E, "Look at the first digit!", "첫째 자리를 봐요!"),
       options: t(E,
         ["First digit always even", "First digit always 4", "All divisible by 8", "Even number of digits"],
         ["첫째 자리가 짝수", "첫째 자리가 전부 4", "전부 8의 배수", "자릿수가 짝수"]),
       correct: 1,
-      explain: t(E, "All start with 4! That's the key.", "전부 4로 시작해! 이게 핵심이야."),
+      explain: t(E, "All start with 4! That's the key.", "전부 4로 시작해요! 이게 핵심이예요."),
     },
     // 3-3: Why 4?
     { type: "quiz",
-      narr: t(E, "Why 4? Remember, Bessie only checks the first digit.", "왜 4일까? Bessie는 첫째 자리만 보잖아."),
+      narr: t(E, "Why 4? Remember, Bessie only checks the first digit.", "왜 4일까요? Bessie는 첫째 자리만 보잖아요."),
       question: t(E, "First digit is 4 — Bessie rounds up or down?", "첫째 자리가 4면, Bessie는 올릴까 버릴까?"),
       options: t(E, ["Up (4 ≥ 5)", "Down (4 < 5)"], ["올린다 (4 ≥ 5)", "버린다 (4 < 5)"]),
       correct: 1,
@@ -565,7 +565,7 @@ export function makePatternSteps(E) {
           {/* 왜 마지막은 5~9, 중간은 4~9 인가 */}
           <div style={{ marginTop: 14, padding: "12px 14px", background: "#fef3c7", border: `1.5px solid #fcd34d`, borderRadius: 10 }}>
             <div style={{ fontSize: 12, fontWeight: 800, color: "#a16207", marginBottom: 8 }}>
-              🤔 {t(E, "Wait — why is last 5~9 but middle 4~9?", "잠깐 — 왜 마지막은 5~9 인데 중간은 4~9 일까?")}
+              🤔 {t(E, "Wait — why is last 5~9 but middle 4~9?", "잠깐 — 왜 마지막은 5~9 인데 중간은 4~9 일까요?")}
             </div>
             <div style={{ fontSize: 12, color: "#78350f", lineHeight: 1.85 }}>
               <div style={{ marginBottom: 4 }}>

@@ -59,7 +59,7 @@ export function makeOddPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We need to partition cows into consecutive groups where group sums alternate between even and odd.\nMaximize the number of groups!", "소들을 연속 그룹으로 나눠서 그룹 합이 짝수/홀수로 번갈아가게 해야 해. 그룹 수를 최대화해!"),
+        "We need to partition cows into consecutive groups where group sums alternate between even and odd.\nMaximize the number of groups!", "소들을 연속 그룹으로 나눠서 그룹 합이 짝수/홀수로 번갈아가게 해야 해요. 그룹 수를 최대화해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf8"}</div>
@@ -76,7 +76,7 @@ export function makeOddPhotosCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If all IDs are even like [2,4,6,8], the first group needs even sum.\nBut the second group needs odd sum.\nCan we make an odd sum from even numbers?", "모든 ID가 짝수인 [2,4,6,8]이면, 첫 그룹은 짝수 합이 필요해. 하지만 두 번째 그룹은 홀수 합이 필요해. 짝수만으로 홀수 합을 만들 수 있을까?"),
+        "If all IDs are even like [2,4,6,8], the first group needs even sum.\nBut the second group needs odd sum.\nCan we make an odd sum from even numbers?", "모든 ID가 짝수인 [2,4,6,8]이면, 첫 그룹은 짝수 합이 필요해요. 하지만 두 번째 그룹은 홀수 합이 필요해요. 짝수만으로 홀수 합을 만들 수 있을까?"),
       question: t(E,
         "IDs = [2,4,6,8]. Max groups with alternating even/odd sums?",
         "IDs = [2,4,6,8]. 짝수/홀수 합 번갈아하는 최대 그룹 수?"),
@@ -87,7 +87,7 @@ export function makeOddPhotosCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! Group 1 has even sum, but group 2 needs odd sum which is impossible with only even numbers. Max: 1 group.",
-        "맞아! 그룹 1은 짝수 합이지만 그룹 2는 홀수 합이 필요한데 짝수만으로는 불가능해. 최대: 1 그룹."),
+        "맞아! 그룹 1은 짝수 합이지만 그룹 2는 홀수 합이 필요한데 짝수만으로는 불가능해요. 최대: 1 그룹."),
     },
     // 1-3: Input
     {
@@ -123,7 +123,7 @@ export function makeOddPhotosCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "Count odd and even IDs.\nGreedily form groups alternating even/odd sums until we can't continue.",
-              "홀수/짝수 ID 개수를 세고 짝수/홀수 합을 번갈아 그리디로 그룹을 만들어.")}
+              "홀수/짝수 ID 개수를 세고 짝수/홀수 합을 번갈아 그리디로 그룹을 만들어요.")}
           </div>
         </div>),
     },
@@ -131,7 +131,7 @@ export function makeOddPhotosCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getOddPhotosSections(E),
     },
   ];

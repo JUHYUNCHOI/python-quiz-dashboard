@@ -42,7 +42,7 @@ export function makeCowPhotosCh1(E) {
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Bitonic (↑ then ↓) + Symmetric (palindrome) + No adjacent duplicates.\nFind max cows that fit!",
-              "바이토닉 (↑ 후 ↓) + 대칭 (팰린드롬) + 인접 중복 금지.\n맞는 최대 소 수를 찾아!")}
+              "바이토닉 (↑ 후 ↓) + 대칭 (팰린드롬) + 인접 중복 금지.\n맞는 최대 소 수를 찾아요!")}
           </div>
         </div>),
     },
@@ -59,12 +59,12 @@ export function makeCowPhotosCh1(E) {
         "[3, 2, 1, 2, 3]",
       ],
       correct: 0,
-      explain: t(E, "Bitonic ✓, palindrome ✓, no adjacent dups ✓. [1,2,2,1] has adjacent 2s!", "바이토닉 ✓, 팰린드롬 ✓, 인접 중복 없음 ✓. [1,2,2,1]은 인접 2가 있어!"),
+      explain: t(E, "Bitonic ✓, palindrome ✓, no adjacent dups ✓. [1,2,2,1] has adjacent 2s!", "바이토닉 ✓, 팰린드롬 ✓, 인접 중복 없음 ✓. [1,2,2,1]은 인접 2가 있어요!"),
     },
     {
       type: "input",
       narr: t(E,
-        "Heights = [3,3,2,1].\nCan we use all 4?\n[1,3,3,1] has adjacent 3s.\n[1,3,1] works but only uses 3.\nBest length?", "키 = [3,3,2,1]. 4개 다 쓸 수 있어? [1,3,3,1]은 인접 3. [1,3,1]은 되지만 3개만. 최대 길이?"),
+        "Heights = [3,3,2,1].\nCan we use all 4?\n[1,3,3,1] has adjacent 3s.\n[1,3,1] works but only uses 3.\nBest length?", "키 = [3,3,2,1]. 4개 다 쓸 수 있어요? [1,3,3,1]은 인접 3. [1,3,1]은 되지만 3개만. 최대 길이?"),
       question: t(E, "Max valid photo length for [3,3,2,1]?", "[3,3,2,1]의 최대 유효 사진 길이?"),
       answer: 1,
     },

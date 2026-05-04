@@ -18,7 +18,7 @@ export function makeMooCh1(E) {
       </div>),
     },
     { type: "reveal",
-      narr: t(E, "A 'moo' is 3 letters: the first is different, and the last two are the SAME.\nLike how a cow says 'moo' — one sound, then the same sound twice!", "'moo'는 3글자야: 첫 글자가 다르고, 뒤 2글자가 같아! 소가 '무우' 하는 것처럼 — 한 소리, 그다음 같은 소리 2번!"),
+      narr: t(E, "A 'moo' is 3 letters: the first is different, and the last two are the SAME.\nLike how a cow says 'moo' — one sound, then the same sound twice!", "'moo'는 3글자야: 첫 글자가 다르고, 뒤 2글자가 같아요! 소가 '무우' 하는 것처럼 — 한 소리, 그다음 같은 소리 2번!"),
       content: (<div style={{ padding: 16 }}>
         <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: C.accent, marginBottom: 10 }}>{t(E, "Moo Pattern: ABB (A≠B)", "Moo 패턴: ABB (A≠B)")}</div>
@@ -28,19 +28,19 @@ export function makeMooCh1(E) {
             ))}
           </div>
           <div style={{ fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "'ooo' fails: first = last two. 'abc' fails: last two differ.", "'ooo'는 실패: 첫 글자 = 뒤 글자. 'abc'도 실패: 뒤 2글자가 달라.")}
+            {t(E, "'ooo' fails: first = last two. 'abc' fails: last two differ.", "'ooo'는 실패: 첫 글자 = 뒤 글자. 'abc'도 실패: 뒤 2글자가 달라요.")}
           </div>
         </div>
       </div>),
     },
     { type: "quiz",
-      narr: t(E, "Quick check! Which of these is a valid moo?", "퀴즈! 어떤 게 유효한 moo일까?"),
+      narr: t(E, "Quick check! Which of these is a valid moo?", "퀴즈! 어떤 게 유효한 moo일까요?"),
       question: t(E, "Which is a valid moo (ABB, A≠B)?", "유효한 moo (ABB, A≠B)는?"),
       options: ["att", "aab", "xyz"], correct: 0,
       explain: t(E, "'att': a≠t and t=t → valid! 'aab': first two same (AA_). 'xyz': last two differ (_YZ).", "'att': a≠t이고 t=t → 유효! 'aab': 앞 2개가 같아(AA_). 'xyz': 뒤 2개가 달라(_YZ)."),
     },
     { type: "reveal",
-      narr: t(E, "Here's the twist: the recording might have exactly 1 wrong letter.\nSo we try: what if I change THIS letter?\nWhat about THAT one?\nWe try every possibility!", "반전: 녹음에 딱 1글자 오타가 있을 수 있어. 그래서 시도해봐: 이 글자를 바꾸면? 저 글자를 바꾸면? 모든 가능성을 시도!"),
+      narr: t(E, "Here's the twist: the recording might have exactly 1 wrong letter.\nSo we try: what if I change THIS letter?\nWhat about THAT one?\nWe try every possibility!", "반전: 녹음에 딱 1글자 오타가 있을 수 있어요. 그래서 시도해봐: 이 글자를 바꾸면? 저 글자를 바꾸면? 모든 가능성을 시도!"),
       content: (<div style={{ padding: 16, textAlign: "center" }}>
         <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: C.carry, marginBottom: 8 }}>{t(E, "Key Constraint", "핵심 조건")}</div>
@@ -49,7 +49,7 @@ export function makeMooCh1(E) {
       </div>),
     },
     { type: "quiz",
-      narr: t(E, "Example: 'zzmoozzmoo' with F=2.\n'moo' appears 2 times already!\nEven changing 1 letter, no NEW moo reaches 2.\nSo the answer is just 'moo'.", "예시: 'zzmoozzmoo'에서 F=2. 'moo'가 이미 2번! 1글자 바꿔도 새로 2번 되는 moo가 없어. 답: 'moo' 하나!"),
+      narr: t(E, "Example: 'zzmoozzmoo' with F=2.\n'moo' appears 2 times already!\nEven changing 1 letter, no NEW moo reaches 2.\nSo the answer is just 'moo'.", "예시: 'zzmoozzmoo'에서 F=2. 'moo'가 이미 2번! 1글자 바꿔도 새로 2번 되는 moo가 없어요. 답: 'moo' 하나!"),
       question: t(E, "What are we looking for?", "우리가 찾는 건?"),
       options: [
         t(E, "All moo patterns with count ≥ F (trying 0 or 1 letter change)", "0~1글자 바꿨을 때 F번 이상인 모든 moo 패턴"),
@@ -118,17 +118,17 @@ export function makeMooCh1(E) {
 export function makeMooCh2(E) {
   return [
     { type: "mooSim",
-      narr: t(E, "Play with it!\nType a string and see the moo patterns.\nThen click any letter to change it — watch how the moos change!\nPay attention to WHICH moos change...\n👀", "직접 해봐! 문자열 입력하고 moo 패턴을 봐. 글자를 클릭해서 바꿔봐 — moo가 어떻게 변하는지 봐! 어떤 moo가 변하는지 잘 봐... 👀"),
+      narr: t(E, "Play with it!\nType a string and see the moo patterns.\nThen click any letter to change it — watch how the moos change!\nPay attention to WHICH moos change...\n👀", "직접 해봐요! 문자열 입력하고 moo 패턴을 봐요. 글자를 클릭해서 바꿔봐 — moo가 어떻게 변하는지 봐요! 어떤 moo가 변하는지 잘 봐요... 👀"),
     },
     { type: "quiz",
-      narr: t(E, "Did you notice something?\nWhen you change a letter, only the moos RIGHT NEXT to it change.\nMoos far away stay the same!", "눈치챘어? 글자를 바꾸면 바로 옆 moo만 변해. 멀리 있는 moo는 그대로야!"),
-      question: t(E, "If you change position i, which 3-letter windows are affected?", "위치 i를 바꾸면 어떤 3글자 윈도우가 영향받아?"),
+      narr: t(E, "Did you notice something?\nWhen you change a letter, only the moos RIGHT NEXT to it change.\nMoos far away stay the same!", "눈치챘어? 글자를 바꾸면 바로 옆 moo만 변해요. 멀리 있는 moo는 그대로예요!"),
+      question: t(E, "If you change position i, which 3-letter windows are affected?", "위치 i를 바꾸면 어떤 3글자 윈도우가 영향받아요?"),
       options: [
         t(E, "Only windows that CONTAIN position i (at most 3!)", "위치 i를 포함하는 윈도우만 (최대 3개!)"),
         t(E, "All windows in the entire string", "문자열의 모든 윈도우"),
         t(E, "Only the window starting at position i", "위치 i에서 시작하는 윈도우만"),
       ], correct: 0,
-      explain: t(E, "At most 3! Position i can be the 1st, 2nd, or 3rd letter of a window. This is the KEY insight! 💡", "최대 3개! 위치 i가 윈도우의 1번째, 2번째, 3번째 글자일 수 있어. 이게 핵심! 💡"),
+      explain: t(E, "At most 3! Position i can be the 1st, 2nd, or 3rd letter of a window. This is the KEY insight! 💡", "최대 3개! 위치 i가 윈도우의 1번째, 2번째, 3번째 글자일 수 있어요. 이게 핵심! 💡"),
     },
     { type: "reveal",
       narr: t(E, "Let's see it clearly.\nIn 'abcdef', if we change position 3 (the 'd'), only 3 windows are affected:", "'abcdef'에서 위치 3('d')을 바꾸면, 딱 3개 윈도우만 영향받아:"),
@@ -152,7 +152,7 @@ export function makeMooCh2(E) {
 export function makeMooCh3(E) {
   return [
     { type: "mooRunner",
-      narr: t(E, "Simplest approach: for each position, try all 26 letters, and scan the ENTIRE string each time to count moos.\nTry N=50 first, then N=200, then N=500.\nFeel the pain!\n🐌", "가장 단순한 방법: 각 위치마다 26글자를 시도하고, 매번 전체 문자열을 스캔해서 moo를 세는 거야.\nN=50부터, N=200, N=500 해봐.\n느린 걸 느껴봐!\n🐌"),
+      narr: t(E, "Simplest approach: for each position, try all 26 letters, and scan the ENTIRE string each time to count moos.\nTry N=50 first, then N=200, then N=500.\nFeel the pain!\n🐌", "가장 단순한 방법: 각 위치마다 26글자를 시도하고, 매번 전체 문자열을 스캔해서 moo를 세는 거예요.\nN=50부터, N=200, N=500 해봐요.\n느린 걸 느껴봐요!\n🐌"),
     },
     { type: "quiz",
       narr: t(E, "Did you feel it getting MUCH slower?\nN=50 is instant, N=500 takes ages!\nWhy?\nThink about what happens: N positions × 26 letters × scan N characters each time...", "엄청 느려지는 거 느꼈지? N=50은 순식간인데 N=500은 한참 걸려! 왜? 생각해봐: N개 위치 × 26글자 × 매번 N글자 스캔..."),
@@ -167,11 +167,11 @@ export function makeMooCh3(E) {
       answer: 104,
     },
     { type: "progressive",
-      narr: t(E, "Brute force code — read it part by part.\nNotice how the inner loop calls count_all 26N times — that's the TLE.", "브루트포스 코드 — 부분별로 읽어봐. 안쪽 루프가 count_all 을 26N 번 호출하는 게 TLE 원인."),
+      narr: t(E, "Brute force code — read it part by part.\nNotice how the inner loop calls count_all 26N times — that's the TLE.", "브루트포스 코드 — 부분별로 읽어봐요. 안쪽 루프가 count_all 을 26N 번 호출하는 게 TLE 원인."),
       sections: getMooBruteSections(E),
     },
     { type: "reveal",
-      narr: t(E, "104 seconds!\n😱 But remember from the simulator — changing 1 letter only affects 3 windows, not N.\nThere MUST be a better way!", "104초! 😱 근데 시뮬레이터에서 봤잖아 — 1글자 바꾸면 3개 윈도우만 영향, N개가 아니라. 더 좋은 방법이 있을 거야!"),
+      narr: t(E, "104 seconds!\n😱 But remember from the simulator — changing 1 letter only affects 3 windows, not N.\nThere MUST be a better way!", "104초! 😱 근데 시뮬레이터에서 봤잖아 — 1글자 바꾸면 3개 윈도우만 영향, N개가 아니라. 더 좋은 방법이 있을 거예요!"),
       content: (<div style={{ fontSize: 13, textAlign: "center", padding: 8 }}>
         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
           <div style={{ flex: 1, background: C.noBg, borderRadius: 12, padding: "14px 8px", border: `2px solid ${C.noBd}` }}>
@@ -193,10 +193,10 @@ export function makeMooCh3(E) {
 export function makeMooCh4(E) {
   return [
     { type: "quiz",
-      narr: t(E, "Remember from the simulator: changing 1 letter only affects nearby windows.\nLet's think — a letter can be the 1st, 2nd, or 3rd character of a window.\nSo how many windows?", "시뮬레이터에서 기억해: 1글자 바꾸면 근처 윈도우만 영향. 생각해봐 — 글자가 윈도우의 1번째, 2번째, 3번째일 수 있어. 그러면 몇 개?"),
+      narr: t(E, "Remember from the simulator: changing 1 letter only affects nearby windows.\nLet's think — a letter can be the 1st, 2nd, or 3rd character of a window.\nSo how many windows?", "시뮬레이터에서 기억해: 1글자 바꾸면 근처 윈도우만 영향. 생각해봐 — 글자가 윈도우의 1번째, 2번째, 3번째일 수 있어요. 그러면 몇 개?"),
       question: t(E, "1 letter sits in at most how many 3-letter windows?", "1글자가 포함되는 3글자 윈도우는 최대?"),
       options: ["1", "2", "3", "N"], correct: 2,
-      explain: t(E, "3! It can be 1st, 2nd, or 3rd character of a window. Not N — just 3!", "3개! 윈도우의 1번째, 2번째, 3번째일 수 있어. N개가 아니라 딱 3개!"),
+      explain: t(E, "3! It can be 1st, 2nd, or 3rd character of a window. Not N — just 3!", "3개! 윈도우의 1번째, 2번째, 3번째일 수 있어요. N개가 아니라 딱 3개!"),
     },
     { type: "reveal",
       narr: t(E, "So here's the big idea: count ALL moos in the original string FIRST.\nThen when we try a change, only update the 3 affected windows!", "큰 아이디어: 원래 문자열의 모든 moo를 먼저 세! 그다음 변경할 때 영향받는 3개 윈도우만 업데이트!"),
@@ -213,7 +213,7 @@ export function makeMooCh4(E) {
       </div>),
     },
     { type: "reveal",
-      narr: t(E, "Think of it like a puzzle!\nTake out the piece, try new pieces, put the original back.\nWe call it 'Remove → Try → Restore'.", "퍼즐이라고 생각해! 조각을 빼고, 새 조각을 넣어보고, 원래 조각을 다시 넣어. '빼기 → 시도 → 복원'이라 불러."),
+      narr: t(E, "Think of it like a puzzle!\nTake out the piece, try new pieces, put the original back.\nWe call it 'Remove → Try → Restore'.", "퍼즐이라고 생각해요! 조각을 빼고, 새 조각을 넣어보고, 원래 조각을 다시 넣어. '빼기 → 시도 → 복원'이라 불러."),
       content: (<div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 8 }}>
         {[
           ["🔴", t(E, "REMOVE: take out 3 windows' moo counts", "빼기: 3개 윈도우의 moo 카운트 빼기"), C.noBg, C.noBd, C.no],
@@ -228,7 +228,7 @@ export function makeMooCh4(E) {
       </div>),
     },
     { type: "reveal",
-      narr: t(E, "Let's trace it by hand!\nString = 'momoo', position 0 ('m').\nThe 3 windows for position 0 are...\nwell, position 0 can only be the 1st letter, so just 1 window: [0,1,2] = 'mom'.\nIs 'mom' a moo?\nm≠o but o≠m, so NO.", "손으로 해보자!\n문자열 = 'momoo', 위치 0('m').\n위치 0의 윈도우는...\n위치 0은 1번째 글자만 가능하니까 윈도우 1개: [0,1,2] = 'mom'.\n'mom'은 moo야?\nm≠o이고 o≠m이니까 아니야."),
+      narr: t(E, "Let's trace it by hand!\nString = 'momoo', position 0 ('m').\nThe 3 windows for position 0 are...\nwell, position 0 can only be the 1st letter, so just 1 window: [0,1,2] = 'mom'.\nIs 'mom' a moo?\nm≠o but o≠m, so NO.", "손으로 해보자!\n문자열 = 'momoo', 위치 0('m').\n위치 0의 윈도우는...\n위치 0은 1번째 글자만 가능하니까 윈도우 1개: [0,1,2] = 'mom'.\n'mom'은 moo야?\nm≠o이고 o≠m이니까 아니예요."),
       content: (<div style={{ padding: 16 }}>
         <div style={{ fontFamily: "'JetBrains Mono',monospace", textAlign: "center", marginBottom: 12 }}>
           {["m","o","m","o","o"].map((ch,i) => (
@@ -248,16 +248,16 @@ export function makeMooCh4(E) {
       </div>),
     },
     { type: "quiz",
-      narr: t(E, "Important: when trying letter 'c', we add its contribution (+1), check the counter, then IMMEDIATELY undo it (-1).\nWhy can't we just leave it?", "중요: 글자 'c' 시도할 때, 기여를 더하고(+1), 카운터 확인하고, 바로 되돌려(-1). 왜 그냥 놔두면 안 돼?"),
-      question: t(E, "Why must we undo each trial immediately?", "왜 각 시도를 바로 되돌려야 해?"),
+      narr: t(E, "Important: when trying letter 'c', we add its contribution (+1), check the counter, then IMMEDIATELY undo it (-1).\nWhy can't we just leave it?", "중요: 글자 'c' 시도할 때, 기여를 더하고(+1), 카운터 확인하고, 바로 되돌려(-1). 왜 그냥 놔두면 안 돼요?"),
+      question: t(E, "Why must we undo each trial immediately?", "왜 각 시도를 바로 되돌려야 해요?"),
       options: [
         t(E, "Next trial letter needs a clean state — without previous trial's counts!", "다음 시도 글자는 깨끗한 상태가 필요 — 이전 시도의 카운트 없이!"),
         t(E, "To save memory", "메모리 절약"),
       ], correct: 0,
-      explain: t(E, "Exactly! If we try 'a' and don't undo, then trying 'b' would still have 'a's counts mixed in! Each of 26 trials must start from the same clean state. 🐛", "맞아! 'a'를 시도하고 안 되돌리면, 'b' 시도할 때 'a'의 카운트가 섞여! 26번 시도 각각 같은 깨끗한 상태에서 시작해야 해. 🐛"),
+      explain: t(E, "Exactly! If we try 'a' and don't undo, then trying 'b' would still have 'a's counts mixed in! Each of 26 trials must start from the same clean state. 🐛", "맞아! 'a'를 시도하고 안 되돌리면, 'b' 시도할 때 'a'의 카운트가 섞여! 26번 시도 각각 같은 깨끗한 상태에서 시작해야 해요. 🐛"),
     },
     { type: "quiz",
-      narr: t(E, "Now let's see how fast this is!\nBrute: N positions × 26 letters × N windows = O(26N²).\nSmart: N positions × 26 letters × 3 windows = O(78N).\nFor N=20,000, how much faster?", "이제 얼마나 빠른지 보자! 브루트: N × 26 × N = O(26N²). 스마트: N × 26 × 3 = O(78N). N=20,000이면 몇 배 빨라?"),
+      narr: t(E, "Now let's see how fast this is!\nBrute: N positions × 26 letters × N windows = O(26N²).\nSmart: N positions × 26 letters × 3 windows = O(78N).\nFor N=20,000, how much faster?", "이제 얼마나 빠른지 보자! 브루트: N × 26 × N = O(26N²). 스마트: N × 26 × 3 = O(78N). N=20,000이면 몇 배 빨라요?"),
       question: "O(78N) vs O(26N²), N=20,000?",
       options: [
         t(E, "About 2× faster", "약 2배"),
@@ -280,7 +280,7 @@ export function makeMooCh4(E) {
           </div>
         </div>
         <div style={{ marginTop: 10, padding: "8px 12px", background: C.okBg, borderRadius: 8, fontWeight: 800, color: C.ok, textAlign: "center", fontSize: 13 }}>
-          {t(E, "O(78N) — blazing fast! ⚡", "O(78N) — 번개처럼 빨라! ⚡")}
+          {t(E, "O(78N) — blazing fast! ⚡", "O(78N) — 번개처럼 빨라요! ⚡")}
         </div>
       </div>),
     },
@@ -294,13 +294,13 @@ export function makeMooCh5(E, lang = "py") {
       content: (<div style={{ padding: 12 }}><MiniCode lines={["from collections import defaultdict","","mydict = defaultdict(int)","# mydict['moo'] → auto 0!","mydict['moo'] += 1","# mydict['moo'] → now 1!"]} /></div>),
     },
     { type: "quiz",
-      narr: t(E, "The code uses `string = list(input())` instead of just `input()`.\nWhy not keep it as a string?", "코드에서 `string = list(input())`을 써. 그냥 문자열로 쓰면 안 돼?"),
+      narr: t(E, "The code uses `string = list(input())` instead of just `input()`.\nWhy not keep it as a string?", "코드에서 `string = list(input())`을 써요. 그냥 문자열로 쓰면 안 돼요?"),
       question: t(E, "Why list(input())?", "왜 list(input())?"),
       options: [
         t(E, "Python strings can't be changed! 'abc'[1]='x' gives an error. Lists allow it.", "Python 문자열은 변경 불가! 'abc'[1]='x'는 에러. 리스트는 가능."),
         t(E, "It's faster", "빨라서"),
       ], correct: 0,
-      explain: t(E, "Try it: 'abc'[1]='x' → TypeError! But ['a','b','c'][1]='x' works perfectly. We need to swap characters, so we need a list.", "'abc'[1]='x' → TypeError! 하지만 ['a','b','c'][1]='x'는 잘 돼. 글자를 바꿔야 하니까 리스트가 필요!"),
+      explain: t(E, "Try it: 'abc'[1]='x' → TypeError! But ['a','b','c'][1]='x' works perfectly. We need to swap characters, so we need a list.", "'abc'[1]='x' → TypeError! 하지만 ['a','b','c'][1]='x'는 잘 돼요. 글자를 바꿔야 하니까 리스트가 필요!"),
     },
     { type: "quiz",
       narr: t(E, "The window range: minIndex = max(pos-2, 0), maxIndex = min(n-2, pos+1).\nFor pos=3, N=10: range(1,4) = [1,2,3].\nLet's verify each window contains pos=3.", "윈도우 범위: minIndex = max(pos-2, 0), maxIndex = min(n-2, pos+1).\npos=3, N=10: range(1,4) = [1,2,3].\n각 윈도우가 pos=3을 포함하는지 확인해보자."),
@@ -329,7 +329,7 @@ export function makeMooCh5(E, lang = "py") {
       sections: getMooSections(E),
     },
     { type: "reveal",
-      narr: t(E, "That's it!\nThe whole insight: don't rescan everything — only update the 3 windows that actually changed.\nRemove → Try → Restore!\n🎉", "이게 전부야! 핵심: 전부 다시 스캔하지 마 — 실제로 바뀐 3개 윈도우만 업데이트. 빼기 → 시도 → 복원! 🎉"),
+      narr: t(E, "That's it!\nThe whole insight: don't rescan everything — only update the 3 windows that actually changed.\nRemove → Try → Restore!\n🎉", "이게 전부예요! 핵심: 전부 다시 스캔하지 마 — 실제로 바뀐 3개 윈도우만 업데이트. 빼기 → 시도 → 복원! 🎉"),
       content: (<div style={{ textAlign: "center", padding: 8 }}>
         <div style={{ background: "linear-gradient(135deg,#4f46e5,#7c5cfc)", borderRadius: 14, padding: "20px 16px" }}>
           <div style={{ fontSize: 18, fontWeight: 900, color: "#fff", lineHeight: 1.6 }}>

@@ -42,7 +42,7 @@ export function makeLogicalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A boolean expression with 'and' and 'or'.\nCan we replace a substring to make it evaluate to a target value?\n🧠", "불리언 수식에 'and'와 'or'가 있어. 부분 문자열을 교체해서 목표값으로 만들 수 있을까? 🧠"),
+        "A boolean expression with 'and' and 'or'.\nCan we replace a substring to make it evaluate to a target value?\n🧠", "불리언 수식에 'and'와 'or'가 있어요. 부분 문자열을 교체해서 목표값으로 만들 수 있을까? 🧠"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🧠</div>

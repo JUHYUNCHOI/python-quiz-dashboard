@@ -35,7 +35,7 @@ export function makeAcow2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "In academic papers, author order can indicate seniority.\nIf author A always appears before author B in every paper they co-author, A may be more senior.", "학술 논문에서 저자 순서는 선임 여부를 나타낼 수 있어. 저자 A가 공동 저술한 모든 논문에서 항상 B 앞에 나타나면, A가 더 선임일 수 있어."),
+        "In academic papers, author order can indicate seniority.\nIf author A always appears before author B in every paper they co-author, A may be more senior.", "학술 논문에서 저자 순서는 선임 여부를 나타낼 수 있어요. 저자 A가 공동 저술한 모든 논문에서 항상 B 앞에 나타나면, A가 더 선임일 수 있어요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc68\u200d\ud83d\udd2c"}</div>
@@ -52,7 +52,7 @@ export function makeAcow2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In author list [A, B, C], A appears before B.\nIf this is the only paper, can we say A is more senior than B?", "저자 목록 [A, B, C]에서 A가 B 앞에 나와. 이것이 유일한 논문이면, A가 B보다 선임이라고 할 수 있을까?"),
+        "In author list [A, B, C], A appears before B.\nIf this is the only paper, can we say A is more senior than B?", "저자 목록 [A, B, C]에서 A가 B 앞에 나와요. 이것이 유일한 논문이면, A가 B보다 선임이라고 할 수 있을까?"),
       question: t(E,
         "List [A,B,C]: A always before B. A more senior or equal?",
         "목록 [A,B,C]: A가 항상 B 앞. A가 더 선임 또는 동등?"),
@@ -69,7 +69,7 @@ export function makeAcow2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "2 publications: [A,B] and [B,A].\nWhat is the relationship between A and B?\nEnter 0 for undetermined.", "2개의 논문: [A,B]와 [B,A]. A와 B의 관계는? 판단 불가이면 0을 입력해."),
+        "2 publications: [A,B] and [B,A].\nWhat is the relationship between A and B?\nEnter 0 for undetermined.", "2개의 논문: [A,B]와 [B,A]. A와 B의 관계는? 판단 불가이면 0을 입력해요."),
       question: t(E,
         "Pubs [A,B] and [B,A]. Relationship? (0=undetermined)",
         "논문 [A,B]와 [B,A]. 관계? (0=판단 불가)"),
@@ -107,7 +107,7 @@ export function makeAcow2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getAcowdemia2Sections(E),
     },
   ];

@@ -24,7 +24,7 @@ export function makeMobileGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A mobile game has N levels, each with a score.\nYou play through all levels and collect all scores.\nFind the total score!", "모바일 게임에 N개의 레벨이 있고, 각각 점수가 있어. 모든 레벨을 플레이하고 점수를 모두 모아. 총 점수를 구해!"),
+        "A mobile game has N levels, each with a score.\nYou play through all levels and collect all scores.\nFind the total score!", "모바일 게임에 N개의 레벨이 있고, 각각 점수가 있어요. 모든 레벨을 플레이하고 점수를 모두 모아요. 총 점수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf1"}</div>
@@ -33,7 +33,7 @@ export function makeMobileGameCh1(E) {
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Given N levels with scores, play all levels and compute the total score.\nSimple summation!",
-              "N개 레벨의 점수가 주어지면,\n모든 레벨을 플레이하고 총 점수를 계산해. 단순 합산!")}
+              "N개 레벨의 점수가 주어지면,\n모든 레벨을 플레이하고 총 점수를 계산해요. 단순 합산!")}
           </div>
         </div>),
     },
@@ -41,7 +41,7 @@ export function makeMobileGameCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If there are 3 levels with scores [10, 20, 30], what is the total score?", "3개 레벨의 점수가 [10, 20, 30]이면, 총 점수는 얼마일까?"),
+        "If there are 3 levels with scores [10, 20, 30], what is the total score?", "3개 레벨의 점수가 [10, 20, 30]이면, 총 점수는 얼마일까요?"),
       question: t(E,
         "Scores = [10, 20, 30]. Total score?",
         "점수 = [10, 20, 30]. 총 점수는?"),
@@ -54,7 +54,7 @@ export function makeMobileGameCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! 10 + 20 + 30 = 60.",
-        "맞아! 10 + 20 + 30 = 60이야."),
+        "맞아! 10 + 20 + 30 = 60이예요."),
     },
     // 1-3: Input
     {
@@ -82,7 +82,7 @@ export function makeMobileGameCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simply read all scores and sum them up. O(N) time complexity.", "모든 점수를 읽고 합산하면 돼. O(N) 시간 복잡도."),
+        "Simply read all scores and sum them up. O(N) time complexity.", "모든 점수를 읽고 합산하면 돼요. O(N) 시간 복잡도."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -90,7 +90,7 @@ export function makeMobileGameCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "Read the list of scores and use sum() to get the total.\nOne pass through the array.",
-              "점수 목록을 읽고 sum()으로 총합을 구해. 배열을 한 번만 순회.")}
+              "점수 목록을 읽고 sum()으로 총합을 구해요. 배열을 한 번만 순회.")}
           </div>
         </div>),
     },
@@ -98,7 +98,7 @@ export function makeMobileGameCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMobileGameSections(E),
     },
   ];

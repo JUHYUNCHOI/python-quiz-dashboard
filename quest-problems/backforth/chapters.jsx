@@ -45,7 +45,7 @@ export function makeBackForthCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "2 barns with 10 buckets each (1000 total milk per barn).\nOver 4 days, alternate carrying one bucket between barns.\nCount distinct possible final amounts in barn 1.", "각 10개 양동이를 가진 2개의 헛간 (헛간당 총 우유 1000). 4일 동안 번갈아 양동이 하나를 옮겨. 헛간 1의 가능한 최종 우유량의 수를 구해!"),
+        "2 barns with 10 buckets each (1000 total milk per barn).\nOver 4 days, alternate carrying one bucket between barns.\nCount distinct possible final amounts in barn 1.", "각 10개 양동이를 가진 2개의 헛간 (헛간당 총 우유 1000). 4일 동안 번갈아 양동이 하나를 옮겨. 헛간 1의 가능한 최종 우유량의 수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🔄"}</div>
@@ -54,7 +54,7 @@ export function makeBackForthCh1(E) {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Enumerate all possible choices! 10 choices per day, 4 days.\nBut bucket counts change each day. Use brute force / recursion with sets to track distinct outcomes.",
-              "핵심: 가능한 모든 선택을 열거해!\n하루 10개 선택, 4일.\n하지만 양동이 수가 매일 변해.\n브루트 포스 / 재귀 + set으로 고유한 결과 추적.")}
+              "핵심: 가능한 모든 선택을 열거해요!\n하루 10개 선택, 4일.\n하지만 양동이 수가 매일 변해요.\n브루트 포스 / 재귀 + set으로 고유한 결과 추적.")}
           </div>
         </div>),
     },
@@ -62,7 +62,7 @@ export function makeBackForthCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If all 10 buckets in each barn have the same amount s, then every day we transfer exactly s.\nAfter 4 days (2 out, 2 back), barn 1 = 1000 - s + s - s + s = 1000.\nOnly 1 outcome!", "각 헛간의 10개 양동이가 모두 같은 양 s이면, 매일 정확히 s를 이동해.\n4일 후 (2번 보내고 2번 받으면), 헛간1 = 1000 - s + s - s + s = 1000.\n결과 1개!"),
+        "If all 10 buckets in each barn have the same amount s, then every day we transfer exactly s.\nAfter 4 days (2 out, 2 back), barn 1 = 1000 - s + s - s + s = 1000.\nOnly 1 outcome!", "각 헛간의 10개 양동이가 모두 같은 양 s이면, 매일 정확히 s를 이동해요.\n4일 후 (2번 보내고 2번 받으면), 헛간1 = 1000 - s + s - s + s = 1000.\n결과 1개!"),
       question: t(E,
         "All buckets same size s. After 4 days of back and forth, how many distinct outcomes for barn 1?",
         "모든 양동이 크기 같으면 s. 4일간 왕복 후 헛간 1의 고유 결과 수?"),
@@ -80,13 +80,13 @@ export function makeBackForthCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "All buckets have the same amount. How many distinct final amounts for barn 1?", "모든 양동이가 같은 양이야. 헛간 1의 고유 최종 우유량은 몇 가지?"),
+        "All buckets have the same amount. How many distinct final amounts for barn 1?", "모든 양동이가 같은 양이예요. 헛간 1의 고유 최종 우유량은 몇 가지?"),
       question: t(E,
         "All identical buckets. Distinct outcomes for barn 1?",
         "모든 양동이 동일. 헛간 1의 고유 결과 수?"),
       hint: t(E,
         "Same bucket sizes means same transfer every time. Always returns to 1000.",
-        "같은 크기 양동이 = 매번 같은 이동량. 항상 1000으로 돌아와."),
+        "같은 크기 양동이 = 매번 같은 이동량. 항상 1000으로 돌아와요."),
       answer: 1,
     },
   ];
@@ -118,7 +118,7 @@ export function makeBackForthCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getBackForthSections(E),
     },
   ];

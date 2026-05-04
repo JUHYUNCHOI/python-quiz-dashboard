@@ -41,7 +41,7 @@ export function makeTttCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A 3x3 tic-tac-toe grid is filled with cow letters A-Z.\nA cow wins individually if one letter fills an entire line.\nA team of exactly 2 cows wins if their two letters together fill a line.\nCount individual winners and team winners across all 8 lines.", "3x3 틱택토 격자에 소 문자 A-Z가 채워져 있어.\n한 문자가 한 줄을 모두 채우면 개인 우승, 정확히 2개 문자가 한 줄을 채우면 팀 우승이야.\n8개 줄 모두에서 개인 우승자 수와 팀 우승자 수를 구해!"),
+        "A 3x3 tic-tac-toe grid is filled with cow letters A-Z.\nA cow wins individually if one letter fills an entire line.\nA team of exactly 2 cows wins if their two letters together fill a line.\nCount individual winners and team winners across all 8 lines.", "3x3 틱택토 격자에 소 문자 A-Z가 채워져 있어요.\n한 문자가 한 줄을 모두 채우면 개인 우승, 정확히 2개 문자가 한 줄을 채우면 팀 우승이예요.\n8개 줄 모두에서 개인 우승자 수와 팀 우승자 수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u274C"}</div>
@@ -58,7 +58,7 @@ export function makeTttCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Consider grid AAA / BBB / CCC.\nEach row is filled by one letter.\nHow many individual winners are there?", "격자 AAA / BBB / CCC를 생각해봐. 각 행이 한 문자로 채워져 있어. 개인 우승자는 몇 명이야?"),
+        "Consider grid AAA / BBB / CCC.\nEach row is filled by one letter.\nHow many individual winners are there?", "격자 AAA / BBB / CCC를 생각해봐요. 각 행이 한 문자로 채워져 있어요. 개인 우승자는 몇 명이예요?"),
       question: t(E,
         "Grid: AAA / BBB / CCC. How many individual winners?",
         "격자: AAA / BBB / CCC. 개인 우승자 수는?"),
@@ -71,7 +71,7 @@ export function makeTttCh1(E) {
       correct: 2,
       explain: t(E,
         "A wins row 1, B wins row 2, C wins row 3. That's 3 individual winners!",
-        "A가 1행, B가 2행, C가 3행 우승. 개인 우승자 3명이야!"),
+        "A가 1행, B가 2행, C가 3행 우승. 개인 우승자 3명이예요!"),
     },
     // 1-3: Input
     {
@@ -115,7 +115,7 @@ export function makeTttCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getTeamTttSections(E),
     },
   ];

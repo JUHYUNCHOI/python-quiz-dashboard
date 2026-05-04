@@ -33,7 +33,7 @@ export function makeBitcoinCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N bitcoin mining sites are placed on a 2D plane.\nFind the maximum squared Euclidean distance between any two sites.\nOutput (x1-x2)^2 + (y1-y2)^2.", "N개의 비트코인 채굴 사이트가 2D 평면에 있어. 임의의 두 사이트 간 최대 유클리드 거리의 제곱을 구해. 출력: (x1-x2)^2 + (y1-y2)^2."),
+        "N bitcoin mining sites are placed on a 2D plane.\nFind the maximum squared Euclidean distance between any two sites.\nOutput (x1-x2)^2 + (y1-y2)^2.", "N개의 비트코인 채굴 사이트가 2D 평면에 있어요. 임의의 두 사이트 간 최대 유클리드 거리의 제곱을 구해요. 출력: (x1-x2)^2 + (y1-y2)^2."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u20bf"}</div>
@@ -50,7 +50,7 @@ export function makeBitcoinCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Why do we use squared distance instead of regular distance?\nThink about what operations we can avoid.", "왜 일반 거리 대신 거리의 제곱을 사용할까? 어떤 연산을 피할 수 있는지 생각해봐."),
+        "Why do we use squared distance instead of regular distance?\nThink about what operations we can avoid.", "왜 일반 거리 대신 거리의 제곱을 사용할까? 어떤 연산을 피할 수 있는지 생각해봐요."),
       question: t(E,
         "Why use squared Euclidean distance instead of regular distance?",
         "왜 일반 유클리드 거리 대신 제곱 거리를 사용하나?"),
@@ -61,7 +61,7 @@ export function makeBitcoinCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! sqrt is monotonic, so max squared distance corresponds to max distance. We avoid floating point issues.",
-        "맞아! sqrt는 단조함수라서 최대 제곱 거리가 최대 거리에 대응해. 부동소수점 문제도 피할 수 있어."),
+        "맞아! sqrt는 단조함수라서 최대 제곱 거리가 최대 거리에 대응해요. 부동소수점 문제도 피할 수 있어요."),
     },
     // 1-3: Input
     {
@@ -105,7 +105,7 @@ export function makeBitcoinCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getBitcoinSections(E),
     },
   ];

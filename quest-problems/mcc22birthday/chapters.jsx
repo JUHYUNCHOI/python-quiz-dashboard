@@ -43,7 +43,7 @@ export function makeMcc22BirthdayCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Plan a cat's birthday party!\nN cats each have availability for certain time slots.\nFind the time slot where the maximum number of cats can attend!", "고양이 생일 파티를 계획해! N마리 고양이는 각각 특정 시간대에 참석 가능해. 최대한 많은 고양이가 참석할 수 있는 시간대를 찾아!"),
+        "Plan a cat's birthday party!\nN cats each have availability for certain time slots.\nFind the time slot where the maximum number of cats can attend!", "고양이 생일 파티를 계획해요! N마리 고양이는 각각 특정 시간대에 참석 가능해요. 최대한 많은 고양이가 참석할 수 있는 시간대를 찾아요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf82"}</div>
@@ -116,7 +116,7 @@ export function makeMcc22BirthdayCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc22BirthdaySections(E),
     },
   ];

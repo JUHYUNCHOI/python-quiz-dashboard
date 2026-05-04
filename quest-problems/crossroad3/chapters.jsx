@@ -34,7 +34,7 @@ export function makeCrossRd3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows arrive at a gate, each with an arrival time and a duration to pass through.\nProcess them FIFO (first come, first served).\nFind when the last cow finishes!", "N마리 소가 문에 도착해, 각각 도착 시간과 통과 시간이 있어. FIFO (선착순)로 처리해. 마지막 소가 끝나는 시간을 구해!"),
+        "N cows arrive at a gate, each with an arrival time and a duration to pass through.\nProcess them FIFO (first come, first served).\nFind when the last cow finishes!", "N마리 소가 문에 도착해, 각각 도착 시간과 통과 시간이 있어요. FIFO (선착순)로 처리해요. 마지막 소가 끝나는 시간을 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udeaa"}</div>
@@ -43,7 +43,7 @@ export function makeCrossRd3Ch1(E) {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Sort by arrival time.\nTrack when the gate becomes free. If a cow arrives after the gate is free, start immediately. Otherwise, wait in queue.",
-              "핵심: 도착 시간으로 정렬해.\n문이 비는 시간을 추적해.\n소가 문이 빈 후에 도착하면 바로 시작.\n아니면 대기열에서 기다려.")}
+              "핵심: 도착 시간으로 정렬해요.\n문이 비는 시간을 추적해요.\n소가 문이 빈 후에 도착하면 바로 시작.\n아니면 대기열에서 기다려.")}
           </div>
         </div>),
     },
@@ -91,7 +91,7 @@ export function makeCrossRd3Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort cows by arrival time, then simulate the queue in one pass. O(N log N) for sorting!", "도착 시간으로 소를 정렬하고, 한 번 순회로 큐를 시뮬레이션해. 정렬에 O(N log N)!"),
+        "Sort cows by arrival time, then simulate the queue in one pass. O(N log N) for sorting!", "도착 시간으로 소를 정렬하고, 한 번 순회로 큐를 시뮬레이션해요. 정렬에 O(N log N)!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -99,7 +99,7 @@ export function makeCrossRd3Ch2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Sort by arrival.\nTrack current_time (when gate becomes free). For each cow: if current_time < arrival, jump to arrival. Then add duration. Final current_time is the answer.",
-              "도착순 정렬.\ncurrent_time (문이 비는 시간)을 추적해.\n각 소: current_time < 도착이면 도착으로 점프.\n그 다음 소요시간 추가.\n최종 current_time이 답.")}
+              "도착순 정렬.\ncurrent_time (문이 비는 시간)을 추적해요.\n각 소: current_time < 도착이면 도착으로 점프.\n그 다음 소요시간 추가.\n최종 current_time이 답.")}
           </div>
         </div>),
     },
@@ -107,7 +107,7 @@ export function makeCrossRd3Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getCrossRoad3Sections(E),
     },
   ];

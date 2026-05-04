@@ -29,7 +29,7 @@ export function makeRectanglesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given an N x M grid, count all axis-aligned rectangles.\nA rectangle is defined by choosing 2 horizontal and 2 vertical grid lines.", "N x M 격자가 주어지면, 모든 축 정렬 직사각형을 세. 직사각형은 수평선 2개와 수직선 2개를 선택해서 정의돼."),
+        "Given an N x M grid, count all axis-aligned rectangles.\nA rectangle is defined by choosing 2 horizontal and 2 vertical grid lines.", "N x M 격자가 주어지면, 모든 축 정렬 직사각형을 세. 직사각형은 수평선 2개와 수직선 2개를 선택해서 정의돼요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u25ac"}</div>
@@ -38,7 +38,7 @@ export function makeRectanglesCh1(E) {
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Formula: C(N+1, 2) * C(M+1, 2).\nAn N x M grid has (N+1) horizontal lines and (M+1) vertical lines. Pick 2 of each!",
-              "공식: C(N+1, 2) * C(M+1, 2). N x M 격자에는 (N+1)개 수평선과 (M+1)개 수직선이 있어.\n각각 2개씩 고르면 돼!")}
+              "공식: C(N+1, 2) * C(M+1, 2). N x M 격자에는 (N+1)개 수평선과 (M+1)개 수직선이 있어요.\n각각 2개씩 고르면 돼요!")}
           </div>
         </div>),
     },
@@ -59,13 +59,13 @@ export function makeRectanglesCh1(E) {
       correct: 2,
       explain: t(E,
         "Correct! C(3,2) = 3, so 3 * 3 = 9 rectangles.",
-        "맞아! C(3,2) = 3이니까, 3 * 3 = 9개 직사각형이야."),
+        "맞아! C(3,2) = 3이니까, 3 * 3 = 9개 직사각형이예요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "Calculate for a 2x2 grid yourself!", "직접 2x2 격자를 계산해봐!"),
+        "Calculate for a 2x2 grid yourself!", "직접 2x2 격자를 계산해봐요!"),
       question: t(E,
         "2x2 grid. Enter the number of rectangles:",
         "2x2 격자. 직사각형 수를 입력해:"),
@@ -87,7 +87,7 @@ export function makeRectanglesCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Pure math formula, no loops needed. O(1) time!", "순수 수학 공식, 반복문 필요 없어. O(1) 시간!"),
+        "Pure math formula, no loops needed. O(1) time!", "순수 수학 공식, 반복문 필요 없어요. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -95,7 +95,7 @@ export function makeRectanglesCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Use the combination formula C(n,2) = n*(n-1)/2.\nMultiply for horizontal and vertical choices.",
-              "조합 공식 C(n,2) = n*(n-1)/2 사용.\n수평과 수직 선택을 곱해.")}
+              "조합 공식 C(n,2) = n*(n-1)/2 사용.\n수평과 수직 선택을 곱해요.")}
           </div>
         </div>),
     },
@@ -103,7 +103,7 @@ export function makeRectanglesCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getRectanglesSections(E),
     },
   ];

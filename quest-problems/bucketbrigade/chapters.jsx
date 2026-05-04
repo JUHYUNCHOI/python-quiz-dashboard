@@ -50,7 +50,7 @@ export function makeBrigadeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "On a 10x10 grid there's a lake (L), a barn (B), and a rock (R).\nCows form a bucket brigade to pass water from lake to barn.\nFind the minimum number of cows needed, avoiding the rock!", "10x10 격자에 호수(L), 헛간(B), 바위(R)가 있어.\n소들이 호수에서 헛간까지 물을 전달하는 버킷 릴레이를 만들어.\n바위를 피해서 필요한 최소 소 수를 구해!"),
+        "On a 10x10 grid there's a lake (L), a barn (B), and a rock (R).\nCows form a bucket brigade to pass water from lake to barn.\nFind the minimum number of cows needed, avoiding the rock!", "10x10 격자에 호수(L), 헛간(B), 바위(R)가 있어요.\n소들이 호수에서 헛간까지 물을 전달하는 버킷 릴레이를 만들어요.\n바위를 피해서 필요한 최소 소 수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udea3"}</div>
@@ -67,7 +67,7 @@ export function makeBrigadeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The grid is a fixed size. What are its dimensions?", "격자는 고정 크기야. 크기가 얼마일까?"),
+        "The grid is a fixed size. What are its dimensions?", "격자는 고정 크기예요. 크기가 얼마일까요?"),
       question: t(E,
         "What is the grid size in Bucket Brigade?",
         "Bucket Brigade에서 격자의 크기는?"),
@@ -80,7 +80,7 @@ export function makeBrigadeCh1(E) {
       correct: 1,
       explain: t(E,
         "The grid is always 10x10 in this problem.",
-        "이 문제에서 격자는 항상 10x10이야."),
+        "이 문제에서 격자는 항상 10x10이예요."),
     },
     // 1-3: Input
     {
@@ -89,10 +89,10 @@ export function makeBrigadeCh1(E) {
         "What is the grid size (one dimension)?", "격자의 한 변의 크기는?"),
       question: t(E,
         "The grid is NxN. What is N?",
-        "격자가 NxN이야. N은?"),
+        "격자가 NxN이예요. N은?"),
       hint: t(E,
         "The grid is always 10x10.",
-        "격자는 항상 10x10이야."),
+        "격자는 항상 10x10이예요."),
       answer: 10,
     },
   ];
@@ -108,7 +108,7 @@ export function makeBrigadeCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "BFS on a 10x10 grid is O(100) = O(1) since the grid size is fixed. Very fast!", "10x10 격자에서 BFS는 O(100) = O(1)이야. 격자 크기가 고정이니까 아주 빨라!"),
+        "BFS on a 10x10 grid is O(100) = O(1) since the grid size is fixed. Very fast!", "10x10 격자에서 BFS는 O(100) = O(1)이예요. 격자 크기가 고정이니까 아주 빨라요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -124,7 +124,7 @@ export function makeBrigadeCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getBucketBrigadeSections(E),
     },
   ];

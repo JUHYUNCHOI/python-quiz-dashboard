@@ -32,7 +32,7 @@ export function makeMcc15ChocoCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You have a row of chocolate bars with different sizes.\nYou can remove adjacent pairs of equal-size bars.\nMaximize the total length removed!\nUse a stack to greedily match pairs.", "다양한 크기의 초콜릿 바가 한 줄로 있어. 같은 크기의 인접한 쌍을 제거할 수 있어. 제거한 총 길이를 최대화해! 스택으로 탐욕적으로 쌍을 매칭해."),
+        "You have a row of chocolate bars with different sizes.\nYou can remove adjacent pairs of equal-size bars.\nMaximize the total length removed!\nUse a stack to greedily match pairs.", "다양한 크기의 초콜릿 바가 한 줄로 있어요. 같은 크기의 인접한 쌍을 제거할 수 있어요. 제거한 총 길이를 최대화해요! 스택으로 탐욕적으로 쌍을 매칭해요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf6b"}</div>
@@ -41,7 +41,7 @@ export function makeMcc15ChocoCh1(E) {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Use a stack.\nPush each bar. If the top of the stack equals the current bar, pop and add 2*size to the total. This greedily removes adjacent equal pairs.",
-              "핵심: 스택 사용.\n각 바를 푸시.\n스택 top이 현재 바와 같으면 팝하고 2*크기를 총합에 더해.\n인접한 같은 쌍을 탐욕적으로 제거.")}
+              "핵심: 스택 사용.\n각 바를 푸시.\n스택 top이 현재 바와 같으면 팝하고 2*크기를 총합에 더해요.\n인접한 같은 쌍을 탐욕적으로 제거.")}
           </div>
         </div>),
     },
@@ -106,7 +106,7 @@ export function makeMcc15ChocoCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc15ChocoSections(E),
     },
   ];

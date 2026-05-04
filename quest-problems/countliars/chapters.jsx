@@ -47,7 +47,7 @@ export function makeLiarsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows make claims about Bessie's position: 'G x' means position >= x, 'L x' means position <= x.\nFind the minimum number of liars!", "N마리 소가 베시 위치를 주장해: 'G x'는 위치 >= x, 'L x'는 위치 <= x. 최소 거짓말쟁이 수를 구해!"),
+        "N cows make claims about Bessie's position: 'G x' means position >= x, 'L x' means position <= x.\nFind the minimum number of liars!", "N마리 소가 베시 위치를 주장해: 'G x'는 위치 >= x, 'L x'는 위치 <= x. 최소 거짓말쟁이 수를 구해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🤥"}</div>
@@ -120,7 +120,7 @@ export function makeLiarsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getCountLiarsSections(E),
     },
   ];

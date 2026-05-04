@@ -45,7 +45,7 @@ export function makeRaceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A cow runs K meters.\nEach second, speed changes by +1 or -1.\nMust end at speed ≤ X.\nFind minimum time.\nStrategy: accelerate then decelerate!", "소가 K미터를 달려. 매초 속도가 +1 또는 -1 변해. 끝날 때 속도 ≤ X. 최소 시간을 구해. 전략: 가속 후 감속!"),
+        "A cow runs K meters.\nEach second, speed changes by +1 or -1.\nMust end at speed ≤ X.\nFind minimum time.\nStrategy: accelerate then decelerate!", "소가 K미터를 달려. 매초 속도가 +1 또는 -1 변해요. 끝날 때 속도 ≤ X. 최소 시간을 구해요. 전략: 가속 후 감속!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"🏃"}</div>
@@ -54,7 +54,7 @@ export function makeRaceCh1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Accelerate to some peak speed, then decelerate to reach speed ≤ X by the end.\nThe distance covered is the sum of speeds each second. Find the optimal peak speed.",
-              "핵심: 어떤 최고 속도까지 가속한 후 감속하여 끝에 속도 ≤ X에 도달.\n이동 거리는 매초 속도의 합.\n최적 최고 속도를 찾아.")}
+              "핵심: 어떤 최고 속도까지 가속한 후 감속하여 끝에 속도 ≤ X에 도달.\n이동 거리는 매초 속도의 합.\n최적 최고 속도를 찾아요.")}
           </div>
         </div>),
     },
@@ -110,7 +110,7 @@ export function makeRaceCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Accelerate from 0 to peak speed P: distance = 1+2+...+P = P(P+1)/2.\nDecelerate from P to X: distance = P+(P-1)+...+(X+1). Find optimal P such that total distance ≥ K.",
-              "0에서 최고 속도 P까지 가속: 거리 = 1+2+...+P = P(P+1)/2.\nP에서 X까지 감속: 거리 = P+(P-1)+...+(X+1). 총 거리 ≥ K가 되는 최적 P를 찾아.")}
+              "0에서 최고 속도 P까지 가속: 거리 = 1+2+...+P = P(P+1)/2.\nP에서 X까지 감속: 거리 = P+(P-1)+...+(X+1). 총 거리 ≥ K가 되는 최적 P를 찾아요.")}
           </div>
         </div>),
     },
@@ -118,7 +118,7 @@ export function makeRaceCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getRaceSections(E),
     },
   ];

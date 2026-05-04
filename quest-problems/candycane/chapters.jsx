@@ -34,7 +34,7 @@ export function makeCandyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows love candy canes!\nEach candy cane hangs from above, and cows eat from the bottom up to their height.\nLet's figure out how this works!\n🍬", "소들은 캔디 케인을 좋아해! 캔디 케인은 위에서 걸려 있고, 소들은 아래부터 자기 키만큼 먹어. 어떻게 동작하는지 알아보자! 🍬"),
+        "Cows love candy canes!\nEach candy cane hangs from above, and cows eat from the bottom up to their height.\nLet's figure out how this works!\n🍬", "소들은 캔디 케인을 좋아해요! 캔디 케인은 위에서 걸려 있고, 소들은 아래부터 자기 키만큼 먹어. 어떻게 동작하는지 알아보자! 🍬"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🍬</div>
@@ -43,7 +43,7 @@ export function makeCandyCh1(E) {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N cows,\nM candy canes. Each cane hung from top. Cows eat bottom up to their height, then grow by amount eaten!",
-              "N마리 소, M개 캔디 케인.\n캔디는 위에서 매달려 있어.\n소들은 아래부터 자기 키까지 먹고, 먹은 만큼 키가 커져!")}
+              "N마리 소, M개 캔디 케인.\n캔디는 위에서 매달려 있어요.\n소들은 아래부터 자기 키까지 먹고, 먹은 만큼 키가 커져!")}
           </div>
         </div>),
     },
@@ -51,7 +51,7 @@ export function makeCandyCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A cow has height 3 and faces a candy cane of height 6.\nThe candy hangs from 0 to 6.\nThe cow can reach up to height 3.\nHow much does it eat?", "키 3인 소가 높이 6짜리 캔디 케인을 만났어. 캔디는 0~6에 있어. 소는 높이 3까지 닿아. 얼마나 먹을까?"),
+        "A cow has height 3 and faces a candy cane of height 6.\nThe candy hangs from 0 to 6.\nThe cow can reach up to height 3.\nHow much does it eat?", "키 3인 소가 높이 6짜리 캔디 케인을 만났어. 캔디는 0~6에 있어요. 소는 높이 3까지 닿아. 얼마나 먹을까?"),
       question: t(E,
         "Cow height = 3, candy cane height = 6. How much does the cow eat?",
         "소 키 = 3, 캔디 높이 = 6. 소가 얼마나 먹어?"),
@@ -88,7 +88,7 @@ export function makeCandyCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The approach: simulate each candy cane.\nTrack the bottom (where eating starts).\nEach cow eats from bottom up to min(height, candy_top).\nTime complexity: O(N × M).", "접근법: 각 캔디 케인을 시뮬레이션해.\n먹기 시작하는 위치(bottom)를 추적해.\n각 소는 bottom부터 min(키, 캔디 꼭대기)까지 먹어.\n시간 복잡도: O(N × M)."),
+        "The approach: simulate each candy cane.\nTrack the bottom (where eating starts).\nEach cow eats from bottom up to min(height, candy_top).\nTime complexity: O(N × M).", "접근법: 각 캔디 케인을 시뮬레이션해요.\n먹기 시작하는 위치(bottom)를 추적해요.\n각 소는 bottom부터 min(키, 캔디 꼭대기)까지 먹어.\n시간 복잡도: O(N × M)."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
@@ -105,7 +105,7 @@ export function makeCandyCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getCandyCaneSections(E),
     },
   ];

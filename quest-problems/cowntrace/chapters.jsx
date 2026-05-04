@@ -68,7 +68,7 @@ export function makeCowntraceCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows shake hooves at events.\nOne cow (patient zero) starts infected and can spread the disease up to K times.\nFind which cows could be patient zero, and the min/max K.", "소들이 행사에서 발굽을 맞대. 한 마리(환자 제로)가 감염 시작, 최대 K번 전파 가능. 환자 제로 후보와 최소/최대 K를 구해."),
+        "Cows shake hooves at events.\nOne cow (patient zero) starts infected and can spread the disease up to K times.\nFind which cows could be patient zero, and the min/max K.", "소들이 행사에서 발굽을 맞대. 한 마리(환자 제로)가 감염 시작, 최대 K번 전파 가능. 환자 제로 후보와 최소/최대 K를 구해요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd0d"}</div>
@@ -141,7 +141,7 @@ export function makeCowntraceCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getCowntraceSections(E),
     },
   ];

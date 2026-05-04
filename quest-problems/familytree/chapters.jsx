@@ -57,7 +57,7 @@ export function makeFamilyTreeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given mother-child relationships between cows, classify the relationship between two specific cows.\nBuild ancestor chains and find the Lowest Common Ancestor (LCA)!", "소들 간 모녀 관계가 주어지면, 특정 두 소의 관계를 분류해. 조상 체인을 만들고 최소 공통 조상(LCA)을 찾아!"),
+        "Given mother-child relationships between cows, classify the relationship between two specific cows.\nBuild ancestor chains and find the Lowest Common Ancestor (LCA)!", "소들 간 모녀 관계가 주어지면, 특정 두 소의 관계를 분류해요. 조상 체인을 만들고 최소 공통 조상(LCA)을 찾아요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf33"}</div>
@@ -86,7 +86,7 @@ export function makeFamilyTreeCh1(E) {
       correct: 1,
       explain: t(E,
         "Mother and child are exactly 1 generation apart!",
-        "어미와 자식은 정확히 1세대 차이야!"),
+        "어미와 자식은 정확히 1세대 차이예요!"),
     },
     // 1-3: Input
     {
@@ -130,7 +130,7 @@ export function makeFamilyTreeCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getFamilyTreeSections(E),
     },
   ];

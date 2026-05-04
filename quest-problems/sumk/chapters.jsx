@@ -26,7 +26,7 @@ export function makeSumKCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given an array of N numbers and an integer K, compute the sum of each element raised to the power K.\nThat is, find a[0]^K + a[1]^K + ...\n+ a[N-1]^K.", "N개의 숫자 배열과 정수 K가 주어지면, 각 원소를 K제곱하여 합을 구해. 즉, a[0]^K + a[1]^K + ... + a[N-1]^K를 구해."),
+        "Given an array of N numbers and an integer K, compute the sum of each element raised to the power K.\nThat is, find a[0]^K + a[1]^K + ...\n+ a[N-1]^K.", "N개의 숫자 배열과 정수 K가 주어지면, 각 원소를 K제곱하여 합을 구해요. 즉, a[0]^K + a[1]^K + ... + a[N-1]^K를 구해요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2211"}</div>
@@ -35,7 +35,7 @@ export function makeSumKCh1(E) {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "For each element x in the array, compute x^K and sum them all up.\nSimple loop with exponentiation.",
-              "배열의 각 원소 x에 대해 x^K를 계산하고 모두 합산해.\n거듭제곱과 반복문으로 해결.")}
+              "배열의 각 원소 x에 대해 x^K를 계산하고 모두 합산해요.\n거듭제곱과 반복문으로 해결.")}
           </div>
         </div>),
     },
@@ -62,7 +62,7 @@ export function makeSumKCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Calculate sum of squares for [1, 2, 3]!", "[1, 2, 3]의 제곱의 합을 계산해봐!"),
+        "Calculate sum of squares for [1, 2, 3]!", "[1, 2, 3]의 제곱의 합을 계산해봐요!"),
       question: t(E,
         "Array=[1,2,3], K=2. Enter the sum:",
         "배열=[1,2,3], K=2. 합을 입력해:"),
@@ -84,7 +84,7 @@ export function makeSumKCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Loop through each element, compute x^K, and add to result.\nO(N * log K) with fast exponentiation, or O(N * K) with naive approach.", "각 원소를 순회하며 x^K를 계산하고 결과에 더해. 빠른 거듭제곱으로 O(N * log K), 단순 방법으로 O(N * K)."),
+        "Loop through each element, compute x^K, and add to result.\nO(N * log K) with fast exponentiation, or O(N * K) with naive approach.", "각 원소를 순회하며 x^K를 계산하고 결과에 더해요. 빠른 거듭제곱으로 O(N * log K), 단순 방법으로 O(N * K)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -92,7 +92,7 @@ export function makeSumKCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Python's ** operator handles exponentiation efficiently.\nJust iterate and accumulate.",
-              "Python의 ** 연산자가 거듭제곱을 효율적으로 처리해.\n순회하며 누적하면 돼.")}
+              "Python의 ** 연산자가 거듭제곱을 효율적으로 처리해요.\n순회하며 누적하면 돼요.")}
           </div>
         </div>),
     },
@@ -100,7 +100,7 @@ export function makeSumKCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getSumKSections(E),
     },
   ];

@@ -25,7 +25,7 @@ export function makeGiftsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You have N gifts to distribute among K people as evenly as possible.\nSome people may get one extra gift.\nHow many people get an extra?", "N개의 선물을 K명에게 최대한 고르게 나눠야 해. 일부는 선물을 하나 더 받을 수 있어. 몇 명이 추가 선물을 받을까?"),
+        "You have N gifts to distribute among K people as evenly as possible.\nSome people may get one extra gift.\nHow many people get an extra?", "N개의 선물을 K명에게 최대한 고르게 나눠야 해요. 일부는 선물을 하나 더 받을 수 있어요. 몇 명이 추가 선물을 받을까?"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf81"}</div>
@@ -34,7 +34,7 @@ export function makeGiftsCh1(E) {
           <div style={{ marginTop: 12, background: "#fef3c7", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Use division and modulo.\nN // K gives the base amount per person. N % K gives how many people receive one extra.",
-              "핵심: 나눗셈과 나머지를 사용해.\nN // K는 1인당 기본 수량.\nN % K는 추가 선물을 받는 사람 수.")}
+              "핵심: 나눗셈과 나머지를 사용해요.\nN // K는 1인당 기본 수량.\nN % K는 추가 선물을 받는 사람 수.")}
           </div>
         </div>),
     },
@@ -54,7 +54,7 @@ export function makeGiftsCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! 10 mod 3 = 1. One person gets an extra gift.",
-        "맞아! 10 mod 3 = 1. 한 명이 추가 선물을 받아."),
+        "맞아! 10 mod 3 = 1. 한 명이 추가 선물을 받아요."),
     },
     // 1-3: Input
     {
@@ -66,7 +66,7 @@ export function makeGiftsCh1(E) {
         "N=10, K=3. 추가 선물을 받는 사람은 몇 명?"),
       hint: t(E,
         "10 % 3 = 1. One person gets 4 gifts, the other two get 3.",
-        "10 % 3 = 1. 한 명이 4개, 나머지 두 명이 3개를 받아."),
+        "10 % 3 = 1. 한 명이 4개, 나머지 두 명이 3개를 받아요."),
       answer: 1,
     },
   ];
@@ -82,7 +82,7 @@ export function makeGiftsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just one division and one modulo operation. O(1) time!", "나눗셈 한 번, 나머지 한 번이면 돼. O(1) 시간!"),
+        "Just one division and one modulo operation. O(1) time!", "나눗셈 한 번, 나머지 한 번이면 돼요. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -90,7 +90,7 @@ export function makeGiftsCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fef3c7", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "The answer is simply N % K. No loops needed!",
-              "답은 간단히 N % K야. 반복문이 필요 없어!")}
+              "답은 간단히 N % K야. 반복문이 필요 없어요!")}
           </div>
         </div>),
     },
@@ -98,7 +98,7 @@ export function makeGiftsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getGiftsSections(E),
     },
   ];

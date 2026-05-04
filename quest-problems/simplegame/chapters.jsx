@@ -27,7 +27,7 @@ export function makeSimpleGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two players take turns removing 1 to 3 stones from a pile of N stones.\nThe player who takes the last stone wins.\nWho wins with optimal play?", "두 플레이어가 번갈아 N개의 돌 더미에서 1~3개를 가져가. 마지막 돌을 가져가는 사람이 이겨. 최적의 플레이에서 누가 이길까?"),
+        "Two players take turns removing 1 to 3 stones from a pile of N stones.\nThe player who takes the last stone wins.\nWho wins with optimal play?", "두 플레이어가 번갈아 N개의 돌 더미에서 1~3개를 가져가요. 마지막 돌을 가져가는 사람이 이겨. 최적의 플레이에서 누가 이길까?"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfae"}</div>
@@ -36,7 +36,7 @@ export function makeSimpleGameCh1(E) {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: This is a classic Nim game.\nLosing positions are multiples of 4. If N % 4 == 0, the second player wins; otherwise, the first player wins.",
-              "핵심: 이것은 고전적인 님 게임이야.\n지는 위치는 4의 배수야.\nN % 4 == 0이면 후수 승, 아니면 선수 승.")}
+              "핵심: 이것은 고전적인 님 게임이예요.\n지는 위치는 4의 배수예요.\nN % 4 == 0이면 후수 승, 아니면 선수 승.")}
           </div>
         </div>),
     },
@@ -44,7 +44,7 @@ export function makeSimpleGameCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If N=5, the first player takes 1 stone, leaving 4.\nNow the opponent faces a multiple of 4 - a losing position!", "N=5이면, 선수가 돌 1개를 가져가서 4개를 남겨. 상대는 4의 배수를 마주해 - 지는 위치야!"),
+        "If N=5, the first player takes 1 stone, leaving 4.\nNow the opponent faces a multiple of 4 - a losing position!", "N=5이면, 선수가 돌 1개를 가져가서 4개를 남겨. 상대는 4의 배수를 마주해 - 지는 위치예요!"),
       question: t(E,
         "N=5. Who wins with optimal play?",
         "N=5. 최적 플레이에서 누가 이겨?"),
@@ -61,13 +61,13 @@ export function makeSimpleGameCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "N=8. Since 8 is a multiple of 4, who wins? Enter 1 for first player, 2 for second player.", "N=8. 8은 4의 배수야. 누가 이겨? 선수면 1, 후수면 2를 입력해."),
+        "N=8. Since 8 is a multiple of 4, who wins? Enter 1 for first player, 2 for second player.", "N=8. 8은 4의 배수예요. 누가 이겨? 선수면 1, 후수면 2를 입력해요."),
       question: t(E,
         "N=8. Who wins? (1=first, 2=second)",
         "N=8. 누가 이겨? (1=선수, 2=후수)"),
       hint: t(E,
         "8 % 4 == 0. Multiples of 4 are losing for the player whose turn it is.",
-        "8 % 4 == 0. 4의 배수는 차례인 사람이 지는 위치야."),
+        "8 % 4 == 0. 4의 배수는 차례인 사람이 지는 위치예요."),
       answer: 2,
     },
   ];
@@ -83,7 +83,7 @@ export function makeSimpleGameCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just check N mod 4. O(1) time!", "N mod 4만 확인하면 돼. O(1) 시간!"),
+        "Just check N mod 4. O(1) time!", "N mod 4만 확인하면 돼요. O(1) 시간!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
@@ -91,7 +91,7 @@ export function makeSimpleGameCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Game theory insight: in a take-away game with moves {1,2,3},\nlosing positions are exactly multiples of 4.",
-              "게임 이론: 이동이 {1,2,3}인 가져가기 게임에서 지는 위치는 정확히 4의 배수야.")}
+              "게임 이론: 이동이 {1,2,3}인 가져가기 게임에서 지는 위치는 정확히 4의 배수예요.")}
           </div>
         </div>),
     },
@@ -99,7 +99,7 @@ export function makeSimpleGameCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getSimpleGameSections(E),
     },
   ];

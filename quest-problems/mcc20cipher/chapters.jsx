@@ -26,7 +26,7 @@ export function makeMcc20CipherCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A cipher maps each lowercase letter to another.\nGiven the cipher key, decode the encoded message by reversing the mapping.", "암호가 각 소문자를 다른 문자로 매핑해. 암호 키가 주어지면 매핑을 뒤집어서 인코딩된 메시지를 해독해."),
+        "A cipher maps each lowercase letter to another.\nGiven the cipher key, decode the encoded message by reversing the mapping.", "암호가 각 소문자를 다른 문자로 매핑해요. 암호 키가 주어지면 매핑을 뒤집어서 인코딩된 메시지를 해독해요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd10"}</div>
@@ -89,7 +89,7 @@ export function makeMcc20CipherCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getMcc20CipherSections(E),
     },
   ];

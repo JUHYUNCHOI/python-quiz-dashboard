@@ -33,7 +33,7 @@ export function makeAbcsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given 7 numbers: A, B, C, A+B, B+C, A+C, A+B+C in some order.\nFind A, B, C where A <= B <= C!", "7개 숫자: A, B, C, A+B, B+C, A+C, A+B+C가 순서 없이 주어져. A <= B <= C인 A, B, C를 찾아!"),
+        "Given 7 numbers: A, B, C, A+B, B+C, A+C, A+B+C in some order.\nFind A, B, C where A <= B <= C!", "7개 숫자: A, B, C, A+B, B+C, A+C, A+B+C가 순서 없이 주어져. A <= B <= C인 A, B, C를 찾아요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
@@ -42,7 +42,7 @@ export function makeAbcsCh1(E) {
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Key: Sort the 7 numbers.\nThe largest is always A+B+C. The smallest is A. The second smallest is B. Then C = (A+B+C) - A - B.",
-              "핵심: 7개 숫자를 정렬해.\n가장 큰 수는 항상 A+B+C. 가장 작은 수는 A. 두 번째로 작은 수는 B. C = (A+B+C) - A - B.")}
+              "핵심: 7개 숫자를 정렬해요.\n가장 큰 수는 항상 A+B+C. 가장 작은 수는 A. 두 번째로 작은 수는 B. C = (A+B+C) - A - B.")}
           </div>
         </div>),
     },
@@ -105,7 +105,7 @@ export function makeAbcsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getAbcsSections(E),
     },
   ];

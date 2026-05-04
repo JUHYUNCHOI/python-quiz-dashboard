@@ -33,7 +33,7 @@ export function makeFjFarmsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John has plants that grow at different rates!\nWe need to find the earliest day when the plants reach a specific height ranking.\nLet's dig in!\n🌱", "파머 존의 식물들은 다른 속도로 자라! 식물들이 특정 키 순서에 도달하는 가장 빠른 날을 찾아야 해. 알아보자! 🌱"),
+        "Farmer John has plants that grow at different rates!\nWe need to find the earliest day when the plants reach a specific height ranking.\nLet's dig in!\n🌱", "파머 존의 식물들은 다른 속도로 자라! 식물들이 특정 키 순서에 도달하는 가장 빠른 날을 찾아야 해요. 알아보자! 🌱"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🌱</div>
@@ -42,7 +42,7 @@ export function makeFjFarmsCh1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "N plants with initial heights h and growth rates a.\nFind min days d so that height ranking matches target t. Binary search on d!",
-              "N개 식물, 초기 키 h와 성장률 a. 키 순서가 목표 t와 일치하는 최소 날 d를 찾아.\nd에 대해 이분 탐색!")}
+              "N개 식물, 초기 키 h와 성장률 a. 키 순서가 목표 t와 일치하는 최소 날 d를 찾아요.\nd에 대해 이분 탐색!")}
           </div>
         </div>),
     },
@@ -68,7 +68,7 @@ export function makeFjFarmsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Let's verify: plant with h=2, a=3, after 2 days. Enter the height!", "확인해보자: h=2, a=3인 식물, 2일 후 키를 입력해!"),
+        "Let's verify: plant with h=2, a=3, after 2 days. Enter the height!", "확인해보자: h=2, a=3인 식물, 2일 후 키를 입력해요!"),
       question: t(E,
         "h=2, a=3, d=2\nHeight = h + a × d = ?",
         "h=2, a=3, d=2\n키 = h + a × d = ?"),
@@ -120,7 +120,7 @@ export function makeFjFarmsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getFjFarmsSections(E),
     },
   ];

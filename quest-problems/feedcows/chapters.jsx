@@ -37,7 +37,7 @@ export function makeFeedCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows of breed G or H stand in a line.\nPlace grass patches (type G or H).\nEach cow must have a matching patch within K positions.\nMinimize the number of patches!", "N마리의 소가 G 또는 H 품종으로 줄 서 있어. 풀 패치 (G 또는 H 타입)를 놓아. 각 소는 K 위치 이내에 맞는 패치가 있어야 해. 패치 수를 최소화해!"),
+        "N cows of breed G or H stand in a line.\nPlace grass patches (type G or H).\nEach cow must have a matching patch within K positions.\nMinimize the number of patches!", "N마리의 소가 G 또는 H 품종으로 줄 서 있어요. 풀 패치 (G 또는 H 타입)를 놓아요. 각 소는 K 위치 이내에 맞는 패치가 있어야 해요. 패치 수를 최소화해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf3e"}</div>
@@ -65,19 +65,19 @@ export function makeFeedCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! K=0 means each patch only covers its own position, and patches must match breed. So we need 1 G patch and 1 H patch = 2 total.",
-        "맞아! K=0이면 패치는 자기 위치만 커버하고, 품종이 맞아야 해. G 패치 1개 + H 패치 1개 = 총 2개."),
+        "맞아! K=0이면 패치는 자기 위치만 커버하고, 품종이 맞아야 해요. G 패치 1개 + H 패치 1개 = 총 2개."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "breeds = \"GGG\", K = 1.\nA patch at position 1 covers positions 0, 1, 2.\nHow many patches minimum?", "breeds = \"GGG\", K = 1. 위치 1의 패치는 위치 0, 1, 2를 커버해. 최소 패치 수는?"),
+        "breeds = \"GGG\", K = 1.\nA patch at position 1 covers positions 0, 1, 2.\nHow many patches minimum?", "breeds = \"GGG\", K = 1. 위치 1의 패치는 위치 0, 1, 2를 커버해요. 최소 패치 수는?"),
       question: t(E,
         "\"GGG\", K = 1. Min patches?",
         "\"GGG\", K = 1. 최소 패치 수?"),
       hint: t(E,
         "Greedy: cow 0 is uncovered, place G patch. It covers positions 0 to 0+1=1. Cow 2 is uncovered, place another. But actually: patch at pos 0+K=1 covers 0 to 1+0? No: a patch at position p covers [p-K, p+K]? No, cow at pos i needs patch within K. So patch at pos 1 covers cows 0,1,2. Answer: 1.",
-        "그리디: 소 0이 미커버, G 패치 놓아. 위치 0+K=1에 놓으면 소 0, 1, 2 모두 커버. 답: 1."),
+        "그리디: 소 0이 미커버, G 패치 놓아요. 위치 0+K=1에 놓으면 소 0, 1, 2 모두 커버. 답: 1."),
       answer: 1,
     },
   ];
@@ -101,7 +101,7 @@ export function makeFeedCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Track the rightmost covered position for each breed separately.\nWhen a cow of breed B at position i is not covered (i > last_B), place a patch at i and set last_B = i + K.",
-              "각 품종별로 가장 오른쪽 커버 위치를 추적해.\n위치 i의 품종 B 소가 미커버 (i > last_B)면, i에 패치를 놓고 last_B = i + K로 설정.")}
+              "각 품종별로 가장 오른쪽 커버 위치를 추적해요.\n위치 i의 품종 B 소가 미커버 (i > last_B)면, i에 패치를 놓고 last_B = i + K로 설정.")}
           </div>
         </div>),
     },
@@ -109,7 +109,7 @@ export function makeFeedCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getFeedCowsSections(E),
     },
   ];
