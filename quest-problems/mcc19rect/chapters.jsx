@@ -27,16 +27,38 @@ export function makeMcc19RectCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a non-decreasing list of N integers, find the minimum absolute difference between consecutive elements.\nSince it's sorted, we just check adjacent pairs!", "비내림차순으로 정렬된 N개의 정수가 주어져. 연속된 원소 사이의 최소 절대 차이를 구해요. 정렬되어 있으니 인접한 쌍만 확인하면 돼요!"),
+        "A non-decreasing list of N integers a[1..N] is given.\nPrint the MINIMUM absolute difference between any pair of CONSECUTIVE elements.",
+        "비내림차순으로 정렬된 N 개의 정수 a[1..N] 가 주어져요.\n인접한 두 원소의 절대 차이의 최솟값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>📏</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Rectangle (Min Diff)</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: The list is non-decreasing, so min abs(a[i]-a[i+1]) = min(a[i+1]-a[i]).\nOne pass O(N).",
-              "핵심: 리스트가 비내림차순이라 min abs(a[i]-a[i+1]) = min(a[i+1]-a[i]).\n한 번 순회 O(N).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>📏</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Rectangle (Min Diff)</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P1</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "non-decreasing list of N integers a[1..N]", "비내림차순으로 정렬된 N 개의 정수 a[1..N]")}</b>
+                  {t(E, ".", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum |a[i+1] − a[i]| over all consecutive pairs", "인접한 두 원소의 |a[i+1] − a[i]| 의 최솟값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

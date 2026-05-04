@@ -53,16 +53,47 @@ export function makeMcc19PalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Find the N-th palindrome in base K.\nPalindromes read the same forwards and backwards.\nEnumerate by length: first half determines the whole number!", "K진법에서 N번째 회문수를 찾아요. 회문은 앞뒤로 읽어도 같아요. 길이별로 열거: 앞 절반이 전체를 결정해요!"),
+        "List all palindromes in base K (digits 0..K-1, no leading zeros except '0' itself) in INCREASING numeric order.\nPrint the N-th palindrome (1-indexed) in this list, written in base K.",
+        "K 진법 (자릿수 0..K-1, '0' 자체 외에는 선행 0 없음) 의 모든 회문수를 작은 숫자부터 큰 숫자 순으로 나열해요.\n그 목록의 N 번째 (1-indexed) 회문수를 K 진법으로 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🔄</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Palindrome</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P6</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Palindromes of length L are determined by the first ceil(L/2) digits.\nCount how many exist per length, then construct the N-th one.",
-              "핵심: 길이 L의 회문은 처음 ceil(L/2)자리로 결정돼요.\n길이별 개수를 세고 N번째를 구성해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🔄</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Palindrome</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P6</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "palindrome", "회문수")}</b>
+                  {t(E, " reads the same forward and backward (in its base-K representation).",
+                        " 는 K 진법 표현이 앞뒤로 같아요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Sort all base-K palindromes (no leading zeros) in ", "K 진법의 모든 회문수 (선행 0 없음) 를 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "increasing numeric order", "작은 숫자부터 큰 숫자 순")}</b>
+                  {t(E, ".", " 으로 정렬해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "N-th palindrome in this sorted list (in base K)", "정렬된 목록의 N 번째 회문수 (K 진법으로)")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

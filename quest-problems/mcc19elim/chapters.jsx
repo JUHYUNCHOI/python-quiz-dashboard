@@ -35,16 +35,49 @@ export function makeMcc19ElimCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a binary string, you can remove at most K zeros.\nFind the longest consecutive streak of 1s after removal.\nClassic sliding window!", "이진 문자열에서 최대 K개의 0을 제거할 수 있어요. 제거 후 가장 긴 연속 1의 길이를 구해요. 전형적인 슬라이딩 윈도우!"),
+        "Given a binary string of length N and a limit K, you may delete at most K zeros from the string. After deletion, the remaining characters re-pack into a single string.\nPrint the LONGEST run of consecutive 1s achievable.",
+        "길이 N 의 이진 문자열과 한계 K 가 주어져요. 문자열에서 최대 K 개의 0 을 지울 수 있어요. 지운 뒤 남은 문자가 한 문자열로 재조합돼요.\n달성 가능한 가장 긴 연속 1 의 길이를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Elimination</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P5</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Sliding window — maintain a window with at most K zeros.\nTrack the maximum window length.",
-              "핵심: 슬라이딩 윈도우 — 최대 K개의 0을 포함하는 윈도우 유지.\n최대 윈도우 길이 추적.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Elimination</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P5</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "binary string of length N", "길이 N 의 이진 문자열")}</b>
+                  {t(E, " and a limit ", " 와 한계 ")}
+                  <b style={{ color: "#7c3aed" }}>K</b>
+                  {t(E, " are given.", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You may ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "delete at most K zeros", "최대 K 개의 0 을 지우기")}</b>
+                  {t(E, ". The remaining characters re-pack into a single string.",
+                        " 가능. 지운 뒤 남은 문자가 한 문자열로 재조합.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "LONGEST run of consecutive 1s achievable", "달성 가능한 가장 긴 연속 1 의 길이")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

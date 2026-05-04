@@ -27,16 +27,46 @@ export function makeMcc19CandyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N people stand in a circle.\nEach round, people at odd positions are eliminated.\nFind who survives!\nThis is a Josephus-like problem.", "N명이 원형으로 서 있어요. 매 라운드마다 홀수 위치의 사람이 탈락해요. 누가 살아남는지 찾아요! 요세푸스 변형 문제예요."),
+        "N people stand in a line numbered 1..N. In each round, every person at an ODD position (1st, 3rd, 5th, ...) is eliminated; the rest renumber from 1. Repeat until ONE person remains.\nPrint that person's original number.",
+        "N 명이 1..N 번호로 한 줄에 서 있어요. 매 라운드, 홀수 위치 (1st, 3rd, 5th, ...) 의 사람들이 탈락하고, 나머지가 1 부터 다시 번호 매겨져요. 한 명만 남을 때까지 반복.\n남은 사람의 원래 번호를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🍬</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Candy</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P3</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Simulate the elimination process.\nEach round removes people at odd positions until one remains.",
-              "핵심: 탈락 과정을 시뮬레이션.\n매 라운드 홀수 위치를 제거해서 한 명 남을 때까지.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🍬</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Candy</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P3</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#dc2626" }}>{t(E, "N people in a line, numbered 1..N", "1..N 번호로 한 줄에 선 N 명")}</b>
+                  {t(E, ".", " 이 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each round, ", "매 라운드, ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "everyone at an ODD position is eliminated", "홀수 위치의 모두가 탈락")}</b>
+                  {t(E, " and the rest renumber from 1.",
+                        "하고 나머지가 1 부터 다시 번호 매겨져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "original number of the last person remaining", "마지막에 남은 사람의 원래 번호")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
