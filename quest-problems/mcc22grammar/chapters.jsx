@@ -138,15 +138,36 @@ export function makeMcc22GrammarCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Build adjacency list O(E), then for each sentence of length L, check L-1 edges.\nUse a set for O(1) lookup per edge.", "인접 리스트 구축 O(E), 길이 L인 각 문장에서 L-1개 간선 확인. 간선당 O(1) 조회를 위해 집합 사용."),
+        "Store all grammar edges in a SET of (X, Y) tuples. For each input sentence, check that every consecutive (X, Y) pair is in the set.",
+        "문법 간선을 (X, Y) 튜플의 SET 으로 저장. 각 입력 문장에서 모든 연속 쌍 (X, Y) 가 SET 에 있는지 확인."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(E + sum of L)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Store edges in adjacency list.\nFor each sentence, iterate through consecutive pairs and check if the edge exists. Linear in total input size.",
-              "간선을 인접 리스트에 저장.\n각 문장에서 연속 쌍을 순회하며 간선 존재 여부 확인.\n전체 입력 크기에 선형.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read edges into a set", "간선을 SET 에 읽기"), code: "edges = {(X, Y) for X→Y in input}", color: "#059669" },
+              { n: 2, label: t(E, "For each sentence", "각 문장"), code: "for sentence in sentences: words = sentence.split()", color: "#7c3aed" },
+              { n: 3, label: t(E, "Check all consecutive pairs", "연속 쌍 모두 확인"), code: "ok = all((words[i], words[i+1]) in edges for i in range(len(words)-1))", color: "#0891b2" },
+              { n: 4, label: t(E, "Print VALID or INVALID", "VALID 또는 INVALID 출력"), code: "print('VALID' if ok else 'INVALID')", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(E + total length)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "set lookups are O(1)", "SET 조회는 O(1)")}</div>
           </div>
         </div>),
     },

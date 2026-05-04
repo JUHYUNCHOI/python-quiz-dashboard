@@ -130,15 +130,36 @@ export function makeMcc22CardSharkCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort the cards O(N log N), then alternate picks in O(N). Total: O(N log N).", "카드 정렬 O(N log N), 번갈아 선택 O(N). 총: O(N log N)."),
+        "Both players play optimally → both pick the largest remaining card. Sort cards descending; Player 1 takes positions 0, 2, 4, ... (every other from the top).",
+        "둘 다 최선 → 둘 다 남은 카드 중 가장 큰 것 선택. 카드 내림차순 정렬; 플레이어 1 은 위치 0, 2, 4, ... (위에서 한 칸씩 건너뜀)."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Sort cards in descending order. Player 1 takes odd-indexed cards (0, 2, 4, ...),\nPlayer 2 takes even-indexed. Sum Player 1's cards.",
-              "카드를 내림차순으로 정렬.\n플레이어 1이 홀수 인덱스(0, 2, 4, ...), 플레이어 2가 짝수 인덱스.\n플레이어 1의 카드 합산.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Sort cards descending", "내림차순 정렬"), code: "cards.sort(reverse=True)", color: "#d97706" },
+              { n: 2, label: t(E, "Player 1 takes evens (0, 2, ...)", "플레이어 1: 짝수 (0, 2, ...)"), code: "p1 = sum(cards[i] for i in range(0, N, 2))", color: "#7c3aed" },
+              { n: 3, label: t(E, "Player 2 takes the rest", "플레이어 2: 나머지"), code: "p2 = sum(cards[i] for i in range(1, N, 2))", color: "#0891b2" },
+              { n: 4, label: t(E, "Print Player 1 score", "플레이어 1 점수 출력"), code: "print(p1)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort dominates", "정렬이 지배적")}</div>
           </div>
         </div>),
     },

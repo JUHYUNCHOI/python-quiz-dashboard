@@ -137,15 +137,36 @@ export function makeMcc22AliensCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For each alien, check if their claim is consistent with the type assignment.\nO(N) per test case.", "각 외계인에 대해 주장이 타입 할당과 일관적인지 확인. 테스트 케이스당 O(N)."),
+        "Walk every alien once. If T-type, the claim must MATCH the actual type of the cited alien. If F-type, the claim must NOT match. Any violation → output N.",
+        "외계인을 한 번씩 순회. T 타입이면 주장이 지목된 외계인의 실제 타입과 일치해야 함. F 타입이면 일치해서는 안 됨. 위반 1 개라도 → N 출력."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Iterate through each alien.\nIf T-type, check claim matches reality. If F-type, check claim contradicts reality. One pass through all aliens.",
-              "각 외계인을 순회.\nT타입이면 주장이 현실과 일치하는지, F타입이면 모순되는지 확인.\n모든 외계인을 한 번 순회.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "For each alien", "각 외계인"), code: "for i, alien in enumerate(aliens):", color: "#2563eb" },
+              { n: 2, label: t(E, "Read claim and target", "주장과 대상 읽기"), code: "target = alien.target;  claim = alien.claim_type", color: "#7c3aed" },
+              { n: 3, label: t(E, "Check consistency", "일관성 검사"), code: "ok = (types[i] == 'T' and types[target] == claim) or (types[i] == 'F' and types[target] != claim)", color: "#0891b2" },
+              { n: 4, label: t(E, "Print Y or N", "Y 또는 N 출력"), code: "print('Y' if all ok else 'N')", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass over aliens", "외계인 한 번 순회")}</div>
           </div>
         </div>),
     },
