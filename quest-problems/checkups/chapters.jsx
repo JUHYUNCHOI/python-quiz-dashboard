@@ -25,15 +25,49 @@ export function makeCheckupsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows with breed types.\nHe checks them against Bessie's list.\nHow many match?\nAnd what's the maximum possible?\n🐮", "FJ에게 N마리 소의 품종이 있어요. 베시의 리스트와 비교해서 몇 개가 일치하는지, 최대 얼마나 일치시킬 수 있는지 찾자! 🐮"),
+        "FJ has N cows with breeds. Bessie guessed each breed in order.\nHow many guesses are right? And how many could be right if Bessie rearranged her guesses?",
+        "FJ에게 N마리 소가 있고 각자 품종이 있어요. 베시가 순서대로 품종을 추측했어요.\n맞춘 개수는? 그리고 베시가 추측을 재배열하면 최대 몇 개 맞출 수 있을까요?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🐮</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Cow Checkups</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
-          <div style={{ marginTop: 12, background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Two arrays a[] and b[] of length N.\nCount positions where a[i]==b[i]. Then find max matches by rearranging b.", "길이 N인 배열 a[]와 b[].\na[i]==b[i]인 위치 세기. 그리고 b를 재배열해서 최대 일치 찾기.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🐮</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Cow Checkups</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
+          </div>
+
+          {/* Problem — bullet facts */}
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has N cows in a line — each cow's ", "FJ에게 N마리 소가 줄 서 있어요 — 각 소의 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "true breed", "진짜 품종")}</b>
+                  {t(E, " is the array ", "은 배열 ")}
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>a[1..N]</code>.
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie writes her ", "베시는 자신의 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "breed guesses", "품종 추측")}</b>
+                  {t(E, " in order: array ", "을 순서대로 적어요: 배열 ")}
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>b[1..N]</code>.
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div style={{ whiteSpace: "pre-line" }}>
+                  {t(E,
+                    "Print 2 numbers:\n  ① how many positions match right now (a[i] == b[i])\n  ② what's the MAX matches if Bessie could rearrange her guesses?",
+                    "두 숫자를 출력해요:\n  ① 지금 같은 위치에서 일치하는 개수 (a[i] == b[i])\n  ② 베시가 추측을 재배열하면 최대 일치 수")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

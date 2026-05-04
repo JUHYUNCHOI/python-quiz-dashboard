@@ -22,16 +22,54 @@ export function makePresentsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a stack of N presents.\nFor each query, find how many presents must be removed to reach the target.\n🎁", "FJ에게 N개의 선물 더미가 있어요. 각 쿼리마다 목표 선물에 도달하려면 몇 개를 제거해야 하는지 찾자. 🎁"),
+        "FJ stacked N presents. People ask for specific presents — count how many sit on top of each one before pulling it out.",
+        "FJ가 N개의 선물을 쌓아 놓았어요. 사람들이 특정 선물을 요청해요 — 그 선물 위에 쌓인 개수를 세고 빼내요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🎁</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Stack of Presents</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2025 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Stack of presents (top to bottom).\nFor each query, count presents above the target. Remove the target after finding it!",
-              "선물 더미 (위→아래).\n각 쿼리에서 목표 위의 선물 수를 세고, 찾은 후 제거!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🎁</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Stack of Presents</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2025 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has a ", "FJ에게 ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "vertical stack of N presents", "수직으로 쌓인 N개의 선물 더미")}</b>
+                  {t(E, ", numbered 1..N. The top of the stack is index 0.",
+                        "이 있어요. 1..N 번호를 가지고 있어요. 더미 맨 위가 인덱스 0.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Q queries arrive — each names ONE present FJ should fetch.",
+                        "Q개의 요청이 와요 — 각 요청은 FJ가 꺼내야 할 선물 1개를 지정해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ must remove all presents ", "FJ는 그 선물 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "above", "위에")}</b>
+                  {t(E, " the target first, then take the target itself out (gone forever).",
+                        " 있는 선물을 모두 빼내고, 타깃도 꺼내요 (영구 제거).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "For each query, print how many presents had to be removed first.",
+                        "각 요청마다, 먼저 빼낸 선물 개수를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

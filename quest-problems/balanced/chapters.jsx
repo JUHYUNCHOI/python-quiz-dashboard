@@ -22,16 +22,66 @@ export function makeBalancedCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We have a string of N '(' followed by M ')'. Find the longest balanced subsequence! 🔗", "N개의 '(' 뒤에 M개의 ')'가 오는 문자열에서 가장 긴 균형 잡힌 부분수열을 찾자! 🔗"),
+        "Given N opening brackets followed by M closing brackets — find the longest balanced subsequence we can pull out.",
+        "N개의 여는 괄호 뒤에 M개의 닫는 괄호 — 그 안에서 뽑아낼 수 있는 가장 긴 균형 부분수열을 찾아요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🔗</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Balanced Subsequences</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "String = '(' × N + ')' × M.\nFind the length of the longest balanced bracket subsequence!",
-              "문자열 = '(' × N + ')' × M.\n가장 긴 균형 괄호 부분수열의 길이를 구해요!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🔗</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Balanced Subsequences</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
+          </div>
+
+          {/* Problem — bullet facts */}
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You're given a string: N copies of ", "주어지는 문자열: ")}
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>(</code>
+                  {t(E, " followed by M copies of ", " N개 + ")}
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>)</code>
+                  {t(E, ".", " M개. (모든 여는 괄호 → 모든 닫는 괄호 순서)")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#f97316" }}>{t(E, "subsequence", "부분수열")}</b>
+                  {t(E, " keeps some characters in order — you can ", "은 원래 순서를 유지하며 ")}
+                  <b>{t(E, "skip", "건너뛰기")}</b>
+                  {t(E, " any.", " 가능.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A string is ", "문자열이 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "balanced", "균형")}</b>
+                  {t(E, " if every ", "이려면 모든 ")}
+                  <code>(</code>
+                  {t(E, " has a matching ", "에 짝이 되는 ")}
+                  <code>)</code>
+                  {t(E, " AFTER it. e.g. ", "이 뒤에 있어야 해요. 예: ")}
+                  <code style={{ background: "#dcfce7", padding: "1px 5px", borderRadius: 3, color: "#15803d", fontWeight: 800 }}>{`(())`}</code>{" "}
+                  {t(E, "balanced, ", "균형, ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 3, color: "#991b1b", fontWeight: 800 }}>{`(()`}</code>{" "}
+                  {t(E, "not.", "아님.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Find the LENGTH of the longest balanced subsequence you can form.",
+                        "이 문자열에서 만들 수 있는 가장 긴 균형 부분수열의 길이를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
