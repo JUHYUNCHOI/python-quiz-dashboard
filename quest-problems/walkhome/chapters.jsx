@@ -55,16 +55,56 @@ export function makeWalkHomeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N x N grid.\nMove only right or down from (0,0) to (N-1,N-1).\nAvoid 'H' cells.\nAt most K direction changes allowed.\nCount valid paths!", "N x N 격자. (0,0)에서 (N-1,N-1)까지 오른쪽 또는 아래로만 이동. 'H' 칸은 피해요. 방향 전환은 최대 K번. 유효한 경로 수를 세!"),
+        "Bessie walks from (1, 1) (top-left) to (N, N) (bottom-right) on an N×N grid; some cells are HAYSTACKS ('H') she can't enter. She moves only RIGHT or DOWN.\nShe's also lazy — she changes direction (R↔D) at most K times during the walk.\nFor each test case, print the number of valid paths.",
+        "베시가 N×N 격자에서 (1, 1) 좌상단부터 (N, N) 우하단까지 걸어요. 일부 칸은 H (건초더미) 라 못 들어가요. 이동은 오른쪽 또는 아래쪽만.\n또 그녀는 게을러서 — 걷는 도중 방향 (R ↔ D) 을 최대 K 번까지만 바꿔요.\n각 테스트 케이스마다 유효한 경로의 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfe0"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Walking Home</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: DP with state (row, col, direction, changes_left).\nK <= 3 so the state space is manageable: N^2 * 2 * (K+1).",
-              "핵심: DP 상태 (행,\n열,\n방향, 남은 전환 수). K <= 3이므로 상태 공간 관리 가능: N^2 * 2 * (K+1).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfe0"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Walking Home</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "An ", "")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "N × N grid", "N × N 격자")}</b>
+                  {t(E, " with some cells marked ", " 의 일부 칸이 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "H (haystacks, blocked)", "H (건초더미, 통과 불가)")}</b>
+                  {t(E, ".", " 예요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie walks from (1, 1) to (N, N) using only ", "베시가 (1, 1) → (N, N) 까지 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "RIGHT or DOWN moves", "오른쪽 또는 아래쪽 이동만")}</b>
+                  {t(E, ".", " 으로 가요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "She changes direction (R ↔ D) ", "방향 (R ↔ D) 을 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "at most K times", "최대 K 번")}</b>
+                  {t(E, " during the walk.", " 까지만 바꿀 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of valid paths", "유효한 경로의 수")}</b>
+                  {t(E, ".", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

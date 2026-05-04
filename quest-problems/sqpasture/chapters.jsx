@@ -29,16 +29,46 @@ export function makeSqPastureCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two rectangular pastures on a field.\nFJ wants to build the smallest square fence that contains BOTH of them.\nWhat's the area?\n⬜", "들판에 직사각형 목초지 두 개가 있어요. FJ가 둘 다 포함하는 가장 작은 정사각형 울타리를 만들려 해요. 면적은? ⬜"),
+        "Two non-overlapping axis-aligned rectangular pastures sit on a field. FJ wants to build a SQUARE fence (with sides parallel to the axes) whose interior contains both pastures.\nPrint the AREA of the smallest such square.",
+        "겹치지 않는 축에 평행한 직사각형 목초지 2개가 들판에 있어요. FJ 가 두 목초지를 모두 포함하는 정사각형 울타리 (축에 평행) 를 만들어요.\n그런 정사각형 중 가장 작은 것의 면적을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>⬜</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Square Pasture</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, textAlign: "left", whiteSpace: "pre-line" }}>
-            {t(E,
-              "Given: Two non-overlapping axis-aligned rectangles.\nFind: Minimum area of a square (sides parallel to axes) that encloses both.",
-              "주어진 것: 겹치지 않는 축 평행 직사각형 2개.\n구할 것: 둘 다 포함하는 정사각형의 최소 면적 (축 평행).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>⬜</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Square Pasture</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#d97706" }}>{t(E, "Two non-overlapping axis-aligned rectangles", "겹치지 않는 축에 평행한 직사각형 2개")}</b>
+                  {t(E, " (pastures) on a field.", " 가 들판에 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ builds a ", "FJ 가 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "SQUARE fence (sides parallel to axes)", "정사각형 울타리 (변이 축에 평행)")}</b>
+                  {t(E, " whose interior contains BOTH pastures.",
+                        " — 두 목초지를 모두 포함.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "AREA of the smallest such square", "그런 정사각형 중 가장 작은 것의 면적")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

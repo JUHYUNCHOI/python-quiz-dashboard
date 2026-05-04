@@ -43,16 +43,55 @@ export function makeYearCowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The Chinese zodiac repeats every 12 years.\nBessie knows relationships like 'my friend was born in the previous Dragon year'.\nChain these to find the total age difference!", "십이지는 12년마다 반복돼요. Bessie는 '내 친구는 이전 용띠 해에 태어났어' 같은 관계를 알고 있어요. 이들을 연결해서 총 나이 차이를 구해요!"),
+        "The Chinese zodiac assigns one of 12 animals to each year, repeating in the fixed cycle Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig, Rat (then Ox again).\nBessie was born in the Year of the Cow (Ox). Cows make statements like \"X was born in the previous/next Dragon year relative to Y\". Chain the statements to compute, for each query cow, how many years APART she is from Bessie.",
+        "십이지는 매년 12 동물 (소, 호랑이, 토끼, 용, 뱀, 말, 양, 원숭이, 닭, 개, 돼지, 쥐) 을 정해진 순환 순서로 배정해요.\n베시는 소띠 해에 태어났어요. 소들이 \"X 는 Y 의 직전/직후 용띠 해에 태어났다\" 같은 진술을 해요. 진술을 연결해 각 쿼리 소가 베시와 몇 년 차이가 나는지 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc02"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Year of the Cow</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: The zodiac cycle is 12 years. 'Previous X year' means go back 1-12 years to find that animal.\nChain the relationships to compute total offset.",
-              "핵심: 십이지 주기는 12년.\n'이전 X년'은 그 동물을 찾기 위해 1-12년 뒤로 가는 것.\n관계를 연결해서 총 오프셋을 계산.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc02"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Year of the Cow</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The ", "")}
+                  <b style={{ color: "#d97706" }}>{t(E, "Chinese zodiac cycles through 12 animals", "십이지가 12 가지 동물을 순환")}</b>
+                  {t(E, " each year, in a fixed order (Ox, Tiger, Rabbit, Dragon, ...).",
+                        " 해요 (소, 호랑이, 토끼, 용, ... 의 정해진 순서).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie was born in the ", "베시는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "Year of the Cow (Ox)", "소띠 해")}</b>
+                  {t(E, ".", " 에 태어났어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Cows make statements like ", "소들이 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "\"X was born in the previous/next ANIMAL year relative to Y\"", "\"X 는 Y 의 직전/직후 ANIMAL 해에 태어났다\"")}</b>
+                  {t(E, ".", " 같은 진술을 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "For each query cow, print ", "각 쿼리 소에 대해 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "how many years apart she is from Bessie", "베시와의 나이 차이 (연도 차이)")}</b>
+                  {t(E, " (positive = older).", " 를 출력해요 (양수 = 더 나이 많음).")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

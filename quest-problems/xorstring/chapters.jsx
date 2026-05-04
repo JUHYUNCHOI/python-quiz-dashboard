@@ -29,16 +29,39 @@ export function makeXorStringCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given two binary strings of equal length, compute their XOR.\nXOR returns 1 when bits differ, 0 when they match.", "같은 길이의 두 이진 문자열이 주어졌을 때 XOR을 계산해요. XOR은 비트가 다르면 1, 같으면 0을 반환해요."),
+        "Two binary strings A and B of EQUAL length are given.\nPrint the bitwise XOR — a string the same length where each position is 0 if A and B match there, else 1.",
+        "같은 길이의 두 이진 문자열 A, B 가 주어져요.\n비트별 XOR — 같은 길이의 문자열로, 각 위치에서 A 와 B 가 같으면 0, 다르면 1 — 을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2295"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>XOR The String</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P6</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: XOR truth table: 0^0=0, 0^1=1, 1^0=1, 1^1=0.\nSame bits give 0, different bits give 1.",
-              "핵심: XOR 진리표: 0^0=0, 0^1=1, 1^0=1, 1^1=0. 같은 비트는 0,\n다른 비트는 1.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2295"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>XOR The String</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P6</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Two ", "두 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "binary strings A, B of equal length", "같은 길이의 이진 문자열 A, B")}</b>
+                  {t(E, " are given.", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "bitwise XOR string", "비트별 XOR 문자열")}</b>
+                  {t(E, " — same bits → 0, different bits → 1.",
+                        " — 같은 비트는 0, 다른 비트는 1.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

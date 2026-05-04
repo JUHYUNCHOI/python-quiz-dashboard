@@ -53,15 +53,47 @@ export function makeWhereAmICh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie lives on a street with mailboxes, each labeled A-Z.\nShe wants to figure out her location by looking at K consecutive labels.\nLet's find the smallest K!", "베시는 각 우편함에 A-Z 라벨이 붙은 길에 살아. K개의 연속된 라벨을 보고 자기 위치를 알고 싶어. 가장 작은 K를 찾아보자!"),
+        "Bessie lives on a street whose N mailboxes are labeled with letters A..Z. She'd like to identify her location by looking at K consecutive mailboxes.\nFind the SMALLEST K such that every length-K window of N consecutive letters is unique in the street.",
+        "베시가 N개의 우편함이 줄지어 있는 길에 살고, 각 우편함은 A..Z 글자로 표시돼요. 그녀는 K 개의 연속한 우편함만 보고 자기 위치를 알아내고 싶어요.\n길이 K 인 모든 연속 부분 문자열이 길에서 유일해지는 가장 작은 K 를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"📍"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: C.carry }}>Where Am I?</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #2</div>
-          <div style={{ marginTop: 12, background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Given a string of N mailbox labels (A-Z),\nfind the minimum K such that every substring of length K is unique.", "N개의 우편함 라벨 문자열(A-Z)이 주어질 때,\n길이 K인 모든 부분문자열이 고유한 최소 K를 구해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"📍"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: C.carry }}>Where Am I?</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #2</div>
+          </div>
+
+          <div style={{ background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: C.carry, fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A street has ", "")}
+                  <b style={{ color: C.carry }}>{t(E, "N mailboxes labeled A..Z", "A..Z 글자로 표시된 N 개의 우편함")}</b>
+                  {t(E, " (a string of N letters).",
+                        " 이 길에 있어요 (길이 N 문자열).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: C.carry, fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie wants to identify her location by looking at ", "베시는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "K consecutive mailbox labels", "K 개의 연속한 우편함 글자")}</b>
+                  {t(E, ".", " 만 보고 위치를 알아내고 싶어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: `1px dashed ${C.carryBd}` }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "smallest K such that every length-K window is unique", "길이 K 의 모든 연속 부분 문자열이 유일해지는 가장 작은 K")}</b>
+                  {t(E, ".", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
