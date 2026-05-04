@@ -47,16 +47,62 @@ export function makeLiarsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows make claims about Bessie's position: 'G x' means position >= x, 'L x' means position <= x.\nFind the minimum number of liars!", "N마리 소가 베시 위치를 주장해: 'G x'는 위치 >= x, 'L x'는 위치 <= x. 최소 거짓말쟁이 수를 구해요!"),
+        "N cows each claim where Bessie is on a number line. A 'G x' claim says Bessie is at position ≥ x; 'L x' says ≤ x. Bessie has ONE actual position.\nFind the MINIMUM number of cows who must be lying — i.e., pick Bessie's position to maximize the number of true claims.",
+        "N마리 소가 각자 베시의 위치에 대해 주장을 해요. 'G x'는 베시 위치가 x 이상, 'L x'는 x 이하라는 뜻이에요. 베시의 실제 위치는 하나예요.\n베시의 위치를 잘 골라서 참인 주장 수를 최대화할 때, 거짓말쟁이의 최소 수를 구해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"🤥"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Counting Liars</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Try each possible position for Bessie.\nCount how many claims are contradicted. The minimum across all positions is the answer.",
-              "핵심: 베시의 가능한 각 위치를 시도.\n모순되는 주장 수 세기. 모든 위치 중 최솟값이 답.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🤥"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Counting Liars</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie has ", "베시의 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "a single position on a number line", "수직선 위 단 하나의 위치")}</b>
+                  {t(E, ".", "가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each of ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "N cows makes a claim", "N마리 소가 각자 주장")}</b>
+                  {t(E, ":", " 을 해요:")}
+                  <div style={{ marginTop: 4, marginLeft: 8, fontSize: 12, color: "#475569" }}>
+                    <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace" }}>G x</code>
+                    {t(E, " — Bessie's position ≥ x", " — 베시 위치 ≥ x")}<br/>
+                    <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace" }}>L x</code>
+                    {t(E, " — Bessie's position ≤ x", " — 베시 위치 ≤ x")}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Some cows might be ", "어떤 소들은 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "lying", "거짓말")}</b>
+                  {t(E, " — their claim is false for Bessie's actual position.",
+                        "을 해요 — 그 주장이 베시의 실제 위치에 대해 거짓이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of liars", "거짓말쟁이의 최소 수")}</b>
+                  {t(E, " over all possible positions for Bessie.",
+                        "를 출력해요. 베시의 위치를 가장 좋게 골랐을 때.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

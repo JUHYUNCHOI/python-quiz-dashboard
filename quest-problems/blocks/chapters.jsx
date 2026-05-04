@@ -50,16 +50,58 @@ export function makeBlocksCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "4 cubes with 6 letters each.\nSpell words by choosing which block goes where and which face shows.\nTry all permutations!", "4개의 큐브에 각 6개 글자. 어떤 블록을 어디에 놓고 어떤 면을 보여줄지 선택해서 단어를 만들어요. 모든 순열을 시도!"),
+        "FJ has 4 cubes; each cube has 6 letters (one per face).\nFor each query word, decide whether you can spell it by lining up the 4 cubes left-to-right, choosing which cube goes in each position and which face shows.\nFor each query, print YES or NO.",
+        "FJ에게 4개의 큐브가 있고, 각 큐브의 6개 면에 글자가 한 개씩 있어요.\n각 단어 쿼리에 대해, 4개 큐브를 왼쪽부터 오른쪽으로 나란히 놓고 — 어느 큐브를 어디에, 어느 면을 위로 — 선택해서 그 단어를 만들 수 있는지 판단해요.\n각 쿼리마다 YES 또는 NO를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"🧱"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Blocks</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Try all permutations of blocks to positions (4! = 24).\nFor each, check if the required letter exists on that block's faces.",
-              "핵심: 블록을 위치에 배치하는 모든 순열 시도 (4!\n= 24). 각각에 대해 필요한 글자가 블록 면에 있는지 확인.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🧱"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Blocks</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ에게 ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "4 cubes", "4개의 큐브")}</b>
+                  {t(E, " — each cube has ", "가 있어요 — 각 큐브는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "6 letters (one per face)", "6개 면에 글자가 1개씩")}</b>
+                  {t(E, ".", " 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "To spell a 4-letter word, line up the 4 cubes ", "4글자 단어를 만들려면 큐브 4개를 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "left to right", "왼쪽부터 오른쪽")}</b>
+                  {t(E, " — pick which cube sits in each position and which face is showing.",
+                        "으로 나란히 놓고, 어느 큐브를 어디에 놓을지와 어느 면을 보일지 선택해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each cube can be used ", "각 큐브는 한 단어 안에서 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "at most once per word", "최대 한 번만")}</b>
+                  {t(E, " (one block per position).",
+                        " 사용해요 (한 위치에 한 큐브).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "For each query word, print ", "각 단어 쿼리에 대해 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "YES if it can be spelled, else NO", "만들 수 있으면 YES, 아니면 NO")}</b>
+                  {t(E, ".", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

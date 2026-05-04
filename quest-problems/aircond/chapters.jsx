@@ -52,16 +52,60 @@ export function makeAirCondCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows need cooling in their stall ranges.\nM air conditioning units are available (M is at most 10).\nEach AC has a range, power, and cost.\nFind the minimum cost subset of ACs that satisfies all cows!", "N마리의 소가 각자의 축사 범위에서 냉방이 필요해요.\nM개의 에어컨이 있어 (M은 최대 10).\n각 에어컨은 범위, 파워, 비용이 있어요.\n모든 소를 만족시키는 최소 비용 에어컨 조합을 찾아요!"),
+        "FJ has N cows, each in a stall range [s, t] needing at least some cooling power c.\nThere are M ≤ 10 AC units; each AC covers a stall range with some cooling power and a fixed cost. ACs stack — overlapping ACs add their power.\nPick a subset of ACs whose stacked power meets every cow's need, with minimum total cost.",
+        "FJ에게 N마리 소가 있고, 각 소는 축사 범위 [s, t]에 살며 최소 c의 냉방력이 필요해요.\nM ≤ 10개의 에어컨이 있고, 각 에어컨은 정해진 축사 범위에 정해진 냉방력을 더해주며 정해진 비용을 가져요. 같은 위치를 덮는 에어컨은 냉방력이 더해져요.\n모든 소의 요구를 만족시키는 최소 비용의 에어컨 조합을 찾아요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2744\ufe0f"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Air Cownditioning II</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Since M <= 10, we can try all 2^M subsets (at most 1024).\nFor each subset, check if all cows are satisfied and track the minimum cost.",
-              "핵심: M <= 10이므로,\n모든 2^M 부분집합을 시도할 수 있어 (최대 1024개). 각 부분집합에 대해 모든 소가 만족되는지 확인하고 최소 비용을 추적해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2744\ufe0f"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Air Cownditioning II</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ에게 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N cows", "N마리 소")}</b>
+                  {t(E, ", each living in a stall range ", "가 있고, 각 소는 축사 범위 ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>[s, t]</code>
+                  {t(E, " and needing cooling power ≥ ", "에 있으며 냉방력 ≥ ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>c</code>
+                  {t(E, ".", " 가 필요해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "M ≤ 10 AC units", "M ≤ 10개의 에어컨")}</b>
+                  {t(E, " — each covers a stall range with some cooling power and a fixed cost.",
+                        "이 있어요. 각 에어컨은 축사 범위, 냉방력, 비용을 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#0891b2" }}>{t(E, "ACs stack additively", "에어컨은 효과가 더해져요")}</b>
+                  {t(E, " — at any stall, the cooling is the sum of powers of all chosen ACs covering that stall.",
+                        " — 한 축사의 냉방력은 그 축사를 덮는 선택된 에어컨들의 파워 합이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum total cost", "최소 총 비용")}</b>
+                  {t(E, " of an AC subset that satisfies every cow.",
+                        "을 출력해요. 모든 소의 요구를 만족시키는 에어컨 조합 중 가장 싼 것.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

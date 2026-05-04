@@ -39,16 +39,60 @@ export function makePhotoshootCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Arrange G (Guernsey) and H (Holstein) cows to maximize G at even positions.\nUse minimum prefix reversals to rearrange!", "G(건지)와 H(홀스타인) 소를 배치해서 짝수 위치에 G를 최대화해요! 최소 접두사 뒤집기로 재배열해요!"),
+        "FJ has a row of N cows, each Guernsey (G) or Holstein (H). He's given a final desired arrangement b[].\nHis only allowed move: pick a prefix of the row and REVERSE it. He wants to reach b in as few moves as possible.\nPrint the minimum number of prefix reversals.",
+        "FJ에게 한 줄로 선 N마리 소가 있고, 각 소는 건지(G) 또는 홀스타인(H)이에요. 목표 배치 b[] 가 주어져요.\nFJ가 쓸 수 있는 유일한 동작: 접두사(앞부분 일정 길이)를 골라 그 부분을 뒤집기. 목표 b에 도달하기까지 동작을 가장 적게 사용해요.\n최소 접두사-뒤집기 횟수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"📸"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Photoshoot</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Count how many G cows are at even 1-indexed positions.\nUse prefix reversals to move G's into even positions.",
-              "핵심: 1-인덱스 짝수 위치에 G 소가 몇 마리인지 세기.\n접두사 뒤집기로 G를 짝수 위치로 이동.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"📸"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Photoshoot</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ에게 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "N cows in a row", "한 줄로 선 N마리 소")}</b>
+                  {t(E, ", each ", "가 있고, 각 소는 ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>G</code>
+                  {t(E, " (Guernsey) or ", " 또는 ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>H</code>
+                  {t(E, " (Holstein).", " (홀스타인) 이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given a ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "target arrangement b", "목표 배치 b")}</b>
+                  {t(E, " (also a string of G and H, same length N).",
+                        " (G와 H로 된 같은 길이 N의 문자열)도 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One move: pick a ", "한 동작: ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "prefix length k and reverse the first k cows", "접두사 길이 k를 골라 앞에서부터 k마리를 뒤집기")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of moves", "최소 동작 횟수")}</b>
+                  {t(E, " to transform the starting row into b.",
+                        " 를 출력해요. 시작 줄을 b로 만드는 데 필요한.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

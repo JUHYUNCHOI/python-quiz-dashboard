@@ -33,16 +33,50 @@ export function makeAbcsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given 7 numbers: A, B, C, A+B, B+C, A+C, A+B+C in some order.\nFind A, B, C where A <= B <= C!", "7개 숫자: A, B, C, A+B, B+C, A+C, A+B+C가 순서 없이 주어져. A <= B <= C인 A, B, C를 찾아요!"),
+        "Three positive integers A ≤ B ≤ C exist somewhere. You're handed all 7 of these sums in SOME order: A, B, C, A+B, B+C, A+C, A+B+C.\nFigure out the original A, B, C.",
+        "세 양의 정수 A ≤ B ≤ C 가 있어요. 그리고 7가지 합이 순서가 섞인 채로 주어져요: A, B, C, A+B, B+C, A+C, A+B+C.\n원래 A, B, C를 찾아요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Do You Know Your ABCs?</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Sort the 7 numbers.\nThe largest is always A+B+C. The smallest is A. The second smallest is B. Then C = (A+B+C) - A - B.",
-              "핵심: 7개 숫자를 정렬해요.\n가장 큰 수는 항상 A+B+C. 가장 작은 수는 A. 두 번째로 작은 수는 B. C = (A+B+C) - A - B.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Do You Know Your ABCs?</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are three positive integers ", "세 양의 정수 ")}
+                  <b style={{ color: "#d97706" }}>{t(E, "A ≤ B ≤ C", "A ≤ B ≤ C")}</b>
+                  {t(E, " (hidden from you).", " 가 있어요 (숨겨져 있음).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You're given ", "그리고 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "all 7 of these values", "다음 7가지 값")}</b>
+                  {t(E, " — but in some shuffled order:",
+                        " — 가 섞인 순서로 주어져요:")}
+                  <div style={{ marginTop: 4, padding: "4px 10px", background: "#fef3c7", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#7c3aed" }}>
+                    A, B, C, A+B, B+C, A+C, A+B+C
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the original ", "원래 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "A B C", "A B C")}</b>
+                  {t(E, " (in non-decreasing order).", " 를 오름차순으로 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
