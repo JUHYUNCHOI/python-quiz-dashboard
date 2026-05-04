@@ -68,16 +68,47 @@ export function makeSocDist1Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We have stalls in a row, some occupied by cows.\nWe need to place more cows to maximize the minimum distance between any two occupied stalls.\nBinary search on the answer!", "일렬로 놓인 축사에 소가 몇 마리 있어요. 추가로 소를 넣어서 인접 소 사이 최소 거리를 최대화해야 해요. 답에 대해 이분 탐색!"),
+        "FJ has a number line with M disjoint segments where cows can stand. He must place exactly N cows on integer positions inside those segments.\nMaximize the MINIMUM distance between any two cows.",
+        "FJ 에게 수직선 위 M 개의 서로 떨어진 구간이 있고, 소들이 그 구간 안 정수 위치에 설 수 있어요. 정확히 N 마리 소를 배치해야 해요.\n임의의 두 소 사이 최소 거리를 최대화해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude37"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Social Distancing I</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Binary search on minimum distance D.\nFor each D, greedily check if we can place all cows with at least D spacing.",
-              "핵심: 최소 거리 D에 대해 이분 탐색.\n각 D에 대해 그리디하게 소를 배치할 수 있는지 확인.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude37"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Social Distancing I</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ 에게 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "M disjoint segments on a number line", "수직선 위 M 개의 서로 떨어진 구간")}</b>
+                  {t(E, " — cows can only stand on integer positions inside these segments.",
+                        " 이 있고, 소는 그 구간 안 정수 위치에만 설 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Place EXACTLY ", "정확히 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "N cows", "N 마리 소")}</b>
+                  {t(E, " in those positions.", " 를 그 위치에 배치해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM possible minimum distance between any two cows", "두 소 사이 최소 거리의 최댓값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -39,16 +39,49 @@ export function makeRevegCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N pastures need grass from 4 types.\nSome cow pairs need different grass on their favorite pastures.\nFind the lexicographically smallest valid coloring.", "N개의 목초지에 4종류 잔디 중 하나를 심어야 해요. 일부 소 쌍은 좋아하는 목초지의 잔디가 달라야 해요. 사전순으로 가장 작은 유효 배색을 찾아요!"),
+        "There are N pastures (1..N), each gets ONE of 4 grass types. M cow pairs each have two favorite pastures and they require those two pastures to have DIFFERENT grass types.\nPrint the LEXICOGRAPHICALLY SMALLEST valid grass-type assignment as a string of digits 1..4.",
+        "N 개의 목초지 (1..N) 가 있고, 각각 4 가지 잔디 종류 중 하나를 심어요. M 쌍의 소 각각이 두 좋아하는 목초지를 가지고 있고, 그 두 목초지는 서로 다른 잔디 종류여야 해요.\n사전순으로 가장 작은 유효 배색을 1..4 의 숫자 문자열로 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf31"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Great Revegetation</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Greedy graph coloring.\nProcess pastures 1 to N, assign the smallest color (1-4) not used by constrained neighbors.",
-              "핵심: 그리디 그래프 색칠.\n목초지 1부터 N까지 처리하며, 제약된 이웃이 쓰지 않는 가장 작은 색(1-4)을 배정.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf31"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Great Revegetation</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#f97316" }}>{t(E, "N pastures (1..N)", "N 개의 목초지 (1..N)")}</b>
+                  {t(E, " — each must be planted with one of ", " 가 있고, 각자 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "4 grass types (1, 2, 3, 4)", "4 가지 잔디 종류 (1, 2, 3, 4)")}</b>
+                  {t(E, ".", " 중 하나를 심어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "M cow pairs each have ", "M 쌍의 소가 각자 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "two favorite pastures", "두 개의 좋아하는 목초지")}</b>
+                  {t(E, " — those two must have DIFFERENT grass types.",
+                        " 를 가지고 있고, 그 두 목초지는 서로 다른 잔디 종류여야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest valid assignment", "사전순으로 가장 작은 유효 배색")}</b>
+                  {t(E, " as a string of digits 1..4.", " 을 1..4 숫자 문자열로 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

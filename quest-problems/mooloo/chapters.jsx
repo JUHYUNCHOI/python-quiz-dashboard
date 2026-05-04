@@ -38,16 +38,50 @@ export function makeMoolooCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie wants to watch Mooloo on certain days.\nA subscription for d consecutive days costs d+K.\nMinimize total cost!\n\ud83d\udcfa", "\ubca0\uc2dc\ub294 \ud2b9\uc815 \ub0a0\uc5d0 Mooloo\ub97c \ubcf4\uace0 \uc2f6\uc5b4.\nd\uc77c \uc5f0\uc18d \uad6c\ub3c5\uc740 d+K \ube44\uc6a9.\n\ucd1d \ube44\uc6a9\uc744 \ucd5c\uc18c\ud654!\n\ud83d\udcfa"),
+        "Bessie wants to watch Mooloo on N specific days. A subscription for d consecutive days costs d + K (a fixed activation fee K is paid no matter how short).\nFind the MINIMUM total cost to buy subscriptions covering EVERY day on her list.",
+        "베시가 정해진 N개의 날짜에 Mooloo 를 보고 싶어요. d 일 연속 구독은 d + K 비용 (활성화 수수료 K 가 길이와 무관하게 추가).\n그녀의 목록에 있는 모든 날짜를 덮는 구독들의 최소 총 비용을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcfa"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Watching Mooloo</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "N specific days Bessie wants to watch.\nEach subscription costs d+K for d consecutive days. Find minimum total cost to cover all N days.",
-              "N\uac1c \ud2b9\uc815 \ub0a0\uc5d0 \ubcf4\uace0 \uc2f6\uc74c.\n\uac01 \uad6c\ub3c5\uc740 d\uc77c \uc5f0\uc18d\uc73c\ub85c d+K \ube44\uc6a9. \ubaa8\ub4e0 N\uc77c\uc744 \ucee4\ubc84\ud558\ub294 \ucd5c\uc18c \ube44\uc6a9.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcfa"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Watching Mooloo</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie wants to watch Mooloo on ", "베시가 정해진 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "N specific days", "N개의 날짜")}</b>
+                  {t(E, " (sorted in increasing order).",
+                        " 에 보고 싶어요 (오름차순으로 주어짐).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "subscription for d consecutive days", "d 일 연속 구독")}</b>
+                  {t(E, " costs ", " 의 비용은 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>d + K</code>
+                  {t(E, " (K is a fixed activation fee).",
+                        " (K 는 고정 활성화 수수료).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum total cost to cover every day on her list", "그녀의 목록에 있는 모든 날짜를 덮는 최소 총 비용")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
