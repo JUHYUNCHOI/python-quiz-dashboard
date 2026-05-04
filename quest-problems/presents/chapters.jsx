@@ -38,22 +38,52 @@ export function makePresentsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Stack = [3, 1, 4, 2].\nQuery: find 4.\nMust remove 3 and 1 (2 presents).\nThen 4 is taken out.\nStack becomes [2].", "스택 = [3, 1, 4, 2]. 쿼리: 4를 찾기. 3과 1을 제거해야 해 (2개). 4를 꺼내면 스택은 [2]."),
+        "Query: find 4.\nThe 2 presents above 4 must be removed.\nThen 4 is taken out — gone forever.",
+        "쿼리: 4 찾기.\n4 위에 있는 2개를 먼저 제거.\n그 다음 4도 꺼내짐 — 영구 제거."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center" }}>
-            {[3,1,4,2].map((v, i) => (
-              <div key={i} style={{
-                width: 60, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-                borderRadius: 8, fontWeight: 900, fontSize: 18, fontFamily: "'JetBrains Mono',monospace",
-                background: v === 4 ? C.okBg : i < 2 ? C.noBg : "#fff",
-                border: `2px solid ${v === 4 ? C.okBd : i < 2 ? C.noBd : C.border}`,
-                color: v === 4 ? C.ok : i < 2 ? C.no : C.text,
-              }}>{v}</div>
-            ))}
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
-              {t(E, "↑ Top of stack", "↑ 스택 맨 위")}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 6, alignItems: "center" }}>
+            {/* BEFORE */}
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
+                {t(E, "BEFORE", "전")}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
+                {[3,1,4,2].map((v, i) => {
+                  const isTarget = v === 4;
+                  const isAbove = i < 2;
+                  return (
+                    <div key={i} style={{
+                      width: 70, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
+                      borderRadius: 7, fontWeight: 900, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
+                      background: isTarget ? "#dcfce7" : (isAbove ? "#fef2f2" : "#fff"),
+                      border: `2px solid ${isTarget ? "#16a34a" : (isAbove ? "#dc2626" : "#cbd5e1")}`,
+                      color: isTarget ? "#15803d" : (isAbove ? "#7f1d1d" : C.text),
+                    }}>{v}{isTarget ? " ←" : isAbove ? " ✗" : ""}</div>
+                  );
+                })}
+                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>↑ {t(E, "top", "맨 위")}</div>
+              </div>
             </div>
+            {/* arrow */}
+            <div style={{ fontSize: 24, color: "#8b5cf6", textAlign: "center", fontWeight: 900 }}>→</div>
+            {/* AFTER */}
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
+                {t(E, "AFTER", "후")}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
+                <div style={{
+                  width: 70, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
+                  borderRadius: 7, fontWeight: 900, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
+                  background: "#fff", border: `2px solid #cbd5e1`, color: C.text,
+                }}>2</div>
+                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>↑ {t(E, "top", "맨 위")}</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 12, background: "#ede9fe", border: "1.5px solid #c4b5fd", borderRadius: 8, padding: "8px 10px", textAlign: "center", fontSize: 12, color: "#5b21b6", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "Output: 2  (2 presents above 4)", "출력: 2  (4 위에 2개)")}
           </div>
         </div>),
     },
@@ -88,14 +118,44 @@ export function makePresentsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simple simulation: use a list, find index with .index(), print position, then pop.\nO(NQ) total.", "간단한 시뮬레이션: 리스트에서 .index()로 위치 찾고, 출력하고, pop. 총 O(NQ)."),
+        "For each query: find target's position, print it, then remove.\nThe stack shrinks by 1 each time.",
+        "쿼리마다: 타겟 위치 찾기 → 출력 → 제거.\n매번 스택은 1개씩 줄어듦."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
-            O(NQ)
+        <div style={{ padding: 16 }}>
+          {/* algorithm steps as visual cards */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read target", "타겟 읽기"), code: "target = int(input())", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Find position", "위치 찾기"), code: "pos = stack.index(target)", color: "#0891b2" },
+              { n: 3, label: t(E, "Print position", "위치 출력"), code: "print(pos)", color: "#16a34a" },
+              { n: 4, label: t(E, "Pop the target", "타겟 제거"), code: "stack.pop(pos)", color: "#dc2626" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
           </div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
-            {t(E, "Q queries × N search each", "Q개 쿼리 × N 탐색")}
+          {/* complexity */}
+          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>
+              {t(E, "⏱ Complexity", "⏱ 복잡도")}
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>
+              O(N · Q)
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
+              {t(E, ".index() scans the list (O(N)) per query", ".index()가 매 쿼리 리스트 스캔 (O(N))")}
+            </div>
           </div>
         </div>),
     },
