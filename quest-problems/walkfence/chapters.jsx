@@ -48,16 +48,57 @@ export function makeWalkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows walk along a fence (polygon).\nEach takes the shorter route between start and end.\nFind distances!\n🚶", "소들이 울타리(다각형)를 따라 걸어. 각자 시작점에서 끝점까지 짧은 경로로! 거리를 구해요! 🚶"),
+        "FJ built a rectangular-corner fence (axis-aligned polygon).\nEach cow walks along the fence — either way around — and we report the SHORTER walk.",
+        "FJ가 직각 모서리로 된 울타리(축에 평행한 다각형)를 만들었어요.\n각 소는 울타리를 따라 양쪽 중 한 방향으로 걸을 수 있어요 — 더 짧은 거리를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🚶</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Walking Along a Fence</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Rectilinear polygon fence.\nEach cow walks the shorter way around. Compute distance for each cow!",
-              "직각 다각형 울타리.\n각 소는 더 짧은 방향으로 걸어. 각 소의 거리를 계산!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🚶</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Walking Along a Fence</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has a closed ", "FJ에게 닫힌 ")}
+                  <b style={{ color: "#059669" }}>{t(E, "rectilinear polygon fence", "직각 다각형 울타리")}</b>
+                  {t(E, " (all sides go horizontally or vertically).",
+                        "가 있어요 (모든 변이 가로 또는 세로 방향).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "N cows each have a ", "N마리 소는 각각 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "start point and an end point", "시작점과 끝점")}</b>
+                  {t(E, " somewhere on the fence.",
+                        "을 울타리 위 어딘가에 가지고 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each cow walks ", "각 소는 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "along the fence", "울타리를 따라")}</b>
+                  {t(E, " — going around either side of the loop.",
+                        " 걸어요 — 폐곡선의 양쪽 중 한 방향을 선택할 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "For each cow, print the ", "각 소마다, ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "SHORTER of the two", "두 거리 중 더 짧은 쪽")}</b>
+                  {t(E, " walking distances.", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

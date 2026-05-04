@@ -73,16 +73,57 @@ export function makeInterviewCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows line up for interviews at K counters.\nEach cow takes a certain time.\nWhich counter will Bessie (last cow) go to?\n🐄", "N마리 소가 K개의 카운터에서 인터뷰! 각 소는 정해진 시간이 걸려. 마지막 소 베시는 어느 카운터로? 🐄"),
+        "N cows line up for interviews at K counters. Each counter takes a fixed amount of time per interview, and each cow goes to the EARLIEST available counter.\nBessie is last in line — which counter could she end up at?",
+        "N마리 소가 K개의 카운터에서 인터뷰를 봐요. 각 카운터는 한 번 인터뷰에 정해진 시간이 걸리고, 각 소는 가장 빨리 비는 카운터로 가요.\n베시는 줄의 마지막에 있어요 — 어느 카운터로 갈 수 있을까요?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Bessie's Interview</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Silver #1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "K counters,\nN cows in line. Each cow goes to the first available counter. Find all possible counters for the last cow!",
-              "K개 카운터, N마리 소가 줄 서있어요.\n각 소는 가장 먼저 비는 카운터로!\n마지막 소가 갈 수 있는 카운터를 모두 찾아요!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Bessie's Interview</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Silver #1</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "K interview counters", "K개의 인터뷰 카운터")}</b>
+                  {t(E, ". Counter j takes ", "가 있어요. j번 카운터는 한 번 인터뷰에 ")}
+                  <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>t[j]</code>
+                  {t(E, " minutes per interview.", "분 걸려요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "N cows ", "N마리 소가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "line up in order", "정해진 순서로 줄을 서요")}</b>
+                  {t(E, ". The first K cows take counters 1..K immediately at time 0.",
+                        ". 처음 K마리 소는 시간 0에 카운터 1..K로 가요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each remaining cow goes to the ", "남은 소는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "earliest available counter", "가장 먼저 비는 카운터")}</b>
+                  {t(E, " (ties broken by smallest counter index).",
+                        "로 가요 (동시에 비면 번호가 작은 쪽).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Bessie is the LAST cow. Print all counters she could possibly go to (ignoring the tie-breaker), in increasing order.",
+                        "베시는 마지막 소예요. 동점 규칙을 무시했을 때 베시가 갈 수 있는 모든 카운터 번호를 오름차순으로 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

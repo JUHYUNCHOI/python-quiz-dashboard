@@ -39,16 +39,57 @@ export function makePalindromeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie and Elsie are playing a stone game!\nThey take turns removing palindrome-number stones from a pile.\nLet's learn the rules!\n🎲", "베시와 엘시가 돌 게임을 해요! 번갈아가며 회문 수만큼 돌을 가져가요. 규칙을 알아보자! 🎲"),
+        "Bessie and Elsie share a pile of S stones. On her turn, a player removes a palindrome-number of stones (1, 2, 3, ..., 9, 11, 22, 121...).\nIf you can't move (the pile is empty on your turn), you LOSE.\nWho wins if Bessie goes first and both play perfectly?",
+        "베시와 엘시가 S개의 돌이 있는 더미를 나눠가져요. 자기 차례마다 회문 수만큼(1, 2, 3, ..., 9, 11, 22, 121...) 돌을 가져가요.\n자기 차례에 더미가 비어있으면 져요.\n베시가 먼저 두고 둘 다 최선을 다하면 누가 이길까요?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🎲</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Palindrome Game</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Palindrome Stone Game</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "S stones in a pile.\nEach turn: remove a palindrome number of stones (1, 2, 3, ..., 9, 11, 22, 121, ...). The player who faces an empty pile LOSES!",
-              "S개의 돌이 있어요.\n매 턴: 회문 수만큼 돌을 가져가 (1, 2, 3, ..., 9, 11, 22, 121, ...). 빈 더미를 마주하는 플레이어가 져!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🎲</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Palindrome Game</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Palindrome Stone Game</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There's a pile of ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "S stones", "S개 돌")}</b>
+                  {t(E, ". Bessie and Elsie take turns; ", " 더미가 있어요. 베시와 엘시가 번갈아 두고, ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "Bessie goes first", "베시가 먼저")}</b>
+                  {t(E, ".", "예요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "On a turn, you must remove a ", "자기 차례에는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "palindrome number of stones", "회문 수만큼 돌")}</b>
+                  {t(E, " (1, 2, ..., 9, 11, 22, 33, ..., 121, ...).",
+                        "을 가져가요 (1, 2, ..., 9, 11, 22, 33, ..., 121, ...).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "If the pile is ", "자기 차례에 더미가 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "empty on your turn", "비어있으면")}</b>
+                  {t(E, " — you lose.", " 져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fecaca" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "둘 다 최선을 다 할 때, ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "'B' if Bessie wins, 'E' if Elsie wins", "베시가 이기면 'B', 엘시가 이기면 'E'")}</b>
+                  {t(E, " (both play optimally).", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

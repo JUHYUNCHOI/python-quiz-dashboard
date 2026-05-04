@@ -33,16 +33,58 @@ export function makeCowPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Arrange cows in a bitonic, symmetric sequence with no adjacent duplicates.\nMaximize the number of cows in the photo!\n📸", "소들을 바이토닉, 대칭, 인접 중복 없는 배열로! 사진에 넣을 소의 수를 최대화! 📸"),
+        "FJ wants a row of cows for a photo where the heights go UP then DOWN, mirror around the middle, and no two neighbors share the same height.\nPick as many cows as possible!",
+        "FJ가 사진을 찍어요 — 소들의 키가 가운데까지 올라갔다 내려오고, 좌우 대칭이며, 이웃끼리 같은 키가 없어야 해요.\n최대한 많은 소를 사진에 넣어요!"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>📸</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>More Cow Photos</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Bitonic (↑ then ↓) + Symmetric (palindrome) + No adjacent duplicates.\nFind max cows that fit!",
-              "바이토닉 (↑ 후 ↓) + 대칭 (팰린드롬) + 인접 중복 금지.\n맞는 최대 소 수를 찾아요!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>📸</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>More Cow Photos</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has N cows with heights ", "FJ에게 키 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>h[1..N]</code>
+                  {t(E, " — pick a subset and order them in a row.",
+                        "인 N마리 소가 있어요 — 일부를 골라서 일렬로 배치해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The row must be ", "그 줄은 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "bitonic", "바이토닉")}</b>
+                  {t(E, " (go UP then DOWN) AND ", " (올랐다 내려옴) 이고 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "symmetric", "대칭")}</b>
+                  {t(E, " (palindrome — mirrors around the peak).",
+                        " (팰린드롬 — 가운데를 기준으로 좌우 대칭)이어야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#0891b2" }}>{t(E, "No two neighbors", "이웃한 두 소")}</b>
+                  {t(E, " can have the same height.",
+                        "는 같은 키를 가질 수 없어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum number of cows", "최대 소 수")}</b>
+                  {t(E, " that can stand in the photo.", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -68,12 +68,58 @@ export function makeExchangeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand in a circle.\nEach round, every cow passes ALL her milk to the next cow clockwise.\nAfter many rounds, what happens?\n🥛", "N마리 소가 원형으로 서있어요. 매 라운드마다 모든 소가 우유를 시계방향 다음 소에게 전달. 여러 라운드 후 어떻게 될까요? 🥛"),
+        "N cows stand in a circle, each holding some milk.\nEvery round, each cow passes ALL her milk to the next cow clockwise.\nAfter M rounds, how much milk does each cow hold?",
+        "N마리 소가 원형으로 서있고, 각자 우유를 가지고 있어요.\n매 라운드마다 모든 소가 자기 우유를 시계방향 다음 소에게 전부 넘겨요.\nM라운드 뒤, 각 소가 든 우유의 양은?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🥛</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Milk Exchange</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #2</div>
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🥛</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Milk Exchange</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "N cows stand in a ", "N마리 소가 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "circle", "원형")}</b>
+                  {t(E, ", each starting with some milk.",
+                        "으로 서있고, 각자 우유를 가지고 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "In each round, every cow ", "매 라운드마다 모든 소가 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "passes ALL her milk", "자기 우유 전부")}</b>
+                  {t(E, " to the next cow clockwise — at the same time.",
+                        "를 시계방향 다음 소에게 동시에 넘겨요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "This repeats for ", "이 과정을 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "M rounds", "M번")}</b>
+                  {t(E, " (M can be huge).",
+                        " 반복해요 (M은 매우 클 수 있어요).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print how much milk ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "each cow holds after M rounds", "M라운드 뒤 각 소가 든 우유의 양")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>),
     },
 

@@ -30,16 +30,58 @@ export function makeMajorityCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows each prefer a type of hay.\nFocus groups of 3 adjacent cows can convince the middle cow to switch.\nWhich hay types can become universal?\nLet's find out!", "N마리의 소가 각각 좋아하는 건초가 있어요. 인접한 3마리 포커스 그룹이 가운데 소를 설득할 수 있어요. 어떤 건초가 전체를 지배할 수 있을까?"),
+        "N cows stand in a row, each preferring some hay type.\nFJ runs 'focus groups' on any 3 adjacent cows: if 2+ agree, the third switches to the majority.\nWhich hay types could end up everywhere?",
+        "N마리 소가 한 줄로 서있고, 각자 좋아하는 건초 종류가 있어요.\nFJ가 인접한 3마리에게 '포커스 그룹'을 열면, 그중 2명 이상이 같은 의견이면 나머지 한 명이 그 의견으로 바꿔요.\n어떤 건초 종류가 결국 전체를 지배할 수 있을까요?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🗳️</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Majority Opinion</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key insight: a hay type can become universal only if it appears in at least 2 adjacent positions somewhere in the line!",
-              "핵심: 건초 종류가 전체를 지배하려면, 줄 어딘가에 연속 2칸 이상 나와야 해요!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🗳️</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Majority Opinion</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ에게 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "N cows in a row", "한 줄로 선 N마리 소")}</b>
+                  {t(E, ". Cow i prefers hay type ", "가 있어요. i번 소는 건초 종류 ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>a[i]</code>
+                  {t(E, ".", "를 좋아해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ can repeatedly run a ", "FJ는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "focus group", "포커스 그룹")}</b>
+                  {t(E, " on any 3 adjacent cows: if 2 agree on a type, the 3rd cow switches to that type.",
+                        "을 인접한 3마리 위에 반복해서 열 수 있어요: 그중 2명이 같은 종류를 좋아하면, 나머지 1명도 그 종류로 바꿔요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A hay type ", "어떤 건초 종류가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "becomes universal", "전체를 지배")}</b>
+                  {t(E, " if FJ can use focus groups to make ALL cows prefer it.",
+                        "한다면 — FJ가 포커스 그룹을 잘 사용해서 모든 소가 그것을 좋아하게 만들 수 있어야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print all hay types that can become universal, in increasing order — or ", "전체를 지배할 수 있는 건초 종류를 오름차순으로 모두 출력해요. 없으면 ")}
+                  <b style={{ color: "#15803d" }}>-1</b>
+                  {t(E, " if none.", " 출력.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

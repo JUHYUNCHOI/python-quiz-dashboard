@@ -42,16 +42,58 @@ export function makeLogicalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A boolean expression with 'and' and 'or'.\nCan we replace a substring to make it evaluate to a target value?\n🧠", "불리언 수식에 'and'와 'or'가 있어요. 부분 문자열을 교체해서 목표값으로 만들 수 있을까? 🧠"),
+        "A long boolean expression made of 'true', 'false', 'and', 'or'.\nFor each query, can we REPLACE a slice with one boolean so the whole expression equals the target?",
+        "'true', 'false', 'and', 'or'로 이루어진 긴 불리언 수식이 있어요.\n각 쿼리마다, 한 구간을 하나의 불리언으로 바꿔서 전체 결과가 목표값이 되게 할 수 있을까요?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🧠</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Logical Moos</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #1</div>
-          <div style={{ marginTop: 12, background: C.lookBg, border: `2px solid ${C.lookBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "'and' has higher precedence than 'or'. Replace positions l..r with one boolean to hit target!",
-              "'and'가 'or'보다 우선. 위치 l~r을 하나의 불리언으로 교체해서 목표값 달성!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🧠</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Logical Moos</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We have a ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "boolean expression", "불리언 수식")}</b>
+                  {t(E, " of N tokens — alternating ", "이 N개의 토큰으로 이루어져 있어요 — ")}
+                  <code style={{ background: "#eff6ff", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>true/false</code>
+                  {t(E, " with operators ", "와 연산자 ")}
+                  <code style={{ background: "#eff6ff", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>and/or</code>
+                  {t(E, ".", "가 번갈아 나와요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "'and' has higher precedence", "'and'가 우선순위가 높아요")}</b>
+                  {t(E, " than 'or' — evaluate ALL ands first, then ors.",
+                        " — 'and'를 먼저 모두 계산한 뒤 'or'를 계산해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each query gives ", "각 쿼리는 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "(l, r, target)", "(l, r, target)")}</b>
+                  {t(E, " — replace tokens l..r with ONE boolean ('true' or 'false').",
+                        "을 줘요 — 토큰 l~r을 하나의 불리언('true' 또는 'false')으로 바꿔요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print 'Y' if some replacement makes the expression equal target, else 'N'.",
+                        "어떤 교체로든 결과가 target과 같아지면 'Y', 아니면 'N'을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

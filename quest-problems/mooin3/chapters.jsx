@@ -42,15 +42,61 @@ export function makeMooin3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Find 'moo' triplets in a string!\nA 'moo' is (i,j,k) where s[i]≠s[j]=s[k].\nMaximize (j-i)×(k-j) in each query range.\n🐄", "문자열에서 'moo' 삼중쌍 찾기! 'moo'는 s[i]≠s[j]=s[k]인 (i,j,k). 각 쿼리 범위에서 (j-i)×(k-j)를 최대화. 🐄"),
+        "We have a string s. A 'moo' is a triple of positions (i, j, k) where s[i] is DIFFERENT from s[j] but s[j] equals s[k].\nFor each query range, find the moo whose 'spread' (j-i)·(k-j) is biggest.",
+        "문자열 s가 있어요. 'moo'는 s[i]가 s[j]와 다르고 s[j]가 s[k]와 같은 위치 세 쌍 (i, j, k)예요.\n각 쿼리 구간에서 (j-i)·(k-j)가 가장 큰 moo를 찾아요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>It's Mooin' Time III</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #3</div>
-          <div style={{ marginTop: 12, background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "String s, Q queries [l,r].\nFind max (j-i)×(k-j) where s[i]≠s[j]=s[k] and l≤i<j<k≤r.", "문자열 s, Q개 쿼리 [l,r].\ns[i]≠s[j]=s[k]이고 l≤i<j<k≤r인 (j-i)×(k-j) 최대값.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>It's Mooin' Time III</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #3</div>
+          </div>
+
+          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#7c5cfc", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Given a ", "")}
+                  <b style={{ color: "#7c5cfc" }}>{t(E, "string s of length N", "길이 N의 문자열 s")}</b>
+                  {t(E, " (only lowercase letters).", "가 주어져요 (소문자만).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#7c5cfc", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "'moo'", "'moo'")}</b>
+                  {t(E, " is positions ", "는 위치 ")}
+                  <code style={{ background: "#ede9fe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>i &lt; j &lt; k</code>
+                  {t(E, " where ", " 중 ")}
+                  <code style={{ background: "#ede9fe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>s[i] ≠ s[j] = s[k]</code>
+                  {t(E, " (e.g., 'abb', 'xzz').",
+                        " 인 것 (예: 'abb', 'xzz').")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#7c5cfc", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each query gives a range ", "각 쿼리는 구간 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "[l, r]", "[l, r]")}</b>
+                  {t(E, " — only positions inside this range count.",
+                        "을 줘요 — 이 안의 위치만 사용할 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: `1px dashed ${C.accentBd}` }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the maximum ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "(j-i) · (k-j)", "(j-i) · (k-j)")}</b>
+                  {t(E, " over all moos in the range, or -1 if none exists.",
+                        " 의 최댓값을 출력해요. moo가 없으면 -1.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

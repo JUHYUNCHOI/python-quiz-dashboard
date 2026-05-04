@@ -46,16 +46,59 @@ export function makeLonelyPhotoCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A string of G's and H's.\nCount substrings of length >= 3 where exactly one cow is 'lonely' (the only one of its type).", "G와 H로 이루어진 문자열. 길이 3 이상인 부분 문자열 중 정확히 1마리가 '외로운'(자기 타입이 유일한) 것의 개수를 세!"),
+        "FJ has N cows in a row, each Guernsey (G) or Holstein (H).\nA contiguous group of 3 or more is 'lonely' if exactly ONE cow has a different breed from all the others.\nCount how many lonely groups there are.",
+        "FJ에게 한 줄로 선 N마리 소가 있고, 각 소는 건지(G) 또는 홀스타인(H)이에요.\n연속한 3마리 이상의 묶음에서 단 1마리만 다른 품종일 때 '외로운' 묶음이라고 해요.\n외로운 묶음이 몇 개 있는지 세요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf8"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Lonely Photo</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: For each cow, count how many substrings (length >= 3) make it the only one of its type.\nCount opposite-type cows on left and right.",
-              "핵심: 각 소에 대해, 그 소가 자기 타입 유일인 부분 문자열(길이 >= 3) 수를 세.\n왼쪽과 오른쪽의 반대 타입 소 수를 세면 돼요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf8"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Lonely Photo</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ에게 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N cows in a row", "한 줄로 선 N마리 소")}</b>
+                  {t(E, ", each labeled ", "가 있어요. 각 소는 ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>G</code>
+                  {t(E, " (Guernsey) or ", " (건지) 또는 ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>H</code>
+                  {t(E, " (Holstein).", " (홀스타인) 이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A photo is a ", "사진은 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "contiguous group of 3 or more cows", "연속한 3마리 이상의 묶음")}</b>
+                  {t(E, " from the row.", "이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A photo is ", "사진이 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "'lonely'", "'외로운' 사진")}</b>
+                  {t(E, " if exactly ONE cow in it has a different breed from all the others (e.g., 'GHG', 'HHGHH').",
+                        "이 되려면 그 안에서 정확히 1마리만 나머지와 다른 품종이어야 해요 (예: 'GHG', 'HHGHH').")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "total number of lonely photos", "외로운 사진의 총 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
