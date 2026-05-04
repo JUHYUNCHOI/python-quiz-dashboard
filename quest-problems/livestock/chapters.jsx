@@ -145,15 +145,36 @@ export function makeLivestockCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Only 8 cows!\nBuild adjacency graph, find chain endpoints, traverse chains.\nO(N) where N is small.", "소가 8마리뿐! 인접 그래프를 만들고, 체인 끝점을 찾고, 체인을 탐색. N이 작으므로 O(N)."),
+        "Each adjacency constraint forms an edge. The constraint graph has max degree 2, so it's a set of CHAINS. Sort cows alphabetically, then for each unvisited cow that's a chain endpoint (or alone), output the chain in order.",
+        "각 인접 제약 = 간선. 제약 그래프는 최대 차수 2 라 체인들의 집합. 소를 알파벳 순 정렬 후, 미방문이고 체인 끝점 (혹은 외톨이) 인 소부터 체인 출력."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Sort cows alphabetically.\nIterate in order: if a cow is unvisited and is a chain start (degree ≤ 1), traverse the chain. This greedily produces the lex-smallest ordering.",
-              "소를 알파벳순 정렬.\n순서대로 반복: 소가 미방문이고 체인 시작(차수 ≤ 1)이면 체인 탐색.\n이 그리디가 사전순 최소 순서를 생성.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Build adjacency map", "인접 맵 구축"), code: "adj = {cow: set of neighbors}", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Sort 8 cow names", "8 마리 이름 정렬"), code: "cows = sorted(8 cow names)", color: "#7c3aed" },
+              { n: 3, label: t(E, "From each unvisited endpoint, walk chain", "미방문 끝점부터 체인 순회"), code: "if not visited and len(adj[c]) ≤ 1: walk chain", color: "#0891b2" },
+              { n: 4, label: t(E, "Output combined order", "합친 순서 출력"), code: "print('\n'.join(order))", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(1)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "only 8 cows", "소 8 마리뿐")}</div>
           </div>
         </div>),
     },

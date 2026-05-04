@@ -125,15 +125,36 @@ export function makeMadSciCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just scan once and count contiguous differing blocks. O(N) time!", "한 번 스캔해서 연속 차이 블록을 세면 돼요. O(N) 시간!"),
+        "Each contiguous block where A[i] ≠ B[i] needs EXACTLY ONE flip operation to fix (one substring reversal). So count how many such CONTIGUOUS differing blocks exist.",
+        "A[i] ≠ B[i] 인 연속 블록 마다 정확히 1 번의 뒤집기로 고칠 수 있어요 (한 부분 문자열 뒤집기). 그러므로 그런 연속 차이 블록의 개수를 세요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Scan A and B in parallel.\nEach time we enter a new block where A[i] != B[i], increment the counter. That's the answer!",
-              "A와 B를 동시에 스캔.\nA[i] != B[i]인 새로운 블록에 들어갈 때마다 카운터 증가. 그게 답!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Scan A and B in parallel", "A 와 B 를 동시 스캔"), code: "i = 0; flips = 0", color: "#f97316" },
+              { n: 2, label: t(E, "Skip matching positions", "일치 위치 건너뛰기"), code: "while i < N and A[i] == B[i]: i += 1", color: "#7c3aed" },
+              { n: 3, label: t(E, "Found a differing block?", "차이 블록 발견?"), code: "if i < N: flips += 1; while i < N and A[i] != B[i]: i += 1", color: "#0891b2" },
+              { n: 4, label: t(E, "Repeat to end, print flips", "끝까지 반복, flips 출력"), code: "print(flips)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
           </div>
         </div>),
     },
