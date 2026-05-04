@@ -217,6 +217,79 @@ export function makePermCh1(E) {
           </div>
         </div>),
     },
+    // 1-1.5: Input / Output format
+    {
+      type: "reveal",
+      narr: t(E,
+        "Here's the sample input — the first line is T (number of test cases). Each test case is 2 lines: N, then the N−1 hints.\nFor each test case, print the permutation on one line, or −1 if impossible.",
+        "샘플 입력 형식이에요 — 첫 줄은 T (테스트 케이스 수). 각 케이스는 2줄: N, 그 다음 N−1개의 힌트.\n각 케이스마다 순열을 한 줄로 출력 (불가능하면 −1)."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
+          </div>
+
+          {/* INPUT */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+            <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
+                {`5
+2
+1
+2
+2
+4
+1 1 1
+4
+2 1 1
+4
+3 2 1`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+                {`1 2
+-1
+-1
+3 1 2 4
+1 2 3 4`}
+              </div>
+            </div>
+          </div>
+
+          {/* Annotated breakdown */}
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>
+              🔍 {t(E, "Reading the input line by line", "입력을 한 줄씩 읽기")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 12, color: C.text, lineHeight: 1.5 }}>
+              <div><b style={{ color: "#5b21b6" }}>5</b> {t(E, " — number of test cases (T)", " — 테스트 케이스 수 (T)")}</div>
+              <div style={{ borderTop: "1px dashed #c4b5fd", paddingTop: 6 }}>
+                <div><b style={{ color: "#7c3aed" }}>2</b> {t(E, " ← N for case 1", " ← 케이스 1의 N")}</div>
+                <div><b style={{ color: "#0891b2" }}>1</b> {t(E, " ← hints (N−1 = 1 number) → answer ", " ← 힌트 (N−1 = 1개) → 답 ")}<code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3, color: "#15803d" }}>1 2</code></div>
+              </div>
+              <div style={{ borderTop: "1px dashed #c4b5fd", paddingTop: 6 }}>
+                <div><b style={{ color: "#7c3aed" }}>2</b> {t(E, " ← N for case 2", " ← 케이스 2의 N")}</div>
+                <div><b style={{ color: "#0891b2" }}>2</b> {t(E, " ← hints → no perm of [1, 2] has gap 2 → ", " ← 힌트 → [1, 2] 순열 중 차이 2인 게 없음 → ")}<code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3, color: "#dc2626" }}>-1</code></div>
+              </div>
+              <div style={{ borderTop: "1px dashed #c4b5fd", paddingTop: 6 }}>
+                <div><b style={{ color: "#7c3aed" }}>4</b> {t(E, " ← N for case 3", " ← 케이스 3의 N")}</div>
+                <div><b style={{ color: "#0891b2" }}>1 1 1</b> {t(E, " ← 3 hints → no valid perm → ", " ← 힌트 3개 → 유효 순열 없음 → ")}<code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3, color: "#dc2626" }}>-1</code></div>
+              </div>
+              <div style={{ borderTop: "1px dashed #c4b5fd", paddingTop: 6 }}>
+                <div><b style={{ color: "#7c3aed" }}>4</b> {t(E, " ← N for case 4", " ← 케이스 4의 N")}</div>
+                <div><b style={{ color: "#0891b2" }}>2 1 1</b> {t(E, " ← 3 hints → answer ", " ← 힌트 3개 → 답 ")}<code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3, color: "#15803d" }}>3 1 2 4</code></div>
+              </div>
+              <div style={{ borderTop: "1px dashed #c4b5fd", paddingTop: 6 }}>
+                <div><b style={{ color: "#7c3aed" }}>4</b> {t(E, " ← N for case 5", " ← 케이스 5의 N")}</div>
+                <div><b style={{ color: "#0891b2" }}>3 2 1</b> {t(E, " ← 3 hints → answer ", " ← 힌트 3개 → 답 ")}<code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3, color: "#15803d" }}>1 2 3 4</code></div>
+              </div>
+            </div>
+          </div>
+        </div>),
+    },
     // 1-2: What is a permutation?
     {
       type: "reveal",
