@@ -53,16 +53,61 @@ export function makeDroughtCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows in a line.\nYou can feed adjacent pairs: both decrease by 1.\nMake all cows equal with minimum operations, or report impossible.", "N마리 소가 줄 서 있어요. 인접한 쌍에게 먹이를 줄 수 있어: 둘 다 1 감소. 최소 횟수로 모든 소를 같게 만들거나, 불가능하면 보고해요!"),
+        "FJ has N cows in a row, each with some hunger level.\nIn one operation, you pick a pair of adjacent cows and reduce BOTH of their hunger levels by 1 (only if both ≥ 1).\nYou want every cow to end at hunger 0 — find the minimum number of operations, or print -1 if impossible.",
+        "FJ에게 한 줄로 선 N마리 소가 있고, 각 소는 배고픔 수치를 가져요.\n한 번의 연산으로 인접한 두 소를 골라 둘의 배고픔을 동시에 1씩 줄여요 (둘 다 ≥ 1일 때만).\n모든 소를 배고픔 0으로 만드는 최소 연산 횟수를 출력해요. 불가능하면 -1."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfdc\ufe0f"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Drought</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Process left to right.\nFor each target value, greedily reduce from left. The leftmost cow determines how many times to feed pair (0,1), which affects cow 1, and so on.",
-              "핵심: 왼쪽에서 오른쪽으로 처리.\n각 목표값에 대해 왼쪽부터 그리디하게 줄여.\n맨 왼쪽 소가 쌍(0,1)의 먹이 횟수를 결정하고, 이것이 소 1에 영향을 줘요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfdc\ufe0f"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Drought</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ에게 ")}
+                  <b style={{ color: "#d97706" }}>{t(E, "N cows in a row", "한 줄로 선 N마리 소")}</b>
+                  {t(E, ", each with a hunger value ", "가 있고, 각 소는 배고픔 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>h[i]</code>
+                  {t(E, ".", " 를 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One operation: pick ", "한 번의 연산: ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "two adjacent cows i, i+1", "인접한 두 소 i, i+1")}</b>
+                  {t(E, " and reduce ", "을 골라 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "both hungers by 1", "둘의 배고픔을 1씩 감소")}</b>
+                  {t(E, " (allowed only if both are ≥ 1).",
+                        " (둘 다 ≥ 1 일 때만 가능).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Goal: ", "목표: ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "make every cow's hunger equal 0", "모든 소의 배고픔을 0으로 만들기")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "최소 연산 횟수")}</b>
+                  {t(E, ", or ", " 를 출력해요. 불가능하면 ")}
+                  <b style={{ color: "#dc2626" }}>-1</b>
+                  {t(E, " if impossible.", ".")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

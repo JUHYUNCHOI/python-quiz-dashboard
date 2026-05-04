@@ -45,16 +45,58 @@ export function makeHerdleCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A 3x3 grid Wordle for cow breeds!\nGiven an answer grid and a guess grid, count green tiles (exact position match) and yellow tiles (right breed, wrong position).", "3x3 소 품종 Wordle! 정답 그리드와 추측 그리드가 주어지면 초록 타일(정확한 위치 일치)과 노란 타일(맞는 품종, 틀린 위치)을 세!"),
+        "A Wordle-style game on a 3×3 grid of cow breeds. You're given the secret answer grid AND the player's guess grid.\nFor each guess cell: GREEN if the breed matches the same cell in the answer; otherwise YELLOW if that breed appears elsewhere in the answer (limited by remaining count).\nCount GREEN cells and YELLOW cells.",
+        "3×3 소 품종 그리드로 하는 Wordle 게임이에요. 비밀 정답 그리드와 플레이어의 추측 그리드가 주어져요.\n각 추측 칸에 대해: 같은 위치의 정답과 같으면 GREEN, 아니라면 그 품종이 정답 다른 곳에 남아있으면 YELLOW (남은 개수만큼만).\nGREEN 칸과 YELLOW 칸의 수를 세요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udfe9"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Herdle</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Count greens first (exact matches).\nThen for remaining cells, match breeds up to available count to get yellows.",
-              "핵심: 먼저 초록(정확한 일치)을 세고,\n남은 셀에서 품종별로 가능한 수만큼 매칭해서 노란색을 구해요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udfe9"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Herdle</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Two ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "3×3 grids of cow breeds (letters)", "3×3 소 품종 그리드 (문자)")}</b>
+                  {t(E, " are given — the secret ", " 두 개가 주어져요 — 정답 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "answer", "answer")}</b>
+                  {t(E, " grid and the player's ", " 그리드와 플레이어의 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "guess", "guess")}</b>
+                  {t(E, " grid.", " 그리드.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#16a34a" }}>{t(E, "GREEN", "GREEN")}</b>
+                  {t(E, ": guess cell exactly equals the same cell in the answer.",
+                        ": 추측 칸이 정답의 같은 칸과 정확히 같음.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#ca8a04" }}>{t(E, "YELLOW", "YELLOW")}</b>
+                  {t(E, ": breed appears somewhere ELSE in the answer (not GREEN). Each answer-cell can supply at most one YELLOW.",
+                        ": 그 품종이 정답의 다른 칸에 있음 (GREEN 아님). 정답 칸 하나는 최대 1개의 YELLOW만 만들 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "the count of GREEN cells, then YELLOW cells", "GREEN 칸 개수와 YELLOW 칸 개수")}</b>
+                  {t(E, ".", "를 차례로 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

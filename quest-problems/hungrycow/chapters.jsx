@@ -43,16 +43,60 @@ export function makeHungryCowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie eats 1 haybale per day.\nDeliveries arrive on specific days.\nHow many days does she eat in T days?\n\ud83d\udc04", "\ubca0\uc2dc\ub294 \ud558\ub8e8\uc5d0 \uac74\ucd08 1\uac1c\ub97c \uba39\uc5b4.\n\ubc30\ub2ec\uc774 \ud2b9\uc815 \ub0a0\uc5d0 \ub3c4\ucc29\ud574.\nT\uc77c \ub3d9\uc548 \uba87 \uc77c \uba39\uc744\uae4c?\n\ud83d\udc04"),
+        "Bessie eats 1 haybale per day if she has any in stock.\nThere are N hay deliveries — each on a specific day, each adding some bales to her stockpile.\nGiven the deliveries and a target day T, count how many of days 1..T Bessie actually eats on.",
+        "베시는 재고가 있으면 하루에 건초 1단을 먹어요.\n특정 날짜에 특정 양이 도착하는 N번의 건초 배달이 있어요.\n배달 정보와 마감일 T가 주어지면, 1~T일 중 베시가 실제로 먹는 날의 수를 구해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Hungry Cow</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Bessie eats 1 haybale/day (if she has any).\nN deliveries on specific days with specific amounts. Count total days she eats in T days.",
-              "\ubca0\uc2dc\ub294 \ud558\ub8e8\uc5d0 \uac74\ucd08 1\uac1c \uba39\uc74c (\uc788\uc73c\uba74).\nN\ubc88 \ubc30\ub2ec\uc774 \ud2b9\uc815 \ub0a0\uc5d0 \ud2b9\uc815 \uc591\uc73c\ub85c \ub3c4\ucc29. T\uc77c \ub3d9\uc548 \ucd1d \uba87 \uc77c \uba39\ub294\uc9c0 \uacc4\uc0b0.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Hungry Cow</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie ", "베시는 ")}
+                  <b style={{ color: "#d97706" }}>{t(E, "eats 1 haybale per day", "재고가 있으면 하루에 건초 1단을 먹어요")}</b>
+                  {t(E, " if she has any in stock — otherwise she eats nothing that day.",
+                        " — 재고가 없으면 그 날은 못 먹어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "N hay deliveries", "N번의 건초 배달")}</b>
+                  {t(E, " — each gives a day ", " 이 있어요. 각 배달은 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>d</code>
+                  {t(E, " and an amount ", " 일에 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>b</code>
+                  {t(E, " bales added to her stockpile.", " 단의 건초가 재고에 추가돼요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given a target day ", "마감일 ")}
+                  <b style={{ color: "#7c3aed" }}>T</b>
+                  {t(E, " (which can be huge — up to 10¹⁴).",
+                        " 가 주어져요 (10¹⁴까지 매우 큼).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of days from day 1 to day T on which Bessie actually eats", "1일~T일 중 베시가 실제로 먹는 날의 수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

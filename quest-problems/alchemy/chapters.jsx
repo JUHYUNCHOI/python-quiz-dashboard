@@ -46,16 +46,58 @@ export function makeAlchemyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N metals with recipes that combine lower metals into higher ones.\nMaximize the amount of metal N you can create!", "N개의 금속과 레시피로 낮은 금속을 합쳐 높은 금속을 만들어요. 금속 N을 최대한 많이 만들어요!"),
+        "There are N metals (1..N), and you start with some count of each. Each metal i (i ≥ 2) has a recipe — a set of lower-numbered metals — that turns into ONE unit of metal i.\nUsing the recipes any number of times, can you create at least one unit of metal N?",
+        "1번부터 N번까지 N개의 금속이 있고, 각 금속의 시작 개수가 주어져요. 2번 이상의 금속 i는 각자 레시피를 가지고 있어요 — 더 낮은 번호의 금속들을 모아서 i 1개를 만들어요.\n레시피를 마음대로 사용해서 금속 N을 1개 이상 만들 수 있을까요?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"⚗️"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Alchemy</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Greedy from top down.\nTo make metal N, recursively try to gather ingredients. Use each metal at most once.",
-              "핵심: 위에서 아래로 그리디.\n금속 N을 만들려면 재료를 재귀적으로 모아요. 각 금속은 최대 한 번 사용.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"⚗️"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Alchemy</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#d97706" }}>{t(E, "N metals numbered 1..N", "1..N 번호의 금속 N개")}</b>
+                  {t(E, ". You start with ", "이 있어요. 시작할 때 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>a[i]</code>
+                  {t(E, " units of metal i.", " 단위의 금속 i를 가지고 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "For each metal ", "각 금속 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "i ≥ 2, you're given a recipe", "i ≥ 2에 대해 레시피")}</b>
+                  {t(E, " — a set of distinct lower-numbered metals — that combines into 1 unit of metal i.",
+                        " — 서로 다른 더 낮은 번호의 금속들 — 가 주어져요. 이 재료를 모으면 금속 i 1단위가 만들어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You can ", "레시피는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "apply any recipe any number of times", "원하는 만큼 여러 번 사용")}</b>
+                  {t(E, ", as long as you have the ingredients.",
+                        "할 수 있어요. 재료가 있다면.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "1 if you can make at least 1 unit of metal N, else 0", "금속 N을 1단위 이상 만들 수 있으면 1, 없으면 0")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

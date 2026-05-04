@@ -43,16 +43,58 @@ export function makeMooOpsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Transform a string of M's and O's into exactly \"MOO\" using minimum operations.\nYou can flip the first or last character, or delete the first or last character.\nFind the minimum operations or -1 if impossible!", "M과 O로 이루어진 문자열을 최소 연산으로 정확히 \"MOO\"로 변환해요.\n첫 번째 또는 마지막 문자를 뒤집거나, 첫 번째 또는 마지막 문자를 삭제할 수 있어요.\n최소 연산 수 또는 불가능하면 -1을 구해요!"),
+        "You're given a string of M's and O's. In one operation you can flip the FIRST char (M↔O), flip the LAST char, delete the FIRST char, or delete the LAST char.\nFind the minimum number of operations to turn the string into exactly \"MOO\". If impossible, print -1.",
+        "M과 O로 된 문자열이 주어져요. 한 번의 연산으로 맨 앞 문자를 뒤집거나(M↔O), 맨 뒤 문자를 뒤집거나, 맨 앞 문자를 지우거나, 맨 뒤 문자를 지울 수 있어요.\n문자열을 정확히 \"MOO\"로 만드는 데 필요한 최소 연산 횟수를 구해요. 불가능하면 -1."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc2e"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Moo Operations</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: The final string is \"MOO\" (length 3).\nWe need to find a substring of length 3 where the middle character is 'O', then compute cost of deletions + flips. The middle character can never be changed (only first/last can flip).",
-              "핵심: 최종 문자열은 \"MOO\" (길이 3). 중간 문자가 'O'인 길이 3 부분문자열을 찾고, 삭제 + 뒤집기 비용을 계산해요.\n중간 문자는 절대 바꿀 수 없어 (첫/마지막만 뒤집기 가능).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc2e"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Moo Operations</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You're given a ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "string of M's and O's", "M과 O로 된 문자열")}</b>
+                  {t(E, " (length ≥ 1).", " (길이 ≥ 1) 이 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each operation costs 1 and lets you do ONE of:", "한 번의 연산(비용 1) 으로 다음 중 하나를 할 수 있어요:")}
+                  <div style={{ marginTop: 6, marginLeft: 8, fontSize: 12, color: "#475569" }}>
+                    {t(E, "↳ flip the first char (M↔O)  /  flip the last char", "↳ 맨 앞 문자 뒤집기 (M↔O) / 맨 뒤 문자 뒤집기")}<br/>
+                    {t(E, "↳ delete the first char  /  delete the last char", "↳ 맨 앞 문자 삭제 / 맨 뒤 문자 삭제")}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The goal is to end with the string ", "최종 목표는 문자열이 ")}
+                  <b style={{ color: "#dc2626" }}>"MOO"</b>
+                  {t(E, " (exactly 3 chars).", " (정확히 3글자) 가 되는 거예요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "최소 연산 횟수")}</b>
+                  {t(E, " — or ", " 를 출력해요. 불가능하면 ")}
+                  <b style={{ color: "#dc2626" }}>-1</b>
+                  {t(E, " if impossible.", ".")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -38,16 +38,64 @@ export function makeRotShiftCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows stand in a circle.\nSome positions are 'active'.\nEach minute, cows at active positions rotate, then active positions shift!\n\ud83d\udd04", "\uc18c\ub4e4\uc774 \uc6d0\ud615\uc73c\ub85c \uc11c \uc788\uc5b4.\n\uc77c\ubd80 \uc704\uce58\uac00 '\ud65c\uc131'.\n\ub9e4\ubd84 \ud65c\uc131 \uc704\uce58\uc758 \uc18c\ub4e4\uc774 \ud68c\uc804\ud558\uace0, \ud65c\uc131 \uc704\uce58\uac00 \uc774\ub3d9\ud574!\n\ud83d\udd04"),
+        "N cows stand at positions 0..N−1 in a circle. K of those positions are 'active'.\nEach minute: (1) all cows currently AT active positions cyclically rotate by 1 (within the active set), (2) every active position then shifts by +1 (mod N).\nAfter T minutes, where does each cow end up?",
+        "N마리 소가 원형의 위치 0..N−1에 서있고, 그중 K개의 위치가 '활성'이에요.\n매분: (1) 활성 위치에 있는 소들이 활성 집합 안에서 순환 회전(1칸), (2) 그 다음 활성 위치들이 +1 만큼 이동 (mod N).\nT분 후 각 소는 어디에 있을까요?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Rotate and Shift</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "N positions in a circle, K active positions. Each step:\n1. Rotate cows at active positions cyclically\n2. Shift active positions by +1\nAfter T steps, where is each cow?",
-              "N\uac1c \uc6d0\ud615 \uc704\uce58, K\uac1c \ud65c\uc131 \uc704\uce58. \uac01 \ub2e8\uacc4:\n1. \ud65c\uc131 \uc704\uce58\uc758 \uc18c\ub4e4\uc744 \uc21c\ud658 \ud68c\uc804\n2. \ud65c\uc131 \uc704\uce58\ub97c +1 \uc774\ub3d9\nT\ub2e8\uacc4 \ud6c4 \uac01 \uc18c\uc758 \uc704\uce58\ub294?")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Rotate and Shift</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "N cows stand at ", "N마리 소가 ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "positions 0..N−1 in a circle", "원형 위치 0..N−1")}</b>
+                  {t(E, ". ", "에 서있어요. ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "K of those positions are active", "그중 K개의 위치가 활성")}</b>
+                  {t(E, ".", "이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each minute, two things happen in order:", "매분, 다음 두 가지가 순서대로 일어나요:")}
+                  <div style={{ marginTop: 6, marginLeft: 8, fontSize: 12, color: "#475569" }}>
+                    {t(E, "(1) cows at active positions ", "(1) 활성 위치의 소들이 ")}
+                    <b style={{ color: "#dc2626" }}>{t(E, "cyclically rotate", "활성 집합 안에서 순환 회전")}</b>
+                    {t(E, " within the active set (each shifts to the next active position).",
+                          " (각자 다음 활성 위치로 이동).")}
+                    <br/>
+                    {t(E, "(2) every active position itself ", "(2) 활성 위치들이 ")}
+                    <b style={{ color: "#7c3aed" }}>{t(E, "shifts by +1 (mod N)", "+1 만큼 이동 (mod N)")}</b>
+                    {t(E, ".", ".")}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Total of ", "총 ")}
+                  <b style={{ color: "#16a34a" }}>{t(E, "T minutes", "T분")}</b>
+                  {t(E, " — T can be huge.", " — T는 매우 클 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "T분 후 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "final position of each cow after T minutes", "각 소의 최종 위치")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
