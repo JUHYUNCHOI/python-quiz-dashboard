@@ -119,18 +119,65 @@ export function makeBalancedCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Why is the answer 2×min(N,M)?\nKey insight: in '(((...))', every '(' appears before every ')'.\nSo any subset of k '(' and k ')' forms a balanced string!", "왜 답이 2×min(N,M)일까?\n핵심: '(((...))'에서 모든 '('가 모든 ')' 앞에 와.\n그래서 k개의 '('와 k개의 ')'를 아무거나 골라도 균형 문자열이 돼!"),
+        "Why min(N, M)?\nEach pair needs ONE '(' and ONE ')'.\nThe smaller side runs out first — that's the cap.",
+        "왜 min(N, M)?\n각 쌍은 '(' 1개 + ')' 1개 필요.\n적은 쪽이 먼저 떨어짐 — 그게 한계."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: C.ok, marginBottom: 6 }}>
-              {t(E, "💡 Key Insight", "💡 핵심 관찰")}
-            </div>
-            <div style={{ fontSize: 13, lineHeight: 1.8, color: C.text }}>
-              {t(E,
-                "All '(' are BEFORE all ')' → any k '(' matched with k ')' is automatically balanced! → max k = min(N, M)",
-                "모든 '('가 모든 ')' 앞에 → k개의 '('와 k개의 ')'를 매칭하면 자동으로 균형! → 최대 k = min(N, M)")}
-            </div>
+          {/* Bottleneck visualization: 2 cases */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            {[
+              { N: 5, M: 3, label: t(E, "More '(' than ')'", "'(' 가 ')' 보다 많음") },
+              { N: 2, M: 6, label: t(E, "More ')' than '('", "')' 가 '(' 보다 많음") },
+            ].map((ex, i) => {
+              const pairs = Math.min(ex.N, ex.M);
+              return (
+                <div key={i} style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 10 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", textAlign: "center", marginBottom: 6 }}>
+                    N={ex.N}, M={ex.M}
+                  </div>
+                  {/* opens row */}
+                  <div style={{ display: "flex", gap: 2, justifyContent: "center", marginBottom: 4 }}>
+                    {Array.from({ length: ex.N }).map((_, j) => {
+                      const matched = j >= ex.N - pairs;
+                      return (
+                        <div key={`o${j}`} style={{
+                          width: 18, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
+                          borderRadius: 4, fontSize: 13, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                          background: matched ? "#fef3c7" : "#f3f4f6",
+                          border: `1.5px solid ${matched ? "#f59e0b" : "#cbd5e1"}`,
+                          color: matched ? "#92400e" : "#9ca3af",
+                        }}>(</div>
+                      );
+                    })}
+                  </div>
+                  {/* closes row */}
+                  <div style={{ display: "flex", gap: 2, justifyContent: "center", marginBottom: 6 }}>
+                    {Array.from({ length: ex.M }).map((_, j) => {
+                      const matched = j < pairs;
+                      return (
+                        <div key={`c${j}`} style={{
+                          width: 18, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
+                          borderRadius: 4, fontSize: 13, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                          background: matched ? "#dbeafe" : "#f3f4f6",
+                          border: `1.5px solid ${matched ? "#3b82f6" : "#cbd5e1"}`,
+                          color: matched ? "#1e3a8a" : "#9ca3af",
+                        }}>)</div>
+                      );
+                    })}
+                  </div>
+                  <div style={{ textAlign: "center", fontSize: 10, color: "#9a3412", marginTop: 2 }}>
+                    {ex.label}
+                  </div>
+                  <div style={{ textAlign: "center", fontSize: 13, fontWeight: 900, color: "#16a34a", marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
+                    pairs = min({ex.N},{ex.M}) = {pairs}<br/>
+                    <span style={{ fontSize: 15 }}>length = {2 * pairs}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center" }}>
+            {t(E, "Greyed = leftover (no partner)", "회색 = 남는 것 (짝 없음)")}
           </div>
         </div>),
     },
