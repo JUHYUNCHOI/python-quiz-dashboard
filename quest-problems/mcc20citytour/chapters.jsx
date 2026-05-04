@@ -33,16 +33,47 @@ export function makeMcc20CityTourCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Fluffy explores a grid city, jumping to adjacent buildings.\nCount how many buildings Fluffy can visit using BFS.", "Fluffy가 격자 도시를 탐험하며 인접 건물로 점프해요. BFS로 방문할 수 있는 건물 수를 세!"),
+        "A city is a grid where each cell is a building (1) or empty (0). Fluffy stands on a starting building and can jump to any adjacent building (up/down/left/right) — but never onto empty cells.\nPrint how many buildings Fluffy can visit (counting the start).",
+        "도시는 각 칸이 건물 (1) 또는 빈 칸 (0) 인 격자예요. Fluffy 가 시작 건물에 서있고 인접 건물 (상하좌우) 로만 점프할 수 있어요 — 빈 칸으로는 못 감.\nFluffy 가 방문할 수 있는 건물의 수 (시작 포함) 를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfd9\ufe0f"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>City Tour</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: BFS from starting position.\nVisit all reachable cells with value 1. Count visited cells.",
-              "핵심: 시작 위치에서 BFS.\n값이 1인 도달 가능한 모든 셀 방문. 방문한 셀 수 세기.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfd9\ufe0f"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>City Tour</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P2</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A city is a grid where each cell is ", "도시는 각 칸이 ")}
+                  <b style={{ color: "#d97706" }}>{t(E, "a building (1) or empty (0)", "건물 (1) 또는 빈 칸 (0)")}</b>
+                  {t(E, ".", " 인 격자예요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Fluffy starts on a given building and can ", "Fluffy 가 시작 건물에서 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "jump to adjacent buildings (up/down/left/right)", "인접한 건물 (상하좌우) 로 점프")}</b>
+                  {t(E, ", never onto empty cells.",
+                        ". 빈 칸으로는 안 됨.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of buildings Fluffy can visit (including start)", "Fluffy 가 방문할 수 있는 건물의 수 (시작 포함)")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

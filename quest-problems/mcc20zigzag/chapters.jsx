@@ -32,16 +32,47 @@ export function makeMcc20ZigzagCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Count zig-zag subsequences of length K in a string.\nA zig-zag alternates between increasing and decreasing.\nUse DP!", "문자열에서 길이 K의 지그재그 부분수열을 세. 지그재그는 증가와 감소를 번갈아. DP 사용!"),
+        "Given a sequence of characters and an integer K, count the number of length-K subsequences that 'zig-zag' — values strictly alternating between going UP and going DOWN at each consecutive step.\nPrint the count.",
+        "문자 수열과 정수 K 가 주어져요. 길이 K 의 부분수열 중 인접한 두 항이 매번 한 번 올라갔다 한 번 내려갔다 하며 엄격히 번갈아 가는 '지그재그' 의 개수를 세요.\n그 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Zig-zag</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P6</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: DP where dp[i][j] = count of zig-zag subsequences of length j ending at position i.\nTransition depends on zig-zag direction.",
-              "핵심: dp[i][j] = 위치 i에서 끝나는 길이 j의 지그재그 부분수열 수.\n전이는 지그재그 방향에 따라.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26a1"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Zig-zag</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P6</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "sequence of characters and an integer K", "문자 수열과 정수 K")}</b>
+                  {t(E, " are given.", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "zig-zag subsequence of length K", "길이 K 의 지그재그 부분수열")}</b>
+                  {t(E, " has consecutive values strictly alternating up/down/up/down...",
+                        " 은 인접 두 항이 매번 한 번 올라갔다 한 번 내려갔다 하며 엄격히 번갈아 감.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "count of length-K zig-zag subsequences", "길이 K 지그재그 부분수열의 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

@@ -32,16 +32,45 @@ export function makeMcc20KnightCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A chess knight on an NxN grid.\nFind minimum moves to reach target using BFS.\nKnight moves in L-shapes.", "NxN 격자의 체스 나이트. BFS로 목표까지 최소 이동 횟수. 나이트는 L자로 이동."),
+        "A chess knight stands on an N × N board at a starting cell. Each move, it goes in an L-shape: 2 in one axis and 1 in the perpendicular axis (8 possible moves).\nPrint the MINIMUM number of moves to reach a target cell (or −1 if unreachable).",
+        "체스 나이트가 N × N 보드의 시작 칸에 있어요. 한 번의 이동은 L 자 — 한 축으로 2 칸, 다른 축으로 1 칸 (8 가지 이동) 이에요.\n목표 칸에 도달하기 위한 최소 이동 횟수를 출력해요 (도달 불가면 -1)."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u265e"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Knight</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P4</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: BFS with 8 possible knight moves.\nEach move is an L-shape (2+1 or 1+2). BFS gives shortest path.",
-              "핵심: 8가지 나이트 이동으로 BFS.\n각 이동은 L자 (2+1 또는 1+2). BFS가 최단 경로 제공.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u265e"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Knight</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P4</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#2563eb" }}>{t(E, "A chess knight on an N × N board", "N × N 보드의 체스 나이트")}</b>
+                  {t(E, " at a starting cell.", " 가 시작 칸에 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each move is an ", "한 번의 이동은 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "L-shape: 2 in one axis, 1 in the perpendicular (8 possible moves)", "L 자 — 한 축으로 2 칸, 다른 축으로 1 칸 (8 가지 이동)")}</b>
+                  {t(E, ".", " 이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MINIMUM moves to reach the target (or −1)", "목표 칸까지 최소 이동 횟수 (또는 −1)")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

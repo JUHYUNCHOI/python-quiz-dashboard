@@ -26,16 +26,48 @@ export function makeMcc20MissingCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A permutation of 1 to N with one number missing and some signs shuffled.\nFind the sum of all possible missing values.", "1부터 N까지의 순열에서 하나가 빠지고 일부 부호가 바뀌었어. 가능한 빠진 값의 합을 구해요!"),
+        "Originally a permutation of 1..N. One number got removed and some entries' signs were flipped (turned negative).\nGiven the resulting list of N−1 (possibly-signed) integers, print the sum of every distinct value that COULD be the missing one.",
+        "원래는 1..N 의 순열이었어요. 한 숫자가 제거되고 일부 항목의 부호가 음수로 바뀌었어요.\n결과로 남은 N−1 개의 (부호 가능한) 정수 목록이 주어졌을 때, 빠진 숫자가 될 수 있는 서로 다른 값의 총합을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2753"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Missing Number</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P5</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Take absolute values to ignore sign changes.\nFind which number from 1..N is not present. Sum all missing candidates.",
-              "핵심: 절대값으로 부호 변경 무시.\n1..N에서 없는 숫자 찾기. 빠진 후보 모두 합산.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2753"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Missing Number</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P5</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Originally a ", "원래는 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "permutation of 1..N", "1..N 의 순열")}</b>
+                  {t(E, ".", " 이었어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One number was ", "한 숫자가 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "removed", "제거")}</b>
+                  {t(E, " and some entries' ", "되고, 일부 항목의 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "signs were flipped (turned negative)", "부호가 음수로 변경")}</b>
+                  {t(E, ".", "됐어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "sum of every distinct value that could be the missing one", "빠진 숫자가 될 수 있는 서로 다른 값의 총합")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
