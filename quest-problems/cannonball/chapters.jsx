@@ -148,15 +148,36 @@ export function makeCannonCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "We simulate step by step, tracking visited states to detect loops.\nWorst case O(N\u00b2) states since power can grow up to N.", "한 단계씩 시뮬레이션하면서 방문 상태를 추적해 루프를 감지해요. 최악 O(N\u00b2) 상태 (파워가 N까지 커질 수 있으니까)."),
+        "Simulate step by step. The state is (position, direction, power) — if we revisit one, we're looping forever. Otherwise process the item at this position and step in our direction.",
+        "한 단계씩 시뮬레이션해요. 상태 = (위치, 방향, 파워) — 같은 상태를 다시 만나면 무한 반복 중이라는 뜻. 아니면 현재 위치의 아이템을 처리하고 한 칸 이동."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N{"\u00b2"}) Simulation</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "State = (position, direction, power).\nIf we revisit a state, we're in a loop \u2192 stop. Otherwise process jump pad or target and move.",
-              "상태 = (위치, 방향, 파워). 같은 상태를 재방문하면 루프 \u2192 종료.\n아니면 점프패드/타겟 처리 후 이동.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Initialize", "초기화"), code: "pos=S, dir=+1, power=1, visited={}", color: "#f97316" },
+              { n: 2, label: t(E, "Loop detection", "루프 감지"), code: "if (pos, dir, power) in visited: stop", color: "#dc2626" },
+              { n: 3, label: t(E, "Process item at pos", "현재 위치 아이템 처리"), code: "jump pad → reverse + boost  /  target → break if power ≥ value", color: "#7c3aed" },
+              { n: 4, label: t(E, "Step + repeat", "이동 + 반복"), code: "pos += dir;  go to step 2", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N²)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "(position, direction, power) state space ≤ N · 2 · N", "(위치, 방향, 파워) 상태 공간 ≤ N · 2 · N")}</div>
           </div>
         </div>),
     },

@@ -139,15 +139,36 @@ export function makeBacteriaCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Process from left to right using prefix sums to track spray effects. O(N) time!", "왼쪽에서 오른쪽으로 누적합을 이용해 분무 효과를 추적해요. O(N) 시간!"),
+        "Process left to right with greedy: cancel each patch as we reach it, track ripple effects with a difference array. O(N) total.",
+        "왼쪽부터 오른쪽으로 그리디하게 처리해요: 각 패치에 도착하면 그 값을 0으로 만드는 분무를 한 번 쏘고, 영향을 차분 배열로 추적해요. 전체 O(N)."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Greedy: at each position, compute the current value (original + spray effects).\nIf nonzero, spray to cancel it. Track effects with a prefix sum array.",
-              "그리디: 각 위치에서 현재 값 계산 (원래 + 분무 효과). 0이 아니면 분무로 상쇄.\n누적합 배열로 효과 추적.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read input", "입력 읽기"), code: "a = list(map(int, input().split()))", color: "#059669" },
+              { n: 2, label: t(E, "Walk left → right", "왼쪽 → 오른쪽 순회"), code: "for i in range(N):  current = a[i] + prefix[i]", color: "#0891b2" },
+              { n: 3, label: t(E, "Spray to zero this patch", "이 패치를 0으로 만드는 분무"), code: "spray = -current  →  apply triangular update", color: "#7c3aed" },
+              { n: 4, label: t(E, "Count this spray", "분무 1번 카운트"), code: "ans += abs(spray)  // wait, count is just 1", color: "#dc2626" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass with O(1) update per position", "위치당 O(1) 업데이트로 한 번 순회")}</div>
           </div>
         </div>),
     },
