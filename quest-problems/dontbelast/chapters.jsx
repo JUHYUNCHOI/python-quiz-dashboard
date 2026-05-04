@@ -40,16 +40,58 @@ export function makeDontBeLastCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Seven cows produce milk.\nGiven a log of milk entries, find the cow with the second-lowest total production.\nIf there's a tie for second-lowest, output 'Tie'.", "일곱 마리 소가 우유를 생산해요. 우유 기록 로그가 주어지면, 총 생산량이 두 번째로 적은 소를 찾아요. 두 번째로 적은 양이 동률이면 'Tie'를 출력해요."),
+        "Seven cows (Bessie, Elsie, Daisy, Gertie, Annabelle, Maggie, Henrietta) produce milk. You're given a log of N entries, each saying how many gallons one cow produced on one occasion.\nFind the cow with the SECOND-lowest total production. If two or more cows are tied for second-lowest, print 'Tie'.",
+        "일곱 마리 소(Bessie, Elsie, Daisy, Gertie, Annabelle, Maggie, Henrietta)가 우유를 생산해요. N개의 기록이 주어지고, 각 기록은 한 번에 한 소가 생산한 갤런 수예요.\n총 생산량이 두 번째로 적은 소를 찾아요. 두 마리 이상이 두 번째 자리를 동률로 차지하면 'Tie'를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udd5b"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Don't Be Last!</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Sum each cow's milk, sort unique totals, find the second-smallest value, then check if exactly one cow has that amount.",
-              "핵심: 각 소의 우유 합산,\n고유 합계 정렬,\n두 번째로 작은 값 찾기, 그 양을 가진 소가 정확히 한 마리인지 확인.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udd5b"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Don't Be Last!</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "7 named cows", "이름이 정해진 7마리 소")}</b>
+                  {t(E, " — Bessie, Elsie, Daisy, Gertie, Annabelle, Maggie, Henrietta.",
+                        " — Bessie, Elsie, Daisy, Gertie, Annabelle, Maggie, Henrietta.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given a ", "")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "log of N entries", "N개의 기록")}</b>
+                  {t(E, " — each entry: a cow name and a gallon amount she produced that time.",
+                        "이 주어져요 — 각 기록은 (소 이름, 그때 생산한 갤런 수).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Cows not in the log are treated as having ", "기록에 없는 소는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "0 gallons total", "총 생산량 0")}</b>
+                  {t(E, ".", "으로 취급해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "총 생산량이 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "name of the cow whose total is second-lowest", "두 번째로 적은 소의 이름")}</b>
+                  {t(E, " — or ", "을 출력해요. 두 번째 자리가 동률이면 ")}
+                  <b style={{ color: "#dc2626" }}>'Tie'</b>
+                  {t(E, " if 2+ cows tie for second.", " 출력.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

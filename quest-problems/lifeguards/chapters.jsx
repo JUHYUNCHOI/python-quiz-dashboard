@@ -59,16 +59,57 @@ export function makeLifeguardsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N lifeguards have time shifts.\nWe must fire exactly one to maximize the remaining total coverage (union of intervals).", "N명의 인명구조원이 근무 시간이 있어요. 정확히 한 명을 해고해서 남은 전체 커버리지(구간 합집합)를 최대화해야 해요."),
+        "FJ has N lifeguards, each working a half-open shift [s, t). The pool is 'covered' at any moment when at least one lifeguard is on duty.\nFJ must FIRE exactly one lifeguard. Print the MAXIMUM total coverage time (union of remaining intervals) he can keep.",
+        "FJ에게 N명의 인명구조원이 있고, 각자 반열린 구간 [s, t) 동안 근무해요. 어느 한 순간에 최소 1명이 근무 중이면 그 순간은 '커버됐다'고 해요.\nFJ가 정확히 1명을 해고해야 해요. 남은 인명구조원들의 근무 구간 합집합으로 얻을 수 있는 최대 커버 시간을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfca"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Lifeguards</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2018 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Fire the lifeguard whose unique coverage (time only they cover) is smallest.\nThat way we lose the least coverage.",
-              "핵심: 고유 커버리지(자기만 담당하는 시간)가 가장 작은 인명구조원을 해고해요.\n그래야 커버리지 손실이 최소예요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfca"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Lifeguards</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2018 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ에게 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N lifeguards", "N명의 인명구조원")}</b>
+                  {t(E, ", each working a shift ", "이 있고, 각자 근무 구간 ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>[s, t)</code>
+                  {t(E, ".", " 을 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The pool is ", "수영장이 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "COVERED at any moment", "어느 한 순간에 '커버'된다")}</b>
+                  {t(E, " when at least one lifeguard is on duty.",
+                        "는 건, 그 순간 최소 1명이 근무 중일 때예요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ must ", "FJ는 정확히 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "fire EXACTLY ONE lifeguard", "1명의 인명구조원을 해고")}</b>
+                  {t(E, ".", " 해야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum total covered time after firing one", "1명을 해고한 뒤 얻을 수 있는 최대 커버 시간")}</b>
+                  {t(E, " (union of remaining shifts).", " (남은 근무들의 합집합).")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

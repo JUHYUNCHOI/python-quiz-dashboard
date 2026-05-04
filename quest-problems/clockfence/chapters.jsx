@@ -39,16 +39,49 @@ export function makeClockCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A fence path is described by a sequence of directions (N, E, S, W).\nDetermine if the path goes clockwise (CW) or counter-clockwise (CCW) by counting right vs left turns!", "울타리 경로가 방향 시퀀스(N, E, S, W)로 설명돼요. 오른쪽 회전과 왼쪽 회전을 세서 시계 방향(CW)인지 반시계 방향(CCW)인지 판단해요!"),
+        "A fence is described by a sequence of unit-step directions (N, E, S, W) that returns to the start, forming a closed simple polygon.\nDecide whether the fence is traced CLOCKWISE or COUNTER-CLOCKWISE.",
+        "울타리가 단위 길이 방향(N, E, S, W) 의 수열로 묘사되고, 시작점으로 돌아오는 단순 폐곡선을 이뤄요.\n그 울타리가 시계 방향(CW) 인지 반시계 방향(CCW) 인지 판단해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Clockwise Fence</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Count right turns minus left turns. If positive, the path is clockwise. Map directions to numbers (N=0,\nE=1,\nS=2, W=3) and check transitions.",
-              "핵심: 오른쪽 회전 - 왼쪽 회전을 계산.\n양수이면 시계 방향.\n방향을 숫자로 매핑(N=0, E=1, S=2, W=3)하고 전환을 확인.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Clockwise Fence</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A fence is given as a ", "울타리가 ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "string of unit-step directions", "단위 길이 방향 문자열")}</b>
+                  {t(E, " — letters ", " — 문자 ")}
+                  <code style={{ background: "#ede9fe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>N E S W</code>
+                  {t(E, " (north / east / south / west).", " (북 / 동 / 남 / 서) 로 표현돼요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Following the directions ", "방향을 따라가면 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "returns to the start", "시작점으로 돌아와요")}</b>
+                  {t(E, " — forming a closed simple polygon (no self-crossings).",
+                        " — 자기 자신과 교차하지 않는 닫힌 단순 다각형이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "CW if the fence is traced clockwise, else CCW", "시계 방향이면 CW, 아니면 CCW")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

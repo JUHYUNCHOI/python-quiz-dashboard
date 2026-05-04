@@ -46,16 +46,48 @@ export function makeComfyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows are added one by one to a 2D grid.\nA cow is 'comfortable' if it has exactly 3 neighbors (up/down/left/right).\nAfter each addition, count comfortable cows!", "소들이 2D 격자에 하나씩 추가돼요. 소가 정확히 3개의 이웃(상하좌우)이 있으면 '편안'해요. 각 추가 후 편안한 소의 수를 세!"),
+        "FJ adds N cows to an infinite 2D grid one at a time, each at a distinct cell.\nA cow is COMFORTABLE if it currently has exactly 3 of the 4 up/down/left/right neighbor cells occupied.\nAfter each addition, print the total number of comfortable cows on the grid.",
+        "FJ가 무한한 2D 격자에 N마리 소를 한 마리씩 서로 다른 칸에 추가해요.\n어떤 소가 상하좌우 이웃 칸 4개 중 정확히 3개가 채워져 있으면 그 소는 '편안'해요.\n각 추가 직후, 격자 위 편안한 소의 총 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Comfortable Cows</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: When adding a cow, only the new cow and its 4 neighbors can change comfort status.\nUse a set for O(1) lookups.",
-              "핵심: 소를 추가할 때 새 소와 4개의 이웃만 편안함 상태가 바뀔 수 있어요.\nO(1) 조회를 위해 집합 사용.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Comfortable Cows</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ adds ", "FJ가 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "N cows one at a time", "N마리 소를 한 마리씩")}</b>
+                  {t(E, " to an infinite 2D grid, each at a distinct cell.",
+                        " 무한 2D 격자의 서로 다른 칸에 추가해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A cow is ", "어떤 소가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "COMFORTABLE", "편안 (COMFORTABLE)")}</b>
+                  {t(E, " if exactly 3 of its 4 up/down/left/right neighbor cells are currently occupied.",
+                        "하려면 상하좌우 4개의 이웃 칸 중 정확히 3개가 그 시점에 차 있어야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "After each addition, print the ", "각 추가 직후 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "current count of comfortable cows", "현재 편안한 소의 개수")}</b>
+                  {t(E, ".", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
