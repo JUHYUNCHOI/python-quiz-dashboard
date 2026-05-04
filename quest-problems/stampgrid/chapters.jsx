@@ -114,7 +114,7 @@ export function makeStampCh1(E) {
             <div style={{ fontSize: 14, fontWeight: 800, color: "#059669", marginBottom: 10 }}>
               {t(E, "Brute Force Strategy", "\ube0c\ub8e8\ud2b8 \ud3ec\uc2a4 \uc804\ub7b5")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 2 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
                 "1. Generate 4 rotations of the stamp\n2. For each rotation, try all (N-K+1)\u00b2 positions\n3. For each placement, check if stamp cells match canvas\n4. Output YES if any combination works",
                 "1. \ub3c4\uc7a5\uc758 4\uac00\uc9c0 \ud68c\uc804 \uc0dd\uc131\n2. \uac01 \ud68c\uc804\uc5d0 \ub300\ud574 (N-K+1)\u00b2 \uc704\uce58 \uc2dc\ub3c4\n3. \uac01 \ubc30\uce58\uc5d0\uc11c \ub3c4\uc7a5 \uc140\uc774 \uce94\ubc84\uc2a4\uc640 \uc77c\uce58\ud558\ub294\uc9c0 \ud655\uc778\n4. \uc5b4\ub5a4 \uc870\ud569\uc774 \ub418\uba74 YES \ucd9c\ub825")}

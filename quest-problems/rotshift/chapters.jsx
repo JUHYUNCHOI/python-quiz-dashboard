@@ -44,7 +44,7 @@ export function makeRotShiftCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Rotate and Shift</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N positions in a circle, K active positions. Each step:\n1. Rotate cows at active positions cyclically\n2. Shift active positions by +1\nAfter T steps, where is each cow?",
               "N\uac1c \uc6d0\ud615 \uc704\uce58, K\uac1c \ud65c\uc131 \uc704\uce58. \uac01 \ub2e8\uacc4:\n1. \ud65c\uc131 \uc704\uce58\uc758 \uc18c\ub4e4\uc744 \uc21c\ud658 \ud68c\uc804\n2. \ud65c\uc131 \uc704\uce58\ub97c +1 \uc774\ub3d9\nT\ub2e8\uacc4 \ud6c4 \uac01 \uc18c\uc758 \uc704\uce58\ub294?")}
@@ -105,7 +105,7 @@ export function makeRotShiftCh1(E) {
             <div style={{ fontSize: 14, fontWeight: 800, color: "#8b5cf6", marginBottom: 10 }}>
               {t(E, "Simulation Steps", "\uc2dc\ubbac\ub808\uc774\uc158 \ub2e8\uacc4")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 2 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
                 "For each of T steps:\n1. Find which cow is at each active position\n2. Move each cow to the next active position (cyclic)\n3. Shift all active positions by +1 (mod N)\n4. After all steps, output each cow's position",
                 "T\ubc88 \ubc18\ubcf5:\n1. \uac01 \ud65c\uc131 \uc704\uce58\uc5d0 \uc5b4\ub5a4 \uc18c\uac00 \uc788\ub294\uc9c0 \ucc3e\uae30\n2. \uac01 \uc18c\ub97c \ub2e4\uc74c \ud65c\uc131 \uc704\uce58\ub85c \uc774\ub3d9 (\uc21c\ud658)\n3. \ubaa8\ub4e0 \ud65c\uc131 \uc704\uce58\ub97c +1 \uc774\ub3d9 (mod N)\n4. \ubaa8\ub4e0 \ub2e8\uacc4 \ud6c4 \uac01 \uc18c\uc758 \uc704\uce58 \ucd9c\ub825")}

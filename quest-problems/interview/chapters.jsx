@@ -157,7 +157,7 @@ export function makeInterviewCh1(E) {
               <div style={{ fontSize: 12, fontWeight: 800, color: "#dc2626", marginBottom: 4 }}>
                 {t(E, "🚨 At t=5: both C1 and C2 are free at the same time!", "🚨 t=5: C1과 C2가 동시에 비워짐!")}
               </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
                 {t(E,
                   "Cow 4 (the next in line) could go to either counter.\nSo if Cow 4 = Bessie, the answer is: 2 possible counters.",
                   "다음 차례인 소 4는 둘 중 어디든 갈 수 있어.\n소 4가 베시라면 답은: 가능한 카운터 2개.")}

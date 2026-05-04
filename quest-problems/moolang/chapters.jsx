@@ -38,7 +38,7 @@ export function makeMooLangCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcdd"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Moo Language</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "Two sentence types:\n\u2022 noun + intransitive_verb (2 words)\n\u2022 noun + transitive_verb + noun (3 words)\nMaximize total words used!",
               "\ub450 \ubb38\uc7a5 \uc720\ud615:\n\u2022 \uba85\uc0ac + \uc790\ub3d9\uc0ac (2\ub2e8\uc5b4)\n\u2022 \uba85\uc0ac + \ud0c0\ub3d9\uc0ac + \uba85\uc0ac (3\ub2e8\uc5b4)\n\ucd1d \ub2e8\uc5b4 \uc218\ub97c \ucd5c\ub300\ud654!")}
@@ -93,7 +93,7 @@ export function makeMooLangCh1(E) {
             <div style={{ fontSize: 14, fontWeight: 800, color: "#2563eb", marginBottom: 10 }}>
               {t(E, "Strategy", "\uc804\ub7b5")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 2 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
                 "For each possible # of transitive sentences t2:\n1. Uses 2*t2 nouns + t2 transitive verbs\n2. Remaining nouns: n - 2*t2\n3. Intransitive sentences: min(k, remaining nouns)\n4. Total words = t2*3 + t1*2\n5. Take max over all t2!",
                 "\uac00\ub2a5\ud55c \ud0c0\ub3d9\uc0ac \ubb38\uc7a5 \uc218 t2\ub9c8\ub2e4:\n1. \uba85\uc0ac 2*t2 + \ud0c0\ub3d9\uc0ac t2 \uc0ac\uc6a9\n2. \ub0a8\uc740 \uba85\uc0ac: n - 2*t2\n3. \uc790\ub3d9\uc0ac \ubb38\uc7a5: min(k, \ub0a8\uc740 \uba85\uc0ac)\n4. \ucd1d \ub2e8\uc5b4 = t2*3 + t1*2\n5. \ubaa8\ub4e0 t2\uc5d0\uc11c \ucd5c\ub300!")}

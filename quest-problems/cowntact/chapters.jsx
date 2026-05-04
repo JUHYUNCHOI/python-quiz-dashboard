@@ -91,7 +91,7 @@ export function makeCowntactCh2(E, lang = "py") {
           <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", marginBottom: 8 }}>
             {t(E, "Approach: Count Segments", "접근법: 세그먼트 세기")}
           </div>
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "Scan left to right:\n• When you hit a '1', increment count\n• Skip all consecutive '1's (same group)\n• When you hit a '0', just move on\n\nEach group of 1s = 1 initial infection\nAnswer = total number of groups",
               "왼쪽에서 오른쪽으로 스캔:\n• '1'을 만나면 카운트 +1\n• 연속된 '1'은 모두 건너뛰기 (같은 그룹)\n• '0'을 만나면 그냥 넘어가기\n\n1의 각 그룹 = 초기 감염 1마리\n답 = 총 그룹 수")}

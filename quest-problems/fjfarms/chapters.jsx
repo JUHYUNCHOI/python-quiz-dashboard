@@ -93,7 +93,7 @@ export function makeFjFarmsCh2(E, lang = "py") {
           <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", marginBottom: 8 }}>
             {t(E, "Binary Search on Days", "날짜에 대한 이분 탐색")}
           </div>
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "Binary search on d (0 to 10^18):\n• For candidate d, compute height_i = h_i + a_i × d\n• Sort plants by height → get ranking\n• If ranking matches target → try smaller d (hi = mid)\n• If not → need larger d (lo = mid + 1)\n\nTime: O(N log N × log D)",
               "d에 대해 이분 탐색 (0 ~ 10^18):\n• 후보 d에서 height_i = h_i + a_i × d 계산\n• 키 기준 정렬 → 순위 확인\n• 순위가 목표와 같으면 → 더 작은 d 시도 (hi = mid)\n• 다르면 → 더 큰 d 필요 (lo = mid + 1)\n\n시간: O(N log N × log D)")}

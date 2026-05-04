@@ -130,7 +130,7 @@ export function makePalindromeCh2(E, lang = "py") {
             <div style={{ fontSize: 14, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
               {t(E, "Game Theory Approach", "게임 이론 접근법")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
                 "1. If S is a palindrome -> Bessie takes all, wins!\n2. Otherwise, try each palindrome p <= S.\n3. If any removal leaves Elsie in a losing state -> Bessie wins.\n4. Time complexity: depends on S, but memoization helps.",
                 "1. S가 회문 -> 베시가 전부 가져가고 승리!\n2. 아니면, S 이하의 모든 회문 p를 시도.\n3. 어떤 제거가 엘시를 패배 상태로 만들면 -> 베시 승리.\n4. 시간 복잡도: S에 따라 다르지만 메모이제이션 도움됨.")}

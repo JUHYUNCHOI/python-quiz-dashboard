@@ -143,7 +143,7 @@ export function makeBillboardCh1(E) {
                 </div>
               ))}
             </div>
-            <div style={{ marginTop: 12, textAlign: "center", fontSize: 13, fontWeight: 700, color: C.text, lineHeight: 1.8 }}>
+            <div style={{ marginTop: 12, textAlign: "center", fontSize: 13, fontWeight: 700, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
                 "Billboard 1: area = 4×3 = 12\nBillboard 2: area = 3×2 = 6\nTotal without truck = 18",
                 "광고판 1: 면적 = 4×3 = 12\n광고판 2: 면적 = 3×2 = 6\n트럭 없이 합계 = 18")}
@@ -239,7 +239,7 @@ export function makeBillboardCh2(E) {
                 </div>
               </div>
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
                 "The overlap is itself a rectangle! Its corners are:\n• left = max(A.left, B.left)\n• bottom = max(A.bottom, B.bottom)\n• right = min(A.right, B.right)\n• top = min(A.top, B.top)",
                 "겹침도 직사각형이야! 꼭짓점은:\n• 왼쪽 = max(A.왼쪽, B.왼쪽)\n• 아래 = max(A.아래, B.아래)\n• 오른쪽 = min(A.오른쪽, B.오른쪽)\n• 위 = min(A.위, B.위)")}

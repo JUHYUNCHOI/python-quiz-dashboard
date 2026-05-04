@@ -35,7 +35,7 @@ export function makeSqPastureCh1(E) {
           <div style={{ fontSize: 48, marginBottom: 8 }}>⬜</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Square Pasture</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, textAlign: "left" }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, textAlign: "left", whiteSpace: "pre-line" }}>
             {t(E,
               "Given: Two non-overlapping axis-aligned rectangles.\nFind: Minimum area of a square (sides parallel to axes) that encloses both.",
               "주어진 것: 겹치지 않는 축 평행 직사각형 2개.\n구할 것: 둘 다 포함하는 정사각형의 최소 면적 (축 평행).")}
@@ -93,7 +93,7 @@ export function makeSqPastureCh1(E) {
             <div style={{ fontSize: 15, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 2 }}>
               side = max(width, height)
             </div>
-            <div style={{ fontSize: 13, color: C.text, marginTop: 8, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 13, color: C.text, marginTop: 8, lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {t(E,
                 "If bounding box is 8 wide × 5 tall → square side = 8\nIf bounding box is 3 wide × 7 tall → square side = 7",
                 "바운딩 박스가 가로 8 × 세로 5 → 정사각형 변 = 8\n바운딩 박스가 가로 3 × 세로 7 → 정사각형 변 = 7")}

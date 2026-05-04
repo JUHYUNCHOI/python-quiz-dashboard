@@ -102,7 +102,7 @@ export function makeMoolooCh1(E) {
             <div style={{ fontSize: 14, fontWeight: 800, color: "#f97316", marginBottom: 10 }}>
               {t(E, "Greedy Algorithm", "\uadf8\ub9ac\ub514 \uc54c\uace0\ub9ac\uc998")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 2 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
                 "1. Sort all days\n2. Start subscription on first day\n3. If next day - current end \u2264 K: extend\n4. Otherwise: finalize current, start new\n5. Cost for each sub = duration + K",
                 "1. \ubaa8\ub4e0 \ub0a0\uc9dc \uc815\ub82c\n2. \uccab \ub0a0\uc5d0 \uad6c\ub3c5 \uc2dc\uc791\n3. \ub2e4\uc74c \ub0a0 - \ud604\uc7ac \ub05d \u2264 K\uba74: \uc5f0\uc7a5\n4. \uc544\ub2c8\uba74: \ud604\uc7ac \ub9c8\ubb34\ub9ac, \uc0c8 \uad6c\ub3c5\n5. \uac01 \uad6c\ub3c5 \ube44\uc6a9 = \uae30\uac04 + K")}

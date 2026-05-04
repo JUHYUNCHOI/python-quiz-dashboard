@@ -94,7 +94,7 @@ export function makeCandyCh2(E, lang = "py") {
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
             {t(E, "Simulation Approach", "시뮬레이션 접근법")}
           </div>
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "For each candy cane:\n• Track bottom = 0 (where next cow starts eating)\n• Each cow eats min(cow_height, candy_top) - bottom\n• Cow grows by amount eaten\n• bottom moves up\n\nTime: O(N × M)",
               "각 캔디마다:\n• bottom = 0 (다음 소가 먹기 시작하는 위치) 추적\n• 각 소는 min(소_키, 캔디_꼭대기) - bottom 만큼 먹음\n• 소 키가 먹은 만큼 커짐\n• bottom이 올라감\n\n시간: O(N × M)")}

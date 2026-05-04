@@ -113,7 +113,7 @@ export function makeHungryCowCh1(E) {
             <div style={{ fontSize: 14, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
               {t(E, "Algorithm", "\uc54c\uace0\ub9ac\uc998")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 2 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
                 "1. Sort deliveries by day\n2. For each delivery, calculate gap from previous\n3. Eat min(stock, gap) during the gap\n4. Add new bales to stock\n5. After last delivery, eat until day T",
                 "1. \ubc30\ub2ec\uc744 \ub0a0\uc9dc\uc21c \uc815\ub82c\n2. \uac01 \ubc30\ub2ec\ub9c8\ub2e4 \uc774\uc804\uacfc\uc758 \uac04\uaca9 \uacc4\uc0b0\n3. \uac04\uaca9 \ub3d9\uc548 min(\uc7ac\uace0, \uac04\uaca9) \uba39\uae30\n4. \uc0c8 \uac74\ucd08\ub97c \uc7ac\uace0\uc5d0 \ucd94\uac00\n5. \ub9c8\uc9c0\ub9c9 \ubc30\ub2ec \ud6c4 T\uc77c\uae4c\uc9c0 \uba39\uae30")}

@@ -122,7 +122,7 @@ export function makeProdCh2(E, lang = "py") {
             <div style={{ fontSize: 14, fontWeight: 800, color: "#f97316", marginBottom: 8 }}>
               {t(E, "Binary Search on Sorted d[]", "정렬된 d[]에서 이진 탐색")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
                 "1. Compute d_i = c_i - t_i for all farms.\n2. Sort d[] in ascending order.\n3. For query (S, V): use bisect_right(d, S) to find first index > S.\n4. Reachable = N - bisect_right(d, S).\n5. Answer YES if reachable >= V.",
                 "1. 모든 농장에 대해 d_i = c_i - t_i 계산.\n2. d[]를 오름차순 정렬.\n3. 쿼리 (S, V): bisect_right(d, S)로 S보다 큰 첫 인덱스 찾기.\n4. 도달 가능 = N - bisect_right(d, S).\n5. 도달 가능 >= V이면 YES.")}

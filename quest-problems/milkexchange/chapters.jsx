@@ -132,7 +132,7 @@ export function makeMilkExCh2(E, lang = "py") {
             <div style={{ fontSize: 14, fontWeight: 800, color: "#059669", marginBottom: 8 }}>
               {t(E, "Key Insight: Stabilization", "핵심: 안정화")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
                 "1. Milk flows in the direction each cow points (L or R).\n2. Where an L-cow meets an R-cow, milk 'collects' at the boundary.\n3. After at most 2N steps, the system reaches a steady state.\n4. Simulate min(M, 2N) steps for the answer.",
                 "1. 우유는 각 소가 가리키는 방향(L/R)으로 흘러.\n2. L-소가 R-소를 만나는 곳에서 우유가 경계에 '모여'.\n3. 최대 2N 단계 후 시스템이 정상 상태에 도달.\n4. min(M, 2N) 단계를 시뮬레이션하면 답이 나와.")}
