@@ -108,15 +108,36 @@ export function makeXorStringCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simply iterate through both strings and XOR each pair of characters. O(N) time!", "두 문자열을 순회하며 각 문자 쌍을 XOR하면 돼요. O(N) 시간!"),
+        "Walk both strings in parallel: at each position, output '0' if A[i] == B[i] else '1'.",
+        "두 문자열을 동시에 순회: 각 위치에서 A[i] == B[i] 면 '0', 아니면 '1' 출력."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Compare characters at each position.\nIf they match, output '0'. If they differ, output '1'. Linear scan.",
-              "각 위치의 문자를 비교해요.\n같으면 '0', 다르면 '1'을 출력. 선형 스캔.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read A, B", "A, B 읽기"), code: "A = input();  B = input()", color: "#2563eb" },
+              { n: 2, label: t(E, "Walk in parallel", "동시 순회"), code: "result = ''", color: "#7c3aed" },
+              { n: 3, label: t(E, "Per position: same → 0, diff → 1", "위치별: 같음 → 0, 다름 → 1"), code: "for a, b in zip(A, B): result += '0' if a == b else '1'", color: "#0891b2" },
+              { n: 4, label: t(E, "Print result", "결과 출력"), code: "print(result)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear pass", "선형 한 번")}</div>
           </div>
         </div>),
     },

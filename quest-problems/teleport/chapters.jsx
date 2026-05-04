@@ -119,15 +119,36 @@ export function makeTeleportCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Just compute 3 values and take the min. O(1) time!", "3개 값 계산하고 최솟값 선택. O(1) 시간!"),
+        "Three possible routes from a to b: 1) direct walk |a − b|; 2) a → x via walking, then teleport to y, then walk to b: |a − x| + |y − b|; 3) the reverse: |a − y| + |x − b|. Take min.",
+        "a 에서 b 까지 가능한 경로 3 개: 1) 직접 |a − b|; 2) a → x 걸어가서 텔레포트로 y, 그리고 b 로 |a − x| + |y − b|; 3) 반대 |a − y| + |x − b|. 최솟값."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Three paths: direct, a->x teleport y->b, a->y teleport x->b.\nJust compare absolute differences!",
-              "세 경로: 직접, a->x 텔레포트 y->b, a->y 텔레포트 x->b.\n절댓값 차이만 비교!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read a, b, x, y", "a, b, x, y 읽기"), code: "a, b, x, y = map(int, input().split())", color: "#d97706" },
+              { n: 2, label: t(E, "Compute three options", "세 옵션 계산"), code: "d1 = abs(a - b)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Add teleport options", "텔레포트 옵션 추가"), code: "d2 = abs(a - x) + abs(y - b);  d3 = abs(a - y) + abs(x - b)", color: "#0891b2" },
+              { n: 4, label: t(E, "Print min", "min 출력"), code: "print(min(d1, d2, d3))", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(1)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant arithmetic", "상수 산술")}</div>
           </div>
         </div>),
     },
