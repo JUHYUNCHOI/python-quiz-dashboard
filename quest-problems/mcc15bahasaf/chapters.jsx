@@ -36,16 +36,48 @@ export function makeMcc15BahasaCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bahasa F is a language where every consonant in a word is replaced with the letter 'f'.\nVowels (a, e, i, o, u) remain unchanged.\nSimple string processing!", "Bahasa F는 단어의 모든 자음을 'f'로 바꾸는 언어예요. 모음(a, e, i, o, u)은 그대로 유지돼요. 간단한 문자열 처리!"),
+        "Bahasa F is a language: every CONSONANT in a word becomes the letter 'f'; vowels (a, e, i, o, u) stay the same.\nGiven a word, print its Bahasa F translation.",
+        "Bahasa F 라는 언어가 있어요: 단어의 모든 자음이 'f' 가 되고, 모음 (a, e, i, o, u) 은 그대로 유지돼요.\n단어가 주어지면 Bahasa F 번역을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udde3\ufe0f"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Bahasa F</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P3</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Iterate through each character.\nIf it's a consonant (not a vowel), replace it with 'f'. Vowels are a, e, i, o, u.",
-              "핵심: 각 문자를 순회해요.\n자음이면 (모음이 아니면) 'f'로 교체. 모음은 a, e, i, o, u.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udde3\ufe0f"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Bahasa F</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P3</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "In ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "Bahasa F", "Bahasa F")}</b>
+                  {t(E, ", every consonant in a word becomes ", " 에서는 단어의 모든 자음이 ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>'f'</code>
+                  {t(E, ".", " 가 돼요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Vowels ", "모음 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "(a, e, i, o, u) stay unchanged", "(a, e, i, o, u) 은 그대로 유지")}</b>
+                  {t(E, ".", " 돼요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "Bahasa F translation of the input word", "입력 단어의 Bahasa F 번역")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

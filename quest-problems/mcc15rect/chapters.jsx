@@ -30,16 +30,39 @@ export function makeMcc15RectCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given 3 corners of an axis-aligned rectangle, find the 4th corner.\nThe sides are parallel to the x and y axes, so each x-coordinate and y-coordinate appears exactly twice!", "축에 정렬된 직사각형의 꼭짓점 3개가 주어지면 4번째 꼭짓점을 찾아요. 변이 x축, y축에 평행하니까 각 x좌표와 y좌표가 정확히 2번씩 나타나!"),
+        "An axis-aligned rectangle has 4 corners; you're given 3 of them.\nPrint the COORDINATES of the missing 4th corner.",
+        "축에 평행한 직사각형에는 꼭짓점이 4개 있고, 그중 3개가 주어져요.\n누락된 4번째 꼭짓점의 좌표를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u25ad"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Rectangle</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Use XOR trick! x4 = x1 ^ x2 ^ x3, y4 = y1 ^ y2 ^ y3. Since each coordinate appears twice except the missing one,\nXOR cancels pairs and leaves the answer.",
-              "핵심: XOR 트릭!\nx4 = x1 ^ x2 ^ x3, y4 = y1 ^ y2 ^ y3. 각 좌표가 빠진 것 빼고 2번 나타나니까, XOR로 쌍이 소거되고 답만 남아.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u25ad"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Rectangle</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P1</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Given ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "3 corners of an axis-aligned rectangle", "축에 평행한 직사각형의 꼭짓점 3개")}</b>
+                  {t(E, " (sides parallel to the x and y axes).",
+                        " 가 주어져요 (변이 x, y 축에 평행).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "coordinates of the 4th (missing) corner", "누락된 4번째 꼭짓점의 좌표")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

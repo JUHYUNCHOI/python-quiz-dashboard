@@ -42,16 +42,47 @@ export function makeMcc15EqCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given 3 numbers, place +, -, *, / between them to form a valid equation equal to a target.\nTry all 4^2 = 16 operator combinations!", "숫자 3개가 주어지면 사이에 +, -, *, /를 넣어서 목표값과 같은 식을 만들어요. 4^2 = 16가지 연산자 조합을 모두 시도해요!"),
+        "You're given 3 numbers a, b, c and a target T. Place an operator (+, −, ×, /) in each of the 2 gaps between them so the resulting expression equals T (using normal precedence).\nPrint any such filled equation, or report none.",
+        "숫자 a, b, c 와 목표값 T 가 주어져요. 그 사이 두 자리에 연산자 (+, −, ×, /) 를 채워서 일반 우선순위로 계산했을 때 결과가 T 가 되는 식을 만들어요.\n그런 식 하나를 출력하고, 없으면 알림."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2795"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Complete the Equation</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Between 3 numbers there are 2 operator slots.\nEach can be +, -, *, /. Brute-force all 4*4 = 16 combinations and check which one equals the target.",
-              "핵심: 숫자 3개 사이에 연산자 2개가 들어가요.\n각각 +, -, *, / 가능.\n4*4 = 16가지 조합을 모두 시도해서 목표값과 같은 것을 찾아요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2795"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Complete the Equation</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P2</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Given ", "숫자 ")}
+                  <b style={{ color: "#d97706" }}>{t(E, "3 numbers a, b, c and a target T", "3 개의 숫자 a, b, c 와 목표값 T")}</b>
+                  {t(E, ".", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Place an operator in each of ", "사이 두 자리에 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "2 gaps using +, −, ×, or /", "+, −, ×, / 중 하나의 연산자")}</b>
+                  {t(E, " (normal precedence — × and / before + and −).",
+                        " 를 채워요 (일반 우선순위 — ×, / 가 +, − 보다 먼저).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print any ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "filled equation that evaluates to T", "결과가 T 가 되는 식")}</b>
+                  {t(E, ", or report none.", " 하나를 출력해요. 없으면 알림.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

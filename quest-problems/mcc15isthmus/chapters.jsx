@@ -52,16 +52,54 @@ export function makeMcc15IsthmusCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a sequence of heights, find peaks and valleys.\nA peak has K strictly increasing neighbors on the left and K strictly decreasing on the right.\nA valley is the opposite.\nCount total peaks + valleys!", "높이 수열이 주어지면 봉우리와 골짜기를 찾아요. 봉우리는 왼쪽 K개가 순증가, 오른쪽 K개가 순감소. 골짜기는 반대. 봉우리 + 골짜기 총 개수를 세!"),
+        "A sequence of N heights and a parameter K are given. Position i is a PEAK if its K immediate left neighbors are strictly INCREASING up to i and its K immediate right neighbors are strictly DECREASING from i. A VALLEY is the opposite.\nPrint the TOTAL number of peaks plus valleys.",
+        "길이 N 의 높이 수열과 매개변수 K 가 주어져요. 위치 i 가 PEAK 이려면 바로 왼쪽 K 개 이웃이 순증가하여 i 에 도달, 바로 오른쪽 K 개 이웃이 i 에서 순감소. VALLEY 는 그 반대.\nPEAK 와 VALLEY 의 총 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26f0\ufe0f"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Isthmus</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P4</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: For each position i (from K to N-K-1), check if the K neighbors on each side form a strictly monotone sequence.\nIf increasing then decreasing = peak. If decreasing then increasing = valley.",
-              "핵심: 각 위치 i (K부터 N-K-1까지)에서 양쪽 K개 이웃이 순단조 수열인지 확인.\n증가 후 감소 = 봉우리.\n감소 후 증가 = 골짜기.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26f0\ufe0f"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Isthmus</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P4</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Given a ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "sequence of N heights and parameter K", "길이 N 의 높이 수열과 매개변수 K")}</b>
+                  {t(E, ".", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "PEAK at i", "PEAK 위치 i")}</b>
+                  {t(E, ": K left neighbors STRICTLY INCREASING up to i AND K right neighbors STRICTLY DECREASING from i.",
+                        ": 왼쪽 K 개 이웃이 i 까지 순증가, 오른쪽 K 개 이웃이 i 에서 순감소.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#0891b2" }}>{t(E, "VALLEY at i", "VALLEY 위치 i")}</b>
+                  {t(E, ": same but DECREASING then INCREASING.",
+                        ": 같은 형태인데 순감소 후 순증가.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "TOTAL number of peaks plus valleys", "PEAK 와 VALLEY 의 총 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

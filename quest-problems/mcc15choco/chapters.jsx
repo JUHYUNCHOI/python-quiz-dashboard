@@ -32,16 +32,47 @@ export function makeMcc15ChocoCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You have a row of chocolate bars with different sizes.\nYou can remove adjacent pairs of equal-size bars.\nMaximize the total length removed!\nUse a stack to greedily match pairs.", "다양한 크기의 초콜릿 바가 한 줄로 있어요. 같은 크기의 인접한 쌍을 제거할 수 있어요. 제거한 총 길이를 최대화해요! 스택으로 탐욕적으로 쌍을 매칭해요."),
+        "A row of N chocolate bars with sizes a[1..N]. You can repeatedly remove ADJACENT pairs of equal-size bars (after removal, the remaining bars become adjacent).\nPrint the TOTAL chocolate length removed.",
+        "크기 a[1..N] 의 N 개 초콜릿 바가 한 줄에 있어요. 같은 크기의 인접한 두 바를 반복해서 제거할 수 있어요 (제거 후 남은 바가 인접하게 돼요).\n제거한 초콜릿 총 길이를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf6b"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Chocolate Bars</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P5</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Use a stack.\nPush each bar. If the top of the stack equals the current bar, pop and add 2*size to the total. This greedily removes adjacent equal pairs.",
-              "핵심: 스택 사용.\n각 바를 푸시.\n스택 top이 현재 바와 같으면 팝하고 2*크기를 총합에 더해요.\n인접한 같은 쌍을 탐욕적으로 제거.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf6b"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Chocolate Bars</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P5</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A row of ", "")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "N chocolate bars with sizes a[1..N]", "크기 a[1..N] 의 N 개 초콜릿 바")}</b>
+                  {t(E, ".", " 가 한 줄에 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Repeatedly remove ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "adjacent pairs of equal-size bars", "같은 크기의 인접한 두 바")}</b>
+                  {t(E, " — after removal, the remaining bars become adjacent and may form new equal pairs.",
+                        " 를 반복해서 제거 — 제거 후 남은 바들이 인접해 새로운 짝이 생길 수 있음.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "TOTAL length of chocolate removed", "제거한 초콜릿 총 길이")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

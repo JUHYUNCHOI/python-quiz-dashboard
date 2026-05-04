@@ -32,16 +32,47 @@ export function makeMcc19BakeryCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A bakery has a promotion: every 4th purchase, you get the 2nd cheapest item free.\nGiven N items with prices, find the minimum cost to buy all items!", "빵집에서 프로모션 중이야: 4번째 구매마다 2번째로 싼 아이템이 무료예요. N개의 아이템 가격이 주어지면 모든 아이템을 사는 최소 비용을 구해요!"),
+        "A bakery has a promotion: in every group of 4 items you check out together, the 2nd cheapest item in the group is FREE.\nYou want to buy all N items grouped however you like (groups of up to 4). Print the minimum total cost.",
+        "빵집 프로모션: 한 번에 4 개씩 묶어 계산할 때마다 그 그룹에서 2 번째로 싼 아이템이 무료예요.\n총 N 개 아이템을 원하는 대로 묶어 (최대 4 개씩) 사요. 최소 총 비용을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🥖</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Bakery</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: Sort items by price descending.\nGroup into sets of 4. In each group, the 2nd cheapest (4th in sorted order) is free.",
-              "핵심: 가격 내림차순 정렬.\n4개씩 묶어. 각 그룹에서 2번째로 싼 것(정렬 순서로 4번째)이 무료.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🥖</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Bakery</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P2</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#d97706" }}>{t(E, "N bakery items with given prices", "가격이 주어진 N 개의 빵집 아이템")}</b>
+                  {t(E, ".", " 이 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "In every checkout group of 4 items, ", "한 번 계산할 때 4 개씩 묶으면 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "the 2nd cheapest in the group is FREE", "그룹에서 2 번째로 싼 아이템이 무료")}</b>
+                  {t(E, ". Smaller groups don't trigger the discount.",
+                        " — 4 개 미만 그룹은 할인 없음.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum total cost to buy all N items", "모든 N 개 아이템을 사는 최소 총 비용")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
