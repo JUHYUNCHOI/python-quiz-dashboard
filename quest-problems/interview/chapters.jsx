@@ -254,15 +254,30 @@ export function makeInterviewCh3(E, lang = "py") {
       narr: t(E,
         "The key insight: we need to find not just ONE counter for Bessie, but ALL counters that finish at the same minimum time when it's Bessie's turn.", "핵심: 베시 차례에 최소 종료 시간인 카운터를 하나가 아니라 전부 찾아야 해."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: C.accent, marginBottom: 8 }}>
-            {t(E, "⏱️ Complexity", "⏱️ 복잡도")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Init heap", "힙 초기화"), code: "heap = [(times[i], i) for i in 0..K-1]   # min-heap of (finish, counter)", color: "#059669" },
+              { n: 2, label: t(E, "Each cow K..N", "K번째 이후 소"), code: "finish, counter = heappop(heap);  heappush(heap, (finish + times[i], counter))", color: "#0891b2" },
+              { n: 3, label: t(E, "Save Bessie\u2019s arrival time", "베시 도착 시각 저장"), code: "bessie_start = the finish popped on Bessie\u2019s turn", color: "#7c3aed" },
+              { n: 4, label: t(E, "All counters tied at that time", "그 시각에 동점인 모든 카운터"), code: "result = [c for (ft, c) in heap_just_before_Bessie if ft == bessie_start]", color: "#dc2626" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
           </div>
-          <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
-            O(N log K)
-          </div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
-            {t(E, "N cows × log K heap operations", "N마리 × log K 힙 연산")}
+          <div style={{ marginTop: 12, background: "#d1fae5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "\u23f1 Complexity", "\u23f1 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N log K)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N cows \u00d7 log K heap ops", "N마리 \u00d7 log K 힙 연산")}</div>
           </div>
         </div>),
     },

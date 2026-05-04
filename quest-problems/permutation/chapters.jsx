@@ -244,15 +244,30 @@ export function makePermCh3(E, lang = "py") {
       narr: t(E,
         "Time complexity: O(N²) per test case — we try N starting values, each taking O(N).\nSince N ≤ 1000, this is fast enough!", "시간복잡도: 테스트 케이스당 O(N²) — N개의 시작값을 시도하고, 각각 O(N). N ≤ 1000이니 충분히 빨라!"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: C.accent, marginBottom: 8 }}>
-            {t(E, "⏱️ Complexity", "⏱️ 복잡도")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Try each start", "시작값 차례로 시도"), code: "for start in range(1, N+1):", color: "#7c5cfc" },
+              { n: 2, label: t(E, "Greedy + or \u2212", "그리디 + 또는 \u2212"), code: "if perm[i] + h[i] valid: pick;  elif perm[i] \u2212 h[i] valid: pick;  else: fail", color: "#0891b2" },
+              { n: 3, label: t(E, "Output if found", "성공하면 출력"), code: "if valid: print(perm);  break", color: "#16a34a" },
+              { n: 4, label: t(E, "All starts fail \u2192 -1", "모두 실패 \u2192 -1"), code: "if no start works: print(-1)", color: "#dc2626" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
           </div>
-          <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
-            O(N²)
-          </div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
-            {t(E, "N starts × N steps each = N²", "N개 시작 × N단계 = N²")}
+          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "\u23f1 Complexity", "\u23f1 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c5cfc" }}>O(N\u00b2)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N starts \u00d7 N steps each", "N개 시작 \u00d7 각 N단계")}</div>
           </div>
         </div>),
     },
