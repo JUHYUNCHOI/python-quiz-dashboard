@@ -105,7 +105,7 @@ export function makeFavPerm2Ch1(E) {
           <div style={{ textAlign: "center", marginBottom: 14 }}>
             <div style={{ fontSize: 48, marginBottom: 8 }}>🧩</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>FJ's Fav Permutation II</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>Same as Open 2024 Bronze #3 — practice variant</div>
           </div>
 
           <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>

@@ -11,7 +11,7 @@ export function makeMooCh1(E) {
       content: (<div style={{ padding: 16, textAlign: "center" }}>
         <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
         <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>It's Mooin' Time</div>
-        <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2024 December Bronze #3</div>
+        <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2024 Bronze #3</div>
         <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E, "A string of letters → find patterns like 'moo',\n'baa' → but 1 letter might be wrong!", "글자 문자열 → 'moo', 'baa' 같은 패턴 찾기 → 근데 1글자가 틀렸을 수도!")}
         </div>

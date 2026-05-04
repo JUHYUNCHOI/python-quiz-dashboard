@@ -2,49 +2,39 @@ import { C, t } from "@/components/quest/theme";
 import { getPermSections } from "./components";
 
 /* ================================================================
-   SOLUTION CODE
+   SOLUTION CODE — Brute force (correct but only for small N)
+   The smart O(N) approach is built backward with a deque (Ch 2).
    ================================================================ */
 export const SOLUTION_CODE = [
+  "from itertools import permutations",
+  "",
+  "def dismantle(p):",
+  "    '''Run Nhoj's dismantling on p, return the hint list h.'''",
+  "    p = list(p)",
+  "    h = []",
+  "    while len(p) > 1:",
+  "        if p[0] > p[-1]:",
+  "            h.append(p[1])     # write 2nd, remove 1st (bigger end)",
+  "            p.pop(0)",
+  "        else:",
+  "            h.append(p[-2])    # write 2nd-to-last, remove last",
+  "            p.pop()",
+  "    return h",
+  "",
   "T = int(input())",
   "for _ in range(T):",
   "    N = int(input())",
   "    h = list(map(int, input().split()))",
-  "    perm = [0] * N",
-  "    used = [False] * (N + 1)",
   "",
-  "    # find positions where h[i] == 0 (fixed neighbors)",
-  "    # greedy: place from left to right",
-  "    ok = True",
-  "    # positions with 0 hint: perm[i+1] = perm[i]±0 impossible,",
-  "    # means perm[i+1] not constrained by diff",
-  "    # Actually: h[i] = abs(perm[i]-perm[i+1])",
-  "    # Strategy: start with perm[0], then perm[i+1]=perm[i]±h[i]",
-  "",
-  "    # Try all starting values",
-  "    found = False",
-  "    for start in range(1, N + 1):",
-  "        perm[0] = start",
-  "        used_t = [False] * (N + 1)",
-  "        used_t[start] = True",
-  "        valid = True",
-  "        for i in range(N - 1):",
-  "            plus = perm[i] + h[i]",
-  "            minus = perm[i] - h[i]",
-  "            if 1 <= plus <= N and not used_t[plus]:",
-  "                perm[i+1] = plus",
-  "                used_t[plus] = True",
-  "            elif 1 <= minus <= N and not used_t[minus]:",
-  "                perm[i+1] = minus",
-  "                used_t[minus] = True",
-  "            else:",
-  "                valid = False",
-  "                break",
-  "        if valid:",
-  "            found = True",
+  "    # Try every permutation in lex order — first match is lex-smallest",
+  "    found = None",
+  "    for p in permutations(range(1, N + 1)):",
+  "        if dismantle(p) == h:",
+  "            found = p",
   "            break",
   "",
   "    if found:",
-  "        print(' '.join(map(str, perm)))",
+  "        print(' '.join(map(str, found)))",
   "    else:",
   "        print(-1)",
 ];
@@ -59,12 +49,12 @@ export function makePermCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a secret list. He only tells us the gaps between neighbors. We have to rebuild the list.",
-        "FJ에게 비밀 리스트가 있어요. 이웃 간격만 알려줘요. 우리가 리스트를 복원해야 해요."),
+        "Farmer Nhoj had a secret permutation. He dismantled it one element at a time, writing down a hint each step. From those hints, rebuild the smallest possible original permutation.",
+        "농부 Nhoj 에게 비밀 순열이 있었어요. 한 원소씩 분해하며 매 단계마다 힌트를 적었어요. 그 힌트들로 원래의 가장 작은 순열을 복원해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>🧩</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>Farmer John's Favorite Permutation</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
           </div>
@@ -79,39 +69,48 @@ export function makePermCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "FJ has N cows lined up in some ", "FJ에게 N마리의 소가 ")}
-                  <b style={{ color: "#9a3412" }}>{t(E, "secret order", "비밀 순서")}</b>
-                  {t(E, ".", "로 줄 서 있어요.")}
+                  {t(E, "Nhoj had a ", "Nhoj 에게 ")}
+                  <b style={{ color: "#9a3412" }}>{t(E, "secret permutation p of 1..N", "비밀 순열 p (1..N 의 순열)")}</b>
+                  {t(E, ".", "이 있었어요.")}
                 </div>
               </div>
-              {/* fact 2 */}
+              {/* fact 2 — the dismantling rule */}
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Each cow wears a tag — numbers ", "각 소는 ")}
-                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>1, 2, ..., N</code>
-                  {t(E, " each used exactly once.", " 번호표를 1번씩만 사용해요.")}
+                  {t(E, "He repeatedly ", "그는 매 단계 ")}
+                  <b style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 3, color: "#7c2d12" }}>
+                    {t(E, "compared the FIRST and LAST", "첫 원소와 마지막 원소를 비교")}
+                  </b>
+                  {t(E, " elements:", " 했어요:")}
+                  <div style={{ marginTop: 6, marginLeft: 6, fontSize: 12, color: "#475569", lineHeight: 1.7 }}>
+                    {t(E, "↳ if first > last: ", "↳ 첫 > 마지막 이면: ")}
+                    <b style={{ color: "#dc2626" }}>{t(E, "write the 2nd element, remove the FIRST", "둘째 원소를 적고 첫 원소 제거")}</b><br/>
+                    {t(E, "↳ otherwise: ", "↳ 그 외 (첫 < 마지막): ")}
+                    <b style={{ color: "#7c3aed" }}>{t(E, "write the 2nd-to-last, remove the LAST", "끝에서 둘째 원소를 적고 마지막 원소 제거")}</b>
+                  </div>
                 </div>
               </div>
               {/* fact 3 */}
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "FJ won't tell you the numbers. He only tells you ", "FJ는 번호를 안 알려주고, ")}
-                  <b style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 3, color: "#7c2d12" }}>
-                    {t(E, "the difference between adjacent cows", "이웃 소끼리의 번호 차이")}
-                  </b>
-                  {t(E, ".", "만 알려줘요.")}
+                  {t(E, "He repeats until ", "원소가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "1 element remains", "1 개 남을 때까지")}</b>
+                  {t(E, ", producing a sequence of N−1 hints — that's the input ", " 반복했고, N−1 개의 힌트 수열을 만들었어요 — 그게 입력 ")}
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>h[0..N−2]</code>
+                  {t(E, ".", " 예요.")}
                 </div>
               </div>
               {/* fact 4 — your job */}
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Find ONE possible original order. If impossible, print ",
-                        "가능한 원래 순서 하나를 찾아요. 불가능하면 ")}
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest permutation", "사전순으로 가장 작은 순열")}</b>
+                  {t(E, " that produces the given h, or ", " 을 출력해요. 가능한 순열이 없으면 ")}
                   <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 3, color: "#991b1b", fontWeight: 800 }}>-1</code>
-                  {t(E, ".", " 출력.")}
+                  {t(E, " if none exists.", ".")}
                 </div>
               </div>
             </div>
@@ -119,103 +118,186 @@ export function makePermCh1(E) {
             {/* Permutation definition box — separate so it doesn't break flow */}
             <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #fdba74", borderRadius: 8, padding: "8px 10px", fontSize: 11, color: C.dim, lineHeight: 1.5 }}>
               <b style={{ color: "#9a3412" }}>{t(E, "💬 What's a “permutation”?", "💬 “순열”이란?")}</b>{" "}
-              {t(E, "A list using each number 1..N exactly once. e.g. for N=4: [3,1,4,2] is one, [3,1,1,2] is not (1 used twice).",
-                    "1부터 N까지 각 숫자를 정확히 1번씩만 쓰는 리스트. 예: N=4일 때 [3,1,4,2]는 순열, [3,1,1,2]는 순열 아님 (1을 두 번 사용).")}
+              {t(E, "A list using each number 1..N exactly once. e.g. for N=4: [3,1,4,2] is a permutation, [3,1,1,2] is not (1 used twice, 4 missing).",
+                    "1부터 N까지 각 숫자를 정확히 1번씩만 쓰는 리스트. 예: N=4 일 때 [3,1,4,2] 는 순열, [3,1,1,2] 는 순열 아님 (1 두 번, 4 빠짐).")}
             </div>
           </div>
 
-          {/* Combined visual: cows in a line with number tags + gaps above */}
+          {/* Forward direction summary — Nhoj makes h from p */}
           <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
-              1️⃣ {t(E, "Example with N = 4", "예시: N = 4")}
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>
+              ⚙️ {t(E, "Nhoj's direction (forward)", "Nhoj 가 한 일 (정방향)")}
             </div>
-            <div style={{ fontSize: 11, color: "#5b21b6", marginBottom: 12 }}>
-              {t(E, "Imagine FJ lined up 4 cows — each wearing a number tag.",
-                    "FJ가 4마리 소를 줄 세웠어요 — 각 소가 번호표를 달고 있어요.")}
-            </div>
-
-            {/* Visual: cows + tags + gaps above */}
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 0, padding: "8px 0" }}>
-              {[3, 1, 4, 2].map((v, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-end" }}>
-                  {/* Cow + tag column */}
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 56 }}>
-                    <div style={{ fontSize: 32, lineHeight: 1 }}>🐄</div>
-                    <div style={{
-                      marginTop: 2, padding: "3px 0", width: 36, textAlign: "center",
-                      borderRadius: 6, background: "#7c5cfc", color: "#fff",
-                      fontWeight: 900, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
-                    }}>{v}</div>
-                  </div>
-                  {/* Gap badge between cows (skip after last) */}
-                  {i < 3 && (
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 36 }}>
-                      <div style={{ fontSize: 9, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>
-                        {t(E, "gap", "차이")}
-                      </div>
-                      <div style={{
-                        padding: "3px 6px", borderRadius: 12,
-                        background: "#fef3c7", border: "1.5px solid #fbbf24",
-                        color: "#7c2d12", fontWeight: 800, fontSize: 12, fontFamily: "'JetBrains Mono',monospace",
-                      }}>
-                        {Math.abs([3,1,4,2][i] - [3,1,4,2][i+1])}
-                      </div>
-                      <div style={{ marginTop: 4, height: 22, fontSize: 18, color: "#9ca3af" }}>↑↓</div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Two reads: secret list vs what FJ tells you */}
-            <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-              <div style={{ background: "#fff", border: "2px solid #c4b5fd", borderRadius: 8, padding: "8px 10px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 8, alignItems: "center" }}>
+              <div style={{ background: "#fff", border: "2px solid #c4b5fd", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 10, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
-                  🙈 {t(E, "Secret (you DON'T see)", "비밀 (안 보여요)")}
+                  {t(E, "secret p (Nhoj knows)", "비밀 p (Nhoj 만 앎)")}
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#5b21b6", textAlign: "center" }}>
-                  perm = [3, 1, 4, 2]
-                </div>
-                <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginTop: 2 }}>
-                  {t(E, "the cow tags in order", "소들의 번호표 (순서대로)")}
+                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#5b21b6" }}>
+                  [3, 1, 2, 4]
                 </div>
               </div>
-              <div style={{ background: "#fff", border: "2px solid #fbbf24", borderRadius: 8, padding: "8px 10px" }}>
+              <div style={{ fontSize: 22, color: "#5b21b6", textAlign: "center", fontWeight: 900 }}>→</div>
+              <div style={{ background: "#fff", border: "2px solid #fbbf24", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 10, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
-                  👀 {t(E, "Given (this IS your input)", "주어짐 (입력으로 받음)")}
+                  {t(E, "hints he writes", "그가 적은 힌트")}
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#92400e", textAlign: "center" }}>
-                  h = [2, 3, 2]
-                </div>
-                <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginTop: 2 }}>
-                  {t(E, "abs(3−1), abs(1−4), abs(4−2)", "abs(3−1), abs(1−4), abs(4−2)")}
+                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#92400e" }}>
+                  h = [2, 1, 1]
                 </div>
               </div>
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+              {t(E, "(We see the next page how p produces h, step by step.)",
+                    "(다음 페이지에서 p 가 어떻게 h 를 만드는지 한 단계씩 봐요.)")}
             </div>
           </div>
 
-          {/* Your job — what to do given h */}
+          {/* Your job — reverse direction */}
           <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#15803d", marginBottom: 10 }}>
-              2️⃣ {t(E, "Your job", "할 일")}
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#15803d", marginBottom: 8 }}>
+              🎯 {t(E, "Your job (reverse)", "할 일 (역방향)")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 8, alignItems: "center" }}>
               <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 10, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>{t(E, "GIVEN", "받는 것")}</div>
-                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>h = [2, 3, 2]</div>
+                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>h = [2, 1, 1]</div>
               </div>
               <div style={{ fontSize: 22, color: "#15803d", textAlign: "center", fontWeight: 900 }}>→</div>
               <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
-                <div style={{ fontSize: 10, fontWeight: 800, color: "#15803d", marginBottom: 4 }}>{t(E, "FIND", "찾을 것")}</div>
-                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>perm = [?, ?, ?, ?]</div>
+                <div style={{ fontSize: 10, fontWeight: 800, color: "#15803d", marginBottom: 4 }}>{t(E, "FIND p", "p 찾기")}</div>
+                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>[?, ?, ?, ?]</div>
               </div>
             </div>
-            <div style={{ marginTop: 10, fontSize: 12, color: "#15803d", textAlign: "center", lineHeight: 1.6 }}>
-              {t(E, "Multiple perms can give the same h — just find ONE valid perm, or print -1 if none exists.",
-                    "여러 perm이 같은 h를 만들 수 있어요 — 유효한 perm 하나만 찾으면 OK. 없으면 -1 출력해요.")}
+            <div style={{ marginTop: 10, fontSize: 11, color: "#15803d", textAlign: "center", lineHeight: 1.5 }}>
+              {t(E, "Multiple p's can produce the same h — find the LEXICOGRAPHICALLY SMALLEST one (or -1).",
+                    "같은 h 를 만드는 p 가 여러 개일 수 있어요 — 사전순으로 가장 작은 것 (또는 -1) 을 찾아요.")}
             </div>
           </div>
         </div>),
+    },
+    // 1-2: Hand-simulate the dismantling on a concrete example
+    {
+      type: "reveal",
+      narr: t(E,
+        "Let's run Nhoj's process on p = [3, 1, 2, 4] step by step. Each row shows the remaining elements, who's first vs last, what gets written, and what gets removed.",
+        "p = [3, 1, 2, 4] 에 Nhoj 과정을 한 단계씩 적용해봐요. 각 줄은 남은 원소들, 첫과 마지막, 적은 값, 제거된 값을 보여줘요."),
+      content: (() => {
+        // Build the trace of dismantling [3, 1, 2, 4]
+        const trace = (() => {
+          let p = [3, 1, 2, 4];
+          const steps = [];
+          while (p.length > 1) {
+            const first = p[0], last = p[p.length - 1];
+            const firstWins = first > last;
+            const written = firstWins ? p[1] : p[p.length - 2];
+            const removed = firstWins ? first : last;
+            const removedIdx = firstWins ? 0 : p.length - 1;
+            const writtenIdx = firstWins ? 1 : p.length - 2;
+            steps.push({ before: [...p], first, last, firstWins, written, removed, removedIdx, writtenIdx });
+            p.splice(removedIdx, 1);
+          }
+          steps.push({ before: [...p], final: true });
+          return steps;
+        })();
+
+        return (
+          <div style={{ padding: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 4 }}>
+              ✏️ {t(E, "Hand-simulate: p = [3, 1, 2, 4]", "손으로 따라가기: p = [3, 1, 2, 4]")}
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 12 }}>
+              {t(E, "Compare ⬅first and last➡. Bigger end loses (×). The element NEXT to it gets written ✏️.",
+                    "⬅첫과 마지막➡ 비교. 더 큰 쪽이 제거 (×). 그 옆 원소가 적힘 ✏️.")}
+            </div>
+
+            {/* Step rows */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {trace.map((s, idx) => {
+                if (s.final) {
+                  return (
+                    <div key={idx} style={{
+                      background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px",
+                      display: "flex", alignItems: "center", gap: 10,
+                    }}>
+                      <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", width: 60 }}>
+                        {t(E, "FINAL", "최종")}
+                      </div>
+                      <div style={{ display: "flex", gap: 4 }}>
+                        {s.before.map((v, i) => (
+                          <div key={i} style={{
+                            width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
+                            borderRadius: 6, background: "#16a34a", color: "#fff",
+                            fontWeight: 900, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
+                          }}>{v}</div>
+                        ))}
+                      </div>
+                      <div style={{ fontSize: 11, color: "#15803d", marginLeft: "auto" }}>
+                        {t(E, "1 element left → stop", "1 개 남음 → 종료")}
+                      </div>
+                    </div>
+                  );
+                }
+                const arrow = s.firstWins
+                  ? t(E, "first > last → remove FIRST, write 2nd",
+                       "첫 > 마지막 → 첫 제거, 둘째 적기")
+                  : t(E, "first < last → remove LAST, write 2nd-to-last",
+                       "첫 < 마지막 → 마지막 제거, 끝에서 둘째 적기");
+                return (
+                  <div key={idx} style={{
+                    background: "#fff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px",
+                  }}>
+                    <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+                      {t(E, `Step ${idx + 1}`, `${idx + 1} 단계`)}
+                      <span style={{ marginLeft: 8, color: C.dim, fontWeight: 600 }}>
+                        — first={s.first}, last={s.last}, {arrow}
+                      </span>
+                    </div>
+                    <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                      {s.before.map((v, i) => {
+                        const isRemoved = i === s.removedIdx;
+                        const isWritten = i === s.writtenIdx;
+                        return (
+                          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+                            <div style={{ fontSize: 9, color: isRemoved ? "#dc2626" : isWritten ? "#7c3aed" : "transparent", fontWeight: 800, height: 12 }}>
+                              {isRemoved ? "× remove" : isWritten ? "✏️ write" : "·"}
+                            </div>
+                            <div style={{
+                              width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+                              borderRadius: 7, fontWeight: 900, fontSize: 15, fontFamily: "'JetBrains Mono',monospace",
+                              background: isRemoved ? "#fee2e2" : isWritten ? "#ede9fe" : "#fff",
+                              border: `2px solid ${isRemoved ? "#dc2626" : isWritten ? "#7c3aed" : "#c4b5fd"}`,
+                              color: isRemoved ? "#7f1d1d" : isWritten ? "#5b21b6" : "#5b21b6",
+                              textDecoration: isRemoved ? "line-through" : "none",
+                            }}>{v}</div>
+                          </div>
+                        );
+                      })}
+                      <div style={{ marginLeft: 16, fontSize: 12, color: "#7c3aed", fontWeight: 800 }}>
+                        h[{idx}] = <b style={{ fontSize: 16 }}>{s.written}</b>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Final h summary */}
+            <div style={{ marginTop: 12, background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
+                {t(E, "All hints written, in order:", "적힌 힌트 (순서대로):")}
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>
+                h = [2, 1, 1]
+              </div>
+              <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>
+                {t(E, "So input h = [2, 1, 1] could come from p = [3, 1, 2, 4].",
+                      "즉 입력 h = [2, 1, 1] 은 p = [3, 1, 2, 4] 에서 나온 것일 수 있어요.")}
+              </div>
+            </div>
+          </div>
+        );
+      })(),
     },
     // 1-1.5: Input / Output format
     {
@@ -290,140 +372,133 @@ export function makePermCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: What is a permutation?
-    {
-      type: "reveal",
-      narr: t(E,
-        "A permutation uses each number from 1 to N exactly once — no missing, no duplicates.",
-        "순열은 1부터 N까지 각 숫자를 정확히 1번씩만 사용해요 — 빠지거나 중복되면 안 돼요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 12, color: C.dim, textAlign: "center", marginBottom: 10 }}>
-            {t(E, "For N = 4, which lists are valid permutations?", "N = 4일 때, 어떤 리스트가 순열일까요?")}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { arr: [3,1,4,2], ok: true,  reason: t(E, "uses 1, 2, 3, 4 — each exactly once", "1, 2, 3, 4 — 각 1번씩 사용") },
-              { arr: [1,2,3,4], ok: true,  reason: t(E, "sorted, but still a permutation", "정렬되어 있지만 순열 맞음") },
-              { arr: [3,1,1,2], ok: false, reason: t(E, "1 appears twice, 4 missing", "1이 두 번 나옴, 4가 없음") },
-              { arr: [1,2,3,5], ok: false, reason: t(E, "5 isn't in 1..4 (4 missing)", "5는 1..4 범위 밖 (4가 없음)") },
-            ].map((row, i) => (
-              <div key={i} style={{
-                background: row.ok ? "#dcfce7" : "#fee2e2",
-                border: `2px solid ${row.ok ? "#86efac" : "#fca5a5"}`,
-                borderRadius: 10, padding: "8px 12px",
-                display: "grid", gridTemplateColumns: "30px 1fr 1.5fr", gap: 10, alignItems: "center",
-              }}>
-                {/* check/cross */}
-                <div style={{ fontSize: 18, fontWeight: 900, color: row.ok ? "#15803d" : "#991b1b", textAlign: "center" }}>
-                  {row.ok ? "✓" : "✗"}
-                </div>
-                {/* the list */}
-                <div style={{ display: "flex", gap: 3 }}>
-                  {row.arr.map((v, j) => (
-                    <div key={j} style={{
-                      width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
-                      borderRadius: 5, fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
-                      background: "#fff",
-                      border: `1.5px solid ${row.ok ? "#16a34a" : "#dc2626"}`,
-                      color: row.ok ? "#15803d" : "#991b1b",
-                    }}>{v}</div>
-                  ))}
-                </div>
-                {/* reason */}
-                <div style={{ fontSize: 11.5, color: row.ok ? "#15803d" : "#991b1b", lineHeight: 1.4 }}>
-                  {row.reason}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>),
-    },
-    // 1-3: Quiz — hint meaning
+    // 1-3: Quiz — verify understanding of the dismantling rule
     {
       type: "quiz",
       narr: t(E,
-        "The hint h[i] tells us the absolute difference between consecutive elements.\nSo h[i] = abs(perm[i] - perm[i+1]).", "힌트 h[i]는 연속 원소의 절댓값 차이예요. h[i] = abs(perm[i] - perm[i+1])."),
+        "The rule: compare the FIRST and LAST element. Bigger end loses (gets removed). The element NEXT to the loser is what we WRITE down.",
+        "규칙: 첫 원소와 마지막 원소 비교. 큰 쪽이 제거. 제거되는 원소 옆 원소가 적혀요."),
       question: t(E,
-        "If perm = [2, 5, 1, 4, 3], what is h[1] (0-indexed)?",
-        "perm = [2, 5, 1, 4, 3]이면, h[1] (0-indexed)은?"),
-      options: ["3", "4", "6", "1"],
-      correct: 1,
+        "Suppose the current state is p = [2, 4, 5, 3]. What gets WRITTEN down in this step?",
+        "지금 상태가 p = [2, 4, 5, 3] 이에요. 이 단계에서 적히는 값은?"),
+      options: ["2", "4", "5", "3"],
+      correct: 2,
       explain: t(E,
-        "|5 - 1| = 4. h[1] is the diff between perm[1]=5 and perm[2]=1.",
-        "|5 - 1| = 4. h[1]은 perm[1]=5와 perm[2]=1의 차이예요."),
+        "first=2, last=3. 2 < 3, so we remove the LAST (3). The element next to 3 is 5 (2nd-to-last). So we write 5.",
+        "first=2, last=3. 2 < 3 이므로 마지막 (3) 제거. 3 옆 원소는 5 (끝에서 둘째). 그래서 5 를 적어요."),
     },
-    // 1-4a: Reveal — reconstruction idea visualized
-    {
-      type: "reveal",
-      narr: t(E,
-        "Once we know perm[i], the next value perm[i+1] has only 2 choices.",
-        "perm[i]를 알면, 다음 값 perm[i+1]은 단 2가지 선택뿐이에요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 14 }}>
-            {/* Given */}
-            <div style={{ fontSize: 12, fontWeight: 800, color: C.accent, marginBottom: 6 }}>
-              {t(E, "Suppose we know:", "지금 아는 것:")}
-            </div>
-            <div style={{ display: "flex", gap: 14, justifyContent: "center", marginBottom: 14, flexWrap: "wrap" }}>
-              <div style={{ background: "#fff", border: "2px solid #c4b5fd", borderRadius: 8, padding: "6px 12px", fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#5b21b6" }}>
-                perm[i] = 3
-              </div>
-              <div style={{ background: "#fff", border: "2px solid #fbbf24", borderRadius: 8, padding: "6px 12px", fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#92400e" }}>
-                h[i] = 2
-              </div>
-            </div>
-
-            {/* Branching */}
-            <div style={{ fontSize: 12, fontWeight: 800, color: C.accent, marginBottom: 6, textAlign: "center" }}>
-              {t(E, "Then perm[i+1] is one of:", "그러면 perm[i+1]은 둘 중 하나:")}
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-              <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
-                <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 2 }}>{t(E, "Add h[i]", "h[i] 더하기")}</div>
-                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>3 + 2 = <span style={{ background: "#86efac", padding: "1px 6px", borderRadius: 4 }}>5</span></div>
-              </div>
-              <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
-                <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 2 }}>{t(E, "Subtract h[i]", "h[i] 빼기")}</div>
-                <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>3 − 2 = <span style={{ background: "#86efac", padding: "1px 6px", borderRadius: 4 }}>1</span></div>
-              </div>
-            </div>
-            <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center" }}>
-              {t(E, "Why? abs(perm[i] − perm[i+1]) = h[i] means the difference is +h or −h.",
-                    "왜? abs(perm[i] − perm[i+1]) = h[i] 이므로 차이는 +h 또는 −h.")}
-            </div>
-          </div>
-        </div>),
-    },
-    // 1-4b: Quiz — same idea, different numbers
-    {
-      type: "quiz",
-      narr: t(E,
-        "Now your turn — pick the right pair.",
-        "이제 직접 — 맞는 쌍을 골라보세요."),
-      question: t(E,
-        "If perm[0] = 4 and h[0] = 3, what are the possible values for perm[1]?",
-        "perm[0] = 4, h[0] = 3이면, perm[1]의 가능한 값은?"),
-      options: [
-        t(E, "1 or 7", "1 또는 7"),
-        t(E, "3 or 5", "3 또는 5"),
-        t(E, "1 or 5", "1 또는 5"),
-        t(E, "7 only", "7만"),
-      ],
-      correct: 0,
-      explain: t(E, "4 + 3 = 7  or  4 − 3 = 1.", "4 + 3 = 7  또는  4 − 3 = 1."),
-    },
-    // 1-5: Input
+    // 1-4: Input — predict what happens next
     {
       type: "input",
       narr: t(E,
-        "Let's practice!\nperm = [?, ?, ?, ?] with N=4.\nh = [1, 2, 1].\nIf perm starts with 2, and we always pick +, what is perm[3]?", "연습! perm = [?, ?, ?, ?], N=4. h = [1, 2, 1]. perm이 2로 시작하고 항상 +를 고르면, perm[3]은?"),
+        "Continuing from p = [2, 4, 5, 3]: the previous step removes 3 and writes 5. The new state is [2, 4, 5]. Now run ONE more dismantling step.",
+        "p = [2, 4, 5, 3] 에서 이어가요: 이전 단계에서 3 제거하고 5 적었어요. 이제 [2, 4, 5] 상태. 한 단계 더 분해해 보세요."),
       question: t(E,
-        "perm[0]=2, h=[1,2,1], always pick +. perm[3]=?",
-        "perm[0]=2, h=[1,2,1], 항상 + 선택. perm[3]=?"),
-      hint: t(E, "2→3→5→6. But 6>4! Is this valid?", "2→3→5→6. 그런데 6>4! 유효할까?"),
-      answer: 6,
+        "From [2, 4, 5], what value gets written next?",
+        "[2, 4, 5] 에서 다음에 적히는 값은?"),
+      hint: t(E,
+        "Compare first=2 and last=5. Bigger end loses → remove last (5). The element next to 5 is 4 (2nd-to-last).",
+        "first=2, last=5 비교. 큰 쪽 제거 → 마지막 (5) 제거. 5 옆 원소는 4 (끝에서 둘째)."),
+      answer: 4,
+    },
+    // 1-5: First natural attempt — brute force
+    {
+      type: "reveal",
+      narr: t(E,
+        "What's the most direct idea? Try EVERY permutation of 1..N — for each one, simulate Nhoj's process and check if it produces our h. Iterate in lex order so the first match is automatically the smallest.",
+        "가장 직접적인 아이디어는? 1..N 의 모든 순열을 다 시도 — 각 순열마다 Nhoj 과정을 돌려서 우리 h 가 나오는지 확인. 사전순으로 돌면 처음 일치하는 게 자동으로 가장 작은 것."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 10 }}>
+            🐢 {t(E, "Idea 1: Try every permutation (brute force)", "아이디어 1: 모든 순열 다 시도 (브루트포스)")}
+          </div>
+
+          {/* Pseudocode */}
+          <div style={{ background: "#1f2937", color: "#e5e7eb", borderRadius: 10, padding: 12, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7, marginBottom: 12 }}>
+            <div><span style={{ color: "#60a5fa" }}>for</span> p <span style={{ color: "#60a5fa" }}>in</span> permutations(1..N):</div>
+            <div style={{ marginLeft: 20 }}>h_test = dismantle(p)</div>
+            <div style={{ marginLeft: 20 }}><span style={{ color: "#60a5fa" }}>if</span> h_test == h:</div>
+            <div style={{ marginLeft: 40 }}><span style={{ color: "#60a5fa" }}>print</span>(p);  <span style={{ color: "#60a5fa" }}>break</span></div>
+          </div>
+
+          {/* Why it works */}
+          <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 4 }}>
+              ✅ {t(E, "Why it works", "왜 정답이 되나")}
+            </div>
+            <div style={{ fontSize: 12, color: "#15803d", lineHeight: 1.6 }}>
+              {t(E, "We literally check every possibility — if any permutation makes the right h, we'll find it. And ", "가능성을 모두 직접 확인 — 맞는 h 를 만드는 순열이 있다면 반드시 찾아요. 그리고 ")}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>permutations()</code>
+              {t(E, " gives them in LEX order, so the first match is the lex-smallest.",
+                    " 가 사전순으로 돌려주니까 처음 일치 = 사전순 최솟값.")}
+            </div>
+          </div>
+
+          {/* Test cases pass */}
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
+              ✓ {t(E, "Sample test cases pass — for small N this is enough!",
+                       "샘플 테스트 통과 — 작은 N 에서는 이걸로 충분!")}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 12px", fontSize: 11, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+              <div style={{ color: "#7c2d12" }}>N=2 → 2! = 2</div><div style={{ color: C.dim }}>{t(E, "instant", "즉시")}</div>
+              <div style={{ color: "#7c2d12" }}>N=4 → 4! = 24</div><div style={{ color: C.dim }}>{t(E, "instant", "즉시")}</div>
+              <div style={{ color: "#7c2d12" }}>N=8 → 8! = 40,320</div><div style={{ color: C.dim }}>{t(E, "fast (&lt; 1s)", "빠름 (&lt; 1초)")}</div>
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-6: Why brute force fails for the actual constraints
+    {
+      type: "reveal",
+      narr: t(E,
+        "But the real constraint is N up to 10⁵. N! grows so fast it doesn't even fit in the universe.",
+        "근데 실제 제약은 N 최대 10⁵. N! 은 너무 빨리 커져서 우주에도 못 담아요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
+            🚨 {t(E, "Problem: N! explodes", "문제: N! 폭발")}
+          </div>
+
+          {/* Growth table */}
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: 12, marginBottom: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr", gap: "8px 12px", fontSize: 12, alignItems: "center" }}>
+              <div style={{ fontWeight: 800, color: "#7f1d1d" }}>N</div>
+              <div style={{ fontWeight: 800, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>N!</div>
+              <div style={{ fontWeight: 800, color: "#7f1d1d" }}>{t(E, "Time @ 10⁸/s", "10⁸/초 기준 시간")}</div>
+
+              {[
+                { n: 4,    fac: "24",                       time: t(E, "instant", "즉시"), bad: false },
+                { n: 8,    fac: "40,320",                   time: t(E, "instant", "즉시"), bad: false },
+                { n: 12,   fac: "479M",                     time: t(E, "~5 sec",  "~5 초"), bad: false },
+                { n: 15,   fac: "1.3 trillion",             time: t(E, "~3.5 hr", "~3.5 시간"), bad: true  },
+                { n: 20,   fac: "2.4 × 10¹⁸",               time: t(E, "~770 yr", "~770 년"), bad: true  },
+                { n: 100,  fac: "9.3 × 10¹⁵⁷",              time: t(E, "uh...", "어..."),    bad: true  },
+                { n: 100000,fac: "10⁴⁵⁶⁵⁷⁴ (!)",            time: t(E, "🌌🪦", "🌌🪦"),       bad: true  },
+              ].map((r, i) => (
+                <div key={i} style={{ display: "contents" }}>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: r.bad ? "#dc2626" : "#7f1d1d" }}>{r.n}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", color: r.bad ? "#dc2626" : "#7f1d1d" }}>{r.fac}</div>
+                  <div style={{ color: r.bad ? "#dc2626" : "#7f1d1d", fontWeight: r.bad ? 700 : 400 }}>{r.time}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* What we need */}
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+              💡 {t(E, "We need to be cleverer", "더 똑똑해져야 함")}
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              {t(E, "For N = 10⁵ we need O(N) or O(N log N). That's a HUGE jump from O(N! · N²). The next chapter shows how to think ",
+                    "N = 10⁵ 에서는 O(N) 또는 O(N log N) 가 필요해요. O(N! · N²) 에서 거대한 점프죠. 다음 챕터에서 ")}
+              <b style={{ color: "#7c3aed" }}>{t(E, "BACKWARDS from the hints", "힌트로부터 거꾸로 생각")}</b>
+              {t(E, " (using a deque) — building the permutation in reverse is the key insight.",
+                    " 하는 방법을 봐요 (deque 사용) — 거꾸로 만드는 게 핵심 발상이에요.")}
+            </div>
+          </div>
+        </div>),
     },
   ];
 }

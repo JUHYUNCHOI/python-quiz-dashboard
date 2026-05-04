@@ -29,7 +29,7 @@ export function makeBalancedCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 14 }}>
             <div style={{ fontSize: 48, marginBottom: 8 }}>🔗</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Balanced Subsequences</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Bronze (contest TBD)</div>
           </div>
 
           {/* Problem — bullet facts */}
