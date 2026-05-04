@@ -114,15 +114,36 @@ export function makeMcc19CandyCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Simulate each round: keep only even-indexed people.\nEach round halves the count.\nO(N) total work.", "각 라운드를 시뮬레이션: 짝수 인덱스만 유지. 매 라운드 절반으로 줄어. 총 O(N) 작업."),
+        "Simulate the elimination: in each round, keep only people at EVEN positions (1, 3, 5, ... in 1-indexed → odd survivors are eliminated). Repeat until 1 person remains.",
+        "탈락 시뮬레이션: 매 라운드, 짝수 위치 (1-indexed: 1, 3, 5, ... 가 홀수 위치라 탈락) 만 유지. 한 명 남을 때까지 반복."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Simulation: repeatedly filter out odd-indexed positions.\nN + N/2 + N/4 + ... = O(N).",
-              "시뮬레이션: 홀수 인덱스를 반복적으로 필터링.\nN + N/2 + N/4 + ... = O(N).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Init list 1..N", "1..N 리스트 초기화"), code: "cur = list(range(1, N+1))", color: "#dc2626" },
+              { n: 2, label: t(E, "While > 1 person, filter", "1 명 초과면 필터"), code: "while len(cur) > 1:", color: "#7c3aed" },
+              { n: 3, label: t(E, "Keep only even-position", "짝수 위치만 유지"), code: "cur = [cur[i] for i in range(len(cur)) if i % 2 == 1]", color: "#0891b2" },
+              { n: 4, label: t(E, "Print survivor", "생존자 출력"), code: "print(cur[0])", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N + N/2 + N/4 + ... = 2N", "N + N/2 + N/4 + ... = 2N")}</div>
           </div>
         </div>),
     },

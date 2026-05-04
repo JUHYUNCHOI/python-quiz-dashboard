@@ -141,15 +141,36 @@ export function makeMcc19PalCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Count palindromes per length, find which length contains N-th, construct it from the first half.\nO(log N) per query!", "길이별 회문 개수를 세고, N번째가 포함된 길이를 찾아 앞 절반에서 구성. 쿼리당 O(log N)!"),
+        "Count palindromes per length L: (K−1) × K^(ceil(L/2)−1). Find the L containing the N-th by subtracting counts. Inside that length, decode the first ⌈L/2⌉ digits in base K, then mirror to form the full palindrome.",
+        "길이 L 의 회문 개수: (K−1) × K^(ceil(L/2)−1). 누적 개수를 빼가며 N 번째가 들어있는 L 을 찾기. 그 안에서 앞 ⌈L/2⌉ 자리를 K 진법으로 디코드, 거울 대칭으로 회문 완성."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(log N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "For each length L: (K-1) × K^(ceil(L/2)-1) palindromes exist.\nSkip lengths until we find the right one, then construct from first half digits.",
-              "각 길이 L: (K-1) × K^(ceil(L/2)-1)개의 회문이 존재.\n맞는 길이를 찾을 때까지 건너뛰고 앞 절반 숫자로 구성.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "For each length L = 1, 2, …", "각 길이 L = 1, 2, … 마다"), code: "while N > count(L): N -= count(L); L += 1", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Decode first half digits", "앞 절반 자리 디코드"), code: "first_half = base_K_repr(N - 1, half)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Mirror to form full palindrome", "거울 대칭으로 완성"), code: "full = first_half + reverse(first_half[:half_excl_middle])", color: "#0891b2" },
+              { n: 4, label: t(E, "Print palindrome", "회문 출력"), code: "print(full)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "L grows logarithmically; constant per length", "L 은 로그 증가; 길이당 상수")}</div>
           </div>
         </div>),
     },
