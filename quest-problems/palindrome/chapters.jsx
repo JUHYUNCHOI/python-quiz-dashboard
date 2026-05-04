@@ -126,18 +126,33 @@ export function makePalindromeCh2(E, lang = "py") {
         "The key insight: if S is a palindrome, Bessie wins immediately.\nOtherwise, we check game states recursively.", "핵심: S가 회문이면 베시가 바로 이겨. 아니면 게임 상태를 재귀적으로 확인해."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
-              {t(E, "Game Theory Approach", "게임 이론 접근법")}
-            </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-              {t(E,
-                "1. If S is a palindrome -> Bessie takes all, wins!\n2. Otherwise, try each palindrome p <= S.\n3. If any removal leaves Elsie in a losing state -> Bessie wins.\n4. Time complexity: depends on S, but memoization helps.",
-                "1. S가 회문 -> 베시가 전부 가져가고 승리!\n2. 아니면, S 이하의 모든 회문 p를 시도.\n3. 어떤 제거가 엘시를 패배 상태로 만들면 -> 베시 승리.\n4. 시간 복잡도: S에 따라 다르지만 메모이제이션 도움됨.")}
-            </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Pre-compute palindromes", "회문 미리 계산"), code: "palis = [p for p in 1..S if is_palindrome(p)]", color: "#dc2626" },
+              { n: 2, label: t(E, "DP from n = 0 upward", "n = 0부터 위로 DP"), code: "can_win[0] = False  // empty pile \u2192 lose", color: "#0891b2" },
+              { n: 3, label: t(E, "Try each palindrome \u2264 n", "n 이하 회문 시도"), code: "if !can_win[n \u2212 p]: can_win[n] = True; break", color: "#16a34a" },
+              { n: 4, label: t(E, "Output", "출력"), code: "print('B' if can_win[S] else 'E')", color: "#7c3aed" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
           </div>
-          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", fontWeight: 600 }}>
-            {t(E, "O(S * num_palindromes) with memoization", "메모이제이션으로 O(S * 회문 수)")}
+          <div style={{ marginTop: 10, background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "8px 10px", fontSize: 11, color: "#7c2d12", lineHeight: 1.6 }}>
+            <span style={{ fontWeight: 800 }}>{t(E, "💡 Key insight: ", "💡 핵심: ")}</span>
+            {t(E, "you WIN at n if you can move to a state where the opponent LOSES.", "n에서 이긴다 = 상대를 지는 상태로 보낼 수 있다.")}
+          </div>
+          <div style={{ marginTop: 10, background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "\u23f1 Complexity", "\u23f1 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(S \u00b7 |palis|)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "palindromes are sparse, so |palis| is small", "회문은 드물어 |palis|는 작음")}</div>
           </div>
         </div>),
     },

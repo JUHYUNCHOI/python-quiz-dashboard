@@ -95,13 +95,29 @@ export function makeMajorityCh2(E, lang = "py") {
       narr: t(E,
         "We just scan once through the array checking adjacent pairs. That's O(N) time!", "배열을 한 번 쭉 훑으면서 인접 쌍만 확인하면 돼. O(N) 시간!"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "For each i from 0 to N-2: if a[i] == a[i+1], add a[i] to the result set. Print sorted results, or -1 if empty.",
-              "i를 0부터 N-2까지: a[i] == a[i+1]이면 결과 집합에 추가. 정렬 출력, 비어있으면 -1.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Init result set", "결과 집합 초기화"), code: "result = set()", color: "#dc2626" },
+              { n: 2, label: t(E, "Scan adjacent pairs", "인접 쌍 스캔"), code: "for i in range(N \u2212 1): if a[i] == a[i+1]: result.add(a[i])", color: "#0891b2" },
+              { n: 3, label: t(E, "Print sorted (or \u22121)", "정렬 출력 (또는 \u22121)"), code: "for x in sorted(result): print(x)   # else print(\u22121)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "\u23f1 Complexity", "\u23f1 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "단일 선형 스캔")}</div>
           </div>
         </div>),
     },
