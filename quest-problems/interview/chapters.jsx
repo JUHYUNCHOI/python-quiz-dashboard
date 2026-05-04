@@ -89,17 +89,79 @@ export function makeInterviewCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First K cows go to counters 1..K immediately.\nAfter that, each cow waits for the earliest counter to finish, then goes there.", "처음 K마리는 카운터 1~K에 바로 들어가. 그 이후 소들은 가장 먼저 끝나는 카운터로!"),
+        "Watch how cows fill the 2 counters over time.\nThe key moment is t=5 — both counters free at the same time!",
+        "소들이 2개 카운터에 시간 순서로 들어가는 걸 봐.\n핵심은 t=5 — 두 카운터가 동시에 비는 순간!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#059669", marginBottom: 10 }}>
-              {t(E, "Example: N=5, K=2, times=[3,5,2,4,1]", "예시: N=5, K=2, times=[3,5,2,4,1]")}
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", marginBottom: 12, textAlign: "center" }}>
+              N=5, K=2, times=[3, 5, 2, 4, 1]
             </div>
-            <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 2, color: C.text }}>
-              {t(E,
-                "t=0: Cow1→C1(done@3), Cow2→C2(done@5)\nt=3: Cow3→C1(done@5)\nt=5: Cow4→C1 or C2 (tie!)\nCow5 goes to whichever is free first",
-                "t=0: 소1→C1(끝@3), 소2→C2(끝@5)\nt=3: 소3→C1(끝@5)\nt=5: 소4→C1 또는 C2 (동시!)\n소5는 먼저 비는 곳으로")}
+
+            {/* Timeline visualization: time on left, two counter columns on right */}
+            <div style={{ display: "flex", gap: 0, fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>
+              {/* Time axis */}
+              <div style={{ width: 40, display: "flex", flexDirection: "column", gap: 0, paddingRight: 8 }}>
+                {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(t => (
+                  <div key={t} style={{
+                    height: 28, display: "flex", alignItems: "center", justifyContent: "flex-end",
+                    fontSize: 10, color: t % 1 === 0 ? "#059669" : "#cbd5e1", fontWeight: 700,
+                  }}>t={t}</div>
+                ))}
+              </div>
+
+              {/* Counter 1 column: 소1 (t=0..3), 소3 (t=3..5), 소4 or 소5 (t=5..) */}
+              <div style={{ flex: 1, position: "relative", paddingRight: 4 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "#059669", textAlign: "center", marginBottom: 2 }}>C1</div>
+                {/* Cow 1: time 3, t=0..3 */}
+                <div style={{
+                  position: "absolute", top: 14, left: 0, right: 4, height: 28 * 3,
+                  background: "#fbbf24", border: "2px solid #d97706", borderRadius: 6,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 11, fontWeight: 800, color: "#7c2d12",
+                }}>🐄 소1<br/>(t=0→3)</div>
+                {/* Cow 3: time 2, t=3..5 */}
+                <div style={{
+                  position: "absolute", top: 14 + 28 * 3, left: 0, right: 4, height: 28 * 2,
+                  background: "#a7f3d0", border: "2px solid #10b981", borderRadius: 6,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 11, fontWeight: 800, color: "#064e3b",
+                }}>🐄 소3<br/>(t=3→5)</div>
+                {/* Tie marker at t=5 */}
+                <div style={{
+                  position: "absolute", top: 14 + 28 * 5, left: 0, right: 4, height: 4,
+                  background: "#dc2626", borderRadius: 2,
+                }} />
+              </div>
+
+              {/* Counter 2 column: 소2 (t=0..5), then ?? */}
+              <div style={{ flex: 1, position: "relative", paddingLeft: 4 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "#059669", textAlign: "center", marginBottom: 2 }}>C2</div>
+                {/* Cow 2: time 5, t=0..5 */}
+                <div style={{
+                  position: "absolute", top: 14, left: 4, right: 0, height: 28 * 5,
+                  background: "#bfdbfe", border: "2px solid #3b82f6", borderRadius: 6,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 11, fontWeight: 800, color: "#1e3a8a",
+                }}>🐄 소2<br/>(t=0→5)</div>
+                {/* Tie marker at t=5 */}
+                <div style={{
+                  position: "absolute", top: 14 + 28 * 5, left: 4, right: 0, height: 4,
+                  background: "#dc2626", borderRadius: 2,
+                }} />
+              </div>
+            </div>
+
+            {/* Tie callout */}
+            <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#dc2626", marginBottom: 4 }}>
+                {t(E, "🚨 At t=5: both C1 and C2 are free at the same time!", "🚨 t=5: C1과 C2가 동시에 비워짐!")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+                {t(E,
+                  "Cow 4 (the next in line) could go to either counter.\nSo if Cow 4 = Bessie, the answer is: 2 possible counters.",
+                  "다음 차례인 소 4는 둘 중 어디든 갈 수 있어.\n소 4가 베시라면 답은: 가능한 카운터 2개.")}
+              </div>
             </div>
           </div>
         </div>),
