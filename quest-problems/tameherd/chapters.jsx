@@ -51,16 +51,56 @@ export function makeTameHerdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A herd breaks out periodically.\nA counter starts at 0 on breakout day and increments daily.\nSome log entries are missing (-1).\nFind the number of breakouts!", "무리가 주기적으로 탈출해요. 카운터가 탈출 날 0에서 시작해 매일 증가해요. 일부 로그 항목이 누락(-1). 탈출 횟수를 구해요!"),
+        "FJ keeps a daily log: each day records 'days since last breakout'. The counter resets to 0 the day a breakout occurs and increments by 1 each day after. Some entries are missing, marked −1.\nPrint the MIN and MAX possible number of breakouts consistent with the log, or −1 if impossible.",
+        "FJ 가 매일 '마지막 탈출 이후 며칠인지' 를 기록해요. 탈출이 일어난 날에 카운터가 0 으로 리셋되고, 그 다음날부터 1 씩 증가해요. 일부 기록은 누락 (−1) 됐어요.\n로그와 일치하는 탈출 횟수의 최솟값과 최댓값을 출력해요. 불가능하면 −1."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Taming the Herd</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key: 0 in the log means a breakout happened that day.\nCount the 0s to find breakout count. Handle missing entries (-1) by checking consistency.",
-              "핵심: 로그의 0은 그날 탈출 발생.\n0의 개수가 탈출 횟수. 누락 항목(-1)은 일관성 확인으로 처리.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Taming the Herd</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has a daily log: ", "FJ 의 매일 기록: ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "'days since last breakout'", "'마지막 탈출 이후 일수'")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The counter ", "카운터는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "resets to 0 on a breakout day", "탈출 날에 0 으로 리셋")}</b>
+                  {t(E, " and increments by 1 each subsequent day.",
+                        " 되고, 그 다음날부터 1 씩 증가.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Some entries are ", "일부 기록은 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "missing (−1)", "누락 (−1)")}</b>
+                  {t(E, " — they could be any value.",
+                        " — 어떤 값이든 될 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MIN and MAX possible number of breakouts consistent with the log", "로그와 일치하는 탈출 횟수의 최솟값과 최댓값")}</b>
+                  {t(E, " (or −1 if impossible).", " 을 출력해요. 불가능하면 −1.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },

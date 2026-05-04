@@ -24,16 +24,38 @@ export function makeTichuCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Tichu is a card game.\nGiven N cards in hand, how many ways can you pick 2 cards to play as a pair?\nThis is a combinations problem: C(N, 2).", "티추는 카드 게임이예요. 손에 N장의 카드가 있을 때, 2장을 뽑아 페어로 낼 수 있는 방법은 몇 가지? 조합 문제: C(N, 2)."),
+        "In Tichu, a 'pair' is two cards of the same value chosen from your hand. You have N cards.\nPrint the number of distinct pairs you could possibly play (i.e., the number of ways to choose 2 of your N cards).",
+        "티추 카드 게임에서 '페어' 는 손에서 같은 값의 카드 2장이에요. 손에 N 장의 카드가 있어요.\n낼 수 있는 페어의 가짓수 (즉, N 장 중 2 장을 뽑는 가짓수) 를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udccf"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Tichu</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P4</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
-            {t(E,
-              "Key formula: C(N, 2) = N * (N-1) / 2.\nThis counts the number of unique pairs from N items.",
-              "핵심 공식: C(N, 2) = N * (N-1) / 2.\nN개 항목에서 고유한 쌍의 수를 세는 공식이예요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 14 }}>
+            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udccf"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Tichu</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P4</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You have a ", "손에 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "hand of N cards", "N 장의 카드")}</b>
+                  {t(E, ".", " 가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of ways to pick 2 cards from N", "N 장 중 2 장을 뽑는 가짓수")}</b>
+                  {t(E, ".", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
