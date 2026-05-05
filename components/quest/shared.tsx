@@ -38,7 +38,7 @@ export function Narration({ text, variant = "accent" }: NarrationProps) {
 
   return (
     <div
-      className={`rounded-xl border-2 px-2 sm:px-4 py-1.5 sm:py-2.5 text-[13px] sm:text-sm font-semibold leading-relaxed whitespace-pre-line mb-2 sm:mb-2.5 min-h-[36px] sm:min-h-[40px] font-sans ${variantClasses[variant]}`}
+      className={`rounded-xl border-2 px-2 sm:px-4 py-1.5 sm:py-2.5 text-[13px] sm:text-sm font-semibold leading-relaxed whitespace-pre-line break-keep mb-2 sm:mb-2.5 min-h-[36px] sm:min-h-[40px] font-sans ${variantClasses[variant]}`}
     >
       {shown}
     </div>
