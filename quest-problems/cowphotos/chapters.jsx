@@ -88,6 +88,79 @@ export function makeCowPhotosCh1(E) {
           </div>
         </div>),
     },
+    // 1-2: Hand-trace — frequency → pairs + optional peak
+    {
+      type: "reveal",
+      narr: t(E,
+        "Walk a small example. Count how many cows of each height we have, take pairs out (each pair becomes the symmetric left+right slot), and keep one extra as the peak if any height has an odd count.",
+        "작은 예시를 따라가요. 각 키의 소가 몇 마리인지 세고, 쌍씩 빼내서 (각 쌍 = 좌+우 대칭 자리), 어떤 키든 홀수가 있으면 1 마리를 가운데 정점으로 남겨요."),
+      content: (() => {
+        const heights = [1, 1, 2, 3, 3, 3, 4];
+        const freq = {};
+        heights.forEach(h => freq[h] = (freq[h] || 0) + 1);
+        let pairs = 0, leftover = false;
+        const rows = Object.keys(freq).sort((a, b) => +a - +b).map(h => {
+          const c = freq[h];
+          const p = Math.floor(c / 2);
+          const odd = c % 2 === 1;
+          pairs += p;
+          if (odd) leftover = true;
+          return { h: +h, count: c, pairs: p, odd };
+        });
+        const total = pairs * 2 + (leftover ? 1 : 0);
+        return (
+          <div style={{ padding: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 4 }}>
+              ✏️ {t(E, "Hand-trace on heights [1, 1, 2, 3, 3, 3, 4]", "키 [1, 1, 2, 3, 3, 3, 4] 손으로 따라가기")}
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 12 }}>
+              {t(E, "Goal: find the longest bitonic-symmetric photo with no adjacent dups.",
+                    "목표: 인접 중복 없는 가장 긴 바이토닉-대칭 사진.")}
+            </div>
+            {/* Per-height table */}
+            <div style={{ display: "grid", gridTemplateColumns: "60px 70px 70px 1fr", gap: "4px 8px", fontSize: 12, marginBottom: 12 }}>
+              <div style={{ fontWeight: 800, color: "#5b21b6" }}>{t(E, "height", "키")}</div>
+              <div style={{ fontWeight: 800, color: "#5b21b6", textAlign: "right" }}>{t(E, "count", "수")}</div>
+              <div style={{ fontWeight: 800, color: "#5b21b6", textAlign: "right" }}>{t(E, "pairs", "쌍")}</div>
+              <div style={{ fontWeight: 800, color: "#5b21b6" }}>{t(E, "leftover?", "남는 거?")}</div>
+              {rows.map((r, i) => (
+                <div key={i} style={{ display: "contents" }}>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#7c3aed" }}>{r.h}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", textAlign: "right" }}>{r.count}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, textAlign: "right", color: "#16a34a" }}>{r.pairs}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", color: r.odd ? "#dc2626" : C.dim }}>
+                    {r.odd ? `1 ${t(E, "extra (could be peak)", "남음 (정점 후보)")}` : t(E, "none", "없음")}
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* Result formula */}
+            <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
+                🧮 {t(E, "Formula", "공식")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono',monospace" }}>
+                total = 2 × pairs + (1 {t(E, "if any height has an odd count", "홀수 있으면")} else 0)<br/>
+                = 2 × {pairs} + {leftover ? 1 : 0} = <b style={{ color: "#16a34a", fontSize: 14 }}>{total}</b>
+              </div>
+            </div>
+            {/* One concrete arrangement */}
+            <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 4 }}>
+                {t(E, "One valid photo of length ", "길이 ")}{total}{t(E, ":", " 인 유효한 사진:")}
+              </div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 900, color: "#15803d", fontSize: 14 }}>
+                [1, 3, 4, 3, 1] {leftover ? "  (peak = 4)" : ""}
+              </div>
+              <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
+                {t(E, "Each pair (1,1) and (3,3) sits symmetrically on both sides; height 4 takes the peak.",
+                      "쌍 (1,1) 과 (3,3) 이 양쪽으로 대칭, 키 4 는 가운데 정점.")}
+              </div>
+            </div>
+          </div>
+        );
+      })(),
+    },
     {
       type: "quiz",
       narr: t(E,
