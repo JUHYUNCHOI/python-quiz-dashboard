@@ -175,6 +175,14 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const prevProblem = idx > 0 ? ALL_PROBLEMS[idx - 1] : null
   const nextProblem = idx < ALL_PROBLEMS.length - 1 ? ALL_PROBLEMS[idx + 1] : null
 
+  // Same-contest siblings (e.g. all "Dec 2024 Bronze" problems together)
+  const contestKey = (sub?: string) =>
+    (sub ?? "").replace(/\s*#\d+$/, "").replace(/\s*P\d+$/, "").trim()
+  const myContestKey = contestKey(meta?.sub)
+  const contestSiblings = myContestKey
+    ? ALL_PROBLEMS.filter(p => contestKey(p.sub) === myContestKey)
+    : []
+
   if (!meta) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -249,32 +257,70 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         )}
       </div>
 
-      {/* Prev / Next problem — 단정한 인라인 띠. 한 줄, 작은 폰트, 약한 색.
-          시작 전에 너무 두드러지면 진행 동력을 약하게 하므로 톤 다운. */}
-      <div className="border-b border-gray-200 px-3 py-1 flex items-center gap-2 text-[11px] text-gray-400">
+      {/* Prev / Next + same-contest jump dots + back-to-list */}
+      <div className="border-b border-gray-200 bg-amber-50/40 px-3 py-2 flex items-center gap-2 text-xs">
+        {/* Back-to-list */}
+        <button
+          onClick={() => router.push("/quest")}
+          className="flex items-center gap-1 px-2 py-1 rounded-md font-bold text-amber-800 hover:bg-amber-100 transition-colors flex-shrink-0"
+          title={t("문제 목록", "Quest list")}
+        >
+          ☰ <span className="hidden sm:inline">{t("목록", "List")}</span>
+        </button>
+        <div className="w-px h-5 bg-amber-300/50" />
+
+        {/* Prev problem */}
         {prevProblem ? (
           <button
             onClick={() => router.push(`/quest/${prevProblem.id}`)}
-            className="flex items-center gap-0.5 hover:text-gray-700 transition-colors min-w-0 truncate"
+            className="flex items-center gap-1 px-2 py-1 rounded-md font-semibold text-gray-700 hover:bg-amber-100 transition-colors min-w-0 truncate flex-shrink"
             title={prevProblem.title}
           >
-            <ChevronLeft size={12} />
+            <ChevronLeft size={14} className="flex-shrink-0" />
             <span className="truncate">{prevProblem.title}</span>
           </button>
-        ) : <div className="flex-1" />}
+        ) : <div className="flex-shrink" />}
 
         <div className="flex-1" />
 
+        {/* Same-contest dots — quick jump within the same contest */}
+        {contestSiblings.length > 1 && (
+          <div className="flex items-center gap-1 flex-shrink-0">
+            {contestSiblings.map((p) => {
+              const isCurrent = p.id === problemId
+              const numMatch = p.sub.match(/#(\d+)$/) || p.sub.match(/P(\d+)$/)
+              const num = numMatch?.[1] ?? "•"
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => router.push(`/quest/${p.id}`)}
+                  className={`w-7 h-7 rounded-full text-[11px] font-black transition-colors ${
+                    isCurrent
+                      ? "bg-amber-500 text-white"
+                      : "bg-white border border-amber-300 text-amber-700 hover:bg-amber-100"
+                  }`}
+                  title={p.title}
+                >
+                  {num}
+                </button>
+              )
+            })}
+          </div>
+        )}
+
+        <div className="flex-1" />
+
+        {/* Next problem */}
         {nextProblem ? (
           <button
             onClick={() => router.push(`/quest/${nextProblem.id}`)}
-            className="flex items-center gap-0.5 hover:text-gray-700 transition-colors min-w-0 truncate"
+            className="flex items-center gap-1 px-2 py-1 rounded-md font-semibold text-gray-700 hover:bg-amber-100 transition-colors min-w-0 truncate flex-shrink"
             title={nextProblem.title}
           >
             <span className="truncate">{nextProblem.title}</span>
-            <ChevronRight size={12} />
+            <ChevronRight size={14} className="flex-shrink-0" />
           </button>
-        ) : <div className="flex-1" />}
+        ) : <div className="flex-shrink" />}
       </div>
 
       {/* Problem App + (옵션) 원본 문제 iframe 반반 스크린.
