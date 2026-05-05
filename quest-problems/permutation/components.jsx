@@ -86,9 +86,22 @@ export function DismantleSimulator({ E }) {
   const cellStyle = (kind) => ({
     width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
     borderRadius: 7, fontWeight: 900, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
-    background: kind === "remove" ? "#fee2e2" : kind === "write" ? "#ede9fe" : kind === "final" ? "#dcfce7" : "#fff",
-    border: `2px solid ${kind === "remove" ? "#dc2626" : kind === "write" ? "#7c3aed" : kind === "final" ? "#16a34a" : "#c4b5fd"}`,
-    color: kind === "remove" ? "#7f1d1d" : kind === "write" ? "#5b21b6" : kind === "final" ? "#15803d" : "#5b21b6",
+    background:
+      kind === "remove" ? "#fee2e2" :
+      kind === "write" ? "#ede9fe" :
+      kind === "final" ? "#dcfce7" :
+      kind === "compare" ? "#fef3c7" : "#fff",
+    border: `3px solid ${
+      kind === "remove" ? "#dc2626" :
+      kind === "write" ? "#7c3aed" :
+      kind === "final" ? "#16a34a" :
+      kind === "compare" ? "#f59e0b" : "#c4b5fd"
+    }`,
+    color:
+      kind === "remove" ? "#7f1d1d" :
+      kind === "write" ? "#5b21b6" :
+      kind === "final" ? "#15803d" :
+      kind === "compare" ? "#92400e" : "#5b21b6",
     textDecoration: kind === "remove" ? "line-through" : "none",
     transition: "all .2s",
   });
@@ -104,18 +117,45 @@ export function DismantleSimulator({ E }) {
       </div>
 
       {/* Cells row */}
-      <div style={{ display: "flex", gap: 4, justifyContent: "center", alignItems: "center", marginBottom: 12, minHeight: 64 }}>
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", alignItems: "center", marginBottom: 12, minHeight: 76 }}>
         {s.p.map((v, i) => {
-          const kind = s.sub === "done" ? "final" :
-                       i === s.removeIdx ? "remove" :
-                       i === s.writeIdx ? "write" : "neutral";
+          // Sub-step-aware highlighting:
+          // - compare: highlight FIRST (i=0) and LAST (i=p.length-1) in yellow
+          // - apply: highlight removeIdx (red) and writeIdx (purple)
+          // - done: all final-green
+          const isFirst = i === 0;
+          const isLast = i === s.p.length - 1;
+          let kind = "neutral";
+          let labelTop = "";
+          let labelBottom = "";
+          if (s.sub === "done") {
+            kind = "final";
+          } else if (s.sub === "compare") {
+            if (isFirst || isLast) {
+              kind = "compare";
+              labelTop = isFirst ? "first" : "last";
+            }
+          } else if (s.sub === "apply" || s.sub === "init") {
+            // apply uses last-recorded removeIdx/writeIdx (which are null after splice)
+            // → no highlight on apply; cells just show post-state
+          }
+          // Edge case: compare sub-step still wants to mark which one will be removed/written.
+          // We layer that as a small below-cell hint.
+          if (s.sub === "compare") {
+            if (i === s.removeIdx) labelBottom = "× will remove";
+            else if (i === s.writeIdx) labelBottom = "✏ will write";
+          }
           return (
             <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-              <div style={{ fontSize: 9, height: 12, fontWeight: 800,
-                color: kind === "remove" ? "#dc2626" : kind === "write" ? "#7c3aed" : "transparent" }}>
-                {kind === "remove" ? "× remove" : kind === "write" ? "✏️ write" : "·"}
+              <div style={{ fontSize: 10, height: 14, fontWeight: 800,
+                color: kind === "compare" ? "#92400e" : "transparent" }}>
+                {labelTop || "·"}
               </div>
               <div style={cellStyle(kind)}>{v}</div>
+              <div style={{ fontSize: 9, height: 14, fontWeight: 800, marginTop: 2,
+                color: labelBottom.startsWith("×") ? "#dc2626" : labelBottom.startsWith("✏") ? "#7c3aed" : "transparent" }}>
+                {labelBottom || "·"}
+              </div>
             </div>
           );
         })}
