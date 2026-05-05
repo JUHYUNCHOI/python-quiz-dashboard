@@ -125,12 +125,12 @@ OUTPUT firstName & lastName
 \`\`\`
 DECLARE score : INTEGER
 score ← 100
-OUTPUT "당신의 점수는 " & score & "점입니다!"
+OUTPUT "점수는 " & score & "점입니다!"
 \`\`\`
 
 결과:
 \`\`\`
-당신의 점수는 100점입니다!
+점수는 100점이에요!
 \`\`\`
 
 **&** 덕분에 멋진 문장을 만들 수 있어요! ✨`

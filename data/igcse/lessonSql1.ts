@@ -23,7 +23,7 @@ export const igcseLessonSql1Data: LessonData = {
           title: "🔍 Products 테이블과 SQL 기초",
           content: `IGCSE Paper 2에서 **SQL** 문제는 거의 매번 나와요!
 
-이 레슨에서는 아래 **Products** 테이블을 사용합니다:
+이 레슨에서는 아래 **Products** 테이블을 사용해요:
 
 \`\`\`
 | ProductID | ProductName | Category    | Price  | InStock | SupplierCode |

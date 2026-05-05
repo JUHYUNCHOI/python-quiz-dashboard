@@ -418,7 +418,7 @@ Total + i] Total]      |
         {
           id: "ch3-quiz1",
           type: "quiz",
-          title: "🧠 수도코드 매칭!",
+          title: "🧠 수도코드 짝 맞추기!",
           content: `다음 플로우차트에 대응하는 올바른 수도코드는?
 
 \`\`\`

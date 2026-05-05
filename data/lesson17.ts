@@ -267,7 +267,7 @@ for name, score in zip(names, scores):
             "에러 발생"
           ],
           answer: 0,
-          explanation: "zip은 같은 위치끼리 짝지어요! 첫번째끼리 ('a',1), 두번째끼리 ('b',2)!"
+          explanation: "zip은 같은 위치끼리 짝지어요! 첫 번째끼리 ('a',1), 두 번째끼리 ('b',2)!"
         }
       ]
     },

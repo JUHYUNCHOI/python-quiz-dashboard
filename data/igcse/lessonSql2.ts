@@ -133,7 +133,7 @@ WHERE House = 'Red';
             "95"
           ],
           answer: 0,
-          explanation: `Red House 학생들의 Score를 평균내요:
+          explanation: `Red House 학생 Score 평균을 구해요:
 
 - Alice: 85
 - Charlie: 91
@@ -147,7 +147,7 @@ AVG = (85 + 91 + 95) / 3 = 271 / 3 = **90.33...**
           id: "ch1-fill1",
           type: "fillblank",
           title: "Blue House 합계 구하기",
-          content: `Blue House 학생들의 총 점수를 구하는 SQL을 완성하세요.
+          content: `Blue House 학생 총 점수를 구하는 SQL을 완성하세요.
 
 💡 Blue House: Bob(72), Edward(78), Hannah(88) → 합계 = 238`,
           code: "SELECT ___(Score)\nFROM Students\nWHERE ___ = 'Blue';",

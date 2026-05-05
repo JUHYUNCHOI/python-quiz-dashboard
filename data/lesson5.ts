@@ -17,7 +17,7 @@ export const lesson5Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🔗 문자열도 더할 수 있어!",
+          title: "🔗 문자열도 더할 수 있어요!",
           content: `숫자만 더할 수 있다고요? 문자열도 더할 수 있어요!
 
 \`\`\`python
