@@ -76,12 +76,12 @@ export function makeHpsCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Sample input / output format
+    // 1-2: Sample input / output format — concrete RPS example
     {
       type: "reveal",
       narr: t(E,
-        "Sample input — first line N M, then N rows of the beats chart, then M Elsie pairs. For each pair print one number (count of Bessie's winning pairs).",
-        "샘플 입력 — 첫 줄 N M, 그 다음 N 줄로 승패 차트, 그 다음 M 줄로 엘시 쌍. 각 쌍마다 한 수 (베시의 승리 보장 쌍 개수) 출력."),
+        "A small concrete sample: 3 cards (rock/paper/scissors) and 1 query. Read the input top-to-bottom and you'll see exactly what each line means.",
+        "작은 예시: 카드 3 종 (가위·바위·보), 쿼리 1 개. 입력을 위에서 아래로 읽으면 각 줄이 무슨 뜻인지 보여요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", textAlign: "center", marginBottom: 10 }}>
@@ -91,36 +91,43 @@ export function makeHpsCh1(E) {
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
-{`3 2
-0010
-1001
-0101
-1010
-1 2
-2 3`}
+{`3 1
+001
+100
+010
+1 3`}
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`5
-5`}
+{`2`}
               </div>
             </div>
           </div>
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
             <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
-              🔍 {t(E, "Reading the input", "입력 읽기")}
+              🔍 {t(E, "Line by line", "한 줄씩")}
             </div>
-            <div><b>3 2</b> — {t(E, "N=3 symbols (rock/paper/scissors), M=2 queries", "N=3 기호 (가위바위보), M=2 쿼리")}</div>
-            <div style={{ marginTop: 4 }}>{t(E, "Next 3 rows = beats matrix. Row i tells which symbols i beats:", "다음 3 줄 = 승패 차트. i 번째 줄은 i 가 이기는 기호:")}</div>
-            <div style={{ marginLeft: 8, fontSize: 11, color: "#475569" }}>
-              <code>0010</code> {t(E, "→ symbol 1 only beats symbol 3 (rock beats scissors)", "→ 기호 1 은 기호 3 만 이김 (바위가 가위)")}<br/>
-              <code>1001</code> {t(E, "→ symbol 2 beats 1 and 4? wait — chart includes one extra symbol in this example", "→ 이 예시에선 1 과 4 를 이김")}
-            </div>
+            <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>3 1</code> — {t(E, "N = 3 cards, M = 1 Elsie query", "N = 3 종 카드, M = 1 개 엘시 쿼리")}</div>
             <div style={{ marginTop: 6 }}>
-              {t(E, "After the chart, M lines each give 2 numbers s1 s2 = Elsie's pair. Print one count per query.",
-                    "차트 다음에 M 줄, 각각 두 수 s1 s2 = 엘시의 쌍. 각 쿼리마다 한 수 출력.")}
+              {t(E, "Next 3 lines = beats chart. Line i has N digits; the j-th digit is 1 if card i beats card j (else 0).",
+                    "다음 3 줄 = 승패 차트. i 번째 줄에 N 자리 — j 번째 자리가 1 이면 카드 i 가 카드 j 를 이김 (아니면 0).")}
+            </div>
+            <div style={{ marginLeft: 8, marginTop: 4, fontSize: 11, color: "#475569", fontFamily: "'JetBrains Mono',monospace" }}>
+              <code>001</code> = {t(E, "card 1 (rock) beats card 3 (scissors)", "카드 1 (바위) 가 카드 3 (가위) 을 이김")}<br/>
+              <code>100</code> = {t(E, "card 2 (paper) beats card 1 (rock)", "카드 2 (보) 가 카드 1 (바위) 를 이김")}<br/>
+              <code>010</code> = {t(E, "card 3 (scissors) beats card 2 (paper)", "카드 3 (가위) 가 카드 2 (보) 를 이김")}
+            </div>
+            <div style={{ marginTop: 8 }}>
+              {t(E, "Then M lines = Elsie's hands. ", "그 다음 M 줄 = 엘시의 hand. ")}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 3</code>{" "}
+              {t(E, "= Elsie's hand is {rock, scissors}.", "= 엘시 hand 는 {바위, 가위}.")}
+            </div>
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+              <b style={{ color: "#15803d" }}>{t(E, "Why answer = 2?", "왜 답이 2?")}</b>{" "}
+              {t(E, "Bessie needs an answer to BOTH rock and scissors. Rock is beaten by paper; scissors is beaten by rock. So Bessie's hand must include {paper, rock} (in either order). The 2 winning hands are (paper, rock) and (rock, paper) — the answer counts ordered pairs.",
+                    "베시는 바위와 가위 둘 다 답이 있어야 함. 바위는 보가 이김, 가위는 바위가 이김. 그러니까 베시 hand 는 {보, 바위} 여야 함 (순서 무관). 정답 hand 는 (보, 바위) 와 (바위, 보) 두 가지 — 정답은 ordered pair 로 카운트.")}
             </div>
           </div>
         </div>),
