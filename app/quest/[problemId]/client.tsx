@@ -205,14 +205,14 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
       <Header />
 
       {/* Breadcrumb: USACO · Dec 2024 Bronze #2 + done button */}
-      <div className="bg-white border-b-2 border-black px-3 py-2 sticky top-[57px] z-30 flex items-center gap-2">
+      <div className="bg-white border-b border-gray-300 px-3 py-1 sticky top-[57px] z-30 flex items-center gap-2">
         <Link href="/quest" className="text-gray-400 hover:text-gray-700 flex-shrink-0" title={t("문제 목록", "Problem list")}>
-          <ChevronLeft size={18} />
+          <ChevronLeft size={16} />
         </Link>
         <div className="flex-1 min-w-0">
-          <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">{meta.section}</span>
-          <span className="text-gray-300 mx-1.5">·</span>
-          <span className="text-xs font-semibold text-gray-700 truncate">{meta.sub}</span>
+          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">{meta.section}</span>
+          <span className="text-gray-300 mx-1">·</span>
+          <span className="text-[11px] font-semibold text-gray-700 truncate">{meta.sub}</span>
         </div>
         {/* 원래 문제 — 반반 스크린 토글 (md 이상) + 새 탭 열기 */}
         <button
@@ -258,26 +258,16 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
       </div>
 
       {/* Prev / Next + same-contest jump dots + back-to-list */}
-      <div className="border-b border-gray-200 bg-amber-50/40 px-3 py-2 flex items-center gap-2 text-xs">
-        {/* Back-to-list */}
-        <button
-          onClick={() => router.push("/quest")}
-          className="flex items-center gap-1 px-2 py-1 rounded-md font-bold text-amber-800 hover:bg-amber-100 transition-colors flex-shrink-0"
-          title={t("문제 목록", "Quest list")}
-        >
-          ☰ <span className="hidden sm:inline">{t("목록", "List")}</span>
-        </button>
-        <div className="w-px h-5 bg-amber-300/50" />
-
+      <div className="border-b border-gray-200 bg-amber-50/30 px-3 py-0.5 flex items-center gap-1 text-[11px]">
         {/* Prev problem */}
         {prevProblem ? (
           <button
             onClick={() => router.push(`/quest/${prevProblem.id}`)}
-            className="flex items-center gap-1 px-2 py-1 rounded-md font-semibold text-gray-700 hover:bg-amber-100 transition-colors min-w-0 truncate flex-shrink"
+            className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-semibold text-gray-600 hover:bg-amber-100 hover:text-amber-800 transition-colors min-w-0 truncate flex-shrink"
             title={prevProblem.title}
           >
-            <ChevronLeft size={14} className="flex-shrink-0" />
-            <span className="truncate">{prevProblem.title}</span>
+            <ChevronLeft size={12} className="flex-shrink-0" />
+            <span className="truncate hidden sm:inline">{prevProblem.title}</span>
           </button>
         ) : <div className="flex-shrink" />}
 
@@ -294,7 +284,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                 <button
                   key={p.id}
                   onClick={() => router.push(`/quest/${p.id}`)}
-                  className={`w-7 h-7 rounded-full text-[11px] font-black transition-colors ${
+                  className={`w-5 h-5 rounded-full text-[10px] font-black transition-colors ${
                     isCurrent
                       ? "bg-amber-500 text-white"
                       : "bg-white border border-amber-300 text-amber-700 hover:bg-amber-100"
@@ -314,11 +304,11 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         {nextProblem ? (
           <button
             onClick={() => router.push(`/quest/${nextProblem.id}`)}
-            className="flex items-center gap-1 px-2 py-1 rounded-md font-semibold text-gray-700 hover:bg-amber-100 transition-colors min-w-0 truncate flex-shrink"
+            className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-semibold text-gray-600 hover:bg-amber-100 hover:text-amber-800 transition-colors min-w-0 truncate flex-shrink"
             title={nextProblem.title}
           >
-            <span className="truncate">{nextProblem.title}</span>
-            <ChevronRight size={14} className="flex-shrink-0" />
+            <span className="truncate hidden sm:inline">{nextProblem.title}</span>
+            <ChevronRight size={12} className="flex-shrink-0" />
           </button>
         ) : <div className="flex-shrink" />}
       </div>
