@@ -154,15 +154,15 @@ export function DismantleSimulator({ E }) {
             const inCompareStages = (s.sub === "compare-mark" || s.sub === "decide-bigger" ||
                                      s.sub === "mark-remove" || s.sub === "mark-write");
             if (inCompareStages && (isFirst || isLast)) {
-              labelTop = isFirst ? "first" : "last";
+              labelTop = isFirst ? t(E, "first", "맨 앞") : t(E, "last", "맨 뒤");
             }
             // Cell color
             if (i === s.removeIdx) {
               kind = "remove";
-              labelBottom = "× will remove";
+              labelBottom = t(E, "× will remove", "× 빠질 칸");
             } else if (i === s.writeIdx) {
               kind = "write";
-              labelBottom = "✏ will write";
+              labelBottom = t(E, "✏ will write", "✏ 적힐 칸");
             } else if (inCompareStages && (isFirst || isLast)) {
               kind = "compare";
             }
