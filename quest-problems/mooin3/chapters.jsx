@@ -297,10 +297,91 @@ export function makeMooin3Ch2(E, lang = "py") {
           </div>
         </div>),
     },
+    // 2-2: Will it TLE? Check the constraints
+    {
+      type: "reveal",
+      narr: t(E,
+        "Will the brute force fit in time? With N, Q up to 10^5 each, the brute is roughly 10^10 operations — way over 1 second. We need a smarter idea.",
+        "브루트포스가 시간 안에 들어올까? N, Q 가 최대 10^5 면 대략 10^10 연산 — 1 초 한참 초과. 더 똑똑한 방법 필요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
+            🚨 {t(E, "TLE check", "타임아웃 체크")}
+          </div>
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 14px", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#7f1d1d" }}>
+              <div style={{ fontWeight: 800 }}>N, Q</div>          <div>≤ 10⁵</div>
+              <div style={{ fontWeight: 800 }}>per query</div>      <div>O(N²) ≈ 10¹⁰ scans worst case</div>
+              <div style={{ fontWeight: 800 }}>total</div>          <div>Q × N² ≈ 10¹⁵ — needs years</div>
+              <div style={{ fontWeight: 800, color: "#dc2626" }}>판정</div>
+              <div style={{ color: "#dc2626", fontWeight: 800 }}>TLE — 1 초 안 나옴</div>
+            </div>
+          </div>
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+              💡 {t(E, "Where can we cut?", "어디서 줄일 수 있을까?")}
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              {t(E, "For a fixed j we did TWO inner loops (find leftmost different i, find rightmost same k). If we knew those answers in O(1), each query becomes O(N) instead of O(N²).",
+                    "j 고정 시 안쪽 루프 2 개 (왼쪽 다른 i 찾기, 오른쪽 같은 k 찾기) 가 있어요. 이 두 답을 O(1) 로 알 수 있다면, 각 쿼리가 O(N²) 대신 O(N) 으로 줄어요.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 2-3: Pattern — precompute prev_diff and next_same
+    {
+      type: "reveal",
+      narr: t(E,
+        "The two inner scans are the same answer for many j values. Precompute them ONCE for the whole string, then each query reads them in O(1).",
+        "안쪽 두 스캔은 사실 j 가 달라도 답이 같은 경우가 많아요. 문자열 전체에 대해 한 번만 미리 계산해두면, 각 쿼리는 O(1) 로 읽기만."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
+            ⚡ {t(E, "Idea: precompute two helper arrays", "아이디어: 보조 배열 2 개 미리 계산")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: "10px 12px" }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+                {t(E, "prev_diff_pos[c][j]", "prev_diff_pos[c][j]")}
+              </div>
+              <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6 }}>
+                {t(E, "For character c and index j: the LARGEST i ≤ j where s[i] ≠ c. Sweep left→right once.",
+                      "문자 c 와 인덱스 j 에 대해: s[i] ≠ c 인 가장 큰 i ≤ j. 왼→오 한 번 스윕.")}
+              </div>
+            </div>
+            <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
+                {t(E, "next_same_pos[c][j]", "next_same_pos[c][j]")}
+              </div>
+              <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6 }}>
+                {t(E, "For character c and index j: the SMALLEST k ≥ j where s[k] == c. Sweep right→left once.",
+                      "문자 c 와 인덱스 j 에 대해: s[k] == c 인 가장 작은 k ≥ j. 오→왼 한 번 스윕.")}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+              📐 {t(E, "Per-query plan", "쿼리당 처리")}
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono',monospace" }}>
+              {t(E, "for each j in (l, r):", "for each j in (l, r):")}<br/>
+              {"  "}c = s[j]<br/>
+              {"  "}left  = {t(E, "leftmost i ≥ l with s[i] ≠ c", "l 이상의 가장 작은 i, s[i] ≠ c")}<br/>
+              {"  "}right = {t(E, "rightmost k ≤ r with s[k] = c", "r 이하의 가장 큰 k, s[k] = c")}<br/>
+              {"  "}best = max(best, (j − left) × (right − j))
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: "#5b21b6", fontWeight: 700, textAlign: "center" }}>
+              {t(E, "→ Per query: O(N).  Total: O(N · 26 + Q · N)  ≈ 10⁷  ✓ fits.",
+                    "→ 쿼리당 O(N). 총 O(N · 26 + Q · N) ≈ 10⁷ ✓ OK.")}
+            </div>
+          </div>
+        </div>),
+    },
     {
       type: "progressive",
       narr: t(E,
-        "Now build the brute-force solution step by step.", "완전탐색을 단계별로 만들자."),
+        "Now build the solution step by step (brute-force version — see Ch2 step 3 for the optimized idea).",
+        "단계별로 풀이 작성 (브루트 버전 — 최적화 아이디어는 Ch2 의 3단계 참고)."),
       sections: getMooin3Sections(E),
     },
   ];
