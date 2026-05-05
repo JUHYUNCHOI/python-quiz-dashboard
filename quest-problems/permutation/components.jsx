@@ -756,7 +756,7 @@ export function PermProgressiveCode({ E, lang = "py", sections }) {
           )}
         </div>
         <div style={{ borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
-          <CodeBlock lines={code} />
+          <CodeBlock lines={code} lang={lang} />
         </div>
       </div>
 

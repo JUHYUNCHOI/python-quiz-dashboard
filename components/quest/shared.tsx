@@ -215,33 +215,79 @@ export function TextInput({ question, hint, answer, E, onSolve }: TextInputProps
 
 // ── Syntax highlighting helper ────────────────────────────────────────────────
 
-export function highlight(line: string): React.ReactNode[] {
-  const keywords = [
-    "def", "return", "for", "if", "else", "elif", "while", "import", "from",
-    "in", "range", "not", "and", "or", "True", "False", "None", "print",
-    "int", "map", "input", "split", "len", "all", "abs", "round",
-  ]
+const PY_KEYWORDS = new Set([
+  "def", "return", "for", "if", "else", "elif", "while", "import", "from",
+  "in", "not", "and", "or", "True", "False", "None", "lambda", "class",
+  "with", "as", "try", "except", "finally", "raise", "yield", "is",
+  "break", "continue", "pass", "global", "nonlocal",
+])
+const PY_BUILTINS = new Set([
+  "print", "input", "range", "len", "sum", "max", "min", "abs", "round",
+  "int", "str", "list", "dict", "set", "tuple", "map", "filter", "sorted",
+  "reversed", "enumerate", "zip", "all", "any", "open", "type", "isinstance",
+  "chr", "ord", "bool", "float", "split", "join",
+])
+
+const CPP_KEYWORDS = new Set([
+  "int", "long", "short", "double", "float", "char", "bool", "void",
+  "auto", "const", "static", "struct", "class", "public", "private",
+  "protected", "namespace", "using", "return", "if", "else", "for",
+  "while", "do", "break", "continue", "switch", "case", "default",
+  "true", "false", "nullptr", "new", "delete", "this", "template",
+  "typename", "typedef", "sizeof", "include", "main",
+])
+const CPP_BUILTINS = new Set([
+  "vector", "string", "map", "set", "pair", "tuple", "queue", "stack",
+  "deque", "priority_queue", "unordered_map", "unordered_set",
+  "cout", "cin", "endl", "ios", "iostream", "std", "sort", "swap",
+  "max", "min", "abs", "next_permutation", "iota", "find", "count",
+  "lower_bound", "upper_bound", "begin", "end", "size", "empty",
+  "push_back", "pop_back", "push_front", "pop_front", "insert", "erase",
+  "clear", "front", "back", "first", "second", "to_string", "stoi",
+  "make_pair", "make_tuple", "get", "tie", "fill",
+])
+
+export function highlight(line: string, lang: "py" | "cpp" = "py"): React.ReactNode[] {
+  const keywords = lang === "cpp" ? CPP_KEYWORDS : PY_KEYWORDS
+  const builtins = lang === "cpp" ? CPP_BUILTINS : PY_BUILTINS
+  const commentMark = lang === "cpp" ? "//" : "#"
+
   const parts: React.ReactNode[] = []
   let rest = line
-  const commentIdx = rest.indexOf("#")
+  // C++ also has /* … */ but we keep it simple; line-level // covers most.
+  const commentIdx = rest.indexOf(commentMark)
   let comment = ""
   if (commentIdx >= 0) { comment = rest.slice(commentIdx); rest = rest.slice(0, commentIdx) }
+
+  // C++ preprocessor (#include, #define) — color whole token
+  if (lang === "cpp") {
+    const ppm = rest.match(/^(\s*)(#\w+)/)
+    if (ppm) {
+      parts.push(<span key="ws">{ppm[1]}</span>)
+      parts.push(<span key="pp" style={{ color: "#c792ea" }}>{ppm[2]}</span>)
+      rest = rest.slice(ppm[0].length)
+    }
+  }
 
   const re = /(\b\w+\b|"[^"]*"|'[^']*'|\d+|[^\w\s]|\s+)/g
   let m: RegExpExecArray | null
   while ((m = re.exec(rest)) !== null) {
     const tok = m[0]
-    if (keywords.includes(tok))
-      parts.push(<span key={m.index} style={{ color: "#c084fc" }}>{tok}</span>)
-    else if (/^\d+$/.test(tok))
-      parts.push(<span key={m.index} style={{ color: "#fbbf24" }}>{tok}</span>)
+    if (keywords.has(tok))
+      parts.push(<span key={`${m.index}k`} style={{ color: "#c792ea" }}>{tok}</span>)
+    else if (builtins.has(tok))
+      parts.push(<span key={`${m.index}b`} style={{ color: "#82aaff" }}>{tok}</span>)
+    else if (/^\d/.test(tok))
+      parts.push(<span key={`${m.index}n`} style={{ color: "#f9a825" }}>{tok}</span>)
     else if (/^["']/.test(tok))
-      parts.push(<span key={m.index} style={{ color: "#34d399" }}>{tok}</span>)
+      parts.push(<span key={`${m.index}s`} style={{ color: "#a5d6a7" }}>{tok}</span>)
+    else if ("=<>!+-*/%&|^~".includes(tok[0]) && tok.length <= 3)
+      parts.push(<span key={`${m.index}o`} style={{ color: "#89ddff" }}>{tok}</span>)
     else
-      parts.push(<span key={m.index} style={{ color: "#f8fafc" }}>{tok}</span>)
+      parts.push(<span key={`${m.index}t`} style={{ color: "#e2e8f0" }}>{tok}</span>)
   }
   if (comment)
-    parts.push(<span key="cmt" style={{ color: "#94a3b8", fontStyle: "italic" }}>{comment}</span>)
+    parts.push(<span key="cmt" style={{ color: "#6b7280", fontStyle: "italic" }}>{comment}</span>)
   return parts
 }
 
@@ -249,9 +295,10 @@ export function highlight(line: string): React.ReactNode[] {
 
 interface CodeBlockProps {
   lines: string[]
+  lang?: "py" | "cpp"
 }
 
-export function CodeBlock({ lines }: CodeBlockProps) {
+export function CodeBlock({ lines, lang = "py" }: CodeBlockProps) {
   return (
     <div className="bg-gray-900 rounded-xl px-3 py-3 overflow-x-auto text-[13px] leading-relaxed font-mono">
       {lines.map((l, i) => (
@@ -259,7 +306,7 @@ export function CodeBlock({ lines }: CodeBlockProps) {
           <span className="text-gray-500 w-7 text-right mr-2.5 flex-shrink-0 select-none text-[11px]">
             {i + 1}
           </span>
-          <span style={{ whiteSpace: "pre" }}>{highlight(l)}</span>
+          <span style={{ whiteSpace: "pre" }}>{highlight(l, lang)}</span>
         </div>
       ))}
     </div>
