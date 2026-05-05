@@ -250,6 +250,35 @@ export function makeHpsCh2(E, lang = "py") {
           </div>
         </div>),
     },
+    // 2-2: TLE check — does brute force fit?
+    {
+      type: "reveal",
+      narr: t(E,
+        "Will the brute force be fast enough? Look at the constraints and multiply out.",
+        "브루트포스가 시간 안에 들어올까? 제약 보고 곱해 봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
+            ✅ {t(E, "TLE check — this one passes", "타임아웃 체크 — 이 문제는 통과")}
+          </div>
+          <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 14px", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>
+              <div style={{ fontWeight: 800 }}>N</div>     <div>≤ 30 (symbols)</div>
+              <div style={{ fontWeight: 800 }}>M</div>     <div>≤ 10⁵ (queries)</div>
+              <div style={{ fontWeight: 800 }}>per query</div> <div>O(N²) = 900</div>
+              <div style={{ fontWeight: 800 }}>total</div> <div>M · N² ≈ 10⁵ · 900 ≈ 10⁸</div>
+              <div style={{ fontWeight: 800, color: "#16a34a" }}>판정</div>
+              <div style={{ color: "#16a34a", fontWeight: 800 }}>{t(E, "Fits comfortably in 1s ✓", "1 초 안에 충분 ✓")}</div>
+            </div>
+          </div>
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              {t(E, "Because N is tiny (≤30), the inner double loop over (a, b) is only 900 work per query. Brute force IS the final solution — no extra optimization needed.",
+                    "N 이 작아서 (≤30) (a, b) 두 중첩 루프가 쿼리당 겨우 900 연산. 브루트포스가 곧 최종 답 — 추가 최적화 불필요.")}
+            </div>
+          </div>
+        </div>),
+    },
     {
       type: "progressive",
       narr: t(E,

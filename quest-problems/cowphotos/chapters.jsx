@@ -225,6 +225,36 @@ export function makeCowPhotosCh2(E, lang = "py") {
           </div>
         </div>),
     },
+    // 2-2: TLE check — does this fit?
+    {
+      type: "reveal",
+      narr: t(E,
+        "Does the frequency approach fit in time? Check the constraints — for cowphotos brute over arrangements would be exponential, so the formula is the saving grace.",
+        "빈도 방식이 시간 안에 들어올까? 제약 봐요. 만약 모든 배열을 시도하는 브루트라면 지수 — 그래서 공식이 답이에요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
+            ✅ {t(E, "TLE check — formula passes easily", "타임아웃 체크 — 공식은 여유 통과")}
+          </div>
+          <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 14px", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>
+              <div style={{ fontWeight: 800 }}>N</div>     <div>{t(E, "≤ 10⁵ heights per test, T ≤ 10 tests", "테스트당 ≤ 10⁵, T ≤ 10")}</div>
+              <div style={{ fontWeight: 800 }}>{t(E, "brute (try all arrangements)", "모든 배열 브루트")}</div>
+              <div style={{ color: "#dc2626" }}>{t(E, "≈ N! permutations — impossible", "≈ N! 순열 — 불가능")}</div>
+              <div style={{ fontWeight: 800 }}>{t(E, "frequency formula", "빈도 공식")}</div>
+              <div>O(N) per test → {t(E, "total ≈ 10⁶", "총 ≈ 10⁶")}</div>
+              <div style={{ fontWeight: 800, color: "#16a34a" }}>판정</div>
+              <div style={{ color: "#16a34a", fontWeight: 800 }}>{t(E, "Formula is the only feasible plan ✓", "공식 외에는 답이 없음 ✓")}</div>
+            </div>
+          </div>
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              {t(E, "💡 Key insight: we don't need to BUILD the photo, just count its length. The pair-counting formula gives the answer in O(N) without enumerating arrangements.",
+                    "💡 핵심: 사진을 만들 필요 X, 길이만 세면 됨. 쌍 세기 공식이 배열 안 만들고 O(N) 으로 답.")}
+            </div>
+          </div>
+        </div>),
+    },
     {
       type: "progressive",
       narr: t(E,
