@@ -323,12 +323,48 @@ export default function QuestPage() {
     const map = new Map<string, Problem[]>()
     for (const p of problems) {
       // sub format: "Dec 2024 Bronze #1" or "MCC 2024 P1"
-      // group key = everything before the #N or PN
       const key = p.sub.replace(/\s*#\d+$/, "").replace(/\s*P\d+$/, "").trim()
       if (!map.has(key)) map.set(key, [])
       map.get(key)!.push(p)
     }
     return Array.from(map.entries()).map(([contest, items]) => ({ contest, items }))
+  }
+
+  // ── Parse season from a USACO contest label ──
+  // USACO season runs Dec → Open of the following year:
+  //   Dec 2024, Jan 2025, Feb 2025, Open 2025  →  "2024-2025 Season"
+  //   Dec 2023, Jan 2024, Feb 2024, Open 2024  →  "2023-2024 Season"
+  function seasonFromContest(contest: string): string {
+    const m = contest.match(/^(Dec|Jan|Feb|Open)\s+(\d{4})/)
+    if (!m) return contest // not a USACO season — fall back
+    const month = m[1]
+    const year = parseInt(m[2], 10)
+    const startYear = month === "Dec" ? year : year - 1
+    return `${startYear}-${startYear + 1} Season`
+  }
+
+  // Group USACO contests by season
+  function groupBySeason(groups: { contest: string; items: Problem[] }[]):
+    { season: string; contests: { contest: string; items: Problem[] }[] }[] {
+    const seasonMap = new Map<string, { contest: string; items: Problem[] }[]>()
+    for (const g of groups) {
+      const season = seasonFromContest(g.contest)
+      if (!seasonMap.has(season)) seasonMap.set(season, [])
+      seasonMap.get(season)!.push(g)
+    }
+    // Sort seasons descending (newest first), and contests within each
+    // descending (Open > Feb > Jan > Dec).
+    const order: Record<string, number> = { Open: 4, Feb: 3, Jan: 2, Dec: 1 }
+    const seasons = Array.from(seasonMap.entries()).map(([season, contests]) => {
+      contests.sort((a, b) => {
+        const am = a.contest.match(/^(\w+)/)?.[1] ?? ""
+        const bm = b.contest.match(/^(\w+)/)?.[1] ?? ""
+        return (order[bm] ?? 0) - (order[am] ?? 0)
+      })
+      return { season, contests }
+    })
+    seasons.sort((a, b) => b.season.localeCompare(a.season))
+    return seasons
   }
 
   // Badge color per problem number within contest
@@ -400,10 +436,29 @@ export default function QuestPage() {
                   <span className="text-gray-400 font-bold text-lg">{isExpanded ? "▲" : "▼"}</span>
                 </button>
 
-                {/* Contest-grouped problem list */}
+                {/* Contest-grouped problem list (USACO additionally wraps by Season) */}
                 {isExpanded && (
                   <div className="border-t-2 border-black">
-                    {groups.map(({ contest, items }) => {
+                    {(section.label === "USACO"
+                      ? groupBySeason(groups)
+                      : [{ season: "", contests: groups }]
+                    ).map(({ season, contests }) => {
+                      const seasonSolved = contests.reduce(
+                        (a, c) => a + c.items.filter(p => solvedSet.has(p.id)).length, 0)
+                      const seasonTotal  = contests.reduce((a, c) => a + c.items.length, 0)
+                      return (
+                        <div key={season || "all"}>
+                          {season && (
+                            <div className="flex items-center justify-between px-4 py-2 bg-gray-900 text-white">
+                              <span className="text-sm font-black tracking-wide">
+                                🗓️ {season}
+                              </span>
+                              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/15 text-white">
+                                {seasonSolved}/{seasonTotal}
+                              </span>
+                            </div>
+                          )}
+                          {contests.map(({ contest, items }) => {
                       const groupSolved = items.filter(p => solvedSet.has(p.id)).length
                       const allDone = groupSolved === items.length && items.length > 0
                       return (
@@ -459,6 +514,9 @@ export default function QuestPage() {
                               )
                             })}
                           </div>
+                        </div>
+                      )
+                    })}
                         </div>
                       )
                     })}
