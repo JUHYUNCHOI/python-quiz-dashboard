@@ -305,10 +305,10 @@ export function getInterviewSections(E) {
       color: "#16a34a",
       py: IV_SIMULATE_PY, cpp: IV_SIMULATE_CPP,
       why: [
-        t(E, "Each remaining cow goes to the COUNTER THAT BECOMES FREE FIRST.", "남은 소들은 가장 먼저 비는 카운터로 감."),
-        t(E, "Pop from min-heap → that's the next available counter (with its current finish time).", "min-heap 에서 pop → 다음 사용 가능 카운터 (현재 종료 시간 포함)."),
-        t(E, "Push back: same counter, but new finish_time = old + cow's processing time.", "다시 push: 같은 카운터, 새 종료 시간 = 이전 + 이 소의 처리 시간."),
-        t(E, "Stop BEFORE Bessie (cow N-1) — she's the question.", "Bessie (소 N-1) 직전에 멈춤 — 그녀가 우리 질문."),
+        t(E, "min-heap pop = next free counter; push it back with new finish_time = old + this cow's processing time.",
+            "min-heap pop = 다음 비는 카운터; 같은 카운터를 새 종료시간 (이전 + 이 소 처리시간) 으로 다시 push."),
+        t(E, "Stop just BEFORE Bessie (cow N-1) — she's what we're solving for.",
+            "Bessie (소 N-1) 직전에 멈춰요 — 그녀가 우리가 알아야 할 답."),
       ],
       pyOnly: [
         t(E, "heapq.heappop / heappush — log K each.", "heapq.heappop / heappush — 각각 log K."),

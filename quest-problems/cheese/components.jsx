@@ -657,10 +657,10 @@ export function getCheeseBruteSections(E) {
       color: "#dc2626",
       py: CB_SCAN_PY, cpp: CB_SCAN_CPP,
       why: [
-        t(E, "Three direction loops: z-axis rows, x-axis rows, y-axis rows. Each direction has N² rows.", "3 방향 루프: z-축 줄, x-축 줄, y-축 줄. 방향당 N² 줄."),
-        t(E, "For each row: check N cells one by one. all() / inner loop = O(N).", "각 줄마다 N 칸 하나씩 체크. all() / 안쪽 루프 = O(N)."),
-        t(E, "Per query: 3 × N² × N = 3N³ operations. For N=1000: 3 × 10⁹ ops/query.", "쿼리당: 3 × N² × N = 3N³ 연산. N=1000: 쿼리당 3×10⁹ 연산."),
-        t(E, "Total: Q × 3N³. For Q=200K, N=1000: 6×10¹⁴ ops → ~70 days on USACO judge.", "전체: Q × 3N³. Q=20만, N=1000: 6×10¹⁴ 연산 → USACO 채점기에서 약 70 일."),
+        t(E, "For each query, scan 3 × N² rows × N cells each → 3N³ ops per query.",
+            "쿼리마다 3 × N² 줄 × 줄당 N 칸 → 쿼리당 3N³ 연산."),
+        t(E, "Q=200K, N=1000 → 6×10¹⁴ ops → ~70 days. Need to skip the inner-N scan.",
+            "Q=20만, N=1000 → 6×10¹⁴ 연산 → 약 70 일. 안쪽 N 스캔을 없애야 함."),
       ],
       pyOnly: [
         t(E, "all(not cheese[...] for z_ in range(N)) — Python idiom for 'all False'.", "all(not cheese[...] for z_ in range(N)) — '모두 False' 의 Python idiom."),
@@ -803,14 +803,10 @@ export function getCheeseSections(E) {
       color: "#16a34a",
       py: CHEESE_LOOP_PY, cpp: CHEESE_LOOP_CPP,
       why: [
-        t(E, "Per query: read (x,y,z), update 3 counters, check if any reached N, print total.",
-            "쿼리마다: (x,y,z) 읽고, 카운터 3 개 +1, N 도달 체크, 총합 출력."),
-        t(E, "count is cumulative — once a row opens, it stays open. So we just keep adding.",
-            "count 는 누적 — 한 번 뚫린 줄은 계속 뚫린 상태. 그래서 더하기만 함."),
-        t(E, "Each block is unique — counter hits N exactly once per row. No 'already counted' check needed.",
-            "각 블록은 유일 — 카운터가 줄마다 N 에 정확히 한 번 도달. '이미 카운트' 체크 불필요."),
-        t(E, "Print count every iteration (not just at end) — problem asks for answer after EACH removal.",
-            "매 반복마다 count 출력 (마지막만 X) — 문제가 각 제거 후 답을 요구."),
+        t(E, "Per query (x,y,z): bump 3 counters; if any just hit N, that row is now fully open → count += 1.",
+            "쿼리 (x,y,z) 마다: 카운터 3 개 +1; 그중 어떤 게 막 N 에 도달하면 그 줄이 뚫린 거 → count += 1."),
+        t(E, "Print count after EACH query (problem requires per-step answer). O(1) per query.",
+            "매 쿼리 후 count 출력 (문제 요구). 쿼리당 O(1)."),
       ],
       pyOnly: [
         t(E, "Loop with [(xy,(x,y)), ...] — DRY: same 3-line update repeated for all 3 directions.",

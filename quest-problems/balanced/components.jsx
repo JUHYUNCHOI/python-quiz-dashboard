@@ -204,11 +204,10 @@ export function getBalancedSections(E) {
       color: A,
       py: BAL_PY, cpp: BAL_CPP,
       why: [
-        t(E, "String is N '(' followed by M ')' — order is fixed by problem.", "문자열은 N 개 '(' 뒤에 M 개 ')' — 순서는 문제로 고정."),
-        t(E, "Each balanced pair = one '(' followed by one ')'. To pair them, '(' must come before ')'.", "균형 쌍 = '(' 뒤에 ')'. 짝지으려면 '(' 가 먼저."),
-        t(E, "Since ALL '(' come before ALL ')', any '(' can pair with any ')' — limit is min(N, M).", "모든 '(' 가 모든 ')' 보다 앞 → 어떤 '(' 든 어떤 ')' 와 짝 가능 — 한계는 min(N, M)."),
-        t(E, "Each pair contributes 2 characters → answer = 2 × min(N, M).", "각 쌍은 2 글자 → 답 = 2 × min(N, M)."),
-        t(E, "Time: O(1) per test case. Trivially fast.", "시간: 테스트 케이스당 O(1). 즉시."),
+        t(E, "All '(' come before all ')', so any '(' can pair with any ')' — limit is min(N, M) pairs.",
+            "모든 '(' 가 모든 ')' 보다 앞에 있어서, 어떤 '(' 든 어떤 ')' 와 짝 가능 — 한계는 min(N, M) 쌍."),
+        t(E, "Each pair = 2 characters → answer = 2 × min(N, M). O(1) per test case.",
+            "각 쌍은 2 글자 → 답 = 2 × min(N, M). 테스트 케이스당 O(1)."),
       ],
       pyOnly: [
         t(E, "min() built-in for the formula. sys.stdin.readline still useful for many T.",
