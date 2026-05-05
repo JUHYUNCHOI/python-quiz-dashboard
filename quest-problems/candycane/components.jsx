@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
@@ -83,43 +84,8 @@ export function getCandyCaneSections(E) {
   ];
 }
 
-export function CandyCaneProgressiveCode({ E, lang = "py", sections }) {
-  const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
-  return (
-    <div style={{ padding: 14 }}>
-      <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 14, textAlign: "center" }}>
-        {t(E, `Showing ${langLabel} (change via header dropdown ↑)`, `${langLabel} 표시 중 (위 헤더 dropdown 으로 변경)`)}
-      </div>
-      {sections.map((s, i) => {
-        const code = lang === "py" ? s.py : s.cpp;
-        const langSpecific = lang === "py" ? (s.pyOnly || []) : (s.cppOnly || []);
-        return (
-          <div key={i} style={{ marginBottom: 18 }}>
-            <div style={{ background: s.color, color: "#fff", padding: "8px 14px", borderRadius: "10px 10px 0 0", fontSize: 14, fontWeight: 800 }}>{s.label}</div>
-            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderTop: "none", padding: "10px 12px" }}>
-              <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>💡 {t(E, "Why this way?", "왜 이렇게?")}</div>
-              {s.why.map((line, j) => (
-                <div key={`w${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
-                  <span style={{ color: s.color, fontWeight: 800, flexShrink: 0 }}>•</span><span>{line}</span>
-                </div>
-              ))}
-              {langSpecific.length > 0 && (
-                <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${C.border}` }}>
-                  <div style={{ fontSize: 10, color: C.dim, fontWeight: 800, marginBottom: 4, letterSpacing: 0.5 }}>{langLabel} {t(E, "specific:", "전용:")}</div>
-                  {langSpecific.map((line, j) => (
-                    <div key={`l${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
-                      <span style={{ color: lang === "py" ? "#16a34a" : "#0891b2", fontWeight: 800, flexShrink: 0 }}>▸</span><span>{line}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div style={{ borderRadius: "0 0 10px 10px", overflow: "hidden" }}><CodeBlock lines={code} /></div>
-          </div>
-        );
-      })}
-    </div>
-  );
+export function CandyCaneProgressiveCode(props) {
+  return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
 
 

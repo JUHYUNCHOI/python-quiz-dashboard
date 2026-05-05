@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 import { isMoo, findAllMoos } from "./helpers";
@@ -734,68 +735,8 @@ export function getMooSections(E) {
 /* ProgressiveCode — 수직 스택 (위→아래 step by step 자연스럽게 읽기).
    lang prop 은 헤더에서. 위젯 내부 toggle/PDF 제거.
    reasoning: cur.why (공통) + cur.pyOnly / cur.cppOnly (언어별). */
-export function MooProgressiveCode({ E, lang = "py", sections }) {
-  const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
-
-  return (
-    <div style={{ padding: 14 }}>
-      {/* 현재 언어 표시 */}
-      <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 14, textAlign: "center" }}>
-        {t(E, `Showing ${langLabel} (change via header dropdown ↑)`,
-            `${langLabel} 표시 중 (위 헤더 dropdown 으로 변경)`)}
-      </div>
-
-      {/* 모든 섹션을 수직으로 스택 — 위→아래 자연스레 읽기 */}
-      {sections.map((s, i) => {
-        const code = lang === "py" ? s.py : s.cpp;
-        const langSpecific = lang === "py" ? (s.pyOnly || []) : (s.cppOnly || []);
-        return (
-          <div key={i} style={{ marginBottom: 18 }}>
-            {/* 섹션 헤더 */}
-            <div style={{
-              background: s.color, color: "#fff",
-              padding: "8px 14px", borderRadius: "10px 10px 0 0",
-              fontSize: 14, fontWeight: 800,
-            }}>{s.label}</div>
-
-            {/* "왜 이렇게?" reasoning */}
-            <div style={{
-              background: "#fff", border: `1.5px solid ${C.border}`, borderTop: "none",
-              padding: "10px 12px",
-            }}>
-              <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
-                💡 {t(E, "Why this way?", "왜 이렇게?")}
-              </div>
-              {s.why.map((line, j) => (
-                <div key={`w${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
-                  <span style={{ color: s.color, fontWeight: 800, flexShrink: 0 }}>•</span>
-                  <span>{line}</span>
-                </div>
-              ))}
-              {langSpecific.length > 0 && (
-                <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${C.border}` }}>
-                  <div style={{ fontSize: 10, color: C.dim, fontWeight: 800, marginBottom: 4, letterSpacing: 0.5 }}>
-                    {langLabel} {t(E, "specific:", "전용:")}
-                  </div>
-                  {langSpecific.map((line, j) => (
-                    <div key={`l${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
-                      <span style={{ color: lang === "py" ? "#16a34a" : "#0891b2", fontWeight: 800, flexShrink: 0 }}>▸</span>
-                      <span>{line}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* 코드 — 같이 붙어 있음 */}
-            <div style={{ borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
-              <CodeBlock lines={code} />
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
+export function MooProgressiveCode(props) {
+  return <ProgressiveCodeStepper {...props} accentColor="#7c5cfc" />;
 }
 
 
