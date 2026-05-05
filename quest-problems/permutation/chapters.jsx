@@ -121,7 +121,17 @@ export function makePermCh1(E) {
             </div>
           </div>
 
-          {/* Forward direction summary — Nhoj dismantles John's p to make h */}
+        </div>),
+    },
+    // 1-1.5: Forward (Nhoj's process) + Your job (reverse) — split off so 1-1 isn't a wall
+    {
+      type: "reveal",
+      narr: t(E,
+        "Two directions: Nhoj went FORWARD (p → h). Your job goes BACKWARD (h → p).",
+        "두 방향: Nhoj 는 정방향 (p → h). 우리 할 일은 역방향 (h → p)."),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* Forward direction summary */}
           <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>
               ⚙️ {t(E, "Forward (what Nhoj did to John's permutation)", "정방향 (Nhoj 가 John 의 순열에 한 일)")}
@@ -149,8 +159,8 @@ export function makePermCh1(E) {
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
-              {t(E, "(Next page: see how Nhoj's process turns John's p into h, step by step.)",
-                    "(다음 페이지: Nhoj 의 과정이 John 의 p 를 어떻게 h 로 바꾸는지 한 단계씩 봐요.)")}
+              {t(E, "(Next page: hand-trace exactly how p turns into h, step by step.)",
+                    "(다음 페이지: p 가 h 로 바뀌는 과정을 한 단계씩 손으로 따라가요.)")}
             </div>
           </div>
 
