@@ -30,8 +30,8 @@ export function makeHpsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie and Elsie play a Rock-Paper-Scissors variant.\nEach cow first puts down TWO cards (face up), so all four are visible.\nThen each cow picks ONE of her own two cards to actually play — that's the round.\n\nGiven Elsie's two-card hand, how many of Bessie's possible two-card hands let her always win — no matter which one Elsie picks?",
-        "베시와 엘시가 가위바위보 비슷한 게임을 해요.\n각자 카드 2 장을 먼저 뒤집어 놓아요 — 4 장이 모두 보여요.\n그 다음 각자 자기 2 장 중 1 장을 골라 실제로 내요. 그게 한 판이에요.\n\n엘시의 카드 2 장이 주어졌을 때, 베시가 어떤 카드 2 장 조합을 가지면 — 엘시가 무엇을 내든 — 항상 이길 수 있을까요?\n그런 조합이 몇 개인지 세요."),
+        "A Rock-Paper-Scissors variant — Bessie wants to count how many 2-card hands of hers always beat Elsie's hand.",
+        "가위바위보 변형 — 베시가 엘시를 무조건 이기는 카드 2 장 조합이 몇 개인지 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
