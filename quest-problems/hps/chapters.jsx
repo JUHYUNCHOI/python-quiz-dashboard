@@ -30,8 +30,8 @@ export function makeHpsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A twist on Rock-Paper-Scissors!\nBoth players reveal TWO symbols, then — seeing all four — each player picks ONE to actually play.\nFor each Elsie pair, count how many of Bessie's pairs guarantee a win.",
-        "가위바위보의 변형이에요!\n두 플레이어가 각자 기호 2개를 먼저 공개하고, 4개를 모두 본 다음 그중 1개를 골라 실제로 내요.\n엘시의 쌍이 주어지면, 베시의 어떤 쌍이 무조건 이길 수 있는지 세요."),
+        "Bessie and Elsie play a Rock-Paper-Scissors variant. Each cow first puts down TWO cards (face up), so all four cards are visible. Then each cow picks ONE of her own two cards to actually play — and that's the round.\nGiven Elsie's two-card hand, how many of Bessie's possible two-card hands let her always win, no matter which one Elsie picks?",
+        "베시와 엘시가 가위바위보 비슷한 게임을 해요. 각자 카드 2 장을 먼저 뒤집어 놓아서 4 장이 모두 보여요. 그 다음 각자 자기 2 장 중 1 장을 골라 실제로 내요 — 그게 한 판이에요.\n엘시의 카드 2 장이 주어졌을 때, 베시가 어떤 카드 2 장 조합을 가져야 — 엘시가 무엇을 내든 — 항상 이길 수 있는지, 그런 조합이 몇 개인지 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -48,35 +48,35 @@ export function makeHpsCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "There are ", "")}
-                  <b style={{ color: "#059669" }}>{t(E, "N symbols", "N개의 기호")}</b>
-                  {t(E, " and a chart telling you who wins between any two of them.",
-                        "와, 두 기호 사이 승패를 알려주는 차트가 있어요.")}
+                  {t(E, "There are ", "이 게임에는 ")}
+                  <b style={{ color: "#059669" }}>{t(E, "N kinds of cards", "N 종류의 카드")}</b>
+                  {t(E, " (think Rock / Paper / Scissors, but maybe more). A chart tells us, for each pair of card types, which one beats which.",
+                        " 가 있어요 (가위·바위·보처럼, 더 많을 수도). 어떤 카드가 어떤 카드를 이기는지 차트로 알려줘요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Each player picks ", "각 플레이어는 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "2 symbols", "기호 2개")}</b>
-                  {t(E, " (a pair). All 4 are revealed, then each picks ONE to play.",
-                        "(쌍)을 골라요. 4개를 공개한 뒤, 그중 1개를 골라 실제로 내요.")}
+                  {t(E, "How a round works: ", "한 판 진행: ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "each cow puts down 2 cards face-up", "각 소가 카드 2 장을 뒤집어 놓아요")}</b>
+                  {t(E, ", so all 4 cards are visible. Then each cow picks ONE of her own two to actually play — Bessie picks last (after seeing Elsie's pick).",
+                        ". 4 장이 모두 보여요. 그 다음 각자 자기 2 장 중 1 장을 골라 실제로 내요 — 베시는 엘시가 무엇을 냈는지 보고 마지막에 골라요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  <b style={{ color: "#dc2626" }}>{t(E, "Bessie wins guaranteed", "베시가 이길 보장")}</b>
-                  {t(E, " if — no matter which symbol Elsie ends up playing — Bessie has one in her pair that beats it.",
-                        "이 있다면 — 엘시가 둘 중 무엇을 내든 — 베시의 쌍 안에 그것을 이기는 기호가 있어야 해요.")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "Bessie's hand wins for sure", "베시의 카드 2 장이 무조건 이김")}</b>
+                  {t(E, " when — no matter which of her two cards Elsie ends up playing — Bessie has at least one card in HER hand that beats it.",
+                        " — 엘시가 자기 2 장 중 무엇을 내든, 베시의 2 장 중에 그걸 이기는 카드가 있는 경우.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "For each of M Elsie pairs, print ", "M개의 엘시 쌍 각각에 대해, ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "how many of Bessie's pairs guarantee a win", "베시의 쌍 중 승리를 보장하는 개수")}</b>
-                  {t(E, ".", "를 출력해요.")}
+                  {t(E, "We get M different Elsie hands. For each one, print ", "엘시의 카드 2 장 조합이 M 가지 주어져요. 각 조합에 대해 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "how many of Bessie's possible 2-card hands guarantee a win", "베시가 가질 수 있는 2 장 조합 중 무조건 이기는 게 몇 개인지")}</b>
+                  {t(E, ".", " 출력해요.")}
                 </div>
               </div>
             </div>
