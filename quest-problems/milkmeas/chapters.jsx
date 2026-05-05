@@ -45,7 +45,7 @@ export function makeMilkMeasCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has 3 cows (Bessie, Elsie, Mildred), each starting at 7 gallons of daily output. There are N daily change events: \"on day d, cow X's output changes by ±value\".\nA sign 'displays the leader(s)' — the set of cows currently producing the maximum. Print the number of times the displayed set changes over the whole period.",
-        "FJ 에게 3마리 소 (Bessie, Elsie, Mildred) 가 있고, 각자 매일 7 갤런 생산으로 시작해요. N 개의 날짜별 변동 이벤트가 있어요: \"d 일에 X 의 생산량이 ±값 만큼 변함\".\n간판이 '현재 리더 집합' 을 표시해요 — 즉 현재 최대 생산량 소들의 집합. 전 기간에 걸쳐 표시 집합이 바뀐 횟수를 출력해요."),
+        "FJ 에게 3마리 소 (Bessie, Elsie, Mildred) 가 있고, 각자 매일 7 갤런 생산으로 시작해요. N 개의 날짜별 변동 이벤트가 있어요: \"d 일에 X 의 생산량이 ±값 만큼 바뀌어요\".\n간판이 '지금 가장 많이 만든 소들' 을 표시해요 — 즉 현재 최대 생산량인 소들이에요. 전체 기간 동안 표시되는 소들이 바뀐 횟수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -80,7 +80,7 @@ export function makeMilkMeasCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A sign displays the ", "간판은 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "set of current leaders", "현재 리더 집합")}</b>
+                  <b style={{ color: "#0891b2" }}>{t(E, "set of current leaders", "지금 가장 많이 만든 소들")}</b>
                   {t(E, " (cows tied for the maximum output).",
                         " (현재 최대 생산량인 소들) 을 표시해요.")}
                 </div>
@@ -101,7 +101,7 @@ export function makeMilkMeasCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "All cows start at 7.\nDay 1: Bessie (cow 1) gets +5, now at 12.\nLeaders change from {all three} to {Bessie}.\nIs this 1 display change?", "모든 소가 7에서 시작. 1일차: 베시(소 1)가 +5, 이제 12. 리더가 {전부}에서 {베시}로 변경. 디스플레이 변경 1번이예요?"),
+        "All cows start at 7.\nDay 1: Bessie (cow 1) gets +5, now at 12.\nLeaders change from {all three} to {Bessie}.\nIs this 1 display change?", "모든 소가 7에서 시작. 1일차: 베시(소 1)가 +5, 이제 12. 리더가 {전부}에서 {베시}로 변경. 디스플레이 변경 1번이에요?"),
       question: t(E,
         "Start: all at 7 (leaders = all). Bessie +5 -> 12. Leaders = {Bessie}. Display changes?",
         "시작: 모두 7 (리더 = 전부). 베시 +5 -> 12. 리더 = {베시}. 디스플레이 변경 횟수?"),

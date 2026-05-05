@@ -51,7 +51,7 @@ export function makeLeadersCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows of breed G or H stand in a line; each cow i 'covers' positions [i, E_i].\nWe pick ONE G-leader and ONE H-leader. The pair is VALID if either (a) the leader covers every cow of her own breed, OR (b) the OTHER leader sits inside her range.\nCount valid pairs.",
-        "N마리 소가 G 또는 H 품종으로 한 줄에 서있고, i번 소는 위치 [i, E_i]를 '커버'해요.\nG 리더 1마리와 H 리더 1마리를 골라요. 그 쌍이 유효하려면, 리더가 자기 품종 소들을 모두 커버하거나, 상대 리더가 자기 범위 안에 있어야 해요.\n유효한 (G리더, H리더) 쌍의 수를 세요."),
+        "N마리 소가 G 또는 H 품종으로 한 줄에 서있고, i번 소는 위치 [i, E_i]를 '커버'해요.\nG 리더 1마리와 H 리더 1마리를 골라요. 그 쌍이 유효하려면, 그 리더가 같은 품종 소들을 모두 커버하거나, 상대 리더가 그 리더의 범위 안에 있어야 해요.\n유효한 (G리더, H리더) 쌍의 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>

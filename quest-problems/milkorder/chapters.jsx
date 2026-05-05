@@ -6,7 +6,7 @@ import { getMilkOrderSections } from "./components";
    ================================================================ */
 export const SOLUTION_CODE = [
   "import sys",
-  "from collections import deque",
+  "input = sys.stdin.readline",
   "",
   "N, M, K = map(int, input().split())",
   "hierarchy = []",
@@ -15,39 +15,31 @@ export const SOLUTION_CODE = [
   "    hierarchy.append(line[1:])",
   "",
   "fixed = {}",
+  "fixed_inv = {}",
   "for _ in range(K):",
   "    c, p = map(int, input().split())",
   "    fixed[c] = p",
+  "    fixed_inv[p] = c",
   "",
-  "# Build graph from hierarchy constraints",
-  "# Try to place cow 1 as early as possible",
-  "# Use topological sort with priority queue",
+  "if 1 in fixed:",
+  "    print(fixed[1])",
+  "else:",
+  "    def feasible(p):",
+  "        if p in fixed_inv:",
+  "            return False",
+  "        for seq in hierarchy:",
+  "            if 1 in seq:",
+  "                idx = seq.index(1)",
+  "                if idx + 1 > p:",
+  "                    return False",
+  "                if (len(seq) - idx) > (N - p + 1):",
+  "                    return False",
+  "        return True",
   "",
-  "from heapq import heappush, heappop",
-  "",
-  "adj = [[] for _ in range(N+1)]",
-  "indeg = [0] * (N+1)",
-  "for seq in hierarchy:",
-  "    for i in range(len(seq)-1):",
-  "        adj[seq[i]].append(seq[i+1])",
-  "        indeg[seq[i+1]] += 1",
-  "",
-  "# Greedy: assign positions with topo sort",
-  "pq = []",
-  "for i in range(1, N+1):",
-  "    if indeg[i] == 0:",
-  "        heappush(pq, i)",
-  "",
-  "order = []",
-  "while pq:",
-  "    u = heappop(pq)",
-  "    order.append(u)",
-  "    for v in adj[u]:",
-  "        indeg[v] -= 1",
-  "        if indeg[v] == 0:",
-  "            heappush(pq, v)",
-  "",
-  "print(order.index(1) + 1)",
+  "    for p in range(1, N + 1):",
+  "        if feasible(p):",
+  "            print(p)",
+  "            break",
 ];
 
 
@@ -61,7 +53,7 @@ export function makeMilkOrderCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ wants a valid milking order of his N cows. Two kinds of rules exist: (1) hierarchy — a list saying these M cows must appear in this relative order, and (2) some cows have FIXED positions in the line.\nAmong all valid orders, print the EARLIEST possible position of cow #1.",
-        "FJ 가 N마리 소의 유효한 착유 순서를 정하려고 해요. 두 종류의 규칙이 있어요: (1) 위계 — 어떤 M마리 소는 이 상대 순서를 지켜야 함, (2) 어떤 소들은 줄에서 고정된 위치를 가짐.\n모든 유효한 순서 중에서 1번 소가 가장 일찍 설 수 있는 위치를 출력해요."),
+        "FJ 가 N마리 소의 유효한 착유 순서를 정하려고 해요. 두 종류의 규칙이 있어요: (1) 순서 규칙 — 어떤 M마리 소는 이 상대 순서를 지켜야 해요, (2) 어떤 소들은 줄에서 정해진 위치를 가져요.\n모든 유효한 순서 중에서 1번 소가 가장 일찍 설 수 있는 위치를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -86,7 +78,7 @@ export function makeMilkOrderCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  <b style={{ color: "#7c3aed" }}>{t(E, "Hierarchy constraint", "위계 제약")}</b>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "Hierarchy constraint", "순서 규칙")}</b>
                   {t(E, ": a list of M cows that must appear in this exact relative order in the line.",
                         ": M마리 소의 목록이 주어지고, 이들은 줄에서 이 상대 순서로 등장해야 해요.")}
                 </div>

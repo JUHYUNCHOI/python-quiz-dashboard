@@ -52,7 +52,7 @@ export function makeMcc22AliensCh1(E) {
       type: "reveal",
       narr: t(E,
         "N aliens are each labeled T (truth-teller) or F (liar). Each makes a claim about another alien's type. Truth-tellers always tell the truth; liars always lie.\nCheck whether the given type assignment is consistent with all claims — print Y or N.",
-        "N 명의 외계인이 각자 T (진실) 또는 F (거짓말쟁이) 로 라벨돼 있어요. 각 외계인이 다른 외계인의 타입에 대해 주장해요. 진실형은 항상 참, 거짓말쟁이는 항상 거짓.\n주어진 타입 할당이 모든 주장과 일관된지 Y 또는 N 으로 출력해요."),
+        "N 명의 외계인이 각자 T (진실) 또는 F (거짓말쟁이) 로 라벨돼 있어요. 각 외계인이 다른 외계인의 타입에 대해 주장해요. 진실형은 항상 참, 거짓말쟁이는 항상 거짓.\n주어진 타입이 모든 주장과 맞는지 Y 또는 N 으로 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -86,7 +86,7 @@ export function makeMcc22AliensCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "Y if all claims are consistent with the given assignment, else N", "주어진 할당이 모든 주장과 일관되면 Y, 아니면 N")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "Y if all claims are consistent with the given assignment, else N", "주어진 타입이 모든 주장과 맞으면 Y, 아니면 N")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
@@ -109,7 +109,7 @@ export function makeMcc22AliensCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! A truth-teller always tells the truth, so if they say alien 2 is T and alien 2 is T, it's consistent.",
-        "맞아! 진실형은 항상 진실을 말하니까, 외계인 2가 T라고 말했고 실제로 T이면 일관적이예요."),
+        "맞아! 진실형은 항상 진실을 말하니까, 외계인 2가 T라고 말했고 실제로 T이면 일관적이에요."),
     },
     // 1-3: Input
     {

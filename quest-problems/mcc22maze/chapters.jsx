@@ -45,7 +45,7 @@ export function makeMcc22MazeCh1(E) {
       type: "reveal",
       narr: t(E,
         "An R × C grid maze: each cell is a wall (#) or open (.). Move only between adjacent open cells (up/down/left/right). Each step counts as 1.\nPrint the SHORTEST distance from the top-left cell (0, 0) to the bottom-right cell (R−1, C−1), or −1 if unreachable.",
-        "R × C 격자 미로: 각 칸이 벽 (#) 또는 열림 (.) 이에요. 인접한 열린 칸 사이만 이동 (상하좌우). 한 걸음 = 1.\n좌상단 (0, 0) 에서 우하단 (R−1, C−1) 까지의 최단 거리를 출력해요. 도달 불가면 −1."),
+        "R × C 격자 미로: 각 칸이 벽 (#) 또는 열림 (.) 이에요. 인접한 열린 칸 사이만 이동 (상하좌우). 한 걸음 = 1.\n좌상단 (0, 0) 에서 우하단 (R−1, C−1) 까지의 최단 거리를 출력해요. 도달할 수 없으면 −1."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -81,7 +81,7 @@ export function makeMcc22MazeCh1(E) {
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "SHORTEST distance from (0, 0) to (R−1, C−1)", "(0, 0) 에서 (R−1, C−1) 까지의 최단 거리")}</b>
-                  {t(E, ", or −1 if unreachable.", " 를 출력해요. 도달 불가면 −1.")}
+                  {t(E, ", or −1 if unreachable.", " 를 출력해요. 도달할 수 없으면 −1.")}
                 </div>
               </div>
             </div>

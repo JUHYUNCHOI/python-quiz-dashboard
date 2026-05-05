@@ -44,7 +44,7 @@ export function makeMcc22CardSharkCh1(E) {
       type: "reveal",
       narr: t(E,
         "Two players take turns picking ONE card from N face-up cards (each card has a value); the picker takes that card's value as score. Both play OPTIMALLY (each picks to maximize her own score).\nPrint the FIRST player's final total score.",
-        "두 플레이어가 N 장의 펼쳐진 카드 (각자 값이 있음) 중 한 장씩 번갈아 골라요. 가져간 카드의 값이 그 사람의 점수예요. 둘 다 최선을 다 해요 (각자 자기 점수 극대화).\n첫 번째 플레이어의 최종 총점을 출력해요."),
+        "두 플레이어가 N 장의 펼쳐진 카드 (각자 값이 있음) 중 한 장씩 번갈아 골라요. 가져간 카드의 값이 그 사람의 점수예요. 둘 다 최선을 다 해요 (자기 점수를 최대로 만들려고).\n첫 번째 플레이어의 최종 총점을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -71,7 +71,7 @@ export function makeMcc22CardSharkCh1(E) {
                   {t(E, "Players ", "두 플레이어가 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "alternate picking ONE card", "한 장씩 번갈아 가져가요")}</b>
                   {t(E, "; the value goes to that player's score. Both play OPTIMALLY.",
-                        ". 가져간 값이 그 플레이어의 점수. 둘 다 최선을 다 함.")}
+                        ". 가져간 값이 그 플레이어의 점수예요. 둘 다 최선을 다 해요 (자기 점수를 최대로 만들려고).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
@@ -90,7 +90,7 @@ export function makeMcc22CardSharkCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cards are [1, 2, 3].\nBoth players play optimally (pick highest).\nPlayer 1 picks first.\nWhat does Player 1 get?", "카드가 [1, 2, 3]이예요. 두 플레이어 모두 최적으로 (가장 높은 것) 플레이해요. 플레이어 1이 먼저 가져가요. 플레이어 1은 무엇을 얻어?"),
+        "Cards are [1, 2, 3].\nBoth players play optimally (pick highest).\nPlayer 1 picks first.\nWhat does Player 1 get?", "카드가 [1, 2, 3]이에요. 두 플레이어 모두 최적으로 (가장 높은 것) 플레이해요. 플레이어 1이 먼저 가져가요. 플레이어 1은 무엇을 얻어?"),
       question: t(E,
         "Cards [1,2,3]. P1 picks 3, P2 picks 2, P1 picks 1. P1's total?",
         "카드 [1,2,3]. P1이 3, P2가 2, P1이 1 가져가요. P1의 합계?"),

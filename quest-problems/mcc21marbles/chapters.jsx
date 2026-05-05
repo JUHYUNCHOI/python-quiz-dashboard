@@ -4,17 +4,18 @@ import { getMcc21MarblesSections } from "./components";
 export const SOLUTION_CODE = [
   "N = int(input())",
   "a = list(map(int, input().split()))",
+  "target = sum(a) // N",
   "",
-  "total = sum(a)",
-  "target = total // N",
-  "extra = total % N",
-  "",
+  "# Each adjacent move = 1 marble crossing one boundary.",
+  "# Total moves = sum over boundaries i of |how many marbles cross boundary i|",
+  "#             = sum |prefix_sum(a[k] - target) for k = 0..i|.",
   "ops = 0",
-  "for i in range(N):",
-  "    diff = a[i] - target - (1 if i < extra else 0)",
-  "    ops += abs(diff)",
+  "carry = 0",
+  "for i in range(N - 1):",
+  "    carry += a[i] - target",
+  "    ops += abs(carry)",
   "",
-  "print(ops // 2)",
+  "print(ops)",
 ];
 
 export function makeMcc21MarblesCh1(E) {

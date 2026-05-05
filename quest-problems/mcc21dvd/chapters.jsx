@@ -24,7 +24,7 @@ export function makeMcc21DvdCh1(E) {
       type: "reveal",
       narr: t(E,
         "A DVD logo starts on a W × H screen at a known position with velocity (dx, dy) where dx, dy ∈ {−1, +1}. Each step it moves by (dx, dy); if it would go past a wall, that component flips sign (it bounces).\nPrint the logo's position after T steps.",
-        "W × H 화면에 DVD 로고가 정해진 위치에서 시작하고 속도 (dx, dy) 를 가져요 (dx, dy ∈ {−1, +1}). 매 단계 (dx, dy) 만큼 이동, 벽을 넘어가면 해당 성분이 부호 반전 (튕김).\nT 단계 후 로고의 위치를 출력해요."),
+        "W × H 화면에 DVD 로고가 정해진 위치에서 시작하고 속도 (dx, dy) 를 가져요 (dx, dy ∈ {−1, +1}). 매 단계 (dx, dy) 만큼 이동, 벽을 넘어가면 그 방향이 반대로 바뀌어 (튕김).\nT 단계 후 로고의 위치를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -51,7 +51,7 @@ export function makeMcc21DvdCh1(E) {
                 <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each step, the logo moves by (dx, dy); if it'd exit the screen, that component ", "매 단계 (dx, dy) 만큼 이동. 벽을 넘어가면 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "flips sign (bounces)", "해당 성분이 부호 반전 (튕김)")}</b>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "flips sign (bounces)", "방향이 반대로 바뀌어요 (튕김)")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>

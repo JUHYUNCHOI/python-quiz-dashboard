@@ -34,7 +34,7 @@ export function makeBitcoinCh1(E) {
       type: "reveal",
       narr: t(E,
         "N bitcoin mining sites at integer points on a 2D plane.\nPrint the MAXIMUM squared Euclidean distance between any two sites — i.e., max (x1−x2)^2 + (y1−y2)^2.",
-        "정수 좌표의 2D 평면에 있는 N 개의 비트코인 채굴 사이트.\n임의 두 사이트 사이 유클리드 거리의 제곱 (x1−x2)^2 + (y1−y2)^2 의 최댓값을 출력해요."),
+        "정수 좌표의 평면 위에 있는 N 개의 비트코인 채굴 사이트.\n임의 두 사이트 사이 유클리드 거리의 제곱 (x1−x2)^2 + (y1−y2)^2 의 최댓값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -51,7 +51,7 @@ export function makeBitcoinCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  <b style={{ color: "#f97316" }}>{t(E, "N bitcoin sites at integer points on a 2D plane", "정수 좌표의 2D 평면 위 N 개 비트코인 사이트")}</b>
+                  <b style={{ color: "#f97316" }}>{t(E, "N bitcoin sites at integer points on a 2D plane", "정수 좌표의 평면 위 N 개 비트코인 사이트")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>

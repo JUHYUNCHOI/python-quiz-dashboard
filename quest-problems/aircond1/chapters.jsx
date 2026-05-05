@@ -57,7 +57,7 @@ export function makeAirCond1Ch1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N stalls in a row, each with a current temperature p[i] and a target temperature q[i]. One AC command adjusts EVERY stall in some contiguous range by +1 OR by -1.\nPrint the MINIMUM number of AC commands to make every p[i] equal q[i].",
-        "FJ 에게 한 줄로 늘어선 N 개 축사가 있고, 각자 현재 온도 p[i] 와 목표 온도 q[i] 를 가져요. AC 명령 한 번은 어떤 연속한 구간의 모든 축사를 동시에 +1 또는 -1 만큼 조절해요.\n모든 p[i] 가 q[i] 와 같아지도록 만드는 최소 AC 명령 횟수를 출력해요."),
+        "FJ 에게 한 줄로 늘어선 N 개 축사가 있어요. 각 축사는 현재 온도 p[i] 와 목표 온도 q[i] 를 가져요.\nAC 명령을 한 번 쓰면 어떤 연속한 구간의 모든 축사를 동시에 +1 또는 -1 만큼 조절할 수 있어요. 모든 p[i] 를 q[i] 와 같게 만드는 최소 명령 횟수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>

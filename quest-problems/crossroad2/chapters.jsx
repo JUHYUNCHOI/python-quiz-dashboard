@@ -42,7 +42,7 @@ export function makeCrossRd2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "26 cows labeled A..Z walk around a circular road, each crossing it EXACTLY TWICE. We're given the cyclic sequence of letters at the 52 crossing points (each letter appears exactly twice).\nTwo cows' paths intersect if their two crossing points INTERLEAVE around the circle (like A..B..A..B). Count the number of intersecting cow-pairs.",
-        "26마리 소 (A..Z) 가 원형 도로를 돌면서 각자 정확히 2번 횡단해요. 52개의 횡단 지점에 등장하는 글자의 원형 수열이 주어져요 (각 글자가 정확히 2번 등장).\n두 소의 경로가 '교차' 한다는 건, 그들의 두 횡단 지점이 원 위에서 서로 엇갈려 나타날 때 (예: A..B..A..B). 교차하는 소-쌍의 개수를 출력해요."),
+        "26마리 소 (A..Z) 가 원형 도로를 돌면서 각자 정확히 2번 횡단해요. 52개의 횡단 지점에 등장하는 글자의 원형 수열이 주어져요 (각 글자가 정확히 2번 등장).\n두 소의 경로가 '교차' 한다는 건, 두 횡단 지점이 원 위에서 서로 엇갈려 나타날 때 (예: A..B..A..B). 교차하는 소-쌍의 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>

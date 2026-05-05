@@ -8,22 +8,17 @@ export const SOLUTION_CODE = [
   "N, M, K = map(int, input().split())",
   "hives = [int(input()) for _ in range(N)]",
   "",
-  "hives.sort(reverse=True)",
+  "# Each trip to a hive collects min(M, remaining honey).",
+  "# Build the list of all possible per-trip yields, then take the K largest.",
+  "yields = []",
+  "for h in hives:",
+  "    while h > 0:",
+  "        take = min(M, h)",
+  "        yields.append(take)",
+  "        h -= take",
   "",
-  "total = 0",
-  "trips_left = K",
-  "",
-  "for honey in hives:",
-  "    if trips_left <= 0:",
-  "        break",
-  "    # How many full trips to empty this hive?",
-  "    trips_needed = (honey + M - 1) // M  # ceil(honey / M)",
-  "    trips_used = min(trips_needed, trips_left)",
-  "    collected = min(honey, trips_used * M)",
-  "    total += collected",
-  "    trips_left -= trips_used",
-  "",
-  "print(total)",
+  "yields.sort(reverse=True)",
+  "print(sum(yields[:K]))",
 ];
 
 
@@ -37,7 +32,7 @@ export function makeHoneyCh1(E) {
       type: "reveal",
       narr: t(E,
         "A squirrel collects honey using a pot of capacity M ml. There are N beehives with given honey amounts h[1..N]. The squirrel can make AT MOST K trips. Each trip: visit ONE hive and take min(remaining honey there, M) into the pot.\nMaximize the TOTAL honey collected.",
-        "다람쥐가 용량 M ml 의 항아리로 꿀을 모아요. N 개의 벌집에 각자 꿀 양 h[1..N] 이 있어요. 다람쥐는 최대 K 번 왕복 가능. 매 왕복: 벌집 1 개를 방문해 min (그곳의 남은 꿀, M) 만큼 가져옴.\n수집한 꿀의 총량 최댓값을 출력해요."),
+        "다람쥐가 용량이 M ml 인 항아리로 꿀을 모아요. N 개의 벌집에 각자 꿀 양 h[1..N] 이 있어요. 다람쥐는 최대 K 번 왕복(한 번 가서 가져오기) 가능. 매 왕복: 벌집 1 개를 방문해 min (그곳의 남은 꿀, M) 만큼 가져와요.\n수집한 꿀의 총량 최댓값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -55,7 +50,7 @@ export function makeHoneyCh1(E) {
                 <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A squirrel has a ", "다람쥐가 ")}
-                  <b style={{ color: "#d97706" }}>{t(E, "pot of capacity M ml", "용량 M ml 의 항아리")}</b>
+                  <b style={{ color: "#d97706" }}>{t(E, "pot of capacity M ml", "용량이 M ml 인 항아리")}</b>
                   {t(E, " and faces ", " 를 들고 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "N beehives with honey h[1..N]", "꿀 양 h[1..N] 을 가진 N 개의 벌집")}</b>
                   {t(E, ".", " 을 만나요.")}
@@ -65,9 +60,9 @@ export function makeHoneyCh1(E) {
                 <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "She can make at most ", "최대 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "K trips", "K 번 왕복")}</b>
+                  <b style={{ color: "#0891b2" }}>{t(E, "K trips", "K 번 왕복(한 번 가서 가져오기)")}</b>
                   {t(E, "; each trip visits ONE hive and takes min (remaining honey there, M).",
-                        " 가능; 매 왕복: 벌집 1 개를 방문해 min (그곳의 남은 꿀, M) 만큼 가져옴.")}
+                        " 가능; 매 왕복: 벌집 1 개를 방문해 min (그곳의 남은 꿀, M) 만큼 가져와요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>

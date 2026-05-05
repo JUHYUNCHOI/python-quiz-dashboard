@@ -100,7 +100,7 @@ export function makeTttCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Consider grid AAA / BBB / CCC.\nEach row is filled by one letter.\nHow many individual winners are there?", "격자 AAA / BBB / CCC를 생각해봐요. 각 행이 한 문자로 채워져 있어요. 개인 우승자는 몇 명이예요?"),
+        "Consider grid AAA / BBB / CCC.\nEach row is filled by one letter.\nHow many individual winners are there?", "격자 AAA / BBB / CCC를 생각해봐요. 각 행이 한 문자로 채워져 있어요. 개인 우승자는 몇 명이에요?"),
       question: t(E,
         "Grid: AAA / BBB / CCC. How many individual winners?",
         "격자: AAA / BBB / CCC. 개인 우승자 수는?"),
@@ -113,7 +113,7 @@ export function makeTttCh1(E) {
       correct: 2,
       explain: t(E,
         "A wins row 1, B wins row 2, C wins row 3. That's 3 individual winners!",
-        "A가 1행, B가 2행, C가 3행 우승. 개인 우승자 3명이예요!"),
+        "A가 1행, B가 2행, C가 3행 우승. 개인 우승자 3명이에요!"),
     },
     // 1-3: Input
     {

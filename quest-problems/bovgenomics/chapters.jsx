@@ -36,7 +36,7 @@ export function makeGenomicsCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N spotted cows and N plain cows; each cow has an M-letter genome over {A, C, G, T}.\nA position j is 'distinguishing' if the set of letters appearing at column j among spotted cows DOES NOT INTERSECT the set among plain cows.\nCount how many positions are distinguishing.",
-        "FJ 에게 점박이 소 N마리와 무늬 없는 소 N마리가 있고, 각 소는 {A, C, G, T} 로 된 M글자 유전체를 가져요.\n어떤 위치 j 가 '구별 가능' 이려면, j 열에서 점박이 소들이 갖는 글자의 집합과 무늬 없는 소들의 집합이 겹치지 않아야 해요.\n구별 가능한 위치의 개수를 출력해요."),
+        "FJ 에게 점박이 소 N마리와 무늬 없는 소 N마리가 있어요. 각 소는 A, C, G, T 로 된 M글자 유전체를 가져요.\n어떤 위치 j 가 '구별 가능' 이려면, j 번째 칸에서 점박이 소들이 가진 글자와 무늬 없는 소들이 가진 글자가 한 글자도 겹치지 않아야 해요. 구별 가능한 위치가 몇 개인지 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -65,7 +65,7 @@ export function makeGenomicsCh1(E) {
                   {t(E, "Position j is ", "위치 j 가 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "distinguishing", "'구별 가능'")}</b>
                   {t(E, " if the set of letters at column j across spotted cows does NOT intersect the set across plain cows.",
-                        " 인 건, j 열에서 점박이 소들의 글자 집합과 무늬 없는 소들의 집합이 겹치지 않을 때.")}
+                        " 인 건, j 번째 칸의 점박이 소 글자들과 무늬 없는 소 글자들이 한 글자도 겹치지 않을 때예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>

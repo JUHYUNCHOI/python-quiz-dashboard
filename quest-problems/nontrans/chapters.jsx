@@ -104,7 +104,7 @@ export function makeNonTransCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "'A beats B' means A is more likely to roll a higher value than B.\nWhat does this mean mathematically?", "'A가 B를 이긴다'는 A가 B보다 높은 값을 굴릴 확률이 높다는 뜻이예요. 수학적으로 어떤 의미일까요?"),
+        "'A beats B' means A is more likely to roll a higher value than B.\nWhat does this mean mathematically?", "'A가 B를 이긴다'는 A가 B보다 높은 값을 굴릴 확률이 높다는 뜻이에요. 수학적으로 어떤 의미일까요?"),
       question: t(E,
         "Die A 'beats' die B means:",
         "주사위 A가 B를 '이긴다'는 뜻은:"),
@@ -122,7 +122,7 @@ export function makeNonTransCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "A=[1,2,3,4] vs B=[1,2,3,4].\nSame dice!\nDoes A beat B?\nCount pairs where a>b vs a<b.\nThey're equal, so no.\nEnter 0 for no.", "A=[1,2,3,4] vs B=[1,2,3,4]. 같은 주사위! A가 B를 이겨? a>b와 a<b 쌍 수가 같으니 아니예요. 아니면 0을 입력해요."),
+        "A=[1,2,3,4] vs B=[1,2,3,4].\nSame dice!\nDoes A beat B?\nCount pairs where a>b vs a<b.\nThey're equal, so no.\nEnter 0 for no.", "A=[1,2,3,4] vs B=[1,2,3,4]. 같은 주사위! A가 B를 이겨? a>b와 a<b 쌍 수가 같으니 아니에요. 아니면 0을 입력해요."),
       question: t(E,
         "A=[1,2,3,4], B=[1,2,3,4]. Does A beat B? (1=yes, 0=no)",
         "A=[1,2,3,4], B=[1,2,3,4]. A가 B를 이겨? (1=예, 0=아니오)"),

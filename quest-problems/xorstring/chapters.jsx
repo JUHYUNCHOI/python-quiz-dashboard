@@ -30,7 +30,7 @@ export function makeXorStringCh1(E) {
       type: "reveal",
       narr: t(E,
         "Two binary strings A and B of EQUAL length are given.\nPrint the bitwise XOR — a string the same length where each position is 0 if A and B match there, else 1.",
-        "같은 길이의 두 이진 문자열 A, B 가 주어져요.\n비트별 XOR — 같은 길이의 문자열로, 각 위치에서 A 와 B 가 같으면 0, 다르면 1 — 을 출력해요."),
+        "같은 길이의 두 이진 문자열 A, B 가 주어져요.\n비트별 XOR 을 출력해요. 결과는 같은 길이의 문자열이고, 각 위치에서 A 와 B 가 같으면 0, 다르면 1 이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -80,7 +80,7 @@ export function makeXorStringCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! XOR of same bits is always 0. 1 XOR 1 = 0.",
-        "맞아! 같은 비트의 XOR은 항상 0이예요. 1 XOR 1 = 0."),
+        "맞아! 같은 비트의 XOR은 항상 0이에요. 1 XOR 1 = 0."),
     },
     // 1-3: Input
     {

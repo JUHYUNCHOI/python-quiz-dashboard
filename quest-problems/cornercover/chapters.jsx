@@ -109,7 +109,7 @@ export function makeCornerCoverCh1(E) {
         "N=4, M=4. 꼭짓점은 몇 개?"),
       hint: t(E,
         "A square is a rectangle. It has 4 corners.",
-        "정사각형은 직사각형이예요. 꼭짓점이 4개예요."),
+        "정사각형은 직사각형이에요. 꼭짓점이 4개예요."),
       answer: 4,
     },
   ];

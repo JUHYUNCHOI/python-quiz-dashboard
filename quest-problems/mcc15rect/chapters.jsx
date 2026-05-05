@@ -70,7 +70,7 @@ export function makeMcc15RectCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Three corners of an axis-aligned rectangle are (0,0), (2,0), (0,3).\nWhat is the 4th corner?", "축 정렬 직사각형의 꼭짓점 3개가 (0,0), (2,0), (0,3)이예요. 4번째 꼭짓점은?"),
+        "Three corners of an axis-aligned rectangle are (0,0), (2,0), (0,3).\nWhat is the 4th corner?", "축 정렬 직사각형의 꼭짓점 3개가 (0,0), (2,0), (0,3)이에요. 4번째 꼭짓점은?"),
       question: t(E,
         "Corners: (0,0), (2,0), (0,3). 4th corner?",
         "꼭짓점: (0,0), (2,0), (0,3). 4번째 꼭짓점은?"),

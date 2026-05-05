@@ -45,7 +45,7 @@ export function makeMcc22LampCh1(E) {
       type: "reveal",
       narr: t(E,
         "N lamps numbered 1..N are all OFF initially. M toggle operations are applied; each operation has a range [L, R] and toggles every lamp in that range (ON↔OFF).\nPrint how many lamps are ON after all operations.",
-        "1..N 번호의 N 개 램프가 모두 꺼진 상태로 시작해요. M 번의 토글 연산이 있고, 각 연산은 범위 [L, R] 의 모든 램프를 토글 (ON ↔ OFF) 해요.\n모든 연산 후 켜진 램프의 수를 출력해요."),
+        "1..N 번호의 N 개 램프가 모두 꺼진 상태로 시작해요. M 번의 켜고 끄기 연산이 있고, 각 연산은 범위 [L, R] 의 모든 램프를 켜고 끄기 (ON ↔ OFF) 해요.\n모든 연산 후 켜진 램프의 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -70,7 +70,7 @@ export function makeMcc22LampCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "M operations apply, each ", "M 번의 연산, 각각 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "toggles every lamp in a range [L, R]", "범위 [L, R] 의 모든 램프를 토글")}</b>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "toggles every lamp in a range [L, R]", "범위 [L, R] 의 모든 램프를 켜고 끄기")}</b>
                   {t(E, " (ON ↔ OFF).", " (ON ↔ OFF).")}
                 </div>
               </div>

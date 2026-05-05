@@ -36,7 +36,7 @@ export function makeBlockGameCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has N alphabet blocks; each block has a word printed on its FRONT face and a word on its BACK face. To 'spell' a word using a block, the block must contain enough letter cubes for that word.\nFor each letter A..Z, find the minimum number of letter cubes Bessie needs so that she can spell EITHER the front or back word of every block — the answer is one count per letter.",
-        "베시에게 N개의 알파벳 판이 있고, 각 판의 앞면과 뒷면에 각각 단어가 적혀있어요. 어떤 단어를 만들려면 그 글자만큼의 글자 큐브가 필요해요.\n각 알파벳 A..Z 에 대해, 베시가 모든 판의 앞면 또는 뒷면 단어 중 하나를 만들 수 있도록 보유해야 할 글자 큐브의 최소 개수를 출력해요."),
+        "베시에게 N개의 알파벳 판이 있어요. 각 판의 앞면과 뒷면에 단어가 하나씩 적혀 있어요. 어떤 단어를 만들려면 그 단어에 들어 있는 글자만큼 글자 큐브가 있어야 해요.\n알파벳 A..Z 각각에 대해, 모든 판마다 앞면이나 뒷면 중 한 단어는 만들 수 있을 만큼 보유해야 할 큐브의 최소 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -96,7 +96,7 @@ export function makeBlockGameCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! We need max(front needs, back needs) per letter. Since AB and CD share no letters, we need max(1,0) for each = 1 each for A,B,C,D. Wait - we only see ONE side. So we need enough for AB OR CD. That's max(2,2) = 2 blocks.",
-        "맞아! 한 면만 보이니까 AB 또는 CD에 충분한 블록이 필요해요. max(2,2) = 2블록이예요."),
+        "맞아! 한 면만 보이니까 AB 또는 CD에 충분한 블록이 필요해요. max(2,2) = 2블록이에요."),
     },
     // 1-3: Input
     {

@@ -573,7 +573,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Last step: print the best revenue and the tuition price. That's the complete solution!", "마지막 단계: 최고 수입과 등록금을 출력. 이게 전체 풀이예요!"),
+        "Last step: print the best revenue and the tuition price. That's the complete solution!", "마지막 단계: 최고 수입과 등록금을 출력. 이게 전체 풀이에요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>

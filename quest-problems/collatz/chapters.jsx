@@ -28,7 +28,7 @@ export function makeCollatzCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The Collatz conjecture: start with any positive integer N.\nIf even, divide by 2.\nIf odd, multiply by 3 and add 1.\nRepeat until you reach 1.\nCount the steps!", "콜라츠 추측: 양의 정수 N에서 시작해요. 짝수면 2로 나누고, 홀수면 3을 곱하고 1을 더해요. 1에 도달할 때까지 반복하고 단계 수를 세!"),
+        "The Collatz conjecture: start with any positive integer N.\nIf even, divide by 2.\nIf odd, multiply by 3 and add 1.\nRepeat until you reach 1.\nCount the steps!", "콜라츠 추측: 양의 정수 N에서 시작해요. 짝수면 2로 나누고, 홀수면 3을 곱하고 1을 더해요. 1에 도달할 때까지 반복하고 단계 수를 세요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
@@ -37,7 +37,7 @@ export function makeCollatzCh1(E) {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Rule: if N is even,\nN = N/2. If N is odd,\nN = 3N+1. Count how many steps until N becomes 1.",
-              "규칙: N이 짝수면 N = N/2.\nN이 홀수면 N = 3N+1. N이 1이 될 때까지 몇 단계인지 세.")}
+              "규칙: N이 짝수면 N = N/2.\nN이 홀수면 N = 3N+1. N이 1이 될 때까지 몇 단계인지 세요.")}
           </div>
         </div>),
     },
@@ -45,7 +45,7 @@ export function makeCollatzCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's trace through N=6.\nThe sequence is 6 -> 3 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1.\nHow many steps?", "N=6을 추적해보자. 수열은 6 -> 3 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1이예요. 몇 단계일까요?"),
+        "Let's trace through N=6.\nThe sequence is 6 -> 3 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1.\nHow many steps?", "N=6을 추적해보자. 수열은 6 -> 3 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1이에요. 몇 단계일까요?"),
       question: t(E,
         "N=6: 6->3->10->5->16->8->4->2->1. How many steps?",
         "N=6: 6->3->10->5->16->8->4->2->1. 몇 단계?"),

@@ -108,7 +108,7 @@ export function makeMcc15BahasaCh1(E) {
         "'b'는 자음인가? (1=예, 0=아니오)"),
       hint: t(E,
         "'b' is not a vowel (a,e,i,o,u), so it IS a consonant. Answer: 1",
-        "'b'는 모음(a,e,i,o,u)이 아니니까 자음이예요. 답: 1"),
+        "'b'는 모음(a,e,i,o,u)이 아니니까 자음이에요. 답: 1"),
       answer: 1,
     },
   ];

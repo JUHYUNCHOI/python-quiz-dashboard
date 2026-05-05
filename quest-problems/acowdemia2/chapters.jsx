@@ -36,7 +36,7 @@ export function makeAcow2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "K papers are each authored by some subset of N total cow-researchers, written in a particular order.\nCow A is more senior than cow B if (a) they share at least one paper, and (b) on every shared paper A's name appears BEFORE B's. Count how many ordered pairs (A, B) satisfy this 'definitely senior' relation.",
-        "K개의 논문이 각각 N명의 소-연구자 중 일부에 의해 정해진 순서로 작성되어 있어요.\n소 A 가 소 B 보다 확실히 선임이라는 건, (a) 둘이 함께 쓴 논문이 적어도 하나 있고, (b) 그 모든 공동 논문에서 A 의 이름이 B 보다 앞에 나올 때예요. '확실히 선임' 관계를 만족하는 순서쌍 (A, B) 의 개수를 출력해요."),
+        "N명의 소-연구자가 함께 K개의 논문을 썼고, 각 논문마다 저자 순서가 정해져 있어요.\n소 A 가 소 B 보다 '확실히 선임' 이려면 두 가지 조건이 필요해요. 첫째, 둘이 함께 쓴 논문이 하나라도 있어야 해요. 둘째, 그 모든 공동 논문에서 A 의 이름이 B 보다 앞에 나와야 해요. 이 조건을 만족하는 순서쌍 (A, B) 의 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>

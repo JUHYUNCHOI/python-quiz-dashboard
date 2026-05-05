@@ -139,7 +139,7 @@ export function makeHps17Ch1(E) {
       correct: 1,
       explain: t(E,
         "Correct! 3! = 3 x 2 x 1 = 6 permutations.",
-        "맞아! 3! = 3 x 2 x 1 = 6가지 순열이예요."),
+        "맞아! 3! = 3 x 2 x 1 = 6가지 순열이에요."),
     },
     // 1-3: Input
     {

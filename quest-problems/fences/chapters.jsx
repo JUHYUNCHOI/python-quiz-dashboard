@@ -163,7 +163,7 @@ export function makeFencesCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A 'full fence column' means every cell in that column is a fence.\nEven one grass cell means it's not complete!", "'완전한 울타리 열'은 그 열의 모든 칸이 울타리란 뜻이예요. 풀이 1개라도 있으면 미완성!"),
+        "A 'full fence column' means every cell in that column is a fence.\nEven one grass cell means it's not complete!", "'완전한 울타리 열'은 그 열의 모든 칸이 울타리란 뜻이에요. 풀이 1개라도 있으면 미완성!"),
       question: t(E,
         "For a column to be a 'full fence column', what must be true?",
         "열이 '완전한 울타리 열'이 되려면?"),
@@ -338,7 +338,7 @@ export function makeFencesCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Did you notice? The answer is simply the MINIMUM number of '.' across all columns!", "눈치챘어? 답은 그냥 모든 열 중 '.'의 최솟값이예요!"),
+        "Did you notice? The answer is simply the MINIMUM number of '.' across all columns!", "눈치챘어? 답은 그냥 모든 열 중 '.'의 최솟값이에요!"),
       question: t(E,
         "What is the answer to this problem?",
         "이 문제의 답은 뭐예요?"),

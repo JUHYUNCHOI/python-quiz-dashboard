@@ -28,7 +28,7 @@ export function makeMcc19RectCh1(E) {
       type: "reveal",
       narr: t(E,
         "A non-decreasing list of N integers a[1..N] is given.\nPrint the MINIMUM absolute difference between any pair of CONSECUTIVE elements.",
-        "비내림차순으로 정렬된 N 개의 정수 a[1..N] 가 주어져요.\n인접한 두 원소의 절대 차이의 최솟값을 출력해요."),
+        "오름차순으로 정렬된 N 개의 정수 a[1..N] 가 주어져요.\n인접한 두 원소의 절대 차이의 최솟값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -46,7 +46,7 @@ export function makeMcc19RectCh1(E) {
                 <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
-                  <b style={{ color: "#059669" }}>{t(E, "non-decreasing list of N integers a[1..N]", "비내림차순으로 정렬된 N 개의 정수 a[1..N]")}</b>
+                  <b style={{ color: "#059669" }}>{t(E, "non-decreasing list of N integers a[1..N]", "오름차순으로 정렬된 N 개의 정수 a[1..N]")}</b>
                   {t(E, ".", " 가 주어져요.")}
                 </div>
               </div>
@@ -78,7 +78,7 @@ export function makeMcc19RectCh1(E) {
       correct: 2,
       explain: t(E,
         "Correct! 6-5 = 1 is the smallest difference among consecutive pairs.",
-        "맞아! 6-5 = 1이 연속 쌍 중 가장 작은 차이예요."),
+        "맞아! 6-5 = 1이 연속 쌍 중 가장 작은 차이에요."),
     },
     // 1-3: Input
     {

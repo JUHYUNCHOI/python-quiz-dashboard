@@ -30,7 +30,7 @@ export function makeMcc21MenuCh1(E) {
       type: "reveal",
       narr: t(E,
         "We're building a nested menu — categories can contain other categories or leaf items. We're given a list of \"add child X under parent Y\" operations.\nPrint the TOTAL number of items in the menu (across all nesting levels) at the end.",
-        "중첩 메뉴를 만들어요 — 카테고리 안에 다른 카테고리나 잎 항목이 들어갈 수 있어요. \"부모 Y 아래에 자식 X 추가\" 연산 목록이 주어져요.\n마지막에 메뉴의 모든 중첩 레벨을 합한 총 항목 수를 출력해요."),
+        "중첩 메뉴를 만들어요 — 카테고리 안에 다른 카테고리나 끝 항목이 들어갈 수 있어요. \"부모 Y 아래에 자식 X 추가\" 연산 목록이 주어져요.\n마지막에 메뉴의 모든 중첩 레벨을 합한 총 항목 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -50,7 +50,7 @@ export function makeMcc21MenuCh1(E) {
                   {t(E, "Build a ", "")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "nested menu tree", "중첩 메뉴 트리")}</b>
                   {t(E, " — categories can contain other categories or leaf items.",
-                        " 를 만들어요 — 카테고리 안에 다른 카테고리나 잎 항목이 들어가요.")}
+                        " 를 만들어요 — 카테고리 안에 다른 카테고리나 끝 항목이 들어가요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>

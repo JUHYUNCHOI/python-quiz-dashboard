@@ -96,7 +96,7 @@ export function makeBucketListCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! From t=3 to t=5, both cows need buckets: 3 + 2 = 5. That's the maximum.",
-        "맞아! t=3부터 t=5까지 두 소 모두 양동이 필요: 3 + 2 = 5. 그게 최대값이예요."),
+        "맞아! t=3부터 t=5까지 두 소 모두 양동이 필요: 3 + 2 = 5. 그게 최대값이에요."),
     },
     // 1-3: Input
     {

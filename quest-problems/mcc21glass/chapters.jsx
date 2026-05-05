@@ -98,7 +98,7 @@ export function makeMcc21GlassCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "In a circle, there's no 'start' or 'end'.\nRotating the entire arrangement gives the same circle.\nA-B-C, B-C-A, and C-A-B are all the same circular arrangement!", "원형에는 '시작'이나 '끝'이 없어요. 전체 배열을 회전해도 같은 원이예요. A-B-C, B-C-A, C-A-B은 모두 같은 원형 배열!"),
+        "In a circle, there's no 'start' or 'end'.\nRotating the entire arrangement gives the same circle.\nA-B-C, B-C-A, and C-A-B are all the same circular arrangement!", "원형에는 '시작'이나 '끝'이 없어요. 전체 배열을 회전해도 같은 원이에요. A-B-C, B-C-A, C-A-B은 모두 같은 원형 배열!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ display: "flex", justifyContent: "center", gap: 6, alignItems: "center" }}>

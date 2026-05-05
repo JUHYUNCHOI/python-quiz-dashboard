@@ -58,7 +58,7 @@ export function makeFamilyTreeCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ tracks cow mother-child relationships. Given two specific cows X and Y, classify their relationship from the family tree:\nmother / grand-mother / great-...-grand-mother (and the reverse: daughter / grand-daughter / great-...-grand-daughter), siblings, cousins, or unrelated.",
-        "FJ 가 소들의 모녀 관계를 추적해요. 특정 두 소 X 와 Y 가 주어지면 가계도에서 둘의 관계를 분류해요:\n엄마 / 할머니 / great-...-할머니 (반대 방향은 딸 / 손녀 / ...), 자매, 사촌, 또는 관계 없음."),
+        "FJ 가 소들의 모녀 관계를 추적해요. 특정 두 소 X 와 Y 가 주어지면 가계도에서 둘의 관계를 분류해요:\n엄마 / 할머니 / 고조-...-할머니 (반대 방향은 딸 / 손녀 / ...), 자매, 사촌, 또는 관계 없음."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -118,7 +118,7 @@ export function makeFamilyTreeCh1(E) {
       correct: 1,
       explain: t(E,
         "Mother and child are exactly 1 generation apart!",
-        "어미와 자식은 정확히 1세대 차이예요!"),
+        "어미와 자식은 정확히 1세대 차이에요!"),
     },
     // 1-3: Input
     {

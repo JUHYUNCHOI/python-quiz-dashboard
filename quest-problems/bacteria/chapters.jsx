@@ -111,7 +111,7 @@ export function makeBacteriaCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! The spray creates a triangular pattern: power L at the rightmost, L-1 at the next, and so on.",
-        "맞아! 분무는 삼각형 패턴을 만들어: 맨 오른쪽에 L, 그 다음에 L-1, 이런 식이예요."),
+        "맞아! 분무는 삼각형 패턴을 만들어: 맨 오른쪽에 L, 그 다음에 L-1, 이런 식이에요."),
     },
     // 1-3: Input
     {

@@ -80,7 +80,7 @@ export function makeInterviewCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 14 }}>
             <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Bessie's Interview</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Silver #1</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #1</div>
           </div>
 
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>

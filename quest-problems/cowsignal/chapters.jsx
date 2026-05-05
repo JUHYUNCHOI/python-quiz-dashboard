@@ -98,7 +98,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The signal is drawn on a grid — like graph paper!\nEach square has either a dot '.' (empty) or an 'X' (filled).\nThis grid has 2 rows and 3 columns.", "신호는 그리드 위에 그려져 — 모눈종이처럼! 각 칸에는 점 '.' (빈칸) 또는 'X' (채워진 칸). 이 그리드는 2행 3열이예요."),
+        "The signal is drawn on a grid — like graph paper!\nEach square has either a dot '.' (empty) or an 'X' (filled).\nThis grid has 2 rows and 3 columns.", "신호는 그리드 위에 그려져 — 모눈종이처럼! 각 칸에는 점 '.' (빈칸) 또는 'X' (채워진 칸). 이 그리드는 2행 3열이에요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#8b5cf6", marginBottom: 8 }}>
@@ -243,7 +243,7 @@ export function makeCowSignalCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The output size is always M×K rows and N×K columns. Each dimension gets multiplied by K!", "출력 크기는 항상 M×K 행, N×K 열이예요. 각 차원에 K를 곱해요!"),
+        "The output size is always M×K rows and N×K columns. Each dimension gets multiplied by K!", "출력 크기는 항상 M×K 행, N×K 열이에요. 각 차원에 K를 곱해요!"),
       question: t(E, "Original 5×4, K=3. Output size?", "원본 5×4, K=3. 출력 크기?"),
       options: [
         t(E, "15 rows × 12 columns", "15행 × 12열"),
@@ -467,7 +467,7 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: Read M lines for the grid. Each line is a string of '.' and 'X'.", "2단계: 그리드로 M줄을 읽어. 각 줄은 '.'와 'X'의 문자열이예요."),
+        "Step 2: Read M lines for the grid. Each line is a string of '.' and 'X'.", "2단계: 그리드로 M줄을 읽어. 각 줄은 '.'와 'X'의 문자열이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
@@ -532,7 +532,7 @@ export function makeCowSignalCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "This is the core of the solution! grid[i][j] * K does the horizontal stretching.", "이게 솔루션의 핵심이예요! grid[i][j] * K가 가로 확대를 해요."),
+        "This is the core of the solution! grid[i][j] * K does the horizontal stretching.", "이게 솔루션의 핵심이에요! grid[i][j] * K가 가로 확대를 해요."),
       question: t(E,
         "grid[0] = 'X.X', K=3. What does grid[0][1] * K produce?",
         "grid[0] = 'X.X', K=3. grid[0][1] * K의 결과는?"),

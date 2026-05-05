@@ -9,48 +9,34 @@ export const SOLUTION_CODE = [
   "input = sys.stdin.readline",
   "",
   "N, M = map(int, input().split())",
-  "stalls = []",
-  "for _ in range(N):",
+  "intervals = []",
+  "for _ in range(M):",
   "    a, b = map(int, input().split())",
-  "    stalls.append((a, b))",
-  "stalls.sort()",
+  "    intervals.append((a, b))",
+  "intervals.sort()",
   "",
-  "# Flatten all stall positions",
-  "positions = []",
-  "for a, b in stalls:",
-  "    positions.extend(range(a, b + 1))",
-  "",
-  "occupied = [positions[i] for i in range(len(positions)) if i < M]",
-  "# Actually: read occupied positions separately",
-  "",
-  "# Binary search on minimum distance D",
-  "def can_place(D, positions, occupied, cows_to_place):",
-  "    all_pos = sorted(set(positions))",
-  "    occ = set(occupied)",
-  "    placed = sorted(occupied)",
-  "    need = cows_to_place",
-  "    for p in all_pos:",
-  "        if p in occ:",
-  "            continue",
-  "        # Check if p is at least D from all placed",
-  "        ok = True",
-  "        for q in placed:",
-  "            if abs(p - q) < D:",
-  "                ok = False",
-  "                break",
-  "        if ok:",
-  "            placed.append(p)",
-  "            placed.sort()",
-  "            need -= 1",
-  "            if need == 0:",
+  "# can we place all N cows so neighbors are >= D apart?",
+  "# greedy: in each interval, place at last+D (or interval start),",
+  "# then keep stepping +D inside the same interval",
+  "def can_place(D):",
+  "    count = 0",
+  "    last = -10**18",
+  "    for a, b in intervals:",
+  "        x = max(a, last + D)",
+  "        while x <= b:",
+  "            count += 1",
+  "            last = x",
+  "            if count >= N:",
   "                return True",
-  "    return need <= 0",
+  "            x += D",
+  "    return False",
   "",
-  "lo, hi = 1, positions[-1] - positions[0]",
-  "ans = 0",
+  "# binary search the answer D",
+  "lo, hi = 1, intervals[-1][1] - intervals[0][0]",
+  "ans = 1",
   "while lo <= hi:",
   "    mid = (lo + hi) // 2",
-  "    if can_place(mid, positions, occupied, M):",
+  "    if can_place(mid):",
   "        ans = mid",
   "        lo = mid + 1",
   "    else:",
@@ -69,7 +55,7 @@ export function makeSocDist1Ch1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has a number line with M disjoint segments where cows can stand. He must place exactly N cows on integer positions inside those segments.\nMaximize the MINIMUM distance between any two cows.",
-        "FJ 에게 수직선 위 M 개의 서로 떨어진 구간이 있고, 소들이 그 구간 안 정수 위치에 설 수 있어요. 정확히 N 마리 소를 배치해야 해요.\n임의의 두 소 사이 최소 거리를 최대화해요."),
+        "FJ 한테 수직선 위 M 개의 서로 떨어진 구간이 있어서, 소들이 그 구간 안 정수 위치에 설 수 있어요. 정확히 N 마리 소를 배치해야 해요.\n두 소 사이 최소 거리가 가장 크게 되도록 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -86,10 +72,10 @@ export function makeSocDist1Ch1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "FJ has ", "FJ 에게 ")}
+                  {t(E, "FJ has ", "FJ 한테 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "M disjoint segments on a number line", "수직선 위 M 개의 서로 떨어진 구간")}</b>
                   {t(E, " — cows can only stand on integer positions inside these segments.",
-                        " 이 있고, 소는 그 구간 안 정수 위치에만 설 수 있어요.")}
+                        " 이 있어서, 소는 그 구간 안 정수 위치에만 설 수 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -104,7 +90,7 @@ export function makeSocDist1Ch1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM possible minimum distance between any two cows", "두 소 사이 최소 거리의 최댓값")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM possible minimum distance between any two cows", "두 소 사이 최소 거리가 가장 크게 되는 값")}</b>
                   {t(E, ".", "을 출력해요.")}
                 </div>
               </div>

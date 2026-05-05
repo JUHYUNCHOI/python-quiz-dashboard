@@ -52,7 +52,7 @@ export function makeMcc22GrammarCh1(E) {
       type: "reveal",
       narr: t(E,
         "A 'grammar' is a directed graph: nodes are words and a directed edge X → Y means \"after word X, word Y is allowed\". A sentence is valid if every consecutive word pair (X, Y) has an edge X → Y.\nFor each input sentence, print VALID or INVALID.",
-        "'문법' 은 단어가 노드인 방향 그래프예요. X → Y 의 방향 간선은 \"단어 X 다음에 단어 Y 가 올 수 있다\" 는 뜻. 문장이 유효하려면 모든 연속 단어 쌍 (X, Y) 에 X → Y 간선이 있어야 해요.\n각 입력 문장에 대해 VALID 또는 INVALID 를 출력해요."),
+        "'문법' 은 단어가 노드인 방향이 있는 그래프예요. X → Y 의 한쪽 방향 화살표는 \"단어 X 다음에 단어 Y 가 올 수 있다\" 는 뜻. 문장이 조건에 맞으려면 모든 연속 단어 쌍 (X, Y) 에 X → Y 화살표가 있어야 해요.\n각 입력 문장에 대해 VALID 또는 INVALID 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -70,16 +70,16 @@ export function makeMcc22GrammarCh1(E) {
                 <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
-                  <b style={{ color: "#059669" }}>{t(E, "grammar is a directed graph of words", "문법은 단어들로 이뤄진 방향 그래프")}</b>
+                  <b style={{ color: "#059669" }}>{t(E, "grammar is a directed graph of words", "문법은 단어들로 이뤄진 방향이 있는 그래프")}</b>
                   {t(E, ". An edge X → Y means \"Y can follow X\".",
-                        " 예요. X → Y 간선은 \"X 다음에 Y\" 가능.")}
+                        " 예요. X → Y 화살표는 \"X 다음에 Y\" 가능해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A sentence is ", "문장이 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "VALID if every consecutive (X, Y) has an edge X → Y", "유효하려면 모든 연속 (X, Y) 가 간선 X → Y 를 가져야")}</b>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "VALID if every consecutive (X, Y) has an edge X → Y", "조건에 맞으려면 모든 연속 (X, Y) 가 화살표 X → Y 를 가져야")}</b>
                   {t(E, ".", " 해요.")}
                 </div>
               </div>

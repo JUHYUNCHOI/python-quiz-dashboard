@@ -5,28 +5,32 @@ import { getPhotoshootSections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
+  "from collections import deque",
+  "",
   "N = int(input())",
-  "s = input()",
+  "start = input().strip()",
+  "target = input().strip()",
   "",
-  "# Count G's at even 1-indexed positions (indices 1,3,5,...)",
-  "# We want to maximize G's at even positions",
-  "# Strategy: greedily fix prefix reversals",
-  "",
-  "cows = list(s)",
-  "ans = 0",
-  "",
-  "for i in range(N - 1):",
-  "    # If current cow doesn't match desired pattern,",
-  "    # find the next different cow and reverse prefix",
-  "    if cows[i] == cows[i + 1]:",
-  "        continue",
-  "    # A transition means we might need a reversal",
-  "    ans += 1",
-  "",
-  "# The answer relates to counting transitions",
-  "# between G and H in the string",
-  "g_even = sum(1 for i in range(N) if (i+1) % 2 == 0 and cows[i] == 'G')",
-  "print(g_even)",
+  "# Allowed move: pick a prefix s[:i] (i >= 2) and reverse it.",
+  "# Find the minimum number of moves to turn start into target.",
+  "# BFS over all reachable arrangements (works for small N).",
+  "if sorted(start) != sorted(target):",
+  "    print(-1)",
+  "else:",
+  "    seen = {start: 0}",
+  "    q = deque([start])",
+  "    ans = -1",
+  "    while q:",
+  "        s = q.popleft()",
+  "        if s == target:",
+  "            ans = seen[s]",
+  "            break",
+  "        for i in range(2, N + 1):",
+  "            nxt = s[:i][::-1] + s[i:]",
+  "            if nxt not in seen:",
+  "                seen[nxt] = seen[s] + 1",
+  "                q.append(nxt)",
+  "    print(ans)",
 ];
 
 
@@ -40,7 +44,7 @@ export function makePhotoshootCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has a row of N cows, each Guernsey (G) or Holstein (H). He's given a final desired arrangement b[].\nHis only allowed move: pick a prefix of the row and REVERSE it. He wants to reach b in as few moves as possible.\nPrint the minimum number of prefix reversals.",
-        "FJ에게 한 줄로 선 N마리 소가 있고, 각 소는 건지(G) 또는 홀스타인(H)이에요. 목표 배치 b[] 가 주어져요.\nFJ가 쓸 수 있는 유일한 동작: 접두사(앞부분 일정 길이)를 골라 그 부분을 뒤집기. 목표 b에 도달하기까지 동작을 가장 적게 사용해요.\n최소 접두사-뒤집기 횟수를 출력해요."),
+        "FJ에게 한 줄로 선 N마리 소가 있고, 각 소는 건지(G) 또는 홀스타인(H)이에요. 목표 배치 b[] 가 주어져요.\nFJ가 쓸 수 있는 유일한 동작: 접두사(앞부분 일정 길이)를 골라 그 부분을 뒤집기. 목표 b에 도달하기까지 동작을 가장 적게 사용해요.\n최소 뒤집기 횟수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -112,7 +116,7 @@ export function makePhotoshootCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! Position 2 has H, position 4 has G. Only 1 G at an even position.",
-        "맞아! 위치2는 H, 위치4는 G. 짝수 위치에 G는 1개뿐이예요."),
+        "맞아! 위치2는 H, 위치4는 G. 짝수 위치에 G는 1개뿐이에요."),
     },
     // 1-3: Input
     {

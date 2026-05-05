@@ -43,7 +43,7 @@ export function makeMcc15EqCh1(E) {
       type: "reveal",
       narr: t(E,
         "You're given 3 numbers a, b, c and a target T. Place an operator (+, −, ×, /) in each of the 2 gaps between them so the resulting expression equals T (using normal precedence).\nPrint any such filled equation, or report none.",
-        "숫자 a, b, c 와 목표값 T 가 주어져요. 그 사이 두 자리에 연산자 (+, −, ×, /) 를 채워서 일반 우선순위로 계산했을 때 결과가 T 가 되는 식을 만들어요.\n그런 식 하나를 출력하고, 없으면 알림."),
+        "숫자 a, b, c 와 목표값 T 가 주어져요. 그 사이 두 자리에 연산자 (+, −, ×, /) 를 채워서 일반 우선순위로 계산했을 때 결과가 T 가 되는 식을 만들어요.\n그런 식 하나를 출력해요. 없으면 없다고 알려요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -79,7 +79,7 @@ export function makeMcc15EqCh1(E) {
                 <div>
                   {t(E, "Print any ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "filled equation that evaluates to T", "결과가 T 가 되는 식")}</b>
-                  {t(E, ", or report none.", " 하나를 출력해요. 없으면 알림.")}
+                  {t(E, ", or report none.", " 하나를 출력해요. 없으면 없다고 알려요.")}
                 </div>
               </div>
             </div>

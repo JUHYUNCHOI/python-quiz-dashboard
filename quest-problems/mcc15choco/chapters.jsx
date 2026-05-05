@@ -33,7 +33,7 @@ export function makeMcc15ChocoCh1(E) {
       type: "reveal",
       narr: t(E,
         "A row of N chocolate bars with sizes a[1..N]. You can repeatedly remove ADJACENT pairs of equal-size bars (after removal, the remaining bars become adjacent).\nPrint the TOTAL chocolate length removed.",
-        "크기 a[1..N] 의 N 개 초콜릿 바가 한 줄에 있어요. 같은 크기의 인접한 두 바를 반복해서 제거할 수 있어요 (제거 후 남은 바가 인접하게 돼요).\n제거한 초콜릿 총 길이를 출력해요."),
+        "N 개 초콜릿 바가 한 줄에 있고, 크기는 각각 a[i] 예요. 같은 크기의 인접한 두 바를 반복해서 제거할 수 있어요 (제거 후 남은 바가 인접하게 돼요).\n제거한 초콜릿 총 길이를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -51,7 +51,7 @@ export function makeMcc15ChocoCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A row of ", "")}
-                  <b style={{ color: "#8b5cf6" }}>{t(E, "N chocolate bars with sizes a[1..N]", "크기 a[1..N] 의 N 개 초콜릿 바")}</b>
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "N chocolate bars with sizes a[1..N]", "N 개 초콜릿 바, 크기는 각각 a[i]")}</b>
                   {t(E, ".", " 가 한 줄에 있어요.")}
                 </div>
               </div>

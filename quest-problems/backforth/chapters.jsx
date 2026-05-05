@@ -46,7 +46,7 @@ export function makeBackForthCh1(E) {
       type: "reveal",
       narr: t(E,
         "Two barns each have 10 buckets of milk (1000 gallons total per barn). Over 4 days, FJ and his sister alternate carrying ONE bucket between barns: day 1 FJ moves one from barn 1 → 2, day 2 sister moves one from barn 2 → 1, day 3 FJ again, day 4 sister.\nCount the number of DISTINCT possible total milk amounts in barn 1 after the 4 days.",
-        "두 헛간에 각각 10개의 우유 양동이가 있어요 (헛간당 총 1000 갤런). 4일 동안 FJ 와 동생이 번갈아 양동이를 1개씩 옮겨요: 1일차 FJ 가 헛간 1 → 2 로 1개, 2일차 동생이 헛간 2 → 1 로 1개, 3일차 FJ, 4일차 동생.\n4일 후 헛간 1 에 남은 가능한 우유 총량의 서로 다른 값의 개수를 출력해요."),
+        "두 헛간에 각각 10개의 우유 양동이가 있어요 (헛간당 총 1000 갤런). 4일 동안 FJ 와 동생이 번갈아 양동이를 1개씩 옮겨요. 1일차 FJ 가 헛간 1 → 2 로 1개, 2일차 동생이 헛간 2 → 1 로 1개, 3일차 FJ, 4일차 동생.\n4일이 끝났을 때 헛간 1 에 들어 있을 수 있는 우유 총량의 서로 다른 값이 몇 가지인지 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -112,7 +112,7 @@ export function makeBackForthCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "All buckets have the same amount. How many distinct final amounts for barn 1?", "모든 양동이가 같은 양이예요. 헛간 1의 고유 최종 우유량은 몇 가지?"),
+        "All buckets have the same amount. How many distinct final amounts for barn 1?", "모든 양동이가 같은 양이에요. 헛간 1의 고유 최종 우유량은 몇 가지?"),
       question: t(E,
         "All identical buckets. Distinct outcomes for barn 1?",
         "모든 양동이 동일. 헛간 1의 고유 결과 수?"),

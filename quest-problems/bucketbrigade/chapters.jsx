@@ -126,7 +126,7 @@ export function makeBrigadeCh1(E) {
       correct: 1,
       explain: t(E,
         "The grid is always 10x10 in this problem.",
-        "이 문제에서 격자는 항상 10x10이예요."),
+        "이 문제에서 격자는 항상 10x10이에요."),
     },
     // 1-3: Input
     {
@@ -135,10 +135,10 @@ export function makeBrigadeCh1(E) {
         "What is the grid size (one dimension)?", "격자의 한 변의 크기는?"),
       question: t(E,
         "The grid is NxN. What is N?",
-        "격자가 NxN이예요. N은?"),
+        "격자가 NxN이에요. N은?"),
       hint: t(E,
         "The grid is always 10x10.",
-        "격자는 항상 10x10이예요."),
+        "격자는 항상 10x10이에요."),
       answer: 10,
     },
   ];

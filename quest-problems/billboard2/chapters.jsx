@@ -54,7 +54,7 @@ export function makeBillboard2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "There's a lawnmower billboard (an axis-aligned rectangle) and a cow-feed billboard (also axis-aligned) that may cover part of it.\nFind the area of the SMALLEST axis-aligned rectangle (a tarp) that covers every part of the lawnmower billboard NOT already hidden by the feed billboard.",
-        "잔디깎이 광고판(축에 평행한 직사각형)과 소 사료 광고판(역시 축에 평행)이 있고, 사료 광고판이 잔디깎이 광고판의 일부를 가릴 수 있어요.\n잔디깎이 광고판에서 사료 광고판에 가려지지 않은 모든 부분을 덮는 가장 작은 축에 평행한 직사각형(타프)의 면적을 출력해요."),
+        "잔디깎이 광고판과 소 사료 광고판이 있어요. 둘 다 변이 축에 평행한 직사각형이에요. 사료 광고판이 잔디깎이 광고판의 일부를 가릴 수 있어요.\n잔디깎이 광고판에서 가려지지 않은 모든 부분을 덮을 수 있는 가장 작은 직사각형 타프의 면적을 출력해요. 타프도 변이 축에 평행해야 해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -115,7 +115,7 @@ export function makeBillboard2Ch1(E) {
       correct: 0,
       explain: t(E,
         "The feed covers the entire top side, so the exposed bottom half is a rectangle. Tarp = 10x5 = 50.",
-        "사료가 윗면 전체를 덮으니 노출된 아랫절반이 직사각형이예요. 타프 = 10x5 = 50."),
+        "사료가 윗면 전체를 덮으니 노출된 아랫절반이 직사각형이에요. 타프 = 10x5 = 50."),
     },
     // 1-3: input
     {

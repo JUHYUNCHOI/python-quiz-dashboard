@@ -100,7 +100,7 @@ export function makeCowTipCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! Toggle (0,0)-(1,1), then (0,0)-(0,1), then (0,0)-(1,0). 3 operations total.",
-        "맞아! (0,0)-(1,1) 토글, (0,0)-(0,1) 토글, (0,0)-(1,0) 토글. 총 3번이예요."),
+        "맞아! (0,0)-(1,1) 토글, (0,0)-(0,1) 토글, (0,0)-(1,0) 토글. 총 3번이에요."),
     },
     // 1-3: Input
     {

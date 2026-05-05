@@ -28,7 +28,7 @@ export function makeMcc19CandyCh1(E) {
       type: "reveal",
       narr: t(E,
         "N people stand in a line numbered 1..N. In each round, every person at an ODD position (1st, 3rd, 5th, ...) is eliminated; the rest renumber from 1. Repeat until ONE person remains.\nPrint that person's original number.",
-        "N 명이 1..N 번호로 한 줄에 서 있어요. 매 라운드, 홀수 위치 (1st, 3rd, 5th, ...) 의 사람들이 탈락하고, 나머지가 1 부터 다시 번호 매겨져요. 한 명만 남을 때까지 반복.\n남은 사람의 원래 번호를 출력해요."),
+        "N 명이 1..N 번호로 한 줄에 서 있어요. 매 라운드, 홀수 위치 (첫째, 셋째, 다섯째, ...) 의 사람들이 탈락하고, 나머지가 1 부터 다시 번호 매겨져요. 한 명만 남을 때까지 반복.\n남은 사람의 원래 번호를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>

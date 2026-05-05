@@ -53,7 +53,7 @@ export function makeEvolutionCh1(E) {
       type: "reveal",
       narr: t(E,
         "There are N cow sub-populations, each with a set of characteristics. We want to know whether a valid evolutionary tree could have produced these populations — meaning each characteristic appeared exactly ONCE on the tree (every population that has it descends from that single appearance).\nPrint 'yes' if such a tree could exist, else 'no'.",
-        "N개의 소 하위 집단이 있고, 각 집단의 특성 집합이 주어져요. 이 집단들을 만들 수 있는 진화 트리가 존재하는지 알고 싶어요 — 각 특성이 트리 위에서 정확히 한 번만 등장해야 해요 (그 특성을 가진 모든 집단이 그 단일 등장점의 후손).\n그런 트리가 존재할 수 있으면 'yes', 아니면 'no'를 출력해요."),
+        "N개의 소 하위 집단이 있고, 각 집단이 가진 특성들이 주어져요. 이 집단들을 만들 수 있는 진화 트리가 있을까요?\n조건은 이래요: 각 특성은 트리 위에서 딱 한 노드에서만 나타나야 해요. 그리고 그 특성을 가진 모든 집단은 그 노드의 후손이어야 해요. 가능하면 'yes', 불가능하면 'no'를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -83,7 +83,7 @@ export function makeEvolutionCh1(E) {
                   {t(E, "An ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "evolutionary tree", "진화 트리")}</b>
                   {t(E, " is valid if each characteristic appears at exactly ONE node — all populations that have it must descend from that node.",
-                        "가 유효하려면 각 특성이 트리에서 정확히 한 노드에만 등장해야 해요 — 그 특성을 가진 모든 집단이 그 노드의 후손.")}
+                        "가 유효하려면 각 특성이 트리에서 정확히 한 노드에만 등장해야 해요. 그리고 그 특성을 가진 모든 집단이 그 노드의 후손이어야 해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>

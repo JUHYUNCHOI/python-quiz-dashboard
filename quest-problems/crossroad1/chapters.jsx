@@ -35,7 +35,7 @@ export function makeCrossRd1Ch1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has 10 cows, each labeled 1..10. Over N observations he records (cow_id, side) where side ∈ {0, 1}. Each observation says which side of the road that cow was on at that moment.\nA 'crossing' happens between two consecutive observations of the SAME cow when her side changes. Count the total number of crossings across all cows.",
-        "FJ 에게 1..10 번호의 10마리 소가 있어요. N개의 관찰을 하는 동안 (소 번호, 쪽) 을 기록해요 — 쪽 ∈ {0, 1}. 각 관찰은 그 시점에 그 소가 도로의 어느 쪽이었는지 알려줘요.\n같은 소를 연속으로 관찰했을 때 쪽이 바뀌면 '횡단' 1번. 모든 소를 합쳐 횡단 총 횟수를 출력해요."),
+        "FJ 에게 1..10 번호의 10마리 소가 있어요. N개의 관찰을 하는 동안 (소 번호, 쪽) 을 기록해요 — 쪽은 0 또는 1. 각 관찰은 그 시점에 그 소가 도로의 어느 쪽에 있었는지 알려줘요.\n같은 소를 연속으로 관찰했을 때 쪽이 바뀌면 '횡단' 1번. 모든 소를 합쳐 횡단 총 횟수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -61,7 +61,7 @@ export function makeCrossRd1Ch1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "He logs ", "그는 시간 순서대로 ")}
+                  {t(E, "He logs ", "시간 순서대로 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "N observations in time order", "N개의 관찰")}</b>
                   {t(E, " — each is (cow_id, side).",
                         " — 각 관찰은 (소 번호, 쪽).")}
@@ -92,7 +92,7 @@ export function makeCrossRd1Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A cow is seen at side 0, then later at side 1. How many crossings is that?", "소가 0번 쪽에서 보이고, 나중에 1번 쪽에서 보여요. 횡단 몇 번이예요?"),
+        "A cow is seen at side 0, then later at side 1. How many crossings is that?", "소가 0번 쪽에서 보이고, 나중에 1번 쪽에서 보여요. 횡단 몇 번이에요?"),
       question: t(E,
         "Cow seen at side 0, then side 1. How many crossings?",
         "소가 0번 쪽, 그 다음 1번 쪽. 횡단 몇 번?"),
@@ -104,7 +104,7 @@ export function makeCrossRd1Ch1(E) {
       correct: 0,
       explain: t(E,
         "Correct! The cow changed from side 0 to side 1, that's exactly 1 crossing.",
-        "맞아! 소가 0번 쪽에서 1번 쪽으로 바뀌었으니 정확히 1번 횡단이예요."),
+        "맞아! 소가 0번 쪽에서 1번 쪽으로 바뀌었으니 정확히 1번 횡단이에요."),
     },
     // 1-3: Input
     {

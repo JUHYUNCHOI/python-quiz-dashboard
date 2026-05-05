@@ -33,7 +33,7 @@ export function makeMcc20ZigzagCh1(E) {
       type: "reveal",
       narr: t(E,
         "Given a sequence of characters and an integer K, count the number of length-K subsequences that 'zig-zag' — values strictly alternating between going UP and going DOWN at each consecutive step.\nPrint the count.",
-        "문자 수열과 정수 K 가 주어져요. 길이 K 의 부분수열 중 인접한 두 항이 매번 한 번 올라갔다 한 번 내려갔다 하며 엄격히 번갈아 가는 '지그재그' 의 개수를 세요.\n그 개수를 출력해요."),
+        "문자 수열과 정수 K 가 주어져요. 길이 K 의 부분수열 중 인접한 두 항이 매번 한 번 올라갔다 한 번 내려갔다 하며 엄격하게 번갈아 가는 '지그재그' 의 개수를 세요.\n그 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -61,7 +61,7 @@ export function makeMcc20ZigzagCh1(E) {
                   {t(E, "A ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "zig-zag subsequence of length K", "길이 K 의 지그재그 부분수열")}</b>
                   {t(E, " has consecutive values strictly alternating up/down/up/down...",
-                        " 은 인접 두 항이 매번 한 번 올라갔다 한 번 내려갔다 하며 엄격히 번갈아 감.")}
+                        " 은 인접 두 항이 매번 한 번 올라갔다 한 번 내려갔다 하며 엄격하게 번갈아 가요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>

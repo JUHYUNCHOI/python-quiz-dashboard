@@ -155,7 +155,7 @@ export function makeDaisyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Not every subarray works!\nThe average must be an integer AND some flower must have exactly that many petals.", "모든 부분 배열이 되는 건 아니예요! 평균이 정수여야 하고 그 개수의 꽃잎을 가진 꽃이 있어야 해요."),
+        "Not every subarray works!\nThe average must be an integer AND some flower must have exactly that many petals.", "모든 부분 배열이 되는 건 아니에요! 평균이 정수여야 하고 그 개수의 꽃잎을 가진 꽃이 있어야 해요."),
       content: (() => {
         const flowers = [1, 1, 2];
         return (
@@ -196,7 +196,7 @@ export function makeDaisyCh1(E) {
                 ❌ {t(E, "Subarray [1, 3]: avg = 2", "부분 배열 [1, 3]: 평균 = 2")}
               </div>
               <div style={{ fontSize: 12, color: C.text }}>
-                {t(E, "Any flower = 2? NO! Neither 1 nor 3 equals 2.", "꽃잎 = 2인 꽃? NO! 1도 3도 2가 아니예요.")}
+                {t(E, "Any flower = 2? NO! Neither 1 nor 3 equals 2.", "꽃잎 = 2인 꽃? NO! 1도 3도 2가 아니에요.")}
               </div>
             </div>
           </div>
@@ -218,7 +218,7 @@ export function makeDaisyCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! avg = (1+1)/2 = 1, and both flowers have 1 petal. This subarray is valid!",
-        "정답! 평균 = (1+1)/2 = 1이고 두 꽃 모두 꽃잎이 1개. 유효한 부분 배열이예요!"),
+        "정답! 평균 = (1+1)/2 = 1이고 두 꽃 모두 꽃잎이 1개. 유효한 부분 배열이에요!"),
     },
     // 1-5: Complete enumeration visual
     {
@@ -393,7 +393,7 @@ export function makeDaisyCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A key trick: we don't recompute the sum from scratch!\nAs j extends by 1, just add p[j] to the running sum.\nThis makes it O(1) per step.", "핵심 트릭: 합을 처음부터 다시 계산하지 않아! j가 1 늘어나면 p[j]만 러닝 합에 더해요. 이러면 각 단계 O(1)이예요."),
+        "A key trick: we don't recompute the sum from scratch!\nAs j extends by 1, just add p[j] to the running sum.\nThis makes it O(1) per step.", "핵심 트릭: 합을 처음부터 다시 계산하지 않아! j가 1 늘어나면 p[j]만 러닝 합에 더해요. 이러면 각 단계 O(1)이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
@@ -562,7 +562,7 @@ export function makeDaisyCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Finally, print the count. That's the complete solution!", "마지막으로 count를 출력해요. 이게 전체 풀이예요!"),
+        "Finally, print the count. That's the complete solution!", "마지막으로 count를 출력해요. 이게 전체 풀이에요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>

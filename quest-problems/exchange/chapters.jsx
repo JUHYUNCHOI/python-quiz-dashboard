@@ -2,16 +2,12 @@ import { C, t } from "@/components/quest/theme";
 import { getExchangeSections } from "./components";
 
 export const SOLUTION_CODE = [
-  "N = int(input())",
+  "N, M = map(int, input().split())",
   "milk = list(map(int, input().split()))",
   "",
-  "total = sum(milk)",
-  "avg = total // N",
-  "extra = total % N",
-  "",
-  "# After enough rounds, milk distributes evenly",
-  "# (N - extra) cows get avg, extra cows get avg+1",
-  "result = [avg + 1] * extra + [avg] * (N - extra)",
+  "# Each round, every cow's milk moves clockwise by one position.",
+  "# After M rounds, the milk now at position i came from position (i - M) % N.",
+  "result = [milk[(i - M) % N] for i in range(N)]",
   "print(' '.join(map(str, result)))",
 ];
 

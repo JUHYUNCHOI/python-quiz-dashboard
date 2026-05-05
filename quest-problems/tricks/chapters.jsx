@@ -62,7 +62,7 @@ export function makeTricksCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "It's Halloween!\nThere are candy bags — each bag has 2 candies.\nPick 3 bags.\nOpen them: you get 6 candies.\nFor it to be a success, those 6 candies must be exactly 2 colors with 3 of each!\n🎃", "할로윈이예요!\n사탕 봉지가 잔뜩 있어요.\n봉지마다 사탕이 2개씩 들어있지.\n이 중에서 봉지를 딱 3개만 골라.\n열어보면 사탕 6개가 나와요.\n이 6개 사탕이 '두 가지 색, 각각 3개씩'이면 성공!\n이렇게 성공하는 방법이 몇 가지인지 세는 문제예요.\n🎃"),
+        "It's Halloween!\nThere are candy bags — each bag has 2 candies.\nPick 3 bags.\nOpen them: you get 6 candies.\nFor it to be a success, those 6 candies must be exactly 2 colors with 3 of each!\n🎃", "할로윈이에요!\n사탕 봉지가 잔뜩 있어요.\n봉지마다 사탕이 2개씩 들어있지.\n이 중에서 봉지를 딱 3개만 골라.\n열어보면 사탕 6개가 나와요.\n이 6개 사탕이 '두 가지 색, 각각 3개씩'이면 성공!\n이렇게 성공하는 방법이 몇 가지인지 세는 문제예요.\n🎃"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🎃</div>
@@ -123,7 +123,7 @@ export function makeTricksCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "3 bags = 6 candies. To succeed, the 6 candies must be exactly 2 colors, 3 of each!", "봉지 3개를 열면 사탕 6개. 이 6개가 딱 '2가지 색, 3개씩'이면 성공이예요!"),
+        "3 bags = 6 candies. To succeed, the 6 candies must be exactly 2 colors, 3 of each!", "봉지 3개를 열면 사탕 6개. 이 6개가 딱 '2가지 색, 3개씩'이면 성공이에요!"),
       question: t(E,
         "Bags (1,2), (1,1), (2,2) → colors: 1×3, 2×3. Success?",
         "봉지 (1,2), (1,1), (2,2)를 골랐어. 사탕을 꺼내보면 색1이 3개, 색2가 3개. 성공일까요?"),
@@ -141,7 +141,7 @@ export function makeTricksCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's the trick!\nPick two colors x and y.\nEvery bag falls into one of 3 groups based on what's inside.", "여기가 핵심이예요! 색깔 2개를 골라서 x, y라고 부르자. 그러면 모든 봉지를 안에 든 사탕에 따라 3가지 그룹으로 나눌 수 있어요."),
+        "Here's the trick!\nPick two colors x and y.\nEvery bag falls into one of 3 groups based on what's inside.", "여기가 핵심이에요! 색깔 2개를 골라서 x, y라고 부르자. 그러면 모든 봉지를 안에 든 사탕에 따라 3가지 그룹으로 나눌 수 있어요."),
       content: (() => {
         const types = [
           { label: "Type A", emoji: "🟠🟠", desc_en: "(x,x) → x color ×2", desc_ko: "(x,x) → x색 사탕만 2개", color: O, bg: "#fff7ed", bd: "#fdba74" },
@@ -205,7 +205,7 @@ export function makeTricksCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "So the plan is: for each pair of colors (x,y), count A, B, C bags, apply two simple formulas, and add it all up!", "그래서 이렇게 풀어! 색깔 쌍 (x,y)마다 → A, B, C 봉지 몇 개인지 세고 → 공식 2개를 적용하고 → 전부 더하면 답이예요!"),
+        "So the plan is: for each pair of colors (x,y), count A, B, C bags, apply two simple formulas, and add it all up!", "그래서 이렇게 풀어! 색깔 쌍 (x,y)마다 → A, B, C 봉지 몇 개인지 세고 → 공식 2개를 적용하고 → 전부 더하면 답이에요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{
@@ -266,7 +266,7 @@ export function makeTricksCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Quick check!\nBag (1,1) has two candies, both color 1.\nIf we're looking at color pair (1,2), what type is this bag?", "퀴즈! 봉지 (1,1)에는 사탕이 둘 다 색1이예요. 색 쌍 (1,2)에서 이 봉지는 어떤 종류?"),
+        "Quick check!\nBag (1,1) has two candies, both color 1.\nIf we're looking at color pair (1,2), what type is this bag?", "퀴즈! 봉지 (1,1)에는 사탕이 둘 다 색1이에요. 색 쌍 (1,2)에서 이 봉지는 어떤 종류?"),
       question: t(E,
         "Bag (1,1) for pair (1,2) is...?",
         "봉지 (1,1)은 색 쌍 (1,2)에서 어떤 종류?"),

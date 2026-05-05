@@ -38,7 +38,7 @@ export function makeStallingCh1(E) {
       type: "reveal",
       narr: t(E,
         "There are N cows (each with a height) and N stalls (each with a maximum height limit). Each stall can hold AT MOST ONE cow, and a cow can be assigned to a stall only if her height is ≤ the stall's limit.\nCount the number of valid one-to-one assignments of cows to stalls.",
-        "N마리 소(각자 키)와 N개 축사(각자 최대 키 제한)가 있어요. 각 축사에 한 마리만 배정할 수 있고, 소의 키가 축사 제한 이하일 때만 그 축사에 배정 가능해요.\n소-축사 일대일 배정의 유효한 가짓수를 세요."),
+        "N마리 소(각자 키)와 N개 축사(각자 최대 키 제한)가 있어요. 각 축사에 한 마리만 배정할 수 있고, 소의 키가 축사 제한 이하일 때만 그 축사에 배정 가능해요.\n소를 축사에 한 마리씩 배정하는 방법의 수를 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -76,7 +76,7 @@ export function makeStallingCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "number of valid one-to-one assignments", "유효한 일대일 배정 가짓수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "number of valid one-to-one assignments", "소를 축사에 한 마리씩 배정하는 방법의 수")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>

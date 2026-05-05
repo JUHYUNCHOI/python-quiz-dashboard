@@ -82,7 +82,7 @@ export function makeSubseqMedianCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given an array A, find the sum of medians of all 'good' subsequences modulo 998244353.\nA good subsequence is strictly increasing with odd length.\nThe median is the middle element.", "배열 A가 주어질 때, 모든 '좋은' 부분수열의 중앙값의 합을 998244353으로 나눈 나머지를 구해요.\n좋은 부분수열은 순증가이고 길이가 홀수예요.\n중앙값은 가운데 원소예요."),
+        "Given an array A, find the sum of medians of all 'good' subsequences modulo 998244353.\nA good subsequence is strictly increasing with odd length.\nThe median is the middle element.", "배열 A가 주어질 때, 모든 '좋은' 부분수열의 중앙값의 합을 998244353으로 나눈 나머지를 구해요.\n좋은 부분수열은 엄격히 증가(같은 값 없이 계속 커짐)하고 길이가 홀수예요.\n중앙값은 가운데 원소예요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcca"}</div>
@@ -112,7 +112,7 @@ export function makeSubseqMedianCh1(E) {
       correct: 2,
       explain: t(E,
         "Correct! [1,2] has even length (2), so it's not a good subsequence. Good subsequences must have odd length.",
-        "맞아! [1,2]는 길이가 2(짝수)이므로 좋은 부분수열이 아니예요. 좋은 부분수열은 홀수 길이여야 해요."),
+        "맞아! [1,2]는 길이가 2(짝수)이므로 좋은 부분수열이 아니에요. 좋은 부분수열은 홀수 길이여야 해요."),
     },
     // 1-3: Input
     {

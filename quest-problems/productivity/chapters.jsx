@@ -66,7 +66,7 @@ export function makeProdCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {t(E,
-                "d_i = c_i - t_i is the latest Bessie can wake up and still visit farm i.\nSort d[], then for each query S, binary search to count how many d_i > S!", "d_i = c_i - t_i는 베시가 농장 i를 방문할 수 있는 가장 늦은 기상 시간이예요.\nd[]를 정렬한 후, 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 세!")}
+                "d_i = c_i - t_i is the latest Bessie can wake up and still visit farm i.\nSort d[], then for each query S, binary search to count how many d_i > S!", "d_i = c_i - t_i는 베시가 농장 i를 방문할 수 있는 가장 늦은 기상 시간이에요.\nd[]를 정렬한 후, 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 세!")}
             </div>
           </div>
         </div>),
@@ -114,7 +114,7 @@ export function makeProdCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Sort d_i = c_i - t_i.\nFor each query S, use binary search to find how many d_i > S.\nThis is O(N log N + Q log N)!", "d_i = c_i - t_i를 정렬해요. 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 찾아요. O(N log N + Q log N)이예요!"),
+        "Sort d_i = c_i - t_i.\nFor each query S, use binary search to find how many d_i > S.\nThis is O(N log N + Q log N)!", "d_i = c_i - t_i를 정렬해요. 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 찾아요. O(N log N + Q log N)이에요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 14, padding: 14 }}>

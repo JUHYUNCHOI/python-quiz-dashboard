@@ -35,7 +35,7 @@ export function makeGuessAnimalCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie thinks of one animal from a list of N animals; you can only ask yes/no questions about characteristics. You keep asking until your questions narrow it down to a single animal.\nIn the WORST case, what's the maximum number of 'yes' answers you might give before the animal is uniquely identified?",
-        "베시가 N마리 동물 목록에서 동물 하나를 마음에 떠올려요. 당신은 특성에 대해 예/아니오 질문만 할 수 있어요. 질문을 계속해서 결국 동물 하나로 좁혀요.\n최악의 경우, 동물을 유일하게 식별하기 전까지 받을 수 있는 '예' 답변의 최대 수는 몇 개일까요?"),
+        "베시가 N마리 동물 목록에서 동물 하나를 마음에 떠올려요. 특성에 대해 예/아니오 질문만 할 수 있어요. 질문을 계속해서 결국 동물 하나로 좁혀요.\n최악의 경우, 동물을 유일하게 식별하기 전까지 받을 수 있는 '예' 답변의 최대 수는 몇 개일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -61,7 +61,7 @@ export function makeGuessAnimalCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie picks one animal in secret. You ask ", "베시가 동물 하나를 비밀로 정해요. 당신은 ")}
+                  {t(E, "Bessie picks one animal in secret. You ask ", "베시가 동물 하나를 비밀로 정해요. ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "yes/no questions about characteristics", "특성에 대한 예/아니오 질문")}</b>
                   {t(E, " until only ONE animal in the list could possibly match all your answers.",
                         "을 해서 답변과 일치 가능한 동물이 1마리만 남을 때까지 좁혀요.")}

@@ -120,7 +120,7 @@ export function makeWordCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Word Distance!\nYou have N words, all length M.\nFind a new word that is 'closest' to all of them combined.\nBut distance here isn't about spelling — it's about having the same letters!\n📝", "단어 거리 문제예요!\n단어가 여러 개 있는데, 이 단어들 모두와 최대한 비슷한 새 단어 하나를 만들어야 해요.\n'비슷하다'는 건 같은 글자를 많이 갖고 있다는 뜻이예요!\n📝"),
+        "Word Distance!\nYou have N words, all length M.\nFind a new word that is 'closest' to all of them combined.\nBut distance here isn't about spelling — it's about having the same letters!\n📝", "단어 거리 문제예요!\n단어가 여러 개 있는데, 이 단어들 모두와 최대한 비슷한 새 단어 하나를 만들어야 해요.\n'비슷하다'는 건 같은 글자를 많이 갖고 있다는 뜻이에요!\n📝"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>📝</div>
@@ -137,7 +137,7 @@ export function makeWordCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First, what's an anagram?\nTwo words are anagrams if they use the exact same letters, just in different order.\n'ade' and 'aed' are anagrams!", "먼저 '애너그램'을 알아보자. 글자를 섞어서 똑같이 만들 수 있으면 애너그램이예요. 예를 들어 'ade'의 글자를 섞으면 'aed'가 되지? 둘은 애너그램!"),
+        "First, what's an anagram?\nTwo words are anagrams if they use the exact same letters, just in different order.\n'ade' and 'aed' are anagrams!", "먼저 '애너그램'을 알아보자. 글자를 섞어서 똑같이 만들 수 있으면 애너그램이에요. 예를 들어 'ade'의 글자를 섞으면 'aed'가 되지? 둘은 애너그램!"),
       content: (() => {
         const pairs = [
           { a: "ade", b: "aed", ok: true },
@@ -236,7 +236,7 @@ export function makeWordCh1(E) {
         "Let's check! What's the distance between 'ade' and 'zaf'? Count the shared letters first.", "확인 퀴즈! 'ade'와 'zaf'에서 겹치는 글자를 먼저 찾아봐요. 그 다음 거리를 구해보자."),
       question: t(E,
         "'ade' vs 'zaf': shared letter = 'a' (1). Distance = 3 − 1 = ?",
-        "'ade'와 'zaf'에서 겹치는 글자는 'a' 하나뿐이예요.\n거리 = 글자 수 3 − 겹치는 수 1 = ?"),
+        "'ade'와 'zaf'에서 겹치는 글자는 'a' 하나뿐이에요.\n거리 = 글자 수 3 − 겹치는 수 1 = ?"),
       options: [
         t(E, "1", "1"),
         t(E, "2", "2"),
@@ -410,7 +410,7 @@ export function makeWordCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The core: fill M slots greedily.\nFor each slot, try all 26 letters and pick the one with highest marginal gain.", "핵심 부분이예요! 빈칸 M개를 하나씩 채우는데, 매번 a~z 26개를 다 시도해봐요. '이걸 넣으면 새로 몇 개 단어랑 겹칠까?' 세서 가장 큰 걸 골라!"),
+        "The core: fill M slots greedily.\nFor each slot, try all 26 letters and pick the one with highest marginal gain.", "핵심 부분이에요! 빈칸 M개를 하나씩 채우는데, 매번 a~z 26개를 다 시도해봐요. '이걸 넣으면 새로 몇 개 단어랑 겹칠까?' 세서 가장 큰 걸 골라!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#3b82f6", marginBottom: 6 }}>
@@ -485,7 +485,7 @@ export function makeWordCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Why does greedy work?\nBecause each letter is independent!\nAdding one more 'a' doesn't affect the gain from 'b'.\nSo we can pick optimally one slot at a time.", "왜 이렇게 하나씩 고르면 최적이 될까요?\n'a'를 넣든 말든 'd'가 겹치는 수는 안 변하거든!\n글자끼리 서로 영향을 안 주니까, 매번 가장 좋은 걸 고르면 전체도 최적이예요."),
+        "Why does greedy work?\nBecause each letter is independent!\nAdding one more 'a' doesn't affect the gain from 'b'.\nSo we can pick optimally one slot at a time.", "왜 이렇게 하나씩 고르면 최적이 될까요?\n'a'를 넣든 말든 'd'가 겹치는 수는 안 변하거든!\n글자끼리 서로 영향을 안 주니까, 매번 가장 좋은 걸 고르면 전체도 최적이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#3b82f6", marginBottom: 8, textAlign: "center" }}>

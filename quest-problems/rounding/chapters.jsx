@@ -379,7 +379,7 @@ export function makePatternSteps(E) {
         ["First digit always even", "First digit always 4", "All divisible by 8", "Even number of digits"],
         ["첫째 자리가 짝수", "첫째 자리가 전부 4", "전부 8의 배수", "자릿수가 짝수"]),
       correct: 1,
-      explain: t(E, "All start with 4! That's the key.", "전부 4로 시작해요! 이게 핵심이예요."),
+      explain: t(E, "All start with 4! That's the key.", "전부 4로 시작해요! 이게 핵심이에요."),
     },
     // 3-3: Why 4?
     { type: "quiz",

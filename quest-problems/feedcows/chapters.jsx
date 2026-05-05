@@ -38,7 +38,7 @@ export function makeFeedCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows of breed G or H stand at distinct positions on a number line. FJ places grass patches (each patch is type G or H) on integer positions. Each cow must have a SAME-BREED patch within distance K of her — and a single patch can satisfy any number of cows of its breed within K.\nFind the MINIMUM number of patches needed.",
-        "N마리 소가 G 또는 H 품종으로 수직선의 서로 다른 정수 위치에 서있어요. FJ 가 풀 패치 (각 G 또는 H) 를 정수 위치에 놓아요. 각 소는 자기 품종과 같은 패치가 거리 K 이내에 있어야 해요 — 한 패치는 거리 K 이내의 같은 품종 소들을 모두 만족시켜요.\n필요한 최소 패치 수를 출력해요."),
+        "N마리 소가 G 또는 H 품종으로 수직선의 서로 다른 정수 위치에 서있어요. FJ 가 풀 패치 (G 종류 또는 H 종류) 를 정수 위치에 놓아요. 각 소는 자기 품종과 같은 패치가 거리 K 이내에 있어야 해요 — 한 패치는 거리 K 이내의 같은 품종 소들을 한꺼번에 처리해요.\n필요한 최소 패치 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>

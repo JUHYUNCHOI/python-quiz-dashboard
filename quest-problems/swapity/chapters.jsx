@@ -52,7 +52,7 @@ export function makeSwapityCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows are in a line. Each ROUND consists of two reversal operations: reverse positions [a1, b1] then reverse [a2, b2]. This entire round is repeated K times (K can be up to 10^9).\nPrint the FINAL order of cows.",
-        "N 마리 소가 한 줄에 있어요. 한 라운드는 두 번의 뒤집기 — 위치 [a1, b1] 뒤집기 + 위치 [a2, b2] 뒤집기 — 로 이루어져 있어요. 이 라운드 전체를 K 번 반복해요 (K 는 최대 10^9).\n최종 줄을 출력해요."),
+        "N 마리 소가 한 줄에 있어요. 한 라운드는 두 번의 뒤집기로 이루어져 있어요. 위치 [a1, b1] 을 뒤집고, 그 다음 [a2, b2] 를 뒤집어요. 이 라운드 전체를 K 번 반복해요 (K 는 최대 10^9).\n최종 줄을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>

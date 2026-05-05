@@ -59,7 +59,7 @@ export function makeRectanglesCh1(E) {
       correct: 2,
       explain: t(E,
         "Correct! C(3,2) = 3, so 3 * 3 = 9 rectangles.",
-        "맞아! C(3,2) = 3이니까, 3 * 3 = 9개 직사각형이예요."),
+        "맞아! C(3,2) = 3이니까, 3 * 3 = 9개 직사각형이에요."),
     },
     // 1-3: Input
     {

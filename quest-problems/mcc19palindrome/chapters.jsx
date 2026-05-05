@@ -113,7 +113,7 @@ export function makeMcc19PalCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! 1-9 are the first 9 palindromes. The 10th is 11 (first 2-digit palindrome).",
-        "맞아! 1-9가 처음 9개 회문이예요. 10번째는 11 (첫 번째 2자리 회문)."),
+        "맞아! 1-9가 처음 9개 회문이에요. 10번째는 11 (첫 번째 2자리 회문)."),
     },
     // 1-3: Input
     {

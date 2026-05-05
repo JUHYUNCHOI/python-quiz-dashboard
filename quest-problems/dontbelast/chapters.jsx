@@ -99,7 +99,7 @@ export function makeDontBeLastCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "All 7 cows produce 0 milk except Bessie who produces 5.\nThe minimum is 0 (six cows).\nThe second-lowest distinct value is 5.\nOnly Bessie has 5.\nWhat's the answer?", "베시만 5를 생산하고 나머지 6마리는 0이예요. 최솟값은 0 (6마리). 두 번째로 작은 고유값은 5. 베시만 5를 가져요. 답은?"),
+        "All 7 cows produce 0 milk except Bessie who produces 5.\nThe minimum is 0 (six cows).\nThe second-lowest distinct value is 5.\nOnly Bessie has 5.\nWhat's the answer?", "베시만 5를 생산하고 나머지 6마리는 0이에요. 최솟값은 0 (6마리). 두 번째로 작은 고유값은 5. 베시만 5를 가져요. 답은?"),
       question: t(E,
         "6 cows produce 0, Bessie produces 5. Who is second-lowest?",
         "6마리는 0, 베시는 5. 두 번째로 적은 소는?"),

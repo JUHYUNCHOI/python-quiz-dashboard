@@ -102,7 +102,7 @@ export function makeRevegCh1(E) {
       correct: 0,
       explain: t(E,
         "Greedy assigns the smallest available color. With no constraints, that's 1.",
-        "그리디는 가장 작은 사용 가능한 색을 배정해요. 제약이 없으면 1이예요."),
+        "그리디는 가장 작은 사용 가능한 색을 배정해요. 제약이 없으면 1이에요."),
     },
     // 1-3: Input
     {

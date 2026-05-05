@@ -43,7 +43,7 @@ export function makeBadmintonCh1(E) {
       type: "reveal",
       narr: t(E,
         "Two players A and B play badminton: best-of-3 games, each game won by the first to 21 points. You're given a string of A/B characters in order — each character is who won that rally.\nPrint each game's final score and the overall match winner.",
-        "두 선수 A 와 B 가 배드민턴: 3 전 2 선승제, 각 게임은 21 점 먼저 따면 승. 랠리 순서대로 A/B 가 적힌 문자열이 주어져요 — 각 문자는 그 랠리의 승자.\n각 게임의 최종 점수와 매치의 최종 승자를 출력해요."),
+        "두 선수 A 와 B 가 배드민턴: 3전 2선승제, 각 게임은 21 점 먼저 따면 승. 랠리 순서대로 A/B 가 적힌 문자열이 주어져요 — 각 문자는 그 랠리의 승자.\n각 게임의 최종 점수와 매치의 최종 승자를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -61,7 +61,7 @@ export function makeBadmintonCh1(E) {
                 <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#059669" }}>{t(E, "Two players A and B play badminton", "두 선수 A 와 B 가 배드민턴")}</b>
-                  {t(E, " — best-of-3 games; each game won by the first to ", " — 3 전 2 선승제; 각 게임은 ")}
+                  {t(E, " — best-of-3 games; each game won by the first to ", " — 3전 2선승제; 각 게임은 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "21 points", "21 점")}</b>
                   {t(E, " (no win-by-2).", " 먼저 (2 점 차 규칙 없음).")}
                 </div>

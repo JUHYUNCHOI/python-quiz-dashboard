@@ -11,23 +11,21 @@ export const SOLUTION_CODE = [
   "",
   "S = int(input())",
   "",
-  "# If S itself is a palindrome, Bessie removes all S stones and wins",
-  "if is_palindrome(S):",
-  "    print('B')",
-  "else:",
-  "    # Try all palindrome removals for Bessie",
-  "    bessie_wins = False",
-  "    for p in range(1, S + 1):",
-  "        if is_palindrome(p) and p <= S:",
-  "            remain = S - p",
-  "            if remain == 0:",
-  "                bessie_wins = True",
-  "                break",
-  "            # Check if Elsie is in a losing position",
-  "            if not can_win(remain):",
-  "                bessie_wins = True",
-  "                break",
-  "    print('B' if bessie_wins else 'E')",
+  "# Precompute palindromes up to S",
+  "palindromes = [p for p in range(1, S + 1) if is_palindrome(p)]",
+  "",
+  "# dp[s] = True if the player to move on a pile of size s WINS",
+  "# Base: dp[0] = False (can't move => loses)",
+  "dp = [False] * (S + 1)",
+  "for s in range(1, S + 1):",
+  "    for p in palindromes:",
+  "        if p > s:",
+  "            break",
+  "        if not dp[s - p]:   # leave opponent in a losing state",
+  "            dp[s] = True",
+  "            break",
+  "",
+  "print('B' if dp[S] else 'E')",
 ];
 
 /* ================================================================
@@ -111,7 +109,7 @@ export function makePalindromeCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {t(E,
-                "All single digits (1-9) are palindromes. 10 is NOT (01 != 10).\nYou must remove at least 1 stone per turn.", "모든 한 자리 수(1-9)는 회문이예요.\n10은 아니야 (01 != 10). 매 턴 최소 1개는 가져가야 해요.")}
+                "All single digits (1-9) are palindromes. 10 is NOT (01 != 10).\nYou must remove at least 1 stone per turn.", "모든 한 자리 수(1-9)는 회문이에요.\n10은 아니야 (01 != 10). 매 턴 최소 1개는 가져가야 해요.")}
             </div>
           </div>
         </div>),
@@ -131,7 +129,7 @@ export function makePalindromeCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! 121 reads the same forwards (1-2-1) and backwards (1-2-1). It's a palindrome!",
-        "정답! 121은 앞으로(1-2-1) 뒤로(1-2-1) 읽어도 같아요. 회문이예요!"),
+        "정답! 121은 앞으로(1-2-1) 뒤로(1-2-1) 읽어도 같아요. 회문이에요!"),
     },
     // 1-4: Key insight + input
     {
@@ -143,7 +141,7 @@ export function makePalindromeCh1(E) {
         "S=8. 베시가 8개 전부 가져가 (8은 회문!). 엘시는 0개를 마주해요. 베시가 이겨? (1=예, 0=아니오)"),
       hint: t(E,
         "8 is a single digit, so it IS a palindrome. She can take all 8!",
-        "8은 한 자리 수라 회문이예요. 8개 전부 가져갈 수 있어요!"),
+        "8은 한 자리 수라 회문이에요. 8개 전부 가져갈 수 있어요!"),
       answer: 1,
     },
     {

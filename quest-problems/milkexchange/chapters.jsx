@@ -39,7 +39,7 @@ export function makeMilkExCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand in a circle.\nEach minute, every cow passes 1 liter of milk left or right.\nLet's understand this exchange!\n🥛", "N마리 소가 원형으로 서 있어요. 매분 모든 소가 우유 1리터를 왼쪽 또는 오른쪽으로 전달해요. 이 교환을 이해해보자! 🥛"),
+        "N cows stand in a circle.\nEach minute, every cow passes 1 liter of milk left or right.\nLet's understand this exchange!\n🥛", "N마리 소가 원형으로 서 있어요. 매분 모든 소가 우유 1리터를 왼쪽 또는 오른쪽으로 전달해요. 이 교환을 이해해 봐요! 🥛"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🥛</div>

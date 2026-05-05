@@ -43,7 +43,7 @@ export function makeSleepyHerdCh1(E) {
       type: "reveal",
       narr: t(E,
         "Three cows stand at distinct positions on a number line. The only allowed move: take ONE of the two ENDPOINT cows and place her at any unoccupied position STRICTLY BETWEEN the other two. The goal is to make all three positions CONSECUTIVE integers.\nPrint two numbers: the MIN and MAX possible number of moves to reach a consecutive configuration.",
-        "세 마리 소가 수직선의 서로 다른 위치에 있어요. 허용된 동작: 양 끝의 두 소 중 한 마리를 골라, 다른 두 소 사이의 비어있는 위치에 놓기. 세 소의 위치가 연속한 정수가 될 때까지 반복.\n도달까지 가능한 이동 횟수의 최솟값과 최댓값을 출력해요."),
+        "세 마리 소가 수직선의 서로 다른 위치에 있어요. 한 번에 할 수 있는 일: 양 끝에 있는 두 소 중 한 마리를 골라서, 다른 두 소 사이의 비어있는 자리에 옮기기. 세 소의 위치가 연속된 정수가 될 때까지 반복해요.\n끝낼 때까지 걸리는 이동 횟수의 최솟값과 최댓값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -67,11 +67,11 @@ export function makeSleepyHerdCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "One move: take one of the ", "한 번의 이동: 양 끝의 ")}
+                  {t(E, "One move: take one of the ", "한 번의 이동: 양 끝에 있는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "two endpoint cows", "두 소 중 한 마리")}</b>
-                  {t(E, " and place her at any unoccupied integer ", "를 골라 다른 두 소 사이의 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "STRICTLY BETWEEN the other two", "비어있는 정수 위치")}</b>
-                  {t(E, ".", "에 놓기.")}
+                  {t(E, " and place her at any unoccupied integer ", "를 골라서 다른 두 소 사이의 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "STRICTLY BETWEEN the other two", "비어있는 자리")}</b>
+                  {t(E, ".", "에 놓아요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>

@@ -24,7 +24,7 @@ export function makeFansCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's make a colorful fan!\nWe have sticks of different colors and need to line them up so no two same-color sticks touch.\nHow many can we use?\n🪭", "알록달록 부채를 만들자! 여러 색깔의 막대를 같은 색끼리 안 닿게 줄 세워야 해요. 최대 몇 개 쓸 수 있을까? 🪭"),
+        "Let's make a colorful fan!\nWe have sticks of different colors and need to line them up so no two same-color sticks touch.\nHow many can we use?\n🪭", "알록달록 부채를 만들어 봐요! 여러 색깔의 막대를 같은 색끼리 안 닿게 줄 세워야 해요. 최대 몇 개 쓸 수 있을까요? 🪭"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🪭</div>

@@ -47,7 +47,7 @@ export function makeTrianglesCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N fence posts at integer (x, y) positions. He wants to choose three posts to form a RIGHT triangle whose two legs are parallel to the x and y axes.\nPrint TWICE the maximum area of such a triangle (to keep the answer integer).",
-        "FJ 에게 정수 좌표 (x, y) 의 N 개 울타리 기둥이 있어요. 그중 세 기둥으로 직각 삼각형 — 두 변이 각각 x 축과 y 축에 평행한 — 을 만들어요.\n그 삼각형의 최대 넓이의 2 배 (분수 안 나오게) 를 출력해요."),
+        "FJ 한테 정수 좌표 (x, y) 의 N 개 울타리 기둥이 있어요. 그중 세 기둥으로 직각 삼각형 — 두 변이 각각 x 축과 y 축에 평행한 — 을 만들어요.\n그 삼각형의 최대 넓이의 2 배 (소수 없이 정수로) 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -64,7 +64,7 @@ export function makeTrianglesCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "FJ has ", "FJ 에게 ")}
+                  {t(E, "FJ has ", "FJ 한테 ")}
                   <b style={{ color: "#d97706" }}>{t(E, "N fence posts at integer (x, y)", "정수 (x, y) 의 N 개 울타리 기둥")}</b>
                   {t(E, " positions.", " 이 있어요.")}
                 </div>
@@ -82,7 +82,7 @@ export function makeTrianglesCh1(E) {
                 <div>
                   {t(E, "Print ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "TWICE the maximum area of such a triangle", "그 삼각형 최대 넓이의 2 배")}</b>
-                  {t(E, " (to keep the output an integer).", " 를 출력해요 (정수 유지).")}
+                  {t(E, " (to keep the output an integer).", " 를 출력해요 (소수 없이 정수로).")}
                 </div>
               </div>
             </div>

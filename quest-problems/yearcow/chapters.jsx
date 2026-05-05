@@ -44,7 +44,7 @@ export function makeYearCowCh1(E) {
       type: "reveal",
       narr: t(E,
         "The Chinese zodiac assigns one of 12 animals to each year, repeating in the fixed cycle Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig, Rat (then Ox again).\nBessie was born in the Year of the Cow (Ox). Cows make statements like \"X was born in the previous/next Dragon year relative to Y\". Chain the statements to compute, for each query cow, how many years APART she is from Bessie.",
-        "십이지는 매년 12 동물 (소, 호랑이, 토끼, 용, 뱀, 말, 양, 원숭이, 닭, 개, 돼지, 쥐) 을 정해진 순환 순서로 배정해요.\n베시는 소띠 해에 태어났어요. 소들이 \"X 는 Y 의 직전/직후 용띠 해에 태어났다\" 같은 진술을 해요. 진술을 연결해 각 쿼리 소가 베시와 몇 년 차이가 나는지 출력해요."),
+        "십이지는 매년 12 동물 (소, 호랑이, 토끼, 용, 뱀, 말, 양, 원숭이, 닭, 개, 돼지, 쥐) 을 정해진 순서로 돌려가며 써요.\n베시는 소띠 해에 태어났어요. 소들이 \"X 는 Y 의 직전/직후 용띠 해에 태어났다\" 같은 진술을 해요. 진술을 연결해 각 쿼리 소가 베시와 몇 년 차이가 나는지 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -111,7 +111,7 @@ export function makeYearCowCh1(E) {
       correct: 0,
       explain: t(E,
         "2021 - 12 = 2009. The previous Ox year is always exactly 12 years before.",
-        "2021 - 12 = 2009. 이전 소띠 해는 항상 정확히 12년 전이예요."),
+        "2021 - 12 = 2009. 이전 소띠 해는 항상 정확히 12년 전이에요."),
     },
     // 1-3: Input
     {

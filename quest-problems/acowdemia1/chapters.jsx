@@ -42,7 +42,7 @@ export function makeAcow1Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has N papers with citation counts c[i]. Her h-index is the largest h such that at least h of her papers have ≥ h citations.\nShe can ADD a total of L extra citations distributed across her papers (each extra citation goes to one paper). What's the MAXIMUM h-index she can achieve?",
-        "베시에게 인용수 c[i] 인 N개의 논문이 있어요. 그녀의 h-index 는 인용수가 h 이상인 논문이 h개 이상인 가장 큰 h 예요.\n그녀는 추가 인용을 총 L개 까지 자유롭게 (한 인용은 한 논문에) 더할 수 있어요. 만들 수 있는 h-index 의 최댓값을 출력해요."),
+        "베시에게 인용수 c[i] 인 N개의 논문이 있어요. h-index 는 어떤 수 h 에 대해, 인용수가 h 이상인 논문이 h편 이상 있을 때의 가장 큰 h 예요.\n추가 인용을 총 L개 까지 자유롭게 더할 수 있어요 (한 인용은 한 논문에). 만들 수 있는 h-index 의 최댓값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -69,20 +69,18 @@ export function makeAcow1Ch1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Her ", "그녀의 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "h-index", "h-index")}</b>
-                  {t(E, " is the largest h such that ", " 는 인용수가 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "at least h papers have ≥ h citations", "h 이상인 논문이 h개 이상")}</b>
+                  {t(E, " is the largest h such that ", " 는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "at least h papers have ≥ h citations", "인용수가 h 이상인 논문이 h편 이상")}</b>
                   {t(E, ".", " 일 때의 가장 큰 h 예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "She can add a ", "그녀는 ")}
                   <b style={{ color: "#16a34a" }}>{t(E, "total of L extra citations", "총 L개의 추가 인용")}</b>
                   {t(E, " distributed however she likes across her papers.",
-                        " 을 자유롭게 분배해 추가할 수 있어요.")}
+                        " 을 논문에 자유롭게 나눠 더할 수 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>

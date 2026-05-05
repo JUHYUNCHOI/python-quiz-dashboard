@@ -51,7 +51,7 @@ export function makeTrainsCh1(E) {
       type: "reveal",
       narr: t(E,
         "An N × N grid has a population count in each cell (or −1 if blocked). Build a train path from cell A to cell B moving up/down/left/right between non-blocked cells. The cost of the path is the SUM of populations along it (every cell visited displaces its population).\nPrint the MINIMUM total displaced population.",
-        "N × N 격자에 각 칸의 인구 수가 있어요 (또는 −1 = 차단). 차단되지 않은 칸 사이에서 상하좌우로 칸 A 에서 칸 B 까지 철도 경로를 놓아요. 경로 비용 = 지나는 칸들의 인구 합 (방문한 모든 칸이 이주됨).\n이주 인구 총합의 최솟값을 출력해요."),
+        "N × N 격자에 각 칸의 인구 수가 있어요 (또는 −1 = 막힘). 막혀있지 않은 칸 사이에서 상하좌우로 칸 A 에서 칸 B 까지 철도 경로를 놓아요. 경로 비용 = 지나는 칸들의 인구 합 (방문한 모든 칸이 옮겨와요).\n옮긴 인구 총합의 최솟값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -69,7 +69,7 @@ export function makeTrainsCh1(E) {
                 <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "An ", "")}
-                  <b style={{ color: "#2563eb" }}>{t(E, "N × N grid with populations per cell (or −1 if blocked)", "각 칸의 인구 수를 가진 N × N 격자 (−1 = 차단)")}</b>
+                  <b style={{ color: "#2563eb" }}>{t(E, "N × N grid with populations per cell (or −1 if blocked)", "각 칸의 인구 수를 가진 N × N 격자 (−1 = 막힘)")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
@@ -79,14 +79,14 @@ export function makeTrainsCh1(E) {
                   {t(E, "Build a train path from cell ", "칸 A 에서 칸 B 까지 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "A to cell B moving up/down/left/right", "상하좌우로 이동하며 경로 놓기")}</b>
                   {t(E, " between non-blocked cells. Cost = sum of populations along the path.",
-                        " (차단되지 않은 칸 사이). 비용 = 지나는 칸들의 인구 합.")}
+                        " (막혀있지 않은 칸 사이). 비용 = 지나는 칸들의 인구 합.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "MINIMUM total displaced population", "이주 인구 총합의 최솟값")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "MINIMUM total displaced population", "옮긴 인구 총합의 최솟값")}</b>
                   {t(E, ".", "을 출력해요.")}
                 </div>
               </div>

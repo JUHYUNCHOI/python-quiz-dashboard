@@ -69,7 +69,7 @@ export function makeCowntraceCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows attended events; T timestamps recorded that two specific cows shook hooves at that time. EXACTLY ONE cow started infected ('patient zero') and infects others on hoof-shake — but each infected cow only infects others up to K more times.\nGiven the final infected/healthy state, count how many cows could possibly be patient zero, and find the minimum / maximum K consistent with the data.",
-        "N마리 소가 행사에 참석했고, 어떤 시각에 두 소가 발굽을 맞댔다는 기록 T개가 있어요. 정확히 1마리만 처음 감염 ('환자 제로') 이고, 발굽을 맞대면 감염을 옮길 수 있어요 — 단, 한 번 감염된 소는 최대 K 마리에게만 옮겨요.\n최종 감염/건강 상태가 주어졌을 때, 환자 제로가 될 수 있는 소의 수와 일관성 있는 K 의 최소·최대 값을 출력해요."),
+        "N마리 소가 행사에 참석했고, 두 소가 발굽을 맞댔다는 기록이 시각별로 T개 있어요. 정확히 1마리만 처음 감염된 '환자 제로' 이고, 발굽을 맞대면 감염을 옮길 수 있어요. 단, 한 번 감염된 소는 다른 소에게 최대 K 번까지만 옮겨요.\n최종 감염/건강 상태가 주어졌을 때, 환자 제로가 될 수 있는 소의 수와 데이터에 맞는 K 의 최솟값·최댓값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>

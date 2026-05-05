@@ -53,7 +53,7 @@ export function makeBillboardCh1(E) {
       type: "reveal",
       narr: t(E,
         "Along a road there are TWO axis-aligned rectangular billboards, plus ONE axis-aligned truck parked in front. The truck may cover parts of one or both billboards.\nThe billboards do NOT overlap each other. Print the TOTAL visible billboard area (sum across both billboards).",
-        "도로변에 축에 평행한 직사각형 광고판 2개와 그 앞에 주차된 축에 평행한 트럭 1대가 있어요. 트럭은 광고판의 일부를 가릴 수 있어요.\n두 광고판은 서로 겹치지 않아요. 트럭에 가려지지 않고 보이는 광고판 면적의 합을 출력해요."),
+        "도로변에 직사각형 광고판 2개가 있고, 그 앞에 트럭 1대가 주차되어 있어요. 모두 변이 축에 평행해요. 트럭이 광고판의 일부를 가릴 수 있어요.\n두 광고판은 서로 겹치지 않아요. 트럭에 가려지지 않고 보이는 광고판 면적의 합을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -146,7 +146,7 @@ export function makeBillboardCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's practice!\nA rectangle has lower-left corner (2, 3) and upper-right corner (7, 6).\nWhat is its area?", "연습해보자! 직사각형의 왼쪽 아래가 (2, 3)이고 오른쪽 위가 (7, 6)이예요. 면적은?"),
+        "Let's practice!\nA rectangle has lower-left corner (2, 3) and upper-right corner (7, 6).\nWhat is its area?", "연습해보자! 직사각형의 왼쪽 아래가 (2, 3)이고 오른쪽 위가 (7, 6)이에요. 면적은?"),
       question: t(E,
         "Rectangle (2,3) to (7,6). Width = 7-2 = 5, Height = 6-3 = 3. Area = ?",
         "직사각형 (2,3)에서 (7,6). 가로 = 7-2 = 5, 세로 = 6-3 = 3. 면적 = ?"),
@@ -283,7 +283,7 @@ export function makeBillboardCh2(E) {
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
                 "The overlap is itself a rectangle! Its corners are:\n• left = max(A.left, B.left)\n• bottom = max(A.bottom, B.bottom)\n• right = min(A.right, B.right)\n• top = min(A.top, B.top)",
-                "겹침도 직사각형이예요! 꼭짓점은:\n• 왼쪽 = max(A.왼쪽, B.왼쪽)\n• 아래 = max(A.아래, B.아래)\n• 오른쪽 = min(A.오른쪽, B.오른쪽)\n• 위 = min(A.위, B.위)")}
+                "겹침도 직사각형이에요! 꼭짓점은:\n• 왼쪽 = max(A.왼쪽, B.왼쪽)\n• 아래 = max(A.아래, B.아래)\n• 오른쪽 = min(A.오른쪽, B.오른쪽)\n• 위 = min(A.위, B.위)")}
             </div>
           </div>
         </div>),

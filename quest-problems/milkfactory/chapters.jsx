@@ -48,7 +48,7 @@ export function makeFactoryCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has a milk factory with N stations connected by N−1 one-way conveyor belts (so the underlying graph is a tree).\nFind a single station that EVERY other station can reach by following the conveyors. Print that station's number, or −1 if none exists.",
-        "FJ 에게 N개의 스테이션과 N−1개의 단방향 컨베이어 벨트로 이뤄진 우유 공장이 있어요 (구조는 트리).\n다른 모든 스테이션에서 컨베이어를 따라 도달할 수 있는 단 하나의 스테이션을 찾아요. 그 번호를 출력하고, 없으면 −1."),
+        "FJ 에게 N개의 역과 N−1개의 한 방향 컨베이어로 이뤄진 우유 공장이 있어요 (연결 구조가 트리 모양이에요).\n다른 모든 역에서 컨베이어를 따라 도달할 수 있는 단 하나의 역을 찾아요. 그 번호를 출력하고, 없으면 −1."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -66,26 +66,26 @@ export function makeFactoryCh1(E) {
                 <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ's factory has ", "공장에 ")}
-                  <b style={{ color: "#2563eb" }}>{t(E, "N stations", "N개의 스테이션")}</b>
+                  <b style={{ color: "#2563eb" }}>{t(E, "N stations", "N개의 역")}</b>
                   {t(E, " connected by ", "이 있고, ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "N−1 one-way conveyor belts", "N−1개의 단방향 컨베이어 벨트")}</b>
-                  {t(E, " (the underlying graph is a tree).", "로 연결돼 있어요 (구조는 트리).")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "N−1 one-way conveyor belts", "N−1개의 한 방향 컨베이어")}</b>
+                  {t(E, " (the underlying graph is a tree).", "로 연결돼 있어요 (연결 구조가 트리 모양이에요).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We want a ", "")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "central station C", "중심 스테이션 C")}</b>
+                  <b style={{ color: "#0891b2" }}>{t(E, "central station C", "중심 역 C")}</b>
                   {t(E, " such that ", " — ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "every other station can reach C", "다른 모든 스테이션에서 C 로 도달 가능")}</b>
+                  <b style={{ color: "#dc2626" }}>{t(E, "every other station can reach C", "다른 모든 역에서 C 로 갈 수 있어요")}</b>
                   {t(E, " by following the conveyor directions.", " (컨베이어 방향대로).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print such a station's number, or ", "그런 스테이션의 번호를 출력해요. 없으면 ")}
+                  {t(E, "Print such a station's number, or ", "그런 역의 번호를 출력해요. 없으면 ")}
                   <b style={{ color: "#dc2626" }}>−1</b>
                   {t(E, ".", " 출력.")}
                 </div>

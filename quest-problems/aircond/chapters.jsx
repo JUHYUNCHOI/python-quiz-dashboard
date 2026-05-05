@@ -53,7 +53,7 @@ export function makeAirCondCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N cows, each in a stall range [s, t] needing at least some cooling power c.\nThere are M ≤ 10 AC units; each AC covers a stall range with some cooling power and a fixed cost. ACs stack — overlapping ACs add their power.\nPick a subset of ACs whose stacked power meets every cow's need, with minimum total cost.",
-        "FJ에게 N마리 소가 있고, 각 소는 축사 범위 [s, t]에 살며 최소 c의 냉방력이 필요해요.\nM ≤ 10개의 에어컨이 있고, 각 에어컨은 정해진 축사 범위에 정해진 냉방력을 더해주며 정해진 비용을 가져요. 같은 위치를 덮는 에어컨은 냉방력이 더해져요.\n모든 소의 요구를 만족시키는 최소 비용의 에어컨 조합을 찾아요."),
+        "FJ에게 N마리 소가 있어요. 각 소는 축사 범위 [s, t] 에 살고, 최소 c 의 냉방력이 필요해요.\n에어컨은 M ≤ 10 개 있어요. 각 에어컨은 덮는 축사 범위, 냉방력, 비용이 정해져 있어요. 같은 칸을 덮는 에어컨은 냉방력이 서로 더해져요.\n모든 소의 요구를 만족시키는 에어컨 조합 중 비용이 가장 적은 것을 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -125,7 +125,7 @@ export function makeAirCondCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! 2^10 = 1024. Each AC is either included or not, giving 2^M subsets. This is very manageable!",
-        "맞아! 2^10 = 1024. 각 에어컨을 포함하거나 안 하거나, 2^M개의 부분집합이예요. 충분히 처리 가능해요!"),
+        "맞아! 2^10 = 1024. 각 에어컨을 포함하거나 안 하거나, 2^M개의 부분집합이에요. 충분히 처리 가능해요!"),
     },
     // 1-3: Input
     {

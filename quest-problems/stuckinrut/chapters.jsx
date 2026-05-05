@@ -56,7 +56,7 @@ export function makeStuckCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows stand on a 2D grid. Each cow moves forever in a single direction — either NORTH (+y) or EAST (+x) — at speed 1.\nWhen a moving cow steps onto a cell already grazed (visited) by ANOTHER cow's path, that arriving cow stops; the cow whose path she stepped onto keeps going.\nPrint the number of cells each cow ends up grazing (Infinity if she never stops).",
-        "2D 격자 위에 N 마리 소가 있어요. 각 소는 한 방향 — 북쪽 (+y) 또는 동쪽 (+x) — 으로 속도 1로 영원히 움직여요.\n움직이는 소가 다른 소의 경로에 이미 들렸던 칸에 도착하면 멈춰요. 그 칸의 원래 주인 소는 계속 움직여요.\n각 소가 먹은 칸의 수를 출력해요 (영원히 멈추지 않으면 Infinity)."),
+        "2D 격자 위에 N 마리 소가 있어요. 각 소는 한 방향 — 북쪽 (위) 또는 동쪽 (오른쪽) — 으로 속도 1로 영원히 움직여요.\n움직이는 소가 다른 소의 경로에 이미 들렸던 칸에 도착하면 멈춰요. 그 칸의 원래 주인 소는 계속 움직여요.\n각 소가 먹은 칸의 수를 출력해요 (영원히 멈추지 않으면 무한대)."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -75,7 +75,7 @@ export function makeStuckCh1(E) {
                 <div>
                   <b style={{ color: "#8b5cf6" }}>{t(E, "N cows on a 2D grid", "2D 격자 위 N 마리 소")}</b>
                   {t(E, " — each moves in one direction at speed 1: ", " — 각자 속도 1 로 한 방향: ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "NORTH (+y) or EAST (+x), forever", "북쪽 (+y) 또는 동쪽 (+x), 영원히")}</b>
+                  <b style={{ color: "#0891b2" }}>{t(E, "NORTH (+y) or EAST (+x), forever", "북쪽 (위) 또는 동쪽 (오른쪽), 영원히")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
@@ -92,7 +92,7 @@ export function makeStuckCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "number of cells each cow grazes (or Infinity)", "각 소가 먹은 칸 수 (혹은 Infinity)")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "number of cells each cow grazes (or Infinity)", "각 소가 먹은 칸 수 (혹은 무한대)")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
@@ -127,7 +127,7 @@ export function makeStuckCh1(E) {
         "이 문제에서 이동 방향은 몇 가지?"),
       hint: t(E,
         "North and East. That's 2 directions.",
-        "북쪽과 동쪽. 2가지 방향이예요."),
+        "북쪽과 동쪽. 2가지 방향이에요."),
       answer: 2,
     },
   ];

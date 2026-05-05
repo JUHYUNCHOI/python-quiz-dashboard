@@ -118,7 +118,7 @@ export function makeCheeseCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's a cube made of cheese cubes, like a Rubik's cube!\nWhat happens if you keep removing blocks one by one?\nLet's find out!\n👀", "치즈 조각으로 만든 큐브가 있어요! 루빅큐브처럼! 여기서 블록을 계속 빼면 무슨 일이 생길까? 알아보자! 👀"),
+        "Here's a cube made of cheese cubes, like a Rubik's cube!\nWhat happens if you keep removing blocks one by one?\nLet's find out!\n👀", "치즈 조각으로 만든 큐브가 있어요! 루빅큐브처럼! 여기서 블록을 계속 빼면 무슨 일이 생길까요? 같이 알아봐요! 👀"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 12, padding: 14, fontSize: 14, color: C.text, lineHeight: 1.9, textAlign: "center" }}>
@@ -132,7 +132,7 @@ export function makeCheeseCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We try to slide a 1×1×N rod through one row.\nLook at these 4 cases — which one does the rod fit?", "1×1×N 막대를 한 줄로 밀어 넣으려고 해요. 4 가지 경우를 봐 — 어느 줄에 들어갈까?"),
+        "We try to slide a 1×1×N rod through one row.\nLook at these 4 cases — which one does the rod fit?", "1×1×N 막대를 한 줄로 밀어 넣으려고 해요. 4 가지 경우를 봐요 — 어느 줄에 들어갈까요?"),
       content: (
         <div style={{ padding: 16 }}>
           {/* 막대 정의 */}
@@ -320,7 +320,7 @@ export function makeCheeseCh1(E) {
           </div>
           <div style={{ marginTop: 12, padding: "10px 12px", background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, fontSize: 12, color: "#92400e", lineHeight: 1.7, fontWeight: 600 }}>
             🤔 {t(E,
-              "Notice the JUMP: 0 → 0 → 1 → 2 → 5.\nWhy does the last carve add +3 at once? That's the magic we'll uncover. Hit 'Sim' next!", "주목: 0 → 0 → 1 → 2 → 5.\n왜 마지막 제거가 한꺼번에 +3 추가? 그게 우리가 풀 마법이예요. '시뮬' 탭으로!")}
+              "Notice the JUMP: 0 → 0 → 1 → 2 → 5.\nWhy does the last carve add +3 at once? That's the magic we'll uncover. Hit 'Sim' next!", "주목: 0 → 0 → 1 → 2 → 5.\n왜 마지막 제거가 한꺼번에 +3 추가? 그게 우리가 풀 마법이에요. '시뮬' 탭으로!")}
           </div>
         </div>),
     },
@@ -633,7 +633,7 @@ export function makeCheeseCh4(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Wait — every carve, we re-check ALL 3N² rows.\nBut only ONE block changed.\nDid all rows really change?", "잠깐 — 매번 carve 마다 모든 3N² 줄을 다시 검사해요. 근데 변한 건 블록 1 개뿐이예요. 정말 모든 줄이 바뀌었을까?"),
+        "Wait — every carve, we re-check ALL 3N² rows.\nBut only ONE block changed.\nDid all rows really change?", "잠깐 — 매번 carve 마다 모든 3N² 줄을 다시 검사해요. 근데 변한 건 블록 1 개뿐이에요. 정말 모든 줄이 바뀌었을까?"),
       question: t(E,
         "When you carve 1 block, how many rows could possibly change their state?",
         "블록 1 개를 빼면, 상태가 바뀔 수 있는 줄은 최대 몇 개?"),

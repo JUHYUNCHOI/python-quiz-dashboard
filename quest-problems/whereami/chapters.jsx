@@ -101,7 +101,7 @@ export function makeWhereAmICh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First, what IS a substring?\nIt's a consecutive chunk of characters from the string.\nLike a sliding window!", "먼저 부분문자열이 뭘까? 문자열에서 연속된 글자 묶음이예요. 슬라이딩 윈도우처럼!"),
+        "First, what IS a substring?\nIt's a consecutive chunk of characters from the string.\nLike a sliding window!", "먼저 부분문자열이 뭘까? 문자열에서 연속된 글자 묶음이에요. 슬라이딩 윈도우처럼!"),
       content: (() => {
         const str = "ABCBA";
         return (
@@ -613,7 +613,7 @@ export function makeWhereAmICh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Finally, if all substrings were unique for this K, print it and stop!\nThat's the complete solution!", "마지막으로, 이 K에서 모든 부분문자열이 고유하면 출력하고 멈춰요! 이게 전체 풀이예요!"),
+        "Finally, if all substrings were unique for this K, print it and stop!\nThat's the complete solution!", "마지막으로, 이 K에서 모든 부분문자열이 고유하면 출력하고 멈춰요! 이게 전체 풀이에요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>

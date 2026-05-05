@@ -34,7 +34,7 @@ export function makeMcc20CityTourCh1(E) {
       type: "reveal",
       narr: t(E,
         "A city is a grid where each cell is a building (1) or empty (0). Fluffy stands on a starting building and can jump to any adjacent building (up/down/left/right) — but never onto empty cells.\nPrint how many buildings Fluffy can visit (counting the start).",
-        "도시는 각 칸이 건물 (1) 또는 빈 칸 (0) 인 격자예요. Fluffy 가 시작 건물에 서있고 인접 건물 (상하좌우) 로만 점프할 수 있어요 — 빈 칸으로는 못 감.\nFluffy 가 방문할 수 있는 건물의 수 (시작 포함) 를 출력해요."),
+        "도시는 각 칸이 건물 (1) 또는 빈 칸 (0) 인 격자예요. Fluffy 가 시작 건물에 서있고 인접 건물 (상하좌우) 로만 점프할 수 있어요 — 빈 칸으로는 갈 수 없어요.\nFluffy 가 방문할 수 있는 건물의 수 (시작 포함) 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -62,7 +62,7 @@ export function makeMcc20CityTourCh1(E) {
                   {t(E, "Fluffy starts on a given building and can ", "Fluffy 가 시작 건물에서 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "jump to adjacent buildings (up/down/left/right)", "인접한 건물 (상하좌우) 로 점프")}</b>
                   {t(E, ", never onto empty cells.",
-                        ". 빈 칸으로는 안 됨.")}
+                        ". 빈 칸으로는 갈 수 없어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>

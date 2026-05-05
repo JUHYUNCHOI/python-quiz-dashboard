@@ -96,7 +96,7 @@ export function makeMixMilkCh1(E) {
       type: "reveal",
       narr: t(E,
         "Three farmers have buckets numbered 1, 2, 3 with given CAPACITIES and starting milk amounts. They perform 100 pour operations in fixed cycle: 1→2, 2→3, 3→1, 1→2, ...\nA pour transfers as much milk as possible from source to destination — bounded by source's milk and destination's free space.\nPrint the milk in each bucket after 100 pours.",
-        "세 농부에게 1, 2, 3 번 양동이가 있고, 각자 정해진 용량과 시작 우유량이 있어요. 100번의 붓기를 정해진 순환 순서로 해요: 1→2, 2→3, 3→1, 1→2, ...\n한 번의 붓기는 가능한 만큼 우유를 옮겨요 — 출발지의 양과 목적지의 남은 공간이 한계.\n100번 붓기 후 각 양동이의 우유량을 출력해요."),
+        "세 농부에게 1, 2, 3 번 양동이가 있고, 각자 정해진 용량과 시작 우유량이 있어요. 100 번의 붓기를 정해진 순서로 돌아가며 해요: 1→2, 2→3, 3→1, 1→2, ...\n한 번 부을 때는 우유를 가능한 만큼 옮겨요 — 출발지에 남은 양과 목적지의 빈 공간 중 더 작은 만큼만 옮길 수 있어요.\n100 번 붓기를 모두 끝낸 뒤 각 양동이에 남은 우유량을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -132,7 +132,7 @@ export function makeMixMilkCh1(E) {
                   {t(E, "Each pour moves ", "한 번의 붓기는 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "as much milk as possible", "가능한 만큼")}</b>
                   {t(E, " — bounded by source amount and destination's remaining capacity.",
-                        " — 출발지의 양과 목적지의 남은 공간이 한계.")}
+                        " — 출발지에 남은 양과 목적지의 빈 공간 중 더 작은 만큼만 옮길 수 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
@@ -192,7 +192,7 @@ export function makeMixMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "When pouring from bucket A to bucket B, how much actually transfers?\nIt's the MINIMUM of what A has and what B can receive!", "A에서 B로 부을 때 실제로 얼마나 이동할까? A가 가진 양과 B가 받을 수 있는 양 중 더 작은 값이예요!"),
+        "When pouring from bucket A to bucket B, how much actually transfers?\nIt's the MINIMUM of what A has and what B can receive!", "A에서 B로 부을 때 실제로 얼마나 이동할까? A가 가진 양과 B가 받을 수 있는 양 중 더 작은 값이에요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
@@ -459,7 +459,7 @@ export function makeMixMilkCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "The total number of pour operations is fixed. How many times do we loop?", "총 붓기 횟수는 고정이예요. 몇 번 반복해요?"),
+        "The total number of pour operations is fixed. How many times do we loop?", "총 붓기 횟수는 고정이에요. 몇 번 반복해요?"),
       question: t(E,
         "How many pour operations total?",
         "총 붓기 횟수는?"),

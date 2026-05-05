@@ -85,7 +85,7 @@ export function makeMobileGameCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! 10 + 20 + 30 = 60.",
-        "맞아! 10 + 20 + 30 = 60이예요."),
+        "맞아! 10 + 20 + 30 = 60이에요."),
     },
     // 1-3: Input
     {

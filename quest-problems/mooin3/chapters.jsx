@@ -43,7 +43,7 @@ export function makeMooin3Ch1(E) {
       type: "reveal",
       narr: t(E,
         "We have a string s. A 'moo' is a triple of positions (i, j, k) where s[i] is DIFFERENT from s[j] but s[j] equals s[k].\nFor each query range, find the moo whose 'spread' (j-i)·(k-j) is biggest.",
-        "문자열 s가 있어요. 'moo'는 s[i]가 s[j]와 다르고 s[j]가 s[k]와 같은 위치 세 쌍 (i, j, k)예요.\n각 쿼리 구간에서 (j-i)·(k-j)가 가장 큰 moo를 찾아요."),
+        "문자열 s가 있어요. 'moo'는 세 자리 (i, j, k) 인데, 가운데와 끝 글자는 같고 첫 글자는 달라야 해요.\n각 쿼리 구간에서 (j-i)·(k-j)가 가장 큰 moo를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>

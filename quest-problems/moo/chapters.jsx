@@ -228,7 +228,7 @@ export function makeMooCh4(E) {
       </div>),
     },
     { type: "reveal",
-      narr: t(E, "Let's trace it by hand!\nString = 'momoo', position 0 ('m').\nThe 3 windows for position 0 are...\nwell, position 0 can only be the 1st letter, so just 1 window: [0,1,2] = 'mom'.\nIs 'mom' a moo?\nm≠o but o≠m, so NO.", "손으로 해보자!\n문자열 = 'momoo', 위치 0('m').\n위치 0의 윈도우는...\n위치 0은 1번째 글자만 가능하니까 윈도우 1개: [0,1,2] = 'mom'.\n'mom'은 moo야?\nm≠o이고 o≠m이니까 아니예요."),
+      narr: t(E, "Let's trace it by hand!\nString = 'momoo', position 0 ('m').\nThe 3 windows for position 0 are...\nwell, position 0 can only be the 1st letter, so just 1 window: [0,1,2] = 'mom'.\nIs 'mom' a moo?\nm≠o but o≠m, so NO.", "손으로 해보자!\n문자열 = 'momoo', 위치 0('m').\n위치 0의 윈도우는...\n위치 0은 1번째 글자만 가능하니까 윈도우 1개: [0,1,2] = 'mom'.\n'mom'은 moo야?\nm≠o이고 o≠m이니까 아니에요."),
       content: (<div style={{ padding: 16 }}>
         <div style={{ fontFamily: "'JetBrains Mono',monospace", textAlign: "center", marginBottom: 12 }}>
           {["m","o","m","o","o"].map((ch,i) => (

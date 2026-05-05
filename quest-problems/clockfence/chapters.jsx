@@ -40,7 +40,7 @@ export function makeClockCh1(E) {
       type: "reveal",
       narr: t(E,
         "A fence is described by a sequence of unit-step directions (N, E, S, W) that returns to the start, forming a closed simple polygon.\nDecide whether the fence is traced CLOCKWISE or COUNTER-CLOCKWISE.",
-        "울타리가 단위 길이 방향(N, E, S, W) 의 수열로 묘사되고, 시작점으로 돌아오는 단순 폐곡선을 이뤄요.\n그 울타리가 시계 방향(CW) 인지 반시계 방향(CCW) 인지 판단해요."),
+        "울타리는 단위 길이 방향 (N, E, S, W) 의 수열로 주어져요. 그 방향대로 따라가면 시작점으로 돌아오고, 자기 자신과 교차하지 않는 닫힌 다각형이 만들어져요.\n이 울타리가 시계 방향 (CW) 으로 그려졌는지 반시계 방향 (CCW) 으로 그려졌는지 판단해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -89,7 +89,7 @@ export function makeClockCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The path 'NESW' makes a square: go North, then East, then South, then West.\nEach turn is a right turn.\nIs this clockwise?", "경로 'NESW'는 정사각형: 북쪽, 동쪽, 남쪽, 서쪽. 각 회전이 오른쪽 회전이예요. 시계 방향일까요?"),
+        "The path 'NESW' makes a square: go North, then East, then South, then West.\nEach turn is a right turn.\nIs this clockwise?", "경로 'NESW'는 정사각형: 북쪽, 동쪽, 남쪽, 서쪽. 각 회전이 오른쪽 회전이에요. 시계 방향일까요?"),
       question: t(E,
         "'NESW' path: all right turns. Clockwise?",
         "'NESW' 경로: 모두 오른쪽 회전. 시계 방향?"),

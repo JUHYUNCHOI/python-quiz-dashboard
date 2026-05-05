@@ -36,7 +36,7 @@ export function makeSecretCh1(E) {
       type: "reveal",
       narr: t(E,
         "Two strings A and B of equal length are given.\nDetermine if B is a CIRCULAR ROTATION of A — i.e., B can be obtained by cyclically shifting A by some amount. Print YES or NO.",
-        "같은 길이의 두 문자열 A 와 B 가 주어져요.\nB 가 A 의 순환 회전인지 — 즉 A 를 어떤 양만큼 순환 이동해서 B 가 나오는지 — 판별해요. YES 또는 NO 를 출력해요."),
+        "같은 길이의 두 문자열 A 와 B 가 주어져요.\nB 가 A 의 회전(한쪽 끝이 반대편으로)인지 — 즉 A 를 어떤 양만큼 돌려서 B 가 나오는지 — 판별해요. YES 또는 NO 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -61,7 +61,7 @@ export function makeSecretCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "YES if B is a circular rotation of A, else NO", "B 가 A 의 순환 회전이면 YES, 아니면 NO")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "YES if B is a circular rotation of A, else NO", "B 가 A 의 회전(한쪽 끝이 반대편으로)이면 YES, 아니면 NO")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
@@ -84,7 +84,7 @@ export function makeSecretCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! For [1,2,3], a+a = [1,2,3,1,2,3]. Rotations [2,3,1] and [3,1,2] are both subarrays of a+a.",
-        "맞아! [1,2,3]이면, a+a = [1,2,3,1,2,3]. 회전 [2,3,1]과 [3,1,2] 모두 a+a의 부분 배열이예요."),
+        "맞아! [1,2,3]이면, a+a = [1,2,3,1,2,3]. 회전 [2,3,1]과 [3,1,2] 모두 a+a의 부분 배열이에요."),
     },
     // 1-3: Input
     {
@@ -96,7 +96,7 @@ export function makeSecretCh1(E) {
         "[1,2,3]과 [2,3,1]: 같은 회전? (1=Yes, 0=No)"),
       hint: t(E,
         "Shift [1,2,3] left by 1: [2,3,1]. Yes, it's a rotation!",
-        "[1,2,3]을 왼쪽으로 1칸 이동: [2,3,1]. 맞아, 회전이예요!"),
+        "[1,2,3]을 왼쪽으로 1칸 이동: [2,3,1]. 맞아, 회전이에요!"),
       answer: 1,
     },
   ];

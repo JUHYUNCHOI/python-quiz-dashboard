@@ -2,23 +2,18 @@ import { C, t } from "@/components/quest/theme";
 import { getMcc21CarrotsSections } from "./components";
 
 export const SOLUTION_CODE = [
-  "N = int(input())",
-  "a = list(map(int, input().split()))",
+  "N, D = map(int, input().split())",
+  "c = list(map(int, input().split()))",
   "",
-  "found = False",
+  "# Count triples (i, j, k) with i < j < k whose carrot sum is divisible by D",
+  "count = 0",
   "for i in range(N):",
   "    for j in range(i+1, N):",
   "        for k in range(j+1, N):",
-  "            s = a[i] + a[j] + a[k]",
-  "            if s % 3 == 0:",
-  "                print(s)",
-  "                found = True",
-  "                break",
-  "        if found: break",
-  "    if found: break",
+  "            if (c[i] + c[j] + c[k]) % D == 0:",
+  "                count += 1",
   "",
-  "if not found:",
-  "    print(-1)",
+  "print(count)",
 ];
 
 export function makeMcc21CarrotsCh1(E) {
@@ -27,7 +22,7 @@ export function makeMcc21CarrotsCh1(E) {
       type: "reveal",
       narr: t(E,
         "A rabbit has N baskets, basket i with c[i] carrots, and a target divisor D. Pick 3 distinct baskets whose carrot total is divisible by D.\nPrint how many such triples exist.",
-        "토끼에게 N 개의 바구니가 있고, i 번 바구니에 c[i] 당근, 목표 약수 D 가 주어져요. 합이 D 로 나누어떨어지는 서로 다른 3 개 바구니를 골라요.\n그런 삼중조합의 개수를 출력해요."),
+        "토끼에게 N 개의 바구니가 있고, i 번 바구니에 c[i] 당근, 목표 약수 D 가 주어져요. 합이 D 로 나누어떨어지는 서로 다른 3 개 바구니를 골라요.\n그런 세 개 조합의 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -57,14 +52,14 @@ export function makeMcc21CarrotsCh1(E) {
                   {t(E, "Pick ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "3 distinct baskets", "서로 다른 3 개 바구니")}</b>
                   {t(E, " whose carrot total is divisible by D.",
-                        " 를 골라 합이 D 로 나누어떨어지도록.")}
+                        " 를 골라요. 합이 D 로 나누어떨어지게요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "number of such valid triples", "그런 삼중조합의 개수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "number of such valid triples", "조건에 맞는 세 개 조합의 개수")}</b>
                   {t(E, ".", " 를 출력해요.")}
                 </div>
               </div>
@@ -75,7 +70,7 @@ export function makeMcc21CarrotsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Given baskets [3, 6, 9], their sum is 18. Is 18 divisible by 3?", "바구니 [3, 6, 9]의 합은 18이예요. 18은 3으로 나누어떨어질까?"),
+        "Given baskets [3, 6, 9], their sum is 18. Is 18 divisible by 3?", "바구니 [3, 6, 9]의 합은 18이에요. 18은 3으로 나누어떨어질까?"),
       question: t(E,
         "Baskets [3, 6, 9]. Sum = 18. Is 18 divisible by 3?",
         "바구니 [3, 6, 9]. 합 = 18. 18은 3으로 나누어떨어져요?"),

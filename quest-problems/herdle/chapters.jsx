@@ -128,7 +128,7 @@ export function makeHerdleCh1(E) {
         "정답=전부 'A', 추측=전부 'A'. 초록 개수?"),
       hint: t(E,
         "Every cell matches, so all 9 are green.",
-        "모든 셀이 일치하니까 9개 다 초록이예요."),
+        "모든 셀이 일치하니까 9개 다 초록이에요."),
       answer: 9,
     },
   ];

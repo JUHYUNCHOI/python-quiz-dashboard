@@ -133,7 +133,7 @@ export function makeReachCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Reachability Queries!\nA dragon starts in city 1.\nSome roads are damaged and will break at time K.\nFor each K, how many cities can the dragon reach?\n🐉", "도달 가능성 문제! 용이 도시 1에서 출발해요. 일부 도로가 손상되어 있어서 시간 K에 파괴돼요. 각 K마다 용이 도달할 수 있는 도시는 몇 개일까요? 🐉"),
+        "Reachability Queries!\nA dragon starts in city 1.\nSome roads are damaged and will break at time K.\nFor each K, how many cities can the dragon reach?\n🐉", "도달할 수 있는지 묻는 문제! 용이 도시 1에서 출발해요. 일부 도로가 손상되어 있어서 시간 K에 파괴돼요. 각 K마다 용이 갈 수 있는 도시는 몇 개일까요? 🐉"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐉</div>
@@ -172,7 +172,7 @@ export function makeReachCh1(E) {
     {
       type: "graphViz",
       narr: t(E,
-        "Here's the graph visually.\nCity 1 is the starting point (purple).\nThe numbers on roads are their lengths (travel time in minutes).", "그래프를 눈으로 보자! 도시 1이 출발점(보라색)이예요. 도로 위의 숫자는 길이(이동 시간, 분 단위)야."),
+        "Here's the graph visually.\nCity 1 is the starting point (purple).\nThe numbers on roads are their lengths (travel time in minutes).", "그래프를 눈으로 보자! 도시 1이 출발점(보라색)이에요. 도로 위의 숫자는 길이(이동 시간, 분 단위)야."),
     },
     // 1-4: Apocalypse rules
     {
@@ -247,7 +247,7 @@ export function makeReachCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "K=11: City 4 needs time 12 via 1→2→4 (7+5=12 > 11).\nIs there another path?\nAll roads to city 4 are damaged.\nSo how many cities are reachable?", "K=11: 도시 4까지 1→2→4 경로가 7+5=12분인데 12 > 11이라 불가! 도시 4로 가는 도로는 다 손상이예요. 도달 가능한 도시는 몇 개?"),
+        "K=11: City 4 needs time 12 via 1→2→4 (7+5=12 > 11).\nIs there another path?\nAll roads to city 4 are damaged.\nSo how many cities are reachable?", "K=11: 도시 4까지 1→2→4 경로가 7+5=12분인데 12 > 11이라 불가! 도시 4로 가는 도로는 다 손상이에요. 도달 가능한 도시는 몇 개?"),
       question: t(E,
         "K=11: How many cities reachable? (city 4 needs 12 min)",
         "K=11일 때 도달 가능한 도시 수는?\n(도시 4는 최소 12분 걸림)"),

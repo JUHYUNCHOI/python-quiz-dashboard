@@ -39,7 +39,7 @@ export function makeRotShiftCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows stand at positions 0..N−1 in a circle. K of those positions are 'active'.\nEach minute: (1) all cows currently AT active positions cyclically rotate by 1 (within the active set), (2) every active position then shifts by +1 (mod N).\nAfter T minutes, where does each cow end up?",
-        "N마리 소가 원형의 위치 0..N−1에 서있고, 그중 K개의 위치가 '활성'이에요.\n매분: (1) 활성 위치에 있는 소들이 활성 집합 안에서 순환 회전(1칸), (2) 그 다음 활성 위치들이 +1 만큼 이동 (mod N).\nT분 후 각 소는 어디에 있을까요?"),
+        "N마리 소가 원형의 위치 0..N−1에 서있고, 그중 K개의 위치가 '활성'이에요.\n매분: (1) 활성 위치에 있는 소들이 활성 집합 안에서 순환 회전(1칸), (2) 그 다음 활성 위치들이 +1 만큼 이동 (N 으로 나눈 나머지).\nT분 후 각 소는 어디에 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 14 }}>
@@ -74,7 +74,7 @@ export function makeRotShiftCh1(E) {
                           " (각자 다음 활성 위치로 이동).")}
                     <br/>
                     {t(E, "(2) every active position itself ", "(2) 활성 위치들이 ")}
-                    <b style={{ color: "#7c3aed" }}>{t(E, "shifts by +1 (mod N)", "+1 만큼 이동 (mod N)")}</b>
+                    <b style={{ color: "#7c3aed" }}>{t(E, "shifts by +1 (mod N)", "+1 만큼 이동 (N 으로 나눈 나머지)")}</b>
                     {t(E, ".", ".")}
                   </div>
                 </div>

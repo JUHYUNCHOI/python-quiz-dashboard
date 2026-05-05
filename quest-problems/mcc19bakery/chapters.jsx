@@ -92,7 +92,7 @@ export function makeMcc19BakeryCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! The 2nd cheapest is the item costing 2. So total = 1+3+4 = 8.",
-        "맞아! 2번째로 싼 건 가격 2인 아이템이예요. 그래서 총 비용 = 1+3+4 = 8."),
+        "맞아! 2번째로 싼 건 가격 2인 아이템이에요. 그래서 총 비용 = 1+3+4 = 8."),
     },
     // 1-3: Input
     {
