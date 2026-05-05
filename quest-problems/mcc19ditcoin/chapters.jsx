@@ -40,8 +40,8 @@ export function makeMcc19DitcoinCh1(E) {
         "D 일 동안 매일 Ditcoin 1 개씩 벌어요. 각 날의 판매 가격 p[i] 를 알아요. 어떤 날에든 그 날 가격으로 보유한 Ditcoin 을 원하는 만큼 팔 수 있어요.\nD 일 동안 벌 수 있는 최대 총액을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>💰</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>💰</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Ditcoin</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P4</div>
           </div>

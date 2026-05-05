@@ -33,8 +33,8 @@ export function makeCornerCoverCh1(E) {
         "N × M 격자가 주어져요. 격자의 네 '끝' 에 위치한 칸들 — 즉 꼭짓점 칸 — 의 서로 다른 개수를 출력해요.\n(예외: 1×M 이나 N×1 같은 가늘어진 격자는 꼭짓점이 2개, 1×1 한 칸은 꼭짓점이 1개.)"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcd0"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcd0"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Corner Cover</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P1</div>
           </div>

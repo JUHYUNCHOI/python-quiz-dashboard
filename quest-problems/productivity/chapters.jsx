@@ -36,7 +36,7 @@ export function makeProdCh1(E) {
         "Bessie wants to visit as many farms as possible!\nEach farm closes at a certain time, and she needs travel time to get there.\nCan she visit enough?\n📊", "베시가 최대한 많은 농장을 방문하고 싶어! 각 농장은 특정 시간에 닫히고, 가는 데 이동 시간이 필요해요. 충분히 방문할 수 있을까? 📊"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>📊</div>
+          <div style={{ fontSize: 32, marginBottom: 4 }}>📊</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Max Productivity</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Maximizing Productivity</div>
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>

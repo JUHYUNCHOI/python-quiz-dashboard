@@ -158,8 +158,8 @@ export function makeCowGymCh1(E) {
         "K개의 체조 세션이 있고, 각 세션에서 N마리 소가 1등부터 N등까지 순위 매겨져요 (ID 의 순열).\n두 소 (i, j) 가 '일관된 쌍' 이려면 — 모든 세션에서 한쪽이 항상 다른 쪽보다 위에 있어야 해요 (방향이 매번 같아야).\n일관된 쌍의 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🤸"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"🤸"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow Gymnastics</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #1</div>
           </div>

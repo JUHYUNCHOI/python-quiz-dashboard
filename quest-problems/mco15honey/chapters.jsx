@@ -35,8 +35,8 @@ export function makeHoneyCh1(E) {
         "다람쥐가 용량이 M ml 인 항아리로 꿀을 모아요. N 개의 벌집에 각자 꿀 양 h[1..N] 이 있어요. 다람쥐는 최대 K 번 왕복(한 번 가서 가져오기) 가능. 매 왕복: 벌집 1 개를 방문해 min (그곳의 남은 꿀, M) 만큼 가져와요.\n수집한 꿀의 총량 최댓값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf6f"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf6f"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Honey</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P2</div>
           </div>

@@ -39,8 +39,8 @@ export function makeMcc19ElimCh1(E) {
         "길이 N 의 이진 문자열과 한계 K 가 주어져요. 문자열에서 최대 K 개의 0 을 지울 수 있어요. 지운 뒤 남은 문자가 한 문자열로 재조합돼요.\n달성 가능한 가장 긴 연속 1 의 길이를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🔢</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🔢</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Elimination</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P5</div>
           </div>

@@ -31,8 +31,8 @@ export function makeMagicOrbsCh1(E) {
         "N 개의 마법 구슬이 있고, 각자 파워 p[i] 를 가져요. 최대 K 개를 고를 수 있어요.\n달성 가능한 총 파워의 최댓값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd2e"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd2e"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Magical Orbs</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P3</div>
           </div>

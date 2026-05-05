@@ -26,8 +26,8 @@ export function makeBalancedCh1(E) {
         "N개의 여는 괄호 뒤에 M개의 닫는 괄호 — 그 안에서 뽑아낼 수 있는 가장 긴 균형 부분수열을 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🔗</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🔗</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Balanced Subsequences</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>Bronze warm-up</div>
           </div>

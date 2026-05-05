@@ -56,8 +56,8 @@ export function makeSocDist2Ch1(E) {
         "소들이 수직선의 정해진 위치에 있고, 지금 아프거나 건강한 상태예요. 병은 아픈 소한테서 거리 R 안에 있는 모든 소에게 옮았어요 (R 은 모르는 값). FJ 는 지금 상태가 나오게 하려면 처음에 몇 마리가 아팠어야 하는지 알고 싶어요.\n지금 상태와 안 맞지 않는 가장 큰 R 을 찾고, 그 R 일 때 처음 아팠던 소의 최소 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udda0"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\udda0"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Social Distancing II</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #2</div>
           </div>

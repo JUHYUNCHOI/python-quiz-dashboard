@@ -85,7 +85,7 @@ export function makeSubseqMedianCh1(E) {
         "Given an array A, find the sum of medians of all 'good' subsequences modulo 998244353.\nA good subsequence is strictly increasing with odd length.\nThe median is the middle element.", "배열 A가 주어질 때, 모든 '좋은' 부분수열의 중앙값의 합을 998244353으로 나눈 나머지를 구해요.\n좋은 부분수열은 엄격히 증가(같은 값 없이 계속 커짐)하고 길이가 홀수예요.\n중앙값은 가운데 원소예요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcca"}</div>
+          <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcca"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Increasing Subsequence Median Sum</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P6</div>
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>

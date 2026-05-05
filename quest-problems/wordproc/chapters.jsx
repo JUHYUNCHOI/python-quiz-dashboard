@@ -156,8 +156,8 @@ export function makeWordProcCh1(E) {
         "워드 프로세서가 N개 단어를 순서대로 받아요. 각 줄에는 단어의 글자 수 합이 최대 K까지 들어갈 수 있어요 (공백은 안 셈). 각 단어는 순서대로, 현재 줄에 들어가면 그 줄에 추가, 안 들어가면 새 줄을 시작해요.\n결과 문서를 한 줄씩 출력해요 (단어 사이는 공백 1개)."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"📝"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"📝"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Word Processor</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #1</div>
           </div>

@@ -117,7 +117,7 @@ export function makeTricksCh1(E) {
         "It's Halloween!\nThere are candy bags — each bag has 2 candies.\nPick 3 bags.\nOpen them: you get 6 candies.\nFor it to be a success, those 6 candies must be exactly 2 colors with 3 of each!\n🎃", "할로윈이에요!\n사탕 봉지가 잔뜩 있어요.\n봉지마다 사탕이 2개씩 들어있지.\n이 중에서 봉지를 딱 3개만 골라.\n열어보면 사탕 6개가 나와요.\n이 6개 사탕이 '두 가지 색, 각각 3개씩'이면 성공!\n이렇게 성공하는 방법이 몇 가지인지 세는 문제예요.\n🎃"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🎃</div>
+          <div style={{ fontSize: 32, marginBottom: 4 }}>🎃</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Trick or Treat</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P3</div>
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>

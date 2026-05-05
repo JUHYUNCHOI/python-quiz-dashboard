@@ -30,8 +30,8 @@ export function makeMcc20CipherCh1(E) {
         "치환 암호가 각 소문자를 다른 소문자에 대응시켜요 (알파벳의 순열). 평문 글자별로 어떤 글자로 인코딩되는지 알려주는 암호 키와 인코딩된 메시지가 주어져요.\n원래 평문 메시지를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd10"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd10"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cipher</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P1</div>
           </div>

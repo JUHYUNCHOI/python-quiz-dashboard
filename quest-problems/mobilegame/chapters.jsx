@@ -28,8 +28,8 @@ export function makeMobileGameCh1(E) {
         "모바일 게임에 N 개의 레벨이 있고, 각 레벨의 점수 s[1..N] 이 주어져요. 모든 레벨을 한 번씩 플레이해 모든 점수를 모아요.\n총 점수 (모든 s[i] 의 합) 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcf1"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcf1"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mobile Game</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P2</div>
           </div>

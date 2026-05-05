@@ -54,8 +54,8 @@ export function makeTrainsCh1(E) {
         "N × N 격자에 각 칸의 인구 수가 있어요 (또는 −1 = 막힘). 막혀있지 않은 칸 사이에서 상하좌우로 칸 A 에서 칸 B 까지 철도 경로를 놓아요. 경로 비용 = 지나는 칸들의 인구 합 (방문한 모든 칸이 옮겨와요).\n옮긴 인구 총합의 최솟값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude82"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\ude82"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Trains</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P4</div>
           </div>

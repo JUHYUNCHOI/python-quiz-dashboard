@@ -46,8 +46,8 @@ export function makeMooin3Ch1(E) {
         "문자열 s가 있어요. 'moo'는 세 자리 (i, j, k) 인데, 가운데와 끝 글자는 같고 첫 글자는 달라야 해요.\n각 쿼리 구간에서 (j-i)·(k-j)가 가장 큰 moo를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>It's Mooin' Time III</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #3</div>
           </div>

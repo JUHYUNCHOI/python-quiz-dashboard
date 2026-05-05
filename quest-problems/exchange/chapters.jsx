@@ -68,8 +68,8 @@ export function makeExchangeCh1(E) {
         "N마리 소가 원형으로 서있고, 각자 우유를 가지고 있어요.\n매 라운드마다 모든 소가 자기 우유를 시계방향 다음 소에게 전부 넘겨요.\nM라운드 뒤, 각 소가 든 우유의 양은?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🥛</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🥛</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Milk Exchange</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #2</div>
           </div>

@@ -54,8 +54,8 @@ export function makeBlocksCh1(E) {
         "FJ에게 4개의 큐브가 있고, 각 큐브의 6개 면에 글자가 한 개씩 있어요.\n각 단어 쿼리에 대해, 4개 큐브를 왼쪽부터 오른쪽으로 나란히 놓고 — 어느 큐브를 어디에, 어느 면을 위로 — 선택해서 그 단어를 만들 수 있는지 판단해요.\n각 쿼리마다 YES 또는 NO를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🧱"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"🧱"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Blocks</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #3</div>
           </div>

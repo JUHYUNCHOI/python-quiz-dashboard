@@ -53,8 +53,8 @@ export function makePermCh1(E) {
         "Farmer John 에게 1..N 의 순열 p 가 있어요. Farmer Nhoj 가 헛간에 들어가서 그걸 분해했어요. 너무 잔인하지 않으려고 힌트를 남겼어요. 그 힌트들로 일관된 사전순으로 가장 작은 p 를 복원하거나, Nhoj 가 실수했음이 분명하면 -1 을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🧩</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🧩</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>Farmer John's Favorite Permutation</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
           </div>

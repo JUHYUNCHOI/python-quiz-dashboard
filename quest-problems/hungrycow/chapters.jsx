@@ -47,8 +47,8 @@ export function makeHungryCowCh1(E) {
         "베시는 재고가 있으면 하루에 건초 1단을 먹어요.\n특정 날짜에 특정 양이 도착하는 N번의 건초 배달이 있어요.\n배달 정보와 마감일 T가 주어지면, 1~T일 중 베시가 실제로 먹는 날의 수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc04"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Hungry Cow</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #1</div>
           </div>

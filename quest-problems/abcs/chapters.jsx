@@ -37,8 +37,8 @@ export function makeAbcsCh1(E) {
         "세 양의 정수 A ≤ B ≤ C 가 있어요. 그리고 7가지 합이 순서가 섞인 채로 주어져요: A, B, C, A+B, B+C, A+C, A+B+C.\n원래 A, B, C를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd22"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Do You Know Your ABCs?</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #1</div>
           </div>

@@ -52,8 +52,8 @@ export function makeWalkCh1(E) {
         "FJ가 직각 모서리로 된 울타리(축에 평행한 다각형)를 만들었어요.\n각 소는 울타리를 따라 양쪽 중 한 방향으로 걸을 수 있어요 — 더 짧은 거리를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🚶</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🚶</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Walking Along a Fence</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #2</div>
           </div>

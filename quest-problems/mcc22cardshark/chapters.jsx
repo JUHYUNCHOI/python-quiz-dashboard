@@ -47,8 +47,8 @@ export function makeMcc22CardSharkCh1(E) {
         "두 플레이어가 N 장의 펼쳐진 카드 (각자 값이 있음) 중 한 장씩 번갈아 골라요. 가져간 카드의 값이 그 사람의 점수예요. 둘 다 최선을 다 해요 (자기 점수를 최대로 만들려고).\n첫 번째 플레이어의 최종 총점을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udccf"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udccf"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Card Shark</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P5</div>
           </div>

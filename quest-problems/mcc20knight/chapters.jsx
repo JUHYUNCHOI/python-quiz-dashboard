@@ -36,8 +36,8 @@ export function makeMcc20KnightCh1(E) {
         "체스 나이트가 N × N 보드의 시작 칸에 있어요. 한 번의 이동은 L 자 — 한 축으로 2 칸, 다른 축으로 1 칸 (8 가지 이동) 이에요.\n목표 칸에 도달하기 위한 최소 이동 횟수를 출력해요 (도달 불가면 -1)."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u265e"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u265e"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Knight</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P4</div>
           </div>

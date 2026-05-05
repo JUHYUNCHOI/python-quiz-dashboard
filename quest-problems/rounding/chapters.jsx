@@ -1732,7 +1732,7 @@ export function makeOptSteps(E) {
       content: (
         <div style={{ padding: 16, fontSize: 14, lineHeight: 1.85 }}>
           {/* N=473 시각 */}
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>{t(E, "Example", "예시")}</div>
             <div style={{ fontSize: 28, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1 }}>N = 473</div>
             <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>{t(E, "473 is 3-digit", "473 은 3자리")}</div>

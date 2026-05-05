@@ -53,8 +53,8 @@ export function makeCannonCh1(E) {
         "베시가 대포알이 되어 위치 S에서 시작해 파워 1로 오른쪽으로 움직여요. 수직선 위에는 서로 다른 위치에 N개의 아이템이 있어요.\n각 아이템은 점프패드(방향을 반대로 바꾸고 파워를 더해줌) 또는 타겟(파워가 그 값 이상이면 부서짐) 둘 중 하나예요.\n베시가 수직선을 벗어나거나 무한 반복할 때까지 부서지는 타겟 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca5"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udca5"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cannonball</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #2</div>
           </div>

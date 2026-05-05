@@ -73,8 +73,8 @@ export function makeRevEngCh1(E) {
         "M 개의 테스트 케이스가 주어져요. 각 케이스는 길이 N 의 이진 입력 배열과 기대 출력 (0/1) 을 가져요. 어떤 'if arr[i] == 상수: X 출력 else Y 출력' 형태의 단순 if/else 프로그램 (단 하나의 입력 위치만 사용) 으로 모든 기대 출력을 만들 수 있는지 판단해요.\n그런 프로그램이 존재하면 OK, 아니면 LIE 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd27"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd27"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Reverse Engineering</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #3</div>
           </div>

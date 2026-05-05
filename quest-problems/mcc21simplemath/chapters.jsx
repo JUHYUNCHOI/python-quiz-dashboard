@@ -31,8 +31,8 @@ export function makeMcc21SimpleMathCh1(E) {
         "정수 P (1, 2, 또는 3) 와 N 개의 정수 배열 A 가 주어져요.\nA 에 대해 왼쪽부터 오른쪽으로 연산 적용: P=1 → 합, P=2 → 곱, P=3 → 순차 정수 나눗셈. 결과를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd22"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Simple Math</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P5</div>
           </div>

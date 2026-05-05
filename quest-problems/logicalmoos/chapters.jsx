@@ -46,8 +46,8 @@ export function makeLogicalCh1(E) {
         "'true', 'false', 'and', 'or'로 이루어진 긴 불리언 수식이 있어요.\n각 쿼리마다, 한 구간을 하나의 불리언으로 바꿔서 전체 결과가 목표값이 되게 할 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🧠</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🧠</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Logical Moos</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #1</div>
           </div>

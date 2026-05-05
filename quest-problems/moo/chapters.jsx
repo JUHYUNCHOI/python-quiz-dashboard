@@ -9,7 +9,7 @@ export function makeMooCh1(E) {
     { type: "reveal",
       narr: t(E, "Bessie mooed a LOT at a contest.\nBut the recording might have 1 typo...\ncan we still figure out what she said?\n🐄", "Bessie가 대회에서 엄청 울었대! 근데 녹음에 오타가 1개 있을 수도... 뭐라고 했는지 알 수 있을까? 🐄"),
       content: (<div style={{ padding: 16, textAlign: "center" }}>
-        <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
+        <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
         <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>It's Mooin' Time</div>
         <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2024 Bronze #3</div>
         <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>

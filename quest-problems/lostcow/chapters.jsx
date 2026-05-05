@@ -43,8 +43,8 @@ export function makeLostCowCh1(E) {
         "FJ가 수직선 위 위치 x에 있어요. 소는 위치 y에 있지만 어느 방향인지 몰라요.\n그래서 지그재그로 걸어요: 오른쪽 1, 왼쪽 2, 오른쪽 4, 왼쪽 8... 매번 두 배씩.\ny에 도달할 때까지 총 몇 칸을 걸을까요?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc04"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>The Lost Cow</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #1</div>
           </div>

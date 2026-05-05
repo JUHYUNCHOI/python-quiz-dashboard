@@ -36,8 +36,8 @@ export function makeMcc19BakeryCh1(E) {
         "빵집 프로모션: 한 번에 4 개씩 묶어 계산할 때마다 그 그룹에서 2 번째로 싼 아이템이 무료예요.\n총 N 개 아이템을 원하는 대로 묶어 (최대 4 개씩) 사요. 최소 총 비용을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🥖</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🥖</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Bakery</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P2</div>
           </div>

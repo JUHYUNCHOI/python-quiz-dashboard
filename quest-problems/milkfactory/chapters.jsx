@@ -51,8 +51,8 @@ export function makeFactoryCh1(E) {
         "FJ 에게 N개의 역과 N−1개의 한 방향 컨베이어로 이뤄진 우유 공장이 있어요 (연결 구조가 트리 모양이에요).\n다른 모든 역에서 컨베이어를 따라 도달할 수 있는 단 하나의 역을 찾아요. 그 번호를 출력하고, 없으면 −1."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfed"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udfed"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Milk Factory</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #2</div>
           </div>

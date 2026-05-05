@@ -39,8 +39,8 @@ export function makeGenomicsCh1(E) {
         "FJ 에게 점박이 소 N마리와 무늬 없는 소 N마리가 있어요. 각 소는 A, C, G, T 로 된 M글자 유전체를 가져요.\n어떤 위치 j 가 '구별 가능' 이려면, j 번째 칸에서 점박이 소들이 가진 글자와 무늬 없는 소들이 가진 글자가 한 글자도 겹치지 않아야 해요. 구별 가능한 위치가 몇 개인지 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddec"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\uddec"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Bovine Genomics</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #2</div>
           </div>

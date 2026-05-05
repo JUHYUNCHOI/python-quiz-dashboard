@@ -33,8 +33,8 @@ export function makeSqPastureCh1(E) {
         "겹치지 않는 축에 평행한 직사각형 목초지 2개가 들판에 있어요. FJ 가 두 목초지를 모두 포함하는 정사각형 울타리 (축에 평행) 를 만들어요.\n그런 정사각형 중 가장 작은 것의 면적을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>⬜</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>⬜</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Square Pasture</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #1</div>
           </div>

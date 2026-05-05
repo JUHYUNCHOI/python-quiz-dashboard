@@ -77,8 +77,8 @@ export function makeInterviewCh1(E) {
         "N마리 소가 K개의 카운터에서 인터뷰를 봐요. 각 카운터는 한 번 인터뷰에 정해진 시간이 걸리고, 각 소는 가장 빨리 비는 카운터로 가요.\n베시는 줄의 마지막에 있어요 — 어느 카운터로 갈 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Bessie's Interview</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #1</div>
           </div>

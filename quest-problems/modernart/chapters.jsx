@@ -69,8 +69,8 @@ export function makeModernArtCh1(E) {
         "N × N 캔버스에 1..9 색의 9개 축에 평행한 직사각형 페인트가 한 번씩 차례로 칠해져요 (나중 페인트가 앞 페인트를 덮음).\n최종 캔버스가 주어졌을 때, 가장 먼저 칠해졌을 수 있는 색들 — 즉 다른 보이는 색 위에 칠해질 필요가 없는 색들 — 을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfa8"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udfa8"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Modern Art</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #3</div>
           </div>

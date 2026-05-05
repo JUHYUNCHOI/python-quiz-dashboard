@@ -56,8 +56,8 @@ export function makeMcc15IsthmusCh1(E) {
         "길이 N 의 높이 수열과 매개변수 K 가 주어져요. 위치 i 가 PEAK 이려면 바로 왼쪽 K 개 이웃이 순증가하여 i 에 도달, 바로 오른쪽 K 개 이웃이 i 에서 순감소. VALLEY 는 그 반대.\nPEAK 와 VALLEY 의 총 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26f0\ufe0f"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u26f0\ufe0f"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Isthmus</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P4</div>
           </div>

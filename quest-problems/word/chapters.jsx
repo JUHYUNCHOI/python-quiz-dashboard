@@ -123,7 +123,7 @@ export function makeWordCh1(E) {
         "Word Distance!\nYou have N words, all length M.\nFind a new word that is 'closest' to all of them combined.\nBut distance here isn't about spelling — it's about having the same letters!\n📝", "단어 거리 문제예요!\n단어가 여러 개 있는데, 이 단어들 모두와 최대한 비슷한 새 단어 하나를 만들어야 해요.\n'비슷하다'는 건 같은 글자를 많이 갖고 있다는 뜻이에요!\n📝"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>📝</div>
+          <div style={{ fontSize: 32, marginBottom: 4 }}>📝</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#3b82f6" }}>Word Distance</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P4</div>
           <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>

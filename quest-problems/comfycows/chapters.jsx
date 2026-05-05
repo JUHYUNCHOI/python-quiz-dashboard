@@ -50,8 +50,8 @@ export function makeComfyCh1(E) {
         "FJ가 무한한 2D 격자에 N마리 소를 한 마리씩 서로 다른 칸에 추가해요.\n어떤 소가 상하좌우 이웃 칸 4개 중 정확히 3개가 채워져 있으면 그 소는 '편안'해요.\n각 추가 직후, 격자 위 편안한 소의 총 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc04"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Comfortable Cows</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #2</div>
           </div>

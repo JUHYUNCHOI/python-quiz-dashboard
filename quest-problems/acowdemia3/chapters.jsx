@@ -40,8 +40,8 @@ export function makeAcow3Ch1(E) {
         "격자 위 각 칸은 소 (C) 또는 풀 (G) 이에요. 두 소 모두에게 상하좌우로 인접한 풀 칸이 있으면 그 풀 칸을 통해 두 소가 친구가 될 수 있어요.\n단, 풀 칸 하나는 최대 한 쌍의 우정만 중재해요. 만들 수 있는 우정의 최대 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc04"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Acowdemia III</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #3</div>
           </div>

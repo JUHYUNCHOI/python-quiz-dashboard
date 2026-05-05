@@ -72,7 +72,7 @@ export function makeMcc20KittyCh1(E) {
         "Meet the Kitty sequence!\nIt's like Fibonacci, but adds THREE previous numbers instead of two.\nLet's learn it step by step!\n🐱", "Kitty 수열을 만나자! 피보나치처럼 생겼는데, 이전 두 개가 아니라 세 개를 더해요. 하나씩 배우자! 🐱"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🐱</div>
+          <div style={{ fontSize: 32, marginBottom: 4 }}>🐱</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Kitty Numbers</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P3</div>
         </div>),

@@ -30,8 +30,8 @@ export function makeSumKCh1(E) {
         "N 개의 숫자 배열 a[0..N−1] 와 정수 K 가 주어져요. 각 원소를 K 제곱한 값들의 총합 Σ a[i]^K 를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2211"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u2211"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>{"Sum^K"}</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P6</div>
           </div>

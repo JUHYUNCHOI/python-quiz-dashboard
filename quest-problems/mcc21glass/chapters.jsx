@@ -51,7 +51,7 @@ export function makeMcc21GlassCh1(E) {
         "We have N glass plates arranged in a circle.\nHow many different ways can we arrange them?\nLet's figure it out!\n🥛", "N개의 유리판이 원형으로 배열돼 있어요. 몇 가지 다른 방법으로 배열할 수 있을까? 알아보자! 🥛"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🥛</div>
+          <div style={{ fontSize: 32, marginBottom: 4 }}>🥛</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Round Glass</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P4</div>
         </div>),

@@ -40,8 +40,8 @@ export function makeMcc15BahasaCh1(E) {
         "Bahasa F 라는 언어가 있어요: 단어의 모든 자음이 'f' 가 되고, 모음 (a, e, i, o, u) 은 그대로 유지돼요.\n단어가 주어지면 Bahasa F 번역을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udde3\ufe0f"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udde3\ufe0f"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Bahasa F</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P3</div>
           </div>

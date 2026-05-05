@@ -38,8 +38,8 @@ export function makeCandyCh1(E) {
         "FJ에게 N마리 소가 있고, M개의 캔디 케인을 위에서 한 개씩 매달아요. 각 캔디마다 모든 소가 차례로 다가가, 자기 키까지 캔디 아랫부분을 먹고, 먹은 양만큼 키가 커져요.\n모든 캔디가 끝난 뒤 각 소의 최종 키를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🍬</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🍬</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Candy Cane Feast</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #1</div>
           </div>

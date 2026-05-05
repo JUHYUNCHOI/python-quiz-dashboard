@@ -43,8 +43,8 @@ export function makeMooLangCh1(E) {
         "무 언어에는 명사, 자동사, 타동사, 접속사가 있어요. 문장은 두 가지: '명사 + 자동사' (2단어) 또는 '명사 + 타동사 + 명사 + ...' (목적어를 쉼표로 추가, 타동사 1개당 목적어 ≥ 1).\n각 종류 단어 개수와 마침표 P개, 쉼표 C개 가 주어졌을 때, 사용 단어 수의 최댓값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcdd"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcdd"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Moo Language</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #2</div>
           </div>

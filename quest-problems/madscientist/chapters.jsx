@@ -40,8 +40,8 @@ export function makeMadSciCh1(E) {
         "길이 N 의 문자열 A, B 두 개가 주어져요. 두 문자열은 H 와 G 두 글자만 사용해요. 한 번의 '뒤집기' 연산으로 B 의 연속한 부분 문자열을 골라 그 안의 H ↔ G 를 모두 교환해요.\nB 를 A 와 같게 만드는 데 필요한 최소 뒤집기 횟수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddea"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\uddea"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Mad Scientist</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #2</div>
           </div>

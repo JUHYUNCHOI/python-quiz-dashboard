@@ -31,8 +31,8 @@ export function makeMcc19RectCh1(E) {
         "오름차순으로 정렬된 N 개의 정수 a[1..N] 가 주어져요.\n인접한 두 원소의 절대 차이의 최솟값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>📏</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>📏</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Rectangle (Min Diff)</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P1</div>
           </div>

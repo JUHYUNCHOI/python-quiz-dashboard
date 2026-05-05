@@ -50,8 +50,8 @@ export function makeCowSignalCh1(E) {
         "FJ 에게 M×N 의 작은 그림 (글자 격자) Cow-Signal 이 있어요. 정수 배율 K 로 확대 — 각 글자가 K×K 블록으로 커져요.\n(M·K) × (N·K) 크기로 확대된 그림을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>📡</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>📡</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>The Cow-Signal</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #3</div>
           </div>

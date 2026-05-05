@@ -66,8 +66,8 @@ export function makeTrafficCh1(E) {
         "고속도로에 N 개의 연속된 구간이 있어요. 각 구간은: 측정된 최소/최대 차량 유량을 알려주는 센서, 유량에 k 대를 더하는 진입로, 또는 유량에서 k 대를 빼는 출구로 중 하나.\n순서대로 구간들이 주어졌을 때 고속도로 시작과 끝의 가장 좁은 가능한 [min, max] 유량 범위를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude97"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\ude97"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Measuring Traffic</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #3</div>
           </div>

@@ -54,8 +54,8 @@ export function makeLeadersCh1(E) {
         "N마리 소가 G 또는 H 품종으로 한 줄에 서있고, i번 소는 위치 [i, E_i]를 '커버'해요.\nG 리더 1마리와 H 리더 1마리를 골라요. 그 쌍이 유효하려면, 그 리더가 같은 품종 소들을 모두 커버하거나, 상대 리더가 그 리더의 범위 안에 있어야 해요.\n유효한 (G리더, H리더) 쌍의 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc51"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc51"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Leaders</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #1</div>
           </div>

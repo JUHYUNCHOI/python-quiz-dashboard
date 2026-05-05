@@ -38,8 +38,8 @@ export function makeCrossRd3Ch1(E) {
         "N마리 소가 한 개의 문에 도착해요. 각자 도착 시각 a[i] 와 통과 시간 d[i] 를 가져요. 문은 도착 순서 (FIFO) 로 한 마리씩 처리해요. 문이 사용 중일 때 도착한 소는 줄을 서고, 자기 차례에 d[i] 초 걸려 통과해요.\n마지막 소가 통과를 끝내는 시각을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udeaa"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udeaa"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Cross the Road III</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #3</div>
           </div>

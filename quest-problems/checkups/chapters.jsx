@@ -29,8 +29,8 @@ export function makeCheckupsCh1(E) {
         "FJ에게 N마리 소가 있고 각자 품종이 있어요. 베시가 순서대로 품종을 추측했어요.\n맞춘 개수는? 그리고 베시가 추측을 재배열하면 최대 몇 개 맞출 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🐮</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🐮</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Cow Checkups</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
           </div>

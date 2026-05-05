@@ -68,8 +68,8 @@ export function makeTameHerdCh1(E) {
         "FJ 가 매일 '마지막 탈출 이후 며칠인지' 를 기록해요. 탈출이 일어난 날에 카운터가 0 으로 리셋되고, 그 다음날부터 1 씩 증가해요. 일부 기록은 누락돼서 −1 로 표시돼요.\n로그와 일치하는 탈출 횟수의 최솟값과 최댓값을 출력해요. 불가능하면 −1."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc04"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc04"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Taming the Herd</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #3</div>
           </div>

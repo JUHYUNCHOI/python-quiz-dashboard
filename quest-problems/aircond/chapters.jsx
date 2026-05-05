@@ -56,8 +56,8 @@ export function makeAirCondCh1(E) {
         "FJ에게 N마리 소가 있어요. 각 소는 축사 범위 [s, t] 에 살고, 최소 c 의 냉방력이 필요해요.\n에어컨은 M ≤ 10 개 있어요. 각 에어컨은 덮는 축사 범위, 냉방력, 비용이 정해져 있어요. 같은 칸을 덮는 에어컨은 냉방력이 서로 더해져요.\n모든 소의 요구를 만족시키는 에어컨 조합 중 비용이 가장 적은 것을 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2744\ufe0f"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u2744\ufe0f"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Air Cownditioning II</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #2</div>
           </div>

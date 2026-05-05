@@ -27,8 +27,8 @@ export function makeMcc21MarblesCh1(E) {
         "한 줄로 늘어선 N 개의 상자에 m[1..N] 개의 구슬이 있어요. 총합이 N 으로 나누어떨어져요. 한 번의 연산: 구슬 1 개를 인접한 상자 (왼쪽 또는 오른쪽) 로 옮기기.\n모든 상자를 같은 개수 (total/N) 로 만드는 데 필요한 최소 연산 횟수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd34"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd34"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Marbles and Boxes</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P3</div>
           </div>

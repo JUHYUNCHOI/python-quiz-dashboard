@@ -55,8 +55,8 @@ export function makeMcc22AliensCh1(E) {
         "N 명의 외계인이 각자 T (진실) 또는 F (거짓말쟁이) 로 라벨돼 있어요. 각 외계인이 다른 외계인의 타입에 대해 주장해요. 진실형은 항상 참, 거짓말쟁이는 항상 거짓.\n주어진 타입이 모든 주장과 맞는지 Y 또는 N 으로 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc7d"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc7d"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Aliens</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P2</div>
           </div>

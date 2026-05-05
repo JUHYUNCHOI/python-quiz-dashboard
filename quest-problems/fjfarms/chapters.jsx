@@ -37,8 +37,8 @@ export function makeFjFarmsCh1(E) {
         "FJ에게 N개 식물이 있어요. i번 식물은 키 h[i]에서 시작해서 하루에 a[i]씩 자라요. 그러므로 d일에는 키가 h[i] + a[i]·d 가 되어요.\n식물을 키 순으로 정렬한 결과가 목표 순서 t와 같아지는 가장 빠른 날 d를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🌱</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🌱</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>FJ Actually Farms</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #3</div>
           </div>

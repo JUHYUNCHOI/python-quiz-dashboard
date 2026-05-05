@@ -43,8 +43,8 @@ export function makeRevegCh1(E) {
         "N 개의 목초지 (1..N) 가 있고, 각각 4 가지 잔디 종류 중 하나를 심어요. M 쌍의 소 각각이 두 좋아하는 목초지를 가지고 있고, 그 두 목초지는 서로 다른 잔디 종류여야 해요.\n사전순으로 가장 작은 유효 배색을 1..4 의 숫자 문자열로 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf31"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf31"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Great Revegetation</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #2</div>
           </div>

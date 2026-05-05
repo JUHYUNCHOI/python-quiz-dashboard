@@ -50,8 +50,8 @@ export function makeAlchemyCh1(E) {
         "1번부터 N번까지 N개의 금속이 있고, 각 금속의 시작 개수가 주어져요. 2번 이상의 금속 i는 각자 레시피를 가지고 있어요 — 더 낮은 번호의 금속들을 모아서 i 1개를 만들어요.\n레시피를 마음대로 사용해서 금속 N을 1개 이상 만들 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"⚗️"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"⚗️"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Alchemy</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #3</div>
           </div>

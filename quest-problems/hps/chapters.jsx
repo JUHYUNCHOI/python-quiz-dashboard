@@ -53,8 +53,8 @@ export function makeHpsCh1(E) {
         "가위바위보의 변형이에요!\n두 플레이어가 각자 기호 2개를 먼저 공개하고, 4개를 모두 본 다음 그중 1개를 골라 실제로 내요.\n엘시의 쌍이 주어지면, 베시의 어떤 쌍이 무조건 이길 수 있는지 세요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>✊✋✌️</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>✊✋✌️</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Hoof Paper Scissors Minus One</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #1</div>
           </div>

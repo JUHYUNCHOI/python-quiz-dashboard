@@ -147,8 +147,8 @@ export function makeShellCh1(E) {
         "고전 컵 게임: 3개의 컵 중 하나에 조약돌이 숨겨져 있어요. N개의 라운드가 있고 각 라운드는 (a, b, g) — 베시가 컵 a와 b를 바꿔놓고, 엘시가 컵 g 아래에 조약돌이 있다고 추측해요.\n조약돌의 시작 위치는 알 수 없어요. 시작 위치 3가지 중 엘시가 가장 많이 맞히는 경우의 정답 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🐚"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"🐚"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Shell Game</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #1</div>
           </div>

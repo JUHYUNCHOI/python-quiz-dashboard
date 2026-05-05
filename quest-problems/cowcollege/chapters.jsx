@@ -111,8 +111,8 @@ export function makeCowCollegeCh1(E) {
         "FJ 가 소 대학을 운영해요. N마리 소 각자에게는 낼 수 있는 최대 등록금 c[i] 가 있어요. FJ 가 등록금 P 를 단 하나 정하면, c[i] ≥ P 인 소만 등록해서 정확히 P 를 내고, 나머지는 0.\n가능한 최대 총 수입과 그것을 달성하는 가격을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\uD83C\uDF93"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\uD83C\uDF93"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow College</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #1</div>
           </div>

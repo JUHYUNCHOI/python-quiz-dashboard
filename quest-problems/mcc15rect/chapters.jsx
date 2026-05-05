@@ -34,8 +34,8 @@ export function makeMcc15RectCh1(E) {
         "축에 평행한 직사각형에는 꼭짓점이 4개 있고, 그중 3개가 주어져요.\n누락된 4번째 꼭짓점의 좌표를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u25ad"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u25ad"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Rectangle</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P1</div>
           </div>

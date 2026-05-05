@@ -56,8 +56,8 @@ export function makeEvolutionCh1(E) {
         "N개의 소 하위 집단이 있고, 각 집단이 가진 특성들이 주어져요. 이 집단들을 만들 수 있는 진화 트리가 있을까요?\n조건은 이래요: 각 특성은 트리 위에서 딱 한 노드에서만 나타나야 해요. 그리고 그 특성을 가진 모든 집단은 그 노드의 후손이어야 해요. 가능하면 'yes', 불가능하면 'no'를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddec"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\uddec"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cow Evolution</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #3</div>
           </div>

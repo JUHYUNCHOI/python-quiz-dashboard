@@ -35,8 +35,8 @@ export function makeCowntactCh1(E) {
         "FJ에게 한 줄로 선 N마리 소가 있어요. 0일차에 어떤 소들이 처음 감염됐고, 매일 밤 감염된 소가 양옆 이웃에게 병을 옮겨요.\n며칠이 지난 뒤의 최종 감염 상태(0과 1로 된 문자열)가 주어지면, 0일차에 감염됐던 소의 최소 수는 몇 마리일까요?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🦠</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🦠</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>Cowntact Tracing 2</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #2</div>
           </div>

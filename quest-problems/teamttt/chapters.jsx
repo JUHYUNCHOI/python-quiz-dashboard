@@ -45,8 +45,8 @@ export function makeTttCh1(E) {
         "3×3 격자에 A..Z 글자가 채워져 있어요 (각 글자가 소 1마리). 8개의 '줄' 이 있어요: 3행, 3열, 2대각선.\n한 소가 자기 글자로 한 줄 전체를 채우면 단독 우승. 정확히 2마리 소의 글자가 합쳐서 한 줄을 채우면 그 2명이 팀 우승.\n(1) 단독 우승하는 서로 다른 소의 수, (2) 우승한 서로 다른 2명 팀의 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u274C"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u274C"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Team Tic Tac Toe</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #1</div>
           </div>

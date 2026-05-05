@@ -109,8 +109,8 @@ export function makeWhereAmICh1(E) {
         "베시가 N개의 우편함이 줄지어 있는 길에 살고, 각 우편함은 A..Z 글자로 표시돼요. 그녀는 K 개의 연속한 우편함만 보고 자기 위치를 알아내고 싶어요.\n길이 K 인 모든 연속 부분 문자열이 길에서 유일해지는 가장 작은 K 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"📍"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"📍"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: C.carry }}>Where Am I?</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #2</div>
           </div>

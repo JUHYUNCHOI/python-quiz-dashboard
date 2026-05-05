@@ -50,8 +50,8 @@ export function makeNonTransCh1(E) {
         "각 면이 1..10 사이 값인 4면 주사위 A, B 가 주어지고, A 가 B 를 이겨요 (a > b 인 (a, b) 결과가 a < b 인 결과보다 많음).\nB 가 C 를 이기고 C 가 A 를 이기는 4면 주사위 C (면도 1..10) 를 찾아요. 없으면 보고."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfb2"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udfb2"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Non-Transitive Dice</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #2</div>
           </div>

@@ -38,8 +38,8 @@ export function makeGuessAnimalCh1(E) {
         "베시가 N마리 동물 목록에서 동물 하나를 마음에 떠올려요. 특성에 대해 예/아니오 질문만 할 수 있어요. 질문을 계속해서 결국 동물 하나로 좁혀요.\n최악의 경우, 동물을 유일하게 식별하기 전까지 받을 수 있는 '예' 답변의 최대 수는 몇 개일까요?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🐾"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"🐾"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Guess the Animal</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #3</div>
           </div>

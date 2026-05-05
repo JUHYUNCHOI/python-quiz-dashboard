@@ -45,8 +45,8 @@ export function makeBacteriaCh1(E) {
         "FJ에게 N개의 세균 패치가 있고, 각 패치에는 양수/음수 편차값이 있어요.\n파워 L의 분무를 위치 i에 쓰면 패치 i는 L, i+1은 L−1, ..., i+L−1은 1 만큼 더해져요 (오른쪽으로 갈수록 감소).\n모든 패치를 0으로 만드는 데 필요한 분무의 최소 횟수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udda0"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\udda0"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Balancing Bacteria</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #3</div>
           </div>

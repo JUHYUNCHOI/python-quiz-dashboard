@@ -151,8 +151,8 @@ export function makeMixMilkCh1(E) {
         "세 농부에게 1, 2, 3 번 양동이가 있고, 각자 정해진 용량과 시작 우유량이 있어요. 100 번의 붓기를 정해진 순서로 돌아가며 해요: 1→2, 2→3, 3→1, 1→2, ...\n한 번 부을 때는 우유를 가능한 만큼 옮겨요 — 출발지에 남은 양과 목적지의 빈 공간 중 더 작은 만큼만 옮길 수 있어요.\n100 번 붓기를 모두 끝낸 뒤 각 양동이에 남은 우유량을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🥛"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"🥛"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mixing Milk</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #1</div>
           </div>

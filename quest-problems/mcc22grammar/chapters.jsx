@@ -55,8 +55,8 @@ export function makeMcc22GrammarCh1(E) {
         "'문법' 은 단어가 노드인 방향이 있는 그래프예요. X → Y 의 한쪽 방향 화살표는 \"단어 X 다음에 단어 Y 가 올 수 있다\" 는 뜻. 문장이 조건에 맞으려면 모든 연속 단어 쌍 (X, Y) 에 X → Y 화살표가 있어야 해요.\n각 입력 문장에 대해 VALID 또는 INVALID 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcd6"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcd6"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Grammar</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P1</div>
           </div>

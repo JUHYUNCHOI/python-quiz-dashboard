@@ -43,8 +43,8 @@ export function makeClockCh1(E) {
         "울타리는 단위 길이 방향 (N, E, S, W) 의 수열로 주어져요. 그 방향대로 따라가면 시작점으로 돌아오고, 자기 자신과 교차하지 않는 닫힌 다각형이 만들어져요.\n이 울타리가 시계 방향 (CW) 으로 그려졌는지 반시계 방향 (CCW) 으로 그려졌는지 판단해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd04"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Clockwise Fence</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #3</div>
           </div>

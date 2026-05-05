@@ -60,8 +60,8 @@ export function makeAirCond1Ch1(E) {
         "FJ 에게 한 줄로 늘어선 N 개 축사가 있어요. 각 축사는 현재 온도 p[i] 와 목표 온도 q[i] 를 가져요.\nAC 명령을 한 번 쓰면 어떤 연속한 구간의 모든 축사를 동시에 +1 또는 -1 만큼 조절할 수 있어요. 모든 p[i] 를 q[i] 와 같게 만드는 최소 명령 횟수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf21\ufe0f"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf21\ufe0f"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Air Cownditioning</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #2</div>
           </div>

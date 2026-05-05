@@ -30,8 +30,8 @@ export function makeMcc20MissingCh1(E) {
         "원래는 1..N 의 순열이었어요. 한 숫자가 제거되고 일부 항목의 부호가 음수로 바뀌었어요.\n결과로 남은 N−1 개의 (부호 가능한) 정수 목록이 주어졌을 때, 빠진 숫자가 될 수 있는 서로 다른 값의 총합을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2753"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u2753"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Missing Number</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P5</div>
           </div>

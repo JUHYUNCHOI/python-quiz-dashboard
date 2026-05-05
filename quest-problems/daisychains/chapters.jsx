@@ -109,8 +109,8 @@ export function makeDaisyCh1(E) {
         "베시에게 한 줄로 놓인 N개의 꽃이 있고, 각 꽃의 꽃잎 수 p[i]가 주어져요. 연속한 부분 배열을 고를 때마다 그 안의 평균 꽃잎 수를 계산해요. 그 부분 배열에 평균과 정확히 같은 꽃잎 수의 꽃이 1개라도 있으면 '예쁜' 부분 배열이에요.\nN·(N+1)/2 개의 연속 부분 배열 중 예쁜 것의 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\uD83C\uDF3C"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\uD83C\uDF3C"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: C.carry }}>Daisy Chains</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #2</div>
           </div>

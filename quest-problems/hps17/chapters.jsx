@@ -74,8 +74,8 @@ export function makeHps17Ch1(E) {
         "FJ가 소와 N라운드 동안 가위바위보를 해요. 매 라운드 소의 제스처는 1, 2, 3 중 하나로 기록되지만, 어떤 숫자가 Hoof/Paper/Scissors 중 무엇인지 우리는 몰라요.\nFJ는 한 가지 제스처를 골라서 N라운드 내내 같은 것만 내야 해요. 가능한 매핑과 FJ 제스처 조합 중에서 FJ가 이길 수 있는 최대 라운드 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u270a"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u270a"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Hoof, Paper, Scissors</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #2</div>
           </div>

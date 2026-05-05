@@ -37,8 +37,8 @@ export function makeInnovationCh1(E) {
         "총 H 시간이 있고 N 개의 작업이 있어요. i번 작업은 t[i] 시간이 걸려요. 작업을 완료하려면 그 시간 전부를 써야 해요.\nH 시간 안에 완료할 수 있는 작업의 최대 개수를 출력해요 (어떤 부분집합이든, 순서 무관)."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca1"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udca1"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Innovation</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P3</div>
           </div>

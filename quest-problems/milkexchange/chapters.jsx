@@ -42,7 +42,7 @@ export function makeMilkExCh1(E) {
         "N cows stand in a circle.\nEach minute, every cow passes 1 liter of milk left or right.\nLet's understand this exchange!\n🥛", "N마리 소가 원형으로 서 있어요. 매분 모든 소가 우유 1리터를 왼쪽 또는 오른쪽으로 전달해요. 이 교환을 이해해 봐요! 🥛"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🥛</div>
+          <div style={{ fontSize: 32, marginBottom: 4 }}>🥛</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Milk Exchange</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Milk Exchange</div>
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>

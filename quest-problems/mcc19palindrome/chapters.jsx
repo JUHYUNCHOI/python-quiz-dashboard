@@ -57,8 +57,8 @@ export function makeMcc19PalCh1(E) {
         "K 진법 (자릿수 0..K-1, '0' 자체 외에는 선행 0 없음) 의 모든 회문수를 작은 숫자부터 큰 숫자 순으로 나열해요.\n그 목록의 N 번째 (1-indexed) 회문수를 K 진법으로 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🔄</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🔄</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Palindrome</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P6</div>
           </div>

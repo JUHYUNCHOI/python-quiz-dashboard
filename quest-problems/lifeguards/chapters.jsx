@@ -63,8 +63,8 @@ export function makeLifeguardsCh1(E) {
         "FJ에게 N명의 인명구조원이 있고, 각자 반열린 구간 [s, t) 동안 근무해요. 어느 한 순간에 최소 1명이 근무 중이면 그 순간은 '커버됐다'고 해요.\nFJ가 정확히 1명을 해고해야 해요. 남은 인명구조원들의 근무 구간 합집합으로 얻을 수 있는 최대 커버 시간을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfca"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udfca"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Lifeguards</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2018 Bronze #2</div>
           </div>

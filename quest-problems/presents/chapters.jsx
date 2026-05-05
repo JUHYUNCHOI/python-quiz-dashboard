@@ -26,8 +26,8 @@ export function makePresentsCh1(E) {
         "FJ가 N개의 선물을 쌓아 놓았어요. 사람들이 특정 선물을 요청해요 — 그 선물 위에 쌓인 개수를 세고 빼내요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>🎁</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🎁</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Stack of Presents</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>Bronze warm-up</div>
           </div>

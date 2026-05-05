@@ -51,8 +51,8 @@ export function makeLiarsCh1(E) {
         "N마리 소가 각자 베시의 위치에 대해 주장을 해요. 'G x'는 베시 위치가 x 이상, 'L x'는 x 이하라는 뜻이에요. 베시의 실제 위치는 하나예요.\n베시의 위치를 잘 골라서 참인 주장 수를 최대화할 때, 거짓말쟁이의 최소 수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"🤥"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"🤥"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Counting Liars</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #2</div>
           </div>

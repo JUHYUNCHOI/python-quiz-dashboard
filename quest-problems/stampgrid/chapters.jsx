@@ -61,7 +61,7 @@ export function makeStampCh1(E) {
         "We have an N\u00d7N canvas and a K\u00d7K stamp that can be rotated 4 ways.\nCan we recreate the desired pattern by stamping?\n\ud83d\udcee", "N\u00d7N \uce94\ubc84\uc2a4\uc640 4\ubc29\ud5a5 \ud68c\uc804 \uac00\ub2a5\ud55c K\u00d7K \ub3c4\uc7a5\uc774 \uc788\uc5b4.\n\ub3c4\uc7a5\uc744 \ucc0d\uc5b4\uc11c \uc6d0\ud558\ub294 \ud328\ud134\uc744 \ub9cc\ub4e4 \uc218 \uc788\uc744\uae4c?\n\ud83d\udcee"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcee"}</div>
+          <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcee"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Stamp Grid</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #2</div>
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>

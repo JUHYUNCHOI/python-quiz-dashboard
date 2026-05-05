@@ -28,8 +28,8 @@ export function makeTichuCh1(E) {
         "티추 카드 게임에서 '페어' 는 손에서 같은 값의 카드 2장이에요. 손에 N 장의 카드가 있어요.\n낼 수 있는 페어의 가짓수 (즉, N 장 중 2 장을 뽑는 가짓수) 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udccf"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udccf"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Tichu</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P4</div>
           </div>

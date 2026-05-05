@@ -48,8 +48,8 @@ export function makeMcc22LampCh1(E) {
         "1..N 번호의 N 개 램프가 모두 꺼진 상태로 시작해요. M 번의 켜고 끄기 연산이 있고, 각 연산은 범위 [L, R] 의 모든 램프를 켜고 끄기 (ON ↔ OFF) 해요.\n모든 연산 후 켜진 램프의 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca1"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udca1"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Lamp</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P6</div>
           </div>

@@ -31,7 +31,7 @@ export function makeCollatzCh1(E) {
         "The Collatz conjecture: start with any positive integer N.\nIf even, divide by 2.\nIf odd, multiply by 3 and add 1.\nRepeat until you reach 1.\nCount the steps!", "콜라츠 추측: 양의 정수 N에서 시작해요. 짝수면 2로 나누고, 홀수면 3을 곱하고 1을 더해요. 1에 도달할 때까지 반복하고 단계 수를 세요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd22"}</div>
+          <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd22"}</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Collatz Conjecture</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P1</div>
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>

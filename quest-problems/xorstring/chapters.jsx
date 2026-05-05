@@ -33,8 +33,8 @@ export function makeXorStringCh1(E) {
         "같은 길이의 두 이진 문자열 A, B 가 주어져요.\n비트별 XOR 을 출력해요. 결과는 같은 길이의 문자열이고, 각 위치에서 A 와 B 가 같으면 0, 다르면 1 이에요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2295"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u2295"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>XOR The String</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P6</div>
           </div>

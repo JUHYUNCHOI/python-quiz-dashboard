@@ -47,8 +47,8 @@ export function makeMcc22BirthdayCh1(E) {
         "고양이 생일 파티를 계획해요. N 마리 고양이가 각자 참석 가능한 시간대 목록을 제출해요.\n모든 시간대 중에서 한 시간대에 가장 많은 고양이가 참석할 수 있는 인원을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf82"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf82"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cats' Birthday</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P4</div>
           </div>

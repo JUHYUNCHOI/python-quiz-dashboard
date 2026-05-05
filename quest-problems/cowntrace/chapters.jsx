@@ -72,8 +72,8 @@ export function makeCowntraceCh1(E) {
         "N마리 소가 행사에 참석했고, 두 소가 발굽을 맞댔다는 기록이 시각별로 T개 있어요. 정확히 1마리만 처음 감염된 '환자 제로' 이고, 발굽을 맞대면 감염을 옮길 수 있어요. 단, 한 번 감염된 소는 다른 소에게 최대 K 번까지만 옮겨요.\n최종 감염/건강 상태가 주어졌을 때, 환자 제로가 될 수 있는 소의 수와 데이터에 맞는 K 의 최솟값·최댓값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd0d"}</div>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd0d"}</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cowntact Tracing</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #3</div>
           </div>
