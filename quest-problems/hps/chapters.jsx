@@ -4,42 +4,23 @@ import { getHpsSections } from "./components";
 export const SOLUTION_CODE = [
   "N, M = map(int, input().split())",
   "",
-  "# Read outcome chart (triangular)",
-  "# result[i][j] = 'W','L','D' for symbol i vs j",
-  "result = [['' for _ in range(N)] for _ in range(N)]",
-  "for i in range(N):",
-  "    row = input().split() if i > 0 else [input().strip()]",
-  "    # Actually read as string characters",
-  "    s = input() if i > 0 else 'D'",
-  "    # Rebuild: result[i][j] for j <= i",
+  "# beats[i][j] = '1' if symbol i beats symbol j, '0' otherwise",
+  "beats = [input().strip() for _ in range(N)]",
   "",
-  "# Simpler: read full chart",
-  "chart = []",
-  "for i in range(N):",
-  "    line = input().strip()",
-  "    chart.append(line)",
+  "def pair_beats(a, b, x):",
+  "    # Bessie picks the better of {a, b} after seeing x",
+  "    return beats[a][x] == '1' or beats[b][x] == '1'",
   "",
-  "def outcome(a, b):",
-  "    if a == b: return 'D'",
-  "    if a < b: return chart[b][a]  # reversed",
-  "    return chart[a][b]",
-  "",
-  "# For each of Elsie's (s1,s2) pairs:",
-  "# Bessie picks best of her (a,b) pair",
-  "# Bessie wins if she can pick a or b that beats",
-  "# whichever Elsie picks from s1,s2",
   "for _ in range(M):",
   "    s1, s2 = map(int, input().split())",
-  "    s1 -= 1; s2 -= 1",
+  "    s1 -= 1; s2 -= 1   # 1-indexed → 0-indexed",
+  "",
   "    count = 0",
   "    for a in range(N):",
   "        for b in range(N):",
-  "            # Bessie has (a,b), Elsie has (s1,s2)",
-  "            # Bessie wins if she can guarantee a win",
-  "            # She picks after seeing Elsie's choice",
-  "            can_beat_s1 = outcome(a,s1)=='W' or outcome(b,s1)=='W'",
-  "            can_beat_s2 = outcome(a,s2)=='W' or outcome(b,s2)=='W'",
-  "            if can_beat_s1 and can_beat_s2:",
+  "            # Bessie's pair (a, b) wins for sure iff she can",
+  "            # beat WHICHEVER of Elsie's symbols she ends up facing",
+  "            if pair_beats(a, b, s1) and pair_beats(a, b, s2):",
   "                count += 1",
   "    print(count)",
 ];
@@ -98,6 +79,107 @@ export function makeHpsCh1(E) {
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-2: Sample input / output format
+    {
+      type: "reveal",
+      narr: t(E,
+        "Sample input — first line N M, then N rows of the beats chart, then M Elsie pairs. For each pair print one number (count of Bessie's winning pairs).",
+        "샘플 입력 — 첫 줄 N M, 그 다음 N 줄로 승패 차트, 그 다음 M 줄로 엘시 쌍. 각 쌍마다 한 수 (베시의 승리 보장 쌍 개수) 출력."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
+{`3 2
+0010
+1001
+0101
+1010
+1 2
+2 3`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`5
+5`}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+              🔍 {t(E, "Reading the input", "입력 읽기")}
+            </div>
+            <div><b>3 2</b> — {t(E, "N=3 symbols (rock/paper/scissors), M=2 queries", "N=3 기호 (가위바위보), M=2 쿼리")}</div>
+            <div style={{ marginTop: 4 }}>{t(E, "Next 3 rows = beats matrix. Row i tells which symbols i beats:", "다음 3 줄 = 승패 차트. i 번째 줄은 i 가 이기는 기호:")}</div>
+            <div style={{ marginLeft: 8, fontSize: 11, color: "#475569" }}>
+              <code>0010</code> {t(E, "→ symbol 1 only beats symbol 3 (rock beats scissors)", "→ 기호 1 은 기호 3 만 이김 (바위가 가위)")}<br/>
+              <code>1001</code> {t(E, "→ symbol 2 beats 1 and 4? wait — chart includes one extra symbol in this example", "→ 이 예시에선 1 과 4 를 이김")}
+            </div>
+            <div style={{ marginTop: 6 }}>
+              {t(E, "After the chart, M lines each give 2 numbers s1 s2 = Elsie's pair. Print one count per query.",
+                    "차트 다음에 M 줄, 각각 두 수 s1 s2 = 엘시의 쌍. 각 쿼리마다 한 수 출력.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: Hand-trace — show the 4 cases on a small example
+    {
+      type: "reveal",
+      narr: t(E,
+        "Walk through one Bessie pair vs one Elsie pair to see exactly when Bessie's pair guarantees a win — she has to handle BOTH of Elsie's symbols.",
+        "베시 쌍 1 개 vs 엘시 쌍 1 개를 끝까지 따라가면서 — 언제 베시의 쌍이 승리를 보장하는지 봐요. 엘시의 두 기호 모두 처리해야 함."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 4 }}>
+            ✏️ {t(E, "Standard RPS — does Bessie's (Rock, Paper) beat Elsie's (Paper, Scissors)?",
+                       "표준 가위바위보 — 베시 (바위, 보) 가 엘시 (보, 가위) 를 이길까?")}
+          </div>
+          <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 12 }}>
+            {t(E, "After both pairs are revealed, Elsie picks her play. Bessie sees Elsie's pick and counters.",
+                  "양쪽 쌍이 공개된 후 엘시가 자기 패를 골라요. 베시는 그걸 보고 카운터해요.")}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { elsie: "Paper",    pickA: "Rock ✗",     pickB: "Paper (tie)", best: "Paper → tie", win: false,
+                note: "Rock loses to Paper, Paper ties Paper. No WIN — Bessie can't beat Paper from {Rock, Paper}." },
+              { elsie: "Scissors", pickA: "Rock ✓",     pickB: "Paper ✗",      best: "Rock → WIN",  win: true,
+                note: "Bessie picks Rock to crush Scissors. Beats Scissors? Yes." },
+            ].map((r, i) => (
+              <div key={i} style={{
+                background: r.win ? "#dcfce7" : "#fee2e2",
+                border: `2px solid ${r.win ? "#16a34a" : "#dc2626"}`,
+                borderRadius: 10, padding: "10px 12px",
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: r.win ? "#15803d" : "#7f1d1d", marginBottom: 4 }}>
+                  {t(E, "Case: Elsie plays ", "케이스: 엘시가 ")}<b>{r.elsie}</b>{t(E, "", " 냄")}
+                </div>
+                <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+                  • {t(E, "Bessie picks Rock?  ", "베시가 바위 선택? ")}<b>{r.pickA}</b><br/>
+                  • {t(E, "Bessie picks Paper? ", "베시가 보 선택?  ")}<b>{r.pickB}</b><br/>
+                  → {t(E, "Best for Bessie: ", "베시 최선: ")}<b>{r.best}</b>
+                </div>
+                <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>{r.note}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 12, color: "#9a3412", fontWeight: 700 }}>
+              {t(E, "Verdict: Bessie's (Rock, Paper) does NOT guarantee a win against (Paper, Scissors).",
+                    "결론: 베시 (바위, 보) 는 (보, 가위) 에 대해 승리를 보장하지 못함.")}
+            </div>
+            <div style={{ fontSize: 11, color: "#9a3412", marginTop: 2 }}>
+              {t(E, "Both of Elsie's symbols must be beatable. Here she can play Paper and Bessie has no answer.",
+                    "엘시의 두 기호 모두 이길 수 있어야 함. 여기선 엘시가 보를 내면 베시가 답이 없음.")}
             </div>
           </div>
         </div>),
