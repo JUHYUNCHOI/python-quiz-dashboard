@@ -131,7 +131,7 @@ export default function CheeseApp(props = {}) {
 
   return (
     <div>
-      <div style={{ maxWidth: "min(1300px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+      <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         {/* --- 상단 progress bar — 수업 페이지와 일치 --- */}
         <div style={{ height: 3, background: "#e5e7eb", borderRadius: 2, marginTop: 8, marginBottom: 10, overflow: "hidden" }}>
           <div style={{ height: "100%", background: "#d97706", borderRadius: 2, width: `${((cur + 1) / steps.length) * 100}%`, transition: "width .3s" }} />
@@ -204,7 +204,7 @@ export default function CheeseApp(props = {}) {
 
       {/* Fixed bottom navigation */}
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "8px 16px 14px", zIndex: 100, borderTop: `1px solid ${C.border}`, boxShadow: "0 -4px 12px rgba(0,0,0,.06)" }}>
-        <div style={{ maxWidth: "min(1300px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
           {showAnswerHint && (
             <div style={{ textAlign: "center", fontSize: 11, color: C.dim, fontWeight: 600, marginBottom: 4 }}>
               {t(E, "💡 Tip: try answering above. (You can skip too — →)",

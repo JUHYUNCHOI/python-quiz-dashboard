@@ -104,7 +104,7 @@ export default function FencesApp(props = {}) {
   };
 
   return (
-    <div style={{ maxWidth: "min(1300px, 100%)", margin: "0 auto" }}>
+    <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto" }}>
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <h1 style={{ fontSize: 16, fontWeight: 800, color: A, margin: 0, fontFamily: "'Jua',sans-serif" }}>🏗️ Building Fences</h1>
@@ -151,7 +151,7 @@ export default function FencesApp(props = {}) {
 
       {/* Fixed bottom navigation */}
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "8px 16px 14px", zIndex: 100, borderTop: `1px solid ${C.border}`, boxShadow: "0 -4px 12px rgba(0,0,0,.06)" }}>
-        <div style={{ maxWidth: "min(1300px, 100%)", margin: "0 auto" }}>
+        <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto" }}>
           {isBlocked && (
             <div style={{ textAlign: "center", fontSize: 13, color: C.carry, fontWeight: 700, marginBottom: 4, animation: "pulse 1.5s ease infinite" }}>
               {E ? "💡 Tip: try answering above" : "💡 팁: 위에서 답해보면 좋아요"}
