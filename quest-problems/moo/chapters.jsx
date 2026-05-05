@@ -91,7 +91,7 @@ export function makeMooCh1(E) {
     { type: "reveal",
       narr: t(E, "Here's the sample input/output we'll explore in the Sim tab:", "다음 시뮬 탭에서 직접 가지고 놀 샘플 입출력:"),
       content: (<div style={{ padding: 16 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10 }}>
           <div>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "INPUT", "입력")}</div>
             <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>

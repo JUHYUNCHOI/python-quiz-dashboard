@@ -293,7 +293,7 @@ export function makeCheeseCh1(E) {
         "Here's the sample input/output we'll trace by hand in the Sim tab:", "다음 시뮬 탭에서 직접 돌려볼 샘플 입출력:"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10 }}>
             {/* Input */}
             <div>
               <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "INPUT", "입력")}</div>

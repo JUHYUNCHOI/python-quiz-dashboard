@@ -92,7 +92,7 @@ export function makeBalancedCh1(E) {
       content: (
         <div style={{ padding: 16 }}>
           {/* Two side-by-side example cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10 }}>
             {[
               { N: 3, M: 2, matched: [1, 2, 3, 4], len: 4 },     // ((()) — match indices 1,2 with 3,4
               { N: 1, M: 5, matched: [0, 1], len: 2 },           // ()))))) — match index 0 with 1
@@ -174,7 +174,7 @@ export function makeBalancedCh2(E) {
       content: (
         <div style={{ padding: 16 }}>
           {/* Bottleneck visualization: 2 cases */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10 }}>
             {[
               { N: 5, M: 3, label: t(E, "More '(' than ')'", "'(' 가 ')' 보다 많음") },
               { N: 2, M: 6, label: t(E, "More ')' than '('", "')' 가 '(' 보다 많음") },

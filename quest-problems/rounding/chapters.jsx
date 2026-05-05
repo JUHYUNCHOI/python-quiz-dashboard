@@ -452,7 +452,7 @@ export function makePatternSteps(E) {
       content: (
         <div style={{ padding: 16 }}>
           {/* 두 수 나란히 비교 */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 12 }}>
             {/* 445 */}
             <div style={{ background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 12, padding: 12 }}>
               <div style={{ textAlign: "center", fontSize: 22, fontWeight: 900, color: C.no, fontFamily: "'JetBrains Mono',monospace", marginBottom: 8 }}>
