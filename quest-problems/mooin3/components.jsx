@@ -6,6 +6,180 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#7c5cfc";
 
 /* ═══════════════════════════════════════════════════════════════
+   MooTraceSimulator — interactive per-j walk on s = "abbab".
+   Press ▶ to scan one middle position j at a time, marking
+   leftmost-different i (red), rightmost-same k (green), score.
+   ═══════════════════════════════════════════════════════════════ */
+export function MooTraceSimulator({ E }) {
+  const str = "abbab";
+  const l = 0, r = str.length - 1;
+  const perJ = [];
+  for (let j = l + 1; j < r; j++) {
+    const sj = str[j];
+    let left = -1;
+    for (let i = l; i < j; i++) if (str[i] !== sj) { left = i; break; }
+    let right = -1;
+    for (let k = r; k > j; k--) if (str[k] === sj) { right = k; break; }
+    const score = (left >= 0 && right >= 0) ? (j - left) * (right - j) : null;
+    perJ.push({ j, sj, left, right, score });
+  }
+  const trace = [{ kind: "init", revealed: 0, best: -1 }];
+  let best = -1;
+  perJ.forEach((row, i) => {
+    if (row.score !== null && row.score > best) best = row.score;
+    trace.push({ kind: "step", row, revealed: i + 1, best });
+  });
+  trace.push({ kind: "final", revealed: perJ.length, best });
+
+  const [idx, setIdx] = useState(0);
+  const safe = Math.max(0, Math.min(idx, trace.length - 1));
+  const s = trace[safe];
+
+  const cellStyle = (i) => {
+    let kind = "neutral";
+    if (s.kind === "step") {
+      if (i === s.row.j) kind = "j";
+      else if (i === s.row.left) kind = "left";
+      else if (i === s.row.right) kind = "right";
+    }
+    return {
+      width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+      borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 900, fontSize: 16,
+      background: kind === "j" ? "#fef3c7" : kind === "left" ? "#fee2e2" : kind === "right" ? "#dcfce7" : "#fff",
+      border: `2px solid ${kind === "j" ? "#f59e0b" : kind === "left" ? "#dc2626" : kind === "right" ? "#16a34a" : "#cbd5e1"}`,
+      color: kind === "j" ? "#92400e" : kind === "left" ? "#7f1d1d" : kind === "right" ? "#15803d" : "#475569",
+      transition: "all .2s",
+    };
+  };
+  const labelFor = (i) => {
+    if (s.kind !== "step") return "";
+    if (i === s.row.j) return "j";
+    if (i === s.row.left) return "i";
+    if (i === s.row.right) return "k";
+    return "";
+  };
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 13, fontWeight: 800, color: A, textAlign: "center", marginBottom: 4 }}>
+        ✏️ {t(E, `Walk every j on s = "${str}"  (query [1, ${r + 1}])`,
+                  `s = "${str}" 의 모든 j 따라가기 (쿼리 [1, ${r + 1}])`)}
+      </div>
+      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 14 }}>
+        {t(E, `Press ▶ to step through each middle position j. (${safe + 1} / ${trace.length})`,
+              `▶ 눌러서 가운데 자리 j 를 하나씩. (${safe + 1} / ${trace.length})`)}
+      </div>
+
+      {/* String row with i/j/k labels above */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 14 }}>
+        {str.split("").map((ch, i) => (
+          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+            <div style={{ fontSize: 10, height: 14, fontWeight: 800,
+              color: labelFor(i) === "j" ? "#92400e" : labelFor(i) === "i" ? "#dc2626" : labelFor(i) === "k" ? "#16a34a" : "transparent" }}>
+              {labelFor(i) || "·"}
+            </div>
+            <div style={cellStyle(i)}>{ch}</div>
+            <div style={{ fontSize: 9, color: C.dim }}>{i + 1}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Per-j table — only revealed rows */}
+      <div style={{ display: "grid", gridTemplateColumns: "40px 50px 90px 90px 70px", gap: "4px 8px", fontSize: 12, marginBottom: 14, minHeight: 30 }}>
+        <div style={{ fontWeight: 800, color: A }}>j</div>
+        <div style={{ fontWeight: 800, color: A }}>s[j]</div>
+        <div style={{ fontWeight: 800, color: A }}>{t(E, "i (left)", "i (왼쪽)")}</div>
+        <div style={{ fontWeight: 800, color: A }}>{t(E, "k (right)", "k (오른쪽)")}</div>
+        <div style={{ fontWeight: 800, color: A, textAlign: "right" }}>{t(E, "score", "점수")}</div>
+        {perJ.slice(0, s.revealed).map((row, i) => {
+          const isCurrent = s.kind === "step" && row.j === s.row.j;
+          return (
+            <div key={i} style={{ display: "contents" }}>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: isCurrent ? "#f59e0b" : C.text }}>{row.j + 1}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", color: "#7c3aed" }}>{row.sj}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>
+                {row.left >= 0 ? `${row.left + 1} ('${str[row.left]}')` : "—"}
+              </div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>
+                {row.right >= 0 ? `${row.right + 1} ('${str[row.right]}')` : "—"}
+              </div>
+              <div style={{
+                textAlign: "right", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
+                color: row.score === s.best && s.best >= 0 ? "#16a34a" : C.text,
+                background: row.score === s.best && s.best >= 0 ? "#dcfce7" : "transparent",
+                padding: "2px 6px", borderRadius: 4,
+              }}>
+                {row.score === null ? "—" : row.score}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Step narrative */}
+      <div style={{
+        background: "#faf5ff", border: "2px solid #c4b5fd", borderRadius: 10,
+        padding: "10px 12px", marginBottom: 12, minHeight: 64, fontSize: 13, color: C.text, lineHeight: 1.65,
+      }}>
+        {s.kind === "init" && (
+          <>{t(E, "Start: no j scanned yet. Press ▶ to begin with the leftmost middle position.",
+                  "시작: 아직 어떤 j 도 안 봤어요. ▶ 눌러서 가장 왼쪽 가운데 자리부터.")}</>
+        )}
+        {s.kind === "step" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#5b21b6" }}>
+              {t(E, `Try j = ${s.row.j + 1}, s[j] = '${s.row.sj}'`,
+                    `j = ${s.row.j + 1} 시도, s[j] = '${s.row.sj}'`)}
+            </div>
+            <div style={{ marginTop: 4 }}>
+              {s.row.left >= 0
+                ? t(E, `i = ${s.row.left + 1} (leftmost different)`, `i = ${s.row.left + 1} (왼쪽에서 가장 가까운 다른 글자)`)
+                : t(E, "no different char to the left", "왼쪽에 다른 글자 없음")}
+              {s.row.right >= 0 && s.row.left >= 0 && (
+                <>{" "}·{" "}
+                  {t(E, `k = ${s.row.right + 1} (rightmost same)`, `k = ${s.row.right + 1} (오른쪽에서 가장 먼 같은 글자)`)}
+                </>
+              )}
+            </div>
+            <div style={{ marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
+              {s.row.score !== null
+                ? <>score = ({s.row.j - s.row.left}) × ({s.row.right - s.row.j}) = <b style={{ color: "#16a34a" }}>{s.row.score}</b></>
+                : <span style={{ color: C.dim }}>{t(E, "no valid moo here", "여기는 유효한 moo 없음")}</span>}
+            </div>
+          </>
+        )}
+        {s.kind === "final" && (
+          <div style={{ fontWeight: 800, color: "#15803d" }}>
+            🎉 {t(E, "All j scanned. Best score:", "모든 j 검사 완료. 최고 점수:")}{" "}
+            <b style={{ fontSize: 16, color: "#15803d" }}>{s.best}</b>
+          </div>
+        )}
+      </div>
+
+      {/* Nav */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+        <button onClick={() => setIdx(0)} disabled={safe === 0} style={{
+          padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 800,
+          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : A}`,
+          color: safe === 0 ? "#b0b5c3" : A, cursor: safe === 0 ? "default" : "pointer",
+        }}>⏮ {t(E, "Restart", "처음부터")}</button>
+        <button onClick={() => setIdx(Math.max(0, safe - 1))} disabled={safe === 0} style={{
+          padding: "6px 14px", borderRadius: 8, fontSize: 13, fontWeight: 800,
+          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : A}`,
+          color: safe === 0 ? "#b0b5c3" : A, cursor: safe === 0 ? "default" : "pointer",
+        }}>◀ {t(E, "Prev", "이전")}</button>
+        <button onClick={() => setIdx(Math.min(trace.length - 1, safe + 1))} disabled={safe === trace.length - 1} style={{
+          padding: "6px 18px", borderRadius: 8, fontSize: 13, fontWeight: 800,
+          background: safe === trace.length - 1 ? "#e5e7eb" : A, border: `2px solid ${safe === trace.length - 1 ? "#e5e7eb" : A}`,
+          color: safe === trace.length - 1 ? "#b0b5c3" : "#fff",
+          cursor: safe === trace.length - 1 ? "default" : "pointer",
+        }}>{t(E, "Next", "다음")} ▶</button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    Mooin3Sim — for each j in [l+1, r-1], find best i and k
    ═══════════════════════════════════════════════════════════════ */
 const _M3_PRESETS = [

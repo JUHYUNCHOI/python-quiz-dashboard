@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooin3Sections } from "./components";
+import { getMooin3Sections, MooTraceSimulator } from "./components";
 
 export const SOLUTION_CODE = [
   "N, Q = map(int, input().split())",
@@ -101,84 +101,13 @@ export function makeMooin3Ch1(E) {
           </div>
         </div>),
     },
-    // 1-2: Hand-trace on a small string — find the best moo in s = "abbab"
+    // 1-2: Interactive per-j walk on s = "abbab"
     {
       type: "reveal",
       narr: t(E,
-        "Walk through s = \"abbab\" with query l=1, r=5 (the whole string). Look at every middle position j and find the best (i, j, k) it can form.",
-        "s = \"abbab\" 에서 쿼리 l=1, r=5 (문자열 전체) 로 손으로 따라가요. 각 가운데 자리 j 에 대해 만들 수 있는 최고의 (i, j, k) 를 찾아요."),
-      content: (() => {
-        const str = "abbab";
-        const l = 0, r = 4;
-        // For each j, find leftmost i with s[i]!=s[j] and rightmost k with s[k]==s[j]
-        const rows = [];
-        for (let j = l + 1; j < r; j++) {
-          const sj = str[j];
-          let left = -1;
-          for (let i = l; i < j; i++) if (str[i] !== sj) { left = i; break; }
-          let right = -1;
-          for (let k = r; k > j; k--) if (str[k] === sj) { right = k; break; }
-          const score = (left >= 0 && right >= 0) ? (j - left) * (right - j) : null;
-          rows.push({ j, sj, left, right, score });
-        }
-        const best = Math.max(...rows.map(r => r.score ?? -1));
-        return (
-          <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 4 }}>
-              ✏️ {t(E, "Hand-trace on s = \"abbab\", query [1, 5]", "s = \"abbab\", 쿼리 [1, 5] 손으로 따라가기")}
-            </div>
-            <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 12 }}>
-              {t(E, "1-indexed positions: a=1, b=2, b=3, a=4, b=5", "1-인덱스: a=1, b=2, b=3, a=4, b=5")}
-            </div>
-            {/* String display */}
-            <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 14 }}>
-              {str.split("").map((ch, i) => (
-                <div key={i} style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: 10, color: C.dim, marginBottom: 2 }}>{i + 1}</div>
-                  <div style={{
-                    width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
-                    background: "#fff", border: "2px solid #c4b5fd", borderRadius: 6,
-                    fontFamily: "'JetBrains Mono',monospace", fontWeight: 900, fontSize: 16, color: "#5b21b6",
-                  }}>{ch}</div>
-                </div>
-              ))}
-            </div>
-            {/* Per-j table */}
-            <div style={{ display: "grid", gridTemplateColumns: "40px 50px 100px 100px 90px", gap: "4px 8px", fontSize: 12 }}>
-              <div style={{ fontWeight: 800, color: "#5b21b6" }}>j</div>
-              <div style={{ fontWeight: 800, color: "#5b21b6" }}>s[j]</div>
-              <div style={{ fontWeight: 800, color: "#5b21b6" }}>{t(E, "leftmost i (s[i]≠s[j])", "왼쪽 i (s[i]≠s[j])")}</div>
-              <div style={{ fontWeight: 800, color: "#5b21b6" }}>{t(E, "rightmost k (s[k]=s[j])", "오른쪽 k (s[k]=s[j])")}</div>
-              <div style={{ fontWeight: 800, color: "#5b21b6", textAlign: "right" }}>{t(E, "score", "점수")}</div>
-              {rows.map((r, i) => (
-                <div key={i} style={{ display: "contents" }}>
-                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>{r.j + 1}</div>
-                  <div style={{ fontFamily: "'JetBrains Mono',monospace", color: "#7c3aed" }}>{r.sj}</div>
-                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>
-                    {r.left >= 0 ? `i=${r.left + 1} (s='${str[r.left]}')` : "—"}
-                  </div>
-                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>
-                    {r.right >= 0 ? `k=${r.right + 1} (s='${str[r.right]}')` : "—"}
-                  </div>
-                  <div style={{
-                    textAlign: "right", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
-                    color: r.score === best && best >= 0 ? "#16a34a" : C.text,
-                    background: r.score === best && best >= 0 ? "#dcfce7" : "transparent",
-                    padding: "2px 6px", borderRadius: 4,
-                  }}>
-                    {r.score === null ? "—" : r.score}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div style={{ marginTop: 14, background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-              <div style={{ fontSize: 13, fontWeight: 800, color: "#15803d" }}>
-                {t(E, `Best moo score for [1, 5] = ${best}`, `[1, 5] 의 최대 moo 점수 = ${best}`)}
-              </div>
-            </div>
-          </div>
-        );
-      })(),
+        "Walk every middle position j on s = \"abbab\" — for each j, find the leftmost different character (i) and the rightmost matching character (k). Score = (j-i)*(k-j). Press ▶ to step through.",
+        "s = \"abbab\" 의 모든 가운데 자리 j 를 따라가요 — 각 j 마다 왼쪽에서 가장 가까운 다른 글자 (i) 와 오른쪽에서 가장 먼 같은 글자 (k) 를 찾아요. 점수 = (j-i)*(k-j). ▶ 눌러서 진행."),
+      content: (<MooTraceSimulator E={E} />),
     },
     {
       type: "quiz",
