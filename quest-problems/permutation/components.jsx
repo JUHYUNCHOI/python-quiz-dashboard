@@ -57,18 +57,39 @@ function buildDismantleTrace(initial) {
     const firstWins = first > last;
     const removeIdx = firstWins ? 0 : p.length - 1;
     const writeIdx = firstWins ? 1 : p.length - 2;
+    const removedVal = p[removeIdx];
     const written = p[writeIdx];
+    // 1) compare-mark: highlight first + last in yellow
     trace.push({
-      sub: "compare",
-      p: [...p], h: [...h], removeIdx, writeIdx,
+      sub: "compare-mark",
+      p: [...p], h: [...h], removeIdx: null, writeIdx: null,
+      compareFirst: first, compareLast: last,
+    });
+    // 2) decide-bigger: same cells, panel says who's bigger
+    trace.push({
+      sub: "decide-bigger",
+      p: [...p], h: [...h], removeIdx: null, writeIdx: null,
       compareFirst: first, compareLast: last, firstWins,
     });
+    // 3) mark-remove: tag the loser cell red
+    trace.push({
+      sub: "mark-remove",
+      p: [...p], h: [...h], removeIdx, writeIdx: null,
+      compareFirst: first, compareLast: last, firstWins, removedVal,
+    });
+    // 4) mark-write: tag the neighbor cell purple (which value goes to h)
+    trace.push({
+      sub: "mark-write",
+      p: [...p], h: [...h], removeIdx, writeIdx,
+      compareFirst: first, compareLast: last, firstWins, removedVal, willWrite: written,
+    });
+    // 5) apply: actually shrink p + grow h
     h.push(written);
     p.splice(removeIdx, 1);
     trace.push({
       sub: "apply",
       p: [...p], h: [...h], removeIdx: null, writeIdx: null,
-      lastWritten: written,
+      removedVal, lastWritten: written,
     });
   }
   trace.push({ sub: "done", p: [...p], h: [...h], removeIdx: null, writeIdx: null });
@@ -119,36 +140,38 @@ export function DismantleSimulator({ E }) {
       {/* Cells row */}
       <div style={{ display: "flex", gap: 4, justifyContent: "center", alignItems: "center", marginBottom: 12, minHeight: 76 }}>
         {s.p.map((v, i) => {
-          // Sub-step-aware highlighting:
-          // - compare: highlight FIRST (i=0) and LAST (i=p.length-1) in yellow
-          // - apply: highlight removeIdx (red) and writeIdx (purple)
-          // - done: all final-green
           const isFirst = i === 0;
           const isLast = i === s.p.length - 1;
+          // Determine cell kind by sub-step priority: remove > write > compare > final/neutral
           let kind = "neutral";
           let labelTop = "";
           let labelBottom = "";
+
           if (s.sub === "done") {
             kind = "final";
-          } else if (s.sub === "compare") {
-            if (isFirst || isLast) {
-              kind = "compare";
+          } else {
+            // Show first/last labels whenever we're in any compare-stage sub-step
+            const inCompareStages = (s.sub === "compare-mark" || s.sub === "decide-bigger" ||
+                                     s.sub === "mark-remove" || s.sub === "mark-write");
+            if (inCompareStages && (isFirst || isLast)) {
               labelTop = isFirst ? "first" : "last";
             }
-          } else if (s.sub === "apply" || s.sub === "init") {
-            // apply uses last-recorded removeIdx/writeIdx (which are null after splice)
-            // → no highlight on apply; cells just show post-state
+            // Cell color
+            if (i === s.removeIdx) {
+              kind = "remove";
+              labelBottom = "× will remove";
+            } else if (i === s.writeIdx) {
+              kind = "write";
+              labelBottom = "✏ will write";
+            } else if (inCompareStages && (isFirst || isLast)) {
+              kind = "compare";
+            }
           }
-          // Edge case: compare sub-step still wants to mark which one will be removed/written.
-          // We layer that as a small below-cell hint.
-          if (s.sub === "compare") {
-            if (i === s.removeIdx) labelBottom = "× will remove";
-            else if (i === s.writeIdx) labelBottom = "✏ will write";
-          }
+
           return (
             <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
               <div style={{ fontSize: 10, height: 14, fontWeight: 800,
-                color: kind === "compare" ? "#92400e" : "transparent" }}>
+                color: labelTop ? "#92400e" : "transparent" }}>
                 {labelTop || "·"}
               </div>
               <div style={cellStyle(kind)}>{v}</div>
@@ -181,31 +204,71 @@ export function DismantleSimulator({ E }) {
                        `p 는 [${initial.join(", ")}] 로 시작. 힌트 h 는 비어 있어요. ▶ 눌러서 시작.`)}</div>
           </>
         )}
-        {s.sub === "compare" && (
+        {s.sub === "compare-mark" && (
           <>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
-              🔍 {t(E, "Compare front vs back", "맨 앞 vs 맨 뒤 비교")}
+            <div style={{ fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
+              1️⃣ 🔍 {t(E, "Mark first and last", "맨 앞과 맨 뒤를 표시")}
             </div>
-            <div>1️⃣ {t(E, "first", "맨 앞")} = <b>{s.compareFirst}</b>, {t(E, "last", "맨 뒤")} = <b>{s.compareLast}</b></div>
-            <div>2️⃣ <b>{s.compareFirst} {s.firstWins ? ">" : "<"} {s.compareLast}</b> →{" "}
-              {s.firstWins
-                ? t(E, "first is bigger → remove FRONT, write 2nd", "맨 앞이 더 커요 → 맨 앞 빼고 둘째 적어요")
-                : t(E, "last is bigger (or equal) → remove BACK, write 2nd-to-last", "맨 뒤가 더 크거나 같아요 → 맨 뒤 빼고 끝에서 둘째 적어요")}
+            <div>{t(E, "first", "맨 앞")} = <b style={{ color: "#92400e" }}>{s.compareFirst}</b>,{" "}
+              {t(E, "last", "맨 뒤")} = <b style={{ color: "#92400e" }}>{s.compareLast}</b>
             </div>
             <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
-              {t(E, "(Cells highlighted above. ▶ to apply.)", "(위 칸에 표시됨. ▶ 눌러서 적용.)")}
+              {t(E, "(▶ to compare them.)", "(▶ 눌러서 비교.)")}
+            </div>
+          </>
+        )}
+        {s.sub === "decide-bigger" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+              2️⃣ ⚖️ {t(E, "Compare", "비교")}
+            </div>
+            <div><b style={{ fontFamily: "'JetBrains Mono',monospace" }}>
+              {s.compareFirst} {s.firstWins ? ">" : "<"} {s.compareLast}
+            </b> → {s.firstWins
+              ? t(E, "first is BIGGER", "맨 앞이 더 커요")
+              : t(E, "last is BIGGER (or equal)", "맨 뒤가 더 크거나 같아요")}
+            </div>
+            <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
+              {t(E, "(Bigger end gets removed. ▶ to mark.)", "(큰 쪽이 빠져요. ▶ 눌러서 표시.)")}
+            </div>
+          </>
+        )}
+        {s.sub === "mark-remove" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
+              3️⃣ ❌ {t(E, "Mark for removal", "빠질 칸 표시")}
+            </div>
+            <div>{t(E, "Remove ", "")}<b style={{ color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>{s.removedVal}</b>
+              {" "}({s.firstWins ? t(E, "the first", "맨 앞") : t(E, "the last", "맨 뒤")}).</div>
+            <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
+              {t(E, "(▶ to mark which value gets written.)", "(▶ 눌러서 적힐 값 표시.)")}
+            </div>
+          </>
+        )}
+        {s.sub === "mark-write" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#7c3aed", marginBottom: 6 }}>
+              4️⃣ ✏️ {t(E, "Mark what gets written", "힌트로 적힐 값 표시")}
+            </div>
+            <div>{t(E, "Write ", "")}<b style={{ color: "#7c3aed", fontFamily: "'JetBrains Mono',monospace" }}>{s.willWrite}</b>
+              {" "}({s.firstWins ? t(E, "the 2nd from front", "앞에서 둘째") : t(E, "the 2nd from back", "끝에서 둘째")}){" "}
+              {t(E, "into h.", "을 h 에 적어요.")}
+            </div>
+            <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
+              {t(E, "(▶ to actually apply: shrink p, grow h.)", "(▶ 눌러서 실제 적용: p 줄이고 h 늘리기.)")}
             </div>
           </>
         )}
         {s.sub === "apply" && (
           <>
             <div style={{ fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-              ✅ {t(E, "Applied!", "적용 완료!")}
+              5️⃣ ✅ {t(E, "Applied!", "적용 완료!")}
             </div>
-            <div>3️⃣ ❌ {t(E, "Removed; ", "빼냈고, ")} 4️⃣ ✏️ {t(E, "wrote ", "적은 값 = ")} <b>{s.lastWritten}</b></div>
+            <div>{t(E, "Removed ", "")}<b>{s.removedVal}</b>{t(E, ", wrote ", " 빼고, ")}<b>{s.lastWritten}</b>{t(E, " into h.", " 을 h 에 적었어요.")}</div>
             <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
-              {t(E, "p shrunk by 1. h grew by 1. ▶ for next step.",
-                    "p 1 칸 줄고 h 1 개 늘었어요. ▶ 다음 단계.")}
+              {s.p.length > 1
+                ? t(E, "(▶ to mark next first/last.)", "(▶ 눌러서 다음 first/last 표시.)")
+                : t(E, "(Only 1 left → done!)", "(1 개 남음 → 종료!)")}
             </div>
           </>
         )}
