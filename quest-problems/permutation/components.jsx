@@ -40,6 +40,178 @@ function simulateGreedy(N, h, start) {
   return { success: true, trace };
 }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   DismantleSimulator — interactive hand-sim of Nhoj's process
+   on p = [3, 1, 2, 4]. Student presses ▶ to advance one sub-step
+   at a time. Each main step has 2 sub-steps:
+     a) compare first vs last → decide
+     b) remove + write → state updates
+   ═══════════════════════════════════════════════════════════════ */
+function buildDismantleTrace(initial) {
+  let p = [...initial];
+  const trace = [{ sub: "init", p: [...p], h: [], removeIdx: null, writeIdx: null }];
+  const h = [];
+  while (p.length > 1) {
+    const first = p[0], last = p[p.length - 1];
+    const firstWins = first > last;
+    const removeIdx = firstWins ? 0 : p.length - 1;
+    const writeIdx = firstWins ? 1 : p.length - 2;
+    const written = p[writeIdx];
+    trace.push({
+      sub: "compare",
+      p: [...p], h: [...h], removeIdx, writeIdx,
+      compareFirst: first, compareLast: last, firstWins,
+    });
+    h.push(written);
+    p.splice(removeIdx, 1);
+    trace.push({
+      sub: "apply",
+      p: [...p], h: [...h], removeIdx: null, writeIdx: null,
+      lastWritten: written,
+    });
+  }
+  trace.push({ sub: "done", p: [...p], h: [...h], removeIdx: null, writeIdx: null });
+  return trace;
+}
+
+export function DismantleSimulator({ E }) {
+  const initial = [3, 1, 2, 4];
+  const trace = buildDismantleTrace(initial);
+  const [idx, setIdx] = useState(0);
+  const safe = Math.max(0, Math.min(idx, trace.length - 1));
+  const s = trace[safe];
+  const isLast = safe === trace.length - 1;
+
+  const cellStyle = (kind) => ({
+    width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
+    borderRadius: 7, fontWeight: 900, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
+    background: kind === "remove" ? "#fee2e2" : kind === "write" ? "#ede9fe" : kind === "final" ? "#dcfce7" : "#fff",
+    border: `2px solid ${kind === "remove" ? "#dc2626" : kind === "write" ? "#7c3aed" : kind === "final" ? "#16a34a" : "#c4b5fd"}`,
+    color: kind === "remove" ? "#7f1d1d" : kind === "write" ? "#5b21b6" : kind === "final" ? "#15803d" : "#5b21b6",
+    textDecoration: kind === "remove" ? "line-through" : "none",
+    transition: "all .2s",
+  });
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 4 }}>
+        ✏️ {t(E, "Hand-simulate Nhoj on p = [3, 1, 2, 4]", "Nhoj 가 p = [3, 1, 2, 4] 를 망가뜨리는 과정")}
+      </div>
+      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 14 }}>
+        {t(E, `Press ▶ to step through. (${safe + 1} / ${trace.length})`,
+              `▶ 눌러서 한 단계씩. (${safe + 1} / ${trace.length})`)}
+      </div>
+
+      {/* Cells row */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", alignItems: "center", marginBottom: 12, minHeight: 64 }}>
+        {s.p.map((v, i) => {
+          const kind = s.sub === "done" ? "final" :
+                       i === s.removeIdx ? "remove" :
+                       i === s.writeIdx ? "write" : "neutral";
+          return (
+            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+              <div style={{ fontSize: 9, height: 12, fontWeight: 800,
+                color: kind === "remove" ? "#dc2626" : kind === "write" ? "#7c3aed" : "transparent" }}>
+                {kind === "remove" ? "× remove" : kind === "write" ? "✏️ write" : "·"}
+              </div>
+              <div style={cellStyle(kind)}>{v}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Hint list so far */}
+      <div style={{ textAlign: "center", marginBottom: 12, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>
+        {t(E, "h so far = ", "지금까지 h = ")}<b>[{s.h ? s.h.join(", ") : ""}]</b>
+      </div>
+
+      {/* Step explanation panel */}
+      <div style={{
+        background: "#faf5ff", border: "2px solid #c4b5fd", borderRadius: 10,
+        padding: "12px 14px", marginBottom: 12, minHeight: 88,
+        fontSize: 13, color: C.text, lineHeight: 1.7,
+      }}>
+        {s.sub === "init" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+              📦 {t(E, "Initial state", "초기 상태")}
+            </div>
+            <div>{t(E, `p starts as [${initial.join(", ")}]. Hint list h is empty. Press ▶ to start.`,
+                       `p 는 [${initial.join(", ")}] 로 시작. 힌트 h 는 비어 있어요. ▶ 눌러서 시작.`)}</div>
+          </>
+        )}
+        {s.sub === "compare" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+              🔍 {t(E, "Compare front vs back", "맨 앞 vs 맨 뒤 비교")}
+            </div>
+            <div>1️⃣ {t(E, "first", "맨 앞")} = <b>{s.compareFirst}</b>, {t(E, "last", "맨 뒤")} = <b>{s.compareLast}</b></div>
+            <div>2️⃣ <b>{s.compareFirst} {s.firstWins ? ">" : "<"} {s.compareLast}</b> →{" "}
+              {s.firstWins
+                ? t(E, "first is bigger → remove FRONT, write 2nd", "맨 앞이 더 커요 → 맨 앞 빼고 둘째 적어요")
+                : t(E, "last is bigger (or equal) → remove BACK, write 2nd-to-last", "맨 뒤가 더 크거나 같아요 → 맨 뒤 빼고 끝에서 둘째 적어요")}
+            </div>
+            <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
+              {t(E, "(Cells highlighted above. ▶ to apply.)", "(위 칸에 표시됨. ▶ 눌러서 적용.)")}
+            </div>
+          </>
+        )}
+        {s.sub === "apply" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+              ✅ {t(E, "Applied!", "적용 완료!")}
+            </div>
+            <div>3️⃣ ❌ {t(E, "Removed; ", "빼냈고, ")} 4️⃣ ✏️ {t(E, "wrote ", "적은 값 = ")} <b>{s.lastWritten}</b></div>
+            <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
+              {t(E, "p shrunk by 1. h grew by 1. ▶ for next step.",
+                    "p 1 칸 줄고 h 1 개 늘었어요. ▶ 다음 단계.")}
+            </div>
+          </>
+        )}
+        {s.sub === "done" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+              🎉 {t(E, "Done — only 1 element left", "종료 — 1 개만 남음")}
+            </div>
+            <div>{t(E, "Final hint list:", "최종 힌트:")}{" "}
+              <b style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, color: "#7c2d12" }}>
+                h = [{s.h.join(", ")}]
+              </b>
+            </div>
+            <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
+              {t(E, "Same as sample case 4! Input h = [2, 1, 1] could come from p = [3, 1, 2, 4].",
+                    "샘플 케이스 4 와 일치! 입력 h = [2, 1, 1] 은 p = [3, 1, 2, 4] 에서 나온 거예요.")}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Nav buttons */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+        <button onClick={() => setIdx(0)} disabled={safe === 0} style={{
+          padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 800,
+          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : "#7c5cfc"}`,
+          color: safe === 0 ? "#b0b5c3" : "#7c5cfc",
+          cursor: safe === 0 ? "default" : "pointer",
+        }}>⏮ {t(E, "Restart", "처음부터")}</button>
+        <button onClick={() => setIdx(Math.max(0, safe - 1))} disabled={safe === 0} style={{
+          padding: "6px 14px", borderRadius: 8, fontSize: 13, fontWeight: 800,
+          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : "#7c5cfc"}`,
+          color: safe === 0 ? "#b0b5c3" : "#7c5cfc",
+          cursor: safe === 0 ? "default" : "pointer",
+        }}>◀ {t(E, "Prev", "이전")}</button>
+        <button onClick={() => setIdx(Math.min(trace.length - 1, safe + 1))} disabled={isLast} style={{
+          padding: "6px 18px", borderRadius: 8, fontSize: 13, fontWeight: 800,
+          background: isLast ? "#e5e7eb" : "#7c5cfc", border: `2px solid ${isLast ? "#e5e7eb" : "#7c5cfc"}`,
+          color: isLast ? "#b0b5c3" : "#fff",
+          cursor: isLast ? "default" : "pointer",
+        }}>{t(E, "Next", "다음")} ▶</button>
+      </div>
+    </div>
+  );
+}
+
 export function PermSim({ E }) {
   const N = 4;
   const h = [2, 3, 2];

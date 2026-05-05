@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getPermSections } from "./components";
+import { getPermSections, DismantleSimulator } from "./components";
 
 /* ================================================================
    SOLUTION CODE — Brute force (correct but only for small N)
@@ -187,128 +187,13 @@ export function makePermCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Hand-simulate the dismantling on a concrete example
+    // 1-3: Interactive hand-simulator (was a static trace dump)
     {
       type: "reveal",
       narr: t(E,
-        "Suppose John's secret was p = [3, 1, 2, 4]. Watch Nhoj dismantle it step by step. Each row shows the remaining elements, who's first vs last, what Nhoj writes, and what he removes.",
-        "John 의 비밀이 p = [3, 1, 2, 4] 라고 가정해봐요. Nhoj 가 이걸 한 단계씩 분해하는 걸 봐요. 각 줄은 남은 원소들, 첫과 마지막, Nhoj 가 적는 값, 제거하는 값을 보여줘요."),
-      content: (() => {
-        // Build the trace of dismantling [3, 1, 2, 4]
-        const trace = (() => {
-          let p = [3, 1, 2, 4];
-          const steps = [];
-          while (p.length > 1) {
-            const first = p[0], last = p[p.length - 1];
-            const firstWins = first > last;
-            const written = firstWins ? p[1] : p[p.length - 2];
-            const removed = firstWins ? first : last;
-            const removedIdx = firstWins ? 0 : p.length - 1;
-            const writtenIdx = firstWins ? 1 : p.length - 2;
-            steps.push({ before: [...p], first, last, firstWins, written, removed, removedIdx, writtenIdx });
-            p.splice(removedIdx, 1);
-          }
-          steps.push({ before: [...p], final: true });
-          return steps;
-        })();
-
-        return (
-          <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 4 }}>
-              ✏️ {t(E, "Hand-simulate Nhoj on John's p = [3, 1, 2, 4]", "손으로 따라가기: Nhoj 가 John 의 p = [3, 1, 2, 4] 를 분해")}
-            </div>
-            <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 12 }}>
-              {t(E, "Compare ⬅first and last➡. Bigger end loses (×). The element NEXT to it gets written ✏️.",
-                    "⬅첫과 마지막➡ 비교. 더 큰 쪽이 제거 (×). 그 옆 원소가 적힘 ✏️.")}
-            </div>
-
-            {/* Step rows */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {trace.map((s, idx) => {
-                if (s.final) {
-                  return (
-                    <div key={idx} style={{
-                      background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px",
-                      display: "flex", alignItems: "center", gap: 10,
-                    }}>
-                      <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", width: 60 }}>
-                        {t(E, "FINAL", "최종")}
-                      </div>
-                      <div style={{ display: "flex", gap: 4 }}>
-                        {s.before.map((v, i) => (
-                          <div key={i} style={{
-                            width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
-                            borderRadius: 6, background: "#16a34a", color: "#fff",
-                            fontWeight: 900, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
-                          }}>{v}</div>
-                        ))}
-                      </div>
-                      <div style={{ fontSize: 11, color: "#15803d", marginLeft: "auto" }}>
-                        {t(E, "1 element left → stop", "1 개 남음 → 종료")}
-                      </div>
-                    </div>
-                  );
-                }
-                const arrow = s.firstWins
-                  ? t(E, "first > last → remove FIRST, write 2nd",
-                       "첫 > 마지막 → 첫 제거, 둘째 적기")
-                  : t(E, "first < last → remove LAST, write 2nd-to-last",
-                       "첫 < 마지막 → 마지막 제거, 끝에서 둘째 적기");
-                return (
-                  <div key={idx} style={{
-                    background: "#fff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px",
-                  }}>
-                    <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
-                      {t(E, `Step ${idx + 1}`, `${idx + 1} 단계`)}
-                      <span style={{ marginLeft: 8, color: C.dim, fontWeight: 600 }}>
-                        — first={s.first}, last={s.last}, {arrow}
-                      </span>
-                    </div>
-                    <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
-                      {s.before.map((v, i) => {
-                        const isRemoved = i === s.removedIdx;
-                        const isWritten = i === s.writtenIdx;
-                        return (
-                          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-                            <div style={{ fontSize: 9, color: isRemoved ? "#dc2626" : isWritten ? "#7c3aed" : "transparent", fontWeight: 800, height: 12 }}>
-                              {isRemoved ? "× remove" : isWritten ? "✏️ write" : "·"}
-                            </div>
-                            <div style={{
-                              width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-                              borderRadius: 7, fontWeight: 900, fontSize: 15, fontFamily: "'JetBrains Mono',monospace",
-                              background: isRemoved ? "#fee2e2" : isWritten ? "#ede9fe" : "#fff",
-                              border: `2px solid ${isRemoved ? "#dc2626" : isWritten ? "#7c3aed" : "#c4b5fd"}`,
-                              color: isRemoved ? "#7f1d1d" : isWritten ? "#5b21b6" : "#5b21b6",
-                              textDecoration: isRemoved ? "line-through" : "none",
-                            }}>{v}</div>
-                          </div>
-                        );
-                      })}
-                      <div style={{ marginLeft: 16, fontSize: 12, color: "#7c3aed", fontWeight: 800 }}>
-                        h[{idx}] = <b style={{ fontSize: 16 }}>{s.written}</b>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Final h summary */}
-            <div style={{ marginTop: 12, background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
-                {t(E, "All hints written, in order:", "적힌 힌트 (순서대로):")}
-              </div>
-              <div style={{ fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>
-                h = [2, 1, 1]
-              </div>
-              <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>
-                {t(E, "So input h = [2, 1, 1] could come from p = [3, 1, 2, 4].",
-                      "즉 입력 h = [2, 1, 1] 은 p = [3, 1, 2, 4] 에서 나온 것일 수 있어요.")}
-              </div>
-            </div>
-          </div>
-        );
-      })(),
+        "Now hand-simulate Nhoj's process on p = [3, 1, 2, 4]. Press ▶ to walk through it one sub-step at a time — compare, then remove + write — and see how the array shrinks while the hint list grows.",
+        "이제 Nhoj 의 과정을 p = [3, 1, 2, 4] 에서 손으로 따라가요. ▶ 눌러서 한 단계씩 — 비교하고, 빼고 적기 — 진행해 봐요. 배열이 줄어들면서 힌트가 늘어나는 걸 볼 수 있어요."),
+      content: (<DismantleSimulator E={E} />),
     },
     // 1-1.5: Input / Output format
     {
