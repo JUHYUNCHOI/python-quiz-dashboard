@@ -6,6 +6,147 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#059669";
 
 /* ═══════════════════════════════════════════════════════════════
+   HpsCaseSimulator — Bessie's (Rock, Paper) vs Elsie's (Paper,
+   Scissors). Sub-steps walk both Elsie picks and end with verdict.
+   ═══════════════════════════════════════════════════════════════ */
+export function HpsCaseSimulator({ E }) {
+  const beats = (a, b) => {
+    if (a === b) return null;
+    if (a === "Rock"     && b === "Scissors") return true;
+    if (a === "Paper"    && b === "Rock")     return true;
+    if (a === "Scissors" && b === "Paper")    return true;
+    return false;
+  };
+  const bessie = ["Rock", "Paper"];
+  const elsie  = ["Paper", "Scissors"];
+  const cases = elsie.map((ePlay) => {
+    const opts = bessie.map(b => ({ b, win: beats(b, ePlay) === true, tie: beats(b, ePlay) === null }));
+    return { ePlay, opts, anyWin: opts.some(o => o.win) };
+  });
+  const allWin = cases.every(c => c.anyWin);
+
+  const trace = [
+    { kind: "setup" },
+    { kind: "case", caseIdx: 0 },
+    { kind: "case", caseIdx: 1 },
+    { kind: "verdict" },
+  ];
+  const [idx, setIdx] = useState(0);
+  const safe = Math.max(0, Math.min(idx, trace.length - 1));
+  const s = trace[safe];
+
+  const handCard = (label, cards, color) => (
+    <div style={{ background: "#fff", border: `2px solid ${color}`, borderRadius: 10, padding: "8px 12px", textAlign: "center" }}>
+      <div style={{ fontSize: 11, fontWeight: 800, color, marginBottom: 6 }}>{label}</div>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+        {cards.map((c, i) => (
+          <div key={i} style={{
+            padding: "4px 10px", borderRadius: 6, border: `1.5px solid ${color}`, background: "#f8fafc",
+            fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color,
+          }}>{c}</div>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 13, fontWeight: 800, color: A, textAlign: "center", marginBottom: 4 }}>
+        ✏️ {t(E, "Does Bessie's (Rock, Paper) beat Elsie's (Paper, Scissors)?",
+                  "베시 (Rock, Paper) 가 엘시 (Paper, Scissors) 를 이길까?")}
+      </div>
+      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 14 }}>
+        {t(E, `Press ▶ to walk through both Elsie's possible plays. (${safe + 1} / ${trace.length})`,
+              `▶ 눌러서 엘시가 낼 수 있는 두 카드를 모두 따라가요. (${safe + 1} / ${trace.length})`)}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 14 }}>
+        {handCard(t(E, "Bessie's hand", "베시의 카드"), bessie, "#7c3aed")}
+        {handCard(t(E, "Elsie's hand",  "엘시의 카드"),  elsie,  "#dc2626")}
+      </div>
+
+      <div style={{
+        background: "#faf5ff", border: "2px solid #c4b5fd", borderRadius: 10,
+        padding: "12px 14px", marginBottom: 12, minHeight: 120, fontSize: 13, color: C.text, lineHeight: 1.7,
+      }}>
+        {s.kind === "setup" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+              📋 {t(E, "Setup", "준비")}
+            </div>
+            <div>
+              {t(E, "Both cows have laid down their two cards. All 4 cards are visible. Now Elsie will pick ONE of her two to play; Bessie picks last (she sees Elsie's pick first).",
+                    "두 소가 카드 2 장씩 펼쳐 놓아서 4 장 모두 보여요. 엘시가 자기 2 장 중 1 장을 골라 내고, 베시는 그걸 보고 마지막에 골라요.")}
+            </div>
+            <div style={{ marginTop: 6, fontSize: 11, color: C.dim }}>
+              {t(E, "Bessie's hand wins for sure ⇔ for EACH of Elsie's two cards, Bessie has at least one that beats it.",
+                    "베시의 카드 2 장이 무조건 이김 ⇔ 엘시의 두 카드 각각에 대해, 베시 카드 중 하나가 이김.")}
+            </div>
+          </>
+        )}
+        {s.kind === "case" && (() => {
+          const c = cases[s.caseIdx];
+          return (
+            <>
+              <div style={{ fontWeight: 800, color: c.anyWin ? "#15803d" : "#7f1d1d", marginBottom: 6 }}>
+                {t(E, `Case ${s.caseIdx + 1}: Elsie plays `, `케이스 ${s.caseIdx + 1}: 엘시가 `)}<b style={{ color: "#dc2626" }}>{c.ePlay}</b>
+                {t(E, "", " 냄")}
+              </div>
+              {c.opts.map((o, j) => (
+                <div key={j} style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                  {t(E, "Bessie picks ", "베시가 ")}<b>{o.b}</b>?{" "}
+                  {o.win ? <span style={{ color: "#16a34a", fontWeight: 800 }}>✓ {t(E, "wins", "이김")}</span>
+                         : o.tie ? <span style={{ color: "#9ca3af", fontWeight: 800 }}>= {t(E, "tie", "비김")}</span>
+                                 : <span style={{ color: "#dc2626", fontWeight: 800 }}>✗ {t(E, "loses", "짐")}</span>}
+                </div>
+              ))}
+              <div style={{ marginTop: 6, fontWeight: 800, color: c.anyWin ? "#15803d" : "#7f1d1d" }}>
+                → {c.anyWin
+                  ? t(E, "Bessie HAS an answer for this Elsie pick.", "이 경우 베시한테 답이 있어요.")
+                  : t(E, "Bessie has NO answer for this Elsie pick.", "이 경우 베시한테 답이 없어요.")}
+              </div>
+            </>
+          );
+        })()}
+        {s.kind === "verdict" && (
+          <>
+            <div style={{ fontWeight: 800, color: allWin ? "#15803d" : "#7f1d1d", marginBottom: 6, fontSize: 14 }}>
+              🏁 {t(E, "Verdict", "결론")}
+            </div>
+            <div>
+              {allWin
+                ? t(E, "Bessie's hand wins for sure ✓ — every Elsie pick had a counter.",
+                      "베시의 카드는 무조건 이김 ✓ — 엘시의 모든 패에 답이 있었어요.")
+                : t(E, "Bessie's hand does NOT guarantee a win ✗ — at least one Elsie pick (Paper) has no counter in Bessie's hand.",
+                      "베시의 카드는 무조건 이기지 못함 ✗ — 엘시 패 중 적어도 하나 (Paper) 에 베시가 답이 없어요.")}
+            </div>
+          </>
+        )}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+        <button onClick={() => setIdx(0)} disabled={safe === 0} style={{
+          padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 800,
+          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : A}`,
+          color: safe === 0 ? "#b0b5c3" : A, cursor: safe === 0 ? "default" : "pointer",
+        }}>⏮ {t(E, "Restart", "처음부터")}</button>
+        <button onClick={() => setIdx(Math.max(0, safe - 1))} disabled={safe === 0} style={{
+          padding: "6px 14px", borderRadius: 8, fontSize: 13, fontWeight: 800,
+          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : A}`,
+          color: safe === 0 ? "#b0b5c3" : A, cursor: safe === 0 ? "default" : "pointer",
+        }}>◀ {t(E, "Prev", "이전")}</button>
+        <button onClick={() => setIdx(Math.min(trace.length - 1, safe + 1))} disabled={safe === trace.length - 1} style={{
+          padding: "6px 18px", borderRadius: 8, fontSize: 13, fontWeight: 800,
+          background: safe === trace.length - 1 ? "#e5e7eb" : A, border: `2px solid ${safe === trace.length - 1 ? "#e5e7eb" : A}`,
+          color: safe === trace.length - 1 ? "#b0b5c3" : "#fff",
+          cursor: safe === trace.length - 1 ? "default" : "pointer",
+        }}>{t(E, "Next", "다음")} ▶</button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    HpsSim — show beats matrix + try Bessie pair vs Elsie pair
    ═══════════════════════════════════════════════════════════════ */
 const _HPS_BEATS = ["011", "101", "110"];   // 3 symbols, classic rock-paper-scissors-ish

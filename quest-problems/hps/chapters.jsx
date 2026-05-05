@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getHpsSections } from "./components";
+import { getHpsSections, HpsCaseSimulator } from "./components";
 
 export const SOLUTION_CODE = [
   "N, M = map(int, input().split())",
@@ -132,57 +132,13 @@ export function makeHpsCh1(E) {
           </div>
         </div>),
     },
-    // 1-3: Hand-trace — show the 4 cases on a small example
+    // 1-3: Interactive case-walk (was static 2-case cards)
     {
       type: "reveal",
       narr: t(E,
-        "Walk through one Bessie pair vs one Elsie pair to see exactly when Bessie's pair guarantees a win — she has to handle BOTH of Elsie's symbols.",
-        "베시 쌍 1 개 vs 엘시 쌍 1 개를 끝까지 따라가면서 — 언제 베시의 쌍이 승리를 보장하는지 봐요. 엘시의 두 기호 모두 처리해야 함."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 4 }}>
-            ✏️ {t(E, "Standard RPS — does Bessie's (Rock, Paper) beat Elsie's (Paper, Scissors)?",
-                       "표준 가위바위보 — 베시 (바위, 보) 가 엘시 (보, 가위) 를 이길까?")}
-          </div>
-          <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 12 }}>
-            {t(E, "After both pairs are revealed, Elsie picks her play. Bessie sees Elsie's pick and counters.",
-                  "양쪽 쌍이 공개된 후 엘시가 자기 패를 골라요. 베시는 그걸 보고 카운터해요.")}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { elsie: "Paper",    pickA: "Rock ✗",     pickB: "Paper (tie)", best: "Paper → tie", win: false,
-                note: "Rock loses to Paper, Paper ties Paper. No WIN — Bessie can't beat Paper from {Rock, Paper}." },
-              { elsie: "Scissors", pickA: "Rock ✓",     pickB: "Paper ✗",      best: "Rock → WIN",  win: true,
-                note: "Bessie picks Rock to crush Scissors. Beats Scissors? Yes." },
-            ].map((r, i) => (
-              <div key={i} style={{
-                background: r.win ? "#dcfce7" : "#fee2e2",
-                border: `2px solid ${r.win ? "#16a34a" : "#dc2626"}`,
-                borderRadius: 10, padding: "10px 12px",
-              }}>
-                <div style={{ fontSize: 12, fontWeight: 800, color: r.win ? "#15803d" : "#7f1d1d", marginBottom: 4 }}>
-                  {t(E, "Case: Elsie plays ", "케이스: 엘시가 ")}<b>{r.elsie}</b>{t(E, "", " 냄")}
-                </div>
-                <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-                  • {t(E, "Bessie picks Rock?  ", "베시가 바위 선택? ")}<b>{r.pickA}</b><br/>
-                  • {t(E, "Bessie picks Paper? ", "베시가 보 선택?  ")}<b>{r.pickB}</b><br/>
-                  → {t(E, "Best for Bessie: ", "베시 최선: ")}<b>{r.best}</b>
-                </div>
-                <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>{r.note}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 12, color: "#9a3412", fontWeight: 700 }}>
-              {t(E, "Verdict: Bessie's (Rock, Paper) does NOT guarantee a win against (Paper, Scissors).",
-                    "결론: 베시 (바위, 보) 는 (보, 가위) 에 대해 승리를 보장하지 못함.")}
-            </div>
-            <div style={{ fontSize: 11, color: "#9a3412", marginTop: 2 }}>
-              {t(E, "Both of Elsie's symbols must be beatable. Here she can play Paper and Bessie has no answer.",
-                    "엘시의 두 기호 모두 이길 수 있어야 함. 여기선 엘시가 보를 내면 베시가 답이 없음.")}
-            </div>
-          </div>
-        </div>),
+        "Walk both Elsie picks one at a time and see whether Bessie's hand has a counter for each. ▶ to step.",
+        "엘시가 낼 수 있는 두 카드를 한 번에 하나씩 따라가요 — 각 경우에 베시한테 답이 있는지 봐요. ▶ 눌러서 진행."),
+      content: (<HpsCaseSimulator E={E} />),
     },
     {
       type: "quiz",
