@@ -314,8 +314,7 @@ export function PermRunner({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 
 const PERM_INPUT_PY = [
-  "import sys",
-  "input = sys.stdin.readline",
+  "from itertools import permutations",
   "",
   "T = int(input())",
   "for _ in range(T):",
@@ -327,211 +326,191 @@ const PERM_INPUT_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int T; cin >> T;",
   "    while (T--) {",
   "        int N; cin >> N;",
   "        vector<int> h(N - 1);",
-  "        for (int i = 0; i < N - 1; i++) cin >> h[i];",
+  "        for (auto& x : h) cin >> x;",
+];
+
+const PERM_DISMANTLE_PY = [
+  "def dismantle(p):",
+  "    p = list(p)",
+  "    out = []",
+  "    while len(p) > 1:",
+  "        if p[0] > p[-1]:",
+  "            out.append(p[1])",
+  "            p.pop(0)",
+  "        else:",
+  "            out.append(p[-2])",
+  "            p.pop()",
+  "    return out",
+];
+const PERM_DISMANTLE_CPP = [
+  "auto dismantle = [](vector<int> p) {",
+  "    vector<int> out;",
+  "    while (p.size() > 1) {",
+  "        if (p.front() > p.back()) {",
+  "            out.push_back(p[1]);",
+  "            p.erase(p.begin());",
+  "        } else {",
+  "            out.push_back(p[p.size() - 2]);",
+  "            p.pop_back();",
+  "        }",
+  "    }",
+  "    return out;",
+  "};",
 ];
 
 const PERM_TRY_PY = [
-  "    found = False",
-  "    perm = [0] * N",
-  "",
-  "    # 시작값 1, 2, ..., N 차례로 시도",
-  "    for start in range(1, N + 1):",
-  "        perm[0] = start",
-  "        used = [False] * (N + 1)",
-  "        used[start] = True",
-  "        valid = True",
-  "",
-  "        # 매 단계: + 또는 - 중 가능한 거 선택",
-  "        for i in range(N - 1):",
-  "            plus = perm[i] + h[i]",
-  "            minus = perm[i] - h[i]",
-  "            if 1 <= plus <= N and not used[plus]:",
-  "                perm[i+1] = plus",
-  "                used[plus] = True",
-  "            elif 1 <= minus <= N and not used[minus]:",
-  "                perm[i+1] = minus",
-  "                used[minus] = True",
-  "            else:",
-  "                valid = False",
-  "                break",
-  "",
-  "        if valid:",
-  "            found = True",
+  "    found = None",
+  "    for p in permutations(range(1, N + 1)):",
+  "        if dismantle(p) == h:",
+  "            found = p",
   "            break",
-];
-const PERM_TRY_CPP = [
-  "        bool found = false;",
-  "        vector<int> perm(N);",
   "",
-  "        // 시작값 1, 2, ..., N 차례로 시도",
-  "        for (int start = 1; start <= N && !found; start++) {",
-  "            perm[0] = start;",
-  "            vector<bool> used(N + 1, false);",
-  "            used[start] = true;",
-  "            bool valid = true;",
-  "",
-  "            // 매 단계: + 또는 - 중 가능한 거 선택",
-  "            for (int i = 0; i < N - 1; i++) {",
-  "                int plus = perm[i] + h[i];",
-  "                int minus = perm[i] - h[i];",
-  "                if (plus >= 1 && plus <= N && !used[plus]) {",
-  "                    perm[i+1] = plus;",
-  "                    used[plus] = true;",
-  "                } else if (minus >= 1 && minus <= N && !used[minus]) {",
-  "                    perm[i+1] = minus;",
-  "                    used[minus] = true;",
-  "                } else {",
-  "                    valid = false;",
-  "                    break;",
-  "                }",
-  "            }",
-  "",
-  "            if (valid) found = true;",
-  "        }",
-];
-
-const PERM_OUTPUT_PY = [
   "    if found:",
-  "        print(' '.join(map(str, perm)))",
+  "        print(' '.join(map(str, found)))",
   "    else:",
   "        print(-1)",
 ];
-const PERM_OUTPUT_CPP = [
-  "        if (found) {",
-  "            for (int i = 0; i < N; i++) cout << perm[i] << \" \\n\"[i == N-1];",
-  "        } else {",
-  "            cout << -1 << \"\\n\";",
-  "        }",
+const PERM_TRY_CPP = [
+  "        vector<int> p(N);",
+  "        iota(p.begin(), p.end(), 1);",
+  "        bool found = false;",
+  "        do {",
+  "            if (dismantle(p) == h) {",
+  "                for (int i = 0; i < N; i++)",
+  "                    cout << p[i] << \" \\n\"[i == N-1];",
+  "                found = true;",
+  "                break;",
+  "            }",
+  "        } while (next_permutation(p.begin(), p.end()));",
+  "        if (!found) cout << -1 << \"\\n\";",
   "    }",
   "    return 0;",
   "}",
 ];
 
-const PERM_FULL_PY = [...PERM_INPUT_PY, "", ...PERM_TRY_PY, "", ...PERM_OUTPUT_PY];
-const PERM_FULL_CPP = [...PERM_INPUT_CPP, "", ...PERM_TRY_CPP, "", ...PERM_OUTPUT_CPP];
-
 export function getPermSections(E) {
   return [
     {
-      label: t(E, "📦 1. Input + Setup", "📦 1. 입력 + 셋업"),
+      label: t(E, "📦 1. Read input", "📦 1. 입력 받기"),
       color: A,
       py: PERM_INPUT_PY, cpp: PERM_INPUT_CPP,
       why: [
-        t(E, "T test cases. Each: N, then N-1 hints h[0]..h[N-2].", "T 테스트케이스. 각: N, 그 다음 N-1 개 힌트 h[0]..h[N-2]."),
-        t(E, "h[i] = |perm[i] - perm[i+1]| — absolute difference.", "h[i] = |perm[i] - perm[i+1]| — 절댓값 차이."),
+        t(E, "T cases. Each: read N, then N−1 hints into h.",
+              "T 케이스. 각각 N 읽고, N−1 개 힌트를 h 로."),
       ],
       pyOnly: [
-        t(E, "list(map(int, ...)) for parsing space-separated ints.", "list(map(int, ...)) 으로 공백 구분 정수 파싱."),
-        t(E, "sys.stdin.readline for fast input.", "sys.stdin.readline 으로 빠른 입력."),
+        t(E, "permutations() yields every permutation of 1..N in lex order.",
+              "permutations() 가 1..N 의 모든 순열을 사전순으로 줘요."),
       ],
       cppOnly: [
-        t(E, "vector<int> h(N-1) — exactly N-1 hints.", "vector<int> h(N-1) — 정확히 N-1 개 힌트."),
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) for fast I/O.", "ios::sync_with_stdio(false) + cin.tie(nullptr) 로 Fast I/O."),
+        t(E, "next_permutation() (used in step 3) walks lex order — same idea.",
+              "next_permutation() (3 단계에서 사용) 이 사전순으로 돌아요 — 같은 아이디어."),
       ],
     },
     {
-      label: t(E, "🔍 2. Try Each Start (Greedy)", "🔍 2. 시작값 차례로 시도 (탐욕)"),
+      label: t(E, "🔁 2. Helper — simulate Nhoj's process", "🔁 2. 헬퍼 — Nhoj 과정 시뮬레이션"),
+      color: "#7c3aed",
+      py: PERM_DISMANTLE_PY, cpp: PERM_DISMANTLE_CPP,
+      why: [
+        t(E, "Given a permutation p, run Nhoj's rule until 1 element remains. Return the list of hints written.",
+              "순열 p 를 받아서, 원소 1 개 남을 때까지 Nhoj 규칙 적용. 적힌 힌트 리스트 반환."),
+      ],
+    },
+    {
+      label: t(E, "🎯 3. Try every permutation, print the first match", "🎯 3. 모든 순열 시도, 처음 일치하는 거 출력"),
       color: "#16a34a",
       py: PERM_TRY_PY, cpp: PERM_TRY_CPP,
       why: [
-        t(E, "Try each start = 1, 2, ..., N. For each: greedily build permutation.", "시작값 = 1, 2, ..., N 시도. 각각 탐욕적으로 순열 구성."),
-        t(E, "At each step: perm[i+1] is perm[i]+h[i] OR perm[i]-h[i]. Try + first, fall back to -.", "각 단계: perm[i+1] = perm[i]+h[i] 또는 perm[i]-h[i]. + 먼저 시도, 안 되면 -."),
-        t(E, "Validity: 1 ≤ value ≤ N AND not already used.", "유효성: 1 ≤ 값 ≤ N AND 미사용."),
-        t(E, "Greedy works because at each step, AT MOST ONE valid choice exists (proof: the other choice would conflict with an earlier value).", "탐욕이 성립: 각 단계에서 유효한 선택은 최대 1 개 (증명: 다른 선택은 이전 값과 충돌)."),
-        t(E, "If both fail at some step → this start doesn't work. Move to next start.", "두 옵션 다 실패 → 이 시작값 안 됨. 다음 시작값으로."),
-      ],
-      pyOnly: [
-        t(E, "used = [False] * (N + 1) — index 0 unused, indexes 1..N for tracking.", "used = [False] * (N + 1) — 인덱스 0 미사용, 1..N 추적."),
-      ],
-      cppOnly: [
-        t(E, "vector<bool>(N+1, false) — same idea, packed bools save memory.", "vector<bool>(N+1, false) — 같은 아이디어, packed bool 로 메모리 절약."),
-      ],
-    },
-    {
-      label: t(E, "📤 3. Output", "📤 3. 출력"),
-      color: A,
-      py: PERM_OUTPUT_PY, cpp: PERM_OUTPUT_CPP,
-      why: [
-        t(E, "If a valid permutation found → print space-separated.", "유효한 순열 찾음 → 공백 구분 출력."),
-        t(E, "Otherwise (all N starts failed) → print -1.", "아니면 (N 개 시작 다 실패) → -1 출력."),
-      ],
-      pyOnly: [
-        t(E, "' '.join(map(str, perm)) — convert ints to strings, join with space.", "' '.join(map(str, perm)) — int 를 str 로 변환 후 공백 join."),
-      ],
-      cppOnly: [
-        t(E, "Trick: \" \\n\"[i == N-1] gives space normally, newline at end.", "트릭: \" \\n\"[i == N-1] 으로 일반은 공백, 마지막은 줄바꿈."),
-      ],
-    },
-    {
-      label: t(E, "🎯 4. Full Code", "🎯 4. 전체 코드"),
-      color: A,
-      py: PERM_FULL_PY, cpp: PERM_FULL_CPP,
-      why: [
-        t(E, "Time: O(N²) per test case (N starts × N steps each).", "시간: 테스트 케이스당 O(N²) (N 시작 × N 단계)."),
-        t(E, "For N=1000: 10⁶ ops per test case. Plenty fast.", "N=1000: 테스트 케이스당 10⁶ 연산. 충분히 빠름."),
-        t(E, "Edge case: h[i] = 0 → permutation needs perm[i] = perm[i+1] but values must be distinct → IMPOSSIBLE → -1.", "엣지: h[i] = 0 → perm[i] = perm[i+1] 필요한데 순열 값은 다 달라야 → 불가능 → -1."),
+        t(E, "Lex order means the FIRST match is automatically the lex-smallest answer.",
+              "사전순으로 도니까 처음 일치하는 게 자동으로 사전순 최소."),
+        t(E, "No match across all N! permutations → Nhoj messed up → print −1.",
+              "N! 개 다 돌려도 일치 없음 → Nhoj 가 실수 → −1 출력."),
       ],
     },
   ];
 }
-
-
 /* ProgressiveCode — vertical stack pattern */
 export function PermProgressiveCode({ E, lang = "py", sections }) {
+  const [idx, setIdx] = useState(0);
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
+  const safeIdx = Math.min(idx, sections.length - 1);
+  const s = sections[safeIdx];
+  const code = lang === "py" ? s.py : s.cpp;
+  const langSpecific = lang === "py" ? (s.pyOnly || []) : (s.cppOnly || []);
+  const isFirst = safeIdx === 0;
+  const isLast = safeIdx === sections.length - 1;
   return (
     <div style={{ padding: 14 }}>
-      <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 14, textAlign: "center" }}>
-        {t(E, `Showing ${langLabel} (change via header dropdown ↑)`, `${langLabel} 표시 중 (위 헤더 dropdown 으로 변경)`)}
+      {/* Top bar: language + step counter */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, fontSize: 11, color: C.dim, fontWeight: 700 }}>
+        <span>{t(E, `${langLabel}  (change in header ↑)`, `${langLabel}  (위 헤더에서 변경)`)}</span>
+        <span style={{ color: A, fontWeight: 800, fontSize: 13 }}>
+          {safeIdx + 1} / {sections.length}
+        </span>
       </div>
-      {sections.map((s, i) => {
-        const code = lang === "py" ? s.py : s.cpp;
-        const langSpecific = lang === "py" ? (s.pyOnly || []) : (s.cppOnly || []);
-        return (
-          <div key={i} style={{ marginBottom: 18 }}>
-            <div style={{ background: s.color, color: "#fff", padding: "8px 14px", borderRadius: "10px 10px 0 0", fontSize: 14, fontWeight: 800 }}>{s.label}</div>
-            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderTop: "none", padding: "10px 12px" }}>
-              <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
-                💡 {t(E, "Why this way?", "왜 이렇게?")}
+
+      {/* Single section */}
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ background: s.color, color: "#fff", padding: "8px 14px", borderRadius: "10px 10px 0 0", fontSize: 14, fontWeight: 800 }}>{s.label}</div>
+        <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderTop: "none", padding: "10px 12px" }}>
+          <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
+            💡 {t(E, "Why this way?", "왜 이렇게?")}
+          </div>
+          {s.why.map((line, j) => (
+            <div key={`w${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
+              <span style={{ color: s.color, fontWeight: 800, flexShrink: 0 }}>•</span>
+              <span>{line}</span>
+            </div>
+          ))}
+          {langSpecific.length > 0 && (
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${C.border}` }}>
+              <div style={{ fontSize: 10, color: C.dim, fontWeight: 800, marginBottom: 4, letterSpacing: 0.5 }}>
+                {langLabel} {t(E, "specific:", "전용:")}
               </div>
-              {s.why.map((line, j) => (
-                <div key={`w${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
-                  <span style={{ color: s.color, fontWeight: 800, flexShrink: 0 }}>•</span>
+              {langSpecific.map((line, j) => (
+                <div key={`l${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
+                  <span style={{ color: lang === "py" ? "#16a34a" : "#0891b2", fontWeight: 800, flexShrink: 0 }}>▸</span>
                   <span>{line}</span>
                 </div>
               ))}
-              {langSpecific.length > 0 && (
-                <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${C.border}` }}>
-                  <div style={{ fontSize: 10, color: C.dim, fontWeight: 800, marginBottom: 4, letterSpacing: 0.5 }}>
-                    {langLabel} {t(E, "specific:", "전용:")}
-                  </div>
-                  {langSpecific.map((line, j) => (
-                    <div key={`l${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
-                      <span style={{ color: lang === "py" ? "#16a34a" : "#0891b2", fontWeight: 800, flexShrink: 0 }}>▸</span>
-                      <span>{line}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
-            <div style={{ borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
-              <CodeBlock lines={code} />
-            </div>
-          </div>
-        );
-      })}
+          )}
+        </div>
+        <div style={{ borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
+          <CodeBlock lines={code} />
+        </div>
+      </div>
+
+      {/* Prev / Next nav */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginTop: 6 }}>
+        <button onClick={() => setIdx(Math.max(0, safeIdx - 1))} disabled={isFirst} style={{
+          background: isFirst ? "#e5e7eb" : "#fff", border: `2px solid ${isFirst ? "#e5e7eb" : A}`,
+          borderRadius: 10, padding: "8px 16px", fontSize: 13, fontWeight: 800,
+          color: isFirst ? "#b0b5c3" : A, cursor: isFirst ? "default" : "pointer",
+        }}>← {t(E, "Previous", "이전")}</button>
+        <div style={{ display: "flex", gap: 4 }}>
+          {sections.map((_, i) => (
+            <button key={i} onClick={() => setIdx(i)} style={{
+              width: 26, height: 26, borderRadius: "50%",
+              background: i === safeIdx ? A : "#fff",
+              border: `1.5px solid ${i === safeIdx ? A : C.border}`,
+              color: i === safeIdx ? "#fff" : C.dim, fontSize: 11, fontWeight: 800, cursor: "pointer",
+            }}>{i + 1}</button>
+          ))}
+        </div>
+        <button onClick={() => setIdx(Math.min(sections.length - 1, safeIdx + 1))} disabled={isLast} style={{
+          background: isLast ? "#e5e7eb" : A, border: `2px solid ${isLast ? "#e5e7eb" : A}`,
+          borderRadius: 10, padding: "8px 16px", fontSize: 13, fontWeight: 800,
+          color: isLast ? "#b0b5c3" : "#fff", cursor: isLast ? "default" : "pointer",
+        }}>{t(E, "Next", "다음")} →</button>
+      </div>
     </div>
   );
 }
-
-
 /* PDF — comprehensive study guide */
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","join"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min"];
