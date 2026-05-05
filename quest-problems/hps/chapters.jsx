@@ -63,20 +63,13 @@ export function makeHpsCh1(E) {
                         ". 4 장이 모두 보여요. 그 다음 각자 자기 2 장 중 1 장을 골라 실제로 내요 — 베시는 엘시가 무엇을 냈는지 보고 마지막에 골라요.")}
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
-                <div>
-                  <b style={{ color: "#dc2626" }}>{t(E, "Bessie's hand wins for sure", "베시의 카드 2 장이 무조건 이김")}</b>
-                  {t(E, " when — no matter which of her two cards Elsie ends up playing — Bessie has at least one card in HER hand that beats it.",
-                        " — 엘시가 자기 2 장 중 무엇을 내든, 베시의 2 장 중에 그걸 이기는 카드가 있는 경우.")}
-                </div>
-              </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "We get M different Elsie hands. For each one, print ", "엘시의 카드 2 장 조합이 M 가지 주어져요. 각 조합에 대해 ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "how many of Bessie's possible 2-card hands guarantee a win", "베시가 가질 수 있는 2 장 조합 중 무조건 이기는 게 몇 개인지")}</b>
-                  {t(E, ".", " 출력해요.")}
+                  {t(E, "Elsie's hand is given M times. Count Bessie's hands that ",
+                        "엘시 조합이 M 가지 주어져요. ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "always have an answer to BOTH of Elsie's cards", "엘시 두 카드 모두에 답이 있는 베시 조합")}</b>
+                  {t(E, ".", " 의 개수를 출력해요.")}
                 </div>
               </div>
             </div>
