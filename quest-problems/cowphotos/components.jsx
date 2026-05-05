@@ -6,6 +6,167 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#d97706";
 
 /* ═══════════════════════════════════════════════════════════════
+   FreqWalkSimulator — interactive walk-through of the formula on
+   heights = [1, 1, 2, 3, 3, 3, 4]. Press ▶ to scan one height at
+   a time, accumulating pairs and the leftover flag.
+   ═══════════════════════════════════════════════════════════════ */
+export function FreqWalkSimulator({ E }) {
+  const heights = [1, 1, 2, 3, 3, 3, 4];
+  const freq = {};
+  heights.forEach(h => freq[h] = (freq[h] || 0) + 1);
+  const sortedKeys = Object.keys(freq).sort((a, b) => +a - +b);
+
+  const trace = [{ kind: "init", revealed: 0, pairs: 0, leftover: false }];
+  let pairs = 0, leftover = false;
+  for (let i = 0; i < sortedKeys.length; i++) {
+    const h = +sortedKeys[i];
+    const cnt = freq[h];
+    pairs += Math.floor(cnt / 2);
+    if (cnt % 2 === 1) leftover = true;
+    trace.push({
+      kind: "step",
+      revealed: i + 1,
+      currentH: h, currentCount: cnt,
+      currentPairs: Math.floor(cnt / 2),
+      currentOdd: cnt % 2 === 1,
+      pairs, leftover,
+    });
+  }
+  trace.push({ kind: "final", revealed: sortedKeys.length, pairs, leftover, total: pairs * 2 + (leftover ? 1 : 0) });
+
+  const [idx, setIdx] = useState(0);
+  const safe = Math.max(0, Math.min(idx, trace.length - 1));
+  const s = trace[safe];
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 13, fontWeight: 800, color: A, textAlign: "center", marginBottom: 4 }}>
+        ✏️ {t(E, "Walk frequencies on heights = [1, 1, 2, 3, 3, 3, 4]",
+                  "키 [1, 1, 2, 3, 3, 3, 4] 에서 빈도 따라가기")}
+      </div>
+      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 14 }}>
+        {t(E, `Press ▶ to scan one height at a time. (${safe + 1} / ${trace.length})`,
+              `▶ 눌러서 키 하나씩 살펴봐요. (${safe + 1} / ${trace.length})`)}
+      </div>
+
+      {/* Heights row */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 14, flexWrap: "wrap" }}>
+        {heights.map((h, i) => {
+          const keyIdx = sortedKeys.indexOf(String(h));
+          const isScanned = keyIdx < s.revealed;
+          const isCurrent = s.kind === "step" && h === s.currentH;
+          return (
+            <div key={i} style={{
+              width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 900, fontSize: 16,
+              background: isCurrent ? "#fef3c7" : isScanned ? "#fff7ed" : "#fff",
+              border: `2px solid ${isCurrent ? "#f59e0b" : isScanned ? "#fdba74" : "#cbd5e1"}`,
+              color: isCurrent ? "#92400e" : isScanned ? "#9a3412" : "#9ca3af",
+              transition: "all .2s",
+            }}>{h}</div>
+          );
+        })}
+      </div>
+
+      {/* Frequency table — only revealed rows */}
+      <div style={{ display: "grid", gridTemplateColumns: "60px 60px 60px 1fr", gap: "4px 8px", fontSize: 12, marginBottom: 14, minHeight: 40 }}>
+        <div style={{ fontWeight: 800, color: A }}>{t(E, "height", "키")}</div>
+        <div style={{ fontWeight: 800, color: A, textAlign: "right" }}>{t(E, "count", "수")}</div>
+        <div style={{ fontWeight: 800, color: A, textAlign: "right" }}>{t(E, "pairs", "쌍")}</div>
+        <div style={{ fontWeight: 800, color: A }}>{t(E, "odd?", "홀수?")}</div>
+        {sortedKeys.slice(0, s.revealed).map((k, i) => {
+          const h = +k, cnt = freq[h];
+          const isCurrent = s.kind === "step" && h === s.currentH;
+          return (
+            <div key={i} style={{ display: "contents" }}>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: isCurrent ? "#f59e0b" : "#7c3aed" }}>{h}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", textAlign: "right" }}>{cnt}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, textAlign: "right", color: "#16a34a" }}>{Math.floor(cnt / 2)}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", color: cnt % 2 === 1 ? "#dc2626" : C.dim }}>
+                {cnt % 2 === 1 ? `1 ${t(E, "extra", "남음")}` : t(E, "no", "없음")}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Running totals */}
+      <div style={{ background: "#fff7ed", border: `2px solid #fdba74`, borderRadius: 10, padding: "10px 12px", marginBottom: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
+          🧮 {t(E, "Running totals", "누적 결과")}
+        </div>
+        <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "pairs so far  = ", "지금까지 쌍 = ")}<b>{s.pairs}</b><br/>
+          {t(E, "leftover flag = ", "남은 거 있음 = ")}<b style={{ color: s.leftover ? "#dc2626" : C.dim }}>{s.leftover ? "✓" : "✗"}</b>
+          {s.kind === "final" && (
+            <><br/>
+            <span style={{ color: "#16a34a", fontWeight: 800 }}>
+              total = 2 × {s.pairs} + {s.leftover ? 1 : 0} = {s.total}
+            </span></>
+          )}
+        </div>
+      </div>
+
+      {/* Step-narrative */}
+      <div style={{
+        background: "#faf5ff", border: "2px solid #c4b5fd", borderRadius: 10,
+        padding: "10px 12px", marginBottom: 12, minHeight: 60, fontSize: 13, color: C.text, lineHeight: 1.6,
+      }}>
+        {s.kind === "init" && (
+          <>{t(E, "Start: no heights scanned yet. Press ▶ to begin.",
+                  "시작: 아직 아무 키도 안 봤어요. ▶ 눌러서 시작.")}</>
+        )}
+        {s.kind === "step" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#5b21b6" }}>
+              {t(E, `Look at height ${s.currentH}: count = ${s.currentCount}`,
+                    `키 ${s.currentH} 보기: 수 = ${s.currentCount}`)}
+            </div>
+            <div style={{ marginTop: 4 }}>
+              {t(E, `→ ${s.currentPairs} pair${s.currentPairs !== 1 ? "s" : ""}`,
+                    `→ ${s.currentPairs} 쌍`)}
+              {s.currentOdd && t(E, ", and 1 extra (could be peak)", ", 그리고 1 마리 남음 (정점 후보)")}
+            </div>
+          </>
+        )}
+        {s.kind === "final" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#15803d" }}>
+              🎉 {t(E, "Done — answer for this test:", "완료 — 이 테스트의 답:")}{" "}
+              <b style={{ fontSize: 16, color: "#15803d" }}>{s.total}</b>
+            </div>
+            <div style={{ marginTop: 4, fontSize: 12, color: C.dim }}>
+              {t(E, "One valid photo: [1, 3, 4, 3, 1] (peak = 4).",
+                    "유효한 사진 예: [1, 3, 4, 3, 1] (정점 = 4).")}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Nav */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+        <button onClick={() => setIdx(0)} disabled={safe === 0} style={{
+          padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 800,
+          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : A}`,
+          color: safe === 0 ? "#b0b5c3" : A, cursor: safe === 0 ? "default" : "pointer",
+        }}>⏮ {t(E, "Restart", "처음부터")}</button>
+        <button onClick={() => setIdx(Math.max(0, safe - 1))} disabled={safe === 0} style={{
+          padding: "6px 14px", borderRadius: 8, fontSize: 13, fontWeight: 800,
+          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : A}`,
+          color: safe === 0 ? "#b0b5c3" : A, cursor: safe === 0 ? "default" : "pointer",
+        }}>◀ {t(E, "Prev", "이전")}</button>
+        <button onClick={() => setIdx(Math.min(trace.length - 1, safe + 1))} disabled={safe === trace.length - 1} style={{
+          padding: "6px 18px", borderRadius: 8, fontSize: 13, fontWeight: 800,
+          background: safe === trace.length - 1 ? "#e5e7eb" : A, border: `2px solid ${safe === trace.length - 1 ? "#e5e7eb" : A}`,
+          color: safe === trace.length - 1 ? "#b0b5c3" : "#fff",
+          cursor: safe === trace.length - 1 ? "default" : "pointer",
+        }}>{t(E, "Next", "다음")} ▶</button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    CowPhotosSim — show counts per breed, pair/peak choice
    ═══════════════════════════════════════════════════════════════ */
 const _CP_PRESETS = [
