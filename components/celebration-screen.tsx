@@ -13,6 +13,7 @@ interface CelebrationScreenProps {
   combo?: number
   grade?: "perfect" | "great" | "good" | "fail" | null
   isRetry?: boolean
+  onSkip?: () => void
 }
 
 const tierMessagesKo: Record<string, string[]> = {
@@ -30,7 +31,7 @@ const tierMessagesEn: Record<string, string[]> = {
   legend: ["A legend is born! 👑", "Are you even human?!", "Invincible mode!"],
 }
 
-export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, combo = 0, grade, isRetry }: CelebrationScreenProps) {
+export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, combo = 0, grade, isRetry, onSkip }: CelebrationScreenProps) {
   const { t, lang } = useLanguage()
   const [message, setMessage] = useState("완벽해요!")
   const tier = comboTier?.tier || "base"
@@ -77,7 +78,13 @@ export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, co
   const colors = confettiColors[tier] || confettiColors.base
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+    <div
+      className={cn(
+        "fixed inset-0 z-50 flex items-center justify-center",
+        onSkip ? "cursor-pointer" : "pointer-events-none",
+      )}
+      onClick={onSkip}
+    >
       {/* Background gradient animation */}
       <div className={bgGradient} />
 
@@ -192,6 +199,13 @@ export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, co
 
       {/* Screen edge glow */}
       <div className={borderGlow} />
+
+      {/* Tap-to-skip hint */}
+      {onSkip && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs md:text-sm text-gray-700/70 bg-white/60 backdrop-blur-sm rounded-full px-3 py-1 animate-pulse pointer-events-none">
+          {t("탭하여 계속 →", "Tap to continue →")}
+        </div>
+      )}
     </div>
   )
 }

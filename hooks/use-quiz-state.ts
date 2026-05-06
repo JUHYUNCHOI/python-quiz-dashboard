@@ -134,6 +134,19 @@ export function useQuizState(questions: QuizQuestion[]) {
   const [isCheckingAnswer, setIsCheckingAnswer] = useState(false)
   const [serverCorrectAnswer, setServerCorrectAnswer] = useState<number | null>(null)
 
+  // 정답 후 다음 문제로 진행하는 타이머 (탭으로 빨리 넘기기 위함)
+  const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const pendingAdvanceRef = useRef<(() => void) | null>(null)
+  const skipCelebration = useCallback(() => {
+    if (advanceTimerRef.current) {
+      clearTimeout(advanceTimerRef.current)
+      advanceTimerRef.current = null
+    }
+    const fn = pendingAdvanceRef.current
+    pendingAdvanceRef.current = null
+    if (fn) fn()
+  }, [])
+
   // Mid check-in
   const [showMidCheckIn, setShowMidCheckIn] = useState(false)
   const [midCheckInShown, setMidCheckInShown] = useState(false)
@@ -288,6 +301,12 @@ export function useQuizState(questions: QuizQuestion[]) {
   )
 
   const handleNext = useCallback(() => {
+    // 정답 후 축하 화면 표시 중이면 → 즉시 다음 문제로 건너뜀
+    if (advanceTimerRef.current || pendingAdvanceRef.current) {
+      skipCelebration()
+      return
+    }
+
     // 이전 문제 복습 중(showResult=true이고 스냅샷 있는 문제) → 다음으로 건너뜀
     if (showResult && questionSnapshots.current.has(currentQuestion)) {
       const nextIdx = currentQuestion + 1
@@ -387,7 +406,7 @@ export function useQuizState(questions: QuizQuestion[]) {
           setMaxCombo((prev) => Math.max(prev, newCombo))
 
           setShowCelebration(true)
-          setTimeout(() => {
+          const advance = () => {
             setShowCelebration(false)
 
             // 재출제 문제를 풀었으면 currentQuestion은 안 올림
@@ -405,7 +424,15 @@ export function useQuizState(questions: QuizQuestion[]) {
               saveSessionData("completed", newScore)
               router.push("/quiz/session-complete")
             }
-          }, 2000)
+          }
+          pendingAdvanceRef.current = advance
+          if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current)
+          advanceTimerRef.current = setTimeout(() => {
+            advanceTimerRef.current = null
+            const fn = pendingAdvanceRef.current
+            pendingAdvanceRef.current = null
+            if (fn) fn()
+          }, 1200)
         } else {
           // Reset combo on wrong
           setCombo(0)
@@ -465,6 +492,7 @@ export function useQuizState(questions: QuizQuestion[]) {
     isRetryQuestion,
     activeRetryQuestion,
     retryCheck.updatedQueue,
+    skipCelebration,
   ])
 
   const handleSkip = useCallback(() => {
@@ -649,5 +677,6 @@ export function useQuizState(questions: QuizQuestion[]) {
     handleContinue,
     handleExplanationClose,
     handlePracticeSimilar,
+    skipCelebration,
   }
 }

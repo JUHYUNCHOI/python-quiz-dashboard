@@ -753,6 +753,7 @@ export default function QuizPage() {
         combo={quiz.combo}
         grade={quiz.currentGrade}
         isRetry={quiz.isRetryQuestion}
+        onSkip={quiz.skipCelebration}
       />
 
       <ExplanationPanel
