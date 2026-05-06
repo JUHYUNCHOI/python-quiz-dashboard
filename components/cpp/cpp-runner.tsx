@@ -232,7 +232,7 @@ export function CppRunner({
 
   // 마운트 시 이전 제출 결과 확인 (submissionMode만)
   useEffect(() => {
-    if (!submissionMode || !stepId) return
+    if (!submissionMode || !stepId || !lessonId) return
     const fetchPrevGrade = async () => {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
@@ -241,10 +241,11 @@ export function CppRunner({
         .from("homework_submissions")
         .select("teacher_grade, teacher_comment")
         .eq("student_id", user.id)
+        .eq("lesson_id", lessonId)
         .eq("step_id", stepId)
         .order("submitted_at", { ascending: false })
         .limit(1)
-        .single()
+        .maybeSingle()
       if (data) {
         setIsSubmitted(true)
         const grade = (data.teacher_grade as "pass" | "fail" | "auto" | null) ?? null
@@ -260,7 +261,7 @@ export function CppRunner({
       }
     }
     fetchPrevGrade()
-  }, [submissionMode, stepId]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [submissionMode, stepId, lessonId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 코드 변경 시 localStorage 자동 저장 — JSON 포맷 {code, starter}
   // starter 필드: 현재 initialCode 를 함께 기록 → 다음 로드 시 starter 변경 감지에 사용

@@ -101,25 +101,39 @@ cout << s << endl;                  // "Hello C++"
 
 ⚠️ 핵심 차이: C++ 의 \`substr\` 과 \`replace\` 는 **위치와 길이** 를 써요! 파이썬처럼 문자열로 검색하지 않아요.
 
-\`find()\` 가 못 찾으면 어떻게 될까요?
+💡 \`substr\` 두 번째 인자를 **생략하면 끝까지** 가져와요!
+\`\`\`cpp
+string s = "Hello World";
+cout << s.substr(6) << endl;       // "World"  ← 6 번 위치부터 끝까지
+cout << s.substr(0, 5) << endl;    // "Hello"  ← 길이를 주면 그만큼만
+\`\`\`
+파이썬의 \`s[6:]\` 와 \`s[0:5]\` 처럼 동작해요.
+
+---
+
+\`find()\` 가 **못 찾으면** 어떻게 될까요?
 \`\`\`cpp
 string s = "Hello";
-size_t pos = s.find("xyz");
+size_t pos = s.find("xyz");        // "xyz" 없음!
 if (pos == string::npos) {
-    cout << "Not found!" << endl;
+    cout << "Not found!" << endl;  // ← 여기로!
 }
 \`\`\`
 파이썬은 \`-1\` 을 반환하지만, C++ 은 \`string::npos\` 라는 특별한 상수를 반환해요!
 
-🔍 \`string::npos\` 가 뭐예요? "no position" 의 줄임말. find() 가 못 찾을 때 이 특별한 값을 반환해요. 왜 -1 이 아니냐면 — 문자열 위치는 \`size_t\` 타입을 쓰는데 음수가 될 수 없거든요!
+🔍 \`string::npos\` 가 뭐예요? "no position" 의 줄임말. find() 가 못 찾을 때 이 특별한 값을 반환해요. 왜 -1 이 아니냐면 — 문자열 위치는 \`size_t\` 타입(0 이상 정수만)을 쓰는데 음수가 될 수 없거든요! 그래서 "절대 나올 수 없는 큰 값" 을 정해두고 "못 찾음" 신호로 써요.
+
+⚠️ **확인 안 하면 사고나요!** 못 찾았는데 그냥 \`pos\` 를 쓰면 \`npos\` 라는 거대한 숫자(예: 18446744073709551615)로 \`substr\` 을 호출하게 돼서 프로그램이 터져요.
 
 문자열에서 검색할 때 표준 패턴:
 \`\`\`cpp
 size_t pos = str.find("abc");
 if (pos != string::npos) {
-    // 찾음
+    // 찾았을 때만 pos 사용!
+    cout << str.substr(pos) << endl;
 } else {
-    // 못 찾음
+    // 못 찾았을 때 처리
+    cout << "없어요" << endl;
 }
 \`\`\`
 
