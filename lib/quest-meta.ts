@@ -303,6 +303,55 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
       "    print(best)",
     ].join("\n"),
   },
+  checkups: {
+    type: "brute-force",
+    concepts_taught: ["nested-loop", "subarray-reversal", "prefix-sum"],
+    concepts_required: ["loop", "list-basics"],
+    difficulty: 3,
+    supported_languages: ["py", "cpp"],
+    // Verified against USACO 2025 January Bronze #3 — all 3 official samples.
+    validate_io: [
+      { input: "3\n1 3 2\n3 2 1\n", expected: "3\n3\n0\n0" },
+      { input: "3\n1 2 3\n1 2 3\n", expected: "0\n3\n0\n3" },
+      { input: "7\n1 3 2 2 1 3 2\n3 2 2 1 2 3 1\n", expected: "0\n6\n14\n6\n2\n0\n0\n0" },
+    ],
+    // Smart O(N²): for each diagonal s = l+r, build prefix Q[k] over
+    // matches a[s−k] == b[k]. Then for any (l, r) with l+r = s:
+    //   inside_after_reverse = Q[r] − Q[l−1]
+    //   outside (unchanged)  = P[l−1] + (P[N] − P[r])    (P = base prefix)
+    // counts[total]++ for each pair.
+    solution_py: [
+      "import sys",
+      "",
+      "data = sys.stdin.buffer.read().split()",
+      "p = 0",
+      "N = int(data[p]); p += 1",
+      "a = [0] + [int(data[p+i]) for i in range(N)]; p += N",
+      "b = [0] + [int(data[p+i]) for i in range(N)]; p += N",
+      "",
+      "P = [0] * (N + 1)",
+      "for i in range(1, N + 1):",
+      "    P[i] = P[i-1] + (1 if a[i] == b[i] else 0)",
+      "",
+      "counts = [0] * (N + 1)",
+      "for s in range(2, 2*N + 1):",
+      "    Q = [0] * (N + 2)",
+      "    for k in range(1, N + 1):",
+      "        j = s - k",
+      "        inc = 1 if (1 <= j <= N and a[j] == b[k]) else 0",
+      "        Q[k] = Q[k-1] + inc",
+      "    l_min = max(1, s - N)",
+      "    l_max = s // 2",
+      "    for l in range(l_min, l_max + 1):",
+      "        r = s - l",
+      "        inside = Q[r] - Q[l-1]",
+      "        outside = P[l-1] + (P[N] - P[r])",
+      "        counts[inside + outside] += 1",
+      "",
+      "for c in counts:",
+      "    print(c)",
+    ].join("\n"),
+  },
   permutation: {
     type: "brute-force",
     concepts_taught: ["recursion", "permutation-enum", "dismantle-rule"],
