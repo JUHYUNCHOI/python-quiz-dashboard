@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getUdderedSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -29,17 +30,48 @@ export function makeUdderedCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie hears a string of letters. She knows the custom alphabet order. Each time the next letter comes before or at the current letter in the alphabet, she needs a new cycle. Count the minimum full cycles!",
-        "Bessie가 글자 문자열을 들어. 커스텀 알파벳 순서를 알고 있어. 다음 글자가 현재 글자보다 앞에 있으면 새 사이클이 필요해. 최소 사이클 수를 구해!"),
+        "Bessie has a custom 26-letter alphabet order. She hears a string S; each character must be read in order, but she has to FULLY recite the alphabet at least once between any two characters that move backward in her order (or stay the same).\nPrint the MINIMUM number of full alphabet recitations she needs to read all of S.",
+        "Bessie에게 26 글자의 커스텀 알파벳 순서가 있어요. 문자열 S 를 들으면 각 문자를 순서대로 읽어야 해요. 다만 두 인접 문자가 그녀의 순서에서 뒤로 가거나 같으면, 그 사이에 알파벳 전체를 적어도 한 번 외워야 해요.\nS 를 모두 읽기 위해 필요한 최소 알파벳 외우기 횟수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd24"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Uddered but not Herd</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Scan through the heard string. Track position in the custom alphabet. When the next letter's position is <= current letter's position, start a new cycle.",
-              "핵심: 들은 문자열을 스캔해. 커스텀 알파벳에서의 위치를 추적해. 다음 글자 위치가 현재 위치 이하이면 새 사이클을 시작해.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd24"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Uddered but not Herd</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie has a ", "Bessie에게 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "custom 26-letter alphabet order", "26 글자의 커스텀 알파벳 순서")}</b>
+                  {t(E, " (a permutation of a..z).",
+                        " (a..z 의 순열) 가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "She hears string S; she reads each letter in order. To read the next letter when it ", "S 문자열을 들으면 각 문자를 순서대로 읽어요. 다음 문자가 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "comes before or equals the current letter in her order", "그녀의 순서에서 현재 문자보다 앞이거나 같으면")}</b>
+                  {t(E, ", she must FULLY recite her alphabet first.",
+                        " 먼저 알파벳을 전체 외워야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MINIMUM number of full alphabet recitations needed to read all of S", "S 를 모두 읽기 위한 최소 알파벳 외우기 횟수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -47,8 +79,7 @@ export function makeUdderedCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If the alphabet order is \"abc\" and the heard string is \"ac\", how many cycles do we need?",
-        "알파벳 순서가 \"abc\"이고 들은 문자열이 \"ac\"이면, 몇 사이클이 필요할까?"),
+        "If the alphabet order is \"abc\" and the heard string is \"ac\", how many cycles do we need?", "알파벳 순서가 \"abc\"이고 들은 문자열이 \"ac\"이면, 몇 사이클이 필요할까?"),
       question: t(E,
         "Alphabet: \"abc\", heard: \"ac\". How many cycles?",
         "알파벳: \"abc\", 들은 문자열: \"ac\". 몇 사이클?"),
@@ -65,8 +96,7 @@ export function makeUdderedCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Alphabet order is \"abc\", heard string is \"ca\". How many cycles?",
-        "알파벳 순서가 \"abc\", 들은 문자열이 \"ca\"야. 몇 사이클?"),
+        "Alphabet order is \"abc\", heard string is \"ca\". How many cycles?", "알파벳 순서가 \"abc\", 들은 문자열이 \"ca\"야. 몇 사이클?"),
       question: t(E,
         "Alphabet: \"abc\", heard: \"ca\". How many cycles needed?",
         "알파벳: \"abc\", 들은 문자열: \"ca\". 몇 사이클 필요?"),
@@ -82,33 +112,51 @@ export function makeUdderedCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: makeCh2 (2 steps: reveal / code)
    ═══════════════════════════════════════════════════════════════ */
-export function makeUdderedCh2(E) {
+export function makeUdderedCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Scan once through the string. Each time next letter is before or at current in order, increment cycle count. O(N) time!",
-        "문자열을 한 번 스캔해. 다음 글자가 현재 이하 위치면 사이클 카운트 증가. O(N) 시간!"),
+        "Map each letter to its position in Bessie's custom alphabet. Scan S; whenever next letter's custom-position ≤ current's, she must recite the alphabet again. Start with cycle = 1.",
+        "각 글자를 Bessie의 커스텀 알파벳에서의 위치로 매핑. S 를 스캔; 다음 글자의 커스텀-위치 ≤ 현재 위치 일 때 알파벳을 다시 외워야 함. cycle = 1 부터 시작."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Map each letter to its position in the custom alphabet. Scan the heard string: if next position <= current position, start a new cycle.",
-              "각 글자를 커스텀 알파벳에서의 위치로 매핑해. 들은 문자열 스캔: 다음 위치 <= 현재 위치면 새 사이클 시작.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Build position map", "위치 맵 구축"), code: "pos = {letter: i for i, letter in enumerate(alphabet)}", color: "#dc2626" },
+              { n: 2, label: t(E, "Init cycles = 1", "cycles = 1 초기화"), code: "cycles = 1", color: "#7c3aed" },
+              { n: 3, label: t(E, "Scan S; bump on backward step", "S 스캔; 뒤로 가면 cycles +1"), code: "for i in range(1, len(S)): if pos[S[i]] <= pos[S[i-1]]: cycles += 1", color: "#0891b2" },
+              { n: 4, label: t(E, "Print cycles", "cycles 출력"), code: "print(cycles)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full solution!",
-        "전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getUdderedSections(E),
     },
   ];
 }

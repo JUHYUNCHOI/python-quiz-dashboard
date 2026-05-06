@@ -74,12 +74,70 @@ string s = "Hi";
           type: "explain",
           title: "🔍 substr, find, replace!",
           component: "stringMethodVisualizer",
-          content: `파이썬의 슬라이싱·find·replace에 대응하는 C++ 메서드 3가지예요. 직접 조작해보세요!
+          content: `파이썬의 슬라이싱·find·replace 에 대응하는 C++ 메서드예요!
 
-**탭별 핵심 포인트:**
-- **substr(pos, len)** — 시작 위치 + **길이** (파이썬 s[a:b]의 끝 인덱스가 아니에요!)
-- **find("x")** — 위치 반환. 못 찾으면 \`string::npos\` (파이썬의 -1 대신!)
-- **replace(pos, len, "new")** — 위치 기반 교체 (파이썬처럼 문자열로 검색하지 않아요)`
+**파이썬 🐍:**
+\`\`\`python
+s = "Hello World"
+print(s[0:5])                    # "Hello" (슬라이싱)
+print(s.find("World"))           # 6
+print(s.replace("World", "C++")) # "Hello C++"
+\`\`\`
+
+**C++ ⚡:**
+\`\`\`cpp
+string s = "Hello World";
+cout << s.substr(0, 5) << endl;    // "Hello"
+cout << s.find("World") << endl;   // 6
+s.replace(6, 5, "C++");            // s 가 "Hello C++" 로 바뀜!
+cout << s << endl;                  // "Hello C++"
+\`\`\`
+
+| 파이썬 🐍 | C++ ⚡ | 메모 |
+|---|---|---|
+| \`s[a:b]\` | \`s.substr(pos, len)\` | 부분 문자열 (시작 위치, **길이**!) |
+| \`s.find("x")\` | \`s.find("x")\` | 검색 (똑같아요!) |
+| \`s.replace("a","b")\` | \`s.replace(pos, len, "b")\` | 교체 (위치 기반!) |
+
+⚠️ 핵심 차이: C++ 의 \`substr\` 과 \`replace\` 는 **위치와 길이** 를 써요! 파이썬처럼 문자열로 검색하지 않아요.
+
+💡 \`substr\` 두 번째 인자를 **생략하면 끝까지** 가져와요!
+\`\`\`cpp
+string s = "Hello World";
+cout << s.substr(6) << endl;       // "World"  ← 6 번 위치부터 끝까지
+cout << s.substr(0, 5) << endl;    // "Hello"  ← 길이를 주면 그만큼만
+\`\`\`
+파이썬의 \`s[6:]\` 와 \`s[0:5]\` 처럼 동작해요.
+
+---
+
+\`find()\` 가 **못 찾으면** 어떻게 될까요?
+\`\`\`cpp
+string s = "Hello";
+size_t pos = s.find("xyz");        // "xyz" 없음!
+if (pos == string::npos) {
+    cout << "Not found!" << endl;  // ← 여기로!
+}
+\`\`\`
+파이썬은 \`-1\` 을 반환하지만, C++ 은 \`string::npos\` 라는 특별한 상수를 반환해요!
+
+🔍 \`string::npos\` 가 뭐예요? "no position" 의 줄임말. find() 가 못 찾을 때 이 특별한 값을 반환해요. 왜 -1 이 아니냐면 — 문자열 위치는 \`size_t\` 타입(0 이상 정수만)을 쓰는데 음수가 될 수 없거든요! 그래서 "절대 나올 수 없는 큰 값" 을 정해두고 "못 찾음" 신호로 써요.
+
+⚠️ **확인 안 하면 사고나요!** 못 찾았는데 그냥 \`pos\` 를 쓰면 \`npos\` 라는 거대한 숫자(예: 18446744073709551615)로 \`substr\` 을 호출하게 돼서 프로그램이 터져요.
+
+문자열에서 검색할 때 표준 패턴:
+\`\`\`cpp
+size_t pos = str.find("abc");
+if (pos != string::npos) {
+    // 찾았을 때만 pos 사용!
+    cout << str.substr(pos) << endl;
+} else {
+    // 못 찾았을 때 처리
+    cout << "없어요" << endl;
+}
+\`\`\`
+
+💡 find 와 substr 를 조합하면 파이썬의 슬라이싱을 흉내낼 수 있어요!`
         },
         {
           id: "ch1-fb1",

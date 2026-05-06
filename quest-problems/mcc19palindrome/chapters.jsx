@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMcc19PalSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -52,17 +53,47 @@ export function makeMcc19PalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Find the N-th palindrome in base K. Palindromes read the same forwards and backwards. Enumerate by length: first half determines the whole number!",
-        "K진법에서 N번째 회문수를 찾아. 회문은 앞뒤로 읽어도 같아. 길이별로 열거: 앞 절반이 전체를 결정해!"),
+        "List all palindromes in base K (digits 0..K-1, no leading zeros except '0' itself) in INCREASING numeric order.\nPrint the N-th palindrome (1-indexed) in this list, written in base K.",
+        "K 진법 (자릿수 0..K-1, '0' 자체 외에는 선행 0 없음) 의 모든 회문수를 작은 숫자부터 큰 숫자 순으로 나열해요.\n그 목록의 N 번째 (1-indexed) 회문수를 K 진법으로 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🔄</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Palindrome</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P6</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Palindromes of length L are determined by the first ceil(L/2) digits. Count how many exist per length, then construct the N-th one.",
-              "핵심: 길이 L의 회문은 처음 ceil(L/2)자리로 결정돼. 길이별 개수를 세고 N번째를 구성해.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🔄</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Palindrome</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P6</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "palindrome", "회문수")}</b>
+                  {t(E, " reads the same forward and backward (in its base-K representation).",
+                        " 는 K 진법 표현이 앞뒤로 같아요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Sort all base-K palindromes (no leading zeros) in ", "K 진법의 모든 회문수 (선행 0 없음) 를 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "increasing numeric order", "작은 숫자부터 큰 숫자 순")}</b>
+                  {t(E, ".", " 으로 정렬해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "N-th palindrome in this sorted list (in base K)", "정렬된 목록의 N 번째 회문수 (K 진법으로)")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -70,8 +101,7 @@ export function makeMcc19PalCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Base 10 palindromes in order: 1,2,3,...,9,11,22,...,99,101,... The first 9 are single digits. The 10th palindrome is?",
-        "10진법 회문 순서: 1,2,3,...,9,11,22,...,99,101,... 처음 9개는 한 자리. 10번째 회문은?"),
+        "Base 10 palindromes in order: 1,2,3,...,9,11,22,...,99,101,...\nThe first 9 are single digits.\nThe 10th palindrome is?", "10진법 회문 순서: 1,2,3,...,9,11,22,...,99,101,... 처음 9개는 한 자리. 10번째 회문은?"),
       question: t(E,
         "Base 10: what is the 10th palindrome?",
         "10진법: 10번째 회문은?"),
@@ -83,14 +113,13 @@ export function makeMcc19PalCh1(E) {
       correct: 1,
       explain: t(E,
         "Correct! 1-9 are the first 9 palindromes. The 10th is 11 (first 2-digit palindrome).",
-        "맞아! 1-9가 처음 9개 회문이야. 10번째는 11 (첫 번째 2자리 회문)."),
+        "맞아! 1-9가 처음 9개 회문이에요. 10번째는 11 (첫 번째 2자리 회문)."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "Base 10 palindromes: 1,2,...,9,11,22,... What is the 10th palindrome?",
-        "10진법 회문: 1,2,...,9,11,22,... 10번째 회문은?"),
+        "Base 10 palindromes: 1,2,...,9,11,22,... What is the 10th palindrome?", "10진법 회문: 1,2,...,9,11,22,... 10번째 회문은?"),
       question: t(E,
         "10th palindrome in base 10 = ?",
         "10진법 10번째 회문 = ?"),
@@ -106,33 +135,51 @@ export function makeMcc19PalCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeMcc19PalCh2(E) {
+export function makeMcc19PalCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Count palindromes per length, find which length contains N-th, construct it from the first half. O(log N) per query!",
-        "길이별 회문 개수를 세고, N번째가 포함된 길이를 찾아 앞 절반에서 구성. 쿼리당 O(log N)!"),
+        "Count palindromes per length L: (K−1) × K^(ceil(L/2)−1). Find the L containing the N-th by subtracting counts. Inside that length, decode the first ⌈L/2⌉ digits in base K, then mirror to form the full palindrome.",
+        "길이 L 의 회문 개수: (K−1) × K^(ceil(L/2)−1). 누적 개수를 빼가며 N 번째가 들어있는 L 을 찾기. 그 안에서 앞 ⌈L/2⌉ 자리를 K 진법으로 디코드, 거울 대칭으로 회문 완성."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(log N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "For each length L: (K-1) × K^(ceil(L/2)-1) palindromes exist. Skip lengths until we find the right one, then construct from first half digits.",
-              "각 길이 L: (K-1) × K^(ceil(L/2)-1)개의 회문이 존재. 맞는 길이를 찾을 때까지 건너뛰고 앞 절반 숫자로 구성.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "For each length L = 1, 2, …", "각 길이 L = 1, 2, … 마다"), code: "while N > count(L): N -= count(L); L += 1", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Decode first half digits", "앞 절반 자리 디코드"), code: "first_half = base_K_repr(N - 1, half)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Mirror to form full palindrome", "거울 대칭으로 완성"), code: "full = first_half + reverse(first_half[:half_excl_middle])", color: "#0891b2" },
+              { n: 4, label: t(E, "Print palindrome", "회문 출력"), code: "print(full)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "L grows logarithmically; constant per length", "L 은 로그 증가; 길이당 상수")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the palindrome enumeration solution!",
-        "회문 열거 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMcc19PalSections(E),
     },
   ];
 }

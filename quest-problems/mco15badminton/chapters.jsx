@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getBadmintonSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -41,17 +42,47 @@ export function makeBadmintonCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Simulate a badminton match! Best of 3 games, first to 21 points wins each game. Given a string of A/B indicating who scored each rally, output the score per game and the overall winner.",
-        "배드민턴 경기를 시뮬레이션해! 3전 2선승제이고, 각 게임은 21점 먼저 따면 이겨. A/B로 구성된 문자열이 주어지면, 게임별 점수와 최종 승자를 출력해!"),
+        "Two players A and B play badminton: best-of-3 games, each game won by the first to 21 points. You're given a string of A/B characters in order — each character is who won that rally.\nPrint each game's final score and the overall match winner.",
+        "두 선수 A 와 B 가 배드민턴: 3전 2선승제, 각 게임은 21 점 먼저 따면 승. 랠리 순서대로 A/B 가 적힌 문자열이 주어져요 — 각 문자는 그 랠리의 승자.\n각 게임의 최종 점수와 매치의 최종 승자를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udff8"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Badminton</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Scan through the string, tracking scores. When someone reaches 21, record the game result and reset. The first player to win 2 games wins the match.",
-              "핵심: 문자열을 순회하며 점수를 추적해. 21점에 도달하면 게임 결과를 기록하고 초기화. 2게임을 먼저 이기는 선수가 매치 승리.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udff8"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Badminton</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P1</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#059669" }}>{t(E, "Two players A and B play badminton", "두 선수 A 와 B 가 배드민턴")}</b>
+                  {t(E, " — best-of-3 games; each game won by the first to ", " — 3전 2선승제; 각 게임은 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "21 points", "21 점")}</b>
+                  {t(E, " (no win-by-2).", " 먼저 (2 점 차 규칙 없음).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We're given the rally winners as a ", "랠리 승자가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "string of A/B characters in order", "순서대로 A/B 문자열")}</b>
+                  {t(E, ".", " 로 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "each game's final score and the overall match winner", "각 게임의 최종 점수와 매치 최종 승자")}</b>
+                  {t(E, ".", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -59,8 +90,7 @@ export function makeBadmintonCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In best-of-3, one player needs to win 2 games to win the match. If Player A wins the first two games, is a third game played?",
-        "3전 2선승제에서 한 선수가 매치를 이기려면 2게임을 이겨야 해. A가 처음 두 게임을 이기면 세 번째 게임을 하나?"),
+        "In best-of-3, one player needs to win 2 games to win the match.\nIf Player A wins the first two games, is a third game played?", "3전 2선승제에서 한 선수가 매치를 이기려면 2게임을 이겨야 해요. A가 처음 두 게임을 이기면 세 번째 게임을 하나?"),
       question: t(E,
         "A wins first 2 games. Is a 3rd game played?",
         "A가 처음 2게임을 이김. 3번째 게임을 하나?"),
@@ -77,8 +107,7 @@ export function makeBadmintonCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If 42 consecutive A's are scored ('AAA...A'), A wins 21-0 twice. How many games are played?",
-        "42개의 연속 A가 입력되면 ('AAA...A'), A가 21-0으로 두 번 이겨. 총 몇 게임이 진행될까?"),
+        "If 42 consecutive A's are scored ('AAA...A'), A wins 21-0 twice.\nHow many games are played?", "42개의 연속 A가 입력되면 ('AAA...A'), A가 21-0으로 두 번 이겨. 총 몇 게임이 진행될까요?"),
       question: t(E,
         "Input: 42 A's in a row. How many games are played total?",
         "입력: A가 42개 연속. 총 몇 게임이 진행되나?"),
@@ -94,33 +123,51 @@ export function makeBadmintonCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeBadmintonCh2(E) {
+export function makeBadmintonCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Simple simulation: scan the string once, tracking scores and game results. O(N) time where N is the length of the string.",
-        "간단한 시뮬레이션: 문자열을 한 번 순회하며 점수와 게임 결과를 추적해. 문자열 길이 N에 대해 O(N) 시간."),
+        "Walk through the rally string char by char, tracking each game's score. When one player hits 21, save the score, reset, and bump that player's game count. Stop at 2 game wins.",
+        "랠리 문자열을 한 글자씩 순회하며 각 게임 점수 추적. 한 쪽이 21 점 도달 시 점수 저장, 초기화, 그 쪽 게임 승수 증가. 2 게임 승 달성 시 종료."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Simulation: iterate through each character. Track game_a, game_b scores. When one hits 21, record result, reset, increment wins. Stop when someone has 2 wins.",
-              "시뮬레이션: 각 문자를 순회. game_a, game_b 점수 추적. 21점 도달 시 결과 기록, 초기화, 승수 증가. 2승 달성 시 종료.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Init scores and game wins", "점수와 게임 승수 초기화"), code: "sa = sb = 0;  wa = wb = 0", color: "#059669" },
+              { n: 2, label: t(E, "For each rally char", "각 랠리 글자"), code: "for c in rallies: if c == 'A': sa += 1 else: sb += 1", color: "#7c3aed" },
+              { n: 3, label: t(E, "On 21, record + reset + bump", "21 점 도달 시 기록·초기화·승수+1"), code: "if sa == 21: scores.append((21, sb)); wa += 1; sa = sb = 0  (similar for B)", color: "#0891b2" },
+              { n: 4, label: t(E, "Print scores + winner", "점수 + 승자 출력"), code: "print(each game score, then 'A' if wa > wb else 'B')", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full simulation solution!",
-        "전체 시뮬레이션 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getBadmintonSections(E),
     },
   ];
 }

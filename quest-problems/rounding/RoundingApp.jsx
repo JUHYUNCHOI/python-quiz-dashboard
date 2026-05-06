@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal, CodeBlock } from "@/components/quest/shared";
 import { CodeCompare3, BruteRunner, SpeedScale, ProgressiveCode, downloadFullPDF } from "./components";
+import { useCodeLang } from "@/components/quest/use-code-lang";
 
 import {
   makeCh1, makePatternSteps, makeBruteSteps, makeOptSteps, getOptSections,
@@ -23,7 +24,7 @@ export default function RoundingApp(props = {}) {
   });
   const E = lang === "en";
   // 코드 언어 — 인앱 코드 + PDF 모두 적용 (Python / C++)
-  const [codeLang, setCodeLang] = useState("py");
+  const [codeLang, setCodeLang] = useCodeLang();
 
   // codeLang 바뀌면 brute 스텝 새로 빌드 (답변 진행 상태는 보존)
   useEffect(() => {
@@ -39,8 +40,21 @@ export default function RoundingApp(props = {}) {
   }, [propLang]);
 
   // --- Navigation ---
-  const [tab, setTab] = useState(0);
-  const [si, setSi]   = useState(0);
+  // Persist tab/si in localStorage so refresh keeps the student on the same step
+  const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";
+  const _loadPos = () => {
+    if (typeof window === "undefined") return { tab: 0, si: 0 };
+    try { return JSON.parse(window.localStorage.getItem(_posKey) || "{}"); } catch { return {}; }
+  };
+  const _initial = _loadPos();
+  const [tab, setTab] = useState(typeof _initial.tab === "number" ? _initial.tab : 0);
+  const [si, setSi]   = useState(typeof _initial.si === "number" ? _initial.si : 0);
+
+  // Save tab + si to localStorage on every change (must come after tab/si declared)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+  }, [tab, si, _posKey]);
 
   // 학생이 가본 적 있는 탭 — 탭 라벨에 ✓ 표시 용
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
@@ -104,9 +118,19 @@ export default function RoundingApp(props = {}) {
     ((tab >= 1) && step.type === "quiz" && step.answered == null) ||
     ((tab >= 1) && step.type === "input" && !step.solved);
 
-  const canNext = cur < steps.length - 1;
+  const canNext = cur < steps.length - 1 || tab < TABS.length - 1;
 
   const next = () => {
+    if (cur < steps.length - 1) {
+      setSi(cur + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (tab < TABS.length - 1) {
+      changeTab(tab + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
     if (!canNext) return;
     setSi(cur + 1);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -162,7 +186,7 @@ export default function RoundingApp(props = {}) {
     if (step.type === "compare3") return <CodeCompare3 E={E} />;
     if (step.type === "runner")   return <BruteRunner E={E} />;
     if (step.type === "scale")    return <SpeedScale E={E} />;
-    if (step.type === "progressive") return <ProgressiveCode E={E} sections={step.sections} />;
+    if (step.type === "progressive") return <ProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
 
     return null;
   };
@@ -172,7 +196,7 @@ export default function RoundingApp(props = {}) {
 
   return (
     <div>
-      <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto", padding: "0 12px" }}>
+      <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         {/* --- 상단 progress bar — 수업 페이지와 위치 일치 --- */}
         <div style={{ height: 3, background: "#e5e7eb", borderRadius: 2, marginTop: 8, marginBottom: 10, overflow: "hidden" }}>
           <div style={{ height: "100%", background: C.accent, borderRadius: 2, width: `${((cur + 1) / steps.length) * 100}%`, transition: "width .3s" }} />
@@ -243,12 +267,12 @@ export default function RoundingApp(props = {}) {
           {renderContent()}
         </div>
 
-        <div style={{ height: 70 }} />
+        <div style={{ height: 110 }} />
       </div>
 
       {/* Fixed bottom navigation */}
-      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "6px 16px 12px", zIndex: 100 }}>
-        <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto", padding: "0 12px" }}>
+      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "8px 16px calc(14px + env(safe-area-inset-bottom))", zIndex: 100, borderTop: `1px solid ${C.border}`, boxShadow: "0 -4px 12px rgba(0,0,0,.06)" }}>
+        <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
           {showAnswerHint && (
             <div style={{ textAlign: "center", fontSize: 11, color: C.dim, fontWeight: 600, marginBottom: 4 }}>
               {t(E, "💡 Tip: try answering above. (You can skip too — →)",

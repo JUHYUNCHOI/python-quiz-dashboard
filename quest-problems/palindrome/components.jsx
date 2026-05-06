@@ -1,0 +1,411 @@
+import { useState, useRef } from "react";
+import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
+import { C, t } from "@/components/quest/theme";
+import { CodeBlock } from "@/components/quest/shared";
+
+const A = "#9333ea";
+
+/* ═══════════════════════════════════════════════════════════════
+   PalindromeSim — DP table for can_win[n], step through fill
+   ═══════════════════════════════════════════════════════════════ */
+function _isPalindrome(n) { const s = String(n); return s === s.split("").reverse().join(""); }
+function _palisUpTo(S) { const out = []; for (let p = 1; p <= S; p++) if (_isPalindrome(p)) out.push(p); return out; }
+const _PA_PRESETS = [4, 8, 10, 22];
+
+export function PalindromeSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [si, setSi] = useState(0);
+  const S = _PA_PRESETS[pi];
+  const palis = _palisUpTo(S);
+  const canWin = [false];
+  const reasons = [null];
+  for (let n = 1; n <= S; n++) {
+    let win = false;
+    let reason = null;
+    for (const p of palis) {
+      if (p > n) break;
+      if (!canWin[n - p]) { win = true; reason = p; break; }
+    }
+    canWin.push(win);
+    reasons.push(reason);
+  }
+  const cur = Math.min(si, S);
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
+        {_PA_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>S = {p}</button>
+        ))}
+      </div>
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "8px 12px", marginBottom: 10, fontSize: 11, color: C.dim, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+        palindromes ≤ S: [{palis.join(", ")}]
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(S+1, 12)}, 1fr)`, gap: 4, marginBottom: 12 }}>
+        {Array.from({ length: S + 1 }, (_, n) => {
+          const filled = n <= cur;
+          const isCur = n === cur;
+          return (
+            <div key={n} style={{
+              padding: "4px 0", borderRadius: 6, textAlign: "center",
+              background: !filled ? "#f3f4f6" : (isCur ? "#fef3c7" : (canWin[n] ? "#dcfce7" : "#fee2e2")),
+              border: `2px solid ${!filled ? "#e5e7eb" : (isCur ? "#f59e0b" : (canWin[n] ? "#86efac" : "#fca5a5"))}`,
+              fontSize: 10, color: !filled ? "#9ca3af" : (canWin[n] ? "#15803d" : "#7f1d1d"),
+              fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+            }}>
+              <div>n={n}</div>
+              <div>{filled ? (canWin[n] ? "B" : "E") : "?"}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+        {cur === 0 ? (
+          t(E, "n = 0: empty pile, player to move LOSES. can_win[0] = E.",
+                "n = 0: 빈 더미, 둘 차례면 짐. can_win[0] = E.")
+        ) : canWin[cur] ? (
+          t(E, `n = ${cur}: take palindrome ${reasons[cur]} → leaves opponent at n = ${cur - reasons[cur]} (E). Bessie wins!`,
+                `n = ${cur}: 회문 ${reasons[cur]} 가져감 → 상대 n = ${cur - reasons[cur]} (E). Bessie 승!`)
+        ) : (
+          t(E, `n = ${cur}: every palindrome p ≤ ${cur} leaves opponent in B. Bessie LOSES.`,
+                `n = ${cur}: 모든 회문 p ≤ ${cur}이 상대 B 상태로. Bessie 패.`)
+        )}
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: cur === 0 ? "#b0b5c3" : A,
+          cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur} / {S}</span>
+        <button onClick={() => setSi(Math.min(S, cur + 1))} disabled={cur === S} style={{
+          background: cur === S ? "#e5e7eb" : A, border: `2px solid ${cur === S ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === S ? "#b0b5c3" : "#fff", cursor: cur === S ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+export function PalindromeRunner({ E }) {
+  const [sIn, setSIn] = useState("22");
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState(null);
+  const [liveN, setLiveN] = useState(0);
+  const alive = useRef(false);
+
+  const run = () => {
+    const S = parseInt(sIn);
+    if (!S || S < 1 || S > 100000) {
+      setResult({ error: t(E, "Invalid: S must be a positive integer ≤ 10⁵.", "잘못된 입력: S는 양의 정수, 최대 10⁵.") });
+      return;
+    }
+    setRunning(true); setResult(null); setLiveN(0);
+    alive.current = true;
+    const palis = _palisUpTo(S);
+    const cw = [false];
+    let n = 1;
+    const tick = () => {
+      if (!alive.current) { setResult({ stopped: true, lastN: n }); setRunning(false); return; }
+      if (n > S) {
+        setResult({ done: true, winner: cw[S] ? "B" : "E" });
+        setRunning(false); return;
+      }
+      let win = false;
+      for (const p of palis) {
+        if (p > n) break;
+        if (!cw[n - p]) { win = true; break; }
+      }
+      cw.push(win);
+      setLiveN(n);
+      n++;
+      const delay = S <= 50 ? 100 : (S <= 1000 ? 5 : 1);
+      setTimeout(tick, delay);
+    };
+    setTimeout(tick, 100);
+  };
+  const stop = () => { alive.current = false; };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <input value={sIn} onChange={e => setSIn(e.target.value)} disabled={running} placeholder="S"
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box", textAlign: "center" }} />
+      <button onClick={running ? stop : run} style={{
+        width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
+        fontSize: 14, fontWeight: 800, marginBottom: 10,
+        background: running ? "#dc2626" : A, color: "#fff",
+      }}>{running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Build DP", "▶ DP 만들기")}</button>
+      {(running || result?.done) && (
+        <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", textAlign: "center" }}>
+          building can_win[{liveN}]...
+        </div>
+      )}
+      {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
+      {result?.done && (
+        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 16, fontWeight: 900, textAlign: "center" }}>
+          ✅ Winner: {result.winner}
+        </div>
+      )}
+      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div>O(S · |palis|) · palindromes are sparse so this is fast</div>
+      </div>
+    </div>
+  );
+}
+
+/* Section 1: helpers — is_palindrome + list of palindromes */
+const PA_HELPER_PY = [
+  "def is_palindrome(n):",
+  "    s = str(n)",
+  "    return s == s[::-1]",
+  "",
+  "S = int(input())",
+  "palis = [p for p in range(1, S + 1) if is_palindrome(p)]",
+];
+const PA_HELPER_CPP = [
+  "#include <bits/stdc++.h>",
+  "using namespace std;",
+  "",
+  "bool is_palindrome(int n) {",
+  "    string s = to_string(n);",
+  "    string r = s;",
+  "    reverse(r.begin(), r.end());",
+  "    return s == r;",
+  "}",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
+  "    int S;",
+  "    cin >> S;",
+  "",
+  "    vector<int> palis;",
+  "    for (int p = 1; p <= S; p++) if (is_palindrome(p)) palis.push_back(p);",
+];
+
+/* Section 2: DP — can_win[n] */
+const PA_DP_PY = [
+  "# can_win[n] = True if the player to move with n stones wins",
+  "can_win = [False] * (S + 1)",
+  "for n in range(1, S + 1):",
+  "    for p in palis:",
+  "        if p > n: break",
+  "        if not can_win[n - p]:   # leave opponent in losing state",
+  "            can_win[n] = True",
+  "            break",
+];
+const PA_DP_CPP = [
+  "    vector<bool> can_win(S + 1, false);",
+  "    for (int n = 1; n <= S; n++) {",
+  "        for (int p : palis) {",
+  "            if (p > n) break;",
+  "            if (!can_win[n - p]) { can_win[n] = true; break; }",
+  "        }",
+  "    }",
+];
+
+/* Section 3: print winner */
+const PA_OUT_PY = [
+  "print('B' if can_win[S] else 'E')",
+];
+const PA_OUT_CPP = [
+  "    cout << (can_win[S] ? 'B' : 'E') << '\\n';",
+  "    return 0;",
+  "}",
+];
+
+/* Section 4: full code */
+const PA_FULL_PY = [
+  "def is_palindrome(n):",
+  "    s = str(n)",
+  "    return s == s[::-1]",
+  "",
+  "S = int(input())",
+  "palis = [p for p in range(1, S + 1) if is_palindrome(p)]",
+  "",
+  "can_win = [False] * (S + 1)",
+  "for n in range(1, S + 1):",
+  "    for p in palis:",
+  "        if p > n: break",
+  "        if not can_win[n - p]:",
+  "            can_win[n] = True",
+  "            break",
+  "",
+  "print('B' if can_win[S] else 'E')",
+];
+const PA_FULL_CPP = [
+  "#include <bits/stdc++.h>",
+  "using namespace std;",
+  "",
+  "bool is_palindrome(int n) {",
+  "    string s = to_string(n);",
+  "    string r = s; reverse(r.begin(), r.end());",
+  "    return s == r;",
+  "}",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
+  "    int S; cin >> S;",
+  "",
+  "    vector<int> palis;",
+  "    for (int p = 1; p <= S; p++) if (is_palindrome(p)) palis.push_back(p);",
+  "",
+  "    vector<bool> can_win(S + 1, false);",
+  "    for (int n = 1; n <= S; n++) {",
+  "        for (int p : palis) {",
+  "            if (p > n) break;",
+  "            if (!can_win[n - p]) { can_win[n] = true; break; }",
+  "        }",
+  "    }",
+  "",
+  "    cout << (can_win[S] ? 'B' : 'E') << '\\n';",
+  "    return 0;",
+  "}",
+];
+
+export function getPalindromeSections(E) {
+  return [
+    {
+      label: t(E, "📦 1. Helper + Palindromes List", "📦 1. 헬퍼 + 회문 리스트"),
+      color: A,
+      py: PA_HELPER_PY, cpp: PA_HELPER_CPP,
+      why: [
+        t(E, "is_palindrome(n) checks if n reads the same backwards.",
+            "is_palindrome(n)이 n이 거꾸로 읽어도 같은지 확인."),
+        t(E, "Pre-compute every palindrome from 1 to S — these are the legal move sizes.",
+            "1부터 S까지 모든 회문을 미리 계산 — 합법적인 이동 크기."),
+      ],
+      pyOnly: [
+        t(E, "s[::-1] reverses a string in one expression.",
+            "s[::-1]로 문자열을 한 줄에 뒤집기."),
+      ],
+      cppOnly: [
+        t(E, "to_string + reverse(begin, end) is the standard idiom.",
+            "to_string + reverse(begin, end)이 표준 관용구."),
+      ],
+    },
+    {
+      label: t(E, "🧠 2. Game-Theory DP", "🧠 2. 게임 이론 DP"),
+      color: "#0891b2",
+      py: PA_DP_PY, cpp: PA_DP_CPP,
+      why: [
+        t(E, "can_win[n] = true if the player to move with n stones can force a win.",
+            "can_win[n] = n개 돌에서 시작한 플레이어가 이길 수 있는지."),
+        t(E, "Player wins iff there exists a palindrome p ≤ n with can_win[n - p] == false (opponent loses next).",
+            "p ≤ n인 회문 중 can_win[n - p] == false (상대 패배)인 것이 있으면 승리."),
+        t(E, "Bottom-up fill from n = 1 to S — each state depends only on smaller ones.",
+            "n = 1부터 S까지 bottom-up — 각 상태는 더 작은 것에만 의존."),
+      ],
+      pyOnly: [
+        t(E, "break out of the inner loop as soon as any winning move is found.",
+            "이기는 수를 찾자마자 내부 루프 break."),
+      ],
+      cppOnly: [
+        t(E, "vector<bool> is compact (1 bit per element) and fast enough here.",
+            "vector<bool>은 비트 단위로 압축, 충분히 빠름."),
+      ],
+    },
+    {
+      label: t(E, "🏆 3. Print Winner", "🏆 3. 승자 출력"),
+      color: "#16a34a",
+      py: PA_OUT_PY, cpp: PA_OUT_CPP,
+      why: [
+        t(E, "Bessie moves first — she wins iff can_win[S] is true.",
+            "Bessie가 선공 — can_win[S]가 true면 Bessie 승리."),
+      ],
+    },
+    {
+      label: t(E, "🎯 4. Full Code", "🎯 4. 전체 코드"),
+      color: "#7c3aed",
+      py: PA_FULL_PY, cpp: PA_FULL_CPP,
+      why: [
+        t(E, "Total work: O(S · |palindromes|) — well within limits since palindromes are sparse.",
+            "총 작업: O(S · |palindromes|) — 회문이 드문 분포라 충분히 빠름."),
+      ],
+    },
+  ];
+}
+
+export function PalindromeProgressiveCode(props) {
+  return <ProgressiveCodeStepper {...props} accentColor="#9333ea" />;
+}
+
+const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
+const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
+function highlightHTML(line, lang) {
+  const escHTML = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const keywords = lang === "py" ? PY_KEYWORDS : CPP_KEYWORDS;
+  let comment = ""; let rest = line;
+  if (lang === "py") { const i = rest.indexOf("#"); if (i >= 0) { comment = rest.slice(i); rest = rest.slice(0, i); } }
+  else { const i = rest.indexOf("//"); if (i >= 0) { comment = rest.slice(i); rest = rest.slice(0, i); } }
+  let out = ""; let work = rest;
+  if (lang === "cpp") {
+    const ppm = work.match(/^(\s*)(#\w+)/);
+    if (ppm) { out += escHTML(ppm[1]) + `<span style="color:#c084fc;">${escHTML(ppm[2])}</span>`; work = work.slice(ppm[0].length); }
+  }
+  const re = /(\b\w+\b|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\d+|[^\w\s]|\s+)/g;
+  let m;
+  while ((m = re.exec(work)) !== null) {
+    const tok = m[0];
+    if (keywords.includes(tok)) out += `<span style="color:#c084fc;">${escHTML(tok)}</span>`;
+    else if (/^\d+$/.test(tok)) out += `<span style="color:#fbbf24;">${escHTML(tok)}</span>`;
+    else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
+    else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
+  }
+  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  return out;
+}
+function highlightCode(lines, lang) {
+  return lines.map((line, i) => {
+    const num = String(i + 1).padStart(2, " ");
+    return `<span style="color:#475569;display:inline-block;width:24px;text-align:right;margin-right:10px;user-select:none;">${num}</span>${highlightHTML(line, lang) || "&nbsp;"}`;
+  }).join("\n");
+}
+
+export function downloadPalindromePDF(E, sections, lang = "py") {
+  const win = window.open("", "_blank");
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
+  const fileTitle = t(E, "Palindrome Game — Full Study Guide", "🎲 Palindrome Game — 종합 풀이 노트");
+  const codeBlock = (lines) => `<pre>${highlightCode(lines, lang)}</pre>`;
+  const sectionCode = (s) => codeBlock(lang === "py" ? s.py : s.cpp);
+  const html = `<!doctype html>
+<html><head><meta charset="utf-8"><title>${fileTitle}</title>
+<style>
+  @page { margin: 14mm; }
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; color: #1f2937; line-height: 1.55; max-width: 820px; margin: 0 auto; padding: 12px; font-size: 13px; }
+  h1 { font-size: 22px; margin: 0 0 4px; color: ${A}; }
+  .sub { color: #6b7280; font-size: 12px; margin-bottom: 18px; }
+  h2 { font-size: 17px; padding: 8px 12px; border-radius: 8px; margin: 22px 0 10px; background: ${A}; color: white; }
+  h3 { font-size: 14px; margin: 14px 0 6px; color: ${A}; }
+  .why { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; margin: 8px 0; font-size: 12px; page-break-inside: avoid; }
+  .why b { color: ${A}; }
+  .why ul { margin: 4px 0 0; padding-left: 18px; }
+  pre { background: #0f172a; padding: 10px 14px; border-radius: 8px; font-family: "JetBrains Mono", monospace; font-size: 11.5px; overflow-x: auto; white-space: pre; word-break: keep-all; page-break-inside: avoid; margin: 8px 0 12px; line-height: 1.55; }
+  pre span { font-family: inherit; }
+  .lang-tag { display: inline-block; background: ${A}; color: white; padding: 3px 10px; border-radius: 5px; font-size: 12px; margin-left: 8px; vertical-align: middle; font-weight: 800; }
+  .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
+  @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
+</style></head><body>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
+<div class="sub">USACO 2024 Feb Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+${sections.map(s => `
+  <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
+  <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
+  ${sectionCode(s)}
+`).join("")}
+<div style="margin-top:30px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e5e7eb;padding-top:8px;">© Coderin · 코드린</div>
+</body></html>`;
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => { win.focus(); win.print(); }, 500);
+}

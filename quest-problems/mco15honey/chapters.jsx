@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getHoneySections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -7,22 +8,17 @@ export const SOLUTION_CODE = [
   "N, M, K = map(int, input().split())",
   "hives = [int(input()) for _ in range(N)]",
   "",
-  "hives.sort(reverse=True)",
+  "# Each trip to a hive collects min(M, remaining honey).",
+  "# Build the list of all possible per-trip yields, then take the K largest.",
+  "yields = []",
+  "for h in hives:",
+  "    while h > 0:",
+  "        take = min(M, h)",
+  "        yields.append(take)",
+  "        h -= take",
   "",
-  "total = 0",
-  "trips_left = K",
-  "",
-  "for honey in hives:",
-  "    if trips_left <= 0:",
-  "        break",
-  "    # How many full trips to empty this hive?",
-  "    trips_needed = (honey + M - 1) // M  # ceil(honey / M)",
-  "    trips_used = min(trips_needed, trips_left)",
-  "    collected = min(honey, trips_used * M)",
-  "    total += collected",
-  "    trips_left -= trips_used",
-  "",
-  "print(total)",
+  "yields.sort(reverse=True)",
+  "print(sum(yields[:K]))",
 ];
 
 
@@ -35,17 +31,49 @@ export function makeHoneyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A squirrel collects honey from N beehives using a pot that holds M ml. It can make at most K trips. Each trip: pick one hive, collect min(remaining, M). Maximize total honey collected!",
-        "다람쥐가 M ml 용량의 항아리로 N개 벌집에서 꿀을 모아. 최대 K번 왕복 가능. 매 왕복: 벌집 하나를 골라 min(남은양, M)만큼 수집. 총 꿀을 최대화해!"),
+        "A squirrel collects honey using a pot of capacity M ml. There are N beehives with given honey amounts h[1..N]. The squirrel can make AT MOST K trips. Each trip: visit ONE hive and take min(remaining honey there, M) into the pot.\nMaximize the TOTAL honey collected.",
+        "다람쥐가 용량이 M ml 인 항아리로 꿀을 모아요. N 개의 벌집에 각자 꿀 양 h[1..N] 이 있어요. 다람쥐는 최대 K 번 왕복(한 번 가서 가져오기) 가능. 매 왕복: 벌집 1 개를 방문해 min (그곳의 남은 꿀, M) 만큼 가져와요.\n수집한 꿀의 총량 최댓값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udf6f"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Honey</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Greedy approach - sort hives by honey amount in descending order. Use trips on the largest hives first to maximize collection.",
-              "핵심: 그리디 접근 - 벌집을 꿀 양 내림차순으로 정렬. 가장 큰 벌집부터 왕복을 사용해서 수집량을 최대화.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf6f"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Honey</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P2</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A squirrel has a ", "다람쥐가 ")}
+                  <b style={{ color: "#d97706" }}>{t(E, "pot of capacity M ml", "용량이 M ml 인 항아리")}</b>
+                  {t(E, " and faces ", " 를 들고 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "N beehives with honey h[1..N]", "꿀 양 h[1..N] 을 가진 N 개의 벌집")}</b>
+                  {t(E, ".", " 을 만나요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "She can make at most ", "최대 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "K trips", "K 번 왕복(한 번 가서 가져오기)")}</b>
+                  {t(E, "; each trip visits ONE hive and takes min (remaining honey there, M).",
+                        " 가능; 매 왕복: 벌집 1 개를 방문해 min (그곳의 남은 꿀, M) 만큼 가져와요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM total honey collected", "수집한 꿀의 총량 최댓값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -53,8 +81,7 @@ export function makeHoneyCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Why do we sort the hives in descending order? Think about maximizing honey per trip.",
-        "왜 벌집을 내림차순으로 정렬할까? 왕복당 꿀 수집량 최대화를 생각해봐."),
+        "Why do we sort the hives in descending order? Think about maximizing honey per trip.", "왜 벌집을 내림차순으로 정렬할까? 왕복당 꿀 수집량 최대화를 생각해봐요."),
       question: t(E,
         "Why sort hives descending by honey amount?",
         "왜 벌집을 꿀 양 내림차순으로 정렬하나?"),
@@ -65,14 +92,13 @@ export function makeHoneyCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! Each trip collects at most M ml. Visiting larger hives first ensures each trip collects as close to M as possible.",
-        "맞아! 각 왕복은 최대 M ml 수집. 큰 벌집부터 방문하면 매 왕복마다 M에 가깝게 수집할 수 있어."),
+        "맞아! 각 왕복은 최대 M ml 수집. 큰 벌집부터 방문하면 매 왕복마다 M에 가깝게 수집할 수 있어요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "If the pot holds M=10 ml and a hive has 25 ml of honey, how many trips are needed to collect all the honey from that hive?",
-        "항아리 용량 M=10 ml이고 벌집에 꿀이 25 ml 있으면, 그 벌집의 꿀을 다 모으려면 몇 번 왕복해야 할까?"),
+        "If the pot holds M=10 ml and a hive has 25 ml of honey, how many trips are needed to collect all the honey from that hive?", "항아리 용량 M=10 ml이고 벌집에 꿀이 25 ml 있으면, 그 벌집의 꿀을 다 모으려면 몇 번 왕복해야 할까?"),
       question: t(E,
         "Pot M=10, hive has 25 honey. Trips to empty it? (10+10+5)",
         "항아리 M=10, 벌집에 꿀 25. 다 모으려면 왕복 횟수? (10+10+5)"),
@@ -88,33 +114,51 @@ export function makeHoneyCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeHoneyCh2(E) {
+export function makeHoneyCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Sort the hives, then greedily assign trips. O(N log N) for sorting, O(N) for the greedy pass.",
-        "벌집을 정렬한 뒤, 그리디하게 왕복을 배정해. 정렬에 O(N log N), 그리디 패스에 O(N)."),
+        "Greedy: sort hives by honey amount DESCENDING. For each hive in order, use trips needed = ceil(honey / M) — capped by remaining trips. Add the collected amount.",
+        "그리디: 벌집을 꿀 양 내림차순 정렬. 순서대로 각 벌집마다, 필요한 왕복 = ceil(꿀/M) — 남은 왕복으로 제한. 수집량 누적."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Greedy: sort descending. For each hive, compute trips needed = ceil(honey/M). Use min(trips_needed, trips_left) trips, collecting min(honey, trips_used * M).",
-              "그리디: 내림차순 정렬. 각 벌집에 대해 필요한 왕복 = ceil(honey/M). min(필요 왕복, 남은 왕복)만큼 사용, min(honey, 사용 왕복 * M) 수집.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Sort hives descending", "벌집 내림차순 정렬"), code: "hives.sort(reverse=True)", color: "#d97706" },
+              { n: 2, label: t(E, "For each hive in order", "순서대로 각 벌집"), code: "for h in hives: if K == 0: break", color: "#7c3aed" },
+              { n: 3, label: t(E, "Use trips for this hive", "이 벌집에 왕복 사용"), code: "need = (h + M - 1) // M;  used = min(need, K)", color: "#0891b2" },
+              { n: 4, label: t(E, "Add collected, decrement K", "수집량 누적, K 감소"), code: "total += min(h, used * M);  K -= used;  print(total)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort dominates", "정렬이 지배적")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full greedy solution!",
-        "전체 그리디 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getHoneySections(E),
     },
   ];
 }

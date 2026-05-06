@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getSimpleGameSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -26,17 +27,46 @@ export function makeSimpleGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two players take turns removing 1 to 3 stones from a pile of N stones. The player who takes the last stone wins. Who wins with optimal play?",
-        "두 플레이어가 번갈아 N개의 돌 더미에서 1~3개를 가져가. 마지막 돌을 가져가는 사람이 이겨. 최적의 플레이에서 누가 이길까?"),
+        "Two players take turns removing 1, 2, or 3 stones from a pile of N stones. The player who takes the LAST stone wins. Both play OPTIMALLY.\nPrint who wins (FIRST or SECOND).",
+        "두 플레이어가 N 개의 돌 더미에서 1, 2, 또는 3 개를 번갈아 가져가요. 마지막 돌을 가져가는 사람이 이겨요. 둘 다 최선을 다 해요.\n승자 (FIRST 또는 SECOND) 를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83c\udfae"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Simple Game</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P4</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: This is a classic Nim game. Losing positions are multiples of 4. If N % 4 == 0, the second player wins; otherwise, the first player wins.",
-              "핵심: 이것은 고전적인 님 게임이야. 지는 위치는 4의 배수야. N % 4 == 0이면 후수 승, 아니면 선수 승.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udfae"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Simple Game</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P4</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#dc2626" }}>{t(E, "A pile of N stones; two players alternate", "N 개의 돌 더미; 두 플레이어가 번갈아")}</b>
+                  {t(E, ".", "")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "On a turn, take ", "자기 차례에 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "1, 2, or 3 stones", "1, 2, 또는 3 개의 돌")}</b>
+                  {t(E, " from the pile. The player taking the LAST stone wins.",
+                        " 을 가져가요. 마지막 돌을 가져가는 사람이 승.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "winner (FIRST or SECOND) under optimal play", "최선의 수일 때 승자 (FIRST 또는 SECOND)")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -44,8 +74,7 @@ export function makeSimpleGameCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If N=5, the first player takes 1 stone, leaving 4. Now the opponent faces a multiple of 4 - a losing position!",
-        "N=5이면, 선수가 돌 1개를 가져가서 4개를 남겨. 상대는 4의 배수를 마주해 - 지는 위치야!"),
+        "If N=5, the first player takes 1 stone, leaving 4.\nNow the opponent faces a multiple of 4 - a losing position!", "N=5이면, 선수가 돌 1개를 가져가서 4개를 남겨. 상대는 4의 배수를 마주해 - 지는 위치예요!"),
       question: t(E,
         "N=5. Who wins with optimal play?",
         "N=5. 최적 플레이에서 누가 이겨?"),
@@ -62,14 +91,13 @@ export function makeSimpleGameCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "N=8. Since 8 is a multiple of 4, who wins? Enter 1 for first player, 2 for second player.",
-        "N=8. 8은 4의 배수야. 누가 이겨? 선수면 1, 후수면 2를 입력해."),
+        "N=8. Since 8 is a multiple of 4, who wins? Enter 1 for first player, 2 for second player.", "N=8. 8은 4의 배수예요. 누가 이겨? 선수면 1, 후수면 2를 입력해요."),
       question: t(E,
         "N=8. Who wins? (1=first, 2=second)",
         "N=8. 누가 이겨? (1=선수, 2=후수)"),
       hint: t(E,
         "8 % 4 == 0. Multiples of 4 are losing for the player whose turn it is.",
-        "8 % 4 == 0. 4의 배수는 차례인 사람이 지는 위치야."),
+        "8 % 4 == 0. 4의 배수는 차례인 사람이 지는 위치예요."),
       answer: 2,
     },
   ];
@@ -79,33 +107,51 @@ export function makeSimpleGameCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeSimpleGameCh2(E) {
+export function makeSimpleGameCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Just check N mod 4. O(1) time!",
-        "N mod 4만 확인하면 돼. O(1) 시간!"),
+        "Game theory: with moves {1, 2, 3}, the LOSING positions are exactly multiples of 4 (face N=0, 4, 8, ... and you lose). So FIRST player wins unless N % 4 == 0.",
+        "게임 이론: 이동 {1, 2, 3} 일 때 지는 위치는 정확히 4 의 배수 (N=0, 4, 8, ... 에서 자기 차례면 짐). 즉 N % 4 == 0 이 아니면 FIRST 승."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Game theory insight: in a take-away game with moves {1,2,3}, losing positions are exactly multiples of 4.",
-              "게임 이론: 이동이 {1,2,3}인 가져가기 게임에서 지는 위치는 정확히 4의 배수야.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read N", "N 읽기"), code: "N = int(input())", color: "#dc2626" },
+              { n: 2, label: t(E, "Check N mod 4", "N mod 4 확인"), code: "mod = N % 4", color: "#7c3aed" },
+              { n: 3, label: t(E, "FIRST loses if mod == 0", "mod == 0 이면 FIRST 짐"), code: "if mod == 0: print('SECOND')", color: "#0891b2" },
+              { n: 4, label: t(E, "Otherwise FIRST wins", "아니면 FIRST 승"), code: "else: print('FIRST')", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(1)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single modulo operation", "한 번의 modulo 연산")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the one-liner game theory solution!",
-        "한 줄짜리 게임 이론 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getSimpleGameSections(E),
     },
   ];
 }

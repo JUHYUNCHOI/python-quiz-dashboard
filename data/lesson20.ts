@@ -389,7 +389,7 @@ for w in words:
           type: "tryit",
           title: "🖥️ 직접 해보기 — 단어 빈도 카운트",
           task: "글자 빈도수를 세는 딕셔너리를 만들어 보세요. (가장 자주 나오는 글자 1 개도)",
-          initialCode: "text = \"banana\"\n\n# 글자 빈도 카운트\ncount = {}\nfor ch in text:\n    count[ch] = count.___(ch, ___) + 1\n\nprint(count)\n\n# 가장 많이 나온 글자 (가장 큰 value 의 key)\ntop = max(count, key=count.get)\nprint(f\"top: {top} ({count[top]} 번)\")",
+          initialCode: "text = \"banana\"\n\n# 글자 빈도 카운트\ncount = {}\nfor ch in text:\n    count[ch] = count.___(ch, ___) + 1\n\nprint(count)\n\n# 가장 많이 나온 글자 (가장 큰 value 의 key)\ntop_ch = \"\"\ntop_n = 0\nfor ch, n in count.items():\n    if n > top_n:\n        top_n = n\n        top_ch = ch\nprint(f\"top: {top_ch} ({top_n} 번)\")",
           expectedOutput: "{'b': 1, 'a': 3, 'n': 2}\ntop: a (3 번)",
           hint: "count.get(ch, 0) + 1 — 없으면 0, 있으면 그 값에 +1.",
           hint2: "count[ch] = count.get(ch, 0) + 1"
@@ -454,21 +454,21 @@ print(flipped)
           type: "mission",
           title: "🏆 미션 2 — 학생 성적 분석",
           task: "학생-점수 딕셔너리에서 **평균, 최고점 학생, 합격자 (60 이상) 명단** 을 출력하세요.",
-          initialCode: "grades = {\"철수\": 85, \"영희\": 92, \"민수\": 55, \"수지\": 78, \"준호\": 60}\n\n# 평균 (소수 첫째 자리)\nscores = list(grades.values())\navg = sum(scores) / len(scores)\nprint(f\"평균: {avg:.1f}\")\n\n# 최고점 학생 — max + key=...\ntop = max(grades, key=___)\nprint(f\"최고: {top} ({grades[top]}점)\")\n\n# 합격자 (60 이상) 명단\npassed = [name for name, s in grades.items() if s >= ___]\nprint(f\"합격자: {sorted(passed)}\")",
+          initialCode: "grades = {\"철수\": 85, \"영희\": 92, \"민수\": 55, \"수지\": 78, \"준호\": 60}\n\n# 평균 (소수 첫째 자리)\nscores = list(grades.values())\navg = sum(scores) / len(scores)\nprint(f\"평균: {avg:.1f}\")\n\n# 최고점 학생 — for 로 1 등 추적\ntop_name = \"\"\ntop_score = -1\nfor name, score in grades.items():\n    if score > ___:\n        top_score = score\n        top_name = name\nprint(f\"최고: {top_name} ({top_score}점)\")\n\n# 합격자 (60 이상) 명단 — for 로 모으기\npassed = []\nfor name, s in grades.items():\n    if s >= ___:\n        passed.append(name)\nprint(f\"합격자: {sorted(passed)}\")",
           expectedOutput: "평균: 74.0\n최고: 영희 (92점)\n합격자: ['수지', '영희', '준호', '철수']",
-          hint: "max(grades, key=grades.get) — 점수 기준 최대 키. 합격선 60.",
-          hint2: "top = max(grades, key=grades.get)\npassed = [name for name, s in grades.items() if s >= 60]"
+          hint: "최고: 지금까지 top_score 보다 크면 갱신. 합격선 60.",
+          hint2: "if score > top_score:\n    top_score = score\n    top_name = name\n# 합격자\nif s >= 60:\n    passed.append(name)"
         },
         {
           id: "mission3",
           type: "mission",
           title: "🏆 미션 3 — 입력 단어 빈도 분석",
           task: "공백으로 구분된 단어를 입력받아 **각 단어의 등장 횟수** + **가장 자주 나온 단어** 를 출력하세요.",
-          initialCode: "words = input().split()\n\n# 빈도 카운트\ncount = {}\nfor w in words:\n    count[w] = count.___(w, 0) + 1\n\nprint(\"=== 빈도 ===\")\nfor w in sorted(count):   # 알파벳/한글 정렬\n    print(f\"{w}: {count[w]}\")\n\n# 가장 많이 나온 단어\ntop = max(count, key=count.get)\nprint(f\"\\n최다: {top} ({count[top]}회)\")",
+          initialCode: "words = input().split()\n\n# 빈도 카운트\ncount = {}\nfor w in words:\n    count[w] = count.___(w, 0) + 1\n\nprint(\"=== 빈도 ===\")\nfor w in sorted(count):   # 알파벳/한글 정렬\n    print(f\"{w}: {count[w]}\")\n\n# 가장 많이 나온 단어 — for 로 1 등 추적\ntop_word = \"\"\ntop_n = 0\nfor w, n in count.items():\n    if n > top_n:\n        top_n = n\n        top_word = w\nprint(f\"\\n최다: {top_word} ({top_n}회)\")",
           expectedOutput: "=== 빈도 ===\n감: 1\n배: 2\n사과: 3\n\n최다: 사과 (3회)",
           stdin: "사과 배 사과 감 배 사과",
-          hint: "count.get(w, 0) + 1 패턴 활용.",
-          hint2: "count[w] = count.get(w, 0) + 1"
+          hint: "count.get(w, 0) + 1 패턴 활용. 1 등은 for + if 로.",
+          hint2: "count[w] = count.get(w, 0) + 1\n# 1 등: if n > top_n: 갱신"
         },
         {
           id: "complete",

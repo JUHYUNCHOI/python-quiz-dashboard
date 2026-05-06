@@ -1,30 +1,21 @@
 import { C, t } from "@/components/quest/theme";
+import { getCheckupsSections } from "./components";
 
 export const SOLUTION_CODE = [
-  "N = int(input())",
-  "a = list(map(int, input().split()))  # FJ's breeds",
-  "b = list(map(int, input().split()))  # Bessie's breeds",
-  "",
-  "# Count matching positions",
-  "match = 0",
-  "for i in range(N):",
-  "    if a[i] == b[i]:",
-  "        match += 1",
-  "",
-  "# Count frequency of each breed in a and b",
   "from collections import Counter",
+  "",
+  "N = int(input())",
+  "a = list(map(int, input().split()))   # FJ's breeds",
+  "b = list(map(int, input().split()))   # Bessie's guesses",
+  "",
+  "# 1) Count current matches (same position, same breed)",
+  "match = sum(1 for i in range(N) if a[i] == b[i])",
+  "",
+  "# 2) Max possible after rearranging b: bottleneck per breed",
   "ca = Counter(a)",
   "cb = Counter(b)",
-  "",
-  "# Max possible matches = sum of min(ca[x], cb[x]) for each breed x",
   "max_match = sum(min(ca[x], cb.get(x, 0)) for x in ca)",
   "",
-  "# Can we get all N matching? Only if max_match >= N",
-  "# Answer: how many swaps in b to maximize matches with a?",
-  "# Actually: min swaps = N - max_match is NOT the question",
-  "# Question: count arrangements where at least half match",
-  "",
-  "# Simpler: just count current matches and max possible",
   "print(match)",
   "print(max_match)",
 ];
@@ -34,25 +25,56 @@ export function makeCheckupsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows with breed types. He checks them against Bessie's list. How many match? And what's the maximum possible? 🐮",
-        "FJ에게 N마리 소의 품종이 있어. 베시의 리스트와 비교해서 몇 개가 일치하는지, 최대 얼마나 일치시킬 수 있는지 찾자! 🐮"),
+        "FJ has N cows with breeds. Bessie guessed each breed in order.\nHow many guesses are right? And how many could be right if Bessie rearranged her guesses?",
+        "FJ에게 N마리 소가 있고 각자 품종이 있어요. Bessie가 순서대로 품종을 추측했어요.\n맞춘 개수는? 그리고 Bessie가 추측을 재배열하면 최대 몇 개 맞출 수 있을까요?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🐮</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Cow Checkups</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
-          <div style={{ marginTop: 12, background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Two arrays a[] and b[] of length N. Count positions where a[i]==b[i]. Then find max matches by rearranging b.",
-              "길이 N인 배열 a[]와 b[]. a[i]==b[i]인 위치 세기. 그리고 b를 재배열해서 최대 일치 찾기.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🐮</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Cow Checkups</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
+          </div>
+
+          {/* Problem — bullet facts */}
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has N cows in a line — each cow's ", "FJ에게 N마리 소가 줄 서 있어요 — 각 소의 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "true breed", "진짜 품종")}</b>
+                  {t(E, " is the array ", "은 배열 ")}
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>a[1..N]</code>.
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Bessie writes her ", "Bessie는 자신의 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "breed guesses", "품종 추측")}</b>
+                  {t(E, " in order: array ", "을 순서대로 적어요: 배열 ")}
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>b[1..N]</code>.
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div style={{ whiteSpace: "pre-line" }}>
+                  {t(E,
+                    "Print 2 numbers:\n  ① how many positions match right now (a[i] == b[i])\n  ② what's the MAX matches if Bessie could rearrange her guesses?",
+                    "두 숫자를 출력해요:\n  ① 지금 같은 위치에서 일치하는 개수 (a[i] == b[i])\n  ② Bessie가 추측을 재배열하면 최대 일치 수")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
     {
       type: "reveal",
       narr: t(E,
-        "Example: a=[1,2,3,1], b=[1,3,2,1]. Current matches: positions 0 and 3 (both have 1). That's 2 matches!",
-        "예시: a=[1,2,3,1], b=[1,3,2,1]. 현재 일치: 위치 0과 3 (둘 다 1). 2개 일치!"),
+        "Example: a=[1,2,3,1], b=[1,3,2,1].\nCurrent matches: positions 0 and 3 (both have 1).\nThat's 2 matches!", "예시: a=[1,2,3,1], b=[1,3,2,1]. 현재 일치: 위치 0과 3 (둘 다 1). 2개 일치!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 14 }}>
@@ -87,8 +109,7 @@ export function makeCheckupsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "For max matches: count how many of each breed appear in a[] and b[]. For breed x, we can match min(count_a[x], count_b[x]) cows.",
-        "최대 일치: 각 품종이 a[]와 b[]에 몇 번 나오는지 세고. 품종 x에 대해 min(count_a[x], count_b[x])마리를 매칭."),
+        "For max matches: count how many of each breed appear in a[] and b[].\nFor breed x, we can match min(count_a[x], count_b[x]) cows.", "최대 일치: 각 품종이 a[]와 b[]에 몇 번 나오는지 세고. 품종 x에 대해 min(count_a[x], count_b[x])마리를 매칭."),
       question: t(E,
         "a=[1,1,2], b=[1,2,2]. Max matches by rearranging b?",
         "a=[1,1,2], b=[1,2,2]. b를 재배열한 최대 일치는?"),
@@ -101,52 +122,92 @@ export function makeCheckupsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "a=[3,3,3,3,3], b=[3,3,1,1,1]. How many current matches (same position)?",
-        "a=[3,3,3,3,3], b=[3,3,1,1,1]. 현재 일치 수 (같은 위치)?"),
+        "a=[3,3,3,3,3], b=[3,3,1,1,1]. How many current matches (same position)?", "a=[3,3,3,3,3], b=[3,3,1,1,1]. 현재 일치 수 (같은 위치)?"),
       question: t(E, "Matches at same positions?", "같은 위치에서 일치 수?"),
       answer: 2,
+    },
+    {
+      type: "sim",
+      narr: t(E,
+        "Step through both phases: scanning a[i] vs b[i] for current matches, then Counter-based max.", "두 단계 따라가기: a[i] vs b[i] 스캔 (현재 일치), 그 다음 Counter 기반 최대."),
     },
   ];
 }
 
-export function makeCheckupsCh2(E) {
+export function makeCheckupsCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
       narr: t(E,
-        "The solution uses Counter (frequency map). Count frequencies in both arrays, then sum min of each breed's counts.",
-        "솔루션은 Counter(빈도맵)를 써. 두 배열의 빈도를 세고, 각 품종 빈도의 min을 합산."),
+        "Why min of each breed?\nIf a has 3 cows of breed 5 but b has only 1, you can match at most 1 (the bottleneck side).\nSum across all breeds.",
+        "왜 각 품종의 min일까요?\na에 품종 5가 3마리, b에 1마리뿐이면 최대 1마리만 매칭 (적은 쪽이 한계).\n모든 품종 합산."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text }}>
-            <div style={{ fontWeight: 800, color: C.accent, marginBottom: 6 }}>
-              {t(E, "🔧 Algorithm", "🔧 알고리즘")}
+          {/* Concrete Counter comparison */}
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, marginBottom: 12 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
+              {t(E, "Example: a = [1,1,2,3,3,3]   b = [1,2,2,3,3,4]", "예시: a = [1,1,2,3,3,3]   b = [1,2,2,3,3,4]")}
             </div>
+            <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 30px 1fr 1fr", gap: 6, alignItems: "center", fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>
+              <div style={{ fontWeight: 800, textAlign: "center", color: "#7f1d1d" }}>{t(E, "breed", "품종")}</div>
+              <div style={{ fontWeight: 800, textAlign: "center", color: "#7f1d1d" }}>ca</div>
+              <div></div>
+              <div style={{ fontWeight: 800, textAlign: "center", color: "#7f1d1d" }}>cb</div>
+              <div style={{ fontWeight: 800, textAlign: "center", color: "#15803d" }}>min</div>
+
+              {[
+                { breed: 1, ca: 2, cb: 1 },
+                { breed: 2, ca: 1, cb: 2 },
+                { breed: 3, ca: 3, cb: 2 },
+                { breed: 4, ca: 0, cb: 1 },
+              ].map((row, i) => [
+                <div key={`k${i}`} style={{ textAlign: "center", fontWeight: 800, color: "#7f1d1d" }}>{row.breed}</div>,
+                <div key={`a${i}`} style={{ textAlign: "center", padding: "4px", borderRadius: 5, background: "#fee2e2", border: "1.5px solid #fca5a5" }}>{row.ca}</div>,
+                <div key={`x${i}`} style={{ textAlign: "center", color: "#9ca3af", fontSize: 10 }}>vs</div>,
+                <div key={`b${i}`} style={{ textAlign: "center", padding: "4px", borderRadius: 5, background: "#fee2e2", border: "1.5px solid #fca5a5" }}>{row.cb}</div>,
+                <div key={`m${i}`} style={{ textAlign: "center", padding: "4px", borderRadius: 5, background: "#dcfce7", border: "1.5px solid #86efac", fontWeight: 800, color: "#15803d" }}>
+                  {Math.min(row.ca, row.cb)}
+                </div>,
+              ])}
+            </div>
+            <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, fontWeight: 900, color: "#15803d", fontFamily: "'JetBrains Mono',monospace" }}>
+              max_match = 1 + 1 + 2 + 0 = <span style={{ fontSize: 17 }}>4</span>
+            </div>
+          </div>
+
+          {/* Algorithm */}
+          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: "10px 14px", fontSize: 12.5, lineHeight: 1.8, color: C.text, whiteSpace: "pre-line" }}>
+            <div style={{ fontWeight: 800, color: C.accent, marginBottom: 4 }}>{t(E, "🔧 Algorithm", "🔧 알고리즘")}</div>
             {t(E,
-              "1. Count breed frequencies in a[] → Counter(a)\n2. Count breed frequencies in b[] → Counter(b)\n3. For each breed x: add min(count_a[x], count_b[x])\n4. That's the maximum possible matches!",
-              "1. a[]의 품종 빈도 → Counter(a)\n2. b[]의 품종 빈도 → Counter(b)\n3. 각 품종 x: min(count_a[x], count_b[x]) 더하기\n4. 그게 가능한 최대 일치!")}
+              "1. ca = Counter(a), cb = Counter(b)\n2. max_match = sum( min(ca[x], cb[x]) )  for every breed x",
+              "1. ca = Counter(a), cb = Counter(b)\n2. max_match = 모든 품종 x에 대해 min(ca[x], cb[x]) 합산")}
           </div>
         </div>),
     },
     {
       type: "quiz",
       narr: t(E,
-        "Time complexity: counting frequencies is O(N), then iterating over breeds is at most O(N). Total: O(N)!",
-        "시간복잡도: 빈도 세기 O(N), 품종 순회 최대 O(N). 합계: O(N)!"),
-      question: t(E, "What data structure is best for counting frequencies?", "빈도 세기에 가장 좋은 자료구조는?"),
-      options: [
-        t(E, "Dictionary / Counter", "딕셔너리 / Counter"),
-        t(E, "Sorted array", "정렬된 배열"),
-        t(E, "Linked list", "링크드 리스트"),
-      ],
-      correct: 0,
-      explain: t(E, "Dictionary gives O(1) lookup and increment. Counter is Python's built-in frequency map!", "딕셔너리는 O(1) 조회와 증가. Counter는 파이썬 내장 빈도맵!"),
+        "Practice: a = [1, 1, 2, 2, 3], b = [2, 3, 3, 1, 1].\nCount per breed, take min, then sum.",
+        "연습: a = [1, 1, 2, 2, 3], b = [2, 3, 3, 1, 1].\n품종별 카운트 → min → 합."),
+      question: t(E,
+        "max_match for a=[1,1,2,2,3], b=[2,3,3,1,1]?",
+        "a=[1,1,2,2,3], b=[2,3,3,1,1]의 max_match?"),
+      options: ["3", "4", "5", "2"],
+      correct: 1,
+      explain: t(E,
+        "ca={1:2, 2:2, 3:1}, cb={1:2, 2:1, 3:2}. min: 2+1+1 = 4.",
+        "ca={1:2, 2:2, 3:1}, cb={1:2, 2:1, 3:2}. min 합: 2+1+1 = 4."),
     },
     {
-      type: "code",
-      narr: t(E, "Clean and simple solution!", "깔끔하고 간단한 솔루션!"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Let's build the solution step by step. Each section reveals one piece of the algorithm.", "솔루션을 단계별로 만들어보자. 각 섹션마다 알고리즘 한 조각씩."),
+      sections: getCheckupsSections(E),
+    },
+    {
+      type: "runner",
+      narr: t(E,
+        "Try your own a, b arrays. Live scan + Counter-based max.", "직접 a, b 배열 시도. 실시간 스캔 + Counter 기반 최대."),
     },
   ];
 }

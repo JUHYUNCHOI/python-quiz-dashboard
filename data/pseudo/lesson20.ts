@@ -100,7 +100,7 @@ UNTIL age >= 1 AND age <= 120
           id: "ch1-quiz2",
           type: "quiz",
           title: "🧠 퀴즈!",
-          content: '시험 점수를 0~100 사이로 입력받으려고 합니다. 올바른 REPEAT...UNTIL 조건은?',
+          content: '시험 점수를 0~100 사이로 입력받으려고 해요. 올바른 REPEAT...UNTIL 조건은?',
           options: [
             'UNTIL score >= 0 AND score <= 100',
             'UNTIL score > 0 AND score < 100',
@@ -168,7 +168,7 @@ INPUT email2
 IF email1 = email2 THEN
     OUTPUT "확인 완료!"
 ELSE
-    OUTPUT "이메일이 일치하지 않습니다!"
+    OUTPUT "이메일이 일치하지 않아요!"
 ENDIF
 \`\`\`
 
@@ -200,7 +200,7 @@ REPEAT
     INPUT password2
 
     IF password1 <> password2 THEN
-        OUTPUT "비밀번호가 일치하지 않습니다. 다시 시도하세요."
+        OUTPUT "비밀번호가 일치하지 않아요. 다시 시도하세요."
     ENDIF
 UNTIL password1 = password2
 
@@ -233,7 +233,7 @@ OUTPUT "비밀번호가 설정되었습니다!"
           type: "fillblank",
           title: "✏️ Double Entry 빈칸 채우기!",
           content: 'Double Entry로 이메일을 확인하는 코드를 완성하세요.',
-          code: 'INPUT email1\nINPUT email2\n\nIF email1 ___ email2 THEN\n    OUTPUT "이메일이 일치하지 않습니다!"\nENDIF',
+          code: 'INPUT email1\nINPUT email2\n\nIF email1 ___ email2 THEN\n    OUTPUT "이메일이 일치하지 않아요!"\nENDIF',
           fillBlanks: [
             { id: 1, answer: "<>", options: ["<>", "=", ">", "<"] }
           ]

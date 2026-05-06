@@ -21,7 +21,27 @@ interface FunctionDef {
 interface Variable {
   name: string
   value: any
-  type: 'string' | 'number' | 'none'
+  type: 'string' | 'number' | 'boolean' | 'none'
+}
+
+// Python 표현식을 JS 표현식으로 번역 (eval 전 단계)
+// True/False, and/or/not, ==/!=/>/< 모두 JS 가 그대로 처리할 수 있게
+function pyToJsExpr(expr: string): string {
+  return expr
+    .replace(/\bTrue\b/g, 'true')
+    .replace(/\bFalse\b/g, 'false')
+    .replace(/\bNone\b/g, 'null')
+    .replace(/\band\b/g, '&&')
+    .replace(/\bor\b/g, '||')
+    .replace(/\bnot\s+/g, '!')
+}
+
+// Python 식 출력 ("True"/"False"/"None") — JS 의 String(true) 은 "true" 라 안 됨
+function formatPyValue(v: any): string {
+  if (v === true) return "True"
+  if (v === false) return "False"
+  if (v === null || v === undefined) return "None"
+  return String(v)
 }
 
 // ============================================================
@@ -333,7 +353,7 @@ function executeFunction(
   result?: string,
   output?: string[],
   returnValue?: any,
-  returnType?: 'string' | 'number' | 'none',
+  returnType?: 'string' | 'number' | 'boolean' | 'none',
   error?: string
 } {
   // 인자 파싱
@@ -362,7 +382,7 @@ function executeFunction(
   // 함수 본문 실행
   const outputs: string[] = []
   let returnValue: any = null
-  let returnType: 'string' | 'number' | 'none' = 'none'
+  let returnType: 'string' | 'number' | 'boolean' | 'none' = 'none'
   
   for (const line of func.body) {
     // print 문
@@ -417,18 +437,18 @@ function executePrint(
         const varName = String(tok.value).trim()
         if (variables.has(varName)) {
           const v = variables.get(varName)!
-          parts.push(v.value === null ? "None" : String(v.value))
+          parts.push(formatPyValue(v.value))
         } else {
           // 표현식 시도
           const ev = evaluateExpression(varName, variables)
           if (!ev.error) {
-            parts.push(ev.value === null ? "None" : String(ev.value))
+            parts.push(formatPyValue(ev.value))
           } else {
             return { result: "", error: `'${varName}'를 찾을 수 없어!` }
           }
         }
       } else {
-        parts.push(tok.value === null ? "None" : String(tok.value))
+        parts.push(formatPyValue(tok.value))
       }
     }
     return { result: parts.join(" ") }
@@ -466,14 +486,13 @@ function executePrint(
   // 변수
   if (variables.has(argsStr)) {
     const v = variables.get(argsStr)!
-    if (v.value === null) return { result: "None" }
-    return { result: String(v.value) }
+    return { result: formatPyValue(v.value) }
   }
 
-  // 숫자나 계산식
+  // 숫자나 계산식 (비교/논리 포함)
   const evalResult = evaluateExpression(argsStr, variables)
   if (!evalResult.error) {
-    return { result: String(evalResult.value) }
+    return { result: formatPyValue(evalResult.value) }
   }
 
   // 따옴표 없는 문자열
@@ -520,12 +539,12 @@ function executeFString(fstr: string, variables: Map<string, Variable>): RunResu
     // 변수 찾기
     if (variables.has(expr)) {
       const v = variables.get(expr)!
-      result = result.replace(varMatch[0], String(v.value))
+      result = result.replace(varMatch[0], formatPyValue(v.value))
     } else {
       // 표현식 평가 시도
       const evalResult = evaluateExpression(expr, variables)
       if (!evalResult.error) {
-        result = result.replace(varMatch[0], String(evalResult.value))
+        result = result.replace(varMatch[0], formatPyValue(evalResult.value))
       } else {
         return { result: "", error: `'{${expr}}'를 찾을 수 없어!` }
       }
@@ -540,66 +559,81 @@ function executeFString(fstr: string, variables: Map<string, Variable>): RunResu
 // ============================================================
 function evaluateExpression(expr: string, variables: Map<string, Variable>): {
   value: any,
-  type: 'string' | 'number' | 'none',
+  type: 'string' | 'number' | 'boolean' | 'none',
   error?: string
 } {
   expr = expr.trim()
-  
+
   // 문자열
   const strMatch = expr.match(/^(['"])([\s\S]*)\1$/)
   if (strMatch) {
     return { value: strMatch[2], type: 'string' }
   }
-  
+
   // 숫자
   if (/^-?\d+(\.\d+)?$/.test(expr)) {
     const num = parseFloat(expr)
     return { value: num, type: 'number' }
   }
-  
+
+  // Boolean / None 리터럴
+  if (expr === 'True') return { value: true, type: 'boolean' }
+  if (expr === 'False') return { value: false, type: 'boolean' }
+  if (expr === 'None') return { value: null, type: 'none' }
+
   // 변수
   if (variables.has(expr)) {
     const v = variables.get(expr)!
     return { value: v.value, type: v.type }
   }
-  
-  // 산술 연산
-  if (/^[\d\s+\-*/().]+$/.test(expr)) {
+
+  // 표현식 평가 — Python → JS 번역 후 Function eval
+  // 허용 문자: 영숫자, 공백, +-*/ 괄호, 비교/논리/부등호 (<>=!&|), 점 (실수)
+  const tryEval = (raw: string) => {
+    const js = pyToJsExpr(raw)
+    if (!/^[\w\s+\-*/().<>=!&|,]+$/.test(js)) return null
     try {
-      const calc = Function('return ' + expr)()
-      return { value: calc, type: 'number' }
+      const calc = Function('return ' + js)()
+      const t: 'string' | 'number' | 'boolean' | 'none' =
+        typeof calc === 'boolean' ? 'boolean' :
+        typeof calc === 'number' ? 'number' :
+        calc === null || calc === undefined ? 'none' : 'string'
+      return { value: calc, type: t }
     } catch {
-      return { value: null, type: 'none', error: "계산식을 확인해봐!" }
+      return null
     }
   }
-  
-  // 변수가 포함된 산술 연산
+
+  const direct = tryEval(expr)
+  if (direct) return direct
+
+  // 변수가 포함된 식 — 변수를 값으로 치환 후 재시도
   let substituted = expr
   for (const [name, v] of variables) {
     const regex = new RegExp(`\\b${name}\\b`, 'g')
-    substituted = substituted.replace(regex, String(v.value))
-  }
-  
-  if (/^[\d\s+\-*/().]+$/.test(substituted)) {
-    try {
-      const calc = Function('return ' + substituted)()
-      return { value: calc, type: 'number' }
-    } catch {
-      return { value: null, type: 'none', error: "계산식을 확인해봐!" }
+    if (typeof v.value === 'string') {
+      // 문자열 변수는 따옴표 둘러서 치환 (이스케이프 단순화)
+      substituted = substituted.replace(regex, JSON.stringify(v.value))
+    } else if (v.value === null) {
+      substituted = substituted.replace(regex, 'null')
+    } else {
+      substituted = substituted.replace(regex, String(v.value))
     }
   }
-  
+  const subResult = tryEval(substituted)
+  if (subResult) return subResult
+
   return { value: null, type: 'none', error: `'${expr}'를 이해 못 했어!` }
 }
 
 // ============================================================
 // 인자 파싱
 // ============================================================
-function parseArguments(argsStr: string): Array<{ value: any, type: 'string' | 'number' | 'none' }> {
+function parseArguments(argsStr: string): Array<{ value: any, type: 'string' | 'number' | 'boolean' | 'none' }> {
   argsStr = argsStr.trim()
   if (!argsStr) return []
   
-  const args: Array<{ value: any, type: 'string' | 'number' | 'none' }> = []
+  const args: Array<{ value: any, type: 'string' | 'number' | 'boolean' | 'none' }> = []
   let current = ""
   let inQuote = false
   let quoteChar = ""
@@ -637,7 +671,7 @@ function parseArguments(argsStr: string): Array<{ value: any, type: 'string' | '
   return args
 }
 
-function parseValue(val: string): { value: any, type: 'string' | 'number' | 'none' } {
+function parseValue(val: string): { value: any, type: 'string' | 'number' | 'boolean' | 'none' } {
   // 문자열
   const strMatch = val.match(/^(['"])([\s\S]*)\1$/)
   if (strMatch) {

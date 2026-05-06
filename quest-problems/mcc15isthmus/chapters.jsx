@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMcc15IsthmusSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -51,17 +52,54 @@ export function makeMcc15IsthmusCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a sequence of heights, find peaks and valleys. A peak has K strictly increasing neighbors on the left and K strictly decreasing on the right. A valley is the opposite. Count total peaks + valleys!",
-        "높이 수열이 주어지면 봉우리와 골짜기를 찾아. 봉우리는 왼쪽 K개가 순증가, 오른쪽 K개가 순감소. 골짜기는 반대. 봉우리 + 골짜기 총 개수를 세!"),
+        "A sequence of N heights and a parameter K are given. Position i is a PEAK if its K immediate left neighbors are strictly INCREASING up to i and its K immediate right neighbors are strictly DECREASING from i. A VALLEY is the opposite.\nPrint the TOTAL number of peaks plus valleys.",
+        "길이 N 의 높이 수열과 매개변수 K 가 주어져요. 위치 i 가 PEAK 이려면 바로 왼쪽 K 개 이웃이 순증가하여 i 에 도달, 바로 오른쪽 K 개 이웃이 i 에서 순감소. VALLEY 는 그 반대.\nPEAK 와 VALLEY 의 총 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26f0\ufe0f"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Isthmus</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P4</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: For each position i (from K to N-K-1), check if the K neighbors on each side form a strictly monotone sequence. If increasing then decreasing = peak. If decreasing then increasing = valley.",
-              "핵심: 각 위치 i (K부터 N-K-1까지)에서 양쪽 K개 이웃이 순단조 수열인지 확인. 증가 후 감소 = 봉우리. 감소 후 증가 = 골짜기.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u26f0\ufe0f"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Isthmus</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P4</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Given a ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "sequence of N heights and parameter K", "길이 N 의 높이 수열과 매개변수 K")}</b>
+                  {t(E, ".", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "PEAK at i", "PEAK 위치 i")}</b>
+                  {t(E, ": K left neighbors STRICTLY INCREASING up to i AND K right neighbors STRICTLY DECREASING from i.",
+                        ": 왼쪽 K 개 이웃이 i 까지 순증가, 오른쪽 K 개 이웃이 i 에서 순감소.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#0891b2" }}>{t(E, "VALLEY at i", "VALLEY 위치 i")}</b>
+                  {t(E, ": same but DECREASING then INCREASING.",
+                        ": 같은 형태인데 순감소 후 순증가.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "TOTAL number of peaks plus valleys", "PEAK 와 VALLEY 의 총 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -69,8 +107,7 @@ export function makeMcc15IsthmusCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Sequence [1, 3, 5, 3, 1] with K=2. Position 2 (value 5) has 2 increasing on the left (1<3<5) and 2 decreasing on the right (5>3>1). Is it a peak?",
-        "수열 [1, 3, 5, 3, 1]에서 K=2. 위치 2 (값 5)는 왼쪽 2개 증가 (1<3<5), 오른쪽 2개 감소 (5>3>1). 봉우리야?"),
+        "Sequence [1, 3, 5, 3, 1] with K=2.\nPosition 2 (value 5) has 2 increasing on the left (1<3<5) and 2 decreasing on the right (5>3>1).\nIs it a peak?", "수열 [1, 3, 5, 3, 1]에서 K=2. 위치 2 (값 5)는 왼쪽 2개 증가 (1<3<5), 오른쪽 2개 감소 (5>3>1). 봉우리예요?"),
       question: t(E,
         "[1,3,5,3,1], K=2. How many peaks + valleys?",
         "[1,3,5,3,1], K=2. 봉우리 + 골짜기 개수?"),
@@ -83,20 +120,19 @@ export function makeMcc15IsthmusCh1(E) {
       correct: 1,
       explain: t(E,
         "Position 2 (value 5) is a peak: left side 1<3<5 (increasing), right side 5>3>1 (decreasing). That's the only peak or valley. Count = 1!",
-        "위치 2 (값 5)가 봉우리: 왼쪽 1<3<5 (증가), 오른쪽 5>3>1 (감소). 유일한 봉우리/골짜기야. 개수 = 1!"),
+        "위치 2 (값 5)가 봉우리: 왼쪽 1<3<5 (증가), 오른쪽 5>3>1 (감소). 유일한 봉우리/골짜기예요. 개수 = 1!"),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "For [1,3,5,3,1] with K=2, how many peaks + valleys are there?",
-        "[1,3,5,3,1]에서 K=2일 때, 봉우리 + 골짜기는 몇 개?"),
+        "For [1,3,5,3,1] with K=2, how many peaks + valleys are there?", "[1,3,5,3,1]에서 K=2일 때, 봉우리 + 골짜기는 몇 개?"),
       question: t(E,
         "[1,3,5,3,1], K=2. Total peaks + valleys = ?",
         "[1,3,5,3,1], K=2. 봉우리 + 골짜기 총 수 = ?"),
       hint: t(E,
         "Only position 2 (value 5) qualifies as a peak. No valleys exist. Answer: 1",
-        "위치 2 (값 5)만 봉우리로 인정돼. 골짜기는 없어. 답: 1"),
+        "위치 2 (값 5)만 봉우리로 인정돼요. 골짜기는 없어요. 답: 1"),
       answer: 1,
     },
   ];
@@ -106,33 +142,51 @@ export function makeMcc15IsthmusCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeMcc15IsthmusCh2(E) {
+export function makeMcc15IsthmusCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "For each of N positions, we check up to K neighbors on each side. Total: O(N*K).",
-        "N개 위치 각각에서 양쪽 K개 이웃을 확인. 총: O(N*K)."),
+        "For each candidate position i (where K ≤ i < N − K), check the K immediate neighbors on each side. PEAK: left K strictly increasing AND right K strictly decreasing. VALLEY: opposite.",
+        "각 후보 위치 i (K ≤ i < N − K) 마다 양쪽 K 개 이웃을 확인. PEAK: 왼쪽 K 순증가 AND 오른쪽 K 순감소. VALLEY: 반대."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N*K)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "For each candidate position, verify K neighbors on each side are strictly increasing (or decreasing). Break early if condition fails.",
-              "각 후보 위치에서 양쪽 K개 이웃이 순증가(또는 순감소)인지 확인. 조건 실패 시 조기 종료.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Iterate valid positions", "유효 위치 순회"), code: "for i in range(K, N-K):", color: "#2563eb" },
+              { n: 2, label: t(E, "Check K-strict-increasing left", "왼쪽 K 순증가 확인"), code: "left = all(h[i-K..i] strictly inc)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Check K-strict-decreasing right", "오른쪽 K 순감소 확인"), code: "right = all(h[i..i+K] strictly dec)", color: "#0891b2" },
+              { n: 4, label: t(E, "Count peaks + valleys", "PEAK + VALLEY 합산"), code: "count += peak or valley;  print(count)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N · K)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N positions × O(K) checks", "N 위치 × O(K) 검사")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the peak/valley counting solution!",
-        "봉우리/골짜기 카운팅 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMcc15IsthmusSections(E),
     },
   ];
 }

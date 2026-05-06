@@ -110,16 +110,11 @@ cout << s.top();  // 20
           id: "ch1-stack-mini",
           type: "practice" as const,
           title: "✋ 잠깐 — stack 으로 거꾸로 출력",
-          content: `**상황**: 숫자 5 개를 받았는데, 나중에 입력된 것부터 거꾸로 출력하고 싶어요.
-
-\`\`\`
-입력: 1 2 3 4 5
-기대 출력: 5 4 3 2 1
-\`\`\`
+          content: `**상황**: 숫자 5 개를 받았는데 (starter 코드의 \`nums\` 배열), 나중에 입력된 것부터 거꾸로 출력하고 싶어요.
 
 stack 의 LIFO 특성으로 한 번에 끝. 다 \`push\` 하고 빌 때까지 \`top\` + \`pop\`.
 
-> 💡 \`while (!s.empty()) { cout << s.top() << " "; s.pop(); }\` — 이 패턴이 핵심.`,
+> 💡 \`while (!s.empty()) { cout << s.top() << " "; s.pop(); }\` — 이 패턴이 핵심. 정답은 아래 박스 참고.`,
           starterCode: `#include <iostream>
 #include <stack>
 using namespace std;

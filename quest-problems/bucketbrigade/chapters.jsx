@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getBucketBrigadeSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -49,17 +50,62 @@ export function makeBrigadeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "On a 10x10 grid there's a lake (L), a barn (B), and a rock (R). Cows form a bucket brigade to pass water from lake to barn. Find the minimum number of cows needed, avoiding the rock!",
-        "10x10 격자에 호수(L), 헛간(B), 바위(R)가 있어. 소들이 호수에서 헛간까지 물을 전달하는 버킷 릴레이를 만들어. 바위를 피해서 필요한 최소 소 수를 구해!"),
+        "On a 10×10 grid there's exactly one lake L, one barn B, and one rock R; every other cell is empty.\nCows stand on empty cells, holding hands in a chain that connects L to B (each adjacent step in the chain shares an edge — up/down/left/right). Cows can NOT stand on the rock.\nFind the MINIMUM number of cows needed.",
+        "10×10 격자에 호수 L, 헛간 B, 바위 R 이 정확히 하나씩 있고 나머지 칸은 비어있어요.\n소들이 빈 칸에 서서 손을 잡고 L 과 B 를 이어요 (체인의 인접한 두 소는 상하좌우로 붙어있어야 함). 바위 위에는 설 수 없어요.\n필요한 소의 최소 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udea3"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Bucket Brigade</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: BFS on the grid from lake to barn, avoiding the rock. The answer is the shortest path length minus 1 (lake and barn are endpoints, not cows).",
-              "핵심: 호수에서 헛간까지 BFS. 바위를 피해서 최단 경로를 구하고, 답은 경로 길이 - 1 (호수와 헛간은 끝점이라 소가 아님).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\udea3"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Bucket Brigade</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "10×10 grid", "10×10 격자")}</b>
+                  {t(E, " contains exactly one ", "에 ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>L</code>
+                  {t(E, " (lake), one ", " (호수), ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>B</code>
+                  {t(E, " (barn), and one ", " (헛간), ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>R</code>
+                  {t(E, " (rock).", " (바위) 가 정확히 하나씩 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Cows form a ", "소들이 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "chain of empty cells from L to B", "L 과 B 를 잇는 빈 칸들의 체인")}</b>
+                  {t(E, " (each adjacent pair in the chain shares an up/down/left/right edge).",
+                        " 을 만들어요 (체인의 인접한 두 소는 상하좌우로 붙어있음).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Cows ", "소는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "cannot stand on the rock", "바위 위에 설 수 없어요")}</b>
+                  {t(E, " (and don't stand on L or B themselves).",
+                        " (L, B 위에도 안 섬).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of cows", "필요한 최소 소 수")}</b>
+                  {t(E, " in the chain.", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -67,8 +113,7 @@ export function makeBrigadeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The grid is a fixed size. What are its dimensions?",
-        "격자는 고정 크기야. 크기가 얼마일까?"),
+        "The grid is a fixed size. What are its dimensions?", "격자는 고정 크기예요. 크기가 얼마일까요?"),
       question: t(E,
         "What is the grid size in Bucket Brigade?",
         "Bucket Brigade에서 격자의 크기는?"),
@@ -81,20 +126,19 @@ export function makeBrigadeCh1(E) {
       correct: 1,
       explain: t(E,
         "The grid is always 10x10 in this problem.",
-        "이 문제에서 격자는 항상 10x10이야."),
+        "이 문제에서 격자는 항상 10x10이에요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "What is the grid size (one dimension)?",
-        "격자의 한 변의 크기는?"),
+        "What is the grid size (one dimension)?", "격자의 한 변의 크기는?"),
       question: t(E,
         "The grid is NxN. What is N?",
-        "격자가 NxN이야. N은?"),
+        "격자가 NxN이에요. N은?"),
       hint: t(E,
         "The grid is always 10x10.",
-        "격자는 항상 10x10이야."),
+        "격자는 항상 10x10이에요."),
       answer: 10,
     },
   ];
@@ -104,33 +148,51 @@ export function makeBrigadeCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeBrigadeCh2(E) {
+export function makeBrigadeCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "BFS on a 10x10 grid is O(100) = O(1) since the grid size is fixed. Very fast!",
-        "10x10 격자에서 BFS는 O(100) = O(1)이야. 격자 크기가 고정이니까 아주 빨라!"),
+        "BFS from the lake L to the barn B on the 10×10 grid, blocking the rock R. The shortest path has some length L_path including L and B. The number of cows = L_path − 2 (L and B are not cows).",
+        "10×10 격자에서 호수 L 에서 헛간 B 까지 BFS — 바위 R 은 통과 불가. 최단 경로 길이를 L_path 라 하면 (L, B 포함), 필요한 소의 수 = L_path − 2 (L, B 는 소 아님)."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "BFS from lake to barn on the grid, skip the rock cell. Answer = shortest_path_length - 1.",
-              "격자에서 호수에서 헛간까지 BFS, 바위 셀은 건너뛰어. 답 = 최단경로길이 - 1.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Find L, B, R positions", "L, B, R 위치 찾기"), code: "locate L, B, R on the grid", color: "#dc2626" },
+              { n: 2, label: t(E, "BFS from L (skip R)", "L 에서 BFS (R 회피)"), code: "queue = [L];  dist[L] = 0", color: "#7c3aed" },
+              { n: 3, label: t(E, "Stop when reaching B", "B 에 도달하면 중단"), code: "if cell == B: shortest = dist[B]", color: "#0891b2" },
+              { n: 4, label: t(E, "Cows = shortest − 1", "소 수 = shortest − 1"), code: "print(shortest - 1)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(1)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "grid size is fixed at 10 × 10", "격자 크기 10 × 10 고정")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the BFS solution!",
-        "BFS 풀이 코드야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getBucketBrigadeSections(E),
     },
   ];
 }

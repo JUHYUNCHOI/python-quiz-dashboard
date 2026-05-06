@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getSleepySortSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -28,17 +29,54 @@ export function makeSleepySortCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows in a line. Only the front cow can move backward to its correct position. Find the minimum number of moves to sort all cows.",
-        "N마리 소가 줄 서 있어. 맨 앞 소만 올바른 위치로 뒤로 이동 가능. 모든 소를 정렬하는 최소 이동 횟수를 구해!"),
+        "N cows stand in a line with distinct IDs. The only allowed move: take the FRONT cow and reinsert her anywhere later in the line.\nFind the MINIMUM number of such moves needed to make the IDs sorted in increasing order.",
+        "한 줄로 선 N마리 소가 있고, 각자 서로 다른 ID를 가져요. 허용되는 움직임은 단 하나: 맨 앞 소를 빼서 줄의 더 뒤쪽 어딘가에 다시 끼워 넣기.\nID가 오름차순이 되도록 만드는 최소 움직임 횟수를 구해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"😴"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Sleepy Cow Sorting</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Find the longest already-sorted suffix from the right. The answer is N minus the length of that suffix. Those suffix cows never need to move!",
-              "핵심: 오른쪽부터 이미 정렬된 가장 긴 접미사를 찾아. 답은 N에서 그 접미사 길이를 빼면 돼. 접미사 소들은 움직일 필요 없어!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"😴"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Sleepy Cow Sorting</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N cows in a line", "한 줄로 선 N마리 소")}</b>
+                  {t(E, ", each with a distinct ID.", "가 있고, ID는 서로 달라요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each move: take the ", "한 번의 움직임: ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "front cow and reinsert her anywhere later", "맨 앞 소를 빼서 더 뒤쪽 어디든 다시 끼워 넣기")}</b>
+                  {t(E, " in the line.", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Goal: ", "목표: ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "sort the line by ID in increasing order", "ID 오름차순으로 정렬")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of moves", "필요한 최소 움직임 횟수")}</b>
+                  {t(E, " required.", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -46,8 +84,7 @@ export function makeSleepySortCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "For [1, 2, 4, 3]: looking from the right, [3] is fine, but 4 > 3 breaks the order. The sorted suffix has length 1. So we move N - 1 = 3 cows.",
-        "[1, 2, 4, 3]에서: 오른쪽부터 보면 [3]은 괜찮지만 4 > 3에서 순서가 깨져. 정렬된 접미사 길이는 1. 그래서 N - 1 = 3마리를 옮겨야 해."),
+        "For [1, 2, 4, 3]: looking from the right, [3] is fine, but 4 > 3 breaks the order.\nThe sorted suffix has length 1.\nSo we move N - 1 = 3 cows.", "[1, 2, 4, 3]에서: 오른쪽부터 보면 [3]은 괜찮지만 4 > 3에서 순서가 깨져. 정렬된 접미사 길이는 1. 그래서 N - 1 = 3마리를 옮겨야 해요."),
       question: t(E,
         "For [2, 1, 3, 4]: what is the length of the longest sorted suffix from the right?",
         "[2, 1, 3, 4]에서: 오른쪽부터 가장 긴 정렬된 접미사 길이는?"),
@@ -65,14 +102,13 @@ export function makeSleepySortCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If the array is already sorted [1, 2, 3, 4], the entire array is a sorted suffix. How many moves?",
-        "배열이 이미 정렬된 [1, 2, 3, 4]이면, 전체가 정렬된 접미사야. 이동 횟수는?"),
+        "If the array is already sorted [1, 2, 3, 4], the entire array is a sorted suffix.\nHow many moves?", "배열이 이미 정렬된 [1, 2, 3, 4]이면, 전체가 정렬된 접미사예요. 이동 횟수는?"),
       question: t(E,
         "[1, 2, 3, 4] already sorted. How many moves needed?",
         "[1, 2, 3, 4] 이미 정렬됨. 필요한 이동 횟수는?"),
       hint: t(E,
         "All cows are in order. Sorted suffix length = N. Answer = N - N = 0.",
-        "모든 소가 순서대로야. 정렬된 접미사 길이 = N. 답 = N - N = 0."),
+        "모든 소가 순서대로예요. 정렬된 접미사 길이 = N. 답 = N - N = 0."),
       answer: 0,
     },
   ];
@@ -82,33 +118,51 @@ export function makeSleepySortCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeSleepySortCh2(E) {
+export function makeSleepySortCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Scan from right to left to find where the sorted suffix breaks. O(N) time!",
-        "오른쪽에서 왼쪽으로 스캔해서 정렬된 접미사가 끊기는 곳을 찾아. O(N) 시간!"),
+        "Cows in the longest already-sorted SUFFIX never need to move — they're already in their final relative order. Every cow in front of that suffix needs at least 1 move. Answer = N − (length of sorted suffix).",
+        "이미 정렬된 가장 긴 SUFFIX (뒤쪽 부분) 의 소들은 움직일 필요 없어요 — 이미 올바른 상대 순서에 있어요. 그 SUFFIX 앞의 모든 소는 적어도 한 번 이동 필요. 답 = N − (정렬된 SUFFIX 길이)."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Scan right to left: while a[k-1] < a[k], extend the sorted suffix. The break point k gives the answer directly.",
-              "오른쪽에서 왼쪽으로 스캔: a[k-1] < a[k]인 동안 정렬된 접미사 확장. 끊기는 지점 k가 바로 답이야.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read N and the cow IDs", "N 과 소 ID 읽기"), code: "a = list(map(int, input().split()))", color: "#2563eb" },
+              { n: 2, label: t(E, "Walk right → left", "오른쪽 → 왼쪽 순회"), code: "k = N - 1", color: "#0891b2" },
+              { n: 3, label: t(E, "Extend sorted suffix", "정렬된 SUFFIX 확장"), code: "while k > 0 and a[k-1] < a[k]: k -= 1", color: "#7c3aed" },
+              { n: 4, label: t(E, "Answer = front-cows count", "답 = 앞쪽 소의 개수"), code: "print(k)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single right-to-left scan", "오른쪽-왼쪽 한 번 스캔")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the clean O(N) solution!",
-        "깔끔한 O(N) 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getSleepySortSections(E),
     },
   ];
 }

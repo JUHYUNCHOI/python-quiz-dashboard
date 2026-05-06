@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getCrossRoad3Sections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -33,17 +34,59 @@ export function makeCrossRd3Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows arrive at a gate, each with an arrival time and a duration to pass through. Process them FIFO (first come, first served). Find when the last cow finishes!",
-        "N마리 소가 문에 도착해, 각각 도착 시간과 통과 시간이 있어. FIFO (선착순)로 처리해. 마지막 소가 끝나는 시간을 구해!"),
+        "N cows arrive at a single gate, each with an arrival time a[i] and a passage duration d[i]. The gate processes cows in arrival order (FIFO) — one at a time. If a cow arrives while the gate is busy, she queues; once it's her turn, she takes d[i] seconds to pass through.\nPrint the time the LAST cow finishes passing.",
+        "N마리 소가 한 개의 문에 도착해요. 각자 도착 시각 a[i] 와 통과 시간 d[i] 를 가져요. 문은 도착 순서 (FIFO) 로 한 마리씩 처리해요. 문이 사용 중일 때 도착한 소는 줄을 서고, 자기 차례에 d[i] 초 걸려 통과해요.\n마지막 소가 통과를 끝내는 시각을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udeaa"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Cross the Road III</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Sort by arrival time. Track when the gate becomes free. If a cow arrives after the gate is free, start immediately. Otherwise, wait in queue.",
-              "핵심: 도착 시간으로 정렬해. 문이 비는 시간을 추적해. 소가 문이 빈 후에 도착하면 바로 시작. 아니면 대기열에서 기다려.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udeaa"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Cross the Road III</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "N cows arriving at a single gate", "한 개의 문에 도착하는 N마리 소")}</b>
+                  {t(E, " — each with an arrival time ", " 가 있고, 도착 시각 ")}
+                  <code style={{ background: "#ede9fe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>a[i]</code>
+                  {t(E, " and a passage duration ", " 와 통과 시간 ")}
+                  <code style={{ background: "#ede9fe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>d[i]</code>
+                  {t(E, ".", " 을 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The gate processes cows ", "문은 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "FIFO (first come, first served)", "FIFO (선착순)")}</b>
+                  {t(E, " — one at a time, taking d[i] seconds for cow i.",
+                        " 로 한 마리씩 처리, i번 소는 d[i] 초 걸려요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "If a cow arrives while the gate is busy, she ", "문이 사용 중일 때 도착한 소는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "queues until her turn", "자기 차례까지 대기")}</b>
+                  {t(E, ".", "해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "time the last cow finishes passing", "마지막 소가 통과를 끝내는 시각")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -51,8 +94,7 @@ export function makeCrossRd3Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Cow A arrives at t=0, takes 5 sec. Cow B arrives at t=3, takes 2 sec. A finishes at t=5. B has to wait (arrived at 3 but gate busy until 5). When does B finish?",
-        "소 A는 t=0에 도착, 5초 소요. 소 B는 t=3에 도착, 2초 소요. A는 t=5에 끝나. B는 기다려야 해 (3에 도착했지만 문은 5까지 사용 중). B는 언제 끝나?"),
+        "Cow A arrives at t=0, takes 5 sec.\nCow B arrives at t=3, takes 2 sec.\nA finishes at t=5.\nB has to wait (arrived at 3 but gate busy until 5).\nWhen does B finish?", "소 A는 t=0에 도착, 5초 소요.\n소 B는 t=3에 도착, 2초 소요.\nA는 t=5에 끝나.\nB는 기다려야 해 (3에 도착했지만 문은 5까지 사용 중).\nB는 언제 끝나?"),
       question: t(E,
         "A: arrive=0, dur=5. B: arrive=3, dur=2. When does B finish?",
         "A: 도착=0, 소요=5. B: 도착=3, 소요=2. B는 언제 끝나?"),
@@ -70,8 +112,7 @@ export function makeCrossRd3Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "Same example: A(0,5), B(3,2). When does the last cow finish?",
-        "같은 예시: A(0,5), B(3,2). 마지막 소가 끝나는 시간?"),
+        "Same example: A(0,5), B(3,2). When does the last cow finish?", "같은 예시: A(0,5), B(3,2). 마지막 소가 끝나는 시간?"),
       question: t(E,
         "A arrives t=0, 5 sec. B arrives t=3, 2 sec. Last finish time?",
         "A 도착 t=0, 5초. B 도착 t=3, 2초. 마지막 끝나는 시간?"),
@@ -87,33 +128,51 @@ export function makeCrossRd3Ch1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeCrossRd3Ch2(E) {
+export function makeCrossRd3Ch2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Sort cows by arrival time, then simulate the queue in one pass. O(N log N) for sorting!",
-        "도착 시간으로 소를 정렬하고, 한 번 순회로 큐를 시뮬레이션해. 정렬에 O(N log N)!"),
+        "Sort cows by arrival time. Walk through them: track when the gate becomes free. If a cow arrives BEFORE the gate is free, she waits — gate-free advances by her duration. If after, she starts at her arrival.",
+        "도착 시간 순으로 정렬. 순회: 문이 비는 시간을 추적. 소가 문이 빈 시간 전에 도착하면 대기 — 문 비는 시간이 그녀의 소요시간 만큼 진행. 후에 도착하면 도착 시각에 시작."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Sort by arrival. Track current_time (when gate becomes free). For each cow: if current_time < arrival, jump to arrival. Then add duration. Final current_time is the answer.",
-              "도착순 정렬. current_time (문이 비는 시간)을 추적해. 각 소: current_time < 도착이면 도착으로 점프. 그 다음 소요시간 추가. 최종 current_time이 답.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Sort cows by arrival", "도착 시간 순 정렬"), code: "cows.sort(key=lambda c: c.arrival)", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Track gate-free time", "문 비는 시간 추적"), code: "gate_free = 0", color: "#7c3aed" },
+              { n: 3, label: t(E, "Process each cow", "각 소 처리"), code: "for c in cows: start = max(gate_free, c.arrival)", color: "#0891b2" },
+              { n: 4, label: t(E, "Update gate_free, output last", "gate_free 갱신, 마지막 출력"), code: "gate_free = start + c.duration;  print(gate_free)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + linear sweep", "정렬 + 선형 스윕")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full queue simulation solution!",
-        "큐 시뮬레이션 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getCrossRoad3Sections(E),
     },
   ];
 }

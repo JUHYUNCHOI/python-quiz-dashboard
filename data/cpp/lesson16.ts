@@ -297,7 +297,7 @@ int main() {
 }`,
           options: ["에러", "0\n1", "0\n2", "1\n1"],
           answer: 2,
-          explanation: "m[\"b\"]는 없는 키라서 기본값 0이 출력되고, 동시에 \"b\":0 이 map에 추가돼요! 그래서 size()가 2가 됩니다. C++ map의 대표적인 함정이에요."
+          explanation: "m[\"b\"]는 없는 키라서 기본값 0이 출력되고, 동시에 \"b\":0 이 map에 추가돼요! 그래서 size()가 2가 돼요. C++ map의 대표적인 함정이에요."
         },
         {
           id: "ch1-unordered",

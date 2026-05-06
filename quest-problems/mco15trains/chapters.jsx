@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getTrainsSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -49,17 +50,47 @@ export function makeTrainsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "An N*N grid has population counts in each cell (-1 = blocked). Build train tracks from station A to station B moving in 4 directions. Minimize total displaced inhabitants along the path!",
-        "N*N 격자에 각 셀의 인구수가 있어 (-1 = 차단). 역 A에서 역 B까지 4방향으로 철도를 놓아. 경로상 총 이주 주민 수를 최소화해!"),
+        "An N × N grid has a population count in each cell (or −1 if blocked). Build a train path from cell A to cell B moving up/down/left/right between non-blocked cells. The cost of the path is the SUM of populations along it (every cell visited displaces its population).\nPrint the MINIMUM total displaced population.",
+        "N × N 격자에 각 칸의 인구 수가 있어요 (또는 −1 = 막힘). 막혀있지 않은 칸 사이에서 상하좌우로 칸 A 에서 칸 B 까지 철도 경로를 놓아요. 경로 비용 = 지나는 칸들의 인구 합 (방문한 모든 칸이 옮겨와요).\n옮긴 인구 총합의 최솟값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude82"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Trains</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P4</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: This is a shortest path problem on a weighted grid. Use Dijkstra's algorithm with cell population as edge weight. Blocked cells (-1) cannot be traversed.",
-              "핵심: 가중 격자에서의 최단 경로 문제. 셀 인구수를 간선 가중치로 사용해 다익스트라 알고리즘 적용. 차단된 셀(-1)은 통과 불가.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\ude82"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Trains</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P4</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "An ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N × N grid with populations per cell (or −1 if blocked)", "각 칸의 인구 수를 가진 N × N 격자 (−1 = 막힘)")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Build a train path from cell ", "칸 A 에서 칸 B 까지 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "A to cell B moving up/down/left/right", "상하좌우로 이동하며 경로 놓기")}</b>
+                  {t(E, " between non-blocked cells. Cost = sum of populations along the path.",
+                        " (막혀있지 않은 칸 사이). 비용 = 지나는 칸들의 인구 합.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MINIMUM total displaced population", "옮긴 인구 총합의 최솟값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -67,8 +98,7 @@ export function makeTrainsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "On a grid, you can move up, down, left, or right. How many directions of movement are allowed?",
-        "격자에서 위, 아래, 왼쪽, 오른쪽으로 이동 가능해. 몇 방향으로 이동할 수 있나?"),
+        "On a grid, you can move up, down, left, or right.\nHow many directions of movement are allowed?", "격자에서 위, 아래, 왼쪽, 오른쪽으로 이동 가능해요. 몇 방향으로 이동할 수 있나?"),
       question: t(E,
         "How many directions can tracks be laid? (up/down/left/right)",
         "철도를 놓을 수 있는 방향은 몇 개? (상/하/좌/우)"),
@@ -79,14 +109,13 @@ export function makeTrainsCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! Only 4-directional movement (up, down, left, right) is allowed on the grid.",
-        "맞아! 격자에서는 4방향(상, 하, 좌, 우)만 이동 가능해."),
+        "맞아! 격자에서는 4방향(상, 하, 좌, 우)만 이동 가능해요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "On a grid, we move in 4 directions. How many directions?",
-        "격자에서 4방향으로 이동해. 몇 방향?"),
+        "On a grid, we move in 4 directions. How many directions?", "격자에서 4방향으로 이동해요. 몇 방향?"),
       question: t(E,
         "Number of movement directions on the grid?",
         "격자에서 이동 가능한 방향 수?"),
@@ -102,33 +131,51 @@ export function makeTrainsCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeTrainsCh2(E) {
+export function makeTrainsCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Dijkstra's algorithm on an N*N grid. Each cell is a node, edges go to 4 neighbors. O(N^2 log N) with a priority queue.",
-        "N*N 격자에서 다익스트라 알고리즘. 각 셀이 노드, 4이웃으로 간선. 우선순위 큐를 사용해 O(N^2 log N)."),
+        "Dijkstra on the N×N grid: start at A with cost grid[A], expand to non-blocked neighbors, accumulate population costs in a min-heap. Stop at B.",
+        "N×N 격자 다익스트라: A 에서 비용 grid[A] 로 시작, 차단되지 않은 이웃으로 확장, 인구 비용을 최소 힙에 누적. B 에서 중단."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N\u00b2 log N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Dijkstra: start from A with cost = grid[A]. For each neighbor, new cost = current + grid[neighbor]. Skip blocked cells (-1). Use min-heap for efficiency.",
-              "다익스트라: A에서 시작, 비용 = grid[A]. 각 이웃에 대해 새 비용 = 현재 + grid[이웃]. 차단 셀(-1) 건너뛰기. 효율을 위해 최소 힙 사용.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Init priority queue with A", "우선순위 큐 A 로 시작"), code: "heap = [(grid[A], A)];  dist[A] = grid[A]", color: "#2563eb" },
+              { n: 2, label: t(E, "Pop min-cost cell", "최소 비용 칸 pop"), code: "while heap: cost, cell = heappop(heap)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Relax 4 neighbors", "4 이웃 완화"), code: "for n in non-blocked neighbors: new = cost + grid[n]; if new < dist[n]: push", color: "#0891b2" },
+              { n: 4, label: t(E, "Print dist[B]", "dist[B] 출력"), code: "print(dist[B])", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N² log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N² cells in priority queue", "N² 칸을 우선순위 큐에")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the Dijkstra solution on the grid!",
-        "격자에서의 다익스트라 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getTrainsSections(E),
     },
   ];
 }

@@ -134,17 +134,10 @@ print((1))       # 1 — 튜플 아님!
 | 좌표 (x, y) | 튜플 | 한 점은 묶음 |
 | 일주일 요일 ("월", "화", ..., "일") | 튜플 | 절대 안 바뀜 |
 | 장바구니 | 리스트 | 추가/제거 |
-| 함수가 여러 값 반환 | 튜플 | 한 번에 묶어서 |
 
 ### 보너스 — 튜플이 살짝 빨라요
 
-\`\`\`python
-import sys
-print(sys.getsizeof([1, 2, 3]))   # 88 정도 (시스템마다 다름)
-print(sys.getsizeof((1, 2, 3)))   # 64 정도 — 더 작음!
-\`\`\`
-
-리스트는 "나중에 늘어날지 모르니" 여유 공간을 둬요. 튜플은 "이대로 끝" 이라서 딱 맞춰 저장. 메모리 + 미세한 속도 이득.
+리스트는 "나중에 늘어날지 모르니" 여유 공간을 둬요. 튜플은 "이대로 끝" 이라서 딱 맞춰 저장. 메모리 살짝 절약 + 미세한 속도 이득.
 
 > 🎯 첫 언어 학생용 한 줄: **"바꿀 거면 리스트, 안 바꿀 거면 튜플."**`
         },
@@ -343,40 +336,49 @@ for i, fruit in enumerate(fruits):
       emoji: "🏆",
       steps: [
         {
-          id: "multi-return-explain",
+          id: "two-values-explain",
           type: "explain",
-          title: "🎁 활용 1 — 함수에서 여러 값 반환",
-          content: `함수가 결과를 **두 개 이상** 돌려주고 싶을 때 — 튜플로 묶어 한 번에 반환해요.
+          title: "🎁 활용 1 — 두 값을 한 번에 묶기",
+          content: `여러 정보를 **한 변수에 묶어서** 다루고 싶을 때 — 튜플로 묶고, 필요하면 언패킹으로 풀어요.
 
 \`\`\`python
-def min_max(numbers):
-    return min(numbers), max(numbers)
-    #      ↑ 사실 (min(...), max(...)) 튜플
+# 학생 1 명의 정보 = (이름, 점수)
+student = ("영희", 92)
 
-result = min_max([3, 1, 4, 1, 5, 9, 2, 6])
-print(result)  # (1, 9) — 튜플로 받음
+# 그대로 출력
+print(student)            # ('영희', 92)
 
-# 받자마자 풀어쓰기 (가장 흔한 패턴)
-lo, hi = min_max([3, 1, 4, 1, 5, 9, 2, 6])
-print(lo, hi)  # 1 9
+# 풀어서 받기 (가장 흔한 패턴)
+name, score = student
+print(name, score)        # 영희 92
 \`\`\`
 
-### 다른 언어와 다른 점
+### 왜 따로 변수 안 쓰고 묶을까?
 
-C++ / Java 는 함수가 값 하나만 반환할 수 있어요. 여러 개 보내려면 클래스 / struct 만들어야 함.
-파이썬은 그냥 \`return a, b, c\` 하면 끝 — 튜플 덕분에.
+\`\`\`python
+# 묶지 않으면 — 변수 두 개를 항상 같이 옮겨야 함
+name1 = "철수"
+score1 = 85
+# 두 개를 따로 다뤄야 해요 (실수 가능)
 
-> 🎯 한 줄: **\`return x, y\` 는 \`return (x, y)\` — 튜플 한 개를 돌려주는 거.**`
+# 묶으면 — 한 덩어리
+s1 = ("철수", 85)
+# 한 변수만 옮기면 됨
+\`\`\`
+
+> 🎯 한 줄: **튜플은 "관련된 값들을 한 묶음으로" 다루기 위해.**
+
+(나중에 lesson 32 에서 함수를 배우면 — 함수 결과를 \`return x, y\` 로 두 개 돌려줄 때 이 튜플 묶음이 그대로 쓰여요.)`
         },
         {
-          id: "try-multi-return",
+          id: "try-two-values",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 여러 값 반환",
-          task: "원의 반지름을 받아 둘레와 넓이를 둘 다 반환하는 함수를 만드세요. (π = 3.14)",
-          initialCode: "def circle(r):\n    # 둘레 = 2 * π * r\n    # 넓이 = π * r * r\n    # 둘 다 반환 (튜플로 자동 묶임)\n    return ___, ___\n\nperi, area = circle(5)\nprint(f\"둘레: {peri}, 넓이: {area}\")",
+          title: "🖥️ 직접 해보기 — 두 값 묶기",
+          task: "원의 반지름이 5 일 때, 둘레와 넓이를 튜플로 묶어 출력하세요. (π = 3.14)",
+          initialCode: "r = 5\n# 둘레 = 2 * π * r\n# 넓이 = π * r * r\n# 둘을 튜플로 묶기\ncircle = (___, ___)\n\nperi, area = circle\nprint(f\"둘레: {peri}, 넓이: {area}\")",
           expectedOutput: "둘레: 31.400000000000002, 넓이: 78.5",
-          hint: "return 2 * 3.14 * r, 3.14 * r * r — 콤마로 구분.",
-          hint2: "return 2 * 3.14 * r, 3.14 * r * r"
+          hint: "circle = (2 * 3.14 * r, 3.14 * r * r) — 괄호 + 콤마.",
+          hint2: "circle = (2 * 3.14 * r, 3.14 * r * r)"
         },
         {
           id: "coord-explain",
@@ -496,11 +498,11 @@ for name, age in zip(names, ages):
           id: "mission2",
           type: "mission",
           title: "🏆 미션 2 — 학생 명단에서 평균과 최고 점수",
-          task: "(이름, 점수) 학생 4 명에서 **평균 점수** 와 **1 등 이름** 을 한 함수로 둘 다 반환받아 출력하세요.",
-          initialCode: "students = [\n    (\"철수\", 75),\n    (\"영희\", 92),\n    (\"민수\", 80),\n    (\"수지\", 88),\n]\n\ndef stats(students):\n    # 평균과 1 등 이름 둘 다 반환 (튜플로!)\n    # 힌트: max(students, key=lambda s: s[1]) 이 1 등 학생 튜플\n    pass\n\navg, top = stats(students)\nprint(f\"평균: {avg}\")\nprint(f\"1 등: {top}\")",
+          task: "(이름, 점수) 튜플로 된 학생 4 명에서 **평균 점수** 와 **1 등 이름** 을 찾아 출력하세요. for-언패킹만 사용하세요.",
+          initialCode: "students = [\n    (\"철수\", 75),\n    (\"영희\", 92),\n    (\"민수\", 80),\n    (\"수지\", 88),\n]\n\n# 1) 평균 점수 — 점수들의 합 / 사람 수\ntotal = 0\nfor name, score in students:\n    total += ___\navg = total / len(students)\n\n# 2) 1 등 이름 — 가장 높은 점수의 학생 이름\ntop_name = \"\"\ntop_score = -1\nfor name, score in students:\n    if score > ___:\n        top_score = score\n        top_name = name\n\nprint(f\"평균: {avg}\")\nprint(f\"1 등: {top_name}\")",
           expectedOutput: "평균: 83.75\n1 등: 영희",
-          hint: "평균 = sum(점수들) / len(students). 1 등 = max(students, key=...) 의 [0] (이름).",
-          hint2: "def stats(students):\n    avg = sum(s[1] for s in students) / len(students)\n    top = max(students, key=lambda s: s[1])[0]\n    return avg, top"
+          hint: "평균: total += score. 1 등: if score > top_score 이면 갱신.",
+          hint2: "total += score   # 점수만 더함\nif score > top_score:   # 지금까지 최고보다 크면 갱신"
         },
         {
           id: "complete",
@@ -514,7 +516,7 @@ for name, age in zip(names, ages):
 ✅ **언패킹** — 한 번에 여러 변수, \`*rest\` 별표 언패킹
 ✅ **swap** — \`a, b = b, a\` 한 줄
 ✅ **for 안 언패킹** — \`for name, score in students:\`
-✅ **여러 값 반환** — \`return x, y\` = 튜플 한 개 반환
+✅ **두 값 묶기** — 관련된 정보를 한 변수로 (이름+점수, 둘레+넓이, …)
 ✅ **좌표/딕셔너리 키** — 묶음 데이터 + 실수 방지턱
 ✅ **enumerate / zip** — 튜플 언패킹 패턴이 곳곳에
 

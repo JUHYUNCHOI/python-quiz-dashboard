@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getSwapitySections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -50,17 +51,53 @@ export function makeSwapityCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows in a line. Each round, apply M reversal operations. After K rounds (K up to 10^9), output the final order. Key insight: detect the cycle length!",
-        "N마리 소가 일렬로. 매 라운드 M개의 뒤집기 연산 적용. K라운드(K는 10^9까지) 후 최종 순서 출력. 핵심: 순환 길이 감지!"),
+        "N cows are in a line. Each ROUND consists of two reversal operations: reverse positions [a1, b1] then reverse [a2, b2]. This entire round is repeated K times (K can be up to 10^9).\nPrint the FINAL order of cows.",
+        "N 마리 소가 한 줄에 있어요. 한 라운드는 두 번의 뒤집기로 이루어져 있어요. 위치 [a1, b1] 을 뒤집고, 그 다음 [a2, b2] 를 뒤집어요. 이 라운드 전체를 K 번 반복해요 (K 는 최대 10^9).\n최종 줄을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd00"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Swapity Swap</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Simulate one round to get the permutation. Find the cycle length. Then K mod cycle gives the effective number of rounds.",
-              "핵심: 한 라운드를 시뮬레이션해서 순열을 구해. 순환 길이를 찾고, K mod 순환 = 실제 라운드 수.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd00"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Swapity Swap</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "N cows in a line", "한 줄에 N 마리 소")}</b>
+                  {t(E, " (initially in order 1..N).", " (초기 순서 1..N).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One ROUND: ", "한 라운드: ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "reverse positions [a1, b1], then reverse [a2, b2]", "위치 [a1, b1] 뒤집기, 그 후 [a2, b2] 뒤집기")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Repeat the round ", "이 라운드를 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "K times (up to 10^9)", "K 번 반복 (최대 10^9)")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "final order of cows", "최종 줄")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -68,8 +105,7 @@ export function makeSwapityCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "[1,2,3]: reverse pos 1-2 -> [2,1,3], then reverse pos 2-3 -> [2,3,1]. That's 1 round. After 3 rounds it returns to [1,2,3]. What's the cycle length?",
-        "[1,2,3]: 위치 1-2 뒤집기 -> [2,1,3], 위치 2-3 뒤집기 -> [2,3,1]. 1라운드. 3라운드 후 [1,2,3]으로 복귀. 순환 길이는?"),
+        "[1,2,3]: reverse pos 1-2 -> [2,1,3], then reverse pos 2-3 -> [2,3,1].\nThat's 1 round.\nAfter 3 rounds it returns to [1,2,3].\nWhat's the cycle length?", "[1,2,3]: 위치 1-2 뒤집기 -> [2,1,3], 위치 2-3 뒤집기 -> [2,3,1]. 1라운드. 3라운드 후 [1,2,3]으로 복귀. 순환 길이는?"),
       question: t(E,
         "[1,2,3] with reversals at (1-2) then (2-3). Cycle length?",
         "[1,2,3]에서 (1-2), (2-3) 뒤집기. 순환 길이?"),
@@ -87,8 +123,7 @@ export function makeSwapityCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For the example [1,2,3] with reversals (1-2) then (2-3), what is the cycle length?",
-        "예제 [1,2,3]에서 (1-2), (2-3) 뒤집기의 순환 길이는?"),
+        "For the example [1,2,3] with reversals (1-2) then (2-3), what is the cycle length?", "예제 [1,2,3]에서 (1-2), (2-3) 뒤집기의 순환 길이는?"),
       question: t(E,
         "[1,2,3], reverse(1-2) then reverse(2-3) each round. Cycle length?",
         "[1,2,3], 매 라운드 reverse(1-2) 후 reverse(2-3). 순환 길이?"),
@@ -104,33 +139,51 @@ export function makeSwapityCh1(E) {
 /* ---------------------------------------------------------------
    Chapter 2: Code (2 steps: reveal / code)
    --------------------------------------------------------------- */
-export function makeSwapityCh2(E) {
+export function makeSwapityCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Build permutation in O(N*M), find cycle in O(N*cycle), apply in O(N*eff). Cycle length is at most N!, but in practice small.",
-        "순열 구성 O(N*M), 순환 찾기 O(N*cycle), 적용 O(N*eff). 순환 길이는 최대 N!이지만 실제로 작아."),
+        "Simulate one round of reversals on identity [1..N] to get the permutation P. Track each cow's cycle length in P; effective rounds = K mod cycle. Apply that many actual rounds.",
+        "단위 순열 [1..N] 에 한 라운드 뒤집기를 적용해 순열 P 를 구함. P 에서 각 소의 순환 길이 추적; 실제 라운드 = K mod 순환. 그만큼 진짜 라운드 적용."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N * cycle)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "1) Simulate one round of reversals to get the permutation. 2) Repeatedly apply until identity to find cycle length. 3) K mod cycle = effective rounds. Apply that many times.",
-              "1) 한 라운드 뒤집기를 시뮬레이션해서 순열 구함. 2) 항등까지 반복 적용해 순환 길이 찾기. 3) K mod 순환 = 실제 라운드. 그만큼 적용.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Simulate one round on [1..N]", "[1..N] 한 라운드 시뮬"), code: "P = apply M reversals to [1..N]", color: "#8b5cf6" },
+              { n: 2, label: t(E, "For each cow, find cycle length", "각 소의 순환 길이 찾기"), code: "cycle[i] = how many P applications return cow i to position i", color: "#7c3aed" },
+              { n: 3, label: t(E, "Effective rounds per cow", "소별 실제 라운드"), code: "effective[i] = K % cycle[i]", color: "#0891b2" },
+              { n: 4, label: t(E, "Apply P that many times per cow", "소별로 P 를 그 횟수만큼"), code: "build final lineup;  print(*final)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N · max_cycle)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "cycles bounded; per cow constant after build", "순환 길이 제한; 소별 상수 작업")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the cycle-detection solution!",
-        "순환 감지 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getSwapitySections(E),
     },
   ];
 }

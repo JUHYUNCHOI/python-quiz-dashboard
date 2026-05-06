@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getSumKSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -25,17 +26,40 @@ export function makeSumKCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given an array of N numbers and an integer K, compute the sum of each element raised to the power K. That is, find a[0]^K + a[1]^K + ... + a[N-1]^K.",
-        "N개의 숫자 배열과 정수 K가 주어지면, 각 원소를 K제곱하여 합을 구해. 즉, a[0]^K + a[1]^K + ... + a[N-1]^K를 구해."),
+        "Given an array of N numbers a[0..N−1] and an integer K, compute Σ a[i]^K — the sum of every element raised to the K-th power.",
+        "N 개의 숫자 배열 a[0..N−1] 와 정수 K 가 주어져요. 각 원소를 K 제곱한 값들의 총합 Σ a[i]^K 를 구해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u2211"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>{"Sum^K"}</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P6</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "For each element x in the array, compute x^K and sum them all up. Simple loop with exponentiation.",
-              "배열의 각 원소 x에 대해 x^K를 계산하고 모두 합산해. 거듭제곱과 반복문으로 해결.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u2211"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>{"Sum^K"}</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P6</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Given an ", "")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "array of N numbers a[0..N−1]", "N 개의 숫자 배열 a[0..N−1]")}</b>
+                  {t(E, " and an integer ", " 와 정수 ")}
+                  <b style={{ color: "#7c3aed" }}>K</b>
+                  {t(E, ".", " 이 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "a[0]^K + a[1]^K + … + a[N−1]^K", "a[0]^K + a[1]^K + … + a[N−1]^K")}</b>
+                  {t(E, ".", " 를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -43,8 +67,7 @@ export function makeSumKCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Array = [1, 2, 3], K = 2. Sum of squares: 1^2 + 2^2 + 3^2 = 1 + 4 + 9 = 14.",
-        "배열 = [1, 2, 3], K = 2. 제곱의 합: 1^2 + 2^2 + 3^2 = 1 + 4 + 9 = 14."),
+        "Array = [1, 2, 3], K = 2. Sum of squares: 1^2 + 2^2 + 3^2 = 1 + 4 + 9 = 14.", "배열 = [1, 2, 3], K = 2. 제곱의 합: 1^2 + 2^2 + 3^2 = 1 + 4 + 9 = 14."),
       question: t(E,
         "Array=[1,2,3], K=2. What is the sum of squares?",
         "배열=[1,2,3], K=2. 제곱의 합은?"),
@@ -63,8 +86,7 @@ export function makeSumKCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Calculate sum of squares for [1, 2, 3]!",
-        "[1, 2, 3]의 제곱의 합을 계산해봐!"),
+        "Calculate sum of squares for [1, 2, 3]!", "[1, 2, 3]의 제곱의 합을 계산해봐요!"),
       question: t(E,
         "Array=[1,2,3], K=2. Enter the sum:",
         "배열=[1,2,3], K=2. 합을 입력해:"),
@@ -80,33 +102,51 @@ export function makeSumKCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeSumKCh2(E) {
+export function makeSumKCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Loop through each element, compute x^K, and add to result. O(N * log K) with fast exponentiation, or O(N * K) with naive approach.",
-        "각 원소를 순회하며 x^K를 계산하고 결과에 더해. 빠른 거듭제곱으로 O(N * log K), 단순 방법으로 O(N * K)."),
+        "Iterate the array; for each element x, add x**K to the running total. Python's ** uses fast exponentiation.",
+        "배열을 순회; 각 원소 x 마다 x**K 를 누적. Python 의 ** 는 빠른 거듭제곱 사용."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Python's ** operator handles exponentiation efficiently. Just iterate and accumulate.",
-              "Python의 ** 연산자가 거듭제곱을 효율적으로 처리해. 순회하며 누적하면 돼.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read N, K, array", "N, K, 배열 읽기"), code: "N, K = ...; A = list(...)", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Init total = 0", "total = 0 초기화"), code: "total = 0", color: "#7c3aed" },
+              { n: 3, label: t(E, "For each x, add x**K", "각 x 마다 x**K 누적"), code: "for x in A: total += x ** K", color: "#0891b2" },
+              { n: 4, label: t(E, "Print total", "total 출력"), code: "print(total)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N · log K)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "fast exponentiation per element", "원소마다 빠른 거듭제곱")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete sum of powers solution!",
-        "거듭제곱의 합 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getSumKSections(E),
     },
   ];
 }

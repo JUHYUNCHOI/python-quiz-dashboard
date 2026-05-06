@@ -200,12 +200,7 @@ Next page: type it yourself.`
           title: "✋ Type the template yourself",
           content: `**Mission**: use the full template above. **Read N, output N+1**.
 
-\`\`\`
-Input: 5
-Output: 6
-\`\`\`
-
-> 💡 Header + namespace + Fast I/O 2 lines + cin/cout`,
+> 💡 Header + namespace + Fast I/O 2 lines + cin/cout. Input / target output in the boxes below.`,
           starterCode: `// Type the template yourself
 // 1. #include <bits/stdc++.h>
 // 2. using namespace std;

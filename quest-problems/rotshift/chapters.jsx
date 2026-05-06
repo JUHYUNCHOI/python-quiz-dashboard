@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getRotShiftSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -37,25 +38,71 @@ export function makeRotShiftCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows stand in a circle. Some positions are 'active'. Each minute, cows at active positions rotate, then active positions shift! \ud83d\udd04",
-        "\uc18c\ub4e4\uc774 \uc6d0\ud615\uc73c\ub85c \uc11c \uc788\uc5b4. \uc77c\ubd80 \uc704\uce58\uac00 '\ud65c\uc131'. \ub9e4\ubd84 \ud65c\uc131 \uc704\uce58\uc758 \uc18c\ub4e4\uc774 \ud68c\uc804\ud558\uace0, \ud65c\uc131 \uc704\uce58\uac00 \uc774\ub3d9\ud574! \ud83d\udd04"),
+        "N cows stand at positions 0..N−1 in a circle. K of those positions are 'active'.\nEach minute: (1) all cows currently AT active positions cyclically rotate by 1 (within the active set), (2) every active position then shifts by +1 (mod N).\nAfter T minutes, where does each cow end up?",
+        "N마리 소가 원형의 위치 0..N−1에 서있고, 그중 K개의 위치가 '활성'이에요.\n매분: (1) 활성 위치에 있는 소들이 활성 집합 안에서 순환 회전(1칸), (2) 그 다음 활성 위치들이 +1 만큼 이동 (N 으로 나눈 나머지).\nT분 후 각 소는 어디에 있을까요?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Rotate and Shift</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "N positions in a circle, K active positions. Each step:\n1. Rotate cows at active positions cyclically\n2. Shift active positions by +1\nAfter T steps, where is each cow?",
-              "N\uac1c \uc6d0\ud615 \uc704\uce58, K\uac1c \ud65c\uc131 \uc704\uce58. \uac01 \ub2e8\uacc4:\n1. \ud65c\uc131 \uc704\uce58\uc758 \uc18c\ub4e4\uc744 \uc21c\ud658 \ud68c\uc804\n2. \ud65c\uc131 \uc704\uce58\ub97c +1 \uc774\ub3d9\nT\ub2e8\uacc4 \ud6c4 \uac01 \uc18c\uc758 \uc704\uce58\ub294?")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Rotate and Shift</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "N cows stand at ", "N마리 소가 ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "positions 0..N−1 in a circle", "원형 위치 0..N−1")}</b>
+                  {t(E, ". ", "에 서있어요. ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "K of those positions are active", "그중 K개의 위치가 활성")}</b>
+                  {t(E, ".", "이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each minute, two things happen in order:", "매분, 다음 두 가지가 순서대로 일어나요:")}
+                  <div style={{ marginTop: 6, marginLeft: 8, fontSize: 12, color: "#475569" }}>
+                    {t(E, "(1) cows at active positions ", "(1) 활성 위치의 소들이 ")}
+                    <b style={{ color: "#dc2626" }}>{t(E, "cyclically rotate", "활성 집합 안에서 순환 회전")}</b>
+                    {t(E, " within the active set (each shifts to the next active position).",
+                          " (각자 다음 활성 위치로 이동).")}
+                    <br/>
+                    {t(E, "(2) every active position itself ", "(2) 활성 위치들이 ")}
+                    <b style={{ color: "#7c3aed" }}>{t(E, "shifts by +1 (mod N)", "+1 만큼 이동 (N 으로 나눈 나머지)")}</b>
+                    {t(E, ".", ".")}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Total of ", "총 ")}
+                  <b style={{ color: "#16a34a" }}>{t(E, "T minutes", "T분")}</b>
+                  {t(E, " — T can be huge.", " — T는 매우 클 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "T분 후 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "final position of each cow after T minutes", "각 소의 최종 위치")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
     {
       type: "reveal",
       narr: t(E,
-        "Let's visualize with N=4, K=2, active=[0,1]. Rotation means: cow at pos 0 goes to pos 1, cow at pos 1 goes to pos 0 (swap for K=2).",
-        "N=4, K=2, active=[0,1]\uc73c\ub85c \uc2dc\uac01\ud654. \ud68c\uc804: \uc704\uce58 0\uc758 \uc18c\uac00 \uc704\uce58 1\ub85c, \uc704\uce58 1\uc758 \uc18c\uac00 \uc704\uce58 0\uc73c\ub85c (K=2\uc774\uba74 \uad50\ud658)."),
+        "Let's visualize with N=4, K=2, active=[0,1].\nRotation means: cow at pos 0 goes to pos 1, cow at pos 1 goes to pos 0 (swap for K=2).", "N=4, K=2, active=[0,1]\uc73c\ub85c \uc2dc\uac01\ud654.\n\ud68c\uc804: \uc704\uce58 0\uc758 \uc18c\uac00 \uc704\uce58 1\ub85c, \uc704\uce58 1\uc758 \uc18c\uac00 \uc704\uce58 0\uc73c\ub85c (K=2\uc774\uba74 \uad50\ud658)."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
@@ -74,7 +121,7 @@ export function makeRotShiftCh1(E) {
               ))}
             </div>
             <div style={{ fontSize: 12, color: "#8b5cf6", fontWeight: 700, textAlign: "center" }}>
-              {t(E, "Purple = active positions. They rotate, then shift right!", "\ubcf4\ub77c = \ud65c\uc131 \uc704\uce58. \ud68c\uc804 \ud6c4 \uc624\ub978\ucabd\uc73c\ub85c \uc774\ub3d9!")}
+              {t(E, "Purple = active positions. They rotate, then shift right!", "\ubcf4\ub77c = \ud65c\uc131 \uc704\uce58.\n\ud68c\uc804 \ud6c4 \uc624\ub978\ucabd\uc73c\ub85c \uc774\ub3d9!")}
             </div>
           </div>
         </div>),
@@ -82,8 +129,7 @@ export function makeRotShiftCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In the rotation step, cows cycle: A1\u2192A2\u2192...\u2192AK\u2192A1. Is this correct?",
-        "\ud68c\uc804 \ub2e8\uacc4\uc5d0\uc11c \uc18c\ub4e4\uc774 \uc21c\ud658: A1\u2192A2\u2192...\u2192AK\u2192A1. \ub9de\ub098?"),
+        "In the rotation step, cows cycle: A1\u2192A2\u2192...\u2192AK\u2192A1. Is this correct?", "\ud68c\uc804 \ub2e8\uacc4\uc5d0\uc11c \uc18c\ub4e4\uc774 \uc21c\ud658: A1\u2192A2\u2192...\u2192AK\u2192A1.\n\ub9de\ub098?"),
       question: t(E, "Rotation means A1\u2192A2\u2192...\u2192AK\u2192A1?", "\ud68c\uc804\uc740 A1\u2192A2\u2192...\u2192AK\u2192A1\uc744 \uc758\ubbf8?"),
       options: [t(E, "Yes", "\ub124"), t(E, "No", "\uc544\ub2c8\uc624")],
       correct: 0,
@@ -92,8 +138,7 @@ export function makeRotShiftCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "N=4, K=2, active=[0,1]. After 1 step:\n1. Rotate: cow0\u2192pos1, cow1\u2192pos0 (swap)\n2. Shift: active becomes [1,2]\nWhere is cow 0 now?",
-        "N=4, K=2, active=[0,1]. 1\ub2e8\uacc4 \ud6c4:\n1. \ud68c\uc804: cow0\u2192pos1, cow1\u2192pos0 (\uad50\ud658)\n2. \uc774\ub3d9: active\uac00 [1,2]\ub85c\nCow 0\uc740 \uc9c0\uae08 \uc5b4\ub514?"),
+        "N=4, K=2, active=[0,1]. After 1 step:\n1. Rotate: cow0\u2192pos1, cow1\u2192pos0 (swap)\n2. Shift: active becomes [1,2]\nWhere is cow 0 now?", "N=4, K=2, active=[0,1]. 1\ub2e8\uacc4 \ud6c4:\n1. \ud68c\uc804: cow0\u2192pos1, cow1\u2192pos0 (\uad50\ud658)\n2. \uc774\ub3d9: active\uac00 [1,2]\ub85c\nCow 0\uc740 \uc9c0\uae08 \uc5b4\ub514?"),
       question: t(E, "After 1 step, cow 0 is at position...?", "1\ub2e8\uacc4 \ud6c4 cow 0\uc758 \uc704\uce58\ub294?"),
       hint: t(E, "Cow 0 was at pos 0 (active), rotates to pos 1", "Cow 0\uc740 pos 0(\ud65c\uc131)\uc5d0 \uc788\uc5c8\uace0, pos 1\ub85c \ud68c\uc804"),
       answer: 1,
@@ -101,15 +146,14 @@ export function makeRotShiftCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Algorithm: Simply simulate each step. For large T, you can detect cycles, but for Bronze, direct simulation works!",
-        "\uc54c\uace0\ub9ac\uc998: \uac01 \ub2e8\uacc4\ub97c \ub2e8\uc21c\ud788 \uc2dc\ubbac\ub808\uc774\uc158. \ud070 T\uc5d0\ub294 \uc21c\ud658 \uac10\uc9c0\ub97c \ud560 \uc218 \uc788\uc9c0\ub9cc, \ube0c\ub860\uc988\ub294 \uc9c1\uc811 \uc2dc\ubbac\ub808\uc774\uc158\uc73c\ub85c \ucda9\ubd84!"),
+        "Algorithm: Simply simulate each step.\nFor large T, you can detect cycles, but for Bronze, direct simulation works!", "\uc54c\uace0\ub9ac\uc998: \uac01 \ub2e8\uacc4\ub97c \ub2e8\uc21c\ud788 \uc2dc\ubbac\ub808\uc774\uc158.\n\ud070 T\uc5d0\ub294 \uc21c\ud658 \uac10\uc9c0\ub97c \ud560 \uc218 \uc788\uc9c0\ub9cc, \ube0c\ub860\uc988\ub294 \uc9c1\uc811 \uc2dc\ubbac\ub808\uc774\uc158\uc73c\ub85c \ucda9\ubd84!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 800, color: "#8b5cf6", marginBottom: 10 }}>
               {t(E, "Simulation Steps", "\uc2dc\ubbac\ub808\uc774\uc158 \ub2e8\uacc4")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 2 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
                 "For each of T steps:\n1. Find which cow is at each active position\n2. Move each cow to the next active position (cyclic)\n3. Shift all active positions by +1 (mod N)\n4. After all steps, output each cow's position",
                 "T\ubc88 \ubc18\ubcf5:\n1. \uac01 \ud65c\uc131 \uc704\uce58\uc5d0 \uc5b4\ub5a4 \uc18c\uac00 \uc788\ub294\uc9c0 \ucc3e\uae30\n2. \uac01 \uc18c\ub97c \ub2e4\uc74c \ud65c\uc131 \uc704\uce58\ub85c \uc774\ub3d9 (\uc21c\ud658)\n3. \ubaa8\ub4e0 \ud65c\uc131 \uc704\uce58\ub97c +1 \uc774\ub3d9 (mod N)\n4. \ubaa8\ub4e0 \ub2e8\uacc4 \ud6c4 \uac01 \uc18c\uc758 \uc704\uce58 \ucd9c\ub825")}
@@ -123,21 +167,55 @@ export function makeRotShiftCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code
    ═══════════════════════════════════════════════════════════════ */
-export function makeRotShiftCh2(E) {
+export function makeRotShiftCh2(E, lang = "py") {
   return [
+    // 2-1: Complexity reveal
     {
-      type: "code",
+      type: "reveal",
       narr: t(E,
-        "Here's the simulation solution. We track each cow's position and apply rotate + shift each step.",
-        "\uc2dc\ubbac\ub808\uc774\uc158 \ud480\uc774\uc57c. \uac01 \uc18c\uc758 \uc704\uce58\ub97c \ucd94\uc801\ud558\uace0 \ub9e4 \ub2e8\uacc4 \ud68c\uc804 + \uc774\ub3d9\uc744 \uc801\uc6a9\ud574."),
-      label: t(E, "\ud83d\udc0d Full Solution", "\ud83d\udc0d \uc804\uccb4 \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Each step: cows on active positions cycle, then active positions shift +1. After K steps, the active set has shifted by K. We compute, for each cow, where she ends up after T minutes using modular arithmetic.",
+        "매 단계: 활성 위치의 소들이 순환 회전, 그 다음 활성 위치들이 +1 이동. K 단계 후 활성 집합은 K 만큼 이동. 각 소가 T 분 후 어디 있을지 모듈러 산술로 계산."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read positions and active mask", "위치와 활성 마스크 읽기"), code: "pos = list(range(N));  active = sorted(active_indices)", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Active set shifts by T (mod N)", "활성 집합이 T 이동 (mod N)"), code: "shift = T % N", color: "#0891b2" },
+              { n: 3, label: t(E, "Cows on active positions cycle T times", "활성 위치 소들이 T 번 순환"), code: "rot = T % len(active)  →  permutation table", color: "#7c3aed" },
+              { n: 4, label: t(E, "Compute final position for each cow", "각 소의 최종 위치 계산"), code: "for cow_id in 0..N−1: print(final[cow_id])", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N + T mod N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "closed-form via modular arithmetic", "모듈러로 닫힌 식 계산")}</div>
+          </div>
+        </div>),
+    },
+    {
+      type: "progressive",
+      narr: t(E,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getRotShiftSections(E),
     },
     {
       type: "quiz",
       narr: t(E,
-        "After the rotation, what happens to the active positions?",
-        "\ud68c\uc804 \ud6c4 \ud65c\uc131 \uc704\uce58\ub294 \uc5b4\ub5bb\uac8c \ub420\uae4c?"),
+        "After the rotation, what happens to the active positions?", "\ud68c\uc804 \ud6c4 \ud65c\uc131 \uc704\uce58\ub294 \uc5b4\ub5bb\uac8c \ub420\uae4c?"),
       question: t(E, "After rotation, active positions...?", "\ud68c\uc804 \ud6c4 \ud65c\uc131 \uc704\uce58\ub294?"),
       options: [
         t(E, "Stay the same", "\uadf8\ub300\ub85c"),
@@ -150,8 +228,7 @@ export function makeRotShiftCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "If N=6 and active position is currently 5, after shifting by +1 mod 6, what is its new position?",
-        "N=6\uc774\uace0 \ud65c\uc131 \uc704\uce58\uac00 \ud604\uc7ac 5\uc774\uba74, +1 mod 6 \uc774\ub3d9 \ud6c4 \uc0c8 \uc704\uce58\ub294?"),
+        "If N=6 and active position is currently 5, after shifting by +1 mod 6, what is its new position?", "N=6\uc774\uace0 \ud65c\uc131 \uc704\uce58\uac00 \ud604\uc7ac 5\uc774\uba74, +1 mod 6 \uc774\ub3d9 \ud6c4 \uc0c8 \uc704\uce58\ub294?"),
       question: t(E, "(5 + 1) mod 6 = ?", "(5 + 1) mod 6 = ?"),
       hint: t(E, "6 mod 6 = 0, wraps around!", "6 mod 6 = 0, \uc21c\ud658!"),
       answer: 0,

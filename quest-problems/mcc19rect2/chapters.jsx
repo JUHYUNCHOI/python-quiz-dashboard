@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMcc19Rect2Sections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -28,17 +29,39 @@ export function makeMcc19Rect2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given 3 corners of an axis-aligned rectangle, find the 4th corner. Key insight: XOR! Each x-coordinate appears exactly twice, so x4 = x1 XOR x2 XOR x3.",
-        "축에 정렬된 직사각형의 3개 꼭짓점이 주어지면 4번째를 찾아. 핵심: XOR! 각 x좌표는 정확히 2번 나타나니까 x4 = x1 XOR x2 XOR x3."),
+        "An axis-aligned rectangle has 4 corners; 3 are given.\nPrint the COORDINATES of the 4th (missing) corner.",
+        "축에 평행한 직사각형의 꼭짓점 4 개 중 3 개가 주어져요.\n누락된 4 번째 꼭짓점의 좌표를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>▭</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Rectangle 2</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P7</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: In a rectangle, the 4 x-coords form 2 pairs. XOR cancels pairs: a XOR a = 0. So x4 = x1 XOR x2 XOR x3. Same for y.",
-              "핵심: 직사각형에서 4개의 x좌표는 2쌍을 형성. XOR은 쌍을 상쇄: a XOR a = 0. 그래서 x4 = x1 XOR x2 XOR x3. y도 마찬가지.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>▭</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Rectangle 2</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P7</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Given ", "")}
+                  <b style={{ color: "#059669" }}>{t(E, "3 corners of an axis-aligned rectangle", "축에 평행한 직사각형의 꼭짓점 3 개")}</b>
+                  {t(E, " (sides parallel to the x and y axes).",
+                        " 가 주어져요 (변이 x, y 축에 평행).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "coordinates of the 4th (missing) corner", "누락된 4 번째 꼭짓점의 좌표")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -46,8 +69,7 @@ export function makeMcc19Rect2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Corners: (0,0), (2,0), (0,3). The rectangle has x-values {0,2} and y-values {0,3}. What's the 4th corner?",
-        "꼭짓점: (0,0), (2,0), (0,3). 직사각형의 x값은 {0,2}, y값은 {0,3}. 4번째 꼭짓점은?"),
+        "Corners: (0,0), (2,0), (0,3).\nThe rectangle has x-values {0,2} and y-values {0,3}.\nWhat's the 4th corner?", "꼭짓점: (0,0), (2,0), (0,3). 직사각형의 x값은 {0,2}, y값은 {0,3}. 4번째 꼭짓점은?"),
       question: t(E,
         "3 corners: (0,0), (2,0), (0,3). 4th corner?",
         "3개 꼭짓점: (0,0), (2,0), (0,3). 4번째 꼭짓점은?"),
@@ -65,8 +87,7 @@ export function makeMcc19Rect2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "Corners: (0,0), (2,0), (0,3). What is the x-coordinate of the 4th corner?",
-        "꼭짓점: (0,0), (2,0), (0,3). 4번째 꼭짓점의 x좌표는?"),
+        "Corners: (0,0), (2,0), (0,3). What is the x-coordinate of the 4th corner?", "꼭짓점: (0,0), (2,0), (0,3). 4번째 꼭짓점의 x좌표는?"),
       question: t(E,
         "4th corner x-coordinate = ?",
         "4번째 꼭짓점의 x좌표 = ?"),
@@ -82,33 +103,51 @@ export function makeMcc19Rect2Ch1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeMcc19Rect2Ch2(E) {
+export function makeMcc19Rect2Ch2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Just XOR the three x-coordinates and XOR the three y-coordinates. O(1) time!",
-        "세 x좌표를 XOR하고 세 y좌표를 XOR하면 돼. O(1) 시간!"),
+        "Each x coord appears exactly twice in a rectangle's 4 corners; same for y. XOR of all 4 x's = 0, so XOR of the 3 given x's gives the missing one.",
+        "직사각형 4 꼭짓점에서 각 x 좌표는 정확히 2 번 등장; y 도 동일. 4 개 x 의 XOR = 0 이므로, 주어진 3 개 x 의 XOR 이 빠진 1 개."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>O(1)</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "XOR property: a ^ a = 0, a ^ 0 = a. In a rectangle, each unique x/y appears twice. XOR of all 4 = 0, so missing = XOR of known 3.",
-              "XOR 성질: a ^ a = 0, a ^ 0 = a. 직사각형에서 각 고유 x/y는 2번 등장. 4개의 XOR = 0이므로 빠진 것 = 알려진 3개의 XOR.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read 3 corners", "꼭짓점 3 개 읽기"), code: "corners = [(x1,y1),(x2,y2),(x3,y3)]", color: "#059669" },
+              { n: 2, label: t(E, "XOR all x's", "x 모두 XOR"), code: "x4 = x1 ^ x2 ^ x3", color: "#0891b2" },
+              { n: 3, label: t(E, "XOR all y's", "y 모두 XOR"), code: "y4 = y1 ^ y2 ^ y3", color: "#7c3aed" },
+              { n: 4, label: t(E, "Print 4th corner", "4 번째 꼭짓점 출력"), code: "print(x4, y4)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(1)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant XOR operations", "상수 XOR 연산")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the XOR solution!",
-        "XOR 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMcc19Rect2Sections(E),
     },
   ];
 }

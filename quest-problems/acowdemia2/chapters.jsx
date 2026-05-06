@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getAcowdemia2Sections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -34,17 +35,48 @@ export function makeAcow2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "In academic papers, author order can indicate seniority. If author A always appears before author B in every paper they co-author, A may be more senior.",
-        "학술 논문에서 저자 순서는 선임 여부를 나타낼 수 있어. 저자 A가 공동 저술한 모든 논문에서 항상 B 앞에 나타나면, A가 더 선임일 수 있어."),
+        "K papers are each authored by some subset of N total cow-researchers, written in a particular order.\nCow A is more senior than cow B if (a) they share at least one paper, and (b) on every shared paper A's name appears BEFORE B's. Count how many ordered pairs (A, B) satisfy this 'definitely senior' relation.",
+        "N명의 소-연구자가 함께 K개의 논문을 썼고, 각 논문마다 저자 순서가 정해져 있어요.\n소 A 가 소 B 보다 '확실히 선임' 이려면 두 가지 조건이 필요해요. 첫째, 둘이 함께 쓴 논문이 하나라도 있어야 해요. 둘째, 그 모든 공동 논문에서 A 의 이름이 B 보다 앞에 나와야 해요. 이 조건을 만족하는 순서쌍 (A, B) 의 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udc68\u200d\ud83d\udd2c"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Acowdemia II</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: For each pair, track if one always appears before the other. If A before B in all shared papers and not vice versa, A is more senior.",
-              "핵심: 각 쌍에 대해 한쪽이 항상 앞에 나타나는지 추적. 모든 공동 논문에서 A가 B 앞이고 반대는 없으면 A가 더 선임.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc68\u200d\ud83d\udd2c"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Acowdemia II</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N cow-researchers and K papers", "N명의 소-연구자와 K개의 논문")}</b>
+                  {t(E, " — each paper has an ordered list of authors.",
+                        " 이 있고, 각 논문은 정해진 순서의 저자 목록을 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Cow ", "소 ")}
+                  <b style={{ color: "#7c3aed" }}>A is 'definitely senior' to B</b>
+                  {t(E, " if they share at least one paper AND in every shared paper A's name appears before B's.",
+                        " 인 조건: 둘이 함께 쓴 논문이 1개 이상 있고, 그 모든 공동 논문에서 A 가 B 보다 앞에 등장.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "number of ordered pairs (A, B) where A is definitely senior to B", "A 가 B 보다 확실히 선임인 순서쌍 (A, B) 의 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -52,8 +84,7 @@ export function makeAcow2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In author list [A, B, C], A appears before B. If this is the only paper, can we say A is more senior than B?",
-        "저자 목록 [A, B, C]에서 A가 B 앞에 나와. 이것이 유일한 논문이면, A가 B보다 선임이라고 할 수 있을까?"),
+        "In author list [A, B, C], A appears before B.\nIf this is the only paper, can we say A is more senior than B?", "저자 목록 [A, B, C]에서 A가 B 앞에 나와요. 이것이 유일한 논문이면, A가 B보다 선임이라고 할 수 있을까?"),
       question: t(E,
         "List [A,B,C]: A always before B. A more senior or equal?",
         "목록 [A,B,C]: A가 항상 B 앞. A가 더 선임 또는 동등?"),
@@ -70,8 +101,7 @@ export function makeAcow2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "2 publications: [A,B] and [B,A]. What is the relationship between A and B? Enter 0 for undetermined.",
-        "2개의 논문: [A,B]와 [B,A]. A와 B의 관계는? 판단 불가이면 0을 입력해."),
+        "2 publications: [A,B] and [B,A].\nWhat is the relationship between A and B?\nEnter 0 for undetermined.", "2개의 논문: [A,B]와 [B,A]. A와 B의 관계는? 판단 불가이면 0을 입력해요."),
       question: t(E,
         "Pubs [A,B] and [B,A]. Relationship? (0=undetermined)",
         "논문 [A,B]와 [B,A]. 관계? (0=판단 불가)"),
@@ -87,33 +117,51 @@ export function makeAcow2Ch1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeAcow2Ch2(E) {
+export function makeAcow2Ch2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "For each publication, record all pairwise orderings. Then check each pair. O(N^2 * M) time.",
-        "각 논문에 대해 모든 쌍의 순서를 기록. 그런 다음 각 쌍을 확인. O(N^2 * M) 시간."),
+        "For every paper, mark before[a][b] = True if a appears before b somewhere in that paper. Cow A is 'definitely senior' to B iff before[A][B] is True AND before[B][A] is False. Sum over all (A, B).",
+        "모든 논문에서, 그 논문 안에서 a 가 b 보다 앞이면 before[a][b] = True. A 가 B 보다 '확실히 선임' 이면 before[A][B] 가 True 이고 before[B][A] 가 False. 모든 (A, B) 에 대해 합산."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N^2 * M)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Track a boolean matrix: before[a][b] = true if a appeared before b in any paper. If before[a][b] and not before[b][a], a is more senior.",
-              "불리언 행렬 추적: before[a][b] = 어떤 논문에서 a가 b 앞에 나타났으면 true. before[a][b]이고 before[b][a]가 아니면, a가 더 선임.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "For each paper, mark all (a, b) pairs", "각 논문에서 (a, b) 쌍 표시"), code: "for paper, for i < j: before[paper[i]][paper[j]] = True", color: "#2563eb" },
+              { n: 2, label: t(E, "Check every ordered pair", "모든 순서쌍 검사"), code: "for A in 1..N: for B in 1..N if A != B:", color: "#7c3aed" },
+              { n: 3, label: t(E, "Definitely senior?", "확실히 선임?"), code: "if before[A][B] and not before[B][A]: count += 1", color: "#0891b2" },
+              { n: 4, label: t(E, "Print count", "개수 출력"), code: "print(count)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N² + total authors)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "fill matrix once + scan all pairs", "행렬 한 번 채우기 + 모든 쌍 스캔")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the pairwise comparison solution!",
-        "쌍별 비교 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getAcowdemia2Sections(E),
     },
   ];
 }

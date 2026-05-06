@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getCowCollegeSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -24,23 +25,75 @@ export const SOLUTION_CODE = [
 ];
 
 
-/* Helper: code snippet box */
+/* Python syntax highlighter (shared across snippets) */
+const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
+const PY_BUILTIN = new Set(["print","input","range","len","sum","map","int","str","chr","ord","min","max","sorted","reversed","list","dict","set","tuple","enumerate","zip","abs","round","type","isinstance","open","filter","any","all","bool","float"]);
+
+function pyHighlight(line, baseColor) {
+  const tokens = [];
+  let i = 0;
+  while (i < line.length) {
+    if (line[i] === "'" || line[i] === '"') {
+      const q = line[i];
+      let j = i + 1;
+      while (j < line.length && line[j] !== q) { if (line[j] === "\\") j++; j++; }
+      tokens.push({ text: line.slice(i, j + 1), color: "#a5d6a7" });
+      i = j + 1;
+    } else if (line[i] === "#") {
+      tokens.push({ text: line.slice(i), color: "#6b7280" });
+      i = line.length;
+    } else if (/[0-9]/.test(line[i]) && (i === 0 || /[\s(,=+\-*/<>[\]:]/.test(line[i - 1]))) {
+      let j = i;
+      while (j < line.length && /[0-9.]/.test(line[j])) j++;
+      tokens.push({ text: line.slice(i, j), color: "#f9a825" });
+      i = j;
+    } else if (/[a-zA-Z_]/.test(line[i])) {
+      let j = i;
+      while (j < line.length && /[a-zA-Z_0-9]/.test(line[j])) j++;
+      const word = line.slice(i, j);
+      if (PY_KW.has(word)) tokens.push({ text: word, color: "#c792ea" });
+      else if (PY_BUILTIN.has(word)) tokens.push({ text: word, color: "#82aaff" });
+      else tokens.push({ text: word, color: baseColor });
+      i = j;
+    } else if ("=<>!+-*/%&|^~".includes(line[i])) {
+      let j = i;
+      while (j < line.length && "=<>!+-*/%&|^~".includes(line[j])) j++;
+      tokens.push({ text: line.slice(i, j), color: "#89ddff" });
+      i = j;
+    } else {
+      tokens.push({ text: line[i], color: baseColor });
+      i++;
+    }
+  }
+  return tokens;
+}
+
+/* Helper: code snippet box (token-highlighted Python) */
 const CodeSnippet = ({ lines, highlight: hl }) => (
   <div style={{
     background: "#1e293b", borderRadius: 10, padding: "10px 8px",
     overflowX: "auto", fontSize: 12, lineHeight: 1.8,
     fontFamily: "'JetBrains Mono', monospace", marginTop: 8,
   }}>
-    {lines.map((l, i) => (
-      <div key={i} style={{
-        display: "flex", minHeight: 20,
-        background: hl && hl.includes(i) ? "rgba(217,119,6,.15)" : "transparent",
-        borderRadius: 4, padding: "0 4px",
-      }}>
-        <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 10, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
-        <span style={{ whiteSpace: "pre", color: hl && hl.includes(i) ? "#fcd34d" : "#e2e8f0" }}>{l}</span>
-      </div>
-    ))}
+    {lines.map((l, i) => {
+      const isHl = hl && hl.includes(i);
+      const baseColor = isHl ? "#fcd34d" : "#e2e8f0";
+      const tokens = pyHighlight(l, baseColor);
+      return (
+        <div key={i} style={{
+          display: "flex", minHeight: 20,
+          background: isHl ? "rgba(217,119,6,.15)" : "transparent",
+          borderRadius: 4, padding: "0 4px",
+        }}>
+          <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 10, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
+          <span style={{ whiteSpace: "pre", wordBreak: "break-all" }}>
+            {tokens.map((tk, j) => (
+              <span key={j} style={{ color: tk.color }}>{tk.text}</span>
+            ))}
+          </span>
+        </div>
+      );
+    })}
   </div>
 );
 
@@ -54,17 +107,49 @@ export function makeCowCollegeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John is setting tuition for cow college! Each cow has a maximum she can pay. Set one price to maximize total revenue. Let's figure it out!",
-        "농부 존이 소 대학 등록금을 정해! 각 소가 낼 수 있는 최대 금액이 있어. 하나의 가격을 정해서 총 수입을 최대화해보자!"),
+        "FJ runs a cow college. Each of N cows has a maximum tuition c[i] she's willing to pay. FJ sets ONE tuition price P; every cow with c[i] ≥ P enrolls and pays exactly P, the rest pay 0.\nPrint the MAX possible total revenue (and a price that achieves it).",
+        "FJ 가 소 대학을 운영해요. N마리 소 각자에게는 낼 수 있는 최대 등록금 c[i] 가 있어요. FJ 가 등록금 P 를 단 하나 정하면, c[i] ≥ P 인 소만 등록해서 정확히 P 를 내고, 나머지는 0.\n가능한 최대 총 수입과 그것을 달성하는 가격을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\uD83C\uDF93"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow College</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "N cows, each with a max tuition. Set ONE tuition price. Revenue = price x (cows who can afford it). Maximize revenue!",
-              "N마리의 소, 각각 최대 등록금. 등록금을 하나로 정해. 수입 = 가격 x (지불 가능한 소 수). 수입 최대화!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\uD83C\uDF93"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow College</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#d97706" }}>{t(E, "N cows", "N마리 소")}</b>
+                  {t(E, ", each with a maximum tuition ", " 가 있고, 각자 최대 등록금 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>c[i]</code>
+                  {t(E, " she's willing to pay.", " 를 가져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ picks ", "FJ 가 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "ONE tuition price P", "단 하나의 등록금 P")}</b>
+                  {t(E, " — every cow with c[i] ≥ P pays P, the rest pay 0.",
+                        " 를 정하면, c[i] ≥ P 인 소만 P 를 내고 나머지는 0.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum total revenue and a price P that achieves it", "최대 총 수입과 그것을 만드는 가격 P")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -72,8 +157,7 @@ export function makeCowCollegeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's visualize! Each cow has a maximum tuition she can pay. Unsorted first, then we'll see why sorting helps.",
-        "시각화해보자! 각 소가 낼 수 있는 최대 등록금이 있어. 먼저 정렬 전, 그다음 정렬이 왜 도움되는지 보자."),
+        "Let's visualize!\nEach cow has a maximum tuition she can pay.\nUnsorted first, then we'll see why sorting helps.", "시각화해보자! 각 소가 낼 수 있는 최대 등록금이 있어요. 먼저 정렬 전, 그다음 정렬이 왜 도움되는지 보자."),
       content: (() => {
         const unsorted = [6, 1, 6, 4];
         const colors = ["#d97706", "#059669", "#7c3aed", "#dc2626"];
@@ -99,11 +183,9 @@ export function makeCowCollegeCh1(E) {
             {/* Revenue idea */}
             <div style={{
               background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10,
-              padding: 10, fontSize: 13, color: C.text, lineHeight: 1.8,
-            }}>
+              padding: 10, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
-                "If we set tuition = $4, which cows can pay? Those with max >= 4: cows with $6, $6, $4. That's 3 cows. Revenue = 4 x 3 = 12.",
-                "등록금 = $4로 정하면 누가 낼 수 있을까? 최대 >= 4인 소: $6, $6, $4. 3마리. 수입 = 4 x 3 = 12.")}
+                "If we set tuition = $4, which cows can pay?\nThose with max >= 4: cows with $6, $6, $4. That's 3 cows. Revenue = 4 x 3 = 12.", "등록금 = $4로 정하면 누가 낼 수 있을까?\n최대 >= 4인 소: $6, $6, $4. 3마리. 수입 = 4 x 3 = 12.")}
             </div>
           </div>
         );
@@ -113,8 +195,7 @@ export function makeCowCollegeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "If we SORT the tuitions, something magical happens! When we pick c[i] as tuition, all cows from index i onward can afford it!",
-        "등록금을 정렬하면 마법이 일어나! c[i]를 등록금으로 정하면 인덱스 i부터 끝까지 모든 소가 지불 가능!"),
+        "If we SORT the tuitions, something magical happens!\nWhen we pick c[i] as tuition, all cows from index i onward can afford it!", "등록금을 정렬하면 마법이 일어나! c[i]를 등록금으로 정하면 인덱스 i부터 끝까지 모든 소가 지불 가능!"),
       content: (() => {
         const sorted = [1, 4, 6, 6];
         return (
@@ -155,8 +236,7 @@ export function makeCowCollegeCh1(E) {
                 {t(E, "Tuition = c[1] = $4", "등록금 = c[1] = $4")}
               </div>
               {t(E,
-                "Cows from index 1 onward (green bars) can all pay! Count = N - i = 4 - 1 = 3. Revenue = 4 x 3 = 12",
-                "인덱스 1부터 끝까지(초록 막대) 모두 지불 가능! 수 = N - i = 4 - 1 = 3. 수입 = 4 x 3 = 12")}
+                "Cows from index 1 onward (green bars) can all pay!\nCount = N - i = 4 - 1 = 3. Revenue = 4 x 3 = 12", "인덱스 1부터 끝까지(초록 막대) 모두 지불 가능!\n수 = N - i = 4 - 1 = 3. 수입 = 4 x 3 = 12")}
             </div>
           </div>
         );
@@ -166,8 +246,7 @@ export function makeCowCollegeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Sorted c = [1, 4, 6, 6]. If tuition = 6 (index 2), how many cows pay and what's the revenue?",
-        "정렬된 c = [1, 4, 6, 6]. 등록금 = 6(인덱스 2)이면 몇 마리가 지불하고 수입은?"),
+        "Sorted c = [1, 4, 6, 6].\nIf tuition = 6 (index 2), how many cows pay and what's the revenue?", "정렬된 c = [1, 4, 6, 6]. 등록금 = 6(인덱스 2)이면 몇 마리가 지불하고 수입은?"),
       question: t(E,
         "c = [1, 4, 6, 6]. Tuition = c[2] = 6. Revenue = ?",
         "c = [1, 4, 6, 6]. 등록금 = c[2] = 6. 수입 = ?"),
@@ -185,8 +264,7 @@ export function makeCowCollegeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's try EVERY possible tuition on sorted c = [1, 4, 6, 6] and see which gives the most revenue!",
-        "정렬된 c = [1, 4, 6, 6]에서 가능한 모든 등록금을 시도해서 어느 것이 최대 수입인지 보자!"),
+        "Let's try EVERY possible tuition on sorted c = [1, 4, 6, 6] and see which gives the most revenue!", "정렬된 c = [1, 4, 6, 6]에서 가능한 모든 등록금을 시도해서 어느 것이 최대 수입인지 보자!"),
       content: (() => {
         const rows = [
           { i: 0, t: 1, cows: 4, rev: 4 },
@@ -244,8 +322,7 @@ export function makeCowCollegeCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "c = [1, 2, 3, 4, 5] (already sorted). Try each as tuition. What's the maximum revenue?",
-        "c = [1, 2, 3, 4, 5] (이미 정렬). 각각을 등록금으로 시도해. 최대 수입은?"),
+        "c = [1, 2, 3, 4, 5] (already sorted). Try each as tuition. What's the maximum revenue?", "c = [1, 2, 3, 4, 5] (이미 정렬). 각각을 등록금으로 시도해요. 최대 수입은?"),
       question: t(E,
         "c = [1, 2, 3, 4, 5]. Max revenue = ?",
         "c = [1, 2, 3, 4, 5]. 최대 수입 = ?"),
@@ -267,8 +344,7 @@ export function makeCowCollegeCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The algorithm: Sort the array. Then sweep through, trying each c[i] as the tuition. Count = N-i. Track maximum revenue.",
-        "알고리즘: 배열 정렬. 그다음 각 c[i]를 등록금으로 시도하며 스윕. 수 = N-i. 최대 수입 추적."),
+        "The algorithm: Sort the array.\nThen sweep through, trying each c[i] as the tuition.\nCount = N-i.\nTrack maximum revenue.", "알고리즘: 배열 정렬. 그다음 각 c[i]를 등록금으로 시도하며 스윕. 수 = N-i. 최대 수입 추적."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
@@ -304,8 +380,7 @@ export function makeCowCollegeCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace c = [2, 5, 3, 8, 1]. After sorting: [1, 2, 3, 5, 8].",
-        "c = [2, 5, 3, 8, 1]을 추적해보자. 정렬 후: [1, 2, 3, 5, 8]."),
+        "Let's trace c = [2, 5, 3, 8, 1]. After sorting: [1, 2, 3, 5, 8].", "c = [2, 5, 3, 8, 1]을 추적해보자. 정렬 후: [1, 2, 3, 5, 8]."),
       content: (() => {
         const rows = [
           { i: 0, t: 1, cows: 5, rev: 5 },
@@ -367,18 +442,17 @@ export function makeCowCollegeCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Time complexity: O(N log N) for sorting + O(N) for the sweep. Total: O(N log N).",
-        "시간 복잡도: 정렬 O(N log N) + 스윕 O(N). 총: O(N log N)."),
+        "Time complexity: O(N log N) for sorting + O(N) for the sweep. Total: O(N log N).", "시간 복잡도: 정렬 O(N log N) + 스윕 O(N). 총: O(N log N)."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
           <div style={{ fontSize: 20, fontWeight: 900, color: "#d97706", fontFamily: "'JetBrains Mono', monospace" }}>
             O(N log N)
           </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
-              "Sorting takes O(N log N). The single sweep is O(N). Since O(N log N) > O(N), total = O(N log N). For N up to 100,000, this runs instantly!",
-              "정렬은 O(N log N). 스윕 한 번은 O(N). O(N log N) > O(N)이므로 총 = O(N log N). N이 100,000까지여도 즉시 실행!")}
+              "Sorting takes O(N log N).\nThe single sweep is O(N). Since O(N log N) > O(N), total = O(N log N). For N up to 100,000, this runs instantly!",
+              "정렬은 O(N log N).\n스윕 한 번은 O(N). O(N log N) > O(N)이므로 총 = O(N log N). N이 100,000까지여도 즉시 실행!")}
           </div>
         </div>),
     },
@@ -386,8 +460,7 @@ export function makeCowCollegeCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Try c = [3, 1, 2]. Sorted: [1, 2, 3]. Revenues: 1x3=3, 2x2=4, 3x1=3. What's the max?",
-        "c = [3, 1, 2]를 해봐. 정렬: [1, 2, 3]. 수입: 1x3=3, 2x2=4, 3x1=3. 최대는?"),
+        "Try c = [3, 1, 2]. Sorted: [1, 2, 3]. Revenues: 1x3=3, 2x2=4, 3x1=3. What's the max?", "c = [3, 1, 2]를 해봐요. 정렬: [1, 2, 3]. 수입: 1x3=3, 2x2=4, 3x1=3. 최대는?"),
       question: t(E,
         "c = [3, 1, 2]. Max revenue = ?",
         "c = [3, 1, 2]. 최대 수입 = ?"),
@@ -403,14 +476,13 @@ export function makeCowCollegeCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeCowCollegeCh3(E) {
+export function makeCowCollegeCh3(E, lang = "py") {
   return [
     // 3-1: Step 1 — Read input
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code! First, read N and the array of max tuitions.",
-        "코드를 만들자! 먼저 N과 최대 등록금 배열을 읽어."),
+        "Let's build the code! First, read N and the array of max tuitions.", "코드를 만들자! 먼저 N과 최대 등록금 배열을 읽어."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
@@ -441,8 +513,7 @@ export function makeCowCollegeCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Next, sort the array! This is the key insight: after sorting, c[i] as tuition means N-i cows can pay.",
-        "다음은 배열 정렬! 핵심 통찰: 정렬 후 c[i]를 등록금으로 하면 N-i마리가 지불 가능."),
+        "Next, sort the array!\nThis is the key insight: after sorting, c[i] as tuition means N-i cows can pay.", "다음은 배열 정렬! 핵심 통찰: 정렬 후 c[i]를 등록금으로 하면 N-i마리가 지불 가능."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
@@ -499,8 +570,7 @@ export function makeCowCollegeCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now sweep through the sorted array. For each index i, compute revenue = c[i] x (N-i) and track the best.",
-        "이제 정렬된 배열을 스윕해. 각 인덱스 i에서 수입 = c[i] x (N-i) 계산하고 최고를 추적해."),
+        "Now sweep through the sorted array.\nFor each index i, compute revenue = c[i] x (N-i) and track the best.", "이제 정렬된 배열을 스윕해요. 각 인덱스 i에서 수입 = c[i] x (N-i) 계산하고 최고를 추적해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
@@ -529,7 +599,7 @@ export function makeCowCollegeCh3(E) {
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E,
               "We track both the best revenue AND the corresponding tuition price, since the problem asks for both.",
-              "문제가 둘 다 물어보니까 최고 수입과 해당 등록금을 모두 추적해.")}
+              "문제가 둘 다 물어보니까 최고 수입과 해당 등록금을 모두 추적해요.")}
           </div>
         </div>),
     },
@@ -537,8 +607,7 @@ export function makeCowCollegeCh3(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Quick check: in sorted array c, why does cows_paying = N - i?",
-        "확인: 정렬된 배열 c에서 cows_paying = N - i인 이유는?"),
+        "Quick check: in sorted array c, why does cows_paying = N - i?", "확인: 정렬된 배열 c에서 cows_paying = N - i인 이유는?"),
       question: t(E,
         "Why is cows_paying = N - i in sorted array?",
         "정렬된 배열에서 cows_paying = N - i인 이유는?"),
@@ -550,14 +619,13 @@ export function makeCowCollegeCh3(E) {
       correct: 1,
       explain: t(E,
         "Correct! Since the array is sorted in ascending order, all elements from index i to N-1 are >= c[i]. So N-i cows can afford tuition c[i].",
-        "정답! 배열이 오름차순이라 인덱스 i부터 N-1까지 모든 원소가 >= c[i]. 그래서 N-i마리가 등록금 c[i]를 낼 수 있어."),
+        "정답! 배열이 오름차순이라 인덱스 i부터 N-1까지 모든 원소가 >= c[i]. 그래서 N-i마리가 등록금 c[i]를 낼 수 있어요."),
     },
     // 3-5: Step 4 — Print + full code
     {
       type: "reveal",
       narr: t(E,
-        "Last step: print the best revenue and the tuition price. That's the complete solution!",
-        "마지막 단계: 최고 수입과 등록금을 출력. 이게 전체 풀이야!"),
+        "Last step: print the best revenue and the tuition price. That's the complete solution!", "마지막 단계: 최고 수입과 등록금을 출력. 이게 전체 풀이에요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>

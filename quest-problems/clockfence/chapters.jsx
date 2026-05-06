@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getClockFenceSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -38,17 +39,49 @@ export function makeClockCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A fence path is described by a sequence of directions (N, E, S, W). Determine if the path goes clockwise (CW) or counter-clockwise (CCW) by counting right vs left turns!",
-        "울타리 경로가 방향 시퀀스(N, E, S, W)로 설명돼. 오른쪽 회전과 왼쪽 회전을 세서 시계 방향(CW)인지 반시계 방향(CCW)인지 판단해!"),
+        "A fence is described by a sequence of unit-step directions (N, E, S, W) that returns to the start, forming a closed simple polygon.\nDecide whether the fence is traced CLOCKWISE or COUNTER-CLOCKWISE.",
+        "울타리는 단위 길이 방향 (N, E, S, W) 의 수열로 주어져요. 그 방향대로 따라가면 시작점으로 돌아오고, 자기 자신과 교차하지 않는 닫힌 다각형이 만들어져요.\n이 울타리가 시계 방향 (CW) 으로 그려졌는지 반시계 방향 (CCW) 으로 그려졌는지 판단해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udd04"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Clockwise Fence</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Count right turns minus left turns. If positive, the path is clockwise. Map directions to numbers (N=0, E=1, S=2, W=3) and check transitions.",
-              "핵심: 오른쪽 회전 - 왼쪽 회전을 계산. 양수이면 시계 방향. 방향을 숫자로 매핑(N=0, E=1, S=2, W=3)하고 전환을 확인.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd04"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Clockwise Fence</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A fence is given as a ", "울타리가 ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "string of unit-step directions", "단위 길이 방향 문자열")}</b>
+                  {t(E, " — letters ", " — 문자 ")}
+                  <code style={{ background: "#ede9fe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>N E S W</code>
+                  {t(E, " (north / east / south / west).", " (북 / 동 / 남 / 서) 로 표현돼요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Following the directions ", "방향을 따라가면 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "returns to the start", "시작점으로 돌아와요")}</b>
+                  {t(E, " — forming a closed simple polygon (no self-crossings).",
+                        " — 자기 자신과 교차하지 않는 닫힌 단순 다각형이에요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "CW if the fence is traced clockwise, else CCW", "시계 방향이면 CW, 아니면 CCW")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -56,8 +89,7 @@ export function makeClockCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The path 'NESW' makes a square: go North, then East, then South, then West. Each turn is a right turn. Is this clockwise?",
-        "경로 'NESW'는 정사각형: 북쪽, 동쪽, 남쪽, 서쪽. 각 회전이 오른쪽 회전이야. 시계 방향일까?"),
+        "The path 'NESW' makes a square: go North, then East, then South, then West.\nEach turn is a right turn.\nIs this clockwise?", "경로 'NESW'는 정사각형: 북쪽, 동쪽, 남쪽, 서쪽. 각 회전이 오른쪽 회전이에요. 시계 방향일까요?"),
       question: t(E,
         "'NESW' path: all right turns. Clockwise?",
         "'NESW' 경로: 모두 오른쪽 회전. 시계 방향?"),
@@ -74,8 +106,7 @@ export function makeClockCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For 'NESW': N->E is right, E->S is right, S->W is right, W->N is right. How many right turns total?",
-        "'NESW'에서: N->E 오른쪽, E->S 오른쪽, S->W 오른쪽, W->N 오른쪽. 오른쪽 회전 총 몇 번?"),
+        "For 'NESW': N->E is right, E->S is right, S->W is right, W->N is right.\nHow many right turns total?", "'NESW'에서: N->E 오른쪽, E->S 오른쪽, S->W 오른쪽, W->N 오른쪽. 오른쪽 회전 총 몇 번?"),
       question: t(E,
         "'NESW': right turns - left turns = ?",
         "'NESW': 오른쪽 회전 - 왼쪽 회전 = ?"),
@@ -91,33 +122,51 @@ export function makeClockCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeClockCh2(E) {
+export function makeClockCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Map each direction to 0-3. A right turn increases by 1 (mod 4), a left turn decreases by 1. Count and compare. O(N) time.",
-        "각 방향을 0-3으로 매핑. 오른쪽 회전은 1 증가(mod 4), 왼쪽 회전은 1 감소. 세고 비교. O(N) 시간."),
+        "Map N=0, E=1, S=2, W=3. For each consecutive direction pair (d_i, d_{i+1}), the difference (d_{i+1} − d_i) mod 4 is 1 for a right turn and 3 for a left turn. CW iff right turns > left turns.",
+        "N=0, E=1, S=2, W=3 매핑. 연속 방향 쌍 (d_i, d_{i+1}) 의 차이 (d_{i+1} − d_i) mod 4 가 1 이면 오른쪽 회전, 3 이면 왼쪽 회전. 오른쪽 > 왼쪽 이면 CW."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "For each consecutive pair of directions, compute (next - cur) mod 4. If 1 = right turn, if 3 = left turn. Compare totals.",
-              "연속 방향 쌍마다 (다음 - 현재) mod 4 계산. 1이면 오른쪽 회전, 3이면 왼쪽 회전. 합계 비교.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Map directions to 0..3", "방향을 0..3 으로 매핑"), code: "d = [{'N':0,'E':1,'S':2,'W':3}[c] for c in path]", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Iterate consecutive pairs", "연속 쌍 순회"), code: "for i in range(N): turn = (d[(i+1) % N] - d[i]) % 4", color: "#7c3aed" },
+              { n: 3, label: t(E, "Count right (1) vs left (3) turns", "오른쪽 (1) vs 왼쪽 (3) 회전 세기"), code: "if turn == 1: right += 1  elif turn == 3: left += 1", color: "#0891b2" },
+              { n: 4, label: t(E, "CW if right > left", "오른쪽이 더 많으면 CW"), code: "print('CW' if right > left else 'CCW')", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass over direction string", "방향 문자열 한 번 순회")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the turn-counting solution!",
-        "회전 카운팅 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getClockFenceSections(E),
     },
   ];
 }

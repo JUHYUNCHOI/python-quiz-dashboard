@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getExplodingArrowSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -55,17 +56,47 @@ export function makeExplodingArrowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Arrows are placed on a grid, each pointing in a direction. When an arrow explodes, it triggers the next arrow in its direction. Count how many arrows explode in total!",
-        "화살이 격자 위에 놓여 있고, 각각 한 방향을 가리켜. 화살이 폭발하면 그 방향의 다음 화살을 연쇄 폭발시켜. 총 몇 개가 폭발할까?"),
+        "Arrows are placed on a 2D grid, each pointing N/S/E/W. When an arrow EXPLODES, it ignites the NEXT arrow in its direction (the closest arrow in the same row/column on that side) — and that arrow then explodes too, in a chain reaction.\nGiven a start arrow, print how many arrows in total explode.",
+        "2D 격자 위에 N/S/E/W 한 방향을 가리키는 화살들이 놓여 있어요. 어떤 화살이 폭발하면, 그 방향의 다음 화살 (같은 행/열에서 그쪽 방향에 있는 가장 가까운 화살) 을 점화해요 — 그 화살도 폭발하며 연쇄가 이어져요.\n시작 화살이 주어졌을 때, 결국 폭발하는 화살의 총 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udca5"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Exploding Arrow</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P5</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Use BFS/DFS to simulate chain reactions. Each arrow points to the next one in its direction. Track visited arrows to avoid cycles.",
-              "핵심: BFS/DFS로 연쇄 반응을 시뮬레이션해. 각 화살은 자기 방향의 다음 화살을 가리켜. 방문한 화살을 추적해서 순환을 피해.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udca5"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Exploding Arrow</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P5</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A 2D grid contains arrows, each pointing in one of ", "2D 격자 위에 화살들이 있고, 각자 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "4 directions: N, S, E, W", "4 방향 N, S, E, W")}</b>
+                  {t(E, ".", " 중 하나를 가리켜요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "When an arrow explodes, it ignites the ", "어떤 화살이 폭발하면, 그 방향의 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "next arrow in its direction", "다음 화살")}</b>
+                  {t(E, " (closest arrow in same row/column on that side) — chain reaction.",
+                        " (같은 행/열에서 그쪽 방향의 가장 가까운 화살) 을 점화 — 연쇄 반응.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Given a start arrow, print the ", "시작 화살이 주어지면 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "TOTAL number of arrows that explode", "폭발하는 화살의 총 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -73,8 +104,7 @@ export function makeExplodingArrowCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "3 arrows in a line, all pointing right: A -> B -> C. If A explodes first, how many total?",
-        "3개의 화살이 일렬로 모두 오른쪽을 가리켜: A -> B -> C. A가 먼저 폭발하면 총 몇 개?"),
+        "3 arrows in a line, all pointing right: A -> B -> C. If A explodes first, how many total?", "3개의 화살이 일렬로 모두 오른쪽을 가리켜: A -> B -> C. A가 먼저 폭발하면 총 몇 개?"),
       question: t(E,
         "3 arrows in a row, all pointing right. First one triggers. Total explosions?",
         "화살 3개가 일렬로 모두 오른쪽. 첫 번째가 발동. 총 폭발 수?"),
@@ -92,8 +122,7 @@ export function makeExplodingArrowCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "3 arrows in a chain, all triggering the next one. How many explode?",
-        "3개의 화살이 연쇄적으로 다음을 발동해. 몇 개가 폭발할까?"),
+        "3 arrows in a chain, all triggering the next one. How many explode?", "3개의 화살이 연쇄적으로 다음을 발동해요. 몇 개가 폭발할까?"),
       question: t(E,
         "Chain of 3 arrows. How many explode total?",
         "화살 3개 체인. 총 몇 개 폭발?"),
@@ -109,33 +138,51 @@ export function makeExplodingArrowCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeExplodingArrowCh2(E) {
+export function makeExplodingArrowCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Use BFS with a position map for efficient lookups. O(N * max_range) time in worst case.",
-        "위치 맵으로 BFS를 사용해 효율적으로 탐색해. 최악의 경우 O(N * max_range) 시간."),
+        "BFS from the start arrow. For each exploding arrow, scan its row/column in its direction to find the NEAREST other arrow — push that one onto the queue if not already exploded. Count exploded arrows.",
+        "시작 화살에서 BFS. 폭발하는 각 화살에 대해, 그 방향의 같은 행/열에서 가장 가까운 다른 화살을 찾아 — 아직 폭발 안 했다면 큐에 추가. 폭발한 화살 수 카운트."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>BFS Simulation</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Store arrow positions in a hash map. BFS from the first arrow, following each arrow's direction to find the next target.",
-              "화살 위치를 해시맵에 저장. 첫 번째 화살에서 BFS, 각 화살의 방향을 따라 다음 대상을 찾아.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Init queue with start arrow", "시작 화살로 큐 초기화"), code: "queue = [start];  exploded = {start}", color: "#f97316" },
+              { n: 2, label: t(E, "BFS: pop arrow, find next in direction", "BFS: 화살 꺼내고 방향의 다음 화살 찾기"), code: "while queue: a = queue.pop(); next = nearest in dir(a)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Push unexploded next", "미폭발 다음 화살 push"), code: "if next and next not in exploded: queue.push(next)", color: "#0891b2" },
+              { n: 4, label: t(E, "Print total count", "총 폭발 수 출력"), code: "print(len(exploded))", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N²)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "for each of N arrows, may scan a full row/column", "N 화살마다 행/열 전체 스캔 가능")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the BFS chain-reaction simulation!",
-        "BFS 연쇄 반응 시뮬레이션 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getExplodingArrowSections(E),
     },
   ];
 }

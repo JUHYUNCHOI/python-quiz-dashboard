@@ -303,21 +303,16 @@ round(float("3.78"))   # 4
 
 > 🎯 **int 는 0 쪽으로 자름**, round 는 반올림. 의도에 맞게 골라요.
 
-### 안전한 정수 변환 함수
+### ⚠️ 숫자 아닌 게 들어오면?
 
 \`\`\`python
-def safe_int(s, default=0):
-    try:
-        return int(float(s))
-    except ValueError:
-        return default
-
-print(safe_int("42"))        # 42
-print(safe_int("3.14"))      # 3
-print(safe_int("hello"))     # 0 (기본값)
+n = int("hello")  # ❌ ValueError 에러!
 \`\`\`
 
-(try/except 는 lesson 37 에서 자세히)`
+\`int()\` 는 숫자 모양이 아닌 문자열을 받으면 에러를 내고 프로그램이 멈춰요.
+
+> 💡 이런 에러를 잡아내는 방법은 **lesson 37 (try/except)** 에서 배워요.
+> 지금은 "사용자가 숫자만 입력한다고 믿고" 코드를 짜요.`
         }
       ]
     },

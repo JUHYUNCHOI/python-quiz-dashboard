@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMeasTrafficSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -61,17 +62,50 @@ export function makeTrafficCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A highway has N segments with sensors giving flow ranges. Between segments, on-ramps add cars and off-ramps remove cars. Find the possible flow range at the start and end of the highway.",
-        "고속도로에 N개 구간이 있고 센서가 유량 범위를 알려줘. 구간 사이에 진입로(on-ramp)는 차를 추가하고 출구로(off-ramp)는 차를 빼. 고속도로 시작과 끝의 가능한 유량 범위를 구해!"),
+        "A highway has N consecutive segments. Each segment is one of: a SENSOR with min/max measured car flow, an ON-RAMP that adds k cars to the flow, or an OFF-RAMP that removes k cars.\nGiven the segments in order, print the tightest [min, max] flow range that's POSSIBLE at the highway's START and at its END.",
+        "고속도로에 N 개의 연속된 구간이 있어요. 각 구간은: 측정된 최소/최대 차량 유량을 알려주는 센서, 유량에 k 대를 더하는 진입로, 또는 유량에서 k 대를 빼는 출구로 중 하나.\n순서대로 구간들이 주어졌을 때 고속도로 시작과 끝의 가장 좁은 가능한 [min, max] 유량 범위를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\ude97"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Measuring Traffic</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Constraint propagation. Forward pass computes end flow range. Backward pass computes start flow range. On-ramps add, off-ramps subtract (reversed going backward).",
-              "핵심: 제약 전파. 순방향 패스로 끝 유량 범위 계산. 역방향 패스로 시작 유량 범위 계산. 진입로는 더하고 출구로는 빼 (역방향은 반대).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\ude97"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Measuring Traffic</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "N consecutive highway segments", "N 개의 연속된 고속도로 구간")}</b>
+                  {t(E, "; each is one of three types:",
+                        ". 각 구간은 세 가지 중 하나:")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#0891b2" }}>{t(E, "SENSOR (low, high)", "센서 (low, high)")}</b>
+                  {t(E, " — measured flow is in [low, high]. ", " — 측정된 유량은 [low, high]. ")}
+                  <b style={{ color: "#16a34a" }}>{t(E, "ON-RAMP (k)", "진입로 (k)")}</b>
+                  {t(E, " adds k cars. ", " 는 k 대 추가. ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "OFF-RAMP (k)", "출구로 (k)")}</b>
+                  {t(E, " removes up to k cars (clamped at 0).",
+                        " 는 최대 k 대 제거 (0 미만 X).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "tightest possible [min, max] flow at the START and END of the highway", "고속도로 시작과 끝의 가장 좁은 가능한 [min, max] 유량")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -79,8 +113,7 @@ export function makeTrafficCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If highway flow is [10,20] and an on-ramp adds [5,10] cars, what's the flow after?",
-        "고속도로 유량이 [10,20]이고 진입로가 [5,10]대를 추가하면 이후 유량은?"),
+        "If highway flow is [10,20] and an on-ramp adds [5,10] cars, what's the flow after?", "고속도로 유량이 [10,20]이고 진입로가 [5,10]대를 추가하면 이후 유량은?"),
       question: t(E,
         "Flow [10,20] + on-ramp [5,10] = ?",
         "유량 [10,20] + 진입로 [5,10] = ?"),
@@ -99,8 +132,7 @@ export function makeTrafficCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If the initial flow range is [10, 20], what is the maximum flow?",
-        "초기 유량 범위가 [10, 20]이면 최대 유량은?"),
+        "If the initial flow range is [10, 20], what is the maximum flow?", "초기 유량 범위가 [10, 20]이면 최대 유량은?"),
       question: t(E,
         "Flow range [10, 20]. Maximum?",
         "유량 범위 [10, 20]. 최대값?"),
@@ -116,33 +148,51 @@ export function makeTrafficCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeTrafficCh2(E) {
+export function makeTrafficCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Two linear passes over the segments. O(N) time!",
-        "구간에 대해 두 번의 선형 패스. O(N) 시간!"),
+        "Constraint propagation in two passes. Forward: start with [0, ∞), apply on-ramps (+k) and off-ramps (−k clamped), intersect with each sensor range to get end-flow range. Backward: reverse the whole thing.",
+        "두 번 패스로 제약 전파. 순방향: [0, ∞) 에서 시작, 진입로 (+k) 와 출구로 (−k, 0 으로 클램프) 적용, 각 센서 범위와 교차해 끝 유량 범위. 역방향: 반대로."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Forward pass: start with first sensor range, apply on/off ramps, intersect with sensor ranges. Backward pass: same in reverse. Two O(N) passes.",
-              "순방향: 첫 센서 범위에서 시작, on/off 적용, 센서 범위와 교차. 역방향: 반대로. O(N) 패스 두 번.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Forward sweep", "순방향 스윕"), code: "cur = [0, INF];  for seg in segments: apply seg, intersect with sensor", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Final = end flow range", "최종 = 끝 유량 범위"), code: "end_range = cur", color: "#7c3aed" },
+              { n: 3, label: t(E, "Backward sweep", "역방향 스윕"), code: "cur = end_range;  for seg in reversed: undo + intersect", color: "#0891b2" },
+              { n: 4, label: t(E, "Print start and end ranges", "시작·끝 범위 출력"), code: "print(start_range);  print(end_range)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "two linear passes over N segments", "N 구간 선형 두 번")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the constraint propagation solution!",
-        "제약 전파 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMeasTrafficSections(E),
     },
   ];
 }

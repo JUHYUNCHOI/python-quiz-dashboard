@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMixMilkSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -21,23 +22,75 @@ export const SOLUTION_CODE = [
   "    print(m)",
 ];
 
-/* Helper: code snippet box */
+/* Python syntax highlighter (shared across snippets) */
+const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
+const PY_BUILTIN = new Set(["print","input","range","len","sum","map","int","str","chr","ord","min","max","sorted","reversed","list","dict","set","tuple","enumerate","zip","abs","round","type","isinstance","open","filter","any","all","bool","float"]);
+
+function pyHighlight(line, baseColor) {
+  const tokens = [];
+  let i = 0;
+  while (i < line.length) {
+    if (line[i] === "'" || line[i] === '"') {
+      const q = line[i];
+      let j = i + 1;
+      while (j < line.length && line[j] !== q) { if (line[j] === "\\") j++; j++; }
+      tokens.push({ text: line.slice(i, j + 1), color: "#a5d6a7" });
+      i = j + 1;
+    } else if (line[i] === "#") {
+      tokens.push({ text: line.slice(i), color: "#6b7280" });
+      i = line.length;
+    } else if (/[0-9]/.test(line[i]) && (i === 0 || /[\s(,=+\-*/<>[\]:]/.test(line[i - 1]))) {
+      let j = i;
+      while (j < line.length && /[0-9.]/.test(line[j])) j++;
+      tokens.push({ text: line.slice(i, j), color: "#f9a825" });
+      i = j;
+    } else if (/[a-zA-Z_]/.test(line[i])) {
+      let j = i;
+      while (j < line.length && /[a-zA-Z_0-9]/.test(line[j])) j++;
+      const word = line.slice(i, j);
+      if (PY_KW.has(word)) tokens.push({ text: word, color: "#c792ea" });
+      else if (PY_BUILTIN.has(word)) tokens.push({ text: word, color: "#82aaff" });
+      else tokens.push({ text: word, color: baseColor });
+      i = j;
+    } else if ("=<>!+-*/%&|^~".includes(line[i])) {
+      let j = i;
+      while (j < line.length && "=<>!+-*/%&|^~".includes(line[j])) j++;
+      tokens.push({ text: line.slice(i, j), color: "#89ddff" });
+      i = j;
+    } else {
+      tokens.push({ text: line[i], color: baseColor });
+      i++;
+    }
+  }
+  return tokens;
+}
+
+/* Helper: code snippet box (token-highlighted Python) */
 const CodeSnippet = ({ lines, highlight: hl }) => (
   <div style={{
     background: "#1e293b", borderRadius: 10, padding: "10px 8px",
     overflowX: "auto", fontSize: 12, lineHeight: 1.8,
     fontFamily: "'JetBrains Mono', monospace", marginTop: 8,
   }}>
-    {lines.map((l, i) => (
-      <div key={i} style={{
-        display: "flex", minHeight: 20,
-        background: hl && hl.includes(i) ? "rgba(217,119,6,.15)" : "transparent",
-        borderRadius: 4, padding: "0 4px",
-      }}>
-        <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 10, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
-        <span style={{ whiteSpace: "pre", color: hl && hl.includes(i) ? "#fbbf24" : "#e2e8f0" }}>{l}</span>
-      </div>
-    ))}
+    {lines.map((l, i) => {
+      const isHl = hl && hl.includes(i);
+      const baseColor = isHl ? "#fbbf24" : "#e2e8f0";
+      const tokens = pyHighlight(l, baseColor);
+      return (
+        <div key={i} style={{
+          display: "flex", minHeight: 20,
+          background: isHl ? "rgba(217,119,6,.15)" : "transparent",
+          borderRadius: 4, padding: "0 4px",
+        }}>
+          <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 10, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
+          <span style={{ whiteSpace: "pre", wordBreak: "break-all" }}>
+            {tokens.map((tk, j) => (
+              <span key={j} style={{ color: tk.color }}>{tk.text}</span>
+            ))}
+          </span>
+        </div>
+      );
+    })}
   </div>
 );
 
@@ -94,17 +147,55 @@ export function makeMixMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Three farmers each have a bucket of milk. They pour milk between buckets in a fixed pattern: 1 to 2, then 2 to 3, then 3 to 1, repeating 100 times total. Let's understand how!",
-        "세 농부가 각각 우유 양동이를 가지고 있어. 고정된 패턴으로 우유를 부어: 1에서 2로, 2에서 3으로, 3에서 1로, 총 100번 반복해. 어떻게 하는지 알아보자!"),
+        "Three farmers have buckets numbered 1, 2, 3 with given CAPACITIES and starting milk amounts. They perform 100 pour operations in fixed cycle: 1→2, 2→3, 3→1, 1→2, ...\nA pour transfers as much milk as possible from source to destination — bounded by source's milk and destination's free space.\nPrint the milk in each bucket after 100 pours.",
+        "세 농부에게 1, 2, 3 번 양동이가 있고, 각자 정해진 용량과 시작 우유량이 있어요. 100 번의 붓기를 정해진 순서로 돌아가며 해요: 1→2, 2→3, 3→1, 1→2, ...\n한 번 부을 때는 우유를 가능한 만큼 옮겨요 — 출발지에 남은 양과 목적지의 빈 공간 중 더 작은 만큼만 옮길 수 있어요.\n100 번 붓기를 모두 끝낸 뒤 각 양동이에 남은 우유량을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"🥛"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mixing Milk</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Each bucket has a CAPACITY (max it can hold) and some initial milk. We simulate 100 pour operations!",
-              "각 양동이에는 용량(최대 보관량)과 초기 우유량이 있어. 100번의 붓기를 시뮬레이션해!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"🥛"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mixing Milk</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#d97706" }}>{t(E, "3 buckets numbered 1, 2, 3", "1, 2, 3 번 양동이")}</b>
+                  {t(E, " with given capacities and starting milk amounts.",
+                        " 가 있고, 각자 정해진 용량과 시작 우유량이 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "100 pours happen in a ", "100 번의 붓기를 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "fixed cycle: 1→2, 2→3, 3→1, 1→2, ...", "정해진 순환 순서: 1→2, 2→3, 3→1, 1→2, ...")}</b>
+                  {t(E, ".", " 로 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each pour moves ", "한 번의 붓기는 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "as much milk as possible", "가능한 만큼")}</b>
+                  {t(E, " — bounded by source amount and destination's remaining capacity.",
+                        " — 출발지에 남은 양과 목적지의 빈 공간 중 더 작은 만큼만 옮길 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "100 번 붓기 후 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "milk in each of the 3 buckets after 100 pours", "각 양동이의 우유량")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -112,8 +203,7 @@ export function makeMixMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Each bucket has two values: CAPACITY (the maximum it can hold) and CURRENT MILK (how much is in it right now). The current milk can never exceed the capacity!",
-        "각 양동이에는 두 가지 값이 있어: 용량(최대 보관량)과 현재 우유량(지금 들어있는 양). 현재 우유는 절대로 용량을 초과할 수 없어!"),
+        "Each bucket has two values: CAPACITY (the maximum it can hold) and CURRENT MILK (how much is in it right now).\nThe current milk can never exceed the capacity!", "각 양동이에는 두 가지 값이 있어: 용량(최대 보관량)과 현재 우유량(지금 들어있는 양). 현재 우유는 절대로 용량을 초과할 수 없어요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
@@ -136,8 +226,7 @@ export function makeMixMilkCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Before we pour milk, we need to know: how much SPACE is left in the destination bucket? This is capacity minus current milk.",
-        "우유를 붓기 전에: 목적지 양동이에 남은 공간이 얼마인지 알아야 해. 이건 용량에서 현재 우유를 뺀 거야."),
+        "Before we pour milk, we need to know: how much SPACE is left in the destination bucket?\nThis is capacity minus current milk.", "우유를 붓기 전에: 목적지 양동이에 남은 공간이 얼마인지 알아야 해요. 이건 용량에서 현재 우유를 뺀 거예요."),
       question: t(E,
         "Bucket B: capacity 8, milk 5. How much SPACE is left?",
         "양동이 B: 용량 8, 우유 5. 남은 공간은?"),
@@ -149,14 +238,13 @@ export function makeMixMilkCh1(E) {
       correct: 2,
       explain: t(E,
         "Remaining space = capacity - milk = 8 - 5 = 3. Only 3 more units can fit!",
-        "남은 공간 = 용량 - 우유 = 8 - 5 = 3. 3단위만 더 들어갈 수 있어!"),
+        "남은 공간 = 용량 - 우유 = 8 - 5 = 3. 3단위만 더 들어갈 수 있어요!"),
     },
     // 1-4: Pouring rules visual
     {
       type: "reveal",
       narr: t(E,
-        "When pouring from bucket A to bucket B, how much actually transfers? It's the MINIMUM of what A has and what B can receive!",
-        "A에서 B로 부을 때 실제로 얼마나 이동할까? A가 가진 양과 B가 받을 수 있는 양 중 더 작은 값이야!"),
+        "When pouring from bucket A to bucket B, how much actually transfers?\nIt's the MINIMUM of what A has and what B can receive!", "A에서 B로 부을 때 실제로 얼마나 이동할까? A가 가진 양과 B가 받을 수 있는 양 중 더 작은 값이에요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
@@ -187,8 +275,7 @@ export function makeMixMilkCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's test! Bucket A has 5ml, Bucket B has capacity 3 with 1ml already. Pour A into B. How much transfers?",
-        "테스트 해보자! A에 5ml, B는 용량 3이고 1ml 있어. A에서 B로 부으면 얼마나 이동할까?"),
+        "Let's test!\nBucket A has 5ml, Bucket B has capacity 3 with 1ml already.\nPour A into B.\nHow much transfers?", "테스트 해보자! A에 5ml, B는 용량 3이고 1ml 있어요. A에서 B로 부으면 얼마나 이동할까?"),
       question: t(E,
         "A: milk=5. B: cap=3, milk=1. Pour A->B. How much transfers?",
         "A: 우유=5. B: 용량=3, 우유=1. A->B 붓기. 이동량은?"),
@@ -206,8 +293,7 @@ export function makeMixMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The 100 pours follow a repeating cycle: 1->2, 2->3, 3->1, 1->2, 2->3, 3->1, ... This cycle of 3 repeats. Step number mod 3 tells us which pour!",
-        "100번의 붓기는 반복 패턴을 따라: 1->2, 2->3, 3->1, 1->2, 2->3, 3->1, ... 3개씩 반복. step % 3으로 어떤 붓기인지 알 수 있어!"),
+        "The 100 pours follow a repeating cycle: 1->2, 2->3, 3->1, 1->2, 2->3, 3->1, ...\nThis cycle of 3 repeats.\nStep number mod 3 tells us which pour!", "100번의 붓기는 반복 패턴을 따라: 1->2, 2->3, 3->1, 1->2, 2->3, 3->1, ...\n3개씩 반복.\nstep % 3으로 어떤 붓기인지 알 수 있어요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
@@ -248,8 +334,7 @@ export function makeMixMilkCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "A has 5 milk, B has capacity 3 and 1 milk. After pouring A->B, how much milk is in A?",
-        "A에 우유 5, B는 용량 3이고 우유 1. A에서 B로 부은 후 A에 있는 우유는?"),
+        "A has 5 milk, B has capacity 3 and 1 milk. After pouring A->B, how much milk is in A?", "A에 우유 5, B는 용량 3이고 우유 1. A에서 B로 부은 후 A에 있는 우유는?"),
       question: t(E,
         "A=5 milk, B=cap 3, milk 1. Pour A->B. Milk left in A?",
         "A=우유5, B=용량3 우유1. A->B 부은 후. A의 우유?"),
@@ -271,8 +356,7 @@ export function makeMixMilkCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace the simulation with a concrete example! Buckets: cap=[10,8,6], milk=[3,5,2]. Step 0: pour bucket 1 -> bucket 2.",
-        "구체적인 예시로 시뮬레이션을 추적해보자! 양동이: 용량=[10,8,6], 우유=[3,5,2]. 0단계: 1번에서 2번으로 붓기."),
+        "Let's trace the simulation with a concrete example!\nBuckets: cap=[10,8,6], milk=[3,5,2].\nStep 0: pour bucket 1 -> bucket 2.", "구체적인 예시로 시뮬레이션을 추적해보자! 양동이: 용량=[10,8,6], 우유=[3,5,2]. 0단계: 1번에서 2번으로 붓기."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
@@ -315,8 +399,7 @@ export function makeMixMilkCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "After step 0: milk=[0,8,2]. Step 1: pour bucket 2 -> bucket 3. B3 remaining = 6-2 = 4. Transfer min(8, 4) = 4.",
-        "0단계 이후: 우유=[0,8,2]. 1단계: 2번에서 3번으로 붓기. B3 남은 공간 = 6-2 = 4. 이동량 min(8, 4) = 4."),
+        "After step 0: milk=[0,8,2].\nStep 1: pour bucket 2 -> bucket 3.\nB3 remaining = 6-2 = 4.\nTransfer min(8, 4) = 4.", "0단계 이후: 우유=[0,8,2]. 1단계: 2번에서 3번으로 붓기. B3 남은 공간 = 6-2 = 4. 이동량 min(8, 4) = 4."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
@@ -361,8 +444,7 @@ export function makeMixMilkCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: pour bucket 3 -> bucket 1. B1 remaining = 10-0 = 10. Transfer min(6, 10) = 6. Now milk=[6, 4, 0]. One full cycle done!",
-        "2단계: 3번에서 1번으로 붓기. B1 남은 공간 = 10-0 = 10. 이동량 min(6, 10) = 6. 이제 우유=[6, 4, 0]. 한 사이클 완료!"),
+        "Step 2: pour bucket 3 -> bucket 1.\nB1 remaining = 10-0 = 10.\nTransfer min(6, 10) = 6.\nNow milk=[6, 4, 0].\nOne full cycle done!", "2단계: 3번에서 1번으로 붓기. B1 남은 공간 = 10-0 = 10. 이동량 min(6, 10) = 6. 이제 우유=[6, 4, 0]. 한 사이클 완료!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
@@ -411,8 +493,7 @@ export function makeMixMilkCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Now you try! After state [6, 4, 0], step 3 pours bucket 1 -> bucket 2 (since 3%3=0, so src=0, dst=1). B2 remaining = 8-4 = 4. Transfer min(6, 4) = 4.",
-        "이제 해봐! 상태 [6, 4, 0] 이후, 3단계는 1번에서 2번으로 부어 (3%3=0이니까 src=0, dst=1). B2 남은 공간 = 8-4 = 4. 이동량 min(6, 4) = 4."),
+        "Now you try!\nAfter state [6, 4, 0], step 3 pours bucket 1 -> bucket 2 (since 3%3=0, so src=0, dst=1).\nB2 remaining = 8-4 = 4.\nTransfer min(6, 4) = 4.", "이제 해봐요!\n상태 [6, 4, 0] 이후, 3단계는 1번에서 2번으로 부어 (3%3=0이니까 src=0, dst=1).\nB2 남은 공간 = 8-4 = 4.\n이동량 min(6, 4) = 4."),
       question: t(E,
         "State [6,4,0]. Step 3: pour 1→2. What is milk[1] after?",
         "상태 [6,4,0]. 3단계: 1→2 붓기. 이후 milk[1]은?"),
@@ -430,8 +511,7 @@ export function makeMixMilkCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "The total number of pour operations is fixed. How many times do we loop?",
-        "총 붓기 횟수는 고정이야. 몇 번 반복해?"),
+        "The total number of pour operations is fixed. How many times do we loop?", "총 붓기 횟수는 고정이에요. 몇 번 반복해요?"),
       question: t(E,
         "How many pour operations total?",
         "총 붓기 횟수는?"),
@@ -447,14 +527,13 @@ export function makeMixMilkCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeMixMilkCh3(E) {
+export function makeMixMilkCh3(E, lang = "py") {
   return [
     // 3-1: Step 1 — Read input
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code step by step! First, we read 3 lines of input. Each has capacity and initial milk for one bucket.",
-        "코드를 한 단계씩 만들어보자! 먼저 3줄의 입력을 읽어. 각 줄에 양동이 하나의 용량과 초기 우유량이 있어."),
+        "Let's build the code step by step!\nFirst, we read 3 lines of input.\nEach has capacity and initial milk for one bucket.", "코드를 한 단계씩 만들어보자! 먼저 3줄의 입력을 읽어. 각 줄에 양동이 하나의 용량과 초기 우유량이 있어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
@@ -477,7 +556,7 @@ export function makeMixMilkCh3(E) {
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
             {t(E,
               "Two arrays: cap[] stores max capacity, milk[] stores current amount.",
-              "배열 2개: cap[]은 최대 용량, milk[]는 현재 양을 저장해.")}
+              "배열 2개: cap[]은 최대 용량, milk[]는 현재 양을 저장해요.")}
           </div>
         </div>),
     },
@@ -485,8 +564,7 @@ export function makeMixMilkCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Next, we loop 100 times. Each step, we figure out which bucket pours into which using modular arithmetic!",
-        "다음으로 100번 반복해. 각 단계에서 어떤 양동이에서 어떤 양동이로 부을지 모듈러 연산으로 결정해!"),
+        "Next, we loop 100 times.\nEach step, we figure out which bucket pours into which using modular arithmetic!", "다음으로 100번 반복해요. 각 단계에서 어떤 양동이에서 어떤 양동이로 부을지 모듈러 연산으로 결정해요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
@@ -526,8 +604,7 @@ export function makeMixMilkCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The core: calculate how much to pour, then update both buckets. This is just one line of math plus two updates!",
-        "핵심: 얼마나 부을지 계산하고 양쪽 양동이를 업데이트해. 수학 한 줄에 업데이트 두 줄이면 끝!"),
+        "The core: calculate how much to pour, then update both buckets.\nThis is just one line of math plus two updates!", "핵심: 얼마나 부을지 계산하고 양쪽 양동이를 업데이트해요. 수학 한 줄에 업데이트 두 줄이면 끝!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
@@ -555,11 +632,10 @@ export function makeMixMilkCh3(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Why do we use min() in the amount calculation? Think about what could go wrong without it!",
-        "이동량 계산에서 왜 min()을 사용할까? min() 없이 무엇이 잘못될 수 있는지 생각해봐!"),
+        "Why do we use min() in the amount calculation?\nThink about what could go wrong without it!", "이동량 계산에서 왜 min()을 사용할까? min() 없이 무엇이 잘못될 수 있는지 생각해봐요!"),
       question: t(E,
         "Why min(milk[src], cap[dst] - milk[dst])?",
-        "왜 min(milk[src], cap[dst] - milk[dst])일까?"),
+        "왜 min(milk[src], cap[dst] - milk[dst])일까요?"),
       options: [
         t(E, "To make the code shorter", "코드를 짧게 만들려고"),
         t(E, "Can't pour more than source has, can't overflow destination", "소스보다 많이 부을 수 없고, 목적지를 넘칠 수 없으니까"),
@@ -568,16 +644,14 @@ export function makeMixMilkCh3(E) {
       correct: 1,
       explain: t(E,
         "Two constraints: (1) can't pour more milk than source has, (2) can't exceed destination capacity. min() ensures both!",
-        "제약 2가지: (1) 소스가 가진 것보다 많이 부을 수 없고, (2) 목적지 용량을 초과할 수 없어. min()이 둘 다 보장해!"),
+        "제약 2가지: (1) 소스가 가진 것보다 많이 부을 수 없고, (2) 목적지 용량을 초과할 수 없어요. min()이 둘 다 보장해요!"),
     },
     // 3-5: Complete code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Add the output at the end: print each bucket's final milk. That's the complete solution!",
-        "마지막에 출력 추가: 각 양동이의 최종 우유량을 출력해. 이게 전체 풀이!"),
-      label: t(E, "Complete Solution", "전체 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMixMilkSections(E),
     },
   ];
 }

@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getBillboardSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -51,17 +52,57 @@ export function makeBillboardCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two billboards stand along a road, but a truck is parked in front — blocking parts of them! How much billboard area is still visible? 🪧",
-        "도로에 광고판 두 개가 서 있는데, 트럭이 앞에 주차해서 일부를 가려! 아직 보이는 광고판 면적은 얼마일까? 🪧"),
+        "Along a road there are TWO axis-aligned rectangular billboards, plus ONE axis-aligned truck parked in front. The truck may cover parts of one or both billboards.\nThe billboards do NOT overlap each other. Print the TOTAL visible billboard area (sum across both billboards).",
+        "도로변에 직사각형 광고판 2개가 있고, 그 앞에 트럭 1대가 주차되어 있어요. 모두 변이 축에 평행해요. 트럭이 광고판의 일부를 가릴 수 있어요.\n두 광고판은 서로 겹치지 않아요. 트럭에 가려지지 않고 보이는 광고판 면적의 합을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🪧</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Blocked Billboard</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, textAlign: "left" }}>
-            {t(E,
-              "Given: Two rectangular billboards + one rectangular truck. All rectangles have sides parallel to axes. Find: Total visible billboard area.",
-              "주어진 것: 직사각형 광고판 2개 + 직사각형 트럭 1개. 모두 축에 평행. 구할 것: 보이는 총 광고판 면적.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🪧</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Blocked Billboard</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#d97706" }}>{t(E, "two axis-aligned rectangular billboards", "축에 평행한 직사각형 광고판 2개")}</b>
+                  {t(E, " along a road, plus ", "와, 그 앞에 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "one axis-aligned truck", "축에 평행한 트럭 1대")}</b>
+                  {t(E, " parked in front.", "가 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each rectangle is given as ", "각 사각형은 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>(x1, y1, x2, y2)</code>
+                  {t(E, ".", " 좌표로 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The two billboards ", "두 광고판은 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "do NOT overlap each other", "서로 겹치지 않아요")}</b>
+                  {t(E, ".", ". 트럭만 광고판을 가릴 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "total visible billboard area", "보이는 광고판 면적의 합")}</b>
+                  {t(E, " (truck blocks may subtract from one or both billboards).",
+                        " 을 출력해요 (트럭이 광고판의 일부를 가릴 수 있음).")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -70,8 +111,7 @@ export function makeBillboardCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Each rectangle is defined by two corners: lower-left (x1, y1) and upper-right (x2, y2). The area is width × height = (x2-x1) × (y2-y1)!",
-        "각 직사각형은 두 꼭짓점으로 정의돼: 왼쪽 아래 (x1, y1)과 오른쪽 위 (x2, y2). 면적 = 가로 × 세로 = (x2-x1) × (y2-y1)!"),
+        "Each rectangle is defined by two corners: lower-left (x1, y1) and upper-right (x2, y2).\nThe area is width × height = (x2-x1) × (y2-y1)!", "각 직사각형은 두 꼭짓점으로 정의돼: 왼쪽 아래 (x1, y1)과 오른쪽 위 (x2, y2). 면적 = 가로 × 세로 = (x2-x1) × (y2-y1)!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
@@ -106,8 +146,7 @@ export function makeBillboardCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's practice! A rectangle has lower-left corner (2, 3) and upper-right corner (7, 6). What is its area?",
-        "연습해보자! 직사각형의 왼쪽 아래가 (2, 3)이고 오른쪽 위가 (7, 6)이야. 면적은?"),
+        "Let's practice!\nA rectangle has lower-left corner (2, 3) and upper-right corner (7, 6).\nWhat is its area?", "연습해보자! 직사각형의 왼쪽 아래가 (2, 3)이고 오른쪽 위가 (7, 6)이에요. 면적은?"),
       question: t(E,
         "Rectangle (2,3) to (7,6). Width = 7-2 = 5, Height = 6-3 = 3. Area = ?",
         "직사각형 (2,3)에서 (7,6). 가로 = 7-2 = 5, 세로 = 6-3 = 3. 면적 = ?"),
@@ -122,8 +161,7 @@ export function makeBillboardCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now imagine: Billboard 1 (blue), Billboard 2 (green), and a Truck (red) blocking them. The truck covers part of each billboard. We need the visible area!",
-        "이제 상상해봐: 광고판 1 (파란색), 광고판 2 (초록색), 그리고 트럭 (빨간색)이 가리고 있어. 트럭이 각 광고판의 일부를 덮어. 보이는 면적이 필요해!"),
+        "Now imagine: Billboard 1 (blue), Billboard 2 (green), and a Truck (red) blocking them.\nThe truck covers part of each billboard.\nWe need the visible area!", "이제 상상해봐: 광고판 1 (파란색), 광고판 2 (초록색), 그리고 트럭 (빨간색)이 가리고 있어요. 트럭이 각 광고판의 일부를 덮어. 보이는 면적이 필요해요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f8fafc", border: "2px solid #e2e8f0", borderRadius: 14, padding: 14 }}>
@@ -146,7 +184,7 @@ export function makeBillboardCh1(E) {
                 </div>
               ))}
             </div>
-            <div style={{ marginTop: 12, textAlign: "center", fontSize: 13, fontWeight: 700, color: C.text, lineHeight: 1.8 }}>
+            <div style={{ marginTop: 12, textAlign: "center", fontSize: 13, fontWeight: 700, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
                 "Billboard 1: area = 4×3 = 12\nBillboard 2: area = 3×2 = 6\nTotal without truck = 18",
                 "광고판 1: 면적 = 4×3 = 12\n광고판 2: 면적 = 3×2 = 6\n트럭 없이 합계 = 18")}
@@ -159,8 +197,7 @@ export function makeBillboardCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The key formula: Visible = (Billboard1 area - overlap with truck) + (Billboard2 area - overlap with truck). We compute each overlap separately!",
-        "핵심 공식: 보이는 면적 = (광고판1 면적 - 트럭과 겹침) + (광고판2 면적 - 트럭과 겹침). 각 겹침을 따로 계산해!"),
+        "The key formula: Visible = (Billboard1 area - overlap with truck) + (Billboard2 area - overlap with truck).\nWe compute each overlap separately!", "핵심 공식: 보이는 면적 = (광고판1 면적 - 트럭과 겹침) + (광고판2 면적 - 트럭과 겹침). 각 겹침을 따로 계산해요!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 14, padding: 16 }}>
@@ -184,8 +221,7 @@ export function makeBillboardCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Billboard 1 area = 20, overlap with truck = 6. Billboard 2 area = 15, overlap with truck = 0 (no overlap). What's the total visible area?",
-        "광고판1 면적 = 20, 트럭과 겹침 = 6. 광고판2 면적 = 15, 트럭과 겹침 = 0 (겹침 없음). 총 보이는 면적은?"),
+        "Billboard 1 area = 20, overlap with truck = 6.\nBillboard 2 area = 15, overlap with truck = 0 (no overlap).\nWhat's the total visible area?", "광고판1 면적 = 20, 트럭과 겹침 = 6. 광고판2 면적 = 15, 트럭과 겹침 = 0 (겹침 없음). 총 보이는 면적은?"),
       question: t(E,
         "A₁=20, O₁=6, A₂=15, O₂=0. Visible = ?",
         "A₁=20, O₁=6, A₂=15, O₂=0. 보이는 면적 = ?"),
@@ -200,8 +236,7 @@ export function makeBillboardCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Billboard 1: (1,2) to (5,5) → area = 4×3 = 12. Billboard 2: (8,1) to (10,4) → area = 2×3 = 6. Truck overlaps 4 with billboard 1, 0 with billboard 2. Visible?",
-        "광고판1: (1,2)에서 (5,5) → 면적 = 4×3 = 12. 광고판2: (8,1)에서 (10,4) → 면적 = 2×3 = 6. 트럭이 광고판1과 4만큼 겹침, 광고판2와 0. 보이는 면적?"),
+        "Billboard 1: (1,2) to (5,5) → area = 4×3 = 12.\nBillboard 2: (8,1) to (10,4) → area = 2×3 = 6.\nTruck overlaps 4 with billboard 1, 0 with billboard 2.\nVisible?", "광고판1: (1,2)에서 (5,5) → 면적 = 4×3 = 12.\n광고판2: (8,1)에서 (10,4) → 면적 = 2×3 = 6.\n트럭이 광고판1과 4만큼 겹침, 광고판2와 0.\n보이는 면적?"),
       question: t(E, "12 - 4 + 6 - 0 = ?", "12 - 4 + 6 - 0 = ?"),
       hint: t(E, "8 + 6 = ?", "8 + 6 = ?"),
       answer: 14,
@@ -219,8 +254,7 @@ export function makeBillboardCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The hardest part: how do we compute the overlap area of two rectangles? Let's learn the overlap formula step by step!",
-        "가장 어려운 부분: 두 직사각형의 겹침 면적을 어떻게 구할까? 겹침 공식을 단계별로 배우자!"),
+        "The hardest part: how do we compute the overlap area of two rectangles?\nLet's learn the overlap formula step by step!", "가장 어려운 부분: 두 직사각형의 겹침 면적을 어떻게 구할까? 겹침 공식을 단계별로 배우자!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14 }}>
@@ -246,10 +280,10 @@ export function makeBillboardCh2(E) {
                 </div>
               </div>
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
                 "The overlap is itself a rectangle! Its corners are:\n• left = max(A.left, B.left)\n• bottom = max(A.bottom, B.bottom)\n• right = min(A.right, B.right)\n• top = min(A.top, B.top)",
-                "겹침도 직사각형이야! 꼭짓점은:\n• 왼쪽 = max(A.왼쪽, B.왼쪽)\n• 아래 = max(A.아래, B.아래)\n• 오른쪽 = min(A.오른쪽, B.오른쪽)\n• 위 = min(A.위, B.위)")}
+                "겹침도 직사각형이에요! 꼭짓점은:\n• 왼쪽 = max(A.왼쪽, B.왼쪽)\n• 아래 = max(A.아래, B.아래)\n• 오른쪽 = min(A.오른쪽, B.오른쪽)\n• 위 = min(A.위, B.위)")}
             </div>
           </div>
         </div>),
@@ -259,8 +293,7 @@ export function makeBillboardCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace! A = (1,1)→(6,4), B = (3,2)→(8,5). Overlap left = max(1,3) = 3, right = min(6,8) = 6, bottom = max(1,2) = 2, top = min(4,5) = 4.",
-        "추적해보자! A = (1,1)→(6,4), B = (3,2)→(8,5). 겹침 왼쪽 = max(1,3) = 3, 오른쪽 = min(6,8) = 6, 아래 = max(1,2) = 2, 위 = min(4,5) = 4."),
+        "Let's trace!\nA = (1,1)→(6,4), B = (3,2)→(8,5).\nOverlap left = max(1,3) = 3, right = min(6,8) = 6, bottom = max(1,2) = 2, top = min(4,5) = 4.", "추적해보자!\nA = (1,1)→(6,4), B = (3,2)→(8,5).\n겹침 왼쪽 = max(1,3) = 3, 오른쪽 = min(6,8) = 6, 아래 = max(1,2) = 2, 위 = min(4,5) = 4."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -292,8 +325,7 @@ export function makeBillboardCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "What if the rectangles don't overlap at all? Then max(left) > min(right) or max(bottom) > min(top). The formula gives a negative width or height!",
-        "직사각형이 아예 안 겹치면? max(왼쪽) > min(오른쪽) 또는 max(아래) > min(위). 공식이 음수 가로 또는 세로를 줘!"),
+        "What if the rectangles don't overlap at all?\nThen max(left) > min(right) or max(bottom) > min(top).\nThe formula gives a negative width or height!", "직사각형이 아예 안 겹치면? max(왼쪽) > min(오른쪽) 또는 max(아래) > min(위). 공식이 음수 가로 또는 세로를 줘요!"),
       question: t(E,
         "A = (0,0)→(2,2), B = (5,5)→(7,7). Overlap right = min(2,7) = 2, left = max(0,5) = 5. Width = 2-5 = -3. What should the overlap area be?",
         "A = (0,0)→(2,2), B = (5,5)→(7,7). 겹침 오른쪽 = min(2,7) = 2, 왼쪽 = max(0,5) = 5. 가로 = 2-5 = -3. 겹침 면적은?"),
@@ -305,15 +337,14 @@ export function makeBillboardCh2(E) {
       correct: 0,
       explain: t(E,
         "We use max(0, width) × max(0, height). Negative means no overlap → area = 0! That's why the formula has max(0, ...) ✅",
-        "max(0, 가로) × max(0, 세로)를 써. 음수면 겹침 없음 → 면적 = 0! 그래서 공식에 max(0, ...)가 있어 ✅"),
+        "max(0, 가로) × max(0, 세로)를 써요. 음수면 겹침 없음 → 면적 = 0! 그래서 공식에 max(0, ...)가 있어 ✅"),
     },
 
     // 2-4: Input — compute overlap
     {
       type: "input",
       narr: t(E,
-        "Your turn! A = (2,1)→(6,5), B = (4,3)→(8,7). Overlap: left=max(2,4)=4, right=min(6,8)=6, bottom=max(1,3)=3, top=min(5,7)=5. Width=2, Height=2. Overlap area?",
-        "네 차례! A = (2,1)→(6,5), B = (4,3)→(8,7). 겹침: 왼쪽=max(2,4)=4, 오른쪽=min(6,8)=6, 아래=max(1,3)=3, 위=min(5,7)=5. 가로=2, 세로=2. 겹침 면적?"),
+        "Your turn!\nA = (2,1)→(6,5), B = (4,3)→(8,7).\nOverlap: left=max(2,4)=4, right=min(6,8)=6, bottom=max(1,3)=3, top=min(5,7)=5.\nWidth=2, Height=2.\nOverlap area?", "네 차례!\nA = (2,1)→(6,5), B = (4,3)→(8,7).\n겹침: 왼쪽=max(2,4)=4, 오른쪽=min(6,8)=6, 아래=max(1,3)=3, 위=min(5,7)=5.\n가로=2, 세로=2.\n겹침 면적?"),
       question: t(E, "Overlap width=2, height=2. Area?", "겹침 가로=2, 세로=2. 면적?"),
       answer: 4,
     },
@@ -322,8 +353,7 @@ export function makeBillboardCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Complete problem! Billboard1 (1,2)→(4,5), area=9. Billboard2 (6,0)→(10,4), area=16. Truck (3,1)→(7,3). Overlap1 = (3,2)→(4,3) = 1×1 = 1. Overlap2 = (6,1)→(7,3) = 1×2 = 2. Visible?",
-        "완전한 문제! 광고판1 (1,2)→(4,5), 면적=9. 광고판2 (6,0)→(10,4), 면적=16. 트럭 (3,1)→(7,3). 겹침1 = (3,2)→(4,3) = 1×1 = 1. 겹침2 = (6,1)→(7,3) = 1×2 = 2. 보이는 면적?"),
+        "Complete problem!\nBillboard1 (1,2)→(4,5), area=9.\nBillboard2 (6,0)→(10,4), area=16.\nTruck (3,1)→(7,3).\nOverlap1 = (3,2)→(4,3) = 1×1 = 1.\nOverlap2 = (6,1)→(7,3) = 1×2 = 2.\nVisible?", "완전한 문제!\n광고판1 (1,2)→(4,5), 면적=9.\n광고판2 (6,0)→(10,4), 면적=16.\n트럭 (3,1)→(7,3).\n겹침1 = (3,2)→(4,3) = 1×1 = 1.\n겹침2 = (6,1)→(7,3) = 1×2 = 2.\n보이는 면적?"),
       question: t(E, "(9-1) + (16-2) = ?", "(9-1) + (16-2) = ?"),
       hint: t(E, "8 + 14 = ?", "8 + 14 = ?"),
       answer: 22,
@@ -335,14 +365,13 @@ export function makeBillboardCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: ⚡ 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeBillboardCh3(E) {
+export function makeBillboardCh3(E, lang = "py") {
   return [
     // 3-1: Step 1 — area function
     {
       type: "reveal",
       narr: t(E,
-        "Let's build the code step by step! First, we need a function to compute rectangle area. Remember: max(0, ...) handles the no-overlap case!",
-        "코드를 단계별로 만들자! 먼저 직사각형 면적을 구하는 함수가 필요해. max(0, ...)가 겹침 없는 경우를 처리해!"),
+        "Let's build the code step by step!\nFirst, we need a function to compute rectangle area.\nRemember: max(0, ...) handles the no-overlap case!", "코드를 단계별로 만들자! 먼저 직사각형 면적을 구하는 함수가 필요해요. max(0, ...)가 겹침 없는 경우를 처리해요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
@@ -362,8 +391,7 @@ export function makeBillboardCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Next: the overlap function! It finds the intersection rectangle using max/min, then calls rect_area.",
-        "다음: 겹침 함수! max/min으로 교집합 직사각형을 찾고, rect_area를 호출해."),
+        "Next: the overlap function!\nIt finds the intersection rectangle using max/min, then calls rect_area.", "다음: 겹침 함수! max/min으로 교집합 직사각형을 찾고, rect_area를 호출해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8 }}>
@@ -385,8 +413,7 @@ export function makeBillboardCh3(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Why do we use max() for the left edge of overlap? Because the overlap starts where BOTH rectangles have started — the later (larger) left edge!",
-        "왜 겹침의 왼쪽에 max()를 쓸까? 겹침은 두 직사각형이 모두 시작한 곳 — 더 늦은 (큰) 왼쪽 끝에서 시작하니까!"),
+        "Why do we use max() for the left edge of overlap?\nBecause the overlap starts where BOTH rectangles have started — the later (larger) left edge!", "왜 겹침의 왼쪽에 max()를 쓸까? 겹침은 두 직사각형이 모두 시작한 곳 — 더 늦은 (큰) 왼쪽 끝에서 시작하니까!"),
       question: t(E,
         "Rectangle A starts at x=2, Rectangle B starts at x=5. Where does the overlap start?",
         "직사각형 A가 x=2에서 시작, B가 x=5에서 시작. 겹침은 어디서 시작?"),
@@ -398,15 +425,14 @@ export function makeBillboardCh3(E) {
       correct: 0,
       explain: t(E,
         "The overlap can only exist where BOTH rectangles exist. A hasn't started until x=2, B hasn't started until x=5. So overlap starts at x=5 (the later one = max). ✅",
-        "겹침은 두 직사각형이 모두 존재하는 곳에서만 가능해. A는 x=2부터, B는 x=5부터. 겹침은 x=5 (더 늦은 쪽 = max)에서 시작. ✅"),
+        "겹침은 두 직사각형이 모두 존재하는 곳에서만 가능해요. A는 x=2부터, B는 x=5부터. 겹침은 x=5 (더 늦은 쪽 = max)에서 시작. ✅"),
     },
 
     // 3-4: Step 3 — main code
     {
       type: "reveal",
       narr: t(E,
-        "Finally: read the three rectangles, compute areas and overlaps, print the answer!",
-        "마지막: 세 직사각형을 읽고, 면적과 겹침을 계산하고, 답을 출력!"),
+        "Finally: read the three rectangles, compute areas and overlaps, print the answer!", "마지막: 세 직사각형을 읽고, 면적과 겹침을 계산하고, 답을 출력!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8 }}>
@@ -425,12 +451,10 @@ export function makeBillboardCh3(E) {
 
     // 3-5: Complete code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution! Just two helper functions + three lines of main logic. O(1) time — no loops needed! 🎉",
-        "완전한 솔루션! 보조 함수 2개 + 메인 로직 3줄. O(1) 시간 — 루프 필요 없어! 🎉"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getBillboardSections(E),
     },
   ];
 }

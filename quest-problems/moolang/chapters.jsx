@@ -1,24 +1,32 @@
 import { C, t } from "@/components/quest/theme";
+import { getMooLangSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "n, m, k = map(int, input().split())",
-  "# n nouns, m transitive verbs, k intransitive verbs",
+  "# Input: counts of each word type, then sentence-period budget P and comma budget C",
+  "N_n, N_t, N_i, P, C_max = map(int, input().split())",
+  "# N_n = nouns, N_t = transitive verbs, N_i = intransitive verbs",
+  "# P    = total sentences allowed (periods)",
+  "# C_max = total commas allowed (used to add extra objects to transitive sentences)",
   "",
-  "# Sentence types:",
-  "# Type 1: noun + intransitive_verb (2 words, uses 1 noun, 1 intrans)",
-  "# Type 2: noun + transitive_verb + noun (3 words, uses 2 nouns, 1 trans)",
-  "",
-  "# Greedy: maximize total words",
   "best = 0",
-  "# try all splits: use t2 transitive sentences, rest intransitive",
-  "for t2 in range(min(m, n // 2) + 1):",
-  "    nouns_left = n - 2 * t2",
-  "    t1 = min(k, nouns_left)",
-  "    total = t2 * 3 + t1 * 2",
-  "    best = max(best, total)",
+  "# Try every split: a intransitive sentences + b transitive sentences",
+  "# Intransitive uses 1 noun + 1 intrans verb (2 words, 1 period).",
+  "# Transitive uses 1 noun (subject) + 1 trans verb + (1 + extras) nouns (objects),",
+  "# where each extra object beyond the first costs 1 comma.",
+  "for a in range(min(N_i, N_n, P) + 1):",
+  "    rem_periods = P - a",
+  "    rem_nouns   = N_n - a",
+  "    b_max = min(N_t, rem_periods, rem_nouns // 2)",
+  "    for b in range(b_max + 1):",
+  "        # base words from b transitive sentences = 3*b (subj + verb + 1 object)",
+  "        base = 2 * a + 3 * b",
+  "        # add extra object nouns up to commas allowed",
+  "        nouns_for_extras = rem_nouns - 2 * b",
+  "        extras = min(nouns_for_extras, C_max)",
+  "        best = max(best, base + extras)",
   "",
   "print(best)",
 ];
@@ -31,25 +39,68 @@ export function makeMooLangCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The Moo Language has simple grammar rules. Let's learn how to form sentences and maximize the number of words used! \ud83d\udcdd",
-        "무 언어에는 간단한 문법 규칙이 있어. 문장을 만들고 사용하는 단어 수를 최대화하는 법을 배우자! \ud83d\udcdd"),
+        "The Moo Language has nouns, intransitive verbs, transitive verbs, and conjunctions. Sentences are either 'noun + intransitive verb' (2 words) or 'noun + transitive verb + noun + ...' (with extra nouns separated by commas, transitive needs ≥1 object).\nGiven word counts and a sentence-period budget P plus a comma budget C, MAXIMIZE the total number of words used.",
+        "무 언어에는 명사, 자동사, 타동사, 접속사가 있어요. 문장은 두 가지: '명사 + 자동사' (2단어) 또는 '명사 + 타동사 + 명사 + ...' (목적어를 쉼표로 추가, 타동사 1개당 목적어 ≥ 1).\n각 종류 단어 개수와 마침표 P개, 쉼표 C개 가 주어졌을 때, 사용 단어 수의 최댓값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcdd"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Moo Language</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Two sentence types:\n\u2022 noun + intransitive_verb (2 words)\n\u2022 noun + transitive_verb + noun (3 words)\nMaximize total words used!",
-              "\ub450 \ubb38\uc7a5 \uc720\ud615:\n\u2022 \uba85\uc0ac + \uc790\ub3d9\uc0ac (2\ub2e8\uc5b4)\n\u2022 \uba85\uc0ac + \ud0c0\ub3d9\uc0ac + \uba85\uc0ac (3\ub2e8\uc5b4)\n\ucd1d \ub2e8\uc5b4 \uc218\ub97c \ucd5c\ub300\ud654!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcdd"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Moo Language</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "We have a ", "")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "word inventory", "단어 재고")}</b>
+                  {t(E, " — counts of nouns, intransitive verbs, transitive verbs, and conjunctions.",
+                        " 가 주어져요 — 명사, 자동사, 타동사, 접속사의 개수.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each sentence is either:", "각 문장은 다음 중 하나:")}
+                  <div style={{ marginTop: 6, marginLeft: 8, fontSize: 12, color: "#475569" }}>
+                    <b style={{ color: "#7c3aed" }}>{t(E, "(A)", "(A)")}</b> {t(E, " noun + intransitive verb  (2 words)", " 명사 + 자동사  (2 단어)")}<br/>
+                    <b style={{ color: "#dc2626" }}>{t(E, "(B)", "(B)")}</b> {t(E, " noun + transitive verb + noun (+ ',' + noun ...)  (3+ words)", " 명사 + 타동사 + 명사 (+ ',' + 명사 ...)  (3 단어 이상)")}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Two sentences can be ", "두 문장을 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "joined by a conjunction", "접속사로 연결")}</b>
+                  {t(E, " (counts as 1 sentence using 1 conjunction). At most ", " 가능 (한 문장으로 셈, 접속사 1개 사용). 마침표는 ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>P</code>
+                  {t(E, " periods and ", " 개, 쉼표는 ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>C</code>
+                  {t(E, " commas may be used.", " 개까지 사용 가능.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum total number of words", "사용 단어 수의 최댓값")}</b>
+                  {t(E, " usable.", " 을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
     {
       type: "reveal",
       narr: t(E,
-        "Each word can only be used once! A transitive sentence uses 2 nouns, while an intransitive sentence uses 1 noun. We need to balance them.",
-        "\uac01 \ub2e8\uc5b4\ub294 \ud55c \ubc88\ub9cc \uc4f8 \uc218 \uc788\uc5b4! \ud0c0\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac 2\uac1c, \uc790\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac 1\uac1c\ub97c \uc4f0\uc9c0. \uade0\ud615\uc744 \ub9de\ucdb0\uc57c \ud574."),
+        "Each word can only be used once!\nA transitive sentence uses 2 nouns, while an intransitive sentence uses 1 noun.\nWe need to balance them.", "\uac01 \ub2e8\uc5b4\ub294 \ud55c \ubc88\ub9cc \uc4f8 \uc218 \uc788\uc5b4!\n\ud0c0\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac 2\uac1c, \uc790\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac 1\uac1c\ub97c \uc4f0\uc9c0.\n\uade0\ud615\uc744 \ub9de\ucdb0\uc57c \ud574."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 14, padding: 14 }}>
@@ -70,8 +121,7 @@ export function makeMooLangCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Is 'noun intransitive_verb' a valid sentence?",
-        "'명사 자동사'는 유효한 문장일까?"),
+        "Is 'noun intransitive_verb' a valid sentence?", "'명사 자동사'는 유효한 문장일까요?"),
       question: t(E, "Is 'noun intransitive_verb' valid?", "'\uba85\uc0ac \uc790\ub3d9\uc0ac'\ub294 \uc720\ud6a8\ud55c \ubb38\uc7a5\uc778\uac00?"),
       options: [t(E, "Yes", "\ub124"), t(E, "No", "\uc544\ub2c8\uc624")],
       correct: 0,
@@ -80,8 +130,7 @@ export function makeMooLangCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "3 nouns, 0 transitive verbs, 2 intransitive verbs. We can only make Type 1 sentences. Each needs 1 noun + 1 intransitive verb. Limited by 2 intransitive verbs = 2 sentences = 4 words!",
-        "명사 3개, 타동사 0개, 자동사 2개. 유형 1 문장만 가능. 각각 명사 1개 + 자동사 1개. 자동사 2개로 제한 = 2문장 = 4단어!"),
+        "3 nouns, 0 transitive verbs, 2 intransitive verbs.\nWe can only make Type 1 sentences.\nEach needs 1 noun + 1 intransitive verb.\nLimited by 2 intransitive verbs = 2 sentences = 4 words!", "명사 3개, 타동사 0개, 자동사 2개. 유형 1 문장만 가능. 각각 명사 1개 + 자동사 1개. 자동사 2개로 제한 = 2문장 = 4단어!"),
       question: t(E, "3 nouns, 2 intransitive, 0 transitive → max words?", "\uba85\uc0ac 3, \uc790\ub3d9\uc0ac 2, \ud0c0\ub3d9\uc0ac 0 \u2192 \ucd5c\ub300 \ub2e8\uc5b4?"),
       hint: t(E, "Only Type 1 possible: 2 sentences x 2 words each", "\uc720\ud615 1\ub9cc \uac00\ub2a5: 2\ubb38\uc7a5 x 2\ub2e8\uc5b4"),
       answer: 4,
@@ -89,15 +138,14 @@ export function makeMooLangCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The greedy approach: try all possible numbers of transitive sentences, use remaining nouns for intransitive sentences, pick the maximum!",
-        "그리디 접근: 가능한 타동사 문장 수를 모두 시도하고, 남은 명사로 자동사 문장을 만들고, 최댓값을 선택!"),
+        "The greedy approach: try all possible numbers of transitive sentences, use remaining nouns for intransitive sentences, pick the maximum!", "그리디 접근: 가능한 타동사 문장 수를 모두 시도하고, 남은 명사로 자동사 문장을 만들고, 최댓값을 선택!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 800, color: "#2563eb", marginBottom: 10 }}>
               {t(E, "Strategy", "\uc804\ub7b5")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 2 }}>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
               {t(E,
                 "For each possible # of transitive sentences t2:\n1. Uses 2*t2 nouns + t2 transitive verbs\n2. Remaining nouns: n - 2*t2\n3. Intransitive sentences: min(k, remaining nouns)\n4. Total words = t2*3 + t1*2\n5. Take max over all t2!",
                 "\uac00\ub2a5\ud55c \ud0c0\ub3d9\uc0ac \ubb38\uc7a5 \uc218 t2\ub9c8\ub2e4:\n1. \uba85\uc0ac 2*t2 + \ud0c0\ub3d9\uc0ac t2 \uc0ac\uc6a9\n2. \ub0a8\uc740 \uba85\uc0ac: n - 2*t2\n3. \uc790\ub3d9\uc0ac \ubb38\uc7a5: min(k, \ub0a8\uc740 \uba85\uc0ac)\n4. \ucd1d \ub2e8\uc5b4 = t2*3 + t1*2\n5. \ubaa8\ub4e0 t2\uc5d0\uc11c \ucd5c\ub300!")}
@@ -111,21 +159,18 @@ export function makeMooLangCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: Code
    ═══════════════════════════════════════════════════════════════ */
-export function makeMooLangCh2(E) {
+export function makeMooLangCh2(E, lang = "py") {
   return [
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the Python solution. We iterate over possible transitive sentence counts and maximize total words.",
-        "\ud30c\uc774\uc36c \ud480\uc774\uc57c. \uac00\ub2a5\ud55c \ud0c0\ub3d9\uc0ac \ubb38\uc7a5 \uc218\ub97c \ubc18\ubcf5\ud558\uba70 \ucd1d \ub2e8\uc5b4\ub97c \ucd5c\ub300\ud654\ud574."),
-      label: t(E, "\ud83d\udc0d Full Solution", "\ud83d\udc0d \uc804\uccb4 \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMooLangSections(E),
     },
     {
       type: "quiz",
       narr: t(E,
-        "A transitive sentence uses how many nouns?",
-        "\ud0c0\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac\ub97c \uba87 \uac1c \uc0ac\uc6a9\ud560\uae4c?"),
+        "A transitive sentence uses how many nouns?", "\ud0c0\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac\ub97c \uba87 \uac1c \uc0ac\uc6a9\ud560\uae4c?"),
       question: t(E, "How many nouns does a transitive sentence use?", "\ud0c0\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac\ub97c \uba87 \uac1c \uc0ac\uc6a9?"),
       options: ["1", "2", "3"],
       correct: 1,
@@ -134,8 +179,7 @@ export function makeMooLangCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "5 nouns, 1 transitive verb, 3 intransitive verbs. If we use 1 transitive sentence: 2 nouns used, 3 left. min(3,3)=3 intransitive sentences. Total = 3 + 3*2 = 9 words!",
-        "\uba85\uc0ac 5, \ud0c0\ub3d9\uc0ac 1, \uc790\ub3d9\uc0ac 3. \ud0c0\ub3d9\uc0ac \ubb38\uc7a5 1\uac1c: \uba85\uc0ac 2\uac1c \uc0ac\uc6a9, 3\uac1c \ub0a8\uc74c. min(3,3)=3 \uc790\ub3d9\uc0ac \ubb38\uc7a5. \ucd1d = 3 + 3*2 = 9\ub2e8\uc5b4!"),
+        "5 nouns, 1 transitive verb, 3 intransitive verbs.\nIf we use 1 transitive sentence: 2 nouns used, 3 left.\nmin(3,3)=3 intransitive sentences.\nTotal = 3 + 3*2 = 9 words!", "\uba85\uc0ac 5, \ud0c0\ub3d9\uc0ac 1, \uc790\ub3d9\uc0ac 3.\n\ud0c0\ub3d9\uc0ac \ubb38\uc7a5 1\uac1c: \uba85\uc0ac 2\uac1c \uc0ac\uc6a9, 3\uac1c \ub0a8\uc74c.\nmin(3,3)=3 \uc790\ub3d9\uc0ac \ubb38\uc7a5.\n\ucd1d = 3 + 3*2 = 9\ub2e8\uc5b4!"),
       question: t(E, "5 nouns, 1 transitive, 3 intransitive → max words?", "\uba85\uc0ac 5, \ud0c0\ub3d9\uc0ac 1, \uc790\ub3d9\uc0ac 3 \u2192 \ucd5c\ub300 \ub2e8\uc5b4?"),
       hint: t(E, "Use 1 transitive (3 words) + 3 intransitive (6 words)", "\ud0c0\ub3d9\uc0ac 1\uac1c(3\ub2e8\uc5b4) + \uc790\ub3d9\uc0ac 3\uac1c(6\ub2e8\uc5b4)"),
       answer: 9,

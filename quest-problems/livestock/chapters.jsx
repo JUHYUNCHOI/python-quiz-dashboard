@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getLivestockSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -55,17 +56,48 @@ export function makeLivestockCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "8 cows with N adjacency constraints (\"X must be beside Y\"). Find the lexicographically smallest valid ordering. Model as a graph: constraints form chains since max degree is 2.",
-        "8마리 소에 N개 인접 조건 (\"X는 Y 옆에 있어야 함\"). 사전순 최소 유효 순서를 구해. 그래프로 모델링: 최대 차수가 2이므로 체인을 형성."),
+        "FJ has 8 named cows (Beatrice, Belinda, Bella, Bessie, Betsy, Blue, Buttercup, Sue). He wants to line them up with N constraints — each constraint says \"cow X must be ADJACENT to cow Y\".\nPrint the LEXICOGRAPHICALLY SMALLEST valid lineup, or 'IMPOSSIBLE'.",
+        "FJ 에게 이름이 정해진 8마리 소 (Beatrice, Belinda, Bella, Bessie, Betsy, Blue, Buttercup, Sue) 가 있어요. N개의 제약 — 각각 \"X 와 Y 는 옆에 있어야 함\" — 을 모두 만족하는 한 줄 배열을 만들어요.\n사전순으로 가장 작은 유효 배열을 출력해요. 불가능하면 'IMPOSSIBLE'."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"🐄"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Livestock Lineup</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #3</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Each constraint is an edge. Max degree 2 means the graph forms chains. Traverse chains in alphabetical order, inserting unconstrained cows alphabetically between chains.",
-              "핵심: 각 조건은 간선. 최대 차수 2이므로 그래프는 체인을 형성. 체인을 알파벳 순서로 탐색하고, 제약 없는 소는 체인 사이에 알파벳순으로 삽입.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"🐄"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Livestock Lineup</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #3</div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Line up FJ's ", "FJ 의 ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "8 named cows", "이름 있는 8마리 소")}</b>
+                  {t(E, " (Beatrice, Belinda, Bella, Bessie, Betsy, Blue, Buttercup, Sue) in a single row.",
+                        " 를 한 줄로 세워요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "There are ", "")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "N constraints", "N 개의 제약")}</b>
+                  {t(E, " of the form \"cow X must be adjacent to cow Y\".",
+                        " 이 있어요 — 각각 \"X 와 Y 는 옆에 있어야 함\".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest valid lineup", "사전순으로 가장 작은 유효 배열")}</b>
+                  {t(E, ", or 'IMPOSSIBLE' if none exists.", " 을 출력해요. 불가능하면 'IMPOSSIBLE'.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -73,8 +105,7 @@ export function makeLivestockCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If there are 0 constraints, all 8 cows are free. The lexicographically smallest ordering is simply alphabetical order!",
-        "조건이 0개이면 8마리 소 모두 자유야. 사전순 최소 순서는 단순히 알파벳 순서!"),
+        "If there are 0 constraints, all 8 cows are free.\nThe lexicographically smallest ordering is simply alphabetical order!", "조건이 0개이면 8마리 소 모두 자유예요. 사전순 최소 순서는 단순히 알파벳 순서!"),
       question: t(E,
         "0 constraints, 8 cows. How many cows in the lineup?",
         "조건 0개, 소 8마리. 줄에 소가 몇 마리?"),
@@ -86,20 +117,19 @@ export function makeLivestockCh1(E) {
       correct: 2,
       explain: t(E,
         "Correct! All 8 cows must appear in the lineup regardless of constraints.",
-        "정답! 조건과 상관없이 모든 8마리 소가 줄에 나와야 해."),
+        "정답! 조건과 상관없이 모든 8마리 소가 줄에 나와야 해요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "With 0 constraints, the answer is just alphabetical order. How many cows are there in total?",
-        "조건 0개이면 답은 알파벳 순서. 총 소는 몇 마리?"),
+        "With 0 constraints, the answer is just alphabetical order.\nHow many cows are there in total?", "조건 0개이면 답은 알파벳 순서. 총 소는 몇 마리?"),
       question: t(E,
         "How many cows total in Livestock Lineup?",
         "Livestock Lineup에서 총 소는 몇 마리?"),
       hint: t(E,
         "The problem always has exactly 8 cows.",
-        "이 문제는 항상 정확히 8마리 소가 있어."),
+        "이 문제는 항상 정확히 8마리 소가 있어요."),
       answer: 8,
     },
   ];
@@ -109,33 +139,51 @@ export function makeLivestockCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeLivestockCh2(E) {
+export function makeLivestockCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Only 8 cows! Build adjacency graph, find chain endpoints, traverse chains. O(N) where N is small.",
-        "소가 8마리뿐! 인접 그래프를 만들고, 체인 끝점을 찾고, 체인을 탐색. N이 작으므로 O(N)."),
+        "Each adjacency constraint forms an edge. The constraint graph has max degree 2, so it's a set of CHAINS. Sort cows alphabetically, then for each unvisited cow that's a chain endpoint (or alone), output the chain in order.",
+        "각 인접 제약 = 간선. 제약 그래프는 최대 차수 2 라 체인들의 집합. 소를 알파벳 순 정렬 후, 미방문이고 체인 끝점 (혹은 외톨이) 인 소부터 체인 출력."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Sort cows alphabetically. Iterate in order: if a cow is unvisited and is a chain start (degree ≤ 1), traverse the chain. This greedily produces the lex-smallest ordering.",
-              "소를 알파벳순 정렬. 순서대로 반복: 소가 미방문이고 체인 시작(차수 ≤ 1)이면 체인 탐색. 이 그리디가 사전순 최소 순서를 생성.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Build adjacency map", "인접 맵 구축"), code: "adj = {cow: set of neighbors}", color: "#8b5cf6" },
+              { n: 2, label: t(E, "Sort 8 cow names", "8 마리 이름 정렬"), code: "cows = sorted(8 cow names)", color: "#7c3aed" },
+              { n: 3, label: t(E, "From each unvisited endpoint, walk chain", "미방문 끝점부터 체인 순회"), code: "if not visited and len(adj[c]) ≤ 1: walk chain", color: "#0891b2" },
+              { n: 4, label: t(E, "Output combined order", "합친 순서 출력"), code: "print('\n'.join(order))", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(1)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "only 8 cows", "소 8 마리뿐")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full graph + greedy solution!",
-        "그래프 + 그리디 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getLivestockSections(E),
     },
   ];
 }

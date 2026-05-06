@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getSqPastureSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -28,25 +29,53 @@ export function makeSqPastureCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two rectangular pastures on a field. FJ wants to build the smallest square fence that contains BOTH of them. What's the area? ⬜",
-        "들판에 직사각형 목초지 두 개가 있어. FJ가 둘 다 포함하는 가장 작은 정사각형 울타리를 만들려 해. 면적은? ⬜"),
+        "Two non-overlapping axis-aligned rectangular pastures sit on a field. FJ wants to build a SQUARE fence (with sides parallel to the axes) whose interior contains both pastures.\nPrint the AREA of the smallest such square.",
+        "겹치지 않는 축에 평행한 직사각형 목초지 2개가 들판에 있어요. FJ 가 두 목초지를 모두 포함하는 정사각형 울타리 (축에 평행) 를 만들어요.\n그런 정사각형 중 가장 작은 것의 면적을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>⬜</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Square Pasture</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, textAlign: "left" }}>
-            {t(E,
-              "Given: Two non-overlapping axis-aligned rectangles.\nFind: Minimum area of a square (sides parallel to axes) that encloses both.",
-              "주어진 것: 겹치지 않는 축 평행 직사각형 2개.\n구할 것: 둘 다 포함하는 정사각형의 최소 면적 (축 평행).")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>⬜</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Square Pasture</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#d97706" }}>{t(E, "Two non-overlapping axis-aligned rectangles", "겹치지 않는 축에 평행한 직사각형 2개")}</b>
+                  {t(E, " (pastures) on a field.", " 가 들판에 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ builds a ", "FJ 가 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "SQUARE fence (sides parallel to axes)", "정사각형 울타리 (변이 축에 평행)")}</b>
+                  {t(E, " whose interior contains BOTH pastures.",
+                        " — 두 목초지를 모두 포함.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "AREA of the smallest such square", "그런 정사각형 중 가장 작은 것의 면적")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: Find the bounding box — the smallest rectangle that contains both pastures. This uses min/max of all coordinates!",
-        "1단계: 바운딩 박스를 찾아 — 두 목초지를 모두 포함하는 가장 작은 직사각형. 모든 좌표의 min/max를 써!"),
+        "Step 1: Find the bounding box — the smallest rectangle that contains both pastures.\nThis uses min/max of all coordinates!", "1단계: 바운딩 박스를 찾아 — 두 목초지를 모두 포함하는 가장 작은 직사각형. 모든 좌표의 min/max를 써요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
@@ -71,8 +100,7 @@ export function makeSqPastureCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The bounding box uses: left = min(all x-lefts), right = max(all x-rights), bottom = min(all y-bottoms), top = max(all y-tops).",
-        "바운딩 박스: 왼쪽 = min(모든 x-왼쪽), 오른쪽 = max(모든 x-오른쪽), 아래 = min(모든 y-아래), 위 = max(모든 y-위)."),
+        "The bounding box uses: left = min(all x-lefts), right = max(all x-rights), bottom = min(all y-bottoms), top = max(all y-tops).", "바운딩 박스: 왼쪽 = min(모든 x-왼쪽), 오른쪽 = max(모든 x-오른쪽), 아래 = min(모든 y-아래), 위 = max(모든 y-위)."),
       question: t(E,
         "Rect A: (1,2)→(4,5). Rect B: (6,1)→(9,4). Bounding box width (x-span)?",
         "A: (1,2)→(4,5). B: (6,1)→(9,4). 바운딩 박스 가로?"),
@@ -85,8 +113,7 @@ export function makeSqPastureCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: The bounding box might not be square! To make it a square, take the LARGER of width and height as the side length.",
-        "2단계: 바운딩 박스가 정사각형이 아닐 수 있어! 정사각형으로 만들려면, 가로와 세로 중 큰 쪽을 변의 길이로!"),
+        "Step 2: The bounding box might not be square!\nTo make it a square, take the LARGER of width and height as the side length.", "2단계: 바운딩 박스가 정사각형이 아닐 수 있어요! 정사각형으로 만들려면, 가로와 세로 중 큰 쪽을 변의 길이로!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 14, padding: 16 }}>
@@ -96,7 +123,7 @@ export function makeSqPastureCh1(E) {
             <div style={{ fontSize: 15, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 2 }}>
               side = max(width, height)
             </div>
-            <div style={{ fontSize: 13, color: C.text, marginTop: 8, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 13, color: C.text, marginTop: 8, lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {t(E,
                 "If bounding box is 8 wide × 5 tall → square side = 8\nIf bounding box is 3 wide × 7 tall → square side = 7",
                 "바운딩 박스가 가로 8 × 세로 5 → 정사각형 변 = 8\n바운딩 박스가 가로 3 × 세로 7 → 정사각형 변 = 7")}
@@ -107,8 +134,7 @@ export function makeSqPastureCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "The area of the square is side × side. Simple!",
-        "정사각형의 면적 = 변 × 변. 간단해!"),
+        "The area of the square is side × side. Simple!", "정사각형의 면적 = 변 × 변. 간단해요!"),
       question: t(E,
         "Bounding box: width=5, height=3. Square side = max(5,3) = 5. Area?",
         "바운딩 박스: 가로=5, 세로=3. 정사각형 변 = max(5,3) = 5. 면적?"),
@@ -119,8 +145,7 @@ export function makeSqPastureCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "A: (0,0)→(3,2). B: (5,1)→(8,6). Bounding box: left=0, right=8, bottom=0, top=6. Width=8, Height=6. Side = max(8,6) = 8. Area?",
-        "A: (0,0)→(3,2). B: (5,1)→(8,6). 바운딩 박스: 왼쪽=0, 오른쪽=8, 아래=0, 위=6. 가로=8, 세로=6. 변 = max(8,6) = 8. 면적?"),
+        "A: (0,0)→(3,2).\nB: (5,1)→(8,6).\nBounding box: left=0, right=8, bottom=0, top=6.\nWidth=8, Height=6.\nSide = max(8,6) = 8.\nArea?", "A: (0,0)→(3,2).\nB: (5,1)→(8,6).\n바운딩 박스: 왼쪽=0, 오른쪽=8, 아래=0, 위=6.\n가로=8, 세로=6.\n변 = max(8,6) = 8.\n면적?"),
       question: t(E, "Side = 8. Area = 8² = ?", "변 = 8. 면적 = 8² = ?"),
       answer: 64,
     },
@@ -130,13 +155,12 @@ export function makeSqPastureCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeSqPastureCh2(E) {
+export function makeSqPastureCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
       narr: t(E,
-        "The code is beautifully simple. Read 2 rectangles, find bounding box with min/max, compute square side, print area!",
-        "코드가 아름답게 간단해. 직사각형 2개 읽고, min/max로 바운딩 박스 찾고, 정사각형 변 계산, 면적 출력!"),
+        "The code is beautifully simple.\nRead 2 rectangles, find bounding box with min/max, compute square side, print area!", "코드가 아름답게 간단해요. 직사각형 2개 읽고, min/max로 바운딩 박스 찾고, 정사각형 변 계산, 면적 출력!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
@@ -149,8 +173,7 @@ export function makeSqPastureCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Find the bounding box: min of all lefts/bottoms, max of all rights/tops.",
-        "바운딩 박스 찾기: 모든 왼쪽/아래의 min, 모든 오른쪽/위의 max."),
+        "Find the bounding box: min of all lefts/bottoms, max of all rights/tops.", "바운딩 박스 찾기: 모든 왼쪽/아래의 min, 모든 오른쪽/위의 max."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
@@ -167,8 +190,7 @@ export function makeSqPastureCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Why min for x1,x3 but max for x2,x4?",
-        "왜 x1,x3에는 min이고 x2,x4에는 max일까?"),
+        "Why min for x1,x3 but max for x2,x4?", "왜 x1,x3에는 min이고 x2,x4에는 max일까요?"),
       question: t(E,
         "x1,x3 are left edges, x2,x4 are right edges. To enclose both:",
         "x1,x3은 왼쪽 끝, x2,x4는 오른쪽 끝. 둘 다 포함하려면:"),
@@ -182,8 +204,7 @@ export function makeSqPastureCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Finally: square side = max of width and height. Area = side².",
-        "마지막: 정사각형 변 = 가로와 세로 중 큰 값. 면적 = 변²."),
+        "Finally: square side = max of width and height. Area = side².", "마지막: 정사각형 변 = 가로와 세로 중 큰 값. 면적 = 변²."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
@@ -197,12 +218,10 @@ export function makeSqPastureCh2(E) {
         </div>),
     },
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Complete solution! Read 2 rectangles → bounding box → square → area. Only 8 lines! 🎉",
-        "완전한 솔루션! 직사각형 2개 읽기 → 바운딩 박스 → 정사각형 → 면적. 8줄뿐! 🎉"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getSqPastureSections(E),
     },
   ];
 }

@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getWordProcSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -27,23 +28,75 @@ export const SOLUTION_CODE = [
   "    print(line)",
 ];
 
-/* Helper: code snippet box */
+/* Python syntax highlighter (shared across snippets) */
+const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
+const PY_BUILTIN = new Set(["print","input","range","len","sum","map","int","str","chr","ord","min","max","sorted","reversed","list","dict","set","tuple","enumerate","zip","abs","round","type","isinstance","open","filter","any","all","bool","float"]);
+
+function pyHighlight(line, baseColor) {
+  const tokens = [];
+  let i = 0;
+  while (i < line.length) {
+    if (line[i] === "'" || line[i] === '"') {
+      const q = line[i];
+      let j = i + 1;
+      while (j < line.length && line[j] !== q) { if (line[j] === "\\") j++; j++; }
+      tokens.push({ text: line.slice(i, j + 1), color: "#a5d6a7" });
+      i = j + 1;
+    } else if (line[i] === "#") {
+      tokens.push({ text: line.slice(i), color: "#6b7280" });
+      i = line.length;
+    } else if (/[0-9]/.test(line[i]) && (i === 0 || /[\s(,=+\-*/<>[\]:]/.test(line[i - 1]))) {
+      let j = i;
+      while (j < line.length && /[0-9.]/.test(line[j])) j++;
+      tokens.push({ text: line.slice(i, j), color: "#f9a825" });
+      i = j;
+    } else if (/[a-zA-Z_]/.test(line[i])) {
+      let j = i;
+      while (j < line.length && /[a-zA-Z_0-9]/.test(line[j])) j++;
+      const word = line.slice(i, j);
+      if (PY_KW.has(word)) tokens.push({ text: word, color: "#c792ea" });
+      else if (PY_BUILTIN.has(word)) tokens.push({ text: word, color: "#82aaff" });
+      else tokens.push({ text: word, color: baseColor });
+      i = j;
+    } else if ("=<>!+-*/%&|^~".includes(line[i])) {
+      let j = i;
+      while (j < line.length && "=<>!+-*/%&|^~".includes(line[j])) j++;
+      tokens.push({ text: line.slice(i, j), color: "#89ddff" });
+      i = j;
+    } else {
+      tokens.push({ text: line[i], color: baseColor });
+      i++;
+    }
+  }
+  return tokens;
+}
+
+/* Helper: code snippet box (token-highlighted Python) */
 const CodeSnippet = ({ lines, highlight: hl }) => (
   <div style={{
     background: "#1e293b", borderRadius: 10, padding: "10px 8px",
     overflowX: "auto", fontSize: 12, lineHeight: 1.8,
     fontFamily: "'JetBrains Mono', monospace", marginTop: 8,
   }}>
-    {lines.map((l, i) => (
-      <div key={i} style={{
-        display: "flex", minHeight: 20,
-        background: hl && hl.includes(i) ? "rgba(220,38,38,.12)" : "transparent",
-        borderRadius: 4, padding: "0 4px",
-      }}>
-        <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 10, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
-        <span style={{ whiteSpace: "pre", color: hl && hl.includes(i) ? "#fca5a5" : "#e2e8f0" }}>{l}</span>
-      </div>
-    ))}
+    {lines.map((l, i) => {
+      const isHl = hl && hl.includes(i);
+      const baseColor = isHl ? "#fca5a5" : "#e2e8f0";
+      const tokens = pyHighlight(l, baseColor);
+      return (
+        <div key={i} style={{
+          display: "flex", minHeight: 20,
+          background: isHl ? "rgba(220,38,38,.12)" : "transparent",
+          borderRadius: 4, padding: "0 4px",
+        }}>
+          <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 10, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
+          <span style={{ whiteSpace: "pre", wordBreak: "break-all" }}>
+            {tokens.map((tk, j) => (
+              <span key={j} style={{ color: tk.color }}>{tk.text}</span>
+            ))}
+          </span>
+        </div>
+      );
+    })}
   </div>
 );
 
@@ -99,17 +152,56 @@ export function makeWordProcCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A word processor needs to format text into lines! Each line can hold at most K characters of words (spaces between words don't count toward the limit).",
-        "워드 프로세서가 텍스트를 줄로 나눠야 해! 각 줄에 최대 K글자의 단어를 담을 수 있어 (단어 사이 공백은 제한에 포함되지 않아)."),
+        "A word processor receives N words in order. Each line can hold at most K LETTERS of words (spaces don't count). Each word, in order, is added to the current line if it still fits — otherwise it goes onto a NEW line.\nPrint the document one line per row, words separated by single spaces.",
+        "워드 프로세서가 N개 단어를 순서대로 받아요. 각 줄에는 단어의 글자 수 합이 최대 K까지 들어갈 수 있어요 (공백은 안 셈). 각 단어는 순서대로, 현재 줄에 들어가면 그 줄에 추가, 안 들어가면 새 줄을 시작해요.\n결과 문서를 한 줄씩 출력해요 (단어 사이는 공백 1개)."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"📝"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Word Processor</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "N words, max K characters per line. Fit as many words as possible on each line (greedy), then start a new line!",
-              "N개 단어, 줄당 최대 K글자. 각 줄에 가능한 많은 단어를 넣고 (그리디), 그 다음 새 줄 시작!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"📝"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Word Processor</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You're given ", "")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "N words in order", "순서대로 N개의 단어")}</b>
+                  {t(E, ".", " 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each line holds at most ", "각 줄에 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "K letters total", "글자 수 합이 최대 K")}</b>
+                  {t(E, " (spaces between words don't count).",
+                        " 까지 들어가요 (단어 사이 공백은 안 셈).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Process words in order: each word ", "단어를 순서대로: 각 단어가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "joins the current line if it still fits", "현재 줄에 들어가면 그 줄에 추가")}</b>
+                  {t(E, ", otherwise it starts a NEW line.",
+                        ", 안 들어가면 새 줄을 시작해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the resulting document, ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "one line per row, words separated by single spaces", "한 줄씩, 단어 사이 공백 1개")}</b>
+                  {t(E, ".", " 로 결과 문서를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -117,8 +209,7 @@ export function makeWordProcCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The rule: when adding the next word would push the total character count past K, start a new line. Spaces DON'T count! Only the sum of word lengths matters.",
-        "규칙: 다음 단어를 추가하면 총 글자 수가 K를 초과할 때 새 줄을 시작해. 공백은 세지 않아! 단어 길이의 합만 중요해."),
+        "The rule: when adding the next word would push the total character count past K, start a new line.\nSpaces DON'T count!\nOnly the sum of word lengths matters.", "규칙: 다음 단어를 추가하면 총 글자 수가 K를 초과할 때 새 줄을 시작해요. 공백은 세지 않아! 단어 길이의 합만 중요해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 10 }}>
@@ -162,8 +253,7 @@ export function makeWordProcCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Important detail: when counting characters per line, do spaces between words count?",
-        "중요한 세부사항: 줄당 글자 수를 셀 때, 단어 사이의 공백도 세나?"),
+        "Important detail: when counting characters per line, do spaces between words count?", "중요한 세부사항: 줄당 글자 수를 셀 때, 단어 사이의 공백도 세나?"),
       question: t(E,
         "Do spaces between words count toward the K character limit?",
         "단어 사이의 공백이 K글자 제한에 포함되나?"),
@@ -175,14 +265,13 @@ export function makeWordProcCh1(E) {
       correct: 1,
       explain: t(E,
         "Only word characters count! The K limit is the sum of word lengths, NOT counting spaces. This is explicitly stated in the problem!",
-        "단어 글자만 세! K 제한은 단어 길이의 합이고, 공백은 세지 않아. 이건 문제에서 명시적으로 나와 있어!"),
+        "단어 글자만 세! K 제한은 단어 길이의 합이고, 공백은 세지 않아. 이건 문제에서 명시적으로 나와 있어요!"),
     },
     // 1-4: Line fitting example
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace a bigger example! Words: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5. We add words greedily until the next one doesn't fit.",
-        "더 큰 예시를 추적해보자! 단어: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5. 다음 단어가 안 들어갈 때까지 그리디하게 추가해."),
+        "Let's trace a bigger example!\nWords: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5.\nWe add words greedily until the next one doesn't fit.", "더 큰 예시를 추적해보자! 단어: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5. 다음 단어가 안 들어갈 때까지 그리디하게 추가해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
@@ -225,8 +314,7 @@ export function makeWordProcCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Words [\"ab\",\"cd\",\"ef\"], K=5. ab(2)+cd(2)=4, fits. 4+ef(2)=6>5, new line. So 2 lines!",
-        "단어 [\"ab\",\"cd\",\"ef\"], K=5. ab(2)+cd(2)=4, 들어감. 4+ef(2)=6>5, 새 줄. 그래서 2줄!"),
+        "Words [\"ab\",\"cd\",\"ef\"], K=5.\nab(2)+cd(2)=4, fits.\n4+ef(2)=6>5, new line.\nSo 2 lines!", "단어 [\"ab\",\"cd\",\"ef\"], K=5. ab(2)+cd(2)=4, 들어감. 4+ef(2)=6>5, 새 줄. 그래서 2줄!"),
       question: t(E,
         "Words [\"ab\",\"cd\",\"ef\"], K=5. How many lines?",
         "단어 [\"ab\",\"cd\",\"ef\"], K=5. 몇 줄?"),
@@ -244,8 +332,7 @@ export function makeWordProcCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Try it! Words [\"aaa\", \"bb\", \"cc\", \"d\"], K=4. aaa(3) fits. 3+bb(2)=5>4, new line. bb(2)+cc(2)=4<=4. 4+d(1)=5>4, new line. 3 lines!",
-        "해봐! 단어 [\"aaa\", \"bb\", \"cc\", \"d\"], K=4. aaa(3) 들어감. 3+bb(2)=5>4, 새 줄. bb(2)+cc(2)=4<=4. 4+d(1)=5>4, 새 줄. 3줄!"),
+        "Try it!\nWords [\"aaa\", \"bb\", \"cc\", \"d\"], K=4.\naaa(3) fits.\n3+bb(2)=5>4, new line.\nbb(2)+cc(2)=4<=4.\n4+d(1)=5>4, new line.\n3 lines!", "해봐요!\n단어 [\"aaa\", \"bb\", \"cc\", \"d\"], K=4.\naaa(3) 들어감.\n3+bb(2)=5>4, 새 줄.\nbb(2)+cc(2)=4<=4.\n4+d(1)=5>4, 새 줄.\n3줄!"),
       question: t(E,
         "Words [\"aaa\",\"bb\",\"cc\",\"d\"], K=4. How many output lines?",
         "단어 [\"aaa\",\"bb\",\"cc\",\"d\"], K=4. 출력 줄 수?"),
@@ -268,8 +355,7 @@ export function makeWordProcCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The greedy strategy: scan words left to right. Track cur_len (total chars on current line). If adding the next word exceeds K, flush the current line and start fresh!",
-        "그리디 전략: 단어를 왼쪽에서 오른쪽으로 스캔. cur_len (현재 줄의 총 글자 수)을 추적. 다음 단어를 추가하면 K를 초과하면 현재 줄을 출력하고 새로 시작!"),
+        "The greedy strategy: scan words left to right.\nTrack cur_len (total chars on current line).\nIf adding the next word exceeds K, flush the current line and start fresh!", "그리디 전략: 단어를 왼쪽에서 오른쪽으로 스캔.\ncur_len (현재 줄의 총 글자 수)을 추적.\n다음 단어를 추가하면 K를 초과하면 현재 줄을 출력하고 새로 시작!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
@@ -301,8 +387,7 @@ export function makeWordProcCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Let's trace: words=[\"the\",\"dog\",\"is\",\"a\",\"good\",\"boy\"], K=6.",
-        "추적해보자: words=[\"the\",\"dog\",\"is\",\"a\",\"good\",\"boy\"], K=6."),
+        "Let's trace: words=[\"the\",\"dog\",\"is\",\"a\",\"good\",\"boy\"], K=6.", "추적해보자: words=[\"the\",\"dog\",\"is\",\"a\",\"good\",\"boy\"], K=6."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
@@ -351,8 +436,7 @@ export function makeWordProcCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Edge case: what if a single word is exactly K characters long? It fills the entire line by itself!",
-        "엣지 케이스: 단어 하나가 정확히 K글자라면? 혼자서 한 줄을 전부 채워!"),
+        "Edge case: what if a single word is exactly K characters long?\nIt fills the entire line by itself!", "엣지 케이스: 단어 하나가 정확히 K글자라면? 혼자서 한 줄을 전부 채워!"),
       question: t(E,
         "Words [\"abcde\", \"fg\"], K=5. Word 1 is exactly 5 chars. What happens?",
         "단어 [\"abcde\", \"fg\"], K=5. 단어 1이 정확히 5글자. 무슨 일이 일어나?"),
@@ -370,8 +454,7 @@ export function makeWordProcCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Words [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4. aa(2)+bb(2)=4. 4+cc(2)=6>4. cc(2)+dd(2)=4. 4+ee(2)=6>4. Lines: [aa,bb], [cc,dd], [ee]. 3 lines!",
-        "단어 [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4. aa(2)+bb(2)=4. 4+cc(2)=6>4. cc(2)+dd(2)=4. 4+ee(2)=6>4. 줄: [aa,bb], [cc,dd], [ee]. 3줄!"),
+        "Words [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4.\naa(2)+bb(2)=4.\n4+cc(2)=6>4.\ncc(2)+dd(2)=4.\n4+ee(2)=6>4.\nLines: [aa,bb], [cc,dd], [ee].\n3 lines!", "단어 [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4.\naa(2)+bb(2)=4.\n4+cc(2)=6>4.\ncc(2)+dd(2)=4.\n4+ee(2)=6>4.\n줄: [aa,bb], [cc,dd], [ee].\n3줄!"),
       question: t(E,
         "Words [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4. How many lines?",
         "단어 [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4. 몇 줄?"),
@@ -387,14 +470,13 @@ export function makeWordProcCh2(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 3: 코드 빌드 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeWordProcCh3(E) {
+export function makeWordProcCh3(E, lang = "py") {
   return [
     // 3-1: Read input
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: Read N (word count) and K (max chars per line), then read all the words.",
-        "1단계: N(단어 수)과 K(줄당 최대 글자)를 읽고, 모든 단어를 읽어."),
+        "Step 1: Read N (word count) and K (max chars per line), then read all the words.", "1단계: N(단어 수)과 K(줄당 최대 글자)를 읽고, 모든 단어를 읽어."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
@@ -418,8 +500,7 @@ export function makeWordProcCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: We need to track the current line (list of words) and its total character count. Plus a list to collect all finished lines.",
-        "2단계: 현재 줄(단어 리스트)과 총 글자 수를 추적해야 해. 완성된 줄을 모을 리스트도 필요해."),
+        "Step 2: We need to track the current line (list of words) and its total character count.\nPlus a list to collect all finished lines.", "2단계: 현재 줄(단어 리스트)과 총 글자 수를 추적해야 해요. 완성된 줄을 모을 리스트도 필요해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
@@ -447,8 +528,7 @@ export function makeWordProcCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Step 3: The main loop! For each word: check if adding it would exceed K. If so, flush the current line first. Then add the word.",
-        "3단계: 메인 루프! 각 단어마다: 추가하면 K를 초과하는지 확인. 초과하면 현재 줄을 먼저 출력. 그 다음 단어를 추가."),
+        "Step 3: The main loop!\nFor each word: check if adding it would exceed K.\nIf so, flush the current line first.\nThen add the word.", "3단계: 메인 루프! 각 단어마다: 추가하면 K를 초과하는지 확인. 초과하면 현재 줄을 먼저 출력. 그 다음 단어를 추가."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
@@ -480,8 +560,7 @@ export function makeWordProcCh3(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Why do we check 'and cur_line' in the if condition? What if cur_line is empty?",
-        "if 조건에서 'and cur_line'을 왜 확인할까? cur_line이 비어있으면?"),
+        "Why do we check 'and cur_line' in the if condition? What if cur_line is empty?", "if 조건에서 'and cur_line'을 왜 확인할까? cur_line이 비어있으면?"),
       question: t(E,
         "Why 'and cur_line' in the overflow check?",
         "초과 확인에서 'and cur_line'이 왜 필요할까?"),
@@ -493,16 +572,14 @@ export function makeWordProcCh3(E) {
       correct: 1,
       explain: t(E,
         "If cur_line is empty, we haven't added any word yet. We must add the current word even if it alone exceeds K (guaranteed not to happen by constraints, but good practice)!",
-        "cur_line이 비어있으면 아직 단어를 추가하지 않은 거야. 현재 단어를 반드시 추가해야 해!"),
+        "cur_line이 비어있으면 아직 단어를 추가하지 않은 거예요. 현재 단어를 반드시 추가해야 해요!"),
     },
     // 3-5: Complete code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Don't forget the last line! After the loop, cur_line may still have words. Flush it, then print all lines.",
-        "마지막 줄을 잊지 마! 루프 후에 cur_line에 아직 단어가 있을 수 있어. 출력하고 모든 줄을 프린트해."),
-      label: t(E, "Complete Solution", "전체 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getWordProcSections(E),
     },
   ];
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, Suspense, lazy } from "react"
+import { useState, useEffect, useRef, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
@@ -10,6 +10,10 @@ import { PROBLEM_LOADERS } from "./loaders"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
+import { QuestHealthBanner } from "@/components/quest/QuestHealthBanner"
+import { ReleaseStageBanner } from "@/components/quest/ReleaseStageBanner"
+import { QuestCompletionCard } from "@/components/quest/QuestCompletionCard"
+import { useCodeLang } from "@/components/quest/use-code-lang"
 
 const ALGO_UNLOCK_THRESHOLD = 8
 
@@ -94,7 +98,8 @@ declare global { interface Window { _questLang?: string } }
 
 export default function QuestProblemClient({ problemId }: { problemId: string }) {
   const router = useRouter()
-  const { lang, t } = useLanguage()
+  const { lang, setLang, t } = useLanguage()
+  const [codeLang, setCodeLang] = useCodeLang()
   const { profile } = useAuth()
   const meta = PROBLEM_MAP.get(problemId)
 
@@ -114,6 +119,55 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const [splitView, setSplitView] = useState(false)
   const [iframeBlocked, setIframeBlocked] = useState(false)
   const [iframeZoom, setIframeZoom] = useState(1) // 0.5 ~ 1.5
+  // Split ratio: 0.2 ~ 0.8 (left panel width fraction). Persists in localStorage.
+  const [splitRatio, setSplitRatio] = useState(0.5)
+  const splitContainerRef = useRef<HTMLDivElement>(null)
+  const draggingRef = useRef(false)
+
+  // Load saved ratio
+  useEffect(() => {
+    try {
+      const saved = parseFloat(localStorage.getItem("quest-split-ratio") || "0.5")
+      if (saved >= 0.2 && saved <= 0.8) setSplitRatio(saved)
+    } catch {}
+  }, [])
+
+  // Drag handlers
+  useEffect(() => {
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      if (!draggingRef.current || !splitContainerRef.current) return
+      const rect = splitContainerRef.current.getBoundingClientRect()
+      const clientX = "touches" in e ? e.touches[0].clientX : (e as MouseEvent).clientX
+      const ratio = (clientX - rect.left) / rect.width
+      const clamped = Math.max(0.2, Math.min(0.8, ratio))
+      setSplitRatio(clamped)
+    }
+    const onUp = () => {
+      if (draggingRef.current) {
+        draggingRef.current = false
+        document.body.style.cursor = ""
+        document.body.style.userSelect = ""
+        try { localStorage.setItem("quest-split-ratio", String(splitRatio)) } catch {}
+      }
+    }
+    window.addEventListener("mousemove", onMove)
+    window.addEventListener("touchmove", onMove)
+    window.addEventListener("mouseup", onUp)
+    window.addEventListener("touchend", onUp)
+    return () => {
+      window.removeEventListener("mousemove", onMove)
+      window.removeEventListener("touchmove", onMove)
+      window.removeEventListener("mouseup", onUp)
+      window.removeEventListener("touchend", onUp)
+    }
+  }, [splitRatio])
+
+  const startDrag = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault()
+    draggingRef.current = true
+    document.body.style.cursor = "col-resize"
+    document.body.style.userSelect = "none"
+  }
 
   if (!lockChecked) return null
 
@@ -125,6 +179,14 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const idx = PROBLEM_INDEX.get(problemId) ?? -1
   const prevProblem = idx > 0 ? ALL_PROBLEMS[idx - 1] : null
   const nextProblem = idx < ALL_PROBLEMS.length - 1 ? ALL_PROBLEMS[idx + 1] : null
+
+  // Same-contest siblings (e.g. all "Dec 2024 Bronze" problems together)
+  const contestKey = (sub?: string) =>
+    (sub ?? "").replace(/\s*#\d+$/, "").replace(/\s*P\d+$/, "").trim()
+  const myContestKey = contestKey(meta?.sub)
+  const contestSiblings = myContestKey
+    ? ALL_PROBLEMS.filter(p => contestKey(p.sub) === myContestKey)
+    : []
 
   if (!meta) {
     return (
@@ -148,14 +210,40 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
       <Header />
 
       {/* Breadcrumb: USACO · Dec 2024 Bronze #2 + done button */}
-      <div className="bg-white border-b-2 border-black px-3 py-2 sticky top-[57px] z-30 flex items-center gap-2">
+      <div className="bg-white border-b border-gray-300 px-3 py-1 sticky top-[57px] z-30 flex items-center gap-2">
         <Link href="/quest" className="text-gray-400 hover:text-gray-700 flex-shrink-0" title={t("문제 목록", "Problem list")}>
-          <ChevronLeft size={18} />
+          <ChevronLeft size={16} />
         </Link>
         <div className="flex-1 min-w-0">
-          <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">{meta.section}</span>
-          <span className="text-gray-300 mx-1.5">·</span>
-          <span className="text-xs font-semibold text-gray-700 truncate">{meta.sub}</span>
+          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">{meta.section}</span>
+          <span className="text-gray-300 mx-1">·</span>
+          <span className="text-[11px] font-semibold text-gray-700 truncate">{meta.sub}</span>
+        </div>
+        {/* 언어 토글: 한국어 ↔ English (글로벌 컨텍스트, persistent) */}
+        <div className="flex-shrink-0 hidden sm:flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">
+          <button
+            onClick={() => setLang("ko")}
+            className={`px-1.5 py-0.5 transition-colors ${lang === "ko" ? "bg-purple-500 text-white" : "bg-white text-gray-500 hover:bg-purple-50"}`}
+            title="한국어"
+          >한</button>
+          <button
+            onClick={() => setLang("en")}
+            className={`px-1.5 py-0.5 transition-colors border-l border-gray-200 ${lang === "en" ? "bg-purple-500 text-white" : "bg-white text-gray-500 hover:bg-purple-50"}`}
+            title="English"
+          >EN</button>
+        </div>
+        {/* 코드 언어 토글: Python ↔ C++ (localStorage persistent across quests) */}
+        <div className="flex-shrink-0 flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">
+          <button
+            onClick={() => setCodeLang("py")}
+            className={`px-1.5 py-0.5 transition-colors ${codeLang === "py" ? "bg-emerald-500 text-white" : "bg-white text-gray-500 hover:bg-emerald-50"}`}
+            title="Python"
+          >🐍 Py</button>
+          <button
+            onClick={() => setCodeLang("cpp")}
+            className={`px-1.5 py-0.5 transition-colors border-l border-gray-200 ${codeLang === "cpp" ? "bg-emerald-500 text-white" : "bg-white text-gray-500 hover:bg-emerald-50"}`}
+            title="C++"
+          >💻 C++</button>
         </div>
         {/* 원래 문제 — 반반 스크린 토글 (md 이상) + 새 탭 열기 */}
         <button
@@ -200,39 +288,75 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         )}
       </div>
 
-      {/* Prev / Next problem — 단정한 인라인 띠. 한 줄, 작은 폰트, 약한 색.
-          시작 전에 너무 두드러지면 진행 동력을 약하게 하므로 톤 다운. */}
-      <div className="border-b border-gray-200 px-3 py-1 flex items-center gap-2 text-[11px] text-gray-400">
+      {/* Prev / Next + same-contest jump dots + back-to-list */}
+      <div className="border-b border-gray-200 bg-amber-50/30 px-3 py-0.5 flex items-center gap-1 text-[11px]">
+        {/* Prev problem */}
         {prevProblem ? (
           <button
             onClick={() => router.push(`/quest/${prevProblem.id}`)}
-            className="flex items-center gap-0.5 hover:text-gray-700 transition-colors min-w-0 truncate"
+            className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-semibold text-gray-600 hover:bg-amber-100 hover:text-amber-800 transition-colors min-w-0 truncate flex-shrink"
             title={prevProblem.title}
           >
-            <ChevronLeft size={12} />
-            <span className="truncate">{prevProblem.title}</span>
+            <ChevronLeft size={12} className="flex-shrink-0" />
+            <span className="truncate hidden sm:inline">{prevProblem.title}</span>
           </button>
-        ) : <div className="flex-1" />}
+        ) : <div className="flex-shrink" />}
 
         <div className="flex-1" />
 
+        {/* Same-contest dots — quick jump within the same contest */}
+        {contestSiblings.length > 1 && (
+          <div className="flex items-center gap-1 flex-shrink-0">
+            {contestSiblings.map((p) => {
+              const isCurrent = p.id === problemId
+              const numMatch = p.sub.match(/#(\d+)$/) || p.sub.match(/P(\d+)$/)
+              const num = numMatch?.[1] ?? "•"
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => router.push(`/quest/${p.id}`)}
+                  className={`w-5 h-5 rounded-full text-[10px] font-black transition-colors ${
+                    isCurrent
+                      ? "bg-amber-500 text-white"
+                      : "bg-white border border-amber-300 text-amber-700 hover:bg-amber-100"
+                  }`}
+                  title={p.title}
+                >
+                  {num}
+                </button>
+              )
+            })}
+          </div>
+        )}
+
+        <div className="flex-1" />
+
+        {/* Next problem */}
         {nextProblem ? (
           <button
             onClick={() => router.push(`/quest/${nextProblem.id}`)}
-            className="flex items-center gap-0.5 hover:text-gray-700 transition-colors min-w-0 truncate"
+            className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-semibold text-gray-600 hover:bg-amber-100 hover:text-amber-800 transition-colors min-w-0 truncate flex-shrink"
             title={nextProblem.title}
           >
-            <span className="truncate">{nextProblem.title}</span>
-            <ChevronRight size={12} />
+            <span className="truncate hidden sm:inline">{nextProblem.title}</span>
+            <ChevronRight size={12} className="flex-shrink-0" />
           </button>
-        ) : <div className="flex-1" />}
+        ) : <div className="flex-shrink" />}
       </div>
 
       {/* Problem App + (옵션) 원본 문제 iframe 반반 스크린.
-          md 이상에서만 split. 모바일은 너무 좁아서 토글 버튼 자체를 숨김. */}
-      <div className="flex-1 flex min-h-0">
+          md 이상에서만 split. 모바일은 너무 좁아서 토글 버튼 자체를 숨김.
+          splitView 일 때 가운데 draggable divider 로 비율 조절 가능. */}
+      <div ref={splitContainerRef} className="flex-1 flex min-h-0">
         {/* key=lang forces remount so useState initializer re-runs with new lang */}
-        <main className={splitView ? "flex-1 md:w-1/2 min-w-0 overflow-auto" : "flex-1 min-w-0"}>
+        <main
+          className={splitView ? "min-w-0 overflow-auto" : "flex-1 min-w-0"}
+          style={splitView ? { flex: `0 0 calc(${splitRatio * 100}% - 4px)` } : undefined}
+        >
+          {/* Phase 0 quest-health banner — additive, only renders for flagged quests */}
+          <QuestHealthBanner questId={problemId} isEn={lang === "en"} />
+          {/* Phase 5 release-stage banner — only renders for internal/beta */}
+          <ReleaseStageBanner questId={problemId} isEn={lang === "en"} />
           {LazyComp ? (
             <Suspense fallback={<ProblemLoadingSpinner />}>
               {/* lang 을 prop 으로 직접 넘김 — window._questLang race 방지 */}
@@ -244,14 +368,40 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
               <div className="text-base font-bold text-gray-700">{t("튜토리얼 준비 중입니다", "Tutorial coming soon")}</div>
             </div>
           )}
+          {/* Phase 7: completion summary + recommendations — only renders when solved */}
+          <QuestCompletionCard questId={problemId} solved={solved} isEn={lang === "en"} />
         </main>
+
+        {/* Resizer handle — slim, modern. Subtle by default, shows grip on hover. */}
+        {splitView && (
+          <div
+            onMouseDown={startDrag}
+            onTouchStart={startDrag}
+            onDoubleClick={() => setSplitRatio(0.5)}
+            className="hidden md:flex flex-shrink-0 cursor-col-resize items-center justify-center group select-none relative"
+            style={{ width: 6 }}
+            title={t("드래그해서 비율 조절 (더블클릭: 50/50)", "Drag to resize (double-click: reset to 50/50)")}
+          >
+            {/* Hairline center line — barely visible */}
+            <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-gray-200 group-hover:bg-violet-300 group-active:bg-violet-400 transition-colors" />
+            {/* Grip dots — appear on hover */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
+              <div className="w-1 h-1 rounded-full bg-violet-500" />
+              <div className="w-1 h-1 rounded-full bg-violet-500" />
+              <div className="w-1 h-1 rounded-full bg-violet-500" />
+            </div>
+          </div>
+        )}
 
         {splitView && (() => {
           const originalUrl = getOriginalProblemUrl(meta)
           // Google 검색 fallback (url 필드 비어있을 때) → iframe 차단되므로 친절한 안내 UI
           const isGoogleFallback = originalUrl.startsWith("https://www.google.com/search")
           return (
-            <aside className="hidden md:flex flex-1 md:w-1/2 min-w-0 border-l-2 border-black bg-white flex-col">
+            <aside
+              className="hidden md:flex min-w-0 border-l-2 border-black bg-white flex-col"
+              style={{ flex: `0 0 calc(${(1 - splitRatio) * 100}% - 4px)` }}
+            >
               <div className="flex items-center gap-1.5 px-2 py-1.5 border-b border-gray-300 bg-amber-50 flex-shrink-0">
                 {/* URL 박스 — 클릭하면 새 탭에서 열림 */}
                 <a

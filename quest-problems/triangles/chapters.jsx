@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getTrianglesSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -45,17 +46,46 @@ export function makeTrianglesCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given N points, find the maximum area right triangle with legs parallel to the axes. Output 2 times the area (to avoid fractions).",
-        "N개의 점이 주어져. 축에 평행한 변을 가진 직각삼각형의 최대 넓이를 구해. 분수를 피하기 위해 넓이의 2배를 출력."),
+        "FJ has N fence posts at integer (x, y) positions. He wants to choose three posts to form a RIGHT triangle whose two legs are parallel to the x and y axes.\nPrint TWICE the maximum area of such a triangle (to keep the answer integer).",
+        "FJ 한테 정수 좌표 (x, y) 의 N 개 울타리 기둥이 있어요. 그중 세 기둥으로 직각 삼각형 — 두 변이 각각 x 축과 y 축에 평행한 — 을 만들어요.\n그 삼각형의 최대 넓이의 2 배 (소수 없이 정수로) 를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83d\udcd0"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Triangles</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: For each point as the right-angle corner, find the farthest point on the same x (height) and same y (width). Area = width * height / 2.",
-              "핵심: 각 점을 직각 꼭짓점으로, 같은 x의 가장 먼 점(높이)과 같은 y의 가장 먼 점(너비)을 찾아. 넓이 = 너비 * 높이 / 2.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcd0"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Triangles</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ 한테 ")}
+                  <b style={{ color: "#d97706" }}>{t(E, "N fence posts at integer (x, y)", "정수 (x, y) 의 N 개 울타리 기둥")}</b>
+                  {t(E, " positions.", " 이 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Choose 3 posts forming a ", "그중 세 기둥으로 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "right triangle with legs parallel to the axes", "두 변이 x 축과 y 축에 평행한 직각 삼각형")}</b>
+                  {t(E, ".", " 을 만들어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "TWICE the maximum area of such a triangle", "그 삼각형 최대 넓이의 2 배")}</b>
+                  {t(E, " (to keep the output an integer).", " 를 출력해요 (소수 없이 정수로).")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -63,8 +93,7 @@ export function makeTrianglesCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Points: (0,0), (1,0), (0,2). The right angle is at (0,0). Base = 1, Height = 2. Area = 1. Output = 2 * area = ?",
-        "점: (0,0), (1,0), (0,2). 직각이 (0,0). 밑변 = 1, 높이 = 2. 넓이 = 1. 출력 = 2 * 넓이 = ?"),
+        "Points: (0,0), (1,0), (0,2).\nThe right angle is at (0,0).\nBase = 1, Height = 2.\nArea = 1.\nOutput = 2 * area = ?", "점: (0,0), (1,0), (0,2). 직각이 (0,0). 밑변 = 1, 높이 = 2. 넓이 = 1. 출력 = 2 * 넓이 = ?"),
       question: t(E,
         "Points (0,0),(1,0),(0,2). Right angle at origin. 2 * area = ?",
         "점 (0,0),(1,0),(0,2). 원점에서 직각. 2 * 넓이 = ?"),
@@ -82,8 +111,7 @@ export function makeTrianglesCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For points (0,0), (1,0), (0,2): what is 2 * max area?",
-        "점 (0,0), (1,0), (0,2)에 대해: 최대 넓이 * 2는?"),
+        "For points (0,0), (1,0), (0,2): what is 2 * max area?", "점 (0,0), (1,0), (0,2)에 대해: 최대 넓이 * 2는?"),
       question: t(E,
         "Points (0,0),(1,0),(0,2). Output 2 * max triangle area?",
         "점 (0,0),(1,0),(0,2). 최대 삼각형 넓이 * 2 출력?"),
@@ -99,33 +127,51 @@ export function makeTrianglesCh1(E) {
 /* ---------------------------------------------------------------
    Chapter 2: Code (2 steps: reveal / code)
    --------------------------------------------------------------- */
-export function makeTrianglesCh2(E) {
+export function makeTrianglesCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Group by x and y, then for each point check all vertical/horizontal neighbors. O(N^2) in worst case but fast enough.",
-        "x와 y로 그룹화, 각 점에서 수직/수평 이웃 확인. 최악 O(N^2)이지만 충분히 빨라."),
+        "Treat each post as the right-angle CORNER. From it, find the FARTHEST post sharing the same x (gives the vertical leg = height) and the FARTHEST sharing the same y (horizontal leg = base). 2 × area = base × height.",
+        "각 기둥을 직각 꼭짓점으로 봐요. 거기서 같은 x 의 가장 먼 기둥 (높이 = 수직 변), 같은 y 의 가장 먼 기둥 (밑변 = 수평 변) 을 찾아요. 2 × 넓이 = 밑변 × 높이."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>O(N^2)</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "For each point, find max vertical distance (same x) and max horizontal distance (same y). The product gives 2 * area. Take the maximum over all points.",
-              "각 점에서 최대 수직 거리(같은 x)와 최대 수평 거리(같은 y)를 찾아. 곱이 2 * 넓이. 모든 점 중 최대값.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Group posts by x and by y", "x, y 별로 그룹화"), code: "by_x = defaultdict(list);  by_y = defaultdict(list)", color: "#d97706" },
+              { n: 2, label: t(E, "For each post (corner candidate)", "각 기둥 (꼭짓점 후보)"), code: "for x, y in posts:", color: "#7c3aed" },
+              { n: 3, label: t(E, "Find farthest with same x and same y", "같은 x, 같은 y 에서 가장 먼 것"), code: "max_dy = max(|y' - y|);  max_dx = max(|x' - x|)", color: "#0891b2" },
+              { n: 4, label: t(E, "Update best 2 × area", "최대 2 × 넓이 갱신"), code: "best = max(best, max_dy * max_dx);  print(best)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N²)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "for each post, scan its x/y groups", "기둥마다 x/y 그룹 스캔")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the complete solution!",
-        "전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getTrianglesSections(E),
     },
   ];
 }

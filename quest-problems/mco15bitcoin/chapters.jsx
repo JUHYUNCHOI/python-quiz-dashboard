@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getBitcoinSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -32,17 +33,37 @@ export function makeBitcoinCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N bitcoin mining sites are placed on a 2D plane. Find the maximum squared Euclidean distance between any two sites. Output (x1-x2)^2 + (y1-y2)^2.",
-        "N개의 비트코인 채굴 사이트가 2D 평면에 있어. 임의의 두 사이트 간 최대 유클리드 거리의 제곱을 구해. 출력: (x1-x2)^2 + (y1-y2)^2."),
+        "N bitcoin mining sites at integer points on a 2D plane.\nPrint the MAXIMUM squared Euclidean distance between any two sites — i.e., max (x1−x2)^2 + (y1−y2)^2.",
+        "정수 좌표의 평면 위에 있는 N 개의 비트코인 채굴 사이트.\n임의 두 사이트 사이 유클리드 거리의 제곱 (x1−x2)^2 + (y1−y2)^2 의 최댓값을 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u20bf"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Bitcoin</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P3</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: For small N, brute force O(N^2) checking all pairs. For larger N, convex hull + rotating calipers can optimize to O(N log N).",
-              "핵심: 작은 N에서는 모든 쌍을 확인하는 O(N^2) 브루트포스. 큰 N에서는 볼록 껍질 + 회전 캘리퍼스로 O(N log N) 최적화 가능.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u20bf"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Bitcoin</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P3</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#f97316" }}>{t(E, "N bitcoin sites at integer points on a 2D plane", "정수 좌표의 평면 위 N 개 비트코인 사이트")}</b>
+                  {t(E, ".", ".")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM (x1−x2)^2 + (y1−y2)^2 over all pairs", "모든 쌍 중 (x1−x2)^2 + (y1−y2)^2 의 최댓값")}</b>
+                  {t(E, ".", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -50,8 +71,7 @@ export function makeBitcoinCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Why do we use squared distance instead of regular distance? Think about what operations we can avoid.",
-        "왜 일반 거리 대신 거리의 제곱을 사용할까? 어떤 연산을 피할 수 있는지 생각해봐."),
+        "Why do we use squared distance instead of regular distance?\nThink about what operations we can avoid.", "왜 일반 거리 대신 거리의 제곱을 사용할까? 어떤 연산을 피할 수 있는지 생각해봐요."),
       question: t(E,
         "Why use squared Euclidean distance instead of regular distance?",
         "왜 일반 유클리드 거리 대신 제곱 거리를 사용하나?"),
@@ -62,14 +82,13 @@ export function makeBitcoinCh1(E) {
       correct: 0,
       explain: t(E,
         "Correct! sqrt is monotonic, so max squared distance corresponds to max distance. We avoid floating point issues.",
-        "맞아! sqrt는 단조함수라서 최대 제곱 거리가 최대 거리에 대응해. 부동소수점 문제도 피할 수 있어."),
+        "맞아! sqrt는 단조함수라서 최대 제곱 거리가 최대 거리에 대응해요. 부동소수점 문제도 피할 수 있어요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "Points (0,0) and (3,4). What is their squared Euclidean distance?",
-        "점 (0,0)과 (3,4). 유클리드 거리의 제곱은?"),
+        "Points (0,0) and (3,4). What is their squared Euclidean distance?", "점 (0,0)과 (3,4). 유클리드 거리의 제곱은?"),
       question: t(E,
         "Squared distance between (0,0) and (3,4)?",
         "(0,0)과 (3,4) 사이의 제곱 거리?"),
@@ -85,33 +104,51 @@ export function makeBitcoinCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeBitcoinCh2(E) {
+export function makeBitcoinCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Brute force: check all N*(N-1)/2 pairs and track the maximum squared distance. O(N^2) time.",
-        "브루트포스: 모든 N*(N-1)/2 쌍을 확인하고 최대 제곱 거리를 추적. O(N^2) 시간."),
+        "Brute force: for every pair of sites (i, j), compute (xi − xj)² + (yi − yj)² and keep the running max.",
+        "완전 탐색: 모든 사이트 쌍 (i, j) 에 대해 (xi − xj)² + (yi − yj)² 계산, 최댓값 유지."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N\u00b2)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "For each pair (i, j), compute dx^2 + dy^2 and keep the maximum. Simple nested loop over all pairs.",
-              "각 쌍 (i, j)에 대해 dx^2 + dy^2을 계산하고 최대값 유지. 모든 쌍에 대한 간단한 이중 루프.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read N sites", "N 사이트 읽기"), code: "sites = [(x, y) for _ in range(N)]", color: "#f97316" },
+              { n: 2, label: t(E, "Init best = 0", "best = 0 초기화"), code: "best = 0", color: "#7c3aed" },
+              { n: 3, label: t(E, "Check every pair", "모든 쌍 확인"), code: "for i in range(N): for j in range(i+1, N):", color: "#0891b2" },
+              { n: 4, label: t(E, "Update best, print", "best 갱신, 출력"), code: "best = max(best, dx*dx + dy*dy);  print(best)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N²)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "all C(N, 2) pairs", "모든 C(N, 2) 쌍")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the brute force solution!",
-        "브루트포스 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getBitcoinSections(E),
     },
   ];
 }

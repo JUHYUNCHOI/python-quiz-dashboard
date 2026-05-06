@@ -48,7 +48,7 @@ print(names)  # {'철수', '영희'}
 # 1) 중괄호 — 가장 흔함
 s1 = {1, 2, 3}
 
-# 2) set() 함수 — 다른 컬렉션 → 집합
+# 2) set() 함수 — 다른 자료구조 → 집합
 s2 = set([1, 2, 2, 3])     # 리스트 → {1, 2, 3}
 s3 = set("hello")           # 문자열 → {'h', 'e', 'l', 'o'}
 s4 = set((1, 2, 3))         # 튜플 → {1, 2, 3}
@@ -203,7 +203,7 @@ print("포도" in fruits)   # False
           id: "more-methods",
           type: "explain",
           title: "🔧 더 많은 메서드 — update / pop / clear",
-          content: `**update()** — 다른 컬렉션의 모든 요소를 한꺼번에 추가
+          content: `**update()** — 다른 자료구조의 모든 요소를 한꺼번에 추가
 **pop()** — 임의의 요소 하나 꺼내서 제거 (순서 없으니 어느 것일지 모름)
 **clear()** — 전부 지우기
 

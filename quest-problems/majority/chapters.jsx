@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMajoritySections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -29,17 +30,58 @@ export function makeMajorityCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "N cows each prefer a type of hay. Focus groups of 3 adjacent cows can convince the middle cow to switch. Which hay types can become universal? Let's find out!",
-        "N마리의 소가 각각 좋아하는 건초가 있어. 인접한 3마리 포커스 그룹이 가운데 소를 설득할 수 있어. 어떤 건초가 전체를 지배할 수 있을까?"),
+        "N cows stand in a row, each preferring some hay type.\nFJ runs 'focus groups' on any 3 adjacent cows: if 2+ agree, the third switches to the majority.\nWhich hay types could end up everywhere?",
+        "N마리 소가 한 줄로 서있고, 각자 좋아하는 건초 종류가 있어요.\nFJ가 인접한 3마리에게 '포커스 그룹'을 열면, 그중 2명 이상이 같은 의견이면 나머지 한 명이 그 의견으로 바꿔요.\n어떤 건초 종류가 결국 전체를 지배할 수 있을까요?"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🗳️</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Majority Opinion</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #1</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key insight: a hay type can become universal only if it appears in at least 2 adjacent positions somewhere in the line!",
-              "핵심: 건초 종류가 전체를 지배하려면, 줄 어딘가에 연속 2칸 이상 나와야 해!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🗳️</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Majority Opinion</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #1</div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has ", "FJ에게 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "N cows in a row", "한 줄로 선 N마리 소")}</b>
+                  {t(E, ". Cow i prefers hay type ", "가 있어요. i번 소는 건초 종류 ")}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>a[i]</code>
+                  {t(E, ".", "를 좋아해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ can repeatedly run a ", "FJ는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "focus group", "포커스 그룹")}</b>
+                  {t(E, " on any 3 adjacent cows: if 2 agree on a type, the 3rd cow switches to that type.",
+                        "을 인접한 3마리 위에 반복해서 열 수 있어요: 그중 2명이 같은 종류를 좋아하면, 나머지 1명도 그 종류로 바꿔요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A hay type ", "어떤 건초 종류가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "becomes universal", "전체를 지배")}</b>
+                  {t(E, " if FJ can use focus groups to make ALL cows prefer it.",
+                        "한다면 — FJ가 포커스 그룹을 잘 사용해서 모든 소가 그것을 좋아하게 만들 수 있어야 해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print all hay types that can become universal, in increasing order — or ", "전체를 지배할 수 있는 건초 종류를 오름차순으로 모두 출력해요. 없으면 ")}
+                  <b style={{ color: "#15803d" }}>-1</b>
+                  {t(E, " if none.", " 출력.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -47,8 +89,7 @@ export function makeMajorityCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If the preferences are [1, 2, 2, 2, 3], which hay type can become universal?",
-        "선호도가 [1, 2, 2, 2, 3]이면 어떤 건초가 전체를 지배할 수 있을까?"),
+        "If the preferences are [1, 2, 2, 2, 3], which hay type can become universal?", "선호도가 [1, 2, 2, 2, 3]이면 어떤 건초가 전체를 지배할 수 있을까?"),
       question: t(E,
         "Preferences: [1, 2, 2, 2, 3]. Which can become universal?",
         "선호도: [1, 2, 2, 2, 3]. 전체를 지배할 수 있는 건?"),
@@ -67,8 +108,7 @@ export function makeMajorityCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Count the adjacent pairs! In [1, 1, 2, 3, 3], how many adjacent pairs share the same value?",
-        "인접 쌍을 세봐! [1, 1, 2, 3, 3]에서 같은 값을 가진 인접 쌍은 몇 개?"),
+        "Count the adjacent pairs!\nIn [1, 1, 2, 3, 3], how many adjacent pairs share the same value?", "인접 쌍을 세봐요! [1, 1, 2, 3, 3]에서 같은 값을 가진 인접 쌍은 몇 개?"),
       question: t(E,
         "Array [1, 1, 2, 3, 3]: how many adjacent pairs have the same value?",
         "배열 [1, 1, 2, 3, 3]: 같은 값의 인접 쌍은 몇 개?"),
@@ -77,6 +117,11 @@ export function makeMajorityCh1(E) {
         "각 쌍을 확인: (1,1), (1,2), (2,3), (3,3)"),
       answer: 2,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Pick a preset and step through the adjacent-pair scan.\nWatch which values get added to the result set.", "프리셋을 골라 인접 쌍 스캔을 한 단계씩. 어떤 값이 결과 집합에 추가되는지 봐요."),
+    },
   ];
 }
 
@@ -84,33 +129,51 @@ export function makeMajorityCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeMajorityCh2(E) {
+export function makeMajorityCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "We just scan once through the array checking adjacent pairs. That's O(N) time!",
-        "배열을 한 번 쭉 훑으면서 인접 쌍만 확인하면 돼. O(N) 시간!"),
+        "We just scan once through the array checking adjacent pairs. That's O(N) time!", "배열을 한 번 쭉 훑으면서 인접 쌍만 확인하면 돼요. O(N) 시간!"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>⚡</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "For each i from 0 to N-2: if a[i] == a[i+1], add a[i] to the result set. Print sorted results, or -1 if empty.",
-              "i를 0부터 N-2까지: a[i] == a[i+1]이면 결과 집합에 추가. 정렬 출력, 비어있으면 -1.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Init result set", "결과 집합 초기화"), code: "result = set()", color: "#dc2626" },
+              { n: 2, label: t(E, "Scan adjacent pairs", "인접 쌍 스캔"), code: "for i in range(N \u2212 1): if a[i] == a[i+1]: result.add(a[i])", color: "#0891b2" },
+              { n: 3, label: t(E, "Print sorted (or \u22121)", "정렬 출력 (또는 \u22121)"), code: "for x in sorted(result): print(x)   # else print(\u22121)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "\u23f1 Complexity", "\u23f1 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "단일 선형 스캔")}</div>
           </div>
         </div>),
     },
-    // 2-2: Code
+    // 2-2: Progressive code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full solution. Clean and simple!",
-        "전체 코드야. 깔끔하고 간단해!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Now build the linear scan step by step.", "선형 스캔을 단계별로 만들자."),
+      sections: getMajoritySections(E),
+    },
+    {
+      type: "runner",
+      narr: t(E,
+        "Try your own array. Enter space-separated values, see live scan and final output.", "직접 배열 시도. 공백 구분 값 입력, 실시간 스캔과 최종 출력 확인."),
     },
   ];
 }

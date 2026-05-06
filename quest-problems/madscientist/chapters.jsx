@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMadSciSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -35,17 +36,48 @@ export function makeMadSciCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two strings A and B of H's and G's. One flip operation reverses a contiguous substring of B (swaps all H<->G in that range). Find the minimum flips to make B equal A.",
-        "H와 G로 된 두 문자열 A, B. 한 번의 뒤집기로 B의 연속 부분 문자열의 H<->G를 교환. B를 A로 만드는 최소 뒤집기 수를 구해."),
+        "Two strings A and B of length N over {H, G} are given. In one 'flip' operation you choose any contiguous substring of B and swap H↔G inside it.\nPrint the MINIMUM number of flip operations to make B equal A.",
+        "길이 N 의 문자열 A, B 두 개가 주어져요. 두 문자열은 H 와 G 두 글자만 사용해요. 한 번의 '뒤집기' 연산으로 B 의 연속한 부분 문자열을 골라 그 안의 H ↔ G 를 모두 교환해요.\nB 를 A 와 같게 만드는 데 필요한 최소 뒤집기 횟수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\uddea"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Mad Scientist</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Count the number of contiguous blocks where A and B differ. Each block needs exactly one flip.",
-              "핵심: A와 B가 다른 연속 블록의 수를 세. 각 블록은 정확히 한 번의 뒤집기가 필요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\uddea"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Mad Scientist</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Two ", "두 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "strings A and B of length N", "길이 N 의 문자열 A, B")}</b>
+                  {t(E, " over the alphabet {H, G} are given.",
+                        " ({H, G} 로 구성) 가 주어져요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One flip operation: choose a ", "한 번의 뒤집기: ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "contiguous substring of B", "B 의 연속 부분 문자열")}</b>
+                  {t(E, " and swap H ↔ G inside it.",
+                        " 을 골라 그 안의 H ↔ G 를 모두 교환.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of flips to make B equal A", "B 를 A 와 같게 만드는 최소 뒤집기 수")}</b>
+                  {t(E, ".", "를 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -53,8 +85,7 @@ export function makeMadSciCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A = \"HH\", B = \"GG\". Both positions differ, forming 1 contiguous block. How many flips?",
-        "A = \"HH\", B = \"GG\". 두 위치 모두 달라서 1개의 연속 블록. 뒤집기 몇 번?"),
+        "A = \"HH\", B = \"GG\".\nBoth positions differ, forming 1 contiguous block.\nHow many flips?", "A = \"HH\", B = \"GG\". 두 위치 모두 달라서 1개의 연속 블록. 뒤집기 몇 번?"),
       question: t(E,
         "A = \"HH\", B = \"GG\". Min flips to make B equal A?",
         "A = \"HH\", B = \"GG\". B를 A로 만드는 최소 뒤집기 수?"),
@@ -72,8 +103,7 @@ export function makeMadSciCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "A = \"HGH\", B = \"GHG\". All 3 positions differ. They form 1 contiguous block of differences. How many flips?",
-        "A = \"HGH\", B = \"GHG\". 3개 위치 모두 달라. 1개의 연속 차이 블록. 뒤집기 몇 번?"),
+        "A = \"HGH\", B = \"GHG\".\nAll 3 positions differ.\nThey form 1 contiguous block of differences.\nHow many flips?", "A = \"HGH\", B = \"GHG\". 3개 위치 모두 달라요. 1개의 연속 차이 블록. 뒤집기 몇 번?"),
       question: t(E,
         "A = \"HGH\", B = \"GHG\". Min flips?",
         "A = \"HGH\", B = \"GHG\". 최소 뒤집기 수?"),
@@ -89,33 +119,51 @@ export function makeMadSciCh1(E) {
 /* ---------------------------------------------------------------
    Chapter 2: Code (2 steps: reveal / code)
    --------------------------------------------------------------- */
-export function makeMadSciCh2(E) {
+export function makeMadSciCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Just scan once and count contiguous differing blocks. O(N) time!",
-        "한 번 스캔해서 연속 차이 블록을 세면 돼. O(N) 시간!"),
+        "Each contiguous block where A[i] ≠ B[i] needs EXACTLY ONE flip operation to fix (one substring reversal). So count how many such CONTIGUOUS differing blocks exist.",
+        "A[i] ≠ B[i] 인 연속 블록 마다 정확히 1 번의 뒤집기로 고칠 수 있어요 (한 부분 문자열 뒤집기). 그러므로 그런 연속 차이 블록의 개수를 세요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Scan A and B in parallel. Each time we enter a new block where A[i] != B[i], increment the counter. That's the answer!",
-              "A와 B를 동시에 스캔. A[i] != B[i]인 새로운 블록에 들어갈 때마다 카운터 증가. 그게 답!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Scan A and B in parallel", "A 와 B 를 동시 스캔"), code: "i = 0; flips = 0", color: "#f97316" },
+              { n: 2, label: t(E, "Skip matching positions", "일치 위치 건너뛰기"), code: "while i < N and A[i] == B[i]: i += 1", color: "#7c3aed" },
+              { n: 3, label: t(E, "Found a differing block?", "차이 블록 발견?"), code: "if i < N: flips += 1; while i < N and A[i] != B[i]: i += 1", color: "#0891b2" },
+              { n: 4, label: t(E, "Repeat to end, print flips", "끝까지 반복, flips 출력"), code: "print(flips)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the simple scanning solution!",
-        "간단한 스캔 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getMadSciSections(E),
     },
   ];
 }

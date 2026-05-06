@@ -8,6 +8,10 @@ import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
 import { useAuth } from "@/contexts/auth-context"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
+import { isVisibleInCatalog, getReleaseStage, getQuestMeta } from "@/lib/quest-meta"
+import { masteredConcepts, suggestNextConcepts } from "@/lib/concept-graph"
+import { CONCEPT_ONTOLOGY, type ConceptId } from "@/lib/quest-meta"
+import { useReleasePref } from "@/components/quest/use-release-pref"
 
 // ────────────────────────────────────────────────
 // Problem data (sourced from CodeQuest HomeScreen)
@@ -223,6 +227,30 @@ export default function QuestPage() {
   const [algoTopicsDone, setAlgoTopicsDone] = useState(0)
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["USACO", "MCC", "MCO"]))
+  const [betaOptIn, setBetaOptIn] = useReleasePref()
+
+  // Phase 5: Filter helper. A quest is visible if:
+  //   (a) the viewer's role/preference grants access, OR
+  //   (b) the student already has progress on it (don't hide solved work).
+  const canSeeProblem = (id: string): boolean =>
+    isVisibleInCatalog(id, { isTeacher, betaOptIn }) || solvedSet.has(id)
+
+  // Phase 6: "ready to try" — required concepts all covered by completed
+  // quests. Quests with no curated prereqs are NOT marked ready (they
+  // could be anything, so silence is safer than a false promise).
+  const mastered = masteredConcepts(solvedSet)
+  const isReady = (id: string): boolean => {
+    if (solvedSet.has(id)) return false
+    const reqs = getQuestMeta(id).concepts_required
+    if (reqs.length === 0) return false
+    return reqs.every(c => mastered.has(c))
+  }
+
+  // Phase 7: top concept that, once mastered, would unlock the most
+  // currently-locked quests. Only shown when there's a clear winner.
+  const allCandidateIds = SECTIONS.flatMap(s => s.problems.map(p => p.id))
+  const studyHints = suggestNextConcepts(solvedSet, allCandidateIds, 1)
+  const studyHint = studyHints[0]
 
   useEffect(() => {
     // Load algo progress (same pattern as curriculum/page.tsx)
@@ -249,8 +277,14 @@ export default function QuestPage() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _unused = algoTopicsDone >= ALGO_UNLOCK_THRESHOLD || isTeacher
 
-  const totalProblems = SECTIONS.reduce((acc, s) => acc + s.problems.length, 0)
-  const totalSolved = SECTIONS.reduce(
+  // Filter problems by release stage (additive: full quests always shown).
+  const visibleSections = SECTIONS.map(s => ({
+    ...s,
+    problems: s.problems.filter(p => canSeeProblem(p.id)),
+  }))
+
+  const totalProblems = visibleSections.reduce((acc, s) => acc + s.problems.length, 0)
+  const totalSolved = visibleSections.reduce(
     (acc, s) => acc + s.problems.filter(p => solvedSet.has(p.id)).length,
     0
   )
@@ -323,12 +357,48 @@ export default function QuestPage() {
     const map = new Map<string, Problem[]>()
     for (const p of problems) {
       // sub format: "Dec 2024 Bronze #1" or "MCC 2024 P1"
-      // group key = everything before the #N or PN
       const key = p.sub.replace(/\s*#\d+$/, "").replace(/\s*P\d+$/, "").trim()
       if (!map.has(key)) map.set(key, [])
       map.get(key)!.push(p)
     }
     return Array.from(map.entries()).map(([contest, items]) => ({ contest, items }))
+  }
+
+  // ── Parse season from a USACO contest label ──
+  // USACO season runs Dec → Open of the following year:
+  //   Dec 2024, Jan 2025, Feb 2025, Open 2025  →  "2024-2025 Season"
+  //   Dec 2023, Jan 2024, Feb 2024, Open 2024  →  "2023-2024 Season"
+  function seasonFromContest(contest: string): string {
+    const m = contest.match(/^(Dec|Jan|Feb|Open)\s+(\d{4})/)
+    if (!m) return contest // not a USACO season — fall back
+    const month = m[1]
+    const year = parseInt(m[2], 10)
+    const startYear = month === "Dec" ? year : year - 1
+    return `${startYear}-${startYear + 1} Season`
+  }
+
+  // Group USACO contests by season
+  function groupBySeason(groups: { contest: string; items: Problem[] }[]):
+    { season: string; contests: { contest: string; items: Problem[] }[] }[] {
+    const seasonMap = new Map<string, { contest: string; items: Problem[] }[]>()
+    for (const g of groups) {
+      const season = seasonFromContest(g.contest)
+      if (!seasonMap.has(season)) seasonMap.set(season, [])
+      seasonMap.get(season)!.push(g)
+    }
+    // Sort seasons descending (newest first), and contests within each
+    // descending (Open > Feb > Jan > Dec).
+    const order: Record<string, number> = { Open: 4, Feb: 3, Jan: 2, Dec: 1 }
+    const seasons = Array.from(seasonMap.entries()).map(([season, contests]) => {
+      contests.sort((a, b) => {
+        const am = a.contest.match(/^(\w+)/)?.[1] ?? ""
+        const bm = b.contest.match(/^(\w+)/)?.[1] ?? ""
+        return (order[bm] ?? 0) - (order[am] ?? 0)
+      })
+      return { season, contests }
+    })
+    seasons.sort((a, b) => b.season.localeCompare(a.season))
+    return seasons
   }
 
   // Badge color per problem number within contest
@@ -339,7 +409,7 @@ export default function QuestPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <main className="max-w-3xl mx-auto px-4 pt-6 pb-28">
+      <main className="max-w-6xl mx-auto px-4 pt-6 pb-28">
 
         {/* Page header */}
         <div className="mb-6 flex items-start justify-between gap-3">
@@ -352,7 +422,28 @@ export default function QuestPage() {
               {t("인터랙티브 알고리즘 풀이", "Interactive algorithm problem walkthroughs")}
             </p>
           </div>
-          <LanguageToggle className="shrink-0 mt-1" />
+          <div className="flex flex-col items-end gap-1.5">
+            <LanguageToggle className="shrink-0" />
+            {/* Phase 5: beta opt-in toggle for students. Teachers always see all stages, so we hide the toggle for them. */}
+            {!isTeacher && (
+              <button
+                onClick={() => setBetaOptIn(!betaOptIn)}
+                className={`text-[10px] font-bold px-2 py-1 rounded-md border-2 transition ${
+                  betaOptIn
+                    ? "bg-fuchsia-100 border-fuchsia-400 text-fuchsia-800"
+                    : "bg-white border-gray-300 text-gray-500 hover:border-gray-400"
+                }`}
+                title={t(
+                  "베타 quest: 새로 만든 quest 를 미리 시도. 끄면 안정 버전만 보여요.",
+                  "Beta quests: see in-progress redesigns. Off = only stable quests."
+                )}
+              >
+                {betaOptIn
+                  ? t("🧪 베타 ON", "🧪 Beta ON")
+                  : t("🧪 베타 OFF", "🧪 Beta OFF")}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Overall progress bar */}
@@ -372,9 +463,30 @@ export default function QuestPage() {
           </div>
         )}
 
+        {/* Phase 7: study-next suggestion. Only renders when the student already has progress AND a clear high-leverage concept exists. */}
+        {loaded && solvedSet.size >= 2 && studyHint && studyHint.unlocksCount >= 2 && (
+          <div className="border-2 border-indigo-400 rounded-xl shadow-[3px_3px_0px_0px_rgba(99,102,241,0.5)] bg-indigo-50 p-4 mb-6">
+            <div className="text-xs font-black uppercase tracking-wider text-indigo-700 mb-1">
+              📚 {t("다음에 배우면 좋은 개념", "Study this next")}
+            </div>
+            <div className="font-bold text-base text-indigo-900 mb-1">
+              <code className="font-mono text-sm bg-white px-1.5 py-0.5 rounded border border-indigo-200">{studyHint.concept}</code>
+              <span className="text-gray-700 text-sm font-semibold ml-2">
+                — {CONCEPT_ONTOLOGY[studyHint.concept as ConceptId] ?? studyHint.concept}
+              </span>
+            </div>
+            <div className="text-xs text-indigo-800">
+              {t(
+                `이거 하나만 더 배우면 ${studyHint.unlocksCount} 개 quest 가 풀려요`,
+                `Mastering this unlocks ${studyHint.unlocksCount} more quest${studyHint.unlocksCount > 1 ? "s" : ""}`
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Sections */}
         <div className="flex flex-col gap-4">
-          {SECTIONS.map(section => {
+          {visibleSections.map(section => {
             const sectionSolved = section.problems.filter(p => solvedSet.has(p.id)).length
             const sectionTotal = section.problems.length
             const isExpanded = expandedSections.has(section.label)
@@ -400,62 +512,105 @@ export default function QuestPage() {
                   <span className="text-gray-400 font-bold text-lg">{isExpanded ? "▲" : "▼"}</span>
                 </button>
 
-                {/* Contest-grouped problem list */}
+                {/* Contest-grouped problem list (USACO: Season → 4-col grid of contest cards) */}
                 {isExpanded && (
-                  <div className="border-t-2 border-black">
-                    {groups.map(({ contest, items }) => {
-                      const groupSolved = items.filter(p => solvedSet.has(p.id)).length
-                      const allDone = groupSolved === items.length && items.length > 0
+                  <div className="border-t-2 border-black bg-gray-50">
+                    {(section.label === "USACO"
+                      ? groupBySeason(groups)
+                      : [{ season: "", contests: groups }]
+                    ).map(({ season, contests }) => {
+                      const seasonSolved = contests.reduce(
+                        (a, c) => a + c.items.filter(p => solvedSet.has(p.id)).length, 0)
+                      const seasonTotal  = contests.reduce((a, c) => a + c.items.length, 0)
                       return (
-                        <div key={contest} className="border-b-2 border-black last:border-b-0">
-                          {/* Contest header row */}
-                          <div className={`flex items-center justify-between px-4 py-2.5 ${allDone ? "bg-green-50 border-l-4 border-green-500" : "bg-amber-50 border-l-4 border-amber-400"}`}>
-                            <span className={`text-sm font-black uppercase tracking-wide ${allDone ? "text-green-800" : "text-amber-900"}`}>
-                              {section.icon} {contest}
-                            </span>
-                            <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${allDone ? "bg-green-100 text-green-700 border-green-300" : groupSolved > 0 ? "bg-amber-100 text-amber-700 border-amber-300" : "bg-gray-100 text-gray-500 border-gray-200"}`}>
-                              {groupSolved}/{items.length}
-                            </span>
-                          </div>
-                          {/* Problems */}
-                          <div className="flex flex-col divide-y divide-gray-100">
-                            {items.map((problem, idx) => {
-                              const isSolved = solvedSet.has(problem.id)
-                              // Extract problem number from sub: "Bronze #2" → "#2", "P3" → "P3"
-                              const numMatch = problem.sub.match(/#(\d+)$/) || problem.sub.match(/P(\d+)$/)
-                              const numLabel = numMatch ? (problem.sub.includes("#") ? `#${numMatch[1]}` : `P${numMatch[1]}`) : `${idx + 1}`
-                              const badgeColor = NUM_COLORS[(parseInt(numMatch?.[1] ?? "1") - 1) % NUM_COLORS.length]
-
+                        <div key={season || "all"} className="border-b-2 border-gray-200 last:border-b-0">
+                          {season && (
+                            <div className="flex items-center justify-between px-3 py-1.5 bg-gray-900 text-white">
+                              <span className="text-xs font-black tracking-wide">
+                                🗓️ {season}
+                              </span>
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/15 text-white">
+                                {seasonSolved}/{seasonTotal}
+                              </span>
+                            </div>
+                          )}
+                          {/* Contest cards: responsive grid */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 p-2">
+                            {contests.map(({ contest, items }) => {
+                              const groupSolved = items.filter(p => solvedSet.has(p.id)).length
+                              const allDone = groupSolved === items.length && items.length > 0
                               return (
-                                <Link
-                                  key={problem.id}
-                                  href={`/quest/${problem.id}`}
-                                  className={[
-                                    "flex items-center gap-3 px-5 py-3.5 transition-all group",
-                                    isSolved
-                                      ? "bg-green-50 hover:bg-green-100"
-                                      : "bg-white hover:bg-amber-50",
-                                  ].join(" ")}
-                                >
-                                  {/* Problem number badge */}
-                                  <span className={`flex-shrink-0 text-xs font-black w-8 text-center px-1.5 py-0.5 rounded-full ${badgeColor}`}>
-                                    {numLabel}
-                                  </span>
-                                  {/* Emoji */}
-                                  <span className="text-xl flex-shrink-0 w-8 text-center">{problem.emoji}</span>
-                                  {/* Title + sub */}
-                                  <div className="flex-1 min-w-0">
-                                    <p className={`font-bold text-sm truncate ${isSolved ? "text-green-700" : "text-gray-900 group-hover:text-amber-700"}`}>
-                                      {problem.title}
-                                    </p>
+                                <div key={contest} className={`rounded-lg border-2 overflow-hidden ${
+                                  allDone ? "border-green-400 bg-green-50"
+                                  : groupSolved > 0 ? "border-amber-300 bg-amber-50/50"
+                                  : "border-gray-300 bg-white"
+                                }`}>
+                                  {/* Contest title bar */}
+                                  <div className="flex items-center justify-between px-2.5 py-1.5 border-b border-gray-200">
+                                    <span className={`text-[11px] font-black uppercase tracking-wide ${
+                                      allDone ? "text-green-800"
+                                      : groupSolved > 0 ? "text-amber-900"
+                                      : "text-gray-700"
+                                    }`}>
+                                      {contest}
+                                    </span>
+                                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                                      allDone ? "bg-green-200 text-green-800"
+                                      : groupSolved > 0 ? "bg-amber-200 text-amber-800"
+                                      : "bg-gray-200 text-gray-600"
+                                    }`}>
+                                      {groupSolved}/{items.length}
+                                    </span>
                                   </div>
-                                  {/* Done indicator / arrow */}
-                                  <span className="flex-shrink-0 text-base">
-                                    {isSolved
-                                      ? <span className="text-green-500 font-bold">✓</span>
-                                      : <span className="text-gray-300 group-hover:text-amber-400 transition-colors text-lg">→</span>}
-                                  </span>
-                                </Link>
+                                  {/* Problems list inside the card */}
+                                  <div className="flex flex-col">
+                                    {items.map((problem, idx) => {
+                                      const isSolved = solvedSet.has(problem.id)
+                                      const stage = getReleaseStage(problem.id)
+                                      const ready = isReady(problem.id)
+                                      const numMatch = problem.sub.match(/#(\d+)$/) || problem.sub.match(/P(\d+)$/)
+                                      const numLabel = numMatch ? (problem.sub.includes("#") ? `#${numMatch[1]}` : `P${numMatch[1]}`) : `${idx + 1}`
+                                      return (
+                                        <Link
+                                          key={problem.id}
+                                          href={`/quest/${problem.id}`}
+                                          className={[
+                                            "flex items-center gap-2 px-2.5 py-1.5 text-xs transition-colors group",
+                                            isSolved
+                                              ? "bg-green-50 hover:bg-green-100"
+                                              : "hover:bg-amber-50/70",
+                                          ].join(" ")}
+                                        >
+                                          <span className="font-black text-[11px] w-7 text-gray-500 flex-shrink-0">
+                                            {numLabel}
+                                          </span>
+                                          <span className="text-sm flex-shrink-0">{problem.emoji}</span>
+                                          <span className={`flex-1 truncate font-semibold ${
+                                            isSolved ? "text-green-700" : "text-gray-800 group-hover:text-amber-700"
+                                          }`}>
+                                            {problem.title}
+                                          </span>
+                                          {stage === "internal" && (
+                                            <span className="text-[9px] font-black uppercase px-1 py-px rounded bg-rose-100 text-rose-700 border border-rose-300 flex-shrink-0">
+                                              internal
+                                            </span>
+                                          )}
+                                          {stage === "beta" && (
+                                            <span className="text-[9px] font-black uppercase px-1 py-px rounded bg-fuchsia-100 text-fuchsia-700 border border-fuchsia-300 flex-shrink-0">
+                                              beta
+                                            </span>
+                                          )}
+                                          {ready && (
+                                            <span className="text-[9px] font-black px-1 py-px rounded bg-indigo-100 text-indigo-700 border border-indigo-300 flex-shrink-0" title={t("준비된 quest — 필요한 개념 다 배웠어요", "Ready — prereqs satisfied")}>
+                                              🎯
+                                            </span>
+                                          )}
+                                          {isSolved && <span className="text-green-500 font-bold text-xs flex-shrink-0">✓</span>}
+                                        </Link>
+                                      )
+                                    })}
+                                  </div>
+                                </div>
                               )
                             })}
                           </div>

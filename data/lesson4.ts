@@ -260,7 +260,7 @@ x = (a + (b * c)) < 100
         {
           id: "compare-explain",
           type: "explain",
-          title: "⚖️ 두 값을 비교해보자!",
+          title: "⚖️ 두 값을 비교해봐요!",
           content: `프로그램은 항상 **결정** 을 해야 해요:
 
 > 🎮 "체력이 0 보다 큰가? → 살아있다"

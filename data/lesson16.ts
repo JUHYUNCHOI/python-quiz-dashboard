@@ -49,7 +49,7 @@ mixed = [1, "hello", True, 3.14]
 fruits = ["사과", "바나나"]
 empty = []
 
-# 2) list() 함수 — 다른 컬렉션을 리스트로
+# 2) list() 함수 — 다른 자료구조를 리스트로
 chars = list("hello")        # ['h', 'e', 'l', 'l', 'o']
 nums  = list(range(5))       # [0, 1, 2, 3, 4]
 empty = list()               # []

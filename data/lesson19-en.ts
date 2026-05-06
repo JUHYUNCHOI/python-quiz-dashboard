@@ -343,39 +343,48 @@ for i, fruit in enumerate(fruits):
       emoji: "🏆",
       steps: [
         {
-          id: "multi-return-explain",
+          id: "two-values-explain",
           type: "explain",
-          title: "🎁 Use case 1 — Functions returning multiple values",
-          content: `When a function wants to return **two or more results** — bundle into a tuple and return at once.
+          title: "🎁 Use case 1 — Bundle two values together",
+          content: `When you want to handle **multiple related values** as one unit — bundle them with a tuple, then unpack as needed.
 
 \`\`\`python
-def min_max(numbers):
-    return min(numbers), max(numbers)
-    #      ↑ this is actually (min(...), max(...)) — a tuple
+# A student's info = (name, score)
+student = ("Bob", 92)
 
-result = min_max([3, 1, 4, 1, 5, 9, 2, 6])
-print(result)  # (1, 9) — received as a tuple
+# Print the whole thing
+print(student)            # ('Bob', 92)
 
-# Unpack right away (most common pattern)
-lo, hi = min_max([3, 1, 4, 1, 5, 9, 2, 6])
-print(lo, hi)  # 1 9
+# Unpack it (most common pattern)
+name, score = student
+print(name, score)        # Bob 92
 \`\`\`
 
-### Different from other languages
+### Why bundle instead of separate variables?
 
-C++ / Java functions return one value at most. To send multiple, you need a class / struct.
-Python? Just \`return a, b, c\` — thanks to tuples.
+\`\`\`python
+# Without bundling — you have to carry both around
+name1 = "Alice"
+score1 = 85
+# Two variables you must keep in sync (easy to mistake)
 
-> 🎯 One-liner: **\`return x, y\` IS \`return (x, y)\` — returning a single tuple.**`
+# With bundling — one chunk
+s1 = ("Alice", 85)
+# Move just one variable
+\`\`\`
+
+> 🎯 One-liner: **A tuple ties related values together as one unit.**
+
+(Later in lesson 32 you'll learn functions — \`return x, y\` returns the same kind of tuple bundle so a function can hand back two results at once.)`
         },
         {
-          id: "try-multi-return",
+          id: "try-two-values",
           type: "tryit",
-          title: "🖥️ Try It — Multiple return values",
-          task: "Write a function that takes a circle's radius and returns BOTH circumference and area. (use π = 3.14)",
-          initialCode: "def circle(r):\n    # circumference = 2 * π * r\n    # area = π * r * r\n    # Return both (auto-bundled into tuple)\n    return ___, ___\n\nperi, area = circle(5)\nprint(f\"circumference: {peri}, area: {area}\")",
+          title: "🖥️ Try It — Bundle two values",
+          task: "For a circle of radius 5, bundle the circumference and area into one tuple and print both. (use π = 3.14)",
+          initialCode: "r = 5\n# circumference = 2 * π * r\n# area = π * r * r\n# Bundle them into a tuple\ncircle = (___, ___)\n\nperi, area = circle\nprint(f\"circumference: {peri}, area: {area}\")",
           expectedOutput: "circumference: 31.400000000000002, area: 78.5",
-          hint: "return 2 * 3.14 * r, 3.14 * r * r — separated by comma.",
+          hint: "circle = (2 * 3.14 * r, 3.14 * r * r) — parens + comma.",
           hint2: "return 2 * 3.14 * r, 3.14 * r * r"
         },
         {
@@ -496,11 +505,11 @@ for name, age in zip(names, ages):
           id: "mission2",
           type: "mission",
           title: "🏆 Mission 2 — Average and top from a roster",
-          task: "From 4 students of (name, score), use ONE function to return both **average score** and **top student's name**.",
-          initialCode: "students = [\n    (\"Alice\", 75),\n    (\"Bob\", 92),\n    (\"Charlie\", 80),\n    (\"Dora\", 88),\n]\n\ndef stats(students):\n    # Return both average and top name (as a tuple!)\n    # Hint: max(students, key=lambda s: s[1]) is the top student tuple\n    pass\n\navg, top = stats(students)\nprint(f\"avg: {avg}\")\nprint(f\"top: {top}\")",
+          task: "From 4 students of (name, score) tuples, find the **average score** and **top student's name**. Use only for-unpacking.",
+          initialCode: "students = [\n    (\"Alice\", 75),\n    (\"Bob\", 92),\n    (\"Charlie\", 80),\n    (\"Dora\", 88),\n]\n\n# 1) Average score — sum of scores / number of people\ntotal = 0\nfor name, score in students:\n    total += ___\navg = total / len(students)\n\n# 2) Top name — name of the student with the highest score\ntop_name = \"\"\ntop_score = -1\nfor name, score in students:\n    if score > ___:\n        top_score = score\n        top_name = name\n\nprint(f\"avg: {avg}\")\nprint(f\"top: {top_name}\")",
           expectedOutput: "avg: 83.75\ntop: Bob",
-          hint: "avg = sum(scores) / len(students). top = max(students, key=...)[0] (the name).",
-          hint2: "def stats(students):\n    avg = sum(s[1] for s in students) / len(students)\n    top = max(students, key=lambda s: s[1])[0]\n    return avg, top"
+          hint: "Average: total += score. Top: if score > top_score, update.",
+          hint2: "total += score   # add the score only\nif score > top_score:   # if higher than current best, update"
         },
         {
           id: "complete",
@@ -514,7 +523,7 @@ for name, age in zip(names, ages):
 ✅ **Unpacking** — multiple variables at once, \`*rest\` star unpacking
 ✅ **Swap** — \`a, b = b, a\` in one line
 ✅ **For-loop unpacking** — \`for name, score in students:\`
-✅ **Multiple return** — \`return x, y\` = returning a single tuple
+✅ **Bundling two values** — group related info in one variable (name+score, perimeter+area, …)
 ✅ **Coordinates / dict keys** — bundle data + mistake guardrail
 ✅ **enumerate / zip** — the tuple-unpacking pattern is everywhere
 

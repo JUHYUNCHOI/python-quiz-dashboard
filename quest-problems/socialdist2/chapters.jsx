@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getSocDist2Sections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -51,17 +52,48 @@ export function makeSocDist2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given cow positions and sick/healthy status, find the minimum number of initially infected cows. Healthy cows constrain the max spread radius R.",
-        "소의 위치와 감염/건강 상태가 주어져. 최초 감염 소의 최소 수를 구해. 건강한 소가 최대 전파 반경 R을 제한해."),
+        "Cows stand at known positions on a number line; each is currently sick or healthy. Disease spreads from a sick cow to any cow within distance R (some unknown constant). FJ wants to know the MINIMUM number of cows that could have started infected to explain the current state.\nFind the largest valid R (so spread is consistent with healthy cows) and print the corresponding minimum initial-infection count.",
+        "소들이 수직선의 정해진 위치에 있고, 지금 아프거나 건강한 상태예요. 병은 아픈 소한테서 거리 R 안에 있는 모든 소에게 옮았어요 (R 은 모르는 값). FJ 는 지금 상태가 나오게 하려면 처음에 몇 마리가 아팠어야 하는지 알고 싶어요.\n지금 상태와 안 맞지 않는 가장 큰 R 을 찾고, 그 R 일 때 처음 아팠던 소의 최소 수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\ud83e\udda0"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Social Distancing II</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Use healthy cows to bound max R. Then count clusters of sick cows separated by gaps > 2R.",
-              "핵심: 건강한 소로 최대 R을 제한. 간격 > 2R인 감염 소 클러스터 수를 세.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\udda0"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Social Distancing II</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Cows stand at ", "소들이 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "known positions on a number line", "수직선 위 정해진 위치")}</b>
+                  {t(E, "; each is currently SICK or HEALTHY.",
+                        "에 있고, 현재 감염 또는 건강 상태예요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "The disease spreads from a sick cow to any cow ", "병은 감염된 소에서 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "within distance R (unknown)", "거리 R 이내 (R 은 미지수)")}</b>
+                  {t(E, " — find the LARGEST R consistent with the data (no healthy cow within R of any sick cow).",
+                        " 의 모든 소에게 전파됐어요 — 데이터와 일치하는 가장 큰 R 을 찾아요 (감염 소의 R 이내에 건강 소 없음).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of cows that could have started infected", "최초 감염 소의 최소 수")}</b>
+                  {t(E, " under that R.", "를 출력해요 (그 R 기준).")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -69,8 +101,7 @@ export function makeSocDist2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If all cows are sick and there are no healthy cows, what's the minimum number of initially infected cows?",
-        "모든 소가 감염되고 건강한 소가 없으면, 최초 감염 소의 최소 수는?"),
+        "If all cows are sick and there are no healthy cows, what's the minimum number of initially infected cows?", "모든 소가 감염되고 건강한 소가 없으면, 최초 감염 소의 최소 수는?"),
       question: t(E,
         "All cows sick, no healthy cows. Min initially infected?",
         "모든 소 감염, 건강한 소 없음. 최초 감염 최소 수?"),
@@ -88,8 +119,7 @@ export function makeSocDist2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "All cows are sick with no healthy cows. What is the minimum number of initially infected cows?",
-        "모든 소가 감염, 건강한 소 없음. 최초 감염 소의 최소 수는?"),
+        "All cows are sick with no healthy cows.\nWhat is the minimum number of initially infected cows?", "모든 소가 감염, 건강한 소 없음. 최초 감염 소의 최소 수는?"),
       question: t(E,
         "5 cows, all sick, 0 healthy. Min initially infected?",
         "소 5마리, 전부 감염, 건강 0마리. 최초 감염 최소 수?"),
@@ -105,33 +135,51 @@ export function makeSocDist2Ch1(E) {
 /* ---------------------------------------------------------------
    Chapter 2: Code (2 steps: reveal / code)
    --------------------------------------------------------------- */
-export function makeSocDist2Ch2(E) {
+export function makeSocDist2Ch2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Sort cows, find max R from healthy cows, count sick clusters. O(N log N)!",
-        "소 정렬, 건강한 소에서 최대 R 계산, 감염 클러스터 세기. O(N log N)!"),
+        "Sort cows by position. The MAXIMUM valid R = (smallest distance from a healthy cow to a sick cow) − 1. Then count groups of sick cows where adjacent sick cows are within 2R of each other.",
+        "소를 위치순 정렬. 가능한 최대 R = (건강한 소에서 가장 가까운 감염 소까지 거리) − 1. 그 R 로, 인접한 감염 소가 서로 2R 이내인 그룹 수를 세요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26a1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "1) Sort by position. 2) For each healthy cow, compute distance to nearest sick cow to bound R. 3) Count clusters of sick cows with gaps > 2R.",
-              "1) 위치로 정렬. 2) 건강한 소마다 가장 가까운 감염 소까지 거리로 R 제한. 3) 간격 > 2R인 감염 클러스터 세기.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Sort cows by position", "소 위치순 정렬"), code: "cows.sort(key=lambda c: c.pos)", color: "#2563eb" },
+              { n: 2, label: t(E, "Find min sick-healthy distance", "감염-건강 최소 거리"), code: "R = min(|sick.pos - healthy.pos|) - 1", color: "#7c3aed" },
+              { n: 3, label: t(E, "Group sick cows with gap ≤ 2R", "간격 ≤ 2R 인 감염 그룹화"), code: "cluster sick cows where adjacent gap ≤ 2R", color: "#0891b2" },
+              { n: 4, label: t(E, "Print cluster count", "클러스터 수 출력"), code: "print(num_clusters)", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + linear sweep", "정렬 + 선형 스윕")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full solution!",
-        "전체 풀이야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getSocDist2Sections(E),
     },
   ];
 }

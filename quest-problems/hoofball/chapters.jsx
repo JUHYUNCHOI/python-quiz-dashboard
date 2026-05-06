@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getHoofballSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -55,17 +56,47 @@ export function makeHoofballCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows stand on a number line and pass a ball to their nearest neighbor. Find the minimum number of balls needed so every cow gets at least one!",
-        "소들이 수직선 위에 서서 가장 가까운 이웃에게 공을 패스해. 모든 소가 최소 1개 공을 받으려면 최소 몇 개 공이 필요한지 구해!"),
+        "N cows stand on a number line at distinct positions. When a cow has a ball, she immediately passes it to her closest neighbor (ties → pass right). Once a ball reaches a cow, she'll keep passing it forever.\nWe need to give out balls so EVERY cow eventually touches one. Print the MINIMUM number of starting balls needed.",
+        "N마리 소가 수직선 위 서로 다른 위치에 서있어요. 공을 가진 소는 즉시 가장 가까운 이웃에게 패스해요 (거리 같으면 오른쪽). 공이 어떤 소에 도달하면, 그 소도 영원히 패스를 이어가요.\n모든 소가 결국 공을 만지도록 처음에 공을 나눠줘요. 필요한 시작 공의 최소 개수를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>{"\u26BD"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Hoofball</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Key: Each cow passes to nearest neighbor. Count 'sources' (cows no one passes to) - each needs its own ball. Handle mutual-pass sinks too.",
-              "핵심: 각 소는 가장 가까운 이웃에게 패스. '소스'(아무도 패스하지 않는 소) 수 세기 - 각각 공 필요. 상호 패스 싱크도 처리.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u26BD"}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Hoofball</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#f97316" }}>{t(E, "N cows stand on a number line", "N마리 소가 수직선 위에 서있어요")}</b>
+                  {t(E, " at distinct positions.", " (서로 다른 위치).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "If a cow holds a ball, she ", "공을 가진 소는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "passes it to her CLOSEST neighbor", "가장 가까운 이웃에게 즉시 패스")}</b>
+                  {t(E, " (tie → right). Cows keep passing forever.",
+                        " (거리 같으면 오른쪽). 한 번 받은 소도 계속 패스해요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of starting balls", "필요한 시작 공의 최소 개수")}</b>
+                  {t(E, " so every cow eventually touches one.",
+                        " 를 출력해요. 모든 소가 결국 공을 만지도록.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
@@ -73,8 +104,7 @@ export function makeHoofballCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "3 cows at positions [1, 5, 10]. Cow at 5 passes to 1 (dist 4 < 5). Cow at 10 passes to 5 (dist 5). Cow at 1 passes to 5 (dist 4). Who never receives a pass?",
-        "3마리 소 위치 [1, 5, 10]. 5의 소는 1로 패스 (거리 4 < 5). 10의 소는 5로 패스 (거리 5). 1의 소는 5로 패스 (거리 4). 패스를 안 받는 소는?"),
+        "3 cows at positions [1, 5, 10].\nCow at 5 passes to 1 (dist 4 < 5).\nCow at 10 passes to 5 (dist 5).\nCow at 1 passes to 5 (dist 4).\nWho never receives a pass?", "3마리 소 위치 [1, 5, 10].\n5의 소는 1로 패스 (거리 4 < 5).\n10의 소는 5로 패스 (거리 5).\n1의 소는 5로 패스 (거리 4).\n패스를 안 받는 소는?"),
       question: t(E,
         "Positions [1,5,10]. How many balls needed?",
         "위치 [1,5,10]. 필요한 공 수는?"),
@@ -92,8 +122,7 @@ export function makeHoofballCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Positions [1, 5, 10]. How many balls are needed?",
-        "위치 [1, 5, 10]. 필요한 공 수는?"),
+        "Positions [1, 5, 10]. How many balls are needed?", "위치 [1, 5, 10]. 필요한 공 수는?"),
       question: t(E,
         "3 cows at [1, 5, 10]. Min balls needed?",
         "3마리 소 [1, 5, 10]. 최소 공 수?"),
@@ -109,33 +138,51 @@ export function makeHoofballCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeHoofballCh2(E) {
+export function makeHoofballCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
       type: "reveal",
       narr: t(E,
-        "Sort positions, compute pass targets, count sources. O(N log N) for sorting!",
-        "위치 정렬, 패스 대상 계산, 소스 세기. 정렬에 O(N log N)!"),
+        "Sort cow positions. Each cow's pass target is her closest neighbor. A cow is a 'source' if no other cow targets her. Each source needs its own ball. Also +1 ball for each pair of mutually-passing cows that's not already counted.",
+        "소 위치 정렬. 각 소의 패스 대상은 가장 가까운 이웃. 다른 소가 타겟하지 않는 소가 '소스' — 각자 공이 필요. 또 상호 패스 쌍 (이미 안 세어진) 마다 공 1 개 추가."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{"\u26A1"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>O(N log N)</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Sort positions. For each cow, find nearest neighbor (left or right). Count cows that no one targets (sources). Handle mutual pass pairs as sinks.",
-              "위치 정렬. 각 소에서 가장 가까운 이웃 찾기 (왼쪽 또는 오른쪽). 아무도 타겟하지 않는 소 세기 (소스). 상호 패스 쌍은 싱크로 처리.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Sort cow positions", "소 위치 정렬"), code: "cows.sort()", color: "#f97316" },
+              { n: 2, label: t(E, "Compute target for each cow", "각 소의 타겟 계산"), code: "target[i] = nearest neighbor (tie → right)", color: "#7c3aed" },
+              { n: 3, label: t(E, "Count sources (no incoming pass)", "소스 카운트 (들어오는 패스 없음)"), code: "balls = number of cows not in target.values()", color: "#0891b2" },
+              { n: 4, label: t(E, "Add 1 for each mutual-pass pair", "상호 패스 쌍마다 +1"), code: "for i, j with target[i] == j and target[j] == i: balls += 1", color: "#16a34a" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
+                }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + linear pass to compute targets", "정렬 + 선형 타겟 계산")}</div>
           </div>
         </div>),
     },
     // 2-2: Code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full solution with source counting and sink handling!",
-        "소스 카운팅과 싱크 처리 전체 풀이야!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+      sections: getHoofballSections(E),
     },
   ];
 }

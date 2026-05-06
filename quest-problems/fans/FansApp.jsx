@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { FanSimulator, FanPlacementViz, SeparatorBuildViz, FormulaTrace } from "./components";
@@ -6,11 +6,28 @@ import { makeFansCh1, makeFansCh2, makeFansCh3 } from "./chapters";
 
 const A = "#d97706";
 
-export default function FansApp() {
-  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("language") === "en") ? "en" : "ko");
+export default function FansApp(props = {}) {
+  const propLang = props.lang;
+  const [lang, setLang] = useState(() => {
+    if (propLang === "ko" || propLang === "en") return propLang;
+    if (typeof window !== "undefined") {
+      if (window._questLang === "en") return "en";
+      if (window._questLang === "ko") return "ko";
+      if (window.localStorage?.getItem("language") === "en") return "en";
+    }
+    return "ko";
+  });
   const E = lang === "en";
-  const [tab, setTab] = useState(0);
-  const [si, setSi] = useState(0);
+  // Persist tab/si in localStorage so refresh keeps the student on the same step
+  const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";
+  const _loadPos = () => {
+    if (typeof window === "undefined") return { tab: 0, si: 0 };
+    try { return JSON.parse(window.localStorage.getItem(_posKey) || "{}"); } catch { return {}; }
+  };
+  const _initial = _loadPos();
+  const [tab, setTab] = useState(typeof _initial.tab === "number" ? _initial.tab : 0);
+  const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
+  const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
 
   const [ch1Q, setCh1Q] = useState(() => makeFansCh1(false));
   const [ch2Q, setCh2Q] = useState(() => makeFansCh2(false));
@@ -25,13 +42,26 @@ export default function FansApp() {
   const makers  = { 0: makeFansCh1, 1: makeFansCh2, 2: makeFansCh3 };
 
   const switchLang = nl => {
-    const ne = nl === "en"; setLang(nl); setSi(0);
-    for (const k of [0,1,2]) setters[k](makers[k](ne));
+    const ne = nl === "en"; setLang(nl);
+    // Preserve current step + answered/solved state across language change
+    for (const k of [0,1,2]) setters[k](prev => makers[k](ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   };
   const changeTab = idx => {
     setTab(idx); setSi(0);
+    setVisitedTabs(prev => { const n = new Set(prev); n.add(idx); return n; });
     setters[idx](makers[idx](E));
   };
+  // Save tab + si to localStorage on every change
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+  }, [tab, si, _posKey]);
+
+  useEffect(() => {
+    if ((propLang === "ko" || propLang === "en") && propLang !== lang) switchLang(propLang);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propLang]);
+
 
   const steps = states[tab];
   const cur = Math.min(si, steps.length - 1);
@@ -51,8 +81,16 @@ export default function FansApp() {
   };
 
   const isBlocked = (step.type === "quiz" && step.answered == null) || (step.type === "input" && !step.solved);
-  const canNext = !isBlocked && cur < steps.length - 1;
-  const next = () => { if (canNext) { setSi(cur + 1); window.scrollTo({ top: 0, behavior: "smooth" }); } };
+  const canNext = cur < steps.length - 1 || tab < TABS.length - 1;  // jump tabs at end
+  const next = () => {
+    if (cur < steps.length - 1) {
+      setSi(cur + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (tab < TABS.length - 1) {
+      changeTab(tab + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
   const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
   const renderContent = () => {
@@ -68,7 +106,7 @@ export default function FansApp() {
   };
 
   return (
-    <div style={{ maxWidth: 440, margin: "0 auto" }}>
+    <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto" }}>
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <h1 style={{ fontSize: 16, fontWeight: 800, color: A, margin: 0, fontFamily: "'Jua',sans-serif" }}>🪭 Fans</h1>
@@ -84,15 +122,20 @@ export default function FansApp() {
 
       {/* Tabs */}
       <div style={{ display: "flex", gap: 3, marginBottom: 12, overflowX: "auto", paddingBottom: 4 }}>
-        {TABS.map((label, i) =>
-          <button key={i} onClick={() => changeTab(i)} style={{
-            flex: "0 0 auto", borderRadius: 8, padding: "6px 10px", cursor: "pointer",
-            fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
-            background: i === tab ? A : "transparent",
-            border: `1.5px solid ${i === tab ? A : C.border}`,
-            color: i === tab ? "#fff" : C.dim,
-          }}>{label}</button>
-        )}
+        {TABS.map((label, i) => {
+          const isCurrent = i === tab;
+          const isVisited = visitedTabs.has(i) && !isCurrent;
+          return (
+            <button key={i} onClick={() => changeTab(i)} style={{
+              flex: "0 0 auto", borderRadius: 8, padding: "6px 10px", cursor: "pointer",
+              fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
+              background: isCurrent ? A : (isVisited ? `${A}20` : "transparent"),
+              border: `1.5px solid ${isCurrent ? A : (isVisited ? `${A}60` : C.border)}`,
+              color: isCurrent ? "#fff" : (isVisited ? A : C.dim),
+              display: "flex", alignItems: "center", gap: 4,
+            }}>{isVisited && <span style={{ fontSize: 10 }}>✓</span>}{label}</button>
+          );
+        })}
       </div>
 
       {/* Narration */}
@@ -106,14 +149,14 @@ export default function FansApp() {
         {renderContent()}
       </div>
 
-      <div style={{ height: 70 }} />
+      <div style={{ height: 110 }} />
 
       {/* Fixed bottom navigation */}
-      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "6px 16px 12px", zIndex: 100 }}>
-        <div style={{ maxWidth: 440, margin: "0 auto" }}>
+      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "8px 16px calc(14px + env(safe-area-inset-bottom))", zIndex: 100, borderTop: `1px solid ${C.border}`, boxShadow: "0 -4px 12px rgba(0,0,0,.06)" }}>
+        <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto" }}>
           {isBlocked && (
             <div style={{ textAlign: "center", fontSize: 13, color: C.carry, fontWeight: 700, marginBottom: 4, animation: "pulse 1.5s ease infinite" }}>
-              {E ? "👆 Answer first!" : "👆 먼저 답해봐!"}
+              {E ? "💡 Tip: try answering above" : "💡 팁: 위에서 답해보면 좋아요"}
             </div>
           )}
           <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center" }}>

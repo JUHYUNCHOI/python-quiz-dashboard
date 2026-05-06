@@ -253,7 +253,7 @@ pos ← FindStudent(students, "이수도")
 IF pos <> -1 THEN
     OUTPUT "찾았습니다! 학년: ", students[pos].grade
 ELSE
-    OUTPUT "학생을 찾을 수 없습니다."
+    OUTPUT "학생을 찾을 수 없어요."
 ENDIF
 \`\`\`
 

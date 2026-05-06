@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getWalkFenceSections } from "./components";
 
 export const SOLUTION_CODE = [
   "N, P = map(int, input().split())",
@@ -47,25 +48,64 @@ export function makeWalkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Cows walk along a fence (polygon). Each takes the shorter route between start and end. Find distances! 🚶",
-        "소들이 울타리(다각형)를 따라 걸어. 각자 시작점에서 끝점까지 짧은 경로로! 거리를 구해! 🚶"),
+        "FJ built a rectangular-corner fence (axis-aligned polygon).\nEach cow walks along the fence — either way around — and we report the SHORTER walk.",
+        "FJ가 직각 모서리로 된 울타리(축에 평행한 다각형)를 만들었어요.\n각 소는 울타리를 따라 양쪽 중 한 방향으로 걸을 수 있어요 — 더 짧은 거리를 출력해요."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🚶</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Walking Along a Fence</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-            {t(E,
-              "Rectilinear polygon fence. Each cow walks the shorter way around. Compute distance for each cow!",
-              "직각 다각형 울타리. 각 소는 더 짧은 방향으로 걸어. 각 소의 거리를 계산!")}
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🚶</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Walking Along a Fence</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #2</div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "FJ has a closed ", "FJ에게 닫힌 ")}
+                  <b style={{ color: "#059669" }}>{t(E, "rectilinear polygon fence", "직각 다각형 울타리")}</b>
+                  {t(E, " (all sides go horizontally or vertically).",
+                        "가 있어요 (모든 변이 가로 또는 세로 방향).")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "N cows each have a ", "N마리 소는 각각 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "start point and an end point", "시작점과 끝점")}</b>
+                  {t(E, " somewhere on the fence.",
+                        "을 울타리 위 어딘가에 가지고 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Each cow walks ", "각 소는 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "along the fence", "울타리를 따라")}</b>
+                  {t(E, " — going around either side of the loop.",
+                        " 걸어요 — 폐곡선의 양쪽 중 한 방향을 선택할 수 있어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "For each cow, print the ", "각 소마다, ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "SHORTER of the two", "두 거리 중 더 짧은 쪽")}</b>
+                  {t(E, " walking distances.", "을 출력해요.")}
+                </div>
+              </div>
+            </div>
           </div>
         </div>),
     },
     {
       type: "quiz",
       narr: t(E,
-        "On a closed loop of perimeter L, the shorter distance between two points is min(d, L-d) where d is the distance going one way.",
-        "둘레 L인 폐곡선에서 두 점 사이 짧은 거리는 min(d, L-d). d는 한쪽 방향 거리."),
+        "On a closed loop of perimeter L, the shorter distance between two points is min(d, L-d) where d is the distance going one way.", "둘레 L인 폐곡선에서 두 점 사이 짧은 거리는 min(d, L-d). d는 한쪽 방향 거리."),
       question: t(E,
         "Perimeter = 8. Distance one way = 3. Shorter route?",
         "둘레 = 8. 한쪽 거리 = 3. 더 짧은 경로?"),
@@ -76,26 +116,58 @@ export function makeWalkCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Square fence: (0,0)→(2,0)→(2,2)→(0,2). Perimeter=8. Cow walks from (0,0) to (0,2). One way=2 (up), other=6 (around). Answer?",
-        "정사각 울타리: (0,0)→(2,0)→(2,2)→(0,2). 둘레=8. 소가 (0,0)에서 (0,2)로. 한쪽=2(위로), 다른쪽=6(돌아서). 답?"),
+        "Square fence: (0,0)→(2,0)→(2,2)→(0,2).\nPerimeter=8.\nCow walks from (0,0) to (0,2).\nOne way=2 (up), other=6 (around).\nAnswer?", "정사각 울타리: (0,0)→(2,0)→(2,2)→(0,2). 둘레=8. 소가 (0,0)에서 (0,2)로. 한쪽=2(위로), 다른쪽=6(돌아서). 답?"),
       question: t(E, "Shorter distance?", "더 짧은 거리?"),
       answer: 2,
+    },
+    {
+      type: "sim",
+      narr: t(E,
+        "3 fence shapes, 2 stages each: see total perimeter, then cow points + shorter side.", "3가지 울타리 모양, 각 2단계: 총 둘레, 소 위치 + 짧은 쪽."),
     },
   ];
 }
 
-export function makeWalkCh2(E) {
+export function makeWalkCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
-      narr: t(E, "Find each point's position on the perimeter, compute distance, take min with complement.", "각 점의 둘레 위 위치를 찾고, 거리 계산, 보완값과 min."),
-      content: (<div style={{ padding: 16, textAlign: "center" }}><div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(NP)</div></div>),
+      narr: t(E,
+        "4 steps: cumulative perimeter, find each point's distance from post 0, take the shorter side.",
+        "4단계: 둘레 누적 거리 → 각 점의 코너 0 거리 찾기 → 짧은 쪽 선택."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, label: t(E, "Read posts", "코너 읽기"), code: "posts = [(x0,y0), (x1,y1), ...]", color: "#16a34a" },
+              { n: 2, label: t(E, "Cumulative perimeter", "누적 둘레"), code: "cum[i] = distance from post 0 to post i", color: "#0891b2" },
+              { n: 3, label: t(E, "Find each cow's position", "소 위치 찾기"), code: "find_pos(x, y) → distance along perimeter", color: "#8b5cf6" },
+              { n: 4, label: t(E, "Pick shorter side", "짧은 쪽"), code: "answer = min(abs(d1 − d2), perimeter − abs(d1 − d2))", color: "#dc2626" },
+            ].map((step, i) => (
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
+                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+              }}>
+                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
+                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#16a34a" }}>O(N · P)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N cows × P posts to scan per query", "소 N마리 × 쿼리당 코너 P개 스캔")}</div>
+          </div>
+        </div>),
     },
     {
-      type: "code",
-      narr: t(E, "Find position on perimeter, compute shortest path!", "둘레 위 위치 찾고 최단 경로 계산!"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Now build the perimeter walker step by step.", "둘레 거리 계산기를 단계별로 만들자."),
+      sections: getWalkFenceSections(E),
     },
   ];
 }

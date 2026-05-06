@@ -101,25 +101,39 @@ cout << s << endl;                  // "Hello C++"
 
 ⚠️ Key difference: C++ \`substr\` and \`replace\` use **position and length**! Not string-based search like Python.
 
-What if \`find()\` doesn't find anything?
+💡 If you **omit substr's second argument**, it goes to the end!
+\`\`\`cpp
+string s = "Hello World";
+cout << s.substr(6) << endl;       // "World"  ← from pos 6 to the end
+cout << s.substr(0, 5) << endl;    // "Hello"  ← give a length to limit
+\`\`\`
+This works just like Python's \`s[6:]\` and \`s[0:5]\`.
+
+---
+
+What if \`find()\` **can't find** the substring?
 \`\`\`cpp
 string s = "Hello";
-size_t pos = s.find("xyz");
+size_t pos = s.find("xyz");        // "xyz" not in s!
 if (pos == string::npos) {
-    cout << "Not found!" << endl;
+    cout << "Not found!" << endl;  // ← goes here!
 }
 \`\`\`
 Python returns \`-1\`, but C++ returns \`string::npos\` — a special constant!
 
-🔍 What is \`string::npos\`? It stands for 'no position.' When find() can't locate the character, it returns this special value. Why not -1? Because string positions use the \`size_t\` type, which can't be negative!
+🔍 What is \`string::npos\`? It stands for 'no position.' When find() can't locate the substring, it returns this special value. Why not -1? Because string positions use the \`size_t\` type (non-negative integers only), which can't be negative! So C++ picks a "huge value that could never be a real position" and uses that as the not-found signal.
+
+⚠️ **If you skip the check, things break!** Calling \`substr(pos)\` when \`pos\` is \`npos\` (a gigantic number like 18446744073709551615) will crash your program.
 
 Here's the standard pattern for searching in strings:
 \`\`\`cpp
 size_t pos = str.find("abc");
 if (pos != string::npos) {
-    // found it
+    // only use pos when found!
+    cout << str.substr(pos) << endl;
 } else {
-    // not found
+    // handle not-found case
+    cout << "Missing" << endl;
 }
 \`\`\`
 

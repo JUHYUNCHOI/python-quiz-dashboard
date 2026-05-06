@@ -57,7 +57,7 @@ export const pseudoLessonP1Data: LessonData = {
         {
           id: "ch1-q2",
           type: "quiz",
-          title: "📊 자료형 매칭",
+          title: "📊 자료형 짝짓기",
           content: `다음 중 "소수점이 있는 숫자" (예: 3.14, 9.8)를 저장하는 데 적합한 자료형은?`,
           options: [
             'REAL',
@@ -78,7 +78,7 @@ export const pseudoLessonP1Data: LessonData = {
         {
           id: "ch1-q3",
           type: "quiz",
-          title: "📊 자료형 매칭 2",
+          title: "📊 자료형 짝짓기 2",
           content: `"한 글자"를 저장하기에 가장 적합한 자료형은?
 
 예: 'A', 'Z', '5'`,
@@ -93,7 +93,7 @@ export const pseudoLessonP1Data: LessonData = {
 
 STRING도 한 글자를 저장할 수 있지만, **정확히 한 글자**만 필요할 때는 CHAR가 더 적합해요.
 
-시험에서 자주 나오는 매칭:
+시험에서 자주 나오는 짝짓기:
 - 정수(whole number) → INTEGER
 - 단일 문자(single letter) → CHAR
 - 단어/문장(word or phrase) → STRING
