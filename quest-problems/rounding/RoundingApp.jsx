@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal, CodeBlock } from "@/components/quest/shared";
 import { CodeCompare3, BruteRunner, SpeedScale, ProgressiveCode, downloadFullPDF } from "./components";
+import { useCodeLang } from "@/components/quest/use-code-lang";
 
 import {
   makeCh1, makePatternSteps, makeBruteSteps, makeOptSteps, getOptSections,
@@ -23,7 +24,7 @@ export default function RoundingApp(props = {}) {
   });
   const E = lang === "en";
   // 코드 언어 — 인앱 코드 + PDF 모두 적용 (Python / C++)
-  const [codeLang, setCodeLang] = useState("py");
+  const [codeLang, setCodeLang] = useCodeLang();
 
   // codeLang 바뀌면 brute 스텝 새로 빌드 (답변 진행 상태는 보존)
   useEffect(() => {

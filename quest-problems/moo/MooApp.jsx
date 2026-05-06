@@ -3,6 +3,7 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { MooSim, MooBruteRunner, MooProgressiveCode, downloadMooPDF, getMooSections } from "./components";
 import { makeMooCh1, makeMooCh2, makeMooCh3, makeMooCh4, makeMooCh5 } from "./chapters";
+import { useCodeLang } from "@/components/quest/use-code-lang";
 
 export default function MooApp(props = {}) {
   const propLang = props.lang;
@@ -16,7 +17,7 @@ export default function MooApp(props = {}) {
     return "ko";
   });
   const E = lang === "en";
-  const [codeLang, setCodeLang] = useState("py");
+  const [codeLang, setCodeLang] = useCodeLang();
 
   // Persist tab/si in localStorage so refresh keeps the student on the same step
   const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";

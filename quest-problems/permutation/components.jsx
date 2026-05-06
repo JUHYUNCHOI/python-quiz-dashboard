@@ -1,7 +1,8 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
+import { SimNav, useTraceStep, StepHeader, NarrativePanel } from "@/components/quest/TraceStepper";
 
 const A = "#7c5cfc";
 
@@ -100,10 +101,9 @@ function buildDismantleTrace(initial) {
 export function DismantleSimulator({ E }) {
   const initial = [3, 1, 2, 4];
   const trace = buildDismantleTrace(initial);
-  const [idx, setIdx] = useState(0);
-  const safe = Math.max(0, Math.min(idx, trace.length - 1));
+  const ts = useTraceStep(trace);
+  const safe = ts.safe;
   const s = trace[safe];
-  const isLast = safe === trace.length - 1;
 
   const cellStyle = (kind) => ({
     width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
@@ -130,13 +130,15 @@ export function DismantleSimulator({ E }) {
 
   return (
     <div style={{ padding: 16 }}>
-      <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 4 }}>
-        ✏️ {t(E, "Hand-simulate Nhoj on p = [3, 1, 2, 4]", "Nhoj 가 p = [3, 1, 2, 4] 를 망가뜨리는 과정")}
-      </div>
-      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 14 }}>
-        {t(E, `Press ▶ to step through. (${safe + 1} / ${trace.length})`,
-              `▶ 눌러서 한 단계씩. (${safe + 1} / ${trace.length})`)}
-      </div>
+      <StepHeader
+        accent={A}
+        idx={safe}
+        total={trace.length}
+        isEn={E}
+        title={t(E, "Hand-simulate Nhoj on p = [3, 1, 2, 4]", "Nhoj 가 p = [3, 1, 2, 4] 를 망가뜨리는 과정")}
+        subtitle={t(E, `Press ▶ to step through. (${safe + 1} / ${trace.length})`,
+                       `▶ 눌러서 한 단계씩. (${safe + 1} / ${trace.length})`)}
+      />
 
       {/* Cells row */}
       <div style={{ display: "flex", gap: 4, justifyContent: "center", alignItems: "center", marginBottom: 12, minHeight: 76 }}>
@@ -191,11 +193,7 @@ export function DismantleSimulator({ E }) {
       </div>
 
       {/* Step explanation panel */}
-      <div style={{
-        background: "#faf5ff", border: "2px solid #c4b5fd", borderRadius: 10,
-        padding: "12px 14px", marginBottom: 12, minHeight: 88,
-        fontSize: 13, color: C.text, lineHeight: 1.7,
-      }}>
+      <NarrativePanel minHeight={88}>
         {s.sub === "init" && (
           <>
             <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
@@ -289,29 +287,9 @@ export function DismantleSimulator({ E }) {
             </div>
           </>
         )}
-      </div>
+      </NarrativePanel>
 
-      {/* Nav buttons */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
-        <button onClick={() => setIdx(0)} disabled={safe === 0} style={{
-          padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 800,
-          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : "#7c5cfc"}`,
-          color: safe === 0 ? "#b0b5c3" : "#7c5cfc",
-          cursor: safe === 0 ? "default" : "pointer",
-        }}>⏮ {t(E, "Restart", "처음부터")}</button>
-        <button onClick={() => setIdx(Math.max(0, safe - 1))} disabled={safe === 0} style={{
-          padding: "6px 14px", borderRadius: 8, fontSize: 13, fontWeight: 800,
-          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : "#7c5cfc"}`,
-          color: safe === 0 ? "#b0b5c3" : "#7c5cfc",
-          cursor: safe === 0 ? "default" : "pointer",
-        }}>◀ {t(E, "Prev", "이전")}</button>
-        <button onClick={() => setIdx(Math.min(trace.length - 1, safe + 1))} disabled={isLast} style={{
-          padding: "6px 18px", borderRadius: 8, fontSize: 13, fontWeight: 800,
-          background: isLast ? "#e5e7eb" : "#7c5cfc", border: `2px solid ${isLast ? "#e5e7eb" : "#7c5cfc"}`,
-          color: isLast ? "#b0b5c3" : "#fff",
-          cursor: isLast ? "default" : "pointer",
-        }}>{t(E, "Next", "다음")} ▶</button>
-      </div>
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );
 }
@@ -590,25 +568,31 @@ export function PermRunner({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 
 const PERM_INPUT_PY = [
-  "from itertools import permutations",
-  "",
   "T = int(input())",
   "for _ in range(T):",
   "    N = int(input())",
   "    h = list(map(int, input().split()))",
 ];
 const PERM_INPUT_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int T; cin >> T;",
-  "    while (T--) {",
-  "        int N; cin >> N;",
-  "        vector<int> h(N - 1);",
-  "        for (auto& x : h) cin >> x;",
+  "    int T;",
+  "    cin >> T;",
+  "    for (int t = 0; t < T; t++) {",
+  "        int N;",
+  "        cin >> N;",
+  "        vector<int> h;",
+  "        for (int i = 0; i < N - 1; i++) {",
+  "            int x;",
+  "            cin >> x;",
+  "            h.push_back(x);",
+  "        }",
 ];
 
+/* Section 2: dismantle as a regular function (no lambda) */
 const PERM_DISMANTLE_PY = [
   "def dismantle(p):",
   "    p = list(p)",
@@ -623,46 +607,90 @@ const PERM_DISMANTLE_PY = [
   "    return out",
 ];
 const PERM_DISMANTLE_CPP = [
-  "auto dismantle = [](vector<int> p) {",
+  "// dismantle: simulate the deletion process and return the hint sequence.",
+  "vector<int> dismantle(vector<int> p) {",
   "    vector<int> out;",
-  "    while (p.size() > 1) {",
-  "        if (p.front() > p.back()) {",
+  "    while ((int)p.size() > 1) {",
+  "        int sz = (int)p.size();",
+  "        if (p[0] > p[sz - 1]) {",
   "            out.push_back(p[1]);",
-  "            p.erase(p.begin());",
+  "            // remove p[0] by shifting left",
+  "            for (int i = 0; i < sz - 1; i++) p[i] = p[i + 1];",
+  "            p.pop_back();",
   "        } else {",
-  "            out.push_back(p[p.size() - 2]);",
+  "            out.push_back(p[sz - 2]);",
   "            p.pop_back();",
   "        }",
   "    }",
   "    return out;",
-  "};",
+  "}",
 ];
 
+/* Section 3: try every permutation via recursion (no itertools / no next_permutation) */
 const PERM_TRY_PY = [
-  "    found = None",
-  "    for p in permutations(range(1, N + 1)):",
+  "def search(p, used, idx, N, h):",
+  "    if idx == N:",
   "        if dismantle(p) == h:",
-  "            found = p",
-  "            break",
+  "            print(' '.join(map(str, p)))",
+  "            return True",
+  "        return False",
+  "    for v in range(1, N + 1):",
+  "        if used[v]:",
+  "            continue",
+  "        p[idx] = v",
+  "        used[v] = True",
+  "        if search(p, used, idx + 1, N, h):",
+  "            return True",
+  "        used[v] = False",
+  "    return False",
   "",
-  "    if found:",
-  "        print(' '.join(map(str, found)))",
-  "    else:",
+  "    p = [0] * N",
+  "    used = [False] * (N + 1)",
+  "    if not search(p, used, 0, N, h):",
   "        print(-1)",
 ];
 const PERM_TRY_CPP = [
-  "        vector<int> p(N);",
-  "        iota(p.begin(), p.end(), 1);",
-  "        bool found = false;",
-  "        do {",
-  "            if (dismantle(p) == h) {",
-  "                for (int i = 0; i < N; i++)",
-  "                    cout << p[i] << \" \\n\"[i == N-1];",
-  "                found = true;",
-  "                break;",
+  "// Compare two int vectors element-by-element.",
+  "bool same(vector<int> a, vector<int> b) {",
+  "    if ((int)a.size() != (int)b.size()) return false;",
+  "    for (int i = 0; i < (int)a.size(); i++) {",
+  "        if (a[i] != b[i]) return false;",
+  "    }",
+  "    return true;",
+  "}",
+  "",
+  "// Recursively try every permutation of 1..N. First match wins.",
+  "// p, used, h declared as globals for simplicity.",
+  "int N;",
+  "vector<int> p, h;",
+  "vector<bool> used;",
+  "",
+  "bool search(int idx) {",
+  "    if (idx == N) {",
+  "        if (same(dismantle(p), h)) {",
+  "            for (int i = 0; i < N; i++) {",
+  "                cout << p[i];",
+  "                if (i < N - 1) cout << ' ';",
   "            }",
-  "        } while (next_permutation(p.begin(), p.end()));",
-  "        if (!found) cout << -1 << \"\\n\";",
+  "            cout << '\\n';",
+  "            return true;",
+  "        }",
+  "        return false;",
+  "    }",
+  "    for (int v = 1; v <= N; v++) {",
+  "        if (used[v]) continue;",
+  "        p[idx] = v;",
+  "        used[v] = true;",
+  "        if (search(idx + 1)) return true;",
+  "        used[v] = false;",
+  "    }",
+  "    return false;",
+  "}",
+  "",
+  "// (back inside main, after reading h:)",
+  "        p = vector<int>(N, 0);",
+  "        used = vector<bool>(N + 1, false);",
+  "        if (!search(0)) cout << -1 << '\\n';",
   "    }",
   "    return 0;",
   "}",
@@ -788,45 +816,32 @@ export function downloadPermPDF(E, sections, lang = "py") {
 
 <h2>1. ${t(E, "Problem", "문제")}</h2>
 <p>${t(E,
-  "Given an array of N-1 hints h[0]..h[N-2], where h[i] = |perm[i] - perm[i+1]|, reconstruct a permutation of 1..N matching the hints. If impossible, output -1.",
-  "N-1 개의 힌트 h[0]..h[N-2] 가 주어짐. h[i] = |perm[i] - perm[i+1]|. 힌트와 일치하는 1..N 순열 복원. 불가능하면 -1 출력.")}</p>
-
-<h3>${t(E, "Constraints", "제약")}</h3>
-<p>1 ≤ T ≤ 10, 2 ≤ N ≤ 1000, 0 ≤ h[i] ≤ N-1.</p>
+  "Farmer John has a permutation p of 1..N. Farmer Nhoj dismantles p step by step: while p has >1 element, if p[0] > p[-1] write p[1] and remove p[0]; otherwise write p[-2] and remove p[-1]. After N-1 steps Nhoj has written N-1 hints h. Given h, recover the lexicographically smallest p, or output -1.",
+  "Farmer John 에게 1..N 순열 p 가 있어요. Farmer Nhoj 가 p 를 한 단계씩 분해: p 에 원소 >1 인 동안, p[0] > p[-1] 이면 p[1] 적고 p[0] 제거; 아니면 p[-2] 적고 p[-1] 제거. N-1 단계 후 N-1 개 힌트 h. h 를 주면 사전순 최소 p 복원 (불가능하면 -1).")}</p>
 
 <h3>${t(E, "Sample I/O", "예제")}</h3>
 <table>
   <tr><th>${t(E, "Input", "입력")}</th><th>${t(E, "Output", "출력")}</th></tr>
-  <tr><td><pre style="margin:0;background:#0f172a;color:#f8fafc;font-size:11px;">3
+  <tr><td><pre style="margin:0;background:#0f172a;color:#f8fafc;font-size:11px;">2
 4
-2 3 2
-3
-1 1
-3
-0 1</pre></td><td><pre style="margin:0;background:#0f172a;color:#f8fafc;font-size:11px;">3 1 4 2
-1 2 3
--1</pre></td></tr>
+2 1 1
+4
+3 2 1</pre></td><td><pre style="margin:0;background:#0f172a;color:#f8fafc;font-size:11px;">3 1 2 4
+1 2 3 4</pre></td></tr>
 </table>
 
-<h2>2. ${t(E, "First Idea: Greedy", "첫 아이디어: 탐욕")}</h2>
+<h2>2. ${t(E, "Approach: Brute force search", "접근: 브루트포스 탐색")}</h2>
 <div class="box ok">
   <b>💡 ${t(E, "Key insight", "핵심 통찰")}</b>:
-  ${t(E, "If we know perm[0], the rest is forced — at each step, ONE of (perm[i]+h[i], perm[i]-h[i]) will be valid (in range 1..N AND not yet used).",
-        "perm[0] 만 정하면 나머지는 강제 — 각 단계에서 (perm[i]+h[i], perm[i]-h[i]) 중 하나만 유효 (1..N 범위 + 미사용).")}
+  ${t(E, "Inverting Nhoj's rule directly is hard. But we can simulate it forward: try every permutation of 1..N in lex order, dismantle each, and stop at the first p whose dismantle equals h. The FIRST match in lex order is automatically the lex-smallest answer.",
+        "Nhoj 규칙을 거꾸로 푸는 건 어려움. 정방향 시뮬: 1..N 의 모든 순열을 사전순으로 시도, 각 dismantle 결과를 h 와 비교, 처음 일치하는 p 가 답. 사전순으로 가니까 자동으로 사전순 최소.")}
 </div>
-<p>${t(E,
-  "So: try start = 1, 2, ..., N. For each, greedily build. If one works, output it.",
-  "그래서: 시작값 1~N 차례로 시도. 각각 탐욕적으로 구성. 하나 성공하면 출력.")}</p>
 
 <div class="box">
   <b>${t(E, "Time complexity", "시간복잡도")}:</b>
-  ${t(E, "O(N²) per test case (N starts × N steps). For N=1000, T=10: 10⁷ ops total. Fast.",
-        "테스트 케이스당 O(N²) (N 시작 × N 단계). N=1000, T=10: 10⁷ 연산. 빠름.")}
+  ${t(E, "O(N! · N) per test case — N! permutations × O(N) per dismantle. Bronze tests typically use small N for this kind of brute force.",
+        "테스트당 O(N! · N) — N! 순열 × dismantle 당 O(N). Bronze 는 보통 작은 N 으로 brute force 가능.")}
 </div>
-
-<h3>${t(E, "Edge case: h[i] = 0", "엣지: h[i] = 0")}</h3>
-<p>${t(E, "h[i] = 0 means |perm[i] - perm[i+1]| = 0, so perm[i] = perm[i+1]. But permutation values are distinct. → IMPOSSIBLE → -1.",
-        "h[i] = 0 이면 |perm[i] - perm[i+1]| = 0, 즉 perm[i] = perm[i+1]. 그러나 순열은 모든 값이 다름. → 불가능 → -1.")}</p>
 
 <h2>3. ${t(E, "Solution Code (3 sections + full)", "최적 코드 (3 섹션 + 전체)")}</h2>
 ${sections.map(s => `

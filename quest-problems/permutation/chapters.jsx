@@ -2,40 +2,48 @@ import { C, t } from "@/components/quest/theme";
 import { getPermSections, DismantleSimulator } from "./components";
 
 /* ================================================================
-   SOLUTION CODE — Brute force (correct but only for small N)
-   The smart O(N) approach is built backward with a deque (Ch 2).
+   SOLUTION CODE — Brute force.
+   For each test case, run dismantle() on every permutation of
+   1..N (in lex order, via recursion). The FIRST p whose dismantle
+   matches h is automatically the lex-smallest answer. -1 if none.
    ================================================================ */
 export const SOLUTION_CODE = [
-  "from itertools import permutations",
-  "",
   "def dismantle(p):",
-  "    '''Run Nhoj's dismantling on p, return the hint list h.'''",
+  "    # Apply Nhoj's rule until 1 element remains; return the hint list.",
   "    p = list(p)",
-  "    h = []",
+  "    out = []",
   "    while len(p) > 1:",
   "        if p[0] > p[-1]:",
-  "            h.append(p[1])     # write 2nd, remove 1st (bigger end)",
+  "            out.append(p[1])     # write 2nd, remove 1st (bigger end)",
   "            p.pop(0)",
   "        else:",
-  "            h.append(p[-2])    # write 2nd-to-last, remove last",
+  "            out.append(p[-2])    # write 2nd-to-last, remove last",
   "            p.pop()",
-  "    return h",
+  "    return out",
+  "",
+  "def search(p, used, idx, N, h):",
+  "    if idx == N:",
+  "        if dismantle(p) == h:",
+  "            print(' '.join(map(str, p)))",
+  "            return True",
+  "        return False",
+  "    for v in range(1, N + 1):",
+  "        if used[v]:",
+  "            continue",
+  "        p[idx] = v",
+  "        used[v] = True",
+  "        if search(p, used, idx + 1, N, h):",
+  "            return True",
+  "        used[v] = False",
+  "    return False",
   "",
   "T = int(input())",
   "for _ in range(T):",
   "    N = int(input())",
   "    h = list(map(int, input().split()))",
-  "",
-  "    # Try every permutation in lex order — first match is lex-smallest",
-  "    found = None",
-  "    for p in permutations(range(1, N + 1)):",
-  "        if dismantle(p) == h:",
-  "            found = p",
-  "            break",
-  "",
-  "    if found:",
-  "        print(' '.join(map(str, found)))",
-  "    else:",
+  "    p = [0] * N",
+  "    used = [False] * (N + 1)",
+  "    if not search(p, used, 0, N, h):",
   "        print(-1)",
 ];
 
@@ -45,12 +53,12 @@ export const SOLUTION_CODE = [
    ═══════════════════════════════════════════════════════════════ */
 export function makePermCh1(E) {
   return [
-    // 1-1: Title + the actual problem
+    // 1-1: Title + the actual problem (dismantle version)
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John has a permutation p of 1..N. Farmer Nhoj broke into the barn and disassembled it. To not be too cruel, he left hints. From those hints, reconstruct the lex-smallest p consistent with them, or report -1 if Nhoj must have made a mistake.",
-        "Farmer John 에게 1..N 의 순열 p 가 있어요. Farmer Nhoj 가 헛간에 들어가서 그걸 분해했어요. 너무 잔인하지 않으려고 힌트를 남겼어요. 그 힌트들로 일관된 사전순으로 가장 작은 p 를 복원하거나, Nhoj 가 실수했음이 분명하면 -1 을 출력해요."),
+        "Farmer John has a permutation p of 1..N. Farmer Nhoj 'dismantled' it by repeatedly removing one end and writing down its neighbor — leaving N−1 hints. From those hints, recover the lex-smallest p, or print -1 if Nhoj must have made a mistake.",
+        "Farmer John 에게 1..N 의 순열 p 가 있어요. Farmer Nhoj 가 한 번에 한 쪽 끝을 빼면서 그 옆 값을 적는 방식으로 p 를 '분해' 했어요 — N−1 개의 힌트가 남아요. 그 힌트들로 사전순으로 가장 작은 p 를 복원하거나, Nhoj 가 실수했음이 분명하면 -1 출력."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -59,7 +67,6 @@ export function makePermCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
           </div>
 
-          {/* Scenario — clean bulleted facts */}
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -71,22 +78,22 @@ export function makePermCh1(E) {
                 <div>
                   {t(E, "Farmer John has a ", "Farmer John 에게 ")}
                   <b style={{ color: "#9a3412" }}>{t(E, "permutation p of length N", "길이 N 의 순열 p")}</b>
-                  {t(E, ", containing each integer 1..N exactly once.", " 가 있어요 (1부터 N 까지 각 정수가 정확히 한 번씩).")}
+                  {t(E, ", containing each integer 1..N exactly once.", " 가 있어요 (1..N 각 정수 정확히 한 번씩).")}
                 </div>
               </div>
-              {/* fact 2 — Nhoj broke in */}
+              {/* fact 2 — Nhoj's dismantle rule */}
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Farmer Nhoj ", "Farmer Nhoj 가 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "broke into the barn and disassembled p", "헛간에 들어가서 p 를 분해")}</b>
-                  {t(E, ". To not be too cruel, he left hints — at each step (while more than 1 element remains in p):",
-                        "했어요. 너무 잔인하지 않으려고 힌트를 남겼어요 — 매 단계 (p 에 원소가 1 개 초과로 남아있는 동안):")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "dismantles p step by step", "p 를 한 단계씩 분해")}</b>
+                  {t(E, ". While more than 1 element remains in p, he applies this rule and records one hint:",
+                        ". p 에 원소가 1 개 초과로 남아있는 동안, 다음 규칙 적용 + 힌트 1 개 기록:")}
                   <div style={{ marginTop: 6, marginLeft: 6, fontSize: 12, color: "#475569", lineHeight: 1.7 }}>
-                    {t(E, "↳ if p′₁ > p′ₙ: ", "↳ p′₁ > p′ₙ 이면: ")}
-                    <b style={{ color: "#dc2626" }}>{t(E, "write p′₂, remove p′₁", "p′₂ 를 적고 p′₁ 제거")}</b><br/>
+                    {t(E, "↳ if first element > last element: ", "↳ 첫 원소 > 마지막 원소 이면: ")}
+                    <b style={{ color: "#dc2626" }}>{t(E, "write the 2nd element, remove the 1st", "2 번째 원소 적고 1 번째 제거")}</b><br/>
                     {t(E, "↳ otherwise: ", "↳ 그 외: ")}
-                    <b style={{ color: "#7c3aed" }}>{t(E, "write p′ₙ₋₁, remove p′ₙ", "p′ₙ₋₁ 을 적고 p′ₙ 제거")}</b>
+                    <b style={{ color: "#7c3aed" }}>{t(E, "write the 2nd-to-last element, remove the last", "마지막에서 2 번째 원소 적고 마지막 제거")}</b>
                   </div>
                 </div>
               </div>
@@ -94,9 +101,9 @@ export function makePermCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#9a3412", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "At the end, Nhoj will have written ", "끝에는 Nhoj 가 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "N−1 integers h₁, h₂, …, h_{N−1}", "N−1 개의 정수 h₁, h₂, …, h_{N−1}")}</b>
-                  {t(E, ", in that order — that's the input.", " 을 그 순서대로 적어둬요 — 그게 입력이에요.")}
+                  {t(E, "After N−1 steps, only 1 element is left and Nhoj has written ", "N−1 단계 후 원소 1 개 남고 Nhoj 가 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "N−1 hints h[0], h[1], …, h[N−2]", "N−1 개 힌트 h[0], h[1], …, h[N−2]")}</b>
+                  {t(E, " in order — that's the input.", " 를 순서대로 적었어요 — 그게 입력.")}
                 </div>
               </div>
               {/* fact 4 — your job */}
@@ -104,20 +111,27 @@ export function makePermCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Reconstruct the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically minimum p consistent with the hints", "힌트와 일관된 사전순으로 가장 작은 p")}</b>
-                  {t(E, ", or determine that Nhoj must have made a mistake (print ",
-                        " 를 복원하거나, Nhoj 가 실수했음이 분명하면 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest p consistent with the hints", "힌트와 일관된 사전순으로 가장 작은 p")}</b>
+                  {t(E, ", or determine that no permutation fits (print ",
+                        " 를 복원하거나, 어떤 순열도 안 맞으면 ")}
                   <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 3, color: "#991b1b", fontWeight: 800 }}>-1</code>
                   {t(E, ").", " 출력.")}
                 </div>
               </div>
             </div>
 
-            {/* Permutation definition box — separate so it doesn't break flow */}
+            {/* Permutation definition box */}
             <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #fdba74", borderRadius: 8, padding: "8px 10px", fontSize: 11, color: C.dim, lineHeight: 1.5 }}>
-              <b style={{ color: "#9a3412" }}>{t(E, "💬 What's a “permutation”?", "💬 “순열”이란?")}</b>{" "}
+              <b style={{ color: "#9a3412" }}>{t(E, "💬 What's a permutation?", "💬 순열이란?")}</b>{" "}
               {t(E, "A list using each number 1..N exactly once. e.g. for N=4: [3,1,4,2] is a permutation, [3,1,1,2] is not (1 used twice, 4 missing).",
-                    "1부터 N까지 각 숫자를 정확히 1번씩만 쓰는 리스트. 예: N=4 일 때 [3,1,4,2] 는 순열, [3,1,1,2] 는 순열 아님 (1 두 번, 4 빠짐).")}
+                    "1부터 N 까지 각 숫자를 정확히 1번씩 쓰는 리스트. 예: N=4 → [3,1,4,2] 는 순열, [3,1,1,2] 는 순열 아님 (1 두 번, 4 빠짐).")}
+            </div>
+
+            {/* Lex order definition box */}
+            <div style={{ marginTop: 6, background: "#fff", border: "1px dashed #fdba74", borderRadius: 8, padding: "8px 10px", fontSize: 11, color: C.dim, lineHeight: 1.5 }}>
+              <b style={{ color: "#9a3412" }}>{t(E, "💬 What's lexicographic (lex) order?", "💬 사전순(lex)이란?")}</b>{" "}
+              {t(E, "Compare two lists position by position from left to right. The first position where they differ decides which is 'smaller'. e.g. [1,3,2] < [2,1,3] because position 0: 1 < 2.",
+                    "두 리스트를 왼쪽부터 한 자리씩 비교. 처음 다른 자리가 어느 쪽이 더 '작은지' 결정. 예: [1,3,2] < [2,1,3] (자리 0: 1 < 2 이므로).")}
             </div>
           </div>
 
@@ -417,132 +431,110 @@ export function makePermCh1(E) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 🔍 시뮬레이션
+   Chapter 2: 🔍 시뮬레이션 — brute force search aligned with Ch1
    ═══════════════════════════════════════════════════════════════ */
 export function makePermCh2(E) {
   return [
-    // 2-1: From the formula → 2 choices → greedy idea
+    // 2-1: Brute force plan
     {
       type: "reveal",
       narr: t(E,
-        "Where does the algorithm come from? Start from the formula.",
-        "공식부터 출발하면 알고리즘이 자연스럽게 나와요."),
+        "How do we recover p? The dismantle rule is hard to invert directly. Easiest idea: try every permutation of 1..N in lex order, dismantle each, and stop at the first match.",
+        "p 를 어떻게 복원할까? dismantle 규칙을 거꾸로 푸는 건 까다로워요. 가장 쉬운 방법: 1..N 의 모든 순열을 사전순으로 시도, 각각 dismantle 해서 일치하는 첫 번째에서 멈추기."),
       content: (
         <div style={{ padding: 16 }}>
-          {/* Step A: the given formula */}
           <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
-              {t(E, "1️⃣  What we're given", "1️⃣  주어진 것")}
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>
+              💡 {t(E, "Brute force plan", "브루트포스 계획")}
             </div>
-            <div style={{ fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#5b21b6", textAlign: "center" }}>
-              h[i] = abs(perm[i] − perm[i+1])
-            </div>
-          </div>
-
-          {/* Step B: rearrange to find perm[i+1] */}
-          <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-              {t(E, "2️⃣  Rearrange — only 2 possible values for perm[i+1]", "2️⃣  변형 — perm[i+1]의 가능값은 단 2개")}
-            </div>
-            <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center", marginTop: 6 }}>
-              <div style={{ padding: "6px 12px", borderRadius: 8, background: "#dcfce7", border: "1.5px solid #16a34a", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#15803d" }}>
-                perm[i] + h[i]
-              </div>
-              <div style={{ fontSize: 13, fontWeight: 800, color: "#15803d" }}>{t(E, "OR", "또는")}</div>
-              <div style={{ padding: "6px 12px", borderRadius: 8, background: "#dcfce7", border: "1.5px solid #16a34a", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#15803d" }}>
-                perm[i] − h[i]
-              </div>
-            </div>
-            <div style={{ fontSize: 11, color: "#15803d", textAlign: "center", marginTop: 6 }}>
-              {t(E, "(because abs removes the sign)", "(abs가 부호를 지우니까)")}
-            </div>
-          </div>
-
-          {/* Step C: pick start, then greedy chain */}
-          <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 12, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
-              {t(E, "3️⃣  But what's perm[0]? Try every value 1..N", "3️⃣  근데 perm[0]은? 1부터 N까지 다 시도")}
-            </div>
-            <div style={{ fontSize: 12, color: "#7c2d12", lineHeight: 1.6, whiteSpace: "pre-line" }}>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, whiteSpace: "pre-line" }}>
               {t(E,
-                "For each start in 1..N:\n  • set perm[0] = start\n  • for each step, try + first, then − (whichever is in [1, N] and unused)\n  • if both fail, give up on this start and try the next",
-                "각 시작값 1..N에 대해:\n  • perm[0] = start로 설정\n  • 단계마다 +를 먼저 시도, 안 되면 − ([1, N] 안이고 미사용인 것)\n  • 둘 다 실패하면 이 시작값 포기, 다음 시도")}
+                "1. Generate every permutation of 1..N in LEX ORDER (smallest first).\n2. For each candidate p, run dismantle(p) → produces a hint list.\n3. Compare to the input h. If they match, p is the answer.\n4. The FIRST match in lex order is automatically the lex-smallest answer.\n5. If no permutation matches → print −1.",
+                "1. 1..N 의 모든 순열을 사전순 (작은 것 먼저) 으로 생성.\n2. 각 후보 p 에 대해 dismantle(p) 실행 → 힌트 리스트 산출.\n3. 입력 h 와 비교. 같으면 그 p 가 답.\n4. 사전순으로 처음 일치하는 게 자동으로 사전순 최소 답.\n5. 어떤 순열도 안 맞으면 → −1 출력.")}
             </div>
           </div>
 
-          {/* Why this is natural */}
-          <div style={{ background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: C.accent, marginBottom: 4 }}>
-              {t(E, "💡 Why is this natural?", "💡 왜 자연스러울까?")}
+          <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
+              ⏱ {t(E, "Complexity", "복잡도")}
             </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-              {t(E,
-                "Once you fix perm[0], the rest is forced (only ± each step). So we only need to guess perm[0] — N choices.",
-                "perm[0]을 정하면 나머지는 강제 (매 단계 ±뿐). 그래서 perm[0]만 추측하면 됨 — N가지.")}
+            <div style={{ fontSize: 12, color: "#7c2d12", lineHeight: 1.6 }}>
+              {t(E, "Per test: O(N! · N) — N! permutations, each costs O(N) to dismantle. Fits at small N (Bronze typically has N ≤ 8 for this kind of problem). For larger N, smarter approaches exist.",
+                    "테스트당: O(N! · N) — N! 개 순열, 각각 O(N) 으로 dismantle. 작은 N (Bronze 보통 N ≤ 8 정도) 에 적합. 더 큰 N 은 더 똑똑한 방법 필요.")}
             </div>
           </div>
         </div>),
     },
-    // 2-2: Interactive sim
-    {
-      type: "sim",
-      narr: t(E,
-        "Try it!\nN=4, h=[2,3,2].\nPick a starting value below and step through the greedy.\nNotice that some starts fail and some succeed.", "직접 해봐요! N=4, h=[2,3,2]. 아래에서 시작값을 골라 그리디를 한 단계씩 따라가봐요. 어떤 시작값은 실패하고 어떤 건 성공해요."),
-    },
-    // 2-3: Static trace example
+    // 2-2: Trace example with dismantle on small input
     {
       type: "reveal",
       narr: t(E,
-        "Recap: with start=3, the trace is 3→1→4→2 = [3,1,4,2] ✅.\nWith start=1, we get stuck at step 2.\nWith start=4, we get stuck at step 3.", "정리: 시작값=3이면 3→1→4→2 = [3,1,4,2] ✅. 시작값=1은 2단계에서 막히고, 시작값=4는 3단계에서 막혀."),
+        "Worked example: N=4, h=[2,1,1]. We try permutations of {1,2,3,4} in lex order, dismantle each, stop at first match. There are 4! = 24 permutations to try in the worst case.",
+        "예시: N=4, h=[2,1,1]. {1,2,3,4} 순열을 사전순으로 시도, 각각 dismantle, 첫 매칭에서 멈춤. 최악의 경우 4! = 24 개."),
       content: (
         <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 12, color: C.text, marginBottom: 10, lineHeight: 1.6 }}>
+            {t(E, "First few attempts in lex order (most don't match):",
+                  "사전순으로 처음 몇 개 (대부분 안 맞음):")}
+          </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             {[
-              { step: "Start", val: 3, used: [3] },
-              { step: "h[0]=2", val: 1, try1: "3+2=5 ✗", try2: "3-2=1 ✓", used: [3,1] },
-              { step: "h[1]=3", val: 4, try1: "1+3=4 ✓", used: [3,1,4] },
-              { step: "h[2]=2", val: 2, try1: "4+2=6 ✗", try2: "4-2=2 ✓", used: [3,1,4,2] },
+              { p: "[1,2,3,4]", dis: "[3,2,1]", ok: false },
+              { p: "[1,2,4,3]", dis: "[4,2,1]", ok: false },
+              { p: "[1,3,2,4]", dis: "[2,3,1]", ok: false },
+              { p: "[1,3,4,2]", dis: "[4,3,1]", ok: false },
+              { p: "…", dis: "…", ok: false, ellipsis: true },
+              { p: "[3,1,2,4]", dis: "[2,1,1]", ok: true },
             ].map((s, i) => (
               <div key={i} style={{
-                background: i === 0 ? C.accentBg : "#fff",
-                border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "8px 12px",
-                fontSize: 12, fontFamily: "'JetBrains Mono',monospace",
+                background: s.ok ? "#dcfce7" : "#fff",
+                border: `1.5px solid ${s.ok ? "#16a34a" : C.border}`, borderRadius: 8, padding: "8px 12px",
+                fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: s.ok ? "#15803d" : C.text,
+                display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 6,
               }}>
-                <span style={{ fontWeight: 800, color: C.accent }}>{s.step}</span>
-                {s.try1 && <span style={{ color: s.try1.includes("✓") ? C.ok : C.no, marginLeft: 8 }}>{s.try1}</span>}
-                {s.try2 && <span style={{ color: s.try2.includes("✓") ? C.ok : C.no, marginLeft: 8 }}>{s.try2}</span>}
-                <span style={{ color: C.dim, marginLeft: 8 }}>→ [{s.used.join(",")}]</span>
+                <span style={{ fontWeight: 800 }}>p = {s.p}</span>
+                <span>→ dismantle = {s.dis}</span>
+                <span style={{ fontWeight: 900, color: s.ok ? "#16a34a" : "#9ca3af" }}>
+                  {s.ok ? "✓ MATCH" : s.ellipsis ? "…" : "✗"}
+                </span>
               </div>
             ))}
           </div>
+          <div style={{ marginTop: 10, fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+            {t(E, "→ The first p in lex order with dismantle(p) == [2, 1, 1] is ", "→ dismantle = [2, 1, 1] 인 사전순 첫 p 는 ")}
+            <b style={{ color: "#16a34a" }}>[3, 1, 2, 4]</b>
+            {t(E, ". Output that.", " 그걸 출력.")}
+          </div>
         </div>),
     },
-    // 2-4: Quiz
+    // 2-3: Quiz on the brute force plan
     {
       type: "quiz",
       narr: t(E,
-        "What happens when BOTH perm[i]+h[i] and perm[i]-h[i] are invalid (out of range or already used)?", "perm[i]+h[i]와 perm[i]-h[i] 둘 다 유효하지 않으면 (범위 밖이거나 이미 사용)?"),
+        "Why does iterating permutations in lex order give us the lex-smallest answer for free?",
+        "사전순으로 순열을 시도하면 왜 자동으로 사전순 최소 답이 나올까요?"),
       question: t(E,
-        "If both options fail at some step, what should we do?",
-        "어떤 단계에서 두 옵션 모두 실패하면?"),
+        "Why is the FIRST matching p automatically the lex-smallest valid p?",
+        "처음 일치하는 p 가 왜 자동으로 사전순 최소?"),
       options: [
-        t(E, "Try next starting value", "다음 시작값 시도"),
-        t(E, "Output -1 immediately", "즉시 -1 출력"),
-        t(E, "Swap previous elements", "이전 원소를 교환"),
-        t(E, "Skip this step", "이 단계를 건너뜀"),
+        t(E, "Because we try permutations in lex order — the first match is by definition the smallest.",
+              "사전순으로 시도하니까 — 처음 매칭이 정의상 가장 작은 것."),
+        t(E, "Because dismantle gives unique results.", "dismantle 이 유일한 결과를 주니까."),
+        t(E, "Because N is small.", "N 이 작으니까."),
       ],
       correct: 0,
       explain: t(E,
-        "This starting value doesn't work. Move on to the next one. Only output -1 if ALL starting values fail!",
-        "이 시작값이 안 되는 거예요. 다음 시작값으로! 모든 시작값이 실패할 때만 -1!"),
+        "Lex-order iteration visits 1234 before 1243 before 1324 ... If we stop at the first p whose dismantle matches h, we've found the lex-smallest valid p.",
+        "사전순으로 1234 → 1243 → 1324 ... 순서. dismantle 일치하는 첫 p 에서 멈추면, 그게 사전순 최소 유효 p."),
     },
-    // 2-4: Input
+    // 2-4: Input quiz
     {
       type: "input",
       narr: t(E,
-        "N=3, h=[1,1]. Try start=1: 1→1+1=2→2+1=3. Result: [1,2,3]. What is perm[2]?", "N=3, h=[1,1]. 시작=1: 1→1+1=2→2+1=3. 결과: [1,2,3]. perm[2]는?"),
-      question: t(E, "N=3, h=[1,1], start=1. perm[2]=?", "N=3, h=[1,1], 시작=1. perm[2]=?"),
-      answer: 3,
+        "Test it. N=2, h=[1]. The only 2 permutations of [1,2] are: [1,2] and [2,1]. Dismantle each.\n• [1,2]: 1<2 → write 1, drop 2 → h=[1] ✓\n• [2,1]: 2>1 → write 1, drop 2 → h=[1] ✓\nBoth match! The lex-smallest is [1,2]. So perm[0] = ?",
+        "테스트. N=2, h=[1]. [1,2] 의 순열은 둘: [1,2] 와 [2,1]. 각각 dismantle:\n• [1,2]: 1<2 → 1 적고 2 제거 → h=[1] ✓\n• [2,1]: 2>1 → 1 적고 2 제거 → h=[1] ✓\n둘 다 일치! 사전순 최소는 [1,2]. perm[0] = ?"),
+      question: t(E, "N=2, h=[1]. perm[0]=?", "N=2, h=[1]. perm[0]=?"),
+      answer: 1,
     },
   ];
 }
@@ -553,19 +545,20 @@ export function makePermCh2(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePermCh3(E, lang = "py") {
   return [
-    // 3-1: Complexity
+    // 3-1: Plan + complexity
     {
       type: "reveal",
       narr: t(E,
-        "Time complexity: O(N²) per test case — we try N starting values, each taking O(N).\nSince N ≤ 1000, this is fast enough!", "시간복잡도: 테스트 케이스당 O(N²) — N개의 시작값을 시도하고, 각각 O(N). N ≤ 1000이니 충분히 빨라요!"),
+        "Time complexity: O(N! · N) per test case — N! permutations, each costs O(N) to dismantle. Bronze typically uses small N for this kind of problem.",
+        "시간복잡도: 테스트당 O(N! · N) — N! 개 순열, 각각 dismantle O(N). Bronze 는 보통 작은 N."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              { n: 1, label: t(E, "Try each start", "시작값 차례로 시도"), code: "for start in range(1, N+1):", color: "#7c5cfc" },
-              { n: 2, label: t(E, "Greedy + or \u2212", "그리디 + 또는 \u2212"), code: "if perm[i] + h[i] valid: pick;  elif perm[i] \u2212 h[i] valid: pick;  else: fail", color: "#0891b2" },
-              { n: 3, label: t(E, "Output if found", "성공하면 출력"), code: "if valid: print(perm);  break", color: "#16a34a" },
-              { n: 4, label: t(E, "All starts fail \u2192 -1", "모두 실패 \u2192 -1"), code: "if no start works: print(-1)", color: "#dc2626" },
+              { n: 1, label: t(E, "dismantle helper", "dismantle 헬퍼"), code: "def dismantle(p): apply Nhoj's rule, return hint list", color: "#7c5cfc" },
+              { n: 2, label: t(E, "Recursive search (lex order)", "재귀 탐색 (사전순)"), code: "search(p, used, idx, N, h): place 1..N at p[idx] and recurse", color: "#0891b2" },
+              { n: 3, label: t(E, "Match → print and stop", "일치 → 출력 후 종료"), code: "if dismantle(p) == h: print(p); return True", color: "#16a34a" },
+              { n: 4, label: t(E, "No match across N! → -1", "N! 다 안 맞으면 → -1"), code: "if not search(...): print(-1)", color: "#dc2626" },
             ].map((step, i) => (
               <div key={i} style={{
                 display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
@@ -581,41 +574,37 @@ export function makePermCh3(E, lang = "py") {
           </div>
           <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
             <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "\u23f1 Complexity", "\u23f1 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c5cfc" }}>O(N\u00b2)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N starts \u00d7 N steps each", "N개 시작 \u00d7 각 N단계")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c5cfc" }}>O(N! · N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N! perms × N per dismantle", "N! 순열 × dismantle 당 N")}</div>
           </div>
         </div>),
     },
-    // 3-2: Quiz on edge case
+    // 3-2: Quiz — when does -1 happen?
     {
       type: "quiz",
       narr: t(E,
-        "When h[i] = 0, perm[i+1] must equal perm[i].\nBut in a permutation, all values are distinct!\nSo h[i]=0 means...", "h[i] = 0이면, perm[i+1] = perm[i]이어야 해요. 그런데 순열에선 모든 값이 다르잖아요! h[i]=0이면..."),
+        "We try every permutation in lex order, dismantle each, and stop at the first match. -1 is printed only when...",
+        "사전순으로 모든 순열을 시도해 dismantle 했는데 일치하는 게 없으면 -1. 언제 그럴까?"),
       question: t(E,
-        "If h[i] = 0 for some i, what can we conclude?",
-        "어떤 i에서 h[i] = 0이면?"),
+        "When does the brute force return -1?",
+        "브루트포스가 -1 을 반환하는 경우?"),
       options: [
-        t(E, "Impossible! Output -1", "불가능! -1 출력"),
-        t(E, "perm[i] = perm[i+1] = 0", "perm[i] = perm[i+1] = 0"),
-        t(E, "Skip to next element", "다음 원소로 건너뜀"),
+        t(E, "When no permutation produces the input h", "어떤 순열도 입력 h 를 만들지 못할 때"),
+        t(E, "When h has a 0 in it", "h 에 0 이 있을 때"),
+        t(E, "When N is too large", "N 이 너무 클 때"),
       ],
       correct: 0,
       explain: t(E,
-        "h[i]=0 means abs(perm[i]-perm[i+1])=0, so they're equal. But permutations have all distinct values — contradiction!",
-        "h[i]=0이면 abs(perm[i]-perm[i+1])=0, 같은 값. 하지만 순열은 모든 값이 달라 — 모순!"),
+        "Some hint lists are 'unreachable' — no permutation produces them under Nhoj's dismantle rule. We can only know after trying all N! permutations.",
+        "어떤 힌트 리스트는 dismantle 규칙으로 만들 수 없음 — N! 개 다 돌려본 후에야 알 수 있음."),
     },
     // 3-3: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read it part by part. Toggle Python ↔ C++ in header, save as PDF.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글, PDF 저장 가능."),
+        "Solution code — read it part by part. Toggle Python ↔ C++ in header.",
+        "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
       sections: getPermSections(E),
-    },
-    // 3-4: Live runner
-    {
-      type: "runner",
-      narr: t(E,
-        "Now run it yourself. Enter N and h, watch the greedy try each start. Stop anytime.", "이제 직접 돌려봐요. N과 h 입력하고, 그리디가 시작값을 하나씩 시도하는 걸 봐요. 언제든 중지 가능."),
     },
   ];
 }

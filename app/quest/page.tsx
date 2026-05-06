@@ -8,6 +8,10 @@ import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
 import { useAuth } from "@/contexts/auth-context"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
+import { isVisibleInCatalog, getReleaseStage, getQuestMeta } from "@/lib/quest-meta"
+import { masteredConcepts, suggestNextConcepts } from "@/lib/concept-graph"
+import { CONCEPT_ONTOLOGY, type ConceptId } from "@/lib/quest-meta"
+import { useReleasePref } from "@/components/quest/use-release-pref"
 
 // ────────────────────────────────────────────────
 // Problem data (sourced from CodeQuest HomeScreen)
@@ -223,6 +227,30 @@ export default function QuestPage() {
   const [algoTopicsDone, setAlgoTopicsDone] = useState(0)
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["USACO", "MCC", "MCO"]))
+  const [betaOptIn, setBetaOptIn] = useReleasePref()
+
+  // Phase 5: Filter helper. A quest is visible if:
+  //   (a) the viewer's role/preference grants access, OR
+  //   (b) the student already has progress on it (don't hide solved work).
+  const canSeeProblem = (id: string): boolean =>
+    isVisibleInCatalog(id, { isTeacher, betaOptIn }) || solvedSet.has(id)
+
+  // Phase 6: "ready to try" — required concepts all covered by completed
+  // quests. Quests with no curated prereqs are NOT marked ready (they
+  // could be anything, so silence is safer than a false promise).
+  const mastered = masteredConcepts(solvedSet)
+  const isReady = (id: string): boolean => {
+    if (solvedSet.has(id)) return false
+    const reqs = getQuestMeta(id).concepts_required
+    if (reqs.length === 0) return false
+    return reqs.every(c => mastered.has(c))
+  }
+
+  // Phase 7: top concept that, once mastered, would unlock the most
+  // currently-locked quests. Only shown when there's a clear winner.
+  const allCandidateIds = SECTIONS.flatMap(s => s.problems.map(p => p.id))
+  const studyHints = suggestNextConcepts(solvedSet, allCandidateIds, 1)
+  const studyHint = studyHints[0]
 
   useEffect(() => {
     // Load algo progress (same pattern as curriculum/page.tsx)
@@ -249,8 +277,14 @@ export default function QuestPage() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _unused = algoTopicsDone >= ALGO_UNLOCK_THRESHOLD || isTeacher
 
-  const totalProblems = SECTIONS.reduce((acc, s) => acc + s.problems.length, 0)
-  const totalSolved = SECTIONS.reduce(
+  // Filter problems by release stage (additive: full quests always shown).
+  const visibleSections = SECTIONS.map(s => ({
+    ...s,
+    problems: s.problems.filter(p => canSeeProblem(p.id)),
+  }))
+
+  const totalProblems = visibleSections.reduce((acc, s) => acc + s.problems.length, 0)
+  const totalSolved = visibleSections.reduce(
     (acc, s) => acc + s.problems.filter(p => solvedSet.has(p.id)).length,
     0
   )
@@ -388,7 +422,28 @@ export default function QuestPage() {
               {t("인터랙티브 알고리즘 풀이", "Interactive algorithm problem walkthroughs")}
             </p>
           </div>
-          <LanguageToggle className="shrink-0 mt-1" />
+          <div className="flex flex-col items-end gap-1.5">
+            <LanguageToggle className="shrink-0" />
+            {/* Phase 5: beta opt-in toggle for students. Teachers always see all stages, so we hide the toggle for them. */}
+            {!isTeacher && (
+              <button
+                onClick={() => setBetaOptIn(!betaOptIn)}
+                className={`text-[10px] font-bold px-2 py-1 rounded-md border-2 transition ${
+                  betaOptIn
+                    ? "bg-fuchsia-100 border-fuchsia-400 text-fuchsia-800"
+                    : "bg-white border-gray-300 text-gray-500 hover:border-gray-400"
+                }`}
+                title={t(
+                  "베타 quest: 새로 만든 quest 를 미리 시도. 끄면 안정 버전만 보여요.",
+                  "Beta quests: see in-progress redesigns. Off = only stable quests."
+                )}
+              >
+                {betaOptIn
+                  ? t("🧪 베타 ON", "🧪 Beta ON")
+                  : t("🧪 베타 OFF", "🧪 Beta OFF")}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Overall progress bar */}
@@ -408,9 +463,30 @@ export default function QuestPage() {
           </div>
         )}
 
+        {/* Phase 7: study-next suggestion. Only renders when the student already has progress AND a clear high-leverage concept exists. */}
+        {loaded && solvedSet.size >= 2 && studyHint && studyHint.unlocksCount >= 2 && (
+          <div className="border-2 border-indigo-400 rounded-xl shadow-[3px_3px_0px_0px_rgba(99,102,241,0.5)] bg-indigo-50 p-4 mb-6">
+            <div className="text-xs font-black uppercase tracking-wider text-indigo-700 mb-1">
+              📚 {t("다음에 배우면 좋은 개념", "Study this next")}
+            </div>
+            <div className="font-bold text-base text-indigo-900 mb-1">
+              <code className="font-mono text-sm bg-white px-1.5 py-0.5 rounded border border-indigo-200">{studyHint.concept}</code>
+              <span className="text-gray-700 text-sm font-semibold ml-2">
+                — {CONCEPT_ONTOLOGY[studyHint.concept as ConceptId] ?? studyHint.concept}
+              </span>
+            </div>
+            <div className="text-xs text-indigo-800">
+              {t(
+                `이거 하나만 더 배우면 ${studyHint.unlocksCount} 개 quest 가 풀려요`,
+                `Mastering this unlocks ${studyHint.unlocksCount} more quest${studyHint.unlocksCount > 1 ? "s" : ""}`
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Sections */}
         <div className="flex flex-col gap-4">
-          {SECTIONS.map(section => {
+          {visibleSections.map(section => {
             const sectionSolved = section.problems.filter(p => solvedSet.has(p.id)).length
             const sectionTotal = section.problems.length
             const isExpanded = expandedSections.has(section.label)
@@ -490,6 +566,8 @@ export default function QuestPage() {
                                   <div className="flex flex-col">
                                     {items.map((problem, idx) => {
                                       const isSolved = solvedSet.has(problem.id)
+                                      const stage = getReleaseStage(problem.id)
+                                      const ready = isReady(problem.id)
                                       const numMatch = problem.sub.match(/#(\d+)$/) || problem.sub.match(/P(\d+)$/)
                                       const numLabel = numMatch ? (problem.sub.includes("#") ? `#${numMatch[1]}` : `P${numMatch[1]}`) : `${idx + 1}`
                                       return (
@@ -512,6 +590,21 @@ export default function QuestPage() {
                                           }`}>
                                             {problem.title}
                                           </span>
+                                          {stage === "internal" && (
+                                            <span className="text-[9px] font-black uppercase px-1 py-px rounded bg-rose-100 text-rose-700 border border-rose-300 flex-shrink-0">
+                                              internal
+                                            </span>
+                                          )}
+                                          {stage === "beta" && (
+                                            <span className="text-[9px] font-black uppercase px-1 py-px rounded bg-fuchsia-100 text-fuchsia-700 border border-fuchsia-300 flex-shrink-0">
+                                              beta
+                                            </span>
+                                          )}
+                                          {ready && (
+                                            <span className="text-[9px] font-black px-1 py-px rounded bg-indigo-100 text-indigo-700 border border-indigo-300 flex-shrink-0" title={t("준비된 quest — 필요한 개념 다 배웠어요", "Ready — prereqs satisfied")}>
+                                              🎯
+                                            </span>
+                                          )}
                                           {isSolved && <span className="text-green-500 font-bold text-xs flex-shrink-0">✓</span>}
                                         </Link>
                                       )

@@ -3,6 +3,7 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { FavPerm2ProgressiveCode, downloadFavPerm2PDF, getFavPerm2Sections } from "./components";
 import { makeFavPerm2Ch1, makeFavPerm2Ch2, makeFavPerm2Ch3 } from "./chapters";
+import { useCodeLang } from "@/components/quest/use-code-lang";
 
 const A = "#8b5cf6";
 
@@ -18,7 +19,7 @@ export default function FavPerm2App(props = {}) {
     return "ko";
   });
   const E = lang === "en";
-  const [codeLang, setCodeLang] = useState("py");
+  const [codeLang, setCodeLang] = useCodeLang();
   // Persist tab/si in localStorage so refresh keeps the student on the same step
   const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";
   const _loadPos = () => {

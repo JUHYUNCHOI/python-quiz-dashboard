@@ -3,6 +3,7 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { Mcc15EqProgressiveCode, downloadMcc15EqPDF, getMcc15EqSections } from "./components";
 import { makeMcc15EqCh1, makeMcc15EqCh2 } from "./chapters";
+import { useCodeLang } from "@/components/quest/use-code-lang";
 
 const A = "#d97706";
 
@@ -18,7 +19,7 @@ export default function Mcc15EqApp(props = {}) {
     return "ko";
   });
   const E = lang === "en";
-  const [codeLang, setCodeLang] = useState("py");
+  const [codeLang, setCodeLang] = useCodeLang();
   // Persist tab/si in localStorage so refresh keeps the student on the same step
   const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";
   const _loadPos = () => {

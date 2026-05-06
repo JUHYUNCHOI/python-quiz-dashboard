@@ -10,6 +10,10 @@ import { PROBLEM_LOADERS } from "./loaders"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
+import { QuestHealthBanner } from "@/components/quest/QuestHealthBanner"
+import { ReleaseStageBanner } from "@/components/quest/ReleaseStageBanner"
+import { QuestCompletionCard } from "@/components/quest/QuestCompletionCard"
+import { useCodeLang } from "@/components/quest/use-code-lang"
 
 const ALGO_UNLOCK_THRESHOLD = 8
 
@@ -94,7 +98,8 @@ declare global { interface Window { _questLang?: string } }
 
 export default function QuestProblemClient({ problemId }: { problemId: string }) {
   const router = useRouter()
-  const { lang, t } = useLanguage()
+  const { lang, setLang, t } = useLanguage()
+  const [codeLang, setCodeLang] = useCodeLang()
   const { profile } = useAuth()
   const meta = PROBLEM_MAP.get(problemId)
 
@@ -214,6 +219,32 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           <span className="text-gray-300 mx-1">·</span>
           <span className="text-[11px] font-semibold text-gray-700 truncate">{meta.sub}</span>
         </div>
+        {/* 언어 토글: 한국어 ↔ English (글로벌 컨텍스트, persistent) */}
+        <div className="flex-shrink-0 hidden sm:flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">
+          <button
+            onClick={() => setLang("ko")}
+            className={`px-1.5 py-0.5 transition-colors ${lang === "ko" ? "bg-purple-500 text-white" : "bg-white text-gray-500 hover:bg-purple-50"}`}
+            title="한국어"
+          >한</button>
+          <button
+            onClick={() => setLang("en")}
+            className={`px-1.5 py-0.5 transition-colors border-l border-gray-200 ${lang === "en" ? "bg-purple-500 text-white" : "bg-white text-gray-500 hover:bg-purple-50"}`}
+            title="English"
+          >EN</button>
+        </div>
+        {/* 코드 언어 토글: Python ↔ C++ (localStorage persistent across quests) */}
+        <div className="flex-shrink-0 flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">
+          <button
+            onClick={() => setCodeLang("py")}
+            className={`px-1.5 py-0.5 transition-colors ${codeLang === "py" ? "bg-emerald-500 text-white" : "bg-white text-gray-500 hover:bg-emerald-50"}`}
+            title="Python"
+          >🐍 Py</button>
+          <button
+            onClick={() => setCodeLang("cpp")}
+            className={`px-1.5 py-0.5 transition-colors border-l border-gray-200 ${codeLang === "cpp" ? "bg-emerald-500 text-white" : "bg-white text-gray-500 hover:bg-emerald-50"}`}
+            title="C++"
+          >💻 C++</button>
+        </div>
         {/* 원래 문제 — 반반 스크린 토글 (md 이상) + 새 탭 열기 */}
         <button
           onClick={() => {
@@ -322,6 +353,10 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           className={splitView ? "min-w-0 overflow-auto" : "flex-1 min-w-0"}
           style={splitView ? { flex: `0 0 calc(${splitRatio * 100}% - 4px)` } : undefined}
         >
+          {/* Phase 0 quest-health banner — additive, only renders for flagged quests */}
+          <QuestHealthBanner questId={problemId} isEn={lang === "en"} />
+          {/* Phase 5 release-stage banner — only renders for internal/beta */}
+          <ReleaseStageBanner questId={problemId} isEn={lang === "en"} />
           {LazyComp ? (
             <Suspense fallback={<ProblemLoadingSpinner />}>
               {/* lang 을 prop 으로 직접 넘김 — window._questLang race 방지 */}
@@ -333,6 +368,8 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
               <div className="text-base font-bold text-gray-700">{t("튜토리얼 준비 중입니다", "Tutorial coming soon")}</div>
             </div>
           )}
+          {/* Phase 7: completion summary + recommendations — only renders when solved */}
+          <QuestCompletionCard questId={problemId} solved={solved} isEn={lang === "en"} />
         </main>
 
         {/* Resizer handle — slim, modern. Subtle by default, shows grip on hover. */}

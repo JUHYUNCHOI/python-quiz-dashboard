@@ -3,6 +3,7 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { CheeseSim2, CheeseBruteRunner, CheeseProgressiveCode, downloadCheesePDF, getCheeseSections } from "./components";
 import { makeCheeseCh1, makeCheeseCh2, makeCheeseCh3, makeCheeseCh4, makeCheeseCh5 } from "./chapters";
+import { useCodeLang } from "@/components/quest/use-code-lang";
 
 export default function CheeseApp(props = {}) {
   const propLang = props.lang;
@@ -19,7 +20,7 @@ export default function CheeseApp(props = {}) {
   const E = lang === "en";
 
   // 코드 언어 (Python / C++)
-  const [codeLang, setCodeLang] = useState("py");
+  const [codeLang, setCodeLang] = useCodeLang();
 
   // Persist tab/si in localStorage so refresh keeps the student on the same step
   const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";

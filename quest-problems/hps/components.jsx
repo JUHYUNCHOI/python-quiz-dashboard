@@ -1,74 +1,115 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
+import { SimNav, useTraceStep, StepHeader, NarrativePanel } from "@/components/quest/TraceStepper";
 
 const A = "#059669";
 
+/* Shared shape registry — neutral visual markers for cards 1..N.
+   Used so quest content stays abstract (no Rock/Paper/Scissors). */
+const SHAPES = {
+  1: { glyph: "●", color: "#2563eb" },  // circle, blue
+  2: { glyph: "■", color: "#7c3aed" },  // square, purple
+  3: { glyph: "▲", color: "#ea580c" },  // triangle, orange
+};
+function CardChip({ n, size = 22 }) {
+  const s = SHAPES[n] ?? { glyph: "?", color: "#6b7280" };
+  return (
+    <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+      <span style={{ fontSize: size, color: s.color, lineHeight: 1 }}>{s.glyph}</span>
+      <span style={{ fontSize: 9, color: "#6b7280", fontWeight: 700 }}>{n}</span>
+    </div>
+  );
+}
+
+/* Beats matrix from Sample I/O `001/100/010`:
+   row i, position j = '1' means card (i+1) beats card (j+1). */
+const BEATS_MATRIX = ["001", "100", "010"];
+const cardBeats = (a, b) => {
+  if (a === b) return null;             // tie / self
+  return BEATS_MATRIX[a - 1][b - 1] === "1";
+};
+
 /* ═══════════════════════════════════════════════════════════════
-   HpsCaseSimulator — Bessie's (Rock, Paper) vs Elsie's (Paper,
-   Scissors). Sub-steps walk both Elsie picks and end with verdict.
+   HpsCaseSimulator — Walks two scenarios against the SAME Elsie
+   hand (cards 1, 3) from Sample I/O `1 3`:
+     • Scenario A: Bessie (card 2, card 3) — partial answer, FAILS
+     • Scenario B: Bessie (card 2, card 1) — covers both, WINS
+   Sub-steps: setup → A case 1 → A case 2 → A verdict
+              → B case 1 → B case 2 → B verdict → summary
    ═══════════════════════════════════════════════════════════════ */
 export function HpsCaseSimulator({ E }) {
-  const beats = (a, b) => {
-    if (a === b) return null;
-    if (a === "Rock"     && b === "Scissors") return true;
-    if (a === "Paper"    && b === "Rock")     return true;
-    if (a === "Scissors" && b === "Paper")    return true;
-    return false;
-  };
-  const bessie = ["Rock", "Paper"];
-  const elsie  = ["Paper", "Scissors"];
-  const cases = elsie.map((ePlay) => {
-    const opts = bessie.map(b => ({ b, win: beats(b, ePlay) === true, tie: beats(b, ePlay) === null }));
+  const elsie = [1, 3];   // Same as Sample I/O `1 3`
+  const scenarios = [
+    { label: t(E, "Scenario A — Bessie (card 2, card 3)", "시나리오 A — 베시 (카드 2, 카드 3)"), bessie: [2, 3], expectWin: false },
+    { label: t(E, "Scenario B — Bessie (card 2, card 1)", "시나리오 B — 베시 (카드 2, 카드 1)"), bessie: [2, 1], expectWin: true },
+  ];
+  const buildCases = (bessie) => elsie.map((ePlay) => {
+    const opts = bessie.map(b => ({ b, win: cardBeats(b, ePlay) === true, tie: cardBeats(b, ePlay) === null }));
     return { ePlay, opts, anyWin: opts.some(o => o.win) };
   });
-  const allWin = cases.every(c => c.anyWin);
 
   const trace = [
     { kind: "setup" },
-    { kind: "case", caseIdx: 0 },
-    { kind: "case", caseIdx: 1 },
-    { kind: "verdict" },
+    { kind: "scenario", sIdx: 0 },
+    { kind: "case", sIdx: 0, caseIdx: 0 },
+    { kind: "case", sIdx: 0, caseIdx: 1 },
+    { kind: "verdict", sIdx: 0 },
+    { kind: "scenario", sIdx: 1 },
+    { kind: "case", sIdx: 1, caseIdx: 0 },
+    { kind: "case", sIdx: 1, caseIdx: 1 },
+    { kind: "verdict", sIdx: 1 },
+    { kind: "summary" },
   ];
-  const [idx, setIdx] = useState(0);
-  const safe = Math.max(0, Math.min(idx, trace.length - 1));
+  const ts = useTraceStep(trace);
+  const safe = ts.safe;
   const s = trace[safe];
+  const curScenario = s.sIdx != null ? scenarios[s.sIdx] : null;
+  const curBessie = curScenario?.bessie;
+  const curCases = curBessie ? buildCases(curBessie) : null;
+  const curAllWin = curCases?.every(c => c.anyWin);
 
   const handCard = (label, cards, color) => (
     <div style={{ background: "#fff", border: `2px solid ${color}`, borderRadius: 10, padding: "8px 12px", textAlign: "center" }}>
       <div style={{ fontSize: 11, fontWeight: 800, color, marginBottom: 6 }}>{label}</div>
-      <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+      <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
         {cards.map((c, i) => (
           <div key={i} style={{
-            padding: "4px 10px", borderRadius: 6, border: `1.5px solid ${color}`, background: "#f8fafc",
-            fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color,
-          }}>{c}</div>
+            padding: "4px 8px", borderRadius: 6, border: `1.5px solid ${color}`, background: "#f8fafc",
+          }}>
+            {typeof c === "number" ? <CardChip n={c} size={22} /> : <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color }}>{c}</span>}
+          </div>
         ))}
       </div>
     </div>
   );
 
+  const renderCard = (n) => (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 4, verticalAlign: "middle" }}>
+      <span style={{ fontSize: 18, color: SHAPES[n]?.color, lineHeight: 1 }}>{SHAPES[n]?.glyph}</span>
+      <span style={{ fontWeight: 800 }}>{t(E, `card ${n}`, `카드 ${n}`)}</span>
+    </span>
+  );
+
   return (
     <div style={{ padding: 16 }}>
-      <div style={{ fontSize: 13, fontWeight: 800, color: A, textAlign: "center", marginBottom: 4 }}>
-        ✏️ {t(E, "Does Bessie's (Rock, Paper) beat Elsie's (Paper, Scissors)?",
-                  "베시 (Rock, Paper) 가 엘시 (Paper, Scissors) 를 이길까?")}
-      </div>
-      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 14 }}>
-        {t(E, `Press ▶ to walk through both Elsie's possible plays. (${safe + 1} / ${trace.length})`,
-              `▶ 눌러서 엘시가 낼 수 있는 두 카드를 모두 따라가요. (${safe + 1} / ${trace.length})`)}
-      </div>
+      <StepHeader
+        accent={A}
+        idx={safe}
+        total={trace.length}
+        isEn={E}
+        title={t(E, "Two scenarios vs same Elsie hand (card 1, card 3) — see one fail, one win.",
+                    "엘시 hand (카드 1, 카드 3) 에 두 시나리오 — 하나는 실패, 하나는 성공.")}
+      />
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 14 }}>
-        {handCard(t(E, "Bessie's hand", "베시의 카드"), bessie, "#7c3aed")}
+        {handCard(curBessie ? (s.sIdx === 0 ? t(E, "Bessie A", "베시 A") : t(E, "Bessie B", "베시 B")) : t(E, "Bessie's hand", "베시의 카드"),
+                  curBessie ?? ["?", "?"], "#7c3aed")}
         {handCard(t(E, "Elsie's hand",  "엘시의 카드"),  elsie,  "#dc2626")}
       </div>
 
-      <div style={{
-        background: "#faf5ff", border: "2px solid #c4b5fd", borderRadius: 10,
-        padding: "12px 14px", marginBottom: 12, minHeight: 120, fontSize: 13, color: C.text, lineHeight: 1.7,
-      }}>
+      <NarrativePanel minHeight={120}>
         {s.kind === "setup" && (
           <>
             <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
@@ -79,22 +120,38 @@ export function HpsCaseSimulator({ E }) {
                     "두 소가 카드 2 장씩 펼쳐 놓아서 4 장 모두 보여요. 엘시가 자기 2 장 중 1 장을 골라 내고, 베시는 그걸 보고 마지막에 골라요.")}
             </div>
             <div style={{ marginTop: 6, fontSize: 11, color: C.dim }}>
-              {t(E, "Bessie's hand wins for sure ⇔ for EACH of Elsie's two cards, Bessie has at least one that beats it.",
-                    "베시의 카드 2 장이 무조건 이김 ⇔ 엘시의 두 카드 각각에 대해, 베시 카드 중 하나가 이김.")}
+              {t(E, "Bessie's hand wins for sure ⇔ for EACH of Elsie's two cards, Bessie has at least one that beats it. We'll try two different Bessie hands against Elsie's (card 1, card 3).",
+                    "베시의 카드 2 장이 무조건 이김 ⇔ 엘시의 두 카드 각각에 대해, 베시 카드 중 하나가 이김. 엘시 (카드 1, 카드 3) 에 대해 두 가지 베시 hand 를 시도해요.")}
+            </div>
+          </>
+        )}
+        {s.kind === "scenario" && (
+          <>
+            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4, fontSize: 14 }}>
+              🎬 {curScenario.label}
+            </div>
+            <div>
+              {s.sIdx === 0
+                ? t(E, "Bessie holds card 2 + card 3. Card 2 beats card 1 ✓, but neither card 2 nor card 3 beats card 3 (chart row 3 = '010'). Let's verify both Elsie picks.",
+                      "베시 hand: 카드 2 + 카드 3. 카드 2 는 카드 1 이김 ✓, 그런데 카드 2 도 카드 3 도 카드 3 못 이김 (3 행 = '010'). 두 경우 다 확인.")
+                : t(E, "Bessie holds card 2 + card 1. Card 2 beats card 1 ✓, card 1 beats card 3 ✓. Looks promising — let's verify both cases.",
+                      "베시 hand: 카드 2 + 카드 1. 카드 2 는 카드 1 이김 ✓, 카드 1 은 카드 3 이김 ✓. 가능성 있어 보임 — 두 경우 다 확인.")}
             </div>
           </>
         )}
         {s.kind === "case" && (() => {
-          const c = cases[s.caseIdx];
+          const c = curCases[s.caseIdx];
           return (
             <>
-              <div style={{ fontWeight: 800, color: c.anyWin ? "#15803d" : "#7f1d1d", marginBottom: 6 }}>
-                {t(E, `Case ${s.caseIdx + 1}: Elsie plays `, `케이스 ${s.caseIdx + 1}: 엘시가 `)}<b style={{ color: "#dc2626" }}>{c.ePlay}</b>
+              <div style={{ fontWeight: 800, color: c.anyWin ? "#15803d" : "#7f1d1d", marginBottom: 6, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                {t(E, `Case ${s.caseIdx + 1}: Elsie plays `, `케이스 ${s.caseIdx + 1}: 엘시가 `)}
+                {renderCard(c.ePlay)}
                 {t(E, "", " 냄")}
               </div>
               {c.opts.map((o, j) => (
-                <div key={j} style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
-                  {t(E, "Bessie picks ", "베시가 ")}<b>{o.b}</b>?{" "}
+                <div key={j} style={{ fontSize: 12.5, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginTop: 2 }}>
+                  {t(E, "Bessie picks ", "베시가 ")}
+                  {renderCard(o.b)}?{" "}
                   {o.win ? <span style={{ color: "#16a34a", fontWeight: 800 }}>✓ {t(E, "wins", "이김")}</span>
                          : o.tie ? <span style={{ color: "#9ca3af", fontWeight: 800 }}>= {t(E, "tie", "비김")}</span>
                                  : <span style={{ color: "#dc2626", fontWeight: 800 }}>✗ {t(E, "loses", "짐")}</span>}
@@ -110,118 +167,127 @@ export function HpsCaseSimulator({ E }) {
         })()}
         {s.kind === "verdict" && (
           <>
-            <div style={{ fontWeight: 800, color: allWin ? "#15803d" : "#7f1d1d", marginBottom: 6, fontSize: 14 }}>
-              🏁 {t(E, "Verdict", "결론")}
+            <div style={{ fontWeight: 800, color: curAllWin ? "#15803d" : "#7f1d1d", marginBottom: 6, fontSize: 14 }}>
+              🏁 {curScenario.label} — {curAllWin
+                ? t(E, "Verdict: WIN ✓", "결론: 승리 ✓")
+                : t(E, "Verdict: NOT GUARANTEED ✗", "결론: 보장 못함 ✗")}
             </div>
             <div>
-              {allWin
-                ? t(E, "Bessie's hand wins for sure ✓ — every Elsie pick had a counter.",
-                      "베시의 카드는 무조건 이김 ✓ — 엘시의 모든 패에 답이 있었어요.")
-                : t(E, "Bessie's hand does NOT guarantee a win ✗ — at least one Elsie pick (Paper) has no counter in Bessie's hand.",
-                      "베시의 카드는 무조건 이기지 못함 ✗ — 엘시 패 중 적어도 하나 (Paper) 에 베시가 답이 없어요.")}
+              {curAllWin
+                ? t(E, "Bessie's hand wins for sure ✓ — every Elsie pick had a counter. This hand is COUNTED in the answer.",
+                      "베시의 카드는 무조건 이김 ✓ — 엘시의 모든 패에 답이 있었음. 이 hand 는 정답에 카운트됨.")
+                : t(E, "Bessie's hand does NOT guarantee a win ✗ — at least one Elsie pick has no counter. This hand is NOT counted.",
+                      "베시의 카드는 무조건 이기지 못함 ✗ — 엘시 패 중 적어도 하나에 답이 없음. 이 hand 는 카운트 안 됨.")}
             </div>
           </>
         )}
-      </div>
+        {s.kind === "summary" && (
+          <>
+            <div style={{ fontWeight: 800, color: A, marginBottom: 6, fontSize: 14 }}>
+              📊 {t(E, "Summary — what gets counted?", "정리 — 무엇이 카운트됨?")}
+            </div>
+            <div style={{ fontSize: 12.5, lineHeight: 1.7 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>• {t(E, "Scenario A (", "시나리오 A (")}{renderCard(2)}, {renderCard(3)}) → <b style={{ color: "#dc2626" }}>{t(E, "FAILS, not counted", "실패, 카운트 안 됨")}</b></div>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>• {t(E, "Scenario B (", "시나리오 B (")}{renderCard(2)}, {renderCard(1)}) → <b style={{ color: "#16a34a" }}>{t(E, "WINS, counted", "성공, 카운트됨")}</b></div>
+              <div style={{ marginTop: 6 }}>{t(E, "Counting all 9 ordered pairs against Elsie (card 1, card 3), only (card 2, card 1) and (card 1, card 2) win. That's why Sample I/O answer = 2.",
+                    "엘시 (카드 1, 카드 3) 에 대해 9 가지 순서쌍 다 세보면, (카드 2, 카드 1) 과 (카드 1, 카드 2) 두 가지만 이김. 그래서 Sample I/O 답 = 2.")}</div>
+            </div>
+          </>
+        )}
+      </NarrativePanel>
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
-        <button onClick={() => setIdx(0)} disabled={safe === 0} style={{
-          padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 800,
-          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : A}`,
-          color: safe === 0 ? "#b0b5c3" : A, cursor: safe === 0 ? "default" : "pointer",
-        }}>⏮ {t(E, "Restart", "처음부터")}</button>
-        <button onClick={() => setIdx(Math.max(0, safe - 1))} disabled={safe === 0} style={{
-          padding: "6px 14px", borderRadius: 8, fontSize: 13, fontWeight: 800,
-          background: "#fff", border: `2px solid ${safe === 0 ? "#e5e7eb" : A}`,
-          color: safe === 0 ? "#b0b5c3" : A, cursor: safe === 0 ? "default" : "pointer",
-        }}>◀ {t(E, "Prev", "이전")}</button>
-        <button onClick={() => setIdx(Math.min(trace.length - 1, safe + 1))} disabled={safe === trace.length - 1} style={{
-          padding: "6px 18px", borderRadius: 8, fontSize: 13, fontWeight: 800,
-          background: safe === trace.length - 1 ? "#e5e7eb" : A, border: `2px solid ${safe === trace.length - 1 ? "#e5e7eb" : A}`,
-          color: safe === trace.length - 1 ? "#b0b5c3" : "#fff",
-          cursor: safe === trace.length - 1 ? "default" : "pointer",
-        }}>{t(E, "Next", "다음")} ▶</button>
-      </div>
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   HpsSim — show beats matrix + try Bessie pair vs Elsie pair
+   HpsSim — uses Sample I/O beats matrix `001/100/010` so the free
+   sim is consistent with the chart shown in Ch1-3.
+   Buttons use the abstract shape glyphs.
    ═══════════════════════════════════════════════════════════════ */
-const _HPS_BEATS = ["011", "101", "110"];   // 3 symbols, classic rock-paper-scissors-ish
-const _HPS_NAMES = ["Rock", "Paper", "Scissors"];
+const _HPS_BEATS = BEATS_MATRIX;   // ["001", "100", "010"] — same as Sample I/O
 
 export function HpsSim({ E }) {
+  // 0-indexed: 0 = card 1, 1 = card 2, 2 = card 3
   const [a, setA] = useState(0);
   const [b, setB] = useState(1);
-  const [s1, setS1] = useState(2);
-  const [s2, setS2] = useState(1);
-  const N = 3;
+  const [s1, setS1] = useState(0);
+  const [s2, setS2] = useState(2);
   const beats = _HPS_BEATS;
   const pairBeats = (a, b, x) => beats[a][x] === "1" || beats[b][x] === "1";
   const winS1 = pairBeats(a, b, s1);
   const winS2 = pairBeats(a, b, s2);
   const winsAll = winS1 && winS2;
 
+  // Compact shape chip — keeps shape color visible even when selected
+  const ShapeChip = ({ idx, isActive, accent, onClick }) => {
+    const sh = SHAPES[idx + 1];
+    return (
+      <button onClick={onClick} style={{
+        flex: 1, height: 38, borderRadius: 8,
+        border: `2px solid ${isActive ? accent : "#e5e7eb"}`,
+        background: isActive ? `${accent}15` : "#fff",
+        cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+        boxShadow: isActive ? `inset 0 0 0 1px ${accent}` : "none",
+      }}>
+        <span style={{ fontSize: 18, color: sh.color, lineHeight: 1 }}>{sh.glyph}</span>
+        <span style={{ fontSize: 12, fontWeight: 800, color: isActive ? accent : C.dim }}>{idx + 1}</span>
+      </button>
+    );
+  };
+
+  // Compact slot picker (one labeled row of 3 chips)
+  const SlotPicker = ({ label, value, accent, onChange }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+      <div style={{ width: 32, fontSize: 12, fontWeight: 800, color: accent, fontFamily: "'JetBrains Mono',monospace" }}>{label}</div>
+      <div style={{ display: "flex", gap: 4, flex: 1 }}>
+        {[0,1,2].map(i => <ShapeChip key={i} idx={i} isActive={i === value} accent={accent} onClick={() => onChange(i)} />)}
+      </div>
+    </div>
+  );
+
+  // Big card display in result panel
+  const Pill = ({ idx }) => (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", border: `1.5px solid ${SHAPES[idx + 1].color}40`, borderRadius: 6, background: "#fff" }}>
+      <span style={{ fontSize: 16, color: SHAPES[idx + 1].color, lineHeight: 1 }}>{SHAPES[idx + 1].glyph}</span>
+      <span style={{ fontSize: 11, fontWeight: 800, color: C.text }}>{idx + 1}</span>
+    </span>
+  );
+
   return (
     <div style={{ padding: 14 }}>
-      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 12, fontSize: 11, color: C.dim, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
-        beats[i][j] = '1' if i beats j ({_HPS_NAMES[0]}={beats[0]}, {_HPS_NAMES[1]}={beats[1]}, {_HPS_NAMES[2]}={beats[2]})
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "8px 12px", marginBottom: 12, fontSize: 11, color: C.dim, textAlign: "center" }}>
+        {t(E, "Beats chart (same as Sample I/O):", "승패 차트 (Sample I/O 와 같음):")}{" "}
+        <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>001 / 100 / 010</code>
       </div>
 
       <div style={{ marginBottom: 10 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>Bessie's pair (a, b):</div>
-        <div style={{ display: "flex", gap: 6 }}>
-          {[0,1,2].map(i => (
-            <button key={`a${i}`} onClick={() => setA(i)} style={{
-              flex: 1, padding: "6px 0", borderRadius: 8, border: `2px solid ${i === a ? A : C.border}`,
-              background: i === a ? A : "transparent", color: i === a ? "#fff" : C.dim,
-              fontSize: 11, fontWeight: 800, cursor: "pointer",
-            }}>a={_HPS_NAMES[i][0]}</button>
-          ))}
-        </div>
-        <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
-          {[0,1,2].map(i => (
-            <button key={`b${i}`} onClick={() => setB(i)} style={{
-              flex: 1, padding: "6px 0", borderRadius: 8, border: `2px solid ${i === b ? A : C.border}`,
-              background: i === b ? A : "transparent", color: i === b ? "#fff" : C.dim,
-              fontSize: 11, fontWeight: 800, cursor: "pointer",
-            }}>b={_HPS_NAMES[i][0]}</button>
-          ))}
-        </div>
+        <div style={{ fontSize: 11, fontWeight: 800, color: A, marginBottom: 6 }}>{t(E, "Bessie's pair (a, b)", "베시 쌍 (a, b)")}</div>
+        <SlotPicker label="a" value={a} accent={A} onChange={setA} />
+        <SlotPicker label="b" value={b} accent={A} onChange={setB} />
       </div>
       <div>
-        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>Elsie's pair (s1, s2):</div>
-        <div style={{ display: "flex", gap: 6 }}>
-          {[0,1,2].map(i => (
-            <button key={`s1${i}`} onClick={() => setS1(i)} style={{
-              flex: 1, padding: "6px 0", borderRadius: 8, border: `2px solid ${i === s1 ? "#dc2626" : C.border}`,
-              background: i === s1 ? "#dc2626" : "transparent", color: i === s1 ? "#fff" : C.dim,
-              fontSize: 11, fontWeight: 800, cursor: "pointer",
-            }}>s1={_HPS_NAMES[i][0]}</button>
-          ))}
-        </div>
-        <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
-          {[0,1,2].map(i => (
-            <button key={`s2${i}`} onClick={() => setS2(i)} style={{
-              flex: 1, padding: "6px 0", borderRadius: 8, border: `2px solid ${i === s2 ? "#dc2626" : C.border}`,
-              background: i === s2 ? "#dc2626" : "transparent", color: i === s2 ? "#fff" : C.dim,
-              fontSize: 11, fontWeight: 800, cursor: "pointer",
-            }}>s2={_HPS_NAMES[i][0]}</button>
-          ))}
-        </div>
+        <div style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>{t(E, "Elsie's pair (s1, s2)", "엘시 쌍 (s1, s2)")}</div>
+        <SlotPicker label="s1" value={s1} accent="#dc2626" onChange={setS1} />
+        <SlotPicker label="s2" value={s2} accent="#dc2626" onChange={setS2} />
       </div>
 
       <div style={{
         marginTop: 14, padding: "10px 12px", borderRadius: 10,
         background: winsAll ? "#dcfce7" : "#fef2f2",
         border: `2px solid ${winsAll ? "#16a34a" : "#dc2626"}`,
-        fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.7,
+        fontSize: 12.5, color: C.text, lineHeight: 1.8,
       }}>
-        {t(E, `Can Bessie's (a, b) beat Elsie's s1 (${_HPS_NAMES[s1]})?`, `베시 (a, b)가 엘시 s1 (${_HPS_NAMES[s1]})을 이길 수 있나?`)} <b style={{ color: winS1 ? "#16a34a" : "#dc2626" }}>{winS1 ? "✓" : "✗"}</b><br/>
-        {t(E, `Can Bessie's (a, b) beat Elsie's s2 (${_HPS_NAMES[s2]})?`, `베시 (a, b)가 엘시 s2 (${_HPS_NAMES[s2]})을 이길 수 있나?`)} <b style={{ color: winS2 ? "#16a34a" : "#dc2626" }}>{winS2 ? "✓" : "✗"}</b><br/>
-        <b style={{ color: winsAll ? "#16a34a" : "#dc2626" }}>{winsAll ? t(E, "✅ This pair WINS!", "✅ 이 쌍은 승리!") : t(E, "❌ This pair LOSES", "❌ 이 쌍은 패배")}</b>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+          {t(E, "vs s1 ", "vs s1 ")}<Pill idx={s1} />: <b style={{ color: winS1 ? "#16a34a" : "#dc2626", fontSize: 16 }}>{winS1 ? "✓" : "✗"}</b>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+          {t(E, "vs s2 ", "vs s2 ")}<Pill idx={s2} />: <b style={{ color: winS2 ? "#16a34a" : "#dc2626", fontSize: 16 }}>{winS2 ? "✓" : "✗"}</b>
+        </div>
+        <div style={{ marginTop: 4, fontWeight: 900, color: winsAll ? "#16a34a" : "#dc2626", fontSize: 14 }}>
+          {winsAll ? t(E, "✅ This pair WINS!", "✅ 이 쌍은 승리!") : t(E, "❌ This pair LOSES", "❌ 이 쌍은 패배")}
+        </div>
       </div>
     </div>
   );
@@ -237,73 +303,75 @@ export function HpsRunner({ E }) {
 }
 
 /* Section 1: Input + chart */
-const HP_INPUT_PY = [
+const HP_INPUT_PY = (E) => [
   "N, M = map(int, input().split())",
-  "# beats[i][j] = '1' if symbol i beats symbol j, else '0'",
+  t(E, "# beats[i][j] = '1' if symbol i beats symbol j, else '0'",
+        "# beats[i][j] = '1' 이면 기호 i 가 j 를 이김, 아니면 '0'"),
   "beats = [input().strip() for _ in range(N)]",
 ];
-const HP_INPUT_CPP = [
-  "#include <bits/stdc++.h>",
+const HP_INPUT_CPP = (E) => [
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <string>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int N, M;",
   "    cin >> N >> M;",
-  "    vector<string> beats(N);",
-  "    for (int i = 0; i < N; i++) cin >> beats[i];",
+  t(E, "    // beats[i][j] = '1' if card i beats card j",
+        "    // beats[i][j] = '1' 이면 카드 i 가 카드 j 이김"),
+  "    vector<string> beats;",
+  "    for (int i = 0; i < N; i++) {",
+  "        string row;",
+  "        cin >> row;",
+  "        beats.push_back(row);",
+  "    }",
 ];
 
-/* Section 2: helper — does pair (a,b) beat opponent x? */
-const HP_HELPER_PY = [
-  "def pair_beats(a, b, x):",
-  "    # Bessie can pick whichever of a or b beats x",
-  "    return beats[a][x] == '1' or beats[b][x] == '1'",
-];
-const HP_HELPER_CPP = [
-  "    auto pair_beats = [&](int a, int b, int x) {",
-  "        return beats[a][x] == '1' || beats[b][x] == '1';",
-  "    };",
-];
-
-/* Section 3: per-query brute force */
-const HP_LOOP_PY = [
+/* Section 2: per-query brute force with INLINE win check (no helper function) */
+const HP_LOOP_PY = (E) => [
   "for _ in range(M):",
   "    s1, s2 = map(int, input().split())",
-  "    s1 -= 1; s2 -= 1   # convert to 0-based",
-  "",
+  t(E, "    s1 -= 1; s2 -= 1   # convert to 0-based",
+        "    s1 -= 1; s2 -= 1   # 0-based 로 변환"),
   "    count = 0",
   "    for a in range(N):",
   "        for b in range(N):",
-  "            if pair_beats(a, b, s1) and pair_beats(a, b, s2):",
+  t(E, "            # pair (a, b) wins for sure iff it covers s1 AND s2",
+        "            # 쌍 (a, b) 가 s1 AND s2 둘 다 cover 하면 무조건 이김"),
+  "            wins_s1 = beats[a][s1] == '1' or beats[b][s1] == '1'",
+  "            wins_s2 = beats[a][s2] == '1' or beats[b][s2] == '1'",
+  "            if wins_s1 and wins_s2:",
   "                count += 1",
   "    print(count)",
 ];
-const HP_LOOP_CPP = [
-  "    while (M--) {",
+const HP_LOOP_CPP = (E) => [
+  "    for (int q = 0; q < M; q++) {",
   "        int s1, s2;",
   "        cin >> s1 >> s2;",
-  "        s1--; s2--;",
-  "",
+  t(E, "        s1--; s2--;   // convert to 0-based",
+        "        s1--; s2--;   // 0-based 로 변환"),
   "        long long count = 0;",
-  "        for (int a = 0; a < N; a++)",
-  "            for (int b = 0; b < N; b++)",
-  "                if (pair_beats(a, b, s1) && pair_beats(a, b, s2)) count++;",
+  "",
+  "        for (int a = 0; a < N; a++) {",
+  "            for (int b = 0; b < N; b++) {",
+  t(E, "                // pair (a, b) wins for sure iff it covers s1 AND s2",
+        "                // 쌍 (a, b) 가 s1 AND s2 둘 다 cover 하면 무조건 이김"),
+  "                bool wins_s1 = beats[a][s1] == '1' || beats[b][s1] == '1';",
+  "                bool wins_s2 = beats[a][s2] == '1' || beats[b][s2] == '1';",
+  "                if (wins_s1 && wins_s2) count++;",
+  "            }",
+  "        }",
   "        cout << count << '\\n';",
   "    }",
   "    return 0;",
   "}",
 ];
 
-/* Section 4: Full code */
+/* Section 3: Full code (no helper, all inline) */
 const HP_FULL_PY = [
   "N, M = map(int, input().split())",
   "beats = [input().strip() for _ in range(N)]",
-  "",
-  "def pair_beats(a, b, x):",
-  "    return beats[a][x] == '1' or beats[b][x] == '1'",
   "",
   "for _ in range(M):",
   "    s1, s2 = map(int, input().split())",
@@ -311,35 +379,40 @@ const HP_FULL_PY = [
   "    count = 0",
   "    for a in range(N):",
   "        for b in range(N):",
-  "            if pair_beats(a, b, s1) and pair_beats(a, b, s2):",
+  "            wins_s1 = beats[a][s1] == '1' or beats[b][s1] == '1'",
+  "            wins_s2 = beats[a][s2] == '1' or beats[b][s2] == '1'",
+  "            if wins_s1 and wins_s2:",
   "                count += 1",
   "    print(count)",
 ];
 const HP_FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <string>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int N, M;",
   "    cin >> N >> M;",
-  "    vector<string> beats(N);",
-  "    for (int i = 0; i < N; i++) cin >> beats[i];",
+  "    vector<string> beats;",
+  "    for (int i = 0; i < N; i++) {",
+  "        string row;",
+  "        cin >> row;",
+  "        beats.push_back(row);",
+  "    }",
   "",
-  "    auto pair_beats = [&](int a, int b, int x) {",
-  "        return beats[a][x] == '1' || beats[b][x] == '1';",
-  "    };",
-  "",
-  "    while (M--) {",
+  "    for (int q = 0; q < M; q++) {",
   "        int s1, s2;",
   "        cin >> s1 >> s2;",
   "        s1--; s2--;",
   "        long long count = 0;",
-  "        for (int a = 0; a < N; a++)",
-  "            for (int b = 0; b < N; b++)",
-  "                if (pair_beats(a, b, s1) && pair_beats(a, b, s2)) count++;",
+  "        for (int a = 0; a < N; a++) {",
+  "            for (int b = 0; b < N; b++) {",
+  "                bool wins_s1 = beats[a][s1] == '1' || beats[b][s1] == '1';",
+  "                bool wins_s2 = beats[a][s2] == '1' || beats[b][s2] == '1';",
+  "                if (wins_s1 && wins_s2) count++;",
+  "            }",
+  "        }",
   "        cout << count << '\\n';",
   "    }",
   "    return 0;",
@@ -350,10 +423,10 @@ export function getHpsSections(E) {
     {
       label: t(E, "📦 1. Input + Beats Chart", "📦 1. 입력 + 승패 차트"),
       color: A,
-      py: HP_INPUT_PY, cpp: HP_INPUT_CPP,
+      py: HP_INPUT_PY(E), cpp: HP_INPUT_CPP(E),
       why: [
-        t(E, "Read N×N chart of '0'/'1'. beats[i][j] = '1' means symbol i beats symbol j.",
-            "N×N의 '0'/'1' 차트 읽기. beats[i][j] = '1'이면 기호 i가 j를 이김."),
+        t(E, "Read the N×N chart of '0'/'1'. beats[i][j] = '1' means card i beats card j.",
+            "N×N의 '0'/'1' 차트 읽기. beats[i][j] = '1'이면 카드 i 가 카드 j 이김."),
         t(E, "Storing it as strings is fine — direct character lookup is O(1).",
             "문자열로 저장 OK — 문자 직접 접근은 O(1)."),
       ],
@@ -362,38 +435,21 @@ export function getHpsSections(E) {
             "리스트 컴프리헨션으로 N줄을 문자열 리스트로."),
       ],
       cppOnly: [
-        t(E, "vector<string> stores rows; beats[i][j] gives the char directly.",
-            "vector<string>으로 행 저장; beats[i][j]가 문자 바로 접근."),
+        t(E, "Push back each row as we read — uses only vector + string from cpp-9 / cpp-11.",
+            "한 줄씩 읽어 push_back — cpp-9 (vector) + cpp-11 (string) 만 사용."),
       ],
     },
     {
-      label: t(E, "🛡️ 2. pair_beats Helper", "🛡️ 2. pair_beats 헬퍼"),
+      label: t(E, "🔁 2. Per-query brute force (inline check)", "🔁 2. 쿼리마다 완전탐색 (인라인 체크)"),
       color: "#0891b2",
-      py: HP_HELPER_PY, cpp: HP_HELPER_CPP,
-      why: [
-        t(E, "Bessie picks the better of (a, b) AFTER she sees Elsie's choice.",
-            "베시는 엘시의 선택을 본 후 (a, b) 중 더 좋은 것을 고름."),
-        t(E, "So she beats x if EITHER a or b beats x — a logical OR.",
-            "그래서 a 또는 b 중 하나라도 x를 이기면 x를 이김 — 논리 OR."),
-      ],
-      pyOnly: [
-        t(E, "A small named function makes the main loop very readable.",
-            "작은 함수로 분리하면 메인 루프가 매우 읽기 쉬움."),
-      ],
-      cppOnly: [
-        t(E, "A lambda capturing beats by reference avoids copying.",
-            "beats를 참조 캡처하는 람다로 복사 회피."),
-      ],
-    },
-    {
-      label: t(E, "🔁 3. Brute-Force Each Query", "🔁 3. 쿼리마다 완전탐색"),
-      color: "#16a34a",
-      py: HP_LOOP_PY, cpp: HP_LOOP_CPP,
+      py: HP_LOOP_PY(E), cpp: HP_LOOP_CPP(E),
       why: [
         t(E, "For each Elsie pair, try all N² Bessie pairs (a, b).",
             "엘시의 각 쌍마다 베시의 N² 쌍 (a, b)을 모두 시도."),
-        t(E, "(a, b) wins if pair_beats both s1 AND s2 — that means Bessie has a counter regardless.",
-            "pair_beats가 s1과 s2 모두 만족하면 (a, b) 승 — 무엇을 내든 베시가 이기는 답이 있음."),
+        t(E, "Pair (a, b) wins iff at least one of a, b beats s1 AND at least one beats s2.",
+            "쌍 (a, b) 가 이기려면 a, b 중 하나가 s1 이김 AND 하나가 s2 이김."),
+        t(E, "We compute these two booleans (wins_s1, wins_s2) inline — no helper function needed.",
+            "두 boolean (wins_s1, wins_s2) 을 인라인으로 계산 — 헬퍼 함수 불필요."),
         t(E, "Total work: O(M · N²) — fits comfortably for Bronze sizes.",
             "총 작업: O(M · N²) — Bronze 크기에는 충분."),
       ],
@@ -402,27 +458,27 @@ export function getHpsSections(E) {
             "range(N) 위 이중 for 루프가 가장 직관적."),
       ],
       cppOnly: [
-        t(E, "long long count guards against overflow when N gets large.",
-            "N이 커질 때 overflow 방지를 위해 long long count."),
+        t(E, "Uses only cpp-7 (loops), cpp-5/6 (operators/if), cpp-11 (string indexing). No lambdas, no helper functions.",
+            "cpp-7 (루프), cpp-5/6 (연산자/if), cpp-11 (문자열 인덱싱) 만 사용. 람다 없음, 헬퍼 함수 없음."),
       ],
     },
     {
-      label: t(E, "🎯 4. Full Code", "🎯 4. 전체 코드"),
+      label: t(E, "🎯 3. Full Code", "🎯 3. 전체 코드"),
       color: "#7c3aed",
       py: HP_FULL_PY, cpp: HP_FULL_CPP,
       why: [
-        t(E, "Read input → define helper → loop M queries → print counts. That's the whole program.",
-            "입력 읽기 → 헬퍼 정의 → M개 쿼리 루프 → 결과 출력. 그게 전부."),
+        t(E, "Read input → loop M queries (with inline win check) → print counts. That's the whole program.",
+            "입력 읽기 → M 쿼리 루프 (인라인 win 체크) → 결과 출력. 그게 전부."),
         t(E, "Brute force is fine here — no smarter trick needed at Bronze.",
             "Bronze에서는 완전탐색으로 충분 — 더 똑똑한 트릭 불필요."),
       ],
       pyOnly: [
-        t(E, "If TLE in Python, switching to PyPy or replacing the inner loop with bit-AND on bitmask rows is a path.",
-            "Python에서 TLE라면 PyPy 사용 또는 비트마스크 행 + AND로 내부 루프 대체 가능."),
+        t(E, "If TLE in Python, submit as PyPy.",
+            "Python TLE 면 PyPy 로 제출."),
       ],
       cppOnly: [
-        t(E, "Output with '\\n' (not endl) keeps the loop fast.",
-            "endl 대신 '\\n'로 출력해 루프 속도 유지."),
+        t(E, "Only Part 1-2 syntax used: includes, vector, string indexing, loops, if, basic IO.",
+            "Part 1-2 문법만 사용: includes, vector, 문자열 인덱싱, 루프, if, 기본 IO."),
       ],
     },
   ];
