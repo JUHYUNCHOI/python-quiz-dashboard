@@ -611,6 +611,156 @@ const CP_FULL_CPP = [
   "}",
 ];
 
+// Step 6 = "같은 정보를 한 번만 세두면?" — manual frequency dict (insight stage,
+// before committing to language-specific helpers like Counter / vector indexing).
+const CP_INSIGHT_PY = [
+  "# 매번 h.count(v) 대신 — 빈도를 한 번만 세두면?",
+  "freq = {}",
+  "for v in h:",
+  "    freq[v] = freq.get(v, 0) + 1   # h 한 번만 훑음 → O(N)",
+  "",
+  "rings = 0",
+  "for v in freq:",
+  "    if v < M and freq[v] >= 2:     # lookup 은 즉시 (O(1))",
+  "        rings += 1",
+];
+const CP_INSIGHT_CPP = [
+  "// 키가 1..N 이라 — 그냥 freq[키] 인덱스로 빈도 저장하면 어떨까?",
+  "vector<int> freq(N + 2, 0);",
+  "for (int i = 0; i < N; i++) {",
+  "    freq[h[i]]++;                  // h 한 번만 훑기 → O(N)",
+  "}",
+  "",
+  "int rings = 0;",
+  "for (int v = 1; v < M; v++) {",
+  "    if (freq[v] >= 2) rings++;     // lookup 은 즉시",
+  "}",
+];
+
+// Step 7 = 실전 코드 — Python Counter / C++ freq 배열 (cumulative final).
+const CP_FAST_PY = [
+  "from collections import Counter",
+  "",
+  "T = int(input())",
+  "for _ in range(T):",
+  "    N = int(input())",
+  "    h = list(map(int, input().split()))",
+  "    M = max(h)",
+  "",
+  "    cnt = Counter(h)            # 한 줄로 dict 빈도 — O(N)",
+  "    rings = 0",
+  "    for v in cnt:",
+  "        if v < M and cnt[v] >= 2:",
+  "            rings += 1",
+  "",
+  "    print(2 * rings + 1)",
+];
+const CP_FAST_CPP = [
+  "#include <iostream>",
+  "#include <vector>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);                  // cin 빠르게",
+  "",
+  "    int T;",
+  "    cin >> T;",
+  "    while (T--) {",
+  "        int N;",
+  "        cin >> N;",
+  "        vector<int> freq(N + 2, 0);    // 인덱스 = 키, 값 = 빈도",
+  "        int M = 0;",
+  "        for (int i = 0; i < N; i++) {",
+  "            int h;",
+  "            cin >> h;",
+  "            freq[h]++;                 // 입력 받으면서 빈도 누적",
+  "            if (h > M) M = h;          // peak 도 같이",
+  "        }",
+  "        int rings = 0;",
+  "        for (int v = 1; v < M; v++) {",
+  "            if (freq[v] >= 2) rings++;",
+  "        }",
+  "        cout << 2 * rings + 1 << '\\n';",
+  "    }",
+  "    return 0;",
+  "}",
+];
+
+// Aside that compares operation count for naive vs fast.
+const CpPerfAside = ({ E }) => (
+  <div style={{
+    background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10,
+    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#7f1d1d",
+  }}>
+    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#991b1b", marginBottom: 6, letterSpacing: 0.3 }}>
+      🐌 {t(E, "Operation count", "연산량")}
+    </div>
+    <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 8px" }}>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N = 10</code>
+      <div>{t(E, "tiny — 100 ops, instant", "작음 — 100 연산, 즉시")}</div>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N = 1,000</code>
+      <div>{t(E, "1 million ops — still fast", "백만 연산 — 아직 빠름")}</div>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N = 100,000</code>
+      <div>{t(E, "10 BILLION ops — TLE 🚫", "100 억 연산 — TLE 🚫")}</div>
+    </div>
+    <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fca5a5", fontSize: 11 }}>
+      {t(E,
+        "Why? `h.count(v)` walks the whole array. Doing that once per distinct v ⇒ up to N · N work per case.",
+        "왜? `h.count(v)` 가 매번 배열 전체를 훑어요. distinct v 마다 그렇게 하면 케이스당 최대 N · N 일.")}
+    </div>
+  </div>
+);
+
+// Aside for the insight step — celebrates the savings.
+const CpInsightAside = ({ E }) => (
+  <div style={{
+    background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10,
+    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#065f46",
+  }}>
+    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#065f46", marginBottom: 6 }}>
+      💡 {t(E, "Key idea", "핵심 아이디어")}
+    </div>
+    <div>
+      {t(E,
+        "Frequencies don't change while we count rings. So count them ONCE up front, then ring-check is just a lookup.",
+        "ring 세는 동안 빈도는 안 바뀜. 그러니 한 번만 세두면 그 다음부턴 그냥 꺼내 쓰면 끝.")}
+    </div>
+    <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #6ee7b7", fontSize: 11 }}>
+      <div>{t(E, "Total work per case:", "케이스당 총 일:")}</div>
+      <div style={{ marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>
+        N (build freq) + distinct (check) ≤ 2N → <b>O(N)</b>
+      </div>
+    </div>
+  </div>
+);
+
+// Aside for the final fast-code step.
+const CpFastAside = ({ E }) => (
+  <div style={{
+    background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10,
+    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#1e3a8a",
+  }}>
+    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#1e40af", marginBottom: 6 }}>
+      ✅ {t(E, "Two language-friendly tools", "언어별 도구")}
+    </div>
+    <div style={{ marginBottom: 6 }}>
+      <b>Python:</b> <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>Counter(h)</code>
+      {" "}{t(E, "→ ready-made dict of frequencies in one line.",
+                "→ 한 줄로 dict 빈도 완성.")}
+    </div>
+    <div>
+      <b>C++:</b> <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>vector&lt;int&gt; freq(N+2)</code>
+      {" "}{t(E, "→ heights are 1..N, so use the value as the index directly. Cache-friendly, instant lookup.",
+                "→ 키가 1..N 이라 값 자체를 인덱스로. 캐시 친화 + 즉시 lookup.")}
+    </div>
+    <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #93c5fd", fontSize: 11 }}>
+      {t(E, "Sum of N across all cases ≤ 10⁶ → both versions pass comfortably.",
+            "전체 N 합 ≤ 10⁶ → 두 버전 다 여유롭게 통과.")}
+    </div>
+  </div>
+);
+
 // Sample input for the InputAside panel — actual USACO sample.
 const CP_SAMPLE_LINES = ["2", "4", "1 1 2 3", "4", "3 3 2 1"];
 const CpAside = ({ E, highlight = [], note = null }) => {
@@ -689,8 +839,54 @@ export function getCowPhotosSections(E) {
             "각 ring 이 2 마리 기여 (좌+우 mirror). peak 가 1 마리. 그래서 길이 = 2·rings + 1."),
         t(E, "Always at least 1: even with 0 rings, we can take any single cow alone (just a peak, no rings).",
             "항상 최소 1: ring 이 0 개여도 한 마리만으로 길이 1 사진 가능 (peak 만)."),
+        t(E, "Done — small inputs work. But what happens at N = 100,000? Next steps explore that.",
+            "끝 — 작은 입력에선 잘 돼요. 그런데 N = 10만 이면? 다음 단계에서 봐요."),
       ],
       aside: <CpAside E={E} highlight={[1, 2]} note={t(E, "Example: case 1 → M=3, rings={1}, ans=3. Case 2 → M=3, rings={}, ans=1.", "예: 케이스 1 → M=3, rings={1}, 답=3. 케이스 2 → M=3, rings={}, 답=1.")} />,
+    },
+    /* ─────────── 5–7: WHY → BRAINSTORM → IMPLEMENT (procedural optimization) ─── */
+    {
+      label: t(E, "5️⃣ Why is this slow on big N?", "5️⃣ 왜 큰 N 에선 느릴까?"),
+      color: "#dc2626",
+      // 같은 코드를 다시 보여줌 — 어디가 병목인지 분석하는 단계
+      py: CP_FULL_PY, cpp: CP_FULL_CPP,
+      why: [
+        t(E, "Look at the inner loop: `h.count(v)` scans the WHOLE array h once — O(N) work.",
+            "안쪽 루프 보세요: `h.count(v)` 가 매번 h 전체를 한 번 훑어요 — O(N)."),
+        t(E, "And we do that for EACH distinct v (there can be up to N of them) → up to N × N work per case.",
+            "그리고 그걸 distinct v 마다 (최대 N 개) → 케이스당 최대 N × N 일."),
+        t(E, "USACO N can be 100,000. N² = 10 billion. Way too slow → TLE on big test cases.",
+            "USACO 의 N 은 10 만까지. N² = 100 억. 너무 느림 → 큰 테스트에서 TLE."),
+      ],
+      aside: <CpPerfAside E={E} />,
+    },
+    {
+      label: t(E, "6️⃣ Idea — count frequencies ONCE", "6️⃣ 아이디어 — 빈도를 한 번만 세두자"),
+      color: "#0891b2",
+      py: CP_INSIGHT_PY, cpp: CP_INSIGHT_CPP,
+      why: [
+        t(E, "Frequencies of values in h don't change while we work. So why count v's appearances every time?",
+            "h 안의 빈도는 우리가 작업하는 동안 안 바뀌는데, 왜 매번 셀까?"),
+        t(E, "Plan: walk h ONCE, build a freq table. Then ring-check is just `freq[v] >= 2` — instant lookup.",
+            "계획: h 를 한 번만 훑어 freq 표를 만든다. 그 다음 ring 검사는 그냥 `freq[v] >= 2` — 즉시."),
+        t(E, "Total: O(N) to build + O(distinct) to scan = O(N) per case. 100x–1000x faster on large inputs.",
+            "총 일: O(N) 으로 만들기 + O(distinct) 로 훑기 = O(N) per case. 큰 입력에서 100~1000 배 빨라짐."),
+      ],
+      aside: <CpInsightAside E={E} />,
+    },
+    {
+      label: t(E, "7️⃣ Final fast code — Counter (Py) / freq array (C++)", "7️⃣ 최종 빠른 코드 — Counter (Py) / freq 배열 (C++)"),
+      color: "#15803d",
+      py: CP_FAST_PY, cpp: CP_FAST_CPP,
+      why: [
+        t(E, "Python: `Counter(h)` builds the dict in one line. Same logic as before, just using `cnt[v]` instead of `h.count(v)`.",
+            "Python: `Counter(h)` 한 줄로 dict 완성. 로직은 똑같고 `h.count(v)` 자리만 `cnt[v]` 로."),
+        t(E, "C++: heights are guaranteed 1..N, so we use the value AS the index. No need to even store h — we accumulate freq while reading input.",
+            "C++: 키가 1..N 으로 보장 → 값 자체를 인덱스로. h 를 따로 저장할 필요 없이 입력 받으면서 freq 누적."),
+        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) makes cin fast — important when T can be 10⁵.",
+            "ios::sync_with_stdio(false) + cin.tie(nullptr) 로 cin 빠르게 — T 가 10⁵ 까지 갈 수 있어서 중요."),
+      ],
+      aside: <CpFastAside E={E} />,
     },
   ];
 }
