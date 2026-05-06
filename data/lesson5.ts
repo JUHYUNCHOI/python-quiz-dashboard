@@ -93,14 +93,12 @@ print(len("안녕"))  # 2
 print(len(""))     # 0 — 빈 문자열
 \`\`\`
 
-### 활용 — 비밀번호 길이 검사
+### 활용 — 비밀번호 길이 표시
 
 \`\`\`python
 pwd = "secret12"
-if len(pwd) < 8:
-    print("8 자 이상이어야 해요!")
-else:
-    print("OK")
+print("길이: " + str(len(pwd)) + "자")
+# 길이: 8자
 \`\`\`
 
 > 💡 \`len\` 은 문자열, 리스트, 튜플, 딕셔너리, 집합 다 가능. 여기저기 쓰여요.`
@@ -217,16 +215,14 @@ print("love" in text)     # True
 print("LOVE" in text)     # False — 대소문자 구분!
 \`\`\`
 
-### 활용 — 비속어 필터, 주제 검사
+### 활용 — 단어 포함 여부 표시
 
 \`\`\`python
 comment = "이거 좀 멍청한 댓글이네"
-
-bad_words = ["멍청", "바보"]
-for w in bad_words:
-    if w in comment:
-        print("부적절한 표현!")
-        break
+print("멍청 포함?: " + str("멍청" in comment))
+print("바보 포함?: " + str("바보" in comment))
+# 멍청 포함?: True
+# 바보 포함?: False
 \`\`\`
 
 ### not in — 반대
@@ -264,14 +260,14 @@ print("kiwi" < "apple")     # False
 
 → 사전에서 먼저 나오는 게 "작음". 대문자 > 소문자 (ASCII 코드 차이).
 
-### 활용 — 답 검사
+### 활용 — 답 검사 결과 표시
 
 \`\`\`python
 answer = "y"
-if answer == "y":
-    print("진행합니다")
-elif answer == "n":
-    print("취소합니다")
+print("y 인가?: " + str(answer == "y"))
+print("n 인가?: " + str(answer == "n"))
+# y 인가?: True
+# n 인가?: False
 \`\`\``
         },
         {
@@ -427,12 +423,12 @@ print(text)
         {
           id: "mission3",
           type: "mission",
-          title: "🏆 미션 2 — 비밀번호 길이 검사",
-          task: "비밀번호 길이가 8 자 이상이면 'OK', 짧으면 '부족 (현재 N자)' 출력.",
-          initialCode: "pwd = \"abc12\"\n\n# len() 사용\nif ___(pwd) >= 8:\n    print(\"OK\")\nelse:\n    print(\"부족 (현재 \" + ___(len(pwd)) + \"자)\")",
-          expectedOutput: "부족 (현재 5자)",
-          hint: "len(pwd) 와 str(len(pwd))",
-          hint2: "len(pwd) >= 8 / str(len(pwd))"
+          title: "🏆 미션 2 — 비밀번호 정보 카드",
+          task: "비밀번호와 그 길이를 두 줄로 출력하세요!\n출력 예:\n비밀번호: abc12\n길이: 5자",
+          initialCode: "pwd = \"abc12\"\n\n# 1 줄: 비밀번호 그대로 출력\nprint(\"비밀번호: \" + ___)\n\n# 2 줄: 길이를 글자 수로 변환해서 연결\n# len() 으로 길이를 구하고, str() 로 문자열로 바꿔야 + 가능\nprint(\"길이: \" + ___(len(pwd)) + \"자\")",
+          expectedOutput: "비밀번호: abc12\n길이: 5자",
+          hint: "1 줄 빈칸: pwd 변수. 2 줄 빈칸: len 결과를 문자열로 바꾸는 함수.",
+          hint2: "pwd / str"
         },
         {
           id: "mission4",
