@@ -176,8 +176,8 @@ abcabbacabac
     {
       type: "reveal",
       narr: t(E,
-        "Natural first idea: try EVERY (i, j, k). Walk through s = \"abba\" — only 4 triplets, easy by hand. Then check whether this scales.",
-        "자연스러운 첫 시도: 모든 (i, j, k) 시도. s = \"abba\" 따라가요 — 4 개뿐, 손으로 가능. 그리고 큰 입력에도 되는지 확인."),
+        "Natural first idea: try EVERY (i, j, k). Walk through s = \"abba\" — only 4 triplets, easy by hand.",
+        "자연스러운 첫 시도: 모든 (i, j, k) 시도. s = \"abba\" 따라가요 — 4 개뿐, 손으로 가능."),
       content: (<TripletEnumSimulator E={E} />),
     },
 
@@ -185,8 +185,8 @@ abcabbacabac
     {
       type: "reveal",
       narr: t(E,
-        "Better idea: fix j (the middle), then find the BEST i and BEST k separately.\n• To maximize (j − i): take the SMALLEST possible i with s[i] ≠ s[j]  →  i = leftmost different character.\n• To maximize (k − j): take the LARGEST possible k with s[k] = s[j]  →  k = rightmost matching character.\nPer query: O(N²) instead of O(N³).",
-        "좋은 아이디어: j (중간) 고정 → best i 와 best k 따로 찾기.\n• (j − i) 최대화 → i 가 가장 작아야 → s[i] ≠ s[j] 인 가장 왼쪽 i.\n• (k − j) 최대화 → k 가 가장 커야 → s[k] = s[j] 인 가장 오른쪽 k.\n쿼리당 O(N³) → O(N²)."),
+        "Better idea: fix j (the middle), then find the BEST i and BEST k separately.\n• To maximize (j − i): take the SMALLEST possible i with s[i] ≠ s[j]  →  i = leftmost different character.\n• To maximize (k − j): take the LARGEST possible k with s[k] = s[j]  →  k = rightmost matching character.",
+        "좋은 아이디어: j (중간) 고정 → best i 와 best k 따로 찾기.\n• (j − i) 최대화 → i 가 가장 작아야 → s[i] ≠ s[j] 인 가장 왼쪽 i.\n• (k − j) 최대화 → k 가 가장 커야 → s[k] = s[j] 인 가장 오른쪽 k."),
       content: (<MooTraceSimulator E={E} />),
     },
 
@@ -244,119 +244,16 @@ export function makeMooin3Ch2(E, lang = "py") {
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c5cfc" }}>O(Q · N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "Q queries × O(N²) brute scan per query", "Q 쿼리 × 쿼리당 O(N²) 완전탐색")}</div>
-          </div>
         </div>),
     },
 
-    // 2-2: TLE reality — official constraints, brute is partial-credit only.
-    {
-      type: "reveal",
-      narr: t(E,
-        "Brute force is the natural FIRST code to write — it directly mirrors the fix-j idea. But will it fit the official limits? Let's check.",
-        "brute 는 처음 짜기 자연스러운 코드 — fix-j 아이디어 그대로. 그런데 공식 제약에 들어맞을까? 따져봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 10 }}>
-            ⏱ {t(E, "Will brute O(Q · N²) fit?", "brute O(Q · N²) 가 들어올까?")}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-                ✅ {t(E, "Inputs 2–3: N, Q ≤ 50", "Inputs 2–3: N, Q ≤ 50")}
-              </div>
-              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace" }}>
-                <div>brute ≈ 50² · 50 = 1.25·10⁵</div>
-                <div style={{ color: "#15803d", fontWeight: 700 }}>{t(E, "→ instant. Partial credit ✓", "→ 즉시. 부분점수 ✓")}</div>
-              </div>
-            </div>
-            <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
-                ⚠️ {t(E, "Inputs 4–6: Q=1, l=1, r=N", "Inputs 4–6: Q=1, l=1, r=N")}
-              </div>
-              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace" }}>
-                <div>brute ≈ N² · 1 = 10¹⁰</div>
-                <div style={{ color: "#dc2626", fontWeight: 700 }}>{t(E, "→ TLE.", "→ TLE.")}</div>
-              </div>
-            </div>
-            <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
-                🚨 {t(E, "Inputs 7–11: full N, Q", "Inputs 7–11: 풀 N, Q")}
-              </div>
-              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace" }}>
-                <div>brute ≈ 10¹⁰ · 3·10⁴ = 3·10¹⁴</div>
-                <div style={{ color: "#dc2626", fontWeight: 700 }}>{t(E, "→ TLE.", "→ TLE.")}</div>
-              </div>
-            </div>
-          </div>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-              💡 {t(E,
-                "Plan: code the brute first — it's the right code to write WHILE you're learning the idea (and gets partial credit). The next slide shows how to make it fast for full credit.",
-                "계획: brute 먼저 짜기 — 아이디어 익히는 동안 짤 코드 (부분점수도 받음). 다음 슬라이드에서 풀점수 받는 빠른 버전.")}
-            </div>
-            <div style={{ marginTop: 6, fontSize: 11, color: "#9a3412" }}>
-              {t(E, "(Constraints: N ≤ 10⁵, Q ≤ 3·10⁴.)",
-                    "(제약: N ≤ 10⁵, Q ≤ 3·10⁴.)")}
-            </div>
-          </div>
-        </div>),
-    },
-
-    // 2-3: Full-credit optimization — precompute idea (required for inputs 4-11).
-    {
-      type: "reveal",
-      narr: t(E,
-        "For full credit, kill the inner scans. The two scans answer the same question many times — precompute once, then each query reads in O(1) per j.",
-        "풀점수 받으려면 안쪽 스캔 제거. 같은 질문을 여러 번 반복 → 한 번만 미리 계산 → 쿼리당 O(1) per j."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
-            ⚡ {t(E, "Full-credit path: precompute two helper arrays", "풀점수 경로: 보조 배열 2 개 미리 계산")}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: "10px 12px" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-                {t(E, "prev_diff_pos[c][j]", "prev_diff_pos[c][j]")}
-              </div>
-              <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6 }}>
-                {t(E, "For character c and index j: the LARGEST i ≤ j where s[i] ≠ c. Sweep left→right once.",
-                      "문자 c 와 인덱스 j 에 대해: s[i] ≠ c 인 가장 큰 i ≤ j. 왼→오 한 번 스윕.")}
-              </div>
-            </div>
-            <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
-                {t(E, "next_same_pos[c][j]", "next_same_pos[c][j]")}
-              </div>
-              <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6 }}>
-                {t(E, "For character c and index j: the SMALLEST k ≥ j where s[k] == c. Sweep right→left once.",
-                      "문자 c 와 인덱스 j 에 대해: s[k] == c 인 가장 작은 k ≥ j. 오→왼 한 번 스윕.")}
-              </div>
-            </div>
-          </div>
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7 }}>
-              <b>{t(E, "With both arrays: ", "두 배열로: ")}</b>
-              {t(E, "for each j in [l+1, r-1], read i and k in O(1) each → per query O(N), total O(N · 26 + Q · N).",
-                    "각 j ∈ [l+1, r-1] 에서 i, k 를 O(1) 로 읽음 → 쿼리당 O(N), 총 O(N · 26 + Q · N).")}
-            </div>
-            <div style={{ marginTop: 6, fontSize: 11, color: "#5b21b6", fontStyle: "italic" }}>
-              {t(E, "(We'll code the brute below — that's enough for partial credit. The fast version uses these arrays — try it after you've got the brute working.)",
-                    "(아래에서 brute 를 짤게요 — 부분점수에는 충분. 빠른 버전은 이 배열을 써요 — brute 동작 확인 후 도전.)")}
-            </div>
-          </div>
-        </div>),
-    },
-
-    // 2-4: Progressive code (brute)
+    // 2-2: Progressive code — brute first (1–4), then analyze/insight/fast (5–7).
+    //   Complexity discussion arrives ONLY after the brute is written.
     {
       type: "progressive",
       narr: t(E,
-        "Now build the brute force step by step. This is the natural code to write first — clean and matches the fix-j idea.",
-        "brute 를 단계별로. 처음 짜기 자연스러운 코드 — 깔끔하고 fix-j 아이디어 그대로."),
+        "Build the code step by step. Start with the brute that matches the fix-j idea. Once it's working, we'll see what happens at large N and how to fix it.",
+        "단계별로 코드 작성. fix-j 아이디어 그대로 brute 부터. 동작 확인한 다음 큰 N 에선 어떻게 되는지 보고 고쳐요."),
       sections: getMooin3Sections(E),
     },
   ];

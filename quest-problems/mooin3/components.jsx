@@ -519,6 +519,118 @@ const M3_FULL_CPP = [
   "}",
 ];
 
+/* ── Step 6 — insight (pseudo-code; commits to the lookup-table direction) ── */
+const M3_INSIGHT_PY = [
+  "# 안쪽 두 스캔이 같은 답을 반복하는 게 보임. 문자마다 미리 계산하자:",
+  "#",
+  "#   first_diff[c][i] = s[idx] != chr(c) 인 가장 작은 idx ≥ i",
+  "#                      (없으면 N)",
+  "#   last_same[c][i]  = s[idx] == chr(c) 인 가장 큰 idx ≤ i",
+  "#                      (없으면 -1)",
+  "#",
+  "# 그러면 j 에서:",
+  "#   c = s[j]",
+  "#   i = first_diff[c][l]   ← (j-i) 최대화",
+  "#   k = last_same[c][r]    ← (k-j) 최대화",
+  "# 두 lookup 모두 O(1).",
+];
+const M3_INSIGHT_CPP = [
+  "// 같은 인사이트 (C++ 도 동일):",
+  "//   first_diff[c][i] = smallest idx >= i with s[idx] != c (else N)",
+  "//   last_same[c][i]  = largest idx <= i with s[idx] == c  (else -1)",
+  "//",
+  "// 한 번만 만들고, 쿼리마다 j 별 두 lookup 이 O(1).",
+];
+
+/* ── Step 7 — final fast code (lookup tables) ── */
+const M3_FAST_PY = [
+  "import sys",
+  "",
+  "data = sys.stdin.buffer.read().split()",
+  "p = 0",
+  "N = int(data[p]); p += 1",
+  "Q = int(data[p]); p += 1",
+  "s = data[p].decode(); p += 1",
+  "",
+  "INF = N",
+  "first_diff = [[INF] * (N + 1) for _ in range(26)]",
+  "last_same  = [[-1]  * (N + 1) for _ in range(26)]",
+  "for c in range(26):",
+  "    ch = chr(c + 97)",
+  "    nxt = INF",
+  "    for i in range(N - 1, -1, -1):",
+  "        if s[i] != ch: nxt = i",
+  "        first_diff[c][i] = nxt",
+  "    last = -1",
+  "    for i in range(N):",
+  "        if s[i] == ch: last = i",
+  "        last_same[c][i] = last",
+  "",
+  "for _ in range(Q):",
+  "    l = int(data[p]) - 1; p += 1",
+  "    r = int(data[p]) - 1; p += 1",
+  "    best = -1",
+  "    for j in range(l + 1, r):",
+  "        c = ord(s[j]) - 97",
+  "        i = first_diff[c][l]",
+  "        if i >= j: continue",
+  "        k = last_same[c][r]",
+  "        if k <= j: continue",
+  "        v = (j - i) * (k - j)",
+  "        if v > best: best = v",
+  "    print(best)",
+];
+const M3_FAST_CPP = [
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <string>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
+  "    int N, Q;",
+  "    cin >> N >> Q;",
+  "    string s;",
+  "    cin >> s;",
+  "",
+  "    int INF = N;",
+  "    vector<vector<int>> first_diff(26, vector<int>(N + 1, INF));",
+  "    vector<vector<int>> last_same (26, vector<int>(N + 1, -1));",
+  "    for (int c = 0; c < 26; c++) {",
+  "        char ch = 'a' + c;",
+  "        int nxt = INF;",
+  "        for (int i = N - 1; i >= 0; i--) {",
+  "            if (s[i] != ch) nxt = i;",
+  "            first_diff[c][i] = nxt;",
+  "        }",
+  "        int last = -1;",
+  "        for (int i = 0; i < N; i++) {",
+  "            if (s[i] == ch) last = i;",
+  "            last_same[c][i] = last;",
+  "        }",
+  "    }",
+  "",
+  "    while (Q--) {",
+  "        int l, r;",
+  "        cin >> l >> r;",
+  "        l--; r--;",
+  "        long long best = -1;",
+  "        for (int j = l + 1; j < r; j++) {",
+  "            int c = s[j] - 'a';",
+  "            int i = first_diff[c][l];",
+  "            if (i >= j) continue;",
+  "            int k = last_same[c][r];",
+  "            if (k <= j) continue;",
+  "            long long v = (long long)(j - i) * (k - j);",
+  "            if (v > best) best = v;",
+  "        }",
+  "        cout << best << '\\n';",
+  "    }",
+  "    return 0;",
+  "}",
+];
+
 export function getMooin3Sections(E) {
   return [
     {
@@ -577,18 +689,130 @@ export function getMooin3Sections(E) {
       ],
     },
     {
-      label: t(E, "🎯 4. Full Code", "🎯 4. 전체 코드"),
+      label: t(E, "🎯 4. Full Code (brute)", "🎯 4. 전체 코드 (brute)"),
       color: "#7c3aed",
       py: M3_FULL_PY, cpp: M3_FULL_CPP,
       why: [
-        t(E, "Per query: O(N²). Total: O(Q · N²) ≈ 3·10¹⁴ at the upper limit — TLE on inputs 4–11.",
-            "쿼리당: O(N²). 총: O(Q · N²) ≈ 3·10¹⁴ (풀 제약) — inputs 4-11 에서 TLE."),
-        t(E, "Brute passes inputs 2–3 (N, Q ≤ 50) for partial credit. For full credit, precompute the prev_diff and next_same arrays (previous slide).",
-            "brute 는 inputs 2-3 (N, Q ≤ 50) 통과 → 부분점수. 풀점수는 prev_diff + next_same 미리 계산 (이전 슬라이드)."),
+        t(E, "All four parts wired together. Reads input, walks every j, tracks the best product.",
+            "네 조각이 합쳐진 모습. 입력 읽고, 모든 j 훑고, 최고 곱 추적."),
+        t(E, "Try it on the official sample first — small N, instant. Then think about big inputs.",
+            "공식 샘플 먼저 시도 — N 작아서 즉시. 그 다음 큰 입력 생각."),
       ],
+    },
+    /* ── 5–7: appears AFTER the brute is written. Now we ask: what about big N? ── */
+    {
+      label: t(E, "5️⃣ What if N is big?", "5️⃣ N 이 크면 어떻게 될까?"),
+      color: "#dc2626",
+      // 같은 brute 코드를 다시 보여주고 — 이번엔 분석.
+      py: M3_FULL_PY, cpp: M3_FULL_CPP,
+      why: [
+        t(E, "The inner two scans (left for i, right for k) walk the array — O(N) each, so per-j work is O(N).",
+            "안쪽 두 스캔 (왼쪽으로 i, 오른쪽으로 k) 가 배열을 훑어요 — 각 O(N), j 마다 O(N) 일."),
+        t(E, "Outer j loop runs O(N) times per query → O(N²) per query.",
+            "바깥 j 루프가 쿼리당 O(N) 번 → 쿼리당 O(N²)."),
+        t(E, "Q queries → total O(Q · N²). At N = 10⁵ and Q = 3·10⁴ that's ~3·10¹⁴ — way too slow.",
+            "Q 쿼리 → 총 O(Q · N²). N = 10⁵, Q = 3·10⁴ 면 ~3·10¹⁴ — 너무 느려요."),
+        t(E, "Inputs 2–3 (N, Q ≤ 50) still pass for partial credit. We'll fix the rest next.",
+            "Inputs 2–3 (N, Q ≤ 50) 는 통과 → 부분점수. 나머지는 다음 단계에서."),
+      ],
+      aside: <M3PerfAside E={E} />,
+    },
+    {
+      label: t(E, "6️⃣ Idea — the inner scans repeat the same answer", "6️⃣ 아이디어 — 안쪽 스캔이 같은 답 반복"),
+      color: "#0891b2",
+      py: M3_INSIGHT_PY, cpp: M3_INSIGHT_CPP,
+      why: [
+        t(E, "For a fixed character c, \"smallest i in [l, …] with s[i] ≠ c\" is the same answer for every j with s[j] = c. The inner left-scan is wasted work.",
+            "고정된 문자 c 에 대해 \"[l, …] 에서 s[i] ≠ c 인 가장 작은 i\" 는 s[j] = c 인 모든 j 에서 같은 답. 안쪽 왼쪽 스캔이 중복."),
+        t(E, "Same for the right scan: \"largest k in […, r] with s[k] = c\" only depends on c (and r), not on j.",
+            "오른쪽 스캔도 마찬가지: \"[…, r] 에서 s[k] = c 인 가장 큰 k\" 는 c 와 r 에만 의존, j 와는 무관."),
+        t(E, "Plan: precompute these answers ONCE per character. Then per j, both lookups are O(1) instead of O(N).",
+            "계획: 문자마다 한 번씩만 미리 계산. 그러면 j 마다 두 lookup 이 O(N) → O(1)."),
+      ],
+      aside: <M3InsightAside E={E} />,
+    },
+    {
+      label: t(E, "7️⃣ Final fast code — precomputed lookup tables", "7️⃣ 최종 빠른 코드 — 미리 계산한 lookup 표"),
+      color: "#15803d",
+      py: M3_FAST_PY, cpp: M3_FAST_CPP,
+      why: [
+        t(E, "first_diff[c][i] = smallest index ≥ i with s[idx] ≠ chr(c). Built per character with one right-to-left sweep.",
+            "first_diff[c][i] = s[idx] ≠ chr(c) 인 가장 작은 idx ≥ i. 문자마다 오→왼 스윕 한 번."),
+        t(E, "last_same[c][i] = largest index ≤ i with s[idx] == chr(c). Built with one left-to-right sweep.",
+            "last_same[c][i] = s[idx] == chr(c) 인 가장 큰 idx ≤ i. 왼→오 스윕 한 번."),
+        t(E, "Per query: walk j ∈ (l, r), pull i and k in O(1) each, update best. Per query O(N), total O(26·N + Q·N).",
+            "쿼리당: j ∈ (l, r) 훑고, i 와 k 를 O(1) lookup, best 갱신. 쿼리당 O(N), 총 O(26·N + Q·N)."),
+        t(E, "C++ comfortably fits the limit. Python is borderline at full N — submit with PyPy if available.",
+            "C++ 는 풀 제약에서 여유. Python 은 빠듯 — 가능하면 PyPy 로 제출."),
+      ],
+      aside: <M3FastAside E={E} />,
     },
   ];
 }
+
+/* ── Asides for steps 5/6/7 ── */
+const M3PerfAside = ({ E }) => (
+  <div style={{
+    background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10,
+    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#7f1d1d",
+  }}>
+    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#991b1b", marginBottom: 6 }}>
+      🐌 {t(E, "Operation count (brute O(Q · N²))", "연산량 (brute O(Q · N²))")}
+    </div>
+    <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 8px" }}>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N, Q ≤ 50</code>
+      <div>{t(E, "1.25·10⁵ — instant ✓", "1.25·10⁵ — 즉시 ✓")}</div>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>Q=1, N=10⁵</code>
+      <div>{t(E, "10¹⁰ — TLE 🚫", "10¹⁰ — TLE 🚫")}</div>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>full N, Q</code>
+      <div>{t(E, "3·10¹⁴ — TLE 🚫", "3·10¹⁴ — TLE 🚫")}</div>
+    </div>
+  </div>
+);
+
+const M3InsightAside = ({ E }) => (
+  <div style={{
+    background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10,
+    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#065f46",
+  }}>
+    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#065f46", marginBottom: 6 }}>
+      💡 {t(E, "Same character → same answer", "같은 문자 → 같은 답")}
+    </div>
+    <div>
+      {t(E,
+        "If s[j] = 'b' for many j, all those j's ask the SAME left/right scan question. Compute once per character.",
+        "여러 j 에서 s[j] = 'b' 이면, 그 j 들이 같은 왼/오 스캔 질문을 함. 문자마다 한 번만.")}
+    </div>
+    <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #6ee7b7", fontSize: 11 }}>
+      {t(E, "Per query work: O(N²) → O(N).", "쿼리당 일: O(N²) → O(N).")}
+    </div>
+  </div>
+);
+
+const M3FastAside = ({ E }) => (
+  <div style={{
+    background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10,
+    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#1e3a8a",
+  }}>
+    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#1e40af", marginBottom: 6 }}>
+      ✅ {t(E, "Two lookup tables", "lookup 표 2 개")}
+    </div>
+    <div style={{ marginBottom: 6 }}>
+      <b>first_diff[c][i]</b>{" "}
+      {t(E, "→ smallest idx ≥ i where s[idx] ≠ c.",
+            "→ s[idx] ≠ c 인 가장 작은 idx ≥ i.")}
+    </div>
+    <div>
+      <b>last_same[c][i]</b>{" "}
+      {t(E, "→ largest idx ≤ i where s[idx] = c.",
+            "→ s[idx] = c 인 가장 큰 idx ≤ i.")}
+    </div>
+    <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #93c5fd", fontSize: 11 }}>
+      {t(E, "Build once: O(26·N). Each query: O(N). Total: O(26·N + Q·N).",
+            "한 번 만들기: O(26·N). 쿼리마다: O(N). 총: O(26·N + Q·N).")}
+    </div>
+  </div>
+);
 
 export function Mooin3ProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#7c5cfc" />;
