@@ -26,7 +26,7 @@ export function makeCheckupsCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has N cows with breeds. Bessie guessed each breed in order.\nHow many guesses are right? And how many could be right if Bessie rearranged her guesses?",
-        "FJ에게 N마리 소가 있고 각자 품종이 있어요. 베시가 순서대로 품종을 추측했어요.\n맞춘 개수는? 그리고 베시가 추측을 재배열하면 최대 몇 개 맞출 수 있을까요?"),
+        "FJ에게 N마리 소가 있고 각자 품종이 있어요. Bessie가 순서대로 품종을 추측했어요.\n맞춘 개수는? 그리고 Bessie가 추측을 재배열하면 최대 몇 개 맞출 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -53,7 +53,7 @@ export function makeCheckupsCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie writes her ", "베시는 자신의 ")}
+                  {t(E, "Bessie writes her ", "Bessie는 자신의 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "breed guesses", "품종 추측")}</b>
                   {t(E, " in order: array ", "을 순서대로 적어요: 배열 ")}
                   <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>b[1..N]</code>.
@@ -64,7 +64,7 @@ export function makeCheckupsCh1(E) {
                 <div style={{ whiteSpace: "pre-line" }}>
                   {t(E,
                     "Print 2 numbers:\n  ① how many positions match right now (a[i] == b[i])\n  ② what's the MAX matches if Bessie could rearrange her guesses?",
-                    "두 숫자를 출력해요:\n  ① 지금 같은 위치에서 일치하는 개수 (a[i] == b[i])\n  ② 베시가 추측을 재배열하면 최대 일치 수")}
+                    "두 숫자를 출력해요:\n  ① 지금 같은 위치에서 일치하는 개수 (a[i] == b[i])\n  ② Bessie가 추측을 재배열하면 최대 일치 수")}
                 </div>
               </div>
             </div>

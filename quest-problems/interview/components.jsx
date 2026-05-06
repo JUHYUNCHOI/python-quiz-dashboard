@@ -65,7 +65,7 @@ export function InterviewSim({ E }) {
       }}>
         <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
           {t(E, `Step ${cur + 1}: Cow ${step.cow + 1} (time ${times[step.cow]})`, `${cur + 1}단계: 소 ${step.cow + 1} (시간 ${times[step.cow]})`)}
-          {step.cow === N - 1 && <span style={{ marginLeft: 8, color: "#92400e", fontWeight: 900 }}>← {t(E, "Bessie!", "베시!")}</span>}
+          {step.cow === N - 1 && <span style={{ marginLeft: 8, color: "#92400e", fontWeight: 900 }}>← {t(E, "Bessie!", "Bessie!")}</span>}
         </div>
         <div style={{ fontSize: 13, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
           {step.isInitial
@@ -189,7 +189,7 @@ export function InterviewRunner({ E }) {
       )}
       {result?.done && (
         <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 800 }}>
-          {t(E, `✅ Bessie went to counter ${result.bessieCounter + 1}.`, `✅ 베시는 카운터 ${result.bessieCounter + 1}로 갔어.`)}
+          {t(E, `✅ Bessie went to counter ${result.bessieCounter + 1}.`, `✅ Bessie는 카운터 ${result.bessieCounter + 1}로 갔어.`)}
         </div>
       )}
       {result?.stopped && (

@@ -61,7 +61,7 @@ export function makeOutOfPlaceCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie secretly ", "베시가 몰래 ")}
+                  {t(E, "Bessie secretly ", "Bessie가 몰래 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "moved exactly one cow to a different position", "정확히 1마리를 다른 위치로 옮겼어요")}</b>
                   {t(E, " — the cows in between shifted by 1.",
                         " — 그 사이 소들이 한 칸씩 밀려났어요.")}

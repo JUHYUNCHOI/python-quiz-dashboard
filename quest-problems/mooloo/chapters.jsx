@@ -39,7 +39,7 @@ export function makeMoolooCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie wants to watch Mooloo on N specific days. A subscription for d consecutive days costs d + K (a fixed activation fee K is paid no matter how short).\nFind the MINIMUM total cost to buy subscriptions covering EVERY day on her list.",
-        "베시가 정해진 N개의 날짜에 Mooloo 를 보고 싶어요. d 일 연속 구독은 d + K 비용이에요 (한 번 켤 때마다 길이와 상관없이 K 만큼 추가돼요).\n그녀의 목록에 있는 모든 날짜를 덮는 구독들의 최소 총 비용을 출력해요."),
+        "Bessie가 정해진 N개의 날짜에 Mooloo 를 보고 싶어요. d 일 연속 구독은 d + K 비용이에요 (한 번 켤 때마다 길이와 상관없이 K 만큼 추가돼요).\n그녀의 목록에 있는 모든 날짜를 덮는 구독들의 최소 총 비용을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -56,7 +56,7 @@ export function makeMoolooCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie wants to watch Mooloo on ", "베시가 정해진 ")}
+                  {t(E, "Bessie wants to watch Mooloo on ", "Bessie가 정해진 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "N specific days", "N개의 날짜")}</b>
                   {t(E, " (sorted in increasing order).",
                         " 에 보고 싶어요 (오름차순으로 주어짐).")}

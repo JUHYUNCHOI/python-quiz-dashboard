@@ -106,7 +106,7 @@ export function makeDaisyCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has N flowers in a row, each with a petal count p[i]. For every contiguous subarray, compute the average petal count; the subarray is 'photogenic' if at least one flower in it has petal count exactly equal to the average.\nCount how many of the N·(N+1)/2 contiguous subarrays are photogenic.",
-        "베시에게 한 줄로 놓인 N개의 꽃이 있고, 각 꽃의 꽃잎 수 p[i]가 주어져요. 연속한 부분 배열을 고를 때마다 그 안의 평균 꽃잎 수를 계산해요. 그 부분 배열에 평균과 정확히 같은 꽃잎 수의 꽃이 1개라도 있으면 '예쁜' 부분 배열이에요.\nN·(N+1)/2 개의 연속 부분 배열 중 예쁜 것의 개수를 출력해요."),
+        "Bessie에게 한 줄로 놓인 N개의 꽃이 있고, 각 꽃의 꽃잎 수 p[i]가 주어져요. 연속한 부분 배열을 고를 때마다 그 안의 평균 꽃잎 수를 계산해요. 그 부분 배열에 평균과 정확히 같은 꽃잎 수의 꽃이 1개라도 있으면 '예쁜' 부분 배열이에요.\nN·(N+1)/2 개의 연속 부분 배열 중 예쁜 것의 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -123,7 +123,7 @@ export function makeDaisyCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: C.carry, fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie has ", "베시에게 ")}
+                  {t(E, "Bessie has ", "Bessie에게 ")}
                   <b style={{ color: C.carry }}>{t(E, "N flowers in a row", "한 줄로 놓인 N개의 꽃")}</b>
                   {t(E, ", each with petal count ", "이 있고, 각 꽃의 꽃잎 수 ")}
                   <code style={{ background: "#f1f5f9", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>p[i]</code>

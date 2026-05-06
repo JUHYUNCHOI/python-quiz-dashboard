@@ -44,7 +44,7 @@ export function makeYearCowCh1(E) {
       type: "reveal",
       narr: t(E,
         "The Chinese zodiac assigns one of 12 animals to each year, repeating in the fixed cycle Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig, Rat (then Ox again).\nBessie was born in the Year of the Cow (Ox). Cows make statements like \"X was born in the previous/next Dragon year relative to Y\". Chain the statements to compute, for each query cow, how many years APART she is from Bessie.",
-        "십이지는 매년 12 동물 (소, 호랑이, 토끼, 용, 뱀, 말, 양, 원숭이, 닭, 개, 돼지, 쥐) 을 정해진 순서로 돌려가며 써요.\n베시는 소띠 해에 태어났어요. 소들이 \"X 는 Y 의 직전/직후 용띠 해에 태어났다\" 같은 진술을 해요. 진술을 연결해 각 쿼리 소가 베시와 몇 년 차이가 나는지 출력해요."),
+        "십이지는 매년 12 동물 (소, 호랑이, 토끼, 용, 뱀, 말, 양, 원숭이, 닭, 개, 돼지, 쥐) 을 정해진 순서로 돌려가며 써요.\nBessie는 소띠 해에 태어났어요. 소들이 \"X 는 Y 의 직전/직후 용띠 해에 태어났다\" 같은 진술을 해요. 진술을 연결해 각 쿼리 소가 Bessie와 몇 년 차이가 나는지 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -70,7 +70,7 @@ export function makeYearCowCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie was born in the ", "베시는 ")}
+                  {t(E, "Bessie was born in the ", "Bessie는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "Year of the Cow (Ox)", "소띠 해")}</b>
                   {t(E, ".", " 에 태어났어요.")}
                 </div>
@@ -87,7 +87,7 @@ export function makeYearCowCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "For each query cow, print ", "각 쿼리 소에 대해 ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "how many years apart she is from Bessie", "베시와의 나이 차이 (연도 차이)")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "how many years apart she is from Bessie", "Bessie와의 나이 차이 (연도 차이)")}</b>
                   {t(E, " (positive = older).", " 를 출력해요 (양수 = 더 나이 많음).")}
                 </div>
               </div>
@@ -140,7 +140,7 @@ export function makeYearCowCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Maintain a year-offset per cow (Bessie = 0). For each statement 'X was born in the previous/next ANIMAL year relative to Y', compute modular distance to that animal in the 12-cycle (never 0 — use 12).",
-        "소별 연도 오프셋 유지 (베시 = 0). 각 진술 'X 가 Y 의 직전/직후 ANIMAL 해' 에 대해 12-주기에서 그 동물까지의 모듈러 거리 계산 (0 이면 12 사용)."),
+        "소별 연도 오프셋 유지 (Bessie = 0). 각 진술 'X 가 Y 의 직전/직후 ANIMAL 해' 에 대해 12-주기에서 그 동물까지의 모듈러 거리 계산 (0 이면 12 사용)."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

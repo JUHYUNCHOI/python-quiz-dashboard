@@ -42,8 +42,8 @@ const cardBeats = (a, b) => {
 export function HpsCaseSimulator({ E }) {
   const elsie = [1, 3];   // Same as Sample I/O `1 3`
   const scenarios = [
-    { label: t(E, "Scenario A — Bessie (card 2, card 3)", "시나리오 A — 베시 (카드 2, 카드 3)"), bessie: [2, 3], expectWin: false },
-    { label: t(E, "Scenario B — Bessie (card 2, card 1)", "시나리오 B — 베시 (카드 2, 카드 1)"), bessie: [2, 1], expectWin: true },
+    { label: t(E, "Scenario A — Bessie (card 2, card 3)", "시나리오 A — Bessie (카드 2, 카드 3)"), bessie: [2, 3], expectWin: false },
+    { label: t(E, "Scenario B — Bessie (card 2, card 1)", "시나리오 B — Bessie (카드 2, 카드 1)"), bessie: [2, 1], expectWin: true },
   ];
   const buildCases = (bessie) => elsie.map((ePlay) => {
     const opts = bessie.map(b => ({ b, win: cardBeats(b, ePlay) === true, tie: cardBeats(b, ePlay) === null }));
@@ -100,13 +100,13 @@ export function HpsCaseSimulator({ E }) {
         total={trace.length}
         isEn={E}
         title={t(E, "Two scenarios vs same Elsie hand (card 1, card 3) — see one fail, one win.",
-                    "엘시 hand (카드 1, 카드 3) 에 두 시나리오 — 하나는 실패, 하나는 성공.")}
+                    "Elsie hand (카드 1, 카드 3) 에 두 시나리오 — 하나는 실패, 하나는 성공.")}
       />
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 14 }}>
-        {handCard(curBessie ? (s.sIdx === 0 ? t(E, "Bessie A", "베시 A") : t(E, "Bessie B", "베시 B")) : t(E, "Bessie's hand", "베시의 카드"),
+        {handCard(curBessie ? (s.sIdx === 0 ? t(E, "Bessie A", "Bessie A") : t(E, "Bessie B", "Bessie B")) : t(E, "Bessie's hand", "Bessie의 카드"),
                   curBessie ?? ["?", "?"], "#7c3aed")}
-        {handCard(t(E, "Elsie's hand",  "엘시의 카드"),  elsie,  "#dc2626")}
+        {handCard(t(E, "Elsie's hand",  "Elsie의 카드"),  elsie,  "#dc2626")}
       </div>
 
       <NarrativePanel minHeight={120}>
@@ -117,11 +117,11 @@ export function HpsCaseSimulator({ E }) {
             </div>
             <div>
               {t(E, "Both cows have laid down their two cards. All 4 cards are visible. Now Elsie will pick ONE of her two to play; Bessie picks last (she sees Elsie's pick first).",
-                    "두 소가 카드 2 장씩 펼쳐 놓아서 4 장 모두 보여요. 엘시가 자기 2 장 중 1 장을 골라 내고, 베시는 그걸 보고 마지막에 골라요.")}
+                    "두 소가 카드 2 장씩 펼쳐 놓아서 4 장 모두 보여요. Elsie가 자기 2 장 중 1 장을 골라 내고, Bessie는 그걸 보고 마지막에 골라요.")}
             </div>
             <div style={{ marginTop: 6, fontSize: 11, color: C.dim }}>
               {t(E, "Bessie's hand wins for sure ⇔ for EACH of Elsie's two cards, Bessie has at least one that beats it. We'll try two different Bessie hands against Elsie's (card 1, card 3).",
-                    "베시의 카드 2 장이 무조건 이김 ⇔ 엘시의 두 카드 각각에 대해, 베시 카드 중 하나가 이김. 엘시 (카드 1, 카드 3) 에 대해 두 가지 베시 hand 를 시도해요.")}
+                    "Bessie의 카드 2 장이 무조건 이김 ⇔ Elsie의 두 카드 각각에 대해, Bessie 카드 중 하나가 이김. Elsie (카드 1, 카드 3) 에 대해 두 가지 Bessie hand 를 시도해요.")}
             </div>
           </>
         )}
@@ -133,9 +133,9 @@ export function HpsCaseSimulator({ E }) {
             <div>
               {s.sIdx === 0
                 ? t(E, "Bessie holds card 2 + card 3. Card 2 beats card 1 ✓, but neither card 2 nor card 3 beats card 3 (chart row 3 = '010'). Let's verify both Elsie picks.",
-                      "베시 hand: 카드 2 + 카드 3. 카드 2 는 카드 1 이김 ✓, 그런데 카드 2 도 카드 3 도 카드 3 못 이김 (3 행 = '010'). 두 경우 다 확인.")
+                      "Bessie hand: 카드 2 + 카드 3. 카드 2 는 카드 1 이김 ✓, 그런데 카드 2 도 카드 3 도 카드 3 못 이김 (3 행 = '010'). 두 경우 다 확인.")
                 : t(E, "Bessie holds card 2 + card 1. Card 2 beats card 1 ✓, card 1 beats card 3 ✓. Looks promising — let's verify both cases.",
-                      "베시 hand: 카드 2 + 카드 1. 카드 2 는 카드 1 이김 ✓, 카드 1 은 카드 3 이김 ✓. 가능성 있어 보임 — 두 경우 다 확인.")}
+                      "Bessie hand: 카드 2 + 카드 1. 카드 2 는 카드 1 이김 ✓, 카드 1 은 카드 3 이김 ✓. 가능성 있어 보임 — 두 경우 다 확인.")}
             </div>
           </>
         )}
@@ -144,13 +144,13 @@ export function HpsCaseSimulator({ E }) {
           return (
             <>
               <div style={{ fontWeight: 800, color: c.anyWin ? "#15803d" : "#7f1d1d", marginBottom: 6, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                {t(E, `Case ${s.caseIdx + 1}: Elsie plays `, `케이스 ${s.caseIdx + 1}: 엘시가 `)}
+                {t(E, `Case ${s.caseIdx + 1}: Elsie plays `, `케이스 ${s.caseIdx + 1}: Elsie가 `)}
                 {renderCard(c.ePlay)}
                 {t(E, "", " 냄")}
               </div>
               {c.opts.map((o, j) => (
                 <div key={j} style={{ fontSize: 12.5, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginTop: 2 }}>
-                  {t(E, "Bessie picks ", "베시가 ")}
+                  {t(E, "Bessie picks ", "Bessie가 ")}
                   {renderCard(o.b)}?{" "}
                   {o.win ? <span style={{ color: "#16a34a", fontWeight: 800 }}>✓ {t(E, "wins", "이김")}</span>
                          : o.tie ? <span style={{ color: "#9ca3af", fontWeight: 800 }}>= {t(E, "tie", "비김")}</span>
@@ -159,8 +159,8 @@ export function HpsCaseSimulator({ E }) {
               ))}
               <div style={{ marginTop: 6, fontWeight: 800, color: c.anyWin ? "#15803d" : "#7f1d1d" }}>
                 → {c.anyWin
-                  ? t(E, "Bessie HAS an answer for this Elsie pick.", "이 경우 베시한테 답이 있어요.")
-                  : t(E, "Bessie has NO answer for this Elsie pick.", "이 경우 베시한테 답이 없어요.")}
+                  ? t(E, "Bessie HAS an answer for this Elsie pick.", "이 경우 Bessie한테 답이 있어요.")
+                  : t(E, "Bessie has NO answer for this Elsie pick.", "이 경우 Bessie한테 답이 없어요.")}
               </div>
             </>
           );
@@ -175,9 +175,9 @@ export function HpsCaseSimulator({ E }) {
             <div>
               {curAllWin
                 ? t(E, "Bessie's hand wins for sure ✓ — every Elsie pick had a counter. This hand is COUNTED in the answer.",
-                      "베시의 카드는 무조건 이김 ✓ — 엘시의 모든 패에 답이 있었음. 이 hand 는 정답에 카운트됨.")
+                      "Bessie의 카드는 무조건 이김 ✓ — Elsie의 모든 패에 답이 있었음. 이 hand 는 정답에 카운트됨.")
                 : t(E, "Bessie's hand does NOT guarantee a win ✗ — at least one Elsie pick has no counter. This hand is NOT counted.",
-                      "베시의 카드는 무조건 이기지 못함 ✗ — 엘시 패 중 적어도 하나에 답이 없음. 이 hand 는 카운트 안 됨.")}
+                      "Bessie의 카드는 무조건 이기지 못함 ✗ — Elsie 패 중 적어도 하나에 답이 없음. 이 hand 는 카운트 안 됨.")}
             </div>
           </>
         )}
@@ -190,7 +190,7 @@ export function HpsCaseSimulator({ E }) {
               <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>• {t(E, "Scenario A (", "시나리오 A (")}{renderCard(2)}, {renderCard(3)}) → <b style={{ color: "#dc2626" }}>{t(E, "FAILS, not counted", "실패, 카운트 안 됨")}</b></div>
               <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>• {t(E, "Scenario B (", "시나리오 B (")}{renderCard(2)}, {renderCard(1)}) → <b style={{ color: "#16a34a" }}>{t(E, "WINS, counted", "성공, 카운트됨")}</b></div>
               <div style={{ marginTop: 6 }}>{t(E, "Counting all 9 ordered pairs against Elsie (card 1, card 3), only (card 2, card 1) and (card 1, card 2) win. That's why Sample I/O answer = 2.",
-                    "엘시 (카드 1, 카드 3) 에 대해 9 가지 순서쌍 다 세보면, (카드 2, 카드 1) 과 (카드 1, 카드 2) 두 가지만 이김. 그래서 Sample I/O 답 = 2.")}</div>
+                    "Elsie (카드 1, 카드 3) 에 대해 9 가지 순서쌍 다 세보면, (카드 2, 카드 1) 과 (카드 1, 카드 2) 두 가지만 이김. 그래서 Sample I/O 답 = 2.")}</div>
             </div>
           </>
         )}
@@ -263,12 +263,12 @@ export function HpsSim({ E }) {
       </div>
 
       <div style={{ marginBottom: 10 }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: A, marginBottom: 6 }}>{t(E, "Bessie's pair (a, b)", "베시 쌍 (a, b)")}</div>
+        <div style={{ fontSize: 11, fontWeight: 800, color: A, marginBottom: 6 }}>{t(E, "Bessie's pair (a, b)", "Bessie 쌍 (a, b)")}</div>
         <SlotPicker label="a" value={a} accent={A} onChange={setA} />
         <SlotPicker label="b" value={b} accent={A} onChange={setB} />
       </div>
       <div>
-        <div style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>{t(E, "Elsie's pair (s1, s2)", "엘시 쌍 (s1, s2)")}</div>
+        <div style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>{t(E, "Elsie's pair (s1, s2)", "Elsie 쌍 (s1, s2)")}</div>
         <SlotPicker label="s1" value={s1} accent="#dc2626" onChange={setS1} />
         <SlotPicker label="s2" value={s2} accent="#dc2626" onChange={setS2} />
       </div>
@@ -445,7 +445,7 @@ export function getHpsSections(E) {
       py: HP_LOOP_PY(E), cpp: HP_LOOP_CPP(E),
       why: [
         t(E, "For each Elsie pair, try all N² Bessie pairs (a, b).",
-            "엘시의 각 쌍마다 베시의 N² 쌍 (a, b)을 모두 시도."),
+            "Elsie의 각 쌍마다 Bessie의 N² 쌍 (a, b)을 모두 시도."),
         t(E, "Pair (a, b) wins iff at least one of a, b beats s1 AND at least one beats s2.",
             "쌍 (a, b) 가 이기려면 a, b 중 하나가 s1 이김 AND 하나가 s2 이김."),
         t(E, "We compute these two booleans (wins_s1, wins_s2) inline — no helper function needed.",

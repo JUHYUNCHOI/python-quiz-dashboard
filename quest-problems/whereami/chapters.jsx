@@ -106,7 +106,7 @@ export function makeWhereAmICh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie lives on a street whose N mailboxes are labeled with letters A..Z. She'd like to identify her location by looking at K consecutive mailboxes.\nFind the SMALLEST K such that every length-K window of N consecutive letters is unique in the street.",
-        "베시가 N개의 우편함이 줄지어 있는 길에 살고, 각 우편함은 A..Z 글자로 표시돼요. 그녀는 K 개의 연속한 우편함만 보고 자기 위치를 알아내고 싶어요.\n길이 K 인 모든 연속 부분 문자열이 길에서 유일해지는 가장 작은 K 를 출력해요."),
+        "Bessie가 N개의 우편함이 줄지어 있는 길에 살고, 각 우편함은 A..Z 글자로 표시돼요. 그녀는 K 개의 연속한 우편함만 보고 자기 위치를 알아내고 싶어요.\n길이 K 인 모든 연속 부분 문자열이 길에서 유일해지는 가장 작은 K 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -132,7 +132,7 @@ export function makeWhereAmICh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: C.carry, fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie wants to identify her location by looking at ", "베시는 ")}
+                  {t(E, "Bessie wants to identify her location by looking at ", "Bessie는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "K consecutive mailbox labels", "K 개의 연속한 우편함 글자")}</b>
                   {t(E, ".", " 만 보고 위치를 알아내고 싶어요.")}
                 </div>
@@ -279,7 +279,7 @@ export function makeWhereAmICh1(E) {
       correct: 1,
       explain: t(E,
         "Right! \"AB\" appears at positions 0-1 and 2-3. Duplicate means two different locations look the same -- Bessie can't tell where she is!",
-        "맞아! \"AB\"가 위치 0-1과 2-3에 나타나. 중복이면 두 위치가 같아 보여서 베시가 자기 위치를 모르게 돼요!"),
+        "맞아! \"AB\"가 위치 0-1과 2-3에 나타나. 중복이면 두 위치가 같아 보여서 Bessie가 자기 위치를 모르게 돼요!"),
     },
     // 1-5: Visual — K=3 on "ABAB" — all unique!
     {

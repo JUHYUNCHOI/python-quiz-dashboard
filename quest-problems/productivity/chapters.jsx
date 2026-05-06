@@ -33,7 +33,7 @@ export function makeProdCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie wants to visit as many farms as possible!\nEach farm closes at a certain time, and she needs travel time to get there.\nCan she visit enough?\n📊", "베시가 최대한 많은 농장을 방문하고 싶어! 각 농장은 특정 시간에 닫히고, 가는 데 이동 시간이 필요해요. 충분히 방문할 수 있을까? 📊"),
+        "Bessie wants to visit as many farms as possible!\nEach farm closes at a certain time, and she needs travel time to get there.\nCan she visit enough?\n📊", "Bessie가 최대한 많은 농장을 방문하고 싶어! 각 농장은 특정 시간에 닫히고, 가는 데 이동 시간이 필요해요. 충분히 방문할 수 있을까? 📊"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>📊</div>
@@ -42,7 +42,7 @@ export function makeProdCh1(E) {
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N farms, each closes at time c_i. Bessie wakes at time S, arrives at farm i at time t_i + S. She can visit farm i only if t_i + S < c_i. Given Q queries (S,\nV): can she visit >= V farms?",
-              "N개 농장, 각각 시간 c_i에 닫혀.\n베시는 시간 S에 일어나서, 농장 i에 t_i + S에 도착.\nt_i + S < c_i일 때만 방문 가능.\nQ개 쿼리 (S, V): V개 이상 방문 가능?")}
+              "N개 농장, 각각 시간 c_i에 닫혀.\nBessie는 시간 S에 일어나서, 농장 i에 t_i + S에 도착.\nt_i + S < c_i일 때만 방문 가능.\nQ개 쿼리 (S, V): V개 이상 방문 가능?")}
           </div>
         </div>),
     },
@@ -66,7 +66,7 @@ export function makeProdCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {t(E,
-                "d_i = c_i - t_i is the latest Bessie can wake up and still visit farm i.\nSort d[], then for each query S, binary search to count how many d_i > S!", "d_i = c_i - t_i는 베시가 농장 i를 방문할 수 있는 가장 늦은 기상 시간이에요.\nd[]를 정렬한 후, 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 세!")}
+                "d_i = c_i - t_i is the latest Bessie can wake up and still visit farm i.\nSort d[], then for each query S, binary search to count how many d_i > S!", "d_i = c_i - t_i는 Bessie가 농장 i를 방문할 수 있는 가장 늦은 기상 시간이에요.\nd[]를 정렬한 후, 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 세!")}
             </div>
           </div>
         </div>),
@@ -75,7 +75,7 @@ export function makeProdCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's check: c=[10,5,8], t=[3,2,4], S=3. Which farms can Bessie visit?", "확인해보자: c=[10,5,8], t=[3,2,4], S=3. 베시가 어떤 농장을 방문할 수 있어요?"),
+        "Let's check: c=[10,5,8], t=[3,2,4], S=3. Which farms can Bessie visit?", "확인해보자: c=[10,5,8], t=[3,2,4], S=3. Bessie가 어떤 농장을 방문할 수 있어요?"),
       question: t(E,
         "c=[10,5,8], t=[3,2,4], S=3. Farm 1: 3+3=6<10 OK. Farm 2: 2+3=5, NOT <5. Farm 3: 4+3=7<8 OK. How many farms?",
         "c=[10,5,8], t=[3,2,4], S=3. 농장1: 3+3=6<10 OK. 농장2: 2+3=5, 5<5 아님. 농장3: 4+3=7<8 OK. 몇 개 농장?"),
@@ -96,7 +96,7 @@ export function makeProdCh1(E) {
         "Now you try! Same example but count it yourself.", "이제 직접 해봐요! 같은 예제로 직접 세봐요."),
       question: t(E,
         "c=[10,5,8], t=[3,2,4], S=3. How many farms can Bessie visit? (strict inequality: t_i + S < c_i)",
-        "c=[10,5,8], t=[3,2,4], S=3. 베시가 방문할 수 있는 농장 수는? (엄격한 부등식: t_i + S < c_i)"),
+        "c=[10,5,8], t=[3,2,4], S=3. Bessie가 방문할 수 있는 농장 수는? (엄격한 부등식: t_i + S < c_i)"),
       hint: t(E,
         "Check each: 3+3=6<10 yes, 2+3=5<5 no, 4+3=7<8 yes. Count the yes's!",
         "각각 확인: 3+3=6<10 맞아, 2+3=5<5 아니야, 4+3=7<8 맞아. 맞는 것 세봐요!"),

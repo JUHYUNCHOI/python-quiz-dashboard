@@ -44,7 +44,7 @@ export function makeHungryCowCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie eats 1 haybale per day if she has any in stock.\nThere are N hay deliveries — each on a specific day, each adding some bales to her stockpile.\nGiven the deliveries and a target day T, count how many of days 1..T Bessie actually eats on.",
-        "베시는 재고가 있으면 하루에 건초 1단을 먹어요.\n특정 날짜에 특정 양이 도착하는 N번의 건초 배달이 있어요.\n배달 정보와 마감일 T가 주어지면, 1~T일 중 베시가 실제로 먹는 날의 수를 구해요."),
+        "Bessie는 재고가 있으면 하루에 건초 1단을 먹어요.\n특정 날짜에 특정 양이 도착하는 N번의 건초 배달이 있어요.\n배달 정보와 마감일 T가 주어지면, 1~T일 중 Bessie가 실제로 먹는 날의 수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -61,7 +61,7 @@ export function makeHungryCowCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie ", "베시는 ")}
+                  {t(E, "Bessie ", "Bessie는 ")}
                   <b style={{ color: "#d97706" }}>{t(E, "eats 1 haybale per day", "재고가 있으면 하루에 건초 1단을 먹어요")}</b>
                   {t(E, " if she has any in stock — otherwise she eats nothing that day.",
                         " — 재고가 없으면 그 날은 못 먹어요.")}
@@ -92,7 +92,7 @@ export function makeHungryCowCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "number of days from day 1 to day T on which Bessie actually eats", "1일~T일 중 베시가 실제로 먹는 날의 수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "number of days from day 1 to day T on which Bessie actually eats", "1일~T일 중 Bessie가 실제로 먹는 날의 수")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>

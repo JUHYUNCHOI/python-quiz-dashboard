@@ -144,7 +144,7 @@ export function makeShellCh1(E) {
       type: "reveal",
       narr: t(E,
         "The classic shell game: a pebble hides under one of 3 shells. There are N rounds; each round records (a, b, g) — Bessie swaps shells a and b, then Elsie guesses the pebble is under shell g.\nThe pebble's STARTING shell is unknown. Print the MAXIMUM possible number of correct Elsie guesses, taken over all 3 starting positions.",
-        "고전 컵 게임: 3개의 컵 중 하나에 조약돌이 숨겨져 있어요. N개의 라운드가 있고 각 라운드는 (a, b, g) — 베시가 컵 a와 b를 바꿔놓고, 엘시가 컵 g 아래에 조약돌이 있다고 추측해요.\n조약돌의 시작 위치는 알 수 없어요. 시작 위치 3가지 중 엘시가 가장 많이 맞히는 경우의 정답 수를 출력해요."),
+        "고전 컵 게임: 3개의 컵 중 하나에 조약돌이 숨겨져 있어요. N개의 라운드가 있고 각 라운드는 (a, b, g) — Bessie가 컵 a와 b를 바꿔놓고, Elsie가 컵 g 아래에 조약돌이 있다고 추측해요.\n조약돌의 시작 위치는 알 수 없어요. 시작 위치 3가지 중 Elsie가 가장 많이 맞히는 경우의 정답 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -174,7 +174,7 @@ export function makeShellCh1(E) {
                   {t(E, " — each round gives ", "가 있고, 각 라운드는 ")}
                   <b style={{ color: "#7c3aed" }}>(a, b, g)</b>
                   {t(E, ": Bessie swaps shells a and b, then Elsie guesses shell g.",
-                        " — 베시가 컵 a와 b를 바꾸고, 엘시가 컵 g라고 추측해요.")}
+                        " — Bessie가 컵 a와 b를 바꾸고, Elsie가 컵 g라고 추측해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -189,7 +189,7 @@ export function makeShellCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Try all 3 starting positions; print the ", "3가지 시작 위치를 모두 시도해서, ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "maximum number of correct Elsie guesses", "엘시가 가장 많이 맞히는 경우의 정답 수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum number of correct Elsie guesses", "Elsie가 가장 많이 맞히는 경우의 정답 수")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>

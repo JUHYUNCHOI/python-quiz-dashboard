@@ -56,7 +56,7 @@ export function makeWalkHomeCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie walks from (1, 1) (top-left) to (N, N) (bottom-right) on an N×N grid; some cells are HAYSTACKS ('H') she can't enter. She moves only RIGHT or DOWN.\nShe's also lazy — she changes direction (R↔D) at most K times during the walk.\nFor each test case, print the number of valid paths.",
-        "베시가 N×N 격자에서 (1, 1) 좌상단부터 (N, N) 우하단까지 걸어요. 일부 칸은 H (건초더미) 라 못 들어가요. 이동은 오른쪽 또는 아래쪽만.\n베시가 게을러서 — 걷는 도중 방향 (R 또는 D) 을 최대 K 번까지만 바꿔요.\n각 테스트 케이스마다 유효한 경로의 수를 출력해요."),
+        "Bessie가 N×N 격자에서 (1, 1) 좌상단부터 (N, N) 우하단까지 걸어요. 일부 칸은 H (건초더미) 라 못 들어가요. 이동은 오른쪽 또는 아래쪽만.\nBessie가 게을러서 — 걷는 도중 방향 (R 또는 D) 을 최대 K 번까지만 바꿔요.\n각 테스트 케이스마다 유효한 경로의 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -83,7 +83,7 @@ export function makeWalkHomeCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie walks from (1, 1) to (N, N) using only ", "베시가 (1, 1) → (N, N) 까지 ")}
+                  {t(E, "Bessie walks from (1, 1) to (N, N) using only ", "Bessie가 (1, 1) → (N, N) 까지 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "RIGHT or DOWN moves", "오른쪽 또는 아래쪽 이동만")}</b>
                   {t(E, ".", " 으로 가요.")}
                 </div>

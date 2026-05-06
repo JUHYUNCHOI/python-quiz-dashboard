@@ -7,7 +7,7 @@ export function makeHpsCh1(E) {
       type: "reveal",
       narr: t(E,
         "A Rock-Paper-Scissors variant — Bessie wants to count how many 2-card hands of hers always beat Elsie's hand.",
-        "가위바위보 변형 — 베시가 엘시를 무조건 이기는 카드 2 장 조합이 몇 개인지 세요."),
+        "가위바위보 변형 — Bessie가 Elsie를 무조건 이기는 카드 2 장 조합이 몇 개인지 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -42,16 +42,16 @@ export function makeHpsCh1(E) {
                   {t(E, "How a round works: ", "한 판 진행: ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "each cow lays out 2 cards face-up", "각 소가 카드 2 장을 앞면이 보이게 내려놔요")}</b>
                   {t(E, ", so all 4 cards are visible. Then each cow picks ONE of her own two to actually play — Bessie picks last (after seeing Elsie's pick).",
-                        ". 4 장이 모두 보여요. 그 다음 각자 자기 2 장 중 1 장을 골라 실제로 내요 — 베시는 엘시가 무엇을 냈는지 보고 마지막에 골라요.")}
+                        ". 4 장이 모두 보여요. 그 다음 각자 자기 2 장 중 1 장을 골라 실제로 내요 — Bessie는 Elsie가 무엇을 냈는지 보고 마지막에 골라요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Elsie's hand is given M times. For each, count Bessie's hands that ",
-                        "엘시 hand 가 M 번 주어져요. 각각에 대해 ")}
+                        "Elsie hand 가 M 번 주어져요. 각각에 대해 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "GUARANTEE a win — for each of Elsie's two cards, Bessie has at least one card that beats it",
-                                                          "무조건 이김 — 엘시의 두 카드 각각에 대해 베시가 이기는 카드를 적어도 하나 가지고 있는 hand")}</b>
+                                                          "무조건 이김 — Elsie의 두 카드 각각에 대해 Bessie가 이기는 카드를 적어도 하나 가지고 있는 hand")}</b>
                   {t(E, ". Output the count.", " 개수를 출력.")}
                 </div>
               </div>
@@ -71,7 +71,7 @@ export function makeHpsCh1(E) {
       type: "reveal",
       narr: t(E,
         "A small concrete sample: 3 card types and 1 Elsie hand. Read the input top-to-bottom and you'll see exactly what each line means.",
-        "작은 예시: 3 종 카드, 엘시 hand 1 개. 입력을 위에서 아래로 읽으면 각 줄이 무슨 뜻인지 보여요."),
+        "작은 예시: 3 종 카드, Elsie hand 1 개. 입력을 위에서 아래로 읽으면 각 줄이 무슨 뜻인지 보여요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", textAlign: "center", marginBottom: 10 }}>
@@ -99,14 +99,14 @@ export function makeHpsCh1(E) {
             <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
               🔍 {t(E, "What each line means", "각 줄 의미")}
             </div>
-            <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>3 1</code> — {t(E, "N = 3 cards, M = 1 Elsie query", "N = 3 종 카드, M = 1 개 엘시 쿼리")}</div>
+            <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>3 1</code> — {t(E, "N = 3 cards, M = 1 Elsie query", "N = 3 종 카드, M = 1 개 Elsie 쿼리")}</div>
             <div style={{ marginTop: 6 }}>
               <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>001 / 100 / 010</code> — {t(E, "next N lines = beats chart (one row per card). We'll decode this on the next page.",
                     "다음 N 줄 = 승패 차트 (카드 1 장당 1 줄). 다음 페이지에서 풀어봐요.")}
             </div>
             <div style={{ marginTop: 6 }}>
               <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 3</code> — {t(E, "M lines of Elsie's hands. Here: hand = cards {1, 3}.",
-                    "M 줄 = 엘시 hand. 여기서: hand = 카드 {1, 3}.")}
+                    "M 줄 = Elsie hand. 여기서: hand = 카드 {1, 3}.")}
             </div>
             <div style={{ marginTop: 8, fontSize: 10.5, color: C.dim, fontStyle: "italic" }}>
               {t(E, "📌 Cards in input are numbered 1..N (1-INDEXED). Code internally converts to 0-indexed before looking up the chart array.",
@@ -258,7 +258,7 @@ export function makeHpsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Walk the answer in one picture: Elsie's two cards → what beats each → Bessie's required pair → 2 orderings.",
-        "한 그림으로 답 풀기: 엘시 두 카드 → 각각 무엇이 이김 → 베시 필요 카드 → 순서 2 가지."),
+        "한 그림으로 답 풀기: Elsie 두 카드 → 각각 무엇이 이김 → Bessie 필요 카드 → 순서 2 가지."),
       content: (() => {
         const C1 = { glyph: "●", color: "#2563eb" };
         const C2 = { glyph: "■", color: "#7c3aed" };
@@ -295,20 +295,20 @@ export function makeHpsCh1(E) {
           <div style={{ padding: 16 }}>
             {/* Step 1: Elsie's hand laid down */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 12 }}>
-              <div style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>{t(E, "Elsie's hand", "엘시 hand")}</div>
+              <div style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>{t(E, "Elsie's hand", "Elsie hand")}</div>
               <div style={{ display: "flex", gap: 12, padding: "8px 14px", background: "#fee2e2", borderRadius: 10, border: "2px solid #fca5a5" }}>
                 <Pill s={C1} n={1} size={24} />
                 <Pill s={C3} n={3} size={24} />
               </div>
               <div style={{ fontSize: 11.5, color: "#7f1d1d", fontWeight: 700, marginTop: 4 }}>
-                {t(E, "Bessie needs a counter for EACH", "베시는 각각에 대한 카운터 필요")}
+                {t(E, "Bessie needs a counter for EACH", "Bessie는 각각에 대한 카운터 필요")}
               </div>
             </div>
 
             {/* Step 2: Two parallel lookup columns */}
             <div style={{ background: "#fff", border: "2px solid #c4b5fd", borderRadius: 10, padding: 14, marginBottom: 12 }}>
               <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 800, textAlign: "center", marginBottom: 12 }}>
-                {t(E, "Look up the counter for each Elsie card", "엘시 카드 각각의 카운터 차트에서 lookup")}
+                {t(E, "Look up the counter for each Elsie card", "Elsie 카드 각각의 카운터 차트에서 lookup")}
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                 <Column elsieCard={C1} counterCard={C2} elsieN={1} counterN={2} chartRow={2} />
@@ -324,7 +324,7 @@ export function makeHpsCh1(E) {
 
             {/* Step 3: Both required → Bessie's hand */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 12 }}>
-              <div style={{ fontSize: 11, color: "#15803d", fontWeight: 800 }}>{t(E, "Bessie's hand must contain BOTH", "베시 hand 는 둘 다 포함")}</div>
+              <div style={{ fontSize: 11, color: "#15803d", fontWeight: 800 }}>{t(E, "Bessie's hand must contain BOTH", "Bessie hand 는 둘 다 포함")}</div>
               <div style={{ display: "flex", gap: 12, padding: "8px 14px", background: "#dcfce7", borderRadius: 10, border: "2px solid #86efac" }}>
                 <Pill s={C2} n={2} size={24} />
                 <Pill s={C1} n={1} size={24} />
@@ -364,32 +364,32 @@ export function makeHpsCh1(E) {
       type: "reveal",
       narr: t(E,
         "We'll try TWO different Bessie hands against Elsie's (card 1, card 3) — same as Sample I/O. One hand fails, one wins. Press ▶ to step through both.",
-        "엘시 (카드 1, 카드 3) 에 대해 — Sample I/O 와 같음 — 베시 hand 두 가지를 시도해요. 하나는 실패, 하나는 성공. ▶ 눌러서 두 시나리오 다 따라가요."),
+        "Elsie (카드 1, 카드 3) 에 대해 — Sample I/O 와 같음 — Bessie hand 두 가지를 시도해요. 하나는 실패, 하나는 성공. ▶ 눌러서 두 시나리오 다 따라가요."),
       content: (<HpsCaseSimulator E={E} />),
     },
     {
       type: "quiz",
       narr: t(E,
         "Bessie wins if for BOTH of Elsie's cards, at least one of Bessie's cards can beat it.\nShe picks optimally after seeing Elsie's choice!\n(Beats chart: card 1 beats 3, card 2 beats 1, card 3 beats 2.)",
-        "베시가 이기려면: 엘시의 두 카드 모두에 대해, 베시의 카드 중 하나가 이길 수 있어야 해요. 엘시 선택 본 후 최적으로 고름!\n(차트: 카드 1 이 3 이김, 카드 2 가 1 이김, 카드 3 이 2 이김.)"),
+        "Bessie가 이기려면: Elsie의 두 카드 모두에 대해, Bessie의 카드 중 하나가 이길 수 있어야 해요. Elsie 선택 본 후 최적으로 고름!\n(차트: 카드 1 이 3 이김, 카드 2 가 1 이김, 카드 3 이 2 이김.)"),
       question: t(E,
         "Bessie has (card 1, card 2). Elsie plays card 3. Can Bessie win?",
-        "베시가 (카드 1, 카드 2) 를 가짐. 엘시가 카드 3 을 냄. 베시가 이길 수 있어요?"),
+        "Bessie가 (카드 1, 카드 2) 를 가짐. Elsie가 카드 3 을 냄. Bessie가 이길 수 있어요?"),
       options: [
         t(E, "Yes — pick card 1 (it beats card 3)", "네 — 카드 1 선택 (카드 3 이김)"),
         t(E, "No — card 3 beats card 2", "아니 — 카드 3 이 카드 2 이김"),
       ],
       correct: 0,
-      explain: t(E, "Card 1 beats card 3 (chart row 1 = '001'). Bessie picks card 1.", "카드 1 이 카드 3 이김 (차트 1 행 = '001'). 베시는 카드 1 을 골라요."),
+      explain: t(E, "Card 1 beats card 3 (chart row 1 = '001'). Bessie picks card 1.", "카드 1 이 카드 3 이김 (차트 1 행 = '001'). Bessie는 카드 1 을 골라요."),
     },
     {
       type: "input",
       narr: t(E,
         "Now you count. Elsie's hand = (card 1, card 2) — different from Sample I/O. Bessie has 3×3 = 9 possible hands (ordered pairs (a, b)).\nFor a hand to GUARANTEE a win:\n• at least one of a, b beats card 1 → need card 2 (chart row 2 = '100')\n• at least one of a, b beats card 2 → need card 3 (chart row 3 = '010')\nSo Bessie's hand must contain BOTH card 2 AND card 3.",
-        "이제 직접 세요. 엘시 hand = (카드 1, 카드 2) — Sample I/O 와는 다름. 베시 hand 는 3×3 = 9 가지 (순서쌍 (a, b)).\n무조건 이기는 hand 가 되려면:\n• a, b 중 하나가 카드 1 이김 → 카드 2 필요 (차트 2 행 = '100')\n• a, b 중 하나가 카드 2 이김 → 카드 3 필요 (차트 3 행 = '010')\n그러니까 hand 는 카드 2 AND 카드 3 둘 다 포함해야 함."),
+        "이제 직접 세요. Elsie hand = (카드 1, 카드 2) — Sample I/O 와는 다름. Bessie hand 는 3×3 = 9 가지 (순서쌍 (a, b)).\n무조건 이기는 hand 가 되려면:\n• a, b 중 하나가 카드 1 이김 → 카드 2 필요 (차트 2 행 = '100')\n• a, b 중 하나가 카드 2 이김 → 카드 3 필요 (차트 3 행 = '010')\n그러니까 hand 는 카드 2 AND 카드 3 둘 다 포함해야 함."),
       question: t(E,
         "Elsie plays (card 1, card 2). How many of Bessie's 9 hands guarantee a win?",
-        "엘시가 (카드 1, 카드 2) 를 가짐. 베시의 9 가지 hand 중 무조건 이기는 것은?"),
+        "Elsie가 (카드 1, 카드 2) 를 가짐. Bessie의 9 가지 hand 중 무조건 이기는 것은?"),
       hint: t(E, "Hand must contain BOTH card 2 AND card 3. Only (card 2, card 3) and (card 3, card 2) qualify.",
                 "hand 에 카드 2 AND 카드 3 둘 다 들어가야 함. (카드 2, 카드 3) 와 (카드 3, 카드 2) 두 가지만 해당."),
       answer: 2,
@@ -397,7 +397,7 @@ export function makeHpsCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Pick Bessie's (a, b) and Elsie's (s1, s2). See if Bessie can guarantee a win.", "베시 (a, b), 엘시 (s1, s2) 골라서 베시가 승리 보장 가능한지 확인."),
+        "Pick Bessie's (a, b) and Elsie's (s1, s2). See if Bessie can guarantee a win.", "Bessie (a, b), Elsie (s1, s2) 골라서 Bessie가 승리 보장 가능한지 확인."),
     },
   ];
 }
@@ -408,7 +408,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Brute force: for each Elsie pair, try every (a, b) for Bessie. The win check is just a 1-line OR — done inline in the loop.",
-        "완전탐색: 엘시 쌍마다 베시의 모든 (a, b) 시도. win 체크는 1 줄 OR — 루프 안에 인라인."),
+        "완전탐색: Elsie 쌍마다 Bessie의 모든 (a, b) 시도. win 체크는 1 줄 OR — 루프 안에 인라인."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -432,7 +432,7 @@ export function makeHpsCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
             <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
             <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(M · N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "M queries × N² Bessie pairs", "M 쿼리 × N² 베시 쌍")}</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "M queries × N² Bessie pairs", "M 쿼리 × N² Bessie 쌍")}</div>
           </div>
         </div>),
     },

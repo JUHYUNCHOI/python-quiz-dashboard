@@ -1526,7 +1526,7 @@ export function makeOptSteps(E) {
     // 5-0: 부드러운 도입 — 공식이 뭘 뜻하는지 구체 숫자로 보여주기
     { type: "reveal",
       narr: t(E,
-        "Recap: pattern chapter formula = 5 × 6^(d−2).\nIt tells us, for each digit-count d, how many numbers in that range give different Bessie/Elsie answers.", "패턴 챕터에서 찾은 공식: 5 × 6ᵈ⁻². 이게 뜻하는 건 — d 자리 수 중에서 베시랑 엘시 답이 다른 게 몇 개인지."),
+        "Recap: pattern chapter formula = 5 × 6^(d−2).\nIt tells us, for each digit-count d, how many numbers in that range give different Bessie/Elsie answers.", "패턴 챕터에서 찾은 공식: 5 × 6ᵈ⁻². 이게 뜻하는 건 — d 자리 수 중에서 Bessie랑 Elsie 답이 다른 게 몇 개인지."),
       content: (
         <div style={{ padding: 16 }}>
           {/* 공식 카드 */}

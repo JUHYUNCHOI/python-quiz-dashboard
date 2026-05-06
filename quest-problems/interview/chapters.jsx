@@ -74,7 +74,7 @@ export function makeInterviewCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows line up for interviews at K counters. Each counter takes a fixed amount of time per interview, and each cow goes to the EARLIEST available counter.\nBessie is last in line — which counter could she end up at?",
-        "N마리 소가 K개의 카운터에서 인터뷰를 봐요. 각 카운터는 한 번 인터뷰에 정해진 시간이 걸리고, 각 소는 가장 빨리 비는 카운터로 가요.\n베시는 줄의 마지막에 있어요 — 어느 카운터로 갈 수 있을까요?"),
+        "N마리 소가 K개의 카운터에서 인터뷰를 봐요. 각 카운터는 한 번 인터뷰에 정해진 시간이 걸리고, 각 소는 가장 빨리 비는 카운터로 가요.\nBessie는 줄의 마지막에 있어요 — 어느 카운터로 갈 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -120,7 +120,7 @@ export function makeInterviewCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Bessie is the LAST cow. Print all counters she could possibly go to (ignoring the tie-breaker), in increasing order.",
-                        "베시는 마지막 소예요. 동점 규칙을 무시했을 때 베시가 갈 수 있는 모든 카운터 번호를 오름차순으로 출력해요.")}
+                        "Bessie는 마지막 소예요. 동점 규칙을 무시했을 때 Bessie가 갈 수 있는 모든 카운터 번호를 오름차순으로 출력해요.")}
                 </div>
               </div>
             </div>
@@ -201,7 +201,7 @@ export function makeInterviewCh1(E) {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
                 {t(E,
                   "Cow 4 (the next in line) could go to either counter.\nSo if Cow 4 = Bessie, the answer is: 2 possible counters.",
-                  "다음 차례인 소 4는 둘 중 어디든 갈 수 있어요.\n소 4가 베시라면 답은: 가능한 카운터 2개.")}
+                  "다음 차례인 소 4는 둘 중 어디든 갈 수 있어요.\n소 4가 Bessie라면 답은: 가능한 카운터 2개.")}
               </div>
             </div>
           </div>
@@ -210,21 +210,21 @@ export function makeInterviewCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "When multiple counters finish at the same time, the cow could go to ANY of them.\nThat's why we need to find ALL possible counters for Bessie!", "여러 카운터가 동시에 끝나면, 소는 어디든 갈 수 있어요. 그래서 베시가 갈 수 있는 모든 카운터를 찾아야 해요!"),
+        "When multiple counters finish at the same time, the cow could go to ANY of them.\nThat's why we need to find ALL possible counters for Bessie!", "여러 카운터가 동시에 끝나면, 소는 어디든 갈 수 있어요. 그래서 Bessie가 갈 수 있는 모든 카운터를 찾아야 해요!"),
       question: t(E,
         "If counters 1, 3, 5 all finish at the same time and Bessie is next, how many possible counters does she have?",
-        "카운터 1, 3, 5가 동시에 끝나고 베시가 다음이면, 가능한 카운터 수는?"),
+        "카운터 1, 3, 5가 동시에 끝나고 Bessie가 다음이면, 가능한 카운터 수는?"),
       options: ["1", "3", "5", t(E, "Depends on cow order", "소 순서에 따라 다름")],
       correct: 1,
       explain: t(E,
         "Bessie could go to any of the 3 tied counters. So the answer lists all 3!",
-        "베시는 동점인 3개 카운터 중 아무 곳이나 갈 수 있어요. 그래서 3개 모두 답!"),
+        "Bessie는 동점인 3개 카운터 중 아무 곳이나 갈 수 있어요. 그래서 3개 모두 답!"),
     },
     {
       type: "input",
       narr: t(E,
-        "N=4, K=2, times=[3,1,2,1]\n\n• t=0: Cow 1 → C1 (done @3), Cow 2 → C2 (done @1)\n• t=1: Cow 3 → C2 (free first) → done @3\n• t=3: both C1 and C2 free at the same time\n\nBessie (Cow 4) can go to either. How many possible counters?", "N=4, K=2, times=[3,1,2,1]\n\n• t=0: 소 1 → C1 (끝 @3), 소 2 → C2 (끝 @1)\n• t=1: 소 3 → C2 (먼저 빔) → 끝 @3\n• t=3: C1, C2 동시에 비워짐\n\n베시(소 4)는 둘 다 가능. 갈 수 있는 카운터 수는?"),
-      question: t(E, "How many counters can Bessie go to?", "베시가 갈 수 있는 카운터 수는?"),
+        "N=4, K=2, times=[3,1,2,1]\n\n• t=0: Cow 1 → C1 (done @3), Cow 2 → C2 (done @1)\n• t=1: Cow 3 → C2 (free first) → done @3\n• t=3: both C1 and C2 free at the same time\n\nBessie (Cow 4) can go to either. How many possible counters?", "N=4, K=2, times=[3,1,2,1]\n\n• t=0: 소 1 → C1 (끝 @3), 소 2 → C2 (끝 @1)\n• t=1: 소 3 → C2 (먼저 빔) → 끝 @3\n• t=3: C1, C2 동시에 비워짐\n\nBessie(소 4)는 둘 다 가능. 갈 수 있는 카운터 수는?"),
+      question: t(E, "How many counters can Bessie go to?", "Bessie가 갈 수 있는 카운터 수는?"),
       answer: 2,
     },
   ];
@@ -248,7 +248,7 @@ export function makeInterviewCh2(E) {
             </div>
             {t(E,
               "1. Push first K cows' finish times into heap\n2. For each remaining cow: pop min, assign that counter\n3. Push new finish time (old finish + cow's time)\n4. For Bessie: check all counters with minimum finish time",
-              "1. 처음 K마리의 종료 시간을 힙에 넣기\n2. 나머지 소마다: 최솟값 pop, 그 카운터 배정\n3. 새 종료 시간 push (이전 종료 + 소의 시간)\n4. 베시: 최소 종료 시간인 모든 카운터 찾기")}
+              "1. 처음 K마리의 종료 시간을 힙에 넣기\n2. 나머지 소마다: 최솟값 pop, 그 카운터 배정\n3. 새 종료 시간 push (이전 종료 + 소의 시간)\n4. Bessie: 최소 종료 시간인 모든 카운터 찾기")}
           </div>
         </div>),
     },
@@ -277,8 +277,8 @@ export function makeInterviewCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "N=6, K=3, times=[2,3,1,4,2,1].\nHeap after first 3: [(2,0),(3,1),(1,2)].\nPop min (1,2), cow4→C3, push (1+4=5,2).\nPop min (2,0), cow5→C1, push (2+2=4,0).\nPop min (3,1), cow6→C2.\nBessie goes to counter...?", "N=6, K=3, times=[2,3,1,4,2,1].\n처음 3마리 힙: [(2,0),(3,1),(1,2)].\nPop (1,2), 소4→C3, push (5,2).\nPop (2,0), 소5→C1, push (4,0).\nPop (3,1), 소6→C2.\n베시는 카운터...?"),
-      question: t(E, "Bessie (cow 6) goes to counter #? (1-indexed)", "베시(소6)는 카운터 몇번? (1부터)"),
+        "N=6, K=3, times=[2,3,1,4,2,1].\nHeap after first 3: [(2,0),(3,1),(1,2)].\nPop min (1,2), cow4→C3, push (1+4=5,2).\nPop min (2,0), cow5→C1, push (2+2=4,0).\nPop min (3,1), cow6→C2.\nBessie goes to counter...?", "N=6, K=3, times=[2,3,1,4,2,1].\n처음 3마리 힙: [(2,0),(3,1),(1,2)].\nPop (1,2), 소4→C3, push (5,2).\nPop (2,0), 소5→C1, push (4,0).\nPop (3,1), 소6→C2.\nBessie는 카운터...?"),
+      question: t(E, "Bessie (cow 6) goes to counter #? (1-indexed)", "Bessie(소6)는 카운터 몇번? (1부터)"),
       answer: 2,
     },
   ];
@@ -293,14 +293,14 @@ export function makeInterviewCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The key insight: we need to find not just ONE counter for Bessie, but ALL counters that finish at the same minimum time when it's Bessie's turn.", "핵심: 베시 차례에 최소 종료 시간인 카운터를 하나가 아니라 전부 찾아야 해요."),
+        "The key insight: we need to find not just ONE counter for Bessie, but ALL counters that finish at the same minimum time when it's Bessie's turn.", "핵심: Bessie 차례에 최소 종료 시간인 카운터를 하나가 아니라 전부 찾아야 해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
               { n: 1, label: t(E, "Init heap", "힙 초기화"), code: "heap = [(times[i], i) for i in 0..K-1]   # min-heap of (finish, counter)", color: "#059669" },
               { n: 2, label: t(E, "Each cow K..N", "K번째 이후 소"), code: "finish, counter = heappop(heap);  heappush(heap, (finish + times[i], counter))", color: "#0891b2" },
-              { n: 3, label: t(E, "Save Bessie\u2019s arrival time", "베시 도착 시각 저장"), code: "bessie_start = the finish popped on Bessie\u2019s turn", color: "#7c3aed" },
+              { n: 3, label: t(E, "Save Bessie\u2019s arrival time", "Bessie 도착 시각 저장"), code: "bessie_start = the finish popped on Bessie\u2019s turn", color: "#7c3aed" },
               { n: 4, label: t(E, "All counters tied at that time", "그 시각에 동점인 모든 카운터"), code: "result = [c for (ft, c) in heap_just_before_Bessie if ft == bessie_start]", color: "#dc2626" },
             ].map((step, i) => (
               <div key={i} style={{
@@ -325,10 +325,10 @@ export function makeInterviewCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "After simulating N-1 cows, we check the heap.\nAll counters with the minimum finish time are valid for Bessie.", "N-1마리를 시뮬레이션한 후, 힙에서 최소 종료 시간인 카운터를 모두 찾으면 그게 베시의 가능한 카운터!"),
+        "After simulating N-1 cows, we check the heap.\nAll counters with the minimum finish time are valid for Bessie.", "N-1마리를 시뮬레이션한 후, 힙에서 최소 종료 시간인 카운터를 모두 찾으면 그게 Bessie의 가능한 카운터!"),
       question: t(E,
         "If the heap has [(5,0),(5,2),(7,1),(8,3)], which counters can Bessie go to?",
-        "힙이 [(5,0),(5,2),(7,1),(8,3)]이면 베시가 갈 수 있는 카운터는?"),
+        "힙이 [(5,0),(5,2),(7,1),(8,3)]이면 Bessie가 갈 수 있는 카운터는?"),
       options: [
         t(E, "Counter 1 and 3 (0-indexed: 0,2)", "카운터 1, 3 (0-indexed: 0,2)"),
         t(E, "Counter 1 only", "카운터 1만"),
@@ -337,7 +337,7 @@ export function makeInterviewCh3(E, lang = "py") {
       correct: 0,
       explain: t(E,
         "Min finish = 5. Counters 0 and 2 both have finish time 5, so Bessie can go to either!",
-        "최소 종료 = 5. 카운터 0과 2 모두 5니까 베시는 둘 중 하나!"),
+        "최소 종료 = 5. 카운터 0과 2 모두 5니까 Bessie는 둘 중 하나!"),
     },
     {
       type: "progressive",
@@ -349,7 +349,7 @@ export function makeInterviewCh3(E, lang = "py") {
     {
       type: "runner",
       narr: t(E,
-        "Try it yourself.\nEnter N, K, times — watch the live assignment, see which counter Bessie ends at.", "직접 돌려봐요. N, K, times 입력 — 실시간 배정을 보고 베시가 어느 카운터로 가는지 확인."),
+        "Try it yourself.\nEnter N, K, times — watch the live assignment, see which counter Bessie ends at.", "직접 돌려봐요. N, K, times 입력 — 실시간 배정을 보고 Bessie가 어느 카운터로 가는지 확인."),
     },
   ];
 }

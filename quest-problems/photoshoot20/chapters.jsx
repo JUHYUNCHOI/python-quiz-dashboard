@@ -31,7 +31,7 @@ export function makePhoto20Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie wrote down a permutation a of 1..N, then computed b[i] = a[i] + a[i+1] for i = 0 to N−2 — and only b survived.\nGiven b, recover the lexicographically SMALLEST permutation a that could have produced it.",
-        "베시가 1..N의 순열 a를 적은 뒤, b[i] = a[i] + a[i+1] (i = 0 ~ N−2) 을 계산했어요 — 그런데 a 는 사라지고 b 만 남았어요.\nb 를 보고, 그것을 만들 수 있었던 순열 a 중 사전순으로 가장 작은 것을 알아내요."),
+        "Bessie가 1..N의 순열 a를 적은 뒤, b[i] = a[i] + a[i+1] (i = 0 ~ N−2) 을 계산했어요 — 그런데 a 는 사라지고 b 만 남았어요.\nb 를 보고, 그것을 만들 수 있었던 순열 a 중 사전순으로 가장 작은 것을 알아내요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>

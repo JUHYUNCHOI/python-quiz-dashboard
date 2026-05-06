@@ -101,10 +101,10 @@ export function makeMilkMeasCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "All cows start at 7.\nDay 1: Bessie (cow 1) gets +5, now at 12.\nLeaders change from {all three} to {Bessie}.\nIs this 1 display change?", "모든 소가 7에서 시작. 1일차: 베시(소 1)가 +5, 이제 12. 리더가 {전부}에서 {베시}로 변경. 디스플레이 변경 1번이에요?"),
+        "All cows start at 7.\nDay 1: Bessie (cow 1) gets +5, now at 12.\nLeaders change from {all three} to {Bessie}.\nIs this 1 display change?", "모든 소가 7에서 시작. 1일차: Bessie(소 1)가 +5, 이제 12. 리더가 {전부}에서 {Bessie}로 변경. 디스플레이 변경 1번이에요?"),
       question: t(E,
         "Start: all at 7 (leaders = all). Bessie +5 -> 12. Leaders = {Bessie}. Display changes?",
-        "시작: 모두 7 (리더 = 전부). 베시 +5 -> 12. 리더 = {베시}. 디스플레이 변경 횟수?"),
+        "시작: 모두 7 (리더 = 전부). Bessie +5 -> 12. 리더 = {Bessie}. 디스플레이 변경 횟수?"),
       options: [
         t(E, "1 change", "1번 변경"),
         t(E, "0 changes", "0번 변경"),
@@ -119,13 +119,13 @@ export function makeMilkMeasCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "All start at 7. Only one change: Bessie +5 on day 1. How many display changes total?", "모두 7에서 시작. 변경 하나만: 1일차 베시 +5. 총 디스플레이 변경 횟수는?"),
+        "All start at 7. Only one change: Bessie +5 on day 1. How many display changes total?", "모두 7에서 시작. 변경 하나만: 1일차 Bessie +5. 총 디스플레이 변경 횟수는?"),
       question: t(E,
         "1 change: Bessie +5. Total display changes?",
-        "변경 1개: 베시 +5. 총 디스플레이 변경 횟수?"),
+        "변경 1개: Bessie +5. 총 디스플레이 변경 횟수?"),
       hint: t(E,
         "Leaders go from {all} to {Bessie}. That's 1 change.",
-        "리더가 {전부}에서 {베시}로. 1번 변경."),
+        "리더가 {전부}에서 {Bessie}로. 1번 변경."),
       answer: 1,
     },
   ];

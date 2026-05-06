@@ -69,10 +69,10 @@ export function PalindromeSim({ E }) {
                 "n = 0: 빈 더미, 둘 차례면 짐. can_win[0] = E.")
         ) : canWin[cur] ? (
           t(E, `n = ${cur}: take palindrome ${reasons[cur]} → leaves opponent at n = ${cur - reasons[cur]} (E). Bessie wins!`,
-                `n = ${cur}: 회문 ${reasons[cur]} 가져감 → 상대 n = ${cur - reasons[cur]} (E). 베시 승!`)
+                `n = ${cur}: 회문 ${reasons[cur]} 가져감 → 상대 n = ${cur - reasons[cur]} (E). Bessie 승!`)
         ) : (
           t(E, `n = ${cur}: every palindrome p ≤ ${cur} leaves opponent in B. Bessie LOSES.`,
-                `n = ${cur}: 모든 회문 p ≤ ${cur}이 상대 B 상태로. 베시 패.`)
+                `n = ${cur}: 모든 회문 p ≤ ${cur}이 상대 B 상태로. Bessie 패.`)
         )}
       </div>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
@@ -318,7 +318,7 @@ export function getPalindromeSections(E) {
       py: PA_OUT_PY, cpp: PA_OUT_CPP,
       why: [
         t(E, "Bessie moves first — she wins iff can_win[S] is true.",
-            "베시가 선공 — can_win[S]가 true면 베시 승리."),
+            "Bessie가 선공 — can_win[S]가 true면 Bessie 승리."),
       ],
     },
     {

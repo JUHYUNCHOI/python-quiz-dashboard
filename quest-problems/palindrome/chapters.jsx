@@ -38,7 +38,7 @@ export function makePalindromeCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie and Elsie share a pile of S stones. On her turn, a player removes a palindrome-number of stones (1, 2, 3, ..., 9, 11, 22, 121...).\nIf you can't move (the pile is empty on your turn), you LOSE.\nWho wins if Bessie goes first and both play perfectly?",
-        "베시와 엘시가 S개의 돌이 있는 더미를 나눠가져요. 자기 차례마다 회문 수만큼(1, 2, 3, ..., 9, 11, 22, 121...) 돌을 가져가요.\n자기 차례에 더미가 비어있으면 져요.\n베시가 먼저 두고 둘 다 최선을 다하면 누가 이길까요?"),
+        "Bessie와 Elsie가 S개의 돌이 있는 더미를 나눠가져요. 자기 차례마다 회문 수만큼(1, 2, 3, ..., 9, 11, 22, 121...) 돌을 가져가요.\n자기 차례에 더미가 비어있으면 져요.\nBessie가 먼저 두고 둘 다 최선을 다하면 누가 이길까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -57,8 +57,8 @@ export function makePalindromeCh1(E) {
                 <div>
                   {t(E, "There's a pile of ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "S stones", "S개 돌")}</b>
-                  {t(E, ". Bessie and Elsie take turns; ", " 더미가 있어요. 베시와 엘시가 번갈아 두고, ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "Bessie goes first", "베시가 먼저")}</b>
+                  {t(E, ". Bessie and Elsie take turns; ", " 더미가 있어요. Bessie와 Elsie가 번갈아 두고, ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "Bessie goes first", "Bessie가 먼저")}</b>
                   {t(E, ".", "예요.")}
                 </div>
               </div>
@@ -83,7 +83,7 @@ export function makePalindromeCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "둘 다 최선을 다 할 때, ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "'B' if Bessie wins, 'E' if Elsie wins", "베시가 이기면 'B', 엘시가 이기면 'E'")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "'B' if Bessie wins, 'E' if Elsie wins", "Bessie가 이기면 'B', Elsie가 이기면 'E'")}</b>
                   {t(E, " (both play optimally).", "를 출력해요.")}
                 </div>
               </div>
@@ -135,10 +135,10 @@ export function makePalindromeCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "If S is a palindrome, Bessie can take ALL stones on her first turn and win!\nWhat about S=8?", "S가 회문이면, 베시가 첫 턴에 돌을 전부 가져가서 이겨! S=8이면?"),
+        "If S is a palindrome, Bessie can take ALL stones on her first turn and win!\nWhat about S=8?", "S가 회문이면, Bessie가 첫 턴에 돌을 전부 가져가서 이겨! S=8이면?"),
       question: t(E,
         "S=8. Bessie removes all 8 stones (8 is a palindrome!). Elsie faces 0 stones. Does Bessie win? (1=yes, 0=no)",
-        "S=8. 베시가 8개 전부 가져가 (8은 회문!). 엘시는 0개를 마주해요. 베시가 이겨? (1=예, 0=아니오)"),
+        "S=8. Bessie가 8개 전부 가져가 (8은 회문!). Elsie는 0개를 마주해요. Bessie가 이겨? (1=예, 0=아니오)"),
       hint: t(E,
         "8 is a single digit, so it IS a palindrome. She can take all 8!",
         "8은 한 자리 수라 회문이에요. 8개 전부 가져갈 수 있어요!"),
@@ -147,7 +147,7 @@ export function makePalindromeCh1(E) {
     {
       type: "sim",
       narr: t(E,
-        "Watch the DP table fill bottom-up. Green = Bessie wins, red = Elsie wins.", "DP 테이블이 아래에서 위로 채워지는 걸 봐요. 초록 = 베시 승, 빨강 = 엘시 승."),
+        "Watch the DP table fill bottom-up. Green = Bessie wins, red = Elsie wins.", "DP 테이블이 아래에서 위로 채워지는 걸 봐요. 초록 = Bessie 승, 빨강 = Elsie 승."),
     },
   ];
 }
@@ -161,7 +161,7 @@ export function makePalindromeCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The key insight: if S is a palindrome, Bessie wins immediately.\nOtherwise, we check game states recursively.", "핵심: S가 회문이면 베시가 바로 이겨. 아니면 게임 상태를 재귀적으로 확인해요."),
+        "The key insight: if S is a palindrome, Bessie wins immediately.\nOtherwise, we check game states recursively.", "핵심: S가 회문이면 Bessie가 바로 이겨. 아니면 게임 상태를 재귀적으로 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

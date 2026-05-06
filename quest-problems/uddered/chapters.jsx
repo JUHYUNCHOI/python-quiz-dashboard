@@ -31,7 +31,7 @@ export function makeUdderedCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has a custom 26-letter alphabet order. She hears a string S; each character must be read in order, but she has to FULLY recite the alphabet at least once between any two characters that move backward in her order (or stay the same).\nPrint the MINIMUM number of full alphabet recitations she needs to read all of S.",
-        "베시에게 26 글자의 커스텀 알파벳 순서가 있어요. 문자열 S 를 들으면 각 문자를 순서대로 읽어야 해요. 다만 두 인접 문자가 그녀의 순서에서 뒤로 가거나 같으면, 그 사이에 알파벳 전체를 적어도 한 번 외워야 해요.\nS 를 모두 읽기 위해 필요한 최소 알파벳 외우기 횟수를 출력해요."),
+        "Bessie에게 26 글자의 커스텀 알파벳 순서가 있어요. 문자열 S 를 들으면 각 문자를 순서대로 읽어야 해요. 다만 두 인접 문자가 그녀의 순서에서 뒤로 가거나 같으면, 그 사이에 알파벳 전체를 적어도 한 번 외워야 해요.\nS 를 모두 읽기 위해 필요한 최소 알파벳 외우기 횟수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -48,7 +48,7 @@ export function makeUdderedCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie has a ", "베시에게 ")}
+                  {t(E, "Bessie has a ", "Bessie에게 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "custom 26-letter alphabet order", "26 글자의 커스텀 알파벳 순서")}</b>
                   {t(E, " (a permutation of a..z).",
                         " (a..z 의 순열) 가 있어요.")}
@@ -119,7 +119,7 @@ export function makeUdderedCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Map each letter to its position in Bessie's custom alphabet. Scan S; whenever next letter's custom-position ≤ current's, she must recite the alphabet again. Start with cycle = 1.",
-        "각 글자를 베시의 커스텀 알파벳에서의 위치로 매핑. S 를 스캔; 다음 글자의 커스텀-위치 ≤ 현재 위치 일 때 알파벳을 다시 외워야 함. cycle = 1 부터 시작."),
+        "각 글자를 Bessie의 커스텀 알파벳에서의 위치로 매핑. S 를 스캔; 다음 글자의 커스텀-위치 ≤ 현재 위치 일 때 알파벳을 다시 외워야 함. cycle = 1 부터 시작."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

@@ -36,7 +36,7 @@ export function makeFebCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie texts using only the letters B, E, and F. The 'excitement' of a message is the number of adjacent same-letter pairs (e.g., BBE has 1: the BB). Each F is a wildcard — it can become either B or E.\nFor a given message, print how many DISTINCT excitement values are possible across all ways of assigning F's.",
-        "베시는 B, E, F 만 사용해 문자를 보내요. 메시지의 '흥분도' 는 인접한 같은 글자 쌍의 수예요 (예: BBE 의 흥분도는 1, BB 부분). 각 F 는 와일드카드 — B 또는 E 어느 쪽으로든 결정될 수 있어요.\n주어진 메시지에 대해 F 들의 모든 결정 방식에 걸쳐 만들어질 수 있는 서로 다른 흥분도 값의 개수를 출력해요."),
+        "Bessie는 B, E, F 만 사용해 문자를 보내요. 메시지의 '흥분도' 는 인접한 같은 글자 쌍의 수예요 (예: BBE 의 흥분도는 1, BB 부분). 각 F 는 와일드카드 — B 또는 E 어느 쪽으로든 결정될 수 있어요.\n주어진 메시지에 대해 F 들의 모든 결정 방식에 걸쳐 만들어질 수 있는 서로 다른 흥분도 값의 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -53,7 +53,7 @@ export function makeFebCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie's message is a string over ", "베시의 메시지는 ")}
+                  {t(E, "Bessie's message is a string over ", "Bessie의 메시지는 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "{B, E, F}", "{B, E, F}")}</b>
                   {t(E, ".", " 문자열이에요.")}
                 </div>

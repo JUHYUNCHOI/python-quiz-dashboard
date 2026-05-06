@@ -43,7 +43,7 @@ export function makePhoto2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has N cows in some current order, and a target order. The only allowed move: pick ONE cow and move her to ANY position farther LEFT in the line.\nPrint the MINIMUM number of moves to transform the current order into the target order.",
-        "베시에게 N 마리 소가 어떤 현재 순서로 있고, 목표 순서가 주어져요. 허용된 동작은 단 하나: 한 소를 골라 줄에서 더 왼쪽 어디든 옮기기.\n현재 순서를 목표 순서로 만드는 최소 동작 수를 출력해요."),
+        "Bessie에게 N 마리 소가 어떤 현재 순서로 있고, 목표 순서가 주어져요. 허용된 동작은 단 하나: 한 소를 골라 줄에서 더 왼쪽 어디든 옮기기.\n현재 순서를 목표 순서로 만드는 최소 동작 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -60,7 +60,7 @@ export function makePhoto2Ch1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie has ", "베시에게 ")}
+                  {t(E, "Bessie has ", "Bessie에게 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "N cows in a current line and a target order", "N 마리 소의 현재 줄과 목표 순서")}</b>
                   {t(E, ".", " 가 있어요.")}
                 </div>

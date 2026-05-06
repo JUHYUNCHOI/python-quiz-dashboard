@@ -42,7 +42,7 @@ export function makeAcow1Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has N papers with citation counts c[i]. Her h-index is the largest h such that at least h of her papers have ≥ h citations.\nShe can ADD a total of L extra citations distributed across her papers (each extra citation goes to one paper). What's the MAXIMUM h-index she can achieve?",
-        "베시에게 인용수 c[i] 인 N개의 논문이 있어요. h-index 는 어떤 수 h 에 대해, 인용수가 h 이상인 논문이 h편 이상 있을 때의 가장 큰 h 예요.\n추가 인용을 총 L개 까지 자유롭게 더할 수 있어요 (한 인용은 한 논문에). 만들 수 있는 h-index 의 최댓값을 출력해요."),
+        "Bessie에게 인용수 c[i] 인 N개의 논문이 있어요. h-index 는 어떤 수 h 에 대해, 인용수가 h 이상인 논문이 h편 이상 있을 때의 가장 큰 h 예요.\n추가 인용을 총 L개 까지 자유롭게 더할 수 있어요 (한 인용은 한 논문에). 만들 수 있는 h-index 의 최댓값을 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -59,7 +59,7 @@ export function makeAcow1Ch1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie has ", "베시에게 ")}
+                  {t(E, "Bessie has ", "Bessie에게 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "N papers with citation counts", "인용수가 주어진 N개의 논문")}</b>
                   {t(E, " ", " ")}
                   <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>c[i]</code>

@@ -36,7 +36,7 @@ export function makeBlockGameCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has N alphabet blocks; each block has a word printed on its FRONT face and a word on its BACK face. To 'spell' a word using a block, the block must contain enough letter cubes for that word.\nFor each letter A..Z, find the minimum number of letter cubes Bessie needs so that she can spell EITHER the front or back word of every block — the answer is one count per letter.",
-        "베시에게 N개의 알파벳 판이 있어요. 각 판의 앞면과 뒷면에 단어가 하나씩 적혀 있어요. 어떤 단어를 만들려면 그 단어에 들어 있는 글자만큼 글자 큐브가 있어야 해요.\n알파벳 A..Z 각각에 대해, 모든 판마다 앞면이나 뒷면 중 한 단어는 만들 수 있을 만큼 보유해야 할 큐브의 최소 개수를 출력해요."),
+        "Bessie에게 N개의 알파벳 판이 있어요. 각 판의 앞면과 뒷면에 단어가 하나씩 적혀 있어요. 어떤 단어를 만들려면 그 단어에 들어 있는 글자만큼 글자 큐브가 있어야 해요.\n알파벳 A..Z 각각에 대해, 모든 판마다 앞면이나 뒷면 중 한 단어는 만들 수 있을 만큼 보유해야 할 큐브의 최소 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -53,7 +53,7 @@ export function makeBlockGameCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie has ", "베시에게 ")}
+                  {t(E, "Bessie has ", "Bessie에게 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "N alphabet blocks", "N개의 알파벳 판")}</b>
                   {t(E, " — each block has a word on its FRONT and a word on its BACK.",
                         " 가 있어요 — 각 판의 앞면과 뒷면에 각각 단어가 적혀있어요.")}

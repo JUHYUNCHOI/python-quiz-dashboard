@@ -48,7 +48,7 @@ export function makeLiarsCh1(E) {
       type: "reveal",
       narr: t(E,
         "N cows each claim where Bessie is on a number line. A 'G x' claim says Bessie is at position ≥ x; 'L x' says ≤ x. Bessie has ONE actual position.\nFind the MINIMUM number of cows who must be lying — i.e., pick Bessie's position to maximize the number of true claims.",
-        "N마리 소가 각자 베시의 위치에 대해 주장을 해요. 'G x'는 베시 위치가 x 이상, 'L x'는 x 이하라는 뜻이에요. 베시의 실제 위치는 하나예요.\n베시의 위치를 잘 골라서 참인 주장 수를 최대화할 때, 거짓말쟁이의 최소 수를 구해요."),
+        "N마리 소가 각자 Bessie의 위치에 대해 주장을 해요. 'G x'는 Bessie 위치가 x 이상, 'L x'는 x 이하라는 뜻이에요. Bessie의 실제 위치는 하나예요.\nBessie의 위치를 잘 골라서 참인 주장 수를 최대화할 때, 거짓말쟁이의 최소 수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -65,7 +65,7 @@ export function makeLiarsCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie has ", "베시의 ")}
+                  {t(E, "Bessie has ", "Bessie의 ")}
                   <b style={{ color: "#2563eb" }}>{t(E, "a single position on a number line", "수직선 위 단 하나의 위치")}</b>
                   {t(E, ".", "가 있어요.")}
                 </div>
@@ -78,9 +78,9 @@ export function makeLiarsCh1(E) {
                   {t(E, ":", " 을 해요:")}
                   <div style={{ marginTop: 4, marginLeft: 8, fontSize: 12, color: "#475569" }}>
                     <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace" }}>G x</code>
-                    {t(E, " — Bessie's position ≥ x", " — 베시 위치 ≥ x")}<br/>
+                    {t(E, " — Bessie's position ≥ x", " — Bessie 위치 ≥ x")}<br/>
                     <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace" }}>L x</code>
-                    {t(E, " — Bessie's position ≤ x", " — 베시 위치 ≤ x")}
+                    {t(E, " — Bessie's position ≤ x", " — Bessie 위치 ≤ x")}
                   </div>
                 </div>
               </div>
@@ -90,7 +90,7 @@ export function makeLiarsCh1(E) {
                   {t(E, "Some cows might be ", "어떤 소들은 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "lying", "거짓말")}</b>
                   {t(E, " — their claim is false for Bessie's actual position.",
-                        "을 해요 — 그 주장이 베시의 실제 위치에 대해 거짓이에요.")}
+                        "을 해요 — 그 주장이 Bessie의 실제 위치에 대해 거짓이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
@@ -99,7 +99,7 @@ export function makeLiarsCh1(E) {
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of liars", "거짓말쟁이의 최소 수")}</b>
                   {t(E, " over all possible positions for Bessie.",
-                        "를 출력해요. 베시의 위치를 가장 좋게 골랐을 때.")}
+                        "를 출력해요. Bessie의 위치를 가장 좋게 골랐을 때.")}
                 </div>
               </div>
             </div>
@@ -110,10 +110,10 @@ export function makeLiarsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Claims: 'G 3' and 'L 5'. If Bessie is at position 4, how many liars?", "주장: 'G 3'과 'L 5'. 베시가 위치 4에 있으면, 거짓말쟁이는 몇 명?"),
+        "Claims: 'G 3' and 'L 5'. If Bessie is at position 4, how many liars?", "주장: 'G 3'과 'L 5'. Bessie가 위치 4에 있으면, 거짓말쟁이는 몇 명?"),
       question: t(E,
         "'G 3' (pos>=3) and 'L 5' (pos<=5). Bessie at 4. Liars?",
-        "'G 3' (위치>=3)과 'L 5' (위치<=5). 베시 위치 4. 거짓말쟁이?"),
+        "'G 3' (위치>=3)과 'L 5' (위치<=5). Bessie 위치 4. 거짓말쟁이?"),
       options: [
         t(E, "0 - both claims are true", "0 - 둘 다 참"),
         t(E, "1 - one claim is false", "1 - 하나가 거짓"),
@@ -151,7 +151,7 @@ export function makeLiarsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "The optimal Bessie position is somewhere among the claim x values. Brute force: for each candidate position p, count how many claims are CONTRADICTED. The minimum count is the answer (number of liars).",
-        "베시의 최적 위치는 주장된 x 값 중 하나예요. 완전탐색: 각 후보 위치 p 마다, 모순되는 주장 수를 셈. 최솟값이 답 (거짓말쟁이 수)."),
+        "Bessie의 최적 위치는 주장된 x 값 중 하나예요. 완전탐색: 각 후보 위치 p 마다, 모순되는 주장 수를 셈. 최솟값이 답 (거짓말쟁이 수)."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

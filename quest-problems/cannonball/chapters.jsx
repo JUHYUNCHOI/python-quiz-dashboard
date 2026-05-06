@@ -50,7 +50,7 @@ export function makeCannonCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie is a cannonball that starts at position S, moving RIGHT with power 1, on a number line dotted with N items at distinct positions.\nEach item is a jump pad (reverse direction, add to power) or a target (breaks if power ≥ its value).\nHow many targets break before Bessie leaves the line or loops forever?",
-        "베시가 대포알이 되어 위치 S에서 시작해 파워 1로 오른쪽으로 움직여요. 수직선 위에는 서로 다른 위치에 N개의 아이템이 있어요.\n각 아이템은 점프패드(방향을 반대로 바꾸고 파워를 더해줌) 또는 타겟(파워가 그 값 이상이면 부서짐) 둘 중 하나예요.\n베시가 수직선을 벗어나거나 무한 반복할 때까지 부서지는 타겟 수를 출력해요."),
+        "Bessie가 대포알이 되어 위치 S에서 시작해 파워 1로 오른쪽으로 움직여요. 수직선 위에는 서로 다른 위치에 N개의 아이템이 있어요.\n각 아이템은 점프패드(방향을 반대로 바꾸고 파워를 더해줌) 또는 타겟(파워가 그 값 이상이면 부서짐) 둘 중 하나예요.\nBessie가 수직선을 벗어나거나 무한 반복할 때까지 부서지는 타겟 수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -67,7 +67,7 @@ export function makeCannonCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie starts at position ", "베시가 위치 ")}
+                  {t(E, "Bessie starts at position ", "Bessie가 위치 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "S, moving RIGHT with power 1", "S에서 오른쪽 방향, 파워 1")}</b>
                   {t(E, ", on a number line.", "로 출발해요.")}
                 </div>
@@ -86,7 +86,7 @@ export function makeCannonCh1(E) {
                 <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#dc2626" }}>{t(E, "Targets", "타겟")}</b>
-                  {t(E, " break the first time Bessie lands on them ", "은 베시가 처음 착지했을 때 ")}
+                  {t(E, " break the first time Bessie lands on them ", "은 Bessie가 처음 착지했을 때 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "if her power ≥ the target's value", "파워 ≥ 타겟 값")}</b>
                   {t(E, ". Once broken, they stay broken (and don't trigger again).",
                         "이면 부서져요. 한 번 부서진 뒤에는 효과가 없어요.")}
@@ -98,7 +98,7 @@ export function makeCannonCh1(E) {
                   {t(E, "Print how many targets ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "break in total", "부서진 타겟의 총 개수")}</b>
                   {t(E, " (Bessie keeps going until she leaves the line or starts looping).",
-                        "를 출력해요 (베시는 수직선을 벗어나거나 무한 반복에 빠질 때까지 계속 움직여요).")}
+                        "를 출력해요 (Bessie는 수직선을 벗어나거나 무한 반복에 빠질 때까지 계속 움직여요).")}
                 </div>
               </div>
             </div>
@@ -109,7 +109,7 @@ export function makeCannonCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Quick check!\nIf Bessie's power is 2 and she lands on a target with value 3, does it break?", "확인! 베시의 파워가 2이고 값이 3인 타겟에 착지하면, 부서질까?"),
+        "Quick check!\nIf Bessie's power is 2 and she lands on a target with value 3, does it break?", "확인! Bessie의 파워가 2이고 값이 3인 타겟에 착지하면, 부서질까?"),
       question: t(E,
         "Power = 2, target value = 3. Does the target break?",
         "파워 = 2, 타겟 값 = 3. 타겟이 부서질까?"),
@@ -126,7 +126,7 @@ export function makeCannonCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Bessie starts at position 2 with power 1, going right. What is her next position?", "베시가 위치 2에서 파워 1, 오른쪽으로 출발해요. 다음 위치는?"),
+        "Bessie starts at position 2 with power 1, going right. What is her next position?", "Bessie가 위치 2에서 파워 1, 오른쪽으로 출발해요. 다음 위치는?"),
       question: t(E,
         "Position = 2, direction = right (+1). Next position?",
         "위치 = 2, 방향 = 오른쪽(+1). 다음 위치는?"),
