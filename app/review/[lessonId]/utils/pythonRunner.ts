@@ -25,12 +25,27 @@ interface Variable {
 }
 
 // Python 표현식을 JS 표현식으로 번역 (eval 전 단계)
-// True/False, and/or/not, ==/!=/>/< 모두 JS 가 그대로 처리할 수 있게
+// True/False, and/or/not, ==/!=/>/<, and Python's `in`/`not in` substring check
 function pyToJsExpr(expr: string): string {
-  return expr
+  let s = expr
     .replace(/\bTrue\b/g, 'true')
     .replace(/\bFalse\b/g, 'false')
     .replace(/\bNone\b/g, 'null')
+
+  // `X in Y` / `X not in Y` → `Y.includes(X)` / `!Y.includes(X)`
+  // (Python: substring/list membership. JS: .includes() handles both.)
+  // Atom = identifier / "..." / '...'. (괄호 표현식은 단순화 위해 제외 — 학생 코드에서 드뭄.)
+  const atom = `(?:[A-Za-z_$][\\w$]*|"[^"]*"|'[^']*')`
+  s = s.replace(
+    new RegExp(`(${atom})\\s+not\\s+in\\s+(${atom})`, 'g'),
+    '!$2.includes($1)',
+  )
+  s = s.replace(
+    new RegExp(`(${atom})\\s+in\\s+(${atom})`, 'g'),
+    '$2.includes($1)',
+  )
+
+  return s
     .replace(/\band\b/g, '&&')
     .replace(/\bor\b/g, '||')
     .replace(/\bnot\s+/g, '!')
@@ -457,9 +472,11 @@ function executePrint(
   // ── 단일 인자 ─────────────────────────────────────────────────
 
   // 일반 문자열
-  const strMatch = argsStr.match(/^(['"])([\s\S]*)\1$/)
+  // 문자열 리터럴: 외부 따옴표만 있고 안에는 같은 따옴표 없는 경우만
+  // (그래야 `'hello' == 'hello'` 같은 표현식이 한 문자열로 잘못 매칭 안 됨)
+  const strMatch = argsStr.match(/^'([^']*)'$|^"([^"]*)"$/)
   if (strMatch) {
-    return { result: strMatch[2] }
+    return { result: strMatch[1] !== undefined ? strMatch[1] : strMatch[2] }
   }
 
   // 함수 호출이 print 안에 있는 경우: print(함수())
@@ -564,10 +581,10 @@ function evaluateExpression(expr: string, variables: Map<string, Variable>): {
 } {
   expr = expr.trim()
 
-  // 문자열
-  const strMatch = expr.match(/^(['"])([\s\S]*)\1$/)
+  // 문자열 — 외부 따옴표 안에 같은 따옴표가 없는 경우만
+  const strMatch = expr.match(/^'([^']*)'$|^"([^"]*)"$/)
   if (strMatch) {
-    return { value: strMatch[2], type: 'string' }
+    return { value: strMatch[1] !== undefined ? strMatch[1] : strMatch[2], type: 'string' }
   }
 
   // 숫자
@@ -588,10 +605,23 @@ function evaluateExpression(expr: string, variables: Map<string, Variable>): {
   }
 
   // 표현식 평가 — Python → JS 번역 후 Function eval
-  // 허용 문자: 영숫자, 공백, +-*/ 괄호, 비교/논리/부등호 (<>=!&|), 점 (실수)
+  // 안전성: 문자열 리터럴 ('...', "...") 은 placeholder 로 잠시 빼두고
+  // 나머지가 안전한 토큰만 가지는지 확인. 빼둔 문자열은 다시 끼워넣어 eval.
+  // 허용 (문자열 밖): 영숫자, 공백, +-*/ 괄호, 비교/논리 (<>=!&|), 점 (실수), 쉼표
   const tryEval = (raw: string) => {
-    const js = pyToJsExpr(raw)
+    let js = pyToJsExpr(raw)
+    // single-quote 문자열을 double-quote 로 바꿔서 JS 가 똑같이 해석하게 함
+    // (escape 처리는 단순화 — 따옴표 안에 다른 따옴표 나오면 학생이 잘 안 씀)
+    const literals: string[] = []
+    js = js.replace(/'([^'\\]*)'|"([^"\\]*)"/g, (_, s1, s2) => {
+      const content = s1 !== undefined ? s1 : s2
+      const idx = literals.length
+      literals.push(JSON.stringify(content))
+      return `__STR${idx}__`
+    })
     if (!/^[\w\s+\-*/().<>=!&|,]+$/.test(js)) return null
+    // placeholder 복원
+    js = js.replace(/__STR(\d+)__/g, (_, n) => literals[Number(n)])
     try {
       const calc = Function('return ' + js)()
       const t: 'string' | 'number' | 'boolean' | 'none' =
@@ -672,10 +702,10 @@ function parseArguments(argsStr: string): Array<{ value: any, type: 'string' | '
 }
 
 function parseValue(val: string): { value: any, type: 'string' | 'number' | 'boolean' | 'none' } {
-  // 문자열
-  const strMatch = val.match(/^(['"])([\s\S]*)\1$/)
+  // 문자열 — 외부 따옴표 안에 같은 따옴표가 없는 경우만
+  const strMatch = val.match(/^'([^']*)'$|^"([^"]*)"$/)
   if (strMatch) {
-    return { value: strMatch[2], type: 'string' }
+    return { value: strMatch[1] !== undefined ? strMatch[1] : strMatch[2], type: 'string' }
   }
   
   // 숫자
