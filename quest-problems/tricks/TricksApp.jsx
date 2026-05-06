@@ -152,7 +152,7 @@ export default function TricksApp(props = {}) {
       <div style={{ height: 110 }} />
 
       {/* Fixed bottom navigation */}
-      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "8px 16px 14px", zIndex: 100, borderTop: `1px solid ${C.border}`, boxShadow: "0 -4px 12px rgba(0,0,0,.06)" }}>
+      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "8px 16px calc(14px + env(safe-area-inset-bottom))", zIndex: 100, borderTop: `1px solid ${C.border}`, boxShadow: "0 -4px 12px rgba(0,0,0,.06)" }}>
         <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto" }}>
           {isBlocked && (
             <div style={{ textAlign: "center", fontSize: 13, color: C.carry, fontWeight: 700, marginBottom: 4, animation: "pulse 1.5s ease infinite" }}>
