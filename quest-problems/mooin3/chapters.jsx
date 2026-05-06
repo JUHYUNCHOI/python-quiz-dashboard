@@ -64,34 +64,51 @@ export function makeMooin3Ch1(E) {
                 </div>
               </div>
             </div>
+
+            {/* Constraints */}
+            <div style={{ marginTop: 10, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
+              📐 <b>{t(E, "Constraints", "제약")}:</b>{" "}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>3 ≤ N ≤ 10⁵</code>,{" "}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ Q ≤ 3·10⁴</code>,{" "}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>r − l + 1 ≥ 3</code>{" "}
+              {t(E, "(query range fits a triplet).", "(쿼리 구간에 triplet 들어갈 수 있어야).")}
+            </div>
           </div>
         </div>),
     },
 
-    // 1-2: Sample I/O — concrete example with the input format
+    // 1-2: Sample I/O — the official USACO 2025 Open Bronze #3 sample, verbatim.
     {
       type: "reveal",
       narr: t(E,
-        "A small concrete sample. Read the input top-to-bottom and you'll see exactly what each line means.",
-        "작은 예시. 입력을 위에서 아래로 읽으면 각 줄이 무슨 뜻인지 보여요."),
+        "Real USACO sample: 12-character string, 5 queries. Each gives a different answer (28, 6, 1, -1, 12). One walkthrough below.",
+        "실제 USACO 샘플: 12 자 문자열 + 쿼리 5 개. 답이 각각 다름 (28, 6, 1, -1, 12). 첫 쿼리는 아래에서 자세히."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 10 }}>
-            📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
+            📥 {t(E, "Input / Output Format (official sample)", "입력 / 출력 형식 (공식 샘플)")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
-{`5 1
-abbab
-1 5`}
+{`12 5
+abcabbacabac
+1 12
+2 7
+4 8
+2 5
+3 10`}
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`4`}
+{`28
+6
+1
+-1
+12`}
               </div>
             </div>
           </div>
@@ -99,20 +116,36 @@ abbab
             <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
               🔍 {t(E, "Line by line", "한 줄씩")}
             </div>
-            <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>5 1</code> — {t(E, "N = 5 (string length), Q = 1 (one query)", "N = 5 (문자열 길이), Q = 1 (쿼리 1 개)")}</div>
+            <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>12 5</code> — {t(E, "N = 12 (string length), Q = 5 (five queries)", "N = 12 (문자열 길이), Q = 5 (쿼리 5 개)")}</div>
             <div style={{ marginTop: 6 }}>
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>abbab</code> — {t(E, "the string s (1-indexed positions 1..5)", "문자열 s (1-based 위치 1..5)")}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>abcabbacabac</code> — {t(E, "the string s (1-indexed positions 1..12)", "문자열 s (1-based 위치 1..12)")}
             </div>
             <div style={{ marginTop: 6 }}>
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 5</code> — {t(E, "query range [l, r] = [1, 5] (the whole string)", "쿼리 구간 [l, r] = [1, 5] (문자열 전체)")}
+              {t(E, "Then 5 query lines, each: ", "그 다음 쿼리 5 줄, 각각: ")}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>l r</code>
             </div>
-            <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-              <b style={{ color: "#15803d" }}>{t(E, "Why answer = 4?", "왜 답이 4?")}</b>{" "}
-              {t(E, "Pick i=1 ('a'), j=3 ('b'), k=5 ('b'). s[i]='a' ≠ s[j]='b', and s[j]='b' = s[k]='b' ✓. Score = (3-1)·(5-3) = 2·2 = 4. No other triplet beats this.",
-                    "i=1 ('a'), j=3 ('b'), k=5 ('b') 선택. s[i]='a' ≠ s[j]='b', s[j]='b' = s[k]='b' ✓. 점수 = (3-1)·(5-3) = 2·2 = 4. 다른 어떤 triplet 도 이를 못 넘음.")}
+
+            <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+              <b style={{ color: "#15803d" }}>{t(E, "Walkthrough — Query 1: [1, 12] → 28", "샘플 풀이 — 쿼리 1: [1, 12] → 28")}</b>
+              <div style={{ marginTop: 4 }}>
+                {t(E, "The best triplet is (i, j, k) = (1, 8, 12).", "최선 triplet 은 (i, j, k) = (1, 8, 12).")}
+              </div>
+              <div style={{ marginTop: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#5b21b6" }}>
+                s[1]='a', s[8]='c', s[12]='c' &nbsp;→&nbsp; 'a' ≠ 'c' ✓, 'c' = 'c' ✓
+              </div>
+              <div style={{ marginTop: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#15803d" }}>
+                {t(E, "Score = (8 − 1) · (12 − 8) = 7 · 4 = 28", "점수 = (8 − 1) · (12 − 8) = 7 · 4 = 28")}
+              </div>
             </div>
+
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #c4b5fd", fontSize: 11.5 }}>
+              <b style={{ color: "#dc2626" }}>{t(E, "Query 4: [2, 5] → −1", "쿼리 4: [2, 5] → −1")}</b>{" "}
+              {t(E, "no valid moo exists in s[2..5] = \"bcab\".",
+                    "s[2..5] = \"bcab\" 안엔 유효한 moo 없음.")}
+            </div>
+
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, fontStyle: "italic" }}>
-              {t(E, "📌 Indexing: input uses 1-based positions (1..N). The code internally converts to 0-based with l--, r-- for array access.",
+              {t(E, "📌 Indexing: input is 1-based (1..N). Code converts to 0-based with l--, r-- for array access.",
                     "📌 인덱싱: 입력은 1-based (1..N). 코드 안에서는 배열 접근 위해 0-based 로 변환 (l--, r--).")}
             </div>
           </div>
@@ -219,62 +252,70 @@ export function makeMooin3Ch2(E, lang = "py") {
         </div>),
     },
 
-    // 2-2: TLE check — reframed (brute fits at typical Bronze sizes; precompute is for stress)
+    // 2-2: TLE reality — official constraints, brute is partial-credit only.
     {
       type: "reveal",
       narr: t(E,
-        "Will the brute force fit in time? It depends on the constraints — fine at typical Bronze sizes, but at the worst case (N, Q = 10⁵) we'd need to optimize.",
-        "브루트포스가 시간 안에 들어올까? 제약에 따라 — 일반 Bronze 크기는 OK, 최악 (N, Q = 10⁵) 면 최적화 필요."),
+        "Brute force is the natural FIRST code to write — it directly mirrors the fix-j idea. But will it fit the official limits? Let's check.",
+        "brute 는 처음 짜기 자연스러운 코드 — fix-j 아이디어 그대로. 그런데 공식 제약에 들어맞을까? 따져봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 10 }}>
-            ⏱ {t(E, "TLE check — depends on constraints", "타임아웃 체크 — 제약에 따라")}
+            ⏱ {t(E, "Will brute O(Q · N²) fit?", "brute O(Q · N²) 가 들어올까?")}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 10, marginBottom: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-                ✅ {t(E, "Typical Bronze (small N · Q)", "일반 Bronze (작은 N · Q)")}
+                ✅ {t(E, "Inputs 2–3: N, Q ≤ 50", "Inputs 2–3: N, Q ≤ 50")}
               </div>
               <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace" }}>
-                <div>{t(E, "N · Q ≤ ~10⁶", "N · Q ≤ ~10⁶")}</div>
-                <div>{t(E, "brute = N² · Q ≈ 10⁹ → borderline", "brute = N² · Q ≈ 10⁹ → 경계선")}</div>
-                <div style={{ color: "#15803d", fontWeight: 700, marginTop: 4 }}>
-                  {t(E, "→ Brute is the natural answer.", "→ brute 가 자연스러운 답.")}
-                </div>
+                <div>brute ≈ 50² · 50 = 1.25·10⁵</div>
+                <div style={{ color: "#15803d", fontWeight: 700 }}>{t(E, "→ instant. Partial credit ✓", "→ 즉시. 부분점수 ✓")}</div>
+              </div>
+            </div>
+            <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
+                ⚠️ {t(E, "Inputs 4–6: Q=1, l=1, r=N", "Inputs 4–6: Q=1, l=1, r=N")}
+              </div>
+              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace" }}>
+                <div>brute ≈ N² · 1 = 10¹⁰</div>
+                <div style={{ color: "#dc2626", fontWeight: 700 }}>{t(E, "→ TLE.", "→ TLE.")}</div>
               </div>
             </div>
             <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
-                🚨 {t(E, "Stress case (N, Q = 10⁵)", "스트레스 (N, Q = 10⁵)")}
+                🚨 {t(E, "Inputs 7–11: full N, Q", "Inputs 7–11: 풀 N, Q")}
               </div>
               <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace" }}>
-                <div>brute = N² · Q ≈ 10¹⁵</div>
-                <div style={{ color: "#dc2626", fontWeight: 700 }}>{t(E, "→ TLE in any language.", "→ 어떤 언어든 TLE.")}</div>
-                <div style={{ color: "#5b21b6", fontWeight: 700, marginTop: 4 }}>
-                  {t(E, "→ Need precompute (next slide).", "→ precompute 필요 (다음 슬라이드).")}
-                </div>
+                <div>brute ≈ 10¹⁰ · 3·10⁴ = 3·10¹⁴</div>
+                <div style={{ color: "#dc2626", fontWeight: 700 }}>{t(E, "→ TLE.", "→ TLE.")}</div>
               </div>
             </div>
           </div>
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-              💡 {t(E, "We'll code the brute force first (it's clean and works on Bronze samples). The optimization idea is shown next as an extension.",
-                       "brute 부터 코드 짜요 (간단하고 Bronze 샘플 통과). 최적화 아이디어는 다음 슬라이드에서 확장으로 소개.")}
+              💡 {t(E,
+                "Plan: code the brute first — it's the right code to write WHILE you're learning the idea (and gets partial credit). The next slide shows how to make it fast for full credit.",
+                "계획: brute 먼저 짜기 — 아이디어 익히는 동안 짤 코드 (부분점수도 받음). 다음 슬라이드에서 풀점수 받는 빠른 버전.")}
+            </div>
+            <div style={{ marginTop: 6, fontSize: 11, color: "#9a3412" }}>
+              {t(E, "(Constraints: N ≤ 10⁵, Q ≤ 3·10⁴.)",
+                    "(제약: N ≤ 10⁵, Q ≤ 3·10⁴.)")}
             </div>
           </div>
         </div>),
     },
 
-    // 2-3: Optimization idea (precompute) — kept for context, marked as extension
+    // 2-3: Full-credit optimization — precompute idea (required for inputs 4-11).
     {
       type: "reveal",
       narr: t(E,
-        "Extension idea: the two inner scans repeat the same answer for many j. Precompute once, then each query reads in O(1) per j.",
-        "확장 아이디어: 안쪽 두 스캔이 j 별로 답이 같은 경우 많음. 한 번만 미리 계산 → 쿼리당 O(1) per j."),
+        "For full credit, kill the inner scans. The two scans answer the same question many times — precompute once, then each query reads in O(1) per j.",
+        "풀점수 받으려면 안쪽 스캔 제거. 같은 질문을 여러 번 반복 → 한 번만 미리 계산 → 쿼리당 O(1) per j."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
-            ⚡ {t(E, "Optional optimization: precompute two helper arrays", "선택 최적화: 보조 배열 2 개 미리 계산")}
+            ⚡ {t(E, "Full-credit path: precompute two helper arrays", "풀점수 경로: 보조 배열 2 개 미리 계산")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: "10px 12px" }}>
@@ -303,8 +344,8 @@ export function makeMooin3Ch2(E, lang = "py") {
                     "각 j ∈ [l+1, r-1] 에서 i, k 를 O(1) 로 읽음 → 쿼리당 O(N), 총 O(N · 26 + Q · N).")}
             </div>
             <div style={{ marginTop: 6, fontSize: 11, color: "#5b21b6", fontStyle: "italic" }}>
-              {t(E, "(We'll code the brute force next; the optimization is left as an exercise.)",
-                    "(다음에 brute 를 코드로 짜고, 최적화는 연습 문제로 남겨둠.)")}
+              {t(E, "(We'll code the brute below — that's enough for partial credit. The fast version uses these arrays — try it after you've got the brute working.)",
+                    "(아래에서 brute 를 짤게요 — 부분점수에는 충분. 빠른 버전은 이 배열을 써요 — brute 동작 확인 후 도전.)")}
             </div>
           </div>
         </div>),

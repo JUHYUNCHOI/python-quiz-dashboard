@@ -581,10 +581,10 @@ export function getMooin3Sections(E) {
       color: "#7c3aed",
       py: M3_FULL_PY, cpp: M3_FULL_CPP,
       why: [
-        t(E, "Per query: O(N²) — fine for typical Bronze constraints.",
-            "쿼리당: O(N²) — 일반 Bronze 제약에 충분."),
-        t(E, "Total: O(Q · N²). Faster solutions exist with precomputed arrays, but brute force passes at typical Bronze sizes.",
-            "총: O(Q · N²). 미리 계산한 배열로 더 빠르게도 가능하지만 일반 Bronze 크기는 brute force 통과."),
+        t(E, "Per query: O(N²). Total: O(Q · N²) ≈ 3·10¹⁴ at the upper limit — TLE on inputs 4–11.",
+            "쿼리당: O(N²). 총: O(Q · N²) ≈ 3·10¹⁴ (풀 제약) — inputs 4-11 에서 TLE."),
+        t(E, "Brute passes inputs 2–3 (N, Q ≤ 50) for partial credit. For full credit, precompute the prev_diff and next_same arrays (previous slide).",
+            "brute 는 inputs 2-3 (N, Q ≤ 50) 통과 → 부분점수. 풀점수는 prev_diff + next_same 미리 계산 (이전 슬라이드)."),
       ],
     },
   ];
