@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMooin3Sections, MooTraceSimulator, TripletEnumSimulator } from "./components";
+import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 export function makeMooin3Ch1(E) {
   return [
@@ -247,14 +248,16 @@ export function makeMooin3Ch2(E, lang = "py") {
         </div>),
     },
 
-    // 2-2: Progressive code — brute first (1–4), then analyze/insight/fast (5–7).
-    //   Complexity discussion arrives ONLY after the brute is written.
-    {
-      type: "progressive",
-      narr: t(E,
-        "Build the code step by step. Start with the brute that matches the fix-j idea. Once it's working, we'll see what happens at large N and how to fix it.",
-        "단계별로 코드 작성. fix-j 아이디어 그대로 brute 부터. 동작 확인한 다음 큰 N 에선 어떻게 되는지 보고 고쳐요."),
-      sections: getMooin3Sections(E),
-    },
+    // 2-2..2-8: WRITE — one section per chapter step (cowphotos pattern).
+    //   Single nav level: chapter prev/next walks all 7 sections.
+    //   Brute (1–4) first, complexity / insight / fast (5–7) appear AFTER.
+    ...getMooin3Sections(E).map((sec, i) => ({
+      type: "reveal",
+      narr: i === 0
+        ? t(E, "Build the code step by step. Start with the brute that matches the fix-j idea.",
+              "단계별로 코드 작성. fix-j 아이디어 그대로 brute 부터.")
+        : "",
+      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+    })),
   ];
 }

@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, ReverseSim } from "./components";
+import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 // Reference solution — full O(N²) version (matches `solution_py` in quest-meta).
 export const SOLUTION_CODE = [
@@ -404,13 +405,15 @@ export function makeCheckupsCh2(E, lang = "py") {
         </div>),
     },
 
-    /* 2-4 — Progressive code (brute + smart). */
-    {
-      type: "progressive",
-      narr: t(E,
-        "Build the code step by step. First brute (1–4) for partial credit, then the prefix-sum upgrade (5–7) for full credit.",
-        "단계별 코드. 먼저 brute (1–4) 로 부분점수, 그 다음 prefix-sum 업그레이드 (5–7) 로 풀점수."),
-      sections: getCheckupsSections(E),
-    },
+    /* 2-4..2-10 — WRITE: one section per chapter step (cowphotos pattern).
+       Single nav level: chapter prev/next walks all 7 sections. */
+    ...getCheckupsSections(E).map((sec, i) => ({
+      type: "reveal",
+      narr: i === 0
+        ? t(E, "Build the code step by step. Brute (1–4) for partial credit, prefix-sum upgrade (5–7) for full credit.",
+              "단계별 코드. brute (1–4) 로 부분점수, prefix-sum 업그레이드 (5–7) 로 풀점수.")
+        : "",
+      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+    })),
   ];
 }
