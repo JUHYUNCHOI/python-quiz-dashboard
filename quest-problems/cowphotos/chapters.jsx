@@ -19,45 +19,58 @@ export function makeCowPhotosCh1(E) {
           </div>
 
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 8 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "FJ has N cows with heights ", "FJ에게 키 ")}
-                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>h[1..N]</code>
-                  {t(E, " — pick a subset and order them in a row.",
-                        "인 N마리 소가 있어요 — 일부를 골라서 일렬로 배치해요.")}
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, marginBottom: 10 }}>
+              {t(E, "FJ has N cows with heights ", "FJ에게 키 ")}
+              <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>h[1..N]</code>
+              {t(E, " — pick a subset and arrange them in a row h₁,…,h_K satisfying ALL three rules below.",
+                    "인 N 마리 소가 있어요 — 그 중 일부를 골라 한 줄 h₁,…,h_K 로 세우는데, 아래 세 조건을 **모두** 만족해야 해요.")}
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.55 }}>
+              {/* Rule 1: mountain */}
+              <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px" }}>
+                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>1.</span>
+                <div style={{ flex: 1 }}>
+                  <b style={{ color: "#dc2626" }}>{t(E, "Mountain shape", "산 모양")}</b>
+                  {t(E, " — heights go UP to a peak, then DOWN.", " — 가운데 peak 까지 올라갔다 내려와요.")}
+                  <div style={{ fontSize: 11, color: C.dim, marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
+                    h₁ ≤ ⋯ ≤ hᵢ ≥ ⋯ ≥ h_K
+                  </div>
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "The row must look like a ", "그 줄은 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "mountain", "산 모양")}</b>
-                  {t(E, " — heights go UP to a peak, then DOWN — and be ", " (가운데까지 올라갔다 내려옴) 이고 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "left-right symmetric", "좌우 대칭")}</b>
-                  {t(E, " (mirror image around the peak).",
-                        " (가운데 peak 를 기준으로 좌우 거울상)이어야 해요.")}
+              {/* Rule 2: no adjacent dup */}
+              <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px" }}>
+                <span style={{ color: "#0891b2", fontWeight: 800, flexShrink: 0 }}>2.</span>
+                <div style={{ flex: 1 }}>
+                  <b style={{ color: "#0891b2" }}>{t(E, "No adjacent duplicates", "이웃 다름")}</b>
+                  {t(E, " — neighboring cows have different heights.", " — 이웃한 두 소의 키는 달라야 해요.")}
+                  <div style={{ fontSize: 11, color: C.dim, marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
+                    hᵢ ≠ hᵢ₊₁
+                  </div>
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
-                <div>
-                  <b style={{ color: "#0891b2" }}>{t(E, "No two neighbors", "이웃한 두 소")}</b>
-                  {t(E, " can have the same height.",
-                        "는 같은 키를 가질 수 없어요.")}
+              {/* Rule 3: palindrome */}
+              <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px" }}>
+                <span style={{ color: "#7c3aed", fontWeight: 800, flexShrink: 0 }}>3.</span>
+                <div style={{ flex: 1 }}>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "Symmetric (palindrome)", "좌우 대칭 (팰린드롬)")}</b>
+                  {t(E, " — reads the same forwards and backwards.", " — 거꾸로 읽어도 같아요.")}
+                  <div style={{ fontSize: 11, color: C.dim, marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
+                    {t(E, "if i + j = K + 1, then hᵢ = hⱼ", "i + j = K + 1 이면 hᵢ = hⱼ")}
+                  </div>
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
-                <div>
-                  {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "maximum number of cows", "최대 소 수")}</b>
-                  {t(E, " that can stand in the photo.", "를 출력해요.")}
-                </div>
+            </div>
+
+            <div style={{ display: "flex", gap: 8, marginTop: 10, paddingTop: 8, borderTop: "1px dashed #fdba74", fontSize: 13 }}>
+              <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+              <div>
+                {t(E, "Print the ", "")}
+                <b style={{ color: "#15803d" }}>{t(E, "maximum number of cows K", "최대 소 수 K")}</b>
+                {t(E, " that can stand in the photo.", "를 출력해요.")}
               </div>
             </div>
           </div>
@@ -143,6 +156,19 @@ export function makeCowPhotosCh1(E) {
         "손으로 그려본 결과: peak 는 1번, ring 값은 2번씩 등장. 자연스럽게 첫 공식이 나와요 — 페어 가능한 값 세고 + peak 1마리."),
       content: (
         <div style={{ padding: 16 }}>
+          {/* Rules reminder — student needs all 3 rules in mind to make sense of "ring" below. */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "8px 12px", marginBottom: 10, fontSize: 12, color: "#1e40af", lineHeight: 1.55 }}>
+            📋 <b>{t(E, "Rules recap", "규칙 다시")}:</b>{" "}
+            <b style={{ color: "#dc2626" }}>{t(E, "mountain", "산 모양")}</b>
+            {" + "}
+            <b style={{ color: "#0891b2" }}>{t(E, "no adj duplicates", "이웃 다름")}</b>
+            {" + "}
+            <b style={{ color: "#7c3aed" }}>{t(E, "palindrome (mirror)", "좌우 대칭 (거울)")}</b>
+            {t(E,
+                ". The 3rd rule (palindrome) is what forces every non-peak cow to have a twin on the other side — that's where 'ring' comes from below.",
+                ". 세 번째 규칙 (좌우 대칭) 때문에 peak 가 아닌 모든 소가 반대편에 짝을 가져야 함 — 이게 아래 'ring' 정의의 출발점.")}
+          </div>
+
           {/* Concrete picture-first definition of peak / ring. */}
           <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "12px 14px", marginBottom: 12, fontSize: 12.5, lineHeight: 1.65, color: "#7c2d12" }}>
             <div style={{ fontWeight: 800, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
