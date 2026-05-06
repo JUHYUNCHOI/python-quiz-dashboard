@@ -93,14 +93,12 @@ print(len("hi!"))  # 3
 print(len(""))     # 0 — empty string
 \`\`\`
 
-### Use case — password length check
+### Use case — show password length
 
 \`\`\`python
 pwd = "secret12"
-if len(pwd) < 8:
-    print("Must be 8+ characters!")
-else:
-    print("OK")
+print("length: " + str(len(pwd)) + " chars")
+# length: 8 chars
 \`\`\`
 
 > 💡 \`len\` works on strings, lists, tuples, dicts, sets — useful everywhere.`
@@ -217,16 +215,14 @@ print("love" in text)     # True
 print("LOVE" in text)     # False — case-sensitive!
 \`\`\`
 
-### Use case — banned-words filter, topic check
+### Use case — show whether words appear
 
 \`\`\`python
 comment = "this is a dumb post"
-
-bad_words = ["dumb", "idiot"]
-for w in bad_words:
-    if w in comment:
-        print("Inappropriate!")
-        break
+print("dumb in comment?: " + str("dumb" in comment))
+print("idiot in comment?: " + str("idiot" in comment))
+# dumb in comment?: True
+# idiot in comment?: False
 \`\`\`
 
 ### not in — opposite
@@ -264,14 +260,14 @@ print("kiwi" < "apple")     # False
 
 → Words earlier in the dictionary are "smaller". Uppercase < lowercase (ASCII codes).
 
-### Use case — yes/no answer check
+### Use case — show answer comparison
 
 \`\`\`python
 answer = "y"
-if answer == "y":
-    print("proceeding")
-elif answer == "n":
-    print("cancelled")
+print("is y?: " + str(answer == "y"))
+print("is n?: " + str(answer == "n"))
+# is y?: True
+# is n?: False
 \`\`\``
         },
         {
@@ -427,12 +423,12 @@ print(text)
         {
           id: "mission3",
           type: "mission",
-          title: "🏆 Mission 2 — Password length check",
-          task: "If password length is 8+ print 'OK', else print 'short (current N chars)'.",
-          initialCode: "pwd = \"abc12\"\n\n# Use len()\nif ___(pwd) >= 8:\n    print(\"OK\")\nelse:\n    print(\"short (current \" + ___(len(pwd)) + \" chars)\")",
-          expectedOutput: "short (current 5 chars)",
-          hint: "len(pwd) and str(len(pwd))",
-          hint2: "len(pwd) >= 8 / str(len(pwd))"
+          title: "🏆 Mission 2 — Password info card",
+          task: "Print the password and its length on two lines!\nExample output:\npassword: abc12\nlength: 5 chars",
+          initialCode: "pwd = \"abc12\"\n\n# Line 1: print the password\nprint(\"password: \" + ___)\n\n# Line 2: print the length\n# len() gives the length as a number — convert with str() before joining\nprint(\"length: \" + ___(len(pwd)) + \" chars\")",
+          expectedOutput: "password: abc12\nlength: 5 chars",
+          hint: "Blank 1: the pwd variable. Blank 2: function that converts a number to a string.",
+          hint2: "pwd / str"
         },
         {
           id: "mission4",
