@@ -470,9 +470,6 @@ export function getCheckupsSections(E) {
         t(E, "We'll fill the inner body next — for now just see the shape.",
             "안쪽은 다음 단계에서 채움 — 지금은 모양만."),
       ],
-      aside: <SampleInputAside E={E} sample={CK_SAMPLE} note={t(E,
-        "N=3 → 6 distinct (l, r) pairs: (1,1), (1,2), (1,3), (2,2), (2,3), (3,3).",
-        "N=3 → 서로 다른 (l, r) 쌍 6 개: (1,1), (1,2), (1,3), (2,2), (2,3), (3,3).")} />,
     },
     {
       label: t(E, "3️⃣ Reverse + count matches", "3️⃣ 뒤집기 + 일치 세기"),
@@ -486,9 +483,6 @@ export function getCheckupsSections(E) {
         t(E, "Compare to b[i]; tally if equal.",
             "b[i] 와 비교, 같으면 c 증가."),
       ],
-      aside: <SampleInputAside E={E} sample={CK_SAMPLE} highlight={[1, 2]} note={t(E,
-        "Example (l=1, r=3): a' = [2, 3, 1]. Compare to b = [3, 2, 1] — only pos 3 matches → c = 1.",
-        "예 (l=1, r=3): a' = [2, 3, 1]. b = [3, 2, 1] 비교 — 위치 3 만 일치 → c = 1.")} />,
     },
     {
       label: t(E, "4️⃣ Tally + print full counts", "4️⃣ 집계 + counts 전체 출력"),
@@ -502,9 +496,6 @@ export function getCheckupsSections(E) {
         t(E, "Done — passes inputs with N up to ~100. Larger N times out (next steps fix that).",
             "끝 — N 이 ~100 까지인 입력 통과. 더 크면 TLE (다음 단계에서 해결)."),
       ],
-      aside: <SampleInputAside E={E} sample={CK_SAMPLE} note={t(E,
-        "Sample 1 expected output: 3 (c=0), 3 (c=1), 0 (c=2), 0 (c=3). Four lines.",
-        "샘플 1 답: 3 (c=0), 3 (c=1), 0 (c=2), 0 (c=3). 4 줄.")} />,
     },
     {
       label: t(E, "5️⃣ Why O(N³) is too slow", "5️⃣ 왜 O(N³) 가 느린가"),
@@ -518,7 +509,6 @@ export function getCheckupsSections(E) {
         t(E, "We need to remove the inner O(N) scan. The next step shows how.",
             "안쪽 O(N) 스캔을 없애야 함. 다음 단계에서 방법."),
       ],
-      aside: <CkPerfAside E={E} />,
     },
     {
       label: t(E, "6️⃣ Idea — share work along diagonal s = l + r", "6️⃣ 아이디어 — 대각선 s = l + r 위에서 일 공유"),
@@ -532,7 +522,6 @@ export function getCheckupsSections(E) {
         t(E, "Per diagonal: O(N) to build Q + O(N) pairs × O(1) lookup = O(N) per diagonal. Total O(N²).",
             "대각선당: O(N) 으로 Q 만들기 + O(N) 쌍 × O(1) lookup = O(N). 총 O(N²)."),
       ],
-      aside: <CkInsightAside E={E} />,
     },
     {
       label: t(E, "7️⃣ Final fast code — prefix-sum on diagonal", "7️⃣ 최종 빠른 코드 — 대각선 위 prefix-sum"),
@@ -548,7 +537,6 @@ export function getCheckupsSections(E) {
         t(E, "C++ comfortably fits at N = 7500. Python is borderline — submit with PyPy if available.",
             "C++ 는 N = 7500 도 여유. Python 은 빠듯 — 가능하면 PyPy 로 제출."),
       ],
-      aside: <CkSmartAside E={E} />,
     },
   ];
 }

@@ -801,9 +801,6 @@ export function getMooin3Sections(E) {
         t(E, "Inner loop with break — uses only cpp-7 (loops) + cpp-11 (string indexing).",
             "for + break 내부 루프 — cpp-7 (루프) + cpp-11 (문자열 인덱싱) 만 사용."),
       ],
-      aside: <SampleInputAside E={E} sample={M3_SAMPLE} highlight={[2]} note={t(E,
-        "Walking query 1: l=1, r=12. j ranges over [2..11]. For each j, scan left/right within [l, r].",
-        "쿼리 1 진행: l=1, r=12. j ∈ [2..11] 훑으면서 [l, r] 안에서 좌/우 스캔.")} />,
     },
     {
       label: t(E, "🏆 3. Update Best Product", "🏆 3. 최댓값 갱신"),
@@ -819,9 +816,6 @@ export function getMooin3Sections(E) {
         t(E, "Why long long? With N up to 10⁵, (j−i) and (k−j) can each be up to 10⁵ → product up to 10¹⁰, larger than int's max (~2·10⁹). Casting one operand to long long forces the multiplication to use long long.",
             "왜 long long? N 최대 10⁵, (j−i) 와 (k−j) 각각 최대 10⁵ → 곱 최대 10¹⁰, int 최대값 (~2·10⁹) 초과. 한 쪽을 long long 캐스팅하면 곱이 long long 으로 계산됨."),
       ],
-      aside: <SampleInputAside E={E} sample={M3_SAMPLE} highlight={[2]} note={t(E,
-        "Query 1 → answer 28. j = 8, i = 1, k = 12 gives (8−1)·(12−8) = 28.",
-        "쿼리 1 → 답 28. j = 8, i = 1, k = 12 면 (8−1)·(12−8) = 28.")} />,
     },
     {
       label: t(E, "🎯 4. Full Code (brute)", "🎯 4. 전체 코드 (brute)"),
@@ -833,11 +827,8 @@ export function getMooin3Sections(E) {
         t(E, "Try it on the official sample first — small N, instant. Then think about big inputs.",
             "공식 샘플 먼저 시도 — N 작아서 즉시. 그 다음 큰 입력 생각."),
       ],
-      aside: <SampleInputAside E={E} sample={M3_SAMPLE} highlight={[2, 3, 4, 5, 6]} note={t(E,
-        "All 5 queries answered: 28, 6, 1, −1, 12.",
-        "쿼리 5 개 모두 답: 28, 6, 1, −1, 12.")} />,
     },
-    /* ── 5–7: appears AFTER the brute is written. Now we ask: what about big N? ── */
+    /* ── 5–8: appears AFTER the brute is written. Now we ask: what about big N? ── */
     {
       label: t(E, "5️⃣ What if N is big?", "5️⃣ N 이 크면 어떻게 될까?"),
       color: "#dc2626",
@@ -853,7 +844,6 @@ export function getMooin3Sections(E) {
         t(E, "Inputs 2–3 (N, Q ≤ 50) still pass for partial credit. We'll fix the rest next.",
             "Inputs 2–3 (N, Q ≤ 50) 는 통과 → 부분점수. 나머지는 다음 단계에서."),
       ],
-      aside: <M3PerfAside E={E} />,
     },
     {
       label: t(E, "6️⃣ Idea 1 — the inner scans repeat the same answer", "6️⃣ 아이디어 1 — 안쪽 스캔이 같은 답 반복"),
@@ -869,7 +859,6 @@ export function getMooin3Sections(E) {
         t(E, "But we still iterate every j ∈ (l, r) → O(N) per query, O(Q·N) total ≈ 3·10⁹. C++ borderline, Python TLE.",
             "근데 여전히 j ∈ (l, r) 모두 훑음 → 쿼리당 O(N), 총 O(Q·N) ≈ 3·10⁹. C++ 빠듯, Python TLE."),
       ],
-      aside: <M3InsightAside E={E} />,
     },
     {
       label: t(E, "7️⃣ Idea 2 — f(j) is a parabola, so binary-search for the peak", "7️⃣ 아이디어 2 — f(j) 는 포물선, 꼭대기를 이분탐색"),
@@ -885,7 +874,6 @@ export function getMooin3Sections(E) {
         t(E, "Per query work: 26 chars × O(log N) bisect = O(26 · log N). Total O(Q · 26 · log N) ≈ 1.3·10⁷. Fast in Python.",
             "쿼리당 일: 26 문자 × O(log N) bisect = O(26 · log N). 총 O(Q · 26 · log N) ≈ 1.3·10⁷. Python 도 빠름."),
       ],
-      aside: <M3PeakAside E={E} />,
     },
     {
       label: t(E, "8️⃣ Final fast code — lookup tables + bisect for peak", "8️⃣ 최종 빠른 코드 — lookup 표 + 꼭대기 bisect"),
@@ -901,7 +889,6 @@ export function getMooin3Sections(E) {
         t(E, "Both Python and C++ pass the official limit comfortably.",
             "Python 과 C++ 모두 풀 제약 여유롭게 통과."),
       ],
-      aside: <M3FastAside E={E} />,
     },
   ];
 }

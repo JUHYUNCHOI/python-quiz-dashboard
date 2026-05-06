@@ -816,7 +816,6 @@ export function getCowPhotosSections(E) {
         t(E, "Setting peak = M means every value below M is a candidate ring (max possible photo).",
             "peak = M 으로 두면 M 보다 작은 모든 값이 ring 후보 (사진 최대 길이)."),
       ],
-      aside: <CpAside E={E} note={t(E, "No new input read. Process the heights array h we already have.", "입력 추가로 안 읽음. 이미 가진 h 배열만 처리.")} />,
     },
     {
       label: t(E, "3️⃣ Count 'ring' values (v < M, freq ≥ 2)", "3️⃣ ring 값 세기 (v < M, freq ≥ 2)"),
@@ -828,7 +827,6 @@ export function getCowPhotosSections(E) {
         t(E, "This is the constraint the naive '2·pairs+1' formula MISSED — it's why [3,3,2,1] gives 1, not 3.",
             "단순 '2·페어+1' 공식이 놓친 제약 — [3,3,2,1] 의 답이 3 이 아니라 1 인 이유."),
       ],
-      aside: <CpAside E={E} note={t(E, "Walk through h: for each distinct value v, check (v < M) AND count appearances ≥ 2.", "h 를 보면서: 각 서로 다른 값 v 마다 (v < M) 인지 확인하고 등장 횟수 ≥ 2 인지.")} />,
     },
     {
       label: t(E, "4️⃣ Apply formula 2·rings + 1 + print", "4️⃣ 공식 2·rings + 1 적용 + 출력"),
@@ -842,7 +840,6 @@ export function getCowPhotosSections(E) {
         t(E, "Done — small inputs work. But what happens at N = 100,000? Next steps explore that.",
             "끝 — 작은 입력에선 잘 돼요. 그런데 N = 10만 이면? 다음 단계에서 봐요."),
       ],
-      aside: <CpAside E={E} highlight={[1, 2]} note={t(E, "Example: case 1 → M=3, rings={1}, ans=3. Case 2 → M=3, rings={}, ans=1.", "예: 케이스 1 → M=3, rings={1}, 답=3. 케이스 2 → M=3, rings={}, 답=1.")} />,
     },
     /* ─────────── 5–7: WHY → BRAINSTORM → IMPLEMENT (procedural optimization) ─── */
     {
@@ -858,7 +855,6 @@ export function getCowPhotosSections(E) {
         t(E, "USACO N can be 100,000. N² = 10 billion. Way too slow → TLE on big test cases.",
             "USACO 의 N 은 10 만까지. N² = 100 억. 너무 느림 → 큰 테스트에서 TLE."),
       ],
-      aside: <CpPerfAside E={E} />,
     },
     {
       label: t(E, "6️⃣ Idea — count frequencies ONCE", "6️⃣ 아이디어 — 빈도를 한 번만 세두자"),
@@ -872,7 +868,6 @@ export function getCowPhotosSections(E) {
         t(E, "Total: O(N) to build + O(distinct) to scan = O(N) per case. 100x–1000x faster on large inputs.",
             "총 일: O(N) 으로 만들기 + O(distinct) 로 훑기 = O(N) per case. 큰 입력에서 100~1000 배 빨라짐."),
       ],
-      aside: <CpInsightAside E={E} />,
     },
     {
       label: t(E, "7️⃣ Final fast code — Counter (Py) / freq array (C++)", "7️⃣ 최종 빠른 코드 — Counter (Py) / freq 배열 (C++)"),
@@ -886,7 +881,6 @@ export function getCowPhotosSections(E) {
         t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) makes cin fast — important when T can be 10⁵.",
             "ios::sync_with_stdio(false) + cin.tie(nullptr) 로 cin 빠르게 — T 가 10⁵ 까지 갈 수 있어서 중요."),
       ],
-      aside: <CpFastAside E={E} />,
     },
   ];
 }
