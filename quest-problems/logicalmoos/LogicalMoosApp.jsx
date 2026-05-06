@@ -5,7 +5,7 @@ import { LogicalMoosProgressiveCode, downloadLogicalMoosPDF, getLogicalMoosSecti
 import { makeLogicalCh1, makeLogicalCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
-const A = "#2563eb";
+const A = "#4f46e5";
 
 export default function LogicalMoosApp(props = {}) {
   const propLang = props.lang;
@@ -118,9 +118,9 @@ export default function LogicalMoosApp(props = {}) {
                 <button key={i} onClick={() => changeTab(i)} style={{
                   flex: "0 0 auto", borderRadius: 8, padding: "6px 10px", cursor: "pointer",
                   fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
-                  background: isCurrent ? A : (isVisited ? "#dbeafe" : "transparent"),
-                  border: `1.5px solid ${isCurrent ? A : (isVisited ? "#93c5fd" : C.border)}`,
-                  color: isCurrent ? "#fff" : (isVisited ? "#1e3a8a" : C.dim),
+                  background: isCurrent ? A : (isVisited ? "#e0e7ff" : "transparent"),
+                  border: `1.5px solid ${isCurrent ? A : (isVisited ? "#a5b4fc" : C.border)}`,
+                  color: isCurrent ? "#fff" : (isVisited ? "#3730a3" : C.dim),
                   display: "flex", alignItems: "center", gap: 4,
                 }}>
                   {isVisited && <span style={{ fontSize: 10 }}>✓</span>}
