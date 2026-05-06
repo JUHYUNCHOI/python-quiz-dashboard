@@ -34,7 +34,6 @@ String + String = **Concatenation!**
 - **File path joining** — \`folder + "/" + filename\`
 - **Message composition** — score + name + status
 - **Decoration** — separators, boxes, tables (\`*\` repeat)
-- Connecting user input with prompts
 
 The first tool for string handling. Master this and the next chapters get easier.`
         },
@@ -97,7 +96,7 @@ print(len(""))     # 0 — empty string
 ### Use case — password length check
 
 \`\`\`python
-pwd = input("password: ")
+pwd = "secret12"
 if len(pwd) < 8:
     print("Must be 8+ characters!")
 else:
@@ -162,37 +161,37 @@ print(f"{name}'s initial: {initial}")
           content: `When you multiply a string by a number, it **repeats**!
 
 \`\`\`python
-print("Ha" * 3)      # HaHaHa
-print("=" * 10)      # ==========
-print("Hi! " * 2)    # Hi! Hi!
+print("Ha" * 3)       # HaHaHa
+print("=" * 5)        # =====
+print("Hi! " * 2)     # Hi! Hi!
 \`\`\`
 
 **Usage example:**
 \`\`\`python
-print("=" * 20)
-print("  Menu  ")
-print("=" * 20)
+print("=" * 8)
+print(" Menu ")
+print("=" * 8)
 \`\`\``
         },
         {
           id: "try2",
           type: "tryit",
           title: "🖥️ Try It Yourself!",
-          task: "Print 10 asterisks (*)!",
+          task: "Print 5 asterisks (*)!",
           initialCode: "# Repeat a string with *!\nprint(\"*\" * ___)",
-          expectedOutput: "**********",
+          expectedOutput: "*****",
           hint: "String * number = repeat!",
-          hint2: "\"*\" * 10"
+          hint2: "\"*\" * 5"
         },
         {
           id: "try3",
           type: "tryit",
           title: "🖥️ Make a Divider Line!",
-          task: "Print 20 equal signs (=) to make a divider line!",
+          task: "Print 8 equal signs (=) to make a divider line!",
           initialCode: "print(\"=\" * ___)",
-          expectedOutput: "====================",
-          hint: "\"=\" * 20",
-          hint2: "print(\"=\" * 20)"
+          expectedOutput: "========",
+          hint: "\"=\" * 8",
+          hint2: "print(\"=\" * 8)"
         },
         {
           id: "quiz2",
@@ -221,7 +220,7 @@ print("LOVE" in text)     # False — case-sensitive!
 ### Use case — banned-words filter, topic check
 
 \`\`\`python
-comment = input("comment: ")
+comment = "this is a dumb post"
 
 bad_words = ["dumb", "idiot"]
 for w in bad_words:
@@ -268,7 +267,7 @@ print("kiwi" < "apple")     # False
 ### Use case — yes/no answer check
 
 \`\`\`python
-answer = input("y/n: ").lower()
+answer = "y"
 if answer == "y":
     print("proceeding")
 elif answer == "n":
@@ -419,20 +418,19 @@ print(text)
           id: "mission2",
           type: "mission",
           title: "🏆 Mission 1 — Menu board",
-          task: "Create a nice-looking menu board!",
-          initialCode: "print(\"=\" * ___)\nprint(\"    🍗 Chicken Shop    \")\nprint(\"=\" * ___)\nprint(\"Fried: \" + str(___) + \" won\")\nprint(\"Spicy: \" + str(___) + \" won\")",
-          expectedOutput: "====================\n    🍗 Chicken Shop    \n====================\nFried: 18000 won\nSpicy: 19000 won",
-          hint: "Use * for 20 divider characters, str() to convert prices!",
-          hint2: "20 / 18000 / 19000"
+          task: "Create a nice-looking menu board! (divider = 8 chars)",
+          initialCode: "print(\"=\" * ___)\nprint(\"  🍗 Chicken Shop  \")\nprint(\"=\" * ___)\nprint(\"Fried: \" + str(___) + \" won\")\nprint(\"Spicy: \" + str(___) + \" won\")",
+          expectedOutput: "========\n  🍗 Chicken Shop  \n========\nFried: 18000 won\nSpicy: 19000 won",
+          hint: "Use = 8 times for the divider, str() to convert prices!",
+          hint2: "8 / 18000 / 19000"
         },
         {
           id: "mission3",
           type: "mission",
           title: "🏆 Mission 2 — Password length check",
-          task: "If password length is 8+ print 'OK', else print 'short (current N chars)'. (input via stdin)",
-          initialCode: "pwd = input()\n\n# Use len()\nif ___(pwd) >= 8:\n    print(\"OK\")\nelse:\n    print(\"short (current \" + ___(len(pwd)) + \" chars)\")",
+          task: "If password length is 8+ print 'OK', else print 'short (current N chars)'.",
+          initialCode: "pwd = \"abc12\"\n\n# Use len()\nif ___(pwd) >= 8:\n    print(\"OK\")\nelse:\n    print(\"short (current \" + ___(len(pwd)) + \" chars)\")",
           expectedOutput: "short (current 5 chars)",
-          stdin: "abc12",
           hint: "len(pwd) and str(len(pwd))",
           hint2: "len(pwd) >= 8 / str(len(pwd))"
         },
@@ -440,10 +438,9 @@ print(text)
           id: "mission4",
           type: "mission",
           title: "🏆 Mission 3 — Initial card",
-          task: "Read first and last name, build initials (first letters), output uppercase!",
-          initialCode: "first = input(\"first: \").strip()\nlast = input(\"last: \").strip()\n\n# First char + first char, uppercase (lesson 6 .upper() preview)\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 10)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 10)",
-          expectedOutput: "==========\n  AC\nAlice Choi\n==========",
-          stdin: "Alice\nChoi",
+          task: "Build initials (first letters of first + last name), output uppercase!",
+          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# First char + first char, uppercase (lesson 6 .upper() preview)\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
+          expectedOutput: "========\n  AC\nAlice Choi\n========",
           hint: "first[0] and last[0] joined, then .upper()",
           hint2: "initials = (first[0] + last[0]).upper()"
         },

@@ -34,7 +34,6 @@ print(first + second)  # 안녕하세요
 - **파일명 조합** — \`folder + "/" + filename\`
 - **메시지 조합** — 점수+이름+상태 등
 - **출력 꾸미기** — 구분선, 박스, 표 (\`* \` 곱하기)
-- 사용자 입력값과 안내 문구 연결
 
 문자열 다루는 첫 번째 도구. 이걸 알아야 다음 챕터들이 가벼워져요.`
         },
@@ -97,7 +96,7 @@ print(len(""))     # 0 — 빈 문자열
 ### 활용 — 비밀번호 길이 검사
 
 \`\`\`python
-pwd = input("비밀번호: ")
+pwd = "secret12"
 if len(pwd) < 8:
     print("8 자 이상이어야 해요!")
 else:
@@ -162,37 +161,37 @@ print(f"{name} 의 이니셜: {initial}")
           content: `문자열에 숫자를 곱하면 **반복**돼요!
 
 \`\`\`python
-print("하" * 3)      # 하하하
-print("=" * 10)      # ==========
-print("안녕! " * 2)  # 안녕! 안녕! 
+print("하" * 3)       # 하하하
+print("=" * 5)        # =====
+print("안녕! " * 2)   # 안녕! 안녕!
 \`\`\`
 
 **활용 예시:**
 \`\`\`python
-print("=" * 20)
-print("  메뉴판  ")
-print("=" * 20)
+print("=" * 8)
+print(" 메뉴판 ")
+print("=" * 8)
 \`\`\``
         },
         {
           id: "try2",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
-          task: "별(*)을 10개 출력하세요!",
+          task: "별(*)을 5개 출력하세요!",
           initialCode: "# 문자열 * 숫자로 반복!\nprint(\"*\" * ___)",
-          expectedOutput: "**********",
+          expectedOutput: "*****",
           hint: "문자열 * 숫자 = 반복!",
-          hint2: "\"*\" * 10"
+          hint2: "\"*\" * 5"
         },
         {
           id: "try3",
           type: "tryit",
           title: "🖥️ 구분선 만들기!",
-          task: "=를 20개 출력해서 구분선을 만드세요!",
+          task: "=를 8개 출력해서 구분선을 만드세요!",
           initialCode: "print(\"=\" * ___)",
-          expectedOutput: "====================",
-          hint: "\"=\" * 20",
-          hint2: "print(\"=\" * 20)"
+          expectedOutput: "========",
+          hint: "\"=\" * 8",
+          hint2: "print(\"=\" * 8)"
         },
         {
           id: "quiz2",
@@ -221,7 +220,7 @@ print("LOVE" in text)     # False — 대소문자 구분!
 ### 활용 — 비속어 필터, 주제 검사
 
 \`\`\`python
-comment = input("댓글: ")
+comment = "이거 좀 멍청한 댓글이네"
 
 bad_words = ["멍청", "바보"]
 for w in bad_words:
@@ -265,10 +264,10 @@ print("kiwi" < "apple")     # False
 
 → 사전에서 먼저 나오는 게 "작음". 대문자 > 소문자 (ASCII 코드 차이).
 
-### 활용 — 사용자 답 검사
+### 활용 — 답 검사
 
 \`\`\`python
-answer = input("y/n: ").lower()
+answer = "y"
 if answer == "y":
     print("진행합니다")
 elif answer == "n":
@@ -419,20 +418,19 @@ print(text)
           id: "mission2",
           type: "mission",
           title: "🏆 미션 1 — 예쁜 메뉴판",
-          task: "예쁜 메뉴판을 만들어보세요!",
-          initialCode: "print(\"=\" * ___)\nprint(\"    🍗 치킨집    \")\nprint(\"=\" * ___)\nprint(\"후라이드: \" + str(___) + \"원\")\nprint(\"양념: \" + str(___) + \"원\")",
-          expectedOutput: "====================\n    🍗 치킨집    \n====================\n후라이드: 18000원\n양념: 19000원",
-          hint: "* 로 구분선 20개, str()로 가격 변환!",
-          hint2: "20 / 18000 / 19000"
+          task: "예쁜 메뉴판을 만들어보세요! (구분선 = 8개)",
+          initialCode: "print(\"=\" * ___)\nprint(\"  🍗 치킨집  \")\nprint(\"=\" * ___)\nprint(\"후라이드: \" + str(___) + \"원\")\nprint(\"양념: \" + str(___) + \"원\")",
+          expectedOutput: "========\n  🍗 치킨집  \n========\n후라이드: 18000원\n양념: 19000원",
+          hint: "= 로 구분선 8개, str()로 가격 변환!",
+          hint2: "8 / 18000 / 19000"
         },
         {
           id: "mission3",
           type: "mission",
           title: "🏆 미션 2 — 비밀번호 길이 검사",
-          task: "비밀번호 길이가 8 자 이상이면 'OK', 짧으면 '부족 (현재 N자)' 출력. (입력 stdin)",
-          initialCode: "pwd = input()\n\n# len() 사용\nif ___(pwd) >= 8:\n    print(\"OK\")\nelse:\n    print(\"부족 (현재 \" + ___(len(pwd)) + \"자)\")",
+          task: "비밀번호 길이가 8 자 이상이면 'OK', 짧으면 '부족 (현재 N자)' 출력.",
+          initialCode: "pwd = \"abc12\"\n\n# len() 사용\nif ___(pwd) >= 8:\n    print(\"OK\")\nelse:\n    print(\"부족 (현재 \" + ___(len(pwd)) + \"자)\")",
           expectedOutput: "부족 (현재 5자)",
-          stdin: "abc12",
           hint: "len(pwd) 와 str(len(pwd))",
           hint2: "len(pwd) >= 8 / str(len(pwd))"
         },
@@ -440,10 +438,9 @@ print(text)
           id: "mission4",
           type: "mission",
           title: "🏆 미션 3 — 이름 이니셜 카드",
-          task: "성과 이름 받아 이니셜 (첫 글자) 두 개로 카드 만들기. 대문자로 출력!",
-          initialCode: "first = input(\"first: \").strip()\nlast = input(\"last: \").strip()\n\n# 첫 글자 + 첫 글자, 대문자로 (lesson 6 메서드 .upper() 미리)\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 10)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 10)",
-          expectedOutput: "==========\n  AC\nAlice Choi\n==========",
-          stdin: "Alice\nChoi",
+          task: "성과 이름의 첫 글자 두 개로 이니셜 카드 만들기. 대문자로 출력!",
+          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# 첫 글자 + 첫 글자, 대문자로 (lesson 6 메서드 .upper() 미리)\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
+          expectedOutput: "========\n  AC\nAlice Choi\n========",
           hint: "first[0] 과 last[0] 합쳐 .upper()",
           hint2: "initials = (first[0] + last[0]).upper()"
         },
