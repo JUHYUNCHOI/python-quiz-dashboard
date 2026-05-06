@@ -11,6 +11,10 @@ interface Section {
   why?: string[];
   pyOnly?: string[];
   cppOnly?: string[];
+  /** Optional sidebar JSX (e.g. a sample-input panel highlighting which
+   *  lines this section reads). When present, the section renders in a
+   *  2-column layout on wide screens. */
+  aside?: React.ReactNode;
 }
 
 interface Props {
@@ -38,37 +42,56 @@ export function ProgressiveCodeStepper({
   const s = sections[safeIdx];
   const code = lang === "py" ? s.py : s.cpp;
   const langSpecific = lang === "py" ? s.pyOnly ?? [] : s.cppOnly ?? [];
-  const isFirst = safeIdx === 0;
-  const isLast = safeIdx === sections.length - 1;
 
   return (
     <div style={{ padding: 14 }}>
-      {/* Top bar: language + step counter */}
+      {/* Top bar: dot section selector + language hint */}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: 14,
-          fontSize: 11,
-          color: C.dim,
-          fontWeight: 700,
+          marginBottom: 12,
+          gap: 8,
         }}
       >
-        <span>
-          {t(
-            E,
-            `${langLabel}  (change in header ↑)`,
-            `${langLabel}  (위 헤더에서 변경)`
-          )}
-        </span>
-        <span style={{ color: accentColor, fontWeight: 800, fontSize: 13 }}>
-          {safeIdx + 1} / {sections.length}
+        <div style={{ display: "flex", gap: 4 }}>
+          {sections.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIdx(i)}
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: "50%",
+                background: i === safeIdx ? accentColor : "#fff",
+                border: `1.5px solid ${i === safeIdx ? accentColor : C.border}`,
+                color: i === safeIdx ? "#fff" : C.dim,
+                fontSize: 12,
+                fontWeight: 800,
+                cursor: "pointer",
+              }}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+        <span style={{ fontSize: 10.5, color: C.dim, fontWeight: 700 }}>
+          {langLabel}
         </span>
       </div>
 
-      {/* Single section */}
-      <div style={{ marginBottom: 14 }}>
+      {/* Single section. With `aside` set, render side-by-side: code on the
+          left, sample-input panel on the right with a clear gap between them. */}
+      <div
+        style={{
+          marginBottom: 14,
+          display: s.aside ? "grid" : "block",
+          gridTemplateColumns: s.aside ? "minmax(0, 1fr) minmax(200px, 280px)" : undefined,
+          gap: s.aside ? 20 : 0,
+        }}
+      >
+        <div>
         <div
           style={{
             background: s.color,
@@ -173,72 +196,10 @@ export function ProgressiveCodeStepper({
         <div style={{ borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
           <CodeBlock lines={code} lang={lang} />
         </div>
+        </div>
+        {s.aside && <div>{s.aside}</div>}
       </div>
 
-      {/* Prev / dots / Next nav */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: 8,
-          marginTop: 6,
-        }}
-      >
-        <button
-          onClick={() => setIdx(Math.max(0, safeIdx - 1))}
-          disabled={isFirst}
-          style={{
-            background: isFirst ? "#e5e7eb" : "#fff",
-            border: `2px solid ${isFirst ? "#e5e7eb" : accentColor}`,
-            borderRadius: 10,
-            padding: "8px 16px",
-            fontSize: 13,
-            fontWeight: 800,
-            color: isFirst ? "#b0b5c3" : accentColor,
-            cursor: isFirst ? "default" : "pointer",
-          }}
-        >
-          ← {t(E, "Previous", "이전")}
-        </button>
-        <div style={{ display: "flex", gap: 4 }}>
-          {sections.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIdx(i)}
-              style={{
-                width: 26,
-                height: 26,
-                borderRadius: "50%",
-                background: i === safeIdx ? accentColor : "#fff",
-                border: `1.5px solid ${i === safeIdx ? accentColor : C.border}`,
-                color: i === safeIdx ? "#fff" : C.dim,
-                fontSize: 11,
-                fontWeight: 800,
-                cursor: "pointer",
-              }}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
-        <button
-          onClick={() => setIdx(Math.min(sections.length - 1, safeIdx + 1))}
-          disabled={isLast}
-          style={{
-            background: isLast ? "#e5e7eb" : accentColor,
-            border: `2px solid ${isLast ? "#e5e7eb" : accentColor}`,
-            borderRadius: 10,
-            padding: "8px 16px",
-            fontSize: 13,
-            fontWeight: 800,
-            color: isLast ? "#b0b5c3" : "#fff",
-            cursor: isLast ? "default" : "pointer",
-          }}
-        >
-          {t(E, "Next", "다음")} →
-        </button>
-      </div>
     </div>
   );
 }

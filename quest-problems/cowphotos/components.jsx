@@ -99,23 +99,23 @@ export function HandDrawSimulator({ E }) {
         {s.kind === "fail-even" && (
           <>
             <div style={{ fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
-              ✗ {t(E, "Length 4 is impossible — for ANY input", "길이 4 는 불가능 — 어떤 입력이든")}
+              ✗ {t(E, "Can we use all 4? Length 4 is impossible — for ANY input.", "4 마리 다 쓸 수 있을까? 길이 4 는 불가능 — 어떤 입력이든.")}
             </div>
             <div>
-              {t(E, "A symmetric length-4 row looks like [x, y, y, x] (mirrored). Try concrete: [1, 2, 2, 1].",
-                    "대칭 길이 4 줄은 [x, y, y, x] 모양 (거울상). 구체적으로: [1, 2, 2, 1].")}
+              {t(E, "Why? A symmetric length-4 row has shape ", "왜? 대칭 길이 4 줄은 ")}
+              <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>[x, y, y, x]</b>
+              {t(E, " (mirrored around the middle).", " 모양 (가운데 기준 거울).")}
             </div>
-            <div style={{ marginTop: 8 }}>
-              <CowRow values={[1, 2, 2, 1]} validity={{ kind: "fail" }} />
-            </div>
-            <div style={{ marginTop: 6, fontSize: 12 }}>
-              {t(E, "The two middle 2's are next to each other → ", "가운데 2 두 마리가 이웃 → ")}
-              <b style={{ color: "#dc2626" }}>{t(E, "adjacent duplicate", "인접 중복")}</b>
-              {t(E, ". Same problem with [1, 3, 3, 1], [2, 5, 5, 2], … any length-4 mirror.",
-                    ". [1, 3, 3, 1], [2, 5, 5, 2] 등 어떤 길이 4 거울상도 같은 문제.")}
+            <div style={{ marginTop: 6 }}>
+              {t(E, "But then the two middle ", "그런데 가운데 두 ")}
+              <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>y</b>
+              {t(E, "'s sit next to each other →  ", " 가 이웃 → ")}
+              <b style={{ color: "#dc2626" }}>{t(E, "adjacent duplicate (rule violation)", "인접 중복 (룰 위반)")}</b>
+              {t(E, ".", ".")}
             </div>
             <div style={{ marginTop: 6, fontSize: 12, color: C.dim }}>
-              {t(E, "→ Even lengths NEVER work. Skip to length 3.", "→ 짝수 길이는 절대 안 됨. 길이 3 으로 넘어감.")}
+              {t(E, "→ Even lengths NEVER work, regardless of which heights we have. Skip to length 3.",
+                    "→ 짝수 길이는 (어떤 키 입력이든) 절대 안 됨. 길이 3 으로 넘어감.")}
             </div>
           </>
         )}
@@ -467,14 +467,17 @@ export function CowPhotosRunner({ E }) {
   );
 }
 
-/* Section 1: Read T test cases + heights */
-const CP_INPUT_PY = [
+/* Cumulative code chunks — each step adds one new piece. The student
+   sees the program grow line by line, one idea at a time. */
+
+const CP_STEP1_PY = [
   "T = int(input())",
+  "",
   "for _ in range(T):",
   "    N = int(input())",
   "    h = list(map(int, input().split()))",
 ];
-const CP_INPUT_CPP = [
+const CP_STEP1_CPP = [
   "#include <iostream>",
   "#include <vector>",
   "using namespace std;",
@@ -485,88 +488,89 @@ const CP_INPUT_CPP = [
   "    for (int t = 0; t < T; t++) {",
   "        int N;",
   "        cin >> N;",
-  "        vector<int> h;",
-  "        for (int i = 0; i < N; i++) {",
-  "            int x;",
-  "            cin >> x;",
-  "            h.push_back(x);",
-  "        }",
+  "        vector<int> h(N);",
+  "        for (int i = 0; i < N; i++) cin >> h[i];",
+  "    }",
 ];
 
-/* Section 2: find max value (peak candidate) — plain loop, no map */
-const CP_COUNT_PY = (E) => [
-  "    from collections import Counter",
-  "    freq = Counter(h)",
-  t(E, "    M = max(freq)            # peak = the largest value",
-        "    M = max(freq)            # peak = 가장 큰 값"),
+const CP_STEP2_PY = [
+  "T = int(input())",
+  "",
+  "for _ in range(T):",
+  "    N = int(input())",
+  "    h = list(map(int, input().split()))",
+  "",
+  "    # 가장 큰 키 = peak 후보",
+  "    M = max(h)",
 ];
-const CP_COUNT_CPP = (E) => [
-  t(E, "        // M = the largest height (peak candidate)",
-        "        // M = 가장 큰 키 (peak 후보)"),
+const CP_STEP2_CPP = [
+  "// (앞부분 생략 — 입력 읽기)",
+  "    for (int t = 0; t < T; t++) {",
+  "        int N;",
+  "        cin >> N;",
+  "        vector<int> h(N);",
+  "        for (int i = 0; i < N; i++) cin >> h[i];",
+  "",
+  "        // 가장 큰 키 = peak 후보",
   "        int M = h[0];",
   "        for (int i = 1; i < N; i++) {",
   "            if (h[i] > M) M = h[i];",
   "        }",
+  "    }",
 ];
 
-/* Section 3: count rings — values strictly less than M with freq >= 2 (O(N²) brute, no map) */
-const CP_RINGS_PY = (E) => [
-  t(E, "    # ring of value v needs peak > v, so we exclude v == M",
-        "    # 값 v 가 ring 이려면 peak > v 필요, 그래서 v == M 은 제외"),
-  "    rings = sum(1 for v, c in freq.items() if v < M and c >= 2)",
+const CP_STEP3_PY = [
+  "T = int(input())",
+  "",
+  "for _ in range(T):",
+  "    N = int(input())",
+  "    h = list(map(int, input().split()))",
+  "    M = max(h)",
+  "",
+  "    # ring 이 되려면: 값이 peak 보다 작고 (v < M), 같은 값 2 마리 이상",
+  "    rings = 0",
+  "    for v in set(h):",
+  "        if v < M and h.count(v) >= 2:",
+  "            rings += 1",
 ];
-const CP_RINGS_CPP = (E) => [
-  t(E, "        // For each height in h: if v < M and we haven't already",
-        "        // 각 키마다: v < M 이고 아직 안 센 값이면"),
-  t(E, "        // counted v, count how many times it appears.",
-        "        // 그 값이 몇 번 나오는지 셈."),
+const CP_STEP3_CPP = [
+  "// (앞부분 생략)",
+  "        int M = h[0];",
+  "        for (int i = 1; i < N; i++) if (h[i] > M) M = h[i];",
+  "",
+  "        // ring 이 되려면: v < M 이고 같은 값이 2 마리 이상",
   "        int rings = 0;",
   "        for (int i = 0; i < N; i++) {",
   "            int v = h[i];",
   "            if (v >= M) continue;",
-  t(E, "            // skip if we already counted v (it appeared earlier)",
-        "            // v 를 이미 셌으면 건너뜀 (앞에 같은 값 있었음)"),
+  "            // v 를 이미 셌으면 skip",
   "            bool seen = false;",
   "            for (int k = 0; k < i; k++) {",
   "                if (h[k] == v) { seen = true; break; }",
   "            }",
   "            if (seen) continue;",
-  t(E, "            // count occurrences of v",
-        "            // v 가 몇 번 나오는지 셈"),
+  "            // v 가 몇 번 나오는지 세고 ≥ 2 면 ring",
   "            int cnt = 0;",
-  "            for (int k = 0; k < N; k++) {",
-  "                if (h[k] == v) cnt++;",
-  "            }",
+  "            for (int k = 0; k < N; k++) if (h[k] == v) cnt++;",
   "            if (cnt >= 2) rings++;",
   "        }",
 ];
 
-/* Section 4: assemble length and print */
-const CP_ANS_PY = [
-  "    ans = 2 * rings + 1",
-  "    print(ans)",
-];
-const CP_ANS_CPP = [
-  "        int ans = 2 * rings + 1;",
-  "        cout << ans << '\\n';",
-  "    }",
-  "    return 0;",
-  "}",
-];
-
-/* Section 5: full code */
-const CP_FULL_PY = (E) => [
-  "from collections import Counter",
-  "",
+// Step 4 = full final program
+const CP_FULL_PY = [
   "T = int(input())",
+  "",
   "for _ in range(T):",
   "    N = int(input())",
   "    h = list(map(int, input().split()))",
-  "    freq = Counter(h)",
-  "    M = max(freq)",
-  t(E, "    # ring of value v needs peak > v, so v < M and freq[v] >= 2",
-        "    # 값 v 가 ring 이려면 peak > v 필요 → v < M 이고 freq[v] >= 2"),
-  "    rings = sum(1 for v, c in freq.items() if v < M and c >= 2)",
+  "    M = max(h)",
+  "",
+  "    rings = 0",
+  "    for v in set(h):",
+  "        if v < M and h.count(v) >= 2:",
+  "            rings += 1",
+  "",
+  "    # 길이 = 2·rings + 1 (좌+우 mirror = 2 마리, peak 1 마리)",
   "    print(2 * rings + 1)",
 ];
 const CP_FULL_CPP = [
@@ -580,20 +584,12 @@ const CP_FULL_CPP = [
   "    for (int t = 0; t < T; t++) {",
   "        int N;",
   "        cin >> N;",
-  "        vector<int> h;",
-  "        for (int i = 0; i < N; i++) {",
-  "            int x;",
-  "            cin >> x;",
-  "            h.push_back(x);",
-  "        }",
+  "        vector<int> h(N);",
+  "        for (int i = 0; i < N; i++) cin >> h[i];",
   "",
-  "        // M = largest height (peak candidate)",
   "        int M = h[0];",
-  "        for (int i = 1; i < N; i++) {",
-  "            if (h[i] > M) M = h[i];",
-  "        }",
+  "        for (int i = 1; i < N; i++) if (h[i] > M) M = h[i];",
   "",
-  "        // count rings: distinct v < M with freq >= 2",
   "        int rings = 0;",
   "        for (int i = 0; i < N; i++) {",
   "            int v = h[i];",
@@ -604,95 +600,97 @@ const CP_FULL_CPP = [
   "            }",
   "            if (seen) continue;",
   "            int cnt = 0;",
-  "            for (int k = 0; k < N; k++) {",
-  "                if (h[k] == v) cnt++;",
-  "            }",
+  "            for (int k = 0; k < N; k++) if (h[k] == v) cnt++;",
   "            if (cnt >= 2) rings++;",
   "        }",
-  "        cout << (2 * rings + 1) << '\\n';",
+  "",
+  "        // 길이 = 2·rings + 1",
+  "        cout << 2 * rings + 1 << '\\n';",
   "    }",
   "    return 0;",
   "}",
 ];
 
+// Sample input for the InputAside panel — actual USACO sample.
+const CP_SAMPLE_LINES = ["2", "4", "1 1 2 3", "4", "3 3 2 1"];
+const CpAside = ({ E, highlight = [], note = null }) => {
+  const hi = new Set(highlight);
+  return (
+    <div style={{
+      background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10,
+      padding: "8px 10px", fontSize: 11.5,
+    }}>
+      <div style={{ fontSize: 10.5, fontWeight: 800, color: "#92400e", marginBottom: 6, letterSpacing: 0.3 }}>
+        📥 {t(E, "Sample input", "샘플 입력")}
+      </div>
+      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55 }}>
+        {CP_SAMPLE_LINES.map((line, i) => (
+          <div key={i} style={{
+            background: hi.has(i) ? "#fde68a" : "transparent",
+            border: hi.has(i) ? "1.5px solid #f59e0b" : "1.5px solid transparent",
+            borderRadius: 4, padding: "1px 5px",
+            color: hi.has(i) ? "#7c2d12" : "#9ca3af",
+            fontWeight: hi.has(i) ? 800 : 500,
+            opacity: hi.has(i) ? 1 : 0.7,
+          }}>{line || " "}</div>
+        ))}
+      </div>
+      {note && (
+        <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fcd34d", fontSize: 11, color: "#7c2d12", lineHeight: 1.5 }}>
+          {note}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export function getCowPhotosSections(E) {
   return [
     {
-      label: t(E, "📦 1. Input + Heights", "📦 1. 입력 + 키 배열"),
-      color: A,
-      py: CP_INPUT_PY, cpp: CP_INPUT_CPP,
+      label: t(E, "1️⃣ Read input — T cases, then N + heights", "1️⃣ 입력 읽기 — T 케이스, N + 키"),
+      color: "#d97706",
+      py: CP_STEP1_PY, cpp: CP_STEP1_CPP,
       why: [
-        t(E, "T independent test cases. Each: N then the cow heights.",
-            "T개 독립 테스트 케이스. 각: N과 소들의 키."),
+        t(E, "T independent test cases. For each: read N, then N heights as a list.",
+            "독립 테스트 T 개. 각 케이스: N 읽고, 그 다음 줄에서 키 N 개를 list 로."),
       ],
-      pyOnly: [
-        t(E, "list(map(int, input().split())) reads a row of integers.",
-            "list(map(int, input().split()))로 정수 한 줄 읽기."),
-      ],
-      cppOnly: [
-        t(E, "Read each height and push_back into a vector — uses only cpp-9 syntax.",
-            "키를 하나씩 읽어 vector 에 push_back — cpp-9 문법만 사용."),
-      ],
+      aside: <CpAside E={E} highlight={[0, 1, 2]} note={t(E, "First case (after T): N = 4, heights = [1, 1, 2, 3].", "첫 케이스 (T 다음): N = 4, 키 = [1, 1, 2, 3].")} />,
     },
     {
-      label: t(E, "🔢 2. Find max value (peak)", "🔢 2. 최댓값 찾기 (peak)"),
+      label: t(E, "2️⃣ Find max height (peak candidate)", "2️⃣ 가장 큰 키 찾기 (peak 후보)"),
       color: "#0891b2",
-      py: CP_COUNT_PY(E), cpp: CP_COUNT_CPP(E),
+      py: CP_STEP2_PY, cpp: CP_STEP2_CPP,
       why: [
-        t(E, "The peak is always the LARGEST value (mountain top must be highest).",
-            "peak 는 항상 가장 큰 값 (mountain 꼭대기는 제일 높음)."),
-        t(E, "Setting peak = M maximizes ring choices — every value below M becomes a candidate ring.",
-            "peak = M 으로 두면 ring 후보가 최대 — M 보다 작은 모든 값이 후보."),
+        t(E, "Peak is always the LARGEST height — mountain top must be highest.",
+            "peak 는 항상 가장 큰 키 — mountain 꼭대기는 제일 높음."),
+        t(E, "Setting peak = M means every value below M is a candidate ring (max possible photo).",
+            "peak = M 으로 두면 M 보다 작은 모든 값이 ring 후보 (사진 최대 길이)."),
       ],
-      pyOnly: [
-        t(E, "Counter(h) is a dict-style frequency map; max(freq) returns the largest key.",
-            "Counter(h) 는 dict 스타일 빈도 맵; max(freq) 가 가장 큰 키."),
-      ],
-      cppOnly: [
-        t(E, "Plain loop comparing each h[i] against current max — no map needed.",
-            "각 h[i] 와 현재 최댓값을 비교하는 단순 루프 — map 필요 X."),
-      ],
+      aside: <CpAside E={E} note={t(E, "No new input read. Process the heights array h we already have.", "입력 추가로 안 읽음. 이미 가진 h 배열만 처리.")} />,
     },
     {
-      label: t(E, "🔍 3. Count rings (v < M with freq ≥ 2)", "🔍 3. ring 세기 (v < M, freq ≥ 2)"),
+      label: t(E, "3️⃣ Count 'ring' values (v < M, freq ≥ 2)", "3️⃣ ring 값 세기 (v < M, freq ≥ 2)"),
       color: "#7c3aed",
-      py: CP_RINGS_PY(E), cpp: CP_RINGS_CPP(E),
+      py: CP_STEP3_PY, cpp: CP_STEP3_CPP,
       why: [
-        t(E, "A value v can be a ring only if (a) freq[v] ≥ 2 (need a pair) AND (b) v < M (peak must exceed it).",
-            "값 v 가 ring 이 되려면 (a) freq[v] ≥ 2 (페어 필요) AND (b) v < M (peak 가 더 커야)."),
-        t(E, "This is the constraint the simple formula MISSED — it's why [3,3,2,1] gives 1, not 3.",
-            "이게 단순 공식이 놓친 제약 — [3,3,2,1] 의 답이 3 이 아니라 1 인 이유."),
+        t(E, "A value v can sit on both sides of the peak only if (a) at least 2 cows have height v AND (b) v < M (peak must be strictly higher).",
+            "값 v 가 양옆에 들어가려면 (a) 그 키의 소가 2 마리 이상 AND (b) v < M (peak 가 더 커야)."),
+        t(E, "This is the constraint the naive '2·pairs+1' formula MISSED — it's why [3,3,2,1] gives 1, not 3.",
+            "단순 '2·페어+1' 공식이 놓친 제약 — [3,3,2,1] 의 답이 3 이 아니라 1 인 이유."),
       ],
-      pyOnly: [
-        t(E, "sum(1 for v, c in freq.items() if cond) is a one-line counter.",
-            "sum(1 for v, c in freq.items() if 조건) 한 줄 카운터."),
-      ],
-      cppOnly: [
-        t(E, "Without map, walk h[]: skip values already counted, then count occurrences of v across the whole array. O(N²) but uses only cpp-7 (loops) + cpp-9 (vector).",
-            "map 없이 h[] 순회: 이미 센 값 건너뛰고, v 가 배열 전체에 몇 번 나오는지 세요. O(N²) 이지만 cpp-7 (루프) + cpp-9 (vector) 만 사용."),
-      ],
+      aside: <CpAside E={E} note={t(E, "Walk through h: for each distinct value v, check (v < M) AND count appearances ≥ 2.", "h 를 보면서: 각 서로 다른 값 v 마다 (v < M) 인지 확인하고 등장 횟수 ≥ 2 인지.")} />,
     },
     {
-      label: t(E, "🏔️ 4. Length = 2·rings + 1", "🏔️ 4. 길이 = 2·rings + 1"),
+      label: t(E, "4️⃣ Apply formula 2·rings + 1 + print", "4️⃣ 공식 2·rings + 1 적용 + 출력"),
       color: "#16a34a",
-      py: CP_ANS_PY, cpp: CP_ANS_CPP,
+      py: CP_FULL_PY, cpp: CP_FULL_CPP,
       why: [
-        t(E, "Each ring contributes 2 cows (left + right mirror). Peak contributes 1.",
-            "각 ring 이 2 마리 기여 (좌+우 mirror). peak 가 1 마리."),
-        t(E, "Length = 2·rings + 1 (odd-length palindrome). Always at least 1 (peak alone).",
-            "길이 = 2·rings + 1 (홀수 길이 palindrome). 항상 최소 1 (peak 만)."),
+        t(E, "Each ring contributes 2 cows (one on each side, mirrored). The peak contributes 1. So length = 2·rings + 1.",
+            "각 ring 이 2 마리 기여 (좌+우 mirror). peak 가 1 마리. 그래서 길이 = 2·rings + 1."),
+        t(E, "Always at least 1: even with 0 rings, we can take any single cow alone (just a peak, no rings).",
+            "항상 최소 1: ring 이 0 개여도 한 마리만으로 길이 1 사진 가능 (peak 만)."),
       ],
-    },
-    {
-      label: t(E, "🎯 5. Full Code", "🎯 5. 전체 코드"),
-      color: "#dc2626",
-      py: CP_FULL_PY(E), cpp: CP_FULL_CPP,
-      why: [
-        t(E, "Read test → find max → count rings (with peak-must-exceed check) → print 2·rings + 1.",
-            "테스트 읽기 → 최댓값 → ring 세기 (peak 초과 조건 포함) → 2·rings + 1 출력."),
-        t(E, "Python: O(N) per test (Counter + sum). C++: O(N²) per test (brute count). Both fit at typical Bronze sizes.",
-            "Python: 테스트당 O(N) (Counter + sum). C++: 테스트당 O(N²) (brute). 일반 Bronze 크기에 둘 다 통과."),
-      ],
+      aside: <CpAside E={E} highlight={[1, 2]} note={t(E, "Example: case 1 → M=3, rings={1}, ans=3. Case 2 → M=3, rings={}, ans=1.", "예: 케이스 1 → M=3, rings={1}, 답=3. 케이스 2 → M=3, rings={}, 답=1.")} />,
     },
   ];
 }

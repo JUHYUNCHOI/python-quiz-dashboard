@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCowPhotosSections, HandDrawSimulator, TrickySimulator } from "./components";
+import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 export function makeCowPhotosCh1(E) {
   return [
@@ -63,7 +64,69 @@ export function makeCowPhotosCh1(E) {
         </div>),
     },
 
-    // 1-2: Hand-draw small example to discover the shape & first pattern
+    // 1-2: Sample input/output format — real USACO sample
+    {
+      type: "reveal",
+      narr: t(E,
+        "Real USACO sample: 2 test cases. Each case = N then N heights. Print one answer per case.",
+        "실제 USACO 샘플: 2 케이스. 각 케이스 = N 그 다음 키 N 개. 케이스마다 답 1 줄 출력."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
+{`2
+4
+1 1 2 3
+4
+3 3 2 1`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`3
+1`}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
+            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+              🔍 {t(E, "What each line means", "각 줄 의미")}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "8px 12px", alignItems: "baseline" }}>
+              <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 3, fontSize: 12 }}>2</code>
+              <div>{t(E, "T = number of test cases (here: 2 cases)", "T = 테스트 케이스 개수 (여기선: 2 개)")}</div>
+
+              <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 3, fontSize: 12 }}>4</code>
+              <div>{t(E, "Case 1: N = 4 cows", "케이스 1: N = 4 마리")}</div>
+
+              <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 3, fontSize: 12 }}>1 1 2 3</code>
+              <div>{t(E, "Case 1: heights of the 4 cows", "케이스 1: 4 마리의 키")}</div>
+
+              <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 3, fontSize: 12 }}>4</code>
+              <div>{t(E, "Case 2: N = 4 cows", "케이스 2: N = 4 마리")}</div>
+
+              <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 3, fontSize: 12 }}>3 3 2 1</code>
+              <div>{t(E, "Case 2: heights of those 4 cows", "케이스 2: 그 4 마리의 키")}</div>
+            </div>
+            <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #c4b5fd", fontSize: 12, color: "#5b21b6" }}>
+              💡 {t(E, "For each case, print ONE number — the longest valid mountain palindrome length.",
+                       "케이스마다 답을 한 줄씩 출력 — 가능한 가장 긴 mountain palindrome 의 길이.")}
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: "#475569", lineHeight: 1.55 }}>
+              {t(E, "Sample answers: case 1 (heights 1,1,2,3) → 3 (e.g. [1, 3, 1]) · case 2 (heights 3,3,2,1) → 1 (just one cow alone). The next pages show WHY.",
+                    "샘플 답: 케이스 1 (키 1,1,2,3) → 3 (예: [1, 3, 1]) · 케이스 2 (키 3,3,2,1) → 1 (한 마리만). 다음 페이지에서 왜 그런지.")}
+            </div>
+          </div>
+        </div>),
+    },
+
+    // 1-3: Hand-draw small example to discover the shape & first pattern
     {
       type: "reveal",
       narr: t(E,
@@ -80,17 +143,75 @@ export function makeCowPhotosCh1(E) {
         "손으로 그려본 결과: peak 는 1번, ring 값은 2번씩 등장. 자연스럽게 첫 공식이 나와요 — 페어 가능한 값 세고 + peak 1마리."),
       content: (
         <div style={{ padding: 16 }}>
+          {/* Concrete picture-first definition of peak / ring. */}
+          <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "12px 14px", marginBottom: 12, fontSize: 12.5, lineHeight: 1.65, color: "#7c2d12" }}>
+            <div style={{ fontWeight: 800, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
+              📖 {t(E, "First — name the parts of the photo", "먼저 — 사진의 부분 이름 짓기")}
+            </div>
+
+            {/* The picture */}
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: 8 }}>
+                  {[
+                    { v: 1, label: t(E, "left", "왼쪽") },
+                    { v: 3, label: t(E, "MIDDLE", "가운데"), peak: true },
+                    { v: 1, label: t(E, "right", "오른쪽") },
+                  ].map((c, i) => (
+                    <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+                      <div style={{
+                        width: 36, height: 24 + c.v * 14,
+                        background: c.peak ? "#f59e0b" : "#fbbf24",
+                        border: c.peak ? "3px solid #d97706" : "1.5px solid #d97706",
+                        borderRadius: "6px 6px 0 0",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        color: "#7c2d12", fontWeight: 900, fontSize: 14,
+                        fontFamily: "'JetBrains Mono',monospace",
+                      }}>{c.v}</div>
+                      <div style={{ fontSize: 9, color: "#92400e", fontWeight: 700 }}>{c.label}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ fontSize: 11, color: "#6b7280", fontFamily: "'JetBrains Mono',monospace", marginTop: 2 }}>
+                  [1, 3, 1] {t(E, "(3 cows in a row)", "(3 마리 줄)")}
+                </div>
+              </div>
+            </div>
+
+            {/* The names */}
+            <div style={{ background: "#fff", border: "1px solid #fcd34d", borderRadius: 6, padding: "8px 10px", marginTop: 4 }}>
+              <div style={{ marginBottom: 4 }}>
+                • <b style={{ color: "#9a3412" }}>peak</b>
+                {t(E, " = the tallest cow in the MIDDLE. There's only ONE.",
+                      " = 가운데 가장 큰 소. 1 마리만.")}
+                <span style={{ color: "#6b7280" }}>{t(E, " (here: 3)", " (위 사진에선: 3)")}</span>
+              </div>
+              <div>
+                • <b style={{ color: "#9a3412" }}>ring</b>
+                {t(E, " = a height value that fills BOTH sides — left AND right (so 2 cows of the same value).",
+                      " = 양옆 (왼쪽 AND 오른쪽) 에 똑같이 들어가는 키 — 한 ring 마다 같은 키 소가 2 마리.")}
+                <span style={{ color: "#6b7280" }}>{t(E, " (here: value 1, on left and right)",
+                                                              " (위 사진에선: 키 1, 왼쪽과 오른쪽 한 마리씩)")}</span>
+              </div>
+              <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fcd34d", fontSize: 11.5, color: "#6b7280" }}>
+                {t(E, "Why 2 cows per ring? The photo must read the same forward and backward (palindrome). So whatever cow stands at position 2 from the LEFT must also stand at position 2 from the RIGHT. Same height, two cows.",
+                      "왜 ring 마다 2 마리? 사진이 거꾸로 읽어도 똑같아야 하니까 (palindrome). 왼쪽에서 두 번째 소의 키는 오른쪽에서 두 번째 소의 키와 같아야 함 → 같은 키 2 마리.")}
+              </div>
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 12 }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 8 }}>
               💡 {t(E, "Natural first formula", "자연스러운 첫 공식")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-              <div>• {t(E, "rings = (number of distinct values with freq ≥ 2)",
-                          "rings = (freq ≥ 2 인 서로 다른 값의 개수)")}</div>
-              <div>• {t(E, "answer = 2 · rings + 1", "답 = 2 · rings + 1")}</div>
+              <div>• {t(E, "rings = how many distinct values have freq ≥ 2 (could go on both sides)",
+                          "rings = freq ≥ 2 인 값의 개수 (양옆에 들어갈 수 있는 값 개수)")}</div>
+              <div>• {t(E, "answer = 2 · rings + 1 (each ring contributes 2 cows, peak contributes 1)",
+                          "답 = 2 · rings + 1 (ring 마다 2 마리, peak 1 마리)")}</div>
               <div style={{ marginTop: 6, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-                {t(E, "Why +1? Even with 0 rings, we can still take ANY single cow alone as a length-1 photo (just a peak, no rings on either side). So the answer is at least 1.",
-                      "왜 +1? ring 이 0 개여도, 어떤 한 마리든 단독으로 길이 1 사진 가능 (peak 만, 양쪽 ring 없음). 그래서 답은 최소 1.")}
+                {t(E, "Why +1? Even with 0 rings we can still take any one cow alone (just a peak). So the answer is at least 1.",
+                      "왜 +1? ring 이 0 개여도 한 마리만 단독으로 길이 1 사진 가능 (peak 만). 그래서 답은 최소 1.")}
               </div>
             </div>
           </div>
@@ -232,10 +353,10 @@ export function makeCowPhotosCh2(E, lang = "py") {
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              { n: 1, label: t(E, "Frequency map", "빈도 맵"), code: "freq = Counter(h)", color: "#d97706" },
-              { n: 2, label: t(E, "Find peak", "peak 찾기"), code: "M = max(freq)", color: "#0891b2" },
-              { n: 3, label: t(E, "Count rings (v < M, freq ≥ 2)", "ring 세기 (v < M, freq ≥ 2)"), code: "rings = sum(1 for v,c in freq.items() if v < M and c >= 2)", color: "#7c3aed" },
-              { n: 4, label: t(E, "Output length", "길이 출력"), code: "ans = 2 * rings + 1", color: "#16a34a" },
+              { n: 1, label: t(E, "Read input", "입력 읽기"), code: t(E, "Read T, then per case: N + heights array h", "T 읽고, 케이스마다: N + 키 배열 h"), color: "#d97706" },
+              { n: 2, label: t(E, "Find the largest height (peak)", "가장 큰 키 찾기 (peak)"), code: t(E, "M = max(h)", "M = max(h)"), color: "#0891b2" },
+              { n: 3, label: t(E, "Count ring values (v < M and appears ≥ 2 times)", "ring 값 세기 (v < M 이고 ≥ 2 번 등장)"), code: t(E, "for distinct v in h: if v < M and count of v ≥ 2 → ring", "h 의 서로 다른 값 v 마다: v < M 이고 v 가 ≥ 2 번 등장이면 ring"), color: "#7c3aed" },
+              { n: 4, label: t(E, "Apply formula and print", "공식 적용 + 출력"), code: t(E, "answer = 2 · rings + 1", "답 = 2 · rings + 1"), color: "#16a34a" },
             ].map((step, i) => (
               <div key={i} style={{
                 display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
@@ -249,66 +370,22 @@ export function makeCowPhotosCh2(E, lang = "py") {
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, textAlign: "center", marginBottom: 6 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 10px", fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>
-              <div style={{ fontWeight: 800 }}>🐍 Python</div>
-              <div>{t(E, "Counter + max + sum → O(N)", "Counter + max + sum → O(N)")}</div>
-              <div style={{ fontWeight: 800 }}>💻 C++</div>
-              <div>{t(E, "brute count (no map yet) → O(N²) per test", "brute 카운팅 (map 미배움) → 테스트당 O(N²)")}</div>
-            </div>
-            <div style={{ fontSize: 10.5, color: "#9a3412", marginTop: 6, textAlign: "center", fontStyle: "italic" }}>
-              {t(E, "(C++ uses brute counting because map<int,int> is taught in cpp-16; both fit at typical Bronze sizes)",
-                    "(C++ 은 map<int,int> 가 cpp-16 에서 배우므로 brute 카운팅 사용; 둘 다 일반 Bronze 크기에 충분)")}
-            </div>
-          </div>
         </div>),
     },
 
-    // 2-2: TLE check
-    {
+    // 2-2..2-5: WRITE — one section per chapter step (cumulative code,
+    //    sample input on the right, "why" notes per step). Single nav
+    //    level: chapter prev/next walks all sections.
+    ...getCowPhotosSections(E).map((sec, i) => ({
       type: "reveal",
-      narr: t(E,
-        "Does this fit in time? Python's Counter approach is O(N); C++ brute is O(N²) per test. Both fit comfortably at Bronze sizes.",
-        "시간 안에 들어올까? Python Counter 는 O(N); C++ brute 는 테스트당 O(N²). Bronze 크기에는 둘 다 여유."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
-            ✅ {t(E, "TLE check — both languages pass at Bronze sizes", "타임아웃 체크 — Bronze 크기에 둘 다 통과")}
-          </div>
-          <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: 12, marginBottom: 10 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 14px", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>
-              <div style={{ fontWeight: 800 }}>{t(E, "constraints", "제약")}</div>
-              <div>{t(E, "N ≤ 10⁵ per test, T ≤ 10 tests", "테스트당 N ≤ 10⁵, T ≤ 10")}</div>
-              <div style={{ fontWeight: 800 }}>{t(E, "brute (all arrangements)", "모든 배열 브루트")}</div>
-              <div style={{ color: "#dc2626" }}>{t(E, "≈ N! permutations — impossible", "≈ N! 순열 — 불가능")}</div>
-              <div style={{ fontWeight: 800 }}>🐍 Python</div>
-              <div>{t(E, "Counter map → O(N) per test, total ~10⁶ ✓", "Counter map → 테스트당 O(N), 총 ~10⁶ ✓")}</div>
-              <div style={{ fontWeight: 800 }}>💻 C++</div>
-              <div>{t(E, "brute count → O(N²) per test; for typical Bronze N (~10³) total ~10⁷ ✓", "brute 카운팅 → 테스트당 O(N²); 일반 Bronze N (~10³) 면 총 ~10⁷ ✓")}</div>
-              <div style={{ fontWeight: 800, color: "#16a34a" }}>{t(E, "verdict", "판정")}</div>
-              <div style={{ color: "#16a34a", fontWeight: 800 }}>{t(E, "both fit ✓", "둘 다 통과 ✓")}</div>
-            </div>
-          </div>
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-              {t(E, "💡 Key insight: we don't need to BUILD the photo, just count its length. C++ brute counting is O(N²) but for the typical Bronze sizes (N ≤ a few thousand) it's plenty fast. After learning map<int,int> in cpp-16 you can drop to O(N) like Python.",
-                    "💡 핵심: 사진을 만들 필요 X, 길이만 세면 됨. C++ brute 는 O(N²) 지만 일반 Bronze 크기 (N ≤ 수천) 에는 빠름. cpp-16 에서 map<int,int> 배우면 Python 처럼 O(N) 으로 가능.")}
-            </div>
-          </div>
-        </div>),
-    },
+      narr: i === 0
+        ? t(E, "Now write the code, step by step. Each step adds one piece.",
+              "이제 코드 작성. 한 단계마다 한 조각씩 추가.")
+        : "",
+      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+    })),
 
-    // 2-3: Progressive code
-    {
-      type: "progressive",
-      narr: t(E,
-        "Build the corrected solution piece by piece. Each section reveals one part.",
-        "고친 솔루션을 한 조각씩. 각 섹션이 한 부분 공개."),
-      sections: getCowPhotosSections(E),
-    },
-
-    // 2-4: Free runner
+    // 2-7: Free runner
     {
       type: "runner",
       narr: t(E, "Try your own heights.", "직접 키 시도."),

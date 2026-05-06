@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getHpsSections, HpsCaseSimulator } from "./components";
+import { getHpsSections, HpsCaseSimulator, ChartReadingTour, WinningRulesBanner, CodeSectionView, BitsLab, BitmaskColSim } from "./components";
 
 export function makeHpsCh1(E) {
   return [
@@ -41,37 +41,40 @@ export function makeHpsCh1(E) {
                 <div>
                   {t(E, "How a round works: ", "한 판 진행: ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "each cow lays out 2 cards face-up", "각 소가 카드 2 장을 앞면이 보이게 내려놔요")}</b>
-                  {t(E, ", so all 4 cards are visible. Then each cow picks ONE of her own two to actually play — Bessie picks last (after seeing Elsie's pick).",
-                        ". 4 장이 모두 보여요. 그 다음 각자 자기 2 장 중 1 장을 골라 실제로 내요 — Bessie는 Elsie가 무엇을 냈는지 보고 마지막에 골라요.")}
+                  {t(E, ". All 4 cards are visible. Then both cows ", ". 4 장 다 보여요. 그 다음 두 소가 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "SIMULTANEOUSLY", "동시에")}</b>
+                  {t(E, " each pick ONE of their own two to play — neither sees the other's pick. The card that beats the other wins.",
+                        " 자기 2 장 중 1 장을 골라 내요 — 서로의 선택을 못 봐요. 이기는 카드를 낸 쪽이 승리.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Elsie's hand is given M times. For each, count Bessie's hands that ",
-                        "Elsie hand 가 M 번 주어져요. 각각에 대해 ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "GUARANTEE a win — for each of Elsie's two cards, Bessie has at least one card that beats it",
-                                                          "무조건 이김 — Elsie의 두 카드 각각에 대해 Bessie가 이기는 카드를 적어도 하나 가지고 있는 hand")}</b>
-                  {t(E, ". Output the count.", " 개수를 출력.")}
+                  {t(E, "Elsie's hand is given M times. For each one, count Bessie's hands (ordered pairs) where ",
+                        "Elsie 의 패 가 M 번 주어져요. 각 패 마다, ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "Elsie can play whatever card she wants and Bessie still wins",
+                                                          "Elsie 가 무슨 카드를 내도 Bessie 가 이기는")}</b>
+                  {t(E, ". (Bessie just needs ONE card in her hand that beats BOTH of Elsie's cards — she plays that one and is safe either way.) Output the count.",
+                        " Bessie 패 의 개수를 출력. (Bessie 한테 Elsie 의 두 카드를 모두 이기는 카드 하나만 있으면 됨 — 그 카드를 내면 Elsie 가 뭘 내든 이김.)")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 6, fontSize: 11.5, color: C.dim, lineHeight: 1.5 }}>
                 <span style={{ flexShrink: 0 }}>📌</span>
                 <div>
-                  {t(E, "A 'hand' is an ORDERED pair (a, b) — slot 1 and slot 2 are different positions. So (Paper, Rock) and (Rock, Paper) count as 2 separate hands.",
-                        "'hand' 는 순서쌍 (a, b) — 자리 1 과 자리 2 는 다른 자리. 그래서 (보, 바위) 와 (바위, 보) 는 따로 셈.")}
+                  {t(E, "A 'hand' is an ORDERED pair (a, b) — slot 1 and slot 2 are different positions, and the two cards CAN be the same. For N = 3 there are 3² = 9 possible hands.",
+                        "'패' 는 순서쌍 (a, b) — 자리 1 과 자리 2 는 서로 다른 자리이고, 같은 카드 두 장도 OK. N = 3 이면 패 는 3² = 9 가지.")}
                 </div>
               </div>
             </div>
           </div>
         </div>),
     },
-    // 1-2: Sample input / output format
+    // 1-2: Sample input / output format — real USACO sample
     {
       type: "reveal",
       narr: t(E,
-        "A small concrete sample: 3 card types and 1 Elsie hand. Read the input top-to-bottom and you'll see exactly what each line means.",
-        "작은 예시: 3 종 카드, Elsie hand 1 개. 입력을 위에서 아래로 읽으면 각 줄이 무슨 뜻인지 보여요."),
+        "Real USACO sample: 3 card types, 3 Elsie hands. The matchup chart is a TRIANGULAR matrix using W/L/D characters.",
+        "실제 USACO 샘플: 3 종 카드, 3 개 Elsie 패. 승패 차트는 W/L/D 글자로 된 삼각 행렬."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", textAlign: "center", marginBottom: 10 }}>
@@ -81,184 +84,79 @@ export function makeHpsCh1(E) {
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
-{`3 1
-001
-100
-010
-1 3`}
+{`3 3
+D
+WD
+LWD
+1 2
+2 3
+1 1`}
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`2`}
+{`0
+0
+5`}
               </div>
             </div>
           </div>
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>
               🔍 {t(E, "What each line means", "각 줄 의미")}
             </div>
-            <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>3 1</code> — {t(E, "N = 3 cards, M = 1 Elsie query", "N = 3 종 카드, M = 1 개 Elsie 쿼리")}</div>
-            <div style={{ marginTop: 6 }}>
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>001 / 100 / 010</code> — {t(E, "next N lines = beats chart (one row per card). We'll decode this on the next page.",
-                    "다음 N 줄 = 승패 차트 (카드 1 장당 1 줄). 다음 페이지에서 풀어봐요.")}
-            </div>
-            <div style={{ marginTop: 6 }}>
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 3</code> — {t(E, "M lines of Elsie's hands. Here: hand = cards {1, 3}.",
-                    "M 줄 = Elsie hand. 여기서: hand = 카드 {1, 3}.")}
-            </div>
-            <div style={{ marginTop: 8, fontSize: 10.5, color: C.dim, fontStyle: "italic" }}>
-              {t(E, "📌 Cards in input are numbered 1..N (1-INDEXED). Code internally converts to 0-indexed before looking up the chart array.",
-                    "📌 입력의 카드 번호는 1..N (1-INDEXED). 코드에서 차트 배열 접근 위해 0-indexed 로 변환.")}
-            </div>
-          </div>
-        </div>),
-    },
+            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "8px 12px", alignItems: "baseline" }}>
+              <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 3, fontSize: 12 }}>3 3</code>
+              <div>{t(E, "N = number of cards, M = number of Elsie's hands", "N = 카드 종류 수, M = Elsie 패 개수")}</div>
 
-    // 1-3: How to read the beats chart — single visual, glance-and-get-it
-    {
-      type: "reveal",
-      narr: t(E,
-        "0 and 1 — what do they mean? One picture: each '1' = an arrow saying 'I beat that card'.",
-        "0 과 1 — 무슨 뜻? 한 그림으로: '1' = '내가 저 카드를 이김' 화살표."),
-      content: (
-        <div style={{ padding: 16 }}>
-          {/* Reading rule — bold, placed first */}
-          <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "10px 14px", fontSize: 13, color: "#7c2d12", textAlign: "center", marginBottom: 14, lineHeight: 1.55 }}>
-            <b style={{ color: "#92400e" }}>{t(E, "Reading rule: ", "읽는 법: ")}</b>
-            {t(E, "row ", "줄 ")}<b style={{ color: "#dc2626" }}>i</b>
-            {t(E, "'s ", "의 ")}<b style={{ color: "#0891b2" }}>j</b>
-            {t(E, "th digit = ", "번째 자리 = ")}
-            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, color: "#16a34a", fontWeight: 900 }}>1</code>
-            {t(E, " if card ", " 이면 카드 ")}<b style={{ color: "#dc2626" }}>i</b>
-            {t(E, " beats card ", " 가 카드 ")}<b style={{ color: "#0891b2" }}>j</b>
-            {t(E, ".", ".")}
-          </div>
-
-          {/* Compact square matrix — uniform 64px cells throughout */}
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-            <div style={{
-              display: "grid", gridTemplateColumns: "64px 64px repeat(3, 64px)",
-              gridAutoRows: "64px",
-              fontFamily: "'JetBrains Mono',monospace",
-              border: "2px solid #cbd5e1", borderRadius: 10, overflow: "hidden", background: "#fff",
-            }}>
-              {/* Header row */}
-              <div style={{ background: "#f8fafc", borderRight: "1px solid #e5e7eb", borderBottom: "2px solid #cbd5e1" }}></div>
-              <div style={{
-                background: "#f8fafc", borderRight: "2px solid #cbd5e1", borderBottom: "2px solid #cbd5e1",
-                fontSize: 10, color: C.dim, fontWeight: 700, textAlign: "center",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                {t(E, "input", "입력")}
+              <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 3, fontSize: 12 }}>D / WD / LWD</code>
+              <div>
+                {t(E, "matchup chart (next N lines, row ", "매치업 차트 (다음 N 줄, ")}<b style={{ color: "#dc2626" }}>i</b>
+                {t(E, " has ", " 행은 ")}<b style={{ color: "#dc2626" }}>i</b>
+                {t(E, " characters of W/L/D)", " 글자: W/L/D)")}
+                <span style={{ marginLeft: 6, color: "#5b21b6", fontSize: 12 }}>
+                  → {t(E, "see next page", "다음 페이지 참고")}
+                </span>
               </div>
-              {[
-                { n: 1, glyph: "●", color: "#2563eb" },
-                { n: 2, glyph: "■", color: "#7c3aed" },
-                { n: 3, glyph: "▲", color: "#ea580c" },
-              ].map((c, idx) => (
-                <div key={c.n} style={{
-                  background: "#f8fafc", borderRight: idx < 2 ? "1px solid #e5e7eb" : "none",
-                  borderBottom: "2px solid #cbd5e1", textAlign: "center",
-                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 1,
-                }}>
-                  <div style={{ fontSize: 9, color: C.dim, fontWeight: 700 }}>{t(E, "vs", "vs")}</div>
-                  <div style={{ fontSize: 20, color: c.color, lineHeight: 1 }}>{c.glyph}</div>
-                  <div style={{ fontSize: 9, color: C.dim, fontWeight: 700 }}>{t(E, "card ", "카드 ")}{c.n}</div>
-                </div>
-              ))}
 
-              {/* Three data rows */}
-              {[
-                { row: 1, glyph: "●", color: "#2563eb", str: "001", vals: [0, 0, 1] },
-                { row: 2, glyph: "■", color: "#7c3aed", str: "100", vals: [1, 0, 0] },
-                { row: 3, glyph: "▲", color: "#ea580c", str: "010", vals: [0, 1, 0] },
-              ].map((r, ri) => (
-                <div key={r.row} style={{ display: "contents" }}>
-                  {/* Row label: shape + card N */}
-                  <div style={{
-                    background: "#f8fafc", borderRight: "1px solid #e5e7eb",
-                    borderBottom: ri < 2 ? "1px solid #e5e7eb" : "none",
-                    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 1,
-                  }}>
-                    <div style={{ fontSize: 20, color: r.color, lineHeight: 1 }}>{r.glyph}</div>
-                    <div style={{ fontSize: 9, color: C.dim, fontWeight: 700 }}>{t(E, "card ", "카드 ")}{r.row}</div>
-                  </div>
-                  {/* Original input string */}
-                  <div style={{
-                    background: "#fef3c7", borderRight: "2px solid #cbd5e1",
-                    borderBottom: ri < 2 ? "1px solid #fcd34d" : "none",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 16, fontWeight: 900, color: "#7c2d12",
-                  }}>{r.str}</div>
-                  {/* Three cells — show the raw digit (0/1) + meaning annotation */}
-                  {r.vals.map((v, j) => {
-                    const isSelf = j + 1 === r.row;
-                    return (
-                      <div key={j} style={{
-                        borderRight: j < 2 ? "1px solid #e5e7eb" : "none",
-                        borderBottom: ri < 2 ? "1px solid #e5e7eb" : "none",
-                        background: isSelf
-                          ? "repeating-linear-gradient(45deg, #f1f5f9 0 6px, #e2e8f0 6px 12px)"
-                          : v === 1 ? "#16a34a" : "#fff",
-                        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2,
-                      }}>
-                        <div style={{
-                          fontSize: 22, fontWeight: 900, lineHeight: 1,
-                          fontFamily: "'JetBrains Mono',monospace",
-                          color: isSelf ? "#94a3b8" : v === 1 ? "#fff" : "#cbd5e1",
-                        }}>
-                          {v}
-                        </div>
-                        {!isSelf && (
-                          <div style={{
-                            fontSize: 14, fontWeight: 900, lineHeight: 1,
-                            color: v === 1 ? "#fff" : "#cbd5e1",
-                          }}>
-                            {v === 1 ? "✓" : "·"}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
+              <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 3, fontSize: 12 }}>1 2</code>
+              <div>{t(E, "Elsie's 1st hand: cards (1, 2)", "Elsie 의 첫 패: 카드 (1, 2)")}</div>
+
+              <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 3, fontSize: 12 }}>2 3</code>
+              <div>{t(E, "Elsie's 2nd hand: cards (2, 3)", "Elsie 의 둘째 패: 카드 (2, 3)")}</div>
+
+              <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 3, fontSize: 12 }}>1 1</code>
+              <div>{t(E, "Elsie's 3rd hand: cards (1, 1)", "Elsie 의 셋째 패: 카드 (1, 1)")}</div>
             </div>
-          </div>
 
-          {/* Compact legend below matrix — matches cell representation (digit + annotation) */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 18, fontSize: 11.5, color: C.text, marginBottom: 10, flexWrap: "wrap", alignItems: "center" }}>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <span style={{ display: "inline-block", padding: "2px 6px", background: "#16a34a", color: "#fff", borderRadius: 3, fontWeight: 900, fontSize: 13, fontFamily: "'JetBrains Mono',monospace" }}>1</span>
-              <span style={{ color: "#16a34a", fontWeight: 900 }}>✓</span>
-              {t(E, "= beats", "= 이김")}
-            </span>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <span style={{ display: "inline-block", padding: "2px 6px", background: "#fff", color: "#cbd5e1", border: "1px solid #cbd5e1", borderRadius: 3, fontWeight: 900, fontSize: 13, fontFamily: "'JetBrains Mono',monospace" }}>0</span>
-              <span style={{ color: "#cbd5e1", fontWeight: 900 }}>·</span>
-              {t(E, "= doesn't beat", "= 못 이김")}
-            </span>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-              <span style={{ display: "inline-block", width: 18, height: 18, background: "repeating-linear-gradient(45deg, #f1f5f9 0 3px, #e2e8f0 3px 6px)", borderRadius: 3 }}></span>
-              {t(E, "= self", "= 자기 자신")}
-            </span>
-          </div>
-
-          {/* Small RPS-coincidence caveat */}
-          <div style={{ marginTop: 4, fontSize: 10.5, color: C.dim, textAlign: "center", fontStyle: "italic", lineHeight: 1.5 }}>
-            {t(E, "(This sample's chart happens to encode standard Rock-Paper-Scissors if you're familiar — but the problem is purely about the chart, not RPS rules.)",
-                  "(이 샘플 차트는 우연히 익숙한 가위·바위·보 규칙과 같아요 — 하지만 문제는 차트만 보면 됨, RPS 규칙 몰라도 됨.)")}
+            <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #c4b5fd", fontSize: 12, color: "#5b21b6" }}>
+              💡 {t(E, "For each of the 3 Elsie hands, output how many Bessie hands let her win no matter what Elsie plays.",
+                       "Elsie 의 3 개 패 각각에 대해, Elsie 가 무엇을 내도 이기는 Bessie 패 개수를 출력.")}
+            </div>
+            <div style={{ marginTop: 6, fontSize: 10.5, color: C.dim, fontStyle: "italic" }}>
+              {t(E, "📌 Cards are numbered 1..N (1-indexed).", "📌 카드 번호는 1..N (1-indexed).")}
+            </div>
           </div>
         </div>),
     },
 
-    // 1-4: Why answer = 2 — visual flow
+    // 1-3: How to read the W/L/D triangular matchup chart
+    // 1-3: Read the chart cell-by-cell — winner → loser arrows
     {
       type: "reveal",
       narr: t(E,
-        "Walk the answer in one picture: Elsie's two cards → what beats each → Bessie's required pair → 2 orderings.",
-        "한 그림으로 답 풀기: Elsie 두 카드 → 각각 무엇이 이김 → Bessie 필요 카드 → 순서 2 가지."),
+        "Walk the chart cell by cell. Each cell shows winner → loser. Press ▶ to step through.",
+        "차트 셀 하나씩 따라가요. 각 셀은 '이기는 카드 → 지는 카드' 표시. ▶ 눌러서 진행."),
+      content: (<ChartReadingTour E={E} />),
+    },
+
+    // 1-4: Walk-through of Game 3 from sample (Elsie hand = (1, 1) → 5)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Walk Game 3 from the sample: Elsie has (card 1, card 1). Find the card that beats card 1 — then count Bessie hands that contain at least one such card.",
+        "샘플 게임 3 풀이: Elsie 패 = (카드 1, 카드 1). 카드 1 을 이기는 카드 찾고 — 그 카드를 적어도 한 장 들고 있는 Bessie 패 가 몇 개인지 세요."),
       content: (() => {
         const C1 = { glyph: "●", color: "#2563eb" };
         const C2 = { glyph: "■", color: "#7c3aed" };
@@ -274,211 +172,613 @@ export function makeHpsCh1(E) {
             <span style={{ fontSize: 12, fontWeight: 800, color: C.text }}>{t(E, "card ", "카드 ")}{n}</span>
           </span>
         );
-        const Column = ({ elsieCard, counterCard, elsieN, counterN, chartRow }) => (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-            <Pill s={elsieCard} n={elsieN} size={26} />
-            <div style={{
-              display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
-              padding: "6px 10px", background: "#faf5ff", border: "1px dashed #c4b5fd", borderRadius: 8,
-              fontSize: 11, color: "#5b21b6",
-            }}>
-              <div style={{ fontWeight: 700 }}>{t(E, "what beats it?", "이기는 게 뭐?")}</div>
-              <div style={{ fontSize: 10, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
-                {t(E, `chart row ${chartRow}`, `차트 ${chartRow} 행`)}
-              </div>
+        const TryCol = ({ card, n, beats1, label }) => (
+          <div style={{
+            display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
+            padding: "10px 8px", borderRadius: 10,
+            background: beats1 ? "#dcfce7" : "#fff",
+            border: `2px solid ${beats1 ? "#16a34a" : "#e5e7eb"}`,
+          }}>
+            <Pill s={card} n={n} size={24} bgTint={beats1} />
+            <div style={{ fontSize: 11, color: beats1 ? "#15803d" : C.dim, fontWeight: 700, textAlign: "center", lineHeight: 1.4 }}>
+              {beats1
+                ? t(E, "beats card 1 ✓", "카드 1 이김 ✓")
+                : t(E, "doesn't beat card 1", "카드 1 못 이김")}
             </div>
-            <div style={{ fontSize: 16, color: "#16a34a", fontWeight: 900 }}>↓</div>
-            <Pill s={counterCard} n={counterN} size={26} bgTint />
+            {label && <div style={{ fontSize: 10, color: "#15803d", fontWeight: 800 }}>{label}</div>}
           </div>
         );
         return (
           <div style={{ padding: 16 }}>
-            {/* Step 1: Elsie's hand laid down */}
+            <WinningRulesBanner E={E} />
+            {/* Step 1: Elsie's hand */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 12 }}>
-              <div style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>{t(E, "Elsie's hand", "Elsie hand")}</div>
+              <div style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>{t(E, "Elsie's hand (sample game 3)", "Elsie 의 패 (샘플 게임 3)")}</div>
               <div style={{ display: "flex", gap: 12, padding: "8px 14px", background: "#fee2e2", borderRadius: 10, border: "2px solid #fca5a5" }}>
                 <Pill s={C1} n={1} size={24} />
-                <Pill s={C3} n={3} size={24} />
-              </div>
-              <div style={{ fontSize: 11.5, color: "#7f1d1d", fontWeight: 700, marginTop: 4 }}>
-                {t(E, "Bessie needs a counter for EACH", "Bessie는 각각에 대한 카운터 필요")}
-              </div>
-            </div>
-
-            {/* Step 2: Two parallel lookup columns */}
-            <div style={{ background: "#fff", border: "2px solid #c4b5fd", borderRadius: 10, padding: 14, marginBottom: 12 }}>
-              <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 800, textAlign: "center", marginBottom: 12 }}>
-                {t(E, "Look up the counter for each Elsie card", "Elsie 카드 각각의 카운터 차트에서 lookup")}
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <Column elsieCard={C1} counterCard={C2} elsieN={1} counterN={2} chartRow={2} />
-                <Column elsieCard={C3} counterCard={C1} elsieN={3} counterN={1} chartRow={1} />
-              </div>
-              <div style={{ marginTop: 10, fontSize: 10.5, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
-                {t(E, "(chart row 2 = '100' → card 2 beats card 1; chart row 1 = '001' → card 1 beats card 3)",
-                      "(차트 2행 = '100' → 카드 2 가 카드 1 이김; 차트 1행 = '001' → 카드 1 이 카드 3 이김)")}
-              </div>
-            </div>
-
-            <div style={{ textAlign: "center", fontSize: 18, color: C.dim, margin: "0 0 8px" }}>↓</div>
-
-            {/* Step 3: Both required → Bessie's hand */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 12 }}>
-              <div style={{ fontSize: 11, color: "#15803d", fontWeight: 800 }}>{t(E, "Bessie's hand must contain BOTH", "Bessie hand 는 둘 다 포함")}</div>
-              <div style={{ display: "flex", gap: 12, padding: "8px 14px", background: "#dcfce7", borderRadius: 10, border: "2px solid #86efac" }}>
-                <Pill s={C2} n={2} size={24} />
                 <Pill s={C1} n={1} size={24} />
               </div>
+              <div style={{ fontSize: 11.5, color: "#7f1d1d", fontWeight: 700, marginTop: 4 }}>
+                {t(E, "Both cards are card 1 — Bessie just needs ONE card that beats card 1.",
+                      "두 카드 다 카드 1 — Bessie 는 카드 1 을 이기는 카드 하나만 필요.")}
+              </div>
+            </div>
+
+            {/* Step 2: Try every card */}
+            <div style={{ background: "#fff", border: "2px solid #c4b5fd", borderRadius: 10, padding: 14, marginBottom: 12 }}>
+              <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 800, textAlign: "center", marginBottom: 10 }}>
+                {t(E, "Try every card 1..N — does it beat card 1?",
+                      "카드 1..N 시험 — 카드 1 을 이기는가?")}
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+                <TryCol card={C1} n={1} beats1={false} />
+                <TryCol card={C2} n={2} beats1={true} label={t(E, "this one!", "이거!")} />
+                <TryCol card={C3} n={3} beats1={false} />
+              </div>
+              <div style={{ marginTop: 10, fontSize: 11, color: "#15803d", textAlign: "center", fontWeight: 700 }}>
+                → {t(E, "Only card 2 beats card 1.", "카드 2 만 카드 1 이김.")}
+              </div>
             </div>
 
             <div style={{ textAlign: "center", fontSize: 18, color: C.dim, margin: "0 0 8px" }}>↓</div>
 
-            {/* Step 4: 2 orderings — the answer */}
+            {/* Step 3: All 9 Bessie hands laid out in a 3×3 grid;
+                highlight the ones with at least one card 2. */}
+            <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 10, padding: 14, marginBottom: 12 }}>
+              <div style={{ fontSize: 12, color: "#15803d", fontWeight: 800, textAlign: "center", marginBottom: 4 }}>
+                {t(E, "All 9 Bessie hands (a, b) — green ones contain card 2",
+                      "Bessie 패 9 가지 (a, b) 모두 — 초록 = 카드 2 가 들어 있는 패")}
+              </div>
+              <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 10 }}>
+                {t(E, "(rows = a / first card · columns = b / second card)",
+                      "(행 = a / 첫째 카드 · 열 = b / 둘째 카드)")}
+              </div>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <div style={{
+                  display: "grid", gridTemplateColumns: "32px repeat(3, 60px)",
+                  gridAutoRows: "44px", gap: 0,
+                  fontFamily: "'JetBrains Mono',monospace",
+                }}>
+                  {/* header: empty + b labels */}
+                  <div />
+                  {[1, 2, 3].map((b) => (
+                    <div key={`h${b}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: C.dim }}>
+                      b={b}
+                    </div>
+                  ))}
+                  {/* rows: a label + 3 cells */}
+                  {[1, 2, 3].map((a) => (
+                    <div key={`r${a}`} style={{ display: "contents" }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 6, fontSize: 11, fontWeight: 800, color: C.dim }}>
+                        a={a}
+                      </div>
+                      {[1, 2, 3].map((b) => {
+                        const hasDom = a === 2 || b === 2;
+                        return (
+                          <div key={`${a}-${b}`} style={{
+                            margin: 3,
+                            border: `2px solid ${hasDom ? "#16a34a" : "#cbd5e1"}`,
+                            background: hasDom ? "#dcfce7" : "#fff",
+                            borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
+                            fontSize: 14, fontWeight: 800,
+                            color: hasDom ? "#15803d" : "#94a3b8",
+                          }}>
+                            ({a},{b}) {hasDom && <span style={{ marginLeft: 3, fontSize: 11 }}>✓</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div style={{ marginTop: 12, paddingTop: 8, borderTop: "1px dashed #86efac", textAlign: "center", fontSize: 13, fontWeight: 800, color: "#15803d" }}>
+                {t(E, "Count the green cells: 5 hands win.", "초록 셀 세보면: 5 개 패 가 이김.")}
+              </div>
+            </div>
+
+            {/* Step 4: Answer */}
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 12 }}>
-              <div style={{ fontSize: 11, color: "#92400e", fontWeight: 800, textAlign: "center", marginBottom: 8 }}>
-                {t(E, "Two orderings = 2 hands counted", "순서 2 가지 = hand 2 개로 카운트")}
-              </div>
-              <div style={{ display: "flex", justifyContent: "center", gap: 18, flexWrap: "wrap" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, fontSize: 22 }}>
-                  <span>(</span><span style={{ color: C2.color }}>{C2.glyph}</span><span style={{ color: C.dim }}>,</span><span style={{ color: C1.color }}>{C1.glyph}</span><span>)</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, fontSize: 22 }}>
-                  <span>(</span><span style={{ color: C1.color }}>{C1.glyph}</span><span style={{ color: C.dim }}>,</span><span style={{ color: C2.color }}>{C2.glyph}</span><span>)</span>
-                </div>
-              </div>
-              <div style={{ marginTop: 10, textAlign: "center", fontSize: 18, fontWeight: 900, color: "#16a34a" }}>
-                {t(E, "answer = 2", "답 = 2")}
+              <div style={{ fontSize: 18, fontWeight: 900, color: "#16a34a", textAlign: "center" }}>
+                {t(E, "answer = 5", "답 = 5")}
               </div>
               <div style={{ marginTop: 4, textAlign: "center", fontSize: 10.5, color: C.dim }}>
-                {t(E, "(slot 1 vs slot 2 are different positions → both orderings count)",
-                      "(자리 1 과 자리 2 는 다른 자리 → 두 순서 다 셈)")}
+                {t(E, "Matches the sample's third output line.", "샘플 출력 셋째 줄과 일치.")}
               </div>
+            </div>
+
+            {/* Sidebar — what about other games? */}
+            <div style={{ marginTop: 12, fontSize: 11, color: "#5b21b6", textAlign: "center", lineHeight: 1.55 }}>
+              {t(E, "Games 1 (Elsie hand 1, 2) and 2 (hand 2, 3) — no card beats both Elsie cards → answer 0 each. Try them in the sim below.",
+                    "게임 1 (Elsie 패 1, 2) 과 2 (패 2, 3) — 두 카드 다 이기는 카드 없음 → 둘 다 답 0. 아래 sim 에서 따라가요.")}
             </div>
           </div>
         );
       })(),
     },
 
-    // 1-5: Interactive case-walk — two scenarios (one fail, one win) vs Sample I/O Elsie hand
+    // 1-5: Interactive walk — both sample games (Elsie (1,2)→0 and (1,1)→5)
     {
       type: "reveal",
       narr: t(E,
-        "We'll try TWO different Bessie hands against Elsie's (card 1, card 3) — same as Sample I/O. One hand fails, one wins. Press ▶ to step through both.",
-        "Elsie (카드 1, 카드 3) 에 대해 — Sample I/O 와 같음 — Bessie hand 두 가지를 시도해요. 하나는 실패, 하나는 성공. ▶ 눌러서 두 시나리오 다 따라가요."),
-      content: (<HpsCaseSimulator E={E} />),
+        "Walk all 3 sample games step by step. ▶ to advance.",
+        "샘플 3 게임 한 단계씩 따라가요. ▶ 눌러서 진행."),
+      content: (<><WinningRulesBanner E={E} /><HpsCaseSimulator E={E} /></>),
     },
     {
       type: "quiz",
       narr: t(E,
-        "Bessie wins if for BOTH of Elsie's cards, at least one of Bessie's cards can beat it.\nShe picks optimally after seeing Elsie's choice!\n(Beats chart: card 1 beats 3, card 2 beats 1, card 3 beats 2.)",
-        "Bessie가 이기려면: Elsie의 두 카드 모두에 대해, Bessie의 카드 중 하나가 이길 수 있어야 해요. Elsie 선택 본 후 최적으로 고름!\n(차트: 카드 1 이 3 이김, 카드 2 가 1 이김, 카드 3 이 2 이김.)"),
+        "Quick check.",
+        "간단 체크."),
       question: t(E,
-        "Bessie has (card 1, card 2). Elsie plays card 3. Can Bessie win?",
-        "Bessie가 (카드 1, 카드 2) 를 가짐. Elsie가 카드 3 을 냄. Bessie가 이길 수 있어요?"),
+        "Bessie = (card 2, card 1), Elsie = (card 1, card 1). Does Bessie always win?",
+        "Bessie = (카드 2, 카드 1), Elsie = (카드 1, 카드 1). Bessie 가 무조건 이기나?"),
       options: [
-        t(E, "Yes — pick card 1 (it beats card 3)", "네 — 카드 1 선택 (카드 3 이김)"),
-        t(E, "No — card 3 beats card 2", "아니 — 카드 3 이 카드 2 이김"),
+        t(E, "Yes — card 2 beats both of Elsie's card 1's", "네 — 카드 2 가 Elsie 의 카드 1 두 장을 다 이김"),
+        t(E, "No — card 1 doesn't beat card 1 (draw)", "아니 — 카드 1 은 카드 1 못 이김 (비김)"),
       ],
       correct: 0,
-      explain: t(E, "Card 1 beats card 3 (chart row 1 = '001'). Bessie picks card 1.", "카드 1 이 카드 3 이김 (차트 1 행 = '001'). Bessie는 카드 1 을 골라요."),
+      explain: t(E,
+        "Bessie plays card 2 — beats card 1 either way.",
+        "Bessie 는 카드 2 를 내면 됨 — 카드 1 어느 쪽이든 다 이김."),
     },
     {
       type: "input",
       narr: t(E,
-        "Now you count. Elsie's hand = (card 1, card 2) — different from Sample I/O. Bessie has 3×3 = 9 possible hands (ordered pairs (a, b)).\nFor a hand to GUARANTEE a win:\n• at least one of a, b beats card 1 → need card 2 (chart row 2 = '100')\n• at least one of a, b beats card 2 → need card 3 (chart row 3 = '010')\nSo Bessie's hand must contain BOTH card 2 AND card 3.",
-        "이제 직접 세요. Elsie hand = (카드 1, 카드 2) — Sample I/O 와는 다름. Bessie hand 는 3×3 = 9 가지 (순서쌍 (a, b)).\n무조건 이기는 hand 가 되려면:\n• a, b 중 하나가 카드 1 이김 → 카드 2 필요 (차트 2 행 = '100')\n• a, b 중 하나가 카드 2 이김 → 카드 3 필요 (차트 3 행 = '010')\n그러니까 hand 는 카드 2 AND 카드 3 둘 다 포함해야 함."),
+        "Your turn — count.",
+        "직접 세요."),
       question: t(E,
-        "Elsie plays (card 1, card 2). How many of Bessie's 9 hands guarantee a win?",
-        "Elsie가 (카드 1, 카드 2) 를 가짐. Bessie의 9 가지 hand 중 무조건 이기는 것은?"),
-      hint: t(E, "Hand must contain BOTH card 2 AND card 3. Only (card 2, card 3) and (card 3, card 2) qualify.",
-                "hand 에 카드 2 AND 카드 3 둘 다 들어가야 함. (카드 2, 카드 3) 와 (카드 3, 카드 2) 두 가지만 해당."),
-      answer: 2,
-    },
-    {
-      type: "sim",
-      narr: t(E,
-        "Pick Bessie's (a, b) and Elsie's (s1, s2). See if Bessie can guarantee a win.", "Bessie (a, b), Elsie (s1, s2) 골라서 Bessie가 승리 보장 가능한지 확인."),
+        "Elsie = (card 2, card 3). How many of Bessie's 9 hands always win?",
+        "Elsie 패 = (카드 2, 카드 3). Bessie 의 9 가지 패 중 무조건 이기는 패 는 몇 개?"),
+      hint: t(E, "No single card beats both card 2 and card 3.",
+                "카드 2 와 카드 3 둘 다 이기는 카드는 없어요."),
+      answer: 0,
     },
   ];
 }
 
 export function makeHpsCh2(E, lang = "py") {
   return [
+    // 2-1..2-5: WRITE — one section per chapter step. Each step shows
+    // the cumulative code, the sample input with relevant lines lit up,
+    // and a brief "why this way?" note. Single navigation level: chapter
+    // prev/next walks all 5 sections naturally.
+    // Steps 1-6: input + table + brute force code (sections 1-6)
+    ...getHpsSections(E).slice(0, 6).map((sec, i) => ({
+      type: "reveal",
+      narr: i === 0
+        ? t(E, "Now write the code, step by step. We'll grow the program one piece at a time.",
+              "이제 코드 작성. 한 단계마다 한 조각씩 추가하면서 프로그램을 키워요.")
+        : "",
+      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+    })),
+    // Reality check: submit brute force → TLE on harder cases.
+    // The "why both languages fail" math comes on the NEXT page; here we
+    // just show the raw result.
     {
       type: "reveal",
       narr: t(E,
-        "Brute force: for each Elsie pair, try every (a, b) for Bessie. The win check is just a 1-line OR — done inline in the loop.",
-        "완전탐색: Elsie 쌍마다 Bessie의 모든 (a, b) 시도. win 체크는 1 줄 OR — 루프 안에 인라인."),
+        "Submit the brute force. The judge runs 12 test inputs.",
+        "Brute force 코드 제출. 채점기가 12 개 테스트 입력을 돌려요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", textAlign: "center", marginBottom: 4 }}>
+            🚦 {t(E, "Submission result", "제출 결과")}
+          </div>
+          <div style={{ fontSize: 12, color: "#6b7280", textAlign: "center", marginBottom: 12, lineHeight: 1.5 }}>
+            {t(E, "Each box = one judge test case. ✓ = passed (with time taken). ⏱ = time limit exceeded.",
+                  "박스 1 개 = 채점 테스트 1 개. ✓ = 통과 (걸린 시간). ⏱ = 시간 초과.")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 6, marginBottom: 12 }}>
             {[
-              { n: 1, label: t(E, "Read beats matrix", "승패 차트 읽기"), code: "beats[i][j] = '1' if i beats j", color: "#059669" },
-              { n: 2, label: t(E, "Per query: inline win check", "쿼리마다: 인라인 win 체크"), code: "wins = beats[a][x]=='1' or beats[b][x]=='1'  # for x in {s1, s2}", color: "#0891b2" },
-              { n: 3, label: t(E, "Count pairs that win both", "두 카드 다 이기는 쌍 카운트"), code: "if wins_s1 and wins_s2: count++", color: "#dc2626" },
-            ].map((step, i) => (
+              { ok: true,  ms: 67  }, { ok: true,  ms: 215 }, { ok: true,  ms: 224 },
+              { ok: true,  ms: 222 }, { ok: true,  ms: 235 }, { ok: true,  ms: 281 },
+              { ok: false }, { ok: false }, { ok: false },
+              { ok: false }, { ok: false }, { ok: false },
+            ].map((tc, i) => (
               <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
+                background: tc.ok ? "#dcfce7" : "#fee2e2",
+                border: `2px solid ${tc.ok ? "#16a34a" : "#fca5a5"}`,
+                borderRadius: 6, padding: "8px 4px", textAlign: "center",
+                fontFamily: "'JetBrains Mono',monospace",
               }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
+                <div style={{ fontSize: 9, color: tc.ok ? "#15803d" : "#7f1d1d", fontWeight: 800, marginBottom: 2 }}>
+                  {t(E, "Test ", "테스트 ")}#{i + 1}
+                </div>
+                <div style={{ fontSize: 18, color: tc.ok ? "#16a34a" : "#dc2626", fontWeight: 900, lineHeight: 1 }}>
+                  {tc.ok ? "✓" : "⏱"}
+                </div>
+                <div style={{ fontSize: 9, color: tc.ok ? "#15803d" : "#7f1d1d", marginTop: 4, fontWeight: 700 }}>
+                  {tc.ok ? `${tc.ms}ms` : "TLE"}
                 </div>
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(M · N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "M queries × N² Bessie pairs", "M 쿼리 × N² Bessie 쌍")}</div>
+          <div style={{
+            background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 8,
+            padding: "10px 12px", fontSize: 12, color: "#7c2d12", lineHeight: 1.65,
+          }}>
+            <div><b>{t(E, "What happened?", "어떻게 된 거?")}</b></div>
+            <div style={{ marginTop: 4 }}>
+              {t(E, "Tests 1-6 use small inputs (N, M ≤ 100) — fast enough. Tests 7-12 use the full size (N, M up to 3000) — too slow, time out.",
+                    "테스트 1-6 은 작은 입력 (N, M ≤ 100) — 충분히 빠름. 7-12 는 풀 사이즈 (N, M 최대 3000) — 너무 느려서 시간 초과.")}
+            </div>
           </div>
         </div>),
     },
-    // 2-2: TLE check — does brute force fit?
+    // Why brute force fails — math, with derivation of N²
     {
       type: "reveal",
       narr: t(E,
-        "Will the brute force be fast enough? Look at the constraints and multiply out.",
-        "브루트포스가 시간 안에 들어올까? 제약 보고 곱해 봐요."),
+        "Why does even C++ time out? Count the operations — and see WHERE the N² comes from.",
+        "왜 C++ 도 시간 초과? 연산 횟수 세기 — N² 가 어디서 나오는지부터."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
-            ✅ {t(E, "TLE check — C++ passes, Python is borderline", "타임아웃 체크 — C++ 통과, Python 은 경계선")}
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", textAlign: "center", marginBottom: 12 }}>
+            ⏱ {t(E, "Brute force complexity", "Brute force 복잡도")}
           </div>
-          <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: 12, marginBottom: 10 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 14px", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>
-              <div style={{ fontWeight: 800 }}>N</div>     <div>≤ 30 {t(E, "(symbols)", "(기호)")}</div>
-              <div style={{ fontWeight: 800 }}>M</div>     <div>≤ 10⁵ {t(E, "(queries)", "(쿼리)")}</div>
-              <div style={{ fontWeight: 800 }}>{t(E, "per query", "쿼리당")}</div> <div>O(N²) = 900</div>
-              <div style={{ fontWeight: 800 }}>{t(E, "total", "총")}</div> <div>M · N² ≈ 10⁵ · 900 ≈ 10⁸</div>
-              <div style={{ fontWeight: 800, color: "#16a34a" }}>{t(E, "verdict", "판정")}</div>
-              <div style={{ color: "#16a34a", fontWeight: 800 }}>{t(E, "C++ fits comfortably in 1s ✓", "C++ 은 1 초 안에 충분 ✓")}</div>
+
+          {/* Derivation: WHERE does N² come from? */}
+          <div style={{
+            background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10,
+            padding: "12px 14px", marginBottom: 10, fontSize: 12.5, color: "#7c2d12", lineHeight: 1.75,
+          }}>
+            <div style={{ fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
+              🔍 {t(E, "Where does the N² come from?", "쿼리당 N² 는 어디서?")}
+            </div>
+            <div>• {t(E, "For one Elsie hand, we try every Bessie hand (a, b).", "Elsie 패 1 개에 대해, Bessie 패 (a, b) 모든 짝 시도.")}</div>
+            <div>• {t(E, "Card a: N choices · Card b: N choices → ", "카드 a: N 가지 · 카드 b: N 가지 → ")}<b>N × N = N²</b> {t(E, "hands", "패")}</div>
+            <div>• {t(E, "Each hand: 4 table lookups (constant time).", "각 패: 표 lookup 4 번 (상수 시간).")}</div>
+            <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fdba74", fontWeight: 700 }}>
+              → {t(E, "Per query = N² operations.", "쿼리당 = N² 연산.")}
             </div>
           </div>
-          <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
-              ⚠️ {t(E, "Python warning — 10⁸ ops is slow in Python", "Python 주의 — 10⁸ 연산은 Python 에서 느려요")}
-            </div>
-            <div style={{ fontSize: 12, color: "#7c2d12", lineHeight: 1.6 }}>
-              {t(E, "Pure Python runs ~10⁷ basic ops per second. 10⁸ inner-loop ops would take ~10s — likely TLE on USACO. Workarounds: (a) submit as PyPy, (b) replace the (a,b) double loop with bit-AND on bitmask rows of beats. C++ has no such issue.",
-                    "순수 Python 은 1 초에 약 10⁷ 기본 연산. 10⁸ 안쪽 루프면 약 10 초 — USACO 에서 TLE 가능성 높음. 우회: (a) PyPy 로 제출, (b) (a,b) 이중 루프를 beats 행의 비트마스크 + AND 로 대체. C++ 은 그런 문제 없음.")}
+
+          {/* Numerical complexity */}
+          <div style={{ background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2, color: "#7c2d12" }}>
+              <div>{t(E, "Per query:", "쿼리당:")} <b>N × N = 3000 × 3000 = 9,000,000</b></div>
+              <div>{t(E, "× M queries:", "× M 쿼리:")} <b>3000</b></div>
+              <div style={{ borderTop: "1.5px dashed #fca5a5", paddingTop: 8, marginTop: 4 }}>
+                {t(E, "Total: ", "합계: ")}<b style={{ fontSize: 16 }}>27,000,000,000</b> {t(E, "operations", "연산")}
+              </div>
             </div>
           </div>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-              {t(E, "Because N is tiny (≤30), the inner double loop over (a, b) is only 900 work per query. The algorithm itself is brute force — no smarter trick needed conceptually. Just pick the right language (or PyPy).",
-                    "N 이 작아서 (≤30) (a, b) 두 중첩 루프가 쿼리당 겨우 900 연산. 알고리즘 자체는 브루트포스로 충분 — 더 똑똑한 트릭 개념적으로 불필요. 언어 (또는 PyPy) 만 잘 고르면 됨.")}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
+            <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "10px 12px", fontSize: 12 }}>
+              <div style={{ fontWeight: 800, color: "#92400e" }}>C++</div>
+              <div style={{ color: "#7c2d12", marginTop: 4 }}>{t(E, "~10⁹ ops/sec → ", "~10⁹ 연산/초 → ")}<b>~27 {t(E, "sec", "초")}</b> ❌</div>
+            </div>
+            <div style={{ background: "#fee2e2", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "10px 12px", fontSize: 12 }}>
+              <div style={{ fontWeight: 800, color: "#7f1d1d" }}>Python</div>
+              <div style={{ color: "#7c2d12", marginTop: 4 }}>{t(E, "~10⁷ ops/sec → ", "~10⁷ 연산/초 → ")}<b>~2700 {t(E, "sec", "초")}</b> ❌❌</div>
+            </div>
+          </div>
+          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "10px 12px", fontSize: 12, color: "#7c2d12", lineHeight: 1.6 }}>
+            {t(E, "3-second limit can't fit either. ", "3 초 제한에 둘 다 못 들어감. ")}
+            <b>{t(E, "Algorithm itself needs to change.", "알고리즘 자체를 바꿔야 함.")}</b>
+          </div>
+        </div>),
+    },
+    // Formula derivation — explain N² − (N − dom)² visually with the (1,1) sample
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before coding the smart version — let's see WHY the formula works. It's counting via the complement (count what's easy, subtract).",
+        "Smart 코드 짜기 전에 — 공식이 왜 이렇게 되는지. 핵심: '쉬운 쪽' 을 세서 빼는 방식 (여집합 카운팅)."),
+      content: (() => {
+        const C1 = { glyph: "●", color: "#2563eb" };
+        const C2 = { glyph: "■", color: "#7c3aed" };
+        const C3 = { glyph: "▲", color: "#ea580c" };
+        const Card = ({ n, glyph, color, size = 16 }) => (
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 2 }}>
+            <span style={{ fontSize: size, color, lineHeight: 1 }}>{glyph}</span>
+            <span style={{ fontSize: size * 0.7, fontWeight: 800 }}>{n}</span>
+          </span>
+        );
+        return (
+          <div style={{ padding: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", textAlign: "center", marginBottom: 10 }}>
+              💡 {t(E, "The formula: N² − (N − dom)²", "공식: N² − (N − dom)²")}
+            </div>
+
+            {/* The reasoning */}
+            <div style={{ background: "#faf5ff", border: "1.5px solid #c4b5fd", borderRadius: 10, padding: "12px 14px", marginBottom: 12, fontSize: 12.5, color: "#1f2937", lineHeight: 1.75 }}>
+              <div><b style={{ color: "#5b21b6" }}>{t(E, "Step 1 — Count everything: ", "1 단계 — 전체 다 세기: ")}</b></div>
+              <div style={{ paddingLeft: 12 }}>
+                {t(E, "Bessie has N choices for card a, N for card b → ", "Bessie 가 a 자리에 N 가지, b 자리에 N 가지 → ")}
+                <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N × N = N²</b> {t(E, "total hands.", "전체 패.")}
+              </div>
+
+              <div style={{ marginTop: 10 }}><b style={{ color: "#5b21b6" }}>{t(E, "Step 2 — Find what's EASY to count: ", "2 단계 — 세기 쉬운 것 찾기: ")}</b></div>
+              <div style={{ paddingLeft: 12 }}>
+                {t(E, "Counting 'hands that win' directly is hard (overlapping cases). But counting 'hands that LOSE' is easy: a hand loses iff NEITHER card beats both Elsie cards.",
+                      "'이기는 패' 직접 세기는 어려움 (겹침). 그런데 '지는 패' 는 쉬움: 두 카드 다 'Elsie 두 카드 다 이기는 카드' 가 아닌 경우.")}
+              </div>
+
+              <div style={{ marginTop: 10 }}><b style={{ color: "#5b21b6" }}>{t(E, "Step 3 — Count the losers: ", "3 단계 — 지는 패 세기: ")}</b></div>
+              <div style={{ paddingLeft: 12 }}>
+                {t(E, "If dom cards beat both, then (N − dom) cards DON'T. For a losing hand, both a and b must be from those (N − dom) cards → ",
+                      "이기는 카드 dom 개, 못 이기는 카드 (N − dom) 개. 지는 패: a 도 b 도 그 (N − dom) 개 중 → ")}
+                <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>(N − dom) × (N − dom) = (N − dom)²</b>
+              </div>
+
+              <div style={{ marginTop: 10 }}><b style={{ color: "#5b21b6" }}>{t(E, "Step 4 — Subtract: ", "4 단계 — 빼기: ")}</b></div>
+              <div style={{ paddingLeft: 12 }}>
+                {t(E, "Winning hands = total − losing hands = ", "이기는 패 = 전체 − 지는 패 = ")}
+                <b style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, color: "#16a34a" }}>N² − (N − dom)²</b>
+              </div>
+            </div>
+
+            {/* Concrete example: Game 3 */}
+            <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 10, padding: 14 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#166534", marginBottom: 8, textAlign: "center" }}>
+                🎯 {t(E, "Plug in Game 3: Elsie (card 1, card 1)", "샘플 게임 3 에 대입: Elsie (카드 1, 카드 1)")}
+              </div>
+              <div style={{ fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace", color: "#15803d", lineHeight: 1.85 }}>
+                <div>{t(E, "Cards beating card 1: only ", "카드 1 을 이기는 카드: ")}<Card n={2} glyph="■" color="#7c3aed" /> {t(E, " → dom = ", " → dom = ")}<b>1</b></div>
+                <div>{t(E, "N = 3, so:", "N = 3 일 때:")}</div>
+                <div style={{ paddingLeft: 10 }}>{t(E, "Total hands = N² = 3² = ", "전체 패 = N² = 3² = ")}<b>9</b></div>
+                <div style={{ paddingLeft: 10 }}>{t(E, "Losing hands = (N − dom)² = (3 − 1)² = 2² = ", "지는 패 = (N − dom)² = (3 − 1)² = 2² = ")}<b>4</b></div>
+                <div style={{ paddingLeft: 10, paddingTop: 4, borderTop: "1px dashed #86efac", marginTop: 4 }}>
+                  {t(E, "Winning hands = 9 − 4 = ", "이기는 패 = 9 − 4 = ")}<b style={{ fontSize: 16, color: "#15803d" }}>5</b> ✓
+                </div>
+              </div>
+              <div style={{ marginTop: 8, fontSize: 11, color: "#166534", textAlign: "center", lineHeight: 1.5 }}>
+                {t(E, "(Same answer as the 9 hands grid in Ch 1.)", "(Ch 1 의 9 가지 패 격자 답과 동일.)")}
+              </div>
+            </div>
+          </div>
+        );
+      })(),
+    },
+    // Insight + smart code (sections 7-8)
+    ...getHpsSections(E).slice(6, 8).map((sec, i) => ({
+      type: "reveal",
+      narr: i === 0
+        ? t(E, "Now write the smart version — single loop counting dom, then plug into the formula.",
+              "이제 smart 버전 — dom 세는 단일 for, 그 후 공식 대입.")
+        : "",
+      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+    })),
+    // Why smart works — both Python and C++
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now both C++ and Python pass — even Python! Why?",
+        "이제 C++ 도 Python 도 둘 다 통과 — Python 까지! 왜 그럴까?"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#15803d", textAlign: "center", marginBottom: 12 }}>
+            ✅ {t(E, "Smart algorithm complexity", "Smart 알고리즘 복잡도")}
+          </div>
+          <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2, color: "#15803d" }}>
+              <div>{t(E, "Per query:", "쿼리당:")} <b>N = 3000</b></div>
+              <div>{t(E, "× M queries:", "× M 쿼리:")} <b>3000</b></div>
+              <div style={{ borderTop: "1.5px dashed #86efac", paddingTop: 8, marginTop: 4 }}>
+                {t(E, "Total: ", "합계: ")}<b style={{ fontSize: 16 }}>9,000,000</b> {t(E, "operations", "연산")}
+              </div>
+            </div>
+          </div>
+          <div style={{
+            display: "grid", gridTemplateColumns: "auto 1fr 1fr", gap: "6px 12px",
+            fontSize: 12, marginBottom: 10, alignItems: "center",
+          }}>
+            <div style={{ fontWeight: 800, color: "#6b7280" }}></div>
+            <div style={{ fontWeight: 800, color: "#dc2626", textAlign: "center" }}>{t(E, "Brute", "Brute")}</div>
+            <div style={{ fontWeight: 800, color: "#16a34a", textAlign: "center" }}>{t(E, "Smart", "Smart")}</div>
+
+            <div style={{ fontWeight: 800 }}>{t(E, "Total ops", "총 연산")}</div>
+            <div style={{ textAlign: "center", color: "#dc2626" }}>27,000,000,000</div>
+            <div style={{ textAlign: "center", color: "#16a34a" }}>9,000,000</div>
+
+            <div style={{ fontWeight: 800 }}>C++</div>
+            <div style={{ textAlign: "center", color: "#dc2626" }}>~27 {t(E, "sec", "초")} ❌</div>
+            <div style={{ textAlign: "center", color: "#16a34a" }}>~0.01 {t(E, "sec", "초")} ✅</div>
+
+            <div style={{ fontWeight: 800 }}>Python</div>
+            <div style={{ textAlign: "center", color: "#dc2626" }}>~2700 {t(E, "sec", "초")} ❌</div>
+            <div style={{ textAlign: "center", color: "#16a34a" }}>~1 {t(E, "sec", "초")} ✅</div>
+          </div>
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", fontSize: 13, lineHeight: 1.65, color: "#065f46" }}>
+            {t(E, "→ ", "→ ")}<b>3000× {t(E, "fewer operations", "적은 연산")}</b>
+            {t(E, ". The Python slowness barely matters when total work is small enough. Algorithm beats language.",
+                  ". Python 의 느린 속도가 문제 안 됨 — 절대 작업량이 작아져서. 알고리즘이 언어보다 중요.")}
+          </div>
+        </div>),
+    },
+    // ── Bonus track: bitmask trick. Teaches bits + operators from scratch
+    //    before showing the optimized code, since most Bronze students
+    //    haven't seen bit operations yet.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Want to get even smarter? There's a trick using BITS — but you need to know what bits are first. New territory; let's learn it from scratch.",
+        "더 똑똑해지려면? 비트 (bit) 트릭이 있어요 — 비트가 뭔지부터 배워야 함. 새 내용이니까 처음부터."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
+            🚀 {t(E, "Even smarter? Bits.", "더 똑똑해지려면? 비트.")}
+          </div>
+          <div style={{ background: "#f0f9ff", border: "2px solid #7dd3fc", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#075985", lineHeight: 1.7 }}>
+            <div>
+              {t(E, "The smart version is already fast enough to pass. But there's a beautiful trick that makes it ", "Smart 버전으로도 통과는 하지만, 한층 더 빠르게 만드는 깔끔한 트릭이 있어요 — ")}
+              <b>{t(E, "60× faster still", "추가로 ~60× 빠름")}</b>
+              {t(E, " — using BITS.", " — 비트 (bit) 사용.")}
+            </div>
+            <div style={{ marginTop: 6 }}>
+              {t(E, "If you've never used bit operators, the next 3 steps teach what they are. Then we apply them.",
+                    "비트 연산을 처음 보는 거면 다음 3 단계가 기초부터 설명. 그 후 이 문제에 적용.")}
             </div>
           </div>
         </div>),
     },
+    // Bits primer
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "Now build the brute force step by step. Each section reveals one piece.", "완전탐색을 단계별로 만들어보자. 각 섹션마다 한 조각씩."),
-      sections: getHpsSections(E),
+        "Step 1: bits. Every number has a binary form — a row of 0s and 1s.",
+        "1 단계: 비트 (bit). 모든 숫자는 2진수 — 0 과 1 의 줄."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
+            🔢 {t(E, "What's a bit?", "비트가 뭐?")}
+          </div>
+          <div style={{ background: "#fff", border: "1.5px solid #cbd5e1", borderRadius: 10, padding: "12px 14px", marginBottom: 10, fontSize: 13, lineHeight: 1.7 }}>
+            <div>
+              {t(E, "Numbers can be written in ", "숫자는 ")}<b>{t(E, "binary", "2진수")}</b>{t(E, " — only 0 and 1, place values are powers of 2.",
+                                                                                              " 로 쓸 수 있어요 — 0 과 1 만, 자리값은 2 의 제곱.")}
+            </div>
+            <div style={{ marginTop: 8, padding: 10, background: "#f8fafc", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.85 }}>
+              <div>5 = <b style={{ color: "#16a34a" }}>1</b><b style={{ color: "#dc2626" }}>0</b><b style={{ color: "#16a34a" }}>1</b> {t(E, "(binary)", "(2진수)")} = 4 + 0 + 1</div>
+              <div>3 = <b style={{ color: "#dc2626" }}>0</b><b style={{ color: "#16a34a" }}>1</b><b style={{ color: "#16a34a" }}>1</b> = 0 + 2 + 1</div>
+              <div>8 = <b style={{ color: "#16a34a" }}>1</b><b style={{ color: "#dc2626" }}>0</b><b style={{ color: "#dc2626" }}>0</b><b style={{ color: "#dc2626" }}>0</b> = 8</div>
+            </div>
+            <div style={{ marginTop: 8, fontSize: 12, color: "#475569" }}>
+              {t(E, "Each 0/1 in the row is a ", "줄의 각 0/1 = ")}<b>{t(E, "bit", "비트 (bit)")}</b>
+              {t(E, ". Position 0 is the rightmost.", ". 0 번째 자리는 가장 오른쪽.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#7c2d12", lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
+              ⚙️ {t(E, "The shortcut: 1 << i", "유용한 표현: 1 << i")}
+            </div>
+            <div>
+              {t(E, "1 << i", "1 << i")} {t(E, " means '1 shifted left i positions' — only the i-th bit is 1.",
+                                                  "= '1 을 왼쪽으로 i 칸 밀기' — i 번째 비트만 1.")}
+            </div>
+            <div style={{ marginTop: 6, padding: 8, background: "#fff", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8 }}>
+              <div>1 &lt;&lt; 0  =    1   ({t(E, "binary", "")} 0001)</div>
+              <div>1 &lt;&lt; 1  =    2   (0010)</div>
+              <div>1 &lt;&lt; 2  =    4   (0100)</div>
+              <div>1 &lt;&lt; 3  =    8   (1000)</div>
+            </div>
+          </div>
+        </div>),
     },
+    // Bit operators primer
+    {
+      type: "reveal",
+      narr: t(E,
+        "Step 2: three operators we need — AND (&), OR (|), and popcount.",
+        "2 단계: 비트 연산자 3 개 — AND (&), OR (|), popcount."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
+            ⚙️ {t(E, "Bit operators", "비트 연산자")}
+          </div>
+
+          <div style={{ background: "#fff", border: "1.5px solid #16a34a", borderRadius: 10, padding: "12px 14px", marginBottom: 8, fontSize: 13, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#15803d", marginBottom: 4 }}>
+              & {t(E, "(AND) — keeps a bit ON only if BOTH inputs have it ON", "(AND) — 두 쪽 다 1 일 때만 결과가 1")}
+            </div>
+            <div style={{ padding: 8, background: "#f0fdf4", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7 }}>
+              <div>  0110</div>
+              <div>{`& `}1010</div>
+              <div>──────</div>
+              <div>  <b style={{ color: "#15803d" }}>0010</b></div>
+            </div>
+          </div>
+
+          <div style={{ background: "#fff", border: "1.5px solid #ea580c", borderRadius: 10, padding: "12px 14px", marginBottom: 8, fontSize: 13, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#9a3412", marginBottom: 4 }}>
+              | {t(E, "(OR) — bit ON if EITHER input has it ON", "(OR) — 둘 중 하나라도 1 이면 결과가 1")}
+            </div>
+            <div style={{ padding: 8, background: "#fff7ed", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7 }}>
+              <div>  0110</div>
+              <div>{`| `}1010</div>
+              <div>──────</div>
+              <div>  <b style={{ color: "#9a3412" }}>1110</b></div>
+            </div>
+            <div style={{ marginTop: 6, fontSize: 12, color: "#7c2d12" }}>
+              {t(E, "Use ", "")}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>x |= 1 &lt;&lt; i</code>
+              {t(E, " to TURN ON bit i in x.", " 로 x 의 i 번째 비트를 켤 수 있음.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff", border: "1.5px solid #7c3aed", borderRadius: 10, padding: "12px 14px", fontSize: 13, lineHeight: 1.7, marginBottom: 12 }}>
+            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+              popcount {t(E, "— count how many bits are 1", "— 1 인 비트 개수 세기")}
+            </div>
+            <div style={{ padding: 8, background: "#faf5ff", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.85 }}>
+              <div>{t(E, "In Python:", "Python 에선:")}</div>
+              <div><code>bin(0b1011).count('1')</code> {t(E, "→ 3", "→ 3")}</div>
+              <div style={{ fontSize: 11, color: "#6b7280", marginTop: 4 }}>{t(E, "(0b1011 has three 1s)", "(0b1011 에 1 이 3 개)")}</div>
+            </div>
+          </div>
+
+          {/* Hands-on bit playground */}
+          <BitsLab E={E} />
+        </div>),
+    },
+    // Apply to this problem
+    {
+      type: "reveal",
+      narr: t(E,
+        "Step 3: apply bits to this problem. One column per Elsie card; bit i means 'card i beats this column'.",
+        "3 단계: 비트를 이 문제에 적용. 컬럼마다 비트마스크 — i 번째 비트 = '카드 i 가 이 컬럼 카드 이김'."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
+            🎯 {t(E, "Apply bits to the problem", "비트를 이 문제에 적용")}
+          </div>
+
+          <div style={{ background: "#f0f9ff", border: "1.5px solid #7dd3fc", borderRadius: 10, padding: "12px 14px", fontSize: 12.5, color: "#075985", lineHeight: 1.75, marginBottom: 10 }}>
+            <div style={{ fontWeight: 800, color: "#0c4a6e", marginBottom: 4 }}>
+              {t(E, "Idea: pack 'who beats this card' into one number.", "아이디어: '이 카드를 이기는 카드들' 을 숫자 하나에 담기.")}
+            </div>
+            <div>
+              {t(E, "For each card c, store ", "카드 c 마다 ")}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>col[c]</code>
+              {t(E, " — bit i is 1 iff card i beats card c. Build it once.",
+                    " 저장 — i 번째 비트가 1 이면 카드 i 가 카드 c 이김. 한 번만 만듦.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff", border: "1.5px solid #cbd5e1", borderRadius: 10, padding: "12px 14px", fontSize: 12.5, marginBottom: 10 }}>
+            <div style={{ fontWeight: 800, color: "#475569", marginBottom: 6 }}>
+              {t(E, "For sample (cards 1-3, beats: 2→1, 1→3, 3→2):", "샘플 차트 (카드 1-3, 2→1 이김, 1→3, 3→2) 일 때:")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: "#1f2937", lineHeight: 1.85, paddingLeft: 4 }}>
+              <div>col[0] {t(E, "(card 1)", "(카드 1)")} = 0b010 = 2  {t(E, "← only card 2 beats card 1", "← 카드 2 만 카드 1 이김")}</div>
+              <div>col[1] {t(E, "(card 2)", "(카드 2)")} = 0b100 = 4  {t(E, "← only card 3 beats card 2", "← 카드 3 만 카드 2 이김")}</div>
+              <div>col[2] {t(E, "(card 3)", "(카드 3)")} = 0b001 = 1  {t(E, "← only card 1 beats card 3", "← 카드 1 만 카드 3 이김")}</div>
+            </div>
+          </div>
+
+          <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: "12px 14px", fontSize: 12.5, color: "#15803d", lineHeight: 1.75 }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>
+              {t(E, "Now a query is just AND + popcount:", "쿼리는 AND + popcount 한 번씩:")}
+            </div>
+            <div style={{ paddingLeft: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.85 }}>
+              <div>col[s1] & col[s2] {t(E, "= bits ON only where the SAME card beats BOTH", "= '같은 카드가 두 컬럼 다 이김' 인 비트만 1")}</div>
+              <div>{t(E, "popcount(...) = how many such cards =", "popcount(...) = 그런 카드 개수 = ")} <b>dom</b></div>
+            </div>
+            <div style={{ marginTop: 6, padding: "6px 8px", background: "#fff", borderRadius: 6 }}>
+              {t(E, "Example: Elsie (1, 1) → col[0] & col[0] = 2 & 2 = 0b010. popcount = ",
+                    "예: Elsie (1, 1) → col[0] & col[0] = 2 & 2 = 0b010. popcount = ")}<b>1</b>
+              {t(E, " → dom = 1 (matches our earlier answer ✓).", " → dom = 1 (앞 답과 일치 ✓).")}
+            </div>
+          </div>
+
+          <div style={{ marginTop: 10, marginBottom: 12, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.55 }}>
+            💡 {t(E, "Why is this fast? Python's int handles 64 bits at a time, so AND on N-bit masks does ~N/64 chunks instead of N steps.",
+                       "왜 빠른가? Python 정수가 한 번에 64 비트씩 처리 → N 비트 AND 는 N/64 chunk 만에 끝. N 단계가 N/64 가 됨.")}
+          </div>
+
+          {/* Hands-on col[s1] & col[s2] simulator */}
+          <BitmaskColSim E={E} />
+        </div>),
+    },
+    // Bonus: Python bitmask code (section 9)
+    ...getHpsSections(E).slice(8, 9).map((sec, i) => ({
+      type: "reveal",
+      narr: t(E,
+        "Now the bitmask code. Same algorithm, but with the bit tricks above.",
+        "위 비트 트릭 적용한 코드. 알고리즘은 동일."),
+      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+    })),
   ];
 }

@@ -171,10 +171,18 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
     difficulty: 2,
     supported_languages: ["py", "cpp"],
     // Phase 1: deferred CI runner — verified vs USACO Open 2025 Bronze #2.
-    validate_io: [{
-      input: "3\n4\n1 1 2 3\n4\n3 3 2 1\n5\n4 4 3 3 2\n",
-      expected: "3\n1\n3",
-    }],
+    // Case 1 is the literal USACO sample (T=2). Case 2 is an extra
+    // stress case with peak-freq > 1 (the formula's tricky branch).
+    validate_io: [
+      {
+        input: "2\n4\n1 1 2 3\n4\n3 3 2 1\n",
+        expected: "3\n1",
+      },
+      {
+        input: "1\n5\n4 4 3 3 2\n",
+        expected: "3",
+      },
+    ],
     solution_py: [
       "T = int(input())",
       "for _ in range(T):",
@@ -186,11 +194,38 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
     ].join("\n"),
   },
   hps: {
-    type: "simulation",
-    concepts_taught: ["string-indexing", "exhaustive-pair"],
-    concepts_required: ["loop", "string-basics"],
+    type: "brute-force",
+    concepts_taught: ["exhaustive-pair", "string-indexing"],
+    concepts_required: ["loop", "string-basics", "vector-basics"],
     difficulty: 2,
     supported_languages: ["py", "cpp"],
+    // Phase 1: deferred CI runner — verified vs USACO Open 2025 Bronze #1.
+    validate_io: [{
+      input: "3 3\nD\nWD\nLWD\n1 2\n2 3\n1 1\n",
+      expected: "0\n0\n5",
+    }],
+    solution_py: [
+      "N, M = map(int, input().split())",
+      "beats = [[False] * N for _ in range(N)]",
+      "for i in range(N):",
+      "    row = input().strip()",
+      "    for j in range(i + 1):",
+      "        if row[j] == 'W':",
+      "            beats[i][j] = True",
+      "        elif row[j] == 'L':",
+      "            beats[j][i] = True",
+      "for _ in range(M):",
+      "    s1, s2 = map(int, input().split())",
+      "    s1 -= 1",
+      "    s2 -= 1",
+      "    # Count cards that beat BOTH Elsie cards (the 'dominators')",
+      "    dom = 0",
+      "    for c in range(N):",
+      "        if beats[c][s1] and beats[c][s2]:",
+      "            dom += 1",
+      "    # Bessie hands with at least one dominator: N^2 - (N - dom)^2",
+      "    print(N * N - (N - dom) * (N - dom))",
+    ].join("\n"),
   },
   mooin3: {
     type: "brute-force",
