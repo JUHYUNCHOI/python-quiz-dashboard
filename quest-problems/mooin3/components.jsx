@@ -3,6 +3,11 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 import { SimNav as SharedSimNav, useTraceStep, StepHeader, NarrativePanel } from "@/components/quest/TraceStepper";
+import { SampleInputAside } from "@/components/quest/SampleInputAside";
+
+// Official USACO 2025 Open Bronze #3 sample, line by line.
+// Index 0 = "12 5", 1 = "abcabbacabac", 2-6 = the 5 query lines.
+const M3_SAMPLE = ["12 5", "abcabbacabac", "1 12", "2 7", "4 8", "2 5", "3 10"];
 
 const A = "#7c5cfc";
 
@@ -519,7 +524,7 @@ const M3_FULL_CPP = [
   "}",
 ];
 
-/* ── Step 6 — insight (pseudo-code; commits to the lookup-table direction) ── */
+/* ── Step 6 — insight: precompute lookup tables ── */
 const M3_INSIGHT_PY = [
   "# 안쪽 두 스캔이 같은 답을 반복하는 게 보임. 문자마다 미리 계산하자:",
   "#",
@@ -528,29 +533,56 @@ const M3_INSIGHT_PY = [
   "#   last_same[c][i]  = s[idx] == chr(c) 인 가장 큰 idx ≤ i",
   "#                      (없으면 -1)",
   "#",
-  "# 그러면 j 에서:",
-  "#   c = s[j]",
-  "#   i = first_diff[c][l]   ← (j-i) 최대화",
-  "#   k = last_same[c][r]    ← (k-j) 최대화",
-  "# 두 lookup 모두 O(1).",
+  "# 그러면 한 query 에서 character c 의 best 답은:",
+  "#   i = first_diff[c][l]   ← (j-i) 최대화하려면 i 가 가장 작아야",
+  "#   k = last_same[c][r]    ← (k-j) 최대화하려면 k 가 가장 커야",
+  "#",
+  "# 안쪽 두 lookup 이 O(N) → O(1).",
 ];
 const M3_INSIGHT_CPP = [
   "// 같은 인사이트 (C++ 도 동일):",
   "//   first_diff[c][i] = smallest idx >= i with s[idx] != c (else N)",
   "//   last_same[c][i]  = largest idx <= i with s[idx] == c  (else -1)",
   "//",
-  "// 한 번만 만들고, 쿼리마다 j 별 두 lookup 이 O(1).",
+  "// 한 번만 만들면 character c 마다 i, k 가 O(1) 에 결정됨.",
 ];
 
-/* ── Step 7 — final fast code (lookup tables) ── */
+/* ── Step 7 — even faster: parabola peak + bisect on positions[c] ── */
+const M3_PEAK_PY = [
+  "# 한 번 더 — c 가 정해지면 i 와 k 도 정해짐.",
+  "# best j 는 positions[c] (s[j] = c 인 모든 j) 중 어디일까?",
+  "#",
+  "# 식을 보면: f(j) = (j - i) * (k - j)",
+  "#   → j 에 대한 아래로 볼록 포물선",
+  "#   → 꼭대기 (최댓값) 는 j = (i + k) / 2",
+  "#",
+  "# 그러니 j 를 모두 훑지 말고:",
+  "#   1) positions[c] 에서 (i, k) 사이만 추리고",
+  "#   2) 그 안에서 (i+k)/2 와 가장 가까운 j 한두 개만 보면 끝",
+  "# bisect 로 O(log N).",
+];
+const M3_PEAK_CPP = [
+  "// 한 번 더 — c 정해지면 i, k 도 정해짐.",
+  "// f(j) = (j - i) * (k - j) 는 j 에 대한 아래로 볼록 포물선.",
+  "// 꼭대기 j = (i + k) / 2 → positions[c] ∩ (i, k) 에서 그 미드포인트와",
+  "// 가장 가까운 j 한두 개만 검사. lower_bound 로 O(log N).",
+];
+
+/* ── Step 8 — final fast code: O(Q · 26 · log N) ── */
 const M3_FAST_PY = [
   "import sys",
+  "from bisect import bisect_left, bisect_right",
   "",
   "data = sys.stdin.buffer.read().split()",
   "p = 0",
   "N = int(data[p]); p += 1",
   "Q = int(data[p]); p += 1",
   "s = data[p].decode(); p += 1",
+  "",
+  "# positions[c] = chr(c+97) 가 등장하는 인덱스들 (자동 정렬)",
+  "positions = [[] for _ in range(26)]",
+  "for i, ch in enumerate(s):",
+  "    positions[ord(ch) - 97].append(i)",
   "",
   "INF = N",
   "first_diff = [[INF] * (N + 1) for _ in range(26)]",
@@ -570,20 +602,29 @@ const M3_FAST_PY = [
   "    l = int(data[p]) - 1; p += 1",
   "    r = int(data[p]) - 1; p += 1",
   "    best = -1",
-  "    for j in range(l + 1, r):",
-  "        c = ord(s[j]) - 97",
+  "    for c in range(26):",
   "        i = first_diff[c][l]",
-  "        if i >= j: continue",
+  "        if i >= r: continue",
   "        k = last_same[c][r]",
-  "        if k <= j: continue",
-  "        v = (j - i) * (k - j)",
-  "        if v > best: best = v",
+  "        if k <= i: continue",
+  "        posc = positions[c]",
+  "        lo = bisect_right(posc, i)   # j > i 인 첫 인덱스",
+  "        hi = bisect_left(posc, k)    # j >= k 인 첫 인덱스",
+  "        if lo >= hi: continue",
+  "        mid = (i + k) / 2",
+  "        at = bisect_left(posc, mid, lo, hi)",
+  "        for cand in (at, at - 1):",
+  "            if lo <= cand < hi:",
+  "                j = posc[cand]",
+  "                v = (j - i) * (k - j)",
+  "                if v > best: best = v",
   "    print(best)",
 ];
 const M3_FAST_CPP = [
   "#include <iostream>",
   "#include <vector>",
   "#include <string>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
@@ -593,6 +634,9 @@ const M3_FAST_CPP = [
   "    cin >> N >> Q;",
   "    string s;",
   "    cin >> s;",
+  "",
+  "    vector<vector<int>> positions(26);",
+  "    for (int i = 0; i < N; i++) positions[s[i] - 'a'].push_back(i);",
   "",
   "    int INF = N;",
   "    vector<vector<int>> first_diff(26, vector<int>(N + 1, INF));",
@@ -616,14 +660,23 @@ const M3_FAST_CPP = [
   "        cin >> l >> r;",
   "        l--; r--;",
   "        long long best = -1;",
-  "        for (int j = l + 1; j < r; j++) {",
-  "            int c = s[j] - 'a';",
+  "        for (int c = 0; c < 26; c++) {",
   "            int i = first_diff[c][l];",
-  "            if (i >= j) continue;",
+  "            if (i >= r) continue;",
   "            int k = last_same[c][r];",
-  "            if (k <= j) continue;",
-  "            long long v = (long long)(j - i) * (k - j);",
-  "            if (v > best) best = v;",
+  "            if (k <= i) continue;",
+  "            const auto& posc = positions[c];",
+  "            int lo = upper_bound(posc.begin(), posc.end(), i) - posc.begin();",
+  "            int hi = lower_bound(posc.begin(), posc.end(), k) - posc.begin();",
+  "            if (lo >= hi) continue;",
+  "            int mid = (i + k) / 2;",
+  "            int at = lower_bound(posc.begin() + lo, posc.begin() + hi, mid) - posc.begin();",
+  "            for (int cand : {at, at - 1}) {",
+  "                if (lo <= cand && cand < hi) {",
+  "                    long long v = (long long)(posc[cand] - i) * (k - posc[cand]);",
+  "                    if (v > best) best = v;",
+  "                }",
+  "            }",
   "        }",
   "        cout << best << '\\n';",
   "    }",
@@ -651,6 +704,9 @@ export function getMooin3Sections(E) {
         t(E, "cin >> string reads a whitespace-delimited token (cpp-11 string).",
             "cin >> string 으로 공백 구분 토큰 (cpp-11 string)."),
       ],
+      aside: <SampleInputAside E={E} sample={M3_SAMPLE} highlight={[0, 1]} note={t(E,
+        "First two lines: \"12 5\" → N=12, Q=5. Then the string.",
+        "처음 두 줄: \"12 5\" → N=12, Q=5. 그 다음 문자열.")} />,
     },
     {
       label: t(E, "🔍 2. Fix the Middle j", "🔍 2. 중간 j 고정"),
@@ -672,6 +728,9 @@ export function getMooin3Sections(E) {
         t(E, "Inner loop with break — uses only cpp-7 (loops) + cpp-11 (string indexing).",
             "for + break 내부 루프 — cpp-7 (루프) + cpp-11 (문자열 인덱싱) 만 사용."),
       ],
+      aside: <SampleInputAside E={E} sample={M3_SAMPLE} highlight={[2]} note={t(E,
+        "Walking query 1: l=1, r=12. j ranges over [2..11]. For each j, scan left/right within [l, r].",
+        "쿼리 1 진행: l=1, r=12. j ∈ [2..11] 훑으면서 [l, r] 안에서 좌/우 스캔.")} />,
     },
     {
       label: t(E, "🏆 3. Update Best Product", "🏆 3. 최댓값 갱신"),
@@ -687,6 +746,9 @@ export function getMooin3Sections(E) {
         t(E, "Why long long? With N up to 10⁵, (j−i) and (k−j) can each be up to 10⁵ → product up to 10¹⁰, larger than int's max (~2·10⁹). Casting one operand to long long forces the multiplication to use long long.",
             "왜 long long? N 최대 10⁵, (j−i) 와 (k−j) 각각 최대 10⁵ → 곱 최대 10¹⁰, int 최대값 (~2·10⁹) 초과. 한 쪽을 long long 캐스팅하면 곱이 long long 으로 계산됨."),
       ],
+      aside: <SampleInputAside E={E} sample={M3_SAMPLE} highlight={[2]} note={t(E,
+        "Query 1 → answer 28. j = 8, i = 1, k = 12 gives (8−1)·(12−8) = 28.",
+        "쿼리 1 → 답 28. j = 8, i = 1, k = 12 면 (8−1)·(12−8) = 28.")} />,
     },
     {
       label: t(E, "🎯 4. Full Code (brute)", "🎯 4. 전체 코드 (brute)"),
@@ -698,6 +760,9 @@ export function getMooin3Sections(E) {
         t(E, "Try it on the official sample first — small N, instant. Then think about big inputs.",
             "공식 샘플 먼저 시도 — N 작아서 즉시. 그 다음 큰 입력 생각."),
       ],
+      aside: <SampleInputAside E={E} sample={M3_SAMPLE} highlight={[2, 3, 4, 5, 6]} note={t(E,
+        "All 5 queries answered: 28, 6, 1, −1, 12.",
+        "쿼리 5 개 모두 답: 28, 6, 1, −1, 12.")} />,
     },
     /* ── 5–7: appears AFTER the brute is written. Now we ask: what about big N? ── */
     {
@@ -718,7 +783,7 @@ export function getMooin3Sections(E) {
       aside: <M3PerfAside E={E} />,
     },
     {
-      label: t(E, "6️⃣ Idea — the inner scans repeat the same answer", "6️⃣ 아이디어 — 안쪽 스캔이 같은 답 반복"),
+      label: t(E, "6️⃣ Idea 1 — the inner scans repeat the same answer", "6️⃣ 아이디어 1 — 안쪽 스캔이 같은 답 반복"),
       color: "#0891b2",
       py: M3_INSIGHT_PY, cpp: M3_INSIGHT_CPP,
       why: [
@@ -726,24 +791,42 @@ export function getMooin3Sections(E) {
             "고정된 문자 c 에 대해 \"[l, …] 에서 s[i] ≠ c 인 가장 작은 i\" 는 s[j] = c 인 모든 j 에서 같은 답. 안쪽 왼쪽 스캔이 중복."),
         t(E, "Same for the right scan: \"largest k in […, r] with s[k] = c\" only depends on c (and r), not on j.",
             "오른쪽 스캔도 마찬가지: \"[…, r] 에서 s[k] = c 인 가장 큰 k\" 는 c 와 r 에만 의존, j 와는 무관."),
-        t(E, "Plan: precompute these answers ONCE per character. Then per j, both lookups are O(1) instead of O(N).",
-            "계획: 문자마다 한 번씩만 미리 계산. 그러면 j 마다 두 lookup 이 O(N) → O(1)."),
+        t(E, "Plan: precompute these answers ONCE per character — first_diff[c][i] and last_same[c][i]. Inner scan O(N) → O(1).",
+            "계획: 문자마다 한 번씩만 미리 계산 — first_diff[c][i] 와 last_same[c][i]. 안쪽 스캔 O(N) → O(1)."),
+        t(E, "But we still iterate every j ∈ (l, r) → O(N) per query, O(Q·N) total ≈ 3·10⁹. C++ borderline, Python TLE.",
+            "근데 여전히 j ∈ (l, r) 모두 훑음 → 쿼리당 O(N), 총 O(Q·N) ≈ 3·10⁹. C++ 빠듯, Python TLE."),
       ],
       aside: <M3InsightAside E={E} />,
     },
     {
-      label: t(E, "7️⃣ Final fast code — precomputed lookup tables", "7️⃣ 최종 빠른 코드 — 미리 계산한 lookup 표"),
+      label: t(E, "7️⃣ Idea 2 — f(j) is a parabola, so binary-search for the peak", "7️⃣ 아이디어 2 — f(j) 는 포물선, 꼭대기를 이분탐색"),
+      color: "#7c3aed",
+      py: M3_PEAK_PY, cpp: M3_PEAK_CPP,
+      why: [
+        t(E, "Once character c is fixed, i and k are also fixed (they don't depend on j). So f(j) = (j − i)(k − j) — a function of j alone.",
+            "character c 가 정해지면 i 와 k 도 자동으로 정해짐 (j 와 무관). 그러니 f(j) = (j − i)(k − j) — j 에 대한 함수 하나."),
+        t(E, "Expand: f(j) = −j² + (i+k)j − ik. Negative leading coefficient → downward parabola → unique peak at j = (i + k) / 2.",
+            "전개: f(j) = −j² + (i+k)j − ik. j² 계수가 음수 → 아래로 볼록 → 꼭대기 j = (i + k) / 2."),
+        t(E, "Best j must be on positions[c] AND in (i, k). Use bisect to find the entry closest to (i+k)/2 — only two candidates to check.",
+            "best j 는 positions[c] 위에 있어야 하고 (i, k) 안. bisect 로 (i+k)/2 와 가장 가까운 항목 찾고 — 후보 2 개만 확인."),
+        t(E, "Per query work: 26 chars × O(log N) bisect = O(26 · log N). Total O(Q · 26 · log N) ≈ 1.3·10⁷. Fast in Python.",
+            "쿼리당 일: 26 문자 × O(log N) bisect = O(26 · log N). 총 O(Q · 26 · log N) ≈ 1.3·10⁷. Python 도 빠름."),
+      ],
+      aside: <M3PeakAside E={E} />,
+    },
+    {
+      label: t(E, "8️⃣ Final fast code — lookup tables + bisect for peak", "8️⃣ 최종 빠른 코드 — lookup 표 + 꼭대기 bisect"),
       color: "#15803d",
       py: M3_FAST_PY, cpp: M3_FAST_CPP,
       why: [
-        t(E, "first_diff[c][i] = smallest index ≥ i with s[idx] ≠ chr(c). Built per character with one right-to-left sweep.",
-            "first_diff[c][i] = s[idx] ≠ chr(c) 인 가장 작은 idx ≥ i. 문자마다 오→왼 스윕 한 번."),
-        t(E, "last_same[c][i] = largest index ≤ i with s[idx] == chr(c). Built with one left-to-right sweep.",
-            "last_same[c][i] = s[idx] == chr(c) 인 가장 큰 idx ≤ i. 왼→오 스윕 한 번."),
-        t(E, "Per query: walk j ∈ (l, r), pull i and k in O(1) each, update best. Per query O(N), total O(26·N + Q·N).",
-            "쿼리당: j ∈ (l, r) 훑고, i 와 k 를 O(1) lookup, best 갱신. 쿼리당 O(N), 총 O(26·N + Q·N)."),
-        t(E, "C++ comfortably fits the limit. Python is borderline at full N — submit with PyPy if available.",
-            "C++ 는 풀 제약에서 여유. Python 은 빠듯 — 가능하면 PyPy 로 제출."),
+        t(E, "Build positions[c] (sorted list of j where s[j] = chr(c+97)) — natural order from a left-to-right pass.",
+            "positions[c] 만들기 (s[j] = chr(c+97) 인 j 들의 sorted list) — 왼→오 한 번에 자연스럽게 정렬."),
+        t(E, "first_diff and last_same as before — give us i and k in O(1) per (c, l, r).",
+            "first_diff 와 last_same 은 이전과 같음 — (c, l, r) 마다 i 와 k 를 O(1) 에 줌."),
+        t(E, "bisect_right(posc, i) and bisect_left(posc, k) bound the valid j range; bisect_left(posc, mid) finds the peak candidate. Check it and its neighbor.",
+            "bisect_right(posc, i) 와 bisect_left(posc, k) 로 유효한 j 범위 잡고; bisect_left(posc, mid) 로 꼭대기 후보 찾아 그 자리 + 이웃 확인."),
+        t(E, "Both Python and C++ pass the official limit comfortably.",
+            "Python 과 C++ 모두 풀 제약 여유롭게 통과."),
       ],
       aside: <M3FastAside E={E} />,
     },
@@ -789,27 +872,57 @@ const M3InsightAside = ({ E }) => (
   </div>
 );
 
+const M3PeakAside = ({ E }) => (
+  <div style={{
+    background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10,
+    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#7c2d12",
+  }}>
+    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
+      📈 {t(E, "Why a parabola?", "왜 포물선?")}
+    </div>
+    <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, marginBottom: 6 }}>
+      f(j) = (j − i)(k − j)<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;= −j² + (i+k)j − ik
+    </div>
+    <div style={{ marginBottom: 6 }}>
+      {t(E,
+        "Coefficient of j² is −1 → opens DOWN. Maximum at the vertex j = (i + k)/2.",
+        "j² 계수 −1 → 아래로 볼록. 꼭대기 j = (i + k)/2.")}
+    </div>
+    <div style={{ paddingTop: 6, borderTop: "1px dashed #fbbf24", fontSize: 11 }}>
+      {t(E,
+        "Constraint: j ∈ positions[c] (so s[j] = c). bisect picks the closest valid j to the vertex — only two candidates.",
+        "조건: j ∈ positions[c] (s[j] = c). bisect 로 vertex 와 가장 가까운 j — 후보 2 개.")}
+    </div>
+  </div>
+);
+
 const M3FastAside = ({ E }) => (
   <div style={{
     background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10,
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#1e3a8a",
   }}>
     <div style={{ fontSize: 10.5, fontWeight: 800, color: "#1e40af", marginBottom: 6 }}>
-      ✅ {t(E, "Two lookup tables", "lookup 표 2 개")}
+      ✅ {t(E, "Three pieces working together", "세 조각의 합")}
     </div>
-    <div style={{ marginBottom: 6 }}>
-      <b>first_diff[c][i]</b>{" "}
-      {t(E, "→ smallest idx ≥ i where s[idx] ≠ c.",
-            "→ s[idx] ≠ c 인 가장 작은 idx ≥ i.")}
+    <div style={{ marginBottom: 4 }}>
+      <b>positions[c]</b>{" "}
+      {t(E, "→ sorted list of j with s[j] = c.",
+            "→ s[j] = c 인 j 의 정렬 리스트.")}
+    </div>
+    <div style={{ marginBottom: 4 }}>
+      <b>first_diff / last_same</b>{" "}
+      {t(E, "→ give i, k in O(1) per (c, l, r).",
+            "→ (c, l, r) 마다 i, k 를 O(1).")}
     </div>
     <div>
-      <b>last_same[c][i]</b>{" "}
-      {t(E, "→ largest idx ≤ i where s[idx] = c.",
-            "→ s[idx] = c 인 가장 큰 idx ≤ i.")}
+      <b>bisect</b>{" "}
+      {t(E, "→ pick best j on positions[c] near (i+k)/2 — O(log N).",
+            "→ positions[c] 에서 (i+k)/2 근처 j — O(log N).")}
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #93c5fd", fontSize: 11 }}>
-      {t(E, "Build once: O(26·N). Each query: O(N). Total: O(26·N + Q·N).",
-            "한 번 만들기: O(26·N). 쿼리마다: O(N). 총: O(26·N + Q·N).")}
+      {t(E, "Total: O(26·N) build + O(Q · 26 · log N) queries ≈ 1.3·10⁷. Both Python and C++ comfortable.",
+            "총: O(26·N) 만들기 + O(Q · 26 · log N) 쿼리 ≈ 1.3·10⁷. Python 도 C++ 도 여유.")}
     </div>
   </div>
 );

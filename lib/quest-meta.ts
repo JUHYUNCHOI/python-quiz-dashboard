@@ -251,14 +251,24 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
     // Full-credit solution: per-character precompute (first_diff, last_same)
     // + position lists; per query iterate 26 chars and pick best j near
     // midpoint. O(26·N + Q·26·log N).
+    // Iterate-by-j is O(Q·N) — TLE in Python at full N=10⁵, Q=3·10⁴.
+    // Smarter: for each character c, find the BEST j on positions[c] near
+    // the midpoint of (i_c, k_c). f(j) = (j−i)(k−j) is a downward
+    // parabola peaking at (i+k)/2, so the optimum j is whichever
+    // position[c] entry is closest to that midpoint. O(Q · 26 · log N).
     solution_py: [
       "import sys",
+      "from bisect import bisect_left, bisect_right",
       "",
       "data = sys.stdin.buffer.read().split()",
       "p = 0",
       "N = int(data[p]); p += 1",
       "Q = int(data[p]); p += 1",
       "s = data[p].decode(); p += 1",
+      "",
+      "positions = [[] for _ in range(26)]",
+      "for i, ch in enumerate(s):",
+      "    positions[ord(ch) - 97].append(i)",
       "",
       "INF = N",
       "first_diff = [[INF] * (N + 1) for _ in range(26)]",
@@ -278,14 +288,22 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
       "    l = int(data[p]) - 1; p += 1",
       "    r = int(data[p]) - 1; p += 1",
       "    best = -1",
-      "    for j in range(l + 1, r):",
-      "        c = ord(s[j]) - 97",
+      "    for c in range(26):",
       "        i = first_diff[c][l]",
-      "        if i >= j: continue",
+      "        if i >= r: continue",
       "        k = last_same[c][r]",
-      "        if k <= j: continue",
-      "        v = (j - i) * (k - j)",
-      "        if v > best: best = v",
+      "        if k <= i: continue",
+      "        posc = positions[c]",
+      "        lo = bisect_right(posc, i)",
+      "        hi = bisect_left(posc, k)",
+      "        if lo >= hi: continue",
+      "        mid = (i + k) / 2",
+      "        at = bisect_left(posc, mid, lo, hi)",
+      "        for cand in (at, at - 1):",
+      "            if lo <= cand < hi:",
+      "                j = posc[cand]",
+      "                v = (j - i) * (k - j)",
+      "                if v > best: best = v",
       "    print(best)",
     ].join("\n"),
   },

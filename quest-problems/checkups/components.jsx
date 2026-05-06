@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
+import { SampleInputAside } from "@/components/quest/SampleInputAside";
+
+// Official Sample 1 (cpid=1469): N=3, a=[1,3,2], b=[3,2,1]. Answers: 3,3,0,0.
+const CK_SAMPLE = ["3", "1 3 2", "3 2 1"];
 
 const A = "#dc2626";
 
@@ -452,6 +456,9 @@ export function getCheckupsSections(E) {
         t(E, "counts[c] will hold the number of (l, r) pairs that result in exactly c checkups.",
             "counts[c] 는 검진 수가 정확히 c 인 (l, r) 쌍 개수."),
       ],
+      aside: <SampleInputAside E={E} sample={CK_SAMPLE} highlight={[0, 1, 2]} note={t(E,
+        "N=3, a=[1, 3, 2], b=[3, 2, 1]. Three input lines.",
+        "N=3, a=[1, 3, 2], b=[3, 2, 1]. 입력 3 줄.")} />,
     },
     {
       label: t(E, "2️⃣ Outer pair (l, r)", "2️⃣ 바깥 쌍 (l, r)"),
@@ -463,6 +470,9 @@ export function getCheckupsSections(E) {
         t(E, "We'll fill the inner body next — for now just see the shape.",
             "안쪽은 다음 단계에서 채움 — 지금은 모양만."),
       ],
+      aside: <SampleInputAside E={E} sample={CK_SAMPLE} note={t(E,
+        "N=3 → 6 distinct (l, r) pairs: (1,1), (1,2), (1,3), (2,2), (2,3), (3,3).",
+        "N=3 → 서로 다른 (l, r) 쌍 6 개: (1,1), (1,2), (1,3), (2,2), (2,3), (3,3).")} />,
     },
     {
       label: t(E, "3️⃣ Reverse + count matches", "3️⃣ 뒤집기 + 일치 세기"),
@@ -476,6 +486,9 @@ export function getCheckupsSections(E) {
         t(E, "Compare to b[i]; tally if equal.",
             "b[i] 와 비교, 같으면 c 증가."),
       ],
+      aside: <SampleInputAside E={E} sample={CK_SAMPLE} highlight={[1, 2]} note={t(E,
+        "Example (l=1, r=3): a' = [2, 3, 1]. Compare to b = [3, 2, 1] — only pos 3 matches → c = 1.",
+        "예 (l=1, r=3): a' = [2, 3, 1]. b = [3, 2, 1] 비교 — 위치 3 만 일치 → c = 1.")} />,
     },
     {
       label: t(E, "4️⃣ Tally + print full counts", "4️⃣ 집계 + counts 전체 출력"),
@@ -489,6 +502,9 @@ export function getCheckupsSections(E) {
         t(E, "Done — passes inputs with N up to ~100. Larger N times out (next steps fix that).",
             "끝 — N 이 ~100 까지인 입력 통과. 더 크면 TLE (다음 단계에서 해결)."),
       ],
+      aside: <SampleInputAside E={E} sample={CK_SAMPLE} note={t(E,
+        "Sample 1 expected output: 3 (c=0), 3 (c=1), 0 (c=2), 0 (c=3). Four lines.",
+        "샘플 1 답: 3 (c=0), 3 (c=1), 0 (c=2), 0 (c=3). 4 줄.")} />,
     },
     {
       label: t(E, "5️⃣ Why O(N³) is too slow", "5️⃣ 왜 O(N³) 가 느린가"),
