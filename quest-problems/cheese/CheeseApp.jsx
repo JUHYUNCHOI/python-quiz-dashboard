@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { CheeseSim2, CheeseBruteRunner, CheeseProgressiveCode, downloadCheesePDF, getCheeseSections } from "./components";
-import { makeCheeseCh1, makeCheeseCh2, makeCheeseCh3, makeCheeseCh4, makeCheeseCh5 } from "./chapters";
+import { CheeseProgressiveCode, downloadCheesePDF, getCheeseSections, CheeseSim, CheeseRunner } from "./components";
+import { makeCheeseCh1, makeCheeseCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
+
+const A = "#eab308";
 
 export default function CheeseApp(props = {}) {
   const propLang = props.lang;
-  // 글로벌 헤더 lang prop → 인앱 동기화 (race condition 방지)
   const [lang, setLang] = useState(() => {
     if (propLang === "ko" || propLang === "en") return propLang;
     if (typeof window !== "undefined") {
@@ -18,10 +19,7 @@ export default function CheeseApp(props = {}) {
     return "ko";
   });
   const E = lang === "en";
-
-  // 코드 언어 (Python / C++)
   const [codeLang, setCodeLang] = useCodeLang();
-
   // Persist tab/si in localStorage so refresh keeps the student on the same step
   const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";
   const _loadPos = () => {
@@ -31,23 +29,15 @@ export default function CheeseApp(props = {}) {
   const _initial = _loadPos();
   const [tab, setTab] = useState(typeof _initial.tab === "number" ? _initial.tab : 0);
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
-
-  // visited 탭 추적 (✓ 마커용)
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  // Quiz/input state per chapter
   const [ch1Q, setCh1Q] = useState(() => makeCheeseCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeCheeseCh2(false));
-  const [ch3Q, setCh3Q] = useState(() => makeCheeseCh3(false));
-  const [ch4Q, setCh4Q] = useState(() => makeCheeseCh4(false));
-  const [ch5Q, setCh5Q] = useState(() => makeCheeseCh5(false, "py"));
+  const [ch2Q, setCh2Q] = useState(() => makeCheeseCh2(false, "py"));
 
-  // codeLang 변경 시 Ch5 재빌드 (답변 진행 보존)
   useEffect(() => {
-    setCh5Q(prev => makeCheeseCh5(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+    setCh2Q(prev => makeCheeseCh2(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   }, [codeLang, E]);
 
-  // 글로벌 lang prop 변경 → 인앱 lang 동기화
   // Save tab + si to localStorage on every change
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -55,25 +45,19 @@ export default function CheeseApp(props = {}) {
   }, [tab, si, _posKey]);
 
   useEffect(() => {
-    if ((propLang === "ko" || propLang === "en") && propLang !== lang) {
-      switchLang(propLang);
-    }
+    if ((propLang === "ko" || propLang === "en") && propLang !== lang) switchLang(propLang);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propLang]);
 
-  // Tab order: 문제 → 시뮬 → 브루트 → 패턴 → 코드
-  const TABS = E
-    ? ["📋 Problem", "🧀 Sim", "🐍 Brute", "💡 Pattern", "⚡ Code"]
-    : ["📋 문제", "🧀 시뮬", "🐍 브루트", "💡 패턴", "⚡ 코드"];
-
-  const setters = { 0: setCh1Q, 1: setCh2Q, 2: setCh4Q, 3: setCh3Q, 4: setCh5Q };
-  const states  = { 0: ch1Q,    1: ch2Q,    2: ch4Q,    3: ch3Q,    4: ch5Q };
-  const makers  = { 0: makeCheeseCh1, 1: makeCheeseCh2, 2: makeCheeseCh4, 3: makeCheeseCh3, 4: (e) => makeCheeseCh5(e, codeLang) };
+  const TABS = E ? ["📋 Problem", "⚡ Code"] : ["📋 문제", "⚡ 코드"];
+  const setters = { 0: setCh1Q, 1: setCh2Q };
+  const states  = { 0: ch1Q,    1: ch2Q };
+  const makers  = { 0: makeCheeseCh1, 1: (e) => makeCheeseCh2(e, codeLang) };
 
   const switchLang = nl => {
     const ne = nl === "en"; setLang(nl);
     // Preserve current step + answered/solved state across language change
-    for (const k of [0,1,2,3,4]) setters[k](prev => makers[k](ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+    for (const k of [0,1]) setters[k](prev => makers[k](ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   };
   const changeTab = idx => {
     setTab(idx); setSi(0);
@@ -81,29 +65,20 @@ export default function CheeseApp(props = {}) {
     setters[idx](makers[idx](E));
   };
 
-  const steps = states[tab];
-  const cur = Math.min(si, steps.length - 1);
-  const step = steps[cur];
+  const steps = states[tab], cur = Math.min(si, steps.length - 1), step = steps[cur];
 
-  const handleAnswer = optIdx => {
+  const handleAnswer = i => {
     if (step.answered != null) return;
-    const setter = setters[tab], state = states[tab];
-    const u = [...state]; u[cur] = { ...u[cur], answered: optIdx };
-    setter(u);
+    const u = [...states[tab]]; u[cur] = { ...u[cur], answered: i };
+    setters[tab](u);
   };
-
   const handleSolve = () => {
-    const setter = setters[tab], state = states[tab];
-    const u = [...state]; u[cur] = { ...u[cur], solved: true };
-    setter(u);
+    const u = [...states[tab]]; u[cur] = { ...u[cur], solved: true };
+    setters[tab](u);
   };
 
-  // 차단 해제 — 학생이 자유롭게 진행. 미응답 시 부드러운 안내만.
   const isBlocked = false;
-  const showAnswerHint =
-    (step.type === "quiz" && step.answered == null) ||
-    (step.type === "input" && !step.solved);
-
+  const showAnswerHint = (step.type === "quiz" && step.answered == null) || (step.type === "input" && !step.solved);
   const canNext = cur < steps.length - 1 || tab < TABS.length - 1;
   const next = () => {
     if (cur < steps.length - 1) {
@@ -116,29 +91,26 @@ export default function CheeseApp(props = {}) {
   };
   const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
-  // 코드 컨트롤은 코드 탭(4)에서만
-  const showCodeControls = tab === 4;
+  const showCodeControls = tab === 1;
 
   const renderContent = () => {
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
-    if (step.type === "cheeseSim2") return <CheeseSim2 E={E} />;
-    if (step.type === "cheeseRunner") return <CheeseBruteRunner E={E} />;
     if (step.type === "progressive") return <CheeseProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <CheeseSim E={E} />;
+    if (step.type === "runner") return <CheeseRunner E={E} />;
     return null;
   };
 
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
-        {/* --- 상단 progress bar — 수업 페이지와 일치 --- */}
         <div style={{ height: 3, background: "#e5e7eb", borderRadius: 2, marginTop: 8, marginBottom: 10, overflow: "hidden" }}>
-          <div style={{ height: "100%", background: "#d97706", borderRadius: 2, width: `${((cur + 1) / steps.length) * 100}%`, transition: "width .3s" }} />
+          <div style={{ height: "100%", background: A, borderRadius: 2, width: `${((cur + 1) / steps.length) * 100}%`, transition: "width .3s" }} />
         </div>
 
-        {/* --- 탭 + (조건부) 코드 컨트롤 한 줄에 --- */}
         <div style={{ display: "flex", gap: 8, marginBottom: 12, alignItems: "center" }}>
           <div style={{ display: "flex", gap: 3, overflowX: "auto", paddingBottom: 4, flex: 1 }}>
             {TABS.map((label, i) => {
@@ -148,9 +120,9 @@ export default function CheeseApp(props = {}) {
                 <button key={i} onClick={() => changeTab(i)} style={{
                   flex: "0 0 auto", borderRadius: 8, padding: "6px 10px", cursor: "pointer",
                   fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
-                  background: isCurrent ? "#d97706" : (isVisited ? "#fef3c7" : "transparent"),
-                  border: `1.5px solid ${isCurrent ? "#d97706" : (isVisited ? "#fde68a" : C.border)}`,
-                  color: isCurrent ? "#fff" : (isVisited ? "#92400e" : C.dim),
+                  background: isCurrent ? A : (isVisited ? "#fef9c3" : "transparent"),
+                  border: `1.5px solid ${isCurrent ? A : (isVisited ? "#fde047" : C.border)}`,
+                  color: isCurrent ? "#fff" : (isVisited ? "#854d0e" : C.dim),
                   display: "flex", alignItems: "center", gap: 4,
                 }}>
                   {isVisited && <span style={{ fontSize: 10 }}>✓</span>}
@@ -159,72 +131,54 @@ export default function CheeseApp(props = {}) {
               );
             })}
           </div>
-
           {showCodeControls && (
             <div style={{ display: "flex", gap: 0, alignItems: "stretch", flexShrink: 0 }}>
-              <select
-                value={codeLang}
-                onChange={e => setCodeLang(e.target.value)}
-                title={t(E, "Choose code language", "코드 언어 선택")}
-                style={{
-                  background: "#fff", color: "#d97706", border: `1.5px solid #d97706`,
-                  borderRadius: "8px 0 0 8px", borderRight: "none",
-                  padding: "4px 6px", fontSize: 12, fontWeight: 800, cursor: "pointer",
-                }}>
+              <select value={codeLang} onChange={e => setCodeLang(e.target.value)} title={t(E, "Code language", "코드 언어")} style={{
+                background: "#fff", color: A, border: `1.5px solid ${A}`,
+                borderRadius: "8px 0 0 8px", borderRight: "none",
+                padding: "4px 6px", fontSize: 12, fontWeight: 800, cursor: "pointer",
+              }}>
                 <option value="py">🐍 Py</option>
                 <option value="cpp">💻 C++</option>
               </select>
-              <button
-                onClick={() => downloadCheesePDF(E, getCheeseSections(E), codeLang)}
-                title={t(E, "Download full study guide", "전체 풀이 PDF 다운로드")}
-                style={{
-                  background: "#d97706", color: "#fff", border: `1.5px solid #d97706`,
-                  borderRadius: "0 8px 8px 0",
-                  padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800,
-                  display: "flex", alignItems: "center", gap: 4,
-                }}>
-                📄 PDF
-              </button>
+              <button onClick={() => downloadCheesePDF(E, getCheeseSections(E), codeLang)} style={{
+                background: A, color: "#fff", border: `1.5px solid ${A}`,
+                borderRadius: "0 8px 8px 0",
+                padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800,
+              }}>📄 PDF</button>
             </div>
           )}
         </div>
 
-        {/* Narration */}
-        {step.narr && <Narration key={`cheese-${tab}-${cur}-${lang}`} text={step.narr} />}
+        {step.narr && <Narration key={`chs-${tab}-${cur}-${lang}`} text={step.narr} />}
 
-        {/* Content */}
         <div style={{
           background: C.card, borderRadius: 14, border: `2px solid ${C.border}`,
           marginBottom: 10, boxShadow: "0 2px 10px rgba(0,0,0,.04)", overflow: "hidden",
         }}>
           {renderContent()}
         </div>
-
         <div style={{ height: 110 }} />
       </div>
 
-      {/* Fixed bottom navigation */}
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "8px 16px calc(14px + env(safe-area-inset-bottom))", zIndex: 100, borderTop: `1px solid ${C.border}`, boxShadow: "0 -4px 12px rgba(0,0,0,.06)" }}>
         <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
           {showAnswerHint && (
             <div style={{ textAlign: "center", fontSize: 11, color: C.dim, fontWeight: 600, marginBottom: 4 }}>
-              {t(E, "💡 Tip: try answering above. (You can skip too — →)",
-                  "💡 팁: 위에서 답해보면 좋아요. (그냥 넘어가도 OK — →)")}
+              {t(E, "💡 Tip: try answering above. (You can skip too — →)", "💡 팁: 위에서 답해보면 좋아요. (그냥 넘어가도 OK — →)")}
             </div>
           )}
           <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center" }}>
             <button onClick={prev} disabled={cur === 0} style={{
-              background: cur === 0 ? "#e5e7eb" : C.card,
-              border: `2px solid ${cur === 0 ? "#e5e7eb" : "#d97706"}`,
+              background: cur === 0 ? "#e5e7eb" : C.card, border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
               borderRadius: 9, padding: "10px 22px", fontSize: 14, fontWeight: 800,
-              cursor: cur === 0 ? "default" : "pointer", color: cur === 0 ? "#b0b5c3" : "#d97706",
+              cursor: cur === 0 ? "default" : "pointer", color: cur === 0 ? "#b0b5c3" : A,
             }}>←</button>
             <span style={{ fontSize: 12, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", minWidth: 56, textAlign: "center" }}>
               {cur + 1}/{steps.length}
             </span>
             <button onClick={next} disabled={!canNext} style={{
-              background: !canNext ? "#e5e7eb" : "#d97706",
-              border: `2px solid ${!canNext ? "#e5e7eb" : "#d97706"}`,
+              background: !canNext ? "#e5e7eb" : A, border: `2px solid ${!canNext ? "#e5e7eb" : A}`,
               borderRadius: 9, padding: "10px 22px", fontSize: 14, fontWeight: 800,
               cursor: !canNext ? "default" : "pointer", color: !canNext ? "#b0b5c3" : "#fff",
             }}>→</button>
