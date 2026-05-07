@@ -2,6 +2,83 @@ import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, ReverseSim } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
+/* ====================================================================
+   Shared visual language for the checkups quest — reused across the
+   1-1 mini-visual, the 1-5 sample-3 walkthrough, and the ReverseSim.
+   Keeping these in one place means a tweak applies everywhere.
+   ==================================================================== */
+const SPECIES = {
+  1: { bg: "#fef3c7", text: "#92400e", border: "#fcd34d" },  // amber
+  2: { bg: "#dbeafe", text: "#1e3a8a", border: "#93c5fd" },  // blue
+  3: { bg: "#fce7f3", text: "#9d174d", border: "#f9a8d4" },  // pink
+  4: { bg: "#dcfce7", text: "#14532d", border: "#86efac" },  // green
+  5: { bg: "#ede9fe", text: "#5b21b6", border: "#a78bfa" },  // purple
+};
+
+function SpeciesCell({ v, swapped, matched, size = 52 }) {
+  const sp = SPECIES[v] || SPECIES[1];
+  return (
+    <div style={{
+      width: size, height: size, borderRadius: 10,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontFamily: "'JetBrains Mono',monospace", fontSize: Math.round(size * 0.42), fontWeight: 700,
+      background: sp.bg, color: sp.text,
+      border: `${swapped ? 1.5 : 1}px ${swapped ? "dashed" : "solid"} ${swapped ? "#3b82f6" : sp.border}`,
+      boxShadow: matched ? "0 0 0 2px #22c55e inset" : "none",
+    }}>{v}</div>
+  );
+}
+
+function CowRow({ label, sub, cells, withSwap, matches, size = 52 }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+      <div style={{ width: 130, fontSize: 12, fontWeight: 600, color: "#7f1d1d", textAlign: "right", lineHeight: 1.25 }}>
+        {label}
+        {sub && <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>{sub}</div>}
+      </div>
+      <div style={{ display: "flex", gap: 6 }}>
+        {cells.map((c, i) => (
+          <SpeciesCell key={i} v={c.v} swapped={withSwap && c.swapped} matched={matches?.[i]} size={size} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TreatedRow({ matches, size = 52 }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
+      <div style={{ width: 130, fontSize: 12, fontWeight: 600, color: "#15803d", textAlign: "right" }}>
+        💉 치료?
+      </div>
+      <div style={{ display: "flex", gap: 6 }}>
+        {matches.map((m, i) => (
+          <div key={i} style={{
+            width: size, height: Math.round(size * 0.6), borderRadius: 8,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: Math.round(size * 0.36), fontWeight: 600,
+            background: m ? "#22c55e" : "transparent",
+            color: m ? "#fff" : "#cbd5e1",
+          }}>{m ? "✓" : "—"}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PositionRow({ n, size = 52 }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 2 }}>
+      <div style={{ width: 130 }} />
+      <div style={{ display: "flex", gap: 6 }}>
+        {Array.from({ length: n }, (_, i) => (
+          <div key={i} style={{ width: size, fontSize: 10, color: C.dim, textAlign: "center", fontWeight: 400 }}>{i + 1}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // Reference solution — full O(N²) version (matches `solution_py` in quest-meta).
 export const SOLUTION_CODE = [
   "import sys",
@@ -60,143 +137,61 @@ export function makeCheckupsCh1(E) {
                     "작은 예: 소 4 마리가 줄 서 있음. 각 자리마다 소가 가진 종 / 수의사가 원하는 종.")}
             </div>
 
-            {(() => {
-              // Visual weight rules:
-              //   - Cell digit (= the actual content) = the heaviest, but only 700.
-              //   - Status mark (✓ / —) = 600.
-              //   - Row label, step heading = 600.
-              //   - Captions, sub-labels = normal (400-500).
-              // Borders are 1.5px and only as thick as needed for color identity.
-              const SPECIES = {
-                1: { bg: "#fef3c7", text: "#92400e", border: "#fcd34d" },  // amber
-                2: { bg: "#dbeafe", text: "#1e3a8a", border: "#93c5fd" },  // blue
-                3: { bg: "#fce7f3", text: "#9d174d", border: "#f9a8d4" },  // pink
-                4: { bg: "#dcfce7", text: "#14532d", border: "#86efac" },  // green
-              };
-              function speciesCell(v, opts = {}) {
-                const sp = SPECIES[v] || SPECIES[1];
-                return (
-                  <div style={{
-                    width: 52, height: 52, borderRadius: 10,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 700,
-                    background: sp.bg, color: sp.text,
-                    border: `${opts.swapped ? 1.5 : 1}px ${opts.swapped ? "dashed" : "solid"} ${opts.swapped ? "#3b82f6" : sp.border}`,
-                    boxShadow: opts.matched ? "0 0 0 2px #22c55e inset" : "none",
-                  }}>{v}</div>
-                );
-              }
+            {/* Step 1: no reversal */}
+            <div style={{ background: "#fff", border: "1px solid #fecaca", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
+                {t(E, "1. Without any reversal", "1. 뒤집기 없이")}
+              </div>
+              <CowRow
+                label={t(E, "🐄 has", "🐄 가진 종")}
+                sub="a"
+                cells={[{v:1},{v:2},{v:1},{v:3}]}
+                matches={[true, false, true, false]}
+              />
+              <CowRow
+                label={t(E, "📋 vet wants", "📋 원하는 종")}
+                sub="b"
+                cells={[{v:1},{v:1},{v:1},{v:1}]}
+                matches={[true, false, true, false]}
+              />
+              <TreatedRow matches={[true, false, true, false]} />
+              <PositionRow n={4} />
+              <div style={{ marginTop: 8, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 600 }}>
+                {t(E, "→ 2 cows treated (positions 1 and 3).", "→ 2 마리 치료 (1, 3 번 자리).")}
+              </div>
+            </div>
 
-              function Row({ label, sub, cells, withSwap, matches }) {
-                return (
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                    <div style={{ width: 120, fontSize: 12, fontWeight: 600, color: "#7f1d1d", textAlign: "right", lineHeight: 1.25 }}>
-                      {label}
-                      {sub && <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>{sub}</div>}
-                    </div>
-                    <div style={{ display: "flex", gap: 8 }}>
-                      {cells.map((c, i) => (
-                        <div key={i}>
-                          {speciesCell(c.v, { swapped: withSwap && c.swapped, matched: matches?.[i] })}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                );
-              }
-              function MatchRow({ matches }) {
-                return (
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
-                    <div style={{ width: 120, fontSize: 12, fontWeight: 600, color: "#15803d", textAlign: "right" }}>
-                      {t(E, "💉 treated?", "💉 치료?")}
-                    </div>
-                    <div style={{ display: "flex", gap: 8 }}>
-                      {matches.map((m, i) => (
-                        <div key={i} style={{
-                          width: 52, height: 32, borderRadius: 8,
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          fontSize: 18, fontWeight: 600,
-                          background: m ? "#22c55e" : "transparent",
-                          color: m ? "#fff" : "#cbd5e1",
-                        }}>{m ? "✓" : "—"}</div>
-                      ))}
-                    </div>
-                  </div>
-                );
-              }
-              function PositionRow() {
-                return (
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 2 }}>
-                    <div style={{ width: 120 }} />
-                    <div style={{ display: "flex", gap: 8 }}>
-                      {[1, 2, 3, 4].map(i => (
-                        <div key={i} style={{ width: 52, fontSize: 10, color: C.dim, textAlign: "center", fontWeight: 400 }}>{i}</div>
-                      ))}
-                    </div>
-                  </div>
-                );
-              }
-
-              return (
-                <>
-                  {/* Step 1 */}
-                  <div style={{ background: "#fff", border: "1px solid #fecaca", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
-                      {t(E, "1. Without any reversal", "1. 뒤집기 없이")}
-                    </div>
-                    <Row
-                      label={t(E, "🐄 has", "🐄 가진 종")}
-                      sub="a"
-                      cells={[{v:1},{v:2},{v:1},{v:3}]}
-                      matches={[true, false, true, false]}
-                    />
-                    <Row
-                      label={t(E, "📋 vet wants", "📋 원하는 종")}
-                      sub="b"
-                      cells={[{v:1},{v:1},{v:1},{v:1}]}
-                      matches={[true, false, true, false]}
-                    />
-                    <MatchRow matches={[true, false, true, false]} />
-                    <PositionRow />
-                    <div style={{ marginTop: 8, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 600 }}>
-                      {t(E, "→ 2 cows treated (positions 1 and 3).", "→ 2 마리 치료 (1, 3 번 자리).")}
-                    </div>
-                  </div>
-
-                  {/* Step 2 */}
-                  <div style={{ background: "#fff", border: "1px solid #fecaca", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
-                      {t(E, "2. Pick (l, r) = (2, 3) → reverse a[2..3] (blue dashed = swapped)",
-                            "2. (l, r) = (2, 3) 골라 a[2..3] 뒤집기 (파랑 점선 = 교환된 칸)")}
-                    </div>
-                    <Row
-                      label={t(E, "🐄 has (after swap)", "🐄 가진 종 (뒤집기 후)")}
-                      sub="a'"
-                      cells={[
-                        {v:1, swapped:false},
-                        {v:1, swapped:true},
-                        {v:2, swapped:true},
-                        {v:3, swapped:false},
-                      ]}
-                      matches={[true, true, false, false]}
-                      withSwap
-                    />
-                    <Row
-                      label={t(E, "📋 vet wants", "📋 원하는 종")}
-                      sub="b"
-                      cells={[{v:1},{v:1},{v:1},{v:1}]}
-                      matches={[true, true, false, false]}
-                    />
-                    <MatchRow matches={[true, true, false, false]} />
-                    <PositionRow />
-                    <div style={{ marginTop: 8, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 600 }}>
-                      {t(E, "→ still 2 treated, but DIFFERENT cows (positions 1, 2 instead of 1, 3).",
-                            "→ 여전히 2 마리 — 다른 소들 (1, 3 자리 → 1, 2 자리).")}
-                    </div>
-                  </div>
-                </>
-              );
-            })()}
+            {/* Step 2: one reversal */}
+            <div style={{ background: "#fff", border: "1px solid #fecaca", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
+                {t(E, "2. Pick (l, r) = (2, 3) → reverse a[2..3] (blue dashed = swapped)",
+                      "2. (l, r) = (2, 3) 골라 a[2..3] 뒤집기 (파랑 점선 = 교환된 칸)")}
+              </div>
+              <CowRow
+                label={t(E, "🐄 has (after swap)", "🐄 가진 종 (뒤집기 후)")}
+                sub="a'"
+                cells={[
+                  {v:1, swapped:false},
+                  {v:1, swapped:true},
+                  {v:2, swapped:true},
+                  {v:3, swapped:false},
+                ]}
+                matches={[true, true, false, false]}
+                withSwap
+              />
+              <CowRow
+                label={t(E, "📋 vet wants", "📋 원하는 종")}
+                sub="b"
+                cells={[{v:1},{v:1},{v:1},{v:1}]}
+                matches={[true, true, false, false]}
+              />
+              <TreatedRow matches={[true, true, false, false]} />
+              <PositionRow n={4} />
+              <div style={{ marginTop: 8, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 600 }}>
+                {t(E, "→ still 2 treated, but DIFFERENT cows (positions 1, 2 instead of 1, 3).",
+                      "→ 여전히 2 마리 — 다른 소들 (1, 3 자리 → 1, 2 자리).")}
+              </div>
+            </div>
 
             {/* Step 3: try ALL (l, r) and tally */}
             <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 10 }}>
@@ -311,57 +306,55 @@ export function makeCheckupsCh1(E) {
         "샘플 3: N=7. 검진 4 개를 내는 연산은 (l=4, r=5) 와 (l=5, r=7). 아래 손 풀이로 확인."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>
-              🔍 {t(E, "Walkthrough — (l=4, r=5)", "풀이 — (l=4, r=5)")}
+          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
+              🔍 {t(E, "Walkthrough — Sample 3, pick (l=4, r=5)", "풀이 — 샘플 3, (l=4, r=5)")}
             </div>
-            <div style={{ marginBottom: 10, fontSize: 12 }}>
-              {t(E, "Reverse a[4..5] (values 2, 1 → 1, 2). Then check each column: same number on top & bottom = treated 💉.",
-                    "a[4..5] (2, 1 → 1, 2) 뒤집기. 각 칸 비교: 위아래 번호 같으면 치료 💉.")}
-            </div>
-
-            {/* Column-box visual: each column is one cow, with a' on top and b below.
-                Matched columns get a green box + 💉. The reversed positions get a blue dashed
-                outline on the a-cell so the student can see what was swapped. */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 4 }}>
-              {[
-                { a: 1, b: 3, swapped: false },
-                { a: 3, b: 2, swapped: false },
-                { a: 2, b: 2, swapped: false },
-                { a: 1, b: 1, swapped: true },   // a[4] reversed: was 2 → now 1
-                { a: 2, b: 2, swapped: true },   // a[5] reversed: was 1 → now 2
-                { a: 3, b: 3, swapped: false },
-                { a: 2, b: 1, swapped: false },
-              ].map((col, i) => {
-                const m = col.a === col.b;
-                return (
-                  <div key={i} style={{
-                    borderRadius: 8, padding: "4px 2px", textAlign: "center",
-                    background: m ? "#dcfce7" : "#fff",
-                    border: `2.5px solid ${m ? "#16a34a" : "#e5e7eb"}`,
-                  }}>
-                    <div style={{ fontSize: 9, color: C.dim, fontWeight: 700 }}>{i + 1}</div>
-                    <div style={{
-                      fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800,
-                      color: m ? "#15803d" : (col.swapped ? "#1e3a8a" : C.text),
-                      background: col.swapped ? "#dbeafe" : "transparent",
-                      border: col.swapped ? "1.5px dashed #3b82f6" : "none",
-                      borderRadius: 4, marginTop: 2,
-                    }}>{col.a}</div>
-                    <div style={{ fontSize: 9, color: m ? "#15803d" : "#9ca3af", margin: "1px 0", fontWeight: 700 }}>—</div>
-                    <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: m ? "#15803d" : C.text }}>{col.b}</div>
-                    {m && <div style={{ fontSize: 13, marginTop: 2 }}>💉</div>}
-                  </div>
-                );
-              })}
+            <div style={{ marginBottom: 10, fontSize: 12, lineHeight: 1.6 }}>
+              {t(E, "N=7. Reverse positions 4..5 of a (the values 2, 1 swap to 1, 2).  Same colour above & below ⇒ vet treats that cow.",
+                    "N=7. a 의 4..5 위치 뒤집기 (값 2, 1 ↔ 1, 2). 위아래 같은 색 ⇒ 그 자리 치료.")}
             </div>
 
-            <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center" }}>
-              {t(E, "Top number = a' (after reversal).  Bottom = b (vet's wishlist).  Blue dashed = swapped by the reversal.",
-                    "위 = a' (뒤집은 후). 아래 = b (수의사 원하는 것). 파랑 점선 = 뒤집기로 바뀐 칸.")}
-            </div>
-            <div style={{ marginTop: 6, textAlign: "center", color: "#15803d", fontWeight: 800, fontSize: 13 }}>
-              {t(E, "Treated columns: 3, 4, 5, 6 → ", "치료 칸: 3, 4, 5, 6 → ")}<span style={{ fontSize: 16 }}>4</span>{t(E, " cows.", " 마리.")}
+            {(() => {
+              // Sample 3 data: a = [1, 3, 2, 2, 1, 3, 2], b = [3, 2, 2, 1, 2, 3, 1].
+              // After reversing a[4..5]: a' = [1, 3, 2, 1, 2, 3, 2].
+              const aOriginal = [1, 3, 2, 2, 1, 3, 2];
+              const aPrime    = [1, 3, 2, 1, 2, 3, 2];
+              const b         = [3, 2, 2, 1, 2, 3, 1];
+              const swapped   = [false, false, false, true, true, false, false];
+              const matches   = aPrime.map((v, i) => v === b[i]);
+              const N = 7;
+              return (
+                <>
+                  <CowRow
+                    label={t(E, "🐄 original", "🐄 원래")}
+                    sub="a"
+                    cells={aOriginal.map(v => ({ v }))}
+                    size={42}
+                  />
+                  <CowRow
+                    label={t(E, "🐄 after swap", "🐄 뒤집기 후")}
+                    sub="a'"
+                    cells={aPrime.map((v, i) => ({ v, swapped: swapped[i] }))}
+                    matches={matches}
+                    withSwap
+                    size={42}
+                  />
+                  <CowRow
+                    label={t(E, "📋 vet wants", "📋 원하는 종")}
+                    sub="b"
+                    cells={b.map(v => ({ v }))}
+                    matches={matches}
+                    size={42}
+                  />
+                  <TreatedRow matches={matches} size={42} />
+                  <PositionRow n={N} size={42} />
+                </>
+              );
+            })()}
+
+            <div style={{ marginTop: 8, textAlign: "center", color: "#15803d", fontWeight: 600, fontSize: 13 }}>
+              {t(E, "→ 4 cows treated (positions 3, 4, 5, 6).", "→ 4 마리 치료 (3, 4, 5, 6 번 자리).")}
             </div>
           </div>
         </div>),
