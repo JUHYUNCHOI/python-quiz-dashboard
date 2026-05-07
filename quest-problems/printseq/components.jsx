@@ -339,7 +339,7 @@ export function getPrintseqSections(E) {
     {
       label: t(E, "2️⃣ Recursive can(seq, k) — base cases", "2️⃣ 재귀 can(seq, k) — 베이스"),
       color: "#0891b2",
-      py: PSQ_S2_PY, cpp: PSQ_S2_CPP,
+      py: PSQ_S2_PY, cpp: PSQ_FAST_CPP,
       why: [
         t(E, "Empty sequence cannot be produced (we need at least the original PRINT).",
             "빈 수열은 만들 수 없음 (최소 PRINT 1 개 필요)."),
@@ -350,7 +350,7 @@ export function getPrintseqSections(E) {
     {
       label: t(E, "3️⃣ Option A — all same value, 1 PRINT does it", "3️⃣ 옵션 A — 모두 같은 값, PRINT 1 개"),
       color: "#dc2626",
-      py: PSQ_S3_PY, cpp: PSQ_S3_CPP,
+      py: PSQ_S3_PY, cpp: PSQ_FAST_CPP,
       why: [
         t(E, "If every element is the same value v, one PRINT v wrapped in REPs (towers if needed) outputs v any number of times.",
             "모두 같은 값 v 면, PRINT v 를 REP 로 (필요시 다중으로) 감싸서 원하는 개수만큼."),
@@ -361,7 +361,7 @@ export function getPrintseqSections(E) {
     {
       label: t(E, "4️⃣ Options B + C — repeating block & split", "4️⃣ 옵션 B + C — 반복 블록 & 분할"),
       color: "#7c3aed",
-      py: PSQ_S4_PY, cpp: PSQ_S4_CPP,
+      py: PSQ_S4_PY, cpp: PSQ_FAST_CPP,
       why: [
         t(E, "Option B: if seq is a smaller block REPEATED m times (m ≥ 2), wrap that block in REP m. Cost = whatever the block costs (REPs are free).",
             "옵션 B: seq 가 더 작은 블록을 m 번 (m ≥ 2) 반복이면 REP m 로 감쌈. 비용 = 블록 비용 (REP 는 공짜)."),
