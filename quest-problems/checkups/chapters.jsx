@@ -60,70 +60,82 @@ export function makeCheckupsCh1(E) {
                     "작은 예: 소 4 마리. 수의사가 원하는 종 b[]. 실제 종 a[].")}
             </div>
 
-            {/* Step 1: original arrangement */}
+            {/* Step 1: original arrangement — match columns are boxed together */}
             <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 10, marginBottom: 8 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
-                {t(E, "1. Without any reversal", "1. 뒤집기 없이")}
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 8 }}>
+                {t(E, "1. Without any reversal — same number on top & bottom = treated 💉",
+                      "1. 뒤집기 없이 — 위아래 번호 같으면 치료 💉")}
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "60px repeat(4, 1fr)", gap: 4, alignItems: "center" }}>
-                <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>a =</div>
-                {[1, 2, 1, 3].map((v, i) => (
-                  <div key={`a-${i}`} style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 6, padding: "4px 0", textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: "#7c2d12" }}>{v}</div>
-                ))}
-                <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>b =</div>
-                {[1, 1, 1, 1].map((v, i) => (
-                  <div key={`b-${i}`} style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 6, padding: "4px 0", textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: "#7c2d12" }}>{v}</div>
-                ))}
-                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>{t(E, "match?", "검진?")}</div>
-                {[true, false, true, false].map((m, i) => (
-                  <div key={`m-${i}`} style={{ textAlign: "center", fontSize: 14, fontWeight: 900, color: m ? "#16a34a" : "#dc2626" }}>
-                    {m ? "✓" : "✗"}
-                  </div>
-                ))}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 6 }}>
+                {[
+                  { a: 1, b: 1 },
+                  { a: 2, b: 1 },
+                  { a: 1, b: 1 },
+                  { a: 3, b: 1 },
+                ].map((col, i) => {
+                  const m = col.a === col.b;
+                  return (
+                    <div key={i} style={{
+                      borderRadius: 8, padding: "6px 4px",
+                      background: m ? "#dcfce7" : "transparent",
+                      border: `2.5px solid ${m ? "#16a34a" : "transparent"}`,
+                      textAlign: "center",
+                    }}>
+                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: m ? "#15803d" : "#7c2d12" }}>{col.a}</div>
+                      <div style={{ fontSize: 9, color: m ? "#15803d" : "#9ca3af", margin: "2px 0", fontWeight: 700 }}>—</div>
+                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: m ? "#15803d" : "#7c2d12" }}>{col.b}</div>
+                      {m && <div style={{ fontSize: 14, marginTop: 2 }}>💉</div>}
+                    </div>
+                  );
+                })}
               </div>
-              <div style={{ marginTop: 8, textAlign: "center", fontSize: 12, color: "#15803d", fontWeight: 800 }}>
-                {t(E, "→ 2 cows checked.", "→ 2 마리 검진.")}
+              <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center" }}>
+                {t(E, "Top row = a (Bessie's species).  Bottom row = b (what the vet wants).",
+                      "위 = a (실제 종). 아래 = b (수의사가 원하는 종).")}
+              </div>
+              <div style={{ marginTop: 4, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 800 }}>
+                {t(E, "→ 2 cows treated.", "→ 2 마리 치료.")}
               </div>
             </div>
 
-            {/* Step 2: one reversal operation */}
+            {/* Step 2: one reversal operation — same column-box visualization */}
             <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 10, marginBottom: 8 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
-                {t(E, "2. Pick (l, r) = (2, 3) → reverse a[2..3]", "2. (l, r) = (2, 3) 골라 a[2..3] 뒤집기")}
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 8 }}>
+                {t(E, "2. Pick (l, r) = (2, 3) → reverse a[2..3] (blue cells swapped)",
+                      "2. (l, r) = (2, 3) 골라 a[2..3] 뒤집기 (파란 칸 교환)")}
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "60px repeat(4, 1fr)", gap: 4, alignItems: "center" }}>
-                <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>a' =</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 6 }}>
                 {[
-                  { v: 1, hi: false },
-                  { v: 1, hi: true },   // was 2 → now 1 (reversed)
-                  { v: 2, hi: true },   // was 1 → now 2 (reversed)
-                  { v: 3, hi: false },
-                ].map((c, i) => (
-                  <div key={i} style={{
-                    background: c.hi ? "#dbeafe" : "#fef3c7",
-                    border: `2px solid ${c.hi ? "#3b82f6" : "#fbbf24"}`,
-                    borderRadius: 6, padding: "4px 0", textAlign: "center",
-                    fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800,
-                    color: c.hi ? "#1e3a8a" : "#7c2d12",
-                  }}>{c.v}</div>
-                ))}
-                <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>b =</div>
-                {[1, 1, 1, 1].map((v, i) => (
-                  <div key={`b-${i}`} style={{
-                    background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 6,
-                    padding: "4px 0", textAlign: "center",
-                    fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: "#7c2d12",
-                  }}>{v}</div>
-                ))}
-                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>{t(E, "match?", "검진?")}</div>
-                {[true, true, false, false].map((m, i) => (
-                  <div key={`m2-${i}`} style={{ textAlign: "center", fontSize: 14, fontWeight: 900, color: m ? "#16a34a" : "#dc2626" }}>
-                    {m ? "✓" : "✗"}
-                  </div>
-                ))}
+                  { a: 1, b: 1, swapped: false },
+                  { a: 1, b: 1, swapped: true },   // was a=2, swapped → 1
+                  { a: 2, b: 1, swapped: true },   // was a=1, swapped → 2
+                  { a: 3, b: 1, swapped: false },
+                ].map((col, i) => {
+                  const m = col.a === col.b;
+                  return (
+                    <div key={i} style={{
+                      borderRadius: 8, padding: "6px 4px",
+                      background: m ? "#dcfce7" : "transparent",
+                      border: `2.5px solid ${m ? "#16a34a" : "transparent"}`,
+                      textAlign: "center",
+                    }}>
+                      <div style={{
+                        fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800,
+                        color: m ? "#15803d" : (col.swapped ? "#1e3a8a" : "#7c2d12"),
+                        background: col.swapped ? "#dbeafe" : "transparent",
+                        border: col.swapped ? "1.5px dashed #3b82f6" : "none",
+                        borderRadius: 4, padding: col.swapped ? "0 2px" : 0,
+                      }}>{col.a}</div>
+                      <div style={{ fontSize: 9, color: m ? "#15803d" : "#9ca3af", margin: "2px 0", fontWeight: 700 }}>—</div>
+                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: m ? "#15803d" : "#7c2d12" }}>{col.b}</div>
+                      {m && <div style={{ fontSize: 14, marginTop: 2 }}>💉</div>}
+                    </div>
+                  );
+                })}
               </div>
-              <div style={{ marginTop: 8, textAlign: "center", fontSize: 12, color: "#15803d", fontWeight: 800 }}>
-                {t(E, "→ 2 cows checked (different cows!).", "→ 2 마리 검진 (이전과 다른 소들!).")}
+              <div style={{ marginTop: 4, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 800 }}>
+                {t(E, "→ still 2 cows treated, but DIFFERENT ones (positions 1, 2 instead of 1, 3).",
+                      "→ 2 마리 치료 — 다른 소들 (1, 3 → 1, 2 위치).")}
               </div>
             </div>
 
