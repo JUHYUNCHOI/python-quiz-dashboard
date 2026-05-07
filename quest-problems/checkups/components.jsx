@@ -50,20 +50,22 @@ export function ReverseSim({ E }) {
   // Cell size adapts to N — keeps the row from overflowing on long arrays.
   const cellSize = N <= 5 ? 52 : (N <= 8 ? 44 : 36);
   const fontSize = cellSize >= 50 ? 22 : (cellSize >= 42 ? 18 : 15);
+  const cellGap = 8;
 
   // Render one species cell. `swapped` = inside [l, r] (reversal segment).
-  // `matched` = a'[i] == b[i] (vet checks this position) — applied to the
-  // a-row cell as a green inset glow so the eye lands on the treated columns.
-  const cell = (val, { matched = false, swapped = false } = {}) => {
+  // `matched` = a'[i] == b[i] — kept subtle (no inset glow on data cells), the
+  // only loud match indicator is the ✓ pill in its own row below.  This keeps
+  // the data rows calm so the colour-shift across the swap reads as the
+  // primary visual story.
+  const cell = (val, { swapped = false } = {}) => {
     const sp = _SPECIES[val] || _SPECIES[1];
     return (
       <div style={{
         width: cellSize, height: cellSize, borderRadius: 10,
         display: "flex", alignItems: "center", justifyContent: "center",
-        fontFamily: "'JetBrains Mono',monospace", fontWeight: 900, fontSize,
+        fontFamily: "'JetBrains Mono',monospace", fontWeight: 600, fontSize,
         background: sp.bg, color: sp.text,
-        border: `${swapped ? 2.5 : 2}px ${swapped ? "dashed" : "solid"} ${swapped ? "#3b82f6" : sp.border}`,
-        boxShadow: matched ? "0 0 0 3px #16a34a inset" : "none",
+        border: `${swapped ? 1.5 : 1}px ${swapped ? "dashed" : "solid"} ${swapped ? "#3b82f6" : sp.border}`,
       }}>{val}</div>
     );
   };
@@ -128,93 +130,131 @@ export function ReverseSim({ E }) {
           : t(E, "No reversal yet (drag r to the right to swap a slice)", "아직 뒤집지 않음 (r 슬라이더를 옮겨요)")}
       </div>
 
-      {/* arrays — three rows: original a, reversed a', target b */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "center" }}>
-        {/* original a — always shown so the student can see WHAT changed */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 110, fontSize: 11, fontWeight: 600, color: "#7f1d1d", textAlign: "right", lineHeight: 1.2 }}>
-            {t(E, "🐄 original", "🐄 원래")}
-            <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>a</div>
-          </div>
-          <div style={{ display: "flex", gap: 8 }}>
-            {preset.a.map((v, i) => (
-              <div key={i} style={{ opacity: 0.65 }}>{cell(v)}</div>
-            ))}
-          </div>
-        </div>
+      {(() => {
+        const labelWidth = 110;
+        const cellGap2 = 8;
+        const cellCenterX = (i) => i * (cellSize + cellGap2) + cellSize / 2;
+        const arcHeight = 26;
+        const swapPairs = [];
+        if (reversed) {
+          for (let i = safeL - 1, j = safeR - 1; i < j; i++, j--) swapPairs.push([i, j]);
+        }
+        const totalWidth = N * cellSize + (N - 1) * cellGap2;
 
-        {/* a' (after reverse) — always shown, even if no swap (then it's identical to a) */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 110, fontSize: 11, fontWeight: 600, color: "#7f1d1d", textAlign: "right", lineHeight: 1.2 }}>
-            {reversed
-              ? t(E, "🐄 after swap", "🐄 뒤집기 후")
-              : t(E, "🐄 (same as a)", "🐄 (a 와 같음)")}
-            <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>a'</div>
-          </div>
-          <div style={{ display: "flex", gap: 8 }}>
-            {aPrime.map((v, i) => {
-              const inside = reversed && i + 1 >= safeL && i + 1 <= safeR;
-              const matched = v === preset.b[i];
-              return <div key={i}>{cell(v, { matched, swapped: inside })}</div>;
-            })}
-          </div>
-        </div>
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center" }}>
+            {/* Original a row */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: labelWidth, fontSize: 11, fontWeight: 500, color: "#7f1d1d", textAlign: "right", lineHeight: 1.2 }}>
+                {t(E, "🐄 original", "🐄 원래")}
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>a</div>
+              </div>
+              <div style={{ display: "flex", gap: cellGap2 }}>
+                {preset.a.map((v, i) => <div key={i}>{cell(v)}</div>)}
+              </div>
+            </div>
 
-        {/* b */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 110, fontSize: 11, fontWeight: 600, color: "#7f1d1d", textAlign: "right", lineHeight: 1.2 }}>
-            {t(E, "📋 vet wants", "📋 원하는 종")}
-            <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>b</div>
-          </div>
-          <div style={{ display: "flex", gap: 8 }}>
-            {preset.b.map((v, i) => {
-              const matched = aPrime[i] === v;
-              return <div key={i}>{cell(v, { matched })}</div>;
-            })}
-          </div>
-        </div>
+            {/* Swap arc overlay — visible only when something IS reversed.
+                Each pair (i, l+r-i) gets two crossing dashed arcs that LOOK
+                like the values are sliding past each other into mirrored
+                positions.  This is the 'feel of reversing' that was missing. */}
+            {reversed && swapPairs.length > 0 && (
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ width: labelWidth }} />
+                <svg
+                  width={totalWidth}
+                  height={arcHeight}
+                  style={{ display: "block", overflow: "visible" }}
+                  aria-hidden="true"
+                >
+                  {swapPairs.map(([i, j], k) => {
+                    const x1 = cellCenterX(i);
+                    const x2 = cellCenterX(j);
+                    const dip = Math.min(arcHeight - 4, 10 + (j - i) * 2);
+                    return (
+                      <g key={k}>
+                        <path d={`M ${x1} 0 Q ${(x1 + x2) / 2} ${dip} ${x2} ${arcHeight}`}
+                          fill="none" stroke="#3b82f6" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.65" />
+                        <path d={`M ${x2} 0 Q ${(x1 + x2) / 2} ${arcHeight - dip} ${x1} ${arcHeight}`}
+                          fill="none" stroke="#3b82f6" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.65" />
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            )}
 
-        {/* treated row */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
-          <div style={{ width: 110, fontSize: 11, fontWeight: 600, color: "#15803d", textAlign: "right" }}>
-            {t(E, "💉 treated?", "💉 치료?")}
-          </div>
-          <div style={{ display: "flex", gap: 8 }}>
-            {preset.b.map((v, i) => {
-              const m = aPrime[i] === v;
-              return (
-                <div key={i} style={{
-                  width: cellSize, height: Math.round(cellSize * 0.6), borderRadius: 8,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: Math.round(fontSize * 0.85), fontWeight: 600,
-                  background: m ? "#22c55e" : "transparent",
-                  color: m ? "#fff" : "#cbd5e1",
-                }}>{m ? "✓" : "—"}</div>
-              );
-            })}
-          </div>
-        </div>
+            {/* a' row */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: labelWidth, fontSize: 11, fontWeight: 500, color: "#7f1d1d", textAlign: "right", lineHeight: 1.2 }}>
+                {reversed
+                  ? t(E, "🐄 after swap", "🐄 뒤집기 후")
+                  : t(E, "🐄 (= a)", "🐄 (= a)")}
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>a'</div>
+              </div>
+              <div style={{ display: "flex", gap: cellGap2 }}>
+                {aPrime.map((v, i) => {
+                  const inside = reversed && i + 1 >= safeL && i + 1 <= safeR;
+                  return <div key={i}>{cell(v, { swapped: inside })}</div>;
+                })}
+              </div>
+            </div>
 
-        {/* position labels */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 2 }}>
-          <div style={{ width: 110 }} />
-          <div style={{ display: "flex", gap: 8 }}>
-            {preset.a.map((_, i) => (
-              <div key={i} style={{ width: cellSize, fontSize: 10, color: C.dim, textAlign: "center", fontWeight: 400 }}>{i + 1}</div>
-            ))}
+            {/* b row, with a tiny gap so the eye reads it as 'compare with' */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
+              <div style={{ width: labelWidth, fontSize: 11, fontWeight: 500, color: "#7f1d1d", textAlign: "right", lineHeight: 1.2 }}>
+                {t(E, "📋 vet wants", "📋 원하는 종")}
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>b</div>
+              </div>
+              <div style={{ display: "flex", gap: cellGap2 }}>
+                {preset.b.map((v, i) => <div key={i}>{cell(v)}</div>)}
+              </div>
+            </div>
+
+            {/* treated row — light tint, never a heavy solid pill */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
+              <div style={{ width: labelWidth, fontSize: 11, fontWeight: 500, color: "#15803d", textAlign: "right" }}>
+                {t(E, "💉 treated?", "💉 치료?")}
+              </div>
+              <div style={{ display: "flex", gap: cellGap2 }}>
+                {preset.b.map((v, i) => {
+                  const m = aPrime[i] === v;
+                  return (
+                    <div key={i} style={{
+                      width: cellSize, height: Math.round(cellSize * 0.5), borderRadius: 6,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: Math.round(fontSize * 0.75), fontWeight: 500,
+                      background: m ? "#dcfce7" : "transparent",
+                      color: m ? "#166534" : "#cbd5e1",
+                      border: m ? "1px solid #86efac" : "1px dashed #e5e7eb",
+                    }}>{m ? "✓" : "—"}</div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* position labels */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: labelWidth }} />
+              <div style={{ display: "flex", gap: cellGap2 }}>
+                {preset.a.map((_, i) => (
+                  <div key={i} style={{ width: cellSize, fontSize: 10, color: C.dim, textAlign: "center", fontWeight: 400 }}>{i + 1}</div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        );
+      })()}
 
       {/* count badge */}
-      <div style={{ marginTop: 14, padding: "10px 12px", borderRadius: 10, background: "#dcfce7", border: "1px solid #86efac", textAlign: "center", fontSize: 13, fontWeight: 600, color: "#15803d" }}>
-        💉 {t(E, "Cows treated: ", "치료된 소: ")}<span style={{ fontSize: 22, fontWeight: 700 }}>{matches}</span>
+      <div style={{ marginTop: 14, padding: "8px 12px", borderRadius: 8, background: "#f0fdf4", border: "1px solid #bbf7d0", textAlign: "center", fontSize: 13, fontWeight: 500, color: "#15803d" }}>
+        💉 {t(E, "Cows treated: ", "치료된 소: ")}<span style={{ fontSize: 18, fontWeight: 600 }}>{matches}</span>
         <span style={{ color: C.dim, fontWeight: 400, fontSize: 11 }}> / {N}</span>
       </div>
-      <div style={{ marginTop: 8, fontSize: 11, color: C.dim, lineHeight: 1.55 }}>
+      <div style={{ marginTop: 6, fontSize: 11, color: C.dim, lineHeight: 1.55, fontWeight: 400 }}>
         {t(E,
-          "Blue dashed = inside [l, r] (reversed segment). Green inset / ✓ = vet treats this cow (a'[i] == b[i]). Same colour above & below = same species.",
-          "파랑 점선 = [l, r] 안쪽 (뒤집힌 구간). 초록 글로우 / ✓ = 수의사 치료 (a'[i] == b[i]). 위아래 같은 색 = 같은 종.")}
+          "Blue dashed arcs = swap pairs in [l, r] — values literally slide past each other.  ✓ = vet treats this position.",
+          "파랑 점선 곡선 = [l, r] 안 swap 짝. 값들이 자리를 교환해요.  ✓ = 그 자리 치료.")}
       </div>
     </div>
   );
