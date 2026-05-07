@@ -5,29 +5,34 @@ import { getRotShiftSections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N, K, T = map(int, input().split())",
-  "active = list(map(int, input().split()))",
+  "import sys",
   "",
-  "# pos[i] = which position cow i is at",
+  "data = sys.stdin.read().split()",
+  "N = int(data[0]); K = int(data[1]); T = int(data[2])",
+  "active = [int(data[3 + i]) for i in range(K)]",
+  "",
+  "# pos[c] = current position of cow c",
   "pos = list(range(N))",
   "",
   "for step in range(T):",
-  "    # 1. Rotate: active[0]->active[1]->...->active[K-1]->active[0]",
   "    new_pos = pos[:]",
+  "    # 1) Rotate: cow at active[j] → active[(j+1) % K]",
   "    for j in range(K):",
-  "        cow_at = -1",
   "        for c in range(N):",
   "            if pos[c] == active[j]:",
-  "                cow_at = c",
+  "                new_pos[c] = active[(j + 1) % K]",
   "                break",
-  "        new_pos[cow_at] = active[(j + 1) % K]",
   "    pos = new_pos",
-  "",
-  "    # 2. Shift: active[j] = (active[j] + 1) % N",
+  "    # 2) Shift: every active position moves +1 mod N",
   "    active = [(a + 1) % N for a in active]",
   "",
+  "# Invert: at_position[p] = which cow is at position p",
+  "at_position = [0] * N",
   "for c in range(N):",
-  "    print(pos[c])",
+  "    at_position[pos[c]] = c",
+  "",
+  "# Output one line, space-separated.",
+  "print(' '.join(str(x) for x in at_position))",
 ];
 
 /* ═══════════════════════════════════════════════════════════════
@@ -90,11 +95,54 @@ export function makeRotShiftCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print the ", "T분 후 ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "final position of each cow after T minutes", "각 소의 최종 위치")}</b>
+                  {t(E, "Print one line, space-separated: ", "한 줄에 공백 구분으로 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "for each position p (0..N-1), which cow ends up there",
+                                                            "각 위치 p (0..N-1) 에 어느 소가 있는지")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>),
+    },
+    // Official sample I/O
+    {
+      type: "reveal",
+      narr: t(E,
+        "Input: N K T then K active positions on the next line.  Output: one line with N space-separated values.",
+        "\uc785\ub825: \uccab \uc904 N K T, \ub2e4\uc74c \uc904\uc5d0 K \uac1c \ud65c\uc131 \uc704\uce58. \ucd9c\ub825: \uacf5\ubc31 \uad6c\ubd84 N \uac1c \uac12 \ud55c \uc904."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#8b5cf6", textAlign: "center", marginBottom: 10 }}>
+            \ud83d\udce5 {t(E, "Sample 1 \u2014 official", "\uc0d8\ud50c 1 \u2014 \uacf5\uc2dd")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>{t(E, "INPUT", "\uc785\ub825")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#5b21b6", whiteSpace: "pre" }}>
+{`5 3 4
+0 2 3`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "\ucd9c\ub825")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`1 2 3 4 0`}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+              \ud83d\udd0d {t(E, "Walkthrough \u2014 N=5, active=[0,2,3], 4 minutes",
+                          "\ud480\uc774 \u2014 N=5, active=[0,2,3], 4 \ubd84")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              {t(E, "After 4 minutes of rotate-then-shift, the cows end up cyclically shifted: cow 0 \u2192 pos 4, cow 1 \u2192 pos 0, cow 2 \u2192 pos 1, ...",
+                    "4 \ubd84 \ud6c4 \ud68c\uc804+\uc774\ub3d9 \uacb0\uacfc: \uc18c 0 \u2192 \uc704\uce58 4, \uc18c 1 \u2192 \uc704\uce58 0, \uc18c 2 \u2192 \uc704\uce58 1, ...")}
+            </div>
+            <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
+              {t(E, "Output by position p:  p=0 has cow 1,  p=1 has cow 2, ...,  p=4 has cow 0  \u2192  '1 2 3 4 0'.",
+                    "\uc704\uce58 p \uae30\uc900: p=0 \uc5d0 \uc18c 1, p=1 \uc5d0 \uc18c 2, ..., p=4 \uc5d0 \uc18c 0 \u2192 '1 2 3 4 0'.")}
             </div>
           </div>
         </div>),
