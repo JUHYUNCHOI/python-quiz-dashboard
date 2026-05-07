@@ -5,22 +5,29 @@ import { getCandyCaneSections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N, M = map(int, input().split())",
-  "heights = list(map(int, input().split()))",
+  "import sys",
   "",
-  "for _ in range(M):",
-  "    h = int(input())  # candy cane height",
-  "    bottom = 0",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "N = int(data[p]); p += 1",
+  "M = int(data[p]); p += 1",
+  "h = [int(data[p + i]) for i in range(N)]; p += N        # cow heights",
+  "canes = [int(data[p + i]) for i in range(M)]            # cane heights, one line",
+  "",
+  "for curr in canes:",
+  "    taken = 0   # how much of THIS cane has already been eaten",
   "    for i in range(N):",
-  "        if heights[i] > bottom:",
-  "            eat = min(heights[i], h) - bottom",
-  "            if eat > 0:",
-  "                heights[i] += eat",
-  "                bottom += eat",
-  "        if bottom >= h:",
-  "            break",
+  "        if h[i] > taken:",
+  "            # cow i can reach the un-eaten portion from `taken`",
+  "            # up to min(curr, h[i])",
+  "            inc = min(curr, h[i]) - taken",
+  "            if inc > 0:",
+  "                h[i] += inc        # cow grows by what it ate",
+  "                taken += inc",
+  "        if taken >= curr:",
+  "            break                  # cane fully eaten",
   "",
-  "for x in heights:",
+  "for x in h:",
   "    print(x)",
 ];
 
@@ -42,6 +49,34 @@ export function makeCandyCh1(E) {
             <div style={{ fontSize: 32, marginBottom: 4 }}>🍬</div>
             <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Candy Cane Feast</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #1</div>
+          </div>
+
+          {/* Mini-visual: 3 cows eating one cane height 6 */}
+          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#7f1d1d", textAlign: "center", marginBottom: 10 }}>
+              {t(E, "Tiny example: cow heights [3, 2, 5], one cane of height 6 →",
+                    "작은 예: 소 키 [3, 2, 5], 캔디 케인 높이 6 →")}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+              {[
+                { who: t(E, "Cow 1 (h=3)", "소 1 (키 3)"), reach: "0 → 3", ate: 3, newH: 6, hi: true },
+                { who: t(E, "Cow 2 (h=2)", "소 2 (키 2)"), reach: t(E, "can't reach 3", "3 에 못 닿음"), ate: 0, newH: 2, hi: false },
+                { who: t(E, "Cow 3 (h=5)", "소 3 (키 5)"), reach: "3 → 5", ate: 2, newH: 7, hi: true },
+              ].map((c, i) => (
+                <div key={i} style={{ background: "#fff", border: `2px solid ${c.hi ? "#dc2626" : "#fca5a5"}`, borderRadius: 10, padding: 8, textAlign: "center" }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", marginBottom: 4 }}>{c.who}</div>
+                  <div style={{ fontSize: 10, color: C.dim, fontFamily: "'JetBrains Mono',monospace", marginBottom: 2 }}>{c.reach}</div>
+                  <div style={{ fontSize: 11, fontWeight: 800, color: c.hi ? "#dc2626" : C.dim }}>{t(E, "ate", "먹음")} {c.ate}</div>
+                  <div style={{ fontSize: 11, color: C.text, marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>
+                    {t(E, "h →", "키 →")} <b style={{ color: "#dc2626" }}>{c.newH}</b>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 10, fontSize: 11, color: C.text, lineHeight: 1.6, textAlign: "center" }}>
+              {t(E, "After cow 1 eats 0 → 3, the next cow starts at the new bottom = 3.  Cow 2 is too short.  Cow 3 keeps eating from 3 → 5.  Cane top (6) reached only partially — the rest (5 → 6) is wasted.",
+                    "소 1 이 0 → 3 먹은 후 다음 소는 새 bottom = 3 부터. 소 2 는 너무 작음. 소 3 이 3 → 5 까지 먹음. 캔디 꼭대기 (6) 까지 다 못 먹어 5 → 6 부분은 버려짐.")}
+            </div>
           </div>
 
           <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -88,7 +123,53 @@ export function makeCandyCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz — single cow eating
+    // 1-2: Official sample I/O
+    {
+      type: "reveal",
+      narr: t(E,
+        "Input format: N M, then N cow heights on one line, then M cane heights on one line.",
+        "입력: 첫 줄 N M, 두 번째 줄 소 N 마리 키, 세 번째 줄 캔디 M 개 높이."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d", whiteSpace: "pre" }}>
+{`3 2
+3 2 5
+6 1`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`7
+2
+7`}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
+              🔍 {t(E, "Walkthrough", "풀이")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              {t(E, "Cane 1 (height 6).  Cows [3, 2, 5] → eat to [6, 2, 7].  (cow 2 can't reach 3.)",
+                    "캔디 1 (높이 6). 소 [3, 2, 5] → [6, 2, 7] 로 자라남. (소 2 는 3 에 못 닿음.)")}
+              <br/>
+              {t(E, "Cane 2 (height 1).  Cow 1 (height 6) eats 0 → 1, becomes 7.  Cane fully eaten.",
+                    "캔디 2 (높이 1). 소 1 (키 6) 이 0 → 1 먹음, 키 7 이 됨. 캔디 다 먹음.")}
+            </div>
+            <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
+              {t(E, "→ final heights = 7, 2, 7.", "→ 최종 키 = 7, 2, 7.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: Quiz — single cow eating
     {
       type: "quiz",
       narr: t(E,
