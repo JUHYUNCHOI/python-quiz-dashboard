@@ -217,41 +217,17 @@ export function makeRotShiftCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeRotShiftCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
+    // 2-1: Light intro — code first.
     {
       type: "reveal",
       narr: t(E,
-        "Each step: cows on active positions cycle, then active positions shift +1. After K steps, the active set has shifted by K. We compute, for each cow, where she ends up after T minutes using modular arithmetic.",
-        "매 단계: 활성 위치의 소들이 순환 회전, 그 다음 활성 위치들이 +1 이동. K 단계 후 활성 집합은 K 만큼 이동. 각 소가 T 분 후 어디 있을지 모듈러 산술로 계산."),
+        "Just simulate T minutes directly.  Each minute: rotate cows on active positions one step around the cycle, then shift every active position +1 mod N.",
+        "그냥 T 분을 그대로 시뮬레이션. 매 분: 활성 위치 소들 순환 한 칸, 그 다음 모든 활성 위치 +1 mod N."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read positions and active mask", "위치와 활성 마스크 읽기"), code: "pos = list(range(N));  active = sorted(active_indices)", color: "#8b5cf6" },
-              { n: 2, label: t(E, "Active set shifts by T (mod N)", "활성 집합이 T 이동 (mod N)"), code: "shift = T % N", color: "#0891b2" },
-              { n: 3, label: t(E, "Cows on active positions cycle T times", "활성 위치 소들이 T 번 순환"), code: "rot = T % len(active)  →  permutation table", color: "#7c3aed" },
-              { n: 4, label: t(E, "Compute final position for each cow", "각 소의 최종 위치 계산"), code: "for cow_id in 0..N−1: print(final[cow_id])", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N + T mod N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "closed-form via modular arithmetic", "모듈러로 닫힌 식 계산")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+          {t(E,
+            "After T minutes, output (for each position p) which cow ended up there.  Code section by section.",
+            "T 분 후 각 위치 p 에 어느 소가 있는지 출력. 코드 한 단락씩.")}
         </div>),
     },
     {

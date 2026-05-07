@@ -221,26 +221,17 @@ RRL
    ================================================================ */
 export function makeMilkExCh2(E, lang = "py") {
   return [
-    // 2-1: Key insight
+    // 2-1: Light intro — code first, theory inline.
     {
       type: "reveal",
       narr: t(E,
-        "After enough steps, the distribution stabilizes.\nMilk flows toward 'sinks' where L and R directions meet.\nWe only need to simulate up to 2N steps!", "충분한 단계 후 분포가 안정돼요. 우유는 L과 R 방향이 만나는 '싱크'로 흘러. 2N 단계만 시뮬레이션하면 돼요!"),
+        "Just simulate the rules step by step.  Each minute, every cow with milk passes 1L; then any over-cap cells lose the overflow.  Read the code section by section.",
+        "규칙 그대로 한 분씩 시뮬레이션. 매분 우유 있는 소가 1L 전달, 그 다음 용량 초과는 버려요. 코드 한 단락씩 읽어요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#059669", marginBottom: 8 }}>
-              {t(E, "Key Insight: Stabilization", "핵심: 안정화")}
-            </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-              {t(E,
-                "1. Milk flows in the direction each cow points (L or R).\n2. Where an L-cow meets an R-cow, milk 'collects' at the boundary.\n3. After at most 2N steps, the system reaches a steady state.\n4. Simulate min(M, 2N) steps for the answer.",
-                "1. 우유는 각 소가 가리키는 방향(L/R)으로 흘러.\n2. L-소가 R-소를 만나는 곳에서 우유가 경계에 '모여'.\n3. 최대 2N 단계 후 시스템이 정상 상태에 도달.\n4. min(M, 2N) 단계를 시뮬레이션하면 답이 나와요.")}
-            </div>
-          </div>
-          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", fontWeight: 600 }}>
-            {t(E, "O(N * min(M, 2N)) simulation", "O(N * min(M, 2N)) 시뮬레이션")}
-          </div>
+        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+          {t(E,
+            "Tiny optimization tucked into the loop: after roughly 2N steps the system stops changing, so simulating min(M, 2N) is enough.  But for Bronze inputs even simulating M directly works.",
+            "작은 최적화 한 줄: 대략 2N 단계 후 변화가 멈추기 때문에 min(M, 2N) 만큼만 돌리면 충분. Bronze 입력에선 M 직접 돌려도 통과해요.")}
         </div>),
     },
     // 2-2: Solution code

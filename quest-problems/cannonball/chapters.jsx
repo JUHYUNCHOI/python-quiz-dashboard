@@ -244,42 +244,17 @@ export function makeCannonCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCannonCh2(E, lang = "py") {
   return [
-    // 2-1: Brute plan
+    // 2-1: Light intro — code first.
     {
       type: "reveal",
       narr: t(E,
-        "Plan: simulate step by step.  Each step: process the pad at x, then move x by direction × power.  Stop once x leaves [1, N] — or after a generous iteration cap to be safe against zero-value-jump-pad loops.",
-        "계획: step 별 시뮬레이션. 매 step: x 의 패드 처리 후 x 를 direction × power 만큼 이동. x 가 [1, N] 벗어나면 종료 — 0-값 점프패드 루프 안전을 위해 충분히 큰 반복 cap 도 둠."),
+        "Just simulate Bessie bouncing.  Each step: process the pad at her position, then move by direction × power.  Stop when she leaves [1, N].",
+        "Bessie 가 튀는 걸 그냥 시뮬레이션. 매 step: 현재 위치의 패드 처리 후 direction × power 만큼 이동. [1, N] 벗어나면 종료."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N S, then N pads",     "N S 읽고 N 개 패드"),         code: "typ[i], val[i] for i in 1..N",                                       color: "#f97316" },
-              { n: 2, label: t(E, "Init x=S, dir=+1, power=1", "x=S, dir=+1, power=1 초기화"), code: "broken = [False]*(N+2);  ans = 0",                                   color: "#dc2626" },
-              { n: 3, label: t(E, "Process pad at x",           "x 의 패드 처리"),             code: "target & power≥val & not broken → break it  /  jump pad → flip + boost", color: "#7c3aed" },
-              { n: 4, label: t(E, "Move + repeat (cap loops)",  "이동 + 반복 (cap)"),          code: "x += direction × power;  break if x<1 or x>N",                       color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "between target hits power grows; harmonic sum bounds bounces.",
-                                                                              "타겟을 칠 때마다 파워가 커지면서 바운스 횟수의 합이 N log N.")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+          {t(E,
+            "If she lands on a target with power ≥ value, that target breaks (only once).  If she lands on a jump pad, direction flips and power grows.  A loop CAN happen between two value-0 jump pads — bounding the iteration count keeps that safe.  Read the code section by section.",
+            "타겟에 도착하고 파워 ≥ 값이면 부숨 (한 번만). 점프 패드에 도착하면 방향 뒤집고 파워 증가. 값 0 점프 패드 두 개 사이에서 무한 루프 가능 — 반복 횟수 cap 으로 안전. 코드 한 단락씩.")}
         </div>),
     },
     // 2-2: Code

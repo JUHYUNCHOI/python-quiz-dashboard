@@ -171,26 +171,17 @@ NO`}
    ================================================================ */
 export function makeProdCh2(E, lang = "py") {
   return [
-    // 2-1: Binary search approach
+    // 2-1: Light intro — code first.
     {
       type: "reveal",
       narr: t(E,
-        "Sort d_i = c_i - t_i.\nFor each query S, use binary search to find how many d_i > S.\nThis is O(N log N + Q log N)!", "d_i = c_i - t_i를 정렬해요. 각 쿼리 S에 대해 이진 탐색으로 d_i > S인 개수를 찾아요. O(N log N + Q log N)이에요!"),
+        "Each farm i is reachable iff S < c[i] − t[i].  So precompute d[i] = c[i] − t[i], sort it, and for each query count how many d are > S.  Read the code section by section.",
+        "농장 i 에 도달 가능 ↔ S < c[i] − t[i]. 그래서 d[i] = c[i] − t[i] 미리 계산하고 정렬, 쿼리마다 d > S 개수만 세요. 코드 한 단락씩 읽어요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#f97316", marginBottom: 8 }}>
-              {t(E, "Binary Search on Sorted d[]", "정렬된 d[]에서 이진 탐색")}
-            </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-              {t(E,
-                "1. Compute d_i = c_i - t_i for all farms.\n2. Sort d[] in ascending order.\n3. For query (S, V): use bisect_right(d, S) to find first index > S.\n4. Reachable = N - bisect_right(d, S).\n5. Answer YES if reachable >= V.",
-                "1. 모든 농장에 대해 d_i = c_i - t_i 계산.\n2. d[]를 오름차순 정렬.\n3. 쿼리 (S, V): bisect_right(d, S)로 S보다 큰 첫 인덱스 찾기.\n4. 도달 가능 = N - bisect_right(d, S).\n5. 도달 가능 >= V이면 YES.")}
-            </div>
-          </div>
-          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", fontWeight: 600 }}>
-            {t(E, "O(N log N + Q log N) — fast enough!", "O(N log N + Q log N) — 충분히 빨라요!")}
-          </div>
+        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+          {t(E,
+            "Once d is sorted, 'how many > S' is a single binary search.  No fancy structure needed.",
+            "d 가 정렬되면 'S 보다 큰 개수' 는 이분탐색 한 번. 복잡한 자료구조 필요 없음.")}
         </div>),
     },
     // 2-2: Solution code

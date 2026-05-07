@@ -256,38 +256,17 @@ export function makeFjFarmsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeFjFarmsCh2(E, lang = "py") {
   return [
-    // 2-1: Brute plan — try each day
+    // 2-1: Light intro — code first.
     {
       type: "reveal",
       narr: t(E,
-        "Plan: try each day x = 0, 1, 2, ...  At each x, compute heights and the count of strictly-taller plants per i.  If counts match t → return x.  Cap at 1100 (per editorial, that's enough under bounds).",
-        "계획: x = 0, 1, 2, ... 매 x 시도. 각 x 에서 키를 계산하고 i 마다 더 큰 식물 수를 셈. 카운트가 t 와 같으면 → x 반환. 1100 까지 시도 (editorial 에 따라 그 이내에 답이 있음)."),
+        "Try every day x = 0, 1, 2, ...  At each x compute heights and the count of strictly-taller plants per i.  Return the first x where counts match t.  Editorial says answers are ≤ 1000 under Bronze bounds.",
+        "x = 0, 1, 2, ... 매 x 시도. 각 x 에서 키 계산하고 i 마다 더 큰 식물 수 세기. 카운트가 t 와 같은 첫 x 반환. Editorial: Bronze 제약 안에선 답이 ≤ 1000."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read T cases",                   "T 케이스 읽기"),       code: "T = int(input())",                                          color: "#059669" },
-              { n: 2, label: t(E, "Per case: read N, h, a, t",       "케이스마다: N,h,a,t 읽기"), code: "h, a, t each have N entries",                              color: "#0891b2" },
-              { n: 3, label: t(E, "Try each day x in [0, 1100]",     "x 를 [0, 1100] 시도"), code: "heights[i] = h[i] + a[i] * x",                              color: "#7c3aed" },
-              { n: 4, label: t(E, "Count strictly-taller per i",    "i 마다 더 큰 식물 수"), code: "tcomp[i] = sum(heights[j] > heights[i] for j in range(N))", color: "#dc2626" },
-              { n: 5, label: t(E, "If tcomp == t → return x",        "tcomp == t → x 반환"), code: "return x  (or -1 after cap)",                              color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 10, background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 12px", fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
-            ⚠️ {t(E, "Why NOT binary-search on x?  The 'correct ordering' is NOT monotonic in x — two plants can swap places more than once as x grows (e.g. start ahead, get caught, fall behind, then catch up by another plant).  So we can't binary-search; brute O(N² · 1100) per case is fine for Bronze bounds.",
-                       "왜 이분탐색 안 됨? '맞는 순위' 가 x 에 대해 단조롭지 않아요 — 두 식물이 여러 번 자리 바뀔 수 있음. 그래서 이분탐색 X. 케이스당 O(N² · 1100) 브루트로 충분 (Bronze 제약).")}
-          </div>
+        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+          {t(E,
+            "Why not binary-search? The 'order matches' property isn't monotonic in x — two plants can swap places more than once.  So just brute-force x.  Code section by section.",
+            "왜 이분탐색 안 됨? '순위 일치' 가 x 에 대해 단조롭지 않아서 — 두 식물이 여러 번 자리 바뀔 수 있음. 그냥 브루트. 코드 한 단락씩.")}
         </div>),
     },
     // 2-2: Full code reveal

@@ -161,41 +161,17 @@ export function makeLeadersCh1(E) {
    =============================================================== */
 export function makeLeadersCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
+    // 2-1: Light intro — code first.
     {
       type: "reveal",
       narr: t(E,
-        "Find each breed's first and last position. A 'big leader' covers her breed's full span. Then count pairs: (a) pairs of two big leaders, plus (b) pairs where one big leader contains the other breed's first cow.",
-        "각 품종의 첫 위치와 마지막 위치를 찾아요. '큰 리더' 는 자기 품종 전체를 커버하는 소. 쌍 세기: (a) 큰 리더 두 마리 쌍 + (b) 큰 리더 한 마리가 상대 품종의 첫 소를 자기 범위에 담은 쌍."),
+        "Editorial trick: in any valid leader pair, AT LEAST one of the two leaders is the EARLIEST cow of its breed AND has visited all of its breed.",
+        "Editorial 한 줄: 유효한 리더 쌍에는, 둘 중 적어도 하나는 자기 품종의 가장 앞 소이고 그 품종 전체를 방문해야 함."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "First / last of each breed", "각 품종의 첫/마지막 위치"), code: "first[G], last[G], first[H], last[H]", color: "#dc2626" },
-              { n: 2, label: t(E, "Find big leaders", "큰 리더 찾기"), code: "big_G = cows whose range covers [first[G], last[G]]", color: "#7c3aed" },
-              { n: 3, label: t(E, "Count both-big pairs", "양쪽 모두 큰 리더 쌍 세기"), code: "both_count = len(big_G) × len(big_H)", color: "#0891b2" },
-              { n: 4, label: t(E, "Add one-side covers-other pairs", "한쪽이 상대를 덮는 쌍 추가"), code: "add cows whose range covers other breed's first cow", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant work per cow after one scan", "한 번 스캔 후 소당 상수 시간")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+          {t(E,
+            "So scan once to find earliest/latest of each breed.  Then: (Case A) eG is true G-leader → pair with H cows whose range reaches eG.  (Case B) symmetric.  (Special) eG and eH together as the pair.  Code section by section.",
+            "한 번 스캔으로 각 품종의 가장 앞/뒤 위치 찾기. 그 다음: (A) eG 가 진짜 G-리더 → 범위가 eG 까지 닿는 H 소들과 쌍. (B) 대칭. (특수) eG, eH 가 함께 쌍. 코드 한 단락씩.")}
         </div>),
     },
     // 2-2: Code

@@ -206,41 +206,17 @@ export function makeCandyCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCandyCh2(E, lang = "py") {
   return [
-    // 2-1: Approach reveal
+    // 2-1: Light intro — code first.
     {
       type: "reveal",
       narr: t(E,
-        "For every candy cane, track 'bottom' (where the next cow starts eating). Each cow eats up to min(her height, candy top) − bottom — and grows by that much.",
-        "캔디마다 'bottom' (다음 소가 먹기 시작하는 위치) 을 추적해요. 각 소는 min(자기 키, 캔디 꼭대기) − bottom 만큼 먹고, 먹은 만큼 키가 커져요."),
+        "For each candy cane, walk the cows in order.  Track 'taken' = how much of the cane has been eaten so far.",
+        "캔디마다 소를 차례로. 변수 'taken' = 지금까지 먹은 양 추적."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "For each candy cane", "각 캔디 케인마다"), code: "for h in candy_heights:  bottom = 0", color: "#dc2626" },
-              { n: 2, label: t(E, "Each cow eats from bottom up", "각 소는 bottom 부터 위로 먹음"), code: "eat = max(0, min(cow, h) − bottom)", color: "#f97316" },
-              { n: 3, label: t(E, "Cow grows by amount eaten", "먹은 만큼 키가 커짐"), code: "cow += eat;  bottom += eat", color: "#7c3aed" },
-              { n: 4, label: t(E, "Print final heights", "최종 키 출력"), code: "for cow in cows: print(cow)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N · M)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "M candy canes × N cows per cane", "M개의 캔디 × 캔디마다 N마리 소")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+          {t(E,
+            "For each cow i: if h[i] > taken (she can reach the un-eaten part), she eats from `taken` up to min(curr, h[i]).  Add what she ate to her height (she grows).  Stop when taken ≥ curr.  Code section by section.",
+            "각 소 i: h[i] > taken (먹지 않은 부분에 닿음) 이면 `taken` 부터 min(curr, h[i]) 까지 먹기. 먹은 만큼 키 증가. taken ≥ curr 되면 중단. 코드 한 단락씩.")}
         </div>),
     },
     // 2-2: Full code reveal

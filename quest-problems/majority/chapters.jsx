@@ -205,38 +205,17 @@ export function makeMajorityCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMajorityCh2(E, lang = "py") {
   return [
-    // 2-1: Brute plan — pair scan at distance 1 and 2
+    // 2-1: Light intro — code first.
     {
       type: "reveal",
       narr: t(E,
-        "Plan: T cases. For each, scan once. At index i, check pair (i, i+1) AND pair (i, i+2). Add matches to a set. Print sorted, or -1.",
-        "계획: T 케이스. 각 케이스마다 한 번 스캔. 인덱스 i 에서 (i, i+1) 과 (i, i+2) 둘 다 검사. 일치하면 set 추가. 정렬 출력, 없으면 -1."),
+        "From the editorial trick: a hay type x is achievable iff some pair of cows at distance 1 OR distance 2 both like x.  Just scan once.",
+        "Editorial 한 줄: 어떤 타입 x 가 가능 ↔ 거리 1 또는 거리 2 의 두 소가 둘 다 x 좋아함. 한 번만 스캔."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read T cases",              "T 케이스 읽기"),        code: "T = int(input())",                                              color: "#dc2626" },
-              { n: 2, label: t(E, "Per case: read N + array",   "케이스마다: N + 배열"), code: "for _ in range(T): N, a = ...",                                color: "#7c3aed" },
-              { n: 3, label: t(E, "Pair scan distance 1 and 2", "쌍 스캔 거리 1, 2"),   code: "a[i]==a[i+1] or (i+2<N and a[i]==a[i+2]) -> valid.add(a[i])",  color: "#0891b2" },
-              { n: 4, label: t(E, "Print sorted (or -1)",        "정렬 출력 (또는 -1)"), code: "\' \'.join(sorted(valid))    # \'-1\' if empty",                    color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "\u23f1 Complexity", "\u23f1 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "단일 선형 스캔")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+          {t(E,
+            "Read T cases. For each: scan i = 0..N-2. If a[i] == a[i+1] OR a[i] == a[i+2], add a[i] to a set. Print the sorted set (or '-1').  Code section by section.",
+            "T 케이스 읽기. 각 케이스: i = 0..N-2 스캔. a[i] == a[i+1] 또는 a[i] == a[i+2] 면 a[i] 를 set 에 추가. 정렬 출력 (없으면 '-1'). 코드 한 단락씩.")}
         </div>),
     },
     // 2-2: Progressive code

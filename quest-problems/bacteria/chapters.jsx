@@ -212,41 +212,17 @@ export function makeBacteriaCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBacteriaCh2(E, lang = "py") {
   return [
-    // 2-1: Brute plan — second-order difference
+    // 2-1: Light intro — code first.
     {
       type: "reveal",
       narr: t(E,
-        "Plan: take diff(diff(a)) and sum |dd[i]|.  Each walk changes only ONE position of dd by ±1, so the L1-sum is exactly the minimum number of walks.",
-        "계획: diff(diff(a)) 후 |dd[i]| 합. 워크 한 번이 dd 의 한 위치만 ±1 바꾸기 때문에, |dd| 합이 정확히 최소 워크 수."),
+        "Editorial trick: take diff(diff(a)).  The answer is sum |dd[i]| — that's the whole solution.",
+        "Editorial 한 줄: diff(diff(a)) 의 절댓값 합이 답. 그게 전부."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N + array a",                 "N 과 a 읽기"),                  code: "a = list of N ints",                                            color: "#059669" },
-              { n: 2, label: t(E, "diff(a) — first-order difference", "diff(a) — 1 차 차분"),         code: "[a[0], a[1]-a[0], a[2]-a[1], ..., a[N-1]-a[N-2]]",              color: "#0891b2" },
-              { n: 3, label: t(E, "diff(diff(a))",                    "diff(diff(a))"),                code: "second-order difference of a",                                  color: "#7c3aed" },
-              { n: 4, label: t(E, "Sum |dd[i]| → answer",              "|dd[i]| 합 → 답"),              code: "ans = sum(abs(x) for x in dd)",                                 color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass with O(1) update per position", "위치당 O(1) 업데이트로 한 번 순회")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+          {t(E,
+            "Why it works: a type-1 walk increments a suffix of diff(a) by 1, a type-2 walk decrements one — so at the SECOND difference level each walk only changes ONE position by ±1.  Minimum walks = sum of |diff(diff(a))_i|.",
+            "왜? 타입 1 워크는 diff(a) 의 suffix 를 +1, 타입 2 는 -1. SECOND difference 단계에선 워크 한 번이 한 위치만 ±1 변경. 최소 워크 = |diff(diff(a))_i| 합.")}
         </div>),
     },
     // 2-2: Code
