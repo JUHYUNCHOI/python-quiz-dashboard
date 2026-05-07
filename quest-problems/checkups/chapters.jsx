@@ -53,60 +53,97 @@ export function makeCheckupsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO January 2025 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 8 }}>
-              📖 {t(E, "Problem", "문제")}
-            </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.65, marginBottom: 10 }}>
-              {t(E, "FJ has N cows in a line. Cow i has species ", "FJ 에 N 마리 소가 줄 서 있어요. i 번째 소의 종은 ")}
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>a[i]</code>
-              {t(E, ". The vet will check cow i only if ", ". 수의사는 ")}
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>a[i] == b[i]</code>
-              {t(E, ".", " 일 때만 i 번째 소를 검진해요.")}
+          {/* Mini-visual: concrete example before the abstract rules */}
+          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#7f1d1d", textAlign: "center", marginBottom: 10 }}>
+              {t(E, "Tiny example: 4 cows.  The vet wants species b[].  Bessie's actual species are a[].",
+                    "작은 예: 소 4 마리. 수의사가 원하는 종 b[]. 실제 종 a[].")}
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.55 }}>
-              <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>1.</span>
-                <div>
-                  <b style={{ color: "#dc2626" }}>{t(E, "One reversal operation", "한 번의 뒤집기")}</b>
-                  {t(E, " — pick l, r with 1 ≤ l ≤ r ≤ N and reverse the subarray a[l..r] in place.",
-                        " — 1 ≤ l ≤ r ≤ N 인 l, r 를 골라 a[l..r] 를 그 자리에서 뒤집어요.")}
-                </div>
+            {/* Step 1: original arrangement */}
+            <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 10, marginBottom: 8 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
+                {t(E, "1. Without any reversal", "1. 뒤집기 없이")}
               </div>
-              <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#0891b2", fontWeight: 800, flexShrink: 0 }}>2.</span>
-                <div>
-                  <b style={{ color: "#0891b2" }}>{t(E, "Count checkups", "검진 수 세기")}</b>
-                  {t(E, " — after the reversal, the vet checks every position i where the new a[i] equals b[i].",
-                        " — 뒤집은 뒤, new a[i] == b[i] 인 모든 i 에서 검진.")}
-                </div>
+              <div style={{ display: "grid", gridTemplateColumns: "60px repeat(4, 1fr)", gap: 4, alignItems: "center" }}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>a =</div>
+                {[1, 2, 1, 3].map((v, i) => (
+                  <div key={`a-${i}`} style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 6, padding: "4px 0", textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: "#7c2d12" }}>{v}</div>
+                ))}
+                <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>b =</div>
+                {[1, 1, 1, 1].map((v, i) => (
+                  <div key={`b-${i}`} style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 6, padding: "4px 0", textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: "#7c2d12" }}>{v}</div>
+                ))}
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>{t(E, "match?", "검진?")}</div>
+                {[true, false, true, false].map((m, i) => (
+                  <div key={`m-${i}`} style={{ textAlign: "center", fontSize: 14, fontWeight: 900, color: m ? "#16a34a" : "#dc2626" }}>
+                    {m ? "✓" : "✗"}
+                  </div>
+                ))}
               </div>
-              <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#7c3aed", fontWeight: 800, flexShrink: 0 }}>3.</span>
-                <div>
-                  <b style={{ color: "#7c3aed" }}>{t(E, "Tally over all (l, r)", "(l, r) 별 집계")}</b>
-                  {t(E, " — there are N(N+1)/2 distinct operations. For each c = 0, 1, …, N, count how many of these operations leave exactly c cows checked.",
-                        " — 서로 다른 연산은 총 N(N+1)/2 개. c = 0, 1, …, N 각각에 대해 검진 수가 정확히 c 인 연산 개수.")}
-                </div>
+              <div style={{ marginTop: 8, textAlign: "center", fontSize: 12, color: "#15803d", fontWeight: 800 }}>
+                {t(E, "→ 2 cows checked.", "→ 2 마리 검진.")}
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: 8, marginTop: 10, paddingTop: 8, borderTop: "1px dashed #fca5a5", fontSize: 13 }}>
-              <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
-              <div>
-                {t(E, "Output ", "")}
-                <b style={{ color: "#15803d" }}>{t(E, "N + 1 lines", "N + 1 줄")}</b>
-                {t(E, " — line i has the count of operations that check exactly i − 1 cows.",
-                      " — i 번째 줄은 정확히 i − 1 마리가 검진되는 연산 개수.")}
+            {/* Step 2: one reversal operation */}
+            <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 10, marginBottom: 8 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
+                {t(E, "2. Pick (l, r) = (2, 3) → reverse a[2..3]", "2. (l, r) = (2, 3) 골라 a[2..3] 뒤집기")}
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "60px repeat(4, 1fr)", gap: 4, alignItems: "center" }}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>a' =</div>
+                {[
+                  { v: 1, hi: false },
+                  { v: 1, hi: true },   // was 2 → now 1 (reversed)
+                  { v: 2, hi: true },   // was 1 → now 2 (reversed)
+                  { v: 3, hi: false },
+                ].map((c, i) => (
+                  <div key={i} style={{
+                    background: c.hi ? "#dbeafe" : "#fef3c7",
+                    border: `2px solid ${c.hi ? "#3b82f6" : "#fbbf24"}`,
+                    borderRadius: 6, padding: "4px 0", textAlign: "center",
+                    fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800,
+                    color: c.hi ? "#1e3a8a" : "#7c2d12",
+                  }}>{c.v}</div>
+                ))}
+                <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>b =</div>
+                {[1, 1, 1, 1].map((v, i) => (
+                  <div key={`b-${i}`} style={{
+                    background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 6,
+                    padding: "4px 0", textAlign: "center",
+                    fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: "#7c2d12",
+                  }}>{v}</div>
+                ))}
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>{t(E, "match?", "검진?")}</div>
+                {[true, true, false, false].map((m, i) => (
+                  <div key={`m2-${i}`} style={{ textAlign: "center", fontSize: 14, fontWeight: 900, color: m ? "#16a34a" : "#dc2626" }}>
+                    {m ? "✓" : "✗"}
+                  </div>
+                ))}
+              </div>
+              <div style={{ marginTop: 8, textAlign: "center", fontSize: 12, color: "#15803d", fontWeight: 800 }}>
+                {t(E, "→ 2 cows checked (different cows!).", "→ 2 마리 검진 (이전과 다른 소들!).")}
               </div>
             </div>
 
-            <div style={{ marginTop: 10, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
-              📐 <b>{t(E, "Constraints", "제약")}:</b>{" "}
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ N ≤ 7500</code>,{" "}
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ a[i], b[i] ≤ N</code>
+            {/* Step 3: try ALL (l, r) and tally */}
+            <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
+                {t(E, "3. Try EVERY (l, r) — N=4 has 4·5/2 = 10 of them — and tally how many give 0, 1, 2, 3, 4 checkups.",
+                      "3. 모든 (l, r) 시도 — N=4 면 4·5/2 = 10 개 — 검진 수 0, 1, 2, 3, 4 별로 몇 개 나오는지 집계.")}
+              </div>
+              <div style={{ fontSize: 11, color: C.text, lineHeight: 1.7 }}>
+                {t(E, "Output: one line per check count.  E.g. '4' means 4 of the 10 operations leave that many cows checked.",
+                      "출력: 검진 수 별 한 줄. 예 '4' 는 10 개 연산 중 4 개가 그 검진 수를 만든다는 뜻.")}
+              </div>
             </div>
+          </div>
+
+          <div style={{ marginTop: 6, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
+            📐 <b>{t(E, "Constraints", "제약")}:</b>{" "}
+            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ N ≤ 7500</code>,{" "}
+            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ a[i], b[i] ≤ N</code>
           </div>
         </div>),
     },
