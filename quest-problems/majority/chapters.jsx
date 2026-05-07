@@ -5,19 +5,33 @@ import { getMajoritySections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N = int(input())",
-  "a = list(map(int, input().split()))",
+  "import sys",
   "",
-  "result = set()",
-  "for i in range(N - 1):",
-  "    if a[i] == a[i + 1]:",
-  "        result.add(a[i])",
+  "data = sys.stdin.read().split()",
+  "idx = 0",
+  "T = int(data[idx]); idx += 1     # number of test cases",
   "",
-  "if len(result) == 0:",
-  "    print(-1)",
-  "else:",
-  "    for x in sorted(result):",
-  "        print(x)",
+  "out = []",
+  "for _ in range(T):",
+  "    N = int(data[idx]); idx += 1",
+  "    a = [int(data[idx + i]) for i in range(N)]",
+  "    idx += N",
+  "",
+  "    # Key fact (from the editorial): a type x is achievable iff",
+  "    #   some pair of cows at distance 1 OR 2 both like x.",
+  "    valid = set()",
+  "    for i in range(N - 1):",
+  "        if a[i] == a[i + 1]:                  # distance 1 — same as cow i+1",
+  "            valid.add(a[i])",
+  "        if i + 2 < N and a[i] == a[i + 2]:    # distance 2 — same as cow i+2",
+  "            valid.add(a[i])",
+  "",
+  "    if not valid:",
+  "        out.append('-1')",
+  "    else:",
+  "        out.append(' '.join(str(x) for x in sorted(valid)))",
+  "",
+  "print(chr(10).join(out))",
 ];
 
 
@@ -76,51 +90,111 @@ export function makeMajorityCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print all hay types that can become universal, in increasing order — or ", "전체를 지배할 수 있는 건초 종류를 오름차순으로 모두 출력해요. 없으면 ")}
+                  {t(E, "Multiple test cases. For each, print all valid hay types in increasing order separated by spaces — or ",
+                        "여러 테스트 케이스. 각 테스트마다 가능한 건초 종류를 오름차순 공백 구분으로 출력. 없으면 ")}
                   <b style={{ color: "#15803d" }}>-1</b>
-                  {t(E, " if none.", " 출력.")}
+                  {t(E, ".", ".")}
                 </div>
               </div>
             </div>
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Official sample I/O
+    {
+      type: "reveal",
+      narr: t(E,
+        "Input: T (test cases), then for each: N then N values on one line. Output one line per case (space-separated values, or -1).",
+        "입력: T (테스트 수), 각 테스트마다 N 줄과 값 N개 한 줄. 출력: 케이스마다 한 줄 (공백 구분 값 또는 -1)."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d", whiteSpace: "pre" }}>
+{`5
+5
+1 2 2 2 3
+6
+1 2 3 1 2 3
+6
+1 1 1 2 2 2
+3
+3 2 3
+2
+2 1`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`2
+-1
+1 2
+3
+-1`}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
+              🔍 {t(E, "Walkthrough — case 4: [3, 2, 3]", "풀이 — 4 번 케이스: [3, 2, 3]")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              {t(E, "Cows: 3, 2, 3. The two 3's sit at positions 0 and 2 — distance 2.",
+                    "소: 3, 2, 3. 양쪽 3 이 위치 0 과 2 — 거리 2.")}
+              <br/>
+              {t(E, "Focus group on cows 0, 1, 2: two 3's vs one 2 → cow 1 switches to 3.",
+                    "0, 1, 2 포커스 그룹: 3 두 명 vs 2 한 명 → 1번 소가 3 으로 변함.")}
+            </div>
+            <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
+              {t(E, "→ type 3 takes over.  Output: 3.", "→ 3 이 전체 지배. 출력: 3.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: Quiz — distance-2 case
     {
       type: "quiz",
       narr: t(E,
-        "If the preferences are [1, 2, 2, 2, 3], which hay type can become universal?", "선호도가 [1, 2, 2, 2, 3]이면 어떤 건초가 전체를 지배할 수 있을까?"),
+        "Two cows of the same type need to be CLOSE (distance 1 or 2) for the type to spread. Why distance 2 still works?",
+        "같은 타입 두 소가 가까이 있어야 (거리 1 또는 2) 그 타입이 퍼져요. 왜 거리 2도 가능할까?"),
       question: t(E,
-        "Preferences: [1, 2, 2, 2, 3]. Which can become universal?",
-        "선호도: [1, 2, 2, 2, 3]. 전체를 지배할 수 있는 건?"),
+        "Preferences: [3, 2, 3]. Which type can become universal?",
+        "선호도: [3, 2, 3]. 어떤 타입이 전체를 지배할 수 있어?"),
       options: [
-        t(E, "1", "1"),
-        t(E, "2", "2"),
-        t(E, "3", "3"),
-        t(E, "1 and 3", "1과 3"),
+        t(E, "Only 2", "2 만"),
+        t(E, "Only 3", "3 만"),
+        t(E, "Both 2 and 3", "2 와 3 모두"),
+        t(E, "Neither", "둘 다 안 돼"),
       ],
       correct: 1,
       explain: t(E,
-        "Only type 2 appears in adjacent positions (indices 1-2 and 2-3). Types 1 and 3 never appear next to themselves.",
-        "타입 2만 인접한 위치에 나타나 (인덱스 1-2, 2-3). 타입 1과 3은 자기 자신 옆에 나타나지 않아."),
+        "Cows at 0 and 2 both like type 3. Focus group on (0, 1, 2): two 3's win → cow 1 becomes 3 too. Type 2 has no nearby duplicate, so it can't spread.",
+        "0번과 2번 소가 둘 다 3을 좋아. (0,1,2) 포커스 그룹: 3 두 명이 다수 → 1번도 3 됨. 2 는 가까이에 같은 게 없어서 못 퍼져."),
     },
-    // 1-3: Input
+    // 1-4: Input — count valid types in [1,1,1,2,2,2]
     {
       type: "input",
       narr: t(E,
-        "Count the adjacent pairs!\nIn [1, 1, 2, 3, 3], how many adjacent pairs share the same value?", "인접 쌍을 세봐요! [1, 1, 2, 3, 3]에서 같은 값을 가진 인접 쌍은 몇 개?"),
+        "Count valid types in [1, 1, 1, 2, 2, 2]. Look for pairs at distance 1 OR 2 with the same value.",
+        "[1, 1, 1, 2, 2, 2]에서 가능한 타입 수. 거리 1 또는 2 의 같은 값 쌍을 찾아요."),
       question: t(E,
-        "Array [1, 1, 2, 3, 3]: how many adjacent pairs have the same value?",
-        "배열 [1, 1, 2, 3, 3]: 같은 값의 인접 쌍은 몇 개?"),
+        "How many distinct hay types can become universal in [1, 1, 1, 2, 2, 2]?",
+        "[1, 1, 1, 2, 2, 2]에서 전체를 지배할 수 있는 타입 수?"),
       hint: t(E,
-        "Check each pair: (1,1), (1,2), (2,3), (3,3)",
-        "각 쌍을 확인: (1,1), (1,2), (2,3), (3,3)"),
+        "Type 1: pairs (0,1), (0,2), (1,2) all match → valid. Type 2: pairs (3,4), (3,5), (4,5) all match → valid. Both qualify.",
+        "타입 1: (0,1), (0,2), (1,2) 다 같음 → 가능. 타입 2: (3,4), (3,5), (4,5) 다 같음 → 가능. 둘 다 OK."),
       answer: 2,
     },
     {
       type: "sim",
       narr: t(E,
-        "Pick a preset and step through the adjacent-pair scan.\nWatch which values get added to the result set.", "프리셋을 골라 인접 쌍 스캔을 한 단계씩. 어떤 값이 결과 집합에 추가되는지 봐요."),
+        "Pick a preset and step through the distance-1 + distance-2 scan. Watch which values get added.",
+        "프리셋을 골라 거리 1 + 거리 2 스캔을 한 단계씩. 어떤 값이 추가되는지 봐요."),
     },
   ];
 }
@@ -131,18 +205,20 @@ export function makeMajorityCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMajorityCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
+    // 2-1: Brute plan — pair scan at distance 1 and 2
     {
       type: "reveal",
       narr: t(E,
-        "We just scan once through the array checking adjacent pairs. That's O(N) time!", "배열을 한 번 쭉 훑으면서 인접 쌍만 확인하면 돼요. O(N) 시간!"),
+        "Plan: T cases. For each, scan once. At index i, check pair (i, i+1) AND pair (i, i+2). Add matches to a set. Print sorted, or -1.",
+        "계획: T 케이스. 각 케이스마다 한 번 스캔. 인덱스 i 에서 (i, i+1) 과 (i, i+2) 둘 다 검사. 일치하면 set 추가. 정렬 출력, 없으면 -1."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              { n: 1, label: t(E, "Init result set", "결과 집합 초기화"), code: "result = set()", color: "#dc2626" },
-              { n: 2, label: t(E, "Scan adjacent pairs", "인접 쌍 스캔"), code: "for i in range(N \u2212 1): if a[i] == a[i+1]: result.add(a[i])", color: "#0891b2" },
-              { n: 3, label: t(E, "Print sorted (or \u22121)", "정렬 출력 (또는 \u22121)"), code: "for x in sorted(result): print(x)   # else print(\u22121)", color: "#16a34a" },
+              { n: 1, label: t(E, "Read T cases",              "T 케이스 읽기"),        code: "T = int(input())",                                              color: "#dc2626" },
+              { n: 2, label: t(E, "Per case: read N + array",   "케이스마다: N + 배열"), code: "for _ in range(T): N, a = ...",                                color: "#7c3aed" },
+              { n: 3, label: t(E, "Pair scan distance 1 and 2", "쌍 스캔 거리 1, 2"),   code: "a[i]==a[i+1] or (i+2<N and a[i]==a[i+2]) -> valid.add(a[i])",  color: "#0891b2" },
+              { n: 4, label: t(E, "Print sorted (or -1)",        "정렬 출력 (또는 -1)"), code: "\' \'.join(sorted(valid))    # \'-1\' if empty",                    color: "#16a34a" },
             ].map((step, i) => (
               <div key={i} style={{
                 display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",

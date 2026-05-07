@@ -6,26 +6,28 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#dc2626";
 
 /* ═══════════════════════════════════════════════════════════════
-   MajoritySim — visualize adjacent pair scan
+   MajoritySim — visualize distance-1 + distance-2 pair scan
    ═══════════════════════════════════════════════════════════════ */
 const _MJ_PRESETS = [
-  { name: "[1,2,2,2,3]", arr: [1,2,2,2,3] },
-  { name: "[1,1,2,3,3]", arr: [1,1,2,3,3] },
-  { name: "[1,2,3,4,5]", arr: [1,2,3,4,5] },
-  { name: "[2,2,1,1,3,3]", arr: [2,2,1,1,3,3] },
+  { name: "[1,2,2,2,3]", arr: [1,2,2,2,3] },     // 2 valid
+  { name: "[3,2,3]",     arr: [3,2,3] },          // 3 valid (distance 2!)
+  { name: "[1,2,3,1,2,3]", arr: [1,2,3,1,2,3] },  // -1
+  { name: "[1,1,1,2,2,2]", arr: [1,1,1,2,2,2] },  // 1 2 valid
 ];
 
 export function MajoritySim({ E }) {
   const [pi, setPi] = useState(0);
   const [si, setSi] = useState(0);
   const arr = _MJ_PRESETS[pi].arr;
-  // trace: each step examines pair (i, i+1)
+  // trace: at each i, check (i,i+1) AND (i,i+2). One step per i.
   const found = new Set();
   const trace = [];
   for (let i = 0; i < arr.length - 1; i++) {
-    const match = arr[i] === arr[i+1];
-    if (match) found.add(arr[i]);
-    trace.push({ i, match, foundSoFar: new Set(found) });
+    const match1 = arr[i] === arr[i + 1];
+    const match2 = i + 2 < arr.length && arr[i] === arr[i + 2];
+    if (match1) found.add(arr[i]);
+    if (match2) found.add(arr[i]);
+    trace.push({ i, match1, match2, foundSoFar: new Set(found) });
   }
   trace.push({ i: -1, foundSoFar: new Set(found), done: true });
   const cur = Math.min(si, trace.length - 1);
@@ -43,21 +45,34 @@ export function MajoritySim({ E }) {
         ))}
       </div>
 
-      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 12 }}>
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 6 }}>
         {arr.map((v, idx) => {
-          const inPair = idx === step.i || idx === step.i + 1;
-          const isMatch = inPair && step.match;
+          const isAnchor = idx === step.i;
+          const isPair1  = idx === step.i + 1;
+          const isPair2  = idx === step.i + 2;
+          let bg = "#fff", border = "#e5e7eb", color = C.text;
+          if (isAnchor) { bg = "#fef3c7"; border = "#f59e0b"; color = "#92400e"; }
+          if (isPair1) {
+            if (step.match1) { bg = "#dcfce7"; border = "#16a34a"; color = "#15803d"; }
+            else             { bg = "#fee2e2"; border = "#fca5a5"; color = "#991b1b"; }
+          }
+          if (isPair2) {
+            if (step.match2) { bg = "#dbeafe"; border = "#3b82f6"; color = "#1e3a8a"; }
+            else             { bg = "#fef2f2"; border = "#fecaca"; color = "#991b1b"; }
+          }
           return (
             <div key={idx} style={{
               width: 38, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
               borderRadius: 8, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
-              background: isMatch ? "#dcfce7" : (inPair ? "#fef3c7" : "#fff"),
-              border: `2.5px solid ${isMatch ? "#16a34a" : (inPair ? "#f59e0b" : "#e5e7eb")}`,
-              color: isMatch ? "#15803d" : (inPair ? "#92400e" : C.text),
-              transition: "all .2s",
+              background: bg, border: `2.5px solid ${border}`, color, transition: "all .2s",
             }}>{v}</div>
           );
         })}
+      </div>
+
+      <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginBottom: 10 }}>
+        {t(E, "🟡 anchor   🟢 dist-1 match   🔵 dist-2 match",
+              "🟡 기준   🟢 거리-1 일치   🔵 거리-2 일치")}
       </div>
 
       <div style={{
@@ -70,16 +85,17 @@ export function MajoritySim({ E }) {
             <div>
               <div style={{ fontWeight: 800, color: "#15803d" }}>{t(E, "✅ Done. Output:", "✅ 완료. 출력:")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", color: "#15803d", fontWeight: 800, marginTop: 4 }}>
-                {[...step.foundSoFar].sort((a,b) => a-b).join(", ")}
+                {[...step.foundSoFar].sort((a,b) => a-b).join(" ")}
               </div>
             </div>
           ) : (
-            <div style={{ color: "#7f1d1d", fontWeight: 800 }}>{t(E, "❌ No adjacent pair → output -1", "❌ 인접 쌍 없음 → -1 출력")}</div>
+            <div style={{ color: "#7f1d1d", fontWeight: 800 }}>{t(E, "❌ No close pair → output -1", "❌ 가까운 쌍 없음 → -1 출력")}</div>
           )
         ) : (
           <div>
-            {t(E, `i = ${step.i}: pair (${arr[step.i]}, ${arr[step.i+1]}) → ${step.match ? "match!" : "different"}`,
-                  `i = ${step.i}: 쌍 (${arr[step.i]}, ${arr[step.i+1]}) → ${step.match ? "일치!" : "다름"}`)}
+            <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
+              {`i = ${step.i}:  (${arr[step.i]}, ${arr[step.i + 1]}) ${step.match1 ? "✓" : "✗"}  ·  ${arr[step.i + 2] !== undefined ? `(${arr[step.i]}, ${arr[step.i + 2]}) ${step.match2 ? "✓" : "✗"}` : "—"}`}
+            </div>
             <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
               {t(E, `Found so far: {${[...step.foundSoFar].sort((a,b)=>a-b).join(", ")}}`,
                     `지금까지 찾은 값: {${[...step.foundSoFar].sort((a,b)=>a-b).join(", ")}}`)}
@@ -132,7 +148,8 @@ export function MajorityRunner({ E }) {
         setRunning(false);
         return;
       }
-      if (arr[i] === arr[i+1]) found.add(arr[i]);
+      if (arr[i] === arr[i + 1]) found.add(arr[i]);
+      if (i + 2 < arr.length && arr[i] === arr[i + 2]) found.add(arr[i]);
       setLiveI(i); setLiveFound([...found].sort((a,b)=>a-b));
       i++;
       const delay = arr.length <= 20 ? 250 : 30;
@@ -170,10 +187,17 @@ export function MajorityRunner({ E }) {
   );
 }
 
-/* Section 1: Read input */
+/* Section 1: read T cases + per-case input */
 const MJ_INPUT_PY = [
-  "N = int(input())",
-  "a = list(map(int, input().split()))",
+  "import sys",
+  "data = sys.stdin.read().split()",
+  "idx = 0",
+  "T = int(data[idx]); idx += 1     # number of test cases",
+  "",
+  "for _ in range(T):",
+  "    N = int(data[idx]); idx += 1",
+  "    a = [int(data[idx + i]) for i in range(N)]",
+  "    idx += N",
 ];
 const MJ_INPUT_CPP = [
   "#include <bits/stdc++.h>",
@@ -182,57 +206,79 @@ const MJ_INPUT_CPP = [
   "int main() {",
   "    ios::sync_with_stdio(false);",
   "    cin.tie(nullptr);",
-  "",
-  "    int N;",
-  "    cin >> N;",
-  "    vector<int> a(N);",
-  "    for (int i = 0; i < N; i++) cin >> a[i];",
+  "    int T; cin >> T;",
+  "    while (T--) {",
+  "        int N; cin >> N;",
+  "        vector<int> a(N);",
+  "        for (int i = 0; i < N; i++) cin >> a[i];",
 ];
 
-/* Section 2: collect adjacent-pair values */
+/* Section 2: pair scan at distance 1 AND 2 */
 const MJ_SCAN_PY = [
-  "result = set()",
-  "for i in range(N - 1):",
-  "    if a[i] == a[i + 1]:",
-  "        result.add(a[i])",
+  "    valid = set()",
+  "    for i in range(N - 1):",
+  "        if a[i] == a[i + 1]:                  # distance 1",
+  "            valid.add(a[i])",
+  "        if i + 2 < N and a[i] == a[i + 2]:    # distance 2",
+  "            valid.add(a[i])",
 ];
 const MJ_SCAN_CPP = [
-  "    set<int> result;",
-  "    for (int i = 0; i + 1 < N; i++) {",
-  "        if (a[i] == a[i + 1]) result.insert(a[i]);",
-  "    }",
+  "        set<int> valid;",
+  "        for (int i = 0; i + 1 < N; i++) {",
+  "            if (a[i] == a[i + 1]) valid.insert(a[i]);             // distance 1",
+  "            if (i + 2 < N && a[i] == a[i + 2]) valid.insert(a[i]); // distance 2",
+  "        }",
 ];
 
-/* Section 3: print sorted or -1 */
+/* Section 3: emit sorted output (or -1) per case */
 const MJ_OUT_PY = [
-  "if not result:",
-  "    print(-1)",
-  "else:",
-  "    for x in sorted(result):",
-  "        print(x)",
+  "    if not valid:",
+  "        print(-1)",
+  "    else:",
+  "        print(' '.join(str(x) for x in sorted(valid)))",
 ];
 const MJ_OUT_CPP = [
-  "    if (result.empty()) cout << -1 << '\\n';",
-  "    else for (int x : result) cout << x << '\\n';   // set already sorted",
+  "        if (valid.empty()) cout << -1 << '\\n';",
+  "        else {",
+  "            bool first = true;",
+  "            for (int x : valid) {                                  // set is sorted",
+  "                if (!first) cout << ' ';",
+  "                cout << x;",
+  "                first = false;",
+  "            }",
+  "            cout << '\\n';",
+  "        }",
+  "    }",
   "    return 0;",
   "}",
 ];
 
 /* Section 4: full code */
 const MJ_FULL_PY = [
-  "N = int(input())",
-  "a = list(map(int, input().split()))",
+  "import sys",
+  "data = sys.stdin.read().split()",
+  "idx = 0",
+  "T = int(data[idx]); idx += 1",
   "",
-  "result = set()",
-  "for i in range(N - 1):",
-  "    if a[i] == a[i + 1]:",
-  "        result.add(a[i])",
+  "out = []",
+  "for _ in range(T):",
+  "    N = int(data[idx]); idx += 1",
+  "    a = [int(data[idx + i]) for i in range(N)]",
+  "    idx += N",
   "",
-  "if not result:",
-  "    print(-1)",
-  "else:",
-  "    for x in sorted(result):",
-  "        print(x)",
+  "    valid = set()",
+  "    for i in range(N - 1):",
+  "        if a[i] == a[i + 1]:",
+  "            valid.add(a[i])",
+  "        if i + 2 < N and a[i] == a[i + 2]:",
+  "            valid.add(a[i])",
+  "",
+  "    if not valid:",
+  "        out.append('-1')",
+  "    else:",
+  "        out.append(' '.join(str(x) for x in sorted(valid)))",
+  "",
+  "print(chr(10).join(out))",
 ];
 const MJ_FULL_CPP = [
   "#include <bits/stdc++.h>",
@@ -241,15 +287,29 @@ const MJ_FULL_CPP = [
   "int main() {",
   "    ios::sync_with_stdio(false);",
   "    cin.tie(nullptr);",
-  "    int N; cin >> N;",
-  "    vector<int> a(N);",
-  "    for (int i = 0; i < N; i++) cin >> a[i];",
+  "    int T; cin >> T;",
+  "    while (T--) {",
+  "        int N; cin >> N;",
+  "        vector<int> a(N);",
+  "        for (int i = 0; i < N; i++) cin >> a[i];",
   "",
-  "    set<int> result;",
-  "    for (int i = 0; i + 1 < N; i++) if (a[i] == a[i + 1]) result.insert(a[i]);",
+  "        set<int> valid;",
+  "        for (int i = 0; i + 1 < N; i++) {",
+  "            if (a[i] == a[i + 1]) valid.insert(a[i]);",
+  "            if (i + 2 < N && a[i] == a[i + 2]) valid.insert(a[i]);",
+  "        }",
   "",
-  "    if (result.empty()) cout << -1 << '\\n';",
-  "    else for (int x : result) cout << x << '\\n';",
+  "        if (valid.empty()) cout << -1 << '\\n';",
+  "        else {",
+  "            bool first = true;",
+  "            for (int x : valid) {",
+  "                if (!first) cout << ' ';",
+  "                cout << x;",
+  "                first = false;",
+  "            }",
+  "            cout << '\\n';",
+  "        }",
+  "    }",
   "    return 0;",
   "}",
 ];
@@ -257,16 +317,18 @@ const MJ_FULL_CPP = [
 export function getMajoritySections(E) {
   return [
     {
-      label: t(E, "📦 1. Input + Preferences", "📦 1. 입력 + 선호도"),
+      label: t(E, "📦 1. Read T cases + per-case input", "📦 1. T 케이스 + 케이스별 입력"),
       color: A,
       py: MJ_INPUT_PY, cpp: MJ_INPUT_CPP,
       why: [
-        t(E, "Read N cows and their N hay-type preferences in a line.",
-            "N마리 소와 그들의 건초 선호도 N개를 한 줄로 읽기."),
+        t(E, "First line: T (number of test cases). For each case: N then N preferences.",
+            "첫 줄: T (테스트 수). 각 케이스: N 줄과 선호도 N개."),
+        t(E, "Reading everything via sys.stdin.read().split() avoids per-line parsing overhead and handles values that are space-OR-newline separated.",
+            "sys.stdin.read().split() 로 한 번에 읽으면 줄 단위 파싱 오버헤드 없고 공백/줄바꿈 다 처리."),
       ],
       pyOnly: [
-        t(E, "list(map(int, input().split())) reads a row of integers.",
-            "list(map(int, input().split()))로 정수 한 줄 읽기."),
+        t(E, "Index pointer `idx` walks through the token list one at a time.",
+            "포인터 `idx` 가 토큰 리스트를 하나씩 진행."),
       ],
       cppOnly: [
         t(E, "vector<int> a(N) sized exactly to N keeps memory tight.",
@@ -274,18 +336,18 @@ export function getMajoritySections(E) {
       ],
     },
     {
-      label: t(E, "🔎 2. Scan for Adjacent Duplicates", "🔎 2. 인접 중복 찾기"),
+      label: t(E, "🔎 2. Pair Scan (distance 1 + 2)", "🔎 2. 쌍 스캔 (거리 1 + 2)"),
       color: "#0891b2",
       py: MJ_SCAN_PY, cpp: MJ_SCAN_CPP,
       why: [
-        t(E, "Key insight: a hay type can take over only if it already sits next to a copy of itself.",
-            "핵심: 건초가 전체를 지배하려면 자기 자신 옆에 한 번이라도 있어야 함."),
-        t(E, "Walk i from 0 to N-2. If a[i] == a[i+1], remember a[i].",
-            "i = 0..N-2 순회. a[i] == a[i+1]이면 a[i] 기억."),
+        t(E, "Editorial fact: a type x is achievable iff some pair of cows at distance 1 OR distance 2 both like x.",
+            "Editorial 핵심: 어떤 타입 x 가 가능 ↔ 거리 1 또는 거리 2 의 두 소가 둘 다 x 를 좋아함."),
+        t(E, "Why distance 2? Cows at i and i+2 with cow i+1 between → focus group of 3 → cow i+1 switches to that type.",
+            "왜 거리 2? i 와 i+2 두 소 사이에 i+1 → 3 명 포커스 그룹 → 가운데 소가 그 타입으로 바뀜."),
       ],
       pyOnly: [
-        t(E, "set() automatically dedupes — no manual check needed.",
-            "set()이 자동 중복 제거 — 수동 확인 불필요."),
+        t(E, "set() automatically dedupes — adding the same value twice is harmless.",
+            "set()이 자동 중복 제거 — 같은 값 두 번 add 해도 괜찮음."),
       ],
       cppOnly: [
         t(E, "set<int> dedupes AND keeps sorted order — perfect for this output format.",
@@ -297,10 +359,10 @@ export function getMajoritySections(E) {
       color: "#16a34a",
       py: MJ_OUT_PY, cpp: MJ_OUT_CPP,
       why: [
-        t(E, "If no adjacent duplicate exists, print -1.",
-            "인접 중복이 없으면 -1 출력."),
-        t(E, "Otherwise list the candidate hay types in ascending order, one per line.",
-            "있으면 후보 건초 종류를 오름차순으로 한 줄에 하나씩."),
+        t(E, "If no near-pair was found for this case, print -1.",
+            "이 케이스에서 가까운 쌍을 못 찾으면 -1 출력."),
+        t(E, "Otherwise print the valid hay types in ascending order, separated by spaces (one line per case).",
+            "있으면 가능한 건초 종류를 오름차순으로 공백 구분 한 줄 (케이스마다 한 줄)."),
       ],
       pyOnly: [
         t(E, "sorted(result) yields the values in order without mutating the set.",
