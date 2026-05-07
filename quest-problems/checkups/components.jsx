@@ -68,49 +68,92 @@ export function ReverseSim({ E }) {
     );
   };
 
+  // Has the reversal actually changed anything? (l == r means a 1-element reverse,
+  // which is a no-op.)  Used to label rows correctly so it never says "after swap"
+  // when nothing was swapped.
+  const reversed = safeL < safeR;
+
   return (
     <div style={{ padding: 14 }}>
+      {/* What this simulator does — read me FIRST. */}
+      <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", marginBottom: 12, fontSize: 12, color: "#5b21b6", lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 600, marginBottom: 4 }}>
+          {t(E, "🎮 How to play", "🎮 사용법")}
+        </div>
+        <div style={{ color: C.text, fontWeight: 400 }}>
+          {t(E,
+            "Drag the (l, r) sliders to pick a slice of a to reverse.  Compare a' with b to see how many cows the vet can treat.  Try different (l, r) — the # treated changes!",
+            "(l, r) 슬라이더를 끌어서 a 의 어느 구간을 뒤집을지 골라요.  뒤집은 결과 a' 를 b 와 비교해 치료 가능한 소를 봐요.  여러 (l, r) 시도 — 치료 수가 달라져요.")}
+        </div>
+      </div>
+
       {/* preset selector */}
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+      <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginBottom: 12 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 500 }}>{t(E, "Example:", "예시:")}</div>
         {_CK_PRESETS.map((p, i) => (
           <button key={i}
             onClick={() => { setPi(i); setL(1); setR(p.a.length); }}
             style={{
-              padding: "4px 10px", borderRadius: 6, fontSize: 11, fontWeight: 700,
-              border: `1.5px solid ${pi === i ? A : C.border}`,
+              padding: "4px 10px", borderRadius: 6, fontSize: 11, fontWeight: 600,
+              border: `1px solid ${pi === i ? A : C.border}`,
               background: pi === i ? "#fee2e2" : "#fff",
               color: pi === i ? A : C.text,
               cursor: "pointer",
             }}>{p.name.split(":")[0]}</button>
         ))}
+        <div style={{ fontSize: 10, color: C.dim, marginLeft: 4 }}>
+          (N = {N})
+        </div>
       </div>
 
       {/* sliders */}
-      <div style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", gap: "6px 12px", alignItems: "center", marginBottom: 14, fontSize: 12 }}>
-        <div style={{ fontWeight: 700, color: A, fontFamily: "'JetBrains Mono',monospace" }}>l =</div>
+      <div style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", gap: "8px 12px", alignItems: "center", marginBottom: 14, fontSize: 12 }}>
+        <div style={{ fontWeight: 600, color: A, fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "l (start)", "l (시작)")}</div>
         <input type="range" min={1} max={N} value={safeL}
           onChange={e => { const v = Number(e.target.value); setL(v); if (v > safeR) setR(v); }}
           style={{ width: "100%" }} />
-        <div style={{ fontWeight: 800, color: A, minWidth: 24, textAlign: "right" }}>{safeL}</div>
+        <div style={{ fontWeight: 700, color: A, minWidth: 24, textAlign: "right" }}>{safeL}</div>
 
-        <div style={{ fontWeight: 700, color: "#0891b2", fontFamily: "'JetBrains Mono',monospace" }}>r =</div>
+        <div style={{ fontWeight: 600, color: "#0891b2", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "r (end)", "r (끝)")}</div>
         <input type="range" min={safeL} max={N} value={safeR}
           onChange={e => setR(Number(e.target.value))}
           style={{ width: "100%" }} />
-        <div style={{ fontWeight: 800, color: "#0891b2", minWidth: 24, textAlign: "right" }}>{safeR}</div>
+        <div style={{ fontWeight: 700, color: "#0891b2", minWidth: 24, textAlign: "right" }}>{safeR}</div>
       </div>
 
-      {/* arrays — same labelled-row layout as the page 1-1 mini-visual */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-        {/* a' (after reverse) */}
+      {/* operation summary so the student can read what they just chose */}
+      <div style={{ marginBottom: 8, fontSize: 12, textAlign: "center", color: C.text, fontWeight: 500 }}>
+        {reversed
+          ? t(E, `Reverse positions ${safeL}..${safeR} of a`, `a 의 ${safeL}..${safeR} 위치 뒤집기`)
+          : t(E, "No reversal yet (drag r to the right to swap a slice)", "아직 뒤집지 않음 (r 슬라이더를 옮겨요)")}
+      </div>
+
+      {/* arrays — three rows: original a, reversed a', target b */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "center" }}>
+        {/* original a — always shown so the student can see WHAT changed */}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 110, fontSize: 12, fontWeight: 700, color: "#7f1d1d", textAlign: "right", lineHeight: 1.25 }}>
-            {t(E, "🐄 has (after swap)", "🐄 가진 종 (뒤집기 후)")}
-            <div style={{ fontSize: 10, color: C.dim, fontWeight: 500 }}>a'</div>
+          <div style={{ width: 110, fontSize: 11, fontWeight: 600, color: "#7f1d1d", textAlign: "right", lineHeight: 1.2 }}>
+            {t(E, "🐄 original", "🐄 원래")}
+            <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>a</div>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            {preset.a.map((v, i) => (
+              <div key={i} style={{ opacity: 0.65 }}>{cell(v)}</div>
+            ))}
+          </div>
+        </div>
+
+        {/* a' (after reverse) — always shown, even if no swap (then it's identical to a) */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ width: 110, fontSize: 11, fontWeight: 600, color: "#7f1d1d", textAlign: "right", lineHeight: 1.2 }}>
+            {reversed
+              ? t(E, "🐄 after swap", "🐄 뒤집기 후")
+              : t(E, "🐄 (same as a)", "🐄 (a 와 같음)")}
+            <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>a'</div>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             {aPrime.map((v, i) => {
-              const inside = i + 1 >= safeL && i + 1 <= safeR;
+              const inside = reversed && i + 1 >= safeL && i + 1 <= safeR;
               const matched = v === preset.b[i];
               return <div key={i}>{cell(v, { matched, swapped: inside })}</div>;
             })}
@@ -119,9 +162,9 @@ export function ReverseSim({ E }) {
 
         {/* b */}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 110, fontSize: 12, fontWeight: 700, color: "#7f1d1d", textAlign: "right", lineHeight: 1.25 }}>
+          <div style={{ width: 110, fontSize: 11, fontWeight: 600, color: "#7f1d1d", textAlign: "right", lineHeight: 1.2 }}>
             {t(E, "📋 vet wants", "📋 원하는 종")}
-            <div style={{ fontSize: 10, color: C.dim, fontWeight: 500 }}>b</div>
+            <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>b</div>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             {preset.b.map((v, i) => {
@@ -133,7 +176,7 @@ export function ReverseSim({ E }) {
 
         {/* treated row */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
-          <div style={{ width: 110, fontSize: 12, fontWeight: 700, color: "#15803d", textAlign: "right" }}>
+          <div style={{ width: 110, fontSize: 11, fontWeight: 600, color: "#15803d", textAlign: "right" }}>
             {t(E, "💉 treated?", "💉 치료?")}
           </div>
           <div style={{ display: "flex", gap: 8 }}>
@@ -141,12 +184,11 @@ export function ReverseSim({ E }) {
               const m = aPrime[i] === v;
               return (
                 <div key={i} style={{
-                  width: cellSize, height: Math.round(cellSize * 0.65), borderRadius: 10,
+                  width: cellSize, height: Math.round(cellSize * 0.6), borderRadius: 8,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: Math.round(fontSize * 0.95), fontWeight: 900,
-                  background: m ? "#16a34a" : "transparent",
-                  color: m ? "#fff" : "#9ca3af",
-                  boxShadow: m ? "0 2px 6px rgba(22,163,74,0.35)" : "none",
+                  fontSize: Math.round(fontSize * 0.85), fontWeight: 600,
+                  background: m ? "#22c55e" : "transparent",
+                  color: m ? "#fff" : "#cbd5e1",
                 }}>{m ? "✓" : "—"}</div>
               );
             })}
@@ -158,20 +200,21 @@ export function ReverseSim({ E }) {
           <div style={{ width: 110 }} />
           <div style={{ display: "flex", gap: 8 }}>
             {preset.a.map((_, i) => (
-              <div key={i} style={{ width: cellSize, fontSize: 10, color: C.dim, textAlign: "center" }}>{i + 1}</div>
+              <div key={i} style={{ width: cellSize, fontSize: 10, color: C.dim, textAlign: "center", fontWeight: 400 }}>{i + 1}</div>
             ))}
           </div>
         </div>
       </div>
 
       {/* count badge */}
-      <div style={{ marginTop: 14, padding: "10px 12px", borderRadius: 10, background: "#dcfce7", border: "2px solid #16a34a", textAlign: "center", fontSize: 13, fontWeight: 800, color: "#15803d" }}>
-        ✅ {t(E, "Checkups (matches): ", "검진 (일치): ")}<span style={{ fontSize: 20 }}>{matches}</span>
+      <div style={{ marginTop: 14, padding: "10px 12px", borderRadius: 10, background: "#dcfce7", border: "1px solid #86efac", textAlign: "center", fontSize: 13, fontWeight: 600, color: "#15803d" }}>
+        💉 {t(E, "Cows treated: ", "치료된 소: ")}<span style={{ fontSize: 22, fontWeight: 700 }}>{matches}</span>
+        <span style={{ color: C.dim, fontWeight: 400, fontSize: 11 }}> / {N}</span>
       </div>
       <div style={{ marginTop: 8, fontSize: 11, color: C.dim, lineHeight: 1.55 }}>
         {t(E,
-          "Blue dashed = inside [l, r] (reversed segment). Green inset / ✓ row = vet checks (a'[i] == b[i]). Same colour above & below = same species.",
-          "파랑 점선 = [l, r] 내부 (뒤집힘 구간). 초록 글로우 / ✓ 행 = 수의사 검진 (a'[i] == b[i]). 위아래 같은 색 = 같은 종.")}
+          "Blue dashed = inside [l, r] (reversed segment). Green inset / ✓ = vet treats this cow (a'[i] == b[i]). Same colour above & below = same species.",
+          "파랑 점선 = [l, r] 안쪽 (뒤집힌 구간). 초록 글로우 / ✓ = 수의사 치료 (a'[i] == b[i]). 위아래 같은 색 = 같은 종.")}
       </div>
     </div>
   );
