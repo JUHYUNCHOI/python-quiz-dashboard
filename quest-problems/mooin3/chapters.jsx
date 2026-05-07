@@ -18,7 +18,7 @@ export function makeMooin3Ch1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #3</div>
           </div>
 
-          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: C.accentBg, border: `1px solid ${C.accentBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -90,7 +90,7 @@ export function makeMooin3Ch1(E) {
             📥 {t(E, "Input / Output Format (official sample)", "입력 / 출력 형식 (공식 샘플)")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`12 5
@@ -102,7 +102,7 @@ abcabbacabac
 3 10`}
               </div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`28
@@ -113,7 +113,7 @@ abcabbacabac
               </div>
             </div>
           </div>
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
+          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
             <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
               🔍 {t(E, "Line by line", "한 줄씩")}
             </div>

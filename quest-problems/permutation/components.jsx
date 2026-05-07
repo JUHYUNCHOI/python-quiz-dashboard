@@ -308,7 +308,7 @@ export function PermSim({ E }) {
     width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
     borderRadius: 8, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
     background: justPicked ? "#fef3c7" : (filled ? "#ede9fe" : "#fff"),
-    border: `2px solid ${conflict ? "#dc2626" : (justPicked ? "#f59e0b" : (filled ? A : "#e5e7eb"))}`,
+    border: `1px solid ${conflict ? "#dc2626" : (justPicked ? "#f59e0b" : (filled ? A : "#e5e7eb"))}`,
     color: conflict ? "#dc2626" : (justPicked ? "#92400e" : (filled ? A : "#cbd5e1")),
     transition: "all .2s",
   });
@@ -324,7 +324,7 @@ export function PermSim({ E }) {
           const r = simulateGreedy(N, h, s);
           return (
             <button key={s} onClick={() => { setStart(s); setSi(0); }} style={{
-              padding: "5px 12px", borderRadius: 8, border: `2px solid ${s === start ? A : C.border}`,
+              padding: "5px 12px", borderRadius: 8, border: `1px solid ${s === start ? A : C.border}`,
               background: s === start ? A : "transparent", color: s === start ? "#fff" : C.dim,
               fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
             }}>
@@ -389,7 +389,7 @@ export function PermSim({ E }) {
       {cur === trace.length - 1 && (
         <div style={{
           background: success ? "#dcfce7" : "#fee2e2",
-          border: `2px solid ${success ? "#16a34a" : "#dc2626"}`,
+          border: `1px solid ${success ? "#16a34a" : "#dc2626"}`,
           borderRadius: 10, padding: "10px 12px", marginBottom: 10, textAlign: "center",
           fontSize: 13, fontWeight: 600, color: success ? "#15803d" : "#7f1d1d",
         }}>
@@ -402,7 +402,7 @@ export function PermSim({ E }) {
       {/* 네비 */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
         <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
-          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === 0 ? "#b0b5c3" : A, cursor: cur === 0 ? "default" : "pointer",
         }}>←</button>
@@ -410,7 +410,7 @@ export function PermSim({ E }) {
           {cur + 1} / {trace.length}
         </span>
         <button onClick={() => setSi(Math.min(trace.length - 1, cur + 1))} disabled={cur === trace.length - 1} style={{
-          background: cur === trace.length - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === trace.length - 1 ? "#e5e7eb" : A}`,
+          background: cur === trace.length - 1 ? "#e5e7eb" : A, border: `1px solid ${cur === trace.length - 1 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === trace.length - 1 ? "#b0b5c3" : "#fff", cursor: cur === trace.length - 1 ? "default" : "pointer",
         }}>→</button>
@@ -490,13 +490,13 @@ export function PermRunner({ E }) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 8, marginBottom: 10 }}>
         <input value={nInput} onChange={e => setNInput(e.target.value)} disabled={running}
           placeholder="N" style={{
-            padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`,
+            padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`,
             fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace",
             color: A, textAlign: "center",
           }} />
         <input value={hInput} onChange={e => setHInput(e.target.value)} disabled={running}
           placeholder="h (space-separated)" style={{
-            padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`,
+            padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`,
             fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace",
             color: A,
           }} />
@@ -533,7 +533,7 @@ export function PermRunner({ E }) {
         </div>
       )}
       {result && result.found && (
-        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px" }}>
+        <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px" }}>
           <div style={{ fontSize: 12, fontWeight: 600, color: "#15803d", marginBottom: 4 }}>
             {t(E, `✅ Found at start = ${result.start} (${fmtTime(result.elapsed)})`, `✅ 시작값 = ${result.start} 에서 성공 (${fmtTime(result.elapsed)})`)}
           </div>
@@ -543,7 +543,7 @@ export function PermRunner({ E }) {
         </div>
       )}
       {result && result.found === false && !result.stopped && (
-        <div style={{ background: "#fef2f2", border: "2px solid #dc2626", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 13, fontWeight: 700 }}>
+        <div style={{ background: "#fef2f2", border: "1px solid #dc2626", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 13, fontWeight: 700 }}>
           {t(E, `❌ No valid permutation. Output: -1 (${fmtTime(result.elapsed)})`, `❌ 유효한 순열 없음. 출력: -1 (${fmtTime(result.elapsed)})`)}
         </div>
       )}

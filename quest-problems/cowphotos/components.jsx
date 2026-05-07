@@ -19,14 +19,14 @@ function CowRow({ values, validity }) {
       display: "flex", gap: 4, justifyContent: "center", padding: "10px 0", flexWrap: "wrap",
       background: validity ? (validity.kind === "ok" ? "#dcfce7" : "#fee2e2") : "transparent",
       borderRadius: 8,
-      border: validity ? `2px solid ${validity.kind === "ok" ? "#86efac" : "#fca5a5"}` : "none",
+      border: validity ? `1px solid ${validity.kind === "ok" ? "#86efac" : "#fca5a5"}` : "none",
     }}>
       {values.map((v, i) => (
         <div key={i} style={{
           width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
           borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
           background: "#fff",
-          border: `2px solid ${validity ? (validity.kind === "ok" ? "#16a34a" : "#dc2626") : "#cbd5e1"}`,
+          border: `1px solid ${validity ? (validity.kind === "ok" ? "#16a34a" : "#dc2626") : "#cbd5e1"}`,
           color: validity ? (validity.kind === "ok" ? "#166534" : "#991b1b") : C.text,
         }}>{v ?? "?"}</div>
       ))}
@@ -336,7 +336,7 @@ export function CowPhotosSim({ E }) {
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
         {_CP_PRESETS.map((p, i) => (
           <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
-            padding: "4px 8px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            padding: "4px 8px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
             fontSize: 10, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>[{p.join(",")}]</button>
@@ -353,7 +353,7 @@ export function CowPhotosSim({ E }) {
               <div key={i} style={{
                 width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
                 borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-                background: "#fff", border: `2px solid ${A}`, color: A,
+                background: "#fff", border: `1px solid ${A}`, color: A,
               }}>{v}</div>
             ))}
           </div>
@@ -407,7 +407,7 @@ export function CowPhotosSim({ E }) {
                   width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
                   borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                   background: isPeak ? "#fef3c7" : "#dcfce7",
-                  border: `2px solid ${isPeak ? "#f59e0b" : "#16a34a"}`,
+                  border: `1px solid ${isPeak ? "#f59e0b" : "#16a34a"}`,
                   color: isPeak ? "#92400e" : "#15803d",
                 }}>{v}</div>
               );
@@ -421,13 +421,13 @@ export function CowPhotosSim({ E }) {
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 12 }}>
         <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
-          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: cur === 0 ? "#b0b5c3" : A,
           cursor: cur === 0 ? "default" : "pointer",
         }}>←</button>
         <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / 3</span>
         <button onClick={() => setSi(Math.min(2, cur + 1))} disabled={cur === 2} style={{
-          background: cur === 2 ? "#e5e7eb" : A, border: `2px solid ${cur === 2 ? "#e5e7eb" : A}`,
+          background: cur === 2 ? "#e5e7eb" : A, border: `1px solid ${cur === 2 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === 2 ? "#b0b5c3" : "#fff", cursor: cur === 2 ? "default" : "pointer",
         }}>→</button>
@@ -459,10 +459,10 @@ export function CowPhotosRunner({ E }) {
   return (
     <div style={{ padding: 14 }}>
       <input value={hIn} onChange={e => setHIn(e.target.value)} placeholder="heights"
-        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
       <button onClick={run} style={{ width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer", fontSize: 14, fontWeight: 600, marginBottom: 10, background: A, color: "#fff" }}>▶ {t(E, "Compute", "계산")}</button>
       {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
-      {result?.done && (<div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 700, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>M = {result.M} · rings = {result.rings} → ans = 2 × {result.rings} + 1 = {result.ans}</div>)}
+      {result?.done && (<div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 700, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>M = {result.M} · rings = {result.rings} → ans = 2 × {result.rings} + 1 = {result.ans}</div>)}
     </div>
   );
 }

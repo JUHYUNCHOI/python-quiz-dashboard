@@ -106,7 +106,7 @@ const WordBox = ({ word, color, size }) => (
     display: "inline-flex", alignItems: "center", justifyContent: "center",
     padding: "4px 10px", borderRadius: 8, fontSize: 13, fontWeight: 700,
     fontFamily: "'JetBrains Mono',monospace",
-    background: `${color}15`, border: `2px solid ${color}`,
+    background: `${color}15`, border: `1px solid ${color}`,
     color, whiteSpace: "nowrap",
   }}>
     {word} <span style={{ fontSize: 10, color: C.dim, marginLeft: 4 }}>({size})</span>
@@ -162,7 +162,7 @@ export function makeWordProcCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -215,7 +215,7 @@ export function makeWordProcCh1(E) {
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
             {t(E, "The Key Rule: Count Characters, Not Spaces!", "핵심 규칙: 글자만 세고, 공백은 안 세!")}
           </div>
-          <div style={{ background: "#fef2f2", borderRadius: 10, padding: 12, border: "2px solid #fca5a5" }}>
+          <div style={{ background: "#fef2f2", borderRadius: 10, padding: 12, border: "1px solid #fca5a5" }}>
             <div style={{ fontSize: 12, lineHeight: 2, color: C.text }}>
               {t(E, "Words: ", "단어: ")}
               {["hello", "my", "name"].map((w, i) => (
@@ -361,7 +361,7 @@ export function makeWordProcCh2(E) {
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
             {t(E, "Greedy Algorithm", "그리디 알고리즘")}
           </div>
-          <div style={{ background: "#fef2f2", borderRadius: 10, padding: 12, border: "2px solid #fca5a5" }}>
+          <div style={{ background: "#fef2f2", borderRadius: 10, padding: 12, border: "1px solid #fca5a5" }}>
             <div style={{ fontSize: 12, lineHeight: 2.2, color: C.text }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>1</span>

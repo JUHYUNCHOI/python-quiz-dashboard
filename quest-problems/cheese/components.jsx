@@ -66,7 +66,7 @@ export function CheeseSimulator({ E }) {
                   <button key={`${x}-${y}-${z}`} onClick={() => toggle(x, y, z)} style={{
                     width: 50, height: 50, padding: 0,
                     background: isCarved ? "#fff" : "#fde047",
-                    border: `2px solid ${isCarved ? C.border : "#854d0e"}`,
+                    border: `1px solid ${isCarved ? C.border : "#854d0e"}`,
                     borderRadius: 6, cursor: "pointer",
                     fontSize: 10, color: isCarved ? C.dim : "#854d0e", fontFamily: "'JetBrains Mono',monospace",
                   }}>
@@ -87,7 +87,7 @@ export function CheeseSimulator({ E }) {
           { label: "Z-axis", val: validZ, color: "#0891b2" },
         ].map((axis, i) => (
           <div key={i} style={{
-            background: "#fff", border: `2px solid ${axis.color}`, borderRadius: 8, padding: "8px 10px", textAlign: "center",
+            background: "#fff", border: `1px solid ${axis.color}`, borderRadius: 8, padding: "8px 10px", textAlign: "center",
           }}>
             <div style={{ fontSize: 10, fontWeight: 700, color: axis.color }}>{axis.label}</div>
             <div style={{ fontSize: 18, fontWeight: 700, color: axis.color, marginTop: 2 }}>{axis.val}</div>

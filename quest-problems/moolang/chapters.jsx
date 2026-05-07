@@ -77,7 +77,7 @@ export function makeMooLangCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -131,7 +131,7 @@ export function makeMooLangCh1(E) {
         "Each word can only be used once!\nA transitive sentence uses 2 nouns, while an intransitive sentence uses 1 noun.\nWe need to balance them.", "\uac01 \ub2e8\uc5b4\ub294 \ud55c \ubc88\ub9cc \uc4f8 \uc218 \uc788\uc5b4!\n\ud0c0\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac 2\uac1c, \uc790\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac 1\uac1c\ub97c \uc4f0\uc9c0.\n\uade0\ud615\uc744 \ub9de\ucdb0\uc57c \ud574."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#2563eb", marginBottom: 10 }}>
               {t(E, "Sentence Structure", "\ubb38\uc7a5 \uad6c\uc870")}
             </div>
@@ -169,7 +169,7 @@ export function makeMooLangCh1(E) {
         "The greedy approach: try all possible numbers of transitive sentences, use remaining nouns for intransitive sentences, pick the maximum!", "그리디 접근: 가능한 타동사 문장 수를 모두 시도하고, 남은 명사로 자동사 문장을 만들고, 최댓값을 선택!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#2563eb", marginBottom: 10 }}>
               {t(E, "Strategy", "\uc804\ub7b5")}
             </div>

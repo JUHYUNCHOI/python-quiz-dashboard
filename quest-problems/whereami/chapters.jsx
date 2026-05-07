@@ -115,7 +115,7 @@ export function makeWhereAmICh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #2</div>
           </div>
 
-          <div style={{ background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -168,7 +168,7 @@ export function makeWhereAmICh1(E) {
                   width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
                   borderRadius: 8, fontSize: 18, fontWeight: 700,
                   fontFamily: "'JetBrains Mono', monospace",
-                  background: C.carryBg, border: `2.5px solid ${C.carryBd}`, color: C.carry,
+                  background: C.carryBg, border: `1.5px solid ${C.carryBd}`, color: C.carry,
                 }}>{ch}</div>
               ))}
             </div>
@@ -240,7 +240,7 @@ export function makeWhereAmICh1(E) {
                         borderRadius: 8, fontSize: 18, fontWeight: 700,
                         fontFamily: "'JetBrains Mono', monospace",
                         background: inWindow ? C.carry : "#f1f5f9",
-                        border: `2.5px solid ${inWindow ? C.carry : C.border}`,
+                        border: `1.5px solid ${inWindow ? C.carry : C.border}`,
                         color: inWindow ? "#fff" : C.dim,
                         transition: "all .3s",
                       }}>{ch}</div>
@@ -254,7 +254,7 @@ export function makeWhereAmICh1(E) {
               </div>
             ))}
             <div style={{
-              background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10,
+              background: C.noBg, border: `1px solid ${C.noBd}`, borderRadius: 10,
               padding: 10, textAlign: "center", fontSize: 13, fontWeight: 600, color: C.no,
             }}>
               {t(E, "\"AB\" appears at position 0 AND position 2 -- duplicate! K=2 fails!", "\"AB\"가 위치 0과 위치 2에 -- 중복! K=2 실패!")}
@@ -308,7 +308,7 @@ export function makeWhereAmICh1(E) {
                         borderRadius: 8, fontSize: 18, fontWeight: 700,
                         fontFamily: "'JetBrains Mono', monospace",
                         background: inWindow ? C.ok : "#f1f5f9",
-                        border: `2.5px solid ${inWindow ? C.ok : C.border}`,
+                        border: `1.5px solid ${inWindow ? C.ok : C.border}`,
                         color: inWindow ? "#fff" : C.dim,
                       }}>{ch}</div>
                     );
@@ -321,7 +321,7 @@ export function makeWhereAmICh1(E) {
               </div>
             ))}
             <div style={{
-              background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10,
+              background: C.okBg, border: `1px solid ${C.okBd}`, borderRadius: 10,
               padding: 10, textAlign: "center", fontSize: 13, fontWeight: 600, color: C.ok,
             }}>
               {t(E, "\"ABA\" and \"BAB\" -- all different! K=3 works!", "\"ABA\"와 \"BAB\" -- 모두 다르다! K=3 성공!")}
@@ -388,7 +388,7 @@ export function makeWhereAmICh2(E) {
                 <div key={k} style={{
                   display: "flex", alignItems: "center", gap: 10,
                   background: ok ? C.okBg : C.noBg,
-                  border: `2px solid ${ok ? C.okBd : C.noBd}`,
+                  border: `1px solid ${ok ? C.okBd : C.noBd}`,
                   borderRadius: 10, padding: "8px 12px",
                 }}>
                   <div style={{
@@ -469,7 +469,7 @@ export function makeWhereAmICh2(E) {
           </div>
           {/* Trace table */}
           <div style={{
-            borderRadius: 10, overflow: "hidden", border: `2px solid ${C.border}`,
+            borderRadius: 10, overflow: "hidden", border: `1px solid ${C.border}`,
             fontSize: 12, fontFamily: "'JetBrains Mono', monospace",
           }}>
             {/* Header */}
@@ -527,7 +527,7 @@ export function makeWhereAmICh2(E) {
           <div style={{ fontSize: 20, fontWeight: 700, color: C.carry, fontFamily: "'JetBrains Mono', monospace" }}>
             O(N{"\u00b2"})
           </div>
-          <div style={{ marginTop: 12, background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+          <div style={{ marginTop: 12, background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "Outer loop: K from 1 to N (max N iterations).\nInner loop: check N-K+1 substrings. With hash set, each check is O(1). Total: O(N^2). N <= 100, so this is fast enough!", "바깥 반복: K를 1부터 N까지 (최대 N번).\n안쪽 반복: N-K+1개 부분문자열 확인. 해시 집합으로 각 확인 O(1). 총: O(N^2). N <= 100이라 충분히 빨라요!")}
           </div>
@@ -677,7 +677,7 @@ export function makeWhereAmICh3(E, lang = "py") {
           />
           <div style={{
             marginTop: 10, background: C.okBg, borderRadius: 10,
-            padding: "8px 12px", border: `2px solid ${C.okBd}`, textAlign: "center",
+            padding: "8px 12px", border: `1px solid ${C.okBd}`, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
               {t(E, "Complete code! Just 11 lines!", "전체 코드 완성! 단 11줄!")}

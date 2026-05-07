@@ -55,7 +55,7 @@ export function LogicalMoosSim({ E }) {
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
         {_LM_PRESETS.map((p, i) => (
           <button key={i} onClick={() => setPi(i)} style={{
-            padding: "4px 8px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            padding: "4px 8px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
             fontSize: 10, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>case {i+1}</button>
@@ -68,7 +68,7 @@ export function LogicalMoosSim({ E }) {
           return (
             <div key={i} style={{
               padding: "6px 10px", borderRadius: 6, fontSize: 12, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace",
-              background: chainColors[cIdx], border: `2px solid ${chainBorders[cIdx]}`, color: chainBorders[cIdx],
+              background: chainColors[cIdx], border: `1px solid ${chainBorders[cIdx]}`, color: chainBorders[cIdx],
             }}>{tok}</div>
           );
         })}
@@ -87,7 +87,7 @@ export function LogicalMoosSim({ E }) {
         </div>
       </div>
 
-      <div style={{ background: result ? "#dcfce7" : "#fef2f2", border: `2px solid ${result ? "#16a34a" : "#dc2626"}`, borderRadius: 10, padding: "10px 12px", color: result ? "#15803d" : "#7f1d1d", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
+      <div style={{ background: result ? "#dcfce7" : "#fef2f2", border: `1px solid ${result ? "#16a34a" : "#dc2626"}`, borderRadius: 10, padding: "10px 12px", color: result ? "#15803d" : "#7f1d1d", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
         ✅ result = {result ? "TRUE" : "FALSE"}
       </div>
     </div>

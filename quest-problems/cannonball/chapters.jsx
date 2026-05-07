@@ -63,7 +63,7 @@ export function makeCannonCh1(E) {
           </div>
 
           {/* Mini-visual: Bessie bouncing on a number line */}
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#9a3412", textAlign: "center", marginBottom: 10 }}>
               {t(E, "Tiny example: 5 pads, start S=2, power 1 →",
                     "작은 예: 패드 5 개, S=2 에서 출발, 파워 1 →")}
@@ -79,7 +79,7 @@ export function makeCannonCh1(E) {
                 <div key={p.i} style={{
                   width: 52, padding: "5px 4px", borderRadius: 8, textAlign: "center",
                   background: p.kind === "jump" ? "#dbeafe" : "#fee2e2",
-                  border: `2px solid ${p.kind === "jump" ? "#3b82f6" : "#fca5a5"}`,
+                  border: `1px solid ${p.kind === "jump" ? "#3b82f6" : "#fca5a5"}`,
                   color: p.kind === "jump" ? "#1e3a8a" : "#7f1d1d",
                 }}>
                   <div style={{ fontSize: 9, fontWeight: 700, opacity: 0.8 }}>pos {p.i}</div>
@@ -99,7 +99,7 @@ export function makeCannonCh1(E) {
             </div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -159,7 +159,7 @@ export function makeCannonCh1(E) {
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#9a3412", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#9a3412", whiteSpace: "pre" }}>
 {`5 2
@@ -170,14 +170,14 @@ export function makeCannonCh1(E) {
 1 1`}
               </div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`1`}
               </div>
             </div>
           </div>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 600, color: "#9a3412", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough", "풀이")}
             </div>

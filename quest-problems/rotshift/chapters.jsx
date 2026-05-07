@@ -53,7 +53,7 @@ export function makeRotShiftCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -117,21 +117,21 @@ export function makeRotShiftCh1(E) {
             \ud83d\udce5 {t(E, "Sample 1 \u2014 official", "\uc0d8\ud50c 1 \u2014 \uacf5\uc2dd")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>{t(E, "INPUT", "\uc785\ub825")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#5b21b6", whiteSpace: "pre" }}>
 {`5 3 4
 0 2 3`}
               </div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "\ucd9c\ub825")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`1 2 3 4 0`}
               </div>
             </div>
           </div>
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
               \ud83d\udd0d {t(E, "Walkthrough \u2014 N=5, active=[0,2,3], 4 minutes",
                           "\ud480\uc774 \u2014 N=5, active=[0,2,3], 4 \ubd84")}
@@ -153,7 +153,7 @@ export function makeRotShiftCh1(E) {
         "Let's visualize with N=4, K=2, active=[0,1].\nRotation means: cow at pos 0 goes to pos 1, cow at pos 1 goes to pos 0 (swap for K=2).", "N=4, K=2, active=[0,1]\uc73c\ub85c \uc2dc\uac01\ud654.\n\ud68c\uc804: \uc704\uce58 0\uc758 \uc18c\uac00 \uc704\uce58 1\ub85c, \uc704\uce58 1\uc758 \uc18c\uac00 \uc704\uce58 0\uc73c\ub85c (K=2\uc774\uba74 \uad50\ud658)."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#8b5cf6", marginBottom: 10 }}>
               {t(E, "Example: N=4, active=[0,1]", "\uc608\uc2dc: N=4, active=[0,1]")}
             </div>
@@ -163,7 +163,7 @@ export function makeRotShiftCh1(E) {
                   width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
                   borderRadius: "50%", fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 600,
                   background: i < 2 ? "#ddd6fe" : "#f1f5f9",
-                  border: `2.5px solid ${i < 2 ? "#8b5cf6" : "#cbd5e1"}`,
+                  border: `1.5px solid ${i < 2 ? "#8b5cf6" : "#cbd5e1"}`,
                   color: i < 2 ? "#5b21b6" : "#64748b",
                 }}>{t(E, `C${i}`, `\uc18c${i}`)}</div>
               ))}
@@ -197,7 +197,7 @@ export function makeRotShiftCh1(E) {
         "Algorithm: Simply simulate each step.\nFor large T, you can detect cycles, but for Bronze, direct simulation works!", "\uc54c\uace0\ub9ac\uc998: \uac01 \ub2e8\uacc4\ub97c \ub2e8\uc21c\ud788 \uc2dc\ubbac\ub808\uc774\uc158.\n\ud070 T\uc5d0\ub294 \uc21c\ud658 \uac10\uc9c0\ub97c \ud560 \uc218 \uc788\uc9c0\ub9cc, \ube0c\ub860\uc988\ub294 \uc9c1\uc811 \uc2dc\ubbac\ub808\uc774\uc158\uc73c\ub85c \ucda9\ubd84!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#8b5cf6", marginBottom: 10 }}>
               {t(E, "Simulation Steps", "\uc2dc\ubbac\ub808\uc774\uc158 \ub2e8\uacc4")}
             </div>

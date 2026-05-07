@@ -88,7 +88,7 @@ export function makeSubseqMedianCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcca"}</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Increasing Subsequence Median Sum</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P6</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "Example: A=[1,2,4,3].\nGood subsequences: [1],[2],[4],[3] (medians 1,2,4,3), [1,2,4],[1,2,3] (medians 2,2). Sum = 1+2+4+3+2+2 = 14.",
               "예시: A=[1,2,4,3]. 좋은 부분수열: [1],[2],[4],[3] (중앙값 1,2,4,3),\n[1,2,4],[1,2,3] (중앙값 2,2). 합 = 1+2+4+3+2+2 = 14.")}

@@ -32,7 +32,7 @@ export function makePresentsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>Bronze warm-up</div>
           </div>
 
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -95,7 +95,7 @@ export function makePresentsCh1(E) {
                       width: 70, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
                       borderRadius: 7, fontWeight: 700, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
                       background: isTarget ? "#dcfce7" : (isAbove ? "#fef2f2" : "#fff"),
-                      border: `2px solid ${isTarget ? "#16a34a" : (isAbove ? "#dc2626" : "#cbd5e1")}`,
+                      border: `1px solid ${isTarget ? "#16a34a" : (isAbove ? "#dc2626" : "#cbd5e1")}`,
                       color: isTarget ? "#15803d" : (isAbove ? "#7f1d1d" : C.text),
                     }}>{v}{isTarget ? " ←" : isAbove ? " ✗" : ""}</div>
                   );
@@ -114,7 +114,7 @@ export function makePresentsCh1(E) {
                 <div style={{
                   width: 70, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
                   borderRadius: 7, fontWeight: 700, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
-                  background: "#fff", border: `2px solid #cbd5e1`, color: C.text,
+                  background: "#fff", border: `1px solid #cbd5e1`, color: C.text,
                 }}>2</div>
                 <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>↑ {t(E, "top", "맨 위")}</div>
               </div>

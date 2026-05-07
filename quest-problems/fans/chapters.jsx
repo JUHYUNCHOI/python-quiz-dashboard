@@ -30,7 +30,7 @@ export function makeFansCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>🪭</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Fans</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fbbf24", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "1px solid #fbbf24", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "N colors of sticks → line them up → no two adjacent same color → maximize length!",
               "N가지 색 막대 → 한 줄로 배치 → 인접한 같은 색 금지 → 최대 길이!")}
@@ -52,7 +52,7 @@ export function makeFansCh1(E) {
               {arr.map((col, i) => (
                 <div key={i} style={{
                   width: stickW, height: stickH, borderRadius: 6,
-                  background: col, border: `2px solid ${col}`,
+                  background: col, border: `1px solid ${col}`,
                   boxShadow: `0 2px 6px ${col}44`,
                 }} />
               ))}
@@ -332,7 +332,7 @@ export function makeFansCh3(E) {
                 width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
                 borderRadius: 6, fontSize: 14, fontWeight: 700,
                 fontFamily: "'JetBrains Mono',monospace",
-                background: "#fffbeb", border: "2px solid #fbbf24", color: "#d97706",
+                background: "#fffbeb", border: "1px solid #fbbf24", color: "#d97706",
               }}>{v}</div>
             ))}
           </div>
@@ -366,7 +366,7 @@ export function makeFansCh3(E) {
           {/* Visual trace with [3,7,2] */}
           <div style={{
             marginTop: 10, background: "#fffbeb", borderRadius: 10,
-            padding: 10, border: "2px solid #fbbf24",
+            padding: 10, border: "1px solid #fbbf24",
           }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#d97706", marginBottom: 4 }}>
               {t(E, "Example: c = [3, 7, 2]", "예시: c = [3, 7, 2]")}
@@ -407,7 +407,7 @@ export function makeFansCh3(E) {
           />
           <div style={{
             marginTop: 10, background: "#d1fae5", borderRadius: 10,
-            padding: "8px 12px", border: "2px solid #6ee7b7", textAlign: "center",
+            padding: "8px 12px", border: "1px solid #6ee7b7", textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#059669" }}>
               {t(E, "That's the complete code! Just 8 lines! 🎉", "이게 전체 코드! 단 8줄! 🎉")}

@@ -17,7 +17,7 @@ export function makeMooCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO December 2024 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#faf5ff", border: "2px solid #d8b4fe", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#faf5ff", border: "1px solid #d8b4fe", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#581c87", marginBottom: 8 }}>
               📖 {t(E, "Definition", "정의")}
             </div>
@@ -84,7 +84,7 @@ export function makeMooCh1(E) {
             </div>
           ))}
 
-          <div style={{ background: "#faf5ff", border: "2px solid #d8b4fe", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+          <div style={{ background: "#faf5ff", border: "1px solid #d8b4fe", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 600, color: "#581c87", marginBottom: 6 }}>
               🔍 {t(E, "Sample 3 — many moos with 1 edit", "샘플 3 — 한 번의 수정으로 많은 moo")}
             </div>

@@ -301,7 +301,7 @@ export function ReachSim({ E }) {
       <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 8 }}>
         <button onClick={autoPlay} style={{
           padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600,
-          border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+          border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
         }}>{playing ? "⏸" : "⏭"} {t(E, playing ? "Pause" : "Auto", playing ? "정지" : "자동")}</button>
       </div>
     </div>
@@ -365,7 +365,7 @@ export function DijkstraTrace({ E }) {
             <div key={n.id} style={{
               padding: "4px 8px", borderRadius: 8, textAlign: "center", minWidth: 44,
               background: isCurrent ? "rgba(139,92,246,.15)" : (isVisited ? "#dcfce7" : ABg),
-              border: `2px solid ${isCurrent ? A : (isVisited ? "#6ee7b7" : ABd)}`,
+              border: `1px solid ${isCurrent ? A : (isVisited ? "#6ee7b7" : ABd)}`,
               fontFamily: "'JetBrains Mono',monospace", transition: "all .3s",
             }}>
               <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>
@@ -403,7 +403,7 @@ export function DijkstraTrace({ E }) {
         ) : (
           <button onClick={() => setStep(0)} style={{
             padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {t(E, "Restart", "처음부터")}</button>
         )}
       </div>

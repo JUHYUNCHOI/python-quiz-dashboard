@@ -126,7 +126,7 @@ export function makeWordCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>📝</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#3b82f6" }}>Word Distance</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P4</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "N words (length M each) → find a word → minimize total 'anagram distance' → output lex smallest!",
               "단어 N개 (길이 M) → 새 단어 하나 만들기 → 모든 단어와 겹치는 글자 최대한 많게 → 같은 답이 여러 개면 abc순으로 가장 앞선 것!")}
@@ -154,7 +154,7 @@ export function makeWordCh1(E) {
                 <div key={i} style={{
                   display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                   background: p.ok ? "#ecfdf5" : "#fef2f2", borderRadius: 10, padding: "8px 12px",
-                  border: `2px solid ${p.ok ? "#6ee7b7" : "#fca5a5"}`,
+                  border: `1px solid ${p.ok ? "#6ee7b7" : "#fca5a5"}`,
                 }}>
                   <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 600, color: "#3b82f6" }}>{p.a}</span>
                   <span style={{ fontSize: 12, color: C.dim }}>↔</span>
@@ -199,7 +199,7 @@ export function makeWordCh1(E) {
               {["a", "d"].map((c, i) => (
                 <div key={i} style={{
                   width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-                  background: "#dcfce7", border: "2px solid #6ee7b7", fontWeight: 700, fontSize: 14, color: "#059669",
+                  background: "#dcfce7", border: "1px solid #6ee7b7", fontWeight: 700, fontSize: 14, color: "#059669",
                   fontFamily: "'JetBrains Mono',monospace",
                 }}>{c}</div>
               ))}
@@ -259,7 +259,7 @@ export function makeWordCh1(E) {
           </div>
           <div style={{
             background: "#eff6ff", borderRadius: 12, padding: 14,
-            border: "2px solid #93c5fd",
+            border: "1px solid #93c5fd",
           }}>
             <div style={{ fontSize: 13, lineHeight: 2, color: C.text }}>
               <div>1️⃣ {t(E,
@@ -471,7 +471,7 @@ export function makeWordCh3(E) {
             {["a", "d", "e"].map((c, i) => (
               <div key={i} style={{
                 width: 36, height: 36, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-                background: "#eff6ff", border: "2px solid #93c5fd", fontWeight: 700, fontSize: 18, color: "#3b82f6",
+                background: "#eff6ff", border: "1px solid #93c5fd", fontWeight: 700, fontSize: 18, color: "#3b82f6",
                 fontFamily: "'JetBrains Mono',monospace",
               }}>{c}</div>
             ))}
@@ -493,7 +493,7 @@ export function makeWordCh3(E) {
           </div>
           <div style={{
             background: "#eff6ff", borderRadius: 12, padding: 14,
-            border: "2px solid #93c5fd", fontSize: 13, lineHeight: 2, color: C.text,
+            border: "1px solid #93c5fd", fontSize: 13, lineHeight: 2, color: C.text,
           }}>
             <div>✅ {t(E,
               "Each letter's marginal gain is independent",

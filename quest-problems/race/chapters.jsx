@@ -46,7 +46,7 @@ export function makeRaceCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -133,7 +133,7 @@ export function makeRaceCh1(E) {
                 );
               })}
             </div>
-            <div style={{ marginTop: 12, background: "#dcfce7", border: "2px solid #86efac", borderRadius: 8, padding: "8px 12px", textAlign: "center", fontSize: 12, color: "#15803d" }}>
+            <div style={{ marginTop: 12, background: "#dcfce7", border: "1px solid #86efac", borderRadius: 8, padding: "8px 12px", textAlign: "center", fontSize: 12, color: "#15803d" }}>
               {t(E, "Answer for K=4, X=0: 4 seconds.  Pattern: peak speed = 2, time = peak + (peak − X) = 2 + 2.",
                     "K=4, X=0 답: 4 초. 패턴: 정점 속도 = 2, 시간 = 정점 + (정점 − X) = 2 + 2.")}
             </div>

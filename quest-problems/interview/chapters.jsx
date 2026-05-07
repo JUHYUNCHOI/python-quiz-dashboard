@@ -83,7 +83,7 @@ export function makeInterviewCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -134,7 +134,7 @@ export function makeInterviewCh1(E) {
         "소들이 2개 카운터에 시간 순서로 들어가는 걸 봐요.\n핵심은 t=5 — 두 카운터가 동시에 비는 순간!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 12, textAlign: "center" }}>
               N=5, K=2, times=[3, 5, 2, 4, 1]
             </div>
@@ -157,14 +157,14 @@ export function makeInterviewCh1(E) {
                 {/* Cow 1: time 3, t=0..3 */}
                 <div style={{
                   position: "absolute", top: 14, left: 0, right: 4, height: 28 * 3,
-                  background: "#fbbf24", border: "2px solid #d97706", borderRadius: 6,
+                  background: "#fbbf24", border: "1px solid #d97706", borderRadius: 6,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 11, fontWeight: 600, color: "#7c2d12",
                 }}>🐄 소1<br/>(t=0→3)</div>
                 {/* Cow 3: time 2, t=3..5 */}
                 <div style={{
                   position: "absolute", top: 14 + 28 * 3, left: 0, right: 4, height: 28 * 2,
-                  background: "#a7f3d0", border: "2px solid #10b981", borderRadius: 6,
+                  background: "#a7f3d0", border: "1px solid #10b981", borderRadius: 6,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 11, fontWeight: 600, color: "#064e3b",
                 }}>🐄 소3<br/>(t=3→5)</div>
@@ -181,7 +181,7 @@ export function makeInterviewCh1(E) {
                 {/* Cow 2: time 5, t=0..5 */}
                 <div style={{
                   position: "absolute", top: 14, left: 4, right: 0, height: 28 * 5,
-                  background: "#bfdbfe", border: "2px solid #3b82f6", borderRadius: 6,
+                  background: "#bfdbfe", border: "1px solid #3b82f6", borderRadius: 6,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 11, fontWeight: 600, color: "#1e3a8a",
                 }}>🐄 소2<br/>(t=0→5)</div>
@@ -194,7 +194,7 @@ export function makeInterviewCh1(E) {
             </div>
 
             {/* Tie callout */}
-            <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ marginTop: 12, background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: "#dc2626", marginBottom: 4 }}>
                 {t(E, "🚨 At t=5: both C1 and C2 are free at the same time!", "🚨 t=5: C1과 C2가 동시에 비워짐!")}
               </div>
@@ -242,7 +242,7 @@ export function makeInterviewCh2(E) {
         "We use a min-heap (priority queue) to track when each counter finishes.\nThe cow always goes to the counter that finishes earliest!", "최소 힙(우선순위 큐)으로 각 카운터의 종료 시간을 추적해요. 소는 항상 가장 먼저 끝나는 카운터로!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text }}>
+          <div style={{ background: C.accentBg, border: `1px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text }}>
             <div style={{ fontWeight: 600, color: C.accent, marginBottom: 6 }}>
               {t(E, "🔧 Algorithm: Min-Heap Simulation", "🔧 알고리즘: 최소 힙 시뮬레이션")}
             </div>

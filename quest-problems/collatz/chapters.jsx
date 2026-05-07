@@ -34,7 +34,7 @@ export function makeCollatzCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd22"}</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Collatz Conjecture</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Rule: if N is even,\nN = N/2. If N is odd,\nN = 3N+1. Count how many steps until N becomes 1.",
               "규칙: N이 짝수면 N = N/2.\nN이 홀수면 N = 3N+1. N이 1이 될 때까지 몇 단계인지 세요.")}

@@ -71,7 +71,7 @@ export function makeStampCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcee"}</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Stamp Grid</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N\u00d7N grid (desired pattern).\nK\u00d7K stamp (can rotate 0/90/180/270\u00b0). Place stamp at any valid position, any rotation. Can we match the pattern exactly?",
               "N\u00d7N \uadf8\ub9ac\ub4dc (\uc6d0\ud558\ub294 \ud328\ud134). K\u00d7K \ub3c4\uc7a5 (0/90/180/270\u00b0 \ud68c\uc804 \uac00\ub2a5). \uc5b4\ub5a4 \uc704\uce58,\n\uc5b4\ub5a4 \ud68c\uc804\uc73c\ub85c\ub4e0 \ubc30\uce58. \ud328\ud134\uc744 \uc815\ud655\ud788 \ub9cc\ub4e4 \uc218 \uc788\ub098?")}
@@ -84,7 +84,7 @@ export function makeStampCh1(E) {
         "The stamp can be rotated 4 ways (0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0).\nEach placement covers a K\u00d7K area on the canvas.", "\ub3c4\uc7a5\uc740 4\ubc29\ud5a5 \ud68c\uc804 \uac00\ub2a5 (0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0).\n\uac01 \ubc30\uce58\ub294 \uce94\ubc84\uc2a4\uc758 K\u00d7K \uc601\uc5ed\uc744 \ucee4\ubc84."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#059669", marginBottom: 10 }}>
               {t(E, "4 Rotations", "4\ubc29\ud5a5 \ud68c\uc804")}
             </div>
@@ -93,7 +93,7 @@ export function makeStampCh1(E) {
                 <div key={i} style={{
                   background: "#d1fae5", borderRadius: 8, padding: "8px 14px",
                   fontSize: 14, fontWeight: 600, color: "#065f46",
-                  border: "2px solid #6ee7b7",
+                  border: "1px solid #6ee7b7",
                   transform: `rotate(${i * 90}deg)`,
                 }}>{"\ud83d\udcee"}</div>
               ))}
@@ -127,7 +127,7 @@ export function makeStampCh1(E) {
         "Approach: Try all positions and rotations.\nFor each combination, check if the stamped cells match the desired pattern!", "\uc811\uadfc\ubc95: \ubaa8\ub4e0 \uc704\uce58\uc640 \ud68c\uc804\uc744 \uc2dc\ub3c4.\n\uac01 \uc870\ud569\uc5d0\uc11c \ub3c4\uc7a5 \ucc0d\ud78c \uc140\uc774 \uc6d0\ud558\ub294 \ud328\ud134\uacfc \uc77c\uce58\ud558\ub294\uc9c0 \ud655\uc778!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#059669", marginBottom: 10 }}>
               {t(E, "Brute Force Strategy", "\ube0c\ub8e8\ud2b8 \ud3ec\uc2a4 \uc804\ub7b5")}
             </div>

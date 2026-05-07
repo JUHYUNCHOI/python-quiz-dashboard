@@ -54,7 +54,7 @@ export function makePalindromeCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Palindrome Stone Game</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -110,7 +110,7 @@ export function makePalindromeCh1(E) {
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d", whiteSpace: "pre" }}>
 {`3
@@ -119,7 +119,7 @@ export function makePalindromeCh1(E) {
 12`}
               </div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`B
@@ -128,7 +128,7 @@ B`}
               </div>
             </div>
           </div>
-          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough", "풀이")}
             </div>
@@ -154,13 +154,13 @@ B`}
         "First, what's a palindrome number?\nIt reads the same forwards and backwards!\nLike 121 or 7.", "먼저, 회문 수가 뭘까? 앞에서 읽어도 뒤에서 읽어도 같은 수예요! 121이나 7처럼."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 14, padding: 14, textAlign: "center" }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 14, padding: 14, textAlign: "center" }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
               {t(E, "Palindrome Numbers", "회문 수")}
             </div>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
               {["1","2","3","7","9","11","22","33","121","131"].map((n, i) => (
-                <div key={i} style={{ background: "#fff", border: "2px solid #fca5a5", borderRadius: 8, padding: "4px 10px", fontSize: 14, fontWeight: 700, color: "#dc2626" }}>{n}</div>
+                <div key={i} style={{ background: "#fff", border: "1px solid #fca5a5", borderRadius: 8, padding: "4px 10px", fontSize: 14, fontWeight: 700, color: "#dc2626" }}>{n}</div>
               ))}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>

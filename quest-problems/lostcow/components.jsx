@@ -66,7 +66,7 @@ export function LostCowSim({ E }) {
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
         {_LC_PRESETS.map((p, i) => (
           <button key={i} onClick={() => { setPi(i); setLegIdx(0); }} style={{
-            padding: "4px 8px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            padding: "4px 8px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
             fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>
@@ -126,7 +126,7 @@ export function LostCowSim({ E }) {
       {/* nav */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
         <button onClick={() => setLegIdx(Math.max(0, cur - 1))} disabled={cur === 0} style={{
-          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === 0 ? "#b0b5c3" : A, cursor: cur === 0 ? "default" : "pointer",
         }}>←</button>
@@ -134,7 +134,7 @@ export function LostCowSim({ E }) {
           {cur + 1} / {legs.length}
         </span>
         <button onClick={() => setLegIdx(Math.min(legs.length - 1, cur + 1))} disabled={cur === legs.length - 1} style={{
-          background: cur === legs.length - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === legs.length - 1 ? "#e5e7eb" : A}`,
+          background: cur === legs.length - 1 ? "#e5e7eb" : A, border: `1px solid ${cur === legs.length - 1 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === legs.length - 1 ? "#b0b5c3" : "#fff", cursor: cur === legs.length - 1 ? "default" : "pointer",
         }}>→</button>
@@ -208,9 +208,9 @@ export function LostCowRunner({ E }) {
     <div style={{ padding: 14 }}>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
         <input value={xInput} onChange={e => setXInput(e.target.value)} disabled={running} placeholder="x"
-          style={{ padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
+          style={{ padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
         <input value={yInput} onChange={e => setYInput(e.target.value)} disabled={running} placeholder="y"
-          style={{ padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
+          style={{ padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
       </div>
       <button onClick={running ? stop : run} style={{
         width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
@@ -228,7 +228,7 @@ export function LostCowRunner({ E }) {
         <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>
       )}
       {result?.done && (
-        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 600 }}>
+        <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 600 }}>
           {t(E, `✅ Total distance = ${result.total} (in ${result.legs} legs)`, `✅ 총 거리 = ${result.total} (${result.legs}개 다리)`)}
         </div>
       )}

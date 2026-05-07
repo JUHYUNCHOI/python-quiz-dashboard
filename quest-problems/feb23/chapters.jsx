@@ -52,7 +52,7 @@ export function makeFebCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -113,14 +113,14 @@ export function makeFebCh1(E) {
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d", whiteSpace: "pre" }}>
 {`4
 BEEF`}
               </div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`2
@@ -129,7 +129,7 @@ BEEF`}
               </div>
             </div>
           </div>
-          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough — 'BEEF' has one F", "풀이 — 'BEEF' 의 F 한 개")}
             </div>
@@ -153,7 +153,7 @@ BEEF`}
         "The excitement level is the number of positions where adjacent characters are the same.\nFor example, 'BEEB' has 1 pair (E,E at positions 2-3).", "흥분도는 인접한 문자가 같은 위치의 수예요. 예를 들어 'BEEB'은 1쌍 (위치 2-3의 E,E)이 있어요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
               {t(E, "Example: BEEB", "예시: BEEB")}
             </div>
@@ -163,7 +163,7 @@ BEEF`}
                   width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
                   borderRadius: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 20, fontWeight: 600,
                   background: ch === "B" ? "#dbeafe" : "#dcfce7",
-                  border: `2.5px solid ${ch === "B" ? "#93c5fd" : "#86efac"}`,
+                  border: `1.5px solid ${ch === "B" ? "#93c5fd" : "#86efac"}`,
                   color: ch === "B" ? "#1d4ed8" : "#166534",
                 }}>{ch}</div>
               ))}
@@ -198,7 +198,7 @@ BEEF`}
         "The key insight: try all possible F assignments (2^count_of_F), compute excitement for each, then count distinct values!", "핵심: 가능한 모든 F 할당(2^F개수)을 시도하고, 각각의 흥분도를 계산한 후, 서로 다른 값의 개수를 세!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
               {t(E, "Algorithm", "알고리즘")}
             </div>

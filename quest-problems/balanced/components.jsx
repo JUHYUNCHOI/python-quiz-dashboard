@@ -41,7 +41,7 @@ export function BalancedSim({ E }) {
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
         {_BAL_PRESETS.map((p, i) => (
           <button key={i} onClick={() => setPi(i)} style={{
-            padding: "5px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
             fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>
@@ -60,7 +60,7 @@ export function BalancedSim({ E }) {
               width: 28, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
               borderRadius: 6, fontSize: 18, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
               background: isMatched ? (isOpen ? "#fef3c7" : "#dbeafe") : "#f3f4f6",
-              border: `2px solid ${isMatched ? (isOpen ? "#f59e0b" : "#3b82f6") : "#d1d5db"}`,
+              border: `1px solid ${isMatched ? (isOpen ? "#f59e0b" : "#3b82f6") : "#d1d5db"}`,
               color: isMatched ? (isOpen ? "#92400e" : "#1e3a8a") : "#9ca3af",
             }}>
               {ch}
@@ -76,7 +76,7 @@ export function BalancedSim({ E }) {
 
       {/* result box */}
       <div style={{
-        background: "#fff7ed", border: `2px solid ${A}`, borderRadius: 10, padding: "10px 14px", textAlign: "center",
+        background: "#fff7ed", border: `1px solid ${A}`, borderRadius: 10, padding: "10px 14px", textAlign: "center",
       }}>
         <div style={{ fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
           min({N}, {M}) = {pairs} {t(E, "pairs", "쌍")}
@@ -137,7 +137,7 @@ export function BalancedRunner({ E }) {
       <textarea value={input} onChange={e => setInput(e.target.value)} disabled={running} rows={5}
         placeholder="T&#10;N1 M1&#10;N2 M2&#10;..."
         style={{
-          width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`,
+          width: "100%", padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`,
           fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10,
           resize: "vertical", boxSizing: "border-box",
         }} />

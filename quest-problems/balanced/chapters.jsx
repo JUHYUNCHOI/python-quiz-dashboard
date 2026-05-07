@@ -33,7 +33,7 @@ export function makeBalancedCh1(E) {
           </div>
 
           {/* Problem — bullet facts */}
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -100,7 +100,7 @@ export function makeBalancedCh1(E) {
               const chars = "(".repeat(ex.N) + ")".repeat(ex.M);
               const matchedSet = new Set(ex.matched);
               return (
-                <div key={i} style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 10 }}>
+                <div key={i} style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 10 }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
                     N={ex.N}, M={ex.M}
                   </div>
@@ -114,7 +114,7 @@ export function makeBalancedCh1(E) {
                           width: 22, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
                           borderRadius: 5, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                           background: isMatched ? (isOpen ? "#fef3c7" : "#dbeafe") : "#f3f4f6",
-                          border: `2px solid ${isMatched ? (isOpen ? "#f59e0b" : "#3b82f6") : "#cbd5e1"}`,
+                          border: `1px solid ${isMatched ? (isOpen ? "#f59e0b" : "#3b82f6") : "#cbd5e1"}`,
                           color: isMatched ? (isOpen ? "#92400e" : "#1e3a8a") : "#9ca3af",
                         }}>{ch}</div>
                       );
@@ -181,7 +181,7 @@ export function makeBalancedCh2(E) {
             ].map((ex, i) => {
               const pairs = Math.min(ex.N, ex.M);
               return (
-                <div key={i} style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 10 }}>
+                <div key={i} style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 10 }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", textAlign: "center", marginBottom: 6 }}>
                     N={ex.N}, M={ex.M}
                   </div>

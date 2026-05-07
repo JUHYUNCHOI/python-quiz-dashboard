@@ -153,7 +153,7 @@ export function makeShellCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -216,7 +216,7 @@ export function makeShellCh1(E) {
           <div style={{ paddingTop: 16 }}>
             <ShellRow shells={[1, 2, 3]} pebble={2} label={t(E, "After: pebble STILL at 2!", "이후: 조약돌 여전히 2번!")} E={E} />
           </div>
-          <div style={{ marginTop: 10, background: "#fef2f2", borderRadius: 10, padding: 10, border: "2px solid #fca5a5", fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+          <div style={{ marginTop: 10, background: "#fef2f2", borderRadius: 10, padding: 10, border: "1px solid #fca5a5", fontSize: 12, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "The pebble was at 2.\nWe swapped 1 and 3. Since the pebble wasn't under 1 or 3, it doesn't move!", "조약돌은 2번에 있었어.\n1번과 3번을 교환했어. 조약돌이 1번이나 3번 아래에 없었으니 이동하지 않아!")}
           </div>
@@ -257,7 +257,7 @@ export function makeShellCh1(E) {
                 <div key={start} style={{
                   display: "flex", alignItems: "center", gap: 10,
                   background: `${colors[start - 1]}10`, borderRadius: 10,
-                  padding: "8px 12px", border: `2px solid ${colors[start - 1]}40`,
+                  padding: "8px 12px", border: `1px solid ${colors[start - 1]}40`,
                 }}>
                   <div style={{
                     fontSize: 24, width: 40, height: 40, borderRadius: "50%",
@@ -386,7 +386,7 @@ export function makeShellCh2(E) {
               <div key={start} style={{
                 marginBottom: 8, padding: "8px 12px", borderRadius: 10,
                 background: score > 0 ? "#dcfce7" : "#f9fafb",
-                border: `2px solid ${score > 0 ? "#6ee7b7" : "#e5e7eb"}`,
+                border: `1px solid ${score > 0 ? "#6ee7b7" : "#e5e7eb"}`,
               }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: cols[start - 1] }}>

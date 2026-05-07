@@ -41,7 +41,7 @@ export function LonelyPhotoSim({ E }) {
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
         {_LP_PRESETS.map((p, i) => (
           <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
-            padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
             fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>{p}</button>
@@ -59,7 +59,7 @@ export function LonelyPhotoSim({ E }) {
               width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
               borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
               background: isCur ? "#fef3c7" : (inSameRun ? "#dbeafe" : (isOppLeft ? "#dcfce7" : (isOppRight ? "#fee2e2" : "#fff"))),
-              border: `2px solid ${isCur ? "#f59e0b" : (inSameRun ? A : (isOppLeft ? "#16a34a" : (isOppRight ? "#dc2626" : "#e5e7eb")))}`,
+              border: `1px solid ${isCur ? "#f59e0b" : (inSameRun ? A : (isOppLeft ? "#16a34a" : (isOppRight ? "#dc2626" : "#e5e7eb")))}`,
               color: C.text,
             }}>{ch}</div>
           );
@@ -80,13 +80,13 @@ export function LonelyPhotoSim({ E }) {
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
         <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
-          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: cur === 0 ? "#b0b5c3" : A,
           cursor: cur === 0 ? "default" : "pointer",
         }}>←</button>
         <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / {N}</span>
         <button onClick={() => setSi(Math.min(N - 1, cur + 1))} disabled={cur === N - 1} style={{
-          background: cur === N - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === N - 1 ? "#e5e7eb" : A}`,
+          background: cur === N - 1 ? "#e5e7eb" : A, border: `1px solid ${cur === N - 1 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === N - 1 ? "#b0b5c3" : "#fff", cursor: cur === N - 1 ? "default" : "pointer",
         }}>→</button>
@@ -117,10 +117,10 @@ export function LonelyPhotoRunner({ E }) {
   return (
     <div style={{ padding: 14 }}>
       <input value={sIn} onChange={e => setSIn(e.target.value)} placeholder="G/H string"
-        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
       <button onClick={run} style={{ width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer", fontSize: 14, fontWeight: 600, marginBottom: 10, background: A, color: "#fff" }}>▶ {t(E, "Compute", "계산")}</button>
       {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
-      {result?.done && (<div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 16, fontWeight: 700, textAlign: "center" }}>✅ {result.total}</div>)}
+      {result?.done && (<div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 16, fontWeight: 700, textAlign: "center" }}>✅ {result.total}</div>)}
     </div>
   );
 }

@@ -35,7 +35,7 @@ export function makeGiftsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P2</div>
           </div>
 
-          <div style={{ background: "#fef3c7", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fef3c7", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>

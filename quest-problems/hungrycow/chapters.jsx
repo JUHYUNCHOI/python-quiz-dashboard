@@ -53,7 +53,7 @@ export function makeHungryCowCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -106,7 +106,7 @@ export function makeHungryCowCh1(E) {
         "Example: 2 bales delivered on day 1, T=5.\nShe eats day 1 and day 2, then runs out.\nTotal = 2 days!", "\uc608\uc2dc: 1\uc77c\uc5d0 \uac74\ucd08 2\uac1c \ubc30\ub2ec, T=5.\n1\uc77c\uacfc 2\uc77c\uc5d0 \uba39\uace0 \ub5a8\uc5b4\uc9c0.\n\ucd1d = 2\uc77c!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "Timeline Example", "\ud0c0\uc784\ub77c\uc778 \uc608\uc2dc")}
             </div>
@@ -116,7 +116,7 @@ export function makeHungryCowCh1(E) {
                   width: 40, height: 50, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                   borderRadius: 8, fontSize: 11, fontWeight: 700,
                   background: d <= 2 ? "#dcfce7" : "#fee2e2",
-                  border: `2px solid ${d <= 2 ? "#86efac" : "#fca5a5"}`,
+                  border: `1px solid ${d <= 2 ? "#86efac" : "#fca5a5"}`,
                   color: d <= 2 ? "#166534" : "#991b1b",
                 }}>
                   <div>{t(E, `D${d}`, `${d}\uc77c`)}</div>
@@ -153,7 +153,7 @@ export function makeHungryCowCh1(E) {
         "Strategy: Sort deliveries by day.\nProcess gaps between deliveries, eating from stock.\nSimple simulation!", "\uc804\ub7b5: \ubc30\ub2ec\uc744 \ub0a0\uc9dc\uc21c \uc815\ub82c.\n\ubc30\ub2ec \uc0ac\uc774 \uac04\uaca9\uc744 \ucc98\ub9ac\ud558\uba70 \uc7ac\uace0\uc5d0\uc11c \uba39\uc74c.\n\uac04\ub2e8\ud55c \uc2dc\ubbac\ub808\uc774\uc158!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "Algorithm", "\uc54c\uace0\ub9ac\uc998")}
             </div>

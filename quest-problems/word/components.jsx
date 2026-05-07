@@ -31,7 +31,7 @@ const Tile = ({ ch, color = A, bg = ABg, bd = ABd, size = 30, glow }) => (
   <div style={{
     width: size, height: size, borderRadius: 7, display: "flex",
     alignItems: "center", justifyContent: "center",
-    background: bg, border: `2px solid ${bd}`,
+    background: bg, border: `1px solid ${bd}`,
     fontWeight: 700, fontSize: size * 0.52, color,
     fontFamily: "'JetBrains Mono',monospace",
     boxShadow: glow ? `0 0 10px ${color}44` : "none",
@@ -68,7 +68,7 @@ export function DistanceCalc({ E }) {
               onChange={e => inp.set(e.target.value.toLowerCase().replace(/[^a-z]/g, ""))}
               style={{
                 width: 80, textAlign: "center", padding: "6px 8px", borderRadius: 8,
-                border: `2px solid ${inp.color}`, fontSize: 16, fontWeight: 600,
+                border: `1px solid ${inp.color}`, fontSize: 16, fontWeight: 600,
                 fontFamily: "'JetBrains Mono',monospace", color: inp.color,
                 outline: "none", background: "#fff",
               }}
@@ -420,13 +420,13 @@ export function GreedySim({ E }) {
             }}>▶ {t(E, "Next slot", "다음 칸")}</button>
             <button onClick={autoPlay} style={{
               padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+              border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
             }}>{playing ? "⏸" : "⏭"} {t(E, playing ? "Pause" : "Auto", playing ? "정지" : "자동")}</button>
           </>
         ) : (
           <button onClick={reset} style={{
             padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {t(E, "Restart", "처음부터")}</button>
         )}
       </div>
@@ -459,7 +459,7 @@ export function WordBuilder({ E }) {
         {finalAns.map((cnt, i) => cnt > 0 ? (
           <div key={i} style={{
             textAlign: "center", padding: "4px 6px", borderRadius: 8,
-            background: ABg, border: `2px solid ${ABd}`, minWidth: 32,
+            background: ABg, border: `1px solid ${ABd}`, minWidth: 32,
           }}>
             <div style={{ fontWeight: 700, fontSize: 16, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
               {String.fromCharCode(i + 97)}
@@ -515,7 +515,7 @@ export function GreedyTrace({ E }) {
       {/* Words display */}
       <div style={{
         background: ABg, borderRadius: 10, padding: "6px 10px",
-        border: `2px solid ${ABd}`, marginBottom: 8, textAlign: "center",
+        border: `1px solid ${ABd}`, marginBottom: 8, textAlign: "center",
         fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text,
       }}>
         {t(E, "words", "주어진 단어")}: {SAMPLE_WORDS.join(", ")}
@@ -601,7 +601,7 @@ export function GreedyTrace({ E }) {
         ) : (
           <button onClick={reset} style={{
             padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {t(E, "Restart", "처음부터")}</button>
         )}
       </div>

@@ -56,7 +56,7 @@ export function TripletEnumSimulator({ E }) {
     return {
       width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
       borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
-      background: bg, border: `2px solid ${bd}`, color: fg, transition: "all .2s",
+      background: bg, border: `1px solid ${bd}`, color: fg, transition: "all .2s",
     };
   };
 
@@ -183,7 +183,7 @@ export function MooTraceSimulator({ E }) {
       width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
       borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
       background: kind === "j" ? "#fef3c7" : kind === "left" ? "#fee2e2" : kind === "right" ? "#dcfce7" : "#fff",
-      border: `2px solid ${kind === "j" ? "#f59e0b" : kind === "left" ? "#dc2626" : kind === "right" ? "#16a34a" : "#cbd5e1"}`,
+      border: `1px solid ${kind === "j" ? "#f59e0b" : kind === "left" ? "#dc2626" : kind === "right" ? "#16a34a" : "#cbd5e1"}`,
       color: kind === "j" ? "#92400e" : kind === "left" ? "#7f1d1d" : kind === "right" ? "#15803d" : "#475569",
       transition: "all .2s",
     };
@@ -330,7 +330,7 @@ export function Mooin3Sim({ E }) {
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
         {_M3_PRESETS.map((p, i) => (
           <button key={i} onClick={() => { setPi(i); setJ(p.l + 1); }} style={{
-            padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
             fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>"{p.s}"</button>
@@ -348,7 +348,7 @@ export function Mooin3Sim({ E }) {
               width: 30, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
               borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
               background: isJ ? "#fef3c7" : (isI ? "#dbeafe" : (isK ? "#dcfce7" : (inRange ? "#fff" : "#f3f4f6"))),
-              border: `2px solid ${isJ ? "#f59e0b" : (isI ? "#3b82f6" : (isK ? "#16a34a" : (inRange ? "#cbd5e1" : "#e5e7eb")))}`,
+              border: `1px solid ${isJ ? "#f59e0b" : (isI ? "#3b82f6" : (isK ? "#16a34a" : (inRange ? "#cbd5e1" : "#e5e7eb")))}`,
               color: inRange ? C.text : "#9ca3af",
             }}>{ch}</div>
           );
@@ -364,7 +364,7 @@ export function Mooin3Sim({ E }) {
         <input type="range" min={l + 1} max={r - 1} value={validJ} onChange={e => setJ(parseInt(e.target.value))} style={{ width: "100%" }} />
       </div>
 
-      <div style={{ background: product >= 0 ? "#dcfce7" : "#fef2f2", border: `2px solid ${product >= 0 ? "#16a34a" : "#dc2626"}`, borderRadius: 10, padding: "10px 12px", color: product >= 0 ? "#15803d" : "#7f1d1d", fontSize: 13, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", textAlign: "center" }}>
+      <div style={{ background: product >= 0 ? "#dcfce7" : "#fef2f2", border: `1px solid ${product >= 0 ? "#16a34a" : "#dc2626"}`, borderRadius: 10, padding: "10px 12px", color: product >= 0 ? "#15803d" : "#7f1d1d", fontSize: 13, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", textAlign: "center" }}>
         {product >= 0 ? `(j − i) × (k − j) = ${validJ - bestI} × ${bestK - validJ} = ${product}` : t(E, "no valid (i, j, k) for this j", "이 j에 대해 유효 (i, j, k) 없음")}
       </div>
     </div>

@@ -100,7 +100,7 @@ export function ReflectionGrid({ E }) {
         );
       })()}
 
-      <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", textAlign: "center", fontSize: 13, fontWeight: 600, color: "#15803d" }}>
+      <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px", textAlign: "center", fontSize: 13, fontWeight: 600, color: "#15803d" }}>
         ✅ {t(E, "Total flips needed: ", "총 뒤집기: ")}<span style={{ fontSize: 18 }}>{total}</span>
       </div>
       <div style={{ marginTop: 8, fontSize: 11, color: C.dim, lineHeight: 1.55 }}>

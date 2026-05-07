@@ -27,7 +27,7 @@ function Grid({ data, cellSize = 32, gap = 3, xColor = "#7c3aed", xBg = "#7c3aed
               borderRadius: Math.max(4, cellSize / 8), fontSize: Math.max(10, cellSize / 2.5), fontWeight: 700,
               fontFamily: "'JetBrains Mono',monospace",
               background: ch === "X" ? xBg : dotBg,
-              border: border || `2px solid ${ch === "X" ? xColor : dotColor}`,
+              border: border || `1px solid ${ch === "X" ? xColor : dotColor}`,
               color: ch === "X" ? "#fff" : dotColor,
             }}>{ch}</div>
           ))}
@@ -56,7 +56,7 @@ export function makeCowSignalCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -107,7 +107,7 @@ export function makeCowSignalCh1(E) {
           <Grid data={[["X",".",".X"],[".",".X","."]].map((_, r) => r === 0 ? ["X",".","X"] : [".","X","."])} cellSize={44} gap={4} />
           <div style={{ marginTop: 10, display: "flex", justifyContent: "center", gap: 16, fontSize: 12, fontWeight: 700 }}>
             <span><span style={{ display: "inline-block", width: 16, height: 16, background: "#7c3aed", borderRadius: 4, verticalAlign: "middle", marginRight: 4 }}/> X = {t(E, "filled", "채움")}</span>
-            <span><span style={{ display: "inline-block", width: 16, height: 16, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 4, verticalAlign: "middle", marginRight: 4 }}/> . = {t(E, "empty", "빈칸")}</span>
+            <span><span style={{ display: "inline-block", width: 16, height: 16, background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 4, verticalAlign: "middle", marginRight: 4 }}/> . = {t(E, "empty", "빈칸")}</span>
           </div>
         </div>),
     },
@@ -126,7 +126,7 @@ export function makeCowSignalCh1(E) {
               { label: "K", value: "2", desc: t(E, "enlarge", "확대") },
             ].map((item, i) => (
               <div key={i} style={{ textAlign: "center" }}>
-                <div style={{ width: 60, height: 60, borderRadius: 12, background: "#ede9fe", border: "2.5px solid #c4b5fd",
+                <div style={{ width: 60, height: 60, borderRadius: 12, background: "#ede9fe", border: "1.5px solid #c4b5fd",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 24, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#7c3aed" }}>
                   {item.value}
@@ -162,7 +162,7 @@ export function makeCowSignalCh1(E) {
             <div>
               <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Before", "전")}</div>
               <div style={{ width: 44, height: 44, background: "#7c3aed", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 20, fontWeight: 700, color: "#fff", fontFamily: "'JetBrains Mono',monospace", border: "2px solid #6d28d9" }}>X</div>
+                fontSize: 20, fontWeight: 700, color: "#fff", fontFamily: "'JetBrains Mono',monospace", border: "1px solid #6d28d9" }}>X</div>
             </div>
             <div style={{ fontSize: 24, color: C.accent, fontWeight: 700 }}>→</div>
             {/* After K=2 */}
@@ -191,7 +191,7 @@ export function makeCowSignalCh1(E) {
             <div>
               <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Before", "전")}</div>
               <div style={{ width: 44, height: 44, background: "#f5f3ff", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 20, fontWeight: 700, color: "#c4b5fd", fontFamily: "'JetBrains Mono',monospace", border: "2px solid #c4b5fd" }}>.</div>
+                fontSize: 20, fontWeight: 700, color: "#c4b5fd", fontFamily: "'JetBrains Mono',monospace", border: "1px solid #c4b5fd" }}>.</div>
             </div>
             <div style={{ fontSize: 24, color: C.accent, fontWeight: 700 }}>→</div>
             <div>
@@ -279,12 +279,12 @@ export function makeCowSignalCh2(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ display: "flex", justifyContent: "center", gap: 20 }}>
-            <div style={{ background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, flex: 1, maxWidth: 160 }}>
+            <div style={{ background: "#dbeafe", border: "1px solid #93c5fd", borderRadius: 12, padding: 12, flex: 1, maxWidth: 160 }}>
               <div style={{ fontSize: 20, marginBottom: 4 }}>↔️</div>
               <div style={{ fontSize: 13, fontWeight: 600, color: "#2563eb" }}>{t(E, "Horizontal", "가로 확대")}</div>
               <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>{t(E, "each char → K chars", "문자 1개 → K개")}</div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 12, padding: 12, flex: 1, maxWidth: 160 }}>
+            <div style={{ background: "#dcfce7", border: "1px solid #86efac", borderRadius: 12, padding: 12, flex: 1, maxWidth: 160 }}>
               <div style={{ fontSize: 20, marginBottom: 4 }}>↕️</div>
               <div style={{ fontSize: 13, fontWeight: 600, color: "#16a34a" }}>{t(E, "Vertical", "세로 확대")}</div>
               <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>{t(E, "each row → K rows", "행 1개 → K개")}</div>
@@ -306,7 +306,7 @@ export function makeCowSignalCh2(E) {
               <span style={{ fontSize: 11, fontWeight: 700, color: C.dim, width: 40 }}>{t(E, "Row:", "행:")}</span>
               {["X",".","X"].map((ch, i) => (
                 <div key={i} style={{ width: 36, height: 36, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
-                  background: ch === "X" ? "#7c3aed" : "#f5f3ff", border: `2px solid ${ch === "X" ? "#6d28d9" : "#c4b5fd"}`,
+                  background: ch === "X" ? "#7c3aed" : "#f5f3ff", border: `1px solid ${ch === "X" ? "#6d28d9" : "#c4b5fd"}`,
                   fontSize: 16, fontWeight: 700, color: ch === "X" ? "#fff" : "#c4b5fd", fontFamily: "'JetBrains Mono',monospace" }}>{ch}</div>
               ))}
             </div>

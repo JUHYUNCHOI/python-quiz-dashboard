@@ -18,7 +18,7 @@ export function makeCowPhotosCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 8 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -89,7 +89,7 @@ export function makeCowPhotosCh1(E) {
             📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`2
@@ -99,7 +99,7 @@ export function makeCowPhotosCh1(E) {
 3 3 2 1`}
               </div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`3
@@ -107,7 +107,7 @@ export function makeCowPhotosCh1(E) {
               </div>
             </div>
           </div>
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
+          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
             <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
               🔍 {t(E, "What each line means", "각 줄 의미")}
             </div>
@@ -226,7 +226,7 @@ export function makeCowPhotosCh1(E) {
             </div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 12 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 8 }}>
               💡 {t(E, "Natural first formula", "자연스러운 첫 공식")}
             </div>
@@ -242,7 +242,7 @@ export function makeCowPhotosCh1(E) {
             </div>
           </div>
 
-          <div style={{ background: "#fff", border: "2px solid #fbbf24", borderRadius: 10, padding: 12 }}>
+          <div style={{ background: "#fff", border: "1px solid #fbbf24", borderRadius: 10, padding: 12 }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>
               🧪 {t(E, "Try it on a bigger input: [1, 1, 2, 3, 3, 3, 4]", "더 큰 입력에 시도: [1, 1, 2, 3, 3, 3, 4]")}
             </div>
@@ -279,7 +279,7 @@ export function makeCowPhotosCh1(E) {
         "고침은 작아요: M (최댓값) 보다 엄격히 작은 값만 ring 으로 세요. 두 케이스 다 검증."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "2px solid #16a34a", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #16a34a", borderRadius: 12, padding: 14, marginBottom: 12 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 8 }}>
               🛠️ {t(E, "Corrected formula", "고친 공식")}
             </div>
@@ -291,7 +291,7 @@ export function makeCowPhotosCh1(E) {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 10 }}>
-            <div style={{ background: "#fff", border: "2px solid #86efac", borderRadius: 10, padding: 12 }}>
+            <div style={{ background: "#fff", border: "1px solid #86efac", borderRadius: 10, padding: 12 }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
                 ✓ [1, 1, 2, 3, 3, 3, 4]
               </div>
@@ -302,7 +302,7 @@ export function makeCowPhotosCh1(E) {
                 <div>{t(E, "answer = ", "답 = ")}<b style={{ color: "#16a34a" }}>5</b> ✓</div>
               </div>
             </div>
-            <div style={{ background: "#fff", border: "2px solid #86efac", borderRadius: 10, padding: 12 }}>
+            <div style={{ background: "#fff", border: "1px solid #86efac", borderRadius: 10, padding: 12 }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
                 ✓ [3, 3, 2, 1]
               </div>

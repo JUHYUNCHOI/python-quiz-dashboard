@@ -70,13 +70,13 @@ export function makeMcc21GlassCh1(E) {
               <div style={{ fontSize: 11, fontWeight: 600, color: "#2563eb", marginBottom: 6 }}>{t(E, "Line: DIFFERENT", "직선: 다른 배열")}</div>
               <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 4 }}>
                 {["A","B","C"].map(c => (
-                  <div key={c} style={{ width: 30, height: 30, borderRadius: 6, background: "#dbeafe", border: "2px solid #93c5fd",
+                  <div key={c} style={{ width: 30, height: 30, borderRadius: 6, background: "#dbeafe", border: "1px solid #93c5fd",
                     display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#2563eb" }}>{c}</div>
                 ))}
               </div>
               <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
                 {["B","C","A"].map(c => (
-                  <div key={c} style={{ width: 30, height: 30, borderRadius: 6, background: "#dbeafe", border: "2px solid #93c5fd",
+                  <div key={c} style={{ width: 30, height: 30, borderRadius: 6, background: "#dbeafe", border: "1px solid #93c5fd",
                     display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#2563eb" }}>{c}</div>
                 ))}
               </div>
@@ -175,7 +175,7 @@ export function makeMcc21GlassCh1(E) {
               <div style={{ fontSize: 22, fontWeight: 700, color: "#dc2626" }}>N</div>
             </div>
             <div style={{ fontSize: 22, fontWeight: 700, color: C.dim }}>=</div>
-            <div style={{ background: "#f0fdf4", borderRadius: 12, padding: 10, border: "2px solid #86efac" }}>
+            <div style={{ background: "#f0fdf4", borderRadius: 12, padding: 10, border: "1px solid #86efac" }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#16a34a" }}>{t(E, "Circle", "원형")}</div>
               <div style={{ fontSize: 22, fontWeight: 700, color: "#16a34a" }}>(N-1)!</div>
             </div>

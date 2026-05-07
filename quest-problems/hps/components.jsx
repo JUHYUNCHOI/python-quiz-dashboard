@@ -325,7 +325,7 @@ export function ChartReadingTour({ E }) {
           <span style={{
             display: "inline-flex", alignItems: "center", gap: 3,
             padding: "2px 8px", borderRadius: 999,
-            background: "#fef3c7", border: "2px solid #f59e0b",
+            background: "#fef3c7", border: "1px solid #f59e0b",
           }}>
             <span style={{ fontSize: 16, color: cards[cur.i - 1].color, lineHeight: 1 }}>{cards[cur.i - 1].glyph}</span>
             <span>{t(E, "card ", "카드 ")}{cur.i}</span>
@@ -334,7 +334,7 @@ export function ChartReadingTour({ E }) {
           <span style={{
             display: "inline-flex", alignItems: "center", gap: 3,
             padding: "2px 8px", borderRadius: 999,
-            background: "#fef3c7", border: "2px solid #f59e0b",
+            background: "#fef3c7", border: "1px solid #f59e0b",
           }}>
             <span style={{ fontSize: 16, color: cards[cur.j - 1].color, lineHeight: 1 }}>{cards[cur.j - 1].glyph}</span>
             <span>{t(E, "card ", "카드 ")}{cur.j}</span>
@@ -370,7 +370,7 @@ export function ChartReadingTour({ E }) {
           display: "grid", gridTemplateColumns: "60px repeat(3, 60px)",
           gridAutoRows: "60px",
           fontFamily: "'JetBrains Mono',monospace",
-          border: "2px solid #cbd5e1", borderRadius: 10, overflow: "hidden", background: "#fff",
+          border: "1px solid #cbd5e1", borderRadius: 10, overflow: "hidden", background: "#fff",
         }}>
           {/* Header row */}
           <div style={{ background: "#f8fafc", borderRight: "2px solid #cbd5e1", borderBottom: "2px solid #cbd5e1" }} />
@@ -509,7 +509,7 @@ export function HpsCaseSimulator({ E }) {
   const ElsieHandBox = ({ cards }) => (
     <div style={{
       display: "inline-flex", gap: 10, padding: "8px 14px",
-      background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10,
+      background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 10,
     }}>
       {cards.map((c, i) => (
         <div key={i} style={{
@@ -529,7 +529,7 @@ export function HpsCaseSimulator({ E }) {
     <div style={{
       padding: "10px 12px", borderRadius: 8,
       background: beatsBoth ? "#dcfce7" : "#f9fafb",
-      border: `2px solid ${beatsBoth ? "#16a34a" : "#e5e7eb"}`,
+      border: `1px solid ${beatsBoth ? "#16a34a" : "#e5e7eb"}`,
     }}>
       {/* Header: which Bessie card we're testing */}
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, fontSize: 12, fontWeight: 600, color: "#5b21b6" }}>
@@ -594,7 +594,7 @@ export function HpsCaseSimulator({ E }) {
                 return (
                   <div key={`${a}-${b}`} style={{
                     margin: 2,
-                    border: `2px solid ${has ? "#16a34a" : "#cbd5e1"}`,
+                    border: `1px solid ${has ? "#16a34a" : "#cbd5e1"}`,
                     background: has ? "#dcfce7" : "#fff",
                     borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: 12, fontWeight: 600,
@@ -640,7 +640,7 @@ export function HpsCaseSimulator({ E }) {
               <span key={i} style={{
                 display: "inline-flex", alignItems: "center", gap: 3,
                 padding: "2px 8px", borderRadius: 999,
-                background: "#fff", border: `2px solid #dc2626`,
+                background: "#fff", border: `1px solid #dc2626`,
                 fontSize: 12, fontWeight: 600, color: "#7f1d1d",
               }}>
                 <span style={{ fontSize: 16, color: card.color, lineHeight: 1 }}>{card.glyph}</span>
@@ -804,7 +804,7 @@ export function HpsSim({ E }) {
     return (
       <button onClick={onClick} style={{
         flex: 1, height: 38, borderRadius: 8,
-        border: `2px solid ${isActive ? accent : "#e5e7eb"}`,
+        border: `1px solid ${isActive ? accent : "#e5e7eb"}`,
         background: isActive ? `${accent}15` : "#fff",
         cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
         boxShadow: isActive ? `inset 0 0 0 1px ${accent}` : "none",
@@ -875,7 +875,7 @@ export function HpsSim({ E }) {
       <div style={{
         marginTop: 14, padding: "10px 12px", borderRadius: 10,
         background: guarantees ? "#dcfce7" : "#fef2f2",
-        border: `2px solid ${guarantees ? "#16a34a" : "#dc2626"}`,
+        border: `1px solid ${guarantees ? "#16a34a" : "#dc2626"}`,
         fontSize: 12.5, color: C.text, lineHeight: 1.7,
       }}>
         <div style={{ fontSize: 11, fontWeight: 600, color: guarantees ? "#15803d" : "#7f1d1d", marginBottom: 6 }}>
@@ -1132,7 +1132,7 @@ const BitRow = ({ bits, color, onToggle, label }) => (
         disabled={!onToggle}
         style={{
           width: 28, height: 28, borderRadius: 5,
-          border: `2px solid ${b ? color : "#cbd5e1"}`,
+          border: `1px solid ${b ? color : "#cbd5e1"}`,
           background: b ? color : "#fff",
           color: b ? "#fff" : "#94a3b8",
           fontWeight: 700, fontSize: 14,
@@ -1215,7 +1215,7 @@ export function BitmaskColSim({ E }) {
         {bits.map((b, i) => (
           <span key={i} style={{
             width: 22, height: 22,
-            border: `2px solid ${b ? color : "#cbd5e1"}`,
+            border: `1px solid ${b ? color : "#cbd5e1"}`,
             background: b ? color : "#fff",
             color: b ? "#fff" : "#94a3b8",
             borderRadius: 4, fontWeight: 700, fontSize: 12,

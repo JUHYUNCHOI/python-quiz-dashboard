@@ -175,7 +175,7 @@ export function FanSimulator({ E }) {
       {/* Formula computation */}
       <div style={{
         background: ABg, borderRadius: 10, padding: 10,
-        border: `2px solid ${ABd}`, marginBottom: 10,
+        border: `1px solid ${ABd}`, marginBottom: 10,
       }}>
         <div style={{
           fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
@@ -293,13 +293,13 @@ export function FanSimulator({ E }) {
             }}>▶ {E ? "Next" : "다음"}</button>
             <button onClick={autoPlay} style={{
               padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+              border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
             }}>{playing ? "⏸" : "⏭"} {E ? (playing ? "Pause" : "Auto") : (playing ? "정지" : "자동")}</button>
           </>
         ) : (
           <button onClick={resetSim} style={{
             padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {E ? "Restart" : "처음부터"}</button>
         )}
       </div>
@@ -431,7 +431,7 @@ export function FanPlacementViz({ E }) {
         {PLACEMENT_CASES.map((pc, i) => (
           <button key={i} onClick={() => switchCase(i)} style={{
             padding: "4px 8px", borderRadius: 7, fontSize: 10, fontWeight: 600,
-            border: `2px solid ${i === caseIdx ? pc.bd : C.border}`,
+            border: `1px solid ${i === caseIdx ? pc.bd : C.border}`,
             background: i === caseIdx ? pc.bg : C.card,
             color: i === caseIdx ? pc.color : C.dim,
             cursor: "pointer", lineHeight: 1.3,
@@ -444,7 +444,7 @@ export function FanPlacementViz({ E }) {
       {/* Case info card */}
       <div style={{
         background: tc.bg, borderRadius: 10, padding: "8px 10px",
-        border: `2px solid ${tc.bd}`, marginBottom: 8,
+        border: `1px solid ${tc.bd}`, marginBottom: 8,
       }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: tc.color, marginBottom: 3 }}>
           {tc.icon} {E ? tc.title_en : tc.title_ko}
@@ -482,7 +482,7 @@ export function FanPlacementViz({ E }) {
       {/* Placement area */}
       <div style={{
         background: "#f8fafc", borderRadius: 12, padding: "10px 6px",
-        border: `2px solid ${s.done ? tc.bd : C.border}`,
+        border: `1px solid ${s.done ? tc.bd : C.border}`,
         minHeight: 74, transition: "border-color .3s",
       }}>
         <div style={{ fontSize: 10, fontWeight: 700, color: C.dim, textAlign: "center", marginBottom: 6 }}>
@@ -501,7 +501,7 @@ export function FanPlacementViz({ E }) {
             <div key={i} style={{
               width: stickW, height: stickH, borderRadius: 5,
               background: STICK_COLORS[colorIdx],
-              border: `2px solid ${STICK_COLORS[colorIdx]}`,
+              border: `1px solid ${STICK_COLORS[colorIdx]}`,
               boxShadow: i === s.highlight ? `0 0 10px ${STICK_COLORS[colorIdx]}88` : `0 1px 3px ${STICK_COLORS[colorIdx]}22`,
               transform: i === s.highlight ? "scale(1.18)" : "scale(1)",
               transition: "all .25s",
@@ -580,14 +580,14 @@ export function FanPlacementViz({ E }) {
             }}>▶ {E ? "Next" : "다음"}</button>
             <button onClick={autoPlay} style={{
               padding: "7px 12px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              border: `2px solid ${ABd}`, background: ABg,
+              border: `1px solid ${ABd}`, background: ABg,
               color: A, cursor: "pointer",
             }}>{playing ? "⏸" : "⏭"} {E ? (playing ? "Pause" : "Auto") : (playing ? "정지" : "자동")}</button>
           </>
         ) : (
           <button onClick={reset} style={{
             padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `2px solid ${ABd}`, background: ABg,
+            border: `1px solid ${ABd}`, background: ABg,
             color: A, cursor: "pointer",
           }}>↺ {E ? "Restart" : "처음부터"}</button>
         )}
@@ -634,7 +634,7 @@ export function SeparatorBuildViz({ E }) {
       {/* Core idea */}
       <div style={{
         background: "#fffbeb", borderRadius: 10, padding: "8px 10px",
-        border: "2px solid #fbbf24", marginBottom: 10, textAlign: "center",
+        border: "1px solid #fbbf24", marginBottom: 10, textAlign: "center",
       }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", lineHeight: 1.7 }}>
           {E
@@ -651,7 +651,7 @@ export function SeparatorBuildViz({ E }) {
       {/* Visual row */}
       <div style={{
         background: "#f8fafc", borderRadius: 12, padding: "12px 6px",
-        border: `2px solid ${C.border}`, marginBottom: 8, minHeight: stickH + 30,
+        border: `1px solid ${C.border}`, marginBottom: 8, minHeight: stickH + 30,
       }}>
         <div style={{
           display: "flex", gap: 3, justifyContent: "center", alignItems: "end",
@@ -737,13 +737,13 @@ export function SeparatorBuildViz({ E }) {
         ) : (
           <button onClick={reset} style={{
             padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {E ? "Reset" : "처음부터"}</button>
         )}
         {sepCount > 0 && sepCount < maxSep && (
           <button onClick={reset} style={{
             padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺</button>
         )}
       </div>
@@ -808,7 +808,7 @@ export function FormulaTrace({ E }) {
               alignItems: "center", justifyContent: "center",
               fontSize: 15, fontWeight: 700, color: "#fff",
               fontFamily: "'JetBrains Mono',monospace",
-              border: `2px solid ${STICK_COLORS[i]}`,
+              border: `1px solid ${STICK_COLORS[i]}`,
               boxShadow: `0 2px 6px ${STICK_COLORS[i]}33`,
             }}>{c}</div>
           </div>
@@ -893,7 +893,7 @@ export function FormulaTrace({ E }) {
         ) : (
           <button onClick={reset} style={{
             padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `2px solid ${ABd}`, background: ABg,
+            border: `1px solid ${ABd}`, background: ABg,
             color: A, cursor: "pointer",
           }}>↺ {E ? "Restart" : "처음부터"}</button>
         )}

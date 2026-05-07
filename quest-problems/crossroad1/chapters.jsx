@@ -44,7 +44,7 @@ export function makeCrossRd1Ch1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>

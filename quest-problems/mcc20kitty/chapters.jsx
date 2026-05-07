@@ -25,7 +25,7 @@ function SeqRow({ values, highlight = -1, accent = "#dc2626", label }) {
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
             background: i === highlight ? accent : "#fef2f2",
-            border: `2px solid ${i === highlight ? accent : "#fca5a5"}`,
+            border: `1px solid ${i === highlight ? accent : "#fca5a5"}`,
             color: i === highlight ? "#fff" : "#dc2626",
           }}>
             {v}
@@ -45,7 +45,7 @@ function VarCards({ vars, accent = "#dc2626" }) {
           <div style={{
             width: 52, height: 52, borderRadius: 12,
             background: v.active ? accent : "#fef2f2",
-            border: `2.5px solid ${v.active ? accent : "#fca5a5"}`,
+            border: `1.5px solid ${v.active ? accent : "#fca5a5"}`,
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 20, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
             color: v.active ? "#fff" : "#dc2626",
@@ -112,7 +112,7 @@ export function makeMcc20KittyCh1(E) {
               </div>
             </div>
             {/* Kitty */}
-            <div style={{ background: "#fef2f2", borderRadius: 10, padding: 10, width: "100%", maxWidth: 320, border: "2px solid #fca5a5" }}>
+            <div style={{ background: "#fef2f2", borderRadius: 10, padding: 10, width: "100%", maxWidth: 320, border: "1px solid #fca5a5" }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#dc2626", marginBottom: 4 }}>{t(E, "Kitty / Tribonacci (3 terms)", "Kitty / 트리보나치 (3항)")}</div>
               <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>
                 K(n) = K(n-1) + K(n-2) + K(n-3)
@@ -161,7 +161,7 @@ export function makeMcc20KittyCh1(E) {
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 18, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                   background: item.bg === "#dc2626" ? "#dc2626" : item.bg,
-                  border: `2px solid ${item.bg === "#dc2626" ? "#dc2626" : "#fca5a5"}`,
+                  border: `1px solid ${item.bg === "#dc2626" ? "#dc2626" : "#fca5a5"}`,
                   color: item.bg === "#dc2626" ? "#fff" : "#dc2626",
                 }}>{item.v}</div>
             ))}
@@ -256,7 +256,7 @@ export function makeMcc20KittyCh2(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
-            <div style={{ background: "#fef2f2", borderRadius: 10, padding: 10, border: "2px solid #fca5a5", textAlign: "center" }}>
+            <div style={{ background: "#fef2f2", borderRadius: 10, padding: 10, border: "1px solid #fca5a5", textAlign: "center" }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: "#dc2626", marginBottom: 4 }}>
                 {t(E, "K(n) needs only:", "K(n)에 필요한 것:")}
               </div>
@@ -486,7 +486,7 @@ export function makeMcc20KittyCh3(E, lang = "py") {
         "After the loop, c holds K(N)!\nThat's because at each step, c becomes the latest Kitty number.", "루프 후, c가 K(N)을 가지고 있어요! 매 단계에서 c가 최신 Kitty 수가 되니까."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 12 }}>
+          <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 12 }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#16a34a", marginBottom: 4 }}>
               {t(E, "After loop completes:", "루프 완료 후:")}
             </div>

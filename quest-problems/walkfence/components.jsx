@@ -60,7 +60,7 @@ export function WalkFenceSim({ E }) {
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
         {_WF_PRESETS.map((p, i) => (
           <button key={i} onClick={() => { setPi(i); setStage(0); }} style={{
-            padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
             fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>case {i+1}</button>
@@ -99,13 +99,13 @@ export function WalkFenceSim({ E }) {
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
         <button onClick={() => setStage(Math.max(0, stage - 1))} disabled={stage === 0} style={{
-          background: stage === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${stage === 0 ? "#e5e7eb" : A}`,
+          background: stage === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${stage === 0 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: stage === 0 ? "#b0b5c3" : A,
           cursor: stage === 0 ? "default" : "pointer",
         }}>←</button>
         <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{stage + 1} / 2</span>
         <button onClick={() => setStage(Math.min(1, stage + 1))} disabled={stage === 1} style={{
-          background: stage === 1 ? "#e5e7eb" : A, border: `2px solid ${stage === 1 ? "#e5e7eb" : A}`,
+          background: stage === 1 ? "#e5e7eb" : A, border: `1px solid ${stage === 1 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: stage === 1 ? "#b0b5c3" : "#fff", cursor: stage === 1 ? "default" : "pointer",
         }}>→</button>

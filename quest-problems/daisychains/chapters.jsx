@@ -115,7 +115,7 @@ export function makeDaisyCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #2</div>
           </div>
 
-          <div style={{ background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -181,7 +181,7 @@ export function makeDaisyCh1(E) {
             {/* Calculation */}
             <div style={{
               background: C.carryBg, borderRadius: 10, padding: 10,
-              border: `2px solid ${C.carryBd}`, textAlign: "center",
+              border: `1px solid ${C.carryBd}`, textAlign: "center",
               fontFamily: "'JetBrains Mono', monospace", fontSize: 14, color: C.text,
             }}>
               <div style={{ marginBottom: 4 }}>
@@ -229,7 +229,7 @@ export function makeDaisyCh1(E) {
             </div>
             {/* Valid example */}
             <div style={{
-              background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10,
+              background: C.okBg, border: `1px solid ${C.okBd}`, borderRadius: 10,
               padding: 10, marginBottom: 8,
             }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: C.ok, marginBottom: 4 }}>
@@ -241,7 +241,7 @@ export function makeDaisyCh1(E) {
             </div>
             {/* Invalid example */}
             <div style={{
-              background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10,
+              background: C.noBg, border: `1px solid ${C.noBd}`, borderRadius: 10,
               padding: 10,
             }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: C.no, marginBottom: 4 }}>
@@ -292,7 +292,7 @@ export function makeDaisyCh1(E) {
               {t(E, "All subarrays of [1, 1, 2]", "[1, 1, 2]의 모든 부분 배열")}
             </div>
             <div style={{
-              borderRadius: 10, overflow: "hidden", border: `2px solid ${C.border}`,
+              borderRadius: 10, overflow: "hidden", border: `1px solid ${C.border}`,
               fontSize: 11, fontFamily: "'JetBrains Mono', monospace",
             }}>
               {/* Header */}
@@ -406,7 +406,7 @@ export function makeDaisyCh2(E) {
               {t(E, "Trace: [1, 1, 2]", "추적: [1, 1, 2]")}
             </div>
             <div style={{
-              borderRadius: 10, overflow: "hidden", border: `2px solid ${C.border}`,
+              borderRadius: 10, overflow: "hidden", border: `1px solid ${C.border}`,
               fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
             }}>
               <div style={{
@@ -602,7 +602,7 @@ export function makeDaisyCh3(E, lang = "py") {
           />
           <div style={{
             marginTop: 10, background: C.okBg, borderRadius: 10,
-            padding: "8px 12px", border: `2px solid ${C.okBd}`, textAlign: "center",
+            padding: "8px 12px", border: `1px solid ${C.okBd}`, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
               {t(E, "Complete solution! O(N^2) with running sum!", "전체 풀이 완성! 러닝 합으로 O(N^2)!")}

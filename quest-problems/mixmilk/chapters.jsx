@@ -157,7 +157,7 @@ export function makeMixMilkCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -213,7 +213,7 @@ export function makeMixMilkCh1(E) {
             buckets={[{ cap: 10, milk: 3 }, { cap: 8, milk: 5 }, { cap: 6, milk: 2 }]}
             E={E}
           />
-          <div style={{ marginTop: 10, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: 10, fontSize: 12, lineHeight: 1.8, color: C.text }}>
+          <div style={{ marginTop: 10, background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10, padding: 10, fontSize: 12, lineHeight: 1.8, color: C.text }}>
             <div><span style={{ fontWeight: 600, color: "#d97706" }}>{t(E, "Capacity", "용량")}</span> = {t(E, "max the bucket can hold", "양동이가 담을 수 있는 최대량")}</div>
             <div><span style={{ fontWeight: 600, color: "#3b82f6" }}>{t(E, "Milk", "우유")}</span> = {t(E, "current amount inside", "현재 들어있는 양")}</div>
             <div style={{ marginTop: 4, fontWeight: 700, color: "#b45309" }}>
@@ -250,7 +250,7 @@ export function makeMixMilkCh1(E) {
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 8 }}>
             {t(E, "The Pouring Rule", "붓기 규칙")}
           </div>
-          <div style={{ background: "#fef3c7", borderRadius: 10, padding: 12, border: "2px solid #fbbf24" }}>
+          <div style={{ background: "#fef3c7", borderRadius: 10, padding: 12, border: "1px solid #fbbf24" }}>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 600, color: "#92400e", textAlign: "center", lineHeight: 2 }}>
               amount = min(source_milk, dest_remaining)<br />
               source_milk -= amount<br />
@@ -309,7 +309,7 @@ export function makeMixMilkCh1(E) {
               { s: 5, label: "3→1", col: "#f59e0b" },
             ].map(({ s, label, col }) => (
               <div key={s} style={{
-                background: `${col}15`, border: `2px solid ${col}`, borderRadius: 8,
+                background: `${col}15`, border: `1px solid ${col}`, borderRadius: 8,
                 padding: "6px 10px", textAlign: "center", minWidth: 52,
               }}>
                 <div style={{ fontSize: 10, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
@@ -322,7 +322,7 @@ export function makeMixMilkCh1(E) {
             ))}
             <div style={{ display: "flex", alignItems: "center", fontSize: 18, color: C.dim }}>...</div>
           </div>
-          <div style={{ marginTop: 10, background: "#fffbeb", borderRadius: 10, padding: 10, border: "2px solid #fcd34d", textAlign: "center" }}>
+          <div style={{ marginTop: 10, background: "#fffbeb", borderRadius: 10, padding: 10, border: "1px solid #fcd34d", textAlign: "center" }}>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 600, color: "#92400e" }}>
               src = step % 3<br />
               dst = (step + 1) % 3
@@ -457,7 +457,7 @@ export function makeMixMilkCh2(E) {
             E={E}
           />
           {/* Summary state table */}
-          <div style={{ marginTop: 10, background: "#d1fae5", borderRadius: 10, padding: 10, border: "2px solid #6ee7b7" }}>
+          <div style={{ marginTop: 10, background: "#d1fae5", borderRadius: 10, padding: 10, border: "1px solid #6ee7b7" }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#059669", marginBottom: 6 }}>
               {t(E, "Full cycle summary:", "전체 사이클 요약:")}
             </div>

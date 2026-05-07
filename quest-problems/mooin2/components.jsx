@@ -70,7 +70,7 @@ export function MooinExplorer({ E }) {
           <div key={i} style={{
             width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
             borderRadius: 8, fontWeight: 700, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
-            background: "#fff", border: `2px solid ${C.border}`, color: C.text,
+            background: "#fff", border: `1px solid ${C.border}`, color: C.text,
           }}>{v}</div>
         ))}
       </div>

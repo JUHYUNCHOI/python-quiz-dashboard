@@ -27,7 +27,7 @@ const Candy = ({ color, label, size = 24 }) => (
   <div style={{
     width: size, height: size, borderRadius: "50%",
     background: CC[color] || "#9ca3af",
-    border: `2px solid ${CC[color] || "#9ca3af"}`,
+    border: `1px solid ${CC[color] || "#9ca3af"}`,
     display: "flex", alignItems: "center", justifyContent: "center",
     fontSize: size * 0.42, fontWeight: 700, color: "#fff",
     flexShrink: 0,
@@ -42,7 +42,7 @@ const PackCard = ({ a, b, idx, selected, onClick, dim, small }) => {
       display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
       padding: small ? "4px 6px" : "6px 8px", borderRadius: 10, cursor: onClick ? "pointer" : "default",
       background: dim ? "#f1f5f9" : selected ? ABg : "#fff",
-      border: `2px solid ${dim ? "#e2e4ec" : selected ? A : C.border}`,
+      border: `1px solid ${dim ? "#e2e4ec" : selected ? A : C.border}`,
       opacity: dim ? 0.35 : 1,
       transform: selected ? "scale(1.06)" : "scale(1)",
       boxShadow: selected ? `0 0 10px ${A}44` : "none",
@@ -116,7 +116,7 @@ export function PackTypeClassifier({ E }) {
         marginBottom: 4,
       }}>{label}</div>
       <div style={{
-        background: bg, border: `2px solid ${bd}`, borderRadius: 10,
+        background: bg, border: `1px solid ${bd}`, borderRadius: 10,
         padding: "6px 4px", minHeight: 70, display: "flex", flexDirection: "column",
         alignItems: "center", gap: 4,
       }}>
@@ -152,7 +152,7 @@ export function PackTypeClassifier({ E }) {
         {PAIRS.map((p, i) => (
           <button key={i} onClick={() => switchPair(i)} style={{
             padding: "5px 10px", borderRadius: 8, fontSize: 12, fontWeight: 600,
-            border: `2px solid ${i === pairIdx ? A : C.border}`,
+            border: `1px solid ${i === pairIdx ? A : C.border}`,
             background: i === pairIdx ? ABg : "#fff",
             color: i === pairIdx ? A : C.dim, cursor: "pointer",
             fontFamily: "'JetBrains Mono',monospace",
@@ -266,7 +266,7 @@ export function PackPickerSim({ E }) {
       {sel.size === 3 && (
         <div style={{
           background: isValid ? "#ecfdf5" : "#fee2e2",
-          border: `2px solid ${isValid ? "#6ee7b7" : "#fca5a5"}`,
+          border: `1px solid ${isValid ? "#6ee7b7" : "#fca5a5"}`,
           borderRadius: 12, padding: 10, marginBottom: 8,
           animation: "tricksPopIn .3s ease",
         }}>
@@ -432,7 +432,7 @@ export function ColorPairCounter({ E }) {
           return (
             <div key={i} style={{
               padding: "4px 10px", borderRadius: 8, fontSize: 12, fontWeight: 600,
-              border: `2px solid ${active && !passed ? A : passed ? "#6ee7b7" : C.border}`,
+              border: `1px solid ${active && !passed ? A : passed ? "#6ee7b7" : C.border}`,
               background: active && !passed ? ABg : passed ? "#ecfdf5" : "#fff",
               color: active && !passed ? A : passed ? "#059669" : C.dim,
               fontFamily: "'JetBrains Mono',monospace",
@@ -517,13 +517,13 @@ export function ColorPairCounter({ E }) {
             }}>▶ {t(E, "Next pair", "다음 쌍")}</button>
             <button onClick={autoPlay} style={{
               padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+              border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
             }}>{playing ? "⏸" : "⏭"} {t(E, playing ? "Pause" : "Auto", playing ? "정지" : "자동")}</button>
           </>
         ) : (
           <button onClick={reset} style={{
             padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {t(E, "Restart", "처음부터")}</button>
         )}
       </div>
@@ -553,7 +553,7 @@ export function TricksFormulaTrace({ E }) {
       {/* pair_count display */}
       <div style={{
         background: ABg, borderRadius: 10, padding: "6px 10px",
-        border: `2px solid ${ABd}`, marginBottom: 8, textAlign: "center",
+        border: `1px solid ${ABd}`, marginBottom: 8, textAlign: "center",
         fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: C.text,
       }}>
         pair_count: {"{"} (1,1):3, (1,2):2, (1,3):2, (2,2):1 {"}"}
@@ -633,7 +633,7 @@ export function TricksFormulaTrace({ E }) {
         ) : (
           <button onClick={reset} style={{
             padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {t(E, "Restart", "처음부터")}</button>
         )}
       </div>

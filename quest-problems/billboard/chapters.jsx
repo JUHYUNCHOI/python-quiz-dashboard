@@ -36,7 +36,7 @@ function RectBox({ x1, y1, x2, y2, color, label, opacity = 0.3 }) {
   const w = x2 - x1, h = y2 - y1;
   return (
     <div style={{ position: "absolute", left: x1 * 30, bottom: y1 * 30, width: w * 30, height: h * 30,
-      background: color, opacity, border: `2px solid ${color}`, borderRadius: 4,
+      background: color, opacity, border: `1px solid ${color}`, borderRadius: 4,
       display: "flex", alignItems: "center", justifyContent: "center",
       fontSize: 10, fontWeight: 600, color: "#fff",
     }}>{label}</div>
@@ -62,7 +62,7 @@ export function makeBillboardCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -114,12 +114,12 @@ export function makeBillboardCh1(E) {
         "Each rectangle is defined by two corners: lower-left (x1, y1) and upper-right (x2, y2).\nThe area is width × height = (x2-x1) × (y2-y1)!", "각 직사각형은 두 꼭짓점으로 정의돼: 왼쪽 아래 (x1, y1)과 오른쪽 위 (x2, y2). 면적 = 가로 × 세로 = (x2-x1) × (y2-y1)!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "📐 Rectangle = Two Corners", "📐 직사각형 = 두 꼭짓점")}
             </div>
             {/* Visual rectangle with labeled corners */}
-            <div style={{ position: "relative", height: 150, margin: "0 auto", width: 200, background: "#fef3c7", border: "2px solid #f59e0b", borderRadius: 8 }}>
+            <div style={{ position: "relative", height: 150, margin: "0 auto", width: 200, background: "#fef3c7", border: "1px solid #f59e0b", borderRadius: 8 }}>
               <div style={{ position: "absolute", left: -4, bottom: -20, fontSize: 11, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>
                 (1, 1)
               </div>
@@ -164,7 +164,7 @@ export function makeBillboardCh1(E) {
         "Now imagine: Billboard 1 (blue), Billboard 2 (green), and a Truck (red) blocking them.\nThe truck covers part of each billboard.\nWe need the visible area!", "이제 상상해봐: 광고판 1 (파란색), 광고판 2 (초록색), 그리고 트럭 (빨간색)이 가리고 있어요. 트럭이 각 광고판의 일부를 덮어. 보이는 면적이 필요해요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#f8fafc", border: "2px solid #e2e8f0", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: C.text, marginBottom: 10, textAlign: "center" }}>
               {t(E, "Example Scenario", "예시 상황")}
             </div>
@@ -176,7 +176,7 @@ export function makeBillboardCh1(E) {
                 { label: t(E, "Billboard 2", "광고판 2"), w: 3, h: 2, color: "#22c55e", bg: "#dcfce7" },
               ].map((r, i) => (
                 <div key={i} style={{ textAlign: "center" }}>
-                  <div style={{ width: r.w * 25, height: r.h * 25, background: r.bg, border: `2.5px solid ${r.color}`, borderRadius: 6,
+                  <div style={{ width: r.w * 25, height: r.h * 25, background: r.bg, border: `1.5px solid ${r.color}`, borderRadius: 6,
                     display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: r.color }}>
                     {r.w}×{r.h}
                   </div>
@@ -245,7 +245,7 @@ export function makeBillboardCh2(E) {
         "The hardest part: how do we compute the overlap area of two rectangles?\nLet's learn the overlap formula step by step!", "가장 어려운 부분: 두 직사각형의 겹침 면적을 어떻게 구할까? 겹침 공식을 단계별로 배우자!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14 }}>
+          <div style={{ background: C.accentBg, border: `1px solid ${C.accentBd}`, borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: C.accent, marginBottom: 10 }}>
               {t(E, "🔍 Rectangle Overlap", "🔍 직사각형 겹침")}
             </div>
@@ -253,11 +253,11 @@ export function makeBillboardCh2(E) {
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
               <div style={{ position: "relative", width: 220, height: 120 }}>
                 {/* Rect A */}
-                <div style={{ position: "absolute", left: 0, top: 20, width: 140, height: 80, background: "rgba(59,130,246,0.2)", border: "2px solid #3b82f6", borderRadius: 4 }}>
+                <div style={{ position: "absolute", left: 0, top: 20, width: 140, height: 80, background: "rgba(59,130,246,0.2)", border: "1px solid #3b82f6", borderRadius: 4 }}>
                   <span style={{ position: "absolute", top: 2, left: 4, fontSize: 10, fontWeight: 600, color: "#3b82f6" }}>A</span>
                 </div>
                 {/* Rect B */}
-                <div style={{ position: "absolute", left: 80, top: 0, width: 140, height: 80, background: "rgba(239,68,68,0.2)", border: "2px solid #ef4444", borderRadius: 4 }}>
+                <div style={{ position: "absolute", left: 80, top: 0, width: 140, height: 80, background: "rgba(239,68,68,0.2)", border: "1px solid #ef4444", borderRadius: 4 }}>
                   <span style={{ position: "absolute", top: 2, right: 4, fontSize: 10, fontWeight: 600, color: "#ef4444" }}>B</span>
                 </div>
                 {/* Overlap area */}

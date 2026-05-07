@@ -74,7 +74,7 @@ export function makeExchangeCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#dbeafe", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -186,7 +186,7 @@ export function makeExchangeCh1(E) {
             {[5, 3, 8, 4].map((v, i) => (
               <div key={i} style={{
                 width: 36, height: 36, borderRadius: 8,
-                background: "#dbeafe", border: "2px solid #93c5fd",
+                background: "#dbeafe", border: "1px solid #93c5fd",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 14, fontWeight: 700, color: "#2563eb",
               }}>{v}</div>
@@ -194,7 +194,7 @@ export function makeExchangeCh1(E) {
             <div style={{ alignSelf: "center", fontSize: 16, fontWeight: 700, color: C.dim }}>=</div>
             <div style={{
               width: 44, height: 44, borderRadius: 10,
-              background: "#16a34a", border: "2px solid #16a34a",
+              background: "#16a34a", border: "1px solid #16a34a",
               display: "flex", alignItems: "center", justifyContent: "center",
               fontSize: 18, fontWeight: 700, color: "#fff",
             }}>20</div>
@@ -288,7 +288,7 @@ export function makeExchangeCh1(E) {
         "Summary: after infinite rounds, extra = total%N cows get avg+1, and (N-extra) cows get avg.\nThat's the entire answer!", "정리: 무한 라운드 후, extra = total%N 마리가 avg+1, (N-extra) 마리가 avg. 이게 전체 답!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 14 }}>
+          <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#16a34a", marginBottom: 6 }}>
               {t(E, "The Formula", "공식")}
             </div>
@@ -317,7 +317,7 @@ export function makeExchangeCh2(E, lang = "py") {
         "Recap: total stays the same, so after enough rounds milk splits as evenly as possible.\nCode is just: total → avg → extra → output.", "정리: 총량은 그대로니까 충분한 라운드 후 우유는 가능한 균등하게 분배. 코드는 단순: total → avg → extra → 출력."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, fontSize: 14, fontWeight: 600, color: "#2563eb" }}>
+          <div style={{ background: "#dbeafe", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, fontSize: 14, fontWeight: 600, color: "#2563eb" }}>
             {t(E, "No simulation. Pure math: O(N).", "시뮬 없음. 순수 수학: O(N).")}
           </div>
         </div>),
@@ -440,7 +440,7 @@ export function makeExchangeCh2(E, lang = "py") {
         "Special case: if total divides evenly (extra=0), ALL cows get the same amount!\n[avg, avg, ..., avg].", "특수 경우: 균등 분배 시 (extra=0), 모든 소가 같은 양! [avg, avg, ..., avg]."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: "#f0fdf4", borderRadius: 10, padding: 10, border: "2px solid #86efac" }}>
+          <div style={{ background: "#f0fdf4", borderRadius: 10, padding: 10, border: "1px solid #86efac" }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#16a34a", marginBottom: 4 }}>
               {t(E, "N=4, total=20 → extra=0", "N=4, 합계=20 → extra=0")}
             </div>

@@ -50,7 +50,7 @@ export function makeMilkExCh1(E) {
           </div>
 
           {/* Mini-visual: 3 cows in a circle, RRL, one minute trace */}
-          <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", textAlign: "center", marginBottom: 10 }}>
               {t(E, "Tiny example: 3 cows, directions RRL, all start with 1 L (cap 1)",
                     "작은 예: 소 3 마리, 방향 RRL, 모두 1 L 로 시작 (용량 1)")}
@@ -65,7 +65,7 @@ export function makeMilkExCh1(E) {
                     { v: 1, dir: "→" },
                     { v: 1, dir: "←" },
                   ].map((c, i) => (
-                    <div key={i} style={{ background: "#fff", border: "2px solid #6ee7b7", borderRadius: 10, padding: "6px 8px", textAlign: "center", minWidth: 40 }}>
+                    <div key={i} style={{ background: "#fff", border: "1px solid #6ee7b7", borderRadius: 10, padding: "6px 8px", textAlign: "center", minWidth: 40 }}>
                       <div style={{ fontSize: 14, fontWeight: 700, color: "#065f46", fontFamily: "'JetBrains Mono',monospace" }}>{c.v} L</div>
                       <div style={{ fontSize: 13, color: "#16a34a", fontWeight: 600 }}>{c.dir}</div>
                     </div>
@@ -84,7 +84,7 @@ export function makeMilkExCh1(E) {
                     { v: 1, hi: true },   // capped from 2
                     { v: 1, hi: false },
                   ].map((c, i) => (
-                    <div key={i} style={{ background: c.hi ? "#fef3c7" : "#fff", border: `2px solid ${c.hi ? "#fbbf24" : "#6ee7b7"}`, borderRadius: 10, padding: "6px 8px", textAlign: "center", minWidth: 40 }}>
+                    <div key={i} style={{ background: c.hi ? "#fef3c7" : "#fff", border: `1px solid ${c.hi ? "#fbbf24" : "#6ee7b7"}`, borderRadius: 10, padding: "6px 8px", textAlign: "center", minWidth: 40 }}>
                       <div style={{ fontSize: 14, fontWeight: 700, color: c.hi ? "#92400e" : "#065f46", fontFamily: "'JetBrains Mono',monospace" }}>{c.v} L</div>
                     </div>
                   ))}
@@ -98,7 +98,7 @@ export function makeMilkExCh1(E) {
             </div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N cows in a circle, each with milk and a capacity limit.\nEvery minute: pass 1L left or right. Overflow is lost! Find total milk after M minutes.",
               "N 마리 소가 원형으로, 각각 우유와 용량 제한이 있어요.\n매분: 1L 를 왼쪽 또는 오른쪽으로 전달.\n넘치면 버려져!\nM 분 후 총 우유량을 구해요.")}
@@ -117,7 +117,7 @@ export function makeMilkExCh1(E) {
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#065f46", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#065f46", whiteSpace: "pre" }}>
 {`3 1
@@ -125,14 +125,14 @@ RRL
 1 1 1`}
               </div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`2`}
               </div>
             </div>
           </div>
-          <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 600, color: "#065f46", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough — minute 1", "풀이 — 1 분 후")}
             </div>
@@ -159,7 +159,7 @@ RRL
         "Each cow simultaneously passes 1 liter.\nIf a cow has 0 milk, it passes nothing.\nIf receiving milk exceeds capacity, the overflow is lost forever!", "모든 소가 동시에 1리터를 전달해요. 우유가 0이면 아무것도 안 전달해요. 받는 우유가 용량을 초과하면 넘치는 건 영원히 사라져!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 14, padding: 14, textAlign: "center" }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 14, padding: 14, textAlign: "center" }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#059669", marginBottom: 10 }}>
               {t(E, "Passing Rules", "전달 규칙")}
             </div>
@@ -168,7 +168,7 @@ RRL
                 [t(E, "Has milk?", "우유 있어요?"), t(E, "Pass 1L", "1L 전달")],
                 [t(E, "Over capacity?", "용량 초과?"), t(E, "Overflow lost!", "넘치면 버려!")],
               ].map(([q, a], i) => (
-                <div key={i} style={{ background: "#fff", border: "2px solid #6ee7b7", borderRadius: 10, padding: 10, flex: 1 }}>
+                <div key={i} style={{ background: "#fff", border: "1px solid #6ee7b7", borderRadius: 10, padding: 10, flex: 1 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: "#059669" }}>{q}</div>
                   <div style={{ fontSize: 11, color: C.text, marginTop: 4 }}>{a}</div>
                 </div>

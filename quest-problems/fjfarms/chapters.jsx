@@ -56,7 +56,7 @@ export function makeFjFarmsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -125,7 +125,7 @@ export function makeFjFarmsCh1(E) {
               return (
                 <div key={i} style={{
                   background: matches ? "#dcfce7" : "#fff",
-                  border: `2px solid ${matches ? "#16a34a" : "#a7f3d0"}`,
+                  border: `1px solid ${matches ? "#16a34a" : "#a7f3d0"}`,
                   borderRadius: 10, padding: 8, textAlign: "center",
                 }}>
                   <div style={{ fontSize: 10, fontWeight: 700, color: matches ? "#15803d" : "#065f46", marginBottom: 4 }}>{t(E, "Day", "Day")} {row.d}</div>
@@ -158,7 +158,7 @@ export function makeFjFarmsCh1(E) {
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#065f46", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#065f46", whiteSpace: "pre" }}>
 {`6
@@ -188,7 +188,7 @@ export function makeFjFarmsCh1(E) {
 1 0`}
               </div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`0
@@ -200,7 +200,7 @@ export function makeFjFarmsCh1(E) {
               </div>
             </div>
           </div>
-          <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 10, padding: 12, fontSize: 11.5, color: C.text, lineHeight: 1.7 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 10, padding: 12, fontSize: 11.5, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 600, color: "#065f46", marginBottom: 6 }}>
               🔍 {t(E, "Why -1 cases?", "왜 -1?")}
             </div>

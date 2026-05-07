@@ -164,7 +164,7 @@ export function makeCowGymCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -245,7 +245,7 @@ export function makeCowGymCh1(E) {
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {/* Consistent example */}
-            <div style={{ flex: 1, minWidth: 140, background: "#dcfce7", borderRadius: 10, padding: 10, border: "2px solid #6ee7b7" }}>
+            <div style={{ flex: 1, minWidth: 140, background: "#dcfce7", borderRadius: 10, padding: 10, border: "1px solid #6ee7b7" }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: "#059669", marginBottom: 6 }}>
                 {t(E, "Consistent (1,2)", "일관된 쌍 (1,2)")} ✓
               </div>
@@ -258,7 +258,7 @@ export function makeCowGymCh1(E) {
               </div>
             </div>
             {/* Inconsistent example */}
-            <div style={{ flex: 1, minWidth: 140, background: "#fef2f2", borderRadius: 10, padding: 10, border: "2px solid #fca5a5" }}>
+            <div style={{ flex: 1, minWidth: 140, background: "#fef2f2", borderRadius: 10, padding: 10, border: "1px solid #fca5a5" }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
                 {t(E, "Inconsistent (2,3)", "비일관 쌍 (2,3)")} ✗
               </div>
@@ -342,7 +342,7 @@ export function makeCowGymCh2(E) {
             {t(E, "Order vs Rank", "순서 vs 순위")}
           </div>
           <div style={{ display: "flex", gap: 8 }}>
-            <div style={{ flex: 1, background: "#fffbeb", borderRadius: 10, padding: 10, border: "2px solid #fcd34d" }}>
+            <div style={{ flex: 1, background: "#fffbeb", borderRadius: 10, padding: 10, border: "1px solid #fcd34d" }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#d97706", marginBottom: 4 }}>
                 {t(E, "Input (order)", "입력 (순서)")}
               </div>
@@ -351,7 +351,7 @@ export function makeCowGymCh2(E) {
                 {t(E, "= pos0:cow3, pos1:cow1, pos2:cow2", "= 0위:소3, 1위:소1, 2위:소2")}
               </div>
             </div>
-            <div style={{ flex: 1, background: "#dcfce7", borderRadius: 10, padding: 10, border: "2px solid #6ee7b7" }}>
+            <div style={{ flex: 1, background: "#dcfce7", borderRadius: 10, padding: 10, border: "1px solid #6ee7b7" }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#059669", marginBottom: 4 }}>
                 {t(E, "We need (rank)", "필요한 것 (순위)")}
               </div>
@@ -439,7 +439,7 @@ export function makeCowGymCh2(E) {
           <div style={{ fontSize: 18, fontWeight: 700, color: "#d97706", fontFamily: "'JetBrains Mono',monospace" }}>
             {"O(K \u00b7 N\u00b2)"}
           </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
               {t(E, "N \u2264 20 → pairs \u2264 190", "N \u2264 20 → 쌍 \u2264 190")}<br />
               {t(E, "K \u2264 10 → checks per pair \u2264 10", "K \u2264 10 → 쌍당 확인 \u2264 10")}<br />

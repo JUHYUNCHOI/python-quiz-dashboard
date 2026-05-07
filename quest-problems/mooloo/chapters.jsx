@@ -51,7 +51,7 @@ export function makeMoolooCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -94,7 +94,7 @@ export function makeMoolooCh1(E) {
         "Key insight: if two days are close (gap \u2264 K), it's cheaper to extend one subscription than start a new one!", "\ud575\uc2ec: \ub450 \ub0a0\uc774 \uac00\uae4c\uc6b0\uba74 (\uac04\uaca9 \u2264 K), \uc0c8 \uad6c\ub3c5\ubcf4\ub2e4 \uae30\uc874 \uad6c\ub3c5\uc744 \uc5f0\uc7a5\ud558\ub294 \uac8c \ub354 \uc2f8!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#f97316", marginBottom: 10 }}>
               {t(E, "Extend vs New Subscription", "\uc5f0\uc7a5 vs \uc0c8 \uad6c\ub3c5")}
             </div>
@@ -135,7 +135,7 @@ export function makeMoolooCh1(E) {
         "Greedy algorithm: sort days, then scan left to right.\nExtend current subscription if gap \u2264 K, otherwise start a new one!", "\uadf8\ub9ac\ub514 \uc54c\uace0\ub9ac\uc998: \ub0a0\uc9dc \uc815\ub82c \ud6c4 \uc67c\ucabd\uc5d0\uc11c \uc624\ub978\ucabd\uc73c\ub85c \uc2a4\uce94.\n\uac04\uaca9 \u2264 K\uba74 \uc5f0\uc7a5, \uc544\ub2c8\uba74 \uc0c8 \uad6c\ub3c5!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 14, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#f97316", marginBottom: 10 }}>
               {t(E, "Greedy Algorithm", "\uadf8\ub9ac\ub514 \uc54c\uace0\ub9ac\uc998")}
             </div>

@@ -67,7 +67,7 @@ export function makePermCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -146,12 +146,12 @@ export function makePermCh1(E) {
       content: (
         <div style={{ padding: 16 }}>
           {/* Forward direction summary */}
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#5b21b6", marginBottom: 8 }}>
               ⚙️ {t(E, "Forward (what Nhoj did to John's permutation)", "정방향 (Nhoj 가 John 의 순열에 한 일)")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 8, alignItems: "center" }}>
-              <div style={{ background: "#fff", border: "2px solid #7c5cfc", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
+              <div style={{ background: "#fff", border: "1px solid #7c5cfc", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 10, fontWeight: 600, color: "#7c5cfc", marginBottom: 4 }}>
                   🤠 {t(E, "John's secret p", "John 의 비밀 p")}
                 </div>
@@ -163,7 +163,7 @@ export function makePermCh1(E) {
                 <div style={{ fontSize: 16, lineHeight: 1 }}>👹</div>
                 <div style={{ fontSize: 9, color: "#dc2626", fontWeight: 700, marginTop: 2 }}>Nhoj</div>
               </div>
-              <div style={{ background: "#fff", border: "2px solid #fbbf24", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
+              <div style={{ background: "#fff", border: "1px solid #fbbf24", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 10, fontWeight: 600, color: "#92400e", marginBottom: 4 }}>
                   ✏️ {t(E, "hints Nhoj wrote", "Nhoj 가 적은 힌트")}
                 </div>
@@ -179,17 +179,17 @@ export function makePermCh1(E) {
           </div>
 
           {/* Your job — reverse direction */}
-          <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 14 }}>
+          <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#15803d", marginBottom: 8 }}>
               🎯 {t(E, "Your job (reverse — recover John's permutation)", "할 일 (역방향 — John 의 순열 복원)")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 8, alignItems: "center" }}>
-              <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
+              <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 10, fontWeight: 600, color: "#92400e", marginBottom: 4 }}>{t(E, "GIVEN", "받는 것")}</div>
                 <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12" }}>h = [2, 1, 1]</div>
               </div>
               <div style={{ fontSize: 22, color: "#15803d", textAlign: "center", fontWeight: 700 }}>→</div>
-              <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
+              <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 10, fontWeight: 600, color: "#15803d", marginBottom: 4 }}>{t(E, "FIND John's p", "John 의 p 찾기")}</div>
                 <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>[?, ?, ?, ?]</div>
               </div>
@@ -223,7 +223,7 @@ export function makePermCh1(E) {
 
           {/* INPUT */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 10, marginBottom: 12 }}>
-            <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
                 {`5
@@ -239,7 +239,7 @@ export function makePermCh1(E) {
 3 2 1`}
               </div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
                 {`1 2
@@ -252,7 +252,7 @@ export function makePermCh1(E) {
           </div>
 
           {/* Annotated breakdown */}
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
+          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12 }}>
             <div style={{ fontSize: 11, fontWeight: 600, color: "#5b21b6", marginBottom: 8 }}>
               🔍 {t(E, "Reading the input line by line", "입력을 한 줄씩 읽기")}
             </div>
@@ -348,7 +348,7 @@ export function makePermCh1(E) {
           </div>
 
           {/* Why it works */}
-          <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
+          <div style={{ background: "#dcfce7", border: "1px solid #86efac", borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#15803d", marginBottom: 4 }}>
               ✅ {t(E, "Why it works", "왜 정답이 되나")}
             </div>
@@ -361,7 +361,7 @@ export function makePermCh1(E) {
           </div>
 
           {/* Test cases pass */}
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#9a3412", marginBottom: 6 }}>
               ✓ {t(E, "Sample test cases pass — for small N this is enough!",
                        "샘플 테스트 통과 — 작은 N 에서는 이걸로 충분!")}
@@ -387,7 +387,7 @@ export function makePermCh1(E) {
           </div>
 
           {/* Growth table */}
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: 12, marginBottom: 12 }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: 12, marginBottom: 12 }}>
             <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr", gap: "8px 12px", fontSize: 12, alignItems: "center" }}>
               <div style={{ fontWeight: 600, color: "#7f1d1d" }}>N</div>
               <div style={{ fontWeight: 600, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>N!</div>
@@ -412,7 +412,7 @@ export function makePermCh1(E) {
           </div>
 
           {/* What we need */}
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px" }}>
+          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 12px" }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
               💡 {t(E, "We need to be cleverer", "더 똑똑해져야 함")}
             </div>

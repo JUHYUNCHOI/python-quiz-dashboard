@@ -60,7 +60,7 @@ export function RoundingSimulator({ E }) {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-        <div style={{ background: "#e0f2fe", border: `2px solid ${A}`, borderRadius: 10, padding: 12 }}>
+        <div style={{ background: "#e0f2fe", border: `1px solid ${A}`, borderRadius: 10, padding: 12 }}>
           <div style={{ fontSize: 12, fontWeight: 600, color: "#0c4a6e", marginBottom: 6 }}>
             👩‍🌾 {t(E, "Bessie — one round to 10^P", "Bessie — 10^P 한 번")}
           </div>
@@ -70,7 +70,7 @@ export function RoundingSimulator({ E }) {
           </div>
         </div>
 
-        <div style={{ background: "#fee2e2", border: "2px solid #ef4444", borderRadius: 10, padding: 12 }}>
+        <div style={{ background: "#fee2e2", border: "1px solid #ef4444", borderRadius: 10, padding: 12 }}>
           <div style={{ fontSize: 12, fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>
             👧 {t(E, "Elsie — chain", "Elsie — 사슬")}
           </div>
@@ -88,7 +88,7 @@ export function RoundingSimulator({ E }) {
       <div style={{
         marginTop: 14, padding: "10px 12px", borderRadius: 10,
         background: disagree ? "#fee2e2" : "#dcfce7",
-        border: `2px solid ${disagree ? "#ef4444" : "#16a34a"}`,
+        border: `1px solid ${disagree ? "#ef4444" : "#16a34a"}`,
         textAlign: "center", fontSize: 14, fontWeight: 600,
         color: disagree ? "#7f1d1d" : "#15803d",
       }}>

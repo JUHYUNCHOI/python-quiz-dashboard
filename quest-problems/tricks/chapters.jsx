@@ -120,7 +120,7 @@ export function makeTricksCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>🎃</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Trick or Treat</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P3</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "N bags (2 candies each) → pick 3 bags → open them → need exactly 2 colors, 3 each!",
               "봉지 N개 (각 2개씩) → 3개 고르기 → 열어보기 → 2가지 색 × 3개씩이면 성공!")}
@@ -144,12 +144,12 @@ export function makeTricksCh1(E) {
             <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
               {packs.map((p, i) => (
                 <div key={i} style={{
-                  background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12,
+                  background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12,
                   padding: "10px 12px", textAlign: "center", minWidth: 70,
                 }}>
                   <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 6 }}>
-                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: p.a, border: `2px solid ${p.a}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#fff" }}>{p.la}</div>
-                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: p.b, border: `2px solid ${p.b}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#fff" }}>{p.lb}</div>
+                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: p.a, border: `1px solid ${p.a}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#fff" }}>{p.la}</div>
+                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: p.b, border: `1px solid ${p.b}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#fff" }}>{p.lb}</div>
                   </div>
                   <div style={{ fontSize: 11, fontWeight: 600, color: "#f97316", fontFamily: "'JetBrains Mono',monospace" }}>{p.label}</div>
                   <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>
@@ -210,7 +210,7 @@ export function makeTricksCh1(E) {
                 <div key={i} style={{
                   display: "flex", alignItems: "center", gap: 10,
                   background: tp.bg, borderRadius: 10, padding: "8px 12px",
-                  border: `2px solid ${tp.bd}`,
+                  border: `1px solid ${tp.bd}`,
                 }}>
                   <div style={{ fontSize: 20, flexShrink: 0 }}>{tp.emoji}</div>
                   <div>
@@ -262,7 +262,7 @@ export function makeTricksCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{
             background: "#fff7ed", borderRadius: 12, padding: 14,
-            border: "2px solid #fdba74",
+            border: "1px solid #fdba74",
           }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#f97316", marginBottom: 10, textAlign: "center" }}>
               {t(E, "The Formula", "공식")}
@@ -411,7 +411,7 @@ export function makeTricksCh3(E) {
           />
           <div style={{
             marginTop: 10, background: "#fff7ed", borderRadius: 10,
-            padding: 10, border: "2px solid #fdba74",
+            padding: 10, border: "1px solid #fdba74",
           }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#f97316", marginBottom: 4 }}>
               {t(E, "Example result:", "예시 결과:")}
@@ -456,7 +456,7 @@ export function makeTricksCh3(E) {
               <div key={i} style={{
                 padding: "4px 10px", borderRadius: 6, fontSize: 12, fontWeight: 600,
                 fontFamily: "'JetBrains Mono',monospace",
-                background: "#fff7ed", border: "2px solid #fdba74", color: "#f97316",
+                background: "#fff7ed", border: "1px solid #fdba74", color: "#f97316",
               }}>{p}</div>
             ))}
           </div>
@@ -488,7 +488,7 @@ export function makeTricksCh3(E) {
           />
           <div style={{
             marginTop: 10, background: "#d1fae5", borderRadius: 10,
-            padding: "8px 12px", border: "2px solid #6ee7b7", textAlign: "center",
+            padding: "8px 12px", border: "1px solid #6ee7b7", textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#059669" }}>
               {t(E, "That's the complete algorithm! 🎉", "이게 전체 알고리즘! 🎉")}

@@ -117,7 +117,7 @@ export function makeCowCollegeCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -173,7 +173,7 @@ export function makeCowCollegeCh1(E) {
                   <div style={{ fontSize: 28, marginBottom: 4 }}>{"\uD83D\uDC2E"}</div>
                   <div style={{
                     width: 44, padding: "4px 0", borderRadius: 8,
-                    background: `${colors[i]}20`, border: `2.5px solid ${colors[i]}`,
+                    background: `${colors[i]}20`, border: `1.5px solid ${colors[i]}`,
                     fontSize: 16, fontWeight: 700, color: colors[i],
                     fontFamily: "'JetBrains Mono', monospace", textAlign: "center",
                   }}>${v}</div>
@@ -182,7 +182,7 @@ export function makeCowCollegeCh1(E) {
             </div>
             {/* Revenue idea */}
             <div style={{
-              background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10,
+              background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10,
               padding: 10, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
                 "If we set tuition = $4, which cows can pay?\nThose with max >= 4: cows with $6, $6, $4. That's 3 cows. Revenue = 4 x 3 = 12.", "등록금 = $4로 정하면 누가 낼 수 있을까?\n최대 >= 4인 소: $6, $6, $4. 3마리. 수입 = 4 x 3 = 12.")}
@@ -210,7 +210,7 @@ export function makeCowCollegeCh1(E) {
                   <div style={{
                     width: 42, height: v * 14,
                     background: i >= 1 ? C.ok : "#e5e7eb",
-                    border: `2px solid ${i >= 1 ? C.ok : C.dim}`,
+                    border: `1px solid ${i >= 1 ? C.ok : C.dim}`,
                     borderRadius: "6px 6px 0 0",
                     display: "flex", alignItems: "flex-start", justifyContent: "center",
                     paddingTop: 2,
@@ -229,7 +229,7 @@ export function makeCowCollegeCh1(E) {
             </div>
             {/* Explanation */}
             <div style={{
-              background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10,
+              background: C.okBg, border: `1px solid ${C.okBd}`, borderRadius: 10,
               padding: 10, fontSize: 12, color: C.text, lineHeight: 1.8,
             }}>
               <div style={{ fontWeight: 600, color: C.ok, marginBottom: 4 }}>
@@ -278,7 +278,7 @@ export function makeCowCollegeCh1(E) {
               {t(E, "Try each c[i] as tuition", "각 c[i]를 등록금으로 시도")}
             </div>
             <div style={{
-              borderRadius: 10, overflow: "hidden", border: `2px solid ${C.border}`,
+              borderRadius: 10, overflow: "hidden", border: `1px solid ${C.border}`,
               fontSize: 12, fontFamily: "'JetBrains Mono', monospace",
             }}>
               <div style={{
@@ -395,7 +395,7 @@ export function makeCowCollegeCh2(E) {
               {t(E, "Trace: sorted c = [1, 2, 3, 5, 8]", "추적: 정렬된 c = [1, 2, 3, 5, 8]")}
             </div>
             <div style={{
-              borderRadius: 10, overflow: "hidden", border: `2px solid ${C.border}`,
+              borderRadius: 10, overflow: "hidden", border: `1px solid ${C.border}`,
               fontSize: 12, fontFamily: "'JetBrains Mono', monospace",
             }}>
               <div style={{
@@ -449,7 +449,7 @@ export function makeCowCollegeCh2(E) {
           <div style={{ fontSize: 20, fontWeight: 700, color: "#d97706", fontFamily: "'JetBrains Mono', monospace" }}>
             O(N log N)
           </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Sorting takes O(N log N).\nThe single sweep is O(N). Since O(N log N) > O(N), total = O(N log N). For N up to 100,000, this runs instantly!",
               "정렬은 O(N log N).\n스윕 한 번은 O(N). O(N log N) > O(N)이므로 총 = O(N log N). N이 100,000까지여도 즉시 실행!")}
@@ -539,7 +539,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
                   <div key={i} style={{
                     width: 30, height: 30, borderRadius: 6, display: "flex",
                     alignItems: "center", justifyContent: "center",
-                    background: C.noBg, border: `2px solid ${C.noBd}`,
+                    background: C.noBg, border: `1px solid ${C.noBd}`,
                     fontSize: 13, fontWeight: 700, color: C.no,
                     fontFamily: "'JetBrains Mono', monospace",
                   }}>{v}</div>
@@ -556,7 +556,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
                   <div key={i} style={{
                     width: 30, height: 30, borderRadius: 6, display: "flex",
                     alignItems: "center", justifyContent: "center",
-                    background: C.okBg, border: `2px solid ${C.okBd}`,
+                    background: C.okBg, border: `1px solid ${C.okBd}`,
                     fontSize: 13, fontWeight: 700, color: C.ok,
                     fontFamily: "'JetBrains Mono', monospace",
                   }}>{v}</div>
@@ -637,7 +637,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
           />
           <div style={{
             marginTop: 10, background: C.okBg, borderRadius: 10,
-            padding: "8px 12px", border: `2px solid ${C.okBd}`, textAlign: "center",
+            padding: "8px 12px", border: `1px solid ${C.okBd}`, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
               {t(E, "Complete code! Sort + sweep in O(N log N)!", "전체 코드 완성! 정렬 + 스윕 O(N log N)!")}

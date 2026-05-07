@@ -36,7 +36,7 @@ export function makeFencesCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P1</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -97,7 +97,7 @@ export function makeFencesCh1(E) {
         const hiliteCol = 3;
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
+            <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
               <div style={{ fontSize: 14, fontWeight: 600, color: "#059669", marginBottom: 10 }}>
                 {t(E, "📋 What's Given", "📋 주어진 것")}
               </div>
@@ -126,7 +126,7 @@ export function makeFencesCh1(E) {
                         width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
                         borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 600,
                         background: isFence ? "#374151" : "#bbf7d0",
-                        border: `2.5px solid ${isFence ? "#6b7280" : "#4ade80"}`,
+                        border: `1.5px solid ${isFence ? "#6b7280" : "#4ade80"}`,
                         color: isFence ? "#fff" : "#166534",
                         animation: isHilite ? "colTrace .5s ease both" : "none",
                         animationDelay: isHilite ? `${0.4 + r * 0.35}s` : "0s",
@@ -196,7 +196,7 @@ export function makeFencesCh1(E) {
                   borderRadius: 6, fontSize: 18, fontWeight: 700,
                   fontFamily: "'JetBrains Mono',monospace",
                   background: needWork ? "#fef3c7" : "#d1fae5",
-                  border: `2.5px solid ${needWork ? "#fbbf24" : "#6ee7b7"}`,
+                  border: `1.5px solid ${needWork ? "#fbbf24" : "#6ee7b7"}`,
                   color: needWork ? "#92400e" : "#059669",
                 }}>{ch}</div>
               ))}
@@ -211,7 +211,7 @@ export function makeFencesCh1(E) {
                 <span style={{ background: "#d1fae5", borderRadius: 4, padding: "2px 6px", border: "1.5px solid #6ee7b7" }}>#</span>
                 {t(E, " → free! +0", " → 공짜! +0")}
               </div>
-              <div style={{ background: "#ecfdf5", borderRadius: 10, padding: "8px 12px", border: "2px solid #6ee7b7", textAlign: "center" }}>
+              <div style={{ background: "#ecfdf5", borderRadius: 10, padding: "8px 12px", border: "1px solid #6ee7b7", textAlign: "center" }}>
                 <div style={{ fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 2 }}>
                   {t(E, "Cost for this column", "이 열의 비용")}
                 </div>
@@ -237,7 +237,7 @@ export function makeFencesCh1(E) {
         // dots per col: [3, 1, 2, 0]
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
+            <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
               <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 8 }}>
                 {t(E, "3×4 grid — count dots per column!", "3×4 그리드 — 각 열의 점을 세봐요!")}
               </div>
@@ -263,7 +263,7 @@ export function makeFencesCh1(E) {
                         width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
                         borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 600,
                         background: isFence ? "#374151" : "#bbf7d0",
-                        border: `2.5px solid ${c === 3 ? "#059669" : isFence ? "#6b7280" : "#4ade80"}`,
+                        border: `1.5px solid ${c === 3 ? "#059669" : isFence ? "#6b7280" : "#4ade80"}`,
                         color: isFence ? "#fff" : "#166534",
                         boxShadow: c === 3 ? "0 0 6px rgba(5,150,105,.3)" : "none",
                       }}>{ch}</div>
@@ -280,7 +280,7 @@ export function makeFencesCh1(E) {
                     color: c === 3 ? "#fff" : "#059669",
                     background: c === 3 ? "#059669" : "#ecfdf5",
                     borderRadius: 6, padding: "4px 0",
-                    border: `2px solid ${c === 3 ? "#059669" : "#6ee7b7"}`,
+                    border: `1px solid ${c === 3 ? "#059669" : "#6ee7b7"}`,
                   }}>{cnt}</div>
                 ))}
               </div>
@@ -500,7 +500,7 @@ export function makeFencesCh3(E) {
                 width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
                 borderRadius: 6, fontSize: 14, fontWeight: 700,
                 fontFamily: "'JetBrains Mono',monospace",
-                background: "#ecfdf5", border: "2px solid #6ee7b7", color: "#059669",
+                background: "#ecfdf5", border: "1px solid #6ee7b7", color: "#059669",
               }}>{v}</div>
             ))}
           </div>
@@ -560,7 +560,7 @@ export function makeFencesCh3(E) {
           />
           <div style={{
             marginTop: 10, background: "#d1fae5", borderRadius: 10,
-            padding: "8px 12px", border: "2px solid #6ee7b7", textAlign: "center",
+            padding: "8px 12px", border: "1px solid #6ee7b7", textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#059669" }}>
               {t(E, "That's the complete code! Just 8 lines! 🎉", "이게 전체 코드! 단 8줄! 🎉")}

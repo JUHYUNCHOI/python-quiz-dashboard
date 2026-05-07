@@ -66,7 +66,7 @@ export function MexesSlider({ E }) {
               width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
               borderRadius: 8, fontWeight: 700, fontSize: 16, fontFamily: "'JetBrains Mono',monospace",
               background: isTarget ? "#fee2e2" : "#fff",
-              border: `2px solid ${isTarget ? "#ef4444" : C.border}`,
+              border: `1px solid ${isTarget ? "#ef4444" : C.border}`,
               color: isTarget ? "#7f1d1d" : C.text,
             }}>{v}</div>
           );

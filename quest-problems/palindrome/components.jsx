@@ -36,7 +36,7 @@ export function PalindromeSim({ E }) {
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
         {_PA_PRESETS.map((p, i) => (
           <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
-            padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
             fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>S = {p}</button>
@@ -53,7 +53,7 @@ export function PalindromeSim({ E }) {
             <div key={n} style={{
               padding: "4px 0", borderRadius: 6, textAlign: "center",
               background: !filled ? "#f3f4f6" : (isCur ? "#fef3c7" : (canWin[n] ? "#dcfce7" : "#fee2e2")),
-              border: `2px solid ${!filled ? "#e5e7eb" : (isCur ? "#f59e0b" : (canWin[n] ? "#86efac" : "#fca5a5"))}`,
+              border: `1px solid ${!filled ? "#e5e7eb" : (isCur ? "#f59e0b" : (canWin[n] ? "#86efac" : "#fca5a5"))}`,
               fontSize: 10, color: !filled ? "#9ca3af" : (canWin[n] ? "#15803d" : "#7f1d1d"),
               fontWeight: 600, fontFamily: "'JetBrains Mono',monospace",
             }}>
@@ -77,13 +77,13 @@ export function PalindromeSim({ E }) {
       </div>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
         <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
-          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: cur === 0 ? "#b0b5c3" : A,
           cursor: cur === 0 ? "default" : "pointer",
         }}>←</button>
         <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur} / {S}</span>
         <button onClick={() => setSi(Math.min(S, cur + 1))} disabled={cur === S} style={{
-          background: cur === S ? "#e5e7eb" : A, border: `2px solid ${cur === S ? "#e5e7eb" : A}`,
+          background: cur === S ? "#e5e7eb" : A, border: `1px solid ${cur === S ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === S ? "#b0b5c3" : "#fff", cursor: cur === S ? "default" : "pointer",
         }}>→</button>
@@ -134,7 +134,7 @@ export function PalindromeRunner({ E }) {
   return (
     <div style={{ padding: 14 }}>
       <input value={sIn} onChange={e => setSIn(e.target.value)} disabled={running} placeholder="S"
-        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box", textAlign: "center" }} />
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box", textAlign: "center" }} />
       <button onClick={running ? stop : run} style={{
         width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
         fontSize: 14, fontWeight: 600, marginBottom: 10,
@@ -147,7 +147,7 @@ export function PalindromeRunner({ E }) {
       )}
       {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
       {result?.done && (
-        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 16, fontWeight: 700, textAlign: "center" }}>
+        <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 16, fontWeight: 700, textAlign: "center" }}>
           ✅ Winner: {result.winner}
         </div>
       )}

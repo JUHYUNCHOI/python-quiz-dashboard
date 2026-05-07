@@ -43,7 +43,7 @@ export function InterviewSim({ E }) {
       <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 12 }}>
         {step.counters.map((finish, c) => (
           <div key={c} style={{
-            border: `2.5px solid ${c === step.counter ? "#f59e0b" : A}`,
+            border: `1.5px solid ${c === step.counter ? "#f59e0b" : A}`,
             background: c === step.counter ? "#fef3c7" : "#ecfdf5",
             borderRadius: 10, padding: "8px 14px", minWidth: 80, textAlign: "center",
           }}>
@@ -60,7 +60,7 @@ export function InterviewSim({ E }) {
 
       <div style={{
         background: step.cow === N - 1 ? "#fef3c7" : "#fff",
-        border: `2px solid ${step.cow === N - 1 ? "#f59e0b" : C.border}`,
+        border: `1px solid ${step.cow === N - 1 ? "#f59e0b" : C.border}`,
         borderRadius: 10, padding: "10px 14px", marginBottom: 12,
       }}>
         <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
@@ -78,7 +78,7 @@ export function InterviewSim({ E }) {
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
         <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
-          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === 0 ? "#b0b5c3" : A, cursor: cur === 0 ? "default" : "pointer",
         }}>←</button>
@@ -86,7 +86,7 @@ export function InterviewSim({ E }) {
           {cur + 1} / {trace.length}
         </span>
         <button onClick={() => setSi(Math.min(trace.length - 1, cur + 1))} disabled={cur === trace.length - 1} style={{
-          background: cur === trace.length - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === trace.length - 1 ? "#e5e7eb" : A}`,
+          background: cur === trace.length - 1 ? "#e5e7eb" : A, border: `1px solid ${cur === trace.length - 1 ? "#e5e7eb" : A}`,
           borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === trace.length - 1 ? "#b0b5c3" : "#fff", cursor: cur === trace.length - 1 ? "default" : "pointer",
         }}>→</button>
@@ -156,9 +156,9 @@ export function InterviewRunner({ E }) {
   return (
     <div style={{ padding: 14 }}>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 2fr", gap: 6, marginBottom: 10 }}>
-        <input value={nInput} onChange={e => setNInput(e.target.value)} disabled={running} placeholder="N" style={{ padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
-        <input value={kInput} onChange={e => setKInput(e.target.value)} disabled={running} placeholder="K" style={{ padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
-        <input value={tInput} onChange={e => setTInput(e.target.value)} disabled={running} placeholder="times" style={{ padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A }} />
+        <input value={nInput} onChange={e => setNInput(e.target.value)} disabled={running} placeholder="N" style={{ padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
+        <input value={kInput} onChange={e => setKInput(e.target.value)} disabled={running} placeholder="K" style={{ padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
+        <input value={tInput} onChange={e => setTInput(e.target.value)} disabled={running} placeholder="times" style={{ padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A }} />
       </div>
       <button onClick={running ? stop : run} style={{
         width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
@@ -188,7 +188,7 @@ export function InterviewRunner({ E }) {
         <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>
       )}
       {result?.done && (
-        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 600 }}>
+        <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 600 }}>
           {t(E, `✅ Bessie went to counter ${result.bessieCounter + 1}.`, `✅ Bessie는 카운터 ${result.bessieCounter + 1}로 갔어.`)}
         </div>
       )}

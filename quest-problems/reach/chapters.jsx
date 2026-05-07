@@ -139,7 +139,7 @@ export function makeReachCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>🐉</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: A }}>Reachability Queries</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P5</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N cities,\nM roads → some roads are damaged → apocalypse at time K destroys damaged roads → how many cities reachable from city 1?",
               "도시 N개,\n도로 M개 → 일부 도로 손상 → 시간 K에 아포칼립스 발생,\n손상 도로 파괴 → 도시 1에서 몇 개 도시에 갈 수 있어요?")}
@@ -186,7 +186,7 @@ export function makeReachCh1(E) {
           </div>
           <div style={{
             background: "#f5f3ff", borderRadius: 12, padding: 14,
-            border: "2px solid #c4b5fd", fontSize: 13, lineHeight: 2, color: C.text,
+            border: "1px solid #c4b5fd", fontSize: 13, lineHeight: 2, color: C.text,
           }}>
             <div>✅ {t(E,
               "Safe roads: usable anytime (before or after K)",
@@ -441,7 +441,7 @@ export function makeReachCh3(E) {
           </div>
           <div style={{
             background: "#f5f3ff", borderRadius: 12, padding: 14,
-            border: "2px solid #c4b5fd", fontSize: 13, lineHeight: 2, color: C.text,
+            border: "1px solid #c4b5fd", fontSize: 13, lineHeight: 2, color: C.text,
           }}>
             <div>✅ {t(E,
               "Dijkstra finds shortest paths = earliest arrival times",

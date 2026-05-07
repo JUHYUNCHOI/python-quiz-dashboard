@@ -72,7 +72,7 @@ export function MooExplorer({ E }) {
         ))}
       </div>
 
-      <div style={{ background: "#fff", border: `2px solid ${C.border}`, borderRadius: 8, padding: 10, marginBottom: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: C.text, textAlign: "center", letterSpacing: 2 }}>
+      <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8, padding: 10, marginBottom: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: C.text, textAlign: "center", letterSpacing: 2 }}>
         {preset.s}
       </div>
 
