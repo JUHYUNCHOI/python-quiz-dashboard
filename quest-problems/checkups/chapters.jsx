@@ -61,51 +61,61 @@ export function makeCheckupsCh1(E) {
             </div>
 
             {(() => {
-              // Reusable column renderer for both step 1 and step 2.
-              // The two rows are labelled on the left so the student can't mistake
-              // top/bottom for "cows" vs "treatment count".
-              function Row({ label, sub, cells, withSwap }) {
+              // Each species gets a distinct color so "same color above-and-below"
+              // is the visual signal for "treated" — no need to read digits.
+              const SPECIES = {
+                1: { bg: "#fef3c7", text: "#92400e", border: "#fbbf24" },  // amber
+                2: { bg: "#dbeafe", text: "#1e3a8a", border: "#60a5fa" },  // blue
+                3: { bg: "#fce7f3", text: "#9d174d", border: "#f472b6" },  // pink
+                4: { bg: "#dcfce7", text: "#14532d", border: "#86efac" },  // green
+              };
+              function speciesCell(v, opts = {}) {
+                const sp = SPECIES[v] || SPECIES[1];
                 return (
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                    <div style={{ width: 110, fontSize: 11, fontWeight: 700, color: "#7f1d1d", textAlign: "right", lineHeight: 1.3 }}>
+                  <div style={{
+                    width: 56, height: 56, borderRadius: 10,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontFamily: "'JetBrains Mono',monospace", fontSize: 24, fontWeight: 900,
+                    background: sp.bg, color: sp.text,
+                    border: `${opts.swapped ? 2.5 : 2}px ${opts.swapped ? "dashed" : "solid"} ${opts.swapped ? "#3b82f6" : sp.border}`,
+                    boxShadow: opts.matched ? "0 0 0 3px #16a34a inset" : "none",
+                  }}>{v}</div>
+                );
+              }
+
+              function Row({ label, sub, cells, withSwap, matches }) {
+                return (
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                    <div style={{ width: 120, fontSize: 12, fontWeight: 700, color: "#7f1d1d", textAlign: "right", lineHeight: 1.25 }}>
                       {label}
                       {sub && <div style={{ fontSize: 10, color: C.dim, fontWeight: 500 }}>{sub}</div>}
                     </div>
-                    <div style={{ display: "flex", gap: 8 }}>
-                      {cells.map((c, i) => {
-                        const swapped = withSwap && c.swapped;
-                        return (
-                          <div key={i} style={{
-                            width: 44, height: 44, borderRadius: 8,
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 900,
-                            background: swapped ? "#dbeafe" : "#fff",
-                            color: swapped ? "#1e3a8a" : "#7c2d12",
-                            border: `2px solid ${swapped ? "#3b82f6" : "#fbbf24"}`,
-                            borderStyle: swapped ? "dashed" : "solid",
-                          }}>{c.v}</div>
-                        );
-                      })}
+                    <div style={{ display: "flex", gap: 10 }}>
+                      {cells.map((c, i) => (
+                        <div key={i}>
+                          {speciesCell(c.v, { swapped: withSwap && c.swapped, matched: matches?.[i] })}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 );
               }
               function MatchRow({ matches }) {
                 return (
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
-                    <div style={{ width: 110, fontSize: 11, fontWeight: 700, color: "#15803d", textAlign: "right" }}>
-                      {t(E, "treated?", "치료?")}
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
+                    <div style={{ width: 120, fontSize: 12, fontWeight: 700, color: "#15803d", textAlign: "right" }}>
+                      {t(E, "💉 treated?", "💉 치료?")}
                     </div>
-                    <div style={{ display: "flex", gap: 8 }}>
+                    <div style={{ display: "flex", gap: 10 }}>
                       {matches.map((m, i) => (
                         <div key={i} style={{
-                          width: 44, height: 30, borderRadius: 8,
+                          width: 56, height: 38, borderRadius: 10,
                           display: "flex", alignItems: "center", justifyContent: "center",
-                          fontSize: 18, fontWeight: 900,
-                          background: m ? "#dcfce7" : "transparent",
-                          color: m ? "#15803d" : "#9ca3af",
-                          border: `2px solid ${m ? "#16a34a" : "transparent"}`,
-                        }}>{m ? "✓" : "·"}</div>
+                          fontSize: 22, fontWeight: 900,
+                          background: m ? "#16a34a" : "transparent",
+                          color: m ? "#fff" : "#9ca3af",
+                          boxShadow: m ? "0 2px 6px rgba(22,163,74,0.35)" : "none",
+                        }}>{m ? "✓" : "—"}</div>
                       ))}
                     </div>
                   </div>
@@ -115,29 +125,31 @@ export function makeCheckupsCh1(E) {
               return (
                 <>
                   {/* Step 1 */}
-                  <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", marginBottom: 8 }}>
-                    <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+                  <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
+                    <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 12 }}>
                       {t(E, "1. Without any reversal", "1. 뒤집기 없이")}
                     </div>
                     <Row
                       label={t(E, "🐄 has", "🐄 가진 종")}
                       sub="a"
-                      cells={[{v:1},{v:2},{v:1},{v:3}].map(c=>({...c, swapped:false}))}
+                      cells={[{v:1},{v:2},{v:1},{v:3}]}
+                      matches={[true, false, true, false]}
                     />
                     <Row
                       label={t(E, "📋 vet wants", "📋 원하는 종")}
                       sub="b"
-                      cells={[{v:1},{v:1},{v:1},{v:1}].map(c=>({...c, swapped:false}))}
+                      cells={[{v:1},{v:1},{v:1},{v:1}]}
+                      matches={[true, false, true, false]}
                     />
                     <MatchRow matches={[true, false, true, false]} />
-                    <div style={{ marginTop: 6, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 800 }}>
+                    <div style={{ marginTop: 8, textAlign: "center", fontSize: 14, color: "#15803d", fontWeight: 800 }}>
                       {t(E, "→ 2 cows treated (positions 1 and 3).", "→ 2 마리 치료 (1, 3 번 자리).")}
                     </div>
                   </div>
 
                   {/* Step 2 */}
-                  <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", marginBottom: 8 }}>
-                    <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+                  <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
+                    <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 12 }}>
                       {t(E, "2. Pick (l, r) = (2, 3) → reverse a[2..3] (blue dashed = swapped)",
                             "2. (l, r) = (2, 3) 골라 a[2..3] 뒤집기 (파랑 점선 = 교환된 칸)")}
                     </div>
@@ -150,15 +162,17 @@ export function makeCheckupsCh1(E) {
                         {v:2, swapped:true},
                         {v:3, swapped:false},
                       ]}
+                      matches={[true, true, false, false]}
                       withSwap
                     />
                     <Row
                       label={t(E, "📋 vet wants", "📋 원하는 종")}
                       sub="b"
-                      cells={[{v:1},{v:1},{v:1},{v:1}].map(c=>({...c, swapped:false}))}
+                      cells={[{v:1},{v:1},{v:1},{v:1}]}
+                      matches={[true, true, false, false]}
                     />
                     <MatchRow matches={[true, true, false, false]} />
-                    <div style={{ marginTop: 6, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 800 }}>
+                    <div style={{ marginTop: 8, textAlign: "center", fontSize: 14, color: "#15803d", fontWeight: 800 }}>
                       {t(E, "→ still 2 treated, but DIFFERENT cows (positions 1, 2 instead of 1, 3).",
                             "→ 여전히 2 마리 — 다른 소들 (1, 3 자리 → 1, 2 자리).")}
                     </div>
