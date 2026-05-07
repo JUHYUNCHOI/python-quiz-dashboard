@@ -42,14 +42,66 @@ export function makeMilkExCh1(E) {
       narr: t(E,
         "N cows stand in a circle.\nEach minute, every cow passes 1 liter of milk left or right.\nLet's understand this exchange!\n🥛", "N마리 소가 원형으로 서 있어요. 매분 모든 소가 우유 1리터를 왼쪽 또는 오른쪽으로 전달해요. 이 교환을 이해해 봐요! 🥛"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 32, marginBottom: 4 }}>🥛</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Milk Exchange</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Milk Exchange</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🥛</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Milk Exchange</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #2</div>
+          </div>
+
+          {/* Mini-visual: 3 cows in a circle, RRL, one minute trace */}
+          <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", textAlign: "center", marginBottom: 10 }}>
+              {t(E, "Tiny example: 3 cows, directions RRL, all start with 1 L (cap 1)",
+                    "작은 예: 소 3 마리, 방향 RRL, 모두 1 L 로 시작 (용량 1)")}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 14 }}>
+              {/* Before */}
+              <div>
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, textAlign: "center", marginBottom: 6 }}>{t(E, "Before", "전")}</div>
+                <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+                  {[
+                    { v: 1, dir: "→" },
+                    { v: 1, dir: "→" },
+                    { v: 1, dir: "←" },
+                  ].map((c, i) => (
+                    <div key={i} style={{ background: "#fff", border: "2px solid #6ee7b7", borderRadius: 10, padding: "6px 8px", textAlign: "center", minWidth: 40 }}>
+                      <div style={{ fontSize: 14, fontWeight: 900, color: "#065f46", fontFamily: "'JetBrains Mono',monospace" }}>{c.v} L</div>
+                      <div style={{ fontSize: 13, color: "#16a34a", fontWeight: 800 }}>{c.dir}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ fontSize: 22, color: "#059669", fontWeight: 900 }}>→</div>
+
+              {/* After 1 minute */}
+              <div>
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, textAlign: "center", marginBottom: 6 }}>{t(E, "After 1 minute", "1 분 후")}</div>
+                <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+                  {[
+                    { v: 0, hi: false },
+                    { v: 1, hi: true },   // capped from 2
+                    { v: 1, hi: false },
+                  ].map((c, i) => (
+                    <div key={i} style={{ background: c.hi ? "#fef3c7" : "#fff", border: `2px solid ${c.hi ? "#fbbf24" : "#6ee7b7"}`, borderRadius: 10, padding: "6px 8px", textAlign: "center", minWidth: 40 }}>
+                      <div style={{ fontSize: 14, fontWeight: 900, color: c.hi ? "#92400e" : "#065f46", fontFamily: "'JetBrains Mono',monospace" }}>{c.v} L</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div style={{ marginTop: 10, fontSize: 11, color: C.text, textAlign: "center", lineHeight: 1.6 }}>
+              {t(E, "Cow 1 received from BOTH sides → would have 2 L, but cap = 1 → 1 L lost (yellow). ",
+                    "소 1 이 양쪽에서 받음 → 2 L 가 됐어야 하지만 용량 1 → 1 L 버려짐 (노랑). ")}
+              <b style={{ color: "#059669" }}>{t(E, "Total milk = 0 + 1 + 1 = 2.", "총 우유 = 0 + 1 + 1 = 2.")}</b>
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N cows in a circle, each with milk and a capacity limit.\nEvery minute: pass 1L left or right. Overflow is lost! Find total milk after M minutes.",
-              "N마리 소가 원형으로, 각각 우유와 용량 제한이 있어요.\n매분: 1L를 왼쪽 또는 오른쪽으로 전달.\n넘치면 버려져!\nM분 후 총 우유량을 구해요.")}
+              "N 마리 소가 원형으로, 각각 우유와 용량 제한이 있어요.\n매분: 1L 를 왼쪽 또는 오른쪽으로 전달.\n넘치면 버려져!\nM 분 후 총 우유량을 구해요.")}
           </div>
         </div>),
     },

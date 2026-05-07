@@ -47,6 +47,38 @@ export function makeBacteriaCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #3</div>
           </div>
 
+          {/* Mini-visual: linear ramp added to a[h..N] */}
+          <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", textAlign: "center", marginBottom: 10 }}>
+              {t(E, "What ONE walk does — type-1 starting at h=2 on a 5-patch row:",
+                    "워크 한 번이 하는 일 — 5 칸 패치, 타입 1, h=2:")}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 4, marginBottom: 8 }}>
+              {[
+                { i: 1, before: 0, add: 0, color: "#9ca3af" },
+                { i: 2, before: 0, add: 1, color: "#16a34a" },
+                { i: 3, before: 0, add: 2, color: "#16a34a" },
+                { i: 4, before: 0, add: 3, color: "#16a34a" },
+                { i: 5, before: 0, add: 4, color: "#16a34a" },
+              ].map((c) => (
+                <div key={c.i} style={{ background: "#fff", border: `2px solid ${c.color}`, borderRadius: 8, padding: "6px 4px", textAlign: "center" }}>
+                  <div style={{ fontSize: 9, color: C.dim, fontWeight: 700 }}>a[{c.i}]</div>
+                  <div style={{ fontSize: 10, color: c.add > 0 ? "#16a34a" : "#9ca3af", fontWeight: 800, fontFamily: "'JetBrains Mono',monospace" }}>
+                    {c.add > 0 ? `+${c.add}` : "—"}
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 900, color: "#065f46", fontFamily: "'JetBrains Mono',monospace" }}>{c.before + c.add}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6, textAlign: "center" }}>
+              {t(E, "Linear ramp 1, 2, 3, 4 added to a[2..5].  Position 1 unchanged.",
+                    "1, 2, 3, 4 의 선형 ramp 가 a[2..5] 에 더해짐. 위치 1 은 그대로.")}
+              <br/>
+              <b style={{ color: "#059669" }}>{t(E, "Type-2 walk = same ramp, but subtracted.",
+                                                       "타입 2 워크 = 같은 ramp 를 빼기.")}</b>
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}

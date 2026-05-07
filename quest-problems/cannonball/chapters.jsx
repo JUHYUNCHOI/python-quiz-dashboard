@@ -62,6 +62,43 @@ export function makeCannonCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #2</div>
           </div>
 
+          {/* Mini-visual: Bessie bouncing on a number line */}
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#9a3412", textAlign: "center", marginBottom: 10 }}>
+              {t(E, "Tiny example: 5 pads, start S=2, power 1 →",
+                    "작은 예: 패드 5 개, S=2 에서 출발, 파워 1 →")}
+            </div>
+            <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 8 }}>
+              {[
+                { i: 1, kind: "jump", v: 1 },
+                { i: 2, kind: "tgt",  v: 1 },
+                { i: 3, kind: "tgt",  v: 2 },
+                { i: 4, kind: "jump", v: 1 },
+                { i: 5, kind: "tgt",  v: 1 },
+              ].map((p) => (
+                <div key={p.i} style={{
+                  width: 52, padding: "5px 4px", borderRadius: 8, textAlign: "center",
+                  background: p.kind === "jump" ? "#dbeafe" : "#fee2e2",
+                  border: `2px solid ${p.kind === "jump" ? "#3b82f6" : "#fca5a5"}`,
+                  color: p.kind === "jump" ? "#1e3a8a" : "#7f1d1d",
+                }}>
+                  <div style={{ fontSize: 9, fontWeight: 700, opacity: 0.8 }}>pos {p.i}</div>
+                  <div style={{ fontSize: 14, lineHeight: 1.1 }}>{p.kind === "jump" ? "🪂" : "🎯"}</div>
+                  <div style={{ fontSize: 10, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700 }}>v={p.v}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ fontSize: 11, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono',monospace", background: "#fff", border: "1.5px dashed #fdba74", borderRadius: 8, padding: "8px 10px" }}>
+              {t(E, "x=2, power=1 → 🎯 v=1 ✓ break (ans=1) → x=3", "x=2, 파워=1 → 🎯 v=1 ✓ 부숨 (ans=1) → x=3")}<br/>
+              {t(E, "x=3, power=1 → 🎯 v=2 ✗ too weak → x=4",       "x=3, 파워=1 → 🎯 v=2 ✗ 약함 → x=4")}<br/>
+              {t(E, "x=4 → 🪂 flip dir, power=2 → x=4 + (-1)·2 = 2 (already broken) → x=0 OUT",
+                    "x=4 → 🪂 방향 뒤집고 파워=2 → x=4 + (-1)·2 = 2 (이미 부숨) → x=0 범위 벗어남")}
+            </div>
+            <div style={{ marginTop: 8, fontSize: 12, color: "#15803d", fontWeight: 700, textAlign: "center" }}>
+              {t(E, "→ ans = 1 (only one target broken)", "→ ans = 1 (한 타겟만 부숨)")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
