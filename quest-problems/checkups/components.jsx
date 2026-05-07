@@ -411,25 +411,7 @@ const CK_BRUTE_FULL_CPP = [
   "}",
 ];
 
-/* ── Smart (cumulative on top of brute insight) ── */
-const CK_INSIGHT_PY = [
-  "# Key: after reversing [l, r], position i (l ≤ i ≤ r) now holds a[l + r − i].",
-  "# So matching at i means a[l+r−i] == b[i] — depends on s = l + r, NOT on l/r alone.",
-  "# Plan:",
-  "#   1. P[i] = baseline matches in [1..i] (one O(N) sweep).",
-  "#   2. For each diagonal s = l + r (2..2N), build Q[k] = #{j ≤ k : a[s−j] == b[j]}.",
-  "#   3. For each (l, r) on diagonal s:",
-  "#        inside  = Q[r] − Q[l−1]                 (matches in reversed window)",
-  "#        outside = P[l−1] + (P[N] − P[r])        (matches outside window — unchanged)",
-  "#        counts[inside + outside] += 1",
-];
-const CK_INSIGHT_CPP = [
-  "// 같은 인사이트 (C++ 도 동일):",
-  "// reverse [l, r] 한 후 i 위치에는 원래 l + r − i 자리 값. 매칭 = a[l+r−i] == b[i].",
-  "// 같은 s = l + r 위의 (l, r) 들이 같은 일을 반복하니, s 마다 한 번만 prefix Q 만들면",
-  "// 모든 (l, r) 답이 O(1). 총 O(N²).",
-];
-
+/* ── Smart final code (cumulative on top of brute) ── */
 const CK_SMART_PY = [
   "import sys",
   "",
@@ -620,49 +602,21 @@ export function getCheckupsSections(E) {
             "(l, r) 쌍마다 counts[c] += 1 로 이 연산을 기록."),
         t(E, "Output N + 1 lines: counts[0], counts[1], …, counts[N].",
             "N + 1 줄 출력: counts[0], counts[1], …, counts[N]."),
-        t(E, "Done — passes inputs with N up to ~100. Larger N times out (next steps fix that).",
-            "끝 — N 이 ~100 까지인 입력 통과. 더 크면 TLE (다음 단계에서 해결)."),
+        t(E, "Submit this. It passes the small tests but times out around N ≈ 1000 — that's the next problem to chew on.",
+            "이 코드 제출해 보세요. 작은 테스트는 통과하지만 N ≈ 1000 부터 시간 초과 — 그 다음을 고민할 시간."),
       ],
     },
     {
-      label: t(E, "5️⃣ Why O(N³) is too slow", "5️⃣ 왜 O(N³) 가 느린가"),
-      color: "#dc2626",
-      py: CK_BRUTE_FULL_PY, cpp: CK_BRUTE_FULL_CPP,
-      why: [
-        t(E, "Three nested loops: O(N) outer × O(N) middle × O(N) inner = O(N³).",
-            "삼중 루프: O(N) × O(N) × O(N) = O(N³)."),
-        t(E, "At N = 7500 that's about 4·10¹¹ operations — TLE in any language.",
-            "N = 7500 이면 약 4·10¹¹ 연산 — 어떤 언어든 TLE."),
-        t(E, "We need to remove the inner O(N) scan. The next step shows how.",
-            "안쪽 O(N) 스캔을 없애야 함. 다음 단계에서 방법."),
-      ],
-    },
-    {
-      label: t(E, "6️⃣ Idea — share work along diagonal s = l + r", "6️⃣ 아이디어 — 대각선 s = l + r 위에서 일 공유"),
-      color: "#0891b2",
-      py: CK_INSIGHT_PY, cpp: CK_INSIGHT_CPP,
-      why: [
-        t(E, "After the reverse, the value at position i is a[l + r − i] — the index expression depends ONLY on s = l + r.",
-            "뒤집은 후 위치 i 의 값은 a[l + r − i] — 인덱스 식이 오직 s = l + r 에만 의존."),
-        t(E, "All (l, r) pairs with the same s share the same per-i answer. Compute it once per s, reuse across pairs.",
-            "같은 s 의 (l, r) 쌍들은 i 마다 같은 답. s 마다 한 번만 계산하고 모든 쌍이 재사용."),
-        t(E, "Per diagonal: O(N) to build Q + O(N) pairs × O(1) lookup = O(N) per diagonal. Total O(N²).",
-            "대각선당: O(N) 으로 Q 만들기 + O(N) 쌍 × O(1) lookup = O(N). 총 O(N²)."),
-      ],
-    },
-    {
-      label: t(E, "7️⃣ Final fast code — prefix-sum on diagonal", "7️⃣ 최종 빠른 코드 — 대각선 위 prefix-sum"),
+      label: t(E, "5️⃣ Faster — prefix-sum on the diagonal", "5️⃣ 더 빠르게 — 대각선 위 prefix-sum"),
       color: "#15803d",
       py: CK_SMART_PY, cpp: CK_SMART_CPP,
       why: [
-        t(E, "Switch to 1-indexed arrays so prefix arithmetic is clean (P[l−1], P[r], etc.).",
-            "1-indexed 로 바꾸면 prefix 식이 깔끔 (P[l−1], P[r] 등)."),
-        t(E, "P (built once): prefix of baseline matches; gives outside-window matches in O(1).",
-            "P (한 번 만들기): 기본 일치의 prefix; 윈도우 밖 일치를 O(1) 로 줌."),
-        t(E, "Q (rebuilt per s): prefix of a[s−j] == b[j]; gives inside-window matches in O(1).",
-            "Q (s 마다 재계산): a[s−j] == b[j] 의 prefix; 윈도우 안 일치를 O(1) 로."),
-        t(E, "C++ comfortably fits at N = 7500. Python is borderline — submit with PyPy if available.",
-            "C++ 는 N = 7500 도 여유. Python 은 빠듯 — 가능하면 PyPy 로 제출."),
+        t(E, "Inner loop kept doing the same work: after reversing [l, r], position i holds a[l+r−i].  The index l+r−i depends ONLY on s = l+r, not on l/r separately.",
+            "안쪽 루프가 같은 일을 반복하고 있었어요: [l, r] 뒤집은 후 위치 i 의 값은 a[l+r−i]. 그런데 인덱스 l+r−i 는 s = l+r 에만 의존, l/r 각각엔 무관."),
+        t(E, "So fix s and process every (l, r) on that diagonal together.  P (built once) holds outside-window matches; Q (rebuilt per s) holds inside-window matches — each lookup is O(1).",
+            "s 를 고정하고 그 대각선의 (l, r) 들을 한 번에 처리. P (한 번 만들기) 는 윈도우 바깥 일치 / Q (s 마다 재계산) 는 윈도우 안 일치 — 각 조회 O(1)."),
+        t(E, "Switch to 1-indexed arrays so prefix arithmetic is clean.  C++ fits N=7500 easily; Python is borderline — try PyPy if available.",
+            "1-indexed 로 바꾸면 prefix 식 깔끔. C++ 는 N=7500 여유, Python 은 빠듯 — PyPy 가능하면 PyPy."),
       ],
     },
   ];

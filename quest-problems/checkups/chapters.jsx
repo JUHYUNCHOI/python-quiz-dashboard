@@ -379,149 +379,21 @@ export function makeCheckupsCh1(E) {
 
 export function makeCheckupsCh2(E, lang = "py") {
   return [
-    /* 2-1 — Brute plan: 3 numbered steps. */
+    /* 2-1 — Light, narrative intro instead of a planning grid + complexity badge. */
     {
       type: "reveal",
       narr: t(E,
-        "Direct approach: try every (l, r), simulate the reversal, count matches, tally. Three nested loops.",
-        "직접적인 방법: 모든 (l, r) 시도 → 뒤집기 시뮬 → 일치 세기 → 집계. 삼중 루프."),
+        "Just write the obvious thing first.  Try every (l, r), reverse, count matches.  Read the code section by section.",
+        "일단 눈에 보이는 대로 짜요. (l, r) 다 돌려보고, 뒤집고, 일치 수 세기. 코드를 한 단락씩 읽어요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Initialize counts[0..N] = 0", "counts[0..N] = 0 초기화"), code: "counts = [0] * (N + 1)", color: "#dc2626" },
-              { n: 2, label: t(E, "Outer pair (l, r) — loop both", "바깥 쌍 (l, r) — 두 겹"), code: "for l in 1..N:  for r in l..N:", color: "#0891b2" },
-              { n: 3, label: t(E, "Inner: count checkups after reversing [l, r]", "안쪽: [l, r] 뒤집기 후 검진 세기"), code: "c = 0; for i in 1..N: if (reversed-a)[i] == b[i]: c++", color: "#7c3aed" },
-              { n: 4, label: t(E, "Tally", "집계"), code: "counts[c] += 1", color: "#15803d" },
-              { n: 5, label: t(E, "Print N+1 lines", "N+1 줄 출력"), code: "for c in counts: print(c)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity (brute)", "⏱ 복잡도 (brute)")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c3aed" }}>O(N³)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N² pairs × O(N) inner scan", "N² 쌍 × O(N) 안쪽 스캔")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+          {t(E,
+            "We have a small N. The straight-forward solution is fine for partial credit and reads as a 1:1 translation of the problem statement. Sections below build it line by line — read the code as you'd read a story.",
+            "N 이 크지 않아요. 가장 직접적인 풀이로 부분점수 받기에 충분하고, 코드도 문제 설명을 그대로 옮긴 모양이에요. 아래 섹션들이 한 단락씩 코드 쌓아가요 — 그냥 코드를 이야기 읽듯 읽어보세요.")}
         </div>),
     },
 
-    /* 2-2 — TLE analysis. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Brute O(N³) at N=7500 ≈ 4·10¹¹ — TLE on large tests. Bronze partial credit comes from small N. Full credit needs O(N²).",
-        "brute O(N³) 가 N=7500 면 ≈ 4·10¹¹ — 큰 입력 TLE. Bronze 부분점수는 작은 N. 풀점수는 O(N²) 필요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginBottom: 10 }}>
-            ⏱ {t(E, "Will brute O(N³) fit?", "brute O(N³) 가 들어올까?")}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-                ✅ {t(E, "Small N (~100)", "작은 N (~100)")}
-              </div>
-              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace" }}>
-                <div>brute ≈ 100³ = 10⁶</div>
-                <div style={{ color: "#15803d", fontWeight: 700 }}>{t(E, "→ instant. Partial credit ✓", "→ 즉시. 부분점수 ✓")}</div>
-              </div>
-            </div>
-            <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
-                ⚠️ {t(E, "Mid N (~1000)", "중간 N (~1000)")}
-              </div>
-              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace" }}>
-                <div>brute ≈ 10⁹</div>
-                <div style={{ color: "#dc2626", fontWeight: 700 }}>{t(E, "→ TLE in Python.", "→ Python TLE.")}</div>
-              </div>
-            </div>
-            <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
-                🚨 {t(E, "Full N = 7500", "풀 N = 7500")}
-              </div>
-              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace" }}>
-                <div>brute ≈ 4·10¹¹</div>
-                <div style={{ color: "#dc2626", fontWeight: 700 }}>{t(E, "→ TLE.", "→ TLE.")}</div>
-              </div>
-            </div>
-          </div>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-            💡 {t(E,
-              "Plan: code the brute first (it's clean and gets partial credit). Next, learn the O(N²) trick that uses prefix sums for full credit.",
-              "계획: 먼저 brute 코드 (간단 + 부분점수 통과). 그 다음 prefix sum 트릭으로 O(N²) → 풀점수.")}
-          </div>
-        </div>),
-    },
-
-    /* 2-3 — Smart approach (sketch only — full code is in section 7). */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Key observation: the inner scan repeats the same work across many (l, r). For all pairs sharing the same diagonal s = l + r, one prefix array Q answers every (l, r) in O(1).",
-        "핵심 관찰: 같은 대각선 s = l + r 위의 (l, r) 들이 같은 안쪽 작업을 반복. 한 번 prefix Q 만들어두면 모든 (l, r) 답이 O(1)."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
-            ⚡ {t(E, "Full-credit path: prefix sum on the diagonal", "풀점수 경로: 대각선 위의 prefix sum")}
-          </div>
-
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#065f46", marginBottom: 4 }}>
-              {t(E, "Why diagonal s = l + r?", "왜 대각선 s = l + r?")}
-            </div>
-            {t(E,
-              "After reversing [l, r], position i (l ≤ i ≤ r) holds the value that was at l + r − i. So matching at i means a[l+r−i] == b[i]. The expression depends on s = l + r, NOT on l and r separately.",
-              "[l, r] 를 뒤집으면 위치 i (l ≤ i ≤ r) 에는 원래 l + r − i 자리에 있던 값이 와요. 즉 a[l+r−i] == b[i] 가 일치 조건. 이 식은 s = l + r 에만 의존, l 과 r 각각엔 의존 안 함.")}
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: "10px 12px" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-                {t(E, "P[i] — baseline prefix", "P[i] — 기본 prefix")}
-              </div>
-              <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6 }}>
-                {t(E, "Number of matches a[k] == b[k] for k in [1, i]. Built once in O(N).",
-                      "k ∈ [1, i] 에서 a[k] == b[k] 인 k 개수. O(N) 에 한 번 계산.")}
-              </div>
-            </div>
-            <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
-                {t(E, "Q[k] for diagonal s", "대각선 s 의 Q[k]")}
-              </div>
-              <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6 }}>
-                {t(E, "Number of j ∈ [1, k] with a[s−j] == b[j]. Rebuilt for each s in O(N).",
-                      "j ∈ [1, k] 에서 a[s−j] == b[j] 인 j 개수. s 마다 O(N) 재계산.")}
-              </div>
-            </div>
-          </div>
-
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <b>{t(E, "For each (l, r) on diagonal s:", "대각선 s 의 각 (l, r) 마다:")}</b>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, marginTop: 4 }}>
-              inside&nbsp; = Q[r] − Q[l−1]<br/>
-              outside = P[l−1] + (P[N] − P[r])<br/>
-              counts[inside + outside] += 1
-            </div>
-            <div style={{ marginTop: 6, fontSize: 11, color: "#5b21b6" }}>
-              {t(E, "Total: O(N²). Code in the next section walks through all of this step by step.",
-                    "총: O(N²). 다음 섹션의 progressive code 가 단계별로 안내.")}
-            </div>
-          </div>
-        </div>),
-    },
-
-    /* 2-4..2-10 — WRITE: one section per chapter step (cowphotos pattern).
-       Single nav level: chapter prev/next walks all 7 sections. */
+    /* 2-2..2-N — Code sections. */
     ...getCheckupsSections(E).map((sec, i) => ({
       type: "reveal",
       narr: i === 0
