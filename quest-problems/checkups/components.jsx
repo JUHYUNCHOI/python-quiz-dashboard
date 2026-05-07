@@ -17,6 +17,16 @@ const _CK_PRESETS = [
   { name: "S3: a=[1,3,2,2,1,3,2] b=[3,2,2,1,2,3,1]", a: [1, 3, 2, 2, 1, 3, 2], b: [3, 2, 2, 1, 2, 3, 1] },
 ];
 
+// Same species color palette as the 1-1 mini-visual on chapters.jsx —
+// keep them in sync so the student sees ONE visual language across the quest.
+const _SPECIES = {
+  1: { bg: "#fef3c7", text: "#92400e", border: "#fbbf24" },  // amber
+  2: { bg: "#dbeafe", text: "#1e3a8a", border: "#60a5fa" },  // blue
+  3: { bg: "#fce7f3", text: "#9d174d", border: "#f472b6" },  // pink
+  4: { bg: "#dcfce7", text: "#14532d", border: "#86efac" },  // green
+  5: { bg: "#ede9fe", text: "#5b21b6", border: "#a78bfa" },  // purple
+};
+
 export function ReverseSim({ E }) {
   const [pi, setPi] = useState(2);
   const preset = _CK_PRESETS[pi];
@@ -37,19 +47,26 @@ export function ReverseSim({ E }) {
   let matches = 0;
   for (let i = 0; i < N; i++) if (aPrime[i] === preset.b[i]) matches++;
 
-  const cellSize = N <= 5 ? 40 : 32;
+  // Cell size adapts to N — keeps the row from overflowing on long arrays.
+  const cellSize = N <= 5 ? 52 : (N <= 8 ? 44 : 36);
+  const fontSize = cellSize >= 50 ? 22 : (cellSize >= 42 ? 18 : 15);
 
-  const cell = (val, ok, inside) => (
-    <div style={{
-      width: cellSize, height: cellSize,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      borderRadius: 8, fontWeight: 900, fontSize: 14,
-      border: ok ? "2px solid #16a34a" : `2px solid ${inside ? "#fca5a5" : C.border}`,
-      background: ok ? "#dcfce7" : (inside ? "#fee2e2" : "#fff"),
-      color: ok ? "#15803d" : (inside ? "#7f1d1d" : C.text),
-      fontFamily: "'JetBrains Mono',monospace",
-    }}>{val}</div>
-  );
+  // Render one species cell. `swapped` = inside [l, r] (reversal segment).
+  // `matched` = a'[i] == b[i] (vet checks this position) — applied to the
+  // a-row cell as a green inset glow so the eye lands on the treated columns.
+  const cell = (val, { matched = false, swapped = false } = {}) => {
+    const sp = _SPECIES[val] || _SPECIES[1];
+    return (
+      <div style={{
+        width: cellSize, height: cellSize, borderRadius: 10,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontFamily: "'JetBrains Mono',monospace", fontWeight: 900, fontSize,
+        background: sp.bg, color: sp.text,
+        border: `${swapped ? 2.5 : 2}px ${swapped ? "dashed" : "solid"} ${swapped ? "#3b82f6" : sp.border}`,
+        boxShadow: matched ? "0 0 0 3px #16a34a inset" : "none",
+      }}>{val}</div>
+    );
+  };
 
   return (
     <div style={{ padding: 14 }}>
@@ -83,38 +100,65 @@ export function ReverseSim({ E }) {
         <div style={{ fontWeight: 800, color: "#0891b2", minWidth: 24, textAlign: "right" }}>{safeR}</div>
       </div>
 
-      {/* arrays */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "center" }}>
-        {/* a (after reverse) */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 50, fontSize: 11, fontWeight: 800, color: A, textAlign: "right", fontFamily: "'JetBrains Mono',monospace" }}>a' =</div>
-          <div style={{ display: "flex", gap: 4 }}>
-            {aPrime.map((v, i) => cell(v, v === preset.b[i], i + 1 >= safeL && i + 1 <= safeR))}
+      {/* arrays — same labelled-row layout as the page 1-1 mini-visual */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+        {/* a' (after reverse) */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ width: 110, fontSize: 12, fontWeight: 700, color: "#7f1d1d", textAlign: "right", lineHeight: 1.25 }}>
+            {t(E, "🐄 has (after swap)", "🐄 가진 종 (뒤집기 후)")}
+            <div style={{ fontSize: 10, color: C.dim, fontWeight: 500 }}>a'</div>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            {aPrime.map((v, i) => {
+              const inside = i + 1 >= safeL && i + 1 <= safeR;
+              const matched = v === preset.b[i];
+              return <div key={i}>{cell(v, { matched, swapped: inside })}</div>;
+            })}
           </div>
         </div>
+
         {/* b */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 50, fontSize: 11, fontWeight: 800, color: "#0891b2", textAlign: "right", fontFamily: "'JetBrains Mono',monospace" }}>b =</div>
-          <div style={{ display: "flex", gap: 4 }}>
-            {preset.b.map((v, i) => (
-              <div key={i} style={{
-                width: cellSize, height: cellSize,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                borderRadius: 8, fontWeight: 900, fontSize: 14,
-                border: aPrime[i] === v ? "2px solid #16a34a" : `1px solid ${C.border}`,
-                background: aPrime[i] === v ? "#dcfce7" : "#fff",
-                color: aPrime[i] === v ? "#15803d" : C.text,
-                fontFamily: "'JetBrains Mono',monospace",
-              }}>{v}</div>
-            ))}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ width: 110, fontSize: 12, fontWeight: 700, color: "#7f1d1d", textAlign: "right", lineHeight: 1.25 }}>
+            {t(E, "📋 vet wants", "📋 원하는 종")}
+            <div style={{ fontSize: 10, color: C.dim, fontWeight: 500 }}>b</div>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            {preset.b.map((v, i) => {
+              const matched = aPrime[i] === v;
+              return <div key={i}>{cell(v, { matched })}</div>;
+            })}
           </div>
         </div>
-        {/* index labels */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 2 }}>
-          <div style={{ width: 50 }} />
-          <div style={{ display: "flex", gap: 4 }}>
+
+        {/* treated row */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
+          <div style={{ width: 110, fontSize: 12, fontWeight: 700, color: "#15803d", textAlign: "right" }}>
+            {t(E, "💉 treated?", "💉 치료?")}
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            {preset.b.map((v, i) => {
+              const m = aPrime[i] === v;
+              return (
+                <div key={i} style={{
+                  width: cellSize, height: Math.round(cellSize * 0.65), borderRadius: 10,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: Math.round(fontSize * 0.95), fontWeight: 900,
+                  background: m ? "#16a34a" : "transparent",
+                  color: m ? "#fff" : "#9ca3af",
+                  boxShadow: m ? "0 2px 6px rgba(22,163,74,0.35)" : "none",
+                }}>{m ? "✓" : "—"}</div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* position labels */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 2 }}>
+          <div style={{ width: 110 }} />
+          <div style={{ display: "flex", gap: 8 }}>
             {preset.a.map((_, i) => (
-              <div key={i} style={{ width: cellSize, fontSize: 9, color: C.dim, textAlign: "center" }}>{i + 1}</div>
+              <div key={i} style={{ width: cellSize, fontSize: 10, color: C.dim, textAlign: "center" }}>{i + 1}</div>
             ))}
           </div>
         </div>
@@ -122,12 +166,12 @@ export function ReverseSim({ E }) {
 
       {/* count badge */}
       <div style={{ marginTop: 14, padding: "10px 12px", borderRadius: 10, background: "#dcfce7", border: "2px solid #16a34a", textAlign: "center", fontSize: 13, fontWeight: 800, color: "#15803d" }}>
-        ✅ {t(E, "Checkups (matches): ", "검진 (일치): ")}<span style={{ fontSize: 18 }}>{matches}</span>
+        ✅ {t(E, "Checkups (matches): ", "검진 (일치): ")}<span style={{ fontSize: 20 }}>{matches}</span>
       </div>
       <div style={{ marginTop: 8, fontSize: 11, color: C.dim, lineHeight: 1.55 }}>
         {t(E,
-          "Pink = inside [l, r] (reversed). Green = vet checks (a'[i] == b[i]). Try every (l, r) and the answers are the official sample outputs.",
-          "분홍 = [l, r] 내부 (뒤집힘). 초록 = 수의사 검진 (a'[i] == b[i]). 모든 (l, r) 시도하면 공식 샘플 출력과 일치.")}
+          "Blue dashed = inside [l, r] (reversed segment). Green inset / ✓ row = vet checks (a'[i] == b[i]). Same colour above & below = same species.",
+          "파랑 점선 = [l, r] 내부 (뒤집힘 구간). 초록 글로우 / ✓ 행 = 수의사 검진 (a'[i] == b[i]). 위아래 같은 색 = 같은 종.")}
       </div>
     </div>
   );

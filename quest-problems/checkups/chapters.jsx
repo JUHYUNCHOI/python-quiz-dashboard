@@ -54,43 +54,47 @@ export function makeCheckupsCh1(E) {
           </div>
 
           {/* Mini-visual: concrete example with labelled rows so a/b is unambiguous. */}
-          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: "#7f1d1d", textAlign: "center", marginBottom: 10 }}>
-              {t(E, "Tiny example: 4 cows lined up.  Each cow has a species, and the vet has a target species for each spot.",
+          <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 500, color: "#7f1d1d", textAlign: "center", marginBottom: 10 }}>
+              {t(E, "Tiny example: 4 cows lined up. Each cow has a species, and the vet has a target species for each spot.",
                     "작은 예: 소 4 마리가 줄 서 있음. 각 자리마다 소가 가진 종 / 수의사가 원하는 종.")}
             </div>
 
             {(() => {
-              // Each species gets a distinct color so "same color above-and-below"
-              // is the visual signal for "treated" — no need to read digits.
+              // Visual weight rules:
+              //   - Cell digit (= the actual content) = the heaviest, but only 700.
+              //   - Status mark (✓ / —) = 600.
+              //   - Row label, step heading = 600.
+              //   - Captions, sub-labels = normal (400-500).
+              // Borders are 1.5px and only as thick as needed for color identity.
               const SPECIES = {
-                1: { bg: "#fef3c7", text: "#92400e", border: "#fbbf24" },  // amber
-                2: { bg: "#dbeafe", text: "#1e3a8a", border: "#60a5fa" },  // blue
-                3: { bg: "#fce7f3", text: "#9d174d", border: "#f472b6" },  // pink
+                1: { bg: "#fef3c7", text: "#92400e", border: "#fcd34d" },  // amber
+                2: { bg: "#dbeafe", text: "#1e3a8a", border: "#93c5fd" },  // blue
+                3: { bg: "#fce7f3", text: "#9d174d", border: "#f9a8d4" },  // pink
                 4: { bg: "#dcfce7", text: "#14532d", border: "#86efac" },  // green
               };
               function speciesCell(v, opts = {}) {
                 const sp = SPECIES[v] || SPECIES[1];
                 return (
                   <div style={{
-                    width: 56, height: 56, borderRadius: 10,
+                    width: 52, height: 52, borderRadius: 10,
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    fontFamily: "'JetBrains Mono',monospace", fontSize: 24, fontWeight: 900,
+                    fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 700,
                     background: sp.bg, color: sp.text,
-                    border: `${opts.swapped ? 2.5 : 2}px ${opts.swapped ? "dashed" : "solid"} ${opts.swapped ? "#3b82f6" : sp.border}`,
-                    boxShadow: opts.matched ? "0 0 0 3px #16a34a inset" : "none",
+                    border: `${opts.swapped ? 1.5 : 1}px ${opts.swapped ? "dashed" : "solid"} ${opts.swapped ? "#3b82f6" : sp.border}`,
+                    boxShadow: opts.matched ? "0 0 0 2px #22c55e inset" : "none",
                   }}>{v}</div>
                 );
               }
 
               function Row({ label, sub, cells, withSwap, matches }) {
                 return (
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                    <div style={{ width: 120, fontSize: 12, fontWeight: 700, color: "#7f1d1d", textAlign: "right", lineHeight: 1.25 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={{ width: 120, fontSize: 12, fontWeight: 600, color: "#7f1d1d", textAlign: "right", lineHeight: 1.25 }}>
                       {label}
-                      {sub && <div style={{ fontSize: 10, color: C.dim, fontWeight: 500 }}>{sub}</div>}
+                      {sub && <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>{sub}</div>}
                     </div>
-                    <div style={{ display: "flex", gap: 10 }}>
+                    <div style={{ display: "flex", gap: 8 }}>
                       {cells.map((c, i) => (
                         <div key={i}>
                           {speciesCell(c.v, { swapped: withSwap && c.swapped, matched: matches?.[i] })}
@@ -102,20 +106,31 @@ export function makeCheckupsCh1(E) {
               }
               function MatchRow({ matches }) {
                 return (
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
-                    <div style={{ width: 120, fontSize: 12, fontWeight: 700, color: "#15803d", textAlign: "right" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
+                    <div style={{ width: 120, fontSize: 12, fontWeight: 600, color: "#15803d", textAlign: "right" }}>
                       {t(E, "💉 treated?", "💉 치료?")}
                     </div>
-                    <div style={{ display: "flex", gap: 10 }}>
+                    <div style={{ display: "flex", gap: 8 }}>
                       {matches.map((m, i) => (
                         <div key={i} style={{
-                          width: 56, height: 38, borderRadius: 10,
+                          width: 52, height: 32, borderRadius: 8,
                           display: "flex", alignItems: "center", justifyContent: "center",
-                          fontSize: 22, fontWeight: 900,
-                          background: m ? "#16a34a" : "transparent",
-                          color: m ? "#fff" : "#9ca3af",
-                          boxShadow: m ? "0 2px 6px rgba(22,163,74,0.35)" : "none",
+                          fontSize: 18, fontWeight: 600,
+                          background: m ? "#22c55e" : "transparent",
+                          color: m ? "#fff" : "#cbd5e1",
                         }}>{m ? "✓" : "—"}</div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+              function PositionRow() {
+                return (
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 2 }}>
+                    <div style={{ width: 120 }} />
+                    <div style={{ display: "flex", gap: 8 }}>
+                      {[1, 2, 3, 4].map(i => (
+                        <div key={i} style={{ width: 52, fontSize: 10, color: C.dim, textAlign: "center", fontWeight: 400 }}>{i}</div>
                       ))}
                     </div>
                   </div>
@@ -125,8 +140,8 @@ export function makeCheckupsCh1(E) {
               return (
                 <>
                   {/* Step 1 */}
-                  <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
-                    <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 12 }}>
+                  <div style={{ background: "#fff", border: "1px solid #fecaca", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
                       {t(E, "1. Without any reversal", "1. 뒤집기 없이")}
                     </div>
                     <Row
@@ -142,14 +157,15 @@ export function makeCheckupsCh1(E) {
                       matches={[true, false, true, false]}
                     />
                     <MatchRow matches={[true, false, true, false]} />
-                    <div style={{ marginTop: 8, textAlign: "center", fontSize: 14, color: "#15803d", fontWeight: 800 }}>
+                    <PositionRow />
+                    <div style={{ marginTop: 8, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 600 }}>
                       {t(E, "→ 2 cows treated (positions 1 and 3).", "→ 2 마리 치료 (1, 3 번 자리).")}
                     </div>
                   </div>
 
                   {/* Step 2 */}
-                  <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
-                    <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 12 }}>
+                  <div style={{ background: "#fff", border: "1px solid #fecaca", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
                       {t(E, "2. Pick (l, r) = (2, 3) → reverse a[2..3] (blue dashed = swapped)",
                             "2. (l, r) = (2, 3) 골라 a[2..3] 뒤집기 (파랑 점선 = 교환된 칸)")}
                     </div>
@@ -172,7 +188,8 @@ export function makeCheckupsCh1(E) {
                       matches={[true, true, false, false]}
                     />
                     <MatchRow matches={[true, true, false, false]} />
-                    <div style={{ marginTop: 8, textAlign: "center", fontSize: 14, color: "#15803d", fontWeight: 800 }}>
+                    <PositionRow />
+                    <div style={{ marginTop: 8, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 600 }}>
                       {t(E, "→ still 2 treated, but DIFFERENT cows (positions 1, 2 instead of 1, 3).",
                             "→ 여전히 2 마리 — 다른 소들 (1, 3 자리 → 1, 2 자리).")}
                     </div>
@@ -195,9 +212,9 @@ export function makeCheckupsCh1(E) {
           </div>
 
           <div style={{ marginTop: 6, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
-            📐 <b>{t(E, "Constraints", "제약")}:</b>{" "}
-            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ N ≤ 7500</code>,{" "}
-            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ a[i], b[i] ≤ N</code>
+            📐 <span style={{ fontWeight: 600 }}>{t(E, "Constraints", "제약")}:</span>{" "}
+            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace", fontWeight: 400 }}>1 ≤ N ≤ 7500</code>,{" "}
+            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace", fontWeight: 400 }}>1 ≤ a[i], b[i] ≤ N</code>
           </div>
         </div>),
     },
