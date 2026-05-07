@@ -1593,7 +1593,35 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
 
   // ─── Algorithm/logic bugs in BOTH languages — full review needed ───
   // Banner already warns. Mark difficulty hint but no language safe-list.
-  bacteria:  { ...DEFAULT_META, type: "algorithm-reveal", difficulty: 2 },
+  bacteria: {
+    type: "algorithm-reveal",
+    concepts_taught: ["second-order-difference", "operation-cost-as-l1-sum"],
+    concepts_required: ["loop", "list-basics", "abs"],
+    difficulty: 3,
+    supported_languages: ["py", "cpp"],
+    validate_io: [
+      // Official USACO Jan 2024 Bronze #3 samples
+      { input: "2\n-1 3\n",            expected: "6"  },
+      { input: "5\n1 3 -2 -7 5\n",     expected: "26" },
+    ],
+    solution_py: [
+      "import sys",
+      "data = sys.stdin.read().split()",
+      "N = int(data[0])",
+      "a = [int(data[1 + i]) for i in range(N)]",
+      "",
+      "# Editorial trick: a type-1 walk increments a suffix of diff(a),",
+      "# a type-2 walk decrements one.  At the diff(diff(a)) level each",
+      "# walk only changes ONE position by +/-1, so the minimum number",
+      "# of walks to zero out a[] equals sum of |diff(diff(a))|.",
+      "def diff(arr):",
+      "    return [arr[0]] + [arr[i] - arr[i - 1] for i in range(1, len(arr))]",
+      "",
+      "dd = diff(diff(a))",
+      "ans = sum(abs(x) for x in dd)",
+      "print(ans)",
+    ].join("\n"),
+  },
   feedcows:  { ...DEFAULT_META, type: "algorithm-reveal", difficulty: 2 },
   hoofball:  { ...DEFAULT_META, type: "simulation",       difficulty: 3 },
   hps17:     { ...DEFAULT_META, type: "brute-force",      difficulty: 3 },

@@ -5,29 +5,25 @@ import { getBacteriaSections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N = int(input())",
-  "a = list(map(int, input().split()))",
+  "import sys",
   "",
-  "ans = 0",
-  "# prefix[i] = cumulative spray effect at position i",
-  "prefix = [0] * (N + 1)",
+  "data = sys.stdin.read().split()",
+  "N = int(data[0])",
+  "a = [int(data[1 + i]) for i in range(N)]",
   "",
-  "for i in range(N):",
-  "    # current value after all previous sprays",
-  "    a[i] += prefix[i]",
-  "    if a[i] != 0:",
-  "        spray = -a[i]",
-  "        ans += abs(a[i])",
-  "        # spray of power `spray` affects i..N-1",
-  "        # patch i gets spray, i+1 gets spray-sign,",
-  "        # triangular: patch j gets spray-(j-i)*sign",
-  "        # Use difference array for triangular update",
-  "        prefix[i] += spray",
-  "        if i + 1 <= N:",
-  "            prefix[i + 1] += -spray  # cancel linear",
-  "    if i + 1 < N:",
-  "        prefix[i + 1] += prefix[i]",
+  "# Editorial trick (Rohin Garg, USACO Jan 2024 Bronze #3):",
+  "# A type-1 spray (h, +1+2+3+... triangle) increments a suffix of diff(a)",
+  "# by 1 — and a type-2 spray decrements one.  At the SECOND difference",
+  "# level diff(diff(a)), each spray only changes ONE position by +/-1.",
+  "# So the minimum number of sprays to make a all-zero =",
+  "#     sum of |diff(diff(a))_i|",
   "",
+  "def diff(arr):",
+  "    # First-order difference: [a0, a1-a0, a2-a1, ...]",
+  "    return [arr[0]] + [arr[i] - arr[i - 1] for i in range(1, len(arr))]",
+  "",
+  "dd = diff(diff(a))",
+  "ans = sum(abs(x) for x in dd)",
   "print(ans)",
 ];
 
@@ -41,8 +37,8 @@ export function makeBacteriaCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N patches of bacteria with positive/negative pH-deviation values.\nA sprayer of power L applied to position i raises patch i by L, patch i+1 by L−1, ..., down to patch i+L−1 by 1 (triangular fall-off).\nFind the MINIMUM number of sprays needed to zero out every patch.",
-        "FJ에게 N개의 세균 패치가 있고, 각 패치에는 양수/음수 편차값이 있어요.\n파워 L의 분무를 위치 i에 쓰면 패치 i는 L, i+1은 L−1, ..., i+L−1은 1 만큼 더해져요 (오른쪽으로 갈수록 감소).\n모든 패치를 0으로 만드는 데 필요한 분무의 최소 횟수를 구해요."),
+        "FJ has N patches in a row with deviation values a[1..N].  A type-1 walk starting at h adds the linear ramp 1, 2, 3, ... to a[h], a[h+1], ..., a[N].  A type-2 walk subtracts the same ramp.  Each walk = 1 operation.  Find the minimum number of walks to zero out every a[i].",
+        "FJ 의 N 개 패치, 편차 a[1..N]. 타입 1 워크 (시작 h): a[h] += 1, a[h+1] += 2, ..., a[N] += (N-h+1) 의 선형 ramp 추가. 타입 2 워크: 같은 ramp 를 빼기. 워크 한 번 = 1 회. 모든 a[i] 가 0 이 되는 최소 워크 수."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -69,62 +65,111 @@ export function makeBacteriaCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "A spray with ", "")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "power L at position i", "파워 L의 분무를 위치 i에 쏘면")}</b>
-                  {t(E, " adds L to a[i], L−1 to a[i+1], ..., 1 to a[i+L−1] (triangular).",
-                        " a[i]에 L, a[i+1]에 L−1, ..., a[i+L−1]에 1 이 더해져요 (삼각형 모양).")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "Type-1 walk starting at h", "타입 1 워크 (시작 h)")}</b>
+                  {t(E, ": adds the ramp ", ": ")}
+                  <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>1, 2, 3, …, N − h + 1</code>
+                  {t(E, " to positions ", " 만큼을 위치 ")}
+                  <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>h, h+1, …, N</code>
+                  {t(E, ".", " 에 더해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Power can also be ", "파워는 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "negative", "음수")}</b>
-                  {t(E, " (subtract instead of add). Each spray counts as ONE operation regardless of |L|.",
-                        "도 가능해요 (더하기 대신 빼기). 분무 한 번은 |L|와 관계없이 1번으로 계산해요.")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "Type-2 walk", "타입 2 워크")}</b>
+                  {t(E, " is the same ramp but ", " 도 같은 ramp 인데 ")}
+                  <b>{t(E, "subtracted", "빼기")}</b>
+                  {t(E, ". Each walk counts as ONE operation, regardless of how long the ramp is.",
+                        ". 워크 한 번은 ramp 길이와 관계없이 1번으로 계산해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of sprays", "필요한 분무의 최소 횟수")}</b>
-                  {t(E, " to make every a[i] equal 0.", "를 출력해요. 모든 a[i]가 0이 되도록.")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of walks", "필요한 워크의 최소 횟수")}</b>
+                  {t(E, " to make every a[i] equal 0.", "를 출력해요. 모든 a[i] 가 0 이 되도록.")}
                 </div>
               </div>
             </div>
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Official sample I/O
+    {
+      type: "reveal",
+      narr: t(E,
+        "Input: N on line 1, then N values on line 2.  Output: minimum walks.",
+        "입력: 1 줄에 N, 2 줄에 N 개 값. 출력: 최소 워크 수."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#065f46", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#065f46", whiteSpace: "pre" }}>
+{`2
+-1 3`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`6`}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#065f46", marginBottom: 6 }}>
+              🔍 {t(E, "Walkthrough", "풀이")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              {t(E, "a = [-1, 3]. To zero out a[1]=-1, do 1 type-1 walk starting at h=1: it adds (1, 2) → a = [0, 5].",
+                    "a = [-1, 3]. a[1]=-1 을 지우려면 h=1 에서 타입 1 워크 1 회: (1, 2) 더함 → a = [0, 5].")}
+              <br/>
+              {t(E, "Now a[2]=5. A type-2 walk at h=2 subtracts (1) from a[2] only.  Need 5 such walks.",
+                    "a[2]=5. h=2 에서 타입 2 워크는 a[2] 에서 (1) 만 빼요. 5 회 필요.")}
+            </div>
+            <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
+              {t(E, "Total walks: 1 + 5 = 6.", "총 워크 수: 1 + 5 = 6.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: Quiz — single-position walk
     {
       type: "quiz",
       narr: t(E,
-        "Understanding the spray pattern: if we spray at power 2 from the right, patch N gets 2, patch N-1 gets 1.\nIs this correct?", "분무 패턴 이해: 파워 2로 오른쪽에서 분무하면, 패치 N은 2, 패치 N-1은 1을 받아요. 맞을까?"),
+        "A walk starting at h=N only touches a[N] (it's a 1-element ramp).",
+        "h=N 에서 시작하는 워크는 a[N] 한 칸만 건드려요 (길이 1 ramp)."),
       question: t(E,
-        "Spray power 2 from right: patch N gets 2, patch N-1 gets 1. True?",
-        "파워 2로 오른쪽에서 분무: 패치 N은 2, 패치 N-1은 1. 맞아?"),
+        "If a = [0, 5] (N=2), how many type-2 walks at h=2 do we need to make a[2] = 0?",
+        "a = [0, 5] (N=2) 이면, h=2 에서 타입 2 워크 몇 번 해야 a[2] = 0?"),
       options: [
-        t(E, "Yes, that's the triangular pattern", "맞아, 삼각형 패턴이야"),
-        t(E, "No, both get 2", "아니, 둘 다 2를 받아"),
+        t(E, "1", "1"),
+        t(E, "2", "2"),
+        t(E, "5", "5"),
       ],
-      correct: 0,
+      correct: 2,
       explain: t(E,
-        "Correct! The spray creates a triangular pattern: power L at the rightmost, L-1 at the next, and so on.",
-        "맞아! 분무는 삼각형 패턴을 만들어: 맨 오른쪽에 L, 그 다음에 L-1, 이런 식이에요."),
+        "A type-2 walk at h=2 subtracts a 1-length ramp (just 1) from a[2].  Need 5 walks to drop a[2] from 5 → 0.",
+        "h=2 의 타입 2 워크는 a[2] 에서 1 만 빼요. a[2] 를 5 → 0 만들려면 5 번."),
     },
-    // 1-3: Input
+    // 1-4: Input — second-difference intuition
     {
       type: "input",
       narr: t(E,
-        "If a = [0, 5] (2 patches), how many sprays of power 5 do we need to fix the right patch?", "a = [0, 5] (패치 2개)이면, 오른쪽 패치를 고치려면 파워 5 분무가 몇 번 필요해요?"),
+        "Editorial trick: each walk changes diff(diff(a)) at exactly ONE position by ±1.  So min walks = sum of |diff(diff(a))|.",
+        "Editorial 핵심: 워크 1 회는 diff(diff(a)) 의 한 위치만 ±1 변경. 최소 워크 = sum |diff(diff(a))|."),
       question: t(E,
-        "a = [0, 5]. Min sprays to make right patch 0? (Each spray adds -1 to right patch)",
-        "a = [0, 5]. 오른쪽 패치를 0으로 만드는 최소 분무 횟수? (분무 1회 = 오른쪽에 -1)"),
+        "a = [-1, 3].  diff(a) = [-1, 4].  diff(diff(a)) = [-1, 5].  Sum of absolute values?",
+        "a = [-1, 3]. diff(a) = [-1, 4]. diff(diff(a)) = [-1, 5]. 절댓값 합?"),
       hint: t(E,
-        "Each spray of power -1 reduces the right patch by 1. We need 5 sprays.",
-        "파워 -1의 분무 1회는 오른쪽 패치를 1 줄여줘요. 5번 필요해요."),
-      answer: 5,
+        "|-1| + |5| = 1 + 5 = 6.  This matches the expected answer.",
+        "|-1| + |5| = 1 + 5 = 6. 답과 일치."),
+      answer: 6,
     },
   ];
 }
@@ -135,20 +180,20 @@ export function makeBacteriaCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBacteriaCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
+    // 2-1: Brute plan — second-order difference
     {
       type: "reveal",
       narr: t(E,
-        "Process left to right with greedy: cancel each patch as we reach it, track ripple effects with a difference array. O(N) total.",
-        "왼쪽부터 오른쪽으로 그리디하게 처리해요: 각 패치에 도착하면 그 값을 0으로 만드는 분무를 한 번 쏘고, 영향을 차분 배열로 추적해요. 전체 O(N)."),
+        "Plan: take diff(diff(a)) and sum |dd[i]|.  Each walk changes only ONE position of dd by ±1, so the L1-sum is exactly the minimum number of walks.",
+        "계획: diff(diff(a)) 후 |dd[i]| 합. 워크 한 번이 dd 의 한 위치만 ±1 바꾸기 때문에, |dd| 합이 정확히 최소 워크 수."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              { n: 1, label: t(E, "Read input", "입력 읽기"), code: "a = list(map(int, input().split()))", color: "#059669" },
-              { n: 2, label: t(E, "Walk left → right", "왼쪽 → 오른쪽 순회"), code: "for i in range(N):  current = a[i] + prefix[i]", color: "#0891b2" },
-              { n: 3, label: t(E, "Spray to zero this patch", "이 패치를 0으로 만드는 분무"), code: "spray = -current  →  apply triangular update", color: "#7c3aed" },
-              { n: 4, label: t(E, "Count this spray", "분무 1번 카운트"), code: "ans += abs(spray)  // wait, count is just 1", color: "#dc2626" },
+              { n: 1, label: t(E, "Read N + array a",                 "N 과 a 읽기"),                  code: "a = list of N ints",                                            color: "#059669" },
+              { n: 2, label: t(E, "diff(a) — first-order difference", "diff(a) — 1 차 차분"),         code: "[a[0], a[1]-a[0], a[2]-a[1], ..., a[N-1]-a[N-2]]",              color: "#0891b2" },
+              { n: 3, label: t(E, "diff(diff(a))",                    "diff(diff(a))"),                code: "second-order difference of a",                                  color: "#7c3aed" },
+              { n: 4, label: t(E, "Sum |dd[i]| → answer",              "|dd[i]| 합 → 답"),              code: "ans = sum(abs(x) for x in dd)",                                 color: "#dc2626" },
             ].map((step, i) => (
               <div key={i} style={{
                 display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
