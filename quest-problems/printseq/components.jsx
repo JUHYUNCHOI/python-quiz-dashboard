@@ -160,15 +160,6 @@ const PSQ_S2_PY = [
   "    # ... (cases A, B, C in next steps)",
   "    return False",
 ];
-const PSQ_S2_CPP = [
-  "// pseudo (full code uses memoization in step 5):",
-  "//   bool can(vector<int> seq, int k) {",
-  "//       if (seq.empty()) return false;",
-  "//       if (k <= 0) return false;",
-  "//       // ... cases A, B, C ...",
-  "//   }",
-];
-
 const PSQ_S3_PY = [
   "def can(seq, k):",
   "    if len(seq) == 0 or k <= 0:",
@@ -177,13 +168,6 @@ const PSQ_S3_PY = [
   "    if all(x == seq[0] for x in seq) and k >= 1:",
   "        return True",
   "    return False  # (cases B, C come next)",
-];
-const PSQ_S3_CPP = [
-  "// 옵션 A — 모든 원소 같음:",
-  "// bool same = true;",
-  "// for (int i = 1; i < (int)seq.size(); i++)",
-  "//     if (seq[i] != seq[0]) { same = false; break; }",
-  "// if (same && k >= 1) return true;",
 ];
 
 const PSQ_S4_PY = [
@@ -209,15 +193,6 @@ const PSQ_S4_PY = [
   "",
   "    return False",
 ];
-const PSQ_S4_CPP = [
-  "// 옵션 B (반복 블록):",
-  "//   for m = 2..n: if (n % m == 0) check seq is m copies of seq[0..n/m-1];",
-  "//     if so, recurse on the block with same k.",
-  "// 옵션 C (이어붙이기 분할):",
-  "//   for split = 1..n-1, for k1 = 1..k-1:",
-  "//     if (can(left, k1) && can(right, k - k1)) return true;",
-];
-
 const PSQ_FAST_PY = [
   "import sys",
   "from functools import lru_cache",
