@@ -524,56 +524,7 @@ const M3_FULL_CPP = [
   "}",
 ];
 
-/* ── Step 6 — insight: precompute lookup tables ── */
-const M3_INSIGHT_PY = [
-  "# 안쪽 두 스캔이 같은 답을 반복하는 게 보임. 문자마다 미리 계산하자:",
-  "#",
-  "#   first_diff[c][i] = s[idx] != chr(c) 인 가장 작은 idx ≥ i",
-  "#                      (없으면 N)",
-  "#   last_same[c][i]  = s[idx] == chr(c) 인 가장 큰 idx ≤ i",
-  "#                      (없으면 -1)",
-  "#",
-  "# 그러면 한 query 에서 character c 의 best 답은:",
-  "#   i = first_diff[c][l]   ← (j-i) 최대화하려면 i 가 가장 작아야",
-  "#   k = last_same[c][r]    ← (k-j) 최대화하려면 k 가 가장 커야",
-  "#",
-  "# 안쪽 두 lookup 이 O(N) → O(1).",
-];
-const M3_INSIGHT_CPP = [
-  "// 같은 인사이트 (C++ 도 동일):",
-  "//   first_diff[c][i] = smallest idx >= i with s[idx] != c (else N)",
-  "//   last_same[c][i]  = largest idx <= i with s[idx] == c  (else -1)",
-  "//",
-  "// 한 번만 만들면 character c 마다 i, k 가 O(1) 에 결정됨.",
-];
-
-/* ── Step 7 — even faster: parabola peak + manual binary search on positions[c] ── */
-const M3_PEAK_PY = [
-  "# 한 번 더 — c 가 정해지면 i 와 k 도 정해짐.",
-  "# best j 는 positions[c] (s[j] = c 인 모든 j) 중 어디일까?",
-  "#",
-  "# 식을 보면: f(j) = (j - i) * (k - j)",
-  "#   → j 에 대한 아래로 볼록 포물선",
-  "#   → 꼭대기 (최댓값) 는 j = (i + k) / 2",
-  "#",
-  "# 그러니 j 를 모두 훑지 말고:",
-  "#   1) positions[c] 에서 (i, k) 사이만 추리고",
-  "#   2) 그 안에서 (i+k)/2 와 가장 가까운 j 한두 개만 보면 끝",
-  "#",
-  "# positions[c] 가 정렬돼 있으니 이분 탐색 (binary search) 으로 O(log N).",
-  "# bisect 모듈 안 써도 while 루프로 직접 만들 수 있음 (다음 단계).",
-];
-const M3_PEAK_CPP = [
-  "// 한 번 더 — c 정해지면 i, k 도 정해짐.",
-  "// f(j) = (j - i) * (k - j) 는 j 에 대한 아래로 볼록 포물선.",
-  "// 꼭대기 j = (i + k) / 2 → positions[c] ∩ (i, k) 에서 그 미드포인트와",
-  "// 가장 가까운 j 한두 개만 검사.",
-  "//",
-  "// positions[c] 가 정렬돼 있으니 이분 탐색 (binary search) 으로 O(log N).",
-  "// <algorithm> 의 lower_bound 안 써도 while 루프로 직접 만들면 됨 (다음 단계).",
-];
-
-/* ── Step 8 — final fast code (curriculum-only: 손으로 만든 이분 탐색)
+/* ── Step 6 — final fast code (curriculum-only: 손으로 만든 이분 탐색)
        변수 이름은 이해하기 쉽게 풀어 씀.                              ── */
 const M3_FAST_PY = [
   "import sys",
@@ -846,48 +797,16 @@ export function getMooin3Sections(E) {
       ],
     },
     {
-      label: t(E, "6️⃣ Idea 1 — the inner scans repeat the same answer", "6️⃣ 아이디어 1 — 안쪽 스캔이 같은 답 반복"),
-      color: "#0891b2",
-      py: M3_INSIGHT_PY, cpp: M3_INSIGHT_CPP,
-      why: [
-        t(E, "For a fixed character c, \"smallest i in [l, …] with s[i] ≠ c\" is the same answer for every j with s[j] = c. The inner left-scan is wasted work.",
-            "고정된 문자 c 에 대해 \"[l, …] 에서 s[i] ≠ c 인 가장 작은 i\" 는 s[j] = c 인 모든 j 에서 같은 답. 안쪽 왼쪽 스캔이 중복."),
-        t(E, "Same for the right scan: \"largest k in […, r] with s[k] = c\" only depends on c (and r), not on j.",
-            "오른쪽 스캔도 마찬가지: \"[…, r] 에서 s[k] = c 인 가장 큰 k\" 는 c 와 r 에만 의존, j 와는 무관."),
-        t(E, "Plan: precompute these answers ONCE per character — first_diff[c][i] and last_same[c][i]. Inner scan O(N) → O(1).",
-            "계획: 문자마다 한 번씩만 미리 계산 — first_diff[c][i] 와 last_same[c][i]. 안쪽 스캔 O(N) → O(1)."),
-        t(E, "But we still iterate every j ∈ (l, r) → O(N) per query, O(Q·N) total ≈ 3·10⁹. C++ borderline, Python TLE.",
-            "근데 여전히 j ∈ (l, r) 모두 훑음 → 쿼리당 O(N), 총 O(Q·N) ≈ 3·10⁹. C++ 빠듯, Python TLE."),
-      ],
-    },
-    {
-      label: t(E, "7️⃣ Idea 2 — f(j) is a parabola, so binary-search for the peak", "7️⃣ 아이디어 2 — f(j) 는 포물선, 꼭대기를 이분탐색"),
-      color: "#7c3aed",
-      py: M3_PEAK_PY, cpp: M3_PEAK_CPP,
-      why: [
-        t(E, "Once character c is fixed, i and k are also fixed (they don't depend on j). So f(j) = (j − i)(k − j) — a function of j alone.",
-            "character c 가 정해지면 i 와 k 도 자동으로 정해짐 (j 와 무관). 그러니 f(j) = (j − i)(k − j) — j 에 대한 함수 하나."),
-        t(E, "Expand: f(j) = −j² + (i+k)j − ik. Negative leading coefficient → downward parabola → unique peak at j = (i + k) / 2.",
-            "전개: f(j) = −j² + (i+k)j − ik. j² 계수가 음수 → 아래로 볼록 → 꼭대기 j = (i + k) / 2."),
-        t(E, "Best j must be on positions[c] AND in (i, k). Use bisect to find the entry closest to (i+k)/2 — only two candidates to check.",
-            "best j 는 positions[c] 위에 있어야 하고 (i, k) 안. bisect 로 (i+k)/2 와 가장 가까운 항목 찾고 — 후보 2 개만 확인."),
-        t(E, "Per query work: 26 chars × O(log N) bisect = O(26 · log N). Total O(Q · 26 · log N) ≈ 1.3·10⁷. Fast in Python.",
-            "쿼리당 일: 26 문자 × O(log N) bisect = O(26 · log N). 총 O(Q · 26 · log N) ≈ 1.3·10⁷. Python 도 빠름."),
-      ],
-    },
-    {
-      label: t(E, "8️⃣ Final fast code — lookup tables + bisect for peak", "8️⃣ 최종 빠른 코드 — lookup 표 + 꼭대기 bisect"),
+      label: t(E, "6️⃣ Final fast code — lookup tables + parabola peak via bisect", "6️⃣ 최종 빠른 코드 — lookup 표 + 포물선 꼭대기 bisect"),
       color: "#15803d",
       py: M3_FAST_PY, cpp: M3_FAST_CPP,
       why: [
-        t(E, "Build positions[c] (sorted list of j where s[j] = chr(c+97)) — natural order from a left-to-right pass.",
-            "positions[c] 만들기 (s[j] = chr(c+97) 인 j 들의 sorted list) — 왼→오 한 번에 자연스럽게 정렬."),
-        t(E, "first_diff and last_same as before — give us i and k in O(1) per (c, l, r).",
-            "first_diff 와 last_same 은 이전과 같음 — (c, l, r) 마다 i 와 k 를 O(1) 에 줌."),
-        t(E, "bisect_right(posc, i) and bisect_left(posc, k) bound the valid j range; bisect_left(posc, mid) finds the peak candidate. Check it and its neighbor.",
-            "bisect_right(posc, i) 와 bisect_left(posc, k) 로 유효한 j 범위 잡고; bisect_left(posc, mid) 로 꼭대기 후보 찾아 그 자리 + 이웃 확인."),
-        t(E, "Both Python and C++ pass the official limit comfortably.",
-            "Python 과 C++ 모두 풀 제약 여유롭게 통과."),
+        t(E, "Inner scans are wasted work — they recompute the same i/k for every j with s[j]=c.  Precompute first_diff[c][i] and last_same[c][i] once → inner becomes O(1).",
+            "안쪽 스캔은 중복: s[j]=c 인 모든 j 에 같은 i/k 가 나와요.  first_diff[c][i] 와 last_same[c][i] 미리 계산 → 안쪽 O(1)."),
+        t(E, "Once c is fixed, i and k are fixed too.  f(j) = (j − i)(k − j) is a downward parabola with peak at j = (i + k) / 2 — bisect positions[c] to find the closest valid j.",
+            "c 정해지면 i, k 도 정해짐. f(j) = (j − i)(k − j) 는 아래로 볼록 포물선, 꼭대기 j = (i + k) / 2 — positions[c] 를 bisect 해서 가장 가까운 j 찾기."),
+        t(E, "Per query: 26 chars × O(log N) bisect ≈ 1.3·10⁷ ops total — fast in both Python and C++.",
+            "쿼리당: 26 문자 × O(log N) bisect ≈ 1.3·10⁷ — Python, C++ 모두 빠름."),
       ],
     },
   ];
