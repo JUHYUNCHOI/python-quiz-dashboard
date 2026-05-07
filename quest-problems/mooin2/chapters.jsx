@@ -165,26 +165,10 @@ export function makeMooin2Ch2(E, lang = "py") {
         "Plan: count each value. For each y with count ≥ 2, find the second-to-last position of y. Count distinct values appearing before that position (excluding y itself if y is there, which happens iff count ≥ 3). Sum across all valid y.",
         "계획: 각 값 count. count ≥ 2 인 y 마다, y 의 끝에서 두 번째 위치 찾기. 그 위치 앞에 나타나는 서로 다른 값 수 (y 자신 빼기, y 가 있으면 — count ≥ 3 일 때). 모든 유효 y 합산."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Count and second-to-last position per value", "값별 count + 끝에서 두 번째 위치"), code: "cnt[v], second_last[v]", color: "#ea580c" },
-              { n: 2, label: t(E, "Prefix distinct count", "prefix 서로 다른 값 수"), code: "D[k] = # distinct values in a[0..k-1]", color: "#0891b2" },
-              { n: 3, label: t(E, "Per valid y, sum contribution", "유효 y 마다 기여 합산"), code: "ans += D[second_last[y]] − (1 if cnt[y] ≥ 3 else 0)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     /* 2-2..2-N — sections */

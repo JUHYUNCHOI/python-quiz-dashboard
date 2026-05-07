@@ -360,50 +360,10 @@ export function makeHpsCh2(E, lang = "py") {
         "Submit the brute force. The judge runs 12 test inputs.",
         "Brute force 코드 제출. 채점기가 12 개 테스트 입력을 돌려요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", textAlign: "center", marginBottom: 4 }}>
-            🚦 {t(E, "Submission result", "제출 결과")}
-          </div>
-          <div style={{ fontSize: 12, color: "#6b7280", textAlign: "center", marginBottom: 12, lineHeight: 1.5 }}>
-            {t(E, "Each box = one judge test case. ✓ = passed (with time taken). ⏱ = time limit exceeded.",
-                  "박스 1 개 = 채점 테스트 1 개. ✓ = 통과 (걸린 시간). ⏱ = 시간 초과.")}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 6, marginBottom: 12 }}>
-            {[
-              { ok: true,  ms: 67  }, { ok: true,  ms: 215 }, { ok: true,  ms: 224 },
-              { ok: true,  ms: 222 }, { ok: true,  ms: 235 }, { ok: true,  ms: 281 },
-              { ok: false }, { ok: false }, { ok: false },
-              { ok: false }, { ok: false }, { ok: false },
-            ].map((tc, i) => (
-              <div key={i} style={{
-                background: tc.ok ? "#dcfce7" : "#fee2e2",
-                border: `2px solid ${tc.ok ? "#16a34a" : "#fca5a5"}`,
-                borderRadius: 6, padding: "8px 4px", textAlign: "center",
-                fontFamily: "'JetBrains Mono',monospace",
-              }}>
-                <div style={{ fontSize: 9, color: tc.ok ? "#15803d" : "#7f1d1d", fontWeight: 800, marginBottom: 2 }}>
-                  {t(E, "Test ", "테스트 ")}#{i + 1}
-                </div>
-                <div style={{ fontSize: 18, color: tc.ok ? "#16a34a" : "#dc2626", fontWeight: 900, lineHeight: 1 }}>
-                  {tc.ok ? "✓" : "⏱"}
-                </div>
-                <div style={{ fontSize: 9, color: tc.ok ? "#15803d" : "#7f1d1d", marginTop: 4, fontWeight: 700 }}>
-                  {tc.ok ? `${tc.ms}ms` : "TLE"}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{
-            background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 8,
-            padding: "10px 12px", fontSize: 12, color: "#7c2d12", lineHeight: 1.65,
-          }}>
-            <div><b>{t(E, "What happened?", "어떻게 된 거?")}</b></div>
-            <div style={{ marginTop: 4 }}>
-              {t(E, "Tests 1-6 use small inputs (N, M ≤ 100) — fast enough. Tests 7-12 use the full size (N, M up to 3000) — too slow, time out.",
-                    "테스트 1-6 은 작은 입력 (N, M ≤ 100) — 충분히 빠름. 7-12 는 풀 사이즈 (N, M 최대 3000) — 너무 느려서 시간 초과.")}
-            </div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // Why brute force fails — math, with derivation of N²
     {
@@ -412,52 +372,10 @@ export function makeHpsCh2(E, lang = "py") {
         "Why does even C++ time out? Count the operations — and see WHERE the N² comes from.",
         "왜 C++ 도 시간 초과? 연산 횟수 세기 — N² 가 어디서 나오는지부터."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", textAlign: "center", marginBottom: 12 }}>
-            ⏱ {t(E, "Brute force complexity", "Brute force 복잡도")}
-          </div>
-
-          {/* Derivation: WHERE does N² come from? */}
-          <div style={{
-            background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10,
-            padding: "12px 14px", marginBottom: 10, fontSize: 12.5, color: "#7c2d12", lineHeight: 1.75,
-          }}>
-            <div style={{ fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
-              🔍 {t(E, "Where does the N² come from?", "쿼리당 N² 는 어디서?")}
-            </div>
-            <div>• {t(E, "For one Elsie hand, we try every Bessie hand (a, b).", "Elsie 패 1 개에 대해, Bessie 패 (a, b) 모든 짝 시도.")}</div>
-            <div>• {t(E, "Card a: N choices · Card b: N choices → ", "카드 a: N 가지 · 카드 b: N 가지 → ")}<b>N × N = N²</b> {t(E, "hands", "패")}</div>
-            <div>• {t(E, "Each hand: 4 table lookups (constant time).", "각 패: 표 lookup 4 번 (상수 시간).")}</div>
-            <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fdba74", fontWeight: 700 }}>
-              → {t(E, "Per query = N² operations.", "쿼리당 = N² 연산.")}
-            </div>
-          </div>
-
-          {/* Numerical complexity */}
-          <div style={{ background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2, color: "#7c2d12" }}>
-              <div>{t(E, "Per query:", "쿼리당:")} <b>N × N = 3000 × 3000 = 9,000,000</b></div>
-              <div>{t(E, "× M queries:", "× M 쿼리:")} <b>3000</b></div>
-              <div style={{ borderTop: "1.5px dashed #fca5a5", paddingTop: 8, marginTop: 4 }}>
-                {t(E, "Total: ", "합계: ")}<b style={{ fontSize: 16 }}>27,000,000,000</b> {t(E, "operations", "연산")}
-              </div>
-            </div>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
-            <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "10px 12px", fontSize: 12 }}>
-              <div style={{ fontWeight: 800, color: "#92400e" }}>C++</div>
-              <div style={{ color: "#7c2d12", marginTop: 4 }}>{t(E, "~10⁹ ops/sec → ", "~10⁹ 연산/초 → ")}<b>~27 {t(E, "sec", "초")}</b> ❌</div>
-            </div>
-            <div style={{ background: "#fee2e2", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "10px 12px", fontSize: 12 }}>
-              <div style={{ fontWeight: 800, color: "#7f1d1d" }}>Python</div>
-              <div style={{ color: "#7c2d12", marginTop: 4 }}>{t(E, "~10⁷ ops/sec → ", "~10⁷ 연산/초 → ")}<b>~2700 {t(E, "sec", "초")}</b> ❌❌</div>
-            </div>
-          </div>
-          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "10px 12px", fontSize: 12, color: "#7c2d12", lineHeight: 1.6 }}>
-            {t(E, "3-second limit can't fit either. ", "3 초 제한에 둘 다 못 들어감. ")}
-            <b>{t(E, "Algorithm itself needs to change.", "알고리즘 자체를 바꿔야 함.")}</b>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // Formula derivation — explain N² − (N − dom)² visually with the (1,1) sample
     {

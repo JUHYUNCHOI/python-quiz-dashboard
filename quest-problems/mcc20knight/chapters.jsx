@@ -112,35 +112,10 @@ export function makeMcc20KnightCh2(E, lang = "py") {
         "BFS from the start with the 8 knight moves (±1, ±2). Track distance per cell; first time we reach the target is the minimum.",
         "시작점에서 8 나이트 이동 (±1, ±2) BFS. 칸마다 거리 추적; 목표에 처음 도달한 시점이 최솟값."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init queue with (start, 0)", "(시작, 0) 으로 큐 초기화"), code: "queue = [(sr, sc, 0)];  dist = {(sr,sc): 0}", color: "#2563eb" },
-              { n: 2, label: t(E, "BFS", "BFS"), code: "while queue: r, c, d = queue.pop(0)", color: "#7c3aed" },
-              { n: 3, label: t(E, "Try 8 knight moves", "8 나이트 이동 시도"), code: "for dr, dc in knight_moves: explore (r+dr, c+dc)", color: "#0891b2" },
-              { n: 4, label: t(E, "Print distance to target (or -1)", "목표까지 거리 (또는 -1) 출력"), code: "print(dist.get(target, -1))", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "BFS over N×N board", "N×N 보드 BFS")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     {
       type: "progressive",

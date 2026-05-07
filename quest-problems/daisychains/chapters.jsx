@@ -447,34 +447,10 @@ export function makeDaisyCh2(E) {
       narr: t(E,
         "A key trick: we don't recompute the sum from scratch!\nAs j extends by 1, just add p[j] to the running sum.\nThis makes it O(1) per step.", "핵심 트릭: 합을 처음부터 다시 계산하지 않아! j가 1 늘어나면 p[j]만 러닝 합에 더해요. 이러면 각 단계 O(1)이에요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
-            {t(E, "Running sum trick", "러닝 합 트릭")}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            {[
-              { j: 0, add: "+p[0]=1", sum: 1 },
-              { j: 1, add: "+p[1]=1", sum: 2 },
-              { j: 2, add: "+p[2]=2", sum: 4 },
-            ].map((step, idx) => (
-              <div key={idx} style={{
-                display: "flex", alignItems: "center", gap: 8,
-                background: C.accentBg, border: `1.5px solid ${C.accentBd}`,
-                borderRadius: 8, padding: "6px 10px",
-                fontFamily: "'JetBrains Mono', monospace", fontSize: 13,
-              }}>
-                <span style={{ color: C.dim }}>j={step.j}</span>
-                <span style={{ color: C.accent, fontWeight: 800 }}>{step.add}</span>
-                <span style={{ color: C.text }}>→ sum = <span style={{ fontWeight: 900, color: C.ok }}>{step.sum}</span></span>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 10, background: C.carryBg, borderRadius: 10, padding: 10, border: `2px solid ${C.carryBd}`, textAlign: "center" }}>
-            <div style={{ fontSize: 16, fontWeight: 900, color: C.carry, fontFamily: "'JetBrains Mono', monospace" }}>
-              O(N{"\u00b2"}) {t(E, "total (N up to 100)", "전체 (N 최대 100)")}
-            </div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-4: Practice — hand calculation
     {

@@ -144,28 +144,10 @@ export function makeMooCh2(E, lang = "py") {
         "Plan: count occurrences of every moo in s, then for each (i, c) edit, compute the count delta and check if any moo crosses F.",
         "계획: s 의 모든 moo 발생 횟수 세고, 각 (i, c) 수정마다 카운트 변화 계산해서 F 넘는 moo 확인."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Count current moos in s", "현재 s 의 moo 카운트"), code: "cnt[m] = # of XYY substrings equal to m", color: "#9333ea" },
-              { n: 2, label: t(E, "Add moos already at F to answer", "이미 F 인 moo 답에 추가"), code: "for m in cnt: if cnt[m] >= F: answer.add(m)", color: "#16a34a" },
-              { n: 3, label: t(E, "For each (i, c) edit: only 3 windows change", "각 (i, c) 수정: 3 윈도우만 변화"), code: "for j in [i-2..i]: window = s[j..j+2]", color: "#0891b2" },
-              { n: 4, label: t(E, "Compute delta per affected moo", "영향받는 moo 마다 delta 계산"), code: "delta[old_m]--, delta[new_m]++", color: "#dc2626" },
-              { n: 5, label: t(E, "Check if cnt[m] + delta ≥ F", "cnt[m] + delta ≥ F 확인"), code: "if so, answer.add(m)", color: "#9a3412" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     ...getMooSections(E).map((sec, i) => ({

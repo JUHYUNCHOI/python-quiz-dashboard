@@ -154,26 +154,10 @@ export function makeMexesCh2(E, lang = "py") {
         "Plan: count how many of each value, then for each target mex i compute (a) how many of {0..i−1} are missing, and (b) how many copies of i exist. Min ops = max of those two.",
         "계획: 값별 개수 세고, 각 목표 mex i 마다 (a) {0..i−1} 에서 빠진 개수, (b) i 의 개수. 최소 ops = 둘 중 큰 값."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Count value frequencies", "값 빈도 세기"), code: "cnt[v] = number of elements equal to v", color: "#7c3aed" },
-              { n: 2, label: t(E, "missing[i] = count of v ∈ {0..i−1} with cnt[v] == 0", "missing[i] = {0..i−1} 중 cnt[v] == 0 인 v 개수"), code: "missing[i] = missing[i-1] + (cnt[i-1] == 0)", color: "#0891b2" },
-              { n: 3, label: t(E, "For each i: ops = max(missing[i], cnt[i])", "각 i: ops = max(missing[i], cnt[i])"), code: "print(max(missing[i], cnt[i]))", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     /* 2-2..2-N — sections */

@@ -184,28 +184,10 @@ export function makeReflectionCh2(E, lang = "py") {
         "Plan: group every cell by its mirror identity (rg, cg). For each group of 4 cells, flips = min(count, 4 − count). Updates only affect ONE group, so we maintain a running total.",
         "계획: 모든 칸을 거울 정체 (rg, cg) 로 묶어요. 4 칸 그룹마다 뒤집기 = min(count, 4 − count). update 는 한 그룹만 건드리니 running total 유지."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N, U, grid", "N, U, grid 읽기"), code: "N, U; grid[N][N]; updates list", color: "#0891b2" },
-              { n: 2, label: t(E, "Group key for (r, c)", "(r, c) 의 그룹 키"), code: "rg = min(r, N+1−r);  cg = min(c, N+1−c)", color: "#7c3aed" },
-              { n: 3, label: t(E, "Initial pass — count painted per group", "초기 — 그룹마다 칠한 칸 세기"), code: "count[rg][cg] += (grid[r][c] == '#')", color: "#16a34a" },
-              { n: 4, label: t(E, "Total = sum of min(c, 4−c)", "총합 = min(c, 4−c) 합"), code: "total = Σ min(count[rg][cg], 4 − count[rg][cg])", color: "#dc2626" },
-              { n: 5, label: t(E, "Each update: tweak one group", "각 update: 한 그룹만 조정"), code: "old → new count; total += min(new) − min(old)", color: "#9a3412" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     /* 2-2..2-7 — WRITE: one section per chapter step. */

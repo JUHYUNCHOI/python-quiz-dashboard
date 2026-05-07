@@ -141,27 +141,10 @@ export function makeLogicalCh2(E, lang = "py") {
         "Plan: write evaluate(tokens) using the OR-of-(AND chains) idea. Per query, try both replacement values.",
         "계획: OR-of-(AND 체인) 으로 evaluate(tokens) 작성. 쿼리마다 두 교체값 시도."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read tokens", "토큰 읽기"),                     code: "words = ['true', 'and', 'false', 'or', ...]",  color: ACCENT },
-              { n: 2, label: t(E, "Define evaluate(tokens)", "evaluate(tokens) 정의"), code: "OR-of-(AND chains)  // 'and' binds tighter", color: "#7c3aed" },
-              { n: 3, label: t(E, "Per query, try true AND false", "쿼리마다 true 와 false 시도"), code: "for rep in ('true', 'false'): ...", color: "#16a34a" },
-              { n: 4, label: t(E, "Match target?", "target 일치?"),                code: "if evaluate(new) == target: 'Y' else 'N'",     color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     ...sections.map((sec, i) => ({

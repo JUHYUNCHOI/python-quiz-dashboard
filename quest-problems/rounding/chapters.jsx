@@ -165,28 +165,10 @@ export function makeRoundingCh2(E, lang = "py") {
         "Plan: for each x in [2, N], compute Bessie(x) and Elsie(x), check if they disagree. Brute is O(N) per case — works for samples but TLEs for N up to 10⁹.",
         "계획: [2, N] 의 각 x 마다 Bessie(x) 와 Elsie(x) 계산해서 다른지 확인. brute 는 케이스당 O(N) — 샘플 통과하지만 N = 10⁹ 면 TLE."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Helper: round x to 10^b (Bessie's method)", "도우미: x 를 10^b 로 (Bessie 방법)"), code: "round_to(x, b)", color: "#0ea5e9" },
-              { n: 2, label: t(E, "Find P = smallest with 10^P ≥ x", "P = 10^P ≥ x 인 최소 찾기"), code: "find_P(x)", color: "#7c3aed" },
-              { n: 3, label: t(E, "Bessie: one round to 10^P", "Bessie: 10^P 한 번"), code: "bessie = round_to(x, P)", color: "#16a34a" },
-              { n: 4, label: t(E, "Elsie: chain rounds 10^1 ... 10^P", "Elsie: 10^1...10^P 사슬"), code: "for k in 1..P: v = round_to(v, k)", color: "#dc2626" },
-              { n: 5, label: t(E, "Count disagreements", "불일치 카운트"), code: "if bessie != elsie: count++", color: "#9a3412" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     ...getRoundingSections(E).map((sec, i) => ({

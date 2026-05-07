@@ -274,17 +274,10 @@ export function makeBalancedCh3(E, lang = "py") {
       narr: t(E,
         "The code is beautifully simple — just print 2 × min(N, M) for each test case.\nO(1) per query!", "코드가 아름답게 간단해 — 테스트 케이스마다 2 × min(N, M)만 출력. 쿼리당 O(1)!"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: "#f97316", marginBottom: 8 }}>
-            {t(E, "⏱️ Complexity", "⏱️ 복잡도")}
-          </div>
-          <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
-            O(1)
-          </div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
-            {t(E, "per test case! Just min + multiply", "테스트 케이스당! min + 곱셈만")}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     {
       type: "progressive",

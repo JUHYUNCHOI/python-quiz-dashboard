@@ -160,27 +160,10 @@ export function makeCheeseCh2(E, lang = "py") {
         "Plan: maintain three N×N count grids (one per axis). Each carve increments three of them. When a row hits N (fully empty), a valid rod placement appears.",
         "계획: 축마다 N×N count 격자 (총 3 개). 매 파낼 때 3 개 갱신. row 가 N 도달 (전부 비어 있음) 하면 막대 자리 1 개 추가."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Three grids: cz[x][y], cy[x][z], cx[y][z]", "격자 3 개: cz[x][y], cy[x][z], cx[y][z]"), code: "cz[N][N], cy[N][N], cx[N][N] all init to 0", color: "#eab308" },
-              { n: 2, label: t(E, "Track carved cells (skip duplicates)", "파낸 칸 추적 (중복 무시)"), code: "if (x, y, z) already carved → skip", color: "#0891b2" },
-              { n: 3, label: t(E, "Increment 3 row counters; check if any reached N", "3 개 row count 증가 후 N 도달 체크"), code: "valid += (cz[x][y] == N) + ...", color: "#16a34a" },
-              { n: 4, label: t(E, "Output running valid count after each", "매 update 후 누적 자리 수 출력"), code: "print(valid)", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     ...getCheeseSections(E).map((sec, i) => ({

@@ -376,27 +376,10 @@ export function makeCowPhotosCh2(E, lang = "py") {
         "Time to code. The algorithm in 4 small steps — the only subtle part is excluding v == M.",
         "코드 시간. 4 단계로 알고리즘 — 까다로운 건 v == M 제외 한 줄."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read input", "입력 읽기"), code: t(E, "Read T, then per case: N + heights array h", "T 읽고, 케이스마다: N + 키 배열 h"), color: "#d97706" },
-              { n: 2, label: t(E, "Find the largest height (peak)", "가장 큰 키 찾기 (peak)"), code: t(E, "M = max(h)", "M = max(h)"), color: "#0891b2" },
-              { n: 3, label: t(E, "Count ring values (v < M and appears ≥ 2 times)", "ring 값 세기 (v < M 이고 ≥ 2 번 등장)"), code: t(E, "for distinct v in h: if v < M and count of v ≥ 2 → ring", "h 의 서로 다른 값 v 마다: v < M 이고 v 가 ≥ 2 번 등장이면 ring"), color: "#7c3aed" },
-              { n: 4, label: t(E, "Apply formula and print", "공식 적용 + 출력"), code: t(E, "answer = 2 · rings + 1", "답 = 2 · rings + 1"), color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     // 2-2..2-5: WRITE — one section per chapter step (cumulative code,

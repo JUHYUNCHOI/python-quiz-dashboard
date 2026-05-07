@@ -166,28 +166,10 @@ export function makeAstralCh2(E, lang = "py") {
         "Approach: each photo-1 star at (r, c) can only travel to (r+B, c+A). So cells form CHAINS along the (B, A) direction. Each cell on a chain feeds the next. Per-chain DP picks min stars.",
         "접근: 사진 1 의 별 (r, c) 은 (r+B, c+A) 로만 이동. 그래서 칸들이 (B, A) 방향으로 체인을 형성. 체인 위 각 칸이 다음 칸을 먹임. 체인별 DP 로 최소 별 결정."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Special: A = B = 0", "특수: A = B = 0"), code: "answer = (#G cells) + (#B cells)", color: "#16a34a" },
-              { n: 2, label: t(E, "Otherwise: identify chain starts", "그 외: 체인 시작점 찾기"), code: "(r, c) 가 시작 ⇔ (r-B, c-A) 가 격자 밖", color: "#4f46e5" },
-              { n: 3, label: t(E, "Walk each chain along (B, A)", "각 체인을 (B, A) 방향으로 따라가기"), code: "(r, c), (r+B, c+A), (r+2B, c+2A), ...", color: "#7c3aed" },
-              { n: 4, label: t(E, "Per-chain DP: state = outgoing pin", "체인별 DP: 상태 = 나가는 pin"), code: "state[0/1] = min stars given out=0 or 1", color: "#0891b2" },
-              { n: 5, label: t(E, "Sum across chains, return -1 if any infeasible", "체인 합산, 불가능하면 -1"), code: "total += min(state); else return -1", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     /* 2-2..2-N — sections */

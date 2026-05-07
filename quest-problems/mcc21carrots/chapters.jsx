@@ -104,35 +104,10 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
         "Triple nested loops over all distinct triples (i, j, k). For each, check if c[i] + c[j] + c[k] is divisible by D. Count valid triples.",
         "모든 서로 다른 삼중조합 (i, j, k) 에 대해 삼중 반복. c[i] + c[j] + c[k] 가 D 로 나누어떨어지는지 확인. 유효한 조합의 수 카운트."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N, D, basket counts", "N, D, 바구니 개수 읽기"), code: "c = list(...);  D = ...", color: "#059669" },
-              { n: 2, label: t(E, "Triple loop", "삼중 반복"), code: "for i: for j > i: for k > j:", color: "#0891b2" },
-              { n: 3, label: t(E, "Check divisibility", "나누어떨어짐 확인"), code: "if (c[i] + c[j] + c[k]) % D == 0: count += 1", color: "#7c3aed" },
-              { n: 4, label: t(E, "Print count", "count 출력"), code: "print(count)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N³)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "all C(N, 3) triples", "모든 C(N, 3) 삼중조합")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     {
       type: "progressive",

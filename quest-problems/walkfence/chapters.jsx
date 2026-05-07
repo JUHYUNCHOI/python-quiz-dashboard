@@ -145,27 +145,10 @@ export function makeWalkCh2(E, lang = "py") {
         "Plan: cumulative perimeter offsets at each post → for each query point find which side it lies on → distance along perimeter → take the shorter of the two arcs.",
         "계획: 코너마다 누적 둘레 거리 → 쿼리 점이 어느 변 위인지 찾기 → 둘레 위 위치 → 두 호 중 짧은 쪽."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read posts in order", "코너 순서대로 읽기"),                code: "posts = [(x0,y0), (x1,y1), ...]",                  color: ACCENT },
-              { n: 2, label: t(E, "Cumulative offsets",   "누적 둘레 거리"),                    code: "cum[i] = perimeter distance from post 0 to post i", color: "#0891b2" },
-              { n: 3, label: t(E, "Find each point's offset", "각 점의 둘레 위치 찾기"),       code: "find_pos(x, y) → scan sides, locate the one containing (x,y)", color: "#8b5cf6" },
-              { n: 4, label: t(E, "Pick the shorter arc", "짧은 호 선택"),                     code: "min(|d1 − d2|, perimeter − |d1 − d2|)",             color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     ...sections.map((sec, i) => ({

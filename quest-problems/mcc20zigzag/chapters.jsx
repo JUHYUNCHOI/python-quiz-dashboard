@@ -114,35 +114,10 @@ export function makeMcc20ZigzagCh2(E, lang = "py") {
         "DP: dp[i][j] = number of zig-zag subsequences of length j ending at position i. Transition: extend from earlier i' with the right comparison (up if j is even, down if j is odd, or vice versa).",
         "DP: dp[i][j] = 위치 i 에서 끝나는 길이 j 의 지그재그 부분수열 수. 전이: 이전 i' 에서 적절한 비교 (j 홀짝에 따라 상승/하강) 로 확장."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init dp[i][1] = 1 for all i", "dp[i][1] = 1 초기화"), code: "dp = [[0]*(K+1) for _ in range(N)];  for i: dp[i][1] = 1", color: "#8b5cf6" },
-              { n: 2, label: t(E, "Build dp by length", "길이별 dp 구축"), code: "for j in 2..K: for i: for i' < i:", color: "#7c3aed" },
-              { n: 3, label: t(E, "Add if direction matches", "방향 일치하면 더하기"), code: "if zig-zag direction(s[i'], s[i], j) ok: dp[i][j] += dp[i'][j-1]", color: "#0891b2" },
-              { n: 4, label: t(E, "Sum dp[i][K] for all i", "모든 i 의 dp[i][K] 합산"), code: "print(sum(dp[i][K] for i in range(N)))", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N² · K)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "two nested position loops × K lengths", "위치 이중 반복 × K 길이")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     {
       type: "progressive",

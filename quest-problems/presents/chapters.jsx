@@ -159,43 +159,10 @@ export function makePresentsCh2(E, lang = "py") {
         "For each query: find target's position, print it, then remove.\nThe stack shrinks by 1 each time.",
         "쿼리마다: 타겟 위치 찾기 → 출력 → 제거.\n매번 스택은 1개씩 줄어듦."),
       content: (
-        <div style={{ padding: 16 }}>
-          {/* algorithm steps as visual cards */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read target", "타겟 읽기"), code: "target = int(input())", color: "#8b5cf6" },
-              { n: 2, label: t(E, "Find position", "위치 찾기"), code: "pos = stack.index(target)", color: "#0891b2" },
-              { n: 3, label: t(E, "Print position", "위치 출력"), code: "print(pos)", color: "#16a34a" },
-              { n: 4, label: t(E, "Pop the target", "타겟 제거"), code: "stack.pop(pos)", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          {/* complexity */}
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>
-              {t(E, "⏱ Complexity", "⏱ 복잡도")}
-            </div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>
-              O(N · Q)
-            </div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
-              {t(E, ".index() scans the list (O(N)) per query", ".index()가 매 쿼리 리스트 스캔 (O(N))")}
-            </div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     {
       type: "progressive",

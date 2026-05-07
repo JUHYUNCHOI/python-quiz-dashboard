@@ -154,30 +154,10 @@ export function makePrintseqCh2(E, lang = "py") {
         "Recursive: for sequence seq with budget k, can we make it? Three options: (A) all values equal — 1 PRINT covers it. (B) seq is m identical blocks — solve one block with k. (C) split seq into two parts, give each a slice of the budget.",
         "재귀: 수열 seq, 예산 k 일 때 가능? 세 옵션: (A) 모두 같은 값 — PRINT 1 개로 OK. (B) seq 가 같은 블록 m 번 — 블록 하나를 k 로. (C) 두 부분으로 쪼개기, 예산도 나눠 갖기."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: "A", label: t(E, "All same value", "모두 같은 값"), code: "all(x == seq[0] for x in seq)  →  k ≥ 1 → YES", color: "#16a34a" },
-              { n: "B", label: t(E, "Repeating block", "반복 블록"), code: "for divisor m of len(seq): if seq is m·block, recurse on block", color: "#0891b2" },
-              { n: "C", label: t(E, "Concat split", "이어붙이기 분할"), code: "for split in 1..n-1: for k1 in 1..k-1: solve(left, k1) ∧ solve(right, k-k1)", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 10, padding: "8px 10px", background: "#ecfdf5", border: "1px dashed #6ee7b7", borderRadius: 8, fontSize: 11.5, color: "#065f46", lineHeight: 1.6 }}>
-            💡 {t(E, "With memoization on (seq, k), same subproblems aren't re-solved. N ≤ 100 and K ≤ 3 keeps the state space small.",
-                     "(seq, k) 메모이제이션으로 같은 부분 문제 재계산 방지. N ≤ 100, K ≤ 3 라 상태 공간 작음.")}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     /* 2-2..2-N — sections */

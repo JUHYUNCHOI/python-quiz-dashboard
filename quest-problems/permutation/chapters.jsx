@@ -442,28 +442,10 @@ export function makePermCh2(E) {
         "How do we recover p? The dismantle rule is hard to invert directly. Easiest idea: try every permutation of 1..N in lex order, dismantle each, and stop at the first match.",
         "p 를 어떻게 복원할까? dismantle 규칙을 거꾸로 푸는 건 까다로워요. 가장 쉬운 방법: 1..N 의 모든 순열을 사전순으로 시도, 각각 dismantle 해서 일치하는 첫 번째에서 멈추기."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>
-              💡 {t(E, "Brute force plan", "브루트포스 계획")}
-            </div>
-            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, whiteSpace: "pre-line" }}>
-              {t(E,
-                "1. Generate every permutation of 1..N in LEX ORDER (smallest first).\n2. For each candidate p, run dismantle(p) → produces a hint list.\n3. Compare to the input h. If they match, p is the answer.\n4. The FIRST match in lex order is automatically the lex-smallest answer.\n5. If no permutation matches → print −1.",
-                "1. 1..N 의 모든 순열을 사전순 (작은 것 먼저) 으로 생성.\n2. 각 후보 p 에 대해 dismantle(p) 실행 → 힌트 리스트 산출.\n3. 입력 h 와 비교. 같으면 그 p 가 답.\n4. 사전순으로 처음 일치하는 게 자동으로 사전순 최소 답.\n5. 어떤 순열도 안 맞으면 → −1 출력.")}
-            </div>
-          </div>
-
-          <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
-              ⏱ {t(E, "Complexity", "복잡도")}
-            </div>
-            <div style={{ fontSize: 12, color: "#7c2d12", lineHeight: 1.6 }}>
-              {t(E, "Per test: O(N! · N) — N! permutations, each costs O(N) to dismantle. Fits at small N (Bronze typically has N ≤ 8 for this kind of problem). For larger N, smarter approaches exist.",
-                    "테스트당: O(N! · N) — N! 개 순열, 각각 O(N) 으로 dismantle. 작은 N (Bronze 보통 N ≤ 8 정도) 에 적합. 더 큰 N 은 더 똑똑한 방법 필요.")}
-            </div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Trace example with dismantle on small input
     {
@@ -552,32 +534,10 @@ export function makePermCh3(E, lang = "py") {
         "Time complexity: O(N! · N) per test case — N! permutations, each costs O(N) to dismantle. Bronze typically uses small N for this kind of problem.",
         "시간복잡도: 테스트당 O(N! · N) — N! 개 순열, 각각 dismantle O(N). Bronze 는 보통 작은 N."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "dismantle helper", "dismantle 헬퍼"), code: "def dismantle(p): apply Nhoj's rule, return hint list", color: "#7c5cfc" },
-              { n: 2, label: t(E, "Recursive search (lex order)", "재귀 탐색 (사전순)"), code: "search(p, used, idx, N, h): place 1..N at p[idx] and recurse", color: "#0891b2" },
-              { n: 3, label: t(E, "Match → print and stop", "일치 → 출력 후 종료"), code: "if dismantle(p) == h: print(p); return True", color: "#16a34a" },
-              { n: 4, label: t(E, "No match across N! → -1", "N! 다 안 맞으면 → -1"), code: "if not search(...): print(-1)", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "\u23f1 Complexity", "\u23f1 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c5cfc" }}>O(N! · N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N! perms × N per dismantle", "N! 순열 × dismantle 당 N")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 3-2: Quiz — when does -1 happen?
     {
