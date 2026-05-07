@@ -127,35 +127,10 @@ export function makeBlockGameCh2(E, lang = "py") {
         "For each board, you only show ONE side. So for each letter you need MAX(count in front, count in back) cubes — that's the worst case for that board. Sum across all boards per letter.",
         "각 판에서 한 면만 보여요. 그래서 각 글자에 대해 MAX(앞면 개수, 뒷면 개수) 만큼 큐브가 필요해요 — 그게 그 판의 최악. 글자별로 모든 판에서 합산."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Count letters in front/back", "앞면/뒷면 글자 세기"), code: "f, b = Counter(front), Counter(back)", color: "#f97316" },
-              { n: 2, label: t(E, "Take max per letter on this board", "이 판의 글자별 max"), code: "need[letter] = max(f[letter], b[letter])", color: "#7c3aed" },
-              { n: 3, label: t(E, "Add to global per-letter needs", "전역 글자별 필요량에 추가"), code: "total[letter] += need[letter]", color: "#0891b2" },
-              { n: 4, label: t(E, "Output 26 letter counts", "26 알파벳 개수 출력"), code: "for letter in 'a'..'z': print(total[letter])", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N · L)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N boards × word length L", "N 판 × 단어 길이 L")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

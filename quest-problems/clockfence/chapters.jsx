@@ -131,35 +131,10 @@ export function makeClockCh2(E, lang = "py") {
         "Map N=0, E=1, S=2, W=3. For each consecutive direction pair (d_i, d_{i+1}), the difference (d_{i+1} − d_i) mod 4 is 1 for a right turn and 3 for a left turn. CW iff right turns > left turns.",
         "N=0, E=1, S=2, W=3 매핑. 연속 방향 쌍 (d_i, d_{i+1}) 의 차이 (d_{i+1} − d_i) mod 4 가 1 이면 오른쪽 회전, 3 이면 왼쪽 회전. 오른쪽 > 왼쪽 이면 CW."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Map directions to 0..3", "방향을 0..3 으로 매핑"), code: "d = [{'N':0,'E':1,'S':2,'W':3}[c] for c in path]", color: "#8b5cf6" },
-              { n: 2, label: t(E, "Iterate consecutive pairs", "연속 쌍 순회"), code: "for i in range(N): turn = (d[(i+1) % N] - d[i]) % 4", color: "#7c3aed" },
-              { n: 3, label: t(E, "Count right (1) vs left (3) turns", "오른쪽 (1) vs 왼쪽 (3) 회전 세기"), code: "if turn == 1: right += 1  elif turn == 3: left += 1", color: "#0891b2" },
-              { n: 4, label: t(E, "CW if right > left", "오른쪽이 더 많으면 CW"), code: "print('CW' if right > left else 'CCW')", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass over direction string", "방향 문자열 한 번 순회")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

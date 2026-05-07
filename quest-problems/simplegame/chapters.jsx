@@ -116,35 +116,10 @@ export function makeSimpleGameCh2(E, lang = "py") {
         "Game theory: with moves {1, 2, 3}, the LOSING positions are exactly multiples of 4 (face N=0, 4, 8, ... and you lose). So FIRST player wins unless N % 4 == 0.",
         "게임 이론: 이동 {1, 2, 3} 일 때 지는 위치는 정확히 4 의 배수 (N=0, 4, 8, ... 에서 자기 차례면 짐). 즉 N % 4 == 0 이 아니면 FIRST 승."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N", "N 읽기"), code: "N = int(input())", color: "#dc2626" },
-              { n: 2, label: t(E, "Check N mod 4", "N mod 4 확인"), code: "mod = N % 4", color: "#7c3aed" },
-              { n: 3, label: t(E, "FIRST loses if mod == 0", "mod == 0 이면 FIRST 짐"), code: "if mod == 0: print('SECOND')", color: "#0891b2" },
-              { n: 4, label: t(E, "Otherwise FIRST wins", "아니면 FIRST 승"), code: "else: print('FIRST')", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(1)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single modulo operation", "한 번의 modulo 연산")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

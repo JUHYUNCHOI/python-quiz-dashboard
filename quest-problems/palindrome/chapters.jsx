@@ -220,11 +220,10 @@ export function makePalindromeCh2(E, lang = "py") {
         "Just write what the rules say. We'll build can_win[n] from small to large — it answers 'does the player to move at n stones win?'.",
         "규칙 그대로 코드로 옮기면 돼요. can_win[n] 을 0 부터 위로 채워가면 'n 개 남았을 때 두는 사람이 이기나?' 답이 나와요."),
       content: (
-        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-          {t(E,
-            "Key idea: I win at n if I can take some palindrome p (p ≤ n) and leave the opponent at a losing state n − p.  Read the code section by section.",
-            "핵심 한 줄: n 에서 이기는 길은 = 어떤 회문 p (p ≤ n) 를 빼서 상대를 지는 상태 n − p 에 두는 것. 코드 한 단락씩 읽어요.")}
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Progressive code
     {

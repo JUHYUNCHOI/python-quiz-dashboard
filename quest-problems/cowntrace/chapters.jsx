@@ -169,35 +169,10 @@ export function makeCowntraceCh2(E, lang = "py") {
         "Brute force: for each cow as patient zero (N) and each K value (0..T), simulate all T hoof-shake events. Check the final infected set matches the input. Track which K values are consistent.",
         "완전 탐색: 각 소를 환자 제로 후보 (N) 와 각 K 값 (0..T) 로, T 개의 발굽-맞댐 이벤트를 시뮬레이션. 최종 감염 집합이 입력과 일치하는지 확인. 일관된 K 값 추적."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "For each candidate patient zero", "각 환자 제로 후보"), code: "for p0 in 1..N:", color: "#059669" },
-              { n: 2, label: t(E, "For each K", "각 K 값"), code: "for K in 0..T:", color: "#0891b2" },
-              { n: 3, label: t(E, "Simulate hoof-shakes", "발굽-맞댐 시뮬레이션"), code: "infected = {p0};  for (a, b) in events: spread up to K", color: "#7c3aed" },
-              { n: 4, label: t(E, "Compare with target & track K", "목표와 비교 + K 추적"), code: "if infected matches: candidates += 1; track min/max K", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N · T²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N candidates × T values of K × T events", "N 후보 × T 값의 K × T 이벤트")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

@@ -128,42 +128,10 @@ export function makeCowntactCh2(E, lang = "py") {
       narr: t(E,
         "The key insight: each consecutive segment of 1s can be explained by a single initial infection.\nSo the answer = number of separate groups of consecutive 1s!", "핵심 통찰: 연속된 1의 각 세그먼트는 하나의 초기 감염으로 설명 가능. 답 = 연속된 1 그룹의 수!"),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", marginBottom: 8 }}>
-            {t(E, "Approach: Count Segments", "접근법: 세그먼트 세기")}
-          </div>
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Scan left to right:\n• When you hit a '1', increment count\n• Skip all consecutive '1's (same group)\n• When you hit a '0', just move on\n\nEach group of 1s = 1 initial infection\nAnswer = total number of groups",
-              "왼쪽에서 오른쪽으로 스캔:\n• '1'을 만나면 카운트 +1\n• 연속된 '1'은 모두 건너뛰기 (같은 그룹)\n• '0'을 만나면 그냥 넘어가기\n\n1의 각 그룹 = 초기 감염 1마리\n답 = 총 그룹 수")}
-          </div>
-          <div style={{
-            marginTop: 10, background: "#f5f3ff", borderRadius: 10,
-            padding: 10, border: "2px solid #c4b5fd",
-          }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#7c5cfc", marginBottom: 4 }}>
-              {t(E, "Example: \"01110110\"", "예시: \"01110110\"")}
-            </div>
-            <div style={{ display: "flex", justifyContent: "center", gap: 3, marginBottom: 6 }}>
-              {"01110110".split("").map((ch, i) => (
-                <div key={i} style={{
-                  width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 6, fontSize: 14, fontWeight: 900,
-                  fontFamily: "'JetBrains Mono',monospace",
-                  background: ch === "1" ? "#c4b5fd" : "#e5e7eb",
-                  border: `2px solid ${ch === "1" ? "#7c5cfc" : "#d1d5db"}`,
-                  color: ch === "1" ? "#4c1d95" : "#9ca3af",
-                }}>{ch}</div>
-              ))}
-            </div>
-            <div style={{
-              fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
-              fontWeight: 700, color: C.text, textAlign: "center",
-            }}>
-              {t(E, "2 groups of 1s → answer = 2", "1의 그룹 2개 → 답 = 2")}
-            </div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Full code reveal
     {

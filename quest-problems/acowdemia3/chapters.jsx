@@ -137,35 +137,10 @@ export function makeAcow3Ch2(E, lang = "py") {
         "Greedy: scan grass cells left-to-right, top-to-bottom. For each grass cell, find pairs of cows it could connect (its 2 adjacent cow cells). If both cows are still 'free' (haven't been paired yet), match them and increment count.",
         "그리디: 풀 칸을 왼→오, 위→아래로 스캔. 각 풀 칸마다 연결할 수 있는 소 쌍 (인접한 2 마리 소) 을 찾아요. 두 소가 아직 짝이 없으면 매칭하고 카운트 증가."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Iterate over grass cells", "풀 칸 순회"), code: "for r in range(R): for c in range(C): if grid[r][c]=='G':", color: "#059669" },
-              { n: 2, label: t(E, "List adjacent cow neighbors", "인접 소 이웃 목록"), code: "neighbors = adjacent C-cells", color: "#0891b2" },
-              { n: 3, label: t(E, "Pair two unmatched cows", "짝없는 두 소 매칭"), code: "if 2 free cows: pair them; mark used", color: "#7c3aed" },
-              { n: 4, label: t(E, "Count friendships", "우정 세기"), code: "friendships += 1;  print(friendships)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(R · C)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single grid pass with constant work per cell", "격자 한 번 순회, 칸당 상수 작업")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

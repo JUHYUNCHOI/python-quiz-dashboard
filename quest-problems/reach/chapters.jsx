@@ -291,25 +291,10 @@ export function makeReachCh2(E) {
       narr: t(E,
         "The key algorithm is Dijkstra!\nIt finds shortest paths from city 1.\nThen for each damaged road, check if we can use it within time K.", "핵심 알고리즘은 다익스트라예요! 도시 1에서 각 도시까지 최단 거리를 구해요. 손상 도로는 출발 시각 < K, 도착 시각 ≤ K인 경우만 사용!"),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
-            {t(E, "Modified Dijkstra", "변형 다익스트라")}
-          </div>
-          <div style={{
-            background: "#f5f3ff", borderRadius: 12, padding: 14,
-            border: "2px solid #c4b5fd", fontSize: 13, lineHeight: 2, color: C.text,
-          }}>
-            <div>1️⃣ {t(E,
-              "Use priority queue (min-heap) for shortest paths",
-              "우선순위 큐(최소 힙)로 최단 경로 탐색")}</div>
-            <div>2️⃣ {t(E,
-              "For each edge: if safe → always use. If damaged → check time constraint",
-              "각 도로: 안전하면 항상 사용. 손상이면 시간 조건 확인")}</div>
-            <div>3️⃣ {t(E,
-              "Damaged road usable only if: start_time < K AND arrive_time ≤ K",
-              "손상 도로 사용 조건: 출발 시각 < K 그리고 도착 시각 ≤ K")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-4: Dijkstra trace
     {

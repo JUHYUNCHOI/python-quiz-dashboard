@@ -199,22 +199,10 @@ export function makeBillboardCh1(E) {
       narr: t(E,
         "The key formula: Visible = (Billboard1 area - overlap with truck) + (Billboard2 area - overlap with truck).\nWe compute each overlap separately!", "핵심 공식: 보이는 면적 = (광고판1 면적 - 트럭과 겹침) + (광고판2 면적 - 트럭과 겹침). 각 겹침을 따로 계산해요!"),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 14, padding: 16 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: C.ok, marginBottom: 8 }}>
-              {t(E, "💡 Key Formula", "💡 핵심 공식")}
-            </div>
-            <div style={{ fontSize: 15, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 2 }}>
-              visible = (A₁ - O₁) + (A₂ - O₂)
-            </div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 8, lineHeight: 1.6 }}>
-              A₁ = {t(E, "billboard 1 area", "광고판1 면적")}<br/>
-              O₁ = {t(E, "overlap of billboard 1 with truck", "광고판1과 트럭의 겹침")}<br/>
-              A₂ = {t(E, "billboard 2 area", "광고판2 면적")}<br/>
-              O₂ = {t(E, "overlap of billboard 2 with truck", "광고판2과 트럭의 겹침")}
-            </div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
 
     // 1-6: Quiz — apply formula

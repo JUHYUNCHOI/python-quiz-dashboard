@@ -123,35 +123,10 @@ export function makeHoneyCh2(E, lang = "py") {
         "Greedy: sort hives by honey amount DESCENDING. For each hive in order, use trips needed = ceil(honey / M) — capped by remaining trips. Add the collected amount.",
         "그리디: 벌집을 꿀 양 내림차순 정렬. 순서대로 각 벌집마다, 필요한 왕복 = ceil(꿀/M) — 남은 왕복으로 제한. 수집량 누적."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Sort hives descending", "벌집 내림차순 정렬"), code: "hives.sort(reverse=True)", color: "#d97706" },
-              { n: 2, label: t(E, "For each hive in order", "순서대로 각 벌집"), code: "for h in hives: if K == 0: break", color: "#7c3aed" },
-              { n: 3, label: t(E, "Use trips for this hive", "이 벌집에 왕복 사용"), code: "need = (h + M - 1) // M;  used = min(need, K)", color: "#0891b2" },
-              { n: 4, label: t(E, "Add collected, decrement K", "수집량 누적, K 감소"), code: "total += min(h, used * M);  K -= used;  print(total)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort dominates", "정렬이 지배적")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

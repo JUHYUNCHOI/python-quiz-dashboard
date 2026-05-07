@@ -126,35 +126,10 @@ export function makeGenomicsCh2(E, lang = "py") {
         "For each genome column j (1..M), gather the SET of letters used by spotted cows there and the SET used by plain cows. If the two sets DON'T intersect, that column distinguishes the breeds.",
         "각 유전체 열 j (1..M) 마다 점박이 소들이 그 자리에서 쓴 글자의 집합과 무늬 없는 소들의 집합을 모아요. 두 집합이 교집합이 없으면 그 열이 구별 가능."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Iterate over M columns", "M 개 열 순회"), code: "for j in range(M):", color: "#2563eb" },
-              { n: 2, label: t(E, "Build spotted set / plain set", "점박이 집합 / 무늬 없는 집합"), code: "spotted = {row[j] for row in spotted_cows}", color: "#7c3aed" },
-              { n: 3, label: t(E, "Check empty intersection", "교집합이 비었는지 확인"), code: "if not (spotted & plain):", color: "#0891b2" },
-              { n: 4, label: t(E, "Count distinguishing columns", "구별 열 카운트"), code: "count += 1;  print(count)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N · M)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N cows × M columns", "N 마리 × M 열")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

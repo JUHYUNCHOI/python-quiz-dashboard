@@ -170,35 +170,10 @@ export function makeHps17Ch2(E, lang = "py") {
         "There are only 3! = 6 ways to map cow gestures {1,2,3} to {Hoof, Paper, Scissors}, and 3 choices for FJ's fixed gesture. For each of 18 combos, scan all N rounds and count FJ's wins. Take the maximum.",
         "소의 제스처 {1,2,3} 을 {Hoof, Paper, Scissors} 에 매핑하는 방법은 3! = 6 가지뿐, FJ 의 고정 제스처는 3 가지. 18 가지 조합마다 N 라운드를 스캔해 FJ 의 승수를 세고, 최댓값을 채택."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N rounds (cow gestures)", "N 라운드 읽기 (소 제스처)"), code: "rounds = list(map(int, input()))", color: "#2563eb" },
-              { n: 2, label: t(E, "Try every {1,2,3} → {H,P,S} mapping", "모든 {1,2,3} → {H,P,S} 매핑"), code: "for mapping in permutations(['H','P','S']): ...", color: "#7c3aed" },
-              { n: 3, label: t(E, "Try every FJ gesture", "FJ 의 모든 제스처 시도"), code: "for fj in 'HPS': wins = sum(beats(fj, mapping[r-1]) for r in rounds)", color: "#0891b2" },
-              { n: 4, label: t(E, "Print max wins over all 18", "18 조합 중 최대 승수 출력"), code: "print(max_wins)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant 18 combos × N rounds = O(N)", "상수 18 조합 × N 라운드 = O(N)")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

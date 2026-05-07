@@ -152,35 +152,10 @@ export function makeBlocksCh2(E, lang = "py") {
         "Only 4! = 24 ways to assign the 4 cubes to positions. For each query word, try every assignment and check that the required letter at each position exists on the assigned cube's faces.",
         "4 개 큐브를 위치에 배정하는 방법은 4! = 24 가지뿐. 각 단어 쿼리에 대해 모든 배정을 시도하고, 각 위치에 필요한 글자가 배정된 큐브의 면에 있는지 확인."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Try every cube-to-position assignment", "큐브-위치 배정 모두 시도"), code: "for perm in permutations([0,1,2,3]): ...", color: "#8b5cf6" },
-              { n: 2, label: t(E, "Check each position's required letter", "각 위치의 글자 확인"), code: "for i, cube_id in enumerate(perm): if word[i] not in faces[cube_id]: break", color: "#7c3aed" },
-              { n: 3, label: t(E, "All positions match → YES", "모든 위치 일치 → YES"), code: "else: print('YES'); break", color: "#16a34a" },
-              { n: 4, label: t(E, "None worked → NO", "전부 실패 → NO"), code: "else: print('NO')", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(Q · 24 · L)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "Q queries × 24 assignments × L letters", "Q 쿼리 × 24 배정 × L 글자")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

@@ -153,35 +153,10 @@ export function makeLiarsCh2(E, lang = "py") {
         "The optimal Bessie position is somewhere among the claim x values. Brute force: for each candidate position p, count how many claims are CONTRADICTED. The minimum count is the answer (number of liars).",
         "Bessie의 최적 위치는 주장된 x 값 중 하나예요. 완전탐색: 각 후보 위치 p 마다, 모순되는 주장 수를 셈. 최솟값이 답 (거짓말쟁이 수)."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N claims", "N 개 주장 읽기"), code: "claims = [(direction, x) for _ in range(N)]", color: "#2563eb" },
-              { n: 2, label: t(E, "Try every candidate position", "가능한 위치 마다 시도"), code: "for p in candidate_positions: ...", color: "#7c3aed" },
-              { n: 3, label: t(E, "Count contradictions at p", "p 에서 모순 세기"), code: "liars = sum(1 for d, x in claims if (d=='G' and p<x) or (d=='L' and p>x))", color: "#dc2626" },
-              { n: 4, label: t(E, "Min over all positions", "모든 위치 중 최솟값"), code: "print(min(liars across all p))", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N candidate positions × N claims (or O(N log N) with prefix sums)", "N 후보 위치 × N 주장 (누적합으로 O(N log N) 가능)")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

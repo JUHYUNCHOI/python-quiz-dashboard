@@ -138,35 +138,10 @@ export function makeFeedCh2(E, lang = "py") {
         "Track separately for each breed: the right-end of the last patch placed (last_G, last_H). When a cow of breed B at position i is past last_B, place a NEW patch at position i — extending its coverage to i + K.",
         "품종별로 따로 추적: 마지막에 놓은 패치의 오른쪽 끝 (last_G, last_H). 품종 B 의 소가 위치 i 에 있고 i > last_B 이면, 위치 i 에 새 패치를 놓아 — 커버 범위를 i + K 까지 확장."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Sort cows by position", "위치 순 정렬"), code: "cows.sort(key=lambda c: c.pos)", color: "#059669" },
-              { n: 2, label: t(E, "Init last_G, last_H = -inf", "last_G, last_H = -inf 초기화"), code: "last = {'G': -inf, 'H': -inf}", color: "#0891b2" },
-              { n: 3, label: t(E, "Cow uncovered? place patch", "소가 미커버? 패치 배치"), code: "if pos > last[breed]: patches += 1; last[breed] = pos + K", color: "#7c3aed" },
-              { n: 4, label: t(E, "Print total patches", "총 패치 수 출력"), code: "print(patches)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + single greedy pass", "정렬 + 그리디 한 번 순회")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

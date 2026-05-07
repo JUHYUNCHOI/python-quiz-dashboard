@@ -137,35 +137,10 @@ export function makeBackForthCh2(E, lang = "py") {
         "Recursively try every choice over the 4 days. State = (day, barn1_buckets, barn2_buckets). Use a set to collect distinct final barn1 totals across all branches.",
         "4 일 동안 모든 선택을 재귀적으로 시도. 상태 = (일, 헛간1 양동이, 헛간2 양동이). 집합으로 모든 분기의 헛간1 최종 총량의 서로 다른 값 수집."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Recursive DFS over 4 days", "4 일에 대해 재귀 DFS"), code: "def dfs(day, a, b):", color: "#8b5cf6" },
-              { n: 2, label: t(E, "On odd day move bucket a → b", "홀수 일에 양동이 a → b"), code: "for bucket in a: dfs(day+1, a−{bucket}, b∪{bucket})", color: "#7c3aed" },
-              { n: 3, label: t(E, "On even day move bucket b → a", "짝수 일에 양동이 b → a"), code: "for bucket in b: dfs(day+1, a∪{bucket}, b−{bucket})", color: "#0891b2" },
-              { n: 4, label: t(E, "Collect final barn1 totals in a set", "최종 헛간1 총량을 집합에 수집"), code: "results.add(sum(a));  print(len(results))", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(10 · 11³)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "small fixed branching factor (≈ 13,310 leaves)", "작은 고정 분기 (잎 약 13,310 개)")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

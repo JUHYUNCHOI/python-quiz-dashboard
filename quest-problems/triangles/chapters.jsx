@@ -136,35 +136,10 @@ export function makeTrianglesCh2(E, lang = "py") {
         "Treat each post as the right-angle CORNER. From it, find the FARTHEST post sharing the same x (gives the vertical leg = height) and the FARTHEST sharing the same y (horizontal leg = base). 2 × area = base × height.",
         "각 기둥을 직각 꼭짓점으로 봐요. 거기서 같은 x 의 가장 먼 기둥 (높이 = 수직 변), 같은 y 의 가장 먼 기둥 (밑변 = 수평 변) 을 찾아요. 2 × 넓이 = 밑변 × 높이."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Group posts by x and by y", "x, y 별로 그룹화"), code: "by_x = defaultdict(list);  by_y = defaultdict(list)", color: "#d97706" },
-              { n: 2, label: t(E, "For each post (corner candidate)", "각 기둥 (꼭짓점 후보)"), code: "for x, y in posts:", color: "#7c3aed" },
-              { n: 3, label: t(E, "Find farthest with same x and same y", "같은 x, 같은 y 에서 가장 먼 것"), code: "max_dy = max(|y' - y|);  max_dx = max(|x' - x|)", color: "#0891b2" },
-              { n: 4, label: t(E, "Update best 2 × area", "최대 2 × 넓이 갱신"), code: "best = max(best, max_dy * max_dx);  print(best)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "for each post, scan its x/y groups", "기둥마다 x/y 그룹 스캔")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

@@ -127,35 +127,10 @@ export function makeSleepySortCh2(E, lang = "py") {
         "Cows in the longest already-sorted SUFFIX never need to move — they're already in their final relative order. Every cow in front of that suffix needs at least 1 move. Answer = N − (length of sorted suffix).",
         "이미 정렬된 가장 긴 SUFFIX (뒤쪽 부분) 의 소들은 움직일 필요 없어요 — 이미 올바른 상대 순서에 있어요. 그 SUFFIX 앞의 모든 소는 적어도 한 번 이동 필요. 답 = N − (정렬된 SUFFIX 길이)."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N and the cow IDs", "N 과 소 ID 읽기"), code: "a = list(map(int, input().split()))", color: "#2563eb" },
-              { n: 2, label: t(E, "Walk right → left", "오른쪽 → 왼쪽 순회"), code: "k = N - 1", color: "#0891b2" },
-              { n: 3, label: t(E, "Extend sorted suffix", "정렬된 SUFFIX 확장"), code: "while k > 0 and a[k-1] < a[k]: k -= 1", color: "#7c3aed" },
-              { n: 4, label: t(E, "Answer = front-cows count", "답 = 앞쪽 소의 개수"), code: "print(k)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single right-to-left scan", "오른쪽-왼쪽 한 번 스캔")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

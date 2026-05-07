@@ -126,35 +126,10 @@ export function makeOutOfPlaceCh2(E, lang = "py") {
         "Sort a copy of the array. Compare to the original — the moved cow creates a CONTIGUOUS block of mismatches. The number of adjacent swaps to fix is (block length − 1).",
         "배열의 사본을 정렬하고 원본과 비교 — 옮겨진 소 때문에 연속된 불일치 블록이 생겨요. 필요한 인접 스왑 수 = (블록 길이 − 1)."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Make sorted copy", "정렬한 사본 만들기"), code: "sorted_a = sorted(a)", color: "#059669" },
-              { n: 2, label: t(E, "Count mismatches", "불일치 세기"), code: "diff = sum(1 for i in range(N) if a[i] != sorted_a[i])", color: "#0891b2" },
-              { n: 3, label: t(E, "All sorted? answer is 0", "이미 정렬됨? 답은 0"), code: "if diff == 0: print(0)", color: "#7c3aed" },
-              { n: 4, label: t(E, "Otherwise diff − 1", "아니면 diff − 1"), code: "else: print(diff - 1)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + linear comparison", "정렬 + 선형 비교")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: code
     {

@@ -145,35 +145,10 @@ export function makeSocDist1Ch2(E, lang = "py") {
         "Binary search the answer D. For each candidate, GREEDILY place cows: put one at the very first available position, then keep placing at the leftmost spot that's ≥ D away from the last. Check if all N fit.",
         "답 D 를 이분 탐색. 각 후보에서, 그리디로 소 배치: 가장 첫 가능 위치에 1 마리, 그 다음 마지막 위치 + D 이상인 가장 왼쪽 위치에 계속 배치. N 마리 모두 들어가는지 확인."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Sort segments", "구간 정렬"), code: "segments.sort()", color: "#dc2626" },
-              { n: 2, label: t(E, "Binary search D", "D 이분 탐색"), code: "lo, hi = 1, max_pos", color: "#7c3aed" },
-              { n: 3, label: t(E, "Greedy can fit N at distance D?", "D 거리로 N 마리 가능?"), code: "place 1 at start; next at last + D, etc.", color: "#0891b2" },
-              { n: 4, label: t(E, "Print max feasible D", "가능한 최대 D 출력"), code: "print(best_D)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N log N · log V)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "binary search × greedy check", "이분 탐색 × 그리디 검증")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

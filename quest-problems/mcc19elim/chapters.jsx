@@ -128,35 +128,10 @@ export function makeMcc19ElimCh2(E, lang = "py") {
         "Sliding window with two pointers. Expand the right side; if zeros in window > K, shrink left until back ≤ K. Track the maximum window size.",
         "투 포인터 슬라이딩 윈도우. 오른쪽으로 확장; 윈도우 안 0 의 수가 K 초과면 왼쪽을 줄여서 ≤ K. 최대 윈도우 크기 추적."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init pointers and zero count", "포인터, 0 카운트 초기화"), code: "l = zeros = best = 0", color: "#2563eb" },
-              { n: 2, label: t(E, "Expand right", "오른쪽 확장"), code: "for r in range(N): if s[r] == '0': zeros += 1", color: "#7c3aed" },
-              { n: 3, label: t(E, "Shrink left if zeros > K", "0 > K 면 왼쪽 축소"), code: "while zeros > K: if s[l]=='0': zeros -= 1; l += 1", color: "#0891b2" },
-              { n: 4, label: t(E, "Track max window size", "최대 윈도우 크기"), code: "best = max(best, r - l + 1);  print(best)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "each element visited at most twice", "각 원소 최대 두 번 방문")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

@@ -157,35 +157,10 @@ export function makeBrigadeCh2(E, lang = "py") {
         "BFS from the lake L to the barn B on the 10×10 grid, blocking the rock R. The shortest path has some length L_path including L and B. The number of cows = L_path − 2 (L and B are not cows).",
         "10×10 격자에서 호수 L 에서 헛간 B 까지 BFS — 바위 R 은 통과 불가. 최단 경로 길이를 L_path 라 하면 (L, B 포함), 필요한 소의 수 = L_path − 2 (L, B 는 소 아님)."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Find L, B, R positions", "L, B, R 위치 찾기"), code: "locate L, B, R on the grid", color: "#dc2626" },
-              { n: 2, label: t(E, "BFS from L (skip R)", "L 에서 BFS (R 회피)"), code: "queue = [L];  dist[L] = 0", color: "#7c3aed" },
-              { n: 3, label: t(E, "Stop when reaching B", "B 에 도달하면 중단"), code: "if cell == B: shortest = dist[B]", color: "#0891b2" },
-              { n: 4, label: t(E, "Cows = shortest − 1", "소 수 = shortest − 1"), code: "print(shortest - 1)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(1)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "grid size is fixed at 10 × 10", "격자 크기 10 × 10 고정")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

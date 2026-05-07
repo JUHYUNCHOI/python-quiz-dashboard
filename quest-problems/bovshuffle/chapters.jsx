@@ -138,35 +138,10 @@ export function makeShuffleCh2(E, lang = "py") {
         "We're given the lineup AFTER 3 shuffles. To recover the original, build the INVERSE shuffle and apply it 3 times to the final lineup.",
         "셔플 3 번 후의 줄이 주어져요. 원래 줄을 복원하려면 역셔플을 만들고 최종 줄에 3 번 적용."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Build inverse shuffle", "역셔플 만들기"), code: "inv[shuffle[i]] = i  for i in range(N)", color: "#f97316" },
-              { n: 2, label: t(E, "Apply inverse once", "역셔플 1 회 적용"), code: "prev = [final[inv[i]] for i in range(N)]", color: "#7c3aed" },
-              { n: 3, label: t(E, "Apply two more times", "두 번 더 적용"), code: "for _ in range(2): prev = [prev[inv[i]] for i in range(N)]", color: "#0891b2" },
-              { n: 4, label: t(E, "Print original lineup", "원래 줄 출력"), code: "print(*prev)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "3 inverse-shuffle passes, each O(N)", "역셔플 3 회, 각 O(N)")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: code
     {

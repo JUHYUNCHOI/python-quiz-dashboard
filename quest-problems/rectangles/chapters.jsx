@@ -90,35 +90,10 @@ export function makeRectanglesCh2(E, lang = "py") {
         "Pick 2 horizontal lines from N+1 (the N+1 boundaries between N columns) and 2 vertical lines from M+1. Number of rectangles = C(N+1, 2) × C(M+1, 2).",
         "N+1 개의 수평선 (N 열의 경계 N+1 개) 중 2 개와 M+1 개의 수직선 중 2 개를 선택. 직사각형 수 = C(N+1, 2) × C(M+1, 2)."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N, M", "N, M 읽기"), code: "N, M = map(int, input().split())", color: "#f97316" },
-              { n: 2, label: t(E, "Choose 2 horizontal lines", "수평선 2 개 선택"), code: "h_choices = (N+1) * N // 2", color: "#7c3aed" },
-              { n: 3, label: t(E, "Choose 2 vertical lines", "수직선 2 개 선택"), code: "v_choices = (M+1) * M // 2", color: "#0891b2" },
-              { n: 4, label: t(E, "Multiply, print", "곱셈, 출력"), code: "print(h_choices * v_choices)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(1)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant arithmetic", "상수 산술")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

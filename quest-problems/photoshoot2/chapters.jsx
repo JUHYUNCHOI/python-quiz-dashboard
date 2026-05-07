@@ -132,35 +132,10 @@ export function makePhoto2Ch2(E, lang = "py") {
         "Map each cow to her index in the CURRENT order. Walk the TARGET order left to right; track the running max of current-positions seen. Each cow whose current-position < max must be MOVED LEFT.",
         "각 소를 현재 순서의 인덱스로 매핑. 목표 순서를 왼→오 순회하며 본 현재-위치의 누적 최댓값 추적. 현재-위치 < 최댓값 인 소는 왼쪽으로 옮겨야 함."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Build current-order index map", "현재 인덱스 맵"), code: "idx = {cow: pos for pos, cow in enumerate(current)}", color: "#f97316" },
-              { n: 2, label: t(E, "Walk target order", "목표 순서 순회"), code: "cur_max = -1;  moves = 0", color: "#7c3aed" },
-              { n: 3, label: t(E, "Compare to running max", "누적 최댓값과 비교"), code: "for cow in target: if idx[cow] < cur_max: moves += 1; else: cur_max = idx[cow]", color: "#0891b2" },
-              { n: 4, label: t(E, "Print moves", "moves 출력"), code: "print(moves)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

@@ -131,35 +131,10 @@ export function makeCowTipCh2(E, lang = "py") {
         "Process cells from BOTTOM-RIGHT to TOP-LEFT. If a cell is 1, the only operation that can flip it without disturbing already-fixed cells is the toggle of the rectangle (0,0)–(i,j) — so we must do it. Count those forced operations.",
         "오른쪽 아래에서 왼쪽 위 순서로 처리해요. 어떤 칸이 1 이면, 이미 고정된 칸들을 건드리지 않고 그 칸을 뒤집을 수 있는 유일한 연산은 사각형 (0,0)~(i,j) 토글 — 따라서 무조건 해야 해요. 그렇게 강제되는 연산의 수를 세요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Iterate bottom-right → top-left", "오른쪽 아래 → 왼쪽 위 순회"), code: "for i in range(N-1, -1, -1):  for j in range(N-1, -1, -1): ...", color: "#059669" },
-              { n: 2, label: t(E, "If cell is 1, toggle rect (0,0)-(i,j)", "칸이 1 이면 사각형 (0,0)-(i,j) 토글"), code: "if grid[i][j] == 1:", color: "#7c3aed" },
-              { n: 3, label: t(E, "Flip every cell in that rect", "그 사각형 안 모든 칸 뒤집기"), code: "for r in range(i+1):  for c in range(j+1): grid[r][c] ^= 1", color: "#0891b2" },
-              { n: 4, label: t(E, "Count operations", "연산 수 세기"), code: "ops += 1;  print(ops)", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N⁴)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N² cells × N² per toggle (N ≤ 10 so fast)", "N² 칸 × 토글당 N² (N ≤ 10 라 빠름)")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

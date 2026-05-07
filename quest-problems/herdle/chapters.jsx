@@ -147,35 +147,10 @@ export function makeHerdleCh2(E, lang = "py") {
         "First pass over 9 cells: count GREEN (exact matches) and remember which guess letters / answer letters are still available. Second pass: count YELLOWs by matching available guess letters with available answer letters.",
         "9 칸을 한 번 훑으면서: GREEN (정확한 일치) 을 세고, 남은 추측 글자 / 정답 글자를 기록. 두 번째 패스: 남은 추측 글자와 남은 정답 글자를 매칭해서 YELLOW 개수."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Count GREEN (exact match)", "GREEN 세기 (정확 일치)"), code: "if guess[i][j] == answer[i][j]: green += 1", color: "#16a34a" },
-              { n: 2, label: t(E, "Collect remaining letters", "남은 글자 모으기"), code: "else: remaining_ans[letter] += 1; remaining_guess.append(letter)", color: "#0891b2" },
-              { n: 3, label: t(E, "Yellow = matches in remaining", "YELLOW = 남은 글자에서 매칭"), code: "for letter in remaining_guess: if remaining_ans[letter]>0: yellow+=1; remaining_ans[letter]-=1", color: "#ca8a04" },
-              { n: 4, label: t(E, "Print green and yellow", "GREEN, YELLOW 출력"), code: "print(green, yellow)", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(1) per test</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "grid is fixed 3×3 = 9 cells", "격자가 고정 3×3 = 9 칸")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

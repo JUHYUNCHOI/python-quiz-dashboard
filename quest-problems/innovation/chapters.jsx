@@ -128,35 +128,10 @@ export function makeInnovationCh2(E, lang = "py") {
         "To complete the MOST tasks within H hours, do the SHORTEST ones first. Sort by duration, then accumulate; count how many fit before the running total exceeds H.",
         "H 시간 안에 가장 많은 작업을 완료하려면 가장 짧은 것부터. 소요시간 순 정렬, 누적; 누적 합이 H 를 넘기 전까지 들어가는 개수."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read tasks, H", "작업과 H 읽기"), code: "tasks = list(...);  H = ...", color: "#2563eb" },
-              { n: 2, label: t(E, "Sort tasks ascending", "오름차순 정렬"), code: "tasks.sort()", color: "#7c3aed" },
-              { n: 3, label: t(E, "Accumulate, stop when over H", "누적, H 초과시 중단"), code: "for t in tasks: if total + t > H: break  total += t; count += 1", color: "#0891b2" },
-              { n: 4, label: t(E, "Print count", "count 출력"), code: "print(count)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + linear accumulation", "정렬 + 선형 누적")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

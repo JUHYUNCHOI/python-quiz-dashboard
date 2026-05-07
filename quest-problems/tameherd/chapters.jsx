@@ -164,35 +164,10 @@ export function makeTameHerdCh2(E, lang = "py") {
         "Walk the log once, tracking the previous known value. Each 0 marks a breakout. For non-zero values, verify consistency: this should be previous + 1, OR a new sequence starting from 0/breakout.",
         "로그를 한 번 순회, 이전 알려진 값 추적. 0 은 탈출 표시. 0 이 아닌 값은 일관성 확인: 이전 + 1 이거나 새 시퀀스 시작 (0/탈출)."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init prev_known = -1", "prev_known = -1 초기화"), code: "prev = -1; min_b = 0; max_b = 0", color: "#8b5cf6" },
-              { n: 2, label: t(E, "Scan log entries", "로그 순회"), code: "for i, x in enumerate(log):", color: "#7c3aed" },
-              { n: 3, label: t(E, "Validate each non-missing value", "결손 아닌 값 검증"), code: "if x == 0: count breakout;  elif x != -1: check vs prev", color: "#0891b2" },
-              { n: 4, label: t(E, "Print min, max, exact (if known)", "min, max, 정확값 출력"), code: "print(min_breakouts, max_breakouts, exact)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

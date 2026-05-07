@@ -149,35 +149,10 @@ export function makeFamilyTreeCh2(E, lang = "py") {
         "Build A's ancestor chain (with depths) in a dictionary. Walk up from B; the first ancestor we hit that's also in A's chain is the LCA. Compare depths to decide: ancestor / descendant / siblings / cousins / unrelated.",
         "A 의 조상 체인을 깊이와 함께 딕셔너리에 저장. B 에서 위로 올라가며 처음 만나는 A 의 조상이 LCA. 깊이를 비교해서 결정: 조상 / 후손 / 자매 / 사촌 / 무관."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Map child → mother", "자식 → 엄마 매핑"), code: "mother = dict of (child, mom) pairs", color: "#059669" },
-              { n: 2, label: t(E, "Build A's ancestor chain", "A 의 조상 체인 구축"), code: "depthA = {A: 0, mom(A): 1, ...}", color: "#0891b2" },
-              { n: 3, label: t(E, "Walk up from B until hitting LCA", "B 에서 LCA 만날 때까지 위로"), code: "d = 0; cur = B; while cur not in depthA: cur = mother[cur]; d += 1", color: "#7c3aed" },
-              { n: 4, label: t(E, "Classify by (depthA[lca], d)", "(depthA[lca], d) 로 관계 분류"), code: "print mother / grandmother / siblings / cousins / NOT RELATED", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "walk both ancestor chains once", "조상 체인 각각 한 번 순회")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

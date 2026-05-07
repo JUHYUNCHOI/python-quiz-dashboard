@@ -123,35 +123,10 @@ export function makeMcc19BakeryCh2(E, lang = "py") {
         "Sort items by price DESCENDING. Group into blocks of 4: positions 0,1,2,3 are the most expensive 4, then next 4, etc. In each block, position 2 (3rd from top = 2nd cheapest of 4) is FREE. Sum all positions except those.",
         "가격 내림차순 정렬. 4 개씩 묶음: 위치 0,1,2,3 가 가장 비싼 4 개, 다음 4 개, ... 각 묶음의 위치 2 (위에서 3 번째 = 묶음 4 개 중 2 번째로 싼 것) 가 무료. 그 외 모두 합산."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Sort items descending", "내림차순 정렬"), code: "items.sort(reverse=True)", color: "#d97706" },
-              { n: 2, label: t(E, "Walk in groups of 4", "4 개씩 순회"), code: "for i in range(N): pos = i % 4", color: "#7c3aed" },
-              { n: 3, label: t(E, "Skip the free position (2)", "무료 자리 (2) 건너뛰기"), code: "if pos != 2: total += items[i]", color: "#0891b2" },
-              { n: 4, label: t(E, "Print total cost", "총 비용 출력"), code: "print(total)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort dominates", "정렬이 지배적")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

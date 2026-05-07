@@ -156,35 +156,10 @@ export function makeAirCondCh2(E, lang = "py") {
         "Since M ≤ 10, only 2^M ≤ 1024 AC subsets exist. Try every subset, build cooling per stall, check that every cow is satisfied, and track the cheapest valid subset.",
         "M ≤ 10 이라 가능한 에어컨 부분집합은 2^M ≤ 1024 개뿐. 부분집합을 전부 시도하면서 축사별 냉방을 만들고, 모든 소를 만족시키는지 확인하고, 가장 싼 유효 조합을 기록해요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Enumerate subsets via bitmask", "비트마스크로 부분집합 열거"), code: "for mask in range(1 << M): ...", color: "#2563eb" },
-              { n: 2, label: t(E, "Build cooling per stall", "축사별 냉방력 합산"), code: "for j in subset: cool[j.s..j.t] += j.power", color: "#0891b2" },
-              { n: 3, label: t(E, "Check every cow", "모든 소 검사"), code: "all(cool[s..t] ≥ c for cow in cows)", color: "#7c3aed" },
-              { n: 4, label: t(E, "Keep cheapest valid", "가장 싼 유효 조합 저장"), code: "if valid: best = min(best, sum_cost)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(2^M · N · S)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "1024 subsets × N cows × stall range S", "1024 개 조합 × N 마리 소 × 축사 범위 S")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

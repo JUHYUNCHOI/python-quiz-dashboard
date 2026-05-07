@@ -159,35 +159,10 @@ export function makeRevEngCh2(E, lang = "py") {
         "First, if two identical inputs have DIFFERENT outputs → LIE. Otherwise try every (position, A, B) triple — does 'if arr[pos]==0 return A else B' produce every test's output? Print OK if any works.",
         "먼저, 동일한 입력에 다른 출력 있으면 → LIE. 그렇지 않으면 모든 (위치, A, B) 삼중조합 시도 — 'if arr[pos]==0 return A else B' 가 모든 테스트의 출력을 만드는지? 하나라도 되면 OK."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Group by input array → output set", "입력 배열별 출력 집합"), code: "by_input = {tuple(arr): {outputs}}", color: "#8b5cf6" },
-              { n: 2, label: t(E, "If any group has 2 outputs → LIE", "한 그룹에 출력 2 개 → LIE"), code: "if any(len(s) > 1): print('LIE'); break", color: "#7c3aed" },
-              { n: 3, label: t(E, "Try every (pos, A, B) program", "(pos, A, B) 모두 시도"), code: "for pos, A, B in product(range(N), [0,1], [0,1]):", color: "#0891b2" },
-              { n: 4, label: t(E, "Print OK if any program works", "하나라도 작동 → OK"), code: "if all tests pass: print('OK'); else 'LIE'", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N · M)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "M tests × N positions × 4 polarities", "M 테스트 × N 위치 × 4 극성")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

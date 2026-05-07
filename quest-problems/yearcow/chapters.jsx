@@ -142,35 +142,10 @@ export function makeYearCowCh2(E, lang = "py") {
         "Maintain a year-offset per cow (Bessie = 0). For each statement 'X was born in the previous/next ANIMAL year relative to Y', compute modular distance to that animal in the 12-cycle (never 0 — use 12).",
         "소별 연도 오프셋 유지 (Bessie = 0). 각 진술 'X 가 Y 의 직전/직후 ANIMAL 해' 에 대해 12-주기에서 그 동물까지의 모듈러 거리 계산 (0 이면 12 사용)."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init year[Bessie] = 0", "year[Bessie] = 0 초기화"), code: "year = {'Bessie': 0}", color: "#d97706" },
-              { n: 2, label: t(E, "For each statement", "각 진술"), code: "for X, direction, Animal, Y in stmts:", color: "#7c3aed" },
-              { n: 3, label: t(E, "Compute modular dist to Animal", "Animal 까지 모듈러 거리"), code: "dist = (animal_idx[Animal] - animal_idx[Y_animal]) mod 12 (or 12 if 0)", color: "#0891b2" },
-              { n: 4, label: t(E, "Set year[X] and answer queries", "year[X] 설정 + 쿼리 응답"), code: "year[X] = year[Y] ± dist;  print difference for queries", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "linear in number of statements", "진술 수에 선형")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

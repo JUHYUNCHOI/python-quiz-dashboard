@@ -121,35 +121,10 @@ export function makeUdderedCh2(E, lang = "py") {
         "Map each letter to its position in Bessie's custom alphabet. Scan S; whenever next letter's custom-position ≤ current's, she must recite the alphabet again. Start with cycle = 1.",
         "각 글자를 Bessie의 커스텀 알파벳에서의 위치로 매핑. S 를 스캔; 다음 글자의 커스텀-위치 ≤ 현재 위치 일 때 알파벳을 다시 외워야 함. cycle = 1 부터 시작."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Build position map", "위치 맵 구축"), code: "pos = {letter: i for i, letter in enumerate(alphabet)}", color: "#dc2626" },
-              { n: 2, label: t(E, "Init cycles = 1", "cycles = 1 초기화"), code: "cycles = 1", color: "#7c3aed" },
-              { n: 3, label: t(E, "Scan S; bump on backward step", "S 스캔; 뒤로 가면 cycles +1"), code: "for i in range(1, len(S)): if pos[S[i]] <= pos[S[i-1]]: cycles += 1", color: "#0891b2" },
-              { n: 4, label: t(E, "Print cycles", "cycles 출력"), code: "print(cycles)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

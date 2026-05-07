@@ -116,35 +116,10 @@ export function makeGiftsCh2(E, lang = "py") {
         "If N gifts are split as evenly as possible across K people, each person gets at least N//K gifts. The remainder N % K people get ONE EXTRA gift each — that's the answer.",
         "N 선물을 K 명에게 최대한 고르게 나누면, 모두 최소 N//K 개씩. 남은 N % K 명이 1 개씩 더 받음 — 그게 답."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N, K", "N, K 읽기"), code: "N, K = map(int, input().split())", color: "#d97706" },
-              { n: 2, label: t(E, "Each person base = N // K", "1 인당 기본 = N // K"), code: "base = N // K", color: "#7c3aed" },
-              { n: 3, label: t(E, "Leftover = N % K", "나머지 = N % K"), code: "extra = N % K", color: "#0891b2" },
-              { n: 4, label: t(E, "Print extra", "extra 출력"), code: "print(extra)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(1)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "two arithmetic operations", "산술 연산 두 번")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

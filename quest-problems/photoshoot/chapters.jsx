@@ -147,35 +147,10 @@ export function makePhotoshootCh2(E, lang = "py") {
         "Reverse-engineer from b: undo the cyclic shifts in b to derive the missing original a. Each prefix reversal in the original corresponds to one Bessie's b[i] = b[i-1] - 1 step.",
         "b 에서 거꾸로 추적: b 의 순환 이동을 되돌려서 원래 a 를 복원. 원본의 각 접두사 뒤집기는 b[i] = b[i-1] - 1 한 단계에 대응돼요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N and target b", "N 과 목표 b 읽기"), code: "b = list(map(int, input().split()))", color: "#dc2626" },
-              { n: 2, label: t(E, "Compare b[i] to b[i-1]", "b[i] 와 b[i-1] 비교"), code: "if b[i] == b[i-1] - 1: same direction", color: "#7c3aed" },
-              { n: 3, label: t(E, "Each direction change = one move", "방향 전환마다 동작 1번"), code: "if direction differs from prev: moves += 1", color: "#0891b2" },
-              { n: 4, label: t(E, "Print total moves", "총 동작 수 출력"), code: "print(moves)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

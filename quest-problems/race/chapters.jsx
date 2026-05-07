@@ -190,35 +190,10 @@ export function makeRaceCh2(E, lang = "py") {
         "Optimal strategy: accelerate to some peak speed P, then decelerate to ≤ X. Distance covered = (1+2+…+P) for accel + (P+(P−1)+…+(X+1)) for decel. Find smallest P so total ≥ K, and total time = P + (P − X).",
         "최적 전략: 어떤 최고 속도 P 까지 가속, 그 후 X 이하로 감속. 거리 = 가속 (1+2+…+P) + 감속 (P+(P−1)+…+(X+1)). 총 거리 ≥ K 가 되는 가장 작은 P 를 찾으면 총 시간 = P + (P − X)."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Try peak speed P = X, X+1, …", "최고 속도 P = X, X+1, … 시도"), code: "for P in range(X, large):", color: "#059669" },
-              { n: 2, label: t(E, "Distance covered at peak P", "최고 P 일 때 이동 거리"), code: "d = P*(P+1)//2 + (P+X)*(P-X)//2", color: "#0891b2" },
-              { n: 3, label: t(E, "Stop when d ≥ K", "d ≥ K 가 되면 중단"), code: "if d ≥ K: break", color: "#7c3aed" },
-              { n: 4, label: t(E, "Time = accel + decel", "시간 = 가속 + 감속"), code: "print(P + (P - X))", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(√K)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "peak speed grows like √K", "최고 속도는 √K 처럼 증가")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

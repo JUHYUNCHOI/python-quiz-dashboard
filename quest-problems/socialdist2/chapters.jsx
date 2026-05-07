@@ -144,35 +144,10 @@ export function makeSocDist2Ch2(E, lang = "py") {
         "Sort cows by position. The MAXIMUM valid R = (smallest distance from a healthy cow to a sick cow) − 1. Then count groups of sick cows where adjacent sick cows are within 2R of each other.",
         "소를 위치순 정렬. 가능한 최대 R = (건강한 소에서 가장 가까운 감염 소까지 거리) − 1. 그 R 로, 인접한 감염 소가 서로 2R 이내인 그룹 수를 세요."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Sort cows by position", "소 위치순 정렬"), code: "cows.sort(key=lambda c: c.pos)", color: "#2563eb" },
-              { n: 2, label: t(E, "Find min sick-healthy distance", "감염-건강 최소 거리"), code: "R = min(|sick.pos - healthy.pos|) - 1", color: "#7c3aed" },
-              { n: 3, label: t(E, "Group sick cows with gap ≤ 2R", "간격 ≤ 2R 인 감염 그룹화"), code: "cluster sick cows where adjacent gap ≤ 2R", color: "#0891b2" },
-              { n: 4, label: t(E, "Print cluster count", "클러스터 수 출력"), code: "print(num_clusters)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + linear sweep", "정렬 + 선형 스윕")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

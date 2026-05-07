@@ -157,35 +157,10 @@ export function makeModernArtCh2(E, lang = "py") {
         "For each color, find its bounding box. A color CANNOT be first if any other color's bounding box contains a cell that's currently this color (it must have been painted on top). Visible-only colors with no such contradiction can be first.",
         "각 색의 바운딩 박스 찾기. 색이 첫 번째일 수 없는 경우: 다른 색의 바운딩 박스가 이 색의 칸을 포함 (위에 칠해진 거여야 함). 그런 모순이 없는 보이는 색만 첫 번째 가능."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Find bounding box per color", "색별 바운딩 박스"), code: "for each color present: bbox[c] = (min_r, min_c, max_r, max_c)", color: "#059669" },
-              { n: 2, label: t(E, "For each color c1", "각 색 c1"), code: "for c1 in present_colors:", color: "#7c3aed" },
-              { n: 3, label: t(E, "Check if any c2 hides cells of c1", "c1 칸이 c2 박스 안에 있나"), code: "for c2 != c1: if c1 cells inside bbox[c2]: c1 cannot be first", color: "#0891b2" },
-              { n: 4, label: t(E, "Add non-visible + valid visible", "안 보이는 + 유효한 보이는 색 추가"), code: "print non-visible count + valid visible count", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "scan canvas + check 9² color pairs", "캔버스 스캔 + 9² 색 쌍 검사")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

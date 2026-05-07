@@ -142,35 +142,10 @@ export function makeFactoryCh2(E, lang = "py") {
         "A central station C is reachable from every other ↔ in the REVERSE graph (flip arrows), C reaches every other. So build the reverse graph, then test each candidate via BFS/DFS — print the first one whose reverse-BFS reaches all N stations.",
         "중심 스테이션 C 가 다른 모든 곳에서 도달 가능 ↔ 역방향 그래프 (간선 뒤집기) 에서 C 가 다른 모두에 도달 가능. 그래서 역방향 그래프를 만들고 후보마다 BFS/DFS — 역방향 BFS 가 N 개 스테이션 모두에 도달하는 첫 후보를 출력."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Build reverse adjacency list", "역방향 인접 리스트 구축"), code: "for u, v in edges: rev[v].append(u)", color: "#2563eb" },
-              { n: 2, label: t(E, "Try each candidate C", "각 후보 C 시도"), code: "for C in range(1, N+1):", color: "#7c3aed" },
-              { n: 3, label: t(E, "BFS on reverse from C", "C 에서 역방향 BFS"), code: "visited = bfs(rev, C)", color: "#0891b2" },
-              { n: 4, label: t(E, "All N reached → print C", "모두 도달 → C 출력"), code: "if len(visited) == N: print(C); break  else: print(-1)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N candidates × BFS over N nodes", "N 후보 × N 노드 BFS")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

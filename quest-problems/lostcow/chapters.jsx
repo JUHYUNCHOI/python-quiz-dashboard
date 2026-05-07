@@ -147,32 +147,10 @@ export function makeLostCowCh2(E, lang = "py") {
       narr: t(E,
         "Simulate the zigzag.\nEach step doubles, so we find y within O(log(abs(x-y))) steps.\nVery fast!", "지그재그를 시뮬레이션해요. 매 스텝마다 두 배로 커지니까 O(log(abs(x-y))) 스텝 안에 y를 찾아요. 매우 빠르지!"),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init state", "초기화"), code: "pos = x,  direction = 1,  step = 1,  total = 0", color: "#dc2626" },
-              { n: 2, label: t(E, "Compute target", "목표 계산"), code: "target = pos + direction · step", color: "#0891b2" },
-              { n: 3, label: t(E, "Check if y is on this leg", "y가 이번 다리?"), code: "if min(pos, target) \u2264 y \u2264 max(pos, target): total += abs(y \u2212 pos); break", color: "#16a34a" },
-              { n: 4, label: t(E, "Otherwise: walk + flip + double", "아니면: 진행 + 반전 + 2배"), code: "total += step;  pos = target;  direction *= \u22121;  step *= 2", color: "#7c3aed" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(log abs(x \u2212 y))</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "step doubles each leg", "다리마다 step 2배")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Progressive code
     {

@@ -148,35 +148,10 @@ export function makeSwapityCh2(E, lang = "py") {
         "Simulate one round of reversals on identity [1..N] to get the permutation P. Track each cow's cycle length in P; effective rounds = K mod cycle. Apply that many actual rounds.",
         "단위 순열 [1..N] 에 한 라운드 뒤집기를 적용해 순열 P 를 구함. P 에서 각 소의 순환 길이 추적; 실제 라운드 = K mod 순환. 그만큼 진짜 라운드 적용."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Simulate one round on [1..N]", "[1..N] 한 라운드 시뮬"), code: "P = apply M reversals to [1..N]", color: "#8b5cf6" },
-              { n: 2, label: t(E, "For each cow, find cycle length", "각 소의 순환 길이 찾기"), code: "cycle[i] = how many P applications return cow i to position i", color: "#7c3aed" },
-              { n: 3, label: t(E, "Effective rounds per cow", "소별 실제 라운드"), code: "effective[i] = K % cycle[i]", color: "#0891b2" },
-              { n: 4, label: t(E, "Apply P that many times per cow", "소별로 P 를 그 횟수만큼"), code: "build final lineup;  print(*final)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N · max_cycle)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "cycles bounded; per cow constant after build", "순환 길이 제한; 소별 상수 작업")}</div>
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
+
     },
     // 2-2: Code
     {

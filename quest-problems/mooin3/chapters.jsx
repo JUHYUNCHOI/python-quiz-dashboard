@@ -225,26 +225,8 @@ export function makeMooin3Ch2(E, lang = "py") {
         "Fix j (middle), then maximize (j − i) × (k − j) by going as far as possible on each side.\nWHY 'farthest'? Bigger (j − i) and bigger (k − j) both make the product bigger.",
         "j (중간) 고정 → 양쪽으로 최대한 멀리 가서 (j − i) × (k − j) 최대화.\n왜 '가장 멀리'? (j − i) 와 (k − j) 둘 다 커야 곱이 커짐."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Per query, loop j", "쿼리당 j 순회"), code: "for j in range(l+1, r):", color: "#7c5cfc" },
-              { n: 2, label: t(E, "Best i = SMALLEST i with s[i] ≠ s[j] (maximizes j−i)", "최선 i = s[i] ≠ s[j] 인 가장 작은 i ((j−i) 최대화)"), code: "i = leftmost idx in [l, j) where s[i] != s[j]", color: "#0891b2" },
-              { n: 3, label: t(E, "Best k = LARGEST k with s[k] = s[j] (maximizes k−j)", "최선 k = s[k] = s[j] 인 가장 큰 k ((k−j) 최대화)"), code: "k = rightmost idx in (j, r] where s[k] == s[j]", color: "#16a34a" },
-              { n: 4, label: t(E, "Update best product", "최댓값 갱신"), code: "best = max(best, (j − i) × (k − j))", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
+          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
         </div>),
     },
 
