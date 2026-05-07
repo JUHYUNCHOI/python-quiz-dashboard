@@ -172,24 +172,5 @@ export function makeLogicalCh2(E, lang = "py") {
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
 
-    {
-      type: "reveal",
-      narr: t(E,
-        "Time check — Q queries × O(N) evaluate = O(N · Q). For Bronze (N, Q ≤ 2·10⁵) the worst case is ~4·10¹⁰ ops — too slow for full credit but earns partial.",
-        "시간 체크 — Q 쿼리 × O(N) 평가 = O(N · Q). Bronze (N, Q ≤ 2·10⁵) 최악은 ~4·10¹⁰ — 풀점수는 안 되지만 부분점수는 받아요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: TINT, border: `2px solid ${BORDER}`, borderRadius: 10, padding: "12px 14px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: DARK, fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Brute complexity", "⏱ 브루트 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: ACCENT }}>O(N · Q)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>{t(E, "Q queries × O(N) evaluate. Earns partial credit on subtasks 3-8.", "Q 쿼리 × O(N) 평가. subtask 3-8 부분점수.")}</div>
-          </div>
-          <div style={{ marginTop: 10, padding: "10px 12px", background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
-            💡 {t(E,
-              "Full credit needs O((N + Q) log N) — precompute prefix/suffix AND-chain stats, then answer each query in O(1). That's the next step beyond Bronze.",
-              "풀점수는 O((N + Q) log N) — prefix/suffix AND-체인 통계를 미리 계산하고 쿼리마다 O(1) 답. Bronze 다음 단계.")}
-          </div>
-        </div>),
-    },
   ];
 }

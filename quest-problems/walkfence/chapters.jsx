@@ -176,24 +176,5 @@ export function makeWalkCh2(E, lang = "py") {
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
 
-    {
-      type: "reveal",
-      narr: t(E,
-        "Time check — N queries × O(P) side scan = O(N · P). For N, P ≤ 2·10⁵ that's ~4·10¹⁰ in the worst case — too slow for full credit but earns subtasks 2-6.",
-        "시간 체크 — N 쿼리 × O(P) 변 스캔 = O(N · P). N, P ≤ 2·10⁵ 이면 최악 ~4·10¹⁰ — 풀점수는 안 되지만 subtask 2-6 부분점수."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: TINT, border: `2px solid ${BORDER}`, borderRadius: 10, padding: "12px 14px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: DARK, fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Brute complexity", "⏱ 브루트 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: ACCENT }}>O(N · P)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>{t(E, "N cows × P sides scanned per query.", "소 N 마리 × 쿼리당 변 P 개 스캔.")}</div>
-          </div>
-          <div style={{ marginTop: 10, padding: "10px 12px", background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
-            💡 {t(E,
-              "Full credit needs O(P + N · log P) — group sides by their fixed coordinate, binary-search each query point. That's beyond Bronze.",
-              "풀점수는 O(P + N · log P) — 변을 고정 좌표 별로 묶고, 쿼리 점마다 이분 탐색. Bronze 다음 단계.")}
-          </div>
-        </div>),
-    },
   ];
 }
