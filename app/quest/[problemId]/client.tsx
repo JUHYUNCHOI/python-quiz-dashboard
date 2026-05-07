@@ -180,12 +180,20 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const prevProblem = idx > 0 ? ALL_PROBLEMS[idx - 1] : null
   const nextProblem = idx < ALL_PROBLEMS.length - 1 ? ALL_PROBLEMS[idx + 1] : null
 
-  // Same-contest siblings (e.g. all "Dec 2024 Bronze" problems together)
+  // Same-contest siblings (e.g. all "Dec 2024 Bronze" problems together).
+  // Sorted by the problem number in the sub tag so the dot row reads
+  // 1 2 3 instead of whatever order data.ts happened to list them.
   const contestKey = (sub?: string) =>
     (sub ?? "").replace(/\s*#\d+$/, "").replace(/\s*P\d+$/, "").trim()
+  const problemNum = (sub?: string) => {
+    const m = (sub ?? "").match(/#(\d+)$/) || (sub ?? "").match(/P(\d+)$/)
+    return m ? parseInt(m[1]) : 99
+  }
   const myContestKey = contestKey(meta?.sub)
   const contestSiblings = myContestKey
-    ? ALL_PROBLEMS.filter(p => contestKey(p.sub) === myContestKey)
+    ? ALL_PROBLEMS
+        .filter(p => contestKey(p.sub) === myContestKey)
+        .sort((a, b) => problemNum(a.sub) - problemNum(b.sub))
     : []
 
   if (!meta) {
