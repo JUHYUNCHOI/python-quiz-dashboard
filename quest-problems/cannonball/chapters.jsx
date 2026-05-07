@@ -5,38 +5,41 @@ import { getCannonballSections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N, S = map(int, input().split())",
-  "pos_type = {}  # position -> (type, value)",
-  "for _ in range(N):",
-  "    p, typ, val = map(int, input().split())",
-  "    pos_type[p] = (typ, val)",
+  "import sys",
   "",
-  "position = S",
-  "direction = 1   # 1 = right, -1 = left",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "N = int(data[p]); p += 1     # number of pads (positions 1..N)",
+  "S = int(data[p]); p += 1     # starting position",
+  "",
+  "# Position i holds pad i — line i is its (type, value) pair.",
+  "typ = [0] * (N + 2)",
+  "val = [0] * (N + 2)",
+  "for i in range(1, N + 1):",
+  "    typ[i] = int(data[p]); p += 1   # 0 = jump pad, 1 = target",
+  "    val[i] = int(data[p]); p += 1   # power-up amount or break threshold",
+  "",
+  "x = S",
+  "direction = 1   # +1 right, -1 left",
   "power = 1",
-  "broken = set()",
-  "visited = set()",
+  "broken = [False] * (N + 2)",
+  "ans = 0",
   "",
-  "while True:",
-  "    state = (position, direction, power)",
-  "    if state in visited:",
+  "# 5,000,000 iterations is plenty.  When Bessie loops between two value-0",
+  "# jump pads forever, she can't break NEW targets after the loop starts,",
+  "# so we don't need explicit cycle detection — just a generous cap.",
+  "for _ in range(5_000_000):",
+  "    if x < 1 or x > N:",
   "        break",
-  "    visited.add(state)",
-  "",
-  "    if position not in pos_type:",
-  "        break",
-  "",
-  "    typ, val = pos_type[position]",
-  "    if typ == 0:  # jump pad",
+  "    if typ[x] == 1 and power >= val[x] and not broken[x]:",
+  "        broken[x] = True",
+  "        ans += 1",
+  "    if typ[x] == 0:",
   "        direction *= -1",
-  "        power += val",
-  "    else:  # target",
-  "        if power >= val and position not in broken:",
-  "            broken.add(position)",
+  "        power += val[x]",
+  "    x += direction * power",
   "",
-  "    position += direction",
-  "",
-  "print(len(broken))",
+  "print(ans)",
 ];
 
 
@@ -49,8 +52,8 @@ export function makeCannonCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie is a cannonball that starts at position S, moving RIGHT with power 1, on a number line dotted with N items at distinct positions.\nEach item is a jump pad (reverse direction, add to power) or a target (breaks if power ≥ its value).\nHow many targets break before Bessie leaves the line or loops forever?",
-        "Bessie가 대포알이 되어 위치 S에서 시작해 파워 1로 오른쪽으로 움직여요. 수직선 위에는 서로 다른 위치에 N개의 아이템이 있어요.\n각 아이템은 점프패드(방향을 반대로 바꾸고 파워를 더해줌) 또는 타겟(파워가 그 값 이상이면 부서짐) 둘 중 하나예요.\nBessie가 수직선을 벗어나거나 무한 반복할 때까지 부서지는 타겟 수를 출력해요."),
+        "Bessie is a cannonball that starts at position S, moving RIGHT with power 1.  Positions 1..N each hold either a jump pad (reverses direction and adds to power) or a target (breaks once if power ≥ its value).  Each step she moves by direction × power.  Count broken targets before she leaves [1, N].",
+        "Bessie 가 위치 S 에서 오른쪽 방향, 파워 1 로 출발하는 대포알. 위치 1..N 각각에 점프패드 (방향을 뒤집고 파워에 값을 더함) 또는 타겟 (파워 ≥ 값이면 한 번 부서짐) 이 있어요. 매 step 마다 direction × power 만큼 움직여요. [1, N] 범위를 벗어날 때까지 부서지는 타겟 수를 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -67,19 +70,21 @@ export function makeCannonCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie starts at position ", "Bessie가 위치 ")}
-                  <b style={{ color: "#f97316" }}>{t(E, "S, moving RIGHT with power 1", "S에서 오른쪽 방향, 파워 1")}</b>
-                  {t(E, ", on a number line.", "로 출발해요.")}
+                  {t(E, "Bessie starts at position ", "Bessie 가 위치 ")}
+                  <b style={{ color: "#f97316" }}>{t(E, "S with power 1, moving RIGHT", "S, 파워 1, 오른쪽 방향")}</b>
+                  {t(E, ".  Each step she moves by ", "으로 출발. 매 step 마다 ")}
+                  <code style={{ background: "#fff7ed", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>direction × power</code>
+                  {t(E, ".", " 만큼 이동.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "There are ", "수직선 위 N개 위치에 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "jump pads", "점프패드")}</b>
-                  {t(E, " — landing on one ", " — 착지하면 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "reverses direction and adds to power", "방향을 반대로 바꾸고 파워에 값을 더해줘요")}</b>
-                  {t(E, ".", ".")}
+                  {t(E, "Each position 1..N holds either a ",
+                        "위치 1..N 각각에 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "jump pad", "점프패드")}</b>
+                  {t(E, " (reverses direction and adds to power) or a target.",
+                        " (방향을 뒤집고 파워에 값을 더함) 또는 타겟이 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -105,11 +110,68 @@ export function makeCannonCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Official sample I/O
+    {
+      type: "reveal",
+      narr: t(E,
+        "Input: N S, then N lines each 't v' (the i-th line is pad i).  t = 0 → jump pad, t = 1 → target.",
+        "입력: N S, 그 다음 N 줄에 't v' 씩 (i 번째 줄이 i 번 패드). t = 0 → 점프패드, t = 1 → 타겟."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#f97316", textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#9a3412", whiteSpace: "pre" }}>
+{`5 2
+0 1
+1 1
+1 2
+0 1
+1 1`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`1`}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
+              🔍 {t(E, "Walkthrough", "풀이")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              {t(E, "Pads: jump1, target1, target2, jump1, target1.  Start x=2, dir=+1, power=1.",
+                    "패드: 점프1, 타겟1, 타겟2, 점프1, 타겟1. 시작 x=2, dir=+1, power=1.")}
+              <br/>
+              {t(E, "x=2 (target val 1): power 1 ≥ 1 → break.  ans=1.  x ← 2 + 1·1 = 3.",
+                    "x=2 (타겟 값 1): 파워 1 ≥ 1 → 부숨. ans=1. x ← 2 + 1·1 = 3.")}
+              <br/>
+              {t(E, "x=3 (target val 2): power 1 < 2 → can't break.  x ← 3 + 1·1 = 4.",
+                    "x=3 (타겟 값 2): 파워 1 < 2 → 못 부숨. x ← 3 + 1·1 = 4.")}
+              <br/>
+              {t(E, "x=4 (jump pad val 1): dir flips to -1, power becomes 2.  x ← 4 + (-1)·2 = 2.",
+                    "x=4 (점프 값 1): dir = -1, power = 2. x ← 4 + (-1)·2 = 2.")}
+              <br/>
+              {t(E, "x=2 already broken; x ← 2 + (-1)·2 = 0.  Out of [1, 5] → stop.",
+                    "x=2 이미 부숨; x ← 2 + (-1)·2 = 0. [1, 5] 벗어남 → 종료.")}
+            </div>
+            <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
+              {t(E, "→ ans = 1.", "→ ans = 1.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: Quiz — break threshold
     {
       type: "quiz",
       narr: t(E,
-        "Quick check!\nIf Bessie's power is 2 and she lands on a target with value 3, does it break?", "확인! Bessie의 파워가 2이고 값이 3인 타겟에 착지하면, 부서질까?"),
+        "Targets only break the first time Bessie reaches them WITH enough power.",
+        "타겟은 Bessie 가 처음 도착했을 때 파워가 충분해야 부서져요."),
       question: t(E,
         "Power = 2, target value = 3. Does the target break?",
         "파워 = 2, 타겟 값 = 3. 타겟이 부서질까?"),
@@ -119,21 +181,22 @@ export function makeCannonCh1(E) {
       ],
       correct: 1,
       explain: t(E,
-        "Power (2) < value (3), so the target does NOT break. Bessie needs power >= target value.",
-        "파워(2) < 값(3)이라 타겟은 안 부서져. 파워 >= 타겟 값이어야 해요."),
+        "Power (2) < value (3) — target does NOT break.  She needs power ≥ value.",
+        "파워(2) < 값(3) — 안 부서짐. 파워 ≥ 값 필요."),
     },
-    // 1-3: Input
+    // 1-4: Input — step distance
     {
       type: "input",
       narr: t(E,
-        "Bessie starts at position 2 with power 1, going right. What is her next position?", "Bessie가 위치 2에서 파워 1, 오른쪽으로 출발해요. 다음 위치는?"),
+        "Each step Bessie moves by direction × power.",
+        "매 step 마다 Bessie 는 direction × power 만큼 움직여요."),
       question: t(E,
-        "Position = 2, direction = right (+1). Next position?",
-        "위치 = 2, 방향 = 오른쪽(+1). 다음 위치는?"),
+        "Position = 4, direction = -1, power = 2.  Next position?",
+        "위치 = 4, 방향 = -1, 파워 = 2. 다음 위치?"),
       hint: t(E,
-        "Next position = current position + direction",
-        "다음 위치 = 현재 위치 + 방향"),
-      answer: 3,
+        "next = position + direction × power = 4 + (-1) × 2 = 2.",
+        "next = position + direction × power = 4 + (-1) × 2 = 2."),
+      answer: 2,
     },
   ];
 }
@@ -144,20 +207,20 @@ export function makeCannonCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCannonCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
+    // 2-1: Brute plan
     {
       type: "reveal",
       narr: t(E,
-        "Simulate step by step. The state is (position, direction, power) — if we revisit one, we're looping forever. Otherwise process the item at this position and step in our direction.",
-        "한 단계씩 시뮬레이션해요. 상태 = (위치, 방향, 파워) — 같은 상태를 다시 만나면 무한 반복 중이라는 뜻. 아니면 현재 위치의 아이템을 처리하고 한 칸 이동."),
+        "Plan: simulate step by step.  Each step: process the pad at x, then move x by direction × power.  Stop once x leaves [1, N] — or after a generous iteration cap to be safe against zero-value-jump-pad loops.",
+        "계획: step 별 시뮬레이션. 매 step: x 의 패드 처리 후 x 를 direction × power 만큼 이동. x 가 [1, N] 벗어나면 종료 — 0-값 점프패드 루프 안전을 위해 충분히 큰 반복 cap 도 둠."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              { n: 1, label: t(E, "Initialize", "초기화"), code: "pos=S, dir=+1, power=1, visited={}", color: "#f97316" },
-              { n: 2, label: t(E, "Loop detection", "루프 감지"), code: "if (pos, dir, power) in visited: stop", color: "#dc2626" },
-              { n: 3, label: t(E, "Process item at pos", "현재 위치 아이템 처리"), code: "jump pad → reverse + boost  /  target → break if power ≥ value", color: "#7c3aed" },
-              { n: 4, label: t(E, "Step + repeat", "이동 + 반복"), code: "pos += dir;  go to step 2", color: "#16a34a" },
+              { n: 1, label: t(E, "Read N S, then N pads",     "N S 읽고 N 개 패드"),         code: "typ[i], val[i] for i in 1..N",                                       color: "#f97316" },
+              { n: 2, label: t(E, "Init x=S, dir=+1, power=1", "x=S, dir=+1, power=1 초기화"), code: "broken = [False]*(N+2);  ans = 0",                                   color: "#dc2626" },
+              { n: 3, label: t(E, "Process pad at x",           "x 의 패드 처리"),             code: "target & power≥val & not broken → break it  /  jump pad → flip + boost", color: "#7c3aed" },
+              { n: 4, label: t(E, "Move + repeat (cap loops)",  "이동 + 반복 (cap)"),          code: "x += direction × power;  break if x<1 or x>N",                       color: "#16a34a" },
             ].map((step, i) => (
               <div key={i} style={{
                 display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
@@ -176,8 +239,9 @@ export function makeCannonCh2(E, lang = "py") {
           </div>
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
             <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "(position, direction, power) state space ≤ N · 2 · N", "(위치, 방향, 파워) 상태 공간 ≤ N · 2 · N")}</div>
+            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N log N)</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "between target hits power grows; harmonic sum bounds bounces.",
+                                                                              "타겟을 칠 때마다 파워가 커지면서 바운스 횟수의 합이 N log N.")}</div>
           </div>
         </div>),
     },
