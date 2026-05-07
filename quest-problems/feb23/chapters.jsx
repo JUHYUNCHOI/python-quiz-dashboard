@@ -5,26 +5,33 @@ import { getFeb23Sections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "s = input()",
-  "results = set()",
+  "import sys",
   "",
-  "# find positions of 'F'",
+  "data = sys.stdin.read().split()",
+  "N = int(data[0])      # length of the string",
+  "s = data[1]           # the message itself",
+  "",
+  "# Find positions of every 'F' wildcard",
   "f_positions = [i for i, c in enumerate(s) if c == 'F']",
   "n_f = len(f_positions)",
   "",
-  "# try all 2^abs(F) assignments",
+  "# Try all 2^|F| ways to fill F's with B or E",
+  "results = set()",
   "for mask in range(1 << n_f):",
   "    arr = list(s)",
   "    for j in range(n_f):",
   "        arr[f_positions[j]] = 'B' if (mask >> j) & 1 else 'E'",
-  "    # count consecutive same pairs",
+  "    # excitement = count of adjacent same-letter pairs",
   "    excitement = 0",
   "    for i in range(len(arr) - 1):",
-  "        if arr[i] == arr[i+1]:",
+  "        if arr[i] == arr[i + 1]:",
   "            excitement += 1",
   "    results.add(excitement)",
   "",
+  "# Output: count of distinct excitement values, then min, then max.",
   "print(len(results))",
+  "print(min(results))",
+  "print(max(results))",
 ];
 
 /* ═══════════════════════════════════════════════════════════════
@@ -84,11 +91,58 @@ export function makeFebCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "number of distinct excitement values possible", "가능한 서로 다른 흥분도 값의 개수")}</b>
-                  {t(E, " over all F-assignments.", " 를 출력해요.")}
+                  {t(E, "Output 3 lines: ", "출력 3 줄: ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "count of distinct excitement values, then min, then max",
+                                                            "서로 다른 흥분도 값의 개수, 그 다음 최솟값, 최댓값")}</b>
+                  {t(E, " across all F-assignments.", " — 모든 F 결정 방식 기준.")}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>),
+    },
+    // Official sample I/O
+    {
+      type: "reveal",
+      narr: t(E,
+        "Input: N on line 1, string of length N on line 2.  Output: 3 lines (count, min, max).",
+        "입력: 1 줄에 N, 2 줄에 길이 N 문자열. 출력: 3 줄 (개수, 최솟값, 최댓값)."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d", whiteSpace: "pre" }}>
+{`4
+BEEF`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`2
+1
+2`}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
+              🔍 {t(E, "Walkthrough — 'BEEF' has one F", "풀이 — 'BEEF' 의 F 한 개")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              {t(E, "F → B: 'BEEB' → adjacent (E,E) ✓ → excitement 1.",
+                    "F → B: 'BEEB' → 인접 (E,E) ✓ → 흥분도 1.")}
+              <br/>
+              {t(E, "F → E: 'BEEE' → adjacent (E,E)(E,E) ✓✓ → excitement 2.",
+                    "F → E: 'BEEE' → 인접 (E,E)(E,E) ✓✓ → 흥분도 2.")}
+            </div>
+            <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
+              {t(E, "Distinct values {1, 2} → count=2, min=1, max=2.",
+                    "서로 다른 값 {1, 2} → 개수=2, 최솟=1, 최댓=2.")}
             </div>
           </div>
         </div>),
