@@ -6,28 +6,29 @@ import { getMilkExchangeSections } from "./components";
    ================================================================ */
 export const SOLUTION_CODE = [
   "import sys",
-  "input = sys.stdin.readline",
   "",
-  "N, M = map(int, input().split())",
-  "cap = list(map(int, input().split()))",
-  "milk = list(map(int, input().split()))",
-  "direction = input().split()  # 'L' or 'R' for each cow",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "N = int(data[p]); p += 1",
+  "M = int(data[p]); p += 1",
+  "S = data[p]; p += 1               # direction string, e.g. 'RRL'",
+  "cap = [int(x) for x in data[p:p+N]]",
   "",
-  "for step in range(min(M, 2 * N)):",
-  "    new_milk = [0] * N",
+  "# Initial milk equals each cow's capacity",
+  "cur = list(cap)",
+  "",
+  "for t in range(M):",
+  "    # 1) every cow with milk passes 1L to its L/R neighbor",
   "    for i in range(N):",
-  "        give = min(1, milk[i])",
-  "        if direction[i] == 'L':",
-  "            target = (i - 1) % N",
-  "        else:",
-  "            target = (i + 1) % N",
-  "        new_milk[i] += milk[i] - give",
-  "        new_milk[target] += give",
-  "    # Apply capacity limits",
+  "        if cur[i] > 0:",
+  "            cur[i] -= 1",
+  "            j = (i + (1 if S[i] == 'R' else -1)) % N",
+  "            cur[j] += 1",
+  "    # 2) any cow over its cap loses the overflow",
   "    for i in range(N):",
-  "        milk[i] = min(new_milk[i], cap[i])",
+  "        cur[i] = min(cur[i], cap[i])",
   "",
-  "print(sum(milk))",
+  "print(sum(cur))",
 ];
 
 /* ================================================================
@@ -52,7 +53,54 @@ export function makeMilkExCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: How passing works
+    // 1-2: Official sample I/O
+    {
+      type: "reveal",
+      narr: t(E,
+        "Input format: N M, then a direction string (no spaces), then N capacities. Initial milk equals capacity.",
+        "입력: 첫 줄 N M, 두번째 줄 방향 문자열 (공백 없음), 세번째 줄 N 개 용량. 초기 우유 = 용량."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#065f46", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#065f46", whiteSpace: "pre" }}>
+{`3 1
+RRL
+1 1 1`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`2`}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#065f46", marginBottom: 6 }}>
+              🔍 {t(E, "Walkthrough — minute 1", "풀이 — 1 분 후")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              {t(E, "Cows: [1, 1, 1], directions R R L, caps [1, 1, 1].",
+                    "소: [1, 1, 1], 방향 R R L, 용량 [1, 1, 1].")}
+              <br/>
+              {t(E, "Cow 0 → cow 1 (R). Cow 1 → cow 2 (R). Cow 2 → cow 1 (L).",
+                    "소 0 → 소 1 (R). 소 1 → 소 2 (R). 소 2 → 소 1 (L).")}
+              <br/>
+              {t(E, "After transfers: cow 1 receives from both sides → over capacity → overflow lost.",
+                    "전달 후: 소 1 이 양쪽에서 받음 → 용량 초과 → 넘침은 사라짐.")}
+            </div>
+            <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
+              {t(E, "→ total milk = 0 + 1 + 1 = 2.", "→ 총 우유 = 0 + 1 + 1 = 2.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: How passing works
     {
       type: "reveal",
       narr: t(E,
