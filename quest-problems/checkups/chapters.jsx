@@ -60,13 +60,13 @@ export function makeCheckupsCh1(E) {
                     "작은 예: 소 4 마리. 수의사가 원하는 종 b[]. 실제 종 a[].")}
             </div>
 
-            {/* Step 1: original arrangement — match columns are boxed together */}
-            <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 10, marginBottom: 8 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 8 }}>
-                {t(E, "1. Without any reversal — same number on top & bottom = treated 💉",
-                      "1. 뒤집기 없이 — 위아래 번호 같으면 치료 💉")}
+            {/* Step 1: original arrangement — match cells stand out, mismatch fade */}
+            <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 12, marginBottom: 8 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+                {t(E, "1. Without any reversal — same number on top & bottom = treated",
+                      "1. 뒤집기 없이 — 위아래 번호 같으면 치료")}
               </div>
-              <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+              <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
                 {[
                   { a: 1, b: 1 },
                   { a: 2, b: 1 },
@@ -76,35 +76,37 @@ export function makeCheckupsCh1(E) {
                   const m = col.a === col.b;
                   return (
                     <div key={i} style={{
-                      width: 50, borderRadius: 8, padding: "4px 0",
-                      background: m ? "#dcfce7" : "transparent",
-                      border: `2px solid ${m ? "#16a34a" : "#e5e7eb"}`,
+                      width: 64, borderRadius: 10, padding: "6px 0",
+                      background: m ? "#16a34a" : "#f3f4f6",
+                      boxShadow: m ? "0 2px 8px rgba(22,163,74,0.35)" : "none",
+                      border: `2px solid ${m ? "#15803d" : "#e5e7eb"}`,
                       textAlign: "center",
+                      opacity: m ? 1 : 0.55,
                     }}>
-                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: m ? "#15803d" : "#7c2d12" }}>{col.a}</div>
-                      <div style={{ fontSize: 9, color: m ? "#15803d" : "#9ca3af", fontWeight: 700, lineHeight: 1 }}>—</div>
-                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: m ? "#15803d" : "#7c2d12" }}>{col.b}</div>
-                      <div style={{ fontSize: 12, height: 14, lineHeight: 1 }}>{m ? "💉" : ""}</div>
+                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 900, color: m ? "#fff" : "#6b7280", lineHeight: 1.1 }}>{col.a}</div>
+                      <div style={{ fontSize: 9, color: m ? "#bbf7d0" : "#9ca3af", fontWeight: 700, lineHeight: 1, margin: "1px 0" }}>vs</div>
+                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 900, color: m ? "#fff" : "#6b7280", lineHeight: 1.1 }}>{col.b}</div>
+                      <div style={{ fontSize: 18, height: 22, lineHeight: 1, marginTop: 2 }}>{m ? "💉" : "·"}</div>
                     </div>
                   );
                 })}
               </div>
-              <div style={{ marginTop: 6, fontSize: 11, color: C.dim, textAlign: "center" }}>
-                {t(E, "Top = a (Bessie's species).  Bottom = b (what the vet wants).",
+              <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center" }}>
+                {t(E, "Top = a (actual species).  Bottom = b (vet's wishlist).",
                       "위 = a (실제 종). 아래 = b (수의사 원하는 종).")}
               </div>
-              <div style={{ marginTop: 4, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 800 }}>
+              <div style={{ marginTop: 4, textAlign: "center", fontSize: 14, color: "#15803d", fontWeight: 800 }}>
                 {t(E, "→ 2 cows treated.", "→ 2 마리 치료.")}
               </div>
             </div>
 
-            {/* Step 2: one reversal operation — same column-box visualization */}
-            <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 10, marginBottom: 8 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 8 }}>
-                {t(E, "2. Pick (l, r) = (2, 3) → reverse a[2..3] (blue cells swapped)",
-                      "2. (l, r) = (2, 3) 골라 a[2..3] 뒤집기 (파란 칸 교환)")}
+            {/* Step 2: one reversal operation — same emphasized column visualization */}
+            <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 12, marginBottom: 8 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+                {t(E, "2. Pick (l, r) = (2, 3) → reverse a[2..3] (blue dashed = swapped)",
+                      "2. (l, r) = (2, 3) 골라 a[2..3] 뒤집기 (파랑 점선 = 교환된 칸)")}
               </div>
-              <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+              <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
                 {[
                   { a: 1, b: 1, swapped: false },
                   { a: 1, b: 1, swapped: true },
@@ -114,26 +116,29 @@ export function makeCheckupsCh1(E) {
                   const m = col.a === col.b;
                   return (
                     <div key={i} style={{
-                      width: 50, borderRadius: 8, padding: "4px 0",
-                      background: m ? "#dcfce7" : "transparent",
-                      border: `2px solid ${m ? "#16a34a" : "#e5e7eb"}`,
+                      width: 64, borderRadius: 10, padding: "6px 0",
+                      background: m ? "#16a34a" : "#f3f4f6",
+                      boxShadow: m ? "0 2px 8px rgba(22,163,74,0.35)" : "none",
+                      border: `2px solid ${m ? "#15803d" : "#e5e7eb"}`,
                       textAlign: "center",
+                      opacity: m ? 1 : 0.55,
                     }}>
                       <div style={{
-                        fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800,
-                        color: m ? "#15803d" : (col.swapped ? "#1e3a8a" : "#7c2d12"),
-                        background: col.swapped ? "#dbeafe" : "transparent",
-                        border: col.swapped ? "1.5px dashed #3b82f6" : "none",
-                        borderRadius: 4, margin: col.swapped ? "0 6px" : 0,
+                        display: "inline-block",
+                        fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 900,
+                        color: m ? "#fff" : (col.swapped ? "#1e3a8a" : "#6b7280"),
+                        background: col.swapped && !m ? "#dbeafe" : "transparent",
+                        border: col.swapped ? `1.5px dashed ${m ? "#bbf7d0" : "#3b82f6"}` : "none",
+                        borderRadius: 6, padding: col.swapped ? "0 6px" : 0, lineHeight: 1.1,
                       }}>{col.a}</div>
-                      <div style={{ fontSize: 9, color: m ? "#15803d" : "#9ca3af", fontWeight: 700, lineHeight: 1 }}>—</div>
-                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: m ? "#15803d" : "#7c2d12" }}>{col.b}</div>
-                      <div style={{ fontSize: 12, height: 14, lineHeight: 1 }}>{m ? "💉" : ""}</div>
+                      <div style={{ fontSize: 9, color: m ? "#bbf7d0" : "#9ca3af", fontWeight: 700, lineHeight: 1, margin: "1px 0" }}>vs</div>
+                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 900, color: m ? "#fff" : "#6b7280", lineHeight: 1.1 }}>{col.b}</div>
+                      <div style={{ fontSize: 18, height: 22, lineHeight: 1, marginTop: 2 }}>{m ? "💉" : "·"}</div>
                     </div>
                   );
                 })}
               </div>
-              <div style={{ marginTop: 4, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 800 }}>
+              <div style={{ marginTop: 4, textAlign: "center", fontSize: 14, color: "#15803d", fontWeight: 800 }}>
                 {t(E, "→ still 2 treated, but DIFFERENT ones (positions 1, 2 instead of 1, 3).",
                       "→ 여전히 2 마리 — 다른 소들 (1, 3 → 1, 2 위치).")}
               </div>
