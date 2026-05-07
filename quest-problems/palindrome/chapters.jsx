@@ -5,27 +5,34 @@ import { getPalindromeSections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
+  "import sys",
+  "",
   "def is_palindrome(n):",
   "    s = str(n)",
   "    return s == s[::-1]",
   "",
-  "S = int(input())",
+  "data = sys.stdin.read().split()",
+  "T = int(data[0])         # number of test cases",
   "",
-  "# Precompute palindromes up to S",
-  "palindromes = [p for p in range(1, S + 1) if is_palindrome(p)]",
+  "out = []",
+  "for k in range(T):",
+  "    S = int(data[1 + k])",
+  "    # Precompute palindromes up to S",
+  "    palindromes = [p for p in range(1, S + 1) if is_palindrome(p)]",
   "",
-  "# dp[s] = True if the player to move on a pile of size s WINS",
-  "# Base: dp[0] = False (can't move => loses)",
-  "dp = [False] * (S + 1)",
-  "for s in range(1, S + 1):",
-  "    for p in palindromes:",
-  "        if p > s:",
-  "            break",
-  "        if not dp[s - p]:   # leave opponent in a losing state",
-  "            dp[s] = True",
-  "            break",
+  "    # dp[s] = True if the player to move on a pile of size s WINS",
+  "    dp = [False] * (S + 1)",
+  "    for s in range(1, S + 1):",
+  "        for p in palindromes:",
+  "            if p > s:",
+  "                break",
+  "            if not dp[s - p]:   # leave opponent in a losing state",
+  "                dp[s] = True",
+  "                break",
   "",
-  "print('B' if dp[S] else 'E')",
+  "    out.append('B' if dp[S] else 'E')",
+  "",
+  "print(chr(10).join(out))",
 ];
 
 /* ================================================================
@@ -91,7 +98,56 @@ export function makePalindromeCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: What is a palindrome?
+    // 1-2: Official sample I/O — multi-T format
+    {
+      type: "reveal",
+      narr: t(E,
+        "Input format: first a number T (test cases), then T values of S — one per line. Output one letter per line: B or E.",
+        "입력: 첫 줄에 T (테스트 케이스 수), 그 다음 T 줄에 각각 S 하나씩. 출력: 각 줄에 B 또는 E."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d", whiteSpace: "pre" }}>
+{`3
+8
+10
+12`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`B
+E
+B`}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
+              🔍 {t(E, "Walkthrough", "풀이")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              {t(E, "T = 3, then S = 8, 10, 12.", "T = 3, S 값은 8, 10, 12.")}
+              <br/>
+              {t(E, "S=8: 8 is a palindrome → Bessie takes all → B.",
+                    "S=8: 8 은 회문 → Bessie 가 다 가져감 → B.")}
+              <br/>
+              {t(E, "S=10: every move leaves a winning state for Elsie → E.",
+                    "S=10: 어떤 수를 빼도 Elsie 가 이길 수 있는 상태가 됨 → E.")}
+              <br/>
+              {t(E, "S=12: Bessie can take 11 (palindrome) → leaves S=1 (losing for Elsie) → B.",
+                    "S=12: Bessie 가 11 (회문) 빼면 S=1 (Elsie 패) → B.")}
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: What is a palindrome?
     {
       type: "reveal",
       narr: t(E,
