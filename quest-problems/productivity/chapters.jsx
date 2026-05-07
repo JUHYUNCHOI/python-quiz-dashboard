@@ -6,22 +6,27 @@ import { getProductivitySections } from "./components";
    ================================================================ */
 export const SOLUTION_CODE = [
   "import sys",
-  "from bisect import bisect_right",
-  "input = sys.stdin.readline",
+  "from bisect import bisect_left",
   "",
-  "N, Q = map(int, input().split())",
-  "c = list(map(int, input().split()))  # closing times",
-  "ti = list(map(int, input().split()))  # travel times",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "N = int(data[p]); p += 1",
+  "Q = int(data[p]); p += 1",
+  "c  = [int(x) for x in data[p:p+N]]; p += N   # closing times",
+  "ti = [int(x) for x in data[p:p+N]]; p += N   # travel times",
   "",
-  "# d[i] = c[i] - t[i]: max wake-up time to visit farm i",
-  "d = sorted([c[i] - ti[i] for i in range(N)])",
+  "# Reachable farm i iff S + t[i] < c[i]  ⇔  d[i] := c[i] - t[i] > S.",
+  "d = sorted(c[i] - ti[i] for i in range(N))",
   "",
+  "out = []",
   "for _ in range(Q):",
-  "    S, V = map(int, input().split())",
-  "    # Count farms where d[i] > S",
-  "    # bisect_right(d, S) gives index of first element > S",
-  "    reachable = N - bisect_right(d, S)",
-  "    print('YES' if reachable >= V else 'NO')",
+  "    V = int(data[p]); p += 1   # query is 'V S' (V first, then S)",
+  "    S = int(data[p]); p += 1",
+  "    # count of d[i] > S = N - (first index with d[i] >= S+1)",
+  "    reachable = N - bisect_left(d, S + 1)",
+  "    out.append('YES' if reachable >= V else 'NO')",
+  "",
+  "print(chr(10).join(out))",
 ];
 
 /* ================================================================
@@ -41,8 +46,64 @@ export function makeProdCh1(E) {
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Maximizing Productivity</div>
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "N farms, each closes at time c_i. Bessie wakes at time S, arrives at farm i at time t_i + S. She can visit farm i only if t_i + S < c_i. Given Q queries (S,\nV): can she visit >= V farms?",
-              "N개 농장, 각각 시간 c_i에 닫혀.\nBessie는 시간 S에 일어나서, 농장 i에 t_i + S에 도착.\nt_i + S < c_i일 때만 방문 가능.\nQ개 쿼리 (S, V): V개 이상 방문 가능?")}
+              "N farms, each closes at time c_i. Bessie wakes at time S, arrives at farm i at time t_i + S. She can visit farm i only if t_i + S < c_i. Given Q queries (V, S): can she visit at least V farms?",
+              "N개 농장, 각각 시간 c_i에 닫혀.\nBessie는 시간 S에 일어나서, 농장 i에 t_i + S에 도착.\nt_i + S < c_i일 때만 방문 가능.\nQ개 쿼리 (V, S): V개 이상 방문 가능?")}
+          </div>
+        </div>),
+    },
+    // 1-1b: Official sample I/O
+    {
+      type: "reveal",
+      narr: t(E,
+        "Input format: N Q, then N closing times, then N travel times, then Q queries each on its own line as 'V S'.",
+        "입력: 첫 줄 N Q, 그 다음 닫힘 시간 N 개, 이동 시간 N 개, 마지막에 'V S' 형식 쿼리 Q 줄."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#f97316", textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#9a3412", whiteSpace: "pre" }}>
+{`5 5
+3 5 7 9 12
+4 2 3 3 8
+1 5
+1 6
+3 3
+4 2
+5 1`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`YES
+NO
+YES
+YES
+NO`}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
+              🔍 {t(E, "Walkthrough — query 1: V=1, S=5", "풀이 — 1 번 쿼리: V=1, S=5")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              {t(E, "Reachable iff S + t[i] < c[i]:",
+                    "방문 가능 조건: S + t[i] < c[i]:")}
+              <br/>
+              {t(E, "farm 0: 5 + 4 = 9 < 3? NO.  farm 1: 5 + 2 = 7 < 5? NO.",
+                    "농장 0: 5+4=9 < 3? NO.  농장 1: 5+2=7 < 5? NO.")}
+              <br/>
+              {t(E, "farm 2: 5 + 3 = 8 < 7? NO.  farm 3: 5 + 3 = 8 < 9? YES.  farm 4: 5 + 8 = 13 < 12? NO.",
+                    "농장 2: 5+3=8 < 7? NO.  농장 3: 5+3=8 < 9? YES.  농장 4: 5+8=13 < 12? NO.")}
+            </div>
+            <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
+              {t(E, "→ reachable = 1.  V = 1.  1 ≥ 1 → YES.", "→ 방문 가능 = 1. V = 1. 1 ≥ 1 → YES.")}
+            </div>
           </div>
         </div>),
     },
