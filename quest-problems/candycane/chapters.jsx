@@ -47,7 +47,7 @@ export function makeCandyCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🍬</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Candy Cane Feast</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Candy Cane Feast</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #1</div>
           </div>
 
@@ -66,7 +66,7 @@ export function makeCandyCh1(E) {
                 <div key={i} style={{ background: "#fff", border: `2px solid ${c.hi ? "#dc2626" : "#fca5a5"}`, borderRadius: 10, padding: 8, textAlign: "center" }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", marginBottom: 4 }}>{c.who}</div>
                   <div style={{ fontSize: 10, color: C.dim, fontFamily: "'JetBrains Mono',monospace", marginBottom: 2 }}>{c.reach}</div>
-                  <div style={{ fontSize: 11, fontWeight: 800, color: c.hi ? "#dc2626" : C.dim }}>{t(E, "ate", "먹음")} {c.ate}</div>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: c.hi ? "#dc2626" : C.dim }}>{t(E, "ate", "먹음")} {c.ate}</div>
                   <div style={{ fontSize: 11, color: C.text, marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>
                     {t(E, "h →", "키 →")} <b style={{ color: "#dc2626" }}>{c.newH}</b>
                   </div>
@@ -80,12 +80,12 @@ export function makeCandyCh1(E) {
           </div>
 
           <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ에게 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "N cows", "N마리 소")}</b>
@@ -94,7 +94,7 @@ export function makeCandyCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "He hangs ", "FJ가 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "M candy canes", "M개 캔디 케인")}</b>
@@ -103,7 +103,7 @@ export function makeCandyCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "For each cane, every cow walks up in order: she eats the bottom up to her own height, and ", "각 캔디마다 모든 소가 차례로 다가가요. 자기 키까지 아랫부분을 먹고, ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "grows by the amount she ate", "먹은 만큼 키가 커져요")}</b>
@@ -112,7 +112,7 @@ export function makeCandyCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "After all M candy canes, print each cow's ", "M개 캔디가 끝난 뒤, 각 소의 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "final height", "최종 키")}</b>
@@ -131,12 +131,12 @@ export function makeCandyCh1(E) {
         "입력: 첫 줄 N M, 두 번째 줄 소 N 마리 키, 세 번째 줄 캔디 M 개 높이."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fee2e2", border: "2px solid #fca5a5", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7f1d1d", whiteSpace: "pre" }}>
 {`3 2
 3 2 5
@@ -144,7 +144,7 @@ export function makeCandyCh1(E) {
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`7
 2
@@ -153,7 +153,7 @@ export function makeCandyCh1(E) {
             </div>
           </div>
           <div style={{ background: "#fef2f2", border: "2px solid #fecaca", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough", "풀이")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>

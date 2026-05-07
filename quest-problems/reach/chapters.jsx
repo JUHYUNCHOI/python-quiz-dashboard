@@ -137,7 +137,7 @@ export function makeReachCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>🐉</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: A }}>Reachability Queries</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: A }}>Reachability Queries</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P5</div>
           <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
@@ -153,7 +153,7 @@ export function makeReachCh1(E) {
         "Here's our sample: 5 cities, 6 roads.\nRed dashed lines are damaged roads.\nThey work for now, but will break at time K!", "예제를 보자! 도시 5개, 도로 6개예요. 빨간 점선이 손상된 도로예요. 지금은 쓸 수 있지만 시간 K가 되면 부서져!"),
       content: (() => (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
             {t(E, "Sample Graph", "예제 그래프")}
           </div>
           <div style={{
@@ -181,7 +181,7 @@ export function makeReachCh1(E) {
         "The rules: Damaged roads break at time K.\nYou CAN'T start a damaged road at time K or later.\nAnd if you're on a damaged road when the apocalypse hits, you can't use it — UNLESS you arrive exactly at time K.", "규칙을 알아보자! 손상 도로는 시간 K에 부서져. K 이후에는 못 써요. 이동 중에 K가 되면 안 되지만, 딱 K에 도착하면 괜찮아!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
             {t(E, "Apocalypse Rules", "아포칼립스 규칙")}
           </div>
           <div style={{
@@ -328,7 +328,7 @@ export function makeReachCh3(E) {
         "Let's code it!\nFirst read the graph: N cities, M roads, which roads are damaged, and Q queries.", "코드를 짜보자! 먼저 그래프를 읽어: 도시 N개, 도로 M개, 손상 도로 목록, 쿼리 Q개."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 6 }}>
             {t(E, "Step 1: Read input", "1단계: 입력 읽기")}
           </div>
           <CodeSnippet
@@ -360,7 +360,7 @@ export function makeReachCh3(E) {
         "Next, read which roads are damaged and the Q queries (values of K).", "다음으로 손상 도로 목록과 쿼리(K 값들)를 읽어."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 6 }}>
             {t(E, "Step 2: Damaged roads & queries", "2단계: 손상 도로 & 쿼리")}
           </div>
           <CodeSnippet
@@ -397,7 +397,7 @@ export function makeReachCh3(E) {
         "The core: Dijkstra with a constraint on damaged edges.\nSafe roads always usable.\nDamaged roads only if start_time < K and arrive_time ≤ K.", "핵심 부분! 다익스트라인데, 손상 도로에 조건을 걸어. 안전한 도로는 항상 OK, 손상 도로는 출발 < K, 도착 ≤ K만!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 6 }}>
             {t(E, "Step 3: Modified Dijkstra", "3단계: 변형 다익스트라")}
           </div>
           <CodeSnippet
@@ -436,7 +436,7 @@ export function makeReachCh3(E) {
         "Why does this work?\nDijkstra always processes the smallest distance first.\nSo when we reach a node, it's via the shortest path.\nFor damaged roads, we just add the time constraint.", "왜 이게 맞을까? 다익스트라는 항상 가장 짧은 거리부터 처리해요. 그래서 노드에 도착하면 최단 경로로 온 거예요. 손상 도로는 시간 제한만 추가하면 끝!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
             {t(E, "Why It Works", "왜 맞는가")}
           </div>
           <div style={{

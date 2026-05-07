@@ -70,7 +70,7 @@ export function PrintseqExplorer({ E }) {
         {preset.seq.map((v, i) => (
           <div key={i} style={{
             width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-            borderRadius: 8, fontWeight: 900, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
+            borderRadius: 8, fontWeight: 700, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
             background: "#fff", border: `2px solid ${C.border}`, color: C.text,
           }}>{v}</div>
         ))}
@@ -86,7 +86,7 @@ export function PrintseqExplorer({ E }) {
         background: result ? "#dcfce7" : "#fee2e2",
         border: `2.5px solid ${result ? "#16a34a" : "#ef4444"}`,
         borderRadius: 10, padding: "12px 14px", textAlign: "center",
-        fontSize: 18, fontWeight: 900,
+        fontSize: 18, fontWeight: 700,
         color: result ? "#15803d" : "#7f1d1d",
       }}>
         {result ? "✅ YES" : "❌ NO"}

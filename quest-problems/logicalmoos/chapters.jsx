@@ -18,12 +18,12 @@ export function makeLogicalCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🧠</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: ACCENT }}>Logical Moos</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: ACCENT }}>Logical Moos</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2024 US Open Bronze #1</div>
           </div>
 
           <div style={{ background: TINT, border: `2px solid ${BORDER}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: DARK, marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: DARK, marginBottom: 8 }}>
               📖 {t(E, "Setup", "설정")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.65, marginBottom: 10 }}>
@@ -49,12 +49,12 @@ export function makeLogicalCh1(E) {
         "샘플 1: 토큰 5 개, 쿼리 7 개 → 'NYYYNYY'. 4 번 쿼리를 아래에서 따라가요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: ACCENT, textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: ACCENT, textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: TINT, border: `2px solid ${BORDER}`, borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: DARK, marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: DARK, marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: DARK, whiteSpace: "pre" }}>
 {`5 7
 false and true or true
@@ -68,7 +68,7 @@ false and true or true
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`NYYYNYY`}
               </div>
@@ -76,7 +76,7 @@ false and true or true
           </div>
 
           <div style={{ background: TINT, border: `2px solid ${BORDER}`, borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: DARK, marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: DARK, marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough — query 4 (l=3, r=3, target=true)", "풀이 — 4 번 쿼리 (l=3, r=3, target=true)")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>

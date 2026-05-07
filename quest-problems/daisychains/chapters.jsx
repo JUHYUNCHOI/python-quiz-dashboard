@@ -111,17 +111,17 @@ export function makeDaisyCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\uD83C\uDF3C"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: C.carry }}>Daisy Chains</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: C.carry }}>Daisy Chains</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #2</div>
           </div>
 
           <div style={{ background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: C.carry, fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: C.carry, fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Bessie has ", "Bessie에게 ")}
                   <b style={{ color: C.carry }}>{t(E, "N flowers in a row", "한 줄로 놓인 N개의 꽃")}</b>
@@ -131,7 +131,7 @@ export function makeDaisyCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: C.carry, fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: C.carry, fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "For each ", "각 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "contiguous subarray", "연속 부분 배열")}</b>
@@ -142,7 +142,7 @@ export function makeDaisyCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: `1px dashed ${C.carryBd}` }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "number of photogenic contiguous subarrays", "예쁜 연속 부분 배열의 개수")}</b>
@@ -163,7 +163,7 @@ export function makeDaisyCh1(E) {
         const colors = [C.bessie, C.carry, C.accent];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               {t(E, "What is an average?", "평균이란?")}
             </div>
             {/* Flowers as circles */}
@@ -173,7 +173,7 @@ export function makeDaisyCh1(E) {
                   width: 54, height: 54, borderRadius: "50%",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   background: `${colors[i]}15`, border: `3px solid ${colors[i]}`,
-                  fontSize: 20, fontWeight: 900, color: colors[i],
+                  fontSize: 20, fontWeight: 700, color: colors[i],
                   fontFamily: "'JetBrains Mono', monospace",
                 }}>{p}</div>
               ))}
@@ -185,17 +185,17 @@ export function makeDaisyCh1(E) {
               fontFamily: "'JetBrains Mono', monospace", fontSize: 14, color: C.text,
             }}>
               <div style={{ marginBottom: 4 }}>
-                {t(E, "sum", "합")} = 2 + 4 + 6 = <span style={{ fontWeight: 900, color: C.carry }}>12</span>
+                {t(E, "sum", "합")} = 2 + 4 + 6 = <span style={{ fontWeight: 700, color: C.carry }}>12</span>
               </div>
               <div style={{ marginBottom: 4 }}>
-                {t(E, "count", "개수")} = <span style={{ fontWeight: 900, color: C.carry }}>3</span>
+                {t(E, "count", "개수")} = <span style={{ fontWeight: 700, color: C.carry }}>3</span>
               </div>
               <div>
-                {t(E, "average", "평균")} = 12 / 3 = <span style={{ fontWeight: 900, color: C.ok, fontSize: 18 }}>4</span>
+                {t(E, "average", "평균")} = 12 / 3 = <span style={{ fontWeight: 700, color: C.ok, fontSize: 18 }}>4</span>
               </div>
             </div>
             <div style={{
-              marginTop: 8, textAlign: "center", fontSize: 13, fontWeight: 800, color: C.ok,
+              marginTop: 8, textAlign: "center", fontSize: 13, fontWeight: 600, color: C.ok,
             }}>
               {t(E, "Flower with 4 petals exists! Valid subarray!", "꽃잎 4개인 꽃이 있어요! 유효한 부분 배열!")}
             </div>
@@ -212,7 +212,7 @@ export function makeDaisyCh1(E) {
         const flowers = [1, 1, 2];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               {t(E, "Flowers: [1, 1, 2]", "꽃: [1, 1, 2]")}
             </div>
             {/* Full flower row */}
@@ -222,7 +222,7 @@ export function makeDaisyCh1(E) {
                   width: 48, height: 48, borderRadius: "50%",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   background: C.carryBg, border: `3px solid ${C.carryBd}`,
-                  fontSize: 20, fontWeight: 900, color: C.carry,
+                  fontSize: 20, fontWeight: 700, color: C.carry,
                   fontFamily: "'JetBrains Mono', monospace",
                 }}>{p}</div>
               ))}
@@ -232,7 +232,7 @@ export function makeDaisyCh1(E) {
               background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10,
               padding: 10, marginBottom: 8,
             }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: C.ok, marginBottom: 4 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: C.ok, marginBottom: 4 }}>
                 ✅ {t(E, "Subarray [1, 1]: avg = 1", "부분 배열 [1, 1]: 평균 = 1")}
               </div>
               <div style={{ fontSize: 12, color: C.text }}>
@@ -244,7 +244,7 @@ export function makeDaisyCh1(E) {
               background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10,
               padding: 10,
             }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: C.no, marginBottom: 4 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: C.no, marginBottom: 4 }}>
                 ❌ {t(E, "Subarray [1, 3]: avg = 2", "부분 배열 [1, 3]: 평균 = 2")}
               </div>
               <div style={{ fontSize: 12, color: C.text }}>
@@ -288,7 +288,7 @@ export function makeDaisyCh1(E) {
         ];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               {t(E, "All subarrays of [1, 1, 2]", "[1, 1, 2]의 모든 부분 배열")}
             </div>
             <div style={{
@@ -298,7 +298,7 @@ export function makeDaisyCh1(E) {
               {/* Header */}
               <div style={{
                 display: "grid", gridTemplateColumns: "70px 40px 40px 50px 50px",
-                background: "#1e293b", color: "#e2e8f0", padding: "6px 6px", fontWeight: 800,
+                background: "#1e293b", color: "#e2e8f0", padding: "6px 6px", fontWeight: 600,
               }}>
                 <span>{t(E, "Sub", "부분")}</span>
                 <span>{t(E, "Sum", "합")}</span>
@@ -315,13 +315,13 @@ export function makeDaisyCh1(E) {
                   <span style={{ color: C.text, fontWeight: 700 }}>{c.sub}</span>
                   <span style={{ color: C.text }}>{c.sum}</span>
                   <span style={{ color: C.text }}>{c.len}</span>
-                  <span style={{ color: c.has ? C.ok : C.no, fontWeight: 800 }}>{c.avg}</span>
-                  <span style={{ fontWeight: 800 }}>{c.has ? "✅" : "❌"}</span>
+                  <span style={{ color: c.has ? C.ok : C.no, fontWeight: 600 }}>{c.avg}</span>
+                  <span style={{ fontWeight: 600 }}>{c.has ? "✅" : "❌"}</span>
                 </div>
               ))}
             </div>
             <div style={{
-              marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 900, color: C.ok,
+              marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 700, color: C.ok,
             }}>
               {t(E, "4 valid subarrays out of 6 total!", "총 6개 중 4개 유효!")}
             </div>
@@ -358,7 +358,7 @@ export function makeDaisyCh2(E) {
         "The algorithm: enumerate all subarrays using two nested loops.\nFor each, compute the sum and check the condition.", "알고리즘: 이중 반복문으로 모든 부분 배열 열거. 각각 합을 계산하고 조건 확인."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
             {t(E, "Enumerate all subarrays (i, j)", "모든 부분 배열 (i, j) 열거")}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -377,7 +377,7 @@ export function makeDaisyCh2(E) {
                 <div style={{
                   width: 28, height: 28, borderRadius: 6, display: "flex",
                   alignItems: "center", justifyContent: "center",
-                  background: C.carry, color: "#fff", fontSize: 13, fontWeight: 900,
+                  background: C.carry, color: "#fff", fontSize: 13, fontWeight: 700,
                   fontFamily: "'JetBrains Mono', monospace",
                 }}>{s.step}</div>
                 <span style={{ fontSize: 12, color: C.text, fontWeight: 700 }}>{s.desc}</span>
@@ -402,7 +402,7 @@ export function makeDaisyCh2(E) {
         ];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               {t(E, "Trace: [1, 1, 2]", "추적: [1, 1, 2]")}
             </div>
             <div style={{
@@ -411,7 +411,7 @@ export function makeDaisyCh2(E) {
             }}>
               <div style={{
                 display: "grid", gridTemplateColumns: "22px 22px 55px 28px 28px 45px",
-                background: "#1e293b", color: "#e2e8f0", padding: "5px 4px", fontWeight: 800, gap: 4,
+                background: "#1e293b", color: "#e2e8f0", padding: "5px 4px", fontWeight: 600, gap: 4,
               }}>
                 <span>i</span><span>j</span><span>{t(E, "sum", "합")}</span>
                 <span>{t(E, "len", "길이")}</span><span>{t(E, "avg", "평균")}</span><span>{t(E, "valid", "유효")}</span>
@@ -423,17 +423,17 @@ export function makeDaisyCh2(E) {
                   padding: "4px 4px", borderBottom: idx < rows.length - 1 ? `1px solid ${C.border}` : "none",
                   gap: 4,
                 }}>
-                  <span style={{ color: C.accent, fontWeight: 800 }}>{r.i}</span>
-                  <span style={{ color: C.accent, fontWeight: 800 }}>{r.j}</span>
+                  <span style={{ color: C.accent, fontWeight: 600 }}>{r.i}</span>
+                  <span style={{ color: C.accent, fontWeight: 600 }}>{r.j}</span>
                   <span style={{ color: C.text }}>{r.s}</span>
                   <span style={{ color: C.text }}>{r.l}</span>
-                  <span style={{ color: r.ok ? C.ok : C.no, fontWeight: 800 }}>{r.avg}</span>
+                  <span style={{ color: r.ok ? C.ok : C.no, fontWeight: 600 }}>{r.avg}</span>
                   <span>{r.ok ? "✅" : "❌"}</span>
                 </div>
               ))}
             </div>
             <div style={{
-              marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 900, color: C.ok,
+              marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 700, color: C.ok,
             }}>
               count = <span style={{ fontSize: 18 }}>4</span>
             </div>
@@ -481,7 +481,7 @@ export function makeDaisyCh3(E, lang = "py") {
         "Let's build the code! First, read N and the petal counts.", "코드를 만들자! 먼저 N과 꽃잎 수를 읽어."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
             {t(E, "Step 1: Read input", "1단계: 입력 읽기")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
@@ -512,7 +512,7 @@ export function makeDaisyCh3(E, lang = "py") {
         "Now the outer loop fixes start index i.\nFor each i, we reset the running sum to 0 and extend j forward.", "이제 바깥 반복이 시작 인덱스 i를 고정해요. 각 i에서 러닝 합을 0으로 초기화하고 j를 앞으로 확장해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
             {t(E, "Step 2: Outer loop + running sum", "2단계: 바깥 반복 + 러닝 합")}
           </div>
           <CodeSnippet
@@ -541,7 +541,7 @@ export function makeDaisyCh3(E, lang = "py") {
         "For each (i, j) pair: length = j-i+1.\nIf sum is divisible by length, the average is an integer.\nThen check if any flower in the range equals the average.", "각 (i, j) 쌍에서: 길이 = j-i+1. 합이 길이로 나누어지면 평균이 정수. 그다음 범위 내 꽃 중 평균과 같은 것이 있는지 확인."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
             {t(E, "Step 3: Check the condition", "3단계: 조건 확인")}
           </div>
           <CodeSnippet
@@ -593,7 +593,7 @@ export function makeDaisyCh3(E, lang = "py") {
         "Finally, print the count. That's the complete solution!", "마지막으로 count를 출력해요. 이게 전체 풀이에요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
             {t(E, "Step 4: Print the answer!", "4단계: 답 출력!")}
           </div>
           <CodeSnippet
@@ -604,7 +604,7 @@ export function makeDaisyCh3(E, lang = "py") {
             marginTop: 10, background: C.okBg, borderRadius: 10,
             padding: "8px 12px", border: `2px solid ${C.okBd}`, textAlign: "center",
           }}>
-            <div style={{ fontSize: 13, fontWeight: 900, color: C.ok }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
               {t(E, "Complete solution! O(N^2) with running sum!", "전체 풀이 완성! 러닝 합으로 O(N^2)!")}
             </div>
           </div>

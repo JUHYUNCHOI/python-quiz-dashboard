@@ -23,7 +23,7 @@ function SeqRow({ values, highlight = -1, accent = "#dc2626", label }) {
           <div key={i} style={{
             minWidth: 36, height: 36, borderRadius: 8, padding: "0 6px",
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+            fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
             background: i === highlight ? accent : "#fef2f2",
             border: `2px solid ${i === highlight ? accent : "#fca5a5"}`,
             color: i === highlight ? "#fff" : "#dc2626",
@@ -47,12 +47,12 @@ function VarCards({ vars, accent = "#dc2626" }) {
             background: v.active ? accent : "#fef2f2",
             border: `2.5px solid ${v.active ? accent : "#fca5a5"}`,
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 20, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+            fontSize: 20, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
             color: v.active ? "#fff" : "#dc2626",
           }}>
             {v.value}
           </div>
-          <div style={{ fontSize: 12, fontWeight: 800, color: accent, marginTop: 3 }}>{v.label}</div>
+          <div style={{ fontSize: 12, fontWeight: 600, color: accent, marginTop: 3 }}>{v.label}</div>
           <div style={{ fontSize: 10, color: C.dim }}>{v.desc}</div>
         </div>
       ))}
@@ -73,7 +73,7 @@ export function makeMcc20KittyCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>🐱</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Kitty Numbers</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Kitty Numbers</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P3</div>
         </div>),
     },
@@ -106,15 +106,15 @@ export function makeMcc20KittyCh1(E) {
           <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
             {/* Fibonacci comparison */}
             <div style={{ background: "#dbeafe", borderRadius: 10, padding: 10, width: "100%", maxWidth: 320 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#2563eb", marginBottom: 4 }}>{t(E, "Fibonacci (2 terms)", "피보나치 (2항)")}</div>
-              <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#2563eb", marginBottom: 4 }}>{t(E, "Fibonacci (2 terms)", "피보나치 (2항)")}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>
                 F(n) = F(n-1) + F(n-2)
               </div>
             </div>
             {/* Kitty */}
             <div style={{ background: "#fef2f2", borderRadius: 10, padding: 10, width: "100%", maxWidth: 320, border: "2px solid #fca5a5" }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", marginBottom: 4 }}>{t(E, "Kitty / Tribonacci (3 terms)", "Kitty / 트리보나치 (3항)")}</div>
-              <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#dc2626", marginBottom: 4 }}>{t(E, "Kitty / Tribonacci (3 terms)", "Kitty / 트리보나치 (3항)")}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>
                 K(n) = K(n-1) + K(n-2) + K(n-3)
               </div>
             </div>
@@ -155,11 +155,11 @@ export function makeMcc20KittyCh1(E) {
               { n: "K(4)", v: "3", bg: "#dc2626" },
             ].map((item, i) => (
               item.bg === "transparent" ?
-                <span key={i} style={{ fontSize: 18, fontWeight: 900, color: C.dim }}>{item.v}</span> :
+                <span key={i} style={{ fontSize: 18, fontWeight: 700, color: C.dim }}>{item.v}</span> :
                 <div key={i} style={{
                   width: 44, height: 44, borderRadius: 10,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 18, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                  fontSize: 18, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                   background: item.bg === "#dc2626" ? "#dc2626" : item.bg,
                   border: `2px solid ${item.bg === "#dc2626" ? "#dc2626" : "#fca5a5"}`,
                   color: item.bg === "#dc2626" ? "#fff" : "#dc2626",
@@ -189,7 +189,7 @@ export function makeMcc20KittyCh1(E) {
         <div style={{ padding: 16, textAlign: "center" }}>
           <SeqRow values={["1","1","1","3","5"]} highlight={4} label="K(1) → K(5)" />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim }}>
-            K(5) = <span style={{ fontWeight: 900, color: "#dc2626" }}>3</span> + 1 + 1 = <span style={{ fontWeight: 900, color: "#dc2626" }}>5</span>
+            K(5) = <span style={{ fontWeight: 700, color: "#dc2626" }}>3</span> + 1 + 1 = <span style={{ fontWeight: 700, color: "#dc2626" }}>5</span>
           </div>
         </div>),
     },
@@ -220,11 +220,11 @@ export function makeMcc20KittyCh1(E) {
                 display: "flex", alignItems: "center", gap: 8,
                 background: i % 2 === 0 ? "#fef2f2" : "#fff7ed", borderRadius: 8, padding: "5px 10px",
               }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", width: 40 }}>K({item.n})</span>
+                <span style={{ fontSize: 11, fontWeight: 600, color: "#dc2626", width: 40 }}>K({item.n})</span>
                 <div style={{ flex: 1, height: 4, background: "#fecaca", borderRadius: 2 }}>
                   <div style={{ height: "100%", background: "#dc2626", borderRadius: 2, width: `${(item.v / 105) * 100}%`, transition: "width .3s" }} />
                 </div>
-                <span style={{ fontSize: 13, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text, width: 36, textAlign: "right" }}>{item.v}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text, width: 36, textAlign: "right" }}>{item.v}</span>
               </div>
             ))}
           </div>
@@ -257,19 +257,19 @@ export function makeMcc20KittyCh2(E) {
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
             <div style={{ background: "#fef2f2", borderRadius: 10, padding: 10, border: "2px solid #fca5a5", textAlign: "center" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#dc2626", marginBottom: 4 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#dc2626", marginBottom: 4 }}>
                 {t(E, "K(n) needs only:", "K(n)에 필요한 것:")}
               </div>
               <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
                 {["K(n-3)", "K(n-2)", "K(n-1)"].map((label, i) => (
                   <div key={i} style={{
                     padding: "6px 10px", borderRadius: 8, background: "#dc2626",
-                    fontSize: 13, fontWeight: 800, color: "#fff",
+                    fontSize: 13, fontWeight: 600, color: "#fff",
                   }}>{label}</div>
                 ))}
               </div>
             </div>
-            <div style={{ fontSize: 20, color: C.accent, fontWeight: 900 }}>↓</div>
+            <div style={{ fontSize: 20, color: C.accent, fontWeight: 700 }}>↓</div>
             <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
               {t(E, "3 variables: a, b, c — that's all!", "변수 3개: a, b, c — 그게 다!")}
             </div>
@@ -309,7 +309,7 @@ export function makeMcc20KittyCh2(E) {
                 { label: "c", value: "1", desc: "K(3)" },
               ]} />
             </div>
-            <div style={{ fontSize: 14, fontWeight: 900, color: "#dc2626" }}>a, b, c = b, c, a+b+c</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#dc2626" }}>a, b, c = b, c, a+b+c</div>
             {/* After */}
             <div>
               <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, textAlign: "center", marginBottom: 4 }}>{t(E, "After (K2-K4):", "후 (K2-K4):")}</div>
@@ -354,9 +354,9 @@ export function makeMcc20KittyCh2(E) {
                 background: i % 2 === 0 ? "#fef2f2" : "#fff7ed", borderRadius: 8, padding: "6px 10px",
               }}>
                 <span style={{ fontSize: 10, fontWeight: 700, color: C.dim, width: 36 }}>{row.step}</span>
-                <span style={{ fontSize: 13, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text, width: 30, textAlign: "center" }}>a={row.a}</span>
-                <span style={{ fontSize: 13, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text, width: 30, textAlign: "center" }}>b={row.b}</span>
-                <span style={{ fontSize: 13, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626", width: 36, textAlign: "center" }}>c={row.c}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text, width: 30, textAlign: "center" }}>a={row.a}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text, width: 30, textAlign: "center" }}>b={row.b}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626", width: 36, textAlign: "center" }}>c={row.c}</span>
                 <span style={{ fontSize: 11, fontWeight: 700, color: C.ok }}>{row.k}</span>
               </div>
             ))}
@@ -487,10 +487,10 @@ export function makeMcc20KittyCh3(E, lang = "py") {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 12 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#16a34a", marginBottom: 4 }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "#16a34a", marginBottom: 4 }}>
               {t(E, "After loop completes:", "루프 완료 후:")}
             </div>
-            <div style={{ fontSize: 18, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#16a34a" }}>
+            <div style={{ fontSize: 18, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#16a34a" }}>
               c = K(N) ← {t(E, "our answer!", "이게 답!")}
             </div>
           </div>
@@ -507,11 +507,11 @@ export function makeMcc20KittyCh3(E, lang = "py") {
           <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
             <div style={{ background: "#dbeafe", borderRadius: 12, padding: 12, textAlign: "center" }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#2563eb" }}>{t(E, "Time", "시간")}</div>
-              <div style={{ fontSize: 24, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
+              <div style={{ fontSize: 24, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
             </div>
             <div style={{ background: "#dcfce7", borderRadius: 12, padding: 12, textAlign: "center" }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#16a34a" }}>{t(E, "Space", "공간")}</div>
-              <div style={{ fontSize: 24, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#16a34a" }}>O(1)</div>
+              <div style={{ fontSize: 24, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#16a34a" }}>O(1)</div>
             </div>
           </div>
         </div>),

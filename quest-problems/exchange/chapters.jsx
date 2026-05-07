@@ -27,7 +27,7 @@ function CowCircle({ values, highlight = [], accent = "#2563eb", size = 130 }) {
           <g key={i}>
             <circle cx={x} cy={y} r={16} fill={hl ? accent : "#eff6ff"} stroke={hl ? accent : "#93c5fd"} strokeWidth="2" />
             <text x={x} y={y + 1} textAnchor="middle" dominantBaseline="middle"
-              style={{ fontSize: 12, fontWeight: 900, fill: hl ? "#fff" : accent, fontFamily: "'JetBrains Mono',monospace" }}>
+              style={{ fontSize: 12, fontWeight: 700, fill: hl ? "#fff" : accent, fontFamily: "'JetBrains Mono',monospace" }}>
               {v}
             </text>
           </g>
@@ -43,7 +43,7 @@ function MilkBars({ values, max, accent = "#2563eb", labels }) {
     <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "flex-end" }}>
       {values.map((v, i) => (
         <div key={i} style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 11, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: accent, marginBottom: 2 }}>{v}</div>
+          <div style={{ fontSize: 11, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: accent, marginBottom: 2 }}>{v}</div>
           <div style={{
             width: 32, height: Math.max(4, (v / max) * 60), borderRadius: "4px 4px 0 0",
             background: accent, opacity: 0.7 + (v / max) * 0.3,
@@ -70,17 +70,17 @@ export function makeExchangeCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🥛</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Milk Exchange</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Milk Exchange</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #2</div>
           </div>
 
           <div style={{ background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "N cows stand in a ", "N마리 소가 ")}
                   <b style={{ color: "#2563eb" }}>{t(E, "circle", "원형")}</b>
@@ -89,7 +89,7 @@ export function makeExchangeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "In each round, every cow ", "매 라운드마다 모든 소가 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "passes ALL her milk", "자기 우유 전부")}</b>
@@ -98,7 +98,7 @@ export function makeExchangeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "This repeats for ", "이 과정을 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "M rounds", "M번")}</b>
@@ -107,7 +107,7 @@ export function makeExchangeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print how much milk ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "each cow holds after M rounds", "M라운드 뒤 각 소가 든 우유의 양")}</b>
@@ -145,7 +145,7 @@ export function makeExchangeCh1(E) {
               <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Before", "전")}</div>
               <MilkBars values={[5, 3, 8, 4]} max={8} labels={["c0","c1","c2","c3"]} />
             </div>
-            <div style={{ fontSize: 24, color: "#2563eb", fontWeight: 900 }}>→</div>
+            <div style={{ fontSize: 24, color: "#2563eb", fontWeight: 700 }}>→</div>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "After round 1", "라운드 1 후")}</div>
               <MilkBars values={[4, 5, 3, 8]} max={8} labels={["c0","c1","c2","c3"]} accent="#16a34a" />
@@ -188,15 +188,15 @@ export function makeExchangeCh1(E) {
                 width: 36, height: 36, borderRadius: 8,
                 background: "#dbeafe", border: "2px solid #93c5fd",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 14, fontWeight: 900, color: "#2563eb",
+                fontSize: 14, fontWeight: 700, color: "#2563eb",
               }}>{v}</div>
             ))}
-            <div style={{ alignSelf: "center", fontSize: 16, fontWeight: 900, color: C.dim }}>=</div>
+            <div style={{ alignSelf: "center", fontSize: 16, fontWeight: 700, color: C.dim }}>=</div>
             <div style={{
               width: 44, height: 44, borderRadius: 10,
               background: "#16a34a", border: "2px solid #16a34a",
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 18, fontWeight: 900, color: "#fff",
+              fontSize: 18, fontWeight: 700, color: "#fff",
             }}>20</div>
           </div>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#16a34a" }}>
@@ -217,13 +217,13 @@ export function makeExchangeCh1(E) {
               <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Start", "시작")}</div>
               <MilkBars values={[5, 3, 8, 4]} max={8} />
             </div>
-            <div style={{ fontSize: 20, color: "#2563eb", fontWeight: 900 }}>→∞→</div>
+            <div style={{ fontSize: 20, color: "#2563eb", fontWeight: 700 }}>→∞→</div>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "After ∞ rounds", "∞ 라운드 후")}</div>
               <MilkBars values={[5, 5, 5, 5]} max={8} accent="#16a34a" />
             </div>
           </div>
-          <div style={{ textAlign: "center", marginTop: 8, fontSize: 13, fontWeight: 800, color: "#16a34a" }}>
+          <div style={{ textAlign: "center", marginTop: 8, fontSize: 13, fontWeight: 600, color: "#16a34a" }}>
             20 ÷ 4 = 5 {t(E, "each!", "씩!")}
           </div>
         </div>),
@@ -251,18 +251,18 @@ export function makeExchangeCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
             <div style={{ background: "#dbeafe", borderRadius: 10, padding: 10, textAlign: "center" }}>
-              <span style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>
+              <span style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>
                 7 ÷ 3 = 2 ... 1
               </span>
             </div>
             <div style={{ display: "flex", gap: 12 }}>
               <div style={{ background: "#f0fdf4", borderRadius: 10, padding: 10, textAlign: "center" }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: "#16a34a" }}>avg = 7 // 3</div>
-                <div style={{ fontSize: 20, fontWeight: 900, color: "#16a34a" }}>2</div>
+                <div style={{ fontSize: 20, fontWeight: 700, color: "#16a34a" }}>2</div>
               </div>
               <div style={{ background: "#fef2f2", borderRadius: 10, padding: 10, textAlign: "center" }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: "#dc2626" }}>extra = 7 % 3</div>
-                <div style={{ fontSize: 20, fontWeight: 900, color: "#dc2626" }}>1</div>
+                <div style={{ fontSize: 20, fontWeight: 700, color: "#dc2626" }}>1</div>
               </div>
             </div>
             <div style={{ fontSize: 12, fontWeight: 700, color: C.text }}>
@@ -289,10 +289,10 @@ export function makeExchangeCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 14 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", marginBottom: 6 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#16a34a", marginBottom: 6 }}>
               {t(E, "The Formula", "공식")}
             </div>
-            <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 2 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 2 }}>
               <div>avg = total // N</div>
               <div>extra = total % N</div>
               <div>{t(E, "extra cows → avg+1", "extra 마리 → avg+1")}</div>
@@ -317,7 +317,7 @@ export function makeExchangeCh2(E, lang = "py") {
         "Recap: total stays the same, so after enough rounds milk splits as evenly as possible.\nCode is just: total → avg → extra → output.", "정리: 총량은 그대로니까 충분한 라운드 후 우유는 가능한 균등하게 분배. 코드는 단순: total → avg → extra → 출력."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, fontSize: 14, fontWeight: 800, color: "#2563eb" }}>
+          <div style={{ background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, fontSize: 14, fontWeight: 600, color: "#2563eb" }}>
             {t(E, "No simulation. Pure math: O(N).", "시뮬 없음. 순수 수학: O(N).")}
           </div>
         </div>),
@@ -350,7 +350,7 @@ export function makeExchangeCh2(E, lang = "py") {
                       width: 28, height: 28, borderRadius: 6,
                       background: i === 4 ? "#dcfce7" : "#dbeafe",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 12, fontWeight: 900, color: i === 4 ? "#16a34a" : "#2563eb",
+                      fontSize: 12, fontWeight: 700, color: i === 4 ? "#16a34a" : "#2563eb",
                     }}>{v}</div>
                   ))}
                 </div>
@@ -408,7 +408,7 @@ export function makeExchangeCh2(E, lang = "py") {
                 width: 40, height: 40, borderRadius: 8,
                 background: v === 3 ? "#dc2626" : "#2563eb",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 16, fontWeight: 900, color: "#fff",
+                fontSize: 16, fontWeight: 700, color: "#fff",
               }}>{v}</div>
             ))}
           </div>
@@ -441,7 +441,7 @@ export function makeExchangeCh2(E, lang = "py") {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ background: "#f0fdf4", borderRadius: 10, padding: 10, border: "2px solid #86efac" }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#16a34a", marginBottom: 4 }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "#16a34a", marginBottom: 4 }}>
               {t(E, "N=4, total=20 → extra=0", "N=4, 합계=20 → extra=0")}
             </div>
             <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
@@ -449,7 +449,7 @@ export function makeExchangeCh2(E, lang = "py") {
                 <div key={i} style={{
                   width: 36, height: 36, borderRadius: 8, background: "#16a34a",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 14, fontWeight: 900, color: "#fff",
+                  fontSize: 14, fontWeight: 700, color: "#fff",
                 }}>{v}</div>
               ))}
             </div>
@@ -581,7 +581,7 @@ export function makeExchangeCh3(E) {
         "Time: O(N) — just sum the list and build the result.\nSpace: O(N) — for the result list.\nSuper efficient!", "시간: O(N) — 리스트 합계 구하고 결과 구성. 공간: O(N) — 결과 리스트. 매우 효율적!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(N)</div>
+          <div style={{ fontSize: 28, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(N)</div>
           <div style={{ fontSize: 12, color: C.ok, fontWeight: 700, marginTop: 4 }}>
             {t(E, "No simulation needed — pure math!", "시뮬레이션 불필요 — 순수 수학!")}
           </div>

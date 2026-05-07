@@ -57,17 +57,17 @@ export function makeMcc22GrammarCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcd6"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Grammar</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Grammar</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P1</div>
           </div>
 
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#059669" }}>{t(E, "grammar is a directed graph of words", "문법은 단어들로 이뤄진 방향이 있는 그래프")}</b>
@@ -76,7 +76,7 @@ export function makeMcc22GrammarCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A sentence is ", "문장이 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "VALID if every consecutive (X, Y) has an edge X → Y", "조건에 맞으려면 모든 연속 (X, Y) 가 화살표 X → Y 를 가져야")}</b>
@@ -84,7 +84,7 @@ export function makeMcc22GrammarCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "For each input sentence, print ", "각 입력 문장에 대해 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "VALID or INVALID", "VALID 또는 INVALID")}</b>

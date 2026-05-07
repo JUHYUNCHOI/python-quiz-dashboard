@@ -42,17 +42,17 @@ export function makeMcc15BahasaCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udde3\ufe0f"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Bahasa F</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Bahasa F</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P3</div>
           </div>
 
           <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "In ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "Bahasa F", "Bahasa F")}</b>
@@ -62,7 +62,7 @@ export function makeMcc15BahasaCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Vowels ", "모음 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "(a, e, i, o, u) stay unchanged", "(a, e, i, o, u) 은 그대로 유지")}</b>
@@ -70,7 +70,7 @@ export function makeMcc15BahasaCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "Bahasa F translation of the input word", "입력 단어의 Bahasa F 번역")}</b>

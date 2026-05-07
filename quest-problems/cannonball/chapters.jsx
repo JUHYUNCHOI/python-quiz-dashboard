@@ -58,7 +58,7 @@ export function makeCannonCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udca5"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cannonball</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Cannonball</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #2</div>
           </div>
 
@@ -100,12 +100,12 @@ export function makeCannonCh1(E) {
           </div>
 
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Bessie starts at position ", "Bessie 가 위치 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "S with power 1, moving RIGHT", "S, 파워 1, 오른쪽 방향")}</b>
@@ -115,7 +115,7 @@ export function makeCannonCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each position 1..N holds either a ",
                         "위치 1..N 각각에 ")}
@@ -125,7 +125,7 @@ export function makeCannonCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#dc2626" }}>{t(E, "Targets", "타겟")}</b>
                   {t(E, " break the first time Bessie lands on them ", "은 Bessie가 처음 착지했을 때 ")}
@@ -135,7 +135,7 @@ export function makeCannonCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print how many targets ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "break in total", "부서진 타겟의 총 개수")}</b>
@@ -155,12 +155,12 @@ export function makeCannonCh1(E) {
         "입력: N S, 그 다음 N 줄에 't v' 씩 (i 번째 줄이 i 번 패드). t = 0 → 점프패드, t = 1 → 타겟."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#f97316", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#9a3412", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#9a3412", whiteSpace: "pre" }}>
 {`5 2
 0 1
@@ -171,14 +171,14 @@ export function makeCannonCh1(E) {
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`1`}
               </div>
             </div>
           </div>
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#9a3412", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough", "풀이")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>

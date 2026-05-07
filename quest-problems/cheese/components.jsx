@@ -90,12 +90,12 @@ export function CheeseSimulator({ E }) {
             background: "#fff", border: `2px solid ${axis.color}`, borderRadius: 8, padding: "8px 10px", textAlign: "center",
           }}>
             <div style={{ fontSize: 10, fontWeight: 700, color: axis.color }}>{axis.label}</div>
-            <div style={{ fontSize: 18, fontWeight: 900, color: axis.color, marginTop: 2 }}>{axis.val}</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: axis.color, marginTop: 2 }}>{axis.val}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", textAlign: "center", fontSize: 14, fontWeight: 800 }}>
+      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", textAlign: "center", fontSize: 14, fontWeight: 600 }}>
         {t(E, `Total valid placements: ${total}`, `총 유효 자리: ${total}`)}
       </div>
     </div>

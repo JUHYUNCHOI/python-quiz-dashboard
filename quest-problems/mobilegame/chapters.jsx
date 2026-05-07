@@ -30,17 +30,17 @@ export function makeMobileGameCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcf1"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mobile Game</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Mobile Game</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P2</div>
           </div>
 
           <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A mobile game has ", "")}
                   <b style={{ color: "#d97706" }}>{t(E, "N levels with scores s[1..N]", "점수 s[1..N] 의 N 개 레벨")}</b>
@@ -48,7 +48,7 @@ export function makeMobileGameCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "You ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "play every level once", "모든 레벨을 한 번씩 플레이")}</b>
@@ -57,7 +57,7 @@ export function makeMobileGameCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "total score (sum of all s[i])", "총 점수 (모든 s[i] 의 합)")}</b>

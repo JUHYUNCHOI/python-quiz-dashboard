@@ -28,17 +28,17 @@ export function makePresentsCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🎁</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Stack of Presents</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>Stack of Presents</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>Bronze warm-up</div>
           </div>
 
           <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has a ", "FJ에게 ")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "vertical stack of N presents", "수직으로 쌓인 N개의 선물 더미")}</b>
@@ -47,14 +47,14 @@ export function makePresentsCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Q queries arrive — each names ONE present FJ should fetch.",
                         "Q개의 요청이 와요 — 각 요청은 FJ가 꺼내야 할 선물 1개를 지정해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ must remove all presents ", "FJ는 그 선물 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "above", "위에")}</b>
@@ -63,7 +63,7 @@ export function makePresentsCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "For each query, print how many presents had to be removed first.",
                         "각 요청마다, 먼저 빼낸 선물 개수를 출력해요.")}
@@ -83,7 +83,7 @@ export function makePresentsCh1(E) {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 6, alignItems: "center" }}>
             {/* BEFORE */}
             <div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
                 {t(E, "BEFORE", "전")}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
@@ -93,7 +93,7 @@ export function makePresentsCh1(E) {
                   return (
                     <div key={i} style={{
                       width: 70, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
-                      borderRadius: 7, fontWeight: 900, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
+                      borderRadius: 7, fontWeight: 700, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
                       background: isTarget ? "#dcfce7" : (isAbove ? "#fef2f2" : "#fff"),
                       border: `2px solid ${isTarget ? "#16a34a" : (isAbove ? "#dc2626" : "#cbd5e1")}`,
                       color: isTarget ? "#15803d" : (isAbove ? "#7f1d1d" : C.text),
@@ -104,16 +104,16 @@ export function makePresentsCh1(E) {
               </div>
             </div>
             {/* arrow */}
-            <div style={{ fontSize: 24, color: "#8b5cf6", textAlign: "center", fontWeight: 900 }}>→</div>
+            <div style={{ fontSize: 24, color: "#8b5cf6", textAlign: "center", fontWeight: 700 }}>→</div>
             {/* AFTER */}
             <div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
                 {t(E, "AFTER", "후")}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
                 <div style={{
                   width: 70, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 7, fontWeight: 900, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
+                  borderRadius: 7, fontWeight: 700, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
                   background: "#fff", border: `2px solid #cbd5e1`, color: C.text,
                 }}>2</div>
                 <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>↑ {t(E, "top", "맨 위")}</div>

@@ -43,7 +43,7 @@ export function makeBacteriaCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\udda0"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Balancing Bacteria</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Balancing Bacteria</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #3</div>
           </div>
 
@@ -63,10 +63,10 @@ export function makeBacteriaCh1(E) {
               ].map((c) => (
                 <div key={c.i} style={{ background: "#fff", border: `2px solid ${c.color}`, borderRadius: 8, padding: "6px 4px", textAlign: "center" }}>
                   <div style={{ fontSize: 9, color: C.dim, fontWeight: 700 }}>a[{c.i}]</div>
-                  <div style={{ fontSize: 10, color: c.add > 0 ? "#16a34a" : "#9ca3af", fontWeight: 800, fontFamily: "'JetBrains Mono',monospace" }}>
+                  <div style={{ fontSize: 10, color: c.add > 0 ? "#16a34a" : "#9ca3af", fontWeight: 600, fontFamily: "'JetBrains Mono',monospace" }}>
                     {c.add > 0 ? `+${c.add}` : "—"}
                   </div>
-                  <div style={{ fontSize: 14, fontWeight: 900, color: "#065f46", fontFamily: "'JetBrains Mono',monospace" }}>{c.before + c.add}</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: "#065f46", fontFamily: "'JetBrains Mono',monospace" }}>{c.before + c.add}</div>
                 </div>
               ))}
             </div>
@@ -80,12 +80,12 @@ export function makeBacteriaCh1(E) {
           </div>
 
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ에게 ")}
                   <b style={{ color: "#059669" }}>{t(E, "N patches in a row", "한 줄로 늘어선 N개의 패치")}</b>
@@ -95,7 +95,7 @@ export function makeBacteriaCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#dc2626" }}>{t(E, "Type-1 walk starting at h", "타입 1 워크 (시작 h)")}</b>
                   {t(E, ": adds the ramp ", ": ")}
@@ -106,7 +106,7 @@ export function makeBacteriaCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#7c3aed" }}>{t(E, "Type-2 walk", "타입 2 워크")}</b>
                   {t(E, " is the same ramp but ", " 도 같은 ramp 인데 ")}
@@ -116,7 +116,7 @@ export function makeBacteriaCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of walks", "필요한 워크의 최소 횟수")}</b>
@@ -135,26 +135,26 @@ export function makeBacteriaCh1(E) {
         "입력: 1 줄에 N, 2 줄에 N 개 값. 출력: 최소 워크 수."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#065f46", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#065f46", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#065f46", whiteSpace: "pre" }}>
 {`2
 -1 3`}
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`6`}
               </div>
             </div>
           </div>
           <div style={{ background: "#ecfdf5", border: "2px solid #a7f3d0", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#065f46", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#065f46", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough", "풀이")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>

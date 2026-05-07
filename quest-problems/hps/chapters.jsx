@@ -16,17 +16,17 @@ export function makeHpsCh1(E) {
               <span style={{ color: "#7c3aed" }}>■</span>
               <span style={{ color: "#ea580c" }}>▲</span>
             </div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Hoof Paper Scissors Minus One</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Hoof Paper Scissors Minus One</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #1</div>
           </div>
 
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "이 게임에는 ")}
                   <b style={{ color: "#059669" }}>{t(E, "N kinds of cards", "N 종류의 카드")}</b>
@@ -37,7 +37,7 @@ export function makeHpsCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "How a round works: ", "한 판 진행: ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "each cow lays out 2 cards face-up", "각 소가 카드 2 장을 앞면이 보이게 내려놔요")}</b>
@@ -48,7 +48,7 @@ export function makeHpsCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Elsie's hand is given M times. For each one, count Bessie's hands (ordered pairs) where ",
                         "Elsie 의 패 가 M 번 주어져요. 각 패 마다, ")}
@@ -77,12 +77,12 @@ export function makeHpsCh1(E) {
         "실제 USACO 샘플: 3 종 카드, 3 개 Elsie 패. 승패 차트는 W/L/D 글자로 된 삼각 행렬."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`3 3
 D
@@ -94,7 +94,7 @@ LWD
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`0
 0
@@ -103,7 +103,7 @@ LWD
             </div>
           </div>
           <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 8 }}>
               🔍 {t(E, "What each line means", "각 줄 의미")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "8px 12px", alignItems: "baseline" }}>
@@ -169,7 +169,7 @@ LWD
             background: bgTint ? `${s.color}10` : "#fff",
           }}>
             <span style={{ fontSize: size, color: s.color, lineHeight: 1 }}>{s.glyph}</span>
-            <span style={{ fontSize: 12, fontWeight: 800, color: C.text }}>{t(E, "card ", "카드 ")}{n}</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: C.text }}>{t(E, "card ", "카드 ")}{n}</span>
           </span>
         );
         const TryCol = ({ card, n, beats1, label }) => (
@@ -185,7 +185,7 @@ LWD
                 ? t(E, "beats card 1 ✓", "카드 1 이김 ✓")
                 : t(E, "doesn't beat card 1", "카드 1 못 이김")}
             </div>
-            {label && <div style={{ fontSize: 10, color: "#15803d", fontWeight: 800 }}>{label}</div>}
+            {label && <div style={{ fontSize: 10, color: "#15803d", fontWeight: 600 }}>{label}</div>}
           </div>
         );
         return (
@@ -206,7 +206,7 @@ LWD
 
             {/* Step 2: Try every card */}
             <div style={{ background: "#fff", border: "2px solid #c4b5fd", borderRadius: 10, padding: 14, marginBottom: 12 }}>
-              <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 800, textAlign: "center", marginBottom: 10 }}>
+              <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 600, textAlign: "center", marginBottom: 10 }}>
                 {t(E, "Try every card 1..N — does it beat card 1?",
                       "카드 1..N 시험 — 카드 1 을 이기는가?")}
               </div>
@@ -225,7 +225,7 @@ LWD
             {/* Step 3: All 9 Bessie hands laid out in a 3×3 grid;
                 highlight the ones with at least one card 2. */}
             <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 10, padding: 14, marginBottom: 12 }}>
-              <div style={{ fontSize: 12, color: "#15803d", fontWeight: 800, textAlign: "center", marginBottom: 4 }}>
+              <div style={{ fontSize: 12, color: "#15803d", fontWeight: 600, textAlign: "center", marginBottom: 4 }}>
                 {t(E, "All 9 Bessie hands (a, b) — green ones contain card 2",
                       "Bessie 패 9 가지 (a, b) 모두 — 초록 = 카드 2 가 들어 있는 패")}
               </div>
@@ -242,14 +242,14 @@ LWD
                   {/* header: empty + b labels */}
                   <div />
                   {[1, 2, 3].map((b) => (
-                    <div key={`h${b}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: C.dim }}>
+                    <div key={`h${b}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: C.dim }}>
                       b={b}
                     </div>
                   ))}
                   {/* rows: a label + 3 cells */}
                   {[1, 2, 3].map((a) => (
                     <div key={`r${a}`} style={{ display: "contents" }}>
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 6, fontSize: 11, fontWeight: 800, color: C.dim }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 6, fontSize: 11, fontWeight: 600, color: C.dim }}>
                         a={a}
                       </div>
                       {[1, 2, 3].map((b) => {
@@ -260,7 +260,7 @@ LWD
                             border: `2px solid ${hasDom ? "#16a34a" : "#cbd5e1"}`,
                             background: hasDom ? "#dcfce7" : "#fff",
                             borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
-                            fontSize: 14, fontWeight: 800,
+                            fontSize: 14, fontWeight: 600,
                             color: hasDom ? "#15803d" : "#94a3b8",
                           }}>
                             ({a},{b}) {hasDom && <span style={{ marginLeft: 3, fontSize: 11 }}>✓</span>}
@@ -271,14 +271,14 @@ LWD
                   ))}
                 </div>
               </div>
-              <div style={{ marginTop: 12, paddingTop: 8, borderTop: "1px dashed #86efac", textAlign: "center", fontSize: 13, fontWeight: 800, color: "#15803d" }}>
+              <div style={{ marginTop: 12, paddingTop: 8, borderTop: "1px dashed #86efac", textAlign: "center", fontSize: 13, fontWeight: 600, color: "#15803d" }}>
                 {t(E, "Count the green cells: 5 hands win.", "초록 셀 세보면: 5 개 패 가 이김.")}
               </div>
             </div>
 
             {/* Step 4: Answer */}
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 12 }}>
-              <div style={{ fontSize: 18, fontWeight: 900, color: "#16a34a", textAlign: "center" }}>
+              <div style={{ fontSize: 18, fontWeight: 700, color: "#16a34a", textAlign: "center" }}>
                 {t(E, "answer = 5", "답 = 5")}
               </div>
               <div style={{ marginTop: 4, textAlign: "center", fontSize: 10.5, color: C.dim }}>
@@ -390,12 +390,12 @@ export function makeHpsCh2(E, lang = "py") {
         const Card = ({ n, glyph, color, size = 16 }) => (
           <span style={{ display: "inline-flex", alignItems: "center", gap: 2 }}>
             <span style={{ fontSize: size, color, lineHeight: 1 }}>{glyph}</span>
-            <span style={{ fontSize: size * 0.7, fontWeight: 800 }}>{n}</span>
+            <span style={{ fontSize: size * 0.7, fontWeight: 600 }}>{n}</span>
           </span>
         );
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", textAlign: "center", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", textAlign: "center", marginBottom: 10 }}>
               💡 {t(E, "The formula: N² − (N − dom)²", "공식: N² − (N − dom)²")}
             </div>
 
@@ -429,7 +429,7 @@ export function makeHpsCh2(E, lang = "py") {
 
             {/* Concrete example: Game 3 */}
             <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 10, padding: 14 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#166534", marginBottom: 8, textAlign: "center" }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#166534", marginBottom: 8, textAlign: "center" }}>
                 🎯 {t(E, "Plug in Game 3: Elsie (card 1, card 1)", "샘플 게임 3 에 대입: Elsie (카드 1, 카드 1)")}
               </div>
               <div style={{ fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace", color: "#15803d", lineHeight: 1.85 }}>
@@ -466,7 +466,7 @@ export function makeHpsCh2(E, lang = "py") {
         "이제 C++ 도 Python 도 둘 다 통과 — Python 까지! 왜 그럴까?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#15803d", textAlign: "center", marginBottom: 12 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#15803d", textAlign: "center", marginBottom: 12 }}>
             ✅ {t(E, "Smart algorithm complexity", "Smart 알고리즘 복잡도")}
           </div>
           <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: 14, marginBottom: 10 }}>
@@ -482,19 +482,19 @@ export function makeHpsCh2(E, lang = "py") {
             display: "grid", gridTemplateColumns: "auto 1fr 1fr", gap: "6px 12px",
             fontSize: 12, marginBottom: 10, alignItems: "center",
           }}>
-            <div style={{ fontWeight: 800, color: "#6b7280" }}></div>
-            <div style={{ fontWeight: 800, color: "#dc2626", textAlign: "center" }}>{t(E, "Brute", "Brute")}</div>
-            <div style={{ fontWeight: 800, color: "#16a34a", textAlign: "center" }}>{t(E, "Smart", "Smart")}</div>
+            <div style={{ fontWeight: 600, color: "#6b7280" }}></div>
+            <div style={{ fontWeight: 600, color: "#dc2626", textAlign: "center" }}>{t(E, "Brute", "Brute")}</div>
+            <div style={{ fontWeight: 600, color: "#16a34a", textAlign: "center" }}>{t(E, "Smart", "Smart")}</div>
 
-            <div style={{ fontWeight: 800 }}>{t(E, "Total ops", "총 연산")}</div>
+            <div style={{ fontWeight: 600 }}>{t(E, "Total ops", "총 연산")}</div>
             <div style={{ textAlign: "center", color: "#dc2626" }}>27,000,000,000</div>
             <div style={{ textAlign: "center", color: "#16a34a" }}>9,000,000</div>
 
-            <div style={{ fontWeight: 800 }}>C++</div>
+            <div style={{ fontWeight: 600 }}>C++</div>
             <div style={{ textAlign: "center", color: "#dc2626" }}>~27 {t(E, "sec", "초")} ❌</div>
             <div style={{ textAlign: "center", color: "#16a34a" }}>~0.01 {t(E, "sec", "초")} ✅</div>
 
-            <div style={{ fontWeight: 800 }}>Python</div>
+            <div style={{ fontWeight: 600 }}>Python</div>
             <div style={{ textAlign: "center", color: "#dc2626" }}>~2700 {t(E, "sec", "초")} ❌</div>
             <div style={{ textAlign: "center", color: "#16a34a" }}>~1 {t(E, "sec", "초")} ✅</div>
           </div>
@@ -515,7 +515,7 @@ export function makeHpsCh2(E, lang = "py") {
         "더 똑똑해지려면? 비트 (bit) 트릭이 있어요 — 비트가 뭔지부터 배워야 함. 새 내용이니까 처음부터."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
             🚀 {t(E, "Even smarter? Bits.", "더 똑똑해지려면? 비트.")}
           </div>
           <div style={{ background: "#f0f9ff", border: "2px solid #7dd3fc", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#075985", lineHeight: 1.7 }}>
@@ -539,7 +539,7 @@ export function makeHpsCh2(E, lang = "py") {
         "1 단계: 비트 (bit). 모든 숫자는 2진수 — 0 과 1 의 줄."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
             🔢 {t(E, "What's a bit?", "비트가 뭐?")}
           </div>
           <div style={{ background: "#fff", border: "1.5px solid #cbd5e1", borderRadius: 10, padding: "12px 14px", marginBottom: 10, fontSize: 13, lineHeight: 1.7 }}>
@@ -559,7 +559,7 @@ export function makeHpsCh2(E, lang = "py") {
           </div>
 
           <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#7c2d12", lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#92400e", marginBottom: 4 }}>
               ⚙️ {t(E, "The shortcut: 1 << i", "유용한 표현: 1 << i")}
             </div>
             <div>
@@ -583,12 +583,12 @@ export function makeHpsCh2(E, lang = "py") {
         "2 단계: 비트 연산자 3 개 — AND (&), OR (|), popcount."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
             ⚙️ {t(E, "Bit operators", "비트 연산자")}
           </div>
 
           <div style={{ background: "#fff", border: "1.5px solid #16a34a", borderRadius: 10, padding: "12px 14px", marginBottom: 8, fontSize: 13, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#15803d", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#15803d", marginBottom: 4 }}>
               & {t(E, "(AND) — keeps a bit ON only if BOTH inputs have it ON", "(AND) — 두 쪽 다 1 일 때만 결과가 1")}
             </div>
             <div style={{ padding: 8, background: "#f0fdf4", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7 }}>
@@ -600,7 +600,7 @@ export function makeHpsCh2(E, lang = "py") {
           </div>
 
           <div style={{ background: "#fff", border: "1.5px solid #ea580c", borderRadius: 10, padding: "12px 14px", marginBottom: 8, fontSize: 13, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#9a3412", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#9a3412", marginBottom: 4 }}>
               | {t(E, "(OR) — bit ON if EITHER input has it ON", "(OR) — 둘 중 하나라도 1 이면 결과가 1")}
             </div>
             <div style={{ padding: 8, background: "#fff7ed", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7 }}>
@@ -617,7 +617,7 @@ export function makeHpsCh2(E, lang = "py") {
           </div>
 
           <div style={{ background: "#fff", border: "1.5px solid #7c3aed", borderRadius: 10, padding: "12px 14px", fontSize: 13, lineHeight: 1.7, marginBottom: 12 }}>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
               popcount {t(E, "— count how many bits are 1", "— 1 인 비트 개수 세기")}
             </div>
             <div style={{ padding: 8, background: "#faf5ff", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.85 }}>
@@ -639,12 +639,12 @@ export function makeHpsCh2(E, lang = "py") {
         "3 단계: 비트를 이 문제에 적용. 컬럼마다 비트마스크 — i 번째 비트 = '카드 i 가 이 컬럼 카드 이김'."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
             🎯 {t(E, "Apply bits to the problem", "비트를 이 문제에 적용")}
           </div>
 
           <div style={{ background: "#f0f9ff", border: "1.5px solid #7dd3fc", borderRadius: 10, padding: "12px 14px", fontSize: 12.5, color: "#075985", lineHeight: 1.75, marginBottom: 10 }}>
-            <div style={{ fontWeight: 800, color: "#0c4a6e", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#0c4a6e", marginBottom: 4 }}>
               {t(E, "Idea: pack 'who beats this card' into one number.", "아이디어: '이 카드를 이기는 카드들' 을 숫자 하나에 담기.")}
             </div>
             <div>
@@ -656,7 +656,7 @@ export function makeHpsCh2(E, lang = "py") {
           </div>
 
           <div style={{ background: "#fff", border: "1.5px solid #cbd5e1", borderRadius: 10, padding: "12px 14px", fontSize: 12.5, marginBottom: 10 }}>
-            <div style={{ fontWeight: 800, color: "#475569", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#475569", marginBottom: 6 }}>
               {t(E, "For sample (cards 1-3, beats: 2→1, 1→3, 3→2):", "샘플 차트 (카드 1-3, 2→1 이김, 1→3, 3→2) 일 때:")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: "#1f2937", lineHeight: 1.85, paddingLeft: 4 }}>
@@ -667,7 +667,7 @@ export function makeHpsCh2(E, lang = "py") {
           </div>
 
           <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: "12px 14px", fontSize: 12.5, color: "#15803d", lineHeight: 1.75 }}>
-            <div style={{ fontWeight: 800, marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, marginBottom: 4 }}>
               {t(E, "Now a query is just AND + popcount:", "쿼리는 AND + popcount 한 번씩:")}
             </div>
             <div style={{ paddingLeft: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.85 }}>

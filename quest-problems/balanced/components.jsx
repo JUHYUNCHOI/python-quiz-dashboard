@@ -43,7 +43,7 @@ export function BalancedSim({ E }) {
           <button key={i} onClick={() => setPi(i)} style={{
             padding: "5px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
-            fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>
             N={p.N}, M={p.M}
           </button>
@@ -58,7 +58,7 @@ export function BalancedSim({ E }) {
           return (
             <div key={i} style={{
               width: 28, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-              borderRadius: 6, fontSize: 18, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+              borderRadius: 6, fontSize: 18, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
               background: isMatched ? (isOpen ? "#fef3c7" : "#dbeafe") : "#f3f4f6",
               border: `2px solid ${isMatched ? (isOpen ? "#f59e0b" : "#3b82f6") : "#d1d5db"}`,
               color: isMatched ? (isOpen ? "#92400e" : "#1e3a8a") : "#9ca3af",
@@ -81,7 +81,7 @@ export function BalancedSim({ E }) {
         <div style={{ fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
           min({N}, {M}) = {pairs} {t(E, "pairs", "쌍")}
         </div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
+        <div style={{ fontSize: 22, fontWeight: 700, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
           2 × {pairs} = {ans}
         </div>
         <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
@@ -143,7 +143,7 @@ export function BalancedRunner({ E }) {
         }} />
       <button onClick={running ? stop : run} style={{
         width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
-        fontSize: 14, fontWeight: 800, marginBottom: 10,
+        fontSize: 14, fontWeight: 600, marginBottom: 10,
         background: running ? "#dc2626" : A, color: "#fff",
       }}>
         {running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run", "▶ 실행")}
@@ -154,14 +154,14 @@ export function BalancedRunner({ E }) {
             {t(E, "Output:", "출력:")}
           </div>
           {results.map((r, i) => (
-            <div key={i} style={{ fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: r.error ? "#dc2626" : A, fontWeight: 800, lineHeight: 1.6 }}>
+            <div key={i} style={{ fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: r.error ? "#dc2626" : A, fontWeight: 600, lineHeight: 1.6 }}>
               {r.error ? `Test ${r.test}: bad input` : (r.test ? `Test ${r.test}: 2 × min(${r.N}, ${r.M}) = ${r.ans}` : r.error)}
             </div>
           ))}
         </div>
       )}
       <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
-        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div style={{ fontWeight: 600, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
         <div>O(1) per query · trivially fast even for T = 10⁶</div>
       </div>
     </div>

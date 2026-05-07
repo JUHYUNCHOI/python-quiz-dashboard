@@ -69,13 +69,13 @@ export function MooinExplorer({ E }) {
         {preset.a.map((v, i) => (
           <div key={i} style={{
             width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-            borderRadius: 8, fontWeight: 900, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
+            borderRadius: 8, fontWeight: 700, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
             background: "#fff", border: `2px solid ${C.border}`, color: C.text,
           }}>{v}</div>
         ))}
       </div>
 
-      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", fontSize: 13, fontWeight: 800, marginBottom: 10, textAlign: "center" }}>
+      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", fontSize: 13, fontWeight: 600, marginBottom: 10, textAlign: "center" }}>
         {t(E, "Distinct moos: ", "서로 다른 moo: ")}<span style={{ fontSize: 18 }}>{moos.length}</span>
       </div>
 

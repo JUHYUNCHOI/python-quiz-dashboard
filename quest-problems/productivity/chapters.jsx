@@ -42,7 +42,7 @@ export function makeProdCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>📊</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Max Productivity</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Max Productivity</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Maximizing Productivity</div>
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
@@ -59,12 +59,12 @@ export function makeProdCh1(E) {
         "입력: 첫 줄 N Q, 그 다음 닫힘 시간 N 개, 이동 시간 N 개, 마지막에 'V S' 형식 쿼리 Q 줄."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#f97316", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#9a3412", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#9a3412", whiteSpace: "pre" }}>
 {`5 5
 3 5 7 9 12
@@ -77,7 +77,7 @@ export function makeProdCh1(E) {
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`YES
 NO
@@ -88,7 +88,7 @@ NO`}
             </div>
           </div>
           <div style={{ background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#9a3412", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough — query 1: V=1, S=5", "풀이 — 1 번 쿼리: V=1, S=5")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
@@ -115,7 +115,7 @@ NO`}
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: "2px solid #fed7aa", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#f97316", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#f97316", marginBottom: 10 }}>
               {t(E, "Transform the Condition", "조건 변환")}
             </div>
             <div style={{ background: "#fff", border: "2px solid #fdba74", borderRadius: 10, padding: 12, marginBottom: 10 }}>

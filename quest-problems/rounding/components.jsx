@@ -56,22 +56,22 @@ export function RoundingSimulator({ E }) {
         <input type="number" min={2} max={99999} value={x}
           onChange={e => setX(Math.max(2, Math.min(99999, Number(e.target.value) || 2)))}
           style={{ padding: "4px 8px", border: `1.5px solid ${C.border}`, borderRadius: 6, fontSize: 13, fontFamily: "'JetBrains Mono',monospace", width: "100%" }} />
-        <div style={{ fontWeight: 800, color: C.dim, fontSize: 11 }}>P = {P} (10^{P} = {Math.pow(10, P)})</div>
+        <div style={{ fontWeight: 600, color: C.dim, fontSize: 11 }}>P = {P} (10^{P} = {Math.pow(10, P)})</div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
         <div style={{ background: "#e0f2fe", border: `2px solid ${A}`, borderRadius: 10, padding: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 800, color: "#0c4a6e", marginBottom: 6 }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: "#0c4a6e", marginBottom: 6 }}>
             👩‍🌾 {t(E, "Bessie — one round to 10^P", "Bessie — 10^P 한 번")}
           </div>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, color: "#0c4a6e" }}>
             <div>round_to({x}, {P})</div>
-            <div style={{ marginTop: 4, fontSize: 14, fontWeight: 800 }}>= {bessie}</div>
+            <div style={{ marginTop: 4, fontSize: 14, fontWeight: 600 }}>= {bessie}</div>
           </div>
         </div>
 
         <div style={{ background: "#fee2e2", border: "2px solid #ef4444", borderRadius: 10, padding: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>
             👧 {t(E, "Elsie — chain", "Elsie — 사슬")}
           </div>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, lineHeight: 1.7, color: "#7f1d1d" }}>
@@ -80,7 +80,7 @@ export function RoundingSimulator({ E }) {
                 10^{s.k}: {s.before} → {s.after}
               </div>
             ))}
-            <div style={{ marginTop: 4, fontSize: 14, fontWeight: 800 }}>= {elsie}</div>
+            <div style={{ marginTop: 4, fontSize: 14, fontWeight: 600 }}>= {elsie}</div>
           </div>
         </div>
       </div>
@@ -89,7 +89,7 @@ export function RoundingSimulator({ E }) {
         marginTop: 14, padding: "10px 12px", borderRadius: 10,
         background: disagree ? "#fee2e2" : "#dcfce7",
         border: `2px solid ${disagree ? "#ef4444" : "#16a34a"}`,
-        textAlign: "center", fontSize: 14, fontWeight: 800,
+        textAlign: "center", fontSize: 14, fontWeight: 600,
         color: disagree ? "#7f1d1d" : "#15803d",
       }}>
         {disagree

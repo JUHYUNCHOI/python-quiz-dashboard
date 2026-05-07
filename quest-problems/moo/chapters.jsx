@@ -13,17 +13,17 @@ export function makeMooCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#9333ea" }}>It's Mooin' Time</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#9333ea" }}>It's Mooin' Time</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO December 2024 Bronze #3</div>
           </div>
 
           <div style={{ background: "#faf5ff", border: "2px solid #d8b4fe", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#581c87", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#581c87", marginBottom: 8 }}>
               📖 {t(E, "Definition", "정의")}
             </div>
 
             <div style={{ background: "#fff", border: "1.5px solid #d8b4fe", borderRadius: 8, padding: "10px 12px", marginBottom: 8, fontSize: 13, color: C.text, lineHeight: 1.65 }}>
-              <div style={{ fontWeight: 800, color: "#9333ea", marginBottom: 4 }}>
+              <div style={{ fontWeight: 600, color: "#9333ea", marginBottom: 4 }}>
                 {t(E, "What's a 'moo'?", "moo 가 뭐?")}
               </div>
               {t(E, "A 3-character substring of pattern X Y Y, where Y is repeated and X ≠ Y.",
@@ -34,7 +34,7 @@ export function makeMooCh1(E) {
             </div>
 
             <div style={{ background: "#fff", border: "1.5px solid #d8b4fe", borderRadius: 8, padding: "10px 12px", fontSize: 13, color: C.text, lineHeight: 1.65 }}>
-              <div style={{ fontWeight: 800, color: "#9333ea", marginBottom: 4 }}>
+              <div style={{ fontWeight: 600, color: "#9333ea", marginBottom: 4 }}>
                 {t(E, "The catch — possibly 1 corrupted character", "함정 — 한 글자 오타 가능성")}
               </div>
               {t(E, "The string s might have UP TO ONE position with a wrong character. So the original could be s, OR s with one position changed.",
@@ -63,7 +63,7 @@ export function makeMooCh1(E) {
         "샘플 1: s = 'zzmoozzmoo', F=2. 'moo' 가 직접 2 번 등장 → 답 = 1, [moo]."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#9333ea", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#9333ea", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Three official samples", "공식 샘플 3 개")}
           </div>
 
@@ -74,18 +74,18 @@ export function makeMooCh1(E) {
           ].map((s, i) => (
             <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
               <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 8, padding: 8 }}>
-                <div style={{ fontSize: 10, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>{t(E, `Sample ${i+1} INPUT`, `샘플 ${i+1} 입력`)}</div>
+                <div style={{ fontSize: 10, fontWeight: 600, color: "#92400e", marginBottom: 4 }}>{t(E, `Sample ${i+1} INPUT`, `샘플 ${i+1} 입력`)}</div>
                 <pre style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#7c2d12", margin: 0, whiteSpace: "pre" }}>{s.input}</pre>
               </div>
               <div style={{ background: "#dcfce7", border: "1.5px solid #16a34a", borderRadius: 8, padding: 8 }}>
-                <div style={{ fontSize: 10, fontWeight: 800, color: "#15803d", marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+                <div style={{ fontSize: 10, fontWeight: 600, color: "#15803d", marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
                 <pre style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#166534", margin: 0, whiteSpace: "pre" }}>{s.output}</pre>
               </div>
             </div>
           ))}
 
           <div style={{ background: "#faf5ff", border: "2px solid #d8b4fe", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#581c87", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#581c87", marginBottom: 6 }}>
               🔍 {t(E, "Sample 3 — many moos with 1 edit", "샘플 3 — 한 번의 수정으로 많은 moo")}
             </div>
             {t(E, "s = \"ooo\", F=1. The original could have ANY single character changed at any position. By changing s[0] to 'a', 'b', ..., 'z' (excluding 'o'), we get \"aoo\", \"boo\", ..., \"zoo\" — all valid moos. 25 distinct moos (all letters except 'o').",

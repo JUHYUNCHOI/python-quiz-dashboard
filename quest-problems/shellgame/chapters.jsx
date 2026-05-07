@@ -122,9 +122,9 @@ const ShellRow = ({ shells, pebble, guess, label, E: isE }) => {
               {hasPebble && <div style={{ fontSize: 10, position: "absolute", bottom: 2 }}>{"⚪"}</div>}
               {isGuess && <div style={{
                 position: "absolute", top: -8, right: -8, fontSize: 10,
-                background: "#dc2626", color: "#fff", borderRadius: 10, padding: "1px 5px", fontWeight: 800,
+                background: "#dc2626", color: "#fff", borderRadius: 10, padding: "1px 5px", fontWeight: 600,
               }}>{isE ? "G" : "추"}</div>}
-              <div style={{ position: "absolute", top: -16, fontSize: 10, color: C.dim, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace" }}>{pos}</div>
+              <div style={{ position: "absolute", top: -16, fontSize: 10, color: C.dim, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace" }}>{pos}</div>
             </div>
           );
         })}
@@ -149,17 +149,17 @@ export function makeShellCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"🐚"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Shell Game</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Shell Game</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #1</div>
           </div>
 
           <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A pebble hides under ", "조약돌이 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "one of 3 shells (positions 1, 2, 3)", "3개 컵 중 하나 (위치 1, 2, 3)")}</b>
@@ -167,7 +167,7 @@ export function makeShellCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#0891b2" }}>{t(E, "N rounds", "N개의 라운드")}</b>
@@ -178,7 +178,7 @@ export function makeShellCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "The pebble's ", "조약돌의 ")}
                   <b style={{ color: "#16a34a" }}>{t(E, "starting position is unknown", "시작 위치는 알 수 없음")}</b>
@@ -186,7 +186,7 @@ export function makeShellCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Try all 3 starting positions; print the ", "3가지 시작 위치를 모두 시도해서, ")}
                   <b style={{ color: "#15803d" }}>{t(E, "maximum number of correct Elsie guesses", "Elsie가 가장 많이 맞히는 경우의 정답 수")}</b>
@@ -204,13 +204,13 @@ export function makeShellCh1(E) {
         "A swap exchanges the positions of two shells.\nIf the pebble is under one of the swapped shells, it moves!\nIf not, it stays put.", "스왑은 두 컵의 위치를 바꿔. 조약돌이 교환되는 컵 중 하나 아래에 있으면 이동해요! 아니면 그대로 있어요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
             {t(E, "How Swaps Work", "스왑 작동 방식")}
           </div>
           <div style={{ marginBottom: 14, paddingTop: 16 }}>
             <ShellRow shells={[1, 2, 3]} pebble={2} label={t(E, "Before: pebble at 2", "이전: 조약돌 2번")} E={E} />
           </div>
-          <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#dc2626", margin: "8px 0" }}>
+          <div style={{ textAlign: "center", fontSize: 14, fontWeight: 600, color: "#dc2626", margin: "8px 0" }}>
             {t(E, "Swap 1 ↔ 3", "스왑 1 ↔ 3")}
           </div>
           <div style={{ paddingTop: 16 }}>
@@ -247,7 +247,7 @@ export function makeShellCh1(E) {
         "We don't know where the pebble starts!\nBut there are only 3 possible positions: 1, 2, or 3.\nSo we try ALL 3 starting positions and take the best score!", "조약돌이 어디서 시작하는지 몰라! 하지만 가능한 위치는 1, 2, 3 단 3개예요. 그래서 3가지 시작 위치를 모두 시도하고 최고 점수를 구해요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
             {t(E, "The Key Insight: Try All 3!", "핵심 아이디어: 3가지 모두 시도!")}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -265,7 +265,7 @@ export function makeShellCh1(E) {
                     alignItems: "center", justifyContent: "center",
                   }}>{"🐚"}</div>
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 800, color: colors[start - 1] }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: colors[start - 1] }}>
                       {t(E, `Try start = ${start}`, `시작 위치 = ${start} 시도`)}
                     </div>
                     <div style={{ fontSize: 11, color: C.dim }}>
@@ -276,7 +276,7 @@ export function makeShellCh1(E) {
               );
             })}
           </div>
-          <div style={{ marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 900, color: "#dc2626" }}>
+          <div style={{ marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 700, color: "#dc2626" }}>
             {t(E, "Answer = max of all 3 scores!", "답 = 3개 점수 중 최대값!")}
           </div>
         </div>),
@@ -328,7 +328,7 @@ export function makeShellCh2(E) {
         "Let's trace with an example!\n3 swaps: (1,2,guess=1), (3,2,guess=1), (1,3,guess=1).\nWe'll try starting position = 1.", "예시로 추적해보자! 스왑 3번: (1,2,추측=1), (3,2,추측=1), (1,3,추측=1). 시작 위치 = 1로 시도할 거예요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
             {t(E, "Trace: start = 1", "추적: 시작 = 1")}
           </div>
           <div style={{ overflowX: "auto" }}>
@@ -352,15 +352,15 @@ export function makeShellCh2(E) {
                   <tr key={i} style={{ background: ok === "✓" ? "#dcfce7" : i % 2 === 0 ? "#fff" : "#fef2f2" }}>
                     <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2" }}>{step}</td>
                     <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center" }}>{swap}</td>
-                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center", fontWeight: 800, color: "#f59e0b" }}>{peb}</td>
+                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center", fontWeight: 600, color: "#f59e0b" }}>{peb}</td>
                     <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center" }}>{guess}</td>
-                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center", fontWeight: 800, color: ok === "✓" ? "#059669" : "#dc2626" }}>{ok}</td>
+                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center", fontWeight: 600, color: ok === "✓" ? "#059669" : "#dc2626" }}>{ok}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div style={{ marginTop: 8, textAlign: "center", fontSize: 13, fontWeight: 800, color: "#dc2626" }}>
+          <div style={{ marginTop: 8, textAlign: "center", fontSize: 13, fontWeight: 600, color: "#dc2626" }}>
             {t(E, "Start=1: score = 1", "시작=1: 점수 = 1")}
           </div>
         </div>),
@@ -372,7 +372,7 @@ export function makeShellCh2(E) {
         "Now let's see start=2 and start=3 too. We need to compare all three!", "이제 시작=2와 시작=3도 보자. 셋 다 비교해야 해요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
             {t(E, "All 3 starting positions", "3가지 시작 위치 모두")}
           </div>
           {/* Compact summary for each start */}
@@ -389,11 +389,11 @@ export function makeShellCh2(E) {
                 border: `2px solid ${score > 0 ? "#6ee7b7" : "#e5e7eb"}`,
               }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <div style={{ fontSize: 12, fontWeight: 800, color: cols[start - 1] }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: cols[start - 1] }}>
                     {t(E, `Start = ${start}`, `시작 = ${start}`)}
                   </div>
                   <div style={{
-                    fontSize: 14, fontWeight: 900,
+                    fontSize: 14, fontWeight: 700,
                     color: score > 0 ? "#059669" : C.dim,
                     fontFamily: "'JetBrains Mono',monospace",
                   }}>
@@ -413,7 +413,7 @@ export function makeShellCh2(E) {
               </div>
             );
           })}
-          <div style={{ marginTop: 8, textAlign: "center", fontSize: 14, fontWeight: 900, color: "#dc2626" }}>
+          <div style={{ marginTop: 8, textAlign: "center", fontSize: 14, fontWeight: 700, color: "#dc2626" }}>
             {t(E, "Answer = max(1, 0, 0) = 1", "답 = max(1, 0, 0) = 1")}
           </div>
         </div>),
@@ -465,7 +465,7 @@ export function makeShellCh3(E, lang = "py") {
         "Let's build the code!\nFirst read N and all the swap data.\nEach swap has: shell A, shell B, and guess G.", "코드를 만들어보자! 먼저 N과 모든 스왑 데이터를 읽어. 각 스왑에는: 컵 A, 컵 B, 추측 G가 있어요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
             {t(E, "Step 1: Read input", "1단계: 입력 읽기")}
           </div>
           <CodeSnippet
@@ -491,7 +491,7 @@ export function makeShellCh3(E, lang = "py") {
         "The outer loop tries all 3 starting positions.\nFor each, we track the pebble position and count correct guesses.", "바깥 루프에서 3가지 시작 위치를 모두 시도해요. 각각에 대해 조약돌 위치를 추적하고 정답 수를 세."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
             {t(E, "Step 2: Try all starting positions", "2단계: 모든 시작 위치 시도")}
           </div>
           <CodeSnippet
@@ -504,9 +504,9 @@ export function makeShellCh3(E, lang = "py") {
             highlight={[0, 1, 2, 3]}
           />
           <div style={{ marginTop: 8, background: "#fef2f2", borderRadius: 8, padding: 8, border: "1.5px solid #fca5a5", fontSize: 12, lineHeight: 1.8, color: C.text }}>
-            <div><span style={{ fontWeight: 800, color: "#dc2626" }}>range(1, 4)</span> = {t(E, "gives 1, 2, 3", "1, 2, 3을 생성")}</div>
-            <div><span style={{ fontWeight: 800, color: "#dc2626" }}>pos</span> = {t(E, "current pebble location", "현재 조약돌 위치")}</div>
-            <div><span style={{ fontWeight: 800, color: "#dc2626" }}>score</span> = {t(E, "correct guesses for this start", "이 시작 위치의 정답 수")}</div>
+            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>range(1, 4)</span> = {t(E, "gives 1, 2, 3", "1, 2, 3을 생성")}</div>
+            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>pos</span> = {t(E, "current pebble location", "현재 조약돌 위치")}</div>
+            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>score</span> = {t(E, "correct guesses for this start", "이 시작 위치의 정답 수")}</div>
           </div>
         </div>),
     },
@@ -517,7 +517,7 @@ export function makeShellCh3(E, lang = "py") {
         "Inside, for each swap: update pebble position, then check if the guess matches.\nThis is the heart of the simulation!", "안쪽에서 각 스왑마다: 조약돌 위치 업데이트 후 추측이 맞는지 확인. 이게 시뮬레이션의 핵심!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
             {t(E, "Step 3: Simulate each swap", "3단계: 각 스왑 시뮬레이션")}
           </div>
           <CodeSnippet
@@ -533,7 +533,7 @@ export function makeShellCh3(E, lang = "py") {
             highlight={[0, 1, 2, 3, 4, 5, 6]}
           />
           <div style={{ marginTop: 8, fontSize: 12, lineHeight: 1.8, color: C.text }}>
-            <div style={{ fontWeight: 800, color: "#dc2626", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#dc2626", marginBottom: 4 }}>
               {t(E, "Two-part logic:", "2단계 로직:")}
             </div>
             <div>1. {t(E, "Update pos: if pebble is at a, move to b (and vice versa)", "pos 업데이트: 조약돌이 a에 있으면 b로 이동 (반대도)")}</div>

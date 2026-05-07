@@ -14,12 +14,12 @@ export function makeAstralCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🔭</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#4f46e5" }}>Astral Superposition</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#4f46e5" }}>Astral Superposition</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO January 2025 Bronze #1</div>
           </div>
 
           <div style={{ background: "#eef2ff", border: "2px solid #a5b4fc", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#312e81", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#312e81", marginBottom: 8 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
 
@@ -30,15 +30,15 @@ export function makeAstralCh1(E) {
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 8, marginBottom: 10 }}>
               <div style={{ background: "#fff", border: "2px solid #cbd5e1", borderRadius: 8, padding: "8px 10px", fontSize: 12 }}>
-                <code style={{ background: "#fff", padding: "2px 8px", borderRadius: 3, fontWeight: 800, fontSize: 14, border: "1px solid #cbd5e1" }}>W</code>
+                <code style={{ background: "#fff", padding: "2px 8px", borderRadius: 3, fontWeight: 600, fontSize: 14, border: "1px solid #cbd5e1" }}>W</code>
                 {t(E, " — empty in BOTH photos.", " — 둘 다 비어있음.")}
               </div>
               <div style={{ background: "#fff", border: "2px solid #94a3b8", borderRadius: 8, padding: "8px 10px", fontSize: 12 }}>
-                <code style={{ background: "#cbd5e1", padding: "2px 8px", borderRadius: 3, fontWeight: 800, fontSize: 14 }}>G</code>
+                <code style={{ background: "#cbd5e1", padding: "2px 8px", borderRadius: 3, fontWeight: 600, fontSize: 14 }}>G</code>
                 {t(E, " — star in EXACTLY ONE photo.", " — 정확히 한 사진에만.")}
               </div>
               <div style={{ background: "#fff", border: "2px solid #475569", borderRadius: 8, padding: "8px 10px", fontSize: 12 }}>
-                <code style={{ background: "#1e293b", color: "#fff", padding: "2px 8px", borderRadius: 3, fontWeight: 800, fontSize: 14 }}>B</code>
+                <code style={{ background: "#1e293b", color: "#fff", padding: "2px 8px", borderRadius: 3, fontWeight: 600, fontSize: 14 }}>B</code>
                 {t(E, " — star in BOTH photos.", " — 두 사진 모두.")}
               </div>
             </div>
@@ -68,12 +68,12 @@ export function makeAstralCh1(E) {
         "샘플 1: A=B=0 → 별이 안 움직임 (그대로 있거나 사라짐). W = 별 없음, G = 사라진 별, B = 그대로 있는 별. 최소 별 = #G + #B = 7."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#4f46e5", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#4f46e5", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — A = B = 0", "샘플 1 — A = B = 0")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`1
 3 0 0
@@ -83,7 +83,7 @@ GGG`}
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`7`}
               </div>
@@ -91,7 +91,7 @@ GGG`}
           </div>
 
           <div style={{ background: "#eef2ff", border: "2px solid #a5b4fc", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
-            <div style={{ fontWeight: 800, color: "#312e81", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#312e81", marginBottom: 6 }}>
               🔍 {t(E, "When A = B = 0, the analysis is simple", "A = B = 0 일 때 분석 단순")}
             </div>
             <div>

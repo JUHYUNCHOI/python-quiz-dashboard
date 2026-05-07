@@ -57,17 +57,17 @@ export function makeMcc22AliensCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc7d"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Aliens</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Aliens</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P2</div>
           </div>
 
           <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "N aliens are each labeled ", "")}
                   <b style={{ color: "#2563eb" }}>{t(E, "T (truth-teller) or F (liar)", "T (진실) 또는 F (거짓말쟁이)")}</b>
@@ -75,7 +75,7 @@ export function makeMcc22AliensCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each makes a claim about another alien's type — ", "각 외계인이 다른 외계인의 타입에 대해 주장 — ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "T always tells truth, F always lies", "T 는 항상 참, F 는 항상 거짓")}</b>
@@ -83,7 +83,7 @@ export function makeMcc22AliensCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "Y if all claims are consistent with the given assignment, else N", "주어진 타입이 모든 주장과 맞으면 Y, 아니면 N")}</b>

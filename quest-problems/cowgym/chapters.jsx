@@ -114,7 +114,7 @@ const RankTable = ({ sessions, N, highlight, E: isE }) => {
             {Array.from({ length: N }, (_, i) => (
               <th key={i} style={{
                 padding: "6px 8px", borderBottom: "2px solid #fcd34d",
-                color: cowColors[i % cowColors.length], fontWeight: 800,
+                color: cowColors[i % cowColors.length], fontWeight: 600,
               }}>
                 {isE ? `Cow ${i + 1}` : `소 ${i + 1}`}
               </th>
@@ -160,17 +160,17 @@ export function makeCowGymCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"🤸"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow Gymnastics</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Cow Gymnastics</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #1</div>
           </div>
 
           <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#d97706" }}>{t(E, "K gymnastics sessions", "K개의 체조 세션")}</b>
@@ -179,7 +179,7 @@ export function makeCowGymCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A pair ", "두 소 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "(i, j) is 'consistent'", "(i, j) 가 '일관된 쌍'")}</b>
@@ -188,7 +188,7 @@ export function makeCowGymCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "number of consistent pairs", "일관된 쌍의 개수")}</b>
@@ -206,7 +206,7 @@ export function makeCowGymCh1(E) {
         "Here's an example with 3 cows and 2 sessions.\nThe table shows each cow's rank (position) in each session.\nLower rank = better performance!", "3마리 소와 2개 세션 예시예요. 표는 각 소의 세션별 순위(위치)를 보여줘요. 낮은 순위 = 더 좋은 성적!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
             {t(E, "Example: 3 cows, 2 sessions", "예시: 3마리 소, 2개 세션")}
           </div>
           <div style={{ marginBottom: 8, fontSize: 12, color: C.dim }}>
@@ -240,13 +240,13 @@ export function makeCowGymCh1(E) {
         "A consistent pair means the relative order NEVER changes across sessions.\nCow A always beats cow B, or cow B always beats cow A.", "일관된 쌍은 상대적 순서가 세션 간에 절대 바뀌지 않는 것. 소 A가 항상 소 B를 이기거나, 소 B가 항상 소 A를 이기거나."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
             {t(E, "Consistent vs Inconsistent", "일관 vs 비일관")}
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {/* Consistent example */}
             <div style={{ flex: 1, minWidth: 140, background: "#dcfce7", borderRadius: 10, padding: 10, border: "2px solid #6ee7b7" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#059669", marginBottom: 6 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#059669", marginBottom: 6 }}>
                 {t(E, "Consistent (1,2)", "일관된 쌍 (1,2)")} ✓
               </div>
               <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.8 }}>
@@ -259,7 +259,7 @@ export function makeCowGymCh1(E) {
             </div>
             {/* Inconsistent example */}
             <div style={{ flex: 1, minWidth: 140, background: "#fef2f2", borderRadius: 10, padding: 10, border: "2px solid #fca5a5" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
                 {t(E, "Inconsistent (2,3)", "비일관 쌍 (2,3)")} ✗
               </div>
               <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.8 }}>
@@ -338,12 +338,12 @@ export function makeCowGymCh2(E) {
         "First key insight: the input gives ORDER (who came 1st, 2nd, ...) but we need RANK (what position was cow X?).\nWe need to convert!", "첫 번째 핵심: 입력은 순서(누가 1등, 2등...)를 주지만 우리는 순위(소 X의 위치?)가 필요해요. 변환해야 해요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
             {t(E, "Order vs Rank", "순서 vs 순위")}
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             <div style={{ flex: 1, background: "#fffbeb", borderRadius: 10, padding: 10, border: "2px solid #fcd34d" }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#d97706", marginBottom: 4 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#d97706", marginBottom: 4 }}>
                 {t(E, "Input (order)", "입력 (순서)")}
               </div>
               <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.8, color: C.text }}>
@@ -352,7 +352,7 @@ export function makeCowGymCh2(E) {
               </div>
             </div>
             <div style={{ flex: 1, background: "#dcfce7", borderRadius: 10, padding: 10, border: "2px solid #6ee7b7" }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#059669", marginBottom: 4 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#059669", marginBottom: 4 }}>
                 {t(E, "We need (rank)", "필요한 것 (순위)")}
               </div>
               <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.8, color: C.text }}>
@@ -373,7 +373,7 @@ export function makeCowGymCh2(E) {
         "Then for each pair (i, j), check ALL K sessions: is rank[s][i] < rank[s][j] for every s?\nOr the reverse?\nIf either holds, it's consistent!", "그 다음 각 쌍 (i, j)에 대해 모든 K 세션을 확인: 모든 s에서 rank[s][i] < rank[s][j]인가?\n또는 반대?\n둘 중 하나가 성립하면 일관!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 8 }}>
             {t(E, "Checking all pairs systematically", "모든 쌍을 체계적으로 확인")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 8 }}>
@@ -399,13 +399,13 @@ export function makeCowGymCh2(E) {
                 background: result ? "#dcfce7" : "#fef2f2",
                 border: `1.5px solid ${result ? "#6ee7b7" : "#fca5a5"}`,
               }}>
-                <span style={{ fontWeight: 800, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#d97706", minWidth: 36 }}>{pair}</span>
+                <span style={{ fontWeight: 600, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#d97706", minWidth: 36 }}>{pair}</span>
                 <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: C.dim, flex: 1 }}>{checks.join(", ")}</span>
-                <span style={{ fontSize: 13, fontWeight: 800, color: result ? "#059669" : "#dc2626" }}>{result ? "✓" : "✗"}</span>
+                <span style={{ fontSize: 13, fontWeight: 600, color: result ? "#059669" : "#dc2626" }}>{result ? "✓" : "✗"}</span>
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 6, textAlign: "center", fontSize: 14, fontWeight: 900, color: "#d97706" }}>
+          <div style={{ marginTop: 6, textAlign: "center", fontSize: 14, fontWeight: 700, color: "#d97706" }}>
             {t(E, "Answer: 2 consistent pairs", "답: 2개의 일관된 쌍")}
           </div>
         </div>),
@@ -436,7 +436,7 @@ export function makeCowGymCh2(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
-          <div style={{ fontSize: 18, fontWeight: 900, color: "#d97706", fontFamily: "'JetBrains Mono',monospace" }}>
+          <div style={{ fontSize: 18, fontWeight: 700, color: "#d97706", fontFamily: "'JetBrains Mono',monospace" }}>
             {"O(K \u00b7 N\u00b2)"}
           </div>
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
@@ -477,7 +477,7 @@ export function makeCowGymCh3(E, lang = "py") {
         "Step 1: Read K sessions.\nFor each, convert the order list into a rank array.\nrank[s][cow] = position of cow in session s.", "1단계: K개 세션 읽기. 각각 순서 리스트를 순위 배열로 변환. rank[s][cow] = 세션 s에서 소의 위치."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 1: Build rank arrays", "1단계: 순위 배열 만들기")}
           </div>
           <CodeSnippet
@@ -495,7 +495,7 @@ export function makeCowGymCh3(E, lang = "py") {
             highlight={[5, 6, 7]}
           />
           <div style={{ marginTop: 8, background: "#fffbeb", borderRadius: 8, padding: 8, border: "1.5px solid #fcd34d", fontSize: 12, lineHeight: 1.8, color: C.text }}>
-            <div style={{ fontWeight: 800, color: "#d97706", marginBottom: 2 }}>
+            <div style={{ fontWeight: 600, color: "#d97706", marginBottom: 2 }}>
               {t(E, "Key conversion:", "핵심 변환:")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
@@ -515,7 +515,7 @@ export function makeCowGymCh3(E, lang = "py") {
         "Step 2: Check all pairs (i, j) where i < j.\nFor each pair, verify if the relative order is consistent across all K sessions.", "2단계: i < j인 모든 쌍 (i, j) 확인. 각 쌍에 대해 상대적 순서가 모든 K세션에서 일관되는지 검증."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 2: Check all pairs", "2단계: 모든 쌍 확인")}
           </div>
           <CodeSnippet
@@ -531,8 +531,8 @@ export function makeCowGymCh3(E, lang = "py") {
             highlight={[1, 2, 3, 4, 5, 6]}
           />
           <div style={{ marginTop: 8, fontSize: 12, lineHeight: 1.8, color: C.text }}>
-            <div><span style={{ fontWeight: 800, color: "#d97706" }}>all()</span> = {t(E, "True only if condition holds for EVERY session", "모든 세션에서 조건이 성립할 때만 True")}</div>
-            <div><span style={{ fontWeight: 800, color: "#d97706" }}>i_wins or j_wins</span> = {t(E, "consistent in either direction", "어느 방향이든 일관")}</div>
+            <div><span style={{ fontWeight: 600, color: "#d97706" }}>all()</span> = {t(E, "True only if condition holds for EVERY session", "모든 세션에서 조건이 성립할 때만 True")}</div>
+            <div><span style={{ fontWeight: 600, color: "#d97706" }}>i_wins or j_wins</span> = {t(E, "consistent in either direction", "어느 방향이든 일관")}</div>
           </div>
         </div>),
     },

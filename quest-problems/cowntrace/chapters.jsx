@@ -74,17 +74,17 @@ export function makeCowntraceCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd0d"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cowntact Tracing</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Cowntact Tracing</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #3</div>
           </div>
 
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#059669" }}>{t(E, "N cows and T timestamped hoof-shakes", "N마리 소와 T개의 시각별 발굽-맞댐 기록")}</b>
@@ -93,7 +93,7 @@ export function makeCowntraceCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Exactly one cow is ", "정확히 1마리가 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "patient zero", "환자 제로")}</b>
@@ -103,7 +103,7 @@ export function makeCowntraceCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're given the ", "최종 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "final infected/healthy state of every cow", "각 소의 감염/건강 상태")}</b>
@@ -111,7 +111,7 @@ export function makeCowntraceCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print three numbers: ", "세 수를 출력: ")}
                   <b style={{ color: "#15803d" }}>{t(E, "(1) candidates for patient zero, (2) min K consistent, (3) max K consistent (or 'Infinity')", "(1) 환자 제로 후보 수, (2) 가능한 K 최솟값, (3) K 최댓값 (또는 'Infinity')")}</b>

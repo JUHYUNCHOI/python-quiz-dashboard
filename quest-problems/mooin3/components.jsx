@@ -55,7 +55,7 @@ export function TripletEnumSimulator({ E }) {
     const [bg, bd, fg] = role ? colors[role] : ["#fff", "#cbd5e1", "#475569"];
     return {
       width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-      borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 900, fontSize: 16,
+      borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
       background: bg, border: `2px solid ${bd}`, color: fg, transition: "all .2s",
     };
   };
@@ -85,7 +85,7 @@ export function TripletEnumSimulator({ E }) {
       <NarrativePanel minHeight={130}>
         {s.kind === "intro" && (
           <>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
               💡 {t(E, "Naive idea: enumerate every triplet (i, j, k) with i < j < k.",
                           "단순 아이디어: i < j < k 인 모든 (i, j, k) 시도.")}
             </div>
@@ -97,7 +97,7 @@ export function TripletEnumSimulator({ E }) {
         )}
         {s.kind === "step" && (
           <>
-            <div style={{ fontWeight: 800, color: s.t.ok ? "#15803d" : "#7f1d1d", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: s.t.ok ? "#15803d" : "#7f1d1d", marginBottom: 6 }}>
               {s.t.ok ? "✓" : "✗"} (i, j, k) = (<b style={{ color: "#dc2626" }}>{s.t.i + 1}</b>, <b style={{ color: "#92400e" }}>{s.t.j + 1}</b>, <b style={{ color: "#16a34a" }}>{s.t.k + 1}</b>) = '{str[s.t.i]}{str[s.t.j]}{str[s.t.k]}'
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{s.t.why}</div>
@@ -105,7 +105,7 @@ export function TripletEnumSimulator({ E }) {
         )}
         {s.kind === "verdict" && (
           <>
-            <div style={{ fontWeight: 800, color: "#15803d", marginBottom: 6, fontSize: 14 }}>
+            <div style={{ fontWeight: 600, color: "#15803d", marginBottom: 6, fontSize: 14 }}>
               🏁 {t(E, "All 4 triplets checked.", "4 개 다 확인 완료.")}
             </div>
             <div>
@@ -116,7 +116,7 @@ export function TripletEnumSimulator({ E }) {
         )}
         {s.kind === "scale" && (
           <>
-            <div style={{ fontWeight: 800, color: "#92400e", marginBottom: 6, fontSize: 14 }}>
+            <div style={{ fontWeight: 600, color: "#92400e", marginBottom: 6, fontSize: 14 }}>
               📈 {t(E, "Will this scale?", "큰 입력에는?")}
             </div>
             <div style={{ fontSize: 12.5, lineHeight: 1.7 }}>
@@ -181,7 +181,7 @@ export function MooTraceSimulator({ E }) {
     }
     return {
       width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-      borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 900, fontSize: 16,
+      borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
       background: kind === "j" ? "#fef3c7" : kind === "left" ? "#fee2e2" : kind === "right" ? "#dcfce7" : "#fff",
       border: `2px solid ${kind === "j" ? "#f59e0b" : kind === "left" ? "#dc2626" : kind === "right" ? "#16a34a" : "#cbd5e1"}`,
       color: kind === "j" ? "#92400e" : kind === "left" ? "#7f1d1d" : kind === "right" ? "#15803d" : "#475569",
@@ -214,7 +214,7 @@ export function MooTraceSimulator({ E }) {
       <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 14 }}>
         {str.split("").map((ch, i) => (
           <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <div style={{ fontSize: 10, height: 14, fontWeight: 800,
+            <div style={{ fontSize: 10, height: 14, fontWeight: 600,
               color: labelFor(i) === "j" ? "#92400e" : labelFor(i) === "i" ? "#dc2626" : labelFor(i) === "k" ? "#16a34a" : "transparent" }}>
               {labelFor(i) || "·"}
             </div>
@@ -226,16 +226,16 @@ export function MooTraceSimulator({ E }) {
 
       {/* Per-j table — only revealed rows */}
       <div style={{ display: "grid", gridTemplateColumns: "40px 50px 90px 90px 70px", gap: "4px 8px", fontSize: 12, marginBottom: 14, minHeight: 30 }}>
-        <div style={{ fontWeight: 800, color: A }}>j</div>
-        <div style={{ fontWeight: 800, color: A }}>s[j]</div>
-        <div style={{ fontWeight: 800, color: A }}>{t(E, "i (left)", "i (왼쪽)")}</div>
-        <div style={{ fontWeight: 800, color: A }}>{t(E, "k (right)", "k (오른쪽)")}</div>
-        <div style={{ fontWeight: 800, color: A, textAlign: "right" }}>{t(E, "score", "점수")}</div>
+        <div style={{ fontWeight: 600, color: A }}>j</div>
+        <div style={{ fontWeight: 600, color: A }}>s[j]</div>
+        <div style={{ fontWeight: 600, color: A }}>{t(E, "i (left)", "i (왼쪽)")}</div>
+        <div style={{ fontWeight: 600, color: A }}>{t(E, "k (right)", "k (오른쪽)")}</div>
+        <div style={{ fontWeight: 600, color: A, textAlign: "right" }}>{t(E, "score", "점수")}</div>
         {perJ.slice(0, s.revealed).map((row, i) => {
           const isCurrent = s.kind === "step" && row.j === s.row.j;
           return (
             <div key={i} style={{ display: "contents" }}>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: isCurrent ? "#f59e0b" : C.text }}>{row.j + 1}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 600, color: isCurrent ? "#f59e0b" : C.text }}>{row.j + 1}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", color: "#7c3aed" }}>{row.sj}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>
                 {row.left >= 0 ? `${row.left + 1} ('${str[row.left]}')` : "—"}
@@ -244,7 +244,7 @@ export function MooTraceSimulator({ E }) {
                 {row.right >= 0 ? `${row.right + 1} ('${str[row.right]}')` : "—"}
               </div>
               <div style={{
-                textAlign: "right", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
+                textAlign: "right", fontFamily: "'JetBrains Mono',monospace", fontWeight: 600,
                 color: row.score === s.best && s.best >= 0 ? "#16a34a" : C.text,
                 background: row.score === s.best && s.best >= 0 ? "#dcfce7" : "transparent",
                 padding: "2px 6px", borderRadius: 4,
@@ -264,7 +264,7 @@ export function MooTraceSimulator({ E }) {
         )}
         {s.kind === "step" && (
           <>
-            <div style={{ fontWeight: 800, color: "#5b21b6" }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6" }}>
               {t(E, `Try j = ${s.row.j + 1}, s[j] = '${s.row.sj}'`,
                     `j = ${s.row.j + 1} 시도, s[j] = '${s.row.sj}'`)}
             </div>
@@ -286,7 +286,7 @@ export function MooTraceSimulator({ E }) {
           </>
         )}
         {s.kind === "final" && (
-          <div style={{ fontWeight: 800, color: "#15803d" }}>
+          <div style={{ fontWeight: 600, color: "#15803d" }}>
             🎉 {t(E, "All j scanned. Best score:", "모든 j 검사 완료. 최고 점수:")}{" "}
             <b style={{ fontSize: 16, color: "#15803d" }}>{s.best}</b>
           </div>
@@ -332,7 +332,7 @@ export function Mooin3Sim({ E }) {
           <button key={i} onClick={() => { setPi(i); setJ(p.l + 1); }} style={{
             padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
-            fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>"{p.s}"</button>
         ))}
       </div>
@@ -346,7 +346,7 @@ export function Mooin3Sim({ E }) {
           return (
             <div key={idx} style={{
               width: 30, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-              borderRadius: 6, fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+              borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
               background: isJ ? "#fef3c7" : (isI ? "#dbeafe" : (isK ? "#dcfce7" : (inRange ? "#fff" : "#f3f4f6"))),
               border: `2px solid ${isJ ? "#f59e0b" : (isI ? "#3b82f6" : (isK ? "#16a34a" : (inRange ? "#cbd5e1" : "#e5e7eb")))}`,
               color: inRange ? C.text : "#9ca3af",
@@ -364,7 +364,7 @@ export function Mooin3Sim({ E }) {
         <input type="range" min={l + 1} max={r - 1} value={validJ} onChange={e => setJ(parseInt(e.target.value))} style={{ width: "100%" }} />
       </div>
 
-      <div style={{ background: product >= 0 ? "#dcfce7" : "#fef2f2", border: `2px solid ${product >= 0 ? "#16a34a" : "#dc2626"}`, borderRadius: 10, padding: "10px 12px", color: product >= 0 ? "#15803d" : "#7f1d1d", fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", textAlign: "center" }}>
+      <div style={{ background: product >= 0 ? "#dcfce7" : "#fef2f2", border: `2px solid ${product >= 0 ? "#16a34a" : "#dc2626"}`, borderRadius: 10, padding: "10px 12px", color: product >= 0 ? "#15803d" : "#7f1d1d", fontSize: 13, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", textAlign: "center" }}>
         {product >= 0 ? `(j − i) × (k − j) = ${validJ - bestI} × ${bestK - validJ} = ${product}` : t(E, "no valid (i, j, k) for this j", "이 j에 대해 유효 (i, j, k) 없음")}
       </div>
     </div>
@@ -818,7 +818,7 @@ const M3PerfAside = ({ E }) => (
     background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10,
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#7f1d1d",
   }}>
-    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#991b1b", marginBottom: 6 }}>
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#991b1b", marginBottom: 6 }}>
       🐌 {t(E, "Operation count (brute O(Q · N²))", "연산량 (brute O(Q · N²))")}
     </div>
     <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 8px" }}>
@@ -837,7 +837,7 @@ const M3InsightAside = ({ E }) => (
     background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10,
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#065f46",
   }}>
-    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#065f46", marginBottom: 6 }}>
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#065f46", marginBottom: 6 }}>
       💡 {t(E, "Same character → same answer", "같은 문자 → 같은 답")}
     </div>
     <div>
@@ -856,7 +856,7 @@ const M3PeakAside = ({ E }) => (
     background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10,
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#7c2d12",
   }}>
-    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>
       📈 {t(E, "Why a parabola?", "왜 포물선?")}
     </div>
     <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, marginBottom: 6 }}>
@@ -881,7 +881,7 @@ const M3FastAside = ({ E }) => (
     background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10,
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#1e3a8a",
   }}>
-    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#1e40af", marginBottom: 6 }}>
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#1e40af", marginBottom: 6 }}>
       ✅ {t(E, "Three pieces working together", "세 조각의 합")}
     </div>
     <div style={{ marginBottom: 4 }}>

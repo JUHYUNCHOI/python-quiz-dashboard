@@ -76,7 +76,7 @@ export function MooExplorer({ E }) {
         {preset.s}
       </div>
 
-      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", fontSize: 13, fontWeight: 800, textAlign: "center", marginBottom: 10 }}>
+      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", fontSize: 13, fontWeight: 600, textAlign: "center", marginBottom: 10 }}>
         {t(E, `Distinct moos with ≤ 1 edit: ${moos.length}`, `≤ 1 수정으로 가능한 moo: ${moos.length}`)}
       </div>
 

@@ -42,17 +42,17 @@ export function makeRaceCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"🏃"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Race</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Race</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #3</div>
           </div>
 
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A cow starts at speed 0 and must run a total of ", "한 소가 속도 0 에서 시작해 총 ")}
                   <b style={{ color: "#059669" }}>{t(E, "K meters", "K미터")}</b>
@@ -60,7 +60,7 @@ export function makeRaceCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each second, her speed ", "매초 속도가 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "changes by +1 or −1", "+1 또는 −1")}</b>
@@ -69,7 +69,7 @@ export function makeRaceCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Her speed when she crosses the K-meter mark must be ", "K미터를 지나는 순간의 속도는 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "≤ X", "≤ X")}</b>
@@ -77,7 +77,7 @@ export function makeRaceCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "For each query (K, X), print the ", "각 쿼리 (K, X) 에 대해 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of seconds", "필요한 최소 초 수")}</b>
@@ -106,7 +106,7 @@ export function makeRaceCh1(E) {
         ];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", textAlign: "center", marginBottom: 4 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", textAlign: "center", marginBottom: 4 }}>
               🏃 {t(E, "K=4, X=0 — trace each second", "K=4, X=0 — 매초 추적")}
             </div>
             <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 12 }}>
@@ -115,20 +115,20 @@ export function makeRaceCh1(E) {
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "32px 1fr 60px 60px 60px", gap: "4px 8px",
                           fontSize: 12, alignItems: "center" }}>
-              <div style={{ fontWeight: 800, color: "#065f46" }}>t</div>
-              <div style={{ fontWeight: 800, color: "#065f46" }}>{t(E, "action", "행동")}</div>
-              <div style={{ fontWeight: 800, color: "#065f46", textAlign: "right" }}>{t(E, "speed", "속도")}</div>
-              <div style={{ fontWeight: 800, color: "#065f46", textAlign: "right" }}>{t(E, "moved", "이동")}</div>
-              <div style={{ fontWeight: 800, color: "#065f46", textAlign: "right" }}>{t(E, "total", "누적")}</div>
+              <div style={{ fontWeight: 600, color: "#065f46" }}>t</div>
+              <div style={{ fontWeight: 600, color: "#065f46" }}>{t(E, "action", "행동")}</div>
+              <div style={{ fontWeight: 600, color: "#065f46", textAlign: "right" }}>{t(E, "speed", "속도")}</div>
+              <div style={{ fontWeight: 600, color: "#065f46", textAlign: "right" }}>{t(E, "moved", "이동")}</div>
+              <div style={{ fontWeight: 600, color: "#065f46", textAlign: "right" }}>{t(E, "total", "누적")}</div>
               {trace.map((r, i) => {
                 const done = r.total >= 4;
                 return (
                   <div key={i} style={{ display: "contents" }}>
-                    <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#7c3aed" }}>{r.t}</div>
+                    <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 600, color: "#7c3aed" }}>{r.t}</div>
                     <div style={{ fontSize: 11, color: C.text, background: i === 2 ? "#fef3c7" : (done && i === trace.length - 1 ? "#dcfce7" : "transparent"), padding: "4px 6px", borderRadius: 4 }}>{r.action}</div>
                     <div style={{ textAlign: "right", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: "#0891b2" }}>{r.speed}</div>
                     <div style={{ textAlign: "right", fontFamily: "'JetBrains Mono',monospace", color: "#92400e" }}>+{r.moved}</div>
-                    <div style={{ textAlign: "right", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: r.total >= 4 ? "#16a34a" : C.text }}>{r.total}</div>
+                    <div style={{ textAlign: "right", fontFamily: "'JetBrains Mono',monospace", fontWeight: 600, color: r.total >= 4 ? "#16a34a" : C.text }}>{r.total}</div>
                   </div>
                 );
               })}

@@ -13,12 +13,12 @@ export function makeCheeseCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🧀</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#eab308" }}>Farmer John's Cheese Block</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#eab308" }}>Farmer John's Cheese Block</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO December 2024 Bronze #2</div>
           </div>
 
           <div style={{ background: "#fefce8", border: "2px solid #fde047", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#854d0e", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#854d0e", marginBottom: 8 }}>
               📖 {t(E, "Setup", "설정")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.65, marginBottom: 10 }}>
@@ -28,7 +28,7 @@ export function makeCheeseCh1(E) {
 
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.55 }}>
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fde047", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#eab308", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#eab308", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#eab308" }}>{t(E, "Rod orientations", "막대 방향")}</b>
                   {t(E, " — along X, Y, or Z axis. Each cell on the rod must be CARVED (empty).",
@@ -36,7 +36,7 @@ export function makeCheeseCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fde047", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#16a34a", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#16a34a", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#16a34a" }}>{t(E, "Total placements", "총 배치")}</b>
                   {t(E, " — sum across all 3 axes. Output one count per update.",
@@ -61,12 +61,12 @@ export function makeCheeseCh1(E) {
         "샘플: N=2, 5 번 파냄. 매번 막대 자리: 0, 0, 1, 2, 5."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#eab308", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#eab308", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`2 5
 0 0 0
@@ -77,7 +77,7 @@ export function makeCheeseCh1(E) {
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`0
 0
@@ -89,7 +89,7 @@ export function makeCheeseCh1(E) {
           </div>
 
           <div style={{ background: "#fefce8", border: "2px solid #fde047", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#854d0e", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#854d0e", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough — after 5th carve", "풀이 — 5 번째 파낸 후")}
             </div>
             <div>

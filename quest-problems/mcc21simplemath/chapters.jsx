@@ -33,17 +33,17 @@ export function makeMcc21SimpleMathCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd22"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Simple Math</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Simple Math</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P5</div>
           </div>
 
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Given an ", "")}
                   <b style={{ color: "#f97316" }}>{t(E, "operation code P (1, 2, 3) and array A of N integers", "연산 코드 P (1, 2, 3) 와 N 개의 정수 배열 A")}</b>
@@ -51,7 +51,7 @@ export function makeMcc21SimpleMathCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Apply left-to-right: ", "왼쪽부터 오른쪽으로 적용: ")}
                   <b style={{ color: "#7c3aed" }}>P=1</b>
@@ -64,7 +64,7 @@ export function makeMcc21SimpleMathCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "result of the operation across the array", "배열에 대한 연산의 결과")}</b>

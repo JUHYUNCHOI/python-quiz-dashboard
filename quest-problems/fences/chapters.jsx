@@ -32,17 +32,17 @@ export function makeFencesCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🏗️</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Building Fences</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Building Fences</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P1</div>
           </div>
 
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "An ", "")}
                   <b style={{ color: "#059669" }}>{t(E, "N × M grid", "N × M 격자")}</b>
@@ -54,7 +54,7 @@ export function makeFencesCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ picks ", "FJ 가 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "ONE column", "한 개의 열")}</b>
@@ -63,7 +63,7 @@ export function makeFencesCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each ", "각 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "grass-to-fence conversion costs 1", "풀 → 울타리 변환은 비용 1")}</b>
@@ -72,7 +72,7 @@ export function makeFencesCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum total cost over all column choices", "어떤 열을 골랐을 때 드는 최소 총 비용")}</b>
@@ -98,14 +98,14 @@ export function makeFencesCh1(E) {
         return (
           <div style={{ padding: 16 }}>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
-              <div style={{ fontSize: 14, fontWeight: 800, color: "#059669", marginBottom: 10 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: "#059669", marginBottom: 10 }}>
                 {t(E, "📋 What's Given", "📋 주어진 것")}
               </div>
               {/* Column labels */}
               <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 2 }}>
                 {demo[0].map((_, c) => (
                   <div key={c} style={{
-                    width: 36, textAlign: "center", fontSize: 10, fontWeight: 800,
+                    width: 36, textAlign: "center", fontSize: 10, fontWeight: 600,
                     fontFamily: "'JetBrains Mono',monospace",
                     color: c === hiliteCol ? "#fff" : "#9ca3af",
                     background: c === hiliteCol ? "#ec4899" : "transparent",
@@ -124,7 +124,7 @@ export function makeFencesCh1(E) {
                     return (
                       <div key={c} style={{
                         width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-                        borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 800,
+                        borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 600,
                         background: isFence ? "#374151" : "#bbf7d0",
                         border: `2.5px solid ${isFence ? "#6b7280" : "#4ade80"}`,
                         color: isFence ? "#fff" : "#166534",
@@ -137,7 +137,7 @@ export function makeFencesCh1(E) {
               ))}
               {/* Arrow + label — appears after cells animate */}
               <div style={{
-                textAlign: "center", marginTop: 6, fontSize: 12, fontWeight: 800, color: "#ec4899",
+                textAlign: "center", marginTop: 6, fontSize: 12, fontWeight: 600, color: "#ec4899",
                 animation: "fadeIn .4s ease both", animationDelay: "1.6s",
               }}>
                 ↑ {t(E, "This is one column (vertical!)", "이게 열 하나야 (세로줄!)")}
@@ -187,13 +187,13 @@ export function makeFencesCh1(E) {
           <div style={{ display: "flex", justifyContent: "center", gap: 24, alignItems: "flex-start" }}>
             {/* Vertical column cells */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-              <div style={{ fontSize: 10, fontWeight: 800, color: "#059669", fontFamily: "'JetBrains Mono',monospace", marginBottom: 2 }}>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "#059669", fontFamily: "'JetBrains Mono',monospace", marginBottom: 2 }}>
                 {t(E, "1 column", "열 1개")}
               </div>
               {[[".", true], ["#", false], [".", true], [".", true]].map(([ch, needWork], i) => (
                 <div key={i} style={{
                   width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 6, fontSize: 18, fontWeight: 900,
+                  borderRadius: 6, fontSize: 18, fontWeight: 700,
                   fontFamily: "'JetBrains Mono',monospace",
                   background: needWork ? "#fef3c7" : "#d1fae5",
                   border: `2.5px solid ${needWork ? "#fbbf24" : "#6ee7b7"}`,
@@ -203,11 +203,11 @@ export function makeFencesCh1(E) {
             </div>
             {/* Cost explanation */}
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", minHeight: 190 }}>
-              <div style={{ fontSize: 13, color: "#92400e", fontWeight: 800, marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
+              <div style={{ fontSize: 13, color: "#92400e", fontWeight: 600, marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
                 <span style={{ background: "#fef3c7", borderRadius: 4, padding: "2px 6px", border: "1.5px solid #fbbf24" }}>.</span>
                 {t(E, " → convert! +1", " → 변환! +1")}
               </div>
-              <div style={{ fontSize: 13, color: "#059669", fontWeight: 800, marginBottom: 12, fontFamily: "'JetBrains Mono',monospace" }}>
+              <div style={{ fontSize: 13, color: "#059669", fontWeight: 600, marginBottom: 12, fontFamily: "'JetBrains Mono',monospace" }}>
                 <span style={{ background: "#d1fae5", borderRadius: 4, padding: "2px 6px", border: "1.5px solid #6ee7b7" }}>#</span>
                 {t(E, " → free! +0", " → 공짜! +0")}
               </div>
@@ -215,7 +215,7 @@ export function makeFencesCh1(E) {
                 <div style={{ fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 2 }}>
                   {t(E, "Cost for this column", "이 열의 비용")}
                 </div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 900, color: "#059669" }}>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 700, color: "#059669" }}>
                   3 × "." → "#" = <span style={{ fontSize: 22 }}>3</span>
                 </div>
               </div>
@@ -238,14 +238,14 @@ export function makeFencesCh1(E) {
         return (
           <div style={{ padding: 16 }}>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
-              <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", marginBottom: 8 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 8 }}>
                 {t(E, "3×4 grid — count dots per column!", "3×4 그리드 — 각 열의 점을 세봐요!")}
               </div>
               {/* Column labels */}
               <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 2 }}>
                 {g[0].map((_, c) => (
                   <div key={c} style={{
-                    width: 36, textAlign: "center", fontSize: 10, fontWeight: 800,
+                    width: 36, textAlign: "center", fontSize: 10, fontWeight: 600,
                     fontFamily: "'JetBrains Mono',monospace",
                     color: c === 3 ? "#fff" : "#9ca3af",
                     background: c === 3 ? "#059669" : "transparent",
@@ -261,7 +261,7 @@ export function makeFencesCh1(E) {
                     return (
                       <div key={c} style={{
                         width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-                        borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 800,
+                        borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 600,
                         background: isFence ? "#374151" : "#bbf7d0",
                         border: `2.5px solid ${c === 3 ? "#059669" : isFence ? "#6b7280" : "#4ade80"}`,
                         color: isFence ? "#fff" : "#166534",
@@ -275,7 +275,7 @@ export function makeFencesCh1(E) {
               <div style={{ display: "flex", justifyContent: "center", gap: 4, marginTop: 6 }}>
                 {[3, 1, 2, 0].map((cnt, c) => (
                   <div key={c} style={{
-                    width: 36, textAlign: "center", fontSize: 13, fontWeight: 900,
+                    width: 36, textAlign: "center", fontSize: 13, fontWeight: 700,
                     fontFamily: "'JetBrains Mono',monospace",
                     color: c === 3 ? "#fff" : "#059669",
                     background: c === 3 ? "#059669" : "#ecfdf5",
@@ -289,7 +289,7 @@ export function makeFencesCh1(E) {
               </div>
               {/* Answer highlight */}
               <div style={{
-                marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 900, color: "#059669",
+                marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 700, color: "#059669",
                 animation: "fadeIn .4s ease both", animationDelay: ".5s",
               }}>
                 {t(E,
@@ -461,7 +461,7 @@ export function makeFencesCh3(E) {
         "Let's build the code step by step!\nFirst, we need to know the grid size.\nThe input gives us N (rows) and M (columns) on the first line.", "코드를 한 줄씩 만들어보자! 먼저 그리드 크기를 알아야 해요. 입력 첫 줄에 N(행 수)과 M(열 수)이 주어져."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 6 }}>
             {t(E, "Step 1: Read the grid size", "1단계: 그리드 크기 읽기")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
@@ -483,7 +483,7 @@ export function makeFencesCh3(E) {
         "We need to count dots per column.\nSo we make a list with M zeros — one slot for each column!", "열마다 점을 세야 하니까, M개의 0이 들어간 리스트를 만들어야 해 — 열마다 자리 하나!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 6 }}>
             {t(E, "Step 2: Prepare the count list", "2단계: 카운트 리스트 준비")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6, whiteSpace: "pre-line" }}>
@@ -498,7 +498,7 @@ export function makeFencesCh3(E) {
             {[0,0,0,0,0].map((v, i) => (
               <div key={i} style={{
                 width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-                borderRadius: 6, fontSize: 14, fontWeight: 900,
+                borderRadius: 6, fontSize: 14, fontWeight: 700,
                 fontFamily: "'JetBrains Mono',monospace",
                 background: "#ecfdf5", border: "2px solid #6ee7b7", color: "#059669",
               }}>{v}</div>
@@ -540,7 +540,7 @@ export function makeFencesCh3(E) {
         "After counting all dots per column, just print the minimum!\nPython's min() does this in one line.", "모든 열의 점을 다 세고 나면, 최솟값만 출력하면 끝! Python의 min()이 한 줄로 해줘요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 6 }}>
             {t(E, "Step 4: Print the answer!", "4단계: 답 출력!")}
           </div>
           <CodeSnippet
@@ -562,7 +562,7 @@ export function makeFencesCh3(E) {
             marginTop: 10, background: "#d1fae5", borderRadius: 10,
             padding: "8px 12px", border: "2px solid #6ee7b7", textAlign: "center",
           }}>
-            <div style={{ fontSize: 13, fontWeight: 900, color: "#059669" }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#059669" }}>
               {t(E, "That's the complete code! Just 8 lines! 🎉", "이게 전체 코드! 단 8줄! 🎉")}
             </div>
           </div>

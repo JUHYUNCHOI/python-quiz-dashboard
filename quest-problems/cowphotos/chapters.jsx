@@ -14,12 +14,12 @@ export function makeCowPhotosCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>📸</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>More Cow Photos</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>More Cow Photos</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #2</div>
           </div>
 
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 8 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, marginBottom: 10 }}>
@@ -32,7 +32,7 @@ export function makeCowPhotosCh1(E) {
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.55 }}>
               {/* Rule 1: mountain */}
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>1.</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>1.</span>
                 <div style={{ flex: 1 }}>
                   <b style={{ color: "#dc2626" }}>{t(E, "Mountain shape", "산 모양")}</b>
                   {t(E, " — heights go UP to a peak, then DOWN.", " — 가운데 peak 까지 올라갔다 내려와요.")}
@@ -43,7 +43,7 @@ export function makeCowPhotosCh1(E) {
               </div>
               {/* Rule 2: no adjacent dup */}
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#0891b2", fontWeight: 800, flexShrink: 0 }}>2.</span>
+                <span style={{ color: "#0891b2", fontWeight: 600, flexShrink: 0 }}>2.</span>
                 <div style={{ flex: 1 }}>
                   <b style={{ color: "#0891b2" }}>{t(E, "No adjacent duplicates", "이웃 다름")}</b>
                   {t(E, " — neighboring cows have different heights.", " — 이웃한 두 소의 키는 달라야 해요.")}
@@ -54,7 +54,7 @@ export function makeCowPhotosCh1(E) {
               </div>
               {/* Rule 3: palindrome */}
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#7c3aed", fontWeight: 800, flexShrink: 0 }}>3.</span>
+                <span style={{ color: "#7c3aed", fontWeight: 600, flexShrink: 0 }}>3.</span>
                 <div style={{ flex: 1 }}>
                   <b style={{ color: "#7c3aed" }}>{t(E, "Symmetric (palindrome)", "좌우 대칭 (팰린드롬)")}</b>
                   {t(E, " — reads the same forwards and backwards.", " — 거꾸로 읽어도 같아요.")}
@@ -66,7 +66,7 @@ export function makeCowPhotosCh1(E) {
             </div>
 
             <div style={{ display: "flex", gap: 8, marginTop: 10, paddingTop: 8, borderTop: "1px dashed #fdba74", fontSize: 13 }}>
-              <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+              <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
               <div>
                 {t(E, "Print the ", "")}
                 <b style={{ color: "#15803d" }}>{t(E, "maximum number of cows K", "최대 소 수 K")}</b>
@@ -85,12 +85,12 @@ export function makeCowPhotosCh1(E) {
         "실제 USACO 샘플: 2 케이스. 각 케이스 = N 그 다음 키 N 개. 케이스마다 답 1 줄 출력."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`2
 4
@@ -100,7 +100,7 @@ export function makeCowPhotosCh1(E) {
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`3
 1`}
@@ -108,7 +108,7 @@ export function makeCowPhotosCh1(E) {
             </div>
           </div>
           <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
               🔍 {t(E, "What each line means", "각 줄 의미")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "8px 12px", alignItems: "baseline" }}>
@@ -171,7 +171,7 @@ export function makeCowPhotosCh1(E) {
 
           {/* Concrete picture-first definition of peak / ring. */}
           <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "12px 14px", marginBottom: 12, fontSize: 12.5, lineHeight: 1.65, color: "#7c2d12" }}>
-            <div style={{ fontWeight: 800, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
+            <div style={{ fontWeight: 600, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
               📖 {t(E, "First — name the parts of the photo", "먼저 — 사진의 부분 이름 짓기")}
             </div>
 
@@ -191,7 +191,7 @@ export function makeCowPhotosCh1(E) {
                         border: c.peak ? "3px solid #d97706" : "1.5px solid #d97706",
                         borderRadius: "6px 6px 0 0",
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        color: "#7c2d12", fontWeight: 900, fontSize: 14,
+                        color: "#7c2d12", fontWeight: 700, fontSize: 14,
                         fontFamily: "'JetBrains Mono',monospace",
                       }}>{c.v}</div>
                       <div style={{ fontSize: 9, color: "#92400e", fontWeight: 700 }}>{c.label}</div>
@@ -227,7 +227,7 @@ export function makeCowPhotosCh1(E) {
           </div>
 
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 12 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 8 }}>
               💡 {t(E, "Natural first formula", "자연스러운 첫 공식")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
@@ -243,7 +243,7 @@ export function makeCowPhotosCh1(E) {
           </div>
 
           <div style={{ background: "#fff", border: "2px solid #fbbf24", borderRadius: 10, padding: 12 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>
               🧪 {t(E, "Try it on a bigger input: [1, 1, 2, 3, 3, 3, 4]", "더 큰 입력에 시도: [1, 1, 2, 3, 3, 3, 4]")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: C.text, lineHeight: 1.7, paddingLeft: 8 }}>
@@ -280,7 +280,7 @@ export function makeCowPhotosCh1(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "2px solid #16a34a", borderRadius: 12, padding: 14, marginBottom: 12 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 8 }}>
               🛠️ {t(E, "Corrected formula", "고친 공식")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: C.text, lineHeight: 1.7, paddingLeft: 8 }}>
@@ -292,7 +292,7 @@ export function makeCowPhotosCh1(E) {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 10 }}>
             <div style={{ background: "#fff", border: "2px solid #86efac", borderRadius: 10, padding: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
                 ✓ [1, 1, 2, 3, 3, 3, 4]
               </div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text, lineHeight: 1.7 }}>
@@ -303,7 +303,7 @@ export function makeCowPhotosCh1(E) {
               </div>
             </div>
             <div style={{ background: "#fff", border: "2px solid #86efac", borderRadius: 10, padding: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
                 ✓ [3, 3, 2, 1]
               </div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text, lineHeight: 1.7 }}>

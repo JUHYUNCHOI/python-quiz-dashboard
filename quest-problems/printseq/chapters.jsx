@@ -14,23 +14,23 @@ export function makePrintseqCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🖨️</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#16a34a" }}>Printing Sequences</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#16a34a" }}>Printing Sequences</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO February 2025 Bronze #3</div>
           </div>
 
           <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#15803d", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#15803d", marginBottom: 8 }}>
               📖 {t(E, "The mini-language", "미니 언어")}
             </div>
             <div style={{ background: "#fff", border: "1.5px solid #86efac", borderRadius: 8, padding: "10px 12px", fontSize: 13, color: C.text, lineHeight: 1.65 }}>
               <div style={{ marginBottom: 6 }}>
-                <code style={{ background: "#dcfce7", padding: "2px 6px", borderRadius: 4, fontWeight: 800 }}>PRINT c</code>
+                <code style={{ background: "#dcfce7", padding: "2px 6px", borderRadius: 4, fontWeight: 600 }}>PRINT c</code>
                 {t(E, " — append integer c to the output.", " — 정수 c 를 출력에 추가.")}
               </div>
               <div>
-                <code style={{ background: "#dcfce7", padding: "2px 6px", borderRadius: 4, fontWeight: 800 }}>REP o</code>
+                <code style={{ background: "#dcfce7", padding: "2px 6px", borderRadius: 4, fontWeight: 600 }}>REP o</code>
                 <code style={{ marginLeft: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>(...)</code>
-                <code style={{ marginLeft: 4, background: "#dcfce7", padding: "2px 6px", borderRadius: 4, fontWeight: 800 }}>END</code>
+                <code style={{ marginLeft: 4, background: "#dcfce7", padding: "2px 6px", borderRadius: 4, fontWeight: 600 }}>END</code>
                 {t(E, " — execute the inner block o times.", " — 내부 블록을 o 번 실행.")}
               </div>
             </div>
@@ -61,12 +61,12 @@ export function makePrintseqCh1(E) {
         "샘플: K=1 + [1] → PRINT 1 개로 끝. K=1 + [1,1,1,1] → REP 4 안에 PRINT 1 → PRINT 한 개로 충분."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`2
 1 1
@@ -76,7 +76,7 @@ export function makePrintseqCh1(E) {
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`YES
 YES`}
@@ -85,7 +85,7 @@ YES`}
           </div>
 
           <div style={{ background: "#f0fdf4", border: "2px solid #86efac", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough", "풀이")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>

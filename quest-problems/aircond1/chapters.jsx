@@ -62,17 +62,17 @@ export function makeAirCond1Ch1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf21\ufe0f"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Air Cownditioning</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Air Cownditioning</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #2</div>
           </div>
 
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ 에게 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "N stalls in a row", "한 줄로 늘어선 N 개 축사")}</b>
@@ -84,7 +84,7 @@ export function makeAirCond1Ch1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "One AC command: adjust EVERY stall in a ", "AC 명령 한 번: 어떤 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "contiguous range by +1 OR -1", "연속한 구간을 동시에 +1 또는 -1")}</b>
@@ -92,7 +92,7 @@ export function makeAirCond1Ch1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of AC commands to make every p[i] = q[i]", "모든 p[i] = q[i] 가 되도록 만드는 최소 AC 명령 횟수")}</b>

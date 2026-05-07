@@ -38,7 +38,7 @@ function RectBox({ x1, y1, x2, y2, color, label, opacity = 0.3 }) {
     <div style={{ position: "absolute", left: x1 * 30, bottom: y1 * 30, width: w * 30, height: h * 30,
       background: color, opacity, border: `2px solid ${color}`, borderRadius: 4,
       display: "flex", alignItems: "center", justifyContent: "center",
-      fontSize: 10, fontWeight: 800, color: "#fff",
+      fontSize: 10, fontWeight: 600, color: "#fff",
     }}>{label}</div>
   );
 }
@@ -58,17 +58,17 @@ export function makeBillboardCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🪧</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Blocked Billboard</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Blocked Billboard</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #1</div>
           </div>
 
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#d97706" }}>{t(E, "two axis-aligned rectangular billboards", "축에 평행한 직사각형 광고판 2개")}</b>
@@ -78,7 +78,7 @@ export function makeBillboardCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each rectangle is given as ", "각 사각형은 ")}
                   <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>(x1, y1, x2, y2)</code>
@@ -86,7 +86,7 @@ export function makeBillboardCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "The two billboards ", "두 광고판은 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "do NOT overlap each other", "서로 겹치지 않아요")}</b>
@@ -94,7 +94,7 @@ export function makeBillboardCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "total visible billboard area", "보이는 광고판 면적의 합")}</b>
@@ -115,27 +115,27 @@ export function makeBillboardCh1(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "📐 Rectangle = Two Corners", "📐 직사각형 = 두 꼭짓점")}
             </div>
             {/* Visual rectangle with labeled corners */}
             <div style={{ position: "relative", height: 150, margin: "0 auto", width: 200, background: "#fef3c7", border: "2px solid #f59e0b", borderRadius: 8 }}>
-              <div style={{ position: "absolute", left: -4, bottom: -20, fontSize: 11, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>
+              <div style={{ position: "absolute", left: -4, bottom: -20, fontSize: 11, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>
                 (1, 1)
               </div>
-              <div style={{ position: "absolute", right: -4, top: -20, fontSize: 11, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>
+              <div style={{ position: "absolute", right: -4, top: -20, fontSize: 11, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>
                 (5, 4)
               </div>
               {/* Width label */}
-              <div style={{ position: "absolute", bottom: -30, left: "50%", transform: "translateX(-50%)", fontSize: 12, fontWeight: 800, color: C.accent }}>
+              <div style={{ position: "absolute", bottom: -30, left: "50%", transform: "translateX(-50%)", fontSize: 12, fontWeight: 600, color: C.accent }}>
                 {t(E, "width = 5-1 = 4", "가로 = 5-1 = 4")}
               </div>
               {/* Height label */}
-              <div style={{ position: "absolute", right: -80, top: "50%", transform: "translateY(-50%)", fontSize: 12, fontWeight: 800, color: C.accent }}>
+              <div style={{ position: "absolute", right: -80, top: "50%", transform: "translateY(-50%)", fontSize: 12, fontWeight: 600, color: C.accent }}>
                 {t(E, "height = 4-1 = 3", "세로 = 4-1 = 3")}
               </div>
             </div>
-            <div style={{ textAlign: "center", marginTop: 36, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
+            <div style={{ textAlign: "center", marginTop: 36, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
               {t(E, "Area = 4 × 3 = 12", "면적 = 4 × 3 = 12")}
             </div>
           </div>
@@ -165,7 +165,7 @@ export function makeBillboardCh1(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f8fafc", border: "2px solid #e2e8f0", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.text, marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.text, marginBottom: 10, textAlign: "center" }}>
               {t(E, "Example Scenario", "예시 상황")}
             </div>
             {/* Three rectangles visualized */}
@@ -177,7 +177,7 @@ export function makeBillboardCh1(E) {
               ].map((r, i) => (
                 <div key={i} style={{ textAlign: "center" }}>
                   <div style={{ width: r.w * 25, height: r.h * 25, background: r.bg, border: `2.5px solid ${r.color}`, borderRadius: 6,
-                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: r.color }}>
+                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: r.color }}>
                     {r.w}×{r.h}
                   </div>
                   <div style={{ fontSize: 11, fontWeight: 700, color: r.color, marginTop: 4 }}>{r.label}</div>
@@ -246,7 +246,7 @@ export function makeBillboardCh2(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: C.accent, marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: C.accent, marginBottom: 10 }}>
               {t(E, "🔍 Rectangle Overlap", "🔍 직사각형 겹침")}
             </div>
             {/* Two overlapping rectangles */}
@@ -254,15 +254,15 @@ export function makeBillboardCh2(E) {
               <div style={{ position: "relative", width: 220, height: 120 }}>
                 {/* Rect A */}
                 <div style={{ position: "absolute", left: 0, top: 20, width: 140, height: 80, background: "rgba(59,130,246,0.2)", border: "2px solid #3b82f6", borderRadius: 4 }}>
-                  <span style={{ position: "absolute", top: 2, left: 4, fontSize: 10, fontWeight: 800, color: "#3b82f6" }}>A</span>
+                  <span style={{ position: "absolute", top: 2, left: 4, fontSize: 10, fontWeight: 600, color: "#3b82f6" }}>A</span>
                 </div>
                 {/* Rect B */}
                 <div style={{ position: "absolute", left: 80, top: 0, width: 140, height: 80, background: "rgba(239,68,68,0.2)", border: "2px solid #ef4444", borderRadius: 4 }}>
-                  <span style={{ position: "absolute", top: 2, right: 4, fontSize: 10, fontWeight: 800, color: "#ef4444" }}>B</span>
+                  <span style={{ position: "absolute", top: 2, right: 4, fontSize: 10, fontWeight: 600, color: "#ef4444" }}>B</span>
                 </div>
                 {/* Overlap area */}
                 <div style={{ position: "absolute", left: 80, top: 20, width: 60, height: 60, background: "rgba(168,85,247,0.3)", border: "2px dashed #7c3aed", borderRadius: 4 }}>
-                  <span style={{ fontSize: 10, fontWeight: 900, color: "#7c3aed", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: "#7c3aed", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
                     {t(E, "overlap!", "겹침!")}
                   </span>
                 </div>
@@ -298,11 +298,11 @@ export function makeBillboardCh2(E) {
                 borderRadius: 8, padding: "8px 12px", display: "flex", justifyContent: "space-between",
                 fontSize: 13, fontFamily: "'JetBrains Mono',monospace",
               }}>
-                <span style={{ fontWeight: 800, color: s.color }}>{s.step}</span>
+                <span style={{ fontWeight: 600, color: s.color }}>{s.step}</span>
                 <span style={{ color: C.text }}>{s.desc}</span>
               </div>
             ))}
-            <div style={{ textAlign: "center", marginTop: 8, fontSize: 15, fontWeight: 900, color: "#7c3aed", fontFamily: "'JetBrains Mono',monospace" }}>
+            <div style={{ textAlign: "center", marginTop: 8, fontSize: 15, fontWeight: 700, color: "#7c3aed", fontFamily: "'JetBrains Mono',monospace" }}>
               {t(E, "Overlap = (3,2)→(6,4) = 3×2 = 6", "겹침 = (3,2)→(6,4) = 3×2 = 6")}
             </div>
           </div>

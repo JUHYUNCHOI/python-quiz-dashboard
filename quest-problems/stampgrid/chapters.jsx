@@ -69,7 +69,7 @@ export function makeStampCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcee"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Stamp Grid</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Stamp Grid</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #2</div>
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
@@ -85,14 +85,14 @@ export function makeStampCh1(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#059669", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#059669", marginBottom: 10 }}>
               {t(E, "4 Rotations", "4\ubc29\ud5a5 \ud68c\uc804")}
             </div>
             <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
               {["0\u00b0", "90\u00b0", "180\u00b0", "270\u00b0"].map((r, i) => (
                 <div key={i} style={{
                   background: "#d1fae5", borderRadius: 8, padding: "8px 14px",
-                  fontSize: 14, fontWeight: 800, color: "#065f46",
+                  fontSize: 14, fontWeight: 600, color: "#065f46",
                   border: "2px solid #6ee7b7",
                   transform: `rotate(${i * 90}deg)`,
                 }}>{"\ud83d\udcee"}</div>
@@ -128,7 +128,7 @@ export function makeStampCh1(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#059669", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#059669", marginBottom: 10 }}>
               {t(E, "Brute Force Strategy", "\ube0c\ub8e8\ud2b8 \ud3ec\uc2a4 \uc804\ub7b5")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>

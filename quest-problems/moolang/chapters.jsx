@@ -73,17 +73,17 @@ export function makeMooLangCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcdd"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Moo Language</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Moo Language</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #2</div>
           </div>
 
           <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We have a ", "")}
                   <b style={{ color: "#2563eb" }}>{t(E, "word inventory", "단어 재고")}</b>
@@ -92,7 +92,7 @@ export function makeMooLangCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each sentence is either:", "각 문장은 다음 중 하나:")}
                   <div style={{ marginTop: 6, marginLeft: 8, fontSize: 12, color: "#475569" }}>
@@ -102,7 +102,7 @@ export function makeMooLangCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Two sentences can be ", "두 문장을 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "joined by a conjunction", "접속사로 연결")}</b>
@@ -114,7 +114,7 @@ export function makeMooLangCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "maximum total number of words", "사용 단어 수의 최댓값")}</b>
@@ -132,7 +132,7 @@ export function makeMooLangCh1(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#2563eb", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#2563eb", marginBottom: 10 }}>
               {t(E, "Sentence Structure", "\ubb38\uc7a5 \uad6c\uc870")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -170,7 +170,7 @@ export function makeMooLangCh1(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#2563eb", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#2563eb", marginBottom: 10 }}>
               {t(E, "Strategy", "\uc804\ub7b5")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>

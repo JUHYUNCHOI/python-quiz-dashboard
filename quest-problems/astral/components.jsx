@@ -69,7 +69,7 @@ export function AstralComposite({ E }) {
             const inThis = inChain.has(`${ri},${ci}`);
             return (
               <button key={`${ri}-${ci}`} onClick={() => setHi([ri, ci])} style={{
-                width: cellSize, height: cellSize, fontSize: cellSize * 0.4, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                width: cellSize, height: cellSize, fontSize: cellSize * 0.4, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                 background: c.bg, color: c.fg,
                 border: inThis ? `3px solid ${A_COLOR}` : `1px solid ${c.border}`,
                 borderRadius: 4, cursor: "pointer", padding: 0,

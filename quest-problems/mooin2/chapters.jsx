@@ -14,17 +14,17 @@ export function makeMooin2Ch1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#ea580c" }}>It's Mooin' Time II</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#ea580c" }}>It's Mooin' Time II</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO January 2025 Bronze #2</div>
           </div>
 
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 8 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
 
             <div style={{ background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "10px 12px", marginBottom: 10, fontSize: 13, color: C.text, lineHeight: 1.65 }}>
-              <div style={{ fontWeight: 800, color: "#9a3412", marginBottom: 4 }}>
+              <div style={{ fontWeight: 600, color: "#9a3412", marginBottom: 4 }}>
                 {t(E, "What's a moo?", "moo 가 뭐?")}
               </div>
               {t(E, "A 'moo' is a 3-tuple (x, y, y) where the second and third are EQUAL but DIFFERENT from the first.",
@@ -37,7 +37,7 @@ export function makeMooin2Ch1(E) {
 
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.55 }}>
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#0891b2", fontWeight: 800, flexShrink: 0 }}>1.</span>
+                <span style={{ color: "#0891b2", fontWeight: 600, flexShrink: 0 }}>1.</span>
                 <div>
                   <b style={{ color: "#0891b2" }}>{t(E, "Occurs in the array", "배열에서 발생")}</b>
                   {t(E, " — moo (x, y, y) occurs if there exist positions i < j < k with a[i]=x, a[j]=y, a[k]=y. (Subsequence — gaps allowed.)",
@@ -45,7 +45,7 @@ export function makeMooin2Ch1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#7c3aed", fontWeight: 800, flexShrink: 0 }}>2.</span>
+                <span style={{ color: "#7c3aed", fontWeight: 600, flexShrink: 0 }}>2.</span>
                 <div>
                   <b style={{ color: "#7c3aed" }}>{t(E, "Distinct moos", "서로 다른 moo")}</b>
                   {t(E, " — two moos are distinct iff their tuples (x, y, y) differ. Count DISTINCT (x, y) pairs.",
@@ -72,19 +72,19 @@ export function makeMooin2Ch1(E) {
         "샘플: a = [1, 2, 3, 4, 4, 4]. 발생하는 moo 3 개: (1, 4, 4), (2, 4, 4), (3, 4, 4) — 4 가 3 번 등장하고 그 끝에서 두 번째 위치 앞에 서로 다른 값 3 개."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#ea580c", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#ea580c", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`6
 1 2 3 4 4 4`}
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`3`}
               </div>
@@ -92,7 +92,7 @@ export function makeMooin2Ch1(E) {
           </div>
 
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#9a3412", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough", "풀이")}
             </div>
             <div>

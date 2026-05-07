@@ -14,17 +14,17 @@ export function makeRoundingCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🔄</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#0ea5e9" }}>Roundabout Rounding</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#0ea5e9" }}>Roundabout Rounding</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO December 2024 Bronze #1</div>
           </div>
 
           <div style={{ background: "#f0f9ff", border: "2px solid #7dd3fc", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#0c4a6e", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#0c4a6e", marginBottom: 8 }}>
               📖 {t(E, "Two rounding methods", "두 가지 반올림 방법")}
             </div>
 
             <div style={{ background: "#fff", border: "1.5px solid #7dd3fc", borderRadius: 8, padding: "10px 12px", marginBottom: 8, fontSize: 13, color: C.text, lineHeight: 1.65 }}>
-              <div style={{ fontWeight: 800, color: "#0ea5e9", marginBottom: 4 }}>
+              <div style={{ fontWeight: 600, color: "#0ea5e9", marginBottom: 4 }}>
                 {t(E, "Bessie — round once to 10^P", "Bessie — 10^P 한 번에 반올림")}
               </div>
               {t(E, "To round x to 10^b: check the b-th digit from the right. If ≥ 5, add 10^b to x. Then zero out all digits at positions 1..b.",
@@ -32,7 +32,7 @@ export function makeRoundingCh1(E) {
             </div>
 
             <div style={{ background: "#fff", border: "1.5px solid #7dd3fc", borderRadius: 8, padding: "10px 12px", marginBottom: 8, fontSize: 13, color: C.text, lineHeight: 1.65 }}>
-              <div style={{ fontWeight: 800, color: "#0ea5e9", marginBottom: 4 }}>
+              <div style={{ fontWeight: 600, color: "#0ea5e9", marginBottom: 4 }}>
                 {t(E, "Elsie — chain round 10^1 → 10^2 → ... → 10^P", "Elsie — 10^1 → 10^2 → ... → 10^P 단계별로")}
               </div>
               {t(E, "Round to 10, then to 100, then to 1000, ..., finally to 10^P. Each step uses Bessie's method on the current value.",
@@ -63,12 +63,12 @@ export function makeRoundingCh1(E) {
         "샘플: 4 케이스. N=1 은 [2, 1] 비어있음 → 0. N=100 은 5 개 (45..49). N=4567 → 183. N=3366 → 60."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#0ea5e9", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#0ea5e9", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`4
 1
@@ -78,7 +78,7 @@ export function makeRoundingCh1(E) {
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`0
 5
@@ -89,7 +89,7 @@ export function makeRoundingCh1(E) {
           </div>
 
           <div style={{ background: "#f0f9ff", border: "2px solid #7dd3fc", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#0c4a6e", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#0c4a6e", marginBottom: 6 }}>
               🔍 {t(E, "Smallest disagreement: x = 45", "가장 작은 불일치: x = 45")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>

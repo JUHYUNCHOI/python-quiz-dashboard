@@ -14,24 +14,24 @@ export function makeReflectionCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🪞</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#0891b2" }}>Reflection</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#0891b2" }}>Reflection</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO February 2025 Bronze #1</div>
           </div>
 
           <div style={{ background: "#ecfeff", border: "2px solid #67e8f9", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#155e75", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#155e75", marginBottom: 8 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.65, marginBottom: 10 }}>
               {t(E, "FJ has an ", "FJ 에게 ")}
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>N × N</code>
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 600 }}>N × N</code>
               {t(E, " canvas (N is EVEN). A valid painting is built by painting the top-right quadrant and reflecting it across the horizontal and vertical center lines into the other three quadrants. Bessie vandalized it.",
                     " 캔버스가 있어요 (N 은 짝수). 올바른 그림은 우상단 사분면을 그린 뒤 가로/세로 가운데 선으로 다른 세 사분면에 반사. Bessie 가 망쳤어요.")}
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.55 }}>
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #67e8f9", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#0891b2", fontWeight: 800, flexShrink: 0 }}>1.</span>
+                <span style={{ color: "#0891b2", fontWeight: 600, flexShrink: 0 }}>1.</span>
                 <div>
                   <b style={{ color: "#0891b2" }}>{t(E, "Symmetry rule", "대칭 규칙")}</b>
                   {t(E, " — cell (r, c) must match cells (r, N+1−c), (N+1−r, c), (N+1−r, N+1−c). All FOUR must be the same color.",
@@ -39,7 +39,7 @@ export function makeReflectionCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #67e8f9", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#7c3aed", fontWeight: 800, flexShrink: 0 }}>2.</span>
+                <span style={{ color: "#7c3aed", fontWeight: 600, flexShrink: 0 }}>2.</span>
                 <div>
                   <b style={{ color: "#7c3aed" }}>{t(E, "Update format", "update 형식")}</b>
                   {t(E, " — U updates follow. Each gives (r, c) and TOGGLES that one cell (paint ↔ unpaint).",
@@ -47,7 +47,7 @@ export function makeReflectionCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #67e8f9", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#16a34a", fontWeight: 800, flexShrink: 0 }}>3.</span>
+                <span style={{ color: "#16a34a", fontWeight: 600, flexShrink: 0 }}>3.</span>
                 <div>
                   <b style={{ color: "#16a34a" }}>{t(E, "Output", "출력")}</b>
                   {t(E, " — U + 1 lines: minimum cells to flip BEFORE any update, then after each update.",
@@ -73,12 +73,12 @@ export function makeReflectionCh1(E) {
         "공식 샘플: 4×4 캔버스, update 5 번. 처음 답 4, 그 다음 update 마다: 3, 2, 1, 0, 1."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`4 5
 ..#.
@@ -93,7 +93,7 @@ export function makeReflectionCh1(E) {
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`4
 3
@@ -106,7 +106,7 @@ export function makeReflectionCh1(E) {
           </div>
 
           <div style={{ background: "#ecfeff", border: "2px solid #67e8f9", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
-            <div style={{ fontWeight: 800, color: "#155e75", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#155e75", marginBottom: 6 }}>
               🔍 {t(E, "Why initial answer = 4?", "왜 초기 답 = 4?")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
@@ -122,7 +122,7 @@ export function makeReflectionCh1(E) {
               <br/>
               {t(E, "Center group (2,2)(2,3)(3,2)(3,3) = # . # # → 3 painted, flip 1.", "가운데 그룹 (2,2)(2,3)(3,2)(3,3) = # . # # → 3 칠함, 1 뒤집기.")}
             </div>
-            <div style={{ marginTop: 6, fontWeight: 800, color: "#15803d" }}>
+            <div style={{ marginTop: 6, fontWeight: 600, color: "#15803d" }}>
               {t(E, "Total = 1 + 2 + 0 + 1 = 4.", "합계 = 1 + 2 + 0 + 1 = 4.")}
             </div>
           </div>

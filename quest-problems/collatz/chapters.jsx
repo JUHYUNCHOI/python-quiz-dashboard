@@ -32,7 +32,7 @@ export function makeCollatzCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd22"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Collatz Conjecture</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Collatz Conjecture</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P1</div>
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,

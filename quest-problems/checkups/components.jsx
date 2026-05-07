@@ -491,7 +491,7 @@ const CkPerfAside = ({ E }) => (
     background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10,
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#7f1d1d",
   }}>
-    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#991b1b", marginBottom: 6 }}>
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#991b1b", marginBottom: 6 }}>
       🐌 {t(E, "Operation count (brute O(N³))", "연산량 (brute O(N³))")}
     </div>
     <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 8px" }}>
@@ -515,7 +515,7 @@ const CkInsightAside = ({ E }) => (
     background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10,
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#065f46",
   }}>
-    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#065f46", marginBottom: 6 }}>
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#065f46", marginBottom: 6 }}>
       💡 {t(E, "Same diagonal = same work", "같은 대각선 = 같은 일")}
     </div>
     <div>
@@ -535,7 +535,7 @@ const CkSmartAside = ({ E }) => (
     background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10,
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#1e3a8a",
   }}>
-    <div style={{ fontSize: 10.5, fontWeight: 800, color: "#1e40af", marginBottom: 6 }}>
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#1e40af", marginBottom: 6 }}>
       ✅ {t(E, "Two prefix arrays do all the work", "prefix 배열 2 개로 끝")}
     </div>
     <div style={{ marginBottom: 6 }}>

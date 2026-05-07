@@ -14,12 +14,12 @@ export function makeMexesCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🧮</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#7c3aed" }}>Making Mexes</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#7c3aed" }}>Making Mexes</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO February 2025 Bronze #2</div>
           </div>
 
           <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 8 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.65, marginBottom: 10 }}>
@@ -28,7 +28,7 @@ export function makeMexesCh1(E) {
             </div>
 
             <div style={{ background: "#fff", border: "1.5px solid #c4b5fd", borderRadius: 8, padding: "10px 12px", marginBottom: 10, fontSize: 13, color: C.text }}>
-              <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+              <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
                 {t(E, "What is mex?", "mex 가 뭐?")}
               </div>
               {t(E, "The MINIMUM EXcluded non-negative integer — the smallest non-negative integer that is NOT in the array.",
@@ -39,7 +39,7 @@ export function makeMexesCh1(E) {
             </div>
 
             <div style={{ display: "flex", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.55, padding: "8px 10px", background: "#fff", border: "1.5px solid #c4b5fd", borderRadius: 8 }}>
-              <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+              <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
               <div>
                 {t(E, "Output ", "")}
                 <b style={{ color: "#15803d" }}>{t(E, "N + 1 lines", "N + 1 줄")}</b>
@@ -65,19 +65,19 @@ export function makeMexesCh1(E) {
         "공식 샘플: a = [2, 2, 2, 0]. 각 목표 mex 별로 풀이."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#7c3aed", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`4
 2 2 2 0`}
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`1
 0
@@ -89,7 +89,7 @@ export function makeMexesCh1(E) {
           </div>
 
           <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
               🔍 {t(E, "Walkthrough — a = [2, 2, 2, 0]", "풀이 — a = [2, 2, 2, 0]")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>

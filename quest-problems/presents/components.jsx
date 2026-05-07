@@ -44,7 +44,7 @@ export function PresentsSim({ E }) {
           <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
             padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
-            fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>case {i+1}</button>
         ))}
       </div>
@@ -60,7 +60,7 @@ export function PresentsSim({ E }) {
           return (
             <div key={`${idx}-${v}`} style={{
               width: 80, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-              borderRadius: 8, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+              borderRadius: 8, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
               background: isFind ? (isTarget ? "#dcfce7" : (isAbove ? "#fef3c7" : "#fff")) : (isTarget && cur % 2 === 1 ? "#fee2e2" : "#fff"),
               border: `2px solid ${isFind ? (isTarget ? "#16a34a" : (isAbove ? "#f59e0b" : "#e5e7eb")) : (isTarget && cur % 2 === 1 ? "#dc2626" : "#e5e7eb")}`,
               color: isFind ? (isTarget ? "#15803d" : (isAbove ? "#92400e" : C.text)) : C.text,
@@ -86,13 +86,13 @@ export function PresentsSim({ E }) {
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
         <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
           background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: cur === 0 ? "#b0b5c3" : A,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: cur === 0 ? "#b0b5c3" : A,
           cursor: cur === 0 ? "default" : "pointer",
         }}>←</button>
         <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / {totalSteps}</span>
         <button onClick={() => setSi(Math.min(totalSteps - 1, cur + 1))} disabled={cur === totalSteps - 1} style={{
           background: cur === totalSteps - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === totalSteps - 1 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === totalSteps - 1 ? "#b0b5c3" : "#fff", cursor: cur === totalSteps - 1 ? "default" : "pointer",
         }}>→</button>
       </div>
@@ -144,12 +144,12 @@ export function PresentsRunner({ E }) {
   return (
     <div style={{ padding: 14 }}>
       <input value={stackIn} onChange={e => setStackIn(e.target.value)} disabled={running} placeholder="stack (top first)"
-        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 8, boxSizing: "border-box" }} />
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 8, boxSizing: "border-box" }} />
       <input value={queriesIn} onChange={e => setQueriesIn(e.target.value)} disabled={running} placeholder="queries"
-        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
       <button onClick={running ? stop : run} style={{
         width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
-        fontSize: 14, fontWeight: 800, marginBottom: 10, background: A, color: "#fff",
+        fontSize: 14, fontWeight: 600, marginBottom: 10, background: A, color: "#fff",
       }}>{running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run", "▶ 실행")}</button>
       {results.length > 0 && (
         <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", fontSize: 13, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.6 }}>
@@ -157,7 +157,7 @@ export function PresentsRunner({ E }) {
         </div>
       )}
       <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
-        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div style={{ fontWeight: 600, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
         <div>O(N · Q) — fine for Bronze sizes.</div>
       </div>
     </div>

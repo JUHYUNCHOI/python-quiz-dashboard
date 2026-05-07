@@ -188,7 +188,7 @@ export function FenceColumnScanner({ E }) {
   const getCellStyle = (r, c, isFence) => {
     const base = {
       width: cellSize, height: cellSize, borderRadius: 6,
-      fontSize: cellSize > 34 ? 18 : 14, fontWeight: 900,
+      fontSize: cellSize > 34 ? 18 : 14, fontWeight: 700,
       fontFamily: "'JetBrains Mono',monospace",
       transition: "all .15s",
       cursor: phase === "interact" ? "pointer" : "default",
@@ -303,7 +303,7 @@ export function FenceColumnScanner({ E }) {
           const isDimmed = phase === "done" && !isMinDone;
           return (
             <div key={c} style={{
-              width: cellSize, textAlign: "center", fontSize: isMinDone ? 11 : 10, fontWeight: 800,
+              width: cellSize, textAlign: "center", fontSize: isMinDone ? 11 : 10, fontWeight: 600,
               fontFamily: "'JetBrains Mono',monospace",
               color: isActive ? "#fff" : isMinDone ? "#fff" : isDimmed ? "#d1d5db" : isDone ? C.dim : C.dimLight,
               background: isActive ? A : isMinDone ? A : "transparent",
@@ -334,10 +334,10 @@ export function FenceColumnScanner({ E }) {
       {/* Scanning: live counter for current column */}
       {phase === "scanning" && scanCol >= 0 && scanCol < cols && scanRow >= 0 && (
         <div style={{ textAlign: "center", marginBottom: 6 }}>
-          <span style={{ fontSize: 12, color: A, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace" }}>
+          <span style={{ fontSize: 12, color: A, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace" }}>
             {E ? `Column ${scanCol + 1}: ` : `${scanCol + 1}번째 열: `}
           </span>
-          <span style={{ fontSize: 14, color: "#92400e", fontWeight: 900, fontFamily: "'JetBrains Mono',monospace" }}>
+          <span style={{ fontSize: 14, color: "#92400e", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
             {E ? `${runningCount} dot${runningCount !== 1 ? "s" : ""}` : `점 ${runningCount}개`}
           </span>
         </div>
@@ -355,7 +355,7 @@ export function FenceColumnScanner({ E }) {
           return (
             <div key={c} style={{
               width: cellSize, textAlign: "center", padding: isMin && phase === "done" ? "6px 0" : "4px 0", borderRadius: 8,
-              fontSize: isMin && phase === "done" ? 18 : 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+              fontSize: isMin && phase === "done" ? 18 : 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
               background: isMin ? (phase === "done" ? A : ABg) : isRevealed ? "#f8f9fc" : "transparent",
               border: `2px solid ${isMin ? (phase === "done" ? A : ABd) : isRevealed ? C.border : "transparent"}`,
               color: isMin ? (phase === "done" ? "#fff" : A) : isRevealed ? C.dim : "transparent",
@@ -372,7 +372,7 @@ export function FenceColumnScanner({ E }) {
       {phase === "idle" && (
         <div style={{ textAlign: "center" }}>
           <button onClick={startScan} style={{
-            padding: "10px 28px", borderRadius: 12, fontSize: 15, fontWeight: 900,
+            padding: "10px 28px", borderRadius: 12, fontSize: 15, fontWeight: 700,
             border: "none", cursor: "pointer", color: "#fff",
             background: "linear-gradient(135deg,#047857,#059669)",
             boxShadow: "0 4px 16px rgba(5,150,105,.3)",
@@ -385,11 +385,11 @@ export function FenceColumnScanner({ E }) {
 
       {phase === "colDone" && (
         <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 13, color: A, fontWeight: 800, marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
+          <div style={{ fontSize: 13, color: A, fontWeight: 600, marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
             {E ? `Column ${scanCol + 1} → ${colCounts[scanCol]} dot${colCounts[scanCol] !== 1 ? "s" : ""} ✓` : `${scanCol + 1}열 → 점 ${colCounts[scanCol]}개 ✓`}
           </div>
           <button onClick={nextCol} style={{
-            padding: "8px 24px", borderRadius: 10, fontSize: 14, fontWeight: 900,
+            padding: "8px 24px", borderRadius: 10, fontSize: 14, fontWeight: 700,
             border: "none", cursor: "pointer", color: "#fff",
             background: scanCol + 1 >= cols ? "linear-gradient(135deg,#047857,#059669)" : A,
             boxShadow: "0 3px 12px rgba(5,150,105,.3)",
@@ -409,14 +409,14 @@ export function FenceColumnScanner({ E }) {
           <div style={{
             display: "inline-block", padding: "8px 28px", borderRadius: 12,
             background: "linear-gradient(135deg,#047857,#059669)",
-            fontSize: 32, fontWeight: 900, color: "#fff",
+            fontSize: 32, fontWeight: 700, color: "#fff",
             fontFamily: "'JetBrains Mono',monospace",
             boxShadow: "0 4px 16px rgba(5,150,105,.3)",
             animation: "popIn .3s ease",
           }}>{minCount}</div>
           <div style={{ marginTop: 10 }}>
             <button onClick={goInteract} style={{
-              padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 800,
+              padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 600,
               border: `2px solid ${ABd}`, background: ABg,
               color: A, cursor: "pointer",
             }}>🖱️ {E ? "Try it yourself!" : "직접 해봐!"}</button>
@@ -432,7 +432,7 @@ export function FenceColumnScanner({ E }) {
           <div style={{
             display: "inline-block", padding: "8px 28px", borderRadius: 12,
             background: "linear-gradient(135deg,#047857,#059669)",
-            fontSize: 32, fontWeight: 900, color: "#fff",
+            fontSize: 32, fontWeight: 700, color: "#fff",
             fontFamily: "'JetBrains Mono',monospace",
             boxShadow: "0 4px 16px rgba(5,150,105,.3)",
           }}>{minCount}</div>
@@ -558,7 +558,7 @@ export function RowColumnFillViz({ E }) {
       {/* Variable state display */}
       <div style={{
         display: "flex", justifyContent: "center", gap: 12, marginBottom: 8,
-        fontSize: 12, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+        fontSize: 12, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace",
       }}>
         {cur.i >= 0 && (
           <span style={{
@@ -634,7 +634,7 @@ export function RowColumnFillViz({ E }) {
           <div style={{ width: 28 }} /> {/* spacer for row labels */}
           {Array.from({ length: GRID_COLS }, (_, c) => (
             <div key={c} style={{
-              width: 40, textAlign: "center", fontSize: 10, fontWeight: 800,
+              width: 40, textAlign: "center", fontSize: 10, fontWeight: 600,
               fontFamily: "'JetBrains Mono',monospace",
               color: (cur.type === "checkCell" && cur.j === c) ? "#fff" : "#9ca3af",
               background: (cur.type === "checkCell" && cur.j === c) ? A : "transparent",
@@ -712,7 +712,7 @@ export function RowColumnFillViz({ E }) {
                 return (
                   <div key={c} style={{
                     width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
-                    borderRadius: 6, fontSize: 18, fontWeight: 900,
+                    borderRadius: 6, fontSize: 18, fontWeight: 700,
                     fontFamily: "'JetBrains Mono',monospace",
                     background: bg, border: `2.5px solid ${border}`, color,
                     boxShadow: shadow, transform,
@@ -744,7 +744,7 @@ export function RowColumnFillViz({ E }) {
             return (
               <div key={c} style={{
                 width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
-                borderRadius: 8, fontSize: isMin ? 18 : 15, fontWeight: 900,
+                borderRadius: 8, fontSize: isMin ? 18 : 15, fontWeight: 700,
                 fontFamily: "'JetBrains Mono',monospace",
                 background: isMin ? A : isFlashing ? "#d1fae5" : "#f0fdf4",
                 border: `2.5px solid ${isMin ? A : isFlashing ? A : "#d1d5db"}`,
@@ -769,7 +769,7 @@ export function RowColumnFillViz({ E }) {
             <div style={{
               display: "inline-block", padding: "6px 20px", borderRadius: 10,
               background: "linear-gradient(135deg,#047857,#059669)",
-              fontSize: 24, fontWeight: 900, color: "#fff",
+              fontSize: 24, fontWeight: 700, color: "#fff",
               fontFamily: "'JetBrains Mono',monospace",
               boxShadow: "0 3px 12px rgba(5,150,105,.3)",
             }}>= {cur.minVal}</div>
@@ -782,20 +782,20 @@ export function RowColumnFillViz({ E }) {
         {!isDone ? (
           <>
             <button onClick={next} style={{
-              padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
+              padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
               border: "none", cursor: "pointer", color: "#fff",
               background: "linear-gradient(135deg,#047857,#059669)",
               boxShadow: "0 3px 12px rgba(5,150,105,.3)",
             }}>▶ {E ? "Next step" : "다음 스텝"}</button>
             {!autoPlay ? (
               <button onClick={play} style={{
-                padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 800,
+                padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 600,
                 border: `1.5px solid ${ABd}`, background: ABg,
                 color: A, cursor: "pointer",
               }}>⏭ {E ? "Auto" : "자동"}</button>
             ) : (
               <button onClick={() => setAutoPlay(false)} style={{
-                padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 800,
+                padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 600,
                 border: "1.5px solid #fca5a5", background: "#fee2e2",
                 color: "#dc2626", cursor: "pointer",
               }}>⏸ {E ? "Pause" : "멈춤"}</button>
@@ -803,7 +803,7 @@ export function RowColumnFillViz({ E }) {
           </>
         ) : (
           <button onClick={reset} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
+            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
             border: `2px solid ${ABd}`, background: ABg,
             color: A, cursor: "pointer",
           }}>↺ {E ? "Restart" : "처음부터"}</button>

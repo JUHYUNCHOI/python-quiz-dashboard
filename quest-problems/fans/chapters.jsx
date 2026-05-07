@@ -28,7 +28,7 @@ export function makeFansCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>🪭</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Fans</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Fans</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P2</div>
           <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fbbf24", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
@@ -58,7 +58,7 @@ export function makeFansCh1(E) {
               ))}
             </div>
             <div style={{
-              fontSize: 12, fontWeight: 800,
+              fontSize: 12, fontWeight: 600,
               color: ok ? "#16a34a" : "#dc2626",
             }}>{ok ? "✅ " : "❌ "}{label}</div>
           </div>
@@ -288,7 +288,7 @@ export function makeFansCh3(E) {
         "Let's build the code! First, we have T test cases. We read T and loop through each one.", "코드를 만들어보자! 먼저 T개의 테스트 케이스가 있어요. T를 읽고 반복해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 1: Handle test cases", "1단계: 테스트 케이스 처리")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
@@ -314,7 +314,7 @@ export function makeFansCh3(E) {
         "For each test case, read N (number of colors) and then the list of stick counts.", "각 테스트 케이스마다 N(색 수)을 읽고, 막대 수 리스트를 읽어."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 2: Read the data", "2단계: 데이터 읽기")}
           </div>
           <CodeSnippet
@@ -330,7 +330,7 @@ export function makeFansCh3(E) {
             {[3, 7, 2].map((v, i) => (
               <div key={i} style={{
                 width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-                borderRadius: 6, fontSize: 14, fontWeight: 900,
+                borderRadius: 6, fontSize: 14, fontWeight: 700,
                 fontFamily: "'JetBrains Mono',monospace",
                 background: "#fffbeb", border: "2px solid #fbbf24", color: "#d97706",
               }}>{v}</div>
@@ -348,7 +348,7 @@ export function makeFansCh3(E) {
         "Now compute the three key values: total, max_c, and rest!", "이제 세 가지 핵심 값을 계산해: total, max_c, rest!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 3: The three key values", "3단계: 세 가지 핵심 값")}
           </div>
           <CodeSnippet
@@ -368,16 +368,16 @@ export function makeFansCh3(E) {
             marginTop: 10, background: "#fffbeb", borderRadius: 10,
             padding: 10, border: "2px solid #fbbf24",
           }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#d97706", marginBottom: 4 }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "#d97706", marginBottom: 4 }}>
               {t(E, "Example: c = [3, 7, 2]", "예시: c = [3, 7, 2]")}
             </div>
             <div style={{
               fontFamily: "'JetBrains Mono',monospace", fontSize: 13,
               fontWeight: 700, color: C.text, lineHeight: 2,
             }}>
-              total = 3 + 7 + 2 = <span style={{ color: "#d97706", fontWeight: 900 }}>12</span><br />
-              max_c = max(3, 7, 2) = <span style={{ color: "#dc2626", fontWeight: 900 }}>7</span><br />
-              rest = 12 - 7 = <span style={{ color: "#059669", fontWeight: 900 }}>5</span>
+              total = 3 + 7 + 2 = <span style={{ color: "#d97706", fontWeight: 700 }}>12</span><br />
+              max_c = max(3, 7, 2) = <span style={{ color: "#dc2626", fontWeight: 700 }}>7</span><br />
+              rest = 12 - 7 = <span style={{ color: "#059669", fontWeight: 700 }}>5</span>
             </div>
           </div>
         </div>),
@@ -389,7 +389,7 @@ export function makeFansCh3(E) {
         "Finally, apply the formula and print! Just one line: min(total, 2*rest+1).", "마지막으로 공식 적용하고 출력! 한 줄이면 돼: min(total, 2*rest+1)."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 4: Apply the formula!", "4단계: 공식 적용!")}
           </div>
           <CodeSnippet
@@ -409,7 +409,7 @@ export function makeFansCh3(E) {
             marginTop: 10, background: "#d1fae5", borderRadius: 10,
             padding: "8px 12px", border: "2px solid #6ee7b7", textAlign: "center",
           }}>
-            <div style={{ fontSize: 13, fontWeight: 900, color: "#059669" }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#059669" }}>
               {t(E, "That's the complete code! Just 8 lines! 🎉", "이게 전체 코드! 단 8줄! 🎉")}
             </div>
           </div>

@@ -68,7 +68,7 @@ export function AlgorithmReasoningTour({ E }) {
   // Soft Q-A panel: bold question on top, body below.
   const QA = ({ q, children }) => (
     <>
-      <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 8, fontSize: 14, lineHeight: 1.5 }}>
+      <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 8, fontSize: 14, lineHeight: 1.5 }}>
         ❓ {q}
       </div>
       <div style={{ fontSize: 13, lineHeight: 1.7 }}>{children}</div>
@@ -169,7 +169,7 @@ export function WinningRulesBanner({ E }) {
       opacity: winner ? 1 : 0.75,
     }}>
       <span style={{ fontSize: 15, color: card.color, lineHeight: 1 }}>{card.glyph}</span>
-      <span style={{ fontSize: 12, fontWeight: 800, color: winner ? "#15803d" : "#475569" }}>{card.n}</span>
+      <span style={{ fontSize: 12, fontWeight: 600, color: winner ? "#15803d" : "#475569" }}>{card.n}</span>
     </span>
   );
   return (
@@ -179,7 +179,7 @@ export function WinningRulesBanner({ E }) {
       background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8,
       flexWrap: "wrap",
     }}>
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#166534" }}>
+      <div style={{ fontSize: 11, fontWeight: 600, color: "#166534" }}>
         🎯 {t(E, "Beats rules", "이김 규칙")}
       </div>
       {rules.map((r, i) => (
@@ -191,7 +191,7 @@ export function WinningRulesBanner({ E }) {
           fontSize: 12, fontWeight: 700, color: "#166534",
         }}>
           <Pill card={r.w} winner />
-          <span style={{ color: "#15803d", fontWeight: 800, fontSize: 11 }}>{t(E, "beats", "이김")}</span>
+          <span style={{ color: "#15803d", fontWeight: 600, fontSize: 11 }}>{t(E, "beats", "이김")}</span>
           <Pill card={r.l} />
         </div>
       ))}
@@ -221,7 +221,7 @@ export function ChartReadingTour({ E }) {
   const C = (n) => {
     const card = cards[n - 1];
     return (
-      <span style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "1px 6px", borderRadius: 5, background: "#f8fafc", border: `1.5px solid ${card.color}40`, fontWeight: 800, verticalAlign: "middle" }}>
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "1px 6px", borderRadius: 5, background: "#f8fafc", border: `1.5px solid ${card.color}40`, fontWeight: 600, verticalAlign: "middle" }}>
         <span style={{ fontSize: 14, color: card.color, lineHeight: 1 }}>{card.glyph}</span>
         <span style={{ fontSize: 12 }}>{n}</span>
       </span>
@@ -319,7 +319,7 @@ export function ChartReadingTour({ E }) {
       {cur.i != null && (
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-          marginBottom: 10, fontSize: 13, fontWeight: 800, color: "#92400e",
+          marginBottom: 10, fontSize: 13, fontWeight: 600, color: "#92400e",
         }}>
           <span>{t(E, "This match-up:", "이 매치업:")}</span>
           <span style={{
@@ -357,7 +357,7 @@ export function ChartReadingTour({ E }) {
           {["D", "WD", "LWD"].map((str, ri) => (
             <div key={str} style={{
               display: "flex", alignItems: "center", justifyContent: "flex-end",
-              paddingRight: 4, fontSize: 17, fontWeight: 900,
+              paddingRight: 4, fontSize: 17, fontWeight: 700,
               color: cur.i === ri + 1 ? "#92400e" : "#7c2d12",
               transition: "color .2s",
             }}>
@@ -431,11 +431,11 @@ export function ChartReadingTour({ E }) {
                     transition: "all .2s",
                   }}>
                     {isSelf ? (
-                      <div style={{ fontSize: 12, fontWeight: 800, color: hl ? "#92400e" : "#94a3b8" }}>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: hl ? "#92400e" : "#94a3b8" }}>
                         {t(E, "draw", "비김")}
                       </div>
                     ) : (
-                      <div style={{ display: "flex", alignItems: "center", gap: 3, fontWeight: 900 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 3, fontWeight: 700 }}>
                         <span style={{ fontSize: hl ? 20 : 17, color: outcome.winner.color, lineHeight: 1 }}>{outcome.winner.glyph}</span>
                         <span style={{ fontSize: hl ? 14 : 12, color: "#16a34a" }}>→</span>
                         <span style={{ fontSize: hl ? 20 : 17, color: outcome.loser.color, lineHeight: 1, opacity: 0.7 }}>{outcome.loser.glyph}</span>
@@ -502,7 +502,7 @@ export function HpsCaseSimulator({ E }) {
   const Card = ({ n, size = 22 }) => (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 4, verticalAlign: "middle" }}>
       <span style={{ fontSize: size, color: SHAPES[n]?.color, lineHeight: 1 }}>{SHAPES[n]?.glyph}</span>
-      <span style={{ fontWeight: 800, fontSize: size * 0.55 }}>{n}</span>
+      <span style={{ fontWeight: 600, fontSize: size * 0.55 }}>{n}</span>
     </span>
   );
 
@@ -517,7 +517,7 @@ export function HpsCaseSimulator({ E }) {
           display: "flex", flexDirection: "column", alignItems: "center", gap: 1,
         }}>
           <span style={{ fontSize: 22, color: SHAPES[c]?.color, lineHeight: 1 }}>{SHAPES[c]?.glyph}</span>
-          <span style={{ fontSize: 10, color: "#7f1d1d", fontWeight: 800 }}>{t(E, "card ", "카드 ")}{c}</span>
+          <span style={{ fontSize: 10, color: "#7f1d1d", fontWeight: 600 }}>{t(E, "card ", "카드 ")}{c}</span>
         </div>
       ))}
     </div>
@@ -532,7 +532,7 @@ export function HpsCaseSimulator({ E }) {
       border: `2px solid ${beatsBoth ? "#16a34a" : "#e5e7eb"}`,
     }}>
       {/* Header: which Bessie card we're testing */}
-      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, fontSize: 12, fontWeight: 800, color: "#5b21b6" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, fontSize: 12, fontWeight: 600, color: "#5b21b6" }}>
         {t(E, "If Bessie plays ", "Bessie 가 ")}<Card n={c} size={20} />{t(E, ":", " 를 내면:")}
       </div>
       {/* Two sub-checks: vs each Elsie card */}
@@ -541,20 +541,20 @@ export function HpsCaseSimulator({ E }) {
           <span style={{ color: "#9ca3af" }}>•</span>
           {t(E, "vs Elsie's ", "Elsie 의 ")}<Card n={e1} size={16} />?{" "}
           {beats1
-            ? <span style={{ color: "#16a34a", fontWeight: 800 }}>✓ {t(E, "beats", "이김")}</span>
-            : <span style={{ color: "#dc2626", fontWeight: 800 }}>✗ {t(E, "doesn't beat", "못 이김")}</span>}
+            ? <span style={{ color: "#16a34a", fontWeight: 600 }}>✓ {t(E, "beats", "이김")}</span>
+            : <span style={{ color: "#dc2626", fontWeight: 600 }}>✗ {t(E, "doesn't beat", "못 이김")}</span>}
         </div>
         <div style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}>
           <span style={{ color: "#9ca3af" }}>•</span>
           {t(E, "vs Elsie's ", "Elsie 의 ")}<Card n={e2} size={16} />?{" "}
           {beats2
-            ? <span style={{ color: "#16a34a", fontWeight: 800 }}>✓ {t(E, "beats", "이김")}</span>
-            : <span style={{ color: "#dc2626", fontWeight: 800 }}>✗ {t(E, "doesn't beat", "못 이김")}</span>}
+            ? <span style={{ color: "#16a34a", fontWeight: 600 }}>✓ {t(E, "beats", "이김")}</span>
+            : <span style={{ color: "#dc2626", fontWeight: 600 }}>✗ {t(E, "doesn't beat", "못 이김")}</span>}
         </div>
       </div>
       {/* Verdict pill */}
       <div style={{
-        fontSize: 11.5, fontWeight: 900,
+        fontSize: 11.5, fontWeight: 700,
         padding: "4px 10px", borderRadius: 999,
         background: beatsBoth ? "#16a34a" : "#fee2e2",
         color: beatsBoth ? "#fff" : "#7f1d1d",
@@ -580,13 +580,13 @@ export function HpsCaseSimulator({ E }) {
         }}>
           <div />
           {[1, 2, 3].map((b) => (
-            <div key={`h${b}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "#6b7280" }}>
+            <div key={`h${b}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: "#6b7280" }}>
               b={b}
             </div>
           ))}
           {[1, 2, 3].map((a) => (
             <div key={`r${a}`} style={{ display: "contents" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 4, fontSize: 11, fontWeight: 800, color: "#6b7280" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 4, fontSize: 11, fontWeight: 600, color: "#6b7280" }}>
                 a={a}
               </div>
               {[1, 2, 3].map((b) => {
@@ -597,7 +597,7 @@ export function HpsCaseSimulator({ E }) {
                     border: `2px solid ${has ? "#16a34a" : "#cbd5e1"}`,
                     background: has ? "#dcfce7" : "#fff",
                     borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 12, fontWeight: 800,
+                    fontSize: 12, fontWeight: 600,
                     color: has ? "#15803d" : "#94a3b8",
                   }}>
                     ({a},{b}){has && <span style={{ marginLeft: 2, fontSize: 10 }}>✓</span>}
@@ -631,7 +631,7 @@ export function HpsCaseSimulator({ E }) {
           background: "#fee2e2", border: "1.5px solid #fca5a5", borderRadius: 8,
           flexWrap: "wrap",
         }}>
-          <span style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d" }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: "#7f1d1d" }}>
             🎬 {t(E, `Game ${s.qIdx + 1} — Elsie's hand:`, `게임 ${s.qIdx + 1} — Elsie 패:`)}
           </span>
           {curQuery.elsie.map((c, i) => {
@@ -641,7 +641,7 @@ export function HpsCaseSimulator({ E }) {
                 display: "inline-flex", alignItems: "center", gap: 3,
                 padding: "2px 8px", borderRadius: 999,
                 background: "#fff", border: `2px solid #dc2626`,
-                fontSize: 12, fontWeight: 800, color: "#7f1d1d",
+                fontSize: 12, fontWeight: 600, color: "#7f1d1d",
               }}>
                 <span style={{ fontSize: 16, color: card.color, lineHeight: 1 }}>{card.glyph}</span>
                 {c}
@@ -654,7 +654,7 @@ export function HpsCaseSimulator({ E }) {
       <NarrativePanel minHeight={150}>
         {s.kind === "setup" && (
           <>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6, fontSize: 14 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6, fontSize: 14 }}>
               📋 {t(E, "Game rule (recap)", "게임 룰 (다시)")}
             </div>
             <div style={{ marginBottom: 6 }}>
@@ -676,7 +676,7 @@ export function HpsCaseSimulator({ E }) {
           const [e1, e2] = curQuery.elsie;
           return (
             <>
-              <div style={{ fontWeight: 800, color: "#7f1d1d", marginBottom: 8, fontSize: 14 }}>
+              <div style={{ fontWeight: 600, color: "#7f1d1d", marginBottom: 8, fontSize: 14 }}>
                 🎬 {t(E, `Query ${s.qIdx + 1}: Elsie's hand`, `쿼리 ${s.qIdx + 1}: Elsie 의 패`)}
               </div>
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
@@ -698,7 +698,7 @@ export function HpsCaseSimulator({ E }) {
           const [e1, e2] = curQuery.elsie;
           return (
             <>
-              <div style={{ fontWeight: 800, color: "#7c3aed", marginBottom: 8, fontSize: 14 }}>
+              <div style={{ fontWeight: 600, color: "#7c3aed", marginBottom: 8, fontSize: 14 }}>
                 🔍 {t(E, "Try every card: does it beat BOTH of Elsie's?",
                           "카드 하나씩 시험: Elsie 두 카드 다 이기는지?")}
               </div>
@@ -722,14 +722,14 @@ export function HpsCaseSimulator({ E }) {
           if (winningCards.length === 0) {
             return (
               <>
-                <div style={{ fontWeight: 800, color: "#7f1d1d", marginBottom: 8, fontSize: 14 }}>
+                <div style={{ fontWeight: 600, color: "#7f1d1d", marginBottom: 8, fontSize: 14 }}>
                   🏁 {t(E, "Count Bessie hands that win", "이기는 Bessie 패 세기")}
                 </div>
                 <div style={{ marginBottom: 8 }}>
                   {t(E, "There's no card that beats both Elsie cards. So no Bessie hand can guarantee a win — whatever 2 cards she holds, Elsie can always pick one Bessie can't beat.",
                         "Elsie 두 카드 다 이기는 카드가 없어요. 그래서 Bessie 가 어떤 2 장을 들어도 Elsie 가 못 이기는 쪽으로 골라 낼 수 있음.")}
                 </div>
-                <div style={{ textAlign: "center", fontSize: 18, fontWeight: 900, color: "#dc2626" }}>
+                <div style={{ textAlign: "center", fontSize: 18, fontWeight: 700, color: "#dc2626" }}>
                   {t(E, "answer = 0", "답 = 0")}
                 </div>
               </>
@@ -741,7 +741,7 @@ export function HpsCaseSimulator({ E }) {
             if (winSet.has(a) || winSet.has(b)) safeHands.push([a, b]);
           return (
             <>
-              <div style={{ fontWeight: 800, color: "#15803d", marginBottom: 8, fontSize: 14 }}>
+              <div style={{ fontWeight: 600, color: "#15803d", marginBottom: 8, fontSize: 14 }}>
                 🏁 {t(E, "Count Bessie hands that win", "이기는 Bessie 패 세기")}
               </div>
               <div style={{ marginBottom: 8, fontSize: 12.5 }}>
@@ -749,7 +749,7 @@ export function HpsCaseSimulator({ E }) {
                       "9 가지 패 (a, b) 모두 — 초록 = 이기는 카드 포함. 초록 셀 세기.")}
               </div>
               <HandGrid winningCards={winningCards} />
-              <div style={{ marginTop: 8, textAlign: "center", fontSize: 18, fontWeight: 900, color: "#15803d" }}>
+              <div style={{ marginTop: 8, textAlign: "center", fontSize: 18, fontWeight: 700, color: "#15803d" }}>
                 {t(E, `answer = ${safeHands.length}`, `답 = ${safeHands.length}`)}
               </div>
             </>
@@ -758,7 +758,7 @@ export function HpsCaseSimulator({ E }) {
 
         {s.kind === "summary" && (
           <>
-            <div style={{ fontWeight: 800, color: A, marginBottom: 8, fontSize: 14 }}>
+            <div style={{ fontWeight: 600, color: A, marginBottom: 8, fontSize: 14 }}>
               📊 {t(E, "All 3 queries — final answers", "샘플 3 쿼리 — 최종 답")}
             </div>
             <div style={{ fontSize: 12.5, lineHeight: 1.85, fontFamily: "'JetBrains Mono',monospace" }}>
@@ -810,7 +810,7 @@ export function HpsSim({ E }) {
         boxShadow: isActive ? `inset 0 0 0 1px ${accent}` : "none",
       }}>
         <span style={{ fontSize: 18, color: sh.color, lineHeight: 1 }}>{sh.glyph}</span>
-        <span style={{ fontSize: 12, fontWeight: 800, color: isActive ? accent : C.dim }}>{idx + 1}</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: isActive ? accent : C.dim }}>{idx + 1}</span>
       </button>
     );
   };
@@ -818,7 +818,7 @@ export function HpsSim({ E }) {
   // Compact slot picker (one labeled row of 3 chips)
   const SlotPicker = ({ label, value, accent, onChange }) => (
     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-      <div style={{ width: 32, fontSize: 12, fontWeight: 800, color: accent, fontFamily: "'JetBrains Mono',monospace" }}>{label}</div>
+      <div style={{ width: 32, fontSize: 12, fontWeight: 600, color: accent, fontFamily: "'JetBrains Mono',monospace" }}>{label}</div>
       <div style={{ display: "flex", gap: 4, flex: 1 }}>
         {[0,1,2].map(i => <ShapeChip key={i} idx={i} isActive={i === value} accent={accent} onClick={() => onChange(i)} />)}
       </div>
@@ -829,7 +829,7 @@ export function HpsSim({ E }) {
   const Pill = ({ idx }) => (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", border: `1.5px solid ${SHAPES[idx + 1].color}40`, borderRadius: 6, background: "#fff" }}>
       <span style={{ fontSize: 16, color: SHAPES[idx + 1].color, lineHeight: 1 }}>{SHAPES[idx + 1].glyph}</span>
-      <span style={{ fontSize: 11, fontWeight: 800, color: C.text }}>{idx + 1}</span>
+      <span style={{ fontSize: 11, fontWeight: 600, color: C.text }}>{idx + 1}</span>
     </span>
   );
 
@@ -849,7 +849,7 @@ export function HpsSim({ E }) {
         <Pill idx={s1} />: <b style={{ color: beats1 ? "#16a34a" : "#dc2626", fontSize: 14 }}>{beats1 ? "✓" : "✗"}</b>
         <span style={{ fontSize: 11 }}>{t(E, "and vs", ", vs")}</span>
         <Pill idx={s2} />: <b style={{ color: beats2 ? "#16a34a" : "#dc2626", fontSize: 14 }}>{beats2 ? "✓" : "✗"}</b>
-        {isWinner && <span style={{ marginLeft: 4, fontSize: 11, fontWeight: 900, color: "#15803d" }}>{t(E, "BEATS BOTH", "둘 다 이김")}</span>}
+        {isWinner && <span style={{ marginLeft: 4, fontSize: 11, fontWeight: 700, color: "#15803d" }}>{t(E, "BEATS BOTH", "둘 다 이김")}</span>}
       </div>
     );
   };
@@ -862,12 +862,12 @@ export function HpsSim({ E }) {
       </div>
 
       <div style={{ marginBottom: 10 }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: A, marginBottom: 6 }}>{t(E, "Bessie's pair (a, b)", "Bessie 쌍 (a, b)")}</div>
+        <div style={{ fontSize: 11, fontWeight: 600, color: A, marginBottom: 6 }}>{t(E, "Bessie's pair (a, b)", "Bessie 쌍 (a, b)")}</div>
         <SlotPicker label="a" value={a} accent={A} onChange={setA} />
         <SlotPicker label="b" value={b} accent={A} onChange={setB} />
       </div>
       <div>
-        <div style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>{t(E, "Elsie's pair (s1, s2)", "Elsie 쌍 (s1, s2)")}</div>
+        <div style={{ fontSize: 11, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>{t(E, "Elsie's pair (s1, s2)", "Elsie 쌍 (s1, s2)")}</div>
         <SlotPicker label="s1" value={s1} accent="#dc2626" onChange={setS1} />
         <SlotPicker label="s2" value={s2} accent="#dc2626" onChange={setS2} />
       </div>
@@ -878,14 +878,14 @@ export function HpsSim({ E }) {
         border: `2px solid ${guarantees ? "#16a34a" : "#dc2626"}`,
         fontSize: 12.5, color: C.text, lineHeight: 1.7,
       }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: guarantees ? "#15803d" : "#7f1d1d", marginBottom: 6 }}>
+        <div style={{ fontSize: 11, fontWeight: 600, color: guarantees ? "#15803d" : "#7f1d1d", marginBottom: 6 }}>
           {t(E, "Each Bessie card vs BOTH of Elsie's cards:", "Bessie 카드 각각이 Elsie 두 카드 다 이기는지:")}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           <VsBoth cardIdx={a} isWinner={aBeatsBoth} />
           <VsBoth cardIdx={b} isWinner={bBeatsBoth} />
         </div>
-        <div style={{ marginTop: 8, fontWeight: 900, color: guarantees ? "#16a34a" : "#dc2626", fontSize: 14 }}>
+        <div style={{ marginTop: 8, fontWeight: 700, color: guarantees ? "#16a34a" : "#dc2626", fontSize: 14 }}>
           {guarantees
             ? t(E, "✅ Bessie always wins — at least one card beats both.",
                   "✅ Bessie 무조건 이김 — 한 카드가 Elsie 두 카드 다 이김.")
@@ -1083,7 +1083,7 @@ const InputAside = ({ E, highlight = [], note = null }) => {
       background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10,
       padding: "8px 10px", fontSize: 11.5,
     }}>
-      <div style={{ fontSize: 10.5, fontWeight: 800, color: "#92400e", marginBottom: 6, letterSpacing: 0.3 }}>
+      <div style={{ fontSize: 10.5, fontWeight: 600, color: "#92400e", marginBottom: 6, letterSpacing: 0.3 }}>
         📥 {t(E, "Sample input", "샘플 입력")}
       </div>
       <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55 }}>
@@ -1124,7 +1124,7 @@ const bitsToInt = (bits) => bits.reduce((acc, b, i) => acc | (b << (WIDTH - 1 - 
 
 const BitRow = ({ bits, color, onToggle, label }) => (
   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-    <span style={{ width: 36, fontSize: 11, fontWeight: 800, color, fontFamily: "'JetBrains Mono',monospace" }}>{label}</span>
+    <span style={{ width: 36, fontSize: 11, fontWeight: 600, color, fontFamily: "'JetBrains Mono',monospace" }}>{label}</span>
     {bits.map((b, i) => (
       <button
         key={i}
@@ -1135,7 +1135,7 @@ const BitRow = ({ bits, color, onToggle, label }) => (
           border: `2px solid ${b ? color : "#cbd5e1"}`,
           background: b ? color : "#fff",
           color: b ? "#fff" : "#94a3b8",
-          fontWeight: 900, fontSize: 14,
+          fontWeight: 700, fontSize: 14,
           fontFamily: "'JetBrains Mono',monospace",
           cursor: onToggle ? "pointer" : "default",
         }}
@@ -1161,7 +1161,7 @@ export function BitsLab({ E }) {
       background: "#fff", border: "1.5px solid #cbd5e1", borderRadius: 10,
       padding: "10px 12px",
     }}>
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#475569", marginBottom: 8, textAlign: "center" }}>
+      <div style={{ fontSize: 11, fontWeight: 600, color: "#475569", marginBottom: 8, textAlign: "center" }}>
         🧪 {t(E, "Try it — click bits to toggle", "직접 — 비트 클릭해서 켜고 끄기")}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 8 }}>
@@ -1169,7 +1169,7 @@ export function BitsLab({ E }) {
         <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
           {["&", "|"].map(o => (
             <button key={o} onClick={() => setOp(o)} style={{
-              padding: "3px 12px", borderRadius: 6, fontSize: 12, fontWeight: 800,
+              padding: "3px 12px", borderRadius: 6, fontSize: 12, fontWeight: 600,
               border: `1.5px solid ${op === o ? "#0891b2" : "#cbd5e1"}`,
               background: op === o ? "#cffafe" : "#fff",
               color: op === o ? "#0c4a6e" : "#475569", cursor: "pointer",
@@ -1218,7 +1218,7 @@ export function BitmaskColSim({ E }) {
             border: `2px solid ${b ? color : "#cbd5e1"}`,
             background: b ? color : "#fff",
             color: b ? "#fff" : "#94a3b8",
-            borderRadius: 4, fontWeight: 900, fontSize: 12,
+            borderRadius: 4, fontWeight: 700, fontSize: 12,
             fontFamily: "'JetBrains Mono',monospace",
             display: "flex", alignItems: "center", justifyContent: "center",
           }}>{b}</span>
@@ -1233,7 +1233,7 @@ export function BitmaskColSim({ E }) {
         display: "inline-flex", alignItems: "center", gap: 3,
         padding: "1px 6px", borderRadius: 5,
         background: "#fff", border: `1.5px solid ${c.color}50`,
-        fontWeight: 800, fontSize: 12,
+        fontWeight: 600, fontSize: 12,
       }}>
         <span style={{ fontSize: 14, color: c.color, lineHeight: 1 }}>{c.glyph}</span>
         {n}
@@ -1242,7 +1242,7 @@ export function BitmaskColSim({ E }) {
   };
   const Picker = ({ value, onChange, label, accent }) => (
     <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-      <span style={{ fontSize: 11, fontWeight: 800, color: accent, fontFamily: "'JetBrains Mono',monospace" }}>{label}</span>
+      <span style={{ fontSize: 11, fontWeight: 600, color: accent, fontFamily: "'JetBrains Mono',monospace" }}>{label}</span>
       <div style={{ display: "flex", gap: 3 }}>
         {[0, 1, 2].map(i => {
           const c = SHAPES[i + 1];
@@ -1268,7 +1268,7 @@ export function BitmaskColSim({ E }) {
       background: "#fff", border: "1.5px solid #cbd5e1", borderRadius: 10,
       padding: "10px 12px",
     }}>
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#475569", marginBottom: 8, textAlign: "center" }}>
+      <div style={{ fontSize: 11, fontWeight: 600, color: "#475569", marginBottom: 8, textAlign: "center" }}>
         🧪 {t(E, "Sim: col[ ] + query", "시뮬: col[ ] 만들기 + 쿼리")}
       </div>
 
@@ -1312,7 +1312,7 @@ export function BitmaskColSim({ E }) {
           <ToBits3 x={c2} color="#0891b2" />
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 6, paddingTop: 4, borderTop: "1px dashed #cbd5e1" }}>
-          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#dc2626", minWidth: 80 }}>= AND</span>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 600, color: "#dc2626", minWidth: 80 }}>= AND</span>
           <ToBits3 x={andRes} color="#dc2626" />
         </div>
         <div style={{ marginTop: 6, fontSize: 11.5, color: "#475569" }}>
@@ -1718,7 +1718,7 @@ export function CodeSectionView({ section: s, lang = "py", E }) {
           <div style={{
             background: s.color, color: "#fff",
             padding: "8px 14px", borderRadius: "10px 10px 0 0",
-            fontSize: 14, fontWeight: 800,
+            fontSize: 14, fontWeight: 600,
           }}>{s.label}</div>
           <div style={{
             background: "#fff", border: "1.5px solid #e5e7eb",
@@ -1726,12 +1726,12 @@ export function CodeSectionView({ section: s, lang = "py", E }) {
           }}>
             {s.why && s.why.length > 0 && (
               <>
-                <div style={{ fontSize: 11, color: "#6b7280", fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
+                <div style={{ fontSize: 11, color: "#6b7280", fontWeight: 600, marginBottom: 6, letterSpacing: 0.5 }}>
                   💡 {t(E, "Why this way?", "왜 이렇게?")}
                 </div>
                 {s.why.map((line, j) => (
                   <div key={j} style={{ fontSize: 12.5, color: "#1f2937", lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
-                    <span style={{ color: s.color, fontWeight: 800, flexShrink: 0 }}>•</span>
+                    <span style={{ color: s.color, fontWeight: 600, flexShrink: 0 }}>•</span>
                     <span>{line}</span>
                   </div>
                 ))}
@@ -1739,12 +1739,12 @@ export function CodeSectionView({ section: s, lang = "py", E }) {
             )}
             {langSpecific.length > 0 && (
               <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #e5e7eb" }}>
-                <div style={{ fontSize: 10, color: "#6b7280", fontWeight: 800, marginBottom: 4, letterSpacing: 0.5 }}>
+                <div style={{ fontSize: 10, color: "#6b7280", fontWeight: 600, marginBottom: 4, letterSpacing: 0.5 }}>
                   {langLabel} {t(E, "specific:", "전용:")}
                 </div>
                 {langSpecific.map((line, j) => (
                   <div key={j} style={{ fontSize: 12.5, color: "#1f2937", lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
-                    <span style={{ color: lang === "py" ? "#16a34a" : "#0891b2", fontWeight: 800, flexShrink: 0 }}>▸</span>
+                    <span style={{ color: lang === "py" ? "#16a34a" : "#0891b2", fontWeight: 600, flexShrink: 0 }}>▸</span>
                     <span>{line}</span>
                   </div>
                 ))}

@@ -58,17 +58,17 @@ export function makeMcc15IsthmusCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u26f0\ufe0f"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Isthmus</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Isthmus</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P4</div>
           </div>
 
           <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Given a ", "")}
                   <b style={{ color: "#2563eb" }}>{t(E, "sequence of N heights and parameter K", "길이 N 의 높이 수열과 매개변수 K")}</b>
@@ -76,7 +76,7 @@ export function makeMcc15IsthmusCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#7c3aed" }}>{t(E, "PEAK at i", "PEAK 위치 i")}</b>
                   {t(E, ": K left neighbors STRICTLY INCREASING up to i AND K right neighbors STRICTLY DECREASING from i.",
@@ -84,7 +84,7 @@ export function makeMcc15IsthmusCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#0891b2" }}>{t(E, "VALLEY at i", "VALLEY 위치 i")}</b>
                   {t(E, ": same but DECREASING then INCREASING.",
@@ -92,7 +92,7 @@ export function makeMcc15IsthmusCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "TOTAL number of peaks plus valleys", "PEAK 와 VALLEY 의 총 개수")}</b>

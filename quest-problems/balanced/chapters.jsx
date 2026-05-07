@@ -28,28 +28,28 @@ export function makeBalancedCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🔗</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Balanced Subsequences</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Balanced Subsequences</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>Bronze warm-up</div>
           </div>
 
           {/* Problem — bullet facts */}
           <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "You're given a string: N copies of ", "주어지는 문자열: ")}
-                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>(</code>
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 600 }}>(</code>
                   {t(E, " followed by M copies of ", " N개 + ")}
-                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>)</code>
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 600 }}>)</code>
                   {t(E, ".", " M개. (모든 여는 괄호 → 모든 닫는 괄호 순서)")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#f97316" }}>{t(E, "subsequence", "부분수열")}</b>
@@ -59,7 +59,7 @@ export function makeBalancedCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A string is ", "문자열이 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "balanced", "균형")}</b>
@@ -68,14 +68,14 @@ export function makeBalancedCh1(E) {
                   {t(E, " has a matching ", "에 짝이 되는 ")}
                   <code>)</code>
                   {t(E, " AFTER it. e.g. ", "이 뒤에 있어야 해요. 예: ")}
-                  <code style={{ background: "#dcfce7", padding: "1px 5px", borderRadius: 3, color: "#15803d", fontWeight: 800 }}>{`(())`}</code>{" "}
+                  <code style={{ background: "#dcfce7", padding: "1px 5px", borderRadius: 3, color: "#15803d", fontWeight: 600 }}>{`(())`}</code>{" "}
                   {t(E, "balanced, ", "균형, ")}
-                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 3, color: "#991b1b", fontWeight: 800 }}>{`(()`}</code>{" "}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 3, color: "#991b1b", fontWeight: 600 }}>{`(()`}</code>{" "}
                   {t(E, "not.", "아님.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Find the LENGTH of the longest balanced subsequence you can form.",
                         "이 문자열에서 만들 수 있는 가장 긴 균형 부분수열의 길이를 출력해요.")}
@@ -101,7 +101,7 @@ export function makeBalancedCh1(E) {
               const matchedSet = new Set(ex.matched);
               return (
                 <div key={i} style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 10 }}>
-                  <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
                     N={ex.N}, M={ex.M}
                   </div>
                   {/* Bracket visualization */}
@@ -112,7 +112,7 @@ export function makeBalancedCh1(E) {
                       return (
                         <div key={idx} style={{
                           width: 22, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
-                          borderRadius: 5, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                          borderRadius: 5, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                           background: isMatched ? (isOpen ? "#fef3c7" : "#dbeafe") : "#f3f4f6",
                           border: `2px solid ${isMatched ? (isOpen ? "#f59e0b" : "#3b82f6") : "#cbd5e1"}`,
                           color: isMatched ? (isOpen ? "#92400e" : "#1e3a8a") : "#9ca3af",
@@ -124,7 +124,7 @@ export function makeBalancedCh1(E) {
                   <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 4 }}>
                     {t(E, `matched = ${ex.matched.length} brackets`, `매칭 = ${ex.matched.length}개`)}
                   </div>
-                  <div style={{ textAlign: "center", fontSize: 14, fontWeight: 900, color: "#16a34a", fontFamily: "'JetBrains Mono',monospace" }}>
+                  <div style={{ textAlign: "center", fontSize: 14, fontWeight: 700, color: "#16a34a", fontFamily: "'JetBrains Mono',monospace" }}>
                     {t(E, `length = ${ex.len}`, `길이 = ${ex.len}`)}
                   </div>
                 </div>
@@ -192,7 +192,7 @@ export function makeBalancedCh2(E) {
                       return (
                         <div key={`o${j}`} style={{
                           width: 18, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
-                          borderRadius: 4, fontSize: 13, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                          borderRadius: 4, fontSize: 13, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                           background: matched ? "#fef3c7" : "#f3f4f6",
                           border: `1.5px solid ${matched ? "#f59e0b" : "#cbd5e1"}`,
                           color: matched ? "#92400e" : "#9ca3af",
@@ -207,7 +207,7 @@ export function makeBalancedCh2(E) {
                       return (
                         <div key={`c${j}`} style={{
                           width: 18, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
-                          borderRadius: 4, fontSize: 13, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                          borderRadius: 4, fontSize: 13, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                           background: matched ? "#dbeafe" : "#f3f4f6",
                           border: `1.5px solid ${matched ? "#3b82f6" : "#cbd5e1"}`,
                           color: matched ? "#1e3a8a" : "#9ca3af",
@@ -218,7 +218,7 @@ export function makeBalancedCh2(E) {
                   <div style={{ textAlign: "center", fontSize: 10, color: "#9a3412", marginTop: 2 }}>
                     {ex.label}
                   </div>
-                  <div style={{ textAlign: "center", fontSize: 13, fontWeight: 900, color: "#16a34a", marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
+                  <div style={{ textAlign: "center", fontSize: 13, fontWeight: 700, color: "#16a34a", marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
                     pairs = min({ex.N},{ex.M}) = {pairs}<br/>
                     <span style={{ fontSize: 15 }}>length = {2 * pairs}</span>
                   </div>

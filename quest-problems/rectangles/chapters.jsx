@@ -33,7 +33,7 @@ export function makeRectanglesCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u25ac"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Rectangles</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Rectangles</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P5</div>
           <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,

@@ -54,7 +54,7 @@ export function MexesSlider({ E }) {
         <input type="range" min={0} max={N} value={safeTarget}
           onChange={e => setTarget(Number(e.target.value))}
           style={{ width: "100%" }} />
-        <div style={{ fontWeight: 800, color: A, minWidth: 24, textAlign: "right" }}>{safeTarget}</div>
+        <div style={{ fontWeight: 600, color: A, minWidth: 24, textAlign: "right" }}>{safeTarget}</div>
       </div>
 
       {/* Array display */}
@@ -64,7 +64,7 @@ export function MexesSlider({ E }) {
           return (
             <div key={i} style={{
               width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
-              borderRadius: 8, fontWeight: 900, fontSize: 16, fontFamily: "'JetBrains Mono',monospace",
+              borderRadius: 8, fontWeight: 700, fontSize: 16, fontFamily: "'JetBrains Mono',monospace",
               background: isTarget ? "#fee2e2" : "#fff",
               border: `2px solid ${isTarget ? "#ef4444" : C.border}`,
               color: isTarget ? "#7f1d1d" : C.text,
@@ -75,7 +75,7 @@ export function MexesSlider({ E }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
         <div style={{ background: "#dcfce7", border: "1.5px solid #86efac", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#15803d", lineHeight: 1.55 }}>
-          <div style={{ fontWeight: 800, marginBottom: 4 }}>
+          <div style={{ fontWeight: 600, marginBottom: 4 }}>
             ✅ {t(E, "Need to ADD", "추가해야")}
           </div>
           <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
@@ -85,7 +85,7 @@ export function MexesSlider({ E }) {
           </div>
         </div>
         <div style={{ background: "#fee2e2", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#7f1d1d", lineHeight: 1.55 }}>
-          <div style={{ fontWeight: 800, marginBottom: 4 }}>
+          <div style={{ fontWeight: 600, marginBottom: 4 }}>
             🚫 {t(E, `Need to REMOVE all ${cnt_target} of value ${safeTarget}`, `값 ${safeTarget} 의 ${cnt_target} 개 모두 제거`)}
           </div>
           <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
@@ -94,7 +94,7 @@ export function MexesSlider({ E }) {
         </div>
       </div>
 
-      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", textAlign: "center", fontSize: 13, fontWeight: 800 }}>
+      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", textAlign: "center", fontSize: 13, fontWeight: 600 }}>
         {t(E, "Min ops = max(missing, count of target) = ", "최소 ops = max(빠진 수, 목표 개수) = ")}
         <span style={{ fontSize: 18 }}>max({missing.length}, {cnt_target}) = {ops}</span>
       </div>
