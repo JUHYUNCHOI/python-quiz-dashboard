@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCollatzSections } from "./components";
+import { getCollatzSections, CollatzTrajectorySim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -54,7 +54,15 @@ export function makeCollatzCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Trajectory sim (interactive)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Play with N before answering. Slide the value, hit Play, watch the bars climb and crash to 1.",
+        "답하기 전에 N 을 직접 골라봐. 값을 바꾸고 재생을 눌러서 막대가 오르내리다 1 까지 떨어지는 걸 봐."),
+      content: <CollatzTrajectorySim E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -73,7 +81,7 @@ export function makeCollatzCh1(E) {
         "Correct! 6->3->10->5->16->8->4->2->1 is 8 transitions, so 8 steps.",
         "맞아! 6->3->10->5->16->8->4->2->1은 8번의 전환이니까 8단계예요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
