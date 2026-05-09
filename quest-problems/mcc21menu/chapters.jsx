@@ -103,12 +103,12 @@ export function makeMcc21MenuCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "2 top-level items, each with 2 children. Total items?", "상위 2개, 각각 자식 2개. 총 항목 수?"),
+        "Now a different menu: 3 top-level items, each with 2 children. Total items?", "이번엔 다른 메뉴: 상위 3개, 각각 자식 2개. 총 항목 수?"),
       question: t(E,
-        "2 items + 2*2 sub-items = ?",
-        "2개 항목 + 2*2개 하위 = ?"),
-      hint: t(E, "2 top + (2×2) sub-items.", "상위 2개 + (2×2)개 하위."),
-      answer: 6,
+        "3 items + 3*2 sub-items = ?",
+        "3개 항목 + 3*2개 하위 = ?"),
+      hint: t(E, "Count tops, then add (tops × children-per-top).", "상위를 세고, (상위 × 상위마다 자식 수)를 더해요."),
+      answer: 9,
     },
   ];
 }

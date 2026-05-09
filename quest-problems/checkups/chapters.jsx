@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCheckupsSections, ReverseSim, DiagonalSim } from "./components";
+import { getCheckupsSections, ReverseSim, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 /* ====================================================================
@@ -477,16 +477,27 @@ export function makeCheckupsCh2(E, lang = "py") {
         slice(4)[0] = ⑤ idea, [1] = ⑥ matchUpTo, [2] = ⑦ diag,
         [3] = ⑧ combine + print, [4] = ⑨ FULL integrated code.
 
-        ⑤ swaps CodeSectionView for an interactive sim — drag two (l, r)
-        pairs and watch cells inside both windows light up in the SAME
-        colour when l + r matches.  Visualization carries the load; the
-        old dense pseudo-code commentary block is gone. */
+        ⑤, ⑥, ⑦ swap CodeSectionView for interactive sims:
+          ⑤ DiagonalSim — drag two (l, r) windows; same l+r → same colour.
+          ⑥ MatchUpToSim — sweep matchUpTo, then drag (l, r) and watch
+             outside-window matches resolve via the prefix formula.
+          ⑦ DiagPrefixSim — pick a diagonal s, see ✓/✗ per position,
+             then drag (l, r) and read inside matches off diag[r]−diag[l−1].
+        Visualization carries the load; dense pseudo-code prose is gone. */
     ...getCheckupsSections(E).slice(4).map((sec, i) => ({
       type: "reveal",
       narr:
         i === 0
           ? t(E, "The fix — drag two (l, r) windows.  When their l + r matches, inside cells share a colour: same diagonal, same comparison.",
                 "고치는 길 — 두 (l, r) 윈도우 드래그. l + r 가 같으면 안쪽 셀이 같은 색 — 같은 대각선이면 같은 비교.")
+          : i === 1
+          ? t(E,
+              "Build matchUpTo once with a left-to-right sweep.  Then drag (l, r) — outside-window matches drop out instantly from the prefix.",
+              "matchUpTo 를 왼쪽부터 한 번만 만들어. 그다음 (l, r) 드래그 — 바깥 일치 수가 prefix 에서 바로 떨어져.")
+          : i === 2
+          ? t(E,
+              "Pick a diagonal s — every position i pairs with j = s − i.  Count ✓ to get diag[k]; any (l, r) on this s reads inside matches as diag[r] − diag[l−1].",
+              "대각선 s 를 골라봐 — 자리 i 마다 짝 j = s − i. ✓ 를 세면 diag[k] 가 나오고, 이 s 의 (l, r) 안쪽 일치는 diag[r] − diag[l−1] 로 바로 읽음.")
           : i === 4
           ? t(E,
               "All five pieces wired together — variable names match the section pages above.  Read top to bottom.",
@@ -494,6 +505,10 @@ export function makeCheckupsCh2(E, lang = "py") {
           : "",
       content: i === 0
         ? (<DiagonalSim E={E} />)
+        : i === 1
+        ? (<MatchUpToSim E={E} />)
+        : i === 2
+        ? (<DiagPrefixSim E={E} />)
         : (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
   ];

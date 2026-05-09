@@ -953,6 +953,532 @@ export function DiagonalSim({ E }) {
   );
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   MatchUpToSim — interactive sim for section ⑥.
+   Shows two arrays, the per-position match indicator, the cumulative
+   matchUpTo[i] row, and two sliders for (l, r) so the student SEES the
+   outside-window match count = matchUpTo[l-1] + (matchUpTo[N] - matchUpTo[r]).
+   Replaces the dense pseudo-code prose; visualization carries the load.
+   ════════════════════════════════════════════════════════════════════ */
+export function MatchUpToSim({ E }) {
+  // Concrete fixed binary arrays — length 7 keeps the row compact and
+  // gives a varied match/mismatch sequence for matchUpTo to grow through.
+  const a = [1, 0, 1, 1, 0, 1, 0];
+  const b = [1, 1, 1, 0, 0, 1, 1];
+  const N = a.length;
+
+  // matchUpTo[0..N], 1-indexed.  matchUpTo[i] = # of j in 1..i with a[j-1]==b[j-1].
+  const matchUpTo = [0];
+  for (let i = 1; i <= N; i++) {
+    matchUpTo.push(matchUpTo[i - 1] + (a[i - 1] === b[i - 1] ? 1 : 0));
+  }
+
+  const [l, setL] = useState(2);
+  const [r, setR] = useState(5);
+
+  const left  = matchUpTo[l - 1];                  // matches before window
+  const right = matchUpTo[N] - matchUpTo[r];       // matches after window
+  const outside = left + right;
+
+  const RED = "#dc2626";
+  const RED_BG = "#fef2f2";
+  const RED_BD = "#fca5a5";
+  const MATCH_BG = "#dcfce7";
+  const MATCH_BD = "#86efac";
+  const MATCH_TXT = "#15803d";
+  const DIM_BG = "#f1f5f9";
+  const DIM_BD = "#e2e8f0";
+  const DIM_TXT = "#94a3b8";
+
+  // Single value cell (a or b).  `inside` dims the cell (it's *in* the window,
+  // so it doesn't contribute to outside count).
+  const ValCell = ({ v, inside }) => (
+    <div style={{
+      width: 38, height: 38, borderRadius: 8,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 700,
+      background: inside ? DIM_BG : "#fff",
+      color: inside ? DIM_TXT : "#1f2937",
+      border: `1px solid ${inside ? DIM_BD : "#cbd5e1"}`,
+      opacity: inside ? 0.55 : 1,
+    }}>{v}</div>
+  );
+
+  const Slider = ({ label, value, setValue, min, max }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
+      <span style={{ width: 14, fontWeight: 700, color: RED, fontFamily: "'JetBrains Mono',monospace" }}>{label}</span>
+      <input
+        type="range" min={min} max={max} value={value}
+        onChange={(e) => setValue(Number(e.target.value))}
+        style={{ flex: 1, accentColor: RED }}
+      />
+      <span style={{ width: 18, textAlign: "center", fontWeight: 700, color: RED, fontFamily: "'JetBrains Mono',monospace" }}>{value}</span>
+    </div>
+  );
+
+  // Header strip: position numbers 1..N
+  const posStrip = (
+    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+      <div style={{ width: 60 }} />
+      <div style={{ display: "flex", gap: 4 }}>
+        {Array.from({ length: N }, (_, i) => (
+          <div key={i} style={{
+            width: 38, fontSize: 9.5, color: "#94a3b8", textAlign: "center",
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>{i + 1}</div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const Row = ({ label, children }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+      <div style={{ width: 60, fontSize: 11, color: C.dim, textAlign: "right", fontWeight: 600 }}>{label}</div>
+      <div style={{ display: "flex", gap: 4 }}>{children}</div>
+    </div>
+  );
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {/* Step 1 — show a, b, per-position match, prefix matchUpTo */}
+        <div style={{
+          background: "#fff", border: `1.5px solid ${RED_BD}`,
+          borderRadius: 10, padding: "10px 12px",
+        }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: RED, marginBottom: 8 }}>
+            {t(E, "Build matchUpTo once: count matches as you sweep left to right.",
+                  "matchUpTo 한 번 만들기: 왼쪽부터 일치 개수를 누적.")}
+          </div>
+
+          {posStrip}
+
+          <Row label="a">
+            {a.map((v, i) => {
+              const pos = i + 1;
+              const inside = pos >= l && pos <= r;
+              return <ValCell key={i} v={v} inside={inside} />;
+            })}
+          </Row>
+
+          <Row label="b">
+            {b.map((v, i) => {
+              const pos = i + 1;
+              const inside = pos >= l && pos <= r;
+              return <ValCell key={i} v={v} inside={inside} />;
+            })}
+          </Row>
+
+          {/* Match indicator row — ✓ green if a==b, ✗ grey otherwise */}
+          <Row label={t(E, "match", "일치")}>
+            {a.map((_, i) => {
+              const ok = a[i] === b[i];
+              return (
+                <div key={i} style={{
+                  width: 38, height: 28, borderRadius: 6,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 700,
+                  background: ok ? MATCH_BG : DIM_BG,
+                  color: ok ? MATCH_TXT : DIM_TXT,
+                  border: `1px solid ${ok ? MATCH_BD : DIM_BD}`,
+                }}>{ok ? "✓" : "✗"}</div>
+              );
+            })}
+          </Row>
+
+          {/* Prefix matchUpTo[1..N] — running count, ticks up at each ✓ */}
+          <Row label="matchUpTo">
+            {Array.from({ length: N }, (_, i) => {
+              const pos = i + 1;
+              const ok = a[i] === b[i];
+              const v = matchUpTo[pos];
+              return (
+                <div key={i} style={{
+                  width: 38, height: 32, borderRadius: 6,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 700,
+                  background: ok ? "#fff7ed" : "#fff",
+                  color: "#7c2d12",
+                  border: `1px solid ${ok ? "#fdba74" : "#e5e7eb"}`,
+                }}>{v}</div>
+              );
+            })}
+          </Row>
+
+          <div style={{ marginTop: 8, fontSize: 10.5, color: C.dim, fontStyle: "italic" }}>
+            {t(E, "matchUpTo[0] = 0; each step, +1 if ✓, else carry over.",
+                  "matchUpTo[0] = 0; 한 칸 갈 때 ✓ 면 +1, 아니면 그대로.")}
+          </div>
+        </div>
+
+        {/* Step 2 — sliders + outside formula */}
+        <div style={{
+          background: RED_BG, border: `1.5px solid ${RED_BD}`,
+          borderRadius: 10, padding: "10px 12px",
+        }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "#991b1b", marginBottom: 6 }}>
+            {t(E, "Pick (l, r) — outside the window, matches stay constant.",
+                  "(l, r) 골라 — 윈도우 바깥 일치 수는 그대로.")}
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 10 }}>
+            <Slider label="l" min={1} max={N} value={l}
+                    setValue={(v) => { setL(v); if (v > r) setR(v); }} />
+            <Slider label="r" min={1} max={N} value={r}
+                    setValue={(v) => { setR(v); if (v < l) setL(v); }} />
+          </div>
+
+          {/* Live outside computation strip — split a/b into [before | window | after] */}
+          <div style={{
+            display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 8,
+          }}>
+            <div style={{
+              background: "#fff", border: `1px dashed ${RED_BD}`, borderRadius: 8,
+              padding: "8px 10px", textAlign: "center",
+            }}>
+              <div style={{ fontSize: 10.5, color: "#7f1d1d", fontWeight: 600 }}>
+                {t(E, "before window", "윈도우 앞")}
+              </div>
+              <div style={{
+                fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: "#1f2937",
+                marginTop: 4,
+              }}>
+                matchUpTo[{l - 1}] = <b style={{ color: RED }}>{left}</b>
+              </div>
+              <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>
+                {t(E, `pos 1..${l - 1}`, `자리 1..${l - 1}`)}
+              </div>
+            </div>
+
+            <div style={{
+              background: DIM_BG, border: `1px dashed ${DIM_BD}`, borderRadius: 8,
+              padding: "8px 10px", textAlign: "center",
+            }}>
+              <div style={{ fontSize: 10.5, color: "#475569", fontWeight: 600 }}>
+                {t(E, "window [l, r]", "윈도우 [l, r]")}
+              </div>
+              <div style={{
+                fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: "#475569",
+                marginTop: 4,
+              }}>
+                {t(E, "skipped", "건너뜀")}
+              </div>
+              <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>
+                {t(E, `pos ${l}..${r}`, `자리 ${l}..${r}`)}
+              </div>
+            </div>
+
+            <div style={{
+              background: "#fff", border: `1px dashed ${RED_BD}`, borderRadius: 8,
+              padding: "8px 10px", textAlign: "center",
+            }}>
+              <div style={{ fontSize: 10.5, color: "#7f1d1d", fontWeight: 600 }}>
+                {t(E, "after window", "윈도우 뒤")}
+              </div>
+              <div style={{
+                fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: "#1f2937",
+                marginTop: 4,
+              }}>
+                matchUpTo[{N}] − matchUpTo[{r}] = <b style={{ color: RED }}>{right}</b>
+              </div>
+              <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>
+                {t(E, `pos ${r + 1}..${N}`, `자리 ${r + 1}..${N}`)}
+              </div>
+            </div>
+          </div>
+
+          {/* Big result */}
+          <div style={{
+            background: "#fff", border: `2px solid ${RED}`, borderRadius: 10,
+            padding: "10px 12px", textAlign: "center",
+          }}>
+            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 600, marginBottom: 4 }}>
+              {t(E, "outside-window matches", "윈도우 바깥 일치")}
+            </div>
+            <div style={{
+              fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#1f2937",
+            }}>
+              matchUpTo[{l - 1}] + (matchUpTo[{N}] − matchUpTo[{r}])
+              {" = "}
+              <b style={{ color: RED }}>{left}</b> + <b style={{ color: RED }}>{right}</b>
+              {" = "}
+              <span style={{
+                fontSize: 22, fontWeight: 800, color: RED, marginLeft: 4,
+              }}>{outside}</span>
+            </div>
+          </div>
+        </div>
+
+        <div style={{
+          fontSize: 11.5, color: C.dim, textAlign: "center", lineHeight: 1.6,
+          fontStyle: "italic",
+        }}>
+          {t(E,
+            "Outside-window matches = matchUpTo[l−1] + (matchUpTo[N] − matchUpTo[r]). One prefix array, O(1) lookup.",
+            "윈도우 바깥 일치 = matchUpTo[l−1] + (matchUpTo[N] − matchUpTo[r]). prefix 배열 한 개로 O(1) 조회.")}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   DiagPrefixSim — Section ⑦ "diag" / per-diagonal prefix.
+   Student picks a diagonal s (2..2N) and SEES which (i, s−i) pairs
+   land inside the array, which compare a[s−i]==b[i] (✓/✗), and how
+   diag[r] − diag[l−1] reads off inside-window matches for any (l, r)
+   on that diagonal — replacing the dense pseudo-code prose.
+   Replaces <CodeSectionView> on chapters.jsx slice(4)[2].
+   ════════════════════════════════════════════════════════════════════ */
+export function DiagPrefixSim({ E }) {
+  // Concrete fixed arrays, length N = 5 — keeps row compact and mirrors
+  // the DiagonalSim example so the student carries context across.
+  const a = [4, 1, 3, 2, 5];
+  const b = [4, 3, 1, 2, 5];
+  const N = a.length;
+
+  // s ranges over 2..2N. Default to 5 (matches DiagonalSim's default).
+  const [s, setS] = useState(5);
+  // Window (l, r) for the right-side mapping panel — l ≤ r, l + r = s.
+  // Student drags l; r is derived as s − l.
+  const lMin = Math.max(1, s - N);
+  const lMax = Math.min(N, Math.floor(s / 2));
+  const [lWin, setLWin] = useState(2);
+  const lActual = Math.max(lMin, Math.min(lMax, lWin));
+  const rActual = s - lActual;
+
+  // diag[k] = number of valid i ≤ k where a[s−i] == b[i] (1-indexed).
+  const diag = [0];
+  for (let i = 1; i <= N; i++) {
+    const j = s - i;
+    let inc = 0;
+    if (j >= 1 && j <= N && a[j - 1] === b[i - 1]) inc = 1;
+    diag.push(diag[i - 1] + inc);
+  }
+
+  // Per-diagonal full count for the bottom table.
+  const diagCount = (sVal) => {
+    let c = 0;
+    for (let i = 1; i <= N; i++) {
+      const j = sVal - i;
+      if (j >= 1 && j <= N && a[j - 1] === b[i - 1]) c++;
+    }
+    return c;
+  };
+
+  const tint = _diagTint(s);
+  const insideMatches = lMax >= lMin ? diag[rActual] - diag[lActual - 1] : 0;
+
+  const Cell = ({ v, glow, ok }) => (
+    <div style={{
+      width: 38, height: 38, borderRadius: 8,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 700,
+      background: glow ? (ok === true ? "#dcfce7" : ok === false ? "#fee2e2" : tint.bg) : "#f1f5f9",
+      color: glow ? (ok === true ? "#166534" : ok === false ? "#991b1b" : tint.color) : "#94a3b8",
+      border: `${glow ? 1.5 : 1}px solid ${
+        glow ? (ok === true ? "#86efac" : ok === false ? "#fca5a5" : tint.bd) : "#e2e8f0"
+      }`,
+    }}>{v}</div>
+  );
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+
+        {/* s selector + a/b rows + ✓/✗ row */}
+        <div style={{
+          background: "#fff", border: `1.5px solid ${tint.bd}`, borderRadius: 10,
+          padding: "10px 12px",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: A }}>
+              {t(E, "Diagonal s", "대각선 s")}
+            </span>
+            <input
+              type="range" min={2} max={2 * N} value={s}
+              onChange={(e) => setS(Number(e.target.value))}
+              style={{ flex: 1, minWidth: 160, accentColor: A }}
+            />
+            <span style={{
+              fontSize: 12, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+              background: tint.bg, color: tint.color, border: `1px solid ${tint.bd}`,
+              borderRadius: 6, padding: "2px 8px",
+            }}>s = {s}</span>
+          </div>
+
+          {/* a row — glow positions j = s − i where i is valid. */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+            <div style={{ width: 36, fontSize: 10, color: C.dim, textAlign: "right" }}>a</div>
+            <div style={{ display: "flex", gap: 4 }}>
+              {a.map((v, idx) => {
+                const pos = idx + 1;
+                const i = s - pos;
+                const valid = i >= 1 && i <= N;
+                const ok = valid && a[pos - 1] === b[i - 1];
+                return <Cell key={idx} v={v} glow={valid} ok={valid ? ok : undefined} />;
+              })}
+            </div>
+          </div>
+
+          {/* b row — glow positions i where partner j = s − i is valid. */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+            <div style={{ width: 36, fontSize: 10, color: C.dim, textAlign: "right" }}>b</div>
+            <div style={{ display: "flex", gap: 4 }}>
+              {b.map((v, idx) => {
+                const i = idx + 1;
+                const j = s - i;
+                const valid = j >= 1 && j <= N;
+                const ok = valid && a[j - 1] === b[i - 1];
+                return <Cell key={idx} v={v} glow={valid} ok={valid ? ok : undefined} />;
+              })}
+            </div>
+          </div>
+
+          {/* per-position match marker: ✓ / ✗ / — */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
+            <div style={{ width: 36, fontSize: 10, color: C.dim, textAlign: "right" }}>
+              a[s−i]·b[i]
+            </div>
+            <div style={{ display: "flex", gap: 4 }}>
+              {a.map((_v, idx) => {
+                const i = idx + 1;
+                const j = s - i;
+                const valid = j >= 1 && j <= N;
+                const ok = valid && a[j - 1] === b[i - 1];
+                return (
+                  <div key={idx} style={{
+                    width: 38, fontSize: 14, fontWeight: 700,
+                    fontFamily: "'JetBrains Mono',monospace",
+                    textAlign: "center",
+                    color: !valid ? "#cbd5e1" : ok ? "#16a34a" : "#dc2626",
+                  }}>{!valid ? "—" : ok ? "✓" : "✗"}</div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* position labels (1..N) */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}>
+            <div style={{ width: 36 }} />
+            <div style={{ display: "flex", gap: 4 }}>
+              {a.map((_v, idx) => (
+                <div key={idx} style={{
+                  width: 38, fontSize: 9, color: "#94a3b8", textAlign: "center",
+                  fontFamily: "'JetBrains Mono',monospace",
+                }}>i={idx + 1}</div>
+              ))}
+            </div>
+          </div>
+
+          {/* total ✓ on this diagonal */}
+          <div style={{
+            marginTop: 8, padding: "6px 10px", borderRadius: 8,
+            background: tint.bg, border: `1px solid ${tint.bd}`,
+            fontSize: 12, color: tint.color, fontWeight: 600, textAlign: "center",
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {t(E,
+              `pairsWithCheckups[s = ${s}] = diag[${N}] = ${diag[N]}  (sum of ✓ on this diagonal)`,
+              `pairsWithCheckups[s = ${s}] = diag[${N}] = ${diag[N]}  (이 대각선의 ✓ 합)`)}
+          </div>
+        </div>
+
+        {/* Window-to-diagonal mapping */}
+        <div style={{
+          background: "#fff", border: "1.5px solid #e5e7eb", borderRadius: 10,
+          padding: "10px 12px",
+        }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: A, marginBottom: 8 }}>
+            {t(E,
+              `Any window (l, r) with l + r = ${s}`,
+              `l + r = ${s} 인 모든 윈도우 (l, r)`)}
+          </div>
+          {lMax < lMin ? (
+            <div style={{ fontSize: 11.5, color: C.dim, fontStyle: "italic" }}>
+              {t(E,
+                `No valid (l, r) with l ≤ r and l + r = ${s} on N = ${N}.`,
+                `N = ${N} 에서 l ≤ r, l + r = ${s} 인 (l, r) 없음.`)}
+            </div>
+          ) : (
+            <>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, marginBottom: 6 }}>
+                <span style={{ width: 14, fontWeight: 700, color: A, fontFamily: "'JetBrains Mono',monospace" }}>l</span>
+                <input
+                  type="range" min={lMin} max={lMax} value={lActual}
+                  onChange={(e) => setLWin(Number(e.target.value))}
+                  style={{ flex: 1, accentColor: A }}
+                />
+                <span style={{
+                  width: 60, textAlign: "right", fontWeight: 700, color: A,
+                  fontFamily: "'JetBrains Mono',monospace",
+                }}>l = {lActual}</span>
+              </div>
+              <div style={{ fontSize: 11.5, color: C.dim, marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
+                r = s − l = {s} − {lActual} = {rActual}
+              </div>
+              <div style={{
+                padding: "8px 10px", borderRadius: 8,
+                background: "#fef2f2", border: "1px solid #fecaca",
+                fontSize: 12.5, color: "#7f1d1d", lineHeight: 1.55,
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                inside [{lActual}, {rActual}] = diag[{rActual}] − diag[{lActual - 1}] = {diag[rActual]} − {diag[lActual - 1]} = <strong>{insideMatches}</strong>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Diagonal table — one box per s */}
+        <div style={{
+          background: "#fff", border: "1.5px solid #e5e7eb", borderRadius: 10,
+          padding: "10px 12px",
+        }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: A, marginBottom: 8 }}>
+            {t(E,
+              "pairsWithCheckups — one number per diagonal",
+              "pairsWithCheckups — 대각선마다 한 숫자")}
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+            {Array.from({ length: 2 * N - 1 }, (_v, k) => k + 2).map((sv) => {
+              const sel = sv === s;
+              const tt = _diagTint(sv);
+              return (
+                <button
+                  key={sv}
+                  onClick={() => setS(sv)}
+                  style={{
+                    padding: "4px 6px", borderRadius: 6, cursor: "pointer",
+                    background: sel ? tt.bg : "#f8fafc",
+                    border: `${sel ? 1.5 : 1}px solid ${sel ? tt.bd : "#e2e8f0"}`,
+                    color: sel ? tt.color : "#64748b",
+                    fontFamily: "'JetBrains Mono',monospace",
+                    fontSize: 10.5, fontWeight: sel ? 700 : 500,
+                    minWidth: 46, textAlign: "center", lineHeight: 1.2,
+                  }}
+                >
+                  <div>s={sv}</div>
+                  <div style={{ fontSize: 12, fontWeight: 700 }}>{diagCount(sv)}</div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* caption */}
+        <div style={{
+          fontSize: 11.5, color: C.dim, textAlign: "center", lineHeight: 1.6,
+          fontStyle: "italic",
+        }}>
+          {t(E,
+            "All windows on diagonal s share the same internal matches. Precompute one number per diagonal.",
+            "같은 대각선 s 의 모든 윈도우는 내부 일치 수가 같음. 대각선마다 한 숫자씩 미리 계산.")}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Static diagram: two (l, r) pairs on the same diagonal s = l + r.
 // Goal: SHOW (not just claim) that position i in BOTH reversals holds a[s-i].
 // We pick a concrete example, do the two reversals visually, and call out
