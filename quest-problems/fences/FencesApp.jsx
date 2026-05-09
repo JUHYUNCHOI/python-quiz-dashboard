@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { FenceColumnScanner, RowColumnFillViz } from "./components";
+import { FenceColumnScanner, RowColumnFillViz, ColumnCostAuditor } from "./components";
 import { makeFencesCh1, makeFencesCh2, makeFencesCh3 } from "./chapters";
 
 const A = "#059669";
@@ -89,6 +89,7 @@ export default function FencesApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "fenceColumnScanner") return <FenceColumnScanner E={E} />;
     if (step.type === "rowColumnFillViz") return <RowColumnFillViz E={E} />;
+    if (step.type === "columnCostAuditor") return <ColumnCostAuditor E={E} />;
     return null;
   };
 
@@ -99,6 +100,7 @@ export default function FencesApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "fenceColumnScanner") return <FenceColumnScanner E={E} />;
     if (s.type === "rowColumnFillViz") return <RowColumnFillViz E={E} />;
+    if (s.type === "columnCostAuditor") return <ColumnCostAuditor E={E} />;
     return null;
   };
 

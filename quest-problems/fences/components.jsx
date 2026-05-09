@@ -825,3 +825,255 @@ export function RowColumnFillViz({ E }) {
     </div>
   );
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ColumnCostAuditor — Click any column, audit each cell one-by-one,
+   see the running cost build up. Compare columns to find the cheapest.
+   ═══════════════════════════════════════════════════════════════ */
+
+const AUDIT_GRID = [
+  [".", "#", ".", "#", "."],
+  [".", ".", "#", "#", "."],
+  ["#", "#", ".", "#", "."],
+  [".", "#", "#", "#", "#"],
+];
+const AUDIT_ROWS = AUDIT_GRID.length;
+const AUDIT_COLS = AUDIT_GRID[0].length;
+
+export function ColumnCostAuditor({ E }) {
+  // For each column we remember its final audited cost (null if not yet audited)
+  const [auditedCosts, setAuditedCosts] = useState(Array(AUDIT_COLS).fill(null));
+  const [activeCol, setActiveCol] = useState(-1);  // column currently being audited
+  const [auditRow, setAuditRow] = useState(-1);    // row pointer during audit
+  const [runCost, setRunCost] = useState(0);
+  const timerRef = useRef(null);
+
+  const clearTimer = useCallback(() => {
+    if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
+  }, []);
+  useEffect(() => () => clearTimer(), [clearTimer]);
+
+  // Audit animation: walk row 0..AUDIT_ROWS-1 in activeCol, +1 per dot
+  useEffect(() => {
+    if (activeCol < 0) return;
+    if (auditRow < 0) {
+      timerRef.current = setTimeout(() => { setAuditRow(0); setRunCost(0); }, 200);
+      return;
+    }
+    if (auditRow >= AUDIT_ROWS) {
+      // finished this column → save cost, idle
+      const final = runCost;
+      setAuditedCosts(prev => {
+        const next = [...prev];
+        next[activeCol] = final;
+        return next;
+      });
+      setActiveCol(-1);
+      setAuditRow(-1);
+      setRunCost(0);
+      return;
+    }
+    const isDot = AUDIT_GRID[auditRow][activeCol] === ".";
+    timerRef.current = setTimeout(() => {
+      if (isDot) setRunCost(c => c + 1);
+      setAuditRow(r => r + 1);
+    }, 380);
+    return () => clearTimer();
+  }, [activeCol, auditRow, runCost, clearTimer]);
+
+  const startAudit = (c) => {
+    if (activeCol >= 0) return;  // one at a time
+    clearTimer();
+    setAuditedCosts(prev => {
+      const next = [...prev];
+      next[c] = null;  // re-audit clears cached value
+      return next;
+    });
+    setActiveCol(c);
+    setAuditRow(-1);
+    setRunCost(0);
+  };
+
+  const resetAll = () => {
+    clearTimer();
+    setAuditedCosts(Array(AUDIT_COLS).fill(null));
+    setActiveCol(-1);
+    setAuditRow(-1);
+    setRunCost(0);
+  };
+
+  const auditedSoFar = auditedCosts.filter(v => v !== null);
+  const allDone = auditedSoFar.length === AUDIT_COLS && activeCol < 0;
+  const minSoFar = auditedSoFar.length > 0 ? Math.min(...auditedSoFar) : null;
+
+  return (
+    <div style={{ padding: "12px 8px" }}>
+      <div style={{
+        textAlign: "center", fontSize: 12, color: C.dim, fontWeight: 600, marginBottom: 8,
+      }}>
+        {E
+          ? "Click a column header to audit it cell-by-cell. Audit them all to find the cheapest."
+          : "열 머리글을 눌러 한 칸씩 감사해봐. 전부 감사해서 가장 싼 열을 찾아내!"}
+      </div>
+
+      {/* Column header buttons */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 4 }}>
+        {Array.from({ length: AUDIT_COLS }, (_, c) => {
+          const isActive = c === activeCol;
+          const cost = auditedCosts[c];
+          const isAudited = cost !== null;
+          const isMin = isAudited && allDone && cost === minSoFar;
+          return (
+            <button
+              key={c}
+              onClick={() => startAudit(c)}
+              disabled={activeCol >= 0}
+              style={{
+                width: 40, textAlign: "center", fontSize: 11, fontWeight: 700,
+                fontFamily: "'JetBrains Mono',monospace",
+                color: isActive ? "#fff" : isMin ? "#fff" : isAudited ? A : "#6b7280",
+                background: isActive ? A : isMin ? A : isAudited ? ABg : C.card,
+                borderRadius: 6, padding: "4px 0",
+                border: `1.5px solid ${isActive || isMin ? A : isAudited ? ABd : C.border}`,
+                cursor: activeCol >= 0 ? "not-allowed" : "pointer",
+                opacity: activeCol >= 0 && !isActive ? 0.55 : 1,
+                transition: "all .15s",
+                boxShadow: isMin ? "0 0 8px rgba(5,150,105,.4)" : "none",
+              }}
+            >
+              {E ? `C${c + 1}` : `${c + 1}열`}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Grid */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, marginBottom: 6 }}>
+        {AUDIT_GRID.map((row, r) => (
+          <div key={r} style={{ display: "flex", gap: 3 }}>
+            {row.map((ch, c) => {
+              const isFence = ch === "#";
+              const inActiveCol = c === activeCol;
+              const isCurrentCell = inActiveCol && r === auditRow;
+              const wasAuditedThisRun = inActiveCol && auditRow >= 0 && r < auditRow;
+              const colDone = auditedCosts[c] !== null;
+              const isMinDone = colDone && allDone && auditedCosts[c] === minSoFar;
+
+              let bg = isFence ? "#374151" : "#bbf7d0";
+              let border = isFence ? "#6b7280" : "#86efac";
+              let color = isFence ? "#fff" : "#166534";
+              let shadow = "none";
+              let transform = "none";
+
+              if (isCurrentCell) {
+                if (isFence) {
+                  bg = "#e5e7eb"; border = "#9ca3af"; color = "#4b5563";
+                  shadow = "0 0 8px rgba(156,163,175,.5)";
+                } else {
+                  bg = "#fef3c7"; border = "#fbbf24"; color = "#92400e";
+                  shadow = "0 0 10px rgba(251,191,36,.55)";
+                  transform = "scale(1.1)";
+                }
+              } else if (wasAuditedThisRun) {
+                if (!isFence) { bg = "#d1fae5"; border = "#6ee7b7"; color = "#065f46"; }
+                else { bg = "#1f2937"; border = "#4b5563"; color = "#9ca3af"; }
+              } else if (inActiveCol) {
+                // upcoming cells in active column
+                border = A;
+                shadow = "0 0 4px rgba(5,150,105,.25)";
+              } else if (isMinDone) {
+                bg = isFence ? "#065f46" : "#6ee7b7";
+                border = "#059669";
+                color = isFence ? "#a7f3d0" : "#065f46";
+                shadow = "0 0 8px rgba(5,150,105,.4)";
+              } else if (allDone && !isMinDone) {
+                bg = isFence ? "#1f2937" : "#e5e7eb";
+                border = isFence ? "#374151" : "#d1d5db";
+                color = "#9ca3af";
+              }
+
+              return (
+                <div key={c} style={{
+                  width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
+                  borderRadius: 6, fontSize: 18, fontWeight: 700,
+                  fontFamily: "'JetBrains Mono',monospace",
+                  background: bg, border: `1.5px solid ${border}`, color,
+                  boxShadow: shadow, transform,
+                  transition: "all .18s",
+                }}>{ch}</div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      {/* Cost row */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 8 }}>
+        {Array.from({ length: AUDIT_COLS }, (_, c) => {
+          const isActive = c === activeCol;
+          const cost = auditedCosts[c];
+          const showVal = isActive ? runCost : cost;
+          const isMinDone = cost !== null && allDone && cost === minSoFar;
+          return (
+            <div key={c} style={{
+              width: 40, padding: "4px 0", borderRadius: 8,
+              textAlign: "center", fontSize: isMinDone ? 17 : 14, fontWeight: 700,
+              fontFamily: "'JetBrains Mono',monospace",
+              background: isActive ? "#fef3c7" : isMinDone ? A : cost !== null ? ABg : "#f8f9fc",
+              border: `1.5px solid ${isActive ? "#fbbf24" : isMinDone ? A : cost !== null ? ABd : C.border}`,
+              color: isActive ? "#92400e" : isMinDone ? "#fff" : cost !== null ? A : C.dimLight,
+              transition: "all .15s",
+              transform: isMinDone ? "scale(1.08)" : "none",
+              boxShadow: isMinDone ? "0 0 8px rgba(5,150,105,.4)" : "none",
+            }}>
+              {showVal !== null && showVal !== undefined ? showVal : "?"}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Status / verdict */}
+      <div style={{ textAlign: "center", minHeight: 40 }}>
+        {activeCol >= 0 && (
+          <div style={{ fontSize: 12, color: "#92400e", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+            {E
+              ? `Auditing column ${activeCol + 1}… running cost = ${runCost}`
+              : `${activeCol + 1}열 감사 중… 누적 비용 = ${runCost}`}
+          </div>
+        )}
+        {activeCol < 0 && !allDone && auditedSoFar.length > 0 && (
+          <div style={{ fontSize: 12, color: A, fontWeight: 600 }}>
+            {E
+              ? `${auditedSoFar.length}/${AUDIT_COLS} columns audited. Pick another!`
+              : `${auditedSoFar.length}/${AUDIT_COLS} 열 감사 완료. 다음 열을 골라봐!`}
+          </div>
+        )}
+        {allDone && (
+          <div>
+            <div style={{ fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
+              {E ? "Cheapest column → minimum cost" : "가장 싼 열 → 최소 비용"}
+            </div>
+            <div style={{
+              display: "inline-block", padding: "6px 22px", borderRadius: 10,
+              background: "linear-gradient(135deg,#047857,#059669)",
+              fontSize: 22, fontWeight: 700, color: "#fff",
+              fontFamily: "'JetBrains Mono',monospace",
+              boxShadow: "0 3px 12px rgba(5,150,105,.3)",
+            }}>{minSoFar}</div>
+          </div>
+        )}
+      </div>
+
+      {/* Reset */}
+      <div style={{ textAlign: "center", marginTop: 10 }}>
+        <button onClick={resetAll} disabled={activeCol >= 0} style={{
+          padding: "5px 14px", borderRadius: 8, fontSize: 11, fontWeight: 700,
+          border: `1.5px solid ${C.border}`, background: C.card,
+          color: C.dim, cursor: activeCol >= 0 ? "not-allowed" : "pointer",
+          opacity: activeCol >= 0 ? 0.5 : 1,
+        }}>🔄 {E ? "Reset audit" : "감사 초기화"}</button>
+      </div>
+    </div>
+  );
+}

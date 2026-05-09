@@ -223,6 +223,13 @@ export function makeFencesCh1(E) {
           </div>
         </div>),
     },
+    // 1-4b: Deep audit — student clicks each column, watches cost build up
+    {
+      type: "columnCostAuditor",
+      narr: t(E,
+        "Now YOU audit each column!\nClick a column header to walk through it cell-by-cell.\nEvery '.' adds 1 to the cost. Audit them all to find the cheapest!",
+        "이제 네가 직접 감사해봐!\n열 머리글을 누르면 그 열을 한 칸씩 따라가면서 비용이 쌓여요.\n'.' 한 개당 비용 +1. 전부 감사해서 가장 싼 열을 찾아내!"),
+    },
     // 1-5: Goal quiz — concrete grid with visible column costs
     {
       type: "reveal",
