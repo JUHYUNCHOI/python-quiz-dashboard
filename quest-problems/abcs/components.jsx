@@ -1,8 +1,143 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ──────────────────────────────────────────────────────────────
+   Interactive sim: pick A, B, C → see all 7 sums + sorted view.
+   Helps the student feel WHY nums[0]=A, nums[1]=B, nums[6]=A+B+C.
+   ────────────────────────────────────────────────────────────── */
+export function AbcsSumExplorer({ E }) {
+  const [aVal, setA] = useState(2);
+  const [bVal, setB] = useState(3);
+  const [cVal, setC] = useState(5);
+
+  const sorted = [aVal, bVal, cVal].slice().sort((x, y) => x - y);
+  const sA = sorted[0], sB = sorted[1], sC = sorted[2];
+
+  const labelled = [
+    { key: "A",     val: sA,           color: "#15803d" },
+    { key: "B",     val: sB,           color: "#0891b2" },
+    { key: "C",     val: sC,           color: "#7c3aed" },
+    { key: "A+B",   val: sA + sB,      color: "#a16207" },
+    { key: "A+C",   val: sA + sC,      color: "#a16207" },
+    { key: "B+C",   val: sB + sC,      color: "#a16207" },
+    { key: "A+B+C", val: sA + sB + sC, color: "#dc2626" },
+  ];
+
+  const sortedSums = labelled.slice().sort((x, y) => x.val - y.val);
+
+  const Slider = ({ name, val, set, min, max, color }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0" }}>
+      <span style={{ width: 18, fontWeight: 800, color, fontFamily: "'JetBrains Mono', monospace" }}>{name}</span>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        value={val}
+        onChange={(e) => set(parseInt(e.target.value, 10))}
+        style={{ flex: 1, accentColor: color }}
+      />
+      <span style={{
+        minWidth: 32, textAlign: "center", fontWeight: 800, color: "#fff",
+        background: color, borderRadius: 6, padding: "2px 6px",
+        fontFamily: "'JetBrains Mono', monospace", fontSize: 13,
+      }}>{val}</span>
+    </div>
+  );
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{
+        background: "#fffbeb", border: `1.5px solid ${A}`, borderRadius: 10,
+        padding: "10px 14px", marginBottom: 12, textAlign: "center",
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+          🎮 {t(E, "Try It", "직접 해봐")}
+        </div>
+        <div style={{ fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
+          {t(E,
+            "Pick any A, B, C. Watch the 7 sums get computed, then see where A, B, A+B+C land after sorting.",
+            "A, B, C 를 골라봐. 7개 합이 계산되고, 정렬 후 A, B, A+B+C 가 어느 자리에 가는지 봐.")}
+        </div>
+      </div>
+
+      <div style={{
+        background: C.card, border: `1.5px solid ${C.border}`, borderRadius: 10,
+        padding: "10px 14px", marginBottom: 12,
+      }}>
+        <Slider name="A" val={aVal} set={setA} min={1} max={9} color="#15803d" />
+        <Slider name="B" val={bVal} set={setB} min={1} max={9} color="#0891b2" />
+        <Slider name="C" val={cVal} set={setC} min={1} max={9} color="#7c3aed" />
+        <div style={{ fontSize: 11, color: C.dim, marginTop: 4, fontStyle: "italic" }}>
+          {t(E,
+            `Auto-sorted as A ≤ B ≤ C → A=${sA}, B=${sB}, C=${sC}`,
+            `자동 정렬: A ≤ B ≤ C → A=${sA}, B=${sB}, C=${sC}`)}
+        </div>
+      </div>
+
+      <div style={{ fontSize: 12, fontWeight: 700, color: C.dim, marginBottom: 6 }}>
+        {t(E, "1. The 7 sums (with labels)", "1. 7개 합 (레이블 표시)")}
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
+        {labelled.map((s) => (
+          <div key={s.key} style={{
+            background: "#fff", border: `1.5px solid ${s.color}`, borderRadius: 8,
+            padding: "4px 8px", fontFamily: "'JetBrains Mono', monospace", fontSize: 12,
+            display: "flex", flexDirection: "column", alignItems: "center", minWidth: 52,
+          }}>
+            <span style={{ color: s.color, fontWeight: 800, fontSize: 10 }}>{s.key}</span>
+            <span style={{ color: C.text, fontWeight: 700 }}>{s.val}</span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ fontSize: 12, fontWeight: 700, color: C.dim, marginBottom: 6 }}>
+        {t(E, "2. After sort() — index → value (label)", "2. sort() 후 — 인덱스 → 값 (레이블)")}
+      </div>
+      <div style={{
+        display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 4,
+        background: "#0f172a", borderRadius: 8, padding: 8,
+      }}>
+        {sortedSums.map((s, i) => {
+          const highlight = i === 0 || i === 1 || i === 6;
+          return (
+            <div key={i} style={{
+              background: highlight ? s.color : "#1e293b",
+              border: `1.5px solid ${highlight ? s.color : "#334155"}`,
+              borderRadius: 6, padding: "6px 2px", textAlign: "center",
+              fontFamily: "'JetBrains Mono', monospace",
+            }}>
+              <div style={{ fontSize: 9, color: highlight ? "#fff" : "#64748b", fontWeight: 700 }}>
+                nums[{i}]
+              </div>
+              <div style={{ fontSize: 14, color: highlight ? "#fff" : "#cbd5e1", fontWeight: 800 }}>
+                {s.val}
+              </div>
+              <div style={{ fontSize: 9, color: highlight ? "#fff" : "#64748b", fontWeight: 700 }}>
+                {s.key}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{
+        marginTop: 12, padding: "8px 12px", background: "#dcfce7",
+        border: "1.5px solid #86efac", borderRadius: 8, fontSize: 12,
+        color: "#15803d", lineHeight: 1.55,
+      }}>
+        💡 <b>{t(E, "Notice", "관찰")}</b>:{" "}
+        {t(E,
+          "no matter what A, B, C you pick, nums[0] = A, nums[1] = B, and nums[6] = A+B+C. That's the whole trick.",
+          "어떤 A, B, C 를 골라도 nums[0] = A, nums[1] = B, nums[6] = A+B+C. 이게 핵심이야.")}
+      </div>
+    </div>
+  );
+}
+
 
 const FULL_PY = [
   "nums = list(map(int, input().split()))",

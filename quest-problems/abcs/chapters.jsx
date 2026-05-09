@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getAbcsSections } from "./components";
+import { getAbcsSections, AbcsSumExplorer } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -25,7 +25,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: makeCh1 (3 steps: reveal / quiz / input)
+   Chapter 1: makeCh1 (4 steps: reveal / sim / quiz / input)
    ═══════════════════════════════════════════════════════════════ */
 export function makeAbcsCh1(E) {
   return [
@@ -92,7 +92,15 @@ export function makeAbcsCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Interactive sim — feel the structure of the 7 sums
+    {
+      type: "reveal",
+      narr: t(E,
+        "Play with A, B, C and watch the 7 sums. What's always at the smallest spot? At the largest?",
+        "A, B, C 를 바꿔보면서 7개 합을 봐. 가장 작은 자리엔 항상 뭐가? 가장 큰 자리엔?"),
+      content: <AbcsSumExplorer E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -109,7 +117,7 @@ export function makeAbcsCh1(E) {
         "Correct! A+B+C is the sum of all three, so it's always the largest of the 7 values.",
         "맞아! A+B+C는 세 수의 합이므로 항상 7개 값 중 가장 커."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
