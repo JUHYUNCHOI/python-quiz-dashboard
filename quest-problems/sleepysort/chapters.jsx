@@ -1,5 +1,194 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getSleepySortSections } from "./components";
+
+/* ================================================================
+   Eye-evident sim: cows in a line + step-through suffix scan
+   - Example array: [3, 1, 5, 2, 4]
+   - Student steps from right to left, watching the green
+     "already-sorted suffix" grow until a[k-1] >= a[k] breaks it.
+   - Final K = N - (sorted suffix length) is highlighted at the end.
+   ================================================================ */
+function SuffixSortSim({ E }) {
+  // A handful of preset arrays to flip between
+  const PRESETS = [
+    [3, 1, 5, 2, 4],
+    [1, 2, 4, 3],
+    [1, 2, 3, 4],
+    [5, 4, 3, 2, 1],
+  ];
+  const [pi, setPi] = useState(0);
+  const arr = PRESETS[pi];
+  const N = arr.length;
+
+  // Step counter: starts at N - 1 (only last cow in suffix),
+  // each step we try to extend left. When extension fails OR k = 0, stop.
+  // step value is the current k being inspected.
+  const [step, setStep] = useState(N - 1);
+
+  // Recompute final k based on full scan (for "answer" badge)
+  const finalK = (() => {
+    let k = N - 1;
+    while (k > 0 && arr[k - 1] < arr[k]) k -= 1;
+    return k;
+  })();
+
+  // For the current step, the sorted suffix runs from `step` to N-1.
+  // At each step we either succeed (extend) or fail (stop).
+  // We animate the scan: from N-1 down. Suffix is [step .. N-1].
+  // Check between arr[step-1] and arr[step] tells us whether we can keep going.
+  const k = step;
+  const compareLeft = k > 0 ? arr[k - 1] : null;
+  const compareRight = arr[k];
+  const canExtend = k > 0 && compareLeft < compareRight;
+  const done = k === 0 || (k > 0 && !canExtend);
+
+  const A = "#2563eb";
+  const GREEN = "#15803d";
+  const RED = "#dc2626";
+  const PURPLE = "#7c3aed";
+
+  const reset = (newPi) => {
+    setPi(newPi);
+    setStep(PRESETS[newPi].length - 1);
+  };
+
+  const onStep = () => {
+    if (done) return;
+    if (canExtend) setStep(k - 1);
+  };
+
+  const cell = (val, i) => {
+    const inSuffix = i >= k;
+    const isBoundaryLeft = i === k - 1; // the cow being tested against
+    const isBoundaryRight = i === k;    // leftmost of current suffix
+    let bg = "#fff";
+    let border = "#cbd5e1";
+    let color = C.text;
+    if (inSuffix) {
+      bg = GREEN + "22";
+      border = GREEN;
+      color = GREEN;
+    }
+    if (isBoundaryLeft && !done) {
+      bg = PURPLE + "22";
+      border = PURPLE;
+      color = PURPLE;
+    }
+    if (isBoundaryLeft && done && !canExtend) {
+      bg = RED + "22";
+      border = RED;
+      color = RED;
+    }
+    return (
+      <div key={i} style={{
+        width: 44, height: 44, borderRadius: 8,
+        background: bg, border: `2px solid ${border}`, color,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontWeight: 800, fontSize: 16, position: "relative",
+        transition: "all 240ms",
+      }}>
+        {val}
+        <div style={{ position: "absolute", bottom: -16, fontSize: 10, color: C.dim, fontWeight: 600 }}>{i}</div>
+        {isBoundaryRight && (
+          <div style={{ position: "absolute", top: -14, fontSize: 10, color: GREEN, fontWeight: 800 }}>
+            {t(E, "k", "k")}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Status message
+  let status;
+  if (done) {
+    if (k === 0) {
+      status = t(E,
+        "Reached k = 0 — the entire array is already a sorted suffix. Answer = 0.",
+        "k = 0까지 도달 — 배열 전체가 이미 정렬된 접미사. 답 = 0.");
+    } else {
+      status = t(E,
+        `Stopped: a[${k - 1}] = ${compareLeft} ≥ a[${k}] = ${compareRight}. Suffix length = ${N - k}, answer K = ${N} − ${N - k} = ${k}.`,
+        `멈춤: a[${k - 1}] = ${compareLeft} ≥ a[${k}] = ${compareRight}. 접미사 길이 = ${N - k}, 답 K = ${N} − ${N - k} = ${k}.`);
+    }
+  } else {
+    status = t(E,
+      `Compare a[${k - 1}] = ${compareLeft} with a[${k}] = ${compareRight}. ${compareLeft} < ${compareRight} → suffix can grow!`,
+      `a[${k - 1}] = ${compareLeft} 와 a[${k}] = ${compareRight} 비교. ${compareLeft} < ${compareRight} → 접미사 확장 가능!`);
+  }
+
+  return (
+    <div style={{ background: "#fff", border: "1.5px dashed #cbd5e1", borderRadius: 10, padding: 14, marginTop: 6 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 8, letterSpacing: 0.4 }}>
+        🐮 {t(E, "TRY: step-through the suffix scan", "직접 해봐: 접미사 스캔 단계별로")}
+      </div>
+
+      {/* Preset picker */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12, justifyContent: "center" }}>
+        {PRESETS.map((p, idx) => (
+          <button key={idx} onClick={() => reset(idx)} style={{
+            background: idx === pi ? A : "#fff",
+            color: idx === pi ? "#fff" : A,
+            border: `1.5px solid ${A}`, borderRadius: 6,
+            padding: "3px 9px", fontSize: 11, fontWeight: 700, cursor: "pointer",
+            fontFamily: "monospace",
+          }}>
+            [{p.join(", ")}]
+          </button>
+        ))}
+      </div>
+
+      {/* Row of cows */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 22, paddingTop: 6 }}>
+        {arr.map((v, i) => cell(v, i))}
+      </div>
+
+      {/* Status */}
+      <div style={{
+        background: done ? (k === 0 ? GREEN + "11" : "#fff7ed") : "#eff6ff",
+        border: `1.5px solid ${done ? (k === 0 ? GREEN : RED) : A}`,
+        borderRadius: 8, padding: "8px 12px", marginBottom: 10,
+        fontSize: 12, color: done ? (k === 0 ? GREEN : "#9a3412") : "#1e3a8a",
+        lineHeight: 1.5, fontWeight: 600, textAlign: "center",
+      }}>
+        {status}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+        <button onClick={onStep} disabled={done} style={{
+          background: done ? "#e5e7eb" : A,
+          color: done ? "#9ca3af" : "#fff",
+          border: "none", borderRadius: 6,
+          padding: "6px 16px", fontSize: 12, fontWeight: 800,
+          cursor: done ? "not-allowed" : "pointer",
+        }}>
+          {done ? t(E, "✓ done", "✓ 끝") : t(E, "▶ extend left", "▶ 왼쪽으로 확장")}
+        </button>
+        <button onClick={() => reset(pi)} style={{
+          background: "#fff", color: C.dim,
+          border: "1.5px solid #cbd5e1", borderRadius: 6,
+          padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>
+          {t(E, "↻ reset", "↻ 처음부터")}
+        </button>
+      </div>
+
+      {/* Final-answer badge (only after scan finished) */}
+      {done && (
+        <div style={{
+          marginTop: 12, padding: "8px 12px", borderRadius: 8,
+          background: GREEN + "11", border: `1.5px solid ${GREEN}`,
+          fontSize: 12, color: GREEN, fontWeight: 700, textAlign: "center",
+        }}>
+          {t(E,
+            `Cows that must move: front ${finalK} of them → answer = ${finalK}.`,
+            `움직여야 하는 소: 앞쪽 ${finalK}마리 → 답 = ${finalK}.`)}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -90,6 +279,27 @@ export function makeSleepySortCh1(E) {
               </div>
             </div>
           </div>
+        </div>),
+    },
+    // 1-1b: Suffix-sort visualizer
+    {
+      type: "reveal",
+      narr: t(E,
+        "Look at the line from the RIGHT. Walk left as long as each cow is smaller than the next.\nThe green prefix from the right is already in order — those cows never have to move.\nEverything to the LEFT of the boundary must be pulled and reinserted.",
+        "줄을 오른쪽부터 봐요. 각 소가 다음 소보다 작은 동안 왼쪽으로 한 칸씩 가요.\n오른쪽부터 초록색 부분은 이미 정렬돼 있어 — 그 소들은 움직일 필요 없음.\n경계 왼쪽에 있는 소들은 모두 빼서 다시 끼워야 해요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 6 }}>
+              🔭 {t(E, "Visual idea", "그림으로 보기")}
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              {t(E,
+                "Pick an array, then press \"extend left\" to walk the boundary one cow at a time. The green block is the already-sorted suffix. The red boundary marks where the order finally breaks.",
+                "배열을 하나 골라서 \"왼쪽으로 확장\" 버튼을 눌러봐. 한 칸씩 경계를 옮기면서 초록 블록(이미 정렬된 접미사)이 자라나요. 순서가 깨지는 자리가 빨간 경계로 표시돼요.")}
+            </div>
+          </div>
+          <SuffixSortSim E={E} />
         </div>),
     },
     // 1-2: Quiz
