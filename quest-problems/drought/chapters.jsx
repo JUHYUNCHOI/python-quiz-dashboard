@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getDroughtSections } from "./components";
+import { getDroughtSections, FeedPairSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -121,6 +121,8 @@ export function makeDroughtCh1(E) {
               </div>
             </div>
           </div>
+
+          <FeedPairSim E={E} />
         </div>),
     },
     // 1-2: Quiz

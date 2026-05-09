@@ -1,8 +1,103 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ==========================================================
+   FeedPairSim — interactive "feed adjacent pair" simulator
+   Student clicks a pair (i, i+1) to reduce both by 1.
+   Counter tracks ops; reset returns to start.
+   ========================================================== */
+export function FeedPairSim({ E }) {
+  const START = [2, 3, 1, 2];
+  const [hunger, setHunger] = useState(START);
+  const [ops, setOps] = useState(0);
+  const [lastPair, setLastPair] = useState(-1);
+
+  const feedPair = (i) => {
+    if (hunger[i] < 1 || hunger[i + 1] < 1) return;
+    const next = [...hunger];
+    next[i] -= 1;
+    next[i + 1] -= 1;
+    setHunger(next);
+    setOps(ops + 1);
+    setLastPair(i);
+  };
+  const reset = () => { setHunger(START); setOps(0); setLastPair(-1); };
+  const allZero = hunger.every(h => h === 0);
+
+  return (
+    <div style={{ background: "#fff7ed", border: `1.5px solid ${A}`, borderRadius: 12, padding: "12px 14px", marginBottom: 10 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
+        🐄 {t(E, "Try it: click a pair to feed both", "직접 해보기: 쌍을 눌러 둘 다 먹이기")}
+      </div>
+
+      {/* Cow row */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 6, flexWrap: "wrap" }}>
+        {hunger.map((h, i) => (
+          <div key={i} style={{
+            width: 54, height: 64,
+            background: h === 0 ? "#dcfce7" : "#fef3c7",
+            border: `2px solid ${h === 0 ? "#15803d" : "#d97706"}`,
+            borderRadius: 10,
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            transition: "all 0.2s",
+          }}>
+            <div style={{ fontSize: 22 }}>🐄</div>
+            <div style={{ fontSize: 14, fontWeight: 800, color: h === 0 ? "#15803d" : "#92400e" }}>{h}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pair feed buttons */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 8, flexWrap: "wrap" }}>
+        {hunger.slice(0, -1).map((_, i) => {
+          const canFeed = hunger[i] >= 1 && hunger[i + 1] >= 1;
+          const wasLast = lastPair === i;
+          return (
+            <button key={i} onClick={() => feedPair(i)} disabled={!canFeed} style={{
+              width: 54 + 4 + 54, padding: "4px 0",
+              background: canFeed ? (wasLast ? A : "#fff") : "#f1f5f9",
+              color: canFeed ? (wasLast ? "#fff" : A) : "#94a3b8",
+              border: `1.5px solid ${canFeed ? A : "#cbd5e1"}`,
+              borderRadius: 6, fontSize: 11, fontWeight: 700,
+              cursor: canFeed ? "pointer" : "not-allowed",
+            }}>
+              {t(E, `feed (${i},${i + 1})`, `(${i},${i + 1}) 먹이`)}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Status row */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, fontSize: 12 }}>
+        <div style={{ color: "#92400e", fontWeight: 700 }}>
+          {t(E, "Ops:", "연산:")} <span style={{ color: A, fontSize: 14 }}>{ops}</span>
+        </div>
+        {allZero && (
+          <div style={{ color: "#15803d", fontWeight: 700 }}>
+            ✅ {t(E, "All zero!", "모두 0!")}
+          </div>
+        )}
+        <button onClick={reset} style={{
+          background: "transparent", color: "#92400e",
+          border: `1px solid ${A}`, borderRadius: 6,
+          padding: "3px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer",
+        }}>
+          ↺ {t(E, "Reset", "초기화")}
+        </button>
+      </div>
+
+      <div style={{ fontSize: 11, color: "#a16207", marginTop: 8, textAlign: "center", lineHeight: 1.5 }}>
+        {t(E,
+          "Start: [2, 3, 1, 2]. Each click feeds an adjacent pair (both must be ≥ 1). Can you make all zero?",
+          "시작: [2, 3, 1, 2]. 한 번 누르면 인접한 쌍을 먹여요 (둘 다 ≥ 1 일 때만). 모두 0 으로 만들 수 있을까?")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",
