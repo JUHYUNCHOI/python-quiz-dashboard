@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc15ChocoSections } from "./components";
+import { getMcc15ChocoSections, Mcc15ChocoStackSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -105,7 +105,15 @@ export function makeMcc15ChocoCh1(E) {
         "Remove (3,3): 2*3=6. Remove (5,5): 2*5=10. Total = 6+10 = 16!",
         "(3,3) 제거: 2*3=6. (5,5) 제거: 2*5=10. 총 = 6+10 = 16!"),
     },
-    // 1-3: Input
+    // 1-3: Stack walkthrough sim (bilingual, step-by-step)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Step through the stack as we scan [3, 3, 5, 5] one bar at a time. Watch how each pair pops and adds 2× its size to the total.",
+        "[3, 3, 5, 5] 을 한 바씩 스캔하면서 스택이 어떻게 변하는지 따라가봐요. 짝이 맞으면 pop 하고 2× 크기를 총합에 더해요."),
+      content: <Mcc15ChocoStackSim E={E} />,
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
