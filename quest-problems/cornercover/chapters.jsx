@@ -1,5 +1,117 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getCornerCoverSections } from "./components";
+
+/* ================================================================
+   Deep-audit sim — adjust N and M, watch the algorithm classify
+   each case and highlight the distinct corner cells.
+   ================================================================ */
+function CornerAuditSim({ E }) {
+  const [N, setN] = useState(3);
+  const [M, setM] = useState(5);
+
+  const isCorner = (r, c) => (r === 0 || r === N - 1) && (c === 0 || c === M - 1);
+  const branch = N === 1 && M === 1 ? "1x1" : (N === 1 || M === 1) ? "line" : "rect";
+  const expected = branch === "1x1" ? 1 : branch === "line" ? 2 : 4;
+
+  // Count DISTINCT corner cells (degenerate cases collapse)
+  const seen = new Set();
+  for (let r = 0; r < N; r++) for (let c = 0; c < M; c++) {
+    if (isCorner(r, c)) seen.add(`${r},${c}`);
+  }
+  const distinct = seen.size;
+
+  const CELL = N <= 4 && M <= 6 ? 36 : N <= 6 && M <= 8 ? 28 : 22;
+
+  const branchColor = branch === "1x1" ? "#dc2626" : branch === "line" ? "#d97706" : "#059669";
+  const branchLabel = branch === "1x1"
+    ? t(E, "N == 1 and M == 1  →  print(1)", "N == 1 그리고 M == 1  →  print(1)")
+    : branch === "line"
+      ? t(E, "N == 1 or M == 1  →  print(2)", "N == 1 또는 M == 1  →  print(2)")
+      : t(E, "else  →  print(4)", "그 외  →  print(4)");
+
+  const Slider = ({ label, val, set, min, max }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
+      <span style={{ fontWeight: 700, color: "#065f46", minWidth: 16 }}>{label}</span>
+      <button onClick={() => set(Math.max(min, val - 1))} style={{
+        width: 26, height: 26, borderRadius: 6, border: "1.5px solid #059669",
+        background: "#fff", color: "#059669", fontWeight: 800, cursor: "pointer",
+      }}>−</button>
+      <span style={{ minWidth: 22, textAlign: "center", fontWeight: 800, color: "#059669" }}>{val}</span>
+      <button onClick={() => set(Math.min(max, val + 1))} style={{
+        width: 26, height: 26, borderRadius: 6, border: "1.5px solid #059669",
+        background: "#fff", color: "#059669", fontWeight: 800, cursor: "pointer",
+      }}>+</button>
+    </div>
+  );
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{
+        background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10,
+        padding: "10px 14px", marginBottom: 10,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 6 }}>
+          🔬 {t(E, "Deep audit — pick N and M, watch the branches", "딥 오딧 — N, M 을 골라보고 분기를 살펴봐요")}
+        </div>
+        <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+          <Slider label="N" val={N} set={setN} min={1} max={6} />
+          <Slider label="M" val={M} set={setM} min={1} max={8} />
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+        <div style={{
+          display: "grid",
+          gridTemplateRows: `repeat(${N}, ${CELL}px)`,
+          gridTemplateColumns: `repeat(${M}, ${CELL}px)`,
+          gap: 2, background: "#d1fae5", padding: 4, borderRadius: 8,
+        }}>
+          {Array.from({ length: N }).map((_, r) =>
+            Array.from({ length: M }).map((__, c) => {
+              const corner = isCorner(r, c);
+              return (
+                <div key={`${r}-${c}`} style={{
+                  background: corner ? branchColor : "#fff",
+                  color: corner ? "#fff" : "#9ca3af",
+                  borderRadius: 4,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 11, fontWeight: 800,
+                  boxShadow: corner ? `0 0 0 2px ${branchColor}` : "none",
+                  transition: "background .2s, box-shadow .2s",
+                }}>
+                  {corner ? "★" : ""}
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      <div style={{
+        background: "#fff", border: `1.5px solid ${branchColor}`, borderRadius: 10,
+        padding: "10px 14px", display: "flex", flexDirection: "column", gap: 6,
+      }}>
+        <div style={{ fontSize: 12, color: C.dim }}>
+          {t(E, "Active branch:", "선택된 분기:")}
+          <b style={{ color: branchColor, marginLeft: 6 }}>{branchLabel}</b>
+        </div>
+        <div style={{ fontSize: 13, color: C.text }}>
+          {t(E, "Distinct corner cells (★):", "서로 다른 꼭짓점 칸 (★):")}
+          <b style={{ color: branchColor, marginLeft: 6 }}>{distinct}</b>
+          <span style={{ color: C.dim, marginLeft: 8, fontSize: 12 }}>
+            {t(E, `→ matches print(${expected})`, `→ print(${expected}) 와 일치`)}
+          </span>
+        </div>
+        <div style={{ fontSize: 12, color: "#065f46", lineHeight: 1.5 }}>
+          {t(E,
+            "Try N=1, M=1 (1 corner), N=1 and M≥2 (a line, 2 corners), then N≥2 and M≥2 (full rectangle, 4 corners). The grid collapses, but the formula still holds.",
+            "N=1, M=1 (꼭짓점 1) → N=1 이면서 M≥2 (직선, 2) → N≥2 이면서 M≥2 (직사각형, 4) 순서로 눌러봐요. 격자가 무너져도 공식은 그대로.")}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -121,6 +233,14 @@ export function makeCornerCoverCh1(E) {
         "A square is just a rectangle with N == M. Both are ≥ 2 here — count its extreme cells.",
         "정사각형도 N == M 인 직사각형이에요. 둘 다 ≥ 2 인 경우 — 끝 칸들을 세어봐요."),
       answer: 4,
+    },
+    // 1-4: Deep-audit sim — sweep N and M, watch the three branches
+    {
+      type: "reveal",
+      narr: t(E,
+        "Sweep N and M yourself — the grid collapses on degenerate cases, and the algorithm's three branches light up.",
+        "N 과 M 을 직접 바꿔봐요 — 가늘어진 경우엔 격자가 무너지고, 알고리즘의 세 분기가 차례로 켜져요."),
+      content: <CornerAuditSim E={E} />,
     },
   ];
 }
