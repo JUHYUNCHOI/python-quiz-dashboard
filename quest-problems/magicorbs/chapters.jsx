@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMagicOrbsSections } from "./components";
+import { getMagicOrbsSections, MagicOrbsDeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -19,7 +19,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: Problem (3 steps)
+   Chapter 1: Problem (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMagicOrbsCh1(E) {
   return [
@@ -84,7 +84,21 @@ export function makeMagicOrbsCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Deep-audit sim — feel the algorithm before guessing
+    {
+      type: "reveal",
+      narr: t(E,
+        "Time to feel it. Pick a sample, slide K up and down, watch which orbs light up and the total grow. Then 'Audit all K' to see every K at once — bigger K never hurts.",
+        "직접 느껴봐. 샘플을 골라 K 를 올렸다 내렸다, 어떤 구슬이 빛나고 총합이 어떻게 자라는지 봐. 'K 모두 점검' 누르면 모든 K 가 한눈에 — K 가 커지면 절대 손해 안 봐."),
+      content: (
+        <div style={{ padding: 12 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
+            🔍 {t(E, "Deep Audit — sort, then take the top K", "심층 점검 — 정렬 후 앞에서 K 개")}
+          </div>
+          <MagicOrbsDeepAuditSim E={E} />
+        </div>),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -102,7 +116,7 @@ export function makeMagicOrbsCh1(E) {
         "Correct! Pick the two largest values: 5 + 4 = 9.",
         "맞아! 가장 큰 두 값을 골라: 5 + 4 = 9."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

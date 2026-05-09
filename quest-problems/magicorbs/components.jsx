@@ -1,8 +1,206 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ═══════════════════════════════════════════════════════════════
+   MagicOrbsDeepAuditSim — pick a sample of orbs, sort them
+   descending by power, then choose K. Watch which orbs get
+   selected (the top K) and the running sum update live.
+   "Audit all K" enumerates every K from 0..N to show how the
+   maximum total grows as you're allowed to pick more orbs.
+   ═══════════════════════════════════════════════════════════════ */
+const _ORB_PRESETS = [
+  { vals: [5, 3, 4],            label: "[5,3,4]" },
+  { vals: [7, 2, 9, 1, 6],      label: "[7,2,9,1,6]" },
+  { vals: [4, 4, 4, 1, 8, 3],   label: "[4,4,4,1,8,3]" },
+  { vals: [10, 1, 2, 9, 3, 8, 4], label: "[10,1,2,9,3,8,4] (N=7)" },
+];
+
+export function MagicOrbsDeepAuditSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [k, setK] = useState(2);
+  const [audited, setAudited] = useState(false);
+
+  const { vals } = _ORB_PRESETS[pi];
+  const N = vals.length;
+  const safeK = Math.min(k, N);
+
+  // Sort descending, but keep original index for the "before" row
+  const indexed = vals.map((v, i) => ({ v, i }));
+  const sorted = [...indexed].sort((a, b) => b.v - a.v);
+  const pickedSet = new Set(sorted.slice(0, safeK).map(o => o.i));
+  const total = sorted.slice(0, safeK).reduce((s, o) => s + o.v, 0);
+
+  const switchPreset = (newPi) => {
+    setPi(newPi);
+    const newN = _ORB_PRESETS[newPi].vals.length;
+    setK(prev => Math.min(prev, newN));
+    setAudited(false);
+  };
+
+  // Audit: enumerate K = 0..N → max total for each
+  const auditRows = [];
+  for (let kk = 0; kk <= N; kk++) {
+    const sum = sorted.slice(0, kk).reduce((s, o) => s + o.v, 0);
+    auditRows.push({ k: kk, sum });
+  }
+  const bestRow = auditRows[auditRows.length - 1];
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {_ORB_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => switchPreset(i)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {p.label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8 }}>
+        {t(E, "Use − / + to change K. Watch which orbs get picked and the total power grow.",
+              "− / + 로 K 를 바꿔봐. 어떤 구슬이 뽑히는지, 총 파워가 어떻게 자라는지 봐.")}
+      </div>
+
+      {/* original order row */}
+      <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginBottom: 4, fontWeight: 700, letterSpacing: 0.4 }}>
+        {t(E, "ORIGINAL ORDER", "원래 순서")}
+      </div>
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {indexed.map((o, i) => (
+          <div key={i} style={{
+            width: 38, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
+            borderRadius: 8, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+            background: "#f5f3ff", border: "1.5px solid #c4b5fd", color: "#5b21b6",
+          }}>
+            {o.v}
+          </div>
+        ))}
+      </div>
+
+      {/* arrow */}
+      <div style={{ textAlign: "center", fontSize: 14, color: A, marginBottom: 4 }}>
+        ↓ {t(E, "sort descending", "내림차순 정렬")} ↓
+      </div>
+
+      {/* sorted row with picked highlight */}
+      <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginBottom: 4, fontWeight: 700, letterSpacing: 0.4 }}>
+        {t(E, "SORTED — top K picked", "정렬됨 — 앞에서 K 개")}
+      </div>
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 4, flexWrap: "wrap" }}>
+        {sorted.map((o, i) => {
+          const picked = i < safeK;
+          const bg = picked ? "#dcfce7" : "#f1f5f9";
+          const border = picked ? "#86efac" : "#cbd5e1";
+          const color = picked ? "#166534" : "#64748b";
+          return (
+            <div key={i} style={{
+              width: 38, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 8, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+              background: bg, border: `1.5px solid ${border}`, color,
+              outline: picked ? `2px dashed ${A}` : "none",
+              outlineOffset: picked ? -4 : 0,
+              opacity: picked ? 1 : 0.6,
+            }}>
+              {o.v}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* tick row to mark which positions are within top K */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {sorted.map((_, i) => (
+          <div key={i} style={{
+            width: 38, textAlign: "center", fontSize: 11,
+            color: i < safeK ? "#15803d" : "#94a3b8",
+            fontWeight: i < safeK ? 700 : 400,
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {i < safeK ? "✓" : "·"}
+          </div>
+        ))}
+      </div>
+
+      {/* K controls + total */}
+      <div style={{
+        background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10,
+        padding: "8px 12px", marginBottom: 10,
+        display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8,
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <button onClick={() => { setK(Math.max(0, safeK - 1)); setAudited(false); }} style={{
+            width: 28, height: 28, borderRadius: 6, border: `1px solid ${A}`,
+            background: "#fff", color: A, fontWeight: 800, cursor: "pointer", fontSize: 14,
+          }}>−</button>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", fontFamily: "'JetBrains Mono',monospace", minWidth: 60, textAlign: "center" }}>
+            K = {safeK} / {N}
+          </div>
+          <button onClick={() => { setK(Math.min(N, safeK + 1)); setAudited(false); }} style={{
+            width: 28, height: 28, borderRadius: 6, border: `1px solid ${A}`,
+            background: "#fff", color: A, fontWeight: 800, cursor: "pointer", fontSize: 14,
+          }}>+</button>
+        </div>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "total power", "총 파워")} = {total}
+        </div>
+      </div>
+
+      {/* audit button */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        <button onClick={() => setAudited(true)} style={{
+          padding: "6px 14px", borderRadius: 8, border: `1px solid ${A}`,
+          background: A, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>
+          {t(E, `🔍 Audit all K = 0..${N}`, `🔍 K = 0..${N} 모두 점검`)}
+        </button>
+      </div>
+
+      {/* audit panel */}
+      {audited && (
+        <div style={{
+          background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10,
+          padding: 10, fontSize: 11.5, color: "#9a3412", lineHeight: 1.6,
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 6, color: "#7c2d12" }}>
+            {t(E, "Each K → max total power", "각 K → 최대 총 파워")}
+          </div>
+          <div style={{
+            display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))",
+            gap: 4, marginBottom: 8, fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {auditRows.map((r) => (
+              <div key={r.k} style={{
+                background: r.k === safeK ? "#fef3c7" : "#fff",
+                border: `1px solid ${r.k === safeK ? "#f59e0b" : "#fed7aa"}`,
+                borderRadius: 6, padding: "3px 6px", fontSize: 11, color: "#7c2d12",
+                display: "flex", justifyContent: "space-between", gap: 4,
+                fontWeight: r.k === safeK ? 800 : 500,
+              }}>
+                <span>K={r.k}</span>
+                <b>{r.sum}</b>
+              </div>
+            ))}
+          </div>
+          <div style={{
+            background: "#dcfce7", border: "1px solid #86efac", borderRadius: 8,
+            padding: "6px 10px", color: "#166534", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {t(E, "non-decreasing — bigger K never hurts.", "단조 비감소 — K 가 커지면 절대 손해 안 봐.")}
+            {" "}{t(E, "max at K=", "최댓값 K=")}{bestRow.k} → {bestRow.sum}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N, K = map(int, input().split())",
