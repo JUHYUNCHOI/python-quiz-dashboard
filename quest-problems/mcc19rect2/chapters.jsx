@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc19Rect2Sections } from "./components";
+import { getMcc19Rect2Sections, Mcc19Rect2AuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -95,6 +95,14 @@ export function makeMcc19Rect2Ch1(E) {
         "x4 = 0 XOR 2 XOR 0 = 2.",
         "x4 = 0 XOR 2 XOR 0 = 2."),
       answer: 2,
+    },
+    // 1-4: Deep-audit sim (XOR bit inspector)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Deep-audit sim: pick a preset, see the 3 known corners, then run XOR bit-by-bit on x and y to reveal the missing 4th corner.",
+        "정밀 감사 시뮬: 프리셋을 골라 알려진 3 꼭짓점을 보고, x 와 y 각각 비트 단위 XOR 로 빠진 4 번째 꼭짓점을 공개해요."),
+      content: <Mcc19Rect2AuditSim E={E} />,
     },
   ];
 }

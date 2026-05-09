@@ -1,8 +1,171 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ═══════════════════════════════════════════════════════════════
+   Deep-Audit Sim: Rectangle XOR Inspector
+   - Bilingual (E flag), theme-matched (green A = #059669).
+   - Student picks one of 3 preset 3-corner sets, sees the rectangle
+     drawn live, then runs XOR bit-by-bit on the x and y coordinates
+     to reveal the missing 4th corner. Reinforces the XOR-trick
+     invariant (each axis value appears twice -> XOR cancels).
+   ═══════════════════════════════════════════════════════════════ */
+const RECT_PRESETS = [
+  { id: "A", c1: [0, 0], c2: [2, 0], c3: [0, 3], hidden: [2, 3] },
+  { id: "B", c1: [1, 1], c2: [4, 1], c3: [1, 5], hidden: [4, 5] },
+  { id: "C", c1: [2, 3], c2: [2, 7], c3: [6, 3], hidden: [6, 7] },
+];
+
+function xorTrace(a, b, c) {
+  // Returns step list of XOR for 3 ints, bit-by-bit (4 bits is enough for presets up to 7).
+  const bits = 4;
+  const toBits = (n) => n.toString(2).padStart(bits, "0");
+  const r = a ^ b ^ c;
+  return { ba: toBits(a), bb: toBits(b), bc: toBits(c), br: toBits(r), val: r };
+}
+
+export function Mcc19Rect2AuditSim({ E }) {
+  const [pid, setPid] = useState("A");
+  const [reveal, setReveal] = useState(false);
+  const p = RECT_PRESETS.find(r => r.id === pid) || RECT_PRESETS[0];
+  const corners = [p.c1, p.c2, p.c3];
+  const all4 = [...corners, p.hidden];
+  const xs = all4.map(c => c[0]);
+  const ys = all4.map(c => c[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const W = 240, H = 200, padPx = 24;
+  const sx = (x) => padPx + ((x - minX) / Math.max(1, maxX - minX)) * (W - 2 * padPx);
+  const sy = (y) => H - padPx - ((y - minY) / Math.max(1, maxY - minY)) * (H - 2 * padPx);
+  const tx = xorTrace(p.c1[0], p.c2[0], p.c3[0]);
+  const ty = xorTrace(p.c1[1], p.c2[1], p.c3[1]);
+
+  const cornerDot = (c, i, hidden) => (
+    <g key={i}>
+      <circle cx={sx(c[0])} cy={sy(c[1])} r={7}
+        fill={hidden ? (reveal ? "#fbbf24" : "#fff") : A}
+        stroke={hidden ? "#d97706" : A}
+        strokeWidth={2}
+        strokeDasharray={hidden && !reveal ? "3 3" : "0"} />
+      <text x={sx(c[0]) + 10} y={sy(c[1]) - 8} fontSize={11} fill={hidden ? "#92400e" : "#065f46"} fontWeight={700}>
+        {hidden && !reveal ? "?" : `(${c[0]},${c[1]})`}
+      </text>
+    </g>
+  );
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{
+        background: "#ecfdf5", border: `1.5px solid #6ee7b7`, borderRadius: 12,
+        padding: 12, marginBottom: 10,
+      }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
+          🔬 {t(E, "Deep-Audit: XOR Bit Inspector", "정밀 감사: XOR 비트 검사기")}
+        </div>
+        <div style={{ fontSize: 12, color: "#065f46", marginBottom: 8, lineHeight: 1.5 }}>
+          {t(E,
+            "Pick a preset, watch the 3 known corners. The 4th is hidden until you XOR.",
+            "프리셋을 골라 알려진 3 꼭짓점을 봐요. 4 번째는 XOR 하기 전엔 숨겨져 있어요.")}
+        </div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {RECT_PRESETS.map(r => (
+            <button key={r.id}
+              onClick={() => { setPid(r.id); setReveal(false); }}
+              style={{
+                padding: "5px 12px", fontSize: 12, fontWeight: 700,
+                borderRadius: 6, cursor: "pointer",
+                border: `1.5px solid ${A}`,
+                background: pid === r.id ? A : "#fff",
+                color: pid === r.id ? "#fff" : A,
+              }}>
+              {t(E, `Preset ${r.id}`, `프리셋 ${r.id}`)}
+            </button>
+          ))}
+          <button onClick={() => setReveal(v => !v)}
+            style={{
+              padding: "5px 12px", fontSize: 12, fontWeight: 700,
+              borderRadius: 6, cursor: "pointer", marginLeft: "auto",
+              border: `1.5px solid #d97706`,
+              background: reveal ? "#d97706" : "#fff",
+              color: reveal ? "#fff" : "#d97706",
+            }}>
+            {reveal
+              ? t(E, "🙈 Hide 4th", "🙈 4 번째 숨기기")
+              : t(E, "🔓 Run XOR → reveal", "🔓 XOR 실행 → 공개")}
+          </button>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 12, alignItems: "flex-start", flexWrap: "wrap" }}>
+        <svg width={W} height={H} style={{
+          background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 8,
+        }}>
+          {/* axes */}
+          <line x1={padPx} y1={H - padPx} x2={W - padPx} y2={H - padPx} stroke="#cbd5e1" strokeWidth={1} />
+          <line x1={padPx} y1={padPx} x2={padPx} y2={H - padPx} stroke="#cbd5e1" strokeWidth={1} />
+          {/* rectangle outline (only when revealed) */}
+          {reveal && (
+            <rect
+              x={sx(minX)} y={sy(maxY)}
+              width={sx(maxX) - sx(minX)} height={sy(minY) - sy(maxY)}
+              fill="none" stroke={A} strokeWidth={2} strokeDasharray="4 3" />
+          )}
+          {corners.map((c, i) => cornerDot(c, i, false))}
+          {cornerDot(p.hidden, 99, true)}
+        </svg>
+
+        <div style={{
+          flex: "1 1 260px", minWidth: 240,
+          background: "#0f172a", color: "#e2e8f0", borderRadius: 8,
+          padding: 12, fontFamily: '"JetBrains Mono", monospace', fontSize: 12, lineHeight: 1.55,
+        }}>
+          <div style={{ color: "#94a3b8", marginBottom: 6 }}>
+            {t(E, "// XOR audit on x-coords", "// x 좌표 XOR 감사")}
+          </div>
+          <div>x1 = {p.c1[0]}  <span style={{ color: "#64748b" }}>= {tx.ba}</span></div>
+          <div>x2 = {p.c2[0]}  <span style={{ color: "#64748b" }}>= {tx.bb}</span></div>
+          <div>x3 = {p.c3[0]}  <span style={{ color: "#64748b" }}>= {tx.bc}</span></div>
+          <div style={{ borderTop: "1px dashed #334155", margin: "4px 0", paddingTop: 4 }}>
+            x4 = {reveal
+              ? <b style={{ color: "#fbbf24" }}>{tx.val}</b>
+              : <span style={{ color: "#475569" }}>?</span>}
+            {"  "}<span style={{ color: "#64748b" }}>
+              = {reveal ? tx.br : "????"}
+            </span>
+          </div>
+          <div style={{ height: 8 }} />
+          <div style={{ color: "#94a3b8", marginBottom: 6 }}>
+            {t(E, "// XOR audit on y-coords", "// y 좌표 XOR 감사")}
+          </div>
+          <div>y1 = {p.c1[1]}  <span style={{ color: "#64748b" }}>= {ty.ba}</span></div>
+          <div>y2 = {p.c2[1]}  <span style={{ color: "#64748b" }}>= {ty.bb}</span></div>
+          <div>y3 = {p.c3[1]}  <span style={{ color: "#64748b" }}>= {ty.bc}</span></div>
+          <div style={{ borderTop: "1px dashed #334155", margin: "4px 0", paddingTop: 4 }}>
+            y4 = {reveal
+              ? <b style={{ color: "#fbbf24" }}>{ty.val}</b>
+              : <span style={{ color: "#475569" }}>?</span>}
+            {"  "}<span style={{ color: "#64748b" }}>
+              = {reveal ? ty.br : "????"}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div style={{
+        marginTop: 10, padding: "8px 12px", fontSize: 12,
+        background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 8,
+        color: "#92400e", lineHeight: 1.55,
+      }}>
+        💡 {t(E,
+          "Each x value appears twice across the 4 corners, so a^a = 0 cancels them and XORing the 3 known values leaves the missing one. Same trick on y.",
+          "각 x 값은 4 꼭짓점에서 정확히 2 번 등장 → a^a = 0 으로 상쇄, 알려진 3 개 XOR 결과가 빠진 1 개. y 도 같은 원리.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "# Given 3 corners of a rectangle, find the 4th",
