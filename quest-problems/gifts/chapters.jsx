@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getGiftsSections } from "./components";
+import { getGiftsSections, GiftsSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -99,7 +99,15 @@ export function makeGiftsCh1(E) {
         "Correct! 10 mod 3 = 1. One person gets an extra gift.",
         "맞아! 10 mod 3 = 1. 한 명이 추가 선물을 받아요."),
     },
-    // 1-3: Input
+    // 1-3: Sim — play with N and K
+    {
+      type: "reveal",
+      narr: t(E,
+        "Drag N and K. Watch how the gifts split — most-even share for everyone, then the leftovers go out as ⭐ extras. Count the stars.",
+        "N과 K를 움직여 봐. 모두에게 최대한 고르게 나눠 준 뒤, 남는 선물이 ⭐로 가는 게 보여. 별 개수를 세어 봐."),
+      content: <GiftsSim E={E} />,
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
