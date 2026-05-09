@@ -1,8 +1,201 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ================================================================
+   Interactive sim: Greedy recipe maker
+   Shows the make(metal) recursion in action on a tiny example.
+   Student clicks "Make metal 3" — watch stock get consumed, see
+   how many total units of N can be crafted before failure.
+   ================================================================ */
+export function RecipeSimulator({ E }) {
+  // Tiny example: metal 1 + metal 2 -> metal 3
+  // Start: 3x metal 1, 2x metal 2, 1x metal 3 already
+  const INITIAL = { 1: 3, 2: 2, 3: 1 };
+  const RECIPES = { 3: [1, 2] };
+  const TARGET = 3;
+
+  const [stock, setStock] = useState({ ...INITIAL });
+  const [made, setMade] = useState(0);
+  const [log, setLog] = useState([]);
+  const [busy, setBusy] = useState(false);
+
+  const fmt = (m) => t(E, `metal ${m}`, `금속 ${m}`);
+
+  const reset = () => {
+    setStock({ ...INITIAL });
+    setMade(0);
+    setLog([]);
+  };
+
+  // One full attempt at making one unit of TARGET, with step messages.
+  const tryMakeOne = () => {
+    if (busy) return;
+    setBusy(true);
+    const local = { ...stock };
+    const trace = [];
+    let ok = true;
+
+    const make = (m, depth) => {
+      const pad = "  ".repeat(depth);
+      if (local[m] > 0) {
+        local[m] -= 1;
+        trace.push({ pad, kind: "use", text: t(E, `use 1 stock of ${fmt(m)}`, `${fmt(m)} 재고 1개 사용`) });
+        return true;
+      }
+      if (!RECIPES[m]) {
+        trace.push({ pad, kind: "fail", text: t(E, `no stock and no recipe for ${fmt(m)} → fail`, `${fmt(m)} 재고도 레시피도 없음 → 실패`) });
+        return false;
+      }
+      trace.push({ pad, kind: "open", text: t(E, `need ${fmt(m)} → try recipe`, `${fmt(m)} 필요 → 레시피 시도`) });
+      for (const ing of RECIPES[m]) {
+        if (!make(ing, depth + 1)) return false;
+      }
+      return true;
+    };
+
+    trace.push({ pad: "", kind: "head", text: t(E, `attempt #${made + 1}: make ${fmt(TARGET)}`, `시도 #${made + 1}: ${fmt(TARGET)} 만들기`) });
+    ok = make(TARGET, 1);
+    trace.push({ pad: "", kind: ok ? "ok" : "no", text: ok ? t(E, "success ✓", "성공 ✓") : t(E, "cannot continue ✗", "더 못 만들어요 ✗") });
+
+    if (ok) {
+      setStock(local);
+      setMade(made + 1);
+    }
+    setLog(trace);
+    setBusy(false);
+  };
+
+  const stockEntries = Object.keys(INITIAL).map(Number).sort((a, b) => a - b);
+
+  const colorOf = (m) => (m === 1 ? "#0891b2" : m === 2 ? "#7c3aed" : A);
+
+  return (
+    <div style={{
+      background: "#fff7ed",
+      border: `1.5px solid ${A}`,
+      borderRadius: 12,
+      padding: 14,
+      marginTop: 12,
+    }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10, flexWrap: "wrap", gap: 8 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e" }}>
+          🧪 {t(E, "Try the greedy algorithm", "탐욕 알고리즘 체험")}
+        </div>
+        <div style={{ fontSize: 11, color: "#92400e" }}>
+          {t(E, "Recipe: metal 1 + metal 2 → metal 3", "레시피: 금속1 + 금속2 → 금속3")}
+        </div>
+      </div>
+
+      {/* Stock display */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
+        {stockEntries.map(m => (
+          <div key={m} style={{
+            background: "#fff",
+            border: `1.5px solid ${colorOf(m)}`,
+            borderRadius: 10,
+            padding: "8px 12px",
+            minWidth: 88,
+            textAlign: "center",
+            opacity: stock[m] === 0 ? 0.45 : 1,
+            transition: "opacity 200ms",
+          }}>
+            <div style={{ fontSize: 11, color: colorOf(m), fontWeight: 700 }}>{fmt(m)}</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: "#1f2937", fontFamily: "'JetBrains Mono', monospace" }}>
+              {stock[m]}
+            </div>
+            <div style={{ fontSize: 10, color: C.dim }}>
+              {t(E, "in stock", "재고")}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        <button
+          onClick={tryMakeOne}
+          disabled={busy}
+          style={{
+            background: A,
+            color: "#fff",
+            border: "none",
+            borderRadius: 8,
+            padding: "8px 14px",
+            fontSize: 12,
+            fontWeight: 800,
+            cursor: busy ? "default" : "pointer",
+          }}
+        >
+          {t(E, `▶ Make 1 metal ${TARGET}`, `▶ 금속${TARGET} 1개 만들기`)}
+        </button>
+        <button
+          onClick={reset}
+          style={{
+            background: "#fff",
+            color: A,
+            border: `1.5px solid ${A}`,
+            borderRadius: 8,
+            padding: "8px 14px",
+            fontSize: 12,
+            fontWeight: 800,
+            cursor: "pointer",
+          }}
+        >
+          ↺ {t(E, "Reset", "초기화")}
+        </button>
+        <div style={{
+          background: "#fff",
+          border: `1.5px solid ${C.ok}`,
+          borderRadius: 8,
+          padding: "8px 14px",
+          fontSize: 12,
+          fontWeight: 800,
+          color: C.ok,
+        }}>
+          {t(E, "Total made: ", "총 제작: ")}{made}
+        </div>
+      </div>
+
+      {/* Trace log */}
+      {log.length > 0 && (
+        <div style={{
+          background: "#1e1b2e",
+          color: "#e2e8f0",
+          borderRadius: 8,
+          padding: 10,
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: 11.5,
+          lineHeight: 1.6,
+          maxHeight: 180,
+          overflowY: "auto",
+        }}>
+          {log.map((entry, i) => {
+            const tone = entry.kind === "ok" ? "#86efac"
+              : entry.kind === "no" || entry.kind === "fail" ? "#fca5a5"
+              : entry.kind === "use" ? "#fcd34d"
+              : entry.kind === "open" ? "#a5b4fc"
+              : "#e2e8f0";
+            return (
+              <div key={i} style={{ color: tone, whiteSpace: "pre" }}>
+                {entry.pad}{entry.text}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <div style={{ fontSize: 11, color: "#92400e", marginTop: 8, lineHeight: 1.5 }}>
+        💡 {t(E,
+          "Click ▶ until it fails — that's the greedy answer. Notice: stock of metal 3 is used first (depth 1), then we fall back to combining 1+2.",
+          "▶ 를 실패할 때까지 눌러봐요 — 그게 탐욕 답이에요. 금속3 재고가 먼저 쓰이고(깊이 1), 다음에 1+2 조합으로 넘어가요.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

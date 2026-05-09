@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getAlchemySections } from "./components";
+import { getAlchemySections, RecipeSimulator } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -111,6 +111,8 @@ export function makeAlchemyCh1(E) {
               </div>
             </div>
           </div>
+
+          <RecipeSimulator E={E} />
         </div>),
     },
     // 1-2: Quiz
