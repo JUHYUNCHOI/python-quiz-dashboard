@@ -1,8 +1,158 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ═══════════════════════════════════════════════════════════════
+   Scale-Up Sim: edit a 3×3 grid + K slider, watch live K×K expansion
+   ═══════════════════════════════════════════════════════════════ */
+export function CowSignalScaleSim({ E }) {
+  const [grid, setGrid] = useState([
+    ["X", ".", "X"],
+    [".", "X", "."],
+    ["X", ".", "X"],
+  ]);
+  const [K, setK] = useState(2);
+  const [hover, setHover] = useState({ r: 1, c: 1 });
+
+  const M = grid.length;
+  const N = grid[0].length;
+
+  const toggle = (r, c) => {
+    setGrid(prev => prev.map((row, i) =>
+      i === r ? row.map((ch, j) => j === c ? (ch === "X" ? "." : "X") : ch) : row
+    ));
+  };
+
+  // Build expanded grid: M*K rows, N*K cols
+  const expanded = [];
+  for (let i = 0; i < M; i++) {
+    for (let rep = 0; rep < K; rep++) {
+      const row = [];
+      for (let j = 0; j < N; j++) {
+        for (let k = 0; k < K; k++) {
+          row.push({ ch: grid[i][j], srcR: i, srcC: j });
+        }
+      }
+      expanded.push(row);
+    }
+  }
+
+  const cellSrcStyle = (ch, isHi) => ({
+    width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+    borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+    background: ch === "X" ? "#7c3aed" : "#f5f3ff",
+    border: isHi ? "2px solid #f59e0b" : `1px solid ${ch === "X" ? "#6d28d9" : "#c4b5fd"}`,
+    color: ch === "X" ? "#fff" : "#c4b5fd",
+    cursor: "pointer",
+    boxShadow: isHi ? "0 0 0 2px #fef3c7" : "none",
+    transition: "border .15s, box-shadow .15s",
+  });
+
+  // Expanded cell size shrinks as K grows
+  const expCell = Math.max(10, Math.min(20, Math.floor(120 / (N * K))));
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{
+        background: "#fef3c7", border: "1.5px solid #f59e0b", borderRadius: 10,
+        padding: "8px 12px", marginBottom: 12, fontSize: 12, color: "#92400e", textAlign: "center",
+      }}>
+        🧪 {t(E,
+          "Click a cell to flip X ↔ . — drag the K slider — see the live K×K expansion!",
+          "셀을 눌러서 X ↔ . 바꿔봐요 — K 슬라이더를 옮기면서 — 실시간 K×K 확대를 확인!")}
+      </div>
+
+      {/* K slider */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
+        marginBottom: 14, flexWrap: "wrap",
+      }}>
+        <span style={{ fontSize: 13, fontWeight: 700, color: "#7c3aed" }}>
+          K = <span style={{ fontSize: 18, fontFamily: "'JetBrains Mono',monospace" }}>{K}</span>
+        </span>
+        <input
+          type="range" min={1} max={4} step={1} value={K}
+          onChange={e => setK(Number(e.target.value))}
+          style={{ width: 180, accentColor: "#8b5cf6" }}
+        />
+        <span style={{ fontSize: 11, color: C.dim }}>
+          {t(E, `output: ${M*K}×${N*K}`, `출력: ${M*K}×${N*K}`)}
+        </span>
+      </div>
+
+      <div style={{ display: "flex", gap: 16, justifyContent: "center", alignItems: "flex-start", flexWrap: "wrap" }}>
+        {/* Original (editable) */}
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "#8b5cf6", marginBottom: 6 }}>
+            {t(E, `Original (${M}×${N}) — click to flip`, `원본 (${M}×${N}) — 클릭으로 변경`)}
+          </div>
+          <div style={{ display: "inline-flex", flexDirection: "column", gap: 3 }}>
+            {grid.map((row, r) => (
+              <div key={r} style={{ display: "flex", gap: 3 }}>
+                {row.map((ch, c) => {
+                  const isHi = hover.r === r && hover.c === c;
+                  return (
+                    <div
+                      key={c}
+                      onClick={() => toggle(r, c)}
+                      onMouseEnter={() => setHover({ r, c })}
+                      style={cellSrcStyle(ch, isHi)}
+                    >{ch}</div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize: 10, color: C.dim, marginTop: 6 }}>
+            {t(E, "↑ source cell highlighted", "↑ 원본 칸 강조")}
+          </div>
+        </div>
+
+        <div style={{ fontSize: 24, color: "#8b5cf6", fontWeight: 700, alignSelf: "center" }}>→</div>
+
+        {/* Expanded */}
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "#16a34a", marginBottom: 6 }}>
+            {t(E, `Expanded (${M*K}×${N*K})`, `확대 (${M*K}×${N*K})`)}
+          </div>
+          <div style={{ display: "inline-flex", flexDirection: "column", gap: 1, padding: 4, background: "#f9fafb", borderRadius: 6 }}>
+            {expanded.map((row, r) => (
+              <div key={r} style={{ display: "flex", gap: 1 }}>
+                {row.map((cell, c) => {
+                  const isBlock = cell.srcR === hover.r && cell.srcC === hover.c;
+                  return (
+                    <div key={c} style={{
+                      width: expCell, height: expCell,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: Math.max(7, expCell - 6), fontWeight: 700,
+                      fontFamily: "'JetBrains Mono',monospace",
+                      background: cell.ch === "X" ? "#7c3aed" : "#f5f3ff",
+                      border: isBlock ? "1.5px solid #f59e0b" : `1px solid ${cell.ch === "X" ? "#6d28d9" : "#ddd6fe"}`,
+                      color: cell.ch === "X" ? "#fff" : "#c4b5fd",
+                      borderRadius: 2,
+                    }}>{expCell >= 14 ? cell.ch : ""}</div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize: 10, color: "#16a34a", marginTop: 6, fontWeight: 700 }}>
+            {t(E, `↑ K×K block (${K}×${K}) for hovered cell`, `↑ 호버한 칸의 K×K 블록 (${K}×${K})`)}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 12, padding: "8px 12px", background: "#f5f3ff", borderRadius: 8, fontSize: 11, color: "#5b21b6", textAlign: "center" }}>
+        {t(E,
+          `One source cell → ${K}×${K} = ${K*K} copies. Total: ${M*N} cells → ${M*K*N*K} cells.`,
+          `원본 한 칸 → ${K}×${K} = ${K*K}개 복사. 총: ${M*N}칸 → ${M*K*N*K}칸.`)}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "M, N, K = map(int, input().split())",

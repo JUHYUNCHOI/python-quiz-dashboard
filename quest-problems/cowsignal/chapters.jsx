@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowSignalSections } from "./components";
+import { getCowSignalSections, CowSignalScaleSim } from "./components";
 
 export const SOLUTION_CODE = [
   "M, N, K = map(int, input().split())",
@@ -249,6 +249,15 @@ export function makeCowSignalCh1(E) {
             </div>
           </div>
         </div>),
+    },
+
+    // 1-8.5 직접 해보기 시뮬레이터
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try it yourself! Click cells to flip X ↔ . and slide K from 1 to 4. Watch each source cell expand into a K×K block in real time. Hover over a source cell to see exactly which block in the output it became!",
+        "직접 해보자! 셀을 눌러 X ↔ . 바꿔보고, K 슬라이더를 1에서 4까지 옮겨봐요. 원본 한 칸이 K×K 블록으로 커지는 걸 실시간으로 봐요. 원본 칸에 마우스를 올리면 출력의 어느 블록이 됐는지 정확히 보여요!"),
+      content: <CowSignalScaleSim E={E} />,
     },
 
     // 1-9 출력 크기 퀴즈
