@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowTipSections } from "./components";
+import { getCowTipSections, CowTipSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -96,7 +96,15 @@ export function makeCowTipCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Sandbox sim — feel the operation before reasoning about it
+    {
+      type: "reveal",
+      narr: t(E,
+        "Time to feel the rule yourself. Click a cell — the rectangle from (0, 0) to that cell flips. Try each preset and find the fewest tips.",
+        "직접 느껴봐요. 칸을 클릭하면 (0, 0) ~ 그 칸의 직사각형이 뒤집혀요. 예시마다 가장 적은 횟수를 찾아봐요."),
+      content: <CowTipSim E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -114,7 +122,7 @@ export function makeCowTipCh1(E) {
         "Correct! Toggle (0,0)-(1,1), then (0,0)-(0,1), then (0,0)-(1,0). 3 operations total.",
         "맞아! (0,0)-(1,1) 토글, (0,0)-(0,1) 토글, (0,0)-(1,0) 토글. 총 3번이에요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

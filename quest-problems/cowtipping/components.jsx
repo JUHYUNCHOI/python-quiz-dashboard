@@ -1,8 +1,197 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ================================================================
+   CowTipSim — clickable subgrid-toggle sandbox.
+   Click any cell (i, j) and the rectangle (0,0)..(i,j) flips.
+   Counter shows how many tips. Goal: every cow facing down (0).
+   ================================================================ */
+const SIM_PRESETS = [
+  { label: "★", grid: [[1, 0, 0], [0, 1, 0], [0, 0, 1]] },
+  { label: "▣", grid: [[1, 1, 0], [1, 0, 0], [0, 0, 0]] },
+  { label: "◆", grid: [[1, 1, 1], [1, 1, 0], [1, 0, 0]] },
+];
+
+export function CowTipSim({ E }) {
+  const [presetIdx, setPresetIdx] = useState(0);
+  const [grid, setGrid] = useState(() => SIM_PRESETS[0].grid.map((r) => [...r]));
+  const [tips, setTips] = useState(0);
+  const [history, setHistory] = useState([]);
+
+  const N = grid.length;
+  const allDown = grid.every((row) => row.every((v) => v === 0));
+
+  const handleCell = (i, j) => {
+    const next = grid.map((row, r) =>
+      row.map((v, c) => (r <= i && c <= j ? v ^ 1 : v))
+    );
+    setGrid(next);
+    setTips(tips + 1);
+    setHistory([...history, [i, j]]);
+  };
+
+  const reset = () => {
+    setGrid(SIM_PRESETS[presetIdx].grid.map((r) => [...r]));
+    setTips(0);
+    setHistory([]);
+  };
+
+  const choosePreset = (idx) => {
+    setPresetIdx(idx);
+    setGrid(SIM_PRESETS[idx].grid.map((r) => [...r]));
+    setTips(0);
+    setHistory([]);
+  };
+
+  const cellSize = 56;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{
+        background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 12,
+        padding: "10px 14px", marginBottom: 12, fontSize: 12.5, color: "#065f46", lineHeight: 1.55,
+      }}>
+        <b>🐄 {t(E, "Try it!", "직접 해봐!")}</b>{" "}
+        {t(E,
+          "Click any cell (i, j) — every cow inside the rectangle (0, 0) to (i, j) flips. Make all cows face DOWN (0) in the fewest tips.",
+          "어떤 칸 (i, j) 든 클릭하면 (0, 0) ~ (i, j) 직사각형 안 모든 소가 뒤집혀요. 가장 적은 횟수로 모두 0 (엎드림) 으로 만들어 봐요.")}
+      </div>
+
+      <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", alignItems: "center" }}>
+        <span style={{ fontSize: 12, color: C.dim, fontWeight: 600 }}>
+          {t(E, "Preset:", "예시:")}
+        </span>
+        {SIM_PRESETS.map((p, idx) => (
+          <button
+            key={idx}
+            onClick={() => choosePreset(idx)}
+            style={{
+              background: idx === presetIdx ? A : "#fff",
+              color: idx === presetIdx ? "#fff" : A,
+              border: `1.5px solid ${A}`,
+              borderRadius: 8,
+              padding: "4px 10px",
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            {p.label}
+          </button>
+        ))}
+        <button
+          onClick={reset}
+          style={{
+            marginLeft: "auto",
+            background: "#fff",
+            color: "#6b7280",
+            border: "1.5px solid #d1d5db",
+            borderRadius: 8,
+            padding: "4px 10px",
+            fontSize: 12,
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          ↻ {t(E, "Reset", "초기화")}
+        </button>
+      </div>
+
+      <div style={{ display: "flex", gap: 18, alignItems: "flex-start", flexWrap: "wrap" }}>
+        <div style={{
+          display: "inline-grid",
+          gridTemplateColumns: `repeat(${N}, ${cellSize}px)`,
+          gap: 4,
+          background: "#f0fdf4",
+          border: `2px solid ${A}`,
+          borderRadius: 10,
+          padding: 8,
+        }}>
+          {grid.map((row, i) =>
+            row.map((v, j) => (
+              <button
+                key={`${i}-${j}`}
+                onClick={() => handleCell(i, j)}
+                title={`(${i}, ${j})`}
+                style={{
+                  width: cellSize,
+                  height: cellSize,
+                  border: "1.5px solid #d1d5db",
+                  borderRadius: 8,
+                  background: v === 1 ? "#fef3c7" : "#ecfdf5",
+                  fontSize: 26,
+                  cursor: "pointer",
+                  transition: "background 0.15s",
+                  padding: 0,
+                }}
+              >
+                {v === 1 ? "🐄" : "💤"}
+              </button>
+            ))
+          )}
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 160 }}>
+          <div style={{
+            background: "#fff",
+            border: `1.5px solid ${A}`,
+            borderRadius: 10,
+            padding: "10px 14px",
+          }}>
+            <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, letterSpacing: 0.5 }}>
+              {t(E, "TIPS USED", "사용한 횟수")}
+            </div>
+            <div style={{ fontSize: 28, fontWeight: 800, color: A, lineHeight: 1.1 }}>
+              {tips}
+            </div>
+          </div>
+
+          <div style={{
+            background: allDown ? "#dcfce7" : "#fef3c7",
+            border: `1.5px solid ${allDown ? "#16a34a" : "#fbbf24"}`,
+            borderRadius: 10,
+            padding: "10px 14px",
+            fontSize: 12.5,
+            fontWeight: 700,
+            color: allDown ? "#15803d" : "#92400e",
+            textAlign: "center",
+          }}>
+            {allDown
+              ? t(E, "✅ All down! Nice work.", "✅ 모두 엎드림! 잘했어.")
+              : t(E, "🐄 Standing cows remain", "🐄 아직 서있는 소가 있어요")}
+          </div>
+
+          {history.length > 0 && (
+            <div style={{
+              background: "#fff",
+              border: "1px solid #e5e7eb",
+              borderRadius: 10,
+              padding: "8px 12px",
+              fontSize: 11.5,
+              color: C.text,
+              lineHeight: 1.5,
+              maxHeight: 130,
+              overflowY: "auto",
+            }}>
+              <div style={{ fontWeight: 700, color: C.dim, marginBottom: 4, fontSize: 10.5, letterSpacing: 0.5 }}>
+                {t(E, "MOVES", "기록")}
+              </div>
+              {history.map(([i, j], k) => (
+                <div key={k} style={{ fontFamily: "monospace" }}>
+                  {k + 1}. ({i}, {j})
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",
