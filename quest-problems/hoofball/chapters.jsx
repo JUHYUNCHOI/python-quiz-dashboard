@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getHoofballSections } from "./components";
+import { getHoofballSections, HoofballPassSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -48,7 +48,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeHoofballCh1(E) {
   return [
@@ -112,7 +112,15 @@ export function makeHoofballCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Interactive sim — passes on a number line
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try it: pick a sample, watch each cow's arrow point to her nearest neighbor, then press ▶. Cows nobody points to are SOURCES — count them.",
+        "직접 해 봐: 샘플 골라서 각 소가 가리키는 가장 가까운 이웃을 보고, ▶ 눌러 패스 관찰. 아무도 안 가리키는 소(소스)를 세어 봐."),
+      content: <HoofballPassSim E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -131,7 +139,7 @@ export function makeHoofballCh1(E) {
         "Cow at 1 and cow at 10 never receive passes (they are sources). Need 2 balls!",
         "위치 1과 10의 소는 패스를 안 받아 (소스). 공 2개 필요!"),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
