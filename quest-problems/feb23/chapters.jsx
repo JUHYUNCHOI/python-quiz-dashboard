@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getFeb23Sections } from "./components";
+import { getFeb23Sections, Feb23DeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -219,6 +219,20 @@ BEEF`}
                 "1. F 위치 찾기\n2. 모든 2^abs(F) 할당 시도 (B 또는 E)\n3. 각각에서 연속 같은 쌍 세기\n4. 서로 다른 흥분도 모으기\n5. 답 = 집합의 크기")}
             </div>
           </div>
+        </div>),
+    },
+    // Hands-on: enumerate all F-assignments and watch the distinct set form
+    {
+      type: "reveal",
+      narr: t(E,
+        "Time to feel the algorithm. Pick a string, flip each F by hand to see how excitement changes, then hit 'Audit all' to enumerate every 2^|F| assignment at once and watch the distinct set form.",
+        "직접 느껴보자. 문자열 골라서 F 를 손으로 토글하며 흥분도 변화 보고, '모두 점검' 누르면 2^|F| 가지를 한 번에 펼쳐서 서로 다른 값 집합이 만들어지는 걸 봐."),
+      content: (
+        <div style={{ padding: 12 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#dc2626", textAlign: "center", marginBottom: 6 }}>
+            🔍 {t(E, "Deep Audit — try every F-assignment", "심층 점검 — 모든 F 할당 펼쳐 보기")}
+          </div>
+          <Feb23DeepAuditSim E={E} />
         </div>),
     },
   ];

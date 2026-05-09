@@ -1,8 +1,203 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* ═══════════════════════════════════════════════════════════════
+   Feb23DeepAuditSim — for a small string with F's, toggle each F
+   between B/E, see excitement update live, then "Audit all 2^|F|"
+   to enumerate every assignment and collect distinct values.
+   ═══════════════════════════════════════════════════════════════ */
+const _FEB_PRESETS = [
+  { s: "BEEF",   label: "BEEF (1×F)" },
+  { s: "BFFE",   label: "BFFE (2×F)" },
+  { s: "FBFEF",  label: "FBFEF (3×F)" },
+  { s: "BFEFB",  label: "BFEFB (2×F)" },
+];
+
+function _excitement(arr) {
+  let c = 0;
+  for (let i = 0; i + 1 < arr.length; i++) if (arr[i] === arr[i + 1]) c++;
+  return c;
+}
+
+export function Feb23DeepAuditSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const { s } = _FEB_PRESETS[pi];
+
+  // Position-indexed state for each F: 'B' | 'E'. Non-F characters ignored.
+  const fPositions = [];
+  for (let i = 0; i < s.length; i++) if (s[i] === "F") fPositions.push(i);
+
+  const [choices, setChoices] = useState(() => fPositions.map(() => "B"));
+  const [audited, setAudited] = useState(false);
+
+  const switchPreset = (newPi) => {
+    setPi(newPi);
+    const ns = _FEB_PRESETS[newPi].s;
+    const nf = [];
+    for (let i = 0; i < ns.length; i++) if (ns[i] === "F") nf.push(i);
+    setChoices(nf.map(() => "B"));
+    setAudited(false);
+  };
+
+  // Build current assignment
+  const arr = s.split("");
+  fPositions.forEach((p, idx) => { arr[p] = choices[idx] || "B"; });
+  const curExcite = _excitement(arr);
+
+  // Adjacent-pair flags for highlight
+  const matchFlags = arr.map((_, i) => i + 1 < arr.length && arr[i] === arr[i + 1]);
+
+  // Audit: enumerate all 2^|F| → distinct excitement set
+  const nf = fPositions.length;
+  const auditResults = [];
+  const distinctSet = new Set();
+  for (let mask = 0; mask < (1 << nf); mask++) {
+    const a = s.split("");
+    for (let j = 0; j < nf; j++) a[fPositions[j]] = ((mask >> j) & 1) ? "B" : "E";
+    const ex = _excitement(a);
+    auditResults.push({ str: a.join(""), ex });
+    distinctSet.add(ex);
+  }
+  const distinctSorted = [...distinctSet].sort((x, y) => x - y);
+
+  const toggleF = (idx) => {
+    const u = [...choices];
+    u[idx] = u[idx] === "B" ? "E" : "B";
+    setChoices(u);
+    setAudited(false);
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {_FEB_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => switchPreset(i)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {p.label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8 }}>
+        {t(E, "Tap an F to flip it between B and E. Watch the excitement change live.",
+              "F 를 탭해서 B 와 E 사이를 토글해 봐. 흥분도가 실시간으로 변해.")}
+      </div>
+
+      {/* clickable letter row with adjacent-match underline */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 4, flexWrap: "wrap" }}>
+        {arr.map((ch, i) => {
+          const isF = s[i] === "F";
+          const fIdx = fPositions.indexOf(i);
+          const matched = matchFlags[i];
+          const bg = ch === "B" ? "#dbeafe" : "#dcfce7";
+          const border = ch === "B" ? "#93c5fd" : "#86efac";
+          const color = ch === "B" ? "#1d4ed8" : "#166534";
+          const ring = matched ? "0 0 0 2px #fca5a5" : "none";
+          return (
+            <button
+              key={i}
+              onClick={() => isF && toggleF(fIdx)}
+              disabled={!isF}
+              title={isF ? t(E, "click to flip", "클릭해서 토글") : ""}
+              style={{
+                width: 38, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: 8, fontSize: 20, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+                background: bg, border: `1.5px solid ${border}`, color,
+                cursor: isF ? "pointer" : "default",
+                position: "relative", padding: 0,
+                boxShadow: ring,
+                outline: isF ? `2px dashed ${A}` : "none",
+                outlineOffset: isF ? -4 : 0,
+              }}
+            >
+              {ch}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* origin row showing where F's were */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
+        {s.split("").map((ch, i) => (
+          <div key={i} style={{
+            width: 38, textAlign: "center", fontSize: 10,
+            color: ch === "F" ? A : "#94a3b8", fontWeight: ch === "F" ? 700 : 400,
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {ch === "F" ? "F" : "·"}
+          </div>
+        ))}
+      </div>
+
+      {/* current excitement */}
+      <div style={{
+        background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10,
+        padding: "8px 12px", marginBottom: 10,
+        display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 6,
+      }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#7f1d1d" }}>
+          {t(E, "Current string", "현재 문자열")}: <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>{arr.join("")}</code>
+        </div>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#991b1b", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "excitement", "흥분도")} = {curExcite}
+        </div>
+      </div>
+
+      {/* audit button */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        <button onClick={() => setAudited(true)} style={{
+          padding: "6px 14px", borderRadius: 8, border: `1px solid ${A}`,
+          background: A, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>
+          {t(E, `🔍 Audit all 2^${nf} = ${1 << nf} assignments`,
+                `🔍 모든 2^${nf} = ${1 << nf} 가지 점검`)}
+        </button>
+      </div>
+
+      {/* audit panel */}
+      {audited && (
+        <div style={{
+          background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10,
+          padding: 10, fontSize: 11.5, color: "#9a3412", lineHeight: 1.6,
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 6, color: "#7c2d12" }}>
+            {t(E, "All assignments → excitement", "모든 할당 → 흥분도")}
+          </div>
+          <div style={{
+            display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))",
+            gap: 4, marginBottom: 8, fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {auditResults.map((r, i) => (
+              <div key={i} style={{
+                background: "#fff", border: "1px solid #fed7aa", borderRadius: 6,
+                padding: "3px 6px", fontSize: 11, color: "#7c2d12",
+                display: "flex", justifyContent: "space-between", gap: 4,
+              }}>
+                <span>{r.str}</span>
+                <b>{r.ex}</b>
+              </div>
+            ))}
+          </div>
+          <div style={{
+            background: "#dcfce7", border: "1px solid #86efac", borderRadius: 8,
+            padding: "6px 10px", color: "#166534", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {t(E, "distinct set", "서로 다른 값")} = {"{"}{distinctSorted.join(", ")}{"}"} →
+            {" "}{t(E, "count", "개수")}={distinctSorted.length}, min={distinctSorted[0]}, max={distinctSorted[distinctSorted.length - 1]}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",
