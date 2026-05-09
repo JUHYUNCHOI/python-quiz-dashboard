@@ -6,6 +6,129 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#2563eb";
 
 /* ═══════════════════════════════════════════════════════════════
+   LonelyPhotoWindowSim — editable string + window-size slider;
+   highlights every valid lonely window in green. Built so students
+   can build intuition before formula scanning (per-i sim).
+   ═══════════════════════════════════════════════════════════════ */
+export function LonelyPhotoWindowSim({ E }) {
+  const [sIn, setSIn] = useState("GHGHG");
+  const [w, setW] = useState(3);
+
+  // sanitize: keep only G/H, uppercase, limit 6-10
+  const s = (sIn.toUpperCase().replace(/[^GH]/g, "") || "G").slice(0, 10);
+  const N = s.length;
+  const wMax = Math.max(3, N);
+  const wClamped = Math.min(Math.max(3, w), wMax);
+
+  // find all lonely windows of size wClamped
+  const lonelySet = new Set(); // store start indices
+  for (let i = 0; i + wClamped <= N; i++) {
+    const sub = s.slice(i, i + wClamped);
+    let g = 0, h = 0;
+    for (const ch of sub) { if (ch === "G") g++; else h++; }
+    if ((g === 1 && h >= 2) || (h === 1 && g >= 2)) lonelySet.add(i);
+  }
+  const lonelyCount = lonelySet.size;
+
+  // for each cell, count how many lonely windows contain it
+  const cellHits = Array(N).fill(0);
+  lonelySet.forEach(start => {
+    for (let k = 0; k < wClamped; k++) cellHits[start + k]++;
+  });
+
+  // pick first lonely window to display below as "example"
+  const firstStart = lonelySet.size ? Math.min(...lonelySet) : -1;
+
+  const presets = ["GHGHG", "GHHHG", "HGGGGH", "GHGHGHG"];
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: C.dim, marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+        {t(E, "string s (G/H, length 1–10)", "문자열 s (G/H, 길이 1–10)")}
+      </div>
+      <input
+        value={sIn}
+        onChange={e => setSIn(e.target.value)}
+        placeholder="GHGHG"
+        maxLength={20}
+        style={{
+          width: "100%", padding: "8px 10px", borderRadius: 8,
+          border: `1px solid ${C.border}`, fontSize: 14, fontWeight: 700,
+          fontFamily: "'JetBrains Mono',monospace", color: A,
+          marginBottom: 8, boxSizing: "border-box", letterSpacing: 2,
+        }}
+      />
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {presets.map((p, i) => (
+          <button key={i} onClick={() => setSIn(p)} style={{
+            padding: "3px 9px", borderRadius: 7, border: `1px solid ${C.border}`,
+            background: sIn === p ? A : "transparent", color: sIn === p ? "#fff" : C.dim,
+            fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{p}</button>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: C.dim, fontFamily: "'JetBrains Mono',monospace", minWidth: 80 }}>
+          {t(E, "window size", "창 크기")}
+        </span>
+        <input
+          type="range" min={3} max={wMax} value={wClamped}
+          onChange={e => setW(parseInt(e.target.value, 10))}
+          style={{ flex: 1, accentColor: A }}
+        />
+        <span style={{ fontSize: 13, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono',monospace", minWidth: 28, textAlign: "right" }}>
+          {wClamped}
+        </span>
+      </div>
+
+      {/* Cell row: green tint if cell is part of any lonely window */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {s.split("").map((ch, idx) => {
+          const inLonely = cellHits[idx] > 0;
+          return (
+            <div key={idx} style={{
+              width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+              background: inLonely ? "#dcfce7" : "#fff",
+              border: `1.5px solid ${inLonely ? "#16a34a" : "#e5e7eb"}`,
+              color: C.text,
+            }}>{ch}</div>
+          );
+        })}
+      </div>
+
+      <div style={{
+        background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10,
+        padding: "10px 12px", marginBottom: 8, fontSize: 12,
+        fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.7,
+      }}>
+        N = {N}, {t(E, "window", "창")} = {wClamped}<br/>
+        {t(E, "windows scanned", "검사한 창")} = {Math.max(0, N - wClamped + 1)}<br/>
+        <b style={{ color: "#16a34a" }}>
+          {t(E, "lonely windows of this size", "이 크기의 외로운 창")} = {lonelyCount}
+        </b>
+        {firstStart >= 0 && (
+          <>
+            <br/>
+            <span style={{ color: C.dim }}>
+              {t(E, "first lonely window: ", "첫 외로운 창: ")}
+              s[{firstStart}..{firstStart + wClamped - 1}] = '{s.slice(firstStart, firstStart + wClamped)}'
+            </span>
+          </>
+        )}
+      </div>
+
+      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+        {t(E,
+          "Green = at least one lonely window covers this cell. Drag the slider to scan all sizes.",
+          "초록 = 이 칸을 포함하는 외로운 창이 하나라도 있음. 슬라이더로 모든 크기 훑어보기.")}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    LonelyPhotoSim — for each i: highlight same-type run + opp counts
    ═══════════════════════════════════════════════════════════════ */
 const _LP_PRESETS = ["GHGHG", "GHHHG", "HGGGGH", "GHGHGHG"];

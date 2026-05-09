@@ -152,6 +152,13 @@ export function makeLonelyPhotoCh1(E) {
         "Stand at each cow i and look around — how far does my breed stretch, and what's beyond?",
         "각 소 i 자리에 서서 둘러봐 — 내 품종이 어디까지 이어지고, 그 너머는 어때?"),
     },
+    // 1-5: Window-scanner sim — change s and the window size, see every lonely window light up green.
+    {
+      type: "windowSim",
+      narr: t(E,
+        "Type your own G/H string and slide the window size — every length-w substring with exactly one minority breed lights up green. Watch the count change as you grow w.",
+        "G/H 문자열을 직접 입력하고 창 크기 슬라이더를 움직여봐 — 길이 w 묶음 중 한 품종만 1마리인 것이 초록으로 켜져. 창을 키워가며 개수가 어떻게 바뀌는지 관찰."),
+    },
   ];
 }
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { LonelyPhotoProgressiveCode, downloadLonelyPhotoPDF, getLonelyPhotoSections, LonelyPhotoSim, LonelyPhotoRunner } from "./components";
+import { LonelyPhotoProgressiveCode, downloadLonelyPhotoPDF, getLonelyPhotoSections, LonelyPhotoSim, LonelyPhotoWindowSim, LonelyPhotoRunner } from "./components";
 import { makeLonelyPhotoCh1, makeLonelyPhotoCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -94,6 +94,7 @@ export default function LonelyPhotoApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <LonelyPhotoProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     if (step.type === "sim") return <LonelyPhotoSim E={E} />;
+    if (step.type === "windowSim") return <LonelyPhotoWindowSim E={E} />;
     if (step.type === "runner") return <LonelyPhotoRunner E={E} />;
     return null;
   };
@@ -107,6 +108,7 @@ export default function LonelyPhotoApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
     if (s.type === "progressive") return <LonelyPhotoProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     if (s.type === "sim") return <LonelyPhotoSim E={E} />;
+    if (s.type === "windowSim") return <LonelyPhotoWindowSim E={E} />;
     if (s.type === "runner") return <LonelyPhotoRunner E={E} />;
     return null;
   };
