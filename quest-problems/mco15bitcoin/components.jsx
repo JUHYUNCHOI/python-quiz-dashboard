@@ -1,8 +1,147 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ================================================================
+   Pair Inspector Sim — deep-audit the brute-force pairing
+   Student clicks any two of 4 fixed mining sites and sees
+   dx, dy, dx²+dy² computed live, plus the running max across
+   all visited pairs. Bilingual via E flag.
+   ================================================================ */
+const PI_SITES = [
+  { id: 0, x: 1, y: 1, name: "A" },
+  { id: 1, x: 5, y: 2, name: "B" },
+  { id: 2, x: 2, y: 6, name: "C" },
+  { id: 3, x: 6, y: 5, name: "D" },
+];
+
+export function BitcoinPairInspector({ E }) {
+  const [picked, setPicked] = useState([]); // up to 2 ids
+  const [seenMax, setSeenMax] = useState(0);
+
+  const click = (id) => {
+    let np;
+    if (picked.length === 2) np = [id];
+    else if (picked.includes(id)) np = picked.filter((p) => p !== id);
+    else np = [...picked, id];
+    setPicked(np);
+    if (np.length === 2) {
+      const a = PI_SITES[np[0]], b = PI_SITES[np[1]];
+      const d = (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
+      setSeenMax((m) => Math.max(m, d));
+    }
+  };
+
+  const reset = () => { setPicked([]); setSeenMax(0); };
+
+  // grid: 0..7 in both axes, 36px per unit
+  const U = 34, PAD = 22, GRID = 7;
+  const SVG = PAD * 2 + U * GRID;
+  const px = (x) => PAD + x * U;
+  const py = (y) => PAD + (GRID - y) * U; // flip y so up = +y
+
+  const a = picked[0] != null ? PI_SITES[picked[0]] : null;
+  const b = picked[1] != null ? PI_SITES[picked[1]] : null;
+  const dx = a && b ? a.x - b.x : null;
+  const dy = a && b ? a.y - b.y : null;
+  const distSq = a && b ? dx * dx + dy * dy : null;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{
+        background: "#fff7ed", border: `1.5px solid ${A}`, borderRadius: 10,
+        padding: "8px 12px", marginBottom: 10, fontSize: 12, color: "#9a3412", lineHeight: 1.5,
+      }}>
+        <b>{t(E, "🔍 Pair Inspector", "🔍 쌍 검사기")}</b> — {t(E,
+          "Click any two sites to see dx² + dy². Try all 6 pairs and watch the running max.",
+          "두 사이트를 클릭하면 dx² + dy² 가 보여요. 6개 쌍을 모두 시도하며 최댓값을 추적해봐요.")}
+      </div>
+
+      <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "flex-start" }}>
+        <svg width={SVG} height={SVG} style={{ background: "#fffaf3", border: `1px solid #fdba74`, borderRadius: 10 }}>
+          {/* grid lines */}
+          {Array.from({ length: GRID + 1 }).map((_, i) => (
+            <g key={`g${i}`}>
+              <line x1={px(i)} y1={py(0)} x2={px(i)} y2={py(GRID)} stroke="#fde4c4" strokeWidth={1} />
+              <line x1={px(0)} y1={py(i)} x2={px(GRID)} y2={py(i)} stroke="#fde4c4" strokeWidth={1} />
+            </g>
+          ))}
+          {/* axes */}
+          <line x1={px(0)} y1={py(0)} x2={px(GRID)} y2={py(0)} stroke="#9a3412" strokeWidth={1.5} />
+          <line x1={px(0)} y1={py(0)} x2={px(0)} y2={py(GRID)} stroke="#9a3412" strokeWidth={1.5} />
+          {/* connecting line if 2 picked */}
+          {a && b && (
+            <line x1={px(a.x)} y1={py(a.y)} x2={px(b.x)} y2={py(b.y)} stroke={A} strokeWidth={2.5} strokeDasharray="5 4" />
+          )}
+          {/* dx / dy guides */}
+          {a && b && (
+            <>
+              <line x1={px(a.x)} y1={py(a.y)} x2={px(b.x)} y2={py(a.y)} stroke="#fbbf24" strokeWidth={1.5} />
+              <line x1={px(b.x)} y1={py(a.y)} x2={px(b.x)} y2={py(b.y)} stroke="#fbbf24" strokeWidth={1.5} />
+            </>
+          )}
+          {/* points */}
+          {PI_SITES.map((s) => {
+            const sel = picked.includes(s.id);
+            return (
+              <g key={s.id} onClick={() => click(s.id)} style={{ cursor: "pointer" }}>
+                <circle cx={px(s.x)} cy={py(s.y)} r={sel ? 11 : 8}
+                  fill={sel ? A : "#fff"} stroke={A} strokeWidth={2} />
+                <text x={px(s.x)} y={py(s.y) + 4} textAnchor="middle"
+                  fontSize={11} fontWeight={800}
+                  fill={sel ? "#fff" : A}>{s.name}</text>
+                <text x={px(s.x) + 12} y={py(s.y) - 10} fontSize={10} fill="#9a3412">
+                  ({s.x},{s.y})
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+
+        <div style={{ flex: "1 1 220px", minWidth: 220 }}>
+          <div style={{
+            background: "#fff", border: `1px solid ${C.border}`, borderRadius: 10,
+            padding: 10, fontSize: 12, color: C.text, marginBottom: 8,
+          }}>
+            <div style={{ fontWeight: 700, color: A, marginBottom: 6 }}>
+              {t(E, "Picked", "선택")}: {a ? a.name : "·"} , {b ? b.name : "·"}
+            </div>
+            {a && b ? (
+              <div style={{ fontFamily: "ui-monospace, monospace", lineHeight: 1.7 }}>
+                <div>dx = {a.x} − {b.x} = <b style={{ color: A }}>{dx}</b></div>
+                <div>dy = {a.y} − {b.y} = <b style={{ color: A }}>{dy}</b></div>
+                <div>dx² + dy² = {dx * dx} + {dy * dy} = <b style={{ color: "#15803d" }}>{distSq}</b></div>
+              </div>
+            ) : (
+              <div style={{ color: C.dim }}>
+                {t(E, "Click two sites on the grid.", "그리드에서 두 사이트를 클릭하세요.")}
+              </div>
+            )}
+          </div>
+          <div style={{
+            background: "#dcfce7", border: "1px solid #86efac", borderRadius: 10,
+            padding: 10, fontSize: 12, color: "#15803d",
+          }}>
+            <b>{t(E, "Running max", "지금까지 최댓값")}:</b> {seenMax}
+            <div style={{ fontSize: 11, color: "#166534", marginTop: 4 }}>
+              {t(E, "This is what max_dist tracks across all 6 pairs.",
+                  "max_dist 가 6개 쌍 전체에서 추적하는 값이에요.")}
+            </div>
+          </div>
+          <button onClick={reset} style={{
+            marginTop: 8, background: "#fff", color: A, border: `1.5px solid ${A}`,
+            borderRadius: 8, padding: "5px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+          }}>
+            {t(E, "Reset", "초기화")}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

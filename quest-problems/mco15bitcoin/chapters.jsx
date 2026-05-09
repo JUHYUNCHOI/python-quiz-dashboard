@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getBitcoinSections } from "./components";
+import { getBitcoinSections, BitcoinPairInspector } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -25,7 +25,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeBitcoinCh1(E) {
   return [
@@ -77,7 +77,15 @@ export function makeBitcoinCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Pair Inspector sim — feel the brute force
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before writing code, let's feel the brute force by hand. Pick any two sites, see dx² + dy², and watch the running max climb.",
+        "코드를 짜기 전에 완전 탐색을 손으로 느껴봐요. 두 사이트를 골라 dx² + dy² 를 보고, 최댓값이 올라가는 걸 확인해봐요."),
+      content: <BitcoinPairInspector E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -94,7 +102,7 @@ export function makeBitcoinCh1(E) {
         "Correct! sqrt is monotonic, so max squared distance corresponds to max distance. We avoid floating point issues.",
         "맞아! sqrt는 단조함수라서 최대 제곱 거리가 최대 거리에 대응해요. 부동소수점 문제도 피할 수 있어요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
