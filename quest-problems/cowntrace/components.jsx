@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -113,6 +114,204 @@ export function getCowntraceSections(E) {
 
 export function CowntraceProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
+}
+
+
+/* ───────────────────────────────────────────────────────────────
+   CowntraceSim — pick patient-zero + K, replay handshake events,
+   watch infection spread one event at a time.  Fully bilingual.
+   ─────────────────────────────────────────────────────────────── */
+const _CT_PRESETS = [
+  {
+    label: { en: "Tiny (N=4)", ko: "작은 예시 (N=4)" },
+    N: 4,
+    events: [
+      // [time, a, b]
+      [1, 1, 2],
+      [2, 2, 3],
+      [3, 3, 4],
+    ],
+    finalInfected: [1, 2, 3, 4],
+  },
+  {
+    label: { en: "Branching (N=5)", ko: "가지형 (N=5)" },
+    N: 5,
+    events: [
+      [1, 1, 2],
+      [2, 1, 3],
+      [3, 1, 4],
+      [4, 4, 5],
+    ],
+    finalInfected: [1, 2, 3, 4, 5],
+  },
+  {
+    label: { en: "Skip cow (N=4)", ko: "건너뛰기 (N=4)" },
+    N: 4,
+    events: [
+      [1, 1, 2],
+      [2, 3, 4],
+    ],
+    finalInfected: [1, 2],
+  },
+];
+
+export function CowntraceSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const preset = _CT_PRESETS[pi];
+  const N = preset.N;
+  const events = preset.events;
+  const finalSet = new Set(preset.finalInfected);
+
+  const [pz, setPz] = useState(1);
+  const [K, setK] = useState(1);
+
+  // Simulate the spread step-by-step for the chosen patient-zero + K
+  const safePz = Math.min(Math.max(pz, 1), N);
+  const safeK = Math.max(0, Math.min(K, events.length));
+
+  const sick = new Set([safePz]);
+  const count = new Map(); count.set(safePz, 0);
+  const trace = [];
+  for (const [t_i, a, b] of events) {
+    const aSick = sick.has(a);
+    const bSick = sick.has(b);
+    let action = "skip";
+    let infectedNow = null;
+    if (aSick && !bSick) {
+      if ((count.get(a) || 0) < safeK) {
+        sick.add(b);
+        count.set(b, 0);
+        count.set(a, (count.get(a) || 0) + 1);
+        action = "spread"; infectedNow = b;
+      } else action = "blocked";
+    } else if (bSick && !aSick) {
+      if ((count.get(b) || 0) < safeK) {
+        sick.add(a);
+        count.set(a, 0);
+        count.set(b, (count.get(b) || 0) + 1);
+        action = "spread"; infectedNow = a;
+      } else action = "blocked";
+    } else if (aSick && bSick) {
+      count.set(a, (count.get(a) || 0) + 1);
+      count.set(b, (count.get(b) || 0) + 1);
+      action = "both";
+    }
+    trace.push({ t_i, a, b, aSick, bSick, action, infectedNow, snapshot: new Set(sick) });
+  }
+
+  const finalSick = trace.length ? trace[trace.length - 1].snapshot : new Set([safePz]);
+  const setsEqual = finalSick.size === finalSet.size && [...finalSick].every(x => finalSet.has(x));
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* Preset switcher */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_CT_PRESETS.map((pr, i) => (
+          <button key={i} onClick={() => { setPi(i); setPz(1); setK(1); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 11, fontWeight: 700, cursor: "pointer",
+          }}>{t(E, pr.label.en, pr.label.ko)}</button>
+        ))}
+      </div>
+
+      {/* Final-infected panel */}
+      <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 10, marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", marginBottom: 6 }}>
+          🐄 {t(E, "Cows", "소")} (N = {N}) · {t(E, "Final infected (target)", "최종 감염 (목표)")}
+        </div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {Array.from({ length: N }, (_, i) => i + 1).map(c => {
+            const isFinal = finalSet.has(c);
+            return (
+              <span key={c} style={{
+                display: "inline-flex", alignItems: "center", justifyContent: "center",
+                minWidth: 28, padding: "3px 8px", borderRadius: 999,
+                background: isFinal ? "#fee2e2" : "#fff",
+                border: `1.5px solid ${isFinal ? "#ef4444" : "#cbd5e1"}`,
+                color: isFinal ? "#991b1b" : C.dim,
+                fontSize: 11, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+              }}>{isFinal ? "🤒" : "🐄"} {c}</span>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Pickers */}
+      <div style={{ display: "flex", gap: 10, alignItems: "center", justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        <label style={{ fontSize: 11, fontWeight: 700, color: C.dim }}>
+          {t(E, "Patient zero:", "환자 제로:")}
+          <select value={safePz} onChange={(e) => setPz(Number(e.target.value))} style={{
+            marginLeft: 6, padding: "3px 6px", borderRadius: 6, border: `1px solid ${A}`,
+            color: A, fontWeight: 700, fontSize: 11, background: "#fff",
+          }}>
+            {Array.from({ length: N }, (_, i) => i + 1).map(c => <option key={c} value={c}>{`Cow ${c}`}</option>)}
+          </select>
+        </label>
+        <label style={{ fontSize: 11, fontWeight: 700, color: C.dim }}>
+          {t(E, "K (max spreads/cow):", "K (소당 최대 전파):")}
+          <select value={safeK} onChange={(e) => setK(Number(e.target.value))} style={{
+            marginLeft: 6, padding: "3px 6px", borderRadius: 6, border: `1px solid ${A}`,
+            color: A, fontWeight: 700, fontSize: 11, background: "#fff",
+          }}>
+            {Array.from({ length: events.length + 1 }, (_, i) => i).map(k => <option key={k} value={k}>{k}</option>)}
+          </select>
+        </label>
+      </div>
+
+      {/* Event-by-event trace */}
+      <div style={{ background: "#fff", border: `1.5px solid ${A}`, borderRadius: 10, padding: 10, marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: A, marginBottom: 6, textAlign: "center" }}>
+          🔍 {t(E, `Replaying ${events.length} hoof-shake event(s)`, `발굽-맞댐 이벤트 ${events.length}개 재생`)}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          {trace.map((r, i) => {
+            const bg = r.action === "spread" ? "#fef3c7"
+                      : r.action === "blocked" ? "#fee2e2"
+                      : r.action === "both" ? "#e0e7ff"
+                      : "#f1f5f9";
+            const bd = r.action === "spread" ? "#fbbf24"
+                      : r.action === "blocked" ? "#ef4444"
+                      : r.action === "both" ? "#818cf8"
+                      : "#cbd5e1";
+            const tag = r.action === "spread" ? t(E, `→ infect ${r.infectedNow}`, `→ ${r.infectedNow} 감염`)
+                       : r.action === "blocked" ? t(E, "blocked (K limit)", "차단 (K 한도)")
+                       : r.action === "both" ? t(E, "both already sick", "둘 다 이미 감염")
+                       : t(E, "skip (neither sick)", "건너뜀 (둘 다 건강)");
+            return (
+              <div key={i} style={{
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                padding: "5px 10px", borderRadius: 6, background: bg, border: `1.5px solid ${bd}`,
+                fontSize: 11, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                <span>t={r.t_i}: ({r.a}{r.aSick ? "🤒" : ""}, {r.b}{r.bSick ? "🤒" : ""})</span>
+                <span style={{ color: bd === "#cbd5e1" ? C.dim : "#1f2937" }}>{tag}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Final verdict */}
+      <div style={{
+        textAlign: "center", padding: "10px 12px", borderRadius: 10,
+        background: setsEqual ? "#dcfce7" : "#fee2e2",
+        border: `2px solid ${setsEqual ? "#16a34a" : "#dc2626"}`,
+        fontSize: 12, fontWeight: 800, color: setsEqual ? "#15803d" : "#991b1b",
+      }}>
+        {t(E,
+          `Sim infected = { ${[...finalSick].sort((a,b) => a-b).join(", ")} }`,
+          `시뮬 감염 = { ${[...finalSick].sort((a,b) => a-b).join(", ")} }`)}
+        <div style={{ marginTop: 4, fontSize: 11, fontWeight: 700 }}>
+          {setsEqual
+            ? t(E, `✓ Matches target → cow ${safePz} consistent with K=${safeK}`,
+                  `✓ 목표 일치 → 소 ${safePz} 가 K=${safeK} 와 일관됨`)
+            : t(E, `✗ Differs from target → cow ${safePz} not consistent with K=${safeK}`,
+                  `✗ 목표와 불일치 → 소 ${safePz} 는 K=${safeK} 와 불가능`)}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 

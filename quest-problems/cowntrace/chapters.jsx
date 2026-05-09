@@ -165,6 +165,13 @@ export function makeCowntraceCh1(E) {
         "악수가 한 번도 없었다면 누가 처음부터 감염됐어야 할까?"),
       answer: 1,
     },
+    // 1-4: Deep-audit sim — pick patient-zero + K, replay events, watch spread.
+    {
+      type: "sim",
+      narr: t(E,
+        "Hands-on audit. Pick a patient-zero cow and a K (max spreads per infected cow). Replay every hoof-shake event one by one and watch infection spread, get blocked by K, or skip. The verdict tells you whether (cow, K) matches the target final infected set.",
+        "직접 검사해 봐요. 환자 제로 소와 K (감염된 소 1마리당 최대 전파 횟수) 를 골라요. 발굽-맞댐 이벤트를 하나씩 재생하며 감염 전파/K 차단/건너뜀 을 관찰. 마지막 판정으로 (소, K) 가 목표 감염 집합과 맞는지 확인."),
+    },
   ];
 }
 
