@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -92,6 +93,266 @@ export function getBackForthSections(E) {
 
 export function BackForthProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
+}
+
+
+/* =========================================================
+   StateTreeSim — Bilingual state-space tree visualizer.
+   Toy size to keep the tree readable: 3 buckets per barn,
+   2 days (1: barn1 -> barn2, then 2: barn2 -> barn1).
+   Shows every branch and the resulting barn1 totals.
+   ========================================================= */
+export function BackForthStateTreeSim({ E }) {
+  const [barn1, setBarn1] = useState([4, 1, 7]);
+  const [barn2, setBarn2] = useState([3, 5, 2]);
+  const [days, setDays] = useState(2);
+  const [pickD1, setPickD1] = useState(null);
+  const [pickD2, setPickD2] = useState(null);
+
+  const updateBucket = (which, idx, val) => {
+    const v = Math.max(0, Math.min(99, parseInt(val, 10) || 0));
+    if (which === 1) { const u = [...barn1]; u[idx] = v; setBarn1(u); }
+    else { const u = [...barn2]; u[idx] = v; setBarn2(u); }
+    setPickD1(null); setPickD2(null);
+  };
+
+  const reset = () => { setPickD1(null); setPickD2(null); };
+
+  const branches = useMemo(() => {
+    // Day 1: pick i from barn1 -> barn2.   Day 2: pick j from barn2' -> barn1.
+    const out = [];
+    const totalBarn1 = barn1.reduce((s, x) => s + x, 0);
+    for (let i = 0; i < barn1.length; i++) {
+      const moved1 = barn1[i];
+      const b1after1 = barn1.filter((_, k) => k !== i);
+      const b2after1 = [...barn2, moved1];
+      const day1Total = totalBarn1 - moved1;
+      if (days === 1) {
+        out.push({ i, j: null, day1Total, finalTotal: day1Total, b1after1, b2after1, b1final: b1after1, b2final: b2after1 });
+        continue;
+      }
+      for (let j = 0; j < b2after1.length; j++) {
+        const moved2 = b2after1[j];
+        const b2after2 = b2after1.filter((_, k) => k !== j);
+        const b1after2 = [...b1after1, moved2];
+        const finalTotal = day1Total + moved2;
+        out.push({ i, j, day1Total, finalTotal, b1after1, b2after1, b1final: b1after2, b2final: b2after2 });
+      }
+    }
+    return out;
+  }, [barn1, barn2, days]);
+
+  const distinctTotals = useMemo(() => {
+    const s = new Set(branches.map(b => b.finalTotal));
+    return Array.from(s).sort((a, b) => a - b);
+  }, [branches]);
+
+  // Group branches by day-1 choice for the tree layout
+  const byDay1 = useMemo(() => {
+    const g = {};
+    branches.forEach(b => { (g[b.i] ||= []).push(b); });
+    return g;
+  }, [branches]);
+
+  const isActive = (b) => {
+    if (pickD1 === null && pickD2 === null) return true;
+    if (pickD1 !== null && b.i !== pickD1) return false;
+    if (days === 2 && pickD2 !== null && b.j !== pickD2) return false;
+    return true;
+  };
+
+  const Bucket = ({ v, dim, highlight }) => (
+    <div style={{
+      display: "inline-flex", alignItems: "center", justifyContent: "center",
+      width: 28, height: 28, borderRadius: 6,
+      background: highlight ? "#fde68a" : "#ede9fe",
+      border: `1.5px solid ${highlight ? "#f59e0b" : "#c4b5fd"}`,
+      color: dim ? "#a78bfa" : "#5b21b6",
+      fontSize: 11, fontWeight: 700, opacity: dim ? 0.45 : 1,
+    }}>{v}</div>
+  );
+
+  const Barn = ({ label, list, highlightIdx }) => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+      <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>{label}</div>
+      <div style={{ display: "flex", gap: 3, flexWrap: "wrap", justifyContent: "center", maxWidth: 160 }}>
+        {list.length === 0 ? <span style={{ fontSize: 10, color: C.dim }}>—</span> :
+          list.map((v, k) => <Bucket key={k} v={v} highlight={k === highlightIdx} />)}
+      </div>
+      <div style={{ fontSize: 10, color: "#7c3aed", fontWeight: 700 }}>
+        Σ {list.reduce((s, x) => s + x, 0)}
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* Header */}
+      <div style={{ textAlign: "center", marginBottom: 10 }}>
+        <div style={{ fontSize: 14, fontWeight: 800, color: A }}>
+          🌳 {t(E, "State-Tree Simulator", "상태 트리 시뮬레이터")}
+        </div>
+        <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
+          {t(E,
+            "A toy version (3 buckets, 2 days) to see every branch.",
+            "축소판 (양동이 3 개, 2 일) — 모든 분기를 한눈에.")}
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div style={{
+        background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10,
+        padding: 10, marginBottom: 10, display: "flex", flexDirection: "column", gap: 8,
+      }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", justifyContent: "center" }}>
+          <span style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700 }}>
+            {t(E, "Barn 1", "헛간 1")}
+          </span>
+          {barn1.map((v, k) => (
+            <input key={k} type="number" min={0} max={99} value={v}
+              onChange={(e) => updateBucket(1, k, e.target.value)}
+              style={{ width: 42, padding: "3px 5px", borderRadius: 6, border: "1.5px solid #c4b5fd", fontSize: 12, textAlign: "center", fontWeight: 700, color: "#5b21b6" }} />
+          ))}
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", justifyContent: "center" }}>
+          <span style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700 }}>
+            {t(E, "Barn 2", "헛간 2")}
+          </span>
+          {barn2.map((v, k) => (
+            <input key={k} type="number" min={0} max={99} value={v}
+              onChange={(e) => updateBucket(2, k, e.target.value)}
+              style={{ width: 42, padding: "3px 5px", borderRadius: 6, border: "1.5px solid #c4b5fd", fontSize: 12, textAlign: "center", fontWeight: 700, color: "#5b21b6" }} />
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center" }}>
+          <span style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700 }}>
+            {t(E, "Days", "일수")}
+          </span>
+          {[1, 2].map(d => (
+            <button key={d} onClick={() => { setDays(d); reset(); }} style={{
+              padding: "3px 10px", borderRadius: 6,
+              background: days === d ? A : "#fff",
+              color: days === d ? "#fff" : A,
+              border: `1.5px solid ${A}`, fontSize: 11, fontWeight: 700, cursor: "pointer",
+            }}>{d}</button>
+          ))}
+          <button onClick={reset} style={{
+            padding: "3px 10px", borderRadius: 6, background: "#fff", color: "#6b7280",
+            border: "1.5px solid #d1d5db", fontSize: 11, fontWeight: 700, cursor: "pointer", marginLeft: 8,
+          }}>{t(E, "Clear pick", "선택 해제")}</button>
+        </div>
+      </div>
+
+      {/* Starting state */}
+      <div style={{ display: "flex", justifyContent: "space-around", marginBottom: 12, gap: 10 }}>
+        <Barn label={t(E, "Barn 1 start", "헛간 1 시작")} list={barn1} />
+        <Barn label={t(E, "Barn 2 start", "헛간 2 시작")} list={barn2} />
+      </div>
+
+      {/* Tree */}
+      <div style={{ background: "#fff", border: "1.5px solid #e5e7eb", borderRadius: 10, padding: 10, marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", marginBottom: 6, textAlign: "center" }}>
+          {t(E,
+            "Day 1: pick a bucket from Barn 1 to send → Barn 2",
+            "1 일차: 헛간 1 에서 1 개 골라 → 헛간 2 로 보내기")}
+          {days === 2 && t(E,
+            ".  Day 2: pick a bucket from the new Barn 2 to send back → Barn 1.",
+            ". 2 일차: 새 헛간 2 에서 1 개 골라 → 헛간 1 로 되보내기.")}
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {Object.keys(byDay1).map(iKey => {
+            const i = Number(iKey);
+            const group = byDay1[iKey];
+            const head = group[0];
+            const d1Active = pickD1 === null || pickD1 === i;
+            return (
+              <div key={i} style={{ opacity: d1Active ? 1 : 0.35, transition: "opacity .2s" }}>
+                <button
+                  onClick={() => setPickD1(pickD1 === i ? null : i)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 8,
+                    padding: "5px 8px", width: "100%",
+                    background: pickD1 === i ? "#ede9fe" : "#fafaf9",
+                    border: `1.5px solid ${pickD1 === i ? A : "#e5e7eb"}`,
+                    borderRadius: 8, cursor: "pointer", textAlign: "left",
+                  }}>
+                  <span style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700 }}>
+                    D1 #{i}
+                  </span>
+                  <Bucket v={barn1[i]} highlight />
+                  <span style={{ fontSize: 11, color: C.dim }}>→</span>
+                  <span style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700 }}>
+                    {t(E, "Barn1 Σ", "헛간1 Σ")} {head.day1Total}
+                  </span>
+                </button>
+
+                {days === 2 && pickD1 === i && (
+                  <div style={{
+                    marginLeft: 18, marginTop: 4, paddingLeft: 10,
+                    borderLeft: `2px solid ${A}`,
+                    display: "flex", flexDirection: "column", gap: 3,
+                  }}>
+                    {group.map(b => (
+                      <button key={b.j}
+                        onClick={() => setPickD2(pickD2 === b.j ? null : b.j)}
+                        style={{
+                          display: "flex", alignItems: "center", gap: 6,
+                          padding: "4px 8px",
+                          background: pickD2 === b.j ? "#fde68a" : "#fff",
+                          border: `1px solid ${pickD2 === b.j ? "#f59e0b" : "#e5e7eb"}`,
+                          borderRadius: 6, cursor: "pointer", textAlign: "left",
+                          opacity: isActive(b) ? 1 : 0.4,
+                        }}>
+                        <span style={{ fontSize: 10, color: "#92400e", fontWeight: 700 }}>
+                          D2 #{b.j}
+                        </span>
+                        <Bucket v={b.b2after1[b.j]} highlight />
+                        <span style={{ fontSize: 10, color: C.dim }}>→</span>
+                        <span style={{ fontSize: 10, color: "#15803d", fontWeight: 800 }}>
+                          {t(E, "Barn1 final Σ", "헛간1 최종 Σ")} {b.finalTotal}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Distinct totals */}
+      <div style={{
+        background: "#ecfccb", border: "1.5px solid #84cc16", borderRadius: 10,
+        padding: 10, textAlign: "center",
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#3f6212", marginBottom: 4 }}>
+          {t(E, "Distinct Barn 1 totals reachable", "헛간 1 에서 도달 가능한 서로 다른 총량")}
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center", marginBottom: 4 }}>
+          {distinctTotals.map(v => (
+            <span key={v} style={{
+              padding: "3px 8px", background: "#fff", border: "1.5px solid #84cc16",
+              borderRadius: 6, fontSize: 11, fontWeight: 700, color: "#3f6212",
+            }}>{v}</span>
+          ))}
+        </div>
+        <div style={{ fontSize: 11, color: "#3f6212" }}>
+          {t(E, "Count: ", "개수: ")}
+          <b style={{ fontSize: 13 }}>{distinctTotals.length}</b>
+          <span style={{ color: C.dim, marginLeft: 6 }}>
+            ({branches.length} {t(E, "branches total", "전체 분기")})
+          </span>
+        </div>
+        <div style={{ fontSize: 10, color: C.dim, marginTop: 6, lineHeight: 1.4 }}>
+          {t(E,
+            "👉 The real problem is the same idea with 10 buckets and 4 days — that is 10 × 11 × 11 × 11 ≈ 13,000 branches. A set still keeps it simple.",
+            "👉 실제 문제는 양동이 10 개, 4 일로 같은 아이디어 — 10 × 11 × 11 × 11 ≈ 13,000 분기. set 으로 충분히 처리.")}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 

@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getBackForthSections } from "./components";
+import { getBackForthSections, BackForthStateTreeSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -121,7 +121,14 @@ export function makeBackForthCh1(E) {
         "Correct! If all buckets are identical, every transfer moves the same amount. Barn 1 always ends at 1000. Only 1 distinct outcome.",
         "맞아! 모든 양동이가 동일하면 매번 같은 양을 옮겨. 헛간 1은 항상 1000으로 끝나. 고유 결과 1개."),
     },
-    // 1-3: Input
+    // 1-3: State-tree sim (toy version, 3 buckets, 1-2 days)
+    {
+      type: "tree",
+      narr: t(E,
+        "Before coding — *play* with the state tree.  Change the buckets, pick day-1, watch how every day-2 choice fans out.  The set at the bottom collects the distinct Barn 1 totals.",
+        "코딩 전에 — 상태 트리를 직접 *놀려* 봐. 양동이 값 바꾸고, 1 일차 선택을 골라 — 2 일차 분기들이 어떻게 펼쳐지는지 관찰. 아래 set 이 헛간 1 의 서로 다른 총량을 모아."),
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
