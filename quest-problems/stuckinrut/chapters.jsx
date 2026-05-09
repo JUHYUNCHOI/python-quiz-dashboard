@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getStuckInRutSections } from "./components";
+import { getStuckInRutSections, StuckInRutGridSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -47,7 +47,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: makeCh1 (3 steps: reveal / quiz / input)
+   Chapter 1: makeCh1 (4 steps: reveal / sim / quiz / input)
    ═══════════════════════════════════════════════════════════════ */
 export function makeStuckCh1(E) {
   return [
@@ -112,7 +112,18 @@ export function makeStuckCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Grid simulator — see the rule in motion
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before reading code, watch the rule live. Press play. N-cows go up, E-cows go right. Whoever crosses someone else's earlier trail stops.",
+        "코드를 보기 전에 규칙을 직접 봐. 재생을 눌러 — N 소는 위로, E 소는 오른쪽으로. 누군가의 먼저 지나간 자취를 밟은 소가 멈춰."),
+      content: (
+        <div>
+          <StuckInRutGridSim E={E} />
+        </div>),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -129,7 +140,7 @@ export function makeStuckCh1(E) {
         "Correct! Cows move either North (up) or East (right), never stopping unless blocked.",
         "맞아! 소는 북쪽(위) 또는 동쪽(오른쪽)으로만 이동하고 막히지 않으면 멈추지 않아."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

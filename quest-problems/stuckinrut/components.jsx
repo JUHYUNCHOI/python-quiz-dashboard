@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -88,6 +89,276 @@ export function getStuckInRutSections(E) {
 
 export function StuckInRutProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   StuckInRutGridSim — animated NE-mover grid
+   Cows move N (up) or E (right) one step per tick. If a cow
+   steps onto a cell another cow's path already visited, it stops.
+   ═══════════════════════════════════════════════════════════════ */
+const _SIM_PRESETS = [
+  // Each cow: [dir, x, y]. Grid coords: x=col (E+), y=row (N+, drawn upward).
+  {
+    cows: [
+      { dir: "N", x: 1, y: 1 },
+      { dir: "N", x: 4, y: 0 },
+      { dir: "E", x: 0, y: 3 },
+      { dir: "E", x: 2, y: 5 },
+    ],
+    grid: 7,
+  },
+  {
+    cows: [
+      { dir: "N", x: 2, y: 0 },
+      { dir: "N", x: 5, y: 1 },
+      { dir: "E", x: 0, y: 2 },
+      { dir: "E", x: 1, y: 4 },
+      { dir: "E", x: 3, y: 6 },
+    ],
+    grid: 8,
+  },
+  {
+    cows: [
+      { dir: "N", x: 0, y: 0 },
+      { dir: "N", x: 3, y: 1 },
+      { dir: "E", x: 1, y: 2 },
+      { dir: "E", x: 0, y: 4 },
+    ],
+    grid: 6,
+  },
+];
+
+export function StuckInRutGridSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [tick, setTick] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const timerRef = useRef(null);
+
+  const preset = _SIM_PRESETS[pi];
+  const N = preset.cows.length;
+  const G = preset.grid;
+  const MAX_TICK = G + 4;
+
+  // Build per-tick positions and stopped state.
+  // Each cow has a path of cells it occupied. If a cow arrives at a cell
+  // already in another (earlier-visiting) cow's path, it stops at that cell.
+  const sim = (() => {
+    const paths = preset.cows.map(c => [{ x: c.x, y: c.y }]);
+    const stoppedAt = preset.cows.map(() => -1); // tick at which it stopped, -1 if still moving
+    // visited[key] = first tick someone visited that cell (cow index, tick)
+    const visited = new Map();
+    preset.cows.forEach((c, i) => {
+      visited.set(`${c.x},${c.y}`, { cow: i, tick: 0 });
+    });
+    for (let tk = 1; tk <= MAX_TICK; tk++) {
+      // Compute next positions for all cows still moving.
+      const proposed = preset.cows.map((c, i) => {
+        if (stoppedAt[i] !== -1) return null;
+        const last = paths[i][paths[i].length - 1];
+        const nx = c.dir === "E" ? last.x + 1 : last.x;
+        const ny = c.dir === "N" ? last.y + 1 : last.y;
+        return { x: nx, y: ny };
+      });
+      // Collision check — if proposed cell already in visited (and not by self at same tick), stop.
+      const newlyStopped = preset.cows.map(() => false);
+      proposed.forEach((p, i) => {
+        if (!p) return;
+        const key = `${p.x},${p.y}`;
+        const seen = visited.get(key);
+        if (seen && seen.cow !== i) {
+          // arrived on someone else's earlier trail → stop
+          newlyStopped[i] = true;
+          stoppedAt[i] = tk;
+        }
+      });
+      // Apply move for those not stopped this tick.
+      proposed.forEach((p, i) => {
+        if (!p) return;
+        if (newlyStopped[i]) return;
+        paths[i].push(p);
+        const key = `${p.x},${p.y}`;
+        if (!visited.has(key)) visited.set(key, { cow: i, tick: tk });
+      });
+    }
+    return { paths, stoppedAt };
+  })();
+
+  const movingCount = sim.stoppedAt.filter((s, i) => s === -1 || s > tick).length;
+  const stoppedCount = N - movingCount;
+
+  // Visual positions at current tick.
+  const positions = sim.paths.map((path, i) => {
+    const stopT = sim.stoppedAt[i];
+    if (stopT !== -1 && tick >= stopT) {
+      // Stopped — last position is path[stopT-1]
+      const last = path[Math.min(stopT, path.length - 1) - 1] || path[0];
+      return { ...last, stopped: true };
+    }
+    const p = path[Math.min(tick, path.length - 1)];
+    return { ...p, stopped: false };
+  });
+
+  const trails = sim.paths.map((path, i) => {
+    const stopT = sim.stoppedAt[i];
+    const len = stopT !== -1 && tick >= stopT ? stopT : Math.min(tick + 1, path.length);
+    return path.slice(0, len);
+  });
+
+  // Play/pause animation
+  useEffect(() => {
+    if (!playing) {
+      if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+      return;
+    }
+    timerRef.current = setInterval(() => {
+      setTick(tk => {
+        if (tk >= MAX_TICK) { setPlaying(false); return tk; }
+        return tk + 1;
+      });
+    }, 480);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [playing, MAX_TICK]);
+
+  const reset = () => { setPlaying(false); setTick(0); };
+  const switchPreset = (n) => { setPi(n); setPlaying(false); setTick(0); };
+
+  // SVG layout — y grows upward, but SVG y grows downward, so flip.
+  const PAD = 18;
+  const CELL = 32;
+  const W = G * CELL + PAD * 2;
+  const H = G * CELL + PAD * 2;
+  const cx = (x) => PAD + x * CELL + CELL / 2;
+  const cy = (y) => H - PAD - y * CELL - CELL / 2;
+
+  const COW_COLORS = ["#8b5cf6", "#0891b2", "#db2777", "#ea580c", "#16a34a"];
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{
+        background: "#f5f3ff", border: `1.5px solid ${A}`, borderRadius: 12,
+        padding: 12, marginBottom: 10,
+      }}>
+        <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+          🐄 {t(E, "Grid Simulator — N / E movers", "격자 시뮬레이터 — N / E 이동")}
+        </div>
+        <div style={{ fontSize: 12, color: "#5b21b6", lineHeight: 1.5 }}>
+          {t(E,
+            "Press play. N-cows move up, E-cows move right, one cell per tick. When a cow steps on a cell another cow's trail already touched, she stops.",
+            "재생을 눌러봐. N 소는 위로, E 소는 오른쪽으로 매 틱 한 칸씩 움직여. 다른 소의 자취가 이미 지나간 칸을 밟으면 멈춰.")}
+        </div>
+      </div>
+
+      {/* Preset picker */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 8, flexWrap: "wrap", justifyContent: "center" }}>
+        {_SIM_PRESETS.map((_, i) => (
+          <button key={i} onClick={() => switchPreset(i)} style={{
+            background: pi === i ? A : "#fff",
+            color: pi === i ? "#fff" : A,
+            border: `1.5px solid ${A}`, borderRadius: 8,
+            padding: "4px 10px", cursor: "pointer", fontSize: 12, fontWeight: 700,
+          }}>
+            {t(E, `Case ${i + 1}`, `예제 ${i + 1}`)}
+          </button>
+        ))}
+      </div>
+
+      {/* SVG grid */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+        <svg width={W} height={H} style={{ background: "#faf5ff", borderRadius: 10, border: `1px solid ${C.border}` }}>
+          {/* Grid lines */}
+          {Array.from({ length: G + 1 }).map((_, i) => (
+            <g key={`gl-${i}`}>
+              <line x1={PAD} y1={PAD + i * CELL} x2={PAD + G * CELL} y2={PAD + i * CELL} stroke="#e9d5ff" strokeWidth={1} />
+              <line x1={PAD + i * CELL} y1={PAD} x2={PAD + i * CELL} y2={PAD + G * CELL} stroke="#e9d5ff" strokeWidth={1} />
+            </g>
+          ))}
+
+          {/* Trails */}
+          {trails.map((trail, i) => (
+            <g key={`tr-${i}`}>
+              {trail.map((p, j) => (
+                <circle key={j} cx={cx(p.x)} cy={cy(p.y)} r={5}
+                  fill={COW_COLORS[i % COW_COLORS.length]} opacity={0.28} />
+              ))}
+              {trail.length > 1 && (
+                <polyline
+                  points={trail.map(p => `${cx(p.x)},${cy(p.y)}`).join(" ")}
+                  fill="none"
+                  stroke={COW_COLORS[i % COW_COLORS.length]}
+                  strokeWidth={2}
+                  opacity={0.5}
+                  strokeDasharray="3 3"
+                />
+              )}
+            </g>
+          ))}
+
+          {/* Cows */}
+          {positions.map((p, i) => (
+            <g key={`cow-${i}`}>
+              <circle cx={cx(p.x)} cy={cy(p.y)} r={12}
+                fill={p.stopped ? "#fee2e2" : COW_COLORS[i % COW_COLORS.length]}
+                stroke={p.stopped ? "#dc2626" : "#fff"}
+                strokeWidth={p.stopped ? 2 : 2.5} />
+              <text x={cx(p.x)} y={cy(p.y) + 4} textAnchor="middle"
+                fontSize={11} fontWeight={800}
+                fill={p.stopped ? "#dc2626" : "#fff"}>
+                {preset.cows[i].dir}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center", marginBottom: 8 }}>
+        <button onClick={() => setPlaying(p => !p)} disabled={tick >= MAX_TICK} style={{
+          background: playing ? "#dc2626" : A, color: "#fff",
+          border: "none", borderRadius: 8, padding: "6px 14px",
+          cursor: tick >= MAX_TICK ? "not-allowed" : "pointer",
+          fontSize: 13, fontWeight: 700, opacity: tick >= MAX_TICK ? 0.5 : 1,
+        }}>
+          {playing ? t(E, "⏸ Pause", "⏸ 일시정지") : t(E, "▶ Play", "▶ 재생")}
+        </button>
+        <button onClick={() => setTick(tk => Math.min(MAX_TICK, tk + 1))} disabled={playing || tick >= MAX_TICK} style={{
+          background: "#fff", color: A, border: `1.5px solid ${A}`, borderRadius: 8,
+          padding: "6px 12px", cursor: (playing || tick >= MAX_TICK) ? "not-allowed" : "pointer",
+          fontSize: 13, fontWeight: 700, opacity: (playing || tick >= MAX_TICK) ? 0.5 : 1,
+        }}>
+          {t(E, "Step +1", "한 틱")}
+        </button>
+        <button onClick={reset} style={{
+          background: "#fff", color: C.dim, border: `1.5px solid ${C.border}`, borderRadius: 8,
+          padding: "6px 12px", cursor: "pointer", fontSize: 13, fontWeight: 700,
+        }}>
+          {t(E, "Reset", "처음부터")}
+        </button>
+      </div>
+
+      {/* Counters */}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+        <div style={{
+          background: "#ede9fe", border: `1px solid ${A}`, borderRadius: 8,
+          padding: "6px 12px", fontSize: 12, color: "#5b21b6", fontWeight: 700,
+        }}>
+          ⏱ {t(E, "Tick", "틱")}: {tick}
+        </div>
+        <div style={{
+          background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 8,
+          padding: "6px 12px", fontSize: 12, color: "#166534", fontWeight: 700,
+        }}>
+          🐾 {t(E, "Moving", "이동 중")}: {movingCount}
+        </div>
+        <div style={{
+          background: "#fee2e2", border: "1px solid #dc2626", borderRadius: 8,
+          padding: "6px 12px", fontSize: 12, color: "#991b1b", fontWeight: 700,
+        }}>
+          🛑 {t(E, "Stopped", "멈춤")}: {stoppedCount}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 
