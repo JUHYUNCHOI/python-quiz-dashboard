@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getPhotoshootSections } from "./components";
+import { getPhotoshootSections, PhotoshootUnfoldSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -110,6 +110,8 @@ export function makePhotoshootCh1(E) {
               </div>
             </div>
           </div>
+
+          <PhotoshootUnfoldSim E={E} />
         </div>),
     },
     // 1-2: Quiz

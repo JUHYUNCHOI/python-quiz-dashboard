@@ -1,8 +1,140 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* ════════════════════════════════════════════════════════════════════
+   PhotoshootUnfoldSim — guess a[0], unfold a[i+1] = b[i] - a[i] live.
+   Highlights duplicates / out-of-range cells so a wrong guess is visible.
+   ════════════════════════════════════════════════════════════════════ */
+// Each preset has a unique a[0] in 1..N that yields a valid permutation.
+// S1: a=[1,3,2,4,5] → b=[4,5,6,9]
+// S2: a=[1,3,2,4]   → b=[4,5,6]
+// S3: a=[3,1,4,2,5,6] → b=[4,5,6,7,11]
+const PHOTOSHOOT_PRESETS = [
+  { name: "S1", N: 5, b: [4, 5, 6, 9] },
+  { name: "S2", N: 4, b: [4, 5, 6] },
+  { name: "S3", N: 6, b: [4, 5, 6, 7, 11] },
+];
+
+export function PhotoshootUnfoldSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const preset = PHOTOSHOOT_PRESETS[pi];
+  const N = preset.N;
+  const b = preset.b;
+  const [a0, setA0] = useState(1);
+
+  const safeA0 = Math.max(1, Math.min(N, a0));
+
+  // Unfold a[i+1] = b[i] - a[i]
+  const a = [safeA0];
+  const used = { [safeA0]: true };
+  let firstFailIdx = -1;
+  let failReason = "";
+  for (let i = 0; i + 1 < N; i++) {
+    const next = b[i] - a[i];
+    a.push(next);
+    if (firstFailIdx === -1) {
+      if (next < 1 || next > N) { firstFailIdx = i + 1; failReason = "range"; }
+      else if (used[next]) { firstFailIdx = i + 1; failReason = "dup"; }
+      else used[next] = true;
+    }
+  }
+  const ok = firstFailIdx === -1;
+
+  return (
+    <div style={{
+      padding: 12, marginTop: 12,
+      background: "#fff", border: `1.5px solid ${A}`, borderRadius: 10,
+    }}>
+      <div style={{ fontSize: 12, fontWeight: 800, color: A, marginBottom: 8, letterSpacing: 0.3 }}>
+        🔬 {t(E, "Try it: guess a[0], watch the rest unfold", "직접 해봐: a[0] 추측, 나머지 자동 전개")}
+      </div>
+
+      <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
+        {PHOTOSHOOT_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setA0(1); }}
+            style={{
+              padding: "3px 8px", borderRadius: 6, fontSize: 11, fontWeight: 700,
+              border: `1.5px solid ${pi === i ? A : C.border}`,
+              background: pi === i ? "#fee2e2" : "#fff", color: pi === i ? A : C.text, cursor: "pointer",
+              fontFamily: "'JetBrains Mono',monospace",
+            }}>{p.name}: N={p.N}, b=[{p.b.join(",")}]</button>
+        ))}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", gap: "6px 10px", alignItems: "center", marginBottom: 12, fontSize: 12 }}>
+        <div style={{ fontWeight: 700, color: A, fontFamily: "'JetBrains Mono',monospace" }}>a[0] =</div>
+        <input type="range" min={1} max={N} value={safeA0}
+          onChange={e => setA0(Number(e.target.value))}
+          style={{ width: "100%", accentColor: A }} />
+        <div style={{ fontWeight: 700, color: A, minWidth: 22, textAlign: "right", fontFamily: "'JetBrains Mono',monospace" }}>{safeA0}</div>
+      </div>
+
+      {/* a[] cells */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 6, flexWrap: "wrap" }}>
+        {a.map((v, i) => {
+          const isFail = firstFailIdx !== -1 && i === firstFailIdx;
+          const isAfterFail = firstFailIdx !== -1 && i > firstFailIdx;
+          const isA0 = i === 0;
+          let bg = "#fff", bd = C.border, fg = C.text;
+          if (isA0) { bg = "#fee2e2"; bd = A; fg = "#7f1d1d"; }
+          else if (isFail) { bg = "#fef2f2"; bd = "#dc2626"; fg = "#7f1d1d"; }
+          else if (isAfterFail) { bg = "#f3f4f6"; bd = C.border; fg = C.dim; }
+          else { bg = "#dcfce7"; bd = "#86efac"; fg = "#15803d"; }
+          return (
+            <div key={i} style={{
+              width: 40, height: 40, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              borderRadius: 8, fontWeight: 700, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
+              background: bg, border: `2px solid ${bd}`, color: fg, position: "relative",
+            }}>
+              <div style={{ fontSize: 9, fontWeight: 600, opacity: 0.7, lineHeight: 1 }}>a[{i}]</div>
+              <div>{v}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* b[] formula row */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 10, flexWrap: "wrap" }}>
+        {b.map((v, i) => (
+          <div key={i} style={{
+            width: 40, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
+            borderRadius: 6, fontSize: 11, fontFamily: "'JetBrains Mono',monospace",
+            background: "#eff6ff", border: "1px solid #93c5fd", color: "#1e40af",
+            marginLeft: i === 0 ? 20 : 0,
+          }}>b[{i}]={v}</div>
+        ))}
+      </div>
+
+      {/* Verdict */}
+      <div style={{
+        background: ok ? "#dcfce7" : "#fee2e2",
+        border: `1.5px solid ${ok ? "#86efac" : "#fca5a5"}`,
+        borderRadius: 8, padding: "8px 10px", fontSize: 12, lineHeight: 1.5,
+        color: ok ? "#15803d" : "#7f1d1d",
+      }}>
+        {ok ? (
+          <span><b>✅ {t(E, "Valid permutation!", "유효한 순열!")}</b> {t(E, "All values in 1..N, no duplicates.", "모든 값이 1..N 범위, 중복 없음.")} a = [{a.join(", ")}]</span>
+        ) : (
+          <span>
+            <b>❌ {t(E, "Fails at", "실패 위치")} a[{firstFailIdx}] = {a[firstFailIdx]}.</b>{" "}
+            {failReason === "range"
+              ? t(E, `Out of range 1..${N}.`, `1..${N} 범위 밖.`)
+              : t(E, "Duplicate (already used).", "이미 사용된 값(중복).")}
+          </span>
+        )}
+      </div>
+      <div style={{ marginTop: 6, fontSize: 11, color: C.dim, lineHeight: 1.5 }}>
+        {t(E,
+          "Rule: a[i+1] = b[i] − a[i]. Pick a[0], the rest is forced. Slide until you find a valid lineup.",
+          "규칙: a[i+1] = b[i] − a[i]. a[0] 만 정하면 나머지는 자동. 유효한 줄이 나올 때까지 슬라이더를 옮겨 봐.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",
