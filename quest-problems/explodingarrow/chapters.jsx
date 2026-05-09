@@ -143,6 +143,91 @@ export function makeExplodingArrowCh1(E) {
         "연쇄를 따라가 봐 — 점화되는 화살을 모두 세어 봐."),
       answer: 3,
     },
+    // 1-4: Deep-audit sim — trace the chain step by step
+    {
+      type: "reveal",
+      narr: t(E,
+        "Let's audit a tiny example carefully. 5 arrows on a grid. Start arrow A explodes — trace the chain row/column-by-direction, mark visited, count. Notice how a 'dead end' (no arrow ahead) just stops — it doesn't fail.",
+        "작은 예제를 꼼꼼히 살펴봐요. 격자 위 화살 5개. 시작 화살 A가 폭발 — 방향대로 같은 행/열을 추적, 방문 표시, 카운트. '막다른 길' (앞에 화살 없음) 은 그냥 멈춰 — 실패가 아니에요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#f97316" }}>
+              🔍 {t(E, "Deep Audit: Trace 5-Arrow Chain", "심층 추적: 화살 5개 연쇄")}
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
+              {t(E, "Grid view + step-by-step BFS log", "격자 + 단계별 BFS 로그")}
+            </div>
+          </div>
+
+          {/* Grid sim — 5x5 layout */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 12, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
+              {t(E, "Initial Grid (5 arrows)", "초기 격자 (화살 5개)")}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 4, maxWidth: 280, margin: "0 auto" }}>
+              {[
+                { r: 0, c: 0, label: "" }, { r: 0, c: 1, label: "" }, { r: 0, c: 2, label: "C", dir: "↓", color: "#dc2626" }, { r: 0, c: 3, label: "" }, { r: 0, c: 4, label: "E", dir: "←", color: "#7c3aed" },
+                { r: 1, c: 0, label: "" }, { r: 1, c: 1, label: "" }, { r: 1, c: 2, label: "" }, { r: 1, c: 3, label: "" }, { r: 1, c: 4, label: "" },
+                { r: 2, c: 0, label: "A", dir: "→", color: "#15803d" }, { r: 2, c: 1, label: "" }, { r: 2, c: 2, label: "B", dir: "↑", color: "#f97316" }, { r: 2, c: 3, label: "" }, { r: 2, c: 4, label: "D", dir: "→", color: "#0891b2" },
+                { r: 3, c: 0, label: "" }, { r: 3, c: 1, label: "" }, { r: 3, c: 2, label: "" }, { r: 3, c: 3, label: "" }, { r: 3, c: 4, label: "" },
+                { r: 4, c: 0, label: "" }, { r: 4, c: 1, label: "" }, { r: 4, c: 2, label: "" }, { r: 4, c: 3, label: "" }, { r: 4, c: 4, label: "" },
+              ].map((cell, i) => (
+                <div key={i} style={{
+                  aspectRatio: "1",
+                  background: cell.label ? "#fff" : "#fef3c7",
+                  border: `1.5px solid ${cell.label ? cell.color : "#fde68a"}`,
+                  borderRadius: 6,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: cell.color || "#fbbf24",
+                }}>
+                  {cell.label && (
+                    <>
+                      <div style={{ fontSize: 13 }}>{cell.label}</div>
+                      <div style={{ fontSize: 11 }}>{cell.dir}</div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div style={{ fontSize: 10, color: "#9a3412", marginTop: 8, textAlign: "center" }}>
+              {t(E, "A→ at (2,0), B↑ at (2,2), C↓ at (0,2), D→ at (2,4), E← at (0,4)",
+                  "A→ (2,0), B↑ (2,2), C↓ (0,2), D→ (2,4), E← (0,4)")}
+            </div>
+          </div>
+
+          {/* BFS audit log */}
+          <div style={{ background: "#0f172a", border: "1.5px solid #1e293b", borderRadius: 12, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#fdba74", marginBottom: 8 }}>
+              📋 {t(E, "BFS Audit Log", "BFS 추적 로그")}
+            </div>
+            <div style={{ fontSize: 11, color: "#e2e8f0", lineHeight: 1.7, fontFamily: "monospace" }}>
+              <div><span style={{ color: "#94a3b8" }}>step 0:</span> queue=[A], visited={"{A}"}, count=1</div>
+              <div><span style={{ color: "#94a3b8" }}>step 1:</span> pop A (→). {t(E, "Same row r=2: nearest right = B", "같은 행 r=2: 오른쪽 가장 가까운 = B")} → <span style={{ color: "#fbbf24" }}>visit B</span>, count=2</div>
+              <div><span style={{ color: "#94a3b8" }}>step 2:</span> pop B (↑). {t(E, "Same col c=2: nearest up = C", "같은 열 c=2: 위쪽 가장 가까운 = C")} → <span style={{ color: "#fbbf24" }}>visit C</span>, count=3</div>
+              <div><span style={{ color: "#94a3b8" }}>step 3:</span> pop C (↓). {t(E, "Same col c=2: nearest down = B (already visited)", "같은 열 c=2: 아래쪽 = B (이미 방문)")} → <span style={{ color: "#94a3b8" }}>skip</span></div>
+              <div><span style={{ color: "#94a3b8" }}>step 4:</span> {t(E, "queue empty → done", "큐 비음 → 종료")}. count = <b style={{ color: "#15803d" }}>3</b></div>
+            </div>
+          </div>
+
+          {/* Audit insight */}
+          <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 14px" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
+              💡 {t(E, "Audit Insight", "심층 통찰")}
+            </div>
+            <div style={{ fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
+              {t(E,
+                "D and E never explode — A's chain never reaches them. The 'visited' set prevents re-counting B. A dead end (arrow has no neighbor in its direction) just stops that branch — the BFS keeps going.",
+                "D와 E는 폭발하지 않아요 — A의 연쇄가 닿지 않아. 'visited' 집합이 B를 두 번 세는 것을 막아요. 막다른 길 (방향에 이웃 없음) 은 그 가지만 멈추고 BFS는 계속 진행.")}
+            </div>
+          </div>
+        </div>),
+    },
   ];
 }
 
