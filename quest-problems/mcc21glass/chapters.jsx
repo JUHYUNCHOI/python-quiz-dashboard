@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getMcc21GlassSections } from "./components";
 
@@ -39,8 +40,93 @@ function CirclePlates({ labels, size = 120, accent = "#2563eb" }) {
   );
 }
 
+/* ─── interactive rotation sim: rotate a circle of plates and see all rotations are the same arrangement ─── */
+function RotateSim({ E }) {
+  const [n, setN] = useState(4);
+  const [rot, setRot] = useState(0);
+  const [seen, setSeen] = useState(() => new Set([0]));
+  const labels = ["A", "B", "C", "D", "E", "F"].slice(0, n);
+  const size = 150, cx = size / 2, cy = size / 2, r = size * 0.34;
+  const rotated = labels.map((_, i) => labels[(i + rot) % n]);
+
+  const doRotate = () => {
+    const next = (rot + 1) % n;
+    setRot(next);
+    setSeen(prev => { const s = new Set(prev); s.add(next); return s; });
+  };
+  const reset = (newN) => {
+    setN(newN); setRot(0); setSeen(new Set([0]));
+  };
+
+  const allSeen = seen.size === n;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 8 }}>
+        {[3, 4, 5, 6].map(v => (
+          <button key={v} onClick={() => reset(v)} style={{
+            padding: "4px 10px", borderRadius: 6,
+            background: n === v ? "#2563eb" : "#eff6ff",
+            color: n === v ? "#fff" : "#2563eb",
+            border: "1.5px solid #2563eb", fontSize: 11, fontWeight: 700, cursor: "pointer",
+          }}>N={v}</button>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <svg width={size} height={size} style={{ display: "block" }}>
+          <circle cx={cx} cy={cy} r={r + 8} fill="none" stroke="#93c5fd" strokeWidth="1.5" strokeDasharray="4 3" />
+          {rotated.map((label, i) => {
+            const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+            const x = cx + r * Math.cos(angle);
+            const y = cy + r * Math.sin(angle);
+            const isTop = i === 0;
+            return (
+              <g key={i}>
+                <circle cx={x} cy={y} r={16} fill={isTop ? "#2563eb" : "#eff6ff"}
+                  stroke={isTop ? "#1e3a8a" : "#93c5fd"} strokeWidth="2" />
+                <text x={x} y={y + 1} textAnchor="middle" dominantBaseline="middle"
+                  style={{ fontSize: 13, fontWeight: 700, fill: isTop ? "#fff" : "#2563eb", fontFamily: "'JetBrains Mono',monospace" }}>
+                  {label}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: 6, fontSize: 12, fontWeight: 700, color: "#2563eb", fontFamily: "'JetBrains Mono',monospace" }}>
+        {rotated.join("-")}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 10 }}>
+        <button onClick={doRotate} style={{
+          padding: "6px 14px", borderRadius: 8, background: "#2563eb", color: "#fff",
+          border: "none", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>↻ {t(E, "Rotate", "회전")}</button>
+        <button onClick={() => reset(n)} style={{
+          padding: "6px 14px", borderRadius: 8, background: "#fff", color: "#2563eb",
+          border: "1.5px solid #2563eb", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>↺ {t(E, "Reset", "초기화")}</button>
+      </div>
+
+      <div style={{ marginTop: 10, padding: "8px 12px", background: allSeen ? "#dcfce7" : "#fef3c7",
+        border: `1.5px solid ${allSeen ? "#16a34a" : "#fbbf24"}`, borderRadius: 8, textAlign: "center" }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: allSeen ? "#16a34a" : "#92400e" }}>
+          {t(E, `Rotations seen: ${seen.size} / ${n}`, `본 회전: ${seen.size} / ${n}`)}
+        </div>
+        <div style={{ fontSize: 12, fontWeight: 700, marginTop: 4, color: allSeen ? "#16a34a" : "#92400e" }}>
+          {allSeen
+            ? t(E, `All ${n} rotations look different — but they are the SAME circle!`, `${n}개 회전이 모두 달라 보여 — 하지만 같은 원!`)
+            : t(E, "Click Rotate to see all rotations…", "회전 버튼을 눌러 모든 회전 보기…")}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (10 steps)
+   Chapter 1: 📋 문제 이해 (11 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc21GlassCh1(E) {
   return [
@@ -124,6 +210,14 @@ export function makeMcc21GlassCh1(E) {
             {t(E, "3 rotations of the same circle = 1 arrangement", "같은 원의 3가지 회전 = 1가지 배열")}
           </div>
         </div>),
+    },
+
+    // 1-3.5 인터랙티브: 직접 회전해보기
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try it yourself!\nPick N, then click Rotate.\nWatch the labels shift around the circle — but the circle itself never changes.\nN rotations = 1 arrangement.", "직접 해봐! N을 고르고 회전 버튼을 눌러요. 라벨이 원을 따라 이동하지만, 원 자체는 변하지 않아요. N회전 = 1배열."),
+      content: <RotateSim E={E} />,
     },
 
     // 1-4 퀴즈: 회전 이해
