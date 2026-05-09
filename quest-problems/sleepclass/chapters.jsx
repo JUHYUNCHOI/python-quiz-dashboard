@@ -128,7 +128,14 @@ export function makeSleepCh1(E) {
         "Correct! 6 periods become 3 periods. Each merge reduces count by 1, so 3 merges.",
         "맞아! 6개가 3개로. 합치기 한 번에 개수가 1 줄어드니까 3번."),
     },
-    // 1-3: Input
+    // 1-3: Sim — divisor + greedy partition
+    {
+      type: "sim",
+      narr: t(E,
+        "Try a divisor d of the total. Walk left→right, accumulate; close a segment when sum = d. If you ever overshoot, that d fails.\nMerges = N − number of segments. Smallest across all working d is the answer.",
+        "총합의 약수 d 를 골라봐. 왼→오 누적, 합 = d 가 되면 한 구간 마감. 한번이라도 d 를 넘으면 그 d 는 실패.\n합치기 = N − 구간 수. 통과한 d 중 가장 작은 값이 답."),
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

@@ -1,8 +1,203 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ═══════════════════════════════════════════════════════════════
+   SleepClassSim — pick a divisor d of total, walk the array
+   greedily accumulating; each time running sum hits d, close a
+   segment. If running sum ever exceeds d, target d fails.
+   merges = N − (number of segments).
+   ═══════════════════════════════════════════════════════════════ */
+const _SC_PRESETS = [
+  {
+    label: { en: "[1,2,3,1,1,1] · total=9", ko: "[1,2,3,1,1,1] · 총합=9" },
+    a: [1, 2, 3, 1, 1, 1],
+  },
+  {
+    label: { en: "[2,2,3] · total=7", ko: "[2,2,3] · 총합=7" },
+    a: [2, 2, 3],
+  },
+  {
+    label: { en: "[4,4,4,4] · total=16", ko: "[4,4,4,4] · 총합=16" },
+    a: [4, 4, 4, 4],
+  },
+];
+
+const _SC_COLORS = ["#059669", "#0891b2", "#7c3aed", "#f97316", "#dc2626", "#0d9488"];
+
+function _divisors(n) {
+  const out = [];
+  for (let d = 1; d <= n; d++) if (n % d === 0) out.push(d);
+  return out;
+}
+
+// Greedy partition — returns { segments: [[indices...], ...], failed, failIdx }
+function _partition(a, target) {
+  const segments = [];
+  let curSeg = [];
+  let curr = 0;
+  for (let i = 0; i < a.length; i++) {
+    curr += a[i];
+    curSeg.push(i);
+    if (curr === target) {
+      segments.push(curSeg);
+      curSeg = [];
+      curr = 0;
+    } else if (curr > target) {
+      return { segments, failed: true, failIdx: i };
+    }
+  }
+  if (curr !== 0) return { segments, failed: true, failIdx: a.length - 1 };
+  return { segments, failed: false, failIdx: -1 };
+}
+
+export function SleepClassSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const preset = _SC_PRESETS[pi];
+  const a = preset.a;
+  const total = a.reduce((s, x) => s + x, 0);
+  const divs = _divisors(total);
+  const [di, setDi] = useState(0);
+  const target = divs[Math.min(di, divs.length - 1)];
+
+  const result = _partition(a, target);
+  const { segments, failed, failIdx } = result;
+  const numSegs = segments.length;
+  const merges = failed ? null : a.length - numSegs;
+
+  // index → segIdx (or -1 if failed past failIdx)
+  const segOf = new Array(a.length).fill(-1);
+  segments.forEach((seg, si) => seg.forEach(i => { segOf[i] = si; }));
+
+  const reset = (newPi) => { setPi(newPi); setDi(0); };
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_SC_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => reset(i)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer",
+          }}>
+            {E ? p.label.en : p.label.ko}
+          </button>
+        ))}
+      </div>
+
+      {/* divisor picker */}
+      <div style={{
+        background: "#ecfdf5", border: `1px solid #6ee7b7`, borderRadius: 10,
+        padding: "10px 12px", marginBottom: 10,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.4, marginBottom: 6 }}>
+          {t(E, `Pick target d (divisor of ${total})`, `목표 d 고르기 (${total} 의 약수)`)}
+        </div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {divs.map((d, i) => (
+            <button key={i} onClick={() => setDi(i)} style={{
+              padding: "4px 10px", borderRadius: 6,
+              border: `1.5px solid ${i === di ? A : "#d1fae5"}`,
+              background: i === di ? A : "#fff",
+              color: i === di ? "#fff" : "#065f46",
+              fontSize: 12, fontWeight: 800, cursor: "pointer",
+              fontFamily: "'JetBrains Mono',monospace",
+            }}>
+              {d}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* array visualization — boxed by segment */}
+      <div style={{
+        background: "#fff", border: `1px solid ${C.border}`, borderRadius: 10,
+        padding: 14, marginBottom: 10,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 8, letterSpacing: 0.4 }}>
+          {t(E, `Walk left→right, accumulate. Close a segment when sum = ${target}.`,
+                `왼→오 누적. 합이 ${target} 가 되면 한 구간 마감.`)}
+        </div>
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+          {a.map((v, i) => {
+            const seg = segOf[i];
+            const isFailIdx = failed && i === failIdx;
+            const color = isFailIdx ? "#dc2626" : (seg >= 0 ? _SC_COLORS[seg % _SC_COLORS.length] : "#9ca3af");
+            const bg = isFailIdx ? "#fee2e2" : (seg >= 0 ? color + "22" : "#f3f4f6");
+            return (
+              <div key={i} style={{
+                minWidth: 44, padding: "10px 8px",
+                background: bg,
+                border: `2px solid ${color}`,
+                borderRadius: 8,
+                textAlign: "center",
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                <div style={{ fontSize: 10, color: C.dim }}>a[{i}]</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color }}>{v}</div>
+                {seg >= 0 && (
+                  <div style={{ fontSize: 9, fontWeight: 800, color, marginTop: 2 }}>
+                    seg {seg + 1}
+                  </div>
+                )}
+                {isFailIdx && (
+                  <div style={{ fontSize: 9, fontWeight: 800, color: "#dc2626", marginTop: 2 }}>
+                    {t(E, "OVER", "초과")}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* result panel */}
+      <div style={{
+        background: failed ? "#fef2f2" : "#ecfdf5",
+        border: `1.5px solid ${failed ? "#fca5a5" : A}`,
+        borderRadius: 10, padding: "10px 14px",
+        display: "flex", gap: 16, alignItems: "center", justifyContent: "center", flexWrap: "wrap",
+      }}>
+        {failed ? (
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#991b1b" }}>
+            {t(E, `❌ d=${target} fails — running sum overshoots before resetting.`,
+                  `❌ d=${target} 실패 — 누적이 ${target} 를 넘겨서 안 맞아.`)}
+          </div>
+        ) : (
+          <>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#065f46", letterSpacing: 0.4 }}>
+                {t(E, "SEGMENTS", "구간 수")}
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
+                {numSegs}
+              </div>
+            </div>
+            <div style={{ fontSize: 18, color: C.dim }}>→</div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#065f46", letterSpacing: 0.4 }}>
+                {t(E, `MERGES = N − segs = ${a.length} − ${numSegs}`, `합치기 = N − 구간 = ${a.length} − ${numSegs}`)}
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
+                {merges}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 10 }}>
+        {t(E,
+          "Try every divisor d of the total. The smallest 'N − segments' across all working d is the answer.",
+          "총합의 모든 약수 d 를 시도해. 통과한 d 들 중 'N − 구간 수' 가 가장 작은 게 답.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "T = int(input())",
