@@ -1,8 +1,193 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* ═══════════════════════════════════════════════════════════════
+   DontBeLastSim — bilingual interactive milk-log
+   Student adjusts each cow's gallons, sees totals sorted live,
+   and sees who is the second-lowest (or 'Tie').
+   ═══════════════════════════════════════════════════════════════ */
+const COWS = ["Bessie", "Elsie", "Daisy", "Gertie", "Annabelle", "Maggie", "Henrietta"];
+const COW_EMOJI = {
+  Bessie: "🐄", Elsie: "🐮", Daisy: "🌼", Gertie: "🐂",
+  Annabelle: "🐃", Maggie: "🐏", Henrietta: "🐐",
+};
+
+const _PRESETS = [
+  { label: { en: "Spec example", ko: "문제 예시" }, milk: { Bessie: 7, Elsie: 0, Daisy: 0, Gertie: 0, Annabelle: 0, Maggie: 0, Henrietta: 0 } },
+  { label: { en: "Two-way tie", ko: "두 마리 동률" }, milk: { Bessie: 5, Elsie: 5, Daisy: 0, Gertie: 0, Annabelle: 0, Maggie: 0, Henrietta: 0 } },
+  { label: { en: "Clear order", ko: "확실한 순위" }, milk: { Bessie: 12, Elsie: 3, Daisy: 8, Gertie: 1, Annabelle: 9, Maggie: 6, Henrietta: 4 } },
+  { label: { en: "All zero", ko: "모두 0" }, milk: { Bessie: 0, Elsie: 0, Daisy: 0, Gertie: 0, Annabelle: 0, Maggie: 0, Henrietta: 0 } },
+];
+
+export function DontBeLastSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [milk, setMilk] = useState({ ..._PRESETS[0].milk });
+
+  const applyPreset = (i) => {
+    setPi(i);
+    setMilk({ ..._PRESETS[i].milk });
+  };
+
+  const setOne = (cow, raw) => {
+    const v = Math.max(0, Math.min(99, parseInt(raw, 10) || 0));
+    setMilk((m) => ({ ...m, [cow]: v }));
+    setPi(-1);
+  };
+
+  // Sort cows by total ascending, stable by COWS order
+  const ranking = COWS
+    .map((c, idx) => ({ cow: c, total: milk[c], idx }))
+    .sort((a, b) => a.total - b.total || a.idx - b.idx);
+
+  const distinctVals = Array.from(new Set(ranking.map((r) => r.total))).sort((a, b) => a - b);
+  let resultLabel; let resultColor; let secondVal = null;
+  let winners = [];
+  if (distinctVals.length < 2) {
+    resultLabel = "Tie";
+    resultColor = A;
+  } else {
+    secondVal = distinctVals[1];
+    winners = ranking.filter((r) => r.total === secondVal).map((r) => r.cow);
+    if (winners.length === 1) {
+      resultLabel = winners[0];
+      resultColor = "#15803d";
+    } else {
+      resultLabel = "Tie";
+      resultColor = A;
+    }
+  }
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* Preset row */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_PRESETS.map((p, i) => (
+          <button
+            key={i}
+            onClick={() => applyPreset(i)}
+            style={{
+              padding: "5px 10px", borderRadius: 8,
+              border: `1px solid ${i === pi ? A : C.border}`,
+              background: i === pi ? A : "transparent",
+              color: i === pi ? "#fff" : C.dim,
+              fontSize: 12, fontWeight: 700, cursor: "pointer",
+            }}
+          >
+            {E ? p.label.en : p.label.ko}
+          </button>
+        ))}
+      </div>
+
+      {/* Editable milk inputs */}
+      <div style={{
+        background: "#fef2f2", border: "1px solid #fca5a5",
+        borderRadius: 10, padding: "10px 12px", marginBottom: 12,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", marginBottom: 8, textAlign: "center", letterSpacing: 0.4 }}>
+          🥛 {t(E, "Edit each cow's total gallons", "각 소의 총 갤런을 수정해 봐")}
+        </div>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(110px, 1fr))",
+          gap: 8,
+        }}>
+          {COWS.map((cow) => (
+            <label key={cow} style={{
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
+              background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8,
+              padding: "6px 4px",
+            }}>
+              <span style={{ fontSize: 18, lineHeight: 1 }}>{COW_EMOJI[cow]}</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: C.text }}>{cow}</span>
+              <input
+                type="number"
+                min={0}
+                max={99}
+                value={milk[cow]}
+                onChange={(e) => setOne(cow, e.target.value)}
+                style={{
+                  width: 56, padding: "3px 4px", textAlign: "center",
+                  border: `1.5px solid ${C.border}`, borderRadius: 6,
+                  fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700,
+                  color: A,
+                }}
+              />
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Sorted ranking */}
+      <div style={{ marginBottom: 12 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 6, letterSpacing: 0.4 }}>
+          📊 {t(E, "Sorted by total (lowest first)", "총량 오름차순 정렬")}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          {ranking.map((r, idx) => {
+            const isMin = r.total === distinctVals[0];
+            const isSecond = secondVal !== null && r.total === secondVal;
+            const isAnswer = isSecond && winners.length === 1;
+            const bg = isAnswer ? "#dcfce7" : isSecond ? "#fef3c7" : isMin ? "#e0e7ff" : "#f8fafc";
+            const bd = isAnswer ? "#16a34a" : isSecond ? "#f59e0b" : isMin ? "#6366f1" : C.border;
+            const tag = isAnswer
+              ? t(E, "2nd-lowest ← answer", "두 번째로 적음 ← 정답")
+              : isSecond
+                ? t(E, "tied for 2nd → Tie", "두 번째 동률 → Tie")
+                : isMin
+                  ? t(E, "lowest", "최솟값")
+                  : "";
+            return (
+              <div
+                key={r.cow}
+                style={{
+                  display: "flex", alignItems: "center", gap: 8,
+                  background: bg, border: `1px solid ${bd}`, borderRadius: 8,
+                  padding: "5px 10px",
+                }}
+              >
+                <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, width: 18 }}>#{idx + 1}</span>
+                <span style={{ fontSize: 16 }}>{COW_EMOJI[r.cow]}</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: C.text, flex: 1 }}>{r.cow}</span>
+                <span style={{
+                  fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700,
+                  color: A, minWidth: 28, textAlign: "right",
+                }}>{r.total}</span>
+                {tag && (
+                  <span style={{ fontSize: 10, fontWeight: 700, color: bd, marginLeft: 4 }}>{tag}</span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Result */}
+      <div style={{
+        background: "#fff7ed", border: `1.5px solid ${resultColor}`, borderRadius: 10,
+        padding: "10px 14px", textAlign: "center",
+      }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4, letterSpacing: 0.4 }}>
+          {t(E, "Distinct totals, sorted", "고유 총량 오름차순")}: {distinctVals.join(", ") || "—"}
+        </div>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 600, marginBottom: 6 }}>
+          {distinctVals.length < 2
+            ? t(E, "Fewer than 2 distinct totals → no clear 2nd place", "고유 총량이 2개 미만 → 2등이 없음")
+            : t(E, `2nd-lowest distinct value = ${secondVal}`, `두 번째 고유값 = ${secondVal}`)}
+        </div>
+        <div style={{ fontSize: 22, fontWeight: 800, color: resultColor, fontFamily: "'JetBrains Mono',monospace" }}>
+          {resultLabel}
+        </div>
+        <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
+          {t(E, "= what the program prints", "= 프로그램이 출력하는 답")}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

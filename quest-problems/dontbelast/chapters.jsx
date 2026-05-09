@@ -137,6 +137,13 @@ export function makeDontBeLastCh1(E) {
         "문제를 다시 읽어 봐 — 적힌 소 이름의 수를 세어 봐."),
       answer: 7,
     },
+    // 1-4: Interactive sim — milk-log playground
+    {
+      type: "sim",
+      narr: t(E,
+        "Try different totals for each cow.\nWatch the ranking sort itself, and see who lands in second place.\nRemember: 'second-lowest' means the second distinct value — ties for second print 'Tie'.",
+        "각 소의 총량을 바꿔 봐.\n순위가 자동으로 정렬되고, 두 번째 자리에 누가 오는지 보여줘.\n주의: '두 번째로 적음' = 두 번째 고유값. 두 번째가 동률이면 'Tie'."),
+    },
   ];
 }
 
