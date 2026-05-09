@@ -1,8 +1,142 @@
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
+import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#2563eb";
+
+/* ════════════════════════════════════════════════════════════════════
+   MooLangDeepAudit — try every n_tverb count and watch the budget math.
+   Sample: 5 nouns, 1 transitive verb, 3 intransitive verbs, P=4, C=0.
+   For each candidate # of transitive sentences, compute noun usage,
+   intransitive count, total words. Highlight the maximum.
+   ════════════════════════════════════════════════════════════════════ */
+const ML_AUDIT = {
+  N: 5,        // nouns
+  T: 1,        // transitive verbs
+  I: 3,        // intransitive verbs
+  P: 4,        // period budget
+  C: 0,        // comma budget
+};
+
+function buildMooLangAuditTrace() {
+  const { N, T, I, P } = ML_AUDIT;
+  const rows = [];
+  for (let nt = 0; nt <= T; nt++) {
+    const nounsLeft = N - 2 * nt;
+    const ni = Math.max(0, Math.min(I, nounsLeft));
+    const sentences = nt + ni;
+    const fits = sentences <= P;
+    const words = fits ? 3 * nt + 2 * ni : 0;
+    rows.push({ nt, ni, nounsLeft, sentences, fits, words });
+  }
+  let bestIdx = 0, bestWords = -1;
+  rows.forEach((r, i) => { if (r.fits && r.words > bestWords) { bestWords = r.words; bestIdx = i; } });
+  const trace = [];
+  trace.push({
+    cur: -1, bestIdx,
+    note_en: `Setup: N=${N} nouns, T=${T} transitive, I=${I} intransitive, P=${P} periods. We sweep n_tverb from 0..${T} and pick the row with the biggest word count.`,
+    note_ko: `세팅: 명사 ${N}개, 타동사 ${T}개, 자동사 ${I}개, 마침표 ${P}개. n_tverb 를 0..${T} 까지 훑어 단어 수가 최대인 줄을 골라요.`,
+    rows,
+  });
+  rows.forEach((r, i) => {
+    const en = !r.fits
+      ? `n_tverb=${r.nt}: would need ${r.sentences} sentences but P=${P}. Skip.`
+      : `n_tverb=${r.nt}: uses ${2 * r.nt} nouns → ${r.nounsLeft} left. min(I, left) = ${r.ni} intransitive. Total = 3·${r.nt} + 2·${r.ni} = ${r.words} words.`;
+    const ko = !r.fits
+      ? `n_tverb=${r.nt}: 문장 ${r.sentences}개 필요한데 P=${P}. 건너뜀.`
+      : `n_tverb=${r.nt}: 명사 ${2 * r.nt}개 사용 → ${r.nounsLeft}개 남음. min(I, 남음) = ${r.ni} 자동사 문장. 총 = 3·${r.nt} + 2·${r.ni} = ${r.words} 단어.`;
+    trace.push({ cur: i, bestIdx, note_en: en, note_ko: ko, rows });
+  });
+  trace.push({
+    cur: -2, bestIdx,
+    note_en: `Best row: n_tverb=${rows[bestIdx].nt}, n_iverb=${rows[bestIdx].ni}, words=${rows[bestIdx].words}. That is the answer.`,
+    note_ko: `최댓값 줄: n_tverb=${rows[bestIdx].nt}, n_iverb=${rows[bestIdx].ni}, 단어=${rows[bestIdx].words}. 이게 답.`,
+    rows,
+  });
+  return trace;
+}
+
+const ML_TRACE = buildMooLangAuditTrace();
+
+export function MooLangDeepAudit({ E }) {
+  const { idx, safe, setIdx, total } = useTraceStep(ML_TRACE.length);
+  const step = ML_TRACE[safe];
+  const note = E ? step.note_en : step.note_ko;
+  const showBest = step.cur === -2;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ textAlign: "center", marginBottom: 8 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: A, letterSpacing: 0.3 }}>
+          🔬 {t(E, "Deep Audit — sweep every n_tverb", "딥 오딧 — n_tverb 전부 훑기")}
+        </div>
+        <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
+          {t(E, "Sample: 5 nouns, 1 transitive, 3 intransitive, P=4. Find the max words.",
+              "샘플: 명사 5, 타동사 1, 자동사 3, P=4. 최대 단어 찾기.")}
+        </div>
+      </div>
+
+      {/* inventory chips */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap", marginBottom: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+        {[
+          { k: "N", v: ML_AUDIT.N, c: "#2563eb" },
+          { k: "T", v: ML_AUDIT.T, c: "#dc2626" },
+          { k: "I", v: ML_AUDIT.I, c: "#7c3aed" },
+          { k: "P", v: ML_AUDIT.P, c: "#15803d" },
+        ].map(({ k, v, c }) => (
+          <div key={k} style={{
+            border: `1.5px solid ${c}`, color: c, background: "#fff",
+            padding: "3px 9px", borderRadius: 6, fontWeight: 700,
+          }}>{k} = {v}</div>
+        ))}
+      </div>
+
+      {/* table */}
+      <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: 10, marginBottom: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr 1fr 1fr 70px", gap: 4, fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>
+          {[
+            t(E, "n_tverb", "n_tverb"),
+            t(E, "nouns used", "명사 사용"),
+            t(E, "nouns left", "명사 남음"),
+            t(E, "n_iverb", "n_iverb"),
+            t(E, "sentences ≤ P?", "문장 ≤ P?"),
+            t(E, "words", "단어"),
+          ].map((h, i) => (
+            <div key={i} style={{ color: "#1e3a8a", fontWeight: 700, padding: "2px 4px", borderBottom: "1px solid #93c5fd" }}>{h}</div>
+          ))}
+          {step.rows.map((r, i) => {
+            const isCur = step.cur === i;
+            const isBest = showBest && i === step.bestIdx;
+            const bg = isBest ? "#dcfce7" : isCur ? "#dbeafe" : "transparent";
+            const border = isBest ? "1.5px solid #15803d" : isCur ? "1.5px solid #2563eb" : "1px solid transparent";
+            const cells = [
+              `${r.nt}`,
+              `${2 * r.nt}`,
+              `${r.nounsLeft}`,
+              `${r.ni}`,
+              r.fits ? `${r.sentences} ≤ ${ML_AUDIT.P} ✓` : `${r.sentences} > ${ML_AUDIT.P} ✗`,
+              r.fits ? `${r.words}` : "—",
+            ];
+            return cells.map((c2, j) => (
+              <div key={`${i}-${j}`} style={{
+                background: bg, border, borderLeft: j === 0 ? border : "none", borderRight: j === cells.length - 1 ? border : "none",
+                padding: "3px 4px", color: r.fits ? C.text : "#94a3b8", fontWeight: isBest ? 700 : 500,
+              }}>{c2}</div>
+            ));
+          })}
+        </div>
+      </div>
+
+      {/* narration */}
+      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, lineHeight: 1.6, marginBottom: 10, minHeight: 44 }}>
+        {note}
+      </div>
+
+      <SimNav idx={idx} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

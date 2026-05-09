@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooLangSections } from "./components";
+import { getMooLangSections, MooLangDeepAudit } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -192,6 +192,13 @@ export function makeMooLangCh1(E) {
             </div>
           </div>
         </div>),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Let's run the strategy on a real sample. Step through every candidate n_tverb and watch the word count swing \u2014 the green row at the end is the answer.",
+        "\uc804\ub7b5\uc744 \uc2e4\uc81c \uc0d8\ud50c\uc5d0 \ub3cc\ub824\ubd10\uc694. \ud6c4\ubcf4 n_tverb \ub97c \ud558\ub098\uc529 \ubc1f\uc73c\uba74\uc11c \ub2e8\uc5b4 \uc218\uac00 \uc5b4\ub5bb\uac8c \ub2ec\ub77c\uc9c0\ub294\uc9c0 \ubcf4\uace0, \ub9c8\uc9c0\ub9c9\uc5d0 \ucd08\ub85d \uc904\uc774 \ub2f5\uc774\uc5d0\uc694."),
+      content: (<MooLangDeepAudit E={E} />),
     },
   ];
 }
