@@ -1,5 +1,138 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getRaceSections } from "./components";
+
+/* ----------------------------------------------------------------
+   Interactive: Peak-Speed Simulator
+   Student drags peak P (and X, K) and watches the cow's speed
+   profile play out as a bar chart of per-second moves, with
+   cumulative distance counting up against target K.
+   ---------------------------------------------------------------- */
+function PeakSpeedSim({ E }) {
+  const [K, setK] = useState(20);
+  const [X, setX] = useState(1);
+  const [P, setP] = useState(4);
+  const [tick, setTick] = useState(-1);
+
+  const safeP = Math.max(P, X, 1);
+  const accelSpeeds = [];
+  for (let s = 1; s <= safeP; s++) accelSpeeds.push(s);
+  const decelSpeeds = [];
+  if (safeP > X) {
+    for (let s = safeP - 1; s >= X; s--) decelSpeeds.push(s);
+  }
+  const allSpeeds = [...accelSpeeds, ...decelSpeeds];
+  const totalDist = allSpeeds.reduce((a, b) => a + b, 0);
+  const totalTime = allSpeeds.length;
+  const reaches = totalDist >= K;
+
+  const visible = tick < 0 ? allSpeeds.length : Math.min(tick, allSpeeds.length);
+  let cum = 0;
+  for (let i = 0; i < visible; i++) cum += allSpeeds[i];
+
+  const play = () => {
+    setTick(0);
+    let i = 0;
+    const id = setInterval(() => {
+      i += 1;
+      setTick(i);
+      if (i >= allSpeeds.length) {
+        clearInterval(id);
+        setTimeout(() => setTick(-1), 800);
+      }
+    }, 380);
+  };
+
+  const A = "#059669";
+  const maxBar = Math.max(...allSpeeds, 1);
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 13, fontWeight: 600, color: A, textAlign: "center", marginBottom: 4 }}>
+        🎚️ {t(E, "Peak-speed simulator — drag P, X, K", "정점 시뮬레이터 — P, X, K 조절")}
+      </div>
+      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 12 }}>
+        {t(E,
+          "Each bar = one second. Green = accelerate (+1), orange = decelerate (−1). Find the smallest peak P that covers ≥ K.",
+          "막대 1 개 = 1 초. 초록 = 가속(+1), 주황 = 감속(−1). 거리 ≥ K 가 되는 가장 작은 정점 P 찾기.")}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 50px", gap: "6px 10px", alignItems: "center", marginBottom: 10, fontSize: 12 }}>
+        <div style={{ fontWeight: 700, color: "#065f46" }}>K</div>
+        <input type="range" min={1} max={60} value={K} onChange={(e) => { setK(+e.target.value); setTick(-1); }} style={{ accentColor: A }} />
+        <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: "#065f46", textAlign: "right" }}>{K}</div>
+
+        <div style={{ fontWeight: 700, color: "#065f46" }}>X</div>
+        <input type="range" min={0} max={6} value={X} onChange={(e) => { const v = +e.target.value; setX(v); if (P < v) setP(v); setTick(-1); }} style={{ accentColor: A }} />
+        <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: "#065f46", textAlign: "right" }}>{X}</div>
+
+        <div style={{ fontWeight: 700, color: "#7c3aed" }}>P</div>
+        <input type="range" min={Math.max(X, 1)} max={12} value={safeP} onChange={(e) => { setP(+e.target.value); setTick(-1); }} style={{ accentColor: "#7c3aed" }} />
+        <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: "#7c3aed", textAlign: "right" }}>{safeP}</div>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 3, height: 90, padding: "0 4px", borderBottom: "2px solid #d1d5db", marginBottom: 6 }}>
+        {allSpeeds.map((s, i) => {
+          const isAccel = i < accelSpeeds.length;
+          const shown = i < visible;
+          const h = (s / maxBar) * 80;
+          return (
+            <div key={i} style={{
+              width: 18,
+              height: h,
+              background: shown ? (isAccel ? A : "#f59e0b") : "#e5e7eb",
+              borderRadius: "3px 3px 0 0",
+              position: "relative",
+              transition: "background 0.25s, height 0.25s",
+            }}>
+              <div style={{ position: "absolute", top: -16, left: 0, right: 0, textAlign: "center", fontSize: 10, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: shown ? (isAccel ? A : "#b45309") : "#9ca3af" }}>{s}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: C.dim, marginBottom: 10, padding: "0 4px" }}>
+        <span>t = 1</span>
+        <span>t = {totalTime}</span>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 8 }}>
+        <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: "6px 8px", textAlign: "center" }}>
+          <div style={{ fontSize: 10, color: "#065f46", fontWeight: 700 }}>{t(E, "distance", "거리")}</div>
+          <div style={{ fontSize: 14, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: cum >= K ? "#16a34a" : "#065f46" }}>
+            {cum} / {K}
+          </div>
+        </div>
+        <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: "6px 8px", textAlign: "center" }}>
+          <div style={{ fontSize: 10, color: "#065f46", fontWeight: 700 }}>{t(E, "time", "시간")}</div>
+          <div style={{ fontSize: 14, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: "#065f46" }}>
+            {totalTime}s
+          </div>
+        </div>
+        <button onClick={play} disabled={tick >= 0} style={{
+          background: tick >= 0 ? "#9ca3af" : A, color: "#fff", border: "none", borderRadius: 8,
+          padding: "6px 8px", fontSize: 12, fontWeight: 700, cursor: tick >= 0 ? "default" : "pointer",
+        }}>
+          ▶ {t(E, "Play", "재생")}
+        </button>
+      </div>
+
+      <div style={{
+        background: reaches ? "#dcfce7" : "#fef3c7",
+        border: `1px solid ${reaches ? "#86efac" : "#fbbf24"}`,
+        borderRadius: 8, padding: "8px 12px", textAlign: "center", fontSize: 12,
+        color: reaches ? "#15803d" : "#92400e",
+      }}>
+        {reaches
+          ? t(E,
+              `✓ Peak P=${safeP} covers ${totalDist} ≥ K=${K}. Time = P + (P − X) = ${totalTime}. Try smaller P to see what fails.`,
+              `✓ 정점 P=${safeP} 으로 ${totalDist} ≥ K=${K} 도달. 시간 = P + (P − X) = ${totalTime}. P 줄여서 실패 케이스도 확인해 봐.`)
+          : t(E,
+              `✗ Peak P=${safeP} only covers ${totalDist} < K=${K}. Increase P.`,
+              `✗ 정점 P=${safeP} 은 ${totalDist} < K=${K} 만 도달. P 를 늘려야 해.`)}
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -152,6 +285,14 @@ export function makeRaceCh1(E) {
           </div>
         );
       })(),
+    },
+    // 1-2b: Interactive peak-speed simulator
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now play with the peak P yourself. Drag the sliders and press Play to watch the cow accelerate then decelerate. Find the smallest P that still reaches K.",
+        "이제 직접 정점 P 를 움직여 봐. 슬라이더 조절하고 재생 누르면 가속·감속이 보여. K 에 도달하는 가장 작은 P 찾기."),
+      content: <PeakSpeedSim E={E} />,
     },
     // 1-3: Quiz — verify understanding
     {
