@@ -1,5 +1,123 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getAirCond1Sections } from "./components";
+
+/* ================================================================
+   Bilingual sim — Stroke Counter
+   Visualises the diff array as a histogram with 0-padding on both
+   sides. The minimum number of +1 / -1 range commands equals the
+   sum of POSITIVE jumps in the extended diff array. Students edit
+   each bar with +/- and watch strokes light up step by step.
+   ================================================================ */
+function StrokeCounterSim({ E }) {
+  const [d, setD] = useState([1, 3, 2]);
+  const ext = [0, ...d, 0];
+  const jumps = [];
+  let total = 0;
+  for (let i = 1; i < ext.length; i++) {
+    const up = ext[i] - ext[i - 1];
+    if (up > 0) { jumps.push({ at: i, up }); total += up; }
+  }
+  const maxAbs = Math.max(3, ...d.map(v => Math.abs(v)));
+  const bump = (i, delta) => {
+    const nd = [...d];
+    nd[i] = Math.max(-5, Math.min(5, nd[i] + delta));
+    setD(nd);
+  };
+  const reset = (preset) => setD(preset);
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#9a3412", marginBottom: 4 }}>
+          🧪 {t(E, "Sim — Stroke Counter", "시뮬 — 선 세기")}
+        </div>
+        <div style={{ fontSize: 12, color: "#9a3412", lineHeight: 1.55 }}>
+          {t(E,
+            "Edit each diff value with + / −. Watch the strokes (positive jumps in the 0-padded diff) light up. The total count is the answer.",
+            "각 칸의 diff 값을 + / − 로 바꿔봐. 0 으로 감싼 diff 에서 양의 점프(빨간 화살표)가 켜져요. 그 합이 답이에요.")}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        <button onClick={() => reset([1, 3, 2])} style={btnStyle()}>{t(E, "Preset A [1,3,2]", "예시 A [1,3,2]")}</button>
+        <button onClick={() => reset([3, 3, 3])} style={btnStyle()}>{t(E, "Preset B [3,3,3]", "예시 B [3,3,3]")}</button>
+        <button onClick={() => reset([1, -2, 1])} style={btnStyle()}>{t(E, "Preset C [1,-2,1]", "예시 C [1,-2,1]")}</button>
+      </div>
+
+      {/* Histogram */}
+      <div style={{ background: "#0f172a", borderRadius: 10, padding: 14, marginBottom: 10 }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 4, height: 180, position: "relative" }}>
+          {ext.map((v, i) => {
+            const isPad = i === 0 || i === ext.length - 1;
+            const h = (Math.abs(v) / maxAbs) * 70;
+            const isJump = jumps.some(j => j.at === i);
+            return (
+              <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 56, position: "relative" }}>
+                {/* Jump arrow */}
+                {isJump && (
+                  <div style={{ position: "absolute", top: -2, left: -10, fontSize: 13, color: "#f97316", fontWeight: 800 }}>
+                    ↑{ext[i] - ext[i - 1]}
+                  </div>
+                )}
+                <div style={{ height: 80, display: "flex", alignItems: "flex-end" }}>
+                  {v > 0 && <div style={{ width: 36, height: `${h}px`, background: isPad ? "#475569" : "#f97316", borderRadius: "4px 4px 0 0" }} />}
+                </div>
+                <div style={{ height: 2, width: 44, background: "#475569" }} />
+                <div style={{ height: 80, display: "flex", alignItems: "flex-start" }}>
+                  {v < 0 && <div style={{ width: 36, height: `${h}px`, background: isPad ? "#475569" : "#7c3aed", borderRadius: "0 0 4px 4px" }} />}
+                </div>
+                <div style={{ fontSize: 11, color: isPad ? "#64748b" : "#fde68a", marginTop: 4, fontFamily: "monospace" }}>
+                  {isPad ? "0" : v}
+                </div>
+                <div style={{ fontSize: 9, color: "#64748b", marginTop: 1 }}>
+                  {isPad ? (i === 0 ? "pad" : "pad") : `i=${i - 1}`}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Editable controls */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
+        {d.map((v, i) => (
+          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", border: `1.5px solid ${C.border}`, borderRadius: 8, padding: 6, background: "#fff" }}>
+            <div style={{ fontSize: 10, color: C.dim, marginBottom: 2 }}>d[{i}]</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316", fontFamily: "monospace", minWidth: 28, textAlign: "center" }}>{v}</div>
+            <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
+              <button onClick={() => bump(i, +1)} style={tickStyle()}>+</button>
+              <button onClick={() => bump(i, -1)} style={tickStyle()}>−</button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Total */}
+      <div style={{ background: "#ecfdf5", border: "1.5px solid #15803d", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#14532d", letterSpacing: 0.5, marginBottom: 4 }}>
+          {t(E, "Total commands = sum of positive jumps", "총 명령 수 = 양의 점프 합")}
+        </div>
+        <div style={{ fontSize: 18, fontWeight: 800, color: "#15803d", fontFamily: "monospace" }}>
+          {jumps.length === 0 ? "0" : jumps.map(j => j.up).join(" + ") + " = " + total}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function btnStyle() {
+  return {
+    background: "#fff", color: "#9a3412", border: "1.5px solid #fdba74",
+    borderRadius: 8, padding: "5px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer",
+  };
+}
+function tickStyle() {
+  return {
+    background: "#f97316", color: "#fff", border: "none",
+    borderRadius: 6, width: 26, height: 24, fontSize: 13, fontWeight: 800, cursor: "pointer",
+  };
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -133,7 +251,15 @@ export function makeAirCond1Ch1(E) {
         "Correct! One command covers stalls 1-3 with +1, repeated 3 times = 3 total commands.",
         "맞아! 1-3번 칸을 +1하는 명령을 3번 반복 = 총 3번 명령."),
     },
-    // 1-3: Input
+    // 1-3: Sim — Stroke Counter (deep audit)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Play with the diff array and watch positive jumps light up. The total of those jumps is the minimum number of AC commands.",
+        "diff 배열을 직접 바꿔봐. 양의 점프가 켜져요. 그 합이 최소 AC 명령 횟수예요."),
+      content: <StrokeCounterSim E={E} />,
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
