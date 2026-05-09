@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getRevEngSections } from "./components";
+import { getRevEngSections, RevEngDeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -142,7 +142,15 @@ export function makeRevEngCh1(E) {
         "Correct! If the same input produces different outputs, no deterministic program can be consistent. It's a LIE.",
         "맞아! 같은 입력이 다른 출력을 만들면, 어떤 결정적 프로그램도 일관될 수 없어요. LIE야."),
     },
-    // 1-3: Input
+    // 1-3: Deep audit sim — try every (pos, A, B) by hand
+    {
+      type: "reveal",
+      narr: t(E,
+        "Let's audit by hand. Pick a position (pos) and an assignment (A,B). The rule is 'if arr[pos]==0 return A, else return B'. Each row shows whether that rule matches the expected output. Try every combo until one works — or all fail (LIE).",
+        "직접 감사해 보자. 위치(pos)와 배정(A,B)을 골라봐. 규칙은 'if arr[pos]==0 이면 A, 아니면 B'. 각 행은 그 규칙이 기대 출력과 맞는지 보여줘. 모든 조합을 시도해 — 하나라도 맞으면 OK, 다 실패면 LIE."),
+      content: <RevEngDeepAuditSim E={E} />,
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

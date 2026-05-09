@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -99,6 +100,118 @@ export function getRevEngSections(E) {
 
 export function RevEngProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#8b5cf6" />;
+}
+
+
+/* ===============================================================
+   Deep Audit Sim — manually try every (pos, A, B) on 4 test cases
+   The rule: if arr[pos]==0 return A, else return B.
+   A green check on every row means OK; any red X on any row fails.
+   =============================================================== */
+const AUDIT_CASES = [
+  { arr: [0, 1, 0], out: 1 },
+  { arr: [1, 1, 0], out: 0 },
+  { arr: [0, 0, 1], out: 1 },
+  { arr: [1, 0, 1], out: 0 },
+];
+
+export function RevEngDeepAuditSim({ E }) {
+  const [pos, setPos] = useState(0);
+  const [A, setA] = useState(1);
+  const N = AUDIT_CASES[0].arr.length;
+  const B = 1 - A;
+
+  const rows = AUDIT_CASES.map((tc) => {
+    const expected = tc.arr[pos] === 0 ? A : B;
+    const ok = expected === tc.out;
+    return { ...tc, expected, ok };
+  });
+  const allOk = rows.every(r => r.ok);
+
+  const btn = (active) => ({
+    background: active ? "#8b5cf6" : "#fff",
+    color: active ? "#fff" : "#5b21b6",
+    border: "1.5px solid #8b5cf6",
+    borderRadius: 8,
+    padding: "5px 12px",
+    fontSize: 13,
+    fontWeight: 800,
+    cursor: "pointer",
+  });
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+          🔎 {t(E, "Deep Audit", "심층 감사")}
+        </div>
+        <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+          {t(E,
+            "Rule: if arr[pos]==0 return A, else return B. Pick (pos, A) and check every row.",
+            "규칙: arr[pos]==0이면 A, 아니면 B 반환. (pos, A)를 골라 모든 행을 확인.")}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", marginBottom: 10 }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: C.dim }}>{t(E, "pos", "위치")}:</span>
+        {Array.from({ length: N }, (_, i) => (
+          <button key={i} onClick={() => setPos(i)} style={btn(pos === i)}>{i}</button>
+        ))}
+        <span style={{ width: 8 }} />
+        <span style={{ fontSize: 12, fontWeight: 700, color: C.dim }}>A:</span>
+        <button onClick={() => setA(0)} style={btn(A === 0)}>0</button>
+        <button onClick={() => setA(1)} style={btn(A === 1)}>1</button>
+        <span style={{ fontSize: 12, color: C.dim, marginLeft: 4 }}>
+          (B = {B})
+        </span>
+      </div>
+
+      <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", color: "#f8fafc", fontFamily: "JetBrains Mono, monospace", fontSize: 13, marginBottom: 10 }}>
+        <span style={{ color: "#c084fc" }}>if</span> arr[<span style={{ color: "#fbbf24" }}>{pos}</span>] == <span style={{ color: "#fbbf24" }}>0</span>: <span style={{ color: "#34d399" }}>return {A}</span> <span style={{ color: "#8b949e" }}>else</span>: <span style={{ color: "#34d399" }}>return {B}</span>
+      </div>
+
+      <div style={{ border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", marginBottom: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 80px 100px 60px", background: "#ede9fe", padding: "8px 12px", fontSize: 12, fontWeight: 800, color: "#5b21b6" }}>
+          <div>arr</div>
+          <div style={{ textAlign: "center" }}>arr[{pos}]</div>
+          <div style={{ textAlign: "center" }}>{t(E, "expected → got", "기대 → 결과")}</div>
+          <div style={{ textAlign: "center" }}>{t(E, "match", "일치")}</div>
+        </div>
+        {rows.map((r, i) => (
+          <div key={i} style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 80px 100px 60px",
+            padding: "8px 12px",
+            fontSize: 13,
+            borderTop: `1px solid ${C.border}`,
+            background: r.ok ? C.okBg : C.noBg,
+            color: r.ok ? "#166534" : "#991b1b",
+            fontFamily: "JetBrains Mono, monospace",
+          }}>
+            <div>[{r.arr.join(", ")}]</div>
+            <div style={{ textAlign: "center", fontWeight: 700 }}>{r.arr[pos]}</div>
+            <div style={{ textAlign: "center" }}>{r.out} → {r.expected}</div>
+            <div style={{ textAlign: "center", fontSize: 16 }}>{r.ok ? "✓" : "✗"}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        background: allOk ? C.okBg : "#fff7ed",
+        border: `1.5px solid ${allOk ? C.okBd : C.carryBd}`,
+        borderRadius: 10,
+        padding: "10px 14px",
+        fontSize: 13,
+        color: allOk ? "#166534" : "#9a3412",
+        fontWeight: 700,
+        textAlign: "center",
+      }}>
+        {allOk
+          ? t(E, "✓ All rows match — this rule works! Verdict: OK", "✓ 모든 행 일치 — 이 규칙이 통해요! 판정: OK")
+          : t(E, "Some rows fail. Try another (pos, A). If nothing works → LIE.", "일부 행 불일치. 다른 (pos, A)를 시도. 다 실패하면 → LIE.")}
+      </div>
+    </div>
+  );
 }
 
 
