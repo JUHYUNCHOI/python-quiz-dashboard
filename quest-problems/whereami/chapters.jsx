@@ -1,5 +1,133 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getWhereAmISections } from "./components";
+
+/* ──────────────────────────────────────────────────────────────
+   Interactive sim — type a mailbox-color string, slide K, watch
+   every length-K window highlighted; duplicates red, distinct green.
+   ────────────────────────────────────────────────────────────── */
+function WhereAmISim({ E }) {
+  const [text, setText] = useState("ABCBABC");
+  const [K, setK] = useState(2);
+  const s = text.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 14);
+  const N = s.length;
+  const safeK = Math.max(1, Math.min(K, Math.max(1, N)));
+
+  // Build windows + count duplicates
+  const windows = [];
+  const counts = {};
+  for (let i = 0; i + safeK <= N; i++) {
+    const sub = s.slice(i, i + safeK);
+    counts[sub] = (counts[sub] || 0) + 1;
+    windows.push({ start: i, sub });
+  }
+  const distinct = Object.keys(counts).length;
+  const total = windows.length;
+  const allUnique = total > 0 && distinct === total;
+
+  return (
+    <div style={{ background: "#f8fafc", border: "1.5px solid #e2e8f0", borderRadius: 12, padding: 14, marginTop: 12 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "#f97316", marginBottom: 8, letterSpacing: 0.4 }}>
+        🧪 {t(E, "Try It — Window Slider", "직접 해보기 — 윈도우 슬라이더")}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", marginBottom: 10 }}>
+        <div>
+          <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>
+            {t(E, "Mailbox letters (A–Z)", "우편함 글자 (A–Z)")}
+          </div>
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            maxLength={14}
+            style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: 14, fontWeight: 700,
+              padding: "6px 10px", border: `1.5px solid ${C.border}`, borderRadius: 8,
+              width: 180, textTransform: "uppercase", outline: "none",
+              background: "#fff", color: "#f97316",
+            }}
+          />
+        </div>
+        <div style={{ flex: 1, minWidth: 180 }}>
+          <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>
+            K = <b style={{ color: "#f97316" }}>{safeK}</b> {t(E, "(window size)", "(윈도우 크기)")}
+          </div>
+          <input
+            type="range"
+            min={1}
+            max={Math.max(1, N)}
+            value={safeK}
+            onChange={(e) => setK(parseInt(e.target.value, 10))}
+            style={{ width: "100%", accentColor: "#f97316" }}
+          />
+        </div>
+      </div>
+
+      {/* String grid */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 3, marginBottom: 10, flexWrap: "wrap" }}>
+        {s.split("").map((ch, i) => (
+          <div key={i} style={{
+            width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+            borderRadius: 6, fontSize: 15, fontWeight: 700,
+            fontFamily: "'JetBrains Mono', monospace",
+            background: "#fff", border: `1.5px solid ${C.border}`, color: "#1e293b",
+          }}>{ch}</div>
+        ))}
+      </div>
+
+      {/* Window list */}
+      {N === 0 ? (
+        <div style={{ fontSize: 12, color: C.dim, textAlign: "center", padding: 8 }}>
+          {t(E, "Type some letters above.", "위에 글자를 입력해.")}
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", marginBottom: 10 }}>
+          {windows.map((w, wi) => {
+            const dup = counts[w.sub] > 1;
+            return (
+              <span key={wi} style={{
+                fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700,
+                background: dup ? C.noBg : C.okBg,
+                color: dup ? C.no : C.ok,
+                border: `1.5px solid ${dup ? C.noBd : C.okBd}`,
+                borderRadius: 6, padding: "3px 8px",
+              }}>
+                {w.sub}
+                {counts[w.sub] > 1 ? " ✗" : " ✓"}
+              </span>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Counter */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", fontSize: 12 }}>
+        <span style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 6, padding: "4px 10px", fontWeight: 700, color: C.text }}>
+          {t(E, "Distinct", "고유")}: <b style={{ color: C.ok }}>{distinct}</b> / {total}
+        </span>
+        <span style={{
+          background: allUnique ? C.okBg : C.noBg,
+          border: `1px solid ${allUnique ? C.okBd : C.noBd}`,
+          color: allUnique ? C.ok : C.no,
+          borderRadius: 6, padding: "4px 10px", fontWeight: 700,
+        }}>
+          {N === 0
+            ? "—"
+            : allUnique
+              ? t(E, `K=${safeK} works! ✅`, `K=${safeK} 성공! ✅`)
+              : t(E, `K=${safeK} has duplicates ❌`, `K=${safeK} 중복 있음 ❌`)}
+        </span>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
+        {t(E,
+          "Slide K up until every window turns green. The smallest such K is the answer.",
+          "모든 윈도우가 초록이 될 때까지 K 를 올려. 그 가장 작은 K 가 답.")}
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -529,7 +657,26 @@ export function makeWhereAmICh2(E) {
           </div>
         </div>),
     },
-    // 2-4: Complexity explanation
+    // 2-4: Interactive sim — try your own string + K
+    {
+      type: "reveal",
+      narr: t(E,
+        "Your turn — type any letters and slide K. Green windows are unique, red ones are duplicates. The smallest K with all-green is the answer.",
+        "직접 해보기 — 글자를 아무거나 입력하고 K 를 밀어봐. 초록은 유일, 빨강은 중복. 모두 초록이 되는 가장 작은 K 가 답."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
+            {t(E, "Play with the algorithm", "알고리즘 가지고 놀기")}
+          </div>
+          <div style={{ fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
+            {t(E,
+              "Try \"ABCBABC\", \"AABB\", or \"AAAA\" — see how K grows when there are more repeats.",
+              "\"ABCBABC\", \"AABB\", \"AAAA\" 등 시도 — 반복이 많을수록 K 가 어떻게 커지는지 봐.")}
+          </div>
+          <WhereAmISim E={E} />
+        </div>),
+    },
+    // 2-5: Complexity explanation
     {
       type: "reveal",
       narr: t(E,
