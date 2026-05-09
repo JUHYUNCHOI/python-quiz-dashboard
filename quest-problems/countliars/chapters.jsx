@@ -1,5 +1,153 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getCountLiarsSections } from "./components";
+
+/* ------------------------------------------------------------------
+   Deep-audit sim — drag Bessie's position, watch liars light up.
+   Each cow makes a 'G x' or 'L x' claim. The bar above the line
+   shows true (green) or lying (red) at the current Bessie position.
+   ------------------------------------------------------------------ */
+const LIARS_SIM_CLAIMS = [
+  { typ: "G", val: 2, label: "Cow 1" },
+  { typ: "L", val: 6, label: "Cow 2" },
+  { typ: "G", val: 4, label: "Cow 3" },
+  { typ: "L", val: 3, label: "Cow 4" },
+  { typ: "G", val: 7, label: "Cow 5" },
+];
+
+function CountLiarsSim({ E }) {
+  const [pos, setPos] = useState(4);
+  const A = "#2563eb";
+  const claims = LIARS_SIM_CLAIMS;
+  const evals = claims.map(c => {
+    const lying = (c.typ === "G" && pos < c.val) || (c.typ === "L" && pos > c.val);
+    return { ...c, lying };
+  });
+  const liarCount = evals.filter(e => e.lying).length;
+
+  // Number line 1..10
+  const MIN = 1, MAX = 10;
+  const span = MAX - MIN;
+  const pct = (v) => ((v - MIN) / span) * 100;
+
+  // Best position (min liars across MIN..MAX)
+  let best = MIN, bestLiars = claims.length;
+  for (let p = MIN; p <= MAX; p++) {
+    let lc = 0;
+    for (const c of claims) {
+      if ((c.typ === "G" && p < c.val) || (c.typ === "L" && p > c.val)) lc++;
+    }
+    if (lc < bestLiars) { bestLiars = lc; best = p; }
+  }
+
+  return (
+    <div style={{
+      background: "#f8fafc",
+      border: `1.5px solid ${A}`,
+      borderRadius: 12,
+      padding: "12px 14px",
+      marginBottom: 10,
+    }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: A, marginBottom: 8, letterSpacing: 0.3 }}>
+        {t(E, "🔬 Try it — drag Bessie's position", "🔬 직접 해봐 — Bessie 위치를 옮겨봐")}
+      </div>
+
+      {/* Claims list with truth status */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 6, marginBottom: 12 }}>
+        {evals.map((e, i) => (
+          <div key={i} style={{
+            background: e.lying ? "#fee2e2" : "#dcfce7",
+            border: `1px solid ${e.lying ? "#dc2626" : "#15803d"}`,
+            borderRadius: 7,
+            padding: "5px 8px",
+            fontSize: 11,
+            color: e.lying ? "#991b1b" : "#14532d",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}>
+            <span style={{ fontWeight: 700 }}>
+              {e.typ} {e.val}
+            </span>
+            <span style={{ fontSize: 14 }}>{e.lying ? "🤥" : "✅"}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Number line */}
+      <div style={{ position: "relative", height: 56, margin: "0 6px" }}>
+        <div style={{
+          position: "absolute", top: 26, left: 0, right: 0, height: 3,
+          background: "#cbd5e1", borderRadius: 2,
+        }} />
+        {/* tick marks */}
+        {Array.from({ length: span + 1 }, (_, i) => MIN + i).map(v => (
+          <div key={v} style={{
+            position: "absolute",
+            left: `${pct(v)}%`,
+            top: 22,
+            transform: "translateX(-50%)",
+            width: 1, height: 11,
+            background: "#94a3b8",
+          }} />
+        ))}
+        {Array.from({ length: span + 1 }, (_, i) => MIN + i).map(v => (
+          <div key={`l-${v}`} style={{
+            position: "absolute",
+            left: `${pct(v)}%`,
+            top: 36,
+            transform: "translateX(-50%)",
+            fontSize: 10, color: "#64748b",
+          }}>{v}</div>
+        ))}
+        {/* Bessie marker */}
+        <div style={{
+          position: "absolute",
+          left: `${pct(pos)}%`,
+          top: 0,
+          transform: "translateX(-50%)",
+          fontSize: 20,
+          filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))",
+          pointerEvents: "none",
+        }}>🐄</div>
+        <div style={{
+          position: "absolute",
+          left: `${pct(pos)}%`,
+          top: 21,
+          transform: "translateX(-50%)",
+          width: 3, height: 13, background: A, borderRadius: 1,
+        }} />
+      </div>
+
+      <input
+        type="range"
+        min={MIN}
+        max={MAX}
+        value={pos}
+        onChange={e => setPos(parseInt(e.target.value))}
+        style={{ width: "100%", accentColor: A, marginTop: 6 }}
+      />
+
+      {/* Live count */}
+      <div style={{
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        marginTop: 8, fontSize: 12, flexWrap: "wrap", gap: 6,
+      }}>
+        <div style={{ color: C.text }}>
+          {t(E, "Bessie at ", "Bessie 위치 ")}
+          <b style={{ color: A }}>{pos}</b>
+          {t(E, " → liars: ", " → 거짓말쟁이: ")}
+          <b style={{ color: liarCount === bestLiars ? "#15803d" : "#dc2626" }}>{liarCount}</b>
+        </div>
+        <div style={{ color: C.dim, fontSize: 11 }}>
+          {liarCount === bestLiars
+            ? t(E, "🏆 You found a best position!", "🏆 최적 위치를 찾았어!")
+            : t(E, `Best so far: ${bestLiars} liars (try other positions)`, `최선: ${bestLiars}명 (다른 위치도 시도)`)}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -116,6 +264,8 @@ export function makeLiarsCh1(E) {
               </div>
             </div>
           </div>
+
+          <CountLiarsSim E={E} />
         </div>),
     },
     // 1-2: Quiz
