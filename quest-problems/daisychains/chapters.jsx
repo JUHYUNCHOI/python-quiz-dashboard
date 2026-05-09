@@ -1,5 +1,196 @@
+import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getDaisyChainsSections } from "./components";
+
+
+/* ─── Subarray Average Lab ──────────────────────────────────────
+   Bilingual interactive: drag L/R handles over a row of petal counts.
+   Live shows sum / count / average and which entries equal the average.
+   "Try all subarrays" sweeps all (i,j) and counts distinct averages.
+   ─────────────────────────────────────────────────────────────── */
+function SubarrayAverageLab({ E }) {
+  const PETALS = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3];
+  const N = PETALS.length;
+  const [L, setL] = useState(2);
+  const [R, setR] = useState(5);
+  const [seenAverages, setSeenAverages] = useState(() => new Set());
+  const [sweepResult, setSweepResult] = useState(null);
+
+  const lo = Math.min(L, R), hi = Math.max(L, R);
+  const slice = PETALS.slice(lo, hi + 1);
+  const sum = slice.reduce((a, b) => a + b, 0);
+  const cnt = slice.length;
+  const avgRaw = sum / cnt;
+  const avgIsInt = sum % cnt === 0;
+  const avg = avgIsInt ? sum / cnt : avgRaw;
+  const matches = avgIsInt ? slice.filter(v => v === avg).length : 0;
+
+  const recordAverage = () => {
+    setSeenAverages(prev => {
+      const n = new Set(prev);
+      n.add(avgRaw.toFixed(4));
+      return n;
+    });
+  };
+
+  const trySweep = useMemo(() => () => {
+    const distinctAvgs = new Set();
+    let photogenic = 0;
+    for (let i = 0; i < N; i++) {
+      let s = 0;
+      for (let j = i; j < N; j++) {
+        s += PETALS[j];
+        const len = j - i + 1;
+        distinctAvgs.add((s / len).toFixed(4));
+        if (s % len === 0) {
+          const a = s / len;
+          if (PETALS.slice(i, j + 1).includes(a)) photogenic++;
+        }
+      }
+    }
+    setSweepResult({ distinct: distinctAvgs.size, photogenic, total: N * (N + 1) / 2 });
+  }, []);
+
+  const reset = () => { setSeenAverages(new Set()); setSweepResult(null); };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: C.carry, marginBottom: 8 }}>
+        🌼 {t(E, "Subarray Average Lab", "부분 배열 평균 실험실")}
+      </div>
+      <div style={{ fontSize: 11, color: C.dim, marginBottom: 10, lineHeight: 1.5 }}>
+        {t(E,
+          "Move the L (left) and R (right) handles to choose a contiguous subarray. Watch sum, count, and average update live.",
+          "L(왼쪽), R(오른쪽) 슬라이더로 연속 부분 배열을 골라봐. 합·개수·평균이 실시간으로 바뀌어.")}
+      </div>
+
+      {/* Petal row */}
+      <div style={{
+        display: "flex", justifyContent: "center", gap: 4, marginBottom: 10,
+        fontFamily: "'JetBrains Mono', monospace",
+      }}>
+        {PETALS.map((p, idx) => {
+          const inRange = idx >= lo && idx <= hi;
+          const isMatch = inRange && avgIsInt && p === avg;
+          const isEdge = idx === lo || idx === hi;
+          return (
+            <div key={idx} style={{
+              width: 36, height: 44, borderRadius: 8,
+              display: "flex", flexDirection: "column",
+              alignItems: "center", justifyContent: "center",
+              background: isMatch ? C.okBg : (inRange ? C.carryBg : "#f8fafc"),
+              border: `${isEdge ? 3 : 2}px solid ${isMatch ? C.ok : (inRange ? C.carry : C.border)}`,
+              fontSize: 14, fontWeight: 700,
+              color: isMatch ? C.ok : (inRange ? C.carry : C.dim),
+            }}>
+              <div style={{ fontSize: 9, color: C.dim, fontWeight: 500 }}>{idx}</div>
+              <div>{p}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Sliders */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 10 }}>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11, color: C.text }}>
+          <span style={{ width: 16, color: C.carry, fontWeight: 700 }}>L</span>
+          <input type="range" min={0} max={N - 1} value={L}
+            onChange={e => setL(Number(e.target.value))}
+            style={{ flex: 1, accentColor: C.carry }} />
+          <span style={{ width: 20, textAlign: "right", color: C.carry, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>{L}</span>
+        </label>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11, color: C.text }}>
+          <span style={{ width: 16, color: C.carry, fontWeight: 700 }}>R</span>
+          <input type="range" min={0} max={N - 1} value={R}
+            onChange={e => setR(Number(e.target.value))}
+            style={{ flex: 1, accentColor: C.carry }} />
+          <span style={{ width: 20, textAlign: "right", color: C.carry, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>{R}</span>
+        </label>
+      </div>
+
+      {/* Stats */}
+      <div style={{
+        display: "grid", gridTemplateColumns: "1fr 1fr 1fr",
+        gap: 6, marginBottom: 8,
+        fontFamily: "'JetBrains Mono', monospace",
+      }}>
+        <div style={{ background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 8, padding: "6px 4px", textAlign: "center" }}>
+          <div style={{ fontSize: 9, color: C.dim }}>{t(E, "sum", "합")}</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: C.carry }}>{sum}</div>
+        </div>
+        <div style={{ background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 8, padding: "6px 4px", textAlign: "center" }}>
+          <div style={{ fontSize: 9, color: C.dim }}>{t(E, "count", "개수")}</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: C.carry }}>{cnt}</div>
+        </div>
+        <div style={{
+          background: avgIsInt ? C.okBg : C.noBg,
+          border: `1px solid ${avgIsInt ? C.okBd : C.noBd}`,
+          borderRadius: 8, padding: "6px 4px", textAlign: "center",
+        }}>
+          <div style={{ fontSize: 9, color: C.dim }}>{t(E, "average", "평균")}</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: avgIsInt ? C.ok : C.no }}>
+            {avgIsInt ? avg : avgRaw.toFixed(2)}
+          </div>
+        </div>
+      </div>
+
+      <div style={{
+        textAlign: "center", fontSize: 12, fontWeight: 600,
+        color: matches > 0 ? C.ok : C.dim, marginBottom: 8,
+      }}>
+        {avgIsInt
+          ? (matches > 0
+              ? t(E, `${matches} flower(s) match the average — photogenic!`, `평균과 같은 꽃 ${matches}개 — 예쁜 부분 배열!`)
+              : t(E, "Average is integer but no flower matches.", "평균이 정수지만 일치하는 꽃이 없어."))
+          : t(E, "Average is not an integer — can't be photogenic.", "평균이 정수가 아니야 — 예쁜 부분 배열이 될 수 없어.")}
+      </div>
+
+      {/* Action buttons */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
+        <button onClick={recordAverage} style={{
+          flex: 1, minWidth: 110,
+          background: C.carry, color: "#fff", border: "none",
+          borderRadius: 8, padding: "7px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer",
+        }}>
+          {t(E, "+ Record this avg", "+ 이 평균 기록")}
+        </button>
+        <button onClick={trySweep} style={{
+          flex: 1, minWidth: 110,
+          background: "#fff", color: C.carry, border: `1.5px solid ${C.carry}`,
+          borderRadius: 8, padding: "7px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer",
+        }}>
+          {t(E, "Try all subarrays", "모든 부분 배열 실행")}
+        </button>
+        <button onClick={reset} style={{
+          background: "#fff", color: C.dim, border: `1px solid ${C.border}`,
+          borderRadius: 8, padding: "7px 10px", fontSize: 11, fontWeight: 600, cursor: "pointer",
+        }}>
+          {t(E, "Reset", "초기화")}
+        </button>
+      </div>
+
+      {/* Distinct counter */}
+      <div style={{
+        background: "#f8fafc", border: `1px dashed ${C.border}`, borderRadius: 8,
+        padding: "8px 10px", fontSize: 11, color: C.text, lineHeight: 1.5,
+      }}>
+        <div>
+          <b style={{ color: C.carry }}>{t(E, "Distinct averages you recorded:", "기록한 서로 다른 평균 수:")}</b>{" "}
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", color: C.carry, fontWeight: 700 }}>
+            {seenAverages.size}
+          </span>
+        </div>
+        {sweepResult && (
+          <div style={{ marginTop: 6, paddingTop: 6, borderTop: `1px solid ${C.border}` }}>
+            {t(E,
+              `Sweep: ${sweepResult.distinct} distinct averages across all ${sweepResult.total} subarrays. Photogenic count = ${sweepResult.photogenic}.`,
+              `전수조사: 총 ${sweepResult.total}개 부분 배열에서 서로 다른 평균 ${sweepResult.distinct}개. 예쁜 부분 배열 = ${sweepResult.photogenic}개.`)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -340,6 +531,14 @@ export function makeDaisyCh1(E) {
           </div>
         );
       })(),
+    },
+    // 1-5b: Interactive lab — subarray average sim
+    {
+      type: "reveal",
+      narr: t(E,
+        "Hands-on time! Drag the L and R handles to pick a subarray. The lab shows sum, count, and average live, and highlights flowers that equal the average.",
+        "직접 해보자! L, R 슬라이더로 부분 배열을 골라봐. 합·개수·평균이 실시간으로 보이고, 평균과 같은 꽃은 강조돼."),
+      content: <SubarrayAverageLab E={E} />,
     },
     // 1-6: Input — count valid subarrays
     {

@@ -1,8 +1,293 @@
+import { useState, useMemo, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* ─────────────────────────────────────────────────────────────
+   Custom-Alphabet Recital Simulator
+   Student picks an alphabet order + a heard string, then steps
+   through each adjacent pair. Forward = green, backward = red
+   (red triggers a "recite!" pulse and increments cycle count).
+   ───────────────────────────────────────────────────────────── */
+export function UdderedRecitalSim({ E }) {
+  const PRESET_ORDERS = [
+    { label: "abc..z", value: "abcdefghijklmnopqrstuvwxyz" },
+    { label: "tngrolewqdmaviuhpkfbxzcsjy", value: "tngrolewqdmaviuhpkfbxzcsjy" },
+    { label: "zyx..a", value: "zyxwvutsrqponmlkjihgfedcba" },
+  ];
+  const [orderIdx, setOrderIdx] = useState(0);
+  const [heard, setHeard] = useState("mood");
+  const order = PRESET_ORDERS[orderIdx].value;
+  const pos = useMemo(() => {
+    const m = {};
+    for (let i = 0; i < order.length; i++) m[order[i]] = i;
+    return m;
+  }, [order]);
+
+  const cleanHeard = heard.toLowerCase().replace(/[^a-z]/g, "");
+  const [step, setStep] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [reciteFlash, setReciteFlash] = useState(false);
+  const timerRef = useRef(null);
+
+  // recompute cycles for highlighting up to current step
+  const stepInfo = useMemo(() => {
+    let cycles = cleanHeard.length > 0 ? 1 : 0;
+    const pairs = [];
+    for (let i = 1; i < cleanHeard.length; i++) {
+      const back = pos[cleanHeard[i]] <= pos[cleanHeard[i - 1]];
+      if (back) cycles++;
+      pairs.push({ back, cyclesAfter: cycles });
+    }
+    return { pairs, totalCycles: cycles };
+  }, [cleanHeard, pos]);
+
+  const maxStep = cleanHeard.length; // step 0 = first letter only, step k = up to comparing letter k with k-1
+  useEffect(() => { setStep(0); setPlaying(false); }, [heard, orderIdx]);
+
+  useEffect(() => {
+    if (!playing) return;
+    if (step >= maxStep - 1) { setPlaying(false); return; }
+    timerRef.current = setTimeout(() => {
+      const nextStep = step + 1;
+      const pairIdx = nextStep - 1;
+      if (pairIdx >= 0 && stepInfo.pairs[pairIdx]?.back) {
+        setReciteFlash(true);
+        setTimeout(() => setReciteFlash(false), 600);
+      }
+      setStep(nextStep);
+    }, 850);
+    return () => clearTimeout(timerRef.current);
+  }, [playing, step, maxStep, stepInfo]);
+
+  const cyclesNow = step === 0
+    ? (cleanHeard.length > 0 ? 1 : 0)
+    : stepInfo.pairs[step - 1]?.cyclesAfter ?? 1;
+
+  const reset = () => { setStep(0); setPlaying(false); setReciteFlash(false); };
+  const stepOnce = () => {
+    if (step >= maxStep - 1) return;
+    const nextStep = step + 1;
+    const pairIdx = nextStep - 1;
+    if (stepInfo.pairs[pairIdx]?.back) {
+      setReciteFlash(true);
+      setTimeout(() => setReciteFlash(false), 600);
+    }
+    setStep(nextStep);
+  };
+
+  return (
+    <div style={{
+      background: "#fff",
+      border: "1.5px solid #fca5a5",
+      borderRadius: 12,
+      padding: 14,
+      marginBottom: 10,
+    }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#7f1d1d", marginBottom: 10 }}>
+        🐄 {t(E, "Try it: Recital Simulator", "직접 해보기: 외우기 시뮬레이터")}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 12 }}>
+        <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 600, minWidth: 64 }}>
+            {t(E, "Order:", "순서:")}
+          </span>
+          {PRESET_ORDERS.map((p, i) => (
+            <button
+              key={p.label}
+              onClick={() => setOrderIdx(i)}
+              style={{
+                background: orderIdx === i ? "#dc2626" : "#fef2f2",
+                color: orderIdx === i ? "#fff" : "#7f1d1d",
+                border: "1px solid #fca5a5",
+                borderRadius: 6,
+                padding: "3px 8px",
+                fontSize: 11,
+                fontWeight: 600,
+                cursor: "pointer",
+                fontFamily: "JetBrains Mono, monospace",
+              }}
+            >{p.label}</button>
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 600, minWidth: 64 }}>
+            {t(E, "Heard:", "들음:")}
+          </span>
+          <input
+            value={heard}
+            onChange={(e) => setHeard(e.target.value)}
+            maxLength={20}
+            placeholder="mood"
+            style={{
+              flex: 1,
+              minWidth: 120,
+              padding: "4px 8px",
+              border: "1px solid #fca5a5",
+              borderRadius: 6,
+              fontSize: 12,
+              fontFamily: "JetBrains Mono, monospace",
+              color: "#7f1d1d",
+            }}
+          />
+          {["cow", "moo", "abba"].map(s => (
+            <button key={s} onClick={() => setHeard(s)} style={{
+              background: "#fef2f2", color: "#7f1d1d",
+              border: "1px solid #fca5a5", borderRadius: 6,
+              padding: "3px 8px", fontSize: 11, fontWeight: 600, cursor: "pointer",
+              fontFamily: "JetBrains Mono, monospace",
+            }}>{s}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Order strip with position pointer */}
+      <div style={{ marginBottom: 10 }}>
+        <div style={{ fontSize: 10, color: C.dim, marginBottom: 4 }}>
+          {t(E, "Bessie's alphabet (custom order, position →)", "Bessie의 알파벳 (커스텀 순서, 위치 →)")}
+        </div>
+        <div style={{
+          display: "flex", flexWrap: "wrap", gap: 2,
+          fontFamily: "JetBrains Mono, monospace",
+        }}>
+          {order.split("").map((ch, i) => {
+            const curLetter = cleanHeard[step];
+            const prevLetter = step > 0 ? cleanHeard[step - 1] : null;
+            const isCur = ch === curLetter;
+            const isPrev = ch === prevLetter;
+            return (
+              <span key={i} style={{
+                display: "inline-block",
+                width: 18, textAlign: "center",
+                padding: "2px 0",
+                fontSize: 11, fontWeight: 600,
+                background: isCur ? "#dc2626" : isPrev ? "#fca5a5" : "#fef2f2",
+                color: isCur ? "#fff" : isPrev ? "#fff" : "#7f1d1d",
+                border: "1px solid #fca5a5",
+                borderRadius: 3,
+              }}>{ch}</span>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Heard string with current/prev highlight */}
+      <div style={{ marginBottom: 10 }}>
+        <div style={{ fontSize: 10, color: C.dim, marginBottom: 4 }}>
+          {t(E, "Heard string (reading position)", "들은 문자열 (읽는 위치)")}
+        </div>
+        <div style={{ display: "flex", gap: 4, fontFamily: "JetBrains Mono, monospace" }}>
+          {cleanHeard.split("").map((ch, i) => {
+            const isCur = i === step;
+            const isPrev = i === step - 1;
+            const isPair = i === step || i === step - 1;
+            const pair = stepInfo.pairs[step - 1];
+            const back = pair?.back;
+            return (
+              <span key={i} style={{
+                display: "inline-block",
+                minWidth: 22, textAlign: "center",
+                padding: "4px 6px",
+                fontSize: 14, fontWeight: 700,
+                background: isCur ? (back ? "#dc2626" : "#15803d")
+                          : isPrev ? (back ? "#fca5a5" : "#86efac")
+                          : "#f9fafb",
+                color: isPair ? "#fff" : "#1f2937",
+                border: `1.5px solid ${isPair ? (back ? "#dc2626" : "#15803d") : "#e5e7eb"}`,
+                borderRadius: 6,
+                transition: "all 0.25s",
+              }}>{ch}</span>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Pair status */}
+      <div style={{
+        background: reciteFlash ? "#fee2e2" : "#fafafa",
+        border: `1px solid ${reciteFlash ? "#dc2626" : "#e5e7eb"}`,
+        borderRadius: 8,
+        padding: "8px 10px",
+        marginBottom: 10,
+        fontSize: 12,
+        color: "#374151",
+        minHeight: 36,
+        transition: "all 0.25s",
+      }}>
+        {step === 0 ? (
+          <span>
+            {t(E, "Reading first letter — start with cycle 1.", "첫 글자 읽기 — cycle 1 시작.")}
+          </span>
+        ) : (() => {
+          const a = cleanHeard[step - 1];
+          const b = cleanHeard[step];
+          const pa = pos[a], pb = pos[b];
+          const back = pb <= pa;
+          return (
+            <span>
+              <b style={{ color: back ? "#dc2626" : "#15803d" }}>
+                {a}({pa}) → {b}({pb})
+              </b>
+              {" — "}
+              {back
+                ? t(E, `backward / equal → recite! cycles++`, `뒤로 / 같음 → 외워야! cycles++`)
+                : t(E, `forward → keep reading`, `앞으로 → 계속 읽기`)}
+            </span>
+          );
+        })()}
+      </div>
+
+      {/* Cycle counter + buttons */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+        <div style={{
+          background: "#dc2626", color: "#fff",
+          padding: "4px 10px", borderRadius: 6,
+          fontSize: 12, fontWeight: 700,
+          fontFamily: "JetBrains Mono, monospace",
+        }}>
+          cycles = {cyclesNow}
+        </div>
+        <div style={{ fontSize: 11, color: C.dim }}>
+          {t(E, `step ${step + 1} / ${Math.max(maxStep, 1)}`, `단계 ${step + 1} / ${Math.max(maxStep, 1)}`)}
+        </div>
+        <div style={{ flex: 1 }} />
+        <button onClick={reset} style={{
+          background: "#fef2f2", color: "#7f1d1d",
+          border: "1px solid #fca5a5", borderRadius: 6,
+          padding: "4px 10px", fontSize: 11, fontWeight: 600, cursor: "pointer",
+        }}>↺ {t(E, "Reset", "초기화")}</button>
+        <button
+          onClick={stepOnce}
+          disabled={step >= maxStep - 1 || playing}
+          style={{
+            background: step >= maxStep - 1 || playing ? "#e5e7eb" : "#fff",
+            color: step >= maxStep - 1 || playing ? "#9ca3af" : "#7f1d1d",
+            border: "1px solid #fca5a5", borderRadius: 6,
+            padding: "4px 10px", fontSize: 11, fontWeight: 600,
+            cursor: step >= maxStep - 1 || playing ? "not-allowed" : "pointer",
+          }}>▶ {t(E, "Step", "한 단계")}</button>
+        <button
+          onClick={() => { if (step >= maxStep - 1) reset(); setPlaying(p => !p); }}
+          style={{
+            background: playing ? "#7f1d1d" : "#dc2626", color: "#fff",
+            border: "1px solid #dc2626", borderRadius: 6,
+            padding: "4px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer",
+          }}>{playing ? "⏸ " + t(E, "Pause", "정지") : "▶▶ " + t(E, "Play", "재생")}</button>
+      </div>
+
+      <div style={{ fontSize: 10, color: C.dim, marginTop: 8, textAlign: "center" }}>
+        {t(E,
+          `Final answer for "${cleanHeard}" with this order: ${stepInfo.totalCycles} cycle(s)`,
+          `이 순서에서 "${cleanHeard}" 의 최종 답: ${stepInfo.totalCycles} 사이클`)}
+      </div>
+    </div>
+  );
+}
+
 
 const FULL_PY = [
   "order = input().strip()",
