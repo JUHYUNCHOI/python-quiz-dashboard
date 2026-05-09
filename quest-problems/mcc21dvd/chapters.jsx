@@ -104,6 +104,12 @@ export function makeMcc21DvdCh1(E) {
       hint: t(E, "Each step adds dx (=1) to x. After 5 steps?", "매 단계 x 에 dx(=1) 가 더해져. 5단계 후엔?"),
       answer: 5,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Step the logo one tick at a time.\nWatch dx flip on left/right walls and dy flip on top/bottom — corners flip both.\nThe trail shows where it just was.",
+        "한 단계씩 진행해봐.\n좌우 벽에서 dx 반전, 위아래 벽에서 dy 반전 — 모서리는 둘 다.\n흐린 칸은 직전 위치야."),
+    },
   ];
 }
 

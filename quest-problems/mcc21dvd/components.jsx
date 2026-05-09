@@ -1,8 +1,156 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ═══════════════════════════════════════════════════════════════
+   Mcc21DvdBounceSim — step-by-step audit of the bouncing DVD logo.
+   Student picks a preset, advances one step at a time, and watches
+   each (x, y) update + which wall flipped which component. Reveals
+   exactly when dx or dy changes sign.
+   ═══════════════════════════════════════════════════════════════ */
+const _DVD_PRESETS = [
+  { W: 5, H: 4, x0: 0, y0: 0, dx0: 1,  dy0: 1,  T: 8 },
+  { W: 6, H: 5, x0: 2, y0: 1, dx0: 1,  dy0: 1,  T: 10 },
+  { W: 4, H: 6, x0: 3, y0: 5, dx0: -1, dy0: -1, T: 9 },
+];
+
+function _simulateDvd(p, steps) {
+  let { x0: x, y0: y, dx0: dx, dy0: dy, W, H } = p;
+  const trace = [{ step: 0, x, y, dx, dy, flipX: false, flipY: false }];
+  for (let s = 1; s <= steps; s++) {
+    x += dx;
+    y += dy;
+    let flipX = false, flipY = false;
+    if (x <= 0 || x >= W - 1) { dx = -dx; flipX = true; }
+    if (y <= 0 || y >= H - 1) { dy = -dy; flipY = true; }
+    trace.push({ step: s, x, y, dx, dy, flipX, flipY });
+  }
+  return trace;
+}
+
+export function Mcc21DvdBounceSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [step, setStep] = useState(0);
+  const p = _DVD_PRESETS[pi];
+
+  const trace = _simulateDvd(p, p.T);
+  const cur = trace[Math.min(step, p.T)];
+  const prev = step > 0 ? trace[step - 1] : null;
+
+  const pickPreset = (i) => { setPi(i); setStep(0); };
+  const stepFwd = () => setStep((s) => Math.min(s + 1, p.T));
+  const stepBack = () => setStep((s) => Math.max(s - 1, 0));
+  const reset = () => setStep(0);
+
+  // Build grid cells, marking the current logo cell + the prior cell
+  const cellSize = Math.min(40, Math.floor(280 / Math.max(p.W, p.H)));
+  const rows = [];
+  for (let r = 0; r < p.H; r++) {
+    const cells = [];
+    for (let c = 0; c < p.W; c++) {
+      const isLogo = (c === cur.x && r === cur.y);
+      const isPrev = prev && (c === prev.x && r === prev.y);
+      const onWall = (c === 0 || c === p.W - 1 || r === 0 || r === p.H - 1);
+      cells.push(
+        <div key={c} style={{
+          width: cellSize, height: cellSize,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          background: isLogo ? "#d97706" : (isPrev ? "#fde68a" : (onWall ? "#fef3c7" : "#fff")),
+          color: isLogo ? "#fff" : "#92400e",
+          border: `1px solid ${onWall ? "#fcd34d" : "#e5e7eb"}`,
+          fontSize: 14, fontWeight: 700,
+        }}>
+          {isLogo ? "📀" : (isPrev ? "·" : "")}
+        </div>
+      );
+    }
+    rows.push(<div key={r} style={{ display: "flex" }}>{cells}</div>);
+  }
+
+  const flipMsg = (() => {
+    if (step === 0) return t(E, "Pick a preset and step forward to watch it bounce.",
+                                "프리셋 골라서 단계를 진행해봐. 튕기는 걸 볼 수 있어.");
+    if (cur.flipX && cur.flipY) return t(E, "💥 Hit a corner — both dx and dy flipped.",
+                                            "💥 모서리 충돌 — dx, dy 둘 다 반전.");
+    if (cur.flipX) return t(E, "↔️ Hit a vertical wall — dx flipped.", "↔️ 좌우 벽 — dx 반전.");
+    if (cur.flipY) return t(E, "↕️ Hit a horizontal wall — dy flipped.", "↕️ 위아래 벽 — dy 반전.");
+    return t(E, "Free flight — no wall this step.", "자유 비행 — 이번 단계는 벽 안 만남.");
+  })();
+
+  const btnStyle = (active) => ({
+    padding: "5px 10px", borderRadius: 8,
+    border: `1px solid ${active ? A : C.border}`,
+    background: active ? A : "transparent",
+    color: active ? "#fff" : C.dim,
+    fontSize: 12, fontWeight: 700, cursor: "pointer",
+    fontFamily: "'JetBrains Mono',monospace",
+  });
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_DVD_PRESETS.map((q, i) => (
+          <button key={i} onClick={() => pickPreset(i)} style={btnStyle(i === pi)}>
+            {q.W}×{q.H} · ({q.x0},{q.y0}) · ({q.dx0 > 0 ? "+" : "-"}{Math.abs(q.dx0)},{q.dy0 > 0 ? "+" : "-"}{Math.abs(q.dy0)}) · T={q.T}
+          </button>
+        ))}
+      </div>
+
+      {/* grid */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+        <div style={{ border: `2px solid ${A}`, borderRadius: 6, padding: 2, background: "#fffbeb" }}>
+          {rows}
+        </div>
+      </div>
+
+      {/* step status */}
+      <div style={{
+        background: "#fff", border: `1px solid ${C.border}`, borderRadius: 10,
+        padding: "10px 14px", marginBottom: 10,
+        display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 6, fontSize: 12,
+        fontFamily: "'JetBrains Mono',monospace", textAlign: "center",
+      }}>
+        <div><div style={{ color: C.dim, fontSize: 10 }}>{t(E, "step", "단계")}</div><b style={{ color: A }}>{cur.step}/{p.T}</b></div>
+        <div><div style={{ color: C.dim, fontSize: 10 }}>(x, y)</div><b style={{ color: A }}>({cur.x}, {cur.y})</b></div>
+        <div><div style={{ color: C.dim, fontSize: 10 }}>dx</div><b style={{ color: cur.flipX ? "#dc2626" : A }}>{cur.dx > 0 ? "+1" : "-1"}</b></div>
+        <div><div style={{ color: C.dim, fontSize: 10 }}>dy</div><b style={{ color: cur.flipY ? "#dc2626" : A }}>{cur.dy > 0 ? "+1" : "-1"}</b></div>
+      </div>
+
+      <div style={{
+        background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10,
+        padding: "8px 12px", textAlign: "center", marginBottom: 10,
+        fontSize: 12, color: "#92400e", minHeight: 18,
+      }}>
+        {flipMsg}
+      </div>
+
+      {/* controls */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 8 }}>
+        <button onClick={reset} style={btnStyle(false)}>⏮ {t(E, "Reset", "처음")}</button>
+        <button onClick={stepBack} disabled={step === 0} style={{ ...btnStyle(false), opacity: step === 0 ? 0.4 : 1 }}>◀ {t(E, "Back", "뒤로")}</button>
+        <button onClick={stepFwd} disabled={step >= p.T} style={{ ...btnStyle(true), opacity: step >= p.T ? 0.4 : 1 }}>{t(E, "Step ▶", "단계 ▶")}</button>
+      </div>
+
+      {step >= p.T && (
+        <div style={{
+          background: "#fff7ed", border: `1px solid ${A}`, borderRadius: 10,
+          padding: "10px 14px", textAlign: "center",
+        }}>
+          <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
+            {t(E, `Final position after T = ${p.T} steps`, `T = ${p.T} 단계 후 최종 위치`)}
+          </div>
+          <div style={{ fontSize: 20, fontWeight: 700, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
+            print({cur.x}, {cur.y})
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 const FULL_PY = [
   "W, H = map(int, input().split())",
