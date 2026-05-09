@@ -1,8 +1,179 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ═══════════════════════════════════════════════════════════════
+   Mcc20MissingDeepAuditSim — flip signs on each entry, watch the
+   abs-value set update, and see which 1..N values stay "missing".
+   The green sum row is exactly what print(sum(possible)) returns.
+   ═══════════════════════════════════════════════════════════════ */
+const _DEEP_PRESETS = [
+  { label: "N=4", N: 4, init: [1, -3, 2] },        // missing: {4}
+  { label: "N=5", N: 5, init: [-2, 4, -1, 5] },     // missing: {3}
+  { label: "N=6", N: 6, init: [3, -1, -5, 6] },     // missing: {2,4}
+  { label: "N=7", N: 7, init: [-2, 5, -7, 1, -3] }, // missing: {4,6}
+];
+
+export function Mcc20MissingDeepAuditSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const preset = _DEEP_PRESETS[pi];
+  const [arr, setArr] = useState(() => [...preset.init]);
+
+  const switchPreset = (newPi) => {
+    setPi(newPi);
+    setArr([..._DEEP_PRESETS[newPi].init]);
+  };
+
+  const flipSign = (i) => {
+    const u = [...arr];
+    u[i] = -u[i];
+    setArr(u);
+  };
+
+  const reset = () => setArr([...preset.init]);
+
+  const present = new Set(arr.map((x) => Math.abs(x)));
+  const missing = [];
+  for (let v = 1; v <= preset.N; v++) {
+    if (!present.has(v)) missing.push(v);
+  }
+  const total = missing.reduce((a, b) => a + b, 0);
+
+  const cellSize = 40;
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {_DEEP_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => switchPreset(i)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {p.label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10 }}>
+        {t(E, "Tap an entry to flip its sign. abs() ignores it — the set of present values stays the same.",
+              "항목을 탭해서 부호를 바꿔봐. abs() 가 부호를 무시해서 — 존재하는 값의 집합은 변하지 않아.")}
+      </div>
+
+      {/* given array */}
+      <div style={{ textAlign: "center", marginBottom: 8 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
+          {t(E, "given array a", "주어진 배열 a")}
+        </div>
+        <div style={{ display: "inline-flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
+          {arr.map((x, i) => {
+            const neg = x < 0;
+            return (
+              <button key={i} onClick={() => flipSign(i)} style={{
+                minWidth: cellSize, height: cellSize, padding: "0 6px", cursor: "pointer",
+                borderRadius: 6, border: `1.5px solid ${neg ? "#7c3aed" : "#fdba74"}`,
+                background: neg ? "#ede9fe" : "#fff7ed",
+                color: neg ? "#5b21b6" : "#9a3412",
+                fontSize: 14, fontWeight: 800,
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                {x}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* abs row */}
+      <div style={{ textAlign: "center", marginBottom: 8 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
+          {t(E, "abs(x) — present set", "abs(x) — 존재 집합")}
+        </div>
+        <div style={{ display: "inline-flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
+          {[...present].sort((a, b) => a - b).map((v) => (
+            <div key={v} style={{
+              minWidth: cellSize, height: cellSize, padding: "0 6px",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 6, border: "1.5px solid #93c5fd",
+              background: "#dbeafe", color: "#1e3a8a",
+              fontSize: 14, fontWeight: 800,
+              fontFamily: "'JetBrains Mono',monospace",
+            }}>
+              {v}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 1..N row, missing highlighted */}
+      <div style={{ textAlign: "center", marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
+          {t(E, `scan 1..${preset.N}: missing values stay`, `1..${preset.N} 훑기: 빠진 값만 남아`)}
+        </div>
+        <div style={{ display: "inline-flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
+          {Array.from({ length: preset.N }).map((_, i) => {
+            const v = i + 1;
+            const isMissing = !present.has(v);
+            return (
+              <div key={v} style={{
+                minWidth: cellSize, height: cellSize, padding: "0 6px",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: 6,
+                border: `1.5px solid ${isMissing ? "#16a34a" : "#e5e7eb"}`,
+                background: isMissing ? "#dcfce7" : "#f9fafb",
+                color: isMissing ? "#15803d" : "#cbd5e1",
+                fontSize: 14, fontWeight: 800,
+                fontFamily: "'JetBrains Mono',monospace",
+                textDecoration: isMissing ? "none" : "line-through",
+              }}>
+                {v}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* result banner */}
+      <div style={{
+        background: "#dcfce7",
+        border: "1px solid #16a34a",
+        borderRadius: 10, padding: "8px 12px", marginBottom: 8,
+        textAlign: "center", fontSize: 13, fontWeight: 700,
+        color: "#15803d",
+        fontFamily: "'JetBrains Mono',monospace",
+      }}>
+        {missing.length > 0
+          ? t(E,
+              `print(sum([${missing.join(", ")}])) → ${total}`,
+              `print(sum([${missing.join(", ")}])) → ${total}`)
+          : t(E, "print(sum([])) → 0  (no values missing)", "print(sum([])) → 0  (빠진 값 없음)")}
+      </div>
+
+      {/* controls */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
+        <button onClick={reset} style={{
+          padding: "5px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
+          background: "transparent", color: C.dim, fontSize: 11, fontWeight: 600, cursor: "pointer",
+        }}>
+          {t(E, "↻ Reset signs", "↻ 부호 초기화")}
+        </button>
+      </div>
+
+      {/* hint */}
+      <div style={{
+        background: "#fff7ed", border: `1px solid #fdba74`, borderRadius: 8, padding: "8px 12px",
+        fontSize: 11, color: "#9a3412", textAlign: "center", lineHeight: 1.5,
+      }}>
+        {t(E, "💡 Sign flips never change abs() — the present set is stable. Only values in 1..N that never appear are missing candidates.",
+              "💡 부호 반전은 abs() 결과를 못 바꿔 — 존재 집합은 그대로. 1..N 중 한 번도 안 나온 값만 빠진 후보야.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

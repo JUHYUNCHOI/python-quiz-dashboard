@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc20MissingSections } from "./components";
+import { getMcc20MissingSections, Mcc20MissingDeepAuditSim } from "./components";
 
 export const SOLUTION_CODE = [
   "N = int(input())",
@@ -87,6 +87,13 @@ export function makeMcc20MissingCh1(E) {
       explain: t(E,
         "Correct! 2 is the only number from {1,2,3} not in the given array.",
         "맞아! {1,2,3}에서 주어진 배열에 없는 유일한 숫자는 2."),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try it yourself: tap entries to flip signs. Watch the green row — those are the missing candidates, and the banner shows print(sum(possible)).",
+        "직접 해봐: 항목을 탭해서 부호를 바꿔봐. 초록색 줄이 빠진 후보들이고, 배너가 print(sum(possible)) 결과를 바로 보여줘."),
+      content: <Mcc20MissingDeepAuditSim E={E} />,
     },
     {
       type: "input",
