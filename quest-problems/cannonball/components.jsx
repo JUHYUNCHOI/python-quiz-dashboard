@@ -1,6 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
+import { SimNav, useTraceStep, NarrativePanel, StepHeader } from "@/components/quest/TraceStepper";
 
 const A = "#f97316";
 
@@ -174,5 +175,174 @@ ${sections.map(s => `
   win.document.write(html);
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   CannonballTrajectorySim — eye-evident bouncing on a number line.
+   Hard-coded to sample 1 (N=5, S=2).  Each click of "Next" advances
+   one logical step: process pad → move.  Power, direction, ans, and
+   the broken-set are all visible at once.
+   ════════════════════════════════════════════════════════════════ */
+const SAMPLE_PADS = [
+  { i: 1, kind: "jump", v: 1 },
+  { i: 2, kind: "tgt",  v: 1 },
+  { i: 3, kind: "tgt",  v: 2 },
+  { i: 4, kind: "jump", v: 1 },
+  { i: 5, kind: "tgt",  v: 1 },
+];
+
+// trace[k] = state AT THIS MOMENT (after the action described in `note`).
+// We build it explicitly so the order of "process pad" vs "move" stays clear.
+const TRAJECTORY = [
+  // 0 — start
+  { x: 2, dir: 1, power: 1, ans: 0, broken: [],   active: 2, fromX: null, toX: null,
+    note: { en: "Start: x=2, power=1, direction=→ (right). ans=0.",
+            ko: "시작: x=2, 파워=1, 방향=→ (오른쪽). ans=0." } },
+  // 1 — at x=2 (target v=1): power 1 ≥ 1 → break
+  { x: 2, dir: 1, power: 1, ans: 1, broken: [2],  active: 2, fromX: null, toX: null,
+    note: { en: "x=2 is a target with value 1. power 1 ≥ 1 → break! ans=1.",
+            ko: "x=2 는 값 1 인 타겟. 파워 1 ≥ 1 → 부숨! ans=1." } },
+  // 2 — move: x ← 2 + 1·1 = 3
+  { x: 3, dir: 1, power: 1, ans: 1, broken: [2],  active: 3, fromX: 2, toX: 3,
+    note: { en: "Move by direction × power = +1. x: 2 → 3.",
+            ko: "direction × power = +1 만큼 이동. x: 2 → 3." } },
+  // 3 — at x=3 (target v=2): power 1 < 2 → can't break
+  { x: 3, dir: 1, power: 1, ans: 1, broken: [2],  active: 3, fromX: null, toX: null,
+    note: { en: "x=3 is a target with value 2. power 1 < 2 → too weak, no break.",
+            ko: "x=3 은 값 2 인 타겟. 파워 1 < 2 → 부족, 못 부숨." } },
+  // 4 — move: x ← 3 + 1·1 = 4
+  { x: 4, dir: 1, power: 1, ans: 1, broken: [2],  active: 4, fromX: 3, toX: 4,
+    note: { en: "Move by +1. x: 3 → 4.",
+            ko: "+1 만큼 이동. x: 3 → 4." } },
+  // 5 — at x=4 (jump v=1): flip dir, power += 1
+  { x: 4, dir: -1, power: 2, ans: 1, broken: [2], active: 4, fromX: null, toX: null,
+    note: { en: "x=4 is a jump pad. Flip direction → ←, power += 1 → power=2.",
+            ko: "x=4 는 점프 패드. 방향 뒤집고 → ←, 파워 += 1 → 파워=2." } },
+  // 6 — move: x ← 4 + (-1)·2 = 2
+  { x: 2, dir: -1, power: 2, ans: 1, broken: [2], active: 2, fromX: 4, toX: 2,
+    note: { en: "Move by direction × power = -2. x: 4 → 2 (a big leap left!).",
+            ko: "direction × power = -2 만큼 이동. x: 4 → 2 (왼쪽으로 크게 점프!)." } },
+  // 7 — at x=2 (already broken; no effect)
+  { x: 2, dir: -1, power: 2, ans: 1, broken: [2], active: 2, fromX: null, toX: null,
+    note: { en: "x=2 is already broken — no effect this time.",
+            ko: "x=2 는 이미 부서졌음 — 이번엔 아무 일도 안 일어남." } },
+  // 8 — move: x ← 2 + (-1)·2 = 0  → out of [1, 5]
+  { x: 0, dir: -1, power: 2, ans: 1, broken: [2], active: null, fromX: 2, toX: 0,
+    note: { en: "Move by -2. x: 2 → 0. 0 < 1 → out of [1, 5]. STOP. Final ans = 1.",
+            ko: "-2 만큼 이동. x: 2 → 0. 0 < 1 → [1, 5] 벗어남. 종료. 최종 ans = 1." } },
+];
+
+const PADX = (i) => 60 + (i - 1) * 80; // x-coord on SVG number line
+
+export function CannonballTrajectorySim({ E }) {
+  const ts = useTraceStep(TRAJECTORY);
+  const s = TRAJECTORY[ts.safe];
+  const note = E ? s.note.en : s.note.ko;
+
+  const W = 60 + 5 * 80 + 60;
+  const Y = 70;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader
+        accent={A}
+        idx={ts.idx}
+        total={ts.total}
+        isEn={E}
+        title={t(E, "Watch Bessie bounce — sample 1, step by step",
+                    "Bessie 가 튕기는 모습 — 샘플 1, 한 단계씩")}
+      />
+
+      {/* State chips: power / direction / ans */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        <Chip label={t(E, "x", "x")} value={s.x === 0 ? "0 (out)" : String(s.x)} color="#1f2937" bg="#f3f4f6" />
+        <Chip label={t(E, "dir", "방향")} value={s.dir === 1 ? "→" : "←"} color="#1d4ed8" bg="#dbeafe" />
+        <Chip label={t(E, "power", "파워")} value={String(s.power)} color="#9a3412" bg="#fff7ed" />
+        <Chip label={t(E, "ans", "ans")} value={String(s.ans)} color="#15803d" bg="#dcfce7" />
+      </div>
+
+      {/* Number line + pads + Bessie */}
+      <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 12, padding: "14px 8px", marginBottom: 12, overflowX: "auto" }}>
+        <svg width={W} height={150} style={{ display: "block", margin: "0 auto" }}>
+          {/* number line */}
+          <line x1={20} y1={Y} x2={W - 20} y2={Y} stroke="#9a3412" strokeWidth={2} />
+          {/* tick at 0 (out) */}
+          <text x={20} y={Y + 32} fontSize={10} fill="#94a3b8" textAnchor="middle">0</text>
+          {/* pads */}
+          {SAMPLE_PADS.map(p => {
+            const broken = s.broken.includes(p.i);
+            const isActive = s.active === p.i;
+            const fill = p.kind === "jump" ? "#dbeafe" : (broken ? "#e5e7eb" : "#fee2e2");
+            const stroke = isActive ? A : (p.kind === "jump" ? "#3b82f6" : (broken ? "#9ca3af" : "#fca5a5"));
+            const cx = PADX(p.i);
+            return (
+              <g key={p.i}>
+                <rect x={cx - 22} y={Y - 22} width={44} height={44} rx={8}
+                      fill={fill} stroke={stroke} strokeWidth={isActive ? 3 : 1.5} />
+                <text x={cx} y={Y - 6} fontSize={14} textAnchor="middle">
+                  {p.kind === "jump" ? "🪂" : (broken ? "💥" : "🎯")}
+                </text>
+                <text x={cx} y={Y + 12} fontSize={10} fontWeight={700}
+                      fill={broken ? "#9ca3af" : "#1f2937"}
+                      textDecoration={broken ? "line-through" : "none"}>
+                  v={p.v}
+                </text>
+                <text x={cx} y={Y + 32} fontSize={10} fill="#9a3412" textAnchor="middle" fontWeight={700}>
+                  {p.i}
+                </text>
+              </g>
+            );
+          })}
+          {/* movement arrow (curved) when this step is a move */}
+          {s.fromX != null && s.toX != null && (() => {
+            const x1 = s.fromX === 0 ? 30 : PADX(s.fromX);
+            const x2 = s.toX === 0 ? 30 : PADX(s.toX);
+            const midX = (x1 + x2) / 2;
+            const arc = Math.min(36, Math.abs(x2 - x1) / 2 + 12);
+            const path = `M ${x1} ${Y - 24} Q ${midX} ${Y - 24 - arc} ${x2} ${Y - 24}`;
+            return (
+              <g>
+                <path d={path} stroke={A} strokeWidth={2.5} fill="none"
+                      markerEnd="url(#arr)" strokeDasharray="4 3" />
+                <defs>
+                  <marker id="arr" markerWidth={8} markerHeight={8} refX={6} refY={4}
+                          orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L8,4 L0,8 z" fill={A} />
+                  </marker>
+                </defs>
+              </g>
+            );
+          })()}
+          {/* Bessie marker */}
+          {s.x >= 1 && s.x <= 5 && (
+            <text x={PADX(s.x)} y={Y + 56} fontSize={22} textAnchor="middle">💥</text>
+          )}
+          {s.x === 0 && (
+            <text x={30} y={Y + 56} fontSize={20} textAnchor="middle">💥</text>
+          )}
+        </svg>
+      </div>
+
+      <NarrativePanel minHeight={70} stepKey={ts.safe}>
+        <div style={{ fontSize: 13, lineHeight: 1.7 }}>{note}</div>
+      </NarrativePanel>
+
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
+}
+
+function Chip({ label, value, color, bg }) {
+  return (
+    <div style={{
+      background: bg, border: `1.5px solid ${color}33`, borderRadius: 8,
+      padding: "4px 10px", fontSize: 12, color, fontWeight: 700,
+      fontFamily: "'JetBrains Mono',monospace", display: "flex", gap: 6, alignItems: "baseline",
+    }}>
+      <span style={{ fontSize: 10, opacity: 0.75 }}>{label}</span>
+      <span>{value}</span>
+    </div>
+  );
 }
 

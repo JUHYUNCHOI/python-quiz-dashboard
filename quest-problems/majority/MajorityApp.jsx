@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { MajorityProgressiveCode, downloadMajorityPDF, getMajoritySections, MajoritySim, MajorityRunner } from "./components";
+import { MajorityProgressiveCode, downloadMajorityPDF, getMajoritySections, MajoritySim, MajorityRunner, FocusGroupSim } from "./components";
 import { makeMajorityCh1, makeMajorityCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -94,6 +94,7 @@ export default function MajorityApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <MajorityProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     if (step.type === "sim") return <MajoritySim E={E} />;
+    if (step.type === "focusSim") return <FocusGroupSim E={E} />;
     if (step.type === "runner") return <MajorityRunner E={E} />;
     return null;
   };
@@ -107,6 +108,7 @@ export default function MajorityApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
     if (s.type === "progressive") return <MajorityProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     if (s.type === "sim") return <MajoritySim E={E} />;
+    if (s.type === "focusSim") return <FocusGroupSim E={E} />;
     if (s.type === "runner") return <MajorityRunner E={E} />;
     return null;
   };

@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getFjFarmsSections } from "./components";
+import { GrowthSim } from "./GrowthSim";
 
 /* ================================================================
    SOLUTION CODE
@@ -118,49 +119,13 @@ export function makeFjFarmsCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Mini-visual — what does t[] mean
+    // 1-2: Animated growth simulation — eye-evident overtake
     {
       type: "reveal",
       narr: t(E,
-        "Walk through one example: plants 0 and 1 grow at different rates; on day 5 plant 1 finally overtakes plant 0.",
-        "예시 따라가기: 식물 0 과 1 이 다른 속도로 자람. 5 일째 식물 1 이 식물 0 을 추월."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", textAlign: "center", marginBottom: 10 }}>
-            {t(E, "h = [7, 3], a = [8, 9], target t = [1, 0]",
-                  "h = [7, 3], a = [8, 9], 목표 t = [1, 0]")}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 6 }}>
-            {[
-              { d: 0, h0: 7,  h1: 3,  t0: 0, t1: 1 },
-              { d: 1, h0: 15, h1: 12, t0: 0, t1: 1 },
-              { d: 4, h0: 39, h1: 39, t0: 0, t1: 0 },  // tie
-              { d: 5, h0: 47, h1: 48, t0: 1, t1: 0 },  // matches!
-            ].map((row, i) => {
-              const matches = row.t0 === 1 && row.t1 === 0;
-              return (
-                <div key={i} style={{
-                  background: matches ? "#dcfce7" : "#fff",
-                  border: `1px solid ${matches ? "#16a34a" : "#a7f3d0"}`,
-                  borderRadius: 10, padding: 8, textAlign: "center",
-                }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: matches ? "#15803d" : "#065f46", marginBottom: 4 }}>{t(E, "Day", "Day")} {row.d}</div>
-                  <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: "#065f46" }}>
-                    h = [{row.h0}, {row.h1}]
-                  </div>
-                  <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: matches ? "#15803d" : "#065f46", fontWeight: matches ? 800 : 500, marginTop: 2 }}>
-                    t = [{row.t0}, {row.t1}]
-                  </div>
-                  {matches && (<div style={{ fontSize: 10, color: "#15803d", fontWeight: 600, marginTop: 4 }}>✓ {t(E, "match", "일치")}</div>)}
-                </div>
-              );
-            })}
-          </div>
-          <div style={{ marginTop: 10, fontSize: 11, color: C.text, lineHeight: 1.7, textAlign: "center" }}>
-            {t(E, "On day 4 the plants tie, so neither is 'strictly taller' → both t = 0.  On day 5 plant 1 has overtaken → answer = 5.",
-                  "4 일에 키가 같음 → '큰' 으로 안 침 → 둘 다 t=0. 5 일에 식물 1 이 추월 → 답 = 5.")}
-          </div>
-        </div>),
+        "Watch two plants grow.  Drag the slider or press Play — see plant 1 (purple, faster) catch up and overtake plant 0 (cyan).",
+        "두 식물이 자라는 걸 봐요. 슬라이더를 끌거나 재생 — 식물 1 (보라, 빠름) 이 식물 0 (시안) 을 따라잡아 추월."),
+      content: <GrowthSim E={E} />,
     },
     // 1-3: Official sample I/O
     {
@@ -221,11 +186,11 @@ export function makeFjFarmsCh1(E) {
               🔍 {t(E, "Why -1 cases?", "왜 -1?")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
-              {t(E, "Case 5: a = [8, 8] — equal growth rates, plants never change relative order; t = [0, 1] needs plant 1 strictly taller, impossible.",
-                    "5 번: a = [8, 8] — 성장률 같음, 상대 순서 영원히 안 바뀜; t = [0, 1] 은 식물 1 이 더 커야 하는데 불가능.")}
+              {t(E, "Case 5: h = [7, 7], a = [8, 8] — same growth, same start → plants stay tied forever → t = [0, 0] forever.  Target [0, 1] never reached.",
+                    "5 번: h = [7, 7], a = [8, 8] — 시작과 성장률 같음 → 영원히 동점 → t = [0, 0] 만. 목표 [0, 1] 영원히 안 됨.")}
               <br/>
-              {t(E, "Case 6: a = [8, 8] same; t = [1, 0] needs plant 0 strictly taller, but h[0]=7 < h[1]=8 wait... initial h=[7, 3].  Same growth → plant 0 stays 4 ahead → t = [0, 1] forever.  t = [1, 0] never reached.",
-                    "6 번: a = [8, 8] 같음; h=[7, 3] 으로 시작해 식물 0 이 영원히 4 앞섬 → t = [0, 1] 만 가능. t = [1, 0] 영원히 안 됨.")}
+              {t(E, "Case 6: h = [7, 3], a = [8, 8] — same growth → gap stays 4 → plant 0 always taller → t = [0, 1] forever.  Target [1, 0] never reached.",
+                    "6 번: h = [7, 3], a = [8, 8] — 성장률 같음 → 차이 4 유지 → 식물 0 항상 더 큼 → t = [0, 1] 만. 목표 [1, 0] 영원히 안 됨.")}
             </div>
           </div>
         </div>),

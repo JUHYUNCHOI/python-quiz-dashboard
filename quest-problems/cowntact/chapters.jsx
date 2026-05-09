@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowntactSections } from "./components";
+import { getCowntactSections, InfectionSim, RunsViz } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -97,7 +97,23 @@ export function makeCowntactCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz — single segment
+    // 1-2: Spread simulator — see infection wave with your eyes
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try it: pick Day-0 sources, press Play, watch the wave. Notice — one source can fill a whole connected stretch.",
+        "직접 해 봐: 0일차 감염원을 고르고 ▶ 재생. 파동이 퍼지는 걸 보면 — 한 마리가 연속된 한 덩어리를 다 채워."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <InfectionSim E={E} />
+          <div style={{ marginTop: 10, padding: "8px 12px", background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 8, fontSize: 12, color: "#9a3412" }}>
+            🔑 {t(E,
+              "Key observation: no matter how long a connected run of 1s is, ONE source in the middle can produce it. So we just need to count separate runs.",
+              "핵심 관찰: 1 이 연속된 덩어리가 아무리 길어도, 가운데 한 마리만 있으면 만들 수 있어요. 그러니까 떨어진 덩어리 개수만 세면 돼요.")}
+          </div>
+        </div>),
+    },
+    // 1-3: Quiz — single segment
     {
       type: "quiz",
       narr: t(E,
@@ -116,7 +132,18 @@ export function makeCowntactCh1(E) {
         "One cow in the middle can spread outward to infect all 5! A single continuous group needs only 1 initial source.",
         "가운데 한 마리가 양옆으로 퍼져서 5마리 모두 감염시킬 수 있어요! 연속된 하나의 그룹은 초기 감염 1마리면 돼요."),
     },
-    // 1-3: Input — multiple segments
+    // 1-4: Visualize runs — eye-evident counting
+    {
+      type: "reveal",
+      narr: t(E,
+        "Each '0' is a wall. Look at \"01110110\" — colored groups show the answer at a glance.",
+        "0 은 벽. \"01110110\" — 색칠된 덩어리를 보면 답이 한눈에."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <RunsViz E={E} str="01110110" />
+        </div>),
+    },
+    // 1-5: Input — multiple segments
     {
       type: "input",
       narr: t(E,

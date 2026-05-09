@@ -1,8 +1,188 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* --- Interactive Simulator: cows eat candy canes --- */
+// Uses the official sample: cows [3,2,5], canes [6,1] → final [7,2,7]
+export function CandyCaneSim({ E }) {
+  const initCows = [3, 2, 5];
+  const canes = [6, 1];
+  // Each event: process cow `i` against cane `c` with current bottom = `taken`.
+  // We pre-build the timeline so each click is one cow's bite (or skip).
+  const buildTimeline = () => {
+    const events = [];
+    let h = [...initCows];
+    for (let c = 0; c < canes.length; c++) {
+      let taken = 0;
+      for (let i = 0; i < h.length; i++) {
+        const before = h[i];
+        let ate = 0;
+        if (h[i] > taken) {
+          const inc = Math.min(canes[c], h[i]) - taken;
+          if (inc > 0) { ate = inc; h[i] += inc; taken += inc; }
+        }
+        const caneDone = taken >= canes[c];
+        events.push({
+          caneIdx: c, caneH: canes[c], cowIdx: i,
+          before, ate, after: h[i], taken,
+          heights: [...h], caneDone, isLastCow: i === h.length - 1,
+        });
+        if (caneDone) break;
+      }
+    }
+    return events;
+  };
+  const timeline = buildTimeline();
+
+  const [step, setStep] = useState(-1);  // -1 = initial state, 0..n-1 after each bite
+  const ev = step >= 0 ? timeline[step] : null;
+  const heights = ev ? ev.heights : initCows;
+  const caneIdx = ev ? ev.caneIdx : 0;
+  const caneH = canes[caneIdx];
+  const taken = ev ? ev.taken : 0;
+  const cowIdx = ev ? ev.cowIdx : -1;
+  const done = step >= timeline.length - 1;
+
+  const next = () => { if (!done) setStep(step + 1); };
+  const reset = () => setStep(-1);
+
+  // Visual scale: 1 unit = 22px high
+  const U = 22;
+  const maxCaneTop = Math.max(...canes);
+  const maxCowH = Math.max(...heights, ...initCows);
+  const colHeight = (Math.max(maxCaneTop, maxCowH) + 1) * U;
+
+  const palette = ["#dc2626", "#0891b2", "#15803d"];
+
+  return (
+    <div style={{ padding: "10px 8px" }}>
+      {/* Sample input badge */}
+      <div style={{ textAlign: "center", marginBottom: 10, fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
+        {t(E, "Sample · cows = [3, 2, 5], canes = [6, 1]", "샘플 · 소 = [3, 2, 5], 캔디 = [6, 1]")}
+      </div>
+
+      {/* Status bar */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
+        <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "Cane", "캔디")} {caneIdx + 1}/{canes.length} · h = <b>{caneH}</b>
+        </div>
+        <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>
+          taken = <b>{taken}</b> / {caneH}
+        </div>
+        {ev && (
+          <div style={{
+            background: ev.ate > 0 ? "#dcfce7" : "#f1f5f9",
+            border: `1px solid ${ev.ate > 0 ? "#16a34a" : "#cbd5e1"}`,
+            borderRadius: 8, padding: "4px 10px", fontSize: 11,
+            color: ev.ate > 0 ? "#166534" : C.dim,
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {t(E, "Cow", "소")} {ev.cowIdx + 1} {ev.ate > 0
+              ? `${t(E, "ate", "먹음")} ${ev.ate} → h = ${ev.after}`
+              : t(E, "can't reach (skip)", "닿지 못함 (skip)")}
+          </div>
+        )}
+      </div>
+
+      {/* Stage: candy cane on left, cows in a row */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 10px", marginBottom: 10 }}>
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 14, height: colHeight + 30 }}>
+          {/* Candy cane */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: colHeight + 30 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", marginBottom: 2 }}>
+              🍬 {t(E, "Cane", "캔디")} {caneIdx + 1}
+            </div>
+            <div style={{ position: "relative", width: 26, height: colHeight, background: "#f8f9fc", borderRadius: 6, border: `1px dashed ${C.border}`, overflow: "hidden" }}>
+              {/* Eaten part (bottom up to taken) — pale */}
+              <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: taken * U, background: "repeating-linear-gradient(45deg, #fee2e2, #fee2e2 4px, #fff 4px, #fff 8px)", borderTop: taken > 0 ? "1px dashed #fca5a5" : "none" }} />
+              {/* Remaining cane (taken to caneH) — solid red */}
+              <div style={{ position: "absolute", left: 0, right: 0, bottom: taken * U, height: (caneH - taken) * U, background: "linear-gradient(180deg, #fca5a5, #dc2626)", borderRadius: "4px 4px 0 0", boxShadow: "inset 0 0 0 1px #b91c1c", transition: "all .25s" }} />
+              {/* Cane top label */}
+              <div style={{ position: "absolute", left: -6, right: -6, bottom: caneH * U - 1, fontSize: 9, color: "#7f1d1d", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>{caneH}</div>
+              {/* taken marker */}
+              {taken > 0 && (
+                <div style={{ position: "absolute", left: -6, right: -6, bottom: taken * U - 1, fontSize: 9, color: "#dc2626", fontWeight: 700, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", borderTop: "1px solid #dc2626" }}>{taken}</div>
+              )}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div style={{ width: 1, height: colHeight, background: C.border }} />
+
+          {/* Cows */}
+          {heights.map((h, i) => {
+            const active = ev && cowIdx === i;
+            const color = palette[i % palette.length];
+            const grew = ev && cowIdx === i && ev.ate > 0;
+            return (
+              <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: colHeight + 30 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color, marginBottom: 2 }}>
+                  🐄 {t(E, "Cow", "소")} {i + 1}
+                </div>
+                <div style={{ position: "relative", width: 30, height: colHeight }}>
+                  {/* Cow body — height bar */}
+                  <div style={{
+                    position: "absolute", left: 0, right: 0, bottom: 0,
+                    height: h * U,
+                    background: active ? `linear-gradient(180deg, ${color}cc, ${color})` : `${color}55`,
+                    border: `1.5px solid ${color}`,
+                    borderRadius: "6px 6px 0 0",
+                    transition: "height .35s ease-out",
+                    boxShadow: active ? `0 0 0 3px ${color}33` : "none",
+                  }} />
+                  {/* Reach line at top of cow */}
+                  <div style={{ position: "absolute", left: -4, right: -4, bottom: h * U - 1, fontSize: 9, fontWeight: 700, color, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>{h}</div>
+                  {grew && (
+                    <div style={{ position: "absolute", left: 0, right: 0, top: -16, fontSize: 11, color: "#16a34a", fontWeight: 800, textAlign: "center" }}>+{ev.ate}</div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Heights row */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+          <span style={{ color: C.dim }}>h =</span>
+          {heights.map((h, i) => (
+            <span key={i} style={{
+              color: ev && cowIdx === i ? palette[i] : C.text,
+              fontWeight: ev && cowIdx === i ? 800 : 600,
+            }}>
+              {h}{i < heights.length - 1 ? "," : ""}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+        <button onClick={reset} style={{
+          background: "#fff", color: A, border: `1.5px solid ${A}`,
+          borderRadius: 8, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>↻ {t(E, "Reset", "초기화")}</button>
+        <button onClick={next} disabled={done} style={{
+          background: done ? "#cbd5e1" : A, color: "#fff",
+          border: `1.5px solid ${done ? "#cbd5e1" : A}`,
+          borderRadius: 8, padding: "6px 18px", fontSize: 12, fontWeight: 800,
+          cursor: done ? "default" : "pointer",
+        }}>
+          {done ? t(E, "✓ Done", "✓ 완료") : t(E, "▶ Next bite", "▶ 다음 한 입")}
+        </button>
+      </div>
+
+      {/* Final-state callout */}
+      {done && (
+        <div style={{ marginTop: 10, background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#166534", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "Final heights:", "최종 키:")} <b>{heights.join(", ")}</b> {t(E, "→ matches sample output 7, 2, 7", "→ 샘플 출력 7, 2, 7 와 일치")}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

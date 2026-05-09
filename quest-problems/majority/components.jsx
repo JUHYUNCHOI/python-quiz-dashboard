@@ -6,6 +6,169 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#dc2626";
 
 /* ═══════════════════════════════════════════════════════════════
+   FocusGroupSim — show how a 3-cow focus group flips the minority
+   ═══════════════════════════════════════════════════════════════ */
+const _FG_PRESETS = [
+  { name: "[3, 2, 3]", arr: [3, 2, 3], pick: 0, label: "dist-2" },
+  { name: "[1, 2, 2]", arr: [1, 2, 2], pick: 0, label: "dist-1" },
+  { name: "[1, 2, 3]", arr: [1, 2, 3], pick: 0, label: "no majority" },
+];
+
+export function FocusGroupSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [phase, setPhase] = useState(0); // 0 before, 1 voting, 2 after
+  const preset = _FG_PRESETS[pi];
+  const { arr, pick } = preset;
+  const trio = [arr[pick], arr[pick + 1], arr[pick + 2]];
+  // count votes
+  const counts = {};
+  trio.forEach(v => { counts[v] = (counts[v] || 0) + 1; });
+  const majorityEntry = Object.entries(counts).find(([, c]) => c >= 2);
+  const majority = majorityEntry ? Number(majorityEntry[0]) : null;
+  const minorityIdx = majority == null ? -1 : trio.findIndex(v => v !== majority);
+  const after = phase === 2 && majority != null
+    ? trio.map((v, i) => i === minorityIdx ? majority : v)
+    : trio;
+  const palette = { 1: "#ef4444", 2: "#3b82f6", 3: "#10b981" };
+
+  const reset = (idx) => { setPi(idx); setPhase(0); };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_FG_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => reset(i)} style={{
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{p.name}</button>
+        ))}
+      </div>
+
+      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 8, fontWeight: 600 }}>
+        {t(E, "Three adjacent cows", "인접한 3 마리 소")}
+      </div>
+
+      {/* Cow row with hay-type emoji */}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 14 }}>
+        {after.map((v, idx) => {
+          const flipped = phase === 2 && idx === minorityIdx && majority != null;
+          const bg = palette[v] || "#94a3b8";
+          return (
+            <div key={idx} style={{
+              width: 76, padding: 8, borderRadius: 12,
+              background: "#fff", border: `2px solid ${bg}`, textAlign: "center",
+              transform: flipped ? "scale(1.05)" : "scale(1)", transition: "all .35s",
+              boxShadow: flipped ? `0 0 0 4px ${bg}33` : "none",
+            }}>
+              <div style={{ fontSize: 26, lineHeight: 1 }}>🐄</div>
+              <div style={{
+                marginTop: 4, padding: "3px 6px", borderRadius: 6,
+                background: bg, color: "#fff", fontSize: 13, fontWeight: 800,
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                {t(E, "type ", "타입 ")}{v}
+              </div>
+              {flipped && (
+                <div style={{ fontSize: 10, color: bg, marginTop: 3, fontWeight: 700 }}>
+                  {t(E, "← flipped!", "← 바뀜!")}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Vote bar chart */}
+      <div style={{
+        background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 10,
+        padding: "10px 14px", marginBottom: 12,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 8, textAlign: "center" }}>
+          {t(E, "🗳️ Votes in this focus group", "🗳️ 이 포커스 그룹의 투표")}
+        </div>
+        {Object.entries(counts).sort((a, b) => Number(a[0]) - Number(b[0])).map(([v, c]) => {
+          const isMaj = Number(v) === majority;
+          const bg = palette[Number(v)] || "#94a3b8";
+          return (
+            <div key={v} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+              <span style={{
+                width: 56, fontSize: 11, fontWeight: 700, color: bg, fontFamily: "'JetBrains Mono',monospace",
+              }}>{t(E, "type ", "타입 ")}{v}</span>
+              <div style={{ flex: 1, height: 18, background: "#e5e7eb", borderRadius: 4, position: "relative" }}>
+                <div style={{
+                  width: `${(c / 3) * 100}%`, height: "100%",
+                  background: bg, borderRadius: 4,
+                  transition: "width .4s", opacity: phase === 0 ? 0.4 : 1,
+                }} />
+              </div>
+              <span style={{
+                width: 70, fontSize: 11, fontWeight: 700,
+                color: isMaj && phase >= 1 ? "#15803d" : C.dim,
+                textAlign: "right",
+              }}>
+                {c} {t(E, "vote", "표")}{c > 1 && E ? "s" : ""}
+                {isMaj && phase >= 1 ? t(E, "  ✓ wins", "  ✓ 승") : ""}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Verdict */}
+      <div style={{
+        background: phase === 0 ? "#fff" : (majority != null ? "#dcfce7" : "#fef2f2"),
+        border: `1.5px solid ${phase === 0 ? C.border : (majority != null ? "#86efac" : "#fca5a5")}`,
+        borderRadius: 10, padding: "10px 14px", marginBottom: 10,
+        fontSize: 13, color: C.text, textAlign: "center", minHeight: 40,
+      }}>
+        {phase === 0 && (
+          <span style={{ color: C.dim }}>
+            {t(E, "Press ▶ to run the focus group.", "▶ 를 눌러 포커스 그룹 진행.")}
+          </span>
+        )}
+        {phase === 1 && majority != null && (
+          <span style={{ color: "#15803d", fontWeight: 700 }}>
+            {t(E, `Majority: type ${majority} (${counts[majority]} of 3)`, `다수: 타입 ${majority} (3 중 ${counts[majority]})`)}
+          </span>
+        )}
+        {phase === 1 && majority == null && (
+          <span style={{ color: "#7f1d1d", fontWeight: 700 }}>
+            {t(E, "No 2 cows agree → nothing happens.", "2 명이 동의 안 함 → 변화 없음.")}
+          </span>
+        )}
+        {phase === 2 && majority != null && (
+          <span style={{ color: "#15803d", fontWeight: 700 }}>
+            {t(E, `Minority cow flipped to type ${majority}. All 3 now agree.`,
+                  `소수 소가 타입 ${majority} 로 변함. 이제 3 명 모두 동의.`)}
+          </span>
+        )}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+        <button onClick={() => setPhase(0)} disabled={phase === 0} style={{
+          background: phase === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${phase === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 12, fontWeight: 700,
+          color: phase === 0 ? "#b0b5c3" : A, cursor: phase === 0 ? "default" : "pointer",
+        }}>{t(E, "↺ Reset", "↺ 처음")}</button>
+        <button onClick={() => setPhase(Math.min(2, phase + 1))}
+          disabled={phase === 2 || (phase === 1 && majority == null)} style={{
+          background: phase === 2 || (phase === 1 && majority == null) ? "#e5e7eb" : A,
+          border: `1px solid ${phase === 2 || (phase === 1 && majority == null) ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 18px", fontSize: 12, fontWeight: 700,
+          color: phase === 2 || (phase === 1 && majority == null) ? "#b0b5c3" : "#fff",
+          cursor: phase === 2 || (phase === 1 && majority == null) ? "default" : "pointer",
+        }}>
+          {phase === 0 ? t(E, "▶ Count votes", "▶ 투표 집계")
+            : phase === 1 ? t(E, "▶ Flip minority", "▶ 소수 변경")
+            : t(E, "✓ Done", "✓ 완료")}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    MajoritySim — visualize distance-1 + distance-2 pair scan
    ═══════════════════════════════════════════════════════════════ */
 const _MJ_PRESETS = [

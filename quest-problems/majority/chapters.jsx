@@ -169,6 +169,13 @@ export function makeMajorityCh1(E) {
           </div>
         </div>),
     },
+    // 1-2.5: Focus-group simulation — see the rule in action before the quiz
+    {
+      type: "focusSim",
+      narr: t(E,
+        "Run a focus group on 3 adjacent cows: 2 votes win, the minority cow flips. See it once before the quiz.",
+        "인접 3 마리 포커스 그룹: 2 표가 이기면 소수 1 명이 그쪽으로 바뀜. 퀴즈 전에 한 번 봐요."),
+    },
     // 1-3: Quiz — distance-2 case
     {
       type: "quiz",

@@ -108,8 +108,8 @@ false and true or true
     {
       type: "reveal",
       narr: t(E,
-        "Try the simulator — 4 preset expressions. Same color = same AND-chain (broken by OR).",
-        "시뮬레이터 — 미리 만든 4 개 수식. 같은 색 = 같은 AND-체인 (OR 가 끊음)."),
+        "Try the simulator — pick a preset, then drag l/r and toggle target to see Y/N live. Same color = same AND-chain (broken by OR).",
+        "시뮬레이터 — 프리셋 고르고, l/r 끌고 target 토글하면 Y/N 실시간 확인. 같은 색 = 같은 AND-체인 (OR 가 끊음)."),
       content: (<LogicalMoosSim E={E} />),
     },
 

@@ -149,6 +149,66 @@ export function makePresentsCh1(E) {
       explain: t(E, "5 and 3 are above 1 → 2 presents to remove!", "5와 3이 1 위에 있어 → 2개 제거!"),
     },
     {
+      type: "reveal",
+      narr: t(E,
+        "Watch what happens after the first query — 5, 3, and 1 itself are all gone. Only [4, 2] remain.",
+        "첫 쿼리 후를 봐 — 5, 3, 그리고 1 자신까지 사라져. [4, 2]만 남아."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 10, fontSize: 12, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "Stack starts [5,3,1,4,2] — Query 1: find 1", "스택 [5,3,1,4,2] — 쿼리 1: 1 찾기")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 24px 1fr", gap: 6, alignItems: "center" }}>
+            {/* BEFORE Q1 */}
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
+                {t(E, "BEFORE Q1", "쿼리 1 전")}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
+                {[5,3,1,4,2].map((v, i) => {
+                  const isTarget = v === 1;
+                  const isAbove = i < 2;
+                  return (
+                    <div key={i} style={{
+                      width: 60, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                      borderRadius: 6, fontWeight: 700, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
+                      background: isTarget ? "#dcfce7" : (isAbove ? "#fef2f2" : "#fff"),
+                      border: `1px solid ${isTarget ? "#16a34a" : (isAbove ? "#dc2626" : "#cbd5e1")}`,
+                      color: isTarget ? "#15803d" : (isAbove ? "#7f1d1d" : C.text),
+                    }}>{v}{isTarget ? " ←" : isAbove ? " ✗" : ""}</div>
+                  );
+                })}
+              </div>
+            </div>
+            <div style={{ fontSize: 18, color: "#8b5cf6", textAlign: "center", fontWeight: 700 }}>→</div>
+            {/* AFTER Q1 */}
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
+                {t(E, "AFTER Q1 (now ask Q2)", "쿼리 1 후 (이제 쿼리 2)")}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
+                {[4,2].map((v, i) => (
+                  <div key={i} style={{
+                    width: 60, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                    borderRadius: 6, fontWeight: 700, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
+                    background: "#fff", border: `1px solid #cbd5e1`, color: C.text,
+                  }}>{v}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 10, background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
+            <b>{t(E, "Output for Q1: ", "쿼리 1 출력: ")}</b>
+            {t(E, "2 (presents 5 and 3 above 1).  Then 1 itself is removed too.",
+                  "2 (1 위에 5와 3).  그 다음 1 자신도 제거.")}
+          </div>
+          <div style={{ marginTop: 6, background: "#ede9fe", border: "1.5px solid #c4b5fd", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#5b21b6", lineHeight: 1.5, textAlign: "center" }}>
+            {t(E, "👉 Next step asks: in the right stack [4, 2], how many are above 2?",
+                  "👉 다음 스텝 질문: 오른쪽 스택 [4, 2]에서, 2 위에 몇 개?")}
+          </div>
+        </div>),
+    },
+    {
       type: "input",
       narr: t(E,
         "Two queries in a row — keep track of what's left in the stack after the first one.",

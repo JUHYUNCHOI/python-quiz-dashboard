@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCannonballSections } from "./components";
+import { getCannonballSections, CannonballTrajectorySim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -214,6 +214,14 @@ export function makeCannonCh1(E) {
             </div>
           </div>
         </div>),
+    },
+    // 1-2.5: Eye-evident trajectory simulator (sample 1 walkthrough)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Read the walkthrough was hard?  Watch it.  Click Next to advance one logical step at a time — process pad, then move.",
+        "글로 읽으니 어렵죠? 직접 보면 쉬워요. Next 를 눌러 한 단계씩 넘겨봐요 — 패드 처리 → 이동."),
+      content: <CannonballTrajectorySim E={E} />,
     },
     // 1-3: Quiz — break threshold
     {

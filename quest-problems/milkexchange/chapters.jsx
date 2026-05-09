@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMilkExchangeSections } from "./components";
+import MilkCircleSim from "./MilkCircleSim";
 
 /* ================================================================
    SOLUTION CODE
@@ -196,7 +197,15 @@ RRL
           </div>
         </div>),
     },
-    // 1-3: Quiz
+    // 1-3.5: Interactive sim — see milk flowing minute by minute
+    {
+      type: "reveal",
+      narr: t(E,
+        "Press ▶ 1 minute and watch milk flow around the circle. Yellow cells lost overflow!",
+        "▶ 1 분 을 누르고 우유가 원을 따라 흐르는 걸 봐. 노란 칸은 넘쳐서 버려진 거야!"),
+      content: <MilkCircleSim E={E} />,
+    },
+    // 1-4: Quiz
     {
       type: "quiz",
       narr: t(E,

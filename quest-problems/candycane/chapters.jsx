@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCandyCaneSections } from "./components";
+import { getCandyCaneSections, CandyCaneSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -137,7 +137,28 @@ export function makeCandyCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Official sample I/O
+    // 1-2: Interactive simulation — eye-evident bite-by-bite
+    {
+      type: "reveal",
+      narr: t(E,
+        "Click 'Next bite' once per cow. Watch the cane shrink from the bottom and each cow grow by exactly what she ate.",
+        "'다음 한 입' 을 한 번씩 눌러봐. 캔디는 아래부터 줄어들고, 각 소는 자기가 먹은 만큼만 키가 커져."),
+      content: (
+        <div style={{ padding: 12 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#dc2626" }}>
+              🎬 {t(E, "Simulation — sample 1, step by step", "시뮬레이션 — 샘플 1, 한 단계씩")}
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
+              {t(E, "Active cow is glowing. Hatched part of the cane = already eaten.",
+                    "현재 소가 빛나고, 캔디의 빗금 부분 = 이미 먹힌 부분.")}
+            </div>
+          </div>
+          <CandyCaneSim E={E} />
+        </div>
+      ),
+    },
+    // 1-3: Official sample I/O
     {
       type: "reveal",
       narr: t(E,

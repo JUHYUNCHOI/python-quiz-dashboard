@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
@@ -38,6 +38,35 @@ export function LogicalMoosSim({ E }) {
   const [pi, setPi] = useState(0);
   const tokens = _LM_PRESETS[pi];
   const { result, groups } = _evaluate(tokens);
+
+  // ── Query-replacement state (the actual problem operation) ──
+  // Valid positions for l, r are odd-indexed in 1-based numbering → 0,2,4,... in 0-based.
+  const valuePositions = tokens.map((_, idx) => idx).filter(idx => idx % 2 === 0);
+  const [lIdxPos, setLIdxPos] = useState(0); // index into valuePositions
+  const [rIdxPos, setRIdxPos] = useState(0);
+  const [target, setTarget] = useState(true);
+
+  // Reset slice when preset changes (so we don't index past shorter presets)
+  useEffect(() => { setLIdxPos(0); setRIdxPos(0); }, [pi]);
+
+  // Clamp when preset changes
+  const safeL = Math.min(lIdxPos, valuePositions.length - 1);
+  const safeR = Math.max(safeL, Math.min(rIdxPos, valuePositions.length - 1));
+  const l = valuePositions[safeL];
+  const r = valuePositions[safeR];
+
+  // Build replaced token lists for both rep choices
+  const _replace = (rep) => {
+    const out = [];
+    for (let i = 0; i < l; i++) out.push(tokens[i]);
+    out.push(rep);
+    for (let i = r + 1; i < tokens.length; i++) out.push(tokens[i]);
+    // Need to also keep the operators that bracket the replaced slice — already in 'before' (ends at op before l) and 'after' (starts at op after r) since l, r are even (value positions). The code above is correct.
+    return out;
+  };
+  const tryTrue = _evaluate(_replace("true")).result;
+  const tryFalse = _evaluate(_replace("false")).result;
+  const verdict = (tryTrue === target) || (tryFalse === target);
 
   // For visualization: highlight AND-chains
   let chainIdx = 0;
@@ -89,6 +118,100 @@ export function LogicalMoosSim({ E }) {
 
       <div style={{ background: result ? "#dcfce7" : "#fef2f2", border: `1px solid ${result ? "#16a34a" : "#dc2626"}`, borderRadius: 10, padding: "10px 12px", color: result ? "#15803d" : "#7f1d1d", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
         ✅ result = {result ? "TRUE" : "FALSE"}
+      </div>
+
+      {/* ────────────── Query replacement panel ────────────── */}
+      <div style={{ marginTop: 16, padding: 12, background: "#fff", border: `2px dashed ${A}`, borderRadius: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: A, marginBottom: 8, textAlign: "center" }}>
+          🎯 {t(E, "Now try a query — pick l, r, target → see if Y/N", "이제 쿼리 — l, r, target 선택 → Y/N 확인")}
+        </div>
+
+        {/* l, r sliders (1-based labels for student) */}
+        <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 30px", gap: 8, alignItems: "center", marginBottom: 6, fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>
+          <div style={{ color: C.dim, fontWeight: 700 }}>l =</div>
+          <input
+            type="range" min={0} max={valuePositions.length - 1} value={safeL}
+            onChange={e => { const v = +e.target.value; setLIdxPos(v); if (v > safeR) setRIdxPos(v); }}
+            style={{ width: "100%", accentColor: A }}
+          />
+          <div style={{ color: A, fontWeight: 800, textAlign: "right" }}>{l + 1}</div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 30px", gap: 8, alignItems: "center", marginBottom: 8, fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>
+          <div style={{ color: C.dim, fontWeight: 700 }}>r =</div>
+          <input
+            type="range" min={safeL} max={valuePositions.length - 1} value={safeR}
+            onChange={e => setRIdxPos(+e.target.value)}
+            style={{ width: "100%", accentColor: A }}
+          />
+          <div style={{ color: A, fontWeight: 800, textAlign: "right" }}>{r + 1}</div>
+        </div>
+
+        {/* target toggle */}
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10 }}>
+          <span style={{ fontSize: 11, color: C.dim, alignSelf: "center", fontFamily: "'JetBrains Mono',monospace" }}>target =</span>
+          {[true, false].map(v => (
+            <button key={String(v)} onClick={() => setTarget(v)} style={{
+              padding: "3px 10px", borderRadius: 6, border: `1px solid ${target === v ? A : C.border}`,
+              background: target === v ? A : "transparent", color: target === v ? "#fff" : C.dim,
+              fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+            }}>{v ? "true" : "false"}</button>
+          ))}
+        </div>
+
+        {/* Visual: tokens with l..r slice highlighted */}
+        <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
+          {tokens.map((tok, i) => {
+            const inSlice = i >= l && i <= r;
+            return (
+              <div key={i} style={{
+                padding: "5px 8px", borderRadius: 5, fontSize: 11, fontWeight: 600,
+                fontFamily: "'JetBrains Mono',monospace",
+                background: inSlice ? "#fde68a" : "#f1f5f9",
+                border: `1px solid ${inSlice ? "#d97706" : C.border}`,
+                color: inSlice ? "#92400e" : C.dim,
+              }}>{tok}</div>
+            );
+          })}
+        </div>
+        <div style={{ textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 10 }}>
+          {t(E, "Yellow = slice replaced by ONE boolean", "노랑 = 하나의 불리언으로 교체될 구간")}
+        </div>
+
+        {/* Two replacement attempts side-by-side */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
+          {[
+            { rep: "true", res: tryTrue },
+            { rep: "false", res: tryFalse },
+          ].map(({ rep, res }) => {
+            const hit = res === target;
+            return (
+              <div key={rep} style={{
+                background: hit ? "#dcfce7" : "#f8fafc",
+                border: `1.5px solid ${hit ? "#16a34a" : C.border}`,
+                borderRadius: 8, padding: "8px 10px",
+                fontSize: 11, fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                <div style={{ color: C.dim, marginBottom: 3 }}>
+                  {t(E, "rep = ", "교체값 = ")}<b style={{ color: A }}>{rep}</b>
+                </div>
+                <div style={{ color: hit ? "#15803d" : C.text }}>
+                  → eval = <b>{res ? "true" : "false"}</b> {hit ? "✓" : ""}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Verdict */}
+        <div style={{
+          background: verdict ? "#16a34a" : "#dc2626", color: "#fff",
+          borderRadius: 8, padding: "8px 12px", textAlign: "center",
+          fontSize: 14, fontWeight: 800, letterSpacing: 1,
+        }}>
+          {verdict ? "Y" : "N"} — {verdict
+            ? t(E, "some replacement matches target", "교체값 중 하나가 target 과 같음")
+            : t(E, "neither replacement matches target", "두 교체값 모두 target 과 다름")}
+        </div>
       </div>
     </div>
   );
