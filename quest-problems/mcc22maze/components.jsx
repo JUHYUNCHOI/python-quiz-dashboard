@@ -1,8 +1,149 @@
+import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* ════════════════════════════════════════════════════════════
+   Mcc22MazeBfsSim — clickable maze + BFS step-through
+   Bilingual via E prop. Theme: red (#dc2626).
+   ════════════════════════════════════════════════════════════ */
+const SIM_GRID = [
+  "....#",
+  ".#..#",
+  ".#...",
+  ".###.",
+  ".....",
+];
+
+function runBfsSteps(grid) {
+  const R = grid.length, Cw = grid[0].length;
+  const dist = Array.from({ length: R }, () => Array(Cw).fill(-1));
+  dist[0][0] = 0;
+  const order = [{ r: 0, c: 0, d: 0 }];
+  const q = [[0, 0]];
+  const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+  while (q.length) {
+    const [r, c] = q.shift();
+    for (const [dr, dc] of dirs) {
+      const nr = r + dr, nc = c + dc;
+      if (nr >= 0 && nr < R && nc >= 0 && nc < Cw && grid[nr][nc] === "." && dist[nr][nc] === -1) {
+        dist[nr][nc] = dist[r][c] + 1;
+        order.push({ r: nr, c: nc, d: dist[nr][nc] });
+        q.push([nr, nc]);
+      }
+    }
+  }
+  return order;
+}
+
+export function Mcc22MazeBfsSim({ E }) {
+  const order = useMemo(() => runBfsSteps(SIM_GRID), []);
+  const [step, setStep] = useState(0);
+
+  const R = SIM_GRID.length, Cw = SIM_GRID[0].length;
+  const visited = new Map();
+  for (let i = 0; i <= step && i < order.length; i++) {
+    visited.set(`${order[i].r},${order[i].c}`, order[i].d);
+  }
+  const frontier = step < order.length ? `${order[step].r},${order[step].c}` : null;
+  const goalKey = `${R - 1},${Cw - 1}`;
+  const goalReached = visited.has(goalKey);
+  const goalDist = visited.get(goalKey);
+
+  const cellSize = 38;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#fef2f2", border: `1.5px solid ${A}`, borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+          🧭 {t(E, "BFS Walkthrough", "BFS 시뮬레이션")}
+        </div>
+        <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+          {t(E,
+            "Click NEXT to expand BFS one cell at a time. Numbers show distance from start.",
+            "다음 버튼으로 BFS가 한 칸씩 퍼져요. 숫자는 시작점에서의 거리예요.")}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+        <div style={{ display: "inline-block", background: "#0f172a", padding: 8, borderRadius: 8 }}>
+          {SIM_GRID.map((row, r) => (
+            <div key={r} style={{ display: "flex" }}>
+              {row.split("").map((ch, c) => {
+                const k = `${r},${c}`;
+                const isWall = ch === "#";
+                const isStart = r === 0 && c === 0;
+                const isGoal = r === R - 1 && c === Cw - 1;
+                const isFrontier = k === frontier;
+                const d = visited.get(k);
+                const visitedHere = d != null;
+                let bg = "#1e293b";
+                if (isWall) bg = "#475569";
+                else if (isFrontier) bg = "#fbbf24";
+                else if (visitedHere) bg = "#fca5a5";
+                const border = isStart ? "2px solid #15803d" : isGoal ? `2px solid ${A}` : "1px solid #334155";
+                return (
+                  <div key={c} style={{
+                    width: cellSize, height: cellSize, margin: 1, background: bg,
+                    color: isWall ? "#cbd5e1" : "#0f172a", border,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 13, fontWeight: 700, borderRadius: 4, fontFamily: "monospace",
+                  }}>
+                    {isWall ? "#" : visitedHere ? d : isStart ? "S" : isGoal ? "G" : ""}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
+        <button
+          onClick={() => setStep(s => Math.max(0, s - 1))}
+          disabled={step === 0}
+          style={{
+            background: step === 0 ? "#e5e7eb" : "#fff", color: step === 0 ? "#9ca3af" : A,
+            border: `1.5px solid ${step === 0 ? "#d1d5db" : A}`, borderRadius: 8,
+            padding: "6px 14px", fontSize: 12, fontWeight: 800, cursor: step === 0 ? "default" : "pointer",
+          }}>← {t(E, "Back", "뒤로")}</button>
+        <button
+          onClick={() => setStep(s => Math.min(order.length - 1, s + 1))}
+          disabled={step >= order.length - 1}
+          style={{
+            background: step >= order.length - 1 ? "#e5e7eb" : A,
+            color: step >= order.length - 1 ? "#9ca3af" : "#fff",
+            border: `1.5px solid ${step >= order.length - 1 ? "#d1d5db" : A}`, borderRadius: 8,
+            padding: "6px 14px", fontSize: 12, fontWeight: 800,
+            cursor: step >= order.length - 1 ? "default" : "pointer",
+          }}>{t(E, "Next", "다음")} →</button>
+        <button
+          onClick={() => setStep(0)}
+          style={{
+            background: "#fff", color: "#475569", border: "1.5px solid #cbd5e1", borderRadius: 8,
+            padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+          }}>↺ {t(E, "Reset", "처음")}</button>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", gap: 10, fontSize: 11, color: C.dim, flexWrap: "wrap", marginBottom: 8 }}>
+        <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#fbbf24", borderRadius: 2, marginRight: 4 }} />{t(E, "current", "현재")}</span>
+        <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#fca5a5", borderRadius: 2, marginRight: 4 }} />{t(E, "visited", "방문")}</span>
+        <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#475569", borderRadius: 2, marginRight: 4 }} />{t(E, "wall", "벽")}</span>
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 12, color: C.text }}>
+        {t(E, "Step ", "단계 ")}<b style={{ color: A }}>{step + 1}</b>{t(E, " of ", " / ")}<b>{order.length}</b>
+        {goalReached && (
+          <div style={{ marginTop: 6, fontSize: 13, fontWeight: 700, color: "#15803d" }}>
+            ✅ {t(E, "Goal reached! Shortest distance = ", "도착! 최단 거리 = ")}<span style={{ color: A }}>{goalDist}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "from collections import deque",

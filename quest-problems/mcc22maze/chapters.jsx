@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc22MazeSections } from "./components";
+import { getMcc22MazeSections, Mcc22MazeBfsSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -101,7 +101,15 @@ export function makeMcc22MazeCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: BFS sim — watch BFS expand cell by cell on a 5x5 maze
+    {
+      type: "reveal",
+      narr: t(E,
+        "Watch BFS expand from the start (S) one layer at a time. Each visited cell shows its distance from S. The first time we reach the goal (G), that distance is the shortest path.",
+        "시작점 (S) 에서 BFS가 한 층씩 퍼지는 걸 봐요. 방문한 칸에는 시작에서의 거리가 적혀요. 도착 (G) 에 처음 닿는 순간의 거리가 최단 경로예요."),
+      content: <Mcc22MazeBfsSim E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -119,7 +127,7 @@ export function makeMcc22MazeCh1(E) {
         "Correct! In a grid, we can only move up/down/left/right. From (0,0) we go right to (0,1) then down to (1,1) = 2 steps.",
         "맞아! 격자에서는 상하좌우만 이동 가능해요. (0,0)에서 오른쪽 (0,1), 아래로 (1,1) = 2단계."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
