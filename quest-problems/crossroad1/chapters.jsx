@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCrossRoad1Sections } from "./components";
+import { getCrossRoad1Sections, CrossRoad1Sim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -96,6 +96,15 @@ export function makeCrossRd1Ch1(E) {
                   {t(E, " across all cows.", "를 출력해요.")}
                 </div>
               </div>
+            </div>
+
+            {/* 🔍 Deep-audit sim — step through observations */}
+            <div style={{ background: "#fff", border: `1.5px solid #fcd34d`, borderRadius: 12, marginTop: 4 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", padding: "10px 14px 0" }}>
+                🔍 {t(E, "Watch crossings count up — one observation at a time",
+                       "관찰을 한 개씩 처리하며 횡단 수가 어떻게 늘어나는지 봐요")}
+              </div>
+              <CrossRoad1Sim E={E} />
             </div>
           </div>
         </div>),

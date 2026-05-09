@@ -1,8 +1,169 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ═══════════════════════════════════════════════════════════════
+   CrossRoad1Sim — step through observations one at a time.
+   For each (cow, side), show last_side dict update and whether
+   a crossing was counted. Helps students *see* the rule:
+   "crossing iff cow seen before AND side changed."
+   ═══════════════════════════════════════════════════════════════ */
+const _CR_PRESETS = [
+  {
+    label: "case 1",
+    obs: [[1, 0], [2, 1], [1, 1], [2, 0], [1, 0]],
+  },
+  {
+    label: "case 2",
+    obs: [[3, 0], [3, 0], [3, 1], [3, 1], [3, 0]],
+  },
+  {
+    label: "case 3",
+    obs: [[1, 1], [2, 0], [3, 1], [2, 1], [1, 0], [3, 1]],
+  },
+];
+
+export function CrossRoad1Sim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [stepIdx, setStepIdx] = useState(0);
+  const preset = _CR_PRESETS[pi];
+  const obs = preset.obs;
+
+  // Replay observations [0 .. stepIdx-1] (stepIdx=0 means "before any step").
+  const last = {};
+  let crossings = 0;
+  let lastEvent = null; // info about the just-processed observation
+  for (let i = 0; i < stepIdx; i++) {
+    const [cow, side] = obs[i];
+    const prev = last[cow];
+    let kind = "first"; // first | same | cross
+    if (prev !== undefined) {
+      if (prev !== side) { crossings += 1; kind = "cross"; }
+      else { kind = "same"; }
+    }
+    last[cow] = side;
+    if (i === stepIdx - 1) lastEvent = { cow, side, prev, kind };
+  }
+
+  const cowIds = Array.from(new Set(obs.map(o => o[0]))).sort((a, b) => a - b);
+
+  const sideColor = (s) => s === 0 ? "#3b82f6" : "#dc2626";
+  const sideLabel = (s) => s === 0 ? "0" : "1";
+
+  const eventBox = () => {
+    if (!lastEvent) {
+      return t(E, "Press → to process the first observation.", "→ 를 눌러 첫 관찰을 처리해요.");
+    }
+    const { cow, side, prev, kind } = lastEvent;
+    if (kind === "first") {
+      return (
+        <>
+          <b>cow {cow}</b> {t(E, "first seen on side", "처음 봤어요 — 쪽")} <b style={{ color: sideColor(side) }}>{sideLabel(side)}</b>
+          {" → "}
+          <span style={{ color: C.dim }}>{t(E, "no crossing (no previous side).", "횡단 없음 (이전 쪽 기록 없음).")}</span>
+        </>
+      );
+    }
+    if (kind === "same") {
+      return (
+        <>
+          <b>cow {cow}</b>: {t(E, "still on side", "여전히")} <b style={{ color: sideColor(side) }}>{sideLabel(side)}</b>
+          {" → "}
+          <span style={{ color: C.dim }}>{t(E, "no crossing (same side as before).", "횡단 없음 (이전과 같은 쪽).")}</span>
+        </>
+      );
+    }
+    return (
+      <>
+        <b>cow {cow}</b>: <b style={{ color: sideColor(prev) }}>{sideLabel(prev)}</b> → <b style={{ color: sideColor(side) }}>{sideLabel(side)}</b>{" "}
+        <span style={{ color: "#16a34a", fontWeight: 800 }}>{t(E, "crossing! +1", "횡단! +1")}</span>
+      </>
+    );
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
+        {_CR_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setStepIdx(0); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{p.label}</button>
+        ))}
+      </div>
+
+      {/* Observations strip */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "10px 8px", marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "observations (cow, side)", "관찰 (소, 쪽)")}
+        </div>
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+          {obs.map(([cow, side], i) => {
+            const done = i < stepIdx;
+            const cur = i === stepIdx - 1;
+            return (
+              <div key={i} style={{
+                padding: "4px 8px", borderRadius: 6,
+                border: `1.5px solid ${cur ? A : (done ? "#86efac" : C.border)}`,
+                background: cur ? "#fffbeb" : (done ? "#f0fdf4" : "#fff"),
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 700,
+                opacity: done || cur ? 1 : 0.55,
+              }}>
+                ({cow},<span style={{ color: sideColor(side) }}>{sideLabel(side)}</span>)
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* last_side dict */}
+      <div style={{ background: "#f0fdf4", border: `1.5px solid #86efac`, borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text }}>
+        <div style={{ marginBottom: 6, fontWeight: 700 }}>last_side = {"{"}</div>
+        <div style={{ paddingLeft: 14, lineHeight: 1.7 }}>
+          {cowIds.map(c => (
+            <div key={c}>
+              {c}: {last[c] === undefined
+                ? <span style={{ color: C.dim }}>—</span>
+                : <b style={{ color: sideColor(last[c]) }}>{sideLabel(last[c])}</b>}
+            </div>
+          ))}
+        </div>
+        <div style={{ fontWeight: 700 }}>{"}"}</div>
+        <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #86efac" }}>
+          crossings = <b style={{ color: "#16a34a" }}>{crossings}</b>
+        </div>
+      </div>
+
+      {/* event narration */}
+      <div style={{ background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 13, color: "#92400e", lineHeight: 1.6, minHeight: 44 }}>
+        {eventBox()}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setStepIdx(Math.max(0, stepIdx - 1))} disabled={stepIdx === 0} style={{
+          background: stepIdx === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${stepIdx === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: stepIdx === 0 ? "#b0b5c3" : A,
+          cursor: stepIdx === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{stepIdx} / {obs.length}</span>
+        <button onClick={() => setStepIdx(Math.min(obs.length, stepIdx + 1))} disabled={stepIdx === obs.length} style={{
+          background: stepIdx === obs.length ? "#e5e7eb" : A, border: `1px solid ${stepIdx === obs.length ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: stepIdx === obs.length ? "#b0b5c3" : "#fff", cursor: stepIdx === obs.length ? "default" : "pointer",
+        }}>→</button>
+        <button onClick={() => setStepIdx(0)} disabled={stepIdx === 0} style={{
+          background: "transparent", border: `1px solid ${C.border}`, borderRadius: 8,
+          padding: "5px 10px", fontSize: 11, fontWeight: 600, color: C.dim,
+          cursor: stepIdx === 0 ? "default" : "pointer", marginLeft: 6,
+        }}>{t(E, "reset", "처음")}</button>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",
