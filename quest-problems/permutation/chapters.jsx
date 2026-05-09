@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getPermSections, DismantleSimulator } from "./components";
+import { getPermSections, DismantleSimulator, BruteForceEnumerator } from "./components";
 
 /* ================================================================
    SOLUTION CODE — Brute force.
@@ -488,6 +488,14 @@ export function makePermCh2(E) {
             {t(E, ". Output that.", " 그걸 출력.")}
           </div>
         </div>),
+    },
+    // 2-2.5: Interactive brute-force enumerator — walk all 24 perms in lex order
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now drive it yourself. Step through all 24 permutations of {1,2,3,4} in lex order, dismantle each, and watch the FIRST match light up green. That's exactly what brute force does — and it's automatically the lex-smallest answer.",
+        "이제 직접 돌려봐요. {1,2,3,4} 의 24 개 순열을 사전순으로 한 단계씩 — 각각 dismantle 해서 처음 일치하는 게 초록으로 빛나요. 브루트포스가 하는 일 그대로 — 자동으로 사전순 최소."),
+      content: (<BruteForceEnumerator E={E} />),
     },
     // 2-3: Quiz on the brute force plan
     {

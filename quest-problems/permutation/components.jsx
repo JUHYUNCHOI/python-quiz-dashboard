@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
@@ -553,6 +553,249 @@ export function PermRunner({ E }) {
     </div>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   BruteForceEnumerator — step-by-step lex-order brute-force visualizer.
+   Shows N=4, h=[2,1,1]. Walks every permutation of 1..4 in lex order,
+   runs dismantle on each, color-codes match/no-match. Stops at first
+   match — visually proves "first match in lex order = lex-smallest".
+   ═══════════════════════════════════════════════════════════════ */
+function dismantleJS(p) {
+  p = [...p];
+  const out = [];
+  while (p.length > 1) {
+    if (p[0] > p[p.length - 1]) {
+      out.push(p[1]);
+      p.shift();
+    } else {
+      out.push(p[p.length - 2]);
+      p.pop();
+    }
+  }
+  return out;
+}
+function lexPermutations(N) {
+  const arr = Array.from({ length: N }, (_, i) => i + 1);
+  const out = [];
+  const recurse = (cur, used) => {
+    if (cur.length === N) { out.push([...cur]); return; }
+    for (let v = 1; v <= N; v++) {
+      if (used[v]) continue;
+      used[v] = true; cur.push(v);
+      recurse(cur, used);
+      cur.pop(); used[v] = false;
+    }
+  };
+  recurse([], Array(N + 1).fill(false));
+  return out;
+}
+
+export function BruteForceEnumerator({ E }) {
+  const N = 4;
+  const targetH = [2, 1, 1];
+  const allPerms = lexPermutations(N);
+  // Find lex-smallest match index so we can highlight stopping point.
+  const matchIdx = allPerms.findIndex(p => {
+    const d = dismantleJS(p);
+    return d.length === targetH.length && d.every((v, i) => v === targetH[i]);
+  });
+
+  const [idx, setIdx] = useState(0);
+  const [auto, setAuto] = useState(false);
+  const timerRef = useRef(null);
+
+  const cur = allPerms[idx];
+  const curH = dismantleJS(cur);
+  const isMatch = curH.length === targetH.length && curH.every((v, i) => v === targetH[i]);
+  const stoppedAtMatch = idx === matchIdx;
+  const atEnd = idx === allPerms.length - 1;
+
+  const stopAuto = () => {
+    setAuto(false);
+    if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
+  };
+  const startAuto = () => {
+    if (auto) { stopAuto(); return; }
+    setAuto(true);
+    const tick = () => {
+      setIdx(prev => {
+        if (prev >= allPerms.length - 1) { setAuto(false); return prev; }
+        const next = prev + 1;
+        const d = dismantleJS(allPerms[next]);
+        const match = d.length === targetH.length && d.every((v, i) => v === targetH[i]);
+        if (match) { setAuto(false); return next; }  // stop on first match
+        timerRef.current = setTimeout(tick, 350);
+        return next;
+      });
+    };
+    timerRef.current = setTimeout(tick, 350);
+  };
+
+  const reset = () => { stopAuto(); setIdx(0); };
+  const stepBack = () => { stopAuto(); setIdx(Math.max(0, idx - 1)); };
+  const stepFwd = () => { stopAuto(); setIdx(Math.min(allPerms.length - 1, idx + 1)); };
+  const jumpToMatch = () => { stopAuto(); if (matchIdx >= 0) setIdx(matchIdx); };
+
+  // h cell render — green if matches target at that index, red if differs.
+  const renderHCell = (val, i, target) => {
+    const ok = val === target[i];
+    return (
+      <div key={i} style={{
+        width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+        borderRadius: 6, fontWeight: 700, fontSize: 13, fontFamily: "'JetBrains Mono',monospace",
+        background: ok ? "#dcfce7" : "#fee2e2",
+        border: `1.5px solid ${ok ? "#16a34a" : "#dc2626"}`,
+        color: ok ? "#15803d" : "#991b1b",
+      }}>{val}</div>
+    );
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <StepHeader
+        accent={A}
+        idx={idx}
+        total={allPerms.length}
+        isEn={E}
+        title={t(E, "Brute force enumerator: try every permutation in lex order",
+                    "브루트포스 시뮬: 모든 순열을 사전순으로 시도")}
+        subtitle={t(E, `N=4, target h = [2, 1, 1]. Permutation ${idx + 1} of ${allPerms.length}.`,
+                       `N=4, 목표 h = [2, 1, 1]. ${allPerms.length} 개 중 ${idx + 1} 번째.`)}
+      />
+
+      {/* Target h */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 10 }}>
+        <span style={{ fontSize: 12, color: C.dim, fontWeight: 600 }}>
+          🎯 {t(E, "target h", "목표 h")} =
+        </span>
+        <div style={{ display: "flex", gap: 4 }}>
+          {targetH.map((v, i) => (
+            <div key={i} style={{
+              width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 6, fontWeight: 700, fontSize: 13, fontFamily: "'JetBrains Mono',monospace",
+              background: "#fef3c7", border: "1.5px solid #f59e0b", color: "#92400e",
+            }}>{v}</div>
+          ))}
+        </div>
+      </div>
+
+      {/* Current p → dismantle(p) → match? */}
+      <div style={{
+        background: isMatch ? "#dcfce7" : "#fff",
+        border: `2px solid ${isMatch ? "#16a34a" : C.border}`,
+        borderRadius: 10, padding: "12px 14px", marginBottom: 10,
+        transition: "all .2s",
+      }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+          {/* p */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, minWidth: 22 }}>p =</span>
+            <div style={{ display: "flex", gap: 4 }}>
+              {cur.map((v, i) => (
+                <div key={i} style={{
+                  width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+                  borderRadius: 7, fontWeight: 700, fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
+                  background: "#ede9fe", border: `1.5px solid ${A}`, color: A,
+                }}>{v}</div>
+              ))}
+            </div>
+          </div>
+
+          {/* arrow + dismantle result */}
+          <div style={{ fontSize: 16, color: C.dim }}>↓ dismantle</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, minWidth: 22 }}>h =</span>
+            <div style={{ display: "flex", gap: 4 }}>
+              {curH.map((v, i) => renderHCell(v, i, targetH))}
+            </div>
+            <span style={{
+              fontSize: 13, fontWeight: 700,
+              color: isMatch ? "#16a34a" : "#9ca3af",
+              marginLeft: 6,
+            }}>
+              {isMatch ? "✓ MATCH" : "✗"}
+            </span>
+          </div>
+        </div>
+
+        {isMatch && (
+          <div style={{
+            marginTop: 10, paddingTop: 10, borderTop: "1px dashed #86efac",
+            fontSize: 12, color: "#15803d", textAlign: "center", lineHeight: 1.5,
+          }}>
+            🎉 {t(E,
+              `First match in lex order — this IS the lex-smallest answer. Output: ${cur.join(" ")}`,
+              `사전순으로 처음 일치 — 이게 바로 사전순 최소 답. 출력: ${cur.join(" ")}`)}
+          </div>
+        )}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 8 }}>
+        <button onClick={stepBack} disabled={idx === 0} style={{
+          padding: "5px 12px", borderRadius: 8,
+          border: `1.5px solid ${idx === 0 ? "#e5e7eb" : A}`,
+          background: idx === 0 ? "#f3f4f6" : "#fff",
+          color: idx === 0 ? "#9ca3af" : A,
+          fontWeight: 700, fontSize: 12, cursor: idx === 0 ? "default" : "pointer",
+        }}>← {t(E, "prev", "이전")}</button>
+        <button onClick={startAuto} disabled={atEnd || stoppedAtMatch} style={{
+          padding: "5px 14px", borderRadius: 8, border: "none",
+          background: auto ? "#dc2626" : ((atEnd || stoppedAtMatch) ? "#e5e7eb" : A),
+          color: (atEnd || stoppedAtMatch) && !auto ? "#9ca3af" : "#fff",
+          fontWeight: 700, fontSize: 12,
+          cursor: (atEnd || stoppedAtMatch) && !auto ? "default" : "pointer",
+        }}>
+          {auto ? t(E, "⏹ stop", "⏹ 중지") : t(E, "▶ run to first match", "▶ 첫 매칭까지 실행")}
+        </button>
+        <button onClick={stepFwd} disabled={atEnd} style={{
+          padding: "5px 12px", borderRadius: 8,
+          border: `1.5px solid ${atEnd ? "#e5e7eb" : A}`,
+          background: atEnd ? "#f3f4f6" : "#fff",
+          color: atEnd ? "#9ca3af" : A,
+          fontWeight: 700, fontSize: 12, cursor: atEnd ? "default" : "pointer",
+        }}>{t(E, "next", "다음")} →</button>
+        <button onClick={reset} style={{
+          padding: "5px 10px", borderRadius: 8,
+          border: `1.5px solid ${C.border}`, background: "#fff", color: C.dim,
+          fontWeight: 700, fontSize: 12, cursor: "pointer",
+        }}>↺ {t(E, "reset", "처음")}</button>
+        {matchIdx >= 0 && (
+          <button onClick={jumpToMatch} style={{
+            padding: "5px 10px", borderRadius: 8,
+            border: "1.5px solid #16a34a", background: "#dcfce7", color: "#15803d",
+            fontWeight: 700, fontSize: 12, cursor: "pointer",
+          }}>⤳ {t(E, "jump to match", "매칭으로 이동")}</button>
+        )}
+      </div>
+
+      {/* Mini progress bar showing all 24 attempts at a glance */}
+      <div style={{ display: "flex", gap: 2, justifyContent: "center", marginTop: 6, flexWrap: "wrap" }}>
+        {allPerms.map((p, i) => {
+          const d = dismantleJS(p);
+          const m = d.length === targetH.length && d.every((v, k) => v === targetH[k]);
+          const visited = i <= idx;
+          return (
+            <div key={i}
+              onClick={() => { stopAuto(); setIdx(i); }}
+              title={`p = [${p.join(",")}] → h = [${d.join(",")}]`}
+              style={{
+                width: 14, height: 14, borderRadius: 3, cursor: "pointer",
+                background: i === idx ? A : (visited ? (m ? "#16a34a" : "#cbd5e1") : "#f1f5f9"),
+                border: m ? "1.5px solid #16a34a" : `1px solid ${i === idx ? A : "#e5e7eb"}`,
+                transition: "all .15s",
+              }} />
+          );
+        })}
+      </div>
+      <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginTop: 4, fontStyle: "italic" }}>
+        {t(E, "(each square = one permutation in lex order; green = match, hover for details)",
+              "(네모 1 개 = 사전순 1 개 순열; 초록 = 일치, 마우스 올리면 상세)")}
+      </div>
+    </div>
+  );
+}
+
 
 /* ═══════════════════════════════════════════════════════════════
    getPermSections — 단계별 코드 + Python/C++ + reasoning
