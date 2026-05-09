@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc19CandySections } from "./components";
+import { getMcc19CandySections, Mcc19CandyDeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -110,6 +110,21 @@ export function makeMcc19CandyCh1(E) {
         "Walk through it: [1,2,3,4] → remove odd positions → ? → remove odd positions again → who's left?",
         "한 단계씩: [1,2,3,4] → 홀수 위치 제거 → ? → 다시 홀수 위치 제거 → 누가 남아요?"),
       answer: 4,
+    },
+    // 1-4: Hands-on deep audit — pick N, step through each elimination round,
+    // watch odd-position candies drop, see who remains.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Time to feel it. Pick an N, step through each elimination round, watch the odd-position candies (#1, #3, #5, …) drop out, and see who survives. Try different N — the survivor is always the largest power of 2 that is ≤ N.",
+        "직접 느껴보자. N 골라서 한 라운드씩 보고, 홀수 위치 사탕 (#1, #3, #5, …) 이 떨어져 나가는 걸 봐. 누가 남아? 여러 N 으로 시도해봐 — 생존자는 항상 N 이하의 가장 큰 2의 거듭제곱이야."),
+      content: (
+        <div style={{ padding: 12 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#dc2626", textAlign: "center", marginBottom: 6 }}>
+            🔍 {t(E, "Deep Audit — step through every elimination round", "심층 점검 — 모든 탈락 라운드 한 단계씩")}
+          </div>
+          <Mcc19CandyDeepAuditSim E={E} />
+        </div>),
     },
   ];
 }
