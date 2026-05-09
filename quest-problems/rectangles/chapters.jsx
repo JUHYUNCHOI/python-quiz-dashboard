@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getRectanglesSections } from "./components";
+import { getRectanglesSections, RectangleCountSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -55,7 +55,25 @@ export function makeRectanglesCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Sim — pick 2 horizontal + 2 vertical lines
+    {
+      type: "reveal",
+      narr: t(E,
+        "Pick 2 of the (N+1) horizontal lines and 2 of the (M+1) vertical lines. Every such choice = exactly one rectangle. Step through them to count by hand.",
+        "(N+1) 개 수평선 중 2 개 + (M+1) 개 수직선 중 2 개 선택 → 직사각형 1 개. 한 번씩 넘기면서 직접 세어 봐요."),
+      content: (
+        <div style={{ padding: 6 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: "8px 12px", margin: "0 8px 8px", fontSize: 12, color: "#9a3412", lineHeight: 1.6 }}>
+            <b>{t(E, "Why this works", "왜 이게 맞을까")}:</b>{" "}
+            {t(E,
+              "Every axis-aligned rectangle is uniquely defined by 2 horizontal grid lines (top + bottom) and 2 vertical grid lines (left + right). So counting rectangles = counting these line pairs.",
+              "축에 평행한 모든 직사각형은 수평선 2 개(위·아래) + 수직선 2 개(왼·오)로 유일하게 정의돼요. 그래서 직사각형 수 = 선 짝 고르는 수.")}
+          </div>
+          <RectangleCountSim E={E} />
+        </div>
+      ),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -74,7 +92,7 @@ export function makeRectanglesCh1(E) {
         "Correct! C(3,2) = 3, so 3 * 3 = 9 rectangles.",
         "맞아! C(3,2) = 3이니까, 3 * 3 = 9개 직사각형이에요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

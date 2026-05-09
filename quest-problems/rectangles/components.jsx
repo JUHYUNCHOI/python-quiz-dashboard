@@ -1,8 +1,122 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ═══════════════════════════════════════════════════════════════
+   RectangleCountSim — pick 2 horizontal + 2 vertical lines
+   from the (N+1) × (M+1) grid lines and watch a rectangle form.
+   Cycles through every C(N+1,2) × C(M+1,2) combination so the
+   student SEES the formula instead of just trusting it.
+   ═══════════════════════════════════════════════════════════════ */
+const _RECT_PRESETS = [
+  { N: 1, M: 1 },
+  { N: 2, M: 2 },
+  { N: 3, M: 2 },
+];
+
+function _comb2(x) { return (x * (x - 1)) / 2; }
+
+function _enumPairs(k) {
+  const out = [];
+  for (let i = 0; i < k; i++) for (let j = i + 1; j < k; j++) out.push([i, j]);
+  return out;
+}
+
+export function RectangleCountSim({ E }) {
+  const [pi, setPi] = useState(1);
+  const [idx, setIdx] = useState(0);
+  const preset = _RECT_PRESETS[pi];
+  const N = preset.N, M = preset.M;
+
+  const hPairs = _enumPairs(N + 1);  // pairs of horizontal lines (y values 0..N)
+  const vPairs = _enumPairs(M + 1);  // pairs of vertical lines (x values 0..M)
+  const total = hPairs.length * vPairs.length;
+  const safeIdx = Math.min(idx, total - 1);
+  const hp = hPairs[Math.floor(safeIdx / vPairs.length)];
+  const vp = vPairs[safeIdx % vPairs.length];
+
+  const W = 320, H = 220;
+  const padL = 28, padR = 16, padT = 16, padB = 28;
+  const cw = (W - padL - padR) / M;
+  const ch = (H - padT - padB) / N;
+  const sx = (x) => padL + x * cw;
+  const sy = (y) => padT + (N - y) * ch;  // flip so y grows up
+
+  const reset = (newPi) => { setPi(newPi); setIdx(0); };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_RECT_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => reset(i)} style={{
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{p.N}×{p.M}</button>
+        ))}
+      </div>
+
+      <svg width={W} height={H} style={{ display: "block", margin: "0 auto", background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8 }}>
+        {/* horizontal grid lines (y = 0..N) */}
+        {Array.from({ length: N + 1 }, (_, y) => {
+          const sel = y === hp[0] || y === hp[1];
+          return (
+            <g key={`h${y}`}>
+              <line x1={sx(0)} y1={sy(y)} x2={sx(M)} y2={sy(y)}
+                stroke={sel ? A : "#cbd5e1"} strokeWidth={sel ? 2.5 : 1} />
+              <text x={padL - 6} y={sy(y) + 3} fontSize="9" fill={sel ? A : "#94a3b8"} textAnchor="end" fontWeight={sel ? 800 : 400}>{y}</text>
+            </g>
+          );
+        })}
+        {/* vertical grid lines (x = 0..M) */}
+        {Array.from({ length: M + 1 }, (_, x) => {
+          const sel = x === vp[0] || x === vp[1];
+          return (
+            <g key={`v${x}`}>
+              <line x1={sx(x)} y1={sy(0)} x2={sx(x)} y2={sy(N)}
+                stroke={sel ? A : "#cbd5e1"} strokeWidth={sel ? 2.5 : 1} />
+              <text x={sx(x)} y={sy(0) + 14} fontSize="9" fill={sel ? A : "#94a3b8"} textAnchor="middle" fontWeight={sel ? 800 : 400}>{x}</text>
+            </g>
+          );
+        })}
+        {/* highlighted rectangle fill */}
+        <rect
+          x={sx(vp[0])} y={sy(hp[1])}
+          width={(vp[1] - vp[0]) * cw}
+          height={(hp[1] - hp[0]) * ch}
+          fill={A} fillOpacity="0.25" stroke={A} strokeWidth="2.5"
+        />
+      </svg>
+
+      <div style={{ background: "#fff7ed", border: `1.5px solid #fdba74`, borderRadius: 10, padding: "10px 12px", marginTop: 10, marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7 }}>
+        {t(E,
+          `H-lines picked: y = ${hp[0]}, ${hp[1]}  ·  V-lines picked: x = ${vp[0]}, ${vp[1]}`,
+          `수평선 선택: y = ${hp[0]}, ${hp[1]}  ·  수직선 선택: x = ${vp[0]}, ${vp[1]}`)}<br/>
+        {t(E,
+          `rectangle ${safeIdx + 1} / ${total}  ·  C(${N + 1},2) × C(${M + 1},2) = ${_comb2(N + 1)} × ${_comb2(M + 1)} = `,
+          `직사각형 ${safeIdx + 1} / ${total}  ·  C(${N + 1},2) × C(${M + 1},2) = ${_comb2(N + 1)} × ${_comb2(M + 1)} = `)}
+        <b style={{ color: A }}>{total}</b>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setIdx(Math.max(0, safeIdx - 1))} disabled={safeIdx === 0} style={{
+          background: safeIdx === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${safeIdx === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: safeIdx === 0 ? "#b0b5c3" : A,
+          cursor: safeIdx === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{safeIdx + 1} / {total}</span>
+        <button onClick={() => setIdx(Math.min(total - 1, safeIdx + 1))} disabled={safeIdx === total - 1} style={{
+          background: safeIdx === total - 1 ? "#e5e7eb" : A, border: `1px solid ${safeIdx === total - 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: safeIdx === total - 1 ? "#b0b5c3" : "#fff", cursor: safeIdx === total - 1 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N, M = map(int, input().split())",
