@@ -1,5 +1,54 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getSimpleGameSections } from "./components";
+
+/* ─── Deep-audit sim: explore who wins for small N (0..12) ─── */
+function WinPatternSim({ E }) {
+  const [n, setN] = useState(5);
+  const isLosing = n % 4 === 0; // current player loses iff multiple of 4
+  const winner = isLosing ? 2 : 1;
+  const cells = [];
+  for (let i = 0; i <= 12; i++) cells.push(i);
+  return (
+    <div style={{ background: "#fff", border: "1px dashed #fca5a5", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "#7f1d1d", marginBottom: 8 }}>
+        🔬 {t(E, "Try N (0..12): who wins?", "N (0..12) 눌러봐: 누가 이겨?")}
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 8 }}>
+        {cells.map(i => {
+          const lose = i % 4 === 0;
+          const sel = i === n;
+          return (
+            <button key={i} onClick={() => setN(i)} style={{
+              minWidth: 30, padding: "4px 6px", fontSize: 12, fontWeight: 700,
+              background: sel ? (lose ? "#dc2626" : "#15803d") : "#fff",
+              color: sel ? "#fff" : (lose ? "#dc2626" : "#15803d"),
+              border: `1.5px solid ${lose ? "#dc2626" : "#15803d"}`,
+              borderRadius: 6, cursor: "pointer",
+            }}>{i}</button>
+          );
+        })}
+      </div>
+      <div style={{ fontSize: 12, color: C.text, lineHeight: 1.5 }}>
+        N = <b>{n}</b> → {t(E, "winner: ", "승자: ")}
+        <b style={{ color: winner === 1 ? "#15803d" : "#dc2626" }}>
+          {winner === 1 ? "FIRST (1)" : "SECOND (2)"}
+        </b>
+        {" · "}
+        <span style={{ color: C.dim }}>
+          {n} % 4 = {n % 4} {isLosing
+            ? t(E, "(multiple of 4 → first player loses)", "(4 의 배수 → 선수 패)")
+            : t(E, "(not 0 → first player wins)", "(0 아님 → 선수 승)")}
+        </span>
+      </div>
+      <div style={{ fontSize: 11, color: C.dim, marginTop: 6 }}>
+        {t(E,
+          "Green = first wins · Red = first loses. Notice every 4th number is red.",
+          "초록 = 선수 승 · 빨강 = 선수 패. 4 칸마다 빨강이 반복돼요.")}
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -80,6 +129,8 @@ export function makeSimpleGameCh1(E) {
               </div>
             </div>
           </div>
+
+          <WinPatternSim E={E} />
         </div>),
     },
     // 1-2: Quiz
