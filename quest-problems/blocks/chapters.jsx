@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getBlocksSections } from "./components";
+import BlockLetterSim from "./BlockLetterSim";
 
 /* ================================================================
    SOLUTION CODE
@@ -42,7 +43,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeBlocksCh1(E) {
   return [
@@ -117,7 +118,15 @@ export function makeBlocksCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Interactive sim — assign cubes to positions and watch ✓/✗ live.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try the simulator. Pick a target word, assign one cube to each letter, and see whether each face matches. Notice that reusing the same cube is blocked.",
+        "시뮬레이터로 직접 해봐요. 목표 단어를 고르고, 각 글자에 큐브를 배정해서 면이 맞는지 확인해요. 같은 큐브 재사용은 막혀 있어요."),
+      content: <BlockLetterSim E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -135,7 +144,7 @@ export function makeBlocksCh1(E) {
         "Correct! C(4,3)=4 ways to choose 3 blocks, times 3!=6 arrangements = 24 total.",
         "맞아! C(4,3)=4가지로 3개 블록 선택, 곱하기 3!=6 배열 = 총 24가지."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
