@@ -738,6 +738,225 @@ export function SeparatorBuildViz({ E }) {
 
 
 /* ═══════════════════════════════════════════════════════════════
+   TryYourselfViz — Student places sticks themselves, gets feedback.
+   Deep-audit sim: does the student really understand "no adjacent same"?
+   ═══════════════════════════════════════════════════════════════ */
+
+const TRY_PRESETS = [
+  { counts: [2, 2, 2], target: 6, label_en: "Easy: [2,2,2]", label_ko: "쉬움: [2,2,2]" },
+  { counts: [3, 2, 1], target: 6, label_en: "Mid: [3,2,1]", label_ko: "중간: [3,2,1]" },
+  { counts: [4, 1, 1], target: 5, label_en: "Tight: [4,1,1]", label_ko: "빡빡: [4,1,1]" },
+];
+
+export function TryYourselfViz({ E }) {
+  const [presetIdx, setPresetIdx] = useState(0);
+  const preset = TRY_PRESETS[presetIdx];
+  const [pool, setPool] = useState(() => [...preset.counts]);
+  const [placed, setPlaced] = useState([]);
+  const [violation, setViolation] = useState(null); // index of bad placement
+  const names = E ? STICK_NAMES_EN : STICK_NAMES_KO;
+
+  const total = preset.counts.reduce((a, b) => a + b, 0);
+  const maxC = Math.max(...preset.counts);
+  const rest = total - maxC;
+  const optimal = Math.min(total, 2 * rest + 1);
+
+  const switchPreset = (i) => {
+    setPresetIdx(i);
+    setPool([...TRY_PRESETS[i].counts]);
+    setPlaced([]);
+    setViolation(null);
+  };
+
+  const reset = () => {
+    setPool([...preset.counts]);
+    setPlaced([]);
+    setViolation(null);
+  };
+
+  const tryPlace = (colorIdx) => {
+    if (pool[colorIdx] <= 0) return;
+    const last = placed.length > 0 ? placed[placed.length - 1] : null;
+    if (last === colorIdx) {
+      // Show violation briefly
+      setViolation(colorIdx);
+      setTimeout(() => setViolation(null), 900);
+      return;
+    }
+    const newPool = [...pool];
+    newPool[colorIdx]--;
+    setPool(newPool);
+    setPlaced([...placed, colorIdx]);
+  };
+
+  const undo = () => {
+    if (placed.length === 0) return;
+    const last = placed[placed.length - 1];
+    const newPool = [...pool];
+    newPool[last]++;
+    setPool(newPool);
+    setPlaced(placed.slice(0, -1));
+    setViolation(null);
+  };
+
+  const stickW = 22, stickH = 38;
+  const stuck = placed.length > 0 && pool.every((c, i) => c === 0 || i === placed[placed.length - 1])
+    && pool.some(c => c > 0);
+  const done = pool.every(c => c === 0) || stuck;
+  const reached = placed.length;
+  const hitOptimal = reached === optimal;
+
+  return (
+    <div style={{ padding: "10px 6px" }}>
+      {/* Title */}
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 700, color: A, marginBottom: 6 }}>
+        🪄 {E ? "Try it yourself! Tap a color to place a stick." : "직접 해봐요! 색을 눌러 막대를 놓아요."}
+      </div>
+
+      {/* Preset selector */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
+        {TRY_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => switchPreset(i)} style={{
+            padding: "4px 10px", borderRadius: 6, fontSize: 10, fontWeight: 700,
+            border: `1.5px solid ${i === presetIdx ? A : C.border}`,
+            background: i === presetIdx ? ABg : C.card,
+            color: i === presetIdx ? A : C.dim, cursor: "pointer",
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>{E ? p.label_en : p.label_ko}</button>
+        ))}
+      </div>
+
+      {/* Goal banner */}
+      <div style={{
+        background: ABg, borderRadius: 8, padding: "6px 10px",
+        border: `1px solid ${ABd}`, marginBottom: 8, textAlign: "center",
+        fontSize: 11, fontWeight: 700, color: "#92400e",
+      }}>
+        🎯 {E
+          ? `Goal: place ${optimal} of ${total} sticks (no two same touch)`
+          : `목표: ${total}개 중 ${optimal}개 배치 (같은 색 옆 금지)`}
+      </div>
+
+      {/* Pool — clickable buttons */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {pool.map((cnt, i) => {
+          const last = placed.length > 0 ? placed[placed.length - 1] : null;
+          const blocked = last === i;
+          const empty = cnt === 0;
+          const flash = violation === i;
+          return (
+            <button
+              key={i}
+              onClick={() => tryPlace(i)}
+              disabled={empty}
+              style={{
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+                padding: "4px 6px", borderRadius: 8,
+                border: flash ? "2px solid #dc2626" : `1.5px solid ${blocked ? "#fca5a5" : C.border}`,
+                background: flash ? "#fee2e2" : (blocked ? "#fef2f2" : C.card),
+                cursor: empty ? "not-allowed" : "pointer",
+                opacity: empty ? 0.35 : 1,
+                transition: "all .2s",
+              }}
+            >
+              <div style={{
+                width: 26, height: 26, borderRadius: 5, background: STICK_COLORS[i],
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 12, fontWeight: 700, color: "#fff",
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>{cnt}</div>
+              <div style={{ fontSize: 9, fontWeight: 700, color: C.dim }}>{names[i]}</div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Violation hint */}
+      {violation != null && (
+        <div style={{
+          textAlign: "center", marginBottom: 6, fontSize: 11, fontWeight: 700,
+          color: "#dc2626",
+        }}>
+          ❌ {E
+            ? `Same as previous! ${names[violation]} can't follow ${names[violation]}.`
+            : `이전과 같은 색! ${names[violation]} 다음에 ${names[violation]} 안 돼요.`}
+        </div>
+      )}
+
+      {/* Placement strip */}
+      <div style={{
+        background: "#f8fafc", borderRadius: 10, padding: "10px 6px",
+        border: `1.5px solid ${done && hitOptimal ? "#6ee7b7" : (done ? "#fca5a5" : C.border)}`,
+        minHeight: stickH + 16, marginBottom: 8,
+      }}>
+        <div style={{ fontSize: 10, fontWeight: 700, color: C.dim, textAlign: "center", marginBottom: 4 }}>
+          {E ? `Your row: ${reached}/${optimal}` : `내 줄: ${reached}/${optimal}`}
+        </div>
+        <div style={{
+          display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap",
+          minHeight: stickH + 4,
+        }}>
+          {placed.map((ci, i) => (
+            <div key={i} style={{
+              width: stickW, height: stickH, borderRadius: 5,
+              background: STICK_COLORS[ci],
+              border: `1px solid ${STICK_COLORS[ci]}`,
+              boxShadow: i === placed.length - 1 ? `0 0 8px ${STICK_COLORS[ci]}88` : `0 1px 3px ${STICK_COLORS[ci]}33`,
+              transform: i === placed.length - 1 ? "scale(1.12)" : "scale(1)",
+              transition: "all .25s",
+            }} />
+          ))}
+          {placed.length === 0 && (
+            <div style={{ fontSize: 11, color: C.dim, padding: 10, display: "flex", alignItems: "center" }}>
+              {E ? "↑ Tap a color above" : "↑ 위 색 눌러요"}
+            </div>
+          )}
+        </div>
+
+        {/* Done / stuck message */}
+        {done && (
+          <div style={{
+            marginTop: 6, textAlign: "center", padding: "5px 8px", borderRadius: 8,
+            background: hitOptimal ? "#ecfdf5" : "#fef3c7",
+            border: `1.5px solid ${hitOptimal ? "#6ee7b7" : "#fbbf24"}`,
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: hitOptimal ? "#059669" : "#92400e" }}>
+              {hitOptimal
+                ? (E ? `🎉 Optimal! You placed all ${optimal} sticks!` : `🎉 최적! ${optimal}개 전부 배치!`)
+                : (E ? `Stuck at ${reached}. Optimal is ${optimal} — try again!` : `${reached}개에서 막힘. 최적은 ${optimal}개 — 다시!`)}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
+        <button onClick={undo} disabled={placed.length === 0} style={{
+          padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
+          border: `1px solid ${C.border}`, background: C.card, color: C.dim,
+          cursor: placed.length === 0 ? "not-allowed" : "pointer",
+          opacity: placed.length === 0 ? 0.4 : 1,
+        }}>↶ {E ? "Undo" : "되돌리기"}</button>
+        <button onClick={reset} style={{
+          padding: "7px 16px", borderRadius: 10, fontSize: 12, fontWeight: 700,
+          border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+        }}>↺ {E ? "Reset" : "처음부터"}</button>
+      </div>
+
+      {/* Hint */}
+      <div style={{
+        textAlign: "center", marginTop: 8, fontSize: 10, color: C.dim, lineHeight: 1.5,
+      }}>
+        💡 {E
+          ? "Tip: place the most-common color whenever it's not blocked. That's the greedy idea!"
+          : "팁: 막히지 않을 때 가장 많은 색을 먼저 놓아봐요. 이게 그리디 아이디어!"}
+      </div>
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
    FormulaTrace — Step-by-step formula walkthrough
    ═══════════════════════════════════════════════════════════════ */
 

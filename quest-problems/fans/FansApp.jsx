@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { FanSimulator, FanPlacementViz, SeparatorBuildViz, FormulaTrace } from "./components";
+import { FanSimulator, FanPlacementViz, SeparatorBuildViz, FormulaTrace, TryYourselfViz } from "./components";
 import { makeFansCh1, makeFansCh2, makeFansCh3 } from "./chapters";
 
 const A = "#d97706";
@@ -91,6 +91,7 @@ export default function FansApp(props = {}) {
     if (step.type === "fanPlacementViz") return <FanPlacementViz E={E} />;
     if (step.type === "separatorBuildViz") return <SeparatorBuildViz E={E} />;
     if (step.type === "formulaTrace") return <FormulaTrace E={E} />;
+    if (step.type === "tryYourselfViz") return <TryYourselfViz E={E} />;
     return null;
   };
 
@@ -103,6 +104,7 @@ export default function FansApp(props = {}) {
     if (s.type === "fanPlacementViz") return <FanPlacementViz E={E} />;
     if (s.type === "separatorBuildViz") return <SeparatorBuildViz E={E} />;
     if (s.type === "formulaTrace") return <FormulaTrace E={E} />;
+    if (s.type === "tryYourselfViz") return <TryYourselfViz E={E} />;
     return null;
   };
 

@@ -16,7 +16,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (7 steps)
+   Chapter 1: 📋 문제 이해 (8 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeFansCh1(E) {
   return [
@@ -111,11 +111,17 @@ export function makeFansCh1(E) {
         "Red Blue Red Blue — every neighbor is different! The other two have same-color neighbors.",
         "빨파빨파 — 모든 이웃이 다른 색! 나머지는 같은 색이 붙어 있어요."),
     },
-    // 1-4: Three cases — watch sticks get placed one by one
+    // 1-4: Hands-on — student places sticks themselves
+    {
+      type: "tryYourselfViz",
+      narr: t(E,
+        "Before we see the algorithm, YOU try first!\nTap colors to place sticks. Same-color neighbors are blocked.\nCan you reach the optimal length?", "알고리즘을 보기 전에 먼저 직접 해봐요! 색을 눌러 막대를 놓아요. 같은 색 옆은 막혀요. 최적 길이까지 갈 수 있어?"),
+    },
+    // 1-5: Three cases — watch sticks get placed one by one
     {
       type: "fanPlacementViz",
       narr: t(E,
-        "When can we use all sticks?\nIt depends on how many of the most common color we have!\nTry all three cases and watch sticks get placed one by one.", "언제 막대를 전부 쓸 수 있을까? 가장 많은 색이 얼마나 많은지에 달려있어요! 세 가지 경우를 직접 확인해봐요."),
+        "Now let's watch the algorithm.\nWhen can we use all sticks? It depends on how many of the most common color we have!\nTry all three cases.", "이제 알고리즘을 봐요. 언제 막대를 전부 쓸 수 있을까? 가장 많은 색이 얼마나 많은지에 달려있어요! 세 가지 경우를 확인해봐요."),
     },
     // 1-5: Why 2×rest+1?
     {
