@@ -1,8 +1,156 @@
+import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* ================================================================
+   Pair Audit Sim — visualize every pair for a small hand of N cards.
+   Student slides N (2..7) and steps through pairs one-by-one,
+   confirming the count matches C(N,2) = N*(N-1)/2.
+   ================================================================ */
+export function TichuPairAuditSim({ E }) {
+  const [N, setN] = useState(5);
+  const [step, setStep] = useState(0);
+
+  const pairs = useMemo(() => {
+    const out = [];
+    for (let i = 0; i < N; i++) {
+      for (let j = i + 1; j < N; j++) out.push([i, j]);
+    }
+    return out;
+  }, [N]);
+
+  const total = pairs.length; // C(N,2)
+  const formula = `${N} · ${N - 1} / 2 = ${total}`;
+  const visible = Math.min(step, total);
+
+  const reset = (newN) => { setN(newN); setStep(0); };
+  const next = () => setStep(s => Math.min(s + 1, total));
+  const showAll = () => setStep(total);
+
+  // Card layout — circular arrangement so edges (pairs) are easy to see.
+  const W = 320, H = 220, cx = W / 2, cy = H / 2;
+  const R = N <= 4 ? 70 : 85;
+  const cardPos = (i) => {
+    const ang = -Math.PI / 2 + (2 * Math.PI * i) / N;
+    return { x: cx + R * Math.cos(ang), y: cy + R * Math.sin(ang) };
+  };
+
+  const pairKey = (a, b) => `${a}-${b}`;
+  const visiblePairs = pairs.slice(0, visible);
+  const currentPair = visible > 0 ? pairs[visible - 1] : null;
+  const currentKey = currentPair ? pairKey(currentPair[0], currentPair[1]) : null;
+
+  const btnBase = {
+    border: `1.5px solid ${A}`, borderRadius: 8, padding: "5px 12px",
+    fontSize: 12, fontWeight: 700, cursor: "pointer",
+  };
+
+  return (
+    <div style={{ background: "#fff7f7", border: `1.5px solid ${A}`, borderRadius: 12, padding: 12 }}>
+      <div style={{ fontSize: 12, fontWeight: 800, color: A, letterSpacing: 0.4, marginBottom: 8, textAlign: "center" }}>
+        🔍 {t(E, "Pair Audit", "페어 감사")}
+      </div>
+
+      {/* N slider */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap", justifyContent: "center" }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: C.text }}>N =</span>
+        <input
+          type="range" min={2} max={7} value={N}
+          onChange={(e) => reset(parseInt(e.target.value, 10))}
+          style={{ accentColor: A, width: 140 }}
+        />
+        <span style={{ fontSize: 14, fontWeight: 800, color: A, minWidth: 18, textAlign: "center" }}>{N}</span>
+      </div>
+
+      {/* SVG */}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <svg width={W} height={H} style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8 }}>
+          {/* Pair edges */}
+          {visiblePairs.map(([a, b]) => {
+            const pa = cardPos(a), pb = cardPos(b);
+            const isCur = pairKey(a, b) === currentKey;
+            return (
+              <line
+                key={`e-${a}-${b}`}
+                x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y}
+                stroke={isCur ? A : "#fca5a5"}
+                strokeWidth={isCur ? 3 : 1.5}
+                strokeOpacity={isCur ? 0.95 : 0.55}
+              />
+            );
+          })}
+          {/* Cards */}
+          {Array.from({ length: N }).map((_, i) => {
+            const p = cardPos(i);
+            const inCurrent = currentPair && (currentPair[0] === i || currentPair[1] === i);
+            return (
+              <g key={`c-${i}`}>
+                <rect
+                  x={p.x - 16} y={p.y - 22} width={32} height={44} rx={5}
+                  fill={inCurrent ? A : "#fff"}
+                  stroke={A} strokeWidth={1.8}
+                />
+                <text
+                  x={p.x} y={p.y + 5} textAnchor="middle"
+                  fontSize={14} fontWeight={800}
+                  fill={inCurrent ? "#fff" : A}
+                  style={{ fontFamily: "system-ui, sans-serif" }}
+                >
+                  {i + 1}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+
+      {/* Counter row */}
+      <div style={{
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8,
+        padding: "6px 10px", margin: "8px 0", fontSize: 12,
+      }}>
+        <span style={{ color: "#7f1d1d", fontWeight: 700 }}>
+          {t(E, "Pairs counted", "센 페어")}: <b style={{ color: A }}>{visible}</b> / {total}
+        </span>
+        <span style={{ color: "#7f1d1d", fontFamily: "JetBrains Mono, monospace" }}>
+          C({N},2) = {formula}
+        </span>
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+        <button onClick={next} disabled={visible >= total}
+          style={{ ...btnBase, background: visible >= total ? "#fca5a5" : A, color: "#fff", opacity: visible >= total ? 0.6 : 1 }}>
+          ▶ {t(E, "Next pair", "다음 페어")}
+        </button>
+        <button onClick={showAll}
+          style={{ ...btnBase, background: "#fff", color: A }}>
+          {t(E, "Show all", "전부 보기")}
+        </button>
+        <button onClick={() => setStep(0)}
+          style={{ ...btnBase, background: "#fff", color: A }}>
+          ↺ {t(E, "Reset", "초기화")}
+        </button>
+      </div>
+
+      {visible >= total && (
+        <div style={{
+          marginTop: 8, textAlign: "center", fontSize: 12, color: "#15803d",
+          background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8,
+          padding: "6px 10px", fontWeight: 700,
+        }}>
+          ✓ {t(E,
+            `Confirmed — ${total} pairs match N·(N−1)/2.`,
+            `확인 완료 — 페어 ${total} 개가 N·(N−1)/2 와 일치.`)}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

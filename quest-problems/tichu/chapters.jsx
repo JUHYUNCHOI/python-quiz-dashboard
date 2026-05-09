@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getTichuSections } from "./components";
+import { getTichuSections, TichuPairAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -71,7 +71,19 @@ export function makeTichuCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Deep-audit sim — visualize every pair for small N
+    {
+      type: "reveal",
+      narr: t(E,
+        "Audit every pair by hand. Slide N and watch each pair light up — count climbs to N·(N−1)/2.",
+        "직접 모든 페어를 눈으로 세어 봐요. N 을 옮기면 페어가 하나씩 켜져요 — 합이 N·(N−1)/2 가 되는지 확인."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <TichuPairAuditSim E={E} />
+        </div>
+      ),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -90,7 +102,7 @@ export function makeTichuCh1(E) {
         "Correct! C(5,2) = 5*4/2 = 10 ways.",
         "맞아! C(5,2) = 5*4/2 = 10가지예요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
