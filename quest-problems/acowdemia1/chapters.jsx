@@ -1,5 +1,162 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getAcowdemia1Sections } from "./components";
+
+/* ---------- H-Index Simulator ----------
+   Additive bilingual interactive sim. Lets the student tweak paper citations
+   and the L bonus slider, and watches the h-index update live. */
+function HIndexSim({ E }) {
+  const [papers, setPapers] = useState([1, 3, 3, 100]);
+  const [L, setL] = useState(0);
+
+  // Compute best h-index achievable by greedily topping up the largest papers.
+  const computeH = (cs, extra) => {
+    const sorted = [...cs].sort((a, b) => a - b); // ascending
+    const N = sorted.length;
+    let best = 0;
+    for (let h = 0; h <= N; h++) {
+      const idx = N - h;
+      if (idx < 0) break;
+      let need = 0;
+      for (let i = idx; i < N; i++) if (sorted[i] < h) need += h - sorted[i];
+      if (need <= extra) best = h;
+    }
+    return best;
+  };
+
+  const sortedAsc = [...papers].sort((a, b) => a - b);
+  const N = papers.length;
+  const baseH = computeH(papers, 0);
+  const boostedH = computeH(papers, L);
+
+  // Distribute L across the top boostedH papers to show "boosted" bars.
+  const distributed = (() => {
+    const arr = [...sortedAsc];
+    const h = boostedH;
+    const idx = N - h;
+    let left = L;
+    if (idx >= 0) {
+      for (let i = idx; i < N && left > 0; i++) {
+        if (arr[i] < h) { const add = Math.min(h - arr[i], left); arr[i] += add; left -= add; }
+      }
+    }
+    return arr;
+  })();
+
+  const maxBar = Math.max(10, ...distributed, boostedH + 2);
+  const bump = (i, d) => {
+    const next = [...papers];
+    next[i] = Math.max(0, Math.min(99, (next[i] || 0) + d));
+    setPapers(next);
+  };
+  const addPaper = () => { if (papers.length < 8) setPapers([...papers, 0]); };
+  const delPaper = () => { if (papers.length > 1) setPapers(papers.slice(0, -1)); };
+  const reset = () => { setPapers([1, 3, 3, 100]); setL(0); };
+
+  const passes = (cite, h) => cite >= h;
+  const hLine = boostedH;
+
+  return (
+    <div style={{ background: C.card, border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14 }}>
+      <div style={{ fontSize: 12, fontWeight: 800, color: C.no, marginBottom: 8, letterSpacing: 0.4 }}>
+        🧪 {t(E, "Try it: H-Index Simulator", "직접 해보기: H-Index 시뮬레이터")}
+      </div>
+      <div style={{ fontSize: 12, color: C.dim, marginBottom: 10, lineHeight: 1.5 }}>
+        {t(E,
+          "Drag bars to change citations. Slide L to add bonus citations. The dashed line is the current h-index — bars at or above it count.",
+          "막대 +/-로 인용수를 바꾸고, L 슬라이더로 보너스 인용을 더해봐요. 점선이 현재 h-index — 점선 이상의 막대만 카운트돼요.")}
+      </div>
+
+      {/* Bars */}
+      <div style={{ position: "relative", display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 10, height: 160, padding: "0 8px 8px", borderBottom: `1px solid ${C.border}`, marginBottom: 8 }}>
+        {/* h-index dashed line */}
+        {hLine > 0 && (
+          <div style={{
+            position: "absolute", left: 8, right: 8,
+            bottom: `${(hLine / maxBar) * 140 + 8}px`,
+            borderTop: `2px dashed ${C.no}`,
+            pointerEvents: "none",
+          }}>
+            <span style={{ position: "absolute", right: 0, top: -16, fontSize: 10, fontWeight: 800, color: C.no, background: C.noBg, padding: "1px 5px", borderRadius: 4 }}>
+              h = {hLine}
+            </span>
+          </div>
+        )}
+        {distributed.map((cite, i) => {
+          const original = sortedAsc[i];
+          const boost = cite - original;
+          const ok = passes(cite, hLine);
+          return (
+            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, width: 36 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: ok ? C.ok : C.dim }}>{cite}</div>
+              <div style={{ position: "relative", width: 28, height: `${(cite / maxBar) * 140}px`, background: ok ? C.okBg : "#f1f5f9", border: `1.5px solid ${ok ? C.ok : C.dimLight}`, borderRadius: 4, overflow: "hidden" }}>
+                {boost > 0 && (
+                  <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: `${(boost / cite) * 100}%`, background: C.carryBd, borderBottom: `1px dashed ${C.carry}` }} />
+                )}
+              </div>
+              <div style={{ fontSize: 9, color: C.dim }}>p{i + 1}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Per-paper +/- controls (operate on original unsorted papers) */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", marginBottom: 10 }}>
+        {papers.map((p, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 4, background: C.bg, borderRadius: 6, padding: "3px 6px", fontSize: 11 }}>
+            <span style={{ color: C.dim, fontWeight: 700 }}>p{i + 1}</span>
+            <button onClick={() => bump(i, -1)} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 4, width: 20, height: 20, cursor: "pointer", fontWeight: 700 }}>−</button>
+            <span style={{ minWidth: 22, textAlign: "center", fontWeight: 700, color: C.text }}>{p}</span>
+            <button onClick={() => bump(i, +1)} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 4, width: 20, height: 20, cursor: "pointer", fontWeight: 700 }}>+</button>
+          </div>
+        ))}
+        <button onClick={addPaper} disabled={papers.length >= 8} style={{ background: C.okBg, border: `1px solid ${C.okBd}`, borderRadius: 6, padding: "3px 8px", fontSize: 11, fontWeight: 700, color: C.ok, cursor: papers.length >= 8 ? "not-allowed" : "pointer", opacity: papers.length >= 8 ? 0.5 : 1 }}>
+          +{t(E, " paper", " 논문")}
+        </button>
+        <button onClick={delPaper} disabled={papers.length <= 1} style={{ background: C.noBg, border: `1px solid ${C.noBd}`, borderRadius: 6, padding: "3px 8px", fontSize: 11, fontWeight: 700, color: C.no, cursor: papers.length <= 1 ? "not-allowed" : "pointer", opacity: papers.length <= 1 ? 0.5 : 1 }}>
+          −{t(E, " paper", " 논문")}
+        </button>
+        <button onClick={reset} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 6, padding: "3px 8px", fontSize: 11, fontWeight: 700, color: C.dim, cursor: "pointer" }}>
+          ⟲ {t(E, "Reset", "초기화")}
+        </button>
+      </div>
+
+      {/* L slider */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10, padding: "8px 10px", background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 8 }}>
+        <span style={{ fontSize: 12, fontWeight: 800, color: C.carry, minWidth: 78 }}>
+          L = {L}
+        </span>
+        <input type="range" min={0} max={50} value={L} onChange={e => setL(Number(e.target.value))} style={{ flex: 1, accentColor: C.carry }} />
+        <span style={{ fontSize: 10, color: C.dim, minWidth: 80, textAlign: "right" }}>
+          {t(E, "bonus citations", "보너스 인용")}
+        </span>
+      </div>
+
+      {/* Result */}
+      <div style={{ display: "flex", gap: 8, fontSize: 12 }}>
+        <div style={{ flex: 1, background: C.bg, border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "8px 10px" }}>
+          <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, marginBottom: 2 }}>
+            {t(E, "H-index (no bonus)", "H-index (보너스 없이)")}
+          </div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: C.text }}>{baseH}</div>
+        </div>
+        <div style={{ flex: 1, background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 8, padding: "8px 10px" }}>
+          <div style={{ fontSize: 10, color: C.no, fontWeight: 700, marginBottom: 2 }}>
+            {t(E, "Best h-index with L", "L을 활용한 최대 h-index")}
+          </div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: C.no }}>
+            {boostedH}
+            {boostedH > baseH && (
+              <span style={{ fontSize: 11, marginLeft: 6, color: C.carry, fontWeight: 700 }}>
+                +{boostedH - baseH}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -105,6 +262,17 @@ export function makeAcow1Ch1(E) {
               </div>
             </div>
           </div>
+        </div>),
+    },
+    // 1-1b: Interactive H-Index simulator (additive)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Play with the bars and the L slider to feel how the h-index moves. Notice: the h-index is bounded by the count of papers above the dashed line. Every bonus citation poured into a low paper might not raise h — only when the SHORTEST top-h paper crosses h does h jump up.",
+        "막대와 L 슬라이더를 직접 움직여 h-index 가 어떻게 변하는지 느껴봐요. 점선 위 막대 개수가 곧 h-index. 낮은 논문에 인용을 부어도 — 상위 h 개 중 가장 짧은 막대가 h 를 넘는 순간에만 h 가 한 칸 올라가요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <HIndexSim E={E} />
         </div>),
     },
     // 1-2: Quiz
