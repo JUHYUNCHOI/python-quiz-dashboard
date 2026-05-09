@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -119,6 +120,212 @@ function highlightCode(lines, lang) {
   }).join("\n");
 }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   Mcc21SimpleMathOpSim — Pick P (1/2/3) and watch the operation
+   roll left-to-right across A. Live running value + step trail.
+   ═══════════════════════════════════════════════════════════════ */
+export function Mcc21SimpleMathOpSim({ E }) {
+  const [arrText, setArrText] = useState("8 4 2");
+  const [P, setP] = useState(1);
+  const [running, setRunning] = useState(false);
+  const [step, setStep] = useState(0);     // 0 .. arr.length (0 = before start)
+  const [trail, setTrail] = useState([]);  // [{idx, before, op, val, after}]
+  const alive = useRef(false);
+
+  const parseArr = () => {
+    const parts = arrText.trim().split(/\s+/).map(Number);
+    if (parts.some(isNaN) || parts.length === 0) return null;
+    if (P === 3 && parts.slice(1).some(v => v === 0)) return null; // floor-div by 0
+    return parts;
+  };
+  const arr = parseArr();
+  const valid = arr !== null;
+
+  const opSymbol = P === 1 ? "+" : P === 2 ? "×" : "//";
+  const opLabel = P === 1
+    ? t(E, "Sum (P=1)", "합 (P=1)")
+    : P === 2
+      ? t(E, "Product (P=2)", "곱 (P=2)")
+      : t(E, "Floor-div (P=3)", "정수 나눗셈 (P=3)");
+
+  const initial = (a) => P === 1 ? 0 : P === 2 ? 1 : a[0];
+  const apply = (acc, v) => P === 1 ? acc + v : P === 2 ? acc * v : Math.trunc(acc / v);
+
+  const reset = () => { alive.current = false; setRunning(false); setStep(0); setTrail([]); };
+
+  useEffect(() => { reset(); /* eslint-disable-next-line */ }, [arrText, P]);
+
+  const run = () => {
+    if (!valid) return;
+    alive.current = true;
+    setRunning(true);
+    setTrail([]);
+    // For P=3 we start from a[0], so first "applied" index is 1.
+    const startIdx = P === 3 ? 1 : 0;
+    let acc = initial(arr);
+    setStep(P === 3 ? 1 : 0);
+    let i = startIdx;
+    const localTrail = [];
+    const tick = () => {
+      if (!alive.current) { setRunning(false); return; }
+      if (i >= arr.length) { setRunning(false); return; }
+      const before = acc;
+      const v = arr[i];
+      acc = apply(acc, v);
+      localTrail.push({ idx: i, before, op: opSymbol, val: v, after: acc });
+      setTrail([...localTrail]);
+      setStep(i + 1);
+      i++;
+      setTimeout(tick, 650);
+    };
+    setTimeout(tick, 400);
+  };
+  const stop = () => { alive.current = false; setRunning(false); };
+
+  const finalValue = trail.length > 0 ? trail[trail.length - 1].after : (valid ? initial(arr) : null);
+  const done = !running && trail.length > 0 && step >= (arr ? arr.length : 0);
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* Inputs row */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 12 }}>
+        <div>
+          <label style={{ fontSize: 11, color: C.dim, fontWeight: 700, display: "block", marginBottom: 4 }}>
+            {t(E, "Array A (space-separated)", "배열 A (공백으로 구분)")}
+          </label>
+          <input
+            value={arrText}
+            onChange={e => setArrText(e.target.value)}
+            disabled={running}
+            placeholder="8 4 2"
+            style={{
+              width: "100%", padding: "8px 10px", borderRadius: 8,
+              border: `1px solid ${C.border}`, fontSize: 14,
+              fontFamily: "'JetBrains Mono',monospace", color: A,
+              boxSizing: "border-box",
+            }}
+          />
+        </div>
+        <div>
+          <label style={{ fontSize: 11, color: C.dim, fontWeight: 700, display: "block", marginBottom: 4 }}>
+            {t(E, "Pick operation P", "연산 P 선택")}
+          </label>
+          <div style={{ display: "flex", gap: 6 }}>
+            {[1, 2, 3].map(p => (
+              <button
+                key={p}
+                onClick={() => setP(p)}
+                disabled={running}
+                style={{
+                  flex: 1, padding: "8px 0", borderRadius: 8,
+                  border: P === p ? `2px solid ${A}` : `1px solid ${C.border}`,
+                  background: P === p ? "#fff7ed" : "#fff",
+                  color: P === p ? "#9a3412" : C.text,
+                  fontSize: 12, fontWeight: 700, cursor: running ? "not-allowed" : "pointer",
+                }}
+              >
+                {p === 1 ? t(E, `P=1 (+)`, `P=1 (+)`) : p === 2 ? t(E, `P=2 (×)`, `P=2 (×)`) : t(E, `P=3 (//)`, `P=3 (//)`)}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Run / Stop / Reset */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+        <button
+          onClick={running ? stop : run}
+          disabled={!valid}
+          style={{
+            flex: 1, padding: "10px 0", borderRadius: 10, border: "none",
+            cursor: valid ? "pointer" : "not-allowed",
+            fontSize: 14, fontWeight: 700,
+            background: !valid ? "#cbd5e1" : running ? "#dc2626" : A, color: "#fff",
+          }}
+        >
+          {running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run", "▶ 실행")}
+        </button>
+        <button
+          onClick={reset}
+          disabled={running}
+          style={{
+            padding: "10px 14px", borderRadius: 10, border: `1.5px solid ${A}`,
+            background: "#fff", color: A, fontSize: 13, fontWeight: 700,
+            cursor: running ? "not-allowed" : "pointer",
+          }}
+        >
+          {t(E, "↺ Reset", "↺ 초기화")}
+        </button>
+      </div>
+
+      {!valid && (
+        <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#b91c1c", marginBottom: 10 }}>
+          {P === 3
+            ? t(E, "Numbers only — and no zeros after the first (P=3 divides).", "숫자만 입력 — 그리고 첫 값 이후 0 금지 (P=3 은 나눗셈).")
+            : t(E, "Numbers only, separated by spaces.", "공백으로 구분된 숫자만 입력.")}
+        </div>
+      )}
+
+      {/* Array visualization */}
+      {valid && (
+        <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+          <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 8 }}>
+            {opLabel} — {t(E, "left-to-right walk", "왼쪽→오른쪽 진행")}
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
+            {arr.map((v, i) => {
+              const consumed = i < step;
+              const cursor = i === step && running;
+              return (
+                <div key={i} style={{
+                  minWidth: 36, padding: "8px 10px", borderRadius: 8,
+                  border: cursor ? `2px solid ${A}` : `1px solid ${consumed ? "#fdba74" : C.border}`,
+                  background: consumed ? "#fed7aa" : cursor ? "#fff" : "#fff",
+                  color: consumed ? "#9a3412" : C.text,
+                  fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700,
+                  textAlign: "center",
+                  boxShadow: cursor ? `0 0 0 3px ${A}33` : "none",
+                  transition: "all 200ms",
+                }}>
+                  {v}
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ fontSize: 12, color: C.dim }}>
+            {t(E, "Running value: ", "현재 값: ")}
+            <span style={{ color: A, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace" }}>
+              {finalValue ?? "—"}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Trail */}
+      {trail.length > 0 && (
+        <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px" }}>
+          <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6 }}>
+            {t(E, "Step trail:", "단계 기록:")}
+          </div>
+          {trail.map((s, i) => (
+            <div key={i} style={{
+              fontSize: 13, fontFamily: "'JetBrains Mono',monospace",
+              color: A, fontWeight: 600, lineHeight: 1.7,
+            }}>
+              {`step ${i + 1}: ${s.before} ${s.op} ${s.val} = ${s.after}`}
+            </div>
+          ))}
+          {done && (
+            <div style={{ marginTop: 6, fontSize: 12, color: "#15803d", fontWeight: 700 }}>
+              {t(E, `✅ Final answer: ${finalValue}`, `✅ 최종 답: ${finalValue}`)}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function downloadMcc21SimpleMathPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");

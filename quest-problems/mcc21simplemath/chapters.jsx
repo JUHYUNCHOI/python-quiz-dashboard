@@ -112,6 +112,12 @@ export function makeMcc21SimpleMathCh1(E) {
       hint: t(E, "Add the three values together.", "세 값을 모두 더해요."),
       answer: 9,
     },
+    {
+      type: "opsim",
+      narr: t(E,
+        "Pick P, watch the operation walk left-to-right across A.\nTry P=2 with [8 4 2] (= 64) and P=3 with [100 5 2] (= 10).\nSee how each step's result feeds into the next.",
+        "P 를 골라, 연산이 A 를 왼쪽→오른쪽으로 진행하는 걸 봐.\nP=2 와 [8 4 2] 시도 (= 64), P=3 와 [100 5 2] 시도 (= 10).\n각 단계 결과가 다음 단계로 이어지는 걸 확인해."),
+    },
   ];
 }
 
