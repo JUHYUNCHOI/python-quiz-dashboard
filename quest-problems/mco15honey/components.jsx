@@ -1,8 +1,163 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ============================================================
+   HoneySim — drag the K slider, see which trip-yields the
+   squirrel picks. Each hive splits into trip blocks of size M
+   (last block = remainder). Sort all blocks descending; the
+   top K light up and sum into the live total.
+   ============================================================ */
+const _SIM_M = 10;
+const _SIM_HIVES = [
+  { idx: 1, honey: 25, color: "#d97706" },
+  { idx: 2, honey: 12, color: "#0891b2" },
+  { idx: 3, honey: 8,  color: "#a855f7" },
+];
+
+function _splitYields(honey, M) {
+  const out = [];
+  let h = honey;
+  while (h > 0) {
+    const take = Math.min(M, h);
+    out.push(take);
+    h -= take;
+  }
+  return out;
+}
+
+export function HoneySim({ E }) {
+  // Build per-hive yield blocks (each tagged with hive info)
+  const blocksByHive = _SIM_HIVES.map(h => ({
+    ...h,
+    yields: _splitYields(h.honey, _SIM_M),
+  }));
+  // Flatten and sort descending — the picked-set is the top K
+  const allBlocks = [];
+  blocksByHive.forEach(h => h.yields.forEach((y, j) => {
+    allBlocks.push({ hive: h.idx, color: h.color, take: y, isPartial: y < _SIM_M, partOrder: j });
+  }));
+  const sortedDesc = [...allBlocks]
+    .map((b, i) => ({ ...b, _orig: i }))
+    .sort((a, b) => b.take - a.take);
+
+  const totalBlocks = allBlocks.length;
+  const [K, setK] = useState(4);
+  const pickedKey = new Set(sortedDesc.slice(0, K).map(b => `${b.hive}-${b.partOrder}`));
+
+  const total = sortedDesc.slice(0, K).reduce((s, b) => s + b.take, 0);
+  const maxPossible = sortedDesc.reduce((s, b) => s + b.take, 0);
+  const isMax = K >= totalBlocks;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
+          {t(E, "🍯 Trip Yields — drag K to pick the best trips",
+                "🍯 왕복 수확량 — K 를 움직여 최고의 왕복을 골라봐")}
+        </div>
+
+        {/* Per-hive rows: each hive shows its trip-blocks */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: "4px 4px 0" }}>
+          {blocksByHive.map((h, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div style={{ width: 70, fontSize: 12, fontWeight: 700, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+                {t(E, `hive ${h.idx}`, `벌집 ${h.idx}`)}
+              </div>
+              <div style={{ width: 44, fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
+                {h.honey}ml
+              </div>
+              <div style={{ display: "flex", gap: 4, flex: 1, flexWrap: "wrap" }}>
+                {h.yields.map((y, j) => {
+                  const picked = pickedKey.has(`${h.idx}-${j}`);
+                  return (
+                    <div key={j} style={{
+                      minWidth: 36,
+                      padding: "4px 8px",
+                      borderRadius: 6,
+                      background: picked ? h.color : `${h.color}22`,
+                      border: picked ? `2px solid ${h.color}` : `1px dashed ${h.color}77`,
+                      color: picked ? "#fff" : h.color,
+                      fontSize: 12, fontWeight: 800,
+                      fontFamily: "'JetBrains Mono',monospace",
+                      textAlign: "center",
+                      transition: "all 0.15s",
+                      opacity: picked ? 1 : 0.55,
+                    }}>
+                      {y}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* K slider */}
+        <div style={{ marginTop: 12, padding: "0 4px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+            <span style={{ fontSize: 12, color: C.dim }}>
+              {t(E, "trips K", "왕복 K")}
+            </span>
+            <span style={{ fontSize: 13, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
+              K = {K} / {totalBlocks}
+            </span>
+          </div>
+          <input
+            type="range"
+            min={0}
+            max={totalBlocks}
+            step={1}
+            value={K}
+            onChange={e => setK(Number(e.target.value))}
+            style={{ width: "100%", accentColor: A }}
+          />
+        </div>
+      </div>
+
+      {/* Live readout */}
+      <div style={{
+        background: isMax ? "#fef3c7" : "#f8fafc",
+        border: `2px solid ${isMax ? A : C.border}`,
+        borderRadius: 12, padding: "10px 14px",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        gap: 10, flexWrap: "wrap",
+      }}>
+        <div style={{ fontSize: 13, color: C.text }}>
+          <b style={{ color: A }}>K = {K}</b>
+          {" · "}
+          {t(E, "picked: ", "선택: ")}
+          {K === 0
+            ? <span style={{ color: C.dim }}>{t(E, "none", "없음")}</span>
+            : sortedDesc.slice(0, K).map((b, i) => (
+                <span key={i} style={{ color: b.color, fontWeight: 700 }}>
+                  {b.take}{i < K - 1 ? " + " : ""}
+                </span>
+              ))
+          }
+        </div>
+        <div style={{ fontSize: 14, fontWeight: 800, color: isMax ? A : C.text }}>
+          {t(E, "total honey: ", "총 꿀: ")}
+          <span style={{ fontSize: 18 }}>{total}</span>
+          {isMax && (
+            <span style={{ marginLeft: 6, fontSize: 11, color: A }}>
+              {t(E, "← all yields!", "← 전부!")}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+        {t(E,
+          `M=${_SIM_M}. Each hive splits into trip-yields of M (last block = remainder). Sort all yields descending, take the K largest — that's the answer.`,
+          `M=${_SIM_M}. 각 벌집을 M 짜리 왕복 블록으로 쪼개요 (마지막 블록 = 나머지). 전부 내림차순 정렬해서 큰 것 K 개 = 정답.`)}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N, M, K = map(int, input().split())",

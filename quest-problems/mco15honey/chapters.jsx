@@ -105,7 +105,14 @@ export function makeHoneyCh1(E) {
         "Correct! Each trip collects at most M ml. Visiting larger hives first ensures each trip collects as close to M as possible.",
         "맞아! 각 왕복은 최대 M ml 수집. 큰 벌집부터 방문하면 매 왕복마다 M에 가깝게 수집할 수 있어요."),
     },
-    // 1-3: Input
+    // 1-3: Sim — drag K, watch which trip-yields the squirrel picks
+    {
+      type: "sim",
+      narr: t(E,
+        "Three hives, M=10. Each hive splits into trip-yields (M ml, last block = remainder). Drag K — the K largest yields light up and sum into the live total. That sorted-descending pick IS the algorithm.",
+        "벌집 3 개, M=10. 각 벌집을 M ml 왕복 블록으로 쪼개요 (마지막 = 나머지). K 를 움직여 봐 — 큰 것 K 개가 진해지면서 합계가 나와요. 내림차순으로 K 개 고르기, 그게 알고리즘이에요."),
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
