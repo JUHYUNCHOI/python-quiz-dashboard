@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowGymSections } from "./components";
+import { getCowGymSections, CowGymPairSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -421,6 +421,14 @@ export function makeCowGymCh2(E) {
             {t(E, "Answer: 2 consistent pairs", "답: 2개의 일관된 쌍")}
           </div>
         </div>),
+    },
+    // 2-2b: Deep audit sim — pick a pair, step through every session
+    {
+      type: "reveal",
+      narr: t(E,
+        "Your turn — pick a pair, then step through every session.\nWatch the rank cells light up, see who wins each round, and only call it consistent if the same cow wins every time.",
+        "이번엔 직접 — 쌍을 고르고 세션마다 한 칸씩 넘겨봐.\nrank 셀이 켜지는 걸 보면서 매 라운드 승자를 확인하고, 매번 같은 소가 이겼을 때만 일관이라고 외쳐."),
+      content: (<CowGymPairSim E={E} />),
     },
     // 2-3: Quiz
     {

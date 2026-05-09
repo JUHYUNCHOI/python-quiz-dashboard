@@ -1,8 +1,182 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ═══════════════════════════════════════════════════════════════
+   CowGymPairSim — Pick a pair (i, j), step through K sessions,
+   see per-session winner accumulate to a final verdict.
+   ═══════════════════════════════════════════════════════════════ */
+const _CG_PRESETS = [
+  {
+    // K=3, N=4 — pair (1,2) consistent, pair (2,3) inconsistent
+    sessionsOrder: [
+      [1, 2, 3, 4], // S1
+      [1, 4, 2, 3], // S2
+      [4, 1, 2, 3], // S3
+    ],
+    N: 4,
+  },
+  {
+    // K=2, N=3 — classic
+    sessionsOrder: [
+      [1, 2, 3],
+      [1, 3, 2],
+    ],
+    N: 3,
+  },
+];
+
+export function CowGymPairSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [pairIdx, setPairIdx] = useState(0);
+  const [step, setStep] = useState(0); // 0..K-1: per-session check, K = verdict
+  const preset = _CG_PRESETS[pi];
+  const { sessionsOrder, N } = preset;
+  const K = sessionsOrder.length;
+
+  // Build rank[s][cow]: position of cow in session s
+  const rank = sessionsOrder.map(order => {
+    const r = new Array(N + 1).fill(0);
+    for (let pos = 0; pos < N; pos++) r[order[pos]] = pos;
+    return r;
+  });
+
+  // All unique pairs (i, j), i < j
+  const pairs = [];
+  for (let i = 1; i <= N; i++) for (let j = i + 1; j <= N; j++) pairs.push([i, j]);
+  const [ci, cj] = pairs[pairIdx % pairs.length];
+
+  // Per-session: who wins (i wins → 'i', j wins → 'j')
+  const winners = rank.map(r => r[ci] < r[cj] ? "i" : "j");
+  const visible = winners.slice(0, step);
+  const allI = visible.length > 0 && visible.every(w => w === "i");
+  const allJ = visible.length > 0 && visible.every(w => w === "j");
+  const verdict = step >= K ? (allI || allJ ? "consistent" : "inconsistent") : null;
+
+  const cowColors = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"];
+
+  const newPair = () => { setPairIdx(p => (p + 1) % pairs.length); setStep(0); };
+  const newCase = () => { setPi(p => (p + 1) % _CG_PRESETS.length); setPairIdx(0); setStep(0); };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: A, marginBottom: 8, textAlign: "center" }}>
+        {t(E, "🤸 Try a pair — step through every session", "🤸 쌍을 골라서 — 세션마다 한 칸씩")}
+      </div>
+
+      {/* Case + pair pickers */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        <button onClick={newCase} style={{
+          padding: "4px 10px", borderRadius: 8, border: `1px solid ${A}`,
+          background: "#fff", color: A, fontSize: 11, fontWeight: 700, cursor: "pointer",
+        }}>{t(E, `Case ${pi + 1}/${_CG_PRESETS.length}`, `예제 ${pi + 1}/${_CG_PRESETS.length}`)}</button>
+        <button onClick={newPair} style={{
+          padding: "4px 10px", borderRadius: 8, border: `1px solid ${A}`,
+          background: A, color: "#fff", fontSize: 11, fontWeight: 700, cursor: "pointer",
+        }}>{t(E, `Pair (${ci},${cj}) — next`, `쌍 (${ci},${cj}) — 다음`)}</button>
+      </div>
+
+      {/* Rank table — highlight ci, cj columns */}
+      <div style={{ overflowX: "auto", marginBottom: 10 }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>
+          <thead>
+            <tr style={{ background: "#fffbeb" }}>
+              <th style={{ padding: "6px 8px", borderBottom: `2px solid #fcd34d`, color: A, textAlign: "left" }}>
+                {t(E, "Session", "세션")}
+              </th>
+              {Array.from({ length: N }, (_, k) => {
+                const cow = k + 1;
+                const isPair = cow === ci || cow === cj;
+                return (
+                  <th key={k} style={{
+                    padding: "6px 8px", borderBottom: `2px solid #fcd34d`,
+                    color: cowColors[k % cowColors.length],
+                    fontWeight: isPair ? 900 : 600,
+                    background: isPair ? "#fef3c7" : "transparent",
+                  }}>{t(E, `Cow ${cow}`, `소 ${cow}`)}</th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {rank.map((r, s) => {
+              const active = s < step;
+              return (
+                <tr key={s} style={{ background: active ? "#fff7ed" : (s % 2 === 0 ? "#fff" : "#fffbeb") }}>
+                  <td style={{ padding: "5px 8px", borderBottom: "1px solid #fde68a", fontWeight: 700 }}>S{s + 1}</td>
+                  {Array.from({ length: N }, (_, k) => {
+                    const cow = k + 1;
+                    const isPair = cow === ci || cow === cj;
+                    return (
+                      <td key={k} style={{
+                        padding: "5px 8px", borderBottom: "1px solid #fde68a", textAlign: "center",
+                        fontWeight: isPair ? 900 : 600,
+                        color: isPair ? A : C.text,
+                        background: isPair && active ? "#fde68a" : (isPair ? "#fef3c7" : "transparent"),
+                      }}>{r[cow]}</td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Per-session check log */}
+      <div style={{ background: "#fffbeb", border: `1.5px solid #fcd34d`, borderRadius: 10, padding: "8px 12px", marginBottom: 10, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.8, color: C.text, minHeight: 60 }}>
+        {step === 0 && (
+          <span style={{ color: C.dim }}>
+            {t(E, `Press → to check session-by-session if cow ${ci} stays above cow ${cj}.`,
+                  `→ 를 눌러 소 ${ci} 가 소 ${cj} 위에 계속 있는지 세션마다 확인.`)}
+          </span>
+        )}
+        {visible.map((w, s) => {
+          const ri = rank[s][ci], rj = rank[s][cj];
+          const sign = ri < rj ? "<" : ">";
+          const winner = w === "i" ? ci : cj;
+          return (
+            <div key={s}>
+              S{s + 1}: rank[{ci}]={ri} {sign} rank[{cj}]={rj} →{" "}
+              <b style={{ color: w === "i" ? cowColors[(ci - 1) % cowColors.length] : cowColors[(cj - 1) % cowColors.length] }}>
+                {t(E, `cow ${winner} wins`, `소 ${winner} 승`)}
+              </b>
+            </div>
+          );
+        })}
+        {verdict && (
+          <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fcd34d", fontWeight: 800, color: verdict === "consistent" ? "#059669" : "#dc2626" }}>
+            {verdict === "consistent"
+              ? t(E, `✓ Consistent — same winner every session (ans += 1)`,
+                       `✓ 일관 — 매 세션 같은 승자 (ans += 1)`)
+              : t(E, `✗ Inconsistent — winner flipped, skip`,
+                       `✗ 비일관 — 승자가 바뀜, 건너뜀`)}
+          </div>
+        )}
+      </div>
+
+      {/* Step controls */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0} style={{
+          background: step === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${step === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: step === 0 ? "#b0b5c3" : A, cursor: step === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+          {step} / {K}
+        </span>
+        <button onClick={() => setStep(Math.min(K, step + 1))} disabled={step >= K} style={{
+          background: step >= K ? "#e5e7eb" : A, border: `1px solid ${step >= K ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: step >= K ? "#b0b5c3" : "#fff", cursor: step >= K ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "K, N = map(int, input().split())",
