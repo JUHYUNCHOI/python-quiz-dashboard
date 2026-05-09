@@ -1,8 +1,209 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ─────────────────────────────────────────────────────────────
+   StampSimulator — bilingual interactive stamp playground.
+   Canvas 4×4 target, L-shape 2×2 stamp with 4 rotations.
+   Student picks rotation + top-left position, clicks "Stamp!".
+   Cells turn green when matching target, red on mismatch.
+   ───────────────────────────────────────────────────────────── */
+const TARGET = [
+  "**..",
+  "**.*",
+  ".***",
+  "...*",
+];
+const BASE_STAMP = ["*.", "**"]; // L-shape, K=2
+function rot90(g) {
+  const R = g.length, C = g[0].length;
+  const out = [];
+  for (let c = 0; c < C; c++) {
+    let row = "";
+    for (let r = 0; r < R; r++) row += g[R - 1 - r][c];
+    out.push(row);
+  }
+  return out;
+}
+function getRotations(stamp) {
+  const rs = [stamp];
+  for (let i = 0; i < 3; i++) rs.push(rot90(rs[rs.length - 1]));
+  return rs;
+}
+const ROTATIONS = getRotations(BASE_STAMP);
+
+export function StampSimulator({ E }) {
+  const N = TARGET.length, K = BASE_STAMP.length;
+  const [rot, setRot] = useState(0);
+  const [pos, setPos] = useState({ r: 0, c: 0 });
+  const [canvas, setCanvas] = useState(() => Array.from({ length: N }, () => Array(N).fill(false)));
+  const [bad, setBad] = useState(false);
+
+  const stamp = ROTATIONS[rot];
+  const maxRC = N - K;
+
+  const stampNow = () => {
+    // Legality: stamp's '*' cell must land on target '*'
+    let ok = true;
+    for (let dr = 0; dr < K && ok; dr++) {
+      for (let dc = 0; dc < K && ok; dc++) {
+        if (stamp[dr][dc] === "*" && TARGET[pos.r + dr][pos.c + dc] !== "*") ok = false;
+      }
+    }
+    if (!ok) { setBad(true); setTimeout(() => setBad(false), 700); return; }
+    const nx = canvas.map(row => row.slice());
+    for (let dr = 0; dr < K; dr++) {
+      for (let dc = 0; dc < K; dc++) {
+        if (stamp[dr][dc] === "*") nx[pos.r + dr][pos.c + dc] = true;
+      }
+    }
+    setCanvas(nx);
+  };
+  const reset = () => { setCanvas(Array.from({ length: N }, () => Array(N).fill(false))); setBad(false); };
+
+  // Done check: every target '*' covered
+  let allCovered = true;
+  for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+    if (TARGET[r][c] === "*" && !canvas[r][c]) { allCovered = false; break; }
+  }
+
+  const cellSize = 32;
+  const previewCell = 22;
+
+  // Render target+canvas combined: green = covered '*', light = uncovered '*', white = '.'
+  const renderGrid = () => (
+    <div style={{ display: "inline-grid", gridTemplateColumns: `repeat(${N}, ${cellSize}px)`, gap: 2, padding: 4, background: "#d1fae5", borderRadius: 8 }}>
+      {Array.from({ length: N }).flatMap((_, r) =>
+        Array.from({ length: N }).map((__, c) => {
+          const isTarget = TARGET[r][c] === "*";
+          const covered = canvas[r][c];
+          // Highlight where preview stamp would land
+          let preview = false;
+          if (r >= pos.r && r < pos.r + K && c >= pos.c && c < pos.c + K) {
+            if (stamp[r - pos.r][c - pos.c] === "*") preview = true;
+          }
+          let bg = "#fff";
+          let border = "1px solid #e5e7eb";
+          if (isTarget && covered) bg = "#10b981"; // covered target — green
+          else if (isTarget) bg = "#fef3c7"; // uncovered target — yellow
+          else bg = "#f9fafb"; // empty
+          if (preview) {
+            border = `2px solid ${bad ? "#dc2626" : "#059669"}`;
+          }
+          return (
+            <div key={`${r}-${c}`} style={{
+              width: cellSize, height: cellSize, background: bg, border,
+              borderRadius: 4, transition: "background .15s",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 14, color: covered ? "#fff" : "#9ca3af", fontWeight: 700,
+            }}>
+              {isTarget ? "★" : ""}
+            </div>
+          );
+        })
+      )}
+    </div>
+  );
+
+  // Render small stamp preview
+  const renderStamp = () => (
+    <div style={{ display: "inline-grid", gridTemplateColumns: `repeat(${K}, ${previewCell}px)`, gap: 2, padding: 3, background: "#a7f3d0", borderRadius: 6 }}>
+      {stamp.flatMap((row, r) =>
+        row.split("").map((ch, c) => (
+          <div key={`s-${r}-${c}`} style={{
+            width: previewCell, height: previewCell,
+            background: ch === "*" ? "#059669" : "#f9fafb",
+            border: "1px solid #6ee7b7", borderRadius: 3,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 12, color: "#fff", fontWeight: 700,
+          }}>{ch === "*" ? "★" : ""}</div>
+        ))
+      )}
+    </div>
+  );
+
+  const btn = (active) => ({
+    background: active ? "#059669" : "#fff",
+    color: active ? "#fff" : "#059669",
+    border: "1.5px solid #059669",
+    borderRadius: 6, padding: "4px 10px", fontSize: 12, fontWeight: 700,
+    cursor: "pointer", minWidth: 36,
+  });
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: "#059669", marginBottom: 8, textAlign: "center" }}>
+          {t(E, "🧪 Stamp Simulator — Cover every ★", "🧪 도장 시뮬레이터 — 모든 ★ 덮기")}
+        </div>
+        <div style={{ fontSize: 12, color: C.dim, textAlign: "center", marginBottom: 10 }}>
+          {t(E, "Pick a rotation + top-left, then press Stamp! Yellow ★ must turn green.",
+              "회전 + 좌상단 선택 후 도장 찍기! 노란 ★ 가 모두 초록이 되어야 해.")}
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 12 }}>
+          {/* Target + canvas */}
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 4 }}>
+              {t(E, "Canvas (4×4)", "캔버스 (4×4)")}
+            </div>
+            {renderGrid()}
+          </div>
+          {/* Stamp preview */}
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 4 }}>
+              {t(E, `Stamp (rot ${rot * 90}°)`, `도장 (회전 ${rot * 90}°)`)}
+            </div>
+            {renderStamp()}
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+            <span style={{ fontSize: 11, color: "#065f46", fontWeight: 700 }}>{t(E, "Rotation:", "회전:")}</span>
+            {[0, 1, 2, 3].map(i => (
+              <button key={i} onClick={() => setRot(i)} style={btn(rot === i)}>{i * 90}°</button>
+            ))}
+          </div>
+          <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+            <span style={{ fontSize: 11, color: "#065f46", fontWeight: 700 }}>{t(E, "Row:", "행:")}</span>
+            {Array.from({ length: maxRC + 1 }).map((_, i) => (
+              <button key={`r${i}`} onClick={() => setPos(p => ({ ...p, r: i }))} style={btn(pos.r === i)}>{i}</button>
+            ))}
+            <span style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginLeft: 6 }}>{t(E, "Col:", "열:")}</span>
+            {Array.from({ length: maxRC + 1 }).map((_, i) => (
+              <button key={`c${i}`} onClick={() => setPos(p => ({ ...p, c: i }))} style={btn(pos.c === i)}>{i}</button>
+            ))}
+          </div>
+          <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+            <button onClick={stampNow} style={{
+              background: "#059669", color: "#fff", border: "none",
+              borderRadius: 8, padding: "6px 18px", fontSize: 13, fontWeight: 800, cursor: "pointer",
+            }}>📮 {t(E, "Stamp!", "도장 찍기!")}</button>
+            <button onClick={reset} style={{
+              background: "#fff", color: "#059669", border: "1.5px solid #059669",
+              borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+            }}>↺ {t(E, "Reset", "초기화")}</button>
+          </div>
+        </div>
+
+        {/* Status */}
+        <div style={{ marginTop: 10, textAlign: "center", fontSize: 12, fontWeight: 700,
+          color: bad ? "#dc2626" : (allCovered ? "#059669" : "#92400e") }}>
+          {bad
+            ? t(E, "❌ Illegal! Stamp's ★ would land outside target ★.", "❌ 불가능! 도장의 ★ 이 비어있는 칸에 찍혀.")
+            : (allCovered
+                ? t(E, "✅ All target ★ covered — pattern is reachable!", "✅ 모든 ★ 덮음 — 이 패턴은 만들 수 있어!")
+                : t(E, "Keep stamping… Yellow ★ still uncovered.", "계속 찍어봐… 노란 ★ 이 아직 남아 있어."))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

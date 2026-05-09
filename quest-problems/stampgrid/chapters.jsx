@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getStampGridSections } from "./components";
+import { getStampGridSections, StampSimulator } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -133,6 +133,13 @@ export function makeStampCh1(E) {
       question: t(E, "Canvas 3\u00d73, stamp 2\u00d72 \u2192 max positions?", "\uce94\ubc84\uc2a4 3\u00d73, \ub3c4\uc7a5 2\u00d72 \u2192 \ucd5c\ub300 \uc704\uce58?"),
       hint: t(E, "Top-left rows: 0, 1. Top-left cols: 0, 1. Count the pairs.", "\uc88c\uc0c1\ub2e8 \ud589: 0, 1. \uc88c\uc0c1\ub2e8 \uc5f4: 0, 1. \uc30d\uc758 \uac1c\uc218\ub97c \uc138\ubd10."),
       answer: 4,
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try it yourself! Pick a rotation and position, then stamp. The legality rule: every '*' of the stamp must land on a '*' of the target.",
+        "\uc9c1\uc811 \ud574\ubd10! \ud68c\uc804\uacfc \uc704\uce58\ub97c \uace0\ub978 \ub4a4 \ub3c4\uc7a5\uc744 \ucc0d\uc5b4. \uaddc\uce59\uc740: \ub3c4\uc7a5\uc758 '*' \uc740 \ubc18\ub4dc\uc2dc \ubaa9\ud45c\uc758 '*' \uc704\uc5d0 \ub5a8\uc5b4\uc838\uc57c \ud574."),
+      content: <StampSimulator E={E} />,
     },
     {
       type: "reveal",
