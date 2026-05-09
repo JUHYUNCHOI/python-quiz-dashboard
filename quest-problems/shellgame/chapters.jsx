@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getShellGameSections } from "./components";
 
@@ -132,6 +133,160 @@ const ShellRow = ({ shells, pebble, guess, label, E: isE }) => {
     </div>
   );
 };
+
+
+/* Interactive: 3-shell pebble tracker
+   Steps through a fixed swap sequence; tracks pebble + score for all 3 starts. */
+const SIM_SWAPS = [
+  { a: 1, b: 2, g: 1 },
+  { a: 3, b: 2, g: 1 },
+  { a: 1, b: 3, g: 1 },
+];
+
+function tracePebble(start, swaps, upTo) {
+  let pos = start;
+  let score = 0;
+  for (let i = 0; i < upTo; i++) {
+    const { a, b, g } = swaps[i];
+    if (pos === a) pos = b;
+    else if (pos === b) pos = a;
+    if (pos === g) score++;
+  }
+  return { pos, score };
+}
+
+function ShellSim({ E: isE }) {
+  const [step, setStep] = useState(0); // 0 = init, 1..N after each swap
+  const N = SIM_SWAPS.length;
+  const traces = [1, 2, 3].map(s => tracePebble(s, SIM_SWAPS, step));
+  const lastSwap = step > 0 ? SIM_SWAPS[step - 1] : null;
+  const colors = ["#3b82f6", "#10b981", "#f59e0b"];
+
+  const next = () => setStep(s => Math.min(N, s + 1));
+  const reset = () => setStep(0);
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
+        {t(isE, "🎮 Try It: 3-Shell Tracker", "🎮 직접 해보기: 3-컵 추적기")}
+      </div>
+      <div style={{
+        background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10,
+        padding: "8px 12px", marginBottom: 10, fontSize: 12, color: "#7c2d12", lineHeight: 1.6,
+      }}>
+        {t(isE,
+          "Press Next to apply each swap to all 3 starts. Watch which start collects the most correct guesses.",
+          "Next 를 눌러 각 스왑을 3 가지 시작에 적용해봐. 어느 시작이 가장 많이 맞히는지 관찰해.")}
+      </div>
+
+      {/* Swap timeline */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10 }}>
+        {SIM_SWAPS.map((sw, i) => {
+          const done = i < step;
+          const cur = i === step - 1;
+          return (
+            <div key={i} style={{
+              fontSize: 11, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700,
+              padding: "4px 8px", borderRadius: 8,
+              background: cur ? "#dc2626" : done ? "#fee2e2" : "#f3f4f6",
+              color: cur ? "#fff" : done ? "#b91c1c" : C.dim,
+              border: `1px solid ${cur ? "#dc2626" : done ? "#fca5a5" : "#e5e7eb"}`,
+            }}>
+              {`(${sw.a},${sw.b},${sw.g})`}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Status */}
+      <div style={{
+        textAlign: "center", fontSize: 12, color: C.dim, marginBottom: 8,
+        fontFamily: "'JetBrains Mono',monospace",
+      }}>
+        {step === 0
+          ? t(isE, "Round 0 — initial positions", "라운드 0 — 시작 상태")
+          : t(isE,
+              `Round ${step}/${N} — swapped ${lastSwap.a}↔${lastSwap.b}, guess=${lastSwap.g}`,
+              `라운드 ${step}/${N} — ${lastSwap.a}↔${lastSwap.b} 스왑, 추측=${lastSwap.g}`)}
+      </div>
+
+      {/* Three rows */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {[1, 2, 3].map(start => {
+          const { pos, score } = traces[start - 1];
+          return (
+            <div key={start} style={{
+              padding: "10px 10px 6px",
+              borderRadius: 10,
+              background: `${colors[start - 1]}10`,
+              border: `1px solid ${colors[start - 1]}40`,
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: colors[start - 1] }}>
+                  {t(isE, `Start = ${start}`, `시작 = ${start}`)}
+                </div>
+                <div style={{
+                  fontSize: 13, fontWeight: 800,
+                  color: score > 0 ? "#059669" : C.dim,
+                  fontFamily: "'JetBrains Mono',monospace",
+                }}>
+                  {t(isE, `score: ${score}`, `점수: ${score}`)}
+                </div>
+              </div>
+              <div style={{ paddingTop: 14 }}>
+                <ShellRow
+                  shells={[1, 2, 3]}
+                  pebble={pos}
+                  guess={step > 0 ? lastSwap.g : null}
+                  E={isE}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 14 }}>
+        <button
+          onClick={next}
+          disabled={step >= N}
+          style={{
+            background: step >= N ? "#e5e7eb" : "#dc2626",
+            color: step >= N ? "#9ca3af" : "#fff",
+            border: "none", borderRadius: 8, padding: "6px 16px",
+            fontSize: 13, fontWeight: 700,
+            cursor: step >= N ? "not-allowed" : "pointer",
+          }}
+        >
+          {t(isE, "Next swap ▶", "다음 스왑 ▶")}
+        </button>
+        <button
+          onClick={reset}
+          style={{
+            background: "#fff", color: "#dc2626",
+            border: "1.5px solid #dc2626", borderRadius: 8, padding: "6px 16px",
+            fontSize: 13, fontWeight: 700, cursor: "pointer",
+          }}
+        >
+          {t(isE, "↺ Reset", "↺ 처음")}
+        </button>
+      </div>
+
+      {step >= N && (
+        <div style={{
+          marginTop: 12, textAlign: "center", fontSize: 13, fontWeight: 700,
+          color: "#dc2626", background: "#fef2f2", border: "1px solid #fca5a5",
+          borderRadius: 8, padding: "8px 10px",
+        }}>
+          {t(isE,
+            `Best = max(${traces[0].score}, ${traces[1].score}, ${traces[2].score}) = ${Math.max(traces[0].score, traces[1].score, traces[2].score)}`,
+            `최대 = max(${traces[0].score}, ${traces[1].score}, ${traces[2].score}) = ${Math.max(traces[0].score, traces[1].score, traces[2].score)}`)}
+        </div>
+      )}
+    </div>
+  );
+}
 
 
 /* ═══════════════════════════════════════════════════════════════
@@ -330,7 +485,7 @@ export function makeShellCh1(E) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 시뮬레이션 (4 steps)
+   Chapter 2: 시뮬레이션 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeShellCh2(E) {
   return [
@@ -431,7 +586,15 @@ export function makeShellCh2(E) {
           </div>
         </div>),
     },
-    // 2-3: Quiz on simulation logic
+    // 2-3: Interactive — try the simulation yourself
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now try it yourself! Step through the swaps and watch all 3 starting positions in parallel.\nWhich one wins?",
+        "이제 직접 해봐! 스왑을 한 단계씩 밟으면서 3 가지 시작 위치를 동시에 봐. 어느 게 이길까?"),
+      content: <ShellSim E={E} />,
+    },
+    // 2-4: Quiz on simulation logic
     {
       type: "quiz",
       narr: t(E,
@@ -449,7 +612,7 @@ export function makeShellCh2(E) {
         "If the pebble is at A and we swap A↔B, the pebble moves to B! If pos==B, it moves to A. Otherwise, no change.",
         "조약돌이 A에 있고 A↔B를 교환하면 조약돌은 B로 이동! pos==B이면 A로 이동. 아니면 변화 없음."),
     },
-    // 2-4: Complexity input
+    // 2-5: Complexity input
     {
       type: "input",
       narr: t(E,
