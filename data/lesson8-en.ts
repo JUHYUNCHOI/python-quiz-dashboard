@@ -198,6 +198,69 @@ print(f"Salary: {salary:,}")
           hint2: "f\"Balance: {money:,}\""
         },
         {
+          id: "width1",
+          type: "explain",
+          title: "🎯 Width & Alignment",
+          content: `You can place text or numbers inside a fixed-width slot, aligned **left / right / center**!
+
+\`\`\`python
+print(f"|{'cat':<10}|")   # |cat       |  (left, width 10)
+print(f"|{'cat':>10}|")   # |       cat|  (right, width 10)
+print(f"|{'cat':^10}|")   # |   cat    |  (center, width 10)
+\`\`\`
+
+- **:<N** = left-aligned, width N
+- **:>N** = right-aligned, width N
+- **:^N** = centered, width N
+
+Super handy when you want **columns to line up** in tables or menus!`
+        },
+        {
+          id: "width-tryit",
+          type: "tryit",
+          title: "🖥️ Try It Yourself!",
+          task: "Right-align the name in a 10-character slot!",
+          initialCode: "name = \"Alice\"\n# Use :>10 for right-align, width 10\nprint(f\"|{name:___}|\")",
+          expectedOutput: "|     Alice|",
+          hint: "{name:>10}",
+          hint2: "f\"|{name:>10}|\""
+        },
+        {
+          id: "padding1",
+          type: "explain",
+          title: "🎯 Zero-padding",
+          content: `Pad numbers with **leading zeros**. Great for clocks, IDs, ticket numbers, etc.
+
+\`\`\`python
+n = 7
+print(f"{n:03d}")   # 007   (3 digits, pad with 0)
+print(f"{n:05d}")   # 00007 (5 digits, pad with 0)
+\`\`\`
+
+- **:0Nd** = integer in N digits, padded with **0**
+- d stands for decimal (integer)
+- Use it for clock display (\`09:05\`), student IDs (\`00042\`), and more!`
+        },
+        {
+          id: "padding-tryit",
+          type: "tryit",
+          title: "🖥️ Try It Yourself!",
+          task: "Print num as a 5-digit integer (00042)!",
+          initialCode: "num = 42\n# Use :05d for 5 digits, padded with 0\nprint(f\"{num:___}\")",
+          expectedOutput: "00042",
+          hint: "{num:05d}",
+          hint2: "f\"{num:05d}\""
+        },
+        {
+          id: "quiz3",
+          type: "quiz",
+          title: "❓ Quiz!",
+          content: "What does `f\"|{'hi':>5}|\"` print?",
+          options: ["|hi   |", "|   hi|", "| hi  |", "|hi|"],
+          answer: 1,
+          explanation: ":>5 means right-align, width 5. 'hi' gets 3 spaces in front → |   hi|"
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
@@ -234,6 +297,8 @@ f"{name.upper()}"    # method
 \`\`\`python
 f"{pi:.2f}"      # 2 decimal places
 f"{price:,}"     # thousands comma
+f"{name:>10}"    # right-aligned, width 10 (also :<, :^)
+f"{n:05d}"       # 5 digits, zero-padded
 \`\`\``
         },
         {
@@ -256,6 +321,8 @@ f"{price:,}"     # thousands comma
 ✅ **Calculations/methods inside { }**
 ✅ **:.2f** - decimal place formatting
 ✅ **:,** - thousands separator comma
+✅ **:<N :>N :^N** - width and alignment
+✅ **:0Nd** - zero-padding
 
 Next time, we'll learn about **type conversion**! 🚀`
         }
