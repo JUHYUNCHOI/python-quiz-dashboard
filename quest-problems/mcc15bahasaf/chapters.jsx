@@ -93,6 +93,78 @@ export function makeMcc15BahasaCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: Deep-audit sim — trace each letter of "bahasa"
+    {
+      type: "reveal",
+      narr: t(E,
+        "Let's walk through 'bahasa' letter by letter. For each letter, ask: vowel or consonant? Vowels stay, consonants become 'f'.",
+        "'bahasa'를 한 글자씩 따라가요. 각 글자마다 물어봐요: 모음이야, 자음이야? 모음은 그대로, 자음은 'f'로 변해요."),
+      content: (() => {
+        const word = "bahasa";
+        const vowels = new Set("aeiou");
+        const trace = word.split("").map((ch, idx) => {
+          const isVowel = vowels.has(ch);
+          return { idx, ch, isVowel, out: isVowel ? ch : "f" };
+        });
+        const result = trace.map(r => r.out).join("");
+        return (
+          <div style={{ padding: 16 }}>
+            <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+                🔬 {t(E, "Deep Audit", "꼼꼼히 살펴보기")}
+              </div>
+              <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+                {t(E,
+                  "Trace 'bahasa' one letter at a time.",
+                  "'bahasa'를 한 글자씩 따라가요.")}
+              </div>
+            </div>
+
+            <div style={{ background: "#fff", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+              <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 20, fontWeight: 700 }}>
+                {trace.map(r => (
+                  <span key={`in-${r.idx}`} style={{
+                    display: "inline-block", minWidth: 28, textAlign: "center",
+                    padding: "4px 6px", borderRadius: 6,
+                    background: r.isVowel ? "#ede9fe" : "#fee2e2",
+                    color: r.isVowel ? "#7c3aed" : "#dc2626",
+                    border: `1.5px solid ${r.isVowel ? "#c4b5fd" : "#fca5a5"}`,
+                  }}>{r.ch}</span>
+                ))}
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 12, color: C.text, marginBottom: 12 }}>
+                {trace.map(r => (
+                  <div key={`row-${r.idx}`} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 8px", background: r.isVowel ? "#faf5ff" : "#fef2f2", borderRadius: 6 }}>
+                    <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: r.isVowel ? "#7c3aed" : "#dc2626", minWidth: 20 }}>{r.ch}</span>
+                    <span style={{ color: C.dim }}>→</span>
+                    <span style={{ fontSize: 11, color: r.isVowel ? "#7c3aed" : "#dc2626", fontWeight: 600 }}>
+                      {r.isVowel
+                        ? t(E, "vowel · keep", "모음 · 유지")
+                        : t(E, "consonant · → 'f'", "자음 · → 'f'")}
+                    </span>
+                    <span style={{ marginLeft: "auto", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: r.isVowel ? "#7c3aed" : "#dc2626" }}>{r.out}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, paddingTop: 10, borderTop: "1px dashed #fca5a5" }}>
+                <span style={{ fontSize: 11, color: C.dim, fontWeight: 600 }}>{t(E, "Result", "결과")}</span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 800, color: "#15803d", background: "#f0fdf4", padding: "4px 10px", borderRadius: 6, border: "1.5px solid #86efac" }}>
+                  {result}
+                </span>
+              </div>
+            </div>
+
+            <div style={{ fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+              {t(E,
+                "Same loop runs for every letter — check the vowel set, then append.",
+                "모든 글자에 같은 로직 — 모음 집합을 확인하고, 결과에 추가.")}
+            </div>
+          </div>
+        );
+      })(),
+    },
     // 1-2: Quiz
     {
       type: "quiz",
