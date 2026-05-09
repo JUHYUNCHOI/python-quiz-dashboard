@@ -1,8 +1,147 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+// Deep-audit sim: walk left→right, carry the running prefix imbalance across
+// each boundary. The absolute value of the carry at each boundary is exactly
+// how many single-marble adjacent moves must cross it — i.e. the answer.
+export function Mcc21MarblesBoundarySim({ E }) {
+  const SAMPLE = [7, 2, 6, 1]; // total 16, target 4
+  const target = SAMPLE.reduce((a, b) => a + b, 0) / SAMPLE.length;
+  const N = SAMPLE.length;
+  const [step, setStep] = useState(0); // 0..N-1, boundary index after box `step`
+
+  // carry after processing box i = sum_{k<=i} (a[k] - target)
+  const carry = (i) => {
+    let s = 0;
+    for (let k = 0; k <= i; k++) s += SAMPLE[k] - target;
+    return s;
+  };
+  // total ops up to and including boundary `step-1` (boundaries 0..step-1)
+  const opsUpTo = (s) => {
+    let total = 0;
+    for (let i = 0; i < s; i++) total += Math.abs(carry(i));
+    return total;
+  };
+
+  const cur = step;       // current boundary being highlighted (0..N-2), or N-1 = done
+  const done = cur >= N - 1;
+  const liveCarry = done ? carry(N - 2) : carry(cur);
+  const liveOps = done ? opsUpTo(N - 1) : opsUpTo(cur) + Math.abs(liveCarry);
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+          🔍 {t(E, "Deep-Audit Sim", "심층 시뮬")}
+        </div>
+        <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5 }}>
+          {t(E,
+            "Walk left → right. The running imbalance MUST cross each boundary — that's exactly the marbles we move there.",
+            "왼쪽 → 오른쪽으로 걸어가요. 누적 불균형은 반드시 그 경계를 건너야 해요 — 그게 그 자리에서 옮기는 구슬 수예요.")}
+        </div>
+      </div>
+
+      {/* Boxes + boundaries */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "stretch", gap: 0, marginBottom: 12, fontFamily: "JetBrains Mono, monospace" }}>
+        {SAMPLE.map((v, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "stretch" }}>
+            <div style={{
+              minWidth: 56, padding: "10px 6px", borderRadius: 8,
+              border: `2px solid ${i <= cur ? "#dc2626" : "#e5e7eb"}`,
+              background: i <= cur ? "#fef2f2" : "#fff",
+              textAlign: "center",
+              transition: "all .25s",
+            }}>
+              <div style={{ fontSize: 10, color: C.dim }}>a[{i}]</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: i <= cur ? "#dc2626" : C.text }}>{v}</div>
+              <div style={{ fontSize: 9, color: C.dim }}>
+                {t(E, "diff ", "차이 ")}{v - target >= 0 ? "+" : ""}{v - target}
+              </div>
+            </div>
+            {i < N - 1 && (
+              <div style={{
+                width: 36, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                color: i === cur && !done ? "#dc2626" : "#cbd5e1",
+                fontWeight: 800, fontSize: 11,
+                transform: i === cur && !done ? "scale(1.15)" : "scale(1)",
+                transition: "all .2s",
+              }}>
+                <div style={{ fontSize: 9 }}>{t(E, "edge", "경계")}{i}</div>
+                <div style={{ fontSize: 16 }}>{i <= cur ? (carry(i) === 0 ? "·" : (carry(i) > 0 ? "→" : "←")) : "│"}</div>
+                <div>{i <= cur ? Math.abs(carry(i)) : ""}</div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Live state */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
+        <div style={{ background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 10px" }}>
+          <div style={{ fontSize: 10, color: C.dim, textTransform: "uppercase", letterSpacing: 0.5 }}>
+            {t(E, "Carry across edge", "경계 통과 carry")} {done ? N - 2 : cur}
+          </div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: "#dc2626", fontFamily: "JetBrains Mono, monospace" }}>
+            {liveCarry >= 0 ? "+" : ""}{liveCarry}
+          </div>
+          <div style={{ fontSize: 10, color: C.dim }}>
+            {liveCarry > 0 && t(E, "→ marbles flow right", "→ 구슬이 오른쪽으로")}
+            {liveCarry < 0 && t(E, "← marbles flow left", "← 구슬이 왼쪽으로")}
+            {liveCarry === 0 && t(E, "balanced — no crossing", "균형 — 통과 없음")}
+          </div>
+        </div>
+        <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, padding: "8px 10px" }}>
+          <div style={{ fontSize: 10, color: "#15803d", textTransform: "uppercase", letterSpacing: 0.5 }}>
+            {t(E, "Total ops so far", "지금까지 총 이동")}
+          </div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: "#15803d", fontFamily: "JetBrains Mono, monospace" }}>
+            {liveOps}
+          </div>
+          <div style={{ fontSize: 10, color: "#15803d" }}>
+            target = {target}
+          </div>
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 8 }}>
+        <button onClick={() => setStep(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#f1f5f9" : "#fff", color: cur === 0 ? "#cbd5e1" : "#dc2626",
+          border: `1.5px solid ${cur === 0 ? "#e2e8f0" : "#dc2626"}`, borderRadius: 8,
+          padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: cur === 0 ? "not-allowed" : "pointer",
+        }}>← {t(E, "Back", "이전")}</button>
+        <button onClick={() => setStep(Math.min(N - 1, cur + 1))} disabled={done} style={{
+          background: done ? "#f1f5f9" : "#dc2626", color: done ? "#cbd5e1" : "#fff",
+          border: `1.5px solid ${done ? "#e2e8f0" : "#dc2626"}`, borderRadius: 8,
+          padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: done ? "not-allowed" : "pointer",
+        }}>{t(E, "Cross next edge", "다음 경계 통과")} →</button>
+        <button onClick={() => setStep(0)} style={{
+          background: "#fff", color: "#64748b", border: "1.5px solid #cbd5e1", borderRadius: 8,
+          padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>↺ {t(E, "Reset", "초기화")}</button>
+      </div>
+
+      {done && (
+        <div style={{ marginTop: 12, background: "#f0fdf4", border: "1.5px solid #15803d", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "#15803d" }}>
+            ✅ {t(E,
+              `Answer = sum of |carry| at each edge = ${liveOps}`,
+              `정답 = 각 경계에서 |carry| 의 합 = ${liveOps}`)}
+          </div>
+          <div style={{ fontSize: 11, color: "#15803d", marginTop: 4 }}>
+            {t(E,
+              "That's exactly what SOLUTION_CODE computes — one pass, O(N).",
+              "이것이 SOLUTION_CODE 가 계산하는 값 — 한 번 훑기, O(N).")}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

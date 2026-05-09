@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc21MarblesSections } from "./components";
+import { getMcc21MarblesSections, Mcc21MarblesBoundarySim } from "./components";
 
 export const SOLUTION_CODE = [
   "N = int(input())",
@@ -75,6 +75,13 @@ export function makeMcc21MarblesCh1(E) {
             </div>
           </div>
         </div>),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Watch the imbalance flow across each boundary. Whatever amount of imbalance crosses an edge IS the marbles moved there — the answer is just the sum of |carry| at every edge.",
+        "불균형이 각 경계를 어떻게 건너는지 봐요. 경계를 통과하는 불균형의 양이 곧 그 자리에서 옮기는 구슬 수 — 정답은 모든 경계의 |carry| 합."),
+      content: <Mcc21MarblesBoundarySim E={E} />,
     },
     {
       type: "quiz",
