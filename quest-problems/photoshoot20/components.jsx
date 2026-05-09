@@ -1,8 +1,203 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
+
+/* ─────────────────────────────────────────────────────────────
+   Deep-Audit Sim — try a[0] = 1, 2, …, N. For each candidate,
+   chain a[i+1] = b[i] − a[i], then audit: is the result a valid
+   permutation of {1..N}? Stop at the first SMALLEST a[0] that
+   passes. Demo: N=4, b=[3,4,7] → a[0]=1 fails, a[0]=2 succeeds.
+   ───────────────────────────────────────────────────────────── */
+export function Photo20AuditSim({ E }) {
+  // Fixed demo so kids can step through deterministically.
+  const N = 4;
+  const b = [3, 4, 7];
+
+  // Build all candidate chains in advance.
+  const candidates = [];
+  for (let a0 = 1; a0 <= N; a0++) {
+    const a = [a0];
+    for (let i = 0; i < N - 1; i++) a.push(b[i] - a[a.length - 1]);
+    const sorted = [...a].sort((x, y) => x - y);
+    let valid = sorted.length === N;
+    for (let i = 0; i < N && valid; i++) if (sorted[i] !== i + 1) valid = false;
+    candidates.push({ a0, a, valid });
+  }
+
+  // step counts how many candidates we've tried (0..N). After step k we
+  // know the result of the first k candidates. Find the winner index.
+  const winnerIdx = candidates.findIndex(c => c.valid);
+  const maxStep = winnerIdx >= 0 ? winnerIdx + 1 : N;
+  const [step, setStep] = useState(0);
+
+  const tried = candidates.slice(0, step);
+  const cur = step > 0 ? candidates[step - 1] : null;
+
+  const reset = () => setStep(0);
+  const nextStep = () => setStep(s => Math.min(maxStep, s + 1));
+
+  // Range check helper: each a[i] must be in 1..N.
+  const isInRange = (v) => v >= 1 && v <= N;
+  const seenDup = (arr, idx) => arr.slice(0, idx).includes(arr[idx]);
+
+  const cellBox = (label, value, color) => (
+    <div style={{
+      background: "#fff", border: `1.5px solid ${color}`, borderRadius: 8,
+      padding: "6px 10px", textAlign: "center", minWidth: 64,
+    }}>
+      <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, letterSpacing: 0.4 }}>{label}</div>
+      <div style={{ fontSize: 18, fontWeight: 800, color }}>{value}</div>
+    </div>
+  );
+
+  const renderChain = (cand) => {
+    const arr = cand.a;
+    return (
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+        {arr.map((v, i) => {
+          const inRange = isInRange(v);
+          const dup = inRange && seenDup(arr, i);
+          const bad = !inRange || dup;
+          return (
+            <div key={i} style={{
+              width: 50, height: 56,
+              background: bad ? "#fee2e2" : "#dbeafe",
+              border: `2px solid ${bad ? "#ef4444" : A}`,
+              borderRadius: 8,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              transition: "all 180ms ease",
+            }}>
+              <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>a[{i}]</div>
+              <div style={{ fontSize: 16, fontWeight: 800, color: bad ? "#b91c1c" : "#1e3a8a" }}>{v}</div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  // Build a human-readable audit line for the current candidate.
+  const auditLine = (cand) => {
+    if (!cand) return null;
+    if (cand.valid) {
+      return t(E,
+        `a[0] = ${cand.a0} ✓ chain = [${cand.a.join(", ")}] is a valid permutation of 1..${N}. WINNER!`,
+        `a[0] = ${cand.a0} ✓ 사슬 = [${cand.a.join(", ")}] 는 1..${N} 의 유효한 순열. 정답!`);
+    }
+    const arr = cand.a;
+    let badIdx = -1;
+    let reason = "";
+    for (let i = 0; i < arr.length; i++) {
+      if (!isInRange(arr[i])) { badIdx = i; reason = "oob"; break; }
+      if (seenDup(arr, i)) { badIdx = i; reason = "dup"; break; }
+    }
+    if (reason === "oob") {
+      return t(E,
+        `a[0] = ${cand.a0} → a[${badIdx}] = ${arr[badIdx]} is outside 1..${N}. Reject, try next.`,
+        `a[0] = ${cand.a0} → a[${badIdx}] = ${arr[badIdx]} 는 1..${N} 범위 밖. 탈락, 다음 시도.`);
+    }
+    if (reason === "dup") {
+      return t(E,
+        `a[0] = ${cand.a0} → a[${badIdx}] = ${arr[badIdx]} duplicates an earlier value. Reject, try next.`,
+        `a[0] = ${cand.a0} → a[${badIdx}] = ${arr[badIdx]} 는 앞에 이미 등장한 값. 탈락, 다음 시도.`);
+    }
+    return t(E,
+      `a[0] = ${cand.a0} → chain not a permutation of 1..${N}. Reject.`,
+      `a[0] = ${cand.a0} → 1..${N} 의 순열 아님. 탈락.`);
+  };
+
+  return (
+    <div style={{
+      background: "#eff6ff", border: `1.5px solid ${A}`, borderRadius: 12,
+      padding: 14, marginBottom: 10,
+    }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 10, textAlign: "center" }}>
+        🔍 {t(E, "Deep-Audit Sim", "꼼꼼 검증 시뮬")}
+      </div>
+
+      {/* Given input */}
+      <div style={{ background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8, padding: "8px 10px", marginBottom: 10, textAlign: "center", fontSize: 12, color: "#1e3a8a" }}>
+        {t(E, "Given", "주어진 값")}: <b>N = {N}</b>, <b>b = [{b.join(", ")}]</b>
+        <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
+          {t(E, "Try a[0] = 1, 2, … and chain a[i+1] = b[i] − a[i].",
+              "a[0] = 1, 2, … 를 시도하고, a[i+1] = b[i] − a[i] 로 사슬을 이어요.")}
+        </div>
+      </div>
+
+      {/* Current candidate */}
+      <div style={{ marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4, textAlign: "center" }}>
+          {cur
+            ? t(E, `Trying a[0] = ${cur.a0}`, `시도 중: a[0] = ${cur.a0}`)
+            : t(E, "Press NEXT to start auditing.", "다음을 눌러 검증을 시작.")}
+        </div>
+        {cur && renderChain(cur)}
+      </div>
+
+      {/* Counters */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10 }}>
+        {cellBox(t(E, "tried", "시도"), `${step}/${N}`, "#7c3aed")}
+        {cellBox(t(E, "winner a[0]", "정답 a[0]"), winnerIdx >= 0 && step > winnerIdx ? candidates[winnerIdx].a0 : "?", A)}
+      </div>
+
+      {/* Audit log */}
+      <div style={{
+        background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8,
+        padding: "8px 10px", fontSize: 12, color: "#1e3a8a", minHeight: 36,
+        textAlign: "center", lineHeight: 1.5,
+      }}>
+        {!cur && t(E,
+          "Each candidate gets audited: in-range? duplicates? sorted = 1..N?",
+          "후보마다 검증해요: 범위 안인가? 중복 있나? 정렬하면 1..N 인가?")}
+        {cur && auditLine(cur)}
+      </div>
+
+      {/* Tried list (history) */}
+      {tried.length > 1 && (
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginTop: 10 }}>
+          {tried.slice(0, -1).map((c) => (
+            <div key={c.a0} style={{
+              background: "#fff", border: `1px solid ${c.valid ? "#86efac" : "#fca5a5"}`,
+              borderRadius: 6, padding: "3px 8px", fontSize: 11, color: c.valid ? "#15803d" : "#b91c1c",
+              fontWeight: 700,
+            }}>
+              {c.valid ? "✓" : "✗"} a[0]={c.a0}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 10 }}>
+        <button onClick={nextStep} disabled={step >= maxStep} style={{
+          background: step >= maxStep ? "#bfdbfe" : A,
+          color: "#fff", border: "none", borderRadius: 8,
+          padding: "6px 16px", fontSize: 13, fontWeight: 800,
+          cursor: step >= maxStep ? "default" : "pointer",
+        }}>{t(E, "Next ▶", "다음 ▶")}</button>
+        <button onClick={reset} style={{
+          background: "#fff", color: A, border: `1.5px solid ${A}`, borderRadius: 8,
+          padding: "6px 16px", fontSize: 13, fontWeight: 800, cursor: "pointer",
+        }}>{t(E, "↺ Reset", "↺ 처음으로")}</button>
+      </div>
+
+      {step >= maxStep && winnerIdx >= 0 && (
+        <div style={{
+          marginTop: 10, padding: "8px 12px", background: "#dcfce7",
+          border: "1.5px solid #86efac", borderRadius: 8, textAlign: "center",
+          fontSize: 13, fontWeight: 700, color: "#15803d",
+        }}>
+          ✅ {t(E,
+            `Lex-smallest answer: a = [${candidates[winnerIdx].a.join(", ")}].`,
+            `사전순 최소 정답: a = [${candidates[winnerIdx].a.join(", ")}].`)}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

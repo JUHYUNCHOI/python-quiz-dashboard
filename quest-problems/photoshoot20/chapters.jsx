@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getPhoto20Sections } from "./components";
+import { getPhoto20Sections, Photo20AuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -84,6 +84,22 @@ export function makePhoto20Ch1(E) {
               </div>
             </div>
           </div>
+        </div>),
+    },
+    // 1-1b: Deep-audit sim — walk through trying a[0] = 1, 2, ...
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try the algorithm by hand. Pick a[0] = 1, chain a[i+1] = b[i] − a[i], then audit: are all values in 1..N with no duplicates? If not, bump a[0] up and retry. The first a[0] that passes is our lex-smallest answer.",
+        "알고리즘을 직접 굴려봐요. a[0] = 1 부터 시도해서, a[i+1] = b[i] − a[i] 로 사슬을 잇고, 검증해요: 모두 1..N 안에 있고 중복 없나? 안 되면 a[0] 을 한 칸 올려 재시도. 처음 통과한 a[0] 이 사전순 최소 정답."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, marginBottom: 10, textAlign: "center" }}>
+            {t(E,
+              "Example: N = 4, b = [3, 4, 7]. Press NEXT to audit each a[0] candidate one at a time.",
+              "예시: N = 4, b = [3, 4, 7]. 다음 버튼으로 a[0] 후보를 하나씩 검증해 봐요.")}
+          </div>
+          <Photo20AuditSim E={E} />
         </div>),
     },
     // 1-2: Quiz
