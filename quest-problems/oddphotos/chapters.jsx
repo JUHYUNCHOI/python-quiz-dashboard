@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getOddPhotosSections } from "./components";
+import { getOddPhotosSections, OddPhotosSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -51,7 +51,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: makeCh1 (3 steps: reveal / quiz / input)
+   Chapter 1: makeCh1 (4 steps: reveal / sim / quiz / input)
    ═══════════════════════════════════════════════════════════════ */
 export function makeOddPhotosCh1(E) {
   return [
@@ -123,7 +123,15 @@ export function makeOddPhotosCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Interactive parity sim
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try pairing cows. Click two cows — if their ID sum is ODD, they form an ODD-sum pair. If EVEN, an EVEN-sum pair. Watch the parity rule emerge.",
+        "소를 짝지어 봐. 두 마리를 클릭 — ID 합이 홀수면 홀수합 쌍, 짝수면 짝수합 쌍. 홀짝 규칙이 보일 거야."),
+      content: <OddPhotosSim E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -140,7 +148,7 @@ export function makeOddPhotosCh1(E) {
         "Correct! Group 1 has even sum, but group 2 needs odd sum which is impossible with only even numbers. Max: 1 group.",
         "맞아! 그룹 1은 짝수 합이지만 그룹 2는 홀수 합이 필요한데 짝수만으로는 불가능해요. 최대: 1 그룹."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
