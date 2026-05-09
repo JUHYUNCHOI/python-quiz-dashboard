@@ -1,8 +1,220 @@
+import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ════════════════════════════════════════════════════════════════
+   StallingAssignmentSim
+   Visual sim of the "biggest cow first" assignment algorithm.
+   Cows sorted ascending → process from tallest down. Each step,
+   show which stalls fit the current cow (limit ≥ height), subtract
+   already-assigned, and multiply choices into the running answer.
+   ════════════════════════════════════════════════════════════════ */
+export function StallingAssignmentSim({ E }) {
+  // Fixed example so students can predict and verify
+  const cows = [2, 4, 4]; // sorted ascending
+  const stalls = [3, 4, 5]; // sorted ascending
+  const N = cows.length;
+
+  // step: -1 = not started, 0..N-1 = processed cows[N-1-step] just now, N = done
+  const [step, setStep] = useState(-1);
+  const [playing, setPlaying] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    if (!playing) return;
+    if (step >= N) { setPlaying(false); return; }
+    timerRef.current = setTimeout(() => setStep(s => s + 1), 950);
+    return () => clearTimeout(timerRef.current);
+  }, [playing, step, N]);
+
+  const reset = () => { setPlaying(false); setStep(-1); };
+
+  // For each processed step k (0..step-1), compute which cow it processed,
+  // which stalls fit, and how many choices remained.
+  // Algorithm: process cows from tallest (index N-1) to shortest (index 0).
+  // After processing k cows, k stalls have been used.
+  // For cow index i = N-1-k, "fits" = count of stalls with limit >= cow height.
+  // choices = fits - k.
+  const history = [];
+  let runningAns = 1;
+  let killed = false;
+  for (let k = 0; k <= Math.min(step, N - 1); k++) {
+    const cowIdx = N - 1 - k;
+    const cowH = cows[cowIdx];
+    const fits = stalls.filter(s => s >= cowH).length;
+    const choices = fits - k;
+    if (choices <= 0) { killed = true; runningAns = 0; }
+    else if (!killed) runningAns *= choices;
+    history.push({ k, cowIdx, cowH, fits, choices, runningAns });
+  }
+
+  const currentCowIdx = step >= 0 && step < N ? N - 1 - step : -1;
+  const usedCount = step >= 0 ? Math.min(step + 1, N) : 0;
+
+  const finalAns = step >= N - 1 ? runningAns : null;
+
+  return (
+    <div style={{
+      background: "#f0fdf4",
+      border: `1.5px solid ${A}`,
+      borderRadius: 12,
+      padding: 14,
+      marginBottom: 10,
+    }}>
+      <div style={{
+        fontSize: 12, fontWeight: 800, color: "#065f46",
+        letterSpacing: 0.4, marginBottom: 8, textAlign: "center",
+      }}>
+        🧪 {t(E, "Try It — Assign Cows To Stalls", "직접 해보기 — 소를 축사에 배정")}
+      </div>
+
+      <div style={{ fontSize: 12, color: "#065f46", lineHeight: 1.5, marginBottom: 10, textAlign: "center" }}>
+        {t(E,
+          "Watch the algorithm: process the TALLEST cow first. Count how many stalls fit her, subtract already-used stalls, and multiply.",
+          "알고리즘 관찰: 가장 큰 소부터 처리. 자기 키 ≤ 인 축사 수에서 이미 쓴 축사를 빼고, 곱해.")}
+      </div>
+
+      {/* Stalls row */}
+      <div style={{ marginBottom: 6, fontSize: 11, fontWeight: 700, color: "#0e7490" }}>
+        🏚️ {t(E, "Stalls (limits)", "축사 (제한)")}
+      </div>
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 14, flexWrap: "wrap" }}>
+        {stalls.map((s, i) => {
+          // A stall is "used" if it's among the largest `usedCount` stalls that fit each processed cow.
+          // Greedy mental model: tallest cow takes the largest fitting stall, etc.
+          // Mark stalls as used if their rank from the top is < usedCount AND they fit some processed cow.
+          const used = i >= N - usedCount;
+          const fitsCurrent = currentCowIdx >= 0 && s >= cows[currentCowIdx] && !used;
+          return (
+            <div key={i} style={{
+              width: 56, height: 56,
+              borderRadius: 10,
+              background: used ? "#d1fae5" : fitsCurrent ? "#fef3c7" : "#fff",
+              border: `2px solid ${used ? A : fitsCurrent ? "#f59e0b" : "#a7f3d0"}`,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              fontWeight: 800, color: used ? A : "#1f2937",
+              transition: "all .25s",
+              opacity: used ? 0.7 : 1,
+              position: "relative",
+            }}>
+              <div style={{ fontSize: 18 }}>{used ? "🐄" : "🏚️"}</div>
+              <div style={{ fontSize: 11 }}>≤{s}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Cows row */}
+      <div style={{ marginBottom: 6, fontSize: 11, fontWeight: 700, color: A }}>
+        🐄 {t(E, "Cows (heights, sorted)", "소 (키, 정렬됨)")}
+      </div>
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {cows.map((c, i) => {
+          const isCurrent = i === currentCowIdx;
+          const processed = step >= 0 && i > currentCowIdx && currentCowIdx !== -1
+            ? false
+            : (i > N - 1 - step);
+          // Simpler: processed = cows whose index > currentCowIdx (already done in earlier steps)
+          const done = step >= 0 && i > N - 1 - (step);
+          return (
+            <div key={i} style={{
+              width: 56, height: 56,
+              borderRadius: 10,
+              background: isCurrent ? "#fef3c7" : done ? "#d1fae5" : "#fff",
+              border: `2px solid ${isCurrent ? "#f59e0b" : done ? A : "#a7f3d0"}`,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              fontWeight: 800, color: isCurrent ? "#92400e" : done ? A : "#1f2937",
+              transition: "all .25s",
+              transform: isCurrent ? "translateY(-4px) scale(1.05)" : "none",
+              boxShadow: isCurrent ? "0 4px 12px rgba(245,158,11,.35)" : "none",
+            }}>
+              <div style={{ fontSize: 18 }}>🐄</div>
+              <div style={{ fontSize: 11 }}>{c}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Step explanation */}
+      <div style={{
+        background: "#fff",
+        border: "1px solid #a7f3d0",
+        borderRadius: 8,
+        padding: "8px 12px",
+        marginBottom: 10,
+        fontSize: 12,
+        color: "#065f46",
+        minHeight: 38,
+      }}>
+        {step === -1 && (
+          <span>{t(E, "Press Step or Auto to start.", "Step 또는 Auto를 눌러 시작.")}</span>
+        )}
+        {step >= 0 && step < N && (() => {
+          const h = history[step];
+          return (
+            <span>
+              <b>{t(E, `Step ${step + 1}: Cow height ${h.cowH}`, `${step + 1}단계: 소 키 ${h.cowH}`)}</b>
+              {" — "}
+              {t(E,
+                `${h.fits} stalls fit, ${step} already used → choices = ${h.fits} − ${step} = ${h.choices}. ans × ${h.choices} = ${h.runningAns}.`,
+                `맞는 축사 ${h.fits}개, 이미 사용 ${step}개 → 선택 = ${h.fits} − ${step} = ${h.choices}. ans × ${h.choices} = ${h.runningAns}.`)}
+            </span>
+          );
+        })()}
+        {step >= N && (
+          <span>
+            <b style={{ color: A }}>
+              {t(E, `Done! Final answer = ${finalAns}`, `완료! 최종 답 = ${finalAns}`)}
+            </b>
+            {" "}
+            {t(E,
+              "(multiply the choices from each step).",
+              "(각 단계 선택 수를 모두 곱한 값).")}
+          </span>
+        )}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+        <button
+          onClick={() => { setPlaying(false); setStep(s => Math.min(s + 1, N)); }}
+          disabled={step >= N}
+          style={{
+            background: step >= N ? "#d1d5db" : A,
+            color: "#fff", border: "none", borderRadius: 8,
+            padding: "6px 14px", fontWeight: 700, fontSize: 12,
+            cursor: step >= N ? "not-allowed" : "pointer",
+          }}>
+          ▶ {t(E, "Step", "한 단계")}
+        </button>
+        <button
+          onClick={() => { if (step >= N) setStep(-1); setPlaying(p => !p); }}
+          style={{
+            background: playing ? "#f59e0b" : "#fff",
+            color: playing ? "#fff" : A,
+            border: `1.5px solid ${playing ? "#f59e0b" : A}`,
+            borderRadius: 8,
+            padding: "6px 14px", fontWeight: 700, fontSize: 12, cursor: "pointer",
+          }}>
+          {playing ? `⏸ ${t(E, "Pause", "일시정지")}` : `⚡ ${t(E, "Auto", "자동")}`}
+        </button>
+        <button
+          onClick={reset}
+          style={{
+            background: "#fff", color: C.dim,
+            border: `1.5px solid ${C.border}`,
+            borderRadius: 8,
+            padding: "6px 14px", fontWeight: 700, fontSize: 12, cursor: "pointer",
+          }}>
+          ↻ {t(E, "Reset", "초기화")}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

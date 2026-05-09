@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getStallingSections } from "./components";
+import { getStallingSections, StallingAssignmentSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -94,6 +94,8 @@ export function makeStallingCh1(E) {
               </div>
             </div>
           </div>
+
+          <StallingAssignmentSim E={E} />
         </div>),
     },
     // 1-2: Quiz
