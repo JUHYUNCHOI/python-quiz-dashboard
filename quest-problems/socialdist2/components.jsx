@@ -1,8 +1,201 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
+
+/* ----------------------------------------------------------------
+   SocDist2Sim — bilingual deep-audit sim for the title page
+   Sample: sick = [3, 5, 12, 14], healthy = [8]. Number line 0..16.
+   Student picks R (0..6). Sim shows:
+   - Each sick cow with infection range [x-R, x+R]
+   - If any healthy cow falls inside any range → invalid (R too big)
+   - When valid, count clusters: adjacent sick gap > 2R → new cluster
+   Big idea: largest R with no healthy hit + cluster count = answer.
+   --------------------------------------------------------------- */
+export function SocDist2Sim({ E }) {
+  const sick = [3, 5, 12, 14];
+  const healthy = [8];
+  const MAX_X = 16;
+  const MAX_R = 6;
+  const [R, setR] = useState(1);
+
+  // Validity: no healthy cow within R of any sick cow
+  const conflicts = healthy.filter(h => sick.some(s => Math.abs(h - s) <= R));
+  const valid = conflicts.length === 0;
+
+  // True best R: min |h - s| - 1, clamped at 0
+  const bestR = Math.max(0, Math.min(
+    ...healthy.flatMap(h => sick.map(s => Math.abs(h - s) - 1))
+  ));
+  const isBest = R === bestR;
+
+  // Cluster count (only meaningful when valid)
+  const sortedSick = [...sick].sort((a, b) => a - b);
+  let clusters = sortedSick.length > 0 ? 1 : 0;
+  for (let i = 1; i < sortedSick.length; i++) {
+    if (sortedSick[i] - sortedSick[i - 1] > 2 * R) clusters++;
+  }
+
+  const U = 26;
+  const totalW = (MAX_X + 1) * U;
+
+  return (
+    <div style={{ padding: "10px 8px" }}>
+      <div style={{ textAlign: "center", marginBottom: 8, fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
+        {t(E,
+          "Try it · sick = {3,5,12,14}, healthy = {8}",
+          "직접 해봐 · 감염 = {3,5,12,14}, 건강 = {8}")}
+      </div>
+
+      {/* Status row */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
+        <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#1e3a8a", fontFamily: "'JetBrains Mono',monospace" }}>
+          R = <b>{R}</b>
+        </div>
+        <div style={{
+          background: valid ? "#dcfce7" : "#fee2e2",
+          border: `1px solid ${valid ? "#16a34a" : "#dc2626"}`,
+          borderRadius: 8, padding: "4px 10px", fontSize: 11,
+          color: valid ? "#166534" : "#7f1d1d",
+          fontFamily: "'JetBrains Mono',monospace",
+        }}>
+          {valid
+            ? t(E, "valid ✓", "유효 ✓")
+            : t(E, "healthy hit ✗", "건강 소 감염 ✗")}
+        </div>
+        {valid && (
+          <div style={{ background: "#fef3c7", border: "1px solid #f59e0b", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#92400e", fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "clusters", "클러스터")} = <b>{clusters}</b>
+          </div>
+        )}
+        {isBest && (
+          <div style={{ background: "#fce7f3", border: "1px solid #db2777", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#9d174d", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
+            {t(E, "★ best R", "★ 최적 R")}
+          </div>
+        )}
+      </div>
+
+      {/* Number line stage */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "16px 10px", marginBottom: 10, overflowX: "auto" }}>
+        <div style={{ position: "relative", width: totalW, height: 96, margin: "0 auto" }}>
+          {/* Base axis */}
+          <div style={{ position: "absolute", left: U / 2, right: U / 2, top: 56, height: 2, background: C.border }} />
+
+          {/* Infection ranges around each sick cow */}
+          {sick.map((s, si) => {
+            const lo = Math.max(0, s - R);
+            const hi = Math.min(MAX_X, s + R);
+            return (
+              <div key={`range-${si}`} style={{
+                position: "absolute",
+                left: lo * U + U / 2 - 10,
+                top: 44,
+                width: (hi - lo) * U + 20,
+                height: 26,
+                background: valid ? "rgba(220, 38, 38, 0.15)" : "rgba(220, 38, 38, 0.30)",
+                border: `1.5px ${valid ? "dashed" : "solid"} #dc2626`,
+                borderRadius: 14,
+                transition: "all .2s ease-out",
+              }} />
+            );
+          })}
+
+          {/* Tick marks */}
+          {Array.from({ length: MAX_X + 1 }, (_, i) => (
+            <div key={`tick-${i}`} style={{
+              position: "absolute",
+              left: i * U + U / 2 - 8,
+              top: 70,
+              width: 16,
+              textAlign: "center",
+              fontSize: 9,
+              color: C.dim,
+              fontFamily: "'JetBrains Mono',monospace",
+            }}>{i}</div>
+          ))}
+
+          {/* Sick cows */}
+          {sick.map((pos, ci) => (
+            <div key={`sick-${ci}`} style={{
+              position: "absolute",
+              left: pos * U + U / 2 - 12,
+              top: 22,
+              width: 24,
+              fontSize: 18,
+              textAlign: "center",
+            }}>
+              <div>{"🦠"}</div>
+              <div style={{ fontSize: 9, color: "#dc2626", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", marginTop: -4 }}>
+                {pos}
+              </div>
+            </div>
+          ))}
+
+          {/* Healthy cows */}
+          {healthy.map((pos, ci) => {
+            const hit = sick.some(s => Math.abs(pos - s) <= R);
+            return (
+              <div key={`hlt-${ci}`} style={{
+                position: "absolute",
+                left: pos * U + U / 2 - 12,
+                top: 22,
+                width: 24,
+                fontSize: 18,
+                textAlign: "center",
+              }}>
+                <div style={{ filter: hit ? "none" : "hue-rotate(80deg) saturate(2)" }}>{"🐄"}</div>
+                <div style={{ fontSize: 9, color: hit ? "#dc2626" : "#16a34a", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", marginTop: -4 }}>
+                  {pos}{hit ? " ✗" : " ✓"}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Cluster gap row */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 4, marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: C.dim, flexWrap: "wrap" }}>
+          <span>{t(E, "sick gaps:", "감염 간격:")}</span>
+          {sortedSick.slice(1).map((p, i) => {
+            const g = p - sortedSick[i];
+            const newCluster = g > 2 * R;
+            return (
+              <span key={i} style={{ color: newCluster ? "#db2777" : "#16a34a", fontWeight: 700 }}>
+                {g}{newCluster ? " ▶" : ""}{i < sortedSick.length - 2 ? "," : ""}
+              </span>
+            );
+          })}
+          <span style={{ color: C.dim }}>· {t(E, "gap > 2R = new cluster", "간격 > 2R = 새 클러스터")}</span>
+        </div>
+      </div>
+
+      {/* R slider */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "Drag to change spread radius R", "전파 반경 R 을 바꿔봐")}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 11, color: C.dim }}>0</span>
+          <input
+            type="range" min={0} max={MAX_R} value={R}
+            onChange={(e) => setR(parseInt(e.target.value, 10))}
+            style={{ width: 220, accentColor: A }}
+          />
+          <span style={{ fontSize: 11, color: C.dim }}>{MAX_R}</span>
+        </div>
+      </div>
+
+      {/* Insight box */}
+      <div style={{ marginTop: 10, background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 8, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.55 }}>
+        <b style={{ color: A }}>{t(E, "Two questions, one answer", "질문 둘, 답 하나")}</b>{" "}
+        {t(E,
+          "Bigger R → infection rings reach healthy cows (invalid). Smaller R → sick cows fall into separate clusters (more seeds). The largest valid R minimises the cluster count.",
+          "R 이 커지면 감염 범위가 건강 소까지 닿음 (무효). R 이 작으면 감염 소들이 다른 클러스터로 갈라져요 (씨앗 ↑). 유효한 가장 큰 R 이 클러스터 (= 최초 감염) 최소.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

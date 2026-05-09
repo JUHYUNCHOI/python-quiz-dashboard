@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSocDist2Sections } from "./components";
+import { getSocDist2Sections, SocDist2Sim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -106,6 +106,14 @@ export function makeSocDist2Ch1(E) {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* 🦠 Deep-audit sim — pick R, see infection rings + clusters */}
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "10px 8px", marginTop: 6 }}>
+            <div style={{ textAlign: "center", fontSize: 12, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>
+              🦠 {t(E, "See it: spread radius R vs clusters", "직접 봐: 전파 반경 R 과 클러스터")}
+            </div>
+            <SocDist2Sim E={E} />
           </div>
         </div>),
     },
