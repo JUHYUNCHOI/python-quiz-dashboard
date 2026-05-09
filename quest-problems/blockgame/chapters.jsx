@@ -125,7 +125,118 @@ export function makeBlockGameCh1(E) {
         "양면 각자 필요 수 — 더 큰 쪽이 승."),
       answer: 2,
     },
+    // 1-4: Deep-audit sim — per-letter MAX across two boards
+    {
+      type: "reveal",
+      narr: t(E,
+        "Deep audit: two boards. For EACH board take MAX(front, back) per letter — its worst case. Then SUM the per-board maxes across boards, letter by letter.",
+        "심층 감사: 판 2개. 각 판마다 글자별 MAX(앞, 뒤) — 그 판의 최악의 경우. 그다음 글자별로 모든 판의 max 를 합산."),
+      content: <BlockGameDeepAuditSim E={E} />,
+    },
   ];
+}
+
+/* ───────────────────────────────────────────────────────────────
+   Deep-audit sim: shows per-board MAX(front, back) per letter,
+   then SUM across boards.  Uses two concrete boards.
+   ─────────────────────────────────────────────────────────────── */
+function countLetters(word) {
+  const m = {};
+  for (const ch of word) m[ch] = (m[ch] || 0) + 1;
+  return m;
+}
+
+function BlockGameDeepAuditSim({ E }) {
+  const boards = [
+    { front: "ABA", back: "BBC" },  // A:max(2,0)=2, B:max(1,2)=2, C:max(0,1)=1
+    { front: "CAB", back: "AAB" },  // A:max(1,2)=2, B:max(1,1)=1, C:max(1,0)=1
+  ];
+  const letters = ["A", "B", "C"];
+  const perBoardMax = boards.map(b => {
+    const cf = countLetters(b.front);
+    const cb = countLetters(b.back);
+    const out = {};
+    for (const L of letters) out[L] = Math.max(cf[L] || 0, cb[L] || 0);
+    return out;
+  });
+  const totals = {};
+  for (const L of letters) totals[L] = perBoardMax.reduce((s, m) => s + (m[L] || 0), 0);
+  const grandTotal = letters.reduce((s, L) => s + totals[L], 0);
+
+  const cellBox = {
+    minWidth: 28, padding: "4px 8px", borderRadius: 6,
+    fontFamily: "JetBrains Mono, monospace", fontSize: 13,
+    textAlign: "center", display: "inline-block",
+  };
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "8px 12px", marginBottom: 12, fontSize: 12, color: "#9a3412", textAlign: "center", fontWeight: 600 }}>
+        🔍 {t(E, "Per-letter MAX, board by board → then SUM", "글자별 MAX, 판별로 → 그 다음 합산")}
+      </div>
+
+      {boards.map((b, i) => {
+        const cf = countLetters(b.front);
+        const cb = countLetters(b.back);
+        return (
+          <div key={i} style={{ background: "#fff", border: "1px solid #fed7aa", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#9a3412", marginBottom: 6 }}>
+              {t(E, `Board ${i + 1}`, `판 ${i + 1}`)} — front=<b style={{ color: "#0891b2" }}>{b.front}</b> · back=<b style={{ color: "#7c3aed" }}>{b.back}</b>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center", fontSize: 12 }}>
+              {letters.map(L => {
+                const f = cf[L] || 0, k = cb[L] || 0, mx = Math.max(f, k);
+                const fwins = f >= k;
+                return (
+                  <div key={L} style={{ display: "flex", alignItems: "center", gap: 4, background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 6, padding: "3px 6px" }}>
+                    <span style={{ ...cellBox, fontWeight: 700, color: "#9a3412", minWidth: 18 }}>{L}</span>
+                    <span style={{ ...cellBox, color: "#0891b2", background: fwins ? "#cffafe" : "transparent" }}>{f}</span>
+                    <span style={{ color: C.dim }}>vs</span>
+                    <span style={{ ...cellBox, color: "#7c3aed", background: !fwins ? "#ede9fe" : "transparent" }}>{k}</span>
+                    <span style={{ color: C.dim }}>→</span>
+                    <span style={{ ...cellBox, background: "#f97316", color: "#fff", fontWeight: 800 }}>{mx}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Sum row */}
+      <div style={{ background: "#fef3c7", border: "1.5px solid #f59e0b", borderRadius: 10, padding: 12, marginBottom: 8 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#78350f", marginBottom: 6 }}>
+          ➕ {t(E, "Sum per-board maxes, letter by letter", "글자별로 판별 max 합산")}
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, fontSize: 12 }}>
+          {letters.map(L => (
+            <div key={L} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <span style={{ ...cellBox, fontWeight: 700, color: "#78350f", minWidth: 18 }}>{L}</span>
+              <span style={{ color: C.dim }}>:</span>
+              {perBoardMax.map((m, idx) => (
+                <span key={idx} style={{ display: "inline-flex", alignItems: "center", gap: 2 }}>
+                  <span style={{ ...cellBox, background: "#f97316", color: "#fff", fontWeight: 700 }}>{m[L]}</span>
+                  {idx < perBoardMax.length - 1 && <span style={{ color: "#78350f", fontWeight: 700 }}>+</span>}
+                </span>
+              ))}
+              <span style={{ color: "#78350f", fontWeight: 700 }}>=</span>
+              <span style={{ ...cellBox, background: "#78350f", color: "#fff", fontWeight: 800 }}>{totals[L]}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 13, color: "#9a3412", fontWeight: 700 }}>
+        {t(E, "Grand total cubes = ", "필요한 큐브 총합 = ")}
+        <span style={{ background: "#f97316", color: "#fff", padding: "3px 10px", borderRadius: 6, fontFamily: "JetBrains Mono, monospace" }}>{grandTotal}</span>
+      </div>
+      <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+        {t(E,
+          "Note: we do NOT take MAX across boards — we SUM. Each board needs its own cubes.",
+          "주의: 판 사이에는 MAX 가 아니라 SUM. 판마다 자기 큐브가 필요.")}
+      </div>
+    </div>
+  );
 }
 
 
