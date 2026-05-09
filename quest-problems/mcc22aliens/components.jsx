@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
+import { SimNav, useTraceStep, StepHeader, NarrativePanel } from "@/components/quest/TraceStepper";
 
 const A = "#2563eb";
 
@@ -119,6 +121,304 @@ export function getMcc22AliensSections(E) {
 
 export function Mcc22AliensProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   DeepAuditSim — pick a scenario, walk every alien's claim, and
+   audit it against the T/F rule one alien at a time. Students see
+   exactly which claim breaks consistency (or that all pass).
+   Three scenarios over the same N=4 type vector [T, F, T, F]:
+     • "consistent" — every claim is honest-T / lying-F  → YES
+     • "T-fails"    — alien 0 (T) says alien 2 is F (wrong)
+     • "F-fails"    — alien 1 (F) says alien 0 is T (true → lied=false)
+   ═══════════════════════════════════════════════════════════════ */
+function buildAliensAuditTrace(types, claims) {
+  const N = types.length;
+  const trace = [{
+    sub: "init", i: -1, ok: null, consistent: true, done: false, failedAt: null,
+  }];
+  let consistent = true;
+  let failedAt = null;
+  for (let i = 0; i < N; i++) {
+    const [pi, bi] = claims[i];
+    // 1) read claim
+    trace.push({
+      sub: "read", i, pi, bi, types_i: types[i], types_pi: types[pi],
+      consistent, failedAt: null,
+    });
+    // 2) judge
+    let ok;
+    if (types[i] === "T") ok = (types[pi] === bi);
+    else                  ok = (types[pi] !== bi);
+    if (ok) {
+      trace.push({
+        sub: "pass", i, pi, bi, types_i: types[i], types_pi: types[pi],
+        consistent: true, failedAt: null,
+      });
+    } else {
+      consistent = false;
+      failedAt = i;
+      trace.push({
+        sub: "fail", i, pi, bi, types_i: types[i], types_pi: types[pi],
+        consistent: false, failedAt,
+      });
+      break;
+    }
+  }
+  trace.push({
+    sub: "done", consistent, failedAt, done: true, i: -1,
+  });
+  return trace;
+}
+
+const ALIEN_SCENARIOS = [
+  {
+    key: "consistent",
+    types: ["T", "F", "T", "F"],
+    // each tuple = [pi (0-indexed target), bi ('T' or 'F')]
+    claims: [[2, "T"], [0, "F"], [3, "F"], [2, "T"]],
+    label: { en: "All consistent → YES",      ko: "모두 일관 → YES" },
+  },
+  {
+    key: "T-fails",
+    types: ["T", "F", "T", "F"],
+    // alien 0 (T) lies about alien 2 → fails immediately
+    claims: [[2, "F"], [0, "F"], [3, "F"], [2, "T"]],
+    label: { en: "T-type lies → fails at i=0", ko: "T 가 거짓말 → i=0 에서 실패" },
+  },
+  {
+    key: "F-fails",
+    types: ["T", "F", "T", "F"],
+    // alien 1 (F) tells the truth about alien 0 → fails at i=1
+    claims: [[2, "T"], [0, "T"], [3, "F"], [2, "T"]],
+    label: { en: "F-type tells truth → fails at i=1", ko: "F 가 진실 발설 → i=1 에서 실패" },
+  },
+];
+
+export function DeepAuditSim({ E }) {
+  const [scKey, setScKey] = useState("consistent");
+  const sc = ALIEN_SCENARIOS.find(s => s.key === scKey) || ALIEN_SCENARIOS[0];
+  const trace = buildAliensAuditTrace(sc.types, sc.claims);
+  const ts = useTraceStep(trace);
+  const safe = ts.safe;
+  const s = trace[safe];
+
+  const N = sc.types.length;
+
+  const typeBadge = (typ, opts = {}) => {
+    const isT = typ === "T";
+    const dim = opts.dim;
+    return (
+      <span style={{
+        display: "inline-flex", alignItems: "center", justifyContent: "center",
+        width: 22, height: 22, borderRadius: 6,
+        background: dim ? "#f1f5f9" : (isT ? "#dcfce7" : "#fee2e2"),
+        border: `1.5px solid ${dim ? "#cbd5e1" : (isT ? "#16a34a" : "#dc2626")}`,
+        color: dim ? "#94a3b8" : (isT ? "#15803d" : "#991b1b"),
+        fontWeight: 800, fontSize: 12, fontFamily: "'JetBrains Mono',monospace",
+      }}>{typ}</span>
+    );
+  };
+
+  const renderAlienCell = (typ, idx) => {
+    const isCurrent = (s.sub === "read" || s.sub === "pass" || s.sub === "fail") && s.i === idx;
+    const isTarget = (s.sub === "read" || s.sub === "pass" || s.sub === "fail") && s.pi === idx;
+    const isPassedRow = s.sub === "done" && s.consistent;
+    const isFailRow = s.sub === "fail" || (s.sub === "done" && s.failedAt === idx);
+    const bg = isFailRow && (isCurrent || isTarget) ? "#fee2e2"
+             : isPassedRow ? "#dcfce7"
+             : isCurrent ? "#fef3c7"
+             : isTarget ? "#dbeafe"
+             : "#fff";
+    const bd = isFailRow && (isCurrent || isTarget) ? "#dc2626"
+             : isPassedRow ? "#16a34a"
+             : isCurrent ? "#f59e0b"
+             : isTarget ? A
+             : "#cbd5e1";
+    return (
+      <div key={idx} style={{
+        display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
+        padding: "6px 4px", borderRadius: 8,
+        background: bg, border: `2px solid ${bd}`, minWidth: 50,
+      }}>
+        <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>i={idx}</div>
+        <div style={{ fontSize: 18 }}>{"👽"}</div>
+        {typeBadge(typ)}
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader
+        accent={A}
+        idx={safe}
+        total={trace.length}
+        isEn={E}
+        title={t(E, "Deep audit: walk each alien's claim against the T/F rule",
+                    "딥 오딧: 각 외계인의 주장을 T/F 규칙과 한 명씩 대조")}
+        subtitle={t(E, `Pick a scenario, then ▶ to audit claim by claim. (${safe + 1} / ${trace.length})`,
+                       `시나리오를 고른 뒤 ▶ 으로 한 주장씩 검증. (${safe + 1} / ${trace.length})`)}
+      />
+
+      {/* Scenario picker */}
+      <div style={{
+        background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 10,
+        padding: "8px 12px", marginBottom: 10,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 6 }}>
+          🧪 {t(E, "Scenario", "시나리오")}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          {ALIEN_SCENARIOS.map(c => (
+            <label key={c.key} style={{
+              display: "flex", alignItems: "center", gap: 8, fontSize: 12,
+              cursor: "pointer", padding: "4px 6px", borderRadius: 6,
+              background: scKey === c.key ? "#dbeafe" : "transparent",
+              color: scKey === c.key ? "#1e3a8a" : C.text,
+              fontWeight: scKey === c.key ? 700 : 500,
+            }}>
+              <input
+                type="radio"
+                name="mcc22aliens-audit-sc"
+                value={c.key}
+                checked={scKey === c.key}
+                onChange={() => { setScKey(c.key); ts.setIdx(0); }}
+                style={{ accentColor: A }}
+              />
+              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>
+                {E ? c.label.en : c.label.ko}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Aliens row with types */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 10 }}>
+        {sc.types.map((typ, idx) => renderAlienCell(typ, idx))}
+      </div>
+
+      {/* Claims table */}
+      <div style={{
+        background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8,
+        padding: "8px 10px", marginBottom: 10, fontSize: 12,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 6 }}>
+          📋 {t(E, "Claims", "주장 목록")}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          {sc.claims.map((cl, idx) => {
+            const [pi, bi] = cl;
+            const isCurrent = (s.sub === "read" || s.sub === "pass" || s.sub === "fail") && s.i === idx;
+            const isPast = s.sub === "done" || (s.i > idx && s.i >= 0);
+            const isFail = s.sub === "fail" && s.i === idx;
+            return (
+              <div key={idx} style={{
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "4px 8px", borderRadius: 6,
+                background: isFail ? "#fee2e2" : isCurrent ? "#fef3c7" : isPast ? "#f0fdf4" : "#f8fafc",
+                border: `1.5px solid ${isFail ? "#dc2626" : isCurrent ? "#f59e0b" : isPast ? "#86efac" : C.border}`,
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
+              }}>
+                <span style={{ color: C.dim, minWidth: 28 }}>i={idx}</span>
+                <span>{typeBadge(sc.types[idx], { dim: !isCurrent && !isFail && !isPast })}</span>
+                <span style={{ color: C.dim }}>{t(E, "says alien", "왈 외계인")} {pi}</span>
+                <span>{t(E, "is", "는")}</span>
+                <span>{typeBadge(bi, { dim: !isCurrent && !isFail && !isPast })}</span>
+                {isPast && !isFail && <span style={{ marginLeft: "auto", color: "#15803d", fontWeight: 700 }}>✅</span>}
+                {isFail && <span style={{ marginLeft: "auto", color: "#991b1b", fontWeight: 700 }}>❌</span>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Step explanation */}
+      <NarrativePanel minHeight={92} stepKey={ts.safe}>
+        {s.sub === "init" && (
+          <>
+            <div style={{ fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>
+              📦 {t(E, "Initial state", "초기 상태")}
+            </div>
+            <div>{t(E,
+              `N = ${N}, types = [${sc.types.join(", ")}]. Press ▶ to audit each claim against the T/F rule.`,
+              `N = ${N}, types = [${sc.types.join(", ")}]. ▶ 눌러서 각 주장을 T/F 규칙과 대조.`)}</div>
+          </>
+        )}
+        {s.sub === "read" && (
+          <>
+            <div style={{ fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
+              1️⃣ {t(E, `Step i=${s.i}: read the claim`, `i=${s.i} 단계: 주장 읽기`)}
+            </div>
+            <div>
+              {t(E, "Alien ", "외계인 ")}<b>{s.i}</b>{t(E, " is type ", " 의 타입은 ")}
+              <b style={{ color: s.types_i === "T" ? "#15803d" : "#991b1b" }}>{s.types_i}</b>
+              {t(E, " and claims alien ", " 이고, 외계인 ")}<b>{s.pi}</b>{t(E, " is ", " 는 ")}
+              <b style={{ color: s.bi === "T" ? "#15803d" : "#991b1b" }}>{s.bi}</b>.
+              {" "}
+              {t(E, `Actually alien ${s.pi} is type `, `실제로 외계인 ${s.pi} 는 `)}
+              <b style={{ color: s.types_pi === "T" ? "#15803d" : "#991b1b" }}>{s.types_pi}</b>.
+              {" "}
+              {t(E, "(▶ to judge.)", "(▶ 눌러서 판정.)")}
+            </div>
+          </>
+        )}
+        {s.sub === "pass" && (
+          <>
+            <div style={{ fontWeight: 700, color: "#15803d", marginBottom: 4 }}>
+              ✅ {t(E, `Claim ${s.i} is consistent`, `주장 ${s.i} 일관`)}
+            </div>
+            <div>
+              {s.types_i === "T"
+                ? t(E, `T-type told truth: alien ${s.pi} really is ${s.bi}.`,
+                       `T 가 진실 발설: 외계인 ${s.pi} 는 정말 ${s.bi}.`)
+                : t(E, `F-type lied: alien ${s.pi} is actually ${s.types_pi}, not ${s.bi}.`,
+                       `F 가 거짓말: 외계인 ${s.pi} 는 실제로 ${s.types_pi}, ${s.bi} 가 아님.`)}
+              {" "}
+              {t(E, "Move to the next claim.", "다음 주장으로.")}
+            </div>
+          </>
+        )}
+        {s.sub === "fail" && (
+          <>
+            <div style={{ fontWeight: 700, color: "#991b1b", marginBottom: 4 }}>
+              ❌ {t(E, `Claim ${s.i} breaks the rule`, `주장 ${s.i} 규칙 위반`)}
+            </div>
+            <div>
+              {s.types_i === "T"
+                ? t(E, `T-type must tell truth, but alien ${s.pi} is ${s.types_pi}, not ${s.bi}.`,
+                       `T 는 진실만 말해야 하는데 외계인 ${s.pi} 는 ${s.types_pi}, ${s.bi} 가 아님.`)
+                : t(E, `F-type must lie, but alien ${s.pi} really IS ${s.bi} — that's the truth, not a lie.`,
+                       `F 는 거짓말만 해야 하는데 외계인 ${s.pi} 는 정말로 ${s.bi} — 진실 발설.`)}
+              {" "}
+              {t(E, "Stop early — answer is NO.", "즉시 종료 — 답 NO.")}
+            </div>
+          </>
+        )}
+        {s.sub === "done" && (
+          <>
+            <div style={{ fontWeight: 700, color: s.consistent ? "#15803d" : "#991b1b", marginBottom: 4 }}>
+              {s.consistent ? "🎉" : "🛑"}{" "}
+              {s.consistent
+                ? t(E, "All claims consistent — print YES", "모든 주장 일관 — YES 출력")
+                : t(E, `Inconsistency at i=${s.failedAt} — print NO`, `i=${s.failedAt} 불일치 — NO 출력`)}
+            </div>
+            <div>
+              {s.consistent
+                ? t(E, "Every T told truth and every F lied. The type assignment is valid.",
+                       "모든 T 가 진실, 모든 F 가 거짓. 타입 배정이 유효해요.")
+                : t(E, "One violation is enough — the assignment cannot be valid.",
+                       "위반 한 건이면 충분 — 타입 배정이 유효할 수 없어요.")}
+            </div>
+          </>
+        )}
+      </NarrativePanel>
+
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
 }
 
 

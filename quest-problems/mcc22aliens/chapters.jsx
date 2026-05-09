@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc22AliensSections } from "./components";
+import { getMcc22AliensSections, DeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -47,7 +47,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: Problem (3 steps)
+   Chapter 1: Problem (4 steps — incl. deep-audit sim)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22AliensCh1(E) {
   return [
@@ -108,7 +108,17 @@ export function makeMcc22AliensCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Deep audit sim — drive the T/F rule on three concrete scenarios
+    //        BEFORE the abstract quiz. Densest page is 1-1 (mission + bullets);
+    //        this sim lets the student touch the rule instead of just reading it.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Above is the rule in words — now AUDIT it yourself. Pick a scenario, then ▶ walk every alien's claim and check it against the T/F rule. You'll see exactly where bad scenarios break and why the consistent one survives all four checks.",
+        "위는 글로 된 규칙 — 이제 직접 검증해 봐요. 시나리오를 고르고 ▶ 으로 한 외계인씩 주장을 돌리며 T/F 규칙과 대조. 잘못된 시나리오가 어디서 깨지는지, 왜 일관된 시나리오만 4 개 검증을 모두 통과하는지 직접 확인."),
+      content: (<DeepAuditSim E={E} />),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -125,7 +135,7 @@ export function makeMcc22AliensCh1(E) {
         "Correct! A truth-teller always tells the truth, so if they say alien 2 is T and alien 2 is T, it's consistent.",
         "맞아! 진실형은 항상 진실을 말하니까, 외계인 2가 T라고 말했고 실제로 T이면 일관적이에요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
