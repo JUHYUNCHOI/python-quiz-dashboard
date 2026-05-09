@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc15IsthmusSections } from "./components";
+import { getMcc15IsthmusSections, Mcc15IsthmusDeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -112,6 +112,8 @@ export function makeMcc15IsthmusCh1(E) {
               </div>
             </div>
           </div>
+
+          <Mcc15IsthmusDeepAuditSim E={E} />
         </div>),
     },
     // 1-2: Quiz

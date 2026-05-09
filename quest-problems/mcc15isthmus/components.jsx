@@ -1,8 +1,146 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
+
+/* ──────────────────────────────────────────────────────────────
+   DeepAuditSim — bilingual peak/valley audit visualizer
+   Sequence [1,3,5,3,1] with K=2. Click any interior position
+   (i = K..N-K-1) to see the K left + K right neighbor checks.
+   ────────────────────────────────────────────────────────────── */
+export function Mcc15IsthmusDeepAuditSim({ E }) {
+  const a = [1, 3, 5, 3, 1];
+  const K = 2;
+  const N = a.length;
+  const [pos, setPos] = useState(2);
+
+  const interior = [];
+  for (let i = K; i < N - K; i++) interior.push(i);
+
+  // Compute audit for current pos
+  const leftPeak = []; // strictly increasing into i
+  for (let j = 1; j <= K; j++) {
+    leftPeak.push({ j, lhs: a[pos - j], rhs: a[pos - j + 1], ok: a[pos - j] < a[pos - j + 1] });
+  }
+  const rightPeak = []; // strictly decreasing out of i
+  for (let j = 0; j < K; j++) {
+    rightPeak.push({ j, lhs: a[pos + j], rhs: a[pos + j + 1], ok: a[pos + j] > a[pos + j + 1] });
+  }
+  const leftValley = leftPeak.map(c => ({ ...c, ok: c.lhs > c.rhs }));
+  const rightValley = rightPeak.map(c => ({ ...c, ok: c.lhs < c.rhs }));
+
+  const isPeak = leftPeak.every(c => c.ok) && rightPeak.every(c => c.ok);
+  const isValley = leftValley.every(c => c.ok) && rightValley.every(c => c.ok);
+  const verdict = isPeak ? "PEAK" : isValley ? "VALLEY" : null;
+
+  const cellSize = 44;
+
+  return (
+    <div style={{
+      background: "#f8fafc", border: `1.5px solid ${A}`, borderRadius: 12,
+      padding: "12px 14px", marginTop: 10,
+    }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 8, textAlign: "center" }}>
+        🔍 {t(E, "Deep Audit Sim", "심층 감사 시뮬")} · [1, 3, 5, 3, 1], K=2
+      </div>
+
+      {/* Sequence row — click interior positions */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
+        {a.map((v, i) => {
+          const isInterior = interior.includes(i);
+          const isCur = i === pos;
+          const inLeftWin = isInterior && i >= pos - K && i < pos;
+          const inRightWin = isInterior && i > pos && i <= pos + K;
+          const inWin = i >= pos - K && i <= pos + K;
+          let bg = "#fff", color = C.text, border = "1.5px solid #cbd5e1";
+          if (isCur) { bg = A; color = "#fff"; border = `2px solid ${A}`; }
+          else if (inWin) { bg = "#dbeafe"; border = "1.5px solid #93c5fd"; }
+          return (
+            <button
+              key={i}
+              onClick={() => isInterior && setPos(i)}
+              disabled={!isInterior}
+              title={isInterior ? t(E, `Audit position ${i}`, `위치 ${i} 감사`) : t(E, "Edge — skip", "끝 — 건너뜀")}
+              style={{
+                width: cellSize, height: cellSize, borderRadius: 8,
+                background: bg, color, border, cursor: isInterior ? "pointer" : "not-allowed",
+                fontWeight: 700, fontSize: 16, opacity: isInterior ? 1 : 0.5,
+                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              }}
+            >
+              <div>{v}</div>
+              <div style={{ fontSize: 9, fontWeight: 500, opacity: 0.75 }}>i={i}</div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Audit checks */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, fontSize: 12 }}>
+        <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 8, padding: "8px 10px" }}>
+          <div style={{ fontWeight: 700, color: "#7c3aed", marginBottom: 4 }}>
+            {t(E, "PEAK check", "PEAK 검사")}
+          </div>
+          <div style={{ fontSize: 10, color: C.dim, marginBottom: 4 }}>
+            {t(E, "left ↑ then right ↓", "왼쪽 ↑ 후 오른쪽 ↓")}
+          </div>
+          {leftPeak.map((c, k) => (
+            <div key={`lp${k}`} style={{ color: c.ok ? "#16a34a" : "#dc2626", fontFamily: "monospace" }}>
+              {c.lhs} &lt; {c.rhs} {c.ok ? "✓" : "✗"}
+            </div>
+          ))}
+          {rightPeak.map((c, k) => (
+            <div key={`rp${k}`} style={{ color: c.ok ? "#16a34a" : "#dc2626", fontFamily: "monospace" }}>
+              {c.lhs} &gt; {c.rhs} {c.ok ? "✓" : "✗"}
+            </div>
+          ))}
+          <div style={{ marginTop: 4, fontWeight: 700, color: isPeak ? "#16a34a" : "#94a3b8" }}>
+            {isPeak ? `✓ ${t(E, "PEAK", "PEAK")}` : t(E, "not a peak", "PEAK 아님")}
+          </div>
+        </div>
+        <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 8, padding: "8px 10px" }}>
+          <div style={{ fontWeight: 700, color: "#0891b2", marginBottom: 4 }}>
+            {t(E, "VALLEY check", "VALLEY 검사")}
+          </div>
+          <div style={{ fontSize: 10, color: C.dim, marginBottom: 4 }}>
+            {t(E, "left ↓ then right ↑", "왼쪽 ↓ 후 오른쪽 ↑")}
+          </div>
+          {leftValley.map((c, k) => (
+            <div key={`lv${k}`} style={{ color: c.ok ? "#16a34a" : "#dc2626", fontFamily: "monospace" }}>
+              {c.lhs} &gt; {c.rhs} {c.ok ? "✓" : "✗"}
+            </div>
+          ))}
+          {rightValley.map((c, k) => (
+            <div key={`rv${k}`} style={{ color: c.ok ? "#16a34a" : "#dc2626", fontFamily: "monospace" }}>
+              {c.lhs} &lt; {c.rhs} {c.ok ? "✓" : "✗"}
+            </div>
+          ))}
+          <div style={{ marginTop: 4, fontWeight: 700, color: isValley ? "#16a34a" : "#94a3b8" }}>
+            {isValley ? `✓ ${t(E, "VALLEY", "VALLEY")}` : t(E, "not a valley", "VALLEY 아님")}
+          </div>
+        </div>
+      </div>
+
+      {/* Verdict */}
+      <div style={{
+        marginTop: 10, padding: "6px 10px", borderRadius: 8, textAlign: "center", fontSize: 12, fontWeight: 700,
+        background: verdict ? "#dcfce7" : "#f1f5f9",
+        color: verdict ? "#15803d" : "#64748b",
+        border: `1px solid ${verdict ? "#86efac" : "#cbd5e1"}`,
+      }}>
+        {verdict
+          ? t(E, `Position ${pos} counts as a ${verdict}.`, `위치 ${pos} 는 ${verdict} 로 인정.`)
+          : t(E, `Position ${pos} is neither peak nor valley.`, `위치 ${pos} 는 PEAK 도 VALLEY 도 아님.`)}
+      </div>
+      <div style={{ fontSize: 10, color: C.dim, marginTop: 6, textAlign: "center" }}>
+        {t(E, "Click any blue-bordered position to audit it.",
+              "파란 테두리 위치를 눌러 감사해봐요.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N, K = map(int, input().split())",
