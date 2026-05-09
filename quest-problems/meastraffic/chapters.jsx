@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMeasTrafficSections } from "./components";
+import { getMeasTrafficSections, TrafficPropagateSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -117,6 +117,9 @@ export function makeTrafficCh1(E) {
               </div>
             </div>
           </div>
+
+          {/* Range propagation sim — feel how a range tightens as it travels */}
+          <TrafficPropagateSim E={E} />
         </div>),
     },
     // 1-2: Quiz

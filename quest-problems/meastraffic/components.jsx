@@ -1,8 +1,170 @@
+import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ================================================================
+   Range Propagation Sim — editable bounds, play to propagate
+   Eye-evident: a 4-segment highway where the student edits each
+   segment's bounds (sensor lo/hi or ramp k), then presses Play to
+   watch the [min,max] flow propagate left→right one segment at a
+   time. Forward pass only — keeps the visual simple.
+   ================================================================ */
+export function TrafficPropagateSim({ E }) {
+  // Initial scenario: sensor → on-ramp → sensor → off-ramp
+  const INITIAL = [
+    { typ: "none", lo: 10, hi: 20, label: t(E, "Sensor", "센서") },
+    { typ: "on",   lo: 5,  hi: 10, label: t(E, "On-ramp", "진입로") },
+    { typ: "none", lo: 12, hi: 40, label: t(E, "Sensor", "센서") },
+    { typ: "off",  lo: 2,  hi: 8,  label: t(E, "Off-ramp", "출구로") },
+  ];
+  const [segs, setSegs] = useState(INITIAL);
+  const [step, setStep] = useState(0);   // 0..segs.length (number of propagations done)
+  const [playing, setPlaying] = useState(false);
+  const timerRef = useRef(null);
+
+  // Propagate forward to compute [lo,hi] AFTER each segment index
+  // ranges[0] = after segment 0 (= sensor's range); ranges[i] = after applying segs[i]
+  const ranges = [];
+  let lo = segs[0].lo, hi = segs[0].hi;
+  ranges.push({ lo, hi });
+  for (let i = 1; i < segs.length; i++) {
+    const s = segs[i];
+    if (s.typ === "none") { lo = Math.max(lo, s.lo); hi = Math.min(hi, s.hi); }
+    else if (s.typ === "on")  { lo += s.lo; hi += s.hi; }
+    else if (s.typ === "off") { lo -= s.hi; hi -= s.lo; }
+    if (lo < 0) lo = 0;
+    if (hi < lo) hi = lo; // empty range guard, visual only
+    ranges.push({ lo, hi });
+  }
+
+  useEffect(() => {
+    if (!playing) return;
+    if (step >= segs.length) { setPlaying(false); return; }
+    timerRef.current = setTimeout(() => setStep(s => s + 1), 700);
+    return () => clearTimeout(timerRef.current);
+  }, [playing, step, segs.length]);
+
+  const reset = () => { setPlaying(false); setStep(0); };
+  const play = () => {
+    if (step >= segs.length) setStep(0);
+    setPlaying(true);
+  };
+
+  const updateSeg = (i, field, val) => {
+    setPlaying(false); setStep(0);
+    setSegs(prev => prev.map((s, k) => k === i ? { ...s, [field]: Math.max(0, Number(val) || 0) } : s));
+  };
+  const cycleType = (i) => {
+    if (i === 0) return; // first segment locked as sensor (provides initial range)
+    const order = ["none", "on", "off"];
+    setPlaying(false); setStep(0);
+    setSegs(prev => prev.map((s, k) => {
+      if (k !== i) return s;
+      const next = order[(order.indexOf(s.typ) + 1) % 3];
+      return { ...s, typ: next, label: next === "none" ? t(E, "Sensor", "센서") : next === "on" ? t(E, "On-ramp", "진입로") : t(E, "Off-ramp", "출구로") };
+    }));
+  };
+
+  const TYPE_COLOR = {
+    none: { fg: "#0891b2", bg: "#cffafe", bd: "#67e8f9" },
+    on:   { fg: "#16a34a", bg: "#dcfce7", bd: "#86efac" },
+    off:  { fg: "#dc2626", bg: "#fee2e2", bd: "#fca5a5" },
+  };
+  const opLabel = (s) => s.typ === "none" ? `[${s.lo}, ${s.hi}]` : s.typ === "on" ? `+[${s.lo}, ${s.hi}]` : `−[${s.lo}, ${s.hi}]`;
+
+  return (
+    <div style={{
+      background: "#f8fafc", border: `1.5px dashed ${A}`, borderRadius: 12,
+      padding: 14, marginTop: 6, marginBottom: 6,
+    }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: A, letterSpacing: 0.5, marginBottom: 8 }}>
+        🧪 {t(E, "Try it: edit bounds, press Play to propagate", "직접 해보기: 값을 바꾸고 Play 로 전파해 봐")}
+      </div>
+
+      {/* Highway segments row */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 12 }}>
+        {segs.map((s, i) => {
+          const c = TYPE_COLOR[s.typ];
+          const active = step > i; // propagation has reached AFTER segment i
+          const current = step === i + 1; // just-applied segment
+          return (
+            <div key={i} style={{
+              minWidth: 92,
+              background: c.bg, border: `2px solid ${current ? A : c.bd}`,
+              borderRadius: 10, padding: "6px 8px", textAlign: "center",
+              boxShadow: current ? `0 0 0 3px ${A}33` : "none",
+              transition: "box-shadow 200ms, border-color 200ms",
+            }}>
+              <button onClick={() => cycleType(i)} disabled={i === 0} title={t(E, "Click to change type", "클릭해서 타입 변경")} style={{
+                background: "transparent", border: "none", padding: 0, cursor: i === 0 ? "default" : "pointer",
+                fontSize: 10, fontWeight: 800, color: c.fg, letterSpacing: 0.3,
+              }}>
+                {s.label}{i === 0 ? " 🔒" : " ↻"}
+              </button>
+              <div style={{ display: "flex", gap: 3, justifyContent: "center", marginTop: 4 }}>
+                <input type="number" value={s.lo} min={0} onChange={e => updateSeg(i, "lo", e.target.value)} style={{
+                  width: 36, padding: "2px 4px", fontSize: 11, fontWeight: 700,
+                  border: `1px solid ${c.bd}`, borderRadius: 4, textAlign: "center", color: c.fg, background: "#fff",
+                }} />
+                <input type="number" value={s.hi} min={0} onChange={e => updateSeg(i, "hi", e.target.value)} style={{
+                  width: 36, padding: "2px 4px", fontSize: 11, fontWeight: 700,
+                  border: `1px solid ${c.bd}`, borderRadius: 4, textAlign: "center", color: c.fg, background: "#fff",
+                }} />
+              </div>
+              <div style={{ fontSize: 10, color: c.fg, marginTop: 3, fontWeight: 600 }}>{opLabel(s)}</div>
+              {/* Range label after this segment */}
+              <div style={{
+                marginTop: 6, fontSize: 11, fontWeight: 800,
+                color: active ? "#5b21b6" : "#cbd5e1",
+                opacity: active ? 1 : 0.4, transition: "opacity 250ms, color 250ms",
+              }}>
+                {active ? `→ [${ranges[i].lo}, ${ranges[i].hi}]` : "→ [?, ?]"}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+        <button onClick={play} disabled={playing} style={{
+          background: playing ? "#cbd5e1" : A, color: "#fff",
+          border: "none", borderRadius: 8, padding: "5px 14px",
+          fontSize: 12, fontWeight: 800, cursor: playing ? "default" : "pointer",
+        }}>
+          ▶ {t(E, "Play", "재생")}
+        </button>
+        <button onClick={reset} style={{
+          background: "#fff", color: A, border: `1.5px solid ${A}`,
+          borderRadius: 8, padding: "5px 12px",
+          fontSize: 12, fontWeight: 800, cursor: "pointer",
+        }}>
+          ↺ {t(E, "Reset", "리셋")}
+        </button>
+        <div style={{ fontSize: 11, color: C.dim, marginLeft: 4 }}>
+          {t(E, "Step", "단계")} {step}/{segs.length}
+        </div>
+      </div>
+
+      {/* Final range banner */}
+      <div style={{ marginTop: 10, textAlign: "center", fontSize: 12, color: C.text }}>
+        {step >= segs.length ? (
+          <span><b style={{ color: "#15803d" }}>{t(E, "End flow", "끝 유량")}:</b>{" "}
+            <b style={{ color: A }}>[{ranges[segs.length - 1].lo}, {ranges[segs.length - 1].hi}]</b>
+          </span>
+        ) : (
+          <span style={{ color: C.dim }}>
+            {t(E, "Press Play to watch the range tighten as it travels right.",
+                  "Play 를 눌러 범위가 오른쪽으로 가며 좁아지는 걸 봐.")}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",
