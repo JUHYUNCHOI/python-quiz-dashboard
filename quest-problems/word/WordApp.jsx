@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal, TextInput } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { DistanceCalc, GreedySim, WordBuilder, GreedyTrace } from "./components";
+import { DistanceCalc, GreedySim, WordBuilder, GreedyTrace, MarginalGainSim } from "./components";
 import { makeWordCh1, makeWordCh2, makeWordCh3 } from "./chapters";
 
 const A = "#3b82f6";
@@ -96,6 +96,7 @@ export default function WordApp(props = {}) {
     if (step.type === "greedySim") return <GreedySim E={E} />;
     if (step.type === "wordBuilder") return <WordBuilder E={E} />;
     if (step.type === "greedyTrace") return <GreedyTrace E={E} />;
+    if (step.type === "marginalGainSim") return <MarginalGainSim E={E} />;
     return null;
   };
 
@@ -113,6 +114,7 @@ export default function WordApp(props = {}) {
     if (s.type === "greedySim") return <GreedySim E={E} />;
     if (s.type === "wordBuilder") return <WordBuilder E={E} />;
     if (s.type === "greedyTrace") return <GreedyTrace E={E} />;
+    if (s.type === "marginalGainSim") return <MarginalGainSim E={E} />;
     return null;
   };
 

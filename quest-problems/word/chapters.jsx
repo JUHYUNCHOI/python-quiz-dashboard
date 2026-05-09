@@ -297,6 +297,13 @@ export function makeWordCh1(E) {
           </div>
         </div>),
     },
+    // 1-5b: Marginal gain hands-on
+    {
+      type: "marginalGainSim",
+      narr: t(E,
+        "Try it yourself!\nTap any letter and watch its gain (+N) shrink as you add more.\nThat's the key insight — gains only go down, so picking the highest gain each step is safe.",
+        "직접 해봐요!\n글자를 눌러서 추가하면 그 글자의 +N (새로 겹치는 수)이 줄어들어요.\n이게 핵심이에요 — 매번 가장 큰 +N을 고르면 항상 최선이에요!"),
+    },
     // 1-6: Quiz — greedy pick
     {
       type: "quiz",

@@ -429,6 +429,151 @@ export function GreedySim({ E }) {
 
 
 /* ═══════════════════════════════════════════════════════════════
+   MarginalGainSim — Click letters to see marginal gain decrease
+   Reinforces "why greedy works": each extra letter has lower gain
+   ═══════════════════════════════════════════════════════════════ */
+export function MarginalGainSim({ E }) {
+  // Track how many of each letter the student has placed
+  const [counts, setCounts] = useState({}); // letter -> count
+  const placedTotal = Object.values(counts).reduce((a, b) => a + b, 0);
+
+  const addLetter = (c) => {
+    if (placedTotal >= M) return;
+    setCounts(prev => ({ ...prev, [c]: (prev[c] || 0) + 1 }));
+  };
+  const reset = () => setCounts({});
+
+  // Marginal gain for letter c at current count k:
+  // = number of words where freq[c] > k
+  const gainOf = (c) => {
+    const k = counts[c] || 0;
+    return WORD_FREQS.reduce((s, f) => s + ((f[c] || 0) > k ? 1 : 0), 0);
+  };
+
+  // Total shared so far (sum of min(freqInWord, count) across words)
+  const totalShared = SAMPLE_WORDS.reduce((tot, w, wi) => {
+    const f = WORD_FREQS[wi];
+    let s = 0;
+    for (const c in counts) s += Math.min(f[c] || 0, counts[c] || 0);
+    return tot + s;
+  }, 0);
+
+  // Build the current word (sorted) — only meaningful when full
+  const builtLetters = [];
+  for (const c of ALL_LETTERS) {
+    for (let i = 0; i < (counts[c] || 0); i++) builtLetters.push(c);
+  }
+  const isFull = placedTotal >= M;
+
+  // Best gain right now (for "smart pick" hint)
+  const bestGain = Math.max(0, ...ALL_LETTERS.map(c => gainOf(c)));
+
+  return (
+    <div style={{ padding: "10px 6px" }}>
+      {/* Header */}
+      <div style={{ textAlign: "center", fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 6 }}>
+        {t(E, "Tap a letter to add it. Watch the gain change!", "글자를 눌러서 추가해봐. 추가할 때마다 겹치는 수가 어떻게 변하는지 봐!")}
+      </div>
+
+      {/* Slot indicator */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 8 }}>
+        {Array.from({ length: M }).map((_, i) => {
+          const filled = i < builtLetters.length;
+          return (
+            <div key={i} style={{
+              width: 36, height: 36, borderRadius: 8,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              background: filled ? `linear-gradient(135deg,#1d4ed8,${A})` : "#fff",
+              border: filled ? "none" : `2px dashed ${ABd}`,
+              color: filled ? "#fff" : C.dim,
+              fontFamily: "'JetBrains Mono',monospace",
+              fontWeight: 700, fontSize: 18,
+              transition: "all .25s",
+            }}>{filled ? builtLetters[i] : "·"}</div>
+          );
+        })}
+      </div>
+
+      {/* Letter buttons with live gain */}
+      <div style={{
+        display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center", marginBottom: 8,
+      }}>
+        {ALL_LETTERS.map(c => {
+          const g = gainOf(c);
+          const k = counts[c] || 0;
+          const isBest = !isFull && g === bestGain && g > 0;
+          return (
+            <button key={c} onClick={() => addLetter(c)} disabled={isFull} style={{
+              width: 44, padding: "4px 0", borderRadius: 8, cursor: isFull ? "default" : "pointer",
+              border: `1.5px solid ${isBest ? "#fbbf24" : ABd}`,
+              background: isBest ? "#fef3c7" : (k > 0 ? "#dbeafe" : "#fff"),
+              fontFamily: "'JetBrains Mono',monospace",
+              transition: "all .2s",
+              opacity: isFull ? 0.65 : 1,
+            }}>
+              <div style={{
+                fontWeight: 700, fontSize: 15,
+                color: isBest ? "#92400e" : (k > 0 ? "#1d4ed8" : A),
+              }}>
+                {c}{k > 0 ? `×${k}` : ""}
+              </div>
+              <div style={{
+                fontSize: 10, fontWeight: 700,
+                color: g === 0 ? "#cbd5e1" : (isBest ? "#92400e" : "#059669"),
+              }}>+{g}</div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Live status */}
+      <div style={{
+        background: "#1e293b", borderRadius: 10, padding: "8px 12px",
+        fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
+        color: "#e2e8f0", lineHeight: 1.8, textAlign: "center", marginBottom: 8,
+      }}>
+        <div>
+          {t(E, "placed", "넣은 글자")}: <span style={{ color: "#93c5fd", fontWeight: 700 }}>{placedTotal}/{M}</span>
+          {"   "}
+          {t(E, "total shared", "겹침 총합")}: <span style={{ color: "#fbbf24", fontWeight: 700 }}>{totalShared}</span>
+        </div>
+        {isFull && (
+          <div style={{ marginTop: 4 }}>
+            {t(E, "word", "단어")}: <span style={{ color: "#6ee7b7", fontWeight: 700, fontSize: 14 }}>'{builtLetters.join("")}'</span>
+            {"   "}
+            {t(E, "distance sum", "거리 합")} = {SAMPLE_WORDS.length}×{M} − {totalShared} = <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: 14 }}>{SAMPLE_WORDS.length * M - totalShared}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Hint — only show when something placed but not full */}
+      {placedTotal > 0 && !isFull && (
+        <div style={{
+          background: "#fef3c7", borderRadius: 8, padding: "6px 10px",
+          border: "1.5px solid #fbbf24", fontSize: 11, color: "#92400e",
+          fontWeight: 700, textAlign: "center", marginBottom: 8,
+        }}>
+          💡 {t(E,
+            "Notice: gain (+N) drops as you add a letter — that's why greedy works!",
+            "글자를 더 넣을수록 +N (새로 겹치는 수)이 줄어들어. 그래서 매번 가장 큰 걸 고르면 돼!")}
+        </div>
+      )}
+
+      {/* Reset */}
+      {placedTotal > 0 && (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <button onClick={reset} style={{
+            padding: "6px 16px", borderRadius: 8, fontSize: 12, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+          }}>↺ {t(E, "Reset", "다시")}</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
    WordBuilder — Show final construction
    ═══════════════════════════════════════════════════════════════ */
 export function WordBuilder({ E }) {
