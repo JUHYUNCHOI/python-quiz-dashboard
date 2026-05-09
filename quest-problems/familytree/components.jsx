@@ -1,8 +1,223 @@
+import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ============================================================
+   FamilyTreeSim — pick two cows, watch the LCA walk light up
+   and classify the relationship live.
+   ============================================================ */
+// Fixed mini family tree (parent → child). Single root grandma.
+const _SIM_PARENT = {
+  // child : mom
+  Bessie: "Mildred",
+  Daisy: "Mildred",
+  Lola: "Bessie",
+  Mabel: "Bessie",
+  Rosie: "Daisy",
+  Tilly: "Lola",
+};
+const _SIM_COWS = ["Mildred", "Bessie", "Daisy", "Lola", "Mabel", "Rosie", "Tilly"];
+// Pre-computed (row, col) for tree layout
+const _SIM_POS = {
+  Mildred: { row: 0, col: 3 },
+  Bessie:  { row: 1, col: 1.5 },
+  Daisy:   { row: 1, col: 4.5 },
+  Lola:    { row: 2, col: 0.5 },
+  Mabel:   { row: 2, col: 2.5 },
+  Rosie:   { row: 2, col: 4.5 },
+  Tilly:   { row: 3, col: 0.5 },
+};
+
+function _ancestorChain(name) {
+  const chain = [];
+  let cur = name, d = 0;
+  while (cur) {
+    chain.push({ name: cur, depth: d });
+    cur = _SIM_PARENT[cur];
+    d += 1;
+  }
+  return chain;
+}
+
+function _classify(X, Y, E) {
+  if (X === Y) return t(E, "same cow", "같은 소");
+  const chX = _ancestorChain(X);
+  const setX = new Map(chX.map(n => [n.name, n.depth]));
+  const chY = _ancestorChain(Y);
+  let lca = null, dX = -1, dY = -1;
+  for (const node of chY) {
+    if (setX.has(node.name)) {
+      lca = node.name;
+      dX = setX.get(node.name);
+      dY = node.depth;
+      break;
+    }
+  }
+  if (!lca) return t(E, "NOT RELATED", "관계 없음");
+  if (dX === 0 && dY === 1) return t(E, `${X} is ${Y}'s mother`, `${X} 는 ${Y} 의 엄마`);
+  if (dY === 0 && dX === 1) return t(E, `${X} is ${Y}'s daughter`, `${X} 는 ${Y} 의 딸`);
+  if (dX === 0 && dY > 1) {
+    const greats = "great-".repeat(dY - 2);
+    return t(E, `${X} is ${Y}'s ${greats}grandmother`, `${X} 는 ${Y} 의 ${greats}할머니`);
+  }
+  if (dY === 0 && dX > 1) {
+    const greats = "great-".repeat(dX - 2);
+    return t(E, `${X} is ${Y}'s ${greats}granddaughter`, `${X} 는 ${Y} 의 ${greats}손녀`);
+  }
+  if (dX === 1 && dY === 1) return t(E, "siblings", "자매");
+  if (dX === dY) return t(E, "cousins", "사촌");
+  return t(E, `related (LCA=${lca})`, `친척 (공통조상=${lca})`);
+}
+
+function _pathTo(start, target) {
+  // walk up from start until reaching target; returns list of names (inclusive)
+  const path = [];
+  let cur = start;
+  while (cur) {
+    path.push(cur);
+    if (cur === target) return path;
+    cur = _SIM_PARENT[cur];
+  }
+  return path;
+}
+
+export function FamilyTreeSim({ E }) {
+  const [X, setX] = useState("Tilly");
+  const [Y, setY] = useState("Rosie");
+
+  const { lca, pathX, pathY, label } = useMemo(() => {
+    const chX = _ancestorChain(X);
+    const setX = new Map(chX.map(n => [n.name, n.depth]));
+    const chY = _ancestorChain(Y);
+    let lcaName = null;
+    for (const node of chY) {
+      if (setX.has(node.name)) { lcaName = node.name; break; }
+    }
+    const pX = lcaName ? _pathTo(X, lcaName) : _ancestorChain(X).map(n => n.name);
+    const pY = lcaName ? _pathTo(Y, lcaName) : _ancestorChain(Y).map(n => n.name);
+    return { lca: lcaName, pathX: pX, pathY: pY, label: _classify(X, Y, E) };
+  }, [X, Y, E]);
+
+  const cellW = 70, cellH = 56, padX = 16, padY = 10;
+  const rows = 4, cols = 6;
+  const svgW = padX * 2 + cellW * cols;
+  const svgH = padY * 2 + cellH * rows;
+  const xy = (name) => {
+    const p = _SIM_POS[name];
+    return {
+      cx: padX + (p.col + 0.5) * cellW,
+      cy: padY + (p.row + 0.5) * cellH,
+    };
+  };
+
+  const pathSet = new Set([...pathX, ...pathY]);
+  const edgeIsOnPath = (child, parent) =>
+    pathSet.has(child) && pathSet.has(parent) &&
+    ((pathX.includes(child) && pathX.includes(parent)) ||
+     (pathY.includes(child) && pathY.includes(parent)));
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 8, textAlign: "center" }}>
+          {t(E, "🌳 Pick two cows — watch the LCA walk up", "🌳 두 소를 골라 — LCA 까지 걸어 올라가요")}
+        </div>
+
+        {/* Cow pickers */}
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 8 }}>
+          {[
+            { label: "X", value: X, setter: setX, color: "#7c3aed" },
+            { label: "Y", value: Y, setter: setY, color: "#0891b2" },
+          ].map(({ label: lbl, value, setter, color }) => (
+            <div key={lbl} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ fontSize: 12, fontWeight: 800, color }}>{lbl}:</span>
+              <select value={value} onChange={(e) => setter(e.target.value)} style={{
+                background: "#fff", color, border: `1.5px solid ${color}`,
+                borderRadius: 8, padding: "4px 8px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+              }}>
+                {_SIM_COWS.map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </div>
+          ))}
+        </div>
+
+        {/* SVG tree */}
+        <div style={{ background: "#fff", borderRadius: 10, border: `1px solid #6ee7b7`, padding: 4, overflowX: "auto" }}>
+          <svg width={svgW} height={svgH} style={{ display: "block", margin: "0 auto", maxWidth: "100%" }}>
+            {/* Edges parent → child */}
+            {Object.entries(_SIM_PARENT).map(([child, parent]) => {
+              const a = xy(parent), b = xy(child);
+              const onPath = edgeIsOnPath(child, parent);
+              return (
+                <line key={`${parent}-${child}`}
+                  x1={a.cx} y1={a.cy + 14}
+                  x2={b.cx} y2={b.cy - 14}
+                  stroke={onPath ? A : "#cbd5e1"}
+                  strokeWidth={onPath ? 3 : 1.5}
+                  strokeDasharray={onPath ? "0" : "3,3"}
+                />
+              );
+            })}
+            {/* Nodes */}
+            {_SIM_COWS.map(name => {
+              const { cx, cy } = xy(name);
+              const isX = name === X, isY = name === Y, isLCA = name === lca && X !== Y;
+              const onPath = pathSet.has(name);
+              const fill = isX ? "#7c3aed" : isY ? "#0891b2" : isLCA ? "#f59e0b" : onPath ? "#a7f3d0" : "#fff";
+              const stroke = isX ? "#7c3aed" : isY ? "#0891b2" : isLCA ? "#f59e0b" : onPath ? A : "#cbd5e1";
+              const textColor = isX || isY || isLCA ? "#fff" : "#065f46";
+              return (
+                <g key={name} style={{ cursor: "pointer" }} onClick={() => {
+                  // click = quick set: prefer setting whichever is "less recent" — toggle
+                  if (name === X) return;
+                  if (name === Y) setX(name); else setY(name);
+                }}>
+                  <rect x={cx - 30} y={cy - 14} width={60} height={28} rx={8}
+                    fill={fill} stroke={stroke} strokeWidth={2} />
+                  <text x={cx} y={cy + 4} textAnchor="middle"
+                    style={{ fontSize: 11, fontWeight: 800, fill: textColor, fontFamily: "system-ui, sans-serif" }}>
+                    {name}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+
+        {/* Legend */}
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 8, flexWrap: "wrap", fontSize: 11, color: "#065f46" }}>
+          <span><b style={{ color: "#7c3aed" }}>■</b> X</span>
+          <span><b style={{ color: "#0891b2" }}>■</b> Y</span>
+          <span><b style={{ color: "#f59e0b" }}>■</b> LCA</span>
+          <span><b style={{ color: A }}>—</b> {t(E, "walk-up path", "올라가는 경로")}</span>
+        </div>
+      </div>
+
+      {/* Verdict card */}
+      <div style={{
+        background: "#fff", border: `2px solid ${A}`, borderRadius: 12, padding: "12px 14px",
+        textAlign: "center",
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 6 }}>
+          🎯 {t(E, "Relationship", "관계")}
+        </div>
+        <div style={{ fontSize: 15, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono', monospace" }}>
+          {label}
+        </div>
+        {lca && X !== Y && (
+          <div style={{ fontSize: 11, color: C.dim, marginTop: 6 }}>
+            {t(E,
+              `LCA = ${lca} · depth(X) = ${pathX.length - 1}, depth(Y) = ${pathY.length - 1}`,
+              `공통조상 = ${lca} · 깊이(X) = ${pathX.length - 1}, 깊이(Y) = ${pathY.length - 1}`)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

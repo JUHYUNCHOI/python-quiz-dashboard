@@ -114,7 +114,14 @@ export function makeFamilyTreeCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Sim — pick two cows, watch LCA + classification live
+    {
+      type: "sim",
+      narr: t(E,
+        "Tiny family tree. Pick X and Y — both walk up to their first common ancestor (LCA). Depths from each side decide the label: mother / grand-mother / siblings / cousins / unrelated. Try Tilly vs Rosie, Lola vs Mabel, Bessie vs Mildred, then Tilly vs Daisy.",
+        "작은 가계도. X 와 Y 를 골라 — 둘 다 처음 만나는 공통 조상 (LCA) 까지 올라가요. 양쪽 깊이로 라벨이 결정돼요: 엄마 / 할머니 / 자매 / 사촌 / 무관. Tilly vs Rosie, Lola vs Mabel, Bessie vs Mildred, Tilly vs Daisy 순으로 눌러봐."),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -132,7 +139,7 @@ export function makeFamilyTreeCh1(E) {
         "Mother and child are exactly 1 generation apart!",
         "어미와 자식은 정확히 1세대 차이에요!"),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

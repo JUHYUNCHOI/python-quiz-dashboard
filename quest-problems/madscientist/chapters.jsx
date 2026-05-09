@@ -124,6 +124,13 @@ export function makeMadSciCh1(E) {
         "A 와 B 가 다른 연속 블록의 수를 세어 봐."),
       answer: 1,
     },
+    // 1-4: Sim — scan the rows, count mismatch runs
+    {
+      type: "sim",
+      narr: t(E,
+        "Now play with it. Pick a preset, then click 'Scan next' to walk through one position at a time. Watch the ✗ marks light up — each contiguous run of ✗ is exactly one flip.",
+        "이제 직접 해 봐요. 프리셋을 고르고 '다음 스캔'을 눌러 한 칸씩 진행. ✗ 표시가 켜지는 걸 봐요 — 연속된 ✗ 한 묶음이 정확히 한 번의 뒤집기."),
+    },
   ];
 }
 

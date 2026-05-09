@@ -1,8 +1,181 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ================================================================
+   MismatchRunsSim — bilingual scan-the-rows simulation
+   Shows two cow patterns A, B (length N over {G, H}).
+   Click "Scan" to walk through index i; component highlights mismatch
+   positions and counts contiguous runs of mismatches = answer.
+   ================================================================ */
+const _MS_PRESETS = [
+  { A: "HH",       B: "GG"       },
+  { A: "HGH",      B: "GHG"      },
+  { A: "HHGG",     B: "GHGG"     },
+  { A: "GHHGGH",   B: "HHGHGG"   },
+  { A: "HGHGHGHG", B: "HGGGHHGG" },
+];
+
+export function MismatchRunsSim({ E }) {
+  const [pi, setPi] = useState(1);
+  const [i, setI] = useState(0);
+  const { A: SA, B: SB } = _MS_PRESETS[pi];
+  const N = SA.length;
+
+  // up to current scan index i (exclusive when 0, inclusive when > 0)
+  // i=0 means "not started"; i=1 means "scanned position 0", up to i=N "all scanned"
+  const scannedThrough = i; // number of positions scanned
+  let runs = 0;
+  let inDiff = false;
+  for (let k = 0; k < scannedThrough; k++) {
+    if (SA[k] !== SB[k]) {
+      if (!inDiff) { runs += 1; inDiff = true; }
+    } else inDiff = false;
+  }
+
+  const reset = (idx) => { setPi(idx); setI(0); };
+  const cellSize = N <= 4 ? 38 : N <= 6 ? 34 : 30;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: A, marginBottom: 8, textAlign: "center" }}>
+        🔬 {t(E, "Scan the rows — count mismatch runs", "행을 스캔 — 다른 구간 묶음 세기")}
+      </div>
+
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_MS_PRESETS.map((p, idx) => (
+          <button key={idx} onClick={() => reset(idx)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${idx === pi ? A : C.border}`,
+            background: idx === pi ? A : "transparent", color: idx === pi ? "#fff" : C.dim,
+            fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            N={p.A.length}
+          </button>
+        ))}
+      </div>
+
+      {/* index ruler */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 4 }}>
+        <div style={{ width: 36 }} />
+        <div style={{ display: "flex", gap: 4 }}>
+          {Array.from({ length: N }).map((_, k) => (
+            <div key={k} style={{
+              width: cellSize, textAlign: "center", fontSize: 10, color: C.dim,
+              fontFamily: "'JetBrains Mono',monospace",
+            }}>{k}</div>
+          ))}
+        </div>
+      </div>
+
+      {/* row A */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 4 }}>
+        <div style={{ width: 36, fontWeight: 800, color: A, textAlign: "right", paddingRight: 8, lineHeight: `${cellSize}px` }}>A</div>
+        <div style={{ display: "flex", gap: 4 }}>
+          {SA.split("").map((c, k) => {
+            const scanned = k < scannedThrough;
+            const isMis = scanned && SA[k] !== SB[k];
+            return (
+              <div key={k} style={{
+                width: cellSize, height: cellSize, lineHeight: `${cellSize}px`, textAlign: "center",
+                fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 15,
+                background: !scanned ? "#f1f5f9" : isMis ? "#fee2e2" : "#dcfce7",
+                color: !scanned ? C.dim : isMis ? "#b91c1c" : "#166534",
+                border: `1.5px solid ${!scanned ? C.border : isMis ? "#f87171" : "#86efac"}`,
+                borderRadius: 6,
+              }}>{c}</div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* row B */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 4 }}>
+        <div style={{ width: 36, fontWeight: 800, color: A, textAlign: "right", paddingRight: 8, lineHeight: `${cellSize}px` }}>B</div>
+        <div style={{ display: "flex", gap: 4 }}>
+          {SB.split("").map((c, k) => {
+            const scanned = k < scannedThrough;
+            const isMis = scanned && SA[k] !== SB[k];
+            return (
+              <div key={k} style={{
+                width: cellSize, height: cellSize, lineHeight: `${cellSize}px`, textAlign: "center",
+                fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 15,
+                background: !scanned ? "#f1f5f9" : isMis ? "#fee2e2" : "#dcfce7",
+                color: !scanned ? C.dim : isMis ? "#b91c1c" : "#166534",
+                border: `1.5px solid ${!scanned ? C.border : isMis ? "#f87171" : "#86efac"}`,
+                borderRadius: 6,
+              }}>{c}</div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* diff marker row */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+        <div style={{ width: 36 }} />
+        <div style={{ display: "flex", gap: 4 }}>
+          {Array.from({ length: N }).map((_, k) => {
+            const scanned = k < scannedThrough;
+            const isMis = scanned && SA[k] !== SB[k];
+            return (
+              <div key={k} style={{
+                width: cellSize, height: 18, lineHeight: "18px", textAlign: "center",
+                fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 12,
+                color: !scanned ? "transparent" : isMis ? "#b91c1c" : "#94a3b8",
+              }}>{!scanned ? "·" : isMis ? "✗" : "="}</div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        <button onClick={() => setI(Math.max(0, i - 1))} disabled={i === 0} style={{
+          padding: "6px 12px", borderRadius: 8, border: `1.5px solid ${A}`,
+          background: i === 0 ? "#fed7aa" : "#fff", color: A,
+          fontSize: 12, fontWeight: 800, cursor: i === 0 ? "not-allowed" : "pointer",
+          opacity: i === 0 ? 0.5 : 1,
+        }}>⟵ {t(E, "Back", "뒤로")}</button>
+        <button onClick={() => setI(Math.min(N, i + 1))} disabled={i >= N} style={{
+          padding: "6px 14px", borderRadius: 8, border: `1.5px solid ${A}`,
+          background: i >= N ? "#fed7aa" : A, color: i >= N ? A : "#fff",
+          fontSize: 12, fontWeight: 800, cursor: i >= N ? "not-allowed" : "pointer",
+          opacity: i >= N ? 0.6 : 1,
+        }}>🔍 {t(E, "Scan next", "다음 스캔")} ⟶</button>
+        <button onClick={() => setI(N)} style={{
+          padding: "6px 12px", borderRadius: 8, border: `1.5px solid ${C.border}`,
+          background: "#fff", color: C.dim, fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>{t(E, "Scan all", "전부 스캔")}</button>
+        <button onClick={() => setI(0)} style={{
+          padding: "6px 12px", borderRadius: 8, border: `1.5px solid ${C.border}`,
+          background: "#fff", color: C.dim, fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>↺ {t(E, "Reset", "리셋")}</button>
+      </div>
+
+      {/* counter */}
+      <div style={{
+        background: "#fff7ed", border: `1.5px solid ${A}`, borderRadius: 10,
+        padding: "10px 14px", textAlign: "center",
+      }}>
+        <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, letterSpacing: 0.5, marginBottom: 4 }}>
+          {t(E, "Scanned", "스캔됨")}: {scannedThrough} / {N}
+          {inDiff && i > 0 && i < N ? <span style={{ marginLeft: 8, color: "#b91c1c" }}>· {t(E, "inside a mismatch run", "다른 구간 안")}</span> : null}
+        </div>
+        <div style={{ fontSize: 22, fontWeight: 900, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "mismatch runs", "다른 구간 수")} = <span style={{ color: "#b91c1c" }}>{runs}</span>
+        </div>
+        <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
+          {i < N
+            ? t(E, "Each run of consecutive ✗ becomes one flip.", "연속된 ✗ 묶음 하나가 한 번의 뒤집기.")
+            : t(E, "Answer = number of mismatch runs = minimum flips.", "답 = 다른 구간 수 = 최소 뒤집기 수.")}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",
