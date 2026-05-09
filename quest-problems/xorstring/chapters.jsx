@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getXorStringSections } from "./components";
+import { getXorStringSections, XorWalkerSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -76,6 +76,14 @@ export function makeXorStringCh1(E) {
             </div>
           </div>
         </div>),
+    },
+    // 1-1.5: XOR Walker Sim (interactive)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try the XOR walker — edit A and B, then step or play to watch each position compare. Same → green 0, different → red 1.",
+        "XOR 워커를 직접 해 봐 — A 와 B 를 바꾸고, 한 칸씩 또는 자동 재생으로 각 자리 비교를 봐. 같으면 초록 0, 다르면 빨강 1."),
+      content: <XorWalkerSim E={E} />,
     },
     // 1-2: Quiz
     {

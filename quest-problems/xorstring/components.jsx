@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -93,6 +94,194 @@ function highlightCode(lines, lang) {
     const num = String(i + 1).padStart(2, " ");
     return `<span style="color:#475569;display:inline-block;width:24px;text-align:right;margin-right:10px;user-select:none;">${num}</span>${highlightHTML(line, lang) || "&nbsp;"}`;
   }).join("\n");
+}
+
+
+/* ================================================================
+   XOR Walker Simulator
+   Bit-by-bit interactive lab. Edit A and B, step/play to walk
+   the position pointer left-to-right; result builds char by char.
+   ================================================================ */
+const SAME_BG = "#dcfce7";   // green-100
+const SAME_FG = "#15803d";   // green-700
+const DIFF_BG = "#fee2e2";   // red-100
+const DIFF_FG = "#b91c1c";   // red-700
+const BLUE_BG = "#eff6ff";
+const BLUE_BD = "#93c5fd";
+const BLUE_FG = "#2563eb";
+
+function sanitizeBits(s, len) {
+  const cleaned = String(s).replace(/[^01]/g, "").slice(0, len);
+  return cleaned.padEnd(len, "0");
+}
+
+export function XorWalkerSim({ E }) {
+  const LEN = 8;
+  const [a, setA] = useState("10110100");
+  const [b, setB] = useState("11010001");
+  const [pos, setPos] = useState(0);   // next index to compute (0..LEN); LEN means done
+  const [playing, setPlaying] = useState(false);
+  const timerRef = useRef(null);
+
+  const result = [];
+  for (let i = 0; i < pos; i++) result.push(a[i] === b[i] ? "0" : "1");
+
+  useEffect(() => {
+    if (!playing) return;
+    if (pos >= LEN) { setPlaying(false); return; }
+    timerRef.current = setTimeout(() => setPos(p => p + 1), 650);
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, [playing, pos]);
+
+  // Reset pointer when inputs change
+  useEffect(() => { setPos(0); setPlaying(false); }, [a, b]);
+
+  const reset = () => { setPlaying(false); setPos(0); };
+  const step = () => { setPlaying(false); if (pos < LEN) setPos(pos + 1); };
+  const togglePlay = () => {
+    if (pos >= LEN) { setPos(0); setPlaying(true); return; }
+    setPlaying(p => !p);
+  };
+
+  const cellBase = {
+    width: 36, height: 40, display: "inline-flex",
+    alignItems: "center", justifyContent: "center",
+    borderRadius: 6, border: "1.5px solid #cbd5e1",
+    fontFamily: "JetBrains Mono, monospace", fontSize: 18, fontWeight: 700,
+    background: "#fff", color: "#0f172a",
+  };
+
+  const renderRow = (label, bits, isResult = false) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+      <div style={{ width: 56, fontSize: 13, fontWeight: 700, color: BLUE_FG, textAlign: "right" }}>{label}</div>
+      <div style={{ display: "flex", gap: 4 }}>
+        {Array.from({ length: LEN }).map((_, i) => {
+          const isCur = i === pos && pos < LEN;
+          const isDone = i < pos;
+          let bg = "#fff", fg = "#0f172a", bd = "#cbd5e1";
+          if (isResult) {
+            if (i < pos) {
+              const same = a[i] === b[i];
+              bg = same ? SAME_BG : DIFF_BG;
+              fg = same ? SAME_FG : DIFF_FG;
+              bd = same ? SAME_FG : DIFF_FG;
+            } else {
+              return (
+                <div key={i} style={{ ...cellBase, background: "#f1f5f9", color: "#94a3b8", borderStyle: "dashed" }}>·</div>
+              );
+            }
+          } else {
+            if (isCur) { bg = "#fef3c7"; bd = "#f59e0b"; }
+            else if (isDone) {
+              const same = a[i] === b[i];
+              bg = same ? SAME_BG : DIFF_BG;
+              bd = same ? SAME_FG : DIFF_FG;
+            }
+          }
+          const ch = isResult ? result[i] : bits[i];
+          return (
+            <div key={i} style={{
+              ...cellBase, background: bg, color: fg, borderColor: bd,
+              transform: isCur && !isResult ? "translateY(-2px)" : "none",
+              boxShadow: isCur && !isResult ? "0 4px 10px rgba(245,158,11,.35)" : "none",
+              transition: "all .25s ease",
+            }}>{ch}</div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  // Index ruler
+  const ruler = (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+      <div style={{ width: 56 }} />
+      <div style={{ display: "flex", gap: 4 }}>
+        {Array.from({ length: LEN }).map((_, i) => (
+          <div key={i} style={{
+            width: 36, textAlign: "center", fontSize: 11, color: i === pos && pos < LEN ? "#b45309" : "#64748b",
+            fontWeight: i === pos && pos < LEN ? 700 : 500,
+          }}>{i}</div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const inputStyle = {
+    fontFamily: "JetBrains Mono, monospace", fontSize: 15, fontWeight: 700,
+    padding: "6px 8px", border: `1.5px solid ${BLUE_BD}`, borderRadius: 6,
+    width: 140, letterSpacing: 1, color: "#0f172a", background: "#fff",
+  };
+
+  const btnStyle = (filled) => ({
+    padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+    borderRadius: 6, border: `1.5px solid ${BLUE_FG}`,
+    background: filled ? BLUE_FG : "#fff", color: filled ? "#fff" : BLUE_FG,
+  });
+
+  const done = pos >= LEN;
+  const cur = pos < LEN ? pos : null;
+  const curSame = cur != null ? a[cur] === b[cur] : null;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: BLUE_BG, border: `1.5px solid ${BLUE_FG}`, borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+          🧪 {t(E, "XOR Truth Walker", "XOR 워커 실험")}
+        </div>
+        <div style={{ fontSize: 12, color: "#1e3a8a", lineHeight: 1.5 }}>
+          {t(E,
+            "Edit A and B (only 0/1, length 8). Step or Play to walk the pointer.",
+            "A 와 B 를 바꿔 봐 (0/1 만, 길이 8). Step 또는 Play 로 포인터를 움직여.")}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", marginBottom: 12, justifyContent: "center" }}>
+        <label style={{ fontSize: 12, color: "#1e3a8a", fontWeight: 700 }}>A</label>
+        <input value={a} onChange={e => setA(sanitizeBits(e.target.value, LEN))} style={inputStyle} />
+        <label style={{ fontSize: 12, color: "#1e3a8a", fontWeight: 700 }}>B</label>
+        <input value={b} onChange={e => setB(sanitizeBits(e.target.value, LEN))} style={inputStyle} />
+      </div>
+
+      <div style={{ background: "#fff", border: `1px solid ${BLUE_BD}`, borderRadius: 10, padding: 14, marginBottom: 12, overflowX: "auto" }}>
+        {ruler}
+        {renderRow("A", a)}
+        {renderRow("B", b)}
+        <div style={{ height: 1, background: "#e2e8f0", margin: "8px 0 8px 64px" }} />
+        {renderRow(t(E, "A⊕B", "A⊕B"), null, true)}
+      </div>
+
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        <button onClick={togglePlay} style={btnStyle(true)}>
+          {done ? t(E, "🔁 Replay", "🔁 다시") : (playing ? t(E, "⏸ Pause", "⏸ 일시정지") : t(E, "▶ Play", "▶ 재생"))}
+        </button>
+        <button onClick={step} style={btnStyle(false)} disabled={done}>
+          {t(E, "Step ▸", "한 칸 ▸")}
+        </button>
+        <button onClick={reset} style={btnStyle(false)}>
+          {t(E, "Reset", "초기화")}
+        </button>
+      </div>
+
+      <div style={{ fontSize: 12, color: C.text, textAlign: "center", lineHeight: 1.6, padding: "0 8px" }}>
+        {done ? (
+          <span>
+            ✅ {t(E, "Done — final XOR string: ", "완료 — 최종 XOR 문자열: ")}
+            <b style={{ fontFamily: "JetBrains Mono, monospace", color: BLUE_FG }}>{result.join("")}</b>
+          </span>
+        ) : cur != null ? (
+          <span>
+            {t(E, "At position ", "위치 ")}<b>{cur}</b>{t(E, ": A[", " 에서: A[")}{cur}{t(E, "]=", "]=")}<b>{a[cur]}</b>{t(E, ", B[", ", B[")}{cur}{t(E, "]=", "]=")}<b>{b[cur]}</b>{" → "}
+            {curSame
+              ? <b style={{ color: SAME_FG }}>{t(E, "same → 0", "같음 → 0")}</b>
+              : <b style={{ color: DIFF_FG }}>{t(E, "different → 1", "다름 → 1")}</b>}
+          </span>
+        ) : (
+          <span>{t(E, "Press Play or Step to begin.", "Play 또는 Step 을 눌러 시작.")}</span>
+        )}
+      </div>
+    </div>
+  );
 }
 
 
