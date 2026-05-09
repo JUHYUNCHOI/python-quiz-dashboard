@@ -1,5 +1,130 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getMcc19BakerySections } from "./components";
+
+/* ---------- Bakery Audit Sim ----------
+   Additive bilingual interactive sim. Student tweaks N item prices, then
+   walks through the greedy: sort DESC, every 4th sorted item (index 3, 7, ...)
+   is the free one (2nd cheapest in its group of 4). Verifies the rule from
+   chapter 1's problem reveal in a hands-on way. */
+const PRESETS = [
+  { label: "[1, 2, 3, 4]", arr: [1, 2, 3, 4] },
+  { label: "[10, 5, 8, 2, 7]", arr: [10, 5, 8, 2, 7] },
+  { label: "[20, 15, 10, 5, 4, 3, 2, 1]", arr: [20, 15, 10, 5, 4, 3, 2, 1] },
+  { label: "[9, 9, 9, 1, 1, 1]", arr: [9, 9, 9, 1, 1, 1] },
+];
+
+function BakeryAuditSim({ E }) {
+  const [arr, setArr] = useState([10, 5, 8, 2, 7]);
+  const [revealed, setRevealed] = useState(false);
+
+  const sorted = [...arr].sort((a, b) => b - a);
+  // Group of 4: indices 0..3 → cheapest of group = sorted[3] (the smaller one in top-4)
+  // The "free" pick in each group of 4 = the 2nd cheapest of that group
+  // = sorted[2] of group (i.e. global indices 2, 6, 10, ...) when greedy takes top-4 each block?
+  // SOLUTION_CODE marks (i+1) % 4 == 0 → indices 3, 7, 11, ... as free.
+  // That's the cheapest of each block of 4 in the descending list — the 2nd cheapest of the block-of-4.
+  // (Top-4 sorted desc: [20,15,10,5] → cheapest "5" = 2nd cheapest in group, since the 1st cheapest is the leftover.)
+  // We mirror SOLUTION_CODE exactly: index i with (i+1)%4==0 in sorted desc is FREE.
+  const isFree = (i) => (i + 1) % 4 === 0;
+  const total = sorted.reduce((s, v, i) => s + (isFree(i) ? 0 : v), 0);
+  const saved = sorted.reduce((s, v, i) => s + (isFree(i) ? v : 0), 0);
+
+  const tweak = (i, d) => {
+    setArr(arr.map((v, j) => (j === i ? Math.max(0, v + d) : v)));
+    setRevealed(false);
+  };
+  const usePreset = (p) => { setArr(p.arr); setRevealed(false); };
+
+  return (
+    <div style={{
+      background: "#fff7ed", border: "1.5px dashed #d97706", borderRadius: 12,
+      padding: "12px 14px", marginBottom: 10,
+    }}>
+      <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
+        🔍 {t(E, "Audit Sim — sort DESC & mark every 4th as FREE", "감사 시뮬 — 내림차순 정렬 후 4 번째마다 무료 표시")}
+      </div>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", marginBottom: 8 }}>
+        {PRESETS.map((p, i) => (
+          <button key={i} onClick={() => usePreset(p)} style={{
+            background: "#fff", border: "1px solid #fcd34d", borderRadius: 6,
+            padding: "3px 8px", fontSize: 11, fontWeight: 600, color: "#92400e", cursor: "pointer",
+          }}>{p.label}</button>
+        ))}
+      </div>
+
+      <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
+        {t(E, "Input prices:", "입력 가격:")}
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 10 }}>
+        {arr.map((v, i) => (
+          <div key={i} style={{
+            background: "#fff", border: "1px solid #fcd34d", borderRadius: 6,
+            padding: "4px 6px", fontSize: 12, display: "flex", alignItems: "center", gap: 4,
+          }}>
+            <button onClick={() => tweak(i, -1)} style={{
+              border: "none", background: "#fef3c7", color: "#92400e",
+              borderRadius: 4, width: 18, height: 18, cursor: "pointer", fontSize: 11, fontWeight: 800,
+            }}>−</button>
+            <span style={{ minWidth: 18, textAlign: "center", fontWeight: 700, color: "#92400e" }}>{v}</span>
+            <button onClick={() => tweak(i, +1)} style={{
+              border: "none", background: "#fef3c7", color: "#92400e",
+              borderRadius: 4, width: 18, height: 18, cursor: "pointer", fontSize: 11, fontWeight: 800,
+            }}>+</button>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
+        {t(E, "Sorted DESC (every 4th = FREE):", "내림차순 정렬 (4 번째마다 무료):")}
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 10 }}>
+        {sorted.map((v, i) => {
+          const free = isFree(i);
+          return (
+            <div key={i} style={{
+              background: free ? "#dcfce7" : "#fff",
+              border: free ? "1.5px solid #15803d" : "1px solid #fcd34d",
+              borderRadius: 6, padding: "4px 8px", fontSize: 12, fontWeight: 700,
+              color: free ? "#15803d" : "#92400e", position: "relative",
+              textDecoration: free ? "line-through" : "none",
+            }}>
+              {v}
+              {free && <span style={{
+                position: "absolute", top: -8, right: -6, fontSize: 9, fontWeight: 800,
+                background: "#15803d", color: "#fff", padding: "1px 4px", borderRadius: 4,
+              }}>FREE</span>}
+            </div>
+          );
+        })}
+      </div>
+
+      {!revealed ? (
+        <div style={{ textAlign: "center" }}>
+          <button onClick={() => setRevealed(true)} style={{
+            background: "#d97706", color: "#fff", border: "none", borderRadius: 8,
+            padding: "5px 14px", fontSize: 12, fontWeight: 800, cursor: "pointer",
+          }}>{t(E, "Reveal total cost", "총 비용 보기")}</button>
+        </div>
+      ) : (
+        <div style={{
+          background: "#fff", border: "1px solid #15803d", borderRadius: 8,
+          padding: "8px 12px", textAlign: "center", fontSize: 12, color: C.text,
+        }}>
+          <div style={{ marginBottom: 2 }}>
+            {t(E, "Saved (free items): ", "절약 (무료 아이템): ")}
+            <b style={{ color: "#15803d" }}>{saved}</b>
+          </div>
+          <div>
+            {t(E, "Pay: ", "지불: ")}
+            <b style={{ color: "#d97706", fontSize: 14 }}>{total}</b>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -86,6 +211,8 @@ export function makeMcc19BakeryCh1(E) {
               </div>
             </div>
           </div>
+
+          <BakeryAuditSim E={E} />
         </div>),
     },
     // 1-2: Quiz
