@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc20KnightSections } from "./components";
+import { getMcc20KnightSections, KnightMovesSim } from "./components";
 
 export const SOLUTION_CODE = [
   "from collections import deque",
@@ -73,6 +73,13 @@ export function makeMcc20KnightCh1(E) {
             </div>
           </div>
         </div>),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Feel the L-shape — click a ★ to see where the knight lands. Each move is ±2 in one axis and ±1 in the other.",
+        "L 자를 직접 느껴봐 — ★ 을 누르면 나이트가 어디 가는지 보여요. 한 축 ±2, 다른 축 ±1."),
+      content: (<KnightMovesSim E={E} />),
     },
     {
       type: "quiz",

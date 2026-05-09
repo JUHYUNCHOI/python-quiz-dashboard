@@ -1,8 +1,129 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
+
+// 8 knight L-moves: (dr, dc) — 2 in one axis, 1 in the perpendicular.
+const KNIGHT_MOVES = [
+  { dr: -2, dc: -1 }, { dr: -2, dc:  1 },
+  { dr: -1, dc: -2 }, { dr: -1, dc:  2 },
+  { dr:  1, dc: -2 }, { dr:  1, dc:  2 },
+  { dr:  2, dc: -1 }, { dr:  2, dc:  1 },
+];
+
+export function KnightMovesSim({ E }) {
+  const N = 5;            // 5x5 mini board, knight in center
+  const SR = 2, SC = 2;
+  const [pickedIdx, setPickedIdx] = useState(null);
+  const picked = pickedIdx == null ? null : KNIGHT_MOVES[pickedIdx];
+  const targetR = picked ? SR + picked.dr : null;
+  const targetC = picked ? SC + picked.dc : null;
+
+  const reachable = (r, c) =>
+    KNIGHT_MOVES.some(m => SR + m.dr === r && SC + m.dc === c);
+
+  const cellSize = 44;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{
+        background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12,
+        padding: 12, marginBottom: 12, fontSize: 12, color: "#1e3a8a", lineHeight: 1.55,
+      }}>
+        <b style={{ color: A }}>{t(E, "Try a move", "이동 해 보기")}</b>
+        {t(E,
+          " — click any blue ★ cell. The knight (♞) jumps in an L-shape: 2 in one axis, 1 in the other.",
+          " — 파란 ★ 칸 아무거나 눌러 봐요. 나이트 (♞) 가 L 자로 점프 — 한 축 2 칸, 다른 축 1 칸.")}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${N}, ${cellSize}px)`,
+          gridTemplateRows: `repeat(${N}, ${cellSize}px)`,
+          border: `2px solid ${A}`, borderRadius: 8, overflow: "hidden",
+          boxShadow: "0 2px 8px rgba(37,99,235,.15)",
+        }}>
+          {Array.from({ length: N * N }, (_, k) => {
+            const r = Math.floor(k / N), c = k % N;
+            const isStart = r === SR && c === SC;
+            const isTarget = picked && r === targetR && c === targetC;
+            const isReach = reachable(r, c);
+            const checker = (r + c) % 2 === 0 ? "#f1f5f9" : "#cbd5e1";
+            let bg = checker;
+            if (isReach) bg = "#dbeafe";
+            if (isTarget) bg = "#86efac";
+            const showKnight = picked ? isTarget : isStart;
+            const trailKnight = picked && isStart;
+            return (
+              <button
+                key={k}
+                disabled={!isReach}
+                onClick={() => {
+                  const idx = KNIGHT_MOVES.findIndex(m => SR + m.dr === r && SC + m.dc === c);
+                  if (idx >= 0) setPickedIdx(idx);
+                }}
+                style={{
+                  background: bg,
+                  border: "1px solid #94a3b8",
+                  cursor: isReach ? "pointer" : "default",
+                  fontSize: 22, fontWeight: 700,
+                  color: trailKnight ? "#94a3b8" : "#1e293b",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  padding: 0,
+                  transition: "background .25s ease",
+                }}
+                title={isReach ? `(${r},${c})` : ""}
+              >
+                {showKnight ? "♞" : trailKnight ? "·" : (isReach ? "★" : "")}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 8 }}>
+        {KNIGHT_MOVES.map((m, i) => {
+          const active = pickedIdx === i;
+          const sign = (n) => (n > 0 ? `+${n}` : `${n}`);
+          return (
+            <button key={i} onClick={() => setPickedIdx(i)} style={{
+              background: active ? A : "#fff",
+              color: active ? "#fff" : A,
+              border: `1.5px solid ${A}`,
+              borderRadius: 6,
+              padding: "4px 8px",
+              fontSize: 11, fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: "monospace",
+            }}>
+              ({sign(m.dr)},{sign(m.dc)})
+            </button>
+          );
+        })}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 12, color: C.dim, minHeight: 18 }}>
+        {picked ? (
+          <span>
+            <b style={{ color: A }}>(+{picked.dr},{picked.dc})</b>
+            {" "}
+            {t(E, "→ knight moves to", "→ 나이트 이동")}
+            {" "}
+            <b style={{ color: "#15803d" }}>({targetR},{targetC})</b>
+            {". "}
+            {t(E, "One axis ±2, the other ±1.", "한 축 ±2, 다른 축 ±1.")}
+          </span>
+        ) : (
+          <span>{t(E, "Pick one of the 8 ★ cells (or a button below).", "8 개의 ★ 칸 중 하나를 골라요 (또는 아래 버튼).")}</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 
 const FULL_PY = [
   "from collections import deque",
