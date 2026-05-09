@@ -1,5 +1,170 @@
+import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getLifeguardsSections } from "./components";
+
+/* ================================================================
+   Interactive Sim: interval-removal coverage visualizer
+   ================================================================ */
+const SIM_SHIFTS = [
+  { a: 0, b: 8,  color: "#2563eb" },  // Lifeguard 1
+  { a: 5, b: 14, color: "#0891b2" },  // Lifeguard 2
+  { a: 12, b: 20, color: "#7c3aed" }, // Lifeguard 3
+  { a: 17, b: 25, color: "#db2777" }, // Lifeguard 4
+  { a: 22, b: 30, color: "#ea580c" }, // Lifeguard 5
+];
+const SIM_T_MAX = 30;
+
+function computeCovered(shifts, skipIdx) {
+  // returns { covered: number, coveredSet: Set<number-as-second-start> }
+  const set = new Set();
+  shifts.forEach((s, i) => {
+    if (i === skipIdx) return;
+    for (let m = s.a; m < s.b; m++) set.add(m);
+  });
+  return { covered: set.size, coveredSet: set };
+}
+
+function LifeguardsRemovalSim({ E }) {
+  const [skip, setSkip] = useState(-1); // -1 = no removal
+  const baseline = useMemo(() => computeCovered(SIM_SHIFTS, -1), []);
+  const current = useMemo(() => computeCovered(SIM_SHIFTS, skip), [skip]);
+
+  const lostMinutes = baseline.covered - current.covered;
+  const bestSkip = useMemo(() => {
+    let best = 0, bestI = 0;
+    SIM_SHIFTS.forEach((_, i) => {
+      const c = computeCovered(SIM_SHIFTS, i).covered;
+      if (c > best) { best = c; bestI = i; }
+    });
+    return { idx: bestI, covered: best };
+  }, []);
+
+  const cellW = `calc(100% / ${SIM_T_MAX})`;
+  const trackBG = "#f1f5f9";
+  const A = "#2563eb";
+
+  return (
+    <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>
+        🧪 {t(E, "Try it: remove a lifeguard", "직접 해봐: 인명구조원 한 명 빼기")}
+      </div>
+      <div style={{ fontSize: 12, color: C.dim, marginBottom: 10, lineHeight: 1.5 }}>
+        {t(E,
+          "Click a button below to fire that lifeguard. Watch the timeline and find which removal keeps the MOST coverage.",
+          "아래 버튼을 눌러 그 인명구조원을 해고해 봐. 타임라인을 보고 어느 명을 해고할 때 커버 시간이 가장 많이 남는지 찾아봐.")}
+      </div>
+
+      {/* Buttons */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
+        <button
+          onClick={() => setSkip(-1)}
+          style={{
+            padding: "5px 10px", fontSize: 12, fontWeight: 700,
+            border: skip === -1 ? `2px solid ${A}` : "1.5px solid #cbd5e1",
+            background: skip === -1 ? A : "#fff",
+            color: skip === -1 ? "#fff" : "#475569",
+            borderRadius: 6, cursor: "pointer",
+          }}
+        >
+          {t(E, "All on duty", "전원 근무")}
+        </button>
+        {SIM_SHIFTS.map((s, i) => (
+          <button
+            key={i}
+            onClick={() => setSkip(i)}
+            style={{
+              padding: "5px 10px", fontSize: 12, fontWeight: 700,
+              border: skip === i ? `2px solid ${s.color}` : `1.5px solid ${s.color}80`,
+              background: skip === i ? s.color : "#fff",
+              color: skip === i ? "#fff" : s.color,
+              borderRadius: 6, cursor: "pointer",
+            }}
+          >
+            {t(E, `Fire #${i + 1}`, `#${i + 1} 해고`)}
+          </button>
+        ))}
+      </div>
+
+      {/* Timeline */}
+      <div style={{ background: "#fff", border: "1px solid #cbd5e1", borderRadius: 8, padding: 10 }}>
+        {/* Coverage row (union) */}
+        <div style={{ fontSize: 10, fontWeight: 700, color: "#475569", marginBottom: 3 }}>
+          {t(E, "Covered seconds (union)", "커버된 초 (합집합)")}
+        </div>
+        <div style={{ position: "relative", display: "flex", height: 14, background: trackBG, borderRadius: 3, overflow: "hidden", marginBottom: 8 }}>
+          {Array.from({ length: SIM_T_MAX }).map((_, sec) => {
+            const wasCovered = baseline.coveredSet.has(sec);
+            const nowCovered = current.coveredSet.has(sec);
+            let bg = trackBG;
+            if (nowCovered) bg = "#15803d";
+            else if (wasCovered) bg = "#fca5a5"; // newly uncovered
+            return <div key={sec} style={{ width: cellW, background: bg, borderRight: "1px solid #fff" }} />;
+          })}
+        </div>
+
+        {/* Per-guard rows */}
+        {SIM_SHIFTS.map((s, i) => {
+          const fired = i === skip;
+          return (
+            <div key={i} style={{ marginBottom: 4 }}>
+              <div style={{ fontSize: 10, color: fired ? "#94a3b8" : s.color, fontWeight: 700, marginBottom: 2, textDecoration: fired ? "line-through" : "none" }}>
+                #{i + 1} [{s.a}, {s.b})
+              </div>
+              <div style={{ position: "relative", display: "flex", height: 10, background: trackBG, borderRadius: 2, overflow: "hidden" }}>
+                {Array.from({ length: SIM_T_MAX }).map((_, sec) => {
+                  const inShift = sec >= s.a && sec < s.b;
+                  let bg = trackBG;
+                  if (inShift) bg = fired ? "#e2e8f0" : s.color;
+                  return <div key={sec} style={{ width: cellW, background: bg, opacity: fired && inShift ? 0.45 : 1 }} />;
+                })}
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Time axis labels */}
+        <div style={{ display: "flex", marginTop: 6, fontSize: 9, color: "#64748b" }}>
+          {[0, 5, 10, 15, 20, 25, 30].map(tm => (
+            <div key={tm} style={{ width: `calc(100% / 6)`, textAlign: tm === 0 ? "left" : tm === 30 ? "right" : "center" }}>
+              {tm === 0 || tm === 30 ? `t=${tm}` : tm}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginTop: 10, fontSize: 12 }}>
+        <div style={{ background: "#fff", padding: "6px 8px", borderRadius: 6, border: "1px solid #93c5fd" }}>
+          <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>{t(E, "Baseline", "원래 커버")}</div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: "#1e3a8a" }}>{baseline.covered}</div>
+        </div>
+        <div style={{ background: "#fff", padding: "6px 8px", borderRadius: 6, border: "1.5px solid #15803d" }}>
+          <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>{t(E, "Now covered", "지금 커버")}</div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: "#15803d" }}>{current.covered}</div>
+        </div>
+        <div style={{ background: "#fff", padding: "6px 8px", borderRadius: 6, border: "1px solid #fca5a5" }}>
+          <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>{t(E, "Lost", "잃은 시간")}</div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: lostMinutes === 0 ? "#475569" : "#dc2626" }}>−{lostMinutes}</div>
+        </div>
+      </div>
+
+      {skip === bestSkip.idx && (
+        <div style={{ marginTop: 8, padding: "6px 10px", background: "#dcfce7", border: "1px solid #15803d", borderRadius: 6, fontSize: 12, color: "#14532d", fontWeight: 700 }}>
+          ✅ {t(E,
+            `Best choice! Firing #${bestSkip.idx + 1} keeps ${bestSkip.covered} covered seconds — the maximum among all 5 options.`,
+            `최고의 선택! #${bestSkip.idx + 1}을 해고하면 ${bestSkip.covered}초가 남아 — 5명 중 최댓값이야.`)}
+        </div>
+      )}
+      {skip >= 0 && skip !== bestSkip.idx && (
+        <div style={{ marginTop: 8, padding: "6px 10px", background: "#fef3c7", border: "1px solid #f59e0b", borderRadius: 6, fontSize: 12, color: "#78350f" }}>
+          💡 {t(E,
+            "Try other lifeguards — one of them gives bigger remaining coverage.",
+            "다른 인명구조원도 눌러봐 — 더 큰 남은 커버를 주는 사람이 있어.")}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -125,7 +290,28 @@ export function makeLifeguardsCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: quiz
+    // 1-2: interactive sim
+    {
+      type: "reveal",
+      narr: t(E,
+        "Time to play! Below are 5 lifeguards with overlapping shifts on a 0..30 timeline. Try firing each one and watch which seconds become uncovered. Find the lifeguard whose removal LOSES the LEAST — that's the one to fire.",
+        "직접 해볼 시간! 아래에 0..30 타임라인 위에서 겹쳐 일하는 5명의 인명구조원이 있어. 한 명씩 해고해 보면서 어느 초가 비게 되는지 관찰해 봐. '잃는 시간이 가장 적은' 해고가 정답이야."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fff", border: "1px solid #93c5fd", borderRadius: 12, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 6 }}>
+              🎯 {t(E, "Goal", "목표")}
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              {t(E,
+                "Each lifeguard's shift is a colored bar. The top bar shows the union of remaining coverage. Green = still covered. Red = newly uncovered after firing. Find the firing that keeps the MOST green.",
+                "각 인명구조원의 근무는 색깔 막대야. 맨 위 막대는 남은 근무들의 합집합 커버. 초록 = 여전히 커버됨. 빨강 = 해고 후 비어버린 초. 초록이 가장 많이 남는 해고를 찾아봐.")}
+            </div>
+          </div>
+          <LifeguardsRemovalSim E={E} />
+        </div>),
+    },
+    // 1-3: quiz
     {
       type: "quiz",
       narr: t(E,
@@ -142,7 +328,7 @@ export function makeLifeguardsCh1(E) {
         "Fire the first guard: remaining coverage [3,8] = 5, which is larger than [1,5] = 4.",
         "첫째를 해고: 남은 커버리지 [3,8] = 5, 이게 [1,5] = 4보다 커."),
     },
-    // 1-3: input
+    // 1-4: input
     {
       type: "input",
       narr: t(E,
