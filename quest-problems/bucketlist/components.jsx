@@ -1,8 +1,157 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ============================================================
+   BucketListSim — drag the time slider, see active cows live.
+   Each cow = horizontal bar across her [s, t] interval. Active
+   bars light up at the current minute; total buckets sum below.
+   ============================================================ */
+const _SIM_COWS = [
+  { name: "🐄 A", s: 1, e: 5, b: 3, color: "#f97316" },
+  { name: "🐮 B", s: 3, e: 8, b: 2, color: "#0891b2" },
+  { name: "🐂 C", s: 6, e: 10, b: 4, color: "#a855f7" },
+];
+const _SIM_T_MIN = 1;
+const _SIM_T_MAX = 10;
+
+export function BucketListSim({ E }) {
+  const [time, setTime] = useState(4);
+  const span = _SIM_T_MAX - _SIM_T_MIN;
+  const active = _SIM_COWS.filter(c => time >= c.s && time <= c.e);
+  const total = active.reduce((sum, c) => sum + c.b, 0);
+
+  // Compute peak across all minutes for "best so far" hint
+  let peak = 0;
+  for (let m = _SIM_T_MIN; m <= _SIM_T_MAX; m++) {
+    const s = _SIM_COWS.filter(c => m >= c.s && m <= c.e).reduce((a, c) => a + c.b, 0);
+    if (s > peak) peak = s;
+  }
+
+  const pctOf = (x) => `${((x - _SIM_T_MIN) / span) * 100}%`;
+  const widthOf = (s, e) => `${((e - s) / span) * 100}%`;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#9a3412", marginBottom: 6, textAlign: "center" }}>
+          {t(E, "🪣 Bucket Timeline — drag to scrub", "🪣 양동이 타임라인 — 드래그해서 시간 이동")}
+        </div>
+
+        {/* Cow bars */}
+        <div style={{ position: "relative", padding: "4px 8px 0" }}>
+          {_SIM_COWS.map((c, i) => {
+            const isActive = time >= c.s && time <= c.e;
+            return (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <div style={{ width: 60, fontSize: 12, fontWeight: 700, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+                  {c.name}
+                </div>
+                <div style={{ position: "relative", flex: 1, height: 22, background: "#fef3c7", borderRadius: 6 }}>
+                  <div style={{
+                    position: "absolute",
+                    left: pctOf(c.s),
+                    width: widthOf(c.s, c.e),
+                    top: 0, height: "100%",
+                    background: isActive ? c.color : `${c.color}55`,
+                    borderRadius: 6,
+                    border: isActive ? `2px solid ${c.color}` : `1px solid ${c.color}77`,
+                    transition: "all 0.15s",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "#fff", fontSize: 11, fontWeight: 800,
+                  }}>
+                    {t(E, `${c.b} buckets`, `양동이 ${c.b}`)}
+                  </div>
+                </div>
+                <div style={{ width: 28, fontSize: 11, color: C.dim, textAlign: "right", fontFamily: "'JetBrains Mono',monospace" }}>
+                  {c.s}-{c.e}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Time axis with current marker */}
+        <div style={{ position: "relative", margin: "10px 8px 0", paddingLeft: 60, paddingRight: 28 }}>
+          <div style={{ position: "relative", height: 24 }}>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: C.border }} />
+            {Array.from({ length: span + 1 }, (_, i) => i + _SIM_T_MIN).map(m => (
+              <div key={m} style={{
+                position: "absolute", left: pctOf(m), top: 0,
+                transform: "translateX(-50%)",
+                fontSize: 10, color: m === time ? A : C.dim,
+                fontWeight: m === time ? 800 : 500,
+              }}>
+                <div style={{ width: 1, height: 6, background: m === time ? A : C.border, margin: "0 auto" }} />
+                <div style={{ marginTop: 2 }}>{m}</div>
+              </div>
+            ))}
+            {/* Vertical playhead line */}
+            <div style={{
+              position: "absolute", left: pctOf(time), top: -160,
+              width: 2, height: 168, background: A, opacity: 0.45,
+              pointerEvents: "none", transform: "translateX(-1px)",
+            }} />
+          </div>
+        </div>
+
+        {/* Slider */}
+        <div style={{ padding: "10px 8px 0", paddingLeft: 60, paddingRight: 28 }}>
+          <input
+            type="range"
+            min={_SIM_T_MIN}
+            max={_SIM_T_MAX}
+            step={1}
+            value={time}
+            onChange={e => setTime(Number(e.target.value))}
+            style={{ width: "100%", accentColor: A }}
+          />
+        </div>
+      </div>
+
+      {/* Live readout */}
+      <div style={{
+        background: total === peak ? "#fef3c7" : "#f8fafc",
+        border: `2px solid ${total === peak ? A : C.border}`,
+        borderRadius: 12, padding: "10px 14px",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        gap: 10, flexWrap: "wrap",
+      }}>
+        <div style={{ fontSize: 13, color: C.text }}>
+          <b style={{ color: A }}>t = {time}</b>
+          {" · "}
+          {t(E, "active: ", "활성: ")}
+          {active.length === 0
+            ? <span style={{ color: C.dim }}>{t(E, "none", "없음")}</span>
+            : active.map((c, i) => (
+                <span key={i} style={{ color: c.color, fontWeight: 700 }}>
+                  {c.name}({c.b}){i < active.length - 1 ? " + " : ""}
+                </span>
+              ))
+          }
+        </div>
+        <div style={{ fontSize: 14, fontWeight: 800, color: total === peak ? A : C.text }}>
+          {t(E, "buckets needed: ", "필요 양동이: ")}
+          <span style={{ fontSize: 18 }}>{total}</span>
+          {total === peak && total > 0 && (
+            <span style={{ marginLeft: 6, fontSize: 11, color: A }}>
+              {t(E, "← peak!", "← 최댓값!")}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+        {t(E,
+          "Drag the slider. The answer is the largest sum you ever see — that's the minimum buckets FJ must own.",
+          "슬라이더를 움직여 봐. 가장 큰 합이 정답 — FJ 가 가져야 할 양동이의 최소 수.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

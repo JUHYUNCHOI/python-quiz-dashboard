@@ -110,7 +110,14 @@ export function makeBucketListCh1(E) {
         "Correct! From t=3 to t=5, both cows need buckets: 3 + 2 = 5. That's the maximum.",
         "맞아! t=3부터 t=5까지 두 소 모두 양동이 필요: 3 + 2 = 5. 그게 최대값이에요."),
     },
-    // 1-3: Input
+    // 1-3: Sim — drag the timeline, see active cows + bucket total live
+    {
+      type: "sim",
+      narr: t(E,
+        "Three cows, three intervals. Drag the slider — bars light up while a cow is active, and the total below sums their buckets right now. The peak you see is the answer.",
+        "세 마리, 세 구간. 슬라이더를 움직여봐 — 소가 활성일 때 막대가 진해지고, 아래 합계는 지금 필요한 양동이 수. 가장 큰 값이 정답이에요."),
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

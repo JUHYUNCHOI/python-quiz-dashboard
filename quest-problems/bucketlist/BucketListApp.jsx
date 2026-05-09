@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { BucketListProgressiveCode, downloadBucketListPDF, getBucketListSections } from "./components";
+import { BucketListProgressiveCode, BucketListSim, downloadBucketListPDF, getBucketListSections } from "./components";
 import { makeBucketListCh1, makeBucketListCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -93,6 +93,7 @@ export default function BucketListApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <BucketListProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <BucketListSim E={E} />;
     return null;
   };
 
@@ -104,6 +105,7 @@ export default function BucketListApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
     if (s.type === "progressive") return <BucketListProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "sim") return <BucketListSim E={E} />;
     return null;
   };
 
