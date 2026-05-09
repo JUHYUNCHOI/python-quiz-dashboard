@@ -109,7 +109,14 @@ export function makeMilkMeasCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: quiz
+    // 1-2: sim — replay event log, watch leader set + counter
+    {
+      type: "sim",
+      narr: t(E,
+        "Replay a small event log.\nThe crown 👑 marks the current leader(s) — cows tied for the maximum.\nEach time the leader set differs from the previous one, the counter ticks up.",
+        "작은 이벤트 로그를 재생.\n👑 는 지금 리더(들) — 최대 생산량으로 동률인 소들.\n리더 집합이 이전과 달라질 때마다 카운터가 1씩 증가."),
+    },
+    // 1-3: quiz
     {
       type: "quiz",
       narr: t(E,

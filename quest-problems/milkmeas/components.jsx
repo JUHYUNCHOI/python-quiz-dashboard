@@ -1,8 +1,231 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ═══════════════════════════════════════════════════════════════
+   MilkMeasSim — replay a sorted event log; watch leader set change
+   Bilingual via t(E, EN, KO)
+   ═══════════════════════════════════════════════════════════════ */
+const _COW_NAMES = ["Bessie", "Elsie", "Mildred"];
+const _COW_COLORS = ["#8b5cf6", "#0891b2", "#f97316"];
+
+const _MM_PRESETS = [
+  {
+    label: { en: "Tiny (3 events)", ko: "초간단 (3 이벤트)" },
+    events: [
+      { day: 1, cow: 0, delta: +5 },  // Bessie 7->12
+      { day: 2, cow: 1, delta: +6 },  // Elsie 7->13 (leader change)
+      { day: 3, cow: 2, delta: +7 },  // Mildred 7->14 (leader change)
+    ],
+  },
+  {
+    label: { en: "Tied leaders", ko: "공동 리더" },
+    events: [
+      { day: 1, cow: 0, delta: +3 },  // Bessie 10
+      { day: 2, cow: 1, delta: +3 },  // Elsie 10 -> tie {B,E}
+      { day: 3, cow: 2, delta: +3 },  // Mildred 10 -> tie {B,E,M}
+      { day: 4, cow: 0, delta: +1 },  // Bessie 11 -> {B}
+    ],
+  },
+  {
+    label: { en: "Drop & rebound", ko: "감소 후 반등" },
+    events: [
+      { day: 1, cow: 0, delta: +5 },   // Bessie 12
+      { day: 2, cow: 0, delta: -6 },   // Bessie 6 -> {Elsie, Mildred}
+      { day: 3, cow: 1, delta: +4 },   // Elsie 11 -> {Elsie}
+      { day: 4, cow: 2, delta: +4 },   // Mildred 11 -> {Elsie, Mildred}
+    ],
+  },
+];
+
+function _leaderSet(milk) {
+  const mx = Math.max(...milk);
+  const s = [];
+  for (let i = 0; i < milk.length; i++) if (milk[i] === mx) s.push(i);
+  return s;
+}
+function _setEq(a, b) {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+  return true;
+}
+
+export function MilkMeasSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [step, setStep] = useState(0);
+  const events = _MM_PRESETS[pi].events;
+
+  // Replay events from start through current step
+  const milk = [7, 7, 7];
+  let prevLeaders = _leaderSet(milk);
+  let changeCount = 0;
+  const history = [{ milk: [...milk], leaders: [...prevLeaders], changed: false, event: null }];
+  for (let k = 0; k < step; k++) {
+    const ev = events[k];
+    milk[ev.cow] += ev.delta;
+    const cur = _leaderSet(milk);
+    const changed = !_setEq(cur, prevLeaders);
+    if (changed) changeCount++;
+    history.push({ milk: [...milk], leaders: [...cur], changed, event: ev });
+    prevLeaders = cur;
+  }
+  const cur = history[history.length - 1];
+  const maxBar = Math.max(15, ...history.flatMap(h => h.milk));
+
+  const reset = (newPi) => { setPi(newPi); setStep(0); };
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_MM_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => reset(i)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer",
+          }}>
+            {E ? p.label.en : p.label.ko}
+          </button>
+        ))}
+      </div>
+
+      {/* bar chart — 3 cows */}
+      <div style={{
+        background: "#faf5ff", border: `1px solid #c4b5fd`, borderRadius: 10,
+        padding: "14px 12px 10px", marginBottom: 10,
+      }}>
+        <div style={{ display: "flex", gap: 14, alignItems: "flex-end", justifyContent: "center", height: 130 }}>
+          {[0, 1, 2].map(ci => {
+            const v = cur.milk[ci];
+            const isLeader = cur.leaders.includes(ci);
+            const h = Math.max(8, (v / maxBar) * 110);
+            return (
+              <div key={ci} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                <div style={{
+                  fontSize: 12, fontWeight: 800,
+                  color: isLeader ? _COW_COLORS[ci] : C.dim,
+                  fontFamily: "'JetBrains Mono',monospace",
+                }}>
+                  {v}{isLeader ? " 👑" : ""}
+                </div>
+                <div style={{
+                  width: 56, height: h,
+                  background: isLeader ? _COW_COLORS[ci] : "#e5e7eb",
+                  border: `2px solid ${isLeader ? _COW_COLORS[ci] : "#d1d5db"}`,
+                  borderRadius: "6px 6px 0 0",
+                  transition: "height 0.3s, background 0.2s",
+                }} />
+                <div style={{
+                  fontSize: 11, fontWeight: 700,
+                  color: isLeader ? _COW_COLORS[ci] : C.dim,
+                }}>
+                  {_COW_NAMES[ci]}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 6 }}>
+          {t(E, "Leader set", "리더 집합")}: <b style={{ color: A }}>
+            {"{" + cur.leaders.map(i => _COW_NAMES[i]).join(", ") + "}"}
+          </b>
+        </div>
+      </div>
+
+      {/* event log */}
+      <div style={{
+        background: "#fff", border: `1px solid ${C.border}`, borderRadius: 10,
+        padding: 8, marginBottom: 10, fontSize: 12,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, padding: "2px 6px 6px", letterSpacing: 0.4 }}>
+          {t(E, "EVENT LOG (sorted by day)", "이벤트 로그 (날짜순 정렬)")}
+        </div>
+        {events.map((ev, i) => {
+          const applied = i < step;
+          const isCurrent = i === step - 1;
+          const row = history[i + 1];
+          const changed = row && row.changed;
+          return (
+            <div key={i} style={{
+              display: "flex", alignItems: "center", gap: 8,
+              padding: "5px 8px", borderRadius: 6, marginBottom: 2,
+              background: isCurrent ? (changed ? "#fef3c7" : "#ede9fe") : (applied ? "#f9fafb" : "transparent"),
+              opacity: applied ? 1 : 0.45,
+              fontFamily: "'JetBrains Mono',monospace",
+            }}>
+              <span style={{ width: 24, color: C.dim, fontSize: 11 }}>#{i + 1}</span>
+              <span style={{ width: 50, fontSize: 11, color: C.dim }}>
+                {t(E, "day", "날짜")} {ev.day}
+              </span>
+              <span style={{ color: _COW_COLORS[ev.cow], fontWeight: 700, minWidth: 60 }}>
+                {_COW_NAMES[ev.cow]}
+              </span>
+              <span style={{ fontWeight: 700, color: ev.delta >= 0 ? "#15803d" : "#dc2626" }}>
+                {ev.delta >= 0 ? "+" : ""}{ev.delta}
+              </span>
+              {applied && changed && (
+                <span style={{
+                  marginLeft: "auto", fontSize: 10, fontWeight: 800, color: "#92400e",
+                  background: "#fde68a", padding: "2px 6px", borderRadius: 4,
+                }}>
+                  {t(E, "LEADER CHANGED", "리더 변경")}
+                </span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* controls + counter */}
+      <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
+        <button onClick={() => setStep(0)} disabled={step === 0} style={{
+          padding: "6px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
+          background: "#fff", color: step === 0 ? C.dim : C.text,
+          fontSize: 12, fontWeight: 700, cursor: step === 0 ? "default" : "pointer",
+        }}>
+          ⏮ {t(E, "Reset", "처음")}
+        </button>
+        <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0} style={{
+          padding: "6px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
+          background: "#fff", color: step === 0 ? C.dim : C.text,
+          fontSize: 12, fontWeight: 700, cursor: step === 0 ? "default" : "pointer",
+        }}>
+          ◀ {t(E, "Back", "뒤로")}
+        </button>
+        <button onClick={() => setStep(Math.min(events.length, step + 1))} disabled={step >= events.length} style={{
+          padding: "6px 14px", borderRadius: 8, border: `1px solid ${A}`,
+          background: step >= events.length ? "#e5e7eb" : A,
+          color: step >= events.length ? C.dim : "#fff",
+          fontSize: 12, fontWeight: 800, cursor: step >= events.length ? "default" : "pointer",
+        }}>
+          {t(E, "Next event", "다음 이벤트")} ▶
+        </button>
+
+        <div style={{
+          marginLeft: 6,
+          background: "#ede9fe", border: `1.5px solid ${A}`, borderRadius: 10,
+          padding: "6px 14px", textAlign: "center",
+        }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.4 }}>
+            {t(E, "DISPLAY CHANGES", "표시 변경 횟수")}
+          </div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
+            {changeCount}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 10 }}>
+        {t(E,
+          "Step through events. The crown 👑 marks current leaders. When the leader set differs from the previous one, the counter ticks up.",
+          "이벤트를 한 단계씩. 👑 는 지금 리더. 리더 집합이 이전과 다르면 카운터가 1 증가.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",
