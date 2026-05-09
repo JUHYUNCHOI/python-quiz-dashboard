@@ -1,8 +1,229 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ═══════════════════════════════════════════════════════════════
+   Mcc19DitcoinDeepAuditSim — pick a price preset, toggle which
+   days you SELL on, and watch coins accumulate / profit update
+   live. Mirrors the greedy "sell when today == suffix_max" rule
+   so students can feel why selling on the highest-future-price
+   day is optimal.
+   ═══════════════════════════════════════════════════════════════ */
+const _DEEP_PRESETS = [
+  { label: "[3,1,5]",        prices: [3, 1, 5] },
+  { label: "[2,4,1,5,3]",    prices: [2, 4, 1, 5, 3] },
+  { label: "[1,2,3,4,5]",    prices: [1, 2, 3, 4, 5] },
+  { label: "[5,4,3,2,1]",    prices: [5, 4, 3, 2, 1] },
+];
+
+export function Mcc19DitcoinDeepAuditSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const preset = _DEEP_PRESETS[pi];
+  const [sells, setSells] = useState(() => preset.prices.map(() => false));
+
+  const switchPreset = (newPi) => {
+    setPi(newPi);
+    setSells(_DEEP_PRESETS[newPi].prices.map(() => false));
+  };
+
+  const toggle = (i) => {
+    const u = [...sells];
+    u[i] = !u[i];
+    setSells(u);
+  };
+
+  // Walk days, accumulating coins; on a sell-day, sell all coins.
+  const N = preset.prices.length;
+  const coinsTrace = [];
+  const profitTrace = [];
+  let coins = 0, profit = 0;
+  for (let i = 0; i < N; i++) {
+    coins += 1;
+    if (sells[i]) {
+      profit += coins * preset.prices[i];
+      coins = 0;
+    }
+    coinsTrace.push(coins);
+    profitTrace.push(profit);
+  }
+  const finalProfit = profit;
+
+  // Optimal profit: greedy via suffix_max — sell when prices[i] == suffix_max[i]
+  const suffMax = Array(N).fill(0);
+  suffMax[N - 1] = preset.prices[N - 1];
+  for (let i = N - 2; i >= 0; i--) suffMax[i] = Math.max(preset.prices[i], suffMax[i + 1]);
+  let optProfit = 0, optCoins = 0;
+  const optSells = preset.prices.map((p, i) => {
+    optCoins += 1;
+    if (p === suffMax[i]) {
+      optProfit += optCoins * p;
+      optCoins = 0;
+      return true;
+    }
+    return false;
+  });
+
+  const isOptimal = finalProfit === optProfit;
+  const reset = () => setSells(preset.prices.map(() => false));
+  const showAnswer = () => setSells(optSells);
+
+  const cellW = 56;
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {_DEEP_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => switchPreset(i)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {p.label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10 }}>
+        {t(E, "Tap a day to toggle SELL. Coins accumulate +1 per day; on a SELL-day, profit += coins × price and coins reset to 0.",
+              "날을 탭해서 매도(SELL) 여부를 토글해. 코인은 매일 +1, 매도일에는 수익 += 코인 × 가격, 코인 0 으로 초기화.")}
+      </div>
+
+      {/* timeline grid */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10, overflowX: "auto" }}>
+        <div style={{ display: "inline-block" }}>
+          {/* header: day labels */}
+          <div style={{ display: "flex", gap: 4, marginBottom: 4 }}>
+            <div style={{ width: cellW + 24, fontSize: 11, color: C.dim, fontWeight: 700, display: "flex", alignItems: "center" }}>
+              {t(E, "day", "날")}
+            </div>
+            {preset.prices.map((_, i) => (
+              <div key={i} style={{
+                width: cellW, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 12, fontWeight: 700, color: A, background: "#fff7ed", borderRadius: 6, border: "1px solid #fdba74",
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                {`d${i + 1}`}
+              </div>
+            ))}
+          </div>
+
+          {/* prices row */}
+          <div style={{ display: "flex", gap: 4, marginBottom: 4 }}>
+            <div style={{ width: cellW + 24, fontSize: 11, color: "#7c3aed", fontWeight: 700, display: "flex", alignItems: "center" }}>
+              {t(E, "price", "가격")}
+            </div>
+            {preset.prices.map((p, i) => (
+              <div key={i} style={{
+                width: cellW, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 14, fontWeight: 800, color: "#7c3aed", background: "#faf5ff", borderRadius: 6, border: "1px solid #d8b4fe",
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                {p}
+              </div>
+            ))}
+          </div>
+
+          {/* sell toggle row */}
+          <div style={{ display: "flex", gap: 4, marginBottom: 4 }}>
+            <div style={{ width: cellW + 24, fontSize: 11, color: A, fontWeight: 700, display: "flex", alignItems: "center" }}>
+              {t(E, "sell?", "매도?")}
+            </div>
+            {preset.prices.map((_, i) => {
+              const on = sells[i];
+              return (
+                <button key={i} onClick={() => toggle(i)} style={{
+                  width: cellW, height: 36, padding: 0, cursor: "pointer",
+                  borderRadius: 6, border: `1.5px solid ${on ? A : "#e5e7eb"}`,
+                  background: on ? "#fed7aa" : "#f9fafb",
+                  color: on ? "#9a3412" : "#cbd5e1",
+                  fontSize: 13, fontWeight: 800,
+                  fontFamily: "'JetBrains Mono',monospace",
+                }}>
+                  {on ? t(E, "SELL", "매도") : "·"}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* coins row (after action) */}
+          <div style={{ display: "flex", gap: 4, marginBottom: 4 }}>
+            <div style={{ width: cellW + 24, fontSize: 11, color: "#15803d", fontWeight: 700, display: "flex", alignItems: "center" }}>
+              {t(E, "coins", "코인")}
+            </div>
+            {coinsTrace.map((c, i) => (
+              <div key={i} style={{
+                width: cellW, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 12, fontWeight: 700, color: c === 0 ? C.dim : "#15803d",
+                background: c === 0 ? "#f9fafb" : "#f0fdf4", borderRadius: 6,
+                border: `1px solid ${c === 0 ? "#e5e7eb" : "#86efac"}`,
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                {c}
+              </div>
+            ))}
+          </div>
+
+          {/* profit row */}
+          <div style={{ display: "flex", gap: 4, marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fdba74" }}>
+            <div style={{ width: cellW + 24, fontSize: 11, color: "#9a3412", fontWeight: 800, display: "flex", alignItems: "center" }}>
+              {t(E, "profit", "수익")}
+            </div>
+            {profitTrace.map((p, i) => (
+              <div key={i} style={{
+                width: cellW, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 12, fontWeight: 800, color: "#9a3412",
+                background: "#fff7ed", borderRadius: 6, border: "1px solid #fdba74",
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                {p}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* status banner */}
+      <div style={{
+        margin: "10px auto 8px", maxWidth: 480, textAlign: "center",
+        padding: "8px 12px", borderRadius: 10,
+        background: isOptimal && finalProfit > 0 ? "#f0fdf4" : "#fff7ed",
+        border: `1.5px solid ${isOptimal && finalProfit > 0 ? "#86efac" : "#fdba74"}`,
+        color: isOptimal && finalProfit > 0 ? "#15803d" : "#9a3412",
+        fontSize: 13, fontWeight: 700,
+      }}>
+        {t(E, "Your profit: ", "내 수익: ")}<b>{finalProfit}</b>
+        {"  ·  "}
+        {t(E, "Optimal: ", "최적: ")}<b>{optProfit}</b>
+        {isOptimal && finalProfit > 0 ? t(E, "  ✓ Matched!", "  ✓ 일치!") : ""}
+      </div>
+
+      {/* controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+        <button onClick={reset} style={{
+          padding: "6px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
+          background: "transparent", color: C.dim, fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>
+          {t(E, "Reset", "초기화")}
+        </button>
+        <button onClick={showAnswer} style={{
+          padding: "6px 12px", borderRadius: 8, border: `1px solid ${A}`,
+          background: A, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>
+          {t(E, "Show optimal", "최적 보기")}
+        </button>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+        {t(E, "Hint: sell on day i exactly when prices[i] equals the maximum of prices[i..N-1] (no better day ahead).",
+              "힌트: prices[i] 가 prices[i..N-1] 중 최댓값일 때(앞으로 더 나은 날이 없을 때) 매도해.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

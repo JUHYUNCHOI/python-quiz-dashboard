@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc19DitcoinSections } from "./components";
+import { getMcc19DitcoinSections, Mcc19DitcoinDeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -108,7 +108,15 @@ export function makeMcc19DitcoinCh1(E) {
         "Correct! Day 3 price (5) is the highest. Hold all 3 coins and sell at 5 → profit = 15.",
         "맞아! 3일 가격(5)이 최고예요. 코인 3개를 모아 5에 판매 → 수익 = 15."),
     },
-    // 1-3: Input
+    // 1-3: Deep-audit sim — toggle SELL days, watch coins/profit live
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try it yourself. Toggle SELL days and watch coins accumulate, profit update live. Can you match the OPTIMAL profit? When should you sell?",
+        "직접 해봐. 매도(SELL) 날을 토글해서 코인 누적과 수익이 실시간으로 갱신되는걸 봐. 최적 수익에 일치시킬 수 있어? 언제 팔아야 할까?"),
+      content: <Mcc19DitcoinDeepAuditSim E={E} />,
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
