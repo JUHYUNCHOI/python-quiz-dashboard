@@ -66,6 +66,13 @@ export function makeMooHuntCh1(E) {
             </div>
           </div>
 
+          {/* ⚠️ Performance note */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
+            ⚠️ {t(E,
+              "The Python solution is correct on samples but may TLE at max constraints (N = 20) under USACO's 2-second Python limit. The C++ version handles full constraints comfortably.",
+              "Python 풀이는 샘플에선 통과하지만 최대 제약 (N = 20) 에서 USACO 의 2초 Python 제한에 걸려 부분 점수만 받을 수 있어요. C++ 풀이는 풀 제약에서도 여유롭게 통과해요.")}
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}

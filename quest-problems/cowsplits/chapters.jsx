@@ -64,6 +64,13 @@ export function makeCowSplitsCh1(E) {
             </div>
           </div>
 
+          {/* ⚠️ Scope note */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
+            ⚠️ {t(E,
+              "This tutorial covers only the k = 1 variant (output any M ≤ optimal + 1). The exact-optimum k = 0 case (where M = 2 is sometimes possible) is harder — see the official editorial.",
+              "이 튜토리얼은 k = 1 변형 (M ≤ 최적값 + 1 인 어떤 M 든 출력) 만 다뤄요. 정확한 최솟값을 요구하는 k = 0 케이스는 더 어려워요 — 공식 editorial 참고.")}
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
