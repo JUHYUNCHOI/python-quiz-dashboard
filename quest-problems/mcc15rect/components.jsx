@@ -1,8 +1,122 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ================================================================
+   Mcc15RectCornerSim — pick 3 corners, watch the 4th reveal via XOR
+   pairing. Bilingual. Theme-matched (#059669 emerald).
+   ================================================================ */
+const PRESETS = [
+  { corners: [[0, 0], [4, 0], [0, 3]], missing: [4, 3] },
+  { corners: [[1, 1], [5, 1], [1, 4]], missing: [5, 4] },
+  { corners: [[2, 0], [2, 5], [6, 0]], missing: [6, 5] },
+  { corners: [[0, 2], [3, 2], [3, 6]], missing: [0, 6] },
+];
+
+export function Mcc15RectCornerSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const preset = PRESETS[pi];
+  const [a, b, c] = preset.corners;
+  const [mx, my] = preset.missing;
+
+  const allX = [a[0], b[0], c[0], mx];
+  const allY = [a[1], b[1], c[1], my];
+  const minX = Math.min(...allX), maxX = Math.max(...allX);
+  const minY = Math.min(...allY), maxY = Math.max(...allY);
+  const padX = 1, padY = 1;
+  const W = 240, H = 180;
+  const sx = (x) => 20 + ((x - minX + padX) / (maxX - minX + 2 * padX)) * (W - 40);
+  const sy = (y) => H - 20 - ((y - minY + padY) / (maxY - minY + 2 * padY)) * (H - 40);
+
+  const x1 = a[0], x2 = b[0], x3 = c[0];
+  const y1 = a[1], y2 = b[1], y3 = c[1];
+  const xorX = x1 ^ x2 ^ x3;
+  const xorY = y1 ^ y2 ^ y3;
+
+  const next = () => { setPi((pi + 1) % PRESETS.length); setRevealed(false); };
+
+  const dot = (x, y, color, label, key) => (
+    <g key={key}>
+      <circle cx={sx(x)} cy={sy(y)} r="6" fill={color} stroke="#fff" strokeWidth="2" />
+      <text x={sx(x) + 9} y={sy(y) - 8} fontSize="11" fontWeight="700" fill={color}>{label}</text>
+    </g>
+  );
+
+  return (
+    <div style={{ background: "#fff", border: `1.5px solid ${A}`, borderRadius: 12, padding: 12, marginBottom: 10 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 8, textAlign: "center" }}>
+        🧪 {t(E, "Sim — Spot the missing corner", "시뮬 — 빠진 꼭짓점 찾기")}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+        <svg width={W} height={H} style={{ background: "#f0fdf4", borderRadius: 8 }}>
+          {/* grid */}
+          {Array.from({ length: maxX - minX + 2 * padX + 1 }).map((_, i) => {
+            const gx = sx(minX - padX + i);
+            return <line key={`vx${i}`} x1={gx} y1={20} x2={gx} y2={H - 20} stroke="#d1fae5" strokeWidth="1" />;
+          })}
+          {Array.from({ length: maxY - minY + 2 * padY + 1 }).map((_, i) => {
+            const gy = sy(minY - padY + i);
+            return <line key={`hy${i}`} x1={20} y1={gy} x2={W - 20} y2={gy} stroke="#d1fae5" strokeWidth="1" />;
+          })}
+          {/* rectangle outline if revealed */}
+          {revealed && (() => {
+            const xs = [...new Set(allX)].sort((p, q) => p - q);
+            const ys = [...new Set(allY)].sort((p, q) => p - q);
+            if (xs.length !== 2 || ys.length !== 2) return null;
+            return <rect x={sx(xs[0])} y={sy(ys[1])} width={sx(xs[1]) - sx(xs[0])} height={sy(ys[0]) - sy(ys[1])}
+              fill="none" stroke={A} strokeWidth="2" strokeDasharray="4 3" />;
+          })()}
+          {/* given corners */}
+          {dot(a[0], a[1], "#059669", "A", "a")}
+          {dot(b[0], b[1], "#059669", "B", "b")}
+          {dot(c[0], c[1], "#059669", "C", "c")}
+          {/* 4th corner */}
+          {revealed
+            ? dot(mx, my, "#dc2626", "?", "m")
+            : <g>
+                <circle cx={sx(mx)} cy={sy(my)} r="6" fill="#fde68a" stroke="#a16207" strokeWidth="2" strokeDasharray="2 2" />
+                <text x={sx(mx) + 9} y={sy(my) - 8} fontSize="11" fontWeight="700" fill="#a16207">?</text>
+              </g>}
+        </svg>
+      </div>
+
+      <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, padding: "0 4px" }}>
+        <div><b style={{ color: A }}>{t(E, "Given:", "주어진 꼭짓점:")}</b>{` (${a[0]},${a[1]}), (${b[0]},${b[1]}), (${c[0]},${c[1]})`}</div>
+        {revealed && (
+          <div style={{ marginTop: 6, padding: 8, background: "#ecfdf5", border: "1px dashed #6ee7b7", borderRadius: 6, fontSize: 11.5 }}>
+            <div>{`x: ${x1} ^ ${x2} ^ ${x3} = `}<b style={{ color: "#dc2626" }}>{xorX}</b></div>
+            <div>{`y: ${y1} ^ ${y2} ^ ${y3} = `}<b style={{ color: "#dc2626" }}>{xorY}</b></div>
+            <div style={{ marginTop: 4, color: "#065f46" }}>
+              {t(E, "Each side appears twice — XOR cancels the duplicates, leaving the lonely one.",
+                  "각 좌표는 변마다 2번 등장 — XOR이 짝꿍을 지워서 짝 없는 값만 남아요.")}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginTop: 10 }}>
+        <button onClick={() => setRevealed(true)} disabled={revealed} style={{
+          background: revealed ? "#d1fae5" : A, color: revealed ? "#065f46" : "#fff",
+          border: "none", borderRadius: 6, padding: "5px 12px", fontSize: 12, fontWeight: 700,
+          cursor: revealed ? "default" : "pointer",
+        }}>
+          {revealed ? t(E, "Revealed", "공개됨") : t(E, "Reveal 4th corner", "4번째 꼭짓점 공개")}
+        </button>
+        <button onClick={next} style={{
+          background: "#fff", color: A, border: `1.5px solid ${A}`,
+          borderRadius: 6, padding: "5px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>
+          {t(E, "Try another", "다른 예제")}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "T = int(input())",

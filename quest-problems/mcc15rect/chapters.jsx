@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc15RectSections } from "./components";
+import { getMcc15RectSections, Mcc15RectCornerSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -49,6 +49,8 @@ export function makeMcc15RectCh1(E) {
               {t(E, "Print the coordinates of the missing 4th corner of the rectangle.", "직사각형의 누락된 4번째 꼭짓점 좌표를 출력해요.")}
             </div>
           </div>
+
+          <Mcc15RectCornerSim E={E} />
 
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
