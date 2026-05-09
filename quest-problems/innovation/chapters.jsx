@@ -112,7 +112,14 @@ export function makeInnovationCh1(E) {
         "Correct! Sorted: [1,2,2,3,4]. Take 1+2+2+3=8 hours, fitting 4 tasks.",
         "맞아! 정렬: [1,2,2,3,4]. 1+2+2+3=8시간, 4개 작업이 들어가요."),
     },
-    // 1-3: Input
+    // 1-3: Sim — slide K, watch the time bar fill, find the greedy peak
+    {
+      type: "sim",
+      narr: t(E,
+        "Tasks already sorted shortest → longest. Slide K — bars light up as you take them, the time bar fills toward H. The biggest K that stays green is the greedy answer.",
+        "작업은 짧은 순 → 긴 순으로 정렬됨. K 를 움직여봐 — 선택한 작업 막대가 진해지고, 시간 막대가 H 까지 차요. 초록색을 유지하는 가장 큰 K 가 그리디 정답이에요."),
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

@@ -1,8 +1,151 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
+
+/* ============================================================
+   InnovationSim — slide K = "take K shortest tasks"
+   Tasks show as horizontal duration bars. Sorted ascending.
+   Live readout: time used vs H, count completed, fits/overflow.
+   Student sees the greedy peak — biggest K with time_used ≤ H.
+   ============================================================ */
+const _SIM_TASKS = [2, 3, 1, 4, 2];
+const _SIM_H = 8;
+
+export function InnovationSim({ E }) {
+  // Sorted ascending — index of bar shown corresponds to "Kth shortest"
+  const sorted = [..._SIM_TASKS].sort((a, b) => a - b);
+  const N = sorted.length;
+  const maxBar = Math.max(...sorted);
+  const [k, setK] = useState(0);
+
+  // Time used by taking the k shortest
+  let used = 0;
+  for (let i = 0; i < k; i++) used += sorted[i];
+  const fits = used <= _SIM_H;
+
+  // Greedy peak: largest K with prefix sum ≤ H
+  let bestK = 0, sum = 0;
+  for (let i = 0; i < N; i++) {
+    if (sum + sorted[i] <= _SIM_H) { sum += sorted[i]; bestK = i + 1; }
+    else break;
+  }
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#1e3a8a", marginBottom: 8, textAlign: "center" }}>
+          {t(E, "📅 Tasks sorted shortest → longest", "📅 작업을 짧은 순 → 긴 순으로 정렬")}
+        </div>
+
+        {/* Sorted task bars */}
+        <div style={{ padding: "4px 8px 0" }}>
+          {sorted.map((dur, i) => {
+            const taken = i < k;
+            return (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <div style={{ width: 60, fontSize: 12, fontWeight: 700, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+                  {t(E, `task ${i + 1}`, `작업 ${i + 1}`)}
+                </div>
+                <div style={{ position: "relative", flex: 1, height: 22, background: "#dbeafe", borderRadius: 6 }}>
+                  <div style={{
+                    width: `${(dur / maxBar) * 100}%`,
+                    height: "100%",
+                    background: taken ? A : `${A}55`,
+                    borderRadius: 6,
+                    border: taken ? `2px solid ${A}` : `1px solid ${A}77`,
+                    transition: "all 0.15s",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "#fff", fontSize: 11, fontWeight: 800,
+                  }}>
+                    {t(E, `${dur} h`, `${dur}시간`)}
+                  </div>
+                </div>
+                <div style={{ width: 32, fontSize: 11, color: taken ? A : C.dim, textAlign: "right", fontWeight: taken ? 800 : 500 }}>
+                  {taken ? t(E, "take", "선택") : "—"}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* H budget bar */}
+        <div style={{ margin: "12px 8px 0", paddingLeft: 60, paddingRight: 32 }}>
+          <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>
+            {t(E, `Time used / H = ${_SIM_H}`, `사용 시간 / H = ${_SIM_H}`)}
+          </div>
+          <div style={{ position: "relative", height: 16, background: "#fef3c7", borderRadius: 4, overflow: "hidden" }}>
+            <div style={{
+              width: `${Math.min(100, (used / _SIM_H) * 100)}%`,
+              height: "100%",
+              background: fits ? "#22c55e" : "#dc2626",
+              transition: "all 0.15s",
+            }} />
+            {!fits && (
+              <div style={{
+                position: "absolute", top: 0, right: 0, height: "100%",
+                display: "flex", alignItems: "center", paddingRight: 6,
+                fontSize: 10, fontWeight: 800, color: "#fff",
+              }}>
+                {t(E, "OVER!", "초과!")}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Slider */}
+        <div style={{ padding: "12px 8px 0", paddingLeft: 60, paddingRight: 32 }}>
+          <input
+            type="range"
+            min={0}
+            max={N}
+            step={1}
+            value={k}
+            onChange={e => setK(Number(e.target.value))}
+            style={{ width: "100%", accentColor: A }}
+          />
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: C.dim, marginTop: 2 }}>
+            <span>0</span><span>{N}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Live readout */}
+      <div style={{
+        background: k === bestK ? "#dbeafe" : "#f8fafc",
+        border: `2px solid ${k === bestK ? A : C.border}`,
+        borderRadius: 12, padding: "10px 14px",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        gap: 10, flexWrap: "wrap",
+      }}>
+        <div style={{ fontSize: 13, color: C.text }}>
+          <b style={{ color: A }}>K = {k}</b>
+          {" · "}
+          {t(E, "time used: ", "사용 시간: ")}
+          <span style={{ color: fits ? "#15803d" : "#dc2626", fontWeight: 700 }}>{used}</span>
+          {" / "}{_SIM_H}
+        </div>
+        <div style={{ fontSize: 14, fontWeight: 800, color: k === bestK ? A : C.text }}>
+          {t(E, "tasks done: ", "완료 작업: ")}
+          <span style={{ fontSize: 18 }}>{fits ? k : "—"}</span>
+          {k === bestK && (
+            <span style={{ marginLeft: 6, fontSize: 11, color: A }}>
+              {t(E, "← greedy peak!", "← 그리디 최댓값!")}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+        {t(E,
+          "Slide K. Tasks are already sorted shortest-first — picking shortest fits the most. The biggest K that stays green is the answer.",
+          "K 를 움직여 봐. 짧은 순으로 정렬했으니 — 짧은 것부터 고르면 가장 많이 들어가요. 초록색을 유지하는 가장 큰 K 가 정답이에요.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N, H = map(int, input().split())",
