@@ -116,7 +116,99 @@ export function makeMcc22CardSharkCh1(E) {
         "Correct! Sorted descending: [3,2,1]. P1 gets 3 and 1 = 4.",
         "맞아! 내림차순 정렬: [3,2,1]. P1이 3과 1을 가져가서 = 4."),
     },
-    // 1-3: Input
+    // 1-3: Deep-audit sim — turn-by-turn alternating pick on sorted cards
+    {
+      type: "reveal",
+      narr: t(E,
+        "Let's WATCH the game play out. Cards [5, 2, 8, 1, 6] sorted descending → [8, 6, 5, 2, 1]. Each turn, the current player grabs the TOP (largest remaining). P1 takes turns 0, 2, 4 — that's positions [0, 2, 4] of the sorted list.",
+        "게임을 직접 봐. 카드 [5, 2, 8, 1, 6]을 내림차순 정렬 → [8, 6, 5, 2, 1]. 매 턴 현재 플레이어가 맨 위 (가장 큰 것)를 가져가. P1은 턴 0, 2, 4에 가져가 → 정렬된 리스트의 위치 [0, 2, 4]."),
+      content: (() => {
+        const cards = [5, 2, 8, 1, 6];
+        const sorted = [...cards].sort((a, b) => b - a); // [8,6,5,2,1]
+        const turns = sorted.map((v, i) => ({
+          idx: i,
+          val: v,
+          player: i % 2 === 0 ? 1 : 2,
+        }));
+        const p1 = turns.filter(x => x.player === 1).reduce((s, x) => s + x.val, 0);
+        const p2 = turns.filter(x => x.player === 2).reduce((s, x) => s + x.val, 0);
+        return (
+          <div style={{ padding: 16 }}>
+            <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+                🃏 {t(E, "Turn-by-turn audit", "턴 별 시뮬레이션")}
+              </div>
+              <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+                {t(E, "Sample cards [5, 2, 8, 1, 6] → sort descending → both pick top each turn.",
+                     "예시 카드 [5, 2, 8, 1, 6] → 내림차순 정렬 → 매 턴 둘 다 맨 위 선택.")}
+              </div>
+            </div>
+
+            {/* Sorted card row */}
+            <div style={{ marginBottom: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: C.dim, marginBottom: 6 }}>
+                {t(E, "Sorted (descending):", "정렬 (내림차순):")}
+              </div>
+              <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+                {sorted.map((v, i) => (
+                  <div key={i} style={{
+                    width: 48, height: 64,
+                    border: `2px solid ${i % 2 === 0 ? "#d97706" : "#7c3aed"}`,
+                    borderRadius: 8,
+                    background: i % 2 === 0 ? "#fffbeb" : "#f5f3ff",
+                    display: "flex", flexDirection: "column",
+                    alignItems: "center", justifyContent: "center",
+                    fontWeight: 800, color: i % 2 === 0 ? "#92400e" : "#5b21b6",
+                  }}>
+                    <div style={{ fontSize: 10, color: C.dim, fontWeight: 600 }}>#{i}</div>
+                    <div style={{ fontSize: 20 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Turn table */}
+            <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 10, padding: 10, marginBottom: 10 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr 1fr", fontSize: 12, gap: 4 }}>
+                <div style={{ fontWeight: 700, color: C.dim, padding: "4px 6px" }}>{t(E, "Turn", "턴")}</div>
+                <div style={{ fontWeight: 700, color: C.dim, padding: "4px 6px" }}>{t(E, "Picker", "차례")}</div>
+                <div style={{ fontWeight: 700, color: C.dim, padding: "4px 6px" }}>{t(E, "Card", "카드")}</div>
+                <div style={{ fontWeight: 700, color: C.dim, padding: "4px 6px" }}>i % 2</div>
+                {turns.flatMap(tr => [
+                  <div key={`t-${tr.idx}`} style={{ padding: "4px 6px", borderTop: `1px dashed ${C.border}` }}>{tr.idx}</div>,
+                  <div key={`p-${tr.idx}`} style={{ padding: "4px 6px", borderTop: `1px dashed ${C.border}`, fontWeight: 700, color: tr.player === 1 ? "#d97706" : "#7c3aed" }}>
+                    P{tr.player}
+                  </div>,
+                  <div key={`v-${tr.idx}`} style={{ padding: "4px 6px", borderTop: `1px dashed ${C.border}`, fontWeight: 700 }}>+{tr.val}</div>,
+                  <div key={`m-${tr.idx}`} style={{ padding: "4px 6px", borderTop: `1px dashed ${C.border}`, color: C.dim }}>
+                    {tr.idx % 2}{tr.idx % 2 === 0 ? " → P1" : " → P2"}
+                  </div>,
+                ])}
+              </div>
+            </div>
+
+            {/* Score totals */}
+            <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+              <div style={{ flex: 1, background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e" }}>P1 = 8 + 5 + 1</div>
+                <div style={{ fontSize: 22, fontWeight: 800, color: "#d97706" }}>{p1}</div>
+              </div>
+              <div style={{ flex: 1, background: "#f5f3ff", border: "1.5px solid #7c3aed", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6" }}>P2 = 6 + 2</div>
+                <div style={{ fontSize: 22, fontWeight: 800, color: "#7c3aed" }}>{p2}</div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: 10, padding: "8px 12px", background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, fontSize: 12, color: "#065f46" }}>
+              👉 {t(E,
+                  "Pattern locked in: sort descending, sum every EVEN index for P1.",
+                  "패턴 확정: 내림차순 정렬, 짝수 인덱스를 모두 더하면 P1.")}
+            </div>
+          </div>
+        );
+      })(),
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
