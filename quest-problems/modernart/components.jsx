@@ -1,8 +1,263 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ═══════════════════════════════════════════════════════════════
+   ModernArtPaintSim — stack rectangles on a small canvas, see which
+   colors are visible vs fully hidden, and watch the answer count.
+   ═══════════════════════════════════════════════════════════════ */
+const _COLOR_HEX = {
+  0: "#f8fafc",
+  1: "#ef4444", // red
+  2: "#f97316", // orange
+  3: "#eab308", // yellow
+  4: "#22c55e", // green
+  5: "#0ea5e9", // sky
+  6: "#6366f1", // indigo
+  7: "#a855f7", // purple
+  8: "#ec4899", // pink
+  9: "#0f766e", // teal
+};
+
+const _PRESET_RECTS = {
+  4: [
+    // {color, r1, r2, c1, c2}
+    { color: 1, r1: 0, r2: 3, c1: 0, c2: 3 }, // big red — covers all
+    { color: 2, r1: 0, r2: 1, c1: 0, c2: 3 }, // orange band top
+    { color: 3, r1: 1, r2: 2, c1: 1, c2: 2 }, // tiny yellow inside
+    { color: 4, r1: 3, r2: 3, c1: 0, c2: 2 }, // green strip bottom
+    { color: 5, r1: 2, r2: 2, c1: 3, c2: 3 }, // sky single cell
+  ],
+  5: [
+    { color: 1, r1: 0, r2: 4, c1: 0, c2: 4 }, // red — full canvas
+    { color: 2, r1: 0, r2: 2, c1: 0, c2: 2 }, // orange top-left
+    { color: 3, r1: 2, r2: 4, c1: 2, c2: 4 }, // yellow bottom-right
+    { color: 6, r1: 1, r2: 1, c1: 1, c2: 1 }, // indigo dot inside orange
+    { color: 7, r1: 3, r2: 3, c1: 3, c2: 3 }, // purple dot inside yellow
+    { color: 8, r1: 0, r2: 0, c1: 4, c2: 4 }, // pink corner
+  ],
+};
+
+function _paintCanvas(N, rects) {
+  const canvas = Array.from({ length: N }, () => Array(N).fill(0));
+  for (const rec of rects) {
+    for (let r = rec.r1; r <= rec.r2; r++) {
+      for (let c = rec.c1; c <= rec.c2; c++) {
+        canvas[r][c] = rec.color;
+      }
+    }
+  }
+  return canvas;
+}
+
+function _bboxesFromCanvas(N, canvas) {
+  const bb = {};
+  for (let r = 0; r < N; r++) {
+    for (let c = 0; c < N; c++) {
+      const col = canvas[r][c];
+      if (col === 0) continue;
+      if (!bb[col]) bb[col] = { r1: r, r2: r, c1: c, c2: c };
+      else {
+        bb[col].r1 = Math.min(bb[col].r1, r);
+        bb[col].r2 = Math.max(bb[col].r2, r);
+        bb[col].c1 = Math.min(bb[col].c1, c);
+        bb[col].c2 = Math.max(bb[col].c2, c);
+      }
+    }
+  }
+  return bb;
+}
+
+export function ModernArtPaintSim({ E }) {
+  const [N, setN] = useState(4);
+  const [count, setCount] = useState(2); // number of rectangles applied so far
+
+  const allRects = _PRESET_RECTS[N];
+  const applied = allRects.slice(0, count);
+  const canvas = _paintCanvas(N, applied);
+  const bb = _bboxesFromCanvas(N, canvas);
+  const visibleColors = Object.keys(bb).map(Number).sort((a, b) => a - b);
+  const appliedColors = applied.map(r => r.color);
+  const hiddenColors = appliedColors.filter(c => !visibleColors.includes(c));
+
+  const cellPx = N === 4 ? 36 : 30;
+
+  const setN4 = () => { setN(4); setCount(Math.min(count, _PRESET_RECTS[4].length)); };
+  const setN5 = () => { setN(5); setCount(Math.min(count, _PRESET_RECTS[5].length)); };
+
+  const reset = () => setCount(0);
+  const stepBack = () => setCount(Math.max(0, count - 1));
+  const stepFwd = () => setCount(Math.min(allRects.length, count + 1));
+
+  const nextRect = count < allRects.length ? allRects[count] : null;
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* Controls */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginBottom: 10 }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: C.dim }}>
+          {t(E, "Canvas:", "캔버스:")}
+        </span>
+        <button onClick={setN4} style={{
+          background: N === 4 ? A : "#fff", color: N === 4 ? "#fff" : A,
+          border: `1.5px solid ${A}`, borderRadius: 6, padding: "4px 10px",
+          fontSize: 12, fontWeight: 800, cursor: "pointer",
+        }}>4 × 4</button>
+        <button onClick={setN5} style={{
+          background: N === 5 ? A : "#fff", color: N === 5 ? "#fff" : A,
+          border: `1.5px solid ${A}`, borderRadius: 6, padding: "4px 10px",
+          fontSize: 12, fontWeight: 800, cursor: "pointer",
+        }}>5 × 5</button>
+        <span style={{ flex: 1 }} />
+        <button onClick={reset} style={{
+          background: "#fff", color: "#475569", border: "1.5px solid #cbd5e1",
+          borderRadius: 6, padding: "4px 10px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>{t(E, "Reset", "초기화")}</button>
+        <button onClick={stepBack} disabled={count === 0} style={{
+          background: count === 0 ? "#f1f5f9" : "#fff", color: "#475569",
+          border: "1.5px solid #cbd5e1", borderRadius: 6, padding: "4px 10px",
+          fontSize: 12, fontWeight: 700, cursor: count === 0 ? "not-allowed" : "pointer",
+        }}>← {t(E, "Undo", "되돌리기")}</button>
+        <button onClick={stepFwd} disabled={count >= allRects.length} style={{
+          background: count >= allRects.length ? "#f1f5f9" : A, color: count >= allRects.length ? "#94a3b8" : "#fff",
+          border: `1.5px solid ${count >= allRects.length ? "#cbd5e1" : A}`,
+          borderRadius: 6, padding: "4px 10px", fontSize: 12, fontWeight: 800,
+          cursor: count >= allRects.length ? "not-allowed" : "pointer",
+        }}>{t(E, "Paint next →", "다음 칠하기 →")}</button>
+      </div>
+
+      {/* Hint about next rect */}
+      <div style={{
+        background: nextRect ? "#fef3c7" : "#ecfdf5",
+        border: `1px solid ${nextRect ? "#fbbf24" : "#6ee7b7"}`,
+        borderRadius: 8, padding: "8px 12px", marginBottom: 10, fontSize: 12, color: "#374151",
+      }}>
+        {nextRect ? (
+          <>
+            <span style={{
+              display: "inline-block", width: 14, height: 14, background: _COLOR_HEX[nextRect.color],
+              borderRadius: 3, verticalAlign: "middle", marginRight: 6,
+              border: "1px solid rgba(0,0,0,.15)",
+            }} />
+            <b>{t(E, "Next rectangle:", "다음 직사각형:")}</b>{" "}
+            {t(E, `color ${nextRect.color}, rows ${nextRect.r1}–${nextRect.r2}, cols ${nextRect.c1}–${nextRect.c2}`,
+                  `색 ${nextRect.color}, 행 ${nextRect.r1}–${nextRect.r2}, 열 ${nextRect.c1}–${nextRect.c2}`)}
+          </>
+        ) : (
+          <b>{t(E, "All rectangles painted. Look at which colors survived.", "모든 직사각형 칠 완료. 어떤 색이 살아남았는지 봐요.")}</b>
+        )}
+      </div>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 14 }}>
+        {/* Canvas */}
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>
+            {t(E, "Canvas (final view)", "캔버스 (최종)")}
+          </div>
+          <div style={{
+            display: "inline-block", padding: 4, background: "#0f172a", borderRadius: 8,
+          }}>
+            {canvas.map((row, r) => (
+              <div key={r} style={{ display: "flex" }}>
+                {row.map((col, c) => (
+                  <div key={c} style={{
+                    width: cellPx, height: cellPx,
+                    background: _COLOR_HEX[col],
+                    border: "1px solid #1e293b",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 11, fontWeight: 700,
+                    color: col === 0 ? "#cbd5e1" : "rgba(0,0,0,0.55)",
+                  }}>
+                    {col === 0 ? "·" : col}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Side panel */}
+        <div style={{ flex: 1, minWidth: 240 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>
+            {t(E, "Bounding boxes & status", "바운딩 박스 & 상태")}
+          </div>
+          <div style={{
+            background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8,
+            padding: 10, fontSize: 12, color: C.text,
+          }}>
+            {visibleColors.length === 0 && (
+              <div style={{ color: C.dim, fontStyle: "italic" }}>
+                {t(E, "(no color visible yet)", "(아직 보이는 색 없음)")}
+              </div>
+            )}
+            {visibleColors.map(col => {
+              const b = bb[col];
+              return (
+                <div key={col} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+                  <span style={{
+                    display: "inline-block", width: 14, height: 14,
+                    background: _COLOR_HEX[col], borderRadius: 3,
+                    border: "1px solid rgba(0,0,0,.15)",
+                  }} />
+                  <b style={{ minWidth: 18 }}>{col}</b>
+                  <span style={{ color: C.dim, fontSize: 11 }}>
+                    bbox r:{b.r1}–{b.r2}, c:{b.c1}–{b.c2}
+                  </span>
+                  <span style={{
+                    marginLeft: "auto", background: "#dcfce7", color: "#166534",
+                    padding: "1px 6px", borderRadius: 4, fontSize: 10, fontWeight: 700,
+                  }}>{t(E, "visible", "보임")}</span>
+                </div>
+              );
+            })}
+            {hiddenColors.length > 0 && (
+              <div style={{ borderTop: "1px dashed #cbd5e1", marginTop: 6, paddingTop: 6 }}>
+                <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>
+                  {t(E, "Fully hidden (painted over):", "완전히 가려짐 (덮였음):")}
+                </div>
+                {hiddenColors.map(col => (
+                  <div key={col} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
+                    <span style={{
+                      display: "inline-block", width: 12, height: 12,
+                      background: _COLOR_HEX[col], borderRadius: 3, opacity: 0.45,
+                      border: "1px solid rgba(0,0,0,.15)",
+                    }} />
+                    <b style={{ minWidth: 18, opacity: 0.6 }}>{col}</b>
+                    <span style={{
+                      marginLeft: "auto", background: "#fee2e2", color: "#991b1b",
+                      padding: "1px 6px", borderRadius: 4, fontSize: 10, fontWeight: 700,
+                    }}>{t(E, "hidden", "숨겨짐")}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Counter */}
+          <div style={{
+            marginTop: 10, background: "#ecfdf5", border: `1.5px solid ${A}`,
+            borderRadius: 8, padding: "10px 12px",
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", marginBottom: 2 }}>
+              {t(E, "Distinct visible colors", "보이는 색의 개수")}
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: A }}>
+              {visibleColors.length}
+            </div>
+            <div style={{ fontSize: 11, color: "#065f46", marginTop: 4, lineHeight: 1.45 }}>
+              {t(E,
+                "Each visible color was the LAST rectangle painted in its bbox region. Hidden colors got fully covered by later rectangles.",
+                "보이는 색은 그 바운딩 박스 영역에서 마지막에 칠해진 색. 숨겨진 색은 나중 직사각형에 완전히 덮인 거예요.")}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

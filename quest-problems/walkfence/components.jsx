@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
@@ -115,6 +115,197 @@ export function WalkFenceSim({ E }) {
 }
 
 export function WalkFenceRunner() { return null; }
+
+/* ═══════════════════════════════════════════════════════════════
+   WalkFencePathSim — animate BOTH routes around the loop
+   so students see why we take min(d, P − d).
+   ═══════════════════════════════════════════════════════════════ */
+const _WFP_PRESETS = [
+  { posts: [[0,0],[4,0],[4,3],[0,3]], A: [0,0], B: [4,3] },                  // square: diagonally opposite
+  { posts: [[0,0],[4,0],[4,3],[2,3],[2,5],[0,5]], A: [4,0], B: [0,5] },      // L-shape
+  { posts: [[0,0],[6,0],[6,4],[0,4]], A: [2,0], B: [6,2] },                  // rectangle
+];
+
+export function WalkFencePathSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [tick, setTick] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const timerRef = useRef(null);
+
+  const preset = _WFP_PRESETS[pi];
+  const posts = preset.posts;
+  const P = posts.length;
+
+  // Compute perimeter + cumulative offsets
+  let perimeter = 0;
+  const cum = [0];
+  for (let i = 0; i < P; i++) {
+    const j = (i + 1) % P;
+    const d = Math.abs(posts[j][0] - posts[i][0]) + Math.abs(posts[j][1] - posts[i][1]);
+    perimeter += d;
+    cum.push(perimeter);
+  }
+
+  // Position of point on perimeter (from post 0)
+  const findPos = (x, y) => {
+    for (let i = 0; i < P; i++) {
+      const j = (i + 1) % P;
+      const px = posts[i][0], py = posts[i][1];
+      const qx = posts[j][0], qy = posts[j][1];
+      if (px === qx && qx === x && Math.min(py, qy) <= y && y <= Math.max(py, qy)) return cum[i] + Math.abs(y - py);
+      if (py === qy && qy === y && Math.min(px, qx) <= x && x <= Math.max(px, qx)) return cum[i] + Math.abs(x - px);
+    }
+    return -1;
+  };
+  const dA = findPos(preset.A[0], preset.A[1]);
+  const dB = findPos(preset.B[0], preset.B[1]);
+  const cw  = (dB - dA + perimeter) % perimeter;          // forward distance A→B
+  const ccw = perimeter - cw;                              // backward distance
+  const shorter = Math.min(cw, ccw);
+  const longer  = Math.max(cw, ccw);
+
+  // Resolve a perimeter offset back into (x, y)
+  const offsetToXY = (offset) => {
+    const o = ((offset % perimeter) + perimeter) % perimeter;
+    for (let i = 0; i < P; i++) {
+      if (o >= cum[i] && o <= cum[i + 1]) {
+        const t = o - cum[i];
+        const px = posts[i][0], py = posts[i][1];
+        const qx = posts[(i + 1) % P][0], qy = posts[(i + 1) % P][1];
+        const seg = cum[i + 1] - cum[i];
+        if (seg === 0) return [px, py];
+        const f = t / seg;
+        return [px + (qx - px) * f, py + (qy - py) * f];
+      }
+    }
+    return posts[0];
+  };
+
+  // SVG dimensions
+  const minX = Math.min(...posts.map(p => p[0])) - 1;
+  const maxX = Math.max(...posts.map(p => p[0])) + 1;
+  const minY = Math.min(...posts.map(p => p[1])) - 1;
+  const maxY = Math.max(...posts.map(p => p[1])) + 1;
+  const W = 320; const H = 220;
+  const sx = (x) => ((x - minX) / (maxX - minX)) * W;
+  const sy = (y) => H - ((y - minY) / (maxY - minY)) * H;
+
+  // Two walkers — green walker uses shorter route, orange walker uses longer route.
+  // Both start at A (offset = dA).  Green moves toward B in the SHORT direction.
+  const goCWisShorter = cw <= ccw;
+  // tick goes 0..longer.  Each walker stops when it reaches B.
+  const greenPos = Math.min(tick, shorter);
+  const orangePos = Math.min(tick, longer);
+  const greenXY  = offsetToXY(dA + (goCWisShorter ? +1 : -1) * greenPos);
+  const orangeXY = offsetToXY(dA + (goCWisShorter ? -1 : +1) * orangePos);
+
+  // Play/pause animation
+  useEffect(() => {
+    if (!playing) {
+      if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+      return;
+    }
+    timerRef.current = setInterval(() => {
+      setTick(t => {
+        if (t >= longer) { setPlaying(false); return t; }
+        return t + 1;
+      });
+    }, 380);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [playing, longer]);
+
+  const reset = () => { setPlaying(false); setTick(0); };
+
+  // Build the two route polylines for visual trail
+  const buildTrail = (direction, dist) => {
+    const pts = [];
+    const steps = Math.max(2, Math.round(dist) + 1);
+    for (let s = 0; s <= steps; s++) {
+      const off = dA + direction * (dist * (s / steps));
+      const [x, y] = offsetToXY(off);
+      pts.push(`${sx(x)},${sy(y)}`);
+    }
+    return pts.join(" ");
+  };
+  const greenTrail  = buildTrail(goCWisShorter ? +1 : -1, greenPos);
+  const orangeTrail = buildTrail(goCWisShorter ? -1 : +1, orangePos);
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: A, textAlign: "center", marginBottom: 8 }}>
+        🐄 {t(E, "Two cows race — one each way around the loop", "두 소가 경주 — 양쪽 방향으로 한 마리씩")}
+      </div>
+
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10 }}>
+        {_WFP_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); reset(); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>case {i+1}</button>
+        ))}
+      </div>
+
+      <svg width={W} height={H} style={{ display: "block", margin: "0 auto", background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8 }}>
+        {/* Fence */}
+        <polygon
+          points={posts.map(p => `${sx(p[0])},${sy(p[1])}`).join(" ")}
+          fill="none" stroke="#94a3b8" strokeWidth="2"
+        />
+        {posts.map((p, i) => (
+          <circle key={i} cx={sx(p[0])} cy={sy(p[1])} r="3" fill="#94a3b8" />
+        ))}
+
+        {/* Orange (longer) trail */}
+        {orangePos > 0 && (
+          <polyline points={orangeTrail} fill="none" stroke="#f97316" strokeWidth="3.5" strokeOpacity="0.55" strokeLinecap="round" strokeLinejoin="round" />
+        )}
+        {/* Green (shorter) trail — drawn on top */}
+        {greenPos > 0 && (
+          <polyline points={greenTrail} fill="none" stroke="#16a34a" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+        )}
+
+        {/* Endpoints */}
+        <circle cx={sx(preset.A[0])} cy={sy(preset.A[1])} r="6" fill="#3b82f6" />
+        <text x={sx(preset.A[0])} y={sy(preset.A[1]) - 10} fontSize="10" fill="#3b82f6" textAnchor="middle" fontWeight="800">A</text>
+        <circle cx={sx(preset.B[0])} cy={sy(preset.B[1])} r="6" fill="#dc2626" />
+        <text x={sx(preset.B[0])} y={sy(preset.B[1]) - 10} fontSize="10" fill="#dc2626" textAnchor="middle" fontWeight="800">B</text>
+
+        {/* Walkers */}
+        <circle cx={sx(greenXY[0])} cy={sy(greenXY[1])} r="7" fill="#16a34a" stroke="#fff" strokeWidth="2" />
+        <text x={sx(greenXY[0])} y={sy(greenXY[1]) + 3} fontSize="9" fill="#fff" textAnchor="middle" fontWeight="800">S</text>
+        <circle cx={sx(orangeXY[0])} cy={sy(orangeXY[1])} r="7" fill="#f97316" stroke="#fff" strokeWidth="2" />
+        <text x={sx(orangeXY[0])} y={sy(orangeXY[1]) + 3} fontSize="9" fill="#fff" textAnchor="middle" fontWeight="800">L</text>
+      </svg>
+
+      <div style={{ background: "#f0fdf4", border: `1.5px solid #86efac`, borderRadius: 10, padding: "10px 12px", marginTop: 10, marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7 }}>
+        perimeter = {perimeter}<br/>
+        <span style={{ color: "#16a34a", fontWeight: 700 }}>S {t(E, "(short route)", "(짧은 길)")}</span> = {shorter} · {t(E, "step", "걸음")} {Math.min(tick, shorter)}/{shorter}
+        {tick >= shorter && <span style={{ color: "#16a34a", fontWeight: 700 }}> ✓ {t(E, "arrived", "도착")}</span>}
+        <br/>
+        <span style={{ color: "#f97316", fontWeight: 700 }}>L {t(E, "(long route)", "(먼 길)")}</span> = {longer} · {t(E, "step", "걸음")} {Math.min(tick, longer)}/{longer}
+        {tick >= longer && <span style={{ color: "#f97316", fontWeight: 700 }}> ✓ {t(E, "arrived", "도착")}</span>}
+        <br/>
+        {t(E, "answer = min(", "답 = min(")}{cw}, {ccw}) = <b style={{ color: "#16a34a" }}>{shorter}</b>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setPlaying(p => !p)} disabled={tick >= longer} style={{
+          background: tick >= longer ? "#e5e7eb" : (playing ? "#fff" : A),
+          border: `1px solid ${tick >= longer ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 700,
+          color: tick >= longer ? "#b0b5c3" : (playing ? A : "#fff"),
+          cursor: tick >= longer ? "default" : "pointer",
+        }}>{playing ? `⏸ ${t(E, "pause", "정지")}` : `▶ ${t(E, "play", "재생")}`}</button>
+        <button onClick={reset} style={{
+          background: "#fff", border: `1px solid ${C.border}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: C.dim,
+          cursor: "pointer",
+        }}>↺ {t(E, "reset", "리셋")}</button>
+      </div>
+    </div>
+  );
+}
 
 /* Section 1: read posts */
 const WF_INPUT_PY = [

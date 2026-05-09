@@ -57,7 +57,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: Problem (3 steps)
+   Chapter 1: Problem (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeModernArtCh1(E) {
   return [
@@ -123,7 +123,14 @@ export function makeModernArtCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Paint-stack sim
+    {
+      type: "sim",
+      narr: t(E,
+        "Pick a 4×4 or 5×5 canvas, then paint rectangles one by one. Watch which colors stay visible and which get fully covered. The counter on the right is the answer for this preset.",
+        "4×4 또는 5×5 캔버스를 골라 직사각형을 하나씩 칠해봐. 어떤 색이 보이고 어떤 색이 완전히 덮이는지 봐요. 오른쪽 숫자가 이 프리셋의 정답이에요."),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -140,7 +147,7 @@ export function makeModernArtCh1(E) {
         "Correct! If only 1 color is visible, its bounding box isn't inside any other visible color's box. It can be first (and also last, since it's the only one).",
         "맞아! 1가지 색만 보이면 그 바운딩 박스가 다른 보이는 색의 박스 안에 없어요. 처음일 수 있어 (유일하니까 마지막이기도 하고)."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

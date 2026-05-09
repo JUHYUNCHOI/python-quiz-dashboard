@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getWalkFenceSections, WalkFenceSim } from "./components";
+import { getWalkFenceSections, WalkFenceSim, WalkFencePathSim } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 const ACCENT = "#059669";       // emerald-600
@@ -111,6 +111,14 @@ export function makeWalkCh1(E) {
             </div>
           </div>
         </div>),
+    },
+
+    {
+      type: "reveal",
+      narr: t(E,
+        "Watch two cows race A → B — one each way around the loop. The green one always wins; that's our answer.",
+        "두 소가 A → B 경주 — 각자 다른 방향. 항상 초록 소가 이겨요; 그게 답."),
+      content: (<WalkFencePathSim E={E} />),
     },
 
     {
