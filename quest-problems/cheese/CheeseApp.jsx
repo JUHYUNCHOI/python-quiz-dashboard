@@ -2,11 +2,16 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { CheeseProgressiveCode, downloadCheesePDF, getCheeseSections, CheeseSim, CheeseRunner } from "./components";
-import { makeCheeseCh1, makeCheeseCh2 } from "./chapters";
+import {
+  CheeseSim2, CheeseBruteRunner, CheeseProgressiveCode,
+  downloadCheesePDF, getCheeseSections,
+} from "./components";
+import {
+  makeCheeseCh1, makeCheeseCh2, makeCheeseCh3, makeCheeseCh4, makeCheeseCh5,
+} from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
-const A = "#eab308";
+const A = "#d97706";
 
 export default function CheeseApp(props = {}) {
   const propLang = props.lang;
@@ -20,7 +25,10 @@ export default function CheeseApp(props = {}) {
     return "ko";
   });
   const E = lang === "en";
+
   const [codeLang, setCodeLang] = useCodeLang();
+
+  // Persist tab/si in localStorage so refresh keeps the student on the same step
   const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";
   const _loadPos = () => {
     if (typeof window === "undefined") return { tab: 0, si: 0 };
@@ -29,13 +37,19 @@ export default function CheeseApp(props = {}) {
   const _initial = _loadPos();
   const [tab, setTab] = useState(typeof _initial.tab === "number" ? _initial.tab : 0);
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
+
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
+  // Quiz/input state per chapter
   const [ch1Q, setCh1Q] = useState(() => makeCheeseCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeCheeseCh2(false, "py"));
+  const [ch2Q, setCh2Q] = useState(() => makeCheeseCh2(false));
+  const [ch3Q, setCh3Q] = useState(() => makeCheeseCh3(false));
+  const [ch4Q, setCh4Q] = useState(() => makeCheeseCh4(false));
+  const [ch5Q, setCh5Q] = useState(() => makeCheeseCh5(false, "py"));
 
+  // codeLang change → rebuild Ch5 (preserve answered/solved)
   useEffect(() => {
-    setCh2Q(prev => makeCheeseCh2(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+    setCh5Q(prev => makeCheeseCh5(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   }, [codeLang, E]);
 
   useEffect(() => {
@@ -44,88 +58,114 @@ export default function CheeseApp(props = {}) {
   }, [tab, si, _posKey]);
 
   useEffect(() => {
-    if ((propLang === "ko" || propLang === "en") && propLang !== lang) switchLang(propLang);
+    if ((propLang === "ko" || propLang === "en") && propLang !== lang) {
+      switchLang(propLang);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propLang]);
 
-  const TABS = E ? ["📋 Problem", "⚡ Code"] : ["📋 문제", "⚡ 코드"];
-  const setters = { 0: setCh1Q, 1: setCh2Q };
-  const states  = { 0: ch1Q,    1: ch2Q };
-  const makers  = { 0: makeCheeseCh1, 1: (e) => makeCheeseCh2(e, codeLang) };
+  // Tab order: 문제 → 시뮬 → 브루트 → 패턴 → 코드
+  const TABS = E
+    ? ["📋 Problem", "🧀 Sim", "🐍 Brute", "💡 Pattern", "⚡ Code"]
+    : ["📋 문제", "🧀 시뮬", "🐍 브루트", "💡 패턴", "⚡ 코드"];
+
+  // Tab index → chapter setters/states/makers (note: brute=ch4, pattern=ch3 by design)
+  const setters = { 0: setCh1Q, 1: setCh2Q, 2: setCh4Q, 3: setCh3Q, 4: setCh5Q };
+  const states  = { 0: ch1Q,    1: ch2Q,    2: ch4Q,    3: ch3Q,    4: ch5Q };
+  const makers  = { 0: makeCheeseCh1, 1: makeCheeseCh2, 2: makeCheeseCh4, 3: makeCheeseCh3, 4: (e) => makeCheeseCh5(e, codeLang) };
 
   const switchLang = nl => {
     const ne = nl === "en"; setLang(nl);
-    for (const k of [0,1]) setters[k](prev => makers[k](ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+    for (const k of [0,1,2,3,4]) setters[k](prev => makers[k](ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   };
 
-  const steps = states[tab], cur = Math.min(si, steps.length - 1), step = steps[cur];
+  const steps = states[tab];
+  const cur = Math.min(si, steps.length - 1);
+  const step = steps[cur];
 
-  const handleAnswer = i => {
+  const handleAnswer = optIdx => {
     if (step.answered != null) return;
-    const u = [...states[tab]]; u[cur] = { ...u[cur], answered: i };
-    setters[tab](u);
-  };
-  const handleSolve = () => {
-    const u = [...states[tab]]; u[cur] = { ...u[cur], solved: true };
-    setters[tab](u);
+    const setter = setters[tab], state = states[tab];
+    const u = [...state]; u[cur] = { ...u[cur], answered: optIdx };
+    setter(u);
   };
 
-  const showAnswerHint = (step.type === "quiz" && step.answered == null) || (step.type === "input" && !step.solved);
+  const handleSolve = () => {
+    const setter = setters[tab], state = states[tab];
+    const u = [...state]; u[cur] = { ...u[cur], solved: true };
+    setter(u);
+  };
+
+  const showAnswerHint =
+    (step.type === "quiz" && step.answered == null) ||
+    (step.type === "input" && !step.solved);
+
   const canNext = cur < steps.length - 1 || tab < TABS.length - 1;
+
   const next = () => {
     if (cur < steps.length - 1) {
       setSi(cur + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    } else if (tab < TABS.length - 1) {
-      setVisitedTabs(prev => { const n = new Set(prev); n.add(tab + 1); return n; });
-      setTab(tab + 1); setSi(0);
-      setters[tab + 1](makers[tab + 1](E));
+      return;
+    }
+    if (tab < TABS.length - 1) {
+      const nextTab = tab + 1;
+      setTab(nextTab); setSi(0);
+      setVisitedTabs(prev => { const n = new Set(prev); n.add(nextTab); return n; });
+      setters[nextTab](makers[nextTab](E));
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
   const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
-  const showCodeControls = tab === 1;
+  // Code controls visible only on the Code tab (4)
+  const showCodeControls = tab === 4;
 
   const renderContent = () => {
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
+    if (step.type === "cheeseSim2") return <CheeseSim2 E={E} />;
+    if (step.type === "cheeseRunner") return <CheeseBruteRunner E={E} />;
     if (step.type === "progressive") return <CheeseProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
-    if (step.type === "sim") return <CheeseSim E={E} />;
-    if (step.type === "runner") return <CheeseRunner E={E} />;
     return null;
   };
 
   const renderPreviewBody = (s) => {
+    if (!s) return null;
     if (s.type === "quiz") return <Quiz {...s} onAnswer={() => {}} />;
-    if (s.type === "input") return (
-      <NumInput question={s.question} hint={s.hint} answer={s.answer} E={E} onSolve={() => {}} />
-    );
+    if (s.type === "input") return <NumInput question={s.question} hint={s.hint} answer={s.answer} E={E} onSolve={() => {}} />;
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
+    if (s.type === "cheeseSim2") return <CheeseSim2 E={E} />;
+    if (s.type === "cheeseRunner") return <CheeseBruteRunner E={E} />;
     if (s.type === "progressive") return <CheeseProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
-    if (s.type === "sim") return <CheeseSim E={E} />;
-    if (s.type === "runner") return <CheeseRunner E={E} />;
     return null;
   };
 
   const codeControlsSlot = showCodeControls ? (
     <div style={{ display: "flex", gap: 0, alignItems: "stretch" }}>
-      <select value={codeLang} onChange={e => setCodeLang(e.target.value)} title={t(E, "Code language", "코드 언어")} style={{
-        background: "#fff", color: A, border: `1.5px solid ${A}`,
-        borderRadius: "8px 0 0 8px", borderRight: "none",
-        padding: "4px 6px", fontSize: 12, fontWeight: 800, cursor: "pointer",
-      }}>
+      <select
+        value={codeLang}
+        onChange={e => setCodeLang(e.target.value)}
+        title={t(E, "Choose code language", "코드 언어 선택")}
+        style={{
+          background: "#fff", color: A, border: `1.5px solid ${A}`,
+          borderRadius: "8px 0 0 8px", borderRight: "none",
+          padding: "4px 6px", fontSize: 12, fontWeight: 800, cursor: "pointer",
+        }}>
         <option value="py">🐍 Py</option>
         <option value="cpp">💻 C++</option>
       </select>
-      <button onClick={() => downloadCheesePDF(E, getCheeseSections(E), codeLang)} style={{
-        background: A, color: "#fff", border: `1.5px solid ${A}`,
-        borderRadius: "0 8px 8px 0",
-        padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800,
-      }}>📄 PDF</button>
+      <button
+        onClick={() => downloadCheesePDF(E, getCheeseSections(E), codeLang)}
+        title={t(E, "Download full study guide", "전체 풀이 PDF 다운로드")}
+        style={{
+          background: A, color: "#fff", border: `1.5px solid ${A}`,
+          borderRadius: "0 8px 8px 0",
+          padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800,
+        }}>📄 PDF</button>
     </div>
   ) : null;
 
@@ -146,7 +186,7 @@ export default function CheeseApp(props = {}) {
           codeControlsSlot={codeControlsSlot}
         />
 
-        {step.narr && <Narration key={`chee-${tab}-${cur}-${lang}`} text={step.narr} />}
+        {step.narr && <Narration key={`cheese-${tab}-${cur}-${lang}`} text={step.narr} />}
 
         <div style={{
           background: C.card, borderRadius: 14, border: `2px solid ${C.border}`,
