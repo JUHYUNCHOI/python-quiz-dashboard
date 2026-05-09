@@ -1,8 +1,164 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ═══════════════════════════════════════════════════════════════
+   MoolooMergeSim — number line with viewing days; step through
+   the greedy scan and watch subscriptions extend or split.
+   ═══════════════════════════════════════════════════════════════ */
+const _MM_PRESETS = [
+  { days: [1, 2, 3, 10],       K: 2, label: "[1,2,3,10] K=2" },
+  { days: [1, 5, 9, 12],       K: 3, label: "[1,5,9,12] K=3" },
+  { days: [2, 4, 7, 8, 9, 20], K: 3, label: "[2,4,7,8,9,20] K=3" },
+];
+
+// Run greedy and return list of subscriptions: { start, end, indices: [..] }
+function _runGreedy(days, K) {
+  const subs = [];
+  let i = 0;
+  while (i < days.length) {
+    const start = days[i];
+    let end = days[i];
+    const idx = [i];
+    i++;
+    while (i < days.length && days[i] - end <= K) {
+      end = days[i];
+      idx.push(i);
+      i++;
+    }
+    subs.push({ start, end, indices: idx });
+  }
+  return subs;
+}
+
+export function MoolooMergeSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [stage, setStage] = useState(0);
+
+  const preset = _MM_PRESETS[pi];
+  const days = preset.days;
+  const K = preset.K;
+  const subs = _runGreedy(days, K);
+
+  // stage 0: show days only; stages 1..subs.length: reveal subscriptions one by one
+  const maxStage = subs.length;
+  const revealed = Math.min(stage, maxStage);
+
+  // SVG layout
+  const W = 340, H = 130;
+  const padX = 24;
+  const minD = days[0];
+  const maxD = days[days.length - 1];
+  const span = Math.max(1, (maxD + K) - (minD - 1));
+  const sx = (d) => padX + ((d - (minD - 1)) / span) * (W - 2 * padX);
+  const lineY = 78;
+
+  // Cost summary
+  const partialSubs = subs.slice(0, revealed);
+  const partialCost = partialSubs.reduce((s, sub) => s + (sub.end - sub.start + 1) + K, 0);
+  const totalCost = subs.reduce((s, sub) => s + (sub.end - sub.start + 1) + K, 0);
+
+  const subColors = ["#f97316", "#7c3aed", "#0ea5e9", "#16a34a", "#dc2626", "#d97706"];
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: A, textAlign: "center", marginBottom: 8 }}>
+        {t(E, "Greedy Subscription Merge", "그리디 구독 병합")}
+      </div>
+
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {_MM_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setStage(0); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{p.label}</button>
+        ))}
+      </div>
+
+      <svg width={W} height={H} style={{ display: "block", margin: "0 auto", background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8 }}>
+        {/* number line */}
+        <line x1={padX - 8} y1={lineY} x2={W - padX + 8} y2={lineY} stroke="#94a3b8" strokeWidth="1.5" />
+
+        {/* subscription bars (revealed) */}
+        {partialSubs.map((sub, si) => {
+          const color = subColors[si % subColors.length];
+          const x1 = sx(sub.start);
+          const x2 = sx(sub.end + K); // includes K-day grace period
+          const xCore = sx(sub.end);
+          return (
+            <g key={si}>
+              {/* core (start..end) solid */}
+              <rect x={x1 - 6} y={lineY - 14} width={(xCore - x1) + 12} height={28} rx={6}
+                    fill={color} fillOpacity="0.18" stroke={color} strokeWidth="1.5" />
+              {/* grace (end..end+K) dashed */}
+              {K > 0 && (
+                <rect x={xCore} y={lineY - 10} width={x2 - xCore} height={20} rx={4}
+                      fill={color} fillOpacity="0.05" stroke={color} strokeWidth="1.2" strokeDasharray="3 3" />
+              )}
+              <text x={(x1 + xCore) / 2} y={lineY - 18} fontSize="10" fill={color} textAnchor="middle" fontWeight="800">
+                {(sub.end - sub.start + 1)}+{K}={(sub.end - sub.start + 1) + K}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* day dots */}
+        {days.map((d, i) => {
+          const inSub = partialSubs.some(s => s.indices.includes(i));
+          return (
+            <g key={i}>
+              <circle cx={sx(d)} cy={lineY} r="5" fill={inSub ? A : "#cbd5e1"} stroke="#fff" strokeWidth="1.5" />
+              <text x={sx(d)} y={lineY + 22} fontSize="11" fill={C.text} textAnchor="middle" fontWeight="700" fontFamily="'JetBrains Mono',monospace">{d}</text>
+            </g>
+          );
+        })}
+      </svg>
+
+      <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "8px 12px", marginTop: 10, marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7 }}>
+        {revealed === 0 && (
+          <>{t(E, `${days.length} viewing days, K=${K}. Press → to start scanning.`,
+                  `시청일 ${days.length}개, K=${K}. → 눌러서 스캔 시작.`)}</>
+        )}
+        {revealed > 0 && revealed < maxStage && (
+          <>
+            {t(E, `Subscription ${revealed}: days ${partialSubs[revealed-1].start}→${partialSubs[revealed-1].end}, cost ${(partialSubs[revealed-1].end - partialSubs[revealed-1].start + 1) + K}`,
+                  `구독 ${revealed}: ${partialSubs[revealed-1].start}→${partialSubs[revealed-1].end}일, 비용 ${(partialSubs[revealed-1].end - partialSubs[revealed-1].start + 1) + K}`)}
+            <br/>{t(E, `Cost so far: ${partialCost}`, `현재까지 비용: ${partialCost}`)}
+          </>
+        )}
+        {revealed === maxStage && maxStage > 0 && (
+          <>
+            {t(E, `${maxStage} subscription${maxStage>1?"s":""} total.`, `총 ${maxStage}개 구독.`)}
+            <br/><b style={{ color: A }}>{t(E, `Total cost = ${totalCost}`, `총 비용 = ${totalCost}`)}</b>
+          </>
+        )}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setStage(Math.max(0, stage - 1))} disabled={stage === 0} style={{
+          background: stage === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${stage === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 700, color: stage === 0 ? "#b0b5c3" : A,
+          cursor: stage === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{revealed} / {maxStage}</span>
+        <button onClick={() => setStage(Math.min(maxStage, stage + 1))} disabled={stage >= maxStage} style={{
+          background: stage >= maxStage ? "#e5e7eb" : A, border: `1px solid ${stage >= maxStage ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 700,
+          color: stage >= maxStage ? "#b0b5c3" : "#fff", cursor: stage >= maxStage ? "default" : "pointer",
+        }}>→</button>
+      </div>
+
+      <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginTop: 8, lineHeight: 1.5 }}>
+        {t(E, "Solid bar = active days · Dashed = K-day grace period (the activation fee).",
+              "실선 = 활성 일수 · 점선 = K일 유예 (켜는 비용).")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

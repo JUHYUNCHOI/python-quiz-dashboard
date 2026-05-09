@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMoolooSections } from "./components";
+import { getMoolooSections, MoolooMergeSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -156,6 +156,13 @@ export function makeMoolooCh1(E) {
             </div>
           </div>
         </div>),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Walk the greedy scan day by day. Watch each subscription grow as long as the next day fits within K, then a new bar starts when the gap is too big.",
+        "\uadf8\ub9ac\ub514 \uc2a4\uce94\uc744 \ud558\ub8e8\uc529 \ub530\ub77c\uac00\uc694. \ub2e4\uc74c \ub0a0\uc774 K \uc548\uc5d0 \ub4e4\uc5b4\uc624\uba74 \uac19\uc740 \uad6c\ub3c5\uc774 \uc790\ub77c\uace0, \uac04\uaca9\uc774 \ub108\ubb34 \ud06c\uba74 \uc0c8 \ub9c9\ub300\uac00 \uc2dc\uc791\ub3fc\uc694."),
+      content: <MoolooMergeSim E={E} />,
     },
   ];
 }
