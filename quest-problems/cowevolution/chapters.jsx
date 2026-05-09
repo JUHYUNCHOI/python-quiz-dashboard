@@ -141,6 +141,13 @@ export function makeEvolutionCh1(E) {
         "두 집단이 공유하는 특성이 있어?"),
       answer: 1,
     },
+    // 1-4: Deep-audit sim — pick a pair, watch the three flags light up.
+    {
+      type: "sim",
+      narr: t(E,
+        "Hands-on audit. Pick a pair (A, B). For every population, check which of A only / B only / both shows up. If all THREE flags ever turn on at once for any pair, the input is invalid.",
+        "직접 검사해 봐요. 쌍 (A, B) 를 골라요. 각 집단마다 A 만 / B 만 / 둘 다 중 어느 게 나오는지 확인. 어떤 쌍이든 세 플래그가 모두 켜지면 그 입력은 무효."),
+    },
   ];
 }
 

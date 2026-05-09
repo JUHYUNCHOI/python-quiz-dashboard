@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { CowEvolutionProgressiveCode, downloadCowEvolutionPDF, getCowEvolutionSections } from "./components";
+import { CowEvolutionProgressiveCode, downloadCowEvolutionPDF, getCowEvolutionSections, CowEvolutionSim } from "./components";
 import { makeEvolutionCh1, makeEvolutionCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -93,6 +93,7 @@ export default function CowEvolutionApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <CowEvolutionProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <CowEvolutionSim E={E} />;
     return null;
   };
 
@@ -104,6 +105,7 @@ export default function CowEvolutionApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
     if (s.type === "progressive") return <CowEvolutionProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "sim") return <CowEvolutionSim E={E} />;
     return null;
   };
 

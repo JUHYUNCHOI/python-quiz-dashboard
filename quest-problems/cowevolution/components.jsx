@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -103,6 +104,243 @@ export function getCowEvolutionSections(E) {
 
 export function CowEvolutionProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CowEvolutionSim — pick a pair (A,B), audit every population,
+   tally the three crossing flags, decide yes/no.
+   ═══════════════════════════════════════════════════════════════ */
+const _CE_PRESETS = [
+  {
+    label: t_label("Valid · nested", "유효 · 포함"),
+    pops: [
+      ["fly"],
+      ["fly", "spot"],
+      ["fly", "spot", "horn"],
+    ],
+  },
+  {
+    label: t_label("Invalid · cross", "무효 · 교차"),
+    pops: [
+      ["fly", "spot"],
+      ["fly", "horn"],
+      ["spot", "horn"],
+    ],
+  },
+  {
+    label: t_label("Valid · disjoint", "유효 · 분리"),
+    pops: [
+      ["fly"],
+      ["swim"],
+      ["walk", "horn"],
+    ],
+  },
+  {
+    label: t_label("Invalid · classic", "무효 · 전형적"),
+    pops: [
+      ["A", "B"],
+      ["B", "C"],
+      ["A", "C"],
+    ],
+  },
+];
+
+function t_label(en, ko) { return { en, ko }; }
+
+export function CowEvolutionSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const preset = _CE_PRESETS[pi];
+  const pops = preset.pops;
+
+  // Collect all distinct characteristics from the chosen preset
+  const allChars = [];
+  const seen = new Set();
+  for (const p of pops) for (const c of p) if (!seen.has(c)) { seen.add(c); allChars.push(c); }
+
+  // Default pair = first two characteristics
+  const [aIdx, setAIdx] = useState(0);
+  const [bIdx, setBIdx] = useState(1);
+  // Reset indices when preset changes
+  const safeA = Math.min(aIdx, allChars.length - 1);
+  const safeB = Math.min(bIdx, allChars.length - 1);
+  const A_char = allChars[safeA];
+  const B_char = allChars[safeB] !== A_char ? allChars[safeB] : allChars[(safeB + 1) % allChars.length];
+
+  // Audit each population for the chosen pair
+  let aOnly = false, bOnly = false, both = false;
+  const rows = pops.map((p, i) => {
+    const ha = p.includes(A_char);
+    const hb = p.includes(B_char);
+    const role =
+      ha && hb ? "both"
+      : ha ? "aOnly"
+      : hb ? "bOnly"
+      : "neither";
+    if (role === "aOnly") aOnly = true;
+    if (role === "bOnly") bOnly = true;
+    if (role === "both") both = true;
+    return { i, p, ha, hb, role };
+  });
+
+  // Auto-scan: do any pair cross across this preset?
+  let presetValid = true;
+  let crossingPair = null;
+  outer:
+  for (let i = 0; i < allChars.length; i++) {
+    for (let j = i + 1; j < allChars.length; j++) {
+      let xa = false, xb = false, xab = false;
+      for (const p of pops) {
+        const ha = p.includes(allChars[i]);
+        const hb = p.includes(allChars[j]);
+        if (ha && !hb) xa = true;
+        if (!ha && hb) xb = true;
+        if (ha && hb) xab = true;
+      }
+      if (xa && xb && xab) { presetValid = false; crossingPair = [allChars[i], allChars[j]]; break outer; }
+    }
+  }
+
+  const cross = aOnly && bOnly && both;
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* Preset switcher */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_CE_PRESETS.map((pr, i) => (
+          <button key={i} onClick={() => { setPi(i); setAIdx(0); setBIdx(1); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 11, fontWeight: 700, cursor: "pointer",
+          }}>{t(E, pr.label.en, pr.label.ko)}</button>
+        ))}
+      </div>
+
+      {/* Population list */}
+      <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 10, marginBottom: 12 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", marginBottom: 6 }}>
+          🐄 {t(E, "Populations", "집단")} (N = {pops.length})
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          {pops.map((p, i) => (
+            <div key={i} style={{
+              display: "flex", gap: 6, alignItems: "center",
+              fontSize: 12, fontFamily: "'JetBrains Mono',monospace",
+              padding: "4px 8px", background: "#fff", border: "1px solid #d1fae5", borderRadius: 6,
+            }}>
+              <span style={{ color: C.dim, fontWeight: 700, minWidth: 30 }}>P{i + 1}:</span>
+              <span style={{ color: A, fontWeight: 600 }}>{`{ ${p.join(", ")} }`}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Pair picker */}
+      <div style={{ display: "flex", gap: 10, alignItems: "center", justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        <label style={{ fontSize: 11, fontWeight: 700, color: C.dim }}>
+          {t(E, "Pair A:", "쌍 A:")}
+          <select value={safeA} onChange={(e) => setAIdx(Number(e.target.value))} style={{
+            marginLeft: 6, padding: "3px 6px", borderRadius: 6, border: `1px solid ${A}`,
+            color: A, fontWeight: 700, fontSize: 11, background: "#fff",
+          }}>
+            {allChars.map((c, i) => <option key={i} value={i}>{c}</option>)}
+          </select>
+        </label>
+        <label style={{ fontSize: 11, fontWeight: 700, color: C.dim }}>
+          {t(E, "Pair B:", "쌍 B:")}
+          <select value={safeB} onChange={(e) => setBIdx(Number(e.target.value))} style={{
+            marginLeft: 6, padding: "3px 6px", borderRadius: 6, border: `1px solid ${A}`,
+            color: A, fontWeight: 700, fontSize: 11, background: "#fff",
+          }}>
+            {allChars.map((c, i) => <option key={i} value={i}>{c}</option>)}
+          </select>
+        </label>
+      </div>
+
+      {/* Audit table */}
+      <div style={{ background: "#fff", border: `1.5px solid ${A}`, borderRadius: 10, padding: 10, marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: A, marginBottom: 6, textAlign: "center" }}>
+          🔍 {t(E, `Auditing pair ( ${A_char}, ${B_char} )`, `( ${A_char}, ${B_char} ) 쌍 검사`)}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          {rows.map((r) => {
+            const bg = r.role === "both" ? "#fef3c7"
+                      : r.role === "aOnly" ? "#dbeafe"
+                      : r.role === "bOnly" ? "#fce7f3"
+                      : "#f1f5f9";
+            const bd = r.role === "both" ? "#fbbf24"
+                      : r.role === "aOnly" ? "#60a5fa"
+                      : r.role === "bOnly" ? "#f472b6"
+                      : "#cbd5e1";
+            const tag = r.role === "both" ? t(E, "both A,B", "A,B 둘 다")
+                       : r.role === "aOnly" ? t(E, "A only", "A 만")
+                       : r.role === "bOnly" ? t(E, "B only", "B 만")
+                       : t(E, "neither", "둘 다 없음");
+            return (
+              <div key={r.i} style={{
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                padding: "5px 10px", borderRadius: 6, background: bg, border: `1.5px solid ${bd}`,
+                fontSize: 11, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                <span>P{r.i + 1}: <span style={{ color: r.ha ? A : C.dim }}>{A_char}{r.ha ? "✓" : "✗"}</span> · <span style={{ color: r.hb ? A : C.dim }}>{B_char}{r.hb ? "✓" : "✗"}</span></span>
+                <span>{tag}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Three flags summary */}
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", marginTop: 10, flexWrap: "wrap" }}>
+          <FlagPill on={aOnly} label={t(E, "∃ A-only", "A 만 ∃")} />
+          <FlagPill on={bOnly} label={t(E, "∃ B-only", "B 만 ∃")} />
+          <FlagPill on={both}  label={t(E, "∃ A∧B",   "A∧B ∃")} />
+        </div>
+
+        {/* Verdict for this pair */}
+        <div style={{
+          marginTop: 10, textAlign: "center", padding: "8px 10px", borderRadius: 8,
+          background: cross ? "#fef2f2" : "#ecfdf5",
+          border: `1.5px solid ${cross ? "#ef4444" : A}`,
+          fontSize: 12, fontWeight: 700, color: cross ? "#991b1b" : "#065f46",
+        }}>
+          {cross
+            ? t(E, `Pair (${A_char},${B_char}) CROSSES → no valid tree for this pair.`,
+                  `( ${A_char}, ${B_char} ) 쌍 교차 → 이 쌍 때문에 트리 불가.`)
+            : t(E, `Pair (${A_char},${B_char}) is fine (one flag missing).`,
+                  `( ${A_char}, ${B_char} ) 쌍은 OK (플래그 하나 빠짐).`)}
+        </div>
+      </div>
+
+      {/* Final verdict for the whole preset (auto-scan) */}
+      <div style={{
+        textAlign: "center", padding: "10px 12px", borderRadius: 10,
+        background: presetValid ? "#dcfce7" : "#fee2e2",
+        border: `2px solid ${presetValid ? "#16a34a" : "#dc2626"}`,
+        fontSize: 13, fontWeight: 800, color: presetValid ? "#15803d" : "#991b1b",
+      }}>
+        {presetValid
+          ? t(E, "Whole input → print 'yes' (no pair crosses).",
+                "전체 입력 → 'yes' 출력 (교차 쌍 없음).")
+          : t(E, `Whole input → print 'no' (pair (${crossingPair?.[0]},${crossingPair?.[1]}) crosses).`,
+                `전체 입력 → 'no' 출력 ( ( ${crossingPair?.[0]}, ${crossingPair?.[1]} ) 쌍 교차 ).`)}
+      </div>
+    </div>
+  );
+}
+
+function FlagPill({ on, label }) {
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 4,
+      padding: "3px 9px", borderRadius: 999,
+      background: on ? "#059669" : "#f1f5f9",
+      color: on ? "#fff" : "#64748b",
+      border: `1px solid ${on ? "#047857" : "#cbd5e1"}`,
+      fontSize: 11, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+    }}>
+      {on ? "✓" : "✗"} {label}
+    </span>
+  );
 }
 
 
