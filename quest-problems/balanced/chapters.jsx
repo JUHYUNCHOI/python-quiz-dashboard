@@ -191,6 +191,12 @@ export function makeBalancedCh1(E) {
         </div>),
     },
     {
+      type: "auditSim",
+      narr: t(E,
+        "Your turn — tap brackets to skip them and audit the subsequence yourself.\nCan you make a balanced one as long as possible?",
+        "직접 — 괄호 탭해서 건너뛰고 부분수열을 감사해 봐.\n가장 긴 균형 부분수열을 만들 수 있어?"),
+    },
+    {
       type: "quiz",
       narr: t(E,
         "Try this — sketch out the brackets in your head and count how many pairs you can really form.",

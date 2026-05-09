@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { BalancedProgressiveCode, downloadBalancedPDF, getBalancedSections, BalancedSim, BalancedRunner } from "./components";
+import { BalancedProgressiveCode, downloadBalancedPDF, getBalancedSections, BalancedSim, BalancedAuditSim, BalancedRunner } from "./components";
 import { makeBalancedCh1, makeBalancedCh2, makeBalancedCh3 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -95,6 +95,7 @@ export default function BalancedApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <BalancedProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     if (step.type === "sim") return <BalancedSim E={E} />;
+    if (step.type === "auditSim") return <BalancedAuditSim E={E} />;
     if (step.type === "runner") return <BalancedRunner E={E} />;
     return null;
   };
@@ -108,6 +109,7 @@ export default function BalancedApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
     if (s.type === "progressive") return <BalancedProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     if (s.type === "sim") return <BalancedSim E={E} />;
+    if (s.type === "auditSim") return <BalancedAuditSim E={E} />;
     if (s.type === "runner") return <BalancedRunner E={E} />;
     return null;
   };

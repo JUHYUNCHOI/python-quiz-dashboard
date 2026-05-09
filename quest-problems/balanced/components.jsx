@@ -93,6 +93,172 @@ export function BalancedSim({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   BalancedAuditSim — student picks which brackets to keep and
+   audits whether the resulting subsequence is balanced + how long.
+   Reveals WHY all-'('-then-all-')' input + greedy pair-up = min(N,M).
+   ═══════════════════════════════════════════════════════════════ */
+const _AUDIT_PRESETS = [
+  { N: 3, M: 3 },   // (((    )))
+  { N: 4, M: 2 },   // ((((    ))
+  { N: 2, M: 5 },   // ((    )))))
+];
+
+export function BalancedAuditSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const { N, M } = _AUDIT_PRESETS[pi];
+  const total = N + M;
+
+  // start: all kept
+  const [kept, setKept] = useState(() => Array.from({ length: total }, () => true));
+
+  // when preset changes, reset kept to "all kept"
+  const switchPreset = (newPi) => {
+    const { N: nN, M: nM } = _AUDIT_PRESETS[newPi];
+    setPi(newPi);
+    setKept(Array.from({ length: nN + nM }, () => true));
+  };
+
+  const chars = [];
+  for (let i = 0; i < N; i++) chars.push("(");
+  for (let i = 0; i < M; i++) chars.push(")");
+
+  // build picked subsequence in order
+  const picked = chars.filter((_, i) => kept[i]);
+  const pickedStr = picked.join("");
+
+  // check if picked is balanced (every prefix has #'(' >= #')' AND totals equal)
+  let depth = 0;
+  let balanced = true;
+  for (const c of picked) {
+    if (c === "(") depth++;
+    else depth--;
+    if (depth < 0) { balanced = false; break; }
+  }
+  if (depth !== 0) balanced = false;
+
+  const len = picked.length;
+  const optimal = 2 * Math.min(N, M);
+  const isOptimal = balanced && len === optimal;
+
+  const toggle = (i) => {
+    const u = [...kept];
+    u[i] = !u[i];
+    setKept(u);
+  };
+  const resetAll = () => setKept(Array.from({ length: total }, () => true));
+  const findOptimal = () => {
+    // keep min(N,M) opens (rightmost) + min(N,M) closes (leftmost) — but greedy:
+    // simplest: keep last min(N,M) of '(' and first min(N,M) of ')'
+    const keep = Math.min(N, M);
+    const u = Array.from({ length: total }, () => false);
+    for (let i = N - keep; i < N; i++) u[i] = true;
+    for (let i = N; i < N + keep; i++) u[i] = true;
+    setKept(u);
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {_AUDIT_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => switchPreset(i)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            N={p.N}, M={p.M}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8 }}>
+        {t(E, "Tap a bracket to skip / keep. Build a subsequence and see if it's balanced.",
+              "괄호 탭 = 건너뛰기 / 다시 포함. 부분수열을 만들어보고 균형인지 확인해 봐.")}
+      </div>
+
+      {/* clickable bracket row */}
+      <div style={{ display: "flex", gap: 3, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
+        {chars.map((ch, i) => {
+          const on = kept[i];
+          const isOpen = ch === "(";
+          return (
+            <button key={i} onClick={() => toggle(i)} style={{
+              width: 30, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 6, fontSize: 18, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+              background: on ? (isOpen ? "#fef3c7" : "#dbeafe") : "#f3f4f6",
+              border: `1.5px solid ${on ? (isOpen ? "#f59e0b" : "#3b82f6") : "#d1d5db"}`,
+              color: on ? (isOpen ? "#92400e" : "#1e3a8a") : "#cbd5e1",
+              cursor: "pointer",
+              textDecoration: on ? "none" : "line-through",
+              padding: 0,
+            }}>
+              {ch}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* picked subsequence display */}
+      <div style={{
+        background: "#0f172a", borderRadius: 8, padding: "8px 12px", marginBottom: 8,
+        textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 16,
+        color: "#f8fafc", minHeight: 24, letterSpacing: 1,
+      }}>
+        {pickedStr || <span style={{ color: "#475569", fontSize: 12 }}>{t(E, "(empty subsequence)", "(빈 부분수열)")}</span>}
+      </div>
+
+      {/* audit result */}
+      <div style={{
+        background: balanced ? "#dcfce7" : "#fee2e2",
+        border: `1px solid ${balanced ? "#16a34a" : "#dc2626"}`,
+        borderRadius: 10, padding: "8px 12px", marginBottom: 8,
+        display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 6,
+      }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: balanced ? "#15803d" : "#991b1b" }}>
+          {balanced
+            ? t(E, "✓ Balanced", "✓ 균형")
+            : t(E, "✗ Not balanced", "✗ 균형 아님")}
+        </div>
+        <div style={{ fontSize: 13, fontWeight: 700, color: balanced ? "#15803d" : "#991b1b", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, `length = ${len}`, `길이 = ${len}`)}
+        </div>
+      </div>
+
+      {/* controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
+        <button onClick={resetAll} style={{
+          padding: "5px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
+          background: "transparent", color: C.dim, fontSize: 11, fontWeight: 600, cursor: "pointer",
+        }}>
+          {t(E, "↻ Keep all", "↻ 전부 포함")}
+        </button>
+        <button onClick={findOptimal} style={{
+          padding: "5px 12px", borderRadius: 8, border: `1px solid ${A}`,
+          background: A, color: "#fff", fontSize: 11, fontWeight: 700, cursor: "pointer",
+        }}>
+          {t(E, `✨ Show optimal (${optimal})`, `✨ 최적 보기 (${optimal})`)}
+        </button>
+      </div>
+
+      {/* hint */}
+      <div style={{
+        background: "#fff7ed", border: `1px solid #fdba74`, borderRadius: 8, padding: "8px 12px",
+        fontSize: 11, color: "#9a3412", textAlign: "center", lineHeight: 1.5,
+      }}>
+        {isOptimal
+          ? t(E, `🎯 Perfect — that's the longest balanced subsequence: 2 × min(${N},${M}) = ${optimal}.`,
+                `🎯 완벽 — 가장 긴 균형 부분수열: 2 × min(${N},${M}) = ${optimal}.`)
+          : balanced
+            ? t(E, `Balanced! But can you make it longer? Target = ${optimal}.`,
+                  `균형! 더 길게 만들 수 있어? 목표 = ${optimal}.`)
+            : t(E, "Tip: every '(' you keep must have a ')' AFTER it that you also keep.",
+                  "힌트: 포함하는 '(' 마다 그 뒤에 포함하는 ')' 가 있어야 해.")}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    BalancedRunner — student inputs T queries, see results live
    ═══════════════════════════════════════════════════════════════ */
 export function BalancedRunner({ E }) {
