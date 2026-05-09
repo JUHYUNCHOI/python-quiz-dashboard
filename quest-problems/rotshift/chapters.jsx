@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getRotShiftSections } from "./components";
+import { getRotShiftSections, RotShiftSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -184,6 +184,16 @@ export function makeRotShiftCh1(E) {
               {t(E, "Purple = active positions. They rotate, then shift right!", "\ubcf4\ub77c = \ud65c\uc131 \uc704\uce58.\n\ud68c\uc804 \ud6c4 \uc624\ub978\ucabd\uc73c\ub85c \uc774\ub3d9!")}
             </div>
           </div>
+        </div>),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Drive the simulation yourself. Press Step to advance one minute (rotate then shift). Sample 1 reaches '1 2 3 4 0' after 4 steps.",
+        "\uc9c1\uc811 \uc2dc\ubbac\ub808\uc774\uc158\uc744 \uad74\ub824\ubd10\uc694. Step \uc744 \ub20c\ub7ec 1 \ubd84 \uc9c4\ud589 (\ud68c\uc804 \ud6c4 \uc774\ub3d9). \uc0d8\ud50c 1 \uc740 4 \ubd84 \ud6c4 '1 2 3 4 0' \uc774 \ub3fc\uc694."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <RotShiftSim E={E} />
         </div>),
     },
     {

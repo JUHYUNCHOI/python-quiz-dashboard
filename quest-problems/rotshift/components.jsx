@@ -1,8 +1,141 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ───────────────────────────────────────────────────────────────
+   Interactive rotate-and-shift sim — official Sample 1 (N=5, K=3, T=4)
+   Press ▶ Step to advance one minute: rotate cows on active
+   positions, then shift every active position by +1 (mod N).
+   ─────────────────────────────────────────────────────────────── */
+const SIM_N = 5;
+const SIM_INIT_ACTIVE = [0, 2, 3];
+const SIM_T = 4;
+
+function _simStep(state) {
+  const { N, active, pos } = state;
+  const K = active.length;
+  const newPos = pos.slice();
+  // 1) rotate
+  for (let j = 0; j < K; j++) {
+    for (let c = 0; c < N; c++) {
+      if (pos[c] === active[j]) {
+        newPos[c] = active[(j + 1) % K];
+        break;
+      }
+    }
+  }
+  // 2) shift
+  const newActive = active.map(a => (a + 1) % N);
+  return { N, active: newActive, pos: newPos };
+}
+
+export function RotShiftSim({ E }) {
+  const init = () => ({
+    N: SIM_N,
+    active: SIM_INIT_ACTIVE.slice(),
+    pos: Array.from({ length: SIM_N }, (_, i) => i),
+  });
+  const [state, setState] = useState(init);
+  const [step, setStep] = useState(0);
+
+  const atPos = Array(state.N).fill(-1);
+  for (let c = 0; c < state.N; c++) atPos[state.pos[c]] = c;
+  const activeSet = new Set(state.active);
+
+  const onStep = () => {
+    if (step >= SIM_T) return;
+    setState(s => _simStep(s));
+    setStep(s => s + 1);
+  };
+  const onReset = () => { setState(init()); setStep(0); };
+
+  const done = step >= SIM_T;
+  const outputLine = atPos.join(" ");
+
+  return (
+    <div style={{ background: "#f5f3ff", border: `1.5px solid ${A}`, borderRadius: 14, padding: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: "#5b21b6" }}>
+          🎮 {t(E, "Try it: N=5, active=[0,2,3], T=4", "직접 해봐요: N=5, active=[0,2,3], T=4")}
+        </div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: done ? "#15803d" : "#5b21b6" }}>
+          {t(E, "Minute", "분")} {step} / {SIM_T}
+        </div>
+      </div>
+
+      {/* positions row */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
+        {Array.from({ length: state.N }, (_, p) => {
+          const isActive = activeSet.has(p);
+          return (
+            <div key={p} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <div style={{ fontSize: 10, color: C.dim, fontWeight: 600 }}>
+                {t(E, "p", "위치")}={p}
+              </div>
+              <div style={{
+                width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: "50%", fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 700,
+                background: isActive ? "#ddd6fe" : "#f1f5f9",
+                border: `2px solid ${isActive ? "#8b5cf6" : "#cbd5e1"}`,
+                color: isActive ? "#5b21b6" : "#64748b",
+                transition: "all 0.25s ease",
+              }}>
+                {atPos[p]}
+              </div>
+              <div style={{ fontSize: 9, color: isActive ? "#8b5cf6" : C.dim, fontWeight: 700 }}>
+                {isActive ? (E ? "★ active" : "★ 활성") : ""}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* active set + current state */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 14, fontSize: 11, color: "#5b21b6", margin: "10px 0", flexWrap: "wrap" }}>
+        <span><b>active</b> = [{state.active.join(", ")}]</span>
+        <span><b>{t(E, "cow positions", "소 위치")}</b> = [{state.pos.join(", ")}]</span>
+      </div>
+
+      {/* output line */}
+      <div style={{
+        background: done ? "#dcfce7" : "#fff",
+        border: `1.5px solid ${done ? "#16a34a" : "#c4b5fd"}`,
+        borderRadius: 10, padding: "8px 12px", marginBottom: 10,
+        fontFamily: "'JetBrains Mono',monospace", fontSize: 13,
+        color: done ? "#166534" : "#5b21b6", textAlign: "center", fontWeight: 700,
+      }}>
+        {t(E, "output", "출력")}: {outputLine}
+        {done && <span style={{ marginLeft: 8 }}>✓ {t(E, "matches expected '1 2 3 4 0'", "기댓값 '1 2 3 4 0' 과 일치")}</span>}
+      </div>
+
+      {/* controls */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 8 }}>
+        <button onClick={onStep} disabled={done} style={{
+          background: done ? "#cbd5e1" : A, color: "#fff", border: "none",
+          borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 700,
+          cursor: done ? "not-allowed" : "pointer",
+        }}>
+          ▶ {t(E, "Step (rotate + shift)", "Step (회전 + 이동)")}
+        </button>
+        <button onClick={onReset} style={{
+          background: "#fff", color: A, border: `1.5px solid ${A}`,
+          borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+        }}>
+          ↺ {t(E, "Reset", "초기화")}
+        </button>
+      </div>
+
+      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginTop: 8, lineHeight: 1.5 }}>
+        {t(E,
+          "Each press: cows on ★ positions cycle one slot forward, then every ★ position itself slides +1 (mod N).",
+          "한 번 누를 때마다: ★ 위치 소들이 순환 한 칸 → 그 다음 ★ 위치 자체가 +1 mod N 이동.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",
