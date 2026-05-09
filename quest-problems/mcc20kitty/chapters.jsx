@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getMcc20KittySections } from "./components";
 
@@ -56,6 +57,130 @@ function VarCards({ vars, accent = "#dc2626" }) {
           <div style={{ fontSize: 10, color: C.dim }}>{v.desc}</div>
         </div>
       ))}
+    </div>
+  );
+}
+
+/* ─── interactive rolling-window sim ─── */
+function KittySim({ E }) {
+  const ACCENT = "#dc2626";
+  const [target, setTarget] = useState(7);
+  const [i, setI] = useState(3);   // current "computed up to" — start at K(3)
+  const [a, setA] = useState(1);
+  const [b, setB] = useState(1);
+  const [c, setC] = useState(1);
+  const [pulse, setPulse] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const timerRef = useRef(null);
+
+  const reset = (newTarget) => {
+    if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
+    setPlaying(false);
+    setI(3); setA(1); setB(1); setC(1); setPulse(false);
+    if (typeof newTarget === "number") setTarget(newTarget);
+  };
+
+  const stepOnce = () => {
+    if (i >= target) return;
+    const newC = a + b + c;
+    setA(b); setB(c); setC(newC);
+    setI(i + 1);
+    setPulse(true);
+    setTimeout(() => setPulse(false), 220);
+  };
+
+  useEffect(() => {
+    if (!playing) return;
+    if (i >= target) { setPlaying(false); return; }
+    timerRef.current = setTimeout(() => {
+      const newC = a + b + c;
+      setA(b); setB(c); setC(newC);
+      setI(i + 1);
+      setPulse(true);
+      setTimeout(() => setPulse(false), 220);
+    }, 600);
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, [playing, i, a, b, c, target]);
+
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
+
+  const done = i >= target;
+  const cell = (label, value, isNew) => (
+    <div style={{ textAlign: "center" }}>
+      <div style={{
+        width: 56, height: 56, borderRadius: 12,
+        background: isNew ? ACCENT : "#fef2f2",
+        border: `1.5px solid ${isNew ? ACCENT : "#fca5a5"}`,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontSize: 18, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+        color: isNew ? "#fff" : "#dc2626",
+        transform: isNew && pulse ? "scale(1.12)" : "scale(1)",
+        transition: "transform .22s ease, background .22s ease",
+      }}>{value}</div>
+      <div style={{ fontSize: 12, fontWeight: 700, color: ACCENT, marginTop: 3 }}>{label}</div>
+    </div>
+  );
+
+  const btn = (txt, onClick, disabled, primary) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      padding: "6px 14px", fontSize: 12, fontWeight: 700,
+      borderRadius: 8, cursor: disabled ? "not-allowed" : "pointer",
+      background: disabled ? "#e5e7eb" : (primary ? ACCENT : "#fff"),
+      color: disabled ? "#94a3b8" : (primary ? "#fff" : ACCENT),
+      border: `1.5px solid ${disabled ? "#e5e7eb" : ACCENT}`,
+      transition: "all .15s",
+    }}>{txt}</button>
+  );
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* Target picker */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: C.dim }}>{t(E, "Target N:", "목표 N:")}</span>
+        {[5, 7, 9, 11].map(n => (
+          <button key={n} onClick={() => reset(n)} style={{
+            padding: "4px 10px", fontSize: 12, fontWeight: 700,
+            borderRadius: 6, cursor: "pointer",
+            background: target === n ? ACCENT : "#fff",
+            color: target === n ? "#fff" : ACCENT,
+            border: `1.5px solid ${ACCENT}`,
+          }}>K({n})</button>
+        ))}
+      </div>
+
+      {/* Variable cards */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 14, marginBottom: 8 }}>
+        {cell("a", a, false)}
+        {cell("b", b, false)}
+        {cell("c", c, true)}
+      </div>
+
+      {/* Status line */}
+      <div style={{ textAlign: "center", fontSize: 12, color: C.dim, marginBottom: 10, minHeight: 18 }}>
+        {done ? (
+          <span style={{ color: C.ok, fontWeight: 700 }}>
+            ✓ {t(E, `K(${target}) = ${c}`, `K(${target}) = ${c}`)}
+          </span>
+        ) : (
+          <span>
+            {t(E, `Computed K(${i}). Next: K(${i + 1}) = ${a} + ${b} + ${c} = ${a + b + c}`,
+                  `K(${i})까지 계산. 다음: K(${i + 1}) = ${a} + ${b} + ${c} = ${a + b + c}`)}
+          </span>
+        )}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
+        {btn(t(E, "Step", "한 단계"), stepOnce, done || playing)}
+        {btn(playing ? t(E, "Pause", "정지") : t(E, "Play", "자동"),
+             () => setPlaying(p => !p), done, true)}
+        {btn(t(E, "Reset", "초기화"), () => reset(), false)}
+      </div>
+
+      {/* Formula reminder */}
+      <div style={{ textAlign: "center", marginTop: 10, fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: ACCENT, fontWeight: 700 }}>
+        a, b, c = b, c, a + b + c
+      </div>
     </div>
   );
 }
@@ -374,6 +499,14 @@ export function makeMcc20KittyCh2(E) {
             ))}
           </div>
         </div>),
+    },
+
+    // 2-5b 인터랙티브 시뮬: 직접 굴려보기
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now drive the rolling window yourself!\nPick a target N, then press Step (or Play) and watch a, b, c slide forward.\nNotice: only c is fresh each round — that's the new Kitty number!", "이제 롤링 윈도우를 직접 굴려봐요! 목표 N을 고르고 한 단계 (또는 자동) 누르면 a, b, c가 앞으로 슬라이드. 매 단계 새로워지는 건 c 뿐 — 그게 새 Kitty 수!"),
+      content: <KittySim E={E} />,
     },
 
     // 2-6 파이썬 동시 할당
