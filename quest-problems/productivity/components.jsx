@@ -1,8 +1,119 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ═══════════════════════════════════════════════════════════════
+   ProductivitySim — slide S, watch d[i] = c[i] - t[i] light up
+   the farms Bessie can still reach (d[i] > S).
+   ═══════════════════════════════════════════════════════════════ */
+const SAMPLE_C  = [3, 5, 7, 9, 12];
+const SAMPLE_T  = [4, 2, 3, 3, 8];
+
+export function ProductivitySim({ E }) {
+  const [S, setS] = useState(3);
+  const N = SAMPLE_C.length;
+  const farms = SAMPLE_C.map((c, i) => {
+    const ti = SAMPLE_T[i];
+    const d = c - ti;
+    const arrive = ti + S;
+    const ok = arrive < c;            // equivalent to S < d
+    return { i, c, ti, d, arrive, ok };
+  });
+  const reachable = farms.filter(f => f.ok).length;
+  const sortedD = [...farms].map(f => f.d).sort((a, b) => a - b);
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", textAlign: "center", marginBottom: 8 }}>
+        🎚️ {t(E, "Slide wake-up time S", "기상 시간 S 슬라이드")}
+      </div>
+
+      {/* Slider */}
+      <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#9a3412" }}>S</span>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: A }}>{S}</span>
+        </div>
+        <input
+          type="range" min={0} max={12} value={S}
+          onChange={(e) => setS(parseInt(e.target.value, 10))}
+          style={{ width: "100%", accentColor: A }}
+        />
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "#9a3412" }}>
+          <span>0</span><span>12</span>
+        </div>
+      </div>
+
+      {/* Farm table */}
+      <div style={{ background: "#fff", border: "1px solid #fed7aa", borderRadius: 10, padding: 10, marginBottom: 10, overflowX: "auto" }}>
+        <table style={{ width: "100%", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, borderCollapse: "collapse", color: C.text }}>
+          <thead>
+            <tr style={{ color: "#9a3412", fontWeight: 700 }}>
+              <th style={{ textAlign: "left", padding: 4 }}>farm</th>
+              <th style={{ padding: 4 }}>c</th>
+              <th style={{ padding: 4 }}>t</th>
+              <th style={{ padding: 4 }}>d=c−t</th>
+              <th style={{ padding: 4 }}>t+S</th>
+              <th style={{ padding: 4 }}>{t(E, "reach?", "도달?")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {farms.map(f => (
+              <tr key={f.i} style={{ background: f.ok ? "#dcfce7" : "transparent", color: f.ok ? "#166534" : C.dim }}>
+                <td style={{ padding: 4 }}>{f.i}</td>
+                <td style={{ textAlign: "center", padding: 4 }}>{f.c}</td>
+                <td style={{ textAlign: "center", padding: 4 }}>{f.ti}</td>
+                <td style={{ textAlign: "center", padding: 4, fontWeight: 700, color: f.ok ? "#15803d" : "#9a3412" }}>{f.d}</td>
+                <td style={{ textAlign: "center", padding: 4 }}>{f.arrive}{" "}<span style={{ color: C.dim }}>{f.ok ? "<" : "≥"}</span>{" "}{f.c}</td>
+                <td style={{ textAlign: "center", padding: 4, fontWeight: 700 }}>{f.ok ? "✓" : "·"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Sorted d[] number line */}
+      <div style={{ background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 10, padding: 10, marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", marginBottom: 6 }}>
+          {t(E, "sorted d[]  →  count d > S", "정렬된 d[]  →  d > S 개수")}
+        </div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
+          {sortedD.map((dv, i) => {
+            const above = dv > S;
+            return (
+              <div key={i} style={{
+                minWidth: 36, padding: "6px 8px", textAlign: "center",
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800,
+                borderRadius: 8,
+                background: above ? "#16a34a" : "#fed7aa",
+                color: above ? "#fff" : "#9a3412",
+                border: above ? "2px solid #15803d" : "1px solid #fdba74",
+              }}>{dv}</div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Result */}
+      <div style={{ background: "#dcfce7", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>
+          {t(E, "REACHABLE COUNT", "도달 가능 개수")}
+        </div>
+        <div style={{ fontSize: 18, fontWeight: 800, color: "#166534", fontFamily: "'JetBrains Mono',monospace" }}>
+          {reachable} / {N}
+        </div>
+        <div style={{ fontSize: 11, color: "#15803d", marginTop: 4 }}>
+          {t(E,
+            `farms with d[i] > ${S}`,
+            `d[i] > ${S} 인 농장`)}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

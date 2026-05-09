@@ -148,6 +148,13 @@ NO`}
           </div>
         </div>),
     },
+    // 1-2b: Deep audit sim — slide S, watch d[i] > S light up
+    {
+      type: "sim",
+      narr: t(E,
+        "Deep audit time! Slide S left and right.\nWatch d[i] = c[i] − t[i] decide each farm — green when d[i] > S.\nThe answer is just 'how many d[i] are above the line.'",
+        "심층 점검! S 슬라이더를 좌우로 움직여 봐.\nd[i] = c[i] − t[i] 가 농장 도달 여부를 결정 — d[i] > S 면 초록.\n답은 '선 위의 d[i] 가 몇 개?' 그뿐이에요."),
+    },
     // 1-3: Quiz
     {
       type: "quiz",
