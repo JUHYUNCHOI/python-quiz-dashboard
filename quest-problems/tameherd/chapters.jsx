@@ -147,7 +147,14 @@ export function makeTameHerdCh1(E) {
         "Value 0 appears at day 1 and day 4. That's 2 breakouts!",
         "값 0이 1일차와 4일차에 나타나. 탈출 2회!"),
     },
-    // 1-3: Input
+    // 1-3: Deep audit sim — walk a sample log day-by-day
+    {
+      type: "sim",
+      narr: t(E,
+        "Pick a log preset and step through it day by day. Watch how the counter must reset on a breakout, how −1 days are skipped, and when the log becomes impossible.",
+        "로그 프리셋을 골라서 하루씩 따라가봐. 탈출 날에 카운터가 어떻게 0으로 리셋되는지, −1 인 날은 어떻게 건너뛰는지, 언제 모순이 되는지 확인해."),
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

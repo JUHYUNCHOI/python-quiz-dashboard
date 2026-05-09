@@ -1,8 +1,186 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ================================================================
+   TameHerdSim — deep-audit a sample log day-by-day.
+   Walk through each entry, showing whether the counter is consistent
+   with the previous known value, when a breakout must have happened,
+   and how missing (−1) entries are skipped.
+   ================================================================ */
+const _TH_PRESETS = [
+  { log: [0, 1, 2, 0, 1], label: "[0,1,2,0,1]" },
+  { log: [-1, 1, 2, -1, 0], label: "[-1,1,2,-1,0]" },
+  { log: [3, -1, -1, 0, 1], label: "[3,-1,-1,0,1]" },
+  { log: [0, 1, 0, 5, 1], label: "[0,1,0,5,1]" },
+];
+
+function _audit(log) {
+  // Returns array of step states with breakout flags + ok flag.
+  const N = log.length;
+  const steps = [];
+  let prevI = -1, prevV = null, ok = true, minB = 0, maxB = 0;
+  for (let i = 0; i < N; i++) {
+    const v = log[i];
+    const state = { i, v, note: "", breakout: false, ok: true };
+    if (v === -1) {
+      state.note = "skip";
+    } else if (prevV === null) {
+      if (v > i) {
+        state.note = "impossible";
+        state.ok = false;
+        ok = false;
+        steps.push(state);
+        break;
+      }
+      state.breakout = v !== i;
+      state.note = state.breakout ? "first known: breakout" : "first known: ok";
+      minB += state.breakout ? 1 : 0;
+      maxB += i;
+      prevI = i; prevV = v;
+    } else {
+      const gap = i - prevI;
+      if (v === prevV + gap) {
+        state.note = "consistent";
+      } else {
+        const d = i - v;
+        if (!(prevI < d && d <= i)) {
+          state.note = "impossible";
+          state.ok = false;
+          ok = false;
+          steps.push(state);
+          break;
+        }
+        state.breakout = true;
+        state.note = "breakout!";
+        minB += 1; maxB += 1;
+      }
+      prevI = i; prevV = v;
+    }
+    steps.push(state);
+  }
+  if (ok) {
+    if (prevI !== -1) {
+      maxB += (N - 1 - prevI);
+    } else {
+      minB = 0; maxB = N;
+    }
+  }
+  return { steps, ok, minB, maxB };
+}
+
+export function TameHerdSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [si, setSi] = useState(0);
+  const log = _TH_PRESETS[pi].log;
+  const audit = _audit(log);
+  const N = log.length;
+  const cur = Math.min(si, N - 1);
+  const cell = audit.steps[cur] || { i: cur, v: log[cur], note: "", breakout: false, ok: true };
+
+  const noteText = (s) => {
+    if (s.note === "skip") return t(E, "−1 — missing, skip", "−1 — 누락, 건너뜀");
+    if (s.note === "consistent") return t(E, "matches prev + gap — no breakout", "이전 + 간격과 일치 — 탈출 없음");
+    if (s.note === "breakout!") return t(E, "value breaks the chain — breakout!", "값이 체인을 끊음 — 탈출!");
+    if (s.note === "first known: breakout") return t(E, "first known value v < day → breakout in [0, day]", "첫 알려진 값 v < 날짜 → [0, 날짜] 안에 탈출");
+    if (s.note === "first known: ok") return t(E, "first known matches day index — possible no breakout yet", "첫 알려진 값이 날짜와 일치 — 탈출 없을 수도");
+    if (s.note === "impossible") return t(E, "inconsistent — answer is −1", "모순 — 답은 −1");
+    return "";
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: A, textAlign: "center", marginBottom: 8, letterSpacing: 0.4 }}>
+        🔍 {t(E, "DEEP AUDIT — walk the log day by day", "딥 오딧 — 로그를 하루씩 따라가요")}
+      </div>
+
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_TH_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
+            padding: "4px 8px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 10, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{p.label}</button>
+        ))}
+      </div>
+
+      {/* Log row */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {log.map((v, i) => {
+          const past = audit.steps[i];
+          const isCur = i === cur;
+          const visited = i <= cur;
+          const isBreak = visited && past && past.breakout;
+          const isBad = visited && past && !past.ok;
+          const isMissing = v === -1;
+          const bg = isBad ? "#fee2e2" : isCur ? "#ddd6fe" : isBreak ? "#fef3c7" : isMissing && visited ? "#f3f4f6" : visited ? "#eef2ff" : "#fff";
+          const border = isBad ? "#dc2626" : isCur ? A : isBreak ? "#f59e0b" : visited ? "#a5b4fc" : C.border;
+          return (
+            <div key={i} style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 9, color: C.dim, marginBottom: 2 }}>{t(E, `day ${i}`, `${i}일`)}</div>
+              <div style={{
+                width: 36, height: 36, lineHeight: "36px", borderRadius: 6,
+                background: bg, border: `2px solid ${border}`,
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700,
+                color: isMissing ? C.dim : C.text,
+                transition: "all .25s",
+              }}>{v === -1 ? "−1" : v}</div>
+              <div style={{ fontSize: 10, marginTop: 2, height: 12 }}>
+                {isBreak ? "💥" : isBad ? "✗" : ""}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Note panel */}
+      <div style={{
+        background: cell.ok === false ? "#fef2f2" : cell.breakout ? "#fffbeb" : "#f8fafc",
+        border: `1px solid ${cell.ok === false ? "#fca5a5" : cell.breakout ? "#fcd34d" : "#e2e8f0"}`,
+        borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12,
+        color: C.text, textAlign: "center", lineHeight: 1.7, minHeight: 44,
+      }}>
+        <span style={{ fontFamily: "'JetBrains Mono',monospace", color: A, fontWeight: 700 }}>
+          {t(E, `day ${cell.i}, value `, `${cell.i}일, 값 `)}{cell.v === -1 ? "−1" : cell.v}
+        </span>
+        {" → "}
+        <span style={{ fontWeight: 600 }}>{noteText(cell)}</span>
+      </div>
+
+      {/* Result on last step */}
+      {cur === N - 1 && (
+        <div style={{
+          background: audit.ok ? "#ecfdf5" : "#fef2f2",
+          border: `1.5px solid ${audit.ok ? "#10b981" : "#dc2626"}`,
+          borderRadius: 10, padding: "10px 12px", marginBottom: 10, textAlign: "center",
+          fontSize: 13, fontWeight: 700, color: audit.ok ? "#047857" : "#991b1b",
+          fontFamily: "'JetBrains Mono',monospace",
+        }}>
+          {audit.ok
+            ? <>MIN = {audit.minB}, MAX = {audit.maxB}</>
+            : <>{t(E, "answer = −1 (impossible)", "답 = −1 (불가능)")}</>}
+        </div>
+      )}
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: cur === 0 ? "#b0b5c3" : A,
+          cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / {N}</span>
+        <button onClick={() => setSi(Math.min(N - 1, cur + 1))} disabled={cur === N - 1} style={{
+          background: cur === N - 1 ? "#e5e7eb" : A, border: `1px solid ${cur === N - 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: cur === N - 1 ? "#b0b5c3" : "#fff", cursor: cur === N - 1 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",
