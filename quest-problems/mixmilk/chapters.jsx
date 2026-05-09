@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getMixMilkSections } from "./components";
 
@@ -136,6 +137,122 @@ const BucketViz = ({ buckets, labels, highlight, E: isE }) => (
     })}
   </div>
 );
+
+
+/* Helper: interactive pour simulator (3 buckets, cyclic 1→2→3→1, up to 100 steps) */
+const PourSim = ({ E: isE }) => {
+  const CAP = [10, 8, 6];
+  const INIT = [3, 5, 2];
+  const [step, setStep] = useState(0);
+  const [milk, setMilk] = useState(INIT);
+  const [last, setLast] = useState(null); // {src, dst, amount}
+
+  const doStep = () => {
+    if (step >= 100) return;
+    const src = step % 3;
+    const dst = (step + 1) % 3;
+    const amount = Math.min(milk[src], CAP[dst] - milk[dst]);
+    const nm = milk.slice();
+    nm[src] -= amount;
+    nm[dst] += amount;
+    setMilk(nm);
+    setLast({ src, dst, amount });
+    setStep(step + 1);
+  };
+  const runToEnd = () => {
+    let s = step, m = milk.slice(), lastOp = last;
+    while (s < 100) {
+      const src = s % 3;
+      const dst = (s + 1) % 3;
+      const amount = Math.min(m[src], CAP[dst] - m[dst]);
+      m[src] -= amount;
+      m[dst] += amount;
+      lastOp = { src, dst, amount };
+      s++;
+    }
+    setMilk(m); setStep(s); setLast(lastOp);
+  };
+  const reset = () => { setStep(0); setMilk(INIT); setLast(null); };
+
+  const colors = ["#3b82f6", "#10b981", "#f59e0b"];
+  const bgs = ["#dbeafe", "#d1fae5", "#fef3c7"];
+  const nextSrc = step < 100 ? step % 3 : -1;
+  const nextDst = step < 100 ? (step + 1) % 3 : -1;
+  const done = step >= 100;
+
+  return (
+    <div style={{ marginTop: 10, background: "#fffbeb", borderRadius: 10, padding: 12, border: "1.5px solid #fbbf24" }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
+        {isE ? "🧪 Try it: pour up to 100 steps" : "🧪 직접 해보기: 100단계까지 부어보기"}
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", gap: 14, padding: "4px 0" }}>
+        {milk.map((m, i) => {
+          const pct = (m / CAP[i]) * 100;
+          const isSrc = !done && i === nextSrc;
+          const isDst = !done && i === nextDst;
+          const ring = isSrc ? colors[i] : isDst ? colors[i] : "#d1d5db";
+          return (
+            <div key={i} style={{ textAlign: "center" }}>
+              <div style={{
+                fontSize: 10, fontWeight: 700,
+                color: isSrc || isDst ? colors[i] : C.dim,
+                fontFamily: "'JetBrains Mono',monospace", marginBottom: 3,
+              }}>
+                {isE ? `B${i + 1}` : `${i + 1}번`}
+                {isSrc ? (isE ? " (src)" : " (소스)") : isDst ? (isE ? " (dst)" : " (목적지)") : ""}
+              </div>
+              <div style={{
+                width: 50, height: 64, borderRadius: "0 0 8px 8px",
+                border: `3px solid ${ring}`, borderTop: "none",
+                position: "relative", overflow: "hidden", background: "#f9fafb",
+                boxShadow: (isSrc || isDst) ? `0 0 6px ${colors[i]}50` : "none",
+              }}>
+                <div style={{
+                  position: "absolute", bottom: 0, left: 0, right: 0,
+                  height: `${pct}%`, background: bgs[i],
+                  transition: "height .35s ease",
+                }} />
+                <div style={{
+                  position: "absolute", bottom: 3, left: 0, right: 0,
+                  fontSize: 12, fontWeight: 700, color: colors[i],
+                  fontFamily: "'JetBrains Mono',monospace",
+                }}>{m}</div>
+              </div>
+              <div style={{ fontSize: 9, color: C.dim, marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>
+                {isE ? `cap ${CAP[i]}` : `용량 ${CAP[i]}`}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ marginTop: 8, textAlign: "center", fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: "#92400e", minHeight: 18 }}>
+        {done
+          ? (isE ? `step = 100 (done) — final: [${milk.join(", ")}]` : `step = 100 (완료) — 최종: [${milk.join(", ")}]`)
+          : last
+            ? (isE
+                ? `step ${step}: poured ${last.amount} from B${last.src + 1}→B${last.dst + 1}`
+                : `${step}단계: ${last.src + 1}번→${last.dst + 1}번 ${last.amount} 이동`)
+            : (isE ? `step = 0 (start) — next: B${nextSrc + 1}→B${nextDst + 1}` : `0단계 (시작) — 다음: ${nextSrc + 1}번→${nextDst + 1}번`)}
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 8 }}>
+        <button onClick={doStep} disabled={done} style={{
+          background: done ? "#e5e7eb" : "#d97706", color: done ? "#9ca3af" : "#fff",
+          border: "none", borderRadius: 6, padding: "5px 12px",
+          fontSize: 11, fontWeight: 700, cursor: done ? "default" : "pointer",
+        }}>{isE ? "▶ Step" : "▶ 한 단계"}</button>
+        <button onClick={runToEnd} disabled={done} style={{
+          background: done ? "#e5e7eb" : "#92400e", color: done ? "#9ca3af" : "#fff",
+          border: "none", borderRadius: 6, padding: "5px 12px",
+          fontSize: 11, fontWeight: 700, cursor: done ? "default" : "pointer",
+        }}>{isE ? "⏭ Run to 100" : "⏭ 100까지"}</button>
+        <button onClick={reset} style={{
+          background: "#fff", color: "#92400e", border: "1.5px solid #fbbf24",
+          borderRadius: 6, padding: "5px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer",
+        }}>{isE ? "↻ Reset" : "↻ 처음"}</button>
+      </div>
+    </div>
+  );
+};
 
 
 /* ═══════════════════════════════════════════════════════════════
@@ -500,6 +617,7 @@ export function makeMixMilkCh2(E) {
               </tbody>
             </table>
           </div>
+          <PourSim E={E} />
         </div>),
     },
     // 2-4: Quiz on trace
