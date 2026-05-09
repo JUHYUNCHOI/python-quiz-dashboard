@@ -3,7 +3,7 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock, CodeReveal } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
 import {
-  CodeCompare3, BruteRunner, SpeedScale, ProgressiveCode, downloadFullPDF,
+  CodeCompare3, BruteRunner, SpeedScale, IntervalSim, ProgressiveCode, downloadFullPDF,
 } from "./components";
 import {
   makeCh1, makePatternSteps, makeBruteSteps, makeOptSteps, getOptSections,
@@ -130,6 +130,7 @@ export default function RoundingApp(props = {}) {
     if (step.type === "compare3") return <CodeCompare3 E={E} />;
     if (step.type === "runner")   return <BruteRunner E={E} />;
     if (step.type === "scale")    return <SpeedScale E={E} />;
+    if (step.type === "interval-sim") return <IntervalSim E={E} />;
     if (step.type === "progressive") return <ProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     if (step.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={step.section} />;
     return null;
@@ -143,6 +144,7 @@ export default function RoundingApp(props = {}) {
     if (s.type === "compare3") return <CodeCompare3 E={E} />;
     if (s.type === "runner")   return <BruteRunner E={E} />;
     if (s.type === "scale")    return <SpeedScale E={E} />;
+    if (s.type === "interval-sim") return <IntervalSim E={E} />;
     if (s.type === "progressive") return <ProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     if (s.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={s.section} />;
     return null;

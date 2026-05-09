@@ -248,6 +248,230 @@ export function SpeedScale({ E }) {
 
 
 /* ================================================================
+   IntervalSim — interactive [s_d, e_d] interval explorer
+   ----------------------------------------------------------------
+   Goal: BEFORE the student sees `s_d = int("4"*(d-1) + "5")` in code,
+   give them hands-on feel for what s_d / e_d mean. Slide d, slide N,
+   see the digit boxes light up and the band on the number line clip.
+   ================================================================ */
+export function IntervalSim({ E }) {
+  const [d, setD] = useState(3);
+  const [N, setN] = useState(4567);
+
+  // s_d = 4...45 (d-1 fours + one 5)
+  // e_d = 4 99...9 (one 4 + d-1 nines)
+  const sStr = "4".repeat(d - 1) + "5";
+  const eStr = "4" + "9".repeat(d - 1);
+  const sVal = parseInt(sStr, 10);
+  const eVal = parseInt(eStr, 10);
+
+  // d-digit overall range, used for the number-line scale
+  const lo = Math.pow(10, d - 1);
+  const hi = Math.pow(10, d) - 1;
+  const xMax = hi; // number line ends at the largest d-digit number
+  const pct = v => Math.max(0, Math.min(100, ((v - 0) / xMax) * 100));
+
+  // Where N sits relative to [s_d, e_d]
+  let zone, count, formula;
+  if (N < sVal) {
+    zone = "before";
+    count = 0;
+    formula = t(E, `s_d (${sVal}) > N (${N}) → 0 (stop)`,
+                   `s_d (${sVal}) > N (${N}) → 0 (멈춤)`);
+  } else if (N > eVal) {
+    zone = "after";
+    count = eVal - sVal + 1;
+    formula = `min(${N}, ${eVal}) − ${sVal} + 1 = ${eVal} − ${sVal} + 1 = ${count}`;
+  } else {
+    zone = "inside";
+    count = N - sVal + 1;
+    formula = `min(${N}, ${eVal}) − ${sVal} + 1 = ${N} − ${sVal} + 1 = ${count}`;
+  }
+
+  // Highlighted band on the number line: [s_d, min(N, e_d)] when N >= s_d
+  const bandStart = sVal;
+  const bandEnd = zone === "before" ? sVal : Math.min(N, eVal);
+
+  // Digit-box renderer
+  const Box = ({ ch, color, bg, bd, big }) => (
+    <div style={{
+      display: "inline-flex", alignItems: "center", justifyContent: "center",
+      width: big ? 36 : 30, height: big ? 44 : 38,
+      background: bg, color, border: `2px solid ${bd}`, borderRadius: 8,
+      fontFamily: "'JetBrains Mono',monospace", fontWeight: 900,
+      fontSize: big ? 22 : 18,
+    }}>{ch}</div>
+  );
+
+  const sBoxes = sStr.split("").map((ch, i) => {
+    const isFive = i === sStr.length - 1;
+    return (
+      <Box key={`s${i}`} ch={ch}
+        color={isFive ? "#fff" : C.no}
+        bg={isFive ? C.no : C.noBg}
+        bd={C.noBd}
+        big={isFive} />
+    );
+  });
+  const eBoxes = eStr.split("").map((ch, i) => {
+    const isFour = i === 0;
+    return (
+      <Box key={`e${i}`} ch={ch}
+        color={isFour ? C.ok : "#fff"}
+        bg={isFour ? C.okBg : C.ok}
+        bd={C.okBd}
+        big={!isFour} />
+    );
+  });
+
+  return (
+    <div style={{ padding: 16 }}>
+      {/* Sliders */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: 12, marginBottom: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+          <span style={{ minWidth: 40, fontSize: 12, fontWeight: 800, color: C.dim }}>d =</span>
+          <span style={{ minWidth: 28, fontSize: 20, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>{d}</span>
+          <input type="range" min={2} max={6} step={1} value={d}
+            onChange={e => setD(parseInt(e.target.value))}
+            style={{ flex: 1, accentColor: C.accent }} />
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span style={{ minWidth: 40, fontSize: 12, fontWeight: 800, color: C.dim }}>N =</span>
+          <span style={{ minWidth: 70, fontSize: 16, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>{N.toLocaleString()}</span>
+          <input type="range" min={1} max={99999} step={1} value={N}
+            onChange={e => setN(parseInt(e.target.value))}
+            style={{ flex: 1, accentColor: C.accent }} />
+        </div>
+      </div>
+
+      {/* Digit-box display: s_d and e_d */}
+      <div style={{
+        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14,
+      }}>
+        {/* s_d */}
+        <div style={{ background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.no, letterSpacing: 0.5, marginBottom: 6 }}>
+            s<sub>d</sub> {t(E, "(smallest)", "(가장 작음)")}
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 6 }}>{sBoxes}</div>
+          <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+            = "4"×{d - 1} + "5"
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 900, color: C.no, fontFamily: "'JetBrains Mono',monospace", marginTop: 2 }}>
+            {sVal.toLocaleString()}
+          </div>
+        </div>
+        {/* e_d */}
+        <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.ok, letterSpacing: 0.5, marginBottom: 6 }}>
+            e<sub>d</sub> {t(E, "(largest)", "(가장 큼)")}
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 6 }}>{eBoxes}</div>
+          <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+            = "4" + "9"×{d - 1}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 900, color: C.ok, fontFamily: "'JetBrains Mono',monospace", marginTop: 2 }}>
+            {eVal.toLocaleString()}
+          </div>
+        </div>
+      </div>
+
+      {/* Number line */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "14px 16px 18px", marginBottom: 14 }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, letterSpacing: 0.5, marginBottom: 8, textAlign: "center" }}>
+          {t(E, `${d}-digit number line — disagreement band highlighted`,
+              `${d}자리 수직선 — 답이 다른 구간 강조`)}
+        </div>
+        <div style={{ position: "relative", height: 70, marginBottom: 4 }}>
+          {/* base line: full d-digit range [lo, hi] shown lightly */}
+          <div style={{
+            position: "absolute", left: `${pct(lo)}%`, right: `${100 - pct(hi)}%`,
+            top: 30, height: 8, background: "#e5e7eb", borderRadius: 4,
+          }} />
+          {/* disagreement band [s_d, min(N, e_d)] */}
+          {zone !== "before" && (
+            <div style={{
+              position: "absolute", left: `${pct(bandStart)}%`,
+              width: `${pct(bandEnd) - pct(bandStart)}%`,
+              top: 28, height: 12, background: C.accent, borderRadius: 4,
+              boxShadow: `0 0 0 2px ${C.accentBd}`,
+            }} />
+          )}
+          {/* s_d tick */}
+          <div style={{ position: "absolute", left: `${pct(sVal)}%`, top: 18, transform: "translateX(-50%)" }}>
+            <div style={{ width: 2, height: 32, background: C.no }} />
+            <div style={{ fontSize: 10, fontWeight: 800, color: C.no, fontFamily: "'JetBrains Mono',monospace", marginTop: 2, transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+              s<sub>d</sub>={sVal}
+            </div>
+          </div>
+          {/* e_d tick */}
+          <div style={{ position: "absolute", left: `${pct(eVal)}%`, top: 18, transform: "translateX(-50%)" }}>
+            <div style={{ width: 2, height: 32, background: C.ok }} />
+            <div style={{ fontSize: 10, fontWeight: 800, color: C.ok, fontFamily: "'JetBrains Mono',monospace", marginTop: 2, transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+              e<sub>d</sub>={eVal}
+            </div>
+          </div>
+          {/* N marker */}
+          <div style={{
+            position: "absolute", left: `${pct(Math.min(N, xMax))}%`,
+            top: 0, transform: "translateX(-50%)",
+          }}>
+            <div style={{
+              fontSize: 10, fontWeight: 900,
+              color: zone === "before" ? C.no : C.accent,
+              fontFamily: "'JetBrains Mono',monospace",
+              background: "#fff",
+              padding: "1px 4px", borderRadius: 4,
+              border: `1.5px solid ${zone === "before" ? C.noBd : C.accentBd}`,
+              whiteSpace: "nowrap",
+            }}>N={N.toLocaleString()}</div>
+            <div style={{
+              width: 2, height: 18, marginLeft: "auto", marginRight: "auto",
+              background: zone === "before" ? C.no : C.accent,
+            }} />
+          </div>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: C.dim, fontFamily: "'JetBrains Mono',monospace", marginTop: 6 }}>
+          <span>0</span>
+          <span>{lo.toLocaleString()}</span>
+          <span>{hi.toLocaleString()}</span>
+        </div>
+      </div>
+
+      {/* Count formula */}
+      <div style={{
+        background: zone === "before" ? C.noBg : C.accentBg,
+        border: `2px solid ${zone === "before" ? C.noBd : C.accentBd}`,
+        borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center",
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: zone === "before" ? C.no : C.accent, letterSpacing: 0.5, marginBottom: 4 }}>
+          {t(E, "count = min(N, e_d) − s_d + 1", "개수 = min(N, e_d) − s_d + 1")}
+        </div>
+        <div style={{ fontSize: 14, fontWeight: 800, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.6 }}>
+          {formula}
+        </div>
+        {zone !== "before" && (
+          <div style={{ fontSize: 22, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace", marginTop: 4 }}>
+            = {count}
+          </div>
+        )}
+      </div>
+
+      {/* Caption */}
+      <div style={{
+        background: "#f8f9fc", borderRadius: 8, padding: "10px 12px",
+        fontSize: 11.5, color: C.dim, fontWeight: 700, lineHeight: 1.6, textAlign: "center",
+      }}>
+        💡 {t(E,
+          "Slide d and N. The disagreeing numbers for each digit count form ONE clean interval.",
+          "d 와 N 을 움직여 봐. 각 자릿수마다 답이 다른 수들이 한 덩어리로 모여 있어요.")}
+      </div>
+    </div>
+  );
+}
+
+
+/* ================================================================
    BruteRunner — interactive brute force runner
    ================================================================ */
 export function BruteRunner({ E }) {
