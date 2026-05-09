@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc20CityTourSections } from "./components";
+import { getMcc20CityTourSections, Mcc20CityTourBfsSim } from "./components";
 
 export const SOLUTION_CODE = [
   "from collections import deque",
@@ -76,6 +76,13 @@ export function makeMcc20CityTourCh1(E) {
             </div>
           </div>
         </div>),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Step through BFS hop by hop. Each pop drains the queue front and pushes the new buildings Fluffy can still reach.",
+        "BFS 를 한 칸씩 따라가요. pop 할 때마다 큐 앞이 비고, Fluffy 가 새로 갈 수 있는 건물이 뒤에 들어가요."),
+      content: <Mcc20CityTourBfsSim E={E} />,
     },
     {
       type: "quiz",

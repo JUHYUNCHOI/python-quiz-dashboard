@@ -1,8 +1,192 @@
+import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ───────────────── Deep-audit BFS simulator ─────────────────
+   Fluffy hops through a 4x4 building grid via BFS.
+   Step-by-step: queue pops a cell, paints visited, enqueues adjacent buildings.
+   ──────────────────────────────────────────────────────────── */
+const SIM_GRID = [
+  [1, 1, 0, 1],
+  [0, 1, 0, 1],
+  [1, 1, 1, 1],
+  [1, 0, 0, 0],
+];
+const SIM_START = [0, 0];
+
+function buildBfsTrace(grid, start) {
+  const R = grid.length, C = grid[0].length;
+  const visited = Array.from({ length: R }, () => Array(C).fill(false));
+  const [sr, sc] = start;
+  visited[sr][sc] = true;
+  const queue = [[sr, sc]];
+  const trace = [];
+  trace.push({
+    queue: [...queue],
+    visited: visited.map(r => [...r]),
+    popped: null,
+    enqueued: [],
+    count: 1,
+    note: { en: "Start. Push start cell, mark visited, count = 1.", ko: "시작. 출발 칸 push, 방문 표시, count = 1." },
+  });
+  const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+  while (queue.length) {
+    const [r, c] = queue.shift();
+    const enqueued = [];
+    for (const [dr, dc] of dirs) {
+      const nr = r + dr, nc = c + dc;
+      if (nr >= 0 && nr < R && nc >= 0 && nc < C && !visited[nr][nc] && grid[nr][nc] === 1) {
+        visited[nr][nc] = true;
+        queue.push([nr, nc]);
+        enqueued.push([nr, nc]);
+      }
+    }
+    const count = visited.flat().filter(Boolean).length;
+    trace.push({
+      queue: [...queue],
+      visited: visited.map(r => [...r]),
+      popped: [r, c],
+      enqueued,
+      count,
+      note: enqueued.length
+        ? { en: `Pop (${r},${c}). Enqueue ${enqueued.length} new building(s). count = ${count}.`,
+            ko: `(${r},${c}) pop. 새 건물 ${enqueued.length}개 enqueue. count = ${count}.` }
+        : { en: `Pop (${r},${c}). No new neighbours. count = ${count}.`,
+            ko: `(${r},${c}) pop. 새 이웃 없음. count = ${count}.` },
+    });
+  }
+  return trace;
+}
+
+export function Mcc20CityTourBfsSim({ E }) {
+  const trace = useMemo(() => buildBfsTrace(SIM_GRID, SIM_START), []);
+  const [step, setStep] = useState(0);
+  const cur = trace[step];
+  const R = SIM_GRID.length, Cn = SIM_GRID[0].length;
+
+  const cellStyle = (r, c) => {
+    const isBuilding = SIM_GRID[r][c] === 1;
+    const visited = cur.visited[r][c];
+    const isPopped = cur.popped && cur.popped[0] === r && cur.popped[1] === c;
+    const isEnqueued = cur.enqueued.some(([er, ec]) => er === r && ec === c);
+    let bg = isBuilding ? "#fef3c7" : "#f3f4f6";
+    let border = isBuilding ? "#fcd34d" : "#e5e7eb";
+    let color = isBuilding ? "#92400e" : "#9ca3af";
+    if (visited) { bg = "#fde68a"; border = A; color = "#78350f"; }
+    if (isEnqueued) { bg = "#a7f3d0"; border = "#15803d"; }
+    if (isPopped) { bg = A; border = "#78350f"; color = "#fff"; }
+    return {
+      width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
+      background: bg, border: `2px solid ${border}`, borderRadius: 6,
+      color, fontWeight: 700, fontSize: 14,
+      transition: "background 180ms, border-color 180ms",
+    };
+  };
+
+  const cellLabel = (r, c) => {
+    const isPopped = cur.popped && cur.popped[0] === r && cur.popped[1] === c;
+    if (isPopped) return "🐰";
+    if (SIM_GRID[r][c] === 1) return cur.visited[r][c] ? "✓" : "1";
+    return "·";
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 12, marginBottom: 10 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
+          🐰 {t(E, "Fluffy's BFS hop-by-hop", "Fluffy 의 BFS 한 칸씩")}
+        </div>
+        <div style={{ fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
+          {t(E,
+            "Step through BFS on a 4×4 city. Watch the queue, the visited mark, and the count grow.",
+            "4×4 도시에서 BFS 를 한 단계씩. 큐, 방문 표시, count 가 어떻게 늘어나는지 봐.")}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 14, alignItems: "flex-start", flexWrap: "wrap", justifyContent: "center" }}>
+        <div>
+          <div style={{ fontSize: 11, color: C.dim, marginBottom: 4, textAlign: "center", fontWeight: 600 }}>
+            {t(E, "Grid", "격자")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Cn}, 44px)`, gap: 4 }}>
+            {SIM_GRID.map((row, r) => row.map((_, c) => (
+              <div key={`${r}-${c}`} style={cellStyle(r, c)}>{cellLabel(r, c)}</div>
+            )))}
+          </div>
+        </div>
+
+        <div style={{ minWidth: 180 }}>
+          <div style={{ fontSize: 11, color: C.dim, marginBottom: 4, fontWeight: 600 }}>
+            {t(E, "Queue (front → back)", "Queue (앞 → 뒤)")}
+          </div>
+          <div style={{
+            background: "#0f172a", color: "#fde68a", padding: 8, borderRadius: 8,
+            fontFamily: "JetBrains Mono, monospace", fontSize: 12, minHeight: 40,
+          }}>
+            {cur.queue.length === 0
+              ? <span style={{ color: "#64748b" }}>∅ {t(E, "empty", "비어있음")}</span>
+              : cur.queue.map(([r, c], i) => (
+                  <span key={i} style={{
+                    display: "inline-block", padding: "2px 6px", margin: 2,
+                    background: i === 0 ? A : "#334155", color: "#fff", borderRadius: 4, fontSize: 11,
+                  }}>({r},{c})</span>
+                ))}
+          </div>
+          <div style={{ marginTop: 10, fontSize: 12, color: C.text }}>
+            <b style={{ color: A }}>count = {cur.count}</b>
+          </div>
+          <div style={{ marginTop: 6, fontSize: 11, color: C.dim, lineHeight: 1.5 }}>
+            {E ? cur.note.en : cur.note.ko}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 14, alignItems: "center" }}>
+        <button
+          onClick={() => setStep(Math.max(0, step - 1))}
+          disabled={step === 0}
+          style={{
+            background: step === 0 ? "#e5e7eb" : "#fff", color: step === 0 ? "#9ca3af" : A,
+            border: `1.5px solid ${step === 0 ? "#e5e7eb" : A}`, borderRadius: 8,
+            padding: "5px 12px", fontWeight: 700, fontSize: 12,
+            cursor: step === 0 ? "default" : "pointer",
+          }}
+        >◀ {t(E, "Prev", "이전")}</button>
+        <span style={{ fontSize: 12, color: C.dim, minWidth: 70, textAlign: "center" }}>
+          {step + 1} / {trace.length}
+        </span>
+        <button
+          onClick={() => setStep(Math.min(trace.length - 1, step + 1))}
+          disabled={step === trace.length - 1}
+          style={{
+            background: step === trace.length - 1 ? "#e5e7eb" : A,
+            color: step === trace.length - 1 ? "#9ca3af" : "#fff",
+            border: `1.5px solid ${step === trace.length - 1 ? "#e5e7eb" : A}`, borderRadius: 8,
+            padding: "5px 12px", fontWeight: 700, fontSize: 12,
+            cursor: step === trace.length - 1 ? "default" : "pointer",
+          }}
+        >{t(E, "Next", "다음")} ▶</button>
+        <button
+          onClick={() => setStep(0)}
+          style={{
+            background: "#fff", color: C.dim, border: `1.5px solid #e5e7eb`,
+            borderRadius: 8, padding: "5px 10px", fontWeight: 600, fontSize: 11, cursor: "pointer",
+          }}
+        >↺ {t(E, "Reset", "처음")}</button>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.6 }}>
+        🐰 = {t(E, "current pop", "현재 pop")} ·
+        <span style={{ color: A, fontWeight: 700 }}> ✓</span> = {t(E, "visited", "방문")} ·
+        <span style={{ color: "#15803d", fontWeight: 700 }}> 1</span> = {t(E, "building", "건물")} ·
+        · = {t(E, "empty", "빈칸")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "from collections import deque",
