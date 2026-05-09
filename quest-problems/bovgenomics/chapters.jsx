@@ -1,5 +1,201 @@
+import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getBovGenomicsSections } from "./components";
+
+/* ────────────────────────────────────────────────────────────────
+   Interactive sim: position-by-position distinguishing table
+   ──────────────────────────────────────────────────────────────── */
+function PositionTableSim({ E }) {
+  // Sample data: 3 spotted, 3 plain, M = 8.
+  // Designed so a few positions ARE distinguishing and others are NOT.
+  const SPOTTED = ["AATCCCAT", "GATTGCAA", "GGTCGCAA"];
+  const PLAIN   = ["CCTTGGAT", "ACTACCAT", "TCTTTCAT"];
+  const M = SPOTTED[0].length;
+
+  const perPos = useMemo(() => {
+    const arr = [];
+    for (let j = 0; j < M; j++) {
+      const sSet = new Set(SPOTTED.map(r => r[j]));
+      const pSet = new Set(PLAIN.map(r => r[j]));
+      let overlap = false;
+      for (const ch of sSet) if (pSet.has(ch)) { overlap = true; break; }
+      arr.push({ j, sSet: [...sSet].sort(), pSet: [...pSet].sort(), valid: !overlap });
+    }
+    return arr;
+  }, []);
+
+  const validCount = perPos.filter(p => p.valid).length;
+  const [sel, setSel] = useState(null);
+  const selInfo = sel == null ? null : perPos[sel];
+
+  const cellBase = {
+    width: 30, height: 30, display: "inline-flex",
+    alignItems: "center", justifyContent: "center",
+    fontFamily: "JetBrains Mono, monospace", fontWeight: 700,
+    fontSize: 14, border: "1px solid #cbd5e1", borderRadius: 4,
+  };
+
+  const colorFor = (j, kind) => {
+    if (sel !== j) {
+      return { background: "#fff", color: "#1f2937" };
+    }
+    const valid = perPos[j].valid;
+    if (valid) return { background: kind === "s" ? "#dbeafe" : "#dcfce7", color: "#111827", border: "1.5px solid #15803d" };
+    return { background: "#fee2e2", color: "#111827", border: "1.5px solid #b91c1c" };
+  };
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{
+        background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10,
+        padding: "10px 14px", marginBottom: 12, textAlign: "center",
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+          🧪 {t(E, "Interactive Sim", "직접 해보기")}
+        </div>
+        <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+          {t(E,
+            "Click any column to compare spotted vs plain letters at that position. A position is valid only when the two sets share NO letter.",
+            "어떤 칸이든 눌러봐. 그 위치의 점박이 글자들과 무늬 없는 글자들을 비교해줘. 두 집합이 한 글자도 안 겹쳐야 유효한 위치예요.")}
+        </div>
+      </div>
+
+      <div style={{
+        display: "flex", justifyContent: "center", gap: 10, alignItems: "center",
+        marginBottom: 10, fontSize: 13, color: C.text,
+      }}>
+        <span style={{ fontWeight: 700, color: "#15803d" }}>
+          ✅ {t(E, "Valid positions", "유효한 위치")}: {validCount} / {M}
+        </span>
+        <span style={{ color: C.dim }}>·</span>
+        <span style={{ color: C.dim }}>
+          {t(E, "(click a column to inspect)", "(칸을 눌러 살펴봐요)")}
+        </span>
+      </div>
+
+      <div style={{ overflowX: "auto", paddingBottom: 4 }}>
+        <table style={{ borderCollapse: "separate", borderSpacing: 4, margin: "0 auto" }}>
+          <tbody>
+            <tr>
+              <td style={{ fontSize: 11, color: C.dim, paddingRight: 6, textAlign: "right" }}>
+                {t(E, "pos j", "위치 j")}
+              </td>
+              {perPos.map((p) => (
+                <td key={`h-${p.j}`} style={{
+                  textAlign: "center", fontSize: 11, color: sel === p.j ? "#2563eb" : C.dim,
+                  fontWeight: sel === p.j ? 800 : 500,
+                }}>
+                  {p.j}
+                </td>
+              ))}
+              <td />
+            </tr>
+
+            {SPOTTED.map((row, ri) => (
+              <tr key={`s-${ri}`}>
+                <td style={{ fontSize: 11, color: "#2563eb", paddingRight: 6, textAlign: "right", fontWeight: 700 }}>
+                  {ri === 0 ? t(E, "🐄 spotted", "🐄 점박이") : ""}
+                </td>
+                {row.split("").map((ch, j) => (
+                  <td key={`s-${ri}-${j}`}>
+                    <button
+                      onClick={() => setSel(j)}
+                      style={{ ...cellBase, ...colorFor(j, "s"), cursor: "pointer", padding: 0 }}
+                      aria-label={`spotted row ${ri} col ${j}`}
+                    >
+                      {ch}
+                    </button>
+                  </td>
+                ))}
+                <td />
+              </tr>
+            ))}
+
+            <tr>
+              <td />
+              {perPos.map((p) => (
+                <td key={`sep-${p.j}`} style={{ height: 6 }} />
+              ))}
+              <td />
+            </tr>
+
+            {PLAIN.map((row, ri) => (
+              <tr key={`p-${ri}`}>
+                <td style={{ fontSize: 11, color: "#7c3aed", paddingRight: 6, textAlign: "right", fontWeight: 700 }}>
+                  {ri === 0 ? t(E, "🐮 plain", "🐮 무늬 없음") : ""}
+                </td>
+                {row.split("").map((ch, j) => (
+                  <td key={`p-${ri}-${j}`}>
+                    <button
+                      onClick={() => setSel(j)}
+                      style={{ ...cellBase, ...colorFor(j, "p"), cursor: "pointer", padding: 0 }}
+                      aria-label={`plain row ${ri} col ${j}`}
+                    >
+                      {ch}
+                    </button>
+                  </td>
+                ))}
+                <td />
+              </tr>
+            ))}
+
+            <tr>
+              <td />
+              {perPos.map((p) => (
+                <td key={`b-${p.j}`} style={{ textAlign: "center" }}>
+                  <span style={{
+                    display: "inline-block", fontSize: 14,
+                    color: p.valid ? "#15803d" : "#b91c1c",
+                    fontWeight: 700,
+                  }}>
+                    {p.valid ? "✓" : "✗"}
+                  </span>
+                </td>
+              ))}
+              <td />
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style={{
+        marginTop: 12,
+        background: selInfo == null ? "#f8fafc" : (selInfo.valid ? "#f0fdf4" : "#fef2f2"),
+        border: `1px solid ${selInfo == null ? "#e2e8f0" : (selInfo.valid ? "#86efac" : "#fca5a5")}`,
+        borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.6,
+      }}>
+        {selInfo == null ? (
+          <span style={{ color: C.dim }}>
+            {t(E, "Pick a column above to see the comparison.", "위 칸을 하나 골라서 비교를 봐요.")}
+          </span>
+        ) : (
+          <div style={{ color: "#1f2937" }}>
+            <div style={{ marginBottom: 4 }}>
+              <b style={{ color: "#1e3a8a" }}>{t(E, "Position", "위치")} j = {selInfo.j}</b>
+            </div>
+            <div>
+              <span style={{ color: "#2563eb", fontWeight: 700 }}>{t(E, "spotted set", "점박이 집합")}</span>
+              {" = { "}
+              <span style={{ fontFamily: "JetBrains Mono, monospace" }}>{selInfo.sSet.join(", ")}</span>
+              {" }"}
+            </div>
+            <div>
+              <span style={{ color: "#7c3aed", fontWeight: 700 }}>{t(E, "plain set", "무늬 없음 집합")}</span>
+              {" = { "}
+              <span style={{ fontFamily: "JetBrains Mono, monospace" }}>{selInfo.pSet.join(", ")}</span>
+              {" }"}
+            </div>
+            <div style={{ marginTop: 6, fontWeight: 700, color: selInfo.valid ? "#15803d" : "#b91c1c" }}>
+              {selInfo.valid
+                ? t(E, "✓ No overlap → distinguishing position!", "✓ 겹침 없음 → 구별 가능한 위치!")
+                : t(E, "✗ Sets share at least one letter → NOT distinguishing.", "✗ 두 집합에 같은 글자가 있어요 → 구별 불가능.")}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -27,7 +223,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: Problem (3 steps)
+   Chapter 1: Problem (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeGenomicsCh1(E) {
   return [
@@ -92,7 +288,15 @@ export function makeGenomicsCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Interactive sim — position-by-position distinguishing table
+    {
+      type: "reveal",
+      narr: t(E,
+        "Let's see distinguishing positions in action. Click any column — we compare the spotted set vs the plain set at that position. A position counts only when the two sets share NO letter.",
+        "구별 가능한 위치를 직접 봐요. 칸을 누르면 그 위치에서 점박이 집합과 무늬 없는 집합을 비교해줘. 두 집합이 한 글자도 안 겹쳐야 그 위치를 세요."),
+      content: <PositionTableSim E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -109,7 +313,7 @@ export function makeGenomicsCh1(E) {
         "Correct! The spotted set is {A} and the plain set is {C}. They have no intersection, so this position can distinguish the two groups.",
         "맞아! 점박이 집합은 {A}, 무늬 없는 집합은 {C}. 교집합이 없으니 이 위치로 두 그룹을 구별할 수 있어요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
