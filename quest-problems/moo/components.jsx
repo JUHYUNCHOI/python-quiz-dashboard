@@ -325,6 +325,277 @@ export function MooBruteRunner({ E }) {
 
 
 /* ═══════════════════════════════════════════════════════════════
+   MooRTRSim — Remove → Try → Restore step-through
+   Pick a position in a fixed string, watch the 3 affected windows,
+   step through REMOVE (–1 affected moo counts), TRY 26 letters
+   (+1 / check ≥ F / –1), then RESTORE. The dict + result set are
+   shown as live state so students can audit each ±1.
+   ═══════════════════════════════════════════════════════════════ */
+export function MooRTRSim({ E }) {
+  // Fixed teaching string — has 2 'baa' moos so we can actually
+  // hit the threshold during a TRY and show result.add() firing.
+  const BASE = "baacbaa".split("");
+  const N = BASE.length;
+  const F = 2;
+  const ALPHABET = "abcdefghijklmnopqrstuvwxyz".split("");
+
+  const [pos, setPos] = useState(3);     // the 'c' — clearly in the middle
+  const [phase, setPhase] = useState("idle"); // idle | removed | trying | restored
+  const [trialIdx, setTrialIdx] = useState(0);  // which letter of 26
+  const [resultSet, setResultSet] = useState(() => new Set());
+
+  // Affected window starts (≤ 3)
+  const minIdx = Math.max(pos - 2, 0);
+  const maxIdx = Math.min(N - 3, pos);
+  const winStarts = [];
+  for (let i = minIdx; i <= maxIdx; i++) winStarts.push(i);
+
+  // Pre-count of original moos
+  const origCounts = findAllMoos(BASE);
+
+  // Build dict reflecting current phase
+  const buildDict = () => {
+    const d = { ...origCounts };
+    if (phase === "idle" || phase === "restored") return d;
+    // After REMOVE: subtract moo counts for each affected window in BASE
+    for (const idx of winStarts) {
+      if (isMoo(BASE[idx], BASE[idx + 1], BASE[idx + 2])) {
+        const k = BASE[idx] + BASE[idx + 1] + BASE[idx + 2];
+        d[k] = (d[k] || 0) - 1;
+        if (d[k] === 0) delete d[k];
+      }
+    }
+    return d;
+  };
+
+  const dict = buildDict();
+
+  // For TRY phase: simulate +1 / check / -1 for current trial letter,
+  // across the affected windows (to mirror the real algorithm).
+  let trialReports = []; // { idx, key, newCount, hits }
+  if (phase === "trying") {
+    const c = ALPHABET[trialIdx];
+    for (const idx of winStarts) {
+      const w = [BASE[idx], BASE[idx + 1], BASE[idx + 2]];
+      w[pos - idx] = c;
+      if (isMoo(w[0], w[1], w[2])) {
+        const k = w[0] + w[1] + w[2];
+        const newCount = (dict[k] || 0) + 1;
+        trialReports.push({ idx, key: k, newCount, hits: newCount >= F });
+      } else {
+        trialReports.push({ idx, key: null });
+      }
+    }
+  }
+
+  const reset = () => {
+    setPhase("idle");
+    setTrialIdx(0);
+    setResultSet(new Set());
+  };
+
+  const stepNext = () => {
+    if (phase === "idle") { setPhase("removed"); return; }
+    if (phase === "removed") { setPhase("trying"); setTrialIdx(0); return; }
+    if (phase === "trying") {
+      // commit any hits to result set
+      const hits = trialReports.filter(r => r.hits).map(r => r.key);
+      if (hits.length) {
+        setResultSet(prev => {
+          const n = new Set(prev);
+          for (const k of hits) n.add(k);
+          return n;
+        });
+      }
+      if (trialIdx < 25) { setTrialIdx(trialIdx + 1); return; }
+      setPhase("restored");
+      return;
+    }
+    // restored → loop back to idle
+    setPhase("idle");
+    setTrialIdx(0);
+  };
+
+  const phaseLabel = {
+    idle:     t(E, "① click Step → REMOVE", "① Step 누르기 → REMOVE"),
+    removed:  t(E, "🔴 REMOVED — 3 windows subtracted", "🔴 REMOVED — 윈도우 3개 빼기 완료"),
+    trying:   t(E, "🟡 TRYING letter…", "🟡 TRYING 글자 시도 중…"),
+    restored: t(E, "🟢 RESTORED — back to original counts", "🟢 RESTORED — 원래 카운트로 복원"),
+  }[phase];
+
+  const phaseColor = { idle: C.dim, removed: C.no, trying: "#92400e", restored: C.ok }[phase];
+
+  return (
+    <div style={{ padding: "12px 8px" }}>
+      <div style={{ textAlign: "center", marginBottom: 8, fontSize: 12, color: C.dim, fontWeight: 700 }}>
+        {t(E, "Watch ONE position go through Remove → Try → Restore", "한 위치가 빼기 → 시도 → 복원 거치는 모습 관찰")}
+      </div>
+
+      {/* String row */}
+      <div style={{ display: "flex", gap: 3, justifyContent: "center", marginBottom: 4 }}>
+        {BASE.map((ch, i) => {
+          const inWin = winStarts.some(s => i >= s && i < s + 3);
+          const isPos = i === pos;
+          return (
+            <button
+              key={i}
+              onClick={() => { if (phase === "idle") setPos(i); }}
+              disabled={phase !== "idle"}
+              title={t(E, `position ${i}`, `위치 ${i}`)}
+              style={{
+                width: 30, height: 34, borderRadius: 6,
+                fontFamily: "'JetBrains Mono',monospace",
+                fontSize: 15, fontWeight: 800,
+                background: isPos ? "#fde68a" : inWin ? C.accentBg : "#f8f9fc",
+                border: `2px solid ${isPos ? "#f59e0b" : inWin ? C.accentBd : C.border}`,
+                color: isPos ? "#92400e" : inWin ? C.accent : C.text,
+                cursor: phase === "idle" ? "pointer" : "default",
+              }}>{ch}</button>
+          );
+        })}
+      </div>
+      <div style={{ display: "flex", gap: 3, justifyContent: "center", marginBottom: 10, fontSize: 9, color: C.dimLight }}>
+        {BASE.map((_, i) => <span key={i} style={{ width: 30, textAlign: "center" }}>{i}</span>)}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8 }}>
+        {t(E, `pos = ${pos}, F = ${F}, affected windows starting at:`,
+            `pos = ${pos}, F = ${F}, 영향받는 윈도우 시작:`)} {winStarts.join(", ")}
+      </div>
+
+      {/* Phase banner */}
+      <div style={{
+        padding: "8px 12px", borderRadius: 10, marginBottom: 10,
+        background: "#fff", border: `2px solid ${phaseColor}`,
+        textAlign: "center", fontSize: 13, fontWeight: 800, color: phaseColor,
+      }}>{phaseLabel}{phase === "trying" ? ` "${ALPHABET[trialIdx]}" (${trialIdx + 1}/26)` : ""}</div>
+
+      {/* Trial detail */}
+      {phase === "trying" && (
+        <div style={{
+          background: "#fffbeb", border: "1.5px solid #fde68a",
+          borderRadius: 10, padding: "8px 12px", marginBottom: 10, fontSize: 12, lineHeight: 1.7,
+        }}>
+          {trialReports.map((r, i) => (
+            <div key={i} style={{ fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
+              {r.key ? (
+                <>
+                  win@{r.idx}: <b>{r.key}</b> → +1 → count = <b>{r.newCount}</b>
+                  {r.hits ? <span style={{ color: C.ok, fontWeight: 800 }}> ≥ F → result.add('{r.key}') ✓</span>
+                          : <span style={{ color: C.dim }}> &lt; F</span>}
+                  <span style={{ color: C.dim }}> → -1</span>
+                </>
+              ) : (
+                <span style={{ color: C.dim }}>win@{r.idx}: {t(E, "not a moo — skip", "moo 아님 — 건너뜀")}</span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Live dict */}
+      <div style={{
+        background: C.card, border: `1.5px solid ${C.border}`,
+        borderRadius: 10, padding: "8px 12px", marginBottom: 10,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>
+          {t(E, "mydict (live)", "mydict (실시간)")}
+        </div>
+        {Object.keys(dict).length === 0 ? (
+          <div style={{ fontSize: 12, color: C.dim, fontStyle: "italic" }}>{t(E, "(empty)", "(비어있음)")}</div>
+        ) : (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {Object.entries(dict).sort().map(([k, v]) => (
+              <div key={k} style={{
+                padding: "3px 8px", borderRadius: 6,
+                background: v >= F ? C.okBg : C.accentBg,
+                border: `1.5px solid ${v >= F ? C.okBd : C.accentBd}`,
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 700,
+                color: v >= F ? C.ok : C.accent,
+              }}>{k}: {v}</div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Result set */}
+      <div style={{
+        background: resultSet.size > 0 ? C.okBg : "#f8f9fc",
+        border: `1.5px solid ${resultSet.size > 0 ? C.okBd : C.border}`,
+        borderRadius: 10, padding: "8px 12px", marginBottom: 12,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>
+          {t(E, "result set (qualifying moos found so far)", "result 집합 (지금까지 찾은 ≥ F moo)")}
+        </div>
+        {resultSet.size === 0 ? (
+          <div style={{ fontSize: 12, color: C.dim, fontStyle: "italic" }}>{t(E, "(none yet)", "(아직 없음)")}</div>
+        ) : (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {[...resultSet].sort().map(k => (
+              <div key={k} style={{
+                padding: "3px 8px", borderRadius: 6, background: "#fff",
+                border: `1.5px solid ${C.okBd}`,
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color: C.ok,
+              }}>{k}</div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+        <button onClick={stepNext} style={{
+          padding: "8px 18px", borderRadius: 10, border: "none",
+          background: A, color: "#fff", fontSize: 13, fontWeight: 800, cursor: "pointer",
+        }}>
+          {phase === "trying" && trialIdx < 25
+            ? t(E, `▶ Next letter (${ALPHABET[trialIdx + 1]})`, `▶ 다음 글자 (${ALPHABET[trialIdx + 1]})`)
+            : t(E, "▶ Step", "▶ 단계")}
+        </button>
+        {phase === "trying" && (
+          <button onClick={() => {
+            // fast-forward through remaining trials
+            const hits = new Set(resultSet);
+            for (let ti = trialIdx; ti < 26; ti++) {
+              const c = ALPHABET[ti];
+              for (const idx of winStarts) {
+                const w = [BASE[idx], BASE[idx + 1], BASE[idx + 2]];
+                w[pos - idx] = c;
+                if (isMoo(w[0], w[1], w[2])) {
+                  const k = w[0] + w[1] + w[2];
+                  const nc = (dict[k] || 0) + 1;
+                  if (nc >= F) hits.add(k);
+                }
+              }
+            }
+            setResultSet(hits);
+            setPhase("restored");
+            setTrialIdx(0);
+          }} style={{
+            padding: "8px 14px", borderRadius: 10,
+            background: "#fff", color: A, border: `1.5px solid ${A}`,
+            fontSize: 12, fontWeight: 800, cursor: "pointer",
+          }}>
+            {t(E, "⏭ Skip remaining 26 letters", "⏭ 남은 26 글자 건너뛰기")}
+          </button>
+        )}
+        <button onClick={reset} style={{
+          padding: "8px 14px", borderRadius: 10,
+          background: "#fff", color: C.dim, border: `1.5px solid ${C.border}`,
+          fontSize: 12, fontWeight: 800, cursor: "pointer",
+        }}>{t(E, "↺ Reset", "↺ 리셋")}</button>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.6 }}>
+        {t(E, "Notice: outside the affected windows, mydict never moves.\nThat's why this is O(78N), not O(26N²).",
+            "관찰: 영향받는 윈도우 밖에서는 mydict 가 움직이지 않아요.\n그래서 O(26N²) 가 아니라 O(78N).")}
+      </div>
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
    getMooBruteSections — 첫 아이디어 (브루트) 단계별 코드
    ═══════════════════════════════════════════════════════════════ */
 

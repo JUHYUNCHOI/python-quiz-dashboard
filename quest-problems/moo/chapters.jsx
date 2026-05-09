@@ -247,6 +247,9 @@ export function makeMooCh4(E) {
         </div>
       </div>),
     },
+    { type: "mooRTR",
+      narr: t(E, "Now play with it!\nPick a position, then click ▶ Step.\nWatch mydict change as we REMOVE the 3 windows, TRY each of 26 letters (+1 → check ≥ F → -1), then RESTORE.\nNotice that any moo OUTSIDE the 3 windows never moves.", "직접 해봐요!\n위치를 고르고 ▶ Step 누르기.\n3 윈도우를 빼고(REMOVE), 26 글자 시도(+1 → ≥ F 확인 → -1), 다시 복원(RESTORE) 하면서 mydict 가 어떻게 변하는지 봐요.\n3 윈도우 바깥의 moo 는 절대 안 움직이는 거 잘 봐요."),
+    },
     { type: "quiz",
       narr: t(E, "Important: when trying letter 'c', we add its contribution (+1), check the counter, then IMMEDIATELY undo it (-1).\nWhy can't we just leave it?", "중요: 글자 'c' 시도할 때, 기여를 더하고(+1), 카운터 확인하고, 바로 되돌려(-1). 왜 그냥 놔두면 안 돼요?"),
       question: t(E, "Why must we undo each trial immediately?", "왜 각 시도를 바로 되돌려야 해요?"),

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { MooSim, MooBruteRunner, MooProgressiveCode, downloadMooPDF, getMooSections } from "./components";
+import { MooSim, MooBruteRunner, MooRTRSim, MooProgressiveCode, downloadMooPDF, getMooSections } from "./components";
 import { makeMooCh1, makeMooCh2, makeMooCh3, makeMooCh4, makeMooCh5 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -112,6 +112,7 @@ export default function MooApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "mooSim") return <MooSim E={E} />;
     if (step.type === "mooRunner") return <MooBruteRunner E={E} />;
+    if (step.type === "mooRTR") return <MooRTRSim E={E} />;
     if (step.type === "progressive") return <MooProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     return null;
   };
@@ -124,6 +125,7 @@ export default function MooApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
     if (s.type === "mooSim") return <MooSim E={E} />;
     if (s.type === "mooRunner") return <MooBruteRunner E={E} />;
+    if (s.type === "mooRTR") return <MooRTRSim E={E} />;
     if (s.type === "progressive") return <MooProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     return null;
   };
