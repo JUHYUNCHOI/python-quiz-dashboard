@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCrossRoad2Sections } from "./components";
+import { getCrossRoad2Sections, CrossRoad2Sim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -100,6 +100,15 @@ export function makeCrossRd2Ch1(E) {
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
+            </div>
+
+            {/* 🔍 Deep-audit sim — step through every pair and check interleave */}
+            <div style={{ background: "#fff", border: `1.5px solid #fdba74`, borderRadius: 12, marginTop: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#9a3412", padding: "10px 14px 0" }}>
+                🔍 {t(E, "Walk through every pair — does it interleave?",
+                       "모든 쌍을 한 번씩 — 엇갈리는지 직접 확인")}
+              </div>
+              <CrossRoad2Sim E={E} />
             </div>
           </div>
         </div>),

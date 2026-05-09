@@ -1,8 +1,196 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ═══════════════════════════════════════════════════════════════
+   CrossRoad2Sim — step through every pair of cows and check if
+   their two positions INTERLEAVE (a1 < b1 < a2 < b2  or  rotated).
+   For each pair we show the four positions on the strip and the
+   interleave check, then accumulate the crossing count.
+   ═══════════════════════════════════════════════════════════════ */
+const _CR2_PRESETS = [
+  { label: "ABBA", s: "ABBA" },        // 1 crossing? no — A surrounds B (nested)
+  { label: "ABAB", s: "ABAB" },        // 1 crossing (interleave)
+  { label: "ABCABC", s: "ABCABC" },    // all 3 pairs interleave → 3
+  { label: "ABCBAC", s: "ABCBAC" },    // mixed
+];
+
+// Build sorted list of unique cows + their two positions.
+function _cr2Pairs(s) {
+  const pos = {};
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (!pos[c]) pos[c] = [];
+    pos[c].push(i);
+  }
+  const cows = Object.keys(pos).sort();
+  const pairs = [];
+  for (let i = 0; i < cows.length; i++) {
+    for (let j = i + 1; j < cows.length; j++) {
+      const [a1, a2] = pos[cows[i]];
+      const [b1, b2] = pos[cows[j]];
+      const cross = (a1 < b1 && b1 < a2 && a2 < b2) || (b1 < a1 && a1 < b2 && b2 < a2);
+      pairs.push({ A: cows[i], B: cows[j], a1, a2, b1, b2, cross });
+    }
+  }
+  return { pos, cows, pairs };
+}
+
+export function CrossRoad2Sim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [stepIdx, setStepIdx] = useState(0);
+  const preset = _CR2_PRESETS[pi];
+  const s = preset.s;
+  const { pairs } = _cr2Pairs(s);
+
+  // ans = number of crossing pairs in pairs[0..stepIdx-1]
+  let ans = 0;
+  for (let i = 0; i < stepIdx; i++) if (pairs[i].cross) ans += 1;
+  const cur = stepIdx > 0 ? pairs[stepIdx - 1] : null;
+
+  const colorA = "#f97316"; // pair A
+  const colorB = "#2563eb"; // pair B
+
+  // Renders the string strip, highlighting the 4 positions of the current pair.
+  const strip = () => (
+    <div style={{ display: "flex", gap: 4, justifyContent: "center", flexWrap: "wrap" }}>
+      {s.split("").map((ch, i) => {
+        let bg = "#fff", bd = C.border, fg = C.dim;
+        if (cur) {
+          if (i === cur.a1 || i === cur.a2) { bg = "#fff7ed"; bd = colorA; fg = colorA; }
+          else if (i === cur.b1 || i === cur.b2) { bg = "#eff6ff"; bd = colorB; fg = colorB; }
+        }
+        return (
+          <div key={i} style={{
+            width: 26, height: 30, borderRadius: 6,
+            border: `1.5px solid ${bd}`, background: bg, color: fg,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800,
+          }}>{ch}</div>
+        );
+      })}
+    </div>
+  );
+
+  // Position labels under the strip.
+  const idxStrip = () => (
+    <div style={{ display: "flex", gap: 4, justifyContent: "center", flexWrap: "wrap", marginTop: 2 }}>
+      {s.split("").map((_, i) => (
+        <div key={i} style={{ width: 26, textAlign: "center", fontSize: 10, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>{i}</div>
+      ))}
+    </div>
+  );
+
+  const eventBox = () => {
+    if (!cur) return t(E, "Press → to inspect the first pair of cows.", "→ 를 눌러 첫 소-쌍을 확인해요.");
+    const { A: ca, B: cb, a1, a2, b1, b2, cross } = cur;
+    const order = [
+      { p: a1, c: ca, col: colorA },
+      { p: a2, c: ca, col: colorA },
+      { p: b1, c: cb, col: colorB },
+      { p: b2, c: cb, col: colorB },
+    ].sort((x, y) => x.p - y.p);
+    const orderStr = order.map(o => o.c).join("");
+    return (
+      <>
+        <div>
+          {t(E, "Pair ", "쌍 ")}
+          <b style={{ color: colorA }}>{ca}</b>
+          {t(E, " (positions ", " (위치 ")}{a1},{a2}
+          {t(E, ") vs ", ") 와 ")}
+          <b style={{ color: colorB }}>{cb}</b>
+          {t(E, " (positions ", " (위치 ")}{b1},{b2}{")"}
+        </div>
+        <div style={{ marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "sorted order: ", "정렬된 순서: ")}<b>{orderStr}</b>{" → "}
+          {cross
+            ? <span style={{ color: "#16a34a", fontWeight: 800 }}>{t(E, "interleave! cross +1", "엇갈림! 교차 +1")}</span>
+            : <span style={{ color: C.dim }}>{t(E, "nested or apart — no cross", "포개지거나 떨어짐 — 교차 X")}</span>}
+        </div>
+      </>
+    );
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_CR2_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setStepIdx(0); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{p.label}</button>
+        ))}
+      </div>
+
+      {/* String strip with highlighted positions */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "10px 8px", marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "string s (cow letters at each crossing point)", "문자열 s (각 횡단 지점의 소 글자)")}
+        </div>
+        {strip()}
+        {idxStrip()}
+      </div>
+
+      {/* Pair list — done so far, current, remaining */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "10px 8px", marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "all cow-pairs to check", "확인할 모든 소-쌍")}
+        </div>
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+          {pairs.map((p, i) => {
+            const done = i < stepIdx - 1;
+            const isCur = i === stepIdx - 1;
+            const tagBg = isCur ? "#fffbeb" : (done ? (p.cross ? "#dcfce7" : "#f1f5f9") : "#fff");
+            const tagBd = isCur ? A : (done ? (p.cross ? "#86efac" : C.border) : C.border);
+            const tagFg = done && p.cross ? "#16a34a" : (done ? C.dim : C.text);
+            return (
+              <div key={i} style={{
+                padding: "3px 8px", borderRadius: 6,
+                border: `1.5px solid ${tagBd}`, background: tagBg, color: tagFg,
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 700,
+                opacity: done || isCur ? 1 : 0.5,
+              }}>
+                ({p.A},{p.B}){done ? (p.cross ? " ✓" : " ·") : ""}
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${C.border}`, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+          ans = <b style={{ color: "#16a34a" }}>{ans}</b>
+          <span style={{ color: C.dim }}>{"  ("}{stepIdx}/{pairs.length}{")"}</span>
+        </div>
+      </div>
+
+      {/* event narration */}
+      <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 13, color: "#9a3412", lineHeight: 1.6, minHeight: 48 }}>
+        {eventBox()}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setStepIdx(Math.max(0, stepIdx - 1))} disabled={stepIdx === 0} style={{
+          background: stepIdx === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${stepIdx === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: stepIdx === 0 ? "#b0b5c3" : A,
+          cursor: stepIdx === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{stepIdx} / {pairs.length}</span>
+        <button onClick={() => setStepIdx(Math.min(pairs.length, stepIdx + 1))} disabled={stepIdx === pairs.length} style={{
+          background: stepIdx === pairs.length ? "#e5e7eb" : A, border: `1px solid ${stepIdx === pairs.length ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: stepIdx === pairs.length ? "#b0b5c3" : "#fff", cursor: stepIdx === pairs.length ? "default" : "pointer",
+        }}>→</button>
+        <button onClick={() => setStepIdx(0)} disabled={stepIdx === 0} style={{
+          background: "transparent", border: `1px solid ${C.border}`, borderRadius: 8,
+          padding: "5px 10px", fontSize: 11, fontWeight: 600, color: C.dim,
+          cursor: stepIdx === 0 ? "default" : "pointer",
+        }}>{t(E, "reset", "초기화")}</button>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",
