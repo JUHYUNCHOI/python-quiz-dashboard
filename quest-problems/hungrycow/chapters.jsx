@@ -165,7 +165,7 @@ export function makeHungryCowCh1(E) {
         "Strategy: Sort deliveries by day.\nProcess gaps between deliveries, eating from stock.\nSimple simulation!", "\uc804\ub7b5: \ubc30\ub2ec\uc744 \ub0a0\uc9dc\uc21c \uc815\ub82c.\n\ubc30\ub2ec \uc0ac\uc774 \uac04\uaca9\uc744 \ucc98\ub9ac\ud558\uba70 \uc7ac\uace0\uc5d0\uc11c \uba39\uc74c.\n\uac04\ub2e8\ud55c \uc2dc\ubbac\ub808\uc774\uc158!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 14, padding: 14 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 14, padding: 14, marginBottom: 12 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "Algorithm", "\uc54c\uace0\ub9ac\uc998")}
             </div>
@@ -174,6 +174,76 @@ export function makeHungryCowCh1(E) {
                 "1. Sort deliveries by day\n2. For each delivery, calculate gap from previous\n3. Eat min(stock, gap) during the gap\n4. Add new bales to stock\n5. After last delivery, eat until day T",
                 "1. \ubc30\ub2ec\uc744 \ub0a0\uc9dc\uc21c \uc815\ub82c\n2. \uac01 \ubc30\ub2ec\ub9c8\ub2e4 \uc774\uc804\uacfc\uc758 \uac04\uaca9 \uacc4\uc0b0\n3. \uac04\uaca9 \ub3d9\uc548 min(\uc7ac\uace0, \uac04\uaca9) \uba39\uae30\n4. \uc0c8 \uac74\ucd08\ub97c \uc7ac\uace0\uc5d0 \ucd94\uac00\n5. \ub9c8\uc9c0\ub9c9 \ubc30\ub2ec \ud6c4 T\uc77c\uae4c\uc9c0 \uba39\uae30")}
             </div>
+          </div>
+
+          {/* \ud83d\udc41\ufe0f Day-by-day stockpile visualization \u2014 example: deliveries (1,3) (5,2), T=8 */}
+          <div style={{ background: "#fff", border: "1.5px solid #fcd34d", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
+              {t(E, "\ud83d\udc41\ufe0f See the stockpile day by day", "\ud83d\udc41\ufe0f \uc7ac\uace0\ub97c \ud558\ub8e8\ud558\ub8e8 \ub208\uc73c\ub85c")}
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, marginBottom: 10 }}>
+              {t(E, "Deliveries: day 1 \u2192 +3, day 5 \u2192 +2.  T=8.", "\ubc30\ub2ec: 1\uc77c \u2192 +3, 5\uc77c \u2192 +2.  T=8.")}
+            </div>
+            {(() => {
+              // Simulate stock per day for T=8 with deliveries (1,3),(5,2)
+              const dels = { 1: 3, 5: 2 };
+              const T = 8;
+              const rows = [];
+              let stock = 0;
+              for (let d = 1; d <= T; d++) {
+                const delivered = dels[d] || 0;
+                stock += delivered;
+                const ate = stock > 0 ? 1 : 0;
+                stock -= ate;
+                rows.push({ d, delivered, ate, stockAfter: stock });
+              }
+              const maxStock = 3;
+              const total = rows.reduce((a, r) => a + r.ate, 0);
+              return (
+                <>
+                  <div style={{ display: "flex", gap: 4, alignItems: "flex-end", justifyContent: "center" }}>
+                    {rows.map(r => (
+                      <div key={r.d} style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 36 }}>
+                        {/* delivery indicator */}
+                        <div style={{ fontSize: 11, height: 16, color: "#0891b2", fontWeight: 700 }}>
+                          {r.delivered ? `+${r.delivered}` : ""}
+                        </div>
+                        {/* stock bar */}
+                        <div style={{ width: 22, height: 56, background: "#f3f4f6", borderRadius: 4, position: "relative", border: "1px solid #e5e7eb" }}>
+                          <div style={{
+                            position: "absolute", bottom: 0, left: 0, right: 0,
+                            height: `${(r.stockAfter / maxStock) * 100}%`,
+                            background: r.stockAfter > 0 ? "#fbbf24" : "transparent",
+                            borderRadius: "0 0 3px 3px",
+                            transition: "height .3s",
+                          }} />
+                          <div style={{ position: "absolute", top: 2, left: 0, right: 0, textAlign: "center", fontSize: 9, fontWeight: 700, color: "#92400e" }}>
+                            {r.stockAfter}
+                          </div>
+                        </div>
+                        {/* eat indicator */}
+                        <div style={{ fontSize: 14, height: 18, marginTop: 2 }}>
+                          {r.ate ? "\ud83c\udf3e" : "\u274c"}
+                        </div>
+                        {/* day label */}
+                        <div style={{ fontSize: 10, color: C.dim, fontWeight: 600 }}>
+                          {t(E, `D${r.d}`, `${r.d}\uc77c`)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", fontSize: 11, color: C.dim }}>
+                    <span><span style={{ color: "#0891b2", fontWeight: 700 }}>+n</span> = {t(E, "delivery", "\ubc30\ub2ec")}</span>
+                    <span><span style={{ color: "#fbbf24", fontWeight: 700 }}>\u25ae</span> = {t(E, "stock left after eating", "\uba39\uc740 \ud6c4 \uc7ac\uace0")}</span>
+                    <span>\ud83c\udf3e = {t(E, "ate", "\uba39\uc74c")}</span>
+                    <span>\u274c = {t(E, "no food", "\uc7ac\uace0 0")}</span>
+                  </div>
+                  <div style={{ marginTop: 10, padding: "8px 12px", background: "#dcfce7", border: "1px solid #86efac", borderRadius: 8, fontSize: 12, color: "#166534", textAlign: "center", fontWeight: 700 }}>
+                    {t(E, `Days she ate = ${total}  (D1, D2, D3, D5, D6 \u2192 5)`, `\uba39\uc740 \ub0a0 = ${total}  (1,2,3,5,6\uc77c \u2192 5)`)}
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </div>),
     },

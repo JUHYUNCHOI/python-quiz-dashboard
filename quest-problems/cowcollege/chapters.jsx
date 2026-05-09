@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowCollegeSections } from "./components";
+import { getCowCollegeSections, TuitionSlider } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -330,12 +330,20 @@ export function makeCowCollegeCh1(E) {
         );
       })(),
     },
-    // 1-6: Input practice
+    // 1-6: Interactive slider — drag price, see revenue live
+    {
+      type: "reveal",
+      narr: t(E,
+        "Your turn — drag the price slider. Watch which cows pay (green) and which skip (gray). Find the price that maxes revenue!",
+        "직접 해봐 — 가격 슬라이더를 움직여. 누가 내고(초록) 누가 안 내는지(회색) 봐. 수입을 최대로 만드는 가격을 찾아!"),
+      content: <TuitionSlider E={E} sorted={[1, 2, 3, 4, 5]} />,
+    },
+    // 1-7: Input practice (same dataset as the slider above)
     {
       type: "input",
       narr: t(E,
-        "Try each value of c as the tuition.  At price c[i], how many cows pay?",
-        "c 의 각 값을 등록금으로 시도. 가격 c[i] 일 때 몇 마리가 내?"),
+        "Now lock in your answer. After playing with the slider, what's the max revenue?",
+        "이제 답을 확정. 슬라이더로 놀아본 뒤, 최대 수입은?"),
       question: t(E,
         "c = [1, 2, 3, 4, 5]. Max revenue = ?",
         "c = [1, 2, 3, 4, 5]. 최대 수입 = ?"),

@@ -1,8 +1,157 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ────────────────────────────────────────────────────────────────
+   ChainSim — visualizes how adjacency constraints form chains
+   and how lex-smallest lineup is built. Eye-evident, click-paced.
+   ──────────────────────────────────────────────────────────────── */
+const SIM_COWS = ["Beatrice","Belinda","Bella","Bessie","Betsy","Blue","Buttercup","Sue"];
+// Demo constraint script — produces a non-trivial chain set.
+// 1) Bella - Blue, 2) Bella - Bessie, 3) Buttercup - Sue
+// → chains: [Blue-Bella-Bessie], [Buttercup-Sue], plus singletons {Beatrice, Belinda, Betsy}
+// → lex-smallest: alphabetical pass picks Beatrice, Belinda (singletons), then Bessie's chain
+//   (start from Bessie's chain endpoint walked alphabetically) etc.
+const SIM_EDGES = [
+  ["Bella","Blue"],
+  ["Bella","Bessie"],
+  ["Buttercup","Sue"],
+];
+
+function buildChains(edges) {
+  const adj = {}; SIM_COWS.forEach(c => { adj[c] = []; });
+  edges.forEach(([a,b]) => { adj[a].push(b); adj[b].push(a); });
+  const used = new Set(); const out = [];
+  const sorted = [...SIM_COWS].sort();
+  for (const c of sorted) {
+    if (used.has(c)) continue;
+    if (adj[c].length > 1) continue; // not a chain endpoint
+    // walk
+    let cur = c, prev = null;
+    const chain = [];
+    while (cur) {
+      chain.push(cur); used.add(cur);
+      let nxt = null;
+      for (const n of adj[cur]) if (n !== prev) { nxt = n; break; }
+      prev = cur; cur = nxt;
+    }
+    out.push(...chain);
+  }
+  return out;
+}
+
+export function ChainSim({ E }) {
+  const [step, setStep] = useState(0); // 0..SIM_EDGES.length = adding edges; +1 = show lineup
+  const totalSteps = SIM_EDGES.length + 2; // 0..N edges, then lineup reveal
+
+  const activeEdges = SIM_EDGES.slice(0, Math.min(step, SIM_EDGES.length));
+  const showLineup = step > SIM_EDGES.length;
+  const lineup = showLineup ? buildChains(activeEdges) : null;
+
+  const adj = {}; SIM_COWS.forEach(c => { adj[c] = new Set(); });
+  activeEdges.forEach(([a,b]) => { adj[a].add(b); adj[b].add(a); });
+
+  // Group cows into connected components for display
+  const visited = new Set();
+  const groups = [];
+  const sorted = [...SIM_COWS].sort();
+  for (const c of sorted) {
+    if (visited.has(c)) continue;
+    if (adj[c].size > 1) continue;
+    let cur = c, prev = null; const chain = [];
+    while (cur) {
+      chain.push(cur); visited.add(cur);
+      let nxt = null;
+      for (const n of adj[cur]) if (n !== prev) { nxt = n; break; }
+      prev = cur; cur = nxt;
+    }
+    groups.push(chain);
+  }
+
+  const reset = () => setStep(0);
+  const nextStep = () => setStep(s => Math.min(s + 1, totalSteps - 1));
+
+  const canNext = step < totalSteps - 1;
+  const stepLabels = [
+    t(E, "Start: 8 free cows", "시작: 자유로운 8마리"),
+    ...SIM_EDGES.map(([a,b]) => t(E, `Add: ${a} ↔ ${b}`, `추가: ${a} ↔ ${b}`)),
+    t(E, "Build lex-smallest lineup", "사전순 최소 배열 만들기"),
+  ];
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 10, padding: "10px 14px", marginBottom: 12, fontSize: 12.5, color: "#5b21b6", lineHeight: 1.55 }}>
+        <b>🔍 {t(E, "Watch", "관찰")}</b> · {t(E,
+          "Each constraint links two cows. Linked cows form chains. Free cows stay alone. Then we pick lex-smallest start each time.",
+          "각 제약은 두 소를 잇는 간선. 연결된 소는 체인이 되고, 외톨이는 그대로. 사전순으로 가장 빠른 출발점부터 골라요.")}
+      </div>
+
+      <div style={{ background: "#0f172a", borderRadius: 10, padding: "12px 10px", minHeight: 180 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center" }}>
+          {groups.map((g, gi) => (
+            <div key={gi} style={{
+              display: "flex", alignItems: "center", gap: 4,
+              background: g.length > 1 ? "#1e1b4b" : "#1f2937",
+              border: g.length > 1 ? `1.5px solid ${A}` : "1px solid #334155",
+              borderRadius: 8, padding: "6px 8px",
+            }}>
+              {g.map((cow, ci) => (
+                <span key={cow} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  <span style={{
+                    background: g.length > 1 ? A : "#475569",
+                    color: "#fff", fontSize: 11.5, fontWeight: 700,
+                    padding: "4px 8px", borderRadius: 6, fontFamily: "ui-monospace,monospace",
+                  }}>{cow}</span>
+                  {ci < g.length - 1 && <span style={{ color: A, fontWeight: 800 }}>—</span>}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {showLineup && lineup && (
+          <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px dashed #334155" }}>
+            <div style={{ fontSize: 11, color: "#a5b4fc", textAlign: "center", marginBottom: 6, fontWeight: 700, letterSpacing: 0.4 }}>
+              ✅ {t(E, "FINAL LINEUP (lex-smallest)", "최종 배열 (사전순 최소)")}
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center" }}>
+              {lineup.map((c, i) => (
+                <span key={i} style={{
+                  background: "#15803d", color: "#fff", fontSize: 11.5, fontWeight: 700,
+                  padding: "4px 8px", borderRadius: 6, fontFamily: "ui-monospace,monospace",
+                }}>{i + 1}. {c}</span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 10, gap: 8, flexWrap: "wrap" }}>
+        <div style={{ fontSize: 12, color: C.dim }}>
+          {t(E, "Step ", "단계 ")}{step + 1}/{totalSteps} · <span style={{ color: A, fontWeight: 700 }}>{stepLabels[step]}</span>
+        </div>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button onClick={reset} style={{
+            background: "#fff", color: C.dim, border: `1px solid ${C.border}`,
+            borderRadius: 8, padding: "5px 12px", cursor: "pointer", fontSize: 12, fontWeight: 700,
+          }}>{t(E, "↺ Reset", "↺ 처음부터")}</button>
+          <button onClick={nextStep} disabled={!canNext} style={{
+            background: canNext ? A : "#cbd5e1", color: "#fff",
+            border: "none", borderRadius: 8, padding: "5px 14px",
+            cursor: canNext ? "pointer" : "default", fontSize: 12, fontWeight: 800,
+          }}>
+            {step < SIM_EDGES.length ? t(E, "+ Add constraint", "+ 제약 추가")
+              : step === SIM_EDGES.length ? t(E, "▶ Build lineup", "▶ 배열 만들기")
+              : t(E, "Done", "완료")}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "cows = ['Bessie','Buttercup','Belinda','Beatrice',",

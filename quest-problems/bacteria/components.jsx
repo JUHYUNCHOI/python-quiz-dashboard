@@ -1,8 +1,158 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+
+/* ════════════════════════════════════════════════════════════════
+   BacteriaTrickSim — eye-evident "diff-of-diff" visualization
+   ────────────────────────────────────────────────────────────────
+   Student clicks "type-1 walk at h=k" or "type-2 walk at h=k".
+   THREE rows update live: a, diff(a), diff(diff(a)).
+   The bottom row (dd) changes EXACTLY ONE cell by ±1 — that's the
+   whole trick.  Reset button.  No prose required to see it.
+   ════════════════════════════════════════════════════════════════ */
+function diffArr(arr) {
+  const out = new Array(arr.length);
+  for (let i = 0; i < arr.length; i++) out[i] = i === 0 ? arr[0] : arr[i] - arr[i - 1];
+  return out;
+}
+function applyWalk(a, h, sign) {
+  // h is 1-based.  add sign*(1,2,3,...) to a[h..N]
+  const out = a.slice();
+  for (let i = h - 1, k = 1; i < a.length; i++, k++) out[i] += sign * k;
+  return out;
+}
+
+export function BacteriaTrickSim({ E }) {
+  const N = 5;
+  const [a, setA] = useState([0, 0, 0, 0, 0]);
+  const [highlightDd, setHighlightDd] = useState(null); // {idx, sign}
+  const [history, setHistory] = useState([]);
+
+  const d1 = diffArr(a);
+  const dd = diffArr(d1);
+
+  const doWalk = (h, sign) => {
+    setA(applyWalk(a, h, sign));
+    // The trick: dd at index (h-1) changes by sign.  (h must be >= 1; dd[0] also flips when h=1.)
+    setHighlightDd({ idx: h - 1, sign });
+    setHistory(prev => [...prev, { h, sign }].slice(-6));
+    setTimeout(() => setHighlightDd(null), 1100);
+  };
+  const reset = () => { setA([0, 0, 0, 0, 0]); setHighlightDd(null); setHistory([]); };
+
+  const cellBase = {
+    fontFamily: "'JetBrains Mono',monospace",
+    fontSize: 14, fontWeight: 700, textAlign: "center",
+    padding: "8px 0", border: "1px solid #d1d5db", background: "#fff",
+    transition: "background .35s, color .35s, transform .35s",
+  };
+  const headStyle = { fontSize: 11, fontWeight: 700, color: "#065f46", textAlign: "right", paddingRight: 8 };
+
+  const ddCell = (v, i) => {
+    const lit = highlightDd && highlightDd.idx === i;
+    const bg = lit ? (highlightDd.sign > 0 ? "#bbf7d0" : "#fecaca") : "#fff";
+    const col = lit ? (highlightDd.sign > 0 ? "#15803d" : "#b91c1c") : (v === 0 ? "#9ca3af" : "#0f172a");
+    return (
+      <div key={i} style={{ ...cellBase, background: bg, color: col, transform: lit ? "scale(1.1)" : "scale(1)" }}>
+        {v > 0 ? `+${v}` : v}
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 12, padding: 14, marginBottom: 12, textAlign: "center" }}>
+        <div style={{ fontSize: 12, fontWeight: 800, color: "#065f46", marginBottom: 4 }}>
+          {t(E, "🔬 Try a walk — watch what changes", "🔬 워크 한 번 — 무엇이 바뀌는지 봐")}
+        </div>
+        <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.5 }}>
+          {t(E,
+            "Click a button. The top row a updates by a ramp. But look at the BOTTOM row diff(diff(a)) — only ONE cell flickers, by exactly ±1.",
+            "버튼을 눌러봐. 위쪽 a 는 ramp 만큼 바뀌어. 그런데 맨 아래 diff(diff(a)) 는 — 딱 한 칸만 ±1 만큼 깜빡여.")}
+        </div>
+      </div>
+
+      {/* THREE rows: a, diff, diff(diff) */}
+      <div style={{ display: "grid", gridTemplateColumns: "auto repeat(5, 1fr)", gap: 4, marginBottom: 14, alignItems: "center" }}>
+        <div style={headStyle}>a</div>
+        {a.map((v, i) => (
+          <div key={`a${i}`} style={{ ...cellBase, color: v === 0 ? "#9ca3af" : "#0f172a" }}>
+            {v > 0 ? `+${v}` : v}
+          </div>
+        ))}
+        <div style={headStyle}>diff(a)</div>
+        {d1.map((v, i) => (
+          <div key={`d${i}`} style={{ ...cellBase, background: "#f9fafb", color: v === 0 ? "#9ca3af" : "#374151" }}>
+            {v > 0 ? `+${v}` : v}
+          </div>
+        ))}
+        <div style={{ ...headStyle, color: "#059669" }}>{t(E, "diff(diff(a)) ⭐", "diff(diff(a)) ⭐")}</div>
+        {dd.map((v, i) => ddCell(v, i))}
+      </div>
+
+      {/* Buttons: type-1 / type-2 at each h */}
+      <div style={{ background: "#fff", border: "1px solid #d1fae5", borderRadius: 10, padding: 10, marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", marginBottom: 6, textAlign: "center" }}>
+          {t(E, "Type-1 walk (add ramp)", "타입 1 워크 (ramp 더하기)")}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 4, marginBottom: 10 }}>
+          {[1, 2, 3, 4, 5].map(h => (
+            <button key={`p${h}`} onClick={() => doWalk(h, +1)} style={{
+              background: "#16a34a", color: "#fff", border: "none", borderRadius: 8,
+              padding: "6px 0", cursor: "pointer", fontSize: 11.5, fontWeight: 700,
+            }}>+ h={h}</button>
+          ))}
+        </div>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#7c2d12", marginBottom: 6, textAlign: "center" }}>
+          {t(E, "Type-2 walk (subtract ramp)", "타입 2 워크 (ramp 빼기)")}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 4 }}>
+          {[1, 2, 3, 4, 5].map(h => (
+            <button key={`m${h}`} onClick={() => doWalk(h, -1)} style={{
+              background: "#dc2626", color: "#fff", border: "none", borderRadius: 8,
+              padding: "6px 0", cursor: "pointer", fontSize: 11.5, fontWeight: 700,
+            }}>− h={h}</button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+        <div style={{ fontSize: 11, color: C.dim, lineHeight: 1.5, flex: 1 }}>
+          {history.length === 0
+            ? t(E, "No walks yet — click a button above.", "아직 워크 없음 — 위 버튼을 눌러.")
+            : (
+              <span>
+                <b>{t(E, "Walks: ", "워크: ")}</b>
+                {history.map((w, i) => (
+                  <span key={i} style={{ color: w.sign > 0 ? "#15803d" : "#b91c1c", fontWeight: 700, marginRight: 6 }}>
+                    {w.sign > 0 ? "+" : "−"}h{w.h}
+                  </span>
+                ))}
+                <span style={{ color: "#065f46", fontWeight: 700, marginLeft: 4 }}>
+                  ({history.length} {t(E, "ops", "회")})
+                </span>
+              </span>
+            )}
+        </div>
+        <button onClick={reset} style={{
+          background: "#fff", color: "#059669", border: "1.5px solid #059669",
+          borderRadius: 8, padding: "5px 12px", cursor: "pointer", fontSize: 11.5, fontWeight: 700,
+        }}>↺ {t(E, "Reset", "초기화")}</button>
+      </div>
+
+      <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10, fontSize: 11.5, color: "#92400e", lineHeight: 1.6 }}>
+        💡 <b>{t(E, "What you see:", "관찰:")}</b>{" "}
+        {t(E,
+          "One walk = one ±1 change in diff(diff(a)).  So the minimum number of walks to make diff(diff(a)) all zero (= a all zero) is the sum of |diff(diff(a))_i| for the input.",
+          "워크 1 회 = diff(diff(a)) 의 ±1 변화 1 회. 그러니까 diff(diff(a)) 를 전부 0 (= a 를 전부 0) 으로 만드는 최소 횟수 = |diff(diff(a))_i| 의 합.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

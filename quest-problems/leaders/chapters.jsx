@@ -1,5 +1,154 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getLeadersSections } from "./components";
+
+/* ================================================================
+   Eye-evident sim: line of cows + leader pair + validity check
+   - Concrete example: breeds = "GHHG", E = [4, 4, 3, 4]
+     positions: 0  1  2  3
+     breeds:    G  H  H  G
+     cover:    0-3 1-3 2-2 3-3
+   - Student picks (G-leader, H-leader) from radios. Sees coverage spans
+     and which validity rule (a) or (b) makes the pair work.
+   ================================================================ */
+function LeadersIntroSim({ E }) {
+  const breeds = ["G", "H", "H", "G"];
+  const ends   = [3, 3, 2, 3]; // 0-indexed end positions
+  const N = breeds.length;
+  const Gs = breeds.map((b, i) => ({ b, i })).filter(x => x.b === "G").map(x => x.i);
+  const Hs = breeds.map((b, i) => ({ b, i })).filter(x => x.b === "H").map(x => x.i);
+  const [g, setG] = useState(0);
+  const [h, setH] = useState(1);
+
+  const gEnd = ends[g], hEnd = ends[h];
+  // (a): leader's range covers all own breed
+  const gCoversAllG = Gs.every(j => j >= g && j <= gEnd);
+  const hCoversAllH = Hs.every(j => j >= h && j <= hEnd);
+  // (b): other leader inside this leader's range
+  const gHasH = h >= g && h <= gEnd;
+  const hHasG = g >= h && g <= hEnd;
+  const gOK = gCoversAllG || gHasH;
+  const hOK = hCoversAllH || hHasG;
+  const valid = gOK && hOK;
+
+  const G_COL = "#2563eb", H_COL = "#d97706";
+  const cell = (i) => {
+    const isG = breeds[i] === "G";
+    const col = isG ? G_COL : H_COL;
+    const isLeader = (isG && i === g) || (!isG && i === h);
+    return (
+      <div key={i} style={{
+        width: 44, height: 44, borderRadius: 8,
+        background: isLeader ? col : col + "22",
+        color: isLeader ? "#fff" : col,
+        border: `2px solid ${col}`,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontWeight: 800, fontSize: 16, position: "relative",
+      }}>
+        {breeds[i]}
+        <div style={{ position: "absolute", bottom: -16, fontSize: 10, color: C.dim, fontWeight: 600 }}>{i}</div>
+        {isLeader && <div style={{ position: "absolute", top: -14, fontSize: 10, color: col, fontWeight: 800 }}>★</div>}
+      </div>
+    );
+  };
+
+  // Span bar from leader -> end
+  const spanBar = (start, end, color, label) => {
+    const left = start * 52;
+    const w = (end - start + 1) * 52 - 8;
+    return (
+      <div style={{
+        position: "absolute", left, top: 0, width: w, height: 10,
+        background: color + "55", border: `1.5px solid ${color}`, borderRadius: 4,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontSize: 9, fontWeight: 800, color,
+      }}>
+        {label}
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ background: "#fff", border: "1.5px dashed #cbd5e1", borderRadius: 10, padding: 14, marginTop: 6 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 8, letterSpacing: 0.4 }}>
+        🐮 {t(E, "TRY: pick a leader pair", "직접 골라봐: 리더 쌍")}
+      </div>
+
+      {/* Row of cows */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 22, paddingTop: 6 }}>
+        {breeds.map((_, i) => cell(i))}
+      </div>
+
+      {/* Span bars under cows */}
+      <div style={{ position: "relative", height: 12, width: N * 52 - 8, margin: "0 auto 18px" }}>
+        {spanBar(g, gEnd, G_COL, t(E, "G covers", "G 범위"))}
+      </div>
+      <div style={{ position: "relative", height: 12, width: N * 52 - 8, margin: "0 auto 14px" }}>
+        {spanBar(h, hEnd, H_COL, t(E, "H covers", "H 범위"))}
+      </div>
+
+      {/* Picker */}
+      <div style={{ display: "flex", gap: 14, justifyContent: "center", marginBottom: 12, fontSize: 12, flexWrap: "wrap" }}>
+        <div>
+          <span style={{ color: G_COL, fontWeight: 700, marginRight: 6 }}>{t(E, "G-leader:", "G 리더:")}</span>
+          {Gs.map(i => (
+            <button key={i} onClick={() => setG(i)} style={{
+              marginRight: 4, padding: "3px 9px", borderRadius: 6,
+              border: `1.5px solid ${G_COL}`,
+              background: g === i ? G_COL : "#fff",
+              color: g === i ? "#fff" : G_COL,
+              fontWeight: 700, fontSize: 12, cursor: "pointer",
+            }}>{i}</button>
+          ))}
+        </div>
+        <div>
+          <span style={{ color: H_COL, fontWeight: 700, marginRight: 6 }}>{t(E, "H-leader:", "H 리더:")}</span>
+          {Hs.map(i => (
+            <button key={i} onClick={() => setH(i)} style={{
+              marginRight: 4, padding: "3px 9px", borderRadius: 6,
+              border: `1.5px solid ${H_COL}`,
+              background: h === i ? H_COL : "#fff",
+              color: h === i ? "#fff" : H_COL,
+              fontWeight: 700, fontSize: 12, cursor: "pointer",
+            }}>{i}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Validity board */}
+      <div style={{
+        background: valid ? "#ecfdf5" : "#fef2f2",
+        border: `1.5px solid ${valid ? "#10b981" : "#f87171"}`,
+        borderRadius: 8, padding: 10, fontSize: 12, lineHeight: 1.6,
+      }}>
+        <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "2px 8px" }}>
+          <span style={{ color: G_COL, fontWeight: 700 }}>{t(E, "G-leader OK?", "G 리더 OK?")}</span>
+          <span>
+            (a) {t(E, "covers all G", "모든 G 커버")}: <b style={{ color: gCoversAllG ? "#059669" : "#dc2626" }}>{gCoversAllG ? "✓" : "✗"}</b>
+            {" · "}
+            (b) {t(E, "H-leader inside", "H 리더 안에")}: <b style={{ color: gHasH ? "#059669" : "#dc2626" }}>{gHasH ? "✓" : "✗"}</b>
+          </span>
+          <span style={{ color: H_COL, fontWeight: 700 }}>{t(E, "H-leader OK?", "H 리더 OK?")}</span>
+          <span>
+            (a) {t(E, "covers all H", "모든 H 커버")}: <b style={{ color: hCoversAllH ? "#059669" : "#dc2626" }}>{hCoversAllH ? "✓" : "✗"}</b>
+            {" · "}
+            (b) {t(E, "G-leader inside", "G 리더 안에")}: <b style={{ color: hHasG ? "#059669" : "#dc2626" }}>{hHasG ? "✓" : "✗"}</b>
+          </span>
+        </div>
+        <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${valid ? "#10b98155" : "#f8717155"}`, fontWeight: 800, color: valid ? "#047857" : "#b91c1c", textAlign: "center" }}>
+          {valid
+            ? t(E, "✓ VALID pair — both leaders pass at least one rule.", "✓ 유효한 쌍 — 두 리더 모두 (a) 또는 (b) 통과.")
+            : t(E, "✗ Not valid — one leader fails BOTH (a) and (b).", "✗ 유효하지 않음 — 어느 한 리더가 (a)/(b) 둘 다 실패.")}
+        </div>
+      </div>
+      <div style={{ fontSize: 11, color: C.dim, marginTop: 8, textAlign: "center", fontStyle: "italic" }}>
+        {t(E,
+          "Example: breeds = \"GHHG\", end positions = [4, 4, 3, 4] (1-indexed) → [3, 3, 2, 3] (0-indexed).",
+          "예: breeds = \"GHHG\", 끝 위치 = [4, 4, 3, 4] (1-indexed) → [3, 3, 2, 3] (0-indexed).")}
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -133,6 +282,8 @@ export function makeLeadersCh1(E) {
               </div>
             </div>
           </div>
+
+          <LeadersIntroSim E={E} />
         </div>),
     },
     // 1-2: Quiz

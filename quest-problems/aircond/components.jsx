@@ -1,8 +1,160 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
+
+/* ================================================================
+   AC Subset Sim — toggle ACs, see stacked cooling on stalls
+   Eye-evident: bars stack, cells turn green when need is met.
+   Used in Ch1 between the 2^M quiz and the numeric input.
+   ================================================================ */
+export function ACSubsetSim({ E }) {
+  // Fixed scenario matching the input quiz: 1 cow, 2 ACs, stalls 1-5
+  const STALL_LO = 1, STALL_HI = 5;
+  const COW = { s: 1, e: 5, c: 3, label: t(E, "Cow", "소") };
+  const ACS = [
+    { id: 0, s: 1, e: 5, p: 3, cost: 10, color: "#2563eb", bg: "#dbeafe" },
+    { id: 1, s: 1, e: 3, p: 5, cost: 20, color: "#7c3aed", bg: "#ede9fe" },
+  ];
+  const [picked, setPicked] = useState([true, false]); // start with AC1 only
+  const toggle = (i) => setPicked(p => p.map((v, k) => k === i ? !v : v));
+
+  // Compute cooling per stall + total cost
+  const stalls = [];
+  for (let s = STALL_LO; s <= STALL_HI; s++) {
+    let cool = 0;
+    ACS.forEach((ac, i) => { if (picked[i] && s >= ac.s && s <= ac.e) cool += ac.p; });
+    stalls.push({ s, cool, ok: cool >= COW.c });
+  }
+  const totalCost = ACS.reduce((sum, ac, i) => sum + (picked[i] ? ac.cost : 0), 0);
+  const allOk = stalls.every(x => x.ok);
+  const anyPicked = picked.some(Boolean);
+
+  const cellW = 56;
+
+  return (
+    <div style={{
+      background: "#f8fafc", border: `1.5px dashed ${A}`, borderRadius: 12,
+      padding: 14, marginTop: 6, marginBottom: 6,
+    }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: A, letterSpacing: 0.5, marginBottom: 8 }}>
+        🧪 {t(E, "Try it: toggle ACs, watch the stalls", "직접 해보기: 에어컨을 켜고 꺼보면서 축사를 봐")}
+      </div>
+
+      {/* AC toggle row */}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+        {ACS.map((ac, i) => (
+          <button key={ac.id} onClick={() => toggle(i)} style={{
+            display: "flex", alignItems: "center", gap: 6,
+            background: picked[i] ? ac.bg : "#fff",
+            border: `1.5px solid ${picked[i] ? ac.color : "#cbd5e1"}`,
+            borderRadius: 8, padding: "6px 10px", cursor: "pointer",
+            fontSize: 12, fontWeight: 600, color: picked[i] ? ac.color : "#64748b",
+            transition: "all 120ms",
+          }}>
+            <span style={{
+              width: 14, height: 14, borderRadius: 3,
+              border: `2px solid ${picked[i] ? ac.color : "#94a3b8"}`,
+              background: picked[i] ? ac.color : "#fff",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: "#fff", fontSize: 10, fontWeight: 900,
+            }}>{picked[i] ? "✓" : ""}</span>
+            <span>AC{i + 1}</span>
+            <span style={{ fontSize: 10, color: picked[i] ? ac.color : "#94a3b8" }}>
+              [{ac.s}-{ac.e}] +{ac.p} · ${ac.cost}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* Stall grid with stacked cooling bars */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>
+        <div style={{ display: "flex", gap: 4 }}>
+          {stalls.map(({ s, cool, ok }) => {
+            const need = COW.c;
+            const barH = 60;
+            const unit = barH / Math.max(need + 2, 5);
+            // Per-AC contributions for stacking
+            const contribs = ACS
+              .map((ac, i) => picked[i] && s >= ac.s && s <= ac.e ? { p: ac.p, color: ac.color } : null)
+              .filter(Boolean);
+            return (
+              <div key={s} style={{ width: cellW, textAlign: "center" }}>
+                {/* Bar area */}
+                <div style={{
+                  height: barH, position: "relative",
+                  background: "#f1f5f9", borderRadius: 6,
+                  border: `1px solid ${ok ? C.okBd : C.noBd}`,
+                  display: "flex", flexDirection: "column-reverse", overflow: "hidden",
+                }}>
+                  {/* Need line */}
+                  <div style={{
+                    position: "absolute", left: 0, right: 0,
+                    bottom: need * unit - 1,
+                    borderTop: "2px dashed #dc2626", zIndex: 2,
+                  }} />
+                  {/* Stacked AC contributions (bottom up) */}
+                  {contribs.map((c, ci) => (
+                    <div key={ci} style={{
+                      height: c.p * unit, background: c.color, opacity: 0.85,
+                      borderTop: ci > 0 ? "1px solid #fff" : "none",
+                    }} />
+                  ))}
+                </div>
+                {/* Stall label */}
+                <div style={{ fontSize: 11, fontWeight: 700, color: C.text, marginTop: 4 }}>{s}</div>
+                {/* Cooling number */}
+                <div style={{
+                  fontSize: 11, fontWeight: 700,
+                  color: ok ? "#15803d" : "#dc2626",
+                }}>
+                  {cool}{ok ? " ✓" : " ✗"}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Cow needs label */}
+      <div style={{ textAlign: "center", fontSize: 11, color: "#dc2626", marginBottom: 10 }}>
+        - - - {t(E, `Cow needs ${COW.c} cooling in stalls ${COW.s}-${COW.e}`,
+                    `소가 축사 ${COW.s}-${COW.e}에서 냉방 ${COW.c} 필요`)} - - -
+      </div>
+
+      {/* Status footer */}
+      <div style={{
+        display: "flex", justifyContent: "center", gap: 14, alignItems: "center",
+        background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8,
+        padding: "8px 12px", fontSize: 12,
+      }}>
+        <span>
+          💰 <b>{t(E, "Cost", "비용")}:</b>{" "}
+          <span style={{ color: A, fontWeight: 700 }}>{totalCost}</span>
+        </span>
+        <span style={{ color: C.dimLight }}>|</span>
+        <span style={{
+          fontWeight: 700,
+          color: !anyPicked ? C.dim : (allOk ? "#15803d" : "#dc2626"),
+        }}>
+          {!anyPicked
+            ? t(E, "Pick at least one AC", "에어컨을 1개 이상 골라봐")
+            : (allOk
+                ? t(E, "✓ All stalls satisfied", "✓ 모든 축사 OK")
+                : t(E, "✗ Some stall under cooled", "✗ 부족한 축사 있어"))}
+        </span>
+      </div>
+
+      <div style={{ fontSize: 11, color: C.dim, marginTop: 8, textAlign: "center", lineHeight: 1.5 }}>
+        {t(E,
+          "Try {AC1}, {AC2}, {AC1+AC2}, {} — only valid subsets count, pick the cheapest.",
+          "{AC1만}, {AC2만}, {둘 다}, {아무것도 X} 시도해봐 — 모든 소가 OK인 것 중 가장 싼 것이 답.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N, M = map(int, input().split())",

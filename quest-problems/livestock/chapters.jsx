@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getLivestockSections } from "./components";
+import { getLivestockSections, ChainSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -48,7 +48,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeLivestockCh1(E) {
   return [
@@ -113,7 +113,34 @@ export function makeLivestockCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Visual sim — how constraints form chains
+    {
+      type: "reveal",
+      narr: t(E,
+        "Click '+ Add constraint' to watch each adjacency rule connect two cows. Linked cows form a chain; free cows stay alone. Then build the final lineup alphabetically.",
+        "'+ 제약 추가' 를 눌러서 각 인접 규칙이 두 소를 어떻게 잇는지 봐요. 연결된 소는 체인, 외톨이는 그대로. 마지막에 알파벳 순으로 줄을 만들어요."),
+      content: <ChainSim E={E} />,
+    },
+    // 1-3: Predict — chain count after the sim
+    {
+      type: "quiz",
+      narr: t(E,
+        "From the sim above: 3 constraints linked Bella-Blue, Bella-Bessie, Buttercup-Sue.\nHow many separate groups (chains + lone cows) end up?",
+        "위 시뮬레이션에서 제약 3개: Bella-Blue, Bella-Bessie, Buttercup-Sue.\n결국 몇 개의 그룹 (체인 + 외톨이) 이 생겼나요?"),
+      question: t(E,
+        "Total groups (chains + singletons)?",
+        "총 그룹 수 (체인 + 외톨이)?"),
+      options: [
+        t(E, "3", "3"),
+        t(E, "5", "5"),
+        t(E, "8", "8"),
+      ],
+      correct: 1,
+      explain: t(E,
+        "5 groups: chain [Blue-Bella-Bessie], chain [Buttercup-Sue], plus singletons Beatrice, Belinda, Betsy.",
+        "5개 그룹: 체인 [Blue-Bella-Bessie], 체인 [Buttercup-Sue], 그리고 외톨이 Beatrice, Belinda, Betsy."),
+    },
+    // 1-4: Quiz (original 1-2)
     {
       type: "quiz",
       narr: t(E,

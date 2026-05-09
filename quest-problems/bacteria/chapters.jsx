@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getBacteriaSections } from "./components";
+import { getBacteriaSections, BacteriaTrickSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -29,7 +29,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeBacteriaCh1(E) {
   return [
@@ -182,7 +182,15 @@ export function makeBacteriaCh1(E) {
           </div>
         </div>),
     },
-    // 1-3: Quiz — single-position walk
+    // 1-3: Sim — eye-evident: one walk = one ±1 in diff(diff(a))
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try walks. Watch diff(diff(a)) — only ONE cell flickers ±1 per walk. That's the whole trick.",
+        "워크를 눌러봐. diff(diff(a)) 를 봐 — 워크 1 회당 딱 한 칸이 ±1 만큼 깜빡여. 이게 트릭의 전부."),
+      content: (<BacteriaTrickSim E={E} />),
+    },
+    // 1-4: Quiz — single-position walk
     {
       type: "quiz",
       narr: t(E,
@@ -201,7 +209,7 @@ export function makeBacteriaCh1(E) {
         "A type-2 walk at h=2 subtracts a 1-length ramp (just 1) from a[2].  Need 5 walks to drop a[2] from 5 → 0.",
         "h=2 의 타입 2 워크는 a[2] 에서 1 만 빼요. a[2] 를 5 → 0 만들려면 5 번."),
     },
-    // 1-4: Input — second-difference intuition (trick fully explained in Ch2 progressive code)
+    // 1-5: Input — second-difference intuition (now backed by sim above)
     {
       type: "input",
       narr: t(E,

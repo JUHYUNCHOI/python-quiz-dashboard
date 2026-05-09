@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooOpsSections } from "./components";
+import { getMooOpsSections, MooOpsLab } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -128,7 +128,15 @@ export function makeMooOpsCh1(E) {
         "Correct! \"MOO\" is already the target, so 0 operations needed.",
         "맞아! \"MOO\"가 이미 목표이므로 0번의 연산이 필요해요."),
     },
-    // 1-3: Input
+    // 1-3: Lab — visualize the candidate-MOO scan
+    {
+      type: "reveal",
+      narr: t(E,
+        "Pick a position i and watch the cost break down: left deletes + right deletes + flips. The middle char must already be 'O' (we can't flip the middle).",
+        "위치 i 를 골라봐 — 비용이 (왼쪽 삭제) + (오른쪽 삭제) + (뒤집기) 로 쪼개져. 가운데 글자는 이미 'O' 여야 해 (가운데는 뒤집기 불가)."),
+      content: <MooOpsLab E={E} />,
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

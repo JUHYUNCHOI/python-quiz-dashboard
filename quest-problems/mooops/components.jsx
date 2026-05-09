@@ -1,8 +1,154 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ============================================================
+   MooOpsLab — eye-evident scan of candidate 'MOO' windows.
+   Shown in Ch1 to ground the algorithm before code.
+   Student picks i with arrows; sees window highlighted, middle
+   check, left-delete + right-delete + flip cost breakdown.
+   ============================================================ */
+export function MooOpsLab({ E }) {
+  const PRESETS = [
+    { s: "MOOO", label: "MOOO" },
+    { s: "MMOO", label: "MMOO" },
+    { s: "OOOM", label: "OOOM" },
+    { s: "MOMOO", label: "MOMOO" },
+  ];
+  const [pIdx, setPIdx] = useState(0);
+  const s = PRESETS[pIdx].s;
+  const n = s.length;
+  const maxI = Math.max(0, n - 3);
+  const [i, setI] = useState(0);
+
+  // Reset i on preset change.
+  const switchPreset = (idx) => {
+    setPIdx(idx);
+    setI(0);
+  };
+
+  const inRange = i + 2 < n;
+  const c0 = inRange ? s[i] : "";
+  const c1 = inRange ? s[i + 1] : "";
+  const c2 = inRange ? s[i + 2] : "";
+  const middleOk = c1 === "O";
+  const leftDel = i;
+  const rightDel = n - i - 3;
+  const flipFirst = c0 !== "M" ? 1 : 0;
+  const flipLast = c2 !== "O" ? 1 : 0;
+  const total = middleOk ? leftDel + rightDel + flipFirst + flipLast : null;
+
+  // Compute best across all valid i for the current string.
+  let best = null;
+  for (let k = 0; k + 2 < n; k++) {
+    if (s[k + 1] !== "O") continue;
+    const cost = k + (n - k - 3) + (s[k] !== "M" ? 1 : 0) + (s[k + 2] !== "O" ? 1 : 0);
+    if (best == null || cost < best) best = cost;
+  }
+
+  const charBox = (ch, mode) => {
+    const styles = {
+      base: { background: "#fff", color: C.text, border: `2px solid ${C.border}` },
+      window: { background: "#ecfdf5", color: "#065f46", border: `2px solid ${A}` },
+      bad: { background: "#fee2e2", color: "#991b1b", border: "2px solid #dc2626" },
+      del: { background: "#f1f5f9", color: "#94a3b8", border: "2px dashed #cbd5e1", textDecoration: "line-through" },
+    }[mode];
+    return (
+      <div style={{
+        width: 38, height: 44, borderRadius: 8,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontWeight: 800, fontSize: 20, fontFamily: "JetBrains Mono, monospace",
+        ...styles,
+      }}>{ch}</div>
+    );
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: A, marginBottom: 6 }}>
+        {t(E, "🧪 Lab — Pick i (start of candidate MOO window)", "🧪 실험실 — i (후보 MOO 창 시작 위치) 선택")}
+      </div>
+
+      {/* Preset picker */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
+        {PRESETS.map((p, idx) => (
+          <button key={p.s} onClick={() => switchPreset(idx)} style={{
+            padding: "4px 10px", fontSize: 12, fontWeight: 700,
+            border: `1.5px solid ${pIdx === idx ? A : C.border}`,
+            background: pIdx === idx ? A : "#fff",
+            color: pIdx === idx ? "#fff" : C.text,
+            borderRadius: 6, cursor: "pointer", fontFamily: "JetBrains Mono, monospace",
+          }}>{p.label}</button>
+        ))}
+      </div>
+
+      {/* String display with window */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 6, flexWrap: "wrap" }}>
+        {s.split("").map((ch, k) => {
+          let mode = "base";
+          if (k < i) mode = "del";
+          else if (k > i + 2) mode = "del";
+          else if (k === i + 1) mode = middleOk ? "window" : "bad";
+          else mode = "window";
+          return <div key={k}>{charBox(ch, mode)}</div>;
+        })}
+      </div>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, fontSize: 10, color: C.dim, fontFamily: "JetBrains Mono, monospace" }}>
+        {s.split("").map((_, k) => (
+          <div key={k} style={{ width: 38, textAlign: "center", fontWeight: k === i ? 800 : 400, color: k === i ? A : C.dim }}>
+            {k}{k === i ? "←i" : ""}
+          </div>
+        ))}
+      </div>
+
+      {/* i slider */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+        <button onClick={() => setI(Math.max(0, i - 1))} disabled={i === 0} style={{
+          padding: "4px 10px", fontSize: 14, fontWeight: 800, cursor: i === 0 ? "default" : "pointer",
+          border: `1.5px solid ${C.border}`, background: "#fff", color: A, borderRadius: 6,
+          opacity: i === 0 ? 0.4 : 1,
+        }}>◀</button>
+        <div style={{ flex: 1, fontSize: 12, textAlign: "center", color: C.text }}>
+          i = <b style={{ color: A, fontFamily: "JetBrains Mono, monospace" }}>{i}</b>
+          <span style={{ color: C.dim }}> / max {maxI}</span>
+        </div>
+        <button onClick={() => setI(Math.min(maxI, i + 1))} disabled={i === maxI} style={{
+          padding: "4px 10px", fontSize: 14, fontWeight: 800, cursor: i === maxI ? "default" : "pointer",
+          border: `1.5px solid ${C.border}`, background: "#fff", color: A, borderRadius: 6,
+          opacity: i === maxI ? 0.4 : 1,
+        }}>▶</button>
+      </div>
+
+      {/* Cost breakdown */}
+      <div style={{ background: middleOk ? "#ecfdf5" : "#fef2f2", border: `1.5px solid ${middleOk ? "#6ee7b7" : "#fca5a5"}`, borderRadius: 10, padding: 10, fontSize: 12, lineHeight: 1.7 }}>
+        {!middleOk ? (
+          <div style={{ color: "#991b1b" }}>
+            <b>{t(E, "Middle char", "가운데 문자")} s[i+1] = '{c1}'</b> ≠ 'O' →{" "}
+            {t(E, "skip (middle can't be flipped).", "건너뜀 (가운데는 뒤집기 불가).")}
+          </div>
+        ) : (
+          <div style={{ color: "#065f46", fontFamily: "JetBrains Mono, monospace", fontSize: 12 }}>
+            <div>{t(E, "left delete", "왼쪽 삭제")} = i = <b>{leftDel}</b></div>
+            <div>{t(E, "right delete", "오른쪽 삭제")} = n − i − 3 = {n} − {i} − 3 = <b>{rightDel}</b></div>
+            <div>{t(E, "flip s[i]", "s[i] 뒤집기")} ('{c0}' {c0 === "M" ? "= 'M' ✓" : "≠ 'M'"}) = <b>{flipFirst}</b></div>
+            <div>{t(E, "flip s[i+2]", "s[i+2] 뒤집기")} ('{c2}' {c2 === "O" ? "= 'O' ✓" : "≠ 'O'"}) = <b>{flipLast}</b></div>
+            <div style={{ marginTop: 4, paddingTop: 4, borderTop: "1px dashed #6ee7b7" }}>
+              {t(E, "total cost", "총 비용")} = <b style={{ color: A, fontSize: 14 }}>{total}</b>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center" }}>
+        {t(E, "Best across all valid i for this string", "이 문자열에서 모든 유효 i 중 최솟값")}{" : "}
+        <b style={{ color: A, fontFamily: "JetBrains Mono, monospace" }}>{best == null ? "-1" : best}</b>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "Q = int(input())",

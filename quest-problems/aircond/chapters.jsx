@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getAirCondSections } from "./components";
+import { getAirCondSections, ACSubsetSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -139,17 +139,39 @@ export function makeAirCondCh1(E) {
         "Correct! 2^10 = 1024. Each AC is either included or not, giving 2^M subsets. This is very manageable!",
         "맞아! 2^10 = 1024. 각 에어컨을 포함하거나 안 하거나, 2^M개의 부분집합이에요. 충분히 처리 가능해요!"),
     },
-    // 1-3: Input
+    // 1-3: Sim — toggle AC subsets, see stall coverage
+    {
+      type: "reveal",
+      narr: t(E,
+        "Same scenario as the next question — toggle AC1 / AC2 and watch the bars stack on each stall. The dashed red line is the cow's need (3). All cells must clear that line.",
+        "다음 문제와 같은 상황이야 — AC1, AC2를 켜고 끄면서 각 축사의 막대가 어떻게 쌓이는지 봐. 빨간 점선이 소가 필요한 양 (3). 모든 칸이 그 선을 넘어야 OK."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{
+            background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12,
+            padding: 12, marginBottom: 8, fontSize: 13, color: "#1e3a8a", lineHeight: 1.6,
+          }}>
+            🔍 <b>{t(E, "Scenario", "상황")}:</b>{" "}
+            {t(E,
+              "1 cow in stalls 1-5 needs cooling ≥ 3. AC1 covers stalls 1-5 with power 3, cost 10. AC2 covers stalls 1-3 with power 5, cost 20.",
+              "축사 1-5에 소 1마리, 냉방 ≥ 3 필요. AC1: 범위 1-5, 파워 3, 비용 10. AC2: 범위 1-3, 파워 5, 비용 20.")}
+          </div>
+          <ACSubsetSim E={E} />
+        </div>
+      ),
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
-        "1 cow needs 3 cooling in stalls 1-5.\nAC1 covers 1-5 with power 3, cost 10.\nAC2 covers 1-3 with power 5, cost 20.\nWhat's the minimum cost?", "소 1마리가 축사 1-5에서 냉방 3이 필요해요. AC1은 1-5 커버, 파워 3, 비용 10. AC2는 1-3 커버, 파워 5, 비용 20. 최소 비용은?"),
+        "Same numbers as the sim above. Click each subset and read the cost — what's the cheapest one where every stall ✓?",
+        "위 시뮬과 같은 숫자야. 각 부분집합을 눌러보고 비용을 봐 — 모든 축사가 ✓인 것 중 가장 싼 비용은?"),
       question: t(E,
         "1 cow needs cooling 3 in stalls 1-5. AC1: range 1-5, power 3, cost 10. AC2: range 1-3, power 5, cost 20. Min cost?",
         "소 1마리 냉방 3 필요 (축사 1-5). AC1: 범위 1-5, 파워 3, 비용 10. AC2: 범위 1-3, 파워 5, 비용 20. 최소 비용?"),
       hint: t(E,
-        "Try each subset (AC1 only, AC2 only, both) and check coverage.",
-        "각 부분집합 (AC1만, AC2만, 둘 다) 을 시도하면서 커버를 확인해봐."),
+        "AC1 alone covers all stalls 1-5 with power 3 — exactly meets the need at cost 10. AC2 alone misses stalls 4-5.",
+        "AC1만 켜도 축사 1-5에 파워 3 — 딱 필요한 만큼, 비용 10. AC2만 켜면 축사 4-5는 비어."),
       answer: 10,
     },
   ];

@@ -78,6 +78,138 @@ export function FeedCowsProgressiveCode(props) {
 }
 
 
+/* ===============================================================
+   FeedCowsNumberLineViz
+   Eye-evident static visualization for Chapter 1-1.
+   Shows breeds = "GHGHG", K = 1, and one example G patch at
+   position 1 covering [0..2] — so the student sees:
+     • breed letter under each cow position
+     • a colored patch bar showing its [i-K .. i+K] reach
+     • which same-breed cows it satisfies (✓)
+     • which cows still need a different patch
+   Purely additive — does not change any existing prose.
+   =============================================================== */
+const G_COLOR = "#059669";
+const H_COLOR = "#7c3aed";
+
+export function FeedCowsNumberLineViz({ E }) {
+  const breeds = ["G", "H", "G", "H", "G"];
+  const K = 1;
+  const N = breeds.length;
+  // Example: a G patch placed at position 1 → reach [1-K .. 1+K] = [0..2]
+  const patchPos = 1;
+  const patchBreed = "G";
+  const patchLeft = patchPos - K;
+  const patchRight = patchPos + K;
+
+  const colW = 56;
+  const lineH = 6;
+  const totalW = colW * N;
+
+  const colorOf = (b) => (b === "G" ? G_COLOR : H_COLOR);
+  const isCovered = (i) => breeds[i] === patchBreed && i >= patchLeft && i <= patchRight;
+
+  return (
+    <div style={{
+      background: "#fff",
+      border: `1.5px solid ${C.border}`,
+      borderRadius: 12,
+      padding: 14,
+      marginTop: 4,
+    }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: C.text, marginBottom: 6 }}>
+        👀 {t(E, "See it on the number line", "수직선에서 한눈에")}
+      </div>
+      <div style={{ fontSize: 11, color: C.dim, marginBottom: 10 }}>
+        {t(E,
+          "Cows: G H G H G   ·   K = 1   ·   Example: place ONE G patch at position 1 → it reaches [0..2].",
+          "소: G H G H G   ·   K = 1   ·   예: G 패치 한 개를 위치 1 에 놓으면 → [0..2] 까지 도달.")}
+      </div>
+
+      <div style={{ overflowX: "auto", paddingBottom: 4 }}>
+        <div style={{ position: "relative", width: totalW, minWidth: totalW, margin: "0 auto" }}>
+          {/* Cow row */}
+          <div style={{ display: "flex" }}>
+            {breeds.map((b, i) => (
+              <div key={i} style={{ width: colW, textAlign: "center" }}>
+                <div style={{ fontSize: 22 }}>🐄</div>
+                <div style={{
+                  fontSize: 12, fontWeight: 800, color: colorOf(b),
+                  marginTop: -2,
+                }}>{b}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Patch coverage bar — drawn under cows, above number line */}
+          <div style={{ position: "relative", height: 22, margin: "4px 0 2px" }}>
+            <div style={{
+              position: "absolute",
+              left: patchLeft * colW + colW * 0.1,
+              width: (patchRight - patchLeft + 1) * colW - colW * 0.2,
+              top: 4,
+              height: 14,
+              background: `${G_COLOR}33`,
+              border: `1.5px solid ${G_COLOR}`,
+              borderRadius: 7,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 10, fontWeight: 700, color: G_COLOR,
+            }}>
+              {t(E, "G patch reach", "G 패치 도달 범위")}
+            </div>
+          </div>
+
+          {/* Number line */}
+          <div style={{
+            position: "relative",
+            height: lineH,
+            background: "#cbd5e1",
+            borderRadius: lineH,
+            margin: "2px 0 4px",
+          }} />
+
+          {/* Position labels */}
+          <div style={{ display: "flex" }}>
+            {breeds.map((_, i) => (
+              <div key={i} style={{
+                width: colW, textAlign: "center",
+                fontSize: 11, color: C.dim, fontFamily: "monospace",
+              }}>{i}</div>
+            ))}
+          </div>
+
+          {/* Coverage marks */}
+          <div style={{ display: "flex", marginTop: 4 }}>
+            {breeds.map((b, i) => {
+              const covered = isCovered(i);
+              return (
+                <div key={i} style={{ width: colW, textAlign: "center", fontSize: 14 }}>
+                  {covered
+                    ? <span style={{ color: G_COLOR, fontWeight: 800 }}>✓</span>
+                    : (b === "H"
+                        ? <span style={{ color: H_COLOR, fontSize: 10 }}>{t(E, "needs H", "H 필요")}</span>
+                        : <span style={{ color: "#94a3b8", fontSize: 10 }}>—</span>)}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div style={{
+        marginTop: 8, padding: "6px 10px",
+        background: "#f0fdf4", border: "1px dashed #6ee7b7",
+        borderRadius: 8, fontSize: 11, color: "#065f46", lineHeight: 1.5,
+      }}>
+        {t(E,
+          "One G patch satisfies cows G at positions 0 and 2 (same breed, within K). The H cows still need their own H patches.",
+          "G 패치 하나가 위치 0 과 2 의 G 소를 동시에 만족 (같은 품종, K 이내). H 소들은 각자 H 패치가 필요해요.")}
+      </div>
+    </div>
+  );
+}
+
+
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
 function highlightHTML(line, lang) {

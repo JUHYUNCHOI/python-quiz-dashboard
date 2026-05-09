@@ -1,8 +1,171 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ─────────────────────────────────────────────────────────────
+   TuitionSlider — interactive sim for "try every price"
+   Student drags price; bars above cut-line turn green (paying),
+   below turn gray (skipped). Revenue updates live.
+   ───────────────────────────────────────────────────────────── */
+export function TuitionSlider({ E, sorted = [1, 2, 3, 4, 5] }) {
+  const N = sorted.length;
+  const maxV = sorted[N - 1];
+  const [price, setPrice] = useState(sorted[Math.floor(N / 2)]);
+
+  // Cows paying: those with c[i] >= price
+  const paying = sorted.filter(v => v >= price).length;
+  const revenue = price * paying;
+
+  // Best revenue across all candidate prices (only c[i] values matter)
+  const best = Math.max(...sorted.map((p, i) => p * (N - i)));
+  const isBest = revenue === best;
+
+  // Bar dimensions
+  const BAR_W = 36;
+  const BAR_GAP = 6;
+  const CHART_H = 120;
+  const chartW = N * BAR_W + (N - 1) * BAR_GAP;
+  const cutY = CHART_H - (price / maxV) * CHART_H;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8 }}>
+        {t(E, "Drag the slider — try each price!", "슬라이더를 움직여 — 가격을 시도해봐!")}
+      </div>
+      <div style={{ fontSize: 12, color: C.dim, marginBottom: 10, lineHeight: 1.6 }}>
+        {t(E,
+          "Sorted c = [1, 2, 3, 4, 5]. Green bars = cows paying (c[i] ≥ price). Gray = skip.",
+          "정렬된 c = [1, 2, 3, 4, 5]. 초록 막대 = 내는 소 (c[i] ≥ 가격). 회색 = 안 냄.")}
+      </div>
+
+      {/* Bar chart with horizontal cut-line */}
+      <div style={{
+        display: "flex", justifyContent: "center", marginBottom: 10,
+      }}>
+        <div style={{ position: "relative", width: chartW, height: CHART_H + 24 }}>
+          {/* Bars */}
+          <div style={{
+            display: "flex", gap: BAR_GAP, alignItems: "flex-end",
+            height: CHART_H, position: "relative",
+          }}>
+            {sorted.map((v, i) => {
+              const isPaying = v >= price;
+              return (
+                <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <div style={{
+                    width: BAR_W, height: (v / maxV) * CHART_H,
+                    background: isPaying ? C.ok : "#e5e7eb",
+                    border: `1.5px solid ${isPaying ? C.ok : C.dimLight}`,
+                    borderRadius: "6px 6px 0 0",
+                    display: "flex", alignItems: "flex-start", justifyContent: "center",
+                    paddingTop: 3, transition: "background 120ms, border-color 120ms",
+                  }}>
+                    <span style={{
+                      fontSize: 12, fontWeight: 700,
+                      color: isPaying ? "#fff" : C.dim,
+                      fontFamily: "'JetBrains Mono', monospace",
+                    }}>${v}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {/* Cut-line overlay (price) */}
+          <div style={{
+            position: "absolute", left: -4, right: -4, top: cutY - 1,
+            height: 0, borderTop: `2px dashed ${A}`,
+            pointerEvents: "none",
+          }} />
+          <div style={{
+            position: "absolute", left: chartW + 6, top: cutY - 10,
+            fontSize: 11, fontWeight: 700, color: A,
+            fontFamily: "'JetBrains Mono', monospace",
+            background: "#fffbeb", border: `1px solid ${A}`,
+            padding: "1px 5px", borderRadius: 4, whiteSpace: "nowrap",
+          }}>
+            ${price}
+          </div>
+          {/* Index labels under bars */}
+          <div style={{
+            display: "flex", gap: BAR_GAP, marginTop: 4,
+          }}>
+            {sorted.map((_, i) => (
+              <div key={i} style={{
+                width: BAR_W, textAlign: "center",
+                fontSize: 10, fontWeight: 600, color: C.dim,
+                fontFamily: "'JetBrains Mono', monospace",
+              }}>i={i}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Slider */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: A, minWidth: 56 }}>
+          {t(E, "Price", "가격")}
+        </span>
+        <input
+          type="range"
+          min={1}
+          max={maxV}
+          step={1}
+          value={price}
+          onChange={e => setPrice(Number(e.target.value))}
+          style={{ flex: 1, accentColor: A }}
+        />
+        <span style={{
+          fontSize: 13, fontWeight: 700, color: A, minWidth: 36, textAlign: "right",
+          fontFamily: "'JetBrains Mono', monospace",
+        }}>${price}</span>
+      </div>
+
+      {/* Live revenue card */}
+      <div style={{
+        background: isBest ? C.okBg : "#fffbeb",
+        border: `1.5px solid ${isBest ? C.okBd : "#fcd34d"}`,
+        borderRadius: 10, padding: "10px 12px",
+        display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, fontSize: 12,
+        fontFamily: "'JetBrains Mono', monospace",
+      }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ color: C.dim, fontSize: 10, fontWeight: 600 }}>
+            {t(E, "price", "가격")}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: A }}>${price}</div>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ color: C.dim, fontSize: 10, fontWeight: 600 }}>
+            {t(E, "cows paying", "내는 소")}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: C.text }}>{paying}</div>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ color: C.dim, fontSize: 10, fontWeight: 600 }}>
+            {t(E, "revenue", "수입")}
+          </div>
+          <div style={{
+            fontSize: 16, fontWeight: 700,
+            color: isBest ? C.ok : C.text,
+          }}>
+            {price}×{paying}={revenue}{isBest ? " ★" : ""}
+          </div>
+        </div>
+      </div>
+
+      {isBest && (
+        <div style={{
+          marginTop: 8, textAlign: "center", fontSize: 12, fontWeight: 700, color: C.ok,
+        }}>
+          {t(E, "★ Best price found!", "★ 최고 가격 발견!")}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

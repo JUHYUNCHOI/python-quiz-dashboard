@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getFeedCowsSections } from "./components";
+import { getFeedCowsSections, FeedCowsNumberLineViz } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -102,6 +102,9 @@ export function makeFeedCh1(E) {
               </div>
             </div>
           </div>
+
+          {/* 👀 Eye-evident visualization — additive */}
+          <FeedCowsNumberLineViz E={E} />
         </div>),
     },
     // 1-2: Quiz
