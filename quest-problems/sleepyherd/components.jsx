@@ -1,8 +1,206 @@
+import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* --- Interactive Simulator: move endpoint cows into the gap ---
+   Three preset scenarios. Student picks which endpoint to move and where,
+   counts moves, and sees when the three positions become consecutive. */
+export function SleepyHerdSim({ E }) {
+  const SCENARIOS = [
+    { label: t(E, "Scenario A · [4, 7, 9]", "예제 A · [4, 7, 9]"), start: [4, 7, 9] },
+    { label: t(E, "Scenario B · [2, 5, 10]", "예제 B · [2, 5, 10]"), start: [2, 5, 10] },
+    { label: t(E, "Scenario C · [3, 4, 6]", "예제 C · [3, 4, 6]"), start: [3, 4, 6] },
+  ];
+  const [sIdx, setSIdx] = useState(0);
+  const [positions, setPositions] = useState(SCENARIOS[0].start);
+  const [moves, setMoves] = useState(0);
+  const [picked, setPicked] = useState(null); // "L" | "R" | null
+
+  const sorted = useMemo(() => [...positions].sort((a, b) => a - b), [positions]);
+  const a = sorted[0], b = sorted[1], c = sorted[2];
+  const consecutive = (b - a === 1) && (c - b === 1);
+
+  // Display range
+  const minX = Math.min(...positions) - 1;
+  const maxX = Math.max(...positions) + 1;
+  const span = Math.max(maxX - minX, 1);
+
+  const reset = (idx = sIdx) => {
+    setPositions(SCENARIOS[idx].start);
+    setMoves(0);
+    setPicked(null);
+  };
+
+  const chooseScenario = (idx) => {
+    setSIdx(idx);
+    setPositions(SCENARIOS[idx].start);
+    setMoves(0);
+    setPicked(null);
+  };
+
+  // Move the picked endpoint to a target slot strictly between the other two.
+  const moveTo = (target) => {
+    if (consecutive || picked == null) return;
+    if (target <= a || target >= c) return; // must be strictly between
+    if (target === b) return;                // unoccupied
+    const endpoint = picked === "L" ? a : c;
+    const next = positions.map((p) => (p === endpoint ? target : p));
+    setPositions(next);
+    setMoves(moves + 1);
+    setPicked(null);
+  };
+
+  // Slots strictly between a and c (excluding b)
+  const slots = [];
+  for (let x = a + 1; x < c; x++) if (x !== b) slots.push(x);
+
+  // px-positioning helper
+  const xPct = (val) => ((val - minX) / span) * 100;
+
+  return (
+    <div style={{
+      background: "#fffbeb",
+      border: `1.5px solid ${A}`,
+      borderRadius: 12,
+      padding: "12px 14px",
+      marginTop: 12,
+    }}>
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", letterSpacing: 0.5, marginBottom: 8 }}>
+        🐮 {t(E, "TRY IT — move an endpoint cow", "직접 해보기 — 끝점 소를 옮겨봐")}
+      </div>
+
+      {/* Scenario picker */}
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
+        {SCENARIOS.map((s, i) => (
+          <button
+            key={i}
+            onClick={() => chooseScenario(i)}
+            style={{
+              background: i === sIdx ? A : "#fff",
+              color: i === sIdx ? "#fff" : A,
+              border: `1.5px solid ${A}`,
+              borderRadius: 8,
+              padding: "4px 10px",
+              fontSize: 11,
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Number line */}
+      <div style={{ position: "relative", height: 70, background: "#fff", border: "1px dashed #fcd34d", borderRadius: 8, marginBottom: 8 }}>
+        {/* tick marks */}
+        {Array.from({ length: maxX - minX + 1 }, (_, i) => minX + i).map((x) => {
+          const isSlot = slots.includes(x);
+          return (
+            <div key={x} style={{ position: "absolute", left: `${xPct(x)}%`, top: 0, transform: "translateX(-50%)", textAlign: "center" }}>
+              <div style={{ height: 30, width: 1, background: "#e5e7eb", margin: "0 auto" }} />
+              <div style={{ fontSize: 10, color: isSlot ? A : C.dim, fontFamily: "'JetBrains Mono',monospace", fontWeight: isSlot ? 700 : 400 }}>{x}</div>
+              {isSlot && picked && (
+                <button
+                  onClick={() => moveTo(x)}
+                  title={t(E, "Move here", "여기로 옮기기")}
+                  style={{
+                    marginTop: 2,
+                    width: 18, height: 18,
+                    borderRadius: 9,
+                    border: `1.5px dashed ${A}`,
+                    background: "#fff7ed",
+                    color: A,
+                    cursor: "pointer",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    padding: 0,
+                    lineHeight: "14px",
+                  }}
+                >+</button>
+              )}
+            </div>
+          );
+        })}
+        {/* cows */}
+        {sorted.map((p, idx) => {
+          const isEndpoint = idx === 0 || idx === 2;
+          const isPicked = (picked === "L" && idx === 0) || (picked === "R" && idx === 2);
+          return (
+            <div
+              key={`${p}-${idx}`}
+              onClick={() => {
+                if (consecutive) return;
+                if (idx === 0) setPicked(picked === "L" ? null : "L");
+                else if (idx === 2) setPicked(picked === "R" ? null : "R");
+              }}
+              style={{
+                position: "absolute",
+                left: `${xPct(p)}%`,
+                top: 4,
+                transform: "translateX(-50%)",
+                fontSize: 22,
+                cursor: isEndpoint && !consecutive ? "pointer" : "default",
+                filter: isPicked ? "drop-shadow(0 0 6px #d97706)" : "none",
+                opacity: isEndpoint || consecutive ? 1 : 0.55,
+                transition: "left 0.3s ease",
+              }}
+            >
+              🐄
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Status row */}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 8 }}>
+        <div style={{ background: "#fff", border: "1px solid #fcd34d", borderRadius: 8, padding: "3px 9px", fontSize: 11, color: "#92400e", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "moves", "이동")} = <b>{moves}</b>
+        </div>
+        <div style={{ background: "#fff", border: "1px solid #fcd34d", borderRadius: 8, padding: "3px 9px", fontSize: 11, color: "#92400e", fontFamily: "'JetBrains Mono',monospace" }}>
+          [{a}, {b}, {c}]
+        </div>
+        {consecutive ? (
+          <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 8, padding: "3px 9px", fontSize: 11, color: "#166534", fontWeight: 700 }}>
+            ✓ {t(E, "Consecutive!", "연속 완성!")}
+          </div>
+        ) : picked ? (
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: "3px 9px", fontSize: 11, color: "#9a3412" }}>
+            {t(E, `Picked ${picked === "L" ? "left" : "right"} endpoint — click a slot`,
+                  `${picked === "L" ? "왼쪽" : "오른쪽"} 끝점 선택됨 — 빈 자리 클릭`)}
+          </div>
+        ) : (
+          <div style={{ background: "#f1f5f9", border: "1px solid #cbd5e1", borderRadius: 8, padding: "3px 9px", fontSize: 11, color: C.dim }}>
+            {t(E, "Click an endpoint cow (left or right)", "끝점 소(왼쪽 또는 오른쪽)를 클릭")}
+          </div>
+        )}
+        <button
+          onClick={() => reset()}
+          style={{
+            marginLeft: "auto",
+            background: "#fff",
+            color: A,
+            border: `1.5px solid ${A}`,
+            borderRadius: 8,
+            padding: "3px 10px",
+            fontSize: 11,
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >↺ {t(E, "Reset", "초기화")}</button>
+      </div>
+
+      <div style={{ fontSize: 11, color: "#92400e", lineHeight: 1.5 }}>
+        {t(E,
+          "Only the LEFTMOST or RIGHTMOST cow can move, and only into an empty slot strictly between the other two. Try to reach a consecutive triple in as few — or as many — moves as you can.",
+          "왼쪽 끝 또는 오른쪽 끝 소만 움직일 수 있어, 그것도 다른 두 소 사이의 빈 자리로만. 연속 세 칸을 만드는 데 몇 번이 최소이고 몇 번이 최대인지 직접 시도해봐.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "positions = sorted([int(input()) for _ in range(3)])",

@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSleepyHerdSections } from "./components";
+import { getSleepyHerdSections, SleepyHerdSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -104,6 +104,8 @@ export function makeSleepyHerdCh1(E) {
               </div>
             </div>
           </div>
+
+          <SleepyHerdSim E={E} />
         </div>),
     },
     // 1-2: Quiz
