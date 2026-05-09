@@ -1,8 +1,116 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ═══════════════════════════════════════════════════════════════
+   SubseqMedianSim — pick elements from A to build a subsequence,
+   and watch whether it's "good" (strictly increasing + odd length)
+   and what its median is. Live-updating.
+   ═══════════════════════════════════════════════════════════════ */
+const _SSM_PRESETS = [
+  { name: "[1,2,4,3]", arr: [1, 2, 4, 3] },
+  { name: "[1,2,3]",   arr: [1, 2, 3] },
+  { name: "[3,1,4,1,5]", arr: [3, 1, 4, 1, 5] },
+];
+
+export function SubseqMedianSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [picked, setPicked] = useState([]); // indices into arr (in click order)
+  const arr = _SSM_PRESETS[pi].arr;
+
+  const reset = () => setPicked([]);
+  const togglePick = (i) => {
+    setPicked((prev) => {
+      if (prev.includes(i)) return prev.filter((x) => x !== i);
+      // insert at the right index-position (preserve original order)
+      const next = [...prev, i].sort((a, b) => a - b);
+      return next;
+    });
+  };
+
+  // The picked indices are kept sorted by index — which gives the
+  // subsequence in original order. Now check the "good" criteria.
+  const sub = picked.map((i) => arr[i]);
+  const len = sub.length;
+  const oddLen = len > 0 && len % 2 === 1;
+  let strictInc = true;
+  for (let k = 1; k < len; k++) {
+    if (sub[k] <= sub[k - 1]) { strictInc = false; break; }
+  }
+  const good = oddLen && strictInc;
+  const median = good ? sub[(len - 1) / 2] : null;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_SSM_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setPicked([]); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{p.name}</button>
+        ))}
+      </div>
+
+      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 8 }}>
+        {t(E, "Click cells to add/remove from the subsequence (kept in original order).",
+             "칸을 눌러서 부분수열에 넣었다 뺐다 해봐 (원래 순서 그대로 유지돼).")}
+      </div>
+
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {arr.map((v, i) => {
+          const on = picked.includes(i);
+          return (
+            <button key={i} onClick={() => togglePick(i)} style={{
+              width: 44, height: 44, borderRadius: 8,
+              border: `2px solid ${on ? A : C.border}`,
+              background: on ? A : "#fff",
+              color: on ? "#fff" : C.text,
+              fontSize: 16, fontWeight: 800, cursor: "pointer",
+              fontFamily: "'JetBrains Mono',monospace",
+              transition: "all 120ms",
+            }}>{v}</button>
+          );
+        })}
+      </div>
+
+      <div style={{ background: "#f0fdf4", border: `1.5px solid #86efac`, borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.8 }}>
+        <div>
+          {t(E, "subsequence", "부분수열")} = [{sub.join(", ")}]
+          &nbsp;·&nbsp;{t(E, "length", "길이")} = {len}
+        </div>
+        <div>
+          {t(E, "odd length?", "홀수 길이?")} {oddLen ? "✅" : "❌"}
+          &nbsp;·&nbsp;
+          {t(E, "strictly increasing?", "엄격히 증가?")} {len <= 1 ? "—" : (strictInc ? "✅" : "❌")}
+        </div>
+        <div>
+          {good ? (
+            <b style={{ color: A }}>
+              {t(E, "GOOD ✓ median = ", "좋은 부분수열 ✓ 중앙값 = ")}{median}
+            </b>
+          ) : (
+            <span style={{ color: "#9ca3af" }}>
+              {len === 0
+                ? t(E, "(pick some cells)", "(칸을 골라봐)")
+                : t(E, "(not a good subsequence)", "(좋은 부분수열이 아니야)")}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <button onClick={reset} style={{
+          background: "#fff", border: `1px solid ${A}`, borderRadius: 8,
+          padding: "5px 14px", fontSize: 12, fontWeight: 700, color: A, cursor: "pointer",
+        }}>{t(E, "↺ reset", "↺ 초기화")}</button>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

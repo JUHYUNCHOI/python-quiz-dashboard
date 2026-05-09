@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSubseqMedianSections } from "./components";
+import { getSubseqMedianSections, SubseqMedianSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -105,6 +105,13 @@ export function makeSubseqMedianCh1(E) {
             {t(E,
               "Example: A=[1,2,4,3].\nGood subsequences: [1],[2],[4],[3] (medians 1,2,4,3), [1,2,4],[1,2,3] (medians 2,2). Sum = 1+2+4+3+2+2 = 14.",
               "예시: A=[1,2,4,3]. 좋은 부분수열: [1],[2],[4],[3] (중앙값 1,2,4,3),\n[1,2,4],[1,2,3] (중앙값 2,2). 합 = 1+2+4+3+2+2 = 14.")}
+          </div>
+
+          <div style={{ marginTop: 14, textAlign: "left" }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: "#065f46", letterSpacing: 0.5, marginBottom: 4, textAlign: "center" }}>
+              🧪 {t(E, "Try it — median tracker", "직접 해보기 — 중앙값 추적기")}
+            </div>
+            <SubseqMedianSim E={E} />
           </div>
         </div>),
     },
