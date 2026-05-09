@@ -1,8 +1,214 @@
+import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
+
+/* ================================================================
+   Belt-Graph Reachability Sim
+   - Student types belt list, picks a candidate station.
+   - Sim flows milk from every station along belts and checks if
+     all reach the candidate. Auto-detects the central station.
+   ================================================================ */
+export function MilkFactoryBeltSim({ E }) {
+  const [N, setN] = useState(4);
+  const [edgesText, setEdgesText] = useState("1 2\n3 2\n4 2");
+  const [candidate, setCandidate] = useState(2);
+
+  const parsed = useMemo(() => {
+    const lines = edgesText.split(/\n+/).map(s => s.trim()).filter(Boolean);
+    const edges = [];
+    let bad = false;
+    for (const ln of lines) {
+      const parts = ln.split(/\s+/).map(Number);
+      if (parts.length !== 2 || parts.some(x => !Number.isInteger(x) || x < 1 || x > N)) {
+        bad = true; continue;
+      }
+      edges.push([parts[0], parts[1]]);
+    }
+    return { edges, bad };
+  }, [edgesText, N]);
+
+  // Forward graph: u -> [v]. We want every u to reach `candidate`.
+  const reachInfo = useMemo(() => {
+    const adj = Array.from({ length: N + 1 }, () => []);
+    for (const [a, b] of parsed.edges) adj[a].push(b);
+    // For each station, walk forward and see if it lands on candidate.
+    const reaches = new Array(N + 1).fill(false);
+    for (let s = 1; s <= N; s++) {
+      const seen = new Set([s]);
+      const stack = [s];
+      let ok = (s === candidate);
+      while (stack.length && !ok) {
+        const u = stack.pop();
+        for (const v of adj[u]) {
+          if (v === candidate) { ok = true; break; }
+          if (!seen.has(v)) { seen.add(v); stack.push(v); }
+        }
+      }
+      reaches[s] = ok;
+    }
+    const allReach = reaches.slice(1, N + 1).every(Boolean);
+
+    // Find any station that all others reach (the "central" one).
+    let answer = -1;
+    for (let c = 1; c <= N; c++) {
+      let all = true;
+      for (let s = 1; s <= N; s++) {
+        if (s === c) continue;
+        const seen = new Set([s]);
+        const stack = [s];
+        let ok = false;
+        while (stack.length && !ok) {
+          const u = stack.pop();
+          for (const v of adj[u]) {
+            if (v === c) { ok = true; break; }
+            if (!seen.has(v)) { seen.add(v); stack.push(v); }
+          }
+        }
+        if (!ok) { all = false; break; }
+      }
+      if (all) { answer = c; break; }
+    }
+
+    // Layout: place stations on a circle.
+    const cx = 180, cy = 130, R = 92;
+    const pos = [null];
+    for (let i = 1; i <= N; i++) {
+      const ang = -Math.PI / 2 + ((i - 1) * 2 * Math.PI) / N;
+      pos.push({ x: cx + R * Math.cos(ang), y: cy + R * Math.sin(ang) });
+    }
+    return { adj, reaches, allReach, answer, pos };
+  }, [parsed.edges, N, candidate]);
+
+  const stationFill = (i) => {
+    if (i === candidate) return "#2563eb";
+    if (reachInfo.reaches[i]) return "#22c55e";
+    return "#ef4444";
+  };
+  const stationStroke = (i) => i === candidate ? "#1e3a8a" : "#0f172a";
+
+  const setNclamped = (val) => {
+    const v = Math.max(2, Math.min(8, Number(val) || 2));
+    setN(v);
+    if (candidate > v) setCandidate(1);
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "8px 12px", marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5 }}>
+          🧪 {t(E, "Belt-Graph Sim", "벨트 그래프 시뮬")}
+        </div>
+        <div style={{ fontSize: 12, color: "#1e3a8a", marginTop: 4, lineHeight: 1.5 }}>
+          {t(E,
+            "Type belts (one 'a b' per line, meaning a→b). Pick a candidate station — green = milk from that station can reach the candidate.",
+            "벨트를 한 줄에 'a b' (a→b 방향) 로 입력해. 후보 역을 골라 — 초록 = 그 역에서 후보 역으로 우유가 도달 가능.")}
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+        <div>
+          <label style={{ fontSize: 11, fontWeight: 700, color: C.dim }}>
+            {t(E, "Stations N", "역 개수 N")}
+          </label>
+          <input
+            type="number" min={2} max={8} value={N}
+            onChange={(e) => setNclamped(e.target.value)}
+            style={{ width: "100%", padding: "6px 8px", fontSize: 13, border: `1.5px solid ${C.border}`, borderRadius: 6, marginTop: 2 }}
+          />
+        </div>
+        <div>
+          <label style={{ fontSize: 11, fontWeight: 700, color: C.dim }}>
+            {t(E, "Candidate station", "후보 역")}
+          </label>
+          <select
+            value={candidate}
+            onChange={(e) => setCandidate(Number(e.target.value))}
+            style={{ width: "100%", padding: "6px 8px", fontSize: 13, border: `1.5px solid ${C.border}`, borderRadius: 6, marginTop: 2, background: "#fff" }}
+          >
+            {Array.from({ length: N }, (_, i) => i + 1).map(s => (
+              <option key={s} value={s}>{t(E, `Station ${s}`, `역 ${s}`)}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: 10 }}>
+        <label style={{ fontSize: 11, fontWeight: 700, color: C.dim }}>
+          {t(E, "Belts (one 'a b' per line)", "벨트 (한 줄에 'a b')")}
+        </label>
+        <textarea
+          value={edgesText}
+          onChange={(e) => setEdgesText(e.target.value)}
+          rows={4}
+          style={{ width: "100%", padding: "6px 8px", fontSize: 12, fontFamily: "JetBrains Mono, monospace", border: `1.5px solid ${C.border}`, borderRadius: 6, marginTop: 2, resize: "vertical" }}
+        />
+        {parsed.bad && (
+          <div style={{ fontSize: 11, color: "#dc2626", marginTop: 4 }}>
+            {t(E, "Some lines were skipped (must be 'a b' with 1 ≤ a,b ≤ N).", "일부 줄을 건너뛰었어요 ('a b' 형식, 1 ≤ a,b ≤ N).")}
+          </div>
+        )}
+      </div>
+
+      <div style={{ background: "#0f172a", borderRadius: 10, padding: 8, marginBottom: 10, display: "flex", justifyContent: "center" }}>
+        <svg width={360} height={260} style={{ maxWidth: "100%" }}>
+          <defs>
+            <marker id="mfArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+          {parsed.edges.map(([a, b], idx) => {
+            const pa = reachInfo.pos[a], pb = reachInfo.pos[b];
+            if (!pa || !pb) return null;
+            const dx = pb.x - pa.x, dy = pb.y - pa.y;
+            const len = Math.hypot(dx, dy) || 1;
+            const ux = dx / len, uy = dy / len;
+            const r = 18;
+            return (
+              <line key={idx}
+                x1={pa.x + ux * r} y1={pa.y + uy * r}
+                x2={pb.x - ux * r} y2={pb.y - uy * r}
+                stroke="#94a3b8" strokeWidth={2}
+                markerEnd="url(#mfArrow)"
+              />
+            );
+          })}
+          {Array.from({ length: N }, (_, i) => i + 1).map(s => {
+            const p = reachInfo.pos[s];
+            return (
+              <g key={s}>
+                <circle cx={p.x} cy={p.y} r={18} fill={stationFill(s)} stroke={stationStroke(s)} strokeWidth={2} />
+                <text x={p.x} y={p.y + 5} textAnchor="middle" fontSize={14} fontWeight={800} fill="#fff">{s}</text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", fontSize: 11, color: C.dim, marginBottom: 10 }}>
+        <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#2563eb", borderRadius: "50%", marginRight: 4 }} />{t(E, "Candidate", "후보")}</span>
+        <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#22c55e", borderRadius: "50%", marginRight: 4 }} />{t(E, "Reaches candidate", "후보로 도달")}</span>
+        <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#ef4444", borderRadius: "50%", marginRight: 4 }} />{t(E, "Cannot reach", "도달 불가")}</span>
+      </div>
+
+      <div style={{
+        background: reachInfo.allReach ? "#dcfce7" : "#fef2f2",
+        border: `1.5px solid ${reachInfo.allReach ? "#16a34a" : "#dc2626"}`,
+        borderRadius: 8, padding: "8px 12px", fontSize: 13, color: reachInfo.allReach ? "#166534" : "#991b1b", lineHeight: 1.5,
+      }}>
+        <b>{reachInfo.allReach
+          ? t(E, "✓ All stations reach this candidate.", "✓ 모든 역에서 이 후보로 도달!")
+          : t(E, "✗ Some stations cannot reach this candidate.", "✗ 일부 역에서 이 후보로 도달 불가.")}</b>
+        <div style={{ marginTop: 4, fontSize: 12, color: C.dim }}>
+          {t(E, "Auto-detected answer for this graph: ", "이 그래프의 정답: ")}
+          <b style={{ color: A }}>{reachInfo.answer === -1 ? "-1" : reachInfo.answer}</b>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

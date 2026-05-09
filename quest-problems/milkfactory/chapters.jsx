@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMilkFactorySections } from "./components";
+import { getMilkFactorySections, MilkFactoryBeltSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -106,7 +106,15 @@ export function makeFactoryCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Belt-graph reachability sim (interactive)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try it yourself! Edit the belts, pick a candidate station, and watch which stations turn green (reach the candidate). The sim also shows the auto-detected central station.",
+        "직접 해봐! 벨트를 수정하고 후보 역을 골라봐. 어떤 역이 초록 (후보로 도달) 인지 보여주고, 자동으로 중심 역도 알려줘."),
+      content: <MilkFactoryBeltSim E={E} />,
+    },
+    // 1-3: Quiz (uses example student just simulated)
     {
       type: "quiz",
       narr: t(E,
@@ -125,7 +133,7 @@ export function makeFactoryCh1(E) {
         "Station 2 is reachable from 1 (via 1->2) and from 3 (via 3->2). Station 2 can reach itself.",
         "스테이션 2는 1에서 (1->2), 3에서 (3->2) 도달 가능. 자기 자신도 도달 가능."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
