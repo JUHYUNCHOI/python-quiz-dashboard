@@ -1,8 +1,149 @@
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ================================================================
+   Interactive bounding-square simulator
+   ================================================================
+   - Two draggable axis-aligned rectangles on a 12×8 grid
+   - Live readout: bounding box, square side, area
+   - Bilingual via t(E, ...)
+   ================================================================ */
+const GRID_W = 12;
+const GRID_H = 8;
+const CELL = 32;
+
+function clampRect(r) {
+  const x = Math.max(0, Math.min(GRID_W - r.w, r.x));
+  const y = Math.max(0, Math.min(GRID_H - r.h, r.y));
+  return { ...r, x, y };
+}
+
+export function SqPastureSim({ E }) {
+  const [rectA, setRectA] = useState({ x: 1, y: 4, w: 3, h: 2 });
+  const [rectB, setRectB] = useState({ x: 7, y: 1, w: 3, h: 3 });
+  const dragRef = useRef(null);
+  const svgRef = useRef(null);
+
+  const minX = Math.min(rectA.x, rectB.x);
+  const maxX = Math.max(rectA.x + rectA.w, rectB.x + rectB.w);
+  const minY = Math.min(rectA.y, rectB.y);
+  const maxY = Math.max(rectA.y + rectA.h, rectB.y + rectB.h);
+  const bbW = maxX - minX;
+  const bbH = maxY - minY;
+  const side = Math.max(bbW, bbH);
+  const area = side * side;
+
+  const toSvg = (gx, gy) => ({ x: gx * CELL, y: (GRID_H - gy) * CELL });
+
+  const startDrag = (which) => (e) => {
+    e.preventDefault();
+    dragRef.current = { which, startClient: getClient(e) };
+  };
+  const getClient = (e) => {
+    if (e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    return { x: e.clientX, y: e.clientY };
+  };
+  const onMove = (e) => {
+    const d = dragRef.current;
+    if (!d || !svgRef.current) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    const client = getClient(e);
+    const sx = ((client.x - rect.left) / rect.width) * GRID_W * CELL;
+    const sy = ((client.y - rect.top) / rect.height) * GRID_H * CELL;
+    const gx = Math.round(sx / CELL);
+    const gy = Math.round(GRID_H - sy / CELL);
+    const target = d.which === "A" ? rectA : rectB;
+    const setter = d.which === "A" ? setRectA : setRectB;
+    setter(clampRect({ ...target, x: gx - Math.floor(target.w / 2), y: gy - Math.floor(target.h / 2) }));
+  };
+  const endDrag = () => { dragRef.current = null; };
+
+  const svgW = GRID_W * CELL;
+  const svgH = GRID_H * CELL;
+  const bb = { ...toSvg(minX, maxY), w: bbW * CELL, h: bbH * CELL };
+  const sq = { ...toSvg(minX, minY + side), w: side * CELL, h: side * CELL };
+
+  const Rect = ({ r, fill, stroke, label, which }) => {
+    const tl = toSvg(r.x, r.y + r.h);
+    return (
+      <g
+        onMouseDown={startDrag(which)}
+        onTouchStart={startDrag(which)}
+        style={{ cursor: "grab" }}
+      >
+        <rect x={tl.x} y={tl.y} width={r.w * CELL} height={r.h * CELL} fill={fill} stroke={stroke} strokeWidth={2} rx={4} />
+        <text x={tl.x + (r.w * CELL) / 2} y={tl.y + (r.h * CELL) / 2 + 5} textAnchor="middle" fontSize={14} fontWeight={700} fill={stroke}>{label}</text>
+      </g>
+    );
+  };
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#fff7ed", border: "1.5px solid #d97706", borderRadius: 12, padding: 14 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
+          🎮 {t(E, "Try it: drag rectangles, watch the square shrink/grow", "직접 해보기: 직사각형을 드래그해서 정사각형이 변하는 걸 봐요")}
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+          <svg
+            ref={svgRef}
+            viewBox={`0 0 ${svgW} ${svgH}`}
+            width="100%"
+            style={{ maxWidth: 480, height: "auto", touchAction: "none", background: "#fffbeb", border: `1.5px solid ${A}`, borderRadius: 8 }}
+            onMouseMove={onMove}
+            onMouseUp={endDrag}
+            onMouseLeave={endDrag}
+            onTouchMove={onMove}
+            onTouchEnd={endDrag}
+          >
+            {/* Grid */}
+            {Array.from({ length: GRID_W + 1 }).map((_, i) => (
+              <line key={`vx${i}`} x1={i * CELL} y1={0} x2={i * CELL} y2={svgH} stroke="#fde68a" strokeWidth={1} />
+            ))}
+            {Array.from({ length: GRID_H + 1 }).map((_, i) => (
+              <line key={`hy${i}`} x1={0} y1={i * CELL} x2={svgW} y2={i * CELL} stroke="#fde68a" strokeWidth={1} />
+            ))}
+
+            {/* Smallest square (drawn first so it sits behind) */}
+            <rect x={sq.x} y={sq.y} width={sq.w} height={sq.h} fill="rgba(217,119,6,0.10)" stroke="#d97706" strokeWidth={2.5} strokeDasharray="6 4" rx={4} />
+
+            {/* Bounding box */}
+            <rect x={bb.x} y={bb.y} width={bb.w} height={bb.h} fill="none" stroke="#7c3aed" strokeWidth={2} strokeDasharray="3 3" rx={3} />
+
+            {/* Pastures */}
+            <Rect r={rectA} fill="rgba(59,130,246,0.30)" stroke="#3b82f6" label="A" which="A" />
+            <Rect r={rectB} fill="rgba(34,197,94,0.30)" stroke="#22c55e" label="B" which="B" />
+          </svg>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, fontSize: 12 }}>
+          <div style={{ background: "#fff", border: "1px solid #fdba74", borderRadius: 8, padding: "8px 10px", textAlign: "center" }}>
+            <div style={{ color: "#7c3aed", fontWeight: 700, fontSize: 11 }}>{t(E, "Bounding box", "바운딩 박스")}</div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: C.text, marginTop: 2 }}>{bbW} × {bbH}</div>
+          </div>
+          <div style={{ background: "#fff", border: "1px solid #fdba74", borderRadius: 8, padding: "8px 10px", textAlign: "center" }}>
+            <div style={{ color: "#d97706", fontWeight: 700, fontSize: 11 }}>{t(E, "Square side", "정사각형 변")}</div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: C.text, marginTop: 2 }}>max({bbW}, {bbH}) = {side}</div>
+          </div>
+          <div style={{ background: "#fff7ed", border: "1.5px solid #d97706", borderRadius: 8, padding: "8px 10px", textAlign: "center" }}>
+            <div style={{ color: "#9a3412", fontWeight: 700, fontSize: 11 }}>{t(E, "Area", "면적")}</div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: "#9a3412", marginTop: 2 }}>{side}² = {area}</div>
+          </div>
+        </div>
+
+        <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+          {t(E,
+            "Purple dashed = bounding box · Orange dashed = smallest enclosing square",
+            "보라 점선 = 바운딩 박스 · 주황 점선 = 가장 작은 정사각형")}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "# Read two rectangles",

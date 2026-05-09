@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSqPastureSections } from "./components";
+import { getSqPastureSections, SqPastureSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -108,6 +108,13 @@ export function makeSqPastureCh1(E) {
             </div>
           </div>
         </div>),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Drag pastures A and B around the grid. The bounding box (purple) and the smallest enclosing square (orange) update live — watch how side = max(width, height) plays out.",
+        "목초지 A와 B를 격자 위에서 드래그해 봐요. 바운딩 박스(보라)와 가장 작은 정사각형(주황)이 실시간으로 바뀌어요 — side = max(가로, 세로)가 어떻게 작동하는지 직접 봐요."),
+      content: <SqPastureSim E={E} />,
     },
     {
       type: "quiz",
