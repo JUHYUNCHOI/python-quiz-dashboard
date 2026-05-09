@@ -254,6 +254,13 @@ export function makeTricksCh1(E) {
         "Both work! 1A+1B+1C: 2+0+1=3x, 0+2+1=3y ✓. 3C: 1+1+1=3x, 1+1+1=3y ✓. No other combos give 3+3!",
         "둘 다 돼요! A+B+C 하나씩: x가 2+0+1=3, y가 0+2+1=3 ✓. C 3개: x가 1+1+1=3, y가 1+1+1=3 ✓. 이 두 가지만 가능해요!"),
     },
+    // 1-5b: Deep audit sim — verify combos candy by candy
+    {
+      type: "deepAudit",
+      narr: t(E,
+        "Audit time!\nPick a combo and reveal candies one by one.\nWatch the color tally build — see why some combos succeed and others fail.\n🔍",
+        "감사 시간이에요!\n조합을 골라서 사탕을 하나씩 공개해봐요.\n색깔 개수가 쌓이는 걸 보면서 — 왜 어떤 조합은 성공하고 어떤 건 실패하는지 직접 확인해봐요.\n🔍"),
+    },
     // 1-6: Counting formula
     {
       type: "reveal",

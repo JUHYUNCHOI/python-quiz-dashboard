@@ -533,6 +533,199 @@ export function ColorPairCounter({ E }) {
 
 
 /* ═══════════════════════════════════════════════════════════════
+   DeepAuditSim — Audit a 3-bag combo candy by candy
+   Pick a preset combo, walk through each candy reveal,
+   watch the x/y tally build, then verdict.
+   ═══════════════════════════════════════════════════════════════ */
+
+const AUDIT_CASES = [
+  // 1A + 1B + 1C : (1,1)+(2,2)+(1,2) → x=1,y=2
+  { id: "ABC", label_en: "1A + 1B + 1C", label_ko: "A+B+C 하나씩", bags: [[1,1],[2,2],[1,2]], x: 1, y: 2 },
+  // 3C : (1,2)+(1,2)+(1,2)
+  { id: "3C", label_en: "3C (all mixed)", label_ko: "C 3개 (전부 섞임)", bags: [[1,2],[1,2],[1,2]], x: 1, y: 2 },
+  // Fail: 2A + 1B
+  { id: "2A1B", label_en: "2A + 1B (fail)", label_ko: "A 2개 + B 1개 (실패)", bags: [[1,1],[1,1],[2,2]], x: 1, y: 2 },
+  // Fail: 3 colors
+  { id: "3col", label_en: "3 colors (fail)", label_ko: "3가지 색 (실패)", bags: [[1,2],[1,3],[2,3]], x: 1, y: 2 },
+];
+
+export function DeepAuditSim({ E }) {
+  const [caseIdx, setCaseIdx] = useState(0);
+  const [revealed, setRevealed] = useState(0); // 0..6
+  const playRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+
+  const cur = AUDIT_CASES[caseIdx];
+  const flat = cur.bags.flatMap(([a, b]) => [a, b]); // 6 candies
+
+  const stop = () => { if (playRef.current) { clearInterval(playRef.current); playRef.current = null; } setPlaying(false); };
+  useEffect(() => () => stop(), []);
+
+  const reset = (idx = caseIdx) => {
+    stop();
+    setCaseIdx(idx);
+    setRevealed(0);
+  };
+
+  const stepOne = () => {
+    setRevealed(r => Math.min(6, r + 1));
+  };
+
+  const auto = () => {
+    if (playing) { stop(); return; }
+    setPlaying(true);
+    setRevealed(0);
+    let r = 0;
+    playRef.current = setInterval(() => {
+      r++;
+      setRevealed(r);
+      if (r >= 6) { stop(); }
+    }, 480);
+  };
+
+  // Tally by color, only over revealed candies
+  const tally = {};
+  flat.slice(0, revealed).forEach(c => { tally[c] = (tally[c] || 0) + 1; });
+  const colorList = Object.keys(tally).map(Number).sort((a, b) => a - b);
+  const allDistinct = Array.from(new Set(flat)).sort((a, b) => a - b);
+
+  const done = revealed === 6;
+  const distinctCount = Object.keys(tally).length;
+  const counts = Object.values(tally);
+  const isValid = done && distinctCount === 2 && counts.every(v => v === 3);
+
+  const verdict = () => {
+    if (!done) return null;
+    if (distinctCount !== 2) return E ? `${distinctCount} colors found (need 2)` : `색이 ${distinctCount}가지야 (2가지 필요)`;
+    if (!counts.every(v => v === 3)) return E ? `Not 3+3: ${counts.join("+")}` : `3+3이 안 돼: ${counts.join("+")}`;
+    return E ? "Exactly 2 colors × 3 each" : "딱 2가지 색 × 3개씩";
+  };
+
+  return (
+    <div style={{ padding: "10px 6px" }}>
+      {/* Case selector */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", flexWrap: "wrap", marginBottom: 8 }}>
+        {AUDIT_CASES.map((cs, i) => (
+          <button key={cs.id} onClick={() => reset(i)} style={{
+            padding: "5px 9px", borderRadius: 8, fontSize: 11, fontWeight: 700,
+            border: `1px solid ${i === caseIdx ? A : C.border}`,
+            background: i === caseIdx ? ABg : "#fff",
+            color: i === caseIdx ? A : C.dim, cursor: "pointer",
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>{E ? cs.label_en : cs.label_ko}</button>
+        ))}
+      </div>
+
+      {/* Bags row */}
+      <div style={{
+        display: "flex", gap: 8, justifyContent: "center",
+        marginBottom: 10, flexWrap: "wrap",
+      }}>
+        {cur.bags.map(([a, b], bi) => {
+          const slot0 = bi * 2, slot1 = bi * 2 + 1;
+          const r0 = revealed > slot0;
+          const r1 = revealed > slot1;
+          const isAuditing = revealed === slot0 || revealed === slot1 + 1 - 1;
+          return (
+            <div key={bi} style={{
+              background: "#fff7ed", border: `1px solid ${ABd}`, borderRadius: 12,
+              padding: "8px 10px", textAlign: "center", minWidth: 70,
+              boxShadow: (revealed > slot0 && revealed <= slot1 + 1) ? `0 0 14px ${A}55` : "none",
+              transition: "box-shadow .3s",
+            }}>
+              <div style={{ display: "flex", gap: 5, justifyContent: "center", marginBottom: 4 }}>
+                <div style={{
+                  transform: r0 ? "scale(1)" : "scale(0.7)",
+                  opacity: r0 ? 1 : 0.25,
+                  transition: "all .3s ease",
+                }}>
+                  <Candy color={a} size={24} />
+                </div>
+                <div style={{
+                  transform: r1 ? "scale(1)" : "scale(0.7)",
+                  opacity: r1 ? 1 : 0.25,
+                  transition: "all .3s ease",
+                }}>
+                  <Candy color={b} size={24} />
+                </div>
+              </div>
+              <div style={{
+                fontSize: 10, fontWeight: 700, color: A,
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                ({a},{b})
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Tally panel */}
+      <div style={{
+        background: "#1e293b", borderRadius: 10, padding: "8px 10px",
+        marginBottom: 8, color: "#e2e8f0",
+        fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
+      }}>
+        <div style={{ color: "#94a3b8", fontSize: 11, marginBottom: 4 }}>
+          {t(E, "Audit", "감사")}: {revealed}/6 {t(E, "candies revealed", "사탕 공개")}
+        </div>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+          {allDistinct.map(c => {
+            const v = tally[c] || 0;
+            return (
+              <span key={c} style={{
+                display: "inline-flex", alignItems: "center", gap: 4,
+                opacity: v > 0 ? 1 : 0.3,
+                transition: "opacity .25s",
+              }}>
+                <Candy color={c} size={18} />
+                <span style={{ color: CC[c], fontWeight: 700 }}>×{v}</span>
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Verdict */}
+      {done && (
+        <div style={{
+          background: isValid ? "#ecfdf5" : "#fee2e2",
+          border: `1px solid ${isValid ? "#6ee7b7" : "#fca5a5"}`,
+          borderRadius: 10, padding: "8px 10px", marginBottom: 8,
+          textAlign: "center",
+          animation: "tricksAuditPop .35s ease",
+        }}>
+          <style>{`@keyframes tricksAuditPop { 0% { transform: scale(0.85); opacity: 0; } 60% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }`}</style>
+          <div style={{ fontSize: 13, fontWeight: 700, color: isValid ? "#059669" : "#dc2626" }}>
+            {isValid ? "✅" : "❌"} {verdict()}
+          </div>
+        </div>
+      )}
+
+      {/* Controls */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
+        <button onClick={stepOne} disabled={done || playing} style={{
+          padding: "7px 16px", borderRadius: 10, fontSize: 12, fontWeight: 700,
+          border: "none", cursor: (done || playing) ? "default" : "pointer",
+          color: "#fff", opacity: (done || playing) ? 0.4 : 1,
+          background: `linear-gradient(135deg,#ea580c,${A})`,
+          boxShadow: "0 3px 10px rgba(249,115,22,.3)",
+        }}>▶ {t(E, "Reveal next", "다음 공개")}</button>
+        <button onClick={auto} style={{
+          padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
+          border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+        }}>{playing ? "⏸" : "⏭"} {t(E, playing ? "Pause" : "Auto", playing ? "정지" : "자동")}</button>
+        <button onClick={() => reset()} style={{
+          padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
+          border: `1px solid ${C.border}`, background: "#fff", color: C.dim, cursor: "pointer",
+        }}>↺ {t(E, "Reset", "초기화")}</button>
+      </div>
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
    TricksFormulaTrace — Step-by-step formula trace
    ═══════════════════════════════════════════════════════════════ */
 export function TricksFormulaTrace({ E }) {

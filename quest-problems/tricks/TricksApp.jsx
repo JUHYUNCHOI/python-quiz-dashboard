@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { PackTypeClassifier, PackPickerSim, ColorPairCounter, TricksFormulaTrace } from "./components";
+import { PackTypeClassifier, PackPickerSim, ColorPairCounter, TricksFormulaTrace, DeepAuditSim } from "./components";
 import { makeTricksCh1, makeTricksCh2, makeTricksCh3 } from "./chapters";
 
 const A = "#f97316";
@@ -89,6 +89,7 @@ export default function TricksApp(props = {}) {
     if (step.type === "packPickerSim") return <PackPickerSim E={E} />;
     if (step.type === "colorPairCounter") return <ColorPairCounter E={E} />;
     if (step.type === "formulaTrace") return <TricksFormulaTrace E={E} />;
+    if (step.type === "deepAudit") return <DeepAuditSim E={E} />;
     return null;
   };
 
@@ -101,6 +102,7 @@ export default function TricksApp(props = {}) {
     if (s.type === "packPickerSim") return <PackPickerSim E={E} />;
     if (s.type === "colorPairCounter") return <ColorPairCounter E={E} />;
     if (s.type === "formulaTrace") return <TricksFormulaTrace E={E} />;
+    if (s.type === "deepAudit") return <DeepAuditSim E={E} />;
     return null;
   };
 
