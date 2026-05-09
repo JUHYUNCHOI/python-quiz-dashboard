@@ -97,7 +97,14 @@ export function makeRevegCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Interactive sim — click pastures, watch violations live
+    {
+      type: "sim",
+      narr: t(E,
+        "5 pastures, 5 cow constraints. Click a pasture to cycle its grass type 1→2→3→4. Red edges = same color on both ends = violation. Aim for the lexicographically smallest valid string, then press 'Greedy auto' to compare.",
+        "목초지 5 개, 소 제약 5 개. 목초지를 클릭해서 잔디 종류를 1→2→3→4 로 순환. 빨간 간선 = 양 끝 같은 색 = 위반. 사전순 가장 작은 유효 문자열을 직접 만들어보고 '그리디 자동' 으로 비교."),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -116,7 +123,7 @@ export function makeRevegCh1(E) {
         "Greedy assigns the smallest available color. With no constraints, that's 1.",
         "그리디는 가장 작은 사용 가능한 색을 배정해요. 제약이 없으면 1이에요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

@@ -1,8 +1,152 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ─────────────────────────────────────────────────────────
+   RevegSim — interactive grass-assignment playground
+   N = 5 pastures, fixed M = 5 constraint pairs.
+   • Click a pasture to cycle through colors 0(blank) → 1 → 2 → 3 → 4 → 0
+   • Violated constraints highlight in red live
+   • "Greedy 자동" button = run the same algorithm SOLUTION_CODE uses
+   • "초기화" = clear all colors
+   Match theme: orange A = #f97316, 4 grass-type palette.
+   ───────────────────────────────────────────────────────── */
+const GRASS_COLORS = {
+  0: { bg: "#f3f4f6", fg: "#94a3b8", border: "#d1d5db" },           // empty
+  1: { bg: "#bbf7d0", fg: "#14532d", border: "#16a34a" },           // green
+  2: { bg: "#fde68a", fg: "#78350f", border: "#d97706" },           // yellow
+  3: { bg: "#fecaca", fg: "#7f1d1d", border: "#dc2626" },           // red
+  4: { bg: "#bfdbfe", fg: "#1e3a8a", border: "#2563eb" },           // blue
+};
+
+// 5 pastures laid out on a pentagon. Constraints (edges) form a small graph
+// with an interesting greedy answer: 12121.
+const SIM_N = 5;
+const SIM_EDGES = [[1,2],[2,3],[3,4],[4,5],[1,3]]; // 1-2 1-3 2-3 3-4 4-5
+const SIM_POS = [
+  null,                       // index 0 unused
+  { x: 200, y:  40 },         // 1 — top
+  { x: 340, y: 140 },         // 2 — top-right
+  { x: 285, y: 290 },         // 3 — bot-right
+  { x: 115, y: 290 },         // 4 — bot-left
+  { x:  60, y: 140 },         // 5 — top-left
+];
+
+function greedyAssign() {
+  const adj = Array.from({ length: SIM_N + 1 }, () => new Set());
+  for (const [a, b] of SIM_EDGES) { adj[a].add(b); adj[b].add(a); }
+  const color = Array(SIM_N + 1).fill(0);
+  for (let i = 1; i <= SIM_N; i++) {
+    const used = new Set();
+    for (const j of adj[i]) if (color[j] !== 0) used.add(color[j]);
+    for (let c = 1; c <= 4; c++) if (!used.has(c)) { color[i] = c; break; }
+  }
+  return color;
+}
+
+export function RevegSim({ E }) {
+  const [color, setColor] = useState(() => Array(SIM_N + 1).fill(0));
+
+  const cycle = i => {
+    const u = [...color]; u[i] = (u[i] + 1) % 5; setColor(u);
+  };
+  const reset = () => setColor(Array(SIM_N + 1).fill(0));
+  const auto  = () => setColor(greedyAssign());
+
+  // Find violations + summary
+  const violations = SIM_EDGES.filter(([a, b]) => color[a] !== 0 && color[b] !== 0 && color[a] === color[b]);
+  const filled = color.slice(1).filter(c => c !== 0).length;
+  const allFilled = filled === SIM_N;
+  const valid = allFilled && violations.length === 0;
+  const assignString = color.slice(1).map(c => c === 0 ? "·" : c).join("");
+  const greedy = greedyAssign();
+  const greedyStr = greedy.slice(1).join("");
+  const isLexSmallest = valid && assignString === greedyStr;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#fff7ed", border: `1.5px solid ${A}`, borderRadius: 10, padding: "10px 14px", marginBottom: 10, fontSize: 12.5, color: "#9a3412", lineHeight: 1.55 }}>
+        <b>🎮 {t(E, "Try it", "직접 해봐")}:</b>{" "}
+        {t(E, "Click each pasture to cycle through grass types 1→2→3→4. Edges that connect SAME-color pastures glow red — that's a violation. Try to find the lexicographically smallest valid assignment (lowest digits first), then press \"Greedy auto\" to compare.",
+              "각 목초지를 클릭해서 잔디 종류 1→2→3→4 로 순환. 같은 색끼리 연결된 간선은 빨갛게 빛나요 — 그게 위반. 사전순 가장 작은 유효 배색을 직접 찾아본 뒤 \"그리디 자동\" 으로 비교해봐.")}
+      </div>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "flex-start" }}>
+        <svg width="400" height="340" viewBox="0 0 400 340" style={{ background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 10, flexShrink: 0, maxWidth: "100%", height: "auto" }}>
+          {/* edges first so nodes draw on top */}
+          {SIM_EDGES.map(([a, b], i) => {
+            const va = SIM_POS[a], vb = SIM_POS[b];
+            const bad = color[a] !== 0 && color[b] !== 0 && color[a] === color[b];
+            return (
+              <line key={i}
+                x1={va.x} y1={va.y} x2={vb.x} y2={vb.y}
+                stroke={bad ? "#dc2626" : "#94a3b8"}
+                strokeWidth={bad ? 4 : 2}
+                strokeDasharray={bad ? "0" : "6,4"}
+              />
+            );
+          })}
+          {Array.from({ length: SIM_N }, (_, k) => {
+            const i = k + 1;
+            const p = SIM_POS[i];
+            const c = color[i];
+            const sty = GRASS_COLORS[c];
+            return (
+              <g key={i} onClick={() => cycle(i)} style={{ cursor: "pointer" }}>
+                <circle cx={p.x} cy={p.y} r="32"
+                  fill={sty.bg} stroke={sty.border} strokeWidth="3" />
+                <text x={p.x} y={p.y - 4} textAnchor="middle" fontSize="11"
+                  fill={sty.fg} fontWeight="700">P{i}</text>
+                <text x={p.x} y={p.y + 13} textAnchor="middle" fontSize="16"
+                  fill={sty.fg} fontWeight="800">{c === 0 ? "·" : c}</text>
+              </g>
+            );
+          })}
+        </svg>
+
+        <div style={{ flex: 1, minWidth: 220, fontSize: 12.5 }}>
+          <div style={{ background: "#0f172a", color: "#f8fafc", padding: "10px 12px", borderRadius: 8, fontFamily: "'JetBrains Mono',monospace", marginBottom: 8 }}>
+            <div style={{ color: "#94a3b8", fontSize: 11, marginBottom: 4 }}>{t(E, "Current assignment", "현재 배색")}</div>
+            <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: 4, color: A }}>{assignString}</div>
+          </div>
+
+          <div style={{ background: violations.length ? "#fef2f2" : (allFilled ? "#dcfce7" : "#f1f5f9"),
+                        border: `1.5px solid ${violations.length ? "#fca5a5" : (allFilled ? "#86efac" : C.border)}`,
+                        borderRadius: 8, padding: "8px 10px", marginBottom: 6,
+                        color: violations.length ? "#7f1d1d" : (allFilled ? "#15803d" : C.dim),
+                        fontWeight: 700 }}>
+            {violations.length > 0
+              ? <>❌ {t(E, "Violations", "위반")}: {violations.map(([a,b]) => `P${a}–P${b}`).join(", ")}</>
+              : (allFilled
+                ? (isLexSmallest
+                    ? <>✅ {t(E, "Valid AND lexicographically smallest!", "유효하고 사전순 최소!")}</>
+                    : <>✅ {t(E, "Valid — but not the smallest. Greedy gives", "유효 — 그러나 최소는 아님. 그리디:")} <code style={{ color: A }}>{greedyStr}</code></>)
+                : <>⏳ {t(E, "Filled", "채움")}: {filled}/{SIM_N}</>)
+            }
+          </div>
+
+          <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8, padding: "8px 10px", fontSize: 11.5, color: C.dim, marginBottom: 8 }}>
+            <b style={{ color: C.text }}>{t(E, "Constraints", "제약")}:</b>{" "}
+            {SIM_EDGES.map(([a,b]) => `(${a},${b})`).join(" ")}
+            <div style={{ marginTop: 4 }}>{t(E, "Each pair → DIFFERENT grass types.", "각 쌍은 서로 다른 잔디 종류여야 함.")}</div>
+          </div>
+
+          <div style={{ display: "flex", gap: 6 }}>
+            <button onClick={auto} style={{ flex: 1, padding: "8px 0", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12.5, fontWeight: 700, background: A, color: "#fff" }}>
+              ▶ {t(E, "Greedy auto", "그리디 자동")}
+            </button>
+            <button onClick={reset} style={{ flex: 1, padding: "8px 0", borderRadius: 8, border: `1.5px solid ${C.border}`, cursor: "pointer", fontSize: 12.5, fontWeight: 700, background: "#fff", color: C.text }}>
+              ↺ {t(E, "Reset", "초기화")}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N, M = map(int, input().split())",
