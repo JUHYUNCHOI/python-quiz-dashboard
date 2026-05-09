@@ -432,6 +432,13 @@ export function makeReachCh3(E) {
           </div>
         </div>),
     },
+    // 3-3b: Deep audit — step the modified Dijkstra edge by edge under K
+    {
+      type: "dijkstraKAudit",
+      narr: t(E,
+        "Deep audit time! Pick K=6, 11, or 12, then click Next to walk through every edge the algorithm checks.\nWatch which damaged edges get blocked by `not(d < K and arrive <= K)` and which slip through.\nThis is exactly what the inner loop does — line by line.",
+        "심층 점검 시간! K = 6, 11, 12 중 골라요. 다음 버튼을 누를 때마다 알고리즘이 검사하는 도로 하나씩 따라가. 손상 도로 중 어떤 것이 `not(d < K and arrive <= K)` 조건에 걸려 차단되고 어떤 것이 통과하는지 봐. 코드의 안쪽 루프가 그대로 한 줄씩 펼쳐지는 거야!"),
+    },
     // 3-4: Why it works
     {
       type: "reveal",
