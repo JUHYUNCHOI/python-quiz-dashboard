@@ -80,7 +80,14 @@ export function makeMobileGameCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Sim — play levels one by one, watch total grow
+    {
+      type: "sim",
+      narr: t(E,
+        "Tap 'Play next level' to play levels one at a time.\nEach level's score is added to the running total.\nAfter all N levels, the total = sum of every score.",
+        "'다음 레벨' 을 눌러 레벨을 한 개씩 플레이.\n매 레벨의 점수가 총합에 더해져요.\n모든 N 레벨 후, 총합 = 모든 점수의 합."),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -99,7 +106,7 @@ export function makeMobileGameCh1(E) {
         "Correct! 10 + 20 + 30 = 60.",
         "맞아! 10 + 20 + 30 = 60이에요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

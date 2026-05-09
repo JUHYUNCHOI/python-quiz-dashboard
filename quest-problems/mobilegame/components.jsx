@@ -1,8 +1,182 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ═══════════════════════════════════════════════════════════════
+   MobileGameSim — play levels one by one, watch total grow
+   Bilingual via t(E, EN, KO)
+   ═══════════════════════════════════════════════════════════════ */
+const _MG_PRESETS = [
+  {
+    label: { en: "Tiny (3 levels)", ko: "초간단 (3 레벨)" },
+    scores: [10, 20, 30],
+  },
+  {
+    label: { en: "Mixed (5 levels)", ko: "혼합 (5 레벨)" },
+    scores: [7, 15, 3, 22, 8],
+  },
+  {
+    label: { en: "Big run (6 levels)", ko: "대형 (6 레벨)" },
+    scores: [50, 25, 100, 40, 15, 70],
+  },
+];
+
+const _MG_ICONS = ["🎮", "🕹️", "🎯", "⭐", "💎", "🏆", "🔥", "⚡"];
+
+export function MobileGameSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [step, setStep] = useState(0);
+  const scores = _MG_PRESETS[pi].scores;
+  const N = scores.length;
+
+  // Build running totals up through current step
+  const totals = [0];
+  for (let i = 0; i < N; i++) totals.push(totals[i] + scores[i]);
+  const curTotal = totals[step];
+  const maxTotal = totals[N];
+
+  const reset = (newPi) => { setPi(newPi); setStep(0); };
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_MG_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => reset(i)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer",
+          }}>
+            {E ? p.label.en : p.label.ko}
+          </button>
+        ))}
+      </div>
+
+      {/* total counter (big phone screen) */}
+      <div style={{
+        background: "linear-gradient(135deg,#1f2937,#111827)", border: `2px solid ${A}`,
+        borderRadius: 14, padding: "12px 16px", marginBottom: 12, textAlign: "center",
+        boxShadow: "0 4px 14px rgba(217,119,6,.18)",
+      }}>
+        <div style={{ fontSize: 10, fontWeight: 800, color: "#fcd34d", letterSpacing: 0.6 }}>
+          📱 {t(E, "TOTAL SCORE", "총 점수")}
+        </div>
+        <div style={{
+          fontSize: 32, fontWeight: 800, color: "#fbbf24",
+          fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.1, marginTop: 2,
+          transition: "color 0.2s",
+        }}>
+          {curTotal}
+        </div>
+        <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 2 }}>
+          {t(E, "Levels played", "플레이한 레벨")}: <b style={{ color: "#fbbf24" }}>{step}</b> / {N}
+        </div>
+      </div>
+
+      {/* level list */}
+      <div style={{
+        background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10,
+        padding: 8, marginBottom: 10,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", padding: "2px 6px 6px", letterSpacing: 0.4 }}>
+          {t(E, "LEVELS (in order)", "레벨 (순서대로)")}
+        </div>
+        {scores.map((s, i) => {
+          const played = i < step;
+          const isCurrent = i === step - 1;
+          return (
+            <div key={i} style={{
+              display: "flex", alignItems: "center", gap: 8,
+              padding: "5px 8px", borderRadius: 6, marginBottom: 2,
+              background: isCurrent ? "#fde68a" : (played ? "#fef3c7" : "transparent"),
+              opacity: played ? 1 : 0.5,
+              fontFamily: "'JetBrains Mono',monospace",
+              border: isCurrent ? `1px solid ${A}` : "1px solid transparent",
+            }}>
+              <span style={{ width: 24, color: C.dim, fontSize: 11 }}>#{i + 1}</span>
+              <span style={{ fontSize: 16 }}>{_MG_ICONS[i % _MG_ICONS.length]}</span>
+              <span style={{ minWidth: 80, fontSize: 12, color: C.dim }}>
+                {t(E, `Level ${i + 1}`, `레벨 ${i + 1}`)}
+              </span>
+              <span style={{ fontWeight: 800, color: played ? "#15803d" : C.dim, marginLeft: "auto" }}>
+                +{s}
+              </span>
+              {played && (
+                <span style={{
+                  fontSize: 10, fontWeight: 800, color: "#92400e",
+                  background: "#fcd34d", padding: "2px 6px", borderRadius: 4,
+                  fontFamily: "system-ui",
+                }}>
+                  {t(E, `total = ${totals[i + 1]}`, `합 = ${totals[i + 1]}`)}
+                </span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* progress bar */}
+      <div style={{ marginBottom: 10 }}>
+        <div style={{
+          background: "#fef3c7", border: `1px solid ${A}`, borderRadius: 8,
+          height: 12, overflow: "hidden", position: "relative",
+        }}>
+          <div style={{
+            width: `${maxTotal === 0 ? 0 : (curTotal / maxTotal) * 100}%`,
+            height: "100%",
+            background: `linear-gradient(90deg,${A},#fbbf24)`,
+            transition: "width 0.3s",
+          }} />
+        </div>
+        <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginTop: 3 }}>
+          {curTotal} / {maxTotal} {t(E, "points", "점")}
+        </div>
+      </div>
+
+      {/* controls */}
+      <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
+        <button onClick={() => setStep(0)} disabled={step === 0} style={{
+          padding: "6px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
+          background: "#fff", color: step === 0 ? C.dim : C.text,
+          fontSize: 12, fontWeight: 700, cursor: step === 0 ? "default" : "pointer",
+        }}>
+          ⏮ {t(E, "Reset", "처음")}
+        </button>
+        <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0} style={{
+          padding: "6px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
+          background: "#fff", color: step === 0 ? C.dim : C.text,
+          fontSize: 12, fontWeight: 700, cursor: step === 0 ? "default" : "pointer",
+        }}>
+          ◀ {t(E, "Back", "뒤로")}
+        </button>
+        <button onClick={() => setStep(Math.min(N, step + 1))} disabled={step >= N} style={{
+          padding: "6px 14px", borderRadius: 8, border: `1px solid ${A}`,
+          background: step >= N ? "#e5e7eb" : A,
+          color: step >= N ? C.dim : "#fff",
+          fontSize: 12, fontWeight: 800, cursor: step >= N ? "default" : "pointer",
+        }}>
+          {t(E, "Play next level", "다음 레벨 ▶")} ▶
+        </button>
+        <button onClick={() => setStep(N)} disabled={step >= N} style={{
+          padding: "6px 12px", borderRadius: 8, border: `1px solid ${A}`,
+          background: "#fff", color: step >= N ? C.dim : A,
+          fontSize: 12, fontWeight: 700, cursor: step >= N ? "default" : "pointer",
+        }}>
+          ⏭ {t(E, "Play all", "전부")}
+        </button>
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 10 }}>
+        {t(E,
+          "Play levels one by one. Each level adds its score to the total. After all N levels, total = sum(scores).",
+          "레벨을 하나씩 플레이. 매 레벨마다 점수가 총합에 더해져요. 모든 N 레벨 후, 총합 = 점수들의 합.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",
