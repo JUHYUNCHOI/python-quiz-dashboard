@@ -1,8 +1,169 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ─────────────────────────────────────────────────────────────
+   Swap Counter Sim — interactive walk-through of the greedy
+   algorithm. Walks target left→right; each cow whose current
+   position falls below the running max counts as one move-left.
+   ───────────────────────────────────────────────────────────── */
+export function Photoshoot2SwapSim({ E }) {
+  // Demo arrangement: current = [3,1,4,2], target = [1,2,3,4]
+  const target = [1, 2, 3, 4];
+  const current = [3, 1, 4, 2];
+  const posMap = {};
+  current.forEach((c, i) => { posMap[c] = i; });
+
+  // Step 0 = before any cow visited; step k = after target[k-1] processed.
+  const [step, setStep] = useState(0);
+
+  // Re-derive walk state up to current step
+  const walk = [];
+  let maxPos = -1;
+  let moves = 0;
+  for (let k = 0; k < target.length; k++) {
+    const cow = target[k];
+    const p = posMap[cow];
+    let needMove = false;
+    if (p < maxPos) { moves += 1; needMove = true; }
+    else { maxPos = p; }
+    walk.push({ cow, p, maxPosAfter: maxPos, movesAfter: moves, needMove });
+  }
+  const visited = step; // number of target cows processed
+  const movesShown = visited > 0 ? walk[visited - 1].movesAfter : 0;
+  const maxShown = visited > 0 ? walk[visited - 1].maxPosAfter : -1;
+  const lastEv = visited > 0 ? walk[visited - 1] : null;
+
+  const cowEmoji = "🐮";
+  const reset = () => setStep(0);
+  const nextStep = () => setStep(s => Math.min(target.length, s + 1));
+
+  // Mark which target cows have been processed; among current,
+  // highlight the cow just looked at, plus the running-max position.
+  const processedSet = new Set(target.slice(0, visited));
+  const focusCow = lastEv ? lastEv.cow : null;
+
+  const cellBox = (label, value, color) => (
+    <div style={{
+      background: "#fff", border: `1.5px solid ${color}`, borderRadius: 8,
+      padding: "6px 10px", textAlign: "center", minWidth: 64,
+    }}>
+      <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, letterSpacing: 0.4 }}>{label}</div>
+      <div style={{ fontSize: 18, fontWeight: 800, color }}>{value}</div>
+    </div>
+  );
+
+  const rowOfCows = (arr, opts) => (
+    <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+      {arr.map((cow, i) => {
+        const isFocus = opts.highlightCow === cow;
+        const isProcessed = opts.processed && opts.processed.has(cow);
+        const isMaxPos = opts.maxIdx === i;
+        const bg = isFocus ? "#fed7aa" : isProcessed ? "#fff7ed" : "#fff";
+        const border = isFocus ? A : isMaxPos ? "#7c3aed" : "#fdba74";
+        return (
+          <div key={i} style={{
+            width: 50, height: 56,
+            background: bg,
+            border: `2px solid ${border}`,
+            borderRadius: 8,
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            boxShadow: isFocus ? `0 0 0 3px ${A}33` : "none",
+            transition: "all 180ms ease",
+          }}>
+            <div style={{ fontSize: 18 }}>{cowEmoji}</div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: isFocus ? "#9a3412" : C.text }}>{cow}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <div style={{
+      background: "#fff7ed", border: `1.5px solid ${A}`, borderRadius: 12,
+      padding: 14, marginBottom: 10,
+    }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 10, textAlign: "center" }}>
+        🎬 {t(E, "Walk-through Sim", "동작 시뮬레이션")}
+      </div>
+
+      {/* Target row */}
+      <div style={{ marginBottom: 8 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4, textAlign: "center" }}>
+          {t(E, "TARGET (walk left → right)", "목표 순서 (왼쪽 → 오른쪽으로 훑기)")}
+        </div>
+        {rowOfCows(target, { processed: processedSet, highlightCow: focusCow })}
+      </div>
+
+      {/* Current row with maxPos marker */}
+      <div style={{ marginTop: 12, marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4, textAlign: "center" }}>
+          {t(E, "CURRENT (positions)", "현재 줄 (위치)")}
+        </div>
+        {rowOfCows(current, { highlightCow: focusCow, maxIdx: maxShown })}
+        <div style={{ display: "flex", gap: 4, justifyContent: "center", marginTop: 4 }}>
+          {current.map((_, i) => (
+            <div key={i} style={{ width: 50, textAlign: "center", fontSize: 10, color: C.dim }}>{i}</div>
+          ))}
+        </div>
+      </div>
+
+      {/* Counters */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10 }}>
+        {cellBox(t(E, "step", "스텝"), `${visited}/${target.length}`, "#7c3aed")}
+        {cellBox(t(E, "max pos seen", "본 위치 최대"), maxShown < 0 ? "−1" : maxShown, "#7c3aed")}
+        {cellBox(t(E, "moves needed", "필요한 이동"), movesShown, A)}
+      </div>
+
+      {/* Event line */}
+      <div style={{
+        background: "#fff", border: "1px dashed #fdba74", borderRadius: 8,
+        padding: "8px 10px", fontSize: 12, color: "#9a3412", minHeight: 36,
+        textAlign: "center", lineHeight: 1.5,
+      }}>
+        {!lastEv && t(E,
+          "Click NEXT to walk the target order one cow at a time.",
+          "다음 버튼을 눌러 목표 순서를 한 마리씩 훑어봐.")}
+        {lastEv && lastEv.needMove && t(E,
+          `Cow ${lastEv.cow} sits at pos ${lastEv.p}, but max-seen is ${walk[visited-2]?.maxPosAfter ?? -1}. It must move LEFT → moves +1.`,
+          `소 ${lastEv.cow}는 위치 ${lastEv.p}, 그런데 본 위치 최대는 ${walk[visited-2]?.maxPosAfter ?? -1}. 왼쪽으로 이동 필요 → 이동 +1.`)}
+        {lastEv && !lastEv.needMove && t(E,
+          `Cow ${lastEv.cow} sits at pos ${lastEv.p} ≥ max-seen. It is already in order — no move.`,
+          `소 ${lastEv.cow}는 위치 ${lastEv.p} ≥ 본 위치 최대. 이미 순서대로 — 이동 없음.`)}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 10 }}>
+        <button onClick={nextStep} disabled={visited >= target.length} style={{
+          background: visited >= target.length ? "#fed7aa" : A,
+          color: "#fff", border: "none", borderRadius: 8,
+          padding: "6px 16px", fontSize: 13, fontWeight: 800,
+          cursor: visited >= target.length ? "default" : "pointer",
+        }}>{t(E, "Next ▶", "다음 ▶")}</button>
+        <button onClick={reset} style={{
+          background: "#fff", color: A, border: `1.5px solid ${A}`, borderRadius: 8,
+          padding: "6px 16px", fontSize: 13, fontWeight: 800, cursor: "pointer",
+        }}>{t(E, "↺ Reset", "↺ 처음으로")}</button>
+      </div>
+
+      {visited >= target.length && (
+        <div style={{
+          marginTop: 10, padding: "8px 12px", background: "#dcfce7",
+          border: "1.5px solid #86efac", borderRadius: 8, textAlign: "center",
+          fontSize: 13, fontWeight: 700, color: "#15803d",
+        }}>
+          ✅ {t(E,
+            `Done! Total moves = ${movesShown}.`,
+            `완료! 총 이동 = ${movesShown}.`)}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",

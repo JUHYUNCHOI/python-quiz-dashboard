@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getPhotoshoot2Sections } from "./components";
+import { getPhotoshoot2Sections, Photoshoot2SwapSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -95,6 +95,22 @@ export function makePhoto2Ch1(E) {
               </div>
             </div>
           </div>
+        </div>),
+    },
+    // 1-1b: Interactive walk-through sim
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try the algorithm by hand. Walk the TARGET order left → right. Track the largest current-position you have seen. Each cow whose current-position drops below that max must move LEFT.",
+        "알고리즘을 직접 굴려봐. 목표 순서를 왼쪽→오른쪽으로 훑어. 본 현재-위치의 최댓값을 기억해. 그보다 작은 위치의 소는 왼쪽으로 이동해야 함."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, marginBottom: 10, textAlign: "center" }}>
+            {t(E,
+              "Example: current = [3, 1, 4, 2], target = [1, 2, 3, 4]. Press NEXT to step through.",
+              "예시: 현재 = [3, 1, 4, 2], 목표 = [1, 2, 3, 4]. 다음 버튼으로 한 단계씩 진행.")}
+          </div>
+          <Photoshoot2SwapSim E={E} />
         </div>),
     },
     // 1-2: Quiz
