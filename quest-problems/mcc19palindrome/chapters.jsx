@@ -138,6 +138,13 @@ export function makeMcc19PalCh1(E) {
         "1-9 가 9 개 회문. 그 다음으로 가장 작은 2 자리 회문은?"),
       answer: 11,
     },
+    // 1-4: Sim — drag K (base) and N (rank), watch the length-by-length count
+    {
+      type: "sim",
+      narr: t(E,
+        "Length L holds (K−1)·K^(⌈L/2⌉−1) palindromes. Drag K and N — the table builds the running total length by length until it covers N. Inside that length, decode the front ⌈L/2⌉ digits in base K and mirror. That length-walk IS the algorithm.",
+        "길이 L 의 회문 개수 = (K−1)·K^(⌈L/2⌉−1). K 와 N 을 움직여 봐 — 길이별로 누적이 쌓이다 N 을 덮는 순간이 답의 길이. 그 안에서 앞 ⌈L/2⌉ 자리를 K 진법으로 디코드, 거울 대칭으로 완성. 그 길이-걷기가 알고리즘이에요."),
+    },
   ];
 }
 

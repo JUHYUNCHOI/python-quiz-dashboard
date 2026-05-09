@@ -1,8 +1,177 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ============================================================
+   PalSim — drag K (base) and N (rank). Watch palindromes
+   enumerate length-by-length: count per length L equals
+   (K−1)·K^(⌈L/2⌉−1). When the running total covers N, that
+   length holds the answer; decode the front half digits in
+   base K, mirror, and print the full palindrome.
+   ============================================================ */
+function _baseKDigits(val, k) {
+  if (val === 0) return [0];
+  const out = [];
+  let v = val;
+  while (v > 0) { out.push(v % k); v = Math.floor(v / k); }
+  return out.reverse();
+}
+
+function _nthPalindromeBaseK(k, n) {
+  // 1..k-1 single digits
+  if (n <= k - 1) return _baseKDigits(n, k);
+  let m = n - (k - 1);
+  let length = 2;
+  while (true) {
+    const half = Math.floor((length + 1) / 2);
+    const count = (k - 1) * Math.pow(k, half - 1);
+    if (m <= count) {
+      m -= 1;
+      const digits = [];
+      for (let i = 0; i < half; i++) {
+        let d;
+        if (i === 0) d = Math.floor(m / Math.pow(k, half - 1)) + 1;
+        else d = Math.floor(m / Math.pow(k, half - 1 - i)) % k;
+        digits.push(d);
+      }
+      const tail = digits.slice(0, Math.floor(length / 2)).reverse();
+      return digits.concat(tail);
+    }
+    m -= count;
+    length += 1;
+  }
+}
+
+function _enumerateLengths(k, n) {
+  // Build per-length info up to and including the length holding n
+  const rows = [];
+  // Length 1
+  const len1 = k - 1;
+  rows.push({ length: 1, half: 1, count: len1, cumulative: len1 });
+  if (n <= len1) return rows;
+  let cum = len1;
+  let length = 2;
+  while (true) {
+    const half = Math.floor((length + 1) / 2);
+    const count = (k - 1) * Math.pow(k, half - 1);
+    cum += count;
+    rows.push({ length, half, count, cumulative: cum });
+    if (n <= cum) return rows;
+    length += 1;
+    if (length > 12) return rows; // safety
+  }
+}
+
+export function Mcc19PalSim({ E }) {
+  const [K, setK] = useState(3);
+  const [N, setN] = useState(8);
+
+  const rows = _enumerateLengths(K, N);
+  const hitRow = rows[rows.length - 1];
+  const prevCum = rows.length >= 2 ? rows[rows.length - 2].cumulative : 0;
+  const localRank = N - prevCum; // 1-indexed within hit length
+  const digits = _nthPalindromeBaseK(K, N);
+  const baseKStr = digits.join("");
+  let base10 = 0;
+  for (const d of digits) base10 = base10 * K + d;
+  const halfDigits = digits.slice(0, Math.ceil(digits.length / 2));
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 10, textAlign: "center" }}>
+          {t(E, "🔄 Palindrome Counter — drag K (base) and N (rank)",
+                "🔄 회문 카운터 — K (진법) 와 N (순위) 를 움직여 봐")}
+        </div>
+
+        {/* K and N sliders */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "0 4px" }}>
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+              <span style={{ fontSize: 12, color: C.dim }}>{t(E, "base K", "진법 K")}</span>
+              <span style={{ fontSize: 13, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono',monospace" }}>K = {K}</span>
+            </div>
+            <input type="range" min={2} max={10} step={1} value={K}
+              onChange={e => setK(Number(e.target.value))}
+              style={{ width: "100%", accentColor: A }} />
+          </div>
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+              <span style={{ fontSize: 12, color: C.dim }}>{t(E, "rank N", "순위 N")}</span>
+              <span style={{ fontSize: 13, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono',monospace" }}>N = {N}</span>
+            </div>
+            <input type="range" min={1} max={50} step={1} value={N}
+              onChange={e => setN(Number(e.target.value))}
+              style={{ width: "100%", accentColor: A }} />
+          </div>
+        </div>
+      </div>
+
+      {/* Per-length table — count = (K-1)*K^(half-1), cumulative builds up */}
+      <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 12, padding: 10, marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 6, textAlign: "center", letterSpacing: 0.5 }}>
+          {t(E, "PALINDROMES BY LENGTH", "길이별 회문 개수")}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          {rows.map((r, i) => {
+            const isHit = i === rows.length - 1;
+            return (
+              <div key={i} style={{
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "6px 10px", borderRadius: 8,
+                background: isHit ? "#ede9fe" : "#fafafa",
+                border: isHit ? `2px solid ${A}` : `1px solid ${C.border}`,
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
+              }}>
+                <span style={{ width: 70, color: C.text, fontWeight: 700 }}>
+                  L = {r.length}
+                </span>
+                <span style={{ flex: 1, color: C.dim }}>
+                  (K−1)·K^({r.half}−1) = <b style={{ color: isHit ? A : C.text }}>{r.count}</b>
+                </span>
+                <span style={{ color: isHit ? A : C.dim, fontWeight: isHit ? 800 : 500 }}>
+                  Σ = {r.cumulative}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Live answer card */}
+      <div style={{
+        background: "#ede9fe", border: `2px solid ${A}`,
+        borderRadius: 12, padding: "10px 14px",
+      }}>
+        <div style={{ fontSize: 12, color: "#5b21b6", marginBottom: 6 }}>
+          <b>N = {N}</b>{" · "}
+          {t(E, "lives in length L = ", "들어있는 길이 L = ")}
+          <b style={{ color: A }}>{hitRow.length}</b>
+          {" · "}
+          {t(E, "local rank = ", "그 안의 순위 = ")}
+          <b style={{ color: A }}>{localRank}</b>
+        </div>
+        <div style={{ fontSize: 12, color: "#5b21b6", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "front half digits (base K): ", "앞 절반 자릿수 (K 진법): ")}
+          <b style={{ color: A }}>[{halfDigits.join(", ")}]</b>
+        </div>
+        <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", fontFamily: "'JetBrains Mono',monospace", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+          <span>{t(E, "answer (base K):", "정답 (K 진법):")} <span style={{ fontSize: 18, color: A }}>{baseKStr}</span></span>
+          <span style={{ color: C.dim, fontWeight: 600 }}>{t(E, "= ", "= ")}{base10}<span style={{ fontSize: 11 }}>{t(E, " (base 10)", " (10진법)")}</span></span>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+        {t(E,
+          "Subtract counts length-by-length until N fits → decode the front half in base K → mirror to get the full palindrome.",
+          "길이별 개수를 빼가며 N 이 들어가는 길이를 찾고 → 앞 절반을 K 진법으로 디코드 → 거울 대칭으로 회문 완성.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "K, N = map(int, input().split())",
