@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc19RectSections } from "./components";
+import { getMcc19RectSections, ConsecutiveDiffScanSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -89,6 +89,18 @@ export function makeMcc19RectCh1(E) {
       explain: t(E,
         "Correct! 6-5 = 1 is the smallest difference among consecutive pairs.",
         "맞아! 6-5 = 1이 연속 쌍 중 가장 작은 차이에요."),
+    },
+    // 1-2b: Sim — deep audit of the consecutive scan
+    {
+      type: "reveal",
+      narr: t(E,
+        "Watch the scan crawl across the sorted list, comparing each pair and tracking the smallest diff so far.",
+        "정렬된 리스트를 한 칸씩 훑으면서 인접 쌍의 차이를 비교하고, 지금까지의 최솟값을 갱신해요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <ConsecutiveDiffScanSim E={E} />
+        </div>
+      ),
     },
     // 1-3: Input
     {

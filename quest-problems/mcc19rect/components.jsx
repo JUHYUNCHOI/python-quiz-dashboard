@@ -1,8 +1,183 @@
+import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ──────────────────────────────────────────────────────────────
+   Sim: ConsecutiveDiffScanSim
+   Shows a sliding window of size 2 walking across a sorted list,
+   computing each adjacent diff and tracking the running minimum.
+   ────────────────────────────────────────────────────────────── */
+const SIM_LIST = [1, 3, 5, 6, 10, 11];
+
+export function ConsecutiveDiffScanSim({ E }) {
+  const [i, setI] = useState(-1);
+  const [running, setRunning] = useState(false);
+  const timerRef = useRef(null);
+  const N = SIM_LIST.length;
+
+  const stop = () => {
+    setRunning(false);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  const reset = () => {
+    stop();
+    setI(-1);
+  };
+
+  useEffect(() => {
+    if (!running) return;
+    if (i >= N - 2) {
+      setRunning(false);
+      return;
+    }
+    timerRef.current = setTimeout(() => setI(i + 1), 850);
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, [i, running, N]);
+
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
+
+  const start = () => {
+    if (i >= N - 2) setI(-1);
+    setRunning(true);
+  };
+
+  const stepOnce = () => {
+    stop();
+    if (i >= N - 2) setI(0);
+    else setI(i + 1);
+  };
+
+  // Compute diffs scanned so far and current min
+  const diffs = [];
+  for (let k = 0; k <= i; k++) {
+    if (k + 1 < N) diffs.push({ k, d: SIM_LIST[k + 1] - SIM_LIST[k] });
+  }
+  const minSoFar = diffs.length ? Math.min(...diffs.map(x => x.d)) : null;
+  const minIdx = diffs.length ? diffs.findIndex(x => x.d === minSoFar) : -1;
+
+  const cellStyle = (idx) => {
+    const isLeft = idx === i;
+    const isRight = idx === i + 1;
+    const inWindow = isLeft || isRight;
+    return {
+      width: 48, height: 48,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      borderRadius: 8,
+      fontWeight: 800, fontSize: 16,
+      background: inWindow ? "#bbf7d0" : "#f0fdf4",
+      color: inWindow ? "#065f46" : "#166534",
+      border: inWindow ? `2px solid ${A}` : "1.5px solid #a7f3d0",
+      transition: "all 0.25s ease",
+      transform: inWindow ? "translateY(-2px)" : "none",
+      boxShadow: inWindow ? `0 4px 10px ${A}33` : "none",
+    };
+  };
+
+  const btn = (label, onClick, primary) => (
+    <button onClick={onClick} style={{
+      background: primary ? A : "#fff",
+      color: primary ? "#fff" : A,
+      border: `1.5px solid ${A}`,
+      borderRadius: 8,
+      padding: "6px 14px",
+      fontSize: 12, fontWeight: 800,
+      cursor: "pointer",
+    }}>{label}</button>
+  );
+
+  const curDiff = i >= 0 && i + 1 < N ? SIM_LIST[i + 1] - SIM_LIST[i] : null;
+
+  return (
+    <div style={{
+      background: "#ecfdf5", border: `1.5px solid ${A}`,
+      borderRadius: 12, padding: 14,
+    }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 10, letterSpacing: 0.3 }}>
+        🔬 {t(E, "Deep Audit — Consecutive Diff Scan", "정밀 점검 — 인접 차이 스캔")}
+      </div>
+
+      {/* Array cells */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 6, flexWrap: "wrap" }}>
+        {SIM_LIST.map((v, idx) => (
+          <div key={idx} style={cellStyle(idx)}>{v}</div>
+        ))}
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
+        {SIM_LIST.map((_, idx) => (
+          <div key={idx} style={{ width: 48, textAlign: "center", fontSize: 10, color: C.dim }}>
+            i={idx}
+          </div>
+        ))}
+      </div>
+
+      {/* Live readout */}
+      <div style={{
+        background: "#fff", borderRadius: 8, padding: "10px 12px",
+        border: "1px solid #a7f3d0", marginBottom: 10, fontSize: 13, color: C.text,
+        fontFamily: "JetBrains Mono, monospace",
+      }}>
+        <div style={{ marginBottom: 4 }}>
+          <span style={{ color: C.dim }}>i = </span>
+          <b style={{ color: A }}>{i < 0 ? "—" : i}</b>
+          {curDiff != null && (
+            <>
+              <span style={{ color: C.dim, marginLeft: 12 }}>
+                a[{i + 1}] − a[{i}] =
+              </span>{" "}
+              <b style={{ color: A }}>{SIM_LIST[i + 1]} − {SIM_LIST[i]} = {curDiff}</b>
+            </>
+          )}
+        </div>
+        <div>
+          <span style={{ color: C.dim }}>{t(E, "min_diff so far = ", "지금까지 최솟값 = ")}</span>
+          <b style={{ color: "#15803d" }}>{minSoFar == null ? "∞" : minSoFar}</b>
+          {i >= N - 2 && minSoFar != null && (
+            <span style={{ marginLeft: 10, color: A, fontWeight: 800 }}>
+              ✓ {t(E, "done", "완료")}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Diff trail */}
+      {diffs.length > 0 && (
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>
+            {t(E, "Diffs seen:", "지금까지의 차이:")}
+          </div>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {diffs.map((x, idx) => (
+              <span key={idx} style={{
+                fontFamily: "JetBrains Mono, monospace",
+                fontSize: 12, fontWeight: 700,
+                padding: "3px 8px", borderRadius: 6,
+                background: idx === minIdx ? "#15803d" : "#fff",
+                color: idx === minIdx ? "#fff" : "#166534",
+                border: idx === minIdx ? "1.5px solid #15803d" : "1px solid #a7f3d0",
+              }}>{x.d}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+        {!running
+          ? btn(i >= N - 2 ? t(E, "▶ Replay", "▶ 다시") : t(E, "▶ Play", "▶ 재생"), start, true)
+          : btn(t(E, "■ Stop", "■ 정지"), stop, true)}
+        {btn(t(E, "Step", "한 칸"), stepOnce, false)}
+        {btn(t(E, "Reset", "처음으로"), reset, false)}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",
