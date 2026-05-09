@@ -134,6 +134,13 @@ export function makeTrainsCh1(E) {
         "나열된 방향을 세어 봐요: 상, 하, 좌, 우."),
       answer: 4,
     },
+    // 1-4: Audit sim — build a path on the grid, audit cost vs. Dijkstra optimum
+    {
+      type: "auditSim",
+      narr: t(E,
+        "Build your own train path A→B on a small grid. Live: cost is summed and compared against Dijkstra's minimum. Many valid paths exist — only the lowest-cost one wins.",
+        "작은 격자에서 직접 A→B 철도 경로를 놓아 봐요. 비용이 합산되고 다익스트라의 최솟값과 비교돼요. 유효한 경로는 많지만, 비용이 최소인 경로만 정답이에요."),
+    },
   ];
 }
 
