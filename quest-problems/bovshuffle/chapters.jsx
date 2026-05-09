@@ -1,5 +1,130 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getBovShuffleSections } from "./components";
+
+/* ────────────────────────────────────────────────────────────────
+   Interactive sim: step the shuffle round-by-round
+   shuffle (1-indexed) = [3,1,4,5,2]
+   meaning cow at position i moves to position shuffle[i]
+   Cows labeled A..E start at positions 1..5.
+   Click "Apply shuffle" to advance one round; "Reset" to start over.
+   ──────────────────────────────────────────────────────────────── */
+function PermShuffleSim({ E }) {
+  // shuffle in 1-indexed form for display friendliness; store 0-indexed internally
+  const SHUFFLE_1 = [3, 1, 4, 5, 2];
+  const N = SHUFFLE_1.length;
+  const SHUFFLE = SHUFFLE_1.map(s => s - 1);
+  const INITIAL = ["A", "B", "C", "D", "E"];
+
+  const [round, setRound] = useState(0);
+  const [lineup, setLineup] = useState(INITIAL);
+
+  const applyOnce = () => {
+    const next = new Array(N).fill(null);
+    for (let i = 0; i < N; i++) next[SHUFFLE[i]] = lineup[i];
+    setLineup(next);
+    setRound(r => r + 1);
+  };
+  const reset = () => { setLineup(INITIAL); setRound(0); };
+
+  const cellBase = {
+    width: 44, height: 44, display: "inline-flex",
+    alignItems: "center", justifyContent: "center",
+    fontFamily: "JetBrains Mono, monospace", fontWeight: 800,
+    fontSize: 18, border: "1.5px solid #fdba74", borderRadius: 8,
+    background: "#fff7ed", color: "#9a3412",
+  };
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{
+        background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10,
+        padding: "10px 14px", marginBottom: 12, textAlign: "center",
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+          🧪 {t(E, "Interactive Sim", "직접 해보기")}
+        </div>
+        <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+          {t(E,
+            "Watch the shuffle act. The cow at position i jumps to shuffle[i]. Click 'Apply shuffle' to advance one round.",
+            "셔플이 어떻게 움직이는지 봐요. 위치 i 의 소가 shuffle[i] 위치로 이동해요. 'Apply shuffle' 을 눌러 한 라운드씩 진행해요.")}
+        </div>
+      </div>
+
+      {/* shuffle permutation row */}
+      <div style={{
+        display: "flex", justifyContent: "center", gap: 6,
+        marginBottom: 6, fontSize: 12, color: C.dim,
+      }}>
+        <span style={{ fontWeight: 700, color: "#7c3aed" }}>
+          shuffle = [{SHUFFLE_1.join(", ")}]
+        </span>
+        <span>·</span>
+        <span>{t(E, "1-indexed", "1-인덱스")}</span>
+      </div>
+
+      <table style={{ borderCollapse: "separate", borderSpacing: 6, margin: "0 auto" }}>
+        <tbody>
+          <tr>
+            <td style={{ fontSize: 11, color: C.dim, paddingRight: 6, textAlign: "right" }}>
+              {t(E, "position", "위치")}
+            </td>
+            {INITIAL.map((_, i) => (
+              <td key={`p-${i}`} style={{ textAlign: "center", fontSize: 12, color: C.dim, fontWeight: 600 }}>
+                {i + 1}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <td style={{ fontSize: 11, color: "#f97316", paddingRight: 6, textAlign: "right", fontWeight: 700 }}>
+              {t(E, "🐄 cow", "🐄 소")}
+            </td>
+            {lineup.map((c, i) => (
+              <td key={`c-${i}`}>
+                <div style={cellBase}>{c == null ? "·" : c}</div>
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+
+      <div style={{
+        display: "flex", justifyContent: "center", alignItems: "center",
+        gap: 10, marginTop: 14, flexWrap: "wrap",
+      }}>
+        <span style={{ fontSize: 13, fontWeight: 700, color: "#9a3412" }}>
+          {t(E, "Rounds applied", "적용한 라운드")}: {round}
+        </span>
+        <button
+          onClick={applyOnce}
+          style={{
+            background: "#f97316", color: "#fff", border: "none",
+            borderRadius: 8, padding: "7px 14px", fontWeight: 800,
+            fontSize: 13, cursor: "pointer",
+          }}>
+          ▶ {t(E, "Apply shuffle", "셔플 적용")}
+        </button>
+        <button
+          onClick={reset}
+          style={{
+            background: "#fff", color: "#f97316", border: "1.5px solid #f97316",
+            borderRadius: 8, padding: "6px 12px", fontWeight: 800,
+            fontSize: 13, cursor: "pointer",
+          }}>
+          ↺ {t(E, "Reset", "초기화")}
+        </button>
+      </div>
+
+      <div style={{
+        marginTop: 14, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.55,
+      }}>
+        {t(E,
+          "After 3 rounds, this is the lineup the problem GIVES you. To recover the original (round 0), apply the inverse shuffle 3 times.",
+          "3 라운드가 지난 모습이 문제에서 주어지는 줄이에요. 원래 줄(라운드 0)로 되돌리려면 역셔플을 3 번 적용해요.")}
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -103,7 +228,15 @@ export function makeShuffleCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: quiz
+    // 1-2: Interactive sim — step the shuffle round-by-round
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before reading code, see the shuffle in motion. Click 'Apply shuffle' a few times — watch which cows land where, and notice how the lineup at round 3 is what the problem gives you.",
+        "코드를 읽기 전에 셔플이 움직이는 모습을 봐요. 'Apply shuffle' 을 몇 번 눌러서 어느 소가 어디로 가는지, 라운드 3 의 모습이 문제에서 주는 줄과 같다는 걸 확인해요."),
+      content: <PermShuffleSim E={E} />,
+    },
+    // 1-3: quiz
     {
       type: "quiz",
       narr: t(E,
@@ -121,7 +254,7 @@ export function makeShuffleCh1(E) {
         "The problem states the shuffle is applied exactly 3 times. So we undo it by applying the inverse 3 times.",
         "문제에서 셔플을 정확히 3번 적용한다고 해요. 그래서 역순열을 3번 적용해서 되돌려."),
     },
-    // 1-3: input
+    // 1-4: input
     {
       type: "input",
       narr: t(E,
