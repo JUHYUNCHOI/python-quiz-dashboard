@@ -1,5 +1,123 @@
+import { Fragment, useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getMcc15EqSections } from "./components";
+
+/* ================================================================
+   Mini sim: try all 16 operator pairs on (a, b, c) vs target T
+   — bilingual (E), theme-matched (orange #d97706)
+   ================================================================ */
+function OpsGridSim({ E }) {
+  const A = "#d97706";
+  const ops = ["+", "-", "*", "/"];
+  const [a, setA] = useState(2);
+  const [b, setB] = useState(3);
+  const [c, setC] = useState(4);
+  const [target, setTarget] = useState(10);
+  const [pick, setPick] = useState({ op1: "+", op2: "*" });
+
+  const compute = (op1, op2) => {
+    try {
+      // eslint-disable-next-line no-eval
+      const v = eval(`${a}${op1}${b}${op2}${c}`);
+      if (!isFinite(v)) return null;
+      return v;
+    } catch { return null; }
+  };
+
+  const matches = (op1, op2) => {
+    const v = compute(op1, op2);
+    return v !== null && Math.abs(v - target) < 1e-9 && Number.isInteger(v);
+  };
+
+  const cur = compute(pick.op1, pick.op2);
+  const hit = cur !== null && Math.abs(cur - target) < 1e-9 && Number.isInteger(cur);
+  const hitCount = ops.reduce((s, o1) => s + ops.filter(o2 => matches(o1, o2)).length, 0);
+
+  const numStyle = {
+    width: 48, padding: "4px 6px", fontSize: 13, fontWeight: 700,
+    border: `1.5px solid ${A}`, borderRadius: 6, textAlign: "center", color: A,
+    background: "#fff",
+  };
+
+  return (
+    <div style={{
+      background: "#fff7ed", border: `1.5px dashed ${A}`, borderRadius: 12,
+      padding: 12, marginBottom: 10,
+    }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 8, textAlign: "center", letterSpacing: 0.3 }}>
+        🔬 {t(E, "Sim — try all 16 operator pairs", "시뮬 — 16 가지 연산자 쌍 시도")}
+      </div>
+
+      {/* Inputs row */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", alignItems: "center", marginBottom: 10, fontSize: 13, color: C.text }}>
+        <input type="number" value={a} onChange={e => setA(Number(e.target.value) || 0)} style={numStyle} />
+        <span style={{ color: A, fontWeight: 800 }}>op</span>
+        <input type="number" value={b} onChange={e => setB(Number(e.target.value) || 0)} style={numStyle} />
+        <span style={{ color: A, fontWeight: 800 }}>op</span>
+        <input type="number" value={c} onChange={e => setC(Number(e.target.value) || 0)} style={numStyle} />
+        <span style={{ color: C.dim, fontWeight: 700, margin: "0 2px" }}>=</span>
+        <span style={{ fontSize: 11, color: "#92400e", fontWeight: 700 }}>{t(E, "target", "목표")} T</span>
+        <input type="number" value={target} onChange={e => setTarget(Number(e.target.value) || 0)} style={numStyle} />
+      </div>
+
+      {/* 4x4 grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "auto repeat(4, 1fr)", gap: 3, fontSize: 11, marginBottom: 8 }}>
+        <div />
+        {ops.map(o => (
+          <div key={`h-${o}`} style={{ textAlign: "center", fontWeight: 800, color: A, padding: "2px 0" }}>{o}</div>
+        ))}
+        {ops.map(op1 => (
+          <Fragment key={`row-${op1}`}>
+            <div style={{ textAlign: "center", fontWeight: 800, color: A, padding: "2px 0" }}>{op1}</div>
+            {ops.map(op2 => {
+              const v = compute(op1, op2);
+              const ok = matches(op1, op2);
+              const sel = pick.op1 === op1 && pick.op2 === op2;
+              return (
+                <button
+                  key={`${op1}-${op2}`}
+                  onClick={() => setPick({ op1, op2 })}
+                  style={{
+                    padding: "4px 2px",
+                    border: sel ? `2px solid ${A}` : `1px solid ${ok ? "#15803d" : "#fcd34d"}`,
+                    background: ok ? "#dcfce7" : "#fff",
+                    color: ok ? "#15803d" : C.text,
+                    borderRadius: 6,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    fontSize: 11,
+                    lineHeight: 1.2,
+                  }}
+                  title={`${a}${op1}${b}${op2}${c}`}
+                >
+                  {v === null ? "·" : (Number.isInteger(v) ? v : v.toFixed(2))}
+                </button>
+              );
+            })}
+          </Fragment>
+        ))}
+      </div>
+
+      {/* Selected expression */}
+      <div style={{
+        background: hit ? "#dcfce7" : "#fff",
+        border: `1.5px solid ${hit ? "#15803d" : "#fcd34d"}`,
+        borderRadius: 8, padding: "6px 10px", textAlign: "center",
+        fontFamily: "JetBrains Mono, monospace", fontSize: 13, color: hit ? "#15803d" : C.text,
+        marginBottom: 6, fontWeight: 700,
+      }}>
+        {a}{pick.op1}{b}{pick.op2}{c} = {cur === null ? "?" : (Number.isInteger(cur) ? cur : cur.toFixed(3))}
+        {hit && <span style={{ marginLeft: 6 }}>✅ = T</span>}
+      </div>
+
+      <div style={{ fontSize: 11, color: "#92400e", textAlign: "center", lineHeight: 1.5 }}>
+        {t(E,
+          `Green cells hit T=${target}. Total matches: ${hitCount} / 16. Click any cell to inspect it.`,
+          `초록 칸이 T=${target}에 맞는 식. 정답 ${hitCount} / 16 개. 칸 눌러서 식 확인.`)}
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -94,6 +212,8 @@ export function makeMcc15EqCh1(E) {
               </div>
             </div>
           </div>
+
+          <OpsGridSim E={E} />
         </div>),
     },
     // 1-2: Quiz
