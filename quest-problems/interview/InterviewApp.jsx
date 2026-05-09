@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { InterviewProgressiveCode, downloadInterviewPDF, getInterviewSections, InterviewSim, InterviewRunner } from "./components";
+import { InterviewProgressiveCode, downloadInterviewPDF, getInterviewSections, InterviewSim, InterviewRunner, InterviewHeapAudit } from "./components";
 import { makeInterviewCh1, makeInterviewCh2, makeInterviewCh3 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -95,6 +95,7 @@ export default function InterviewApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <InterviewProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     if (step.type === "sim") return <InterviewSim E={E} />;
+    if (step.type === "audit") return <InterviewHeapAudit E={E} />;
     if (step.type === "runner") return <InterviewRunner E={E} />;
     return null;
   };
@@ -106,6 +107,7 @@ export default function InterviewApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
     if (s.type === "progressive") return <InterviewProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     if (s.type === "sim") return <InterviewSim E={E} />;
+    if (s.type === "audit") return <InterviewHeapAudit E={E} />;
     if (s.type === "runner") return <InterviewRunner E={E} />;
     return null;
   };

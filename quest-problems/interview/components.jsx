@@ -96,6 +96,161 @@ export function InterviewSim({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   InterviewHeapAudit — deep-audit of heap state at each step,
+   with tied-minimum counters highlighted when Bessie arrives
+   ═══════════════════════════════════════════════════════════════ */
+function _heapTrace(N, K, times) {
+  // Build a trace of (heap_state, just_processed_cow, isBessieMoment)
+  // heap entries: { ft, cid }
+  const heap = [];
+  const trace = [];
+  for (let i = 0; i < K; i++) heap.push({ ft: times[i], cid: i });
+  const sortHeap = () => heap.sort((a, b) => a.ft - b.ft || a.cid - b.cid);
+  sortHeap();
+  trace.push({ phase: "init", cow: K - 1, heap: heap.map(h => ({ ...h })), note: "init" });
+
+  for (let i = K; i < N - 1; i++) {
+    sortHeap();
+    const popped = heap.shift();
+    const newFt = popped.ft + times[i];
+    heap.push({ ft: newFt, cid: popped.cid });
+    sortHeap();
+    trace.push({
+      phase: "process",
+      cow: i,
+      popped: { ...popped },
+      pushed: { ft: newFt, cid: popped.cid },
+      heap: heap.map(h => ({ ...h })),
+    });
+  }
+  // Bessie moment — don't pop; show tied minimums
+  sortHeap();
+  const minFt = heap.length > 0 ? heap[0].ft : 0;
+  trace.push({
+    phase: "bessie",
+    cow: N - 1,
+    heap: heap.map(h => ({ ...h })),
+    minFt,
+    tied: heap.filter(h => h.ft === minFt).map(h => h.cid),
+  });
+  return trace;
+}
+
+const _AUDIT_PRESET = { N: 5, K: 3, times: [4, 2, 3, 1, 5] };
+
+export function InterviewHeapAudit({ E }) {
+  const { N, K, times } = _AUDIT_PRESET;
+  const trace = _heapTrace(N, K, times);
+  const [si, setSi] = useState(0);
+  const cur = Math.min(si, trace.length - 1);
+  const step = trace[cur];
+  const isBessie = step.phase === "bessie";
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.dim, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+        N = {N}, K = {K}, times = [{times.join(", ")}]
+      </div>
+
+      <div style={{
+        background: isBessie ? "#fef3c7" : "#ecfdf5",
+        border: `1.5px solid ${isBessie ? "#f59e0b" : A}`,
+        borderRadius: 10, padding: "10px 12px", marginBottom: 10,
+      }}>
+        <div style={{ fontSize: 11, color: isBessie ? "#92400e" : "#065f46", fontWeight: 700, marginBottom: 4, letterSpacing: 0.3 }}>
+          {isBessie
+            ? t(E, `🐄 BESSIE ARRIVES (cow ${step.cow + 1})`, `🐄 BESSIE 도착 (소 ${step.cow + 1})`)
+            : step.phase === "init"
+              ? t(E, `📦 Initial heap (cows 1..${K} placed)`, `📦 초기 heap (소 1..${K} 배치 완료)`)
+              : t(E, `Step ${cur}: cow ${step.cow + 1} processed`, `${cur} 단계: 소 ${step.cow + 1} 처리`)}
+        </div>
+        <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+          {step.phase === "process" && (
+            <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>
+              pop ({step.popped.ft}, c{step.popped.cid + 1}) → push ({step.pushed.ft}, c{step.pushed.cid + 1})
+            </span>
+          )}
+          {isBessie && t(E,
+            `Min free time = ${step.minFt}. Bessie can take ANY counter with that exact free time.`,
+            `최소 free time = ${step.minFt}. Bessie 는 그 시간과 같은 카운터 중 어디든 가능.`)}
+          {step.phase === "init" && t(E,
+            "Each entry: (free_time, counter_id). Sorted by free_time.",
+            "각 항목: (free_time, counter_id). free_time 순 정렬.")}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 12 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 2 }}>
+          {t(E, "Heap contents (sorted by free_time)", "Heap 내용 (free_time 순 정렬)")}
+        </div>
+        {step.heap.map((h, idx) => {
+          const isMin = isBessie && h.ft === step.minFt;
+          const isTopElseStep = !isBessie && step.phase === "process" && idx === 0;
+          return (
+            <div key={`${h.cid}-${idx}`} style={{
+              display: "flex", alignItems: "center", gap: 10,
+              border: `1.5px solid ${isMin ? "#f59e0b" : (idx === 0 ? "#0891b2" : C.border)}`,
+              background: isMin ? "#fef3c7" : (idx === 0 && !isBessie ? "#ecfeff" : "#fff"),
+              borderRadius: 8, padding: "6px 10px",
+            }}>
+              <div style={{
+                fontSize: 10, fontWeight: 700, color: idx === 0 ? "#0891b2" : C.dim,
+                minWidth: 30, fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                {idx === 0 ? "TOP" : `#${idx + 1}`}
+              </div>
+              <div style={{ flex: 1, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: C.text }}>
+                ({h.ft}, c{h.cid + 1})
+              </div>
+              {isMin && (
+                <div style={{ fontSize: 10, fontWeight: 700, color: "#92400e", background: "#fde68a", padding: "2px 8px", borderRadius: 6 }}>
+                  ✓ {t(E, "Bessie OK", "Bessie 가능")}
+                </div>
+              )}
+              {isTopElseStep && idx === 0 && (
+                <div style={{ fontSize: 10, fontWeight: 700, color: "#0891b2" }}>
+                  {t(E, "← popped this step", "← 이 단계에 pop")}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {isBessie && (
+        <div style={{
+          background: "#dcfce7", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 12px", marginBottom: 12,
+        }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>
+            {t(E, "📤 Output", "📤 출력")}
+          </div>
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#14532d" }}>
+            {step.tied.length}<br />
+            {step.tied.map(c => c + 1).sort((a, b) => a - b).join(" ")}
+          </div>
+        </div>
+      )}
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: cur === 0 ? "#b0b5c3" : A, cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+          {cur + 1} / {trace.length}
+        </span>
+        <button onClick={() => setSi(Math.min(trace.length - 1, cur + 1))} disabled={cur === trace.length - 1} style={{
+          background: cur === trace.length - 1 ? "#e5e7eb" : A, border: `1px solid ${cur === trace.length - 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: cur === trace.length - 1 ? "#b0b5c3" : "#fff", cursor: cur === trace.length - 1 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    InterviewRunner — student inputs N, K, times — live assignment
    ═══════════════════════════════════════════════════════════════ */
 export function InterviewRunner({ E }) {

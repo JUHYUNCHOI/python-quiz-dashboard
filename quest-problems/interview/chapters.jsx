@@ -287,6 +287,12 @@ export function makeInterviewCh2(E) {
         "Step through the assignment.\nN=5, K=2, times=[3,5,2,4,1].\nWatch how each cow goes to the earliest-free counter.", "배정 단계별로 따라가봐요. N=5, K=2, times=[3,5,2,4,1]. 각 소가 가장 먼저 빈 카운터로 가는 걸 봐요."),
     },
     {
+      type: "audit",
+      narr: t(E,
+        "Deep-audit the heap itself.\nN=5, K=3, times=[4,2,3,1,5]. Each row = one heap entry (free_time, counter_id), sorted by free_time.\nWhen Bessie arrives, every counter tied at the minimum is highlighted — those are her possible answers.",
+        "Heap 자체를 깊게 들여다봐요.\nN=5, K=3, times=[4,2,3,1,5]. 각 줄 = heap 항목 (free_time, counter_id), free_time 순.\nBessie 차례에, 최솟값과 동점인 카운터가 모두 하이라이트 — 그게 답."),
+    },
+    {
       type: "input",
       narr: t(E,
         "Walk the heap simulation yourself for N=6, K=3, times=[2,3,1,4,2,1].  Which counter ends up free first when Bessie arrives?",
