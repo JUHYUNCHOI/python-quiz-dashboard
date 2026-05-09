@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooin2Sections, MooinExplorer } from "./components";
+import { getMooin2Sections, MooinExplorer, MooinDeepAudit } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 export function makeMooin2Ch1(E) {
@@ -126,7 +126,16 @@ export function makeMooin2Ch1(E) {
         </div>),
     },
 
-    /* 1-3 — Explorer. */
+    /* 1-3 — Deep Audit: step through the sample one index at a time. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "How do we BUILD count, second_last, and D in one left-to-right pass? Step through a = [1, 2, 3, 4, 4, 4] and watch each table fill in.",
+        "count, second_last, D 를 한 번 왼→오 패스로 어떻게 만들지? a = [1, 2, 3, 4, 4, 4] 한 칸씩 밟으며 표가 채워지는 걸 봐요."),
+      content: (<MooinDeepAudit E={E} />),
+    },
+
+    /* 1-4 — Explorer. */
     {
       type: "reveal",
       narr: t(E,

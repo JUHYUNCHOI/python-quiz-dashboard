@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
 import { SampleInputAside } from "@/components/quest/SampleInputAside";
+import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
 const A = "#ea580c";
 
@@ -89,6 +90,168 @@ export function MooinExplorer({ E }) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   MooinDeepAudit — single-step trace through a = [1, 2, 3, 4, 4, 4].
+   Shows live count[], last_seen[], second_last[], and D[] after each
+   index — turning the dense Ch1 walkthrough into a button-driven
+   "see it happen" panel. Matches the Ch1 sample I/O and orange theme.
+   ════════════════════════════════════════════════════════════════════ */
+const M2_AUDIT_A = [1, 2, 3, 4, 4, 4];
+
+function buildAuditTrace(a) {
+  const N = a.length;
+  const trace = [];
+  // Step 0: initial state, before any index processed.
+  trace.push({
+    i: -1,
+    v: null,
+    count: {},
+    lastSeen: {},
+    secondLast: {},
+    D: [0],
+    note_en: "Before scanning: every table empty, D[0] = 0.",
+    note_ko: "스캔 전: 모든 표 비어 있고 D[0] = 0.",
+  });
+  const count = {};
+  const lastSeen = {};
+  const secondLast = {};
+  const seen = new Set();
+  const D = [0];
+  for (let i = 0; i < N; i++) {
+    const v = a[i];
+    count[v] = (count[v] ?? 0) + 1;
+    if (lastSeen[v] != null) secondLast[v] = lastSeen[v];
+    lastSeen[v] = i;
+    const wasNew = !seen.has(v);
+    if (wasNew) seen.add(v);
+    D.push(D[i] + (wasNew ? 1 : 0));
+    let note_en, note_ko;
+    if (count[v] === 1) {
+      note_en = `i=${i}: a[${i}] = ${v} is new. count[${v}] = 1, last_seen[${v}] = ${i}. D grows by 1 → ${D[i + 1]}.`;
+      note_ko = `i=${i}: a[${i}] = ${v} 처음 봄. count[${v}] = 1, last_seen[${v}] = ${i}. D 가 1 증가 → ${D[i + 1]}.`;
+    } else if (count[v] === 2) {
+      note_en = `i=${i}: a[${i}] = ${v} again. Old last_seen[${v}] = ${secondLast[v]} becomes second_last[${v}]. last_seen[${v}] = ${i}. D unchanged.`;
+      note_ko = `i=${i}: a[${i}] = ${v} 또 등장. 이전 last_seen[${v}] = ${secondLast[v]} 가 second_last[${v}] 가 됨. last_seen[${v}] = ${i}. D 그대로.`;
+    } else {
+      note_en = `i=${i}: a[${i}] = ${v} again (count = ${count[v]}). second_last[${v}] updates to ${secondLast[v]}, last_seen[${v}] = ${i}. D unchanged.`;
+      note_ko = `i=${i}: a[${i}] = ${v} 또 (count = ${count[v]}). second_last[${v}] 가 ${secondLast[v]} 로 갱신, last_seen[${v}] = ${i}. D 그대로.`;
+    }
+    trace.push({
+      i,
+      v,
+      count: { ...count },
+      lastSeen: { ...lastSeen },
+      secondLast: { ...secondLast },
+      D: [...D],
+      note_en,
+      note_ko,
+    });
+  }
+  return trace;
+}
+
+const M2_AUDIT_TRACE = buildAuditTrace(M2_AUDIT_A);
+
+function tableRow(label, dict, highlight) {
+  const keys = [1, 2, 3, 4];
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>
+      <div style={{ width: 90, color: "#9a3412", fontWeight: 700 }}>{label}</div>
+      {keys.map(k => {
+        const has = dict[k] != null;
+        const isHi = highlight === k;
+        return (
+          <div key={k} style={{
+            display: "flex", flexDirection: "column", alignItems: "center",
+            border: `1.5px solid ${isHi ? "#ea580c" : "#fdba74"}`,
+            background: isHi ? "#ffedd5" : "#fff",
+            borderRadius: 6, padding: "2px 6px", minWidth: 38,
+          }}>
+            <div style={{ fontSize: 10, color: "#9a3412" }}>{k}</div>
+            <div style={{ fontWeight: 700, color: has ? C.text : "#cbd5e1" }}>
+              {has ? String(dict[k]) : "·"}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export function MooinDeepAudit({ E }) {
+  const { idx, safe, setIdx, total } = useTraceStep(M2_AUDIT_TRACE.length);
+  const step = M2_AUDIT_TRACE[safe];
+  const note = E ? step.note_en : step.note_ko;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ textAlign: "center", marginBottom: 8 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#9a3412", letterSpacing: 0.3 }}>
+          🔬 {t(E, "Deep Audit — one pass through the sample", "딥 오딧 — 샘플 한 번 훑기")}
+        </div>
+        <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
+          {t(E, "Watch count, last_seen, second_last, and D fill in.", "count, last_seen, second_last, D 가 채워지는 걸 봐요.")}
+        </div>
+      </div>
+
+      {/* array with cursor */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 12 }}>
+        {M2_AUDIT_A.map((v, i) => {
+          const isCur = step.i === i;
+          const past = step.i >= 0 && i <= step.i;
+          return (
+            <div key={i} style={{
+              width: 36, height: 44, display: "flex", flexDirection: "column",
+              alignItems: "center", justifyContent: "center",
+              borderRadius: 8, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+              background: isCur ? "#ea580c" : past ? "#ffedd5" : "#fff",
+              color: isCur ? "#fff" : C.text,
+              border: `2px solid ${isCur ? "#ea580c" : past ? "#fdba74" : C.border}`,
+            }}>
+              <div style={{ fontSize: 9, opacity: 0.85 }}>i={i}</div>
+              <div style={{ fontSize: 14 }}>{v}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* state tables */}
+      <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: 10, marginBottom: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+        {tableRow(t(E, "count", "count"), step.count, step.v)}
+        {tableRow(t(E, "last_seen", "last_seen"), step.lastSeen, step.v)}
+        {tableRow(t(E, "second_last", "second_last"), step.secondLast, step.v)}
+      </div>
+
+      {/* D[] strip */}
+      <div style={{ background: "#fff", border: "1.5px solid #fdba74", borderRadius: 10, padding: "8px 10px", marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 4 }}>
+          D[k] — {t(E, "distinct values in a[0..k-1]", "a[0..k-1] 의 서로 다른 값 수")}
+        </div>
+        <div style={{ display: "flex", gap: 4, flexWrap: "wrap", fontFamily: "'JetBrains Mono',monospace" }}>
+          {step.D.map((d, k) => (
+            <div key={k} style={{
+              display: "flex", flexDirection: "column", alignItems: "center",
+              border: `1.5px solid ${k === step.D.length - 1 && step.i >= 0 ? "#ea580c" : "#fdba74"}`,
+              background: k === step.D.length - 1 && step.i >= 0 ? "#ffedd5" : "#fff",
+              borderRadius: 6, padding: "2px 6px", minWidth: 36,
+            }}>
+              <div style={{ fontSize: 9, color: "#9a3412" }}>k={k}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{d}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* narration */}
+      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, lineHeight: 1.6, marginBottom: 10, minHeight: 44 }}>
+        {note}
+      </div>
+
+      <SimNav idx={idx} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
     </div>
   );
 }
