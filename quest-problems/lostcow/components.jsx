@@ -144,6 +144,98 @@ export function LostCowSim({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   LostCowDoublingSim — feel the +1, -2, +4, -8 doubling pattern
+   ═══════════════════════════════════════════════════════════════ */
+export function LostCowDoublingSim({ E }) {
+  const [n, setN] = useState(1);
+  const maxN = 10;
+
+  // legs: leg i has size 2^i and direction (i even → +, odd → −)
+  const legs = Array.from({ length: n }, (_, i) => ({
+    idx: i,
+    size: Math.pow(2, i),
+    dir: i % 2 === 0 ? 1 : -1,
+  }));
+  const total = legs.reduce((s, l) => s + l.size, 0);
+  const maxSize = Math.pow(2, maxN - 1);
+  const W = 360;
+  const barH = 16;
+  const gap = 4;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ textAlign: "center", marginBottom: 10 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: A, marginBottom: 2 }}>
+          {t(E, "🔢 The Doubling Pattern", "🔢 두 배씩 커지는 패턴")}
+        </div>
+        <div style={{ fontSize: 11, color: C.dim }}>
+          {t(E, "Each leg is twice as long as the one before. Watch the total explode.",
+                "다리마다 길이가 두 배. 합계가 폭발적으로 커지는 걸 봐요.")}
+        </div>
+      </div>
+
+      {/* bars */}
+      <svg width={W} height={n * (barH + gap) + 4} style={{ display: "block", margin: "0 auto" }}>
+        {legs.map((leg) => {
+          const w = (leg.size / maxSize) * (W - 70);
+          const y0 = leg.idx * (barH + gap) + 2;
+          const fill = leg.dir > 0 ? "#dc2626" : "#0891b2";
+          const sign = leg.dir > 0 ? "+" : "−";
+          return (
+            <g key={leg.idx}>
+              <text x={0} y={y0 + barH - 4} fontSize="10" fill={C.dim} fontWeight="700"
+                    fontFamily="'JetBrains Mono',monospace">
+                {`#${leg.idx + 1}`}
+              </text>
+              <rect x={28} y={y0} width={Math.max(w, 4)} height={barH} rx="3" fill={fill} opacity="0.85" />
+              <text x={28 + Math.max(w, 4) + 6} y={y0 + barH - 4} fontSize="10"
+                    fill={fill} fontWeight="800" fontFamily="'JetBrains Mono',monospace">
+                {sign}{leg.size}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+
+      {/* totals readout */}
+      <div style={{
+        background: "#fef2f2", border: `1.5px solid #fca5a5`, borderRadius: 10,
+        padding: "8px 12px", marginTop: 10, marginBottom: 10,
+        display: "flex", justifyContent: "space-around", alignItems: "center",
+        fontSize: 12, color: A, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+      }}>
+        <span>{t(E, `Legs: ${n}`, `다리: ${n}개`)}</span>
+        <span>{t(E, `Last leg: ${legs[n - 1]?.size ?? 0}`, `마지막 다리: ${legs[n - 1]?.size ?? 0}`)}</span>
+        <span>{t(E, `Total walked: ${total}`, `총 거리: ${total}`)}</span>
+      </div>
+
+      {/* nav */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setN(Math.max(1, n - 1))} disabled={n === 1} style={{
+          background: n === 1 ? "#e5e7eb" : "#fff", border: `1px solid ${n === 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: n === 1 ? "#b0b5c3" : A, cursor: n === 1 ? "default" : "pointer",
+        }}>{t(E, "− leg", "− 다리")}</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+          {n} / {maxN}
+        </span>
+        <button onClick={() => setN(Math.min(maxN, n + 1))} disabled={n === maxN} style={{
+          background: n === maxN ? "#e5e7eb" : A, border: `1px solid ${n === maxN ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: n === maxN ? "#b0b5c3" : "#fff", cursor: n === maxN ? "default" : "pointer",
+        }}>{t(E, "+ leg", "+ 다리")}</button>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+        {t(E,
+          "After 10 legs FJ has already walked 1023 steps — but he could be 512 away from x. The doubling guarantees he overshoots y in O(log) tries.",
+          "10개 다리 후엔 이미 1023칸 걸었지만 x에서 최대 512칸 거리까지 커버. 두 배 패턴 덕분에 O(log) 안에 y를 넘어가요.")}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    LostCowRunner — input x, y, see total distance live
    ═══════════════════════════════════════════════════════════════ */
 export function LostCowRunner({ E }) {

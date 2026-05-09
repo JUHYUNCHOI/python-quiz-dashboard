@@ -142,6 +142,12 @@ export function makeLostCowCh1(E) {
       answer: 9,
     },
     {
+      type: "doubling",
+      narr: t(E,
+        "Before walking, feel the leg sizes: 1, 2, 4, 8, 16…  Each one twice the last.  Add legs and watch the bars and total grow.",
+        "걷기 전에 다리 길이부터 느껴 봐: 1, 2, 4, 8, 16…  매번 두 배.  다리를 추가하며 막대와 합계가 커지는 걸 관찰."),
+    },
+    {
       type: "sim",
       narr: t(E,
         "Pick a (x, y) and walk FJ through one leg at a time on the number line below.",
