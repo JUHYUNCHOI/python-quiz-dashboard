@@ -1,8 +1,215 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ═══════════════════════════════════════════════════════════════
+   ClockFenceDeepAuditSim — pick a fence path, step through every
+   consecutive direction pair, watch (next - cur) mod 4 classify
+   each transition (right / left / straight / U-turn), tally
+   rights vs lefts, and let the verdict (CW / CCW) emerge.
+   ═══════════════════════════════════════════════════════════════ */
+const _CF_PRESETS = [
+  { s: "NESW",     label: "NESW (square, CW)" },
+  { s: "NWSE",     label: "NWSE (square, CCW)" },
+  { s: "NENESWSW", label: "NENESWSW (L-shape)" },
+  { s: "NNEESSWW", label: "NNEESSWW (rectangle)" },
+];
+
+const _DIR_MAP = { N: 0, E: 1, S: 2, W: 3 };
+const _DIR_ARROW = { N: "↑", E: "→", S: "↓", W: "←" };
+const _DIR_LABEL = { N: "N", E: "E", S: "S", W: "W" };
+const _DIR_COLOR = { N: "#0ea5e9", E: "#16a34a", S: "#dc2626", W: "#f59e0b" };
+
+function _classify(cur, nxt) {
+  const diff = ((nxt - cur) % 4 + 4) % 4;
+  if (diff === 1) return { kind: "R", diff };  // right
+  if (diff === 3) return { kind: "L", diff };  // left
+  if (diff === 2) return { kind: "U", diff };  // U-turn
+  return { kind: "S", diff };                  // straight
+}
+
+export function ClockFenceDeepAuditSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const { s } = _CF_PRESETS[pi];
+  const [step, setStep] = useState(0);     // how many transitions revealed
+  const [audited, setAudited] = useState(false);
+
+  const switchPreset = (newPi) => {
+    setPi(newPi);
+    setStep(0);
+    setAudited(false);
+  };
+
+  const n = s.length;
+  const transitions = [];
+  for (let i = 0; i < n; i++) {
+    const cur = _DIR_MAP[s[i]];
+    const nxt = _DIR_MAP[s[(i + 1) % n]];
+    transitions.push({ i, cur, nxt, ...(_classify(cur, nxt)) });
+  }
+
+  // Tally based on revealed-so-far step
+  let rights = 0, lefts = 0;
+  for (let k = 0; k < step; k++) {
+    if (transitions[k].kind === "R") rights++;
+    else if (transitions[k].kind === "L") lefts++;
+  }
+  const totalRights = transitions.filter(x => x.kind === "R").length;
+  const totalLefts  = transitions.filter(x => x.kind === "L").length;
+  const verdict = totalRights > totalLefts ? "CW" : "CCW";
+
+  const advance = () => {
+    if (step < n) setStep(step + 1);
+    else setAudited(true);
+  };
+  const reset = () => { setStep(0); setAudited(false); };
+
+  const kindBg = { R: "#dcfce7", L: "#fee2e2", U: "#fef3c7", S: "#e0e7ff" };
+  const kindBd = { R: "#86efac", L: "#fca5a5", U: "#fde68a", S: "#a5b4fc" };
+  const kindCol = { R: "#166534", L: "#991b1b", U: "#92400e", S: "#3730a3" };
+  const kindTxt = (k) => k === "R" ? t(E, "right", "오른쪽")
+                       : k === "L" ? t(E, "left",  "왼쪽")
+                       : k === "U" ? t(E, "U-turn","U턴")
+                       :              t(E, "straight","직진");
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {_CF_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => switchPreset(i)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {p.label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8 }}>
+        {t(E,
+          "Step through each consecutive pair. Watch (next − cur) mod 4 decide right / left / straight / U-turn.",
+          "연속한 쌍을 한 단계씩 살펴봐. (다음 − 현재) mod 4 가 오른쪽 / 왼쪽 / 직진 / U턴 을 결정해.")}
+      </div>
+
+      {/* direction row with arrow icons */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
+        {s.split("").map((ch, i) => {
+          const active = i === step % n && step < n;
+          const consumed = i < step;
+          return (
+            <div key={i} style={{
+              width: 40, height: 50, display: "flex", flexDirection: "column",
+              alignItems: "center", justifyContent: "center",
+              borderRadius: 8,
+              background: consumed ? "#f5f3ff" : (active ? "#ede9fe" : "#fff"),
+              border: `1.5px solid ${active ? A : C.border}`,
+              color: _DIR_COLOR[ch],
+              boxShadow: active ? `0 0 0 2px ${A}33` : "none",
+            }}>
+              <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1 }}>{_DIR_ARROW[ch]}</div>
+              <div style={{ fontSize: 10, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", marginTop: 2 }}>{_DIR_LABEL[ch]}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* index row showing (next-cur) mod 4 calc, only for revealed steps */}
+      <div style={{
+        background: "#fafafa", border: "1px solid #e5e7eb", borderRadius: 10,
+        padding: "8px 10px", marginBottom: 10, fontSize: 12,
+        fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.7,
+      }}>
+        <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 4, fontFamily: "inherit" }}>
+          {t(E, "Transitions revealed", "공개된 전환")} ({Math.min(step, n)} / {n})
+        </div>
+        {step === 0 && (
+          <div style={{ color: C.dim, fontStyle: "italic" }}>
+            {t(E, "Tap 'Next step' to reveal the first transition.",
+                  "'다음 단계' 를 눌러 첫 전환을 공개해.")}
+          </div>
+        )}
+        {transitions.slice(0, step).map((tr, k) => (
+          <div key={k} style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+            <span style={{ color: C.dim, minWidth: 22 }}>#{k + 1}</span>
+            <span style={{ color: _DIR_COLOR[s[tr.i]], fontWeight: 700 }}>{s[tr.i]}({tr.cur})</span>
+            <span style={{ color: C.dim }}>→</span>
+            <span style={{ color: _DIR_COLOR[s[(tr.i + 1) % n]], fontWeight: 700 }}>{s[(tr.i + 1) % n]}({tr.nxt})</span>
+            <span style={{ color: C.dim }}>:</span>
+            <span>({tr.nxt} − {tr.cur}) mod 4 = {tr.diff}</span>
+            <span style={{
+              padding: "1px 8px", borderRadius: 6, fontSize: 11, fontWeight: 700,
+              background: kindBg[tr.kind], border: `1px solid ${kindBd[tr.kind]}`, color: kindCol[tr.kind],
+            }}>
+              {kindTxt(tr.kind)}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* tally */}
+      <div style={{
+        background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10,
+        padding: "8px 12px", marginBottom: 10,
+        display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 6,
+      }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "right", "오른쪽")} = {rights} &nbsp; {t(E, "left", "왼쪽")} = {lefts}
+        </div>
+        <div style={{ fontSize: 12, color: "#5b21b6" }}>
+          {step < n
+            ? t(E, "more to go…", "아직 남았어…")
+            : t(E, "all pairs counted ✓", "모든 쌍 세기 완료 ✓")}
+        </div>
+      </div>
+
+      {/* controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        <button onClick={advance} disabled={audited} style={{
+          padding: "6px 14px", borderRadius: 8, border: `1px solid ${A}`,
+          background: audited ? "#e5e7eb" : A, color: audited ? "#9ca3af" : "#fff",
+          fontSize: 12, fontWeight: 700, cursor: audited ? "default" : "pointer",
+        }}>
+          {step < n
+            ? t(E, "▶ Next step", "▶ 다음 단계")
+            : t(E, "🔍 Reveal verdict", "🔍 판정 공개")}
+        </button>
+        <button onClick={reset} style={{
+          padding: "6px 14px", borderRadius: 8, border: `1px solid ${C.border}`,
+          background: "transparent", color: C.dim, fontSize: 12, fontWeight: 600, cursor: "pointer",
+        }}>
+          {t(E, "↻ Reset", "↻ 초기화")}
+        </button>
+      </div>
+
+      {/* verdict */}
+      {audited && (
+        <div style={{
+          background: verdict === "CW" ? "#ecfdf5" : "#eff6ff",
+          border: `1px solid ${verdict === "CW" ? "#6ee7b7" : "#93c5fd"}`,
+          borderRadius: 10, padding: "10px 14px",
+          color: verdict === "CW" ? "#065f46" : "#1e3a8a",
+          fontSize: 13, lineHeight: 1.6,
+        }}>
+          <div style={{ fontWeight: 800, marginBottom: 4, fontFamily: "'JetBrains Mono',monospace" }}>
+            rights ({totalRights}) {totalRights > totalLefts ? ">" : "≤"} lefts ({totalLefts}) → {verdict}
+          </div>
+          <div style={{ fontSize: 12 }}>
+            {verdict === "CW"
+              ? t(E, "More right turns than left → fence is traced CLOCKWISE.",
+                    "오른쪽 회전이 왼쪽보다 많아 → 시계 방향(CW) 으로 그려졌어.")
+              : t(E, "More (or equal) left turns than right → fence is traced COUNTER-CLOCKWISE.",
+                    "왼쪽 회전이 오른쪽보다 많아 (또는 같아) → 반시계 방향(CCW) 으로 그려졌어.")}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 const FULL_PY = [
   "s = input().strip()",

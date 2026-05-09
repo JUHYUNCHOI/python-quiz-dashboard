@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getClockFenceSections } from "./components";
+import { getClockFenceSections, ClockFenceDeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -126,6 +126,21 @@ export function makeClockCh1(E) {
         "Trace each consecutive direction pair and count right turns.",
         "연속한 방향 쌍을 따라가면서 오른쪽 회전 수를 세어 봐."),
       answer: 4,
+    },
+    // 1-4: Hands-on deep audit — step through every consecutive pair, watch
+    // (next - cur) mod 4 classify each transition, tally right vs left, verdict.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Time to feel it. Pick a fence, step through each consecutive pair, watch (next − cur) mod 4 decide right / left / straight / U-turn, then let the verdict (CW vs CCW) drop out of the tally.",
+        "직접 느껴보자. 울타리 골라서 연속 쌍을 한 단계씩 보고, (다음 − 현재) mod 4 가 오른쪽 / 왼쪽 / 직진 / U턴 을 결정하는 걸 봐. 그러면 오른쪽-왼쪽 누적값에서 CW vs CCW 판정이 자연스럽게 나와."),
+      content: (
+        <div style={{ padding: 12 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
+            🔍 {t(E, "Deep Audit — step through every direction pair", "심층 점검 — 모든 방향 쌍 한 단계씩")}
+          </div>
+          <ClockFenceDeepAuditSim E={E} />
+        </div>),
     },
   ];
 }
