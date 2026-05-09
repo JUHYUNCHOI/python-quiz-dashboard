@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCrossRoad3Sections } from "./components";
+import { getCrossRoad3Sections, CrossRoad3Sim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -97,6 +97,15 @@ export function makeCrossRd3Ch1(E) {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* 🔍 Deep-audit sim — process each cow at the gate, step by step */}
+          <div style={{ background: "#fff", border: `1.5px solid #c4b5fd`, borderRadius: 12, marginTop: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", padding: "10px 14px 0" }}>
+              🔍 {t(E, "Walk each cow through the gate — see current_time grow",
+                     "소를 한 마리씩 문에 통과시키며 — current_time 이 어떻게 커지는지 확인")}
+            </div>
+            <CrossRoad3Sim E={E} />
           </div>
         </div>),
     },

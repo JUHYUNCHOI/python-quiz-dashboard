@@ -1,8 +1,216 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ═══════════════════════════════════════════════════════════════
+   CrossRoad3Sim — step through cows in arrival order, advancing
+   the gate's free-time. For each cow we show:
+     • whether the gate is free before/after cow arrives
+     • new current_time after this cow finishes
+   ═══════════════════════════════════════════════════════════════ */
+const _CR3_PRESETS = [
+  { label: "A(0,5) B(3,2)",       cows: [["A", 0, 5], ["B", 3, 2]] },
+  { label: "A(0,3) B(1,5) C(10,2)", cows: [["A", 0, 3], ["B", 1, 5], ["C", 10, 2]] },
+  { label: "Out-of-order × 3",     cows: [["A", 5, 2], ["B", 0, 4], ["C", 2, 3]] },
+  { label: "Spread-out × 3",       cows: [["A", 0, 2], ["B", 5, 3], ["C", 10, 1]] },
+];
+
+// Sort by arrival, then walk and produce per-step traces.
+function _cr3Trace(rawCows) {
+  const sorted = [...rawCows].sort((a, b) => a[1] - b[1]);
+  const trace = [];
+  let cur = 0;
+  for (const [name, arr, dur] of sorted) {
+    const waited = cur < arr;
+    const start = waited ? arr : cur;
+    const finish = start + dur;
+    trace.push({ name, arr, dur, before: cur, waited, start, finish });
+    cur = finish;
+  }
+  return { sorted, trace, finalTime: cur };
+}
+
+export function CrossRoad3Sim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [stepIdx, setStepIdx] = useState(0);
+  const preset = _CR3_PRESETS[pi];
+  const { sorted, trace, finalTime } = _cr3Trace(preset.cows);
+
+  const cur = stepIdx > 0 ? trace[stepIdx - 1] : null;
+  const curTime = stepIdx > 0 ? trace[stepIdx - 1].finish : 0;
+
+  const colorGate = "#8b5cf6";
+  const colorWait = "#0891b2";
+  const colorPass = "#16a34a";
+
+  const eventBox = () => {
+    if (!cur) return t(E, "Press → to process the first cow (sorted by arrival).",
+                       "→ 를 눌러 첫 소를 처리해요 (도착순 정렬).");
+    return (
+      <>
+        <div>
+          {t(E, "Cow ", "소 ")}
+          <b style={{ color: colorGate }}>{cur.name}</b>
+          {t(E, " (arrives at ", " (도착 ")}<b>{cur.arr}</b>
+          {t(E, ", takes ", ", 소요 ")}<b>{cur.dur}</b>{t(E, " sec)", "초)")}
+        </div>
+        <div style={{ marginTop: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+          {t(E, "gate free at ", "문 비는 시각 ")}
+          <b>{cur.before}</b>{" → "}
+          {cur.waited
+            ? <span style={{ color: colorWait, fontWeight: 800 }}>
+                {t(E, `gate idle, wait until t=${cur.arr}`, `문 놀고 있음, t=${cur.arr} 까지 대기`)}
+              </span>
+            : <span style={{ color: "#9a3412", fontWeight: 800 }}>
+                {t(E, `cow queues — gate busy past her arrival`, `소가 대기 — 문이 도착시각 이후까지 사용 중`)}
+              </span>}
+        </div>
+        <div style={{ marginTop: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+          {t(E, "start ", "시작 ")}<b>{cur.start}</b>
+          {t(E, " + dur ", " + 소요 ")}<b>{cur.dur}</b>{" → "}
+          <span style={{ color: colorPass, fontWeight: 800 }}>
+            {t(E, `finishes at t=${cur.finish}`, `t=${cur.finish} 에 끝남`)}
+          </span>
+        </div>
+      </>
+    );
+  };
+
+  const cowRow = (c, idx) => {
+    const done = idx < stepIdx - 1;
+    const isCur = idx === stepIdx - 1;
+    const tr = idx < stepIdx ? trace[idx] : null;
+    const bg = isCur ? "#f5f3ff" : (done ? "#fff" : "#fff");
+    const bd = isCur ? colorGate : (done ? "#c4b5fd" : C.border);
+    const fg = done || isCur ? C.text : C.dim;
+    return (
+      <div key={idx} style={{
+        display: "flex", alignItems: "center", gap: 10,
+        padding: "6px 10px", borderRadius: 8,
+        border: `1.5px solid ${bd}`, background: bg,
+        opacity: done || isCur ? 1 : 0.5,
+        fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
+      }}>
+        <div style={{ fontWeight: 800, color: colorGate, minWidth: 18 }}>{c[0]}</div>
+        <div style={{ color: fg }}>arr=<b>{c[1]}</b></div>
+        <div style={{ color: fg }}>dur=<b>{c[2]}</b></div>
+        {tr && (
+          <div style={{ marginLeft: "auto", color: colorPass, fontWeight: 700 }}>
+            → finish=<b>{tr.finish}</b>
+          </div>
+        )}
+        {isCur && !tr && (
+          <div style={{ marginLeft: "auto", color: colorGate, fontWeight: 700 }}>
+            ⏳ {t(E, "now", "처리 중")}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Timeline strip — shows gate-busy intervals so far.
+  const tMax = Math.max(finalTime, ...preset.cows.map(c => c[1] + c[2])) + 1;
+  const timeline = () => {
+    const cells = [];
+    for (let i = 0; i < tMax; i++) {
+      // figure out which cow (if any) is occupying the gate at time i
+      let owner = null;
+      for (let k = 0; k < stepIdx; k++) {
+        const tr = trace[k];
+        if (i >= tr.start && i < tr.finish) { owner = tr; break; }
+      }
+      const filled = !!owner;
+      const isCurOwner = owner && cur && owner.name === cur.name;
+      cells.push(
+        <div key={i} style={{
+          flex: "0 0 auto", width: 20, height: 22,
+          borderRight: i === tMax - 1 ? `1px solid ${C.border}` : "none",
+          borderTop: `1.5px solid ${C.border}`, borderBottom: `1.5px solid ${C.border}`,
+          borderLeft: i === 0 ? `1px solid ${C.border}` : "none",
+          background: filled ? (isCurOwner ? colorGate : "#c4b5fd") : "#fff",
+          color: filled ? "#fff" : C.dim,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 10, fontWeight: 700,
+        }}>{filled ? owner.name : ""}</div>
+      );
+    }
+    return (
+      <div>
+        <div style={{ display: "flex", justifyContent: "flex-start", overflowX: "auto" }}>
+          {cells}
+        </div>
+        <div style={{ display: "flex", justifyContent: "flex-start", overflowX: "auto", marginTop: 2 }}>
+          {Array.from({ length: tMax }).map((_, i) => (
+            <div key={i} style={{ flex: "0 0 auto", width: 20, textAlign: "center", fontSize: 9, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>{i}</div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_CR3_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setStepIdx(0); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{p.label}</button>
+        ))}
+      </div>
+
+      {/* Sorted cow list */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "10px 8px", marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "cows sorted by arrival time", "도착 시각 순으로 정렬된 소들")}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {sorted.map((c, i) => cowRow(c, i))}
+        </div>
+        <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${C.border}`, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+          current_time = <b style={{ color: colorPass }}>{curTime}</b>
+          <span style={{ color: C.dim }}>{"  ("}{stepIdx}/{trace.length}{")"}</span>
+        </div>
+      </div>
+
+      {/* Timeline */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "10px 8px", marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "gate timeline (each cell = 1 sec)", "문 사용 타임라인 (한 칸 = 1초)")}
+        </div>
+        {timeline()}
+      </div>
+
+      {/* event narration */}
+      <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 13, color: "#5b21b6", lineHeight: 1.6, minHeight: 60 }}>
+        {eventBox()}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setStepIdx(Math.max(0, stepIdx - 1))} disabled={stepIdx === 0} style={{
+          background: stepIdx === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${stepIdx === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: stepIdx === 0 ? "#b0b5c3" : A,
+          cursor: stepIdx === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{stepIdx} / {trace.length}</span>
+        <button onClick={() => setStepIdx(Math.min(trace.length, stepIdx + 1))} disabled={stepIdx === trace.length} style={{
+          background: stepIdx === trace.length ? "#e5e7eb" : A, border: `1px solid ${stepIdx === trace.length ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: stepIdx === trace.length ? "#b0b5c3" : "#fff", cursor: stepIdx === trace.length ? "default" : "pointer",
+        }}>→</button>
+        <button onClick={() => setStepIdx(0)} disabled={stepIdx === 0} style={{
+          background: "transparent", border: `1px solid ${C.border}`, borderRadius: 8,
+          padding: "5px 10px", fontSize: 11, fontWeight: 600, color: C.dim,
+          cursor: stepIdx === 0 ? "default" : "pointer",
+        }}>{t(E, "reset", "초기화")}</button>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",
