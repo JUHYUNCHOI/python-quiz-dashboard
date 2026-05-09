@@ -94,11 +94,7 @@ export function MooinExplorer({ E }) {
 }
 
 export function Mooin2Sim({ E }) { return <MooinExplorer E={E} />; }
-export function Mooin2Runner({ E }) {
-  return <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-    {t(E, "Use the explorer above.", "위 explorer 사용.")}
-  </div>;
-}
+export function Mooin2Runner() { return null; }
 
 /* ════════════════════════════════════════════════════════════════════
    Progressive code: 4 sections.
@@ -107,7 +103,7 @@ export function Mooin2Runner({ E }) {
 const M2_S1_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "N = int(data[0])",
   "a = [int(data[1 + i]) for i in range(N)]",
 ];
@@ -172,7 +168,7 @@ const M2_S3_CPP = [
 const M2_FULL_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "N = int(data[0])",
   "a = [int(data[1 + i]) for i in range(N)]",
   "",
@@ -339,7 +335,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

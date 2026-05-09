@@ -62,6 +62,16 @@ export function makeMilkOrderCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E, "Find the earliest position cow #1 can take in a valid milking order.", "유효한 착유 순서에서 1번 소가 설 수 있는 가장 이른 위치를 찾아요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -130,8 +140,8 @@ export function makeMilkOrderCh1(E) {
         "No constraints on cow 1. Earliest position number?",
         "소 1번에 제약 없음. 가장 빠른 위치 번호는?"),
       hint: t(E,
-        "Without any ordering or fixed position constraint, cow 1 can be first.",
-        "순서나 고정 위치 제약 없이, 소 1번은 첫 번째가 될 수 있어요."),
+        "If nothing blocks cow 1, what's the smallest spot in a line of N?",
+        "소 1번을 막는 게 아무것도 없다면, N마리 줄에서 가장 작은 자리 번호는?"),
       answer: 1,
     },
   ];
@@ -143,23 +153,12 @@ export function makeMilkOrderCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMilkOrderCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Build a DAG from the hierarchy chain (a → b means a must come before b). Try every possible position for cow 1 (1..N) — for each, build the lineup using topological sort with cow 1 inserted there. Print the smallest valid position.",
-        "위계 체인으로 DAG 구축 (a → b 는 a 가 b 보다 먼저). 1번 소의 위치를 1..N 모두 시도해 — 각 위치에서 그 자리에 소 1번을 넣은 위상 정렬 라인업을 만들고, 가장 작은 유효 위치를 출력."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Build a DAG from the hierarchy chain (a → b means a must come before b). Try every possible position for cow 1 (1..N) — for each, build the lineup using topological sort with cow 1 inserted there. Print the smallest valid position. Sections build it one piece at a time.",
+        "위계 체인으로 DAG 구축 (a → b 는 a 가 b 보다 먼저). 1번 소의 위치를 1..N 모두 시도해 — 각 위치에서 그 자리에 소 1번을 넣은 위상 정렬 라인업을 만들고, 가장 작은 유효 위치를 출력. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMilkOrderSections(E),
     },
   ];

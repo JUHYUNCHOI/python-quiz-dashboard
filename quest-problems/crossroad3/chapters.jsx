@@ -41,7 +41,17 @@ export function makeCrossRd3Ch1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udeaa"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>Cross the Road III</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #3</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2017 Bronze #3</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E, "Print the time the last cow finishes passing through the gate.", "마지막 소가 문을 통과해 끝나는 시각을 출력해요.")}
+            </div>
           </div>
 
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -117,8 +127,8 @@ export function makeCrossRd3Ch1(E) {
         "A arrives t=0, 5 sec. B arrives t=3, 2 sec. Last finish time?",
         "A 도착 t=0, 5초. B 도착 t=3, 2초. 마지막 끝나는 시간?"),
       hint: t(E,
-        "A finishes at 5. B waits, starts at 5, finishes at 7. Answer: 7.",
-        "A는 5에 끝나. B는 기다리다 5에 시작, 7에 끝나. 답: 7."),
+        "When does A finish? B has to wait until then, then add B's duration.",
+        "A는 언제 끝날까? B는 그때까지 기다렸다가 B의 소요시간을 더해요."),
       answer: 7,
     },
   ];
@@ -130,23 +140,12 @@ export function makeCrossRd3Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCrossRd3Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sort cows by arrival time. Walk through them: track when the gate becomes free. If a cow arrives BEFORE the gate is free, she waits — gate-free advances by her duration. If after, she starts at her arrival.",
-        "도착 시간 순으로 정렬. 순회: 문이 비는 시간을 추적. 소가 문이 빈 시간 전에 도착하면 대기 — 문 비는 시간이 그녀의 소요시간 만큼 진행. 후에 도착하면 도착 시각에 시작."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort cows by arrival time. Walk through them: track when the gate becomes free. If a cow arrives BEFORE the gate is free, she waits — gate-free advances by her duration. If after, she starts at her arrival. Sections build it one piece at a time.",
+        "도착 시간 순으로 정렬. 순회: 문이 비는 시간을 추적. 소가 문이 빈 시간 전에 도착하면 대기 — 문 비는 시간이 그녀의 소요시간 만큼 진행. 후에 도착하면 도착 시각에 시작. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCrossRoad3Sections(E),
     },
   ];

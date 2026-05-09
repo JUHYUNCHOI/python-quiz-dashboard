@@ -37,6 +37,16 @@ export function makeMcc19CandyCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E, "Print the original number of the last person remaining after repeated odd-position eliminations.", "홀수 위치 탈락을 반복한 뒤 마지막에 남은 사람의 원래 번호를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -97,8 +107,8 @@ export function makeMcc19CandyCh1(E) {
         "N=4. Survivor's original position = ?",
         "N=4. 생존자의 원래 위치 = ?"),
       hint: t(E,
-        "[1,2,3,4] → [2,4] → [4]. Answer is 4.",
-        "[1,2,3,4] → [2,4] → [4]. 답은 4."),
+        "Walk through it: [1,2,3,4] → remove odd positions → ? → remove odd positions again → who's left?",
+        "한 단계씩: [1,2,3,4] → 홀수 위치 제거 → ? → 다시 홀수 위치 제거 → 누가 남아요?"),
       answer: 4,
     },
   ];
@@ -110,23 +120,12 @@ export function makeMcc19CandyCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc19CandyCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Simulate the elimination: in each round, keep only people at EVEN positions (1, 3, 5, ... in 1-indexed → odd survivors are eliminated). Repeat until 1 person remains.",
-        "탈락 시뮬레이션: 매 라운드, 짝수 위치 (1-indexed: 1, 3, 5, ... 가 홀수 위치라 탈락) 만 유지. 한 명 남을 때까지 반복."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Simulate the elimination: in each round, keep only people at EVEN positions (1, 3, 5, ... in 1-indexed → odd survivors are eliminated). Repeat until 1 person remains. Solution code — read part by part. Toggle Python ↔ C++ in header. Sections build it one piece at a time.",
+        "탈락 시뮬레이션: 매 라운드, 짝수 위치 (1-indexed: 1, 3, 5, ... 가 홀수 위치라 탈락) 만 유지. 한 명 남을 때까지 반복. 풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc19CandySections(E),
     },
   ];

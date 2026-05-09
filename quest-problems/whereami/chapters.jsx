@@ -115,6 +115,18 @@ export function makeWhereAmICh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: C.carryBg, border: `1.5px solid ${C.carry}`, borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.carry, letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: C.carry, lineHeight: 1.5 }}>
+              {t(E,
+                "Output the smallest K such that every length-K window in the street's letter string is unique.",
+                "길이 K 의 모든 연속 부분 문자열이 유일해지는 가장 작은 K 를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -353,13 +365,14 @@ export function makeWhereAmICh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now try \"AABB\".\nK=1: A,A,B,B (duplicates!).\nK=2: AA,AB,BB (all unique!).\nWhat's the minimum K?", "이제 \"AABB\"를 해봐요. K=1: A,A,B,B (중복!). K=2: AA,AB,BB (모두 고유!). 최소 K는?"),
+        "Try it on \"AABB\" yourself — start at K=1, see if any duplicate, bump up.",
+        "\"AABB\" 직접 — K=1 부터 시도해 중복 있으면 K 키워."),
       question: t(E,
         "\"AABB\" -> minimum K for unique substrings?",
         "\"AABB\" -> 유일한 부분문자열을 위한 최소 K?"),
       hint: t(E,
-        "K=1: A, A, B, B (A repeats). K=2: AA, AB, BB (all different!). Answer: 2.",
-        "K=1: A, A, B, B (A 반복). K=2: AA, AB, BB (모두 다름!). 답: 2."),
+        "List the windows of size 1 — any repeats?  If yes, try size 2.",
+        "크기 1 윈도우 나열 — 중복? 있으면 크기 2 시도."),
       answer: 2,
     },
   ];
@@ -537,13 +550,14 @@ export function makeWhereAmICh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Try \"AABBA\". K=1: A,A,B,B,A (duplicates). K=2: AA,AB,BB,BA (all unique!). Answer?", "\"AABBA\"를 해봐요. K=1: A,A,B,B,A (중복). K=2: AA,AB,BB,BA (모두 고유!). 답은?"),
+        "Hand-trace \"AABBA\" — start with K=1 and bump until every window is unique.",
+        "\"AABBA\" 손으로 — K=1 부터 시작해 모든 윈도우가 유일해질 때까지 K 올려."),
       question: t(E,
         "\"AABBA\" -> minimum K?",
         "\"AABBA\" -> 최소 K?"),
       hint: t(E,
-        "K=1 has duplicates (A and B repeat). K=2: AA, AB, BB, BA -- all different! Answer: 2.",
-        "K=1은 중복(A, B 반복). K=2: AA, AB, BB, BA -- 모두 다름! 답: 2."),
+        "List the windows of each size and check for duplicates.",
+        "크기별 윈도우 나열하고 중복 있는지 확인."),
       answer: 2,
     },
   ];

@@ -33,6 +33,16 @@ export function makeMcc21DvdCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E, "Track a bouncing DVD logo and print where it lands after T steps.", "튕기는 DVD 로고를 따라가서 T 단계 후 어디 있는지 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -91,7 +101,7 @@ export function makeMcc21DvdCh1(E) {
       question: t(E,
         "Start (0,0), direction (1,1), no walls. X-coordinate after 5 steps?",
         "시작 (0,0), 방향 (1,1), 벽 없음. 5단계 후 x좌표?"),
-      hint: t(E, "x = 0 + 5*1 = 5", "x = 0 + 5*1 = 5"),
+      hint: t(E, "Each step adds dx (=1) to x. After 5 steps?", "매 단계 x 에 dx(=1) 가 더해져. 5단계 후엔?"),
       answer: 5,
     },
   ];
@@ -100,20 +110,10 @@ export function makeMcc21DvdCh1(E) {
 export function makeMcc21DvdCh2(E, lang = "py") {
   return [
     {
-      type: "reveal",
-      narr: t(E,
-        "Simulate T steps. Each step: tentative move (x + dx, y + dy). If would cross a wall, flip the corresponding component before applying.",
-        "T 단계 시뮬레이션. 매 단계: 가상 이동 (x + dx, y + dy). 벽을 넘어가면 해당 성분을 먼저 부호 반전 후 적용."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Simulate T steps. Each step: tentative move (x + dx, y + dy). If would cross a wall, flip the corresponding component before applying. Sections build it one piece at a time.",
+        "T 단계 시뮬레이션. 매 단계: 가상 이동 (x + dx, y + dy). 벽을 넘어가면 해당 성분을 먼저 부호 반전 후 적용. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc21DvdSections(E),
     },
   ];

@@ -60,6 +60,18 @@ export function makeBrigadeCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #1</div>
           </div>
 
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of cows needed to form a chain from L to B on the 10\u00d710 grid (cows can't stand on R).",
+                "10\u00d710 \uaca9\uc790\uc5d0\uc11c L \ubd80\ud130 B \uae4c\uc9c0 \uccb4\uc778\uc744 \ub9cc\ub4dc\ub294 \ub370 \ud544\uc694\ud55c \ucd5c\uc18c \uc18c \uc218\ub97c \ucd9c\ub825 (\uc18c\ub294 R \uc704 X).")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -150,23 +162,12 @@ export function makeBrigadeCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBrigadeCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "BFS from the lake L to the barn B on the 10×10 grid, blocking the rock R. The shortest path has some length L_path including L and B. The number of cows = L_path − 2 (L and B are not cows).",
-        "10×10 격자에서 호수 L 에서 헛간 B 까지 BFS — 바위 R 은 통과 불가. 최단 경로 길이를 L_path 라 하면 (L, B 포함), 필요한 소의 수 = L_path − 2 (L, B 는 소 아님)."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code — straight in.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "BFS from L to B on the 10×10 grid, blocking R.  Shortest path length minus 2 (L and B don't count as cows).  Sections build it one piece at a time.",
+        "10×10 격자에서 L 부터 B 까지 BFS, R 은 통과 불가. 최단 경로 길이 − 2 (L, B 는 소 아님). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBucketBrigadeSections(E),
     },
   ];

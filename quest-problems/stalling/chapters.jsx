@@ -47,6 +47,18 @@ export function makeStallingCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of valid one-to-one cow ↔ stall assignments.",
+                "유효한 소 ↔ 축사 일대일 배정의 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -110,8 +122,8 @@ export function makeStallingCh1(E) {
         "Cows: [1,2], Stalls: [2,2]. Number of valid arrangements?",
         "소: [1,2], 축사: [2,2]. 유효한 배정 수?"),
       hint: t(E,
-        "Sorted: cows=[1,2], stalls=[2,2]. Cow 1 fits 2 stalls, cow 2 fits 1 remaining. 2*1=2.",
-        "정렬: 소=[1,2], 축사=[2,2]. 소 1은 2개 가능, 소 2는 1개 남음. 2*1=2."),
+        "Process the tallest cow first and multiply available choices.",
+        "가장 큰 소부터 처리하면서 가능한 축사 수를 곱해 봐."),
       answer: 2,
     },
   ];
@@ -123,23 +135,12 @@ export function makeStallingCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeStallingCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sort cows and stalls by height (ascending). Process the TALLEST cow first; she can use any stall whose limit is ≥ her height. Each subsequent (smaller) cow has all the previous stalls plus more — but minus those already taken by taller cows.",
-        "소와 축사를 키 오름차순 정렬. 가장 큰 소부터 처리 — 자기 키 ≥ 인 축사 중 아무거나 사용 가능. 다음 (더 작은) 소는 앞의 축사 + 추가 가능한 것 − 이미 배정된 (큰 소가 차지한) 수."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort cows and stalls ascending. Process the TALLEST cow first — she can use any stall with limit ≥ her height. Each next (smaller) cow has more stalls available minus those taken by taller cows. Sections build it one piece at a time.",
+        "소·축사 오름차순 정렬. 가장 큰 소부터 — 자기 키 ≥ 인 축사 사용 가능. 다음 (더 작은) 소는 추가 가능 축사 − 이미 배정된 수. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getStallingSections(E),
     },
   ];

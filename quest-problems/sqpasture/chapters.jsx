@@ -39,6 +39,18 @@ export function makeSqPastureCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the area of the smallest axis-aligned square containing both pastures.",
+                "두 목초지를 모두 포함하는 가장 작은 축에 평행한 정사각형의 면적을 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}

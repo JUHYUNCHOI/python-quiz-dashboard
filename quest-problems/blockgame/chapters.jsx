@@ -45,6 +45,18 @@ export function makeBlockGameCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #2</div>
           </div>
 
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "For each letter A..Z, output the minimum cubes of that letter needed so any front-or-back word can be spelled on every board.",
+                "\uac01 \uc54c\ud30c\ubcb3 A..Z \uc5d0 \ub300\ud574 \u2014 \ubaa8\ub4e0 \ud310\uc758 \uc55e\uba74 \ub610\ub294 \ub4b7\uba74 \ub2e8\uc5b4\ub97c spelled out \uac00\ub2a5\ud55c \uadf8 \uc54c\ud30c\ubcb3 \ud050\ube0c\uc758 \ucd5c\uc18c \uac1c\uc218 \ucd9c\ub825.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -85,7 +97,8 @@ export function makeBlockGameCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "1 board: front = 'AB', back = 'CD'.\nWe need blocks for either AB or CD.\nFor front: A=1, B=1.\nFor back: C=1, D=1.\nMax per letter: A=1, B=1, C=1, D=1.\nBut we only see one side!\nSo we need max(2 blocks for AB, 2 blocks for CD) = 2 total blocks.", "판 1개: 앞 = 'AB', 뒤 = 'CD'.\nAB 또는 CD용 블록이 필요해요.\n앞: A=1, B=1.\n뒤: C=1, D=1.\n글자별 최대: A=1, B=1, C=1, D=1.\n하지만 한 면만 보여요!\nmax(AB용 2블록, CD용 2블록) = 총 2블록."),
+        "Picture 1 board with 'AB' on front, 'CD' on back.  Only ONE side will be shown — so plan for the worst case.",
+        "판 1 개 — 앞 'AB', 뒤 'CD'. 한 면만 보일 테니 최악의 경우를 대비."),
       question: t(E,
         "1 board with 'AB' front and 'CD' back. How many total blocks needed?",
         "앞면 'AB', 뒷면 'CD'인 판 1개. 총 몇 개 블록 필요?"),
@@ -102,13 +115,14 @@ export function makeBlockGameCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For 1 board with 'AB' on front and 'CD' on back, how many total blocks are needed?", "앞면 'AB', 뒷면 'CD'인 판 1개에 총 몇 개 블록이 필요해요?"),
+        "Same setup, your turn — 'AB' / 'CD' board, only one side seen.  Total blocks?",
+        "같은 상황 — 'AB' / 'CD' 판, 한 면만 보임. 총 몇 블록?"),
       question: t(E,
         "Total blocks for 1 board: front='AB', back='CD'?",
         "판 1개 총 블록 수: 앞='AB', 뒤='CD'?"),
       hint: t(E,
-        "max(abs(AB), abs(CD)) = max(2, 2) = 2.",
-        "max(abs(AB), abs(CD)) = max(2, 2) = 2."),
+        "Each side needs its own count — the worst case wins.",
+        "양면 각자 필요 수 — 더 큰 쪽이 승."),
       answer: 2,
     },
   ];
@@ -120,23 +134,12 @@ export function makeBlockGameCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBlockGameCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "For each board, you only show ONE side. So for each letter you need MAX(count in front, count in back) cubes — that's the worst case for that board. Sum across all boards per letter.",
-        "각 판에서 한 면만 보여요. 그래서 각 글자에 대해 MAX(앞면 개수, 뒷면 개수) 만큼 큐브가 필요해요 — 그게 그 판의 최악. 글자별로 모든 판에서 합산."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code — straight in.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "For each board, take MAX(front-count, back-count) per letter — the board's worst case.  Sum those maxes across all boards.  Sections build it one piece at a time.",
+        "각 판마다 글자별 MAX(앞면 개수, 뒷면 개수) — 그 판의 worst. 모든 판의 max 를 글자별로 합산. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBlockGameSections(E),
     },
   ];

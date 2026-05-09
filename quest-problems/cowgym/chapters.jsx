@@ -164,6 +164,18 @@ export function makeCowGymCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of cow pairs (i, j) whose relative ranking is the same in every one of the K sessions.",
+                "K 개 세션 모두에서 상대 순위가 같은 소 쌍 (i, j) 의 개수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -318,8 +330,8 @@ export function makeCowGymCh1(E) {
         "N=3 cows. How many unique pairs to check?",
         "N=3마리 소. 확인할 유일한 쌍의 수?"),
       hint: t(E,
-        "N*(N-1)/2 = 3*2/2 = 3 pairs: (1,2), (1,3), (2,3).",
-        "N*(N-1)/2 = 3*2/2 = 3쌍: (1,2), (1,3), (2,3)."),
+        "Use the formula N·(N − 1) / 2 for unique unordered pairs.",
+        "유일한 순서 무관 쌍은 N·(N − 1) / 2."),
       answer: 3,
     },
   ];
@@ -457,8 +469,8 @@ export function makeCowGymCh2(E) {
         "N=5 cows. N*(N-1)/2 = ?",
         "N=5마리 소. N*(N-1)/2 = ?"),
       hint: t(E,
-        "5 * 4 / 2 = 10",
-        "5 * 4 / 2 = 10"),
+        "Apply N·(N − 1) / 2 with N = 5.",
+        "N·(N − 1) / 2 에 N = 5 대입."),
       answer: 10,
     },
   ];

@@ -52,6 +52,18 @@ export function makeSleepyHerdCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the MIN and MAX moves to make the three cow positions consecutive integers.",
+                "세 소 위치가 연속한 정수가 될 때까지 이동 횟수의 최솟값과 최댓값을 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -122,8 +134,8 @@ export function makeSleepyHerdCh1(E) {
         "Positions [4,7,9]. Minimum moves?",
         "위치 [4,7,9]. 최소 이동 횟수?"),
       hint: t(E,
-        "Gap 7-9 is 2, so we can place the cow at 4 into position 8 in one move.",
-        "7-9 간격이 2이므로 4에 있는 소를 8로 1번에 옮길 수 있어요."),
+        "Look at the gaps — can one move land an endpoint into the slot?",
+        "간격을 봐 — 한 번의 이동으로 끝점 소를 빈 자리에 넣을 수 있을까?"),
       answer: 1,
     },
   ];
@@ -135,23 +147,12 @@ export function makeSleepyHerdCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeSleepyHerdCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sort positions a < b < c. MAX moves = (c − a) − 2 (move one step at a time). MIN moves: 0 if already consecutive; 1 if one gap is ≤ 2 (move endpoint into the slot); else 2.",
-        "위치 정렬 a < b < c. 최대 이동 = (c − a) − 2 (한 칸씩 이동). 최소: 이미 연속이면 0; 한쪽 간격이 ≤ 2 이면 1 (끝점을 그 자리에); 아니면 2."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort a < b < c. MAX = (c − a) − 2 (one step at a time). MIN = 0 if already consecutive, 1 if one gap ≤ 2, else 2. Sections build it one piece at a time.",
+        "정렬 a < b < c. 최대 = (c − a) − 2 (한 칸씩). 최소 = 이미 연속이면 0, 한쪽 간격 ≤ 2 면 1, 아니면 2. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getSleepyHerdSections(E),
     },
   ];

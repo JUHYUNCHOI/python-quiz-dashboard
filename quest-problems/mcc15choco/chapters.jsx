@@ -42,6 +42,16 @@ export function makeMcc15ChocoCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P5</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E, "Print the total length of chocolate removed by repeatedly popping adjacent equal-size pairs.", "인접한 같은 크기의 짝을 반복해서 제거한 초콜릿 총 길이를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -104,8 +114,8 @@ export function makeMcc15ChocoCh1(E) {
         "Bars [3,3,5,5]. Total removed length = ?",
         "바 [3,3,5,5]. 제거한 총 길이 = ?"),
       hint: t(E,
-        "(3,3) removes 6, (5,5) removes 10. Total = 16.",
-        "(3,3) 제거 = 6, (5,5) 제거 = 10. 총 = 16."),
+        "Each pair contributes 2 × size. Add up both pairs.",
+        "각 짝은 2 × 크기만큼 기여해요. 두 짝의 값을 더해봐요."),
       answer: 16,
     },
   ];
@@ -117,23 +127,12 @@ export function makeMcc15ChocoCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc15ChocoCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Use a stack: scan bars left to right. If the current bar equals the stack top, pop and add 2× size to the total. Otherwise push.",
-        "스택 사용: 바를 왼쪽부터 스캔. 현재 바가 스택 top 과 같으면 pop 하고 2 × 크기를 총합에 더함. 아니면 push."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Use a stack: scan bars left to right. If the current bar equals the stack top, pop and add 2× size to the total. Otherwise push. Sections build it one piece at a time.",
+        "스택 사용: 바를 왼쪽부터 스캔. 현재 바가 스택 top 과 같으면 pop 하고 2 × 크기를 총합에 더함. 아니면 push. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc15ChocoSections(E),
     },
   ];

@@ -49,6 +49,18 @@ export function makeShuffleCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Recover the original lineup before any shuffles, given the lineup after 3 applications.",
+                "셔플 3 번 후의 줄에서 원래 줄을 복원해 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -118,8 +130,8 @@ export function makeShuffleCh1(E) {
         "How many times is the shuffle applied?",
         "셔플은 몇 번 적용돼요?"),
       hint: t(E,
-        "The problem says 3 times!",
-        "문제에서 3번이라고 해요!"),
+        "Re-read the problem statement — how many shuffles are applied?",
+        "문제를 다시 읽어 봐 — 셔플이 몇 번 적용돼?"),
       answer: 3,
     },
   ];
@@ -131,23 +143,12 @@ export function makeShuffleCh1(E) {
    --------------------------------------------------------------- */
 export function makeShuffleCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "We're given the lineup AFTER 3 shuffles. To recover the original, build the INVERSE shuffle and apply it 3 times to the final lineup.",
-        "셔플 3 번 후의 줄이 주어져요. 원래 줄을 복원하려면 역셔플을 만들고 최종 줄에 3 번 적용."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Given lineup AFTER 3 shuffles → recover original by building INVERSE shuffle and applying it 3 times. Sections build it one piece at a time.",
+        "셔플 3 번 후 줄이 주어짐 → 역셔플을 만들고 3 번 적용해 원래 줄 복원. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBovShuffleSections(E),
     },
   ];

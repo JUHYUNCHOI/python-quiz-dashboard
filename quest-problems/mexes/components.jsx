@@ -108,11 +108,7 @@ export function MexesSlider({ E }) {
 }
 
 export function MexesSim({ E }) { return <MexesSlider E={E} />; }
-export function MexesRunner({ E }) {
-  return <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-    {t(E, "Use the simulator above.", "위 시뮬레이터 사용.")}
-  </div>;
-}
+export function MexesRunner() { return null; }
 
 /* ════════════════════════════════════════════════════════════════════
    Progressive code: 4 sections (input → cnt → missing → output).
@@ -122,7 +118,7 @@ export function MexesRunner({ E }) {
 const MEX_S1_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "N = int(data[0])",
   "a = [int(data[1 + i]) for i in range(N)]",
 ];
@@ -174,7 +170,7 @@ const MEX_S3_CPP = [
 const MEX_FULL_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "N = int(data[0])",
   "a = [int(data[1 + i]) for i in range(N)]",
   "",
@@ -308,7 +304,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

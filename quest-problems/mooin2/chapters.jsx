@@ -15,7 +15,19 @@ export function makeMooin2Ch1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#ea580c" }}>It's Mooin' Time II</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO January 2025 Bronze #2</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #2</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #ea580c", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of DISTINCT moos (x, y, y) — pairs (x, y) — that occur as a subsequence in a.",
+                "배열 a 에 부분수열로 등장하는 서로 다른 moo (x, y, y) — 즉 (x, y) 쌍 — 의 개수를 출력.")}
+            </div>
           </div>
 
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -143,14 +155,14 @@ export function makeMooin2Ch1(E) {
     {
       type: "input",
       narr: t(E,
-        "a = [1, 2, 2]. Distinct moos?",
-        "a = [1, 2, 2]. 서로 다른 moo 개수?"),
+        "Walk through a = [1, 2, 2] yourself — which (x, y, y) tuples actually fit?",
+        "a = [1, 2, 2] 직접 — (x, y, y) 중 어떤 게 자리를 갖춰?"),
       question: t(E,
         "Distinct moos in [1, 2, 2]?",
         "[1, 2, 2] 의 서로 다른 moo 개수?"),
       hint: t(E,
-        "y = 2 has count 2. Before the (2, 2) pair (position 2 — second-to-last 2), values seen: {1}. Distinct x ≠ 2: {1} → 1 moo: (1, 2, 2).",
-        "y = 2, count 2. (2, 2) 쌍 앞 (위치 2 — 끝에서 두 번째 2) 까지의 값: {1}. x ≠ 2: {1} → moo 1 개: (1, 2, 2)."),
+        "Which value can be the (y, y) pair?  Then who can come before as x?",
+        "(y, y) 가 될 수 있는 값은? 그 앞에 x 로 올 수 있는 값은?"),
       answer: 1,
     },
   ];
@@ -158,24 +170,13 @@ export function makeMooin2Ch1(E) {
 
 export function makeMooin2Ch2(E, lang = "py") {
   return [
-    /* 2-1 — Plan. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Plan: count each value. For each y with count ≥ 2, find the second-to-last position of y. Count distinct values appearing before that position (excluding y itself if y is there, which happens iff count ≥ 3). Sum across all valid y.",
-        "계획: 각 값 count. count ≥ 2 인 y 마다, y 의 끝에서 두 번째 위치 찾기. 그 위치 앞에 나타나는 서로 다른 값 수 (y 자신 빼기, y 가 있으면 — count ≥ 3 일 때). 모든 유효 y 합산."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-
-    /* 2-2..2-N — sections */
+    /* 2-1..2-N — sections, no upfront prose page. */
     ...getMooin2Sections(E).map((sec, i) => ({
       type: "reveal",
       narr: i === 0
-        ? t(E, "Build the solution step by step.", "단계별로 솔루션 작성.")
+        ? t(E,
+            "For each y with count ≥ 2, find the second-to-last position and count distinct earlier values (minus y itself).  Sections build it one piece at a time.",
+            "count ≥ 2 인 각 y 마다 — y 의 끝에서 두 번째 자리를 찾고 그 앞 서로 다른 값 (y 자신 제외) 을 세. 아래 섹션이 한 단락씩 쌓아요.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),

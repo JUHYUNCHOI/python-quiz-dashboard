@@ -126,7 +126,20 @@ export function makeWordCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>📝</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#3b82f6" }}>Word Distance</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P4</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+
+          {/* 🎯 Mission box */}
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "1.5px solid #3b82f6", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output a length-M word that minimizes total anagram distance to all N words — break ties by picking the lexicographically smallest.",
+                "N 개 단어 모두에 대한 애너그램 거리 합을 최소로 하는 길이 M 단어를 출력. 동률이면 사전순으로 가장 앞.")}
+            </div>
+          </div>
+
+          <div style={{ marginTop: 10, background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "N words (length M each) → find a word → minimize total 'anagram distance' → output lex smallest!",
               "단어 N개 (길이 M) → 새 단어 하나 만들기 → 모든 단어와 겹치는 글자 최대한 많게 → 같은 답이 여러 개면 abc순으로 가장 앞선 것!")}

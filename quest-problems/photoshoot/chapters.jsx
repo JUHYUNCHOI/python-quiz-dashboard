@@ -53,6 +53,18 @@ export function makePhotoshootCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of prefix-reversal moves to reach the target arrangement.",
+                "목표 배치에 도달하기 위한 접두사 뒤집기 최소 동작 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -127,8 +139,8 @@ export function makePhotoshootCh1(E) {
         "\"GHHG\": How many G at even positions (2,4)?",
         "\"GHHG\": 짝수 위치(2,4)에 G가 몇 개?"),
       hint: t(E,
-        "Pos 2 = H, Pos 4 = G. Count only G's.",
-        "위치2 = H, 위치4 = G. G만 세."),
+        "Walk through positions 2 and 4 and tally the G's only.",
+        "위치 2 와 4 만 보면서 G 의 개수만 세어 봐."),
       answer: 1,
     },
   ];
@@ -140,23 +152,12 @@ export function makePhotoshootCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePhotoshootCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Reverse-engineer from b: undo the cyclic shifts in b to derive the missing original a. Each prefix reversal in the original corresponds to one Bessie's b[i] = b[i-1] - 1 step.",
-        "b 에서 거꾸로 추적: b 의 순환 이동을 되돌려서 원래 a 를 복원. 원본의 각 접두사 뒤집기는 b[i] = b[i-1] - 1 한 단계에 대응돼요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Reverse-engineer from b: undo the cyclic shifts in b to derive the missing original a. Each original prefix reversal corresponds to a single b[i] = b[i-1] − 1 step. Sections build it one piece at a time.",
+        "b 에서 거꾸로: b 의 순환 이동을 되돌려 원래 a 를 복원. 각 원본 접두사 뒤집기 = b[i] = b[i-1] − 1 한 단계. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getPhotoshootSections(E),
     },
   ];

@@ -35,6 +35,18 @@ export function makeGiftsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef3c7", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of people who receive an extra gift after the most-even split.",
+                "최대한 고른 분배 후 추가 선물을 받는 사람의 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef3c7", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -96,8 +108,8 @@ export function makeGiftsCh1(E) {
         "N=10, K=3. How many people get an extra gift?",
         "N=10, K=3. 추가 선물을 받는 사람은 몇 명?"),
       hint: t(E,
-        "10 % 3 = 1. One person gets 4 gifts, the other two get 3.",
-        "10 % 3 = 1. 한 명이 4개, 나머지 두 명이 3개를 받아요."),
+        "After base-share goes out, how many gifts are left over to hand out as extras?",
+        "기본 몫을 나눠 준 뒤 남은 선물은 추가 선물로 가니까 — 몇 개 남을까?"),
       answer: 1,
     },
   ];
@@ -109,23 +121,12 @@ export function makeGiftsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeGiftsCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "If N gifts are split as evenly as possible across K people, each person gets at least N//K gifts. The remainder N % K people get ONE EXTRA gift each — that's the answer.",
-        "N 선물을 K 명에게 최대한 고르게 나누면, 모두 최소 N//K 개씩. 남은 N % K 명이 1 개씩 더 받음 — 그게 답."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Even split → each person gets at least N//K. The remaining N % K people get one extra each — that's the answer. Sections build it one piece at a time.",
+        "고른 분배 → 모두 최소 N//K. 남은 N % K 명이 1 개씩 더 받음 — 그게 답. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getGiftsSections(E),
     },
   ];

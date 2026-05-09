@@ -117,6 +117,18 @@ export function makeCowCollegeCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #1</div>
           </div>
 
+          {/* \uD83C\uDFAF Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              \uD83C\uDFAF {t(E, "Mission", "\uBBF8\uC158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the maximum total revenue and a price P that achieves it.",
+                "\uCD5C\uB300 \uCD1D \uC218\uC785\uACFC \uADF8\uAC83\uC744 \uB2EC\uC131\uD558\uB294 \uAC00\uACA9 P \uB97C \uCD9C\uB825.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -322,13 +334,14 @@ export function makeCowCollegeCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "c = [1, 2, 3, 4, 5] (already sorted). Try each as tuition. What's the maximum revenue?", "c = [1, 2, 3, 4, 5] (이미 정렬). 각각을 등록금으로 시도해요. 최대 수입은?"),
+        "Try each value of c as the tuition.  At price c[i], how many cows pay?",
+        "c 의 각 값을 등록금으로 시도. 가격 c[i] 일 때 몇 마리가 내?"),
       question: t(E,
         "c = [1, 2, 3, 4, 5]. Max revenue = ?",
         "c = [1, 2, 3, 4, 5]. 최대 수입 = ?"),
       hint: t(E,
-        "1x5=5, 2x4=8, 3x3=9, 4x2=8, 5x1=5. Max = 9 at tuition $3.",
-        "1x5=5, 2x4=8, 3x3=9, 4x2=8, 5x1=5. 최대 = 9, 등록금 $3."),
+        "Revenue = price × (cows able to pay).  Try every choice of price.",
+        "수입 = 가격 × (낼 수 있는 소 수). 가격 후보를 다 시도."),
       answer: 9,
     },
   ];
@@ -460,13 +473,14 @@ export function makeCowCollegeCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Try c = [3, 1, 2]. Sorted: [1, 2, 3]. Revenues: 1x3=3, 2x2=4, 3x1=3. What's the max?", "c = [3, 1, 2]를 해봐요. 정렬: [1, 2, 3]. 수입: 1x3=3, 2x2=4, 3x1=3. 최대는?"),
+        "Sort first, then try each entry as the tuition.",
+        "정렬한 뒤 각 항목을 등록금으로 시도."),
       question: t(E,
         "c = [3, 1, 2]. Max revenue = ?",
         "c = [3, 1, 2]. 최대 수입 = ?"),
       hint: t(E,
-        "Sorted: [1,2,3]. 1x3=3, 2x2=4, 3x1=3. Max = 4.",
-        "정렬: [1,2,3]. 1x3=3, 2x2=4, 3x1=3. 최대 = 4."),
+        "After sorting, count cows able to pay each price and multiply.",
+        "정렬 후 각 가격에서 낼 수 있는 소 수 × 가격."),
       answer: 4,
     },
   ];

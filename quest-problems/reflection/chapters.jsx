@@ -15,7 +15,19 @@ export function makeReflectionCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🪞</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#0891b2" }}>Reflection</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO February 2025 Bronze #1</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2025 Bronze #1</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfeff", border: "1.5px solid #0891b2", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#155e75", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#155e75", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum cells to flip so the canvas is symmetric across both center lines — before any update, then after each of U updates (U+1 lines total).",
+                "캔버스가 가로 + 세로 가운데 선 양쪽으로 대칭이 되는 최소 뒤집기 횟수를 출력 — update 전 + 각 update 후 (총 U+1 줄).")}
+            </div>
           </div>
 
           <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -162,14 +174,14 @@ export function makeReflectionCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Tiny 2×2 grid: \"#.\" / \"..\". Only 1 group of 4 cells (since N=2, all 4 cells form one group). Painted = 1 of 4. Min flips?",
-        "작은 2×2 그리드: \"#.\" / \"..\". 그룹 하나 (N=2 라 4 칸 전부 한 그룹). 칠한 칸 = 4 중 1. 최소 뒤집기?"),
+        "2×2 grid \"#.\" / \"..\".  N=2, so all 4 cells are ONE mirror group.  Count what's painted, decide min flips.",
+        "2×2 그리드 \"#.\" / \"..\". N=2 라 4 칸 모두 한 거울 그룹. 칠해진 거 세고 최소 뒤집기 정해."),
       question: t(E,
         "Min flips for 2×2 grid \"#.\" / \"..\"?",
         "2×2 그리드 \"#.\" / \"..\" 의 최소 뒤집기?"),
       hint: t(E,
-        "Group has 1 painted, 3 unpainted. Either flip the 1 to '.' (1 op) or flip the 3 to '#' (3 ops). Min = 1.",
-        "그룹에 1 칠함, 3 안 칠함. '#' 1 개를 '.' 로 뒤집기 (1 op) 또는 '.' 3 개를 '#' 로 (3 ops). 최소 = 1."),
+        "Either everyone in the group becomes '.' or everyone becomes '#'.  Pick the cheaper.",
+        "그룹 전체를 '.' 로 통일하거나 '#' 로 통일. 더 적게 뒤집는 쪽."),
       answer: 1,
     },
   ];
@@ -177,25 +189,13 @@ export function makeReflectionCh1(E) {
 
 export function makeReflectionCh2(E, lang = "py") {
   return [
-    /* 2-1 — Plan: group cells by (rg, cg), per-group min flip. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Plan: group every cell by its mirror identity (rg, cg). For each group of 4 cells, flips = min(count, 4 − count). Updates only affect ONE group, so we maintain a running total.",
-        "계획: 모든 칸을 거울 정체 (rg, cg) 로 묶어요. 4 칸 그룹마다 뒤집기 = min(count, 4 − count). update 는 한 그룹만 건드리니 running total 유지."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-
-    /* 2-2..2-7 — WRITE: one section per chapter step. */
+    /* 2-1..2-7 — sections directly. */
     ...getReflectionSections(E).map((sec, i) => ({
       type: "reveal",
       narr: i === 0
-        ? t(E, "Build the code step by step. Brute first, then upgrade for full credit.",
-              "단계별 코드. brute 먼저, 그 다음 풀점수용으로.")
+        ? t(E,
+            "Group every cell by its mirror identity, then for each group of 4 cells: flips = min(count, 4 − count).  Brute first, then maintain a running total to handle updates fast.",
+            "모든 칸을 거울 정체로 묶고 — 4 칸 그룹마다 뒤집기 = min(count, 4 − count). brute 먼저, 그 다음 update 빠르게 처리하기 위해 running total 유지.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),

@@ -34,6 +34,18 @@ export function makeTichuCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P4</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of ways to pick 2 cards from a hand of N.",
+                "N 장 중 2 장을 뽑는 가짓수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -87,8 +99,8 @@ export function makeTichuCh1(E) {
         "N=5. Enter C(5,2):",
         "N=5. C(5,2)를 입력해:"),
       hint: t(E,
-        "C(5,2) = 5 * 4 / 2 = 10.",
-        "C(5,2) = 5 * 4 / 2 = 10."),
+        "Use the combinations formula C(N, 2) = N · (N − 1) / 2.",
+        "조합 공식 C(N, 2) = N · (N − 1) / 2 를 적용해 봐."),
       answer: 10,
     },
   ];
@@ -100,23 +112,12 @@ export function makeTichuCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeTichuCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Direct formula: ways to pick 2 from N is C(N, 2) = N · (N − 1) / 2.",
-        "직접 공식: N 장 중 2 장 뽑는 가짓수 = C(N, 2) = N · (N − 1) / 2."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Direct formula: C(N, 2) = N · (N − 1) / 2. Sections build it one piece at a time.",
+        "공식: C(N, 2) = N · (N − 1) / 2. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getTichuSections(E),
     },
   ];

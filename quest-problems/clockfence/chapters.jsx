@@ -49,6 +49,18 @@ export function makeClockCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output 'CW' if the fence is traced clockwise, else 'CCW'.",
+                "울타리가 시계 방향이면 'CW', 아니면 'CCW' 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -111,8 +123,8 @@ export function makeClockCh1(E) {
         "'NESW': right turns - left turns = ?",
         "'NESW': 오른쪽 회전 - 왼쪽 회전 = ?"),
       hint: t(E,
-        "All 4 turns are right turns, 0 left turns. 4 - 0 = 4.",
-        "4번 모두 오른쪽 회전, 왼쪽 회전 0번. 4 - 0 = 4."),
+        "Trace each consecutive direction pair and count right turns.",
+        "연속한 방향 쌍을 따라가면서 오른쪽 회전 수를 세어 봐."),
       answer: 4,
     },
   ];
@@ -124,23 +136,12 @@ export function makeClockCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeClockCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Map N=0, E=1, S=2, W=3. For each consecutive direction pair (d_i, d_{i+1}), the difference (d_{i+1} − d_i) mod 4 is 1 for a right turn and 3 for a left turn. CW iff right turns > left turns.",
-        "N=0, E=1, S=2, W=3 매핑. 연속 방향 쌍 (d_i, d_{i+1}) 의 차이 (d_{i+1} − d_i) mod 4 가 1 이면 오른쪽 회전, 3 이면 왼쪽 회전. 오른쪽 > 왼쪽 이면 CW."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Map N=0, E=1, S=2, W=3. For each consecutive pair, (next − cur) mod 4 = 1 → right turn, = 3 → left turn. CW iff right > left. Sections build it one piece at a time.",
+        "N=0, E=1, S=2, W=3 매핑. 연속 쌍의 (다음 − 현재) mod 4 가 1 이면 오른쪽, 3 이면 왼쪽. 오른쪽 > 왼쪽 이면 CW. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getClockFenceSections(E),
     },
   ];

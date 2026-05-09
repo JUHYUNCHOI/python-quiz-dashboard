@@ -102,11 +102,7 @@ export function PrintseqExplorer({ E }) {
 }
 
 export function PrintseqSim({ E }) { return <PrintseqExplorer E={E} />; }
-export function PrintseqRunner({ E }) {
-  return <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-    {t(E, "Use the explorer above.", "위 explorer 사용.")}
-  </div>;
-}
+export function PrintseqRunner() { return null; }
 
 /* ════════════════════════════════════════════════════════════════════
    Progressive code: 5 sections.
@@ -120,12 +116,15 @@ export function PrintseqRunner({ E }) {
 const PSQ_S1_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "p = 0",
-  "T = int(data[p]); p += 1",
+  "T = int(data[p])",
+  "p += 1",
   "for _ in range(T):",
-  "    N = int(data[p]); p += 1",
-  "    K = int(data[p]); p += 1",
+  "    N = int(data[p])",
+  "    p += 1",
+  "    K = int(data[p])",
+  "    p += 1",
   "    a = tuple(int(x) for x in data[p:p+N])",
   "    p += N",
   "    # solve case (next steps)",
@@ -197,12 +196,15 @@ const PSQ_FAST_PY = [
   "import sys",
   "from functools import lru_cache",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "p = 0",
-  "T = int(data[p]); p += 1",
+  "T = int(data[p])",
+  "p += 1",
   "for _ in range(T):",
-  "    N = int(data[p]); p += 1",
-  "    K = int(data[p]); p += 1",
+  "    N = int(data[p])",
+  "    p += 1",
+  "    K = int(data[p])",
+  "    p += 1",
   "    a = tuple(int(x) for x in data[p:p+N])",
   "    p += N",
   "",
@@ -391,7 +393,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

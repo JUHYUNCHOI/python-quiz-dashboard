@@ -41,7 +41,19 @@ export function makeCrossRd1Ch1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc04"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Cross the Road I</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #1</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2017 Bronze #1</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Print the total number of road crossings across all cows.",
+                "모든 소를 합친 도로 횡단 총 횟수를 출력해요.")}
+            </div>
           </div>
 
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -115,8 +127,8 @@ export function makeCrossRd1Ch1(E) {
         "Cow: side 0 then side 1. Total crossings?",
         "소: 0번 쪽 그 다음 1번 쪽. 총 횡단 횟수?"),
       hint: t(E,
-        "Side changed once: 0 to 1. Answer: 1.",
-        "쪽이 한 번 바뀜: 0에서 1. 답: 1."),
+        "Count how many times the side actually changes between consecutive observations.",
+        "연속된 관찰 사이에서 쪽이 실제로 몇 번 바뀌는지 세어봐요."),
       answer: 1,
     },
   ];
@@ -128,23 +140,12 @@ export function makeCrossRd1Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCrossRd1Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Maintain a dict last[cow_id] = last seen side. For each observation, if the cow has been seen before on a DIFFERENT side, count one crossing. Then update last[cow_id].",
-        "딕셔너리 last[소 ID] = 마지막으로 본 쪽 을 유지. 각 관찰에서, 소가 이전에 다른 쪽에서 보였으면 횡단 1 카운트. 그 다음 last[소 ID] 갱신."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Maintain a dict last[cow_id] = last seen side. For each observation, if the cow has been seen before on a DIFFERENT side, count one crossing. Then update last[cow_id]. Sections build it one piece at a time.",
+        "딕셔너리 last[소 ID] = 마지막으로 본 쪽 을 유지. 각 관찰에서, 소가 이전에 다른 쪽에서 보였으면 횡단 1 카운트. 그 다음 last[소 ID] 갱신. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCrossRoad1Sections(E),
     },
   ];

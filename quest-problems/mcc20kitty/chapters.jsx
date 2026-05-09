@@ -75,6 +75,18 @@ export function makeMcc20KittyCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>🐱</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Kitty Numbers</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P3</div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ marginTop: 12, background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Compute the N-th Kitty (Tribonacci) number, where each term is the sum of the previous three.",
+                "N 번째 Kitty (트리보나치) 수를 출력 — 각 항은 직전 세 항의 합.")}
+            </div>
+          </div>
         </div>),
     },
 

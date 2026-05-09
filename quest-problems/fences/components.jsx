@@ -436,9 +436,7 @@ export function FenceColumnScanner({ E }) {
             fontFamily: "'JetBrains Mono',monospace",
             boxShadow: "0 4px 16px rgba(5,150,105,.3)",
           }}>{minCount}</div>
-          <div style={{ marginTop: 8, fontSize: 11, color: C.dim }}>
-            {E ? "Click cells to toggle! Try different grids." : "셀을 클릭해서 바꿔봐! 다른 그리드도 해봐."}
-          </div>
+          {/* "Click cells to toggle" caption removed — cells are visibly clickable buttons. */}
           <div style={{ marginTop: 6 }}>
             <button onClick={() => resetToIdle(null)} style={{
               padding: "4px 12px", borderRadius: 6, fontSize: 11, fontWeight: 700,

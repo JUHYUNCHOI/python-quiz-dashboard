@@ -14,7 +14,19 @@ export function makeCheeseCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🧀</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#eab308" }}>Farmer John's Cheese Block</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO December 2024 Bronze #2</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2024 Bronze #2</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fefce8", border: "1.5px solid #eab308", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#854d0e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#854d0e", lineHeight: 1.5 }}>
+              {t(E,
+                "After each carve, output the number of positions where a 1×1×N rod (any axis) fits without overlapping cheese.",
+                "매 파낼 때마다 — 1×1×N 막대 (어느 축이든) 가 치즈와 안 겹치게 들어가는 자리 수를 출력.")}
+            </div>
           </div>
 
           <div style={{ background: "#fefce8", border: "1px solid #fde047", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -139,14 +151,14 @@ export function makeCheeseCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "After 4th carve in sample (cells (0,0,0), (1,1,1), (0,1,0), (1,0,0)), how many valid rod placements?",
-        "샘플의 4 번째 파낸 후 ((0,0,0), (1,1,1), (0,1,0), (1,0,0)), 막대 자리 수?"),
+        "Use the simulator above to walk the 4 carves yourself, then count the rod positions across all 3 axes.",
+        "위 시뮬로 4 번 파낸 직접 — 그 다음 3 축의 막대 자리 합산."),
       question: t(E,
         "Valid rods after 4th carve?",
         "4 번 파낸 후 막대 자리 수?"),
       hint: t(E,
-        "Y-axis row (0, *, 0): cells (0,0,0), (0,1,0) both carved → 1 valid. X-axis row (*, 0, 0): cells (0,0,0), (1,0,0) both carved → 1 valid. Total 2.",
-        "Y 축 row (0, *, 0): (0,0,0), (0,1,0) 둘 다 → 1 자리. X 축 row (*, 0, 0): (0,0,0), (1,0,0) 둘 다 → 1 자리. 합 2."),
+        "Look at each axis: which N-cell line is fully carved?  Sum across X / Y / Z.",
+        "축마다 — 어떤 N 칸 줄이 전부 파였나? X / Y / Z 합산."),
       answer: 2,
     },
   ];
@@ -154,22 +166,13 @@ export function makeCheeseCh1(E) {
 
 export function makeCheeseCh2(E, lang = "py") {
   return [
-    {
-      type: "reveal",
-      narr: t(E,
-        "Plan: maintain three N×N count grids (one per axis). Each carve increments three of them. When a row hits N (fully empty), a valid rod placement appears.",
-        "계획: 축마다 N×N count 격자 (총 3 개). 매 파낼 때 3 개 갱신. row 가 N 도달 (전부 비어 있음) 하면 막대 자리 1 개 추가."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-
+    /* Sections directly. */
     ...getCheeseSections(E).map((sec, i) => ({
       type: "reveal",
       narr: i === 0
-        ? t(E, "Build the solution step by step.", "단계별로 솔루션 작성.")
+        ? t(E,
+            "Maintain three N×N count grids (one per axis).  Each carve increments three of them.  When a row hits N (fully carved), a valid rod placement appears.  Sections build it one piece at a time.",
+            "축마다 N×N count 격자 (총 3 개) 유지. 매 파낼 때 3 개 갱신. row 가 N 도달 (전부 파임) 하면 막대 자리 1 개 추가. 아래 섹션이 한 단락씩 쌓아요.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),

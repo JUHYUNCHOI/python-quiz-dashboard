@@ -11,27 +11,35 @@ export const SOLUTION_CODE = [
   "def solve():",
   "    input_data = sys.stdin.read().split()",
   "    idx = 0",
-  "    W = int(input_data[idx]); idx += 1",
+  "    W = int(input_data[idx])",
+  "    idx += 1",
   "    words = []",
   "    word_id = {}",
   "    for i in range(W):",
-  "        w = input_data[idx]; idx += 1",
+  "        w = input_data[idx]",
+  "        idx += 1",
   "        words.append(w)",
   "        word_id[w] = i",
   "",
-  "    E = int(input_data[idx]); idx += 1",
+  "    E = int(input_data[idx])",
+  "    idx += 1",
   "    adj = [[] for _ in range(W)]",
   "    for _ in range(E):",
-  "        u = word_id[input_data[idx]]; idx += 1",
-  "        v = word_id[input_data[idx]]; idx += 1",
+  "        u = word_id[input_data[idx]]",
+  "        idx += 1",
+  "        v = word_id[input_data[idx]]",
+  "        idx += 1",
   "        adj[u].append(v)",
   "",
-  "    S = int(input_data[idx]); idx += 1",
+  "    S = int(input_data[idx])",
+  "    idx += 1",
   "    for _ in range(S):",
-  "        n = int(input_data[idx]); idx += 1",
+  "        n = int(input_data[idx])",
+  "        idx += 1",
   "        sentence = []",
   "        for _ in range(n):",
-  "            sentence.append(word_id[input_data[idx]]); idx += 1",
+  "            sentence.append(word_id[input_data[idx]])",
+  "            idx += 1",
   "        valid = True",
   "        for i in range(n - 1):",
   "            if sentence[i+1] not in adj[sentence[i]]:",
@@ -59,6 +67,16 @@ export function makeMcc22GrammarCh1(E) {
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcd6"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Grammar</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P1</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E, "For each sentence, check every consecutive word pair against the grammar's edges and print VALID or INVALID.", "각 문장에서 연속 단어 쌍이 모두 문법 화살표에 있는지 확인하고 VALID 또는 INVALID 를 출력해요.")}
+            </div>
           </div>
 
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -121,8 +139,8 @@ export function makeMcc22GrammarCh1(E) {
         "Is 'WE KNOW' a valid sentence? (1=yes, 0=no)",
         "'WE KNOW'는 유효한 문장인가? (1=예, 0=아니오)"),
       hint: t(E,
-        "WE can go to DONT or KNOW. Since WE->KNOW exists, it's valid!",
-        "WE는 DONT 또는 KNOW로 갈 수 있어요. WE->KNOW가 존재하니까 유효해요!"),
+        "Look at the edges starting from WE. Does an edge WE->KNOW exist?",
+        "WE 에서 시작하는 화살표를 봐요. WE->KNOW 화살표가 있나요?"),
       answer: 1,
     },
   ];
@@ -134,23 +152,12 @@ export function makeMcc22GrammarCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22GrammarCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Store all grammar edges in a SET of (X, Y) tuples. For each input sentence, check that every consecutive (X, Y) pair is in the set.",
-        "문법 간선을 (X, Y) 튜플의 SET 으로 저장. 각 입력 문장에서 모든 연속 쌍 (X, Y) 가 SET 에 있는지 확인."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Store all grammar edges in a SET of (X, Y) tuples. For each input sentence, check that every consecutive (X, Y) pair is in the set. Solution code — read part by part. Toggle Python ↔ C++ in header. Sections build it one piece at a time.",
+        "문법 간선을 (X, Y) 튜플의 SET 으로 저장. 각 입력 문장에서 모든 연속 쌍 (X, Y) 가 SET 에 있는지 확인. 풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc22GrammarSections(E),
     },
   ];

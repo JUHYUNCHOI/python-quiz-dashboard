@@ -65,6 +65,18 @@ export function makeStuckCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "For each cow, output the number of cells she grazes (or 'Infinity' if she never stops).",
+                "각 소가 먹은 칸 수 (멈추지 않으면 'Infinity') 를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -126,8 +138,8 @@ export function makeStuckCh1(E) {
         "How many movement directions exist in this problem?",
         "이 문제에서 이동 방향은 몇 가지?"),
       hint: t(E,
-        "North and East. That's 2 directions.",
-        "북쪽과 동쪽. 2가지 방향이에요."),
+        "Re-read the problem statement — count the listed directions.",
+        "문제를 다시 읽어 봐 — 적힌 방향의 수를 세어 봐."),
       answer: 2,
     },
   ];
@@ -139,23 +151,12 @@ export function makeStuckCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeStuckCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Enumerate every N-cow / E-cow pair and compute their potential collision time. Sort events by time. Process: a cow that's already stopped doesn't trigger; the other is the one who arrives later — she stops.",
-        "모든 N-소 / E-소 쌍을 열거해 잠재적 충돌 시각 계산. 시간순 정렬. 처리: 이미 멈춘 소는 발동 X; 다른 한 마리 (더 늦게 도착) 가 멈춤."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Enumerate every N-cow / E-cow pair, compute potential collision time, sort events. Process: a cow already stopped doesn't trigger; the later arriver stops. Sections build it one piece at a time.",
+        "모든 N / E 소 쌍의 잠재 충돌 시각 계산, 시간순 정렬. 처리 — 이미 멈춘 소는 발동 X, 더 늦게 도착한 소가 멈춤. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getStuckInRutSections(E),
     },
   ];

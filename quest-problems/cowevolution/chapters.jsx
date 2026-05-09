@@ -62,6 +62,18 @@ export function makeEvolutionCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #3</div>
           </div>
 
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output 'yes' if a valid evolutionary tree could have produced these populations, else 'no'.",
+                "\uc8fc\uc5b4\uc9c4 \uc9d1\ub2e8\ub4e4\uc744 \ub9cc\ub4e4 \uc218 \uc788\ub294 \uc720\ud6a8\ud55c \uc9c4\ud654 \ud2b8\ub9ac\uac00 \uc874\uc7ac\ud558\uba74 'yes', \uc544\ub2c8\uba74 'no' \ucd9c\ub825.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -119,13 +131,14 @@ export function makeEvolutionCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For 2 populations with no crossing characteristics, the answer is 'yes'.\nEncode: yes=1, no=0.\nWhat is the answer?", "교차 특성이 없는 2개 집단의 답은 'yes'야. yes=1, no=0으로 인코딩. 답은?"),
+        "Same {fly} and {swim} populations — your answer (1=yes, 0=no).",
+        "같은 {fly} 와 {swim} 집단 — 답 (1=yes, 0=no)."),
       question: t(E,
         "Populations {fly}, {swim}. Valid tree? (1=yes, 0=no)",
         "집단 {fly}, {swim}. 유효한 트리? (1=yes, 0=no)"),
       hint: t(E,
-        "No crossing pair exists, so the answer is yes = 1.",
-        "교차하는 쌍이 없으니 답은 yes = 1."),
+        "Do these two populations share any characteristics?",
+        "두 집단이 공유하는 특성이 있어?"),
       answer: 1,
     },
   ];
@@ -137,23 +150,12 @@ export function makeEvolutionCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeEvolutionCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Two characteristics A, B 'cross' (preventing a valid tree) if some population has just {A}, another has just {B}, and another has both {A, B}. Brute-force check every pair of characteristics.",
-        "두 특성 A, B 가 '교차' 하면 (유효한 트리 불가) — 어떤 집단은 {A 만}, 어떤 집단은 {B 만}, 어떤 집단은 {A, B} 둘 다. 모든 특성 쌍을 완전 탐색."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code — straight in.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Two characteristics A, B 'cross' (no valid tree) if some pop has just {A}, another has just {B}, another has both {A, B}.  Check every pair.  Sections build it one piece at a time.",
+        "두 특성 A, B 가 '교차' (유효한 트리 X) — 어떤 집단은 {A 만}, 어떤 집단은 {B 만}, 어떤 집단은 {A, B} 둘 다. 모든 특성 쌍 확인. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCowEvolutionSections(E),
     },
   ];

@@ -119,12 +119,8 @@ export function DistanceCalc({ E }) {
             })}
           </div>
 
-          {/* Explanation */}
-          <div style={{ textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 6, lineHeight: 1.6 }}>
-            {t(E,
-              "For each letter: take the smaller count = matched letters",
-              "각 글자마다: 둘 중 적은 쪽 = 겹치는 수")}
-          </div>
+          {/* Explanation removed — the per-letter min row above and the "shared = N"
+              line in the result card below name the concept. */}
 
           {/* Result */}
           <div style={{
@@ -138,10 +134,7 @@ export function DistanceCalc({ E }) {
         </>
       )}
 
-      {/* Quick presets */}
-      <div style={{ textAlign: "center", marginTop: 8, fontSize: 10, color: C.dim, fontWeight: 700 }}>
-        {t(E, "Try presets:", "예시 해보기:")}
-      </div>
+      {/* Preset row label removed — the chips themselves are obviously clickable. */}
       <div style={{ display: "flex", gap: 3, justifyContent: "center", marginTop: 4, flexWrap: "wrap" }}>
         {[["ade","adb"],["ade","dez"],["ade","zaf"],["ade","aed"],["ade","wxy"]].map(([a,b], i) => (
           <button key={i} onClick={() => { setW1(a); setW2(b); }} style={{

@@ -103,11 +103,7 @@ export function CheeseSimulator({ E }) {
 }
 
 export function CheeseSim({ E }) { return <CheeseSimulator E={E} />; }
-export function CheeseRunner({ E }) {
-  return <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-    {t(E, "Use the simulator above.", "위 시뮬레이터 사용.")}
-  </div>;
-}
+export function CheeseRunner() { return null; }
 
 /* ════════════════════════════════════════════════════════════════════
    Progressive code: 4 sections.
@@ -116,10 +112,12 @@ export function CheeseRunner({ E }) {
 const CHS_S1_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "Q = int(data[p]); p += 1",
+  "N = int(data[p])",
+  "p += 1",
+  "Q = int(data[p])",
+  "p += 1",
 ];
 const CHS_S1_CPP = [
   "#include <iostream>",
@@ -157,9 +155,12 @@ const CHS_S3_PY = [
   "# Each carve increments 3 row counters (one per axis).",
   "# When a counter hits N, a valid rod placement appears.",
   "for _ in range(Q):",
-  "    x = int(data[p]); p += 1",
-  "    y = int(data[p]); p += 1",
-  "    z = int(data[p]); p += 1",
+  "    x = int(data[p])",
+  "    p += 1",
+  "    y = int(data[p])",
+  "    p += 1",
+  "    z = int(data[p])",
+  "    p += 1",
   "    if (x, y, z) in carved:",
   "        print(valid)",
   "        continue",
@@ -194,10 +195,12 @@ const CHS_S3_CPP = [
 const CHS_FULL_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "Q = int(data[p]); p += 1",
+  "N = int(data[p])",
+  "p += 1",
+  "Q = int(data[p])",
+  "p += 1",
   "",
   "cz = [[0] * N for _ in range(N)]",
   "cy = [[0] * N for _ in range(N)]",
@@ -206,9 +209,12 @@ const CHS_FULL_PY = [
   "valid = 0",
   "",
   "for _ in range(Q):",
-  "    x = int(data[p]); p += 1",
-  "    y = int(data[p]); p += 1",
-  "    z = int(data[p]); p += 1",
+  "    x = int(data[p])",
+  "    p += 1",
+  "    y = int(data[p])",
+  "    p += 1",
+  "    z = int(data[p])",
+  "    p += 1",
   "    if (x, y, z) in carved:",
   "        print(valid)",
   "        continue",
@@ -339,7 +345,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

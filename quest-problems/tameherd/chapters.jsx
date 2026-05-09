@@ -74,6 +74,18 @@ export function makeTameHerdCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the MIN and MAX possible breakouts consistent with the log, or −1 if impossible.",
+                "로그와 일치하는 탈출 횟수의 최솟값·최댓값 (불가능하면 −1) 을 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -144,8 +156,8 @@ export function makeTameHerdCh1(E) {
         "Log [0, 1, 2, 0, 1]. Number of breakouts?",
         "로그 [0, 1, 2, 0, 1]. 탈출 횟수?"),
       hint: t(E,
-        "Count the zeros: positions 0 and 3 have value 0.",
-        "0의 개수: 위치 0과 3에 값 0이 있어요."),
+        "A breakout day shows up as which counter value?",
+        "탈출이 일어난 날의 카운터 값은 뭘까?"),
       answer: 2,
     },
   ];
@@ -157,23 +169,12 @@ export function makeTameHerdCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeTameHerdCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Walk the log once, tracking the previous known value. Each 0 marks a breakout. For non-zero values, verify consistency: this should be previous + 1, OR a new sequence starting from 0/breakout.",
-        "로그를 한 번 순회, 이전 알려진 값 추적. 0 은 탈출 표시. 0 이 아닌 값은 일관성 확인: 이전 + 1 이거나 새 시퀀스 시작 (0/탈출)."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Walk the log once tracking previous known value. Each 0 = breakout. Non-zero values: check consistency (previous + 1, or new sequence from 0). Sections build it one piece at a time.",
+        "로그 한 번 순회 — 이전 값 추적. 0 = 탈출. 0 이 아니면 일관성 확인 (이전 + 1, 또는 0 부터 새 시퀀스). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getTameHerdSections(E),
     },
   ];

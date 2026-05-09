@@ -43,6 +43,18 @@ export function makeAbcsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Recover A B C from the 7 shuffled sums and output them in non-decreasing order.",
+                "섞인 7개 합에서 원래 A B C 를 복원해 오름차순으로 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -106,8 +118,8 @@ export function makeAbcsCh1(E) {
         "Numbers: [2,2,4,7,9,9,11]. A+B+C=11. A = ?",
         "숫자: [2,2,4,7,9,9,11]. A+B+C=11. A = ?"),
       hint: t(E,
-        "Sort: [2,2,4,7,9,9,11]. Smallest = A = 2.",
-        "정렬: [2,2,4,7,9,9,11]. 가장 작은 수 = A = 2."),
+        "After sorting, which position holds A?",
+        "정렬 후 A 는 어느 위치에 올까?"),
       answer: 2,
     },
   ];
@@ -119,23 +131,12 @@ export function makeAbcsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeAbcsCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sort the 7 numbers, then read off A, B, C from known positions in the sorted list.",
-        "7개 숫자를 정렬하면 A, B, C 가 정해진 위치에서 바로 읽혀요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort the 7 numbers, then read A, B, C off known positions of the sorted list. Sections build it one piece at a time.",
+        "7개 숫자를 정렬한 뒤 A, B, C 를 정해진 위치에서 바로 읽어요. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getAbcsSections(E),
     },
   ];

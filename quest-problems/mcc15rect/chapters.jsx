@@ -40,6 +40,16 @@ export function makeMcc15RectCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E, "Print the coordinates of the missing 4th corner of the rectangle.", "직사각형의 누락된 4번째 꼭짓점 좌표를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -94,8 +104,8 @@ export function makeMcc15RectCh1(E) {
         "Corners (0,0),(2,0),(0,3). x of 4th corner = ?",
         "꼭짓점 (0,0),(2,0),(0,3). 4번째 꼭짓점의 x좌표 = ?"),
       hint: t(E,
-        "x appears in: 0, 2, 0. The unique one is 2. (Or XOR: 0^2^0 = 2)",
-        "x가 나타나는 값: 0, 2, 0. 유일한 건 2. (또는 XOR: 0^2^0 = 2)"),
+        "x-coordinates given: 0, 2, 0. Two of them match (left side appears twice) — which x is the lonely one?",
+        "주어진 x 좌표: 0, 2, 0. 두 개는 짝이 있어요 (한 변이 2번 등장) — 짝이 없는 x 는 어떤 값?"),
       answer: 2,
     },
   ];
@@ -107,23 +117,12 @@ export function makeMcc15RectCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc15RectCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "In an axis-aligned rectangle, each x-coordinate appears exactly twice (left/right side). XOR-ing the 3 given x's leaves the missing one (since a ^ a = 0). Same for y.",
-        "축에 평행한 직사각형에서 각 x 좌표는 정확히 2 번 등장 (좌/우). 주어진 3 개 x 를 XOR 하면 빠진 1 개가 남아요 (a ^ a = 0). y 도 동일."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "In an axis-aligned rectangle, each x-coordinate appears exactly twice (left/right side). XOR-ing the 3 given x's leaves the missing one (since a ^ a = 0). Same for y. Sections build it one piece at a time.",
+        "축에 평행한 직사각형에서 각 x 좌표는 정확히 2 번 등장 (좌/우). 주어진 3 개 x 를 XOR 하면 빠진 1 개가 남아요 (a ^ a = 0). y 도 동일. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc15RectSections(E),
     },
   ];

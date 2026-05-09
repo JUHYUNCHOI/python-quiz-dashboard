@@ -27,10 +27,14 @@ export const SOLUTION_CODE = [
   "",
   "out = []",
   "for _ in range(T):",
-  "    N = int(data[idx]); idx += 1",
-  "    h = [int(data[idx + i]) for i in range(N)]; idx += N",
-  "    a = [int(data[idx + i]) for i in range(N)]; idx += N",
-  "    t = [int(data[idx + i]) for i in range(N)]; idx += N",
+  "    N = int(data[idx])",
+  "    idx += 1",
+  "    h = [int(data[idx + i]) for i in range(N)]",
+  "    idx += N",
+  "    a = [int(data[idx + i]) for i in range(N)]",
+  "    idx += N",
+  "    t = [int(data[idx + i]) for i in range(N)]",
+  "    idx += N",
   "    out.append(str(solve(N, h, a, t)))",
   "",
   "print(chr(10).join(out))",
@@ -54,6 +58,18 @@ export function makeFjFarmsCh1(E) {
             <div style={{ fontSize: 32, marginBottom: 4 }}>🌱</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>FJ Actually Farms</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #3</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the smallest day x ≥ 0 on which every t[i] matches (or -1 if no such day).",
+                "모든 t[i] 가 맞는 가장 작은 날 x ≥ 0 (없으면 -1) 를 출력.")}
+            </div>
           </div>
 
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -243,8 +259,8 @@ export function makeFjFarmsCh1(E) {
         "h = [7, 3] at d = 0.  Number of plants strictly taller than plant 0?",
         "h = [7, 3], d = 0. 식물 0 보다 큰 식물 수?"),
       hint: t(E,
-        "Plant 0 has height 7, plant 1 has height 3.  Plant 1 < plant 0 — so 0 plants are taller than plant 0.",
-        "식물 0 = 7, 식물 1 = 3. 식물 1 < 식물 0 — 식물 0 보다 큰 식물 0 개."),
+        "Compare heights side by side — is plant 1 taller, shorter, or equal to plant 0?",
+        "키를 나란히 비교 — 식물 1 이 식물 0 보다 큰가, 작은가, 같은가?"),
       answer: 0,
     },
   ];
@@ -256,24 +272,12 @@ export function makeFjFarmsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeFjFarmsCh2(E, lang = "py") {
   return [
-    // 2-1: Light intro — code first.
-    {
-      type: "reveal",
-      narr: t(E,
-        "Try every day x = 0, 1, 2, ...  At each x compute heights and the count of strictly-taller plants per i.  Return the first x where counts match t.  Editorial says answers are ≤ 1000 under Bronze bounds.",
-        "x = 0, 1, 2, ... 매 x 시도. 각 x 에서 키 계산하고 i 마다 더 큰 식물 수 세기. 카운트가 t 와 같은 첫 x 반환. Editorial: Bronze 제약 안에선 답이 ≤ 1000."),
-      content: (
-        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-          {t(E,
-            "Why not binary-search? The 'order matches' property isn't monotonic in x — two plants can swap places more than once.  So just brute-force x.  Code section by section.",
-            "왜 이분탐색 안 됨? '순위 일치' 가 x 에 대해 단조롭지 않아서 — 두 식물이 여러 번 자리 바뀔 수 있음. 그냥 브루트. 코드 한 단락씩.")}
-        </div>),
-    },
-    // 2-2: Full code reveal
+    // 2-1: Progressive code — try every x = 0, 1, ..., 1000.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Try every day x = 0, 1, …, 1000.  At each x compute heights, count strictly-taller plants per i, return the first x matching t.  Sections build the loop one piece at a time.",
+        "x = 0, 1, …, 1000 모두 시도. 각 x 에서 키 계산하고 i 마다 더 큰 식물 수를 세서 t 와 일치하는 첫 x 반환. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getFjFarmsSections(E),
     },
   ];

@@ -53,6 +53,18 @@ export function makeHungryCowCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of days from 1 to T on which Bessie actually eats.",
+                "1일 ~ T일 중 Bessie 가 실제로 먹는 날의 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -173,22 +185,11 @@ export function makeHungryCowCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeHungryCowCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Don't simulate every day (T can be huge). Process delivery events in order — between deliveries, eat at most (stockpile) days; after T, stop. Sum eating days.",
-        "매일을 시뮬레이션하면 안 돼요 (T 가 매우 큼). 배달 이벤트 순서대로 — 두 배달 사이에 (재고) 일까지 먹고, T 가 넘으면 멈춤. 먹는 날을 합산해요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Don't simulate every day (T can be huge). Process delivery events in order — between deliveries, eat at most (stockpile) days; stop at T. Sum eating days. Sections build it one piece at a time.",
+        "매일 시뮬 안 함 (T 가 매우 큼). 배달 이벤트를 순서대로 처리 — 배달 사이에 (재고) 일까지 먹고 T 에서 멈춤. 먹는 날을 합산. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getHungryCowSections(E),
     },
     {

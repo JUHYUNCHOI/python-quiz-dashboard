@@ -56,6 +56,18 @@ export function makeComfyCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "After each cow is added, output the current count of comfortable cows (exactly 3 of 4 neighbors occupied).",
+                "각 추가 직후, 편안한 소 (이웃 4개 중 정확히 3개가 채워진 소) 의 현재 개수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -117,8 +129,8 @@ export function makeComfyCh1(E) {
         "Cow with exactly 3 neighbors: comfortable? (1=yes, 0=no)",
         "이웃 3마리인 소: 편안? (1=예, 0=아니오)"),
       hint: t(E,
-        "The definition says exactly 3 neighbors makes a cow comfortable.",
-        "정의상 정확히 이웃 3마리면 소가 편안해요."),
+        "Re-read the comfortable rule — exactly how many neighbors?",
+        "편안 조건을 다시 읽어 봐 — 이웃이 정확히 몇 마리?"),
       answer: 1,
     },
   ];
@@ -130,23 +142,12 @@ export function makeComfyCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeComfyCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Maintain a SET of cow positions and a current comfort count. When a new cow is added, only the new cow + her 4 neighbors can change comfort status — recheck just those 5 cells.",
-        "소 위치 집합 (SET) 과 현재 편안한 소의 수를 유지. 새 소가 추가되면 그 소 + 4 이웃 만이 편안 상태가 바뀔 수 있으니 그 5 칸만 재확인."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Maintain a SET of cow positions and a current comfort count. When a new cow is added, only the new cow + her 4 neighbors can change status — recheck just those 5 cells. Sections build it one piece at a time.",
+        "소 위치 집합 (SET) 과 현재 편안한 소 수 유지. 새 소가 추가되면 그 소 + 4 이웃만 상태가 바뀔 수 있으니 그 5 칸만 재확인. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getComfyCowsSections(E),
     },
   ];

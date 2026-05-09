@@ -88,7 +88,20 @@ export function makeSubseqMedianCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcca"}</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Increasing Subsequence Median Sum</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P6</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", margin: "12px 0", textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the sum of medians of all good subsequences mod 998244353.",
+                "모든 좋은 부분수열의 중앙값 합을 998244353 으로 나눈 나머지를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "Example: A=[1,2,4,3].\nGood subsequences: [1],[2],[4],[3] (medians 1,2,4,3), [1,2,4],[1,2,3] (medians 2,2). Sum = 1+2+4+3+2+2 = 14.",
               "예시: A=[1,2,4,3]. 좋은 부분수열: [1],[2],[4],[3] (중앙값 1,2,4,3),\n[1,2,4],[1,2,3] (중앙값 2,2). 합 = 1+2+4+3+2+2 = 14.")}
@@ -123,8 +136,8 @@ export function makeSubseqMedianCh1(E) {
         "A=[1,2,3]. Sum of medians of all good subsequences?",
         "A=[1,2,3]. 모든 좋은 부분수열의 중앙값의 합은?"),
       hint: t(E,
-        "Good subseqs: [1](median 1), [2](median 2), [3](median 3), [1,2,3](median 2). Sum = 1+2+3+2 = 8.",
-        "좋은 부분수열: [1](중앙값 1), [2](중앙값 2), [3](중앙값 3), [1,2,3](중앙값 2). 합 = 1+2+3+2 = 8."),
+        "List the good subsequences and add up each median.",
+        "좋은 부분수열을 모두 적어 보고 각 중앙값을 더해 봐."),
       answer: 8,
     },
   ];
@@ -136,23 +149,12 @@ export function makeSubseqMedianCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeSubseqMedianCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "For every element v at index i, the good subsequences where v is the median come from picking equal-length increasing chains on both sides — k smaller-element chains on the left, k larger-element chains on the right.",
-        "각 위치 i 의 원소 v 가 중앙값인 좋은 부분수열은, 양쪽에서 같은 길이의 증가 사슬을 선택 — 왼쪽에서 v 보다 작은 원소들의 길이 k 사슬, 오른쪽에서 v 보다 큰 원소들의 길이 k 사슬."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "For each i, A[i] is the median when we pick equal-length increasing chains on both sides — k smaller-element chain on the left, k larger-element chain on the right. Sections build it one piece at a time.",
+        "각 i 에서 A[i] 가 중앙값 = 양쪽에 같은 길이 증가 사슬 — 왼쪽 작은 값 k 사슬, 오른쪽 큰 값 k 사슬. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getSubseqMedianSections(E),
     },
   ];

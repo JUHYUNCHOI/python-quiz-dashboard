@@ -32,6 +32,18 @@ export function makePresentsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>Bronze warm-up</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "For each query, print how many presents had to be removed before reaching the target.",
+                "쿼리마다 타깃에 도달하기 전 빼내야 했던 선물의 개수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -139,8 +151,14 @@ export function makePresentsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Stack = [5,3,1,4,2].\nAfter finding 1 (remove 5,3,1), stack becomes [4,2].\nNow find 2.\nHow many above?", "스택 = [5,3,1,4,2]. 1을 찾은 후 (5,3,1 제거), 스택은 [4,2]. 이제 2를 찾기. 위에 몇 개?"),
-      question: t(E, "Stack [4,2], find 2. Presents above?", "스택 [4,2], 2를 찾기. 위의 개수?"),
+        "Two queries in a row — keep track of what's left in the stack after the first one.",
+        "쿼리 두 번 연속 — 첫 번째 후 스택에 뭐가 남는지 챙기면서 풀어 봐."),
+      question: t(E,
+        "Stack starts [5,3,1,4,2]. Query 1 = find 1, then query 2 = find 2. Presents above for query 2?",
+        "스택 [5,3,1,4,2]. 쿼리 1 = 1 찾기, 쿼리 2 = 2 찾기. 쿼리 2 의 위 개수?"),
+      hint: t(E,
+        "After query 1 some presents are gone. Recount from the new stack.",
+        "쿼리 1 후 몇 개가 사라졌어. 새 스택에서 다시 세어 봐."),
       answer: 1,
     },
     {
@@ -154,26 +172,17 @@ export function makePresentsCh1(E) {
 export function makePresentsCh2(E, lang = "py") {
   return [
     {
-      type: "reveal",
-      narr: t(E,
-        "For each query: find target's position, print it, then remove.\nThe stack shrinks by 1 each time.",
-        "쿼리마다: 타겟 위치 찾기 → 출력 → 제거.\n매번 스택은 1개씩 줄어듦."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    {
       type: "progressive",
       narr: t(E,
-        "Now build the simulation step by step. Each section reveals one piece.", "시뮬레이션을 단계별로 만들어보자. 각 섹션마다 한 조각씩."),
+        "For each query: find target's position, print it, then remove.  Sections build the loop one piece at a time.",
+        "쿼리마다 타깃 위치 찾기 → 출력 → 제거. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getPresentsSections(E),
     },
     {
       type: "runner",
       narr: t(E,
-        "Try your own stack and queries.", "직접 스택과 쿼리 시도."),
+        "Try your own stack and queries.",
+        "직접 스택과 쿼리 시도."),
     },
   ];
 }

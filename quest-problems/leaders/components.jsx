@@ -8,8 +8,10 @@ const FULL_PY = [
   "import sys",
   "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "s = data[p]; p += 1",
+  "N = int(data[p])",
+  "p += 1",
+  "s = data[p]",
+  "p += 1",
   "arr = [int(data[p + i]) for i in range(N)]",
   "arr = [x - 1 for x in arr]",
   "",
@@ -136,7 +138,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

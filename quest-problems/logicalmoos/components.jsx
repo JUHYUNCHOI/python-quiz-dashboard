@@ -94,14 +94,7 @@ export function LogicalMoosSim({ E }) {
   );
 }
 
-export function LogicalMoosRunner({ E }) {
-  return (
-    <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
-      {t(E, "Use the Sim above to see how AND-chains group via OR. Per-query brute force in code section.",
-            "위 Sim에서 OR로 AND-체인이 어떻게 묶이는지 봐. 쿼리당 brute force는 코드 섹션 참고.")}
-    </div>
-  );
-}
+export function LogicalMoosRunner() { return null; }
 
 /* Section 1: Read N, Q + words */
 const LM_INPUT_PY = [
@@ -365,7 +358,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

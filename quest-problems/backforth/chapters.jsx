@@ -55,6 +55,18 @@ export function makeBackForthCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of distinct possible total milk amounts in barn 1 after 4 days of alternating bucket transfers.",
+                "4 일간 양동이 왕복 후 헛간 1 의 가능한 우유 총량 (서로 다른 값) 개수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -94,7 +106,8 @@ export function makeBackForthCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If all 10 buckets in each barn have the same amount s, then every day we transfer exactly s.\nAfter 4 days (2 out, 2 back), barn 1 = 1000 - s + s - s + s = 1000.\nOnly 1 outcome!", "각 헛간의 10개 양동이가 모두 같은 양 s이면, 매일 정확히 s를 이동해요.\n4일 후 (2번 보내고 2번 받으면), 헛간1 = 1000 - s + s - s + s = 1000.\n결과 1개!"),
+        "Imagine all buckets are the same size.  Walk through 4 days mentally — what could change?",
+        "모든 양동이가 같은 크기라고 상상. 4 일을 머릿속으로 따라가 봐 — 뭐가 변할 수 있어?"),
       question: t(E,
         "All buckets same size s. After 4 days of back and forth, how many distinct outcomes for barn 1?",
         "모든 양동이 크기 같으면 s. 4일간 왕복 후 헛간 1의 고유 결과 수?"),
@@ -112,13 +125,14 @@ export function makeBackForthCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "All buckets have the same amount. How many distinct final amounts for barn 1?", "모든 양동이가 같은 양이에요. 헛간 1의 고유 최종 우유량은 몇 가지?"),
+        "Now you say it — all 10 buckets identical, 4-day swap.  How many DIFFERENT final amounts can barn 1 have?",
+        "직접 — 양동이 10 개 동일, 4 일 왕복. 헛간 1 의 *서로 다른* 최종 양은 몇 가지?"),
       question: t(E,
         "All identical buckets. Distinct outcomes for barn 1?",
         "모든 양동이 동일. 헛간 1의 고유 결과 수?"),
       hint: t(E,
-        "Same bucket sizes means same transfer every time. Always returns to 1000.",
-        "같은 크기 양동이 = 매번 같은 이동량. 항상 1000으로 돌아와요."),
+        "Each transfer moves the same amount.  Does the total in barn 1 ever change?",
+        "이동량이 매번 같음. 헛간 1 의 총량이 *바뀔 수* 있어?"),
       answer: 1,
     },
   ];
@@ -130,23 +144,12 @@ export function makeBackForthCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBackForthCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Recursively try every choice over the 4 days. State = (day, barn1_buckets, barn2_buckets). Use a set to collect distinct final barn1 totals across all branches.",
-        "4 일 동안 모든 선택을 재귀적으로 시도. 상태 = (일, 헛간1 양동이, 헛간2 양동이). 집합으로 모든 분기의 헛간1 최종 총량의 서로 다른 값 수집."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code — straight in, no placeholder.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Try every choice across the 4 days — collect all distinct barn 1 totals into a set.  Sections build the recursion one piece at a time.",
+        "4 일간 모든 선택을 시도 — 헛간 1 의 모든 가능한 총량을 set 에 모음. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBackForthSections(E),
     },
   ];

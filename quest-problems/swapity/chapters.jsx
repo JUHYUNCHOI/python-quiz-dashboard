@@ -61,6 +61,18 @@ export function makeSwapityCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the final order after K rounds of the two-reversal sequence.",
+                "두 번의 뒤집기 라운드를 K 번 반복한 뒤의 최종 줄을 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -128,8 +140,8 @@ export function makeSwapityCh1(E) {
         "[1,2,3], reverse(1-2) then reverse(2-3) each round. Cycle length?",
         "[1,2,3], 매 라운드 reverse(1-2) 후 reverse(2-3). 순환 길이?"),
       hint: t(E,
-        "R1: [2,3,1], R2: [3,1,2], R3: [1,2,3]. Returns after 3 rounds.",
-        "R1: [2,3,1], R2: [3,1,2], R3: [1,2,3]. 3라운드 후 복귀."),
+        "Apply the round step by step until the array returns to start.",
+        "한 라운드씩 적용해 배열이 처음으로 되돌아올 때까지 세어 봐."),
       answer: 3,
     },
   ];
@@ -141,23 +153,12 @@ export function makeSwapityCh1(E) {
    --------------------------------------------------------------- */
 export function makeSwapityCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Simulate one round of reversals on identity [1..N] to get the permutation P. Track each cow's cycle length in P; effective rounds = K mod cycle. Apply that many actual rounds.",
-        "단위 순열 [1..N] 에 한 라운드 뒤집기를 적용해 순열 P 를 구함. P 에서 각 소의 순환 길이 추적; 실제 라운드 = K mod 순환. 그만큼 진짜 라운드 적용."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Apply one round to identity [1..N] → permutation P. Track each cow's cycle length in P; effective rounds = K mod cycle, apply that many. Sections build it one piece at a time.",
+        "단위 순열 [1..N] 에 한 라운드 적용해 순열 P 도출. P 에서 각 소의 순환 길이 — 실제 라운드 = K mod 순환. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getSwapitySections(E),
     },
   ];

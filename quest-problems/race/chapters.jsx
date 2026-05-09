@@ -46,6 +46,18 @@ export function makeRaceCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "For each (K, X), output the minimum seconds to cover K meters and finish at speed ≤ X.",
+                "각 (K, X) 에 대해 K 미터를 달리고 최종 속도 ≤ X 로 끝내는 최소 초 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -183,23 +195,12 @@ export function makeRaceCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeRaceCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Optimal strategy: accelerate to some peak speed P, then decelerate to ≤ X. Distance covered = (1+2+…+P) for accel + (P+(P−1)+…+(X+1)) for decel. Find smallest P so total ≥ K, and total time = P + (P − X).",
-        "최적 전략: 어떤 최고 속도 P 까지 가속, 그 후 X 이하로 감속. 거리 = 가속 (1+2+…+P) + 감속 (P+(P−1)+…+(X+1)). 총 거리 ≥ K 가 되는 가장 작은 P 를 찾으면 총 시간 = P + (P − X)."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Optimal: accelerate to some peak P, then decelerate to ≤ X. Distance = (1+…+P) + (P+(P−1)+…+(X+1)). Find smallest P with total ≥ K → time = P + (P − X). Sections build it one piece at a time.",
+        "최적: 어떤 정점 P 까지 가속, X 이하로 감속. 거리 = (1+…+P) + (P+(P−1)+…+(X+1)). 거리 ≥ K 인 가장 작은 P → 시간 = P + (P − X). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getRaceSections(E),
     },
   ];

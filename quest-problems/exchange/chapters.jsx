@@ -74,6 +74,18 @@ export function makeExchangeCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Print how much milk each cow holds after M rounds of clockwise passing.",
+                "M 라운드 동안 시계방향으로 우유를 전달한 뒤, 각 소가 든 우유 양을 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#dbeafe", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -119,11 +131,48 @@ export function makeExchangeCh1(E) {
         </div>),
     },
 
-    // 1-2 원형 배치
+    // 1-2 [승] sample input/output
     {
       type: "reveal",
       narr: t(E,
-        "Let's start with a simple example: 4 cows with milk amounts [5, 3, 8, 4].\nThey stand in a circle!", "간단한 예시부터: 우유가 [5, 3, 8, 4]인 4마리 소. 원형으로 서있어요!"),
+        "Input is N M then N milk amounts. Output is one line of N final amounts.",
+        "입력은 N M 한 줄, 그 다음 우유 N 개. 출력은 마지막 우유 N 개 한 줄."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55, color: "#7c2d12", whiteSpace: "pre" }}>
+{`4 1
+5 3 8 4`}
+              </div>
+              <div style={{ fontSize: 10.5, color: "#9a3412", marginTop: 6, lineHeight: 1.5 }}>
+                {t(E, "N=4 cows, M=1 round. Then N milk amounts.", "N=4 마리, M=1 라운드. 그 다음 우유 N 개.")}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55, color: "#166534", whiteSpace: "pre" }}>
+{`4 5 3 8`}
+              </div>
+              <div style={{ fontSize: 10.5, color: "#15803d", marginTop: 6, lineHeight: 1.5 }}>
+                {t(E, "Each cow's milk after M rounds, space-separated.", "M 라운드 후 각 소의 우유 — 공백 구분.")}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center" }}>
+            {t(E, "→ Next pages walk through how 4 5 3 8 actually appears.",
+                  "→ 다음 페이지에서 4 5 3 8 이 어떻게 나오는지 자세히.")}
+          </div>
+        </div>),
+    },
+
+    // 1-3 원형 배치
+    {
+      type: "reveal",
+      narr: t(E,
+        "Picture the 4 cows in a circle, each holding the starting amount.",
+        "4 마리 소가 원형으로 — 각자 시작 우유를 들고 있어."),
       content: (
         <div style={{ padding: 16 }}>
           <CowCircle values={[5, 3, 8, 4]} size={140} />
@@ -162,7 +211,8 @@ export function makeExchangeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "After round 1: each cow has the milk of the previous cow.\nThe milk just 'rotates' around the circle!", "라운드 1 후: 각 소는 이전 소의 우유를 가짐. 우유가 원형으로 '회전'하는 것!"),
+        "Try it — trace one round in your head and see who ends up with what.",
+        "직접 — 머릿속으로 한 라운드 따라가 보고 누가 뭘 갖게 되는지 봐."),
       question: t(E,
         "Start: [5,3,8,4]. After 1 round, cow 2 has...?",
         "시작: [5,3,8,4]. 1라운드 후 소2는...?"),
@@ -209,7 +259,8 @@ export function makeExchangeCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "After INFINITE rounds, the milk distributes as evenly as possible.\nTotal 20 ÷ 4 cows = 5 each!\nEveryone gets the average.", "무한 라운드 후, 우유는 가능한 균등하게 분배. 총 20 ÷ 4마리 = 각 5! 모두 평균을 받아요."),
+        "Look at what happens if we keep passing forever — the bars on the right.  What do you notice?",
+        "계속 끝없이 전달하면 어떻게 될까 — 오른쪽 막대 봐. 뭐가 보여?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20 }}>
@@ -233,7 +284,8 @@ export function makeExchangeCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "After infinite rounds, every cow has total/N. That's just the average!", "무한 라운드 후, 모든 소가 total/N을 가짐. 그냥 평균!"),
+        "Use what you just observed — total milk stays the same, distributed across N cows.",
+        "방금 본 것 그대로 — 총 우유는 그대로, N 마리에 나눠 가짐."),
       question: t(E,
         "N=5, milk=[2,4,6,8,10]. Total=30. Each cow gets?",
         "N=5, milk=[2,4,6,8,10]. 합계=30. 각 소는?"),

@@ -53,6 +53,18 @@ export function makeMooOpsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum operations to turn the string into 'MOO', or -1 if impossible.",
+                "문자열을 'MOO' 로 만드는 최소 연산 수 (불가능하면 -1) 를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -125,8 +137,8 @@ export function makeMooOpsCh1(E) {
         "String \"MOOO\". Min operations to make it \"MOO\"?",
         "문자열 \"MOOO\". \"MOO\"로 만드는 최소 연산 수?"),
       hint: t(E,
-        "Use the first 3 characters \"MOO\" and delete the last 'O'. That's 1 deletion = 1 operation.",
-        "처음 3문자 \"MOO\"를 사용하고 마지막 'O'를 삭제해요. 삭제 1번 = 연산 1번."),
+        "Try keeping the first 3 chars and removing extras with deletes / flips.",
+        "앞 3 글자를 살리고 나머지를 삭제/뒤집기로 처리하는 걸 시도해 봐."),
       answer: 1,
     },
   ];
@@ -138,23 +150,12 @@ export function makeMooOpsCh1(E) {
    =============================================================== */
 export function makeMooOpsCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "The middle character of the final 'MOO' can never be flipped (only first/last can). So scan every position i where s[i+1]='O', then compute (deletes from left) + (deletes from right) + (any flips needed for s[i] and s[i+2]).",
-        "최종 'MOO' 의 가운데 글자는 절대 뒤집을 수 없어요 (맨 앞/뒤만 가능). 그래서 s[i+1]='O' 인 모든 i 를 스캔하고, (왼쪽 삭제 수) + (오른쪽 삭제 수) + (s[i] 와 s[i+2] 의 뒤집기 비용) 을 계산해요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Final 'MOO' middle char can never be flipped (only first/last). Scan every i with s[i+1]='O' and compute (left deletes) + (right deletes) + (flips needed for s[i] and s[i+2]). Sections build it one piece at a time.",
+        "최종 'MOO' 의 가운데는 절대 뒤집기 불가 (앞/뒤만 가능). s[i+1]='O' 인 모든 i 를 스캔, (왼쪽 삭제) + (오른쪽 삭제) + (s[i], s[i+2] 뒤집기) 계산. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMooOpsSections(E),
     },
   ];

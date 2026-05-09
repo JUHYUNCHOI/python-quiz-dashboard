@@ -175,7 +175,8 @@ export function makeTricksCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "3 bags = 6 candies. To succeed, the 6 candies must be exactly 2 colors, 3 of each!", "봉지 3개를 열면 사탕 6개. 이 6개가 딱 '2가지 색, 3개씩'이면 성공이에요!"),
+        "Try this — count colors in the chosen bags and decide.",
+        "직접 — 고른 봉지에서 색을 세어 보고 판단해 봐."),
       question: t(E,
         "Bags (1,2), (1,1), (2,2) → colors: 1×3, 2×3. Success?",
         "봉지 (1,2), (1,1), (2,2)를 골랐어. 사탕을 꺼내보면 색1이 3개, 색2가 3개. 성공일까요?"),

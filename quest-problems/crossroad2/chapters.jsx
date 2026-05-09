@@ -48,7 +48,17 @@ export function makeCrossRd2Ch1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd00"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Cross the Road II</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #2</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2017 Bronze #2</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E, "Print the number of intersecting cow-pairs.", "교차하는 소-쌍의 개수를 출력해요.")}
+            </div>
           </div>
 
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -121,8 +131,8 @@ export function makeCrossRd2Ch1(E) {
         "Pattern 'ABBA': how many crossing pairs?",
         "패턴 'ABBA': 교차하는 쌍 몇 개?"),
       hint: t(E,
-        "Only 2 cows (A and B), and they do cross. So 1 pair.",
-        "소가 2마리 (A와 B)뿐이고, 교차해요. 그래서 1쌍."),
+        "Only 2 cows here (A and B). Count how many pairs cross.",
+        "소가 2마리뿐이에요 (A, B). 교차하는 쌍이 몇 개인지 세어봐요."),
       answer: 1,
     },
   ];
@@ -134,23 +144,12 @@ export function makeCrossRd2Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCrossRd2Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Record the TWO crossing positions of each of the 26 cows. For every pair (A, B), their paths intersect iff their positions INTERLEAVE: a1 < b1 < a2 < b2 (or rotated).",
-        "26 마리 소 각각의 두 횡단 위치를 기록. 모든 쌍 (A, B) 에 대해, 위치가 엇갈리면 (a1 < b1 < a2 < b2 또는 회전한 형태) 경로가 교차."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Record the TWO crossing positions of each of the 26 cows. For every pair (A, B), their paths intersect iff their positions INTERLEAVE: a1 < b1 < a2 < b2 (or rotated). Sections build it one piece at a time.",
+        "26 마리 소 각각의 두 횡단 위치를 기록. 모든 쌍 (A, B) 에 대해, 위치가 엇갈리면 (a1 < b1 < a2 < b2 또는 회전한 형태) 경로가 교차. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCrossRoad2Sections(E),
     },
   ];

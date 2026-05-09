@@ -60,6 +60,18 @@ export function makeBlocksCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "For each query word, print YES if it can be spelled with the 4 cubes, else NO.",
+                "각 단어 쿼리에 대해 4개 큐브로 만들 수 있으면 YES, 아니면 NO를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -132,8 +144,8 @@ export function makeBlocksCh1(E) {
         "Block \"COWMOO\": can it show 'C'? (1=yes, 0=no)",
         "블록 \"COWMOO\": 'C'를 보여줄 수 있어요? (1=예, 0=아니오)"),
       hint: t(E,
-        "'C' is the first character of \"COWMOO\". Yes!",
-        "'C'는 \"COWMOO\"의 첫 글자. 당연히 가능!"),
+        "Scan the 6 faces of \"COWMOO\" — does any face show 'C'?",
+        "\"COWMOO\"의 6개 면을 훑어봐요 — 'C'가 보이는 면이 있나요?"),
       answer: 1,
     },
   ];
@@ -145,23 +157,12 @@ export function makeBlocksCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBlocksCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Only 4! = 24 ways to assign the 4 cubes to positions. For each query word, try every assignment and check that the required letter at each position exists on the assigned cube's faces.",
-        "4 개 큐브를 위치에 배정하는 방법은 4! = 24 가지뿐. 각 단어 쿼리에 대해 모든 배정을 시도하고, 각 위치에 필요한 글자가 배정된 큐브의 면에 있는지 확인."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Only 4! = 24 ways to assign the 4 cubes to positions. For each query word, try every assignment and check that the required letter at each position exists on the assigned cube's faces. Sections build it one piece at a time.",
+        "4 개 큐브를 위치에 배정하는 방법은 4! = 24 가지뿐. 각 단어 쿼리에 대해 모든 배정을 시도하고, 각 위치에 필요한 글자가 배정된 큐브의 면에 있는지 확인. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBlocksSections(E),
     },
   ];

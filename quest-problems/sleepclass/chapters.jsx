@@ -56,6 +56,18 @@ export function makeSleepCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "For each test case, output the minimum number of adjacent merges to make all periods equal length.",
+                "각 테스트 케이스마다 모든 시간을 같은 길이로 만드는 최소 합치기 횟수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -125,8 +137,8 @@ export function makeSleepCh1(E) {
         "[2,2,3] total=7. Min merges?",
         "[2,2,3] 총합=7. 최소 합치기?"),
       hint: t(E,
-        "7 is prime. Only target is 7 (one big period). 3 periods -> 1 = 2 merges.",
-        "7은 소수. 목표는 7만 가능 (하나로 합침). 3개 -> 1개 = 2번 합치기."),
+        "Which target lengths divide the total sum cleanly?",
+        "총합을 깔끔하게 나누는 목표 길이는 어떤 게 있을까?"),
       answer: 2,
     },
   ];
@@ -138,23 +150,12 @@ export function makeSleepCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeSleepCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "The final equal value MUST divide the total sum S. For each divisor d of S, greedily walk the array accumulating; whenever running sum == d, start a new segment. The smallest 'merges = N − segments' wins.",
-        "최종 동일 값은 총합 S 의 약수여야 함. S 의 각 약수 d 에 대해, 배열을 누적하며 그리디 — 누적 == d 가 되면 새 구간 시작. 가장 작은 '합치기 = N − 구간 수' 가 답."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Final equal value must divide total sum S. For each divisor d of S, greedily walk the array accumulating — start a new segment when running sum == d. Smallest 'N − segments' wins. Sections build it one piece at a time.",
+        "최종 동일 값은 총합 S 의 약수여야 함. S 의 각 약수 d 에 대해 누적이 d 가 될 때마다 새 구간 — 가장 작은 'N − 구간 수' 가 답. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getSleepClassSections(E),
     },
   ];

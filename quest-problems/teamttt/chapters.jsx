@@ -51,6 +51,18 @@ export function makeTttCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output two numbers: distinct solo winners, then distinct 2-cow team winners.",
+                "두 수를 출력 — 단독 우승 소 수, 그리고 2 명 팀 우승 수.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -124,8 +136,8 @@ export function makeTttCh1(E) {
         "Grid AAA / BBB / CCC. Number of individual winners?",
         "격자 AAA / BBB / CCC. 개인 우승자 수는?"),
       hint: t(E,
-        "Each row has one unique letter. A, B, C each win a row.",
-        "각 행에 고유 문자 1개. A, B, C 각각 한 행 우승."),
+        "Scan each row, column, and diagonal — count solo wins.",
+        "각 행, 열, 대각선을 살펴보면서 단독 우승을 세어 봐."),
       answer: 3,
     },
   ];
@@ -137,23 +149,12 @@ export function makeTttCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeTttCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Walk through each of the 8 lines (3 rows + 3 cols + 2 diagonals). For each line, take the SET of letters in its 3 cells. Size 1 → solo winner; size 2 → 2-cow team. Collect distinct winners across all lines.",
-        "8 개의 줄 (3 행 + 3 열 + 2 대각선) 을 순회. 각 줄의 3 칸의 글자 집합을 만들어요. 크기 1 → 단독 우승; 크기 2 → 2 마리 팀. 모든 줄에 걸쳐 중복 없는 우승자 수집."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Walk the 8 lines (3 rows + 3 cols + 2 diagonals). Take the SET of letters in its 3 cells: size 1 → solo win, size 2 → 2-cow team. Collect distinct winners. Sections build it one piece at a time.",
+        "8 개 줄 (3 행 + 3 열 + 2 대각선) 순회. 3 칸 글자 집합 — 크기 1 → 단독, 크기 2 → 2 명 팀. 중복 없는 우승자 수집. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getTeamTttSections(E),
     },
   ];

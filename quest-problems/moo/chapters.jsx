@@ -14,7 +14,19 @@ export function makeMooCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#9333ea" }}>It's Mooin' Time</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO December 2024 Bronze #3</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2024 Bronze #3</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#faf5ff", border: "1.5px solid #9333ea", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#581c87", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#581c87", lineHeight: 1.5 }}>
+              {t(E,
+                "List every moo (XYY pattern) that could appear ≥ F times in some original — the recording may have ONE corrupted character.",
+                "녹음에 한 글자 오타가 있을 수도 있는 어떤 원본에서 ≥ F 번 등장 가능한 moo (XYY 패턴) 모두 출력.")}
+            </div>
           </div>
 
           <div style={{ background: "#faf5ff", border: "1px solid #d8b4fe", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -123,14 +135,14 @@ export function makeMooCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "s = 'aaa', F = 1. How many distinct moos can occur with at most 1 edit?",
-        "s = 'aaa', F = 1. 한 번 수정으로 발생 가능한 서로 다른 moo 수?"),
+        "s = 'aaa', F = 1. Try changing one character — how many DIFFERENT valid moos can show up?",
+        "s = 'aaa', F = 1. 한 글자만 바꿔봐 — 서로 다른 유효한 moo 가 몇 개?"),
       question: t(E,
         "Distinct moos for 'aaa', F=1?",
         "'aaa', F=1 의 서로 다른 moo 수?"),
       hint: t(E,
-        "Change s[0] from 'a' to any other letter c gives 'caa' — valid moo with X=c, Y=a. 25 letters except 'a' → 25 moos.",
-        "s[0] 을 'a' 가 아닌 c 로 바꾸면 'caa' — X=c, Y=a 유효. 'a' 외 25 글자 → 25 moo."),
+        "What's the alphabet size?  How many of those satisfy XYY with X ≠ Y?",
+        "알파벳은 몇 개? 그중 XYY (X ≠ Y) 를 만족하는 건?"),
       answer: 25,
     },
   ];
@@ -138,22 +150,12 @@ export function makeMooCh1(E) {
 
 export function makeMooCh2(E, lang = "py") {
   return [
-    {
-      type: "reveal",
-      narr: t(E,
-        "Plan: count occurrences of every moo in s, then for each (i, c) edit, compute the count delta and check if any moo crosses F.",
-        "계획: s 의 모든 moo 발생 횟수 세고, 각 (i, c) 수정마다 카운트 변화 계산해서 F 넘는 moo 확인."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-
     ...getMooSections(E).map((sec, i) => ({
       type: "reveal",
       narr: i === 0
-        ? t(E, "Build the solution step by step.", "단계별로 솔루션 작성.")
+        ? t(E,
+            "Count each moo in s, then for each (position, replacement) edit see which moos cross F.  Sections build it one piece at a time.",
+            "s 의 각 moo 횟수 세고, 각 (자리, 새 글자) 수정마다 어떤 moo 가 F 를 넘는지 확인. 아래 섹션이 한 단락씩 쌓아요.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),

@@ -59,7 +59,19 @@ export function makeSocDist2Ch1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\udda0"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Social Distancing II</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #2</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2020 Bronze #2</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of initially infected cows under the largest valid spread radius R.",
+                "데이터와 일치하는 가장 큰 R 에서 최초 감염 소의 최소 수를 출력.")}
+            </div>
           </div>
 
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -124,8 +136,8 @@ export function makeSocDist2Ch1(E) {
         "5 cows, all sick, 0 healthy. Min initially infected?",
         "소 5마리, 전부 감염, 건강 0마리. 최초 감염 최소 수?"),
       hint: t(E,
-        "With no healthy cows to bound R, one cow with large enough R infects all.",
-        "R을 제한할 건강한 소가 없으니, R이 충분히 큰 한 마리로 전부 감염."),
+        "Without healthy cows to bound R, how few starters can spread to all?",
+        "R 을 제한할 건강한 소가 없을 때 최초 감염은 얼마나 적을 수 있을까?"),
       answer: 1,
     },
   ];
@@ -137,23 +149,12 @@ export function makeSocDist2Ch1(E) {
    --------------------------------------------------------------- */
 export function makeSocDist2Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sort cows by position. The MAXIMUM valid R = (smallest distance from a healthy cow to a sick cow) − 1. Then count groups of sick cows where adjacent sick cows are within 2R of each other.",
-        "소를 위치순 정렬. 가능한 최대 R = (건강한 소에서 가장 가까운 감염 소까지 거리) − 1. 그 R 로, 인접한 감염 소가 서로 2R 이내인 그룹 수를 세요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort cows by position. Max valid R = (smallest distance from a healthy cow to a sick cow) − 1. Then count groups of sick cows where adjacent sick cows are within 2R. Sections build it one piece at a time.",
+        "소 위치순 정렬. 최대 R = (건강한 소 → 가장 가까운 감염 소 거리) − 1. 그 R 로 인접 감염 소가 2R 이내인 그룹 수 세기. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getSocDist2Sections(E),
     },
   ];

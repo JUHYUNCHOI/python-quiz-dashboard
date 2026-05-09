@@ -47,6 +47,18 @@ export function makeBacteriaCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #3</div>
           </div>
 
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the smallest number of walks (any mix of type-1 and type-2) that zero out every a[i].",
+                "\ubaa8\ub4e0 a[i] \ub97c 0 \uc73c\ub85c \ub9cc\ub4e4 \uc218 \uc788\ub294 \ucd5c\uc18c \uc6cc\ud06c \ud69f\uc218 (\ud0c0\uc785 1 / 2 \uc11e\uc5b4\uc11c) \ucd9c\ub825.")}
+            </div>
+          </div>
+
           {/* Mini-visual: linear ramp added to a[h..N] */}
           <div style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", textAlign: "center", marginBottom: 10 }}>
@@ -189,18 +201,18 @@ export function makeBacteriaCh1(E) {
         "A type-2 walk at h=2 subtracts a 1-length ramp (just 1) from a[2].  Need 5 walks to drop a[2] from 5 → 0.",
         "h=2 의 타입 2 워크는 a[2] 에서 1 만 빼요. a[2] 를 5 → 0 만들려면 5 번."),
     },
-    // 1-4: Input — second-difference intuition
+    // 1-4: Input — second-difference intuition (trick fully explained in Ch2 progressive code)
     {
       type: "input",
       narr: t(E,
-        "Editorial trick: each walk changes diff(diff(a)) at exactly ONE position by ±1.  So min walks = sum of |diff(diff(a))|.",
-        "Editorial 핵심: 워크 1 회는 diff(diff(a)) 의 한 위치만 ±1 변경. 최소 워크 = sum |diff(diff(a))|."),
+        "Practice the arithmetic — given the two diffs already computed, what does the formula give?",
+        "산수 연습 — 두 diff 이 이미 계산돼 있어. 공식대로 답을 내 봐."),
       question: t(E,
         "a = [-1, 3].  diff(a) = [-1, 4].  diff(diff(a)) = [-1, 5].  Sum of absolute values?",
         "a = [-1, 3]. diff(a) = [-1, 4]. diff(diff(a)) = [-1, 5]. 절댓값 합?"),
       hint: t(E,
-        "|-1| + |5| = 1 + 5 = 6.  This matches the expected answer.",
-        "|-1| + |5| = 1 + 5 = 6. 답과 일치."),
+        "Sum the absolute values of the two entries.",
+        "두 항의 절댓값을 더해 봐."),
       answer: 6,
     },
   ];
@@ -212,24 +224,12 @@ export function makeBacteriaCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBacteriaCh2(E, lang = "py") {
   return [
-    // 2-1: Light intro — code first.
-    {
-      type: "reveal",
-      narr: t(E,
-        "Editorial trick: take diff(diff(a)).  The answer is sum |dd[i]| — that's the whole solution.",
-        "Editorial 한 줄: diff(diff(a)) 의 절댓값 합이 답. 그게 전부."),
-      content: (
-        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-          {t(E,
-            "Why it works: a type-1 walk increments a suffix of diff(a) by 1, a type-2 walk decrements one — so at the SECOND difference level each walk only changes ONE position by ±1.  Minimum walks = sum of |diff(diff(a))_i|.",
-            "왜? 타입 1 워크는 diff(a) 의 suffix 를 +1, 타입 2 는 -1. SECOND difference 단계에선 워크 한 번이 한 위치만 ±1 변경. 최소 워크 = |diff(diff(a))_i| 합.")}
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code — sections explain the diff(diff) trick as it unfolds.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Build the diff-of-diff trick step by step.  Each section explains why one walk only changes ONE position of diff(diff(a)) by ±1, so the answer = sum of absolute values.",
+        "diff-of-diff 트릭을 한 단락씩. 워크 1 회가 왜 diff(diff(a)) 의 한 위치만 ±1 변경하는지, 그래서 왜 답이 절댓값 합인지 섹션별로 설명."),
       sections: getBacteriaSections(E),
     },
   ];

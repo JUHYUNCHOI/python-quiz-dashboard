@@ -19,7 +19,19 @@ export function makeWalkCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🚶</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: ACCENT }}>Walking Along a Fence</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2024 US Open Bronze #2</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #2</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: TINT, border: `1.5px solid ${ACCENT}`, borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: DARK, letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: DARK, lineHeight: 1.5 }}>
+              {t(E,
+                "For each cow, output the shorter of the two routes around the closed fence loop between her start and end points.",
+                "각 소마다 — 시작과 끝 사이 폐곡선 두 경로 중 더 짧은 쪽을 출력.")}
+            </div>
           </div>
 
           <div style={{ background: TINT, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -125,12 +137,12 @@ export function makeWalkCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Square fence (0,0)→(2,0)→(2,2)→(0,2). Perimeter = 8. Cow walks (0,0) to (0,2). One way = 2 (up the left edge), other = 6 (around). Shorter = ?",
-        "정사각 울타리 (0,0)→(2,0)→(2,2)→(0,2). 둘레 = 8. 소가 (0,0) → (0,2). 한쪽 = 2 (왼쪽 변 위로), 다른쪽 = 6 (돌아서). 더 짧은 거리 = ?"),
+        "Square fence (0,0)→(2,0)→(2,2)→(0,2), perimeter 8.  Cow walks (0,0) to (0,2) — find the shorter of the two routes.",
+        "정사각 울타리 (0,0)→(2,0)→(2,2)→(0,2), 둘레 8. 소가 (0,0) → (0,2) — 두 경로 중 더 짧은 쪽."),
       question: t(E, "Shorter distance?", "더 짧은 거리?"),
       hint: t(E,
-        "(0,0) and (0,2) are both on the left edge — going straight up is 2 units. min(2, 8 − 2) = 2.",
-        "(0,0) 과 (0,2) 둘 다 왼쪽 변 위 — 직선으로 위 = 2. min(2, 8 − 2) = 2."),
+        "Trace one route, then the other.  Pick the smaller.",
+        "한쪽 경로 따라가 보고, 다른 쪽도. 더 짧은 쪽."),
       answer: 2,
     },
   ];
@@ -139,25 +151,14 @@ export function makeWalkCh1(E) {
 export function makeWalkCh2(E, lang = "py") {
   const sections = getWalkFenceSections(E);
   return [
-    {
-      type: "reveal",
-      narr: t(E,
-        "Plan: cumulative perimeter offsets at each post → for each query point find which side it lies on → distance along perimeter → take the shorter of the two arcs.",
-        "계획: 코너마다 누적 둘레 거리 → 쿼리 점이 어느 변 위인지 찾기 → 둘레 위 위치 → 두 호 중 짧은 쪽."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-
     ...sections.map((sec, i) => ({
       type: "reveal",
       narr: i === 0
-        ? t(E, "Build the brute solution step by step.", "완전탐색 솔루션을 단계별로 작성.")
+        ? t(E,
+            "Compute a perimeter offset for each query point — then the answer is min(|d1 − d2|, perimeter − |d1 − d2|).  Sections build it one piece at a time.",
+            "쿼리 점마다 둘레 위치를 구해 — 답은 min(|d1 − d2|, 둘레 − |d1 − d2|). 아래 섹션이 한 단락씩 쌓아요.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
-
   ];
 }

@@ -16,8 +16,10 @@ export const SOLUTION_CODE = [
   "    # Each toggle operation: toggle lamps from L to R",
   "    toggles = [0] * (N + 2)  # difference array",
   "    for _ in range(M):",
-  "        L = int(input_data[idx]); idx += 1",
-  "        R = int(input_data[idx]); idx += 1",
+  "        L = int(input_data[idx])",
+  "        idx += 1",
+  "        R = int(input_data[idx])",
+  "        idx += 1",
   "        toggles[L] += 1",
   "        toggles[R + 1] -= 1",
   "",
@@ -52,6 +54,16 @@ export function makeMcc22LampCh1(E) {
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udca1"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>Lamp</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P6</div>
+          </div>
+
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E, "Count lamps left ON after M range-toggle operations on N lamps.", "N \uac1c \ub7a8\ud504\uc5d0 M \ubc88\uc758 \ubc94\uc704 \ud1a0\uae00 \ud6c4 \ucf1c\uc838 \uc788\ub294 \ub7a8\ud504 \uc218\ub97c \uc138\uc694.")}
+            </div>
           </div>
 
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -113,8 +125,8 @@ export function makeMcc22LampCh1(E) {
         "5 lamps, toggle(1-5), toggle(2-4). How many ON?",
         "램프 5개, toggle(1-5), toggle(2-4). 켜진 수?"),
       hint: t(E,
-        "Lamp 1: 1 toggle (ON). Lamps 2-4: 2 toggles (OFF). Lamp 5: 1 toggle (ON). Answer: 2.",
-        "램프 1: 1번 토글 (켜짐). 램프 2-4: 2번 토글 (꺼짐). 램프 5: 1번 토글 (켜짐). 답: 2."),
+        "For each lamp, count how many of the two operations cover it. Odd count = ON, even count = OFF. Then count the ON lamps.",
+        "램프마다 두 연산 중 몇 개가 그 램프를 덮는지 세어 봐요. 홀수면 켜짐, 짝수면 꺼짐. 그 다음 켜진 램프를 세요."),
       answer: 2,
     },
   ];
@@ -126,23 +138,12 @@ export function makeMcc22LampCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22LampCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Difference array: for each toggle(L, R), do diff[L] += 1, diff[R+1] -= 1. Prefix-sum diff to get toggle COUNT per lamp. Count lamps with ODD toggle counts (those are ON).",
-        "차분 배열: toggle(L, R) 마다 diff[L] += 1, diff[R+1] -= 1. 누적합으로 램프별 토글 횟수 계산. 홀수 토글된 램프 카운트 (켜진 것)."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Difference array: for each toggle(L, R), do diff[L] += 1, diff[R+1] -= 1. Prefix-sum diff to get toggle COUNT per lamp. Count lamps with ODD toggle counts (those are ON). Sections build it one piece at a time.",
+        "차분 배열: toggle(L, R) 마다 diff[L] += 1, diff[R+1] -= 1. 누적합으로 램프별 토글 횟수 계산. 홀수 토글된 램프 카운트 (켜진 것). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc22LampSections(E),
     },
   ];

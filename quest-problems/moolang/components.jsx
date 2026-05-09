@@ -8,17 +8,23 @@ const FULL_PY = [
   "import sys",
   "data = sys.stdin.read().split()",
   "p = 0",
-  "T = int(data[p]); p += 1",
+  "T = int(data[p])",
+  "p += 1",
   "",
   "out_lines = []",
   "for _ in range(T):",
-  "    N = int(data[p]); p += 1",
-  "    C = int(data[p]); p += 1",
-  "    P = int(data[p]); p += 1",
+  "    N = int(data[p])",
+  "    p += 1",
+  "    C = int(data[p])",
+  "    p += 1",
+  "    P = int(data[p])",
+  "    p += 1",
   "    nouns, tverbs, iverbs, conjs = [], [], [], []",
   "    for _ in range(N):",
-  "        word = data[p]; p += 1",
-  "        ty = data[p]; p += 1",
+  "        word = data[p]",
+  "        p += 1",
+  "        ty = data[p]",
+  "        p += 1",
   "        if ty[0] == 'n': nouns.append(word)",
   "        elif ty[0] == 't': tverbs.append(word)",
   "        elif ty[0] == 'i': iverbs.append(word)",
@@ -161,7 +167,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

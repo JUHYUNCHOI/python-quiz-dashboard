@@ -45,6 +45,18 @@ export function makeOutOfPlaceCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2018 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of adjacent swaps needed to restore the sorted order.",
+                "정렬 상태로 되돌리기 위한 최소 인접 스왑 횟수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -106,8 +118,8 @@ export function makeOutOfPlaceCh1(E) {
         "Min adjacent swaps to sort [1, 3, 2]?",
         "[1, 3, 2] 정렬에 필요한 최소 인접 스왑 수?"),
       hint: t(E,
-        "Diff positions = 2. Answer = 2 - 1 = 1.",
-        "다른 위치 = 2. 답 = 2 - 1 = 1."),
+        "Compare to sorted; how many positions differ?",
+        "정렬된 결과와 비교해 봐 — 다른 위치가 몇 개?"),
       answer: 1,
     },
   ];
@@ -119,23 +131,12 @@ export function makeOutOfPlaceCh1(E) {
    --------------------------------------------------------------- */
 export function makeOutOfPlaceCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sort a copy of the array. Compare to the original — the moved cow creates a CONTIGUOUS block of mismatches. The number of adjacent swaps to fix is (block length − 1).",
-        "배열의 사본을 정렬하고 원본과 비교 — 옮겨진 소 때문에 연속된 불일치 블록이 생겨요. 필요한 인접 스왑 수 = (블록 길이 − 1)."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort a copy and compare to original — the moved cow creates a CONTIGUOUS block of mismatches. Answer = (block length − 1). Sections build it one piece at a time.",
+        "사본을 정렬해 원본과 비교 — 옮겨진 소가 연속된 불일치 블록을 만들어요. 답 = (블록 길이 − 1). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getOutOfPlaceSections(E),
     },
   ];

@@ -79,6 +79,18 @@ export function makeRevEngCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output OK if a single-position if/else program could produce all the test outputs, else LIE.",
+                "한 위치 if/else 프로그램이 모든 출력을 만들 수 있으면 OK, 아니면 LIE 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -139,8 +151,8 @@ export function makeRevEngCh1(E) {
         "[0]->1, [1]->0. Is it OK? (1=OK, 0=LIE)",
         "[0]->1, [1]->0. OK일까요? (1=OK, 0=LIE)"),
       hint: t(E,
-        "if arr[0]==0 return 1, else return 0. This matches both test cases. Answer: 1 (OK).",
-        "if arr[0]==0 return 1, else return 0. 두 테스트 케이스 모두 일치. 답: 1 (OK)."),
+        "Try a tiny if/else on arr[0] and see if it matches both cases.",
+        "arr[0] 에 대한 작은 if/else 를 시도해 두 케이스 모두 맞는지 봐."),
       answer: 1,
     },
   ];
@@ -152,23 +164,12 @@ export function makeRevEngCh1(E) {
    =============================================================== */
 export function makeRevEngCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "First, if two identical inputs have DIFFERENT outputs → LIE. Otherwise try every (position, A, B) triple — does 'if arr[pos]==0 return A else B' produce every test's output? Print OK if any works.",
-        "먼저, 동일한 입력에 다른 출력 있으면 → LIE. 그렇지 않으면 모든 (위치, A, B) 삼중조합 시도 — 'if arr[pos]==0 return A else B' 가 모든 테스트의 출력을 만드는지? 하나라도 되면 OK."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Identical inputs with different outputs → LIE. Otherwise try every (pos, A, B) — 'if arr[pos]==0 return A else B' must match every test. OK if any works. Sections build it one piece at a time.",
+        "동일 입력 다른 출력 → LIE. 아니면 모든 (위치, A, B) 시도 — 모든 테스트와 일치하면 OK. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getRevEngSections(E),
     },
   ];

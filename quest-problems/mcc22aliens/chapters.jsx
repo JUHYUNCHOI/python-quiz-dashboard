@@ -10,13 +10,17 @@ export const SOLUTION_CODE = [
   "def solve():",
   "    input_data = sys.stdin.read().split()",
   "    idx = 0",
-  "    N = int(input_data[idx]); idx += 1",
+  "    N = int(input_data[idx])",
+  "    idx += 1",
   "    types = []",
   "    claims = []",
   "    for i in range(N):",
-  "        ti = input_data[idx]; idx += 1",
-  "        pi = int(input_data[idx]) - 1; idx += 1",
-  "        bi = input_data[idx]; idx += 1",
+  "        ti = input_data[idx]",
+  "        idx += 1",
+  "        pi = int(input_data[idx]) - 1",
+  "        idx += 1",
+  "        bi = input_data[idx]",
+  "        idx += 1",
   "        types.append(ti)",
   "        claims.append((pi, bi))",
   "",
@@ -59,6 +63,16 @@ export function makeMcc22AliensCh1(E) {
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc7d"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Aliens</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P2</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E, "Check whether each alien's claim matches their truth/lie nature — print Y if all consistent, else N.", "각 외계인의 주장이 진실/거짓 본성과 맞는지 확인 — 다 일관되면 Y, 아니면 N.")}
+            </div>
           </div>
 
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -120,8 +134,8 @@ export function makeMcc22AliensCh1(E) {
         "T-type says 'alien 2 is T', alien 2 is T. Consistent? (1=yes, 0=no)",
         "T타입이 '외계인2는 T' 주장, 외계인2는 T. 일관적? (1=예, 0=아니오)"),
       hint: t(E,
-        "Truth-tellers tell truth. Claim matches reality. So yes, consistent!",
-        "진실형은 진실을 말해요. 주장이 현실과 일치해요. 그러니까 맞아, 일관적!"),
+        "Truth-tellers must say something that matches reality. Compare the claim to the actual type.",
+        "진실형은 현실과 맞는 말을 해야 해요. 주장과 실제 타입을 비교해 봐요."),
       answer: 1,
     },
   ];
@@ -133,23 +147,12 @@ export function makeMcc22AliensCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22AliensCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Walk every alien once. If T-type, the claim must MATCH the actual type of the cited alien. If F-type, the claim must NOT match. Any violation → output N.",
-        "외계인을 한 번씩 순회. T 타입이면 주장이 지목된 외계인의 실제 타입과 일치해야 함. F 타입이면 일치해서는 안 됨. 위반 1 개라도 → N 출력."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Walk every alien once. If T-type, the claim must MATCH the actual type of the cited alien. If F-type, the claim must NOT match. Any violation → output N. Solution code — read part by part. Toggle Python ↔ C++ in header. Sections build it one piece at a time.",
+        "외계인을 한 번씩 순회. T 타입이면 주장이 지목된 외계인의 실제 타입과 일치해야 함. F 타입이면 일치해서는 안 됨. 위반 1 개라도 → N 출력. 풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc22AliensSections(E),
     },
   ];

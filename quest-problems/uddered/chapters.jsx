@@ -40,6 +40,18 @@ export function makeUdderedCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of full alphabet recitations needed to read all of S.",
+                "S 를 모두 읽는 데 필요한 최소 알파벳 외우기 횟수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -101,8 +113,8 @@ export function makeUdderedCh1(E) {
         "Alphabet: \"abc\", heard: \"ca\". How many cycles needed?",
         "알파벳: \"abc\", 들은 문자열: \"ca\". 몇 사이클 필요?"),
       hint: t(E,
-        "'c' is at position 2, 'a' is at position 0. Since 0 <= 2, we need a new cycle. Total: 2.",
-        "'c'는 위치 2, 'a'는 위치 0. 0 <= 2이므로 새 사이클 필요. 총: 2."),
+        "Compare each letter's custom position with the previous one — when does she need to restart?",
+        "인접한 두 글자의 커스텀 위치를 비교해 봐 — 언제 알파벳을 다시 외워야 할까?"),
       answer: 2,
     },
   ];
@@ -114,23 +126,12 @@ export function makeUdderedCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeUdderedCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Map each letter to its position in Bessie's custom alphabet. Scan S; whenever next letter's custom-position ≤ current's, she must recite the alphabet again. Start with cycle = 1.",
-        "각 글자를 Bessie의 커스텀 알파벳에서의 위치로 매핑. S 를 스캔; 다음 글자의 커스텀-위치 ≤ 현재 위치 일 때 알파벳을 다시 외워야 함. cycle = 1 부터 시작."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Map each letter to its position in Bessie's custom alphabet. Scan S — when next letter's custom-position ≤ current's, recite again. Start cycle = 1. Sections build it one piece at a time.",
+        "각 글자를 커스텀 알파벳 위치로 매핑. S 스캔 — 다음 글자 위치 ≤ 현재 일 때 다시 외움. cycle = 1 부터 시작. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getUdderedSections(E),
     },
   ];

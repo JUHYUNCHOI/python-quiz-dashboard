@@ -65,6 +65,18 @@ export function makeWalkHomeCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of valid (1,1) → (N,N) paths with at most K direction changes.",
+                "방향 전환을 최대 K 번까지만 쓰는 (1,1) → (N,N) 유효 경로 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -135,8 +147,8 @@ export function makeWalkHomeCh1(E) {
         "2x2 grid, no obstacles, K=1. Number of paths?",
         "2x2 격자, 장애물 없음, K=1. 경로 수?"),
       hint: t(E,
-        "Only 2 possible paths: right-down and down-right. Each has 1 direction change.",
-        "가능한 경로 2개: 오른쪽-아래와 아래-오른쪽. 각각 방향 전환 1번."),
+        "List the possible paths and count those with at most K direction changes.",
+        "가능한 경로를 다 적어 보고 방향 전환이 K 이하인 것만 세어 봐."),
       answer: 2,
     },
   ];
@@ -148,23 +160,12 @@ export function makeWalkHomeCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeWalkHomeCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "DP: dp[r][c][last_dir][changes] = number of paths to (r, c) arriving via last_dir with that many direction changes. Move right or down; bump changes if direction differs from last; prune when changes > K.",
-        "DP: dp[r][c][last_dir][changes] = (r, c) 까지 last_dir 로 도착, 그만큼 전환한 경로 수. 오른쪽 또는 아래로 이동; 방향이 다르면 전환 +1; 전환 > K 면 가지치기."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "DP: dp[r][c][last_dir][changes] = paths to (r, c) arriving via last_dir with that many changes. Move right/down; +1 changes when direction flips; prune when changes > K. Sections build it one piece at a time.",
+        "DP: dp[r][c][last_dir][changes] = (r, c) 까지 last_dir 로 도착한 경로 수. 오른쪽/아래 이동, 방향 바뀌면 +1, > K 면 가지치기. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getWalkHomeSections(E),
     },
   ];

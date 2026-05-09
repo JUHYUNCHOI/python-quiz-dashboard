@@ -56,6 +56,18 @@ export function makeTrianglesCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output TWICE the maximum area of an axis-aligned right triangle from the N posts.",
+                "축에 평행한 직각 삼각형의 최대 넓이의 2 배를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -116,8 +128,8 @@ export function makeTrianglesCh1(E) {
         "Points (0,0),(1,0),(0,2). Output 2 * max triangle area?",
         "점 (0,0),(1,0),(0,2). 최대 삼각형 넓이 * 2 출력?"),
       hint: t(E,
-        "Area = base * height / 2 = 1 * 2 / 2 = 1. Answer = 2 * 1 = 2.",
-        "넓이 = 밑변 * 높이 / 2 = 1 * 2 / 2 = 1. 답 = 2 * 1 = 2."),
+        "Find the right-angle vertex, then 2 × area = base × height.",
+        "직각 꼭짓점을 찾고 2 × 넓이 = 밑변 × 높이."),
       answer: 2,
     },
   ];
@@ -129,23 +141,12 @@ export function makeTrianglesCh1(E) {
    --------------------------------------------------------------- */
 export function makeTrianglesCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Treat each post as the right-angle CORNER. From it, find the FARTHEST post sharing the same x (gives the vertical leg = height) and the FARTHEST sharing the same y (horizontal leg = base). 2 × area = base × height.",
-        "각 기둥을 직각 꼭짓점으로 봐요. 거기서 같은 x 의 가장 먼 기둥 (높이 = 수직 변), 같은 y 의 가장 먼 기둥 (밑변 = 수평 변) 을 찾아요. 2 × 넓이 = 밑변 × 높이."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Treat each post as the right-angle CORNER. Find the farthest post sharing same x (height) and farthest sharing same y (base). 2 × area = base × height. Sections build it one piece at a time.",
+        "각 기둥을 직각 꼭짓점으로 — 같은 x 의 가장 먼 기둥 (높이), 같은 y 의 가장 먼 기둥 (밑변). 2 × 넓이 = 밑변 × 높이. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getTrianglesSections(E),
     },
   ];

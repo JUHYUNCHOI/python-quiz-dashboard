@@ -15,7 +15,7 @@ export function makePrintseqCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🖨️</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#16a34a" }}>Printing Sequences</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO February 2025 Bronze #3</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2025 Bronze #3</div>
           </div>
 
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -128,18 +128,19 @@ YES`}
         "PRINT 1; PRINT 2 를 REP 3 로 감싸면 (1,2)(1,2)(1,2) — PRINT 정확히 2 개. YES."),
     },
 
-    /* 1-5 — Input quiz. */
+    /* 1-5 — Input quiz: student tries to write a program for [1,1,2,2] with K=2.
+       Hint nudges toward "split into blocks" without giving the program. */
     {
       type: "input",
       narr: t(E,
-        "[1, 1, 2, 2] with K=2: split into two blocks. PRINT 1 wrapped in REP 2, then PRINT 2 wrapped in REP 2 → 2 PRINTs total. → 1 (YES) or 0 (NO)?",
-        "[1, 1, 2, 2] + K=2: 두 블록으로 나누기. PRINT 1 을 REP 2 + PRINT 2 를 REP 2 → PRINT 총 2 개. → 1 (YES) 또는 0 (NO)?"),
+        "Try writing a program for this — can you make it within the budget?",
+        "이거 직접 프로그램 짜 봐 — 예산 안에 가능?"),
       question: t(E,
-        "Possible? (1 = YES, 0 = NO)",
-        "가능? (1 = YES, 0 = NO)"),
+        "Can [1, 1, 2, 2] be produced with K=2?  (1 = YES, 0 = NO)",
+        "[1, 1, 2, 2] 를 K=2 로 만들 수 있을까? (1 = YES, 0 = NO)"),
       hint: t(E,
-        "REP 2 (PRINT 1) END; REP 2 (PRINT 2) END uses 2 PRINTs. Answer = 1 (YES).",
-        "REP 2 (PRINT 1) END; REP 2 (PRINT 2) END = PRINT 2 개. 답 = 1 (YES)."),
+        "[1, 1, 2, 2] = two blocks of identical values stuck together.  Can REP help with each block?",
+        "[1, 1, 2, 2] = 같은 값 블록 두 개. 각 블록에 REP 가 도움이 될까?"),
       answer: 1,
     },
   ];
@@ -147,24 +148,16 @@ YES`}
 
 export function makePrintseqCh2(E, lang = "py") {
   return [
-    /* 2-1 — Plan: recursive checker. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Recursive: for sequence seq with budget k, can we make it? Three options: (A) all values equal — 1 PRINT covers it. (B) seq is m identical blocks — solve one block with k. (C) split seq into two parts, give each a slice of the budget.",
-        "재귀: 수열 seq, 예산 k 일 때 가능? 세 옵션: (A) 모두 같은 값 — PRINT 1 개로 OK. (B) seq 가 같은 블록 m 번 — 블록 하나를 k 로. (C) 두 부분으로 쪼개기, 예산도 나눠 갖기."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-
-    /* 2-2..2-N — sections */
+    /* 2-1..2-N — sections.  No empty "plan" placeholder; the first
+       section's narration introduces the recursive checker. */
     ...getPrintseqSections(E).map((sec, i) => ({
       type: "reveal",
+      label: sec.label,
+      preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       narr: i === 0
-        ? t(E, "Build the recursive checker step by step.", "재귀 체커를 단계별로.")
+        ? t(E,
+            "Three patterns from the explorer: (A) all-equal → 1 PRINT, (B) repeated blocks → REP, (C) split.  Code the recursive checker that tries each.",
+            "explorer 에서 본 세 패턴: (A) 다 같으면 PRINT 1, (B) 블록 반복이면 REP, (C) 쪼개기. 이 셋을 다 시도하는 재귀 체커를 짜자.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),

@@ -41,6 +41,17 @@ export function makeHoneyCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E, "Maximize total honey across at most K trips, where each trip drains up to M ml from one hive.",
+                    "최대 K 번 왕복 안에서, 각 왕복마다 한 벌집에서 최대 M ml 을 가져와 총 꿀을 최대로 모아요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -103,8 +114,8 @@ export function makeHoneyCh1(E) {
         "Pot M=10, hive has 25 honey. Trips to empty it? (10+10+5)",
         "항아리 M=10, 벌집에 꿀 25. 다 모으려면 왕복 횟수? (10+10+5)"),
       hint: t(E,
-        "ceil(25/10) = 3 trips: first two collect 10 each, third collects 5.",
-        "ceil(25/10) = 3번: 처음 두 번은 10씩, 세 번째는 5를 수집."),
+        "Each trip takes up to 10. Subtract 10 each time until honey hits 0 — count the trips.",
+        "한 번에 최대 10 씩 가져와요. 꿀이 0 이 될 때까지 10 씩 빼면서 횟수를 세어봐요."),
       answer: 3,
     },
   ];
@@ -116,23 +127,12 @@ export function makeHoneyCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeHoneyCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Greedy: sort hives by honey amount DESCENDING. For each hive in order, use trips needed = ceil(honey / M) — capped by remaining trips. Add the collected amount.",
-        "그리디: 벌집을 꿀 양 내림차순 정렬. 순서대로 각 벌집마다, 필요한 왕복 = ceil(꿀/M) — 남은 왕복으로 제한. 수집량 누적."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code (greedy strategy + progressive sections)
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Greedy: sort hives by honey amount DESCENDING. For each hive in order, use trips = ceil(honey / M) — capped by remaining trips. Sections build it one piece at a time. Toggle Python ↔ C++ in header.",
+        "그리디: 벌집을 꿀 양 내림차순 정렬. 순서대로 각 벌집마다 필요한 왕복 = ceil(꿀/M) — 남은 왕복으로 제한. 아래 섹션이 한 단락씩 쌓아요. 헤더에서 Python ↔ C++ 토글."),
       sections: getHoneySections(E),
     },
   ];

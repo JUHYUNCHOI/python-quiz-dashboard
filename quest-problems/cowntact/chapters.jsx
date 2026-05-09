@@ -41,6 +41,18 @@ export function makeCowntactCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #7c5cfc", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the smallest possible number of cows that could have been sick on day 0 to produce this final state.",
+                "이 최종 상태를 만들 수 있는 0 일차 감염 소의 최소 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -89,7 +101,8 @@ export function makeCowntactCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Consider the string \"11111\".\nAll 5 cows are infected.\nCould they all have come from just 1 cow in the middle?\nYes!\nThe center cow infects outward over time.", "문자열 \"11111\"을 생각해봐요. 5마리 모두 감염됐어. 가운데 1마리에서 시작했을 수 있을까? 그렇지! 가운데 소가 시간이 지나면서 양옆으로 퍼져."),
+        "Picture the spread in reverse — if 5 cows are sick now, how few could have started it?",
+        "거꾸로 상상해 봐 — 지금 5 마리가 감염이라면, 시작은 최소 몇 마리?"),
       question: t(E,
         "\"11111\" — what is the minimum number initially infected?",
         "\"11111\" — 처음에 감염된 최소 수는?"),
@@ -107,10 +120,14 @@ export function makeCowntactCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now consider \"01110110\".\nThe 0s break the infected cows into separate groups.\nGroup 1: positions 1-3 (\"111\"), Group 2: positions 5-6 (\"11\").\nEach group needs at least 1 initial source!", "이제 \"01110110\"을 봐요.\n0이 감염된 소들을 별도 그룹으로 나눠.\n그룹1: 위치 1-3 (\"111\"), 그룹2: 위치 5-6 (\"11\").\n각 그룹은 최소 1마리 초기 감염이 필요해요!"),
+        "0s split the row.  Look at \"01110110\" and find the runs of 1s.",
+        "0 이 줄을 끊어. \"01110110\" 에서 1 이 이어지는 구간을 세 봐."),
       question: t(E,
         "\"01110110\"\nHow many separate infected groups?",
         "\"01110110\"\n감염된 그룹이 몇 개예요?"),
+      hint: t(E,
+        "Each '0' breaks the chain.  Count how many separate runs of 1s appear.",
+        "0 은 끊어주는 역할. 1 이 연속된 덩어리가 몇 개?"),
       answer: 2,
     },
   ];
@@ -122,22 +139,12 @@ export function makeCowntactCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowntactCh2(E, lang = "py") {
   return [
-    // 2-1: Approach reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "The key insight: each consecutive segment of 1s can be explained by a single initial infection.\nSo the answer = number of separate groups of consecutive 1s!", "핵심 통찰: 연속된 1의 각 세그먼트는 하나의 초기 감염으로 설명 가능. 답 = 연속된 1 그룹의 수!"),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Full code reveal
+    // 2-1: Progressive code — answer = number of runs of 1s.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Walk the string once and count runs of 1s.  Sections build the loop one piece at a time.",
+        "문자열을 한 번 훑으며 1 의 연속 구간 개수를 세요. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCowntactSections(E),
     },
   ];

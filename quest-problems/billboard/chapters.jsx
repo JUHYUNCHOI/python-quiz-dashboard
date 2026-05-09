@@ -104,6 +104,18 @@ export function makeBillboardCh1(E) {
               </div>
             </div>
           </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginTop: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the total visible billboard area (sum of two billboards minus their overlaps with the truck).",
+                "두 광고판 면적 합에서 트럭과의 겹침을 뺀 보이는 면적의 합을 출력.")}
+            </div>
+          </div>
         </div>),
     },
 
@@ -197,12 +209,19 @@ export function makeBillboardCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The key formula: Visible = (Billboard1 area - overlap with truck) + (Billboard2 area - overlap with truck).\nWe compute each overlap separately!", "핵심 공식: 보이는 면적 = (광고판1 면적 - 트럭과 겹침) + (광고판2 면적 - 트럭과 겹침). 각 겹침을 따로 계산해요!"),
+        "Each visible billboard is its area minus its overlap with the truck — sum the two.",
+        "각 광고판은 자기 면적에서 트럭과의 겹침을 뺀 게 보이는 면적. 두 개를 더하면 답."),
       content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, fontSize: 14, fontWeight: 700, color: "#9a3412", textAlign: "center", lineHeight: 1.8, fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "visible = (A₁ − overlap₁) + (A₂ − overlap₂)",
+                  "보이는 면적 = (A₁ − 겹침₁) + (A₂ − 겹침₂)")}
+          </div>
+          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
+            {t(E, "Next chapter: how to compute the overlap of two rectangles.",
+                  "다음 챕터에서 두 직사각형의 겹침 면적을 계산하는 방법.")}
+          </div>
         </div>),
-
     },
 
     // 1-6: Quiz — apply formula

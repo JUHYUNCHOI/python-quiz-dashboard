@@ -39,6 +39,16 @@ export function makeCornerCoverCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E, "Print the number of distinct corner cells in an N × M grid.", "N × M 격자의 서로 다른 꼭짓점 칸 개수를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -108,8 +118,8 @@ export function makeCornerCoverCh1(E) {
         "N=4, M=4. How many corners?",
         "N=4, M=4. 꼭짓점은 몇 개?"),
       hint: t(E,
-        "A square is a rectangle. It has 4 corners.",
-        "정사각형은 직사각형이에요. 꼭짓점이 4개예요."),
+        "A square is just a rectangle with N == M. Both are ≥ 2 here — count its extreme cells.",
+        "정사각형도 N == M 인 직사각형이에요. 둘 다 ≥ 2 인 경우 — 끝 칸들을 세어봐요."),
       answer: 4,
     },
   ];
@@ -121,23 +131,12 @@ export function makeCornerCoverCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCornerCoverCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Just three cases based on (N, M): if both = 1, only 1 corner; if exactly one = 1 (a line), 2 corners; otherwise 4 corners.",
-        "세 가지 경우 (N, M) 기준: 둘 다 = 1 이면 꼭짓점 1 개; 한쪽만 = 1 (직선) 이면 2 개; 그 외 4 개."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Just three cases based on (N, M): if both = 1, only 1 corner; if exactly one = 1 (a line), 2 corners; otherwise 4 corners. Sections build it one piece at a time.",
+        "세 가지 경우 (N, M) 기준: 둘 다 = 1 이면 꼭짓점 1 개; 한쪽만 = 1 (직선) 이면 2 개; 그 외 4 개. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCornerCoverSections(E),
     },
   ];

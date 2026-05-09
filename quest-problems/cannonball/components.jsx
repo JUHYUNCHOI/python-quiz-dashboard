@@ -9,13 +9,17 @@ const FULL_PY = [
   "",
   "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "S = int(data[p]); p += 1",
+  "N = int(data[p])",
+  "p += 1",
+  "S = int(data[p])",
+  "p += 1",
   "typ = [0] * (N + 2)",
   "val = [0] * (N + 2)",
   "for i in range(1, N + 1):",
-  "    typ[i] = int(data[p]); p += 1",
-  "    val[i] = int(data[p]); p += 1",
+  "    typ[i] = int(data[p])",
+  "    p += 1",
+  "    val[i] = int(data[p])",
+  "    p += 1",
   "",
   "x = S",
   "direction = 1",
@@ -121,7 +125,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

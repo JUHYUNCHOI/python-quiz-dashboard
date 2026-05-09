@@ -57,6 +57,18 @@ export function makeLiarsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of cows who must be lying — pick Bessie's position to maximize true claims.",
+                "Bessie 의 위치를 가장 좋게 골랐을 때 거짓말쟁이가 될 수밖에 없는 소의 최소 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -128,13 +140,14 @@ export function makeLiarsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Claims: 'G 3' and 'L 2'. What's the minimum number of liars?", "주장: 'G 3'과 'L 2'. 최소 거짓말쟁이 수는?"),
+        "Try every Bessie position you can think of for 'G 3' and 'L 2'.  How many liars at the best position?",
+        "'G 3' 과 'L 2' 에 대해 Bessie 의 가능한 위치들을 다 시도해 봐. 가장 좋은 위치에서 거짓말쟁이는?"),
       question: t(E,
         "'G 3' and 'L 2'. Min liars?",
         "'G 3'과 'L 2'. 최소 거짓말쟁이?"),
       hint: t(E,
-        "If p=3: G 3 true, L 2 false (3>2). If p=2: G 3 false (2<3), L 2 true. Either way, 1 liar.",
-        "p=3이면: G 3 참, L 2 거짓(3>2). p=2이면: G 3 거짓(2<3), L 2 참. 어느 쪽이든 거짓말쟁이 1명."),
+        "Can both claims be true at any single position?  If not, at least how many lose?",
+        "한 위치에서 두 주장 모두 참이 될 수 있어? 안 되면 최소 몇 개가 거짓?"),
       answer: 1,
     },
   ];
@@ -146,23 +159,12 @@ export function makeLiarsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeLiarsCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "The optimal Bessie position is somewhere among the claim x values. Brute force: for each candidate position p, count how many claims are CONTRADICTED. The minimum count is the answer (number of liars).",
-        "Bessie의 최적 위치는 주장된 x 값 중 하나예요. 완전탐색: 각 후보 위치 p 마다, 모순되는 주장 수를 셈. 최솟값이 답 (거짓말쟁이 수)."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code — straight in.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Brute force: for each candidate position p (try the claim's x values), count contradicted claims.  Take the min.  Sections build it one piece at a time.",
+        "완전탐색: 각 후보 위치 p (주장의 x 값들 시도) 마다 모순되는 주장 수 카운트. 최솟값이 답. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCountLiarsSections(E),
     },
   ];

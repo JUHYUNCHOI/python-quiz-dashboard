@@ -45,6 +45,16 @@ export function makeMcc19ElimCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P5</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E, "Print the longest run of consecutive 1s achievable after deleting at most K zeros.", "최대 K 개의 0 을 지운 뒤 달성 가능한 가장 긴 연속 1 의 길이를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -108,8 +118,8 @@ export function makeMcc19ElimCh1(E) {
         "\"10110\", K=1. Longest streak = ?",
         "\"10110\", K=1. 가장 긴 연속 = ?"),
       hint: t(E,
-        "Window [0,3] covers \"1011\" with 1 zero → length 4.",
-        "윈도우 [0,3]이 \"1011\"을 포함하고 0이 1개 → 길이 4."),
+        "Find the longest window that contains at most 1 zero — that zero is the one you delete.",
+        "0 이 최대 1 개 들어가는 가장 긴 구간을 찾아봐요 — 그 0 하나를 지우면 돼요."),
       answer: 4,
     },
   ];
@@ -121,23 +131,12 @@ export function makeMcc19ElimCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc19ElimCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sliding window with two pointers. Expand the right side; if zeros in window > K, shrink left until back ≤ K. Track the maximum window size.",
-        "투 포인터 슬라이딩 윈도우. 오른쪽으로 확장; 윈도우 안 0 의 수가 K 초과면 왼쪽을 줄여서 ≤ K. 최대 윈도우 크기 추적."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sliding window with two pointers. Expand the right side; if zeros in window > K, shrink left until back ≤ K. Track the maximum window size. Sections build it one piece at a time.",
+        "투 포인터 슬라이딩 윈도우. 오른쪽으로 확장; 윈도우 안 0 의 수가 K 초과면 왼쪽을 줄여서 ≤ K. 최대 윈도우 크기 추적. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc19ElimSections(E),
     },
   ];

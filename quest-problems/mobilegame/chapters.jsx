@@ -34,6 +34,18 @@ export function makeMobileGameCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the total score collected after playing all N levels.",
+                "N 개 레벨을 플레이해 얻은 총 점수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -96,8 +108,8 @@ export function makeMobileGameCh1(E) {
         "Scores = [10, 20, 30]. Enter the total:",
         "점수 = [10, 20, 30]. 총합을 입력해:"),
       hint: t(E,
-        "Add all scores: 10 + 20 + 30.",
-        "모든 점수를 더해: 10 + 20 + 30."),
+        "Add up the scores from every level.",
+        "모든 레벨의 점수를 더해 봐."),
       answer: 60,
     },
   ];
@@ -109,23 +121,12 @@ export function makeMobileGameCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMobileGameCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Read all N level scores; total score = sum of the scores. One-line in Python.",
-        "N 개의 레벨 점수 읽기; 총 점수 = 점수의 합. Python 한 줄."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Read the N scores; total = sum of scores. One-liner in Python. Sections build it one piece at a time.",
+        "N 개의 점수를 읽고 합 계산. Python 한 줄. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMobileGameSections(E),
     },
   ];

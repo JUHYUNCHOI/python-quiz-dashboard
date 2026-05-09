@@ -54,6 +54,18 @@ export function makeMcc21GlassCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>🥛</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Round Glass</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P4</div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of distinct circular arrangements of N glass plates.",
+                "N 개 유리판의 서로 다른 원형 배열 가짓수를 출력.")}
+            </div>
+          </div>
         </div>),
     },
 

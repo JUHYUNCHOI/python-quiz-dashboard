@@ -47,6 +47,18 @@ export function makeFeedCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of grass patches so every cow has a same-breed patch within distance K.",
+                "모든 소가 거리 K 이내에 자기 품종 패치를 가지도록 하는 최소 패치 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -118,8 +130,8 @@ export function makeFeedCh1(E) {
         "\"GGG\", K = 1. Min patches?",
         "\"GGG\", K = 1. 최소 패치 수?"),
       hint: t(E,
-        "Greedy: cow 0 is uncovered, place G patch. It covers positions 0 to 0+1=1. Cow 2 is uncovered, place another. But actually: patch at pos 0+K=1 covers 0 to 1+0? No: a patch at position p covers [p-K, p+K]? No, cow at pos i needs patch within K. So patch at pos 1 covers cows 0,1,2. Answer: 1.",
-        "그리디: 소 0이 미커버, G 패치 놓아요. 위치 0+K=1에 놓으면 소 0, 1, 2 모두 커버. 답: 1."),
+        "Place a patch as far right as possible while still covering the leftmost uncovered cow of that breed.",
+        "그 품종의 가장 왼쪽 미커버 소를 여전히 커버하면서 패치를 가능한 한 오른쪽에 놓아 봐."),
       answer: 1,
     },
   ];
@@ -131,23 +143,12 @@ export function makeFeedCh1(E) {
    =============================================================== */
 export function makeFeedCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Track separately for each breed: the right-end of the last patch placed (last_G, last_H). When a cow of breed B at position i is past last_B, place a NEW patch at position i — extending its coverage to i + K.",
-        "품종별로 따로 추적: 마지막에 놓은 패치의 오른쪽 끝 (last_G, last_H). 품종 B 의 소가 위치 i 에 있고 i > last_B 이면, 위치 i 에 새 패치를 놓아 — 커버 범위를 i + K 까지 확장."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Track per breed the right-end of the last patch placed (last_G, last_H). When a cow of breed B at position i is past last_B, place a NEW patch at i — extending its coverage to i + K. Sections build it one piece at a time.",
+        "품종별로 마지막 패치의 오른쪽 끝 (last_G, last_H) 추적. 품종 B 의 소가 i 에 있고 i > last_B 이면 i 에 새 패치를 놓아 — 커버 범위를 i + K 까지 확장. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getFeedCowsSections(E),
     },
   ];

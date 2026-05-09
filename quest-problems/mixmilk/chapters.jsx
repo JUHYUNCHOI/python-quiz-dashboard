@@ -157,6 +157,18 @@ export function makeMixMilkCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the milk in each of the 3 buckets after 100 cyclic pours (1→2, 2→3, 3→1, …).",
+                "100 번의 순환 붓기 (1→2, 2→3, 3→1, …) 후 각 양동이의 우유량 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -334,13 +346,14 @@ export function makeMixMilkCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "A has 5 milk, B has capacity 3 and 1 milk. After pouring A->B, how much milk is in A?", "A에 우유 5, B는 용량 3이고 우유 1. A에서 B로 부은 후 A에 있는 우유는?"),
+        "Try this — figure out how much B can accept, then how much A loses.",
+        "직접 — B 가 몇 더 받을 수 있나 보고, A 에서 그만큼 빠짐."),
       question: t(E,
         "A=5 milk, B=cap 3, milk 1. Pour A->B. Milk left in A?",
         "A=우유5, B=용량3 우유1. A->B 부은 후. A의 우유?"),
       hint: t(E,
-        "Transfer min(5, 3-1) = min(5, 2) = 2. A: 5 - 2 = 3.",
-        "이동량 min(5, 3-1) = min(5, 2) = 2. A: 5 - 2 = 3."),
+        "B can still take (cap − current) more.  Transfer is the smaller of A's milk and B's free space.",
+        "B 는 (용량 − 현재) 만큼 더 받을 수 있어. 이동량은 A 의 우유와 B 의 빈 공간 중 더 작은 쪽."),
       answer: 3,
     },
   ];
@@ -493,7 +506,8 @@ export function makeMixMilkCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Now you try!\nAfter state [6, 4, 0], step 3 pours bucket 1 -> bucket 2 (since 3%3=0, so src=0, dst=1).\nB2 remaining = 8-4 = 4.\nTransfer min(6, 4) = 4.", "이제 해봐요!\n상태 [6, 4, 0] 이후, 3단계는 1번에서 2번으로 부어 (3%3=0이니까 src=0, dst=1).\nB2 남은 공간 = 8-4 = 4.\n이동량 min(6, 4) = 4."),
+        "Now you try!  At state [6, 4, 0], the next step pours 1 → 2.  Compute the transfer yourself.",
+        "이제 해봐요! 상태 [6, 4, 0] 다음 단계는 1 → 2 붓기. 이동량을 직접 계산."),
       question: t(E,
         "State [6,4,0]. Step 3: pour 1→2. What is milk[1] after?",
         "상태 [6,4,0]. 3단계: 1→2 붓기. 이후 milk[1]은?"),

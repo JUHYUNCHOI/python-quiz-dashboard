@@ -10,8 +10,10 @@ export const SOLUTION_CODE = [
   "",
   "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "Q = int(data[p]); p += 1",
+  "N = int(data[p])",
+  "p += 1",
+  "Q = int(data[p])",
+  "p += 1",
   "c  = [int(x) for x in data[p:p+N]]; p += N   # closing times",
   "ti = [int(x) for x in data[p:p+N]]; p += N   # travel times",
   "",
@@ -21,7 +23,8 @@ export const SOLUTION_CODE = [
   "out = []",
   "for _ in range(Q):",
   "    V = int(data[p]); p += 1   # query is 'V S' (V first, then S)",
-  "    S = int(data[p]); p += 1",
+  "    S = int(data[p])",
+  "    p += 1",
   "    # count of d[i] > S = N - (first index with d[i] >= S+1)",
   "    reachable = N - bisect_left(d, S + 1)",
   "    out.append('YES' if reachable >= V else 'NO')",
@@ -43,8 +46,21 @@ export function makeProdCh1(E) {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>📊</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Max Productivity</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Maximizing Productivity</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #3</div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", margin: "12px 0", textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "For each (V, S) query, output YES if Bessie can reach ≥ V farms, else NO.",
+                "각 (V, S) 쿼리마다 Bessie 가 V 개 이상 농장에 갈 수 있으면 YES, 아니면 NO 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N farms, each closes at time c_i. Bessie wakes at time S, arrives at farm i at time t_i + S. She can visit farm i only if t_i + S < c_i. Given Q queries (V, S): can she visit at least V farms?",
               "N개 농장, 각각 시간 c_i에 닫혀.\nBessie는 시간 S에 일어나서, 농장 i에 t_i + S에 도착.\nt_i + S < c_i일 때만 방문 가능.\nQ개 쿼리 (V, S): V개 이상 방문 가능?")}
@@ -159,8 +175,8 @@ NO`}
         "c=[10,5,8], t=[3,2,4], S=3. How many farms can Bessie visit? (strict inequality: t_i + S < c_i)",
         "c=[10,5,8], t=[3,2,4], S=3. Bessie가 방문할 수 있는 농장 수는? (엄격한 부등식: t_i + S < c_i)"),
       hint: t(E,
-        "Check each: 3+3=6<10 yes, 2+3=5<5 no, 4+3=7<8 yes. Count the yes's!",
-        "각각 확인: 3+3=6<10 맞아, 2+3=5<5 아니야, 4+3=7<8 맞아. 맞는 것 세봐요!"),
+        "Check each farm with the strict inequality and tally the yes's.",
+        "각 농장을 엄격한 부등식으로 확인하고 yes 인 것을 세어 봐."),
       answer: 2,
     },
   ];
@@ -171,24 +187,12 @@ NO`}
    ================================================================ */
 export function makeProdCh2(E, lang = "py") {
   return [
-    // 2-1: Light intro — code first.
-    {
-      type: "reveal",
-      narr: t(E,
-        "Each farm i is reachable iff S < c[i] − t[i].  So precompute d[i] = c[i] − t[i], sort it, and for each query count how many d are > S.  Read the code section by section.",
-        "농장 i 에 도달 가능 ↔ S < c[i] − t[i]. 그래서 d[i] = c[i] − t[i] 미리 계산하고 정렬, 쿼리마다 d > S 개수만 세요. 코드 한 단락씩 읽어요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-          {t(E,
-            "Once d is sorted, 'how many > S' is a single binary search.  No fancy structure needed.",
-            "d 가 정렬되면 'S 보다 큰 개수' 는 이분탐색 한 번. 복잡한 자료구조 필요 없음.")}
-        </div>),
-    },
-    // 2-2: Solution code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Farm i reachable iff S < c[i] − t[i]. Precompute d[i] = c[i] − t[i], sort, and for each query do one binary search for 'how many d > S'. Sections build it one piece at a time.",
+        "농장 i 도달 가능 ↔ S < c[i] − t[i]. d[i] = c[i] − t[i] 계산·정렬, 쿼리마다 'd > S 개수' 이분탐색 한 번. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getProductivitySections(E),
     },
   ];

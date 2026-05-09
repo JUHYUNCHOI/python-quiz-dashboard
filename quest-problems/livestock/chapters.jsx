@@ -66,6 +66,18 @@ export function makeLivestockCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the lexicographically smallest valid lineup, or 'IMPOSSIBLE'.",
+                "사전순으로 가장 작은 유효 배열을 출력. 불가능하면 'IMPOSSIBLE'.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -128,8 +140,8 @@ export function makeLivestockCh1(E) {
         "How many cows total in Livestock Lineup?",
         "Livestock Lineup에서 총 소는 몇 마리?"),
       hint: t(E,
-        "The problem always has exactly 8 cows.",
-        "이 문제는 항상 정확히 8마리 소가 있어요."),
+        "Re-read the problem statement — how many cow names are listed?",
+        "문제를 다시 읽어 봐 — 이름이 적힌 소가 몇 마리?"),
       answer: 8,
     },
   ];
@@ -141,23 +153,12 @@ export function makeLivestockCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeLivestockCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Each adjacency constraint forms an edge. The constraint graph has max degree 2, so it's a set of CHAINS. Sort cows alphabetically, then for each unvisited cow that's a chain endpoint (or alone), output the chain in order.",
-        "각 인접 제약 = 간선. 제약 그래프는 최대 차수 2 라 체인들의 집합. 소를 알파벳 순 정렬 후, 미방문이고 체인 끝점 (혹은 외톨이) 인 소부터 체인 출력."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Each adjacency constraint = an edge. The constraint graph has max degree 2, so it's a set of CHAINS. Sort cows alphabetically, then for each unvisited chain endpoint (or alone cow), output the chain in order. Sections build it one piece at a time.",
+        "각 인접 제약 = 간선. 제약 그래프는 최대 차수 2 라 체인들의 집합. 소를 알파벳 순 정렬 후, 미방문 체인 끝점 (또는 외톨이) 부터 체인 출력. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getLivestockSections(E),
     },
   ];

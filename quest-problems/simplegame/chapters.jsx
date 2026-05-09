@@ -37,6 +37,18 @@ export function makeSimpleGameCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P4</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the winner (FIRST or SECOND) under optimal play.",
+                "최적의 수일 때 승자 (FIRST 또는 SECOND) 를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -96,8 +108,8 @@ export function makeSimpleGameCh1(E) {
         "N=8. Who wins? (1=first, 2=second)",
         "N=8. 누가 이겨? (1=선수, 2=후수)"),
       hint: t(E,
-        "8 % 4 == 0. Multiples of 4 are losing for the player whose turn it is.",
-        "8 % 4 == 0. 4의 배수는 차례인 사람이 지는 위치예요."),
+        "Try small N and see who wins — find the pattern.",
+        "작은 N 값으로 누가 이기는지 보면서 패턴을 찾아 봐."),
       answer: 2,
     },
   ];
@@ -109,23 +121,12 @@ export function makeSimpleGameCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeSimpleGameCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Game theory: with moves {1, 2, 3}, the LOSING positions are exactly multiples of 4 (face N=0, 4, 8, ... and you lose). So FIRST player wins unless N % 4 == 0.",
-        "게임 이론: 이동 {1, 2, 3} 일 때 지는 위치는 정확히 4 의 배수 (N=0, 4, 8, ... 에서 자기 차례면 짐). 즉 N % 4 == 0 이 아니면 FIRST 승."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "With moves {1, 2, 3}, losing positions are exactly multiples of 4. So FIRST wins iff N % 4 ≠ 0. Sections build it one piece at a time.",
+        "이동 {1, 2, 3} 에서 지는 위치는 4 의 배수. 즉 N % 4 ≠ 0 이면 FIRST 승. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getSimpleGameSections(E),
     },
   ];

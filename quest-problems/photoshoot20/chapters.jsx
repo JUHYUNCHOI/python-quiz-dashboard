@@ -40,6 +40,16 @@ export function makePhoto20Ch1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E, "Given pair sums b, recover the lex-smallest permutation a of 1..N.", "쌍 합 b 가 주어졌을 때, 1..N 의 사전순 최소 순열 a 를 복원해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -102,8 +112,8 @@ export function makePhoto20Ch1(E) {
         "b = [3], N = 2. a[0] for lex-smallest permutation?",
         "b = [3], N = 2. 사전순 최소 순열의 a[0]은?"),
       hint: t(E,
-        "Try a[0] = 1: a[1] = 3 - 1 = 2. [1,2] is valid!",
-        "a[0] = 1 시도: a[1] = 3 - 1 = 2. [1,2]는 유효해요!"),
+        "For lex-smallest, try the tiniest a[0] first and check if it works.",
+        "사전순 최소를 노리니, 가장 작은 a[0] 부터 시도해서 되는지 확인해 봐요."),
       answer: 1,
     },
   ];
@@ -115,23 +125,12 @@ export function makePhoto20Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePhoto20Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Once you fix a[0], the entire array is determined: a[i+1] = b[i] − a[i]. So try a[0] = 1, 2, …, N and pick the SMALLEST that produces a valid permutation of 1..N (no duplicates, all in range).",
-        "a[0] 을 정하면 나머지가 자동으로 정해져요: a[i+1] = b[i] − a[i]. 그러므로 a[0] = 1, 2, …, N 을 시도해 보고, 1..N 의 유효한 순열 (중복 없음, 범위 내) 을 만드는 가장 작은 a[0] 을 채택."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Once you fix a[0], the entire array is determined: a[i+1] = b[i] − a[i]. So try a[0] = 1, 2, …, N and pick the SMALLEST that produces a valid permutation of 1..N (no duplicates, all in range). Sections build it one piece at a time.",
+        "a[0] 을 정하면 나머지가 자동으로 정해져요: a[i+1] = b[i] − a[i]. 그러므로 a[0] = 1, 2, …, N 을 시도해 보고, 1..N 의 유효한 순열 (중복 없음, 범위 내) 을 만드는 가장 작은 a[0] 을 채택. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getPhoto20Sections(E),
     },
   ];

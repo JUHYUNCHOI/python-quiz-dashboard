@@ -30,7 +30,20 @@ export function makeFansCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>🪭</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Fans</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P2</div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "1px solid #fbbf24", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+
+          {/* 🎯 Mission box */}
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the maximum number of sticks usable in a row, given no two adjacent sticks may share a color.",
+                "인접한 두 막대가 같은 색이면 안 된다는 조건 아래 일렬로 배치할 수 있는 최대 막대 수 출력.")}
+            </div>
+          </div>
+
+          <div style={{ marginTop: 10, background: "#fffbeb", border: "1px solid #fbbf24", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "N colors of sticks → line them up → no two adjacent same color → maximize length!",
               "N가지 색 막대 → 한 줄로 배치 → 인접한 같은 색 금지 → 최대 길이!")}

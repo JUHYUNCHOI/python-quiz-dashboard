@@ -37,6 +37,18 @@ export function makeMagicOrbsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P3</div>
           </div>
 
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#ede9fe", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Pick at most K orbs to maximize total power \u2014 output that maximum.",
+                "\ucd5c\ub300 K \uac1c\uc758 \uad6c\uc2ac\uc744 \uace8\ub77c \ucd1d \ud30c\uc6cc\ub97c \ucd5c\ub300\ud654 \u2014 \uadf8 \ucd5c\ub313\uac12\uc744 \ucd9c\ub825.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -94,13 +106,14 @@ export function makeMagicOrbsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Orbs: [5, 3, 4], pick 2. What is the maximum sum?", "구슬: [5, 3, 4], 2개 선택. 최대 합은?"),
+        "Same orbs [5, 3, 4], pick 2 — your turn.  What's the biggest sum you can get?",
+        "같은 구슬 [5, 3, 4], 2 개 — 직접 골라봐. 가장 큰 합?"),
       question: t(E,
         "Values [5, 3, 4], K=2. Maximum total power?",
         "값 [5, 3, 4], K=2. 최대 총 파워?"),
       hint: t(E,
-        "Sort descending: [5, 4, 3]. Take first 2: 5 + 4 = 9.",
-        "내림차순 정렬: [5, 4, 3]. 처음 2개: 5 + 4 = 9."),
+        "Pick the largest values you can — how many of them?",
+        "큰 값들을 골라 — 몇 개까지?"),
       answer: 9,
     },
   ];
@@ -112,23 +125,12 @@ export function makeMagicOrbsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMagicOrbsCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Greedy: pick the K orbs with the LARGEST powers. Sort descending and sum the first K.",
-        "그리디: 파워가 가장 큰 K 개의 구슬 선택. 내림차순 정렬 후 처음 K 개 합산."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code — straight in.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort powers descending, sum the first K.  Sections build it one piece at a time.",
+        "파워 내림차순 정렬, 앞에서 K 개 합. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMagicOrbsSections(E),
     },
   ];

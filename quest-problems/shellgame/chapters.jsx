@@ -153,6 +153,18 @@ export function makeShellCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the maximum possible number of correct Elsie guesses, taken over all 3 starting positions.",
+                "3 가지 시작 위치 중 Elsie 가 가장 많이 맞히는 경우의 정답 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -303,13 +315,14 @@ export function makeShellCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Pebble at 2.\nSwap 2 ↔ 3.\nThen guess = 3.\nIs the guess correct?\nThe pebble moved to 3, guess is 3, so yes!\nScore +1.", "조약돌 2번. 2 ↔ 3 스왑. 추측 = 3. 추측이 맞아? 조약돌이 3으로 이동, 추측도 3, 맞아! 점수 +1."),
+        "Quick check — picture the swap and see where the pebble lands.",
+        "직접 — 스왑을 머릿속에 그려보고 조약돌이 어디로 가는지 확인."),
       question: t(E,
         "Pebble at 2. Swap 2↔3. Now pebble is at position...?",
         "조약돌 2번. 2↔3 스왑. 이제 조약돌 위치는...?"),
       hint: t(E,
-        "Pebble was at 2. Swap 2 and 3. So pebble moves to 3!",
-        "조약돌이 2번에 있었어. 2번과 3번 교환. 조약돌은 3번으로 이동!"),
+        "Swapping 2 ↔ 3 moves whatever's at 2 over to 3 (and vice versa).",
+        "2 ↔ 3 스왑은 2 에 있던 게 3 으로 옮겨가 (반대도)."),
       answer: 3,
     },
   ];
@@ -445,8 +458,8 @@ export function makeShellCh2(E) {
         "3 starts × N swaps each. If N=5, total operations?",
         "3가지 시작 × N번 스왑. N=5이면 총 연산 수?"),
       hint: t(E,
-        "3 × 5 = 15",
-        "3 × 5 = 15"),
+        "Multiply the number of starts by the number of swaps per start.",
+        "시작 위치 수 × 시작당 스왑 수."),
       answer: 15,
     },
   ];

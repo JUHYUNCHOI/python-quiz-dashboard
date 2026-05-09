@@ -47,6 +47,18 @@ export function makeCowTipCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of rectangle-flip operations to turn the grid into all 0s.",
+                "격자를 모두 0 으로 만드는 데 필요한 최소 직사각형 뒤집기 횟수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -111,8 +123,8 @@ export function makeCowTipCh1(E) {
         "Grid [[1,0],[0,1]]: minimum toggles?",
         "격자 [[1,0],[0,1]]: 최소 토글 횟수?"),
       hint: t(E,
-        "Process bottom-right to top-left: (1,1) is 1 -> toggle, (1,0) becomes 1 -> toggle, (0,1) becomes 1 -> toggle.",
-        "오른쪽 아래부터: (1,1)=1 -> 토글, (1,0)=1 -> 토글, (0,1)=1 -> 토글."),
+        "Process bottom-right to top-left — flip whenever you find a 1.",
+        "오른쪽 아래부터 왼쪽 위로 — 1 을 만나면 그때마다 뒤집어 봐."),
       answer: 3,
     },
   ];
@@ -124,23 +136,12 @@ export function makeCowTipCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowTipCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Process cells from BOTTOM-RIGHT to TOP-LEFT. If a cell is 1, the only operation that can flip it without disturbing already-fixed cells is the toggle of the rectangle (0,0)–(i,j) — so we must do it. Count those forced operations.",
-        "오른쪽 아래에서 왼쪽 위 순서로 처리해요. 어떤 칸이 1 이면, 이미 고정된 칸들을 건드리지 않고 그 칸을 뒤집을 수 있는 유일한 연산은 사각형 (0,0)~(i,j) 토글 — 따라서 무조건 해야 해요. 그렇게 강제되는 연산의 수를 세요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Process cells bottom-right → top-left. If a cell is 1, the only flip that doesn't disturb fixed cells is toggle (0,0)–(i,j) — so we must do it. Count forced operations. Sections build it one piece at a time.",
+        "오른쪽 아래 → 왼쪽 위 순서. 1 인 칸은 이미 고정된 칸을 안 건드리고 뒤집을 수 있는 유일한 방법이 (0,0)~(i,j) 토글 — 강제. 횟수 세기. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCowTipSections(E),
     },
   ];

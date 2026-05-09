@@ -43,6 +43,18 @@ export function makeBucketListCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of buckets FJ must own to cover every cow on every day.",
+                "모든 소를 매일 만족시키기 위한 양동이의 최소 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -107,8 +119,8 @@ export function makeBucketListCh1(E) {
         "Max buckets needed at any time?",
         "어느 시점에서 최대 양동이 수?"),
       hint: t(E,
-        "At t=3-5, both active: 3 + 2 = 5.",
-        "t=3-5에서 둘 다 활성: 3 + 2 = 5."),
+        "Find the time window where both cows overlap, then sum their buckets.",
+        "두 소가 모두 활성인 시간 구간을 찾고 양동이 수를 더해 봐."),
       answer: 5,
     },
   ];
@@ -120,23 +132,12 @@ export function makeBucketListCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBucketListCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Convert each cow's interval into two events: at day s add +b buckets, at day t+1 subtract b. Sort all events by time, sweep through accumulating active buckets, and track the running maximum.",
-        "각 소의 구간을 두 이벤트로 변환: s 일에 +b 양동이, t+1 일에 −b. 모든 이벤트를 시간순 정렬, 활성 양동이 누적하면서 스윕, 누적 최댓값 추적."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Convert each cow's interval into two events: +b at s, −b at t+1. Sort by time, sweep accumulating active buckets, track the running max. Sections build it one piece at a time.",
+        "각 구간을 두 이벤트로: s 에 +b, t+1 에 −b. 시간순 정렬, 누적하면서 스윕, 최댓값 추적. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBucketListSections(E),
     },
   ];

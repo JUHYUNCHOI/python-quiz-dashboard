@@ -39,6 +39,18 @@ export function makeSleepySortCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2019 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of front-pulls needed to sort the line by ID.",
+                "줄을 ID 오름차순으로 정렬하는 데 필요한 최소 움직임 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -107,8 +119,8 @@ export function makeSleepySortCh1(E) {
         "[1, 2, 3, 4] already sorted. How many moves needed?",
         "[1, 2, 3, 4] 이미 정렬됨. 필요한 이동 횟수는?"),
       hint: t(E,
-        "All cows are in order. Sorted suffix length = N. Answer = N - N = 0.",
-        "모든 소가 순서대로예요. 정렬된 접미사 길이 = N. 답 = N - N = 0."),
+        "If everything is already sorted, no moves are required.",
+        "이미 다 정렬된 상태라면 굳이 움직일 필요가 있을까?"),
       answer: 0,
     },
   ];
@@ -120,23 +132,12 @@ export function makeSleepySortCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeSleepySortCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Cows in the longest already-sorted SUFFIX never need to move — they're already in their final relative order. Every cow in front of that suffix needs at least 1 move. Answer = N − (length of sorted suffix).",
-        "이미 정렬된 가장 긴 SUFFIX (뒤쪽 부분) 의 소들은 움직일 필요 없어요 — 이미 올바른 상대 순서에 있어요. 그 SUFFIX 앞의 모든 소는 적어도 한 번 이동 필요. 답 = N − (정렬된 SUFFIX 길이)."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Cows in the longest already-sorted SUFFIX never need to move. Every cow in front of it needs at least 1 move. Answer = N − (sorted suffix length). Sections build it one piece at a time.",
+        "이미 정렬된 가장 긴 SUFFIX 소들은 움직일 필요 없음. 그 앞의 소들은 적어도 한 번 이동 필요. 답 = N − (SUFFIX 길이). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getSleepySortSections(E),
     },
   ];

@@ -13,7 +13,8 @@ export const SOLUTION_CODE = [
   "",
   "out = []",
   "for _ in range(T):",
-  "    N = int(data[idx]); idx += 1",
+  "    N = int(data[idx])",
+  "    idx += 1",
   "    a = [int(data[idx + i]) for i in range(N)]",
   "    idx += N",
   "",
@@ -52,6 +53,18 @@ export function makeMajorityCh1(E) {
             <div style={{ fontSize: 32, marginBottom: 4 }}>🗳️</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Majority Opinion</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #1</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "List every hay type that COULD become universal via repeated focus groups (or output -1 if none).",
+                "포커스 그룹을 반복해 전체를 지배할 수 있는 건초 종류를 모두 출력 (없으면 -1).")}
+            </div>
           </div>
 
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -186,8 +199,8 @@ export function makeMajorityCh1(E) {
         "How many distinct hay types can become universal in [1, 1, 1, 2, 2, 2]?",
         "[1, 1, 1, 2, 2, 2]에서 전체를 지배할 수 있는 타입 수?"),
       hint: t(E,
-        "Type 1: pairs (0,1), (0,2), (1,2) all match → valid. Type 2: pairs (3,4), (3,5), (4,5) all match → valid. Both qualify.",
-        "타입 1: (0,1), (0,2), (1,2) 다 같음 → 가능. 타입 2: (3,4), (3,5), (4,5) 다 같음 → 가능. 둘 다 OK."),
+        "Walk down the array — for each value, is there another nearby cow (distance 1 or 2) of the same value?",
+        "배열을 따라가면서 — 각 값이, 거리 1 또는 2 안에 같은 값을 가진 이웃이 있나?"),
       answer: 2,
     },
     {
@@ -205,30 +218,19 @@ export function makeMajorityCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMajorityCh2(E, lang = "py") {
   return [
-    // 2-1: Light intro — code first.
-    {
-      type: "reveal",
-      narr: t(E,
-        "From the editorial trick: a hay type x is achievable iff some pair of cows at distance 1 OR distance 2 both like x.  Just scan once.",
-        "Editorial 한 줄: 어떤 타입 x 가 가능 ↔ 거리 1 또는 거리 2 의 두 소가 둘 다 x 좋아함. 한 번만 스캔."),
-      content: (
-        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-          {t(E,
-            "Read T cases. For each: scan i = 0..N-2. If a[i] == a[i+1] OR a[i] == a[i+2], add a[i] to a set. Print the sorted set (or '-1').  Code section by section.",
-            "T 케이스 읽기. 각 케이스: i = 0..N-2 스캔. a[i] == a[i+1] 또는 a[i] == a[i+2] 면 a[i] 를 set 에 추가. 정렬 출력 (없으면 '-1'). 코드 한 단락씩.")}
-        </div>),
-    },
-    // 2-2: Progressive code
+    // 2-1: Progressive code — sections explain the insight as they unfold.
     {
       type: "progressive",
       narr: t(E,
-        "Now build the linear scan step by step.", "선형 스캔을 단계별로 만들자."),
+        "Build the scan one piece at a time.  Each section explains why one short check (distance 1 + distance 2) decides whether each type can take over.",
+        "스캔을 한 단락씩. 거리 1 + 거리 2 짧은 검사 한 줄로 어떻게 결판나는지 섹션마다 설명."),
       sections: getMajoritySections(E),
     },
     {
       type: "runner",
       narr: t(E,
-        "Try your own array. Enter space-separated values, see live scan and final output.", "직접 배열 시도. 공백 구분 값 입력, 실시간 스캔과 최종 출력 확인."),
+        "Try your own array. Enter space-separated values, see live scan and final output.",
+        "직접 배열 시도. 공백 구분 값 입력, 실시간 스캔과 최종 출력 확인."),
     },
   ];
 }

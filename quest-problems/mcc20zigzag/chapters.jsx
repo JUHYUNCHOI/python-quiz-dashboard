@@ -42,6 +42,16 @@ export function makeMcc20ZigzagCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P6</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E, "Print the count of length-K zig-zag subsequences of the given string.", "주어진 문자열에서 길이 K 인 지그재그 부분수열의 개수를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -100,7 +110,7 @@ export function makeMcc20ZigzagCh1(E) {
       question: t(E,
         "C(3, 2) = ?",
         "C(3, 2) = ?"),
-      hint: t(E, "3! / (2! * 1!) = 3", "3! / (2! * 1!) = 3"),
+      hint: t(E, "C(n, k) = n! / (k! · (n−k)!).", "C(n, k) = n! / (k! · (n−k)!)."),
       answer: 3,
     },
   ];
@@ -109,20 +119,10 @@ export function makeMcc20ZigzagCh1(E) {
 export function makeMcc20ZigzagCh2(E, lang = "py") {
   return [
     {
-      type: "reveal",
-      narr: t(E,
-        "DP: dp[i][j] = number of zig-zag subsequences of length j ending at position i. Transition: extend from earlier i' with the right comparison (up if j is even, down if j is odd, or vice versa).",
-        "DP: dp[i][j] = 위치 i 에서 끝나는 길이 j 의 지그재그 부분수열 수. 전이: 이전 i' 에서 적절한 비교 (j 홀짝에 따라 상승/하강) 로 확장."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "DP: dp[i][j] = number of zig-zag subsequences of length j ending at position i. Transition: extend from earlier i' with the right comparison (up if j is even, down if j is odd, or vice versa). Sections build it one piece at a time.",
+        "DP: dp[i][j] = 위치 i 에서 끝나는 길이 j 의 지그재그 부분수열 수. 전이: 이전 i' 에서 적절한 비교 (j 홀짝에 따라 상승/하강) 로 확장. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc20ZigzagSections(E),
     },
   ];

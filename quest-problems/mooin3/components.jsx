@@ -60,6 +60,91 @@ export function TripletEnumSimulator({ E }) {
     };
   };
 
+  // Per-triplet "rule check card" — shows visually whether s[i]≠s[j] and s[j]=s[k] hold.
+  // Three letter chips with comparison signs.  Pure visual, no prose.
+  const RuleCheckCard = ({ tr }) => {
+    const sIeqJ = str[tr.i] === str[tr.j];   // BAD if equal
+    const sJeqK = str[tr.j] === str[tr.k];   // GOOD if equal
+    const Letter = ({ ch, role }) => {
+      const cols = {
+        i: { bg: "#fee2e2", bd: "#dc2626", fg: "#7f1d1d" },
+        j: { bg: "#fef3c7", bd: "#f59e0b", fg: "#92400e" },
+        k: { bg: "#dcfce7", bd: "#16a34a", fg: "#15803d" },
+      };
+      const c = cols[role];
+      return (
+        <div style={{
+          display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+        }}>
+          <div style={{ fontSize: 9, color: c.fg, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+            s[{role}]
+          </div>
+          <div style={{
+            width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+            borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
+            background: c.bg, border: `1.5px solid ${c.bd}`, color: c.fg,
+          }}>{ch}</div>
+        </div>
+      );
+    };
+    const Comp = ({ pass, expected }) => (
+      // expected: "≠" or "=" — what we WANT.  pass: did the actual values satisfy this?
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", gap: 1 }}>
+        <div style={{ fontSize: 18, fontWeight: 800, color: pass ? "#16a34a" : "#dc2626", lineHeight: 1, marginBottom: 4 }}>
+          {expected}
+        </div>
+        <div style={{
+          fontSize: 11, fontWeight: 800, lineHeight: 1,
+          color: pass ? "#16a34a" : "#dc2626",
+        }}>{pass ? "✓" : "✗"}</div>
+      </div>
+    );
+    return (
+      <div style={{
+        display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 6,
+        background: tr.ok ? "#f0fdf4" : "#fef2f2",
+        border: `1.5px solid ${tr.ok ? "#86efac" : "#fca5a5"}`,
+        borderRadius: 10, padding: "8px 12px", marginBottom: 10,
+      }}>
+        <Letter ch={str[tr.i]} role="i" />
+        <Comp pass={!sIeqJ} expected="≠" />
+        <Letter ch={str[tr.j]} role="j" />
+        <Comp pass={sJeqK} expected="=" />
+        <Letter ch={str[tr.k]} role="k" />
+        {tr.ok && (
+          <div style={{ marginLeft: 10, paddingLeft: 10, borderLeft: "1px dashed #86efac",
+            display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ fontSize: 9, color: "#15803d", fontWeight: 700 }}>score</div>
+            <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: "#1f2937", whiteSpace: "nowrap" }}>
+              <span style={{ color: "#dc2626" }}>{tr.j - tr.i}</span>
+              <span style={{ color: C.dim }}>×</span>
+              <span style={{ color: "#16a34a" }}>{tr.k - tr.j}</span>
+              <span style={{ color: C.dim }}>=</span>
+              <span style={{ fontSize: 14, color: "#15803d", fontWeight: 800 }}>{tr.score}</span>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Compute per-step "revealed count" (how many triplets shown so far) for the score strip.
+  const revealedCount =
+    s.kind === "intro" ? 0 :
+    s.kind === "step" ? s.idx + 1 :
+    trips.length;  // verdict/scale: all revealed
+
+  // Persistent role labels above cells (so j/i/k meaning is visible without text).
+  const labelForPos = (pos) => {
+    if (s.kind !== "step") return "";
+    if (pos === s.t.i) return "i";
+    if (pos === s.t.j) return "j";
+    if (pos === s.t.k) return "k";
+    return "";
+  };
+  const labelColor = (lab) =>
+    lab === "i" ? "#dc2626" : lab === "j" ? "#92400e" : lab === "k" ? "#16a34a" : "transparent";
+
   return (
     <div style={{ padding: 16 }}>
       <StepHeader
@@ -67,75 +152,88 @@ export function TripletEnumSimulator({ E }) {
         idx={safe}
         total={trace.length}
         isEn={E}
-        title={t(E, `First idea: try ALL triplets on s = "${str}"`,
-                    `첫 시도: s = "${str}" 의 모든 triplet 시도`)}
-        subtitle={<>({safe + 1} / {trace.length}) — ▶ {t(E, "to step", "눌러서 진행")}</>}
+        title={t(E, `s = "${str}"`, `s = "${str}"`)}
+        subtitle={`(${safe + 1} / ${trace.length})`}
       />
 
-      {/* String visualization */}
-      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 14 }}>
-        {str.split("").map((ch, pos) => (
-          <div key={pos} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <div style={{ fontSize: 10, color: C.dim }}>{pos + 1}</div>
-            <div style={cellStyle(pos, s.kind === "step" ? s.t : null)}>{ch}</div>
-          </div>
-        ))}
+      {/* String visualization with i/j/k labels above */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 10 }}>
+        {str.split("").map((ch, pos) => {
+          const lab = labelForPos(pos);
+          return (
+            <div key={pos} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+              <div style={{ fontSize: 10, height: 12, fontWeight: 700, color: labelColor(lab), fontFamily: "'JetBrains Mono',monospace" }}>
+                {lab || " "}
+              </div>
+              <div style={cellStyle(pos, s.kind === "step" ? s.t : null)}>{ch}</div>
+              <div style={{ fontSize: 9, color: C.dim }}>{pos + 1}</div>
+            </div>
+          );
+        })}
       </div>
 
-      <NarrativePanel minHeight={130}>
-        {s.kind === "intro" && (
-          <>
-            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
-              💡 {t(E, "Naive idea: enumerate every triplet (i, j, k) with i < j < k.",
-                          "단순 아이디어: i < j < k 인 모든 (i, j, k) 시도.")}
-            </div>
-            <div>
-              {t(E, `For s = "${str}" (N = 4), there are C(4, 3) = 4 triplets to check. ▶ to walk through all of them.`,
-                    `s = "${str}" (N = 4) 에서 C(4, 3) = 4 개 triplet. ▶ 눌러서 다 확인.`)}
-            </div>
-          </>
-        )}
-        {s.kind === "step" && (
-          <>
-            <div style={{ fontWeight: 600, color: s.t.ok ? "#15803d" : "#7f1d1d", marginBottom: 6 }}>
-              {s.t.ok ? "✓" : "✗"} (i, j, k) = (<b style={{ color: "#dc2626" }}>{s.t.i + 1}</b>, <b style={{ color: "#92400e" }}>{s.t.j + 1}</b>, <b style={{ color: "#16a34a" }}>{s.t.k + 1}</b>) = '{str[s.t.i]}{str[s.t.j]}{str[s.t.k]}'
-            </div>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{s.t.why}</div>
-          </>
-        )}
-        {s.kind === "verdict" && (
-          <>
-            <div style={{ fontWeight: 600, color: "#15803d", marginBottom: 6, fontSize: 14 }}>
-              🏁 {t(E, "All 4 triplets checked.", "4 개 다 확인 완료.")}
-            </div>
-            <div>
-              {t(E, "Only (1, 2, 3) = 'abb' is a valid moo. Best score = ", "(1, 2, 3) = 'abb' 만 유효. 최고 점수 = ")}
-              <b style={{ color: "#16a34a" }}>{best}</b>.
-            </div>
-          </>
-        )}
-        {s.kind === "scale" && (
-          <>
-            <div style={{ fontWeight: 600, color: "#92400e", marginBottom: 6, fontSize: 14 }}>
-              📈 {t(E, "Will this scale?", "큰 입력에는?")}
-            </div>
-            <div style={{ fontSize: 12.5, lineHeight: 1.7 }}>
-              <div>• {t(E, "N = 4: C(4,3) = 4 triplets — easy.", "N = 4: C(4,3) = 4 개 — 쉬움.")}</div>
-              <div>• {t(E, "N = 100: C(100,3) ≈ 1.6 × 10⁵ — still OK.", "N = 100: C(100,3) ≈ 1.6 × 10⁵ — 아직 OK.")}</div>
-              <div>• {t(E, "N = 1000: C(1000,3) ≈ 1.6 × 10⁸ — borderline.",
-                          "N = 1000: C(1000,3) ≈ 1.6 × 10⁸ — 경계선.")}</div>
-              <div style={{ color: "#dc2626", fontWeight: 700 }}>
-                • {t(E, "N = 10⁵: ~10¹⁵ triplets — IMPOSSIBLE.",
-                          "N = 10⁵: ~10¹⁵ 개 — 불가능.")}
+      {/* Step body: rule-check card on step, scale-bars on scale, otherwise empty */}
+      {s.kind === "step" && <RuleCheckCard tr={s.t} />}
+
+      {s.kind === "scale" && (
+        <div style={{ marginBottom: 10 }}>
+          {[
+            { N: 4,    ops: 4,         okLabel: "✓" },
+            { N: 100,  ops: 1.6e5,     okLabel: "✓" },
+            { N: 1000, ops: 1.6e8,     okLabel: "△" },
+            { N: 1e5,  ops: 1.6e14,    okLabel: "✗" },
+          ].map((row) => {
+            // Use log scale for bar widths; clamp.
+            const w = Math.max(8, Math.min(320, 25 * Math.log10(row.ops + 1)));
+            const ok = row.okLabel === "✓";
+            const borderline = row.okLabel === "△";
+            const bg = ok ? "#16a34a" : borderline ? "#f59e0b" : "#dc2626";
+            return (
+              <div key={row.N} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>
+                <div style={{ width: 60, textAlign: "right", color: C.dim, fontWeight: 600 }}>N = {row.N.toLocaleString()}</div>
+                <div style={{
+                  width: w, height: 16, background: bg, borderRadius: 4,
+                  display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 6,
+                  color: "#fff", fontSize: 10, fontWeight: 700,
+                }}>
+                  {row.ops >= 1e6 ? `~${row.ops.toExponential(1)}` : row.ops.toLocaleString()}
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: bg }}>{row.okLabel}</div>
               </div>
-              <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fbbf24", color: "#5b21b6", fontWeight: 700 }}>
-                {t(E, "→ Need to narrow the search. Idea: fix j (middle), find best i and best k separately.",
-                      "→ 탐색을 좁혀야 함. 아이디어: j (중간) 고정하고 best i, best k 따로 찾기.")}
+            );
+          })}
+        </div>
+      )}
+
+      {/* Score strip — small card per triplet checked.  ✓ green = valid moo with score.
+          ✗ red = rule failed.  Best gets ⭐ + dark green. */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap", marginBottom: 10 }}>
+        {trips.slice(0, revealedCount).map((tr, idx) => {
+          const isCurrent = s.kind === "step" && idx === s.idx;
+          const isBest = tr.ok && tr.score === best && best > 0;
+          return (
+            <div key={idx} style={{
+              padding: "3px 7px", borderRadius: 6, minWidth: 38,
+              background: isBest ? "#dcfce7" : tr.ok ? "#f0fdf4" : "#fef2f2",
+              border: `${isCurrent ? 2 : 1.5}px solid ${
+                isBest ? "#16a34a" : isCurrent ? "#f59e0b" : tr.ok ? "#86efac" : "#fca5a5"
+              }`,
+              fontFamily: "'JetBrains Mono',monospace",
+              display: "flex", flexDirection: "column", alignItems: "center", lineHeight: 1.2,
+            }}>
+              <div style={{ fontSize: 8.5, color: C.dim, fontWeight: 700 }}>
+                ({tr.i + 1},{tr.j + 1},{tr.k + 1})
+              </div>
+              <div style={{
+                fontSize: 13, fontWeight: 800,
+                color: tr.ok ? (isBest ? "#15803d" : "#166534") : "#991b1b",
+              }}>
+                {tr.ok ? tr.score : "✗"}{isBest && " ⭐"}
               </div>
             </div>
-          </>
-        )}
-      </NarrativePanel>
+          );
+        })}
+      </div>
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} />
     </div>
@@ -172,28 +270,72 @@ export function MooTraceSimulator({ E }) {
   const safe = ts.safe;
   const s = trace[safe];
 
+  /* cellRole — what each cell IS in the current step:
+       "j"            → middle (yellow, locked)
+       "left_i"       → matched during LEFT scan (red)
+       "right_k"      → matched during RIGHT scan (green)
+       "skipped_left" → scanned during LEFT scan, didn't match → ✗ overlay
+       "skipped_right"→ scanned during RIGHT scan, didn't match → ✗ overlay
+       "outside"      → not scanned at all in this j
+     The "skipped_*" roles let the student SEE the scan path
+     without reading text — footprints from outside-l → j and outside-r → j. */
+  const cellRole = (i) => {
+    if (s.kind !== "step") return "outside";
+    if (i === s.row.j) return "j";
+    if (i === s.row.left) return "left_i";
+    if (i === s.row.right) return "right_k";
+    // Left scan walks l → j-1, stopping at first different letter.
+    // If left found: scanned-and-skipped = [l, s.row.left - 1].
+    // If NOT found: every position [l, j-1] was scanned, all skipped.
+    const leftScanEnd = s.row.left >= 0 ? s.row.left : s.row.j;
+    if (i >= l && i < leftScanEnd) return "skipped_left";
+    // Right scan walks r → j+1, stopping at first same letter.
+    // If right found: scanned-and-skipped = [s.row.right + 1, r].
+    // If NOT found: every position [j+1, r] was scanned, all skipped.
+    const rightScanStart = s.row.right >= 0 ? s.row.right : s.row.j;
+    if (i > rightScanStart && i <= r) return "skipped_right";
+    return "outside";
+  };
   const cellStyle = (i) => {
-    let kind = "neutral";
-    if (s.kind === "step") {
-      if (i === s.row.j) kind = "j";
-      else if (i === s.row.left) kind = "left";
-      else if (i === s.row.right) kind = "right";
-    }
+    const role = cellRole(i);
+    const PALETTE = {
+      j:             { bg: "#fef3c7", bd: "#f59e0b", fg: "#92400e", op: 1 },
+      left_i:        { bg: "#fee2e2", bd: "#dc2626", fg: "#7f1d1d", op: 1 },
+      right_k:       { bg: "#dcfce7", bd: "#16a34a", fg: "#15803d", op: 1 },
+      skipped_left:  { bg: "#fef2f2", bd: "#fca5a5", fg: "#991b1b", op: 0.55 },
+      skipped_right: { bg: "#f0fdf4", bd: "#86efac", fg: "#166534", op: 0.55 },
+      outside:       { bg: "#fff",    bd: "#cbd5e1", fg: "#475569", op: 1 },
+    };
+    const p = PALETTE[role];
     return {
       width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
       borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
-      background: kind === "j" ? "#fef3c7" : kind === "left" ? "#fee2e2" : kind === "right" ? "#dcfce7" : "#fff",
-      border: `1px solid ${kind === "j" ? "#f59e0b" : kind === "left" ? "#dc2626" : kind === "right" ? "#16a34a" : "#cbd5e1"}`,
-      color: kind === "j" ? "#92400e" : kind === "left" ? "#7f1d1d" : kind === "right" ? "#15803d" : "#475569",
+      background: p.bg, border: `1px solid ${p.bd}`, color: p.fg, opacity: p.op,
       transition: "all .2s",
+      position: "relative",
     };
   };
   const labelFor = (i) => {
-    if (s.kind !== "step") return "";
-    if (i === s.row.j) return "j";
-    if (i === s.row.left) return "i";
-    if (i === s.row.right) return "k";
+    const role = cellRole(i);
+    if (role === "j") return "j";
+    if (role === "left_i") return "left_i";
+    if (role === "right_k") return "right_k";
     return "";
+  };
+  const overlayFor = (i) => {
+    // Show ✗ on cells that were scanned but didn't match — the "footprint" of the scan.
+    const role = cellRole(i);
+    if (role === "skipped_left" || role === "skipped_right") return "✗";
+    return null;
+  };
+  // Direction-arrow row: shows ▶▶▶ from l-edge toward where left_i was found,
+  //                     and ◀◀◀ from r-edge toward where right_k was found.
+  // Anchored on the OUTSIDE end of each scan so the student sees "scan starts here, lands there".
+  const arrowFor = (i) => {
+    if (s.kind !== "step") return null;
+    if (i === l && (s.row.left >= 0 || s.row.left === -1)) return "▶";  // left scan start
+    if (i === r && (s.row.right >= 0 || s.row.right === -1)) return "◀";  // right scan start
+    return null;
   };
 
   return (
@@ -203,95 +345,111 @@ export function MooTraceSimulator({ E }) {
         idx={safe}
         total={trace.length}
         isEn={E}
-        title={t(E, `Walk every j on s = "${str}"  (query [1, ${r + 1}])`,
-                    `s = "${str}" 의 모든 j 따라가기 (쿼리 [1, ${r + 1}])`)}
-        subtitle={t(E, `Press ▶ to step through each middle position j. (${safe + 1} / ${trace.length})`,
-                       `▶ 눌러서 가운데 자리 j 를 하나씩. (${safe + 1} / ${trace.length})`)}
+        title={t(E, `s = "${str}"`, `s = "${str}"`)}
+        subtitle={`(${safe + 1} / ${trace.length})`}
       />
 
+      {/* No legend. The cells below carry all the meaning visually:
+          color  → role (yellow=j, red=left_i, green=right_k)
+          ▶◀     → scan start direction
+          ✗      → scanned-but-skipped
+          label  → which name (j / left_i / right_k) */}
 
-      {/* String row with i/j/k labels above */}
+      {/* String row with j/left_i/right_k labels + scan footprints (✗) + scan-direction arrows. */}
       <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 14 }}>
-        {str.split("").map((ch, i) => (
-          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <div style={{ fontSize: 10, height: 14, fontWeight: 600,
-              color: labelFor(i) === "j" ? "#92400e" : labelFor(i) === "i" ? "#dc2626" : labelFor(i) === "k" ? "#16a34a" : "transparent" }}>
-              {labelFor(i) || "·"}
-            </div>
-            <div style={cellStyle(i)}>{ch}</div>
-            <div style={{ fontSize: 9, color: C.dim }}>{i + 1}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Per-j table — only revealed rows */}
-      <div style={{ display: "grid", gridTemplateColumns: "40px 50px 90px 90px 70px", gap: "4px 8px", fontSize: 12, marginBottom: 14, minHeight: 30 }}>
-        <div style={{ fontWeight: 600, color: A }}>j</div>
-        <div style={{ fontWeight: 600, color: A }}>s[j]</div>
-        <div style={{ fontWeight: 600, color: A }}>{t(E, "i (left)", "i (왼쪽)")}</div>
-        <div style={{ fontWeight: 600, color: A }}>{t(E, "k (right)", "k (오른쪽)")}</div>
-        <div style={{ fontWeight: 600, color: A, textAlign: "right" }}>{t(E, "score", "점수")}</div>
-        {perJ.slice(0, s.revealed).map((row, i) => {
-          const isCurrent = s.kind === "step" && row.j === s.row.j;
+        {str.split("").map((ch, i) => {
+          const role = cellRole(i);
+          const labelColor =
+            role === "j" ? "#92400e" :
+            role === "left_i" ? "#dc2626" :
+            role === "right_k" ? "#16a34a" :
+            "transparent";
+          const arrow = arrowFor(i);
+          const overlay = overlayFor(i);
           return (
-            <div key={i} style={{ display: "contents" }}>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 600, color: isCurrent ? "#f59e0b" : C.text }}>{row.j + 1}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", color: "#7c3aed" }}>{row.sj}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>
-                {row.left >= 0 ? `${row.left + 1} ('${str[row.left]}')` : "—"}
+            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+              {/* Top: scan-direction arrow (▶ at l, ◀ at r) — shows where each scan STARTS. */}
+              <div style={{ fontSize: 11, height: 13, fontWeight: 700,
+                color: arrow === "▶" ? "#dc2626" : arrow === "◀" ? "#16a34a" : "transparent" }}>
+                {arrow || " "}
               </div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>
-                {row.right >= 0 ? `${row.right + 1} ('${str[row.right]}')` : "—"}
+              {/* Role label (j / left_i / right_k) */}
+              <div style={{ fontSize: 10, height: 14, fontWeight: 600, color: labelColor }}>
+                {labelFor(i) || "·"}
               </div>
-              <div style={{
-                textAlign: "right", fontFamily: "'JetBrains Mono',monospace", fontWeight: 600,
-                color: row.score === s.best && s.best >= 0 ? "#16a34a" : C.text,
-                background: row.score === s.best && s.best >= 0 ? "#dcfce7" : "transparent",
-                padding: "2px 6px", borderRadius: 4,
-              }}>
-                {row.score === null ? "—" : row.score}
+              {/* The cell itself with optional ✗ overlay for scanned-but-skipped positions */}
+              <div style={cellStyle(i)}>
+                {ch}
+                {overlay && (
+                  <span style={{
+                    position: "absolute", top: -3, right: -3, fontSize: 12, fontWeight: 800,
+                    color: cellRole(i) === "skipped_left" ? "#dc2626" : "#16a34a",
+                    background: "#fff", border: `1.5px solid ${cellRole(i) === "skipped_left" ? "#fca5a5" : "#86efac"}`,
+                    width: 14, height: 14, borderRadius: "50%",
+                    display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1,
+                  }}>{overlay}</span>
+                )}
               </div>
+              <div style={{ fontSize: 9, color: C.dim }}>{i + 1}</div>
             </div>
           );
         })}
       </div>
 
-      {/* Step narrative */}
-      <NarrativePanel minHeight={64} padding="10px 12px" lineHeight={1.65}>
-        {s.kind === "init" && (
-          <>{t(E, "Start: no j scanned yet. Press ▶ to begin with the leftmost middle position.",
-                  "시작: 아직 어떤 j 도 안 봤어요. ▶ 눌러서 가장 왼쪽 가운데 자리부터.")}</>
-        )}
-        {s.kind === "step" && (
-          <>
-            <div style={{ fontWeight: 600, color: "#5b21b6" }}>
-              {t(E, `Try j = ${s.row.j + 1}, s[j] = '${s.row.sj}'`,
-                    `j = ${s.row.j + 1} 시도, s[j] = '${s.row.sj}'`)}
+      {/* Score strip — one card per j tried so far.
+          Shows: which j, and where the score COMES FROM as a formula.
+          Format:  j=2
+                   1×3=3   ⭐
+          The "1×3=3" makes it unambiguous that 3 is the SCORE (result of multiplication),
+          not the j position.  No prose. */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
+        {perJ.slice(0, s.revealed).map((row) => {
+          const isCurrent = s.kind === "step" && row.j === s.row.j;
+          const isBest = row.score !== null && row.score === s.best && s.best >= 0;
+          // (j - left_i) × (right_k - j) = score
+          const f1 = row.left >= 0 ? row.j - row.left : null;
+          const f2 = row.right >= 0 ? row.right - row.j : null;
+          return (
+            <div key={row.j} style={{
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+              padding: "4px 8px", borderRadius: 8, minWidth: 64,
+              background: isBest ? "#dcfce7" : isCurrent ? "#fef3c7" : "#f8fafc",
+              border: `${isCurrent ? 2 : 1.5}px solid ${
+                isBest ? "#16a34a" : isCurrent ? "#f59e0b" : "#e2e8f0"
+              }`,
+              fontFamily: "'JetBrains Mono',monospace",
+            }}>
+              {/* Top: which j this card is about (small, dim) */}
+              <div style={{ fontSize: 9.5, color: isCurrent ? "#92400e" : C.dim, fontWeight: 700 }}>
+                j = {row.j + 1}
+              </div>
+              {/* Bottom: the score, shown as a formula so '3' can't be mistaken for j.
+                  Uses red/green colored factor numbers matching left_i (red) and right_k (green) cells. */}
+              <div style={{
+                fontSize: 12, fontWeight: 700, lineHeight: 1.2,
+                color: row.score === null ? "#9ca3af" : "#1f2937",
+                whiteSpace: "nowrap",
+              }}>
+                {row.score === null ? (
+                  <span style={{ fontSize: 16 }}>✗</span>
+                ) : (
+                  <>
+                    <span style={{ color: "#dc2626" }}>{f1}</span>
+                    <span style={{ color: C.dim }}>×</span>
+                    <span style={{ color: "#16a34a" }}>{f2}</span>
+                    <span style={{ color: C.dim }}>=</span>
+                    <span style={{
+                      fontSize: 14, fontWeight: 800,
+                      color: isBest ? "#15803d" : "#1f2937",
+                    }}>{row.score}</span>
+                    {isBest && " ⭐"}
+                  </>
+                )}
+              </div>
             </div>
-            <div style={{ marginTop: 4 }}>
-              {s.row.left >= 0
-                ? t(E, `i = ${s.row.left + 1} (leftmost different)`, `i = ${s.row.left + 1} (왼쪽에서 가장 가까운 다른 글자)`)
-                : t(E, "no different char to the left", "왼쪽에 다른 글자 없음")}
-              {s.row.right >= 0 && s.row.left >= 0 && (
-                <>{" "}·{" "}
-                  {t(E, `k = ${s.row.right + 1} (rightmost same)`, `k = ${s.row.right + 1} (오른쪽에서 가장 먼 같은 글자)`)}
-                </>
-              )}
-            </div>
-            <div style={{ marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
-              {s.row.score !== null
-                ? <>score = ({s.row.j - s.row.left}) × ({s.row.right - s.row.j}) = <b style={{ color: "#16a34a" }}>{s.row.score}</b></>
-                : <span style={{ color: C.dim }}>{t(E, "no valid moo here", "여기는 유효한 moo 없음")}</span>}
-            </div>
-          </>
-        )}
-        {s.kind === "final" && (
-          <div style={{ fontWeight: 600, color: "#15803d" }}>
-            🎉 {t(E, "All j scanned. Best score:", "모든 j 검사 완료. 최고 점수:")}{" "}
-            <b style={{ fontSize: 16, color: "#15803d" }}>{s.best}</b>
-          </div>
-        )}
-      </NarrativePanel>
+          );
+        })}
+      </div>
 
       {/* Nav */}
       <SharedSimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
@@ -337,47 +495,74 @@ export function Mooin3Sim({ E }) {
         ))}
       </div>
 
-      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 6 }}>
+      {/* Cells with role labels above (j / left_i / right_k) — colors match the score card.
+          left_i = RED (consistent with MooTraceSim), j = YELLOW, right_k = GREEN. */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 12 }}>
         {s.split("").map((ch, idx) => {
           const isJ = idx === validJ;
           const isI = idx === bestI;
           const isK = idx === bestK;
           const inRange = idx >= l && idx <= r;
+          const lab = isJ ? "j" : isI ? "left_i" : isK ? "right_k" : "";
+          const labColor = isJ ? "#92400e" : isI ? "#dc2626" : isK ? "#16a34a" : "transparent";
           return (
-            <div key={idx} style={{
-              width: 30, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-              borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-              background: isJ ? "#fef3c7" : (isI ? "#dbeafe" : (isK ? "#dcfce7" : (inRange ? "#fff" : "#f3f4f6"))),
-              border: `1px solid ${isJ ? "#f59e0b" : (isI ? "#3b82f6" : (isK ? "#16a34a" : (inRange ? "#cbd5e1" : "#e5e7eb")))}`,
-              color: inRange ? C.text : "#9ca3af",
-            }}>{ch}</div>
+            <div key={idx} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+              <div style={{ fontSize: 9.5, height: 12, fontWeight: 700, color: labColor, fontFamily: "'JetBrains Mono',monospace" }}>
+                {lab || " "}
+              </div>
+              <div style={{
+                width: 30, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+                background: isJ ? "#fef3c7" : (isI ? "#fee2e2" : (isK ? "#dcfce7" : (inRange ? "#fff" : "#f3f4f6"))),
+                border: `1.5px solid ${isJ ? "#f59e0b" : (isI ? "#dc2626" : (isK ? "#16a34a" : (inRange ? "#cbd5e1" : "#e5e7eb")))}`,
+                color: isJ ? "#92400e" : isI ? "#7f1d1d" : isK ? "#15803d" : (inRange ? C.text : "#9ca3af"),
+              }}>{ch}</div>
+              <div style={{ fontSize: 9, color: C.dim }}>{idx + 1}</div>
+            </div>
           );
         })}
       </div>
-      <div style={{ textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 12 }}>
-        🟡 = j ({validJ}) · 🔵 = best i ({bestI}) · 🟢 = best k ({bestK})
-      </div>
 
-      {/* j slider */}
-      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "8px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
-        <div style={{ marginBottom: 6 }}>j = {validJ}</div>
+      {/* j slider — visual control, label shows current j next to thumb. */}
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "8px 12px", marginBottom: 10, fontFamily: "'JetBrains Mono',monospace" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: C.text, marginBottom: 4 }}>
+          <span style={{ background: "#fef3c7", border: "1.5px solid #f59e0b", color: "#92400e", padding: "1px 8px", borderRadius: 5, fontWeight: 800 }}>
+            j = {validJ + 1}
+          </span>
+          <span style={{ color: C.dim, fontSize: 10 }}>← →</span>
+        </div>
         <input type="range" min={l + 1} max={r - 1} value={validJ} onChange={e => setJ(parseInt(e.target.value))} style={{ width: "100%" }} />
       </div>
 
-      <div style={{ background: product >= 0 ? "#dcfce7" : "#fef2f2", border: `1px solid ${product >= 0 ? "#16a34a" : "#dc2626"}`, borderRadius: 10, padding: "10px 12px", color: product >= 0 ? "#15803d" : "#7f1d1d", fontSize: 13, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", textAlign: "center" }}>
-        {product >= 0 ? `(j − i) × (k − j) = ${validJ - bestI} × ${bestK - validJ} = ${product}` : t(E, "no valid (i, j, k) for this j", "이 j에 대해 유효 (i, j, k) 없음")}
+      {/* Score card — visual formula, no prose.  Matches the score-strip card style of MooTraceSim. */}
+      <div style={{
+        display: "flex", justifyContent: "center", alignItems: "center", gap: 6,
+        background: product >= 0 ? "#dcfce7" : "#fef2f2",
+        border: `1.5px solid ${product >= 0 ? "#16a34a" : "#dc2626"}`,
+        borderRadius: 10, padding: "8px 14px", fontFamily: "'JetBrains Mono',monospace",
+      }}>
+        <span style={{ fontSize: 10, color: product >= 0 ? "#15803d" : "#991b1b", fontWeight: 700 }}>
+          score
+        </span>
+        {product >= 0 ? (
+          <>
+            <span style={{ color: "#dc2626", fontSize: 14, fontWeight: 700 }}>{validJ - bestI}</span>
+            <span style={{ color: C.dim }}>×</span>
+            <span style={{ color: "#16a34a", fontSize: 14, fontWeight: 700 }}>{bestK - validJ}</span>
+            <span style={{ color: C.dim }}>=</span>
+            <span style={{ fontSize: 18, fontWeight: 800, color: "#15803d" }}>{product}</span>
+          </>
+        ) : (
+          <span style={{ fontSize: 22, fontWeight: 800, color: "#dc2626" }}>✗</span>
+        )}
       </div>
     </div>
   );
 }
 
 export function Mooin3Runner({ E }) {
-  return (
-    <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
-      {t(E, "Use the Sim above to drag j and watch best i and k. Per-query brute force is in the code section.",
-            "위 Sim에서 j를 드래그하며 best i, k 변화 관찰. 쿼리당 brute force는 코드 섹션 참고.")}
-    </div>
-  );
+  // Empty placeholder — actual interactivity lives in Mooin3Sim above.
+  return null;
 }
 
 /* Section 1: Input — string + queries */
@@ -401,24 +586,27 @@ const M3_INPUT_CPP = [
 const M3_LOOP_PY = (E) => [
   "for q in range(Q):",
   "    l, r = map(int, input().split())",
-  t(E, "    l -= 1; r -= 1   # convert to 0-based",
-        "    l -= 1; r -= 1   # 0-based 로 변환"),
+  t(E, "    l -= 1   # convert to 0-based",
+        "    l -= 1   # 0-based 로 변환"),
+  "    r -= 1",
   "    best = -1",
   "",
+  t(E, "    # Try every middle position j; for each, scan left + right.",
+        "    # 모든 가운데 자리 j 시도 — j 박힌 동안 왼쪽 + 오른쪽 훑기."),
   "    for j in range(l + 1, r):",
-  t(E, "        # leftmost i in [l, j) with s[i] != s[j] → maximizes (j - i)",
-        "        # [l, j) 에서 s[i] != s[j] 인 가장 왼쪽 i → (j - i) 최대화"),
-  "        i = -1",
-  "        for ii in range(l, j):",
-  "            if s[ii] != s[j]:",
-  "                i = ii",
+  t(E, "        # left_i = first slot in [l, j) with a DIFFERENT letter from s[j].",
+        "        # left_i = [l, j) 에서 s[j] 와 다른 글자가 *처음* 나오는 자리"),
+  "        left_i = -1",
+  "        for idx in range(l, j):",
+  "            if s[idx] != s[j]:",
+  "                left_i = idx",
   "                break",
-  t(E, "        # rightmost k in (j, r] with s[k] == s[j] → maximizes (k - j)",
-        "        # (j, r] 에서 s[k] == s[j] 인 가장 오른쪽 k → (k - j) 최대화"),
-  "        k = -1",
-  "        for kk in range(r, j, -1):",
-  "            if s[kk] == s[j]:",
-  "                k = kk",
+  t(E, "        # right_k = last slot in (j, r] with the SAME letter as s[j].",
+        "        # right_k = (j, r] 에서 s[j] 와 같은 글자가 *마지막* 으로 있는 자리"),
+  "        right_k = -1",
+  "        for idx in range(r, j, -1):",
+  "            if s[idx] == s[j]:",
+  "                right_k = idx",
   "                break",
 ];
 const M3_LOOP_CPP = (E) => [
@@ -430,30 +618,32 @@ const M3_LOOP_CPP = (E) => [
   "        long long best = -1;",
   "",
   "        for (int j = l + 1; j < r; j++) {",
-  t(E, "            // leftmost i with s[i] != s[j]",
-        "            // s[i] != s[j] 인 가장 왼쪽 i"),
-  "            int i = -1;",
-  "            for (int ii = l; ii < j; ii++) {",
-  "                if (s[ii] != s[j]) { i = ii; break; }",
+  t(E, "            // left_i = first slot left of j with a DIFFERENT letter from s[j].",
+        "            // left_i = j 왼쪽에서 s[j] 와 다른 글자가 *처음* 나오는 자리"),
+  "            int left_i = -1;",
+  "            for (int idx = l; idx < j; idx++) {",
+  "                if (s[idx] != s[j]) { left_i = idx; break; }",
   "            }",
-  t(E, "            // rightmost k with s[k] == s[j]",
-        "            // s[k] == s[j] 인 가장 오른쪽 k"),
-  "            int k = -1;",
-  "            for (int kk = r; kk > j; kk--) {",
-  "                if (s[kk] == s[j]) { k = kk; break; }",
+  t(E, "            // right_k = last slot right of j with the SAME letter as s[j].",
+        "            // right_k = j 오른쪽에서 s[j] 와 같은 글자가 *마지막* 자리"),
+  "            int right_k = -1;",
+  "            for (int idx = r; idx > j; idx--) {",
+  "                if (s[idx] == s[j]) { right_k = idx; break; }",
   "            }",
 ];
 
-/* Section 3: update best with (j-i)*(k-j) */
+/* Section 3: update best with (j - left_i) * (right_k - j) */
 const M3_UPDATE_PY = [
-  "        if i != -1 and k != -1:",
-  "            best = max(best, (j - i) * (k - j))",
+  "        if left_i != -1 and right_k != -1:",
+  "            score = (j - left_i) * (right_k - j)",
+  "            if score > best:",
+  "                best = score",
   "    print(best)",
 ];
 const M3_UPDATE_CPP = [
-  "            if (i != -1 && k != -1) {",
-  "                long long val = (long long)(j - i) * (k - j);",
-  "                if (val > best) best = val;",
+  "            if (left_i != -1 && right_k != -1) {",
+  "                long long score = (long long)(j - left_i) * (right_k - j);",
+  "                if (score > best) best = score;",
   "            }",
   "        }",
   "        cout << best << '\\n';",
@@ -469,23 +659,27 @@ const M3_FULL_PY = [
   "",
   "for q in range(Q):",
   "    l, r = map(int, input().split())",
-  "    l -= 1; r -= 1",
+  "    l -= 1   # 0-based 로 변환",
+  "    r -= 1",
   "    best = -1",
+  "    # 모든 가운데 자리 j 한 번씩 시도 — j 가 박힌 동안 양쪽으로 훑기.",
   "    for j in range(l + 1, r):",
-  "        i = -1",
-  "        for ii in range(l, j):",
-  "            if s[ii] != s[j]:",
-  "                i = ii",
+  "        # 왼쪽 훑기: s[j] 와 다른 글자가 *처음* 나오는 자리 → left_i",
+  "        left_i = -1",
+  "        for idx in range(l, j):",
+  "            if s[idx] != s[j]:",
+  "                left_i = idx",
   "                break",
-  "        k = -1",
-  "        for kk in range(r, j, -1):",
-  "            if s[kk] == s[j]:",
-  "                k = kk",
+  "        # 오른쪽 훑기: s[j] 와 같은 글자가 *마지막* 으로 있는 자리 → right_k",
+  "        right_k = -1",
+  "        for idx in range(r, j, -1):",
+  "            if s[idx] == s[j]:",
+  "                right_k = idx",
   "                break",
-  "        if i != -1 and k != -1:",
-  "            val = (j - i) * (k - j)",
-  "            if val > best:",
-  "                best = val",
+  "        if left_i != -1 and right_k != -1:",
+  "            score = (j - left_i) * (right_k - j)",
+  "            if score > best:",
+  "                best = score",
   "    print(best)",
 ];
 const M3_FULL_CPP = [
@@ -505,17 +699,17 @@ const M3_FULL_CPP = [
   "        l--; r--;",
   "        long long best = -1;",
   "        for (int j = l + 1; j < r; j++) {",
-  "            int i = -1;",
-  "            for (int ii = l; ii < j; ii++) {",
-  "                if (s[ii] != s[j]) { i = ii; break; }",
+  "            int left_i = -1;",
+  "            for (int idx = l; idx < j; idx++) {",
+  "                if (s[idx] != s[j]) { left_i = idx; break; }",
   "            }",
-  "            int k = -1;",
-  "            for (int kk = r; kk > j; kk--) {",
-  "                if (s[kk] == s[j]) { k = kk; break; }",
+  "            int right_k = -1;",
+  "            for (int idx = r; idx > j; idx--) {",
+  "                if (s[idx] == s[j]) { right_k = idx; break; }",
   "            }",
-  "            if (i != -1 && k != -1) {",
-  "                long long val = (long long)(j - i) * (k - j);",
-  "                if (val > best) best = val;",
+  "            if (left_i != -1 && right_k != -1) {",
+  "                long long score = (long long)(j - left_i) * (right_k - j);",
+  "                if (score > best) best = score;",
   "            }",
   "        }",
   "        cout << best << '\\n';",
@@ -524,13 +718,224 @@ const M3_FULL_CPP = [
   "}",
 ];
 
-/* ── Step 6 — final fast code (curriculum-only: 손으로 만든 이분 탐색)
-       변수 이름은 이해하기 쉽게 풀어 씀.                              ── */
-const M3_FAST_PY = [
-  "import sys",
+/* ── Step 6 — Stage A: Group by character c (still scans for i, k each query).
+       이 단계의 목표: 외곽 루프를 j (N 개) → c (26 개) 로 바꾼다.
+       복잡도는 아직 O(Q · 26·N) — 통과는 못 하지만 다음 단계의 발판.        ── */
+const M3_STAGE_A_PY = [
+  "N, Q = map(int, input().split())",
+  "s = input().strip()",
   "",
-  "# 손으로 짠 이분 탐색 — bisect 모듈 안 써도 같은 일.",
-  "# 정렬된 sorted_arr 의 [lo, hi) 구간에서 target 이상인 첫 위치 반환.",
+  "# 문자 c 마다 등장 인덱스 미리 모아두기 (왼→오 순서라 자동 정렬).",
+  "positions_of = [[] for _ in range(26)]",
+  "for idx in range(N):",
+  "    positions_of[ord(s[idx]) - 97].append(idx)",
+  "",
+  "for q in range(Q):",
+  "    l, r = map(int, input().split())",
+  "    l -= 1",
+  "    r -= 1",
+  "    best = -1",
+  "    # 핵심 변경: j (N 개) 대신 c (26 개) 로 외곽 루프.",
+  "    # 같은 글자 c 인 j 들은 모두 같은 i, k 질문을 함 → 한 번만 답하면 됨.",
+  "    for c in range(26):",
+  "        ch = chr(c + 97)",
+  "        # 가장 왼쪽 i (s[i] ≠ ch) — 매번 스캔 (다음 단계에서 lookup 표로 교체)",
+  "        left_i = -1",
+  "        for idx in range(l, r):",
+  "            if s[idx] != ch:",
+  "                left_i = idx",
+  "                break",
+  "        if left_i == -1:",
+  "            continue",
+  "        # 가장 오른쪽 k (s[k] = ch) — 매번 스캔",
+  "        right_k = -1",
+  "        for idx in range(r, left_i, -1):",
+  "            if s[idx] == ch:",
+  "                right_k = idx",
+  "                break",
+  "        if right_k <= left_i:",
+  "            continue",
+  "        # 그 사이의 j 후보들 = positions_of[c] 중 (left_i, right_k) 안",
+  "        for j in positions_of[c]:",
+  "            if j <= left_i:",
+  "                continue",
+  "            if j >= right_k:",
+  "                break",
+  "            product = (j - left_i) * (right_k - j)",
+  "            if product > best:",
+  "                best = product",
+  "    print(best)",
+];
+const M3_STAGE_A_CPP = [
+  "#include <iostream>",
+  "#include <string>",
+  "#include <vector>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    int N, Q;",
+  "    cin >> N >> Q;",
+  "    string s;",
+  "    cin >> s;",
+  "",
+  "    // 문자 c 마다 등장 인덱스 미리 모아두기 (왼→오 순서라 자동 정렬).",
+  "    vector<vector<int>> positions_of(26);",
+  "    for (int idx = 0; idx < N; idx++)",
+  "        positions_of[s[idx] - 'a'].push_back(idx);",
+  "",
+  "    for (int q = 0; q < Q; q++) {",
+  "        int l, r;",
+  "        cin >> l >> r;",
+  "        l--; r--;",
+  "        long long best = -1;",
+  "        // 핵심 변경: j (N 개) 대신 c (26 개) 로 외곽 루프.",
+  "        for (int c = 0; c < 26; c++) {",
+  "            char ch = 'a' + c;",
+  "            // 가장 왼쪽 i (s[i] != ch) — 매번 스캔",
+  "            int left_i = -1;",
+  "            for (int idx = l; idx < r; idx++) {",
+  "                if (s[idx] != ch) { left_i = idx; break; }",
+  "            }",
+  "            if (left_i == -1) continue;",
+  "            // 가장 오른쪽 k (s[k] == ch)",
+  "            int right_k = -1;",
+  "            for (int idx = r; idx > left_i; idx--) {",
+  "                if (s[idx] == ch) { right_k = idx; break; }",
+  "            }",
+  "            if (right_k <= left_i) continue;",
+  "            // 그 사이의 j 후보들",
+  "            for (int j : positions_of[c]) {",
+  "                if (j <= left_i) continue;",
+  "                if (j >= right_k) break;",
+  "                long long product = (long long)(j - left_i) * (right_k - j);",
+  "                if (product > best) best = product;",
+  "            }",
+  "        }",
+  "        cout << best << '\\n';",
+  "    }",
+  "    return 0;",
+  "}",
+];
+
+/* ── Step 7 — Stage B: + lookup 표 미리 만들기.
+       nearest_diff[c][i] + latest_same[c][i] precompute → i, k 조회 O(1).
+       복잡도 O(26·N + Q · |positions[c]|) — 여전히 부족하지만 점점 나아짐.    ── */
+const M3_STAGE_B_PY = [
+  "N, Q = map(int, input().split())",
+  "s = input().strip()",
+  "",
+  "positions_of = [[] for _ in range(26)]",
+  "for idx in range(N):",
+  "    positions_of[ord(s[idx]) - 97].append(idx)",
+  "",
+  "# NEW: 두 lookup 표를 한 번만 만들어 둠.",
+  "#   nearest_diff[c][i] = idx ≥ i 중 s[idx] ≠ chr(c) 인 가장 작은 idx",
+  "#   latest_same[c][i]  = idx ≤ i 중 s[idx] == chr(c) 인 가장 큰 idx",
+  "INF = N",
+  "nearest_diff = [[INF] * (N + 1) for _ in range(26)]",
+  "latest_same  = [[-1]  * (N + 1) for _ in range(26)]",
+  "for c in range(26):",
+  "    ch = chr(c + 97)",
+  "    next_diff_idx = INF",
+  "    for idx in range(N - 1, -1, -1):",
+  "        if s[idx] != ch:",
+  "            next_diff_idx = idx",
+  "        nearest_diff[c][idx] = next_diff_idx",
+  "    last_same_idx = -1",
+  "    for idx in range(N):",
+  "        if s[idx] == ch:",
+  "            last_same_idx = idx",
+  "        latest_same[c][idx] = last_same_idx",
+  "",
+  "for q in range(Q):",
+  "    l, r = map(int, input().split())",
+  "    l -= 1",
+  "    r -= 1",
+  "    best = -1",
+  "    for c in range(26):",
+  "        # NEW: 매번 스캔하던 left_i / right_k 가 표 한 번 조회로 끝.",
+  "        left_i = nearest_diff[c][l]",
+  "        if left_i >= r:",
+  "            continue",
+  "        right_k = latest_same[c][r]",
+  "        if right_k <= left_i:",
+  "            continue",
+  "        # j 는 여전히 positions_of[c] 모두 순회 (다음 단계에서 binary search 로 압축)",
+  "        for j in positions_of[c]:",
+  "            if j <= left_i:",
+  "                continue",
+  "            if j >= right_k:",
+  "                break",
+  "            product = (j - left_i) * (right_k - j)",
+  "            if product > best:",
+  "                best = product",
+  "    print(best)",
+];
+const M3_STAGE_B_CPP = [
+  "#include <iostream>",
+  "#include <string>",
+  "#include <vector>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    int N, Q;",
+  "    cin >> N >> Q;",
+  "    string s;",
+  "    cin >> s;",
+  "",
+  "    vector<vector<int>> positions_of(26);",
+  "    for (int idx = 0; idx < N; idx++)",
+  "        positions_of[s[idx] - 'a'].push_back(idx);",
+  "",
+  "    // NEW: 두 lookup 표를 한 번만 만들어 둠.",
+  "    int INF = N;",
+  "    vector<vector<int>> nearest_diff(26, vector<int>(N + 1, INF));",
+  "    vector<vector<int>> latest_same(26, vector<int>(N + 1, -1));",
+  "    for (int c = 0; c < 26; c++) {",
+  "        char ch = 'a' + c;",
+  "        int next_diff_idx = INF;",
+  "        for (int idx = N - 1; idx >= 0; idx--) {",
+  "            if (s[idx] != ch) next_diff_idx = idx;",
+  "            nearest_diff[c][idx] = next_diff_idx;",
+  "        }",
+  "        int last_same_idx = -1;",
+  "        for (int idx = 0; idx < N; idx++) {",
+  "            if (s[idx] == ch) last_same_idx = idx;",
+  "            latest_same[c][idx] = last_same_idx;",
+  "        }",
+  "    }",
+  "",
+  "    for (int q = 0; q < Q; q++) {",
+  "        int l, r;",
+  "        cin >> l >> r;",
+  "        l--; r--;",
+  "        long long best = -1;",
+  "        for (int c = 0; c < 26; c++) {",
+  "            // NEW: 표 조회 O(1)",
+  "            int left_i = nearest_diff[c][l];",
+  "            if (left_i >= r) continue;",
+  "            int right_k = latest_same[c][r];",
+  "            if (right_k <= left_i) continue;",
+  "            for (int j : positions_of[c]) {",
+  "                if (j <= left_i) continue;",
+  "                if (j >= right_k) break;",
+  "                long long product = (long long)(j - left_i) * (right_k - j);",
+  "                if (product > best) best = product;",
+  "            }",
+  "        }",
+  "        cout << best << '\\n';",
+  "    }",
+  "    return 0;",
+  "}",
+];
+
+/* ── Step 8 — Stage C (final fast): + 포물선 꼭대기 + binary search.
+       f(j) = (j - left_i)(right_k - j) 는 j 에 대한 아래볼록 포물선.
+       꼭대기 (left_i + right_k)/2 근처 c_positions 의 후보 2 개만 검사.
+       O(26·N + Q · 26·log N) — 통과.                                    ── */
+const M3_FAST_PY = [
+  "# 손으로 짠 이분 탐색 — 정렬된 리스트에서 target 이상인 첫 위치 반환.",
+  "# (커리큘럼: while 루프만 사용. bisect 모듈 import 없음.)",
   "def find_first_at_least(sorted_arr, target, lo, hi):",
   "    while lo < hi:",
   "        mid = (lo + hi) // 2",
@@ -550,11 +955,8 @@ const M3_FAST_PY = [
   "            hi = mid",
   "    return lo",
   "",
-  "data = sys.stdin.buffer.read().split()",
-  "p = 0",
-  "N = int(data[p]); p += 1",
-  "Q = int(data[p]); p += 1",
-  "s = data[p].decode(); p += 1",
+  "N, Q = map(int, input().split())",
+  "s = input().strip()",
   "",
   "# positions_of[c] = 문자 chr(c+97) 가 등장하는 인덱스들 (왼→오 순서라 자동 정렬)",
   "positions_of = [[] for _ in range(26)]",
@@ -571,31 +973,37 @@ const M3_FAST_PY = [
   "    ch = chr(c + 97)",
   "    next_diff_idx = INF",
   "    for idx in range(N - 1, -1, -1):",
-  "        if s[idx] != ch: next_diff_idx = idx",
+  "        if s[idx] != ch:",
+  "            next_diff_idx = idx",
   "        nearest_diff[c][idx] = next_diff_idx",
   "    last_same_idx = -1",
   "    for idx in range(N):",
-  "        if s[idx] == ch: last_same_idx = idx",
+  "        if s[idx] == ch:",
+  "            last_same_idx = idx",
   "        latest_same[c][idx] = last_same_idx",
   "",
-  "for _ in range(Q):",
-  "    l = int(data[p]) - 1; p += 1",
-  "    r = int(data[p]) - 1; p += 1",
+  "for q in range(Q):",
+  "    l, r = map(int, input().split())",
+  "    l -= 1",
+  "    r -= 1",
   "    best = -1",
   "    for c in range(26):",
   "        # left_i = (j-i) 최대화하려고 잡는 가장 왼쪽 i (s[i] ≠ chr(c))",
   "        left_i = nearest_diff[c][l]",
-  "        if left_i >= r: continue",
+  "        if left_i >= r:",
+  "            continue",
   "        # right_k = (k-j) 최대화하려고 잡는 가장 오른쪽 k (s[k] == chr(c))",
   "        right_k = latest_same[c][r]",
-  "        if right_k <= left_i: continue",
+  "        if right_k <= left_i:",
+  "            continue",
   "",
   "        # j 후보들 = positions_of[c] 중 (left_i, right_k) 사이에 있는 것들",
   "        c_positions = positions_of[c]",
   "        n_positions = len(c_positions)",
   "        first_valid = find_first_greater_than(c_positions, left_i, 0, n_positions)",
   "        first_invalid = find_first_at_least(c_positions, right_k, 0, n_positions)",
-  "        if first_valid >= first_invalid: continue",
+  "        if first_valid >= first_invalid:",
+  "            continue",
   "",
   "        # f(j) = (j - left_i)·(right_k - j) 는 j 에 대한 아래볼록 포물선.",
   "        # 꼭대기 j_peak = (left_i + right_k) / 2.",
@@ -606,7 +1014,8 @@ const M3_FAST_PY = [
   "            if first_valid <= cand_idx < first_invalid:",
   "                j = c_positions[cand_idx]",
   "                product = (j - left_i) * (right_k - j)",
-  "                if product > best: best = product",
+  "                if product > best:",
+  "                    best = product",
   "    print(best)",
 ];
 const M3_FAST_CPP = [
@@ -796,18 +1205,62 @@ export function getMooin3Sections(E) {
             "Inputs 2–3 (N, Q ≤ 50) 는 통과 → 부분점수. 나머지는 다음 단계에서."),
       ],
     },
+    /* ── 6️⃣ Stage A: 외곽 루프를 j → c (26 개) 로 ── */
     {
-      label: t(E, "6️⃣ Final fast code — lookup tables + parabola peak via bisect", "6️⃣ 최종 빠른 코드 — lookup 표 + 포물선 꼭대기 bisect"),
+      label: t(E, "6️⃣ Group j by character c — 26 candidates instead of N",
+                  "6️⃣ j 대신 글자 c 26 개로 묶기"),
+      color: "#0891b2",
+      py: M3_STAGE_A_PY, cpp: M3_STAGE_A_CPP,
+      why: [
+        t(E, "Key observation: every j with s[j] = c asks the SAME left/right scan question (find leftmost i with s[i] ≠ c, rightmost k with s[k] = c).",
+            "핵심 관찰: s[j] = c 인 모든 j 가 같은 좌/우 스캔 질문을 함 (s[i] ≠ c 인 가장 왼쪽 i, s[k] = c 인 가장 오른쪽 k)."),
+        t(E, "So loop the OUTER over c (just 26 letters) instead of j (N positions).  Inside each c, iterate positions_of[c] to find the best j.",
+            "외곽 루프를 c (26 글자) 로 — j (N 개) 대신. c 안에서 positions_of[c] 를 돌며 best j 를 찾음."),
+        t(E, "Per query still O(26·N) because we scan to find left_i / right_k each time. Conceptual win, not yet a speed win — but the next step plugs that hole.",
+            "쿼리당 아직 O(26·N) — 매번 left_i / right_k 를 스캔해서. 개념 압축은 끝, 속도 압축은 다음 단계."),
+      ],
+    },
+
+    /* ── 7️⃣ Stage B: lookup 표 미리 만들기 ── */
+    {
+      label: t(E, "7️⃣ Precompute i, k tables — O(1) lookup per query",
+                  "7️⃣ i, k lookup 표 미리 만들기 — 쿼리당 O(1) 조회"),
+      color: "#7c3aed",
+      py: M3_STAGE_B_PY, cpp: M3_STAGE_B_CPP,
+      why: [
+        t(E, "Build two tables ONCE before any query: nearest_diff[c][i] (smallest idx ≥ i with s[idx] ≠ c) and latest_same[c][i] (largest idx ≤ i with s[idx] = c).",
+            "쿼리 전에 한 번만: nearest_diff[c][i] (idx ≥ i 중 s[idx] ≠ c 인 가장 작은 idx) 와 latest_same[c][i] (idx ≤ i 중 s[idx] = c 인 가장 큰 idx) 표 작성."),
+        t(E, "Precompute is O(26·N).  Per query, getting (left_i, right_k) for each c is now a single table lookup — no scan.",
+            "Precompute O(26·N). 쿼리에선 c 마다 (left_i, right_k) 가 표 한 번 조회로 끝 — 스캔 없음."),
+        t(E, "But we still iterate every position in positions_of[c] to find best j — per query O(N) total. One more leap to go.",
+            "그래도 best j 를 찾으려고 positions_of[c] 를 다 도는 건 그대로 — 쿼리당 O(N). 마지막 한 걸음 남음."),
+      ],
+      aside: <M3InsightAside E={E} />,
+    },
+
+    /* ── 8️⃣ Stage C: 포물선 꼭대기 + binary search → 최종 ── */
+    {
+      label: t(E, "8️⃣ Parabola peak + binary search — only 2 j candidates per c",
+                  "8️⃣ 포물선 꼭대기 + 이분 탐색 — c 마다 후보 j 2 개만"),
       color: "#15803d",
       py: M3_FAST_PY, cpp: M3_FAST_CPP,
       why: [
-        t(E, "Inner scans are wasted work — they recompute the same i/k for every j with s[j]=c.  Precompute first_diff[c][i] and last_same[c][i] once → inner becomes O(1).",
-            "안쪽 스캔은 중복: s[j]=c 인 모든 j 에 같은 i/k 가 나와요.  first_diff[c][i] 와 last_same[c][i] 미리 계산 → 안쪽 O(1)."),
-        t(E, "Once c is fixed, i and k are fixed too.  f(j) = (j − i)(k − j) is a downward parabola with peak at j = (i + k) / 2 — bisect positions[c] to find the closest valid j.",
-            "c 정해지면 i, k 도 정해짐. f(j) = (j − i)(k − j) 는 아래로 볼록 포물선, 꼭대기 j = (i + k) / 2 — positions[c] 를 bisect 해서 가장 가까운 j 찾기."),
-        t(E, "Per query: 26 chars × O(log N) bisect ≈ 1.3·10⁷ ops total — fast in both Python and C++.",
-            "쿼리당: 26 문자 × O(log N) bisect ≈ 1.3·10⁷ — Python, C++ 모두 빠름."),
+        t(E, "With c (and thus left_i, right_k) fixed, f(j) = (j − left_i)·(right_k − j) is a downward parabola in j, peaking at (left_i + right_k) / 2.",
+            "c 가 정해지면 left_i, right_k 도 정해짐. f(j) = (j − left_i)·(right_k − j) 는 j 에 대한 아래볼록 포물선, 꼭대기 (left_i + right_k) / 2."),
+        t(E, "So the best j in positions_of[c] is whichever of the 2 entries closest to that peak is biggest.  Find them with a hand-written binary search (find_first_at_least).",
+            "그래서 positions_of[c] 안 best j 는 꼭대기에 가장 가까운 항목 2 개 중 큰 쪽. 손으로 짠 이분 탐색 (find_first_at_least) 으로 찾음."),
+        t(E, "Per query: 26 chars × O(log N) ≈ 442 ops.  Total ≈ 1.3·10⁷ — fits comfortably in Python and C++.",
+            "쿼리당: 26 문자 × O(log N) ≈ 442 연산. 총 ≈ 1.3·10⁷ — Python, C++ 모두 여유."),
       ],
+      pyOnly: [
+        t(E, "Hand-written find_first_at_least + find_first_greater_than — uses only Python lesson 14 (while) syntax, no bisect import.",
+            "손으로 짠 find_first_at_least + find_first_greater_than — Python 레슨 14 (while) 만 사용, bisect import 없이."),
+      ],
+      cppOnly: [
+        t(E, "Hand-written binary search — same shape as <algorithm>'s lower_bound / upper_bound, but pure cpp-7 (loops). Avoids any STL algorithm.",
+            "손으로 짠 이분 탐색 — <algorithm> 의 lower_bound / upper_bound 와 같은 모양이지만 cpp-7 (루프) 만으로 작성. STL algorithm 안 씀."),
+      ],
+      aside: <M3PerfFastAside E={E} />,
     },
   ];
 }
@@ -828,6 +1281,25 @@ const M3PerfAside = ({ E }) => (
       <div>{t(E, "10¹⁰ — TLE 🚫", "10¹⁰ — TLE 🚫")}</div>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>full N, Q</code>
       <div>{t(E, "3·10¹⁴ — TLE 🚫", "3·10¹⁴ — TLE 🚫")}</div>
+    </div>
+  </div>
+);
+
+const M3PerfFastAside = ({ E }) => (
+  <div style={{
+    background: "#dcfce7", border: "1.5px solid #86efac", borderRadius: 10,
+    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#14532d",
+  }}>
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
+      ⚡ {t(E, "Operation count (smart)", "연산량 (smart)")}
+    </div>
+    <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 8px" }}>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>{t(E, "precompute", "표 만들기")}</code>
+      <div>{t(E, "26·N ≈ 2.6·10⁶ — fast ✓", "26·N ≈ 2.6·10⁶ — 빠름 ✓")}</div>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>{t(E, "per query", "쿼리당")}</code>
+      <div>{t(E, "26·log N ≈ 442 — instant ✓", "26·log N ≈ 442 — 즉시 ✓")}</div>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>{t(E, "total", "총합")}</code>
+      <div>{t(E, "≈ 1.3·10⁷ ops — fits ✓", "≈ 1.3·10⁷ — 통과 ✓")}</div>
     </div>
   </div>
 );
@@ -870,8 +1342,8 @@ const M3PeakAside = ({ E }) => (
     </div>
     <div style={{ paddingTop: 6, borderTop: "1px dashed #fbbf24", fontSize: 11 }}>
       {t(E,
-        "Constraint: j ∈ positions[c] (so s[j] = c). bisect picks the closest valid j to the vertex — only two candidates.",
-        "조건: j ∈ positions[c] (s[j] = c). bisect 로 vertex 와 가장 가까운 j — 후보 2 개.")}
+        "Constraint: j ∈ positions[c] (so s[j] = c).  Hand-written binary search picks the closest valid j to the vertex — only two candidates.",
+        "조건: j ∈ positions[c] (s[j] = c). 손으로 짠 이분 탐색으로 vertex 와 가장 가까운 j — 후보 2 개.")}
     </div>
   </div>
 );
@@ -895,9 +1367,9 @@ const M3FastAside = ({ E }) => (
             "→ (c, l, r) 마다 i, k 를 O(1).")}
     </div>
     <div>
-      <b>bisect</b>{" "}
-      {t(E, "→ pick best j on positions[c] near (i+k)/2 — O(log N).",
-            "→ positions[c] 에서 (i+k)/2 근처 j — O(log N).")}
+      <b>{t(E, "binary search", "이분 탐색")}</b>{" "}
+      {t(E, "→ hand-written find_first_at_least picks best j near (i+k)/2 in positions[c] — O(log N).",
+            "→ 손으로 짠 find_first_at_least 로 positions[c] 에서 (i+k)/2 근처 j — O(log N).")}
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #93c5fd", fontSize: 11 }}>
       {t(E, "Total: O(26·N) build + O(Q · 26 · log N) queries ≈ 1.3·10⁷. Both Python and C++ comfortable.",
@@ -932,7 +1404,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

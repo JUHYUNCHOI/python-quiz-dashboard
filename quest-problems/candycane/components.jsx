@@ -9,9 +9,12 @@ const FULL_PY = [
   "",
   "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "M = int(data[p]); p += 1",
-  "heights = [int(data[p + i]) for i in range(N)]; p += N",
+  "N = int(data[p])",
+  "p += 1",
+  "M = int(data[p])",
+  "p += 1",
+  "heights = [int(data[p + i]) for i in range(N)]",
+  "p += N",
   "canes   = [int(data[p + i]) for i in range(M)]",
   "",
   "for curr in canes:",
@@ -116,7 +119,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

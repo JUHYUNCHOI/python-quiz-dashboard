@@ -11,11 +11,14 @@ const FULL_PY = [
   "def solve():",
   "    input_data = sys.stdin.read().split()",
   "    idx = 0",
-  "    R = int(input_data[idx]); idx += 1",
-  "    C_ = int(input_data[idx]); idx += 1",
+  "    R = int(input_data[idx])",
+  "    idx += 1",
+  "    C_ = int(input_data[idx])",
+  "    idx += 1",
   "    grid = []",
   "    for i in range(R):",
-  "        grid.append(input_data[idx]); idx += 1",
+  "        grid.append(input_data[idx])",
+  "        idx += 1",
   "",
   "    # BFS from (0,0) to (R-1,C-1)",
   "    dist = [[-1]*C_ for _ in range(R)]",
@@ -50,7 +53,8 @@ const FULL_CPP = [
   "        auto C_ = int(input_data[idx]); idx += 1;",
   "        auto grid = [];",
   "        for (long long i = 0; i < R; i++) {",
-  "            // grid.append(input_data[idx]); idx += 1",
+  "            // grid.append(input_data[idx])",
+  "            idx += 1",
   "",
   "        // BFS from (0,0) to (R-1,C-1)",
   "        auto dist = [[-1]*C_ for _ in range(R)];",
@@ -125,7 +129,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

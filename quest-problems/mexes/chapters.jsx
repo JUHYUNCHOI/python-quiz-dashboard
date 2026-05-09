@@ -15,7 +15,19 @@ export function makeMexesCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🧮</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#7c3aed" }}>Making Mexes</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO February 2025 Bronze #2</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2025 Bronze #2</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #7c3aed", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output N+1 lines — for each target mex 0..N, the minimum element changes to make the array's mex equal that target.",
+                "N+1 줄 출력 — 각 목표 mex 0..N 에 대해, 배열의 mex 를 그 값으로 만드는 최소 원소 변경 수.")}
+            </div>
           </div>
 
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -116,30 +128,30 @@ export function makeMexesCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Think about the formula: ops = max(missing values in {0..mex−1}, count of mex).",
-        "공식 생각: ops = max({0..mex−1} 에서 빠진 값 수, mex 개수)."),
+        "For mex = 2 you need 0 present, 1 present, 2 absent.  Look at the array.",
+        "mex = 2 가 되려면 0 있고, 1 있고, 2 없어야. 배열을 살펴봐."),
       question: t(E,
         "a = [0, 1, 1, 3]. Min ops to make mex = 2?",
         "a = [0, 1, 1, 3]. mex = 2 만드는 최소 ops?"),
       options: ["0", "1", "2", "3"],
       correct: 0,
       explain: t(E,
-        "Need 0 and 1 present (both present ✓), and 2 absent (no 2 in array ✓). Already mex = 2! → 0 ops.",
-        "0 과 1 있어야 (둘 다 ✓), 2 없어야 (2 없음 ✓). 이미 mex = 2! → 0 ops."),
+        "0 ✓, 1 ✓, no 2 ✓ — already mex = 2. So 0 ops.",
+        "0 ✓, 1 ✓, 2 없음 ✓ — 이미 mex = 2. 0 ops."),
     },
 
     /* 1-5 — Input quiz. */
     {
       type: "input",
       narr: t(E,
-        "a = [0, 0, 0]. Min ops to make mex = 1?",
-        "a = [0, 0, 0]. mex = 1 만드는 최소 ops?"),
+        "a = [0, 0, 0].  Walk through what's in the array — is it already mex = 1?",
+        "a = [0, 0, 0]. 배열 안에 뭐가 있나 — 이미 mex = 1?"),
       question: t(E,
         "Min ops for a = [0, 0, 0] to make mex = 1?",
         "a = [0, 0, 0] 의 mex = 1 만들기 최소 ops?"),
       hint: t(E,
-        "Need 0 present (✓), 1 absent (✓). Already mex = 1! → 0 ops.",
-        "0 있어야 (✓), 1 없어야 (✓). 이미 mex = 1! → 0 ops."),
+        "For mex = 1: 0 must be present, 1 must be absent.",
+        "mex = 1 조건: 0 있고 1 없어야."),
       answer: 0,
     },
   ];
@@ -147,24 +159,13 @@ export function makeMexesCh1(E) {
 
 export function makeMexesCh2(E, lang = "py") {
   return [
-    /* 2-1 — Plan: count + missing. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Plan: count how many of each value, then for each target mex i compute (a) how many of {0..i−1} are missing, and (b) how many copies of i exist. Min ops = max of those two.",
-        "계획: 값별 개수 세고, 각 목표 mex i 마다 (a) {0..i−1} 에서 빠진 개수, (b) i 의 개수. 최소 ops = 둘 중 큰 값."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-
-    /* 2-2..2-N — sections */
+    /* 2-1..2-N — sections directly. */
     ...getMexesSections(E).map((sec, i) => ({
       type: "reveal",
       narr: i === 0
-        ? t(E, "Build the code step by step.", "단계별로 코드 작성.")
+        ? t(E,
+            "Count each value, then for each target mex i: ops = max((missing values in {0..i−1}), (count of i)).  Sections build it one piece at a time.",
+            "값별 개수 세고, 각 목표 mex i 마다: ops = max((빠진 값 수 in {0..i−1}), (i 의 개수)). 아래 섹션이 한 단락씩 쌓아요.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),

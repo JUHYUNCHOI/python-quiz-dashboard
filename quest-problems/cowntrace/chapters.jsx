@@ -75,7 +75,19 @@ export function makeCowntraceCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd0d"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Cowntact Tracing</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #3</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2020 Bronze #3</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output (1) patient-zero candidates, (2) min consistent K, (3) max consistent K (or 'Infinity').",
+                "(1) 환자 제로 후보 수, (2) 일관된 K 최솟값, (3) K 최댓값 (또는 'Infinity') 을 출력.")}
+            </div>
           </div>
 
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -149,8 +161,8 @@ export function makeCowntraceCh1(E) {
         "1 infected cow, 0 handshakes. Number of patient zero candidates?",
         "감염 소 1마리, 악수 0번. 환자 제로 후보 수?"),
       hint: t(E,
-        "Only the infected cow could be patient zero.",
-        "감염된 소만 환자 제로 가능."),
+        "Without any handshakes, who must have started infected?",
+        "악수가 한 번도 없었다면 누가 처음부터 감염됐어야 할까?"),
       answer: 1,
     },
   ];
@@ -162,23 +174,12 @@ export function makeCowntraceCh1(E) {
    --------------------------------------------------------------- */
 export function makeCowntraceCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Brute force: for each cow as patient zero (N) and each K value (0..T), simulate all T hoof-shake events. Check the final infected set matches the input. Track which K values are consistent.",
-        "완전 탐색: 각 소를 환자 제로 후보 (N) 와 각 K 값 (0..T) 로, T 개의 발굽-맞댐 이벤트를 시뮬레이션. 최종 감염 집합이 입력과 일치하는지 확인. 일관된 K 값 추적."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Brute force: for each cow as patient zero (N) and each K (0..T), simulate all T hoof-shake events and check the final infected set. Track which K values are consistent. Sections build it one piece at a time.",
+        "완전 탐색: 각 소를 환자 제로 (N) × 각 K (0..T) 로 T 개 이벤트 시뮬, 최종 감염 집합 일치 여부 확인. 일관된 K 추적. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCowntraceSections(E),
     },
   ];

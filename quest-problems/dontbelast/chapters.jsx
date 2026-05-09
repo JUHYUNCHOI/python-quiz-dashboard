@@ -50,6 +50,18 @@ export function makeDontBeLastCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the cow with the second-lowest total milk, or 'Tie' if multiple cows tie for second.",
+                "총 우유량이 두 번째로 적은 소의 이름을 출력 — 동률이면 'Tie'.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -121,8 +133,8 @@ export function makeDontBeLastCh1(E) {
         "How many named cows are in this problem?",
         "이 문제에서 이름 있는 소는 총 몇 마리?"),
       hint: t(E,
-        "Bessie, Elsie, Daisy, Gertie, Annabelle, Maggie, Henrietta.",
-        "Bessie, Elsie, Daisy, Gertie, Annabelle, Maggie, Henrietta."),
+        "Re-read the problem statement — count the listed cow names.",
+        "문제를 다시 읽어 봐 — 적힌 소 이름의 수를 세어 봐."),
       answer: 7,
     },
   ];
@@ -134,23 +146,12 @@ export function makeDontBeLastCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeDontBeLastCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sum each named cow's milk using a dict (default 0 for cows not in the log). Find the SECOND-LOWEST distinct total. If exactly one cow has that total, print her name; otherwise print 'Tie'.",
-        "딕셔너리로 각 이름 있는 소의 우유 합산 (로그에 없는 소는 0). 두 번째로 낮은 서로 다른 총량을 찾아요. 그 값을 가진 소가 정확히 1 마리면 이름을 출력, 그 외 'Tie'."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sum each named cow's milk in a dict (cows not in the log default to 0). Find the second-lowest distinct total. If exactly one cow has that total, print her name; otherwise 'Tie'. Sections build it one piece at a time.",
+        "딕셔너리로 각 소의 우유를 합산 (로그에 없는 소는 0). 두 번째로 낮은 서로 다른 총량을 찾아 — 그 값을 가진 소가 정확히 1 마리면 이름, 아니면 'Tie'. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getDontBeLastSections(E),
     },
   ];

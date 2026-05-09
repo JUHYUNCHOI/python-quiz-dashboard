@@ -80,6 +80,16 @@ export function makeHps17Ch1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E, "Print the maximum number of rounds FJ can win.", "FJ가 이길 수 있는 최대 라운드 수를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -150,8 +160,8 @@ export function makeHps17Ch1(E) {
         "How many permutations do we try?",
         "몇 가지 순열을 시도해요?"),
       hint: t(E,
-        "3! = 6.",
-        "3! = 6."),
+        "Count the permutations of 3 distinct items.",
+        "서로 다른 3개 항목의 순열 수를 세어 봐요."),
       answer: 6,
     },
   ];
@@ -163,23 +173,12 @@ export function makeHps17Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeHps17Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "There are only 3! = 6 ways to map cow gestures {1,2,3} to {Hoof, Paper, Scissors}, and 3 choices for FJ's fixed gesture. For each of 18 combos, scan all N rounds and count FJ's wins. Take the maximum.",
-        "소의 제스처 {1,2,3} 을 {Hoof, Paper, Scissors} 에 매핑하는 방법은 3! = 6 가지뿐, FJ 의 고정 제스처는 3 가지. 18 가지 조합마다 N 라운드를 스캔해 FJ 의 승수를 세고, 최댓값을 채택."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "There are only 3! = 6 ways to map cow gestures {1,2,3} to {Hoof, Paper, Scissors}, and 3 choices for FJ's fixed gesture. For each of 18 combos, scan all N rounds and count FJ's wins. Take the maximum. Sections build it one piece at a time.",
+        "소의 제스처 {1,2,3} 을 {Hoof, Paper, Scissors} 에 매핑하는 방법은 3! = 6 가지뿐, FJ 의 고정 제스처는 3 가지. 18 가지 조합마다 N 라운드를 스캔해 FJ 의 승수를 세고, 최댓값을 채택. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getHps17Sections(E),
     },
   ];

@@ -115,6 +115,18 @@ export function makeDaisyCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #2</div>
           </div>
 
+          {/* \uD83C\uDFAF Mission box */}
+          <div style={{ background: C.carryBg, border: `1.5px solid ${C.carry}`, borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.carry, letterSpacing: 0.5, marginBottom: 4 }}>
+              \uD83C\uDFAF {t(E, "Mission", "\uBBF8\uC158")}
+            </div>
+            <div style={{ fontSize: 13, color: C.carry, lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of contiguous subarrays whose average petal count exactly equals at least one flower in that subarray.",
+                "\uC5F0\uC18D \uBD80\uBD84 \uBC30\uC5F4 \uC911 \u2014 \uD3C9\uADE0 \uAF43\uC78E \uC218\uAC00 \uADF8 \uC548\uC758 \uC5B4\uB5A4 \uAF43\uC758 \uAF43\uC78E \uC218\uC640 \uC815\uD655\uD788 \uAC19\uC740 \u2014 \uBD80\uBD84 \uBC30\uC5F4 \uAC1C\uC218 \uCD9C\uB825.")}
+            </div>
+          </div>
+
           <div style={{ background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -333,13 +345,14 @@ export function makeDaisyCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Flowers = [1, 1].\nSubarrays: [1], [1], [1,1].\nAll have average 1 and a flower with 1 petal.\nHow many valid?", "꽃 = [1, 1]. 부분 배열: [1], [1], [1,1]. 모두 평균 1이고 꽃잎 1개인 꽃이 있어요. 유효한 수는?"),
+        "List every contiguous subarray of [1, 1].  For each, compare the average to the petal counts.",
+        "[1, 1] 의 모든 연속 부분 배열을 나열해. 각각 평균과 꽃잎 수를 비교."),
       question: t(E,
         "Flowers = [1, 1]. Count of valid subarrays?",
         "꽃 = [1, 1]. 유효한 부분 배열 수?"),
       hint: t(E,
-        "[1] avg=1 has 1. [1] avg=1 has 1. [1,1] avg=1 has 1. All 3 work!",
-        "[1] 평균=1 있음. [1] 평균=1 있음. [1,1] 평균=1 있음. 3개 모두 가능!"),
+        "There are 3 contiguous subarrays.  Check each — does any flower equal the subarray average?",
+        "연속 부분 배열은 3 개. 각각 — 평균과 같은 꽃잎 수의 꽃이 있나?"),
       answer: 3,
     },
   ];
@@ -441,28 +454,19 @@ export function makeDaisyCh2(E) {
         );
       })(),
     },
-    // 2-3: Key optimization trick
-    {
-      type: "reveal",
-      narr: t(E,
-        "A key trick: we don't recompute the sum from scratch!\nAs j extends by 1, just add p[j] to the running sum.\nThis makes it O(1) per step.", "핵심 트릭: 합을 처음부터 다시 계산하지 않아! j가 1 늘어나면 p[j]만 러닝 합에 더해요. 이러면 각 단계 O(1)이에요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
+    // 2-3: (key optimization trick — running sum — explained inline in Ch3 code sections)
     // 2-4: Practice — hand calculation
     {
       type: "input",
       narr: t(E,
-        "Try [2, 2].\nSubarrays: [2] (avg=2, has 2, valid), [2] (avg=2, has 2, valid), [2,2] (avg=2, has 2, valid).\nHow many?", "[2, 2]를 해봐요. 부분 배열: [2] (평균=2, 2있음, 유효), [2] (평균=2, 2있음, 유효), [2,2] (평균=2, 2있음, 유효). 몇 개?"),
+        "Try it on [2, 2] yourself.  Walk through every contiguous subarray.",
+        "[2, 2] 직접 — 모든 연속 부분 배열 따라가."),
       question: t(E,
         "Flowers = [2, 2]. Count of valid subarrays?",
         "꽃 = [2, 2]. 유효한 부분 배열 수?"),
       hint: t(E,
-        "All 3 subarrays have average 2, and a flower with 2 petals exists. Answer: 3.",
-        "3개 부분 배열 모두 평균 2이고 꽃잎 2개인 꽃이 있어요. 답: 3."),
+        "Compute each subarray's average and check it appears in the subarray.",
+        "각 부분 배열의 평균을 계산하고 그 평균과 같은 꽃잎 수가 있는지 확인."),
       answer: 3,
     },
   ];

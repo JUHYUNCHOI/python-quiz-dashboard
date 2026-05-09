@@ -9,7 +9,8 @@ const FULL_PY = [
   "",
   "data = sys.stdin.read().split()",
   "idx = 0",
-  "T = int(data[idx]); idx += 1",
+  "T = int(data[idx])",
+  "idx += 1",
   "",
   "def solve(N, h, a, t):",
   "    # Try each day x from 0 upward — bound 1100 is enough under Bronze constraints.",
@@ -23,10 +24,14 @@ const FULL_PY = [
   "",
   "out = []",
   "for _ in range(T):",
-  "    N = int(data[idx]); idx += 1",
-  "    h = [int(data[idx + i]) for i in range(N)]; idx += N",
-  "    a = [int(data[idx + i]) for i in range(N)]; idx += N",
-  "    t = [int(data[idx + i]) for i in range(N)]; idx += N",
+  "    N = int(data[idx])",
+  "    idx += 1",
+  "    h = [int(data[idx + i]) for i in range(N)]",
+  "    idx += N",
+  "    a = [int(data[idx + i]) for i in range(N)]",
+  "    idx += N",
+  "    t = [int(data[idx + i]) for i in range(N)]",
+  "    idx += N",
   "    out.append(str(solve(N, h, a, t)))",
   "",
   "print(chr(10).join(out))",
@@ -119,7 +124,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

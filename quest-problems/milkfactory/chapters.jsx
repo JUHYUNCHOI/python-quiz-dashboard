@@ -57,6 +57,18 @@ export function makeFactoryCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the central station every other station can reach, or −1 if none exists.",
+                "다른 모든 역에서 도달 가능한 중심 역의 번호 (없으면 −1) 를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -122,8 +134,8 @@ export function makeFactoryCh1(E) {
         "Edges: 1->2, 3->2. Answer station number?",
         "간선: 1->2, 3->2. 답 스테이션 번호는?"),
       hint: t(E,
-        "All paths lead to station 2.",
-        "모든 경로가 스테이션 2로 이어져."),
+        "Where do all the conveyor arrows point toward?",
+        "컨베이어 화살표가 모두 어디로 향하고 있어?"),
       answer: 2,
     },
   ];
@@ -135,23 +147,12 @@ export function makeFactoryCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeFactoryCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "A central station C is reachable from every other ↔ in the REVERSE graph (flip arrows), C reaches every other. So build the reverse graph, then test each candidate via BFS/DFS — print the first one whose reverse-BFS reaches all N stations.",
-        "중심 스테이션 C 가 다른 모든 곳에서 도달 가능 ↔ 역방향 그래프 (간선 뒤집기) 에서 C 가 다른 모두에 도달 가능. 그래서 역방향 그래프를 만들고 후보마다 BFS/DFS — 역방향 BFS 가 N 개 스테이션 모두에 도달하는 첫 후보를 출력."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "C reachable from all ↔ in the REVERSE graph C reaches all. Build the reverse graph, BFS/DFS from each candidate — print the first whose reverse-BFS reaches all N stations. Sections build it one piece at a time.",
+        "C 가 모두에서 도달 가능 ↔ 역방향 그래프에서 C 가 모두에 도달. 역방향 그래프 → 후보마다 BFS/DFS → N 개 모두 도달하면 출력. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMilkFactorySections(E),
     },
   ];

@@ -34,7 +34,20 @@ export function makeCollatzCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd22"}</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Collatz Conjecture</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P1</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", margin: "12px 0", textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of Collatz steps to reach 1 from N.",
+                "N 에서 1 까지 도달하는 데 걸리는 콜라츠 단계 수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Rule: if N is even,\nN = N/2. If N is odd,\nN = 3N+1. Count how many steps until N becomes 1.",
               "규칙: N이 짝수면 N = N/2.\nN이 홀수면 N = 3N+1. N이 1이 될 때까지 몇 단계인지 세요.")}
@@ -69,8 +82,8 @@ export function makeCollatzCh1(E) {
         "How many Collatz steps for N=6?",
         "N=6의 콜라츠 단계 수는?"),
       hint: t(E,
-        "6->3->10->5->16->8->4->2->1. Count each arrow.",
-        "6->3->10->5->16->8->4->2->1. 각 화살표를 세봐요."),
+        "Apply the rule step by step and count transitions.",
+        "규칙을 한 단계씩 적용하면서 전환 수를 세어 봐."),
       answer: 8,
     },
   ];
@@ -82,23 +95,12 @@ export function makeCollatzCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCollatzCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Pure simulation: while N ≠ 1, if N is even divide by 2, else multiply by 3 and add 1. Count the number of steps.",
-        "순수 시뮬레이션: N ≠ 1 인 동안, N 이 짝수면 2 로 나누고, 홀수면 3 을 곱한 뒤 1 더하기. 단계 수를 세요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Pure simulation: while N ≠ 1, if even N = N/2, else N = 3N + 1. Count steps. Sections build it one piece at a time.",
+        "순수 시뮬: N ≠ 1 인 동안 짝수면 N = N/2, 홀수면 N = 3N + 1. 단계 수 카운트. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCollatzSections(E),
     },
   ];

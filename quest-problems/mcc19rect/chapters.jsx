@@ -37,6 +37,16 @@ export function makeMcc19RectCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E, "Print the smallest difference between consecutive elements of the sorted list.", "정렬된 리스트의 인접한 두 원소 차이 중 최솟값을 출력하기.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -89,8 +99,8 @@ export function makeMcc19RectCh1(E) {
         "Sorted list [1, 3, 5, 6]. Min difference = ?",
         "정렬된 리스트 [1, 3, 5, 6]. 최소 차이 = ?"),
       hint: t(E,
-        "Check all consecutive pairs: 3-1=2, 5-3=2, 6-5=1. Minimum is 1.",
-        "모든 연속 쌍 확인: 3-1=2, 5-3=2, 6-5=1. 최솟값은 1."),
+        "Compute each consecutive diff (3-1, 5-3, 6-5), then pick the smallest.",
+        "인접한 차이 (3-1, 5-3, 6-5) 를 각각 구한 뒤 가장 작은 걸 골라요."),
       answer: 1,
     },
   ];
@@ -102,23 +112,12 @@ export function makeMcc19RectCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc19RectCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Since the list is non-decreasing, the smallest |a[i+1] − a[i]| is just the smallest CONSECUTIVE difference. One linear pass.",
-        "리스트가 비내림차순이라 |a[i+1] − a[i]| 의 최솟값은 인접 차이의 최솟값. 한 번 선형 순회."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Since the list is non-decreasing, the smallest |a[i+1] − a[i]| is just the smallest CONSECUTIVE difference. One linear pass. Sections build it one piece at a time.",
+        "리스트가 비내림차순이라 |a[i+1] − a[i]| 의 최솟값은 인접 차이의 최솟값. 한 번 선형 순회. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc19RectSections(E),
     },
   ];

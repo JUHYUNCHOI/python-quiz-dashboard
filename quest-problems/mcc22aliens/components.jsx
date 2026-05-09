@@ -10,13 +10,17 @@ const FULL_PY = [
   "def solve():",
   "    input_data = sys.stdin.read().split()",
   "    idx = 0",
-  "    N = int(input_data[idx]); idx += 1",
+  "    N = int(input_data[idx])",
+  "    idx += 1",
   "    types = []",
   "    claims = []",
   "    for i in range(N):",
-  "        ti = input_data[idx]; idx += 1",
-  "        pi = int(input_data[idx]) - 1; idx += 1",
-  "        bi = input_data[idx]; idx += 1",
+  "        ti = input_data[idx]",
+  "        idx += 1",
+  "        pi = int(input_data[idx]) - 1",
+  "        idx += 1",
+  "        bi = input_data[idx]",
+  "        idx += 1",
   "        types.append(ti)",
   "        claims.append((pi, bi))",
   "",
@@ -140,7 +144,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

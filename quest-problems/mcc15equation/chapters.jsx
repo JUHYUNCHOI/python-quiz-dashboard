@@ -52,6 +52,16 @@ export function makeMcc15EqCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2015 P2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E, "Print one filled equation a OP b OP c = T, or report none.", "결과가 T 가 되는 식 a OP b OP c = T 하나를 출력해요. 없으면 없다고 알려요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -127,23 +137,12 @@ export function makeMcc15EqCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc15EqCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Try all 16 operator-pair combinations between a, b, c. For each, evaluate the expression with proper precedence (use Python's eval) and check whether it equals the target T.",
-        "a, b, c 사이 16 가지 연산자 쌍 모두 시도. 각각 우선순위 지키며 계산 (Python eval 사용) 후 목표 T 와 같은지 확인."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Try all 16 operator-pair combinations between a, b, c. For each, evaluate the expression with proper precedence (use Python's eval) and check whether it equals the target T. Sections build it one piece at a time.",
+        "a, b, c 사이 16 가지 연산자 쌍 모두 시도. 각각 우선순위 지키며 계산 (Python eval 사용) 후 목표 T 와 같은지 확인. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc15EqSections(E),
     },
   ];

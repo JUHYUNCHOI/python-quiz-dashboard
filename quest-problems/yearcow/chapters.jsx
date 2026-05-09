@@ -53,6 +53,18 @@ export function makeYearCowCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "For each query cow, output how many years apart she is from Bessie.",
+                "각 쿼리 소에 대해 Bessie 와의 연도 차이를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -122,8 +134,8 @@ export function makeYearCowCh1(E) {
         "How many animals in the zodiac cycle?",
         "십이지 주기에 동물 몇 마리?"),
       hint: t(E,
-        "The Chinese zodiac has exactly 12 animals in its cycle.",
-        "십이지에는 정확히 12마리의 동물이 있어요."),
+        "Re-read the problem statement — count the listed animals.",
+        "문제를 다시 읽어 봐 — 적힌 동물의 수를 세어 봐."),
       answer: 12,
     },
   ];
@@ -135,23 +147,12 @@ export function makeYearCowCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeYearCowCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Maintain a year-offset per cow (Bessie = 0). For each statement 'X was born in the previous/next ANIMAL year relative to Y', compute modular distance to that animal in the 12-cycle (never 0 — use 12).",
-        "소별 연도 오프셋 유지 (Bessie = 0). 각 진술 'X 가 Y 의 직전/직후 ANIMAL 해' 에 대해 12-주기에서 그 동물까지의 모듈러 거리 계산 (0 이면 12 사용)."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Track a year-offset per cow (Bessie = 0). For each statement 'X was born in the previous/next ANIMAL year relative to Y', compute modular distance to that animal in the 12-cycle (0 → 12). Sections build it one piece at a time.",
+        "소별 연도 오프셋 유지 (Bessie = 0). 각 진술마다 12-주기에서 모듈러 거리 계산 (0 이면 12). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getYearCowSections(E),
     },
   ];

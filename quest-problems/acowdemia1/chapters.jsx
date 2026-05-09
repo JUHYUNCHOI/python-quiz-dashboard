@@ -51,6 +51,18 @@ export function makeAcow1Ch1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Print the maximum h-index Bessie can achieve after distributing L extra citations.",
+                "L 개의 추가 인용을 나눠 더했을 때 만들 수 있는 h-index 의 최댓값을 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -122,8 +134,8 @@ export function makeAcow1Ch1(E) {
         "Papers [1, 3, 3, 100], L=0. H-index?",
         "논문 [1, 3, 3, 100], L=0. H-index는?"),
       hint: t(E,
-        "3 papers have >= 3 citations. So h = 3.",
-        "3개의 논문이 인용 3 이상. h = 3."),
+        "Try each h from largest down: how many papers meet ≥ h?",
+        "큰 h 부터 시도해봐요: 인용수가 h 이상인 논문이 몇 개?"),
       answer: 3,
     },
   ];
@@ -135,23 +147,12 @@ export function makeAcow1Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeAcow1Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sort papers ascending. For a candidate h-index, the LAST h papers (top h cited) must each have ≥ h citations. Sum the deficits (max(0, h − c[i])) and check if ≤ L extra citations are needed. Binary search h.",
-        "논문 오름차순 정렬. 후보 h-index 에 대해, 인용수 상위 h 개 논문이 각자 ≥ h 인용 필요. 부족분 (max(0, h − c[i])) 의 합 ≤ L 인지 확인. h 를 이분 탐색."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort papers ascending. For a candidate h-index, the LAST h papers (top h cited) must each have ≥ h citations. Sum the deficits (max(0, h − c[i])) and check if ≤ L extra citations are needed. Binary search h. Sections build it one piece at a time.",
+        "논문 오름차순 정렬. 후보 h-index 에 대해, 인용수 상위 h 개 논문이 각자 ≥ h 인용 필요. 부족분 (max(0, h − c[i])) 의 합 ≤ L 인지 확인. h 를 이분 탐색. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getAcowdemia1Sections(E),
     },
   ];

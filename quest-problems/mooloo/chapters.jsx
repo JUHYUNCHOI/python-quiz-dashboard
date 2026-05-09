@@ -51,6 +51,16 @@ export function makeMoolooCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E, "Cover every viewing day with subscriptions at minimum total cost.", "모든 시청 날짜를 덮으면서 구독 총 비용을 최소로 만들어요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -126,7 +136,7 @@ export function makeMoolooCh1(E) {
       narr: t(E,
         "Days [1,10], K=3.\nGap = 10-1-1 = 8, which is > K=3.\nMust use two separate subscriptions.\nCost = (1+3) + (1+3) = 8.", "\ub0a0\uc9dc [1,10], K=3.\n\uac04\uaca9 = 10-1-1 = 8, K=3\ubcf4\ub2e4 \ud07c.\n\ub450 \uac1c \uad6c\ub3c5 \ud544\uc694.\n\ube44\uc6a9 = (1+3) + (1+3) = 8."),
       question: t(E, "Days [1,10], K=3 \u2192 total cost?", "\ub0a0\uc9dc [1,10], K=3 \u2192 \ucd1d \ube44\uc6a9?"),
-      hint: t(E, "Gap=8 > K=3, so two subscriptions. Each covers 1 day: (1+3)+(1+3)", "\uac04\uaca9=8 > K=3, \ub450 \uad6c\ub3c5. \uac01\uac01 1\uc77c: (1+3)+(1+3)"),
+      hint: t(E, "Compare the gap to K. If the gap is too big to extend, what's left to do?", "\uac04\uaca9\uc744 K\uc640 \ube44\uad50\ud574\ubd10\uc694. \uc5f0\uc7a5\ud558\uae30\uc5d4 \ub108\ubb34 \uba40\uba74 \uc5b4\ub5bb\uac8c \ud574\uc57c \ud560\uae4c\uc694?"),
       answer: 8,
     },
     {

@@ -9,8 +9,10 @@ export const SOLUTION_CODE = [
   "",
   "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "M = int(data[p]); p += 1",
+  "N = int(data[p])",
+  "p += 1",
+  "M = int(data[p])",
+  "p += 1",
   "h = [int(data[p + i]) for i in range(N)]; p += N        # cow heights",
   "canes = [int(data[p + i]) for i in range(M)]            # cane heights, one line",
   "",
@@ -49,6 +51,18 @@ export function makeCandyCh1(E) {
             <div style={{ fontSize: 32, marginBottom: 4 }}>🍬</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Candy Cane Feast</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #1</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "After all M canes are eaten, output each cow's final height (one per line).",
+                "M 개 캔디 케인을 모두 처리한 뒤 각 소의 최종 키를 한 줄씩 출력.")}
+            </div>
           </div>
 
           {/* Mini-visual: 3 cows eating one cane height 6 */}
@@ -191,10 +205,14 @@ export function makeCandyCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Cow heights = [3, 2, 5], one candy cane of height 6.\nCow1 (h=3) eats 0→3, candy remaining is 3→6.\nCow2 (h=2) can't reach 3!\nCow3 (h=5) eats 3→5.\nHow much does cow2 eat from this candy?", "소 키 = [3, 2, 5], 캔디 높이 6.\n소1(키3)이 0→3 먹고, 남은 캔디는 3→6.\n소2(키2)는 3에 못 닿아!\n소3(키5)은 3→5 먹어.\n소2가 이 캔디에서 먹는 양은?"),
+        "Cow 1 ate first; the bottom of the cane has risen.  Now it's cow 2's turn.",
+        "소 1 이 먼저 먹어 캔디 bottom 이 올라갔어. 이제 소 2 차례."),
       question: t(E,
         "Cow heights [3,2,5], candy height 6.\nAfter cow1 eats 0→3, bottom=3.\nCow2 height=2, bottom=3.\nHow much does cow2 eat?",
         "소 키 [3,2,5], 캔디 높이 6.\n소1이 0→3 먹고 bottom=3.\n소2 키=2, bottom=3.\n소2가 먹는 양은?"),
+      hint: t(E,
+        "Can cow 2 reach the new bottom?  If not, she eats nothing.",
+        "소 2 가 새 bottom 에 닿을 수 있어? 안 닿으면 못 먹음."),
       answer: 0,
     },
   ];
@@ -206,24 +224,12 @@ export function makeCandyCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCandyCh2(E, lang = "py") {
   return [
-    // 2-1: Light intro — code first.
-    {
-      type: "reveal",
-      narr: t(E,
-        "For each candy cane, walk the cows in order.  Track 'taken' = how much of the cane has been eaten so far.",
-        "캔디마다 소를 차례로. 변수 'taken' = 지금까지 먹은 양 추적."),
-      content: (
-        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-          {t(E,
-            "For each cow i: if h[i] > taken (she can reach the un-eaten part), she eats from `taken` up to min(curr, h[i]).  Add what she ate to her height (she grows).  Stop when taken ≥ curr.  Code section by section.",
-            "각 소 i: h[i] > taken (먹지 않은 부분에 닿음) 이면 `taken` 부터 min(curr, h[i]) 까지 먹기. 먹은 만큼 키 증가. taken ≥ curr 되면 중단. 코드 한 단락씩.")}
-        </div>),
-    },
-    // 2-2: Full code reveal
+    // 2-1: Progressive code — straight to the build.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "For each cane, walk the cows in order — track 'taken' = how much of this cane has been eaten so far.  Sections build the loop one piece at a time.",
+        "각 캔디마다 소를 순서대로 처리. 'taken' = 이 캔디에서 지금까지 먹은 양. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCandyCaneSections(E),
     },
   ];

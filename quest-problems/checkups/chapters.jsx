@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getCheckupsSections, ReverseSim } from "./components";
+import { getCheckupsSections, ReverseSim, DiagonalSim } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 /* ====================================================================
@@ -83,11 +83,14 @@ function PositionRow({ n, size = 52 }) {
 export const SOLUTION_CODE = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "a = [0] + [int(data[p+i]) for i in range(N)]; p += N",
-  "b = [0] + [int(data[p+i]) for i in range(N)]; p += N",
+  "N = int(data[p])",
+  "p += 1",
+  "a = [0] + [int(data[p+i]) for i in range(N)]",
+  "p += N",
+  "b = [0] + [int(data[p+i]) for i in range(N)]",
+  "p += N",
   "",
   "# baseline prefix: P[i] = matches a[k]==b[k] in [1..i]",
   "P = [0] * (N + 1)",
@@ -127,7 +130,7 @@ export function makeCheckupsCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🐮</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Cow Checkups</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO January 2025 Bronze #3</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
           </div>
 
           {/* Mini-visual: concrete example with labelled rows so a/b is unambiguous. */}
@@ -218,8 +221,8 @@ export function makeCheckupsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Official sample 1: N=3 cows. There are 6 possible (l, r) pairs. Three leave 0 cows checked, three leave exactly 1 — so the answer is 3, 3, 0, 0.",
-        "공식 샘플 1: N=3. (l, r) 쌍 6 개. 3 개는 검진 0, 3 개는 정확히 1 → 답 3, 3, 0, 0."),
+        "Official sample 1: N=3 cows.  Take a look — input is 3 lines, output is 4 lines (one per checkup count 0..N).",
+        "공식 샘플 1: N=3. 입력 3 줄, 출력 4 줄 (검진 수 0..N 각각)."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
@@ -286,8 +289,8 @@ export function makeCheckupsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Reverse a[2..4] in [5, 1, 2, 3, 4] gives [5, 4, 3, 2, 1]? No — only positions 2..4 reverse, leaving [5, 4, 3, 2, 4]. Wait, we lose the 4 at the end! Actually positions 2..4 are values 1, 2, 3 — reversed they become 3, 2, 1. Result: [5, 3, 2, 1, 4].",
-        "[5, 1, 2, 3, 4] 의 a[2..4] 뒤집기? 위치 2..4 의 값 1, 2, 3 만 뒤집혀서 3, 2, 1 → 결과 [5, 3, 2, 1, 4]. 위치 1 과 5 는 그대로."),
+        "Quick check on what a reversal does — only positions [l, r] flip, the rest stay put.",
+        "뒤집기가 뭘 바꾸는지 확인 — [l, r] 위치만 뒤집히고 나머지는 그대로."),
       question: t(E,
         "After reversing a[2..4] of a=[5, 1, 2, 3, 4], what is a[3]?",
         "a=[5, 1, 2, 3, 4] 의 a[2..4] 를 뒤집은 후, a[3] 의 값은?"),
@@ -302,8 +305,8 @@ export function makeCheckupsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Sample 3: N=7. The two operations that yield 4 checkups are (l=4, r=5) and (l=5, r=7). One worked example below — verify by hand.",
-        "샘플 3: N=7. 검진 4 개를 내는 연산은 (l=4, r=5) 와 (l=5, r=7). 아래 손 풀이로 확인."),
+        "Sample 3: a bigger case — N=7.  Walk through one specific reversal and count cows by hand.",
+        "샘플 3: 더 큰 케이스 — N=7. 뒤집기 하나 골라 직접 손으로 검진 수 세 보자."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text }}>
@@ -364,14 +367,14 @@ export function makeCheckupsCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Tiny case: a=[1, 2], b=[2, 1]. After reversing a[1..2] we get a'=[2, 1]. How many checkups?",
-        "작은 예: a=[1, 2], b=[2, 1]. a[1..2] 뒤집기 후 a'=[2, 1]. 검진 수?"),
+        "Your turn — count checkups on a tiny case.",
+        "직접 — 작은 케이스에서 검진 수 세 봐."),
       question: t(E,
         "Checkups after reversing a[1..2] of a=[1, 2] vs b=[2, 1]?",
         "a=[1, 2] 의 a[1..2] 뒤집기 후 b=[2, 1] 와 비교 시 검진 수?"),
       hint: t(E,
-        "a' = [2, 1]. Compare to b = [2, 1]: position 1 → 2=2 ✓, position 2 → 1=1 ✓. Both match!",
-        "a' = [2, 1]. b = [2, 1] 비교: 위치 1 → 2=2 ✓, 위치 2 → 1=1 ✓. 둘 다."),
+        "Reverse a[1..2] in your head, then compare each spot to b position by position.",
+        "머릿속으로 a[1..2] 를 뒤집어 본 뒤, b 와 자리별로 하나씩 비교해 봐."),
       answer: 2,
     },
   ];
@@ -393,14 +396,105 @@ export function makeCheckupsCh2(E, lang = "py") {
         </div>),
     },
 
-    /* 2-2..2-N — Code sections. */
-    ...getCheckupsSections(E).map((sec, i) => ({
+    /* 2-2..2-5 — Brute code sections (1️⃣..4️⃣) [결-a]. */
+    ...getCheckupsSections(E).slice(0, 4).map((sec, i) => ({
       type: "reveal",
       narr: i === 0
-        ? t(E, "Build the code step by step. Brute (1–4) for partial credit, prefix-sum upgrade (5–7) for full credit.",
-              "단계별 코드. brute (1–4) 로 부분점수, prefix-sum 업그레이드 (5–7) 로 풀점수.")
+        ? t(E, "Build brute step by step (1️⃣–4️⃣). It's the literal translation of the problem statement — fine for partial credit.",
+              "brute 를 한 단락씩 (1️⃣–4️⃣). 문제 그대로 옮긴 모양 — 부분점수에 충분.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+    })),
+
+    /* [결-b 한계] — show why brute times out on N=7500. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Submit brute — small inputs pass, big ones time out.  Why?  Count operations.",
+        "brute 제출 — 작은 입력은 통과, 큰 입력은 시간 초과. 왜? 연산 수를 세 봐."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 12, padding: 16 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#991b1b", textAlign: "center", marginBottom: 12 }}>
+              🚨 {t(E, "Why brute fails", "brute 가 왜 무너지는가")}
+            </div>
+
+            <div style={{ background: "#fff", border: "1px solid #fecaca", borderRadius: 10, padding: 12, marginBottom: 12, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+              <div style={{ fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>
+                {t(E, "Per (l, r) brute does:", "(l, r) 마다 brute 는:")}
+              </div>
+              <div style={{ marginLeft: 12, fontSize: 12.5 }}>
+                · {t(E, "Up to N reversed-position lookups + N comparisons → ", "뒤집은 위치 조회 + 비교 최대 N 번 → ")}
+                <code style={{ background: "#fef3c7", padding: "1px 6px", borderRadius: 4, fontWeight: 600 }}>O(N)</code>
+              </div>
+              <div style={{ marginLeft: 12, fontSize: 12.5, marginTop: 4 }}>
+                · {t(E, "Pairs (l, r): N(N+1)/2 ≈ N² / 2 → ", "쌍 (l, r): N(N+1)/2 ≈ N² / 2 → ")}
+                <code style={{ background: "#fef3c7", padding: "1px 6px", borderRadius: 4, fontWeight: 600 }}>O(N²)</code>
+              </div>
+              <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fca5a5", textAlign: "center", fontWeight: 700, color: "#991b1b" }}>
+                = O(N³) {t(E, "total", "총합")}
+              </div>
+            </div>
+
+            {/* Concrete numbers grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 12 }}>
+              {[
+                { n: "100",   ops: "10⁶",     ms: "~10ms",   ok: true,  label: t(E, "tiny",   "작음") },
+                { n: "1,000", ops: "10⁹",     ms: "~10s",    ok: false, label: t(E, "borderline", "경계") },
+                { n: "7,500", ops: "≈4·10¹¹", ms: "~hours",  ok: false, label: t(E, "TLE",    "TLE") },
+              ].map((row) => (
+                <div key={row.n} style={{
+                  background: row.ok ? "#dcfce7" : "#fee2e2",
+                  border: `1.5px solid ${row.ok ? "#86efac" : "#fca5a5"}`,
+                  borderRadius: 8, padding: 8, textAlign: "center",
+                }}>
+                  <div style={{ fontSize: 11, color: row.ok ? "#15803d" : "#991b1b", fontWeight: 600, marginBottom: 2 }}>
+                    N = {row.n}
+                  </div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700, color: row.ok ? "#166534" : "#7f1d1d" }}>
+                    {row.ops}
+                  </div>
+                  <div style={{ fontSize: 11, color: row.ok ? "#166534" : "#7f1d1d", marginTop: 2 }}>
+                    {row.ms}
+                  </div>
+                  <div style={{ fontSize: 10, color: row.ok ? "#15803d" : "#991b1b", marginTop: 2, fontWeight: 600 }}>
+                    {row.ok ? "✓" : "✗"} {row.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 8, padding: "10px 12px", fontSize: 12.5, color: "#7c2d12", lineHeight: 1.6 }}>
+              💡 {t(E,
+                "Constraint says N ≤ 7,500.  We need to drop one factor of N — turn O(N) per pair into O(1).  Next pages: a key observation that lets us do exactly that.",
+                "제약: N ≤ 7,500. N 한 겹을 빼야 — 쌍당 O(N) 을 O(1) 로. 다음 페이지부터 그게 가능한 핵심 관찰.")}
+            </div>
+          </div>
+        </div>),
+    },
+
+    /* 2-7..2-11 — Smart code sections (5️⃣..9️⃣) [결-c].
+        slice(4)[0] = ⑤ idea, [1] = ⑥ matchUpTo, [2] = ⑦ diag,
+        [3] = ⑧ combine + print, [4] = ⑨ FULL integrated code.
+
+        ⑤ swaps CodeSectionView for an interactive sim — drag two (l, r)
+        pairs and watch cells inside both windows light up in the SAME
+        colour when l + r matches.  Visualization carries the load; the
+        old dense pseudo-code commentary block is gone. */
+    ...getCheckupsSections(E).slice(4).map((sec, i) => ({
+      type: "reveal",
+      narr:
+        i === 0
+          ? t(E, "The fix — drag two (l, r) windows.  When their l + r matches, inside cells share a colour: same diagonal, same comparison.",
+                "고치는 길 — 두 (l, r) 윈도우 드래그. l + r 가 같으면 안쪽 셀이 같은 색 — 같은 대각선이면 같은 비교.")
+          : i === 4
+          ? t(E,
+              "All five pieces wired together — variable names match the section pages above.  Read top to bottom.",
+              "다섯 조각이 한 군데에 — 변수 이름은 위 섹션 페이지 그대로. 위에서 아래로 읽어요.")
+          : "",
+      content: i === 0
+        ? (<DiagonalSim E={E} />)
+        : (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
   ];
 }

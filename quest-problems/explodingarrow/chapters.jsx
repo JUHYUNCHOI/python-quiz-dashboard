@@ -66,6 +66,18 @@ export function makeExplodingArrowCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P5</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the total number of arrows that explode in the chain reaction from the start.",
+                "시작 화살의 연쇄 반응으로 폭발하는 화살의 총 개수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -127,8 +139,8 @@ export function makeExplodingArrowCh1(E) {
         "Chain of 3 arrows. How many explode total?",
         "화살 3개 체인. 총 몇 개 폭발?"),
       hint: t(E,
-        "Each arrow triggers the next: 1 -> 2 -> 3. All three explode.",
-        "각 화살이 다음을 발동: 1 -> 2 -> 3. 세 개 모두 폭발."),
+        "Trace the chain — every arrow that gets ignited counts.",
+        "연쇄를 따라가 봐 — 점화되는 화살을 모두 세어 봐."),
       answer: 3,
     },
   ];
@@ -140,23 +152,12 @@ export function makeExplodingArrowCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeExplodingArrowCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "BFS from the start arrow. For each exploding arrow, scan its row/column in its direction to find the NEAREST other arrow — push that one onto the queue if not already exploded. Count exploded arrows.",
-        "시작 화살에서 BFS. 폭발하는 각 화살에 대해, 그 방향의 같은 행/열에서 가장 가까운 다른 화살을 찾아 — 아직 폭발 안 했다면 큐에 추가. 폭발한 화살 수 카운트."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "BFS from the start arrow. For each exploding arrow, scan its row/column in its direction to find the nearest other arrow → push to queue if not yet exploded. Count exploded arrows. Sections build it one piece at a time.",
+        "시작 화살에서 BFS. 폭발하는 각 화살의 방향으로 같은 행/열에서 가장 가까운 화살 → 미폭발이면 큐 추가. 폭발 수 카운트. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getExplodingArrowSections(E),
     },
   ];

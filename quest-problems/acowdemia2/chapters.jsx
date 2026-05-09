@@ -45,6 +45,18 @@ export function makeAcow2Ch1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Print the number of ordered pairs (A, B) where A is definitely senior to B.",
+                "A 가 B 보다 확실히 선임인 순서쌍 (A, B) 의 개수를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -106,8 +118,8 @@ export function makeAcow2Ch1(E) {
         "Pubs [A,B] and [B,A]. Relationship? (0=undetermined)",
         "논문 [A,B]와 [B,A]. 관계? (0=판단 불가)"),
       hint: t(E,
-        "A is before B in one paper, B before A in another. Neither always first, so undetermined.",
-        "한 논문에서 A가 B 앞, 다른 논문에서 B가 A 앞. 어느 쪽도 항상 먼저가 아니므로 판단 불가."),
+        "Look at each paper separately — is A always before B across all of them?",
+        "두 논문을 각각 살펴봐요 — 모든 논문에서 A 가 항상 B 보다 앞에 있나요?"),
       answer: 0,
     },
   ];
@@ -119,23 +131,12 @@ export function makeAcow2Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeAcow2Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "For every paper, mark before[a][b] = True if a appears before b somewhere in that paper. Cow A is 'definitely senior' to B iff before[A][B] is True AND before[B][A] is False. Sum over all (A, B).",
-        "모든 논문에서, 그 논문 안에서 a 가 b 보다 앞이면 before[a][b] = True. A 가 B 보다 '확실히 선임' 이면 before[A][B] 가 True 이고 before[B][A] 가 False. 모든 (A, B) 에 대해 합산."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "For every paper, mark before[a][b] = True if a appears before b somewhere in that paper. Cow A is 'definitely senior' to B iff before[A][B] is True AND before[B][A] is False. Sum over all (A, B). Sections build it one piece at a time.",
+        "모든 논문에서, 그 논문 안에서 a 가 b 보다 앞이면 before[a][b] = True. A 가 B 보다 '확실히 선임' 이면 before[A][B] 가 True 이고 before[B][A] 가 False. 모든 (A, B) 에 대해 합산. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getAcowdemia2Sections(E),
     },
   ];

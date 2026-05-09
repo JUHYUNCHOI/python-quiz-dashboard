@@ -179,10 +179,6 @@ export function MajorityRunner({ E }) {
           {result.found.length > 0 ? `✅ ${result.found.join(", ")}` : "❌ -1"}
         </div>
       )}
-      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
-        <div style={{ fontWeight: 600, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
-        <div>O(N) per test case · trivially fast</div>
-      </div>
     </div>
   );
 }
@@ -195,7 +191,8 @@ const MJ_INPUT_PY = [
   "T = int(data[idx]); idx += 1     # number of test cases",
   "",
   "for _ in range(T):",
-  "    N = int(data[idx]); idx += 1",
+  "    N = int(data[idx])",
+  "    idx += 1",
   "    a = [int(data[idx + i]) for i in range(N)]",
   "    idx += N",
 ];
@@ -258,11 +255,13 @@ const MJ_FULL_PY = [
   "import sys",
   "data = sys.stdin.read().split()",
   "idx = 0",
-  "T = int(data[idx]); idx += 1",
+  "T = int(data[idx])",
+  "idx += 1",
   "",
   "out = []",
   "for _ in range(T):",
-  "    N = int(data[idx]); idx += 1",
+  "    N = int(data[idx])",
+  "    idx += 1",
   "    a = [int(data[idx + i]) for i in range(N)]",
   "    idx += N",
   "",
@@ -411,7 +410,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

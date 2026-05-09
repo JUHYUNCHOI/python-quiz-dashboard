@@ -10,10 +10,14 @@ const FULL_PY = [
   "",
   "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "Q = int(data[p]); p += 1",
-  "c  = [int(x) for x in data[p:p+N]]; p += N",
-  "ti = [int(x) for x in data[p:p+N]]; p += N",
+  "N = int(data[p])",
+  "p += 1",
+  "Q = int(data[p])",
+  "p += 1",
+  "c  = [int(x) for x in data[p:p+N]]",
+  "p += N",
+  "ti = [int(x) for x in data[p:p+N]]",
+  "p += N",
   "",
   "# Reachable farm i iff S + t[i] < c[i]  ⇔  d[i] := c[i] - t[i] > S.",
   "d = sorted(c[i] - ti[i] for i in range(N))",
@@ -21,7 +25,8 @@ const FULL_PY = [
   "out = []",
   "for _ in range(Q):",
   "    V = int(data[p]); p += 1   # query is 'V S' — V first, then S",
-  "    S = int(data[p]); p += 1",
+  "    S = int(data[p])",
+  "    p += 1",
   "    reachable = N - bisect_left(d, S + 1)",
   "    out.append('YES' if reachable >= V else 'NO')",
   "",
@@ -105,7 +110,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

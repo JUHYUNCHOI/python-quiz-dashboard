@@ -56,6 +56,18 @@ export function makeLonelyPhotoCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #1</div>
           </div>
 
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Count contiguous groups of 3+ cows where exactly one cow's breed differs from all the rest.",
+                "\ud55c \ub9c8\ub9ac\ub9cc \ub098\uba38\uc9c0\uc640 \ud488\uc885\uc774 \ub2e4\ub978 \u2014 \uc5f0\uc18d 3 \ub9c8\ub9ac \uc774\uc0c1 \ubb36\uc74c\uc758 \uac1c\uc218\ub97c \ucd9c\ub825.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -106,7 +118,8 @@ export function makeLonelyPhotoCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "'GHG' has length 3 with exactly 1 H. Is H lonely here?", "'GHG'는 길이 3이고 H가 정확히 1마리. H가 외로운 걸까요?"),
+        "Look at 'GHG' — count G's, count H's, decide.",
+        "'GHG' 보고 — G 몇 개, H 몇 개, 그래서 외로운 거 맞아?"),
       question: t(E,
         "In 'GHG', is the H a lonely cow?",
         "'GHG'에서 H는 외로운 소일까요?"),
@@ -123,19 +136,21 @@ export function makeLonelyPhotoCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For 'GHGHG' (length 5), count all lonely substrings of length >= 3.", "'GHGHG'(길이 5)에서 길이 3 이상인 외로운 부분 문자열 수를 세봐요."),
+        "Walk through every length-3, length-4, length-5 chunk of 'GHGHG' and count the lonely ones.",
+        "'GHGHG' 의 길이 3, 4, 5 묶음을 모두 훑어. 외로운 거 몇 개?"),
       question: t(E,
         "s = 'GHGHG'. How many lonely photos?",
         "s = 'GHGHG'. 외로운 사진 수는?"),
       hint: t(E,
-        "Length-3 substrings: GHG(lonely H), HGH(lonely G), GHG(lonely H). Length-4: GHGH(no), HGHG(no). Length-5: GHGHG(no). Answer: 3.",
-        "길이3: GHG(H외로움), HGH(G외로움), GHG(H외로움). 길이4: GHGH(x), HGHG(x). 길이5: GHGHG(x). 답: 3."),
+        "Each length is its own family — count 1-only chunks separately for length 3, 4, 5.",
+        "길이별로 따로 — 3 짜리, 4 짜리, 5 짜리 각각 외로운 건 몇 개?"),
       answer: 3,
     },
     {
       type: "sim",
       narr: t(E,
-        "For each i, see same-type run + opp_left/opp_right + the count formula contribution.", "각 i마다 같은 타입 구간 + opp_left/opp_right + 카운트 공식 기여."),
+        "Stand at each cow i and look around — how far does my breed stretch, and what's beyond?",
+        "각 소 i 자리에 서서 둘러봐 — 내 품종이 어디까지 이어지고, 그 너머는 어때?"),
     },
   ];
 }
@@ -146,22 +161,12 @@ export function makeLonelyPhotoCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeLonelyPhotoCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "For each cow, count opposite-type cows on each side.\nCombine counts to find valid substrings.\nO(N) with prefix sums!", "각 소에 대해 양쪽의 반대 타입 소 수를 세. 조합해서 유효한 부분 문자열을 찾아요. 누적합으로 O(N)!"),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Progressive code
+    // 2-1: Progressive code — straight in, no placeholder.
     {
       type: "progressive",
       narr: t(E,
-        "Now build the run-length scan step by step.", "구간 길이 스캔을 단계별로 만들자."),
+        "For each cow i, count same-type neighbors and the opposite-type cows beyond. The formula combines those into the lonely count.  Sections build it one piece at a time.",
+        "각 소 i 마다 — 같은 품종 이웃이 어디까지인지, 그 너머 반대 품종이 몇 마리인지 세고 공식으로 합쳐. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getLonelyPhotoSections(E),
     },
     {

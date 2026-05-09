@@ -52,6 +52,18 @@ export function makeBadmintonCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Print each game's final score and the overall match winner.",
+                "각 게임의 최종 점수와 매치 최종 승자를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -112,8 +124,8 @@ export function makeBadmintonCh1(E) {
         "Input: 42 A's in a row. How many games are played total?",
         "입력: A가 42개 연속. 총 몇 게임이 진행되나?"),
       hint: t(E,
-        "First 21 A's = Game 1 (21-0). Next 21 A's = Game 2 (21-0). A wins 2-0, match over.",
-        "처음 21개 A = 1게임 (21-0). 다음 21개 A = 2게임 (21-0). A가 2-0 승리, 매치 종료."),
+        "Each game ends at 21 points. How many full games of 21 A's fit, and when does the match end?",
+        "각 게임은 21 점에서 끝나. 21 개씩 끊어서 몇 게임이 들어가고, 매치는 언제 끝나는지 생각해봐."),
       answer: 2,
     },
   ];
@@ -125,23 +137,12 @@ export function makeBadmintonCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBadmintonCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Walk through the rally string char by char, tracking each game's score. When one player hits 21, save the score, reset, and bump that player's game count. Stop at 2 game wins.",
-        "랠리 문자열을 한 글자씩 순회하며 각 게임 점수 추적. 한 쪽이 21 점 도달 시 점수 저장, 초기화, 그 쪽 게임 승수 증가. 2 게임 승 달성 시 종료."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Walk through the rally string char by char, tracking each game's score. When one player hits 21, save the score, reset, and bump that player's game count. Stop at 2 game wins. Sections build it one piece at a time.",
+        "랠리 문자열을 한 글자씩 순회하며 각 게임 점수 추적. 한 쪽이 21 점 도달 시 점수 저장, 초기화, 그 쪽 게임 승수 증가. 2 게임 승 달성 시 종료. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBadmintonSections(E),
     },
   ];

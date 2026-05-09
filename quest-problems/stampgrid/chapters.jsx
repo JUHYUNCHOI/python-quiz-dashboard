@@ -18,10 +18,14 @@ export const SOLUTION_CODE = [
   "def solve():",
   "    global p",
   "    # Per test: N + canvas, then K + stamp",
-  "    N = int(data[p]); p += 1",
-  "    canvas = [data[p + i] for i in range(N)]; p += N",
-  "    K = int(data[p]); p += 1",
-  "    stamp = [data[p + i] for i in range(K)]; p += K",
+  "    N = int(data[p])",
+  "    p += 1",
+  "    canvas = [data[p + i] for i in range(N)]",
+  "    p += N",
+  "    K = int(data[p])",
+  "    p += 1",
+  "    stamp = [data[p + i] for i in range(K)]",
+  "    p += K",
   "",
   "    # All 4 rotations of the stamp",
   "    rotations = [stamp]",
@@ -71,7 +75,16 @@ export function makeStampCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcee"}</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Stamp Grid</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginTop: 12, marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E, "Decide if a K×K stamp (rotatable 4 ways) can recreate the N×N pattern exactly.", "K×K 도장(4방향 회전 가능)으로 N×N 패턴을 정확히 만들 수 있는지 판단하기.")}
+            </div>
+          </div>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N\u00d7N grid (desired pattern).\nK\u00d7K stamp (can rotate 0/90/180/270\u00b0). Place stamp at any valid position, any rotation. Can we match the pattern exactly?",
               "N\u00d7N \uadf8\ub9ac\ub4dc (\uc6d0\ud558\ub294 \ud328\ud134). K\u00d7K \ub3c4\uc7a5 (0/90/180/270\u00b0 \ud68c\uc804 \uac00\ub2a5). \uc5b4\ub5a4 \uc704\uce58,\n\uc5b4\ub5a4 \ud68c\uc804\uc73c\ub85c\ub4e0 \ubc30\uce58. \ud328\ud134\uc744 \uc815\ud655\ud788 \ub9cc\ub4e4 \uc218 \uc788\ub098?")}
@@ -118,7 +131,7 @@ export function makeStampCh1(E) {
       narr: t(E,
         "If canvas is 3\u00d73 and stamp is 2\u00d72, valid top-left positions are (0,0), (0,1), (1,0), (1,1).\nThat's (3-2+1)\u00b2 = 4 positions!", "\uce94\ubc84\uc2a4 3\u00d73, \ub3c4\uc7a5 2\u00d72\uba74, \uc720\ud6a8\ud55c \uc88c\uc0c1\ub2e8 \uc704\uce58\ub294 (0,0), (0,1), (1,0), (1,1).\n(3-2+1)\u00b2 = 4\uac1c!"),
       question: t(E, "Canvas 3\u00d73, stamp 2\u00d72 \u2192 max positions?", "\uce94\ubc84\uc2a4 3\u00d73, \ub3c4\uc7a5 2\u00d72 \u2192 \ucd5c\ub300 \uc704\uce58?"),
-      hint: t(E, "(N-K+1)\u00b2 = (3-2+1)\u00b2", "(N-K+1)\u00b2 = (3-2+1)\u00b2"),
+      hint: t(E, "Top-left rows: 0, 1. Top-left cols: 0, 1. Count the pairs.", "\uc88c\uc0c1\ub2e8 \ud589: 0, 1. \uc88c\uc0c1\ub2e8 \uc5f4: 0, 1. \uc30d\uc758 \uac1c\uc218\ub97c \uc138\ubd10."),
       answer: 4,
     },
     {

@@ -46,7 +46,19 @@ export function makeLostCowCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc04"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>The Lost Cow</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #1</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2017 Bronze #1</div>
+          </div>
+
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the total distance FJ walks during his zigzag (+1, \u22122, +4, \u2026) before passing through y.",
+                "FJ \uac00 \uc9c0\uadf8\uc7ac\uadf8 (+1, \u22122, +4, \u2026) \ub85c \uac77\ub2e4\uac00 y \ub97c \uc9c0\ub098\uac00\uae30\uae4c\uc9c0\uc758 \ucd1d \uac70\ub9ac\ub97c \ucd9c\ub825.")}
+            </div>
           </div>
 
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -99,7 +111,8 @@ export function makeLostCowCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "FJ is at x=3, cow at y=6.\nHe goes to 4 (dist 1), then to 1 (dist 3), then toward 7 but finds cow at 6.\nWhat's the total distance?", "FJ는 x=3, 소는 y=6. 4로 가고 (거리 1), 1로 가고 (거리 3), 7을 향해 가다 6에서 소를 찾아요. 총 거리는?"),
+        "Trace the zigzag yourself for x=3, y=6.  Add up each leg until you reach (or pass) y.",
+        "x=3, y=6 에서 지그재그를 직접 따라가. y 에 닿거나 지나갈 때까지 각 다리의 거리 합."),
       question: t(E,
         "x=3, y=6. FJ goes 3->4 (1), 4->1 (3), 1->6 (5). Total distance?",
         "x=3, y=6. FJ: 3->4 (1), 4->1 (3), 1->6 (5). 총 거리?"),
@@ -118,19 +131,21 @@ export function makeLostCowCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Try it yourself! x=3, y=6. What is the total distance FJ walks?", "직접 해봐요! x=3, y=6. FJ가 걷는 총 거리는?"),
+        "Now you do it on your own — write down each leg, sum the distances.",
+        "이번엔 혼자서 — 다리 하나씩 적어보고 거리 다 더해."),
       question: t(E,
         "x=3, y=6. Total distance walked?",
         "x=3, y=6. 총 걸은 거리?"),
       hint: t(E,
-        "3->4 (dist 1), 4->1 (dist 3), 1->6 (dist 5). Total = 1+3+5 = 9.",
-        "3->4 (거리 1), 4->1 (거리 3), 1->6 (거리 5). 합 = 1+3+5 = 9."),
+        "Each leg's distance is the doubling pattern (1, 2, 4, 8, …).  Stop when you've passed y.",
+        "다리마다 거리는 두 배씩 (1, 2, 4, 8, …). y 를 지난 다리까지 합산."),
       answer: 9,
     },
     {
       type: "sim",
       narr: t(E,
-        "Pick a (x, y) pair below and step through FJ's zigzag walk on the number line.", "아래에서 (x, y) 골라서 FJ의 지그재그 걷기를 한 다리씩 따라가봐요."),
+        "Pick a (x, y) and walk FJ through one leg at a time on the number line below.",
+        "아래에서 (x, y) 골라 FJ 의 지그재그를 한 다리씩 직접 걸어 봐."),
     },
   ];
 }
@@ -141,22 +156,12 @@ export function makeLostCowCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeLostCowCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Simulate the zigzag.\nEach step doubles, so we find y within O(log(abs(x-y))) steps.\nVery fast!", "지그재그를 시뮬레이션해요. 매 스텝마다 두 배로 커지니까 O(log(abs(x-y))) 스텝 안에 y를 찾아요. 매우 빠르지!"),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Progressive code
+    // 2-1: Progressive code — straight in.
     {
       type: "progressive",
       narr: t(E,
-        "Now build the zigzag simulation step by step.", "지그재그 시뮬레이션을 단계별로 만들자."),
+        "Simulate the zigzag — each leg doubles, alternates direction, stops the moment y is between current and next position.  Sections build it one piece at a time.",
+        "지그재그 시뮬 — 다리마다 두 배, 방향 교대, y 가 현재와 다음 사이에 있으면 거기서 멈춤. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getLostCowSections(E),
     },
     {

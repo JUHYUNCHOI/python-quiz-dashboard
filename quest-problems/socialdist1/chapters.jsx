@@ -61,7 +61,19 @@ export function makeSocDist1Ch1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\ude37"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Social Distancing I</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2020 US Open Bronze #1</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2020 Bronze #1</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the maximum possible minimum distance between any two of the N placed cows.",
+                "배치한 N 마리 소 사이 최소 거리의 최댓값을 출력.")}
+            </div>
           </div>
 
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -125,8 +137,8 @@ export function makeSocDist1Ch1(E) {
         "\"10001\": occupied at 0,4. Place 2 cows. Max of min distance?",
         "\"10001\": 0,4에 소. 2마리 추가. 최소 거리의 최대값?"),
       hint: t(E,
-        "Best placement: 1 and 3. Gaps: 1, 2, 1. Min = 1.",
-        "최적 배치: 1과 3. 간격: 1, 2, 1. 최소 = 1."),
+        "Try different placements and look at the smallest gap each makes.",
+        "여러 배치를 시도하면서 각 배치의 최소 간격을 확인해 봐."),
       answer: 1,
     },
   ];
@@ -138,23 +150,12 @@ export function makeSocDist1Ch1(E) {
    --------------------------------------------------------------- */
 export function makeSocDist1Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Binary search the answer D. For each candidate, GREEDILY place cows: put one at the very first available position, then keep placing at the leftmost spot that's ≥ D away from the last. Check if all N fit.",
-        "답 D 를 이분 탐색. 각 후보에서, 그리디로 소 배치: 가장 첫 가능 위치에 1 마리, 그 다음 마지막 위치 + D 이상인 가장 왼쪽 위치에 계속 배치. N 마리 모두 들어가는지 확인."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Binary search the answer D. For each candidate, greedily place cows — first at the earliest available, then leftmost spot ≥ D from the last. Check if all N fit. Sections build it one piece at a time.",
+        "답 D 를 이분 탐색. 후보마다 그리디 배치 — 가장 처음 가능 위치, 그 다음 마지막 + D 이상인 가장 왼쪽. N 마리 모두 들어가는지 확인. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getSocDist1Sections(E),
     },
   ];

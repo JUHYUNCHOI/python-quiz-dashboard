@@ -9,8 +9,10 @@ export const SOLUTION_CODE = [
   "",
   "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "M = int(data[p]); p += 1",
+  "N = int(data[p])",
+  "p += 1",
+  "M = int(data[p])",
+  "p += 1",
   "S = data[p]; p += 1               # direction string, e.g. 'RRL'",
   "cap = [int(x) for x in data[p:p+N]]",
   "",
@@ -47,6 +49,18 @@ export function makeMilkExCh1(E) {
             <div style={{ fontSize: 32, marginBottom: 4 }}>🥛</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Milk Exchange</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #2</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "After M minutes of milk passing (with overflow lost), output the total milk left.",
+                "M 분 동안 우유를 전달하고 (넘침은 버림) 남은 총 우유 양을 출력.")}
+            </div>
           </div>
 
           {/* Mini-visual: 3 cows in a circle, RRL, one minute trace */}
@@ -209,8 +223,8 @@ RRL
         "3 cows, all pass right, milk=[2,2,2], capacity=[2,2,2]. After 1 minute, what is the total milk?",
         "3마리 소, 모두 오른쪽 전달, 우유=[2,2,2], 용량=[2,2,2]. 1분 후 총 우유량은?"),
       hint: t(E,
-        "Each cow gives 1L right and receives 1L from left neighbor. Net: 2-1+1=2 each. No overflow since cap=2. Total=6.",
-        "각 소가 1L를 오른쪽으로 주고 왼쪽 이웃에게서 1L 받아요. 순: 2-1+1=2씩. 용량=2라 넘침 없음. 총=6."),
+        "Each cow gives 1 right AND receives 1 from the left.  Will any cow exceed its capacity?",
+        "각 소는 1 을 오른쪽으로 주고 왼쪽에서 1 받아. 용량 초과되는 소가 있을까?"),
       answer: 6,
     },
   ];
@@ -221,24 +235,12 @@ RRL
    ================================================================ */
 export function makeMilkExCh2(E, lang = "py") {
   return [
-    // 2-1: Light intro — code first, theory inline.
-    {
-      type: "reveal",
-      narr: t(E,
-        "Just simulate the rules step by step.  Each minute, every cow with milk passes 1L; then any over-cap cells lose the overflow.  Read the code section by section.",
-        "규칙 그대로 한 분씩 시뮬레이션. 매분 우유 있는 소가 1L 전달, 그 다음 용량 초과는 버려요. 코드 한 단락씩 읽어요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-          {t(E,
-            "Tiny optimization tucked into the loop: after roughly 2N steps the system stops changing, so simulating min(M, 2N) is enough.  But for Bronze inputs even simulating M directly works.",
-            "작은 최적화 한 줄: 대략 2N 단계 후 변화가 멈추기 때문에 min(M, 2N) 만큼만 돌리면 충분. Bronze 입력에선 M 직접 돌려도 통과해요.")}
-        </div>),
-    },
-    // 2-2: Solution code
+    // 2-1: Solution code — straight to the build, no placeholder page.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Simulate one minute at a time: every cow with milk passes 1 L, then over-cap cells lose the overflow.  Sections build the loop one piece at a time.",
+        "한 분씩 시뮬레이션 — 우유 있는 소가 1 L 전달, 그 다음 용량 초과는 버림. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMilkExchangeSections(E),
     },
   ];

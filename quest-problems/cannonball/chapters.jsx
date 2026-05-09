@@ -62,6 +62,18 @@ export function makeCannonCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2024 Bronze #2</div>
           </div>
 
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Count how many targets break before Bessie leaves the line [1, N] (or starts looping).",
+                "Bessie \uac00 [1, N] \uc744 \ubc97\uc5b4\ub098\uae30 (\ub610\ub294 \ubb34\ud55c \ub8e8\ud504) \uc804\uae4c\uc9c0 \ubd80\uc11c\uc9c0\ub294 \ud0c0\uac9f \uac1c\uc218\ub97c \ucd9c\ub825.")}
+            </div>
+          </div>
+
           {/* Mini-visual: Bessie bouncing on a number line */}
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#9a3412", textAlign: "center", marginBottom: 10 }}>
@@ -231,8 +243,8 @@ export function makeCannonCh1(E) {
         "Position = 4, direction = -1, power = 2.  Next position?",
         "위치 = 4, 방향 = -1, 파워 = 2. 다음 위치?"),
       hint: t(E,
-        "next = position + direction × power = 4 + (-1) × 2 = 2.",
-        "next = position + direction × power = 4 + (-1) × 2 = 2."),
+        "Apply next = position + direction × power.  What does -1 × 2 do to the position?",
+        "next = position + direction × power. -1 × 2 가 위치를 어떻게 바꿔?"),
       answer: 2,
     },
   ];
@@ -244,24 +256,12 @@ export function makeCannonCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCannonCh2(E, lang = "py") {
   return [
-    // 2-1: Light intro — code first.
-    {
-      type: "reveal",
-      narr: t(E,
-        "Just simulate Bessie bouncing.  Each step: process the pad at her position, then move by direction × power.  Stop when she leaves [1, N].",
-        "Bessie 가 튀는 걸 그냥 시뮬레이션. 매 step: 현재 위치의 패드 처리 후 direction × power 만큼 이동. [1, N] 벗어나면 종료."),
-      content: (
-        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-          {t(E,
-            "If she lands on a target with power ≥ value, that target breaks (only once).  If she lands on a jump pad, direction flips and power grows.  A loop CAN happen between two value-0 jump pads — bounding the iteration count keeps that safe.  Read the code section by section.",
-            "타겟에 도착하고 파워 ≥ 값이면 부숨 (한 번만). 점프 패드에 도착하면 방향 뒤집고 파워 증가. 값 0 점프 패드 두 개 사이에서 무한 루프 가능 — 반복 횟수 cap 으로 안전. 코드 한 단락씩.")}
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code — straight in.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Simulate Bessie bouncing.  Each step: process the pad, then move by direction × power.  Stop when she leaves [1, N] or after a generous iteration cap (handles infinite jump-pad loops).  Sections build the loop one piece at a time.",
+        "Bessie 가 튀는 걸 시뮬레이션. 매 step: 패드 처리 → direction × power 만큼 이동. [1, N] 벗어나거나 iteration cap 도달 시 종료 (점프 패드 무한 루프 안전 장치). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCannonballSections(E),
     },
   ];

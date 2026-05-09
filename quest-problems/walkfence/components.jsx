@@ -114,14 +114,7 @@ export function WalkFenceSim({ E }) {
   );
 }
 
-export function WalkFenceRunner({ E }) {
-  return (
-    <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
-      {t(E, "Use the Sim above to try different fence shapes and cow positions. (A custom fence runner needs structured input — see code section.)",
-            "위의 Sim에서 다양한 울타리 모양과 소 위치를 시도해봐. (커스텀 울타리 runner는 구조화된 입력 필요 — 코드 섹션 참고.)")}
-    </div>
-  );
-}
+export function WalkFenceRunner() { return null; }
 
 /* Section 1: read posts */
 const WF_INPUT_PY = [
@@ -383,7 +376,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

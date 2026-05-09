@@ -43,6 +43,16 @@ export function makeBitcoinCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E, "Find the largest squared distance between any two mining sites.", "두 채굴 사이트 사이의 제곱 거리 중 최댓값을 찾아요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -93,8 +103,8 @@ export function makeBitcoinCh1(E) {
         "Squared distance between (0,0) and (3,4)?",
         "(0,0)과 (3,4) 사이의 제곱 거리?"),
       hint: t(E,
-        "(3-0)^2 + (4-0)^2 = 9 + 16 = 25",
-        "(3-0)^2 + (4-0)^2 = 9 + 16 = 25"),
+        "dx = 3 − 0, dy = 4 − 0. Compute dx² + dy².",
+        "dx = 3 − 0, dy = 4 − 0. dx² + dy² 를 계산해봐요."),
       answer: 25,
     },
   ];
@@ -106,23 +116,12 @@ export function makeBitcoinCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBitcoinCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Brute force: for every pair of sites (i, j), compute (xi − xj)² + (yi − yj)² and keep the running max.",
-        "완전 탐색: 모든 사이트 쌍 (i, j) 에 대해 (xi − xj)² + (yi − yj)² 계산, 최댓값 유지."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Brute force: for every pair of sites (i, j), compute (xi − xj)² + (yi − yj)² and keep the running max. Sections build it one piece at a time.",
+        "완전 탐색: 모든 사이트 쌍 (i, j) 에 대해 (xi − xj)² + (yi − yj)² 계산, 최댓값 유지. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBitcoinSections(E),
     },
   ];

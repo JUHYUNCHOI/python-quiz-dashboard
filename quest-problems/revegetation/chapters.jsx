@@ -49,6 +49,18 @@ export function makeRevegCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the lexicographically smallest valid grass-type assignment as a string of digits 1..4.",
+                "사전순 가장 작은 유효 배색을 1..4 숫자 문자열로 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -113,8 +125,8 @@ export function makeRevegCh1(E) {
         "Smallest available color for unconstrained pasture?",
         "제약 없는 목초지에 배정되는 가장 작은 색?"),
       hint: t(E,
-        "Colors are 1, 2, 3, 4. Smallest is 1.",
-        "색은 1, 2, 3, 4. 가장 작은 건 1."),
+        "With no neighbors fixed yet, what color minimizes lexicographic order?",
+        "이웃 색이 아직 정해지지 않았다면 사전순을 가장 작게 만드는 색은?"),
       answer: 1,
     },
   ];
@@ -126,23 +138,12 @@ export function makeRevegCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeRevegCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Greedy: process pastures 1, 2, …, N in order. For each, look at the colors already used by ALREADY-colored neighbors, and pick the SMALLEST color in {1,2,3,4} that's not in that set.",
-        "그리디: 목초지를 1, 2, …, N 순서로 처리. 각 목초지에서, 이미 색칠된 이웃의 색을 확인하고 그 집합에 없는 {1,2,3,4} 중 가장 작은 색 선택."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Greedy: process pastures 1..N in order. For each, look at colors already taken by colored neighbors and pick the smallest in {1,2,3,4} not in that set. Sections build it one piece at a time.",
+        "그리디: 1..N 순서. 각 목초지마다 이미 색칠된 이웃 색을 확인하고 {1,2,3,4} 중 그 집합에 없는 가장 작은 색 선택. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getRevegSections(E),
     },
   ];

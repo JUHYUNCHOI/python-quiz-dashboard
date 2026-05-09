@@ -39,6 +39,18 @@ export function makeXorStringCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P6</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the bitwise XOR string of A and B.",
+                "A 와 B 의 비트별 XOR 문자열을 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -91,8 +103,8 @@ export function makeXorStringCh1(E) {
         "1 XOR 1 = ?",
         "1 XOR 1 = ?"),
       hint: t(E,
-        "Same bits XOR to 0.",
-        "같은 비트의 XOR은 0."),
+        "Recall the XOR rule for matching bits.",
+        "같은 비트끼리의 XOR 규칙을 떠올려 봐."),
       answer: 0,
     },
   ];
@@ -104,23 +116,12 @@ export function makeXorStringCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeXorStringCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Walk both strings in parallel: at each position, output '0' if A[i] == B[i] else '1'.",
-        "두 문자열을 동시에 순회: 각 위치에서 A[i] == B[i] 면 '0', 아니면 '1' 출력."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Walk both strings in parallel — at each position, output '0' if A[i] == B[i] else '1'. Sections build it one piece at a time.",
+        "두 문자열을 동시에 순회 — 각 위치에서 A[i] == B[i] 면 '0', 아니면 '1' 출력. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getXorStringSections(E),
     },
   ];

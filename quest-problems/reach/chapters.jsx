@@ -139,7 +139,20 @@ export function makeReachCh1(E) {
           <div style={{ fontSize: 32, marginBottom: 4 }}>🐉</div>
           <div style={{ fontSize: 16, fontWeight: 600, color: A }}>Reachability Queries</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P5</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+
+          {/* 🎯 Mission box */}
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: `1.5px solid ${A}`, borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "For each query K, output how many cities are reachable from city 1 within K minutes (using damaged roads only if start < K and arrive ≤ K).",
+                "쿼리 K 마다 — 도시 1 에서 K 분 안에 도달 가능한 도시 수 (손상 도로는 출발 < K 이고 도착 ≤ K 인 경우만) 출력.")}
+            </div>
+          </div>
+
+          <div style={{ marginTop: 10, background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N cities,\nM roads → some roads are damaged → apocalypse at time K destroys damaged roads → how many cities reachable from city 1?",
               "도시 N개,\n도로 M개 → 일부 도로 손상 → 시간 K에 아포칼립스 발생,\n손상 도로 파괴 → 도시 1에서 몇 개 도시에 갈 수 있어요?")}
@@ -285,17 +298,7 @@ export function makeReachCh2(E) {
         "Right! Larger K means more time before apocalypse → can use damaged roads for longer → can only reach MORE cities.",
         "정답! K가 클수록 아포칼립스 전 시간이 많아 → 손상 도로를 더 오래 쓸 수 있어 → 도달 가능 도시는 늘어나기만 해요!"),
     },
-    // 2-3: Dijkstra concept
-    {
-      type: "reveal",
-      narr: t(E,
-        "The key algorithm is Dijkstra!\nIt finds shortest paths from city 1.\nThen for each damaged road, check if we can use it within time K.", "핵심 알고리즘은 다익스트라예요! 도시 1에서 각 도시까지 최단 거리를 구해요. 손상 도로는 출발 시각 < K, 도착 시각 ≤ K인 경우만 사용!"),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
+    // 2-3: Dijkstra concept (intro card lives in Ch3)
     // 2-4: Dijkstra trace
     {
       type: "dijkstraTrace",

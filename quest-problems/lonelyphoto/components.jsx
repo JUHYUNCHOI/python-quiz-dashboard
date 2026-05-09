@@ -48,25 +48,34 @@ export function LonelyPhotoSim({ E }) {
         ))}
       </div>
 
-      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 8 }}>
+      {/* Cells with role labels above — replaces the 🟡🔵🟢🔴 emoji legend below.
+          Labels: i (yellow center), same (blue same-letter run), opp_left (green opposite to the left),
+          opp_right (red opposite to the right). */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 12 }}>
         {s.split("").map((ch, idx) => {
           const isCur = idx === cur;
           const inSameRun = (idx >= cur - left && idx <= cur + right);
           const isOppLeft = idx < cur - left;
           const isOppRight = idx > cur + right;
+          const lab = isCur ? "i" : (inSameRun ? "same" : (isOppLeft ? "opp_l" : (isOppRight ? "opp_r" : "")));
+          const labColor = isCur ? "#92400e" : (inSameRun ? A : (isOppLeft ? "#16a34a" : (isOppRight ? "#dc2626" : "transparent")));
+          // Show label only on the BOUNDARY positions to avoid clutter on every same-run cell.
+          const showLab = isCur || (inSameRun && (idx === cur - left || idx === cur + right)) || isOppLeft || isOppRight;
           return (
-            <div key={idx} style={{
-              width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-              borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-              background: isCur ? "#fef3c7" : (inSameRun ? "#dbeafe" : (isOppLeft ? "#dcfce7" : (isOppRight ? "#fee2e2" : "#fff"))),
-              border: `1px solid ${isCur ? "#f59e0b" : (inSameRun ? A : (isOppLeft ? "#16a34a" : (isOppRight ? "#dc2626" : "#e5e7eb")))}`,
-              color: C.text,
-            }}>{ch}</div>
+            <div key={idx} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+              <div style={{ fontSize: 9, height: 12, fontWeight: 700, color: showLab ? labColor : "transparent", fontFamily: "'JetBrains Mono',monospace" }}>
+                {showLab ? lab : " "}
+              </div>
+              <div style={{
+                width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+                background: isCur ? "#fef3c7" : (inSameRun ? "#dbeafe" : (isOppLeft ? "#dcfce7" : (isOppRight ? "#fee2e2" : "#fff"))),
+                border: `1px solid ${isCur ? "#f59e0b" : (inSameRun ? A : (isOppLeft ? "#16a34a" : (isOppRight ? "#dc2626" : "#e5e7eb")))}`,
+                color: C.text,
+              }}>{ch}</div>
+            </div>
           );
         })}
-      </div>
-      <div style={{ textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 12 }}>
-        🟡 = i ({cur}) · 🔵 = same run · 🟢 = opp_left ({oppLeft}) · 🔴 = opp_right ({oppRight})
       </div>
 
       <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.7 }}>
@@ -337,7 +346,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

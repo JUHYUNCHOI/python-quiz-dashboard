@@ -8,7 +8,8 @@ const FULL_PY = [
   "import sys",
   "data = sys.stdin.read().split()",
   "p = 0",
-  "T = int(data[p]); p += 1",
+  "T = int(data[p])",
+  "p += 1",
   "",
   "def rotate90(grid):",
   "    R, C = len(grid), len(grid[0])",
@@ -16,10 +17,14 @@ const FULL_PY = [
   "",
   "def solve():",
   "    global p",
-  "    N = int(data[p]); p += 1",
-  "    canvas = [data[p + i] for i in range(N)]; p += N",
-  "    K = int(data[p]); p += 1",
-  "    stamp = [data[p + i] for i in range(K)]; p += K",
+  "    N = int(data[p])",
+  "    p += 1",
+  "    canvas = [data[p + i] for i in range(N)]",
+  "    p += N",
+  "    K = int(data[p])",
+  "    p += 1",
+  "    stamp = [data[p + i] for i in range(K)]",
+  "    p += K",
   "    rotations = [stamp]",
   "    for _ in range(3):",
   "        rotations.append(rotate90(rotations[-1]))",
@@ -151,7 +156,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

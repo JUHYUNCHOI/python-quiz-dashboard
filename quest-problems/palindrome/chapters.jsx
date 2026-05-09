@@ -51,7 +51,19 @@ export function makePalindromeCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🎲</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Palindrome Game</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Palindrome Stone Game</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #1</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output 'B' if Bessie wins (going first, both playing optimally), else 'E'.",
+                "Bessie 가 먼저 두고 둘 다 최선이면 — Bessie 가 이기면 'B', Elsie 가 이기면 'E' 출력.")}
+            </div>
           </div>
 
           <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -191,19 +203,21 @@ B`}
     {
       type: "input",
       narr: t(E,
-        "If S is a palindrome, Bessie can take ALL stones on her first turn and win!\nWhat about S=8?", "S가 회문이면, Bessie가 첫 턴에 돌을 전부 가져가서 이겨! S=8이면?"),
+        "Imagine you're Bessie facing S = 8 stones.  What's the best move you can make?",
+        "Bessie 가 되어 봐. 돌 8 개 앞에서 가장 좋은 한 수는?"),
       question: t(E,
         "S=8. Bessie removes all 8 stones (8 is a palindrome!). Elsie faces 0 stones. Does Bessie win? (1=yes, 0=no)",
-        "S=8. Bessie가 8개 전부 가져가 (8은 회문!). Elsie는 0개를 마주해요. Bessie가 이겨? (1=예, 0=아니오)"),
+        "S=8. Bessie 가 8 개 전부 가져가 (8 은 회문!). Elsie 는 0 개를 마주해요. Bessie 가 이겨? (1=예, 0=아니오)"),
       hint: t(E,
-        "8 is a single digit, so it IS a palindrome. She can take all 8!",
-        "8은 한 자리 수라 회문이에요. 8개 전부 가져갈 수 있어요!"),
+        "Whoever faces an empty pile loses.  Where does Elsie stand here?",
+        "빈 더미 마주한 사람이 짐. 이 경우 Elsie 는 어디에 서 있나?"),
       answer: 1,
     },
     {
       type: "sim",
       narr: t(E,
-        "Watch the DP table fill bottom-up. Green = Bessie wins, red = Elsie wins.", "DP 테이블이 아래에서 위로 채워지는 걸 봐요. 초록 = Bessie 승, 빨강 = Elsie 승."),
+        "Build the answer bottom-up — start from S=0 and grow.  Green cells = the player to move wins; red = loses.",
+        "S=0 부터 위로 — 답을 한 칸씩 채워가. 초록 칸 = 두는 사람이 이김, 빨강 = 짐."),
     },
   ];
 }
@@ -213,29 +227,19 @@ B`}
    ================================================================ */
 export function makePalindromeCh2(E, lang = "py") {
   return [
-    // 2-1: Light intro — no planning grid, no upfront complexity.
-    {
-      type: "reveal",
-      narr: t(E,
-        "Just write what the rules say. We'll build can_win[n] from small to large — it answers 'does the player to move at n stones win?'.",
-        "규칙 그대로 코드로 옮기면 돼요. can_win[n] 을 0 부터 위로 채워가면 'n 개 남았을 때 두는 사람이 이기나?' 답이 나와요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Progressive code
+    // 2-1: Progressive code — straight in.
     {
       type: "progressive",
       narr: t(E,
-        "Now build the game-theory DP step by step.", "게임 이론 DP를 단계별로 만들자."),
+        "Build can_win[n] from 0 upward — it answers 'does the player to move at n stones win?'.  Sections build the DP one piece at a time.",
+        "can_win[n] 을 0 부터 위로 채워가 — 'n 개 남았을 때 두는 사람이 이기나?' 답이 나와. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getPalindromeSections(E),
     },
     {
       type: "runner",
       narr: t(E,
-        "Try your own S. Watch the DP build to find the winner.", "직접 S 시도. DP가 만들어지면서 승자를 찾는 걸 봐요."),
+        "Try your own S. Watch the DP build to find the winner.",
+        "직접 S 시도. DP 가 만들어지면서 승자를 찾는 걸 봐요."),
     },
   ];
 }

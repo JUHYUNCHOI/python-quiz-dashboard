@@ -19,7 +19,19 @@ export function makeLogicalCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🧠</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: ACCENT }}>Logical Moos</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2024 US Open Bronze #1</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #1</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: TINT, border: `1.5px solid ${ACCENT}`, borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: DARK, letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: DARK, lineHeight: 1.5 }}>
+              {t(E,
+                "For each query (l, r, target), output 'Y' if some single boolean replacement of tokens l..r makes the whole expression equal target, else 'N'.",
+                "각 쿼리 (l, r, target) 에 대해 — l..r 구간을 하나의 불리언으로 교체했을 때 전체 식이 target 이 될 수 있으면 'Y', 없으면 'N'.")}
+            </div>
           </div>
 
           <div style={{ background: TINT, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -125,8 +137,8 @@ false and true or true
         "'false and true or true', query (l=3, r=3, target=false). Replace position 3 with 'false': 'false and false or true'. Result = ? (1 = true, 0 = false)",
         "'false and true or true', 쿼리 (l=3, r=3, target=false). 위치 3 을 'false' 로 교체: 'false and false or true'. 결과 = ? (1 = true, 0 = false)"),
       hint: t(E,
-        "and first: false and false = false → false or true = true. So result = 1. Neither replacement gives false → answer 'N' for this query.",
-        "and 먼저: false and false = false → false or true = true. 결과 = 1. 어떤 교체도 false 안 나옴 → 답 'N'."),
+        "Apply 'and' first, then 'or'.  Step through the three tokens.",
+        "'and' 먼저 처리 후 'or'. 토큰 셋을 차례대로."),
       answer: 1,
     },
   ];
@@ -135,25 +147,14 @@ false and true or true
 export function makeLogicalCh2(E, lang = "py") {
   const sections = getLogicalMoosSections(E);
   return [
-    {
-      type: "reveal",
-      narr: t(E,
-        "Plan: write evaluate(tokens) using the OR-of-(AND chains) idea. Per query, try both replacement values.",
-        "계획: OR-of-(AND 체인) 으로 evaluate(tokens) 작성. 쿼리마다 두 교체값 시도."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-
     ...sections.map((sec, i) => ({
       type: "reveal",
       narr: i === 0
-        ? t(E, "Build the brute solution step by step.", "완전탐색 솔루션을 단계별로 작성.")
+        ? t(E,
+            "Build evaluate(tokens) using the OR-of-(AND chains) idea, then per query try both replacement values.  Sections build it one piece at a time.",
+            "OR-of-(AND 체인) 으로 evaluate(tokens) 작성, 쿼리마다 두 교체값 시도. 아래 섹션이 한 단락씩 쌓아요.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
-
   ];
 }

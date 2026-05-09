@@ -18,8 +18,10 @@ export const SOLUTION_CODE = [
   "    P = int(data[p]); p += 1   # period budget",
   "    nouns, tverbs, iverbs, conjs = [], [], [], []",
   "    for _ in range(N):",
-  "        word = data[p]; p += 1",
-  "        ty = data[p]; p += 1",
+  "        word = data[p]",
+  "        p += 1",
+  "        ty = data[p]",
+  "        p += 1",
   "        if ty[0] == 'n': nouns.append(word)",
   "        elif ty[0] == 't': tverbs.append(word)",
   "        elif ty[0] == 'i': iverbs.append(word)",
@@ -75,6 +77,16 @@ export function makeMooLangCh1(E) {
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcdd"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Moo Language</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #2</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E, "Given word counts and period/comma budgets, output the maximum total words usable.", "단어 개수와 마침표·쉼표 한도가 주어졌을 때, 사용 가능한 단어 수의 최댓값을 출력해요.")}
+            </div>
           </div>
 
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -160,7 +172,7 @@ export function makeMooLangCh1(E) {
       narr: t(E,
         "3 nouns, 0 transitive verbs, 2 intransitive verbs.\nWe can only make Type 1 sentences.\nEach needs 1 noun + 1 intransitive verb.\nLimited by 2 intransitive verbs = 2 sentences = 4 words!", "명사 3개, 타동사 0개, 자동사 2개. 유형 1 문장만 가능. 각각 명사 1개 + 자동사 1개. 자동사 2개로 제한 = 2문장 = 4단어!"),
       question: t(E, "3 nouns, 2 intransitive, 0 transitive → max words?", "\uba85\uc0ac 3, \uc790\ub3d9\uc0ac 2, \ud0c0\ub3d9\uc0ac 0 \u2192 \ucd5c\ub300 \ub2e8\uc5b4?"),
-      hint: t(E, "Only Type 1 possible: 2 sentences x 2 words each", "\uc720\ud615 1\ub9cc \uac00\ub2a5: 2\ubb38\uc7a5 x 2\ub2e8\uc5b4"),
+      hint: t(E, "No transitive verbs \u2192 only Type 1. The bottleneck is the smaller of nouns / intransitive verbs.", "\ud0c0\ub3d9\uc0ac 0 \u2192 \uc720\ud615 1\ub9cc \uac00\ub2a5. \uba85\uc0ac\uc640 \uc790\ub3d9\uc0ac \uc911 \ub354 \uc801\uc740 \ucabd\uc774 \ubcd1\ubaa9\uc774\uc5d0\uc694."),
       answer: 4,
     },
     {

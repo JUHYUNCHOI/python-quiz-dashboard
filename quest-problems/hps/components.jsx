@@ -89,7 +89,7 @@ export function AlgorithmReasoningTour({ E }) {
                     "함께 생각해 보기 — 한 단계씩")}
       />
 
-      <NarrativePanel minHeight={170}>
+      <NarrativePanel minHeight={170} stepKey={ts.safe}>
         {cur.kind === "input" && (
           <QA q={t(E, "First — how do we read the input?",
                      "먼저 — 입력은 어떻게 받지?")}>
@@ -449,7 +449,7 @@ export function ChartReadingTour({ E }) {
         </div>
       </div>
 
-      <NarrativePanel minHeight={84}>
+      <NarrativePanel minHeight={84} stepKey={ts.safe}>
         <div style={{ fontSize: 14, lineHeight: 1.65 }}>{cur.narr}</div>
       </NarrativePanel>
 
@@ -523,47 +523,51 @@ export function HpsCaseSimulator({ E }) {
     </div>
   );
 
-  // Vertical card per Bessie candidate — clearer than a sparse horizontal row.
-  // Reads as: "If Bessie plays card X: vs Elsie's e1? ... vs Elsie's e2? ... → verdict"
+  // Compact column per Bessie candidate.  Three of these sit side-by-side
+  // so the student sees ALL three card tests at once — natural comparison.
+  // Vertical stack made the panel tall enough that the bottom verdict
+  // disappeared off-screen; horizontal columns drop the panel height to
+  // ~1/3 of the previous layout.
   const TryRow = ({ c, beats1, beats2, beatsBoth, e1, e2 }) => (
     <div style={{
-      padding: "10px 12px", borderRadius: 8,
+      flex: 1, minWidth: 0,
+      padding: "10px 8px", borderRadius: 8,
       background: beatsBoth ? "#dcfce7" : "#f9fafb",
-      border: `1px solid ${beatsBoth ? "#16a34a" : "#e5e7eb"}`,
+      border: `1.5px solid ${beatsBoth ? "#16a34a" : "#e5e7eb"}`,
+      display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
     }}>
       {/* Header: which Bessie card we're testing */}
-      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, fontSize: 12, fontWeight: 600, color: "#5b21b6" }}>
-        {t(E, "If Bessie plays ", "Bessie 가 ")}<Card n={c} size={20} />{t(E, ":", " 를 내면:")}
+      <div style={{ fontSize: 11.5, fontWeight: 600, color: "#5b21b6", textAlign: "center" }}>
+        {t(E, "Bessie: ", "Bessie: ")}
       </div>
-      {/* Two sub-checks: vs each Elsie card */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 3, paddingLeft: 6, marginBottom: 6 }}>
-        <div style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}>
-          <span style={{ color: "#9ca3af" }}>•</span>
-          {t(E, "vs Elsie's ", "Elsie 의 ")}<Card n={e1} size={16} />?{" "}
+      <Card n={c} size={26} />
+      {/* Two sub-checks stacked vertically inside the column */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11.5, alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          {t(E, "vs ", "vs ")}<Card n={e1} size={14} />
           {beats1
-            ? <span style={{ color: "#16a34a", fontWeight: 600 }}>✓ {t(E, "beats", "이김")}</span>
-            : <span style={{ color: "#dc2626", fontWeight: 600 }}>✗ {t(E, "doesn't beat", "못 이김")}</span>}
+            ? <span style={{ color: "#16a34a", fontWeight: 700 }}>✓</span>
+            : <span style={{ color: "#dc2626", fontWeight: 700 }}>✗</span>}
         </div>
-        <div style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}>
-          <span style={{ color: "#9ca3af" }}>•</span>
-          {t(E, "vs Elsie's ", "Elsie 의 ")}<Card n={e2} size={16} />?{" "}
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          {t(E, "vs ", "vs ")}<Card n={e2} size={14} />
           {beats2
-            ? <span style={{ color: "#16a34a", fontWeight: 600 }}>✓ {t(E, "beats", "이김")}</span>
-            : <span style={{ color: "#dc2626", fontWeight: 600 }}>✗ {t(E, "doesn't beat", "못 이김")}</span>}
+            ? <span style={{ color: "#16a34a", fontWeight: 700 }}>✓</span>
+            : <span style={{ color: "#dc2626", fontWeight: 700 }}>✗</span>}
         </div>
       </div>
       {/* Verdict pill */}
       <div style={{
-        fontSize: 11.5, fontWeight: 700,
-        padding: "4px 10px", borderRadius: 999,
+        fontSize: 11, fontWeight: 700,
+        padding: "3px 8px", borderRadius: 999,
         background: beatsBoth ? "#16a34a" : "#fee2e2",
         color: beatsBoth ? "#fff" : "#7f1d1d",
         border: beatsBoth ? "none" : "1.5px solid #fca5a5",
-        display: "inline-block",
+        textAlign: "center",
       }}>
         {beatsBoth
-          ? t(E, "✓ beats both!", "✓ 둘 다 이김!")
-          : t(E, "✗ doesn't beat both", "✗ 둘 다 이기진 못함")}
+          ? t(E, "✓ both!", "✓ 둘 다!")
+          : t(E, "✗ not both", "✗ 둘 다 X")}
       </div>
     </div>
   );
@@ -651,7 +655,7 @@ export function HpsCaseSimulator({ E }) {
         </div>
       )}
 
-      <NarrativePanel minHeight={150}>
+      <NarrativePanel minHeight={150} stepKey={ts.safe}>
         {s.kind === "setup" && (
           <>
             <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6, fontSize: 14 }}>
@@ -702,7 +706,7 @@ export function HpsCaseSimulator({ E }) {
                 🔍 {t(E, "Try every card: does it beat BOTH of Elsie's?",
                           "카드 하나씩 시험: Elsie 두 카드 다 이기는지?")}
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <div style={{ display: "flex", flexDirection: "row", gap: 8, alignItems: "stretch" }}>
                 {curEval.map((r) => (
                   <TryRow key={r.c} c={r.c} beats1={r.beats1} beats2={r.beats2} beatsBoth={r.beatsBoth} e1={e1} e2={e2} />
                 ))}
@@ -1663,8 +1667,13 @@ export function getHpsSections(E) {
       why: [
         t(E, "Same input + table code as before; only the per-query inner loop changed (nested → single). Total work: O(M · N) instead of O(M · N²).",
             "입력 + 표 만들기는 그대로; 쿼리당 안쪽 루프만 바뀜 (이중 → 단일). 총 작업 O(M · N²) → O(M · N)."),
-        t(E, "C++ adds ios::sync_with_stdio(false) for faster I/O — helpful when M reaches 3000.",
-            "C++ 에는 ios::sync_with_stdio(false) 추가 — M 이 3000 까지 가니까 I/O 빠르게."),
+      ],
+      // C++-only tip — shown via the language-specific block of the
+      // section renderer.  Used to leak into `why` (visible to Python
+      // students too), which made no sense.
+      cppOnly: [
+        t(E, "Add ios::sync_with_stdio(false) for faster I/O — helpful when M reaches 3000.",
+            "ios::sync_with_stdio(false) 추가 — M 이 3000 까지 가니까 I/O 빠르게."),
       ],
     },
     {
@@ -1799,7 +1808,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

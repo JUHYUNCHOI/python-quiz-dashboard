@@ -37,6 +37,16 @@ export function makeMcc21SimpleMathCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P5</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E, "Read P, then run the matching operation across the array A.", "P 를 읽고, 배열 A 에 해당하는 연산을 실행해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -99,7 +109,7 @@ export function makeMcc21SimpleMathCh1(E) {
       question: t(E,
         "A = [2, 3, 4], P = 1. Sum = ?",
         "A = [2, 3, 4], P = 1. 합 = ?"),
-      hint: t(E, "2 + 3 + 4 = 9", "2 + 3 + 4 = 9"),
+      hint: t(E, "Add the three values together.", "세 값을 모두 더해요."),
       answer: 9,
     },
   ];
@@ -108,20 +118,10 @@ export function makeMcc21SimpleMathCh1(E) {
 export function makeMcc21SimpleMathCh2(E, lang = "py") {
   return [
     {
-      type: "reveal",
-      narr: t(E,
-        "Branch on P: P=1 sum (use sum()); P=2 product (multiply through); P=3 sequential floor division (start with A[0], floor-divide by each subsequent value).",
-        "P 로 분기: P=1 합 (sum() 사용); P=2 곱 (모두 곱); P=3 순차 정수 나눗셈 (A[0] 시작, 이어지는 값으로 정수 나눗셈)."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Branch on P: P=1 sum (use sum()); P=2 product (multiply through); P=3 sequential floor division (start with A[0], floor-divide by each subsequent value). Sections build it one piece at a time.",
+        "P 로 분기: P=1 합 (sum() 사용); P=2 곱 (모두 곱); P=3 순차 정수 나눗셈 (A[0] 시작, 이어지는 값으로 정수 나눗셈). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc21SimpleMathSections(E),
     },
   ];

@@ -83,6 +83,18 @@ export function makeInterviewCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output every counter Bessie (the last cow) could possibly end up at, in increasing order.",
+                "줄의 마지막 소 Bessie 가 갈 수 있는 모든 카운터 번호를 오름차순으로 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -277,8 +289,12 @@ export function makeInterviewCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "N=6, K=3, times=[2,3,1,4,2,1].\nHeap after first 3: [(2,0),(3,1),(1,2)].\nPop min (1,2), cow4→C3, push (1+4=5,2).\nPop min (2,0), cow5→C1, push (2+2=4,0).\nPop min (3,1), cow6→C2.\nBessie goes to counter...?", "N=6, K=3, times=[2,3,1,4,2,1].\n처음 3마리 힙: [(2,0),(3,1),(1,2)].\nPop (1,2), 소4→C3, push (5,2).\nPop (2,0), 소5→C1, push (4,0).\nPop (3,1), 소6→C2.\nBessie는 카운터...?"),
+        "Walk the heap simulation yourself for N=6, K=3, times=[2,3,1,4,2,1].  Which counter ends up free first when Bessie arrives?",
+        "N=6, K=3, times=[2,3,1,4,2,1] 의 힙 시뮬을 직접 따라가. Bessie 차례에 가장 먼저 비는 카운터는?"),
       question: t(E, "Bessie (cow 6) goes to counter #? (1-indexed)", "Bessie(소6)는 카운터 몇번? (1부터)"),
+      hint: t(E,
+        "After each cow, the counter she went to gets her finish time pushed back into the heap.",
+        "소를 보낼 때마다 그 카운터의 새 종료 시간이 힙에 다시 들어가."),
       answer: 2,
     },
   ];
@@ -290,16 +306,7 @@ export function makeInterviewCh2(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeInterviewCh3(E, lang = "py") {
   return [
-    {
-      type: "reveal",
-      narr: t(E,
-        "The key insight: we need to find not just ONE counter for Bessie, but ALL counters that finish at the same minimum time when it's Bessie's turn.", "핵심: Bessie 차례에 최소 종료 시간인 카운터를 하나가 아니라 전부 찾아야 해요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
+    // (key insight — find ALL counters with the same minimum finish time — explained inline in the progressive code below.)
     {
       type: "quiz",
       narr: t(E,

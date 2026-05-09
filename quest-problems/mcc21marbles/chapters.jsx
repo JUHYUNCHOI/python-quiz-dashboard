@@ -33,6 +33,16 @@ export function makeMcc21MarblesCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E, "Find the minimum number of single-marble moves to make every box hold the same count.", "구슬을 한 개씩 옮겨 모든 상자를 같은 개수로 만드는 최소 이동 횟수를 구해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -90,7 +100,7 @@ export function makeMcc21MarblesCh1(E) {
       question: t(E,
         "Boxes = [5, 3]. Min moves to make equal?",
         "상자 = [5, 3]. 같게 만드는 최소 이동?"),
-      hint: t(E, "Move 1 marble from first to second box.", "첫 번째에서 두 번째 상자로 구슬 1개 이동."),
+      hint: t(E, "Each box should end at 4. How far is each box from 4?", "각 상자가 4가 되어야 해요. 각 상자는 4에서 얼마나 떨어져 있나요?"),
       answer: 1,
     },
   ];
@@ -99,20 +109,10 @@ export function makeMcc21MarblesCh1(E) {
 export function makeMcc21MarblesCh2(E, lang = "py") {
   return [
     {
-      type: "reveal",
-      narr: t(E,
-        "Each box should end at target = total/N. Walk left to right tracking the running prefix imbalance — each unit of imbalance must be moved across that boundary, contributing 1 to the answer.",
-        "각 상자가 target = total/N 이 되어야 해요. 왼쪽부터 오른쪽으로 누적 불균형을 추적 — 단위 불균형 각각이 그 경계를 건너야 하므로 답에 1 기여."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Each box should end at target = total/N. Walk left to right tracking the running prefix imbalance — each unit of imbalance must be moved across that boundary, contributing 1 to the answer. Sections build it one piece at a time.",
+        "각 상자가 target = total/N 이 되어야 해요. 왼쪽부터 오른쪽으로 누적 불균형을 추적 — 단위 불균형 각각이 그 경계를 건너야 하므로 답에 1 기여. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc21MarblesSections(E),
     },
   ];

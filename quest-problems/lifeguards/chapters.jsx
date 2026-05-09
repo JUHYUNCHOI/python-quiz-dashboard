@@ -69,6 +69,18 @@ export function makeLifeguardsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2018 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the maximum total covered time after firing exactly one lifeguard.",
+                "정확히 1명을 해고한 뒤 얻을 수 있는 최대 커버 시간을 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -139,8 +151,8 @@ export function makeLifeguardsCh1(E) {
         "Shifts [1,5] and [3,8]. Max coverage after firing one?",
         "근무 [1,5]와 [3,8]. 한 명 해고 후 최대 커버리지?"),
       hint: t(E,
-        "Fire guard 1: coverage [3,8] = 5. Fire guard 2: coverage [1,5] = 4. Max = 5.",
-        "1번 해고: 커버리지 [3,8] = 5. 2번 해고: 커버리지 [1,5] = 4. 최대 = 5."),
+        "Try firing each guard one at a time and compare remaining coverage.",
+        "한 명씩 해고해 보면서 남은 커버리지를 비교해 봐."),
       answer: 5,
     },
   ];
@@ -152,23 +164,12 @@ export function makeLifeguardsCh1(E) {
    --------------------------------------------------------------- */
 export function makeLifeguardsCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Brute force: try firing each guard one at a time. For each removal, compute the union coverage of remaining shifts using a sweep line. Take the maximum coverage across all N choices.",
-        "완전 탐색: 인명구조원을 하나씩 해고. 매 시도마다 남은 근무의 합집합 커버 시간을 스위프 라인으로 계산. N 가지 시도 중 최댓값."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Brute force: fire each guard one at a time. For each removal, compute union coverage of remaining shifts via sweep line. Take the max across all N choices. Sections build it one piece at a time.",
+        "완전 탐색: 인명구조원을 한 명씩 해고. 매 시도마다 남은 근무의 합집합 커버를 스위프 라인으로 계산. N 가지 중 최댓값. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getLifeguardsSections(E),
     },
   ];

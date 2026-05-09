@@ -90,21 +90,14 @@ export function AstralComposite({ E }) {
         </div>
       )}
 
-      <div style={{ marginTop: 8, fontSize: 11, color: C.dim, lineHeight: 1.55 }}>
-        {t(E,
-          "Stars travel from cell (r, c) to (r+B, c+A) between photos. Cells along this direction form 'chains' — the per-chain DP determines min stars (or -1 if no consistent assignment).",
-          "별은 두 사진 사이에 (r, c) → (r+B, c+A) 로 이동. 이 방향 위 칸들이 '체인' 을 형성 — 체인별 DP 가 최소 별 (또는 -1) 결정.")}
-      </div>
+      {/* Caption removed — chain visualization (border highlight + chain cells list) is self-evident
+          once the student clicks a cell.  Concept (chain = (r,c)→(r+B,c+A)) lives in the chapter narration. */}
     </div>
   );
 }
 
 export function AstralSim({ E }) { return <AstralComposite E={E} />; }
-export function AstralRunner({ E }) {
-  return <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-    {t(E, "Use the simulator above.", "위 시뮬레이터 사용.")}
-  </div>;
-}
+export function AstralRunner() { return null; }
 
 /* ════════════════════════════════════════════════════════════════════
    Progressive code: 5 sections.
@@ -113,14 +106,18 @@ export function AstralRunner({ E }) {
 const AST_S1_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "p = 0",
-  "T = int(data[p]); p += 1",
+  "T = int(data[p])",
+  "p += 1",
   "for _ in range(T):",
-  "    N = int(data[p]); p += 1",
-  "    A = int(data[p]); p += 1",
-  "    B = int(data[p]); p += 1",
-  "    grid = [data[p + r].decode() for r in range(N)]",
+  "    N = int(data[p])",
+  "    p += 1",
+  "    A = int(data[p])",
+  "    p += 1",
+  "    B = int(data[p])",
+  "    p += 1",
+  "    grid = [data[p + r] for r in range(N)]",
   "    p += N",
   "    # solve below",
 ];
@@ -282,16 +279,20 @@ const AST_FULL_PY = [
   "import sys",
   "",
   "def main():",
-  "    data = sys.stdin.buffer.read().split()",
+  "    data = sys.stdin.read().split()",
   "    p = 0",
-  "    T = int(data[p]); p += 1",
+  "    T = int(data[p])",
+  "    p += 1",
   "    out = []",
   "    INF = float('inf')",
   "    for _ in range(T):",
-  "        N = int(data[p]); p += 1",
-  "        A = int(data[p]); p += 1",
-  "        B = int(data[p]); p += 1",
-  "        grid = [data[p + r].decode() for r in range(N)]",
+  "        N = int(data[p])",
+  "        p += 1",
+  "        A = int(data[p])",
+  "        p += 1",
+  "        B = int(data[p])",
+  "        p += 1",
+  "        grid = [data[p + r] for r in range(N)]",
   "        p += N",
   "",
   "        # Special case A = B = 0",
@@ -529,7 +530,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

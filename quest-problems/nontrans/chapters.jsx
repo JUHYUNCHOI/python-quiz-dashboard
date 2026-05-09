@@ -56,6 +56,18 @@ export function makeNonTransCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Print the four faces of die C that beats A while losing to B, or 'no' if no such C exists.",
+                "B 에게 지면서 A 를 이기는 주사위 C 의 네 면을 출력해요. 그런 C 가 없으면 'no'.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -127,8 +139,8 @@ export function makeNonTransCh1(E) {
         "A=[1,2,3,4], B=[1,2,3,4]. Does A beat B? (1=yes, 0=no)",
         "A=[1,2,3,4], B=[1,2,3,4]. A가 B를 이겨? (1=예, 0=아니오)"),
       hint: t(E,
-        "Equal dice have equal win/loss counts. Neither beats the other.",
-        "같은 주사위는 승/패 수가 같아요. 누구도 이기지 못해요."),
+        "Compare a > b vs a < b counts across all 16 pairs. Is one strictly greater?",
+        "16 쌍에서 a > b 와 a < b 개수를 비교해봐요. 한쪽이 더 많아?"),
       answer: 0,
     },
   ];
@@ -140,23 +152,12 @@ export function makeNonTransCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeNonTransCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Each die face is in 1..10, so we can brute-force C: 4 sorted faces give only C(10+3, 4) = 715 unique dice. For each candidate, count win pairs B vs C and C vs A — keep one where both directions exceed half.",
-        "각 면이 1..10 이므로 C 를 완전탐색: 정렬된 4 면은 C(10+3, 4) = 715 가지. 각 후보마다 B vs C, C vs A 의 승 쌍을 세고, 양방향 모두 절반을 넘는 C 를 채택."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Each die face is in 1..10, so we can brute-force C: 4 sorted faces give only C(10+3, 4) = 715 unique dice. For each candidate, count win pairs B vs C and C vs A — keep one where both directions exceed half. Sections build it one piece at a time.",
+        "각 면이 1..10 이므로 C 를 완전탐색: 정렬된 4 면은 C(10+3, 4) = 715 가지. 각 후보마다 B vs C, C vs A 의 승 쌍을 세고, 양방향 모두 절반을 넘는 C 를 채택. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getNonTransSections(E),
     },
   ];

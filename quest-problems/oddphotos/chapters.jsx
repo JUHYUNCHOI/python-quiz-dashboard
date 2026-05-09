@@ -69,6 +69,18 @@ export function makeOddPhotosCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the maximum number of consecutive groups whose sums alternate EVEN, ODD, EVEN, ODD, ...",
+                "합이 EVEN, ODD, EVEN, ODD ... 로 번갈아 가는 연속 묶음의 최대 개수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -137,8 +149,8 @@ export function makeOddPhotosCh1(E) {
         "IDs = [2,4,6,8]. Maximum groups?",
         "IDs = [2,4,6,8]. 최대 그룹 수?"),
       hint: t(E,
-        "All even, so group 1 = even sum works. Group 2 needs odd sum = impossible. Answer: 1.",
-        "모두 짝수, 그룹 1 = 짝수 합 가능. 그룹 2 = 홀수 합 불가. 답: 1."),
+        "Group 2 needs an odd sum — can you build that from only even numbers?",
+        "2번 그룹은 홀수 합이 필요해 — 짝수만으로 만들 수 있을까?"),
       answer: 1,
     },
   ];
@@ -150,23 +162,12 @@ export function makeOddPhotosCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeOddPhotosCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Group sums alternate EVEN, ODD, EVEN, ODD, ... An EVEN-sum group needs 1 even cow OR 2 odd cows. An ODD-sum group needs 1 odd cow. Greedily count groups using available odd/even counts.",
-        "그룹 합이 EVEN, ODD, EVEN, ODD, ... 로 번갈아 가요. EVEN 그룹은 짝수 1마리 OR 홀수 2마리 필요. ODD 그룹은 홀수 1마리 필요. 보유한 홀/짝 개수로 그리디하게 그룹 수 세기."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Group sums alternate EVEN, ODD, EVEN, ODD, ... EVEN-sum group needs 1 even cow OR 2 odd cows. ODD-sum group needs 1 odd cow. Greedily count groups from available odd/even counts. Sections build it one piece at a time.",
+        "그룹 합이 EVEN, ODD, EVEN, ODD ... 번갈아. EVEN 그룹은 짝수 1 마리 OR 홀수 2 마리. ODD 그룹은 홀수 1 마리. 보유 홀/짝 개수로 그리디하게 카운트. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getOddPhotosSections(E),
     },
   ];

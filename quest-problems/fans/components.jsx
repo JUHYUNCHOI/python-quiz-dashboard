@@ -631,22 +631,8 @@ export function SeparatorBuildViz({ E }) {
         {E ? "Why 2×rest + 1?" : "왜 2×rest + 1 일까?"}
       </div>
 
-      {/* Core idea */}
-      <div style={{
-        background: "#fffbeb", borderRadius: 10, padding: "8px 10px",
-        border: "1px solid #fbbf24", marginBottom: 10, textAlign: "center",
-      }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", lineHeight: 1.7 }}>
-          {E
-            ? "Each separator lets you place one more dominant stick!"
-            : "분리자 1개를 넣으면 → 가장 많은 색 1개를 더 놓을 수 있어!"}
-        </div>
-        <div style={{
-          fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: C.dim, marginTop: 4,
-        }}>
-          {E ? "separator = any non-dominant stick" : "분리자 = 가장 많은 색이 아닌 모든 막대"}
-        </div>
-      </div>
+      {/* No "core idea" prose box — the visual rows below (▶ button growing the row)
+          carry the meaning: each new separator lets you place one more dominant stick. */}
 
       {/* Visual row */}
       <div style={{
@@ -712,16 +698,15 @@ export function SeparatorBuildViz({ E }) {
         })}
       </div>
 
-      {/* The insight */}
+      {/* Formula card — visual.  Pattern table above already shows 2·n+1 growing,
+          this just stamps the canonical formula at the bottom for anchoring. */}
       {sepCount >= 2 && (
         <div style={{
           background: "#ecfdf5", borderRadius: 8, padding: "6px 10px",
           border: "1.5px solid #6ee7b7", marginBottom: 8, textAlign: "center",
-          fontSize: 11, fontWeight: 700, color: "#059669", lineHeight: 1.6,
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#15803d",
         }}>
-          {E
-            ? `Pattern: rest separators → can hold ${sepCount + 1} dominant → total = 2×rest+1. But if we have MORE sticks than that, we just use all of them! So: answer = min(total, 2×rest+1)`
-            : `패턴: 분리자 ${sepCount}개 → 최대색 ${sepCount + 1}개 배치 → 총 2×${sepCount}+1 = ${totalSticks}개. 하지만 전체가 이보다 적으면 그냥 전부 쓰면 돼! 그래서: 답 = min(total, 2×rest+1)`}
+          answer = min(total,&nbsp;<span style={{ color: "#dc2626" }}>2×rest</span>+1)
         </div>
       )}
 

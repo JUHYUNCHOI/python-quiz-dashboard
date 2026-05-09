@@ -39,6 +39,16 @@ export function makeMcc21MenuCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P6</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E, "Build the menu tree from add-child operations, then count every item across all nesting levels.", "추가 연산으로 메뉴 트리를 만들고, 모든 중첩 레벨의 항목 수를 세요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -97,7 +107,7 @@ export function makeMcc21MenuCh1(E) {
       question: t(E,
         "2 items + 2*2 sub-items = ?",
         "2개 항목 + 2*2개 하위 = ?"),
-      hint: t(E, "2 + 4 = 6", "2 + 4 = 6"),
+      hint: t(E, "2 top + (2×2) sub-items.", "상위 2개 + (2×2)개 하위."),
       answer: 6,
     },
   ];
@@ -106,20 +116,10 @@ export function makeMcc21MenuCh1(E) {
 export function makeMcc21MenuCh2(E, lang = "py") {
   return [
     {
-      type: "reveal",
-      narr: t(E,
-        "Apply each \"add child X under parent Y\" operation by appending X to children[Y]. After all ops, do a DFS from the root counting nodes.",
-        "각 \"부모 Y 아래에 자식 X 추가\" 연산을 children[Y] 에 X 추가로 적용. 모든 연산 후 루트에서 DFS 로 노드 카운트."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Apply each \"add child X under parent Y\" operation by appending X to children[Y]. After all ops, do a DFS from the root counting nodes. Sections build it one piece at a time.",
+        "각 \"부모 Y 아래에 자식 X 추가\" 연산을 children[Y] 에 X 추가로 적용. 모든 연산 후 루트에서 DFS 로 노드 카운트. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc21MenuSections(E),
     },
   ];

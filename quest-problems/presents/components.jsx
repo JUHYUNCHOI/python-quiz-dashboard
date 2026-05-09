@@ -71,16 +71,18 @@ export function PresentsSim({ E }) {
         })}
       </div>
 
-      <div style={{ background: "#ede9fe", border: `1.5px solid ${A}`, borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.6, textAlign: "center" }}>
-        {isFind ? (
-          targetIdx >= 0 ? (
-            t(E, `Found ${target} at index ${targetIdx} → ${targetIdx} presents above must be removed.`,
-                  `${target}을 인덱스 ${targetIdx}에서 찾음 → 위에 ${targetIdx}개 제거 필요.`)
-          ) : t(E, "Not found?!", "못 찾음?!")
-        ) : (
-          t(E, `Output: ${targetIdx >= 0 ? targetIdx : "?"}. Then pop ${target} from stack.`,
-                `출력: ${targetIdx >= 0 ? targetIdx : "?"}. ${target}을 스택에서 제거.`)
-        )}
+      {/* Output card — just the answer for this query, large.  No prose. */}
+      <div style={{
+        display: "flex", justifyContent: "center", alignItems: "center", gap: 8,
+        background: "#ede9fe", border: `1.5px solid ${A}`, borderRadius: 10,
+        padding: "8px 14px", marginBottom: 10, fontFamily: "'JetBrains Mono',monospace",
+      }}>
+        <span style={{ fontSize: 11, color: A, fontWeight: 700 }}>
+          {t(E, "output", "출력")}
+        </span>
+        <span style={{ fontSize: 24, fontWeight: 800, color: targetIdx >= 0 ? "#5b21b6" : "#dc2626" }}>
+          {targetIdx >= 0 ? targetIdx : "✗"}
+        </span>
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
@@ -156,10 +158,6 @@ export function PresentsRunner({ E }) {
           {results.map((r, i) => (<div key={i}>{r.error ? <span style={{ color: "#dc2626" }}>{r.error}</span> : r}</div>))}
         </div>
       )}
-      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
-        <div style={{ fontWeight: 600, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
-        <div>O(N · Q) — fine for Bronze sizes.</div>
-      </div>
     </div>
   );
 }
@@ -354,7 +352,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

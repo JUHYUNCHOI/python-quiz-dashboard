@@ -46,6 +46,16 @@ export function makeMcc19DitcoinCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P4</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E, "Print the maximum total money you can earn over D days.", "D 일 동안 벌 수 있는 최대 총액을 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -107,8 +117,8 @@ export function makeMcc19DitcoinCh1(E) {
         "Prices [3, 1, 5]. Max profit = ?",
         "가격 [3, 1, 5]. 최대 수익 = ?"),
       hint: t(E,
-        "Hold 3 coins, sell all at price 5. Profit = 3 × 5 = 15.",
-        "코인 3개 보유, 전부 가격 5에 판매. 수익 = 3 × 5 = 15."),
+        "Hold all 3 coins, then sell them together on the day with the highest price. Multiply count × that price.",
+        "코인 3개를 모았다가, 가격이 가장 높은 날에 전부 함께 팔아요. 개수 × 그 날 가격."),
       answer: 15,
     },
   ];
@@ -120,23 +130,12 @@ export function makeMcc19DitcoinCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc19DitcoinCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "On day i, the BEST future price is suffix_max[i]. Sell all accumulated coins on day i if today's price equals suffix_max[i] (no better day ahead). Compute suffix_max once, then greedy.",
-        "i 일에 미래 최고 가격은 suffix_max[i]. 오늘 가격이 suffix_max[i] 와 같으면 (앞으로 더 좋은 날 없음) 보유 코인 전부 매도. suffix_max 한 번 계산 후 그리디."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "On day i, the BEST future price is suffix_max[i]. Sell all accumulated coins on day i if today's price equals suffix_max[i] (no better day ahead). Compute suffix_max once, then greedy. Sections build it one piece at a time.",
+        "i 일에 미래 최고 가격은 suffix_max[i]. 오늘 가격이 suffix_max[i] 와 같으면 (앞으로 더 좋은 날 없음) 보유 코인 전부 매도. suffix_max 한 번 계산 후 그리디. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc19DitcoinSections(E),
     },
   ];

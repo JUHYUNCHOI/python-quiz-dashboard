@@ -31,6 +31,16 @@ export function makeMcc21CarrotsCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E, "Count triples of baskets whose carrot sum divides evenly by D.", "당근 합이 D 로 나누어떨어지는 바구니 세 개 조합 개수를 세요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -90,7 +100,7 @@ export function makeMcc21CarrotsCh1(E) {
       question: t(E,
         "Baskets = [3, 6, 9]. What is their sum?",
         "바구니 = [3, 6, 9]. 합은 얼마예요?"),
-      hint: t(E, "3 + 6 + 9 = ?", "3 + 6 + 9 = ?"),
+      hint: t(E, "Add the three numbers together.", "세 숫자를 모두 더해요."),
       answer: 18,
     },
   ];
@@ -99,20 +109,10 @@ export function makeMcc21CarrotsCh1(E) {
 export function makeMcc21CarrotsCh2(E, lang = "py") {
   return [
     {
-      type: "reveal",
-      narr: t(E,
-        "Triple nested loops over all distinct triples (i, j, k). For each, check if c[i] + c[j] + c[k] is divisible by D. Count valid triples.",
-        "모든 서로 다른 삼중조합 (i, j, k) 에 대해 삼중 반복. c[i] + c[j] + c[k] 가 D 로 나누어떨어지는지 확인. 유효한 조합의 수 카운트."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Triple nested loops over all distinct triples (i, j, k). For each, check if c[i] + c[j] + c[k] is divisible by D. Count valid triples. Sections build it one piece at a time.",
+        "모든 서로 다른 삼중조합 (i, j, k) 에 대해 삼중 반복. c[i] + c[j] + c[k] 가 D 로 나누어떨어지는지 확인. 유효한 조합의 수 카운트. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc21CarrotsSections(E),
     },
   ];

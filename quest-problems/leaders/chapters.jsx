@@ -9,7 +9,8 @@ export const SOLUTION_CODE = [
   "",
   "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
+  "N = int(data[p])",
+  "p += 1",
   "s = data[p]; p += 1                  # breed string (no spaces), e.g. 'GHHG'",
   "arr = [int(data[p + i]) for i in range(N)]",
   "arr = [x - 1 for x in arr]           # 1-indexed end → 0-indexed end",
@@ -72,6 +73,18 @@ export function makeLeadersCh1(E) {
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc51"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Leaders</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #1</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of valid (G-leader, H-leader) pairs.",
+                "유효한 (G리더, H리더) 쌍의 수를 출력.")}
+            </div>
           </div>
 
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -148,8 +161,8 @@ export function makeLeadersCh1(E) {
         "breeds=\"GH\", E=[2,2]. How many valid leader pairs?",
         "breeds=\"GH\", E=[2,2]. 유효한 리더 쌍은 몇 개?"),
       hint: t(E,
-        "G leader (cow 0) covers up to position 1. H leader (cow 1) covers up to position 1. Cow 0's range includes cow 1. That's 1 valid pair.",
-        "G 리더 (소 0)는 위치 1까지 커버. H 리더 (소 1)는 위치 1까지 커버. 소 0의 범위가 소 1을 포함해요. 유효한 쌍 1개."),
+        "Try each (G, H) pair and check whether condition (a) or (b) holds.",
+        "각 (G, H) 쌍을 시도하면서 (a) 또는 (b) 조건이 성립하는지 확인해 봐."),
       answer: 1,
     },
   ];
@@ -161,24 +174,12 @@ export function makeLeadersCh1(E) {
    =============================================================== */
 export function makeLeadersCh2(E, lang = "py") {
   return [
-    // 2-1: Light intro — code first.
-    {
-      type: "reveal",
-      narr: t(E,
-        "Editorial trick: in any valid leader pair, AT LEAST one of the two leaders is the EARLIEST cow of its breed AND has visited all of its breed.",
-        "Editorial 한 줄: 유효한 리더 쌍에는, 둘 중 적어도 하나는 자기 품종의 가장 앞 소이고 그 품종 전체를 방문해야 함."),
-      content: (
-        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-          {t(E,
-            "So scan once to find earliest/latest of each breed.  Then: (Case A) eG is true G-leader → pair with H cows whose range reaches eG.  (Case B) symmetric.  (Special) eG and eH together as the pair.  Code section by section.",
-            "한 번 스캔으로 각 품종의 가장 앞/뒤 위치 찾기. 그 다음: (A) eG 가 진짜 G-리더 → 범위가 eG 까지 닿는 H 소들과 쌍. (B) 대칭. (특수) eG, eH 가 함께 쌍. 코드 한 단락씩.")}
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Editorial trick: in any valid leader pair, at least one of the two is the EARLIEST cow of its breed AND has visited all of its breed. Scan once for earliest/latest, then count Case A (eG is true G-leader) + Case B (symmetric) + special (eG & eH together). Sections build it one piece at a time.",
+        "Editorial 한 줄: 유효한 쌍에는 둘 중 적어도 하나가 자기 품종의 가장 앞 소이면서 그 품종 전체를 방문해야 함. 한 번 스캔으로 각 품종의 앞/뒤 찾고, Case A (eG 가 진짜 G-리더) + Case B (대칭) + 특수 (eG, eH 함께) 카운트. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getLeadersSections(E),
     },
   ];

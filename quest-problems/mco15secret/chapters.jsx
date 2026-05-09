@@ -45,6 +45,16 @@ export function makeSecretCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P5</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E, "Decide if string B is a circular rotation of string A — print YES or NO.", "문자열 B 가 A 의 회전인지 판별 — YES 또는 NO 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -95,8 +105,8 @@ export function makeSecretCh1(E) {
         "[1,2,3] and [2,3,1]: same rotation? (1=Yes, 0=No)",
         "[1,2,3]과 [2,3,1]: 같은 회전? (1=Yes, 0=No)"),
       hint: t(E,
-        "Shift [1,2,3] left by 1: [2,3,1]. Yes, it's a rotation!",
-        "[1,2,3]을 왼쪽으로 1칸 이동: [2,3,1]. 맞아, 회전이에요!"),
+        "Try shifting [1,2,3] left by 1 step — what do you get? Compare with [2,3,1].",
+        "[1,2,3]을 왼쪽으로 1칸 밀면 무엇이 될까? [2,3,1]과 비교해봐요."),
       answer: 1,
     },
   ];
@@ -108,23 +118,12 @@ export function makeSecretCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeSecretCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Classic trick: B is a circular rotation of A iff B is a substring of A+A. So just check 'B in A+A'.",
-        "고전 트릭: B 가 A 의 순환 회전 iff B 가 A+A 의 부분 문자열. 그러므로 'B in A+A' 만 확인."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Classic trick: B is a circular rotation of A iff B is a substring of A+A. So just check 'B in A+A'. Sections build it one piece at a time.",
+        "고전 트릭: B 가 A 의 순환 회전 iff B 가 A+A 의 부분 문자열. 그러므로 'B in A+A' 만 확인. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getSecretSections(E),
     },
   ];

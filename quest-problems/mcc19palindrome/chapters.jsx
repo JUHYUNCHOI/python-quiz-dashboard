@@ -63,6 +63,16 @@ export function makeMcc19PalCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P6</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E, "Print the N-th base-K palindrome (in base K).", "K 진법의 N 번째 회문수를 K 진법으로 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -124,8 +134,8 @@ export function makeMcc19PalCh1(E) {
         "10th palindrome in base 10 = ?",
         "10진법 10번째 회문 = ?"),
       hint: t(E,
-        "After 1-9 (9 palindromes), the next is 11.",
-        "1-9 (9개 회문) 다음은 11."),
+        "1-9 are 9 palindromes. What's the smallest 2-digit palindrome?",
+        "1-9 가 9 개 회문. 그 다음으로 가장 작은 2 자리 회문은?"),
       answer: 11,
     },
   ];
@@ -137,23 +147,12 @@ export function makeMcc19PalCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc19PalCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Count palindromes per length L: (K−1) × K^(ceil(L/2)−1). Find the L containing the N-th by subtracting counts. Inside that length, decode the first ⌈L/2⌉ digits in base K, then mirror to form the full palindrome.",
-        "길이 L 의 회문 개수: (K−1) × K^(ceil(L/2)−1). 누적 개수를 빼가며 N 번째가 들어있는 L 을 찾기. 그 안에서 앞 ⌈L/2⌉ 자리를 K 진법으로 디코드, 거울 대칭으로 회문 완성."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Count palindromes per length L: (K−1) × K^(ceil(L/2)−1). Find the L containing the N-th by subtracting counts. Inside that length, decode the first ⌈L/2⌉ digits in base K, then mirror to form the full palindrome. Sections build it one piece at a time.",
+        "길이 L 의 회문 개수: (K−1) × K^(ceil(L/2)−1). 누적 개수를 빼가며 N 번째가 들어있는 L 을 찾기. 그 안에서 앞 ⌈L/2⌉ 자리를 K 진법으로 디코드, 거울 대칭으로 회문 완성. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc19PalSections(E),
     },
   ];

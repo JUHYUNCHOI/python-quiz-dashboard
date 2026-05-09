@@ -15,7 +15,19 @@ export function makeAstralCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🔭</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#4f46e5" }}>Astral Superposition</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO January 2025 Bronze #1</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #1</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eef2ff", border: "1.5px solid #4f46e5", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#312e81", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#312e81", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum stars in the original photo that match the composite — or -1 if no consistent original exists.",
+                "합친 그림과 일치하는 원본 사진의 최소 별 수를 출력 — 일관된 원본이 없으면 -1.")}
+            </div>
           </div>
 
           <div style={{ background: "#eef2ff", border: "1px solid #a5b4fc", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -159,24 +171,13 @@ GGG`}
 
 export function makeAstralCh2(E, lang = "py") {
   return [
-    /* 2-1 — Plan: chains + DP */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Approach: each photo-1 star at (r, c) can only travel to (r+B, c+A). So cells form CHAINS along the (B, A) direction. Each cell on a chain feeds the next. Per-chain DP picks min stars.",
-        "접근: 사진 1 의 별 (r, c) 은 (r+B, c+A) 로만 이동. 그래서 칸들이 (B, A) 방향으로 체인을 형성. 체인 위 각 칸이 다음 칸을 먹임. 체인별 DP 로 최소 별 결정."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-
-    /* 2-2..2-N — sections */
+    /* 2-1..2-N — sections directly. */
     ...getAstralSections(E).map((sec, i) => ({
       type: "reveal",
       narr: i === 0
-        ? t(E, "Build the solution step by step.", "단계별로 솔루션 작성.")
+        ? t(E,
+            "Stars travel (r, c) → (r+B, c+A), so cells form CHAINS along (B, A).  Per-chain DP picks min stars (or -1 if no consistent assignment).  Sections build it one piece at a time.",
+            "별이 (r, c) → (r+B, c+A) 로 이동하니 칸들이 (B, A) 방향 체인을 형성. 체인별 DP 로 최소 별 (또는 -1) 결정. 아래 섹션이 한 단락씩 쌓아요.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),

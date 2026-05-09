@@ -162,6 +162,18 @@ export function makeWordProcCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Print the resulting document — each line at most K letters of words, words separated by single spaces.",
+                "결과 문서를 출력 — 각 줄은 단어 글자 수 합이 최대 K, 단어 사이는 공백 1 개.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -332,13 +344,14 @@ export function makeWordProcCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Try it!\nWords [\"aaa\", \"bb\", \"cc\", \"d\"], K=4.\naaa(3) fits.\n3+bb(2)=5>4, new line.\nbb(2)+cc(2)=4<=4.\n4+d(1)=5>4, new line.\n3 lines!", "해봐요!\n단어 [\"aaa\", \"bb\", \"cc\", \"d\"], K=4.\naaa(3) 들어감.\n3+bb(2)=5>4, 새 줄.\nbb(2)+cc(2)=4<=4.\n4+d(1)=5>4, 새 줄.\n3줄!"),
+        "Walk through the words yourself, packing each into the current line until it overflows.",
+        "단어를 직접 따라가며 — 현재 줄에 넣다가 K 를 넘기면 새 줄."),
       question: t(E,
         "Words [\"aaa\",\"bb\",\"cc\",\"d\"], K=4. How many output lines?",
         "단어 [\"aaa\",\"bb\",\"cc\",\"d\"], K=4. 출력 줄 수?"),
       hint: t(E,
-        "Line 1: aaa(3). Line 2: bb+cc(4). Line 3: d(1). → 3 lines",
-        "1줄: aaa(3). 2줄: bb+cc(4). 3줄: d(1). → 3줄"),
+        "Try adding each word in order. When the running sum would pass K, start a new line.",
+        "단어를 순서대로 더해. 합이 K 를 넘기면 새 줄."),
       answer: 3,
     },
   ];
@@ -454,13 +467,14 @@ export function makeWordProcCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Words [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4.\naa(2)+bb(2)=4.\n4+cc(2)=6>4.\ncc(2)+dd(2)=4.\n4+ee(2)=6>4.\nLines: [aa,bb], [cc,dd], [ee].\n3 lines!", "단어 [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4.\naa(2)+bb(2)=4.\n4+cc(2)=6>4.\ncc(2)+dd(2)=4.\n4+ee(2)=6>4.\n줄: [aa,bb], [cc,dd], [ee].\n3줄!"),
+        "Try this packing yourself.  How many words fit per line, and how many lines total?",
+        "이 묶음 직접 — 한 줄에 몇 단어, 총 몇 줄?"),
       question: t(E,
         "Words [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4. How many lines?",
         "단어 [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4. 몇 줄?"),
       hint: t(E,
-        "[aa,bb]=4, [cc,dd]=4, [ee]=2. Three lines!",
-        "[aa,bb]=4, [cc,dd]=4, [ee]=2. 3줄!"),
+        "Each word is 2 letters; line cap is 4.  How many fit per line?",
+        "단어마다 2 글자, 줄 한도 4. 한 줄에 몇 개 들어가?"),
       answer: 3,
     },
   ];

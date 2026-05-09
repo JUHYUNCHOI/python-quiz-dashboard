@@ -54,6 +54,18 @@ export function makeMilkMeasCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ede9fe", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of times the displayed leader set changes over all events.",
+                "전체 기간 동안 표시되는 리더 집합이 바뀐 횟수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -124,8 +136,8 @@ export function makeMilkMeasCh1(E) {
         "1 change: Bessie +5. Total display changes?",
         "변경 1개: Bessie +5. 총 디스플레이 변경 횟수?"),
       hint: t(E,
-        "Leaders go from {all} to {Bessie}. That's 1 change.",
-        "리더가 {전부}에서 {Bessie}로. 1번 변경."),
+        "Compare the leader set before and after the event.",
+        "이벤트 전과 후의 리더 집합을 비교해 봐."),
       answer: 1,
     },
   ];
@@ -137,23 +149,12 @@ export function makeMilkMeasCh1(E) {
    --------------------------------------------------------------- */
 export function makeMilkMeasCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sort events by day. Process each event in order: update that cow's output, recompute the leader set (cows tied for max). Compare with previous leader set — count changes.",
-        "이벤트를 날짜순 정렬. 순서대로 처리: 해당 소의 생산량 갱신, 리더 집합 (최대 값과 동률 소들) 재계산. 이전 리더 집합과 비교 — 변화 카운트."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort events by day. Process each in order — update the cow's output, recompute leader set, compare with previous, count changes. Sections build it one piece at a time.",
+        "이벤트를 날짜순 정렬. 순서대로 — 생산량 갱신, 리더 집합 재계산, 이전과 비교, 변화 카운트. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMilkMeasSections(E),
     },
   ];

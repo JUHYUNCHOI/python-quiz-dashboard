@@ -193,7 +193,7 @@ export function DismantleSimulator({ E }) {
       </div>
 
       {/* Step explanation panel */}
-      <NarrativePanel minHeight={88}>
+      <NarrativePanel minHeight={88} stepKey={ts.safe}>
         {s.sub === "init" && (
           <>
             <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
@@ -379,11 +379,8 @@ export function PermSim({ E }) {
           </div>
         </div>
       )}
-      {(!step.tried || step.tried.length === 0) && cur === 0 && (
-        <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: "#92400e", textAlign: "center", fontWeight: 700 }}>
-          {t(E, `Start = ${start}. Click → to step through the greedy.`, `시작값 = ${start}. → 눌러서 그리디를 한 단계씩 따라가봐.`)}
-        </div>
-      )}
+      {/* Initial-state instruction box removed — the start-value chips already show
+          which start is selected, and the → button is right there. */}
 
       {/* 결과 박스 (마지막 단계) */}
       {cur === trace.length - 1 && (
@@ -553,12 +550,6 @@ export function PermRunner({ E }) {
         </div>
       )}
 
-      {/* 복잡도 추정 */}
-      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
-        <div style={{ fontWeight: 600, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
-        <div>O(N²) per test case · C++ ≈ 10⁸ ops/sec</div>
-        <div>N = 100 → ~0.1ms · N = 1,000 → ~10ms · N = 10,000 → ~1s · N = 100,000 → ~100s</div>
-      </div>
     </div>
   );
 }
@@ -765,7 +756,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

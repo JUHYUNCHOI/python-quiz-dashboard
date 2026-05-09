@@ -171,5 +171,17 @@ export const PROBLEM_LOADERS: Record<string, AppLoader> = {
   'wordproc': () => import('@/quest-problems/wordproc/WordProcApp'),
   'xorstring': () => import('@/quest-problems/xorstring/XorStringApp'),
   'yearcow': () => import('@/quest-problems/yearcow/YearCowApp'),
+  // USACO 2026 First Contest, Bronze
+  'chipxchg': () => import('@/quest-problems/chipxchg/ChipXchgApp'),
+  'cowsplits': () => import('@/quest-problems/cowsplits/CowSplitsApp'),
+  'photoshoot25': () => import('@/quest-problems/photoshoot25/Photoshoot25App'),
+  // USACO 2026 Second Contest, Bronze
+  'mooin4': () => import('@/quest-problems/mooin4/Mooin4App'),
+  'moohunt': () => import('@/quest-problems/moohunt/MooHuntApp'),
+  'buymilk': () => import('@/quest-problems/buymilk/BuyMilkApp'),
+  // USACO 2026 Third Contest, Bronze
+  'makedistinct': () => import('@/quest-problems/makedistinct/MakeDistinctApp'),
+  'strangefn': () => import('@/quest-problems/strangefn/StrangeFnApp'),
+  'swaptowin': () => import('@/quest-problems/swaptowin/SwapToWinApp'),
 }
 

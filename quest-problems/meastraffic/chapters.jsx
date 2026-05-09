@@ -72,6 +72,16 @@ export function makeTrafficCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E, "Find the tightest [min, max] car flow at the highway's start AND end.", "고속도로 시작과 끝의 가장 좁은 [min, max] 차량 유량을 찾아요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -137,8 +147,8 @@ export function makeTrafficCh1(E) {
         "Flow range [10, 20]. Maximum?",
         "유량 범위 [10, 20]. 최대값?"),
       hint: t(E,
-        "The upper bound of [10, 20] is 20.",
-        "[10, 20]의 상한은 20."),
+        "[low, high] — which side is the maximum?",
+        "[low, high] — 최대값은 어느 쪽?"),
       answer: 20,
     },
   ];
@@ -150,23 +160,12 @@ export function makeTrafficCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeTrafficCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Constraint propagation in two passes. Forward: start with [0, ∞), apply on-ramps (+k) and off-ramps (−k clamped), intersect with each sensor range to get end-flow range. Backward: reverse the whole thing.",
-        "두 번 패스로 제약 전파. 순방향: [0, ∞) 에서 시작, 진입로 (+k) 와 출구로 (−k, 0 으로 클램프) 적용, 각 센서 범위와 교차해 끝 유량 범위. 역방향: 반대로."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Constraint propagation in two passes. Forward: start with [0, ∞), apply on-ramps (+k) and off-ramps (−k clamped), intersect with each sensor range to get end-flow range. Backward: reverse the whole thing. Sections build it one piece at a time.",
+        "두 번 패스로 제약 전파. 순방향: [0, ∞) 에서 시작, 진입로 (+k) 와 출구로 (−k, 0 으로 클램프) 적용, 각 센서 범위와 교차해 끝 유량 범위. 역방향: 반대로. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMeasTrafficSections(E),
     },
   ];

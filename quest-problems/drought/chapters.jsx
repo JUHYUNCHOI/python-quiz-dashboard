@@ -63,6 +63,18 @@ export function makeDroughtCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum operations to bring every cow's hunger to 0, or -1 if impossible.",
+                "모든 소의 배고픔을 0 으로 만드는 최소 연산 수 (불가능하면 -1) 를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -138,8 +150,8 @@ export function makeDroughtCh1(E) {
         "a = [2, 2]. Min operations to make all equal?",
         "a = [2, 2]. 모두 같게 만드는 최소 연산 횟수?"),
       hint: t(E,
-        "Feed pair (0,1) twice: [2,2] -> [1,1] -> [0,0]. Answer: 2.",
-        "쌍(0,1)에 2번 먹이: [2,2] -> [1,1] -> [0,0]. 답: 2."),
+        "Feed the pair step by step until both reach 0 — count operations.",
+        "쌍에 한 단계씩 먹이 줘 둘 다 0 이 될 때까지 — 연산 수를 세 봐."),
       answer: 2,
     },
   ];
@@ -151,23 +163,12 @@ export function makeDroughtCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeDroughtCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "For each candidate final value t (0 to min(a)), compute d[i] = a[i] − t. Walk left to right: pair (i, i+1) MUST be fed exactly d[i] times to zero a[i], so d[i+1] -= d[i]. If any d goes negative or last d ≠ 0, this t is impossible.",
-        "가능한 최종 값 t (0 부터 min(a)) 마다 d[i] = a[i] − t 계산. 왼쪽부터 오른쪽: 쌍 (i, i+1) 은 a[i] 를 0 으로 만들기 위해 정확히 d[i] 번 먹여야 하니 d[i+1] -= d[i]. d 가 음수가 되거나 마지막 d ≠ 0 이면 그 t 는 불가능."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "For each candidate final value t (0..min(a)), compute d[i] = a[i] − t and walk left to right — pair (i, i+1) must be fed exactly d[i] times, so d[i+1] -= d[i]. Negative d or last d ≠ 0 means that t is impossible. Sections build it one piece at a time.",
+        "가능한 최종 값 t (0 ~ min(a)) 마다 d[i] = a[i] − t 계산하고 왼쪽부터 오른쪽 — 쌍 (i, i+1) 은 정확히 d[i] 번 먹여야 하니 d[i+1] -= d[i]. d 가 음수거나 마지막 d ≠ 0 이면 그 t 는 불가능. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getDroughtSections(E),
     },
   ];

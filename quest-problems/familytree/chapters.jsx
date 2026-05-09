@@ -67,6 +67,18 @@ export function makeFamilyTreeCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the family relationship between cows X and Y from the tree.",
+                "가계도에서 두 소 X 와 Y 의 가족 관계를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -129,8 +141,8 @@ export function makeFamilyTreeCh1(E) {
         "Generations between mother and child?",
         "어미와 자식 사이 세대 수?"),
       hint: t(E,
-        "Direct parent-child = 1 generation.",
-        "직접 부모-자식 = 1세대."),
+        "Re-read the relationship — how many family levels separate parent and child?",
+        "관계를 다시 읽어 봐 — 부모와 자식 사이는 몇 세대?"),
       answer: 1,
     },
   ];
@@ -142,23 +154,12 @@ export function makeFamilyTreeCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeFamilyTreeCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Build A's ancestor chain (with depths) in a dictionary. Walk up from B; the first ancestor we hit that's also in A's chain is the LCA. Compare depths to decide: ancestor / descendant / siblings / cousins / unrelated.",
-        "A 의 조상 체인을 깊이와 함께 딕셔너리에 저장. B 에서 위로 올라가며 처음 만나는 A 의 조상이 LCA. 깊이를 비교해서 결정: 조상 / 후손 / 자매 / 사촌 / 무관."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Build A's ancestor chain with depths. Walk up from B — first ancestor that's also in A's chain is the LCA. Compare depths to decide: ancestor / descendant / siblings / cousins / unrelated. Sections build it one piece at a time.",
+        "A 의 조상 체인 (깊이 포함). B 에서 위로 — 처음 만나는 A 의 조상이 LCA. 깊이 비교로 분류: 조상 / 후손 / 자매 / 사촌 / 무관. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getFamilyTreeSections(E),
     },
   ];

@@ -42,7 +42,19 @@ export function makeGenomicsCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\uddec"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Bovine Genomics</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #2</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2017 Bronze #2</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of distinguishing positions — columns where spotted-cow letters and plain-cow letters never overlap.",
+                "구별 가능한 위치의 개수 — 점박이와 무늬 없는 소들의 글자가 한 번도 겹치지 않는 칸의 수 — 를 출력.")}
+            </div>
           </div>
 
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -106,8 +118,8 @@ export function makeGenomicsCh1(E) {
         "How many valid positions if only 1 position has no overlap?",
         "겹침 없는 위치가 1개뿐이면 유효한 위치 수는?"),
       hint: t(E,
-        "We simply count positions with no overlap. 1 position = answer is 1.",
-        "겹침 없는 위치를 단순히 세면 돼요. 1개 위치 = 답은 1."),
+        "Just count distinguishing positions directly.",
+        "구별 가능한 위치를 직접 세면 돼."),
       answer: 1,
     },
   ];
@@ -119,23 +131,12 @@ export function makeGenomicsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeGenomicsCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "For each genome column j (1..M), gather the SET of letters used by spotted cows there and the SET used by plain cows. If the two sets DON'T intersect, that column distinguishes the breeds.",
-        "각 유전체 열 j (1..M) 마다 점박이 소들이 그 자리에서 쓴 글자의 집합과 무늬 없는 소들의 집합을 모아요. 두 집합이 교집합이 없으면 그 열이 구별 가능."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "For each column j (1..M): gather the SET of letters from spotted cows and the SET from plain cows. If the two sets don't intersect, that column distinguishes the breeds. Sections build it one piece at a time.",
+        "각 열 j (1..M) 마다: 점박이 소들의 글자 집합과 무늬 없는 소들의 글자 집합을 모아요. 두 집합이 안 겹치면 그 열은 구별 가능. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBovGenomicsSections(E),
     },
   ];

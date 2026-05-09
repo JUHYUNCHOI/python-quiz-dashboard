@@ -11,11 +11,14 @@ export const SOLUTION_CODE = [
   "def solve():",
   "    input_data = sys.stdin.read().split()",
   "    idx = 0",
-  "    R = int(input_data[idx]); idx += 1",
-  "    C_ = int(input_data[idx]); idx += 1",
+  "    R = int(input_data[idx])",
+  "    idx += 1",
+  "    C_ = int(input_data[idx])",
+  "    idx += 1",
   "    grid = []",
   "    for i in range(R):",
-  "        grid.append(input_data[idx]); idx += 1",
+  "        grid.append(input_data[idx])",
+  "        idx += 1",
   "",
   "    # BFS from (0,0) to (R-1,C-1)",
   "    dist = [[-1]*C_ for _ in range(R)]",
@@ -52,6 +55,16 @@ export function makeMcc22MazeCh1(E) {
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udff0"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Maze</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P3</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E, "Find the shortest path through the maze from top-left to bottom-right.", "미로의 좌상단에서 우하단까지 최단 경로를 찾아요.")}
+            </div>
           </div>
 
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -115,8 +128,8 @@ export function makeMcc22MazeCh1(E) {
         "2x2 empty maze, (0,0) to (1,1). Shortest path = ? steps",
         "2x2 빈 미로, (0,0)에서 (1,1). 최단 경로 = ? 단계"),
       hint: t(E,
-        "Right then down, or down then right. 2 moves!",
-        "오른쪽 후 아래, 또는 아래 후 오른쪽. 2번 이동!"),
+        "Count the moves on one path: right, down. How many?",
+        "한 경로의 이동을 세어봐요: 오른쪽, 아래. 몇 번?"),
       answer: 2,
     },
   ];
@@ -128,23 +141,12 @@ export function makeMcc22MazeCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22MazeCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "BFS from (0, 0). For each cell, explore 4 open neighbors and record the distance. Stop when reaching (R−1, C−1).",
-        "(0, 0) 에서 BFS. 각 칸에서 열린 4 이웃을 탐색하고 거리 기록. (R−1, C−1) 에 도달하면 중단."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "BFS from (0, 0). For each cell, explore 4 open neighbors and record the distance. Stop when reaching (R−1, C−1). Sections build it one piece at a time.",
+        "(0, 0) 에서 BFS. 각 칸에서 열린 4 이웃을 탐색하고 거리 기록. (R−1, C−1) 에 도달하면 중단. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc22MazeSections(E),
     },
   ];

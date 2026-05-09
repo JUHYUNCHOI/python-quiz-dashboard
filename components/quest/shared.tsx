@@ -287,7 +287,7 @@ export function highlight(line: string, lang: "py" | "cpp" = "py"): React.ReactN
       parts.push(<span key={`${m.index}t`} style={{ color: "#e2e8f0" }}>{tok}</span>)
   }
   if (comment)
-    parts.push(<span key="cmt" style={{ color: "#6b7280", fontStyle: "italic" }}>{comment}</span>)
+    parts.push(<span key="cmt" style={{ color: "#8b949e", fontStyle: "italic" }}>{comment}</span>)
   return parts
 }
 

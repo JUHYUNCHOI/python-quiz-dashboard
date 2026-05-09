@@ -46,6 +46,18 @@ export function makeAcow3Ch1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2021 Bronze #3</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Print the maximum number of cow friendships that can be formed through shared adjacent grass cells.",
+                "공유된 인접 풀 칸을 통해 만들 수 있는 소들 사이 우정의 최대 개수를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -130,23 +142,12 @@ export function makeAcow3Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeAcow3Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Greedy: scan grass cells left-to-right, top-to-bottom. For each grass cell, find pairs of cows it could connect (its 2 adjacent cow cells). If both cows are still 'free' (haven't been paired yet), match them and increment count.",
-        "그리디: 풀 칸을 왼→오, 위→아래로 스캔. 각 풀 칸마다 연결할 수 있는 소 쌍 (인접한 2 마리 소) 을 찾아요. 두 소가 아직 짝이 없으면 매칭하고 카운트 증가."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Greedy: scan grass cells left-to-right, top-to-bottom. For each grass cell, find pairs of cows it could connect (its 2 adjacent cow cells). If both cows are still 'free' (haven't been paired yet), match them and increment count. Sections build it one piece at a time.",
+        "그리디: 풀 칸을 왼→오, 위→아래로 스캔. 각 풀 칸마다 연결할 수 있는 소 쌍 (인접한 2 마리 소) 을 찾아요. 두 소가 아직 짝이 없으면 매칭하고 카운트 증가. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getAcowdemia3Sections(E),
     },
   ];

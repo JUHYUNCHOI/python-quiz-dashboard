@@ -52,6 +52,17 @@ export function makeFebCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #1</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E, "Print 3 lines: count of distinct excitement values, then min, then max — across all F-assignments.",
+                    "3 줄을 출력해요: 모든 F 결정 방식에서 나오는 서로 다른 흥분도 값의 개수, 그 다음 최솟값, 최댓값.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -189,7 +200,7 @@ BEEF`}
       narr: t(E,
         "Now try this: for the string 'BF', F can be B or E.\nIf F→B: 'BB' has 1 match.\nIf F→E: 'BE' has 0 matches.\nHow many distinct excitement levels?", "이제 해보자: 문자열 'BF'에서 F는 B 또는 E. F→B: 'BB'는 1쌍. F→E: 'BE'는 0쌍. 서로 다른 흥분도는 몇 개?"),
       question: t(E, "How many possible excitement levels for 'BF'?", "'BF'의 가능한 흥분도 개수는?"),
-      hint: t(E, "F→B gives 1, F→E gives 0. Two distinct values!", "F→B는 1, F→E는 0. 서로 다른 값 2개!"),
+      hint: t(E, "Compute excitement for each F choice, then count how many distinct values appear.", "각 F 선택의 흥분도를 구하고, 서로 다른 값이 몇 개인지 세어봐요."),
       answer: 2,
     },
     {
@@ -218,23 +229,11 @@ BEEF`}
    ═══════════════════════════════════════════════════════════════ */
 export function makeFebCh2(E, lang = "py") {
   return [
-    // 2-1: Light intro — code first.
-    {
-      type: "reveal",
-      narr: t(E,
-        "Each F is independently B or E — so 2^|F| total assignments.  Just enumerate them with a bitmask, count adjacent same-pairs each time, collect into a set.  Then print count, min, max.",
-        "F 마다 B 또는 E 독립 — 총 2^|F| 조합. bitmask 로 순회하면서 인접 같은 쌍 세기, set 에 모으기. 그 다음 개수/최솟/최댓 출력."),
-      content: (
-        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-          {t(E,
-            "|F| can be up to ~20 in Bronze, so 2^|F| brute is fine.  Code section by section.",
-            "Bronze 에선 |F| 가 ~20 이하라 2^|F| 브루트로 충분. 코드 한 단락씩.")}
-        </div>),
-    },
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Each F is independently B or E — so 2^|F| total assignments. Enumerate them with a bitmask, count adjacent same-pairs each time, collect into a set, then print count/min/max. |F| ≤ ~20 in Bronze so brute is fine. Sections build it one piece at a time.",
+        "F 마다 B 또는 E 독립 — 총 2^|F| 조합. bitmask 로 순회하면서 인접 같은 쌍 세기, set 에 모으기, 그 다음 개수/최솟/최댓 출력. Bronze 에선 |F| 가 ~20 이하라 브루트로 충분. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getFeb23Sections(E),
     },
     {

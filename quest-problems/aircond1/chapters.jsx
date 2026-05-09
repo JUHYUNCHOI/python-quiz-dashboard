@@ -66,6 +66,18 @@ export function makeAirCond1Ch1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2021 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Print the minimum number of range +1/−1 commands to turn p[] into q[].",
+                "p[] 를 q[] 로 만드는 최소 구간 +1/−1 명령 횟수를 출력해요.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -130,8 +142,8 @@ export function makeAirCond1Ch1(E) {
         "diff = [3, 3, 3]. Min commands?",
         "diff = [3, 3, 3]. 최소 명령 수?"),
       hint: t(E,
-        "All stalls need +3. One command covers all 3 stalls. Repeat 3 times.",
-        "모든 칸이 +3 필요. 하나의 명령이 3칸 모두 커버. 3번 반복."),
+        "All stalls share the same height. Can one wide stroke help, and how often must it repeat?",
+        "모든 칸의 높이가 같아요. 넓은 선 하나가 도움이 될까, 그리고 몇 번 반복해야 할까?"),
       answer: 3,
     },
   ];
@@ -143,23 +155,12 @@ export function makeAirCond1Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeAirCond1Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Compute d[i] = q[i] − p[i] (the change needed). The minimum number of range +1/−1 commands equals the sum of POSITIVE jumps in d (extended with 0 at both ends).",
-        "d[i] = q[i] − p[i] (필요한 변화) 를 계산. 최소 범위 +1/−1 명령 수는 d (양 끝에 0 추가) 에서 양의 점프의 합과 같아요."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Compute d[i] = q[i] − p[i] (the change needed). The minimum number of range +1/−1 commands equals the sum of POSITIVE jumps in d (extended with 0 at both ends). Sections build it one piece at a time.",
+        "d[i] = q[i] − p[i] (필요한 변화) 를 계산. 최소 범위 +1/−1 명령 수는 d (양 끝에 0 추가) 에서 양의 점프의 합과 같아요. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getAirCond1Sections(E),
     },
   ];

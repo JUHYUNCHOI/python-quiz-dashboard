@@ -43,6 +43,18 @@ export function makeInnovationCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P3</div>
           </div>
 
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the maximum number of tasks completable within H hours total.",
+                "\ucd1d H \uc2dc\uac04 \uc548\uc5d0 \uc644\ub8cc \uac00\ub2a5\ud55c \uc791\uc5c5\uc758 \ucd5c\ub300 \uac1c\uc218\ub97c \ucd9c\ub825.")}
+            </div>
+          </div>
+
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -84,7 +96,8 @@ export function makeInnovationCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "5 tasks need [2,3,1,4,2] hours.\nYou have 8 hours.\nSort: [1,2,2,3,4].\nTake 1+2+2+3=8.\nHow many tasks?", "5개 작업이 [2,3,1,4,2]시간 필요해요. 8시간 있어요. 정렬: [1,2,2,3,4]. 1+2+2+3=8. 몇 개?"),
+        "5 tasks need [2, 3, 1, 4, 2] hours, 8 hours total.  Which tasks should you pick to fit the most?",
+        "5 개 작업 [2, 3, 1, 4, 2] 시간, 총 8 시간. 가장 많이 끝내려면 어떤 작업들?"),
       question: t(E,
         "Tasks=[2,3,1,4,2], H=8. Max tasks completed?",
         "작업=[2,3,1,4,2], H=8. 최대 완료 작업 수?"),
@@ -103,13 +116,14 @@ export function makeInnovationCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Try it! Tasks=[2,3,1,4,2], H=8. How many tasks can you complete?", "해보자! 작업=[2,3,1,4,2], H=8. 몇 개 작업을 완료할 수 있어요?"),
+        "Pick tasks yourself for [2, 3, 1, 4, 2], H = 8.  How many fit?",
+        "[2, 3, 1, 4, 2], H = 8 — 직접 골라봐. 몇 개 들어가?"),
       question: t(E,
         "Tasks=[2,3,1,4,2], H=8. Enter max tasks:",
         "작업=[2,3,1,4,2], H=8. 최대 작업 수 입력:"),
       hint: t(E,
-        "Sort ascending: [1,2,2,3,4]. Greedily pick: 1+2+2+3=8.",
-        "오름차순 정렬: [1,2,2,3,4]. 그리디: 1+2+2+3=8."),
+        "If you pick the shortest tasks first, how many fit before time runs out?",
+        "가장 짧은 작업부터 골랐을 때, 시간 다 떨어지기 전까지 몇 개 들어가?"),
       answer: 4,
     },
   ];
@@ -121,23 +135,12 @@ export function makeInnovationCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeInnovationCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "To complete the MOST tasks within H hours, do the SHORTEST ones first. Sort by duration, then accumulate; count how many fit before the running total exceeds H.",
-        "H 시간 안에 가장 많은 작업을 완료하려면 가장 짧은 것부터. 소요시간 순 정렬, 누적; 누적 합이 H 를 넘기 전까지 들어가는 개수."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code — straight in.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort durations ascending, accumulate, count how many fit before the running total exceeds H.  Sections build it one piece at a time.",
+        "소요시간 오름차순 정렬, 누적, 합이 H 를 넘기 전까지 들어가는 개수. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getInnovationSections(E),
     },
   ];

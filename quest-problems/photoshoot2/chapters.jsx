@@ -52,6 +52,18 @@ export function makePhoto2Ch1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #2</div>
           </div>
 
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of move-left operations to transform the current order into the target.",
+                "현재 순서를 목표 순서로 만드는 데 필요한 최소 왼쪽-이동 동작 수를 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -112,8 +124,8 @@ export function makePhoto2Ch1(E) {
         "[2,1] -> [1,2]. Min moves?",
         "[2,1] -> [1,2]. 최소 이동?"),
       hint: t(E,
-        "Only cow 1 is out of place. Move it left once.",
-        "소 1만 위치가 틀려. 왼쪽으로 한 번 이동."),
+        "Count cows that are out of place relative to the target.",
+        "목표와 비교했을 때 자리가 틀린 소를 세어 봐."),
       answer: 1,
     },
   ];
@@ -125,23 +137,12 @@ export function makePhoto2Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePhoto2Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Map each cow to her index in the CURRENT order. Walk the TARGET order left to right; track the running max of current-positions seen. Each cow whose current-position < max must be MOVED LEFT.",
-        "각 소를 현재 순서의 인덱스로 매핑. 목표 순서를 왼→오 순회하며 본 현재-위치의 누적 최댓값 추적. 현재-위치 < 최댓값 인 소는 왼쪽으로 옮겨야 함."),
-      content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
-        </div>),
-
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Map each cow to her index in the CURRENT order. Walk the TARGET order; track running max of current-positions. Each cow with current-position < max must be moved left. Sections build it one piece at a time.",
+        "각 소를 현재 인덱스로 매핑. 목표 순서를 따라가며 본 현재-위치의 최댓값 추적. 현재-위치 < 최댓값 이면 왼쪽으로 이동해야 함. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getPhotoshoot2Sections(E),
     },
   ];

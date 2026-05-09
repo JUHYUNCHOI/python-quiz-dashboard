@@ -100,27 +100,24 @@ export function ReflectionGrid({ E }) {
         );
       })()}
 
-      <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px", textAlign: "center", fontSize: 13, fontWeight: 600, color: "#15803d" }}>
-        ✅ {t(E, "Total flips needed: ", "총 뒤집기: ")}<span style={{ fontSize: 18 }}>{total}</span>
+      <div style={{
+        display: "flex", justifyContent: "center", alignItems: "baseline", gap: 8,
+        background: "#dcfce7", border: "1.5px solid #86efac", borderRadius: 10,
+        padding: "8px 14px", fontFamily: "'JetBrains Mono',monospace",
+      }}>
+        <span style={{ fontSize: 11, color: "#15803d", fontWeight: 700 }}>
+          {t(E, "flips", "뒤집기")}
+        </span>
+        <span style={{ fontSize: 24, fontWeight: 800, color: "#15803d" }}>{total}</span>
       </div>
-      <div style={{ marginTop: 8, fontSize: 11, color: C.dim, lineHeight: 1.55 }}>
-        {t(E,
-          "Click any cell to toggle. Its 3 mirror twins (highlighted) form one group of 4 — min flips = min(painted, 4 − painted).",
-          "아무 칸이나 클릭해서 토글. 거울 짝 3 개 (강조됨) 가 한 그룹 — 최소 뒤집기 = min(칠함, 4 − 칠함).")}
-      </div>
+      {/* Caption removed — clicking cells + mirror highlight + flip count above are self-evident. */}
     </div>
   );
 }
 
 /* Stub legacy exports (App.jsx still imports these names). */
 export function ReflectionSim({ E }) { return <ReflectionGrid E={E} />; }
-export function ReflectionRunner({ E }) {
-  return (
-    <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-      {t(E, "Use the simulator above.", "위 시뮬레이터 사용.")}
-    </div>
-  );
-}
+export function ReflectionRunner() { return null; }
 
 /* ════════════════════════════════════════════════════════════════════
    Progressive code: brute (1–4) → smart incremental (5–6).
@@ -129,11 +126,13 @@ export function ReflectionRunner({ E }) {
 const RFL_S1_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "U = int(data[p]); p += 1",
-  "grid = [list(data[p + r].decode()) for r in range(N)]",
+  "N = int(data[p])",
+  "p += 1",
+  "U = int(data[p])",
+  "p += 1",
+  "grid = [list(data[p + r]) for r in range(N)]",
   "p += N",
 ];
 const RFL_S1_CPP = [
@@ -202,11 +201,13 @@ const RFL_S3_CPP = [
 const RFL_BRUTE_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "U = int(data[p]); p += 1",
-  "grid = [list(data[p + r].decode()) for r in range(N)]",
+  "N = int(data[p])",
+  "p += 1",
+  "U = int(data[p])",
+  "p += 1",
+  "grid = [list(data[p + r]) for r in range(N)]",
   "p += N",
   "",
   "def total_flips():",
@@ -228,8 +229,10 @@ const RFL_BRUTE_PY = [
   "",
   "print(total_flips())",
   "for _ in range(U):",
-  "    r = int(data[p]); p += 1",
-  "    c = int(data[p]); p += 1",
+  "    r = int(data[p])",
+  "    p += 1",
+  "    c = int(data[p])",
+  "    p += 1",
   "    grid[r-1][c-1] = '.' if grid[r-1][c-1] == '#' else '#'",
   "    print(total_flips())   # rebuild after every update — slow!",
 ];
@@ -257,11 +260,13 @@ const RFL_BRUTE_CPP = [
 const RFL_FAST_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "p = 0",
-  "N = int(data[p]); p += 1",
-  "U = int(data[p]); p += 1",
-  "grid = [list(data[p + r].decode()) for r in range(N)]",
+  "N = int(data[p])",
+  "p += 1",
+  "U = int(data[p])",
+  "p += 1",
+  "grid = [list(data[p + r]) for r in range(N)]",
   "p += N",
   "",
   "# Build group_count[(rg, cg)] once",
@@ -286,8 +291,10 @@ const RFL_FAST_PY = [
   "",
   "out = [str(total)]",
   "for _ in range(U):",
-  "    r = int(data[p]); p += 1",
-  "    c = int(data[p]); p += 1",
+  "    r = int(data[p])",
+  "    p += 1",
+  "    c = int(data[p])",
+  "    p += 1",
   "    rg = min(r, N + 1 - r)",
   "    cg = min(c, N + 1 - c)",
   "    key = (rg, cg)",
@@ -476,7 +483,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

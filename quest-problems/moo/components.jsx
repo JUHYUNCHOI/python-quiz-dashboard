@@ -94,11 +94,7 @@ export function MooExplorer({ E }) {
 }
 
 export function MooSim({ E }) { return <MooExplorer E={E} />; }
-export function MooRunner({ E }) {
-  return <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-    {t(E, "Use the explorer above.", "위 explorer 사용.")}
-  </div>;
-}
+export function MooRunner() { return null; }
 
 /* ════════════════════════════════════════════════════════════════════
    Progressive code: 4 sections.
@@ -107,10 +103,10 @@ export function MooRunner({ E }) {
 const MO_S1_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "N = int(data[0])",
   "F = int(data[1])",
-  "s = data[2].decode()",
+  "s = data[2]",
 ];
 const MO_S1_CPP = [
   "#include <iostream>",
@@ -207,10 +203,10 @@ const MO_S3_CPP = [
 const MO_FULL_PY = [
   "import sys",
   "",
-  "data = sys.stdin.buffer.read().split()",
+  "data = sys.stdin.read().split()",
   "N = int(data[0])",
   "F = int(data[1])",
-  "s = data[2].decode()",
+  "s = data[2]",
   "",
   "cnt = {}",
   "for i in range(N - 2):",
@@ -379,7 +375,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {
