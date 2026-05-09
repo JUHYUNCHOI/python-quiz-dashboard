@@ -1,8 +1,195 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* ----------------------------------------------------------------
+   SocDist1Sim — bilingual deep-audit sim for the title page
+   Sample: N=5 cows, segments [(0,2),(4,7),(9,9)] (length 12 number line).
+   Student picks D (1..6). Greedy places cows segment by segment:
+   in each segment, first slot at max(a, last+D), then keep stepping +D ≤ b.
+   Shows: segments, placed cows, count vs N, verdict (✓ feasible / ✗ too far).
+   Big idea: as D grows, fewer cows fit. Largest D with count ≥ N = answer.
+   --------------------------------------------------------------- */
+export function SocDist1Sim({ E }) {
+  const N = 5;
+  const segments = [[0, 2], [4, 7], [9, 9]]; // length 0..9
+  const MAX_X = 9;
+  const [D, setD] = useState(2);
+
+  // Greedy placement for the current D
+  const placements = [];
+  let last = -1e9;
+  for (const [a, b] of segments) {
+    let x = Math.max(a, last + D);
+    while (x <= b) {
+      placements.push(x);
+      last = x;
+      x += D;
+    }
+  }
+  const fits = placements.length >= N;
+  const shown = placements.slice(0, N); // never draw more than N cow icons
+
+  // Find the true answer by scanning D = 1..MAX_X
+  const answer = (() => {
+    let best = 1;
+    for (let d = 1; d <= MAX_X; d++) {
+      let cnt = 0; let lst = -1e9;
+      for (const [a, b] of segments) {
+        let x = Math.max(a, lst + d);
+        while (x <= b) { cnt++; lst = x; x += d; if (cnt >= N) break; }
+        if (cnt >= N) break;
+      }
+      if (cnt >= N) best = d;
+    }
+    return best;
+  })();
+  const isAnswer = D === answer;
+
+  // Layout: each unit on the number line = ~40px wide
+  const U = 40;
+  const totalW = (MAX_X + 1) * U;
+
+  return (
+    <div style={{ padding: "10px 8px" }}>
+      <div style={{ textAlign: "center", marginBottom: 8, fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
+        {t(E,
+          "Try it · N = 5 cows, segments = [0,2] ∪ [4,7] ∪ [9,9]",
+          "직접 해봐 · N = 5 마리, 구간 = [0,2] ∪ [4,7] ∪ [9,9]")}
+      </div>
+
+      {/* Status row */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
+        <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>
+          D = <b>{D}</b>
+        </div>
+        <div style={{
+          background: fits ? "#dcfce7" : "#fee2e2",
+          border: `1px solid ${fits ? "#16a34a" : "#dc2626"}`,
+          borderRadius: 8, padding: "4px 10px", fontSize: 11,
+          color: fits ? "#166534" : "#7f1d1d",
+          fontFamily: "'JetBrains Mono',monospace",
+        }}>
+          {t(E, "placed", "배치")} = <b>{placements.length}</b> / {N} {fits ? "✓" : "✗"}
+        </div>
+        {isAnswer && (
+          <div style={{ background: "#fef3c7", border: "1px solid #f59e0b", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#92400e", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
+            {t(E, "★ best D", "★ 최적 D")}
+          </div>
+        )}
+      </div>
+
+      {/* Number line stage */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "16px 10px", marginBottom: 10, overflowX: "auto" }}>
+        <div style={{ position: "relative", width: totalW, height: 90, margin: "0 auto" }}>
+          {/* Base axis */}
+          <div style={{ position: "absolute", left: U / 2, right: U / 2, top: 50, height: 2, background: C.border }} />
+
+          {/* Segments (where cows MAY stand) */}
+          {segments.map(([a, b], si) => (
+            <div key={`seg-${si}`} style={{
+              position: "absolute",
+              left: a * U + U / 2 - 14,
+              top: 38,
+              width: (b - a) * U + 28,
+              height: 26,
+              background: "linear-gradient(180deg, #fee2e2, #fecaca)",
+              border: "1.5px solid #fca5a5",
+              borderRadius: 14,
+              boxShadow: "inset 0 0 0 1px #fff",
+            }} />
+          ))}
+
+          {/* Tick marks + numbers */}
+          {Array.from({ length: MAX_X + 1 }, (_, i) => (
+            <div key={`tick-${i}`} style={{
+              position: "absolute",
+              left: i * U + U / 2 - 8,
+              top: 64,
+              width: 16,
+              textAlign: "center",
+              fontSize: 10,
+              color: C.dim,
+              fontFamily: "'JetBrains Mono',monospace",
+            }}>{i}</div>
+          ))}
+
+          {/* Cows */}
+          {shown.map((pos, ci) => (
+            <div key={`cow-${ci}`} style={{
+              position: "absolute",
+              left: pos * U + U / 2 - 14,
+              top: 14,
+              width: 28,
+              fontSize: 22,
+              textAlign: "center",
+              transition: "left .25s ease-out",
+            }}>
+              <div>{"🐄"}</div>
+              <div style={{ fontSize: 9, color: "#dc2626", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", marginTop: -2 }}>
+                {pos}
+              </div>
+            </div>
+          ))}
+
+          {/* Missing cow markers if not all N fit */}
+          {!fits && Array.from({ length: N - placements.length }, (_, mi) => (
+            <div key={`miss-${mi}`} style={{
+              position: "absolute",
+              right: 4 + mi * 22,
+              top: 0,
+              fontSize: 16,
+              opacity: 0.55,
+            }}>{"🐄"}<span style={{ position: "absolute", left: 0, top: 0, fontSize: 18, color: "#dc2626" }}>✗</span></div>
+          ))}
+        </div>
+
+        {/* Gaps row */}
+        {placements.length >= 2 && (
+          <div style={{ display: "flex", justifyContent: "center", gap: 4, marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: C.dim, flexWrap: "wrap" }}>
+            <span>{t(E, "gaps:", "간격:")}</span>
+            {placements.slice(1).map((p, i) => {
+              const g = p - placements[i];
+              return (
+                <span key={i} style={{ color: g >= D ? "#16a34a" : "#dc2626", fontWeight: 700 }}>
+                  {g}{i < placements.length - 2 ? "," : ""}
+                </span>
+              );
+            })}
+            <span style={{ color: C.dim }}>· min ≥ D? {Math.min(...placements.slice(1).map((p, i) => p - placements[i])) >= D ? "✓" : "✗"}</span>
+          </div>
+        )}
+      </div>
+
+      {/* D slider */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "Drag to change minimum gap D", "최소 간격 D 를 바꿔봐")}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 11, color: C.dim }}>1</span>
+          <input
+            type="range" min={1} max={MAX_X} value={D}
+            onChange={(e) => setD(parseInt(e.target.value, 10))}
+            style={{ width: 220, accentColor: A }}
+          />
+          <span style={{ fontSize: 11, color: C.dim }}>{MAX_X}</span>
+        </div>
+      </div>
+
+      {/* Insight box */}
+      <div style={{ marginTop: 10, background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 8, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.55 }}>
+        <b style={{ color: A }}>{t(E, "Why binary search?", "왜 이분 탐색?")}</b>{" "}
+        {t(E,
+          "Bigger D → fewer cows fit. So {D : N cows fit} is a downward-true range. The biggest such D is the answer — perfect for binary search.",
+          "D 가 커질수록 들어가는 소가 줄어요. 즉 {D : N 마리 들어감} 은 작은 쪽이 다 참인 구간. 그 중 가장 큰 D 가 답 — 이분 탐색에 딱 맞아요.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

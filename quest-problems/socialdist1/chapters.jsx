@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSocDist1Sections } from "./components";
+import { getSocDist1Sections, SocDist1Sim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -107,6 +107,14 @@ export function makeSocDist1Ch1(E) {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* 🐄 Deep-audit sim — pick D and watch greedy placement */}
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "10px 8px", marginTop: 6 }}>
+            <div style={{ textAlign: "center", fontSize: 12, fontWeight: 700, color: "#7f1d1d", marginBottom: 4 }}>
+              🐄 {t(E, "See it: greedy placement vs D", "직접 봐: D 에 따른 그리디 배치")}
+            </div>
+            <SocDist1Sim E={E} />
           </div>
         </div>),
     },
