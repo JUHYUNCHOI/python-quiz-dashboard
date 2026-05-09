@@ -6,6 +6,159 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#9333ea";
 
 /* ═══════════════════════════════════════════════════════════════
+   PalindromeTwoPointerSim — animate is_palindrome(n) check from
+   both ends inward.  Bilingual.  Matches red theme.
+   ═══════════════════════════════════════════════════════════════ */
+const _TP_PRESETS = ["121", "12321", "1221", "123", "10", "44"];
+
+export function PalindromeTwoPointerSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [si, setSi] = useState(0);
+  const [custom, setCustom] = useState("");
+  const useCustom = custom.length > 0;
+  const s = useCustom ? custom : _TP_PRESETS[pi];
+  const n = s.length;
+  const totalSteps = Math.ceil(n / 2);
+
+  // Build step results: at step k, compare s[k] vs s[n-1-k].
+  // mismatch found in any step → not palindrome.
+  let mismatchAt = -1;
+  for (let k = 0; k < totalSteps; k++) {
+    if (s[k] !== s[n - 1 - k]) { mismatchAt = k; break; }
+  }
+  const cur = Math.min(si, totalSteps);
+  // verdict shows once cur reaches first mismatch or end
+  const verdictReady = (mismatchAt >= 0 && cur > mismatchAt) || (mismatchAt < 0 && cur >= totalSteps);
+  const isPal = verdictReady ? mismatchAt < 0 : null;
+
+  const left = cur < totalSteps ? cur : totalSteps - 1;
+  const right = cur < totalSteps ? n - 1 - cur : n - totalSteps;
+  const lastCompareMatch = cur > 0 ? s[cur - 1] === s[n - cur] : null;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
+        {t(E, "🔍 Two-pointer palindrome check", "🔍 양 끝 포인터로 회문 확인")}
+      </div>
+
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
+        {_TP_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setSi(0); setCustom(""); }} style={{
+            padding: "4px 10px", borderRadius: 8,
+            border: `1px solid ${(!useCustom && i === pi) ? "#dc2626" : C.border}`,
+            background: (!useCustom && i === pi) ? "#dc2626" : "transparent",
+            color: (!useCustom && i === pi) ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer",
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>{p}</button>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
+        <input
+          value={custom}
+          onChange={e => { setCustom(e.target.value.replace(/[^0-9]/g, "").slice(0, 8)); setSi(0); }}
+          placeholder={t(E, "or type a number…", "직접 숫자 입력…")}
+          style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${C.border}`,
+            fontSize: 12, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace",
+            color: "#dc2626", textAlign: "center", width: 160,
+          }}
+        />
+      </div>
+
+      {/* digit row with pointers */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+        {s.split("").map((ch, i) => {
+          const compared = i < cur || i > n - 1 - cur || (cur < totalSteps && (i === left || i === right));
+          const isActive = cur < totalSteps && (i === left || i === right);
+          const wasMismatched = mismatchAt >= 0 && (i === mismatchAt || i === n - 1 - mismatchAt) && cur > mismatchAt;
+          let bg = "#f3f4f6", border = "#e5e7eb", color = "#9ca3af";
+          if (wasMismatched) { bg = "#fee2e2"; border = "#dc2626"; color = "#7f1d1d"; }
+          else if (isActive) { bg = "#fef3c7"; border = "#f59e0b"; color = "#92400e"; }
+          else if (compared) { bg = "#dcfce7"; border = "#86efac"; color = "#15803d"; }
+          return (
+            <div key={i} style={{
+              minWidth: 32, padding: "8px 0", borderRadius: 8, textAlign: "center",
+              background: bg, border: `2px solid ${border}`, color, fontSize: 18, fontWeight: 700,
+            }}>{ch}</div>
+          );
+        })}
+      </div>
+
+      {/* pointer arrows */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>
+        {s.split("").map((_, i) => (
+          <div key={i} style={{ minWidth: 32, textAlign: "center", color: "#dc2626", fontWeight: 800 }}>
+            {cur < totalSteps && i === left && i === right ? "↕" :
+             cur < totalSteps && i === left ? "L" :
+             cur < totalSteps && i === right ? "R" : ""}
+          </div>
+        ))}
+      </div>
+
+      {/* commentary */}
+      <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace", minHeight: 38, lineHeight: 1.5 }}>
+        {cur === 0 ? (
+          t(E, `Set L = 0, R = ${n - 1}.  Compare s[L] with s[R].`,
+                `L = 0, R = ${n - 1} 로 시작.  s[L] 와 s[R] 비교.`)
+        ) : verdictReady ? (
+          isPal
+            ? t(E, `All pairs matched → "${s}" IS a palindrome.`,
+                  `모든 짝이 일치 → "${s}" 는 회문이에요.`)
+            : t(E, `s[${mismatchAt}]='${s[mismatchAt]}' ≠ s[${n - 1 - mismatchAt}]='${s[n - 1 - mismatchAt]}' → NOT a palindrome.`,
+                  `s[${mismatchAt}]='${s[mismatchAt]}' ≠ s[${n - 1 - mismatchAt}]='${s[n - 1 - mismatchAt]}' → 회문 아님.`)
+        ) : lastCompareMatch ? (
+          t(E, `s[${cur - 1}]='${s[cur - 1]}' == s[${n - cur}]='${s[n - cur]}' ✓  Move L→, R←.`,
+                `s[${cur - 1}]='${s[cur - 1]}' == s[${n - cur}]='${s[n - cur]}' ✓  L→, R← 이동.`)
+        ) : (
+          t(E, `s[${cur - 1}] ≠ s[${n - cur}] — mismatch!`,
+                `s[${cur - 1}] ≠ s[${n - cur}] — 불일치!`)
+        )}
+      </div>
+
+      {/* verdict pill */}
+      {verdictReady && (
+        <div style={{
+          background: isPal ? "#dcfce7" : "#fee2e2",
+          border: `1.5px solid ${isPal ? "#16a34a" : "#dc2626"}`,
+          borderRadius: 10, padding: "8px 12px", marginBottom: 10,
+          color: isPal ? "#15803d" : "#7f1d1d",
+          fontSize: 14, fontWeight: 800, textAlign: "center",
+        }}>
+          {isPal ? t(E, `✓ "${s}" is a palindrome`, `✓ "${s}" 는 회문`)
+                 : t(E, `✗ "${s}" is NOT a palindrome`, `✗ "${s}" 는 회문 아님`)}
+        </div>
+      )}
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : "#dc2626"}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: cur === 0 ? "#b0b5c3" : "#dc2626",
+          cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "step", "단계")} {cur} / {totalSteps}
+        </span>
+        <button onClick={() => setSi(Math.min(totalSteps, cur + 1))} disabled={cur >= totalSteps} style={{
+          background: cur >= totalSteps ? "#e5e7eb" : "#dc2626",
+          border: `1px solid ${cur >= totalSteps ? "#e5e7eb" : "#dc2626"}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
+          color: cur >= totalSteps ? "#b0b5c3" : "#fff",
+          cursor: cur >= totalSteps ? "default" : "pointer",
+        }}>→</button>
+        <button onClick={() => setSi(0)} style={{
+          background: "transparent", border: `1px solid ${C.border}`,
+          borderRadius: 8, padding: "5px 10px", fontSize: 11, fontWeight: 600, color: C.dim,
+          cursor: "pointer", marginLeft: 4,
+        }}>{t(E, "↺ Reset", "↺ 초기화")}</button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    PalindromeSim — DP table for can_win[n], step through fill
    ═══════════════════════════════════════════════════════════════ */
 function _isPalindrome(n) { const s = String(n); return s === s.split("").reverse().join(""); }

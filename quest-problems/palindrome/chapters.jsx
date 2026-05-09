@@ -182,6 +182,13 @@ B`}
           </div>
         </div>),
     },
+    // 1-3b: Two-pointer check sim — visualize is_palindrome(n)
+    {
+      type: "twopointer",
+      narr: t(E,
+        "How does is_palindrome(n) actually work?  Compare the digits from both ends inward.  As long as every pair matches, it's a palindrome.",
+        "is_palindrome(n) 은 어떻게 동작할까?  양 끝 자리부터 가운데로 비교해.  모든 짝이 같으면 회문이야."),
+    },
     // 1-3: Quiz
     {
       type: "quiz",
