@@ -59,17 +59,29 @@ export function makeDroughtCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udfdc\ufe0f"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Drought</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Drought</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum operations to bring every cow's hunger to 0, or -1 if impossible.",
+                "모든 소의 배고픔을 0 으로 만드는 최소 연산 수 (불가능하면 -1) 를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ에게 ")}
                   <b style={{ color: "#d97706" }}>{t(E, "N cows in a row", "한 줄로 선 N마리 소")}</b>
@@ -79,7 +91,7 @@ export function makeDroughtCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "One operation: pick ", "한 번의 연산: ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "two adjacent cows i, i+1", "인접한 두 소 i, i+1")}</b>
@@ -90,7 +102,7 @@ export function makeDroughtCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Goal: ", "목표: ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "make every cow's hunger equal 0", "모든 소의 배고픔을 0으로 만들기")}</b>
@@ -98,7 +110,7 @@ export function makeDroughtCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "최소 연산 횟수")}</b>
@@ -138,8 +150,8 @@ export function makeDroughtCh1(E) {
         "a = [2, 2]. Min operations to make all equal?",
         "a = [2, 2]. 모두 같게 만드는 최소 연산 횟수?"),
       hint: t(E,
-        "Feed pair (0,1) twice: [2,2] -> [1,1] -> [0,0]. Answer: 2.",
-        "쌍(0,1)에 2번 먹이: [2,2] -> [1,1] -> [0,0]. 답: 2."),
+        "Feed the pair step by step until both reach 0 — count operations.",
+        "쌍에 한 단계씩 먹이 줘 둘 다 0 이 될 때까지 — 연산 수를 세 봐."),
       answer: 2,
     },
   ];
@@ -151,48 +163,12 @@ export function makeDroughtCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeDroughtCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "For each candidate final value t (0 to min(a)), compute d[i] = a[i] − t. Walk left to right: pair (i, i+1) MUST be fed exactly d[i] times to zero a[i], so d[i+1] -= d[i]. If any d goes negative or last d ≠ 0, this t is impossible.",
-        "가능한 최종 값 t (0 부터 min(a)) 마다 d[i] = a[i] − t 계산. 왼쪽부터 오른쪽: 쌍 (i, i+1) 은 a[i] 를 0 으로 만들기 위해 정확히 d[i] 번 먹여야 하니 d[i+1] -= d[i]. d 가 음수가 되거나 마지막 d ≠ 0 이면 그 t 는 불가능."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Try every target t in 0..min(a)", "가능한 t 마다 시도 (0..min(a))"), code: "for t in range(min(a)+1): ...", color: "#d97706" },
-              { n: 2, label: t(E, "Compute initial deficits", "초기 부족분 계산"), code: "d = [a[i] − t for i in range(N)]", color: "#0891b2" },
-              { n: 3, label: t(E, "Greedy left → right", "왼→오 그리디"), code: "for i in range(N−1): if d[i]<0: fail; ops += d[i]; d[i+1] −= d[i]", color: "#7c3aed" },
-              { n: 4, label: t(E, "Check final, take min ops", "마지막 검사, 최소 ops 채택"), code: "if d[N−1] == 0: best = min(best, ops)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N · max_val)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "for each candidate t, scan N cows", "t 후보마다 N마리 스캔")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "For each candidate final value t (0..min(a)), compute d[i] = a[i] − t and walk left to right — pair (i, i+1) must be fed exactly d[i] times, so d[i+1] -= d[i]. Negative d or last d ≠ 0 means that t is impossible. Sections build it one piece at a time.",
+        "가능한 최종 값 t (0 ~ min(a)) 마다 d[i] = a[i] − t 계산하고 왼쪽부터 오른쪽 — 쌍 (i, i+1) 은 정확히 d[i] 번 먹여야 하니 d[i+1] -= d[i]. d 가 음수거나 마지막 d ≠ 0 이면 그 t 는 불가능. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getDroughtSections(E),
     },
   ];

@@ -223,7 +223,7 @@ export function ReachSim({ E }) {
     <div style={{ padding: "10px 6px" }}>
       {/* K slider */}
       <div style={{ textAlign: "center", marginBottom: 8 }}>
-        <div style={{ fontSize: 12, fontWeight: 800, color: A, marginBottom: 4 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: A, marginBottom: 4 }}>
           K = <span style={{ fontSize: 18, color: "#fbbf24" }}>{K}</span>
           {t(E, " minutes", "분")}
         </div>
@@ -293,15 +293,15 @@ export function ReachSim({ E }) {
         fontFamily: "'JetBrains Mono',monospace", fontSize: 13,
         color: "#e2e8f0", textAlign: "center",
       }}>
-        K={K}: <span style={{ color: "#fbbf24", fontWeight: 900, fontSize: 16 }}>{count}</span>
+        K={K}: <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: 16 }}>{count}</span>
         {t(E, " cities reachable", "개 도시 도달 가능")}
       </div>
 
       {/* Auto play */}
       <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 8 }}>
         <button onClick={autoPlay} style={{
-          padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 800,
-          border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+          padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600,
+          border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
         }}>{playing ? "⏸" : "⏭"} {t(E, playing ? "Pause" : "Auto", playing ? "정지" : "자동")}</button>
       </div>
     </div>
@@ -365,14 +365,14 @@ export function DijkstraTrace({ E }) {
             <div key={n.id} style={{
               padding: "4px 8px", borderRadius: 8, textAlign: "center", minWidth: 44,
               background: isCurrent ? "rgba(139,92,246,.15)" : (isVisited ? "#dcfce7" : ABg),
-              border: `2px solid ${isCurrent ? A : (isVisited ? "#6ee7b7" : ABd)}`,
+              border: `1px solid ${isCurrent ? A : (isVisited ? "#6ee7b7" : ABd)}`,
               fontFamily: "'JetBrains Mono',monospace", transition: "all .3s",
             }}>
               <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>
                 {t(E, "city", "도시")} {n.id}
               </div>
               <div style={{
-                fontSize: 14, fontWeight: 900,
+                fontSize: 14, fontWeight: 700,
                 color: d === Infinity ? "#cbd5e1" : (isCurrent ? A : "#059669"),
               }}>
                 {d === Infinity ? "∞" : d}
@@ -395,15 +395,15 @@ export function DijkstraTrace({ E }) {
       <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
         {step <= maxStep ? (
           <button onClick={() => setStep(s => Math.min(s + 1, maxStep + 1))} style={{
-            padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 900,
+            padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
             border: "none", cursor: "pointer", color: "#fff",
             background: `linear-gradient(135deg,#6d28d9,${A})`,
             boxShadow: "0 3px 12px rgba(139,92,246,.3)",
           }}>▶ {t(E, "Next", "다음")}</button>
         ) : (
           <button onClick={() => setStep(0)} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {t(E, "Restart", "처음부터")}</button>
         )}
       </div>

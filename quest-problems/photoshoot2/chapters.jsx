@@ -48,17 +48,29 @@ export function makePhoto2Ch1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"📷"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Photoshoot 2</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Photoshoot 2</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of move-left operations to transform the current order into the target.",
+                "현재 순서를 목표 순서로 만드는 데 필요한 최소 왼쪽-이동 동작 수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Bessie has ", "Bessie에게 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "N cows in a current line and a target order", "N 마리 소의 현재 줄과 목표 순서")}</b>
@@ -66,7 +78,7 @@ export function makePhoto2Ch1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "One move: pick a cow and ", "한 번의 동작: 소를 골라 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "move her to any position farther LEFT", "줄에서 더 왼쪽 어디든 옮기기")}</b>
@@ -74,7 +86,7 @@ export function makePhoto2Ch1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of moves to reach the target order", "목표 순서에 도달하기 위한 최소 동작 수")}</b>
@@ -112,8 +124,8 @@ export function makePhoto2Ch1(E) {
         "[2,1] -> [1,2]. Min moves?",
         "[2,1] -> [1,2]. 최소 이동?"),
       hint: t(E,
-        "Only cow 1 is out of place. Move it left once.",
-        "소 1만 위치가 틀려. 왼쪽으로 한 번 이동."),
+        "Count cows that are out of place relative to the target.",
+        "목표와 비교했을 때 자리가 틀린 소를 세어 봐."),
       answer: 1,
     },
   ];
@@ -125,48 +137,12 @@ export function makePhoto2Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePhoto2Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Map each cow to her index in the CURRENT order. Walk the TARGET order left to right; track the running max of current-positions seen. Each cow whose current-position < max must be MOVED LEFT.",
-        "각 소를 현재 순서의 인덱스로 매핑. 목표 순서를 왼→오 순회하며 본 현재-위치의 누적 최댓값 추적. 현재-위치 < 최댓값 인 소는 왼쪽으로 옮겨야 함."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Build current-order index map", "현재 인덱스 맵"), code: "idx = {cow: pos for pos, cow in enumerate(current)}", color: "#f97316" },
-              { n: 2, label: t(E, "Walk target order", "목표 순서 순회"), code: "cur_max = -1;  moves = 0", color: "#7c3aed" },
-              { n: 3, label: t(E, "Compare to running max", "누적 최댓값과 비교"), code: "for cow in target: if idx[cow] < cur_max: moves += 1; else: cur_max = idx[cow]", color: "#0891b2" },
-              { n: 4, label: t(E, "Print moves", "moves 출력"), code: "print(moves)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Map each cow to her index in the CURRENT order. Walk the TARGET order; track running max of current-positions. Each cow with current-position < max must be moved left. Sections build it one piece at a time.",
+        "각 소를 현재 인덱스로 매핑. 목표 순서를 따라가며 본 현재-위치의 최댓값 추적. 현재-위치 < 최댓값 이면 왼쪽으로 이동해야 함. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getPhotoshoot2Sections(E),
     },
   ];

@@ -50,17 +50,29 @@ export function makeMilkMeasCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcca"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Milk Measurement</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>Milk Measurement</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ede9fe", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of times the displayed leader set changes over all events.",
+                "전체 기간 동안 표시되는 리더 집합이 바뀐 횟수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ 에게 ")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "3 cows (Bessie, Elsie, Mildred)", "3마리 소 (Bessie, Elsie, Mildred)")}</b>
@@ -69,7 +81,7 @@ export function makeMilkMeasCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "N change events: ", "N 개의 변동 이벤트: ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "on day d, cow X's output changes by ±value", "d 일에 X 의 생산량이 ±값 만큼 변함")}</b>
@@ -77,7 +89,7 @@ export function makeMilkMeasCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A sign displays the ", "간판은 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "set of current leaders", "지금 가장 많이 만든 소들")}</b>
@@ -86,7 +98,7 @@ export function makeMilkMeasCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "number of times the displayed set changes", "표시 집합이 바뀐 횟수")}</b>
@@ -124,8 +136,8 @@ export function makeMilkMeasCh1(E) {
         "1 change: Bessie +5. Total display changes?",
         "변경 1개: Bessie +5. 총 디스플레이 변경 횟수?"),
       hint: t(E,
-        "Leaders go from {all} to {Bessie}. That's 1 change.",
-        "리더가 {전부}에서 {Bessie}로. 1번 변경."),
+        "Compare the leader set before and after the event.",
+        "이벤트 전과 후의 리더 집합을 비교해 봐."),
       answer: 1,
     },
   ];
@@ -137,48 +149,12 @@ export function makeMilkMeasCh1(E) {
    --------------------------------------------------------------- */
 export function makeMilkMeasCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sort events by day. Process each event in order: update that cow's output, recompute the leader set (cows tied for max). Compare with previous leader set — count changes.",
-        "이벤트를 날짜순 정렬. 순서대로 처리: 해당 소의 생산량 갱신, 리더 집합 (최대 값과 동률 소들) 재계산. 이전 리더 집합과 비교 — 변화 카운트."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Sort events by day", "이벤트 날짜순 정렬"), code: "events.sort(key=lambda e: e.day)", color: "#8b5cf6" },
-              { n: 2, label: t(E, "Init milk = {Bessie:7, Elsie:7, Mildred:7}", "우유 = 모두 7 로 초기화"), code: "milk = {'Bessie':7, 'Elsie':7, 'Mildred':7}", color: "#7c3aed" },
-              { n: 3, label: t(E, "Apply event, recompute leaders", "이벤트 적용, 리더 재계산"), code: "milk[name] += delta;  new_leaders = cows with max(milk.values())", color: "#0891b2" },
-              { n: 4, label: t(E, "If different from previous: count", "이전과 다르면 카운트"), code: "if new_leaders != prev: changes += 1; prev = new_leaders", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + linear simulation", "정렬 + 선형 시뮬레이션")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort events by day. Process each in order — update the cow's output, recompute leader set, compare with previous, count changes. Sections build it one piece at a time.",
+        "이벤트를 날짜순 정렬. 순서대로 — 생산량 갱신, 리더 집합 재계산, 이전과 비교, 변화 카운트. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMilkMeasSections(E),
     },
   ];

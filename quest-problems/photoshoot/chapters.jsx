@@ -49,17 +49,29 @@ export function makePhotoshootCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"📸"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Photoshoot</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Photoshoot</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2022 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of prefix-reversal moves to reach the target arrangement.",
+                "목표 배치에 도달하기 위한 접두사 뒤집기 최소 동작 수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ에게 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "N cows in a row", "한 줄로 선 N마리 소")}</b>
@@ -71,7 +83,7 @@ export function makePhotoshootCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're given a ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "target arrangement b", "목표 배치 b")}</b>
@@ -80,7 +92,7 @@ export function makePhotoshootCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "One move: pick a ", "한 동작: ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "prefix length k and reverse the first k cows", "접두사 길이 k를 골라 앞에서부터 k마리를 뒤집기")}</b>
@@ -88,7 +100,7 @@ export function makePhotoshootCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of moves", "최소 동작 횟수")}</b>
@@ -127,8 +139,8 @@ export function makePhotoshootCh1(E) {
         "\"GHHG\": How many G at even positions (2,4)?",
         "\"GHHG\": 짝수 위치(2,4)에 G가 몇 개?"),
       hint: t(E,
-        "Pos 2 = H, Pos 4 = G. Count only G's.",
-        "위치2 = H, 위치4 = G. G만 세."),
+        "Walk through positions 2 and 4 and tally the G's only.",
+        "위치 2 와 4 만 보면서 G 의 개수만 세어 봐."),
       answer: 1,
     },
   ];
@@ -140,48 +152,12 @@ export function makePhotoshootCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePhotoshootCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Reverse-engineer from b: undo the cyclic shifts in b to derive the missing original a. Each prefix reversal in the original corresponds to one Bessie's b[i] = b[i-1] - 1 step.",
-        "b 에서 거꾸로 추적: b 의 순환 이동을 되돌려서 원래 a 를 복원. 원본의 각 접두사 뒤집기는 b[i] = b[i-1] - 1 한 단계에 대응돼요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N and target b", "N 과 목표 b 읽기"), code: "b = list(map(int, input().split()))", color: "#dc2626" },
-              { n: 2, label: t(E, "Compare b[i] to b[i-1]", "b[i] 와 b[i-1] 비교"), code: "if b[i] == b[i-1] - 1: same direction", color: "#7c3aed" },
-              { n: 3, label: t(E, "Each direction change = one move", "방향 전환마다 동작 1번"), code: "if direction differs from prev: moves += 1", color: "#0891b2" },
-              { n: 4, label: t(E, "Print total moves", "총 동작 수 출력"), code: "print(moves)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Reverse-engineer from b: undo the cyclic shifts in b to derive the missing original a. Each original prefix reversal corresponds to a single b[i] = b[i-1] − 1 step. Sections build it one piece at a time.",
+        "b 에서 거꾸로: b 의 순환 이동을 되돌려 원래 a 를 복원. 각 원본 접두사 뒤집기 = b[i] = b[i-1] − 1 한 단계. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getPhotoshootSections(E),
     },
   ];

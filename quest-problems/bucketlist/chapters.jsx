@@ -39,17 +39,29 @@ export function makeBucketListCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"🪣"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Bucket List</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>The Bucket List</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of buckets FJ must own to cover every cow on every day.",
+                "모든 소를 매일 만족시키기 위한 양동이의 최소 수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ 에게 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "N cows", "N마리 소")}</b>
@@ -61,7 +73,7 @@ export function makeBucketListCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#0891b2" }}>{t(E, "Buckets can be reused across cows", "양동이는 소들 사이에 재사용 가능")}</b>
                   {t(E, " whose active intervals don't overlap (a cow that's done releases her buckets for someone else).",
@@ -69,7 +81,7 @@ export function makeBucketListCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of buckets", "양동이의 최소 수")}</b>
@@ -107,8 +119,8 @@ export function makeBucketListCh1(E) {
         "Max buckets needed at any time?",
         "어느 시점에서 최대 양동이 수?"),
       hint: t(E,
-        "At t=3-5, both active: 3 + 2 = 5.",
-        "t=3-5에서 둘 다 활성: 3 + 2 = 5."),
+        "Find the time window where both cows overlap, then sum their buckets.",
+        "두 소가 모두 활성인 시간 구간을 찾고 양동이 수를 더해 봐."),
       answer: 5,
     },
   ];
@@ -120,48 +132,12 @@ export function makeBucketListCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBucketListCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Convert each cow's interval into two events: at day s add +b buckets, at day t+1 subtract b. Sort all events by time, sweep through accumulating active buckets, and track the running maximum.",
-        "각 소의 구간을 두 이벤트로 변환: s 일에 +b 양동이, t+1 일에 −b. 모든 이벤트를 시간순 정렬, 활성 양동이 누적하면서 스윕, 누적 최댓값 추적."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Create +b / −b events", "+b / −b 이벤트 생성"), code: "events += [(s, +b), (t+1, -b) for each cow]", color: "#f97316" },
-              { n: 2, label: t(E, "Sort by time", "시간순 정렬"), code: "events.sort()", color: "#0891b2" },
-              { n: 3, label: t(E, "Sweep, accumulate", "스윕, 누적"), code: "cur = 0;  for time, delta in events: cur += delta", color: "#7c3aed" },
-              { n: 4, label: t(E, "Track running max", "최댓값 추적"), code: "best = max(best, cur);  print(best)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort 2N events + linear sweep", "2N 이벤트 정렬 + 선형 스윕")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Convert each cow's interval into two events: +b at s, −b at t+1. Sort by time, sweep accumulating active buckets, track the running max. Sections build it one piece at a time.",
+        "각 구간을 두 이벤트로: s 에 +b, t+1 에 −b. 시간순 정렬, 누적하면서 스윕, 최댓값 추적. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBucketListSections(E),
     },
   ];

@@ -38,17 +38,27 @@ export function makeMcc20ZigzagCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u26a1"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Zig-zag</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>Zig-zag</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2020 P6</div>
           </div>
 
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E, "Print the count of length-K zig-zag subsequences of the given string.", "주어진 문자열에서 길이 K 인 지그재그 부분수열의 개수를 출력해요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "sequence of characters and an integer K", "문자 수열과 정수 K")}</b>
@@ -56,7 +66,7 @@ export function makeMcc20ZigzagCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "zig-zag subsequence of length K", "길이 K 의 지그재그 부분수열")}</b>
@@ -65,7 +75,7 @@ export function makeMcc20ZigzagCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "count of length-K zig-zag subsequences", "길이 K 지그재그 부분수열의 개수")}</b>
@@ -100,7 +110,7 @@ export function makeMcc20ZigzagCh1(E) {
       question: t(E,
         "C(3, 2) = ?",
         "C(3, 2) = ?"),
-      hint: t(E, "3! / (2! * 1!) = 3", "3! / (2! * 1!) = 3"),
+      hint: t(E, "C(n, k) = n! / (k! · (n−k)!).", "C(n, k) = n! / (k! · (n−k)!)."),
       answer: 3,
     },
   ];
@@ -109,45 +119,10 @@ export function makeMcc20ZigzagCh1(E) {
 export function makeMcc20ZigzagCh2(E, lang = "py") {
   return [
     {
-      type: "reveal",
-      narr: t(E,
-        "DP: dp[i][j] = number of zig-zag subsequences of length j ending at position i. Transition: extend from earlier i' with the right comparison (up if j is even, down if j is odd, or vice versa).",
-        "DP: dp[i][j] = 위치 i 에서 끝나는 길이 j 의 지그재그 부분수열 수. 전이: 이전 i' 에서 적절한 비교 (j 홀짝에 따라 상승/하강) 로 확장."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init dp[i][1] = 1 for all i", "dp[i][1] = 1 초기화"), code: "dp = [[0]*(K+1) for _ in range(N)];  for i: dp[i][1] = 1", color: "#8b5cf6" },
-              { n: 2, label: t(E, "Build dp by length", "길이별 dp 구축"), code: "for j in 2..K: for i: for i' < i:", color: "#7c3aed" },
-              { n: 3, label: t(E, "Add if direction matches", "방향 일치하면 더하기"), code: "if zig-zag direction(s[i'], s[i], j) ok: dp[i][j] += dp[i'][j-1]", color: "#0891b2" },
-              { n: 4, label: t(E, "Sum dp[i][K] for all i", "모든 i 의 dp[i][K] 합산"), code: "print(sum(dp[i][K] for i in range(N)))", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N² · K)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "two nested position loops × K lengths", "위치 이중 반복 × K 길이")}</div>
-          </div>
-        </div>),
-    },
-    {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "DP: dp[i][j] = number of zig-zag subsequences of length j ending at position i. Transition: extend from earlier i' with the right comparison (up if j is even, down if j is odd, or vice versa). Sections build it one piece at a time.",
+        "DP: dp[i][j] = 위치 i 에서 끝나는 길이 j 의 지그재그 부분수열 수. 전이: 이전 i' 에서 적절한 비교 (j 홀짝에 따라 상승/하강) 로 확장. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc20ZigzagSections(E),
     },
   ];

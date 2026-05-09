@@ -39,24 +39,34 @@ export function makeBitcoinCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u20bf"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Bitcoin</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Bitcoin</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P3</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E, "Find the largest squared distance between any two mining sites.", "두 채굴 사이트 사이의 제곱 거리 중 최댓값을 찾아요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#f97316" }}>{t(E, "N bitcoin sites at integer points on a 2D plane", "정수 좌표의 평면 위 N 개 비트코인 사이트")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM (x1−x2)^2 + (y1−y2)^2 over all pairs", "모든 쌍 중 (x1−x2)^2 + (y1−y2)^2 의 최댓값")}</b>
@@ -93,8 +103,8 @@ export function makeBitcoinCh1(E) {
         "Squared distance between (0,0) and (3,4)?",
         "(0,0)과 (3,4) 사이의 제곱 거리?"),
       hint: t(E,
-        "(3-0)^2 + (4-0)^2 = 9 + 16 = 25",
-        "(3-0)^2 + (4-0)^2 = 9 + 16 = 25"),
+        "dx = 3 − 0, dy = 4 − 0. Compute dx² + dy².",
+        "dx = 3 − 0, dy = 4 − 0. dx² + dy² 를 계산해봐요."),
       answer: 25,
     },
   ];
@@ -106,48 +116,12 @@ export function makeBitcoinCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBitcoinCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Brute force: for every pair of sites (i, j), compute (xi − xj)² + (yi − yj)² and keep the running max.",
-        "완전 탐색: 모든 사이트 쌍 (i, j) 에 대해 (xi − xj)² + (yi − yj)² 계산, 최댓값 유지."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N sites", "N 사이트 읽기"), code: "sites = [(x, y) for _ in range(N)]", color: "#f97316" },
-              { n: 2, label: t(E, "Init best = 0", "best = 0 초기화"), code: "best = 0", color: "#7c3aed" },
-              { n: 3, label: t(E, "Check every pair", "모든 쌍 확인"), code: "for i in range(N): for j in range(i+1, N):", color: "#0891b2" },
-              { n: 4, label: t(E, "Update best, print", "best 갱신, 출력"), code: "best = max(best, dx*dx + dy*dy);  print(best)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "all C(N, 2) pairs", "모든 C(N, 2) 쌍")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Brute force: for every pair of sites (i, j), compute (xi − xj)² + (yi − yj)² and keep the running max. Sections build it one piece at a time.",
+        "완전 탐색: 모든 사이트 쌍 (i, j) 에 대해 (xi − xj)² + (yi − yj)² 계산, 최댓값 유지. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBitcoinSections(E),
     },
   ];

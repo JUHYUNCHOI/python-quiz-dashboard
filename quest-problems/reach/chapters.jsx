@@ -137,9 +137,22 @@ export function makeReachCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>🐉</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: A }}>Reachability Queries</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: A }}>Reachability Queries</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P5</div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+
+          {/* 🎯 Mission box */}
+          <div style={{ marginTop: 12, background: "#f5f3ff", border: `1.5px solid ${A}`, borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "For each query K, output how many cities are reachable from city 1 within K minutes (using damaged roads only if start < K and arrive ≤ K).",
+                "쿼리 K 마다 — 도시 1 에서 K 분 안에 도달 가능한 도시 수 (손상 도로는 출발 < K 이고 도착 ≤ K 인 경우만) 출력.")}
+            </div>
+          </div>
+
+          <div style={{ marginTop: 10, background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N cities,\nM roads → some roads are damaged → apocalypse at time K destroys damaged roads → how many cities reachable from city 1?",
               "도시 N개,\n도로 M개 → 일부 도로 손상 → 시간 K에 아포칼립스 발생,\n손상 도로 파괴 → 도시 1에서 몇 개 도시에 갈 수 있어요?")}
@@ -153,7 +166,7 @@ export function makeReachCh1(E) {
         "Here's our sample: 5 cities, 6 roads.\nRed dashed lines are damaged roads.\nThey work for now, but will break at time K!", "예제를 보자! 도시 5개, 도로 6개예요. 빨간 점선이 손상된 도로예요. 지금은 쓸 수 있지만 시간 K가 되면 부서져!"),
       content: (() => (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
             {t(E, "Sample Graph", "예제 그래프")}
           </div>
           <div style={{
@@ -181,12 +194,12 @@ export function makeReachCh1(E) {
         "The rules: Damaged roads break at time K.\nYou CAN'T start a damaged road at time K or later.\nAnd if you're on a damaged road when the apocalypse hits, you can't use it — UNLESS you arrive exactly at time K.", "규칙을 알아보자! 손상 도로는 시간 K에 부서져. K 이후에는 못 써요. 이동 중에 K가 되면 안 되지만, 딱 K에 도착하면 괜찮아!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
             {t(E, "Apocalypse Rules", "아포칼립스 규칙")}
           </div>
           <div style={{
             background: "#f5f3ff", borderRadius: 12, padding: 14,
-            border: "2px solid #c4b5fd", fontSize: 13, lineHeight: 2, color: C.text,
+            border: "1px solid #c4b5fd", fontSize: 13, lineHeight: 2, color: C.text,
           }}>
             <div>✅ {t(E,
               "Safe roads: usable anytime (before or after K)",
@@ -285,32 +298,7 @@ export function makeReachCh2(E) {
         "Right! Larger K means more time before apocalypse → can use damaged roads for longer → can only reach MORE cities.",
         "정답! K가 클수록 아포칼립스 전 시간이 많아 → 손상 도로를 더 오래 쓸 수 있어 → 도달 가능 도시는 늘어나기만 해요!"),
     },
-    // 2-3: Dijkstra concept
-    {
-      type: "reveal",
-      narr: t(E,
-        "The key algorithm is Dijkstra!\nIt finds shortest paths from city 1.\nThen for each damaged road, check if we can use it within time K.", "핵심 알고리즘은 다익스트라예요! 도시 1에서 각 도시까지 최단 거리를 구해요. 손상 도로는 출발 시각 < K, 도착 시각 ≤ K인 경우만 사용!"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
-            {t(E, "Modified Dijkstra", "변형 다익스트라")}
-          </div>
-          <div style={{
-            background: "#f5f3ff", borderRadius: 12, padding: 14,
-            border: "2px solid #c4b5fd", fontSize: 13, lineHeight: 2, color: C.text,
-          }}>
-            <div>1️⃣ {t(E,
-              "Use priority queue (min-heap) for shortest paths",
-              "우선순위 큐(최소 힙)로 최단 경로 탐색")}</div>
-            <div>2️⃣ {t(E,
-              "For each edge: if safe → always use. If damaged → check time constraint",
-              "각 도로: 안전하면 항상 사용. 손상이면 시간 조건 확인")}</div>
-            <div>3️⃣ {t(E,
-              "Damaged road usable only if: start_time < K AND arrive_time ≤ K",
-              "손상 도로 사용 조건: 출발 시각 < K 그리고 도착 시각 ≤ K")}</div>
-          </div>
-        </div>),
-    },
+    // 2-3: Dijkstra concept (intro card lives in Ch3)
     // 2-4: Dijkstra trace
     {
       type: "dijkstraTrace",
@@ -343,7 +331,7 @@ export function makeReachCh3(E) {
         "Let's code it!\nFirst read the graph: N cities, M roads, which roads are damaged, and Q queries.", "코드를 짜보자! 먼저 그래프를 읽어: 도시 N개, 도로 M개, 손상 도로 목록, 쿼리 Q개."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 6 }}>
             {t(E, "Step 1: Read input", "1단계: 입력 읽기")}
           </div>
           <CodeSnippet
@@ -375,7 +363,7 @@ export function makeReachCh3(E) {
         "Next, read which roads are damaged and the Q queries (values of K).", "다음으로 손상 도로 목록과 쿼리(K 값들)를 읽어."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 6 }}>
             {t(E, "Step 2: Damaged roads & queries", "2단계: 손상 도로 & 쿼리")}
           </div>
           <CodeSnippet
@@ -412,7 +400,7 @@ export function makeReachCh3(E) {
         "The core: Dijkstra with a constraint on damaged edges.\nSafe roads always usable.\nDamaged roads only if start_time < K and arrive_time ≤ K.", "핵심 부분! 다익스트라인데, 손상 도로에 조건을 걸어. 안전한 도로는 항상 OK, 손상 도로는 출발 < K, 도착 ≤ K만!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 6 }}>
             {t(E, "Step 3: Modified Dijkstra", "3단계: 변형 다익스트라")}
           </div>
           <CodeSnippet
@@ -451,12 +439,12 @@ export function makeReachCh3(E) {
         "Why does this work?\nDijkstra always processes the smallest distance first.\nSo when we reach a node, it's via the shortest path.\nFor damaged roads, we just add the time constraint.", "왜 이게 맞을까? 다익스트라는 항상 가장 짧은 거리부터 처리해요. 그래서 노드에 도착하면 최단 경로로 온 거예요. 손상 도로는 시간 제한만 추가하면 끝!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, textAlign: "center" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
             {t(E, "Why It Works", "왜 맞는가")}
           </div>
           <div style={{
             background: "#f5f3ff", borderRadius: 12, padding: 14,
-            border: "2px solid #c4b5fd", fontSize: 13, lineHeight: 2, color: C.text,
+            border: "1px solid #c4b5fd", fontSize: 13, lineHeight: 2, color: C.text,
           }}>
             <div>✅ {t(E,
               "Dijkstra finds shortest paths = earliest arrival times",

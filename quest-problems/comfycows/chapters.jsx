@@ -52,17 +52,29 @@ export function makeComfyCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc04"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Comfortable Cows</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Comfortable Cows</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "After each cow is added, output the current count of comfortable cows (exactly 3 of 4 neighbors occupied).",
+                "각 추가 직후, 편안한 소 (이웃 4개 중 정확히 3개가 채워진 소) 의 현재 개수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ adds ", "FJ가 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "N cows one at a time", "N마리 소를 한 마리씩")}</b>
@@ -71,7 +83,7 @@ export function makeComfyCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A cow is ", "어떤 소가 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "COMFORTABLE", "편안 (COMFORTABLE)")}</b>
@@ -80,7 +92,7 @@ export function makeComfyCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "After each addition, print the ", "각 추가 직후 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "current count of comfortable cows", "현재 편안한 소의 개수")}</b>
@@ -117,8 +129,8 @@ export function makeComfyCh1(E) {
         "Cow with exactly 3 neighbors: comfortable? (1=yes, 0=no)",
         "이웃 3마리인 소: 편안? (1=예, 0=아니오)"),
       hint: t(E,
-        "The definition says exactly 3 neighbors makes a cow comfortable.",
-        "정의상 정확히 이웃 3마리면 소가 편안해요."),
+        "Re-read the comfortable rule — exactly how many neighbors?",
+        "편안 조건을 다시 읽어 봐 — 이웃이 정확히 몇 마리?"),
       answer: 1,
     },
   ];
@@ -130,48 +142,12 @@ export function makeComfyCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeComfyCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Maintain a SET of cow positions and a current comfort count. When a new cow is added, only the new cow + her 4 neighbors can change comfort status — recheck just those 5 cells.",
-        "소 위치 집합 (SET) 과 현재 편안한 소의 수를 유지. 새 소가 추가되면 그 소 + 4 이웃 만이 편안 상태가 바뀔 수 있으니 그 5 칸만 재확인."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Add new cow to position set", "새 소를 위치 집합에 추가"), code: "positions.add((r, c))", color: "#f97316" },
-              { n: 2, label: t(E, "For new cow + 4 neighbors", "새 소 + 4 이웃에 대해"), code: "for cell in [new] + neighbors:", color: "#7c3aed" },
-              { n: 3, label: t(E, "Recompute comfort for each cell", "각 칸의 편안 여부 재계산"), code: "new_comfort = sum(neighbor in positions for neighbor of cell) == 3", color: "#0891b2" },
-              { n: 4, label: t(E, "Update count, print", "카운트 갱신, 출력"), code: "comfort_count += delta;  print(comfort_count)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "5 cells re-checked per addition (constant work)", "추가마다 5 칸 재확인 (상수 작업)")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Maintain a SET of cow positions and a current comfort count. When a new cow is added, only the new cow + her 4 neighbors can change status — recheck just those 5 cells. Sections build it one piece at a time.",
+        "소 위치 집합 (SET) 과 현재 편안한 소 수 유지. 새 소가 추가되면 그 소 + 4 이웃만 상태가 바뀔 수 있으니 그 5 칸만 재확인. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getComfyCowsSections(E),
     },
   ];

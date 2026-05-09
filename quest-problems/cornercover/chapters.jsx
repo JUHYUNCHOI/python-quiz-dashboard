@@ -35,17 +35,27 @@ export function makeCornerCoverCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcd0"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Corner Cover</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Corner Cover</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P1</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E, "Print the number of distinct corner cells in an N × M grid.", "N × M 격자의 서로 다른 꼭짓점 칸 개수를 출력해요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "An ", "")}
                   <b style={{ color: "#059669" }}>{t(E, "N × M grid", "N × M 격자")}</b>
@@ -53,7 +63,7 @@ export function makeCornerCoverCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "corner cell", "꼭짓점 칸")}</b>
@@ -62,7 +72,7 @@ export function makeCornerCoverCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Degenerate grids: ", "예외: ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "1 × M or N × 1 has 2 distinct corners; 1 × 1 has 1", "1 × M 이나 N × 1 은 꼭짓점이 2개, 1 × 1 은 1개")}</b>
@@ -70,7 +80,7 @@ export function makeCornerCoverCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "number of distinct corner cells", "서로 다른 꼭짓점 칸의 개수")}</b>
@@ -108,8 +118,8 @@ export function makeCornerCoverCh1(E) {
         "N=4, M=4. How many corners?",
         "N=4, M=4. 꼭짓점은 몇 개?"),
       hint: t(E,
-        "A square is a rectangle. It has 4 corners.",
-        "정사각형은 직사각형이에요. 꼭짓점이 4개예요."),
+        "A square is just a rectangle with N == M. Both are ≥ 2 here — count its extreme cells.",
+        "정사각형도 N == M 인 직사각형이에요. 둘 다 ≥ 2 인 경우 — 끝 칸들을 세어봐요."),
       answer: 4,
     },
   ];
@@ -121,48 +131,12 @@ export function makeCornerCoverCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCornerCoverCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Just three cases based on (N, M): if both = 1, only 1 corner; if exactly one = 1 (a line), 2 corners; otherwise 4 corners.",
-        "세 가지 경우 (N, M) 기준: 둘 다 = 1 이면 꼭짓점 1 개; 한쪽만 = 1 (직선) 이면 2 개; 그 외 4 개."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N, M", "N, M 읽기"), code: "N, M = map(int, input().split())", color: "#059669" },
-              { n: 2, label: t(E, "Single cell? → 1", "한 칸? → 1"), code: "if N == 1 and M == 1: print(1)", color: "#0891b2" },
-              { n: 3, label: t(E, "Line (1 × M or N × 1)? → 2", "직선 (1 × M 또는 N × 1)? → 2"), code: "elif N == 1 or M == 1: print(2)", color: "#7c3aed" },
-              { n: 4, label: t(E, "Otherwise rectangle → 4", "그 외 직사각형 → 4"), code: "else: print(4)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(1)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant-time case check", "상수 시간 케이스 확인")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Just three cases based on (N, M): if both = 1, only 1 corner; if exactly one = 1 (a line), 2 corners; otherwise 4 corners. Sections build it one piece at a time.",
+        "세 가지 경우 (N, M) 기준: 둘 다 = 1 이면 꼭짓점 1 개; 한쪽만 = 1 (직선) 이면 2 개; 그 외 4 개. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCornerCoverSections(E),
     },
   ];

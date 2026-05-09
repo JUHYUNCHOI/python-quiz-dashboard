@@ -36,9 +36,9 @@ function RectBox({ x1, y1, x2, y2, color, label, opacity = 0.3 }) {
   const w = x2 - x1, h = y2 - y1;
   return (
     <div style={{ position: "absolute", left: x1 * 30, bottom: y1 * 30, width: w * 30, height: h * 30,
-      background: color, opacity, border: `2px solid ${color}`, borderRadius: 4,
+      background: color, opacity, border: `1px solid ${color}`, borderRadius: 4,
       display: "flex", alignItems: "center", justifyContent: "center",
-      fontSize: 10, fontWeight: 800, color: "#fff",
+      fontSize: 10, fontWeight: 600, color: "#fff",
     }}>{label}</div>
   );
 }
@@ -58,17 +58,17 @@ export function makeBillboardCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🪧</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Blocked Billboard</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Blocked Billboard</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#d97706" }}>{t(E, "two axis-aligned rectangular billboards", "축에 평행한 직사각형 광고판 2개")}</b>
@@ -78,7 +78,7 @@ export function makeBillboardCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each rectangle is given as ", "각 사각형은 ")}
                   <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>(x1, y1, x2, y2)</code>
@@ -86,7 +86,7 @@ export function makeBillboardCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "The two billboards ", "두 광고판은 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "do NOT overlap each other", "서로 겹치지 않아요")}</b>
@@ -94,7 +94,7 @@ export function makeBillboardCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "total visible billboard area", "보이는 광고판 면적의 합")}</b>
@@ -102,6 +102,18 @@ export function makeBillboardCh1(E) {
                         " 을 출력해요 (트럭이 광고판의 일부를 가릴 수 있음).")}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginTop: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the total visible billboard area (sum of two billboards minus their overlaps with the truck).",
+                "두 광고판 면적 합에서 트럭과의 겹침을 뺀 보이는 면적의 합을 출력.")}
             </div>
           </div>
         </div>),
@@ -114,28 +126,28 @@ export function makeBillboardCh1(E) {
         "Each rectangle is defined by two corners: lower-left (x1, y1) and upper-right (x2, y2).\nThe area is width × height = (x2-x1) × (y2-y1)!", "각 직사각형은 두 꼭짓점으로 정의돼: 왼쪽 아래 (x1, y1)과 오른쪽 위 (x2, y2). 면적 = 가로 × 세로 = (x2-x1) × (y2-y1)!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "📐 Rectangle = Two Corners", "📐 직사각형 = 두 꼭짓점")}
             </div>
             {/* Visual rectangle with labeled corners */}
-            <div style={{ position: "relative", height: 150, margin: "0 auto", width: 200, background: "#fef3c7", border: "2px solid #f59e0b", borderRadius: 8 }}>
-              <div style={{ position: "absolute", left: -4, bottom: -20, fontSize: 11, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>
+            <div style={{ position: "relative", height: 150, margin: "0 auto", width: 200, background: "#fef3c7", border: "1px solid #f59e0b", borderRadius: 8 }}>
+              <div style={{ position: "absolute", left: -4, bottom: -20, fontSize: 11, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>
                 (1, 1)
               </div>
-              <div style={{ position: "absolute", right: -4, top: -20, fontSize: 11, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>
+              <div style={{ position: "absolute", right: -4, top: -20, fontSize: 11, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>
                 (5, 4)
               </div>
               {/* Width label */}
-              <div style={{ position: "absolute", bottom: -30, left: "50%", transform: "translateX(-50%)", fontSize: 12, fontWeight: 800, color: C.accent }}>
+              <div style={{ position: "absolute", bottom: -30, left: "50%", transform: "translateX(-50%)", fontSize: 12, fontWeight: 600, color: C.accent }}>
                 {t(E, "width = 5-1 = 4", "가로 = 5-1 = 4")}
               </div>
               {/* Height label */}
-              <div style={{ position: "absolute", right: -80, top: "50%", transform: "translateY(-50%)", fontSize: 12, fontWeight: 800, color: C.accent }}>
+              <div style={{ position: "absolute", right: -80, top: "50%", transform: "translateY(-50%)", fontSize: 12, fontWeight: 600, color: C.accent }}>
                 {t(E, "height = 4-1 = 3", "세로 = 4-1 = 3")}
               </div>
             </div>
-            <div style={{ textAlign: "center", marginTop: 36, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
+            <div style={{ textAlign: "center", marginTop: 36, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
               {t(E, "Area = 4 × 3 = 12", "면적 = 4 × 3 = 12")}
             </div>
           </div>
@@ -164,8 +176,8 @@ export function makeBillboardCh1(E) {
         "Now imagine: Billboard 1 (blue), Billboard 2 (green), and a Truck (red) blocking them.\nThe truck covers part of each billboard.\nWe need the visible area!", "이제 상상해봐: 광고판 1 (파란색), 광고판 2 (초록색), 그리고 트럭 (빨간색)이 가리고 있어요. 트럭이 각 광고판의 일부를 덮어. 보이는 면적이 필요해요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#f8fafc", border: "2px solid #e2e8f0", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.text, marginBottom: 10, textAlign: "center" }}>
+          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.text, marginBottom: 10, textAlign: "center" }}>
               {t(E, "Example Scenario", "예시 상황")}
             </div>
             {/* Three rectangles visualized */}
@@ -176,8 +188,8 @@ export function makeBillboardCh1(E) {
                 { label: t(E, "Billboard 2", "광고판 2"), w: 3, h: 2, color: "#22c55e", bg: "#dcfce7" },
               ].map((r, i) => (
                 <div key={i} style={{ textAlign: "center" }}>
-                  <div style={{ width: r.w * 25, height: r.h * 25, background: r.bg, border: `2.5px solid ${r.color}`, borderRadius: 6,
-                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: r.color }}>
+                  <div style={{ width: r.w * 25, height: r.h * 25, background: r.bg, border: `1.5px solid ${r.color}`, borderRadius: 6,
+                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: r.color }}>
                     {r.w}×{r.h}
                   </div>
                   <div style={{ fontSize: 11, fontWeight: 700, color: r.color, marginTop: 4 }}>{r.label}</div>
@@ -197,22 +209,17 @@ export function makeBillboardCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The key formula: Visible = (Billboard1 area - overlap with truck) + (Billboard2 area - overlap with truck).\nWe compute each overlap separately!", "핵심 공식: 보이는 면적 = (광고판1 면적 - 트럭과 겹침) + (광고판2 면적 - 트럭과 겹침). 각 겹침을 따로 계산해요!"),
+        "Each visible billboard is its area minus its overlap with the truck — sum the two.",
+        "각 광고판은 자기 면적에서 트럭과의 겹침을 뺀 게 보이는 면적. 두 개를 더하면 답."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 14, padding: 16 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: C.ok, marginBottom: 8 }}>
-              {t(E, "💡 Key Formula", "💡 핵심 공식")}
-            </div>
-            <div style={{ fontSize: 15, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 2 }}>
-              visible = (A₁ - O₁) + (A₂ - O₂)
-            </div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 8, lineHeight: 1.6 }}>
-              A₁ = {t(E, "billboard 1 area", "광고판1 면적")}<br/>
-              O₁ = {t(E, "overlap of billboard 1 with truck", "광고판1과 트럭의 겹침")}<br/>
-              A₂ = {t(E, "billboard 2 area", "광고판2 면적")}<br/>
-              O₂ = {t(E, "overlap of billboard 2 with truck", "광고판2과 트럭의 겹침")}
-            </div>
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, fontSize: 14, fontWeight: 700, color: "#9a3412", textAlign: "center", lineHeight: 1.8, fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "visible = (A₁ − overlap₁) + (A₂ − overlap₂)",
+                  "보이는 면적 = (A₁ − 겹침₁) + (A₂ − 겹침₂)")}
+          </div>
+          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
+            {t(E, "Next chapter: how to compute the overlap of two rectangles.",
+                  "다음 챕터에서 두 직사각형의 겹침 면적을 계산하는 방법.")}
           </div>
         </div>),
     },
@@ -257,24 +264,24 @@ export function makeBillboardCh2(E) {
         "The hardest part: how do we compute the overlap area of two rectangles?\nLet's learn the overlap formula step by step!", "가장 어려운 부분: 두 직사각형의 겹침 면적을 어떻게 구할까? 겹침 공식을 단계별로 배우자!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: C.accent, marginBottom: 10 }}>
+          <div style={{ background: C.accentBg, border: `1px solid ${C.accentBd}`, borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: C.accent, marginBottom: 10 }}>
               {t(E, "🔍 Rectangle Overlap", "🔍 직사각형 겹침")}
             </div>
             {/* Two overlapping rectangles */}
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
               <div style={{ position: "relative", width: 220, height: 120 }}>
                 {/* Rect A */}
-                <div style={{ position: "absolute", left: 0, top: 20, width: 140, height: 80, background: "rgba(59,130,246,0.2)", border: "2px solid #3b82f6", borderRadius: 4 }}>
-                  <span style={{ position: "absolute", top: 2, left: 4, fontSize: 10, fontWeight: 800, color: "#3b82f6" }}>A</span>
+                <div style={{ position: "absolute", left: 0, top: 20, width: 140, height: 80, background: "rgba(59,130,246,0.2)", border: "1px solid #3b82f6", borderRadius: 4 }}>
+                  <span style={{ position: "absolute", top: 2, left: 4, fontSize: 10, fontWeight: 600, color: "#3b82f6" }}>A</span>
                 </div>
                 {/* Rect B */}
-                <div style={{ position: "absolute", left: 80, top: 0, width: 140, height: 80, background: "rgba(239,68,68,0.2)", border: "2px solid #ef4444", borderRadius: 4 }}>
-                  <span style={{ position: "absolute", top: 2, right: 4, fontSize: 10, fontWeight: 800, color: "#ef4444" }}>B</span>
+                <div style={{ position: "absolute", left: 80, top: 0, width: 140, height: 80, background: "rgba(239,68,68,0.2)", border: "1px solid #ef4444", borderRadius: 4 }}>
+                  <span style={{ position: "absolute", top: 2, right: 4, fontSize: 10, fontWeight: 600, color: "#ef4444" }}>B</span>
                 </div>
                 {/* Overlap area */}
                 <div style={{ position: "absolute", left: 80, top: 20, width: 60, height: 60, background: "rgba(168,85,247,0.3)", border: "2px dashed #7c3aed", borderRadius: 4 }}>
-                  <span style={{ fontSize: 10, fontWeight: 900, color: "#7c3aed", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: "#7c3aed", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
                     {t(E, "overlap!", "겹침!")}
                   </span>
                 </div>
@@ -310,11 +317,11 @@ export function makeBillboardCh2(E) {
                 borderRadius: 8, padding: "8px 12px", display: "flex", justifyContent: "space-between",
                 fontSize: 13, fontFamily: "'JetBrains Mono',monospace",
               }}>
-                <span style={{ fontWeight: 800, color: s.color }}>{s.step}</span>
+                <span style={{ fontWeight: 600, color: s.color }}>{s.step}</span>
                 <span style={{ color: C.text }}>{s.desc}</span>
               </div>
             ))}
-            <div style={{ textAlign: "center", marginTop: 8, fontSize: 15, fontWeight: 900, color: "#7c3aed", fontFamily: "'JetBrains Mono',monospace" }}>
+            <div style={{ textAlign: "center", marginTop: 8, fontSize: 15, fontWeight: 700, color: "#7c3aed", fontFamily: "'JetBrains Mono',monospace" }}>
               {t(E, "Overlap = (3,2)→(6,4) = 3×2 = 6", "겹침 = (3,2)→(6,4) = 3×2 = 6")}
             </div>
           </div>

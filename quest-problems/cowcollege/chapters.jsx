@@ -113,17 +113,29 @@ export function makeCowCollegeCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\uD83C\uDF93"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Cow College</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Cow College</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+          {/* \uD83C\uDFAF Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              \uD83C\uDFAF {t(E, "Mission", "\uBBF8\uC158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the maximum total revenue and a price P that achieves it.",
+                "\uCD5C\uB300 \uCD1D \uC218\uC785\uACFC \uADF8\uAC83\uC744 \uB2EC\uC131\uD558\uB294 \uAC00\uACA9 P \uB97C \uCD9C\uB825.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#d97706" }}>{t(E, "N cows", "N마리 소")}</b>
@@ -133,7 +145,7 @@ export function makeCowCollegeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ picks ", "FJ 가 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "ONE tuition price P", "단 하나의 등록금 P")}</b>
@@ -142,7 +154,7 @@ export function makeCowCollegeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "maximum total revenue and a price P that achieves it", "최대 총 수입과 그것을 만드는 가격 P")}</b>
@@ -163,7 +175,7 @@ export function makeCowCollegeCh1(E) {
         const colors = ["#d97706", "#059669", "#7c3aed", "#dc2626"];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "4 cows with max tuitions", "4마리 소의 최대 등록금")}
             </div>
             {/* Cow icons with values */}
@@ -173,8 +185,8 @@ export function makeCowCollegeCh1(E) {
                   <div style={{ fontSize: 28, marginBottom: 4 }}>{"\uD83D\uDC2E"}</div>
                   <div style={{
                     width: 44, padding: "4px 0", borderRadius: 8,
-                    background: `${colors[i]}20`, border: `2.5px solid ${colors[i]}`,
-                    fontSize: 16, fontWeight: 900, color: colors[i],
+                    background: `${colors[i]}20`, border: `1.5px solid ${colors[i]}`,
+                    fontSize: 16, fontWeight: 700, color: colors[i],
                     fontFamily: "'JetBrains Mono', monospace", textAlign: "center",
                   }}>${v}</div>
                 </div>
@@ -182,7 +194,7 @@ export function makeCowCollegeCh1(E) {
             </div>
             {/* Revenue idea */}
             <div style={{
-              background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10,
+              background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10,
               padding: 10, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
               {t(E,
                 "If we set tuition = $4, which cows can pay?\nThose with max >= 4: cows with $6, $6, $4. That's 3 cows. Revenue = 4 x 3 = 12.", "등록금 = $4로 정하면 누가 낼 수 있을까?\n최대 >= 4인 소: $6, $6, $4. 3마리. 수입 = 4 x 3 = 12.")}
@@ -200,7 +212,7 @@ export function makeCowCollegeCh1(E) {
         const sorted = [1, 4, 6, 6];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "After sorting: [1, 4, 6, 6]", "정렬 후: [1, 4, 6, 6]")}
             </div>
             {/* Sorted bar chart */}
@@ -210,18 +222,18 @@ export function makeCowCollegeCh1(E) {
                   <div style={{
                     width: 42, height: v * 14,
                     background: i >= 1 ? C.ok : "#e5e7eb",
-                    border: `2px solid ${i >= 1 ? C.ok : C.dim}`,
+                    border: `1px solid ${i >= 1 ? C.ok : C.dim}`,
                     borderRadius: "6px 6px 0 0",
                     display: "flex", alignItems: "flex-start", justifyContent: "center",
                     paddingTop: 2,
                   }}>
                     <span style={{
-                      fontSize: 13, fontWeight: 900, color: i >= 1 ? "#fff" : C.dim,
+                      fontSize: 13, fontWeight: 700, color: i >= 1 ? "#fff" : C.dim,
                       fontFamily: "'JetBrains Mono', monospace",
                     }}>${v}</span>
                   </div>
                   <div style={{
-                    fontSize: 10, fontWeight: 800, color: C.dim, marginTop: 2,
+                    fontSize: 10, fontWeight: 600, color: C.dim, marginTop: 2,
                     fontFamily: "'JetBrains Mono', monospace",
                   }}>i={i}</div>
                 </div>
@@ -229,10 +241,10 @@ export function makeCowCollegeCh1(E) {
             </div>
             {/* Explanation */}
             <div style={{
-              background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10,
+              background: C.okBg, border: `1px solid ${C.okBd}`, borderRadius: 10,
               padding: 10, fontSize: 12, color: C.text, lineHeight: 1.8,
             }}>
-              <div style={{ fontWeight: 800, color: C.ok, marginBottom: 4 }}>
+              <div style={{ fontWeight: 600, color: C.ok, marginBottom: 4 }}>
                 {t(E, "Tuition = c[1] = $4", "등록금 = c[1] = $4")}
               </div>
               {t(E,
@@ -274,16 +286,16 @@ export function makeCowCollegeCh1(E) {
         ];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "Try each c[i] as tuition", "각 c[i]를 등록금으로 시도")}
             </div>
             <div style={{
-              borderRadius: 10, overflow: "hidden", border: `2px solid ${C.border}`,
+              borderRadius: 10, overflow: "hidden", border: `1px solid ${C.border}`,
               fontSize: 12, fontFamily: "'JetBrains Mono', monospace",
             }}>
               <div style={{
                 display: "grid", gridTemplateColumns: "35px 60px 60px 80px",
-                background: "#1e293b", color: "#e2e8f0", padding: "6px 8px", fontWeight: 800,
+                background: "#1e293b", color: "#e2e8f0", padding: "6px 8px", fontWeight: 600,
               }}>
                 <span>i</span>
                 <span>{t(E, "tuition", "등록금")}</span>
@@ -298,10 +310,10 @@ export function makeCowCollegeCh1(E) {
                     background: best ? C.okBg : "#fff",
                     padding: "6px 8px", borderBottom: idx < rows.length - 1 ? `1px solid ${C.border}` : "none",
                   }}>
-                    <span style={{ color: C.accent, fontWeight: 800 }}>{r.i}</span>
+                    <span style={{ color: C.accent, fontWeight: 600 }}>{r.i}</span>
                     <span style={{ color: C.text }}>${r.t}</span>
                     <span style={{ color: C.text }}>N-{r.i}={r.cows}</span>
-                    <span style={{ fontWeight: 900, color: best ? C.ok : C.text }}>
+                    <span style={{ fontWeight: 700, color: best ? C.ok : C.text }}>
                       {r.t}x{r.cows}=<span style={{ fontSize: best ? 16 : 12 }}>{r.rev}</span>
                       {best ? " ★" : ""}
                     </span>
@@ -310,7 +322,7 @@ export function makeCowCollegeCh1(E) {
               })}
             </div>
             <div style={{
-              marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 900, color: C.ok,
+              marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 700, color: C.ok,
             }}>
               {t(E, "Max revenue = 12 (tuition = $4)", "최대 수입 = 12 (등록금 = $4)")}
             </div>
@@ -322,13 +334,14 @@ export function makeCowCollegeCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "c = [1, 2, 3, 4, 5] (already sorted). Try each as tuition. What's the maximum revenue?", "c = [1, 2, 3, 4, 5] (이미 정렬). 각각을 등록금으로 시도해요. 최대 수입은?"),
+        "Try each value of c as the tuition.  At price c[i], how many cows pay?",
+        "c 의 각 값을 등록금으로 시도. 가격 c[i] 일 때 몇 마리가 내?"),
       question: t(E,
         "c = [1, 2, 3, 4, 5]. Max revenue = ?",
         "c = [1, 2, 3, 4, 5]. 최대 수입 = ?"),
       hint: t(E,
-        "1x5=5, 2x4=8, 3x3=9, 4x2=8, 5x1=5. Max = 9 at tuition $3.",
-        "1x5=5, 2x4=8, 3x3=9, 4x2=8, 5x1=5. 최대 = 9, 등록금 $3."),
+        "Revenue = price × (cows able to pay).  Try every choice of price.",
+        "수입 = 가격 × (낼 수 있는 소 수). 가격 후보를 다 시도."),
       answer: 9,
     },
   ];
@@ -347,7 +360,7 @@ export function makeCowCollegeCh2(E) {
         "The algorithm: Sort the array.\nThen sweep through, trying each c[i] as the tuition.\nCount = N-i.\nTrack maximum revenue.", "알고리즘: 배열 정렬. 그다음 각 c[i]를 등록금으로 시도하며 스윕. 수 = N-i. 최대 수입 추적."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
             {t(E, "Sort + Sweep", "정렬 + 스윕")}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -366,7 +379,7 @@ export function makeCowCollegeCh2(E) {
                 <div style={{
                   width: 28, height: 28, borderRadius: 6, display: "flex",
                   alignItems: "center", justifyContent: "center",
-                  background: "#d97706", color: "#fff", fontSize: 13, fontWeight: 900,
+                  background: "#d97706", color: "#fff", fontSize: 13, fontWeight: 700,
                   fontFamily: "'JetBrains Mono', monospace",
                 }}>{s.step}</div>
                 <span style={{ fontSize: 12, color: C.text, fontWeight: 700, flex: 1 }}>{s.desc}</span>
@@ -391,16 +404,16 @@ export function makeCowCollegeCh2(E) {
         ];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "Trace: sorted c = [1, 2, 3, 5, 8]", "추적: 정렬된 c = [1, 2, 3, 5, 8]")}
             </div>
             <div style={{
-              borderRadius: 10, overflow: "hidden", border: `2px solid ${C.border}`,
+              borderRadius: 10, overflow: "hidden", border: `1px solid ${C.border}`,
               fontSize: 12, fontFamily: "'JetBrains Mono', monospace",
             }}>
               <div style={{
                 display: "grid", gridTemplateColumns: "30px 50px 55px 80px 40px",
-                background: "#1e293b", color: "#e2e8f0", padding: "6px 6px", fontWeight: 800,
+                background: "#1e293b", color: "#e2e8f0", padding: "6px 6px", fontWeight: 600,
               }}>
                 <span>i</span>
                 <span>c[i]</span>
@@ -416,13 +429,13 @@ export function makeCowCollegeCh2(E) {
                     background: isBest ? C.okBg : "#fff",
                     padding: "5px 6px", borderBottom: idx < rows.length - 1 ? `1px solid ${C.border}` : "none",
                   }}>
-                    <span style={{ color: C.accent, fontWeight: 800 }}>{r.i}</span>
+                    <span style={{ color: C.accent, fontWeight: 600 }}>{r.i}</span>
                     <span style={{ color: C.text }}>${r.t}</span>
                     <span style={{ color: C.text }}>{r.cows}</span>
-                    <span style={{ fontWeight: 800, color: isBest ? C.ok : C.text }}>
+                    <span style={{ fontWeight: 600, color: isBest ? C.ok : C.text }}>
                       {r.t}x{r.cows}={r.rev}{isBest ? " ★" : ""}
                     </span>
-                    <span style={{ fontWeight: 900, color: "#d97706" }}>
+                    <span style={{ fontWeight: 700, color: "#d97706" }}>
                       {Math.max(...rows.slice(0, idx + 1).map(x => x.rev))}
                     </span>
                   </div>
@@ -430,7 +443,7 @@ export function makeCowCollegeCh2(E) {
               })}
             </div>
             <div style={{
-              marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 900, color: C.ok,
+              marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 700, color: C.ok,
             }}>
               {t(E, "Max revenue = 10 (tuition = $5)", "최대 수입 = 10 (등록금 = $5)")}
             </div>
@@ -446,10 +459,10 @@ export function makeCowCollegeCh2(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
-          <div style={{ fontSize: 20, fontWeight: 900, color: "#d97706", fontFamily: "'JetBrains Mono', monospace" }}>
+          <div style={{ fontSize: 20, fontWeight: 700, color: "#d97706", fontFamily: "'JetBrains Mono', monospace" }}>
             O(N log N)
           </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 , whiteSpace: "pre-line" }}>
             {t(E,
               "Sorting takes O(N log N).\nThe single sweep is O(N). Since O(N log N) > O(N), total = O(N log N). For N up to 100,000, this runs instantly!",
               "정렬은 O(N log N).\n스윕 한 번은 O(N). O(N log N) > O(N)이므로 총 = O(N log N). N이 100,000까지여도 즉시 실행!")}
@@ -460,13 +473,14 @@ export function makeCowCollegeCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Try c = [3, 1, 2]. Sorted: [1, 2, 3]. Revenues: 1x3=3, 2x2=4, 3x1=3. What's the max?", "c = [3, 1, 2]를 해봐요. 정렬: [1, 2, 3]. 수입: 1x3=3, 2x2=4, 3x1=3. 최대는?"),
+        "Sort first, then try each entry as the tuition.",
+        "정렬한 뒤 각 항목을 등록금으로 시도."),
       question: t(E,
         "c = [3, 1, 2]. Max revenue = ?",
         "c = [3, 1, 2]. 최대 수입 = ?"),
       hint: t(E,
-        "Sorted: [1,2,3]. 1x3=3, 2x2=4, 3x1=3. Max = 4.",
-        "정렬: [1,2,3]. 1x3=3, 2x2=4, 3x1=3. 최대 = 4."),
+        "After sorting, count cows able to pay each price and multiply.",
+        "정렬 후 각 가격에서 낼 수 있는 소 수 × 가격."),
       answer: 4,
     },
   ];
@@ -485,7 +499,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
         "Let's build the code! First, read N and the array of max tuitions.", "코드를 만들자! 먼저 N과 최대 등록금 배열을 읽어."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 1: Read input", "1단계: 입력 읽기")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
@@ -516,7 +530,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
         "Next, sort the array!\nThis is the key insight: after sorting, c[i] as tuition means N-i cows can pay.", "다음은 배열 정렬! 핵심 통찰: 정렬 후 c[i]를 등록금으로 하면 N-i마리가 지불 가능."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 2: Sort the array", "2단계: 배열 정렬")}
           </div>
           <CodeSnippet
@@ -531,7 +545,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
           {/* Before/After visual */}
           <div style={{ marginTop: 10, display: "flex", gap: 12, justifyContent: "center", alignItems: "center" }}>
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 10, fontWeight: 800, color: C.dim, marginBottom: 4 }}>
+              <div style={{ fontSize: 10, fontWeight: 600, color: C.dim, marginBottom: 4 }}>
                 {t(E, "Before", "정렬 전")}
               </div>
               <div style={{ display: "flex", gap: 3 }}>
@@ -539,8 +553,8 @@ export function makeCowCollegeCh3(E, lang = "py") {
                   <div key={i} style={{
                     width: 30, height: 30, borderRadius: 6, display: "flex",
                     alignItems: "center", justifyContent: "center",
-                    background: C.noBg, border: `2px solid ${C.noBd}`,
-                    fontSize: 13, fontWeight: 900, color: C.no,
+                    background: C.noBg, border: `1px solid ${C.noBd}`,
+                    fontSize: 13, fontWeight: 700, color: C.no,
                     fontFamily: "'JetBrains Mono', monospace",
                   }}>{v}</div>
                 ))}
@@ -548,7 +562,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
             </div>
             <span style={{ fontSize: 20, color: "#d97706" }}>→</span>
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 10, fontWeight: 800, color: C.dim, marginBottom: 4 }}>
+              <div style={{ fontSize: 10, fontWeight: 600, color: C.dim, marginBottom: 4 }}>
                 {t(E, "After", "정렬 후")}
               </div>
               <div style={{ display: "flex", gap: 3 }}>
@@ -556,8 +570,8 @@ export function makeCowCollegeCh3(E, lang = "py") {
                   <div key={i} style={{
                     width: 30, height: 30, borderRadius: 6, display: "flex",
                     alignItems: "center", justifyContent: "center",
-                    background: C.okBg, border: `2px solid ${C.okBd}`,
-                    fontSize: 13, fontWeight: 900, color: C.ok,
+                    background: C.okBg, border: `1px solid ${C.okBd}`,
+                    fontSize: 13, fontWeight: 700, color: C.ok,
                     fontFamily: "'JetBrains Mono', monospace",
                   }}>{v}</div>
                 ))}
@@ -573,7 +587,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
         "Now sweep through the sorted array.\nFor each index i, compute revenue = c[i] x (N-i) and track the best.", "이제 정렬된 배열을 스윕해요. 각 인덱스 i에서 수입 = c[i] x (N-i) 계산하고 최고를 추적해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 3: Sweep and track maximum", "3단계: 스윕하며 최대 추적")}
           </div>
           <CodeSnippet
@@ -628,7 +642,7 @@ export function makeCowCollegeCh3(E, lang = "py") {
         "Last step: print the best revenue and the tuition price. That's the complete solution!", "마지막 단계: 최고 수입과 등록금을 출력. 이게 전체 풀이에요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 4: Print the answer!", "4단계: 답 출력!")}
           </div>
           <CodeSnippet
@@ -637,9 +651,9 @@ export function makeCowCollegeCh3(E, lang = "py") {
           />
           <div style={{
             marginTop: 10, background: C.okBg, borderRadius: 10,
-            padding: "8px 12px", border: `2px solid ${C.okBd}`, textAlign: "center",
+            padding: "8px 12px", border: `1px solid ${C.okBd}`, textAlign: "center",
           }}>
-            <div style={{ fontSize: 13, fontWeight: 900, color: C.ok }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
               {t(E, "Complete code! Sort + sweep in O(N log N)!", "전체 코드 완성! 정렬 + 스윕 O(N log N)!")}
             </div>
           </div>

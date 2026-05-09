@@ -59,17 +59,29 @@ export function makeBillboard2Ch1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\udea7"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Blocked Billboard II</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Blocked Billboard II</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2018 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the area of the smallest axis-aligned tarp covering the visible part of the lawnmower billboard.",
+                "잔디깎이 광고판에서 보이는 부분을 덮는 가장 작은 축에 평행한 타프의 면적을 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There's a ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "lawnmower billboard", "잔디깎이 광고판")}</b>
@@ -79,7 +91,7 @@ export function makeBillboard2Ch1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We need a ", "잔디깎이 광고판 중 가려지지 않은 모든 부분을 덮는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "tarp — an axis-aligned rectangle", "타프 — 축에 평행한 직사각형")}</b>
@@ -88,7 +100,7 @@ export function makeBillboard2Ch1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "area of the SMALLEST such tarp", "가장 작은 타프의 면적")}</b>
@@ -126,8 +138,8 @@ export function makeBillboard2Ch1(E) {
         "Billboard 6x3=18, no overlap with feed. Tarp area?",
         "광고판 6x3=18, 사료와 겹침 없음. 타프 면적은?"),
       hint: t(E,
-        "No overlap means the entire billboard is exposed. Tarp = full area.",
-        "겹침이 없으면 전체 광고판이 노출돼요. 타프 = 전체 면적."),
+        "If nothing's covered, the tarp must cover the whole billboard.",
+        "가려진 게 없으면 타프가 광고판 전체를 덮어야 해."),
       answer: 18,
     },
   ];
@@ -139,48 +151,12 @@ export function makeBillboard2Ch1(E) {
    --------------------------------------------------------------- */
 export function makeBillboard2Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "The remaining (visible) part of the lawnmower billboard is rectangular ONLY if the feed billboard fully covers one of its full SIDES (left/right/top/bottom strip). Otherwise the visible part is L-shaped or has a hole — and the smallest rectangle that covers it is the whole lawnmower billboard.",
-        "잔디깎이 광고판의 보이는 부분이 직사각형이 되는 건 사료 광고판이 한 쪽 변 전체 (왼/오/위/아래 띠) 를 덮을 때뿐이에요. 그 외에는 L 자 모양이나 구멍이 있어서 — 그걸 덮는 가장 작은 직사각형은 전체 광고판이에요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Clamp feed to lawnmower bounds", "사료를 잔디깎이 범위로 클램프"), code: "f = intersect(feed, lawn)", color: "#dc2626" },
-              { n: 2, label: t(E, "Does feed cover left/right strip?", "왼/오 변 전체 덮나?"), code: "if f.y1==lawn.y1 and f.y2==lawn.y2: ...", color: "#7c3aed" },
-              { n: 3, label: t(E, "Does feed cover top/bottom strip?", "위/아래 변 전체 덮나?"), code: "or f.x1==lawn.x1 and f.x2==lawn.x2: tarp = remaining strip", color: "#0891b2" },
-              { n: 4, label: t(E, "Otherwise tarp = whole lawn", "아니면 타프 = 전체 잔디깎이"), code: "else: tarp_area = lawn.area", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(1)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant-time geometric case analysis", "상수 시간 기하 케이스 분석")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Visible part is rectangular ONLY if the feed billboard fully covers one full side (left/right/top/bottom strip). Otherwise it's L-shaped/hole → smallest covering rectangle is the whole billboard. Sections build it one piece at a time.",
+        "보이는 부분이 직사각형 = 사료가 한 쪽 변 전체를 덮을 때뿐. 그 외엔 L 자/구멍 → 덮는 최소 직사각형은 전체 광고판. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBillboard2Sections(E),
     },
   ];

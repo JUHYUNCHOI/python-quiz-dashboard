@@ -16,8 +16,10 @@ const FULL_PY = [
   "    # Each toggle operation: toggle lamps from L to R",
   "    toggles = [0] * (N + 2)  # difference array",
   "    for _ in range(M):",
-  "        L = int(input_data[idx]); idx += 1",
-  "        R = int(input_data[idx]); idx += 1",
+  "        L = int(input_data[idx])",
+  "        idx += 1",
+  "        R = int(input_data[idx])",
+  "        idx += 1",
   "        toggles[L] += 1",
   "        toggles[R + 1] -= 1",
   "",
@@ -126,7 +128,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

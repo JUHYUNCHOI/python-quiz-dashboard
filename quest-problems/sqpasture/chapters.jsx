@@ -35,24 +35,36 @@ export function makeSqPastureCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>⬜</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Square Pasture</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Square Pasture</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2016 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the area of the smallest axis-aligned square containing both pastures.",
+                "두 목초지를 모두 포함하는 가장 작은 축에 평행한 정사각형의 면적을 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#d97706" }}>{t(E, "Two non-overlapping axis-aligned rectangles", "겹치지 않는 축에 평행한 직사각형 2개")}</b>
                   {t(E, " (pastures) on a field.", " 가 들판에 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ builds a ", "FJ 가 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "SQUARE fence (sides parallel to axes)", "정사각형 울타리 (변이 축에 평행)")}</b>
@@ -61,7 +73,7 @@ export function makeSqPastureCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "AREA of the smallest such square", "그런 정사각형 중 가장 작은 것의 면적")}</b>
@@ -78,8 +90,8 @@ export function makeSqPastureCh1(E) {
         "Step 1: Find the bounding box — the smallest rectangle that contains both pastures.\nThis uses min/max of all coordinates!", "1단계: 바운딩 박스를 찾아 — 두 목초지를 모두 포함하는 가장 작은 직사각형. 모든 좌표의 min/max를 써요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#d97706", marginBottom: 10, textAlign: "center" }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#d97706", marginBottom: 10, textAlign: "center" }}>
               {t(E, "Bounding Box", "바운딩 박스")}
             </div>
             {/* Visual: two rects inside a dashed bounding box */}
@@ -87,9 +99,9 @@ export function makeSqPastureCh1(E) {
               {/* Bounding box */}
               <div style={{ position: "absolute", left: 0, top: 0, width: 240, height: 140, border: "2.5px dashed #d97706", borderRadius: 6 }} />
               {/* Rect A */}
-              <div style={{ position: "absolute", left: 10, top: 50, width: 80, height: 80, background: "rgba(59,130,246,0.2)", border: "2px solid #3b82f6", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "#3b82f6" }}>A</div>
+              <div style={{ position: "absolute", left: 10, top: 50, width: 80, height: 80, background: "rgba(59,130,246,0.2)", border: "1px solid #3b82f6", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: "#3b82f6" }}>A</div>
               {/* Rect B */}
-              <div style={{ position: "absolute", left: 150, top: 10, width: 80, height: 60, background: "rgba(34,197,94,0.2)", border: "2px solid #22c55e", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "#22c55e" }}>B</div>
+              <div style={{ position: "absolute", left: 150, top: 10, width: 80, height: 60, background: "rgba(34,197,94,0.2)", border: "1px solid #22c55e", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: "#22c55e" }}>B</div>
             </div>
             <div style={{ textAlign: "center", marginTop: 8, fontSize: 12, color: "#d97706", fontWeight: 700 }}>
               {t(E, "Dashed = bounding box of A and B", "점선 = A와 B의 바운딩 박스")}
@@ -116,11 +128,11 @@ export function makeSqPastureCh1(E) {
         "Step 2: The bounding box might not be square!\nTo make it a square, take the LARGER of width and height as the side length.", "2단계: 바운딩 박스가 정사각형이 아닐 수 있어요! 정사각형으로 만들려면, 가로와 세로 중 큰 쪽을 변의 길이로!"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 14, padding: 16 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: C.ok, marginBottom: 8 }}>
+          <div style={{ background: C.okBg, border: `1px solid ${C.okBd}`, borderRadius: 14, padding: 16 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: C.ok, marginBottom: 8 }}>
               {t(E, "💡 Key Insight", "💡 핵심 관찰")}
             </div>
-            <div style={{ fontSize: 15, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 2 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 2 }}>
               side = max(width, height)
             </div>
             <div style={{ fontSize: 13, color: C.text, marginTop: 8, lineHeight: 1.6, whiteSpace: "pre-line" }}>
@@ -212,7 +224,7 @@ export function makeSqPastureCh2(E, lang = "py") {
             <div style={{ color: "#e2e8f0" }}>print(side * side)</div>
           </div>
           <div style={{ marginTop: 8, textAlign: "center" }}>
-            <span style={{ fontSize: 24, fontWeight: 900, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>O(1)</span>
+            <span style={{ fontSize: 24, fontWeight: 700, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>O(1)</span>
             <span style={{ fontSize: 12, color: C.dim, marginLeft: 8 }}>{t(E, "— just math!", "— 그냥 수학!")}</span>
           </div>
         </div>),

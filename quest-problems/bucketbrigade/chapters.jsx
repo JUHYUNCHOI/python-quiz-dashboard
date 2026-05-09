@@ -56,17 +56,29 @@ export function makeBrigadeCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\udea3"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Bucket Brigade</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Bucket Brigade</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of cows needed to form a chain from L to B on the 10\u00d710 grid (cows can't stand on R).",
+                "10\u00d710 \uaca9\uc790\uc5d0\uc11c L \ubd80\ud130 B \uae4c\uc9c0 \uccb4\uc778\uc744 \ub9cc\ub4dc\ub294 \ub370 \ud544\uc694\ud55c \ucd5c\uc18c \uc18c \uc218\ub97c \ucd9c\ub825 (\uc18c\ub294 R \uc704 X).")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "10×10 grid", "10×10 격자")}</b>
@@ -80,7 +92,7 @@ export function makeBrigadeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Cows form a ", "소들이 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "chain of empty cells from L to B", "L 과 B 를 잇는 빈 칸들의 체인")}</b>
@@ -89,7 +101,7 @@ export function makeBrigadeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Cows ", "소는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "cannot stand on the rock", "바위 위에 설 수 없어요")}</b>
@@ -98,7 +110,7 @@ export function makeBrigadeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of cows", "필요한 최소 소 수")}</b>
@@ -150,48 +162,12 @@ export function makeBrigadeCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBrigadeCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "BFS from the lake L to the barn B on the 10×10 grid, blocking the rock R. The shortest path has some length L_path including L and B. The number of cows = L_path − 2 (L and B are not cows).",
-        "10×10 격자에서 호수 L 에서 헛간 B 까지 BFS — 바위 R 은 통과 불가. 최단 경로 길이를 L_path 라 하면 (L, B 포함), 필요한 소의 수 = L_path − 2 (L, B 는 소 아님)."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Find L, B, R positions", "L, B, R 위치 찾기"), code: "locate L, B, R on the grid", color: "#dc2626" },
-              { n: 2, label: t(E, "BFS from L (skip R)", "L 에서 BFS (R 회피)"), code: "queue = [L];  dist[L] = 0", color: "#7c3aed" },
-              { n: 3, label: t(E, "Stop when reaching B", "B 에 도달하면 중단"), code: "if cell == B: shortest = dist[B]", color: "#0891b2" },
-              { n: 4, label: t(E, "Cows = shortest − 1", "소 수 = shortest − 1"), code: "print(shortest - 1)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(1)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "grid size is fixed at 10 × 10", "격자 크기 10 × 10 고정")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code — straight in.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "BFS from L to B on the 10×10 grid, blocking R.  Shortest path length minus 2 (L and B don't count as cows).  Sections build it one piece at a time.",
+        "10×10 격자에서 L 부터 B 까지 BFS, R 은 통과 불가. 최단 경로 길이 − 2 (L, B 는 소 아님). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBucketBrigadeSections(E),
     },
   ];

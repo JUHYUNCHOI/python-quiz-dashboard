@@ -65,17 +65,29 @@ export function makeOddPhotosCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcf8"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Even More Odd Photos</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Even More Odd Photos</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the maximum number of consecutive groups whose sums alternate EVEN, ODD, EVEN, ODD, ...",
+                "합이 EVEN, ODD, EVEN, ODD ... 로 번갈아 가는 연속 묶음의 최대 개수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ에게 ")}
                   <b style={{ color: "#2563eb" }}>{t(E, "N cows in a line", "한 줄로 선 N마리 소")}</b>
@@ -83,7 +95,7 @@ export function makeOddPhotosCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Split the line into ", "줄을 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "consecutive non-empty groups", "연속한 비어있지 않은 묶음")}</b>
@@ -92,7 +104,7 @@ export function makeOddPhotosCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Sum of IDs must be ", "각 묶음의 ID 합은 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "EVEN, ODD, EVEN, ODD, ... alternating", "짝수, 홀수, 짝수, 홀수 ... 로 번갈아")}</b>
@@ -100,7 +112,7 @@ export function makeOddPhotosCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "maximum possible number of groups", "만들 수 있는 묶음의 최대 수")}</b>
@@ -137,8 +149,8 @@ export function makeOddPhotosCh1(E) {
         "IDs = [2,4,6,8]. Maximum groups?",
         "IDs = [2,4,6,8]. 최대 그룹 수?"),
       hint: t(E,
-        "All even, so group 1 = even sum works. Group 2 needs odd sum = impossible. Answer: 1.",
-        "모두 짝수, 그룹 1 = 짝수 합 가능. 그룹 2 = 홀수 합 불가. 답: 1."),
+        "Group 2 needs an odd sum — can you build that from only even numbers?",
+        "2번 그룹은 홀수 합이 필요해 — 짝수만으로 만들 수 있을까?"),
       answer: 1,
     },
   ];
@@ -150,48 +162,12 @@ export function makeOddPhotosCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeOddPhotosCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Group sums alternate EVEN, ODD, EVEN, ODD, ... An EVEN-sum group needs 1 even cow OR 2 odd cows. An ODD-sum group needs 1 odd cow. Greedily count groups using available odd/even counts.",
-        "그룹 합이 EVEN, ODD, EVEN, ODD, ... 로 번갈아 가요. EVEN 그룹은 짝수 1마리 OR 홀수 2마리 필요. ODD 그룹은 홀수 1마리 필요. 보유한 홀/짝 개수로 그리디하게 그룹 수 세기."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Count odd and even cows", "홀수/짝수 소 세기"), code: "odds = sum(1 for x in a if x%2);  evens = N - odds", color: "#2563eb" },
-              { n: 2, label: t(E, "EVEN group: prefer 1 even", "EVEN 그룹: 짝수 1마리 우선"), code: "if evens > 0: evens -= 1  else: odds -= 2", color: "#7c3aed" },
-              { n: 3, label: t(E, "ODD group: needs 1 odd", "ODD 그룹: 홀수 1마리"), code: "if odds > 0: odds -= 1  else: stop", color: "#dc2626" },
-              { n: 4, label: t(E, "Alternate until exhausted", "교대로 자원이 떨어질 때까지"), code: "groups += 1; toggle EVEN/ODD; loop", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "count odds/evens once + linear group counting", "홀/짝 한 번 카운트 + 선형 그룹 세기")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Group sums alternate EVEN, ODD, EVEN, ODD, ... EVEN-sum group needs 1 even cow OR 2 odd cows. ODD-sum group needs 1 odd cow. Greedily count groups from available odd/even counts. Sections build it one piece at a time.",
+        "그룹 합이 EVEN, ODD, EVEN, ODD ... 번갈아. EVEN 그룹은 짝수 1 마리 OR 홀수 2 마리. ODD 그룹은 홀수 1 마리. 보유 홀/짝 개수로 그리디하게 카운트. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getOddPhotosSections(E),
     },
   ];

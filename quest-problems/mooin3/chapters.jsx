@@ -1,322 +1,463 @@
 import { C, t } from "@/components/quest/theme";
 import { getMooin3Sections, MooTraceSimulator, TripletEnumSimulator } from "./components";
+import { CodeSectionView } from "@/components/quest/CodeSectionView";
+
+/* ═══════════════════════════════════════════════════════════════
+   Mooin' Time III walkthrough — follows the 기·승·전·결 arc
+   (see quest_problem_standard.md "🌟 최우선 — 큰 틀"):
+
+     [기] Ch1-1: Light problem intro (story + 1 visual, no detail)
+     [승] Ch1-2: Sample I/O format
+     [전] Ch1-3: Worked example — TripletEnumSim walks "abba" through
+                 every triplet so the rule + score + window land
+                 concretely.
+     [확인] Ch1-4: Quick input quiz on a small case
+     [결-a sim] Ch2-1: MooTraceSim — fix-j idea
+     [결-a code] Ch2-2..5: brute sections (input, fix-j loop, update, full)
+     [결-b limits] Ch2-6: "what if N big?"
+     [결-c code] Ch2-7: smart precomputed code
+
+   Earlier this file had 4 separate "rule detail" pages (✓, ✗, score,
+   window) before sample I/O.  That bloated the [기] step.  Folded
+   into the [전] worked example.
+   ═══════════════════════════════════════════════════════════════ */
 
 export function makeMooin3Ch1(E) {
   return [
-    // 1-1: Problem
+    /* [기] — Light intro.  ONE page, one tiny visual, three short
+       lines.  No detailed rule explanations / score formula
+       derivation / window edge cases — those land in [전]. */
     {
       type: "reveal",
+      label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
-        "We have a string s. A 'moo' is a triple of positions (i, j, k) where s[i] is DIFFERENT from s[j] but s[j] equals s[k] — like 'abb'.\nFor each query range, find the moo with the BIGGEST value of (j-i)·(k-j) (the product of left distance and right distance).",
-        "문자열 s 가 있어요. 'moo' 는 세 자리 (i, j, k) — s[i] 는 다르고 s[j] = s[k] (예: 'abb').\n각 쿼리 구간에서 (j-i)·(k-j) (왼쪽 거리 × 오른쪽 거리) 가 가장 큰 moo 를 찾아요."),
+        "Bessie's looking at a string of letters.  She wants to pick out a special 3-letter pattern called a 'moo'.",
+        "Bessie 가 글자로 된 줄을 보고 있어. 'moo' 라는 특별한 3 글자 패턴을 골라 점수를 매길 거야."),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>It's Mooin' Time III</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #3</div>
-          </div>
-
-          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
-              📖 {t(E, "Problem", "문제")}
+        <div style={{ padding: 20 }}>
+          <div style={{
+            background: C.accentBg, border: `1px solid ${C.accentBd}`, borderRadius: 12,
+            padding: "16px 18px", maxWidth: 460, margin: "0 auto",
+          }}>
+            {/* 🎯 미션 — 문제 목표를 큰 글씨로 한 줄.  학생이 다음
+                페이지 (Sample I/O) 가서 입출력 봐도 "이게 뭐 하는 거지" 가
+                안 되도록 미션이 머리에 박혀있어야. */}
+            <div style={{
+              background: "#fff", border: `2px solid ${C.accentBd}`, borderRadius: 10,
+              padding: "10px 14px", marginBottom: 16, fontSize: 13, lineHeight: 1.6, color: C.text,
+            }}>
+              <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>
+                🎯 {t(E, "Mission", "미션")}
+              </div>
+              {t(E,
+                "Given a string of letters and several query windows.  For each window, find the highest-scoring 'moo' inside (or print -1).",
+                "글자 줄과 여러 쿼리 윈도우가 주어져요. 각 윈도우 안에서 점수가 가장 큰 'moo' 의 점수를 출력 (없으면 -1).")}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#7c5cfc", fontWeight: 800, flexShrink: 0 }}>•</span>
+
+            {/* Rule — what makes 3 letters a moo.  Cards adjacent so the
+                rule is the focus; distance/score introduced separately
+                with visible arrows so the student SEES what "left/right
+                distance" means. */}
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 11.5, fontWeight: 600, color: "#5b21b6", textAlign: "center", marginBottom: 8 }}>
+                {t(E, "What's a 'moo'?  Three letters with this rule:",
+                      "'moo' = 3 글자, 규칙은:")}
+              </div>
+              <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 6 }}>
+                {[
+                  { ch: "a", bg: "#f3e8ff", bd: "#7c3aed", tag: t(E, "1st", "1번째") },
+                  { ch: "b", bg: "#cffafe", bd: "#0891b2", tag: t(E, "2nd", "2번째") },
+                  { ch: "b", bg: "#cffafe", bd: "#0891b2", tag: t(E, "3rd", "3번째") },
+                ].map((c, i) => (
+                  <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                    <div style={{ fontSize: 10.5, fontWeight: 700, color: c.bd }}>{c.tag}</div>
+                    <div style={{
+                      width: 36, height: 42, background: c.bg, border: `2px solid ${c.bd}`,
+                      borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
+                      fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 18, color: "#1f2937",
+                    }}>{c.ch}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontSize: 12, lineHeight: 1.55, textAlign: "center", color: C.text }}>
+                <b style={{ color: "#7c3aed" }}>{t(E, "1st", "1번째")}</b>
+                {t(E, " ≠ ", " 가 다르고 ")}
+                <b style={{ color: "#0891b2" }}>{t(E, "2nd = 3rd", "2번째 = 3번째")}</b>
+              </div>
+            </div>
+
+            {/* Score — concrete tiny example.  Show the picks at positions
+                1, 2, 3 with arrows under them showing distance = 1 and 1.
+                "Left/right distance" gets its meaning from the picture, not
+                from definition. */}
+            <div style={{
+              padding: "10px 12px", background: "#ecfdf5", border: "1px solid #86efac",
+              borderRadius: 8, marginBottom: 6,
+            }}>
+              <div style={{ fontSize: 11.5, fontWeight: 600, color: "#15803d", textAlign: "center", marginBottom: 8 }}>
+                {t(E, "Score = how spread-out the 3 picks are",
+                      "점수 = 3 글자가 얼마나 떨어져 있는가")}
+              </div>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>
                 <div>
-                  {t(E, "Given a ", "")}
-                  <b style={{ color: "#7c5cfc" }}>{t(E, "string s of length N", "길이 N의 문자열 s")}</b>
-                  {t(E, " (only lowercase letters).", "가 주어져요 (소문자만).")}
+                  {/* Letters with position numbers below */}
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {[
+                      { ch: "a", bd: "#7c3aed", bg: "#f3e8ff" },
+                      { ch: "b", bd: "#0891b2", bg: "#cffafe" },
+                      { ch: "b", bd: "#0891b2", bg: "#cffafe" },
+                    ].map((c, i) => (
+                      <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <div style={{
+                          width: 30, height: 32, background: c.bg, border: `2px solid ${c.bd}`,
+                          borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center",
+                          fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 14, color: "#1f2937",
+                        }}>{c.ch}</div>
+                        <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>
+                          {t(E, "pos ", "위치 ")}{i + 1}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Distance arrows under cards */}
+                  <div style={{ display: "flex", gap: 0, marginTop: 6, alignItems: "center", justifyContent: "center" }}>
+                    <div style={{ width: 30 }} />
+                    <div style={{
+                      width: 38, height: 16, position: "relative",
+                      background: "#f3e8ff", border: "1.5px solid #7c3aed", borderRadius: 3,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 10, fontWeight: 700, color: "#7c3aed",
+                    }}>← 1 →</div>
+                    <div style={{
+                      width: 38, height: 16, position: "relative",
+                      background: "#cffafe", border: "1.5px solid #0891b2", borderRadius: 3,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 10, fontWeight: 700, color: "#0891b2",
+                    }}>← 1 →</div>
+                    <div style={{ width: 30 }} />
+                  </div>
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#7c5cfc", fontWeight: 800, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "A ", "")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "'moo'", "'moo'")}</b>
-                  {t(E, " is positions ", "는 위치 ")}
-                  <code style={{ background: "#ede9fe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>i &lt; j &lt; k</code>
-                  {t(E, " where ", " 중 ")}
-                  <code style={{ background: "#ede9fe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>s[i] ≠ s[j] = s[k]</code>
-                  {t(E, " (e.g., 'abb', 'xzz').",
-                        " 인 것 (예: 'abb', 'xzz').")}
-                </div>
+              <div style={{
+                fontSize: 12.5, fontWeight: 700, color: "#15803d", textAlign: "center", marginTop: 4,
+              }}>
+                {t(E, "Score = ", "점수 = ")}
+                <span style={{ color: "#7c3aed" }}>1</span>
+                {" × "}
+                <span style={{ color: "#0891b2" }}>1</span>
+                {" = 1 "}
+                <span style={{ color: C.dim, fontWeight: 400, fontSize: 11 }}>
+                  {t(E, "(adjacent picks → small score)", "(붙어있으면 → 작은 점수)")}
+                </span>
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#7c5cfc", fontWeight: 800, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "Each query gives a range ", "각 쿼리는 구간 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "[l, r]", "[l, r]")}</b>
-                  {t(E, " — only positions inside this range count.",
-                        "을 줘요 — 이 안의 위치만 사용할 수 있어요.")}
-                </div>
+              <div style={{ fontSize: 11, color: "#15803d", textAlign: "center", marginTop: 4 }}>
+                {t(E, "Picks farther apart → bigger score.  Mission: find the BIGGEST.",
+                      "픽이 멀리 있을수록 점수 큼. 미션: 그 중 최대 찾기.")}
               </div>
-              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: `1px dashed ${C.accentBd}` }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
-                <div>
-                  {t(E, "Print the maximum value of ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "(j-i) · (k-j)", "(j-i) · (k-j)")}</b>
-                  {t(E, " — the left distance times the right distance — over all moos in the range. ",
-                        " — 왼쪽 거리 × 오른쪽 거리 — 의 최댓값을 출력. ")}
-                  {t(E, "If no moo exists in the range, print -1.",
-                        "moo 가 없으면 -1.")}
-                </div>
-              </div>
+            </div>
+
+            <div style={{
+              marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center", fontStyle: "italic",
+            }}>
+              {t(E, "Sample input + worked example on the next pages.",
+                    "샘플 입력 + 풀이 예제는 다음 페이지에서.")}
             </div>
           </div>
         </div>),
     },
 
-    // 1-2: Sample I/O — concrete example with the input format
+    /* [승] — Sample I/O.  Same as before. */
     {
       type: "reveal",
+      label: t(E, "Sample I/O", "샘플 입출력"),
       narr: t(E,
-        "A small concrete sample. Read the input top-to-bottom and you'll see exactly what each line means.",
-        "작은 예시. 입력을 위에서 아래로 읽으면 각 줄이 무슨 뜻인지 보여요."),
+        "Sample input — 12-character string with 5 query windows.  Output is 5 lines: the highest moo score in each window.",
+        "샘플 입력 — 12 자 문자열 + 쿼리 윈도우 5 개. 출력 5 줄 = 각 윈도우의 점수 최대 moo 점수."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#7c5cfc", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
-{`5 1
-abbab
-1 5`}
+{`12 5
+abcabbacabac
+1 12
+2 7
+4 8
+2 5
+3 10`}
               </div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`4`}
+{`28
+6
+1
+-1
+12`}
               </div>
             </div>
           </div>
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
               🔍 {t(E, "Line by line", "한 줄씩")}
             </div>
-            <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>5 1</code> — {t(E, "N = 5 (string length), Q = 1 (one query)", "N = 5 (문자열 길이), Q = 1 (쿼리 1 개)")}</div>
+            <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>12 5</code> — {t(E, "N = 12 (string length), Q = 5 (queries)", "N = 12 (문자열 길이), Q = 5 (쿼리 개수)")}</div>
             <div style={{ marginTop: 6 }}>
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>abbab</code> — {t(E, "the string s (1-indexed positions 1..5)", "문자열 s (1-based 위치 1..5)")}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>abcabbacabac</code> — {t(E, "the string s", "문자열 s")}
             </div>
             <div style={{ marginTop: 6 }}>
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 5</code> — {t(E, "query range [l, r] = [1, 5] (the whole string)", "쿼리 구간 [l, r] = [1, 5] (문자열 전체)")}
+              {t(E, "Then 5 query lines, each: ", "그 다음 쿼리 5 줄, 각각: ")}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>l r</code>
+              {" — "}
+              <b style={{ color: "#5b21b6" }}>{t(E, "the WINDOW", "윈도우 범위")}</b>
+              {t(E, " (positions ", " (위치 ")}
+              <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>l..r</code>
+              {t(E, " only).  NOT distances!", " 만 사용). 거리 X!")}
             </div>
-            <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-              <b style={{ color: "#15803d" }}>{t(E, "Why answer = 4?", "왜 답이 4?")}</b>{" "}
-              {t(E, "Pick i=1 ('a'), j=3 ('b'), k=5 ('b'). s[i]='a' ≠ s[j]='b', and s[j]='b' = s[k]='b' ✓. Score = (3-1)·(5-3) = 2·2 = 4. No other triplet beats this.",
-                    "i=1 ('a'), j=3 ('b'), k=5 ('b') 선택. s[i]='a' ≠ s[j]='b', s[j]='b' = s[k]='b' ✓. 점수 = (3-1)·(5-3) = 2·2 = 4. 다른 어떤 triplet 도 이를 못 넘음.")}
+          </div>
+
+          {/* Visual: highlight what query 2 ("2 7") means on the string */}
+          <div style={{
+            marginTop: 10, background: "#fff",
+            border: "1px dashed #c4b5fd", borderRadius: 10, padding: "10px 12px",
+            fontSize: 11.5, color: C.text,
+          }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
+              {t(E, "Example: query \"2 7\" means this window:",
+                    "예시: 쿼리 \"2 7\" 은 이 윈도우:")}
             </div>
-            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, fontStyle: "italic" }}>
-              {t(E, "📌 Indexing: input uses 1-based positions (1..N). The code internally converts to 0-based with l--, r-- for array access.",
-                    "📌 인덱싱: 입력은 1-based (1..N). 코드 안에서는 배열 접근 위해 0-based 로 변환 (l--, r--).")}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div>
+                <div style={{ display: "flex", gap: 3 }}>
+                  {"abcabbacabac".split("").map((ch, i) => {
+                    const pos = i + 1;
+                    const inWindow = pos >= 2 && pos <= 7;
+                    return (
+                      <div key={i} style={{
+                        width: 20, height: 24,
+                        background: inWindow ? "#fef3c7" : "#f9fafb",
+                        border: `1.5px solid ${inWindow ? "#fbbf24" : "#e5e7eb"}`,
+                        borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center",
+                        fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 12,
+                        color: inWindow ? "#7c2d12" : "#cbd5e1",
+                        opacity: inWindow ? 1 : 0.5,
+                      }}>{ch}</div>
+                    );
+                  })}
+                </div>
+                <div style={{ display: "flex", gap: 3, marginTop: 2 }}>
+                  {"abcabbacabac".split("").map((_, i) => {
+                    const pos = i + 1;
+                    const inWindow = pos >= 2 && pos <= 7;
+                    return (
+                      <div key={i} style={{
+                        width: 20, fontSize: 8.5, fontWeight: inWindow ? 700 : 400,
+                        color: inWindow ? "#92400e" : "#cbd5e1", textAlign: "center",
+                      }}>{pos}</div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.55 }}>
+              {t(E,
+                "Find the highest-score moo using ONLY positions 2..7 (yellow).  Answer for this window = 6.",
+                "노란 자리 (2..7) 안에서만 moo 골라 점수 최대 찾기. 이 윈도우 답 = 6.")}
+            </div>
+          </div>
+
+          <div style={{ marginTop: 8, fontSize: 11, color: C.dim, fontStyle: "italic", textAlign: "center" }}>
+            {t(E, "📌 Indexing: input is 1-based.  Next: a worked example walking every triplet on a tiny string.",
+                  "📌 인덱싱: 입력은 1-based. 다음 페이지: 작은 문자열에서 모든 triplet 직접 따라가는 풀이 예제.")}
           </div>
         </div>),
     },
 
-    // 1-3: Quiz — moo shape recognition
-    {
-      type: "quiz",
-      narr: t(E,
-        "Quick check on the 'moo' shape: first character DIFFERENT, second and third character SAME.",
-        "'moo' 모양 체크: 첫 글자 다름, 둘째와 셋째 같음."),
-      question: t(E,
-        "Which is a valid 'moo' triplet?",
-        "유효한 'moo' 삼중쌍은?"),
-      options: [
-        "s[i]='a', s[j]='b', s[k]='b'",
-        "s[i]='a', s[j]='a', s[k]='b'",
-        "s[i]='a', s[j]='b', s[k]='a'",
-      ],
-      correct: 0,
-      explain: t(E,
-        "(0) s[i]≠s[j] ✓ and s[j]=s[k] ✓ — that's a moo. (1) s[i]=s[j] (both 'a') ✗. (2) s[j]≠s[k] ('b' vs 'a') ✗.",
-        "(0) s[i]≠s[j] ✓, s[j]=s[k] ✓ — moo 맞음. (1) s[i]=s[j] (둘 다 'a') ✗. (2) s[j]≠s[k] ('b' vs 'a') ✗."),
-    },
-
-    // 1-4: First natural idea — try all triplets (TripletEnumSimulator on s='abba')
+    /* [전] — Worked example.  TripletEnumSim walks "abba" through
+       every (i, j, k), showing rule + score in action.  Tiny string
+       so the student sees the full picture without intimidation. */
     {
       type: "reveal",
+      label: t(E, "Worked example", "풀이 예제"),
       narr: t(E,
-        "Natural first idea: try EVERY (i, j, k). Walk through s = \"abba\" — only 4 triplets, easy by hand. Then check whether this scales.",
-        "자연스러운 첫 시도: 모든 (i, j, k) 시도. s = \"abba\" 따라가요 — 4 개뿐, 손으로 가능. 그리고 큰 입력에도 되는지 확인."),
+        "Try the rule on a tiny string \"abba\".  Walk every (i, j, k) — only 4 triplets.",
+        "작은 문자열 \"abba\" 로 규칙을 직접 적용해 보자. (i, j, k) 4 개뿐 — 손으로 따라가기 쉬움."),
       content: (<TripletEnumSimulator E={E} />),
     },
 
-    // 1-5: Narrowed idea — fix j, find best i and k separately (MooTraceSimulator on s='abbab')
-    {
-      type: "reveal",
-      narr: t(E,
-        "Better idea: fix j (the middle), then find the BEST i and BEST k separately.\n• To maximize (j − i): take the SMALLEST possible i with s[i] ≠ s[j]  →  i = leftmost different character.\n• To maximize (k − j): take the LARGEST possible k with s[k] = s[j]  →  k = rightmost matching character.\nPer query: O(N²) instead of O(N³).",
-        "좋은 아이디어: j (중간) 고정 → best i 와 best k 따로 찾기.\n• (j − i) 최대화 → i 가 가장 작아야 → s[i] ≠ s[j] 인 가장 왼쪽 i.\n• (k − j) 최대화 → k 가 가장 커야 → s[k] = s[j] 인 가장 오른쪽 k.\n쿼리당 O(N³) → O(N²)."),
-      content: (<MooTraceSimulator E={E} />),
-    },
-
-    // 1-6: Input quiz — apply on small case
+    /* [확인] — Quick input quiz on a tiny case.  Hint nudges only. */
     {
       type: "input",
+      label: t(E, "Your turn", "직접 풀어보기"),
       narr: t(E,
-        "Apply the fix-j approach on s='abba' query [1, 4]. Going through every j ∈ {2, 3}:\n• j=2 (s[2]='b'): i=1 ('a' is different), k = no 'b' to right of 2 in [1,4] → 3. score = (2-1)·(3-2) = 1.\n• j=3 (s[3]='b'): i=1 ('a' is different), k = no 'b' to right (4 is 'a') → invalid.\nBest = 1.",
-        "s='abba' 쿼리 [1, 4] 에 fix-j 적용. j ∈ {2, 3} 각각:\n• j=2 (s[2]='b'): i=1 ('a' 가 다름), k = 2 오른쪽에 'b' 가 [1,4] 안에 → 3. 점수 = (2-1)·(3-2) = 1.\n• j=3 (s[3]='b'): i=1 ('a' 가 다름), k = 3 오른쪽에 'b' 없음 (4는 'a') → 무효.\n최선 = 1."),
+        "Your turn — find the best moo on a small string.",
+        "직접 — 작은 문자열에서 최선 moo."),
       question: t(E,
-        "Max (j-i)·(k-j) for s='abba' query [1, 4]?",
-        "s='abba' 쿼리 [1, 4] 의 최대 (j-i)·(k-j) ?"),
+        "Max (left·right) for s='abba' query [1, 4]?",
+        "s='abba' 쿼리 [1, 4] 의 최대 (왼쪽 거리 × 오른쪽 거리)?"),
       hint: t(E,
-        "Only triplet (1, 2, 3) = 'abb' is a valid moo in this range. Score = (2-1)·(3-2) = 1.",
-        "이 구간에서 유효한 moo 는 (1, 2, 3) = 'abb' 하나. 점수 = (2-1)·(3-2) = 1."),
+        "Try j ∈ {2, 3}.  For each j, find the leftmost i with s[i] ≠ s[j] and rightmost k with s[k] = s[j], inside [1, 4].",
+        "j ∈ {2, 3} 시도. j 마다 [1, 4] 안에서 s[i] ≠ s[j] 인 가장 왼쪽 i, s[k] = s[j] 인 가장 오른쪽 k."),
       answer: 1,
-    },
-
-    // 1-7: Free sim
-    {
-      type: "sim",
-      narr: t(E,
-        "Drag j and watch how best i (left, different) and best k (right, same) shift. Product (j-i)(k-j) shown live.",
-        "j 를 드래그하면서 best i (왼쪽, 다름) 와 best k (오른쪽, 같음) 가 어떻게 변하는지 봐요. 곱 (j-i)(k-j) 실시간."),
     },
   ];
 }
 
 export function makeMooin3Ch2(E, lang = "py") {
+  const sections = getMooin3Sections(E);
+
+  /* [결-a₁] — Level 1: just translate the problem to code.  Three
+     nested for loops over (i, j, k).  No insight — student writes
+     this straight from reading the problem.  Slow but correct.
+     Works for tiny inputs; obviously won't scale.  The "natural
+     first code" the standard demands.  Level 2 (fix-j) comes
+     after as a small refinement. */
+  const LEVEL1_PY = [
+    "N, Q = map(int, input().split())",
+    "s = input().strip()",
+    "",
+    "for q in range(Q):",
+    "    l, r = map(int, input().split())",
+    "    l -= 1",
+    "    r -= 1",
+    "    best = -1",
+    "    # Try every (i, j, k) inside the window — straight from the rules.",
+    "    for i in range(l, r + 1):",
+    "        for j in range(i + 1, r + 1):",
+    "            for k in range(j + 1, r + 1):",
+    "                if s[i] != s[j] and s[j] == s[k]:",
+    "                    val = (j - i) * (k - j)",
+    "                    if val > best:",
+    "                        best = val",
+    "    print(best)",
+  ];
+  const LEVEL1_CPP = [
+    "#include <iostream>",
+    "#include <string>",
+    "using namespace std;",
+    "",
+    "int main() {",
+    "    int N, Q;",
+    "    cin >> N >> Q;",
+    "    string s;",
+    "    cin >> s;",
+    "    for (int q = 0; q < Q; q++) {",
+    "        int l, r;",
+    "        cin >> l >> r;",
+    "        l--;",
+    "        r--;",
+    "        long long best = -1;",
+    "        // Try every (i, j, k) inside the window.",
+    "        for (int i = l; i <= r; i++) {",
+    "            for (int j = i + 1; j <= r; j++) {",
+    "                for (int k = j + 1; k <= r; k++) {",
+    "                    if (s[i] != s[j] && s[j] == s[k]) {",
+    "                        long long val = (long long)(j - i) * (k - j);",
+    "                        if (val > best) best = val;",
+    "                    }",
+    "                }",
+    "            }",
+    "        }",
+    "        cout << best << '\\n';",
+    "    }",
+    "    return 0;",
+    "}",
+  ];
+  const level1Section = {
+    label: t(E, "1️⃣ First code — try every (i, j, k)",
+                "1️⃣ 첫 코드 — 모든 (i, j, k) 시도"),
+    color: "#f59e0b",
+    py: LEVEL1_PY,
+    cpp: LEVEL1_CPP,
+    why: [
+      t(E,
+        "Straight from the problem definition: walk every triplet (i, j, k) inside the window, check the moo rule, track the best score.",
+        "문제 정의 그대로: 윈도우 안 모든 (i, j, k) 돌면서 moo 규칙 확인 + 최고 점수 추적."),
+      t(E,
+        "Three nested for-loops — outermost i, then j > i, then k > j.  No insight, just brute enumeration.",
+        "3 중 for — 바깥 i, 그 다음 j > i, 그 다음 k > j. 통찰 없이 그냥 다 시도."),
+      t(E,
+        "Works for tiny inputs (N ≤ ~30).  For real constraints (N up to 10⁵) it explodes — three loops over N each = O(N³) per query.  Next: a small refinement.",
+        "작은 입력 (N ≤ ~30) 엔 OK. 실제 제약 (N 최대 10⁵) 에선 폭발 — N 짜리 for 가 3 겹 = 쿼리당 O(N³). 다음: 작은 개선."),
+    ],
+  };
+
   return [
-    // 2-1: Brute plan
+    /* [결-a₁] — Level 1: try-every-triplet code (natural first code) */
     {
       type: "reveal",
+      label: level1Section.label,
+      preview: level1Section.why[0],
       narr: t(E,
-        "Fix j (middle), then maximize (j − i) × (k − j) by going as far as possible on each side.\nWHY 'farthest'? Bigger (j − i) and bigger (k − j) both make the product bigger.",
-        "j (중간) 고정 → 양쪽으로 최대한 멀리 가서 (j − i) × (k − j) 최대화.\n왜 '가장 멀리'? (j − i) 와 (k − j) 둘 다 커야 곱이 커짐."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Per query, loop j", "쿼리당 j 순회"), code: "for j in range(l+1, r):", color: "#7c5cfc" },
-              { n: 2, label: t(E, "Best i = SMALLEST i with s[i] ≠ s[j] (maximizes j−i)", "최선 i = s[i] ≠ s[j] 인 가장 작은 i ((j−i) 최대화)"), code: "i = leftmost idx in [l, j) where s[i] != s[j]", color: "#0891b2" },
-              { n: 3, label: t(E, "Best k = LARGEST k with s[k] = s[j] (maximizes k−j)", "최선 k = s[k] = s[j] 인 가장 큰 k ((k−j) 최대화)"), code: "k = rightmost idx in (j, r] where s[k] == s[j]", color: "#16a34a" },
-              { n: 4, label: t(E, "Update best product", "최댓값 갱신"), code: "best = max(best, (j − i) × (k − j))", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#7c5cfc" }}>O(Q · N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "Q queries × O(N²) brute scan per query", "Q 쿼리 × 쿼리당 O(N²) 완전탐색")}</div>
-          </div>
-        </div>),
+        "Worked example clear — now write the code that just *does what the problem says*.  Three for loops.",
+        "예제 따라가기 끝났으니 코드로. 문제 그대로 옮기면 — 3 중 for."),
+      content: (<CodeSectionView section={level1Section} lang={lang} E={E} />),
     },
 
-    // 2-2: TLE check — reframed (brute fits at typical Bronze sizes; precompute is for stress)
+    /* [결-a sim] — MooTraceSim shows the fix-j idea right before the
+       student sees the Level 2 (refined) brute code. */
     {
       type: "reveal",
+      label: t(E, "Idea: fix the middle j", "아이디어: 중간 j 고정"),
       narr: t(E,
-        "Will the brute force fit in time? It depends on the constraints — fine at typical Bronze sizes, but at the worst case (N, Q = 10⁵) we'd need to optimize.",
-        "브루트포스가 시간 안에 들어올까? 제약에 따라 — 일반 Bronze 크기는 OK, 최악 (N, Q = 10⁵) 면 최적화 필요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", textAlign: "center", marginBottom: 10 }}>
-            ⏱ {t(E, "TLE check — depends on constraints", "타임아웃 체크 — 제약에 따라")}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-                ✅ {t(E, "Typical Bronze (small N · Q)", "일반 Bronze (작은 N · Q)")}
-              </div>
-              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace" }}>
-                <div>{t(E, "N · Q ≤ ~10⁶", "N · Q ≤ ~10⁶")}</div>
-                <div>{t(E, "brute = N² · Q ≈ 10⁹ → borderline", "brute = N² · Q ≈ 10⁹ → 경계선")}</div>
-                <div style={{ color: "#15803d", fontWeight: 700, marginTop: 4 }}>
-                  {t(E, "→ Brute is the natural answer.", "→ brute 가 자연스러운 답.")}
-                </div>
-              </div>
-            </div>
-            <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
-                🚨 {t(E, "Stress case (N, Q = 10⁵)", "스트레스 (N, Q = 10⁵)")}
-              </div>
-              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace" }}>
-                <div>brute = N² · Q ≈ 10¹⁵</div>
-                <div style={{ color: "#dc2626", fontWeight: 700 }}>{t(E, "→ TLE in any language.", "→ 어떤 언어든 TLE.")}</div>
-                <div style={{ color: "#5b21b6", fontWeight: 700, marginTop: 4 }}>
-                  {t(E, "→ Need precompute (next slide).", "→ precompute 필요 (다음 슬라이드).")}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-              💡 {t(E, "We'll code the brute force first (it's clean and works on Bronze samples). The optimization idea is shown next as an extension.",
-                       "brute 부터 코드 짜요 (간단하고 Bronze 샘플 통과). 최적화 아이디어는 다음 슬라이드에서 확장으로 소개.")}
-            </div>
-          </div>
-        </div>),
+        "Three for loops — that's N × N × N work per query.  Even N = 100 means 10⁶ checks.  What if we fix the middle j and only search for i and k?  Drag j around and see.",
+        "3 중 for — 쿼리당 N × N × N. N = 100 만 돼도 100 만 번. 가운데 j 만 고정하고 i, k 따로 찾으면 어떻게 될까? j 드래그하면서 봐."),
+      content: (<MooTraceSimulator E={E} />),
     },
 
-    // 2-3: Optimization idea (precompute) — kept for context, marked as extension
-    {
+    /* [결-a code] — brute code sections (input → fix-j loop → update → full).
+       Sections 1..4 from getMooin3Sections. */
+    ...sections.slice(0, 4).map((sec, i) => ({
       type: "reveal",
-      narr: t(E,
-        "Extension idea: the two inner scans repeat the same answer for many j. Precompute once, then each query reads in O(1) per j.",
-        "확장 아이디어: 안쪽 두 스캔이 j 별로 답이 같은 경우 많음. 한 번만 미리 계산 → 쿼리당 O(1) per j."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
-            ⚡ {t(E, "Optional optimization: precompute two helper arrays", "선택 최적화: 보조 배열 2 개 미리 계산")}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#dcfce7", border: "2px solid #86efac", borderRadius: 10, padding: "10px 12px" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-                {t(E, "prev_diff_pos[c][j]", "prev_diff_pos[c][j]")}
-              </div>
-              <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6 }}>
-                {t(E, "For character c and index j: the LARGEST i ≤ j where s[i] ≠ c. Sweep left→right once.",
-                      "문자 c 와 인덱스 j 에 대해: s[i] ≠ c 인 가장 큰 i ≤ j. 왼→오 한 번 스윕.")}
-              </div>
-            </div>
-            <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 6 }}>
-                {t(E, "next_same_pos[c][j]", "next_same_pos[c][j]")}
-              </div>
-              <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6 }}>
-                {t(E, "For character c and index j: the SMALLEST k ≥ j where s[k] == c. Sweep right→left once.",
-                      "문자 c 와 인덱스 j 에 대해: s[k] == c 인 가장 작은 k ≥ j. 오→왼 한 번 스윕.")}
-              </div>
-            </div>
-          </div>
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7 }}>
-              <b>{t(E, "With both arrays: ", "두 배열로: ")}</b>
-              {t(E, "for each j in [l+1, r-1], read i and k in O(1) each → per query O(N), total O(N · 26 + Q · N).",
-                    "각 j ∈ [l+1, r-1] 에서 i, k 를 O(1) 로 읽음 → 쿼리당 O(N), 총 O(N · 26 + Q · N).")}
-            </div>
-            <div style={{ marginTop: 6, fontSize: 11, color: "#5b21b6", fontStyle: "italic" }}>
-              {t(E, "(We'll code the brute force next; the optimization is left as an exercise.)",
-                    "(다음에 brute 를 코드로 짜고, 최적화는 연습 문제로 남겨둠.)")}
-            </div>
-          </div>
-        </div>),
-    },
+      label: sec.label,
+      preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
+      narr: i === 0
+        ? t(E,
+            "Same fix-j idea as the simulator — but now in code.  For each j, scan the left side once for the best i, scan the right side once for the best k.  Three nested for-loops shrink to two.",
+            "방금 시뮬에서 j 를 고정한 그 아이디어 그대로 — 이번엔 코드로.  매 j 마다 왼쪽에서 best i 를 한 번 훑고, 오른쪽에서 best k 를 한 번 훑어요.  3중 for 가 2중 for 로 줄어요.")
+        : "",
+      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+    })),
 
-    // 2-4: Progressive code (brute)
-    {
-      type: "progressive",
+    /* [결-b 한계] — section 5 ("What if N is big?") */
+    ...sections.slice(4, 5).map((sec) => ({
+      type: "reveal",
+      label: sec.label,
+      preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       narr: t(E,
-        "Now build the brute force step by step. This is the natural code to write first — clean and matches the fix-j idea.",
-        "brute 를 단계별로. 처음 짜기 자연스러운 코드 — 깔끔하고 fix-j 아이디어 그대로."),
-      sections: getMooin3Sections(E),
-    },
+        "Submit the brute code — small inputs pass.  But the bigger ones time out.  Why?",
+        "brute 코드 제출 — 작은 입력은 통과. 큰 입력에선 시간 초과. 왜 그럴까?"),
+      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+    })),
+
+    /* [결-c code] — smart code, in 3 stages:
+        slice(5)[0] = Stage A: group j by character c (outer loop swap)
+        slice(5)[1] = Stage B: precompute i, k lookup tables
+        slice(5)[2] = Stage C: parabola peak + binary search (final fast)  */
+    ...sections.slice(5).map((sec, i) => ({
+      type: "reveal",
+      label: sec.label,
+      preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
+      narr:
+        i === 0
+          ? t(E,
+              "First leap: every j with the same s[j] asks the SAME left/right question.  So loop the OUTER over character c (just 26) instead of j (N positions).",
+              "첫 도약: s[j] 가 같은 j 들은 모두 같은 좌/우 질문을 함. 외곽 루프를 c (26 개) 로 — j (N 개) 대신.")
+          : i === 1
+          ? t(E,
+              "Second leap: build nearest_diff and latest_same tables once before any query.  Now (left_i, right_k) per (c, l, r) is just a table lookup.",
+              "둘째 도약: nearest_diff, latest_same 표를 쿼리 전에 한 번만. 이제 (left_i, right_k) 가 표 한 번 조회로 끝.")
+          : i === 2
+          ? t(E,
+              "Third leap: f(j) = (j − left_i)·(right_k − j) is a parabola — peak at the midpoint.  Binary search positions_of[c] to land on the 2 closest j candidates.  Done — fits in time.",
+              "셋째 도약: f(j) = (j − left_i)·(right_k − j) 는 포물선 — 꼭대기 중점. positions_of[c] 에서 이분 탐색으로 가장 가까운 j 2 개만. 끝 — 시간 안에 들어옴.")
+          : "",
+      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+    })),
   ];
 }

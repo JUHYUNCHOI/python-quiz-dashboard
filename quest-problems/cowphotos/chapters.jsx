@@ -14,12 +14,12 @@ export function makeCowPhotosCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>📸</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>More Cow Photos</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>More Cow Photos</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 8 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 8 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, marginBottom: 10 }}>
@@ -32,7 +32,7 @@ export function makeCowPhotosCh1(E) {
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.55 }}>
               {/* Rule 1: mountain */}
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>1.</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>1.</span>
                 <div style={{ flex: 1 }}>
                   <b style={{ color: "#dc2626" }}>{t(E, "Mountain shape", "산 모양")}</b>
                   {t(E, " — heights go UP to a peak, then DOWN.", " — 가운데 peak 까지 올라갔다 내려와요.")}
@@ -43,7 +43,7 @@ export function makeCowPhotosCh1(E) {
               </div>
               {/* Rule 2: no adjacent dup */}
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#0891b2", fontWeight: 800, flexShrink: 0 }}>2.</span>
+                <span style={{ color: "#0891b2", fontWeight: 600, flexShrink: 0 }}>2.</span>
                 <div style={{ flex: 1 }}>
                   <b style={{ color: "#0891b2" }}>{t(E, "No adjacent duplicates", "이웃 다름")}</b>
                   {t(E, " — neighboring cows have different heights.", " — 이웃한 두 소의 키는 달라야 해요.")}
@@ -54,7 +54,7 @@ export function makeCowPhotosCh1(E) {
               </div>
               {/* Rule 3: palindrome */}
               <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#7c3aed", fontWeight: 800, flexShrink: 0 }}>3.</span>
+                <span style={{ color: "#7c3aed", fontWeight: 600, flexShrink: 0 }}>3.</span>
                 <div style={{ flex: 1 }}>
                   <b style={{ color: "#7c3aed" }}>{t(E, "Symmetric (palindrome)", "좌우 대칭 (팰린드롬)")}</b>
                   {t(E, " — reads the same forwards and backwards.", " — 거꾸로 읽어도 같아요.")}
@@ -66,7 +66,7 @@ export function makeCowPhotosCh1(E) {
             </div>
 
             <div style={{ display: "flex", gap: 8, marginTop: 10, paddingTop: 8, borderTop: "1px dashed #fdba74", fontSize: 13 }}>
-              <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+              <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
               <div>
                 {t(E, "Print the ", "")}
                 <b style={{ color: "#15803d" }}>{t(E, "maximum number of cows K", "최대 소 수 K")}</b>
@@ -81,16 +81,16 @@ export function makeCowPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Real USACO sample: 2 test cases. Each case = N then N heights. Print one answer per case.",
-        "실제 USACO 샘플: 2 케이스. 각 케이스 = N 그 다음 키 N 개. 케이스마다 답 1 줄 출력."),
+        "First — what does the input look like?  Two test cases: each is N followed by N heights.",
+        "샘플 입력 한번 보자. 케이스가 두 개 들어와요 — 각 케이스 = N + 키 N 개."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
 {`2
 4
@@ -99,16 +99,16 @@ export function makeCowPhotosCh1(E) {
 3 3 2 1`}
               </div>
             </div>
-            <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
 {`3
 1`}
               </div>
             </div>
           </div>
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
               🔍 {t(E, "What each line means", "각 줄 의미")}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "8px 12px", alignItems: "baseline" }}>
@@ -131,10 +131,6 @@ export function makeCowPhotosCh1(E) {
               💡 {t(E, "For each case, print ONE number — the longest valid mountain palindrome length.",
                        "케이스마다 답을 한 줄씩 출력 — 가능한 가장 긴 mountain palindrome 의 길이.")}
             </div>
-            <div style={{ marginTop: 8, fontSize: 11, color: "#475569", lineHeight: 1.55 }}>
-              {t(E, "Sample answers: case 1 (heights 1,1,2,3) → 3 (e.g. [1, 3, 1]) · case 2 (heights 3,3,2,1) → 1 (just one cow alone). The next pages show WHY.",
-                    "샘플 답: 케이스 1 (키 1,1,2,3) → 3 (예: [1, 3, 1]) · 케이스 2 (키 3,3,2,1) → 1 (한 마리만). 다음 페이지에서 왜 그런지.")}
-            </div>
           </div>
         </div>),
     },
@@ -143,8 +139,8 @@ export function makeCowPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Pick up paper. Heights = [1, 1, 2, 3]. Try arranging them — see why even lengths fail, and what makes [1, 3, 1] work.",
-        "종이를 꺼내요. 키 = [1, 1, 2, 3]. 직접 배열을 시도하며 짝수 길이가 왜 안 되는지, [1, 3, 1] 은 왜 되는지 봐요."),
+        "Heights = [1, 1, 2, 3].  Try arranging them on paper before reading any answer.",
+        "키 [1, 1, 2, 3]. 답 보기 전에 직접 종이로 한번 배열해 봐요."),
       content: (<HandDrawSimulator E={E} />),
     },
 
@@ -152,111 +148,131 @@ export function makeCowPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "From the hand-draw: peak appears 1×, each ring value appears 2×. So a natural first formula falls out — count value pairs, add 1 peak.",
-        "손으로 그려본 결과: peak 는 1번, ring 값은 2번씩 등장. 자연스럽게 첫 공식이 나와요 — 페어 가능한 값 세고 + peak 1마리."),
+        "Spotted a pattern from the paper?  Let's name the parts and write down a first-try formula.",
+        "종이에서 패턴 보였어? 부분 이름 짓고 첫 공식을 적어보자."),
       content: (
         <div style={{ padding: 16 }}>
-          {/* Rules reminder — student needs all 3 rules in mind to make sense of "ring" below. */}
-          <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "8px 12px", marginBottom: 10, fontSize: 12, color: "#1e40af", lineHeight: 1.55 }}>
-            📋 <b>{t(E, "Rules recap", "규칙 다시")}:</b>{" "}
-            <b style={{ color: "#dc2626" }}>{t(E, "mountain", "산 모양")}</b>
-            {" + "}
-            <b style={{ color: "#0891b2" }}>{t(E, "no adj duplicates", "이웃 다름")}</b>
-            {" + "}
-            <b style={{ color: "#7c3aed" }}>{t(E, "palindrome (mirror)", "좌우 대칭 (거울)")}</b>
+          {/* Connect to the paper drawing the student just did. */}
+          <div style={{
+            background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8,
+            padding: "8px 12px", marginBottom: 12, fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.55,
+          }}>
             {t(E,
-                ". The 3rd rule (palindrome) is what forces every non-peak cow to have a twin on the other side — that's where 'ring' comes from below.",
-                ". 세 번째 규칙 (좌우 대칭) 때문에 peak 가 아닌 모든 소가 반대편에 짝을 가져야 함 — 이게 아래 'ring' 정의의 출발점.")}
+              "Your paper answer for heights [1, 1, 2, 3] was [1, 3, 1] — 3 cows.  Look at WHERE each cow came from.",
+              "종이에서 [1, 1, 2, 3] 의 답이 [1, 3, 1] — 3 마리. 각 자리의 소가 어디서 왔는지 봐.")}
           </div>
 
-          {/* Concrete picture-first definition of peak / ring. */}
-          <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "12px 14px", marginBottom: 12, fontSize: 12.5, lineHeight: 1.65, color: "#7c2d12" }}>
-            <div style={{ fontWeight: 800, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
-              📖 {t(E, "First — name the parts of the photo", "먼저 — 사진의 부분 이름 짓기")}
-            </div>
-
-            {/* The picture */}
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+          {/* Mountain picture with names + per-cow count.  Bigger height
+              ratio (×24 instead of ×14) so the peak is clearly above
+              the rings — looked jagged before. */}
+          <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "12px 14px", fontSize: 12.5, lineHeight: 1.65, color: "#7c2d12" }}>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-                <div style={{ display: "flex", alignItems: "flex-end", gap: 8 }}>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: 10 }}>
                   {[
-                    { v: 1, label: t(E, "left", "왼쪽") },
-                    { v: 3, label: t(E, "MIDDLE", "가운데"), peak: true },
-                    { v: 1, label: t(E, "right", "오른쪽") },
+                    { v: 1, tag: t(E, "ring", "ring"), side: t(E, "left", "왼쪽") },
+                    { v: 3, tag: t(E, "peak", "peak"), peak: true },
+                    { v: 1, tag: t(E, "ring", "ring"), side: t(E, "right", "오른쪽") },
                   ].map((c, i) => (
                     <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
                       <div style={{
-                        width: 36, height: 24 + c.v * 14,
+                        width: 44, height: 20 + c.v * 24,
                         background: c.peak ? "#f59e0b" : "#fbbf24",
                         border: c.peak ? "3px solid #d97706" : "1.5px solid #d97706",
                         borderRadius: "6px 6px 0 0",
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        color: "#7c2d12", fontWeight: 900, fontSize: 14,
+                        color: "#7c2d12", fontWeight: 700, fontSize: 15,
                         fontFamily: "'JetBrains Mono',monospace",
                       }}>{c.v}</div>
-                      <div style={{ fontSize: 9, color: "#92400e", fontWeight: 700 }}>{c.label}</div>
+                      <div style={{ fontSize: 10, color: c.peak ? "#9a3412" : "#92400e", fontWeight: 700 }}>{c.tag}</div>
+                      <div style={{ fontSize: 9, color: c.peak ? "#9a3412" : "#92400e" }}>{c.side ?? ""}</div>
                     </div>
                   ))}
                 </div>
-                <div style={{ fontSize: 11, color: "#6b7280", fontFamily: "'JetBrains Mono',monospace", marginTop: 2 }}>
-                  [1, 3, 1] {t(E, "(3 cows in a row)", "(3 마리 줄)")}
+                <div style={{ fontSize: 11, color: "#6b7280", fontFamily: "'JetBrains Mono',monospace", marginTop: 4 }}>
+                  [1, 3, 1]
                 </div>
               </div>
             </div>
 
-            {/* The names */}
-            <div style={{ background: "#fff", border: "1px solid #fcd34d", borderRadius: 6, padding: "8px 10px", marginTop: 4 }}>
-              <div style={{ marginBottom: 4 }}>
-                • <b style={{ color: "#9a3412" }}>peak</b>
-                {t(E, " = the tallest cow in the MIDDLE. There's only ONE.",
-                      " = 가운데 가장 큰 소. 1 마리만.")}
-                <span style={{ color: "#6b7280" }}>{t(E, " (here: 3)", " (위 사진에선: 3)")}</span>
-              </div>
-              <div>
-                • <b style={{ color: "#9a3412" }}>ring</b>
-                {t(E, " = a height value that fills BOTH sides — left AND right (so 2 cows of the same value).",
-                      " = 양옆 (왼쪽 AND 오른쪽) 에 똑같이 들어가는 키 — 한 ring 마다 같은 키 소가 2 마리.")}
-                <span style={{ color: "#6b7280" }}>{t(E, " (here: value 1, on left and right)",
-                                                              " (위 사진에선: 키 1, 왼쪽과 오른쪽 한 마리씩)")}</span>
-              </div>
-              <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fcd34d", fontSize: 11.5, color: "#6b7280" }}>
-                {t(E, "Why 2 cows per ring? The photo must read the same forward and backward (palindrome). So whatever cow stands at position 2 from the LEFT must also stand at position 2 from the RIGHT. Same height, two cows.",
-                      "왜 ring 마다 2 마리? 사진이 거꾸로 읽어도 똑같아야 하니까 (palindrome). 왼쪽에서 두 번째 소의 키는 오른쪽에서 두 번째 소의 키와 같아야 함 → 같은 키 2 마리.")}
-              </div>
+            {/* What the student noticed — names + cow counts */}
+            <div style={{ paddingLeft: 4 }}>
+              • {t(E, "Middle: ", "가운데: ")}
+              <b>peak</b> = {t(E, "the tallest cow, alone in the middle.", "가운데 가장 큰 소, 혼자.")}
+              <span style={{ color: "#15803d", fontWeight: 700 }}>{t(E, "  1 cow.", "  1 마리.")}</span>
+            </div>
+            <div style={{ paddingLeft: 4 }}>
+              • {t(E, "Sides: ", "양옆: ")}
+              <b>ring</b> = {t(E, "a height that fills both sides (palindrome).",
+                                      "양옆에 같이 들어가는 키 (palindrome).")}
+              <span style={{ color: "#15803d", fontWeight: 700 }}>{t(E, "  2 cows per ring.", "  ring 마다 2 마리.")}</span>
+            </div>
+            <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fcd34d", fontSize: 11.5, color: "#7c2d12" }}>
+              {t(E,
+                "Here: 1 peak + 1 ring × 2 cows = 3 cows. ✓",
+                "여기선: peak 1 + ring 1 개 × 2 마리 = 3 마리. ✓")}
+            </div>
+          </div>
+        </div>),
+    },
+
+    // 1-4b: BUILD a bigger one — student tries to construct on paper
+    //       before any formula.  This is the "try → try → can't keep
+    //       doing this by hand" moment that motivates the formula.
+    //       Hint is intentionally NOT a formula spoiler — it nudges
+    //       toward building.
+    {
+      type: "input",
+      narr: t(E,
+        "Bigger input.  Try building it on paper — what's the longest valid arrangement?",
+        "이번엔 더 큰 입력. 직접 종이에 짜 봐 — 가장 긴 배열은 몇 마리?"),
+      question: t(E,
+        "Heights = [1, 1, 2, 3, 3, 3, 4].  How long can you make the photo?",
+        "키 [1, 1, 2, 3, 3, 3, 4]. 사진 길이를 최대 몇 마리까지?"),
+      hint: t(E,
+        "Try arranging: peak in the middle, mirror on both sides, no neighbor duplicates.  E.g. [1, 3, 4, 3, 1] works — verify the rules.",
+        "직접 배열해 봐: 가운데 peak, 양옆 거울, 이웃 다름. 예: [1, 3, 4, 3, 1] 시도 — 세 규칙 만족하는지 확인."),
+      answer: 5,
+    },
+
+    // 1-4c: NOW notice the pattern across two cases.  Two data points
+    //        is when manual building starts feeling repetitive — the
+    //        natural moment to ask "is there a shortcut?".
+    {
+      type: "reveal",
+      narr: t(E,
+        "Building these by hand works but it's getting tedious.  Same shape both times — peak in the middle, paired heights on the sides.  Maybe we can just COUNT.",
+        "손으로 짜는 거 되긴 하는데 점점 귀찮아지지. 두 번 다 같은 모양 — 가운데 peak, 양옆은 짝지은 키들. 그냥 세기만 하면 안 될까?"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fff", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12.5 }}>
+            <div style={{ fontWeight: 700, color: "#92400e", marginBottom: 6 }}>
+              🔍 {t(E, "What both photos had in common",
+                      "두 사진에서 공통으로 본 것")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.85, paddingLeft: 6 }}>
+              <div>[1, 3, 1]            : peak <b>3</b> + ring of <b>1</b>     = 1 + 2×1 = <b style={{ color: "#15803d" }}>3</b></div>
+              <div>[1, 3, 4, 3, 1] : peak <b>4</b> + rings of <b>3, 1</b> = 1 + 2×2 = <b style={{ color: "#15803d" }}>5</b></div>
+            </div>
+            <div style={{ marginTop: 6, fontSize: 11.5, color: "#7c2d12" }}>
+              {t(E,
+                "Both = 1 (peak) + 2 × (number of paired heights).  We don't have to BUILD — just count the pairs.",
+                "둘 다 = 1 (peak) + 2 × (짝지을 수 있는 키 개수). 짤 필요 없이 짝의 수만 세면 됨.")}
             </div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 12 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 8 }}>
-              💡 {t(E, "Natural first formula", "자연스러운 첫 공식")}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "12px 14px" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
+              💡 {t(E, "First-try formula (count, don't build)",
+                      "첫 번째 공식 (짜지 말고 세자)")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-              <div>• {t(E, "rings = how many distinct values have freq ≥ 2 (could go on both sides)",
-                          "rings = freq ≥ 2 인 값의 개수 (양옆에 들어갈 수 있는 값 개수)")}</div>
-              <div>• {t(E, "answer = 2 · rings + 1 (each ring contributes 2 cows, peak contributes 1)",
-                          "답 = 2 · rings + 1 (ring 마다 2 마리, peak 1 마리)")}</div>
-              <div style={{ marginTop: 6, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-                {t(E, "Why +1? Even with 0 rings we can still take any one cow alone (just a peak). So the answer is at least 1.",
-                      "왜 +1? ring 이 0 개여도 한 마리만 단독으로 길이 1 사진 가능 (peak 만). 그래서 답은 최소 1.")}
-              </div>
+            <div style={{ textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 700, color: "#15803d", padding: "6px 0" }}>
+              {t(E, "answer", "답")} = 1 + 2 × rings
             </div>
-          </div>
-
-          <div style={{ background: "#fff", border: "2px solid #fbbf24", borderRadius: 10, padding: 12 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
-              🧪 {t(E, "Try it on a bigger input: [1, 1, 2, 3, 3, 3, 4]", "더 큰 입력에 시도: [1, 1, 2, 3, 3, 3, 4]")}
-            </div>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: C.text, lineHeight: 1.7, paddingLeft: 8 }}>
-              <div>freq = {`{1: 2, 2: 1, 3: 3, 4: 1}`}</div>
-              <div>{t(E, "values with freq ≥ 2: ", "freq ≥ 2 인 값: ")}{`{1, 3}`} → rings = <b>2</b></div>
-              <div>{t(E, "answer = 2 · 2 + 1 = ", "답 = 2 · 2 + 1 = ")}<b style={{ color: "#16a34a", fontSize: 15 }}>5</b></div>
-            </div>
-            <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fbbf24", fontSize: 12, color: C.text }}>
-              ✅ {t(E, "Verify: [1, 3, 4, 3, 1] — uses two 1s, two 3s, one 4. mountain ✓ palindrome ✓ no adj dup ✓",
-                       "검증: [1, 3, 4, 3, 1] — 1 두 마리, 3 두 마리, 4 하나. mountain ✓ palindrome ✓ 인접 다름 ✓")}
-            </div>
-            <div style={{ marginTop: 6, fontSize: 12, color: "#15803d", fontWeight: 700 }}>
-              {t(E, "Looks great — let's code it!", "잘 되네 — 코드 짜볼까!")}
+            <div style={{ fontSize: 11.5, color: "#065f46", lineHeight: 1.55, textAlign: "center" }}>
+              {t(E,
+                "rings = number of distinct heights with freq ≥ 2 (a height that can fill both sides).",
+                "rings = freq ≥ 2 인 키의 개수 (양옆에 같이 넣을 수 있는 키).")}
             </div>
           </div>
         </div>),
@@ -266,8 +282,8 @@ export function makeCowPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "But before coding — try one more case. [3, 3, 2, 1]. Walk through what the formula says, then try to BUILD it. Something goes wrong.",
-        "코드 짜기 전에 — 한 번만 더 시도. [3, 3, 2, 1]. 공식 답이 뭔지 보고, 실제로 만들어봐요. 뭔가 이상해요."),
+        "Before coding it up — try the formula on one more input.  [3, 3, 2, 1].  Does it still work?",
+        "코드 짜기 전에 한 번만 더 시도 — [3, 3, 2, 1] 에서도 공식이 통할까?"),
       content: (<TrickySimulator E={E} />),
     },
 
@@ -275,80 +291,114 @@ export function makeCowPhotosCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The fix is small: only count rings of values STRICTLY less than M (the max). Verify both cases match reality.",
-        "고침은 작아요: M (최댓값) 보다 엄격히 작은 값만 ring 으로 세요. 두 케이스 다 검증."),
+        "The fix turns out to be one tiny tweak.  Then double-check it against both cases.",
+        "고치는 건 의외로 작은 한 줄. 그 다음 두 케이스 모두 다시 검증."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "2px solid #16a34a", borderRadius: 12, padding: 14, marginBottom: 12 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 8 }}>
-              🛠️ {t(E, "Corrected formula", "고친 공식")}
+          {/* Plain-words recipe — set-builder notation (#{v : v < M, freq[v] ≥ 2})
+              is unreadable for middle/high school students.  Replace with a
+              numbered 3-step procedure they can read top-to-bottom. */}
+          <div style={{ background: "#ecfdf5", border: "1px solid #16a34a", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
+              🛠️ {t(E, "Corrected recipe", "고친 풀이 — 순서대로")}
             </div>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: C.text, lineHeight: 1.7, paddingLeft: 8 }}>
-              <div>M = max(values)</div>
-              <div>rings = #{"{"}v : v &lt; M, freq[v] ≥ 2{"}"}</div>
-              <div>answer = 2 · rings + 1</div>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+              <div style={{ marginBottom: 6 }}>
+                <b style={{ color: "#15803d" }}>1.</b>{" "}
+                {t(E, "Find the ", "")}
+                <b>{t(E, "tallest height", "가장 큰 키")}</b>
+                {t(E, ".  That's the ", " — 그게 ")}<b>peak</b>{t(E, ".", ".")}
+              </div>
+              <div style={{ marginBottom: 6 }}>
+                <b style={{ color: "#15803d" }}>2.</b>{" "}
+                {t(E, "Among heights ", "키 중에서 ")}
+                <b>{t(E, "shorter than the peak", "peak 보다 작은 키")}</b>
+                {t(E, ", count how many appear ", " 만 보고, ")}
+                <b>{t(E, "at least 2 times", "2 마리 이상 등장")}</b>
+                {t(E, ".  Each one is a ", " 한 종류 = ")}<b>ring</b>{t(E, ".", ".")}
+              </div>
+              <div>
+                <b style={{ color: "#15803d" }}>3.</b>{" "}
+                {t(E, "Answer = ", "답 = ")}
+                <b style={{ fontSize: 14 }}>1 + 2 × (ring {t(E, "count", "개수")})</b>
+                <span style={{ color: C.dim, fontSize: 11.5 }}>{t(E,
+                  "  (1 peak + 2 cows for each ring)",
+                  "  (peak 1 마리 + ring 마다 2 마리)")}</span>
+              </div>
+            </div>
+            <div style={{
+              marginTop: 10, paddingTop: 8, borderTop: "1px dashed #6ee7b7",
+              fontSize: 11.5, color: "#065f46",
+            }}>
+              {t(E,
+                "What changed: rings have to be SHORTER than the peak.  Heights equal to the peak can't go on the sides.",
+                "바뀐 부분: ring 은 peak 보다 작아야 함. peak 와 같은 키는 양옆에 못 들어감.")}
             </div>
           </div>
 
+          {/* Two worked cases — same recipe applied step by step.  No
+              math notation; just words + concrete numbers. */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 10 }}>
-            <div style={{ background: "#fff", border: "2px solid #86efac", borderRadius: 10, padding: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+            <div style={{ background: "#fff", border: "1px solid #86efac", borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
                 ✓ [1, 1, 2, 3, 3, 3, 4]
               </div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-                <div>M = 4</div>
-                <div>{t(E, "v < 4 with freq ≥ 2: ", "v < 4, freq ≥ 2: ")}{`{1, 3}`}</div>
-                <div>rings = 2</div>
-                <div>{t(E, "answer = ", "답 = ")}<b style={{ color: "#16a34a" }}>5</b> ✓</div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.75 }}>
+                <div>1. {t(E, "tallest = ", "가장 큰 키 = ")}<b>4</b> {t(E, "(peak)", "(peak)")}</div>
+                <div>
+                  2. {t(E, "shorter than 4, appears ≥ 2 times: ",
+                          "4 보다 작고 2 마리 이상 등장: ")}
+                </div>
+                <div style={{ paddingLeft: 12, color: C.dim }}>
+                  {t(E,
+                    "1 (×2) ✓, 2 (×1) ✗, 3 (×3) ✓",
+                    "키 1 (2 마리 ✓), 키 2 (1 마리 ✗), 키 3 (3 마리 ✓)")}
+                </div>
+                <div style={{ paddingLeft: 12 }}>→ <b>2 {t(E, "rings", "ring")}</b></div>
+                <div style={{ marginTop: 4, paddingTop: 4, borderTop: "1px dashed #86efac" }}>
+                  3. {t(E, "answer = 1 + 2 × 2 = ", "답 = 1 + 2 × 2 = ")}
+                  <b style={{ color: "#16a34a", fontSize: 14 }}>5</b> ✓
+                </div>
               </div>
             </div>
-            <div style={{ background: "#fff", border: "2px solid #86efac", borderRadius: 10, padding: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+            <div style={{ background: "#fff", border: "1px solid #86efac", borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
                 ✓ [3, 3, 2, 1]
               </div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-                <div>M = 3</div>
-                <div>{t(E, "v < 3 with freq ≥ 2: ", "v < 3, freq ≥ 2: ")}{`{}`} {t(E, "(none)", "(없음)")}</div>
-                <div>rings = 0</div>
-                <div>{t(E, "answer = ", "답 = ")}<b style={{ color: "#16a34a" }}>1</b> ✓</div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.75 }}>
+                <div>1. {t(E, "tallest = ", "가장 큰 키 = ")}<b>3</b> {t(E, "(peak)", "(peak)")}</div>
+                <div>
+                  2. {t(E, "shorter than 3, appears ≥ 2 times: ",
+                          "3 보다 작고 2 마리 이상 등장: ")}
+                </div>
+                <div style={{ paddingLeft: 12, color: C.dim }}>
+                  {t(E,
+                    "2 (×1) ✗, 1 (×1) ✗ — none qualify",
+                    "키 2 (1 마리 ✗), 키 1 (1 마리 ✗) — 해당 없음")}
+                </div>
+                <div style={{ paddingLeft: 12 }}>→ <b>0 {t(E, "rings", "ring")}</b></div>
+                <div style={{ marginTop: 4, paddingTop: 4, borderTop: "1px dashed #86efac" }}>
+                  3. {t(E, "answer = 1 + 2 × 0 = ", "답 = 1 + 2 × 0 = ")}
+                  <b style={{ color: "#16a34a", fontSize: 14 }}>1</b> ✓
+                </div>
               </div>
             </div>
           </div>
 
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: C.text, lineHeight: 1.6 }}>
-            <b>{t(E, "Edge case: ", "엣지: ")}</b>
-            {t(E, "if all cows are the same height, max value M has freq ≥ 2 but no v < M exists → rings = 0 → answer = 1. Correct: any single cow alone is a valid (length 1) photo.",
-                  "모든 소가 같은 키면, M 은 freq ≥ 2 인데 v < M 이 없음 → rings = 0 → 답 1. 맞음: 어떤 한 마리든 단독으로 (길이 1) 유효한 사진.")}
-          </div>
         </div>),
     },
 
-    // 1-6: Quiz — arrangement validity (not formula, just shape recognition)
-    {
-      type: "quiz",
-      narr: t(E,
-        "Quick check on arrangement validity (independent of input). Mountain palindromes look like [a, b, ..., peak, ..., b, a].",
-        "배열 자체의 유효성 체크 (입력 무관). mountain palindrome 모양은 [a, b, ..., peak, ..., b, a]."),
-      question: t(E,
-        "Which is a valid mountain palindrome (no adj dup)?",
-        "유효한 mountain palindrome 은? (인접 중복 없이)"),
-      options: [
-        "[1, 2, 3, 2, 1]",
-        "[1, 2, 2, 1]",
-        "[3, 2, 1, 2, 3]",
-      ],
-      correct: 0,
-      explain: t(E,
-        "[1,2,3,2,1] is a mountain ✓. [1,2,2,1] has adjacent 2s ✗. [3,2,1,2,3] is V-shape (DOWN-UP), not mountain ✗.",
-        "[1,2,3,2,1] 은 mountain ✓. [1,2,2,1] 은 인접 2 가 붙어있음 ✗. [3,2,1,2,3] 은 V 모양 (내려갔다 올라옴), mountain 아님 ✗."),
-    },
+    // (Removed: "valid mountain palindrome?" rule-recognition quiz —
+    //  came after the corrected formula but tests something the student
+    //  already mastered through HandDraw + TrickySim.  Was a sidetrip
+    //  in the fix → apply flow.)
 
     // 1-7: Input quiz — apply corrected formula
     {
       type: "input",
       narr: t(E,
-        "Apply the CORRECTED formula to a new input. Heights = [4, 4, 3, 3, 2].\nM = 4.\nv < 4 with freq ≥ 2: {3} (freq 2 ≥ 2 ✓). 2 has freq 1, doesn't count.\nrings = 1, so answer = 2·1 + 1.\nThe photo: [3, 4, 3] — peak 4 in middle, ring of 3s on each side.",
-        "고친 공식을 새 입력에 적용해요. 키 = [4, 4, 3, 3, 2].\nM = 4.\nv < 4, freq ≥ 2: {3} (freq 2 ≥ 2 ✓). 2 는 freq 1, 안 셈.\nrings = 1, 답 = 2·1 + 1.\n사진: [3, 4, 3] — 가운데 peak 4, 양쪽에 ring 3."),
+        "Your turn — apply the corrected formula to a new input.",
+        "이번엔 직접 — 고친 공식을 새 입력에 적용해 봐요."),
       question: t(E,
         "Max photo length for heights [4, 4, 3, 3, 2]?",
         "키 [4, 4, 3, 3, 2] 의 최대 사진 길이?"),
@@ -369,44 +419,16 @@ export function makeCowPhotosCh1(E) {
 
 export function makeCowPhotosCh2(E, lang = "py") {
   return [
-    // 2-1: Plan — corrected algorithm in 4 numbered steps
-    {
-      type: "reveal",
-      narr: t(E,
-        "Time to code. The algorithm in 4 small steps — the only subtle part is excluding v == M.",
-        "코드 시간. 4 단계로 알고리즘 — 까다로운 건 v == M 제외 한 줄."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read input", "입력 읽기"), code: t(E, "Read T, then per case: N + heights array h", "T 읽고, 케이스마다: N + 키 배열 h"), color: "#d97706" },
-              { n: 2, label: t(E, "Find the largest height (peak)", "가장 큰 키 찾기 (peak)"), code: t(E, "M = max(h)", "M = max(h)"), color: "#0891b2" },
-              { n: 3, label: t(E, "Count ring values (v < M and appears ≥ 2 times)", "ring 값 세기 (v < M 이고 ≥ 2 번 등장)"), code: t(E, "for distinct v in h: if v < M and count of v ≥ 2 → ring", "h 의 서로 다른 값 v 마다: v < M 이고 v 가 ≥ 2 번 등장이면 ring"), color: "#7c3aed" },
-              { n: 4, label: t(E, "Apply formula and print", "공식 적용 + 출력"), code: t(E, "answer = 2 · rings + 1", "답 = 2 · rings + 1"), color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>),
-    },
-
-    // 2-2..2-5: WRITE — one section per chapter step (cumulative code,
-    //    sample input on the right, "why" notes per step). Single nav
-    //    level: chapter prev/next walks all sections.
+    // 2-1..: WRITE — code sections directly.  No "code time intro"
+    //    page (used to be a near-empty placeholder); the first
+    //    section's narration handles the transition.
     ...getCowPhotosSections(E).map((sec, i) => ({
       type: "reveal",
+      label: sec.label,
+      preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       narr: i === 0
-        ? t(E, "Now write the code, step by step. Each step adds one piece.",
-              "이제 코드 작성. 한 단계마다 한 조각씩 추가.")
+        ? t(E, "Formula's settled.  Translate it straight to code — input → freq → count rings → output.",
+              "공식 확정. 그대로 코드로 — 입력 → 빈도 → ring 세기 → 출력.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),

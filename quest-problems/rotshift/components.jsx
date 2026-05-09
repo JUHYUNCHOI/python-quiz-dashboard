@@ -5,29 +5,30 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#8b5cf6";
 
 const FULL_PY = [
-  "N, K, T = map(int, input().split())",
-  "active = list(map(int, input().split()))",
+  "import sys",
+  "data = sys.stdin.read().split()",
+  "N = int(data[0]); K = int(data[1]); T = int(data[2])",
+  "active = [int(data[3 + i]) for i in range(K)]",
   "",
-  "# pos[i] = which position cow i is at",
-  "pos = list(range(N))",
+  "pos = list(range(N))   # pos[c] = current position of cow c",
   "",
   "for step in range(T):",
-  "    # 1. Rotate: active[0]->active[1]->...->active[K-1]->active[0]",
   "    new_pos = pos[:]",
+  "    # 1) Rotate: cow at active[j] moves to active[(j+1) % K]",
   "    for j in range(K):",
-  "        cow_at = -1",
   "        for c in range(N):",
   "            if pos[c] == active[j]:",
-  "                cow_at = c",
+  "                new_pos[c] = active[(j + 1) % K]",
   "                break",
-  "        new_pos[cow_at] = active[(j + 1) % K]",
   "    pos = new_pos",
-  "",
-  "    # 2. Shift: active[j] = (active[j] + 1) % N",
+  "    # 2) Shift: active positions all move +1 (mod N)",
   "    active = [(a + 1) % N for a in active]",
   "",
+  "# Output: at each position p, which cow is there.",
+  "at_position = [0] * N",
   "for c in range(N):",
-  "    print(pos[c])",
+  "    at_position[pos[c]] = c",
+  "print(' '.join(str(x) for x in at_position))",
 ];
 
 const FULL_CPP = [
@@ -35,6 +36,7 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    ios::sync_with_stdio(false); cin.tie(nullptr);",
   "    int N, K, T; cin >> N >> K >> T;",
   "    vector<int> active(K);",
   "    for (auto& a : active) cin >> a;",
@@ -42,7 +44,7 @@ const FULL_CPP = [
   "    iota(pos.begin(), pos.end(), 0);",
   "",
   "    while (T--) {",
-  "        // build inverse: which cow is at position p?",
+  "        // Inverse map: at[p] = cow currently at position p",
   "        vector<int> at(N, -1);",
   "        for (int c = 0; c < N; c++) at[pos[c]] = c;",
   "        vector<int> newPos = pos;",
@@ -53,7 +55,10 @@ const FULL_CPP = [
   "        pos = newPos;",
   "        for (int j = 0; j < K; j++) active[j] = (active[j] + 1) % N;",
   "    }",
-  "    for (int c = 0; c < N; c++) cout << pos[c] << \"\n\";",
+  "",
+  "    vector<int> out(N);",
+  "    for (int c = 0; c < N; c++) out[pos[c]] = c;",
+  "    for (int p = 0; p < N; p++) cout << out[p] << (p + 1 == N ? '\\n' : ' ');",
   "    return 0;",
   "}",
 ];
@@ -111,7 +116,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

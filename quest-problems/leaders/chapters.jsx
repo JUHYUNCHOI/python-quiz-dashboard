@@ -5,37 +5,52 @@ import { getLeadersSections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N = int(input())",
-  "breed = input().split()",
-  "E = []",
-  "for i in range(N):",
-  "    E.append(int(input()))",
+  "import sys",
   "",
-  "# For each breed, find first and last occurrence",
-  "first = {'G': N, 'H': N}",
-  "last  = {'G': -1, 'H': -1}",
-  "for i in range(N):",
-  "    b = breed[i]",
-  "    first[b] = min(first[b], i)",
-  "    last[b]  = max(last[b], i)",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "N = int(data[p])",
+  "p += 1",
+  "s = data[p]; p += 1                  # breed string (no spaces), e.g. 'GHHG'",
+  "arr = [int(data[p + i]) for i in range(N)]",
+  "arr = [x - 1 for x in arr]           # 1-indexed end → 0-indexed end",
   "",
-  "# A cow i is a leader for breed b if E[i] >= last[b]",
-  "# Valid pair: one from G, one from H",
-  "# Constraint: one leader must contain the other",
+  "# eG / eH = earliest position of each breed",
+  "# lG / lH = latest position",
+  "eG = eH = lG = lH = -1",
+  "for i in range(N - 1, -1, -1):",
+  "    if s[i] == 'G': eG = i",
+  "    if s[i] == 'H': eH = i",
+  "for i in range(N):",
+  "    if s[i] == 'G': lG = i",
+  "    if s[i] == 'H': lH = i",
+  "",
+  "# Per editorial: in any valid leader pair, at LEAST one of the two",
+  "# leaders must be the EARLIEST cow of its breed AND have visited all of",
+  "# its breed (range reaches to the latest one).",
+  "",
   "ans = 0",
-  "g_leaders = []",
-  "h_leaders = []",
-  "for i in range(N):",
-  "    if breed[i] == 'G' and E[i] >= last['G']:",
-  "        g_leaders.append(i)",
-  "    if breed[i] == 'H' and E[i] >= last['H']:",
-  "        h_leaders.append(i)",
   "",
-  "for g in g_leaders:",
-  "    for h in h_leaders:",
-  "        # one must cover the other leader",
-  "        if E[g] >= h or E[h] >= g:",
+  "# Case A: eG is the true G-leader (visited all G).",
+  "# Pair with any H cow (other than eH itself) whose range reaches back to eG.",
+  "if eG != -1 and arr[eG] >= lG:",
+  "    for i in range(eG):",
+  "        if i == eH: continue",
+  "        if s[i] == 'H' and arr[i] >= eG:",
   "            ans += 1",
+  "",
+  "# Case B: symmetric — eH is the true H-leader.",
+  "if eH != -1 and arr[eH] >= lH:",
+  "    for i in range(eH):",
+  "        if i == eG: continue",
+  "        if s[i] == 'G' and arr[i] >= eH:",
+  "            ans += 1",
+  "",
+  "# Special case: eG and eH together as the leader pair.",
+  "if eG != -1 and eH != -1:",
+  "    if (arr[eG] >= lG or (eG <= eH and arr[eG] >= eH)) and \\",
+  "       (arr[eH] >= lH or (eH <= eG and arr[eH] >= eG)):",
+  "        ans += 1",
   "",
   "print(ans)",
 ];
@@ -56,17 +71,29 @@ export function makeLeadersCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc51"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Leaders</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Leaders</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of valid (G-leader, H-leader) pairs.",
+                "유효한 (G리더, H리더) 쌍의 수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "N cows of breed ", "N마리 소가 품종 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "G or H", "G 또는 H")}</b>
@@ -76,7 +103,7 @@ export function makeLeadersCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We pick ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "ONE G-leader and ONE H-leader", "G 리더 1명과 H 리더 1명")}</b>
@@ -84,7 +111,7 @@ export function makeLeadersCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A pair is ", "쌍이 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "VALID", "유효")}</b>
@@ -97,7 +124,7 @@ export function makeLeadersCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "number of valid (G-leader, H-leader) pairs", "유효한 (G리더, H리더) 쌍의 수")}</b>
@@ -134,8 +161,8 @@ export function makeLeadersCh1(E) {
         "breeds=\"GH\", E=[2,2]. How many valid leader pairs?",
         "breeds=\"GH\", E=[2,2]. 유효한 리더 쌍은 몇 개?"),
       hint: t(E,
-        "G leader (cow 0) covers up to position 1. H leader (cow 1) covers up to position 1. Cow 0's range includes cow 1. That's 1 valid pair.",
-        "G 리더 (소 0)는 위치 1까지 커버. H 리더 (소 1)는 위치 1까지 커버. 소 0의 범위가 소 1을 포함해요. 유효한 쌍 1개."),
+        "Try each (G, H) pair and check whether condition (a) or (b) holds.",
+        "각 (G, H) 쌍을 시도하면서 (a) 또는 (b) 조건이 성립하는지 확인해 봐."),
       answer: 1,
     },
   ];
@@ -147,48 +174,12 @@ export function makeLeadersCh1(E) {
    =============================================================== */
 export function makeLeadersCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Find each breed's first and last position. A 'big leader' covers her breed's full span. Then count pairs: (a) pairs of two big leaders, plus (b) pairs where one big leader contains the other breed's first cow.",
-        "각 품종의 첫 위치와 마지막 위치를 찾아요. '큰 리더' 는 자기 품종 전체를 커버하는 소. 쌍 세기: (a) 큰 리더 두 마리 쌍 + (b) 큰 리더 한 마리가 상대 품종의 첫 소를 자기 범위에 담은 쌍."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "First / last of each breed", "각 품종의 첫/마지막 위치"), code: "first[G], last[G], first[H], last[H]", color: "#dc2626" },
-              { n: 2, label: t(E, "Find big leaders", "큰 리더 찾기"), code: "big_G = cows whose range covers [first[G], last[G]]", color: "#7c3aed" },
-              { n: 3, label: t(E, "Count both-big pairs", "양쪽 모두 큰 리더 쌍 세기"), code: "both_count = len(big_G) × len(big_H)", color: "#0891b2" },
-              { n: 4, label: t(E, "Add one-side covers-other pairs", "한쪽이 상대를 덮는 쌍 추가"), code: "add cows whose range covers other breed's first cow", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant work per cow after one scan", "한 번 스캔 후 소당 상수 시간")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Editorial trick: in any valid leader pair, at least one of the two is the EARLIEST cow of its breed AND has visited all of its breed. Scan once for earliest/latest, then count Case A (eG is true G-leader) + Case B (symmetric) + special (eG & eH together). Sections build it one piece at a time.",
+        "Editorial 한 줄: 유효한 쌍에는 둘 중 적어도 하나가 자기 품종의 가장 앞 소이면서 그 품종 전체를 방문해야 함. 한 번 스캔으로 각 품종의 앞/뒤 찾고, Case A (eG 가 진짜 G-리더) + Case B (대칭) + 특수 (eG, eH 함께) 카운트. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getLeadersSections(E),
     },
   ];

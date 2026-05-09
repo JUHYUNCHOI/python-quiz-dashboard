@@ -118,9 +118,9 @@ export function makeTricksCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>🎃</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Trick or Treat</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Trick or Treat</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P3</div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "N bags (2 candies each) → pick 3 bags → open them → need exactly 2 colors, 3 each!",
               "봉지 N개 (각 2개씩) → 3개 고르기 → 열어보기 → 2가지 색 × 3개씩이면 성공!")}
@@ -144,14 +144,14 @@ export function makeTricksCh1(E) {
             <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
               {packs.map((p, i) => (
                 <div key={i} style={{
-                  background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12,
+                  background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12,
                   padding: "10px 12px", textAlign: "center", minWidth: 70,
                 }}>
                   <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 6 }}>
-                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: p.a, border: `2px solid ${p.a}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: "#fff" }}>{p.la}</div>
-                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: p.b, border: `2px solid ${p.b}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: "#fff" }}>{p.lb}</div>
+                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: p.a, border: `1px solid ${p.a}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#fff" }}>{p.la}</div>
+                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: p.b, border: `1px solid ${p.b}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#fff" }}>{p.lb}</div>
                   </div>
-                  <div style={{ fontSize: 11, fontWeight: 800, color: "#f97316", fontFamily: "'JetBrains Mono',monospace" }}>{p.label}</div>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: "#f97316", fontFamily: "'JetBrains Mono',monospace" }}>{p.label}</div>
                   <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>
                     {p.a === p.b ? t(E, "Same", "같은 색") : t(E, "Mixed", "다른 색")}
                   </div>
@@ -175,7 +175,8 @@ export function makeTricksCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "3 bags = 6 candies. To succeed, the 6 candies must be exactly 2 colors, 3 of each!", "봉지 3개를 열면 사탕 6개. 이 6개가 딱 '2가지 색, 3개씩'이면 성공이에요!"),
+        "Try this — count colors in the chosen bags and decide.",
+        "직접 — 고른 봉지에서 색을 세어 보고 판단해 봐."),
       question: t(E,
         "Bags (1,2), (1,1), (2,2) → colors: 1×3, 2×3. Success?",
         "봉지 (1,2), (1,1), (2,2)를 골랐어. 사탕을 꺼내보면 색1이 3개, 색2가 3개. 성공일까요?"),
@@ -202,7 +203,7 @@ export function makeTricksCh1(E) {
         ];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#f97316", marginBottom: 8, textAlign: "center" }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 8, textAlign: "center" }}>
               {t(E, "Bag types for color pair (x, y)", "색 쌍 (x, y)로 봉지를 분류하면")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -210,11 +211,11 @@ export function makeTricksCh1(E) {
                 <div key={i} style={{
                   display: "flex", alignItems: "center", gap: 10,
                   background: tp.bg, borderRadius: 10, padding: "8px 12px",
-                  border: `2px solid ${tp.bd}`,
+                  border: `1px solid ${tp.bd}`,
                 }}>
                   <div style={{ fontSize: 20, flexShrink: 0 }}>{tp.emoji}</div>
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 900, color: tp.color }}>{tp.label}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: tp.color }}>{tp.label}</div>
                     <div style={{ fontSize: 12, fontWeight: 700, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
                       {E ? tp.desc_en : tp.desc_ko}
                     </div>
@@ -262,9 +263,9 @@ export function makeTricksCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{
             background: "#fff7ed", borderRadius: 12, padding: 14,
-            border: "2px solid #fdba74",
+            border: "1px solid #fdba74",
           }}>
-            <div style={{ fontSize: 13, fontWeight: 900, color: "#f97316", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#f97316", marginBottom: 10, textAlign: "center" }}>
               {t(E, "The Formula", "공식")}
             </div>
             <div style={{
@@ -278,7 +279,7 @@ export function makeTricksCh1(E) {
                 <span style={{ color: "#a855f7" }}>Case 2:</span> C(countC, 3) = <span style={{ fontSize: 11 }}>countC×(countC-1)×(countC-2)/6</span>
               </div>
               <div style={{ background: "#f0fdf4", borderRadius: 6, padding: "6px 8px", border: "1.5px solid #6ee7b7", fontSize: 14 }}>
-                <span style={{ color: "#059669", fontWeight: 900 }}>{t(E, "answer", "답")}</span> = {t(E, <span style={{ fontSize: 11 }}>sum over all pairs</span>, <span style={{ fontSize: 11 }}>모든 색 쌍의 합</span>)} (Case1 + Case2)
+                <span style={{ color: "#059669", fontWeight: 700 }}>{t(E, "answer", "답")}</span> = {t(E, <span style={{ fontSize: 11 }}>sum over all pairs</span>, <span style={{ fontSize: 11 }}>모든 색 쌍의 합</span>)} (Case1 + Case2)
               </div>
             </div>
           </div>
@@ -370,7 +371,7 @@ export function makeTricksCh3(E) {
         "Let's build the code!\nFirst, read the bags and normalize: (2,1) → (1,2) so we don't double-count.", "코드를 짜보자! 먼저 봉지 정보를 읽고, (2,1)과 (1,2)를 같은 걸로 취급해서 중복을 없애."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#f97316", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
             {t(E, "Step 1: Read & normalize bags", "1단계: 봉지 읽기 & 정리")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
@@ -388,7 +389,7 @@ export function makeTricksCh3(E) {
             highlight={[3, 4]}
           />
           <div style={{ marginTop: 8, fontSize: 12, color: "#f97316", fontWeight: 700, textAlign: "center" }}>
-            (2,1) → min=1, max=2 → <span style={{ fontWeight: 900 }}>(1,2)</span> ✓
+            (2,1) → min=1, max=2 → <span style={{ fontWeight: 700 }}>(1,2)</span> ✓
           </div>
         </div>),
     },
@@ -399,7 +400,7 @@ export function makeTricksCh3(E) {
         "Count how many of each bag type using Counter.\nThis lets us quickly look up A, B, C counts!", "Counter로 같은 종류의 봉지가 몇 개인지 세. 이러면 A, B, C 개수를 바로 알 수 있어요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#f97316", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
             {t(E, "Step 2: Count bag types", "2단계: 봉지 종류별 개수 세기")}
           </div>
           <CodeSnippet
@@ -411,9 +412,9 @@ export function makeTricksCh3(E) {
           />
           <div style={{
             marginTop: 10, background: "#fff7ed", borderRadius: 10,
-            padding: 10, border: "2px solid #fdba74",
+            padding: 10, border: "1px solid #fdba74",
           }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#f97316", marginBottom: 4 }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "#f97316", marginBottom: 4 }}>
               {t(E, "Example result:", "예시 결과:")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: C.text, lineHeight: 1.8 }}>
@@ -432,7 +433,7 @@ export function makeTricksCh3(E) {
         "Collect all the colors that appear, then go through every pair of colors.", "나오는 색깔을 전부 모은 다음, 2개씩 짝을 지어 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#f97316", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
             {t(E, "Step 3: Get color pairs", "3단계: 색 쌍 구하기")}
           </div>
           <CodeSnippet
@@ -454,9 +455,9 @@ export function makeTricksCh3(E) {
           }}>
             {["(1,2)", "(1,3)", "(2,3)"].map((p, i) => (
               <div key={i} style={{
-                padding: "4px 10px", borderRadius: 6, fontSize: 12, fontWeight: 800,
+                padding: "4px 10px", borderRadius: 6, fontSize: 12, fontWeight: 600,
                 fontFamily: "'JetBrains Mono',monospace",
-                background: "#fff7ed", border: "2px solid #fdba74", color: "#f97316",
+                background: "#fff7ed", border: "1px solid #fdba74", color: "#f97316",
               }}>{p}</div>
             ))}
           </div>
@@ -469,7 +470,7 @@ export function makeTricksCh3(E) {
         "The main loop!\nFor each pair (x,y), look up how many A, B, C bags exist, then apply the formulas.", "핵심 반복문! 색 쌍 (x,y)마다 A, B, C 봉지가 몇 개인지 찾고, 공식 두 개를 적용해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#f97316", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#f97316", marginBottom: 6 }}>
             {t(E, "Step 4: Count valid ways!", "4단계: 가능한 방법 수 세기!")}
           </div>
           <CodeSnippet
@@ -488,9 +489,9 @@ export function makeTricksCh3(E) {
           />
           <div style={{
             marginTop: 10, background: "#d1fae5", borderRadius: 10,
-            padding: "8px 12px", border: "2px solid #6ee7b7", textAlign: "center",
+            padding: "8px 12px", border: "1px solid #6ee7b7", textAlign: "center",
           }}>
-            <div style={{ fontSize: 13, fontWeight: 900, color: "#059669" }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#059669" }}>
               {t(E, "That's the complete algorithm! 🎉", "이게 전체 알고리즘! 🎉")}
             </div>
           </div>

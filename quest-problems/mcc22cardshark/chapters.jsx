@@ -10,10 +10,12 @@ export const SOLUTION_CODE = [
   "def solve():",
   "    input_data = sys.stdin.read().split()",
   "    idx = 0",
-  "    N = int(input_data[idx]); idx += 1",
+  "    N = int(input_data[idx])",
+  "    idx += 1",
   "    cards = []",
   "    for i in range(N):",
-  "        cards.append(int(input_data[idx])); idx += 1",
+  "        cards.append(int(input_data[idx]))",
+  "        idx += 1",
   "",
   "    # Strategy: simulate the card game",
   "    # Player picks the highest available card each turn",
@@ -49,24 +51,34 @@ export function makeMcc22CardSharkCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udccf"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Card Shark</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Card Shark</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P5</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E, "Two players take turns picking cards optimally. Print Player 1's total.", "두 플레이어가 최선을 다해 카드를 번갈아 골라요. 플레이어 1의 합계를 출력해요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#d97706" }}>{t(E, "Two players, N face-up cards each with a value", "두 플레이어, N 장의 펼쳐진 카드 (각자 값)")}</b>
                   {t(E, ".", " 가 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Players ", "두 플레이어가 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "alternate picking ONE card", "한 장씩 번갈아 가져가요")}</b>
@@ -75,7 +87,7 @@ export function makeMcc22CardSharkCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "first player's final total score", "첫 번째 플레이어의 최종 총점")}</b>
@@ -113,8 +125,8 @@ export function makeMcc22CardSharkCh1(E) {
         "Cards [1,2,3], pick highest each turn. P1's score?",
         "카드 [1,2,3], 매 턴 가장 높은 것 선택. P1의 점수?"),
       hint: t(E,
-        "P1 picks 3, P2 picks 2, P1 picks 1. Total = 3 + 1 = 4. Wait, but the problem says just pick highest -> 3. Answer is 3.",
-        "P1이 3을 가져가요. 첫 선택의 값만 물어보면 3."),
+        "Picking highest each turn: who picks first, and how many turns does P1 get?",
+        "매 턴 가장 큰 것을 가져가요. 누가 먼저 가져가고, P1 은 몇 번 가져가?"),
       answer: 3,
     },
   ];
@@ -126,48 +138,12 @@ export function makeMcc22CardSharkCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22CardSharkCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Both players play optimally → both pick the largest remaining card. Sort cards descending; Player 1 takes positions 0, 2, 4, ... (every other from the top).",
-        "둘 다 최선 → 둘 다 남은 카드 중 가장 큰 것 선택. 카드 내림차순 정렬; 플레이어 1 은 위치 0, 2, 4, ... (위에서 한 칸씩 건너뜀)."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Sort cards descending", "내림차순 정렬"), code: "cards.sort(reverse=True)", color: "#d97706" },
-              { n: 2, label: t(E, "Player 1 takes evens (0, 2, ...)", "플레이어 1: 짝수 (0, 2, ...)"), code: "p1 = sum(cards[i] for i in range(0, N, 2))", color: "#7c3aed" },
-              { n: 3, label: t(E, "Player 2 takes the rest", "플레이어 2: 나머지"), code: "p2 = sum(cards[i] for i in range(1, N, 2))", color: "#0891b2" },
-              { n: 4, label: t(E, "Print Player 1 score", "플레이어 1 점수 출력"), code: "print(p1)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort dominates", "정렬이 지배적")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Both players play optimally → both pick the largest remaining card. Sort cards descending; Player 1 takes positions 0, 2, 4, ... (every other from the top). Sections build it one piece at a time.",
+        "둘 다 최선 → 둘 다 남은 카드 중 가장 큰 것 선택. 카드 내림차순 정렬; 플레이어 1 은 위치 0, 2, 4, ... (위에서 한 칸씩 건너뜀). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc22CardSharkSections(E),
     },
   ];

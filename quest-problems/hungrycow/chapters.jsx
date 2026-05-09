@@ -49,17 +49,29 @@ export function makeHungryCowCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc04"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Hungry Cow</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Hungry Cow</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of days from 1 to T on which Bessie actually eats.",
+                "1일 ~ T일 중 Bessie 가 실제로 먹는 날의 수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Bessie ", "Bessie는 ")}
                   <b style={{ color: "#d97706" }}>{t(E, "eats 1 haybale per day", "재고가 있으면 하루에 건초 1단을 먹어요")}</b>
@@ -68,7 +80,7 @@ export function makeHungryCowCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#0891b2" }}>{t(E, "N hay deliveries", "N번의 건초 배달")}</b>
@@ -80,7 +92,7 @@ export function makeHungryCowCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're given a target day ", "마감일 ")}
                   <b style={{ color: "#7c3aed" }}>T</b>
@@ -89,7 +101,7 @@ export function makeHungryCowCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "number of days from day 1 to day T on which Bessie actually eats", "1일~T일 중 Bessie가 실제로 먹는 날의 수")}</b>
@@ -106,8 +118,8 @@ export function makeHungryCowCh1(E) {
         "Example: 2 bales delivered on day 1, T=5.\nShe eats day 1 and day 2, then runs out.\nTotal = 2 days!", "\uc608\uc2dc: 1\uc77c\uc5d0 \uac74\ucd08 2\uac1c \ubc30\ub2ec, T=5.\n1\uc77c\uacfc 2\uc77c\uc5d0 \uba39\uace0 \ub5a8\uc5b4\uc9c0.\n\ucd1d = 2\uc77c!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "Timeline Example", "\ud0c0\uc784\ub77c\uc778 \uc608\uc2dc")}
             </div>
             <div style={{ display: "flex", justifyContent: "center", gap: 4 }}>
@@ -116,7 +128,7 @@ export function makeHungryCowCh1(E) {
                   width: 40, height: 50, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                   borderRadius: 8, fontSize: 11, fontWeight: 700,
                   background: d <= 2 ? "#dcfce7" : "#fee2e2",
-                  border: `2px solid ${d <= 2 ? "#86efac" : "#fca5a5"}`,
+                  border: `1px solid ${d <= 2 ? "#86efac" : "#fca5a5"}`,
                   color: d <= 2 ? "#166534" : "#991b1b",
                 }}>
                   <div>{t(E, `D${d}`, `${d}\uc77c`)}</div>
@@ -153,8 +165,8 @@ export function makeHungryCowCh1(E) {
         "Strategy: Sort deliveries by day.\nProcess gaps between deliveries, eating from stock.\nSimple simulation!", "\uc804\ub7b5: \ubc30\ub2ec\uc744 \ub0a0\uc9dc\uc21c \uc815\ub82c.\n\ubc30\ub2ec \uc0ac\uc774 \uac04\uaca9\uc744 \ucc98\ub9ac\ud558\uba70 \uc7ac\uace0\uc5d0\uc11c \uba39\uc74c.\n\uac04\ub2e8\ud55c \uc2dc\ubbac\ub808\uc774\uc158!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
               {t(E, "Algorithm", "\uc54c\uace0\ub9ac\uc998")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>
@@ -173,47 +185,11 @@ export function makeHungryCowCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeHungryCowCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Don't simulate every day (T can be huge). Process delivery events in order — between deliveries, eat at most (stockpile) days; after T, stop. Sum eating days.",
-        "매일을 시뮬레이션하면 안 돼요 (T 가 매우 큼). 배달 이벤트 순서대로 — 두 배달 사이에 (재고) 일까지 먹고, T 가 넘으면 멈춤. 먹는 날을 합산해요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Sort deliveries by day", "배달을 날짜순 정렬"), code: "events.sort(key=lambda e: e.day)", color: "#d97706" },
-              { n: 2, label: t(E, "Walk through events", "이벤트 순회"), code: "for d, b in events: ...  (track current day, stock)", color: "#0891b2" },
-              { n: 3, label: t(E, "Eat as many days as we can", "재고만큼 먹기"), code: "days_until_next = min(stock, next_day − cur)  →  eat += days_until_next", color: "#7c3aed" },
-              { n: 4, label: t(E, "Cap at T", "T 에서 멈춤"), code: "if cur > T: break;  eat = min(eat, T − ...)", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort deliveries, then linear sweep", "배달 정렬 + 선형 스윕")}</div>
-          </div>
-        </div>),
-    },
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Don't simulate every day (T can be huge). Process delivery events in order — between deliveries, eat at most (stockpile) days; stop at T. Sum eating days. Sections build it one piece at a time.",
+        "매일 시뮬 안 함 (T 가 매우 큼). 배달 이벤트를 순서대로 처리 — 배달 사이에 (재고) 일까지 먹고 T 에서 멈춤. 먹는 날을 합산. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getHungryCowSections(E),
     },
     {

@@ -39,17 +39,29 @@ export function makeAbcsCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd22"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Do You Know Your ABCs?</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Do You Know Your ABCs?</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Recover A B C from the 7 shuffled sums and output them in non-decreasing order.",
+                "섞인 7개 합에서 원래 A B C 를 복원해 오름차순으로 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are three positive integers ", "세 양의 정수 ")}
                   <b style={{ color: "#d97706" }}>{t(E, "A ≤ B ≤ C", "A ≤ B ≤ C")}</b>
@@ -57,7 +69,7 @@ export function makeAbcsCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "You're given ", "그리고 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "all 7 of these values", "다음 7가지 값")}</b>
@@ -69,7 +81,7 @@ export function makeAbcsCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the original ", "원래 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "A B C", "A B C")}</b>
@@ -106,8 +118,8 @@ export function makeAbcsCh1(E) {
         "Numbers: [2,2,4,7,9,9,11]. A+B+C=11. A = ?",
         "숫자: [2,2,4,7,9,9,11]. A+B+C=11. A = ?"),
       hint: t(E,
-        "Sort: [2,2,4,7,9,9,11]. Smallest = A = 2.",
-        "정렬: [2,2,4,7,9,9,11]. 가장 작은 수 = A = 2."),
+        "After sorting, which position holds A?",
+        "정렬 후 A 는 어느 위치에 올까?"),
       answer: 2,
     },
   ];
@@ -119,48 +131,12 @@ export function makeAbcsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeAbcsCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sort the 7 numbers, then read off A, B, C from known positions in the sorted list.",
-        "7개 숫자를 정렬하면 A, B, C 가 정해진 위치에서 바로 읽혀요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read 7 numbers", "7개 숫자 읽기"), code: "nums = sorted(list(map(int, input().split())))", color: "#d97706" },
-              { n: 2, label: t(E, "Smallest is A", "가장 작은 = A"), code: "A = nums[0]", color: "#7c3aed" },
-              { n: 3, label: t(E, "Second smallest is B", "두 번째로 작은 = B"), code: "B = nums[1]", color: "#0891b2" },
-              { n: 4, label: t(E, "Largest is A+B+C; recover C", "가장 큰 = A+B+C; C 복원"), code: "C = nums[6] - A - B", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(1)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "fixed-size input (7 numbers)", "입력 크기 고정 (7개 숫자)")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sort the 7 numbers, then read A, B, C off known positions of the sorted list. Sections build it one piece at a time.",
+        "7개 숫자를 정렬한 뒤 A, B, C 를 정해진 위치에서 바로 읽어요. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getAbcsSections(E),
     },
   ];

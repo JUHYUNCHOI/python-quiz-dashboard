@@ -42,17 +42,29 @@ export function makeMadSciCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\uddea"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Mad Scientist</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Mad Scientist</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2020 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of substring flips on B to make B equal A.",
+                "B 를 A 와 같게 만드는 데 필요한 최소 부분 문자열 뒤집기 수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Two ", "두 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "strings A and B of length N", "길이 N 의 문자열 A, B")}</b>
@@ -61,7 +73,7 @@ export function makeMadSciCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "One flip operation: choose a ", "한 번의 뒤집기: ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "contiguous substring of B", "B 의 연속 부분 문자열")}</b>
@@ -70,7 +82,7 @@ export function makeMadSciCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of flips to make B equal A", "B 를 A 와 같게 만드는 최소 뒤집기 수")}</b>
@@ -108,8 +120,8 @@ export function makeMadSciCh1(E) {
         "A = \"HGH\", B = \"GHG\". Min flips?",
         "A = \"HGH\", B = \"GHG\". 최소 뒤집기 수?"),
       hint: t(E,
-        "All 3 positions differ, forming 1 contiguous block. Flip all of B: GHG -> HGH = A. Answer: 1.",
-        "3개 위치 모두 달라 1개 블록. B 전체 뒤집기: GHG -> HGH = A. 답: 1."),
+        "Count the contiguous blocks where A and B differ.",
+        "A 와 B 가 다른 연속 블록의 수를 세어 봐."),
       answer: 1,
     },
   ];
@@ -121,48 +133,12 @@ export function makeMadSciCh1(E) {
    --------------------------------------------------------------- */
 export function makeMadSciCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Each contiguous block where A[i] ≠ B[i] needs EXACTLY ONE flip operation to fix (one substring reversal). So count how many such CONTIGUOUS differing blocks exist.",
-        "A[i] ≠ B[i] 인 연속 블록 마다 정확히 1 번의 뒤집기로 고칠 수 있어요 (한 부분 문자열 뒤집기). 그러므로 그런 연속 차이 블록의 개수를 세요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Scan A and B in parallel", "A 와 B 를 동시 스캔"), code: "i = 0; flips = 0", color: "#f97316" },
-              { n: 2, label: t(E, "Skip matching positions", "일치 위치 건너뛰기"), code: "while i < N and A[i] == B[i]: i += 1", color: "#7c3aed" },
-              { n: 3, label: t(E, "Found a differing block?", "차이 블록 발견?"), code: "if i < N: flips += 1; while i < N and A[i] != B[i]: i += 1", color: "#0891b2" },
-              { n: 4, label: t(E, "Repeat to end, print flips", "끝까지 반복, flips 출력"), code: "print(flips)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Each contiguous block where A[i] ≠ B[i] takes exactly one flip to fix. So count those differing blocks. Sections build it one piece at a time.",
+        "A[i] ≠ B[i] 인 연속 블록마다 정확히 한 번의 뒤집기로 해결. 그런 블록 수를 세기. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMadSciSections(E),
     },
   ];

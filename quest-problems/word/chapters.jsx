@@ -124,9 +124,22 @@ export function makeWordCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>📝</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#3b82f6" }}>Word Distance</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#3b82f6" }}>Word Distance</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2025 P4</div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+
+          {/* 🎯 Mission box */}
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "1.5px solid #3b82f6", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output a length-M word that minimizes total anagram distance to all N words — break ties by picking the lexicographically smallest.",
+                "N 개 단어 모두에 대한 애너그램 거리 합을 최소로 하는 길이 M 단어를 출력. 동률이면 사전순으로 가장 앞.")}
+            </div>
+          </div>
+
+          <div style={{ marginTop: 10, background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "N words (length M each) → find a word → minimize total 'anagram distance' → output lex smallest!",
               "단어 N개 (길이 M) → 새 단어 하나 만들기 → 모든 단어와 겹치는 글자 최대한 많게 → 같은 답이 여러 개면 abc순으로 가장 앞선 것!")}
@@ -146,7 +159,7 @@ export function makeWordCh1(E) {
         ];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#3b82f6", marginBottom: 8, textAlign: "center" }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 8, textAlign: "center" }}>
               {t(E, "Anagram examples", "애너그램 예시")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -154,12 +167,12 @@ export function makeWordCh1(E) {
                 <div key={i} style={{
                   display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                   background: p.ok ? "#ecfdf5" : "#fef2f2", borderRadius: 10, padding: "8px 12px",
-                  border: `2px solid ${p.ok ? "#6ee7b7" : "#fca5a5"}`,
+                  border: `1px solid ${p.ok ? "#6ee7b7" : "#fca5a5"}`,
                 }}>
-                  <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 800, color: "#3b82f6" }}>{p.a}</span>
+                  <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 600, color: "#3b82f6" }}>{p.a}</span>
                   <span style={{ fontSize: 12, color: C.dim }}>↔</span>
-                  <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>{p.b}</span>
-                  <span style={{ fontSize: 14, fontWeight: 900 }}>{p.ok ? "✅" : "❌"}</span>
+                  <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>{p.b}</span>
+                  <span style={{ fontSize: 14, fontWeight: 700 }}>{p.ok ? "✅" : "❌"}</span>
                 </div>
               ))}
             </div>
@@ -188,18 +201,18 @@ export function makeWordCh1(E) {
             <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 12 }}>
               <div style={{ textAlign: "center" }}>
                 <div style={{ fontSize: 11, color: C.dim, marginBottom: 2 }}>{t(E, "Word 1", "단어 1")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 900, color: "#3b82f6", letterSpacing: 4 }}>ade</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 700, color: "#3b82f6", letterSpacing: 4 }}>ade</div>
               </div>
               <div style={{ textAlign: "center" }}>
                 <div style={{ fontSize: 11, color: C.dim, marginBottom: 2 }}>{t(E, "Word 2", "단어 2")}</div>
-                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 900, color: "#8b5cf6", letterSpacing: 4 }}>adb</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 700, color: "#8b5cf6", letterSpacing: 4 }}>adb</div>
               </div>
             </div>
             <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 8 }}>
               {["a", "d"].map((c, i) => (
                 <div key={i} style={{
                   width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-                  background: "#dcfce7", border: "2px solid #6ee7b7", fontWeight: 900, fontSize: 14, color: "#059669",
+                  background: "#dcfce7", border: "1px solid #6ee7b7", fontWeight: 700, fontSize: 14, color: "#059669",
                   fontFamily: "'JetBrains Mono',monospace",
                 }}>{c}</div>
               ))}
@@ -214,7 +227,7 @@ export function makeWordCh1(E) {
             }}>
               <div>{t(E, "length", "길이")} M = 3</div>
               <div>{t(E, "shared letters", "공통 글자")} = 2 (a, d)</div>
-              <div>{t(E, "distance", "거리")} = 3 - 2 = <span style={{ color: "#fbbf24", fontWeight: 900, fontSize: 16 }}>1</span></div>
+              <div>{t(E, "distance", "거리")} = 3 - 2 = <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: 16 }}>1</span></div>
             </div>
             <div style={{
               marginTop: 10, background: "#eff6ff", borderRadius: 8, padding: "6px 10px",
@@ -254,12 +267,12 @@ export function makeWordCh1(E) {
         "To minimize total distance, we maximize total shared letters.\nThink of it as: we have M slots to fill with letters.\nEach slot, pick the letter that is shared with the most words!", "거리를 줄이려면 겹치는 글자를 최대한 많이 만들면 돼요!\n방법은 간단해: 빈칸 M개에 글자를 하나씩 넣는데, 매번 '이 글자를 넣으면 몇 개 단어랑 겹칠까?' 세보고 가장 많이 겹치는 글자를 골라!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#3b82f6", marginBottom: 8, textAlign: "center" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 8, textAlign: "center" }}>
             {t(E, "Greedy Strategy", "그리디 전략")}
           </div>
           <div style={{
             background: "#eff6ff", borderRadius: 12, padding: 14,
-            border: "2px solid #93c5fd",
+            border: "1px solid #93c5fd",
           }}>
             <div style={{ fontSize: 13, lineHeight: 2, color: C.text }}>
               <div>1️⃣ {t(E,
@@ -383,7 +396,7 @@ export function makeWordCh3(E) {
         "Let's code it!\nFirst, read the words and count each word's letter frequencies using Counter.", "코드를 짜보자! 먼저 단어들을 읽고, 각 단어에 어떤 글자가 몇 번 나오는지 세. 파이썬의 Counter가 이걸 한 줄로 해줘요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#3b82f6", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 6 }}>
             {t(E, "Step 1: Read & count frequencies", "1단계: 입력 읽기 & 글자 빈도 세기")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
@@ -413,7 +426,7 @@ export function makeWordCh3(E) {
         "The core: fill M slots greedily.\nFor each slot, try all 26 letters and pick the one with highest marginal gain.", "핵심 부분이에요! 빈칸 M개를 하나씩 채우는데, 매번 a~z 26개를 다 시도해봐요. '이걸 넣으면 새로 몇 개 단어랑 겹칠까?' 세서 가장 큰 걸 골라!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#3b82f6", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 6 }}>
             {t(E, "Step 2: Greedy slot filling", "2단계: 그리디로 빈칸 채우기")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
@@ -453,7 +466,7 @@ export function makeWordCh3(E) {
         "Finally, build the word!\nJust line up the letters in alphabetical order — that's automatically the lexicographically smallest.", "마지막으로 글자들을 abc순으로 이어붙이면 끝! 이렇게 하면 자동으로 사전에서 가장 앞에 오는 단어가 돼요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#3b82f6", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 6 }}>
             {t(E, "Step 3: Build lex-smallest word", "3단계: 사전순 최소 단어 만들기")}
           </div>
           <CodeSnippet
@@ -471,7 +484,7 @@ export function makeWordCh3(E) {
             {["a", "d", "e"].map((c, i) => (
               <div key={i} style={{
                 width: 36, height: 36, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-                background: "#eff6ff", border: "2px solid #93c5fd", fontWeight: 900, fontSize: 18, color: "#3b82f6",
+                background: "#eff6ff", border: "1px solid #93c5fd", fontWeight: 700, fontSize: 18, color: "#3b82f6",
                 fontFamily: "'JetBrains Mono',monospace",
               }}>{c}</div>
             ))}
@@ -488,12 +501,12 @@ export function makeWordCh3(E) {
         "Why does greedy work?\nBecause each letter is independent!\nAdding one more 'a' doesn't affect the gain from 'b'.\nSo we can pick optimally one slot at a time.", "왜 이렇게 하나씩 고르면 최적이 될까요?\n'a'를 넣든 말든 'd'가 겹치는 수는 안 변하거든!\n글자끼리 서로 영향을 안 주니까, 매번 가장 좋은 걸 고르면 전체도 최적이에요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#3b82f6", marginBottom: 8, textAlign: "center" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#3b82f6", marginBottom: 8, textAlign: "center" }}>
             {t(E, "Why Greedy Works", "그리디가 되는 이유")}
           </div>
           <div style={{
             background: "#eff6ff", borderRadius: 12, padding: 14,
-            border: "2px solid #93c5fd", fontSize: 13, lineHeight: 2, color: C.text,
+            border: "1px solid #93c5fd", fontSize: 13, lineHeight: 2, color: C.text,
           }}>
             <div>✅ {t(E,
               "Each letter's marginal gain is independent",

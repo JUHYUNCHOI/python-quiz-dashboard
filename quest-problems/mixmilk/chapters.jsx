@@ -105,7 +105,7 @@ const BucketViz = ({ buckets, labels, highlight, E: isE }) => (
       return (
         <div key={i} style={{ textAlign: "center" }}>
           <div style={{
-            fontSize: 11, fontWeight: 800, color: isHl ? colors[i] : C.dim,
+            fontSize: 11, fontWeight: 600, color: isHl ? colors[i] : C.dim,
             fontFamily: "'JetBrains Mono',monospace", marginBottom: 4,
           }}>{labels ? labels[i] : (isE ? `Bucket ${i + 1}` : `양동이 ${i + 1}`)}</div>
           <div style={{
@@ -123,7 +123,7 @@ const BucketViz = ({ buckets, labels, highlight, E: isE }) => (
             }} />
             <div style={{
               position: "absolute", bottom: 4, left: 0, right: 0,
-              fontSize: 14, fontWeight: 900, color: colors[i],
+              fontSize: 14, fontWeight: 700, color: colors[i],
               fontFamily: "'JetBrains Mono',monospace",
             }}>{b.milk}</div>
           </div>
@@ -153,17 +153,29 @@ export function makeMixMilkCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"🥛"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Mixing Milk</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Mixing Milk</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2018 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the milk in each of the 3 buckets after 100 cyclic pours (1→2, 2→3, 3→1, …).",
+                "100 번의 순환 붓기 (1→2, 2→3, 3→1, …) 후 각 양동이의 우유량 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#d97706" }}>{t(E, "3 buckets numbered 1, 2, 3", "1, 2, 3 번 양동이")}</b>
                   {t(E, " with given capacities and starting milk amounts.",
@@ -171,7 +183,7 @@ export function makeMixMilkCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "100 pours happen in a ", "100 번의 붓기를 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "fixed cycle: 1→2, 2→3, 3→1, 1→2, ...", "정해진 순환 순서: 1→2, 2→3, 3→1, 1→2, ...")}</b>
@@ -179,7 +191,7 @@ export function makeMixMilkCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each pour moves ", "한 번의 붓기는 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "as much milk as possible", "가능한 만큼")}</b>
@@ -188,7 +200,7 @@ export function makeMixMilkCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "100 번 붓기 후 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "milk in each of the 3 buckets after 100 pours", "각 양동이의 우유량")}</b>
@@ -206,16 +218,16 @@ export function makeMixMilkCh1(E) {
         "Each bucket has two values: CAPACITY (the maximum it can hold) and CURRENT MILK (how much is in it right now).\nThe current milk can never exceed the capacity!", "각 양동이에는 두 가지 값이 있어: 용량(최대 보관량)과 현재 우유량(지금 들어있는 양). 현재 우유는 절대로 용량을 초과할 수 없어요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
             {t(E, "Understanding Buckets", "양동이 이해하기")}
           </div>
           <BucketViz
             buckets={[{ cap: 10, milk: 3 }, { cap: 8, milk: 5 }, { cap: 6, milk: 2 }]}
             E={E}
           />
-          <div style={{ marginTop: 10, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: 10, fontSize: 12, lineHeight: 1.8, color: C.text }}>
-            <div><span style={{ fontWeight: 800, color: "#d97706" }}>{t(E, "Capacity", "용량")}</span> = {t(E, "max the bucket can hold", "양동이가 담을 수 있는 최대량")}</div>
-            <div><span style={{ fontWeight: 800, color: "#3b82f6" }}>{t(E, "Milk", "우유")}</span> = {t(E, "current amount inside", "현재 들어있는 양")}</div>
+          <div style={{ marginTop: 10, background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10, padding: 10, fontSize: 12, lineHeight: 1.8, color: C.text }}>
+            <div><span style={{ fontWeight: 600, color: "#d97706" }}>{t(E, "Capacity", "용량")}</span> = {t(E, "max the bucket can hold", "양동이가 담을 수 있는 최대량")}</div>
+            <div><span style={{ fontWeight: 600, color: "#3b82f6" }}>{t(E, "Milk", "우유")}</span> = {t(E, "current amount inside", "현재 들어있는 양")}</div>
             <div style={{ marginTop: 4, fontWeight: 700, color: "#b45309" }}>
               {t(E, "Remaining space = capacity - milk", "남은 공간 = 용량 - 우유")}
             </div>
@@ -247,11 +259,11 @@ export function makeMixMilkCh1(E) {
         "When pouring from bucket A to bucket B, how much actually transfers?\nIt's the MINIMUM of what A has and what B can receive!", "A에서 B로 부을 때 실제로 얼마나 이동할까? A가 가진 양과 B가 받을 수 있는 양 중 더 작은 값이에요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 8 }}>
             {t(E, "The Pouring Rule", "붓기 규칙")}
           </div>
-          <div style={{ background: "#fef3c7", borderRadius: 10, padding: 12, border: "2px solid #fbbf24" }}>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#92400e", textAlign: "center", lineHeight: 2 }}>
+          <div style={{ background: "#fef3c7", borderRadius: 10, padding: 12, border: "1px solid #fbbf24" }}>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 600, color: "#92400e", textAlign: "center", lineHeight: 2 }}>
               amount = min(source_milk, dest_remaining)<br />
               source_milk -= amount<br />
               dest_milk += amount
@@ -259,12 +271,12 @@ export function makeMixMilkCh1(E) {
           </div>
           {/* Example */}
           <div style={{ marginTop: 12, fontSize: 12, lineHeight: 1.8, color: C.text }}>
-            <div style={{ fontWeight: 800, color: "#d97706", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#d97706", marginBottom: 4 }}>
               {t(E, "Example: Pour A -> B", "예시: A에서 B로 붓기")}
             </div>
             <div>{t(E, "A: milk=7, B: cap=5, milk=2", "A: 우유=7, B: 용량=5, 우유=2")}</div>
             <div>{t(E, "B remaining = 5 - 2 = 3", "B 남은 공간 = 5 - 2 = 3")}</div>
-            <div style={{ fontWeight: 800, color: "#b45309" }}>
+            <div style={{ fontWeight: 600, color: "#b45309" }}>
               {t(E, "amount = min(7, 3) = 3", "이동량 = min(7, 3) = 3")}
             </div>
             <div>{t(E, "After: A=4, B=5 (full!)", "이후: A=4, B=5 (가득!)")}</div>
@@ -296,7 +308,7 @@ export function makeMixMilkCh1(E) {
         "The 100 pours follow a repeating cycle: 1->2, 2->3, 3->1, 1->2, 2->3, 3->1, ...\nThis cycle of 3 repeats.\nStep number mod 3 tells us which pour!", "100번의 붓기는 반복 패턴을 따라: 1->2, 2->3, 3->1, 1->2, 2->3, 3->1, ...\n3개씩 반복.\nstep % 3으로 어떤 붓기인지 알 수 있어요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 8 }}>
             {t(E, "Pour Cycle Pattern", "붓기 순환 패턴")}
           </div>
           <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
@@ -309,21 +321,21 @@ export function makeMixMilkCh1(E) {
               { s: 5, label: "3→1", col: "#f59e0b" },
             ].map(({ s, label, col }) => (
               <div key={s} style={{
-                background: `${col}15`, border: `2px solid ${col}`, borderRadius: 8,
+                background: `${col}15`, border: `1px solid ${col}`, borderRadius: 8,
                 padding: "6px 10px", textAlign: "center", minWidth: 52,
               }}>
                 <div style={{ fontSize: 10, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
                   step {s}
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 900, color: col, fontFamily: "'JetBrains Mono',monospace" }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: col, fontFamily: "'JetBrains Mono',monospace" }}>
                   {label}
                 </div>
               </div>
             ))}
             <div style={{ display: "flex", alignItems: "center", fontSize: 18, color: C.dim }}>...</div>
           </div>
-          <div style={{ marginTop: 10, background: "#fffbeb", borderRadius: 10, padding: 10, border: "2px solid #fcd34d", textAlign: "center" }}>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color: "#92400e" }}>
+          <div style={{ marginTop: 10, background: "#fffbeb", borderRadius: 10, padding: 10, border: "1px solid #fcd34d", textAlign: "center" }}>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 600, color: "#92400e" }}>
               src = step % 3<br />
               dst = (step + 1) % 3
             </div>
@@ -334,13 +346,14 @@ export function makeMixMilkCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "A has 5 milk, B has capacity 3 and 1 milk. After pouring A->B, how much milk is in A?", "A에 우유 5, B는 용량 3이고 우유 1. A에서 B로 부은 후 A에 있는 우유는?"),
+        "Try this — figure out how much B can accept, then how much A loses.",
+        "직접 — B 가 몇 더 받을 수 있나 보고, A 에서 그만큼 빠짐."),
       question: t(E,
         "A=5 milk, B=cap 3, milk 1. Pour A->B. Milk left in A?",
         "A=우유5, B=용량3 우유1. A->B 부은 후. A의 우유?"),
       hint: t(E,
-        "Transfer min(5, 3-1) = min(5, 2) = 2. A: 5 - 2 = 3.",
-        "이동량 min(5, 3-1) = min(5, 2) = 2. A: 5 - 2 = 3."),
+        "B can still take (cap − current) more.  Transfer is the smaller of A's milk and B's free space.",
+        "B 는 (용량 − 현재) 만큼 더 받을 수 있어. 이동량은 A 의 우유와 B 의 빈 공간 중 더 작은 쪽."),
       answer: 3,
     },
   ];
@@ -359,7 +372,7 @@ export function makeMixMilkCh2(E) {
         "Let's trace the simulation with a concrete example!\nBuckets: cap=[10,8,6], milk=[3,5,2].\nStep 0: pour bucket 1 -> bucket 2.", "구체적인 예시로 시뮬레이션을 추적해보자! 양동이: 용량=[10,8,6], 우유=[3,5,2]. 0단계: 1번에서 2번으로 붓기."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 8 }}>
             {t(E, "Step 0: Pour Bucket 1 → Bucket 2", "0단계: 양동이 1 → 양동이 2")}
           </div>
           <BucketViz
@@ -387,7 +400,7 @@ export function makeMixMilkCh2(E) {
                 ].map(([label, val], i) => (
                   <tr key={i} style={{ background: i % 2 === 0 ? "#fffbeb" : "#fff" }}>
                     <td style={{ padding: "5px 8px", borderBottom: "1px solid #fde68a", color: C.text }}>{label}</td>
-                    <td style={{ padding: "5px 8px", borderBottom: "1px solid #fde68a", textAlign: "center", fontWeight: 800, color: "#d97706" }}>{val}</td>
+                    <td style={{ padding: "5px 8px", borderBottom: "1px solid #fde68a", textAlign: "center", fontWeight: 600, color: "#d97706" }}>{val}</td>
                   </tr>
                 ))}
               </tbody>
@@ -402,7 +415,7 @@ export function makeMixMilkCh2(E) {
         "After step 0: milk=[0,8,2].\nStep 1: pour bucket 2 -> bucket 3.\nB3 remaining = 6-2 = 4.\nTransfer min(8, 4) = 4.", "0단계 이후: 우유=[0,8,2]. 1단계: 2번에서 3번으로 붓기. B3 남은 공간 = 6-2 = 4. 이동량 min(8, 4) = 4."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 8 }}>
             {t(E, "Step 1: Pour Bucket 2 → Bucket 3", "1단계: 양동이 2 → 양동이 3")}
           </div>
           <BucketViz
@@ -429,7 +442,7 @@ export function makeMixMilkCh2(E) {
                 ].map(([label, val], i) => (
                   <tr key={i} style={{ background: i % 2 === 0 ? "#fffbeb" : "#fff" }}>
                     <td style={{ padding: "5px 8px", borderBottom: "1px solid #fde68a", color: C.text }}>{label}</td>
-                    <td style={{ padding: "5px 8px", borderBottom: "1px solid #fde68a", textAlign: "center", fontWeight: 800, color: "#d97706" }}>{val}</td>
+                    <td style={{ padding: "5px 8px", borderBottom: "1px solid #fde68a", textAlign: "center", fontWeight: 600, color: "#d97706" }}>{val}</td>
                   </tr>
                 ))}
               </tbody>
@@ -447,7 +460,7 @@ export function makeMixMilkCh2(E) {
         "Step 2: pour bucket 3 -> bucket 1.\nB1 remaining = 10-0 = 10.\nTransfer min(6, 10) = 6.\nNow milk=[6, 4, 0].\nOne full cycle done!", "2단계: 3번에서 1번으로 붓기. B1 남은 공간 = 10-0 = 10. 이동량 min(6, 10) = 6. 이제 우유=[6, 4, 0]. 한 사이클 완료!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 8 }}>
             {t(E, "Step 2: Pour Bucket 3 → Bucket 1", "2단계: 양동이 3 → 양동이 1")}
           </div>
           <BucketViz
@@ -457,8 +470,8 @@ export function makeMixMilkCh2(E) {
             E={E}
           />
           {/* Summary state table */}
-          <div style={{ marginTop: 10, background: "#d1fae5", borderRadius: 10, padding: 10, border: "2px solid #6ee7b7" }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#059669", marginBottom: 6 }}>
+          <div style={{ marginTop: 10, background: "#d1fae5", borderRadius: 10, padding: 10, border: "1px solid #6ee7b7" }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "#059669", marginBottom: 6 }}>
               {t(E, "Full cycle summary:", "전체 사이클 요약:")}
             </div>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>
@@ -479,9 +492,9 @@ export function makeMixMilkCh2(E) {
                 ].map(([step, a, b, c], i) => (
                   <tr key={i} style={{ background: i === 3 ? "#d1fae520" : "transparent" }}>
                     <td style={{ padding: "4px 6px", fontWeight: i === 3 ? 800 : 400 }}>{step}</td>
-                    <td style={{ padding: "4px 6px", textAlign: "center", fontWeight: 800 }}>{a}</td>
-                    <td style={{ padding: "4px 6px", textAlign: "center", fontWeight: 800 }}>{b}</td>
-                    <td style={{ padding: "4px 6px", textAlign: "center", fontWeight: 800 }}>{c}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "center", fontWeight: 600 }}>{a}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "center", fontWeight: 600 }}>{b}</td>
+                    <td style={{ padding: "4px 6px", textAlign: "center", fontWeight: 600 }}>{c}</td>
                   </tr>
                 ))}
               </tbody>
@@ -493,7 +506,8 @@ export function makeMixMilkCh2(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Now you try!\nAfter state [6, 4, 0], step 3 pours bucket 1 -> bucket 2 (since 3%3=0, so src=0, dst=1).\nB2 remaining = 8-4 = 4.\nTransfer min(6, 4) = 4.", "이제 해봐요!\n상태 [6, 4, 0] 이후, 3단계는 1번에서 2번으로 부어 (3%3=0이니까 src=0, dst=1).\nB2 남은 공간 = 8-4 = 4.\n이동량 min(6, 4) = 4."),
+        "Now you try!  At state [6, 4, 0], the next step pours 1 → 2.  Compute the transfer yourself.",
+        "이제 해봐요! 상태 [6, 4, 0] 다음 단계는 1 → 2 붓기. 이동량을 직접 계산."),
       question: t(E,
         "State [6,4,0]. Step 3: pour 1→2. What is milk[1] after?",
         "상태 [6,4,0]. 3단계: 1→2 붓기. 이후 milk[1]은?"),
@@ -536,7 +550,7 @@ export function makeMixMilkCh3(E, lang = "py") {
         "Let's build the code step by step!\nFirst, we read 3 lines of input.\nEach has capacity and initial milk for one bucket.", "코드를 한 단계씩 만들어보자! 먼저 3줄의 입력을 읽어. 각 줄에 양동이 하나의 용량과 초기 우유량이 있어요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 1: Read the 3 buckets", "1단계: 양동이 3개 읽기")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
@@ -567,7 +581,7 @@ export function makeMixMilkCh3(E, lang = "py") {
         "Next, we loop 100 times.\nEach step, we figure out which bucket pours into which using modular arithmetic!", "다음으로 100번 반복해요. 각 단계에서 어떤 양동이에서 어떤 양동이로 부을지 모듈러 연산으로 결정해요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 2: The simulation loop", "2단계: 시뮬레이션 루프")}
           </div>
           <CodeSnippet
@@ -607,7 +621,7 @@ export function makeMixMilkCh3(E, lang = "py") {
         "The core: calculate how much to pour, then update both buckets.\nThis is just one line of math plus two updates!", "핵심: 얼마나 부을지 계산하고 양쪽 양동이를 업데이트해요. 수학 한 줄에 업데이트 두 줄이면 끝!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#d97706", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
             {t(E, "Step 3: The pour logic", "3단계: 붓기 로직")}
           </div>
           <CodeSnippet
@@ -623,8 +637,8 @@ export function makeMixMilkCh3(E, lang = "py") {
             highlight={[4, 5, 6]}
           />
           <div style={{ marginTop: 8, background: "#fef3c7", borderRadius: 8, padding: 8, border: "1.5px solid #fbbf24", fontSize: 12, lineHeight: 1.8, color: "#92400e" }}>
-            <div><span style={{ fontWeight: 800 }}>cap[dst] - milk[dst]</span> = {t(E, "remaining space in destination", "목적지의 남은 공간")}</div>
-            <div><span style={{ fontWeight: 800 }}>min(...)</span> = {t(E, "can't pour more than source has OR dest can fit", "소스가 가진 양과 목적지 남은 공간 중 작은 값")}</div>
+            <div><span style={{ fontWeight: 600 }}>cap[dst] - milk[dst]</span> = {t(E, "remaining space in destination", "목적지의 남은 공간")}</div>
+            <div><span style={{ fontWeight: 600 }}>min(...)</span> = {t(E, "can't pour more than source has OR dest can fit", "소스가 가진 양과 목적지 남은 공간 중 작은 값")}</div>
           </div>
         </div>),
     },

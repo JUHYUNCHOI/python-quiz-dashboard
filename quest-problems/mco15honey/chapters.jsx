@@ -37,17 +37,28 @@ export function makeHoneyCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf6f"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Honey</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Honey</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCO 2015 P2</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E, "Maximize total honey across at most K trips, where each trip drains up to M ml from one hive.",
+                    "최대 K 번 왕복 안에서, 각 왕복마다 한 벌집에서 최대 M ml 을 가져와 총 꿀을 최대로 모아요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A squirrel has a ", "다람쥐가 ")}
                   <b style={{ color: "#d97706" }}>{t(E, "pot of capacity M ml", "용량이 M ml 인 항아리")}</b>
@@ -57,7 +68,7 @@ export function makeHoneyCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "She can make at most ", "최대 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "K trips", "K 번 왕복(한 번 가서 가져오기)")}</b>
@@ -66,7 +77,7 @@ export function makeHoneyCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM total honey collected", "수집한 꿀의 총량 최댓값")}</b>
@@ -103,8 +114,8 @@ export function makeHoneyCh1(E) {
         "Pot M=10, hive has 25 honey. Trips to empty it? (10+10+5)",
         "항아리 M=10, 벌집에 꿀 25. 다 모으려면 왕복 횟수? (10+10+5)"),
       hint: t(E,
-        "ceil(25/10) = 3 trips: first two collect 10 each, third collects 5.",
-        "ceil(25/10) = 3번: 처음 두 번은 10씩, 세 번째는 5를 수집."),
+        "Each trip takes up to 10. Subtract 10 each time until honey hits 0 — count the trips.",
+        "한 번에 최대 10 씩 가져와요. 꿀이 0 이 될 때까지 10 씩 빼면서 횟수를 세어봐요."),
       answer: 3,
     },
   ];
@@ -116,48 +127,12 @@ export function makeHoneyCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeHoneyCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Greedy: sort hives by honey amount DESCENDING. For each hive in order, use trips needed = ceil(honey / M) — capped by remaining trips. Add the collected amount.",
-        "그리디: 벌집을 꿀 양 내림차순 정렬. 순서대로 각 벌집마다, 필요한 왕복 = ceil(꿀/M) — 남은 왕복으로 제한. 수집량 누적."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Sort hives descending", "벌집 내림차순 정렬"), code: "hives.sort(reverse=True)", color: "#d97706" },
-              { n: 2, label: t(E, "For each hive in order", "순서대로 각 벌집"), code: "for h in hives: if K == 0: break", color: "#7c3aed" },
-              { n: 3, label: t(E, "Use trips for this hive", "이 벌집에 왕복 사용"), code: "need = (h + M - 1) // M;  used = min(need, K)", color: "#0891b2" },
-              { n: 4, label: t(E, "Add collected, decrement K", "수집량 누적, K 감소"), code: "total += min(h, used * M);  K -= used;  print(total)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort dominates", "정렬이 지배적")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Code (greedy strategy + progressive sections)
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Greedy: sort hives by honey amount DESCENDING. For each hive in order, use trips = ceil(honey / M) — capped by remaining trips. Sections build it one piece at a time. Toggle Python ↔ C++ in header.",
+        "그리디: 벌집을 꿀 양 내림차순 정렬. 순서대로 각 벌집마다 필요한 왕복 = ceil(꿀/M) — 남은 왕복으로 제한. 아래 섹션이 한 단락씩 쌓아요. 헤더에서 Python ↔ C++ 토글."),
       sections: getHoneySections(E),
     },
   ];

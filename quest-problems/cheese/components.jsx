@@ -1,707 +1,265 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
-import { CodeBlock } from "@/components/quest/shared";
+import { SampleInputAside } from "@/components/quest/SampleInputAside";
 
-export function Cube3D({ N, carved, E }) {
-  const [rotX, setRotX] = useState(-30);
-  const [rotY, setRotY] = useState(40);
-  const dragRef = useRef(null);
+const A = "#eab308";
 
-  const onPD = (e) => {
-    e.preventDefault();
-    dragRef.current = { x: e.clientX, y: e.clientY, rx: rotX, ry: rotY };
-  };
+const CHS_SAMPLE = ["2 5", "0 0 0", "1 1 1", "0 1 0", "1 0 0", "1 1 0"];
 
-  useEffect(() => {
-    const mv = (e) => {
-      if (!dragRef.current) return;
-      setRotY(dragRef.current.ry + (e.clientX - dragRef.current.x) * 0.5);
-      setRotX(Math.max(-80, Math.min(10, dragRef.current.rx - (e.clientY - dragRef.current.y) * 0.5)));
-    };
-    const up = () => { dragRef.current = null; };
-    window.addEventListener("pointermove", mv);
-    window.addEventListener("pointerup", up);
-    return () => { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); };
-  }, []);
-
-  const S = 52, gap = 3, unit = S + gap, half = S / 2;
-  const total = N * unit;
-  const isC = (x, y, z) => carved.some(c => c[0] === x && c[1] === y && c[2] === z);
-
-  const cells = [];
-  for (let x = 0; x < N; x++)
-    for (let y = 0; y < N; y++)
-      for (let z = 0; z < N; z++)
-        cells.push([x, y, z]);
-
-  // Label shown on all 6 faces
-  const mkLabel = (x, y, z, color) => (
-    <span style={{
-      fontSize: 10, fontWeight: 700,
-      fontFamily: "'JetBrains Mono',monospace",
-      color, pointerEvents: "none",
-    }}>{x},{y},{z}</span>
-  );
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 8 }}>
-      <div onPointerDown={onPD} style={{
-        perspective: 600, width: total * 2.4, height: total * 2.4,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        cursor: "grab", touchAction: "none",
-      }}>
-        <div style={{
-          width: total, height: total, position: "relative",
-          transformStyle: "preserve-3d",
-          transform: `rotateX(${rotX}deg) rotateY(${rotY}deg)`,
-        }}>
-          {cells.map(([x, y, z], i) => {
-            if (isC(x, y, z)) return null;
-
-            // Mapping: x→CSS-X, y→CSS-Z(depth), z→CSS-Y(up, flipped)
-            const cx = x * unit + half;
-            const cy = (N - 1 - z) * unit + half;
-            const cz = y * unit + half;
-
-            const topC = "#fde047", frC = "#eab308", sideC = "#ca8a04";
-            const brd = "1px solid rgba(120,80,0,0.25)", txtC = "#78510a";
-
-            const lbl = mkLabel(x, y, z, txtC);
-
-            // Each face: S×S div, centered on the cube via wrapper translate3d
-            // Then offset from center by ±half in the appropriate axis
-            const face = (bg, transform) => (
-              <div style={{
-                position: "absolute", width: S, height: S,
-                left: -half, top: -half,
-                background: bg, border: brd, borderRadius: 2,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                backfaceVisibility: "hidden",
-                transform,
-              }}>{lbl}</div>
-            );
-
-            return (
-              <div key={i} style={{
-                position: "absolute",
-                transformStyle: "preserve-3d",
-                // Move wrapper to the CENTER of this unit cube in 3D space
-                transform: `translate3d(${cx}px, ${cy}px, ${cz}px)`,
-              }}>
-                {face(frC, `translateZ(${half}px)`)}
-                {face(frC, `translateZ(${-half}px) rotateY(180deg)`)}
-                {face(topC, `translateY(${-half}px) rotateX(90deg)`)}
-                {face(sideC, `translateY(${half}px) rotateX(-90deg)`)}
-                {face(sideC, `translateX(${half}px) rotateY(90deg)`)}
-                {face(sideC, `translateX(${-half}px) rotateY(-90deg)`)}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div style={{ fontSize: 11, color: C.dim }}>{"🖱️"} {E ? "Drag to rotate" : "드래그로 회전"}</div>
-    </div>
-  );
-}
-
-/* --- Brute Force Runner — async per-query + live + stop preserves --- */
-export function CheeseBruteRunner({ E }) {
-  const [N, setN] = useState(3);
-  const [running, setRunning] = useState(false);
-  const [result, setResult] = useState(null);
-  // 라이브 표시
-  const [liveQ, setLiveQ] = useState(0);
-  const [liveCount, setLiveCount] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const alive = useRef(false);
-  const startTimeRef = useRef(0);
-
-  // 시간/숫자 포맷
-  const fmtTime = (sec) => {
-    if (sec < 1) return `${(sec * 1000).toFixed(0)}ms`;
-    if (sec < 60) return `${sec.toFixed(1)}s`;
-    if (sec < 3600) return `${(sec / 60).toFixed(1)}분`;
-    if (sec < 86400) return `${(sec / 3600).toFixed(1)}시간`;
-    return `${(sec / 86400).toFixed(1)}일`;
-  };
-  // USACO 추정: 쿼리당 O(N³) × Q
-  const estimateUSACO = (N, Q) => {
-    const opsPerQuery = 3 * N * N * N;       // 3 방향 × N² 줄 × N 칸
-    const totalOps = opsPerQuery * Q;
-    return totalOps / 1e8;                   // C++ 1억 ops/sec
-  };
-
-  const run = () => {
-    if (N < 2 || N > 50) return;
-    setRunning(true); setResult(null); setProgress(0);
-    setLiveQ(0); setLiveCount(0);
-    alive.current = true;
-    startTimeRef.current = performance.now();
-
-    // Q = 모든 셀의 30% 정도 제거 (작은 N 에서도 의미 있고, 큰 N 에서는 충분히 느림)
-    const Q = Math.min(Math.max(Math.floor(N * N * N * 0.3), 5), 200);
-
-    // 모든 셀 셔플
-    const allCells = [];
-    for (let x = 0; x < N; x++)
-      for (let y = 0; y < N; y++)
-        for (let z = 0; z < N; z++) allCells.push([x,y,z]);
-    for (let i = allCells.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [allCells[i], allCells[j]] = [allCells[j], allCells[i]];
-    }
-
-    const answers = [];
-    const isC = new Set();
-    let q = 0;
-
-    const finish = (partial) => {
-      const elapsed = performance.now() - startTimeRef.current;
-      setRunning(false);
-      setResult({
-        N, Q, completedQ: q, answers,
-        lastAnswer: answers.length > 0 ? answers[answers.length - 1] : 0,
-        elapsedMs: elapsed, partial,
-      });
-      alive.current = false;
-    };
-
-    const tick = () => {
-      if (!alive.current) { finish(true); return; }
-
-      // 한 쿼리 처리 (실제 brute 일 작업)
-      const [x,y,z] = allCells[q];
-      isC.add(`${x},${y},${z}`);
-      let count = 0;
-      for (let a = 0; a < N; a++)
-        for (let b = 0; b < N; b++) {
-          let ok = true;
-          for (let c = 0; c < N; c++) if (!isC.has(`${a},${b},${c}`)) { ok = false; break; }
-          if (ok) count++;
-        }
-      for (let b = 0; b < N; b++)
-        for (let c = 0; c < N; c++) {
-          let ok = true;
-          for (let a = 0; a < N; a++) if (!isC.has(`${a},${b},${c}`)) { ok = false; break; }
-          if (ok) count++;
-        }
-      for (let a = 0; a < N; a++)
-        for (let c = 0; c < N; c++) {
-          let ok = true;
-          for (let b = 0; b < N; b++) if (!isC.has(`${a},${b},${c}`)) { ok = false; break; }
-          if (ok) count++;
-        }
-      answers.push(count);
-      q++;
-      setLiveQ(q); setLiveCount(count); setProgress(Math.floor(q / Q * 100));
-
-      if (q >= Q) { finish(false); return; }
-      // 쿼리 사이 16ms 딜레이 — 학생이 진행 체감
-      setTimeout(tick, 16);
-    };
-    setTimeout(tick, 50);
-  };
-  const stop = () => { alive.current = false; };
-
-  return (
-    <div style={{ padding: "12px 8px" }}>
-      <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-        <span style={{ fontSize: 13, fontWeight: 700, color: C.dim }}>N =</span>
-        <input type="number" min={2} max={50} value={N}
-          onChange={e => { setN(+e.target.value); setResult(null); }}
-          disabled={running}
-          style={{ width: 60, padding: "6px 8px", borderRadius: 8, border: `2px solid ${C.border}`,
-            fontSize: 16, fontWeight: 800, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }} />
-        <button
-          onClick={running ? stop : run}
-          disabled={!running && (N < 2 || N > 50)}
-          style={{
-            padding: "8px 20px", borderRadius: 10, border: "none",
-            background: running ? "#dc2626" : "linear-gradient(135deg,#fbbf24,#d97706)",
-            color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer",
-          }}>
-          {running ? (E ? "⏹ Stop" : "⏹ 중지") : (E ? "▶ Run Brute" : "▶ 브루트 실행")}
-        </button>
-      </div>
-
-      {N > 20 && <div style={{ textAlign: "center", fontSize: 12, color: C.carry, fontWeight: 700, marginBottom: 8 }}>
-        {E ? "⚠️ N>20 will be slow — that's the point! Try Stop midway." : "⚠️ N>20 이면 느려져 — 그게 포인트! 중간에 Stop 눌러봐."}
-      </div>}
-
-      {/* 실행 중 라이브 표시 */}
-      {running && (
-        <div style={{ marginBottom: 12 }}>
-          <div style={{ height: 8, background: "#e5e7eb", borderRadius: 4, overflow: "hidden" }}>
-            <div style={{ height: "100%", background: "#d97706", borderRadius: 4, width: `${progress}%`, transition: "width .1s" }} />
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: C.dim, fontWeight: 700 }}>
-            <span>{t(E, "query", "쿼리")} <span style={{ color: "#d97706", fontWeight: 900 }}>{liveQ}</span></span>
-            <span>{t(E, "current count", "현재 답")}: <span style={{ color: "#d97706", fontWeight: 900 }}>{liveCount}</span></span>
-            <span>{progress}%</span>
-          </div>
-        </div>
-      )}
-
-      {/* 결과 */}
-      {result && (
-        <div>
-          <div style={{ textAlign: "center", padding: "12px 0", marginBottom: 10 }}>
-            {result.partial ? (
-              <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 800, letterSpacing: 0.5 }}>
-                ⏸ {t(E, `STOPPED at query ${result.completedQ} of ${result.Q}`,
-                       `${result.completedQ} / ${result.Q} 번째 쿼리에서 중지`)}
-              </div>
-            ) : (
-              <div style={{ fontSize: 11, color: "#10b981", fontWeight: 800 }}>
-                ✓ {t(E, `${result.Q} queries completed`, `${result.Q} 쿼리 전부 완료`)}
-              </div>
-            )}
-            <div style={{ fontSize: 32, fontWeight: 900, color: "#d97706", fontFamily: "'JetBrains Mono',monospace", marginTop: 4 }}>
-              {result.lastAnswer}
-            </div>
-            <div style={{ fontSize: 11, color: C.dim }}>{t(E, "last answer (rods that fit)", "마지막 답 (들어가는 막대 수)")}</div>
-          </div>
-
-          {/* 실제 브라우저 시간 */}
-          <div style={{
-            background: "#fff", border: `2px solid ${result.elapsedMs > 500 ? "#dc2626" : "#10b981"}`, borderRadius: 10,
-            padding: "10px 14px", marginBottom: 10,
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-          }}>
-            <div>
-              <div style={{ fontSize: 10, fontWeight: 800, color: C.dim, letterSpacing: 0.5 }}>
-                ⏱️ {t(E, "BROWSER TIME", "브라우저 측정 시간")}
-              </div>
-              <div style={{ fontSize: 18, fontWeight: 900, color: result.elapsedMs > 500 ? "#dc2626" : "#10b981", fontFamily: "'JetBrains Mono',monospace" }}>
-                {fmtTime(result.elapsedMs / 1000)}
-              </div>
-            </div>
-            <div style={{ fontSize: 10, color: C.dim, textAlign: "right", lineHeight: 1.5, maxWidth: 180 }}>
-              {t(E, "Includes 16ms/query animation. Pure brute is faster but still O(QN³).",
-                  "쿼리당 16ms 애니메이션 포함. 순수 brute 는 더 빠르지만 여전히 O(QN³).")}
-            </div>
-          </div>
-
-          {/* USACO 추정 */}
-          <div style={{
-            background: "linear-gradient(135deg, #fef2f2, #fff)", border: `2px solid #dc2626`, borderRadius: 10,
-            padding: "10px 14px", marginBottom: 10,
-          }}>
-            <div style={{ fontSize: 10, fontWeight: 800, color: "#dc2626", letterSpacing: 0.5, marginBottom: 6 }}>
-              🏆 {t(E, "ON USACO JUDGE — REAL ESTIMATE", "USACO 채점기 — 실제 추정")}
-            </div>
-            <table style={{ width: "100%", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", borderCollapse: "collapse" }}>
-              <tbody>
-                {[
-                  { N: result.N, Q: result.Q, label: t(E, "your run", "지금 실행") },
-                  { N: 100, Q: 200000, label: "N=100 max Q" },
-                  { N: 1000, Q: 200000, label: "N=1000 (max!)" },
-                ].map((row, i) => {
-                  const sec = estimateUSACO(row.N, row.Q);
-                  const tle = sec > 2;
-                  return (
-                    <tr key={i} style={{ borderTop: i > 0 ? "1px solid #fee2e2" : "none" }}>
-                      <td style={{ padding: "4px 0", fontWeight: 700, color: C.dim }}>N={row.N} · Q={row.Q.toLocaleString()}</td>
-                      <td style={{ padding: "4px 6px", fontSize: 10, color: C.dim }}>{row.label}</td>
-                      <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 800, color: tle ? "#dc2626" : "#10b981" }}>
-                        {fmtTime(sec)}
-                      </td>
-                      <td style={{ padding: "4px 0 4px 6px", textAlign: "right", fontWeight: 800, color: tle ? "#dc2626" : "#10b981", minWidth: 32 }}>
-                        {tle ? "TLE" : "✓"}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <div style={{ marginTop: 6, fontSize: 10, color: C.dim, lineHeight: 1.5 }}>
-              {t(E,
-                "Estimate: 3N³ ops per query × Q / 10⁸ ops/sec (C++).",
-                "추정: 쿼리당 3N³ 연산 × Q / 1억 ops/sec (C++).")}
-            </div>
-          </div>
-
-          {result.partial && (
-            <div style={{ padding: "10px 12px", background: C.carryBg, borderRadius: 8, fontSize: 12, color: C.carry, fontWeight: 700, textAlign: "center" }}>
-              {t(E,
-                "Felt slow? On the real judge it'd be way slower. We need a smarter approach!",
-                "느렸지? 실제 채점기에선 훨씬 느려. 더 똑똑한 방법 필요!")}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* --- Interactive Simulator --- */
-export function CheeseSim2({ E }) {
+/* ════════════════════════════════════════════════════════════════════
+   CheeseSimulator — N=2 cube, click to carve, see live counts.
+   ════════════════════════════════════════════════════════════════════ */
+export function CheeseSimulator({ E }) {
   const N = 2;
-  // 샘플 input: 2 5 / 0 0 0 / 1 1 1 / 0 1 0 / 1 0 0 / 1 1 0
-  const order = [[0,0,0],[1,1,1],[0,1,0],[1,0,0],[1,1,0]];
-  const expectedAns = [0,0,1,2,5];   // 샘플 output
+  const [carved, setCarved] = useState(new Set());
 
-  // mkGrid: [N x N], 시작값 N (그 줄에 남은 블록 수)
-  const mkGrid = () => Array.from({length:N}, ()=>Array(N).fill(N));
-  const initState = () => ({
-    step: 0, xy: mkGrid(), yz: mkGrid(), xz: mkGrid(),
-    total: 0, history: [], carved: [], lastCarved: null,
-    lastTouched: { xy: null, yz: null, xz: null },
-  });
-
-  const [state, setState] = useState(initState);
-
-  const doCarve = () => {
-    if (state.step >= order.length) return;
-    const [x,y,z] = order[state.step];
-    const xy = state.xy.map(r=>[...r]);
-    const yz = state.yz.map(r=>[...r]);
-    const xz = state.xz.map(r=>[...r]);
-    let newHits = 0;
-    xy[x][y] -= 1; if (xy[x][y] === 0) newHits++;
-    yz[y][z] -= 1; if (yz[y][z] === 0) newHits++;
-    xz[x][z] -= 1; if (xz[x][z] === 0) newHits++;
-    const newTotal = state.total + newHits;
-    setState({
-      step: state.step + 1, xy, yz, xz, total: newTotal,
-      history: [...state.history, { coord: [x,y,z], hits: newHits, total: newTotal }],
-      carved: [...state.carved, [x,y,z]], lastCarved: [x,y,z],
-      lastTouched: { xy: [x, y], yz: [y, z], xz: [x, z] },
-    });
+  const toggle = (x, y, z) => {
+    const key = `${x},${y},${z}`;
+    const next = new Set(carved);
+    if (next.has(key)) next.delete(key);
+    else next.add(key);
+    setCarved(next);
   };
 
-  const reset = () => setState(initState());
-  const cur = state.step < order.length ? order[state.step] : null;
-  const matches = state.step > 0 && state.total === expectedAns[state.step - 1];
+  // Compute valid placements
+  let validZ = 0, validY = 0, validX = 0;
+  for (let a = 0; a < N; a++) {
+    for (let b = 0; b < N; b++) {
+      let cz = 0, cy = 0, cx = 0;
+      for (let k = 0; k < N; k++) {
+        if (carved.has(`${a},${b},${k}`)) cz++;
+        if (carved.has(`${a},${k},${b}`)) cy++;
+        if (carved.has(`${k},${a},${b}`)) cx++;
+      }
+      if (cz === N) validZ++;
+      if (cy === N) validY++;
+      if (cx === N) validX++;
+    }
+  }
+  const total = validZ + validY + validX;
 
-  // 미니 격자 — N×N counter visualization
-  const renderGrid = (grid, label, axis, color, touched) => (
-    <div style={{ textAlign: "center" }}>
-      <div style={{ fontSize: 10, fontWeight: 800, color, marginBottom: 4, fontFamily: "'JetBrains Mono',monospace" }}>{label}</div>
-      <div style={{ display: "inline-grid", gridTemplateColumns: `repeat(${N}, 28px)`, gap: 2 }}>
-        {grid.flatMap((row, i) => row.map((v, j) => {
-          const isTouch = touched && touched[0] === i && touched[1] === j;
-          const isHit  = v === 0;
-          return (
-            <div key={`${i}-${j}`} style={{
-              width: 28, height: 28, borderRadius: 5,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 13, fontWeight: 800,
-              fontFamily: "'JetBrains Mono',monospace",
-              background: isHit ? "#10b98120" : (isTouch ? `${color}30` : "#f8f9fc"),
-              border: `1.5px solid ${isHit ? "#10b981" : (isTouch ? color : C.border)}`,
-              color: isHit ? "#10b981" : (isTouch ? color : C.text),
-              transition: "all .2s",
-            }}>{v}</div>
-          );
-        }))}
-      </div>
-      <div style={{ fontSize: 9, color: C.dim, marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>{axis}</div>
-    </div>
-  );
+  const reset = () => setCarved(new Set());
 
   return (
-    <div style={{ padding: "12px 8px" }}>
-      <Cube3D N={N} carved={state.carved} E={E} />
-
-      {/* Answer + Sample I/O 매칭 표시 */}
-      {state.step > 0 && (
-        <div style={{ textAlign: "center", marginBottom: 12 }}>
-          <div style={{ fontSize: 13, color: C.dim, fontWeight: 600, marginBottom: 2 }}>
-            {E ? "Rods that fit:" : "들어갈 수 있는 막대:"}
-          </div>
-          <div style={{ fontSize: 36, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: matches ? "#10b981" : C.accent }}>
-            {state.total}
-          </div>
-          {matches && (
-            <div style={{ fontSize: 11, color: "#10b981", fontWeight: 700, marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>
-              ✓ {t(E, `matches sample output line ${state.step}`, `샘플 출력 ${state.step}번째 줄과 일치`)}
-            </div>
-          )}
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+        <div style={{ fontSize: 12, color: C.dim }}>
+          {t(E, `2×2×2 cube — click to carve. ${carved.size} carved.`, `2×2×2 큐브 — 클릭해서 파내기. ${carved.size} 칸 파임.`)}
         </div>
-      )}
-
-      {/* 카운터 3 격자 — 코드의 xy/yz/xz 값을 눈으로 */}
-      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 8px", marginBottom: 12 }}>
-        <div style={{ fontSize: 10, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 8, letterSpacing: 0.5 }}>
-          {t(E, "ROW BLOCKS REMAINING (3 directions)", "각 줄의 남은 블록 수 (3 방향)")}
-        </div>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          {renderGrid(state.xy, "xy", "z-axis", "#ef4444", state.lastTouched.xy)}
-          {renderGrid(state.yz, "yz", "x-axis", "#22c55e", state.lastTouched.yz)}
-          {renderGrid(state.xz, "xz", "y-axis", "#3b82f6", state.lastTouched.xz)}
-        </div>
-        <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginTop: 6, lineHeight: 1.5 }}>
-          {t(E,
-            "Each cell = blocks left in that row. Reaches 0 → row is empty → +1 to total!",
-            "각 칸 = 그 줄에 남은 블록 수. 0이 되면 → 줄이 빔 → 총합 +1!")}
-        </div>
+        <button onClick={reset} style={{
+          padding: "4px 10px", borderRadius: 6, fontSize: 11, fontWeight: 700,
+          border: `1.5px solid ${C.border}`, background: "#fff", cursor: "pointer", color: C.text,
+        }}>{t(E, "Reset", "리셋")}</button>
       </div>
 
-      <div style={{ textAlign: "center", marginTop: 14 }}>
-        {cur && (
-          <div style={{ fontSize: 14, color: C.text, marginBottom: 8, fontWeight: 700 }}>
-            {state.step + 1}/5: ({cur[0]},{cur[1]},{cur[2]}) {E ? "to remove" : "제거 예정"}
-          </div>
-        )}
-        <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
-          {state.step < order.length ? (
-            <button onClick={doCarve} style={{
-              padding: "12px 28px", borderRadius: 10, border: "none",
-              background: "linear-gradient(135deg,#fbbf24,#d97706)",
-              color: "#fff", fontSize: 15, fontWeight: 800, cursor: "pointer",
-              boxShadow: "0 3px 12px #fbbf2440",
-            }}>{"🧀"} {E ? "Carve!" : "제거!"}</button>
-          ) : (
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#10b981" }}>
-              {"🎉"} {E ? "All 5 outputs match the sample!" : "5개 전부 샘플 출력과 일치!"}
+      {/* 2 layers (z=0, z=1) shown side by side */}
+      <div style={{ display: "flex", gap: 16, justifyContent: "center", marginBottom: 14 }}>
+        {[0, 1].map(z => (
+          <div key={z} style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>z = {z}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 50px)", gap: 4 }}>
+              {[0, 1].flatMap(y => [0, 1].map(x => {
+                const key = `${x},${y},${z}`;
+                const isCarved = carved.has(key);
+                return (
+                  <button key={`${x}-${y}-${z}`} onClick={() => toggle(x, y, z)} style={{
+                    width: 50, height: 50, padding: 0,
+                    background: isCarved ? "#fff" : "#fde047",
+                    border: `1px solid ${isCarved ? C.border : "#854d0e"}`,
+                    borderRadius: 6, cursor: "pointer",
+                    fontSize: 10, color: isCarved ? C.dim : "#854d0e", fontFamily: "'JetBrains Mono',monospace",
+                  }}>
+                    {isCarved ? "·" : "🧀"}
+                    <div style={{ fontSize: 8, marginTop: 2 }}>({x},{y})</div>
+                  </button>
+                );
+              }))}
             </div>
-          )}
-          <button onClick={reset} style={{
-            padding: "12px 16px", borderRadius: 10,
-            border: `2px solid ${C.border}`, background: C.card,
-            fontSize: 13, fontWeight: 700, cursor: "pointer", color: C.dim,
-          }}>{"↻"}</button>
-        </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 10 }}>
+        {[
+          { label: "X-axis", val: validX, color: "#dc2626" },
+          { label: "Y-axis", val: validY, color: "#16a34a" },
+          { label: "Z-axis", val: validZ, color: "#0891b2" },
+        ].map((axis, i) => (
+          <div key={i} style={{
+            background: "#fff", border: `1px solid ${axis.color}`, borderRadius: 8, padding: "8px 10px", textAlign: "center",
+          }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: axis.color }}>{axis.label}</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: axis.color, marginTop: 2 }}>{axis.val}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", textAlign: "center", fontSize: 14, fontWeight: 600 }}>
+        {t(E, `Total valid placements: ${total}`, `총 유효 자리: ${total}`)}
       </div>
     </div>
   );
 }
 
+export function CheeseSim({ E }) { return <CheeseSimulator E={E} />; }
+export function CheeseRunner() { return null; }
 
-/* ================================================================
-   ProgressiveCode — 인터랙티브 코드 뷰어
-   섹션 버튼 + Python/C++ 토글 + "왜 이렇게?" + PDF 다운로드 (위젯 내부)
-   ================================================================ */
-/* ProgressiveCode — 수직 스택 (위→아래 step by step). lang prop from header. */
-export function CheeseProgressiveCode(props) {
-  return <ProgressiveCodeStepper {...props} accentColor="#7c5cfc" />;
-}
+/* ════════════════════════════════════════════════════════════════════
+   Progressive code: 4 sections.
+   ════════════════════════════════════════════════════════════════════ */
 
-
-/* ================================================================
-   getCheeseBruteSections — 첫 아이디어 (3D 배열 + 매 query 다 검사)
-   ================================================================ */
-
-const CB_INPUT_PY = [
+const CHS_S1_PY = [
   "import sys",
-  "input = sys.stdin.readline",
   "",
-  "N, Q = map(int, input().split())",
-  "",
-  "# 3D 큐브: cheese[x][y][z] = True 면 거기 블록 있음",
-  "cheese = [[[True]*N for _ in range(N)] for _ in range(N)]",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "N = int(data[p])",
+  "p += 1",
+  "Q = int(data[p])",
+  "p += 1",
 ];
-const CB_INPUT_CPP = [
-  "#include <bits/stdc++.h>",
+const CHS_S1_CPP = [
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <set>",
   "using namespace std;",
   "",
   "int main() {",
   "    ios::sync_with_stdio(false);",
   "    cin.tie(nullptr);",
-  "",
   "    int N, Q;",
   "    cin >> N >> Q;",
-  "",
-  "    // 3D 큐브: cheese[x][y][z] = true 면 거기 블록 있음",
-  "    vector<vector<vector<bool>>> cheese(N,",
-  "        vector<vector<bool>>(N, vector<bool>(N, true)));",
 ];
 
-const CB_CARVE_PY = [
-  "for _ in range(Q):",
-  "    x, y, z = map(int, input().split())",
-  "    cheese[x][y][z] = False   # 블록 빼기",
-  "    count = 0",
+const CHS_S2_PY = [
+  "# Three N x N count grids — one per axis.",
+  "# cz[x][y] = # carved cells in column (x, y, z) over z = 0..N-1",
+  "# cy[x][z] = # carved cells in row    (x, y, z) over y = 0..N-1",
+  "# cx[y][z] = # carved cells in row    (x, y, z) over x = 0..N-1",
+  "cz = [[0] * N for _ in range(N)]",
+  "cy = [[0] * N for _ in range(N)]",
+  "cx = [[0] * N for _ in range(N)]",
+  "carved = set()",
+  "valid = 0",
 ];
-const CB_CARVE_CPP = [
+const CHS_S2_CPP = [
+  "    vector<vector<int>> cz(N, vector<int>(N, 0));",
+  "    vector<vector<int>> cy(N, vector<int>(N, 0));",
+  "    vector<vector<int>> cx(N, vector<int>(N, 0));",
+  "    set<tuple<int, int, int>> carved;",
+  "    long long valid = 0;",
+];
+
+const CHS_S3_PY = [
+  "# Each carve increments 3 row counters (one per axis).",
+  "# When a counter hits N, a valid rod placement appears.",
+  "for _ in range(Q):",
+  "    x = int(data[p])",
+  "    p += 1",
+  "    y = int(data[p])",
+  "    p += 1",
+  "    z = int(data[p])",
+  "    p += 1",
+  "    if (x, y, z) in carved:",
+  "        print(valid)",
+  "        continue",
+  "    carved.add((x, y, z))",
+  "    cz[x][y] += 1",
+  "    if cz[x][y] == N: valid += 1",
+  "    cy[x][z] += 1",
+  "    if cy[x][z] == N: valid += 1",
+  "    cx[y][z] += 1",
+  "    if cx[y][z] == N: valid += 1",
+  "    print(valid)",
+];
+const CHS_S3_CPP = [
   "    while (Q--) {",
   "        int x, y, z;",
   "        cin >> x >> y >> z;",
-  "        cheese[x][y][z] = false;   // 블록 빼기",
-  "        int count = 0;",
-];
-
-const CB_SCAN_PY = [
-  "    # 🐌 3 방향 × N² 줄 × N 칸 = O(N³) per query — TLE 원인!",
-  "",
-  "    # z-방향: (x,y) 고정, z 변함",
-  "    for x_ in range(N):",
-  "        for y_ in range(N):",
-  "            if all(not cheese[x_][y_][z_] for z_ in range(N)):",
-  "                count += 1",
-  "",
-  "    # x-방향: (y,z) 고정, x 변함",
-  "    for y_ in range(N):",
-  "        for z_ in range(N):",
-  "            if all(not cheese[x_][y_][z_] for x_ in range(N)):",
-  "                count += 1",
-  "",
-  "    # y-방향: (x,z) 고정, y 변함",
-  "    for x_ in range(N):",
-  "        for z_ in range(N):",
-  "            if all(not cheese[x_][y_][z_] for y_ in range(N)):",
-  "                count += 1",
-];
-const CB_SCAN_CPP = [
-  "        // 🐌 3 방향 × N² 줄 × N 칸 = O(N³) per query — TLE 원인!",
-  "",
-  "        // z-방향: (x,y) 고정, z 변함",
-  "        for (int x_ = 0; x_ < N; x_++)",
-  "            for (int y_ = 0; y_ < N; y_++) {",
-  "                bool empty = true;",
-  "                for (int z_ = 0; z_ < N; z_++)",
-  "                    if (cheese[x_][y_][z_]) { empty = false; break; }",
-  "                if (empty) count++;",
-  "            }",
-  "",
-  "        // x-방향, y-방향도 똑같이 (생략 — 같은 패턴 반복)",
-  "        // ...",
-];
-
-const CB_OUTPUT_PY = [
-  "    print(count)",
-];
-const CB_OUTPUT_CPP = [
-  "        cout << count << \"\\n\";",
+  "        auto key = make_tuple(x, y, z);",
+  "        if (carved.count(key)) {",
+  "            cout << valid << '\\n';",
+  "            continue;",
+  "        }",
+  "        carved.insert(key);",
+  "        if (++cz[x][y] == N) valid++;",
+  "        if (++cy[x][z] == N) valid++;",
+  "        if (++cx[y][z] == N) valid++;",
+  "        cout << valid << '\\n';",
   "    }",
   "    return 0;",
   "}",
 ];
 
-export function getCheeseBruteSections(E) {
-  return [
-    {
-      label: t(E, "📦 1. Input + 3D Cube Init", "📦 1. 입력 + 3D 큐브 초기화"),
-      color: "#94a3b8",
-      py: CB_INPUT_PY, cpp: CB_INPUT_CPP,
-      why: [
-        t(E, "N = cube size, Q = number of carve queries.", "N = 큐브 크기, Q = 제거 쿼리 수."),
-        t(E, "3D array of bool: cheese[x][y][z] tracks if block exists. All start True.", "3D bool 배열: cheese[x][y][z] 가 블록 존재 여부. 다 True 시작."),
-      ],
-      pyOnly: [
-        t(E, "Triple list comprehension creates N×N×N array. Memory: N³ booleans.",
-            "3 중 리스트 컴프리헨션으로 N×N×N 배열. 메모리: N³ bool."),
-      ],
-      cppOnly: [
-        t(E, "vector<vector<vector<bool>>> — packed 1 bit/bool, but 2D would be enough if we use flags differently.",
-            "vector<vector<vector<bool>>> — bool 당 1 비트 packed. 2D 로도 가능."),
-        t(E, "N=1000 → 10⁹ bits = 125MB. Tight! May need to use vector<vector<int>> or different structure.",
-            "N=1000 → 10⁹ 비트 = 125MB. 빡빡함! vector<vector<int>> 등 다른 구조 필요할 수도."),
-      ],
-    },
-    {
-      label: t(E, "🍰 2. Per-Query: Carve One Block", "🍰 2. 매 쿼리: 블록 1 개 빼기"),
-      color: "#0891b2",
-      py: CB_CARVE_PY, cpp: CB_CARVE_CPP,
-      why: [
-        t(E, "Read (x, y, z) for the block to carve. Set cheese[x][y][z] = false.", "(x, y, z) 읽고 cheese[x][y][z] = false 로 설정."),
-        t(E, "Reset count = 0 because we're recomputing from scratch every query (the brute approach).", "count = 0 리셋 — 매 쿼리마다 전부 재계산하는 게 brute 의 핵심."),
-        t(E, "This is the WASTE — only 1 block changed, but we throw away all previous knowledge.", "이게 낭비 — 블록 1 개만 바뀌었는데 이전 정보 다 버림."),
-      ],
-    },
-    {
-      label: t(E, "🐌 3. Brute Scan (THE TLE)", "🐌 3. 전수 검사 (TLE 원인!)"),
-      color: "#dc2626",
-      py: CB_SCAN_PY, cpp: CB_SCAN_CPP,
-      why: [
-        t(E, "For each query, scan 3 × N² rows × N cells each → 3N³ ops per query.",
-            "쿼리마다 3 × N² 줄 × 줄당 N 칸 → 쿼리당 3N³ 연산."),
-        t(E, "Q=200K, N=1000 → 6×10¹⁴ ops → ~70 days. Need to skip the inner-N scan.",
-            "Q=20만, N=1000 → 6×10¹⁴ 연산 → 약 70 일. 안쪽 N 스캔을 없애야 함."),
-      ],
-      pyOnly: [
-        t(E, "all(not cheese[...] for z_ in range(N)) — Python idiom for 'all False'.", "all(not cheese[...] for z_ in range(N)) — '모두 False' 의 Python idiom."),
-      ],
-      cppOnly: [
-        t(E, "Manual inner loop with early break — slightly faster than scanning all N cells if first one is non-empty.", "수동 안쪽 루프 + early break — 첫 칸이 비어있지 않으면 N 칸 다 안 봐도 됨."),
-      ],
-    },
-    {
-      label: t(E, "📤 4. Output", "📤 4. 출력"),
-      color: "#94a3b8",
-      py: CB_OUTPUT_PY, cpp: CB_OUTPUT_CPP,
-      why: [
-        t(E, "Output count after each carve — problem requires Q lines, one per query.", "각 carve 후 count 출력 — 문제는 쿼리당 한 줄, 총 Q 줄 요구."),
-      ],
-    },
-  ];
-}
-
-
-/* ================================================================
-   getCheeseSections — Python/C++ 코드 + 설명 (인앱 + PDF 공용)
-   ================================================================ */
-
-const CHEESE_INPUT_PY = [
+const CHS_FULL_PY = [
   "import sys",
-  "from collections import defaultdict",
-  "input = sys.stdin.readline",
   "",
-  "N, Q = map(int, input().split())",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "N = int(data[p])",
+  "p += 1",
+  "Q = int(data[p])",
+  "p += 1",
+  "",
+  "cz = [[0] * N for _ in range(N)]",
+  "cy = [[0] * N for _ in range(N)]",
+  "cx = [[0] * N for _ in range(N)]",
+  "carved = set()",
+  "valid = 0",
+  "",
+  "for _ in range(Q):",
+  "    x = int(data[p])",
+  "    p += 1",
+  "    y = int(data[p])",
+  "    p += 1",
+  "    z = int(data[p])",
+  "    p += 1",
+  "    if (x, y, z) in carved:",
+  "        print(valid)",
+  "        continue",
+  "    carved.add((x, y, z))",
+  "    cz[x][y] += 1",
+  "    if cz[x][y] == N: valid += 1",
+  "    cy[x][z] += 1",
+  "    if cy[x][z] == N: valid += 1",
+  "    cx[y][z] += 1",
+  "    if cx[y][z] == N: valid += 1",
+  "    print(valid)",
 ];
-const CHEESE_INPUT_CPP = [
-  "#include <bits/stdc++.h>",
+const CHS_FULL_CPP = [
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <set>",
+  "#include <tuple>",
   "using namespace std;",
   "",
   "int main() {",
   "    ios::sync_with_stdio(false);",
   "    cin.tie(nullptr);",
-  "",
   "    int N, Q;",
   "    cin >> N >> Q;",
-];
-
-const CHEESE_COUNTERS_PY = [
-  "xy = defaultdict(int)  # z-방향: (x,y) 쌍",
-  "yz = defaultdict(int)  # x-방향: (y,z) 쌍",
-  "xz = defaultdict(int)  # y-방향: (x,z) 쌍",
-];
-const CHEESE_COUNTERS_CPP = [
-  "    // N×N 격자 — z/x/y 방향 줄별 카운터",
-  "    vector<vector<int>> xy(N, vector<int>(N, 0));",
-  "    vector<vector<int>> yz(N, vector<int>(N, 0));",
-  "    vector<vector<int>> xz(N, vector<int>(N, 0));",
-];
-
-const CHEESE_LOOP_PY = [
-  "count = 0",
-  "for _ in range(Q):",
-  "    x, y, z = map(int, input().split())",
-  "    for d, key in [(xy,(x,y)), (yz,(y,z)), (xz,(x,z))]:",
-  "        d[key] += 1",
-  "        if d[key] == N:",
-  "            count += 1",
-  "    print(count)",
-];
-const CHEESE_LOOP_CPP = [
-  "    int count = 0;",
+  "",
+  "    vector<vector<int>> cz(N, vector<int>(N, 0));",
+  "    vector<vector<int>> cy(N, vector<int>(N, 0));",
+  "    vector<vector<int>> cx(N, vector<int>(N, 0));",
+  "    set<tuple<int, int, int>> carved;",
+  "    long long valid = 0;",
+  "",
   "    while (Q--) {",
   "        int x, y, z;",
   "        cin >> x >> y >> z;",
-  "",
-  "        if (++xy[x][y] == N) count++;",
-  "        if (++yz[y][z] == N) count++;",
-  "        if (++xz[x][z] == N) count++;",
-  "",
-  "        cout << count << \"\\n\";",
+  "        auto key = make_tuple(x, y, z);",
+  "        if (carved.count(key)) {",
+  "            cout << valid << '\\n';",
+  "            continue;",
+  "        }",
+  "        carved.insert(key);",
+  "        if (++cz[x][y] == N) valid++;",
+  "        if (++cy[x][z] == N) valid++;",
+  "        if (++cx[y][z] == N) valid++;",
+  "        cout << valid << '\\n';",
   "    }",
-];
-
-const CHEESE_FULL_PY = [
-  ...CHEESE_INPUT_PY,
-  "",
-  ...CHEESE_COUNTERS_PY,
-  "",
-  ...CHEESE_LOOP_PY,
-];
-const CHEESE_FULL_CPP = [
-  ...CHEESE_INPUT_CPP,
-  "",
-  ...CHEESE_COUNTERS_CPP,
-  "",
-  ...CHEESE_LOOP_CPP,
   "    return 0;",
   "}",
 ];
@@ -709,134 +267,87 @@ const CHEESE_FULL_CPP = [
 export function getCheeseSections(E) {
   return [
     {
-      label: t(E, "📦 1. Input + Setup", "📦 1. 입력 + 셋업"),
-      color: "#d97706",
-      py: CHEESE_INPUT_PY, cpp: CHEESE_INPUT_CPP,
+      label: t(E, "1️⃣ Read N and Q", "1️⃣ N 과 Q 읽기"),
+      color: A,
+      py: CHS_S1_PY, cpp: CHS_S1_CPP,
       why: [
-        t(E,
-          "N = cube size, Q = number of removals. Standard fast input.",
-          "N = 큐브 크기, Q = 제거 횟수. 표준 빠른 입력."),
-        t(E,
-          "Python: sys.stdin.readline. C++: ios::sync_with_stdio(false) + cin.tie(nullptr).",
-          "Python 은 sys.stdin.readline. C++ 은 ios::sync_with_stdio(false) + cin.tie(nullptr)."),
-        t(E,
-          "Q can be 200,000 — slow input would TLE. Always include this for big-input problems.",
-          "Q 가 20만까지 갈 수 있음 — 느린 입력은 TLE. 입력 큰 문제는 무조건 빠른 입력."),
+        t(E, "First line: N (cube size) and Q (number of carves).",
+            "첫 줄: N (큐브 크기) 와 Q (파낼 횟수)."),
       ],
+      aside: <SampleInputAside E={E} sample={CHS_SAMPLE} highlight={[0]} note={t(E,
+        "First line: \"2 5\" (N=2, Q=5).",
+        "첫 줄: \"2 5\" (N=2, Q=5).")} />,
     },
     {
-      label: t(E, "📊 2. Three Counters", "📊 2. 카운터 3 개"),
+      label: t(E, "2️⃣ Three N×N row counters + carved set", "2️⃣ N×N 카운터 3 개 + carved 집합"),
       color: "#0891b2",
-      py: CHEESE_COUNTERS_PY, cpp: CHEESE_COUNTERS_CPP,
+      py: CHS_S2_PY, cpp: CHS_S2_CPP,
       why: [
-        t(E, "One counter per row direction. xy → z-axis rows. yz → x-axis. xz → y-axis.",
-            "방향당 카운터 1 개. xy → z-축 줄. yz → x-축. xz → y-축."),
-        t(E, "Why three? A block sits on exactly 3 rows (one per direction). Update = 3 increments.",
-            "왜 3 개? 블록 1 개가 정확히 3 줄에 걸침 (방향당 1). 업데이트 = +1 세 번."),
-      ],
-      pyOnly: [
-        t(E, "defaultdict(int): keys auto-init to 0 — clean syntax 'mydict[(x,y)] += 1'.",
-            "defaultdict(int): 키 자동 0 초기화 — 'mydict[(x,y)] += 1' 깔끔한 문법."),
-        t(E, "Tuple keys (x,y) — Python dicts handle tuple keys natively.",
-            "튜플 키 (x,y) — Python dict 가 튜플 키 native 지원."),
-      ],
-      cppOnly: [
-        t(E, "2D vector(N, vector<int>(N, 0)) — fixed N×N grid, faster than map<pair<int,int>>.",
-            "2D vector(N, vector<int>(N, 0)) — 고정 N×N 격자, map<pair<int,int>> 보다 빠름."),
-        t(E, "Memory: N=1000 → 1M ints × 3 = 12MB. Fits comfortably.",
-            "메모리: N=1000 → 100만 int × 3 = 12MB. 여유롭게 들어감."),
+        t(E, "For each axis (X, Y, Z), maintain an N×N grid of counts. Each grid entry tracks how many cells in that 'row' have been carved.",
+            "각 축 (X, Y, Z) 마다 N×N count 격자. 각 항목은 그 row 에서 몇 칸이 파였는지."),
+        t(E, "carved set tracks (x, y, z) triples to skip duplicate carves.",
+            "carved 집합은 (x, y, z) 추적해 중복 파내기 방지."),
+        t(E, "When a counter reaches N, ALL N cells in that row are empty → a valid rod fits there.",
+            "counter 가 N 도달 → 그 row 의 N 칸 전부 비어있음 → 막대 자리 1 개 추가."),
       ],
     },
     {
-      label: t(E, "🔄 3. Update Loop", "🔄 3. 업데이트 루프"),
+      label: t(E, "3️⃣ Process each carve incrementally", "3️⃣ 각 파내기 점진적 처리"),
       color: "#16a34a",
-      py: CHEESE_LOOP_PY, cpp: CHEESE_LOOP_CPP,
+      py: CHS_S3_PY, cpp: CHS_S3_CPP,
       why: [
-        t(E, "Per query (x,y,z): bump 3 counters; if any just hit N, that row is now fully open → count += 1.",
-            "쿼리 (x,y,z) 마다: 카운터 3 개 +1; 그중 어떤 게 막 N 에 도달하면 그 줄이 뚫린 거 → count += 1."),
-        t(E, "Print count after EACH query (problem requires per-step answer). O(1) per query.",
-            "매 쿼리 후 count 출력 (문제 요구). 쿼리당 O(1)."),
-      ],
-      pyOnly: [
-        t(E, "Loop with [(xy,(x,y)), ...] — DRY: same 3-line update repeated for all 3 directions.",
-            "[(xy,(x,y)), ...] 루프 — DRY: 같은 3줄 업데이트를 3 방향에 반복."),
-      ],
-      cppOnly: [
-        t(E, "++xy[x][y] increments AND returns the new value — combine increment + N-check in one line.",
-            "++xy[x][y] 는 증가 + 새 값 반환을 한 번에 — 증가 + N 체크가 한 줄."),
-        t(E, "Three explicit lines (one per direction) — easier to read than a generic loop.",
-            "방향당 한 줄씩 명시적 — 제너릭 루프보다 읽기 쉬움."),
+        t(E, "For each (x, y, z): if already carved, no-op (output current valid). Otherwise add to carved.",
+            "(x, y, z) 마다: 이미 파였으면 그대로. 아니면 carved 에 추가."),
+        t(E, "Increment cz[x][y], cy[x][z], cx[y][z]. Check each: if just hit N, valid++.",
+            "cz[x][y], cy[x][z], cx[y][z] 증가. 각각 N 도달 체크 → valid++."),
+        t(E, "Output running valid count.",
+            "누적 valid 수 출력."),
       ],
     },
     {
-      label: t(E, "🎯 4. Full Code", "🎯 4. 전체 코드"),
-      color: "#d97706",
-      py: CHEESE_FULL_PY, cpp: CHEESE_FULL_CPP,
+      label: t(E, "4️⃣ Full code", "4️⃣ 전체 코드"),
+      color: "#dc2626",
+      py: CHS_FULL_PY, cpp: CHS_FULL_CPP,
       why: [
-        t(E,
-          "Per query: O(1) — three counter updates and three N-checks. Total: O(Q).",
-          "쿼리당 O(1) — 카운터 업데이트 3 번과 N 체크 3 번. 전체 O(Q)."),
-        t(E,
-          "Brute was O(QN³). For N=1000, Q=200,000: brute = 2×10¹⁴ ops. Smart = 6×10⁵. Speedup ~10⁹×.",
-          "브루트 O(QN³). N=1000, Q=20만: 브루트 2×10¹⁴ 연산. 스마트 6×10⁵. 약 10⁹ 배."),
-        t(E,
-          "Insight: 'don't recompute everything — only track what changes'. The 3-counters trick.",
-          "핵심: '전부 재계산하지 마 — 바뀌는 것만 추적'. 카운터 3개 트릭."),
+        t(E, "All pieces wired together. Each update is O(1) after the initial O(N²) grid alloc.",
+            "조각들이 합쳐짐. 초기 O(N²) 할당 후 update 마다 O(1)."),
+        t(E, "Total: O(N² + Q). At N = 1000, Q = 2·10⁵ → 1.2 million ops. Fast.",
+            "총: O(N² + Q). N = 1000, Q = 2·10⁵ → 120 만 ops. 빠름."),
       ],
     },
   ];
 }
 
+export function CheeseProgressiveCode(props) {
+  return <ProgressiveCodeStepper {...props} accentColor={A} />;
+}
 
-/* ================================================================
-   downloadCheesePDF — 종합 풀이 노트
-   ================================================================ */
-
-const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input"];
-const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","to_string","size","include","vector","unordered_map","map","pair"];
-
+/* PDF helpers */
+const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sum","set"];
+const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","map","pair","set","tuple","make_tuple"];
 function highlightHTML(line, lang) {
   const escHTML = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const keywords = lang === "py" ? PY_KEYWORDS : CPP_KEYWORDS;
-
-  let comment = "";
-  let rest = line;
-  if (lang === "py") {
-    const i = rest.indexOf("#");
-    if (i >= 0) { comment = rest.slice(i); rest = rest.slice(0, i); }
-  } else {
-    const i = rest.indexOf("//");
-    if (i >= 0) { comment = rest.slice(i); rest = rest.slice(0, i); }
-  }
-
-  let out = "";
-  let work = rest;
+  let comment = ""; let rest = line;
+  if (lang === "py") { const i = rest.indexOf("#"); if (i >= 0) { comment = rest.slice(i); rest = rest.slice(0, i); } }
+  else { const i = rest.indexOf("//"); if (i >= 0) { comment = rest.slice(i); rest = rest.slice(0, i); } }
+  let out = ""; let work = rest;
   if (lang === "cpp") {
     const ppm = work.match(/^(\s*)(#\w+)/);
-    if (ppm) {
-      out += escHTML(ppm[1]) + `<span style="color:#c084fc;">${escHTML(ppm[2])}</span>`;
-      work = work.slice(ppm[0].length);
-    }
+    if (ppm) { out += escHTML(ppm[1]) + `<span style="color:#c084fc;">${escHTML(ppm[2])}</span>`; work = work.slice(ppm[0].length); }
   }
-
   const re = /(\b\w+\b|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\d+|[^\w\s]|\s+)/g;
   let m;
   while ((m = re.exec(work)) !== null) {
     const tok = m[0];
-    if (keywords.includes(tok))
-      out += `<span style="color:#c084fc;">${escHTML(tok)}</span>`;
-    else if (/^\d+$/.test(tok))
-      out += `<span style="color:#fbbf24;">${escHTML(tok)}</span>`;
-    else if (/^["']/.test(tok))
-      out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
-    else
-      out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
+    if (keywords.includes(tok)) out += `<span style="color:#c084fc;">${escHTML(tok)}</span>`;
+    else if (/^\d+$/.test(tok)) out += `<span style="color:#fbbf24;">${escHTML(tok)}</span>`;
+    else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
+    else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment)
-    out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
-
 function highlightCode(lines, lang) {
   return lines.map((line, i) => {
     const num = String(i + 1).padStart(2, " ");
@@ -846,250 +357,40 @@ function highlightCode(lines, lang) {
 
 export function downloadCheesePDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) {
-    alert(t(E, "Pop-up blocked. Allow pop-ups and try again.", "팝업 차단됨. 허용 후 재시도."));
-    return;
-  }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Cheese Block — Full Study Guide", "🧀 Cheese Block — 종합 풀이 노트");
   const codeBlock = (lines) => `<pre>${highlightCode(lines, lang)}</pre>`;
   const sectionCode = (s) => codeBlock(lang === "py" ? s.py : s.cpp);
-
-  const BRUTE_PY = [
-    "import sys",
-    "input = sys.stdin.readline",
-    "",
-    "N, Q = map(int, input().split())",
-    "cheese = [[[True]*N for _ in range(N)] for _ in range(N)]",
-    "",
-    "for _ in range(Q):",
-    "    x, y, z = map(int, input().split())",
-    "    cheese[x][y][z] = False",
-    "    count = 0",
-    "    # 모든 N² 줄을 N 칸씩 확인 → O(N³) per query",
-    "    for a in range(N):",
-    "        for b in range(N):",
-    "            if all(not cheese[a][b][c] for c in range(N)): count += 1",
-    "    for b in range(N):",
-    "        for c in range(N):",
-    "            if all(not cheese[a][b][c] for a in range(N)): count += 1",
-    "    for a in range(N):",
-    "        for c in range(N):",
-    "            if all(not cheese[a][b][c] for b in range(N)): count += 1",
-    "    print(count)",
-  ];
-  const BRUTE_CPP = [
-    "#include <bits/stdc++.h>",
-    "using namespace std;",
-    "",
-    "int main() {",
-    "    ios::sync_with_stdio(false);",
-    "    cin.tie(nullptr);",
-    "    int N, Q; cin >> N >> Q;",
-    "    vector<vector<vector<bool>>> cheese(N, vector<vector<bool>>(N, vector<bool>(N, true)));",
-    "",
-    "    while (Q--) {",
-    "        int x, y, z; cin >> x >> y >> z;",
-    "        cheese[x][y][z] = false;",
-    "        int count = 0;",
-    "        // O(N³) per query",
-    "        for (int a = 0; a < N; a++)",
-    "            for (int b = 0; b < N; b++) {",
-    "                bool ok = true;",
-    "                for (int c = 0; c < N; c++) if (cheese[a][b][c]) { ok = false; break; }",
-    "                if (ok) count++;",
-    "            }",
-    "        // ... + same for x-direction and y-direction",
-    "        cout << count << \"\\n\";",
-    "    }",
-    "}",
-  ];
-  const bruteCode = lang === "py" ? BRUTE_PY : BRUTE_CPP;
-
   const html = `<!doctype html>
 <html><head><meta charset="utf-8"><title>${fileTitle}</title>
 <style>
   @page { margin: 14mm; }
-  body { font-family: -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-         color: #1f2937; line-height: 1.55; max-width: 820px; margin: 0 auto; padding: 12px; font-size: 13px; }
-  h1 { font-size: 22px; margin: 0 0 4px; color: #d97706; }
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; color: #1f2937; line-height: 1.55; max-width: 820px; margin: 0 auto; padding: 12px; font-size: 13px; }
+  h1 { font-size: 22px; margin: 0 0 4px; color: ${A}; }
   .sub { color: #6b7280; font-size: 12px; margin-bottom: 18px; }
-  h2 { font-size: 17px; padding: 8px 12px; border-radius: 8px; margin: 22px 0 10px;
-       background: #d97706; color: white; }
-  h3 { font-size: 14px; margin: 14px 0 6px; color: #d97706; }
-  .why { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px;
-         margin: 8px 0; font-size: 12px; page-break-inside: avoid; }
-  .why b { color: #d97706; }
+  h2 { font-size: 17px; padding: 8px 12px; border-radius: 8px; margin: 22px 0 10px; background: ${A}; color: white; }
+  h3 { font-size: 14px; margin: 14px 0 6px; color: ${A}; }
+  .why { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; margin: 8px 0; font-size: 12px; page-break-inside: avoid; }
+  .why b { color: ${A}; }
   .why ul { margin: 4px 0 0; padding-left: 18px; }
-  .why li { margin-bottom: 3px; }
-  pre { background: #0f172a; padding: 10px 14px; border-radius: 8px;
-        font-family: "JetBrains Mono", Consolas, monospace; font-size: 11.5px;
-        overflow-x: auto; white-space: pre; word-break: keep-all; page-break-inside: avoid;
-        margin: 8px 0 12px; line-height: 1.55; }
+  pre { background: #0f172a; padding: 10px 14px; border-radius: 8px; font-family: "JetBrains Mono", monospace; font-size: 11.5px; overflow-x: auto; white-space: pre; word-break: keep-all; page-break-inside: avoid; margin: 8px 0 12px; line-height: 1.55; }
   pre span { font-family: inherit; }
-  .lang-tag { display: inline-block; background: #d97706; color: white;
-              padding: 3px 10px; border-radius: 5px; font-size: 12px; margin-left: 8px;
-              vertical-align: middle; font-weight: 800; }
-  table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 12px;
-          page-break-inside: avoid; }
-  th, td { border: 1px solid #e5e7eb; padding: 5px 8px; text-align: left; }
-  th { background: #fef3c7; color: #92400e; font-weight: 800; }
-  .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px;
-          margin-bottom: 16px; font-size: 12px; color: #92400e; }
-  .box { background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 8px;
-         padding: 10px 12px; margin: 8px 0; }
-  .box.ok { background: #ecfdf5; border-color: #6ee7b7; }
-  .box.no { background: #fef2f2; border-color: #fca5a5; }
-  .box.warn { background: #fef3c7; border-color: #fbbf24; }
-  code.inline { background: #f1f5f9; padding: 1px 5px; border-radius: 3px;
-                font-family: "JetBrains Mono", monospace; font-size: 12px; color: #d97706; }
-  .toc { background: #fffbeb; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; }
-  .toc b { color: #d97706; }
+  .lang-tag { display: inline-block; background: ${A}; color: white; padding: 3px 10px; border-radius: 5px; font-size: 12px; margin-left: 8px; vertical-align: middle; font-weight: 800; }
+  .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-
-<div class="hint">📄 ${t(E,
-  "In the print dialog, choose 'Save as PDF' as the destination to download.",
-  "인쇄 창에서 '대상' / 'Destination' 을 'PDF로 저장' / 'Save as PDF' 로 선택하면 다운로드됩니다.")}</div>
-
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO 2024 December Bronze · ${t(E, "Self-contained walkthrough — no app needed", "독립 학습용 — 앱 없이 처음부터 이해 가능")}</div>
-
-<div class="toc">
-  <b>${t(E, "Contents", "목차")}:</b>
-  1. ${t(E, "Problem", "문제")} ·
-  2. ${t(E, "Worked Example", "예제 풀이")} ·
-  3. ${t(E, "Brute Force", "브루트 포스")} ·
-  4. ${t(E, "Pattern (Counter Trick)", "패턴 (카운터 트릭)")} ·
-  5. ${t(E, "Optimal Code", "최적 코드")}
-</div>
-
-<!-- 1. 문제 -->
-<h2>1. ${t(E, "Problem", "문제")}</h2>
-<p>${t(E,
-  "An N×N×N cheese cube. Q removals — each removes one block at (x,y,z). After each removal, count how many 1×1×N rows are now completely empty (a 1×1×N rod can fit through).",
-  "N×N×N 치즈 큐브. Q 번 제거 — 각 제거는 (x,y,z) 의 블록 하나를 뺌. 제거 후, 1×1×N 줄 중 전부 비어 있는 줄이 몇 개인지 (막대가 통과할 수 있는 줄) 출력.")}</p>
-
-<div class="box">
-  <b>📏 ${t(E, "Rod condition", "막대 조건")}</b>:
-  ${t(E, "A row of N cells must be ENTIRELY empty. Even one block left = no fit.",
-        "N 칸 한 줄이 전부 비어야 함. 1 개라도 남으면 못 들어감.")}
-</div>
-
-<h3>${t(E, "How many rows are there?", "줄은 몇 개?")}</h3>
-<p>${t(E, "3 directions × N² rows each = 3N² total rows.", "3 방향 × 방향당 N² 줄 = 총 3N² 줄.")}</p>
-<table>
-  <tr><th>${t(E, "Direction", "방향")}</th><th>${t(E, "Fixed", "고정 자리")}</th><th>${t(E, "Varies", "변화 자리")}</th><th>${t(E, "Count", "개수")}</th></tr>
-  <tr><td>z-axis</td><td>(x, y)</td><td>z = 0..N-1</td><td>N²</td></tr>
-  <tr><td>x-axis</td><td>(y, z)</td><td>x = 0..N-1</td><td>N²</td></tr>
-  <tr><td>y-axis</td><td>(x, z)</td><td>y = 0..N-1</td><td>N²</td></tr>
-</table>
-
-<h3>${t(E, "Constraints", "제약")}</h3>
-<p>N ≤ 1000, Q ≤ 200,000. ${t(E, "Brute O(QN³) ≈ 2×10¹⁴ → way TLE. Need O(Q).", "브루트 O(QN³) ≈ 2×10¹⁴ → 무조건 TLE. O(Q) 필요.")}</p>
-
-<!-- 2. 예제 -->
-<h2>2. ${t(E, "Worked Example (N=2)", "예제 풀이 (N=2)")}</h2>
-<p>${t(E,
-  "N=2 has 12 rows total (3 directions × 4 each). Watch what happens as we remove 5 blocks:",
-  "N=2 에서는 총 12 줄 (3 방향 × 4 개씩). 5 개 블록 제거하면서 어떻게 변하는지:")}</p>
-<table>
-  <tr><th>${t(E, "Step", "단계")}</th><th>${t(E, "Removed", "제거")}</th><th>${t(E, "Open rows", "뚫린 줄")}</th><th>${t(E, "Change", "변화")}</th><th>${t(E, "Why?", "왜?")}</th></tr>
-  <tr><td>1</td><td>(0,0,0)</td><td>0</td><td>+0</td><td>${t(E, "All 3 rows still have 1 block left", "3 개 줄 모두 아직 1 블록 남음")}</td></tr>
-  <tr><td>2</td><td>(1,1,1)</td><td>0</td><td>+0</td><td>${t(E, "Same — different rows, all still half-full", "마찬가지 — 다른 줄, 모두 반쯤 참")}</td></tr>
-  <tr><td>3</td><td>(0,1,0)</td><td>1</td><td>+1</td><td>${t(E, "y-row (0,_,0) now empty (had (0,0,0) and (0,1,0))", "y-줄 (0,_,0) 가 빔 ((0,0,0) + (0,1,0) 다 제거)")}</td></tr>
-  <tr><td>4</td><td>(1,0,0)</td><td>2</td><td>+1</td><td>${t(E, "x-row (_,0,0) opens", "x-줄 (_,0,0) 뚫림")}</td></tr>
-  <tr><td>5</td><td>(1,1,0)</td><td><b>5</b></td><td><b>+3 🤯</b></td><td>${t(E, "This block was the LAST on 3 rows simultaneously!", "이 블록이 3 줄의 마지막 블록!")}</td></tr>
-</table>
-
-<div class="box ok">
-  <b>💡 ${t(E, "The surprise", "놀라움 포인트")}</b>:
-  ${t(E,
-    "One block can be on 3 different rows. When it's the LAST block on multiple rows, removing it opens them all at once — could be +1, +2, or +3.",
-    "블록 1 개가 3 줄에 동시에 걸침. 여러 줄의 마지막 블록일 때, 빼면 동시에 다 뚫림 — +1, +2, +3 가능.")}
-</div>
-
-<!-- 3. 브루트 -->
-<h2>3. ${t(E, "Brute Force (TLE)", "브루트 포스 (TLE)")}</h2>
-<p>${t(E,
-  "Direct approach: after each removal, scan all 3N² rows and check each cell. Time complexity O(QN³).",
-  "직접 풀이: 매 제거 후 3N² 줄을 다 훑고 각 칸을 확인. 시간복잡도 O(QN³).")}</p>
-
-${codeBlock(bruteCode)}
-
-<div class="box no">
-  <b>${t(E, "Why TLE?", "왜 TLE?")}</b>
-  ${t(E,
-    "N=1000, Q=200,000: 200,000 × 3 × 10⁶ × 10³ = 6×10¹⁴ ops. Even 1B ops/sec would take 600,000 seconds = 7 days.",
-    "N=1000, Q=20만: 20만 × 3 × 10⁶ × 10³ = 6×10¹⁴ 연산. 초당 10억 연산 컴퓨터로도 60만 초 = 7 일.")}
-</div>
-
-<!-- 4. 패턴 -->
-<h2>4. ${t(E, "Pattern: The Counter Trick", "패턴: 카운터 트릭")}</h2>
-<h3>${t(E, "Key insight", "핵심 통찰")}</h3>
-<div class="box ok">
-  ${t(E,
-    "Removing 1 block can affect AT MOST 3 rows (one per direction). The other 3N²−3 rows don't change at all. So why scan all of them every time?",
-    "블록 1 개를 빼도 영향받는 줄은 최대 3 개 (방향당 1). 나머지 3N²−3 개 줄은 전혀 안 바뀜. 매번 다 훑을 필요 없음.")}
-</div>
-
-<h3>${t(E, "Solution: tally counters per row", "해결책: 줄마다 카운터")}</h3>
-<p>${t(E, "For each row, keep a counter of how many blocks have been removed.", "각 줄마다, 제거된 블록 수를 카운트.")}</p>
-<ul>
-  <li>${t(E, "Counter starts at 0.", "카운터 0 에서 시작.")}</li>
-  <li>${t(E, "Block removed → that row's counter += 1.", "블록 제거 → 그 줄의 카운터 += 1.")}</li>
-  <li>${t(E, "Counter == N → row fully empty → rod fits!", "카운터 == N → 줄 완전히 빔 → 막대 들어감!")}</li>
-</ul>
-
-<h3>${t(E, "Why 3 counters per removal?", "왜 제거당 3 카운터?")}</h3>
-<p>${t(E,
-  "Block (x,y,z) sits on:",
-  "블록 (x,y,z) 가 걸린 줄:")}</p>
-<ul>
-  <li>z-axis row at (x, y) — ${t(E, "every cell with these (x,y) and any z", "이 (x,y) 와 z 가 변하는 모든 칸")}</li>
-  <li>x-axis row at (y, z) — ${t(E, "every cell with these (y,z) and any x", "이 (y,z) 와 x 가 변하는 모든 칸")}</li>
-  <li>y-axis row at (x, z) — ${t(E, "every cell with these (x,z) and any y", "이 (x,z) 와 y 가 변하는 모든 칸")}</li>
-</ul>
-
-<div class="box">
-  <b>${t(E, "Time complexity", "시간복잡도")}:</b>
-  ${t(E, "O(1) per query (3 increments, 3 checks). Total O(Q). Even Q=200,000 is instant.",
-        "쿼리당 O(1) (증가 3 번, 체크 3 번). 전체 O(Q). Q=20만도 순식간.")}
-</div>
-
-<!-- 5. 최적 코드 -->
-<h2>5. ${t(E, "Optimal Code (4 sections)", "최적 코드 (4 부분)")}</h2>
-
+<div class="sub">USACO December 2024 Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<h2>${t(E, "Code (4 sections)", "코드 (4 섹션)")}</h2>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
-  <div class="why">
-    <b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b>
-    <ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul>
-  </div>
+  <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
   ${sectionCode(s)}
 `).join("")}
-
-<div class="box warn">
-  <b>📝 ${t(E, "Self-check", "자가 점검")}</b>
-  <ol style="margin:6px 0 0;padding-left:20px;font-size:12px;">
-    <li>${t(E, "N=2, removals: (0,0,1), (1,1,1), (0,1,1), (1,0,1). What's the answer after each?",
-              "N=2, 제거 순서: (0,0,1), (1,1,1), (0,1,1), (1,0,1). 각 단계 답?")}</li>
-    <li>${t(E, "Why use 3 counters and not just one?",
-              "왜 카운터를 3 개나 쓸까? 1 개로 안 될까?")}</li>
-    <li>${t(E, "Can a removal ever DECREASE the answer? Why or why not?",
-              "제거가 답을 줄일 수 있을까? 이유는?")}</li>
-  </ol>
-  <div style="font-size:11px;color:#94a3b8;margin-top:6px;font-style:italic;">
-    ${t(E,
-      "Answers: 1) After (0,0,1): xy[0][0]=1, yz[0][1]=1, xz[0][1]=1, all <N=2 → 0. After (1,1,1): xy[1][1]=1, yz[1][1]=1, xz[1][1]=1, all <2 → 0. After (0,1,1): xy[0][1]=1, yz[1][1]=2 (HIT! +1), xz[0][1]=2 (HIT! +1) → 2. After (1,0,1): xy[1][0]=1, yz[0][1]=2 (HIT! +1), xz[1][1]=2 (HIT! +1) → 4. 2) Each block sits on 3 rows (one per direction). One counter would only track one direction. 3) No — once a row is empty it stays empty. count is monotonically non-decreasing.",
-      "답: 1) (0,0,1) 후: 모두 1 < 2 → 0. (1,1,1) 후: 모두 1 → 0. (0,1,1) 후: yz[1][1]=2 (+1), xz[0][1]=2 (+1) → 2. (1,0,1) 후: yz[0][1]=2 (+1), xz[1][1]=2 (+1) → 4. 2) 블록 1 개는 3 줄에 걸쳐서 1 개로는 한 방향만 추적 가능. 3) 못 줄임 — 한 번 뚫린 줄은 계속 뚫린 상태. count 는 단조 비감소.")}
-  </div>
-</div>
-
-<div style="margin-top:30px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e5e7eb;padding-top:8px;">
-  © Coderin · 코드린 · ${t(E, "Generated for offline study", "오프라인 학습용 출력")}
-</div>
+<div style="margin-top:30px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e5e7eb;padding-top:8px;">© Coderin · 코드린</div>
 </body></html>`;
   win.document.write(html);
   win.document.close();

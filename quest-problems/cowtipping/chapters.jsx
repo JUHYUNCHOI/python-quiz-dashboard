@@ -43,17 +43,29 @@ export function makeCowTipCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc04"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cow Tipping</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Cow Tipping</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of rectangle-flip operations to turn the grid into all 0s.",
+                "격자를 모두 0 으로 만드는 데 필요한 최소 직사각형 뒤집기 횟수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has an ", "FJ에게 ")}
                   <b style={{ color: "#059669" }}>{t(E, "N×N grid of 0s and 1s", "0과 1로 채워진 N×N 격자")}</b>
@@ -62,7 +74,7 @@ export function makeCowTipCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "One operation: pick any cell ", "한 번의 연산: 칸 ")}
                   <b style={{ color: "#7c3aed" }}>(i, j)</b>
@@ -72,7 +84,7 @@ export function makeCowTipCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "필요한 최소 연산 횟수")}</b>
@@ -111,8 +123,8 @@ export function makeCowTipCh1(E) {
         "Grid [[1,0],[0,1]]: minimum toggles?",
         "격자 [[1,0],[0,1]]: 최소 토글 횟수?"),
       hint: t(E,
-        "Process bottom-right to top-left: (1,1) is 1 -> toggle, (1,0) becomes 1 -> toggle, (0,1) becomes 1 -> toggle.",
-        "오른쪽 아래부터: (1,1)=1 -> 토글, (1,0)=1 -> 토글, (0,1)=1 -> 토글."),
+        "Process bottom-right to top-left — flip whenever you find a 1.",
+        "오른쪽 아래부터 왼쪽 위로 — 1 을 만나면 그때마다 뒤집어 봐."),
       answer: 3,
     },
   ];
@@ -124,48 +136,12 @@ export function makeCowTipCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowTipCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Process cells from BOTTOM-RIGHT to TOP-LEFT. If a cell is 1, the only operation that can flip it without disturbing already-fixed cells is the toggle of the rectangle (0,0)–(i,j) — so we must do it. Count those forced operations.",
-        "오른쪽 아래에서 왼쪽 위 순서로 처리해요. 어떤 칸이 1 이면, 이미 고정된 칸들을 건드리지 않고 그 칸을 뒤집을 수 있는 유일한 연산은 사각형 (0,0)~(i,j) 토글 — 따라서 무조건 해야 해요. 그렇게 강제되는 연산의 수를 세요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Iterate bottom-right → top-left", "오른쪽 아래 → 왼쪽 위 순회"), code: "for i in range(N-1, -1, -1):  for j in range(N-1, -1, -1): ...", color: "#059669" },
-              { n: 2, label: t(E, "If cell is 1, toggle rect (0,0)-(i,j)", "칸이 1 이면 사각형 (0,0)-(i,j) 토글"), code: "if grid[i][j] == 1:", color: "#7c3aed" },
-              { n: 3, label: t(E, "Flip every cell in that rect", "그 사각형 안 모든 칸 뒤집기"), code: "for r in range(i+1):  for c in range(j+1): grid[r][c] ^= 1", color: "#0891b2" },
-              { n: 4, label: t(E, "Count operations", "연산 수 세기"), code: "ops += 1;  print(ops)", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N⁴)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N² cells × N² per toggle (N ≤ 10 so fast)", "N² 칸 × 토글당 N² (N ≤ 10 라 빠름)")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Process cells bottom-right → top-left. If a cell is 1, the only flip that doesn't disturb fixed cells is toggle (0,0)–(i,j) — so we must do it. Count forced operations. Sections build it one piece at a time.",
+        "오른쪽 아래 → 왼쪽 위 순서. 1 인 칸은 이미 고정된 칸을 안 건드리고 뒤집을 수 있는 유일한 방법이 (0,0)~(i,j) 토글 — 강제. 횟수 세기. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCowTipSections(E),
     },
   ];

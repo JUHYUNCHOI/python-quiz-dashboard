@@ -111,17 +111,29 @@ export function makeWhereAmICh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"📍"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: C.carry }}>Where Am I?</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: C.carry }}>Where Am I?</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2019 Bronze #2</div>
           </div>
 
-          <div style={{ background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: C.carryBg, border: `1.5px solid ${C.carry}`, borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.carry, letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: C.carry, lineHeight: 1.5 }}>
+              {t(E,
+                "Output the smallest K such that every length-K window in the street's letter string is unique.",
+                "길이 K 의 모든 연속 부분 문자열이 유일해지는 가장 작은 K 를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: C.carry, fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: C.carry, fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A street has ", "")}
                   <b style={{ color: C.carry }}>{t(E, "N mailboxes labeled A..Z", "A..Z 글자로 표시된 N 개의 우편함")}</b>
@@ -130,7 +142,7 @@ export function makeWhereAmICh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: C.carry, fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: C.carry, fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Bessie wants to identify her location by looking at ", "Bessie는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "K consecutive mailbox labels", "K 개의 연속한 우편함 글자")}</b>
@@ -138,7 +150,7 @@ export function makeWhereAmICh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: `1px dashed ${C.carryBd}` }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "smallest K such that every length-K window is unique", "길이 K 의 모든 연속 부분 문자열이 유일해지는 가장 작은 K")}</b>
@@ -158,7 +170,7 @@ export function makeWhereAmICh1(E) {
         const str = "ABCBA";
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               {t(E, "Substrings of \"ABCBA\"", "\"ABCBA\"의 부분문자열")}
             </div>
             {/* Original string display */}
@@ -166,9 +178,9 @@ export function makeWhereAmICh1(E) {
               {str.split("").map((ch, i) => (
                 <div key={i} style={{
                   width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 8, fontSize: 18, fontWeight: 900,
+                  borderRadius: 8, fontSize: 18, fontWeight: 700,
                   fontFamily: "'JetBrains Mono', monospace",
-                  background: C.carryBg, border: `2.5px solid ${C.carryBd}`, color: C.carry,
+                  background: C.carryBg, border: `1.5px solid ${C.carryBd}`, color: C.carry,
                 }}>{ch}</div>
               ))}
             </div>
@@ -179,7 +191,7 @@ export function makeWhereAmICh1(E) {
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
               {["A","B","C","B","A"].map((s, i) => (
                 <span key={i} style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 800,
+                  fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 600,
                   background: C.accentBg, borderRadius: 4, padding: "2px 6px", color: C.accent,
                 }}>{s}</span>
               ))}
@@ -191,7 +203,7 @@ export function makeWhereAmICh1(E) {
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
               {["AB","BC","CB","BA"].map((s, i) => (
                 <span key={i} style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 800,
+                  fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 600,
                   background: C.okBg, borderRadius: 4, padding: "2px 6px", color: C.ok,
                 }}>{s}</span>
               ))}
@@ -203,7 +215,7 @@ export function makeWhereAmICh1(E) {
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               {["ABC","BCB","CBA"].map((s, i) => (
                 <span key={i} style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 800,
+                  fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 600,
                   background: C.bessieBg, borderRadius: 4, padding: "2px 6px", color: C.bessie,
                 }}>{s}</span>
               ))}
@@ -226,7 +238,7 @@ export function makeWhereAmICh1(E) {
         ];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               {t(E, "Sliding window K=2 on \"ABAB\"", "\"ABAB\"에서 K=2 슬라이딩 윈도우")}
             </div>
             {windows.map((w, wi) => (
@@ -237,25 +249,25 @@ export function makeWhereAmICh1(E) {
                     return (
                       <div key={ci} style={{
                         width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
-                        borderRadius: 8, fontSize: 18, fontWeight: 900,
+                        borderRadius: 8, fontSize: 18, fontWeight: 700,
                         fontFamily: "'JetBrains Mono', monospace",
                         background: inWindow ? C.carry : "#f1f5f9",
-                        border: `2.5px solid ${inWindow ? C.carry : C.border}`,
+                        border: `1.5px solid ${inWindow ? C.carry : C.border}`,
                         color: inWindow ? "#fff" : C.dim,
                         transition: "all .3s",
                       }}>{ch}</div>
                     );
                   })}
                   <span style={{
-                    display: "flex", alignItems: "center", fontSize: 13, fontWeight: 800,
+                    display: "flex", alignItems: "center", fontSize: 13, fontWeight: 600,
                     fontFamily: "'JetBrains Mono', monospace", color: C.carry, marginLeft: 8,
                   }}>= "{w.sub}"</span>
                 </div>
               </div>
             ))}
             <div style={{
-              background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10,
-              padding: 10, textAlign: "center", fontSize: 13, fontWeight: 800, color: C.no,
+              background: C.noBg, border: `1px solid ${C.noBd}`, borderRadius: 10,
+              padding: 10, textAlign: "center", fontSize: 13, fontWeight: 600, color: C.no,
             }}>
               {t(E, "\"AB\" appears at position 0 AND position 2 -- duplicate! K=2 fails!", "\"AB\"가 위치 0과 위치 2에 -- 중복! K=2 실패!")}
             </div>
@@ -294,7 +306,7 @@ export function makeWhereAmICh1(E) {
         ];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               {t(E, "Sliding window K=3 on \"ABAB\"", "\"ABAB\"에서 K=3 슬라이딩 윈도우")}
             </div>
             {windows.map((w, wi) => (
@@ -305,24 +317,24 @@ export function makeWhereAmICh1(E) {
                     return (
                       <div key={ci} style={{
                         width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
-                        borderRadius: 8, fontSize: 18, fontWeight: 900,
+                        borderRadius: 8, fontSize: 18, fontWeight: 700,
                         fontFamily: "'JetBrains Mono', monospace",
                         background: inWindow ? C.ok : "#f1f5f9",
-                        border: `2.5px solid ${inWindow ? C.ok : C.border}`,
+                        border: `1.5px solid ${inWindow ? C.ok : C.border}`,
                         color: inWindow ? "#fff" : C.dim,
                       }}>{ch}</div>
                     );
                   })}
                   <span style={{
-                    display: "flex", alignItems: "center", fontSize: 13, fontWeight: 800,
+                    display: "flex", alignItems: "center", fontSize: 13, fontWeight: 600,
                     fontFamily: "'JetBrains Mono', monospace", color: C.ok, marginLeft: 8,
                   }}>= "{w.sub}"</span>
                 </div>
               </div>
             ))}
             <div style={{
-              background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10,
-              padding: 10, textAlign: "center", fontSize: 13, fontWeight: 800, color: C.ok,
+              background: C.okBg, border: `1px solid ${C.okBd}`, borderRadius: 10,
+              padding: 10, textAlign: "center", fontSize: 13, fontWeight: 600, color: C.ok,
             }}>
               {t(E, "\"ABA\" and \"BAB\" -- all different! K=3 works!", "\"ABA\"와 \"BAB\" -- 모두 다르다! K=3 성공!")}
             </div>
@@ -353,13 +365,14 @@ export function makeWhereAmICh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now try \"AABB\".\nK=1: A,A,B,B (duplicates!).\nK=2: AA,AB,BB (all unique!).\nWhat's the minimum K?", "이제 \"AABB\"를 해봐요. K=1: A,A,B,B (중복!). K=2: AA,AB,BB (모두 고유!). 최소 K는?"),
+        "Try it on \"AABB\" yourself — start at K=1, see if any duplicate, bump up.",
+        "\"AABB\" 직접 — K=1 부터 시도해 중복 있으면 K 키워."),
       question: t(E,
         "\"AABB\" -> minimum K for unique substrings?",
         "\"AABB\" -> 유일한 부분문자열을 위한 최소 K?"),
       hint: t(E,
-        "K=1: A, A, B, B (A repeats). K=2: AA, AB, BB (all different!). Answer: 2.",
-        "K=1: A, A, B, B (A 반복). K=2: AA, AB, BB (모두 다름!). 답: 2."),
+        "List the windows of size 1 — any repeats?  If yes, try size 2.",
+        "크기 1 윈도우 나열 — 중복? 있으면 크기 2 시도."),
       answer: 2,
     },
   ];
@@ -378,7 +391,7 @@ export function makeWhereAmICh2(E) {
         "The algorithm is simple: try K=1, then K=2, then K=3...\nFor each K, check if ALL substrings of that length are unique.\nStop at the first K that works!", "알고리즘은 간단해: K=1, K=2, K=3... 순서대로 시도. 각 K에서 그 길이의 모든 부분문자열이 고유한지 확인. 처음 성공하는 K에서 멈춰요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
             {t(E, "Algorithm: Try K = 1, 2, 3, ...", "알고리즘: K = 1, 2, 3, ... 시도")}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -388,12 +401,12 @@ export function makeWhereAmICh2(E) {
                 <div key={k} style={{
                   display: "flex", alignItems: "center", gap: 10,
                   background: ok ? C.okBg : C.noBg,
-                  border: `2px solid ${ok ? C.okBd : C.noBd}`,
+                  border: `1px solid ${ok ? C.okBd : C.noBd}`,
                   borderRadius: 10, padding: "8px 12px",
                 }}>
                   <div style={{
                     width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-                    borderRadius: 8, fontSize: 16, fontWeight: 900,
+                    borderRadius: 8, fontSize: 16, fontWeight: 700,
                     fontFamily: "'JetBrains Mono', monospace",
                     background: ok ? C.ok : C.no, color: "#fff",
                   }}>K={k}</div>
@@ -424,7 +437,7 @@ export function makeWhereAmICh2(E) {
         ];
         return (
           <div style={{ padding: 16 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
               {t(E, "Checking K=2 on \"ABAB\" with a Set", "\"ABAB\"에서 K=2를 Set으로 확인")}
             </div>
             <div style={{
@@ -441,7 +454,7 @@ export function makeWhereAmICh2(E) {
                   <span style={{ color: step.dup ? "#fca5a5" : "#e2e8f0" }}>
                     sub = "{step.sub}"
                   </span>
-                  <span style={{ color: step.dup ? C.no : "#6ee7b7", fontWeight: 800 }}>
+                  <span style={{ color: step.dup ? C.no : "#6ee7b7", fontWeight: 600 }}>
                     {step.dup
                       ? t(E, "IN set! Duplicate!", "set에 있어요! 중복!")
                       : t(E, "add to set", "set에 추가")}
@@ -464,18 +477,18 @@ export function makeWhereAmICh2(E) {
         "Let's trace through the entire algorithm for \"ABAB\". We check K=1, K=2, K=3 one by one.", "\"ABAB\" 전체 알고리즘을 추적해보자. K=1, K=2, K=3을 하나씩 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 10 }}>
             {t(E, "Full trace: \"ABAB\"", "전체 추적: \"ABAB\"")}
           </div>
           {/* Trace table */}
           <div style={{
-            borderRadius: 10, overflow: "hidden", border: `2px solid ${C.border}`,
+            borderRadius: 10, overflow: "hidden", border: `1px solid ${C.border}`,
             fontSize: 12, fontFamily: "'JetBrains Mono', monospace",
           }}>
             {/* Header */}
             <div style={{
               display: "grid", gridTemplateColumns: "50px 1fr 80px",
-              background: "#1e293b", color: "#e2e8f0", padding: "6px 8px", fontWeight: 800,
+              background: "#1e293b", color: "#e2e8f0", padding: "6px 8px", fontWeight: 600,
             }}>
               <span>K</span>
               <span>{t(E, "Substrings", "부분문자열")}</span>
@@ -486,31 +499,31 @@ export function makeWhereAmICh2(E) {
               display: "grid", gridTemplateColumns: "50px 1fr 80px",
               background: C.noBg, padding: "6px 8px", borderBottom: `1px solid ${C.border}`,
             }}>
-              <span style={{ fontWeight: 800, color: C.no }}>1</span>
-              <span style={{ color: C.text }}>A, B, <span style={{ color: C.no, fontWeight: 800 }}>A</span>, B</span>
-              <span style={{ color: C.no, fontWeight: 800 }}>❌ {t(E, "No", "아니오")}</span>
+              <span style={{ fontWeight: 600, color: C.no }}>1</span>
+              <span style={{ color: C.text }}>A, B, <span style={{ color: C.no, fontWeight: 600 }}>A</span>, B</span>
+              <span style={{ color: C.no, fontWeight: 600 }}>❌ {t(E, "No", "아니오")}</span>
             </div>
             {/* K=2 */}
             <div style={{
               display: "grid", gridTemplateColumns: "50px 1fr 80px",
               background: C.noBg, padding: "6px 8px", borderBottom: `1px solid ${C.border}`,
             }}>
-              <span style={{ fontWeight: 800, color: C.no }}>2</span>
-              <span style={{ color: C.text }}>AB, BA, <span style={{ color: C.no, fontWeight: 800 }}>AB</span></span>
-              <span style={{ color: C.no, fontWeight: 800 }}>❌ {t(E, "No", "아니오")}</span>
+              <span style={{ fontWeight: 600, color: C.no }}>2</span>
+              <span style={{ color: C.text }}>AB, BA, <span style={{ color: C.no, fontWeight: 600 }}>AB</span></span>
+              <span style={{ color: C.no, fontWeight: 600 }}>❌ {t(E, "No", "아니오")}</span>
             </div>
             {/* K=3 */}
             <div style={{
               display: "grid", gridTemplateColumns: "50px 1fr 80px",
               background: C.okBg, padding: "6px 8px",
             }}>
-              <span style={{ fontWeight: 800, color: C.ok }}>3</span>
+              <span style={{ fontWeight: 600, color: C.ok }}>3</span>
               <span style={{ color: C.text }}>ABA, BAB</span>
-              <span style={{ color: C.ok, fontWeight: 800 }}>✅ {t(E, "Yes!", "예!")}</span>
+              <span style={{ color: C.ok, fontWeight: 600 }}>✅ {t(E, "Yes!", "예!")}</span>
             </div>
           </div>
           <div style={{
-            marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 900, color: C.ok,
+            marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 700, color: C.ok,
           }}>
             {t(E, "Answer: K = 3", "답: K = 3")}
           </div>
@@ -524,10 +537,10 @@ export function makeWhereAmICh2(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
-          <div style={{ fontSize: 20, fontWeight: 900, color: C.carry, fontFamily: "'JetBrains Mono', monospace" }}>
+          <div style={{ fontSize: 20, fontWeight: 700, color: C.carry, fontFamily: "'JetBrains Mono', monospace" }}>
             O(N{"\u00b2"})
           </div>
-          <div style={{ marginTop: 12, background: C.carryBg, border: `2px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+          <div style={{ marginTop: 12, background: C.carryBg, border: `1px solid ${C.carryBd}`, borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "Outer loop: K from 1 to N (max N iterations).\nInner loop: check N-K+1 substrings. With hash set, each check is O(1). Total: O(N^2). N <= 100, so this is fast enough!", "바깥 반복: K를 1부터 N까지 (최대 N번).\n안쪽 반복: N-K+1개 부분문자열 확인. 해시 집합으로 각 확인 O(1). 총: O(N^2). N <= 100이라 충분히 빨라요!")}
           </div>
@@ -537,13 +550,14 @@ export function makeWhereAmICh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Try \"AABBA\". K=1: A,A,B,B,A (duplicates). K=2: AA,AB,BB,BA (all unique!). Answer?", "\"AABBA\"를 해봐요. K=1: A,A,B,B,A (중복). K=2: AA,AB,BB,BA (모두 고유!). 답은?"),
+        "Hand-trace \"AABBA\" — start with K=1 and bump until every window is unique.",
+        "\"AABBA\" 손으로 — K=1 부터 시작해 모든 윈도우가 유일해질 때까지 K 올려."),
       question: t(E,
         "\"AABBA\" -> minimum K?",
         "\"AABBA\" -> 최소 K?"),
       hint: t(E,
-        "K=1 has duplicates (A and B repeat). K=2: AA, AB, BB, BA -- all different! Answer: 2.",
-        "K=1은 중복(A, B 반복). K=2: AA, AB, BB, BA -- 모두 다름! 답: 2."),
+        "List the windows of each size and check for duplicates.",
+        "크기별 윈도우 나열하고 중복 있는지 확인."),
       answer: 2,
     },
   ];
@@ -562,7 +576,7 @@ export function makeWhereAmICh3(E, lang = "py") {
         "Let's build the code step by step! First, read N and the string s from input.", "코드를 한 단계씩 만들어보자! 먼저 입력에서 N과 문자열 s를 읽어."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
             {t(E, "Step 1: Read input", "1단계: 입력 읽기")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6 }}>
@@ -588,7 +602,7 @@ export function makeWhereAmICh3(E, lang = "py") {
         "Next, the outer loop: try K from 1 to N. We'll check each K value.", "다음은 바깥 반복: K를 1부터 N까지 시도. 각 K 값을 확인할 거예요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
             {t(E, "Step 2: Try each K", "2단계: 각 K 시도")}
           </div>
           <CodeSnippet
@@ -616,7 +630,7 @@ export function makeWhereAmICh3(E, lang = "py") {
         "Inside the K loop, we slide the window across the string.\nFor each substring, check if it's already in the set.", "K 반복 안에서 문자열을 따라 윈도우를 밀어. 각 부분문자열이 이미 집합에 있는지 확인해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
             {t(E, "Step 3: Check each substring", "3단계: 각 부분문자열 확인")}
           </div>
           <CodeSnippet
@@ -668,7 +682,7 @@ export function makeWhereAmICh3(E, lang = "py") {
         "Finally, if all substrings were unique for this K, print it and stop!\nThat's the complete solution!", "마지막으로, 이 K에서 모든 부분문자열이 고유하면 출력하고 멈춰요! 이게 전체 풀이에요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.carry, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.carry, marginBottom: 6 }}>
             {t(E, "Step 4: Print and stop!", "4단계: 출력하고 멈춰요!")}
           </div>
           <CodeSnippet
@@ -677,9 +691,9 @@ export function makeWhereAmICh3(E, lang = "py") {
           />
           <div style={{
             marginTop: 10, background: C.okBg, borderRadius: 10,
-            padding: "8px 12px", border: `2px solid ${C.okBd}`, textAlign: "center",
+            padding: "8px 12px", border: `1px solid ${C.okBd}`, textAlign: "center",
           }}>
-            <div style={{ fontSize: 13, fontWeight: 900, color: C.ok }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: C.ok }}>
               {t(E, "Complete code! Just 11 lines!", "전체 코드 완성! 단 11줄!")}
             </div>
           </div>

@@ -27,9 +27,9 @@ const Candy = ({ color, label, size = 24 }) => (
   <div style={{
     width: size, height: size, borderRadius: "50%",
     background: CC[color] || "#9ca3af",
-    border: `2px solid ${CC[color] || "#9ca3af"}`,
+    border: `1px solid ${CC[color] || "#9ca3af"}`,
     display: "flex", alignItems: "center", justifyContent: "center",
-    fontSize: size * 0.42, fontWeight: 900, color: "#fff",
+    fontSize: size * 0.42, fontWeight: 700, color: "#fff",
     flexShrink: 0,
   }}>{label ?? color}</div>
 );
@@ -42,7 +42,7 @@ const PackCard = ({ a, b, idx, selected, onClick, dim, small }) => {
       display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
       padding: small ? "4px 6px" : "6px 8px", borderRadius: 10, cursor: onClick ? "pointer" : "default",
       background: dim ? "#f1f5f9" : selected ? ABg : "#fff",
-      border: `2px solid ${dim ? "#e2e4ec" : selected ? A : C.border}`,
+      border: `1px solid ${dim ? "#e2e4ec" : selected ? A : C.border}`,
       opacity: dim ? 0.35 : 1,
       transform: selected ? "scale(1.06)" : "scale(1)",
       boxShadow: selected ? `0 0 10px ${A}44` : "none",
@@ -112,11 +112,11 @@ export function PackTypeClassifier({ E }) {
   const TypeCol = ({ label, color, bg, bd, items, count }) => (
     <div style={{ flex: 1, minWidth: 80 }}>
       <div style={{
-        textAlign: "center", fontSize: 11, fontWeight: 900, color,
+        textAlign: "center", fontSize: 11, fontWeight: 700, color,
         marginBottom: 4,
       }}>{label}</div>
       <div style={{
-        background: bg, border: `2px solid ${bd}`, borderRadius: 10,
+        background: bg, border: `1px solid ${bd}`, borderRadius: 10,
         padding: "6px 4px", minHeight: 70, display: "flex", flexDirection: "column",
         alignItems: "center", gap: 4,
       }}>
@@ -138,7 +138,7 @@ export function PackTypeClassifier({ E }) {
         {items.length === 0 && <div style={{ fontSize: 10, color: C.dim, padding: 8 }}>—</div>}
       </div>
       <div style={{
-        textAlign: "center", marginTop: 4, fontSize: 14, fontWeight: 900,
+        textAlign: "center", marginTop: 4, fontSize: 14, fontWeight: 700,
         color, fontFamily: "'JetBrains Mono',monospace",
         opacity: formulaVisible ? 1 : 0, transition: "opacity .3s",
       }}>{count}</div>
@@ -151,8 +151,8 @@ export function PackTypeClassifier({ E }) {
       <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 8 }}>
         {PAIRS.map((p, i) => (
           <button key={i} onClick={() => switchPair(i)} style={{
-            padding: "5px 10px", borderRadius: 8, fontSize: 12, fontWeight: 800,
-            border: `2px solid ${i === pairIdx ? A : C.border}`,
+            padding: "5px 10px", borderRadius: 8, fontSize: 12, fontWeight: 600,
+            border: `1px solid ${i === pairIdx ? A : C.border}`,
             background: i === pairIdx ? ABg : "#fff",
             color: i === pairIdx ? A : C.dim, cursor: "pointer",
             fontFamily: "'JetBrains Mono',monospace",
@@ -195,10 +195,10 @@ export function PackTypeClassifier({ E }) {
         transform: formulaVisible ? "translateY(0)" : "translateY(8px)",
         transition: "all .4s ease",
       }}>
-        <div>Case1: {countA}×{countB}×{countC} = <span style={{ color: "#fdba74", fontWeight: 900 }}>{case1}</span></div>
-        <div>Case2: C({countC},3) = <span style={{ color: "#d8b4fe", fontWeight: 900 }}>{case2}</span></div>
+        <div>Case1: {countA}×{countB}×{countC} = <span style={{ color: "#fdba74", fontWeight: 700 }}>{case1}</span></div>
+        <div>Case2: C({countC},3) = <span style={{ color: "#d8b4fe", fontWeight: 700 }}>{case2}</span></div>
         <div style={{ borderTop: "1px solid #334155", marginTop: 4, paddingTop: 4 }}>
-          {t(E, "Subtotal", "이 쌍")}: <span style={{ color: "#fbbf24", fontWeight: 900, fontSize: 15 }}>{case1 + case2}</span>
+          {t(E, "Subtotal", "이 쌍")}: <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: 15 }}>{case1 + case2}</span>
         </div>
       </div>
     </div>
@@ -266,7 +266,7 @@ export function PackPickerSim({ E }) {
       {sel.size === 3 && (
         <div style={{
           background: isValid ? "#ecfdf5" : "#fee2e2",
-          border: `2px solid ${isValid ? "#6ee7b7" : "#fca5a5"}`,
+          border: `1px solid ${isValid ? "#6ee7b7" : "#fca5a5"}`,
           borderRadius: 12, padding: 10, marginBottom: 8,
           animation: "tricksPopIn .3s ease",
         }}>
@@ -276,13 +276,13 @@ export function PackPickerSim({ E }) {
             {Object.entries(colorCount).map(([color, cnt]) => (
               <div key={color} style={{ display: "flex", alignItems: "center", gap: 3 }}>
                 <Candy color={Number(color)} size={20} />
-                <span style={{ fontSize: 14, fontWeight: 900, color: CC[Number(color)], fontFamily: "'JetBrains Mono',monospace" }}>×{cnt}</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: CC[Number(color)], fontFamily: "'JetBrains Mono',monospace" }}>×{cnt}</span>
               </div>
             ))}
           </div>
           {/* Verdict */}
           <div style={{
-            textAlign: "center", fontSize: 13, fontWeight: 900,
+            textAlign: "center", fontSize: 13, fontWeight: 700,
             color: isValid ? "#059669" : "#dc2626",
           }}>
             {isValid
@@ -418,7 +418,7 @@ export function ColorPairCounter({ E }) {
       transform: isFlash ? "scale(1.2)" : "scale(1)",
       transition: "all .25s ease",
     }}>
-      {label} = <span style={{ color, fontWeight: 900, textShadow: isFlash ? `0 0 8px ${color}88` : "none" }}>{value}</span>
+      {label} = <span style={{ color, fontWeight: 700, textShadow: isFlash ? `0 0 8px ${color}88` : "none" }}>{value}</span>
     </span>
   );
 
@@ -431,8 +431,8 @@ export function ColorPairCounter({ E }) {
           const passed = i < pairIdx || (i === pairIdx && subStep >= 4);
           return (
             <div key={i} style={{
-              padding: "4px 10px", borderRadius: 8, fontSize: 12, fontWeight: 800,
-              border: `2px solid ${active && !passed ? A : passed ? "#6ee7b7" : C.border}`,
+              padding: "4px 10px", borderRadius: 8, fontSize: 12, fontWeight: 600,
+              border: `1px solid ${active && !passed ? A : passed ? "#6ee7b7" : C.border}`,
               background: active && !passed ? ABg : passed ? "#ecfdf5" : "#fff",
               color: active && !passed ? A : passed ? "#059669" : C.dim,
               fontFamily: "'JetBrains Mono',monospace",
@@ -456,12 +456,12 @@ export function ColorPairCounter({ E }) {
             <ValReveal label="C" value={curPair.cC} color="#6ee7b7" visible={subStep >= 3} isFlash={subStep === 3} />
           </div>
           <div style={{ opacity: subStep >= 4 ? 1 : 0.1, transition: "opacity .3s" }}>
-            <div>Case1: {curPair.cA}×{curPair.cB}×{curPair.cC} = <span style={{ color: "#fdba74", fontWeight: 900 }}>{curPair.case1}</span></div>
-            <div>Case2: C({curPair.cC},3) = <span style={{ color: "#d8b4fe", fontWeight: 900 }}>{curPair.case2}</span></div>
+            <div>Case1: {curPair.cA}×{curPair.cB}×{curPair.cC} = <span style={{ color: "#fdba74", fontWeight: 700 }}>{curPair.case1}</span></div>
+            <div>Case2: C({curPair.cC},3) = <span style={{ color: "#d8b4fe", fontWeight: 700 }}>{curPair.case2}</span></div>
           </div>
           <div style={{
             borderTop: "1px solid #334155", marginTop: 4, paddingTop: 4,
-            color: "#fbbf24", fontWeight: 900,
+            color: "#fbbf24", fontWeight: 700,
             opacity: subStep >= 4 ? 1 : 0.1, transition: "opacity .3s",
           }}>
             +{curPair.sub} → {t(E, "total so far", "지금까지")} = {runningTotal + (subStep >= 4 ? curPair.sub : 0)}
@@ -478,7 +478,7 @@ export function ColorPairCounter({ E }) {
           <div style={{
             display: "inline-block", padding: "8px 28px", borderRadius: 12,
             background: `linear-gradient(135deg,#ea580c,${A})`,
-            fontSize: 28, fontWeight: 900, color: "#fff",
+            fontSize: 28, fontWeight: 700, color: "#fff",
             fontFamily: "'JetBrains Mono',monospace",
             boxShadow: "0 4px 16px rgba(249,115,22,.3)",
             animation: "tricksPopIn .4s ease",
@@ -497,7 +497,7 @@ export function ColorPairCounter({ E }) {
       {/* Running total bar */}
       {pairIdx >= 0 && !done && (
         <div style={{
-          textAlign: "center", marginBottom: 8, fontSize: 13, fontWeight: 900,
+          textAlign: "center", marginBottom: 8, fontSize: 13, fontWeight: 700,
           color: A, fontFamily: "'JetBrains Mono',monospace",
         }}>
           {t(E, "Total so far", "현재 합계")}: {runningTotal}
@@ -509,21 +509,21 @@ export function ColorPairCounter({ E }) {
         {!done ? (
           <>
             <button onClick={next} disabled={playing} style={{
-              padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 900,
+              padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
               border: "none", cursor: playing ? "default" : "pointer",
               color: "#fff", opacity: playing ? 0.5 : 1,
               background: `linear-gradient(135deg,#ea580c,${A})`,
               boxShadow: "0 3px 12px rgba(249,115,22,.3)",
             }}>▶ {t(E, "Next pair", "다음 쌍")}</button>
             <button onClick={autoPlay} style={{
-              padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-              border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+              padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+              border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
             }}>{playing ? "⏸" : "⏭"} {t(E, playing ? "Pause" : "Auto", playing ? "정지" : "자동")}</button>
           </>
         ) : (
           <button onClick={reset} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {t(E, "Restart", "처음부터")}</button>
         )}
       </div>
@@ -553,7 +553,7 @@ export function TricksFormulaTrace({ E }) {
       {/* pair_count display */}
       <div style={{
         background: ABg, borderRadius: 10, padding: "6px 10px",
-        border: `2px solid ${ABd}`, marginBottom: 8, textAlign: "center",
+        border: `1px solid ${ABd}`, marginBottom: 8, textAlign: "center",
         fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: C.text,
       }}>
         pair_count: {"{"} (1,1):3, (1,2):2, (1,3):2, (2,2):1 {"}"}
@@ -578,12 +578,12 @@ export function TricksFormulaTrace({ E }) {
               transition: "all .35s ease",
             }}>
               <span style={{ color: "#94a3b8" }}>({d.x},{d.y})</span>
-              {" A="}<span style={{ color: CC[d.x], fontWeight: 900, textShadow: isCurrent ? `0 0 6px ${CC[d.x]}88` : "none", transition: "text-shadow .3s" }}>{d.cA}</span>
-              {" B="}<span style={{ color: CC[d.y], fontWeight: 900, textShadow: isCurrent ? `0 0 6px ${CC[d.y]}88` : "none", transition: "text-shadow .3s" }}>{d.cB}</span>
-              {" C="}<span style={{ color: "#6ee7b7", fontWeight: 900, textShadow: isCurrent ? "0 0 6px #6ee7b788" : "none", transition: "text-shadow .3s" }}>{d.cC}</span>
+              {" A="}<span style={{ color: CC[d.x], fontWeight: 700, textShadow: isCurrent ? `0 0 6px ${CC[d.x]}88` : "none", transition: "text-shadow .3s" }}>{d.cA}</span>
+              {" B="}<span style={{ color: CC[d.y], fontWeight: 700, textShadow: isCurrent ? `0 0 6px ${CC[d.y]}88` : "none", transition: "text-shadow .3s" }}>{d.cB}</span>
+              {" C="}<span style={{ color: "#6ee7b7", fontWeight: 700, textShadow: isCurrent ? "0 0 6px #6ee7b788" : "none", transition: "text-shadow .3s" }}>{d.cC}</span>
               {" → "}<span style={{ color: "#fdba74" }}>{d.cA}×{d.cB}×{d.cC}={d.case1}</span>
               {" + "}<span style={{ color: "#d8b4fe" }}>C({d.cC},3)={d.case2}</span>
-              {" = "}<span style={{ color: "#fbbf24", fontWeight: 900, fontSize: isCurrent ? 15 : 12, transition: "font-size .3s" }}>{d.sub}</span>
+              {" = "}<span style={{ color: "#fbbf24", fontWeight: 700, fontSize: isCurrent ? 15 : 12, transition: "font-size .3s" }}>{d.sub}</span>
             </div>
           );
         })}
@@ -604,7 +604,7 @@ export function TricksFormulaTrace({ E }) {
           ))}
           {" = "}
           <span style={{
-            color: "#fbbf24", fontWeight: 900, fontSize: step > PAIRS.length ? 18 : 16,
+            color: "#fbbf24", fontWeight: 700, fontSize: step > PAIRS.length ? 18 : 16,
             textShadow: step > PAIRS.length ? "0 0 12px #fbbf2488" : "none",
             transition: "all .4s ease",
           }}>{TOTAL_ANSWER}</span>
@@ -614,7 +614,7 @@ export function TricksFormulaTrace({ E }) {
       {/* Running total */}
       {step > 0 && step <= PAIRS.length && (
         <div style={{
-          textAlign: "center", fontSize: 13, fontWeight: 900,
+          textAlign: "center", fontSize: 13, fontWeight: 700,
           color: A, fontFamily: "'JetBrains Mono',monospace", marginBottom: 6,
         }}>
           {t(E, "Running total", "지금까지 합계")}: {runningTotal}
@@ -625,15 +625,15 @@ export function TricksFormulaTrace({ E }) {
       <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
         {step <= PAIRS.length ? (
           <button onClick={next} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
+            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
             border: "none", cursor: "pointer", color: "#fff",
             background: `linear-gradient(135deg,#ea580c,${A})`,
             boxShadow: "0 3px 12px rgba(249,115,22,.3)",
           }}>▶ {t(E, "Next", "다음")}</button>
         ) : (
           <button onClick={reset} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {t(E, "Restart", "처음부터")}</button>
         )}
       </div>

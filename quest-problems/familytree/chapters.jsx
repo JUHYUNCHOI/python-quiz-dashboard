@@ -63,17 +63,29 @@ export function makeFamilyTreeCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf33"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Family Tree</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Family Tree</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the family relationship between cows X and Y from the tree.",
+                "가계도에서 두 소 X 와 Y 의 가족 관계를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has a list of ", "FJ 에게 ")}
                   <b style={{ color: "#059669" }}>{t(E, "mother → child relationships", "엄마 → 자식 관계 목록")}</b>
@@ -82,7 +94,7 @@ export function makeFamilyTreeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're given two cows ", "두 소 ")}
                   <b style={{ color: "#7c3aed" }}>X, Y</b>
@@ -91,7 +103,7 @@ export function makeFamilyTreeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print one of: ", "다음 중 하나를 출력: ")}
                   <b style={{ color: "#15803d" }}>{t(E, "(great-)mother / (great-)daughter / siblings / cousins / NOT_RELATED", "(great-)엄마 / (great-)딸 / 자매 / 사촌 / NOT_RELATED")}</b>
@@ -129,8 +141,8 @@ export function makeFamilyTreeCh1(E) {
         "Generations between mother and child?",
         "어미와 자식 사이 세대 수?"),
       hint: t(E,
-        "Direct parent-child = 1 generation.",
-        "직접 부모-자식 = 1세대."),
+        "Re-read the relationship — how many family levels separate parent and child?",
+        "관계를 다시 읽어 봐 — 부모와 자식 사이는 몇 세대?"),
       answer: 1,
     },
   ];
@@ -142,48 +154,12 @@ export function makeFamilyTreeCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeFamilyTreeCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Build A's ancestor chain (with depths) in a dictionary. Walk up from B; the first ancestor we hit that's also in A's chain is the LCA. Compare depths to decide: ancestor / descendant / siblings / cousins / unrelated.",
-        "A 의 조상 체인을 깊이와 함께 딕셔너리에 저장. B 에서 위로 올라가며 처음 만나는 A 의 조상이 LCA. 깊이를 비교해서 결정: 조상 / 후손 / 자매 / 사촌 / 무관."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Map child → mother", "자식 → 엄마 매핑"), code: "mother = dict of (child, mom) pairs", color: "#059669" },
-              { n: 2, label: t(E, "Build A's ancestor chain", "A 의 조상 체인 구축"), code: "depthA = {A: 0, mom(A): 1, ...}", color: "#0891b2" },
-              { n: 3, label: t(E, "Walk up from B until hitting LCA", "B 에서 LCA 만날 때까지 위로"), code: "d = 0; cur = B; while cur not in depthA: cur = mother[cur]; d += 1", color: "#7c3aed" },
-              { n: 4, label: t(E, "Classify by (depthA[lca], d)", "(depthA[lca], d) 로 관계 분류"), code: "print mother / grandmother / siblings / cousins / NOT RELATED", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "walk both ancestor chains once", "조상 체인 각각 한 번 순회")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Build A's ancestor chain with depths. Walk up from B — first ancestor that's also in A's chain is the LCA. Compare depths to decide: ancestor / descendant / siblings / cousins / unrelated. Sections build it one piece at a time.",
+        "A 의 조상 체인 (깊이 포함). B 에서 위로 — 처음 만나는 A 의 조상이 LCA. 깊이 비교로 분류: 조상 / 후손 / 자매 / 사촌 / 무관. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getFamilyTreeSections(E),
     },
   ];

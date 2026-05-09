@@ -31,8 +31,8 @@ const Tile = ({ ch, color = A, bg = ABg, bd = ABd, size = 30, glow }) => (
   <div style={{
     width: size, height: size, borderRadius: 7, display: "flex",
     alignItems: "center", justifyContent: "center",
-    background: bg, border: `2px solid ${bd}`,
-    fontWeight: 900, fontSize: size * 0.52, color,
+    background: bg, border: `1px solid ${bd}`,
+    fontWeight: 700, fontSize: size * 0.52, color,
     fontFamily: "'JetBrains Mono',monospace",
     boxShadow: glow ? `0 0 10px ${color}44` : "none",
     transition: "all .25s",
@@ -68,7 +68,7 @@ export function DistanceCalc({ E }) {
               onChange={e => inp.set(e.target.value.toLowerCase().replace(/[^a-z]/g, ""))}
               style={{
                 width: 80, textAlign: "center", padding: "6px 8px", borderRadius: 8,
-                border: `2px solid ${inp.color}`, fontSize: 16, fontWeight: 800,
+                border: `1px solid ${inp.color}`, fontSize: 16, fontWeight: 600,
                 fontFamily: "'JetBrains Mono',monospace", color: inp.color,
                 outline: "none", background: "#fff",
               }}
@@ -110,21 +110,17 @@ export function DistanceCalc({ E }) {
                   border: `1.5px solid ${mn > 0 ? "#6ee7b7" : "#fca5a5"}`,
                   borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono',monospace",
                 }}>
-                  <div style={{ fontWeight: 900, fontSize: 14, color: mn > 0 ? "#059669" : "#dc2626" }}>{c}</div>
+                  <div style={{ fontWeight: 700, fontSize: 14, color: mn > 0 ? "#059669" : "#dc2626" }}>{c}</div>
                   <div style={{ color: A, fontWeight: 700 }}>{v1}</div>
                   <div style={{ color: "#8b5cf6", fontWeight: 700 }}>{v2}</div>
-                  <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: 2, fontWeight: 900, color: "#059669" }}>{mn}</div>
+                  <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: 2, fontWeight: 700, color: "#059669" }}>{mn}</div>
                 </div>
               );
             })}
           </div>
 
-          {/* Explanation */}
-          <div style={{ textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 6, lineHeight: 1.6 }}>
-            {t(E,
-              "For each letter: take the smaller count = matched letters",
-              "각 글자마다: 둘 중 적은 쪽 = 겹치는 수")}
-          </div>
+          {/* Explanation removed — the per-letter min row above and the "shared = N"
+              line in the result card below name the concept. */}
 
           {/* Result */}
           <div style={{
@@ -133,15 +129,12 @@ export function DistanceCalc({ E }) {
             color: "#e2e8f0", lineHeight: 2, textAlign: "center",
           }}>
             <div>{t(E, "shared", "겹치는 글자")} = {shared}{t(E, " letters", "개")}</div>
-            <div>{t(E, "distance", "거리")} = {t(E, "length", "글자 수")} {len} − {t(E, "shared", "겹침")} {shared} = <span style={{ color: "#fbbf24", fontWeight: 900, fontSize: 18 }}>{dist}</span></div>
+            <div>{t(E, "distance", "거리")} = {t(E, "length", "글자 수")} {len} − {t(E, "shared", "겹침")} {shared} = <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: 18 }}>{dist}</span></div>
           </div>
         </>
       )}
 
-      {/* Quick presets */}
-      <div style={{ textAlign: "center", marginTop: 8, fontSize: 10, color: C.dim, fontWeight: 700 }}>
-        {t(E, "Try presets:", "예시 해보기:")}
-      </div>
+      {/* Preset row label removed — the chips themselves are obviously clickable. */}
       <div style={{ display: "flex", gap: 3, justifyContent: "center", marginTop: 4, flexWrap: "wrap" }}>
         {[["ade","adb"],["ade","dez"],["ade","zaf"],["ade","aed"],["ade","wxy"]].map(([a,b], i) => (
           <button key={i} onClick={() => { setW1(a); setW2(b); }} style={{
@@ -270,7 +263,7 @@ export function GreedySim({ E }) {
               const picking = c === nowPicking;
               return (
                 <div key={c} style={{
-                  width: cellW, textAlign: "center", fontSize: 13, fontWeight: 900,
+                  width: cellW, textAlign: "center", fontSize: 13, fontWeight: 700,
                   fontFamily: "'JetBrains Mono',monospace",
                   color: picking ? "#fbbf24" : (picked ? "#6ee7b7" : A),
                   transition: "color .3s",
@@ -293,7 +286,7 @@ export function GreedySim({ E }) {
                 borderRadius: 6, transition: "background .3s",
               }}>
                 <div style={{
-                  width: labelW, fontSize: 12, fontWeight: 800,
+                  width: labelW, fontSize: 12, fontWeight: 600,
                   fontFamily: "'JetBrains Mono',monospace",
                   color: isContrib ? A : C.dim,
                   textAlign: "right", paddingRight: 6,
@@ -325,7 +318,7 @@ export function GreedySim({ E }) {
             borderTop: "2px solid #e2e8f0", paddingTop: 4,
           }}>
             <div style={{
-              width: labelW, fontSize: 10, fontWeight: 800,
+              width: labelW, fontSize: 10, fontWeight: 600,
               color: "#059669", textAlign: "right", paddingRight: 6,
             }}>{t(E, "count", "개수")}</div>
             {ALL_LETTERS.map((c, ci) => {
@@ -335,7 +328,7 @@ export function GreedySim({ E }) {
                   width: cellW, height: 28, display: "flex",
                   alignItems: "center", justifyContent: "center",
                   fontSize: isPicking ? 15 : 13,
-                  fontWeight: 900,
+                  fontWeight: 700,
                   fontFamily: "'JetBrains Mono',monospace",
                   color: isPicking ? "#fbbf24" : (isPicked ? "#6ee7b7" : (gain > 0 ? "#059669" : "#cbd5e1")),
                   background: isPicking ? "rgba(251,191,36,.18)" : "transparent",
@@ -357,8 +350,8 @@ export function GreedySim({ E }) {
           <span style={{ color: "#94a3b8" }}>
             {t(E, "Slot", "빈칸")} {gs.slot + 1}/{M}:
           </span>{" "}
-          <span style={{ color: "#fbbf24", fontWeight: 900, fontSize: 14 }}>'{gs.picked}'</span>
-          {" "}{t(E, "has the most", "이 가장 많아")} — <span style={{ color: "#93c5fd", fontWeight: 900 }}>{gs.pickedGain}{t(E, " words", "개")}</span>
+          <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: 14 }}>'{gs.picked}'</span>
+          {" "}{t(E, "has the most", "이 가장 많아")} — <span style={{ color: "#93c5fd", fontWeight: 700 }}>{gs.pickedGain}{t(E, " words", "개")}</span>
           {alreadyPicked.length > 0 && (
             <div style={{ fontSize: 10, color: "#64748b", marginTop: 2 }}>
               {t(E, "Already picked:", "이미 고른 글자:")} {alreadyPicked.join(", ")}
@@ -381,7 +374,7 @@ export function GreedySim({ E }) {
           }}>
             {curWord.split("").map((c, i) => (
               <span key={i} style={{
-                fontSize: 24, fontWeight: 900, color: "#fff",
+                fontSize: 24, fontWeight: 700, color: "#fff",
                 fontFamily: "'JetBrains Mono',monospace",
               }}>{c}</span>
             ))}
@@ -400,7 +393,7 @@ export function GreedySim({ E }) {
       {/* Current word being built */}
       {step >= 0 && !done && (
         <div style={{
-          textAlign: "center", marginBottom: 8, fontSize: 13, fontWeight: 900,
+          textAlign: "center", marginBottom: 8, fontSize: 13, fontWeight: 700,
           color: A, fontFamily: "'JetBrains Mono',monospace",
         }}>
           {t(E, "Building", "지금까지 고른 글자")}: {curWord || "..."}
@@ -412,21 +405,21 @@ export function GreedySim({ E }) {
         {!done ? (
           <>
             <button onClick={next} disabled={playing} style={{
-              padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 900,
+              padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
               border: "none", cursor: playing ? "default" : "pointer",
               color: "#fff", opacity: playing ? 0.5 : 1,
               background: `linear-gradient(135deg,#1d4ed8,${A})`,
               boxShadow: "0 3px 12px rgba(59,130,246,.3)",
             }}>▶ {t(E, "Next slot", "다음 칸")}</button>
             <button onClick={autoPlay} style={{
-              padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-              border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+              padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+              border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
             }}>{playing ? "⏸" : "⏭"} {t(E, playing ? "Pause" : "Auto", playing ? "정지" : "자동")}</button>
           </>
         ) : (
           <button onClick={reset} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {t(E, "Restart", "처음부터")}</button>
         )}
       </div>
@@ -452,16 +445,16 @@ export function WordBuilder({ E }) {
   return (
     <div style={{ padding: "10px 6px" }}>
       {/* Frequency display */}
-      <div style={{ fontSize: 12, fontWeight: 800, color: A, textAlign: "center", marginBottom: 6 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: A, textAlign: "center", marginBottom: 6 }}>
         {t(E, "Letter frequencies from greedy:", "빈칸 채우기로 고른 글자들:")}
       </div>
       <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 10 }}>
         {finalAns.map((cnt, i) => cnt > 0 ? (
           <div key={i} style={{
             textAlign: "center", padding: "4px 6px", borderRadius: 8,
-            background: ABg, border: `2px solid ${ABd}`, minWidth: 32,
+            background: ABg, border: `1px solid ${ABd}`, minWidth: 32,
           }}>
-            <div style={{ fontWeight: 900, fontSize: 16, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
+            <div style={{ fontWeight: 700, fontSize: 16, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
               {String.fromCharCode(i + 97)}
             </div>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.dim }}>×{cnt}</div>
@@ -488,11 +481,11 @@ export function WordBuilder({ E }) {
         <div style={{ color: "#94a3b8", marginBottom: 4 }}>{t(E, "Verify distances:", "각 단어와 거리 확인:")}</div>
         {SAMPLE_WORDS.map((w, i) => (
           <div key={i}>
-            {word} ↔ {w}: <span style={{ color: "#fbbf24", fontWeight: 900 }}>{dists[i]}</span>
+            {word} ↔ {w}: <span style={{ color: "#fbbf24", fontWeight: 700 }}>{dists[i]}</span>
           </div>
         ))}
         <div style={{ borderTop: "1px solid #334155", marginTop: 6, paddingTop: 6, textAlign: "center" }}>
-          {t(E, "total distance", "거리 합계")} = {dists.join(" + ")} = <span style={{ color: "#fbbf24", fontWeight: 900, fontSize: 18 }}>{total}</span>
+          {t(E, "total distance", "거리 합계")} = {dists.join(" + ")} = <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: 18 }}>{total}</span>
         </div>
       </div>
     </div>
@@ -515,7 +508,7 @@ export function GreedyTrace({ E }) {
       {/* Words display */}
       <div style={{
         background: ABg, borderRadius: 10, padding: "6px 10px",
-        border: `2px solid ${ABd}`, marginBottom: 8, textAlign: "center",
+        border: `1px solid ${ABd}`, marginBottom: 8, textAlign: "center",
         fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text,
       }}>
         {t(E, "words", "주어진 단어")}: {SAMPLE_WORDS.join(", ")}
@@ -563,7 +556,7 @@ export function GreedyTrace({ E }) {
               ))}
               {" → "}
               <span style={{
-                color: "#fbbf24", fontWeight: 900,
+                color: "#fbbf24", fontWeight: 700,
                 fontSize: isCurrent ? 15 : 12,
                 transition: "font-size .3s",
               }}>'{gs.picked}'</span>
@@ -580,7 +573,7 @@ export function GreedyTrace({ E }) {
         }}>
           <span style={{ color: "#94a3b8" }}>{t(E, "answer", "정답 단어")} = </span>
           <span style={{
-            color: "#93c5fd", fontWeight: 900, fontSize: step > M ? 18 : 16,
+            color: "#93c5fd", fontWeight: 700, fontSize: step > M ? 18 : 16,
             textShadow: step > M ? "0 0 12px #93c5fd88" : "none",
             transition: "all .4s ease",
           }}>
@@ -593,15 +586,15 @@ export function GreedyTrace({ E }) {
       <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
         {step <= M ? (
           <button onClick={next} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
+            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
             border: "none", cursor: "pointer", color: "#fff",
             background: `linear-gradient(135deg,#1d4ed8,${A})`,
             boxShadow: "0 3px 12px rgba(59,130,246,.3)",
           }}>▶ {t(E, "Next", "다음")}</button>
         ) : (
           <button onClick={reset} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {t(E, "Restart", "처음부터")}</button>
         )}
       </div>

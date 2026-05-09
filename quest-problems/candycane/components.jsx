@@ -5,19 +5,27 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#dc2626";
 
 const FULL_PY = [
-  "N, M = map(int, input().split())",
-  "heights = list(map(int, input().split()))",
+  "import sys",
   "",
-  "for _ in range(M):",
-  "    h = int(input())  # candy cane height",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "N = int(data[p])",
+  "p += 1",
+  "M = int(data[p])",
+  "p += 1",
+  "heights = [int(data[p + i]) for i in range(N)]",
+  "p += N",
+  "canes   = [int(data[p + i]) for i in range(M)]",
+  "",
+  "for curr in canes:",
   "    bottom = 0",
   "    for i in range(N):",
   "        if heights[i] > bottom:",
-  "            eat = min(heights[i], h) - bottom",
+  "            eat = min(curr, heights[i]) - bottom",
   "            if eat > 0:",
-  "                heights[i] += eat",
+  "                heights[i] += eat   # cow grows",
   "                bottom += eat",
-  "        if bottom >= h:",
+  "        if bottom >= curr:",
   "            break",
   "",
   "for x in heights:",
@@ -111,7 +119,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

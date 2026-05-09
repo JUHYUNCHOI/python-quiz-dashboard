@@ -45,17 +45,29 @@ export function makeShuffleCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd00"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Bovine Shuffle</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>The Bovine Shuffle</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2017 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Recover the original lineup before any shuffles, given the lineup after 3 applications.",
+                "셔플 3 번 후의 줄에서 원래 줄을 복원해 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#f97316" }}>{t(E, "N cows in a line", "한 줄로 선 N마리 소")}</b>
@@ -63,7 +75,7 @@ export function makeShuffleCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "shuffle permutation", "셔플 순열")}</b>
@@ -72,7 +84,7 @@ export function makeShuffleCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're given the lineup ", "주어지는 줄은 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "AFTER 3 shuffles", "셔플 3 번 후")}</b>
@@ -80,7 +92,7 @@ export function makeShuffleCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "original lineup before any shuffles", "셔플 전 원래 줄")}</b>
@@ -118,8 +130,8 @@ export function makeShuffleCh1(E) {
         "How many times is the shuffle applied?",
         "셔플은 몇 번 적용돼요?"),
       hint: t(E,
-        "The problem says 3 times!",
-        "문제에서 3번이라고 해요!"),
+        "Re-read the problem statement — how many shuffles are applied?",
+        "문제를 다시 읽어 봐 — 셔플이 몇 번 적용돼?"),
       answer: 3,
     },
   ];
@@ -131,48 +143,12 @@ export function makeShuffleCh1(E) {
    --------------------------------------------------------------- */
 export function makeShuffleCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "We're given the lineup AFTER 3 shuffles. To recover the original, build the INVERSE shuffle and apply it 3 times to the final lineup.",
-        "셔플 3 번 후의 줄이 주어져요. 원래 줄을 복원하려면 역셔플을 만들고 최종 줄에 3 번 적용."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Build inverse shuffle", "역셔플 만들기"), code: "inv[shuffle[i]] = i  for i in range(N)", color: "#f97316" },
-              { n: 2, label: t(E, "Apply inverse once", "역셔플 1 회 적용"), code: "prev = [final[inv[i]] for i in range(N)]", color: "#7c3aed" },
-              { n: 3, label: t(E, "Apply two more times", "두 번 더 적용"), code: "for _ in range(2): prev = [prev[inv[i]] for i in range(N)]", color: "#0891b2" },
-              { n: 4, label: t(E, "Print original lineup", "원래 줄 출력"), code: "print(*prev)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "3 inverse-shuffle passes, each O(N)", "역셔플 3 회, 각 O(N)")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Given lineup AFTER 3 shuffles → recover original by building INVERSE shuffle and applying it 3 times. Sections build it one piece at a time.",
+        "셔플 3 번 후 줄이 주어짐 → 역셔플을 만들고 3 번 적용해 원래 줄 복원. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBovShuffleSections(E),
     },
   ];

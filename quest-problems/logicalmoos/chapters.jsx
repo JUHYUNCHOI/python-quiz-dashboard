@@ -1,170 +1,160 @@
 import { C, t } from "@/components/quest/theme";
-import { getLogicalMoosSections } from "./components";
+import { getLogicalMoosSections, LogicalMoosSim } from "./components";
+import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
-export const SOLUTION_CODE = [
-  "N, Q = map(int, input().split())",
-  "words = input().split()",
-  "",
-  "# Evaluate the boolean expression",
-  "def evaluate(tokens):",
-  "    # First pass: handle 'and'",
-  "    stack = [tokens[0] == 'true']",
-  "    i = 1",
-  "    while i < len(tokens):",
-  "        op = tokens[i]",
-  "        val = tokens[i+1] == 'true'",
-  "        if op == 'and':",
-  "            stack[-1] = stack[-1] and val",
-  "        else:  # 'or'",
-  "            stack.append(val)",
-  "        i += 2",
-  "    return any(stack)",
-  "",
-  "result = []",
-  "for _ in range(Q):",
-  "    parts = input().split()",
-  "    l, r = int(parts[0])-1, int(parts[1])-1",
-  "    target = parts[2] == 'true'",
-  "    # Try replacing words[l..r] with 'true' and 'false'",
-  "    for rep in ['true', 'false']:",
-  "        new_tokens = words[:l] + [rep] + words[r+1:]",
-  "        if evaluate(new_tokens) == target:",
-  "            result.append('Y')",
-  "            break",
-  "    else:",
-  "        result.append('N')",
-  "",
-  "print(''.join(result))",
-];
+const ACCENT = "#4f46e5";       // indigo-600
+const TINT   = "#e0e7ff";        // indigo-100
+const BORDER = "#a5b4fc";        // indigo-300
+const DARK   = "#3730a3";        // indigo-800
 
 export function makeLogicalCh1(E) {
   return [
     {
       type: "reveal",
       narr: t(E,
-        "A long boolean expression made of 'true', 'false', 'and', 'or'.\nFor each query, can we REPLACE a slice with one boolean so the whole expression equals the target?",
-        "'true', 'false', 'and', 'or'로 이루어진 긴 불리언 수식이 있어요.\n각 쿼리마다, 한 구간을 하나의 불리언으로 바꿔서 전체 결과가 목표값이 되게 할 수 있을까요?"),
+        "FJ has a long boolean expression — alternating true/false tokens with and/or operators. Each query asks: can we replace one slice with a single boolean so the whole thing equals the target?",
+        "FJ 의 긴 불리언 수식 — true/false 토큰과 and/or 연산자가 번갈아 나와요. 각 쿼리는 묻기: 한 구간을 하나의 불리언으로 바꿔서 전체가 target 과 같아질 수 있을까?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🧠</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Logical Moos</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: ACCENT }}>Logical Moos</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
-              📖 {t(E, "Problem", "문제")}
+          {/* 🎯 Mission box */}
+          <div style={{ background: TINT, border: `1.5px solid ${ACCENT}`, borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: DARK, letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "We have a ", "")}
-                  <b style={{ color: "#2563eb" }}>{t(E, "boolean expression", "불리언 수식")}</b>
-                  {t(E, " of N tokens — alternating ", "이 N개의 토큰으로 이루어져 있어요 — ")}
-                  <code style={{ background: "#eff6ff", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>true/false</code>
-                  {t(E, " with operators ", "와 연산자 ")}
-                  <code style={{ background: "#eff6ff", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>and/or</code>
-                  {t(E, ".", "가 번갈아 나와요.")}
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
-                <div>
-                  <b style={{ color: "#7c3aed" }}>{t(E, "'and' has higher precedence", "'and'가 우선순위가 높아요")}</b>
-                  {t(E, " than 'or' — evaluate ALL ands first, then ors.",
-                        " — 'and'를 먼저 모두 계산한 뒤 'or'를 계산해요.")}
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "Each query gives ", "각 쿼리는 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "(l, r, target)", "(l, r, target)")}</b>
-                  {t(E, " — replace tokens l..r with ONE boolean ('true' or 'false').",
-                        "을 줘요 — 토큰 l~r을 하나의 불리언('true' 또는 'false')으로 바꿔요.")}
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
-                <div>
-                  {t(E, "Print 'Y' if some replacement makes the expression equal target, else 'N'.",
-                        "어떤 교체로든 결과가 target과 같아지면 'Y', 아니면 'N'을 출력해요.")}
-                </div>
-              </div>
+            <div style={{ fontSize: 13, color: DARK, lineHeight: 1.5 }}>
+              {t(E,
+                "For each query (l, r, target), output 'Y' if some single boolean replacement of tokens l..r makes the whole expression equal target, else 'N'.",
+                "각 쿼리 (l, r, target) 에 대해 — l..r 구간을 하나의 불리언으로 교체했을 때 전체 식이 target 이 될 수 있으면 'Y', 없으면 'N'.")}
+            </div>
+          </div>
+
+          <div style={{ background: TINT, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: DARK, marginBottom: 8 }}>
+              📖 {t(E, "Setup", "설정")}
+            </div>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.65, marginBottom: 10 }}>
+              {t(E,
+                "A boolean statement N keywords long (N odd). Odd positions are 'true' or 'false'; even positions are 'and' or 'or'. 'and' has higher precedence than 'or' — evaluate ALL ands first, then ors. Q queries each give (l, r, target): replace tokens at positions l..r (l, r both odd) with ONE boolean — answer 'Y' if some choice makes the result equal target, else 'N'.",
+                "N 개 키워드 (N 홀수). 홀수 위치는 'true'/'false', 짝수 위치는 'and'/'or'. 'and' 가 'or' 보다 우선 — and 모두 먼저 계산 후 or. Q 개 쿼리 (l, r, target) — l..r (둘 다 홀수) 구간을 하나의 불리언으로 교체했을 때 target 이 될 수 있으면 'Y', 아니면 'N'.")}
+            </div>
+
+            <div style={{ marginTop: 10, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
+              📐 <b>{t(E, "Constraints", "제약")}:</b>{" "}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ N &lt; 2·10⁵</code>,{" "}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>N odd</code>,{" "}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ Q ≤ 2·10⁵</code>
             </div>
           </div>
         </div>),
     },
+
+    {
+      type: "reveal",
+      narr: t(E,
+        "Sample 1: 5 tokens, 7 queries → 'NYYYNYY'. Walk through query 4 below.",
+        "샘플 1: 토큰 5 개, 쿼리 7 개 → 'NYYYNYY'. 4 번 쿼리를 아래에서 따라가요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: ACCENT, textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: TINT, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: DARK, marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: DARK, whiteSpace: "pre" }}>
+{`5 7
+false and true or true
+1 1 false
+1 3 true
+1 5 false
+3 3 true
+3 3 false
+5 5 false
+5 5 true`}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`NYYYNYY`}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ background: TINT, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 600, color: DARK, marginBottom: 6 }}>
+              🔍 {t(E, "Walkthrough — query 4 (l=3, r=3, target=true)", "풀이 — 4 번 쿼리 (l=3, r=3, target=true)")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              {t(E, "Replace position 3 (token 'true' with v):  false and v or true",
+                    "위치 3 ('true') 를 v 로 교체:  false and v or true")}
+              <br/>
+              {t(E, "Pick v = true:  false and true = false  →  false or true = true. ✓ matches target.",
+                    "v = true:  false and true = false  →  false or true = true. ✓ target 과 일치.")}
+            </div>
+            <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
+              {t(E, "→ answer 'Y' for query 4.", "→ 4 번 쿼리 답 'Y'.")}
+            </div>
+          </div>
+        </div>),
+    },
+
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try the simulator — 4 preset expressions. Same color = same AND-chain (broken by OR).",
+        "시뮬레이터 — 미리 만든 4 개 수식. 같은 색 = 같은 AND-체인 (OR 가 끊음)."),
+      content: (<LogicalMoosSim E={E} />),
+    },
+
     {
       type: "quiz",
       narr: t(E,
-        "'false and true or true' → first evaluate 'and': false and true = false → 'false or true' → true!", "'false and true or true' → 먼저 'and' 평가: false and true = false → 'false or true' → true!"),
+        "'and' binds tighter than 'or' — evaluate ANDs first.",
+        "'and' 가 'or' 보다 우선 — AND 먼저 계산."),
       question: t(E,
         "What does 'true or false and false' evaluate to?",
-        "'true or false and false'의 결과는?"),
+        "'true or false and false' 의 결과는?"),
       options: ["true", "false"],
       correct: 0,
-      explain: t(E, "'and' first: false and false = false → 'true or false' → true!", "'and' 먼저: false and false = false → 'true or false' → true!"),
+      explain: t(E,
+        "'and' first: false and false = false → 'true or false' → true.",
+        "'and' 먼저: false and false = false → 'true or false' → true."),
     },
+
     {
       type: "input",
       narr: t(E,
-        "For each query: try replacing with 'true' and 'false'.\nIf either makes the expression equal to target, answer Y.", "각 쿼리: 'true'와 'false'로 교체 시도. 둘 중 하나라도 목표값이 되면 Y."),
+        "Per query, try replacing the slice with 'true' AND with 'false' — if either matches the target, answer Y.",
+        "쿼리마다 구간을 'true' 와 'false' 둘 다로 교체 시도 — 하나라도 target 과 같으면 Y."),
       question: t(E,
-        "'false and true or true'. Replace pos 1-3 with 'true'. Result = 'true or true' = ?. Is answer true? (1=yes,0=no)",
-        "'false and true or true'. 위치 1-3을 'true'로 교체. 결과 = 'true or true' = ?. 답이 true? (1=예,0=아니)"),
+        "'false and true or true', query (l=3, r=3, target=false). Replace position 3 with 'false': 'false and false or true'. Result = ? (1 = true, 0 = false)",
+        "'false and true or true', 쿼리 (l=3, r=3, target=false). 위치 3 을 'false' 로 교체: 'false and false or true'. 결과 = ? (1 = true, 0 = false)"),
+      hint: t(E,
+        "Apply 'and' first, then 'or'.  Step through the three tokens.",
+        "'and' 먼저 처리 후 'or'. 토큰 셋을 차례대로."),
       answer: 1,
-    },
-    {
-      type: "sim",
-      narr: t(E,
-        "Same color = same AND-chain. OR splits chains. Final = OR of all chains.", "같은 색 = 같은 AND-체인. OR이 체인을 끊음. 최종 = 모든 체인 OR."),
     },
   ];
 }
 
 export function makeLogicalCh2(E, lang = "py") {
+  const sections = getLogicalMoosSections(E);
   return [
-    {
+    ...sections.map((sec, i) => ({
       type: "reveal",
-      narr: t(E,
-        "Brute force: define an evaluator, then for each query try replacing with 'true' AND 'false'.",
-        "완전탐색: 평가기 정의 → 쿼리마다 'true'와 'false' 둘 다로 교체 시도."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read tokens", "토큰 읽기"), code: "words = ['true', 'and', 'false', 'or', ...]", color: "#0284c7" },
-              { n: 2, label: t(E, "Define evaluate(tokens)", "evaluate(tokens) 정의"), code: "OR-of-(AND chains)  // and binds tighter", color: "#7c3aed" },
-              { n: 3, label: t(E, "For each query, try both", "쿼리마다 둘 다 시도"), code: "for rep in ['true', 'false']: ...", color: "#16a34a" },
-              { n: 4, label: t(E, "Match target?", "target 일치?"), code: "if evaluate(new) == target: 'Y' else 'N'", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#0284c7" }}>O(N · Q)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "Q queries × O(N) evaluate", "Q개 쿼리 × O(N) 평가")}</div>
-          </div>
-        </div>),
-    },
-    {
-      type: "progressive",
-      narr: t(E,
-        "Now build the brute-force evaluator step by step.", "완전탐색 평가기를 단계별로 만들자."),
-      sections: getLogicalMoosSections(E),
-    },
+      narr: i === 0
+        ? t(E,
+            "Build evaluate(tokens) using the OR-of-(AND chains) idea, then per query try both replacement values.  Sections build it one piece at a time.",
+            "OR-of-(AND 체인) 으로 evaluate(tokens) 작성, 쿼리마다 두 교체값 시도. 아래 섹션이 한 단락씩 쌓아요.")
+        : "",
+      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+    })),
   ];
 }

@@ -29,7 +29,7 @@ function CirclePlates({ labels, size = 120, accent = "#2563eb" }) {
           <g key={i}>
             <circle cx={x} cy={y} r={14} fill={i === 0 ? accent : "#eff6ff"} stroke={i === 0 ? accent : "#93c5fd"} strokeWidth="2" />
             <text x={x} y={y + 1} textAnchor="middle" dominantBaseline="middle"
-              style={{ fontSize: 11, fontWeight: 900, fill: i === 0 ? "#fff" : accent, fontFamily: "'JetBrains Mono',monospace" }}>
+              style={{ fontSize: 11, fontWeight: 700, fill: i === 0 ? "#fff" : accent, fontFamily: "'JetBrains Mono',monospace" }}>
               {label}
             </text>
           </g>
@@ -52,8 +52,20 @@ export function makeMcc21GlassCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>🥛</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Round Glass</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Round Glass</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P4</div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of distinct circular arrangements of N glass plates.",
+                "N 개 유리판의 서로 다른 원형 배열 가짓수를 출력.")}
+            </div>
+          </div>
         </div>),
     },
 
@@ -67,26 +79,26 @@ export function makeMcc21GlassCh1(E) {
           <div style={{ display: "flex", justifyContent: "center", gap: 20, flexWrap: "wrap" }}>
             {/* Line */}
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#2563eb", marginBottom: 6 }}>{t(E, "Line: DIFFERENT", "직선: 다른 배열")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#2563eb", marginBottom: 6 }}>{t(E, "Line: DIFFERENT", "직선: 다른 배열")}</div>
               <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 4 }}>
                 {["A","B","C"].map(c => (
-                  <div key={c} style={{ width: 30, height: 30, borderRadius: 6, background: "#dbeafe", border: "2px solid #93c5fd",
-                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900, color: "#2563eb" }}>{c}</div>
+                  <div key={c} style={{ width: 30, height: 30, borderRadius: 6, background: "#dbeafe", border: "1px solid #93c5fd",
+                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#2563eb" }}>{c}</div>
                 ))}
               </div>
               <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
                 {["B","C","A"].map(c => (
-                  <div key={c} style={{ width: 30, height: 30, borderRadius: 6, background: "#dbeafe", border: "2px solid #93c5fd",
-                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900, color: "#2563eb" }}>{c}</div>
+                  <div key={c} style={{ width: 30, height: 30, borderRadius: 6, background: "#dbeafe", border: "1px solid #93c5fd",
+                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#2563eb" }}>{c}</div>
                 ))}
               </div>
             </div>
             {/* Circle */}
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#16a34a", marginBottom: 6 }}>{t(E, "Circle: SAME!", "원형: 같은 배열!")}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#16a34a", marginBottom: 6 }}>{t(E, "Circle: SAME!", "원형: 같은 배열!")}</div>
               <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
                 <CirclePlates labels={["A","B","C"]} size={70} />
-                <div style={{ alignSelf: "center", fontSize: 16, fontWeight: 900, color: "#16a34a" }}>=</div>
+                <div style={{ alignSelf: "center", fontSize: 16, fontWeight: 700, color: "#16a34a" }}>=</div>
                 <CirclePlates labels={["B","C","A"]} size={70} />
               </div>
             </div>
@@ -103,9 +115,9 @@ export function makeMcc21GlassCh1(E) {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ display: "flex", justifyContent: "center", gap: 6, alignItems: "center" }}>
             <CirclePlates labels={["A","B","C"]} size={70} />
-            <span style={{ fontSize: 14, fontWeight: 900, color: "#16a34a" }}>=</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "#16a34a" }}>=</span>
             <CirclePlates labels={["B","C","A"]} size={70} />
-            <span style={{ fontSize: 14, fontWeight: 900, color: "#16a34a" }}>=</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "#16a34a" }}>=</span>
             <CirclePlates labels={["C","A","B"]} size={70} />
           </div>
           <div style={{ marginTop: 8, fontSize: 12, fontWeight: 700, color: "#16a34a" }}>
@@ -146,12 +158,12 @@ export function makeMcc21GlassCh1(E) {
                 <span style={{ fontSize: 10, fontWeight: 700, color: C.dim, width: 16 }}>{i + 1}.</span>
                 {arr.map((c, j) => (
                   <div key={j} style={{ width: 26, height: 26, borderRadius: 5, background: "#dbeafe", border: "1.5px solid #93c5fd",
-                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: "#2563eb" }}>{c}</div>
+                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#2563eb" }}>{c}</div>
                 ))}
               </div>
             ))}
           </div>
-          <div style={{ textAlign: "center", marginTop: 8, fontSize: 13, fontWeight: 800, color: "#2563eb" }}>
+          <div style={{ textAlign: "center", marginTop: 8, fontSize: 13, fontWeight: 600, color: "#2563eb" }}>
             3! = 6 {t(E, "line arrangements", "직선 배열")}
           </div>
         </div>),
@@ -167,17 +179,17 @@ export function makeMcc21GlassCh1(E) {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
             <div style={{ background: "#dbeafe", borderRadius: 12, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#2563eb" }}>{t(E, "Line", "직선")}</div>
-              <div style={{ fontSize: 22, fontWeight: 900, color: "#2563eb" }}>N!</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: "#2563eb" }}>N!</div>
             </div>
-            <div style={{ fontSize: 22, fontWeight: 900, color: C.dim }}>÷</div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: C.dim }}>÷</div>
             <div style={{ background: "#fef2f2", borderRadius: 12, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#dc2626" }}>{t(E, "Rotations", "회전수")}</div>
-              <div style={{ fontSize: 22, fontWeight: 900, color: "#dc2626" }}>N</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: "#dc2626" }}>N</div>
             </div>
-            <div style={{ fontSize: 22, fontWeight: 900, color: C.dim }}>=</div>
-            <div style={{ background: "#f0fdf4", borderRadius: 12, padding: 10, border: "2px solid #86efac" }}>
+            <div style={{ fontSize: 22, fontWeight: 700, color: C.dim }}>=</div>
+            <div style={{ background: "#f0fdf4", borderRadius: 12, padding: 10, border: "1px solid #86efac" }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#16a34a" }}>{t(E, "Circle", "원형")}</div>
-              <div style={{ fontSize: 22, fontWeight: 900, color: "#16a34a" }}>(N-1)!</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: "#16a34a" }}>(N-1)!</div>
             </div>
           </div>
         </div>),
@@ -266,7 +278,7 @@ export function makeMcc21GlassCh2(E) {
                 display: "flex", alignItems: "center", gap: 8,
                 background: i % 2 === 0 ? "#eff6ff" : "#f8fafc", borderRadius: 6, padding: "5px 10px",
               }}>
-                <span style={{ fontSize: 12, fontWeight: 800, color: "#2563eb", width: 28 }}>{item.n}</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: "#2563eb", width: 28 }}>{item.n}</span>
                 <span style={{ fontSize: 13, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{item.v}</span>
               </div>
             ))}
@@ -298,16 +310,16 @@ export function makeMcc21GlassCh2(E) {
                 <div style={{
                   width: 40, height: 40, borderRadius: 10,
                   background: "#2563eb", display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 16, fontWeight: 900, color: "#fff",
+                  fontSize: 16, fontWeight: 700, color: "#fff",
                 }}>{n}</div>
-                {i < 3 && <span style={{ fontSize: 16, fontWeight: 900, color: C.dim }}>×</span>}
+                {i < 3 && <span style={{ fontSize: 16, fontWeight: 700, color: C.dim }}>×</span>}
               </div>
             ))}
-            <span style={{ fontSize: 16, fontWeight: 900, color: C.dim }}>=</span>
+            <span style={{ fontSize: 16, fontWeight: 700, color: C.dim }}>=</span>
             <div style={{
               width: 44, height: 44, borderRadius: 10,
               background: "#16a34a", display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 16, fontWeight: 900, color: "#fff",
+              fontSize: 16, fontWeight: 700, color: "#fff",
             }}>24</div>
           </div>
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim }}>
@@ -371,7 +383,7 @@ export function makeMcc21GlassCh2(E) {
                 display: "flex", alignItems: "center", gap: 8,
                 background: i % 2 === 0 ? "#eff6ff" : "#f8fafc", borderRadius: 6, padding: "5px 10px",
               }}>
-                <span style={{ fontSize: 12, fontWeight: 800, color: "#2563eb", width: 50 }}>({item.n}-1)!</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: "#2563eb", width: 50 }}>({item.n}-1)!</span>
                 <span style={{ fontSize: 12, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{item.v}</span>
               </div>
             ))}
@@ -482,11 +494,11 @@ export function makeMcc21GlassCh3(E, lang = "py") {
           <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
             <div style={{ background: "#dbeafe", borderRadius: 12, padding: 12 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#2563eb" }}>{t(E, "Time", "시간")}</div>
-              <div style={{ fontSize: 24, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
+              <div style={{ fontSize: 24, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N)</div>
             </div>
             <div style={{ background: "#dcfce7", borderRadius: 12, padding: 12 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "#16a34a" }}>{t(E, "Space", "공간")}</div>
-              <div style={{ fontSize: 24, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#16a34a" }}>O(1)</div>
+              <div style={{ fontSize: 24, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#16a34a" }}>O(1)</div>
             </div>
           </div>
         </div>),

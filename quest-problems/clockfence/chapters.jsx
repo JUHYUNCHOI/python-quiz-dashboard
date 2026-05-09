@@ -45,17 +45,29 @@ export function makeClockCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd04"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Clockwise Fence</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>Clockwise Fence</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2021 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output 'CW' if the fence is traced clockwise, else 'CCW'.",
+                "울타리가 시계 방향이면 'CW', 아니면 'CCW' 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A fence is given as a ", "울타리가 ")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "string of unit-step directions", "단위 길이 방향 문자열")}</b>
@@ -65,7 +77,7 @@ export function makeClockCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Following the directions ", "방향을 따라가면 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "returns to the start", "시작점으로 돌아와요")}</b>
@@ -74,7 +86,7 @@ export function makeClockCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "CW if the fence is traced clockwise, else CCW", "시계 방향이면 CW, 아니면 CCW")}</b>
@@ -111,8 +123,8 @@ export function makeClockCh1(E) {
         "'NESW': right turns - left turns = ?",
         "'NESW': 오른쪽 회전 - 왼쪽 회전 = ?"),
       hint: t(E,
-        "All 4 turns are right turns, 0 left turns. 4 - 0 = 4.",
-        "4번 모두 오른쪽 회전, 왼쪽 회전 0번. 4 - 0 = 4."),
+        "Trace each consecutive direction pair and count right turns.",
+        "연속한 방향 쌍을 따라가면서 오른쪽 회전 수를 세어 봐."),
       answer: 4,
     },
   ];
@@ -124,48 +136,12 @@ export function makeClockCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeClockCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Map N=0, E=1, S=2, W=3. For each consecutive direction pair (d_i, d_{i+1}), the difference (d_{i+1} − d_i) mod 4 is 1 for a right turn and 3 for a left turn. CW iff right turns > left turns.",
-        "N=0, E=1, S=2, W=3 매핑. 연속 방향 쌍 (d_i, d_{i+1}) 의 차이 (d_{i+1} − d_i) mod 4 가 1 이면 오른쪽 회전, 3 이면 왼쪽 회전. 오른쪽 > 왼쪽 이면 CW."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Map directions to 0..3", "방향을 0..3 으로 매핑"), code: "d = [{'N':0,'E':1,'S':2,'W':3}[c] for c in path]", color: "#8b5cf6" },
-              { n: 2, label: t(E, "Iterate consecutive pairs", "연속 쌍 순회"), code: "for i in range(N): turn = (d[(i+1) % N] - d[i]) % 4", color: "#7c3aed" },
-              { n: 3, label: t(E, "Count right (1) vs left (3) turns", "오른쪽 (1) vs 왼쪽 (3) 회전 세기"), code: "if turn == 1: right += 1  elif turn == 3: left += 1", color: "#0891b2" },
-              { n: 4, label: t(E, "CW if right > left", "오른쪽이 더 많으면 CW"), code: "print('CW' if right > left else 'CCW')", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass over direction string", "방향 문자열 한 번 순회")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Map N=0, E=1, S=2, W=3. For each consecutive pair, (next − cur) mod 4 = 1 → right turn, = 3 → left turn. CW iff right > left. Sections build it one piece at a time.",
+        "N=0, E=1, S=2, W=3 매핑. 연속 쌍의 (다음 − 현재) mod 4 가 1 이면 오른쪽, 3 이면 왼쪽. 오른쪽 > 왼쪽 이면 CW. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getClockFenceSections(E),
     },
   ];

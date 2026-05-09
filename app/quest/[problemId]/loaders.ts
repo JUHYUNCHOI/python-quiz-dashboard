@@ -38,6 +38,11 @@ export const PROBLEM_LOADERS: Record<string, AppLoader> = {
   'cowntact': () => import('@/quest-problems/cowntact/CowntactApp'),
   'cowntrace': () => import('@/quest-problems/cowntrace/CowntraceApp'),
   'cowphotos': () => import('@/quest-problems/cowphotos/CowPhotosApp'),
+  'reflection': () => import('@/quest-problems/reflection/ReflectionApp'),
+  'mexes': () => import('@/quest-problems/mexes/MexesApp'),
+  'printseq': () => import('@/quest-problems/printseq/PrintseqApp'),
+  'astral': () => import('@/quest-problems/astral/AstralApp'),
+  'mooin2': () => import('@/quest-problems/mooin2/Mooin2App'),
   'cowsignal': () => import('@/quest-problems/cowsignal/CowSignalApp'),
   'cowtipping': () => import('@/quest-problems/cowtipping/CowTipApp'),
   'crossroad1': () => import('@/quest-problems/crossroad1/CrossRoad1App'),
@@ -166,5 +171,17 @@ export const PROBLEM_LOADERS: Record<string, AppLoader> = {
   'wordproc': () => import('@/quest-problems/wordproc/WordProcApp'),
   'xorstring': () => import('@/quest-problems/xorstring/XorStringApp'),
   'yearcow': () => import('@/quest-problems/yearcow/YearCowApp'),
+  // USACO 2026 First Contest, Bronze
+  'chipxchg': () => import('@/quest-problems/chipxchg/ChipXchgApp'),
+  'cowsplits': () => import('@/quest-problems/cowsplits/CowSplitsApp'),
+  'photoshoot25': () => import('@/quest-problems/photoshoot25/Photoshoot25App'),
+  // USACO 2026 Second Contest, Bronze
+  'mooin4': () => import('@/quest-problems/mooin4/Mooin4App'),
+  'moohunt': () => import('@/quest-problems/moohunt/MooHuntApp'),
+  'buymilk': () => import('@/quest-problems/buymilk/BuyMilkApp'),
+  // USACO 2026 Third Contest, Bronze
+  'makedistinct': () => import('@/quest-problems/makedistinct/MakeDistinctApp'),
+  'strangefn': () => import('@/quest-problems/strangefn/StrangeFnApp'),
+  'swaptowin': () => import('@/quest-problems/swaptowin/SwapToWinApp'),
 }
 

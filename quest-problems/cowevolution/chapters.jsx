@@ -58,17 +58,29 @@ export function makeEvolutionCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\uddec"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Cow Evolution</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Cow Evolution</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2019 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output 'yes' if a valid evolutionary tree could have produced these populations, else 'no'.",
+                "\uc8fc\uc5b4\uc9c4 \uc9d1\ub2e8\ub4e4\uc744 \ub9cc\ub4e4 \uc218 \uc788\ub294 \uc720\ud6a8\ud55c \uc9c4\ud654 \ud2b8\ub9ac\uac00 \uc874\uc7ac\ud558\uba74 'yes', \uc544\ub2c8\uba74 'no' \ucd9c\ub825.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#059669" }}>{t(E, "N sub-populations of cows", "N개의 소 하위 집단")}</b>
@@ -78,7 +90,7 @@ export function makeEvolutionCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "An ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "evolutionary tree", "진화 트리")}</b>
@@ -87,7 +99,7 @@ export function makeEvolutionCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "'yes' if a valid tree exists, else 'no'", "유효한 트리가 가능하면 'yes', 아니면 'no'")}</b>
@@ -119,13 +131,14 @@ export function makeEvolutionCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "For 2 populations with no crossing characteristics, the answer is 'yes'.\nEncode: yes=1, no=0.\nWhat is the answer?", "교차 특성이 없는 2개 집단의 답은 'yes'야. yes=1, no=0으로 인코딩. 답은?"),
+        "Same {fly} and {swim} populations — your answer (1=yes, 0=no).",
+        "같은 {fly} 와 {swim} 집단 — 답 (1=yes, 0=no)."),
       question: t(E,
         "Populations {fly}, {swim}. Valid tree? (1=yes, 0=no)",
         "집단 {fly}, {swim}. 유효한 트리? (1=yes, 0=no)"),
       hint: t(E,
-        "No crossing pair exists, so the answer is yes = 1.",
-        "교차하는 쌍이 없으니 답은 yes = 1."),
+        "Do these two populations share any characteristics?",
+        "두 집단이 공유하는 특성이 있어?"),
       answer: 1,
     },
   ];
@@ -137,48 +150,12 @@ export function makeEvolutionCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeEvolutionCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Two characteristics A, B 'cross' (preventing a valid tree) if some population has just {A}, another has just {B}, and another has both {A, B}. Brute-force check every pair of characteristics.",
-        "두 특성 A, B 가 '교차' 하면 (유효한 트리 불가) — 어떤 집단은 {A 만}, 어떤 집단은 {B 만}, 어떤 집단은 {A, B} 둘 다. 모든 특성 쌍을 완전 탐색."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Build set of populations", "집단 집합 구축"), code: "pops = [set(traits) for each population]", color: "#059669" },
-              { n: 2, label: t(E, "For every pair (A, B)", "모든 쌍 (A, B)"), code: "for A, B in combinations(all_traits, 2):", color: "#0891b2" },
-              { n: 3, label: t(E, "Check the three witness sets", "세 가지 증인 집단 확인"), code: "has_A_only, has_B_only, has_both = ...", color: "#7c3aed" },
-              { n: 4, label: t(E, "Print no if all three exist", "셋 다 있으면 no 출력"), code: "if all three: print('no'); break  else: print('yes')", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(C² · N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "C² trait pairs × N populations", "C² 특성 쌍 × N 집단")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code — straight in.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Two characteristics A, B 'cross' (no valid tree) if some pop has just {A}, another has just {B}, another has both {A, B}.  Check every pair.  Sections build it one piece at a time.",
+        "두 특성 A, B 가 '교차' (유효한 트리 X) — 어떤 집단은 {A 만}, 어떤 집단은 {B 만}, 어떤 집단은 {A, B} 둘 다. 모든 특성 쌍 확인. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCowEvolutionSections(E),
     },
   ];

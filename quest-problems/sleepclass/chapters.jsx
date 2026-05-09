@@ -52,17 +52,29 @@ export function makeSleepCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"😴"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Sleeping in Class</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Sleeping in Class</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "For each test case, output the minimum number of adjacent merges to make all periods equal length.",
+                "각 테스트 케이스마다 모든 시간을 같은 길이로 만드는 최소 합치기 횟수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Bessie has ", "Bessie가 ")}
                   <b style={{ color: "#059669" }}>{t(E, "N class periods of lengths a[1..N]", "길이 a[1..N] 의 N 개 수업")}</b>
@@ -70,7 +82,7 @@ export function makeSleepCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "One operation: ", "한 번의 연산: ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "merge two ADJACENT periods", "인접한 두 시간을 합치기")}</b>
@@ -79,7 +91,7 @@ export function makeSleepCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Goal: ", "목표: ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "every remaining period has the SAME length", "모든 남은 시간이 같은 길이가 되도록")}</b>
@@ -87,7 +99,7 @@ export function makeSleepCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of merges", "필요한 최소 합치기 횟수")}</b>
@@ -125,8 +137,8 @@ export function makeSleepCh1(E) {
         "[2,2,3] total=7. Min merges?",
         "[2,2,3] 총합=7. 최소 합치기?"),
       hint: t(E,
-        "7 is prime. Only target is 7 (one big period). 3 periods -> 1 = 2 merges.",
-        "7은 소수. 목표는 7만 가능 (하나로 합침). 3개 -> 1개 = 2번 합치기."),
+        "Which target lengths divide the total sum cleanly?",
+        "총합을 깔끔하게 나누는 목표 길이는 어떤 게 있을까?"),
       answer: 2,
     },
   ];
@@ -138,48 +150,12 @@ export function makeSleepCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeSleepCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "The final equal value MUST divide the total sum S. For each divisor d of S, greedily walk the array accumulating; whenever running sum == d, start a new segment. The smallest 'merges = N − segments' wins.",
-        "최종 동일 값은 총합 S 의 약수여야 함. S 의 각 약수 d 에 대해, 배열을 누적하며 그리디 — 누적 == d 가 되면 새 구간 시작. 가장 작은 '합치기 = N − 구간 수' 가 답."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Compute total S", "총합 S 계산"), code: "S = sum(a)", color: "#059669" },
-              { n: 2, label: t(E, "For each divisor d of S", "S 의 각 약수 d"), code: "for d in divisors(S):", color: "#7c3aed" },
-              { n: 3, label: t(E, "Greedy partition", "그리디 분할"), code: "cur = 0; segs = 0;  for x in a: cur += x; if cur == d: segs += 1; cur = 0; elif cur > d: invalid", color: "#0891b2" },
-              { n: 4, label: t(E, "Min merges = N − max segments", "최소 합치기 = N − 최대 구간"), code: "print(N - best_segs)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N · d(S))</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "scan for each divisor of total", "총합 약수마다 스캔")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Final equal value must divide total sum S. For each divisor d of S, greedily walk the array accumulating — start a new segment when running sum == d. Smallest 'N − segments' wins. Sections build it one piece at a time.",
+        "최종 동일 값은 총합 S 의 약수여야 함. S 의 각 약수 d 에 대해 누적이 d 가 될 때마다 새 구간 — 가장 작은 'N − 구간 수' 가 답. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getSleepClassSections(E),
     },
   ];

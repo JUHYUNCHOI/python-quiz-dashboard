@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
+import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
 import { HpsProgressiveCode, downloadHpsPDF, getHpsSections, HpsSim } from "./components";
 import { makeHpsCh1, makeHpsCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
@@ -103,180 +104,78 @@ export default function HpsApp(props = {}) {
     return null;
   };
 
+  // Hover preview body — passed to QuestProgressBar.  Each quest
+  // knows its own Sim / ProgressiveCode component, so the renderer
+  // is local but the surrounding card UI is shared.
+  const renderPreviewBody = (s) => {
+    if (s.type === "quiz") return <Quiz {...s} onAnswer={() => {}} />;
+    if (s.type === "input") return (
+      <NumInput question={s.question} hint={s.hint} answer={s.answer} E={E} onSolve={() => {}} />
+    );
+    if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
+    if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
+    if (s.type === "progressive") return <HpsProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "sim") return <HpsSim E={E} />;
+    return null;
+  };
+
+  // Code-tab-only controls slot (lang select + PDF button).
+  const codeControlsSlot = showCodeControls ? (
+    <div style={{ display: "flex", gap: 0, alignItems: "stretch" }}>
+      <select value={codeLang} onChange={e => setCodeLang(e.target.value)} title={t(E, "Code language", "코드 언어")} style={{
+        background: "#fff", color: A, border: `1.5px solid ${A}`,
+        borderRadius: "8px 0 0 8px", borderRight: "none",
+        padding: "4px 6px", fontSize: 12, fontWeight: 800, cursor: "pointer",
+      }}>
+        <option value="py">🐍 Py</option>
+        <option value="cpp">💻 C++</option>
+      </select>
+      <button onClick={() => downloadHpsPDF(E, getHpsSections(E), codeLang)} style={{
+        background: A, color: "#fff", border: `1.5px solid ${A}`,
+        borderRadius: "0 8px 8px 0",
+        padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800,
+      }}>📄 PDF</button>
+    </div>
+  ) : null;
+
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
-        <div style={{ height: 3, background: "#e5e7eb", borderRadius: 2, marginTop: 8, marginBottom: 10, overflow: "hidden" }}>
-          <div style={{ height: "100%", background: A, borderRadius: 2, width: `${((cur + 1) / steps.length) * 100}%`, transition: "width .3s" }} />
-        </div>
-
-        <div style={{ display: "flex", gap: 8, marginBottom: 12, alignItems: "center" }}>
-          <div style={{ display: "flex", gap: 3, overflowX: "auto", paddingBottom: 4, flex: 1 }}>
-            {TABS.map((label, i) => {
-              const isCurrent = i === tab;
-              const isVisited = visitedTabs.has(i) && !isCurrent;
-              return (
-                <button key={i} onClick={() => changeTab(i)} style={{
-                  flex: "0 0 auto", borderRadius: 8, padding: "6px 10px", cursor: "pointer",
-                  fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
-                  background: isCurrent ? A : (isVisited ? "#d1fae5" : "transparent"),
-                  border: `1.5px solid ${isCurrent ? A : (isVisited ? "#6ee7b7" : C.border)}`,
-                  color: isCurrent ? "#fff" : (isVisited ? "#065f46" : C.dim),
-                  display: "flex", alignItems: "center", gap: 4,
-                }}>
-                  {isVisited && <span style={{ fontSize: 10 }}>✓</span>}
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-          {showCodeControls && (
-            <div style={{ display: "flex", gap: 0, alignItems: "stretch", flexShrink: 0 }}>
-              <select value={codeLang} onChange={e => setCodeLang(e.target.value)} title={t(E, "Code language", "코드 언어")} style={{
-                background: "#fff", color: A, border: `1.5px solid ${A}`,
-                borderRadius: "8px 0 0 8px", borderRight: "none",
-                padding: "4px 6px", fontSize: 12, fontWeight: 800, cursor: "pointer",
-              }}>
-                <option value="py">🐍 Py</option>
-                <option value="cpp">💻 C++</option>
-              </select>
-              <button onClick={() => downloadHpsPDF(E, getHpsSections(E), codeLang)} style={{
-                background: A, color: "#fff", border: `1.5px solid ${A}`,
-                borderRadius: "0 8px 8px 0",
-                padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800,
-              }}>📄 PDF</button>
-            </div>
-          )}
-        </div>
+        <QuestProgressBar
+          tabs={TABS}
+          states={states}
+          tab={tab}
+          cur={cur}
+          setTab={setTab}
+          setSi={setSi}
+          setVisitedTabs={setVisitedTabs}
+          accent={A}
+          E={E}
+          renderPreviewBody={renderPreviewBody}
+          codeControlsSlot={codeControlsSlot}
+        />
 
         {step.narr && <Narration key={`hps-${tab}-${cur}-${lang}`} text={step.narr} />}
 
         <div style={{
           background: C.card, borderRadius: 14, border: `2px solid ${C.border}`,
           marginBottom: 10, boxShadow: "0 2px 10px rgba(0,0,0,.04)", overflow: "hidden",
+          minHeight: 460,
         }}>
           {renderContent()}
         </div>
         <div style={{ height: 110 }} />
       </div>
 
-      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "8px 16px calc(14px + env(safe-area-inset-bottom))", zIndex: 100, borderTop: `1px solid ${C.border}`, boxShadow: "0 -4px 12px rgba(0,0,0,.06)" }}>
-        <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
-          {showAnswerHint && (
-            <div style={{ textAlign: "center", fontSize: 11, color: C.dim, fontWeight: 600, marginBottom: 4 }}>
-              {t(E, "💡 Tip: try answering above. (You can skip too — →)", "💡 팁: 위에서 답해보면 좋아요. (그냥 넘어가도 OK — →)")}
-            </div>
-          )}
-          <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center" }}>
-            <button onClick={prev} disabled={cur === 0} style={{
-              background: cur === 0 ? "#e5e7eb" : C.card, border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
-              borderRadius: 9, padding: "10px 22px", fontSize: 14, fontWeight: 800,
-              cursor: cur === 0 ? "default" : "pointer", color: cur === 0 ? "#b0b5c3" : A,
-            }}>←</button>
-            <div style={{ position: "relative" }}>
-              <button
-                onClick={() => setStepListOpen(o => !o)}
-                style={{
-                  fontSize: 12, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-                  minWidth: 70, padding: "6px 10px", borderRadius: 6,
-                  background: stepListOpen ? "#f1f5f9" : "transparent",
-                  border: `1px solid ${stepListOpen ? "#cbd5e1" : "transparent"}`,
-                  cursor: "pointer", textAlign: "center",
-                }}
-                title={t(E, "Jump to step", "단계로 점프")}
-              >
-                {cur + 1}/{steps.length} ▾
-              </button>
-              {stepListOpen && (
-                <>
-                  {/* Click-outside backdrop */}
-                  <div
-                    onClick={() => setStepListOpen(false)}
-                    style={{ position: "fixed", inset: 0, zIndex: 200 }}
-                  />
-                  {/* Drop-up panel */}
-                  <div style={{
-                    position: "absolute",
-                    bottom: "calc(100% + 8px)",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    zIndex: 201,
-                    background: "#fff",
-                    border: `1.5px solid ${C.border}`,
-                    borderRadius: 10,
-                    boxShadow: "0 6px 24px rgba(0,0,0,0.15)",
-                    minWidth: 240,
-                    maxHeight: 360,
-                    overflowY: "auto",
-                    padding: 6,
-                  }}>
-                    <div style={{ fontSize: 10, color: C.dim, fontWeight: 800, padding: "4px 8px 6px", letterSpacing: 0.5 }}>
-                      {t(E, "JUMP TO STEP", "단계로 점프")}
-                    </div>
-                    {steps.map((s, i) => {
-                      // Pull a short label from the step's narr if available
-                      const narrText = typeof s.narr === "string" ? s.narr : "";
-                      const label = narrText
-                        ? narrText.split(/[.\n]/)[0].slice(0, 40)
-                        : (s.type === "quiz" ? t(E, "Quiz", "퀴즈")
-                          : s.type === "input" ? t(E, "Input", "입력 문제")
-                          : s.type === "progressive" ? t(E, "Code", "코드")
-                          : t(E, `Step ${i + 1}`, `${i + 1} 단계`));
-                      const isCurrent = i === cur;
-                      return (
-                        <button
-                          key={i}
-                          onClick={() => { setSi(i); setStepListOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                          style={{
-                            display: "flex", alignItems: "center", gap: 8,
-                            width: "100%", textAlign: "left",
-                            padding: "6px 10px", borderRadius: 6,
-                            background: isCurrent ? `${A}15` : "transparent",
-                            border: `1px solid ${isCurrent ? A : "transparent"}`,
-                            color: isCurrent ? A : C.text,
-                            fontSize: 12, fontWeight: isCurrent ? 800 : 600,
-                            cursor: "pointer",
-                            marginBottom: 2,
-                          }}
-                          onMouseEnter={(e) => { if (!isCurrent) e.currentTarget.style.background = "#f8fafc"; }}
-                          onMouseLeave={(e) => { if (!isCurrent) e.currentTarget.style.background = "transparent"; }}
-                        >
-                          <span style={{
-                            fontFamily: "'JetBrains Mono',monospace",
-                            fontWeight: 800,
-                            color: isCurrent ? A : C.dim,
-                            minWidth: 22, textAlign: "right", fontSize: 11,
-                          }}>{i + 1}.</span>
-                          <span style={{ flex: 1, lineHeight: 1.4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                            {label || t(E, `Step ${i + 1}`, `${i + 1} 단계`)}
-                          </span>
-                          {s.solved && <span style={{ color: "#16a34a", fontSize: 11 }}>✓</span>}
-                        </button>
-                      );
-                    })}
-                    <button
-                      onClick={() => { setSi(0); setStepListOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                      style={{
-                        width: "100%", padding: "6px 10px", marginTop: 4,
-                        borderRadius: 6, border: `1.5px dashed ${C.border}`,
-                        background: "transparent", color: C.dim,
-                        fontSize: 11, fontWeight: 700, cursor: "pointer",
-                      }}
-                    >
-                      ⏮ {t(E, "Restart from step 1", "처음부터 다시")}
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-            <button onClick={next} disabled={!canNext} style={{
-              background: !canNext ? "#e5e7eb" : A, border: `2px solid ${!canNext ? "#e5e7eb" : A}`,
-              borderRadius: 9, padding: "10px 22px", fontSize: 14, fontWeight: 800,
-              cursor: !canNext ? "default" : "pointer", color: !canNext ? "#b0b5c3" : "#fff",
-            }}>→</button>
-          </div>
-        </div>
-      </div>
+      <QuestBottomNav
+        cur={cur}
+        canNext={canNext}
+        accent={A}
+        E={E}
+        onPrev={prev}
+        onNext={next}
+        showAnswerHint={showAnswerHint}
+      />
     </div>
   );
 }

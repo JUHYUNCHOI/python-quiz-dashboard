@@ -52,17 +52,29 @@ export function makeNonTransCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udfb2"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Non-Transitive Dice</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Non-Transitive Dice</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Print the four faces of die C that beats A while losing to B, or 'no' if no such C exists.",
+                "B 에게 지면서 A 를 이기는 주사위 C 의 네 면을 출력해요. 그런 C 가 없으면 'no'.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're given ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "two 4-sided dice A and B", "두 개의 4면 주사위 A 와 B")}</b>
@@ -71,7 +83,7 @@ export function makeNonTransCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#7c3aed" }}>{t(E, "Die X beats die Y", "주사위 X 가 Y 를 이긴다")}</b>
                   {t(E, " if among the 16 (x, y) outcomes, more have x > y than y > x.",
@@ -79,7 +91,7 @@ export function makeNonTransCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're told ", "조건: ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "A beats B", "A 가 B 를 이김")}</b>
@@ -89,7 +101,7 @@ export function makeNonTransCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the four faces of C, or ", "C 의 네 면을 출력해요. 그런 C 가 존재하지 않으면 ")}
                   <b style={{ color: "#15803d" }}>'no'</b>
@@ -127,8 +139,8 @@ export function makeNonTransCh1(E) {
         "A=[1,2,3,4], B=[1,2,3,4]. Does A beat B? (1=yes, 0=no)",
         "A=[1,2,3,4], B=[1,2,3,4]. A가 B를 이겨? (1=예, 0=아니오)"),
       hint: t(E,
-        "Equal dice have equal win/loss counts. Neither beats the other.",
-        "같은 주사위는 승/패 수가 같아요. 누구도 이기지 못해요."),
+        "Compare a > b vs a < b counts across all 16 pairs. Is one strictly greater?",
+        "16 쌍에서 a > b 와 a < b 개수를 비교해봐요. 한쪽이 더 많아?"),
       answer: 0,
     },
   ];
@@ -140,48 +152,12 @@ export function makeNonTransCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeNonTransCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Each die face is in 1..10, so we can brute-force C: 4 sorted faces give only C(10+3, 4) = 715 unique dice. For each candidate, count win pairs B vs C and C vs A — keep one where both directions exceed half.",
-        "각 면이 1..10 이므로 C 를 완전탐색: 정렬된 4 면은 C(10+3, 4) = 715 가지. 각 후보마다 B vs C, C vs A 의 승 쌍을 세고, 양방향 모두 절반을 넘는 C 를 채택."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Enumerate all 4-side combinations", "가능한 4 면 조합 모두 열거"), code: "for c in combinations_with_replacement(range(1,11), 4):", color: "#dc2626" },
-              { n: 2, label: t(E, "Compare B vs C", "B vs C 비교"), code: "b_wins = sum(1 for x in B for y in c if x > y)", color: "#7c3aed" },
-              { n: 3, label: t(E, "Compare C vs A", "C vs A 비교"), code: "c_wins = sum(1 for x in c for y in A if x > y)", color: "#0891b2" },
-              { n: 4, label: t(E, "Both must beat 8 (>half of 16)", "둘 다 8 (16 의 절반) 초과 필요"), code: "if b_wins > 8 and c_wins > 8: print(c); break", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(715 · 16)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "715 dice candidates × 16 outcome comparisons", "715 가지 주사위 × 16 결과 비교")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Each die face is in 1..10, so we can brute-force C: 4 sorted faces give only C(10+3, 4) = 715 unique dice. For each candidate, count win pairs B vs C and C vs A — keep one where both directions exceed half. Sections build it one piece at a time.",
+        "각 면이 1..10 이므로 C 를 완전탐색: 정렬된 4 면은 C(10+3, 4) = 715 가지. 각 후보마다 B vs C, C vs A 의 승 쌍을 세고, 양방향 모두 절반을 넘는 C 를 채택. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getNonTransSections(E),
     },
   ];

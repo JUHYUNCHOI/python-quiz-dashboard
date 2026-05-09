@@ -71,17 +71,29 @@ export function makeModernArtCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udfa8"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Modern Art</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #3</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Modern Art</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2017 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the count of colors that could have been painted first.",
+                "가장 먼저 칠해졌을 수 있는 색의 수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "An ", "")}
                   <b style={{ color: "#059669" }}>{t(E, "N × N canvas", "N × N 캔버스")}</b>
@@ -92,7 +104,7 @@ export function makeModernArtCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're given the ", "")}
                   <b style={{ color: "#0891b2" }}>{t(E, "final canvas after all 9 paintings", "9번의 페인트가 끝난 최종 캔버스")}</b>
@@ -100,7 +112,7 @@ export function makeModernArtCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print every color that ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "could possibly have been the FIRST painted", "가장 먼저 칠해졌을 수 있는 모든 색")}</b>
@@ -137,8 +149,8 @@ export function makeModernArtCh1(E) {
         "Can 1 visible color be first? (1=yes, 0=no)",
         "보이는 색 1개가 처음일 수 있어요? (1=예, 0=아니오)"),
       hint: t(E,
-        "Yes! With only 1 visible color, no other color's box contains it. Answer: 1.",
-        "맞아! 보이는 색이 1개뿐이면 다른 색의 박스에 포함되지 않아. 답: 1."),
+        "If nothing else is visible, what could be on top of it?",
+        "다른 색이 안 보이면 그 위에 뭐가 있을 수 있을까?"),
       answer: 1,
     },
   ];
@@ -150,48 +162,12 @@ export function makeModernArtCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeModernArtCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "For each color, find its bounding box. A color CANNOT be first if any other color's bounding box contains a cell that's currently this color (it must have been painted on top). Visible-only colors with no such contradiction can be first.",
-        "각 색의 바운딩 박스 찾기. 색이 첫 번째일 수 없는 경우: 다른 색의 바운딩 박스가 이 색의 칸을 포함 (위에 칠해진 거여야 함). 그런 모순이 없는 보이는 색만 첫 번째 가능."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Find bounding box per color", "색별 바운딩 박스"), code: "for each color present: bbox[c] = (min_r, min_c, max_r, max_c)", color: "#059669" },
-              { n: 2, label: t(E, "For each color c1", "각 색 c1"), code: "for c1 in present_colors:", color: "#7c3aed" },
-              { n: 3, label: t(E, "Check if any c2 hides cells of c1", "c1 칸이 c2 박스 안에 있나"), code: "for c2 != c1: if c1 cells inside bbox[c2]: c1 cannot be first", color: "#0891b2" },
-              { n: 4, label: t(E, "Add non-visible + valid visible", "안 보이는 + 유효한 보이는 색 추가"), code: "print non-visible count + valid visible count", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "scan canvas + check 9² color pairs", "캔버스 스캔 + 9² 색 쌍 검사")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "For each color, find its bounding box. A color cannot be first if its bounding box sits entirely inside another color's bounding box (it must have been painted on top). Otherwise it can be first. Sections build it one piece at a time.",
+        "각 색의 바운딩 박스 찾기. 어떤 색의 박스가 다른 색의 박스 안에 완전히 들어가면 첫 번째 불가 (그 위에 칠해진 거). 아니면 첫 번째 가능. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getModernArtSections(E),
     },
   ];

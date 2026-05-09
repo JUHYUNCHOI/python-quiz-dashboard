@@ -75,17 +75,29 @@ export function makeRevEngCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd27"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Reverse Engineering</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>Reverse Engineering</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output OK if a single-position if/else program could produce all the test outputs, else LIE.",
+                "한 위치 if/else 프로그램이 모든 출력을 만들 수 있으면 OK, 아니면 LIE 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#8b5cf6" }}>{t(E, "M test cases", "M 개의 테스트 케이스")}</b>
                   {t(E, "; each has a binary input array of length N and an expected boolean output.",
@@ -93,7 +105,7 @@ export function makeRevEngCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Could a ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "simple if/else program on a SINGLE input position", "한 개의 입력 위치만 사용하는 단순 if/else 프로그램")}</b>
@@ -102,7 +114,7 @@ export function makeRevEngCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "OK if such a program exists, else LIE", "그런 프로그램이 존재하면 OK, 아니면 LIE")}</b>
@@ -139,8 +151,8 @@ export function makeRevEngCh1(E) {
         "[0]->1, [1]->0. Is it OK? (1=OK, 0=LIE)",
         "[0]->1, [1]->0. OK일까요? (1=OK, 0=LIE)"),
       hint: t(E,
-        "if arr[0]==0 return 1, else return 0. This matches both test cases. Answer: 1 (OK).",
-        "if arr[0]==0 return 1, else return 0. 두 테스트 케이스 모두 일치. 답: 1 (OK)."),
+        "Try a tiny if/else on arr[0] and see if it matches both cases.",
+        "arr[0] 에 대한 작은 if/else 를 시도해 두 케이스 모두 맞는지 봐."),
       answer: 1,
     },
   ];
@@ -152,48 +164,12 @@ export function makeRevEngCh1(E) {
    =============================================================== */
 export function makeRevEngCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "First, if two identical inputs have DIFFERENT outputs → LIE. Otherwise try every (position, A, B) triple — does 'if arr[pos]==0 return A else B' produce every test's output? Print OK if any works.",
-        "먼저, 동일한 입력에 다른 출력 있으면 → LIE. 그렇지 않으면 모든 (위치, A, B) 삼중조합 시도 — 'if arr[pos]==0 return A else B' 가 모든 테스트의 출력을 만드는지? 하나라도 되면 OK."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Group by input array → output set", "입력 배열별 출력 집합"), code: "by_input = {tuple(arr): {outputs}}", color: "#8b5cf6" },
-              { n: 2, label: t(E, "If any group has 2 outputs → LIE", "한 그룹에 출력 2 개 → LIE"), code: "if any(len(s) > 1): print('LIE'); break", color: "#7c3aed" },
-              { n: 3, label: t(E, "Try every (pos, A, B) program", "(pos, A, B) 모두 시도"), code: "for pos, A, B in product(range(N), [0,1], [0,1]):", color: "#0891b2" },
-              { n: 4, label: t(E, "Print OK if any program works", "하나라도 작동 → OK"), code: "if all tests pass: print('OK'); else 'LIE'", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N · M)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "M tests × N positions × 4 polarities", "M 테스트 × N 위치 × 4 극성")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Identical inputs with different outputs → LIE. Otherwise try every (pos, A, B) — 'if arr[pos]==0 return A else B' must match every test. OK if any works. Sections build it one piece at a time.",
+        "동일 입력 다른 출력 → LIE. 아니면 모든 (위치, A, B) 시도 — 모든 테스트와 일치하면 OK. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getRevEngSections(E),
     },
   ];

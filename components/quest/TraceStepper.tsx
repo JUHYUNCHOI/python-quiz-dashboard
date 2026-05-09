@@ -20,7 +20,7 @@
  * configurable so each quest can keep its visual identity.
  */
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { t } from "./theme";
 
 const DEFAULT_ACCENT = "#059669";
@@ -145,6 +145,25 @@ export interface NarrativePanelProps {
   marginBottom?: number;
   /** Line-height. Defaults to 1.7. */
   lineHeight?: number;
+  /**
+   * Optional cap on rendered height in px. When provided AND the
+   * step content exceeds it, the panel becomes internally scrollable
+   * so the SimNav button below stays in view. Defaults to no cap
+   * (legacy behaviour).
+   */
+  maxHeight?: number;
+  /**
+   * Pass the current step index/key. When this changes:
+   *   1) the panel resets its own scrollTop to 0 (so the new
+   *      step is read from the top, not wherever the previous
+   *      one was scrolled to);
+   *   2) it scrolls itself into view (top-of-panel near top of
+   *      viewport) so a "Next" press never hides the panel
+   *      under the chapter header or pushes the SimNav button
+   *      off-screen.
+   * Omit it and the panel behaves like before (no auto-scroll).
+   */
+  stepKey?: number | string;
 }
 
 /**
@@ -158,9 +177,35 @@ export function NarrativePanel({
   padding = "12px 14px",
   marginBottom = 12,
   lineHeight = 1.7,
+  maxHeight,
+  stepKey,
 }: NarrativePanelProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  // Track whether this is the very first render — we shouldn't scroll
+  // the page on initial mount (jarring), only on subsequent step changes.
+  const firstMount = useRef(true);
+  useEffect(() => {
+    if (stepKey === undefined) return;
+    if (firstMount.current) {
+      firstMount.current = false;
+      return;
+    }
+    const node = ref.current;
+    if (!node) return;
+    // Reset internal scroll (in case maxHeight was triggered last step).
+    node.scrollTop = 0;
+    // Bring panel top into view, but only if it's currently off-screen
+    // ABOVE the viewport — we don't want to yank a comfortably-placed
+    // panel just because something below changed.
+    const rect = node.getBoundingClientRect();
+    const headerOffset = 80; // approximate top tab/nav height
+    if (rect.top < headerOffset || rect.top > window.innerHeight - 120) {
+      node.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [stepKey]);
   return (
     <div
+      ref={ref}
       style={{
         background: "#faf5ff",
         border: "2px solid #c4b5fd",
@@ -168,9 +213,14 @@ export function NarrativePanel({
         padding,
         marginBottom,
         minHeight,
+        ...(maxHeight ? { maxHeight, overflowY: "auto" as const } : {}),
         fontSize: 13,
         color: "#1f2937",
         lineHeight,
+        // Smooth height changes — avoids the abrupt "everything below
+        // jumps" effect when a tall step replaces a short one.
+        transition: "max-height 220ms ease",
+        scrollMarginTop: 80, // for scrollIntoView so it doesn't tuck under fixed nav
       }}
     >
       {children}
@@ -207,11 +257,12 @@ export function StepHeader({
   isEn = false,
 }: StepHeaderProps) {
   const safe = Math.max(0, Math.min(idx, total - 1));
-  const fallbackSub = t(
-    isEn,
-    `Press ▶ to walk through. (${safe + 1} / ${total})`,
-    `▶ 눌러서 진행. (${safe + 1} / ${total})`
-  );
+  // Fallback subtitle = step counter only.  We used to also say
+  // "Press ▶ to walk through" here, but the ▶ button itself lives
+  // BELOW the panel (in <SimNav>), and that hint at the top made it
+  // look like a button should be up here.  One source of nav is
+  // enough; the counter is the only thing the header needs.
+  const fallbackSub = `${safe + 1} / ${total}`;
   return (
     <>
       <div style={{ fontSize: 13, fontWeight: 800, color: accent, textAlign: "center", marginBottom: 4 }}>

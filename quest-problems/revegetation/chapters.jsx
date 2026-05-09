@@ -45,17 +45,29 @@ export function makeRevegCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf31"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>The Great Revegetation</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>The Great Revegetation</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2019 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the lexicographically smallest valid grass-type assignment as a string of digits 1..4.",
+                "사전순 가장 작은 유효 배색을 1..4 숫자 문자열로 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#f97316" }}>{t(E, "N pastures (1..N)", "N 개의 목초지 (1..N)")}</b>
@@ -65,7 +77,7 @@ export function makeRevegCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "M cow pairs each have ", "M 쌍의 소가 각자 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "two favorite pastures", "두 개의 좋아하는 목초지")}</b>
@@ -74,7 +86,7 @@ export function makeRevegCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "lexicographically smallest valid assignment", "사전순으로 가장 작은 유효 배색")}</b>
@@ -113,8 +125,8 @@ export function makeRevegCh1(E) {
         "Smallest available color for unconstrained pasture?",
         "제약 없는 목초지에 배정되는 가장 작은 색?"),
       hint: t(E,
-        "Colors are 1, 2, 3, 4. Smallest is 1.",
-        "색은 1, 2, 3, 4. 가장 작은 건 1."),
+        "With no neighbors fixed yet, what color minimizes lexicographic order?",
+        "이웃 색이 아직 정해지지 않았다면 사전순을 가장 작게 만드는 색은?"),
       answer: 1,
     },
   ];
@@ -126,48 +138,12 @@ export function makeRevegCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeRevegCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Greedy: process pastures 1, 2, …, N in order. For each, look at the colors already used by ALREADY-colored neighbors, and pick the SMALLEST color in {1,2,3,4} that's not in that set.",
-        "그리디: 목초지를 1, 2, …, N 순서로 처리. 각 목초지에서, 이미 색칠된 이웃의 색을 확인하고 그 집합에 없는 {1,2,3,4} 중 가장 작은 색 선택."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Build constraint graph", "제약 그래프 구축"), code: "adj = {p: set of neighbors}", color: "#f97316" },
-              { n: 2, label: t(E, "Process pasture 1..N", "1..N 순서 처리"), code: "for p in range(1, N+1):", color: "#7c3aed" },
-              { n: 3, label: t(E, "Find smallest unused color", "안 쓴 가장 작은 색"), code: "used = {color[n] for n in adj[p] if n < p};  color[p] = min({1,2,3,4} - used)", color: "#0891b2" },
-              { n: 4, label: t(E, "Output color string", "색 문자열 출력"), code: "print(''.join(str(c) for c in color[1..N]))", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N + M)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "linear in pastures + constraints", "목초지 + 제약에 선형")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Greedy: process pastures 1..N in order. For each, look at colors already taken by colored neighbors and pick the smallest in {1,2,3,4} not in that set. Sections build it one piece at a time.",
+        "그리디: 1..N 순서. 각 목초지마다 이미 색칠된 이웃 색을 확인하고 {1,2,3,4} 중 그 집합에 없는 가장 작은 색 선택. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getRevegSections(E),
     },
   ];

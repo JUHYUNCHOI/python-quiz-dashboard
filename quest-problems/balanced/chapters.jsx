@@ -28,28 +28,40 @@ export function makeBalancedCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🔗</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Balanced Subsequences</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Balanced Subsequences</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>Bronze warm-up</div>
           </div>
 
+          {/* 🎯 Mission box — what the student must figure out on this quest */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7c2d12", lineHeight: 1.5 }}>
+              {t(E,
+                "Given N opening brackets followed by M closing brackets, find the LONGEST balanced subsequence length.",
+                "여는 괄호 N 개 + 닫는 괄호 M 개 — 그 안에서 만들 수 있는 가장 긴 균형 부분수열의 길이.")}
+            </div>
+          </div>
+
           {/* Problem — bullet facts */}
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "You're given a string: N copies of ", "주어지는 문자열: ")}
-                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>(</code>
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 600 }}>(</code>
                   {t(E, " followed by M copies of ", " N개 + ")}
-                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 800 }}>)</code>
+                  <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 600 }}>)</code>
                   {t(E, ".", " M개. (모든 여는 괄호 → 모든 닫는 괄호 순서)")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#f97316" }}>{t(E, "subsequence", "부분수열")}</b>
@@ -59,7 +71,7 @@ export function makeBalancedCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A string is ", "문자열이 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "balanced", "균형")}</b>
@@ -68,14 +80,14 @@ export function makeBalancedCh1(E) {
                   {t(E, " has a matching ", "에 짝이 되는 ")}
                   <code>)</code>
                   {t(E, " AFTER it. e.g. ", "이 뒤에 있어야 해요. 예: ")}
-                  <code style={{ background: "#dcfce7", padding: "1px 5px", borderRadius: 3, color: "#15803d", fontWeight: 800 }}>{`(())`}</code>{" "}
+                  <code style={{ background: "#dcfce7", padding: "1px 5px", borderRadius: 3, color: "#15803d", fontWeight: 600 }}>{`(())`}</code>{" "}
                   {t(E, "balanced, ", "균형, ")}
-                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 3, color: "#991b1b", fontWeight: 800 }}>{`(()`}</code>{" "}
+                  <code style={{ background: "#fee2e2", padding: "1px 5px", borderRadius: 3, color: "#991b1b", fontWeight: 600 }}>{`(()`}</code>{" "}
                   {t(E, "not.", "아님.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Find the LENGTH of the longest balanced subsequence you can form.",
                         "이 문자열에서 만들 수 있는 가장 긴 균형 부분수열의 길이를 출력해요.")}
@@ -85,10 +97,51 @@ export function makeBalancedCh1(E) {
           </div>
         </div>),
     },
+    /* [승] — Sample input/output format */
     {
       type: "reveal",
       narr: t(E,
-        "A balanced bracket string has matching pairs.\n'(())' is balanced, '(()' is not.\nA subsequence can skip characters!", "균형 괄호 문자열은 쌍이 맞아야 해요. '(())'는 균형, '(()'는 아님. 부분수열은 문자를 건너뛸 수 있어요!"),
+        "Input: T test cases. Each is one line of N M. Output: one line per test case.",
+        "입력: T 개 케이스. 한 케이스는 N M 한 줄. 출력: 케이스마다 한 줄."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55, color: "#7c2d12", whiteSpace: "pre" }}>
+{`3
+5 3
+1 5
+100 42`}
+              </div>
+              <div style={{ fontSize: 10.5, color: "#9a3412", marginTop: 6, lineHeight: 1.5 }}>
+                {t(E, "Line 1: T = 3 cases. Then T lines of 'N M'.", "1 줄: T = 3 케이스. 그 다음 T 줄에 'N M'.")}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55, color: "#166534", whiteSpace: "pre" }}>
+{`6
+2
+84`}
+              </div>
+              <div style={{ fontSize: 10.5, color: "#15803d", marginTop: 6, lineHeight: 1.5 }}>
+                {t(E, "One length per test case.", "케이스마다 균형 부분수열 길이 한 줄.")}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center" }}>
+            {t(E, "→ The next page walks through how the first answer (6) actually comes out.",
+                  "→ 다음 페이지에서 첫 답 (6) 이 어떻게 나오는지 자세히 봐요.")}
+          </div>
+        </div>),
+    },
+
+    {
+      type: "reveal",
+      narr: t(E,
+        "Two worked cases — see which brackets find a partner and which don't.",
+        "두 케이스 따라가 봐 — 어떤 괄호가 짝을 찾고 어떤 게 못 찾는지."),
       content: (
         <div style={{ padding: 16 }}>
           {/* Two side-by-side example cards */}
@@ -100,8 +153,8 @@ export function makeBalancedCh1(E) {
               const chars = "(".repeat(ex.N) + ")".repeat(ex.M);
               const matchedSet = new Set(ex.matched);
               return (
-                <div key={i} style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 10 }}>
-                  <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
+                <div key={i} style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 10 }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
                     N={ex.N}, M={ex.M}
                   </div>
                   {/* Bracket visualization */}
@@ -112,9 +165,9 @@ export function makeBalancedCh1(E) {
                       return (
                         <div key={idx} style={{
                           width: 22, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
-                          borderRadius: 5, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                          borderRadius: 5, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                           background: isMatched ? (isOpen ? "#fef3c7" : "#dbeafe") : "#f3f4f6",
-                          border: `2px solid ${isMatched ? (isOpen ? "#f59e0b" : "#3b82f6") : "#cbd5e1"}`,
+                          border: `1px solid ${isMatched ? (isOpen ? "#f59e0b" : "#3b82f6") : "#cbd5e1"}`,
                           color: isMatched ? (isOpen ? "#92400e" : "#1e3a8a") : "#9ca3af",
                         }}>{ch}</div>
                       );
@@ -124,7 +177,7 @@ export function makeBalancedCh1(E) {
                   <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 4 }}>
                     {t(E, `matched = ${ex.matched.length} brackets`, `매칭 = ${ex.matched.length}개`)}
                   </div>
-                  <div style={{ textAlign: "center", fontSize: 14, fontWeight: 900, color: "#16a34a", fontFamily: "'JetBrains Mono',monospace" }}>
+                  <div style={{ textAlign: "center", fontSize: 14, fontWeight: 700, color: "#16a34a", fontFamily: "'JetBrains Mono',monospace" }}>
                     {t(E, `length = ${ex.len}`, `길이 = ${ex.len}`)}
                   </div>
                 </div>
@@ -140,21 +193,26 @@ export function makeBalancedCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Since ALL '(' come before ALL ')', every '(' can be matched with a ')'.\nWe just need enough of each!", "모든 '('가 모든 ')' 앞에 오니까, 모든 '('는 ')'와 매칭할 수 있어요. 각각 충분히 있기만 하면 돼요!"),
+        "Try this — sketch out the brackets in your head and count how many pairs you can really form.",
+        "직접 — 머릿속에 괄호 그려보고 실제로 몇 쌍이 만들어지는지 세 봐."),
       question: t(E,
         "For N=5, M=3, what's the longest balanced subsequence length?",
         "N=5, M=3이면, 가장 긴 균형 부분수열 길이는?"),
       options: ["5", "6", "8", "3"],
       correct: 1,
       explain: t(E,
-        "min(5,3) = 3 pairs → 2×3 = 6. We match 3 '(' with 3 ')'!",
-        "min(5,3) = 3쌍 → 2×3 = 6. 3개의 '('를 3개의 ')'와 매칭!"),
+        "5 '(' but only 3 ')' → can pair only 3 of each = 3 pairs = 6 characters total.",
+        "'(' 5 개 인데 ')' 는 3 개 → 3 쌍밖에 못 만들어요. 3 쌍 × 2 = 6 글자."),
     },
     {
       type: "input",
       narr: t(E,
-        "The answer is simply 2 × min(N, M).\nSince all opening brackets are before closing ones, we can always match min(N,M) pairs!", "답은 간단히 2 × min(N, M). 여는 괄호가 모두 닫는 괄호 앞에 있으니, 항상 min(N,M)쌍을 매칭할 수 있어요!"),
+        "Same idea on a bigger case. Which side runs out first?",
+        "같은 아이디어 더 큰 케이스. 어느 쪽이 먼저 떨어져?"),
       question: t(E, "N=100, M=42. Answer?", "N=100, M=42. 답은?"),
+      hint: t(E,
+        "The shorter side limits the pair count.",
+        "짧은 쪽이 쌍 개수의 한계."),
       answer: 84,
     },
   ];
@@ -169,8 +227,8 @@ export function makeBalancedCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Why min(N, M)?\nEach pair needs ONE '(' and ONE ')'.\nThe smaller side runs out first — that's the cap.",
-        "왜 min(N, M)?\n각 쌍은 '(' 1개 + ')' 1개 필요.\n적은 쪽이 먼저 떨어짐 — 그게 한계."),
+        "Look at the two cases below. Which brackets get a partner — and which get left over?",
+        "아래 두 케이스 봐. 어떤 괄호가 짝을 찾고 — 어떤 게 남아?"),
       content: (
         <div style={{ padding: 16 }}>
           {/* Bottleneck visualization: 2 cases */}
@@ -181,7 +239,7 @@ export function makeBalancedCh2(E) {
             ].map((ex, i) => {
               const pairs = Math.min(ex.N, ex.M);
               return (
-                <div key={i} style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 10 }}>
+                <div key={i} style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 10 }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", textAlign: "center", marginBottom: 6 }}>
                     N={ex.N}, M={ex.M}
                   </div>
@@ -192,7 +250,7 @@ export function makeBalancedCh2(E) {
                       return (
                         <div key={`o${j}`} style={{
                           width: 18, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
-                          borderRadius: 4, fontSize: 13, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                          borderRadius: 4, fontSize: 13, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                           background: matched ? "#fef3c7" : "#f3f4f6",
                           border: `1.5px solid ${matched ? "#f59e0b" : "#cbd5e1"}`,
                           color: matched ? "#92400e" : "#9ca3af",
@@ -207,7 +265,7 @@ export function makeBalancedCh2(E) {
                       return (
                         <div key={`c${j}`} style={{
                           width: 18, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
-                          borderRadius: 4, fontSize: 13, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                          borderRadius: 4, fontSize: 13, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                           background: matched ? "#dbeafe" : "#f3f4f6",
                           border: `1.5px solid ${matched ? "#3b82f6" : "#cbd5e1"}`,
                           color: matched ? "#1e3a8a" : "#9ca3af",
@@ -218,7 +276,7 @@ export function makeBalancedCh2(E) {
                   <div style={{ textAlign: "center", fontSize: 10, color: "#9a3412", marginTop: 2 }}>
                     {ex.label}
                   </div>
-                  <div style={{ textAlign: "center", fontSize: 13, fontWeight: 900, color: "#16a34a", marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
+                  <div style={{ textAlign: "center", fontSize: 13, fontWeight: 700, color: "#16a34a", marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
                     pairs = min({ex.N},{ex.M}) = {pairs}<br/>
                     <span style={{ fontSize: 15 }}>length = {2 * pairs}</span>
                   </div>
@@ -270,32 +328,17 @@ export function makeBalancedCh2(E) {
 export function makeBalancedCh3(E, lang = "py") {
   return [
     {
-      type: "reveal",
-      narr: t(E,
-        "The code is beautifully simple — just print 2 × min(N, M) for each test case.\nO(1) per query!", "코드가 아름답게 간단해 — 테스트 케이스마다 2 × min(N, M)만 출력. 쿼리당 O(1)!"),
-      content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: "#f97316", marginBottom: 8 }}>
-            {t(E, "⏱️ Complexity", "⏱️ 복잡도")}
-          </div>
-          <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
-            O(1)
-          </div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
-            {t(E, "per test case! Just min + multiply", "테스트 케이스당! min + 곱셈만")}
-          </div>
-        </div>),
-    },
-    {
       type: "progressive",
       narr: t(E,
-        "The simplest USACO solution you'll ever see! 😄 Toggle Python ↔ C++ in header.", "가장 간단한 USACO 솔루션! 😄 헤더에서 Python ↔ C++ 토글."),
+        "Read T, then for each test case read N, M and print 2 × min(N, M). Sections build it line by line.",
+        "T 읽고, 매 케이스마다 N, M 받아 2 × min(N, M) 출력. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBalancedSections(E),
     },
     {
       type: "runner",
       narr: t(E,
-        "Run it on multiple test cases yourself. Format: T on line 1, then T lines of 'N M'.", "여러 테스트 케이스를 직접 실행. 형식: 1줄에 T, 그 다음 T줄 'N M'."),
+        "Run it on your own test cases. Format: T on line 1, then T lines of 'N M'.",
+        "직접 테스트 — 1 줄에 T, 그 다음 T 줄에 'N M'."),
     },
   ];
 }

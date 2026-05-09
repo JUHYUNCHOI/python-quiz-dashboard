@@ -6,22 +6,31 @@ const A = "#f97316";
 
 const FULL_PY = [
   "import sys",
-  "from bisect import bisect_right",
-  "input = sys.stdin.readline",
+  "from bisect import bisect_left",
   "",
-  "N, Q = map(int, input().split())",
-  "c = list(map(int, input().split()))  # closing times",
-  "ti = list(map(int, input().split()))  # travel times",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "N = int(data[p])",
+  "p += 1",
+  "Q = int(data[p])",
+  "p += 1",
+  "c  = [int(x) for x in data[p:p+N]]",
+  "p += N",
+  "ti = [int(x) for x in data[p:p+N]]",
+  "p += N",
   "",
-  "# d[i] = c[i] - t[i]: max wake-up time to visit farm i",
-  "d = sorted([c[i] - ti[i] for i in range(N)])",
+  "# Reachable farm i iff S + t[i] < c[i]  ⇔  d[i] := c[i] - t[i] > S.",
+  "d = sorted(c[i] - ti[i] for i in range(N))",
   "",
+  "out = []",
   "for _ in range(Q):",
-  "    S, V = map(int, input().split())",
-  "    # Count farms where d[i] > S",
-  "    # bisect_right(d, S) gives index of first element > S",
-  "    reachable = N - bisect_right(d, S)",
-  "    print('YES' if reachable >= V else 'NO')",
+  "    V = int(data[p]); p += 1   # query is 'V S' — V first, then S",
+  "    S = int(data[p])",
+  "    p += 1",
+  "    reachable = N - bisect_left(d, S + 1)",
+  "    out.append('YES' if reachable >= V else 'NO')",
+  "",
+  "print(chr(10).join(out))",
 ];
 
 const FULL_CPP = [
@@ -39,10 +48,10 @@ const FULL_CPP = [
   "    sort(d.begin(), d.end());",
   "",
   "    while (Q--) {",
-  "        long long S, V; cin >> S >> V;",
-  "        // Count d[i] > S = N - upper_bound",
+  "        long long V, S; cin >> V >> S;   // query is V then S",
+  "        // count d[i] > S = N - upper_bound(S)",
   "        long long reachable = N - (upper_bound(d.begin(), d.end(), S) - d.begin());",
-  "        cout << (reachable >= V ? \"YES\" : \"NO\") << \"\n\";",
+  "        cout << (reachable >= V ? \"YES\" : \"NO\") << '\\n';",
   "    }",
   "    return 0;",
   "}",
@@ -101,7 +110,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

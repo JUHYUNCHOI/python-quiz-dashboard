@@ -49,17 +49,29 @@ export function makeMooOpsCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc2e"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Moo Operations</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Moo Operations</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum operations to turn the string into 'MOO', or -1 if impossible.",
+                "문자열을 'MOO' 로 만드는 최소 연산 수 (불가능하면 -1) 를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "You're given a ", "")}
                   <b style={{ color: "#059669" }}>{t(E, "string of M's and O's", "M과 O로 된 문자열")}</b>
@@ -67,7 +79,7 @@ export function makeMooOpsCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each operation costs 1 and lets you do ONE of:", "한 번의 연산(비용 1) 으로 다음 중 하나를 할 수 있어요:")}
                   <div style={{ marginTop: 6, marginLeft: 8, fontSize: 12, color: "#475569" }}>
@@ -77,7 +89,7 @@ export function makeMooOpsCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "The goal is to end with the string ", "최종 목표는 문자열이 ")}
                   <b style={{ color: "#dc2626" }}>"MOO"</b>
@@ -85,7 +97,7 @@ export function makeMooOpsCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of operations", "최소 연산 횟수")}</b>
@@ -125,8 +137,8 @@ export function makeMooOpsCh1(E) {
         "String \"MOOO\". Min operations to make it \"MOO\"?",
         "문자열 \"MOOO\". \"MOO\"로 만드는 최소 연산 수?"),
       hint: t(E,
-        "Use the first 3 characters \"MOO\" and delete the last 'O'. That's 1 deletion = 1 operation.",
-        "처음 3문자 \"MOO\"를 사용하고 마지막 'O'를 삭제해요. 삭제 1번 = 연산 1번."),
+        "Try keeping the first 3 chars and removing extras with deletes / flips.",
+        "앞 3 글자를 살리고 나머지를 삭제/뒤집기로 처리하는 걸 시도해 봐."),
       answer: 1,
     },
   ];
@@ -138,48 +150,12 @@ export function makeMooOpsCh1(E) {
    =============================================================== */
 export function makeMooOpsCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "The middle character of the final 'MOO' can never be flipped (only first/last can). So scan every position i where s[i+1]='O', then compute (deletes from left) + (deletes from right) + (any flips needed for s[i] and s[i+2]).",
-        "최종 'MOO' 의 가운데 글자는 절대 뒤집을 수 없어요 (맨 앞/뒤만 가능). 그래서 s[i+1]='O' 인 모든 i 를 스캔하고, (왼쪽 삭제 수) + (오른쪽 삭제 수) + (s[i] 와 s[i+2] 의 뒤집기 비용) 을 계산해요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Find candidate centers (s[i+1]='O')", "가운데 후보 찾기 (s[i+1]='O')"), code: "for i in range(N-2): if s[i+1]=='O': ...", color: "#059669" },
-              { n: 2, label: t(E, "Cost: deletions from each side", "비용: 양쪽 삭제 수"), code: "del_cost = i + (N - i - 3)", color: "#0891b2" },
-              { n: 3, label: t(E, "Cost: flip first/last if needed", "비용: 양 끝 뒤집기 (필요 시)"), code: "flip = (s[i]!='M') + (s[i+2]!='O')", color: "#7c3aed" },
-              { n: 4, label: t(E, "Take MIN over all centers; -1 if none", "모든 후보 중 MIN; 없으면 -1"), code: "ans = min(del_cost + flip)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass over the string", "문자열 한 번 순회")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Final 'MOO' middle char can never be flipped (only first/last). Scan every i with s[i+1]='O' and compute (left deletes) + (right deletes) + (flips needed for s[i] and s[i+2]). Sections build it one piece at a time.",
+        "최종 'MOO' 의 가운데는 절대 뒤집기 불가 (앞/뒤만 가능). s[i+1]='O' 인 모든 i 를 스캔, (왼쪽 삭제) + (오른쪽 삭제) + (s[i], s[i+2] 뒤집기) 계산. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMooOpsSections(E),
     },
   ];

@@ -47,17 +47,29 @@ export function makeTttCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u274C"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Team Tic Tac Toe</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Team Tic Tac Toe</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2018 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output two numbers: distinct solo winners, then distinct 2-cow team winners.",
+                "두 수를 출력 — 단독 우승 소 수, 그리고 2 명 팀 우승 수.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "3×3 grid filled with letters A..Z", "A..Z 글자로 채워진 3×3 격자")}</b>
@@ -65,7 +77,7 @@ export function makeTttCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Eight ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "lines exist", "줄이 있어요")}</b>
@@ -74,7 +86,7 @@ export function makeTttCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#0891b2" }}>{t(E, "solo win", "단독 우승")}</b>
@@ -85,7 +97,7 @@ export function makeTttCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print two numbers: ", "두 수를 출력: ")}
                   <b style={{ color: "#15803d" }}>{t(E, "(1) distinct solo winners, (2) distinct 2-cow team winners", "(1) 단독 우승한 소의 수, (2) 우승한 2명 팀의 수")}</b>
@@ -124,8 +136,8 @@ export function makeTttCh1(E) {
         "Grid AAA / BBB / CCC. Number of individual winners?",
         "격자 AAA / BBB / CCC. 개인 우승자 수는?"),
       hint: t(E,
-        "Each row has one unique letter. A, B, C each win a row.",
-        "각 행에 고유 문자 1개. A, B, C 각각 한 행 우승."),
+        "Scan each row, column, and diagonal — count solo wins.",
+        "각 행, 열, 대각선을 살펴보면서 단독 우승을 세어 봐."),
       answer: 3,
     },
   ];
@@ -137,48 +149,12 @@ export function makeTttCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeTttCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Walk through each of the 8 lines (3 rows + 3 cols + 2 diagonals). For each line, take the SET of letters in its 3 cells. Size 1 → solo winner; size 2 → 2-cow team. Collect distinct winners across all lines.",
-        "8 개의 줄 (3 행 + 3 열 + 2 대각선) 을 순회. 각 줄의 3 칸의 글자 집합을 만들어요. 크기 1 → 단독 우승; 크기 2 → 2 마리 팀. 모든 줄에 걸쳐 중복 없는 우승자 수집."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Enumerate 8 lines", "8 줄 열거"), code: "lines = rows + cols + diagonals", color: "#dc2626" },
-              { n: 2, label: t(E, "Take letter set per line", "줄마다 글자 집합"), code: "s = set(line)", color: "#7c3aed" },
-              { n: 3, label: t(E, "Solo if |s| == 1, team if |s| == 2", "|s|=1 → 단독, |s|=2 → 팀"), code: "if len(s)==1: solo.add(...); elif len(s)==2: team.add(frozenset(s))", color: "#0891b2" },
-              { n: 4, label: t(E, "Print counts", "개수 출력"), code: "print(len(solo)); print(len(team))", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(1)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "3 × 3 grid is fixed", "3 × 3 격자 고정")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Walk the 8 lines (3 rows + 3 cols + 2 diagonals). Take the SET of letters in its 3 cells: size 1 → solo win, size 2 → 2-cow team. Collect distinct winners. Sections build it one piece at a time.",
+        "8 개 줄 (3 행 + 3 열 + 2 대각선) 순회. 3 칸 글자 집합 — 크기 1 → 단독, 크기 2 → 2 명 팀. 중복 없는 우승자 수집. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getTeamTttSections(E),
     },
   ];

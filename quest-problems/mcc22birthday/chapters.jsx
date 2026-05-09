@@ -16,10 +16,12 @@ export const SOLUTION_CODE = [
   "    # Each cat has a set of available time slots",
   "    avail = []",
   "    for i in range(N):",
-  "        k = int(input_data[idx]); idx += 1",
+  "        k = int(input_data[idx])",
+  "        idx += 1",
   "        slots = set()",
   "        for _ in range(k):",
-  "            slots.add(int(input_data[idx])); idx += 1",
+  "            slots.add(int(input_data[idx]))",
+  "            idx += 1",
   "        avail.append(slots)",
   "",
   "    # Greedy: pick the time slot that accommodates most cats",
@@ -49,17 +51,27 @@ export function makeMcc22BirthdayCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf82"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cats' Birthday</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Cats' Birthday</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P4</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          {/* \ud83c\udfaf Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E, "Find the time slot that the most cats can attend, and print that count.", "\uac00\uc7a5 \ub9ce\uc740 \uace0\uc591\uc774\uac00 \ucc38\uc11d\ud560 \uc218 \uc788\ub294 \uc2dc\uac04\ub300\ub97c \ucc3e\uc544 \uadf8 \uc778\uc6d0\uc218\ub97c \ucd9c\ub825\ud574\uc694.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Plan a party for ", "")}
                   <b style={{ color: "#f97316" }}>{t(E, "N cats; each lists time slots she's available", "N 마리 고양이; 각자 참석 가능한 시간대 목록")}</b>
@@ -67,7 +79,7 @@ export function makeMcc22BirthdayCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "MAX number of cats that can attend a single time slot", "한 시간대에 참석할 수 있는 최대 고양이 수")}</b>
@@ -105,8 +117,8 @@ export function makeMcc22BirthdayCh1(E) {
         "3 cats, 2 slots. Max cats in one slot?",
         "고양이 3마리, 시간대 2개. 한 시간대 최대 고양이 수?"),
       hint: t(E,
-        "Slot 1 has cats 1,2. Slot 2 has cats 2,3. Both have 2.",
-        "시간대 1에 고양이 1,2. 시간대 2에 고양이 2,3. 둘 다 2."),
+        "List the cats in each slot, then count.",
+        "각 시간대마다 어떤 고양이들이 있는지 적어보고 세어봐요."),
       answer: 2,
     },
   ];
@@ -118,48 +130,12 @@ export function makeMcc22BirthdayCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22BirthdayCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "For each time slot, count cats that listed it as available. The maximum count across all slots is the answer.",
-        "각 시간대별로 참석 가능 표시한 고양이 수 카운트. 모든 시간대 중 최댓값이 답."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init slot frequency map", "시간대 빈도 맵 초기화"), code: "freq = defaultdict(int)", color: "#f97316" },
-              { n: 2, label: t(E, "Add each cat's availability", "각 고양이의 가능 시간 추가"), code: "for cat in cats: for slot in cat.slots: freq[slot] += 1", color: "#7c3aed" },
-              { n: 3, label: t(E, "Find max count", "최댓값 찾기"), code: "best = max(freq.values())", color: "#0891b2" },
-              { n: 4, label: t(E, "Print best", "best 출력"), code: "print(best)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N + T)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "linear scan over availability", "가능 시간 선형 스캔")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "For each time slot, count cats that listed it as available. The maximum count across all slots is the answer. Sections build it one piece at a time.",
+        "각 시간대별로 참석 가능 표시한 고양이 수 카운트. 모든 시간대 중 최댓값이 답. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc22BirthdaySections(E),
     },
   ];

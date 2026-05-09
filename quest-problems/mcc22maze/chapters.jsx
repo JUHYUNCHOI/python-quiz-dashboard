@@ -11,11 +11,14 @@ export const SOLUTION_CODE = [
   "def solve():",
   "    input_data = sys.stdin.read().split()",
   "    idx = 0",
-  "    R = int(input_data[idx]); idx += 1",
-  "    C_ = int(input_data[idx]); idx += 1",
+  "    R = int(input_data[idx])",
+  "    idx += 1",
+  "    C_ = int(input_data[idx])",
+  "    idx += 1",
   "    grid = []",
   "    for i in range(R):",
-  "        grid.append(input_data[idx]); idx += 1",
+  "        grid.append(input_data[idx])",
+  "        idx += 1",
   "",
   "    # BFS from (0,0) to (R-1,C-1)",
   "    dist = [[-1]*C_ for _ in range(R)]",
@@ -50,17 +53,27 @@ export function makeMcc22MazeCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udff0"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Maze</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Maze</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P3</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E, "Find the shortest path through the maze from top-left to bottom-right.", "미로의 좌상단에서 우하단까지 최단 경로를 찾아요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "An ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "R × C grid maze of walls (#) and open cells (.)", "벽 (#) 과 열린 칸 (.) 으로 된 R × C 격자 미로")}</b>
@@ -68,7 +81,7 @@ export function makeMcc22MazeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Move only between ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "adjacent open cells (up/down/left/right)", "인접한 열린 칸 (상하좌우)")}</b>
@@ -77,7 +90,7 @@ export function makeMcc22MazeCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "SHORTEST distance from (0, 0) to (R−1, C−1)", "(0, 0) 에서 (R−1, C−1) 까지의 최단 거리")}</b>
@@ -115,8 +128,8 @@ export function makeMcc22MazeCh1(E) {
         "2x2 empty maze, (0,0) to (1,1). Shortest path = ? steps",
         "2x2 빈 미로, (0,0)에서 (1,1). 최단 경로 = ? 단계"),
       hint: t(E,
-        "Right then down, or down then right. 2 moves!",
-        "오른쪽 후 아래, 또는 아래 후 오른쪽. 2번 이동!"),
+        "Count the moves on one path: right, down. How many?",
+        "한 경로의 이동을 세어봐요: 오른쪽, 아래. 몇 번?"),
       answer: 2,
     },
   ];
@@ -128,48 +141,12 @@ export function makeMcc22MazeCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22MazeCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "BFS from (0, 0). For each cell, explore 4 open neighbors and record the distance. Stop when reaching (R−1, C−1).",
-        "(0, 0) 에서 BFS. 각 칸에서 열린 4 이웃을 탐색하고 거리 기록. (R−1, C−1) 에 도달하면 중단."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init queue and dist map", "큐와 거리 맵 초기화"), code: "queue = [(0, 0, 0)];  dist = {(0,0): 0}", color: "#dc2626" },
-              { n: 2, label: t(E, "BFS pop and explore", "BFS pop, 탐색"), code: "while queue: r, c, d = queue.pop(0)", color: "#7c3aed" },
-              { n: 3, label: t(E, "For each open neighbor", "각 열린 이웃"), code: "for dr, dc in 4dirs: nr, nc = r+dr, c+dc", color: "#0891b2" },
-              { n: 4, label: t(E, "Record distance, stop at end", "거리 기록, 끝에서 중단"), code: "if (nr,nc) is target: print(d+1); stop", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(R · C)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "each cell visited at most once", "각 칸 최대 한 번 방문")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "BFS from (0, 0). For each cell, explore 4 open neighbors and record the distance. Stop when reaching (R−1, C−1). Sections build it one piece at a time.",
+        "(0, 0) 에서 BFS. 각 칸에서 열린 4 이웃을 탐색하고 거리 기록. (R−1, C−1) 에 도달하면 중단. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc22MazeSections(E),
     },
   ];

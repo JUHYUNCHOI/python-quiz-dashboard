@@ -58,17 +58,29 @@ export function makeAirCondCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u2744\ufe0f"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Air Cownditioning II</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Air Cownditioning II</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2023 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum total cost of an AC subset that satisfies every cow.",
+                "모든 소의 냉방 요구를 만족시키는 에어컨 조합 중 최소 총 비용을 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ에게 ")}
                   <b style={{ color: "#2563eb" }}>{t(E, "N cows", "N마리 소")}</b>
@@ -80,7 +92,7 @@ export function makeAirCondCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "M ≤ 10 AC units", "M ≤ 10개의 에어컨")}</b>
@@ -89,7 +101,7 @@ export function makeAirCondCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#0891b2" }}>{t(E, "ACs stack additively", "에어컨은 효과가 더해져요")}</b>
                   {t(E, " — at any stall, the cooling is the sum of powers of all chosen ACs covering that stall.",
@@ -97,7 +109,7 @@ export function makeAirCondCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum total cost", "최소 총 비용")}</b>
@@ -136,8 +148,8 @@ export function makeAirCondCh1(E) {
         "1 cow needs cooling 3 in stalls 1-5. AC1: range 1-5, power 3, cost 10. AC2: range 1-3, power 5, cost 20. Min cost?",
         "소 1마리 냉방 3 필요 (축사 1-5). AC1: 범위 1-5, 파워 3, 비용 10. AC2: 범위 1-3, 파워 5, 비용 20. 최소 비용?"),
       hint: t(E,
-        "AC1 alone covers stalls 1-5 with power 3 >= 3. Cost = 10. AC2 alone only covers 1-3, not 4-5. So AC1 alone works at cost 10.",
-        "AC1만으로 축사 1-5를 파워 3 >= 3으로 커버. 비용 = 10. AC2만으로는 1-3만 커버, 4-5는 안 돼요. AC1 단독이 비용 10으로 작동."),
+        "Try each subset (AC1 only, AC2 only, both) and check coverage.",
+        "각 부분집합 (AC1만, AC2만, 둘 다) 을 시도하면서 커버를 확인해봐."),
       answer: 10,
     },
   ];
@@ -149,48 +161,12 @@ export function makeAirCondCh1(E) {
    =============================================================== */
 export function makeAirCondCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Since M ≤ 10, only 2^M ≤ 1024 AC subsets exist. Try every subset, build cooling per stall, check that every cow is satisfied, and track the cheapest valid subset.",
-        "M ≤ 10 이라 가능한 에어컨 부분집합은 2^M ≤ 1024 개뿐. 부분집합을 전부 시도하면서 축사별 냉방을 만들고, 모든 소를 만족시키는지 확인하고, 가장 싼 유효 조합을 기록해요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Enumerate subsets via bitmask", "비트마스크로 부분집합 열거"), code: "for mask in range(1 << M): ...", color: "#2563eb" },
-              { n: 2, label: t(E, "Build cooling per stall", "축사별 냉방력 합산"), code: "for j in subset: cool[j.s..j.t] += j.power", color: "#0891b2" },
-              { n: 3, label: t(E, "Check every cow", "모든 소 검사"), code: "all(cool[s..t] ≥ c for cow in cows)", color: "#7c3aed" },
-              { n: 4, label: t(E, "Keep cheapest valid", "가장 싼 유효 조합 저장"), code: "if valid: best = min(best, sum_cost)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(2^M · N · S)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "1024 subsets × N cows × stall range S", "1024 개 조합 × N 마리 소 × 축사 범위 S")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "M ≤ 10, so only 2^M ≤ 1024 AC subsets exist — try every subset, build cooling per stall, check every cow, track the cheapest valid one. Sections build it one piece at a time.",
+        "M ≤ 10 이라 가능한 에어컨 부분집합은 2^M ≤ 1024 개뿐 — 전부 시도하면서 축사별 냉방을 만들고 모든 소를 확인, 가장 싼 유효 조합 기록. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getAirCondSections(E),
     },
   ];

@@ -5,25 +5,28 @@ import { getMoolooSections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N, K = map(int, input().split())",
-  "days = sorted([int(input()) for _ in range(N)])",
+  "import sys",
   "",
-  "# Greedy: extend subscription if gap <= K",
+  "data = sys.stdin.read().split()",
+  "N = int(data[0]); K = int(data[1])",
+  "days = sorted(int(x) for x in data[2:2 + N])    # all N days on ONE line",
+  "",
+  "# Greedy: extend the active subscription as long as the next day fits.",
   "total_cost = 0",
   "i = 0",
   "",
   "while i < N:",
-  "    # start a new subscription on days[i]",
+  "    # Start a new subscription on days[i]",
   "    start = days[i]",
   "    end = days[i]",
   "    i += 1",
   "",
-  "    # extend if next day is within K of current end",
+  "    # Extend if next day is within K of current end",
   "    while i < N and days[i] - end <= K:",
   "        end = days[i]",
   "        i += 1",
   "",
-  "    # cost = duration + K",
+  "    # Cost = active days + the K-day grace period",
   "    duration = end - start + 1",
   "    total_cost += duration + K",
   "",
@@ -44,17 +47,27 @@ export function makeMoolooCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcfa"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Watching Mooloo</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Watching Mooloo</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E, "Cover every viewing day with subscriptions at minimum total cost.", "모든 시청 날짜를 덮으면서 구독 총 비용을 최소로 만들어요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Bessie wants to watch Mooloo on ", "Bessie가 정해진 ")}
                   <b style={{ color: "#f97316" }}>{t(E, "N specific days", "N개의 날짜")}</b>
@@ -63,7 +76,7 @@ export function makeMoolooCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "subscription for d consecutive days", "d 일 연속 구독")}</b>
@@ -74,7 +87,7 @@ export function makeMoolooCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum total cost to cover every day on her list", "그녀의 목록에 있는 모든 날짜를 덮는 최소 총 비용")}</b>
@@ -91,8 +104,8 @@ export function makeMoolooCh1(E) {
         "Key insight: if two days are close (gap \u2264 K), it's cheaper to extend one subscription than start a new one!", "\ud575\uc2ec: \ub450 \ub0a0\uc774 \uac00\uae4c\uc6b0\uba74 (\uac04\uaca9 \u2264 K), \uc0c8 \uad6c\ub3c5\ubcf4\ub2e4 \uae30\uc874 \uad6c\ub3c5\uc744 \uc5f0\uc7a5\ud558\ub294 \uac8c \ub354 \uc2f8!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#f97316", marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#f97316", marginBottom: 10 }}>
               {t(E, "Extend vs New Subscription", "\uc5f0\uc7a5 vs \uc0c8 \uad6c\ub3c5")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -123,7 +136,7 @@ export function makeMoolooCh1(E) {
       narr: t(E,
         "Days [1,10], K=3.\nGap = 10-1-1 = 8, which is > K=3.\nMust use two separate subscriptions.\nCost = (1+3) + (1+3) = 8.", "\ub0a0\uc9dc [1,10], K=3.\n\uac04\uaca9 = 10-1-1 = 8, K=3\ubcf4\ub2e4 \ud07c.\n\ub450 \uac1c \uad6c\ub3c5 \ud544\uc694.\n\ube44\uc6a9 = (1+3) + (1+3) = 8."),
       question: t(E, "Days [1,10], K=3 \u2192 total cost?", "\ub0a0\uc9dc [1,10], K=3 \u2192 \ucd1d \ube44\uc6a9?"),
-      hint: t(E, "Gap=8 > K=3, so two subscriptions. Each covers 1 day: (1+3)+(1+3)", "\uac04\uaca9=8 > K=3, \ub450 \uad6c\ub3c5. \uac01\uac01 1\uc77c: (1+3)+(1+3)"),
+      hint: t(E, "Compare the gap to K. If the gap is too big to extend, what's left to do?", "\uac04\uaca9\uc744 K\uc640 \ube44\uad50\ud574\ubd10\uc694. \uc5f0\uc7a5\ud558\uae30\uc5d4 \ub108\ubb34 \uba40\uba74 \uc5b4\ub5bb\uac8c \ud574\uc57c \ud560\uae4c\uc694?"),
       answer: 8,
     },
     {
@@ -132,8 +145,8 @@ export function makeMoolooCh1(E) {
         "Greedy algorithm: sort days, then scan left to right.\nExtend current subscription if gap \u2264 K, otherwise start a new one!", "\uadf8\ub9ac\ub514 \uc54c\uace0\ub9ac\uc998: \ub0a0\uc9dc \uc815\ub82c \ud6c4 \uc67c\ucabd\uc5d0\uc11c \uc624\ub978\ucabd\uc73c\ub85c \uc2a4\uce94.\n\uac04\uaca9 \u2264 K\uba74 \uc5f0\uc7a5, \uc544\ub2c8\uba74 \uc0c8 \uad6c\ub3c5!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#f97316", marginBottom: 10 }}>
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#f97316", marginBottom: 10 }}>
               {t(E, "Greedy Algorithm", "\uadf8\ub9ac\ub514 \uc54c\uace0\ub9ac\uc998")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>

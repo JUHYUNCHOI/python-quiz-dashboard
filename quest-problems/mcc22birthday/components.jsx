@@ -16,10 +16,12 @@ const FULL_PY = [
   "    # Each cat has a set of available time slots",
   "    avail = []",
   "    for i in range(N):",
-  "        k = int(input_data[idx]); idx += 1",
+  "        k = int(input_data[idx])",
+  "        idx += 1",
   "        slots = set()",
   "        for _ in range(k):",
-  "            slots.add(int(input_data[idx])); idx += 1",
+  "            slots.add(int(input_data[idx]))",
+  "            idx += 1",
   "        avail.append(slots)",
   "",
   "    # Greedy: pick the time slot that accommodates most cats",
@@ -54,7 +56,8 @@ const FULL_CPP = [
   "            auto k = int(input_data[idx]); idx += 1;",
   "            auto slots = set();",
   "            for (long long _ = 0; _ < k; _++) {",
-  "                // slots.add(int(input_data[idx])); idx += 1",
+  "                // slots.add(int(input_data[idx]))",
+  "                idx += 1",
   "            // avail.append(slots)",
   "",
   "        // Greedy: pick the time slot that accommodates most cats",
@@ -124,7 +127,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

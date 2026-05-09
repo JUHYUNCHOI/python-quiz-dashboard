@@ -107,7 +107,7 @@ export function DismantleSimulator({ E }) {
 
   const cellStyle = (kind) => ({
     width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
-    borderRadius: 7, fontWeight: 900, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
+    borderRadius: 7, fontWeight: 700, fontSize: 17, fontFamily: "'JetBrains Mono',monospace",
     background:
       kind === "remove" ? "#fee2e2" :
       kind === "write" ? "#ede9fe" :
@@ -173,12 +173,12 @@ export function DismantleSimulator({ E }) {
 
           return (
             <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-              <div style={{ fontSize: 10, height: 14, fontWeight: 800,
+              <div style={{ fontSize: 10, height: 14, fontWeight: 600,
                 color: labelTop ? "#92400e" : "transparent" }}>
                 {labelTop || "·"}
               </div>
               <div style={cellStyle(kind)}>{v}</div>
-              <div style={{ fontSize: 9, height: 14, fontWeight: 800, marginTop: 2,
+              <div style={{ fontSize: 9, height: 14, fontWeight: 600, marginTop: 2,
                 color: labelBottom.startsWith("×") ? "#dc2626" : labelBottom.startsWith("✏") ? "#7c3aed" : "transparent" }}>
                 {labelBottom || "·"}
               </div>
@@ -193,10 +193,10 @@ export function DismantleSimulator({ E }) {
       </div>
 
       {/* Step explanation panel */}
-      <NarrativePanel minHeight={88}>
+      <NarrativePanel minHeight={88} stepKey={ts.safe}>
         {s.sub === "init" && (
           <>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
               📦 {t(E, "Initial state", "초기 상태")}
             </div>
             <div>{t(E, `p starts as [${initial.join(", ")}]. Hint list h is empty. Press ▶ to start.`,
@@ -205,7 +205,7 @@ export function DismantleSimulator({ E }) {
         )}
         {s.sub === "compare-mark" && (
           <>
-            <div style={{ fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#92400e", marginBottom: 6 }}>
               1️⃣ 🔍 {t(E, "Mark first and last", "맨 앞과 맨 뒤를 표시")}
             </div>
             <div>{t(E, "first", "맨 앞")} = <b style={{ color: "#92400e" }}>{s.compareFirst}</b>,{" "}
@@ -218,7 +218,7 @@ export function DismantleSimulator({ E }) {
         )}
         {s.sub === "decide-bigger" && (
           <>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
               2️⃣ ⚖️ {t(E, "Compare", "비교")}
             </div>
             <div><b style={{ fontFamily: "'JetBrains Mono',monospace" }}>
@@ -234,7 +234,7 @@ export function DismantleSimulator({ E }) {
         )}
         {s.sub === "mark-remove" && (
           <>
-            <div style={{ fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
               3️⃣ ❌ {t(E, "Mark for removal", "빠질 칸 표시")}
             </div>
             <div>{t(E, "Remove ", "")}<b style={{ color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>{s.removedVal}</b>
@@ -246,7 +246,7 @@ export function DismantleSimulator({ E }) {
         )}
         {s.sub === "mark-write" && (
           <>
-            <div style={{ fontWeight: 800, color: "#7c3aed", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#7c3aed", marginBottom: 6 }}>
               4️⃣ ✏️ {t(E, "Mark what gets written", "힌트로 적힐 값 표시")}
             </div>
             <div>{t(E, "Write ", "")}<b style={{ color: "#7c3aed", fontFamily: "'JetBrains Mono',monospace" }}>{s.willWrite}</b>
@@ -260,7 +260,7 @@ export function DismantleSimulator({ E }) {
         )}
         {s.sub === "apply" && (
           <>
-            <div style={{ fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
               5️⃣ ✅ {t(E, "Applied!", "적용 완료!")}
             </div>
             <div>{t(E, "Removed ", "")}<b>{s.removedVal}</b>{t(E, ", wrote ", " 빼고, ")}<b>{s.lastWritten}</b>{t(E, " into h.", " 을 h 에 적었어요.")}</div>
@@ -273,7 +273,7 @@ export function DismantleSimulator({ E }) {
         )}
         {s.sub === "done" && (
           <>
-            <div style={{ fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
               🎉 {t(E, "Done — only 1 element left", "종료 — 1 개만 남음")}
             </div>
             <div>{t(E, "Final hint list:", "최종 힌트:")}{" "}
@@ -306,9 +306,9 @@ export function PermSim({ E }) {
 
   const cellStyle = (filled, justPicked, conflict) => ({
     width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
-    borderRadius: 8, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+    borderRadius: 8, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
     background: justPicked ? "#fef3c7" : (filled ? "#ede9fe" : "#fff"),
-    border: `2px solid ${conflict ? "#dc2626" : (justPicked ? "#f59e0b" : (filled ? A : "#e5e7eb"))}`,
+    border: `1px solid ${conflict ? "#dc2626" : (justPicked ? "#f59e0b" : (filled ? A : "#e5e7eb"))}`,
     color: conflict ? "#dc2626" : (justPicked ? "#92400e" : (filled ? A : "#cbd5e1")),
     transition: "all .2s",
   });
@@ -324,9 +324,9 @@ export function PermSim({ E }) {
           const r = simulateGreedy(N, h, s);
           return (
             <button key={s} onClick={() => { setStart(s); setSi(0); }} style={{
-              padding: "5px 12px", borderRadius: 8, border: `2px solid ${s === start ? A : C.border}`,
+              padding: "5px 12px", borderRadius: 8, border: `1px solid ${s === start ? A : C.border}`,
               background: s === start ? A : "transparent", color: s === start ? "#fff" : C.dim,
-              fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+              fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
             }}>
               {s} <span style={{ fontSize: 10, marginLeft: 2 }}>{r.success ? "✓" : "✗"}</span>
             </button>
@@ -357,41 +357,38 @@ export function PermSim({ E }) {
       {/* 시도 결과 */}
       {step.tried && step.tried.length > 0 && (
         <div style={{ background: step.ok ? "#f0fdf4" : "#fef2f2", border: `1.5px solid ${step.ok ? "#86efac" : "#fca5a5"}`, borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: step.ok ? "#16a34a" : "#dc2626", marginBottom: 6 }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: step.ok ? "#16a34a" : "#dc2626", marginBottom: 6 }}>
             {t(E, `Step ${cur}: pick perm[${step.i}]`, `${cur}단계: perm[${step.i}] 결정`)}
           </div>
           <div style={{ fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.8 }}>
             <div>
               + {h[step.i - 1]} = <b>{step.tried[0].val}</b>{" "}
-              <span style={{ color: step.tried[0].ok ? "#16a34a" : "#dc2626", fontWeight: 800 }}>
+              <span style={{ color: step.tried[0].ok ? "#16a34a" : "#dc2626", fontWeight: 600 }}>
                 {step.tried[0].ok ? "✓ ok" : (step.tried[0].val < 1 || step.tried[0].val > N ? `✗ out of range` : `✗ already used`)}
               </span>
             </div>
             <div>
               − {h[step.i - 1]} = <b>{step.tried[1].val}</b>{" "}
-              <span style={{ color: step.tried[1].ok ? "#16a34a" : "#dc2626", fontWeight: 800 }}>
+              <span style={{ color: step.tried[1].ok ? "#16a34a" : "#dc2626", fontWeight: 600 }}>
                 {step.tried[1].ok ? "✓ ok" : (step.tried[1].val < 1 || step.tried[1].val > N ? `✗ out of range` : `✗ already used`)}
               </span>
             </div>
-            <div style={{ marginTop: 4, fontWeight: 800, color: step.ok ? "#16a34a" : "#dc2626" }}>
+            <div style={{ marginTop: 4, fontWeight: 600, color: step.ok ? "#16a34a" : "#dc2626" }}>
               → {step.ok ? `${t(E, "pick", "선택")}: ${step.picked}` : t(E, "둘 다 안 됨 — start 실패!", "둘 다 안 됨 — start 실패!")}
             </div>
           </div>
         </div>
       )}
-      {(!step.tried || step.tried.length === 0) && cur === 0 && (
-        <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: "#92400e", textAlign: "center", fontWeight: 700 }}>
-          {t(E, `Start = ${start}. Click → to step through the greedy.`, `시작값 = ${start}. → 눌러서 그리디를 한 단계씩 따라가봐.`)}
-        </div>
-      )}
+      {/* Initial-state instruction box removed — the start-value chips already show
+          which start is selected, and the → button is right there. */}
 
       {/* 결과 박스 (마지막 단계) */}
       {cur === trace.length - 1 && (
         <div style={{
           background: success ? "#dcfce7" : "#fee2e2",
-          border: `2px solid ${success ? "#16a34a" : "#dc2626"}`,
+          border: `1px solid ${success ? "#16a34a" : "#dc2626"}`,
           borderRadius: 10, padding: "10px 12px", marginBottom: 10, textAlign: "center",
-          fontSize: 13, fontWeight: 800, color: success ? "#15803d" : "#7f1d1d",
+          fontSize: 13, fontWeight: 600, color: success ? "#15803d" : "#7f1d1d",
         }}>
           {success
             ? t(E, `✅ Success! perm = [${trace[trace.length-1].perm.join(", ")}]`, `✅ 성공! perm = [${trace[trace.length-1].perm.join(", ")}]`)
@@ -402,16 +399,16 @@ export function PermSim({ E }) {
       {/* 네비 */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
         <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
-          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === 0 ? "#b0b5c3" : A, cursor: cur === 0 ? "default" : "pointer",
         }}>←</button>
         <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
           {cur + 1} / {trace.length}
         </span>
         <button onClick={() => setSi(Math.min(trace.length - 1, cur + 1))} disabled={cur === trace.length - 1} style={{
-          background: cur === trace.length - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === trace.length - 1 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          background: cur === trace.length - 1 ? "#e5e7eb" : A, border: `1px solid ${cur === trace.length - 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === trace.length - 1 ? "#b0b5c3" : "#fff", cursor: cur === trace.length - 1 ? "default" : "pointer",
         }}>→</button>
       </div>
@@ -490,20 +487,20 @@ export function PermRunner({ E }) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 8, marginBottom: 10 }}>
         <input value={nInput} onChange={e => setNInput(e.target.value)} disabled={running}
           placeholder="N" style={{
-            padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`,
-            fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+            padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`,
+            fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace",
             color: A, textAlign: "center",
           }} />
         <input value={hInput} onChange={e => setHInput(e.target.value)} disabled={running}
           placeholder="h (space-separated)" style={{
-            padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`,
-            fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+            padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`,
+            fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace",
             color: A,
           }} />
       </div>
       <button onClick={running ? stop : run} style={{
         width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
-        fontSize: 14, fontWeight: 800, marginBottom: 10,
+        fontSize: 14, fontWeight: 600, marginBottom: 10,
         background: running ? "#dc2626" : A, color: "#fff",
       }}>
         {running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run greedy", "▶ 그리디 실행")}
@@ -512,15 +509,15 @@ export function PermRunner({ E }) {
       {running && (
         <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>
           <div style={{ display: "flex", justifyContent: "space-between", color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-            <span>{t(E, "trying", "시도")}: <span style={{ color: A, fontWeight: 900 }}>start = {liveStart}</span></span>
-            <span>{t(E, "filled", "채움")}: <span style={{ color: A, fontWeight: 900 }}>{liveStep}</span></span>
+            <span>{t(E, "trying", "시도")}: <span style={{ color: A, fontWeight: 700 }}>start = {liveStart}</span></span>
+            <span>{t(E, "filled", "채움")}: <span style={{ color: A, fontWeight: 700 }}>{liveStep}</span></span>
           </div>
           <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
             {livePerm.map((v, i) => (
               <div key={i} style={{
                 minWidth: 28, padding: "2px 6px", borderRadius: 5,
                 background: "#ede9fe", border: `1.5px solid ${A}`, color: A,
-                fontSize: 11, fontWeight: 800, textAlign: "center",
+                fontSize: 11, fontWeight: 600, textAlign: "center",
               }}>{v}</div>
             ))}
           </div>
@@ -533,17 +530,17 @@ export function PermRunner({ E }) {
         </div>
       )}
       {result && result.found && (
-        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px" }}>
-          <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 4 }}>
+        <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px" }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: "#15803d", marginBottom: 4 }}>
             {t(E, `✅ Found at start = ${result.start} (${fmtTime(result.elapsed)})`, `✅ 시작값 = ${result.start} 에서 성공 (${fmtTime(result.elapsed)})`)}
           </div>
-          <div style={{ fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: A }}>
+          <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: A }}>
             perm = [{result.perm.join(", ")}]
           </div>
         </div>
       )}
       {result && result.found === false && !result.stopped && (
-        <div style={{ background: "#fef2f2", border: "2px solid #dc2626", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 13, fontWeight: 700 }}>
+        <div style={{ background: "#fef2f2", border: "1px solid #dc2626", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 13, fontWeight: 700 }}>
           {t(E, `❌ No valid permutation. Output: -1 (${fmtTime(result.elapsed)})`, `❌ 유효한 순열 없음. 출력: -1 (${fmtTime(result.elapsed)})`)}
         </div>
       )}
@@ -553,12 +550,6 @@ export function PermRunner({ E }) {
         </div>
       )}
 
-      {/* 복잡도 추정 */}
-      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
-        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
-        <div>O(N²) per test case · C++ ≈ 10⁸ ops/sec</div>
-        <div>N = 100 → ~0.1ms · N = 1,000 → ~10ms · N = 10,000 → ~1s · N = 100,000 → ~100s</div>
-      </div>
     </div>
   );
 }
@@ -765,7 +756,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

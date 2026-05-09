@@ -143,16 +143,16 @@ export function FanSimulator({ E }) {
           <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
             <button onClick={() => adjustCount(i, 1)} style={{
               width: 28, height: 20, borderRadius: 4, border: "none",
-              background: STICK_COLORS[i], color: "#fff", fontSize: 12, fontWeight: 900, cursor: "pointer",
+              background: STICK_COLORS[i], color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer",
             }}>+</button>
             <div style={{
               width: 28, height: 28, borderRadius: 6, background: STICK_COLORS[i],
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 13, fontWeight: 900, color: "#fff", fontFamily: "'JetBrains Mono',monospace",
+              fontSize: 13, fontWeight: 700, color: "#fff", fontFamily: "'JetBrains Mono',monospace",
             }}>{c}</div>
             <button onClick={() => adjustCount(i, -1)} style={{
               width: 28, height: 20, borderRadius: 4, border: "none",
-              background: "#e5e7eb", color: "#6b7280", fontSize: 12, fontWeight: 900, cursor: "pointer",
+              background: "#e5e7eb", color: "#6b7280", fontSize: 12, fontWeight: 700, cursor: "pointer",
             }}>−</button>
           </div>
         ))}
@@ -160,13 +160,13 @@ export function FanSimulator({ E }) {
           {counts.length < 5 && (
             <button onClick={addColor} style={{
               width: 28, height: 24, borderRadius: 4, border: `1.5px dashed ${C.border}`,
-              background: "transparent", color: C.dim, fontSize: 12, fontWeight: 900, cursor: "pointer",
+              background: "transparent", color: C.dim, fontSize: 12, fontWeight: 700, cursor: "pointer",
             }}>+</button>
           )}
           {counts.length > 1 && (
             <button onClick={removeColor} style={{
               width: 28, height: 24, borderRadius: 4, border: `1.5px dashed #fca5a5`,
-              background: "transparent", color: "#dc2626", fontSize: 12, fontWeight: 900, cursor: "pointer",
+              background: "transparent", color: "#dc2626", fontSize: 12, fontWeight: 700, cursor: "pointer",
             }}>−</button>
           )}
         </div>
@@ -175,20 +175,20 @@ export function FanSimulator({ E }) {
       {/* Formula computation */}
       <div style={{
         background: ABg, borderRadius: 10, padding: 10,
-        border: `2px solid ${ABd}`, marginBottom: 10,
+        border: `1px solid ${ABd}`, marginBottom: 10,
       }}>
         <div style={{
           fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
           fontWeight: 700, color: C.text, lineHeight: 2, textAlign: "center",
         }}>
-          total = <span style={{ color: A, fontWeight: 900 }}>{total}</span>
-          {" · "}max = <span style={{ color: "#dc2626", fontWeight: 900 }}>{maxC}</span>
-          {" · "}rest = <span style={{ color: "#059669", fontWeight: 900 }}>{rest}</span>
+          total = <span style={{ color: A, fontWeight: 700 }}>{total}</span>
+          {" · "}max = <span style={{ color: "#dc2626", fontWeight: 700 }}>{maxC}</span>
+          {" · "}rest = <span style={{ color: "#059669", fontWeight: 700 }}>{rest}</span>
           <br />
-          min({total}, 2×{rest}+1) = min({total}, {2 * rest + 1}) = <span style={{ fontSize: 16, fontWeight: 900, color: A }}>{answer}</span>
+          min({total}, 2×{rest}+1) = min({total}, {2 * rest + 1}) = <span style={{ fontSize: 16, fontWeight: 700, color: A }}>{answer}</span>
         </div>
-        {allFit && <div style={{ fontSize: 11, color: "#059669", fontWeight: 800, textAlign: "center", marginTop: 4 }}>✅ {E ? "All sticks fit!" : "전부 사용 가능!"}</div>}
-        {!allFit && <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 800, textAlign: "center", marginTop: 4 }}>⚠️ {E ? `Too many of one color! ${total - answer} left over.` : `한 색이 너무 많아! ${total - answer}개 남음.`}</div>}
+        {allFit && <div style={{ fontSize: 11, color: "#059669", fontWeight: 600, textAlign: "center", marginTop: 4 }}>✅ {E ? "All sticks fit!" : "전부 사용 가능!"}</div>}
+        {!allFit && <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 600, textAlign: "center", marginTop: 4 }}>⚠️ {E ? `Too many of one color! ${total - answer} left over.` : `한 색이 너무 많아! ${total - answer}개 남음.`}</div>}
       </div>
 
       {/* Remaining pool */}
@@ -198,7 +198,7 @@ export function FanSimulator({ E }) {
           <div key={i} style={{ display: "flex", alignItems: "center", gap: 2 }}>
             <div style={{ width: 14, height: 14, borderRadius: 3, background: STICK_COLORS[i] }} />
             <span style={{
-              fontSize: 12, fontWeight: 900, color: cnt > 0 ? STICK_COLORS[i] : "#d1d5db",
+              fontSize: 12, fontWeight: 700, color: cnt > 0 ? STICK_COLORS[i] : "#d1d5db",
               fontFamily: "'JetBrains Mono',monospace", transition: "all .2s",
             }}>{cnt}</span>
           </div>
@@ -247,7 +247,7 @@ export function FanSimulator({ E }) {
                 }} />
               ))
             )}
-            <div style={{ display: "flex", alignItems: "center", fontSize: 10, fontWeight: 800, color: "#dc2626", marginLeft: 4 }}>
+            <div style={{ display: "flex", alignItems: "center", fontSize: 10, fontWeight: 600, color: "#dc2626", marginLeft: 4 }}>
               ← {E ? "can't place!" : "못 넣어!"}
             </div>
           </div>
@@ -260,7 +260,7 @@ export function FanSimulator({ E }) {
             background: s.leftover === 0 ? "#ecfdf5" : "#fee2e2",
             border: `1.5px solid ${s.leftover === 0 ? "#6ee7b7" : "#fca5a5"}`,
           }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: s.leftover === 0 ? "#059669" : "#dc2626" }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: s.leftover === 0 ? "#059669" : "#dc2626" }}>
               {s.leftover === 0
                 ? (E ? `✅ All ${s.answer} placed!` : `✅ ${s.answer}개 전부 배치 완료!`)
                 : (E ? `⚠️ ${s.answer}/${s.total} placed.` : `⚠️ ${s.total}개 중 ${s.answer}개만 배치.`)}
@@ -285,21 +285,21 @@ export function FanSimulator({ E }) {
         {!s.done ? (
           <>
             <button onClick={nextStep} disabled={playing} style={{
-              padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 900,
+              padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
               border: "none", cursor: playing ? "default" : "pointer",
               color: "#fff", opacity: playing ? 0.5 : 1,
               background: `linear-gradient(135deg,#b45309,${A})`,
               boxShadow: "0 3px 12px rgba(217,119,6,.3)",
             }}>▶ {E ? "Next" : "다음"}</button>
             <button onClick={autoPlay} style={{
-              padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-              border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+              padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+              border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
             }}>{playing ? "⏸" : "⏭"} {E ? (playing ? "Pause" : "Auto") : (playing ? "정지" : "자동")}</button>
           </>
         ) : (
           <button onClick={resetSim} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {E ? "Restart" : "처음부터"}</button>
         )}
       </div>
@@ -430,8 +430,8 @@ export function FanPlacementViz({ E }) {
       <div style={{ display: "flex", gap: 3, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
         {PLACEMENT_CASES.map((pc, i) => (
           <button key={i} onClick={() => switchCase(i)} style={{
-            padding: "4px 8px", borderRadius: 7, fontSize: 10, fontWeight: 800,
-            border: `2px solid ${i === caseIdx ? pc.bd : C.border}`,
+            padding: "4px 8px", borderRadius: 7, fontSize: 10, fontWeight: 600,
+            border: `1px solid ${i === caseIdx ? pc.bd : C.border}`,
             background: i === caseIdx ? pc.bg : C.card,
             color: i === caseIdx ? pc.color : C.dim,
             cursor: "pointer", lineHeight: 1.3,
@@ -444,9 +444,9 @@ export function FanPlacementViz({ E }) {
       {/* Case info card */}
       <div style={{
         background: tc.bg, borderRadius: 10, padding: "8px 10px",
-        border: `2px solid ${tc.bd}`, marginBottom: 8,
+        border: `1px solid ${tc.bd}`, marginBottom: 8,
       }}>
-        <div style={{ fontSize: 12, fontWeight: 900, color: tc.color, marginBottom: 3 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: tc.color, marginBottom: 3 }}>
           {tc.icon} {E ? tc.title_en : tc.title_ko}
         </div>
         <div style={{
@@ -472,7 +472,7 @@ export function FanPlacementViz({ E }) {
           <div key={i} style={{ display: "flex", alignItems: "center", gap: 2 }}>
             <div style={{ width: 14, height: 14, borderRadius: 3, background: STICK_COLORS[i] }} />
             <span style={{
-              fontSize: 12, fontWeight: 900, color: cnt > 0 ? STICK_COLORS[i] : "#d1d5db",
+              fontSize: 12, fontWeight: 700, color: cnt > 0 ? STICK_COLORS[i] : "#d1d5db",
               fontFamily: "'JetBrains Mono',monospace", transition: "all .2s",
             }}>{cnt}</span>
           </div>
@@ -482,7 +482,7 @@ export function FanPlacementViz({ E }) {
       {/* Placement area */}
       <div style={{
         background: "#f8fafc", borderRadius: 12, padding: "10px 6px",
-        border: `2px solid ${s.done ? tc.bd : C.border}`,
+        border: `1px solid ${s.done ? tc.bd : C.border}`,
         minHeight: 74, transition: "border-color .3s",
       }}>
         <div style={{ fontSize: 10, fontWeight: 700, color: C.dim, textAlign: "center", marginBottom: 6 }}>
@@ -501,7 +501,7 @@ export function FanPlacementViz({ E }) {
             <div key={i} style={{
               width: stickW, height: stickH, borderRadius: 5,
               background: STICK_COLORS[colorIdx],
-              border: `2px solid ${STICK_COLORS[colorIdx]}`,
+              border: `1px solid ${STICK_COLORS[colorIdx]}`,
               boxShadow: i === s.highlight ? `0 0 10px ${STICK_COLORS[colorIdx]}88` : `0 1px 3px ${STICK_COLORS[colorIdx]}22`,
               transform: i === s.highlight ? "scale(1.18)" : "scale(1)",
               transition: "all .25s",
@@ -525,7 +525,7 @@ export function FanPlacementViz({ E }) {
                 }} />
               ))
             )}
-            <div style={{ display: "flex", alignItems: "center", fontSize: 10, fontWeight: 800, color: "#dc2626", marginLeft: 4 }}>
+            <div style={{ display: "flex", alignItems: "center", fontSize: 10, fontWeight: 600, color: "#dc2626", marginLeft: 4 }}>
               ← {E ? "can't place!" : "못 넣어!"}
             </div>
           </div>
@@ -539,12 +539,12 @@ export function FanPlacementViz({ E }) {
             border: `1.5px solid ${s.leftover === 0 ? "#6ee7b7" : "#fca5a5"}`,
           }}>
             {s.leftover === 0 ? (
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#059669" }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#059669" }}>
                 ✅ {E ? `All ${s.answer} placed!` : `${s.answer}개 전부 배치 완료!`}
                 {" "}{E ? "answer = total" : "답 = total"}
               </div>
             ) : (
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#dc2626" }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#dc2626" }}>
                 ⚠️ {E
                   ? `${s.answer}/${s.total} placed. answer = 2×rest+1 = ${2 * rest + 1}`
                   : `${s.total}개 중 ${s.answer}개만. 답 = 2×rest+1 = ${2 * rest + 1}`}
@@ -572,22 +572,22 @@ export function FanPlacementViz({ E }) {
         {!s.done ? (
           <>
             <button onClick={nextStep} disabled={playing} style={{
-              padding: "7px 16px", borderRadius: 10, fontSize: 13, fontWeight: 900,
+              padding: "7px 16px", borderRadius: 10, fontSize: 13, fontWeight: 700,
               border: "none", cursor: playing ? "default" : "pointer",
               color: "#fff", opacity: playing ? 0.5 : 1,
               background: `linear-gradient(135deg,#b45309,${A})`,
               boxShadow: "0 3px 12px rgba(217,119,6,.3)",
             }}>▶ {E ? "Next" : "다음"}</button>
             <button onClick={autoPlay} style={{
-              padding: "7px 12px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-              border: `2px solid ${ABd}`, background: ABg,
+              padding: "7px 12px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+              border: `1px solid ${ABd}`, background: ABg,
               color: A, cursor: "pointer",
             }}>{playing ? "⏸" : "⏭"} {E ? (playing ? "Pause" : "Auto") : (playing ? "정지" : "자동")}</button>
           </>
         ) : (
           <button onClick={reset} style={{
-            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-            border: `2px solid ${ABd}`, background: ABg,
+            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg,
             color: A, cursor: "pointer",
           }}>↺ {E ? "Restart" : "처음부터"}</button>
         )}
@@ -627,31 +627,17 @@ export function SeparatorBuildViz({ E }) {
   return (
     <div style={{ padding: "12px 8px" }}>
       {/* Title */}
-      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 900, color: "#d97706", marginBottom: 10 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 700, color: "#d97706", marginBottom: 10 }}>
         {E ? "Why 2×rest + 1?" : "왜 2×rest + 1 일까?"}
       </div>
 
-      {/* Core idea */}
-      <div style={{
-        background: "#fffbeb", borderRadius: 10, padding: "8px 10px",
-        border: "2px solid #fbbf24", marginBottom: 10, textAlign: "center",
-      }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", lineHeight: 1.7 }}>
-          {E
-            ? "Each separator lets you place one more dominant stick!"
-            : "분리자 1개를 넣으면 → 가장 많은 색 1개를 더 놓을 수 있어!"}
-        </div>
-        <div style={{
-          fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: C.dim, marginTop: 4,
-        }}>
-          {E ? "separator = any non-dominant stick" : "분리자 = 가장 많은 색이 아닌 모든 막대"}
-        </div>
-      </div>
+      {/* No "core idea" prose box — the visual rows below (▶ button growing the row)
+          carry the meaning: each new separator lets you place one more dominant stick. */}
 
       {/* Visual row */}
       <div style={{
         background: "#f8fafc", borderRadius: 12, padding: "12px 6px",
-        border: `2px solid ${C.border}`, marginBottom: 8, minHeight: stickH + 30,
+        border: `1px solid ${C.border}`, marginBottom: 8, minHeight: stickH + 30,
       }}>
         <div style={{
           display: "flex", gap: 3, justifyContent: "center", alignItems: "end",
@@ -668,7 +654,7 @@ export function SeparatorBuildViz({ E }) {
                 transition: "all .3s",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
-                <span style={{ fontSize: 8, fontWeight: 900, color: "#fff" }}>
+                <span style={{ fontSize: 8, fontWeight: 700, color: "#fff" }}>
                   {s.type === "max" ? (E ? "MAX" : "최대") : (E ? "SEP" : "분리")}
                 </span>
               </div>
@@ -679,7 +665,7 @@ export function SeparatorBuildViz({ E }) {
         {/* Count summary */}
         <div style={{
           textAlign: "center", marginTop: 8, fontFamily: "'JetBrains Mono',monospace",
-          fontSize: 13, fontWeight: 800, lineHeight: 1.8,
+          fontSize: 13, fontWeight: 600, lineHeight: 1.8,
         }}>
           <span style={{ color: "#dc2626" }}>{E ? "dominant" : "최대"}: {sepCount + 1}</span>
           {" + "}
@@ -705,23 +691,22 @@ export function SeparatorBuildViz({ E }) {
               borderRadius: 4, padding: "0 6px",
               transition: "all .3s",
             }}>
-              {E ? "sep" : "분리"}={n} → 2×{n}+1 = <span style={{ color: isCurrent ? "#fbbf24" : "#e2e8f0", fontWeight: 900 }}>{2 * n + 1}</span>
+              {E ? "sep" : "분리"}={n} → 2×{n}+1 = <span style={{ color: isCurrent ? "#fbbf24" : "#e2e8f0", fontWeight: 700 }}>{2 * n + 1}</span>
               {E ? " sticks" : "개"}
             </div>
           );
         })}
       </div>
 
-      {/* The insight */}
+      {/* Formula card — visual.  Pattern table above already shows 2·n+1 growing,
+          this just stamps the canonical formula at the bottom for anchoring. */}
       {sepCount >= 2 && (
         <div style={{
           background: "#ecfdf5", borderRadius: 8, padding: "6px 10px",
           border: "1.5px solid #6ee7b7", marginBottom: 8, textAlign: "center",
-          fontSize: 11, fontWeight: 700, color: "#059669", lineHeight: 1.6,
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#15803d",
         }}>
-          {E
-            ? `Pattern: rest separators → can hold ${sepCount + 1} dominant → total = 2×rest+1. But if we have MORE sticks than that, we just use all of them! So: answer = min(total, 2×rest+1)`
-            : `패턴: 분리자 ${sepCount}개 → 최대색 ${sepCount + 1}개 배치 → 총 2×${sepCount}+1 = ${totalSticks}개. 하지만 전체가 이보다 적으면 그냥 전부 쓰면 돼! 그래서: 답 = min(total, 2×rest+1)`}
+          answer = min(total,&nbsp;<span style={{ color: "#dc2626" }}>2×rest</span>+1)
         </div>
       )}
 
@@ -729,21 +714,21 @@ export function SeparatorBuildViz({ E }) {
       <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
         {sepCount < maxSep ? (
           <button onClick={add} style={{
-            padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 900,
+            padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
             border: "none", cursor: "pointer", color: "#fff",
             background: `linear-gradient(135deg,#b45309,${A})`,
             boxShadow: "0 3px 12px rgba(217,119,6,.3)",
           }}>+ {E ? "Add separator" : "분리자 추가"}</button>
         ) : (
           <button onClick={reset} style={{
-            padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺ {E ? "Reset" : "처음부터"}</button>
         )}
         {sepCount > 0 && sepCount < maxSep && (
           <button onClick={reset} style={{
-            padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-            border: `2px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+            padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
           }}>↺</button>
         )}
       </div>
@@ -806,9 +791,9 @@ export function FormulaTrace({ E }) {
               width: 36, height: 36, borderRadius: 6,
               background: STICK_COLORS[i], display: "flex",
               alignItems: "center", justifyContent: "center",
-              fontSize: 15, fontWeight: 900, color: "#fff",
+              fontSize: 15, fontWeight: 700, color: "#fff",
               fontFamily: "'JetBrains Mono',monospace",
-              border: `2px solid ${STICK_COLORS[i]}`,
+              border: `1px solid ${STICK_COLORS[i]}`,
               boxShadow: `0 2px 6px ${STICK_COLORS[i]}33`,
             }}>{c}</div>
           </div>
@@ -830,7 +815,7 @@ export function FormulaTrace({ E }) {
           {" = "}
           <span style={{ color: "#fbbf24" }}>{tc.counts.join(" + ")}</span>
           {" = "}
-          <span style={{ color: "#fbbf24", fontWeight: 900 }}>{total}</span>
+          <span style={{ color: "#fbbf24", fontWeight: 700 }}>{total}</span>
         </div>
 
         {/* Step 2: max_c */}
@@ -842,7 +827,7 @@ export function FormulaTrace({ E }) {
           {" = "}
           <span style={{ color: "#f87171" }}>max({tc.counts.join(", ")})</span>
           {" = "}
-          <span style={{ color: "#f87171", fontWeight: 900 }}>{maxC}</span>
+          <span style={{ color: "#f87171", fontWeight: 700 }}>{maxC}</span>
         </div>
 
         {/* Step 3: rest */}
@@ -854,7 +839,7 @@ export function FormulaTrace({ E }) {
           {" = "}
           <span style={{ color: "#6ee7b7" }}>{total} - {maxC}</span>
           {" = "}
-          <span style={{ color: "#6ee7b7", fontWeight: 900 }}>{rest}</span>
+          <span style={{ color: "#6ee7b7", fontWeight: 700 }}>{rest}</span>
         </div>
 
         {/* Step 4: answer */}
@@ -877,7 +862,7 @@ export function FormulaTrace({ E }) {
           {", "}
           <span style={{ color: "#6ee7b7" }}>{twoRest1}</span>
           {") = "}
-          <span style={{ color: "#fbbf24", fontWeight: 900, fontSize: 16 }}>{answer}</span>
+          <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: 16 }}>{answer}</span>
         </div>
       </div>
 
@@ -885,15 +870,15 @@ export function FormulaTrace({ E }) {
       <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 10 }}>
         {step < maxSteps - 1 ? (
           <button onClick={next} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
+            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
             border: "none", cursor: "pointer", color: "#fff",
             background: `linear-gradient(135deg,#b45309,${A})`,
             boxShadow: "0 3px 12px rgba(217,119,6,.3)",
           }}>▶ {E ? "Next" : "다음"}</button>
         ) : (
           <button onClick={reset} style={{
-            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 900,
-            border: `2px solid ${ABd}`, background: ABg,
+            padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg,
             color: A, cursor: "pointer",
           }}>↺ {E ? "Restart" : "처음부터"}</button>
         )}

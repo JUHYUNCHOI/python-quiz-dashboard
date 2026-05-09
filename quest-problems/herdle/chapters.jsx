@@ -51,17 +51,29 @@ export function makeHerdleCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udfe9"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Herdle</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Herdle</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2022 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the count of GREEN cells, then YELLOW cells.",
+                "GREEN 칸 개수와 YELLOW 칸 개수를 차례로 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Two ", "")}
                   <b style={{ color: "#059669" }}>{t(E, "3×3 grids of cow breeds (letters)", "3×3 소 품종 그리드 (문자)")}</b>
@@ -73,7 +85,7 @@ export function makeHerdleCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#16a34a" }}>{t(E, "GREEN", "GREEN")}</b>
                   {t(E, ": guess cell exactly equals the same cell in the answer.",
@@ -81,7 +93,7 @@ export function makeHerdleCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#ca8a04" }}>{t(E, "YELLOW", "YELLOW")}</b>
                   {t(E, ": breed appears somewhere ELSE in the answer (not GREEN). Each answer-cell can supply at most one YELLOW.",
@@ -89,7 +101,7 @@ export function makeHerdleCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "the count of GREEN cells, then YELLOW cells", "GREEN 칸 개수와 YELLOW 칸 개수")}</b>
@@ -127,8 +139,8 @@ export function makeHerdleCh1(E) {
         "Answer=all 'A', Guess=all 'A'. Green count?",
         "정답=전부 'A', 추측=전부 'A'. 초록 개수?"),
       hint: t(E,
-        "Every cell matches, so all 9 are green.",
-        "모든 셀이 일치하니까 9개 다 초록이에요."),
+        "Compare each guess cell to the same answer cell — count exact matches.",
+        "각 추측 칸을 같은 위치 정답 칸과 비교 — 정확한 일치를 세어 봐."),
       answer: 9,
     },
   ];
@@ -140,48 +152,12 @@ export function makeHerdleCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeHerdleCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "First pass over 9 cells: count GREEN (exact matches) and remember which guess letters / answer letters are still available. Second pass: count YELLOWs by matching available guess letters with available answer letters.",
-        "9 칸을 한 번 훑으면서: GREEN (정확한 일치) 을 세고, 남은 추측 글자 / 정답 글자를 기록. 두 번째 패스: 남은 추측 글자와 남은 정답 글자를 매칭해서 YELLOW 개수."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Count GREEN (exact match)", "GREEN 세기 (정확 일치)"), code: "if guess[i][j] == answer[i][j]: green += 1", color: "#16a34a" },
-              { n: 2, label: t(E, "Collect remaining letters", "남은 글자 모으기"), code: "else: remaining_ans[letter] += 1; remaining_guess.append(letter)", color: "#0891b2" },
-              { n: 3, label: t(E, "Yellow = matches in remaining", "YELLOW = 남은 글자에서 매칭"), code: "for letter in remaining_guess: if remaining_ans[letter]>0: yellow+=1; remaining_ans[letter]-=1", color: "#ca8a04" },
-              { n: 4, label: t(E, "Print green and yellow", "GREEN, YELLOW 출력"), code: "print(green, yellow)", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(1) per test</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "grid is fixed 3×3 = 9 cells", "격자가 고정 3×3 = 9 칸")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "First pass: count GREEN (exact matches) and record remaining guess / answer letters. Second pass: match remaining guess letters with remaining answer letters → YELLOW count. Sections build it one piece at a time.",
+        "첫 패스: GREEN 카운트하고 남은 추측 / 정답 글자 기록. 두 번째 패스: 남은 추측을 남은 정답과 매칭 → YELLOW. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getHerdleSections(E),
     },
   ];

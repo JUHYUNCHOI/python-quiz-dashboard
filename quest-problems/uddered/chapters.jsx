@@ -36,17 +36,29 @@ export function makeUdderedCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd24"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Uddered but not Herd</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Uddered but not Herd</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2021 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of full alphabet recitations needed to read all of S.",
+                "S 를 모두 읽는 데 필요한 최소 알파벳 외우기 횟수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Bessie has a ", "Bessie에게 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "custom 26-letter alphabet order", "26 글자의 커스텀 알파벳 순서")}</b>
@@ -55,7 +67,7 @@ export function makeUdderedCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "She hears string S; she reads each letter in order. To read the next letter when it ", "S 문자열을 들으면 각 문자를 순서대로 읽어요. 다음 문자가 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "comes before or equals the current letter in her order", "그녀의 순서에서 현재 문자보다 앞이거나 같으면")}</b>
@@ -64,7 +76,7 @@ export function makeUdderedCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "MINIMUM number of full alphabet recitations needed to read all of S", "S 를 모두 읽기 위한 최소 알파벳 외우기 횟수")}</b>
@@ -101,8 +113,8 @@ export function makeUdderedCh1(E) {
         "Alphabet: \"abc\", heard: \"ca\". How many cycles needed?",
         "알파벳: \"abc\", 들은 문자열: \"ca\". 몇 사이클 필요?"),
       hint: t(E,
-        "'c' is at position 2, 'a' is at position 0. Since 0 <= 2, we need a new cycle. Total: 2.",
-        "'c'는 위치 2, 'a'는 위치 0. 0 <= 2이므로 새 사이클 필요. 총: 2."),
+        "Compare each letter's custom position with the previous one — when does she need to restart?",
+        "인접한 두 글자의 커스텀 위치를 비교해 봐 — 언제 알파벳을 다시 외워야 할까?"),
       answer: 2,
     },
   ];
@@ -114,48 +126,12 @@ export function makeUdderedCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeUdderedCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Map each letter to its position in Bessie's custom alphabet. Scan S; whenever next letter's custom-position ≤ current's, she must recite the alphabet again. Start with cycle = 1.",
-        "각 글자를 Bessie의 커스텀 알파벳에서의 위치로 매핑. S 를 스캔; 다음 글자의 커스텀-위치 ≤ 현재 위치 일 때 알파벳을 다시 외워야 함. cycle = 1 부터 시작."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Build position map", "위치 맵 구축"), code: "pos = {letter: i for i, letter in enumerate(alphabet)}", color: "#dc2626" },
-              { n: 2, label: t(E, "Init cycles = 1", "cycles = 1 초기화"), code: "cycles = 1", color: "#7c3aed" },
-              { n: 3, label: t(E, "Scan S; bump on backward step", "S 스캔; 뒤로 가면 cycles +1"), code: "for i in range(1, len(S)): if pos[S[i]] <= pos[S[i-1]]: cycles += 1", color: "#0891b2" },
-              { n: 4, label: t(E, "Print cycles", "cycles 출력"), code: "print(cycles)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Map each letter to its position in Bessie's custom alphabet. Scan S — when next letter's custom-position ≤ current's, recite again. Start cycle = 1. Sections build it one piece at a time.",
+        "각 글자를 커스텀 알파벳 위치로 매핑. S 스캔 — 다음 글자 위치 ≤ 현재 일 때 다시 외움. cycle = 1 부터 시작. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getUdderedSections(E),
     },
   ];

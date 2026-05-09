@@ -5,30 +5,60 @@ import { getMooLangSections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "# Input: counts of each word type, then sentence-period budget P and comma budget C",
-  "N_n, N_t, N_i, P, C_max = map(int, input().split())",
-  "# N_n = nouns, N_t = transitive verbs, N_i = intransitive verbs",
-  "# P    = total sentences allowed (periods)",
-  "# C_max = total commas allowed (used to add extra objects to transitive sentences)",
+  "import sys",
   "",
-  "best = 0",
-  "# Try every split: a intransitive sentences + b transitive sentences",
-  "# Intransitive uses 1 noun + 1 intrans verb (2 words, 1 period).",
-  "# Transitive uses 1 noun (subject) + 1 trans verb + (1 + extras) nouns (objects),",
-  "# where each extra object beyond the first costs 1 comma.",
-  "for a in range(min(N_i, N_n, P) + 1):",
-  "    rem_periods = P - a",
-  "    rem_nouns   = N_n - a",
-  "    b_max = min(N_t, rem_periods, rem_nouns // 2)",
-  "    for b in range(b_max + 1):",
-  "        # base words from b transitive sentences = 3*b (subj + verb + 1 object)",
-  "        base = 2 * a + 3 * b",
-  "        # add extra object nouns up to commas allowed",
-  "        nouns_for_extras = rem_nouns - 2 * b",
-  "        extras = min(nouns_for_extras, C_max)",
-  "        best = max(best, base + extras)",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "T = int(data[p]); p += 1     # number of test cases",
   "",
-  "print(best)",
+  "out_lines = []",
+  "for _ in range(T):",
+  "    N = int(data[p]); p += 1   # number of words",
+  "    C = int(data[p]); p += 1   # comma budget",
+  "    P = int(data[p]); p += 1   # period budget",
+  "    nouns, tverbs, iverbs, conjs = [], [], [], []",
+  "    for _ in range(N):",
+  "        word = data[p]",
+  "        p += 1",
+  "        ty = data[p]",
+  "        p += 1",
+  "        if ty[0] == 'n': nouns.append(word)",
+  "        elif ty[0] == 't': tverbs.append(word)",
+  "        elif ty[0] == 'i': iverbs.append(word)",
+  "        else: conjs.append(word)",
+  "",
+  "    # Try every type-2 count.  For each, derive the best type-1 count given",
+  "    # noun supply and the period budget (after subtracting conj-merged sentences).",
+  "    best = (0, 0, 0, 0)        # (words, tverb_count, iverb_count, conj_count)",
+  "    for n_tverb in range(len(tverbs) + 1):",
+  "        n_iverb = min(len(iverbs), len(nouns) - 2 * n_tverb)",
+  "        while n_iverb >= 0:",
+  "            n_conj = min(len(conjs), (n_tverb + n_iverb) // 2)",
+  "            if n_tverb + n_iverb - n_conj <= P:",
+  "                break",
+  "            n_iverb -= 1",
+  "        if n_iverb < 0:",
+  "            continue",
+  "        # Tack extra nouns onto the last type-2 sentence with commas.",
+  "        extra_nouns = min(C, len(nouns) - (n_iverb + 2 * n_tverb))",
+  "        if n_tverb == 0:",
+  "            extra_nouns = 0",
+  "        n_words = 3 * n_tverb + 2 * n_iverb + n_conj + extra_nouns",
+  "        best = max(best, (n_words, n_tverb, n_iverb, n_conj))",
+  "",
+  "    n_words, n_tverb, n_iverb, n_conj = best",
+  "    Cleft = C",
+  "    basic = [nouns.pop() + ' ' + iverbs.pop() for _ in range(n_iverb)] + \\",
+  "            [nouns.pop() + ' ' + tverbs.pop() + ' ' + nouns.pop() for _ in range(n_tverb)]",
+  "    while n_tverb > 0 and Cleft > 0 and len(nouns) > 0:",
+  "        basic[-1] += ', ' + nouns.pop()",
+  "        Cleft -= 1",
+  "    compound = [basic.pop() + ' ' + conjs.pop() + ' ' + basic.pop() for _ in range(n_conj)]",
+  "    sentences = [s + '.' for s in basic + compound]",
+  "    out_lines.append(str(n_words))",
+  "    out_lines.append(' '.join(sentences))",
+  "",
+  "print(chr(10).join(out_lines))",
 ];
 
 /* ═══════════════════════════════════════════════════════════════
@@ -45,17 +75,27 @@ export function makeMooLangCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcdd"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Moo Language</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Moo Language</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2023 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E, "Given word counts and period/comma budgets, output the maximum total words usable.", "단어 개수와 마침표·쉼표 한도가 주어졌을 때, 사용 가능한 단어 수의 최댓값을 출력해요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We have a ", "")}
                   <b style={{ color: "#2563eb" }}>{t(E, "word inventory", "단어 재고")}</b>
@@ -64,7 +104,7 @@ export function makeMooLangCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each sentence is either:", "각 문장은 다음 중 하나:")}
                   <div style={{ marginTop: 6, marginLeft: 8, fontSize: 12, color: "#475569" }}>
@@ -74,7 +114,7 @@ export function makeMooLangCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Two sentences can be ", "두 문장을 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "joined by a conjunction", "접속사로 연결")}</b>
@@ -86,7 +126,7 @@ export function makeMooLangCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "maximum total number of words", "사용 단어 수의 최댓값")}</b>
@@ -103,8 +143,8 @@ export function makeMooLangCh1(E) {
         "Each word can only be used once!\nA transitive sentence uses 2 nouns, while an intransitive sentence uses 1 noun.\nWe need to balance them.", "\uac01 \ub2e8\uc5b4\ub294 \ud55c \ubc88\ub9cc \uc4f8 \uc218 \uc788\uc5b4!\n\ud0c0\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac 2\uac1c, \uc790\ub3d9\uc0ac \ubb38\uc7a5\uc740 \uba85\uc0ac 1\uac1c\ub97c \uc4f0\uc9c0.\n\uade0\ud615\uc744 \ub9de\ucdb0\uc57c \ud574."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#2563eb", marginBottom: 10 }}>
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#2563eb", marginBottom: 10 }}>
               {t(E, "Sentence Structure", "\ubb38\uc7a5 \uad6c\uc870")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -132,7 +172,7 @@ export function makeMooLangCh1(E) {
       narr: t(E,
         "3 nouns, 0 transitive verbs, 2 intransitive verbs.\nWe can only make Type 1 sentences.\nEach needs 1 noun + 1 intransitive verb.\nLimited by 2 intransitive verbs = 2 sentences = 4 words!", "명사 3개, 타동사 0개, 자동사 2개. 유형 1 문장만 가능. 각각 명사 1개 + 자동사 1개. 자동사 2개로 제한 = 2문장 = 4단어!"),
       question: t(E, "3 nouns, 2 intransitive, 0 transitive → max words?", "\uba85\uc0ac 3, \uc790\ub3d9\uc0ac 2, \ud0c0\ub3d9\uc0ac 0 \u2192 \ucd5c\ub300 \ub2e8\uc5b4?"),
-      hint: t(E, "Only Type 1 possible: 2 sentences x 2 words each", "\uc720\ud615 1\ub9cc \uac00\ub2a5: 2\ubb38\uc7a5 x 2\ub2e8\uc5b4"),
+      hint: t(E, "No transitive verbs \u2192 only Type 1. The bottleneck is the smaller of nouns / intransitive verbs.", "\ud0c0\ub3d9\uc0ac 0 \u2192 \uc720\ud615 1\ub9cc \uac00\ub2a5. \uba85\uc0ac\uc640 \uc790\ub3d9\uc0ac \uc911 \ub354 \uc801\uc740 \ucabd\uc774 \ubcd1\ubaa9\uc774\uc5d0\uc694."),
       answer: 4,
     },
     {
@@ -141,8 +181,8 @@ export function makeMooLangCh1(E) {
         "The greedy approach: try all possible numbers of transitive sentences, use remaining nouns for intransitive sentences, pick the maximum!", "그리디 접근: 가능한 타동사 문장 수를 모두 시도하고, 남은 명사로 자동사 문장을 만들고, 최댓값을 선택!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#2563eb", marginBottom: 10 }}>
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#2563eb", marginBottom: 10 }}>
               {t(E, "Strategy", "\uc804\ub7b5")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>

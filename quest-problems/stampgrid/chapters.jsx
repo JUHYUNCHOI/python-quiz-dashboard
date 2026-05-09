@@ -5,49 +5,60 @@ import { getStampGridSections } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N, K = map(int, input().split())",
-  "canvas = [input() for _ in range(N)]",
-  "stamp = [input() for _ in range(K)]",
+  "import sys",
+  "",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "T = int(data[p]); p += 1     # number of test cases",
   "",
   "def rotate90(grid):",
   "    R, C = len(grid), len(grid[0])",
-  "    return [''.join(grid[R-1-r][c] for r in range(R)) for c in range(C)]",
+  "    return [''.join(grid[R - 1 - r][c] for r in range(R)) for c in range(C)]",
   "",
-  "# all 4 rotations of the stamp",
-  "rotations = [stamp]",
-  "for _ in range(3):",
-  "    rotations.append(rotate90(rotations[-1]))",
+  "def solve():",
+  "    global p",
+  "    # Per test: N + canvas, then K + stamp",
+  "    N = int(data[p])",
+  "    p += 1",
+  "    canvas = [data[p + i] for i in range(N)]",
+  "    p += N",
+  "    K = int(data[p])",
+  "    p += 1",
+  "    stamp = [data[p + i] for i in range(K)]",
+  "    p += K",
   "",
-  "# track which canvas cells get covered by SOME legal placement",
-  "covered = [[False]*N for _ in range(N)]",
+  "    # All 4 rotations of the stamp",
+  "    rotations = [stamp]",
+  "    for _ in range(3):",
+  "        rotations.append(rotate90(rotations[-1]))",
   "",
-  "for rot in rotations:",
-  "    for r in range(N - K + 1):",
-  "        for c in range(N - K + 1):",
-  "            # placement is legal only if no '*' of stamp",
-  "            # falls onto a non-'*' of canvas",
-  "            ok = True",
-  "            for dr in range(K):",
-  "                for dc in range(K):",
-  "                    if rot[dr][dc] == '*' and canvas[r+dr][c+dc] != '*':",
-  "                        ok = False",
-  "                        break",
-  "                if not ok:",
-  "                    break",
-  "            if not ok:",
-  "                continue",
-  "            # legal -> mark its '*' cells covered",
-  "            for dr in range(K):",
-  "                for dc in range(K):",
-  "                    if rot[dr][dc] == '*':",
-  "                        covered[r+dr][c+dc] = True",
+  "    # Mark canvas cells covered by SOME legal placement",
+  "    covered = [[False] * N for _ in range(N)]",
+  "    for rot in rotations:",
+  "        for r in range(N - K + 1):",
+  "            for c in range(N - K + 1):",
+  "                # legal: no '*' of stamp falls onto a non-'*' of canvas",
+  "                ok = True",
+  "                for dr in range(K):",
+  "                    if not ok: break",
+  "                    for dc in range(K):",
+  "                        if rot[dr][dc] == '*' and canvas[r + dr][c + dc] != '*':",
+  "                            ok = False",
+  "                            break",
+  "                if not ok: continue",
+  "                # legal -> mark its '*' cells covered",
+  "                for dr in range(K):",
+  "                    for dc in range(K):",
+  "                        if rot[dr][dc] == '*':",
+  "                            covered[r + dr][c + dc] = True",
   "",
-  "# every '*' of the canvas must be covered",
-  "ok_all = all(",
-  "    covered[r][c] or canvas[r][c] != '*'",
-  "    for r in range(N) for c in range(N)",
-  ")",
-  "print('YES' if ok_all else 'NO')",
+  "    # Every '*' of the canvas must be covered",
+  "    return all(covered[r][c] or canvas[r][c] != '*' for r in range(N) for c in range(N))",
+  "",
+  "out = []",
+  "for _ in range(T):",
+  "    out.append('YES' if solve() else 'NO')",
+  "print(chr(10).join(out))",
 ];
 
 /* ═══════════════════════════════════════════════════════════════
@@ -62,9 +73,18 @@ export function makeStampCh1(E) {
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcee"}</div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Stamp Grid</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Stamp Grid</div>
           <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2023 Bronze #2</div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginTop: 12, marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E, "Decide if a K×K stamp (rotatable 4 ways) can recreate the N×N pattern exactly.", "K×K 도장(4방향 회전 가능)으로 N×N 패턴을 정확히 만들 수 있는지 판단하기.")}
+            </div>
+          </div>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
               "N\u00d7N grid (desired pattern).\nK\u00d7K stamp (can rotate 0/90/180/270\u00b0). Place stamp at any valid position, any rotation. Can we match the pattern exactly?",
               "N\u00d7N \uadf8\ub9ac\ub4dc (\uc6d0\ud558\ub294 \ud328\ud134). K\u00d7K \ub3c4\uc7a5 (0/90/180/270\u00b0 \ud68c\uc804 \uac00\ub2a5). \uc5b4\ub5a4 \uc704\uce58,\n\uc5b4\ub5a4 \ud68c\uc804\uc73c\ub85c\ub4e0 \ubc30\uce58. \ud328\ud134\uc744 \uc815\ud655\ud788 \ub9cc\ub4e4 \uc218 \uc788\ub098?")}
@@ -77,16 +97,16 @@ export function makeStampCh1(E) {
         "The stamp can be rotated 4 ways (0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0).\nEach placement covers a K\u00d7K area on the canvas.", "\ub3c4\uc7a5\uc740 4\ubc29\ud5a5 \ud68c\uc804 \uac00\ub2a5 (0\u00b0, 90\u00b0, 180\u00b0, 270\u00b0).\n\uac01 \ubc30\uce58\ub294 \uce94\ubc84\uc2a4\uc758 K\u00d7K \uc601\uc5ed\uc744 \ucee4\ubc84."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#059669", marginBottom: 10 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#059669", marginBottom: 10 }}>
               {t(E, "4 Rotations", "4\ubc29\ud5a5 \ud68c\uc804")}
             </div>
             <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
               {["0\u00b0", "90\u00b0", "180\u00b0", "270\u00b0"].map((r, i) => (
                 <div key={i} style={{
                   background: "#d1fae5", borderRadius: 8, padding: "8px 14px",
-                  fontSize: 14, fontWeight: 800, color: "#065f46",
-                  border: "2px solid #6ee7b7",
+                  fontSize: 14, fontWeight: 600, color: "#065f46",
+                  border: "1px solid #6ee7b7",
                   transform: `rotate(${i * 90}deg)`,
                 }}>{"\ud83d\udcee"}</div>
               ))}
@@ -111,7 +131,7 @@ export function makeStampCh1(E) {
       narr: t(E,
         "If canvas is 3\u00d73 and stamp is 2\u00d72, valid top-left positions are (0,0), (0,1), (1,0), (1,1).\nThat's (3-2+1)\u00b2 = 4 positions!", "\uce94\ubc84\uc2a4 3\u00d73, \ub3c4\uc7a5 2\u00d72\uba74, \uc720\ud6a8\ud55c \uc88c\uc0c1\ub2e8 \uc704\uce58\ub294 (0,0), (0,1), (1,0), (1,1).\n(3-2+1)\u00b2 = 4\uac1c!"),
       question: t(E, "Canvas 3\u00d73, stamp 2\u00d72 \u2192 max positions?", "\uce94\ubc84\uc2a4 3\u00d73, \ub3c4\uc7a5 2\u00d72 \u2192 \ucd5c\ub300 \uc704\uce58?"),
-      hint: t(E, "(N-K+1)\u00b2 = (3-2+1)\u00b2", "(N-K+1)\u00b2 = (3-2+1)\u00b2"),
+      hint: t(E, "Top-left rows: 0, 1. Top-left cols: 0, 1. Count the pairs.", "\uc88c\uc0c1\ub2e8 \ud589: 0, 1. \uc88c\uc0c1\ub2e8 \uc5f4: 0, 1. \uc30d\uc758 \uac1c\uc218\ub97c \uc138\ubd10."),
       answer: 4,
     },
     {
@@ -120,8 +140,8 @@ export function makeStampCh1(E) {
         "Approach: Try all positions and rotations.\nFor each combination, check if the stamped cells match the desired pattern!", "\uc811\uadfc\ubc95: \ubaa8\ub4e0 \uc704\uce58\uc640 \ud68c\uc804\uc744 \uc2dc\ub3c4.\n\uac01 \uc870\ud569\uc5d0\uc11c \ub3c4\uc7a5 \ucc0d\ud78c \uc140\uc774 \uc6d0\ud558\ub294 \ud328\ud134\uacfc \uc77c\uce58\ud558\ub294\uc9c0 \ud655\uc778!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#059669", marginBottom: 10 }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#059669", marginBottom: 10 }}>
               {t(E, "Brute Force Strategy", "\ube0c\ub8e8\ud2b8 \ud3ec\uc2a4 \uc804\ub7b5")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 2, whiteSpace: "pre-line" }}>

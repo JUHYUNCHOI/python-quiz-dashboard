@@ -43,17 +43,29 @@ export function makeFeedCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf3e"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Feeding the Cows</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Feeding the Cows</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2022 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum number of grass patches so every cow has a same-breed patch within distance K.",
+                "모든 소가 거리 K 이내에 자기 품종 패치를 가지도록 하는 최소 패치 수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ 에게 ")}
                   <b style={{ color: "#059669" }}>{t(E, "N cows", "N마리 소")}</b>
@@ -64,7 +76,7 @@ export function makeFeedCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ places grass patches ", "FJ 는 풀 패치 (각각 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "(each patch is type G or H)", "G 또는 H 종류)")}</b>
@@ -72,7 +84,7 @@ export function makeFeedCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each cow must have a ", "각 소는 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "same-breed patch within distance K", "자기 품종과 같은 패치가 거리 K 이내")}</b>
@@ -81,7 +93,7 @@ export function makeFeedCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of patches needed", "필요한 최소 패치 수")}</b>
@@ -118,8 +130,8 @@ export function makeFeedCh1(E) {
         "\"GGG\", K = 1. Min patches?",
         "\"GGG\", K = 1. 최소 패치 수?"),
       hint: t(E,
-        "Greedy: cow 0 is uncovered, place G patch. It covers positions 0 to 0+1=1. Cow 2 is uncovered, place another. But actually: patch at pos 0+K=1 covers 0 to 1+0? No: a patch at position p covers [p-K, p+K]? No, cow at pos i needs patch within K. So patch at pos 1 covers cows 0,1,2. Answer: 1.",
-        "그리디: 소 0이 미커버, G 패치 놓아요. 위치 0+K=1에 놓으면 소 0, 1, 2 모두 커버. 답: 1."),
+        "Place a patch as far right as possible while still covering the leftmost uncovered cow of that breed.",
+        "그 품종의 가장 왼쪽 미커버 소를 여전히 커버하면서 패치를 가능한 한 오른쪽에 놓아 봐."),
       answer: 1,
     },
   ];
@@ -131,48 +143,12 @@ export function makeFeedCh1(E) {
    =============================================================== */
 export function makeFeedCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Track separately for each breed: the right-end of the last patch placed (last_G, last_H). When a cow of breed B at position i is past last_B, place a NEW patch at position i — extending its coverage to i + K.",
-        "품종별로 따로 추적: 마지막에 놓은 패치의 오른쪽 끝 (last_G, last_H). 품종 B 의 소가 위치 i 에 있고 i > last_B 이면, 위치 i 에 새 패치를 놓아 — 커버 범위를 i + K 까지 확장."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Sort cows by position", "위치 순 정렬"), code: "cows.sort(key=lambda c: c.pos)", color: "#059669" },
-              { n: 2, label: t(E, "Init last_G, last_H = -inf", "last_G, last_H = -inf 초기화"), code: "last = {'G': -inf, 'H': -inf}", color: "#0891b2" },
-              { n: 3, label: t(E, "Cow uncovered? place patch", "소가 미커버? 패치 배치"), code: "if pos > last[breed]: patches += 1; last[breed] = pos + K", color: "#7c3aed" },
-              { n: 4, label: t(E, "Print total patches", "총 패치 수 출력"), code: "print(patches)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "sort + single greedy pass", "정렬 + 그리디 한 번 순회")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Track per breed the right-end of the last patch placed (last_G, last_H). When a cow of breed B at position i is past last_B, place a NEW patch at i — extending its coverage to i + K. Sections build it one piece at a time.",
+        "품종별로 마지막 패치의 오른쪽 끝 (last_G, last_H) 추적. 품종 B 의 소가 i 에 있고 i > last_B 이면 i 에 새 패치를 놓아 — 커버 범위를 i + K 까지 확장. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getFeedCowsSections(E),
     },
   ];

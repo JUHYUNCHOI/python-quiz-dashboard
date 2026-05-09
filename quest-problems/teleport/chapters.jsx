@@ -35,17 +35,29 @@ export function makeTeleportCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf00"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>Teleportation</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Teleportation</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2018 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the minimum total walking distance from a to b.",
+                "a 에서 b 까지 걷는 거리의 최솟값을 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ travels from position ", "FJ 가 수직선의 위치 ")}
                   <b style={{ color: "#d97706" }}>a</b>
@@ -55,7 +67,7 @@ export function makeTeleportCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There's a ", "")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "two-way teleporter linking x and y", "x 와 y 를 잇는 양방향 텔레포터")}</b>
@@ -64,7 +76,7 @@ export function makeTeleportCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum total walking distance from a to b", "a 에서 b 까지 걷는 거리의 최솟값")}</b>
@@ -102,8 +114,8 @@ export function makeTeleportCh1(E) {
         "a=0, b=10, teleporter 3<->8. Minimum distance?",
         "a=0, b=10, 텔레포터 3<->8. 최소 거리?"),
       hint: t(E,
-        "Direct: 10. Via 3->8: 3+2=5. Via 8->3: 8+7=15. Min is 5.",
-        "직접: 10. 3->8 경유: 3+2=5. 8->3 경유: 8+7=15. 최소 5."),
+        "Compare three options: direct, teleport x→y, teleport y→x.",
+        "세 경로 비교 — 직접, x→y 텔레포트, y→x 텔레포트."),
       answer: 5,
     },
   ];
@@ -115,48 +127,12 @@ export function makeTeleportCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeTeleportCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Three possible routes from a to b: 1) direct walk |a − b|; 2) a → x via walking, then teleport to y, then walk to b: |a − x| + |y − b|; 3) the reverse: |a − y| + |x − b|. Take min.",
-        "a 에서 b 까지 가능한 경로 3 개: 1) 직접 |a − b|; 2) a → x 걸어가서 텔레포트로 y, 그리고 b 로 |a − x| + |y − b|; 3) 반대 |a − y| + |x − b|. 최솟값."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read a, b, x, y", "a, b, x, y 읽기"), code: "a, b, x, y = map(int, input().split())", color: "#d97706" },
-              { n: 2, label: t(E, "Compute three options", "세 옵션 계산"), code: "d1 = abs(a - b)", color: "#7c3aed" },
-              { n: 3, label: t(E, "Add teleport options", "텔레포트 옵션 추가"), code: "d2 = abs(a - x) + abs(y - b);  d3 = abs(a - y) + abs(x - b)", color: "#0891b2" },
-              { n: 4, label: t(E, "Print min", "min 출력"), code: "print(min(d1, d2, d3))", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(1)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "constant arithmetic", "상수 산술")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Three routes from a to b: 1) direct |a − b|, 2) |a − x| + |y − b|, 3) |a − y| + |x − b|. Take the min. Sections build it one piece at a time.",
+        "a → b 경로 3 가지: 1) 직접 |a − b|, 2) |a − x| + |y − b|, 3) |a − y| + |x − b|. 최솟값. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getTeleportSections(E),
     },
   ];

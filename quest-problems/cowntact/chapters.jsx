@@ -37,17 +37,29 @@ export function makeCowntactCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🦠</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#7c5cfc" }}>Cowntact Tracing 2</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#7c5cfc" }}>Cowntact Tracing 2</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2023 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #7c5cfc", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the smallest possible number of cows that could have been sick on day 0 to produce this final state.",
+                "이 최종 상태를 만들 수 있는 0 일차 감염 소의 최소 수를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#7c5cfc", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#7c5cfc", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ에게 ")}
                   <b style={{ color: "#7c5cfc" }}>{t(E, "N cows in a row", "한 줄로 선 N마리 소")}</b>
@@ -56,7 +68,7 @@ export function makeCowntactCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#7c5cfc", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#7c5cfc", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each night, every sick cow ", "매일 밤, 모든 감염된 소가 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "infects her immediate neighbors", "양옆 이웃에게 병을 옮겨요")}</b>
@@ -65,7 +77,7 @@ export function makeCowntactCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#7c5cfc", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#7c5cfc", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're given the ", "")}
                   <b style={{ color: "#0891b2" }}>{t(E, "final state", "최종 상태")}</b>
@@ -74,7 +86,7 @@ export function makeCowntactCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum number of cows that could have been sick on day 0", "0일차에 감염됐을 수 있는 소의 최소 수")}</b>
@@ -89,7 +101,8 @@ export function makeCowntactCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Consider the string \"11111\".\nAll 5 cows are infected.\nCould they all have come from just 1 cow in the middle?\nYes!\nThe center cow infects outward over time.", "문자열 \"11111\"을 생각해봐요. 5마리 모두 감염됐어. 가운데 1마리에서 시작했을 수 있을까? 그렇지! 가운데 소가 시간이 지나면서 양옆으로 퍼져."),
+        "Picture the spread in reverse — if 5 cows are sick now, how few could have started it?",
+        "거꾸로 상상해 봐 — 지금 5 마리가 감염이라면, 시작은 최소 몇 마리?"),
       question: t(E,
         "\"11111\" — what is the minimum number initially infected?",
         "\"11111\" — 처음에 감염된 최소 수는?"),
@@ -107,10 +120,14 @@ export function makeCowntactCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Now consider \"01110110\".\nThe 0s break the infected cows into separate groups.\nGroup 1: positions 1-3 (\"111\"), Group 2: positions 5-6 (\"11\").\nEach group needs at least 1 initial source!", "이제 \"01110110\"을 봐요.\n0이 감염된 소들을 별도 그룹으로 나눠.\n그룹1: 위치 1-3 (\"111\"), 그룹2: 위치 5-6 (\"11\").\n각 그룹은 최소 1마리 초기 감염이 필요해요!"),
+        "0s split the row.  Look at \"01110110\" and find the runs of 1s.",
+        "0 이 줄을 끊어. \"01110110\" 에서 1 이 이어지는 구간을 세 봐."),
       question: t(E,
         "\"01110110\"\nHow many separate infected groups?",
         "\"01110110\"\n감염된 그룹이 몇 개예요?"),
+      hint: t(E,
+        "Each '0' breaks the chain.  Count how many separate runs of 1s appear.",
+        "0 은 끊어주는 역할. 1 이 연속된 덩어리가 몇 개?"),
       answer: 2,
     },
   ];
@@ -122,54 +139,12 @@ export function makeCowntactCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowntactCh2(E, lang = "py") {
   return [
-    // 2-1: Approach reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "The key insight: each consecutive segment of 1s can be explained by a single initial infection.\nSo the answer = number of separate groups of consecutive 1s!", "핵심 통찰: 연속된 1의 각 세그먼트는 하나의 초기 감염으로 설명 가능. 답 = 연속된 1 그룹의 수!"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#7c5cfc", marginBottom: 8 }}>
-            {t(E, "Approach: Count Segments", "접근법: 세그먼트 세기")}
-          </div>
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "Scan left to right:\n• When you hit a '1', increment count\n• Skip all consecutive '1's (same group)\n• When you hit a '0', just move on\n\nEach group of 1s = 1 initial infection\nAnswer = total number of groups",
-              "왼쪽에서 오른쪽으로 스캔:\n• '1'을 만나면 카운트 +1\n• 연속된 '1'은 모두 건너뛰기 (같은 그룹)\n• '0'을 만나면 그냥 넘어가기\n\n1의 각 그룹 = 초기 감염 1마리\n답 = 총 그룹 수")}
-          </div>
-          <div style={{
-            marginTop: 10, background: "#f5f3ff", borderRadius: 10,
-            padding: 10, border: "2px solid #c4b5fd",
-          }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#7c5cfc", marginBottom: 4 }}>
-              {t(E, "Example: \"01110110\"", "예시: \"01110110\"")}
-            </div>
-            <div style={{ display: "flex", justifyContent: "center", gap: 3, marginBottom: 6 }}>
-              {"01110110".split("").map((ch, i) => (
-                <div key={i} style={{
-                  width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 6, fontSize: 14, fontWeight: 900,
-                  fontFamily: "'JetBrains Mono',monospace",
-                  background: ch === "1" ? "#c4b5fd" : "#e5e7eb",
-                  border: `2px solid ${ch === "1" ? "#7c5cfc" : "#d1d5db"}`,
-                  color: ch === "1" ? "#4c1d95" : "#9ca3af",
-                }}>{ch}</div>
-              ))}
-            </div>
-            <div style={{
-              fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
-              fontWeight: 700, color: C.text, textAlign: "center",
-            }}>
-              {t(E, "2 groups of 1s → answer = 2", "1의 그룹 2개 → 답 = 2")}
-            </div>
-          </div>
-        </div>),
-    },
-    // 2-2: Full code reveal
+    // 2-1: Progressive code — answer = number of runs of 1s.
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Walk the string once and count runs of 1s.  Sections build the loop one piece at a time.",
+        "문자열을 한 번 훑으며 1 의 연속 구간 개수를 세요. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCowntactSections(E),
     },
   ];

@@ -79,17 +79,29 @@ export function makeInterviewCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Bessie's Interview</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Bessie's Interview</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Output every counter Bessie (the last cow) could possibly end up at, in increasing order.",
+                "줄의 마지막 소 Bessie 가 갈 수 있는 모든 카운터 번호를 오름차순으로 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#059669" }}>{t(E, "K interview counters", "K개의 인터뷰 카운터")}</b>
@@ -99,7 +111,7 @@ export function makeInterviewCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "N cows ", "N마리 소가 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "line up in order", "정해진 순서로 줄을 서요")}</b>
@@ -108,7 +120,7 @@ export function makeInterviewCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each remaining cow goes to the ", "남은 소는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "earliest available counter", "가장 먼저 비는 카운터")}</b>
@@ -117,7 +129,7 @@ export function makeInterviewCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Bessie is the LAST cow. Print all counters she could possibly go to (ignoring the tie-breaker), in increasing order.",
                         "Bessie는 마지막 소예요. 동점 규칙을 무시했을 때 Bessie가 갈 수 있는 모든 카운터 번호를 오름차순으로 출력해요.")}
@@ -134,8 +146,8 @@ export function makeInterviewCh1(E) {
         "소들이 2개 카운터에 시간 순서로 들어가는 걸 봐요.\n핵심은 t=5 — 두 카운터가 동시에 비는 순간!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#059669", marginBottom: 12, textAlign: "center" }}>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 12, textAlign: "center" }}>
               N=5, K=2, times=[3, 5, 2, 4, 1]
             </div>
 
@@ -157,16 +169,16 @@ export function makeInterviewCh1(E) {
                 {/* Cow 1: time 3, t=0..3 */}
                 <div style={{
                   position: "absolute", top: 14, left: 0, right: 4, height: 28 * 3,
-                  background: "#fbbf24", border: "2px solid #d97706", borderRadius: 6,
+                  background: "#fbbf24", border: "1px solid #d97706", borderRadius: 6,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 11, fontWeight: 800, color: "#7c2d12",
+                  fontSize: 11, fontWeight: 600, color: "#7c2d12",
                 }}>🐄 소1<br/>(t=0→3)</div>
                 {/* Cow 3: time 2, t=3..5 */}
                 <div style={{
                   position: "absolute", top: 14 + 28 * 3, left: 0, right: 4, height: 28 * 2,
-                  background: "#a7f3d0", border: "2px solid #10b981", borderRadius: 6,
+                  background: "#a7f3d0", border: "1px solid #10b981", borderRadius: 6,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 11, fontWeight: 800, color: "#064e3b",
+                  fontSize: 11, fontWeight: 600, color: "#064e3b",
                 }}>🐄 소3<br/>(t=3→5)</div>
                 {/* Tie marker at t=5 */}
                 <div style={{
@@ -181,9 +193,9 @@ export function makeInterviewCh1(E) {
                 {/* Cow 2: time 5, t=0..5 */}
                 <div style={{
                   position: "absolute", top: 14, left: 4, right: 0, height: 28 * 5,
-                  background: "#bfdbfe", border: "2px solid #3b82f6", borderRadius: 6,
+                  background: "#bfdbfe", border: "1px solid #3b82f6", borderRadius: 6,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 11, fontWeight: 800, color: "#1e3a8a",
+                  fontSize: 11, fontWeight: 600, color: "#1e3a8a",
                 }}>🐄 소2<br/>(t=0→5)</div>
                 {/* Tie marker at t=5 */}
                 <div style={{
@@ -194,8 +206,8 @@ export function makeInterviewCh1(E) {
             </div>
 
             {/* Tie callout */}
-            <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#dc2626", marginBottom: 4 }}>
+            <div style={{ marginTop: 12, background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#dc2626", marginBottom: 4 }}>
                 {t(E, "🚨 At t=5: both C1 and C2 are free at the same time!", "🚨 t=5: C1과 C2가 동시에 비워짐!")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
@@ -242,8 +254,8 @@ export function makeInterviewCh2(E) {
         "We use a min-heap (priority queue) to track when each counter finishes.\nThe cow always goes to the counter that finishes earliest!", "최소 힙(우선순위 큐)으로 각 카운터의 종료 시간을 추적해요. 소는 항상 가장 먼저 끝나는 카운터로!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text }}>
-            <div style={{ fontWeight: 800, color: C.accent, marginBottom: 6 }}>
+          <div style={{ background: C.accentBg, border: `1px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text }}>
+            <div style={{ fontWeight: 600, color: C.accent, marginBottom: 6 }}>
               {t(E, "🔧 Algorithm: Min-Heap Simulation", "🔧 알고리즘: 최소 힙 시뮬레이션")}
             </div>
             {t(E,
@@ -277,8 +289,12 @@ export function makeInterviewCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "N=6, K=3, times=[2,3,1,4,2,1].\nHeap after first 3: [(2,0),(3,1),(1,2)].\nPop min (1,2), cow4→C3, push (1+4=5,2).\nPop min (2,0), cow5→C1, push (2+2=4,0).\nPop min (3,1), cow6→C2.\nBessie goes to counter...?", "N=6, K=3, times=[2,3,1,4,2,1].\n처음 3마리 힙: [(2,0),(3,1),(1,2)].\nPop (1,2), 소4→C3, push (5,2).\nPop (2,0), 소5→C1, push (4,0).\nPop (3,1), 소6→C2.\nBessie는 카운터...?"),
+        "Walk the heap simulation yourself for N=6, K=3, times=[2,3,1,4,2,1].  Which counter ends up free first when Bessie arrives?",
+        "N=6, K=3, times=[2,3,1,4,2,1] 의 힙 시뮬을 직접 따라가. Bessie 차례에 가장 먼저 비는 카운터는?"),
       question: t(E, "Bessie (cow 6) goes to counter #? (1-indexed)", "Bessie(소6)는 카운터 몇번? (1부터)"),
+      hint: t(E,
+        "After each cow, the counter she went to gets her finish time pushed back into the heap.",
+        "소를 보낼 때마다 그 카운터의 새 종료 시간이 힙에 다시 들어가."),
       answer: 2,
     },
   ];
@@ -290,38 +306,7 @@ export function makeInterviewCh2(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeInterviewCh3(E, lang = "py") {
   return [
-    {
-      type: "reveal",
-      narr: t(E,
-        "The key insight: we need to find not just ONE counter for Bessie, but ALL counters that finish at the same minimum time when it's Bessie's turn.", "핵심: Bessie 차례에 최소 종료 시간인 카운터를 하나가 아니라 전부 찾아야 해요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init heap", "힙 초기화"), code: "heap = [(times[i], i) for i in 0..K-1]   # min-heap of (finish, counter)", color: "#059669" },
-              { n: 2, label: t(E, "Each cow K..N", "K번째 이후 소"), code: "finish, counter = heappop(heap);  heappush(heap, (finish + times[i], counter))", color: "#0891b2" },
-              { n: 3, label: t(E, "Save Bessie\u2019s arrival time", "Bessie 도착 시각 저장"), code: "bessie_start = the finish popped on Bessie\u2019s turn", color: "#7c3aed" },
-              { n: 4, label: t(E, "All counters tied at that time", "그 시각에 동점인 모든 카운터"), code: "result = [c for (ft, c) in heap_just_before_Bessie if ft == bessie_start]", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900 }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#d1fae5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "\u23f1 Complexity", "\u23f1 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N log K)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N cows \u00d7 log K heap ops", "N마리 \u00d7 log K 힙 연산")}</div>
-          </div>
-        </div>),
-    },
+    // (key insight — find ALL counters with the same minimum finish time — explained inline in the progressive code below.)
     {
       type: "quiz",
       narr: t(E,

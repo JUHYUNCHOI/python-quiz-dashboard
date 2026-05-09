@@ -46,17 +46,29 @@ export function makeDontBeLastCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\udd5b"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Don't Be Last!</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Don't Be Last!</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the cow with the second-lowest total milk, or 'Tie' if multiple cows tie for second.",
+                "총 우유량이 두 번째로 적은 소의 이름을 출력 — 동률이면 'Tie'.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "7 named cows", "이름이 정해진 7마리 소")}</b>
@@ -65,7 +77,7 @@ export function makeDontBeLastCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're given a ", "")}
                   <b style={{ color: "#0891b2" }}>{t(E, "log of N entries", "N개의 기록")}</b>
@@ -74,7 +86,7 @@ export function makeDontBeLastCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Cows not in the log are treated as having ", "기록에 없는 소는 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "0 gallons total", "총 생산량 0")}</b>
@@ -82,7 +94,7 @@ export function makeDontBeLastCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "총 생산량이 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "name of the cow whose total is second-lowest", "두 번째로 적은 소의 이름")}</b>
@@ -121,8 +133,8 @@ export function makeDontBeLastCh1(E) {
         "How many named cows are in this problem?",
         "이 문제에서 이름 있는 소는 총 몇 마리?"),
       hint: t(E,
-        "Bessie, Elsie, Daisy, Gertie, Annabelle, Maggie, Henrietta.",
-        "Bessie, Elsie, Daisy, Gertie, Annabelle, Maggie, Henrietta."),
+        "Re-read the problem statement — count the listed cow names.",
+        "문제를 다시 읽어 봐 — 적힌 소 이름의 수를 세어 봐."),
       answer: 7,
     },
   ];
@@ -134,48 +146,12 @@ export function makeDontBeLastCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeDontBeLastCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sum each named cow's milk using a dict (default 0 for cows not in the log). Find the SECOND-LOWEST distinct total. If exactly one cow has that total, print her name; otherwise print 'Tie'.",
-        "딕셔너리로 각 이름 있는 소의 우유 합산 (로그에 없는 소는 0). 두 번째로 낮은 서로 다른 총량을 찾아요. 그 값을 가진 소가 정확히 1 마리면 이름을 출력, 그 외 'Tie'."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init totals = {name: 0} for 7 cows", "7 마리 총량 초기화"), code: "total = {name: 0 for name in 7_cow_names}", color: "#dc2626" },
-              { n: 2, label: t(E, "Add log entries", "로그 항목 더하기"), code: "for name, gallons in log: total[name] += gallons", color: "#7c3aed" },
-              { n: 3, label: t(E, "Find 2nd-lowest distinct total", "두 번째로 낮은 서로 다른 총량"), code: "distinct = sorted(set(total.values()))", color: "#0891b2" },
-              { n: 4, label: t(E, "Print cow or 'Tie'", "소 이름 또는 'Tie' 출력"), code: "if len(distinct) ≥ 2 and one cow has distinct[1]: print(name) else 'Tie'", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#dc2626" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single pass through log + sort 7 totals", "로그 한 번 순회 + 7 개 총량 정렬")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Sum each named cow's milk in a dict (cows not in the log default to 0). Find the second-lowest distinct total. If exactly one cow has that total, print her name; otherwise 'Tie'. Sections build it one piece at a time.",
+        "딕셔너리로 각 소의 우유를 합산 (로그에 없는 소는 0). 두 번째로 낮은 서로 다른 총량을 찾아 — 그 값을 가진 소가 정확히 1 마리면 이름, 아니면 'Tie'. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getDontBeLastSections(E),
     },
   ];

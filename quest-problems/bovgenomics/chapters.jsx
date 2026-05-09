@@ -41,17 +41,29 @@ export function makeGenomicsCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83e\uddec"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Bovine Genomics</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Open Bronze #2</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Bovine Genomics</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2017 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+              {t(E,
+                "Output the number of distinguishing positions — columns where spotted-cow letters and plain-cow letters never overlap.",
+                "구별 가능한 위치의 개수 — 점박이와 무늬 없는 소들의 글자가 한 번도 겹치지 않는 칸의 수 — 를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ 에게 ")}
                   <b style={{ color: "#2563eb" }}>{t(E, "N spotted cows and N plain cows", "점박이 소 N마리와 무늬 없는 소 N마리")}</b>
@@ -60,7 +72,7 @@ export function makeGenomicsCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Position j is ", "위치 j 가 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "distinguishing", "'구별 가능'")}</b>
@@ -69,7 +81,7 @@ export function makeGenomicsCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "number of distinguishing positions", "구별 가능한 위치의 개수")}</b>
@@ -106,8 +118,8 @@ export function makeGenomicsCh1(E) {
         "How many valid positions if only 1 position has no overlap?",
         "겹침 없는 위치가 1개뿐이면 유효한 위치 수는?"),
       hint: t(E,
-        "We simply count positions with no overlap. 1 position = answer is 1.",
-        "겹침 없는 위치를 단순히 세면 돼요. 1개 위치 = 답은 1."),
+        "Just count distinguishing positions directly.",
+        "구별 가능한 위치를 직접 세면 돼."),
       answer: 1,
     },
   ];
@@ -119,48 +131,12 @@ export function makeGenomicsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeGenomicsCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "For each genome column j (1..M), gather the SET of letters used by spotted cows there and the SET used by plain cows. If the two sets DON'T intersect, that column distinguishes the breeds.",
-        "각 유전체 열 j (1..M) 마다 점박이 소들이 그 자리에서 쓴 글자의 집합과 무늬 없는 소들의 집합을 모아요. 두 집합이 교집합이 없으면 그 열이 구별 가능."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Iterate over M columns", "M 개 열 순회"), code: "for j in range(M):", color: "#2563eb" },
-              { n: 2, label: t(E, "Build spotted set / plain set", "점박이 집합 / 무늬 없는 집합"), code: "spotted = {row[j] for row in spotted_cows}", color: "#7c3aed" },
-              { n: 3, label: t(E, "Check empty intersection", "교집합이 비었는지 확인"), code: "if not (spotted & plain):", color: "#0891b2" },
-              { n: 4, label: t(E, "Count distinguishing columns", "구별 열 카운트"), code: "count += 1;  print(count)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#1e3a8a", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>O(N · M)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "N cows × M columns", "N 마리 × M 열")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "For each column j (1..M): gather the SET of letters from spotted cows and the SET from plain cows. If the two sets don't intersect, that column distinguishes the breeds. Sections build it one piece at a time.",
+        "각 열 j (1..M) 마다: 점박이 소들의 글자 집합과 무늬 없는 소들의 글자 집합을 모아요. 두 집합이 안 겹치면 그 열은 구별 가능. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBovGenomicsSections(E),
     },
   ];

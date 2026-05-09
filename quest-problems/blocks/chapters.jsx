@@ -56,17 +56,29 @@ export function makeBlocksCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"🧱"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Blocks</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>Blocks</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2022 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "For each query word, print YES if it can be spelled with the 4 cubes, else NO.",
+                "각 단어 쿼리에 대해 4개 큐브로 만들 수 있으면 YES, 아니면 NO를 출력해요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has ", "FJ에게 ")}
                   <b style={{ color: "#8b5cf6" }}>{t(E, "4 cubes", "4개의 큐브")}</b>
@@ -76,7 +88,7 @@ export function makeBlocksCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "To spell a 4-letter word, line up the 4 cubes ", "4글자 단어를 만들려면 큐브 4개를 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "left to right", "왼쪽부터 오른쪽")}</b>
@@ -85,7 +97,7 @@ export function makeBlocksCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each cube can be used ", "각 큐브는 한 단어 안에서 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "at most once per word", "최대 한 번만")}</b>
@@ -94,7 +106,7 @@ export function makeBlocksCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "For each query word, print ", "각 단어 쿼리에 대해 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "YES if it can be spelled, else NO", "만들 수 있으면 YES, 아니면 NO")}</b>
@@ -132,8 +144,8 @@ export function makeBlocksCh1(E) {
         "Block \"COWMOO\": can it show 'C'? (1=yes, 0=no)",
         "블록 \"COWMOO\": 'C'를 보여줄 수 있어요? (1=예, 0=아니오)"),
       hint: t(E,
-        "'C' is the first character of \"COWMOO\". Yes!",
-        "'C'는 \"COWMOO\"의 첫 글자. 당연히 가능!"),
+        "Scan the 6 faces of \"COWMOO\" — does any face show 'C'?",
+        "\"COWMOO\"의 6개 면을 훑어봐요 — 'C'가 보이는 면이 있나요?"),
       answer: 1,
     },
   ];
@@ -145,48 +157,12 @@ export function makeBlocksCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBlocksCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Only 4! = 24 ways to assign the 4 cubes to positions. For each query word, try every assignment and check that the required letter at each position exists on the assigned cube's faces.",
-        "4 개 큐브를 위치에 배정하는 방법은 4! = 24 가지뿐. 각 단어 쿼리에 대해 모든 배정을 시도하고, 각 위치에 필요한 글자가 배정된 큐브의 면에 있는지 확인."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Try every cube-to-position assignment", "큐브-위치 배정 모두 시도"), code: "for perm in permutations([0,1,2,3]): ...", color: "#8b5cf6" },
-              { n: 2, label: t(E, "Check each position's required letter", "각 위치의 글자 확인"), code: "for i, cube_id in enumerate(perm): if word[i] not in faces[cube_id]: break", color: "#7c3aed" },
-              { n: 3, label: t(E, "All positions match → YES", "모든 위치 일치 → YES"), code: "else: print('YES'); break", color: "#16a34a" },
-              { n: 4, label: t(E, "None worked → NO", "전부 실패 → NO"), code: "else: print('NO')", color: "#dc2626" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(Q · 24 · L)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "Q queries × 24 assignments × L letters", "Q 쿼리 × 24 배정 × L 글자")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Only 4! = 24 ways to assign the 4 cubes to positions. For each query word, try every assignment and check that the required letter at each position exists on the assigned cube's faces. Sections build it one piece at a time.",
+        "4 개 큐브를 위치에 배정하는 방법은 4! = 24 가지뿐. 각 단어 쿼리에 대해 모든 배정을 시도하고, 각 위치에 필요한 글자가 배정된 큐브의 면에 있는지 확인. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getBlocksSections(E),
     },
   ];

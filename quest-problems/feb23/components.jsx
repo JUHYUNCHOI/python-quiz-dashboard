@@ -5,26 +5,29 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#dc2626";
 
 const FULL_PY = [
-  "s = input()",
-  "results = set()",
+  "import sys",
   "",
-  "# find positions of 'F'",
+  "data = sys.stdin.read().split()",
+  "N = int(data[0])",
+  "s = data[1]",
+  "",
   "f_positions = [i for i, c in enumerate(s) if c == 'F']",
   "n_f = len(f_positions)",
   "",
-  "# try all 2^|F| assignments",
+  "results = set()",
   "for mask in range(1 << n_f):",
   "    arr = list(s)",
   "    for j in range(n_f):",
   "        arr[f_positions[j]] = 'B' if (mask >> j) & 1 else 'E'",
-  "    # count consecutive same pairs",
   "    excitement = 0",
   "    for i in range(len(arr) - 1):",
-  "        if arr[i] == arr[i+1]:",
+  "        if arr[i] == arr[i + 1]:",
   "            excitement += 1",
   "    results.add(excitement)",
   "",
   "print(len(results))",
+  "print(min(results))",
+  "print(max(results))",
 ];
 
 const FULL_CPP = [
@@ -32,19 +35,27 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    int N; cin >> N;",
   "    string s; cin >> s;",
+  "",
   "    vector<int> fpos;",
   "    for (int i = 0; i < (int)s.size(); i++) if (s[i] == 'F') fpos.push_back(i);",
   "    int nf = fpos.size();",
-  "    set<string> results;",
+  "",
+  "    set<int> results;",
   "    for (int mask = 0; mask < (1 << nf); mask++) {",
-  "        string t = s;",
-  "        for (int i = 0; i < nf; i++) {",
-  "            if (mask & (1 << i)) t[fpos[i]] = 'B';",
-  "        }",
-  "        results.insert(t);",
+  "        string arr = s;",
+  "        for (int j = 0; j < nf; j++)",
+  "            arr[fpos[j]] = ((mask >> j) & 1) ? 'B' : 'E';",
+  "        int excitement = 0;",
+  "        for (int i = 0; i + 1 < (int)arr.size(); i++)",
+  "            if (arr[i] == arr[i + 1]) excitement++;",
+  "        results.insert(excitement);",
   "    }",
-  "    cout << results.size() << \"\n\";",
+  "",
+  "    cout << results.size() << '\\n';",
+  "    cout << *results.begin() << '\\n';",
+  "    cout << *results.rbegin() << '\\n';",
   "    return 0;",
   "}",
 ];
@@ -102,7 +113,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

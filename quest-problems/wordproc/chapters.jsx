@@ -106,7 +106,7 @@ const WordBox = ({ word, color, size }) => (
     display: "inline-flex", alignItems: "center", justifyContent: "center",
     padding: "4px 10px", borderRadius: 8, fontSize: 13, fontWeight: 700,
     fontFamily: "'JetBrains Mono',monospace",
-    background: `${color}15`, border: `2px solid ${color}`,
+    background: `${color}15`, border: `1px solid ${color}`,
     color, whiteSpace: "nowrap",
   }}>
     {word} <span style={{ fontSize: 10, color: C.dim, marginLeft: 4 }}>({size})</span>
@@ -122,11 +122,11 @@ const LineViz = ({ words, colors, K, lineNum, E: isE }) => {
       border: "1.5px solid #e5e7eb", marginBottom: 6,
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-        <div style={{ fontSize: 10, fontWeight: 800, color: C.dim }}>
+        <div style={{ fontSize: 10, fontWeight: 600, color: C.dim }}>
           {isE ? `Line ${lineNum}` : `${lineNum}줄`}
         </div>
         <div style={{
-          fontSize: 10, fontWeight: 800, color: totalLen <= K ? "#059669" : "#dc2626",
+          fontSize: 10, fontWeight: 600, color: totalLen <= K ? "#059669" : "#dc2626",
           fontFamily: "'JetBrains Mono',monospace",
         }}>
           {totalLen}/{K}
@@ -158,17 +158,29 @@ export function makeWordProcCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"📝"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#dc2626" }}>Word Processor</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Word Processor</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2020 Bronze #1</div>
           </div>
 
-          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#7f1d1d", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E,
+                "Print the resulting document — each line at most K letters of words, words separated by single spaces.",
+                "결과 문서를 출력 — 각 줄은 단어 글자 수 합이 최대 K, 단어 사이는 공백 1 개.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "You're given ", "")}
                   <b style={{ color: "#dc2626" }}>{t(E, "N words in order", "순서대로 N개의 단어")}</b>
@@ -176,7 +188,7 @@ export function makeWordProcCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each line holds at most ", "각 줄에 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "K letters total", "글자 수 합이 최대 K")}</b>
@@ -185,7 +197,7 @@ export function makeWordProcCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Process words in order: each word ", "단어를 순서대로: 각 단어가 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "joins the current line if it still fits", "현재 줄에 들어가면 그 줄에 추가")}</b>
@@ -194,7 +206,7 @@ export function makeWordProcCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the resulting document, ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "one line per row, words separated by single spaces", "한 줄씩, 단어 사이 공백 1개")}</b>
@@ -212,15 +224,15 @@ export function makeWordProcCh1(E) {
         "The rule: when adding the next word would push the total character count past K, start a new line.\nSpaces DON'T count!\nOnly the sum of word lengths matters.", "규칙: 다음 단어를 추가하면 총 글자 수가 K를 초과할 때 새 줄을 시작해요. 공백은 세지 않아! 단어 길이의 합만 중요해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 10 }}>
             {t(E, "The Key Rule: Count Characters, Not Spaces!", "핵심 규칙: 글자만 세고, 공백은 안 세!")}
           </div>
-          <div style={{ background: "#fef2f2", borderRadius: 10, padding: 12, border: "2px solid #fca5a5" }}>
+          <div style={{ background: "#fef2f2", borderRadius: 10, padding: 12, border: "1px solid #fca5a5" }}>
             <div style={{ fontSize: 12, lineHeight: 2, color: C.text }}>
               {t(E, "Words: ", "단어: ")}
               {["hello", "my", "name"].map((w, i) => (
                 <span key={i}>
-                  {i > 0 && <span style={{ color: "#dc2626", fontWeight: 800 }}> + </span>}
+                  {i > 0 && <span style={{ color: "#dc2626", fontWeight: 600 }}> + </span>}
                   <WordBox word={w} color={wColors[i]} size={w.length} />
                 </span>
               ))}
@@ -228,17 +240,17 @@ export function makeWordProcCh1(E) {
             <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text }}>
               <div>{t(E, "K = 8 (max chars per line)", "K = 8 (줄당 최대 글자)")}</div>
               <div style={{ marginTop: 4 }}>
-                <span style={{ color: "#3b82f6", fontWeight: 800 }}>5</span>
+                <span style={{ color: "#3b82f6", fontWeight: 600 }}>5</span>
                 {" + "}
-                <span style={{ color: "#10b981", fontWeight: 800 }}>2</span>
+                <span style={{ color: "#10b981", fontWeight: 600 }}>2</span>
                 {" = 7 "}
-                <span style={{ color: "#059669", fontWeight: 800 }}>{"<= 8 ✓"}</span>
+                <span style={{ color: "#059669", fontWeight: 600 }}>{"<= 8 ✓"}</span>
               </div>
               <div>
                 {"7 + "}
-                <span style={{ color: "#f59e0b", fontWeight: 800 }}>4</span>
+                <span style={{ color: "#f59e0b", fontWeight: 600 }}>4</span>
                 {" = 11 "}
-                <span style={{ color: "#dc2626", fontWeight: 800 }}>{"> 8 ✗"}</span>
+                <span style={{ color: "#dc2626", fontWeight: 600 }}>{"> 8 ✗"}</span>
                 {t(E, " → new line!", " → 새 줄!")}
               </div>
             </div>
@@ -274,7 +286,7 @@ export function makeWordProcCh1(E) {
         "Let's trace a bigger example!\nWords: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5.\nWe add words greedily until the next one doesn't fit.", "더 큰 예시를 추적해보자! 단어: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5. 다음 단어가 안 들어갈 때까지 그리디하게 추가해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
             {t(E, "Trace: K=5", "추적: K=5")}
           </div>
           <div style={{ overflowX: "auto" }}>
@@ -295,10 +307,10 @@ export function makeWordProcCh1(E) {
                   ["gh", 2, "2+2=4", "4<=5 ✓"],
                 ].map(([w, len, calc, fits], i) => (
                   <tr key={i} style={{ background: fits.includes("✗") ? "#fef2f2" : "#fff" }}>
-                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", fontWeight: 800, color: wColors[i] }}>{w}</td>
+                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", fontWeight: 600, color: wColors[i] }}>{w}</td>
                     <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center" }}>{len}</td>
                     <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center" }}>{calc}</td>
-                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center", fontWeight: 800, color: fits.includes("✓") ? "#059669" : "#dc2626" }}>{fits}</td>
+                    <td style={{ padding: "5px 6px", borderBottom: "1px solid #fde2e2", textAlign: "center", fontWeight: 600, color: fits.includes("✓") ? "#059669" : "#dc2626" }}>{fits}</td>
                   </tr>
                 ))}
               </tbody>
@@ -332,13 +344,14 @@ export function makeWordProcCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Try it!\nWords [\"aaa\", \"bb\", \"cc\", \"d\"], K=4.\naaa(3) fits.\n3+bb(2)=5>4, new line.\nbb(2)+cc(2)=4<=4.\n4+d(1)=5>4, new line.\n3 lines!", "해봐요!\n단어 [\"aaa\", \"bb\", \"cc\", \"d\"], K=4.\naaa(3) 들어감.\n3+bb(2)=5>4, 새 줄.\nbb(2)+cc(2)=4<=4.\n4+d(1)=5>4, 새 줄.\n3줄!"),
+        "Walk through the words yourself, packing each into the current line until it overflows.",
+        "단어를 직접 따라가며 — 현재 줄에 넣다가 K 를 넘기면 새 줄."),
       question: t(E,
         "Words [\"aaa\",\"bb\",\"cc\",\"d\"], K=4. How many output lines?",
         "단어 [\"aaa\",\"bb\",\"cc\",\"d\"], K=4. 출력 줄 수?"),
       hint: t(E,
-        "Line 1: aaa(3). Line 2: bb+cc(4). Line 3: d(1). → 3 lines",
-        "1줄: aaa(3). 2줄: bb+cc(4). 3줄: d(1). → 3줄"),
+        "Try adding each word in order. When the running sum would pass K, start a new line.",
+        "단어를 순서대로 더해. 합이 K 를 넘기면 새 줄."),
       answer: 3,
     },
   ];
@@ -358,25 +371,25 @@ export function makeWordProcCh2(E) {
         "The greedy strategy: scan words left to right.\nTrack cur_len (total chars on current line).\nIf adding the next word exceeds K, flush the current line and start fresh!", "그리디 전략: 단어를 왼쪽에서 오른쪽으로 스캔.\ncur_len (현재 줄의 총 글자 수)을 추적.\n다음 단어를 추가하면 K를 초과하면 현재 줄을 출력하고 새로 시작!"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
             {t(E, "Greedy Algorithm", "그리디 알고리즘")}
           </div>
-          <div style={{ background: "#fef2f2", borderRadius: 10, padding: 12, border: "2px solid #fca5a5" }}>
+          <div style={{ background: "#fef2f2", borderRadius: 10, padding: 12, border: "1px solid #fca5a5" }}>
             <div style={{ fontSize: 12, lineHeight: 2.2, color: C.text }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, flexShrink: 0 }}>1</span>
+                <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>1</span>
                 {t(E, "Start with empty line (cur_len = 0)", "빈 줄로 시작 (cur_len = 0)")}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, flexShrink: 0 }}>2</span>
+                <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>2</span>
                 {t(E, "For each word: check if cur_len + len(word) > K", "각 단어마다: cur_len + len(word) > K 확인")}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, flexShrink: 0 }}>3</span>
+                <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>3</span>
                 {t(E, "If yes → flush current line, start new", "초과하면 → 현재 줄 출력, 새 줄 시작")}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, flexShrink: 0 }}>4</span>
+                <span style={{ background: "#dc2626", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, flexShrink: 0 }}>4</span>
                 {t(E, "Add word to current line, cur_len += len(word)", "현재 줄에 단어 추가, cur_len += len(word)")}
               </div>
             </div>
@@ -390,7 +403,7 @@ export function makeWordProcCh2(E) {
         "Let's trace: words=[\"the\",\"dog\",\"is\",\"a\",\"good\",\"boy\"], K=6.", "추적해보자: words=[\"the\",\"dog\",\"is\",\"a\",\"good\",\"boy\"], K=6."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 8 }}>
             {t(E, "Trace: K=6", "추적: K=6")}
           </div>
           <div style={{ overflowX: "auto" }}>
@@ -414,7 +427,7 @@ export function makeWordProcCh2(E) {
                   ["boy", 3, "4+3=7", "7>6", t(E, "flush! add", "출력! 추가")],
                 ].map(([w, len, calc, cmp, act], i) => (
                   <tr key={i} style={{ background: act.includes("flush") ? "#fef2f2" : "#fff" }}>
-                    <td style={{ padding: "4px 4px", borderBottom: "1px solid #fde2e2", fontWeight: 800, color: wColors[i] }}>{w}</td>
+                    <td style={{ padding: "4px 4px", borderBottom: "1px solid #fde2e2", fontWeight: 600, color: wColors[i] }}>{w}</td>
                     <td style={{ padding: "4px 4px", borderBottom: "1px solid #fde2e2", textAlign: "center" }}>{len}</td>
                     <td style={{ padding: "4px 4px", borderBottom: "1px solid #fde2e2", textAlign: "center" }}>{calc}</td>
                     <td style={{ padding: "4px 4px", borderBottom: "1px solid #fde2e2", textAlign: "center", color: cmp.includes(">") ? "#dc2626" : "#059669", fontWeight: 700 }}>{cmp}</td>
@@ -454,13 +467,14 @@ export function makeWordProcCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "Words [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4.\naa(2)+bb(2)=4.\n4+cc(2)=6>4.\ncc(2)+dd(2)=4.\n4+ee(2)=6>4.\nLines: [aa,bb], [cc,dd], [ee].\n3 lines!", "단어 [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4.\naa(2)+bb(2)=4.\n4+cc(2)=6>4.\ncc(2)+dd(2)=4.\n4+ee(2)=6>4.\n줄: [aa,bb], [cc,dd], [ee].\n3줄!"),
+        "Try this packing yourself.  How many words fit per line, and how many lines total?",
+        "이 묶음 직접 — 한 줄에 몇 단어, 총 몇 줄?"),
       question: t(E,
         "Words [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4. How many lines?",
         "단어 [\"aa\",\"bb\",\"cc\",\"dd\",\"ee\"], K=4. 몇 줄?"),
       hint: t(E,
-        "[aa,bb]=4, [cc,dd]=4, [ee]=2. Three lines!",
-        "[aa,bb]=4, [cc,dd]=4, [ee]=2. 3줄!"),
+        "Each word is 2 letters; line cap is 4.  How many fit per line?",
+        "단어마다 2 글자, 줄 한도 4. 한 줄에 몇 개 들어가?"),
       answer: 3,
     },
   ];
@@ -479,7 +493,7 @@ export function makeWordProcCh3(E, lang = "py") {
         "Step 1: Read N (word count) and K (max chars per line), then read all the words.", "1단계: N(단어 수)과 K(줄당 최대 글자)를 읽고, 모든 단어를 읽어."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
             {t(E, "Step 1: Read input", "1단계: 입력 읽기")}
           </div>
           <CodeSnippet
@@ -503,7 +517,7 @@ export function makeWordProcCh3(E, lang = "py") {
         "Step 2: We need to track the current line (list of words) and its total character count.\nPlus a list to collect all finished lines.", "2단계: 현재 줄(단어 리스트)과 총 글자 수를 추적해야 해요. 완성된 줄을 모을 리스트도 필요해요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
             {t(E, "Step 2: Initialize variables", "2단계: 변수 초기화")}
           </div>
           <CodeSnippet
@@ -518,9 +532,9 @@ export function makeWordProcCh3(E, lang = "py") {
             highlight={[3, 4, 5]}
           />
           <div style={{ marginTop: 8, background: "#fef2f2", borderRadius: 8, padding: 8, border: "1.5px solid #fca5a5", fontSize: 12, lineHeight: 1.8, color: C.text }}>
-            <div><span style={{ fontWeight: 800, color: "#dc2626" }}>lines</span> = {t(E, "list of finished lines", "완성된 줄들의 리스트")}</div>
-            <div><span style={{ fontWeight: 800, color: "#dc2626" }}>cur_line</span> = {t(E, "words on the current line", "현재 줄의 단어들")}</div>
-            <div><span style={{ fontWeight: 800, color: "#dc2626" }}>cur_len</span> = {t(E, "total chars on current line", "현재 줄의 총 글자 수")}</div>
+            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>lines</span> = {t(E, "list of finished lines", "완성된 줄들의 리스트")}</div>
+            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>cur_line</span> = {t(E, "words on the current line", "현재 줄의 단어들")}</div>
+            <div><span style={{ fontWeight: 600, color: "#dc2626" }}>cur_len</span> = {t(E, "total chars on current line", "현재 줄의 총 글자 수")}</div>
           </div>
         </div>),
     },
@@ -531,7 +545,7 @@ export function makeWordProcCh3(E, lang = "py") {
         "Step 3: The main loop!\nFor each word: check if adding it would exceed K.\nIf so, flush the current line first.\nThen add the word.", "3단계: 메인 루프! 각 단어마다: 추가하면 K를 초과하는지 확인. 초과하면 현재 줄을 먼저 출력. 그 다음 단어를 추가."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", marginBottom: 6 }}>
             {t(E, "Step 3: The greedy loop", "3단계: 그리디 루프")}
           </div>
           <CodeSnippet
@@ -548,7 +562,7 @@ export function makeWordProcCh3(E, lang = "py") {
             highlight={[0, 1, 2, 3, 4, 5, 6, 7]}
           />
           <div style={{ marginTop: 8, fontSize: 12, lineHeight: 1.8, color: C.text }}>
-            <div style={{ fontWeight: 800, color: "#dc2626", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#dc2626", marginBottom: 4 }}>
               {t(E, "Key logic:", "핵심 로직:")}
             </div>
             <div>{t(E, "Check BEFORE adding: if overflow → flush", "추가 전에 확인: 초과하면 → 출력")}</div>

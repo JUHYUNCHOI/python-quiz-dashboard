@@ -10,10 +10,12 @@ const FULL_PY = [
   "def solve():",
   "    input_data = sys.stdin.read().split()",
   "    idx = 0",
-  "    N = int(input_data[idx]); idx += 1",
+  "    N = int(input_data[idx])",
+  "    idx += 1",
   "    cards = []",
   "    for i in range(N):",
-  "        cards.append(int(input_data[idx])); idx += 1",
+  "        cards.append(int(input_data[idx]))",
+  "        idx += 1",
   "",
   "    # Strategy: simulate the card game",
   "    # Player picks the highest available card each turn",
@@ -48,7 +50,8 @@ const FULL_CPP = [
   "        auto N = int(input_data[idx]); idx += 1;",
   "        auto cards = [];",
   "        for (long long i = 0; i < N; i++) {",
-  "            // cards.append(int(input_data[idx])); idx += 1",
+  "            // cards.append(int(input_data[idx]))",
+  "            idx += 1",
   "",
   "        // Strategy: simulate the card game",
   "        // Player picks the highest available card each turn",
@@ -124,7 +127,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

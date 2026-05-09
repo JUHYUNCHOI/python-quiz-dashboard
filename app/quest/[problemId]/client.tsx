@@ -180,12 +180,20 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const prevProblem = idx > 0 ? ALL_PROBLEMS[idx - 1] : null
   const nextProblem = idx < ALL_PROBLEMS.length - 1 ? ALL_PROBLEMS[idx + 1] : null
 
-  // Same-contest siblings (e.g. all "Dec 2024 Bronze" problems together)
+  // Same-contest siblings (e.g. all "Dec 2024 Bronze" problems together).
+  // Sorted by the problem number in the sub tag so the dot row reads
+  // 1 2 3 instead of whatever order data.ts happened to list them.
   const contestKey = (sub?: string) =>
     (sub ?? "").replace(/\s*#\d+$/, "").replace(/\s*P\d+$/, "").trim()
+  const problemNum = (sub?: string) => {
+    const m = (sub ?? "").match(/#(\d+)$/) || (sub ?? "").match(/P(\d+)$/)
+    return m ? parseInt(m[1]) : 99
+  }
   const myContestKey = contestKey(meta?.sub)
   const contestSiblings = myContestKey
-    ? ALL_PROBLEMS.filter(p => contestKey(p.sub) === myContestKey)
+    ? ALL_PROBLEMS
+        .filter(p => contestKey(p.sub) === myContestKey)
+        .sort((a, b) => problemNum(a.sub) - problemNum(b.sub))
     : []
 
   if (!meta) {
@@ -214,10 +222,19 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         <Link href="/quest" className="text-gray-400 hover:text-gray-700 flex-shrink-0" title={t("문제 목록", "Problem list")}>
           <ChevronLeft size={16} />
         </Link>
+        {/* Compact contest meta only — title moves DOWN one row to the
+            prev/next strip, where it sits centred between previous and
+            next problem links (Codecademy / LeetCode pattern: current
+            problem name is the visual anchor of that row).
+            The same-contest 1/2/3 jump dots also live below now, with a
+            "같은 대회" label.  Up here we just keep the contest
+            breadcrumb so students can identify the source. */}
         <div className="flex-1 min-w-0">
-          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">{meta.section}</span>
-          <span className="text-gray-300 mx-1">·</span>
-          <span className="text-[11px] font-semibold text-gray-700 truncate">{meta.sub}</span>
+          <div className="text-[11px] truncate leading-tight">
+            <span className="font-bold text-gray-500 uppercase tracking-wide">{meta.section}</span>
+            <span className="text-gray-300 mx-1">·</span>
+            <span className="font-semibold text-gray-600">{meta.sub}</span>
+          </div>
         </div>
         {/* 언어 토글: 한국어 ↔ English (글로벌 컨텍스트, persistent) */}
         <div className="flex-shrink-0 hidden sm:flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">
@@ -288,44 +305,59 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         )}
       </div>
 
-      {/* Prev / Next + same-contest jump dots + back-to-list */}
-      <div className="border-b border-gray-200 bg-amber-50/30 px-3 py-0.5 flex items-center gap-1 text-[11px]">
+      {/* Title strip + prev/next + same-contest jump dots.
+          Layout (left → right):
+            ◀ Prev problem | 🎯 EMOJI + TITLE (anchor) | 같은 대회 ① ② ③ | Next ▶
+          The title sits centred so the student's eye lands on
+          "what am I solving" without hunting. */}
+      <div className="border-b border-gray-200 bg-white px-3 py-1.5 flex items-center gap-2 text-[11px]">
         {/* Prev problem */}
         {prevProblem ? (
           <button
             onClick={() => router.push(`/quest/${prevProblem.id}`)}
-            className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-semibold text-gray-600 hover:bg-amber-100 hover:text-amber-800 transition-colors min-w-0 truncate flex-shrink"
+            className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-semibold text-gray-500 hover:bg-amber-100 hover:text-amber-800 transition-colors min-w-0 truncate flex-shrink"
             title={prevProblem.title}
           >
             <ChevronLeft size={12} className="flex-shrink-0" />
-            <span className="truncate hidden sm:inline">{prevProblem.title}</span>
+            <span className="truncate hidden md:inline max-w-[120px]">{prevProblem.title}</span>
           </button>
         ) : <div className="flex-shrink" />}
 
         <div className="flex-1" />
 
-        {/* Same-contest dots — quick jump within the same contest */}
+        {/* Current problem title — biggest visual element of this row */}
+        <div className="flex items-center gap-1.5 flex-shrink min-w-0 px-2">
+          {meta.emoji && <span className="text-[16px] leading-none flex-shrink-0">{meta.emoji}</span>}
+          <span className="text-[14px] font-bold text-gray-900 truncate">{meta.title}</span>
+        </div>
+
+        {/* Same-contest dots: nested next to title, with label */}
         {contestSiblings.length > 1 && (
-          <div className="flex items-center gap-1 flex-shrink-0">
-            {contestSiblings.map((p) => {
-              const isCurrent = p.id === problemId
-              const numMatch = p.sub.match(/#(\d+)$/) || p.sub.match(/P(\d+)$/)
-              const num = numMatch?.[1] ?? "•"
-              return (
-                <button
-                  key={p.id}
-                  onClick={() => router.push(`/quest/${p.id}`)}
-                  className={`w-5 h-5 rounded-full text-[10px] font-black transition-colors ${
-                    isCurrent
-                      ? "bg-amber-500 text-white"
-                      : "bg-white border border-amber-300 text-amber-700 hover:bg-amber-100"
-                  }`}
-                  title={p.title}
-                >
-                  {num}
-                </button>
-              )
-            })}
+          <div className="flex items-center gap-1.5 flex-shrink-0 border-l border-gray-200 pl-2 ml-1">
+            <span className="text-[10px] font-semibold text-gray-400 hidden lg:inline">
+              {t("같은 대회", "Same contest")}
+            </span>
+            <div className="flex items-center gap-1">
+              {contestSiblings.map((p) => {
+                const isCurrent = p.id === problemId
+                const numMatch = p.sub.match(/#(\d+)$/) || p.sub.match(/P(\d+)$/)
+                const num = numMatch?.[1] ?? "•"
+                return (
+                  <button
+                    key={p.id}
+                    onClick={() => router.push(`/quest/${p.id}`)}
+                    className={`w-5 h-5 rounded-full text-[10px] font-black transition-colors ${
+                      isCurrent
+                        ? "bg-amber-500 text-white"
+                        : "bg-white border border-amber-300 text-amber-700 hover:bg-amber-100"
+                    }`}
+                    title={`${t("문제", "Problem")} #${num} — ${p.title}`}
+                  >
+                    {num}
+                  </button>
+                )
+              })}
+            </div>
           </div>
         )}
 
@@ -335,10 +367,10 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         {nextProblem ? (
           <button
             onClick={() => router.push(`/quest/${nextProblem.id}`)}
-            className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-semibold text-gray-600 hover:bg-amber-100 hover:text-amber-800 transition-colors min-w-0 truncate flex-shrink"
+            className="flex items-center gap-0.5 px-1.5 py-0.5 rounded font-semibold text-gray-500 hover:bg-amber-100 hover:text-amber-800 transition-colors min-w-0 truncate flex-shrink"
             title={nextProblem.title}
           >
-            <span className="truncate hidden sm:inline">{nextProblem.title}</span>
+            <span className="truncate hidden md:inline max-w-[120px]">{nextProblem.title}</span>
             <ChevronRight size={12} className="flex-shrink-0" />
           </button>
         ) : <div className="flex-shrink" />}

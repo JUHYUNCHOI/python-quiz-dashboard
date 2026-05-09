@@ -33,17 +33,27 @@ export function makeMcc19RectCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>📏</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Rectangle (Min Diff)</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Rectangle (Min Diff)</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P1</div>
           </div>
 
-          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E, "Print the smallest difference between consecutive elements of the sorted list.", "정렬된 리스트의 인접한 두 원소 차이 중 최솟값을 출력하기.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#059669" }}>{t(E, "non-decreasing list of N integers a[1..N]", "오름차순으로 정렬된 N 개의 정수 a[1..N]")}</b>
@@ -51,7 +61,7 @@ export function makeMcc19RectCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "minimum |a[i+1] − a[i]| over all consecutive pairs", "인접한 두 원소의 |a[i+1] − a[i]| 의 최솟값")}</b>
@@ -89,8 +99,8 @@ export function makeMcc19RectCh1(E) {
         "Sorted list [1, 3, 5, 6]. Min difference = ?",
         "정렬된 리스트 [1, 3, 5, 6]. 최소 차이 = ?"),
       hint: t(E,
-        "Check all consecutive pairs: 3-1=2, 5-3=2, 6-5=1. Minimum is 1.",
-        "모든 연속 쌍 확인: 3-1=2, 5-3=2, 6-5=1. 최솟값은 1."),
+        "Compute each consecutive diff (3-1, 5-3, 6-5), then pick the smallest.",
+        "인접한 차이 (3-1, 5-3, 6-5) 를 각각 구한 뒤 가장 작은 걸 골라요."),
       answer: 1,
     },
   ];
@@ -102,48 +112,12 @@ export function makeMcc19RectCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc19RectCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Since the list is non-decreasing, the smallest |a[i+1] − a[i]| is just the smallest CONSECUTIVE difference. One linear pass.",
-        "리스트가 비내림차순이라 |a[i+1] − a[i]| 의 최솟값은 인접 차이의 최솟값. 한 번 선형 순회."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Read N integers", "N 개 정수 읽기"), code: "a = list(map(int, input().split()))", color: "#059669" },
-              { n: 2, label: t(E, "Init best = infinity", "best = 무한대 초기화"), code: "best = float('inf')", color: "#0891b2" },
-              { n: 3, label: t(E, "For each consecutive pair", "각 인접 쌍"), code: "for i in range(N-1): best = min(best, a[i+1] - a[i])", color: "#7c3aed" },
-              { n: 4, label: t(E, "Print best", "best 출력"), code: "print(best)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#065f46", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#059669" }}>O(N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single linear scan", "선형 한 번 스캔")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Since the list is non-decreasing, the smallest |a[i+1] − a[i]| is just the smallest CONSECUTIVE difference. One linear pass. Sections build it one piece at a time.",
+        "리스트가 비내림차순이라 |a[i+1] − a[i]| 의 최솟값은 인접 차이의 최솟값. 한 번 선형 순회. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc19RectSections(E),
     },
   ];

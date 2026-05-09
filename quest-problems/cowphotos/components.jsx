@@ -19,14 +19,14 @@ function CowRow({ values, validity }) {
       display: "flex", gap: 4, justifyContent: "center", padding: "10px 0", flexWrap: "wrap",
       background: validity ? (validity.kind === "ok" ? "#dcfce7" : "#fee2e2") : "transparent",
       borderRadius: 8,
-      border: validity ? `2px solid ${validity.kind === "ok" ? "#86efac" : "#fca5a5"}` : "none",
+      border: validity ? `1px solid ${validity.kind === "ok" ? "#86efac" : "#fca5a5"}` : "none",
     }}>
       {values.map((v, i) => (
         <div key={i} style={{
           width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-          borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 900, fontSize: 16,
+          borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
           background: "#fff",
-          border: `2px solid ${validity ? (validity.kind === "ok" ? "#16a34a" : "#dc2626") : "#cbd5e1"}`,
+          border: `1px solid ${validity ? (validity.kind === "ok" ? "#16a34a" : "#dc2626") : "#cbd5e1"}`,
           color: validity ? (validity.kind === "ok" ? "#166534" : "#991b1b") : C.text,
         }}>{v ?? "?"}</div>
       ))}
@@ -75,16 +75,16 @@ export function HandDrawSimulator({ E }) {
 
       {/* Available cow heights */}
       <div style={{ marginBottom: 14 }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 4 }}>
+        <div style={{ fontSize: 11, fontWeight: 600, color: C.dim, textAlign: "center", marginBottom: 4 }}>
           {t(E, "available cows", "갖고 있는 소들")}
         </div>
         <CowRow values={heights} />
       </div>
 
-      <NarrativePanel minHeight={130}>
+      <NarrativePanel minHeight={130} stepKey={ts.safe}>
         {s.kind === "setup" && (
           <>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
               📋 {t(E, "Goal: pick a subset, arrange in mountain palindrome", "목표: 일부 골라서 mountain palindrome 으로 배열")}
             </div>
             <div>
@@ -98,7 +98,7 @@ export function HandDrawSimulator({ E }) {
         )}
         {s.kind === "fail-even" && (
           <>
-            <div style={{ fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>
               ✗ {t(E, "Can we use all 4? Length 4 is impossible — for ANY input.", "4 마리 다 쓸 수 있을까? 길이 4 는 불가능 — 어떤 입력이든.")}
             </div>
             <div>
@@ -121,7 +121,7 @@ export function HandDrawSimulator({ E }) {
         )}
         {s.kind === "try" && (
           <>
-            <div style={{ fontWeight: 800, color: s.ok ? "#15803d" : "#7f1d1d", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: s.ok ? "#15803d" : "#7f1d1d", marginBottom: 6 }}>
               {s.ok ? "✓" : "✗"} {t(E, "Try ", "시도 ")}<code style={{ fontFamily: "'JetBrains Mono',monospace" }}>[{s.arr.join(", ")}]</code>
             </div>
             <CowRow values={s.arr} validity={{ kind: s.ok ? "ok" : "fail" }} />
@@ -130,7 +130,7 @@ export function HandDrawSimulator({ E }) {
         )}
         {s.kind === "observation" && (
           <>
-            <div style={{ fontWeight: 800, color: A, marginBottom: 6, fontSize: 14 }}>
+            <div style={{ fontWeight: 600, color: A, marginBottom: 6, fontSize: 14 }}>
               💡 {t(E, "What did we learn?", "관찰한 것")}
             </div>
             <div style={{ fontSize: 12.5, lineHeight: 1.7 }}>
@@ -200,16 +200,16 @@ export function TrickySimulator({ E }) {
       />
 
       <div style={{ marginBottom: 14 }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 4 }}>
+        <div style={{ fontSize: 11, fontWeight: 600, color: C.dim, textAlign: "center", marginBottom: 4 }}>
           {t(E, "available cows", "갖고 있는 소들")}
         </div>
         <CowRow values={heights} />
       </div>
 
-      <NarrativePanel minHeight={140}>
+      <NarrativePanel minHeight={140} stepKey={ts.safe}>
         {s.kind === "setup" && (
           <>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
               🔢 {t(E, "Frequency: 3 appears 2×, 2 appears 1×, 1 appears 1×", "빈도: 3 이 2번, 2 가 1번, 1 이 1번")}
             </div>
             <div>
@@ -221,7 +221,7 @@ export function TrickySimulator({ E }) {
         )}
         {s.kind === "formula" && (
           <>
-            <div style={{ fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
               ✏️ {t(E, "Formula says length 3. Let's actually BUILD it.",
                           "공식 답: 길이 3. 실제로 만들어보자.")}
             </div>
@@ -243,7 +243,7 @@ export function TrickySimulator({ E }) {
         )}
         {s.kind === "build" && (
           <>
-            <div style={{ fontWeight: 800, color: "#7f1d1d", marginBottom: 6 }}>
+            <div style={{ fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>
               ✗ {t(E, "Try ", "시도 ")}<code style={{ fontFamily: "'JetBrains Mono',monospace" }}>[{s.arr.join(", ")}]</code>
             </div>
             <CowRow values={s.arr} validity={{ kind: "fail" }} />
@@ -252,7 +252,7 @@ export function TrickySimulator({ E }) {
         )}
         {s.kind === "verdict" && (
           <>
-            <div style={{ fontWeight: 800, color: "#7f1d1d", marginBottom: 6, fontSize: 14 }}>
+            <div style={{ fontWeight: 600, color: "#7f1d1d", marginBottom: 6, fontSize: 14 }}>
               🚫 {t(E, "All length-3 candidates failed.", "길이 3 후보 다 실패.")}
             </div>
             <div>
@@ -261,14 +261,14 @@ export function TrickySimulator({ E }) {
             </div>
             <div style={{ marginTop: 8, background: "#fef3c7", border: "1px dashed #fbbf24", borderRadius: 6, padding: "6px 10px", fontSize: 12 }}>
               <b>{t(E, "Real answer: ", "진짜 답: ")}</b>
-              <span style={{ color: "#16a34a", fontWeight: 800 }}>1</span>
+              <span style={{ color: "#16a34a", fontWeight: 600 }}>1</span>
               {t(E, " (just one cow as peak, no rings)", " (소 1마리만 peak 으로, ring 없음)")}
             </div>
           </>
         )}
         {s.kind === "diagnosis" && (
           <>
-            <div style={{ fontWeight: 800, color: A, marginBottom: 6, fontSize: 14 }}>
+            <div style={{ fontWeight: 600, color: A, marginBottom: 6, fontSize: 14 }}>
               🔍 {t(E, "Why did the formula fail?", "공식이 왜 틀렸을까?")}
             </div>
             <div style={{ fontSize: 12.5, lineHeight: 1.7 }}>
@@ -281,7 +281,7 @@ export function TrickySimulator({ E }) {
                 {t(E, "→ For [3, 3, 2, 1], the value 3 has freq 2 BUT no value > 3 exists. So 3 cannot be a ring.",
                       "→ [3, 3, 2, 1] 에서 3 은 freq 2 인데 3 보다 큰 값이 없음. 그래서 3 은 ring 못 됨.")}
               </div>
-              <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fbbf24", fontWeight: 800, color: "#92400e" }}>
+              <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fbbf24", fontWeight: 600, color: "#92400e" }}>
                 {t(E, "Fix: peak = M (max). Rings = (v < M with freq[v] ≥ 2). Length = 2·rings + 1.",
                       "고침: peak = M (최댓값). Rings = (v < M, freq[v] ≥ 2). 길이 = 2·rings + 1.")}
               </div>
@@ -336,9 +336,9 @@ export function CowPhotosSim({ E }) {
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
         {_CP_PRESETS.map((p, i) => (
           <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
-            padding: "4px 8px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            padding: "4px 8px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
-            fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+            fontSize: 10, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>[{p.join(",")}]</button>
         ))}
       </div>
@@ -352,8 +352,8 @@ export function CowPhotosSim({ E }) {
             {h.map((v, i) => (
               <div key={i} style={{
                 width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-                borderRadius: 6, fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
-                background: "#fff", border: `2px solid ${A}`, color: A,
+                borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+                background: "#fff", border: `1px solid ${A}`, color: A,
               }}>{v}</div>
             ))}
           </div>
@@ -375,7 +375,7 @@ export function CowPhotosSim({ E }) {
                   display: "flex", justifyContent: "space-between", padding: "5px 10px", borderRadius: 6,
                   background: isPeak ? "#fef3c7" : isRing ? "#dcfce7" : "#f1f5f9",
                   border: `1.5px solid ${isPeak ? "#fbbf24" : isRing ? "#86efac" : "#cbd5e1"}`,
-                  fontSize: 12, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+                  fontSize: 12, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace",
                 }}>
                   <span>{t(E, `value ${k}`, `값 ${k}`)}</span>
                   <span>
@@ -388,7 +388,7 @@ export function CowPhotosSim({ E }) {
               );
             })}
           </div>
-          <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, fontWeight: 800, color: A }}>
+          <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, fontWeight: 600, color: A }}>
             rings = {rings}, ans = 2 × {rings} + 1 = {ans}
           </div>
         </div>
@@ -405,15 +405,15 @@ export function CowPhotosSim({ E }) {
               return (
                 <div key={i} style={{
                   width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 6, fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                  borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                   background: isPeak ? "#fef3c7" : "#dcfce7",
-                  border: `2px solid ${isPeak ? "#f59e0b" : "#16a34a"}`,
+                  border: `1px solid ${isPeak ? "#f59e0b" : "#16a34a"}`,
                   color: isPeak ? "#92400e" : "#15803d",
                 }}>{v}</div>
               );
             })}
           </div>
-          <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, fontWeight: 800, color: "#15803d" }}>
+          <div style={{ textAlign: "center", marginTop: 10, fontSize: 13, fontWeight: 600, color: "#15803d" }}>
             ✅ length = {arr.length}
           </div>
         </div>
@@ -421,14 +421,14 @@ export function CowPhotosSim({ E }) {
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 12 }}>
         <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
-          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: cur === 0 ? "#b0b5c3" : A,
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: cur === 0 ? "#b0b5c3" : A,
           cursor: cur === 0 ? "default" : "pointer",
         }}>←</button>
         <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / 3</span>
         <button onClick={() => setSi(Math.min(2, cur + 1))} disabled={cur === 2} style={{
-          background: cur === 2 ? "#e5e7eb" : A, border: `2px solid ${cur === 2 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          background: cur === 2 ? "#e5e7eb" : A, border: `1px solid ${cur === 2 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: cur === 2 ? "#b0b5c3" : "#fff", cursor: cur === 2 ? "default" : "pointer",
         }}>→</button>
       </div>
@@ -459,10 +459,10 @@ export function CowPhotosRunner({ E }) {
   return (
     <div style={{ padding: 14 }}>
       <input value={hIn} onChange={e => setHIn(e.target.value)} placeholder="heights"
-        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
-      <button onClick={run} style={{ width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer", fontSize: 14, fontWeight: 800, marginBottom: 10, background: A, color: "#fff" }}>▶ {t(E, "Compute", "계산")}</button>
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
+      <button onClick={run} style={{ width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer", fontSize: 14, fontWeight: 600, marginBottom: 10, background: A, color: "#fff" }}>▶ {t(E, "Compute", "계산")}</button>
       {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
-      {result?.done && (<div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 900, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>M = {result.M} · rings = {result.rings} → ans = 2 × {result.rings} + 1 = {result.ans}</div>)}
+      {result?.done && (<div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 700, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>M = {result.M} · rings = {result.rings} → ans = 2 × {result.rings} + 1 = {result.ans}</div>)}
     </div>
   );
 }
@@ -611,6 +611,156 @@ const CP_FULL_CPP = [
   "}",
 ];
 
+// Step 6 = "같은 정보를 한 번만 세두면?" — manual frequency dict (insight stage,
+// before committing to language-specific helpers like Counter / vector indexing).
+const CP_INSIGHT_PY = [
+  "# 매번 h.count(v) 대신 — 빈도를 한 번만 세두면?",
+  "freq = {}",
+  "for v in h:",
+  "    freq[v] = freq.get(v, 0) + 1   # h 한 번만 훑음 → O(N)",
+  "",
+  "rings = 0",
+  "for v in freq:",
+  "    if v < M and freq[v] >= 2:     # lookup 은 즉시 (O(1))",
+  "        rings += 1",
+];
+const CP_INSIGHT_CPP = [
+  "// 키가 1..N 이라 — 그냥 freq[키] 인덱스로 빈도 저장하면 어떨까?",
+  "vector<int> freq(N + 2, 0);",
+  "for (int i = 0; i < N; i++) {",
+  "    freq[h[i]]++;                  // h 한 번만 훑기 → O(N)",
+  "}",
+  "",
+  "int rings = 0;",
+  "for (int v = 1; v < M; v++) {",
+  "    if (freq[v] >= 2) rings++;     // lookup 은 즉시",
+  "}",
+];
+
+// Step 7 = 실전 코드 — Python Counter / C++ freq 배열 (cumulative final).
+const CP_FAST_PY = [
+  "from collections import Counter",
+  "",
+  "T = int(input())",
+  "for _ in range(T):",
+  "    N = int(input())",
+  "    h = list(map(int, input().split()))",
+  "    M = max(h)",
+  "",
+  "    cnt = Counter(h)            # 한 줄로 dict 빈도 — O(N)",
+  "    rings = 0",
+  "    for v in cnt:",
+  "        if v < M and cnt[v] >= 2:",
+  "            rings += 1",
+  "",
+  "    print(2 * rings + 1)",
+];
+const CP_FAST_CPP = [
+  "#include <iostream>",
+  "#include <vector>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);                  // cin 빠르게",
+  "",
+  "    int T;",
+  "    cin >> T;",
+  "    while (T--) {",
+  "        int N;",
+  "        cin >> N;",
+  "        vector<int> freq(N + 2, 0);    // 인덱스 = 키, 값 = 빈도",
+  "        int M = 0;",
+  "        for (int i = 0; i < N; i++) {",
+  "            int h;",
+  "            cin >> h;",
+  "            freq[h]++;                 // 입력 받으면서 빈도 누적",
+  "            if (h > M) M = h;          // peak 도 같이",
+  "        }",
+  "        int rings = 0;",
+  "        for (int v = 1; v < M; v++) {",
+  "            if (freq[v] >= 2) rings++;",
+  "        }",
+  "        cout << 2 * rings + 1 << '\\n';",
+  "    }",
+  "    return 0;",
+  "}",
+];
+
+// Aside that compares operation count for naive vs fast.
+const CpPerfAside = ({ E }) => (
+  <div style={{
+    background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10,
+    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#7f1d1d",
+  }}>
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#991b1b", marginBottom: 6, letterSpacing: 0.3 }}>
+      🐌 {t(E, "Operation count", "연산량")}
+    </div>
+    <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 8px" }}>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N = 10</code>
+      <div>{t(E, "tiny — 100 ops, instant", "작음 — 100 연산, 즉시")}</div>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N = 1,000</code>
+      <div>{t(E, "1 million ops — still fast", "백만 연산 — 아직 빠름")}</div>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N = 100,000</code>
+      <div>{t(E, "10 BILLION ops — TLE 🚫", "100 억 연산 — TLE 🚫")}</div>
+    </div>
+    <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fca5a5", fontSize: 11 }}>
+      {t(E,
+        "Why? `h.count(v)` walks the whole array. Doing that once per distinct v ⇒ up to N · N work per case.",
+        "왜? `h.count(v)` 가 매번 배열 전체를 훑어요. distinct v 마다 그렇게 하면 케이스당 최대 N · N 일.")}
+    </div>
+  </div>
+);
+
+// Aside for the insight step — celebrates the savings.
+const CpInsightAside = ({ E }) => (
+  <div style={{
+    background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10,
+    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#065f46",
+  }}>
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#065f46", marginBottom: 6 }}>
+      💡 {t(E, "Key idea", "핵심 아이디어")}
+    </div>
+    <div>
+      {t(E,
+        "Frequencies don't change while we count rings. So count them ONCE up front, then ring-check is just a lookup.",
+        "ring 세는 동안 빈도는 안 바뀜. 그러니 한 번만 세두면 그 다음부턴 그냥 꺼내 쓰면 끝.")}
+    </div>
+    <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #6ee7b7", fontSize: 11 }}>
+      <div>{t(E, "Total work per case:", "케이스당 총 일:")}</div>
+      <div style={{ marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>
+        N (build freq) + distinct (check) ≤ 2N → <b>O(N)</b>
+      </div>
+    </div>
+  </div>
+);
+
+// Aside for the final fast-code step.
+const CpFastAside = ({ E }) => (
+  <div style={{
+    background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10,
+    padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#1e3a8a",
+  }}>
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "#1e40af", marginBottom: 6 }}>
+      ✅ {t(E, "Two language-friendly tools", "언어별 도구")}
+    </div>
+    <div style={{ marginBottom: 6 }}>
+      <b>Python:</b> <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>Counter(h)</code>
+      {" "}{t(E, "→ ready-made dict of frequencies in one line.",
+                "→ 한 줄로 dict 빈도 완성.")}
+    </div>
+    <div>
+      <b>C++:</b> <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>vector&lt;int&gt; freq(N+2)</code>
+      {" "}{t(E, "→ heights are 1..N, so use the value as the index directly. Cache-friendly, instant lookup.",
+                "→ 키가 1..N 이라 값 자체를 인덱스로. 캐시 친화 + 즉시 lookup.")}
+    </div>
+    <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #93c5fd", fontSize: 11 }}>
+      {t(E, "Sum of N across all cases ≤ 10⁶ → both versions pass comfortably.",
+            "전체 N 합 ≤ 10⁶ → 두 버전 다 여유롭게 통과.")}
+    </div>
+  </div>
+);
+
 // Sample input for the InputAside panel — actual USACO sample.
 const CP_SAMPLE_LINES = ["2", "4", "1 1 2 3", "4", "3 3 2 1"];
 const CpAside = ({ E, highlight = [], note = null }) => {
@@ -620,7 +770,7 @@ const CpAside = ({ E, highlight = [], note = null }) => {
       background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10,
       padding: "8px 10px", fontSize: 11.5,
     }}>
-      <div style={{ fontSize: 10.5, fontWeight: 800, color: "#92400e", marginBottom: 6, letterSpacing: 0.3 }}>
+      <div style={{ fontSize: 10.5, fontWeight: 600, color: "#92400e", marginBottom: 6, letterSpacing: 0.3 }}>
         📥 {t(E, "Sample input", "샘플 입력")}
       </div>
       <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55 }}>
@@ -666,7 +816,6 @@ export function getCowPhotosSections(E) {
         t(E, "Setting peak = M means every value below M is a candidate ring (max possible photo).",
             "peak = M 으로 두면 M 보다 작은 모든 값이 ring 후보 (사진 최대 길이)."),
       ],
-      aside: <CpAside E={E} note={t(E, "No new input read. Process the heights array h we already have.", "입력 추가로 안 읽음. 이미 가진 h 배열만 처리.")} />,
     },
     {
       label: t(E, "3️⃣ Count 'ring' values (v < M, freq ≥ 2)", "3️⃣ ring 값 세기 (v < M, freq ≥ 2)"),
@@ -678,7 +827,6 @@ export function getCowPhotosSections(E) {
         t(E, "This is the constraint the naive '2·pairs+1' formula MISSED — it's why [3,3,2,1] gives 1, not 3.",
             "단순 '2·페어+1' 공식이 놓친 제약 — [3,3,2,1] 의 답이 3 이 아니라 1 인 이유."),
       ],
-      aside: <CpAside E={E} note={t(E, "Walk through h: for each distinct value v, check (v < M) AND count appearances ≥ 2.", "h 를 보면서: 각 서로 다른 값 v 마다 (v < M) 인지 확인하고 등장 횟수 ≥ 2 인지.")} />,
     },
     {
       label: t(E, "4️⃣ Apply formula 2·rings + 1 + print", "4️⃣ 공식 2·rings + 1 적용 + 출력"),
@@ -689,8 +837,50 @@ export function getCowPhotosSections(E) {
             "각 ring 이 2 마리 기여 (좌+우 mirror). peak 가 1 마리. 그래서 길이 = 2·rings + 1."),
         t(E, "Always at least 1: even with 0 rings, we can take any single cow alone (just a peak, no rings).",
             "항상 최소 1: ring 이 0 개여도 한 마리만으로 길이 1 사진 가능 (peak 만)."),
+        t(E, "Done — small inputs work. But what happens at N = 100,000? Next steps explore that.",
+            "끝 — 작은 입력에선 잘 돼요. 그런데 N = 10만 이면? 다음 단계에서 봐요."),
       ],
-      aside: <CpAside E={E} highlight={[1, 2]} note={t(E, "Example: case 1 → M=3, rings={1}, ans=3. Case 2 → M=3, rings={}, ans=1.", "예: 케이스 1 → M=3, rings={1}, 답=3. 케이스 2 → M=3, rings={}, 답=1.")} />,
+    },
+    /* ─────────── 5–7: WHY → BRAINSTORM → IMPLEMENT (procedural optimization) ─── */
+    {
+      label: t(E, "5️⃣ Why is this slow on big N?", "5️⃣ 왜 큰 N 에선 느릴까?"),
+      color: "#dc2626",
+      // 같은 코드를 다시 보여줌 — 어디가 병목인지 분석하는 단계
+      py: CP_FULL_PY, cpp: CP_FULL_CPP,
+      why: [
+        t(E, "Look at the inner loop: `h.count(v)` scans the WHOLE array h once — O(N) work.",
+            "안쪽 루프 보세요: `h.count(v)` 가 매번 h 전체를 한 번 훑어요 — O(N)."),
+        t(E, "And we do that for EACH distinct v (there can be up to N of them) → up to N × N work per case.",
+            "그리고 그걸 distinct v 마다 (최대 N 개) → 케이스당 최대 N × N 일."),
+        t(E, "USACO N can be 100,000. N² = 10 billion. Way too slow → TLE on big test cases.",
+            "USACO 의 N 은 10 만까지. N² = 100 억. 너무 느림 → 큰 테스트에서 TLE."),
+      ],
+    },
+    {
+      label: t(E, "6️⃣ Idea — count frequencies ONCE", "6️⃣ 아이디어 — 빈도를 한 번만 세두자"),
+      color: "#0891b2",
+      py: CP_INSIGHT_PY, cpp: CP_INSIGHT_CPP,
+      why: [
+        t(E, "Frequencies of values in h don't change while we work. So why count v's appearances every time?",
+            "h 안의 빈도는 우리가 작업하는 동안 안 바뀌는데, 왜 매번 셀까?"),
+        t(E, "Plan: walk h ONCE, build a freq table. Then ring-check is just `freq[v] >= 2` — instant lookup.",
+            "계획: h 를 한 번만 훑어 freq 표를 만든다. 그 다음 ring 검사는 그냥 `freq[v] >= 2` — 즉시."),
+        t(E, "Total: O(N) to build + O(distinct) to scan = O(N) per case. 100x–1000x faster on large inputs.",
+            "총 일: O(N) 으로 만들기 + O(distinct) 로 훑기 = O(N) per case. 큰 입력에서 100~1000 배 빨라짐."),
+      ],
+    },
+    {
+      label: t(E, "7️⃣ Final fast code — Counter (Py) / freq array (C++)", "7️⃣ 최종 빠른 코드 — Counter (Py) / freq 배열 (C++)"),
+      color: "#15803d",
+      py: CP_FAST_PY, cpp: CP_FAST_CPP,
+      why: [
+        t(E, "Python: `Counter(h)` builds the dict in one line. Same logic as before, just using `cnt[v]` instead of `h.count(v)`.",
+            "Python: `Counter(h)` 한 줄로 dict 완성. 로직은 똑같고 `h.count(v)` 자리만 `cnt[v]` 로."),
+        t(E, "C++: heights are guaranteed 1..N, so we use the value AS the index. No need to even store h — we accumulate freq while reading input.",
+            "C++: 키가 1..N 으로 보장 → 값 자체를 인덱스로. h 를 따로 저장할 필요 없이 입력 받으면서 freq 누적."),
+        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) makes cin fast — important when T can be 10⁵.",
+            "ios::sync_with_stdio(false) + cin.tie(nullptr) 로 cin 빠르게 — T 가 10⁵ 까지 갈 수 있어서 중요."),
+      ],
     },
   ];
 }
@@ -721,7 +911,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

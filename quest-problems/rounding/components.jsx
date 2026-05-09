@@ -167,20 +167,20 @@ export function SpeedScale({ E }) {
   const formulaTime = formulaOps / OPS_PER_SEC;
 
   // 시각용 — TIME_LIMIT 까지가 100%, 넘으면 100% 채우고 ❌
-  const widthOf = t => Math.min(100, (t / TIME_LIMIT) * 100);
-  const fmtTime = t =>
-    t < 1e-4 ? "즉시"
-    : t < 0.01 ? `${(t * 1000).toFixed(1)}ms`
-    : t < 1   ? `${(t * 1000).toFixed(0)}ms`
-    : t < 60  ? `${t.toFixed(1)}초`
-    : `${(t / 60).toFixed(1)}분`;
+  const widthOf = tt => Math.min(100, (tt / TIME_LIMIT) * 100);
+  const fmtTime = tt =>
+    tt < 1e-4 ? "즉시"
+    : tt < 0.01 ? `${(tt * 1000).toFixed(1)}ms`
+    : tt < 1   ? `${(tt * 1000).toFixed(0)}ms`
+    : tt < 60  ? `${tt.toFixed(1)}초`
+    : `${(tt / 60).toFixed(1)}분`;
   const fmtOps = n =>
     n < 1e3 ? `${n}`
     : n < 1e6 ? `${(n / 1e3).toFixed(1)}K`
     : n < 1e9 ? `${(n / 1e6).toFixed(1)}M`
     : `${(n / 1e9).toFixed(1)}B`;
 
-  const Bar = ({ label, time, ops, color, bg }) => {
+  const Bar = ({ label, time, ops, color }) => {
     const tle = time > TIME_LIMIT;
     return (
       <div style={{ marginBottom: 10 }}>
@@ -230,9 +230,9 @@ export function SpeedScale({ E }) {
       </div>
 
       {/* 막대 3 개 */}
-      <Bar label={t(E, "🐢 Brute force", "🐢 브루트포스")} time={bruteTime} ops={bruteOps} color={C.no}     bg={C.noBg} />
-      <Bar label={t(E, "💾 Cache",       "💾 캐시")}        time={cacheTime} ops={cacheOps} color={C.carry} bg={C.carryBg} />
-      <Bar label={t(E, "⚡ Formula",     "⚡ 공식 (목표)")}   time={formulaTime} ops={formulaOps} color={C.ok} bg={C.okBg} />
+      <Bar label={t(E, "🐢 Brute force", "🐢 브루트포스")} time={bruteTime} ops={bruteOps} color={C.no} />
+      <Bar label={t(E, "💾 Cache",       "💾 캐시")}        time={cacheTime} ops={cacheOps} color={C.carry} />
+      <Bar label={t(E, "⚡ Formula",     "⚡ 공식 (목표)")}   time={formulaTime} ops={formulaOps} color={C.ok} />
 
       {/* 제한 시간 표시 */}
       <div style={{ marginTop: 12, padding: "8px 12px", background: "#f8f9fc", borderRadius: 8, fontSize: 11, color: C.dim, fontWeight: 700, textAlign: "center" }}>
@@ -269,18 +269,11 @@ export function BruteRunner({ E }) {
     startTimeRef.current = performance.now();
     const found = []; let idx = 2;
 
-    // 실제로 brute "체감" 되도록 batch + delay 조정.
-    // 60fps 기준 1 tick = 16ms. batch 를 작게 잡아 N 에 비례해서 시간 걸림.
-    // N = 100      → ~3 ticks × 16ms = ~50ms  (작은 N 은 빨리)
-    // N = 1,000    → ~25 ticks × 16ms = ~400ms
-    // N = 10,000   → ~250 ticks × 16ms = ~4초
-    // N = 100,000  → ~2500 ticks × 16ms = ~40초 (학생이 stop 누르고 싶을 만큼)
-    const BATCH = 40;        // 배치당 검사할 x 개수 — 작게 잡아 진짜 동작감
-    const TICK_MS = 16;      // 60fps
+    const BATCH = 40;
+    const TICK_MS = 16;
 
     const tick = () => {
       if (!alive.current) {
-        // 학생이 멈춤 — 그때까지 결과 보존
         const elapsed = performance.now() - startTimeRef.current;
         setResults({
           found, total: found.length, N, elapsedMs: elapsed,
@@ -297,7 +290,6 @@ export function BruteRunner({ E }) {
         }
       }
       setProgress(Math.floor((idx - 2) / (N - 1) * 100));
-      // 라이브 업데이트 — 학생이 진행되는 거 눈으로 봄
       setLiveCurrent(idx - 1);
       setLiveCount(found.length);
 
@@ -317,9 +309,6 @@ export function BruteRunner({ E }) {
   };
   const stop = () => { alive.current = false; };
 
-  // USACO 추정: 브라우저는 setTimeout 으로 인해 인위적으로 늦어졌으니
-  // CPU 연산 시간만 추정 — N 당 ~10 연산 (Bessie + Elsie 각각의 자릿수 루프)
-  // C++ 가 1억 ops/sec 라고 보면 N=10^9 에서 ~10×10^9 / 10^8 = 100 초 / 쿼리
   const estimateUSACO = (N) => {
     const opsPerN = 10;
     const cppOpsPerSec = 1e8;
@@ -356,11 +345,9 @@ export function BruteRunner({ E }) {
 
       {running && (
         <div style={{ marginBottom: 12 }}>
-          {/* progress bar */}
           <div style={{ height: 8, background: "#e5e7eb", borderRadius: 4, overflow: "hidden" }}>
             <div style={{ height: "100%", background: C.accent, borderRadius: 4, width: `${progress}%`, transition: "width .1s" }} />
           </div>
-          {/* 라이브 상태 — 학생이 진행 체감 */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 6, fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>
             <span style={{ color: C.dim, fontWeight: 700 }}>
               {t(E, "checking", "확인 중")} <span style={{ color: C.accent, fontWeight: 900 }}>x = {liveCurrent.toLocaleString()}</span>
@@ -395,7 +382,6 @@ export function BruteRunner({ E }) {
             <div style={{ fontSize: 12, color: C.dim }}>{t(E, "different x found (so far)", "개 (지금까지 발견)")}</div>
           </div>
 
-          {/* 실제 측정 시간 (브라우저) — 가장 명확한 timing 신호 */}
           <div style={{
             background: "#fff", border: `2px solid ${results.elapsedMs > 500 ? C.no : C.okBd}`, borderRadius: 10,
             padding: "10px 14px", marginBottom: 10,
@@ -415,7 +401,6 @@ export function BruteRunner({ E }) {
             </div>
           </div>
 
-          {/* USACO 채점기 추정 (실제 제출 시) */}
           <div style={{
             background: "linear-gradient(135deg, #fef2f2, #fff)", border: `2px solid ${C.noBd}`, borderRadius: 10,
             padding: "10px 14px", marginBottom: 10,
@@ -505,19 +490,16 @@ function highlightHTML(line, lang) {
   const escHTML = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const keywords = lang === "py" ? PY_KEYWORDS : CPP_KEYWORDS;
 
-  // 주석 분리
   let comment = "";
   let rest = line;
   if (lang === "py") {
     const i = rest.indexOf("#");
     if (i >= 0) { comment = rest.slice(i); rest = rest.slice(0, i); }
   } else {
-    // C++ // 주석. 전처리 # 와 구분
     const i = rest.indexOf("//");
     if (i >= 0) { comment = rest.slice(i); rest = rest.slice(0, i); }
   }
 
-  // C++ 전처리 (#include 등) 처음에 있으면 keyword 색
   let out = "";
   let work = rest;
   if (lang === "cpp") {
@@ -547,7 +529,6 @@ function highlightHTML(line, lang) {
 }
 
 function highlightCode(lines, lang) {
-  // 줄 번호 + 하이라이트
   return lines.map((line, i) => {
     const num = String(i + 1).padStart(2, " ");
     return `<span style="color:#475569;display:inline-block;width:24px;text-align:right;margin-right:10px;user-select:none;">${num}</span>${highlightHTML(line, lang) || "&nbsp;"}`;
@@ -556,7 +537,6 @@ function highlightCode(lines, lang) {
 
 /* ================================================================
    downloadFullPDF — 전체 풀이 종합 (문제 → 브루트 → 패턴 → 최적화)
-   lang: "py" | "cpp"  — 한 가지 언어만 보여줌
    ================================================================ */
 export function downloadFullPDF(E, optSections, lang = "py") {
   const win = window.open("", "_blank");
@@ -570,11 +550,9 @@ export function downloadFullPDF(E, optSections, lang = "py") {
   const fileTitle = t(E, "Roundabout Rounding — Full Study Guide", "🔄 Roundabout Rounding — 종합 풀이 노트");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
 
-  // 코드 블록 — 선택된 언어만, 하이라이트 적용
   const codeBlock = (lines) => `<pre>${highlightCode(lines, lang)}</pre>`;
   const sectionCode = (s) => codeBlock(lang === "py" ? s.py : s.cpp);
 
-  // 브루트 포스 코드 (Python / C++ 둘 중 lang 에 맞는 것만)
   const BRUTE_PY = [
     "import sys",
     "input = sys.stdin.readline",
@@ -711,7 +689,6 @@ export function downloadFullPDF(E, optSections, lang = "py") {
   5. ${t(E, "Optimization", "최적화")}
 </div>
 
-<!-- ════════════════════════════ 1. 문제 ════════════════════════════ -->
 <h2>1. ${t(E, "Problem", "문제")}</h2>
 
 <p>${t(E,
@@ -732,13 +709,6 @@ export function downloadFullPDF(E, optSections, lang = "py") {
     "1의자리부터 P자리까지 한 자리씩 봐요. 자리값 ≥ 5 면 10^pos 더하고 그 아래 0으로 (carry 전파).")}
 </div>
 
-<h3>${t(E, "Input / Output", "입력 / 출력")}</h3>
-<p>${t(E, "T test cases. Each line: N. For each, output the count of x in [2, N] where Bessie(x) ≠ Elsie(x).",
-        "T 테스트케이스. 각 줄에 N. 각 케이스마다 2 ≤ x ≤ N 중 Bessie(x) ≠ Elsie(x) 인 x 의 개수 출력.")}</p>
-<p>${t(E, "Constraints: T up to 10, N up to 10⁹. Brute O(T·N) = 10¹⁰ → too slow.",
-        "제약: T ≤ 10, N ≤ 10⁹. 브루트 O(T·N) = 10¹⁰ → 시간초과.")}</p>
-
-<!-- ════════════════════════════ 2. 예제 ════════════════════════════ -->
 <h2>2. ${t(E, "Worked Examples", "예제 풀이")}</h2>
 
 <h3>${t(E, "Example 1: x = 48", "예제 1: x = 48")}</h3>
@@ -750,45 +720,6 @@ export function downloadFullPDF(E, optSections, lang = "py") {
 </table>
 <p><b>${t(E, "Different! → counts.", "다름! → 카운트.")}</b></p>
 
-<h3>${t(E, "Elsie's carry — step by step (x = 48)", "Elsie 의 carry — 한 자리씩 (x = 48)")}</h3>
-<p style="font-size:12px;color:#6b7280;">${t(E,
-  "How does the carry propagate? Track 'cur' through each position:",
-  "carry 가 어떻게 위로 전파될까? 각 pos 에서 'cur' 변수가 어떻게 바뀌는지 추적:")}</p>
-<table>
-  <tr><th>pos</th><th>${t(E, "cur (before)", "cur (시작)")}</th><th>${t(E, "digit at pos", "그 자리 숫자")}</th><th>${t(E, "≥ 5?", "≥ 5?")}</th><th>${t(E, "action", "동작")}</th><th>${t(E, "cur (after)", "cur (결과)")}</th></tr>
-  <tr><td>1 (ones)</td><td>48</td><td>8</td><td>✅ ${t(E, "yes", "예")}</td><td>${t(E, "+10, zero out ones", "+10, 1의자리 0으로")}</td><td><b>50</b></td></tr>
-  <tr><td>2 (tens)</td><td>50</td><td>5</td><td>✅ ${t(E, "yes", "예")}</td><td>${t(E, "+100, zero out tens", "+100, 10의자리 0으로")}</td><td><b>100</b></td></tr>
-</table>
-<p style="font-size:12px;"><b>${t(E, "Final Elsie(48) = 100.", "결과 Elsie(48) = 100.")}</b> ${t(E,
-  "Bessie sees first digit = 4, returns 0. So 0 ≠ 100 → counted.",
-  "Bessie 는 첫째 자리 = 4 만 보고 0 반환. 0 ≠ 100 → 카운트.")}</p>
-
-<h3>${t(E, "Example 2: x = 100", "예제 2: x = 100")}</h3>
-<table>
-  <tr><th>${t(E, "Cow", "소")}</th><th>${t(E, "Process", "과정")}</th><th>${t(E, "Result", "결과")}</th></tr>
-  <tr><td>🐄 Bessie</td><td>${t(E, "first digit = 1 < 5 → 0", "첫째 = 1 < 5 → 0")}</td><td><b>0</b></td></tr>
-  <tr><td>🐮 Elsie</td><td>${t(E, "ones=0, tens=0, hundreds=1: none ≥ 5 → no carry", "1의자리=0, 10의자리=0, 100의자리=1: 모두 <5 → carry 없음")}</td><td><b>0</b></td></tr>
-</table>
-<p>${t(E, "Same → not counted.", "같음 → 카운트 안 함.")}</p>
-
-<div class="box warn">
-  <b>📝 ${t(E, "Self-check", "자가 점검")} (${t(E, "answers below", "답은 아래")})</b>
-  <ol style="margin:6px 0 0;padding-left:20px;font-size:12px;">
-    <li>${t(E, "Compute Bessie(67) and Elsie(67). Are they equal?",
-              "Bessie(67) 과 Elsie(67) 를 직접 구해봐. 같을까?")}</li>
-    <li>${t(E, "Compute Bessie(123) and Elsie(123). Equal?",
-              "Bessie(123), Elsie(123). 같을까?")}</li>
-    <li>${t(E, "Compute Bessie(449) and Elsie(449). Equal?",
-              "Bessie(449), Elsie(449). 같을까?")}</li>
-  </ol>
-  <div style="font-size:11px;color:#94a3b8;margin-top:6px;font-style:italic;">
-    ${t(E,
-      "Answers: 1) Bessie=100, Elsie=100 (equal). 2) Bessie=0, Elsie=0 (equal). 3) Bessie=0, Elsie=1000 (different!).",
-      "답: 1) Bessie=100, Elsie=100 (같음). 2) Bessie=0, Elsie=0 (같음). 3) Bessie=0, Elsie=1000 (다름!).")}
-  </div>
-</div>
-
-<!-- ════════════════════════════ 3. 브루트 ════════════════════════════ -->
 <h2>3. ${t(E, "Brute Force (TLE on big N)", "브루트 포스 (큰 N 에서 시간초과)")}</h2>
 
 <p>${t(E,
@@ -803,194 +734,43 @@ ${codeBlock(bruteCode)}
     "시간복잡도 O(T · N). N = 10⁹ 면: 쿼리당 ~10⁹ 연산 × 10 쿼리 = 10¹⁰. 너무 느림 (한계 ~10⁸/초).")}
 </div>
 
-<div class="box warn">
-  <b>📝 ${t(E, "Self-check (brute)", "자가 점검 (브루트)")}</b>
-  <ol style="margin:6px 0 0;padding-left:20px;font-size:12px;">
-    <li>${t(E, "Roughly how long would the brute take for N = 10⁶? (1 op = 1 ns)",
-              "브루트가 N = 10⁶ 에 대략 얼마나 걸릴까? (연산 1 개 = 1 ns 가정)")}</li>
-    <li>${t(E, "Why does the prefix sum (DP) idea help when there are MANY queries?",
-              "쿼리가 많을 때 누적합(DP) 아이디어가 왜 도움이 될까?")}</li>
-  </ol>
-  <div style="font-size:11px;color:#94a3b8;margin-top:6px;font-style:italic;">
-    ${t(E,
-      "Answers: 1) ~1 second for one query (10⁶ × ~10 inner ops). With T=10 queries → 10s. Still TLE for N=10⁹. 2) Prefix sum builds the array ONCE; T queries become O(1) lookups. But for N=10⁹ even building once is too slow → need O(log N) formula.",
-      "답: 1) 쿼리 하나에 ~1 초 (10⁶ × ~10 내부 연산). T=10 → 10 초. N=10⁹ 면 여전히 TLE. 2) 누적합은 배열을 한 번만 만들고 T 쿼리는 O(1) 조회. 하지만 N=10⁹ 면 한 번 만드는 것도 너무 느림 → O(log N) 공식 필요.")}
-  </div>
-</div>
-
-<!-- ════════════════════════════ 4. 패턴 ════════════════════════════ -->
 <h2>4. ${t(E, "Pattern Discovery", "패턴 발견")}</h2>
 
 <p>${t(E,
-  "Look at numbers where Bessie ≠ Elsie. They all share the same shape:",
-  "Bessie ≠ Elsie 인 수들의 형태를 관찰하면 — 모두 같은 모양:")}</p>
+  "Look at numbers where Bessie ≠ Elsie. They form contiguous intervals by digit count d:",
+  "Bessie ≠ Elsie 인 수들 — 자릿수 d 별로 연속 구간을 이룸:")}</p>
 
 <div class="box ok">
-  <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:800;">
-    <span style="color:#dc2626;">4</span>
-    <span style="color:#f59e0b;">[4~9]</span>
-    <span style="color:#f59e0b;">[4~9]</span>
-    ...
-    <span style="color:#f59e0b;">[4~9]</span>
-    <span style="color:#10b981;">[5~9]</span>
+  <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;line-height:1.9;">
+    s<sub>d</sub> = <span style="color:#dc2626;">4…45</span> &nbsp;(d−1 fours + a 5)<br/>
+    e<sub>d</sub> = <span style="color:#10b981;">4 99…9</span> &nbsp;(a 4 + d−1 nines)
   </div>
   <div style="text-align:center;font-size:11px;color:#6b7280;margin-top:6px;">
-    ${t(E, "first=4 fixed · middle digits 4~9 · last digit 5~9", "첫째=4 고정 · 중간 자리 4~9 · 마지막 자리 5~9")}
+    ${t(E, "All d-digit x with Bessie ≠ Elsie lie in [s_d, e_d].",
+          "Bessie ≠ Elsie 인 d 자리 x 는 모두 [s_d, e_d] 구간에 있어요.")}
   </div>
 </div>
-
-<h3>${t(E, "Why first digit must be 4 — three cases", "첫째 자리가 왜 반드시 4 여야 하나 — 세 케이스")}</h3>
-<p style="font-size:12px;color:#6b7280;">${t(E,
-  "Key Elsie detail: at the very last position (pos=P), the line",
-  "Elsie 의 핵심 디테일: 마지막 위치(pos=P)에서")} <code class="inline">cur = (cur // 10^P) * 10^P</code> ${t(E,
-  "zeros everything UNLESS cur ≥ 10^P. So Elsie returns 10^P only if carry pushed cur over 10^P.",
-  "는 cur ≥ 10^P 가 아니면 모두 0 으로 만들어요. 즉 Elsie 가 10^P 를 반환하려면 carry 가 cur 를 10^P 위로 밀어 올려야 해요.")}</p>
-<table>
-  <tr><th>${t(E, "Case", "경우")}</th><th>x</th><th>🐄 Bessie</th><th>🐮 Elsie</th><th>${t(E, "Equal?", "같음?")}</th></tr>
-  <tr><td>${t(E, "first ≤ 3", "첫째 ≤ 3")}</td><td>345</td>
-      <td>${t(E, "first=3 < 5 → 0", "첫째=3 < 5 → 0")}</td>
-      <td>${t(E, "350 → 400 (first now 4) → final step zeros (4<5) = 0",
-               "350 → 400 (first 가 4 됨) → 마지막 step 에서 0 (4<5)")}</td>
-      <td style="color:#10b981;">${t(E, "Same (0 vs 0)", "같음 (0 vs 0)")}</td></tr>
-  <tr><td>${t(E, "first = 4 ✅", "첫째 = 4 ✅")}</td><td>449</td>
-      <td>${t(E, "first=4 < 5 → 0", "첫째=4 < 5 → 0")}</td>
-      <td>${t(E, "450 → 500 (first now 5) → final keeps 1000",
-               "450 → 500 (first 가 5 됨) → 마지막 step 에서 1000 유지")}</td>
-      <td style="color:#dc2626;"><b>${t(E, "Different! (0 vs 1000) ✓ COUNTED", "다름! (0 vs 1000) ✓ 카운트")}</b></td></tr>
-  <tr><td>${t(E, "first ≥ 5", "첫째 ≥ 5")}</td><td>523</td>
-      <td>${t(E, "first=5 ≥ 5 → 1000", "첫째=5 ≥ 5 → 1000")}</td>
-      <td>${t(E, "no carry from below, but first=5≥5 at pos=3 → 1000",
-               "아래에서 carry 없지만 pos=3 에서 first=5≥5 → 1000")}</td>
-      <td style="color:#10b981;">${t(E, "Same (1000 vs 1000)", "같음 (1000 vs 1000)")}</td></tr>
-</table>
-
-<div class="why"><b>💡 ${t(E, "The key insight", "핵심 통찰")}:</b>
-<p style="font-size:12px;margin:4px 0 0;">${t(E,
-  "For first ≤ 3: carry can push first to at most 4 (3+1). 4 < 5 → final step zeros it → Elsie = 0 = Bessie.\nFor first ≥ 5: Bessie immediately returns 10^P. Elsie also ends at 10^P.\nFor first = 4 with carry reaching it: 4+1 = 5 → Elsie returns 10^P, but Bessie sees ORIGINAL first=4 → returns 0. They differ by exactly 10^P.",
-  "first ≤ 3: carry 가 first 를 최대 4 까지만 밀어 올림 (3+1). 4 < 5 라서 마지막 step 에서 0. Elsie = 0 = Bessie.\nfirst ≥ 5: Bessie 가 바로 10^P 반환. Elsie 도 결국 10^P 로 끝.\nfirst = 4 + carry 도달: 4+1 = 5 → Elsie 가 10^P 반환. Bessie 는 원래 first=4 만 봐서 → 0. 정확히 10^P 차이.")}</p>
-</div>
-
-<h3>${t(E, "Why these digit ranges (4~9 middle, 5~9 last)?", "왜 이런 자릿수 범위 (중간 4~9, 마지막 5~9)?")}</h3>
-<div class="why"><ul>
-  <li>${t(E, "Last digit ≥ 5: needed to START the carry chain.",
-            "마지막 자리 ≥ 5: carry 를 시작하려면 필요.")}</li>
-  <li>${t(E, "Middle digits ≥ 4: when they receive carry (+1) from below, they become ≥ 5, so they propagate upward. (digit 3 + 1 = 4 stays below 5 → carry stops.)",
-            "중간 자리 ≥ 4: 아래에서 carry 받아 +1 되면 ≥5 가 되어 위로 전파. (digit 3 + 1 = 4 는 5 미만 → carry 멈춤.)")}</li>
-  <li>${t(E, "First digit = 4: receives carry → becomes 5 → Elsie returns 10^P. Bessie sees first=4 < 5 → returns 0. Always different by 10^P.",
-            "첫째 = 4: carry 받아 → 5 됨 → Elsie 가 10^P 반환. Bessie 는 first=4 < 5 → 0 반환. 항상 10^P 만큼 다름.")}</li>
-</ul></div>
-
-<h3>${t(E, "Slot visualization — where does 5 × 6^(d−2) come from?", "슬롯 시각화 — 5 × 6^(d−2) 어디서 나왔지?")}</h3>
-<div class="box ok">
-  <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800;margin-bottom:10px;">
-    ${t(E, "Each slot = number of choices for that digit", "각 칸 = 그 자리의 선택지 수")}
-  </div>
-  <div style="text-align:center;">
-    <div style="display:inline-block;padding:8px 12px;border:2px solid #dc2626;border-radius:6px;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:18px;">4</div>
-    <span style="font-size:18px;color:#6b7280;">×</span>
-    <div style="display:inline-block;padding:8px 12px;border:2px solid #f59e0b;border-radius:6px;background:#fef3c7;color:#92400e;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:18px;">[4~9]</div>
-    <span style="font-size:18px;color:#6b7280;">×</span>
-    <div style="display:inline-block;padding:8px 12px;border:2px solid #f59e0b;border-radius:6px;background:#fef3c7;color:#92400e;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:18px;">[4~9]</div>
-    <span style="font-size:14px;color:#6b7280;">… (d−2 ${t(E, "middles", "중간")})</span>
-    <span style="font-size:18px;color:#6b7280;">×</span>
-    <div style="display:inline-block;padding:8px 12px;border:2px solid #10b981;border-radius:6px;background:#ecfdf5;color:#065f46;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:18px;">[5~9]</div>
-  </div>
-  <div style="text-align:center;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:800;">
-    <span style="color:#dc2626;">1</span>
-    <span style="color:#6b7280;">×</span>
-    <span style="color:#92400e;">6</span>
-    <span style="color:#6b7280;">×</span>
-    <span style="color:#92400e;">6</span>
-    <span style="color:#6b7280;">× … ×</span>
-    <span style="color:#10b981;">5</span>
-    <span style="color:#6b7280;">=</span>
-    <span style="color:#4f46e5;">5 × 6<sup>d−2</sup></span>
-  </div>
-  <div style="text-align:center;margin-top:6px;font-size:11px;color:#6b7280;">
-    ${t(E, "first: 1 choice (must be 4) · middles: 6 choices each (4,5,6,7,8,9) · last: 5 choices (5,6,7,8,9)",
-          "첫째: 1가지 (4 만) · 중간: 각 6가지 (4,5,6,7,8,9) · 마지막: 5가지 (5,6,7,8,9)")}
-  </div>
-</div>
-
-<h3>${t(E, "Counting formula", "개수 공식")}</h3>
-<div class="formula">5 × 6<sup>d−2</sup></div>
-<div style="text-align:center;font-size:12px;color:#6b7280;">
-  ${t(E, "= count of d-digit numbers where Bessie ≠ Elsie", "= d 자리 수 중 답이 다른 개수")}
-</div>
-<p>${t(E,
-  "1 (first=4) × 6^(d−2) (middle digits, each 6 options) × 5 (last digit, 5 options).",
-  "1 (첫째=4) × 6^(d−2) (중간 자리 각각 6가지) × 5 (마지막 5가지).")}</p>
 
 <table>
-  <tr><th>d</th><th>${t(E, "Calculation", "계산")}</th><th>${t(E, "Count", "개수")}</th><th>${t(E, "Examples", "예시")}</th></tr>
-  <tr><td>2</td><td>5 × 6⁰ = 5 × 1</td><td><b>5</b></td><td>45, 46, 47, 48, 49</td></tr>
-  <tr><td>3</td><td>5 × 6¹ = 5 × 6</td><td><b>30</b></td><td>445, 467, 489, 495 ...</td></tr>
-  <tr><td>4</td><td>5 × 6² = 5 × 36</td><td><b>180</b></td><td>4456, 4789 ...</td></tr>
-  <tr><td>5</td><td>5 × 6³ = 5 × 216</td><td><b>1,080</b></td><td>...</td></tr>
-  <tr><td>6</td><td>5 × 6⁴</td><td><b>6,480</b></td><td>...</td></tr>
+  <tr><th>d</th><th>s<sub>d</sub></th><th>e<sub>d</sub></th><th>${t(E, "Count", "개수")}</th></tr>
+  <tr><td>2</td><td>45</td><td>49</td><td><b>5</b></td></tr>
+  <tr><td>3</td><td>445</td><td>499</td><td><b>55</b></td></tr>
+  <tr><td>4</td><td>4445</td><td>4999</td><td><b>555</b></td></tr>
+  <tr><td>5</td><td>44445</td><td>49999</td><td><b>5555</b></td></tr>
 </table>
 
-<!-- ════════════════════════════ 5. 최적화 ════════════════════════════ -->
 <h2>5. ${t(E, "Optimization — O(log N)", "최적화 — O(log N)")}</h2>
 
 <p>${t(E,
-  "Strategy: split into two parts.",
-  "전략: 두 부분으로 나눠서 처리.")}</p>
+  "Strategy: for each digit count d (2, 3, 4, ...), the disagreeing x form one contiguous interval [s_d, e_d]. Clip to N and sum the lengths.",
+  "전략: 각 자릿수 d (2, 3, 4, ...) 마다 답이 다른 x 는 연속 구간 [s_d, e_d]. N 으로 자르고 길이 합산.")}</p>
 
 <div class="box ok">
-  <b>${t(E, "Part 1 (Easy):", "쉬운 부분:")}</b>
-  ${t(E, "Numbers with FEWER digits than N. Automatically ≤ N. Use formula directly.",
-        "N 보다 자릿수가 적은 수. 자동으로 ≤ N. 공식 그대로 사용.")}
+  <b>${t(E, "Per query:", "쿼리당:")}</b>
+  ${t(E,
+    "Loop d = 2, 3, ... while s_d ≤ N. Add min(N, e_d) − s_d + 1. Stop when s_d > N (about 10 iterations max for N ≤ 10⁹).",
+    "d = 2, 3, ... 반복하며 s_d ≤ N 인 동안. min(N, e_d) − s_d + 1 더함. s_d > N 이면 멈춤 (N ≤ 10⁹ 면 최대 10번).")}
 </div>
-<div class="box warn">
-  <b>${t(E, "Part 2 (Tricky):", "어려운 부분:")}</b>
-  ${t(E, "Numbers with the SAME digit count as N. Walk N's digits one by one to count only ≤ N.",
-        "N 과 자릿수 같은 수. N 의 자릿수를 하나씩 따라가면서 ≤ N 인 것만 셈.")}
-</div>
-
-<h3>${t(E, "Worked example: N = 1000 (D=4)", "예: N = 1000 (D=4)")}</h3>
-<table>
-  <tr><th>${t(E, "Digits", "자릿수")}</th><th>${t(E, "What counts", "셈에 들어가는 것")}</th><th>${t(E, "Count", "개수")}</th></tr>
-  <tr><td>1</td><td>${t(E, "no carry possible", "carry 못 함")}</td><td>0</td></tr>
-  <tr><td>2</td><td>45~49</td><td>5</td></tr>
-  <tr><td>3</td><td>4xx ${t(E, "pattern", "패턴")}</td><td>30</td></tr>
-  <tr><td>4</td><td>${t(E, "only 1000, first=1≠4", "1000만 있고 첫째=1≠4")}</td><td>0</td></tr>
-  <tr><td colspan="2" style="text-align:right;"><b>${t(E, "Total", "합계")}</b></td><td><b>35</b></td></tr>
-</table>
-
-<h3>${t(E, "Worked example: N = 473 (D=3)", "예: N = 473 (D=3)")}</h3>
-<p><b>${t(E, "Easy part:", "쉬운 부분:")}</b> ${t(E, "2-digit = 5", "2자리 = 5")}</p>
-<p><b>${t(E, "Tricky part:", "어려운 부분:")}</b> ${t(E, "3-digit ≤ 473, broken down by middle digit:", "3자리 중 ≤ 473, 중간 자리별로:")}</p>
-<table>
-  <tr><th>${t(E, "Middle", "중간")}</th><th>${t(E, "Numbers", "수들")}</th><th>${t(E, "Count", "개수")}</th></tr>
-  <tr><td>4</td><td>445~449</td><td>5</td></tr>
-  <tr><td>5</td><td>455~459</td><td>5</td></tr>
-  <tr><td>6</td><td>465~469</td><td>5</td></tr>
-  <tr><td>7</td><td>${t(E, "need ≥5 AND ≤3 → impossible", "마지막 ≥5 AND ≤3 → 불가능")}</td><td>0</td></tr>
-  <tr><td>8</td><td>480~ &gt; 473 ❌</td><td>0</td></tr>
-  <tr><td>9</td><td>490~ &gt; 473 ❌</td><td>0</td></tr>
-  <tr><td colspan="2" style="text-align:right;"><b>${t(E, "Tricky total", "어려운 합")}</b></td><td><b>15</b></td></tr>
-</table>
-<p style="text-align:center;font-size:14px;font-weight:800;color:#4f46e5;">
-  ${t(E, "Final: 5 + 15 = 20", "최종: 5 + 15 = 20")}
-</p>
-
-<h3>${t(E, "Code trace for N = 473 — what each variable holds", "N = 473 코드 trace — 변수가 실제로 뭘 담고 있나")}</h3>
-<p style="font-size:12px;color:#6b7280;">${t(E,
-  "Map the variables in the tricky-part code to actual numbers from the N=473 walkthrough above:",
-  "위 N=473 워크쓰루의 실제 숫자가 어려운 부분 코드의 어느 변수에 들어가는지 매핑:")}</p>
-<table>
-  <tr><th>i</th><th>${t(E, "digit (s[i])", "digit (s[i])")}</th><th>${t(E, "branch", "분기")}</th><th>extra</th><th>rem</th><th>${t(E, "result += ?", "result += ?")}</th><th>${t(E, "running total", "누적")}</th></tr>
-  <tr><td>${t(E, "(start)", "(시작)")}</td><td>—</td><td>${t(E, "easy part: d=2 → +5", "쉬운 부분: d=2 → +5")}</td><td>—</td><td>—</td><td><b>+5</b></td><td>5</td></tr>
-  <tr><td>${t(E, "(D-loop start, first==4)", "(D-loop 시작, first==4)")}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>5</td></tr>
-  <tr><td>1</td><td>7 (s = "473", s[1] = '7')</td><td>${t(E, "middle, digit≥4", "중간, digit≥4")}</td><td>7−4 = 3</td><td>3−1−2 = 0</td><td>3 × 6⁰ × 5 = <b>+15</b></td><td>20</td></tr>
-  <tr><td>2</td><td>3 (s[2] = '3')</td><td>${t(E, "last, digit&lt;5 → +0", "마지막, digit&lt;5 → +0")}</td><td>—</td><td>—</td><td>+0</td><td><b>20</b></td></tr>
-</table>
-<p style="font-size:12px;"><b>${t(E, "Final result = 20.", "최종 result = 20.")}</b> ${t(E,
-  "Note: at i=1 the 'extra * p6[rem] * 5' = '3 × 1 × 5 = 15' is exactly the count of (445~449) + (455~459) + (465~469) = 5+5+5 from our table.",
-  "주목: i=1 에서 'extra * p6[rem] * 5' = '3 × 1 × 5 = 15' 는 위 표의 (445~449) + (455~459) + (465~469) = 5+5+5 와 정확히 일치.")}</p>
-
-<h3>${t(E, "Optimal Code — broken into 4 parts", "최적 코드 — 4 부분으로 나눠서")}</h3>
 
 ${optSections.map(s => `
   <h3 style="background:${s.bgColor || '#eef2ff'};color:${s.color || '#4f46e5'};padding:6px 10px;border-radius:6px;">${s.label}</h3>
@@ -1008,23 +788,6 @@ ${optSections.map(s => `
     "쿼리당 O(D) = O(log₁₀ N). 전체 O(T · log N). N = 10⁹: 쿼리당 ~10 연산 vs 브루트 ~10⁹. 약 10⁸ 배 빠름.")}
 </div>
 
-<div class="box warn">
-  <b>📝 ${t(E, "Self-check (final)", "자가 점검 (마지막)")}</b>
-  <ol style="margin:6px 0 0;padding-left:20px;font-size:12px;">
-    <li>${t(E, "Compute by hand: how many x in [2, 100] give different answers? (Use the table.)",
-              "직접 계산: x ∈ [2, 100] 중 답이 다른 수는 몇 개? (표 활용.)")}</li>
-    <li>${t(E, "What does the optimal code return for N = 50?",
-              "N = 50 일 때 최적 코드는 뭘 반환?")}</li>
-    <li>${t(E, "Trace N = 4500 by hand. (Hint: easy = 5+30 = 35; tricky = 4-digit ≤ 4500 with first=4 → walk i=1,2,3.)",
-              "N = 4500 직접 trace. (힌트: 쉬운 = 5+30 = 35; 어려운 = 4자리 ≤ 4500 중 first=4 → i=1,2,3 따라가기.)")}</li>
-  </ol>
-  <div style="font-size:11px;color:#94a3b8;margin-top:6px;font-style:italic;">
-    ${t(E,
-      "Answers: 1) 5 (just 45~49). 2) 5 (only 2-digit, 45~49). 3) Easy = 35. Tricky: i=1 digit=5≥4 → extra=1, rem=1, p6[1]=6 → +1·6·5=30; i=2 digit=0<4 → break. So tricky = 30. Total = 65.",
-      "답: 1) 5 (45~49 만). 2) 5 (2자리만, 45~49). 3) 쉬운 = 35. 어려운: i=1 digit=5≥4 → extra=1, rem=1, p6[1]=6 → +1·6·5=30; i=2 digit=0<4 → break. 어려운 = 30. 전체 = 65.")}
-  </div>
-</div>
-
 <div style="margin-top:30px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e5e7eb;padding-top:8px;">
   © Coderin · 코드린 · ${t(E, "Generated for offline study", "오프라인 학습용 출력")}
 </div>
@@ -1034,72 +797,12 @@ ${optSections.map(s => `
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
 
+// Backwards-compat alias used by RoundingApp.jsx
+export const downloadRoundingPDF = downloadFullPDF;
 
-/* ================================================================
-   downloadOptPDF — 어디서든 호출 가능. 새 창에 인쇄용 HTML 그리고 print() 호출
-   ================================================================ */
-export function downloadOptPDF(E, sections, lang = "py") {
-  const win = window.open("", "_blank");
-  if (!win) {
-    alert(t(E,
-      "Pop-up was blocked. Please allow pop-ups and try again.",
-      "팝업이 차단됐어요. 팝업 허용 후 다시 시도해주세요."));
-    return;
-  }
-  const escapeHtml = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const langLabel = lang === "py" ? "Python" : "C++";
-  const fileTitle = t(E, "Roundabout Rounding — Optimized Code", "🔄 Roundabout Rounding — 최적 코드");
-  const html = `<!doctype html>
-<html><head><meta charset="utf-8"><title>${fileTitle}</title>
-<style>
-  @page { margin: 18mm; }
-  body { font-family: -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-         color: #1f2937; line-height: 1.55; max-width: 760px; margin: 0 auto; padding: 16px; }
-  h1 { font-size: 20px; margin: 0 0 4px; color: #4f46e5; }
-  .sub { color: #6b7280; font-size: 12px; margin-bottom: 18px; }
-  h2 { font-size: 16px; padding: 8px 12px; border-radius: 8px; margin: 18px 0 10px; }
-  .why { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; font-size: 13px; }
-  .why b { color: #4f46e5; }
-  .why ul { margin: 6px 0 0; padding-left: 18px; }
-  .why li { margin-bottom: 4px; }
-  pre { background: #0f172a; color: #f8fafc; padding: 12px 14px; border-radius: 8px;
-        font-family: "JetBrains Mono", Consolas, monospace; font-size: 12px;
-        overflow-x: auto; white-space: pre-wrap; word-break: break-word; page-break-inside: avoid; }
-  .lang-tag { display: inline-block; background: #4f46e5; color: white;
-              padding: 2px 8px; border-radius: 4px; font-size: 10px; margin-left: 6px; vertical-align: middle; }
-  .footer { margin-top: 24px; font-size: 10px; color: #94a3b8; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 8px; }
-  .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
-  @media print { body { padding: 0; } .hint { display: none; } }
-</style></head><body>
-<div class="hint">📄 ${t(E,
-  "In the print dialog, choose 'Save as PDF' as the destination to download.",
-  "인쇄 창에서 '대상' / 'Destination' 을 'PDF로 저장' / 'Save as PDF' 로 선택하면 다운로드됩니다.")}</div>
-<h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">${t(E, "USACO 2024 December Bronze · O(log N) solution", "USACO 2024 December Bronze · O(log N) 풀이")}</div>
-${sections.map(s => {
-  const sCode = lang === "py" ? s.py : s.cpp;
-  return `
-  <h2 style="background:${s.bgColor || "#eef2ff"};color:${s.color || "#4f46e5"};">${s.label}</h2>
-  <div class="why">
-    <b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b>
-    <ul>${s.why.map(w => `<li>${escapeHtml(w)}</li>`).join("")}</ul>
-  </div>
-  <pre>${escapeHtml(sCode.join("\n"))}</pre>
-  `;
-}).join("")}
-<div class="footer">© Coderin · 코드린</div>
-</body></html>`;
-  win.document.write(html);
-  win.document.close();
-  setTimeout(() => { win.focus(); win.print(); }, 400);
-}
 
 /* ================================================================
    ProgressiveCode — 인터랙티브 코드 뷰어
-     - 4 가지 섹션 (1단계, 2단계, 3단계, 전체) 버튼으로 선택
-     - Python / C++ 토글
-     - 각 섹션마다 "왜 이렇게?" 설명
-     - PDF 다운로드 (브라우저 print → Save as PDF)
    ================================================================ */
 export function ProgressiveCode({ E, lang = "py", sections }) {
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
@@ -1155,3 +858,17 @@ export function ProgressiveCode({ E, lang = "py", sections }) {
     </div>
   );
 }
+
+// Backwards-compat alias used by RoundingApp.jsx
+export const RoundingProgressiveCode = ProgressiveCode;
+
+// Stubs kept for any other consumer of the old "thin" component API.
+// These aren't used by the new RoundingApp (which wires its own widgets via
+// step types like "compare3" / "runner" / "scale" / "progressive"), but
+// re-exporting keeps compile-time imports stable elsewhere.
+export function RoundingSim() { return null; }
+export function RoundingRunner() { return null; }
+
+// getRoundingSections is wired through chapters.jsx (re-export) so old code
+// that imports it from "./components" keeps working.
+export { getOptSections as getRoundingSections } from "./chapters";

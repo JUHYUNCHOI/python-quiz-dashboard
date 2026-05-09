@@ -47,17 +47,27 @@ export function makeCrossRd2Ch1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udd00"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#f97316" }}>Cross the Road II</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO 2017 Feb Bronze #2</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Cross the Road II</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2017 Bronze #2</div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#9a3412", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
+              {t(E, "Print the number of intersecting cow-pairs.", "교차하는 소-쌍의 개수를 출력해요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#f97316" }}>{t(E, "26 cows (A..Z) walk around a circular road", "26마리 소 (A..Z) 가 원형 도로 위를 걸어요")}</b>
                   {t(E, " — each crosses it exactly twice (so 52 crossing points total).",
@@ -65,7 +75,7 @@ export function makeCrossRd2Ch1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "We're given the ", "")}
                   <b style={{ color: "#0891b2" }}>{t(E, "cyclic sequence of 52 letters at the crossing points", "횡단 지점 52개의 글자 원형 수열")}</b>
@@ -74,7 +84,7 @@ export function makeCrossRd2Ch1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Two cow paths ", "두 소의 경로가 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "intersect", "교차")}</b>
@@ -83,7 +93,7 @@ export function makeCrossRd2Ch1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "number of intersecting cow-pairs", "교차하는 소-쌍의 개수")}</b>
@@ -121,8 +131,8 @@ export function makeCrossRd2Ch1(E) {
         "Pattern 'ABBA': how many crossing pairs?",
         "패턴 'ABBA': 교차하는 쌍 몇 개?"),
       hint: t(E,
-        "Only 2 cows (A and B), and they do cross. So 1 pair.",
-        "소가 2마리 (A와 B)뿐이고, 교차해요. 그래서 1쌍."),
+        "Only 2 cows here (A and B). Count how many pairs cross.",
+        "소가 2마리뿐이에요 (A, B). 교차하는 쌍이 몇 개인지 세어봐요."),
       answer: 1,
     },
   ];
@@ -134,48 +144,12 @@ export function makeCrossRd2Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCrossRd2Ch2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Record the TWO crossing positions of each of the 26 cows. For every pair (A, B), their paths intersect iff their positions INTERLEAVE: a1 < b1 < a2 < b2 (or rotated).",
-        "26 마리 소 각각의 두 횡단 위치를 기록. 모든 쌍 (A, B) 에 대해, 위치가 엇갈리면 (a1 < b1 < a2 < b2 또는 회전한 형태) 경로가 교차."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Record 2 positions per cow", "소마다 두 위치 기록"), code: "pos[letter] = (idx1, idx2)", color: "#f97316" },
-              { n: 2, label: t(E, "Iterate every cow pair", "모든 소 쌍 순회"), code: "for A, B in combinations(cows, 2):", color: "#7c3aed" },
-              { n: 3, label: t(E, "Check interleaving", "엇갈림 확인"), code: "if a1 < b1 < a2 < b2 or b1 < a1 < b2 < a2: count += 1", color: "#0891b2" },
-              { n: 4, label: t(E, "Print count", "개수 출력"), code: "print(count)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#f97316" }}>O(N + 26²)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "single scan + constant pair check", "한 번 스캔 + 상수 쌍 검사")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Record the TWO crossing positions of each of the 26 cows. For every pair (A, B), their paths intersect iff their positions INTERLEAVE: a1 < b1 < a2 < b2 (or rotated). Sections build it one piece at a time.",
+        "26 마리 소 각각의 두 횡단 위치를 기록. 모든 쌍 (A, B) 에 대해, 위치가 엇갈리면 (a1 < b1 < a2 < b2 또는 회전한 형태) 경로가 교차. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getCrossRoad2Sections(E),
     },
   ];

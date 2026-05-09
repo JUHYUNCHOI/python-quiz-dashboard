@@ -61,17 +61,29 @@ export function makeStuckCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udc04"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#8b5cf6" }}>Stuck in a Rut</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>Stuck in a Rut</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2020 Bronze #3</div>
           </div>
 
-          <div style={{ background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {t(E,
+                "For each cow, output the number of cells she grazes (or 'Infinity' if she never stops).",
+                "각 소가 먹은 칸 수 (멈추지 않으면 'Infinity') 를 출력.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#8b5cf6" }}>{t(E, "N cows on a 2D grid", "2D 격자 위 N 마리 소")}</b>
                   {t(E, " — each moves in one direction at speed 1: ", " — 각자 속도 1 로 한 방향: ")}
@@ -80,7 +92,7 @@ export function makeStuckCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#8b5cf6", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "If a moving cow steps onto a cell ", "움직이는 소가 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "already visited by ANOTHER cow's path", "다른 소의 경로에 이미 들렀던 칸")}</b>
@@ -89,7 +101,7 @@ export function makeStuckCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "number of cells each cow grazes (or Infinity)", "각 소가 먹은 칸 수 (혹은 무한대)")}</b>
@@ -126,8 +138,8 @@ export function makeStuckCh1(E) {
         "How many movement directions exist in this problem?",
         "이 문제에서 이동 방향은 몇 가지?"),
       hint: t(E,
-        "North and East. That's 2 directions.",
-        "북쪽과 동쪽. 2가지 방향이에요."),
+        "Re-read the problem statement — count the listed directions.",
+        "문제를 다시 읽어 봐 — 적힌 방향의 수를 세어 봐."),
       answer: 2,
     },
   ];
@@ -139,48 +151,12 @@ export function makeStuckCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeStuckCh2(E, lang = "py") {
   return [
-    // 2-1: Complexity reveal
-    {
-      type: "reveal",
-      narr: t(E,
-        "Enumerate every N-cow / E-cow pair and compute their potential collision time. Sort events by time. Process: a cow that's already stopped doesn't trigger; the other is the one who arrives later — she stops.",
-        "모든 N-소 / E-소 쌍을 열거해 잠재적 충돌 시각 계산. 시간순 정렬. 처리: 이미 멈춘 소는 발동 X; 다른 한 마리 (더 늦게 도착) 가 멈춤."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Compute collision time per pair", "쌍마다 충돌 시각 계산"), code: "for n_cow in N_cows: for e_cow in E_cows: t = ...", color: "#8b5cf6" },
-              { n: 2, label: t(E, "Sort events by time", "이벤트 시간순 정렬"), code: "events.sort(key=lambda e: e.time)", color: "#7c3aed" },
-              { n: 3, label: t(E, "Process events in order", "순서대로 처리"), code: "for e in events: if both cows still moving: later cow stops", color: "#0891b2" },
-              { n: 4, label: t(E, "Print cells per cow", "소별 칸 수 출력"), code: "print(cells[cow] for cow)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#f5f3ff", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#8b5cf6" }}>O(N² log N)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "all pairs × sort", "모든 쌍 × 정렬")}</div>
-          </div>
-        </div>),
-    },
-    // 2-2: Code
+    // 2-1: Progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Enumerate every N-cow / E-cow pair, compute potential collision time, sort events. Process: a cow already stopped doesn't trigger; the later arriver stops. Sections build it one piece at a time.",
+        "모든 N / E 소 쌍의 잠재 충돌 시각 계산, 시간순 정렬. 처리 — 이미 멈춘 소는 발동 X, 더 늦게 도착한 소가 멈춤. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getStuckInRutSections(E),
     },
   ];

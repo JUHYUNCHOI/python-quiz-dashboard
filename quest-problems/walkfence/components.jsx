@@ -60,9 +60,9 @@ export function WalkFenceSim({ E }) {
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
         {_WF_PRESETS.map((p, i) => (
           <button key={i} onClick={() => { setPi(i); setStage(0); }} style={{
-            padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
-            fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>case {i+1}</button>
         ))}
       </div>
@@ -99,14 +99,14 @@ export function WalkFenceSim({ E }) {
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
         <button onClick={() => setStage(Math.max(0, stage - 1))} disabled={stage === 0} style={{
-          background: stage === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${stage === 0 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: stage === 0 ? "#b0b5c3" : A,
+          background: stage === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${stage === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: stage === 0 ? "#b0b5c3" : A,
           cursor: stage === 0 ? "default" : "pointer",
         }}>←</button>
         <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{stage + 1} / 2</span>
         <button onClick={() => setStage(Math.min(1, stage + 1))} disabled={stage === 1} style={{
-          background: stage === 1 ? "#e5e7eb" : A, border: `2px solid ${stage === 1 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          background: stage === 1 ? "#e5e7eb" : A, border: `1px solid ${stage === 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
           color: stage === 1 ? "#b0b5c3" : "#fff", cursor: stage === 1 ? "default" : "pointer",
         }}>→</button>
       </div>
@@ -114,14 +114,7 @@ export function WalkFenceSim({ E }) {
   );
 }
 
-export function WalkFenceRunner({ E }) {
-  return (
-    <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
-      {t(E, "Use the Sim above to try different fence shapes and cow positions. (A custom fence runner needs structured input — see code section.)",
-            "위의 Sim에서 다양한 울타리 모양과 소 위치를 시도해봐. (커스텀 울타리 runner는 구조화된 입력 필요 — 코드 섹션 참고.)")}
-    </div>
-  );
-}
+export function WalkFenceRunner() { return null; }
 
 /* Section 1: read posts */
 const WF_INPUT_PY = [
@@ -383,7 +376,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

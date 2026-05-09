@@ -5,27 +5,21 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#f97316";
 
 const FULL_PY = [
-  "N, K = map(int, input().split())",
-  "days = sorted([int(input()) for _ in range(N)])",
+  "import sys",
+  "data = sys.stdin.read().split()",
+  "N = int(data[0]); K = int(data[1])",
+  "days = sorted(int(x) for x in data[2:2 + N])",
   "",
-  "# Greedy: extend subscription if gap <= K",
   "total_cost = 0",
   "i = 0",
-  "",
   "while i < N:",
-  "    # start a new subscription on days[i]",
   "    start = days[i]",
   "    end = days[i]",
   "    i += 1",
-  "",
-  "    # extend if next day is within K of current end",
   "    while i < N and days[i] - end <= K:",
   "        end = days[i]",
   "        i += 1",
-  "",
-  "    # cost = duration + K",
-  "    duration = end - start + 1",
-  "    total_cost += duration + K",
+  "    total_cost += (end - start + 1) + K",
   "",
   "print(total_cost)",
 ];
@@ -107,7 +101,7 @@ function highlightHTML(line, lang) {
     else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
     else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
   }
-  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  if (comment) out += `<span style="color:#8b949e;font-style:italic;">${escHTML(comment)}</span>`;
   return out;
 }
 function highlightCode(lines, lang) {

@@ -29,17 +29,27 @@ export function makeMcc21DvdCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udcc0"}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "#d97706" }}>DVD Screensaver</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>DVD Screensaver</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2021 P2</div>
           </div>
 
-          <div style={{ background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
+              {t(E, "Track a bouncing DVD logo and print where it lands after T steps.", "튕기는 DVD 로고를 따라가서 T 단계 후 어디 있는지 출력해요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A ", "")}
                   <b style={{ color: "#d97706" }}>{t(E, "DVD logo on a W × H screen", "W × H 화면의 DVD 로고")}</b>
@@ -48,7 +58,7 @@ export function makeMcc21DvdCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Each step, the logo moves by (dx, dy); if it'd exit the screen, that component ", "매 단계 (dx, dy) 만큼 이동. 벽을 넘어가면 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "flips sign (bounces)", "방향이 반대로 바뀌어요 (튕김)")}</b>
@@ -56,7 +66,7 @@ export function makeMcc21DvdCh1(E) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 800, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
                   <b style={{ color: "#15803d" }}>{t(E, "logo's position after T steps", "T 단계 후 로고의 위치")}</b>
@@ -91,7 +101,7 @@ export function makeMcc21DvdCh1(E) {
       question: t(E,
         "Start (0,0), direction (1,1), no walls. X-coordinate after 5 steps?",
         "시작 (0,0), 방향 (1,1), 벽 없음. 5단계 후 x좌표?"),
-      hint: t(E, "x = 0 + 5*1 = 5", "x = 0 + 5*1 = 5"),
+      hint: t(E, "Each step adds dx (=1) to x. After 5 steps?", "매 단계 x 에 dx(=1) 가 더해져. 5단계 후엔?"),
       answer: 5,
     },
   ];
@@ -100,45 +110,10 @@ export function makeMcc21DvdCh1(E) {
 export function makeMcc21DvdCh2(E, lang = "py") {
   return [
     {
-      type: "reveal",
-      narr: t(E,
-        "Simulate T steps. Each step: tentative move (x + dx, y + dy). If would cross a wall, flip the corresponding component before applying.",
-        "T 단계 시뮬레이션. 매 단계: 가상 이동 (x + dx, y + dy). 벽을 넘어가면 해당 성분을 먼저 부호 반전 후 적용."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              { n: 1, label: t(E, "Init position and velocity", "위치와 속도 초기화"), code: "x, y = start;  dx, dy = ±1, ±1", color: "#d97706" },
-              { n: 2, label: t(E, "For T steps, attempt move", "T 단계 동안 이동 시도"), code: "for _ in range(T):", color: "#7c3aed" },
-              { n: 3, label: t(E, "Bounce off walls", "벽에서 튕기기"), code: "if x+dx out of [0,W-1]: dx = -dx;  same for dy", color: "#0891b2" },
-              { n: 4, label: t(E, "Apply move; print final", "이동 적용; 최종 출력"), code: "x += dx; y += dy;  print(x, y)", color: "#16a34a" },
-            ].map((step, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "32px 1fr", gap: 10, alignItems: "center",
-                background: "#fff", border: `1.5px solid ${step.color}`, borderRadius: 8, padding: "8px 10px",
-              }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%", background: step.color, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900,
-                }}>{step.n}</div>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: step.color, marginBottom: 2 }}>{step.label}</div>
-                  <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{step.code}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "2px solid #fcd34d", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 2 }}>{t(E, "⏱ Complexity", "⏱ 복잡도")}</div>
-            <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: "#d97706" }}>O(T)</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>{t(E, "T simulation steps", "T 단계 시뮬레이션")}</div>
-          </div>
-        </div>),
-    },
-    {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Simulate T steps. Each step: tentative move (x + dx, y + dy). If would cross a wall, flip the corresponding component before applying. Sections build it one piece at a time.",
+        "T 단계 시뮬레이션. 매 단계: 가상 이동 (x + dx, y + dy). 벽을 넘어가면 해당 성분을 먼저 부호 반전 후 적용. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc21DvdSections(E),
     },
   ];
