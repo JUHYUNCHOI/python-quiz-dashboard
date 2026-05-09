@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getTeamTttSections } from "./components";
+import { getTeamTttSections, TeamLineChecker } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -33,7 +33,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeTttCh1(E) {
   return [
@@ -108,7 +108,15 @@ export function makeTttCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Interactive sim — feel the algorithm before code
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before any code, play with the grid. Edit cells, edit team rosters, and watch the 8 lines get judged. The whole problem is just: take the SET of letters per line.",
+        "코드 보기 전에 직접 격자를 만져봐. 칸과 팀 명단을 바꾸면 8 개 줄이 실시간 판정돼. 핵심 원리는 한 줄의 글자 집합 크기 — 그게 전부."),
+      content: <TeamLineChecker E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -127,7 +135,7 @@ export function makeTttCh1(E) {
         "A wins row 1, B wins row 2, C wins row 3. That's 3 individual winners!",
         "A가 1행, B가 2행, C가 3행 우승. 개인 우승자 3명이에요!"),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
