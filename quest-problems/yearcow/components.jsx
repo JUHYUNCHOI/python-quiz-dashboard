@@ -1,8 +1,109 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ================================================================
+   Zodiac Circle Sim — visual aid for reveal step.
+   Click an animal to set the target. Previous/Next sweeps Bessie's
+   marker around the 12-year cycle, displaying the year delta live.
+   ================================================================ */
+const ZODIAC_EN = ["Ox","Tiger","Rabbit","Dragon","Snake","Horse","Goat","Monkey","Rooster","Dog","Pig","Rat"];
+const ZODIAC_KO = ["소","호랑이","토끼","용","뱀","말","양","원숭이","닭","개","돼지","쥐"];
+const ZODIAC_EMOJI = ["🐂","🐅","🐇","🐉","🐍","🐎","🐐","🐒","🐓","🐕","🐖","🐀"];
+
+export function ZodiacCircleSim({ E }) {
+  const [bessieIdx, setBessieIdx] = useState(0);   // current Bessie position on circle
+  const [targetIdx, setTargetIdx] = useState(3);   // selected animal (Dragon)
+  const [yearDelta, setYearDelta] = useState(0);   // accumulated year offset
+
+  const cx = 140, cy = 140, R = 100;
+  const labels = E ? ZODIAC_EN : ZODIAC_KO;
+
+  const sweep = (direction) => {
+    const cur = ((bessieIdx % 12) + 12) % 12;
+    let diff;
+    if (direction === "previous") {
+      diff = (cur - targetIdx + 12) % 12;
+      if (diff === 0) diff = 12;
+      setYearDelta(d => d - diff);
+    } else {
+      diff = (targetIdx - cur + 12) % 12;
+      if (diff === 0) diff = 12;
+      setYearDelta(d => d + diff);
+    }
+    setBessieIdx(targetIdx);
+  };
+
+  const reset = () => { setBessieIdx(0); setYearDelta(0); };
+
+  const angle = (i) => (i / 12) * 2 * Math.PI - Math.PI / 2;
+  const px = (i, r) => cx + Math.cos(angle(i)) * r;
+  const py = (i, r) => cy + Math.sin(angle(i)) * r;
+
+  return (
+    <div style={{ background: "#fff", border: "1.5px solid #fcd34d", borderRadius: 12, padding: 12, marginBottom: 10 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
+        🔮 {t(E, "Try it: click an animal, then Previous / Next", "직접 해 봐: 동물 클릭 후 직전 / 직후 누르기")}
+      </div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
+        <svg width="280" height="280" style={{ flexShrink: 0 }}>
+          <circle cx={cx} cy={cy} r={R} fill="none" stroke="#fcd34d" strokeWidth="2" strokeDasharray="4 4" />
+          {labels.map((lbl, i) => {
+            const x = px(i, R), y = py(i, R);
+            const isTarget = i === targetIdx;
+            const isBessie = ((bessieIdx % 12) + 12) % 12 === i;
+            return (
+              <g key={i} style={{ cursor: "pointer" }} onClick={() => setTargetIdx(i)}>
+                <circle cx={x} cy={y} r="20"
+                  fill={isTarget ? "#0891b2" : "#fffbeb"}
+                  stroke={isBessie ? "#7c3aed" : "#fcd34d"}
+                  strokeWidth={isBessie ? 3 : 1.5} />
+                <text x={x} y={y + 5} textAnchor="middle" fontSize="16">{ZODIAC_EMOJI[i]}</text>
+                <text x={x} y={y + 32} textAnchor="middle" fontSize="9"
+                  fill={isTarget ? "#0891b2" : "#92400e"} fontWeight={isTarget ? 700 : 400}>{lbl}</text>
+              </g>
+            );
+          })}
+          {/* Bessie marker (purple ring already on circle); draw arrow from center */}
+          <line x1={cx} y1={cy}
+            x2={px(((bessieIdx % 12) + 12) % 12, R - 22)}
+            y2={py(((bessieIdx % 12) + 12) % 12, R - 22)}
+            stroke="#7c3aed" strokeWidth="2.5"
+            style={{ transition: "all 0.5s ease" }} />
+          <circle cx={cx} cy={cy} r="6" fill="#7c3aed" />
+        </svg>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 140 }}>
+          <div style={{ fontSize: 11, color: C.dim }}>
+            {t(E, "Bessie now at:", "Bessie 위치:")}
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#7c3aed" }}>{labels[((bessieIdx % 12) + 12) % 12]}</div>
+          </div>
+          <div style={{ fontSize: 11, color: C.dim }}>
+            {t(E, "Target:", "목표:")}
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#0891b2" }}>{labels[targetIdx]}</div>
+          </div>
+          <div style={{ fontSize: 11, color: C.dim, borderTop: "1px dashed #fcd34d", paddingTop: 6 }}>
+            {t(E, "Year delta:", "연도 차이:")}
+            <div style={{ fontSize: 18, fontWeight: 800, color: "#15803d" }}>{yearDelta}</div>
+          </div>
+          <div style={{ display: "flex", gap: 4, marginTop: 4 }}>
+            <button onClick={() => sweep("previous")} style={{ flex: 1, background: "#fef3c7", border: "1.5px solid #d97706", color: "#92400e", borderRadius: 6, padding: "6px 4px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
+              ← {t(E, "Prev", "직전")}
+            </button>
+            <button onClick={() => sweep("next")} style={{ flex: 1, background: "#fef3c7", border: "1.5px solid #d97706", color: "#92400e", borderRadius: 6, padding: "6px 4px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
+              {t(E, "Next", "직후")} →
+            </button>
+          </div>
+          <button onClick={reset} style={{ background: "#fff", border: "1px solid #d1d5db", color: C.dim, borderRadius: 6, padding: "4px", fontSize: 10, cursor: "pointer" }}>
+            ↺ {t(E, "Reset", "초기화")}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "# Zodiac animals in order (12-year cycle)",

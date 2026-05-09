@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getBucketBrigadeSections } from "./components";
+import { getBucketBrigadeSections, BucketBrigadeGrid } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -119,6 +119,9 @@ export function makeBrigadeCh1(E) {
               </div>
             </div>
           </div>
+
+          {/* 🪣 Eye-evident grid simulator — additive to dense prose above */}
+          <BucketBrigadeGrid E={E} />
         </div>),
     },
     // 1-2: Quiz

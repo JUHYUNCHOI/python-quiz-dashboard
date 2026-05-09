@@ -1,8 +1,231 @@
+import { useEffect, useRef, useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ================================================================
+   RoundSim — visualize one round (two reversals) + cycle detection
+   on [1,2,3,4,5] with reverses (1-3) then (3-5).
+   Pure presentation, no algorithm change.
+   ================================================================ */
+export function SwapityRoundSim({ E }) {
+  // 0-indexed reversal ranges: [0..2] then [2..4] on a 5-cow array.
+  const N = 5;
+  const REV = [
+    [0, 2],
+    [2, 4],
+  ];
+  const initial = [1, 2, 3, 4, 5];
+
+  // Compute one-round permutation P (apply both reversals to identity).
+  const onePerm = (() => {
+    const p = [...initial];
+    for (const [l, r] of REV) {
+      const slice = p.slice(l, r + 1).reverse();
+      for (let k = 0; k < slice.length; k++) p[l + k] = slice[k];
+    }
+    return p; // P[i] = cow at position i after one round
+  })();
+
+  // Detect cycle length: apply round repeatedly to initial.
+  const cycleLen = (() => {
+    let cur = [...initial];
+    let n = 0;
+    do {
+      const nxt = new Array(N);
+      for (let i = 0; i < N; i++) {
+        // Map by reapplying reversals (equivalent to one round).
+        nxt[i] = cur[i];
+      }
+      // Just apply the same reversals to cur:
+      for (const [l, r] of REV) {
+        const slice = nxt.slice(l, r + 1).reverse();
+        for (let k = 0; k < slice.length; k++) nxt[l + k] = slice[k];
+      }
+      cur = nxt;
+      n++;
+      if (n > 60) break;
+    } while (!cur.every((v, i) => v === initial[i]));
+    return n;
+  })();
+
+  /* phase machine:
+     0 = identity, 1 = after first reversal, 2 = after second (= 1 round done)
+     round counter increments when we transition 2 -> next 0. */
+  const [phase, setPhase] = useState(0);
+  const [round, setRound] = useState(0);
+  const [arr, setArr] = useState(initial);
+  const [playing, setPlaying] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, []);
+
+  const stepOnce = (curArr, curPhase, curRound) => {
+    if (curPhase === 0) {
+      // Apply first reversal.
+      const next = [...curArr];
+      const [l, r] = REV[0];
+      const slice = next.slice(l, r + 1).reverse();
+      for (let k = 0; k < slice.length; k++) next[l + k] = slice[k];
+      return { arr: next, phase: 1, round: curRound };
+    }
+    if (curPhase === 1) {
+      const next = [...curArr];
+      const [l, r] = REV[1];
+      const slice = next.slice(l, r + 1).reverse();
+      for (let k = 0; k < slice.length; k++) next[l + k] = slice[k];
+      return { arr: next, phase: 2, round: curRound + 1 };
+    }
+    // phase 2 -> start of next round (no array change yet, just reset highlight)
+    return { arr: curArr, phase: 0, round: curRound };
+  };
+
+  const doStep = () => {
+    const { arr: a, phase: p, round: r } = stepOnce(arr, phase, round);
+    setArr(a); setPhase(p); setRound(r);
+  };
+  const doReset = () => {
+    setPlaying(false);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setArr(initial); setPhase(0); setRound(0);
+  };
+  const togglePlay = () => {
+    if (playing) {
+      setPlaying(false);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      return;
+    }
+    setPlaying(true);
+  };
+
+  // Auto-advance when playing.
+  useEffect(() => {
+    if (!playing) return;
+    if (round >= cycleLen && phase === 0) { setPlaying(false); return; }
+    timerRef.current = setTimeout(() => {
+      const { arr: a, phase: p, round: r } = stepOnce(arr, phase, round);
+      setArr(a); setPhase(p); setRound(r);
+    }, 700);
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, [playing, arr, phase, round, cycleLen]);
+
+  // Highlight which range is "active" based on phase.
+  const activeRange = phase === 0 ? null : REV[phase === 1 ? 0 : 1];
+  const phaseLabel = (() => {
+    if (phase === 0) return t(E, "Start of round (identity)", "라운드 시작 (원래 줄)");
+    if (phase === 1) return t(E, `Step 1: reversed positions ${REV[0][0] + 1}–${REV[0][1] + 1}`, `1단계: 위치 ${REV[0][0] + 1}–${REV[0][1] + 1} 뒤집기 완료`);
+    return t(E, `Step 2: reversed positions ${REV[1][0] + 1}–${REV[1][1] + 1}  →  round complete`, `2단계: 위치 ${REV[1][0] + 1}–${REV[1][1] + 1} 뒤집기 완료  →  라운드 끝`);
+  })();
+
+  const cellSize = 46;
+  const gap = 8;
+  const reachedCycle = round >= cycleLen && phase === 0;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>
+          🎬 {t(E, "Watch one round, then keep going", "한 라운드를 본 다음, 계속 돌려봐")}
+        </div>
+        <div style={{ fontSize: 12, color: "#5b21b6", lineHeight: 1.5 }}>
+          {t(E,
+            "Array [1..5]. Each round = reverse positions 1–3, then reverse 3–5. Step or play to see the cycle close.",
+            "배열 [1..5]. 한 라운드 = 위치 1–3 뒤집기 → 위치 3–5 뒤집기. 단계로 넘기거나 재생을 눌러 순환이 닫히는 걸 확인.")}
+        </div>
+      </div>
+
+      {/* Array row */}
+      <div style={{ display: "flex", justifyContent: "center", gap, marginBottom: 10 }}>
+        {arr.map((v, i) => {
+          const inRange = activeRange && i >= activeRange[0] && i <= activeRange[1];
+          return (
+            <div key={i} style={{
+              width: cellSize, height: cellSize,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              background: inRange ? "#fde68a" : "#fff",
+              color: C.text,
+              border: `2px solid ${inRange ? "#f59e0b" : A}`,
+              borderRadius: 8,
+              fontWeight: 800, fontSize: 18,
+              transition: "all .35s ease",
+              boxShadow: inRange ? "0 2px 8px rgba(245,158,11,.4)" : "none",
+            }}>{v}</div>
+          );
+        })}
+      </div>
+
+      {/* Position labels */}
+      <div style={{ display: "flex", justifyContent: "center", gap, marginBottom: 14 }}>
+        {arr.map((_, i) => (
+          <div key={i} style={{ width: cellSize, textAlign: "center", fontSize: 10, color: C.dim }}>
+            pos {i + 1}
+          </div>
+        ))}
+      </div>
+
+      {/* Where each ORIGINAL cow ended up — arrows after a full round */}
+      {phase === 2 && (
+        <div style={{ background: "#ecfdf5", border: "1px dashed #10b981", borderRadius: 10, padding: "8px 12px", marginBottom: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#047857", marginBottom: 6 }}>
+            🔁 {t(E, "After this round, cow → new position:", "이 라운드 후 소 → 새 위치:")}
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, fontSize: 12, color: "#047857" }}>
+            {onePerm.map((cow, newPos) => (
+              <span key={newPos} style={{ background: "#fff", padding: "2px 8px", borderRadius: 6, border: "1px solid #a7f3d0" }}>
+                {t(E, `cow ${cow} → pos ${newPos + 1}`, `소 ${cow} → 위치 ${newPos + 1}`)}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Counters */}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        <div style={{ background: "#fff", border: `1.5px solid ${A}`, borderRadius: 10, padding: "6px 12px", fontSize: 12, color: A, fontWeight: 700 }}>
+          {t(E, "Round", "라운드")}: <b style={{ fontSize: 15 }}>{round}</b> / K
+        </div>
+        <div style={{ background: "#fff", border: "1.5px solid #10b981", borderRadius: 10, padding: "6px 12px", fontSize: 12, color: "#047857", fontWeight: 700 }}>
+          {t(E, "Cycle length", "순환 길이")}: <b style={{ fontSize: 15 }}>{reachedCycle ? cycleLen : "?"}</b>
+        </div>
+        <div style={{ background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: 10, padding: "6px 12px", fontSize: 12, color: C.text }}>
+          {phaseLabel}
+        </div>
+      </div>
+
+      {/* Cycle hint */}
+      {reachedCycle && (
+        <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 14px", marginBottom: 12, fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
+          💡 {t(E,
+            `The array returned to [1..5] after ${cycleLen} rounds. So K rounds is the same as K mod ${cycleLen} rounds — that's how 10^9 becomes manageable.`,
+            `${cycleLen} 라운드 후 배열이 [1..5] 로 돌아왔어요. 즉 K 라운드 = K mod ${cycleLen} 라운드 — 10^9 가 다룰 만한 수가 되는 이유.`)}
+        </div>
+      )}
+
+      {/* Controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+        <button onClick={doStep} disabled={reachedCycle} style={{
+          background: reachedCycle ? "#e5e7eb" : A, color: reachedCycle ? "#94a3b8" : "#fff",
+          border: "none", borderRadius: 8, padding: "8px 18px",
+          fontSize: 13, fontWeight: 700, cursor: reachedCycle ? "default" : "pointer",
+        }}>▶ {t(E, "Step", "단계")}</button>
+        <button onClick={togglePlay} disabled={reachedCycle} style={{
+          background: "#fff", color: A, border: `1.5px solid ${A}`, borderRadius: 8,
+          padding: "8px 18px", fontSize: 13, fontWeight: 700,
+          cursor: reachedCycle ? "default" : "pointer",
+          opacity: reachedCycle ? 0.5 : 1,
+        }}>{playing ? "⏸ " + t(E, "Pause", "일시정지") : "⏯ " + t(E, "Play", "재생")}</button>
+        <button onClick={doReset} style={{
+          background: "#fff", color: C.dim, border: `1.5px solid ${C.border}`, borderRadius: 8,
+          padding: "8px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+        }}>↺ {t(E, "Reset", "처음으로")}</button>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

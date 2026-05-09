@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getComfyCowsSections } from "./components";
+import { getComfyCowsSections, ComfyCowsSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -38,7 +38,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: Problem (3 steps)
+   Chapter 1: Problem (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeComfyCh1(E) {
   return [
@@ -103,7 +103,15 @@ export function makeComfyCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Sim — click cells to add cows, watch neighbor counts + comfortable highlight live.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Click empty cells to add cows one by one. Each cow shows her current neighbor count. When that number hits 3 the cell glows orange — she's comfortable. Try the presets, then think: adding one cow can only change the count for which cells?",
+        "빈 칸을 클릭해 소를 한 마리씩 추가. 각 소 위에 현재 이웃 수가 떠요. 그 숫자가 3 이 되는 순간 칸이 주황으로 빛나요 — 편안해진 거예요. 프리셋도 눌러보고 생각해 봐: 소 한 마리 추가가 영향을 주는 칸은 어디뿐일까?"),
+      content: (<ComfyCowsSim E={E} />),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -120,7 +128,7 @@ export function makeComfyCh1(E) {
         "A cow is comfortable with exactly 3 neighbors. (1,1) has 3 occupied neighbors, so it's comfortable!",
         "소는 정확히 이웃 3마리면 편안해요. (1,1)은 점유된 이웃이 3개이므로 편안해요!"),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

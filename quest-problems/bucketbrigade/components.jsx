@@ -1,8 +1,119 @@
+import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* ───────── Bucket Brigade interactive grid ─────────
+   Eye-evident 10×10 sim: shows L (lake), B (barn), R (rock).
+   ▶ button animates the BFS shortest path; cows fill in cell-by-cell.
+   Counter displays cows placed so far. */
+const SAMPLE_GRID = [
+  "..........",
+  "..........",
+  "....L.....",
+  "..........",
+  "..........",
+  ".....R....",
+  "..........",
+  "..........",
+  ".......B..",
+  "..........",
+];
+// Manual BFS shortest path from L(2,4) to B(8,7), avoiding R(5,5).
+// Path includes endpoints; cows = path.length - 2.
+const SAMPLE_PATH = [
+  [2,4],[3,4],[4,4],[5,4],[6,4],[6,5],[6,6],[6,7],[7,7],[8,7],
+];
+
+export function BucketBrigadeGrid({ E }) {
+  const [step, setStep] = useState(0); // 0 = start, 1..N-1 = how many cells revealed
+  const [playing, setPlaying] = useState(false);
+  const timer = useRef(null);
+
+  useEffect(() => {
+    if (!playing) return;
+    if (step >= SAMPLE_PATH.length) { setPlaying(false); return; }
+    timer.current = setTimeout(() => setStep(s => s + 1), 380);
+    return () => { if (timer.current) clearTimeout(timer.current); };
+  }, [playing, step]);
+
+  const reset = () => { setPlaying(false); setStep(0); };
+  const play = () => { if (step >= SAMPLE_PATH.length) setStep(0); setPlaying(true); };
+  const pause = () => setPlaying(false);
+
+  const inPath = (r, c) => {
+    for (let i = 0; i < step; i++) if (SAMPLE_PATH[i][0] === r && SAMPLE_PATH[i][1] === c) return i;
+    return -1;
+  };
+
+  // cows = revealed path cells, excluding L (idx 0) and B (last idx if reached).
+  const reachedBarn = step >= SAMPLE_PATH.length;
+  const cowsPlaced = Math.max(0, step - 1 - (reachedBarn ? 1 : 0));
+
+  return (
+    <div style={{ background: "#fff7ed", border: "1.5px dashed #fb923c", borderRadius: 12, padding: 12, marginBottom: 10 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, flexWrap: "wrap", gap: 6 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#9a3412" }}>
+          {t(E, "🪣 See it: water flows L → B", "🪣 눈으로 보기: 물이 L → B 로")}
+        </div>
+        <div style={{ display: "flex", gap: 6 }}>
+          {!playing
+            ? <button onClick={play} style={btnStyle(A)}>{t(E, "▶ Play", "▶ 재생")}</button>
+            : <button onClick={pause} style={btnStyle("#9a3412")}>{t(E, "⏸ Pause", "⏸ 정지")}</button>}
+          <button onClick={reset} style={btnStyle("#6b7280")}>{t(E, "↺ Reset", "↺ 리셋")}</button>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+        <div style={{ display: "inline-flex", flexDirection: "column", gap: 2, background: "#fffbeb", padding: 6, borderRadius: 8, border: "1px solid #fed7aa" }}>
+          {SAMPLE_GRID.map((row, r) => (
+            <div key={r} style={{ display: "flex", gap: 2 }}>
+              {row.split("").map((ch, c) => {
+                const pi = inPath(r, c);
+                let bg = "#fff", color = "#cbd5e1", txt = "·", border = "1px solid #f1f5f9";
+                if (ch === "L") { bg = "#bae6fd"; color = "#0369a1"; txt = "L"; border = "1.5px solid #0284c7"; }
+                else if (ch === "B") { bg = "#fde68a"; color = "#92400e"; txt = "B"; border = "1.5px solid #d97706"; }
+                else if (ch === "R") { bg = "#374151"; color = "#fff"; txt = "R"; border = "1.5px solid #111827"; }
+                else if (pi > 0 && !(r === SAMPLE_PATH[SAMPLE_PATH.length-1][0] && c === SAMPLE_PATH[SAMPLE_PATH.length-1][1])) {
+                  bg = "#fecaca"; color = "#991b1b"; txt = "🐄"; border = "1.5px solid #dc2626";
+                }
+                return (
+                  <div key={c} style={{
+                    width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center",
+                    borderRadius: 4, fontSize: txt === "🐄" ? 13 : 12, fontWeight: 700,
+                    fontFamily: "'JetBrains Mono',monospace",
+                    background: bg, color, border,
+                    transition: "background 180ms, transform 180ms",
+                  }}>{txt}</div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "space-around", fontSize: 12, color: "#7c2d12", flexWrap: "wrap", gap: 6 }}>
+        <div><b>{t(E, "Step", "단계")}:</b> {step} / {SAMPLE_PATH.length}</div>
+        <div><b>{t(E, "Cows placed", "놓은 소")}:</b> <span style={{ color: A, fontWeight: 800 }}>{cowsPlaced}</span></div>
+        <div><b>{t(E, "Path length", "경로 길이")}:</b> {Math.max(0, step)}</div>
+      </div>
+      {reachedBarn && (
+        <div style={{ marginTop: 8, textAlign: "center", fontSize: 12, fontWeight: 700, color: "#15803d" }}>
+          {t(E, "✓ Reached barn! Cows = path − 2 (L, B excluded)", "✓ 헛간 도착! 소 = 경로 − 2 (L, B 제외)")}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function btnStyle(color) {
+  return {
+    background: color, color: "#fff", border: "none", borderRadius: 6,
+    padding: "4px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer",
+  };
+}
 
 const FULL_PY = [
   "import sys",

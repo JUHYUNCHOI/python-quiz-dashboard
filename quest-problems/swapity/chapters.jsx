@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getSwapitySections } from "./components";
+import { getSwapitySections, SwapityRoundSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -113,7 +113,15 @@ export function makeSwapityCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Sim — animate one round + cycle detection on [1..5]
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before the quiz, watch a round play out. Reverse 1–3, then reverse 3–5. Keep clicking until the array returns to [1,2,3,4,5] — that count is the cycle length.",
+        "퀴즈 전에 한 라운드가 실행되는 걸 보자. 1–3 뒤집기, 그 다음 3–5 뒤집기. 배열이 [1,2,3,4,5] 로 돌아올 때까지 계속 눌러 봐 — 그 횟수가 순환 길이."),
+      content: <SwapityRoundSim E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -131,7 +139,7 @@ export function makeSwapityCh1(E) {
         "Round 1: [2,3,1]. Round 2: [3,1,2]. Round 3: [1,2,3]. Cycle = 3.",
         "1라운드: [2,3,1]. 2라운드: [3,1,2]. 3라운드: [1,2,3]. 순환 = 3."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

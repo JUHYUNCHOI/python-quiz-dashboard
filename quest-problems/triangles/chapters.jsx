@@ -119,7 +119,14 @@ export function makeTrianglesCh1(E) {
         "Base = 1 (along x), Height = 2 (along y). Area = 1*2/2 = 1. Output = 2*1 = 2.",
         "밑변 = 1 (x축), 높이 = 2 (y축). 넓이 = 1*2/2 = 1. 출력 = 2*1 = 2."),
     },
-    // 1-3: Input
+    // 1-3: Sim — click a post as the right-angle corner, see legs auto-light, watch 2×area compute live
+    {
+      type: "sim",
+      narr: t(E,
+        "Click any post — it becomes the right-angle corner. The simulator picks the farthest post on the same row (base) and the same column (height), then shows 2 × area = base × height.",
+        "기둥을 클릭하면 그게 직각 꼭짓점이 돼요. 같은 행에서 가장 먼 기둥 (밑변), 같은 열에서 가장 먼 기둥 (높이) 을 자동으로 골라서 2 × 넓이 = 밑변 × 높이 를 보여줘요."),
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

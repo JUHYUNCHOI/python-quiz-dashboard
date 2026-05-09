@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { TrianglesProgressiveCode, downloadTrianglesPDF, getTrianglesSections } from "./components";
+import { TrianglesProgressiveCode, TrianglesSim, downloadTrianglesPDF, getTrianglesSections } from "./components";
 import { makeTrianglesCh1, makeTrianglesCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -91,6 +91,7 @@ export default function TrianglesApp(props = {}) {
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
+    if (step.type === "sim") return <TrianglesSim E={E} />;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <TrianglesProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     return null;
@@ -102,6 +103,7 @@ export default function TrianglesApp(props = {}) {
       <NumInput question={s.question} hint={s.hint} answer={s.answer} E={E} onSolve={() => {}} />
     );
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
+    if (s.type === "sim") return <TrianglesSim E={E} />;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
     if (s.type === "progressive") return <TrianglesProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     return null;

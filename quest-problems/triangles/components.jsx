@@ -1,8 +1,128 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+
+/* ═══════════════════════════════════════════════════════════════
+   TrianglesSim — pick right-angle vertex, auto-highlight legs,
+                  live area × 2 = base × height
+   ═══════════════════════════════════════════════════════════════ */
+const _TR_PRESETS = [
+  // case 1: (0,0)/(1,0)/(0,2) — the example from the quiz
+  { pts: [[0,0],[1,0],[0,2]] },
+  // case 2: classic 4-post grid corner
+  { pts: [[1,1],[5,1],[1,4],[5,4]] },
+  // case 3: 5 posts, multiple legs share rows/cols
+  { pts: [[0,0],[3,0],[6,0],[0,4],[6,4]] },
+];
+
+export function TrianglesSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [pick, setPick] = useState(0); // index of clicked right-angle vertex
+  const preset = _TR_PRESETS[pi];
+  const pts = preset.pts;
+
+  // For the picked corner k: among pts sharing y[k] (different x), pick one with max |dx|
+  // among pts sharing x[k] (different y), pick one with max |dy|. Triangle = (k, hLeg, vLeg).
+  const k = pick;
+  const [kx, ky] = pts[k];
+  let hIdx = -1, hDx = 0;
+  let vIdx = -1, vDy = 0;
+  for (let i = 0; i < pts.length; i++) {
+    if (i === k) continue;
+    const [x, y] = pts[i];
+    if (y === ky) { const d = Math.abs(x - kx); if (d > hDx) { hDx = d; hIdx = i; } }
+    if (x === kx) { const d = Math.abs(y - ky); if (d > vDy) { vDy = d; vIdx = i; } }
+  }
+  const has = hIdx !== -1 && vIdx !== -1;
+  const twiceArea = has ? hDx * vDy : 0;
+
+  // SVG bounds
+  const minX = Math.min(...pts.map(p => p[0])) - 1;
+  const maxX = Math.max(...pts.map(p => p[0])) + 1;
+  const minY = Math.min(...pts.map(p => p[1])) - 1;
+  const maxY = Math.max(...pts.map(p => p[1])) + 1;
+  const W = 320, H = 220;
+  const sx = (x) => ((x - minX) / (maxX - minX)) * W;
+  const sy = (y) => H - ((y - minY) / (maxY - minY)) * H;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10 }}>
+        {_TR_PRESETS.map((_, i) => (
+          <button key={i} onClick={() => { setPi(i); setPick(0); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>case {i + 1}</button>
+        ))}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 6 }}>
+        {t(E, "Click a post to set it as the right-angle corner.", "직각 꼭짓점으로 쓸 기둥을 클릭해요.")}
+      </div>
+
+      <svg width={W} height={H} style={{ display: "block", margin: "0 auto", background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8 }}>
+        {/* gridlines */}
+        {Array.from({ length: maxX - minX + 1 }, (_, i) => minX + i).map((g) => (
+          <line key={`v${g}`} x1={sx(g)} y1={0} x2={sx(g)} y2={H} stroke="#f1f5f9" strokeWidth="1" />
+        ))}
+        {Array.from({ length: maxY - minY + 1 }, (_, i) => minY + i).map((g) => (
+          <line key={`h${g}`} x1={0} y1={sy(g)} x2={W} y2={sy(g)} stroke="#f1f5f9" strokeWidth="1" />
+        ))}
+
+        {/* legs (drawn behind points) */}
+        {has && (
+          <>
+            <line x1={sx(kx)} y1={sy(ky)} x2={sx(pts[hIdx][0])} y2={sy(pts[hIdx][1])} stroke="#7c3aed" strokeWidth="3" />
+            <line x1={sx(kx)} y1={sy(ky)} x2={sx(pts[vIdx][0])} y2={sy(pts[vIdx][1])} stroke="#15803d" strokeWidth="3" />
+            <line x1={sx(pts[hIdx][0])} y1={sy(pts[hIdx][1])} x2={sx(pts[vIdx][0])} y2={sy(pts[vIdx][1])} stroke="#d97706" strokeWidth="2" strokeDasharray="4 3" />
+            {/* small right-angle marker at the corner */}
+            <rect
+              x={Math.min(sx(kx), sx(kx) + (sx(pts[hIdx][0]) - sx(kx)) * 0.12) - 0}
+              y={Math.min(sy(ky), sy(ky) + (sy(pts[vIdx][1]) - sy(ky)) * 0.12) - 0}
+              width={Math.abs((sx(pts[hIdx][0]) - sx(kx)) * 0.12)}
+              height={Math.abs((sy(pts[vIdx][1]) - sy(ky)) * 0.12)}
+              fill="none" stroke={A} strokeWidth="1.5"
+            />
+          </>
+        )}
+
+        {/* points */}
+        {pts.map((p, i) => {
+          const isCorner = i === k;
+          const isLeg = i === hIdx || i === vIdx;
+          const fill = isCorner ? A : isLeg ? "#7c3aed" : "#94a3b8";
+          const r = isCorner ? 8 : 6;
+          return (
+            <g key={i} style={{ cursor: "pointer" }} onClick={() => setPick(i)}>
+              <circle cx={sx(p[0])} cy={sy(p[1])} r={r + 6} fill="transparent" />
+              <circle cx={sx(p[0])} cy={sy(p[1])} r={r} fill={fill} stroke="#fff" strokeWidth="2" />
+              <text x={sx(p[0])} y={sy(p[1]) - r - 4} fontSize="10" fill={C.text} textAnchor="middle" fontWeight="700">
+                ({p[0]},{p[1]})
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+
+      <div style={{ background: "#fffbeb", border: `1.5px solid #fcd34d`, borderRadius: 10, padding: "10px 12px", marginTop: 12, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.8 }}>
+        {t(E, "Right-angle corner", "직각 꼭짓점")} = <b style={{ color: A }}>({kx}, {ky})</b><br/>
+        {has ? (
+          <>
+            {t(E, "Horizontal leg (same y)", "가로 변 (같은 y)")} → <b style={{ color: "#7c3aed" }}>({pts[hIdx][0]}, {pts[hIdx][1]})</b>, {t(E, "base", "밑변")} = {hDx}<br/>
+            {t(E, "Vertical leg (same x)", "세로 변 (같은 x)")} → <b style={{ color: "#15803d" }}>({pts[vIdx][0]}, {pts[vIdx][1]})</b>, {t(E, "height", "높이")} = {vDy}<br/>
+            <b style={{ color: A }}>2 × area = base × height = {hDx} × {vDy} = {twiceArea}</b>
+          </>
+        ) : (
+          <span style={{ color: "#dc2626" }}>{t(E, "No axis-aligned triangle from this corner — pick another post.", "이 꼭짓점에서는 축에 평행한 삼각형 못 만들어요 — 다른 기둥을 골라봐요.")}</span>
+        )}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",

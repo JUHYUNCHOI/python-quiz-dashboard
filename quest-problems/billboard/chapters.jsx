@@ -1,5 +1,140 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getBillboardSections } from "./components";
+
+/* ================================================================
+   Interactive overlap simulator — drag rectangle corners,
+   see overlap area computed live with max/min formula.
+   ================================================================ */
+function OverlapSim({ E }) {
+  // Coordinate space: 0..12 on both axes; 1 unit = CELL px.
+  const CELL = 28;
+  const GRID = 12;
+  const SVG = GRID * CELL;
+  const [A, setA] = useState({ x1: 1, y1: 1, x2: 6, y2: 5 });
+  const [B, setB] = useState({ x1: 4, y1: 3, x2: 10, y2: 7 });
+  const [drag, setDrag] = useState(null); // { rect: 'A'|'B', corner: 'tl'|'tr'|'bl'|'br' }
+
+  const clamp = (v) => Math.max(0, Math.min(GRID, Math.round(v)));
+  const onMove = (e) => {
+    if (!drag) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / CELL;
+    const py = GRID - (e.clientY - rect.top) / CELL; // flip: bottom-left origin
+    const x = clamp(px), y = clamp(py);
+    const setter = drag.rect === "A" ? setA : setB;
+    setter((r) => {
+      const next = { ...r };
+      if (drag.corner.includes("l")) next.x1 = Math.min(x, r.x2 - 1);
+      else next.x2 = Math.max(x, r.x1 + 1);
+      if (drag.corner.includes("b")) next.y1 = Math.min(y, r.y2 - 1);
+      else next.y2 = Math.max(y, r.y1 + 1);
+      return next;
+    });
+  };
+  const stop = () => setDrag(null);
+
+  // Convert a rect (data coords) to SVG attributes (top-left origin).
+  const toSvg = (r) => ({
+    x: r.x1 * CELL,
+    y: SVG - r.y2 * CELL,
+    w: (r.x2 - r.x1) * CELL,
+    h: (r.y2 - r.y1) * CELL,
+  });
+
+  // Overlap rectangle (max of lefts/bottoms, min of rights/tops).
+  const ox1 = Math.max(A.x1, B.x1);
+  const oy1 = Math.max(A.y1, B.y1);
+  const ox2 = Math.min(A.x2, B.x2);
+  const oy2 = Math.min(A.y2, B.y2);
+  const ow = Math.max(0, ox2 - ox1);
+  const oh = Math.max(0, oy2 - oy1);
+  const overlapArea = ow * oh;
+  const aArea = (A.x2 - A.x1) * (A.y2 - A.y1);
+  const bArea = (B.x2 - B.x1) * (B.y2 - B.y1);
+
+  const sa = toSvg(A), sb = toSvg(B);
+  const so = overlapArea > 0 ? toSvg({ x1: ox1, y1: oy1, x2: ox2, y2: oy2 }) : null;
+
+  const corner = (rect, cornerName, cx, cy, color) => (
+    <circle
+      cx={cx} cy={cy} r={7}
+      fill="#fff" stroke={color} strokeWidth={2.5}
+      style={{ cursor: "grab" }}
+      onMouseDown={(e) => { e.preventDefault(); setDrag({ rect, corner: cornerName }); }}
+    />
+  );
+
+  const rectCorners = (r, color, name) => {
+    const s = toSvg(r);
+    return (
+      <g>
+        {corner(name, "bl", s.x,       s.y + s.h, color)}
+        {corner(name, "br", s.x + s.w, s.y + s.h, color)}
+        {corner(name, "tl", s.x,       s.y,       color)}
+        {corner(name, "tr", s.x + s.w, s.y,       color)}
+      </g>
+    );
+  };
+
+  return (
+    <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 12 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
+        🖱️ {t(E, "Drag the corners — overlap updates live", "꼭짓점을 드래그하면 겹침이 실시간으로 갱신돼요")}
+      </div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <svg
+          width={SVG} height={SVG}
+          onMouseMove={onMove} onMouseUp={stop} onMouseLeave={stop}
+          style={{ background: "#fefce8", border: "1px solid #fde68a", borderRadius: 8, touchAction: "none", userSelect: "none" }}
+        >
+          {/* Grid */}
+          {Array.from({ length: GRID + 1 }).map((_, i) => (
+            <g key={i}>
+              <line x1={i * CELL} y1={0} x2={i * CELL} y2={SVG} stroke="#fde68a" strokeWidth={1} />
+              <line x1={0} y1={i * CELL} x2={SVG} y2={i * CELL} stroke="#fde68a" strokeWidth={1} />
+            </g>
+          ))}
+          {/* Rect A (blue) */}
+          <rect x={sa.x} y={sa.y} width={sa.w} height={sa.h} fill="rgba(59,130,246,0.18)" stroke="#3b82f6" strokeWidth={2} />
+          <text x={sa.x + 4} y={sa.y + 14} fontSize={12} fontWeight={700} fill="#1d4ed8">A</text>
+          {/* Rect B (red) */}
+          <rect x={sb.x} y={sb.y} width={sb.w} height={sb.h} fill="rgba(239,68,68,0.18)" stroke="#ef4444" strokeWidth={2} />
+          <text x={sb.x + sb.w - 14} y={sb.y + 14} fontSize={12} fontWeight={700} fill="#b91c1c">B</text>
+          {/* Overlap */}
+          {so && (
+            <g>
+              <rect x={so.x} y={so.y} width={so.w} height={so.h} fill="rgba(168,85,247,0.40)" stroke="#7c3aed" strokeWidth={2} strokeDasharray="4 3" />
+              <text x={so.x + so.w / 2} y={so.y + so.h / 2 + 4} fontSize={11} fontWeight={800} fill="#5b21b6" textAnchor="middle">
+                {ow}×{oh}={overlapArea}
+              </text>
+            </g>
+          )}
+          {/* Corners on top */}
+          {rectCorners(A, "#3b82f6", "A")}
+          {rectCorners(B, "#ef4444", "B")}
+        </svg>
+      </div>
+      {/* Live readout */}
+      <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>
+        <div style={{ background: "#dbeafe", border: "1px solid #93c5fd", borderRadius: 6, padding: "6px 8px", color: "#1d4ed8" }}>
+          A: ({A.x1},{A.y1})→({A.x2},{A.y2})<br/>area = {aArea}
+        </div>
+        <div style={{ background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 6, padding: "6px 8px", color: "#b91c1c" }}>
+          B: ({B.x1},{B.y1})→({B.x2},{B.y2})<br/>area = {bArea}
+        </div>
+        <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 6, padding: "6px 8px", color: "#5b21b6" }}>
+          {t(E, "overlap", "겹침")}: {overlapArea === 0 ? t(E, "none", "없음") : `${ow}×${oh}=${overlapArea}`}
+        </div>
+      </div>
+      <div style={{ marginTop: 8, fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: "#5b21b6", textAlign: "center", lineHeight: 1.6 }}>
+        ox1 = max({A.x1},{B.x1}) = {ox1} &nbsp;·&nbsp; oy1 = max({A.y1},{B.y1}) = {oy1}<br/>
+        ox2 = min({A.x2},{B.x2}) = {ox2} &nbsp;·&nbsp; oy2 = min({A.y2},{B.y2}) = {oy2}<br/>
+        w = max(0, {ox2}−{ox1}) = {ow} &nbsp;·&nbsp; h = max(0, {oy2}−{oy1}) = {oh}
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -293,6 +428,18 @@ export function makeBillboardCh2(E) {
                 "겹침도 직사각형이에요! 꼭짓점은:\n• 왼쪽 = max(A.왼쪽, B.왼쪽)\n• 아래 = max(A.아래, B.아래)\n• 오른쪽 = min(A.오른쪽, B.오른쪽)\n• 위 = min(A.위, B.위)")}
             </div>
           </div>
+        </div>),
+    },
+
+    // 2-1.5: Interactive sim — drag rectangles, see overlap update
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try it yourself! Drag any corner to resize the blue (A) and red (B) rectangles. The purple overlap and its formula update live — separate them completely and see the overlap snap to 0.",
+        "직접 해보자! 꼭짓점을 드래그해서 파란 (A)와 빨간 (B) 직사각형 크기를 바꿔봐. 보라색 겹침과 공식이 실시간으로 갱신돼요. 완전히 떨어뜨려보면 겹침이 0이 되는 것도 확인!"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <OverlapSim E={E} />
         </div>),
     },
 

@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getYearCowSections } from "./components";
+import { getYearCowSections, ZodiacCircleSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -105,6 +105,8 @@ export function makeYearCowCh1(E) {
               </div>
             </div>
           </div>
+
+          <ZodiacCircleSim E={E} />
         </div>),
     },
     // 1-2: Quiz

@@ -1,8 +1,150 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ════════════════════════════════════════════════════════════════════
+   ComfyCowsSim — click to add cows sequentially.
+   Each occupied cell shows its current neighbor count.
+   Cells with exactly 3 occupied neighbors glow as "comfortable".
+   Running counter at bottom mirrors the per-step output of the problem.
+   ════════════════════════════════════════════════════════════════════ */
+const ROWS = 6;
+const COLS = 9;
+const DIRS = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+
+const COMFY_PRESETS = [
+  {
+    name: "S1: 6 cows",
+    cows: [[0, 0], [1, 0], [0, 1], [2, 0], [1, 1], [1, 2]],
+  },
+  {
+    name: "Cluster",
+    cows: [[2, 3], [2, 4], [2, 5], [1, 4], [3, 4]],
+  },
+  {
+    name: "Empty",
+    cows: [],
+  },
+];
+
+function neighborCount(cows, r, c) {
+  let n = 0;
+  for (const [dr, dc] of DIRS) if (cows.has(`${r + dr},${c + dc}`)) n++;
+  return n;
+}
+
+export function ComfyCowsSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [order, setOrder] = useState(() => COMFY_PRESETS[0].cows.map(([r, c]) => `${r},${c}`));
+
+  const cows = new Set(order);
+  const loadPreset = (i) => {
+    setPi(i);
+    setOrder(COMFY_PRESETS[i].cows.map(([r, c]) => `${r},${c}`));
+  };
+  const undo = () => setOrder(o => o.slice(0, -1));
+  const reset = () => loadPreset(pi);
+
+  const toggle = (r, c) => {
+    const key = `${r},${c}`;
+    if (cows.has(key)) {
+      // Remove this cow (and any later ones — keeps the "sequential" story clean)
+      const idx = order.indexOf(key);
+      setOrder(order.slice(0, idx));
+    } else {
+      setOrder([...order, key]);
+    }
+  };
+
+  let comfyCount = 0;
+  for (const key of order) {
+    const [r, c] = key.split(",").map(Number);
+    if (neighborCount(cows, r, c) === 3) comfyCount++;
+  }
+
+  const cell = 36;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10, justifyContent: "center" }}>
+        {COMFY_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => loadPreset(i)} style={{
+            padding: "4px 10px", borderRadius: 6, fontSize: 11, fontWeight: 700,
+            border: `1.5px solid ${pi === i ? A : C.border}`,
+            background: pi === i ? "#fff7ed" : "#fff", color: pi === i ? A : C.text, cursor: "pointer",
+          }}>{p.name}</button>
+        ))}
+        <button onClick={undo} disabled={order.length === 0} style={{
+          padding: "4px 10px", borderRadius: 6, fontSize: 11, fontWeight: 700,
+          border: `1.5px solid ${C.border}`, background: "#fff", color: order.length ? C.text : C.dim,
+          cursor: order.length ? "pointer" : "not-allowed",
+        }}>{t(E, "↶ Undo", "↶ 취소")}</button>
+        <button onClick={reset} style={{
+          padding: "4px 10px", borderRadius: 6, fontSize: 11, fontWeight: 700,
+          border: `1.5px solid ${C.border}`, background: "#fff", color: C.text, cursor: "pointer",
+        }}>{t(E, "↺ Reset", "↺ 리셋")}</button>
+      </div>
+
+      <div style={{ fontSize: 11, color: C.dim, marginBottom: 8, textAlign: "center" }}>
+        {t(E, "Click any cell to add / remove a cow. Numbers show that cow's neighbor count.",
+              "칸을 클릭해 소를 추가/제거. 숫자는 그 소의 이웃 수.")}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+        <div style={{ display: "grid", gap: 2, gridTemplateColumns: `repeat(${COLS}, ${cell}px)` }}>
+          {Array.from({ length: ROWS }).map((_, r) =>
+            Array.from({ length: COLS }).map((__, c) => {
+              const key = `${r},${c}`;
+              const isCow = cows.has(key);
+              const n = isCow ? neighborCount(cows, r, c) : 0;
+              const comfy = isCow && n === 3;
+              return (
+                <button key={key} onClick={() => toggle(r, c)} style={{
+                  width: cell, height: cell, padding: 0, cursor: "pointer",
+                  borderRadius: 4,
+                  border: comfy ? `3px solid ${A}` : `1px solid ${isCow ? "#9a3412" : C.border}`,
+                  background: comfy ? "#fed7aa" : isCow ? "#fff7ed" : "#fff",
+                  fontSize: isCow ? 14 : 11,
+                  fontWeight: 700,
+                  color: comfy ? "#9a3412" : isCow ? "#9a3412" : "#cbd5e1",
+                  fontFamily: "'JetBrains Mono',monospace",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  {isCow ? (
+                    <span style={{ display: "flex", flexDirection: "column", alignItems: "center", lineHeight: 1 }}>
+                      <span style={{ fontSize: 14 }}>{"🐄"}</span>
+                      <span style={{ fontSize: 9, color: comfy ? "#9a3412" : "#9a3412", marginTop: 1 }}>{n}</span>
+                    </span>
+                  ) : "·"}
+                </button>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", fontSize: 12 }}>
+        <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8, padding: "6px 12px" }}>
+          <b>{t(E, "Cows", "소")}:</b>{" "}
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#9a3412", fontWeight: 700 }}>{order.length}</span>
+        </div>
+        <div style={{ background: "#fff7ed", border: `1.5px solid ${A}`, borderRadius: 8, padding: "6px 12px" }}>
+          <b style={{ color: "#9a3412" }}>{t(E, "Comfortable", "편안")}:</b>{" "}
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", color: A, fontWeight: 800 }}>{comfyCount}</span>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.55 }}>
+        {t(E,
+          "A cow is comfortable iff its neighbor number reads exactly 3. Adding or removing one cow only changes that cow plus her 4 neighbors — that's why the real solver only re-checks 5 cells per step.",
+          "이웃 수가 정확히 3 일 때만 편안. 한 마리 추가/제거는 그 소 + 4 이웃만 영향 → 실제 풀이에서 매 스텝 5 칸만 재확인하면 되는 이유.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N = int(input())",
