@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc22BirthdaySections } from "./components";
+import { getMcc22BirthdaySections, Mcc22BirthdayDeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -90,7 +90,15 @@ export function makeMcc22BirthdayCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Deep-audit sim — toggle availability, watch column counts
+    {
+      type: "reveal",
+      narr: t(E,
+        "Try it yourself: tap the cells to mark which time slots each cat can attend. The green row shows the count per slot — the biggest number is what we print.",
+        "직접 해봐: 셀을 탭해서 각 고양이가 참석 가능한 시간대를 표시해 봐. 초록색 줄이 시간대별 인원수 — 가장 큰 수가 답이야."),
+      content: <Mcc22BirthdayDeepAuditSim E={E} />,
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -108,7 +116,7 @@ export function makeMcc22BirthdayCh1(E) {
         "Correct! Both slots have 2 cats each, so the max is 2.",
         "맞아! 두 시간대 모두 2마리씩이니까 최대는 2."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

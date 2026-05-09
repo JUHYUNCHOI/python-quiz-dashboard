@@ -1,8 +1,187 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ═══════════════════════════════════════════════════════════════
+   Mcc22BirthdayDeepAuditSim — toggle each cat's availability per
+   time slot, watch the column counts update live, and see which
+   slot wins the party. Mirrors the greedy column-scan in solve().
+   ═══════════════════════════════════════════════════════════════ */
+const _DEEP_PRESETS = [
+  { label: "3×2", cats: ["🐈", "🐱", "🐈‍⬛"], slots: 2, init: [[1,0],[1,1],[0,1]] },
+  { label: "4×3", cats: ["🐈", "🐱", "🐈‍⬛", "😺"], slots: 3, init: [[1,0,1],[0,1,1],[1,1,0],[0,0,1]] },
+  { label: "5×4", cats: ["🐈", "🐱", "🐈‍⬛", "😺", "😻"], slots: 4, init: [[1,0,0,1],[1,1,0,0],[0,1,1,0],[0,0,1,1],[1,0,1,0]] },
+];
+
+export function Mcc22BirthdayDeepAuditSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const preset = _DEEP_PRESETS[pi];
+  const [grid, setGrid] = useState(() => preset.init.map(row => [...row]));
+
+  const switchPreset = (newPi) => {
+    setPi(newPi);
+    setGrid(_DEEP_PRESETS[newPi].init.map(row => [...row]));
+  };
+
+  const toggle = (r, c) => {
+    const u = grid.map(row => [...row]);
+    u[r][c] = u[r][c] ? 0 : 1;
+    setGrid(u);
+  };
+
+  const counts = [];
+  for (let c = 0; c < preset.slots; c++) {
+    let s = 0;
+    for (let r = 0; r < preset.cats.length; r++) s += grid[r]?.[c] || 0;
+    counts.push(s);
+  }
+  const best = counts.reduce((a, b) => Math.max(a, b), 0);
+  const winners = counts.map((v, i) => v === best ? i : -1).filter(i => i >= 0);
+
+  const reset = () => setGrid(preset.init.map(row => [...row]));
+  const fillAll = () => setGrid(preset.cats.map(() => Array(preset.slots).fill(1)));
+  const clearAll = () => setGrid(preset.cats.map(() => Array(preset.slots).fill(0)));
+
+  const cellSize = 40;
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {_DEEP_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => switchPreset(i)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            {p.label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10 }}>
+        {t(E, "Tap a cell to toggle a cat's availability. Watch each slot's count update live.",
+              "셀을 탭해서 고양이의 참석 가능 여부를 토글해 봐. 각 시간대 인원수가 바로바로 갱신돼.")}
+      </div>
+
+      {/* matrix */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+        <div style={{ display: "inline-block" }}>
+          {/* header row: slot labels */}
+          <div style={{ display: "flex", gap: 4, marginBottom: 4 }}>
+            <div style={{ width: cellSize + 4, height: cellSize, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: C.dim, fontWeight: 700 }}>
+              {t(E, "cat \\ slot", "고양이 \\ 시간대")}
+            </div>
+            {Array.from({ length: preset.slots }).map((_, c) => (
+              <div key={c} style={{
+                width: cellSize, height: cellSize, display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 12, fontWeight: 700, color: A, background: "#fff7ed", borderRadius: 6, border: "1px solid #fdba74",
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                {`s${c + 1}`}
+              </div>
+            ))}
+          </div>
+
+          {/* body rows */}
+          {preset.cats.map((cat, r) => (
+            <div key={r} style={{ display: "flex", gap: 4, marginBottom: 4 }}>
+              <div style={{ width: cellSize + 4, height: cellSize, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>
+                {cat}
+              </div>
+              {Array.from({ length: preset.slots }).map((_, c) => {
+                const on = !!grid[r]?.[c];
+                return (
+                  <button key={c} onClick={() => toggle(r, c)} style={{
+                    width: cellSize, height: cellSize, padding: 0, cursor: "pointer",
+                    borderRadius: 6, border: `1.5px solid ${on ? "#f97316" : "#e5e7eb"}`,
+                    background: on ? "#fed7aa" : "#f9fafb",
+                    color: on ? "#9a3412" : "#cbd5e1",
+                    fontSize: 16, fontWeight: 700,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    {on ? "✓" : "·"}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+
+          {/* footer row: column sums */}
+          <div style={{ display: "flex", gap: 4, marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fdba74" }}>
+            <div style={{ width: cellSize + 4, height: cellSize, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#15803d" }}>
+              {t(E, "count", "인원수")}
+            </div>
+            {counts.map((v, c) => {
+              const isWin = v === best && best > 0;
+              return (
+                <div key={c} style={{
+                  width: cellSize, height: cellSize, display: "flex", alignItems: "center", justifyContent: "center",
+                  borderRadius: 6, fontSize: 16, fontWeight: 800,
+                  background: isWin ? "#dcfce7" : "#f3f4f6",
+                  border: `1.5px solid ${isWin ? "#16a34a" : "#e5e7eb"}`,
+                  color: isWin ? "#15803d" : C.dim,
+                  fontFamily: "'JetBrains Mono',monospace",
+                }}>
+                  {v}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* result banner */}
+      <div style={{
+        background: best > 0 ? "#dcfce7" : "#fee2e2",
+        border: `1px solid ${best > 0 ? "#16a34a" : "#dc2626"}`,
+        borderRadius: 10, padding: "8px 12px", marginBottom: 8,
+        textAlign: "center", fontSize: 13, fontWeight: 700,
+        color: best > 0 ? "#15803d" : "#991b1b",
+      }}>
+        {best > 0
+          ? t(E, `🎂 Best slot: ${winners.map(i => `s${i + 1}`).join(", ")} → ${best} cat${best === 1 ? "" : "s"}`,
+                `🎂 최고 시간대: ${winners.map(i => `s${i + 1}`).join(", ")} → ${best}마리`)
+          : t(E, "✗ Nobody can attend any slot — pick at least one ✓.",
+                "✗ 어느 시간대도 참석자가 없어 — ✓ 를 하나라도 켜봐.")}
+      </div>
+
+      {/* controls */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
+        <button onClick={reset} style={{
+          padding: "5px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
+          background: "transparent", color: C.dim, fontSize: 11, fontWeight: 600, cursor: "pointer",
+        }}>
+          {t(E, "↻ Reset", "↻ 초기화")}
+        </button>
+        <button onClick={fillAll} style={{
+          padding: "5px 12px", borderRadius: 8, border: `1px solid ${A}`,
+          background: A, color: "#fff", fontSize: 11, fontWeight: 700, cursor: "pointer",
+        }}>
+          {t(E, "✓ All available", "✓ 모두 참석")}
+        </button>
+        <button onClick={clearAll} style={{
+          padding: "5px 12px", borderRadius: 8, border: `1px solid #d1d5db`,
+          background: "#f9fafb", color: C.dim, fontSize: 11, fontWeight: 700, cursor: "pointer",
+        }}>
+          {t(E, "· Clear", "· 모두 비우기")}
+        </button>
+      </div>
+
+      {/* hint */}
+      <div style={{
+        background: "#fff7ed", border: `1px solid #fdba74`, borderRadius: 8, padding: "8px 12px",
+        fontSize: 11, color: "#9a3412", textAlign: "center", lineHeight: 1.5,
+      }}>
+        {t(E, "💡 The solution scans each column and counts ✓'s — exactly what the green row shows. The max wins.",
+              "💡 풀이 코드도 각 열을 훑으며 ✓ 개수를 세 — 초록색 줄이 바로 그 결과. 그중 최댓값이 답.")}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",
