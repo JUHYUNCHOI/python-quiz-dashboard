@@ -392,9 +392,9 @@ export function makePatternSteps(E) {
               <span style={{ textAlign: "right" }}>?</span>
             </div>
             {[
-              { f: "1~3", b: "<5 → 0", e: "+1 → 2~4, 여전히 <5 → 0",  same: true  },
-              { f: "4",    b: "<5 → 0", e: "+1 → 5, 이제 ≥5 → 10ᴾ", same: false },
-              { f: "5~9", b: "≥5 → 10ᴾ", e: "이미 올림 → 10ᴾ",         same: true  },
+              { f: "1~3", b: "<5 → 0", e: t(E, "+1 → 2~4, still <5 → 0",      "+1 → 2~4, 여전히 <5 → 0"),  same: true  },
+              { f: "4",    b: "<5 → 0", e: t(E, "+1 → 5, now ≥5 → 10ᴾ",       "+1 → 5, 이제 ≥5 → 10ᴾ"), same: false },
+              { f: "5~9", b: "≥5 → 10ᴾ", e: t(E, "already rounded up → 10ᴾ", "이미 올림 → 10ᴾ"),         same: true  },
             ].map((row, i) => (
               <div key={i} style={{
                 display: "grid", gridTemplateColumns: "60px 1fr 1fr 60px",
@@ -531,9 +531,9 @@ export function makePatternSteps(E) {
 // Chapter 4: 🐍 Brute Force
 // ═══════════════════════════════════════════════
 
-const BF_P = [
-  "# 두 함수 모두 먼저 P 가 필요해요",
-  "# P = x 의 자릿수",
+const BF_P = (E) => [
+  E ? "# Both functions need P first" : "# 두 함수 모두 먼저 P 가 필요해요",
+  E ? "# P = number of digits of x"   : "# P = x 의 자릿수",
   "",
   "x = 48",
   "P = len(str(x))     # → 2",
@@ -541,9 +541,9 @@ const BF_P = [
   "x = 4459",
   "P = len(str(x))     # → 4",
 ];
-const BF_P_CPP = [
-  "// 두 함수 모두 먼저 P 가 필요해요",
-  "// P = x 의 자릿수",
+const BF_P_CPP = (E) => [
+  E ? "// Both functions need P first" : "// 두 함수 모두 먼저 P 가 필요해요",
+  E ? "// P = number of digits of x"   : "// P = x 의 자릿수",
   "",
   "long long x = 48;",
   "int P = (int)to_string(x).size();   // → 2",
@@ -552,11 +552,11 @@ const BF_P_CPP = [
   "P = (int)to_string(x).size();       // → 4",
 ];
 
-const BF_ELSIE_DIGIT = [
-  "# pos 번째 자리 숫자 어떻게 가져오지?",
-  "# (1자리=ones, 2자리=tens, 3자리=hundreds, ...)",
+const BF_ELSIE_DIGIT = (E) => [
+  E ? "# How do we extract the pos-th digit?"   : "# pos 번째 자리 숫자 어떻게 가져오지?",
+  E ? "# (pos 1 = ones, 2 = tens, 3 = hundreds, ...)" : "# (1자리=ones, 2자리=tens, 3자리=hundreds, ...)",
   "",
-  "cur = 4459          # 예시",
+  E ? "cur = 4459          # example" : "cur = 4459          # 예시",
   "",
   "# pos=1 (ones)",
   "d = (cur // 10**0) % 10      # 4459 % 10 = 9",
@@ -567,11 +567,11 @@ const BF_ELSIE_DIGIT = [
   "# pos=3 (hundreds)",
   "d = (cur // 10**2) % 10      # 44 % 10 = 4",
 ];
-const BF_ELSIE_DIGIT_CPP = [
-  "// pos 번째 자리 숫자 어떻게 가져오지?",
-  "// (10^(pos-1) 로 나눠서 그 자리를 ones 위치까지 내리고, % 10)",
+const BF_ELSIE_DIGIT_CPP = (E) => [
+  E ? "// How do we extract the pos-th digit?" : "// pos 번째 자리 숫자 어떻게 가져오지?",
+  E ? "// (divide by 10^(pos-1) to drop that digit to the ones place, then % 10)" : "// (10^(pos-1) 로 나눠서 그 자리를 ones 위치까지 내리고, % 10)",
   "",
-  "long long cur = 4459;       // 예시",
+  E ? "long long cur = 4459;       // example" : "long long cur = 4459;       // 예시",
   "",
   "// pos=1 (ones)",
   "int d = (cur / 1) % 10;     // 4459 % 10 = 9",
@@ -583,40 +583,40 @@ const BF_ELSIE_DIGIT_CPP = [
   "d = (cur / 100) % 10;       // 44 % 10 = 4",
 ];
 
-const BF_ELSIE_CARRY = [
-  "# 그 자리가 ≥5 면 다음 자리로 +1 올림",
+const BF_ELSIE_CARRY = (E) => [
+  E ? "# If digit ≥5, carry +1 to the next position" : "# 그 자리가 ≥5 면 다음 자리로 +1 올림",
   "cur += 10**pos",
   "",
-  "# 그 자리 이하는 0 으로 (잘라내기)",
+  E ? "# Zero out everything from that position down" : "# 그 자리 이하는 0 으로 (잘라내기)",
   "cur = (cur // 10**pos) * 10**pos",
   "",
-  "# 예: cur=58, pos=1",
+  E ? "# Example: cur=58, pos=1"        : "# 예: cur=58, pos=1",
   "# 58 → +10 → 68 → //10*10 → 60",
-  "# (1의자리 8 이 ≥5 라서 올라가고, 1의자리 자체는 0)",
+  E ? "# (ones digit 8 ≥5 so it carries; ones itself becomes 0)" : "# (1의자리 8 이 ≥5 라서 올라가고, 1의자리 자체는 0)",
 ];
-const BF_ELSIE_CARRY_CPP = [
-  "// 그 자리가 ≥5 면 다음 자리로 +1 올림",
-  "long long pw = 1;            // 10^pos 미리 계산",
+const BF_ELSIE_CARRY_CPP = (E) => [
+  E ? "// If digit ≥5, carry +1 to the next position" : "// 그 자리가 ≥5 면 다음 자리로 +1 올림",
+  E ? "long long pw = 1;            // precompute 10^pos" : "long long pw = 1;            // 10^pos 미리 계산",
   "for (int i = 0; i < pos; i++) pw *= 10;",
   "",
-  "cur += pw;                   // 위 자리 +1",
-  "cur = (cur / pw) * pw;       // 그 자리 이하는 0",
+  E ? "cur += pw;                   // +1 to upper digit"        : "cur += pw;                   // 위 자리 +1",
+  E ? "cur = (cur / pw) * pw;       // zero out everything below" : "cur = (cur / pw) * pw;       // 그 자리 이하는 0",
   "",
-  "// 예: cur=58, pos=1, pw=10",
+  E ? "// Example: cur=58, pos=1, pw=10" : "// 예: cur=58, pos=1, pw=10",
   "// 58 → +10 → 68 → /10*10 → 60",
-  "// (1의자리 8 이 ≥5 라서 올라가고, 1의자리 자체는 0)",
+  E ? "// (ones digit 8 ≥5 so it carries; ones itself becomes 0)" : "// (1의자리 8 이 ≥5 라서 올라가고, 1의자리 자체는 0)",
 ];
 
-const BF_INPUT = [
+const BF_INPUT = (E) => [
   "import sys",
   "input = sys.stdin.readline",
   "",
-  "T = int(input())          # 테스트케이스 개수",
+  E ? "T = int(input())          # number of test cases" : "T = int(input())          # 테스트케이스 개수",
   "for _ in range(T):",
-  "    N = int(input())      # 매 테스트마다 N",
-  "    # ... 이제 2 ~ N 의 답을 구해야 함",
+  E ? "    N = int(input())      # N for each test"      : "    N = int(input())      # 매 테스트마다 N",
+  E ? "    # ... now compute the answer for 2 ~ N"        : "    # ... 이제 2 ~ N 의 답을 구해야 함",
 ];
-const BF_INPUT_CPP = [
+const BF_INPUT_CPP = (E) => [
   "#include <bits/stdc++.h>",
   "using namespace std;",
   "",
@@ -624,89 +624,89 @@ const BF_INPUT_CPP = [
   "    ios::sync_with_stdio(false);",
   "    cin.tie(nullptr);",
   "",
-  "    int T; cin >> T;            // 테스트케이스 개수",
+  E ? "    int T; cin >> T;            // number of test cases" : "    int T; cin >> T;            // 테스트케이스 개수",
   "    while (T--) {",
-  "        long long N; cin >> N;  // 매 테스트마다 N",
-  "        // ... 이제 2 ~ N 의 답을 구해야 함",
+  E ? "        long long N; cin >> N;  // N for each test"        : "        long long N; cin >> N;  // 매 테스트마다 N",
+  E ? "        // ... now compute the answer for 2 ~ N"            : "        // ... 이제 2 ~ N 의 답을 구해야 함",
   "    }",
   "}",
 ];
 
-const BF_BESSIE = [
+const BF_BESSIE = (E) => [
   "def Bessie(x):",
-  "    s = str(x)              # 문자열로",
-  "    P = len(s)              # P = 자릿수",
+  E ? "    s = str(x)              # to string"   : "    s = str(x)              # 문자열로",
+  E ? "    P = len(s)              # P = digit count" : "    P = len(s)              # P = 자릿수",
   "",
-  "    # 첫째 자리만 본다",
+  E ? "    # look only at the first digit" : "    # 첫째 자리만 본다",
   "    first_digit = int(s[0])",
   "",
   "    if first_digit >= 5:",
-  "        return 10**P        # ≥5 → 올림",
+  E ? "        return 10**P        # ≥5 → round up" : "        return 10**P        # ≥5 → 올림",
   "    else:",
   "        return 0            # <5 → 0",
 ];
-const BF_BESSIE_CPP = [
-  "long long pw10(int n) {                  // 10^n 헬퍼",
+const BF_BESSIE_CPP = (E) => [
+  E ? "long long pw10(int n) {                  // 10^n helper" : "long long pw10(int n) {                  // 10^n 헬퍼",
   "    long long r = 1;",
   "    for (int i = 0; i < n; i++) r *= 10;",
   "    return r;",
   "}",
   "",
   "long long Bessie(long long x) {",
-  "    string s = to_string(x);             // 문자열로",
-  "    int P = (int)s.size();               // P = 자릿수",
+  E ? "    string s = to_string(x);             // to string"   : "    string s = to_string(x);             // 문자열로",
+  E ? "    int P = (int)s.size();               // P = digit count" : "    int P = (int)s.size();               // P = 자릿수",
   "",
-  "    // 첫째 자리만 본다",
+  E ? "    // look only at the first digit" : "    // 첫째 자리만 본다",
   "    int first_digit = s[0] - '0';",
   "",
   "    if (first_digit >= 5) {",
-  "        return pw10(P);                  // ≥5 → 올림",
+  E ? "        return pw10(P);                  // ≥5 → round up" : "        return pw10(P);                  // ≥5 → 올림",
   "    } else {",
   "        return 0;                        // <5 → 0",
   "    }",
   "}",
 ];
 
-const BF_ELSIE = [
+const BF_ELSIE = (E) => [
   "def Elsie(x):",
   "    P = len(str(x))",
   "    cur = x",
   "",
-  "    # 1자리부터 P자리까지 순서대로",
+  E ? "    # walk from ones place to P-th place" : "    # 1자리부터 P자리까지 순서대로",
   "    for pos in range(1, P+1):",
-  "        # 그 자리의 숫자",
+  E ? "        # the digit at that position" : "        # 그 자리의 숫자",
   "        d = (cur // 10**(pos-1)) % 10",
   "",
-  "        # ≥5 면 올림",
+  E ? "        # if ≥5, round up" : "        # ≥5 면 올림",
   "        if d >= 5:",
   "            cur += 10**pos",
   "",
-  "        # 그 자리 이하 0으로",
+  E ? "        # zero out everything from that position down" : "        # 그 자리 이하 0으로",
   "        cur = (cur // 10**pos) * 10**pos",
   "",
   "    return cur",
 ];
-const BF_ELSIE_CPP = [
+const BF_ELSIE_CPP = (E) => [
   "long long Elsie(long long x) {",
   "    int P = (int)to_string(x).size();",
   "    long long cur = x;",
   "",
-  "    // 1자리부터 P자리까지 순서대로",
+  E ? "    // walk from ones place to P-th place" : "    // 1자리부터 P자리까지 순서대로",
   "    for (int pos = 1; pos <= P; pos++) {",
-  "        // 그 자리의 숫자",
+  E ? "        // the digit at that position" : "        // 그 자리의 숫자",
   "        int d = (cur / pw10(pos - 1)) % 10;",
   "",
-  "        // ≥5 면 올림",
+  E ? "        // if ≥5, round up" : "        // ≥5 면 올림",
   "        if (d >= 5) cur += pw10(pos);",
   "",
-  "        // 그 자리 이하 0으로",
+  E ? "        // zero out everything from that position down" : "        // 그 자리 이하 0으로",
   "        cur = (cur / pw10(pos)) * pw10(pos);",
   "    }",
   "    return cur;",
   "}",
 ];
 
-const BF_FULL = [
+const BF_FULL = (E) => [
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -740,7 +740,7 @@ const BF_FULL = [
   "            count += 1",
   "    print(count)",
 ];
-const BF_FULL_CPP = [
+const BF_FULL_CPP = (E) => [
   "#include <bits/stdc++.h>",
   "using namespace std;",
   "",
@@ -784,7 +784,7 @@ const BF_FULL_CPP = [
   "}",
 ];
 
-const BF_DP = [
+const BF_DP = (E) => [
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -805,8 +805,8 @@ const BF_DP = [
   "        cur = (cur // 10**pos) * 10**pos",
   "    return cur",
   "",
-  "# 누적합 — 필요한 만큼만 계산해서 저장.",
-  "ans = [0, 0]   # ans[x] = 2 ~ x 까지의 답",
+  E ? "# Prefix sum — compute only as much as we need, then cache." : "# 누적합 — 필요한 만큼만 계산해서 저장.",
+  E ? "ans = [0, 0]   # ans[x] = answer for 2 ~ x"                   : "ans = [0, 0]   # ans[x] = 2 ~ x 까지의 답",
   "",
   "T = int(input())",
   "for _ in range(T):",
@@ -823,7 +823,7 @@ const BF_DP = [
   "",
   "    print(ans[N])",
 ];
-const BF_DP_CPP = [
+const BF_DP_CPP = (E) => [
   "#include <bits/stdc++.h>",
   "using namespace std;",
   "",
@@ -874,7 +874,12 @@ const BF_DP_CPP = [
 ];
 
 export function makeBruteSteps(E, lang = "py") {
-  const pick = (py, cpp) => lang === "py" ? py : cpp;
+  // Code-array consts are functions (E) => string[] so comments can be bilingual.
+  // (Plain arrays — e.g. inline MAIN_SNIPPET — are also accepted.)
+  const pick = (pyFn, cppFn) => {
+    const v = lang === "py" ? pyFn : cppFn;
+    return typeof v === "function" ? v(E) : v;
+  };
   const Label = ({ text }) => (
     <div style={{ marginBottom: 6, fontSize: 11, fontWeight: 800, color: C.dim, letterSpacing: 0.3 }}>
       {text}
@@ -882,19 +887,19 @@ export function makeBruteSteps(E, lang = "py") {
   );
 
   const MAIN_SNIPPET_PY = [
-    "for x in range(2, N+1):       # 2 부터 N 까지",
-    "    b = Bessie(x)             # Bessie 의 답",
-    "    e = Elsie(x)              # Elsie 의 답",
-    "    if b != e:                # 다르면",
-    "        count += 1            # 카운트!",
+    E ? "for x in range(2, N+1):       # x from 2 to N"  : "for x in range(2, N+1):       # 2 부터 N 까지",
+    E ? "    b = Bessie(x)             # Bessie's answer" : "    b = Bessie(x)             # Bessie 의 답",
+    E ? "    e = Elsie(x)              # Elsie's answer"  : "    e = Elsie(x)              # Elsie 의 답",
+    E ? "    if b != e:                # if different"    : "    if b != e:                # 다르면",
+    E ? "        count += 1            # count!"          : "        count += 1            # 카운트!",
     "",
     "print(count)",
   ];
   const MAIN_SNIPPET_CPP = [
-    "for (long long x = 2; x <= N; x++) {  // 2 부터 N 까지",
-    "    long long b = Bessie(x);          // Bessie 의 답",
-    "    long long e = Elsie(x);           // Elsie 의 답",
-    "    if (b != e) count++;              // 다르면 카운트!",
+    E ? "for (long long x = 2; x <= N; x++) {  // x from 2 to N"  : "for (long long x = 2; x <= N; x++) {  // 2 부터 N 까지",
+    E ? "    long long b = Bessie(x);          // Bessie's answer" : "    long long b = Bessie(x);          // Bessie 의 답",
+    E ? "    long long e = Elsie(x);           // Elsie's answer"  : "    long long e = Elsie(x);           // Elsie 의 답",
+    E ? "    if (b != e) count++;              // if different, count!" : "    if (b != e) count++;              // 다르면 카운트!",
     "}",
     "",
     "cout << count << \"\\n\";",
@@ -1067,7 +1072,7 @@ export function makeBruteSteps(E, lang = "py") {
         <div style={{ padding: 16 }}>
           <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, padding: 10, marginBottom: 14, textAlign: "center" }}>
             <div style={{ fontSize: 13, color: C.text, fontWeight: 700 }}>
-              <strong style={{ color: C.accent }}>ans[x]</strong> = 2 ~ x {t(E, "에서 답이 다른 수 개수", "에서 답이 다른 수 개수")}
+              <strong style={{ color: C.accent }}>ans[x]</strong> = 2 ~ x {t(E, "count of disagreeing numbers", "에서 답이 다른 수 개수")}
             </div>
           </div>
 
@@ -1135,7 +1140,7 @@ export function makeBruteSteps(E, lang = "py") {
 //   while s_d ≤ N: ans += min(N, e_d) - s_d + 1
 // ═══════════════════════════════════════════════
 
-const OPT_INPUT = [
+const OPT_INPUT = (E) => [
   "import sys",
   "data = sys.stdin.read().split()",
   "T = int(data[0])",
@@ -1146,10 +1151,13 @@ const OPT_INPUT = [
   "    ans = 0",
 ];
 
-const OPT_LOOP = [
-  "    # 각 자릿수 d 마다 답이 다른 수는 정확히 구간 [s_d, e_d]",
-  "    #   s_d = 4...45    (d-1 개 4 + 5 하나)  ← 최소",
-  "    #   e_d = 4 99...9  (4 하나 + d-1 개 9)  ← 최대",
+const OPT_LOOP = (E) => [
+  E ? "    # For each digit count d, the disagreeing numbers are exactly the interval [s_d, e_d]"
+    : "    # 각 자릿수 d 마다 답이 다른 수는 정확히 구간 [s_d, e_d]",
+  E ? "    #   s_d = 4...45    (d-1 fours + one 5)   ← smallest"
+    : "    #   s_d = 4...45    (d-1 개 4 + 5 하나)  ← 최소",
+  E ? "    #   e_d = 4 99...9  (one 4 + d-1 nines)   ← largest"
+    : "    #   e_d = 4 99...9  (4 하나 + d-1 개 9)  ← 최대",
   "    d = 2",
   "    while True:",
   "        s_d = int(\"4\" * (d - 1) + \"5\")",
@@ -1162,20 +1170,20 @@ const OPT_LOOP = [
   "    out.append(str(ans))",
 ];
 
-const OPT_OUTPUT = [
+const OPT_OUTPUT = (E) => [
   "print(\"\\n\".join(out))",
 ];
 
-const OPT_CODE = [
-  ...OPT_INPUT,
+const OPT_CODE = (E) => [
+  ...OPT_INPUT(E),
   "",
-  ...OPT_LOOP,
+  ...OPT_LOOP(E),
   "",
-  ...OPT_OUTPUT,
+  ...OPT_OUTPUT(E),
 ];
 
 // ─── C++ ────────────────────────────────────────
-const OPT_INPUT_CPP = [
+const OPT_INPUT_CPP = (E) => [
   "#include <iostream>",
   "using namespace std;",
   "",
@@ -1203,8 +1211,9 @@ const OPT_INPUT_CPP = [
   "        long long ans = 0;",
 ];
 
-const OPT_LOOP_CPP = [
-  "        // d = 2 부터 자릿수가 N 을 넘을 때까지",
+const OPT_LOOP_CPP = (E) => [
+  E ? "        // d = 2 onward, until digits exceed N"
+    : "        // d = 2 부터 자릿수가 N 을 넘을 때까지",
   "        for (int d = 2; d <= 11; d++) {",
   "            long long sd = s_low(d), ed = s_high(d);",
   "            if (sd > N) break;",
@@ -1212,18 +1221,18 @@ const OPT_LOOP_CPP = [
   "        }",
 ];
 
-const OPT_OUTPUT_CPP = [
+const OPT_OUTPUT_CPP = (E) => [
   "        cout << ans << '\\n';",
   "    }",
   "    return 0;",
   "}",
 ];
 
-const OPT_CODE_CPP = [
-  ...OPT_INPUT_CPP,
+const OPT_CODE_CPP = (E) => [
+  ...OPT_INPUT_CPP(E),
   "",
-  ...OPT_LOOP_CPP,
-  ...OPT_OUTPUT_CPP,
+  ...OPT_LOOP_CPP(E),
+  ...OPT_OUTPUT_CPP(E),
 ];
 
 // Optimization 섹션 — ProgressiveCode + PDF 둘 다에서 사용
@@ -1232,7 +1241,7 @@ export function getOptSections(E) {
     {
       label: t(E, "📦 1. Input + Setup", "📦 1. 입력 + 셋업"),
       color: C.accent, bgColor: C.accentBg,
-      py: OPT_INPUT, cpp: OPT_INPUT_CPP,
+      py: OPT_INPUT(E), cpp: OPT_INPUT_CPP(E),
       why: [
         t(E,
           "Fast input — sys.stdin.read for Python, ios::sync_with_stdio(false) for C++.",
@@ -1248,7 +1257,7 @@ export function getOptSections(E) {
     {
       label: t(E, "🔁 2. Per-digit-count loop", "🔁 2. 자릿수 d 별 루프"),
       color: C.ok, bgColor: C.okBg,
-      py: OPT_LOOP, cpp: OPT_LOOP_CPP,
+      py: OPT_LOOP(E), cpp: OPT_LOOP_CPP(E),
       why: [
         t(E,
           "For each d ≥ 2: build s_d = '4'*(d-1)+'5' (smallest) and e_d = '4'+'9'*(d-1) (largest).",
@@ -1267,7 +1276,7 @@ export function getOptSections(E) {
     {
       label: t(E, "📤 3. Output", "📤 3. 출력"),
       color: C.carry, bgColor: C.carryBg,
-      py: OPT_OUTPUT, cpp: OPT_OUTPUT_CPP,
+      py: OPT_OUTPUT(E), cpp: OPT_OUTPUT_CPP(E),
       why: [
         t(E,
           "Python: collect answers, print once at the end (faster than per-line print).",
@@ -1280,7 +1289,7 @@ export function getOptSections(E) {
     {
       label: t(E, "🎯 Full Code", "🎯 전체 코드"),
       color: C.accent, bgColor: C.accentBg,
-      py: OPT_CODE, cpp: OPT_CODE_CPP,
+      py: OPT_CODE(E), cpp: OPT_CODE_CPP(E),
       why: [
         t(E,
           "Per query: at most ~10 iterations (one per digit count). O(log N) per query.",

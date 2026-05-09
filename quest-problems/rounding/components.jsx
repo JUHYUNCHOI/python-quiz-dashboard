@@ -169,11 +169,11 @@ export function SpeedScale({ E }) {
   // 시각용 — TIME_LIMIT 까지가 100%, 넘으면 100% 채우고 ❌
   const widthOf = tt => Math.min(100, (tt / TIME_LIMIT) * 100);
   const fmtTime = tt =>
-    tt < 1e-4 ? "즉시"
+    tt < 1e-4 ? t(E, "instant", "즉시")
     : tt < 0.01 ? `${(tt * 1000).toFixed(1)}ms`
     : tt < 1   ? `${(tt * 1000).toFixed(0)}ms`
-    : tt < 60  ? `${tt.toFixed(1)}초`
-    : `${(tt / 60).toFixed(1)}분`;
+    : tt < 60  ? `${tt.toFixed(1)}${t(E, "s", "초")}`
+    : `${(tt / 60).toFixed(1)}${t(E, "m", "분")}`;
   const fmtOps = n =>
     n < 1e3 ? `${n}`
     : n < 1e6 ? `${(n / 1e3).toFixed(1)}K`
@@ -544,9 +544,9 @@ export function BruteRunner({ E }) {
   const fmtTime = (sec) => {
     if (sec < 1) return `${(sec * 1000).toFixed(0)}ms`;
     if (sec < 60) return `${sec.toFixed(1)}s`;
-    if (sec < 3600) return `${(sec / 60).toFixed(1)}분`;
-    if (sec < 86400) return `${(sec / 3600).toFixed(1)}시간`;
-    return `${(sec / 86400).toFixed(1)}일`;
+    if (sec < 3600) return `${(sec / 60).toFixed(1)}${t(E, "m", "분")}`;
+    if (sec < 86400) return `${(sec / 3600).toFixed(1)}${t(E, "h", "시간")}`;
+    return `${(sec / 86400).toFixed(1)}${t(E, "d", "일")}`;
   };
 
   return (

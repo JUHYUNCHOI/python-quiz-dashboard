@@ -121,9 +121,9 @@ export function CheeseBruteRunner({ E }) {
   const fmtTime = (sec) => {
     if (sec < 1) return `${(sec * 1000).toFixed(0)}ms`;
     if (sec < 60) return `${sec.toFixed(1)}s`;
-    if (sec < 3600) return `${(sec / 60).toFixed(1)}분`;
-    if (sec < 86400) return `${(sec / 3600).toFixed(1)}시간`;
-    return `${(sec / 86400).toFixed(1)}일`;
+    if (sec < 3600) return `${(sec / 60).toFixed(1)}${E ? "min" : "분"}`;
+    if (sec < 86400) return `${(sec / 3600).toFixed(1)}${E ? "h" : "시간"}`;
+    return `${(sec / 86400).toFixed(1)}${E ? "d" : "일"}`;
   };
   // USACO 추정: 쿼리당 O(N³) × Q
   const estimateUSACO = (N, Q) => {

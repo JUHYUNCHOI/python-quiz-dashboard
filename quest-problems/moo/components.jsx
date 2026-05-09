@@ -140,8 +140,8 @@ export function MooBruteRunner({ E }) {
   const fmtTime = (sec) => {
     if (sec < 1) return `${(sec * 1000).toFixed(0)}ms`;
     if (sec < 60) return `${sec.toFixed(1)}s`;
-    if (sec < 3600) return `${(sec / 60).toFixed(1)}분`;
-    return `${(sec / 3600).toFixed(1)}시간`;
+    if (sec < 3600) return `${(sec / 60).toFixed(1)}${E ? "min" : "분"}`;
+    return `${(sec / 3600).toFixed(1)}${E ? "h" : "시간"}`;
   };
   const estUSACO = (n) => (26 * n * n) / 1e8;
 
@@ -378,36 +378,36 @@ const BR_HELPERS_CPP = [
   "    };",
 ];
 
-const BR_LOOP_PY = [
-  "# 원본 문자열에 이미 있는 moo 등록",
+const BR_LOOP_PY = (E) => [
+  t(E, "# Register moos already present in the original string", "# 원본 문자열에 이미 있는 moo 등록"),
   "for k, v in count_all(s).items():",
   "    if v >= f:",
   "        result.add(k)",
   "",
-  "# 🐌 매 위치 × 26 글자 시도 — TLE 원인!",
+  t(E, "# 🐌 Try each position × 26 letters — the TLE cause!", "# 🐌 매 위치 × 26 글자 시도 — TLE 원인!"),
   "for pos in range(n):",
   "    orig = s[pos]",
   "    for c in 'abcdefghijklmnopqrstuvwxyz':",
   "        if c == orig: continue",
   "        s[pos] = c",
-  "        # 매번 전체 문자열 재스캔 (N 칸)",
+  t(E, "        # Re-scan the whole string every time (N cells)", "        # 매번 전체 문자열 재스캔 (N 칸)"),
   "        for k, v in count_all(s).items():",
   "            if v >= f:",
   "                result.add(k)",
   "        s[pos] = orig",
 ];
-const BR_LOOP_CPP = [
-  "    // 원본 문자열에 이미 있는 moo 등록",
+const BR_LOOP_CPP = (E) => [
+  t(E, "    // Register moos already present in the original string", "    // 원본 문자열에 이미 있는 moo 등록"),
   "    for (auto& [k, v] : countAll(s))",
   "        if (v >= f) result.insert(k);",
   "",
-  "    // 🐌 매 위치 × 26 글자 시도 — TLE 원인!",
+  t(E, "    // 🐌 Try each position × 26 letters — the TLE cause!", "    // 🐌 매 위치 × 26 글자 시도 — TLE 원인!"),
   "    for (int pos = 0; pos < n; pos++) {",
   "        char orig = s[pos];",
   "        for (char c = 'a'; c <= 'z'; c++) {",
   "            if (c == orig) continue;",
   "            s[pos] = c;",
-  "            // 매번 전체 문자열 재스캔 (N 칸)",
+  t(E, "            // Re-scan the whole string every time (N cells)", "            // 매번 전체 문자열 재스캔 (N 칸)"),
   "            for (auto& [k, v] : countAll(s))",
   "                if (v >= f) result.insert(k);",
   "            s[pos] = orig;",
@@ -464,7 +464,7 @@ export function getMooBruteSections(E) {
     {
       label: t(E, "🐌 3. Trial Loop (THE TLE)", "🐌 3. 시도 루프 (TLE 원인!)"),
       color: "#dc2626",
-      py: BR_LOOP_PY, cpp: BR_LOOP_CPP,
+      py: BR_LOOP_PY(E), cpp: BR_LOOP_CPP(E),
       why: [
         t(E, "Register original moos first, then for each pos × 26 letters call count_all() — that's 26N² total.",
             "원본 moo 등록 후, 각 pos × 26 글자에 대해 count_all() 호출 — 총 26N²."),
@@ -540,7 +540,7 @@ const MOO_PRECOUNT_CPP = [
   "    }",
 ];
 
-const MOO_TRY_PY = [
+const MOO_TRY_PY = (E) => [
   "result = set()",
   "alphabet = 'abcdefghijklmnopqrstuvwxyz'",
   "",
@@ -548,7 +548,7 @@ const MOO_TRY_PY = [
   "    minIdx = max(pos - 2, 0)",
   "    maxIdx = min(n - 3, pos)",
   "",
-  "    # 🔴 REMOVE: 영향받는 3 윈도우 카운트 빼기",
+  t(E, "    # 🔴 REMOVE: subtract counts for the 3 affected windows", "    # 🔴 REMOVE: 영향받는 3 윈도우 카운트 빼기"),
   "    for idx in range(minIdx, maxIdx + 1):",
   "        t = string[idx:idx+3]",
   "        if isMoo(t[0], t[1], t[2]):",
@@ -566,7 +566,7 @@ const MOO_TRY_PY = [
   "                    result.add(key)",
   "                mydict[key] -= 1",
   "",
-  "    # 🟢 RESTORE: 원래 윈도우 복원",
+  t(E, "    # 🟢 RESTORE: put the original windows back", "    # 🟢 RESTORE: 원래 윈도우 복원"),
   "    for idx in range(minIdx, maxIdx + 1):",
   "        t = string[idx:idx+3]",
   "        if isMoo(t[0], t[1], t[2]):",
@@ -618,10 +618,10 @@ const MOO_OUTPUT_CPP = [
   "}",
 ];
 
-const MOO_FULL_PY = [
+const MOO_FULL_PY = (E) => [
   ...MOO_INPUT_PY, "",
   ...MOO_PRECOUNT_PY, "",
-  ...MOO_TRY_PY, "",
+  ...MOO_TRY_PY(E), "",
   ...MOO_OUTPUT_PY,
 ];
 const MOO_FULL_CPP = [
@@ -686,7 +686,7 @@ export function getMooSections(E) {
     {
       label: t(E, "🔄 3. Remove → Try → Restore", "🔄 3. 빼기 → 시도 → 복원"),
       color: "#16a34a",
-      py: MOO_TRY_PY, cpp: MOO_TRY_CPP,
+      py: MOO_TRY_PY(E), cpp: MOO_TRY_CPP,
       why: [
         t(E, "Only 3 windows contain pos (idx = pos-2, pos-1, pos) — REMOVE their old count, TRY 26 letters, RESTORE the original.",
             "pos 를 포함하는 윈도우는 정확히 3 개 (idx = pos-2, pos-1, pos) — 그 카운트만 빼고, 26 글자 시도, 원래대로 복원."),
@@ -709,7 +709,7 @@ export function getMooSections(E) {
     {
       label: t(E, "🎯 4. Output + Full Code", "🎯 4. 출력 + 전체 코드"),
       color: A,
-      py: MOO_FULL_PY, cpp: MOO_FULL_CPP,
+      py: MOO_FULL_PY(E), cpp: MOO_FULL_CPP,
       why: [
         t(E, "Sort result alphabetically (problem requires sorted output).",
             "결과 사전순 정렬 (문제 요구)."),
