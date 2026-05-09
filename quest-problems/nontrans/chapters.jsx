@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getNonTransSections } from "./components";
+import { getNonTransSections, NonTransDeepAuditSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -38,7 +38,7 @@ export const SOLUTION_CODE = [
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeNonTransCh1(E) {
   return [
@@ -130,7 +130,17 @@ export function makeNonTransCh1(E) {
         "Correct! We compare all 16 pairs (4x4). If A wins more matchups than B, A beats B.",
         "맞아! 16개 쌍(4x4)을 모두 비교해서 A가 이기는 매치업이 더 많으면 A가 B를 이기는 거예요."),
     },
-    // 1-3: Input
+    // 1-3: Deep audit sim — step through every (x, y) pair, watch
+    // beats(X, Y) build up one outcome at a time. Try the rock-paper-
+    // scissors-style cycle (4444 ▶ 3336 ▶ 2255 ▶ 4444) yourself.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Pick a dice pair, then tap 'Next pair' 16 times.\nEach (x, y) outcome is x > y, x < y, or x = y.\nWatch the win / lose tally build up — that's exactly what beats(X, Y) computes.\nTry the 4444 ▶ 3336 ▶ 2255 ▶ 4444 cycle: each beats the next, so the relation is non-transitive.",
+        "주사위 쌍을 고르고 '다음 쌍' 을 16 번 눌러봐.\n각 (x, y) 결과는 x > y, x < y, x = y 중 하나.\nwin / lose 합계가 쌓이는 걸 봐 — beats(X, Y) 가 계산하는 그 값이야.\n4444 ▶ 3336 ▶ 2255 ▶ 4444 사이클을 돌려봐: 각자가 다음을 이겨서 비추이적 관계."),
+      content: <NonTransDeepAuditSim E={E} />,
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,
