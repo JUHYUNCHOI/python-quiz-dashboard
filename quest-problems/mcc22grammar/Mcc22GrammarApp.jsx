@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { Mcc22GrammarProgressiveCode, downloadMcc22GrammarPDF, getMcc22GrammarSections } from "./components";
+import { Mcc22GrammarProgressiveCode, Mcc22GrammarSim, downloadMcc22GrammarPDF, getMcc22GrammarSections } from "./components";
 import { makeMcc22GrammarCh1, makeMcc22GrammarCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -92,6 +92,7 @@ export default function Mcc22GrammarApp(props = {}) {
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
+    if (step.type === "sim") return <Mcc22GrammarSim E={E} />;
     if (step.type === "progressive") return <Mcc22GrammarProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     return null;
   };
@@ -103,6 +104,7 @@ export default function Mcc22GrammarApp(props = {}) {
     );
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
+    if (s.type === "sim") return <Mcc22GrammarSim E={E} />;
     if (s.type === "progressive") return <Mcc22GrammarProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
     return null;
   };

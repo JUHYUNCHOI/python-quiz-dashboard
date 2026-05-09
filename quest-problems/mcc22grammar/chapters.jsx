@@ -130,7 +130,14 @@ export function makeMcc22GrammarCh1(E) {
         "Correct! WE->KNOW is a direct edge in the grammar graph, so 'WE KNOW' is valid.",
         "맞아! WE->KNOW는 문법 그래프의 직접 간선이니까 'WE KNOW'는 유효해요."),
     },
-    // 1-3: Input
+    // 1-3: Sim — pick a sentence, step through each word pair
+    {
+      type: "sim",
+      narr: t(E,
+        "Tiny grammar with 5 words and 8 edges. Pick a sentence and click 'Check next pair' — each consecutive (X, Y) lights up the edge if it exists, or a dashed red arrow if it doesn't. The verdict turns VALID only when every pair finds its edge. Try the four sentences in order.",
+        "단어 5 개 + 화살표 8 개의 작은 문법. 문장을 골라 '다음 쌍 확인' 을 눌러 — 연속 쌍 (X, Y) 가 있으면 화살표가 켜지고, 없으면 빨간 점선이 떠요. 모든 쌍이 화살표를 찾으면 VALID. 네 문장을 차례로 눌러봐."),
+    },
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

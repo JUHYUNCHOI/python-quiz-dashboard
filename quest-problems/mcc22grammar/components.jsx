@@ -1,8 +1,254 @@
+import { useState, useMemo } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ============================================================
+   Mcc22GrammarSim — pick a sentence, step through each word
+   pair, watch each consecutive (X, Y) get checked against
+   the grammar's edge SET. Verdict turns VALID / INVALID.
+   ============================================================ */
+const _SIM_EDGES = [
+  ["WE", "DONT"], ["WE", "KNOW"],
+  ["THEY", "DONT"], ["THEY", "KNOW"],
+  ["DONT", "KNOW"],
+  ["KNOW", "THAT"],
+  ["THAT", "WE"], ["THAT", "THEY"],
+];
+const _SIM_EDGE_SET = new Set(_SIM_EDGES.map(([a, b]) => `${a}|${b}`));
+const _SIM_SENTENCES = [
+  ["WE", "KNOW"],
+  ["WE", "KNOW", "THAT", "THEY", "KNOW"],
+  ["THEY", "DONT", "KNOW", "THAT"],
+  ["KNOW", "WE", "DONT"],
+];
+
+export function Mcc22GrammarSim({ E }) {
+  const [sIdx, setSIdx] = useState(0);
+  const [step, setStep] = useState(0);
+
+  const sentence = _SIM_SENTENCES[sIdx];
+  const totalPairs = Math.max(0, sentence.length - 1);
+  const checked = Math.min(step, totalPairs);
+
+  const { firstBadIdx, doneAll } = useMemo(() => {
+    let bad = -1;
+    for (let i = 0; i < totalPairs; i++) {
+      const ok = _SIM_EDGE_SET.has(`${sentence[i]}|${sentence[i + 1]}`);
+      if (!ok) { bad = i; break; }
+    }
+    return { firstBadIdx: bad, doneAll: checked >= totalPairs };
+  }, [sIdx, totalPairs, checked, sentence]);
+
+  const sentenceBroken = doneAll && firstBadIdx !== -1 && checked > firstBadIdx;
+  const verdict = doneAll
+    ? (firstBadIdx === -1
+        ? t(E, "VALID — every pair has an edge", "VALID — 모든 쌍에 화살표 있음")
+        : t(E, "INVALID — pair without edge", "INVALID — 화살표 없는 쌍"))
+    : t(E, "checking…", "확인 중…");
+
+  const pickSentence = (i) => { setSIdx(i); setStep(0); };
+  const stepNext = () => setStep(s => Math.min(s + 1, totalPairs));
+  const stepReset = () => setStep(0);
+
+  // Layout positions for the 5 distinct words
+  const WORDS = ["WE", "THEY", "DONT", "KNOW", "THAT"];
+  const _POS = {
+    WE:    { cx: 70,  cy: 40  },
+    THEY:  { cx: 70,  cy: 130 },
+    DONT:  { cx: 200, cy: 40  },
+    KNOW:  { cx: 200, cy: 130 },
+    THAT:  { cx: 330, cy: 85  },
+  };
+  const svgW = 400, svgH = 175;
+
+  // Currently being inspected pair (the one just checked, or the next one)
+  const inspectIdx = doneAll
+    ? (firstBadIdx === -1 ? totalPairs - 1 : firstBadIdx)
+    : checked;
+  const fromW = sentence[inspectIdx];
+  const toW   = sentence[inspectIdx + 1];
+  const inspectKey = fromW && toW ? `${fromW}|${toW}` : null;
+  const inspectExists = inspectKey ? _SIM_EDGE_SET.has(inspectKey) : false;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 8, textAlign: "center" }}>
+          {t(E, "🔎 Pick a sentence — step through each word pair", "🔎 문장을 골라 — 단어 쌍을 한 번에 하나씩 확인")}
+        </div>
+
+        {/* Sentence pickers */}
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
+          {_SIM_SENTENCES.map((s, i) => (
+            <button key={i} onClick={() => pickSentence(i)} style={{
+              background: i === sIdx ? A : "#fff",
+              color: i === sIdx ? "#fff" : A,
+              border: `1.5px solid ${A}`,
+              borderRadius: 8, padding: "4px 8px", fontSize: 11, fontWeight: 700, cursor: "pointer",
+              fontFamily: "'JetBrains Mono', monospace",
+            }}>
+              {s.join(" ")}
+            </button>
+          ))}
+        </div>
+
+        {/* SVG grammar graph */}
+        <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #6ee7b7", padding: 4, overflowX: "auto" }}>
+          <svg width={svgW} height={svgH} style={{ display: "block", margin: "0 auto", maxWidth: "100%" }}>
+            <defs>
+              <marker id="arr-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#cbd5e1" />
+              </marker>
+              <marker id="arr-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill={A} />
+              </marker>
+              <marker id="arr-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626" />
+              </marker>
+            </defs>
+
+            {/* Edges */}
+            {_SIM_EDGES.map(([u, v]) => {
+              const a = _POS[u], b = _POS[v];
+              const dx = b.cx - a.cx, dy = b.cy - a.cy;
+              const len = Math.hypot(dx, dy) || 1;
+              const ox = (dx / len) * 26, oy = (dy / len) * 14;
+              const isInspect = inspectKey === `${u}|${v}`;
+              const stroke = isInspect ? (inspectExists ? A : "#dc2626") : "#cbd5e1";
+              const marker = isInspect ? (inspectExists ? "arr-ok" : "arr-bad") : "arr-dim";
+              const sw = isInspect ? 2.5 : 1.2;
+              return (
+                <line key={`${u}-${v}`}
+                  x1={a.cx + ox} y1={a.cy + oy}
+                  x2={b.cx - ox} y2={b.cy - oy}
+                  stroke={stroke} strokeWidth={sw}
+                  markerEnd={`url(#${marker})`} />
+              );
+            })}
+
+            {/* Missing edge attempt — draw a dashed red line if pair is not in the grammar */}
+            {inspectKey && !inspectExists && fromW && toW && _POS[fromW] && _POS[toW] && (() => {
+              const a = _POS[fromW], b = _POS[toW];
+              const dx = b.cx - a.cx, dy = b.cy - a.cy;
+              const len = Math.hypot(dx, dy) || 1;
+              const ox = (dx / len) * 26, oy = (dy / len) * 14;
+              return (
+                <line
+                  x1={a.cx + ox} y1={a.cy + oy}
+                  x2={b.cx - ox} y2={b.cy - oy}
+                  stroke="#dc2626" strokeWidth={2.5} strokeDasharray="5,4"
+                  markerEnd="url(#arr-bad)" />
+              );
+            })()}
+
+            {/* Nodes */}
+            {WORDS.map(w => {
+              const p = _POS[w];
+              const isFrom = inspectKey && fromW === w;
+              const isTo   = inspectKey && toW === w;
+              const fill = isFrom ? "#7c3aed" : isTo ? "#0891b2" : "#fff";
+              const stroke = isFrom ? "#7c3aed" : isTo ? "#0891b2" : A;
+              const textColor = isFrom || isTo ? "#fff" : "#065f46";
+              return (
+                <g key={w}>
+                  <rect x={p.cx - 26} y={p.cy - 14} width={52} height={28} rx={8}
+                    fill={fill} stroke={stroke} strokeWidth={2} />
+                  <text x={p.cx} y={p.cy + 4} textAnchor="middle"
+                    style={{ fontSize: 11, fontWeight: 800, fill: textColor, fontFamily: "system-ui, sans-serif" }}>
+                    {w}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+
+        {/* Legend */}
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 6, flexWrap: "wrap", fontSize: 11, color: "#065f46" }}>
+          <span><b style={{ color: "#7c3aed" }}>■</b> X</span>
+          <span><b style={{ color: "#0891b2" }}>■</b> Y</span>
+          <span><b style={{ color: A }}>→</b> {t(E, "edge in grammar", "문법에 있는 화살표")}</span>
+          <span><b style={{ color: "#dc2626" }}>⇢</b> {t(E, "missing edge", "없는 화살표")}</span>
+        </div>
+      </div>
+
+      {/* Sentence with per-pair markers */}
+      <div style={{
+        background: "#fff", border: `1.5px solid ${A}`, borderRadius: 12, padding: "10px 14px", marginBottom: 10,
+        textAlign: "center", fontFamily: "'JetBrains Mono', monospace",
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 6 }}>
+          {t(E, "Sentence", "문장")} · {checked} / {totalPairs} {t(E, "pairs checked", "쌍 확인됨")}
+        </div>
+        <div style={{ fontSize: 15, fontWeight: 800, color: A, lineHeight: 1.7 }}>
+          {sentence.map((w, i) => {
+            const isInspectFrom = i === inspectIdx && !doneAll;
+            const isBad = sentenceBroken && i > firstBadIdx;
+            const color = isBad ? "#dc2626" : isInspectFrom ? "#7c3aed" : A;
+            return (
+              <span key={i}>
+                <span style={{ color, textDecoration: isBad ? "line-through" : "none" }}>{w}</span>
+                {i < sentence.length - 1 && (() => {
+                  const ok = _SIM_EDGE_SET.has(`${sentence[i]}|${sentence[i + 1]}`);
+                  const done = i < checked;
+                  const sym = !done ? "·" : ok ? "→" : "✗";
+                  const c = !done ? "#cbd5e1" : ok ? A : "#dc2626";
+                  return <span style={{ color: c, margin: "0 6px" }}>{sym}</span>;
+                })()}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Step controls */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10 }}>
+        <button onClick={stepReset} style={{
+          background: "#fff", color: A, border: `1.5px solid ${A}`,
+          borderRadius: 8, padding: "5px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>
+          ⟲ {t(E, "Reset", "처음")}
+        </button>
+        <button onClick={stepNext} disabled={doneAll} style={{
+          background: doneAll ? "#d1d5db" : A,
+          color: "#fff",
+          border: `1.5px solid ${doneAll ? "#d1d5db" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 12, fontWeight: 800,
+          cursor: doneAll ? "not-allowed" : "pointer",
+        }}>
+          {t(E, "Check next pair ▶", "다음 쌍 확인 ▶")}
+        </button>
+      </div>
+
+      {/* Verdict card */}
+      <div style={{
+        background: "#fff", border: `2px solid ${doneAll ? (firstBadIdx === -1 ? A : "#dc2626") : "#cbd5e1"}`,
+        borderRadius: 12, padding: "12px 14px", textAlign: "center",
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 6 }}>
+          🎯 {t(E, "Verdict", "판정")}
+        </div>
+        <div style={{
+          fontSize: 15, fontWeight: 800,
+          color: doneAll ? (firstBadIdx === -1 ? A : "#dc2626") : C.dim,
+          fontFamily: "'JetBrains Mono', monospace",
+        }}>
+          {verdict}
+        </div>
+        {doneAll && firstBadIdx !== -1 && (
+          <div style={{ fontSize: 11, color: C.dim, marginTop: 6 }}>
+            {t(E,
+              `No edge ${sentence[firstBadIdx]} → ${sentence[firstBadIdx + 1]} in the grammar`,
+              `문법에 ${sentence[firstBadIdx]} → ${sentence[firstBadIdx + 1]} 화살표가 없어요`)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "import sys",
