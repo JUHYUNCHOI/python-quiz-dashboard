@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getWordProcSections } from "./components";
+import { getWordProcSections, WordProcLineWrapSim } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -444,6 +444,13 @@ export function makeWordProcCh2(E) {
             <LineViz words={["boy"]} colors={["#06b6d4"]} K={6} lineNum={4} E={E} />
           </div>
         </div>),
+    },
+    // 2-2.5: Interactive sim — play with word lengths and K
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now play with it yourself.\nDrag K, edit each word's length, add or remove words — watch the lines re-pack live.", "이제 직접 가지고 놀아봐. K를 움직이고, 단어 길이를 바꾸고, 추가/삭제 — 줄이 즉시 다시 묶여요."),
+      content: <WordProcLineWrapSim E={E} />,
     },
     // 2-3: Quiz on edge case
     {

@@ -1,8 +1,190 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* ================================================================
+   WordProcLineWrapSim — interactive: edit word lengths + K, see
+   how words wrap onto numbered lines.
+   ================================================================ */
+const WRAP_COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#06b6d4", "#ef4444", "#14b8a6"];
+
+function packLines(lengths, K) {
+  const lines = [];
+  let cur = [];
+  let curLen = 0;
+  lengths.forEach((wl, idx) => {
+    if (curLen + wl > K && cur.length > 0) {
+      lines.push(cur);
+      cur = [];
+      curLen = 0;
+    }
+    cur.push({ idx, wl });
+    curLen += wl;
+  });
+  if (cur.length > 0) lines.push(cur);
+  return lines;
+}
+
+export function WordProcLineWrapSim({ E }) {
+  const [lengths, setLengths] = useState([3, 3, 2, 1, 4, 3]);
+  const [K, setK] = useState(6);
+
+  const lines = packLines(lengths, K);
+
+  const updateLen = (i, v) => {
+    const n = Math.max(1, Math.min(20, parseInt(v) || 1));
+    setLengths(prev => prev.map((x, j) => (j === i ? n : x)));
+  };
+  const addWord = () => {
+    if (lengths.length >= 8) return;
+    setLengths(prev => [...prev, 2]);
+  };
+  const removeWord = (i) => {
+    if (lengths.length <= 1) return;
+    setLengths(prev => prev.filter((_, j) => j !== i));
+  };
+
+  const labelStyle = { fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.4 };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#fef2f2", border: "1.5px solid #dc2626", borderRadius: 10, padding: 10, marginBottom: 10, textAlign: "center" }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 2 }}>
+          🎮 {t(E, "Try it — Line Wrap Sim", "직접 — 줄 바꿈 시뮬")}
+        </div>
+        <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5 }}>
+          {t(E,
+            "Change word lengths and K — watch lines re-pack live.",
+            "단어 길이와 K 를 바꿔봐 — 줄이 즉시 다시 묶여요.")}
+        </div>
+      </div>
+
+      {/* K slider */}
+      <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 10, marginBottom: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+          <span style={labelStyle}>K {t(E, "(max chars per line)", "(줄당 최대 글자)")}</span>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#dc2626", fontSize: 14 }}>{K}</span>
+        </div>
+        <input
+          type="range"
+          min={1}
+          max={20}
+          value={K}
+          onChange={e => setK(parseInt(e.target.value))}
+          style={{ width: "100%", accentColor: "#dc2626" }}
+        />
+      </div>
+
+      {/* Word length editor */}
+      <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 10, marginBottom: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+          <span style={labelStyle}>{t(E, "Word lengths", "단어 길이들")}</span>
+          <button
+            onClick={addWord}
+            disabled={lengths.length >= 8}
+            style={{
+              background: lengths.length >= 8 ? "#fca5a5" : "#dc2626",
+              color: "#fff", border: "none", borderRadius: 6,
+              padding: "3px 10px", fontSize: 11, fontWeight: 800,
+              cursor: lengths.length >= 8 ? "not-allowed" : "pointer",
+            }}
+          >
+            + {t(E, "add", "추가")}
+          </button>
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {lengths.map((len, i) => (
+            <div key={i} style={{
+              display: "inline-flex", alignItems: "center", gap: 4,
+              background: `${WRAP_COLORS[i % WRAP_COLORS.length]}15`,
+              border: `1.5px solid ${WRAP_COLORS[i % WRAP_COLORS.length]}`,
+              borderRadius: 8, padding: "3px 6px",
+            }}>
+              <span style={{ fontSize: 10, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>w{i + 1}</span>
+              <input
+                type="number"
+                min={1}
+                max={20}
+                value={len}
+                onChange={e => updateLen(i, e.target.value)}
+                style={{
+                  width: 38, border: "none", background: "transparent",
+                  fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700,
+                  color: WRAP_COLORS[i % WRAP_COLORS.length], textAlign: "center", outline: "none",
+                }}
+              />
+              <button
+                onClick={() => removeWord(i)}
+                disabled={lengths.length <= 1}
+                title={t(E, "remove", "삭제")}
+                style={{
+                  background: "transparent", border: "none",
+                  color: WRAP_COLORS[i % WRAP_COLORS.length],
+                  cursor: lengths.length <= 1 ? "not-allowed" : "pointer",
+                  fontSize: 12, fontWeight: 800, padding: "0 2px",
+                  opacity: lengths.length <= 1 ? 0.4 : 1,
+                }}
+              >×</button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Result lines */}
+      <div style={{ background: "#f9fafb", border: "1.5px solid #e5e7eb", borderRadius: 10, padding: 10 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+          <span style={labelStyle}>{t(E, "Result", "결과")}</span>
+          <span style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "lines", "줄")}: <b style={{ color: "#dc2626" }}>{lines.length}</b>
+          </span>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+          {lines.map((line, li) => {
+            const total = line.reduce((s, w) => s + w.wl, 0);
+            return (
+              <div key={li} style={{
+                background: "#fff", border: "1.5px solid #e5e7eb", borderRadius: 8,
+                padding: "6px 8px",
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 3 }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: C.dim }}>
+                    {E ? `Line ${li + 1}` : `${li + 1}줄`}
+                  </span>
+                  <span style={{
+                    fontSize: 10, fontWeight: 700,
+                    color: total <= K ? "#059669" : "#dc2626",
+                    fontFamily: "'JetBrains Mono',monospace",
+                  }}>
+                    {total}/{K}
+                  </span>
+                </div>
+                <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                  {line.map(({ idx, wl }) => (
+                    <span key={idx} style={{
+                      display: "inline-flex", alignItems: "center", justifyContent: "center",
+                      padding: "3px 8px", borderRadius: 6,
+                      background: `${WRAP_COLORS[idx % WRAP_COLORS.length]}15`,
+                      border: `1px solid ${WRAP_COLORS[idx % WRAP_COLORS.length]}`,
+                      color: WRAP_COLORS[idx % WRAP_COLORS.length],
+                      fontFamily: "'JetBrains Mono',monospace",
+                      fontSize: 11, fontWeight: 700,
+                    }}>
+                      w{idx + 1}
+                      <span style={{ fontSize: 9, color: C.dim, marginLeft: 3 }}>({wl})</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const FULL_PY = [
   "N, K = map(int, input().split())",
