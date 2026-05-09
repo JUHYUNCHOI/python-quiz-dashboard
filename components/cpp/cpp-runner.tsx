@@ -470,10 +470,12 @@ export function CppRunner({
                 const lineStart = val.lastIndexOf("\n", start - 1) + 1
                 const currentLine = val.slice(lineStart, start)
                 const indent = currentLine.match(/^(\s*)/)?.[1] ?? ""
-                const justAfterOpen = currentLine.trimEnd().endsWith("{")
+                const trimmed = currentLine.trimEnd()
+                const justAfterBrace = trimmed.endsWith("{")
+                const justAfterColon = trimmed.endsWith(":")
                 const justBeforeClose = val[start] === "}"
-                const extraIndent = justAfterOpen ? "    " : ""
-                if (justAfterOpen && justBeforeClose) {
+                const extraIndent = (justAfterBrace || justAfterColon) ? "    " : ""
+                if (justAfterBrace && justBeforeClose) {
                   // {|}  →  {\n    |\n}  — 커서 가운데 줄
                   const newVal = val.slice(0, start) + "\n" + indent + extraIndent + "\n" + indent + val.slice(start)
                   const newCursor = start + 1 + indent.length + extraIndent.length
