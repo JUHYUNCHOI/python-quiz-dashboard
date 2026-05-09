@@ -1,5 +1,103 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getMcc21CarrotsSections } from "./components";
+
+function CarrotTripleSim({ E }) {
+  const carrots = [3, 6, 9, 5, 7];
+  const D = 3;
+  const N = carrots.length;
+  const triples = [];
+  for (let i = 0; i < N; i++)
+    for (let j = i + 1; j < N; j++)
+      for (let k = j + 1; k < N; k++)
+        triples.push([i, j, k]);
+  const [step, setStep] = useState(0);
+  const cur = step < triples.length ? triples[step] : null;
+  const validCount = triples.slice(0, step + 1).filter(([i, j, k]) => (carrots[i] + carrots[j] + carrots[k]) % D === 0).length;
+  const sum = cur ? carrots[cur[0]] + carrots[cur[1]] + carrots[cur[2]] : 0;
+  const ok = cur ? sum % D === 0 : false;
+  const reset = () => setStep(0);
+  const next = () => setStep(s => Math.min(s + 1, triples.length - 1));
+  const prev = () => setStep(s => Math.max(s - 1, 0));
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+          🔬 {t(E, "Deep Audit", "깊이 살펴보기")}
+        </div>
+        <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+          {t(E, "Step through every (i, j, k) triple. Watch which sums are divisible by D.",
+                "모든 (i, j, k) 조합을 한 단계씩. 어떤 합이 D 로 나누어떨어지는지 봐요.")}
+        </div>
+      </div>
+
+      <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 10, padding: 12, marginBottom: 10 }}>
+        <div style={{ fontSize: 12, color: C.dim, marginBottom: 6 }}>
+          {t(E, "Baskets c[]", "바구니 c[]")} (N={N}, D={D})
+        </div>
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+          {carrots.map((v, idx) => {
+            const inTriple = cur && (idx === cur[0] || idx === cur[1] || idx === cur[2]);
+            return (
+              <div key={idx} style={{
+                width: 54, padding: "8px 4px", textAlign: "center",
+                background: inTriple ? (ok ? "#d1fae5" : "#fef3c7") : "#f8fafc",
+                border: `2px solid ${inTriple ? (ok ? "#059669" : "#f59e0b") : C.border}`,
+                borderRadius: 8, transition: "all 0.2s",
+              }}>
+                <div style={{ fontSize: 10, color: C.dim }}>i={idx}</div>
+                <div style={{ fontSize: 18 }}>🥕</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: inTriple ? (ok ? "#059669" : "#92400e") : C.text }}>{v}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div style={{ background: "#0f172a", color: "#f8fafc", padding: 12, borderRadius: 10, marginBottom: 10, fontFamily: "monospace", fontSize: 13 }}>
+        <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 4 }}>
+          {t(E, "Triple", "조합")} {step + 1} / {triples.length}
+        </div>
+        {cur ? (
+          <div>
+            <div>(i, j, k) = (<span style={{ color: "#fbbf24" }}>{cur[0]}</span>, <span style={{ color: "#fbbf24" }}>{cur[1]}</span>, <span style={{ color: "#fbbf24" }}>{cur[2]}</span>)</div>
+            <div style={{ marginTop: 4 }}>
+              c[{cur[0]}] + c[{cur[1]}] + c[{cur[2]}] = {carrots[cur[0]]} + {carrots[cur[1]]} + {carrots[cur[2]]} = <span style={{ color: "#34d399", fontWeight: 700 }}>{sum}</span>
+            </div>
+            <div style={{ marginTop: 4 }}>
+              {sum} % {D} = <span style={{ color: ok ? "#34d399" : "#fb7185", fontWeight: 700 }}>{sum % D}</span>
+              {ok ? ` ✅ ${t(E, "count!", "카운트!")}` : ` ❌ ${t(E, "skip", "건너뜀")}`}
+            </div>
+          </div>
+        ) : null}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+        <button onClick={prev} disabled={step === 0} style={{
+          padding: "6px 14px", borderRadius: 8, border: `1.5px solid #059669`,
+          background: step === 0 ? "#f3f4f6" : "#fff", color: step === 0 ? C.dim : "#059669",
+          fontWeight: 700, cursor: step === 0 ? "not-allowed" : "pointer", fontSize: 12,
+        }}>← {t(E, "Prev", "이전")}</button>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#059669" }}>
+          {t(E, "Valid so far:", "지금까지 유효:")} <span style={{ fontSize: 16 }}>{validCount}</span>
+        </div>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button onClick={reset} style={{
+            padding: "6px 10px", borderRadius: 8, border: `1.5px solid ${C.border}`,
+            background: "#fff", color: C.dim, fontWeight: 600, cursor: "pointer", fontSize: 12,
+          }}>{t(E, "Reset", "처음")}</button>
+          <button onClick={next} disabled={step >= triples.length - 1} style={{
+            padding: "6px 14px", borderRadius: 8, border: `1.5px solid #059669`,
+            background: step >= triples.length - 1 ? "#f3f4f6" : "#059669",
+            color: step >= triples.length - 1 ? C.dim : "#fff",
+            fontWeight: 700, cursor: step >= triples.length - 1 ? "not-allowed" : "pointer", fontSize: 12,
+          }}>{t(E, "Next", "다음")} →</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export const SOLUTION_CODE = [
   "N, D = map(int, input().split())",
@@ -102,6 +200,13 @@ export function makeMcc21CarrotsCh1(E) {
         "바구니 = [3, 6, 9]. 합은 얼마예요?"),
       hint: t(E, "Add the three numbers together.", "세 숫자를 모두 더해요."),
       answer: 18,
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now walk every triple of c = [3, 6, 9, 5, 7] with D = 3. Each step shows one (i, j, k) — see which sums divide and which don't. Count grows live.",
+        "c = [3, 6, 9, 5, 7], D = 3 의 모든 조합을 직접 걸어봐요. 매 단계마다 한 (i, j, k) — 어떤 합이 나누어떨어지고 어떤 건 안 되는지. 카운트가 실시간으로 늘어요."),
+      content: <CarrotTripleSim E={E} />,
     },
   ];
 }
