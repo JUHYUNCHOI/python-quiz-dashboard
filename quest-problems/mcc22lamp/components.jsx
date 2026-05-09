@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -99,6 +100,214 @@ export function getMcc22LampSections(E) {
       ],
     },
   ];
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Mcc22LampDeepAuditSim — deep-audit of the diff-array trick.
+   Student picks a preset (N, list of toggle ops), tap any op to
+   include / skip it, and watch THREE rows update live:
+     1) toggle counts per lamp (raw)
+     2) diff array (the trick: +1 at L, -1 at R+1)
+     3) prefix-sum of diff = same as row 1, but built O(M+N)
+   Lamps with odd toggle count light up. ON count appears at right.
+   ═══════════════════════════════════════════════════════════════ */
+const _LAMP_PRESETS = [
+  { N: 5, ops: [[1, 5], [2, 4]] },           // teaches: nested → 2 ON
+  { N: 6, ops: [[1, 3], [2, 5], [4, 6]] },   // overlapping
+  { N: 8, ops: [[1, 8], [3, 6], [5, 7], [2, 2]] }, // mix incl. single
+  { N: 7, ops: [[2, 6], [1, 7], [3, 5], [4, 4]] },
+];
+
+export function Mcc22LampDeepAuditSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const { N, ops } = _LAMP_PRESETS[pi];
+  const [active, setActive] = useState(() => ops.map(() => true));
+
+  const switchPreset = (newPi) => {
+    setPi(newPi);
+    setActive(_LAMP_PRESETS[newPi].ops.map(() => true));
+  };
+  const toggleOp = (i) => {
+    const u = [...active]; u[i] = !u[i]; setActive(u);
+  };
+  const resetAll = () => setActive(ops.map(() => true));
+
+  // raw toggle count per lamp (1..N)
+  const counts = Array(N + 2).fill(0);
+  // diff array (1..N+1)
+  const diff = Array(N + 2).fill(0);
+  ops.forEach(([L, R], i) => {
+    if (!active[i]) return;
+    for (let x = L; x <= R; x++) counts[x]++;
+    diff[L]++;
+    diff[R + 1]--;
+  });
+  // prefix-sum of diff for lamps 1..N
+  const prefix = Array(N + 2).fill(0);
+  let acc = 0;
+  for (let i = 1; i <= N; i++) { acc += diff[i]; prefix[i] = acc; }
+
+  let onCount = 0;
+  for (let i = 1; i <= N; i++) if (prefix[i] % 2 === 1) onCount++;
+
+  // shared cell style helpers
+  const cellBase = {
+    width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
+    borderRadius: 6, fontSize: 13, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+    border: "1px solid #d1d5db",
+  };
+  const labelStyle = {
+    minWidth: 86, fontSize: 11, fontWeight: 700, color: C.dim,
+    display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 8,
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        {_LAMP_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => switchPreset(i)} style={{
+            padding: "5px 10px", borderRadius: 8,
+            border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            N={p.N}, M={p.ops.length}
+          </button>
+        ))}
+        <button onClick={resetAll} style={{
+          padding: "5px 10px", borderRadius: 8, border: `1px solid ${C.border}`,
+          background: "transparent", color: C.dim, fontSize: 12, fontWeight: 600, cursor: "pointer",
+        }}>
+          {t(E, "↺ Reset", "↺ 초기화")}
+        </button>
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10 }}>
+        {t(E, "Tap an operation to skip / include it. Watch all three rows update.",
+              "연산을 탭해서 빼거나 포함해 봐. 세 줄이 동시에 변해요.")}
+      </div>
+
+      {/* operations row (clickable chips) */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 12 }}>
+        {ops.map(([L, R], i) => {
+          const on = active[i];
+          return (
+            <button key={i} onClick={() => toggleOp(i)} style={{
+              padding: "5px 10px", borderRadius: 8,
+              border: `1.5px solid ${on ? A : "#d1d5db"}`,
+              background: on ? "#f5f3ff" : "#f9fafb",
+              color: on ? "#5b21b6" : "#9ca3af",
+              fontSize: 12, fontWeight: 700, cursor: "pointer",
+              fontFamily: "'JetBrains Mono',monospace",
+              textDecoration: on ? "none" : "line-through",
+            }}>
+              toggle({L},{R})
+            </button>
+          );
+        })}
+      </div>
+
+      {/* lamp visual row (ON / OFF based on prefix % 2) */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 6, flexWrap: "wrap", alignItems: "center" }}>
+        <div style={labelStyle}>{t(E, "Lamps:", "램프:")}</div>
+        {Array.from({ length: N }, (_, k) => {
+          const idx = k + 1;
+          const isOn = prefix[idx] % 2 === 1;
+          return (
+            <div key={idx} style={{
+              ...cellBase,
+              fontSize: 18,
+              background: isOn ? "#fef3c7" : "#f3f4f6",
+              border: `1.5px solid ${isOn ? "#f59e0b" : "#d1d5db"}`,
+              color: isOn ? "#92400e" : "#9ca3af",
+            }}>
+              {isOn ? "💡" : "·"}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* row 1: raw toggle counts */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 4, flexWrap: "wrap", alignItems: "center" }}>
+        <div style={labelStyle}>{t(E, "count:", "토글횟수:")}</div>
+        {Array.from({ length: N }, (_, k) => {
+          const idx = k + 1;
+          const v = counts[idx];
+          const odd = v % 2 === 1;
+          return (
+            <div key={idx} style={{
+              ...cellBase,
+              background: odd ? "#fef3c7" : "#f9fafb",
+              borderColor: odd ? "#f59e0b" : "#e5e7eb",
+              color: odd ? "#92400e" : "#6b7280",
+            }}>
+              {v}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* row 2: diff array (length N+1: indices 1..N+1) */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 4, flexWrap: "wrap", alignItems: "center" }}>
+        <div style={labelStyle}>{t(E, "diff:", "차분:")}</div>
+        {Array.from({ length: N + 1 }, (_, k) => {
+          const idx = k + 1;
+          const v = diff[idx];
+          const nonzero = v !== 0;
+          return (
+            <div key={idx} style={{
+              ...cellBase,
+              background: nonzero ? "#ede9fe" : "#f9fafb",
+              borderColor: nonzero ? A : "#e5e7eb",
+              color: nonzero ? "#5b21b6" : "#9ca3af",
+            }}>
+              {v > 0 ? `+${v}` : v}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* row 3: prefix sum */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 12, flexWrap: "wrap", alignItems: "center" }}>
+        <div style={labelStyle}>{t(E, "prefix:", "누적합:")}</div>
+        {Array.from({ length: N }, (_, k) => {
+          const idx = k + 1;
+          const v = prefix[idx];
+          const matches = v === counts[idx];
+          return (
+            <div key={idx} style={{
+              ...cellBase,
+              background: matches ? "#dcfce7" : "#fee2e2",
+              borderColor: matches ? "#16a34a" : "#dc2626",
+              color: matches ? "#166534" : "#991b1b",
+            }}>
+              {v}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* result panel */}
+      <div style={{
+        background: "#f5f3ff", border: `1px solid ${A}`, borderRadius: 10, padding: "10px 14px",
+        display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8,
+      }}>
+        <div style={{ fontSize: 12, color: "#5b21b6", fontWeight: 700 }}>
+          {t(E, "Lamps ON (odd toggle count):", "켜진 램프 (홀수 토글):")}
+        </div>
+        <div style={{ fontSize: 22, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
+          {onCount}
+        </div>
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 8, lineHeight: 1.5 }}>
+        {t(E,
+          "Green prefix row = matches raw count. The diff trick gives the SAME answer in O(N+M) instead of O(N·M).",
+          "초록색 누적합 줄 = 토글횟수와 똑같음. 차분 트릭은 O(N·M) 대신 O(N+M)으로 같은 답을 줘요.")}
+      </div>
+    </div>
+  );
 }
 
 export function Mcc22LampProgressiveCode(props) {

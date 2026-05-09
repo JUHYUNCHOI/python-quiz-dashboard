@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { Mcc22LampProgressiveCode, downloadMcc22LampPDF, getMcc22LampSections } from "./components";
+import { Mcc22LampProgressiveCode, Mcc22LampDeepAuditSim, downloadMcc22LampPDF, getMcc22LampSections } from "./components";
 import { makeMcc22LampCh1, makeMcc22LampCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -93,6 +93,7 @@ export default function Mcc22LampApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <Mcc22LampProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "deepAuditSim") return <Mcc22LampDeepAuditSim E={E} />;
     return null;
   };
 
@@ -104,6 +105,7 @@ export default function Mcc22LampApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
     if (s.type === "progressive") return <Mcc22LampProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "deepAuditSim") return <Mcc22LampDeepAuditSim E={E} />;
     return null;
   };
 

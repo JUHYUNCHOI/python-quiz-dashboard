@@ -129,6 +129,13 @@ export function makeMcc22LampCh1(E) {
         "램프마다 두 연산 중 몇 개가 그 램프를 덮는지 세어 봐요. 홀수면 켜짐, 짝수면 꺼짐. 그 다음 켜진 램프를 세요."),
       answer: 2,
     },
+    // 1-4: Deep-audit sim — feel the diff-array trick
+    {
+      type: "deepAuditSim",
+      narr: t(E,
+        "Tap any operation to skip / include it. Three rows update live: raw toggle count, diff array (+1 at L, -1 at R+1), and prefix-sum of diff. Notice the prefix row always matches count — but it builds in O(N+M).",
+        "연산을 탭해서 빼거나 포함해 봐. 세 줄이 동시에 변해요: 토글 횟수, 차분 배열 (L 에 +1, R+1 에 -1), 차분의 누적합. 누적합 줄이 항상 토글 횟수와 똑같지만, O(N+M) 으로 만들어져요."),
+    },
   ];
 }
 
