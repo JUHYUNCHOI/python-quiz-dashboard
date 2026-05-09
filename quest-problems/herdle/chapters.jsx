@@ -1,5 +1,160 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getHerdleSections } from "./components";
+
+/* ──────────────────────────────────────────────────────────────
+   Interactive Herdle simulator — type a 9-letter guess, watch
+   the algorithm tag GREEN / YELLOW / GRAY one cell at a time.
+   ────────────────────────────────────────────────────────────── */
+function HerdleSim({ E }) {
+  const ANSWER = ["A", "B", "C", "B", "A", "C", "C", "C", "A"];
+  const [guess, setGuess] = useState(["A", "A", "C", "B", "B", "C", "C", "A", "A"]);
+  const [step, setStep] = useState(0);
+
+  const cellState = (i) => {
+    if (step <= i) return "pending";
+    if (guess[i] === ANSWER[i]) return "green";
+    return "pass1-other";
+  };
+
+  let yellowSet = new Set();
+  let greens = 0;
+  if (step >= 10) {
+    const remA = {};
+    const otherIdx = [];
+    for (let i = 0; i < 9; i++) {
+      if (guess[i] === ANSWER[i]) greens++;
+      else { remA[ANSWER[i]] = (remA[ANSWER[i]] || 0) + 1; otherIdx.push(i); }
+    }
+    const remainingA = { ...remA };
+    for (const i of otherIdx) {
+      const b = guess[i];
+      if ((remainingA[b] || 0) > 0) { yellowSet.add(i); remainingA[b]--; }
+    }
+  } else {
+    for (let i = 0; i < step; i++) if (guess[i] === ANSWER[i]) greens++;
+  }
+  const yellowCount = yellowSet.size;
+
+  const tileBg = (i) => {
+    const s = cellState(i);
+    if (s === "green") return "#16a34a";
+    if (yellowSet.has(i)) return "#ca8a04";
+    if (step >= 10 && s === "pass1-other") return "#94a3b8";
+    if (s === "pass1-other") return "#cbd5e1";
+    return "#f1f5f9";
+  };
+  const tileColor = (i) => {
+    const s = cellState(i);
+    if (s === "green" || yellowSet.has(i) || (step >= 10 && s === "pass1-other")) return "#fff";
+    return "#1e293b";
+  };
+  const tileBorder = (i) => {
+    if (step >= 1 && step <= 9 && i === step - 1) return "3px solid #7c3aed";
+    return "1.5px solid #cbd5e1";
+  };
+
+  const setCell = (i, v) => {
+    const ch = (v || "").toUpperCase().slice(-1);
+    if (!ch || /[A-Z]/.test(ch)) {
+      const u = [...guess]; u[i] = ch || ""; setGuess(u); setStep(0);
+    }
+  };
+
+  const stepLabel =
+    step === 0 ? t(E, "Idle. Press ▶ Step to start Pass 1.", "대기 중. ▶ 한 단계 를 눌러 1차 패스 시작.")
+    : step <= 9 ? t(E,
+        `Pass 1 · cell ${step}/9 — compare guess[${step - 1}]='${guess[step - 1] || "?"}' to answer[${step - 1}]='${ANSWER[step - 1]}' → ${guess[step - 1] === ANSWER[step - 1] ? "GREEN ✓" : "not green, save for pass 2"}`,
+        `1차 패스 · 칸 ${step}/9 — 추측[${step - 1}]='${guess[step - 1] || "?"}' 와 정답[${step - 1}]='${ANSWER[step - 1]}' 비교 → ${guess[step - 1] === ANSWER[step - 1] ? "GREEN ✓" : "초록 아님, 2차 패스로"}`)
+    : t(E,
+        `Pass 2 done — yellow uses remaining counts. Result: ${greens} green, ${yellowCount} yellow.`,
+        `2차 패스 완료 — 노랑은 남은 개수로 매칭. 결과: 초록 ${greens}, 노랑 ${yellowCount}.`);
+
+  const stepBtnLabel =
+    step === 0 ? t(E, "▶ Step 1 (Pass 1)", "▶ 1단계 (1차 패스)")
+    : step < 9 ? t(E, `▶ Step ${step + 1} (Pass 1)`, `▶ ${step + 1}단계 (1차 패스)`)
+    : step === 9 ? t(E, "▶ Pass 2 (count yellows)", "▶ 2차 패스 (노랑 세기)")
+    : t(E, "✓ Done", "✓ 완료");
+
+  return (
+    <div style={{ background: "#f8fafc", border: "1.5px solid #e2e8f0", borderRadius: 12, padding: 14, marginTop: 12 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "#7c3aed", marginBottom: 8, letterSpacing: 0.4 }}>
+        🧪 {t(E, "Try It — Interactive Herdle", "직접 해보기 — Herdle 시뮬")}
+      </div>
+
+      <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "flex-start" }}>
+        <div>
+          <div style={{ fontSize: 11, color: C.dim, marginBottom: 4, textAlign: "center" }}>
+            {t(E, "Answer (secret)", "정답 (비밀)")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 36px)", gap: 4 }}>
+            {ANSWER.map((v, i) => (
+              <div key={i} style={{
+                width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+                background: "#0891b2", color: "#fff", fontWeight: 800, fontSize: 16, borderRadius: 6,
+              }}>{v}</div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div style={{ fontSize: 11, color: C.dim, marginBottom: 4, textAlign: "center" }}>
+            {t(E, "Your guess (A/B/C)", "내 추측 (A/B/C)")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 36px)", gap: 4 }}>
+            {guess.map((v, i) => (
+              <input key={i} value={v} onChange={(e) => setCell(i, e.target.value)} maxLength={1}
+                style={{
+                  width: 36, height: 36, textAlign: "center", fontWeight: 800, fontSize: 16,
+                  background: tileBg(i), color: tileColor(i), border: tileBorder(i),
+                  borderRadius: 6, outline: "none", textTransform: "uppercase",
+                  transition: "background .25s, color .25s",
+                }} />
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 120 }}>
+          <div style={{ background: "#dcfce7", color: "#166534", borderRadius: 6, padding: "6px 10px", fontSize: 13, fontWeight: 700 }}>
+            🟩 {t(E, "Green", "초록")}: {greens}
+          </div>
+          <div style={{ background: "#fef9c3", color: "#854d0e", borderRadius: 6, padding: "6px 10px", fontSize: 13, fontWeight: 700 }}>
+            🟨 {t(E, "Yellow", "노랑")}: {yellowCount}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 12, color: C.text, lineHeight: 1.5, background: "#fff", border: "1px dashed #cbd5e1", borderRadius: 8, padding: "8px 10px" }}>
+        {stepLabel}
+      </div>
+
+      <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
+        <button onClick={() => setStep((s) => Math.min(s + 1, 10))} disabled={step >= 10}
+          style={{
+            background: step >= 10 ? "#cbd5e1" : "#7c3aed", color: "#fff", border: "none",
+            borderRadius: 6, padding: "6px 12px", fontSize: 12, fontWeight: 700,
+            cursor: step >= 10 ? "default" : "pointer",
+          }}>{stepBtnLabel}</button>
+        <button onClick={() => setStep(0)}
+          style={{
+            background: "#fff", color: "#7c3aed", border: "1.5px solid #7c3aed",
+            borderRadius: 6, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+          }}>{t(E, "↺ Reset steps", "↺ 단계 초기화")}</button>
+        <button onClick={() => { setGuess(["A","A","C","B","B","C","C","A","A"]); setStep(0); }}
+          style={{
+            background: "#fff", color: C.dim, border: "1.5px solid #cbd5e1",
+            borderRadius: 6, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+          }}>{t(E, "↻ Sample guess", "↻ 예시 추측")}</button>
+      </div>
+
+      <div style={{ marginTop: 8, fontSize: 11, color: C.dim, lineHeight: 1.5 }}>
+        {t(E,
+          "Edit any guess cell to retry. Pass 1 walks 9 cells and locks GREEN matches; Pass 2 hands out YELLOWs based on remaining-count of each breed.",
+          "추측 칸을 수정해서 다시 해봐. 1차 패스는 9칸을 돌면서 GREEN을 확정하고, 2차 패스는 각 품종 남은 개수를 보고 YELLOW를 분배해.")}
+      </div>
+    </div>
+  );
+}
 
 /* ================================================================
    SOLUTION CODE
@@ -110,6 +265,8 @@ export function makeHerdleCh1(E) {
               </div>
             </div>
           </div>
+
+          <HerdleSim E={E} />
         </div>),
     },
     // 1-2: Quiz
