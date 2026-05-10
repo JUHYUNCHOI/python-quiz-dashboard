@@ -1366,40 +1366,6 @@ export function makeOptSteps(E) {
 
     { type: "reveal",
       narr: t(E,
-        "2-digit interval [45, 49]. Just 5 numbers. (Matches the pattern chapter!)",
-        "2자리 구간 [45, 49]. 딱 5개. (패턴 챕터랑 일치!)"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 14, fontFamily: "'JetBrains Mono',monospace" }}>
-            {[45, 46, 47, 48, 49].map(n => (
-              <div key={n} style={{
-                background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10,
-                padding: "10px 14px", fontSize: 22, fontWeight: 900, color: C.ok,
-              }}>{n}</div>
-            ))}
-          </div>
-          <div style={{
-            background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10,
-            padding: 12, textAlign: "center", fontFamily: "'JetBrains Mono',monospace",
-          }}>
-            <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-              {t(E, "Interval length (d=2)", "구간 길이 (d=2)")}
-            </div>
-            <div style={{ fontSize: 18, fontWeight: 900, color: C.accent }}>
-              49 − 45 + 1 = 5
-            </div>
-          </div>
-        </div>
-      ),
-    },
-    { type: "input",
-      narr: t(E, "How many for d=3? Interval [445, 499].", "d=3 은 몇 개? 구간 [445, 499]."),
-      question: "499 − 445 + 1 = ?",
-      answer: 55,
-    },
-
-    { type: "reveal",
-      narr: t(E,
         "Now N=4567. Walk d = 2, 3, 4, ... and stop when s_d > N.",
         "이제 N=4567. d = 2, 3, 4, ... 따라가다가 s_d > N 이면 멈춤."),
       content: (
