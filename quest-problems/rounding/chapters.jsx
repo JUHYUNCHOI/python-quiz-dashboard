@@ -217,19 +217,6 @@ export function makeCh1(E) {
         </div>
       ),
     },
-    { type: "reveal", narr: t(E, "Goal: among 2 to N, count x where Bessie ≠ Elsie!", "목표: 2부터 N까지 수 중에서, Bessie랑 Elsie의 답이 다른 수가 몇 개인지 구해요!"),
-      content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: "linear-gradient(135deg,#4f46e5,#6366f1)", borderRadius: 16, padding: "20px 16px", boxShadow: "0 4px 20px rgba(79,70,229,.3)" }}>
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,.7)", fontWeight: 700, marginBottom: 6 }}>{t(E, "Find", "구해야 하는 것")}</div>
-            <div style={{ fontSize: 20, fontWeight: 900, color: "#fff", lineHeight: 1.6 }}>
-              {E ? <>Among 2 ≤ x ≤ N,<br />how many give<br />different answers?</> : <>2부터 N까지 수 중<br />Bessie와 Elsie의 답이<br /><u>다른 수</u>는 몇 개?</>}
-            </div>
-          </div>
-          <div style={{ marginTop: 12, fontSize: 13, color: C.dim }}>T {t(E, "test cases", "개 테스트케이스")}, N ≤ 10⁹</div>
-        </div>
-      ),
-    },
     { type: "reveal", narr: t(E, "Concrete example: N=100. Check x=2,3,...,100 (99 values total). Answer is 5.", "구체적 예시: N=100이면 x=2부터 100까지 (총 99개) 모두 확인. 답은 5개!"),
       content: (
         <div style={{ padding: 16 }}>
