@@ -1407,8 +1407,8 @@ export function makeOptSteps(E) {
 
     { type: "interval-sim",
       narr: t(E,
-        "Slide d to see s_d and e_d for each digit count. Slide N to see how the band gets clipped.",
-        "d 를 움직여서 각 자릿수의 s_d, e_d 를 봐요. N 을 움직이면 band 가 어떻게 잘리는지 보여줘요."),
+        "Click d to see s_d and e_d for each digit count. Click N to see how the band gets clipped.",
+        "d 버튼을 눌러서 각 자릿수의 s_d, e_d 를 봐요. N 을 바꾸면 구간이 어떻게 잘리는지 보여줘요."),
     },
 
     { type: "scale",

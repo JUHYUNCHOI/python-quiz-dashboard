@@ -326,21 +326,70 @@ export function IntervalSim({ E }) {
 
   return (
     <div style={{ padding: 16 }}>
-      {/* Sliders */}
+      {/* Preset buttons (replaces unreliable sliders) */}
       <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: 12, marginBottom: 14 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+        {/* d row */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
           <span style={{ minWidth: 40, fontSize: 12, fontWeight: 800, color: C.dim }}>d =</span>
-          <span style={{ minWidth: 28, fontSize: 20, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>{d}</span>
-          <input type="range" min={2} max={6} step={1} value={d}
-            onChange={e => setD(parseInt(e.target.value))}
-            style={{ flex: 1, accentColor: C.accent }} />
+          {[2, 3, 4, 5, 6].map(v => {
+            const active = d === v;
+            return (
+              <button
+                key={v}
+                onClick={() => setD(v)}
+                style={{
+                  padding: "6px 14px",
+                  background: active ? C.accent : "#f8f9fc",
+                  color: active ? "#fff" : C.text,
+                  border: `1.5px solid ${active ? C.accent : C.border}`,
+                  borderRadius: 8,
+                  fontFamily: "'JetBrains Mono',monospace",
+                  fontWeight: 800,
+                  fontSize: 14,
+                  cursor: "pointer",
+                  minWidth: 40,
+                }}
+              >{v}</button>
+            );
+          })}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+
+        {/* N row */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <span style={{ minWidth: 40, fontSize: 12, fontWeight: 800, color: C.dim }}>N =</span>
-          <span style={{ minWidth: 70, fontSize: 16, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>{N.toLocaleString()}</span>
-          <input type="range" min={1} max={99999} step={1} value={N}
-            onChange={e => setN(parseInt(e.target.value))}
-            style={{ flex: 1, accentColor: C.accent }} />
+          {[
+            { v: 30,    label: "30"     },
+            { v: 47,    label: "47"     },
+            { v: 500,   label: "500"    },
+            { v: 4567,  label: "4,567"  },
+            { v: 99999, label: "99,999" },
+          ].map(({ v, label }) => {
+            const active = N === v;
+            return (
+              <button
+                key={v}
+                onClick={() => setN(v)}
+                style={{
+                  padding: "6px 12px",
+                  background: active ? C.accent : "#f8f9fc",
+                  color: active ? "#fff" : C.text,
+                  border: `1.5px solid ${active ? C.accent : C.border}`,
+                  borderRadius: 8,
+                  fontFamily: "'JetBrains Mono',monospace",
+                  fontWeight: 800,
+                  fontSize: 13,
+                  cursor: "pointer",
+                }}
+              >{label}</button>
+            );
+          })}
+        </div>
+
+        {/* Hint about what each N preset shows */}
+        <div style={{ marginTop: 10, fontSize: 11, color: C.dim, fontWeight: 600, textAlign: "center", lineHeight: 1.5 }}>
+          {t(E,
+            "Tip: try N=30 (band hasn't started) · N=47 (clips d=2 mid-band) · N=99999 (whole band).",
+            "팁: N=30 (구간 시작 전) · N=47 (d=2 구간 중간 자름) · N=99999 (전체 구간).")}
         </div>
       </div>
 
