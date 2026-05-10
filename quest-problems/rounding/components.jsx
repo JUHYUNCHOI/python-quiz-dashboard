@@ -248,127 +248,73 @@ export function SpeedScale({ E }) {
 
 
 /* ================================================================
-   IntervalSim — interactive [s_d, e_d] interval explorer
+   IntervalSim — see ALL digit counts at once for a chosen N
    ----------------------------------------------------------------
-   Goal: BEFORE the student sees `s_d = int("4"*(d-1) + "5")` in code,
-   give them hands-on feel for what s_d / e_d mean. Slide d, slide N,
-   see the digit boxes light up and the band on the number line clip.
+   Goal: make the algorithm's "stop when s_d > N" obvious by showing
+   every d=2..6 row simultaneously. Student picks N; each row's
+   contribution is shown with a status badge. Once a STOP row hits,
+   the rest grey out as "skip" — exactly mirroring the algorithm.
    ================================================================ */
 export function IntervalSim({ E }) {
-  const [d, setD] = useState(3);
   const [N, setN] = useState(4567);
 
-  // s_d = 4...45 (d-1 fours + one 5)
-  // e_d = 4 99...9 (one 4 + d-1 nines)
-  const sStr = "4".repeat(d - 1) + "5";
-  const eStr = "4" + "9".repeat(d - 1);
-  const sVal = parseInt(sStr, 10);
-  const eVal = parseInt(eStr, 10);
-
-  // d-digit overall range, used for the number-line scale
-  const lo = Math.pow(10, d - 1);
-  const hi = Math.pow(10, d) - 1;
-  const xMax = hi; // number line ends at the largest d-digit number
-  const pct = v => Math.max(0, Math.min(100, ((v - 0) / xMax) * 100));
-
-  // Where N sits relative to [s_d, e_d]
-  let zone, count, formula;
-  if (N < sVal) {
-    zone = "before";
-    count = 0;
-    formula = t(E, `s_d (${sVal}) > N (${N}) → 0 (stop)`,
-                   `s_d (${sVal}) > N (${N}) → 0 (멈춤)`);
-  } else if (N > eVal) {
-    zone = "after";
-    count = eVal - sVal + 1;
-    formula = `min(${N}, ${eVal}) − ${sVal} + 1 = ${eVal} − ${sVal} + 1 = ${count}`;
-  } else {
-    zone = "inside";
-    count = N - sVal + 1;
-    formula = `min(${N}, ${eVal}) − ${sVal} + 1 = ${N} − ${sVal} + 1 = ${count}`;
-  }
-
-  // Highlighted band on the number line: [s_d, min(N, e_d)] when N >= s_d
-  const bandStart = sVal;
-  const bandEnd = zone === "before" ? sVal : Math.min(N, eVal);
-
-  // Digit-box renderer
-  const Box = ({ ch, color, bg, bd, big }) => (
-    <div style={{
-      display: "inline-flex", alignItems: "center", justifyContent: "center",
-      width: big ? 36 : 30, height: big ? 44 : 38,
-      background: bg, color, border: `2px solid ${bd}`, borderRadius: 8,
-      fontFamily: "'JetBrains Mono',monospace", fontWeight: 900,
-      fontSize: big ? 22 : 18,
-    }}>{ch}</div>
-  );
-
-  const sBoxes = sStr.split("").map((ch, i) => {
-    const isFive = i === sStr.length - 1;
-    return (
-      <Box key={`s${i}`} ch={ch}
-        color={isFive ? "#fff" : C.no}
-        bg={isFive ? C.no : C.noBg}
-        bd={C.noBd}
-        big={isFive} />
-    );
+  // Build all d rows
+  const rows = [2, 3, 4, 5, 6].map(d => {
+    let s_d = 0;
+    for (let i = 0; i < d - 1; i++) s_d = s_d * 10 + 4;
+    s_d = s_d * 10 + 5;
+    let e_d = 4;
+    for (let i = 0; i < d - 1; i++) e_d = e_d * 10 + 9;
+    return { d, s_d, e_d };
   });
-  const eBoxes = eStr.split("").map((ch, i) => {
-    const isFour = i === 0;
-    return (
-      <Box key={`e${i}`} ch={ch}
-        color={isFour ? C.ok : "#fff"}
-        bg={isFour ? C.okBg : C.ok}
-        bd={C.okBd}
-        big={!isFour} />
-    );
+
+  // Status: full / clipped / stop / skip
+  let stopped = false;
+  rows.forEach(r => {
+    if (stopped) {
+      r.status = "skip";
+      r.count = 0;
+    } else if (r.s_d > N) {
+      r.status = "stop";
+      r.count = 0;
+      stopped = true;
+    } else if (r.e_d <= N) {
+      r.status = "full";
+      r.count = r.e_d - r.s_d + 1;
+    } else {
+      r.status = "clipped";
+      r.count = N - r.s_d + 1;
+    }
   });
+
+  const total = rows.reduce((s, r) => s + r.count, 0);
+
+  const statusStyle = (status) => {
+    if (status === "full")    return { bg: C.okBg, color: C.ok,   label: t(E, "FULL",   "전체") };
+    if (status === "clipped") return { bg: "#fef3c7", color: "#a16207", label: t(E, "CLIPPED", "잘림") };
+    if (status === "stop")    return { bg: C.noBg, color: C.no,   label: t(E, "STOP",   "멈춤") };
+    return { bg: "#f8f9fc", color: C.dim, label: t(E, "skip", "건너뜀") };
+  };
 
   return (
     <div style={{ padding: 16 }}>
-      {/* Preset buttons (replaces unreliable sliders) */}
-      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: 12, marginBottom: 14 }}>
-        {/* d row */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-          <span style={{ minWidth: 40, fontSize: 12, fontWeight: 800, color: C.dim }}>d =</span>
-          {[2, 3, 4, 5, 6].map(v => {
-            const active = d === v;
-            return (
-              <button
-                key={v}
-                onClick={() => setD(v)}
-                style={{
-                  padding: "6px 14px",
-                  background: active ? C.accent : "#f8f9fc",
-                  color: active ? "#fff" : C.text,
-                  border: `1.5px solid ${active ? C.accent : C.border}`,
-                  borderRadius: 8,
-                  fontFamily: "'JetBrains Mono',monospace",
-                  fontWeight: 800,
-                  fontSize: 14,
-                  cursor: "pointer",
-                  minWidth: 40,
-                }}
-              >{v}</button>
-            );
-          })}
-        </div>
-
-        {/* N row */}
+      {/* N preset buttons */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: 12, marginBottom: 12 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <span style={{ minWidth: 40, fontSize: 12, fontWeight: 800, color: C.dim }}>N =</span>
           {[
-            { v: 30,    label: "30"     },
-            { v: 47,    label: "47"     },
-            { v: 500,   label: "500"    },
-            { v: 4567,  label: "4,567"  },
-            { v: 99999, label: "99,999" },
-          ].map(({ v, label }) => {
+            { v: 30,    label: "30",     hint: t(E, "before any band", "구간 시작 전") },
+            { v: 47,    label: "47",     hint: t(E, "clips d=2",        "d=2 잘림") },
+            { v: 500,   label: "500",    hint: t(E, "clips d=3",        "d=3 잘림") },
+            { v: 4567,  label: "4,567",  hint: t(E, "clips d=4",        "d=4 잘림") },
+            { v: 99999, label: "99,999", hint: t(E, "all bands fit",    "전부 다 들어감") },
+          ].map(({ v, label, hint }) => {
             const active = N === v;
             return (
               <button
                 key={v}
                 onClick={() => setN(v)}
+                title={hint}
                 style={{
                   padding: "6px 12px",
                   background: active ? C.accent : "#f8f9fc",
@@ -384,136 +330,85 @@ export function IntervalSim({ E }) {
             );
           })}
         </div>
-
-        {/* Hint about what each N preset shows */}
-        <div style={{ marginTop: 10, fontSize: 11, color: C.dim, fontWeight: 600, textAlign: "center", lineHeight: 1.5 }}>
-          {t(E,
-            "Tip: try N=30 (band hasn't started) · N=47 (clips d=2 mid-band) · N=99999 (whole band).",
-            "팁: N=30 (구간 시작 전) · N=47 (d=2 구간 중간 자름) · N=99999 (전체 구간).")}
-        </div>
       </div>
 
-      {/* Digit-box display: s_d and e_d */}
-      <div style={{
-        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14,
-      }}>
-        {/* s_d */}
-        <div style={{ background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: C.no, letterSpacing: 0.5, marginBottom: 6 }}>
-            s<sub>d</sub> {t(E, "(smallest)", "(가장 작음)")}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 6 }}>{sBoxes}</div>
-          <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
-            = "4"×{d - 1} + "5"
-          </div>
-          <div style={{ fontSize: 16, fontWeight: 900, color: C.no, fontFamily: "'JetBrains Mono',monospace", marginTop: 2 }}>
-            {sVal.toLocaleString()}
-          </div>
+      {/* All-d table */}
+      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", marginBottom: 12 }}>
+        <div style={{
+          display: "grid", gridTemplateColumns: "40px 1fr 90px 80px",
+          padding: "8px 12px", background: "#f8f9fc",
+          borderBottom: `1.5px solid ${C.border}`,
+          fontSize: 11, fontWeight: 800, color: C.dim,
+        }}>
+          <span>d</span>
+          <span>{t(E, "interval [s_d, e_d]", "구간 [s_d, e_d]")}</span>
+          <span style={{ textAlign: "center" }}>{t(E, "status", "상태")}</span>
+          <span style={{ textAlign: "right" }}>+</span>
         </div>
-        {/* e_d */}
-        <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: C.ok, letterSpacing: 0.5, marginBottom: 6 }}>
-            e<sub>d</sub> {t(E, "(largest)", "(가장 큼)")}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 6 }}>{eBoxes}</div>
-          <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
-            = "4" + "9"×{d - 1}
-          </div>
-          <div style={{ fontSize: 16, fontWeight: 900, color: C.ok, fontFamily: "'JetBrains Mono',monospace", marginTop: 2 }}>
-            {eVal.toLocaleString()}
-          </div>
-        </div>
-      </div>
-
-      {/* Number line */}
-      <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "14px 16px 18px", marginBottom: 14 }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, letterSpacing: 0.5, marginBottom: 8, textAlign: "center" }}>
-          {t(E, `${d}-digit number line — disagreement band highlighted`,
-              `${d}자리 수직선 — 답이 다른 구간 강조`)}
-        </div>
-        <div style={{ position: "relative", height: 70, marginBottom: 4 }}>
-          {/* base line: full d-digit range [lo, hi] shown lightly */}
-          <div style={{
-            position: "absolute", left: `${pct(lo)}%`, right: `${100 - pct(hi)}%`,
-            top: 30, height: 8, background: "#e5e7eb", borderRadius: 4,
-          }} />
-          {/* disagreement band [s_d, min(N, e_d)] */}
-          {zone !== "before" && (
-            <div style={{
-              position: "absolute", left: `${pct(bandStart)}%`,
-              width: `${pct(bandEnd) - pct(bandStart)}%`,
-              top: 28, height: 12, background: C.accent, borderRadius: 4,
-              boxShadow: `0 0 0 2px ${C.accentBd}`,
-            }} />
-          )}
-          {/* s_d tick */}
-          <div style={{ position: "absolute", left: `${pct(sVal)}%`, top: 18, transform: "translateX(-50%)" }}>
-            <div style={{ width: 2, height: 32, background: C.no }} />
-            <div style={{ fontSize: 10, fontWeight: 800, color: C.no, fontFamily: "'JetBrains Mono',monospace", marginTop: 2, transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
-              s<sub>d</sub>={sVal}
-            </div>
-          </div>
-          {/* e_d tick */}
-          <div style={{ position: "absolute", left: `${pct(eVal)}%`, top: 18, transform: "translateX(-50%)" }}>
-            <div style={{ width: 2, height: 32, background: C.ok }} />
-            <div style={{ fontSize: 10, fontWeight: 800, color: C.ok, fontFamily: "'JetBrains Mono',monospace", marginTop: 2, transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
-              e<sub>d</sub>={eVal}
-            </div>
-          </div>
-          {/* N marker */}
-          <div style={{
-            position: "absolute", left: `${pct(Math.min(N, xMax))}%`,
-            top: 0, transform: "translateX(-50%)",
-          }}>
-            <div style={{
-              fontSize: 10, fontWeight: 900,
-              color: zone === "before" ? C.no : C.accent,
+        {rows.map((r, i) => {
+          const st = statusStyle(r.status);
+          return (
+            <div key={r.d} style={{
+              display: "grid", gridTemplateColumns: "40px 1fr 90px 80px",
+              alignItems: "center",
+              padding: "10px 12px",
+              borderBottom: i < rows.length - 1 ? `1px solid ${C.border}` : "none",
+              background: i % 2 === 0 ? "#fff" : "#fafbff",
+              opacity: r.status === "skip" ? 0.45 : 1,
               fontFamily: "'JetBrains Mono',monospace",
-              background: "#fff",
-              padding: "1px 4px", borderRadius: 4,
-              border: `1.5px solid ${zone === "before" ? C.noBd : C.accentBd}`,
-              whiteSpace: "nowrap",
-            }}>N={N.toLocaleString()}</div>
-            <div style={{
-              width: 2, height: 18, marginLeft: "auto", marginRight: "auto",
-              background: zone === "before" ? C.no : C.accent,
-            }} />
-          </div>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: C.dim, fontFamily: "'JetBrains Mono',monospace", marginTop: 6 }}>
-          <span>0</span>
-          <span>{lo.toLocaleString()}</span>
-          <span>{hi.toLocaleString()}</span>
+            }}>
+              <span style={{ fontWeight: 900, color: C.accent, fontSize: 14 }}>{r.d}</span>
+              <span style={{ fontSize: 13, fontWeight: 700 }}>
+                <span style={{ color: C.no }}>{r.s_d.toLocaleString()}</span>
+                <span style={{ color: C.dim }}>{" — "}</span>
+                <span style={{ color: C.ok }}>{r.e_d.toLocaleString()}</span>
+                {r.status === "clipped" && (
+                  <span style={{ marginLeft: 10, fontSize: 11, color: "#a16207", fontWeight: 800 }}>
+                    {t(E, "→ clip at N=", "→ N=")}
+                    {N.toLocaleString()}
+                    {t(E, "", " 에서 자름")}
+                  </span>
+                )}
+              </span>
+              <span style={{
+                textAlign: "center",
+                fontSize: 11, fontWeight: 800,
+                color: st.color, background: st.bg,
+                padding: "3px 0", borderRadius: 6,
+                justifySelf: "center",
+                minWidth: 70,
+              }}>{st.label}</span>
+              <span style={{
+                textAlign: "right", fontSize: 14, fontWeight: 900,
+                color: r.count > 0 ? C.accent : C.dim,
+              }}>
+                {r.count > 0 ? "+" + r.count.toLocaleString() : "0"}
+              </span>
+            </div>
+          );
+        })}
+        {/* Total row */}
+        <div style={{
+          display: "grid", gridTemplateColumns: "1fr 80px",
+          padding: "12px 14px",
+          background: C.accentBg, borderTop: `2px solid ${C.accentBd}`,
+          fontFamily: "'JetBrains Mono',monospace",
+          color: C.accent, fontWeight: 900,
+        }}>
+          <span style={{ fontSize: 13 }}>{t(E, "Total answer", "최종 답")}</span>
+          <span style={{ textAlign: "right", fontSize: 18 }}>{total.toLocaleString()}</span>
         </div>
       </div>
 
-      {/* Count formula */}
+      {/* Caption — explains why we show ALL d's */}
       <div style={{
-        background: zone === "before" ? C.noBg : C.accentBg,
-        border: `2px solid ${zone === "before" ? C.noBd : C.accentBd}`,
-        borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center",
-      }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: zone === "before" ? C.no : C.accent, letterSpacing: 0.5, marginBottom: 4 }}>
-          {t(E, "count = min(N, e_d) − s_d + 1", "개수 = min(N, e_d) − s_d + 1")}
-        </div>
-        <div style={{ fontSize: 14, fontWeight: 800, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.6 }}>
-          {formula}
-        </div>
-        {zone !== "before" && (
-          <div style={{ fontSize: 22, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace", marginTop: 4 }}>
-            = {count}
-          </div>
-        )}
-      </div>
-
-      {/* Caption */}
-      <div style={{
-        background: "#f8f9fc", borderRadius: 8, padding: "10px 12px",
-        fontSize: 11.5, color: C.dim, fontWeight: 700, lineHeight: 1.6, textAlign: "center",
+        background: C.accentBg, border: `1.5px dashed ${C.accentBd}`, borderRadius: 8,
+        padding: "10px 14px",
+        fontSize: 12, color: C.accent, fontWeight: 700, lineHeight: 1.7,
       }}>
         💡 {t(E,
-          "Slide d and N. The disagreeing numbers for each digit count form ONE clean interval.",
-          "d 와 N 을 움직여 봐. 각 자릿수마다 답이 다른 수들이 한 덩어리로 모여 있어요.")}
+          "Each row is one digit-count's contribution. Once a row hits STOP (s_d > N), the algorithm exits — that's why later rows are skipped.",
+          "각 줄은 한 자릿수의 기여분이에요. STOP (s_d > N) 이 한 번 뜨면 알고리즘이 거기서 끝나서 — 그 뒤는 다 건너뜀.")}
       </div>
     </div>
   );
