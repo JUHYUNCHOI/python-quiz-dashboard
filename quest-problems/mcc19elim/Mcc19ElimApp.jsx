@@ -31,8 +31,8 @@ export default function Mcc19ElimApp(props = {}) {
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  const [ch1Q, setCh1Q] = useState(() => makeMcc19ElimCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeMcc19ElimCh2(false, "py"));
+  const [ch1Q, setCh1Q] = useState(() => makeMcc19ElimCh1(lang === "en"));
+  const [ch2Q, setCh2Q] = useState(() => makeMcc19ElimCh2(lang === "en", "py"));
 
   useEffect(() => {
     setCh2Q(prev => makeMcc19ElimCh2(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));

@@ -31,9 +31,9 @@ export default function MixMilkApp(props = {}) {
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  const [ch1Q, setCh1Q] = useState(() => makeMixMilkCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeMixMilkCh2(false));
-  const [ch3Q, setCh3Q] = useState(() => makeMixMilkCh3(false, "py"));
+  const [ch1Q, setCh1Q] = useState(() => makeMixMilkCh1(lang === "en"));
+  const [ch2Q, setCh2Q] = useState(() => makeMixMilkCh2(lang === "en"));
+  const [ch3Q, setCh3Q] = useState(() => makeMixMilkCh3(lang === "en", "py"));
 
   useEffect(() => {
     setCh3Q(prev => makeMixMilkCh3(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));

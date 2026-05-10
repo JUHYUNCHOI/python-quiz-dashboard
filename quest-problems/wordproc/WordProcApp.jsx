@@ -31,9 +31,9 @@ export default function WordProcApp(props = {}) {
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  const [ch1Q, setCh1Q] = useState(() => makeWordProcCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeWordProcCh2(false));
-  const [ch3Q, setCh3Q] = useState(() => makeWordProcCh3(false, "py"));
+  const [ch1Q, setCh1Q] = useState(() => makeWordProcCh1(lang === "en"));
+  const [ch2Q, setCh2Q] = useState(() => makeWordProcCh2(lang === "en"));
+  const [ch3Q, setCh3Q] = useState(() => makeWordProcCh3(lang === "en", "py"));
 
   useEffect(() => {
     setCh3Q(prev => makeWordProcCh3(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));

@@ -31,9 +31,9 @@ export default function FavPerm2App(props = {}) {
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  const [ch1Q, setCh1Q] = useState(() => makeFavPerm2Ch1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeFavPerm2Ch2(false));
-  const [ch3Q, setCh3Q] = useState(() => makeFavPerm2Ch3(false, "py"));
+  const [ch1Q, setCh1Q] = useState(() => makeFavPerm2Ch1(lang === "en"));
+  const [ch2Q, setCh2Q] = useState(() => makeFavPerm2Ch2(lang === "en"));
+  const [ch3Q, setCh3Q] = useState(() => makeFavPerm2Ch3(lang === "en", "py"));
 
   useEffect(() => {
     setCh3Q(prev => makeFavPerm2Ch3(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));

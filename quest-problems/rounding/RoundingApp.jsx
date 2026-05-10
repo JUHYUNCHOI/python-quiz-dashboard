@@ -44,9 +44,10 @@ export default function RoundingApp(props = {}) {
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
   // --- Quiz state (mutable, with answered/solved tracking) ---
-  const [patternQ, setPatternQ] = useState(() => makePatternSteps(false));
-  const [bruteQ, setBruteQ]     = useState(() => makeBruteSteps(false, "py"));
-  const [optQ, setOptQ]         = useState(() => makeOptSteps(false));
+  // Init with current E so EN-mode-on-first-load doesn't stick on Korean.
+  const [patternQ, setPatternQ] = useState(() => makePatternSteps(lang === "en"));
+  const [bruteQ, setBruteQ]     = useState(() => makeBruteSteps(lang === "en", "py"));
+  const [optQ, setOptQ]         = useState(() => makeOptSteps(lang === "en"));
 
   // codeLang change → rebuild brute steps (preserve answered/solved)
   useEffect(() => {

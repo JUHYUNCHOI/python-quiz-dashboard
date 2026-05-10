@@ -31,9 +31,9 @@ export default function BalancedApp(props = {}) {
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  const [ch1Q, setCh1Q] = useState(() => makeBalancedCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeBalancedCh2(false));
-  const [ch3Q, setCh3Q] = useState(() => makeBalancedCh3(false, "py"));
+  const [ch1Q, setCh1Q] = useState(() => makeBalancedCh1(lang === "en"));
+  const [ch2Q, setCh2Q] = useState(() => makeBalancedCh2(lang === "en"));
+  const [ch3Q, setCh3Q] = useState(() => makeBalancedCh3(lang === "en", "py"));
 
   useEffect(() => {
     setCh3Q(prev => makeBalancedCh3(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));

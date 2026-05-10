@@ -33,11 +33,12 @@ export default function MooApp(props = {}) {
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  const [ch1Q, setCh1Q] = useState(() => makeMooCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeMooCh2(false));
-  const [ch3Q, setCh3Q] = useState(() => makeMooCh3(false));
-  const [ch4Q, setCh4Q] = useState(() => makeMooCh4(false));
-  const [ch5Q, setCh5Q] = useState(() => makeMooCh5(false, "py"));
+  // Init with current E so EN-mode-on-first-load doesn't stick on Korean.
+  const [ch1Q, setCh1Q] = useState(() => makeMooCh1(lang === "en"));
+  const [ch2Q, setCh2Q] = useState(() => makeMooCh2(lang === "en"));
+  const [ch3Q, setCh3Q] = useState(() => makeMooCh3(lang === "en"));
+  const [ch4Q, setCh4Q] = useState(() => makeMooCh4(lang === "en"));
+  const [ch5Q, setCh5Q] = useState(() => makeMooCh5(lang === "en", "py"));
 
   // codeLang change → rebuild Ch5 (preserve answered/solved)
   useEffect(() => {

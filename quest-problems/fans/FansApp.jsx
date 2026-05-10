@@ -29,9 +29,9 @@ export default function FansApp(props = {}) {
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  const [ch1Q, setCh1Q] = useState(() => makeFansCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeFansCh2(false));
-  const [ch3Q, setCh3Q] = useState(() => makeFansCh3(false));
+  const [ch1Q, setCh1Q] = useState(() => makeFansCh1(lang === "en"));
+  const [ch2Q, setCh2Q] = useState(() => makeFansCh2(lang === "en"));
+  const [ch3Q, setCh3Q] = useState(() => makeFansCh3(lang === "en"));
 
 
   useEffect(() => {

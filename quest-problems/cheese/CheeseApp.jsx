@@ -41,11 +41,12 @@ export default function CheeseApp(props = {}) {
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
   // Quiz/input state per chapter
-  const [ch1Q, setCh1Q] = useState(() => makeCheeseCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeCheeseCh2(false));
-  const [ch3Q, setCh3Q] = useState(() => makeCheeseCh3(false));
-  const [ch4Q, setCh4Q] = useState(() => makeCheeseCh4(false));
-  const [ch5Q, setCh5Q] = useState(() => makeCheeseCh5(false, "py"));
+  // Init with current E so EN-mode-on-first-load doesn't stick on Korean.
+  const [ch1Q, setCh1Q] = useState(() => makeCheeseCh1(lang === "en"));
+  const [ch2Q, setCh2Q] = useState(() => makeCheeseCh2(lang === "en"));
+  const [ch3Q, setCh3Q] = useState(() => makeCheeseCh3(lang === "en"));
+  const [ch4Q, setCh4Q] = useState(() => makeCheeseCh4(lang === "en"));
+  const [ch5Q, setCh5Q] = useState(() => makeCheeseCh5(lang === "en", "py"));
 
   // codeLang change → rebuild Ch5 (preserve answered/solved)
   useEffect(() => {

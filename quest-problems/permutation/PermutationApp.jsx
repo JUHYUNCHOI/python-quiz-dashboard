@@ -31,9 +31,9 @@ export default function PermutationApp(props = {}) {
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  const [ch1Q, setCh1Q] = useState(() => makePermCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makePermCh2(false));
-  const [ch3Q, setCh3Q] = useState(() => makePermCh3(false, "py"));
+  const [ch1Q, setCh1Q] = useState(() => makePermCh1(lang === "en"));
+  const [ch2Q, setCh2Q] = useState(() => makePermCh2(lang === "en"));
+  const [ch3Q, setCh3Q] = useState(() => makePermCh3(lang === "en", "py"));
 
   useEffect(() => {
     setCh3Q(prev => makePermCh3(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));

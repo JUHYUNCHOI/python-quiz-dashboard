@@ -31,9 +31,9 @@ export default function Mcc20KittyApp(props = {}) {
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  const [ch1Q, setCh1Q] = useState(() => makeMcc20KittyCh1(false));
-  const [ch2Q, setCh2Q] = useState(() => makeMcc20KittyCh2(false));
-  const [ch3Q, setCh3Q] = useState(() => makeMcc20KittyCh3(false, "py"));
+  const [ch1Q, setCh1Q] = useState(() => makeMcc20KittyCh1(lang === "en"));
+  const [ch2Q, setCh2Q] = useState(() => makeMcc20KittyCh2(lang === "en"));
+  const [ch3Q, setCh3Q] = useState(() => makeMcc20KittyCh3(lang === "en", "py"));
 
   useEffect(() => {
     setCh3Q(prev => makeMcc20KittyCh3(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
