@@ -127,6 +127,37 @@ export function makeCh1(E) {
         </div>
       ),
     },
+    { type: "reveal", narr: t(E, "Two different rounding methods!", "Bessie와 Elsie가 반올림하는 방법이 서로 달라요! 누가 맞을까?"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ display: "flex", gap: 10 }}>
+            <div style={{ flex: 1, background: C.bessieBg, borderRadius: 14, padding: "14px 10px", border: `2px solid ${C.bessieBd}` }}>
+              <div style={{ fontSize: 32, textAlign: "center" }}>🐄</div>
+              <div style={{ fontSize: 15, fontWeight: 900, color: C.bessie, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>Bessie</div>
+              <div style={{ fontSize: 12, color: C.bessie, marginTop: 8, lineHeight: 1.8, fontWeight: 600 }}>
+                {E ? <>P-th digit only.<br /><strong>Just once!</strong></> : <>P번째 자리만 보고<br /><strong>딱 한 번</strong> 반올림!</>}
+              </div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", fontSize: 18, fontWeight: 900, color: C.dimLight }}>VS</div>
+            <div style={{ flex: 1, background: C.elsieBg, borderRadius: 14, padding: "14px 10px", border: `2px solid ${C.elsieBd}` }}>
+              <div style={{ fontSize: 32, textAlign: "center" }}>🐮</div>
+              <div style={{ fontSize: 15, fontWeight: 900, color: C.elsie, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>Elsie</div>
+              <div style={{ fontSize: 12, color: C.elsie, marginTop: 8, lineHeight: 1.8, fontWeight: 600 }}>
+                {E ? <>1st → 2nd → … → P-th<br /><strong>Step by step!</strong></> : <>1번째 → P번째까지<br /><strong>순서대로</strong> 반올림!</>}
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    { type: "reveal", narr: t(E, "Example: x=48. Click → to step through Bessie's and Elsie's reasoning.", "예시: x=48. 아래에서 → 버튼을 눌러가며 Bessie / Elsie 의 과정을 단계별로 따라가봐요."),
+      content: (
+        <div style={{ padding: 12 }}>
+          <InlineSim x={48} E={E} />
+        </div>
+      ),
+    },
+
     { type: "reveal", narr: t(E, "Finding P is the key for this problem. So what's the condition for P? Let's observe.", "이 문제는 P 를 구하는 게 핵심이에요. 그럼 P 의 조건은 뭘까요? 함께 관찰해봐요."),
       content: (
         <div style={{ padding: 16, fontSize: 14, lineHeight: 1.85 }}>
@@ -171,36 +202,6 @@ export function makeCh1(E) {
               {t(E, ".", " 라는 걸 알 수 있어요.")}
             </div>
           </div>
-        </div>
-      ),
-    },
-    { type: "reveal", narr: t(E, "Two different rounding methods!", "Bessie와 Elsie가 반올림하는 방법이 서로 달라요! 누가 맞을까?"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", gap: 10 }}>
-            <div style={{ flex: 1, background: C.bessieBg, borderRadius: 14, padding: "14px 10px", border: `2px solid ${C.bessieBd}` }}>
-              <div style={{ fontSize: 32, textAlign: "center" }}>🐄</div>
-              <div style={{ fontSize: 15, fontWeight: 900, color: C.bessie, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>Bessie</div>
-              <div style={{ fontSize: 12, color: C.bessie, marginTop: 8, lineHeight: 1.8, fontWeight: 600 }}>
-                {E ? <>P-th digit only.<br /><strong>Just once!</strong></> : <>P번째 자리만 보고<br /><strong>딱 한 번</strong> 반올림!</>}
-              </div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", fontSize: 18, fontWeight: 900, color: C.dimLight }}>VS</div>
-            <div style={{ flex: 1, background: C.elsieBg, borderRadius: 14, padding: "14px 10px", border: `2px solid ${C.elsieBd}` }}>
-              <div style={{ fontSize: 32, textAlign: "center" }}>🐮</div>
-              <div style={{ fontSize: 15, fontWeight: 900, color: C.elsie, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>Elsie</div>
-              <div style={{ fontSize: 12, color: C.elsie, marginTop: 8, lineHeight: 1.8, fontWeight: 600 }}>
-                {E ? <>1st → 2nd → … → P-th<br /><strong>Step by step!</strong></> : <>1번째 → P번째까지<br /><strong>순서대로</strong> 반올림!</>}
-              </div>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-    { type: "reveal", narr: t(E, "Example: x=48. Click → to step through Bessie's and Elsie's reasoning.", "예시: x=48. 아래에서 → 버튼을 눌러가며 Bessie / Elsie 의 과정을 단계별로 따라가봐요."),
-      content: (
-        <div style={{ padding: 12 }}>
-          <InlineSim x={48} E={E} />
         </div>
       ),
     },
@@ -322,20 +323,10 @@ export function buildSimSteps(x, E) {
 // ═══════════════════════════════════════════════
 export function makePatternSteps(E) {
   return [
-    { type: "reveal",
-      narr: t(E, "We saw all 6 cases. Let's find the pattern!", "시뮬레이터에서 6개를 해봤어. 이제 규칙을 찾아보자! ✅ 표는 답이 같은 것, ❌는 답이 다른 것!"),
-      content: (
-        <div><div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14 }}>
-          {[[48,"❌"],[67,"✅"],[38,"✅"],[445,"❌"],[435,"✅"],[4459,"❌"]].map(([n,r],i) => (
-            <div key={i} style={{ display:"flex", justifyContent:"space-between", padding:"8px 12px", marginBottom:4,
-              background: r==="❌" ? C.noBg : C.okBg, borderRadius:8,
-              border: `1.5px solid ${r==="❌" ? C.noBd : C.okBd}` }}>
-              <span style={{ fontWeight:800 }}>{n}</span><span>{r}</span>
-            </div>))}
-        </div></div>),
-    },
     { type: "quiz",
-      narr: t(E, "Look at only ❌: 48, 445, 4459", "❌인 수만 모아봤: 48, 445, 4459. 이 세 수의 공통점이 보여요?"),
+      narr: t(E,
+        "From the simulator, we noticed 3 ❌s: 48, 445, 4459. Time to find what they have in common.",
+        "시뮬레이터에서 ❌ 인 수 3 개 (48, 445, 4459) 를 봤어요. 이 세 수의 공통점을 찾아봐요."),
       question: t(E, "What do these three have in common?", "이 세 수의 공통점은?"),
       hint: t(E, "Look at the first digit!", "첫째 자리를 봐요!"),
       options: t(E,
@@ -343,13 +334,6 @@ export function makePatternSteps(E) {
         ["첫째 자리가 짝수", "첫째 자리가 전부 4", "전부 8의 배수", "자릿수가 짝수"]),
       correct: 1,
       explain: t(E, "All start with 4! That's the key.", "전부 4로 시작해요! 이게 핵심이에요."),
-    },
-    { type: "quiz",
-      narr: t(E, "Why 4? Remember, Bessie only checks the first digit.", "왜 4일까요? Bessie는 첫째 자리만 보잖아요."),
-      question: t(E, "First digit is 4 — Bessie rounds up or down?", "첫째 자리가 4면, Bessie는 올릴까 버릴까?"),
-      options: t(E, ["Up (4 ≥ 5)", "Down (4 < 5)"], ["올린다 (4 ≥ 5)", "버린다 (4 < 5)"]),
-      correct: 1,
-      explain: t(E, "4 < 5 → Bessie rounds down → result 0!", "4 < 5 → 버린다 → 결과 0!"),
     },
     { type: "reveal",
       narr: t(E, "But look at Elsie with 48:", "그런데 Elsie의 48을 봐:"),
@@ -985,7 +969,9 @@ export function makeBruteSteps(E, lang = "py") {
     E ? "for (int x = 2; x <= N; x++) {  // x from 2 to N"  : "for (int x = 2; x <= N; x++) {  // 2 부터 N 까지",
     E ? "    int b = Bessie(x);          // Bessie's answer" : "    int b = Bessie(x);          // Bessie 의 답",
     E ? "    int e = Elsie(x);           // Elsie's answer"  : "    int e = Elsie(x);           // Elsie 의 답",
-    E ? "    if (b != e) count++;        // if different, count!" : "    if (b != e) count++;        // 다르면 카운트!",
+    E ? "    if (b != e) {              // if different" : "    if (b != e) {              // 다르면",
+    E ? "        count++;               // count!"      : "        count++;               // 카운트!",
+    "    }",
     "}",
     "",
     "cout << count << \"\\n\";",
@@ -1277,15 +1263,19 @@ const OPT_INPUT_CPP = (E) => [
   E ? "// s_d = 4...45  (d-1 fours, then one 5)" : "// s_d = 4...45  (4 가 d-1 개, 5 하나)",
   "int s_low(int d) {",
   "    int v = 0;",
-  E ? "    for (int i = 0; i < d - 1; i++) v = v * 10 + 4;  // tack on a 4" : "    for (int i = 0; i < d - 1; i++) v = v * 10 + 4;  // 4 를 한 자리씩 붙임",
-  E ? "    v = v * 10 + 5;                                  // last digit is 5" : "    v = v * 10 + 5;                                  // 마지막은 5",
+  "    for (int i = 0; i < d - 1; i++) {",
+  E ? "        v = v * 10 + 4;  // tack on a 4" : "        v = v * 10 + 4;  // 4 를 한 자리씩 붙임",
+  "    }",
+  E ? "    v = v * 10 + 5;      // last digit is 5" : "    v = v * 10 + 5;      // 마지막은 5",
   "    return v;",
   "}",
   "",
   E ? "// e_d = 4 99...9  (one 4, then d-1 nines)" : "// e_d = 4 99...9  (4 하나, 9 가 d-1 개)",
   "int s_high(int d) {",
   "    int v = 4;",
-  E ? "    for (int i = 0; i < d - 1; i++) v = v * 10 + 9;  // tack on a 9" : "    for (int i = 0; i < d - 1; i++) v = v * 10 + 9;  // 9 를 한 자리씩 붙임",
+  "    for (int i = 0; i < d - 1; i++) {",
+  E ? "        v = v * 10 + 9;  // tack on a 9" : "        v = v * 10 + 9;  // 9 를 한 자리씩 붙임",
+  "    }",
   "    return v;",
   "}",
   "",
@@ -1411,28 +1401,6 @@ export function makeOptSteps(E) {
             </div>
           </div>
 
-          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", marginBottom: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
-            <div style={{ padding: "8px 12px", background: "#f8f9fc", borderBottom: `1.5px solid ${C.border}`, fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center" }}>
-              {t(E, "What the intervals look like", "구간이 어떻게 생겼나")}
-            </div>
-            {[
-              { d: 2, s: "45",     e: "49",     c: 5 },
-              { d: 3, s: "445",    e: "499",    c: 55 },
-              { d: 4, s: "4445",   e: "4999",   c: 555 },
-              { d: 5, s: "44445",  e: "49999",  c: 5555 },
-            ].map((row, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "60px 1fr 1fr 70px",
-                padding: "7px 12px", borderBottom: i < 3 ? `1px solid ${C.border}` : "none",
-                background: i % 2 === 0 ? "#fff" : "#fafbff",
-              }}>
-                <span style={{ fontWeight: 800, color: C.accent }}>d={row.d}</span>
-                <span style={{ color: C.no, fontWeight: 700 }}>{row.s}</span>
-                <span style={{ color: C.ok, fontWeight: 700 }}>{row.e}</span>
-                <span style={{ textAlign: "right", fontWeight: 900, color: C.accent }}>{row.c}</span>
-              </div>
-            ))}
-          </div>
         </div>
       ),
     },
@@ -1441,6 +1409,12 @@ export function makeOptSteps(E) {
       narr: t(E,
         "Slide d to see s_d and e_d for each digit count. Slide N to see how the band gets clipped.",
         "d 를 움직여서 각 자릿수의 s_d, e_d 를 봐요. N 을 움직이면 band 가 어떻게 잘리는지 보여줘요."),
+    },
+
+    { type: "scale",
+      narr: t(E,
+        "Compare the three approaches at any N. Brute hits TLE early; formula stays instant.",
+        "세 풀이 속도 비교 — 브루트는 금방 TLE, 공식은 항상 즉시."),
     },
 
     { type: "reveal",
@@ -1492,12 +1466,6 @@ export function makeOptSteps(E) {
       narr: t(E, "Verify: total for N=4567?", "확인: N=4567 의 합계는?"),
       question: "5 + 55 + 123 = ?",
       answer: 183,
-    },
-
-    { type: "scale",
-      narr: t(E,
-        "Compare the three approaches at any N. Brute hits TLE early; formula stays instant.",
-        "세 풀이 속도 비교 — 브루트는 금방 TLE, 공식은 항상 즉시."),
     },
 
     ...getOptSections(E).map((sec, i, arr) => ({
