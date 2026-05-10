@@ -530,19 +530,15 @@ const BF_P = (E) => [
 ];
 const BF_P_CPP = (E) => [
   E ? "// Both functions need P first" : "// 두 함수 모두 먼저 P 가 필요해요",
-  E ? "// P = number of digits of x — count by dividing by 10"   : "// P = x 의 자릿수 — 10 으로 계속 나누면서 셈",
-  "",
-  E ? "int numDigits(int x) {" : "int numDigits(int x) {",
-  "    int b = 0;",
-  "    while (x > 0) { b++; x /= 10; }",
-  "    return b;",
-  "}",
+  E ? "// P = number of digits of x — same as Python's len(str(x))" : "// P = x 의 자릿수 — Python 의 len(str(x)) 와 동일",
   "",
   "int x = 48;",
-  "int P = numDigits(x);    // → 2",
+  E ? "string s = to_string(x);   // \"48\"" : "string s = to_string(x);   // \"48\"",
+  E ? "int P = s.length();        // → 2" : "int P = s.length();        // → 2",
   "",
   "x = 4459;",
-  "P = numDigits(x);        // → 4",
+  "s = to_string(x);          // \"4459\"",
+  "P = s.length();            // → 4",
 ];
 
 const BF_ELSIE_DIGIT = (E) => [
@@ -636,29 +632,29 @@ const BF_BESSIE = (E) => [
   "        return 0            # <5 → 0",
 ];
 const BF_BESSIE_CPP = (E) => [
-  E ? "int pw10(int n) {                       // 10^n helper" : "int pw10(int n) {                       // 10^n 헬퍼",
+  E ? "// 10^n helper" : "// 10^n 헬퍼",
+  "int pw10(int n) {",
   "    int r = 1;",
-  "    for (int i = 0; i < n; i++) r *= 10;",
+  "    for (int i = 0; i < n; i++) {",
+  "        r *= 10;",
+  "    }",
   "    return r;",
   "}",
   "",
-  E ? "int numDigits(int x) {                  // digit-count helper" : "int numDigits(int x) {                  // 자릿수 헬퍼",
-  "    int b = 0;",
-  "    while (x > 0) { b++; x /= 10; }",
-  "    return b;",
-  "}",
-  "",
   "int Bessie(int x) {",
-  E ? "    int P = numDigits(x);                // P = digit count" : "    int P = numDigits(x);                // P = 자릿수",
+  E ? "    string s = to_string(x);  // number → string"   : "    string s = to_string(x);  // 숫자 → 문자열",
+  E ? "    int P = s.length();       // P = digit count" : "    int P = s.length();       // P = 자릿수",
   "",
   E ? "    // strip down until < 10 → that's the first digit" : "    // 10 보다 작아질 때까지 나누면 첫째 자리만 남음",
   "    int first_digit = x;",
-  "    while (first_digit >= 10) first_digit /= 10;",
+  "    while (first_digit >= 10) {",
+  "        first_digit /= 10;",
+  "    }",
   "",
   "    if (first_digit >= 5) {",
-  E ? "        return pw10(P);                  // ≥5 → round up" : "        return pw10(P);                  // ≥5 → 올림",
+  E ? "        return pw10(P);  // ≥5 → round up" : "        return pw10(P);  // ≥5 → 올림",
   "    } else {",
-  "        return 0;                        // <5 → 0",
+  "        return 0;        // <5 → 0",
   "    }",
   "}",
 ];
@@ -684,7 +680,8 @@ const BF_ELSIE = (E) => [
 ];
 const BF_ELSIE_CPP = (E) => [
   "int Elsie(int x) {",
-  "    int P = numDigits(x);",
+  E ? "    string s = to_string(x);" : "    string s = to_string(x);",
+  E ? "    int P = s.length();" : "    int P = s.length();",
   "    int cur = x;",
   "",
   E ? "    // walk from ones place to P-th place" : "    // 1자리부터 P자리까지 순서대로",
@@ -693,7 +690,9 @@ const BF_ELSIE_CPP = (E) => [
   "        int d = (cur / pw10(pos - 1)) % 10;",
   "",
   E ? "        // if ≥5, round up" : "        // ≥5 면 올림",
-  "        if (d >= 5) cur += pw10(pos);",
+  "        if (d >= 5) {",
+  "            cur += pw10(pos);",
+  "        }",
   "",
   E ? "        // zero out everything from that position down" : "        // 그 자리 이하 0으로",
   "        cur = (cur / pw10(pos)) * pw10(pos);",
@@ -738,49 +737,60 @@ const BF_FULL = (E) => [
 ];
 const BF_FULL_CPP = (E) => [
   "#include <iostream>",
+  "#include <string>",
   "using namespace std;",
   "",
   E ? "// 10 ^ n  (small n only — fine for our brute force)" : "// 10 의 n 제곱  (n 작을 때만 — brute 라 OK)",
   "int pw10(int n) {",
   "    int r = 1;",
-  "    for (int i = 0; i < n; i++) r *= 10;",
+  "    for (int i = 0; i < n; i++) {",
+  "        r *= 10;",
+  "    }",
   "    return r;",
   "}",
   "",
-  E ? "// digit count of x" : "// x 의 자릿수",
-  "int numDigits(int x) {",
-  "    int b = 0;",
-  "    while (x > 0) { b++; x /= 10; }",
-  "    return b;",
-  "}",
-  "",
   "int Bessie(int x) {",
-  "    int P = numDigits(x);",
+  E ? "    string s = to_string(x);" : "    string s = to_string(x);",
+  E ? "    int P = s.length();      // digit count from string length" : "    int P = s.length();      // 문자열 길이 = 자릿수",
+  "",
   E ? "    // strip down to first digit" : "    // 첫째 자리만 남기기",
   "    int first = x;",
-  "    while (first >= 10) first /= 10;",
-  "    if (first >= 5) return pw10(P);",
+  "    while (first >= 10) {",
+  "        first /= 10;",
+  "    }",
+  "",
+  "    if (first >= 5) {",
+  "        return pw10(P);",
+  "    }",
   "    return 0;",
   "}",
   "",
   "int Elsie(int x) {",
-  "    int P = numDigits(x);",
+  "    string s = to_string(x);",
+  "    int P = s.length();",
   "    int cur = x;",
+  "",
   "    for (int pos = 1; pos <= P; pos++) {",
   "        int d = (cur / pw10(pos - 1)) % 10;",
-  "        if (d >= 5) cur += pw10(pos);",
+  "        if (d >= 5) {",
+  "            cur += pw10(pos);",
+  "        }",
   "        cur = (cur / pw10(pos)) * pw10(pos);",
   "    }",
   "    return cur;",
   "}",
   "",
   "int main() {",
-  "    int T; cin >> T;",
+  "    int T;",
+  "    cin >> T;",
   "    for (int t = 0; t < T; t++) {",
-  "        int N; cin >> N;",
+  "        int N;",
+  "        cin >> N;",
   "        int count = 0;",
   "        for (int x = 2; x <= N; x++) {",
-  "            if (Bessie(x) != Elsie(x)) count++;",
+  "            if (Bessie(x) != Elsie(x)) {",
+  "                count++;",
+  "            }",
   "        }",
   "        cout << count << \"\\n\";",
   "    }",
@@ -828,35 +838,40 @@ const BF_DP = (E) => [
 ];
 const BF_DP_CPP = (E) => [
   "#include <iostream>",
+  "#include <string>",
   "#include <vector>",
   "using namespace std;",
   "",
   "int pw10(int n) {",
   "    int r = 1;",
-  "    for (int i = 0; i < n; i++) r *= 10;",
+  "    for (int i = 0; i < n; i++) {",
+  "        r *= 10;",
+  "    }",
   "    return r;",
   "}",
   "",
-  "int numDigits(int x) {",
-  "    int b = 0;",
-  "    while (x > 0) { b++; x /= 10; }",
-  "    return b;",
-  "}",
-  "",
   "int Bessie(int x) {",
-  "    int P = numDigits(x);",
+  "    string s = to_string(x);",
+  "    int P = s.length();",
   "    int first = x;",
-  "    while (first >= 10) first /= 10;",
-  "    if (first >= 5) return pw10(P);",
+  "    while (first >= 10) {",
+  "        first /= 10;",
+  "    }",
+  "    if (first >= 5) {",
+  "        return pw10(P);",
+  "    }",
   "    return 0;",
   "}",
   "",
   "int Elsie(int x) {",
-  "    int P = numDigits(x);",
+  "    string s = to_string(x);",
+  "    int P = s.length();",
   "    int cur = x;",
   "    for (int pos = 1; pos <= P; pos++) {",
   "        int d = (cur / pw10(pos - 1)) % 10;",
-  "        if (d >= 5) cur += pw10(pos);",
+  "        if (d >= 5) {",
+  "            cur += pw10(pos);",
+  "        }",
   "        cur = (cur / pw10(pos)) * pw10(pos);",
   "    }",
   "    return cur;",
@@ -865,21 +880,84 @@ const BF_DP_CPP = (E) => [
   "int main() {",
   "    vector<int> ans = {0, 0};",
   "",
-  "    int T; cin >> T;",
+  "    int T;",
+  "    cin >> T;",
   "    for (int t = 0; t < T; t++) {",
-  "        int N; cin >> N;",
+  "        int N;",
+  "        cin >> N;",
   "",
   "        while ((int)ans.size() <= N) {",
   "            int x = ans.size();",
-  "            int b = Bessie(x), e = Elsie(x);",
-  "            if (b != e) ans.push_back(ans.back() + 1);",
-  "            else ans.push_back(ans.back());",
+  "            int b = Bessie(x);",
+  "            int e = Elsie(x);",
+  "            if (b != e) {",
+  "                ans.push_back(ans.back() + 1);",
+  "            } else {",
+  "                ans.push_back(ans.back());",
+  "            }",
   "        }",
   "",
   "        cout << ans[N] << \"\\n\";",
   "    }",
   "}",
 ];
+
+/* ================================================================
+   Pw10Explainer — click to reveal why pw10 helper exists
+   ================================================================ */
+function Pw10Explainer({ E }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: open ? "auto 1fr" : "auto", gap: 12, alignItems: "start" }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          padding: "8px 14px",
+          background: open ? C.accent : C.accentBg,
+          color: open ? "#fff" : C.accent,
+          border: `1.5px solid ${C.accentBd}`,
+          borderRadius: 8,
+          fontSize: 12,
+          fontWeight: 800,
+          cursor: "pointer",
+          whiteSpace: "nowrap",
+        }}
+      >
+        💡 {t(E, "Why pw10?", "pw10 왜 필요해?")}
+      </button>
+      {open && (
+        <div style={{
+          padding: "10px 14px",
+          background: C.accentBg,
+          border: `1.5px dashed ${C.accentBd}`,
+          borderRadius: 8,
+          fontSize: 12,
+          color: C.text,
+          lineHeight: 1.7,
+          fontWeight: 600,
+        }}>
+          {E ? (
+            <>
+              <strong style={{ color: C.accent }}>pw10(n) = 10ⁿ</strong> (e.g. <code>pw10(3) = 1000</code>).<br />
+              Python has <code>10**P</code> built in, but C++ has no integer power operator — so we write our own helper.<br />
+              <br />
+              <strong>Bessie</strong> returns <code>10ᴾ</code> when the first digit ≥ 5 (round up).<br />
+              <strong>Elsie</strong> uses <code>pw10(pos)</code> to add a carry at each position and zero out the digits below.
+            </>
+          ) : (
+            <>
+              <strong style={{ color: C.accent }}>pw10(n) = 10ⁿ</strong> (예: <code>pw10(3) = 1000</code>).<br />
+              Python 에는 <code>10**P</code> 가 있지만, C++ 에는 정수 거듭제곱 연산자가 없어서 직접 함수로 만들어요.<br />
+              <br />
+              <strong>Bessie</strong> 는 첫째 ≥ 5 일 때 <code>10ᴾ</code> 를 돌려줘요 (올림).<br />
+              <strong>Elsie</strong> 는 각 자리에서 <code>pw10(pos)</code> 만큼 carry 를 더하고, 그 자리 이하를 0 으로 만들어요.
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function makeBruteSteps(E, lang = "py") {
   // Code-array consts are functions (E) => string[] so comments can be bilingual.
@@ -971,6 +1049,7 @@ export function makeBruteSteps(E, lang = "py") {
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 4: Bessie 🐄", "4단계: Bessie 구하기 🐄")} />
           <CodeBlock lines={pick(BF_BESSIE, BF_BESSIE_CPP)} />
+          {lang !== "py" && <Pw10Explainer E={E} />}
         </div>
       ),
     },
