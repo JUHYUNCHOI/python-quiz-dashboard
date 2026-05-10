@@ -1387,22 +1387,95 @@ export function makeOptSteps(E) {
       narr: t(E,
         "Recap: in each digit count d, the disagreeing x form ONE contiguous interval [s_d, e_d]. So we just sum interval lengths!",
         "복습: 각 자릿수 d 에서 답이 다른 x 는 하나의 연속 구간 [s_d, e_d]. 그래서 구간 길이만 더하면 끝!"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "linear-gradient(135deg,#4f46e5,#6366f1)", borderRadius: 12, padding: "14px 16px", textAlign: "center", marginBottom: 12 }}>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,.75)", fontWeight: 700, marginBottom: 4 }}>
-              {t(E, "Key insight", "핵심 통찰")}
+      content: (() => {
+        // Digit-box helper
+        const Box = ({ ch, kind }) => {
+          const styleMap = {
+            small:  { bg: "#fee2e2", color: "#dc2626", border: "#fca5a5" },
+            big:    { bg: "#dc2626", color: "#fff",   border: "#fca5a5" },
+            sBig:   { bg: "#dcfce7", color: "#15803d", border: "#86efac" },
+            sSmall: { bg: "#15803d", color: "#fff",   border: "#86efac" },
+          };
+          const s = styleMap[kind];
+          return (
+            <div style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              width: 32, height: 38,
+              background: s.bg, color: s.color, border: `2px solid ${s.border}`,
+              borderRadius: 8,
+              fontFamily: "'JetBrains Mono',monospace",
+              fontWeight: 900, fontSize: 18,
+              margin: "0 2px",
+            }}>{ch}</div>
+          );
+        };
+
+        return (
+          <div style={{ padding: 16 }}>
+            {/* Concrete d=4 example with digit boxes */}
+            <div style={{ background: "#f8f9fc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 10 }}>
+                {t(E, "Example: d=4", "예시: d=4 일 때")}
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                {/* s_d */}
+                <div style={{ background: "#fef2f2", borderRadius: 10, padding: "10px 8px", textAlign: "center" }}>
+                  <div style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
+                    {t(E, "smallest", "가장 작음")} (s<sub>d</sub>)
+                  </div>
+                  <div>
+                    <Box ch="4" kind="small" />
+                    <Box ch="4" kind="small" />
+                    <Box ch="4" kind="small" />
+                    <Box ch="5" kind="big" />
+                  </div>
+                  <div style={{ fontSize: 18, fontWeight: 900, color: "#dc2626", fontFamily: "'JetBrains Mono',monospace", marginTop: 6 }}>
+                    4445
+                  </div>
+                </div>
+                {/* e_d */}
+                <div style={{ background: "#ecfdf5", borderRadius: 10, padding: "10px 8px", textAlign: "center" }}>
+                  <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+                    {t(E, "largest", "가장 큼")} (e<sub>d</sub>)
+                  </div>
+                  <div>
+                    <Box ch="4" kind="sSmall" />
+                    <Box ch="9" kind="sBig" />
+                    <Box ch="9" kind="sBig" />
+                    <Box ch="9" kind="sBig" />
+                  </div>
+                  <div style={{ fontSize: 18, fontWeight: 900, color: "#15803d", fontFamily: "'JetBrains Mono',monospace", marginTop: 6 }}>
+                    4999
+                  </div>
+                </div>
+              </div>
             </div>
-            <div style={{ fontSize: 16, fontWeight: 900, color: "#fff", fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.6 }}>
-              s<sub>d</sub> = 4…45 &nbsp;·&nbsp; e<sub>d</sub> = 4 99…9
+
+            {/* Pattern in plain words */}
+            <div style={{ background: C.accentBg, border: `1.5px dashed ${C.accentBd}`, borderRadius: 10, padding: "12px 14px", fontSize: 13, color: C.accent, fontWeight: 700, lineHeight: 1.8 }}>
+              {t(E, "Pattern: ", "패턴: ")}
+              <strong>s<sub>d</sub></strong>
+              {t(E, " = (d−1 fours) + (one 5) · ", " = (4 가 d−1 개) + (5 하나) · ")}
+              <strong>e<sub>d</sub></strong>
+              {t(E, " = (one 4) + (d−1 nines)", " = (4 하나) + (9 가 d−1 개)")}
             </div>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,.75)", marginTop: 4 }}>
-              {t(E, "for each d, count = e_d − s_d + 1 (clipped to N)", "각 d 마다 개수 = e_d − s_d + 1 (N 으로 자름)")}
+
+            {/* Plain-language formula */}
+            <div style={{ marginTop: 10, padding: "10px 14px", background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 13, color: C.text, fontWeight: 700, textAlign: "center", lineHeight: 1.8 }}>
+              {t(E,
+                "Each d contributes ",
+                "각 d 가 더하는 개수 = ")}
+              <strong style={{ color: "#15803d" }}>e<sub>d</sub></strong>
+              {" − "}
+              <strong style={{ color: "#dc2626" }}>s<sub>d</sub></strong>
+              {" + 1"}
+              <span style={{ color: C.dim, fontWeight: 600 }}>
+                {t(E, " (capped at N if it exceeds)", " (N 보다 크면 N 으로 자름)")}
+              </span>
             </div>
           </div>
-
-        </div>
-      ),
+        );
+      })(),
     },
 
     { type: "interval-sim",
