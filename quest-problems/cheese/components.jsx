@@ -484,16 +484,17 @@ export function CheeseProgressiveCode(props) {
    getCheeseBruteSections — 첫 아이디어 (3D 배열 + 매 query 다 검사)
    ================================================================ */
 
-const CB_INPUT_PY = [
+const CB_INPUT_PY = (E) => [
   "import sys",
   "input = sys.stdin.readline",
   "",
   "N, Q = map(int, input().split())",
   "",
-  "# 3D 큐브: cheese[x][y][z] = True 면 거기 블록 있음",
+  t(E, "# 3D cube: cheese[x][y][z] = True means a block is there",
+       "# 3D 큐브: cheese[x][y][z] = True 면 거기 블록 있음"),
   "cheese = [[[True]*N for _ in range(N)] for _ in range(N)]",
 ];
-const CB_INPUT_CPP = [
+const CB_INPUT_CPP = (E) => [
   "#include <bits/stdc++.h>",
   "using namespace std;",
   "",
@@ -504,50 +505,59 @@ const CB_INPUT_CPP = [
   "    int N, Q;",
   "    cin >> N >> Q;",
   "",
-  "    // 3D 큐브: cheese[x][y][z] = true 면 거기 블록 있음",
+  t(E, "    // 3D cube: cheese[x][y][z] = true means a block is there",
+       "    // 3D 큐브: cheese[x][y][z] = true 면 거기 블록 있음"),
   "    vector<vector<vector<bool>>> cheese(N,",
   "        vector<vector<bool>>(N, vector<bool>(N, true)));",
 ];
 
-const CB_CARVE_PY = [
+const CB_CARVE_PY = (E) => [
   "for _ in range(Q):",
   "    x, y, z = map(int, input().split())",
-  "    cheese[x][y][z] = False   # 블록 빼기",
+  t(E, "    cheese[x][y][z] = False   # remove the block",
+       "    cheese[x][y][z] = False   # 블록 빼기"),
   "    count = 0",
 ];
-const CB_CARVE_CPP = [
+const CB_CARVE_CPP = (E) => [
   "    while (Q--) {",
   "        int x, y, z;",
   "        cin >> x >> y >> z;",
-  "        cheese[x][y][z] = false;   // 블록 빼기",
+  t(E, "        cheese[x][y][z] = false;   // remove the block",
+       "        cheese[x][y][z] = false;   // 블록 빼기"),
   "        int count = 0;",
 ];
 
-const CB_SCAN_PY = [
-  "    # 🐌 3 방향 × N² 줄 × N 칸 = O(N³) per query — TLE 원인!",
+const CB_SCAN_PY = (E) => [
+  t(E, "    # 🐌 3 dirs × N² rows × N cells = O(N³) per query — TLE source!",
+       "    # 🐌 3 방향 × N² 줄 × N 칸 = O(N³) per query — TLE 원인!"),
   "",
-  "    # z-방향: (x,y) 고정, z 변함",
+  t(E, "    # z-direction: (x,y) fixed, z varies",
+       "    # z-방향: (x,y) 고정, z 변함"),
   "    for x_ in range(N):",
   "        for y_ in range(N):",
   "            if all(not cheese[x_][y_][z_] for z_ in range(N)):",
   "                count += 1",
   "",
-  "    # x-방향: (y,z) 고정, x 변함",
+  t(E, "    # x-direction: (y,z) fixed, x varies",
+       "    # x-방향: (y,z) 고정, x 변함"),
   "    for y_ in range(N):",
   "        for z_ in range(N):",
   "            if all(not cheese[x_][y_][z_] for x_ in range(N)):",
   "                count += 1",
   "",
-  "    # y-방향: (x,z) 고정, y 변함",
+  t(E, "    # y-direction: (x,z) fixed, y varies",
+       "    # y-방향: (x,z) 고정, y 변함"),
   "    for x_ in range(N):",
   "        for z_ in range(N):",
   "            if all(not cheese[x_][y_][z_] for y_ in range(N)):",
   "                count += 1",
 ];
-const CB_SCAN_CPP = [
-  "        // 🐌 3 방향 × N² 줄 × N 칸 = O(N³) per query — TLE 원인!",
+const CB_SCAN_CPP = (E) => [
+  t(E, "        // 🐌 3 dirs × N² rows × N cells = O(N³) per query — TLE source!",
+       "        // 🐌 3 방향 × N² 줄 × N 칸 = O(N³) per query — TLE 원인!"),
   "",
-  "        // z-방향: (x,y) 고정, z 변함",
+  t(E, "        // z-direction: (x,y) fixed, z varies",
+       "        // z-방향: (x,y) 고정, z 변함"),
   "        for (int x_ = 0; x_ < N; x_++)",
   "            for (int y_ = 0; y_ < N; y_++) {",
   "                bool empty = true;",
@@ -556,7 +566,8 @@ const CB_SCAN_CPP = [
   "                if (empty) count++;",
   "            }",
   "",
-  "        // x-방향, y-방향도 똑같이 (생략 — 같은 패턴 반복)",
+  t(E, "        // x-direction, y-direction same (omitted — same pattern repeats)",
+       "        // x-방향, y-방향도 똑같이 (생략 — 같은 패턴 반복)"),
   "        // ...",
 ];
 
@@ -575,7 +586,7 @@ export function getCheeseBruteSections(E) {
     {
       label: t(E, "📦 1. Input + 3D Cube Init", "📦 1. 입력 + 3D 큐브 초기화"),
       color: "#94a3b8",
-      py: CB_INPUT_PY, cpp: CB_INPUT_CPP,
+      py: CB_INPUT_PY(E), cpp: CB_INPUT_CPP(E),
       why: [
         t(E, "N = cube size, Q = number of carve queries.", "N = 큐브 크기, Q = 제거 쿼리 수."),
         t(E, "3D array of bool: cheese[x][y][z] tracks if block exists. All start True.", "3D bool 배열: cheese[x][y][z] 가 블록 존재 여부. 다 True 시작."),
@@ -594,7 +605,7 @@ export function getCheeseBruteSections(E) {
     {
       label: t(E, "🍰 2. Per-Query: Carve One Block", "🍰 2. 매 쿼리: 블록 1 개 빼기"),
       color: "#0891b2",
-      py: CB_CARVE_PY, cpp: CB_CARVE_CPP,
+      py: CB_CARVE_PY(E), cpp: CB_CARVE_CPP(E),
       why: [
         t(E, "Read (x, y, z) for the block to carve. Set cheese[x][y][z] = false.", "(x, y, z) 읽고 cheese[x][y][z] = false 로 설정."),
         t(E, "Reset count = 0 because we're recomputing from scratch every query (the brute approach).", "count = 0 리셋 — 매 쿼리마다 전부 재계산하는 게 brute 의 핵심."),
@@ -604,7 +615,7 @@ export function getCheeseBruteSections(E) {
     {
       label: t(E, "🐌 3. Brute Scan (THE TLE)", "🐌 3. 전수 검사 (TLE 원인!)"),
       color: "#dc2626",
-      py: CB_SCAN_PY, cpp: CB_SCAN_CPP,
+      py: CB_SCAN_PY(E), cpp: CB_SCAN_CPP(E),
       why: [
         t(E, "For each query, scan 3 × N² rows × N cells each → 3N³ ops per query.",
             "쿼리마다 3 × N² 줄 × 줄당 N 칸 → 쿼리당 3N³ 연산."),
@@ -653,13 +664,17 @@ const CHEESE_INPUT_CPP = [
   "    cin >> N >> Q;",
 ];
 
-const CHEESE_COUNTERS_PY = [
-  "xy = defaultdict(int)  # z-방향: (x,y) 쌍",
-  "yz = defaultdict(int)  # x-방향: (y,z) 쌍",
-  "xz = defaultdict(int)  # y-방향: (x,z) 쌍",
+const CHEESE_COUNTERS_PY = (E) => [
+  t(E, "xy = defaultdict(int)  # z-direction: (x,y) pair",
+       "xy = defaultdict(int)  # z-방향: (x,y) 쌍"),
+  t(E, "yz = defaultdict(int)  # x-direction: (y,z) pair",
+       "yz = defaultdict(int)  # x-방향: (y,z) 쌍"),
+  t(E, "xz = defaultdict(int)  # y-direction: (x,z) pair",
+       "xz = defaultdict(int)  # y-방향: (x,z) 쌍"),
 ];
-const CHEESE_COUNTERS_CPP = [
-  "    // N×N 격자 — z/x/y 방향 줄별 카운터",
+const CHEESE_COUNTERS_CPP = (E) => [
+  t(E, "    // N×N grids — counters per row in z/x/y directions",
+       "    // N×N 격자 — z/x/y 방향 줄별 카운터"),
   "    vector<vector<int>> xy(N, vector<int>(N, 0));",
   "    vector<vector<int>> yz(N, vector<int>(N, 0));",
   "    vector<vector<int>> xz(N, vector<int>(N, 0));",
@@ -689,17 +704,17 @@ const CHEESE_LOOP_CPP = [
   "    }",
 ];
 
-const CHEESE_FULL_PY = [
+const CHEESE_FULL_PY = (E) => [
   ...CHEESE_INPUT_PY,
   "",
-  ...CHEESE_COUNTERS_PY,
+  ...CHEESE_COUNTERS_PY(E),
   "",
   ...CHEESE_LOOP_PY,
 ];
-const CHEESE_FULL_CPP = [
+const CHEESE_FULL_CPP = (E) => [
   ...CHEESE_INPUT_CPP,
   "",
-  ...CHEESE_COUNTERS_CPP,
+  ...CHEESE_COUNTERS_CPP(E),
   "",
   ...CHEESE_LOOP_CPP,
   "    return 0;",
@@ -727,7 +742,7 @@ export function getCheeseSections(E) {
     {
       label: t(E, "📊 2. Three Counters", "📊 2. 카운터 3 개"),
       color: "#0891b2",
-      py: CHEESE_COUNTERS_PY, cpp: CHEESE_COUNTERS_CPP,
+      py: CHEESE_COUNTERS_PY(E), cpp: CHEESE_COUNTERS_CPP(E),
       why: [
         t(E, "One counter per row direction. xy → z-axis rows. yz → x-axis. xz → y-axis.",
             "방향당 카운터 1 개. xy → z-축 줄. yz → x-축. xz → y-축."),
@@ -771,7 +786,7 @@ export function getCheeseSections(E) {
     {
       label: t(E, "🎯 4. Full Code", "🎯 4. 전체 코드"),
       color: "#d97706",
-      py: CHEESE_FULL_PY, cpp: CHEESE_FULL_CPP,
+      py: CHEESE_FULL_PY(E), cpp: CHEESE_FULL_CPP(E),
       why: [
         t(E,
           "Per query: O(1) — three counter updates and three N-checks. Total: O(Q).",
@@ -867,7 +882,8 @@ export function downloadCheesePDF(E, sections, lang = "py") {
     "    x, y, z = map(int, input().split())",
     "    cheese[x][y][z] = False",
     "    count = 0",
-    "    # 모든 N² 줄을 N 칸씩 확인 → O(N³) per query",
+    t(E, "    # Check every N² rows × N cells each → O(N³) per query",
+         "    # 모든 N² 줄을 N 칸씩 확인 → O(N³) per query"),
     "    for a in range(N):",
     "        for b in range(N):",
     "            if all(not cheese[a][b][c] for c in range(N)): count += 1",

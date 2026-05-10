@@ -764,9 +764,9 @@ export function makeCheeseCh5(E, lang = "py") {
           "from collections import defaultdict",
           "",
           "xy = defaultdict(int)",
-          "# xy[(3,5)] → 자동으로 0!",
+          t(E, "# xy[(3,5)] → auto 0!", "# xy[(3,5)] → 자동으로 0!"),
           "xy[(3,5)] += 1",
-          "# xy[(3,5)] → 이제 1!",
+          t(E, "# xy[(3,5)] → now 1!", "# xy[(3,5)] → 이제 1!"),
         ];
         return (
           <div style={{ padding: 12 }}>
