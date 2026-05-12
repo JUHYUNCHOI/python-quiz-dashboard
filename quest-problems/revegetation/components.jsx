@@ -194,7 +194,7 @@ const FULL_CPP = [
   "        for (int c = 1; c <= 4; c++) if (!used.count(c)) { color[i] = c; break; }",
   "    }",
   "    for (int i = 1; i <= N; i++) cout << color[i];",
-  "    cout << \"\n\";",
+  "    cout << \"\\n\";",
   "    return 0;",
   "}",
 ];

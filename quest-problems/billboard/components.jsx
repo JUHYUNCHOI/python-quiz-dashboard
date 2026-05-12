@@ -56,7 +56,7 @@ const FULL_CPP = [
   "    long long jy1 = max(iy1, cy1), jy2 = min(iy2, cy2);",
   "    long long covered = max(0LL, jx2 - jx1) * max(0LL, jy2 - jy1);",
   "",
-  "    cout << (lawn - covered) << \"\n\";",
+  "    cout << (lawn - covered) << \"\\n\";",
   "    return 0;",
   "}",
 ];

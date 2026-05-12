@@ -208,7 +208,7 @@ const FULL_CPP = [
   "    // (Real problem: bitmask over ACs)",
   "    long long total = 0;",
   "    for (auto& [s, e, c] : cows) total += c;",
-  "    cout << total << \"\n\";",
+  "    cout << total << \"\\n\";",
   "    return 0;",
   "}",
 ];

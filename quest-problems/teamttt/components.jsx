@@ -283,7 +283,7 @@ const FULL_CPP = [
   "    for (int c = 0; c < 3; c++) check(grid[0][c], grid[1][c], grid[2][c]);",
   "    check(grid[0][0], grid[1][1], grid[2][2]);",
   "    check(grid[0][2], grid[1][1], grid[2][0]);",
-  "    cout << single.size() << \"\n\" << pair_.size() << \"\n\";",
+  "    cout << single.size() << \"\\n\" << pair_.size() << \"\\n\";",
   "    return 0;",
   "}",
 ];

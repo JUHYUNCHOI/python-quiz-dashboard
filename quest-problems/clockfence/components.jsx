@@ -253,7 +253,7 @@ const FULL_CPP = [
   "        if (diff == 1) rights++;",
   "        else if (diff == 3) lefts++;",
   "    }",
-  "    cout << rights << \" \" << lefts << \"\n\";",
+  "    cout << rights << \" \" << lefts << \"\\n\";",
   "    return 0;",
   "}",
 ];

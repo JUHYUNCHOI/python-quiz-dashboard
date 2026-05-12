@@ -67,7 +67,7 @@ const FULL_CPP = [
   "int main() {",
   "    // Specific to problem; provide a simple scaffold.",
   "    int N; cin >> N;",
-  "    cout << N << \"\n\";",
+  "    cout << N << \"\\n\";",
   "    return 0;",
   "}",
 ];

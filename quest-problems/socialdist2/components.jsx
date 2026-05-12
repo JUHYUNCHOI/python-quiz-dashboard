@@ -252,7 +252,7 @@ const FULL_CPP = [
   "        infected++;",
   "        // Check spread to neighbors within distance R (problem-specific)",
   "    }",
-  "    cout << infected << \"\n\";",
+  "    cout << infected << \"\\n\";",
   "    return 0;",
   "}",
 ];

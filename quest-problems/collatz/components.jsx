@@ -212,7 +212,7 @@ const FULL_CPP = [
   "        else N = 3 * N + 1;",
   "        steps++;",
   "    }",
-  "    cout << steps << \"\n\";",
+  "    cout << steps << \"\\n\";",
   "    return 0;",
   "}",
 ];

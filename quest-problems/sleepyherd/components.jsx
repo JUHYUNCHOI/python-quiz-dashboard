@@ -243,7 +243,7 @@ const FULL_CPP = [
   "    long long gap1 = b - a, gap2 = c - b;",
   "    long long maxMoves = max(gap1, gap2) - 1;",
   "    long long minMoves = (gap1 == 1 && gap2 == 1) ? 0 : ((gap1 <= 2 || gap2 <= 2) ? 1 : 2);",
-  "    cout << minMoves << \"\n\" << maxMoves << \"\n\";",
+  "    cout << minMoves << \"\\n\" << maxMoves << \"\\n\";",
   "    return 0;",
   "}",
 ];

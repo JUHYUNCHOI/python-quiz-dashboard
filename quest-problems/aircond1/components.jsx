@@ -59,7 +59,7 @@ const FULL_CPP = [
   "    for (auto& x : pref) cin >> x;",
   "    long long total = 0;",
   "    for (int i = 0; i < N; i++) total += abs(pref[i] - cur[i]);",
-  "    cout << total << \"\n\";",
+  "    cout << total << \"\\n\";",
   "    return 0;",
   "}",
 ];

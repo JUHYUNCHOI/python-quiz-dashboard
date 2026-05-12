@@ -265,7 +265,7 @@ const FULL_CPP = [
   "                best = min(best, merges);",
   "            }",
   "        }",
-  "        cout << best << \"\n\";",
+  "        cout << best << \"\\n\";",
   "    }",
   "    return 0;",
   "}",

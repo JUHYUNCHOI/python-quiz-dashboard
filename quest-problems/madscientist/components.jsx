@@ -220,7 +220,7 @@ const FULL_CPP = [
   "            inBlock = false;",
   "        }",
   "    }",
-  "    cout << blocks << \"\n\";",
+  "    cout << blocks << \"\\n\";",
   "    return 0;",
   "}",
 ];

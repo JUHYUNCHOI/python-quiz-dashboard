@@ -40,7 +40,7 @@ const FULL_CPP = [
   "            if (seen.count(sub)) { unique = false; break; }",
   "            seen.insert(sub);",
   "        }",
-  "        if (unique) { cout << K << \"\n\"; return 0; }",
+  "        if (unique) { cout << K << \"\\n\"; return 0; }",
   "    }",
   "    return 0;",
   "}",

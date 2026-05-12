@@ -260,7 +260,7 @@ const FULL_CPP = [
   "        if (choices <= 0) { ans = 0; break; }",
   "        ans *= choices;",
   "    }",
-  "    cout << ans << \"\n\";",
+  "    cout << ans << \"\\n\";",
   "    return 0;",
   "}",
 ];

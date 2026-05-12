@@ -184,7 +184,7 @@ const FULL_CPP = [
   "            count++;",
   "        }",
   "    }",
-  "    cout << count << \"\n\";",
+  "    cout << count << \"\\n\";",
   "    return 0;",
   "}",
 ];

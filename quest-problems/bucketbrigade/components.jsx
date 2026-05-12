@@ -185,7 +185,7 @@ const FULL_CPP = [
   "        auto [r, c, d] = q.front();",
   "        q.pop();",
   "        if (r == barn.first && c == barn.second) {",
-  "            cout << (d - 1) << \"\n\";",
+  "            cout << (d - 1) << \"\\n\";",
   "            return 0;",
   "        }",
   "        for (int k = 0; k < 4; k++) {",

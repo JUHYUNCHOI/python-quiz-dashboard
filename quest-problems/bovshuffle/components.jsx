@@ -47,7 +47,7 @@ const FULL_CPP = [
   "        for (int i = 0; i < N; i++) nxt[i] = cows[inv[i]];",
   "        cows = nxt;",
   "    }",
-  "    for (int i = 0; i < N; i++) cout << cows[i] << \"\n\";",
+  "    for (int i = 0; i < N; i++) cout << cows[i] << \"\\n\";",
   "    return 0;",
   "}",
 ];

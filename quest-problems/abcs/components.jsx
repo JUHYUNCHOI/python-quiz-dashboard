@@ -176,7 +176,7 @@ const FULL_CPP = [
   "    int A = nums[0];",
   "    int B = nums[1];",
   "    int C = nums[6] - A - B;",
-  "    cout << A << \" \" << B << \" \" << C << \"\n\";",
+  "    cout << A << \" \" << B << \" \" << C << \"\\n\";",
   "    return 0;",
   "}",
 ];

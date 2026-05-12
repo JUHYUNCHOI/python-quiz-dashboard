@@ -57,7 +57,7 @@ const FULL_CPP = [
   "        }",
   "        best = max(best, score);",
   "    }",
-  "    cout << best << \"\n\";",
+  "    cout << best << \"\\n\";",
   "    return 0;",
   "}",
 ];

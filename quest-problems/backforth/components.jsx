@@ -62,7 +62,7 @@ const FULL_CPP = [
   "            }",
   "        }",
   "    }",
-  "    cout << finalSums.size() << \"\n\";",
+  "    cout << finalSums.size() << \"\\n\";",
   "    return 0;",
   "}",
 ];

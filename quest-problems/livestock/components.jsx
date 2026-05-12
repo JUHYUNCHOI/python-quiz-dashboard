@@ -244,7 +244,7 @@ const FULL_CPP = [
   "            prev = cur; cur = next;",
   "        }",
   "    }",
-  "    for (auto& r : result) cout << r << \"\n\";",
+  "    for (auto& r : result) cout << r << \"\\n\";",
   "    return 0;",
   "}",
 ];

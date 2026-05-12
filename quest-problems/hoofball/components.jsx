@@ -62,7 +62,7 @@ const FULL_CPP = [
   "    sort(x.begin(), x.end());",
   "",
   "    if (N == 1) {",
-  "        cout << 1 << \"\n\";",
+  "        cout << 1 << \"\\n\";",
   "        return 0;",
   "    }",
   "",
@@ -82,7 +82,7 @@ const FULL_CPP = [
   "    for (int i = 0; i < N; i++) {",
   "        if (receives[i] == 0) balls++;",
   "    }",
-  "    cout << balls << \"\n\";",
+  "    cout << balls << \"\\n\";",
   "    return 0;",
   "}",
 ];

@@ -229,7 +229,7 @@ const FULL_CPP = [
   "",
   "    // Generic: count distinct orb colors / sum / etc.",
   "    set<int> distinct(orbs.begin(), orbs.end());",
-  "    cout << (int)distinct.size() << \"\n\";",
+  "    cout << (int)distinct.size() << \"\\n\";",
   "    return 0;",
   "}",
 ];

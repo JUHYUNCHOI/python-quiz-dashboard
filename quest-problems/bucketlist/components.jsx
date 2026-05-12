@@ -190,7 +190,7 @@ const FULL_CPP = [
   "    sort(events.begin(), events.end());",
   "    long long cur = 0, peak = 0;",
   "    for (auto& [t, d] : events) { cur += d; peak = max(peak, cur); }",
-  "    cout << peak << \"\n\";",
+  "    cout << peak << \"\\n\";",
   "    return 0;",
   "}",
 ];

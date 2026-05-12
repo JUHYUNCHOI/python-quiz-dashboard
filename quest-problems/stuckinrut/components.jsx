@@ -57,7 +57,7 @@ const FULL_CPP = [
   "    for (auto& [d, x, y] : cows) cin >> d >> x >> y;",
   "    // Bronze: simple intersection check between N-going and E-going cows",
   "    vector<int> grazed(N, 0);   // 0 = infinity",
-  "    cout << \"INFINITY\n\";   // placeholder",
+  "    cout << \"INFINITY\\n\";   // placeholder",
   "    return 0;",
   "}",
 ];

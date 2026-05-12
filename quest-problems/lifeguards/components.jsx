@@ -82,7 +82,7 @@ const FULL_CPP = [
   "        }",
   "        best = max(best, covered);",
   "    }",
-  "    cout << best << \"\n\";",
+  "    cout << best << \"\\n\";",
   "    return 0;",
   "}",
 ];

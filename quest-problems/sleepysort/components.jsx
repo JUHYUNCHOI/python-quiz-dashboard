@@ -35,7 +35,7 @@ const FULL_CPP = [
   "    int k = N - 1;",
   "    while (k > 0 && a[k - 1] < a[k]) k--;",
   "",
-  "    cout << k << \"\n\";",
+  "    cout << k << \"\\n\";",
   "    return 0;",
   "}",
 ];

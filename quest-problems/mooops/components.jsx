@@ -199,7 +199,7 @@ const FULL_CPP = [
   "            if (s[i+2] != 'O') cost++;",
   "            best = min(best, cost);",
   "        }",
-  "        cout << (best == INT_MAX ? -1 : best) << \"\n\";",
+  "        cout << (best == INT_MAX ? -1 : best) << \"\\n\";",
   "    }",
   "    return 0;",
   "}",

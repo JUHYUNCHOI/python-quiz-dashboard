@@ -225,7 +225,7 @@ const FULL_CPP = [
   "    for (auto& w : words) {",
   "        int wl = (int)w.size();",
   "        if (curLen + wl + (cur.empty() ? 0 : 1) > K && !cur.empty()) {",
-  "            cout << cur << \"\n\";",
+  "            cout << cur << \"\\n\";",
   "            cur = \"\";",
   "            curLen = 0;",
   "        }",
@@ -233,7 +233,7 @@ const FULL_CPP = [
   "        cur += w;",
   "        curLen += wl;",
   "    }",
-  "    if (!cur.empty()) cout << cur << \"\n\";",
+  "    if (!cur.empty()) cout << cur << \"\\n\";",
   "    return 0;",
   "}",
 ];

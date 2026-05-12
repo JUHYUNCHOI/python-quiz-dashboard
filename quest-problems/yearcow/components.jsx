@@ -137,6 +137,7 @@ const FULL_PY = [
 const FULL_CPP = [
   "#include <iostream>",
   "#include <string>",
+  "#include <sstream>",
   "#include <vector>",
   "#include <algorithm>",
   "#include <map>",
@@ -171,7 +172,7 @@ const FULL_CPP = [
   "            year[name] = oy + delta;",
   "        }",
   "    }",
-  "    cout << abs(year[\"Bessie\"] - year[\"Elsie\"]) << \"\n\";",
+  "    cout << abs(year[\"Bessie\"] - year[\"Elsie\"]) << \"\\n\";",
   "    return 0;",
   "}",
 ];

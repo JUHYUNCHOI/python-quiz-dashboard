@@ -33,7 +33,7 @@ const FULL_CPP = [
   "        if (mid * (mid + 1) / 2 >= K) hi = mid;",
   "        else lo = mid + 1;",
   "    }",
-  "    cout << lo << \"\n\";",
+  "    cout << lo << \"\\n\";",
   "    return 0;",
   "}",
 ];

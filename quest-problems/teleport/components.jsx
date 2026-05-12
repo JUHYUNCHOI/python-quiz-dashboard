@@ -34,7 +34,7 @@ const FULL_CPP = [
   "    // Direct distance vs use of teleport (a→x, then 0→b at distance |y - 0|)",
   "    long long direct = abs(a - b);",
   "    long long viaTel = abs(a - x) + abs(b - y);",
-  "    cout << min(direct, viaTel) << \"\n\";",
+  "    cout << min(direct, viaTel) << \"\\n\";",
   "    return 0;",
   "}",
 ];

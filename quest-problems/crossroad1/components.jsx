@@ -200,7 +200,7 @@ const FULL_CPP = [
   "        if (last.count(cow) && last[cow] != side) crosses++;",
   "        last[cow] = side;",
   "    }",
-  "    cout << crosses << \"\n\";",
+  "    cout << crosses << \"\\n\";",
   "    return 0;",
   "}",
 ];

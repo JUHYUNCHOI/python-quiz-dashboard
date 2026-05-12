@@ -240,7 +240,7 @@ const FULL_CPP = [
   "        for (int i = idx[0] + 1; i < idx[1]; i++) if (s[i] != ch) between.insert(s[i]);",
   "        crosses += between.size();",
   "    }",
-  "    cout << (crosses / 2) << \"\n\";",
+  "    cout << (crosses / 2) << \"\\n\";",
   "    return 0;",
   "}",
 ];

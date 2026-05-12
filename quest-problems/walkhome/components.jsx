@@ -48,6 +48,7 @@ const FULL_PY = [
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
+  "#include <functional>",
   "using namespace std;",
   "",
   "int main() {",
@@ -70,7 +71,7 @@ const FULL_CPP = [
   "        if (r + 1 < N) v += rec(r + 1, c, 1, ch + (dir == 0 ? 1 : 0) > K ? 0 : ch + (dir == 0 ? 1 : 0));",
   "        return v;",
   "    };",
-  "    cout << rec(0, 0, 0, 0) + rec(0, 0, 1, 0) << \"\n\";   // try both initial dirs",
+  "    cout << rec(0, 0, 0, 0) + rec(0, 0, 1, 0) << \"\\n\";   // try both initial dirs",
   "    return 0;",
   "}",
 ];

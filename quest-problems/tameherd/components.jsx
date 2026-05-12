@@ -241,7 +241,7 @@ const FULL_CPP = [
   "        }",
   "        prev = log[i]; prevIdx = i;",
   "    }",
-  "    cout << breakouts << \"\n\";",
+  "    cout << breakouts << \"\\n\";",
   "    return 0;",
   "}",
 ];

@@ -173,7 +173,7 @@ const FULL_CPP = [
   "    long long minX = min(x1, x3), maxX = max(x2, x4);",
   "    long long minY = min(y1, y3), maxY = max(y2, y4);",
   "    long long side = max(maxX - minX, maxY - minY);",
-  "    cout << side * side << \"\n\";",
+  "    cout << side * side << \"\\n\";",
   "    return 0;",
   "}",
 ];

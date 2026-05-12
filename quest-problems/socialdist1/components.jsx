@@ -272,7 +272,7 @@ const FULL_CPP = [
   "        }",
   "        if (placed >= M) lo = mid; else hi = mid - 1;",
   "    }",
-  "    cout << lo << \"\n\";",
+  "    cout << lo << \"\\n\";",
   "    return 0;",
   "}",
 ];

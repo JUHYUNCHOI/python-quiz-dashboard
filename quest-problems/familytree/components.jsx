@@ -291,9 +291,9 @@ const FULL_CPP = [
   "        }",
   "        if (!lca.empty()) break;",
   "    }",
-  "    if (lca.empty()) cout << \"NOT RELATED\n\";",
-  "    else if (dA == 0 && dB == 0) cout << \"SIBLINGS\n\";   // identical not possible; placeholder",
-  "    else cout << lca << \" \" << dA << \" \" << dB << \"\n\";   // adapt to specific output",
+  "    if (lca.empty()) cout << \"NOT RELATED\\n\";",
+  "    else if (dA == 0 && dB == 0) cout << \"SIBLINGS\\n\";   // identical not possible; placeholder",
+  "    else cout << lca << \" \" << dA << \" \" << dB << \"\\n\";   // adapt to specific output",
   "    return 0;",
   "}",
 ];

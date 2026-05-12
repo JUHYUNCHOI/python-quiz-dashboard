@@ -250,7 +250,7 @@ const FULL_CPP = [
   "        curEnd = start + d;",
   "        used++;",
   "    }",
-  "    cout << used << \"\n\";",
+  "    cout << used << \"\\n\";",
   "    return 0;",
   "}",
 ];

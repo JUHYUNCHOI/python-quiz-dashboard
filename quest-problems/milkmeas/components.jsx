@@ -307,7 +307,7 @@ const FULL_CPP = [
   "            top = newTop;",
   "        }",
   "    }",
-  "    cout << changes << \"\n\";",
+  "    cout << changes << \"\\n\";",
   "    return 0;",
   "}",
 ];

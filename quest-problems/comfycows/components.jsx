@@ -200,7 +200,7 @@ const FULL_CPP = [
   "        for (int k = 0; k < 4; k++) if (cows.count({x + dx[k], y + dy[k]})) cnt++;",
   "        if (cnt == 3) comfortableCount++;",
   "    }",
-  "    cout << comfortableCount << \"\n\";",
+  "    cout << comfortableCount << \"\\n\";",
   "    return 0;",
   "}",
 ];

@@ -200,7 +200,7 @@ const FULL_CPP = [
   "        while (i < N && days[i] - end <= K) { end = days[i]; i++; }",
   "        total += (end - start + 1) + K;",
   "    }",
-  "    cout << total << \"\n\";",
+  "    cout << total << \"\\n\";",
   "    return 0;",
   "}",
 ];

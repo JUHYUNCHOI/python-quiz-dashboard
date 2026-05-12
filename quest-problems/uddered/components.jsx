@@ -319,7 +319,7 @@ const FULL_CPP = [
   "    for (size_t i = 1; i < heard.size(); i++) {",
   "        if (pos[heard[i]] <= pos[heard[i-1]]) cycles++;",
   "    }",
-  "    cout << cycles << \"\n\";",
+  "    cout << cycles << \"\\n\";",
   "    return 0;",
   "}",
 ];

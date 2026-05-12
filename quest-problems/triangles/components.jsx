@@ -183,7 +183,7 @@ const FULL_CPP = [
   "        }",
   "        best = max(best, maxDx * maxDy);",
   "    }",
-  "    cout << best << \"\n\";   // area × 2 (problem wants doubled area to keep int)",
+  "    cout << best << \"\\n\";   // area × 2 (problem wants doubled area to keep int)",
   "    return 0;",
   "}",
 ];

@@ -291,7 +291,7 @@ const FULL_CPP = [
   "            }",
   "            return win > lose;",
   "        };",
-  "        cout << (beats(A, B) ? \"yes\" : \"no\") << \"\n\";",
+  "        cout << (beats(A, B) ? \"yes\" : \"no\") << \"\\n\";",
   "    }",
   "    return 0;",
   "}",

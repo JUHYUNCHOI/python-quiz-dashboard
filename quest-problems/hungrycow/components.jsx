@@ -57,7 +57,7 @@ const FULL_CPP = [
   "    }",
   "    long long gap = T - prev;",
   "    eaten += min(stock, gap);",
-  "    cout << eaten << \"\n\";",
+  "    cout << eaten << \"\\n\";",
   "    return 0;",
   "}",
 ];

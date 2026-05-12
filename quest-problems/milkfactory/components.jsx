@@ -274,11 +274,11 @@ const FULL_CPP = [
   "            }",
   "        }",
   "        if (cnt == N) {",
-  "            cout << cand << \"\n\";",
+  "            cout << cand << \"\\n\";",
   "            return 0;",
   "        }",
   "    }",
-  "    cout << -1 << \"\n\";",
+  "    cout << -1 << \"\\n\";",
   "    return 0;",
   "}",
 ];

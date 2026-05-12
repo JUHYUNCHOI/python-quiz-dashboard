@@ -29,7 +29,7 @@ const FULL_CPP = [
   "    string S, T; cin >> S >> T;",
   "    string out;",
   "    for (size_t i = 0; i < S.size(); i++) out += (S[i] == T[i] ? '0' : '1');",
-  "    cout << out << \"\n\";",
+  "    cout << out << \"\\n\";",
   "    return 0;",
   "}",
 ];

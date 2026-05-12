@@ -242,7 +242,7 @@ const FULL_CPP = [
   "            fHi -= lo;",
   "        }",
   "    }",
-  "    cout << fLo << \" \" << fHi << \"\n\";",
+  "    cout << fLo << \" \" << fHi << \"\\n\";",
   "    return 0;",
   "}",
 ];

@@ -252,7 +252,7 @@ const FULL_CPP = [
   "    }",
   "    // Simple greedy: try to make N",
   "    // (Detailed problem-specific logic may differ; this is a scaffold)",
-  "    cout << (count[N] > 0 ? \"YES\" : \"NO\") << \"\n\";",
+  "    cout << (count[N] > 0 ? \"YES\" : \"NO\") << \"\\n\";",
   "    return 0;",
   "}",
 ];

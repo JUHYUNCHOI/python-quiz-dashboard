@@ -193,7 +193,7 @@ const FULL_CPP = [
   "    // Bronze brute: count odd-length increasing subseqs by median",
   "    // (Full solution requires DP with binomial coefficients)",
   "    long long ans = 0;",
-  "    cout << ans << \"\n\";   // placeholder",
+  "    cout << ans << \"\\n\";   // placeholder",
   "    return 0;",
   "}",
 ];

@@ -295,7 +295,7 @@ const FULL_CPP = [
   "    // cur[i] = where i ends up; output in 1-indexed cow order",
   "    vector<int> out(N);",
   "    for (int i = 0; i < N; i++) out[cur[i]] = i + 1;",
-  "    for (int i = 0; i < N; i++) cout << out[i] << \"\n\";",
+  "    for (int i = 0; i < N; i++) cout << out[i] << \"\\n\";",
   "    return 0;",
   "}",
 ];

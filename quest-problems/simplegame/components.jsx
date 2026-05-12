@@ -23,7 +23,7 @@ const FULL_CPP = [
   "",
   "int main() {",
   "    long long N; cin >> N;",
-  "    cout << (N % 4 == 0 ? 2 : 1) << \"\n\";",
+  "    cout << (N % 4 == 0 ? 2 : 1) << \"\\n\";",
   "    return 0;",
   "}",
 ];
