@@ -299,8 +299,38 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock({ lines, lang = "py" }: CodeBlockProps) {
+  const [copied, setCopied] = useState(false)
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(lines.join("\n"))
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch {
+      // fallback for older browsers
+      const ta = document.createElement("textarea")
+      ta.value = lines.join("\n")
+      document.body.appendChild(ta)
+      ta.select()
+      try { document.execCommand("copy") } catch {}
+      document.body.removeChild(ta)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    }
+  }
   return (
-    <div className="bg-gray-900 rounded-xl px-3 py-3 overflow-x-auto text-[13px] leading-relaxed font-mono">
+    <div className="relative bg-gray-900 rounded-xl px-3 py-3 overflow-x-auto text-[13px] leading-relaxed font-mono">
+      <button
+        onClick={handleCopy}
+        className={`absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-bold transition-colors ${
+          copied
+            ? "bg-emerald-600 text-white"
+            : "bg-gray-700 text-gray-200 hover:bg-gray-600"
+        }`}
+        style={{ zIndex: 1 }}
+        aria-label="Copy code"
+      >
+        {copied ? "✓ Copied" : "📋 Copy"}
+      </button>
       {lines.map((l, i) => (
         <div key={i} className="flex min-h-5">
           <span className="text-gray-500 w-7 text-right mr-2.5 flex-shrink-0 select-none text-[11px]">
