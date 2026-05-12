@@ -213,14 +213,14 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <string>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
-  "    long long K, N; cin >> K >> N;",
+  "    int K, N; cin >> K >> N;",
   "",
   "    auto get_nth_palindrome = [&](k, n) {   // TODO: type args",
   "        // Generate palindromes in base k in order",
@@ -239,7 +239,7 @@ const FULL_CPP = [
   "                // Build the n-th palindrome of this length",
   "                n -= 1  # 0-indexed;",
   "                auto digits = [];",
-  "                for (long long i = 0; i < half; i++) {",
+  "                for (int i = 0; i < half; i++) {",
   "                    if (i == 0) {",
   "                        auto d = n // (k ** (half - 1)) + 1;",
   "                    else {",
@@ -278,10 +278,10 @@ export function getMcc19PalSections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up I/O.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입출력 가속."),
-        t(E, "long long avoids overflow — use it freely for indices and sums.",
-            "long long으로 오버플로 방지 — 인덱스, 합계에 자주 사용."),
+        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
+            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
+        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
+            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
       ],
     },
   ];
