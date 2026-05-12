@@ -323,8 +323,8 @@ export function getPresentsSections(E) {
             "Python 리스트는 충분히 빠름; .index + .pop이 가장 읽기 좋음."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) trims input time when Q is high.",
-            "Q가 많을 때 ios::sync_with_stdio(false)로 입력 시간 단축."),
+        t(E, "Plain cin/cout — N, Q ≤ a few thousand so no fast I/O needed.",
+            "N, Q가 수천 정도라 빠른 I/O 없이 cin/cout 그대로 충분."),
       ],
     },
   ];

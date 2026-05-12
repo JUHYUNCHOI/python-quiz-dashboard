@@ -302,8 +302,8 @@ export function getExchangeSections(E) {
             "[x] * n으로 x를 n번 반복한 리스트를 빠르게 생성."),
       ],
       cppOnly: [
-        t(E, "reserve(N) avoids reallocations during push_back.",
-            "reserve(N)로 push_back 도중 재할당 방지."),
+        t(E, "Two separate for-loops keep the logic linear and easy to read.",
+            "for 루프 두 개로 분리하면 흐름이 일직선이라 읽기 쉬움."),
       ],
     },
     {
@@ -321,8 +321,8 @@ export function getExchangeSections(E) {
             "' '.join(map(str, result))로 정수→문자열 변환 후 공백으로 결합."),
       ],
       cppOnly: [
-        t(E, "Avoid endl in tight loops — use '\\n' for speed.",
-            "반복문 안에서 endl 대신 '\\n' 사용 (속도)."),
+        t(E, "Print a value then either a space or a newline depending on position.",
+            "값을 출력하고 위치에 따라 공백 또는 줄바꿈."),
       ],
     },
   ];
