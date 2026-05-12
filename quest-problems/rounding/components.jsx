@@ -152,15 +152,16 @@ export function CodeCompare3({ E }) {
 export function SpeedScale({ E }) {
   const [logN, setLogN] = useState(2); // log10(N), 시작은 N=100
   const N = Math.round(Math.pow(10, logN));
+  const T = 10; // 쿼리 수 — USACO 보통 10
 
   // 파이썬 대략 처리 속도 (interpreted)
   const OPS_PER_SEC = 1e7;
   const TIME_LIMIT = 2; // USACO 제한 ~2초
 
-  // 풀이별 예상 연산 횟수
-  const bruteOps   = N * 6;          // N 번 × 자릿수 만큼 작업
-  const cacheOps   = N * 6;          // 한 번 N 까지 채우면 다음은 즉시 — 첫 호출 기준 같음
-  const formulaOps = Math.max(1, Math.ceil(Math.log10(N)) * 5); // O(log N)
+  // T 번 쿼리 누적 연산 횟수
+  const bruteOps   = T * N * 6;                                  // 매번 N 까지 처음부터
+  const cacheOps   = N * 6 + T * 1;                              // 한 번 채우고 나머지는 lookup
+  const formulaOps = T * Math.max(1, Math.ceil(Math.log10(N)) * 5); // 매번 O(log N)
 
   const bruteTime   = bruteOps   / OPS_PER_SEC;
   const cacheTime   = cacheOps   / OPS_PER_SEC;
@@ -217,6 +218,9 @@ export function SpeedScale({ E }) {
         <span style={{ fontSize: 22, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>
           {N.toLocaleString()}
         </span>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginLeft: 12 }}>
+          {t(E, `· T = ${T} queries`, `· T = ${T} 쿼리`)}
+        </span>
       </div>
 
       {/* 슬라이더 */}
@@ -239,8 +243,9 @@ export function SpeedScale({ E }) {
         ⏱ {t(E, `Time limit: ${TIME_LIMIT}s. Bar full = TLE`, `시간 제한: ${TIME_LIMIT}초. 막대 꽉 차면 시간 초과`)}
       </div>
       <div style={{ marginTop: 8, padding: "8px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 8, fontSize: 11, color: C.accent, fontWeight: 700, lineHeight: 1.6, textAlign: "center" }}>
-        💡 {t(E, "Slide N to 10⁸ or 10⁹ — see brute & cache hit TLE, but formula stays instant!",
-              "슬라이더를 10⁸, 10⁹ 까지 끌어봐 — 브루트와 캐시는 TLE 되는데 공식은 즉시!")}
+        💡 {t(E,
+              `Total cost over ${T} queries. Brute recomputes each time (T × N × 6). Cache fills once then T lookups (N×6 + T). Formula is O(log N) each time.`,
+              `${T} 번 쿼리의 누적 비용. 브루트는 매번 N 까지 다시 계산 (T × N × 6). 캐시는 한 번 채우고 나머진 lookup (N×6 + T). 공식은 매번 O(log N).`)}
       </div>
     </div>
   );
