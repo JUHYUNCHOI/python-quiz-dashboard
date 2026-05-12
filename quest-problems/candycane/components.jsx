@@ -213,19 +213,18 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int N, M;",
   "    cin >> N >> M;",
   "    vector<long long> heights(N);",
   "    for (int i = 0; i < N; i++) cin >> heights[i];",
   "",
-  "    while (M--) {",
+  "    for (int m = 0; m < M; m++) {",
   "        long long h;",
   "        cin >> h;",
   "        long long bottom = 0;",
@@ -241,7 +240,7 @@ const FULL_CPP = [
   "        }",
   "    }",
   "",
-  "    for (int i = 0; i < N; i++) cout << heights[i] << \"\n\";",
+  "    for (int i = 0; i < N; i++) cout << heights[i] << \"\\n\";",
   "    return 0;",
   "}",
 ];
@@ -263,10 +262,10 @@ export function getCandyCaneSections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up I/O.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입출력 가속."),
-        t(E, "long long avoids overflow — use it freely for indices and sums.",
-            "long long으로 오버플로 방지 — 인덱스, 합계에 자주 사용."),
+        t(E, "Split #include into specific headers (iostream, vector, algorithm).",
+            "#include 는 배운 헤더들로 (iostream, vector, algorithm) 나눠 적어."),
+        t(E, "Heights can grow large after many bites — long long is the safe type.",
+            "여러 번 먹으면 키가 커질 수 있어 — long long 으로 안전하게."),
       ],
     },
   ];

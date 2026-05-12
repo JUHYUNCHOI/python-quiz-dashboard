@@ -196,14 +196,19 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <sstream>",
+  "#include <string>",
+  "#include <vector>",
+  "#include <map>",
+  "#include <set>",
   "using namespace std;",
   "",
   "int main() {",
   "    vector<string> cows = {\"Beatrice\",\"Belinda\",\"Bella\",\"Bessie\",\"Betsy\",\"Blue\",\"Buttercup\",\"Sue\"};",
   "    map<string, vector<string>> adj;",
   "    int N; cin >> N;",
-  "    while (N--) {",
+  "    for (int k = 0; k < N; k++) {",
   "        string line;",
   "        getline(cin >> ws, line);",
   "        // \"X must be milked beside Y\"",
@@ -261,10 +266,10 @@ export function getLivestockSections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up I/O.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입출력 가속."),
-        t(E, "long long avoids overflow — use it freely for indices and sums.",
-            "long long으로 오버플로 방지 — 인덱스, 합계에 자주 사용."),
+        t(E, "getline + stringstream splits a sentence into words just like Python's split().",
+            "getline + stringstream으로 문장을 Python의 split()처럼 단어 단위로 분리."),
+        t(E, "map<string, vector<string>> adj stores neighbors keyed by cow name.",
+            "map<string, vector<string>> adj으로 소 이름을 키로 이웃 목록 저장."),
       ],
     },
   ];

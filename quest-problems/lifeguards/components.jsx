@@ -50,13 +50,12 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int N;",
   "    cin >> N;",
   "    vector<pair<int,int>> guards(N);",
@@ -101,10 +100,10 @@ export function getLifeguardsSections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up I/O.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입출력 가속."),
-        t(E, "long long avoids overflow — use it freely for indices and sums.",
-            "long long으로 오버플로 방지 — 인덱스, 합계에 자주 사용."),
+        t(E, "Structured binding for (auto& [s, e] : rest) reads pair fields like names.",
+            "구조화 바인딩 for (auto& [s, e] : rest)으로 pair 값을 이름처럼 읽음."),
+        t(E, "Sweep with curEnd merges overlapping intervals without explicit union sets.",
+            "curEnd 스윕으로 겹치는 구간을 합집합 자료구조 없이 병합."),
       ],
     },
   ];

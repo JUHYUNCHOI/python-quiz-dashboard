@@ -42,11 +42,12 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <string>",
+  "#include <vector>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false); cin.tie(nullptr);",
   "    int N; cin >> N;",
   "    string s; cin >> s;",
   "    vector<int> arr(N);",
@@ -62,7 +63,7 @@ const FULL_CPP = [
   "        if (s[i] == 'H') lH = i;",
   "    }",
   "",
-  "    long long ans = 0;",
+  "    int ans = 0;",
   "    if (eG != -1 && arr[eG] >= lG) {",
   "        for (int i = 0; i < eG; i++) {",
   "            if (i == eH) continue;",
@@ -102,10 +103,10 @@ export function getLeadersSections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up I/O.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입출력 가속."),
-        t(E, "long long avoids overflow — use it freely for indices and sums.",
-            "long long으로 오버플로 방지 — 인덱스, 합계에 자주 사용."),
+        t(E, "We adjust arr[i]-- once on read to convert from 1-indexed to 0-indexed.",
+            "읽을 때 arr[i]--로 1-기반을 0-기반으로 한 번에 변환."),
+        t(E, "Two reverse/forward scans find the first/last G and H positions in O(N).",
+            "역방향/정방향 스캔 두 번으로 G/H의 처음/마지막 위치를 O(N)에 찾음."),
       ],
     },
   ];

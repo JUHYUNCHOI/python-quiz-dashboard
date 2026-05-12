@@ -135,7 +135,12 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <string>",
+  "#include <vector>",
+  "#include <algorithm>",
+  "#include <map>",
+  "#include <cmath>",
   "using namespace std;",
   "",
   "int main() {",
@@ -144,7 +149,7 @@ const FULL_CPP = [
   "    int N; cin >> N; cin.ignore();",
   "    map<string,int> year;",
   "    year[\"Bessie\"] = 0;",
-  "    while (N--) {",
+  "    for (int _n = 0; _n < N; _n++) {",
   "        string line; getline(cin, line);",
   "        // \"Mildred born in previous Cow year from Bessie\"",
   "        stringstream ss(line);",
@@ -188,10 +193,10 @@ export function getYearCowSections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up I/O.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입출력 가속."),
-        t(E, "long long avoids overflow — use it freely for indices and sums.",
-            "long long으로 오버플로 방지 — 인덱스, 합계에 자주 사용."),
+        t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
+            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
+        t(E, "Use long long when sums or products may exceed ~2×10^9.",
+            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
       ],
     },
   ];

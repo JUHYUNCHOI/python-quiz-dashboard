@@ -128,17 +128,17 @@ const EX_INPUT_PY = [
   "milk = list(map(int, input().split()))",
 ];
 const EX_INPUT_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int N;",
   "    cin >> N;",
   "    vector<long long> milk(N);",
-  "    for (int i = 0; i < N; i++) cin >> milk[i];",
+  "    for (int i = 0; i < N; i++) {",
+  "        cin >> milk[i];",
+  "    }",
 ];
 
 /* ──────────────────────────────────────────────────────────────
@@ -151,9 +151,11 @@ const EX_MATH_PY = [
 ];
 const EX_MATH_CPP = [
   "    long long total = 0;",
-  "    for (long long x : milk) total += x;",
-  "    long long avg = total / N;       // floor (positive ints)",
-  "    long long extra = total % N;     // remainder",
+  "    for (int i = 0; i < N; i++) {",
+  "        total += milk[i];",
+  "    }",
+  "    long long avg = total / N;     // floor (positive ints)",
+  "    long long extra = total % N;   // remainder",
 ];
 
 /* ──────────────────────────────────────────────────────────────
@@ -165,9 +167,12 @@ const EX_BUILD_PY = [
 ];
 const EX_BUILD_CPP = [
   "    vector<long long> result;",
-  "    result.reserve(N);",
-  "    for (long long i = 0; i < extra; i++)     result.push_back(avg + 1);",
-  "    for (long long i = 0; i < N - extra; i++) result.push_back(avg);",
+  "    for (int i = 0; i < extra; i++) {",
+  "        result.push_back(avg + 1);",
+  "    }",
+  "    for (int i = 0; i < N - extra; i++) {",
+  "        result.push_back(avg);",
+  "    }",
 ];
 
 /* ──────────────────────────────────────────────────────────────
@@ -179,7 +184,11 @@ const EX_OUTPUT_PY = [
 const EX_OUTPUT_CPP = [
   "    for (int i = 0; i < N; i++) {",
   "        cout << result[i];",
-  "        cout << (i + 1 == N ? '\\n' : ' ');",
+  "        if (i + 1 == N) {",
+  "            cout << endl;",
+  "        } else {",
+  "            cout << ' ';",
+  "        }",
   "    }",
   "    return 0;",
   "}",
@@ -197,26 +206,38 @@ const EX_FULL_PY = [
   "print(' '.join(map(str, result)))",
 ];
 const EX_FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int N;",
   "    cin >> N;",
   "    vector<long long> milk(N);",
-  "    for (int i = 0; i < N; i++) cin >> milk[i];",
+  "    for (int i = 0; i < N; i++) {",
+  "        cin >> milk[i];",
+  "    }",
   "",
   "    long long total = 0;",
-  "    for (long long x : milk) total += x;",
+  "    for (int i = 0; i < N; i++) {",
+  "        total += milk[i];",
+  "    }",
   "    long long avg = total / N;",
   "    long long extra = total % N;",
   "",
   "    for (int i = 0; i < N; i++) {",
-  "        long long v = (i < extra) ? avg + 1 : avg;",
-  "        cout << v << (i + 1 == N ? '\\n' : ' ');",
+  "        long long v;",
+  "        if (i < extra) {",
+  "            v = avg + 1;",
+  "        } else {",
+  "            v = avg;",
+  "        }",
+  "        cout << v;",
+  "        if (i + 1 == N) {",
+  "            cout << endl;",
+  "        } else {",
+  "            cout << ' ';",
+  "        }",
   "    }",
   "    return 0;",
   "}",
@@ -241,8 +262,8 @@ export function getExchangeSections(E) {
       cppOnly: [
         t(E, "vector<long long> guards against overflow on the eventual sum.",
             "vector<long long>로 합계 오버플로 방지."),
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up input.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입력 가속."),
+        t(E, "Plain cin/cout works fine here — input size is small.",
+            "이 문제는 입력이 작아서 cin/cout 그대로 충분."),
       ],
     },
     {

@@ -369,17 +369,19 @@ const IV_INPUT_PY = [
   "times = list(map(int, input().split()))",
 ];
 const IV_INPUT_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <queue>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int N, K;",
   "    cin >> N >> K;",
-  "    vector<long long> times(N);",
-  "    for (int i = 0; i < N; i++) cin >> times[i];",
+  "    vector<int> times(N);",
+  "    for (int i = 0; i < N; i++) {",
+  "        cin >> times[i];",
+  "    }",
 ];
 
 const IV_SIMULATE_PY = [
@@ -395,12 +397,16 @@ const IV_SIMULATE_PY = [
 ];
 const IV_SIMULATE_CPP = [
   "    // min-heap: pair<free_time, counter_id>",
-  "    priority_queue<pair<long long,int>, vector<pair<long long,int>>, greater<>> heap;",
-  "    for (int i = 0; i < K; i++) heap.push({times[i], i});",
+  "    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> heap;",
+  "    for (int i = 0; i < K; i++) {",
+  "        heap.push({(long long)times[i], i});",
+  "    }",
   "",
   "    // Cows K..N-2 take next free counter",
   "    for (int i = K; i < N - 1; i++) {",
-  "        auto [finish, counter] = heap.top(); heap.pop();",
+  "        long long finish = heap.top().first;",
+  "        int counter = heap.top().second;",
+  "        heap.pop();",
   "        heap.push({finish + times[i], counter});",
   "    }",
 ];
@@ -418,14 +424,24 @@ const IV_OUTPUT_CPP = [
   "    long long min_free = heap.top().first;",
   "    vector<int> candidates;",
   "    while (!heap.empty()) {",
-  "        auto [ft, cid] = heap.top(); heap.pop();",
-  "        if (ft == min_free) candidates.push_back(cid + 1);",
+  "        long long ft = heap.top().first;",
+  "        int cid = heap.top().second;",
+  "        heap.pop();",
+  "        if (ft == min_free) {",
+  "            candidates.push_back(cid + 1);",
+  "        }",
   "    }",
   "    sort(candidates.begin(), candidates.end());",
   "",
-  "    cout << candidates.size() << \"\\n\";",
-  "    for (size_t i = 0; i < candidates.size(); i++)",
-  "        cout << candidates[i] << \" \\n\"[i == candidates.size() - 1];",
+  "    cout << candidates.size() << endl;",
+  "    for (int i = 0; i < (int)candidates.size(); i++) {",
+  "        cout << candidates[i];",
+  "        if (i + 1 == (int)candidates.size()) {",
+  "            cout << endl;",
+  "        } else {",
+  "            cout << ' ';",
+  "        }",
+  "    }",
   "    return 0;",
   "}",
 ];
@@ -448,7 +464,7 @@ export function getInterviewSections(E) {
       ],
       cppOnly: [
         t(E, "priority_queue with greater<> for min-heap (default is max-heap).", "priority_queue + greater<> 로 min-heap (기본은 max-heap)."),
-        t(E, "long long for free times — could overflow with int if times are large.", "long long 사용 — int 면 overflow 위험."),
+        t(E, "Cumulative finish times can exceed int (N·max time). Use long long in the heap.", "누적 종료 시간은 N·시간 까지 — int 초과 가능. heap 에 long long 사용."),
       ],
     },
     {
@@ -465,7 +481,7 @@ export function getInterviewSections(E) {
         t(E, "heapq.heappop / heappush — log K each.", "heapq.heappop / heappush — 각각 log K."),
       ],
       cppOnly: [
-        t(E, "auto [a, b] = pair — C++17 structured bindings, like Python tuple unpacking.", "auto [a, b] = pair — C++17 structured bindings, Python 튜플 언패킹과 비슷."),
+        t(E, "heap.top().first / .second access the pair components — no structured bindings needed.", "heap.top().first / .second 로 pair 접근 — structured bindings 없이도 충분."),
       ],
     },
     {

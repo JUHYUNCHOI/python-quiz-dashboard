@@ -48,13 +48,13 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <algorithm>",
+  "#include <climits>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int N;",
   "    cin >> N;",
   "    vector<int> x(N);",
@@ -96,10 +96,10 @@ export function getHoofballSections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up I/O.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입출력 가속."),
-        t(E, "long long avoids overflow — use it freely for indices and sums.",
-            "long long으로 오버플로 방지 — 인덱스, 합계에 자주 사용."),
+        t(E, "INT_MAX as a sentinel lets boundary cows pick their only neighbor automatically.",
+            "INT_MAX를 표식으로 쓰면 끝 소들이 자동으로 유일한 이웃을 고름."),
+        t(E, "vector<int> receives(N, 0) initializes every counter to zero in one line.",
+            "vector<int> receives(N, 0)으로 한 줄에 모든 카운터를 0으로 초기화."),
       ],
     },
   ];

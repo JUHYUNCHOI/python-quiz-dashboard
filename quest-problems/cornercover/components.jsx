@@ -20,15 +20,19 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int N, M; cin >> N >> M;",
-  "    if (N == 1 && M == 1) cout << 1;",
-  "    else if (N == 1 || M == 1) cout << 2;",
-  "    else cout << 4;",
-  "    cout << \"\n\";",
+  "    int N, M;",
+  "    cin >> N >> M;",
+  "    if (N == 1 && M == 1) {",
+  "        cout << 1 << \"\\n\";",
+  "    } else if (N == 1 || M == 1) {",
+  "        cout << 2 << \"\\n\";",
+  "    } else {",
+  "        cout << 4 << \"\\n\";",
+  "    }",
   "    return 0;",
   "}",
 ];
@@ -50,10 +54,10 @@ export function getCornerCoverSections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up I/O.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입출력 가속."),
-        t(E, "long long avoids overflow — use it freely for indices and sums.",
-            "long long으로 오버플로 방지 — 인덱스, 합계에 자주 사용."),
+        t(E, "Only iostream needed here — keep #includes minimal.",
+            "여기선 iostream 만 필요 — #include 는 필요한 것만."),
+        t(E, "Three branches map directly to the three cases — no clever shortcut needed.",
+            "세 경우를 if/else if/else 로 그대로 — 잔재주 없이 깔끔하게."),
       ],
     },
   ];

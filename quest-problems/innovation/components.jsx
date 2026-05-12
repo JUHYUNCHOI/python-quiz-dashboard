@@ -167,7 +167,9 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
@@ -199,10 +201,10 @@ export function getInnovationSections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up I/O.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입출력 가속."),
-        t(E, "long long avoids overflow — use it freely for indices and sums.",
-            "long long으로 오버플로 방지 — 인덱스, 합계에 자주 사용."),
+        t(E, "Range-for with auto& iterates the sorted vector without manual indexing.",
+            "auto& 범위 for로 정렬된 vector를 인덱스 없이 순회."),
+        t(E, "sort + linear pass = O(N log N) — perfectly fast for the greedy.",
+            "sort + 선형 패스 = O(N log N) — 탐욕법에 충분히 빠름."),
       ],
     },
   ];

@@ -343,18 +343,18 @@ const BAL_PY = [
   "    print(2 * min(N, M))",
 ];
 const BAL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "    int T; cin >> T;",
-  "    while (T--) {",
+  "    int T;",
+  "    cin >> T;",
+  "    for (int tc = 0; tc < T; tc++) {",
   "        long long N, M;",
   "        cin >> N >> M;",
   "        // Maximum balanced pairs = min(N, M); each pair = 2 chars",
-  "        cout << 2 * min(N, M) << \"\\n\";",
+  "        cout << 2 * min(N, M) << endl;",
   "    }",
   "    return 0;",
   "}",
@@ -378,7 +378,7 @@ export function getBalancedSections(E) {
       ],
       cppOnly: [
         t(E, "long long for N, M — could be up to 10^18.", "long long 사용 — N, M 이 10^18 까지 가능."),
-        t(E, "min(N, M) from <algorithm> (included via bits/stdc++.h).", "min(N, M) 은 <algorithm> (bits/stdc++.h 포함)."),
+        t(E, "min(N, M) needs #include <algorithm>.", "min(N, M) 은 #include <algorithm> 필요."),
       ],
     },
   ];

@@ -263,13 +263,12 @@ const LP_INPUT_PY = [
   "s = input().strip()",
 ];
 const LP_INPUT_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <string>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int N;",
   "    cin >> N;",
   "    string s;",
@@ -345,12 +344,12 @@ const LP_FULL_PY = [
   "print(ans)",
 ];
 const LP_FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <string>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
   "    int N; cin >> N;",
   "    string s; cin >> s;",
   "",

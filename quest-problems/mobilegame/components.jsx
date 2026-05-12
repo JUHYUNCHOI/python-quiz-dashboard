@@ -189,14 +189,19 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int N; cin >> N;",
-  "    long long total = 0, x;",
-  "    while (N-- && cin >> x) total += x;",
-  "    cout << total << \"\n\";",
+  "    int N;",
+  "    cin >> N;",
+  "    long long total = 0;",
+  "    for (int i = 0; i < N; i++) {",
+  "        int x;",
+  "        cin >> x;",
+  "        total += x;",
+  "    }",
+  "    cout << total << \"\\n\";",
   "    return 0;",
   "}",
 ];
@@ -218,10 +223,10 @@ export function getMobileGameSections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up I/O.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입출력 가속."),
-        t(E, "long long avoids overflow — use it freely for indices and sums.",
-            "long long으로 오버플로 방지 — 인덱스, 합계에 자주 사용."),
+        t(E, "Plain for-loop reading N scores — no while(N--) tricks needed.",
+            "평범한 for 루프로 N 개 점수 읽기 — while(N--) 같은 트릭 안 씀."),
+        t(E, "long long for total in case the sum is large.",
+            "합계가 클 수 있으니 total 만 long long."),
       ],
     },
   ];

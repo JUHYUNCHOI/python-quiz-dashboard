@@ -168,17 +168,17 @@ const PR_INPUT_PY = [
   "stack = list(map(int, input().split()))  # index 0 = top",
 ];
 const PR_INPUT_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int N, Q;",
   "    cin >> N >> Q;",
   "    vector<int> stack(N);",
-  "    for (int i = 0; i < N; i++) cin >> stack[i];",
+  "    for (int i = 0; i < N; i++) {",
+  "        cin >> stack[i];",
+  "    }",
 ];
 
 /* Section 2: Find target's position */
@@ -189,13 +189,15 @@ const PR_FIND_PY = [
   "    print(pos)                  # presents above = pos",
 ];
 const PR_FIND_CPP = [
-  "    while (Q--) {",
+  "    for (int q = 0; q < Q; q++) {",
   "        int target;",
   "        cin >> target;",
   "",
   "        int pos = 0;",
-  "        while (stack[pos] != target) pos++;   // linear scan from top",
-  "        cout << pos << '\\n';",
+  "        while (stack[pos] != target) {        // linear scan from top",
+  "            pos++;",
+  "        }",
+  "        cout << pos << endl;",
 ];
 
 /* Section 3: Remove target */
@@ -221,24 +223,26 @@ const PR_FULL_PY = [
   "    stack.pop(pos)",
 ];
 const PR_FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int N, Q;",
   "    cin >> N >> Q;",
   "    vector<int> stack(N);",
-  "    for (int i = 0; i < N; i++) cin >> stack[i];",
+  "    for (int i = 0; i < N; i++) {",
+  "        cin >> stack[i];",
+  "    }",
   "",
-  "    while (Q--) {",
+  "    for (int q = 0; q < Q; q++) {",
   "        int target;",
   "        cin >> target;",
   "        int pos = 0;",
-  "        while (stack[pos] != target) pos++;",
-  "        cout << pos << '\\n';",
+  "        while (stack[pos] != target) {",
+  "            pos++;",
+  "        }",
+  "        cout << pos << endl;",
   "        stack.erase(stack.begin() + pos);",
   "    }",
   "    return 0;",
