@@ -134,13 +134,17 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
   "using namespace std;",
   "",
+  "long long comb2(long long x) {",
+  "    return x * (x - 1) / 2;",
+  "}",
+  "",
   "int main() {",
-  "    long long N, M; cin >> N >> M;",
-  "    auto comb2 = [](long long x){ return x * (x - 1) / 2; };",
-  "    cout << comb2(N + 1) * comb2(M + 1) << \"\n\";",
+  "    long long N, M;",
+  "    cin >> N >> M;",
+  "    cout << comb2(N + 1) * comb2(M + 1) << \"\\n\";",
   "    return 0;",
   "}",
 ];
@@ -162,10 +166,10 @@ export function getRectanglesSections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) speeds up I/O.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr)로 입출력 가속."),
-        t(E, "long long avoids overflow — use it freely for indices and sums.",
-            "long long으로 오버플로 방지 — 인덱스, 합계에 자주 사용."),
+        t(E, "Plain helper function `comb2` — easier to read than a lambda for a single use.",
+            "평범한 함수 `comb2` — 한 번 쓰는 람다보다 읽기 쉬움."),
+        t(E, "long long for N, M and the product — answer = C(N+1,2)*C(M+1,2) can exceed int.",
+            "N, M 과 곱은 long long — 답 C(N+1,2)*C(M+1,2) 가 int 범위 초과 가능."),
       ],
     },
   ];
