@@ -608,16 +608,16 @@ const BR_INPUT_PY = [
   "result = set()",
 ];
 const BR_INPUT_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <string>",
+  "#include <set>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int n, f;",
   "    cin >> n >> f;",
-  "    string s; cin >> s;",
+  "    string s;",
+  "    cin >> s;",
   "    set<string> result;",
 ];
 
@@ -775,16 +775,16 @@ const MOO_INPUT_PY = [
   "string = list(input().strip())",
 ];
 const MOO_INPUT_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <string>",
+  "#include <set>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
-  "",
   "    int n, f;",
   "    cin >> n >> f;",
-  "    string s; cin >> s;",
+  "    string s;",
+  "    cin >> s;",
 ];
 
 const MOO_PRECOUNT_PY = [
@@ -923,8 +923,8 @@ export function getMooSections(E) {
       cppOnly: [
         t(E, "std::string is mutable in C++ — direct s[i] = c works without conversion.",
             "C++ string 은 변경 가능 — 변환 없이 s[i] = c 바로 가능."),
-        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) — Fast I/O, essential for N=20K.",
-            "ios::sync_with_stdio(false) + cin.tie(nullptr) — Fast I/O, N=20K 에 필수."),
+        t(E, "Include only the headers you actually use (iostream/string/set) — same style you've learned.",
+            "쓰는 헤더만 명시적으로 include (iostream/string/set) — 배운 그대로."),
       ],
     },
     {
