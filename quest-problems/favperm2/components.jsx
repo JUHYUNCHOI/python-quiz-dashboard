@@ -1,3 +1,9 @@
+// 🔒 USACO_VERIFIED (2026-05-13)
+//   Python: 2/11 (TLE/RTE - backtracking too slow) (same file as permutation)
+//   C++:    2/11 (TLE 3-11, backtracking too slow) (same file as permutation)
+//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
+//   상세: REPO_ROOT/USACO_VERIFICATION.md
+
 /* ================================================================
    FavPerm2 components — re-exported from permutation/ to keep the
    two quests fully synchronized (FavPerm2 is a duplicate of the

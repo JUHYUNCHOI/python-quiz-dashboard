@@ -1,3 +1,9 @@
+// 🔒 USACO_VERIFIED (2026-05-13)
+//   Python: 8/13 (TLE 9-13, brute simulation)
+//   C++:    8/14 (TLE 9-14, brute simulation)
+//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
+//   상세: REPO_ROOT/USACO_VERIFICATION.md
+
 import { useState, useRef } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";

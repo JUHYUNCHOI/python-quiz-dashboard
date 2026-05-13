@@ -1,3 +1,9 @@
+// 🔒 USACO_VERIFIED (2026-05-13)
+//   Python: 5/14 (TLE many cases, recursive Python too slow)
+//   C++:    8/9+ (TLE - brute)
+//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
+//   상세: REPO_ROOT/USACO_VERIFICATION.md
+
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";

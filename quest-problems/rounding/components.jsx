@@ -1,3 +1,9 @@
+// 🔒 USACO_VERIFIED (2026-05-13)
+//   Python: 13/13 PASS
+//   C++:    13/13 PASS
+//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
+//   상세: REPO_ROOT/USACO_VERIFICATION.md
+
 import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock, highlight } from "@/components/quest/shared";
