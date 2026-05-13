@@ -5,6 +5,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#dc2626";
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('billboard.in')",
+  "sys.stdout = open('billboard.out', 'w')",
+  "",
   "# Read billboard and feed billboard coordinates",
   "x1, y1, x2, y2 = map(int, input().split())",
   "x3, y3, x4, y4 = map(int, input().split())",
@@ -49,6 +54,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"billboard.in\", \"r\", stdin);",
+  "    freopen(\"billboard.out\", \"w\", stdout);",
+  "",
   "    long long x1, y1, x2, y2, x3, y3, x4, y4;",
   "    cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3 >> x4 >> y4;",
   "    long long bw = x2 - x1, bh = y2 - y1;",

@@ -5,6 +5,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#2563eb";
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('lifeguards.in')",
+  "sys.stdout = open('lifeguards.out', 'w')",
+  "",
   "N = int(input())",
   "shifts = []",
   "for _ in range(N):",
@@ -56,6 +61,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"lifeguards.in\", \"r\", stdin);",
+  "    freopen(\"lifeguards.out\", \"w\", stdout);",
+  "",
   "    int N;",
   "    cin >> N;",
   "    vector<pair<int,int>> guards(N);",

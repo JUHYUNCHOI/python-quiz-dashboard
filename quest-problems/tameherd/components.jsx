@@ -183,6 +183,11 @@ export function TameHerdSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('taming.in')",
+  "sys.stdout = open('taming.out', 'w')",
+  "",
   "N = int(input())",
   "log = list(map(int, input().split()))",
   "",
@@ -225,6 +230,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"taming.in\", \"r\", stdin);",
+  "    freopen(\"taming.out\", \"w\", stdout);",
+  "",
   "    int N; cin >> N;",
   "    vector<int> log(N);",
   "    for (auto& x : log) cin >> x;",

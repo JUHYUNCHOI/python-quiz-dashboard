@@ -193,6 +193,11 @@ export function CrossRoad2Sim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('circlecross.in')",
+  "sys.stdout = open('circlecross.out', 'w')",
+  "",
   "N = int(input())",
   "s = input().strip()",
   "",
@@ -228,6 +233,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"circlecross.in\", \"r\", stdin);",
+  "    freopen(\"circlecross.out\", \"w\", stdout);",
+  "",
   "    int N; cin >> N;",
   "    string s; cin >> s;",
   "    map<char, vector<int>> pos;",

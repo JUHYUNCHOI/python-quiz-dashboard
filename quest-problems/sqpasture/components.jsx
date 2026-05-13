@@ -146,6 +146,11 @@ export function SqPastureSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('square.in')",
+  "sys.stdout = open('square.out', 'w')",
+  "",
   "# Read two rectangles",
   "x1, y1, x2, y2 = map(int, input().split())",
   "x3, y3, x4, y4 = map(int, input().split())",
@@ -168,6 +173,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"square.in\", \"r\", stdin);",
+  "    freopen(\"square.out\", \"w\", stdout);",
+  "",
   "    long long x1, y1, x2, y2, x3, y3, x4, y4;",
   "    cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3 >> x4 >> y4;",
   "    long long minX = min(x1, x3), maxX = max(x2, x4);",

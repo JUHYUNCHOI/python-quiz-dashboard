@@ -238,6 +238,11 @@ function Tally({ color, label, n }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('tttt.in')",
+  "sys.stdout = open('tttt.out', 'w')",
+  "",
   "grid = []",
   "for _ in range(3):",
   "    grid.append(input())",
@@ -271,6 +276,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"tttt.in\", \"r\", stdin);",
+  "    freopen(\"tttt.out\", \"w\", stdout);",
+  "",
   "    vector<string> grid(3);",
   "    for (auto& r : grid) cin >> r;",
   "    set<set<char>> single, pair_;",

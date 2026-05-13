@@ -5,6 +5,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#2563eb";
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('sleepy.in')",
+  "sys.stdout = open('sleepy.out', 'w')",
+  "",
   "N = int(input())",
   "a = list(map(int, input().split()))",
   "",
@@ -25,6 +30,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"sleepy.in\", \"r\", stdin);",
+  "    freopen(\"sleepy.out\", \"w\", stdout);",
+  "",
   "    cin.tie(nullptr);",
   "",
   "    int N;",

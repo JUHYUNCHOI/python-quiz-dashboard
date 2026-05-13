@@ -149,6 +149,11 @@ export function RevegSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('revegetate.in')",
+  "sys.stdout = open('revegetate.out', 'w')",
+  "",
   "N, M = map(int, input().split())",
   "",
   "# constraints[i] = set of pastures that must differ from i",
@@ -181,6 +186,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"revegetate.in\", \"r\", stdin);",
+  "    freopen(\"revegetate.out\", \"w\", stdout);",
+  "",
   "    int N, M; cin >> N >> M;",
   "    vector<set<int>> con(N + 1);",
   "    for (int _m = 0; _m < M; _m++) {",

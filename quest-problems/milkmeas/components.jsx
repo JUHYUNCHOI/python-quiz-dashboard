@@ -228,6 +228,11 @@ export function MilkMeasSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('measurement.in')",
+  "sys.stdout = open('measurement.out', 'w')",
+  "",
   "N = int(input())",
   "",
   "# 3 cows start at 7 gallons each",
@@ -268,6 +273,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"measurement.in\", \"r\", stdin);",
+  "    freopen(\"measurement.out\", \"w\", stdout);",
+  "",
   "    int N;",
   "    cin >> N;",
   "    vector<tuple<int, string, int>> events(N);",

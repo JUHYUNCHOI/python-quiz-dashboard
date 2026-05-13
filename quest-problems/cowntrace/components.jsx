@@ -6,6 +6,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#059669";
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('tracing.in')",
+  "sys.stdout = open('tracing.out', 'w')",
+  "",
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -73,6 +78,10 @@ const FULL_CPP = [
   "}",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"tracing.in\", \"r\", stdin);",
+  "    freopen(\"tracing.out\", \"w\", stdout);",
+  "",
   "    int N, T;",
   "    cin >> N >> T;",
   "    vector<Event> events(T);",

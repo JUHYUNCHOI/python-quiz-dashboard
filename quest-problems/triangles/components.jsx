@@ -125,6 +125,11 @@ export function TrianglesSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('triangles.in')",
+  "sys.stdout = open('triangles.out', 'w')",
+  "",
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -164,6 +169,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"triangles.in\", \"r\", stdin);",
+  "    freopen(\"triangles.out\", \"w\", stdout);",
+  "",
   "    cin.tie(nullptr);",
   "",
   "    int N;",

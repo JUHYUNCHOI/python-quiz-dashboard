@@ -5,6 +5,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#059669";
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('guess.in')",
+  "sys.stdout = open('guess.out', 'w')",
+  "",
   "N = int(input())",
   "animals = []",
   "for _ in range(N):",
@@ -33,6 +38,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"guess.in\", \"r\", stdin);",
+  "    freopen(\"guess.out\", \"w\", stdout);",
+  "",
   "    int N;",
   "    cin >> N;",
   "    vector<set<string>> traits(N);",

@@ -5,6 +5,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#059669";
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('outofplace.in')",
+  "sys.stdout = open('outofplace.out', 'w')",
+  "",
   "N = int(input())",
   "a = []",
   "for _ in range(N):",
@@ -32,6 +37,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"outofplace.in\", \"r\", stdin);",
+  "    freopen(\"outofplace.out\", \"w\", stdout);",
+  "",
   "    int N;",
   "    cin >> N;",
   "    vector<int> a(N);",

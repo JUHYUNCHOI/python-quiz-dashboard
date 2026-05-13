@@ -190,6 +190,11 @@ export function DontBeLastSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('notlast.in')",
+  "sys.stdout = open('notlast.out', 'w')",
+  "",
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -224,6 +229,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"notlast.in\", \"r\", stdin);",
+  "    freopen(\"notlast.out\", \"w\", stdout);",
+  "",
   "    vector<string> cows = {\"Bessie\", \"Elsie\", \"Daisy\", \"Gertie\", \"Annabelle\", \"Maggie\", \"Henrietta\"};",
   "    map<string, int> milk;",
   "    for (int i = 0; i < (int)cows.size(); i++) {",

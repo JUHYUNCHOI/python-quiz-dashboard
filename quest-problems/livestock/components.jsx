@@ -154,6 +154,11 @@ export function ChainSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('lineup.in')",
+  "sys.stdout = open('lineup.out', 'w')",
+  "",
   "cows = ['Bessie','Buttercup','Belinda','Beatrice',",
   "        'Bella','Blue','Betsy','Sue']",
   "cows.sort()",
@@ -205,6 +210,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"lineup.in\", \"r\", stdin);",
+  "    freopen(\"lineup.out\", \"w\", stdout);",
+  "",
   "    vector<string> cows = {\"Beatrice\",\"Belinda\",\"Bella\",\"Bessie\",\"Betsy\",\"Blue\",\"Buttercup\",\"Sue\"};",
   "    map<string, vector<string>> adj;",
   "    int N; cin >> N;",

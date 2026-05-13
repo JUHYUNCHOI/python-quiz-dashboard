@@ -194,6 +194,11 @@ export function CowTipSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('cowtip.in')",
+  "sys.stdout = open('cowtip.out', 'w')",
+  "",
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -223,6 +228,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"cowtip.in\", \"r\", stdin);",
+  "    freopen(\"cowtip.out\", \"w\", stdout);",
+  "",
   "    int N;",
   "    cin >> N;",
   "    vector<string> rows(N);",

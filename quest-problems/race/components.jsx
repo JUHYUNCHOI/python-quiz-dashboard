@@ -5,6 +5,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#059669";
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('race.in')",
+  "sys.stdout = open('race.out', 'w')",
+  "",
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -41,6 +46,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"race.in\", \"r\", stdin);",
+  "    freopen(\"race.out\", \"w\", stdout);",
+  "",
   "    long long K, N;",
   "    cin >> K >> N;",
   "    for (long long q = 0; q < N; q++) {",

@@ -6,6 +6,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#8b5cf6";
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('backforth.in')",
+  "sys.stdout = open('backforth.out', 'w')",
+  "",
   "barn1 = list(map(int, input().split()))",
   "barn2 = list(map(int, input().split()))",
   "",
@@ -43,6 +48,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"backforth.in\", \"r\", stdin);",
+  "    freopen(\"backforth.out\", \"w\", stdout);",
+  "",
   "    vector<int> b1(10), b2(10);",
   "    for (auto& x : b1) cin >> x;",
   "    for (auto& x : b2) cin >> x;",

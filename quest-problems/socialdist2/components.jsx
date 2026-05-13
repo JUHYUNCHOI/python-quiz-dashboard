@@ -198,6 +198,11 @@ export function SocDist2Sim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('socdist2.in')",
+  "sys.stdout = open('socdist2.out', 'w')",
+  "",
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -243,6 +248,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"socdist2.in\", \"r\", stdin);",
+  "    freopen(\"socdist2.out\", \"w\", stdout);",
+  "",
   "    int N; cin >> N;",
   "    vector<pair<long long,int>> cows(N);",
   "    for (auto& [x, s] : cows) cin >> x >> s;",

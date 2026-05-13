@@ -116,6 +116,11 @@ function btnStyle(color) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('buckets.in')",
+  "sys.stdout = open('buckets.out', 'w')",
+  "",
   "import sys",
   "from collections import deque",
   "",
@@ -159,6 +164,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"buckets.in\", \"r\", stdin);",
+  "    freopen(\"buckets.out\", \"w\", stdout);",
+  "",
   "    cin.tie(nullptr);",
   "",
   "    vector<string> grid(10);",

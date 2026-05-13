@@ -178,6 +178,11 @@ export function MismatchRunsSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('breedflip.in')",
+  "sys.stdout = open('breedflip.out', 'w')",
+  "",
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -205,6 +210,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"breedflip.in\", \"r\", stdin);",
+  "    freopen(\"breedflip.out\", \"w\", stdout);",
+  "",
   "    int N; cin >> N;",
   "    string A, B; cin >> A >> B;",
   "    // Count contiguous blocks where A[i] != B[i]",

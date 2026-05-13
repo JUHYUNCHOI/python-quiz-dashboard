@@ -5,6 +5,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#d97706";
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('billboard.in')",
+  "sys.stdout = open('billboard.out', 'w')",
+  "",
   "def rect_area(x1, y1, x2, y2):",
   "    return max(0, x2 - x1) * max(0, y2 - y1)",
   "",
@@ -37,6 +42,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"billboard.in\", \"r\", stdin);",
+  "    freopen(\"billboard.out\", \"w\", stdout);",
+  "",
   "    long long ax1, ay1, ax2, ay2;",
   "    long long bx1, by1, bx2, by2;",
   "    long long cx1, cy1, cx2, cy2;",

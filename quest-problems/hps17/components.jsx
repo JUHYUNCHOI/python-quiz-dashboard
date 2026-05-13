@@ -5,6 +5,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#2563eb";
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('hps.in')",
+  "sys.stdout = open('hps.out', 'w')",
+  "",
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -44,6 +49,10 @@ const FULL_CPP = [
   "char beats(char c) { return c == 'H' ? 'S' : (c == 'P' ? 'H' : 'P'); }",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"hps.in\", \"r\", stdin);",
+  "    freopen(\"hps.out\", \"w\", stdout);",
+  "",
   "    int N; cin >> N;",
   "    vector<char> plays(N);",
   "    for (int i = 0; i < N; i++) cin >> plays[i];",

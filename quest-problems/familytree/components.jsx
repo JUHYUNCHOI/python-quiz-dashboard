@@ -220,6 +220,11 @@ export function FamilyTreeSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('family.in')",
+  "sys.stdout = open('family.out', 'w')",
+  "",
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -271,6 +276,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"family.in\", \"r\", stdin);",
+  "    freopen(\"family.out\", \"w\", stdout);",
+  "",
   "    int N; string A, B; cin >> N >> A >> B;",
   "    map<string, string> parent;",
   "    for (int _n = 0; _n < N; _n++) { string p, c; cin >> p >> c; parent[c] = p; }",

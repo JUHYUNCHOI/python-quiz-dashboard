@@ -155,6 +155,11 @@ export function CowSignalScaleSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('cowsignal.in')",
+  "sys.stdout = open('cowsignal.out', 'w')",
+  "",
   "M, N, K = map(int, input().split())",
   "grid = []",
   "for i in range(M):",
@@ -175,6 +180,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"cowsignal.in\", \"r\", stdin);",
+  "    freopen(\"cowsignal.out\", \"w\", stdout);",
+  "",
   "    int M, N, K;",
   "    cin >> M >> N >> K;",
   "    vector<string> grid(M);",

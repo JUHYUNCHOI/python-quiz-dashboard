@@ -5,6 +5,11 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#d97706";
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('teleport.in')",
+  "sys.stdout = open('teleport.out', 'w')",
+  "",
   "a, b, x, y = map(int, input().split())",
   "",
   "# Direct distance",
@@ -26,6 +31,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"teleport.in\", \"r\", stdin);",
+  "    freopen(\"teleport.out\", \"w\", stdout);",
+  "",
   "    cin.tie(nullptr);",
   "",
   "    long long a, b, x, y;",

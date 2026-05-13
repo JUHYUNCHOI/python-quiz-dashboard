@@ -228,6 +228,11 @@ export function SwapityRoundSim({ E }) {
 }
 
 const FULL_PY = [
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "import sys",
+  "sys.stdin = open('swap.in')",
+  "sys.stdout = open('swap.out', 'w')",
+  "",
   "import sys",
   "input = sys.stdin.readline",
   "",
@@ -272,6 +277,10 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    freopen(\"swap.in\", \"r\", stdin);",
+  "    freopen(\"swap.out\", \"w\", stdout);",
+  "",
   "    int N, M, K; cin >> N >> M >> K;",
   "    vector<int> perm(N);",
   "    iota(perm.begin(), perm.end(), 0);",
