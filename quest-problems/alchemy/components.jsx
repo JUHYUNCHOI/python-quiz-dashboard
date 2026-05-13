@@ -1,3 +1,8 @@
+// 🔒 USACO_VERIFIED (2026-05-13)
+//   Python: 0/1 (RTE - wrong input parsing)
+//   C++:    0/1 (WA - scaffold only (just checks initial count))
+//   코드 수정 시 USACO 재제출 필요 — REPO_ROOT/USACO_VERIFICATION.md 참고
+
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";

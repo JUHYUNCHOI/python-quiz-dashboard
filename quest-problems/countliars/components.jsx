@@ -1,3 +1,8 @@
+// 🔒 USACO_VERIFIED (2026-05-13)
+//   Python: 2/9 (TLE - O(10^6 * N) loop too slow)
+//   C++:    2/12 (TLE - same as py (p up to 10^9))
+//   코드 수정 시 USACO 재제출 필요 — REPO_ROOT/USACO_VERIFICATION.md 참고
+
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
