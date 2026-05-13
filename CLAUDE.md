@@ -60,6 +60,31 @@
 
 ---
 
+## 🔒 USACO 검증된 Quest 파일 — **수정 금지** (LOCK)
+
+`quest-problems/<id>/components.jsx` 상단에 `// 🔒 USACO_VERIFIED` 주석이 있는 파일들은 **실제 USACO 채점기 제출로 결과 검증 완료된 코드** 입니다.
+
+### 절대 규칙
+- 헤더에 `USACO_VERIFIED` 있는 파일의 **`SOLUTION_CODE`, `*_CPP`, `*_PY` 변수는 절대 자동 수정 금지**
+- 알고리즘 변경, 변수명 정리, 스타일 통일 등 "개선" 시도 모두 ❌
+- 선생님이 명시적으로 "이 quest 코드 수정해줘" 요청한 경우에만 가능 — 그 후 **USACO 재제출 필수**
+- 수정했으면 헤더 주석도 새 검증 결과로 업데이트할 것 (또는 선생님이 검증 후 업데이트)
+
+### 검증 결과 확인
+- `USACO_VERIFICATION.md` 에 전체 47 quest 결과 표 (만점/부분/WA)
+- 알려진 버그 (WA, 컴파일 에러, 오버플로우) 도 동일 — 손대지 말고 선생님과 상의
+
+### 새 quest 추가 / 미검증 quest 수정
+- 헤더 없는 quest 파일은 자유 수정 가능
+- 단, 수정 후 USACO 제출로 검증한 결과를 헤더에 추가하고 `USACO_VERIFICATION.md` 갱신
+
+### 왜 중요한가
+- 채점기 통과한 코드를 "더 깔끔하게" 수정하면 알고리즘 깨질 위험 큼
+- 선생님이 검증된 코드라고 신뢰하고 학생에게 전달 중인 상태
+- 무심코 한 수정이 USACO 점수 떨어뜨리는 회귀 (regression) 일으킴
+
+---
+
 ## ⚠️ 복습 레슨 파일 작성 규칙 — practice/interleaving answer 필드
 
 `app/review/[lessonId]/data/lessons/` 파일에서 practice/interleaving 스텝 작성 시 **반드시** 다음 규칙을 지켜야 한다.
