@@ -1094,7 +1094,7 @@ cout << idx;  // 1
           id: "s23-ch2-lb-vs-count",
           type: "explain",
           title: "🤔 잠깐 — 개수 세기는 \`count()\` 도 있지 않아?",
-          content: `맞아요. **STL 탐색 함수** 레슨에서 배운 \`count()\` 도 개수를 세요:
+          content: `맞아요. \`std::count\` 도 개수를 세요 (algorithm 의 표준 함수):
 
 \`\`\`cpp
 int cnt = count(v.begin(), v.end(), 3);   // 정렬 안 되어 있어도 OK

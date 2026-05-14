@@ -257,7 +257,7 @@ if (scores.count("Bob") > 0) {
 }
 \`\`\`
 
-> 💡 \`find\` 라는 함수도 있어요. 더 빠르고 강력한데 **iterator** 를 다뤄야 해요 (레슨 23 sort 에서 본 그 \`lower_bound\` 처럼 — "위치를 가리키는 손가락"). 이 챕터 뒤쪽에서 \`count\` 와 비교해서 짚어요. 지금은 \`count\` 만 알아도 충분.
+> 💡 \`find\` 라는 함수도 있어요. 더 빠르고 강력한데 **iterator** 를 다뤄야 해요 (sort 마스터 레슨에서 본 그 \`lower_bound\` 처럼 — "위치를 가리키는 손가락"). 이 챕터 뒤쪽에서 \`count\` 와 비교해서 짚어요. 지금은 \`count\` 만 알아도 충분.
 
 ---
 
@@ -654,13 +654,13 @@ cout << scores.empty() << endl;      // 0 (false, 비어있지 않음)
 | \`len(d)\` | \`m.size()\` |
 | \`not d\` | \`m.empty()\` |
 
-> 💡 \`find()\` 라는 함수도 있어요 — "값까지 한 번에 받고 싶을 때" 쓰는 도구. iterator 가 필요한데, 이건 **레슨 23 (sort) 에서 \`lower_bound\` 와 함께 이미 배운 그 개념** 이에요. 이 챕터 뒤쪽에서 \`count\` 와 비교해 짚어요. 지금 단계에서는 \`count\` + \`m[key]\` 두 단계로 충분해요.`
+> 💡 \`find()\` 라는 함수도 있어요 — "값까지 한 번에 받고 싶을 때" 쓰는 도구. iterator 가 필요한데, 이건 **sort 마스터 레슨에서 \`lower_bound\` 와 함께 이미 배운 그 개념** 이에요. 이 챕터 뒤쪽에서 \`count\` 와 비교해 짚어요. 지금 단계에서는 \`count\` + \`m[key]\` 두 단계로 충분해요.`
         },
         {
           id: "ch4-why-fast",
           type: "explain",
           title: "🌳 잠깐 — map 은 왜 \`sort\` 안 해도 빨라?",
-          content: `vector 에서는 "정렬 → \`binary_search\` / \`lower_bound\`" 패턴을 배웠죠 (레슨 23). 근데 map 은 **\`sort\` 한 적이 없는데** \`m.count(key)\` 가 빨라요. 이상하지 않아요?
+          content: `vector 에서는 "정렬 → \`binary_search\` / \`lower_bound\`" 패턴을 배웠죠 (sort 마스터 레슨). 근데 map 은 **\`sort\` 한 적이 없는데** \`m.count(key)\` 가 빨라요. 이상하지 않아요?
 
 ---
 
@@ -691,7 +691,7 @@ map 은 자기 안에 트리 탐색 코드를 **이미 가지고 있어서** \`.
 
 > 📌 **한 줄 정리**: vector 는 "sort + algorithm 함수", map 은 "**자기 멤버 함수**". 둘 다 정렬된 데이터에서 O(log N) 으로 같은 속도. 도구가 다른 곳에서 올 뿐.
 
-> ⚠️ 헷갈림 주의 — vector 에서 쓰는 \`std::count(v.begin(), v.end(), x)\` 는 **O(N)** 으로 느려요. 같은 이름이지만 \`m.count(key)\` 와는 **완전히 다른 함수**. 레슨 23 에서 봤던 그 경고예요.`
+> ⚠️ 헷갈림 주의 — vector 에서 쓰는 \`std::count(v.begin(), v.end(), x)\` 는 **O(N)** 으로 느려요. 같은 이름이지만 \`m.count(key)\` 와는 **완전히 다른 함수**. sort 마스터 레슨에서 봤던 그 경고예요.`
         },
         {
           id: "ch4-func-cf",
@@ -720,9 +720,9 @@ if (it != m.end()) {
 
 ### iterator 는 어디서 배웠죠?
 
-🔁 **레슨 23 (sort 마스터)** ch2 에서 \`lower_bound\` 와 함께 처음 봤어요 — "포인터처럼 위치를 가리키는 손가락". map 에서도 **똑같이** 통해요:
+🔁 **sort 마스터 레슨** ch2 에서 \`lower_bound\` 와 함께 처음 봤어요 — "포인터처럼 위치를 가리키는 손가락". map 에서도 **똑같이** 통해요:
 
-| | vector (레슨 23) | map (지금) |
+| | vector (sort 마스터) | map (지금) |
 |---|---|---|
 | 위치 얻기 | \`auto it = lower_bound(v.begin(), v.end(), 5)\` | \`auto it = m.find("Alice")\` |
 | 값 보기 | \`*it\` → 5 | \`it->second\` → 95 |
@@ -730,7 +730,7 @@ if (it != m.end()) {
 
 map 만 \`*it\` 가 아닌 \`it->second\` 인 이유는 — map 의 원소가 **pair** (키, 값) 라서. \`it->first\` 는 키, \`it->second\` 는 값.
 
-> 💡 정리: **있는지만** → \`count\`. **값까지 같이** → \`find\` + iterator (레슨 23 패턴 그대로).
+> 💡 정리: **있는지만** → \`count\`. **값까지 같이** → \`find\` + iterator (sort 마스터 레슨 패턴 그대로).
 
 ---
 
