@@ -1,39 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getFeb23Sections, Feb23DeepAuditSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])      # length of the string",
-  "s = data[1]           # the message itself",
-  "",
-  "# Find positions of every 'F' wildcard",
-  "f_positions = [i for i, c in enumerate(s) if c == 'F']",
-  "n_f = len(f_positions)",
-  "",
-  "# Try all 2^|F| ways to fill F's with B or E",
-  "results = set()",
-  "for mask in range(1 << n_f):",
-  "    arr = list(s)",
-  "    for j in range(n_f):",
-  "        arr[f_positions[j]] = 'B' if (mask >> j) & 1 else 'E'",
-  "    # excitement = count of adjacent same-letter pairs",
-  "    excitement = 0",
-  "    for i in range(len(arr) - 1):",
-  "        if arr[i] == arr[i + 1]:",
-  "            excitement += 1",
-  "    results.add(excitement)",
-  "",
-  "# Output: count of distinct excitement values, then min, then max.",
-  "print(len(results))",
-  "print(min(results))",
-  "print(max(results))",
-];
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem understanding
    ═══════════════════════════════════════════════════════════════ */

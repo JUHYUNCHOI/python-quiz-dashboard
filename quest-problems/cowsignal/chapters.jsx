@@ -1,20 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCowSignalSections, CowSignalScaleSim } from "./components";
 
-export const SOLUTION_CODE = [
-  "M, N, K = map(int, input().split())",
-  "grid = []",
-  "for i in range(M):",
-  "    grid.append(input())",
-  "",
-  "for i in range(M):",
-  "    for _ in range(K):",
-  "        row = ''",
-  "        for j in range(N):",
-  "            row += grid[i][j] * K",
-  "        print(row)",
-];
-
 /* helper: render a grid of cells */
 function Grid({ data, cellSize = 32, gap = 3, xColor = "#7c3aed", xBg = "#7c3aed", dotColor = "#c4b5fd", dotBg = "#f5f3ff", border }) {
   return (

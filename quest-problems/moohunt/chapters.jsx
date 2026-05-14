@@ -1,40 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMooHuntSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "from collections import Counter",
-  "",
-  "N, K = map(int, input().split())",
-  "",
-  "# Group identical moves so duplicates aren't recounted.",
-  "cnt = Counter()",
-  "for _ in range(K):",
-  "    x, y, z = map(int, input().split())",
-  "    cnt[(x - 1, y - 1, z - 1)] += 1",
-  "triples = list(cnt.items())",
-  "",
-  "best = -1",
-  "ways = 0",
-  "",
-  "# bit i = 1 means cell i+1 is 'M', bit i = 0 means 'O'.",
-  "for b in range(1 << N):",
-  "    score = 0",
-  "    for (x, y, z), c in triples:",
-  "        if (b >> x) & 1 and not ((b >> y) & 1) and not ((b >> z) & 1):",
-  "            score += c",
-  "    if score > best:",
-  "        best = score",
-  "        ways = 1",
-  "    elif score == best:",
-  "        ways += 1",
-  "",
-  "print(best, ways)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooHuntCh1 (5 steps: reveal / reveal / reveal / quiz / input)
    ═══════════════════════════════════════════════════════════════ */

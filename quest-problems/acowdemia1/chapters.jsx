@@ -158,37 +158,6 @@ function HIndexSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, L = map(int, input().split())",
-  "c = sorted(map(int, input().split()))",
-  "",
-  "def check(h):",
-  "    # count papers with >= h citations",
-  "    # papers are sorted ascending",
-  "    idx = N - h  # need last h papers",
-  "    if idx < 0: return False",
-  "    need = 0",
-  "    for i in range(idx, N):",
-  "        if c[i] < h:",
-  "            need += h - c[i]",
-  "    return need <= L",
-  "",
-  "lo, hi, ans = 0, N, 0",
-  "while lo <= hi:",
-  "    mid = (lo + hi) // 2",
-  "    if check(mid):",
-  "        ans = mid",
-  "        lo = mid + 1",
-  "    else:",
-  "        hi = mid - 1",
-  "",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

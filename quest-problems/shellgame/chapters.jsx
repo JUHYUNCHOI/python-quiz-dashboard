@@ -2,32 +2,6 @@ import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getShellGameSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "swaps = []",
-  "for _ in range(N):",
-  "    a, b, g = map(int, input().split())",
-  "    swaps.append((a, b, g))",
-  "",
-  "best = 0",
-  "for start in range(1, 4):       # try shell 1, 2, 3",
-  "    pos = start                  # ball starts here",
-  "    score = 0",
-  "    for a, b, g in swaps:",
-  "        if pos == a:",
-  "            pos = b",
-  "        elif pos == b:",
-  "            pos = a",
-  "        if pos == g:",
-  "            score += 1",
-  "    best = max(best, score)",
-  "",
-  "print(best)",
-];
-
 /* Python syntax highlighter (shared across snippets) */
 const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
 const PY_BUILTIN = new Set(["print","input","range","len","sum","map","int","str","chr","ord","min","max","sorted","reversed","list","dict","set","tuple","enumerate","zip","abs","round","type","isinstance","open","filter","any","all","bool","float"]);

@@ -1,49 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getDroughtSections, FeedPairSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N = int(input())",
-  "a = list(map(int, input().split()))",
-  "",
-  "# Try all possible target values t",
-  "# t must have same parity constraints",
-  "# Process left to right: feed pairs to reduce",
-  "",
-  "def solve(a, target):",
-  "    n = len(a)",
-  "    d = [x - target for x in a]",
-  "    if any(x < 0 for x in d):",
-  "        return -1",
-  "    ops = 0",
-  "    for i in range(n - 1):",
-  "        if d[i] < 0:",
-  "            return -1",
-  "        # feed pair (i, i+1) d[i] times",
-  "        ops += d[i]",
-  "        d[i+1] -= d[i]",
-  "        d[i] = 0",
-  "    if d[n-1] != 0:",
-  "        return -1",
-  "    return ops",
-  "",
-  "best = -1",
-  "for target in range(min(a) + 1):",
-  "    # Check parity",
-  "    res = solve(a[:], target)",
-  "    if res != -1:",
-  "        if best == -1 or res < best:",
-  "            best = res",
-  "",
-  "print(best)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

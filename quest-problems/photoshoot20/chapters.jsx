@@ -1,26 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getPhoto20Sections, Photo20AuditSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "b = list(map(int, input().split()))",
-  "",
-  "for a0 in range(1, N + 1):",
-  "    a = [a0]",
-  "    valid = True",
-  "    for i in range(N - 1):",
-  "        a_next = b[i] - a[-1]",
-  "        a.append(a_next)",
-  "    # Check if valid permutation of 1..N",
-  "    if sorted(a) == list(range(1, N + 1)):",
-  "        print(' '.join(map(str, a)))",
-  "        break",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

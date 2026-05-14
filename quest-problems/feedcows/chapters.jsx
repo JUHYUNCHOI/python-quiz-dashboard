@@ -1,33 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getFeedCowsSections, FeedCowsNumberLineViz } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, K = map(int, input().split())",
-  "s = input().strip()",
-  "",
-  "# covered_g[i] = True if cow i is covered by a G patch",
-  "# covered_h[i] = True if cow i is covered by an H patch",
-  "patches = 0",
-  "last_g = -1  # rightmost position covered by G patch",
-  "last_h = -1  # rightmost position covered by H patch",
-  "",
-  "for i in range(N):",
-  "    if s[i] == 'G' and i > last_g:",
-  "        # Place G patch as far right as possible",
-  "        patches += 1",
-  "        last_g = i + K  # covers i to i+K",
-  "    elif s[i] == 'H' and i > last_h:",
-  "        # Place H patch as far right as possible",
-  "        patches += 1",
-  "        last_h = i + K  # covers i to i+K",
-  "",
-  "print(patches)",
-];
-
-
 /* ===============================================================
    Chapter 1: Problem (3 steps)
    =============================================================== */

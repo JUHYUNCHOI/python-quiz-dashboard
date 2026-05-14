@@ -1,39 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMooOpsSections, MooOpsLab } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "Q = int(input())",
-  "for _ in range(Q):",
-  "    s = input().strip()",
-  "    n = len(s)",
-  "    best = -1",
-  "",
-  "    # Try each position i as start of 'MOO'",
-  "    # Final string is 'MOO' (length 3)",
-  "    # Delete chars before i: cost = i",
-  "    # Delete chars after i+2: cost = n - (i+3)",
-  "    # Flip first char if s[i] != 'M': cost 1",
-  "    # Middle char must be 'O' (can't flip middle)",
-  "    # Flip last char if s[i+2] != 'O': cost 1",
-  "    for i in range(n - 2):",
-  "        # middle must be 'O'",
-  "        if s[i + 1] != 'O':",
-  "            continue",
-  "        cost = i + (n - i - 3)  # deletions",
-  "        if s[i] != 'M':",
-  "            cost += 1",
-  "        if s[i + 2] != 'O':",
-  "            cost += 1",
-  "        if best == -1 or cost < best:",
-  "            best = cost",
-  "",
-  "    print(best)",
-];
-
-
 /* ===============================================================
    Chapter 1: Problem (3 steps)
    =============================================================== */

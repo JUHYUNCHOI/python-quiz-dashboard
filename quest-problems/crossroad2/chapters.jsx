@@ -1,37 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCrossRoad2Sections, CrossRoad2Sim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "s = input().strip()",
-  "",
-  "# Find first and second occurrence of each letter",
-  "pos = {}",
-  "for i, ch in enumerate(s):",
-  "    if ch not in pos:",
-  "        pos[ch] = [i]",
-  "    else:",
-  "        pos[ch].append(i)",
-  "",
-  "# Count crossing pairs",
-  "# Two chords cross iff their endpoints alternate: A..B..A..B",
-  "cows = list(pos.keys())",
-  "ans = 0",
-  "for i in range(len(cows)):",
-  "    for j in range(i + 1, len(cows)):",
-  "        a1, a2 = pos[cows[i]]",
-  "        b1, b2 = pos[cows[j]]",
-  "        # Check if they interleave",
-  "        if a1 < b1 < a2 < b2 or b1 < a1 < b2 < a2:",
-  "            ans += 1",
-  "",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

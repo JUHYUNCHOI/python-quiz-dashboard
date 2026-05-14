@@ -1,66 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMooLangSections, MooLangDeepAudit } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "p = 0",
-  "T = int(data[p]); p += 1     # number of test cases",
-  "",
-  "out_lines = []",
-  "for _ in range(T):",
-  "    N = int(data[p]); p += 1   # number of words",
-  "    C = int(data[p]); p += 1   # comma budget",
-  "    P = int(data[p]); p += 1   # period budget",
-  "    nouns, tverbs, iverbs, conjs = [], [], [], []",
-  "    for _ in range(N):",
-  "        word = data[p]",
-  "        p += 1",
-  "        ty = data[p]",
-  "        p += 1",
-  "        if ty[0] == 'n': nouns.append(word)",
-  "        elif ty[0] == 't': tverbs.append(word)",
-  "        elif ty[0] == 'i': iverbs.append(word)",
-  "        else: conjs.append(word)",
-  "",
-  "    # Try every type-2 count.  For each, derive the best type-1 count given",
-  "    # noun supply and the period budget (after subtracting conj-merged sentences).",
-  "    best = (0, 0, 0, 0)        # (words, tverb_count, iverb_count, conj_count)",
-  "    for n_tverb in range(len(tverbs) + 1):",
-  "        n_iverb = min(len(iverbs), len(nouns) - 2 * n_tverb)",
-  "        while n_iverb >= 0:",
-  "            n_conj = min(len(conjs), (n_tverb + n_iverb) // 2)",
-  "            if n_tverb + n_iverb - n_conj <= P:",
-  "                break",
-  "            n_iverb -= 1",
-  "        if n_iverb < 0:",
-  "            continue",
-  "        # Tack extra nouns onto the last type-2 sentence with commas.",
-  "        extra_nouns = min(C, len(nouns) - (n_iverb + 2 * n_tverb))",
-  "        if n_tverb == 0:",
-  "            extra_nouns = 0",
-  "        n_words = 3 * n_tverb + 2 * n_iverb + n_conj + extra_nouns",
-  "        best = max(best, (n_words, n_tverb, n_iverb, n_conj))",
-  "",
-  "    n_words, n_tverb, n_iverb, n_conj = best",
-  "    Cleft = C",
-  "    basic = [nouns.pop() + ' ' + iverbs.pop() for _ in range(n_iverb)] + \\",
-  "            [nouns.pop() + ' ' + tverbs.pop() + ' ' + nouns.pop() for _ in range(n_tverb)]",
-  "    while n_tverb > 0 and Cleft > 0 and len(nouns) > 0:",
-  "        basic[-1] += ', ' + nouns.pop()",
-  "        Cleft -= 1",
-  "    compound = [basic.pop() + ' ' + conjs.pop() + ' ' + basic.pop() for _ in range(n_conj)]",
-  "    sentences = [s + '.' for s in basic + compound]",
-  "    out_lines.append(str(n_words))",
-  "    out_lines.append(' '.join(sentences))",
-  "",
-  "print(chr(10).join(out_lines))",
-];
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem understanding
    ═══════════════════════════════════════════════════════════════ */

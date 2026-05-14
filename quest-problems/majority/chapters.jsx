@@ -1,41 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMajoritySections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "idx = 0",
-  "T = int(data[idx]); idx += 1     # number of test cases",
-  "",
-  "out = []",
-  "for _ in range(T):",
-  "    N = int(data[idx])",
-  "    idx += 1",
-  "    a = [int(data[idx + i]) for i in range(N)]",
-  "    idx += N",
-  "",
-  "    # Key fact (from the editorial): a type x is achievable iff",
-  "    #   some pair of cows at distance 1 OR 2 both like x.",
-  "    valid = set()",
-  "    for i in range(N - 1):",
-  "        if a[i] == a[i + 1]:                  # distance 1 — same as cow i+1",
-  "            valid.add(a[i])",
-  "        if i + 2 < N and a[i] == a[i + 2]:    # distance 2 — same as cow i+2",
-  "            valid.add(a[i])",
-  "",
-  "    if not valid:",
-  "        out.append('-1')",
-  "    else:",
-  "        out.append(' '.join(str(x) for x in sorted(valid)))",
-  "",
-  "print(chr(10).join(out))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

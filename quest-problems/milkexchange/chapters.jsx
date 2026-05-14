@@ -3,38 +3,6 @@ import { getMilkExchangeSections } from "./components";
 import MilkCircleSim from "./MilkCircleSim";
 
 /* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "p = 0",
-  "N = int(data[p])",
-  "p += 1",
-  "M = int(data[p])",
-  "p += 1",
-  "S = data[p]; p += 1               # direction string, e.g. 'RRL'",
-  "cap = [int(x) for x in data[p:p+N]]",
-  "",
-  "# Initial milk equals each cow's capacity",
-  "cur = list(cap)",
-  "",
-  "for t in range(M):",
-  "    # 1) every cow with milk passes 1L to its L/R neighbor",
-  "    for i in range(N):",
-  "        if cur[i] > 0:",
-  "            cur[i] -= 1",
-  "            j = (i + (1 if S[i] == 'R' else -1)) % N",
-  "            cur[j] += 1",
-  "    # 2) any cow over its cap loses the overflow",
-  "    for i in range(N):",
-  "        cur[i] = min(cur[i], cap[i])",
-  "",
-  "print(sum(cur))",
-];
-
-/* ================================================================
    Chapter 1: Problem Understanding (4 steps)
    ================================================================ */
 export function makeMilkExCh1(E) {

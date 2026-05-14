@@ -1,40 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getRotShiftSections, RotShiftSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0]); K = int(data[1]); T = int(data[2])",
-  "active = [int(data[3 + i]) for i in range(K)]",
-  "",
-  "# pos[c] = current position of cow c",
-  "pos = list(range(N))",
-  "",
-  "for step in range(T):",
-  "    new_pos = pos[:]",
-  "    # 1) Rotate: cow at active[j] → active[(j+1) % K]",
-  "    for j in range(K):",
-  "        for c in range(N):",
-  "            if pos[c] == active[j]:",
-  "                new_pos[c] = active[(j + 1) % K]",
-  "                break",
-  "    pos = new_pos",
-  "    # 2) Shift: every active position moves +1 mod N",
-  "    active = [(a + 1) % N for a in active]",
-  "",
-  "# Invert: at_position[p] = which cow is at position p",
-  "at_position = [0] * N",
-  "for c in range(N):",
-  "    at_position[pos[c]] = c",
-  "",
-  "# Output one line, space-separated.",
-  "print(' '.join(str(x) for x in at_position))",
-];
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem understanding
    ═══════════════════════════════════════════════════════════════ */

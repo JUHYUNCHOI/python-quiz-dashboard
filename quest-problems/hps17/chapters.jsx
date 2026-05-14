@@ -1,39 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getHps17Sections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N = int(input())",
-  "plays = [input().strip() for _ in range(N)]",
-  "",
-  "# beats[c] = the opponent gesture that c defeats",
-  "beats = {'H': 'S', 'P': 'H', 'S': 'P'}",
-  "idx = {'H': 0, 'P': 1, 'S': 2}",
-  "",
-  "# pre[i][c] = wins over rounds 0..i-1 if Bessie always plays c",
-  "pre = [[0, 0, 0] for _ in range(N + 1)]",
-  "for i, g in enumerate(plays):",
-  "    for c in 'HPS':",
-  "        pre[i + 1][idx[c]] = pre[i][idx[c]] + (1 if g == beats[c] else 0)",
-  "",
-  "# Try every split k and every (first, second) gesture pair",
-  "best = 0",
-  "for c1 in 'HPS':",
-  "    for c2 in 'HPS':",
-  "        for k in range(N + 1):",
-  "            wins = pre[k][idx[c1]] + (pre[N][idx[c2]] - pre[k][idx[c2]])",
-  "            if wins > best:",
-  "                best = wins",
-  "",
-  "print(best)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (4 steps)
    ═══════════════════════════════════════════════════════════════ */

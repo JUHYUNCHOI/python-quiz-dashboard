@@ -135,48 +135,6 @@ function MilkOrderSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N, M, K = map(int, input().split())",
-  "hierarchy = []",
-  "for _ in range(M):",
-  "    line = list(map(int, input().split()))",
-  "    hierarchy.append(line[1:])",
-  "",
-  "fixed = {}",
-  "fixed_inv = {}",
-  "for _ in range(K):",
-  "    c, p = map(int, input().split())",
-  "    fixed[c] = p",
-  "    fixed_inv[p] = c",
-  "",
-  "if 1 in fixed:",
-  "    print(fixed[1])",
-  "else:",
-  "    def feasible(p):",
-  "        if p in fixed_inv:",
-  "            return False",
-  "        for seq in hierarchy:",
-  "            if 1 in seq:",
-  "                idx = seq.index(1)",
-  "                if idx + 1 > p:",
-  "                    return False",
-  "                if (len(seq) - idx) > (N - p + 1):",
-  "                    return False",
-  "        return True",
-  "",
-  "    for p in range(1, N + 1):",
-  "        if feasible(p):",
-  "            print(p)",
-  "            break",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

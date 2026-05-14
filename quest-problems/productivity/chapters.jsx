@@ -2,37 +2,6 @@ import { C, t } from "@/components/quest/theme";
 import { getProductivitySections } from "./components";
 
 /* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "from bisect import bisect_left",
-  "",
-  "data = sys.stdin.read().split()",
-  "p = 0",
-  "N = int(data[p])",
-  "p += 1",
-  "Q = int(data[p])",
-  "p += 1",
-  "c  = [int(x) for x in data[p:p+N]]; p += N   # closing times",
-  "ti = [int(x) for x in data[p:p+N]]; p += N   # travel times",
-  "",
-  "# Reachable farm i iff S + t[i] < c[i]  ⇔  d[i] := c[i] - t[i] > S.",
-  "d = sorted(c[i] - ti[i] for i in range(N))",
-  "",
-  "out = []",
-  "for _ in range(Q):",
-  "    V = int(data[p]); p += 1   # query is 'V S' (V first, then S)",
-  "    S = int(data[p])",
-  "    p += 1",
-  "    # count of d[i] > S = N - (first index with d[i] >= S+1)",
-  "    reachable = N - bisect_left(d, S + 1)",
-  "    out.append('YES' if reachable >= V else 'NO')",
-  "",
-  "print(chr(10).join(out))",
-];
-
-/* ================================================================
    Chapter 1: Problem Understanding (4 steps)
    ================================================================ */
 export function makeProdCh1(E) {

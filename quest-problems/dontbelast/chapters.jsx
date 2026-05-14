@@ -1,36 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getDontBeLastSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "cows = ['Bessie','Elsie','Daisy','Gertie','Annabelle','Maggie','Henrietta']",
-  "milk = {c: 0 for c in cows}",
-  "",
-  "N = int(input())",
-  "for _ in range(N):",
-  "    parts = input().split()",
-  "    name = parts[0]",
-  "    amt = int(parts[1])",
-  "    milk[name] += amt",
-  "",
-  "vals = sorted(set(milk.values()))",
-  "if len(vals) < 2:",
-  "    print('Tie')",
-  "else:",
-  "    second = vals[1]",
-  "    winners = [c for c in cows if milk[c] == second]",
-  "    if len(winners) == 1:",
-  "        print(winners[0])",
-  "    else:",
-  "        print('Tie')",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

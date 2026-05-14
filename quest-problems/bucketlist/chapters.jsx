@@ -1,29 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getBucketListSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "events = []",
-  "for _ in range(N):",
-  "    s, e, b = map(int, input().split())",
-  "    events.append((s, b))     # cow starts",
-  "    events.append((e + 1, -b))  # cow ends",
-  "",
-  "events.sort()",
-  "",
-  "cur = 0",
-  "best = 0",
-  "for time, delta in events:",
-  "    cur += delta",
-  "    best = max(best, cur)",
-  "",
-  "print(best)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

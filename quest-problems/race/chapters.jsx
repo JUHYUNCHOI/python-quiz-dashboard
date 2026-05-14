@@ -134,32 +134,6 @@ function PeakSpeedSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N = int(input())",
-  "",
-  "for _ in range(N):",
-  "    K, X = map(int, input().split())",
-  "    # Strategy: accelerate 0 -> v (peak), then decelerate v -> X",
-  "    # accel covers 1+2+...+v = v(v+1)/2 in v seconds",
-  "    # decel covers (v-1)+(v-2)+...+X = (X+v-1)(v-X)/2 in (v-X) seconds",
-  "    # Find smallest peak v >= X such that total distance >= K",
-  "    v = max(X, 1)",
-  "    while True:",
-  "        accel = v * (v + 1) // 2",
-  "        decel = (X + v - 1) * (v - X) // 2 if v > X else 0",
-  "        if accel + decel >= K:",
-  "            break",
-  "        v += 1",
-  "    print(2 * v - X)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

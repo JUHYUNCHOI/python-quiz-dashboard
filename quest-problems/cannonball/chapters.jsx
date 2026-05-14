@@ -1,48 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCannonballSections, CannonballTrajectorySim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "p = 0",
-  "N = int(data[p]); p += 1     # number of pads (positions 1..N)",
-  "S = int(data[p]); p += 1     # starting position",
-  "",
-  "# Position i holds pad i — line i is its (type, value) pair.",
-  "typ = [0] * (N + 2)",
-  "val = [0] * (N + 2)",
-  "for i in range(1, N + 1):",
-  "    typ[i] = int(data[p]); p += 1   # 0 = jump pad, 1 = target",
-  "    val[i] = int(data[p]); p += 1   # power-up amount or break threshold",
-  "",
-  "x = S",
-  "direction = 1   # +1 right, -1 left",
-  "power = 1",
-  "broken = [False] * (N + 2)",
-  "ans = 0",
-  "",
-  "# 5,000,000 iterations is plenty.  When Bessie loops between two value-0",
-  "# jump pads forever, she can't break NEW targets after the loop starts,",
-  "# so we don't need explicit cycle detection — just a generous cap.",
-  "for _ in range(5_000_000):",
-  "    if x < 1 or x > N:",
-  "        break",
-  "    if typ[x] == 1 and power >= val[x] and not broken[x]:",
-  "        broken[x] = True",
-  "        ans += 1",
-  "    if typ[x] == 0:",
-  "        direction *= -1",
-  "        power += val[x]",
-  "    x += direction * power",
-  "",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

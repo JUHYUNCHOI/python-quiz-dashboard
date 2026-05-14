@@ -1,42 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getLonelyPhotoSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "s = input().strip()",
-  "",
-  "ans = 0",
-  "for i in range(N):",
-  "    # Count consecutive same-type on left and right",
-  "    left = 0",
-  "    right = 0",
-  "    for j in range(i - 1, -1, -1):",
-  "        if s[j] == s[i]: left += 1",
-  "        else: break",
-  "    for j in range(i + 1, N):",
-  "        if s[j] == s[i]: right += 1",
-  "        else: break",
-  "",
-  "    # This cow is lonely in substrings where",
-  "    # it's the only one of its type",
-  "    # Opposite cows on left",
-  "    opp_left = i - left",
-  "    opp_right = (N - 1 - i) - right",
-  "",
-  "    # Substrings where cow i is the only one of its type:",
-  "    # need >= 2 of opposite type total",
-  "    # Choose l from opp_left, r from opp_right, l+r >= 2",
-  "    ans += opp_left * opp_right  # both sides have opposite",
-  "    ans += max(0, opp_left - 1)  # 2+ from left, 0 from right",
-  "    ans += max(0, opp_right - 1) # 0 from left, 2+ from right",
-  "",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

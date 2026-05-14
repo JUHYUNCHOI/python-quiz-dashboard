@@ -1,38 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCowSplitsSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE (k=1 friendly: M ≤ 3)
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "T, k = map(int, input().split())",
-  "out = []",
-  "for _ in range(T):",
-  "    N = int(input())",
-  "    S = input().strip()",
-  "    n3 = 3 * N",
-  "    # If N is odd, total length 3N is odd -> impossible",
-  "    if N % 2 == 1:",
-  "        out.append('-1')",
-  "        continue",
-  "    # Try M=1: is S itself a square (Y+Y) ?",
-  "    half = n3 // 2",
-  "    if S[:half] == S[half:]:",
-  "        out.append('1')",
-  "        out.append(' '.join(['1'] * n3))",
-  "        continue",
-  "    # Otherwise M=3 by letter group (works for k=1)",
-  "    label = {'C': 1, 'O': 2, 'W': 3}",
-  "    labels = [str(label[ch]) for ch in S]",
-  "    out.append('3')",
-  "    out.append(' '.join(labels))",
-  "print('\\n'.join(out))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeCowSplitsCh1 (5 steps)
    ═══════════════════════════════════════════════════════════════ */

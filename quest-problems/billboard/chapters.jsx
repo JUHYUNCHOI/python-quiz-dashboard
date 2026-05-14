@@ -136,36 +136,6 @@ function OverlapSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "def rect_area(x1, y1, x2, y2):",
-  "    return max(0, x2 - x1) * max(0, y2 - y1)",
-  "",
-  "def overlap(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2):",
-  "    ox1 = max(ax1, bx1)",
-  "    oy1 = max(ay1, by1)",
-  "    ox2 = min(ax2, bx2)",
-  "    oy2 = min(ay2, by2)",
-  "    return rect_area(ox1, oy1, ox2, oy2)",
-  "",
-  "# Billboard 1",
-  "x1, y1, x2, y2 = map(int, input().split())",
-  "# Billboard 2",
-  "x3, y3, x4, y4 = map(int, input().split())",
-  "# Truck",
-  "x5, y5, x6, y6 = map(int, input().split())",
-  "",
-  "area1 = rect_area(x1, y1, x2, y2)",
-  "area2 = rect_area(x3, y3, x4, y4)",
-  "",
-  "ov1 = overlap(x1, y1, x2, y2, x5, y5, x6, y6)",
-  "ov2 = overlap(x3, y3, x4, y4, x5, y5, x6, y6)",
-  "",
-  "print(area1 - ov1 + area2 - ov2)",
-];
-
 /* Helper: draw a rectangle on a coordinate grid */
 function RectBox({ x1, y1, x2, y2, color, label, opacity = 0.3 }) {
   const w = x2 - x1, h = y2 - y1;

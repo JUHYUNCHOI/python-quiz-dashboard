@@ -2,46 +2,6 @@ import { C, t } from "@/components/quest/theme";
 import { getFjFarmsSections } from "./components";
 import { GrowthSim } from "./GrowthSim";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "idx = 0",
-  "T = int(data[idx]); idx += 1     # number of test cases",
-  "",
-  "# t[i] = how many plants should be STRICTLY taller than plant i in the",
-  "# final ordering.  Find the smallest day x such that after x days of",
-  "# growth, this ordering matches.  -1 if no such x exists.",
-  "# Editorial fact: under the given bounds, if any x works it's ≤ 1000.",
-  "",
-  "def solve(N, h, a, t):",
-  "    for x in range(1101):",
-  "        heights = [h[i] + a[i] * x for i in range(N)]",
-  "        # tcomp[i] = number of plants strictly taller than plant i",
-  "        tcomp = [sum(1 for j in range(N) if heights[j] > heights[i]) for i in range(N)]",
-  "        if tcomp == t:",
-  "            return x",
-  "    return -1",
-  "",
-  "out = []",
-  "for _ in range(T):",
-  "    N = int(data[idx])",
-  "    idx += 1",
-  "    h = [int(data[idx + i]) for i in range(N)]",
-  "    idx += N",
-  "    a = [int(data[idx + i]) for i in range(N)]",
-  "    idx += N",
-  "    t = [int(data[idx + i]) for i in range(N)]",
-  "    idx += N",
-  "    out.append(str(solve(N, h, a, t)))",
-  "",
-  "print(chr(10).join(out))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

@@ -1,38 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getPhotoshoot2Sections, Photoshoot2SwapSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "target = list(map(int, input().split()))",
-  "current = list(map(int, input().split()))",
-  "",
-  "# Build position map: where each cow is in current",
-  "pos = {}",
-  "for i, cow in enumerate(current):",
-  "    pos[cow] = i",
-  "",
-  "# Count inversions: cows not in correct relative order",
-  "# A cow needs to move left if it appears after",
-  "# a cow that should come after it in target",
-  "ans = 0",
-  "max_pos = -1",
-  "for cow in target:",
-  "    # Position of this cow in current arrangement",
-  "    p = pos[cow]",
-  "    if p < max_pos:",
-  "        # This cow is to the left of a cow that",
-  "        # should come before it -> needs moving",
-  "        ans += 1",
-  "    else:",
-  "        max_pos = p",
-  "",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

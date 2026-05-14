@@ -126,35 +126,6 @@ function PermShuffleSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "shuffle = list(map(int, input().split()))",
-  "# Convert to 0-indexed",
-  "shuffle = [s - 1 for s in shuffle]",
-  "",
-  "cows = list(map(int, input().split()))",
-  "",
-  "# Build inverse permutation",
-  "inv = [0] * N",
-  "for i in range(N):",
-  "    inv[shuffle[i]] = i",
-  "",
-  "# Apply inverse permutation 3 times",
-  "result = cows[:]",
-  "for _ in range(3):",
-  "    temp = [0] * N",
-  "    for i in range(N):",
-  "        temp[i] = result[inv[i]]",
-  "    result = temp",
-  "",
-  "for x in result:",
-  "    print(x)",
-];
-
-
 /* ---------------------------------------------------------------
    Chapter 1: Problem (3 steps)
    --------------------------------------------------------------- */

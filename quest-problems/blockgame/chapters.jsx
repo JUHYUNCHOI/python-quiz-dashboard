@@ -1,31 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getBlockGameSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "from collections import Counter",
-  "input = sys.stdin.readline",
-  "",
-  "N = int(input())",
-  "need = Counter()",
-  "",
-  "for _ in range(N):",
-  "    front = input().strip()",
-  "    back = input().strip()",
-  "    cf = Counter(front)",
-  "    cb = Counter(back)",
-  "    # For each letter, we need max of front count and back count",
-  "    all_letters = set(cf.keys()) | set(cb.keys())",
-  "    for ch in all_letters:",
-  "        need[ch] += max(cf[ch], cb[ch])",
-  "",
-  "print(sum(need.values()))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

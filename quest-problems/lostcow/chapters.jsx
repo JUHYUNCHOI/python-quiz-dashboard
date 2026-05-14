@@ -1,35 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getLostCowSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "x, y = map(int, input().split())",
-  "",
-  "pos = x",
-  "direction = 1  # +1 right, -1 left",
-  "step = 1",
-  "total = 0",
-  "",
-  "while True:",
-  "    target = x + direction * step",
-  "    # Check if y is between pos and target",
-  "    if direction == 1 and pos <= y <= target:",
-  "        total += y - pos",
-  "        break",
-  "    if direction == -1 and target <= y <= pos:",
-  "        total += pos - y",
-  "        break",
-  "    total += abs(target - pos)",
-  "    pos = target",
-  "    direction *= -1",
-  "    step *= 2",
-  "",
-  "print(total)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

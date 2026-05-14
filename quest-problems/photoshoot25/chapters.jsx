@@ -1,41 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getPhotoshoot25Sections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE (Python)
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N, K = map(int, input().split())",
-  "Q = int(input())",
-  "",
-  "beauty = [[0] * (N + 2) for _ in range(N + 2)]",
-  "W = N - K + 1",
-  "S = [[0] * (W + 2) for _ in range(W + 2)]",
-  "cur_max = 0",
-  "out = []",
-  "",
-  "for _ in range(Q):",
-  "    r, c, v = map(int, input().split())",
-  "    delta = v - beauty[r][c]",
-  "    beauty[r][c] = v",
-  "    i_lo = max(1, r - K + 1)",
-  "    i_hi = min(r, W)",
-  "    j_lo = max(1, c - K + 1)",
-  "    j_hi = min(c, W)",
-  "    for i in range(i_lo, i_hi + 1):",
-  "        for j in range(j_lo, j_hi + 1):",
-  "            S[i][j] += delta",
-  "            if S[i][j] > cur_max:",
-  "                cur_max = S[i][j]",
-  "    out.append(str(cur_max))",
-  "",
-  "sys.stdout.write('\\n'.join(out) + '\\n')",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makePhotoshoot25Ch1 (5 steps)
    ═══════════════════════════════════════════════════════════════ */

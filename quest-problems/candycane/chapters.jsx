@@ -1,39 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCandyCaneSections, CandyCaneSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "p = 0",
-  "N = int(data[p])",
-  "p += 1",
-  "M = int(data[p])",
-  "p += 1",
-  "h = [int(data[p + i]) for i in range(N)]; p += N        # cow heights",
-  "canes = [int(data[p + i]) for i in range(M)]            # cane heights, one line",
-  "",
-  "for curr in canes:",
-  "    taken = 0   # how much of THIS cane has already been eaten",
-  "    for i in range(N):",
-  "        if h[i] > taken:",
-  "            # cow i can reach the un-eaten portion from `taken`",
-  "            # up to min(curr, h[i])",
-  "            inc = min(curr, h[i]) - taken",
-  "            if inc > 0:",
-  "                h[i] += inc        # cow grows by what it ate",
-  "                taken += inc",
-  "        if taken >= curr:",
-  "            break                  # cane fully eaten",
-  "",
-  "for x in h:",
-  "    print(x)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

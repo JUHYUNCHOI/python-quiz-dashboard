@@ -172,32 +172,6 @@ function DeepAuditSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "R, C = map(int, input().split())",
-  "grid = [input() for _ in range(R)]",
-  "",
-  "# Each grass cell can mediate at most one friendship.",
-  "# A grass cell with >= 2 adjacent cows mediates exactly one friendship.",
-  "dirs = [(0,1),(0,-1),(1,0),(-1,0)]",
-  "ans = 0",
-  "for r in range(R):",
-  "    for c in range(C):",
-  "        if grid[r][c] != 'G':",
-  "            continue",
-  "        cows = sum(",
-  "            1 for dr, dc in dirs",
-  "            if 0 <= r+dr < R and 0 <= c+dc < C and grid[r+dr][c+dc] == 'C'",
-  "        )",
-  "        if cows >= 2:",
-  "            ans += 1",
-  "",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

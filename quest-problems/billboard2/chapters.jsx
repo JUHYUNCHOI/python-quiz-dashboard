@@ -177,49 +177,6 @@ function TarpAuditSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "# Read billboard and feed billboard coordinates",
-  "x1, y1, x2, y2 = map(int, input().split())",
-  "x3, y3, x4, y4 = map(int, input().split())",
-  "",
-  "# Billboard dimensions",
-  "bw = x2 - x1",
-  "bh = y2 - y1",
-  "area = bw * bh",
-  "",
-  "# Clamp feed billboard to billboard bounds",
-  "cx1 = max(x1, x3)",
-  "cy1 = max(y1, y3)",
-  "cx2 = min(x2, x4)",
-  "cy2 = min(y2, y4)",
-  "",
-  "# No overlap",
-  "if cx1 >= cx2 or cy1 >= cy2:",
-  "    print(area)",
-  "# Feed covers entire billboard",
-  "elif cx1 <= x1 and cx2 >= x2 and cy1 <= y1 and cy2 >= y2:",
-  "    print(0)",
-  "# Feed covers full left side",
-  "elif cx1 <= x1 and cy1 <= y1 and cy2 >= y2:",
-  "    print((x2 - cx2) * bh)",
-  "# Feed covers full right side",
-  "elif cx2 >= x2 and cy1 <= y1 and cy2 >= y2:",
-  "    print((cx1 - x1) * bh)",
-  "# Feed covers full top side",
-  "elif cy2 >= y2 and cx1 <= x1 and cx2 >= x2:",
-  "    print(bw * (cy1 - y1))",
-  "# Feed covers full bottom side",
-  "elif cy1 <= y1 and cx1 <= x1 and cx2 >= x2:",
-  "    print(bw * (y2 - cy2))",
-  "# Otherwise tarp = entire billboard",
-  "else:",
-  "    print(area)",
-];
-
-
 /* ---------------------------------------------------------------
    Chapter 1: Problem (3 steps)
    --------------------------------------------------------------- */

@@ -1,33 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getWordProcSections, WordProcLineWrapSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, K = map(int, input().split())",
-  "words = input().split()",
-  "",
-  "lines = []",
-  "cur_line = []",
-  "cur_len = 0",
-  "",
-  "for w in words:",
-  "    wl = len(w)",
-  "    if cur_len + wl > K and cur_line:",
-  "        lines.append(' '.join(cur_line))",
-  "        cur_line = []",
-  "        cur_len = 0",
-  "    cur_line.append(w)",
-  "    cur_len += wl",
-  "",
-  "if cur_line:",
-  "    lines.append(' '.join(cur_line))",
-  "",
-  "for line in lines:",
-  "    print(line)",
-];
-
 /* Python syntax highlighter (shared across snippets) */
 const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
 const PY_BUILTIN = new Set(["print","input","range","len","sum","map","int","str","chr","ord","min","max","sorted","reversed","list","dict","set","tuple","enumerate","zip","abs","round","type","isinstance","open","filter","any","all","bool","float"]);

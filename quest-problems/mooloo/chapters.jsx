@@ -1,38 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMoolooSections, MoolooMergeSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0]); K = int(data[1])",
-  "days = sorted(int(x) for x in data[2:2 + N])    # all N days on ONE line",
-  "",
-  "# Greedy: extend the active subscription as long as the next day fits.",
-  "total_cost = 0",
-  "i = 0",
-  "",
-  "while i < N:",
-  "    # Start a new subscription on days[i]",
-  "    start = days[i]",
-  "    end = days[i]",
-  "    i += 1",
-  "",
-  "    # Extend if next day is within K of current end",
-  "    while i < N and days[i] - end <= K:",
-  "        end = days[i]",
-  "        i += 1",
-  "",
-  "    # Cost = active days + the K-day grace period",
-  "    duration = end - start + 1",
-  "    total_cost += duration + K",
-  "",
-  "print(total_cost)",
-];
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem understanding
    ═══════════════════════════════════════════════════════════════ */

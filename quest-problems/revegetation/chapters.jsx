@@ -1,35 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getRevegSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, M = map(int, input().split())",
-  "",
-  "# constraints[i] = set of pastures that must differ from i",
-  "constraints = [set() for _ in range(N+1)]",
-  "for _ in range(M):",
-  "    a, b = map(int, input().split())",
-  "    constraints[a].add(b)",
-  "    constraints[b].add(a)",
-  "",
-  "# Greedy: assign smallest color (1-4) to each pasture",
-  "color = [0] * (N+1)",
-  "for i in range(1, N+1):",
-  "    used = set()",
-  "    for j in constraints[i]:",
-  "        if color[j] != 0:",
-  "            used.add(color[j])",
-  "    for c in range(1, 5):",
-  "        if c not in used:",
-  "            color[i] = c",
-  "            break",
-  "",
-  "print(''.join(str(color[i]) for i in range(1, N+1)))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

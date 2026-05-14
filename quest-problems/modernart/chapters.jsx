@@ -1,61 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getModernArtSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "canvas = []",
-  "for _ in range(N):",
-  "    canvas.append(list(map(int, input().split())))",
-  "",
-  "# Find bounding box for each color",
-  "bbox = {}  # color -> (minr, maxr, minc, maxc)",
-  "for r in range(N):",
-  "    for c in range(N):",
-  "        col = canvas[r][c]",
-  "        if col == 0:",
-  "            continue",
-  "        if col not in bbox:",
-  "            bbox[col] = [r, r, c, c]",
-  "        else:",
-  "            bbox[col][0] = min(bbox[col][0], r)",
-  "            bbox[col][1] = max(bbox[col][1], r)",
-  "            bbox[col][2] = min(bbox[col][2], c)",
-  "            bbox[col][3] = max(bbox[col][3], c)",
-  "",
-  "# A color can be first if no other color appears",
-  "# inside its bounding box",
-  "visible = set(bbox.keys())",
-  "ans = 0",
-  "for col in visible:",
-  "    r1, r2, c1, c2 = bbox[col]",
-  "    can_be_first = True",
-  "    for r in range(r1, r2 + 1):",
-  "        for c in range(c1, c2 + 1):",
-  "            if canvas[r][c] != col and canvas[r][c] != 0:",
-  "                # another color is on top inside our box",
-  "                pass  # this is expected, doesn't disqualify",
-  "    # Actually: color can be first if it's not inside",
-  "    # any other color's bounding box",
-  "    for other in visible:",
-  "        if other == col:",
-  "            continue",
-  "        or1, or2, oc1, oc2 = bbox[other]",
-  "        # if col's bbox is entirely inside other's bbox",
-  "        if or1 <= r1 and r2 <= or2 and oc1 <= c1 and c2 <= oc2:",
-  "            can_be_first = False",
-  "            break",
-  "    if can_be_first:",
-  "        ans += 1",
-  "",
-  "# Colors not on canvas (1..9 minus visible) can also be first",
-  "ans += (9 - len(visible))",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (4 steps)
    ═══════════════════════════════════════════════════════════════ */

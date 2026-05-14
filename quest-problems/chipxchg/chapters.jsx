@@ -1,46 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "def min_final_A(A, B, cA, cB, x):",
-  "    if x == 0:",
-  "        return A + (B // cB) * cA",
-  "    cands = {0, x}",
-  "    r1 = (cB - 1 - (B % cB)) % cB",
-  "    if r1 <= x:",
-  "        cands.add(r1)",
-  "        cands.add(r1 + ((x - r1) // cB) * cB)",
-  "    r0 = (-B) % cB",
-  "    if r0 <= x:",
-  "        cands.add(r0)",
-  "        cands.add(r0 + ((x - r0) // cB) * cB)",
-  "    return min(A + (x - b) + ((B + b) // cB) * cA for b in cands)",
-  "",
-  "def solve(A, B, cA, cB, fA):",
-  "    lo, hi = 0, 2 * 10**18",
-  "    while lo < hi:",
-  "        mid = (lo + hi) // 2",
-  "        if min_final_A(A, B, cA, cB, mid) >= fA:",
-  "            hi = mid",
-  "        else:",
-  "            lo = mid + 1",
-  "    return lo",
-  "",
-  "T = int(input())",
-  "out = []",
-  "for _ in range(T):",
-  "    A, B, cA, cB, fA = map(int, input().split())",
-  "    out.append(str(solve(A, B, cA, cB, fA)))",
-  "print('\\n'.join(out))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeChipXchgCh1 (5 steps)
    ═══════════════════════════════════════════════════════════════ */

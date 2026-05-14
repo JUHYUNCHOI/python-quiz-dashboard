@@ -1,39 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getPhotoshootSections, PhotoshootUnfoldSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "from collections import deque",
-  "",
-  "N = int(input())",
-  "start = input().strip()",
-  "target = input().strip()",
-  "",
-  "# Allowed move: pick a prefix s[:i] (i >= 2) and reverse it.",
-  "# Find the minimum number of moves to turn start into target.",
-  "# BFS over all reachable arrangements (works for small N).",
-  "if sorted(start) != sorted(target):",
-  "    print(-1)",
-  "else:",
-  "    seen = {start: 0}",
-  "    q = deque([start])",
-  "    ans = -1",
-  "    while q:",
-  "        s = q.popleft()",
-  "        if s == target:",
-  "            ans = seen[s]",
-  "            break",
-  "        for i in range(2, N + 1):",
-  "            nxt = s[:i][::-1] + s[i:]",
-  "            if nxt not in seen:",
-  "                seen[nxt] = seen[s] + 1",
-  "                q.append(nxt)",
-  "    print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

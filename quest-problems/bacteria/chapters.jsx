@@ -1,33 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getBacteriaSections, BacteriaTrickSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "a = [int(data[1 + i]) for i in range(N)]",
-  "",
-  "# Editorial trick (Rohin Garg, USACO Jan 2024 Bronze #3):",
-  "# A type-1 spray (h, +1+2+3+... triangle) increments a suffix of diff(a)",
-  "# by 1 — and a type-2 spray decrements one.  At the SECOND difference",
-  "# level diff(diff(a)), each spray only changes ONE position by +/-1.",
-  "# So the minimum number of sprays to make a all-zero =",
-  "#     sum of |diff(diff(a))_i|",
-  "",
-  "def diff(arr):",
-  "    # First-order difference: [a0, a1-a0, a2-a1, ...]",
-  "    return [arr[0]] + [arr[i] - arr[i - 1] for i in range(1, len(arr))]",
-  "",
-  "dd = diff(diff(a))",
-  "ans = sum(abs(x) for x in dd)",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (5 steps)
    ═══════════════════════════════════════════════════════════════ */
