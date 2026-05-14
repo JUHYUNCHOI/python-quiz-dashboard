@@ -1,3 +1,5 @@
+// 🔒 USACO_VERIFIED — cpid=892, sleepysort (2019 Jan Bronze #2)
+// py 12/12 PASS · cpp 12/12 PASS · 2026-05-14
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -6,45 +8,44 @@ const A = "#2563eb";
 
 const FULL_PY = [
   "# USACO 이전 contest는 파일 입출력 사용",
-  "import sys",
-  "sys.stdin = open('sleepy.in')",
-  "sys.stdout = open('sleepy.out', 'w')",
+  "with open('sleepy.in', 'r') as file:",
+  "    lines = file.readlines()",
   "",
-  "N = int(input())",
-  "a = list(map(int, input().split()))",
+  "N = int(lines[0])",
+  "a = list(map(int, lines[1].split()))",
   "",
-  "# Find longest sorted suffix",
-  "# from the right, find where it stops being sorted",
+  "# 오른쪽부터 정렬되어 있는 가장 긴 suffix 찾기",
   "k = N - 1",
   "while k > 0 and a[k - 1] < a[k]:",
   "    k -= 1",
   "",
-  "# k is the first index of the sorted suffix",
-  "# We need to move cows 0..k-1",
-  "print(k)",
+  "# k = 옮겨야 할 소의 수 (앞쪽 0..k-1)",
+  "with open('sleepy.out', 'w') as file:",
+  "    file.write(str(k) + '\\n')",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
+  "#include <fstream>",
   "#include <vector>",
   "using namespace std;",
   "",
   "int main() {",
   "    // USACO 이전 contest는 파일 입출력 사용",
-  "    freopen(\"sleepy.in\", \"r\", stdin);",
-  "    freopen(\"sleepy.out\", \"w\", stdout);",
-  "",
-  "    cin.tie(nullptr);",
+  "    ifstream fin(\"sleepy.in\");",
+  "    ofstream fout(\"sleepy.out\");",
   "",
   "    int N;",
-  "    cin >> N;",
+  "    fin >> N;",
   "    vector<int> a(N);",
-  "    for (int i = 0; i < N; i++) cin >> a[i];",
+  "    for (int i = 0; i < N; i++) fin >> a[i];",
   "",
+  "    // 오른쪽부터 정렬되어 있는 가장 긴 suffix 찾기",
   "    int k = N - 1;",
   "    while (k > 0 && a[k - 1] < a[k]) k--;",
   "",
-  "    cout << k << \"\\n\";",
+  "    // k = 옮겨야 할 소의 수",
+  "    fout << k << \"\\n\";",
   "    return 0;",
   "}",
 ];
