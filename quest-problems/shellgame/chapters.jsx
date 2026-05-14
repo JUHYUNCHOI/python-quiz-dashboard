@@ -620,13 +620,15 @@ export function makeShellCh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
-              "N = int(input())",
+              "with open('shell.in') as file:",
+              "    lines = file.readlines()",
+              "N = int(lines[0])",
               "swaps = []",
-              "for _ in range(N):",
-              "    a, b, g = map(int, input().split())",
+              "for i in range(N):",
+              "    a, b, g = map(int, lines[1 + i].split())",
               "    swaps.append((a, b, g))",
             ]}
-            highlight={[0, 1, 2, 3, 4]}
+            highlight={[0, 1, 2, 3, 4, 5, 6]}
           />
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5, whiteSpace: "pre-line" }}>
             {t(E,

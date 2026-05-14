@@ -475,17 +475,19 @@ export function makeCowGymCh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
-              "K, N = map(int, input().split())",
+              "with open('cowgym.in') as file:",
+              "    lines = file.readlines()",
+              "K, N = map(int, lines[0].split())",
               "",
               "rank = []",
-              "for _ in range(K):",
-              "    order = list(map(int, input().split()))",
+              "for s in range(K):",
+              "    order = list(map(int, lines[1 + s].split()))",
               "    r = [0] * (N + 1)",
               "    for pos in range(N):",
               "        r[order[pos]] = pos",
               "    rank.append(r)",
             ]}
-            highlight={[5, 6, 7]}
+            highlight={[7, 8, 9]}
           />
           <div style={{ marginTop: 8, background: "#fffbeb", borderRadius: 8, padding: 8, border: "1.5px solid #fcd34d", fontSize: 12, lineHeight: 1.8, color: C.text }}>
             <div style={{ fontWeight: 600, color: "#d97706", marginBottom: 2 }}>

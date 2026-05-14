@@ -657,12 +657,14 @@ export function makeMixMilkCh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
+              "with open('mixmilk.in') as file:",
+              "    lines = file.readlines()",
               "cap = [0] * 3",
               "milk = [0] * 3",
               "for i in range(3):",
-              "    cap[i], milk[i] = map(int, input().split())",
+              "    cap[i], milk[i] = map(int, lines[i].split())",
             ]}
-            highlight={[0, 1, 2, 3]}
+            highlight={[0, 1, 4, 5]}
           />
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
             {t(E,
@@ -683,16 +685,18 @@ export function makeMixMilkCh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
+              "with open('mixmilk.in') as file:",
+              "    lines = file.readlines()",
               "cap = [0] * 3",
               "milk = [0] * 3",
               "for i in range(3):",
-              "    cap[i], milk[i] = map(int, input().split())",
+              "    cap[i], milk[i] = map(int, lines[i].split())",
               "",
               "for step in range(100):",
               "    src = step % 3",
               "    dst = (step + 1) % 3",
             ]}
-            highlight={[5, 6, 7]}
+            highlight={[7, 8, 9]}
           />
           <div style={{ marginTop: 8, display: "flex", gap: 8, justifyContent: "center" }}>
             {[

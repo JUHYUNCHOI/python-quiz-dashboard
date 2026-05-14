@@ -163,9 +163,11 @@ export function makeSqPastureCh2(E, lang = "py") {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
-            <div style={{ color: "#6b7280" }}># Read two rectangles</div>
-            <div style={{ color: "#e2e8f0" }}>x1,y1,x2,y2 = map(int, input().split())</div>
-            <div style={{ color: "#e2e8f0" }}>x3,y3,x4,y4 = map(int, input().split())</div>
+            <div style={{ color: "#6b7280" }}># Read two rectangles (USACO 파일 I/O)</div>
+            <div style={{ color: "#e2e8f0" }}>with open('square.in') as file:</div>
+            <div style={{ color: "#e2e8f0" }}>{"    "}lines = file.readlines()</div>
+            <div style={{ color: "#e2e8f0" }}>x1,y1,x2,y2 = map(int, lines[0].split())</div>
+            <div style={{ color: "#e2e8f0" }}>x3,y3,x4,y4 = map(int, lines[1].split())</div>
           </div>
         </div>),
     },
