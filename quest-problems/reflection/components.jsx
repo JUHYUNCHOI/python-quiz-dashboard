@@ -1,3 +1,9 @@
+// 🔒 USACO_VERIFIED (2026-05-13)
+//   Python: 3/16 (TLE 4-16, Python too slow)
+//   C++:    15/15 PASS
+//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
+//   상세: REPO_ROOT/USACO_VERIFICATION.md
+
 import { useState } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";

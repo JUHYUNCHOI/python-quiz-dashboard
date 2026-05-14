@@ -385,7 +385,7 @@ vector<pair<string, int>> students = {
 
 ### 그리고 \`struct\` 라면 더 막막해요
 
-챕터 0 마지막에서 "struct 는 자동 비교가 없다" 고 짚었었죠. 같은 데이터를 struct 로 만들면:
+\`struct\` 는 \`pair\` 와 달리 자동 비교 연산자가 없어요. 같은 데이터를 struct 로 만들면:
 
 \`\`\`cpp
 struct Student { string name; int score; };

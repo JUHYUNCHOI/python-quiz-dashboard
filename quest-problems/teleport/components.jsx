@@ -1,3 +1,5 @@
+// 🔒 USACO_VERIFIED — cpid=807, teleport (2018 Feb Bronze #1)
+// py 10/10 PASS · cpp 10/10 PASS · 2026-05-14
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
@@ -5,36 +7,52 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#d97706";
 
 const FULL_PY = [
-  "a, b, x, y = map(int, input().split())",
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "with open('teleport.in', 'r') as file:",
+  "    lines = file.readlines()",
   "",
-  "# Direct distance",
+  "a, b, x, y = map(int, lines[0].split())",
+  "",
+  "# 직접 가는 거리",
   "direct = abs(a - b)",
-  "",
-  "# Via teleporter: a->x, teleport to y, y->b",
+  "# 텔레포터 사용: a→x, teleport to y, y→b",
   "via1 = abs(a - x) + abs(y - b)",
-  "",
-  "# Via teleporter: a->y, teleport to x, x->b",
+  "# 텔레포터 사용 반대 방향: a→y, teleport to x, x→b",
   "via2 = abs(a - y) + abs(x - b)",
   "",
-  "print(min(direct, via1, via2))",
+  "answer = direct",
+  "if via1 < answer:",
+  "    answer = via1",
+  "if via2 < answer:",
+  "    answer = via2",
+  "",
+  "with open('teleport.out', 'w') as file:",
+  "    file.write(str(answer) + '\\n')",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
-  "#include <algorithm>",
-  "#include <cmath>",
+  "#include <fstream>",
   "using namespace std;",
   "",
+  "long long abs_ll(long long x) { return x < 0 ? -x : x; }",
+  "",
   "int main() {",
-  "    cin.tie(nullptr);",
+  "    // USACO 이전 contest는 파일 입출력 사용",
+  "    ifstream fin(\"teleport.in\");",
+  "    ofstream fout(\"teleport.out\");",
   "",
   "    long long a, b, x, y;",
-  "    cin >> a >> b >> x >> y;",
+  "    fin >> a >> b >> x >> y;",
   "",
-  "    // Direct distance vs use of teleport (a→x, then 0→b at distance |y - 0|)",
-  "    long long direct = abs(a - b);",
-  "    long long viaTel = abs(a - x) + abs(b - y);",
-  "    cout << min(direct, viaTel) << \"\\n\";",
+  "    long long direct = abs_ll(a - b);",
+  "    long long via1 = abs_ll(a - x) + abs_ll(y - b);",
+  "    long long via2 = abs_ll(a - y) + abs_ll(x - b);",
+  "",
+  "    long long answer = direct;",
+  "    if (via1 < answer) answer = via1;",
+  "    if (via2 < answer) answer = via2;",
+  "    fout << answer << \"\\n\";",
   "    return 0;",
   "}",
 ];
