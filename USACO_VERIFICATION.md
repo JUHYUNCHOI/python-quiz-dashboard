@@ -3,18 +3,23 @@
 마지막 업데이트: 2026-05-14
 
 **총 검증: 120 quests (py 120/120, cpp 120/120)**
-**전체 만점: py 31/120, cpp 30/120**
+**전체 만점: py 79/120, cpp 78/120** *(pre-Dec-2020 48 quests 전체 재작성 후 만점 확보, 2026-05-14)*
 
 ## 범례
 - ✅ 만점
 - 🟡 부분/TLE/한계
 - ❌ WA/컴파일/file I/O missing/알고리즘 버그
 
-## ⚠️ 중요: pre-Dec-2020 file I/O 이슈
+## ⚠️ 중요: pre-Dec-2020 file I/O 이슈 — **2026-05-14 해결**
 
 USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 contest는 **file I/O 방식** (`xxx.in/out`).
-Coderin quest 코드들은 stdin/cin을 가정하고 있어, pre-Dec-2020 quest 대부분이 RTE/WA로 실패.
-fix: 각 quest 코드 상단에 `freopen("xxx.in","r",stdin); freopen("xxx.out","w",stdout);` 또는 py `sys.stdin = open(...)` 추가 후 재검증 필요.
+
+**2026-05-14 작업:** pre-Dec-2020 48 quest 전체 재작성 완료.
+- Python: `with open('xxx.in', 'r') as file: lines = file.readlines()` (lesson 38 학습 범위)
+- C++: `ifstream fin("xxx.in"); ofstream fout("xxx.out");` (cpp-19 학습 범위)
+- 학습 범위 밖 코드 제거 (Counter, deque, heapq, structured binding, lambda 등)
+- 알고리즘 wrong-problem 이었던 16개 quest 도 모두 재작성
+- 모든 파일에 `// 🔒 USACO_VERIFIED` 헤더 추가 (자동 수정 방지)
 
 ## 검증된 Quest 목록
 
@@ -92,51 +97,51 @@ fix: 각 quest 코드 상단에 `freopen("xxx.in","r",stdin); freopen("xxx.out",
 | `stuckinrut` | Stuck in a Rut | Dec 2020 Bronze #3 | ❌ 3/10 (WA - greedy doesn't handle cascading correctly) | ❌ 0/1 (Compile error - missing #include <tuple>) |
 | `daisychains` | Daisy Chains | Dec 2020 Bronze #2 | ✅ 10/10 PASS | ✅ 10/10 PASS |
 | `abcs` | Do You Know Your ABCs? | Dec 2020 Bronze #1 | ✅ 10/10 PASS | ✅ 10/10 PASS |
-| `cowntrace` | Cowntact Tracing | Open 2020 Bronze #3 | ❌ 0/15 (RTE - 2020 US Open file I/O + wrong input parsing (expects string of 0/1)) | ❌ 0/15 (TLE - 2020 US Open file I/O missing (uninitialized N → infinite loop)) |
-| `socialdist2` | Social Distancing II | Open 2020 Bronze #2 | ❌ 0/15 (RTE - 2020 US Open uses file I/O, code uses stdin) | ❌ 0/15 (WA - empty stdin (file I/O needed); algorithm also incomplete) |
-| `socialdist1` | Social Distancing I | Open 2020 Bronze #1 | ❌ 0/15 (RTE - code expects intervals, problem is stall string) | ❌ 0/15 (RTE - 2020 US Open file I/O missing) |
-| `swapity` | Swapity Swap | Feb 2020 Bronze #3 | ❌ 0/15 (RTE - 2020 Feb file I/O missing) | ❌ 0/15 (RTE - 2020 Feb file I/O missing) |
-| `madscientist` | Mad Scientist | Feb 2020 Bronze #2 | ❌ 0/15 (RTE - 2020 Feb file I/O; algorithm OK) | ❌ 0/15 (RTE - 2020 Feb file I/O missing) |
-| `triangles` | Triangles | Feb 2020 Bronze #1 | ❌ 0/15 (RTE - 2020 Feb Bronze uses file I/O, code uses stdin) | ❌ 0/15 (WA - empty stdin (file I/O needed); algorithm OK if input read correctly) |
-| `race` | Race | Jan 2020 Bronze #3 | ❌ 0/15 (RTE - 2020 Jan file I/O missing) | ❌ 0/15 (WA - empty stdin (LLONG_MAX output, no actual input)) |
-| `photoshoot20` | Photoshoot | Jan 2020 Bronze #2 | ❌ 0/15 (RTE - 2020 Jan file I/O missing) | ❌ 0/15 (RTE - 2020 Jan file I/O missing) |
-| `wordproc` | Word Processor | Jan 2020 Bronze #1 | ❌ 0/15 (RTE - 2020 Jan file I/O missing) | ❌ 0/15 (RTE - 2020 Jan file I/O missing) |
-| `livestock` | Livestock Lineup | Dec 2019 Bronze #3 | ❌ 0/15 (RTE - 2019 Dec file I/O missing) | ❌ 0/15 (WA - 2019 Dec file I/O missing (alphabetical fallback)) |
-| `whereami` | Where Am I? | Dec 2019 Bronze #2 | ❌ 0/15 (RTE - 2019 Dec file I/O missing) | ❌ 0/15 (RTE - 2019 Dec file I/O missing) |
-| `cowgym` | Cow Gymnastics | Dec 2019 Bronze #1 | ❌ 0/15 (RTE - 2019 Dec file I/O missing) | ❌ 0/15 (WA - 2019 Dec file I/O missing (output 0)) |
-| `cowevolution` | Cow Evolution | Open 2019 Bronze #3 | ❌ 0/15 (RTE - 2019 Open file I/O missing) | ❌ 0/15 (TLE - 2019 Open file I/O missing (garbage N → infinite loop)) |
-| `milkfactory` | Milk Factory | Open 2019 Bronze #2 | ❌ 0/15 (RTE - 2019 Open file I/O missing) | ❌ 0/15 (WA - 2019 Open file I/O missing (output -1)) |
-| `bucketbrigade` | Bucket Brigade | Open 2019 Bronze #1 | ❌ 0/15 (RTE - 2019 Open file I/O missing) | ❌ 0/15 (Compile error - tuple init in q.push() needs make_tuple) |
-| `meastraffic` | Measuring Traffic | Feb 2019 Bronze #3 | ❌ 0/15 (RTE - 2019 Feb file I/O missing) | ❌ 0/15 (RTE - 2019 Feb file I/O missing) |
-| `revegetation` | Great Revegetation | Feb 2019 Bronze #2 | ❌ 0/15 (RTE - 2019 Feb file I/O missing) | ❌ 0/15 (RTE - 2019 Feb file I/O missing) |
-| `sleepyherd` | Sleepy Cow Herding | Feb 2019 Bronze #1 | ❌ 0/15 (RTE - 2019 Feb file I/O missing) | ❌ 0/15 (WA - 2019 Feb file I/O missing (garbage stack values)) |
-| `guessanimal` | Guess the Animal | Jan 2019 Bronze #3 | ❌ 0/15 (RTE - 2019 Jan file I/O missing) | ❌ 0/15 (RTE - 2019 Jan file I/O missing) |
-| `sleepysort` | Sleepy Cow Sorting | Jan 2019 Bronze #2 | ❌ 0/15 (RTE - 2019 Jan file I/O missing) | ❌ 0/15 (WA - 2019 Jan file I/O missing) |
-| `shellgame` | Shell Game | Jan 2019 Bronze #1 | ❌ 0/15 (RTE - 2019 Jan file I/O missing) | ❌ 0/15 (Compile error - missing #include <tuple>) |
-| `backforth` | Back and Forth | Dec 2018 Bronze #3 | ❌ 0/15 (RTE - 2018 Dec file I/O missing) | ❌ 0/15 (WA - 2018 Dec file I/O missing) |
-| `bucketlist` | The Bucket List | Dec 2018 Bronze #2 | ❌ 0/15 (RTE - 2018 Dec file I/O missing) | ❌ 0/15 (RTE - 2018 Dec file I/O missing) |
-| `mixmilk` | Mixing Milk | Dec 2018 Bronze #1 | ❌ 0/15 (RTE - 2018 Dec file I/O missing) | ❌ 0/15 (WA - 2018 Dec file I/O missing (garbage values)) |
-| `familytree` | Family Tree | Open 2018 Bronze #3 | ❌ 0/15 (RTE - 2018 Open file I/O missing) | ❌ 0/15 (RTE - 2018 Open file I/O missing) |
-| `milkorder` | Milking Order | Open 2018 Bronze #2 | ❌ 0/15 (RTE - 2018 Open file I/O missing) | ❌ 0/15 (TLE - 2018 Open file I/O missing (uninitialized N → infinite loop)) |
-| `teamttt` | Team Tic Tac Toe | Open 2018 Bronze #1 | ❌ 0/15 (RTE - 2018 Open file I/O missing) | ❌ 0/15 (WA - 2018 Open file I/O missing) |
-| `tameherd` | Taming the Herd | Feb 2018 Bronze #3 | ❌ 0/15 (RTE - 2018 Feb file I/O missing) | ❌ 0/15 (WA - 2018 Feb file I/O missing) |
-| `hoofball` | Hoofball | Feb 2018 Bronze #2 | ❌ 0/15 (RTE - 2018 Feb file I/O missing) | ❌ 0/15 (WA - 2018 Feb file I/O missing) |
-| `teleport` | Teleportation | Feb 2018 Bronze #1 | ❌ 0/15 (RTE - 2018 Feb file I/O missing) | ❌ 0/15 (WA - 2018 Feb file I/O missing) |
-| `outofplace` | Out of Place | Jan 2018 Bronze #3 | ❌ 0/15 (RTE - 2018 Jan file I/O missing) | ❌ 0/15 (WA - 2018 Jan file I/O missing) |
-| `lifeguards` | Lifeguards | Jan 2018 Bronze #2 | ❌ 0/15 (RTE - 2018 Jan file I/O missing) | ❌ 0/15 (WA - 2018 Jan file I/O missing) |
-| `billboard2` | Blocked Billboard II | Jan 2018 Bronze #1 | ❌ 0/15 (RTE - 2018 Jan file I/O missing) | ❌ 0/15 (WA - 2018 Jan file I/O missing) |
-| `milkmeas` | Milk Measurement | Dec 2017 Bronze #3 | ❌ 0/15 (RTE - 2017 Dec file I/O missing) | ❌ 0/15 (WA - 2017 Dec file I/O missing) |
-| `bovshuffle` | The Bovine Shuffle | Dec 2017 Bronze #2 | ❌ 0/15 (RTE - 2017 Dec file I/O missing) | ❌ 0/15 (RTE/WA - 2017 Dec file I/O missing) |
-| `billboard` | Blocked Billboard | Dec 2017 Bronze #1 | ❌ 0/15 (RTE - 2017 Dec file I/O missing) | ❌ 0/15 (WA - 2017 Dec file I/O missing) |
-| `modernart` | Modern Art | Open 2017 Bronze #3 | ❌ 0/15 (RTE - 2017 Open file I/O missing) | ❌ 0/15 (RTE - 2017 Open file I/O missing) |
-| `bovgenomics` | Bovine Genomics | Open 2017 Bronze #2 | ❌ 0/15 (RTE - 2017 Open file I/O missing) | ❌ 0/15 (RTE - 2017 Open file I/O missing) |
-| `lostcow` | The Lost Cow | Open 2017 Bronze #1 | ❌ 0/15 (RTE - 2017 Open file I/O missing) | ❌ 0/15 (WA - 2017 Open file I/O missing) |
-| `crossroad3` | Cross the Road III | Feb 2017 Bronze #3 | ❌ 0/15 (RTE - 2017 Feb file I/O missing) | ❌ 0/15 (WA - 2017 Feb file I/O missing) |
-| `crossroad2` | Cross the Road II | Feb 2017 Bronze #2 | ❌ 0/15 (RTE - 2017 Feb file I/O missing) | ❌ 0/15 (WA - 2017 Feb file I/O missing) |
-| `crossroad1` | Cross the Road | Feb 2017 Bronze #1 | ❌ 0/15 (RTE - 2017 Feb file I/O missing) | ❌ 0/15 (WA - 2017 Feb file I/O missing) |
-| `cowtipping` | Cow Tipping | Jan 2017 Bronze #3 | ❌ 0/15 (RTE - 2017 Jan file I/O missing) | ❌ 0/15 (TLE - 2017 Jan file I/O missing (garbage N → loop)) |
-| `hps17` | Hoof Paper Scissors | Jan 2017 Bronze #2 | ❌ 0/15 (RTE - 2017 Jan file I/O missing) | ❌ 0/15 (Compile error - missing #include <array>) |
-| `dontbelast` | Don't Be Last! | Jan 2017 Bronze #1 | ❌ 0/15 (RTE - 2017 Jan file I/O missing) | ❌ 0/15 (WA - 2017 Jan file I/O missing) |
-| `cowsignal` | The Cow-Signal | Dec 2016 Bronze #3 | ❌ 0/15 (RTE - 2016 Dec file I/O missing) | ❌ 0/15 (WA - 2016 Dec file I/O missing) |
-| `blockgame` | Block Game | Dec 2016 Bronze #2 | ❌ 0/15 (RTE - 2016 Dec file I/O missing) | ❌ 0/15 (WA - 2016 Dec file I/O missing) |
-| `sqpasture` | Square Pasture | Dec 2016 Bronze #1 | ❌ 0/15 (RTE - 2016 Dec file I/O missing) | ❌ 0/15 (WA - 2016 Dec file I/O missing) |
+| `cowntrace` | Cowntact Tracing | Open 2020 Bronze #3 | ✅ 16/16 PASS (재작성 2026-05-14) | ✅ 16/16 PASS (재작성 2026-05-14) |
+| `socialdist2` | Social Distancing II | Open 2020 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `socialdist1` | Social Distancing I | Open 2020 Bronze #1 | ✅ 15/15 PASS (재작성 2026-05-14) | ✅ 15/15 PASS (재작성 2026-05-14) |
+| `swapity` | Swapity Swap | Feb 2020 Bronze #3 | ✅ 13/13 PASS (재작성 2026-05-14) | ✅ 13/13 PASS (재작성 2026-05-14) |
+| `madscientist` | Mad Scientist | Feb 2020 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `triangles` | Triangles | Feb 2020 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `race` | Race | Jan 2020 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14, 해석적 sqrt+ε 윈도우) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `photoshoot20` | Photoshoot | Jan 2020 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `wordproc` | Word Processor | Jan 2020 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14, 공백 카운트 버그 수정) |
+| `livestock` | Livestock Lineup | Dec 2019 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14, brute force 순열) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `whereami` | Where Am I? | Dec 2019 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `cowgym` | Cow Gymnastics | Dec 2019 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `cowevolution` | Cow Evolution | Open 2019 Bronze #3 | ✅ 17/17 PASS (재작성 2026-05-14) | ✅ 17/17 PASS (재작성 2026-05-14) |
+| `milkfactory` | Milk Factory | Open 2019 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14, deque → list+head) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `bucketbrigade` | Bucket Brigade | Open 2019 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14, BFS → manhattan+우회) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `meastraffic` | Measuring Traffic | Feb 2019 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14, backward sweep 추가) |
+| `revegetation` | Great Revegetation | Feb 2019 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `sleepyherd` | Sleepy Cow Herding | Feb 2019 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14, min/max 공식 수정) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `guessanimal` | Guess the Animal | Jan 2019 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14, shared+1 fix) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `sleepysort` | Sleepy Cow Sorting | Jan 2019 Bronze #2 | ✅ 12/12 PASS (재작성 2026-05-14) | ✅ 12/12 PASS (재작성 2026-05-14) |
+| `shellgame` | Shell Game | Jan 2019 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `backforth` | Back and Forth | Dec 2018 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14, index 버그 수정) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `bucketlist` | The Bucket List | Dec 2018 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `mixmilk` | Mixing Milk | Dec 2018 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `familytree` | Family Tree | Open 2018 Bronze #3 | ✅ 15/15 PASS (재작성 2026-05-14, LCA 분기) | ✅ 15/15 PASS (재작성 2026-05-14) |
+| `milkorder` | Milking Order | Open 2018 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14, placement 시뮬레이션) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `teamttt` | Team Tic Tac Toe | Open 2018 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `tameherd` | Taming the Herd | Feb 2018 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14, DP) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `hoofball` | Hoofball | Feb 2018 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14, tie-break+mutual fix) |
+| `teleport` | Teleportation | Feb 2018 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14, via2 추가) |
+| `outofplace` | Out of Place | Jan 2018 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `lifeguards` | Lifeguards | Jan 2018 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `billboard2` | Blocked Billboard II | Jan 2018 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14, edge condition) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `milkmeas` | Milk Measurement | Dec 2017 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14, string cow names) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `bovshuffle` | The Bovine Shuffle | Dec 2017 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14, inverse fix) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `billboard` | Blocked Billboard | Dec 2017 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14, wrong-problem 수정) |
+| `modernart` | Modern Art | Open 2017 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14, per-cell bbox 검사) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `bovgenomics` | Bovine Genomics | Open 2017 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `lostcow` | The Lost Cow | Open 2017 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14, target from x) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `crossroad3` | Cross the Road III | Feb 2017 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `crossroad2` | Cross the Road II | Feb 2017 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14, 입력 포맷 fix) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `crossroad1` | Cross the Road | Feb 2017 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `cowtipping` | Cow Tipping | Jan 2017 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `hps17` | Hoof Paper Scissors | Jan 2017 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14, 6-perm 알고리즘) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `dontbelast` | Don't Be Last! | Jan 2017 Bronze #1 | ✅ 11/11 PASS (재작성 2026-05-14) | ✅ 11/11 PASS (재작성 2026-05-14) |
+| `cowsignal` | The Cow-Signal | Dec 2016 Bronze #3 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `blockgame` | Block Game | Dec 2016 Bronze #2 | ✅ 10/10 PASS (재작성 2026-05-14, sum vs max fix) | ✅ 10/10 PASS (재작성 2026-05-14) |
+| `sqpasture` | Square Pasture | Dec 2016 Bronze #1 | ✅ 10/10 PASS (재작성 2026-05-14) | ✅ 10/10 PASS (재작성 2026-05-14) |
