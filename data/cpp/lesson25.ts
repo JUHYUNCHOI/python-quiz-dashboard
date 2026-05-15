@@ -170,11 +170,11 @@ lower_bound  upper_bound
 "3 시작"    "3 끝 다음"
 \`\`\`
 
-- **binary_search(x)** → \`x\` 가 배열 안에 있나? **true / false**
-- **lower_bound(x)** → \`x\` **이상(≥)** 의 첫 위치 = "x 가 시작되는 곳"
-- **upper_bound(x)** → \`x\` **초과(>)** 의 첫 위치 = "x 가 끝난 다음"
+- **binary_search(x)** → \`x\` 가 있나? **true / false** _("있다/없다" 만 깔끔하게)_
+- **lower_bound(x)** → \`x\` **이상(≥)** 의 첫 위치 _("기준 이상 첫 거" 찾기)_
+- **upper_bound(x)** → \`x\` **초과(>)** 의 첫 위치 _(주로 lower_bound 와 짝 — 개수 세기 / 구간 카운트)_
 
-> 💡 깊이 파지 말고 **그림 + 세 줄 설명** 만 기억해도 충분해요. 어떤 상황에 어느 걸 쓰는지는 다음 페이지에서.`
+> 💡 깊이 파지 말고 **그림 + 세 줄 설명** 만 기억해도 충분. 어떤 상황에 어느 걸 쓰는지 구체 예시는 다음 페이지들에서 봐요.`
         },
         {
           id: "s23-ch2-trio-quiz",
@@ -313,7 +313,7 @@ int cnt = count(v.begin(), v.end(), 3);   // 정렬 안 되어 있어도 OK
           content: `| | binary_search() | lower_bound() |
 |---|---|---|
 | 반환값 | true / false | 위치(반복자) |
-| 용도 | 있는지만 확인 | 위치·개수 필요할 때 |
+| 용도 | 있는지만 확인 | 위치·개수·경계 필요할 때 |
 | 코드 | 짧고 직관적 | 조금 길지만 강력 |
 
 \`\`\`cpp
@@ -323,6 +323,21 @@ binary_search(v.begin(), v.end(), 5)  // true
 // "5가 몇 번째야?" → lower_bound
 lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
 \`\`\`
+
+---
+
+### 🎯 USACO 어디서 어느 거?
+
+| 상황 | 도구 |
+|---|---|
+| "ID 명단에 이 사용자 있어?" | \`binary_search\` |
+| "이 회원 코드가 등록된 회원인지" | \`binary_search\` |
+| "70 점 이상 몇 명?" | \`lower_bound\` ( v.end - lower_bound ) |
+| "예산 이하 가장 비싼 거" | \`upper_bound\` 의 한 칸 앞 |
+| "[a, b] 구간 안 점 개수" | \`upper_bound(b) - lower_bound(a)\` |
+| "X 가 몇 개 있나?" | \`upper - lower\` |
+
+---
 
 | 파이썬 🐍 | C++ ⚡ |
 |---|---|

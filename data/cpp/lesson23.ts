@@ -216,7 +216,12 @@ sort()의 **세 번째 인자**로 "비교 기준"을 넣을 수 있어요.
 | 오름차순 | \`sort(v.begin(), v.end())\` | 1 2 5 8 9 |
 | 내림차순 | \`sort(v.begin(), v.end(), greater<int>())\` | 9 8 5 2 1 |
 
-💡 세 번째 인자 없으면 기본이 오름차순이에요!`
+💡 세 번째 인자 없으면 기본이 오름차순이에요!
+
+> 🎯 **USACO 에서 언제 내림차순이 필요해?**
+> • "상위 3 등 학생" 출력 → 점수 내림차순 후 앞 3 개
+> • "비싼 상품부터" 나열 → 가격 내림차순
+> • "가장 큰 수부터 적용" 같은 그리디 문제 — 정렬 방향이 답을 결정`
         },
         {
           id: "s23-ch0-fb2",
@@ -499,13 +504,13 @@ sort(v.begin(), v.end(), [](int a, int b) {
           title: "📋 자주 보는 람다 형태들 — 치트시트",
           content: `정렬 람다는 결국 몇 가지 패턴의 변주예요. 외워두면 평생 써먹어요:
 
-| 람다 | 정렬 결과 |
-|---|---|
-| \`[](int a, int b){ return a < b; }\` | 오름차순 (sort 기본값) |
-| \`[](int a, int b){ return a > b; }\` | 내림차순 |
-| \`[](int a, int b){ return abs(a) < abs(b); }\` | 절댓값 오름차순 |
-| \`[](auto a, auto b){ return a.second < b.second; }\` | pair 의 second 기준 |
-| \`[](auto a, auto b){ return a.score > b.score; }\` | struct 의 \`score\` 멤버 내림차순 |
+| 람다 | 정렬 결과 | USACO 상황 |
+|---|---|---|
+| \`[](int a, int b){ return a < b; }\` | 오름차순 (기본) | 점수, 좌표, 가격 정렬의 기본 |
+| \`[](int a, int b){ return a > b; }\` | 내림차순 | "1 등부터 출력" / "상위 K 명" |
+| \`[](int a, int b){ return abs(a) < abs(b); }\` | 절댓값 오름차순 | "원점에서 가까운 순" / "변화량 작은 순" |
+| \`[](auto a, auto b){ return a.second < b.second; }\` | pair 의 second 기준 | (이름, 점수) → 점수순 / (시각, ID) → 시각순 |
+| \`[](auto a, auto b){ return a.score > b.score; }\` | struct 의 \`score\` 멤버 내림차순 | 캐릭터 (이름, HP, 점수) 를 점수 내림차순 |
 
 ### 💡 \`auto\` 매개변수 — pair/struct 정렬에 편함
 

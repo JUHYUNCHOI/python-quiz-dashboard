@@ -170,11 +170,11 @@ lower_bound  upper_bound
 "3 starts"   "after 3 ends"
 \`\`\`
 
-- **binary_search(x)** → is \`x\` in the array? **true / false**
-- **lower_bound(x)** → first position where value **≥ x** = "where x starts"
-- **upper_bound(x)** → first position where value **> x** = "one past where x ends"
+- **binary_search(x)** → is \`x\` in the array? **true / false** _(use when you only need yes/no)_
+- **lower_bound(x)** → first position where value **≥ x** _(use to find "first item ≥ threshold")_
+- **upper_bound(x)** → first position where value **> x** _(usually paired with lower_bound — counting / ranges)_
 
-> 💡 Don't dig deeper — the **picture + three-line description** is enough. Which one to use in which situation comes on the next page.`
+> 💡 Don't dig deeper — the **picture + three-line description** is enough. Concrete scenarios for each tool are on the next pages.`
         },
         {
           id: "s23-ch2-trio-quiz",
@@ -313,7 +313,7 @@ In the next lesson (map) you'll see \`m.count(key)\`. Same name, **completely di
           content: `| | binary_search() | lower_bound() |
 |---|---|---|
 | Returns | true / false | position (iterator) |
-| Use when | just checking existence | need position or count |
+| Use when | just checking existence | need position, count, or boundary |
 | Code | short, intuitive | longer but more powerful |
 
 \`\`\`cpp
@@ -323,6 +323,21 @@ binary_search(v.begin(), v.end(), 5)  // true
 // "What index is 5 at?" → lower_bound
 lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
 \`\`\`
+
+---
+
+### 🎯 USACO situations — which tool?
+
+| Situation | Tool |
+|---|---|
+| "Is this user ID in the list?" | \`binary_search\` |
+| "Is this member code registered?" | \`binary_search\` |
+| "How many scored ≥ 70?" | \`lower_bound\` ( v.end - lower_bound ) |
+| "Most expensive within budget?" | one before \`upper_bound\` |
+| "Points in range [a, b]?" | \`upper_bound(b) - lower_bound(a)\` |
+| "How many of X?" | \`upper - lower\` |
+
+---
 
 | Python 🐍 | C++ ⚡ |
 |---|---|

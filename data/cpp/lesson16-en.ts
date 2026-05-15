@@ -329,7 +329,12 @@ Python's \`dict\` is actually more similar to C++'s \`unordered_map\`!
 | Header | \`<map>\` | \`<unordered_map>\` |
 | Python Equivalent | — | **dict** |
 
-💡 In most cases, \`unordered_map\` is faster! Only use \`map\` when you need sorted keys.`
+💡 In most cases, \`unordered_map\` is faster! Only use \`map\` when you need sorted keys.
+
+> 🎯 **Which one in USACO?**
+> • **map** — when the output requires sorted-by-key order ("print names alphabetically" etc.).
+> • **unordered_map** — frequency counting (\`freq[word]++\`), "seen before" tracking, anywhere order doesn't matter. Most common in Bronze.
+> • If unsure, start with **map**. If you TLE, switch to \`unordered_map\` (same API).`
         },
         {
           id: "ch1-practice",

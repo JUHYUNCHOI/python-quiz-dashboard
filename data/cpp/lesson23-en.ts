@@ -216,7 +216,12 @@ sort() accepts a **third argument** for the comparison rule.
 | Ascending | \`sort(v.begin(), v.end())\` | 1 2 5 8 9 |
 | Descending | \`sort(v.begin(), v.end(), greater<int>())\` | 9 8 5 2 1 |
 
-💡 No third argument = ascending by default!`
+💡 No third argument = ascending by default!
+
+> 🎯 **When do you need descending in USACO?**
+> • "Print top 3 students" → sort scores descending, take first 3
+> • "List most expensive first" → price descending
+> • Greedy problems like "apply largest first" — the sort direction decides the answer`
         },
         {
           id: "s23-ch0-fb2",
@@ -488,12 +493,13 @@ sort(v.begin(), v.end(), [](int a, int b) {
           title: "📋 Common lambda forms — cheatsheet",
           content: `Sort lambdas boil down to a few patterns. Memorize these and you're set:
 
-| Lambda | Sort result |
-|---|---|
-| \`[](int a, int b){ return a < b; }\` | ascending (sort default) |
-| \`[](int a, int b){ return a > b; }\` | descending |
-| \`[](int a, int b){ return abs(a) < abs(b); }\` | absolute value ascending |
-| \`[](auto a, auto b){ return a.second < b.second; }\` | by pair's second |
+| Lambda | Sort result | USACO scenario |
+|---|---|---|
+| \`[](int a, int b){ return a < b; }\` | ascending (default) | basic sort for scores, coordinates, prices |
+| \`[](int a, int b){ return a > b; }\` | descending | "print rank 1 first" / "top K students" |
+| \`[](int a, int b){ return abs(a) < abs(b); }\` | absolute value ascending | "nearest to origin" / "smallest change first" |
+| \`[](auto a, auto b){ return a.second < b.second; }\` | by pair's second | (name, score) → by score / (time, id) → by time |
+| \`[](auto a, auto b){ return a.score > b.score; }\` | struct's \`score\` descending | character (name, hp, score) sorted by score |
 
 ### 💡 \`auto\` parameters — handy for pair/struct sorting
 
