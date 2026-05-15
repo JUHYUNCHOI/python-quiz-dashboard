@@ -8,6 +8,8 @@ import { callPiston } from "@/lib/piston"
 import { CodeBlock } from "@/components/ui/code-block"
 import { createClient } from "@/lib/supabase/client"
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
+import { CodeEditorWithGutter, parseErrorLine } from "@/components/cpp/code-editor-with-gutter"
+import { getErrorHint } from "@/components/cpp/error-hint"
 
 const CPP_KEYWORDS = /\b(alignas|alignof|and|and_eq|asm|auto|bitand|bitor|bool|break|case|catch|char|char8_t|char16_t|char32_t|class|compl|concept|const|consteval|constexpr|constinit|const_cast|continue|co_await|co_return|co_yield|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|false|float|for|friend|goto|if|inline|int|long|mutable|namespace|new|noexcept|not|not_eq|nullptr|operator|or|or_eq|private|protected|public|register|reinterpret_cast|requires|return|short|signed|sizeof|static|static_assert|static_cast|struct|switch|template|this|thread_local|throw|true|try|typedef|typeid|typename|union|unsigned|using|virtual|void|volatile|wchar_t|while|xor|xor_eq|string|vector|map|set|pair|cout|cin|endl|std)\b/g
 const CPP_PREPROCESSOR = /^(#\s*(?:include|define|undef|if|ifdef|ifndef|elif|else|endif|error|pragma|line)\b.*)/gm
@@ -447,10 +449,11 @@ export function CppRunner({
         </div>
 
         <div className="cpp-editor-dark">
-          <SimpleEditor
+          <CodeEditorWithGutter
             value={code}
             onValueChange={newCode => { setCode(newCode); setIsCorrect(null); setOutput(""); setError("") }}
             highlight={highlightCppCode}
+            errorLine={parseErrorLine(error)}
             padding={16}
             tabSize={4}
             insertSpaces={true}
@@ -620,12 +623,39 @@ export function CppRunner({
               <span className="ml-auto text-xs text-gray-400">{isEn ? `${failCount} attempt(s)` : `${failCount}번 시도`}</span>
             )}
           </div>
-          <pre className={cn(
-            "font-mono text-xs md:text-sm whitespace-pre-wrap break-all",
-            error ? "text-red-700" : "text-gray-800"
-          )}>
-            {error || output}
-          </pre>
+          {error ? (() => {
+            const hint = getErrorHint(error, isEn ? "en" : "ko")
+            const errLn = parseErrorLine(error)
+            return (
+              <div className="space-y-2">
+                {(hint || errLn) && (
+                  <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-amber-900 text-sm leading-relaxed">
+                    {errLn && (
+                      <span className="font-bold mr-1">
+                        {isEn ? `Line ${errLn}: ` : `${errLn}번 줄: `}
+                      </span>
+                    )}
+                    {hint || (isEn
+                      ? "Check the highlighted line — that's where the compiler stopped."
+                      : "강조된 줄을 확인해보세요 — 거기서 컴파일러가 멈췄어요.")}
+                  </div>
+                )}
+                <details>
+                  <summary className="text-red-700 text-xs font-bold cursor-pointer select-none">
+                    {isEn ? "Show raw compiler output" : "원본 컴파일러 메시지 보기"}
+                  </summary>
+                  <pre className="font-mono text-xs whitespace-pre-wrap break-all text-red-700 mt-2">{error}</pre>
+                </details>
+              </div>
+            )
+          })() : (
+            <pre className={cn(
+              "font-mono text-xs md:text-sm whitespace-pre-wrap break-all",
+              "text-gray-800"
+            )}>
+              {output}
+            </pre>
+          )}
         </div>
       )}
 
