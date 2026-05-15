@@ -655,14 +655,12 @@ cout << scores.empty() << endl;       // 0 (false, not empty)
 
 > 💡 Master these 4 and you can solve almost any map problem. (There's also a \`find\` function but it's a bit more complex — we don't cover it at this stage.)
 
-<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
-🎯 <b>How USACO actually uses map:</b><br>
-• <b>Frequency counting</b> — <code>map&lt;string, int&gt; freq; for (word w) freq[w]++;</code> — how many times did each input word/number appear?<br>
-• <b>Name → score mapping</b> — <code>map&lt;string, int&gt; scores;</code> look up a student's score by name.<br>
-• <b>Coordinate → index mapping</b> — relabel huge coordinates (10⁹) to small indices.<br>
-• <b>"First seen time" tracking</b> — <code>if (!m.count(k)) m[k] = time;</code><br>
-More than half of Bronze problems can be solved with \`map\`. Essentially required.
-</div>`,
+> 🎯 **How USACO actually uses map:**
+> • **Frequency counting** — <code>map&lt;string, int&gt; freq; for (word w) freq[w]++;</code> — how many times did each input word/number appear?
+> • **Name → score mapping** — <code>map&lt;string, int&gt; scores;</code> look up a student's score by name.
+> • **Coordinate → index mapping** — relabel huge coordinates (10⁹) to small indices.
+> • **"First seen time" tracking** — <code>if (!m.count(k)) m[k] = time;</code>
+> More than half of Bronze problems can be solved with \`map\`. Essentially required.`,
         },
         {
           id: "ch4-why-fast",
@@ -925,14 +923,12 @@ s.empty();         // true if empty
 
 > 💡 Functions look almost identical to \`map\`'s. **The one difference** — set has only keys (no values), so set's find/count just tell you whether the value exists.
 
-<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
-🎯 <b>How USACO actually uses set:</b><br>
-• <b>"Seen before?" tracking</b> — <code>set&lt;string&gt; seen;</code> quick check for repeated words/coordinates/IDs.<br>
-• <b>Count of distinct items</b> — drop everything into a \`set\`, then <code>s.size()</code> is the answer.<br>
-• <b>Visited positions</b> — in grid BFS/DFS, <code>set&lt;pair&lt;int,int&gt;&gt;</code> tracks visited coordinates.<br>
-• <b>Maintain sorted state while inserting</b> — streaming data that you always want sorted.<br>
-"Is it in?" + "no duplicates" + "sorted" — when those three are needed at once, almost always \`set\`.
-</div>`
+> 🎯 **How USACO actually uses set:**
+> • **"Seen before?" tracking** — <code>set&lt;string&gt; seen;</code> quick check for repeated words/coordinates/IDs.
+> • **Count of distinct items** — drop everything into a \`set\`, then <code>s.size()</code> is the answer.
+> • **Visited positions** — in grid BFS/DFS, <code>set&lt;pair&lt;int,int&gt;&gt;</code> tracks visited coordinates.
+> • **Maintain sorted state while inserting** — streaming data that you always want sorted.
+> "Is it in?" + "no duplicates" + "sorted" — when those three are needed at once, almost always \`set\`.`
         },
         {
           id: "ch2-vs-sort-unique",

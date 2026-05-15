@@ -96,10 +96,8 @@ sort(v.begin(), v.end());
 
 In C++, sort always **modifies in place**. Need a sorted copy? Copy the vector first, then sort the copy.
 
-<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
-🎯 <b>How USACO uses it:</b><br>
-Appears in <b>almost every problem</b>. Sorting student scores, coordinates, prices, names. "Read data → sort first → then solve" is the most common opening of a USACO Bronze solution.
-</div>
+> 🎯 **How USACO uses it:**
+> Appears in **almost every problem**. Sorting student scores, coordinates, prices, names. "Read data → sort first → then solve" is the most common opening of a USACO Bronze solution.
 
 ### Same thing for arrays
 
@@ -615,14 +613,12 @@ sort(v.begin(), v.end(), [](auto a, auto b) {
 });
 \`\`\`
 
-<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
-🎯 <b>How USACO uses it:</b><br>
-• <b>Coordinate sorting</b> — \`pair<int, int>\` as (x, y) points. Sort by y, ties by x.<br>
-• <b>Event sorting</b> — (start time, event id). Process in chronological order.<br>
-• <b>Leaderboards</b> — (name, score). Descending by score, ties alphabetical.<br>
-• <b>Distance + index</b> — (distance, original index). Sort by distance, recover original index.<br>
-Almost every Bronze problem that pairs two values uses this.
-</div>`
+> 🎯 **How USACO uses it:**
+> • **Coordinate sorting** — \`pair<int, int>\` as (x, y) points. Sort by y, ties by x.
+> • **Event sorting** — (start time, event id). Process in chronological order.
+> • **Leaderboards** — (name, score). Descending by score, ties alphabetical.
+> • **Distance + index** — (distance, original index). Sort by distance, recover original index.
+> Almost every Bronze problem that pairs two values uses this.`
         },
         {
           id: "s23-ch1-pred1",
@@ -895,9 +891,7 @@ Press the button to follow along!`,
           title: "🗝️ Sorting is the launchpad — a toolbox that opens up after one sort",
           content: `## 🚀 The big picture for this chapter
 
-<div style="font-size:18px; font-weight:800; color:#15803d; background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:14px 18px; margin:10px 0; text-align:center;">
-🎯 <b>"Things that suddenly become possible once you sort."</b>
-</div>
+> 🎯 **"Things that suddenly become possible once you sort."**
 
 This chapter throws a bunch of functions at you (\`binary_search\`, \`lower_bound\`, \`upper_bound\`, \`unique\`...). **Memorizing them one at a time will fry your brain.** They're really **all variations on one idea (the magic that sorting unlocks)**.
 
@@ -933,9 +927,7 @@ On a million elements: 1,000,000 comparisons vs ~20 comparisons. **One sort buys
 
 When data is sorted, **"look at the middle: if it's X, the answer is only on one side"** becomes possible. Each comparison throws away half the data. That's binary search — and every tool below sits on top of that idea.
 
-<div style="background:#fef3c7; border:1.5px solid #f59e0b; border-radius:10px; padding:12px 16px; margin:12px 0;">
-💡 <b>Student takeaway:</b> "Sorting isn't the end — it's the <b>start</b>. One sort = all these tools unlocked at once."
-</div>
+> 💡 **Student takeaway:** "Sorting isn't the end — it's the **start**. One sort = all these tools unlocked at once."
 
 The next pages introduce them one by one. Whenever "wait, why bother?" hits, come back to this table.`
         },
@@ -1093,14 +1085,12 @@ cout << idx;  // 1
 
 > 💡 The trio is one family but they **return different things**, so they're used differently. Next page covers a common trap.
 
-<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
-🎯 <b>USACO usage you'll see often with lower_bound:</b><br>
-• <b>"First ≥ threshold"</b> — sorted prices → "cheapest item costing ≥ $50K" / sorted times → "first meeting after now."<br>
-• <b>"Largest ≤ threshold"</b> — <code>lower_bound(x+1) - 1</code> for "most expensive item within budget."<br>
-• <b>"How many in this range?"</b> — <code>upper_bound(b) - lower_bound(a)</code> = points in [a, b].<br>
-• <b>Coordinate compression</b> (Silver+) — relabel values as 0, 1, 2... using <code>lower_bound</code>.<br>
-Sorted data + boundary query = lower_bound. The default tool in USACO.
-</div>`
+> 🎯 **USACO usage you'll see often with lower_bound:**
+> • **"First ≥ threshold"** — sorted prices → "cheapest item costing ≥ $50K" / sorted times → "first meeting after now."
+> • **"Largest ≤ threshold"** — <code>lower_bound(x+1) - 1</code> for "most expensive item within budget."
+> • **"How many in this range?"** — <code>upper_bound(b) - lower_bound(a)</code> = points in [a, b].
+> • **Coordinate compression** (Silver+) — relabel values as 0, 1, 2... using <code>lower_bound</code>.
+> Sorted data + boundary query = lower_bound. The default tool in USACO.`
         },
         {
           id: "s23-ch2-patterns-fb",
@@ -1387,9 +1377,7 @@ int main() {
           id: "s23-ch3-unique",
           type: "explain",
           title: "🧹 sort + unique — Removing Duplicates",
-          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:10px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
-📌 <b>Advanced pattern — rarely needed in USACO Bronze, common from Silver onwards</b>
-</div>
+          content: `> 📌 **Advanced pattern — rarely needed in USACO Bronze, common from Silver onwards**
 
 ### When do you actually use this?
 
@@ -1546,9 +1534,7 @@ int main() {
           id: "s23-ch3-stable",
           type: "explain",
           title: "📊 stable_sort — preserves original order on ties",
-          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:10px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
-📌 <b>Advanced — rare in USACO Bronze. Just knowing "this exists" is enough</b>
-</div>
+          content: `> 📌 **Advanced — rare in USACO Bronze. Just knowing "this exists" is enough**
 
 ### What problem does stable_sort solve?
 
@@ -1672,9 +1658,7 @@ Dave 80`,
           id: "s23-ch4-intro",
           type: "explain",
           title: "🤔 Does sort's lambda work elsewhere?",
-          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:10px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
-📌 <b>Advanced — a plain <code>for</code> loop is usually clearer for Bronze. This chapter shows "cleaner expressions"</b>
-</div>
+          content: `> 📌 **Advanced — a plain <code>for</code> loop is usually clearer for Bronze. This chapter shows "cleaner expressions"**
 
 Remember the lambda comparator you passed to \`sort\`?
 
@@ -1707,9 +1691,7 @@ You *can* compress that into one \`count_if\` line, but **you don't have to**. G
           id: "s23-ch4-count-if",
           type: "explain",
           title: "🔢 count_if — count matches",
-          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:8px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
-📌 Advanced — for loop is more intuitive. Knowing this "exists" is enough
-</div>
+          content: `> 📌 Advanced — for loop is more intuitive. Knowing this "exists" is enough
 
 **Problem:** How many students scored 80 or higher?
 
@@ -1776,9 +1758,7 @@ What is cnt?`,
           id: "s23-ch4-find-if",
           type: "explain",
           title: "🎯 find_if — first match",
-          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:8px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
-📌 Advanced — for loop + <code>break</code> is usually more intuitive
-</div>
+          content: `> 📌 Advanced — for loop + <code>break</code> is usually more intuitive
 
 **Problem:** Find the first even number in a vector.
 
@@ -1838,9 +1818,7 @@ if (it != v.end()) {
           id: "s23-ch4-accumulate",
           type: "explain",
           title: "➕ accumulate — sum (or product, or anything)",
-          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:8px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
-📌 Advanced — for loop sum is more intuitive in Bronze. accumulate is good to recognize
-</div>
+          content: `> 📌 Advanced — for loop sum is more intuitive in Bronze. accumulate is good to recognize
 
 **Problem:** Score sum and average.
 
@@ -1904,9 +1882,7 @@ double avg = (double)accumulate(v.begin(), v.end(), 0) / v.size();
           id: "s23-ch4-practice",
           type: "practice" as const,
           title: "✋ From scratch — count high scorers + total (advanced practice)",
-          content: `<div style="background:#fef3c7; border:1.5px solid #f59e0b; border-radius:8px; padding:8px 14px; margin:6px 0 10px; font-size:12px; color:#92400e;">
-📌 Advanced practice — a for loop solution is equally correct. The point is to try \`count_if\` / \`accumulate\` once.
-</div>
+          content: `> 📌 Advanced practice — a for loop solution is equally correct. The point is to try \`count_if\` / \`accumulate\` once.
 
 **Problem:** Read 5 student scores, then print:
 1. How many scored 80 or higher

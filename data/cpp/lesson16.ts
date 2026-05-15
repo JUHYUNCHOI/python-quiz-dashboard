@@ -656,14 +656,12 @@ cout << scores.empty() << endl;      // 0 (false, 비어있지 않음)
 
 > 💡 위 4 개만 익히면 map 으로 풀 수 있는 문제 거의 다 풀려요. (\`find\` 라는 함수도 있는데 조금 더 복잡해서 이 단계에선 안 다뤄요.)
 
-<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
-🎯 <b>USACO 에서 map 이 진짜 자주 쓰이는 상황:</b><br>
-• <b>빈도 카운팅</b> — <code>map&lt;string, int&gt; freq; for (단어) freq[w]++;</code> — 입력에 나온 단어/숫자 각각 몇 번 등장?<br>
-• <b>이름 → 점수 매핑</b> — <code>map&lt;string, int&gt; scores;</code> 학생 이름으로 점수 조회.<br>
-• <b>좌표 → 인덱스 매핑</b> — 큰 좌표 (10⁹) 를 작은 번호로 재매김.<br>
-• <b>"이 키가 처음 등장한 시각"</b> 추적 — <code>if (!m.count(k)) m[k] = time;</code><br>
-Bronze 문제의 절반 이상이 \`map\` 으로 풀려요. 사실상 필수.
-</div>`
+> 🎯 **USACO 에서 map 이 진짜 자주 쓰이는 상황:**
+> • **빈도 카운팅** — <code>map&lt;string, int&gt; freq; for (단어) freq[w]++;</code> — 입력에 나온 단어/숫자 각각 몇 번 등장?
+> • **이름 → 점수 매핑** — <code>map&lt;string, int&gt; scores;</code> 학생 이름으로 점수 조회.
+> • **좌표 → 인덱스 매핑** — 큰 좌표 (10⁹) 를 작은 번호로 재매김.
+> • **"이 키가 처음 등장한 시각"** 추적 — <code>if (!m.count(k)) m[k] = time;</code>
+> Bronze 문제의 절반 이상이 \`map\` 으로 풀려요. 사실상 필수.`
         },
         {
           id: "ch4-why-fast",
@@ -925,14 +923,12 @@ s.empty();         // 비어있으면 true
 
 > 💡 거의 \`map\` 과 똑같은 함수 이름. **차이는 단 하나** — set 은 키만 (값 없음), map 은 키-값. 그래서 set 의 find/count 는 그 값이 있는지만 알려줘요.
 
-<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
-🎯 <b>USACO 에서 set 이 진짜 자주 쓰이는 상황:</b><br>
-• <b>"본 적 있나?" 추적</b> — <code>set&lt;string&gt; seen;</code> 단어/좌표/ID 가 이미 등장했는지 빠른 체크.<br>
-• <b>중복 제거된 종류 수</b> — 입력에 중복 섞여 있을 때 <code>set</code> 에 다 넣고 <code>s.size()</code> 가 답.<br>
-• <b>방문한 위치</b> — 격자 BFS/DFS 에서 <code>set&lt;pair&lt;int,int&gt;&gt;</code> 로 이미 방문한 좌표 추적.<br>
-• <b>정렬된 상태 유지하며 추가</b> — 데이터가 흘러 들어오는데 항상 정렬된 순서로 봐야 할 때.<br>
-"있나/없나" + "중복 안 됨" + "정렬" — 이 셋이 동시에 필요하면 거의 set.
-</div>`
+> 🎯 **USACO 에서 set 이 진짜 자주 쓰이는 상황:**
+> • **"본 적 있나?" 추적** — <code>set&lt;string&gt; seen;</code> 단어/좌표/ID 가 이미 등장했는지 빠른 체크.
+> • **중복 제거된 종류 수** — 입력에 중복 섞여 있을 때 <code>set</code> 에 다 넣고 <code>s.size()</code> 가 답.
+> • **방문한 위치** — 격자 BFS/DFS 에서 <code>set&lt;pair&lt;int,int&gt;&gt;</code> 로 이미 방문한 좌표 추적.
+> • **정렬된 상태 유지하며 추가** — 데이터가 흘러 들어오는데 항상 정렬된 순서로 봐야 할 때.
+> "있나/없나" + "중복 안 됨" + "정렬" — 이 셋이 동시에 필요하면 거의 set.`
         },
         {
           id: "ch2-vs-sort-unique",
