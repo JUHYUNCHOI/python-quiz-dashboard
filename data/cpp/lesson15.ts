@@ -637,7 +637,36 @@ for (pair<string, int>& s : students) {  // auto& 대신 직접 타입 명시
 }
 \`\`\`
 
-💡 \`auto&\`가 훨씬 편하죠? 타입이 길어질수록 auto의 가치가 커져요!`
+💡 \`auto&\`가 훨씬 편하죠? 타입이 길어질수록 auto의 가치가 커져요!
+
+---
+
+### ⭐ 더 깔끔한 방법 — structured binding (C++17)
+
+\`s.first\` / \`s.second\` 보다 더 직관적인 방법이 있어요:
+
+\`\`\`cpp
+for (auto& [name, score] : students) {
+    cout << name << ": " << score << endl;
+}
+// Kim: 95
+// Lee: 88
+// Park: 92
+\`\`\`
+
+\`auto& [name, score]\` — pair 의 두 값을 **그 자리에서 name, score 라는 이름으로 풀어요**:
+- \`s.first\` 대신 → \`name\` (이름)
+- \`s.second\` 대신 → \`score\` (점수)
+
+코드 보면 의미가 바로 보여요.
+
+| | 옛 방식 | structured binding |
+|---|---|---|
+| 접근 | \`s.first\`, \`s.second\` | \`name\`, \`score\` (직접 이름) |
+| 가독성 | 익혀야 됨 | 이름 보면 바로 의미 |
+| 버전 | 항상 됨 | C++17+ (USACO 환경 OK) |
+
+> 💡 **USACO 와 다음 레슨 (map & set) 에서 거의 매번 등장.** \`for (auto& [k, v] : map)\` 패턴이 표준. 지금 한 번 익혀두면 두고두고 써먹어요.`
         },
         {
           id: "ch1-practice",

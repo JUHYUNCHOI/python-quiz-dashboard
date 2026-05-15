@@ -637,7 +637,36 @@ for (pair<string, int>& s : students) {  // verbose!
 }
 \`\`\`
 
-💡 \`auto&\` is much more convenient! The longer the type, the more valuable auto becomes.`
+💡 \`auto&\` is much more convenient! The longer the type, the more valuable auto becomes.
+
+---
+
+### ⭐ A cleaner way — structured binding (C++17)
+
+There's a more readable alternative to \`s.first\` / \`s.second\`:
+
+\`\`\`cpp
+for (auto& [name, score] : students) {
+    cout << name << ": " << score << endl;
+}
+// Kim: 95
+// Lee: 88
+// Park: 92
+\`\`\`
+
+\`auto& [name, score]\` — **unpacks the pair right there** into two named variables:
+- \`s.first\` → just \`name\`
+- \`s.second\` → just \`score\`
+
+The code reads like English now.
+
+| | Old way | Structured binding |
+|---|---|---|
+| Access | \`s.first\`, \`s.second\` | \`name\`, \`score\` (named directly) |
+| Readability | Have to remember | Names make meaning obvious |
+| Version | Always works | C++17+ (USACO is fine) |
+
+> 💡 **USACO and the next lesson (map & set) use this every time.** \`for (auto& [k, v] : map)\` is the standard pattern. Get used to it here.`
         },
         {
           id: "ch1-practice",
