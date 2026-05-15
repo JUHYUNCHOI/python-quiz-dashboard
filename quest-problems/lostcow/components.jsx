@@ -11,21 +11,23 @@ const A = "#dc2626";
    LostCowSim — visualize FJ zigzagging on a number line
    ═══════════════════════════════════════════════════════════════ */
 function _buildLegs(x, y, maxLegs = 30) {
+  // ⚠️ Matches the verified algorithm: target is from the START x, not from pos.
   const legs = [];   // each leg: { from, to, dir, step, dist, foundY }
   let pos = x;
   let direction = 1;
   let step = 1;
   let total = 0;
   for (let n = 0; n < maxLegs; n++) {
-    const target = pos + direction * step;
+    const target = x + direction * step;     // ← from x (start), not pos
     const lo = Math.min(pos, target), hi = Math.max(pos, target);
     if (lo <= y && y <= hi) {
       total += Math.abs(y - pos);
       legs.push({ from: pos, to: y, dir: direction, step, dist: Math.abs(y - pos), foundY: true, totalAfter: total });
       return legs;
     }
-    total += step;
-    legs.push({ from: pos, to: target, dir: direction, step, dist: step, foundY: false, totalAfter: total });
+    const legDist = Math.abs(target - pos);
+    total += legDist;
+    legs.push({ from: pos, to: target, dir: direction, step, dist: legDist, foundY: false, totalAfter: total });
     pos = target;
     direction *= -1;
     step *= 2;
@@ -332,25 +334,34 @@ export function LostCowRunner({ E }) {
 
 /* Section 1: input */
 const LC_INPUT_PY = [
-  "x, y = map(int, input().split())",
+  "# USACO 이전 contest 는 파일 입출력 사용",
+  "with open('lostcow.in', 'r') as file:",
+  "    lines = file.readlines()",
+  "",
+  "x, y = map(int, lines[0].split())",
 ];
 const LC_INPUT_CPP = [
   "#include <iostream>",
-  "#include <algorithm>",
-  "#include <cstdlib>",
+  "#include <fstream>",
   "using namespace std;",
   "",
+  "long long abs_ll(long long x) { return x < 0 ? -x : x; }",
+  "",
   "int main() {",
+  "    // USACO 이전 contest 는 파일 입출력 사용",
+  "    ifstream fin(\"lostcow.in\");",
+  "    ofstream fout(\"lostcow.out\");",
+  "",
   "    long long x, y;",
-  "    cin >> x >> y;",
+  "    fin >> x >> y;",
 ];
 
 /* Section 2: setup state */
 const LC_STATE_PY = [
-  "pos = x        # current position",
-  "direction = 1  # +1 right, -1 left",
-  "step = 1       # leg length, doubles each turn",
-  "total = 0      # accumulated walked distance",
+  "pos = x        # 지금 발 위치 (처음엔 x 에서 시작)",
+  "direction = 1  # +1 오른쪽, -1 왼쪽",
+  "step = 1       # 이번 leg 의 거리 — 매번 두 배",
+  "total = 0      # 누적 걸은 거리",
 ];
 const LC_STATE_CPP = [
   "    long long pos = x;",
@@ -359,35 +370,45 @@ const LC_STATE_CPP = [
   "    long long total = 0;",
 ];
 
-/* Section 3: zigzag loop */
+/* Section 3: zigzag loop — target 은 시작 x 기준! */
 const LC_LOOP_PY = [
   "while True:",
-  "    target = pos + direction * step",
-  "    lo, hi = (pos, target) if pos <= target else (target, pos)",
-  "    if lo <= y <= hi:                # we pass y on this leg",
+  "    # ⚠️ target 은 항상 시작 x 에서 계산 (현재 pos 가 아니라!)",
+  "    target = x + direction * step",
+  "",
+  "    # 지금 pos 에서 target 사이에 y 가 있으면 도달",
+  "    if pos <= target:",
+  "        lo, hi = pos, target",
+  "    else:",
+  "        lo, hi = target, pos",
+  "    if lo <= y <= hi:",
   "        total += abs(y - pos)",
   "        break",
-  "    total += step                    # walk the full leg",
-  "    pos = target",
-  "    direction *= -1",
-  "    step *= 2                        # next leg is twice as long",
   "",
-  "print(total)",
+  "    # 한 leg 다 걷고 방향 반전, step 은 두 배",
+  "    total += abs(target - pos)",
+  "    pos = target",
+  "    direction = -direction",
+  "    step = step * 2",
 ];
 const LC_LOOP_CPP = [
   "    while (true) {",
-  "        long long target = pos + direction * step;",
-  "        long long lo = min(pos, target), hi = max(pos, target);",
+  "        // ⚠️ target 은 항상 시작 x 기준",
+  "        long long target = x + direction * step;",
+  "",
+  "        long long lo = pos < target ? pos : target;",
+  "        long long hi = pos > target ? pos : target;",
   "        if (lo <= y && y <= hi) {",
-  "            total += llabs(y - pos);",
+  "            total += abs_ll(y - pos);",
   "            break;",
   "        }",
-  "        total += step;",
+  "        total += abs_ll(target - pos);",
   "        pos = target;",
-  "        direction *= -1;",
-  "        step *= 2;",
+  "        direction = -direction;",
+  "        step = step * 2;",
   "    }",
-  "    cout << total << '\\n';",
+  "",
+  "    fout << total << \"\\n\";",
   "    return 0;",
   "}",
 ];
@@ -488,20 +509,20 @@ export function getLostCowSections(E) {
       color: "#16a34a",
       py: LC_LOOP_PY, cpp: LC_LOOP_CPP,
       why: [
-        t(E, "Each iteration computes target = pos + direction · step.",
-            "매 반복: target = pos + direction · step 계산."),
+        t(E, "⚠️ target is computed from the starting x, NOT from pos. The zigzag pattern is 1, 2, 4, 8… measured from x, alternating direction.",
+            "⚠️ target 은 시작 x 기준으로 계산 — 지금 pos 가 아니라! 1, 2, 4, 8… 패턴이 항상 x 기준으로 방향 바꿔가며 커짐."),
         t(E, "If y lies between pos and target, FJ finds the cow on this leg — add |y - pos| and stop.",
             "y가 pos와 target 사이면 이번 다리에서 소를 찾음 — |y - pos| 더하고 종료."),
-        t(E, "Otherwise add the full leg, advance, flip direction, double the step.",
-            "아니면 전체 다리 더하고, 진행, 방향 반전, 스텝 두 배."),
+        t(E, "Otherwise walk the full leg distance (|target − pos|), then flip direction and double the step.",
+            "아니면 leg 전체 거리 (|target − pos|) 더하고, 방향 반전, step 두 배."),
       ],
       pyOnly: [
-        t(E, "Tuple unpacking lo, hi = ... keeps the comparison clean.",
-            "튜플 언팩으로 lo, hi = ... 비교를 깔끔하게."),
+        t(E, "if/else assigns lo, hi cleanly — both branches in 2 lines.",
+            "if/else 로 lo, hi 깔끔하게 — 두 줄로 끝."),
       ],
       cppOnly: [
-        t(E, "min/max from <algorithm> gives the [lo, hi] window in one line.",
-            "<algorithm>의 min/max로 [lo, hi] 윈도우를 한 줄에."),
+        t(E, "Ternary ? : keeps min/max inline without extra <algorithm> overhead.",
+            "삼항 ? : 으로 min/max 를 인라인 — <algorithm> 의존 없음."),
       ],
     },
     {
