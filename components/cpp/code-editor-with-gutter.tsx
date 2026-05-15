@@ -77,7 +77,7 @@ export function CodeEditorWithGutter({
           fontFamily,
           fontSize: Math.max(11, fontSize - 2),
           lineHeight,
-          color: "rgba(230, 237, 243, 0.35)",   // dim foreground (≈ VSCode line-numbers)
+          color: "rgba(230, 237, 243, 0.55)",   // dim but readable (slightly stronger than VSCode default)
           textAlign: "right",
           userSelect: "none",
           background: editorBg,
