@@ -40,7 +40,7 @@ const cppReviewIds = new Set([
   "cpp-1", "cpp-2", "cpp-3", "cpp-4", "cpp-5", "cpp-6", "cpp-7", "cpp-8",
   "cpp-9", "cpp-10", "cpp-11", "cpp-12", "cpp-13", "cpp-14",
   "cpp-21", "cpp-22",
-  "cpp-15", "cpp-23", "cpp-16", "cpp-17", "cpp-18", "cpp-19", "cpp-20",
+  "cpp-15", "cpp-23", "cpp-25", "cpp-16", "cpp-26", "cpp-17", "cpp-18", "cpp-19", "cpp-20",
   "cpp-p1", "cpp-p2", "cpp-p3"
 ])
 
@@ -237,13 +237,15 @@ export default function CurriculumPage() {
       description: t("C++의 강력한 무기들을 장착해요! pair, sort, map, stack — 이 도구들을 익히면 알고리즘 공부가 훨씬 쉬워져요.", "Equip yourself with C++'s powerful weapons! Master pair, sort, map, stack — these tools make algorithm study much easier."),
       lessons: [
         { id: "cpp-15", title: t("17. pair & tuple", "17. pair & tuple"), description: t("두 값을 묶는 상자 — .first/.second 접근", "Bundle two values — .first/.second access"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "cpp-23", title: t("18. sort 마스터", "18. sort Master"), description: t("sort(), 람다로 커스텀 정렬, stable_sort", "sort(), custom sorting with lambda, stable_sort"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-16", title: "19. map & set", description: t("key-value 저장, 자동 정렬 컨테이너", "Key-value storage, auto-sorted containers"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-24", title: t("20. 🚀 알고리즘 시작 전 셋업", "20. 🚀 Pre-Algorithm Setup"), description: t("3 줄 외우기 — bits/stdc++.h + Fast I/O. 5 분.", "Memorize 3 lines — bits/stdc++.h + Fast I/O. 5 min."), duration: t("5분", "5 min") },
-        { id: "cpp-17", title: t("21. STL 탐색 함수 📌 참고용", "21. STL Search Functions 📌 Reference"), description: t("이미 다른 레슨에서 대부분 다룸 — 정리/심화로 보면 OK", "Mostly covered in earlier lessons — view as a recap/extension"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
-        { id: "cpp-18", title: t("22. stack & queue 📌 참고용", "22. stack & queue 📌 Reference"), description: t("Algorithm Lab 의 BFS/DFS 시작 직전에 돌아와서 보기", "Come back here right before starting BFS/DFS in Algorithm Lab"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
-        { id: "cpp-19", title: t("23. 파일 I/O & Fast I/O 심화 📌 참고용", "23. File I/O & Fast I/O Deep Dive 📌 Reference"), description: t("Fast I/O 핵심은 cpp-24 에 있음 — 여기는 파일 I/O + 심화", "Fast I/O essentials are in cpp-24 — this is File I/O + deep dive"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
-        { id: "cpp-20", title: t("24. CP 실전 팁 📌 참고용", "24. CP Practical Tips 📌 Reference"), description: t("typedef, 매크로, 비트마스크 등 — 필요할 때 돌아오기", "typedef, macros, bitmask, etc. — come back when needed"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-23", title: t("18. sort 기본", "18. sort Basics"), description: t("sort(), 람다로 커스텀 정렬, pair 정렬", "sort(), custom sorting with lambda, pair sort"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-25", title: t("19. 정렬 후 빠른 검색", "19. Fast Search on Sorted Data"), description: t("binary_search, lower_bound, upper_bound — 정렬 한 번이 풀어주는 마법", "binary_search, lower_bound, upper_bound — what one sort unlocks"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-16", title: t("20. map & set", "20. map & set"), description: t("key-value 저장, 자동 정렬 컨테이너", "Key-value storage, auto-sorted containers"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-24", title: t("21. 🚀 알고리즘 시작 전 셋업", "21. 🚀 Pre-Algorithm Setup"), description: t("3 줄 외우기 — bits/stdc++.h + Fast I/O. 5 분.", "Memorize 3 lines — bits/stdc++.h + Fast I/O. 5 min."), duration: t("5분", "5 min") },
+        { id: "cpp-26", title: t("22. sort 응용 패턴 📌 심화", "22. Sort Application Patterns 📌 Advanced"), description: t("sort+unique+erase, stable_sort, count_if 등 — Bronze 합격 후 알아두면 좋음", "sort+unique+erase, stable_sort, count_if, etc. — good to know after Bronze"), duration: t("15분", "15 min"), hasQuiz: true, optional: true },
+        { id: "cpp-17", title: t("23. STL 탐색 함수 📌 참고용", "23. STL Search Functions 📌 Reference"), description: t("이미 다른 레슨에서 대부분 다룸 — 정리/심화로 보면 OK", "Mostly covered in earlier lessons — view as a recap/extension"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-18", title: t("24. stack & queue 📌 참고용", "24. stack & queue 📌 Reference"), description: t("Algorithm Lab 의 BFS/DFS 시작 직전에 돌아와서 보기", "Come back here right before starting BFS/DFS in Algorithm Lab"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-19", title: t("25. 파일 I/O & Fast I/O 심화 📌 참고용", "25. File I/O & Fast I/O Deep Dive 📌 Reference"), description: t("Fast I/O 핵심은 cpp-24 에 있음 — 여기는 파일 I/O + 심화", "Fast I/O essentials are in cpp-24 — this is File I/O + deep dive"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-20", title: t("26. CP 실전 팁 📌 참고용", "26. CP Practical Tips 📌 Reference"), description: t("typedef, 매크로, 비트마스크 등 — 필요할 때 돌아오기", "typedef, macros, bitmask, etc. — come back when needed"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
         { id: "cpp-p3", title: t("🏆 USACO 모의전 (Part 3 종합)", "🏆 USACO Mock Contest (Part 3 Capstone)"), description: t("pair / sort / map / stack — 3 문제로 진짜 USACO 풀이 체험", "pair / sort / map / stack — 3 problems for real USACO experience"), duration: t("30분", "30 min"), isProject: true },
       ],
     },
@@ -574,7 +576,7 @@ export default function CurriculumPage() {
   // 여정 맵 진도 계산
   const cppLessonIds = ["cpp-1","cpp-2","cpp-3","cpp-4","cpp-5","cpp-6","cpp-7","cpp-8",
     "cpp-9","cpp-21","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-22",
-    "cpp-15","cpp-23","cpp-16","cpp-24","cpp-17","cpp-18","cpp-19","cpp-20"]
+    "cpp-15","cpp-23","cpp-25","cpp-16","cpp-24","cpp-26","cpp-17","cpp-18","cpp-19","cpp-20"]
   const cppLessonsDone = cppLessonIds.filter(id => completedLessons.has(id)).length
   const practiceUnlocked = isTeacher || cppLessonsDone >= 8
   const algoUnlocked = isTeacher || practiceProblemsDone >= 40
@@ -1405,9 +1407,9 @@ export default function CurriculumPage() {
                             : null
 
                           // 🎉 메인 트랙 졸업 마일스톤 카드
-                          // 메인 트랙: cpp-15, cpp-23, cpp-16, cpp-24 (필수 셋업)
-                          // cpp-17 이 첫 optional 레슨이라 그 직전에 노출
-                          const showMainTrackMilestone = isCpp && lesson.id === "cpp-17" && part.id === "cpp-part3"
+                          // 메인 트랙: cpp-15, cpp-23, cpp-25, cpp-16, cpp-24 (필수 셋업)
+                          // cpp-26 이 첫 optional 심화 레슨이라 그 직전에 노출
+                          const showMainTrackMilestone = isCpp && lesson.id === "cpp-26" && part.id === "cpp-part3"
                           const cpp16Done = completedLessons.has("cpp-16") && completedLessons.has("cpp-24")
 
                           return (

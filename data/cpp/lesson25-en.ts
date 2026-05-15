@@ -1,0 +1,529 @@
+// ============================================
+// C++ Lesson 25: Fast Search on Sorted Data
+// (이전 cpp-23 에서 분리: ch2 Searching on sorted data)
+// ============================================
+import { LessonData } from '../types'
+
+export const cppLesson25EnData: LessonData = {
+  id: "cpp-25",
+  title: "Fast Search on Sorted Data",
+  emoji: "🔍",
+  description: "binary_search, lower_bound, upper_bound — what one sort unlocks",
+  chapters: [
+    {
+      id: "s23-ch2",
+      title: "Searching in Sorted Arrays",
+      emoji: "🔍",
+      steps: [
+        {
+          id: "s23-ch2-linear",
+          type: "animation" as const,
+          title: "🔎 Linear Search — Checking One by One",
+          component: "linearSearch",
+          content: `You've now mastered sort. There's another big reason sorted data matters — **search becomes much faster.** Let's get into that.
+
+First, see what happens when data is **not** sorted. Imagine finding **"Kim"** in a phone book.
+
+The simplest approach: flip through **one page at a time** from page 1.
+
+Page 1... nope. Page 2... nope. Page 3...
+
+A 500-page book could take **500 checks** in the worst case. Arrays are the same — **1 million elements = up to 1 million checks.**
+
+Press the button to follow along!`,
+        },
+        {
+          id: "s23-ch2-binary",
+          type: "animation" as const,
+          title: "⚡ Binary Search — Open the Middle First",
+          component: "binarySearch",
+          content: `When looking for "Kim" in a phone book, do you start at page 1?
+
+**No.** K is around the middle of the alphabet, so naturally you **open to the middle.**
+
+This only works for one reason — **the phone book is alphabetically sorted.**
+Without sorting, you'd have no idea where to look, so you'd have to start at page 1.
+
+**Binary search turns this intuition into an algorithm:**
+
+Open the middle (page 250): "Park" → Kim is before! **Skip the last 250 pages.**
+Open the new middle (page 125): "Lee" → Kim is before! **Cut in half again.**
+Keep halving — **500 pages found in just 9 checks.**
+
+**Sort → enables binary search → much faster!**
+This is why we learn sort before binary search.
+
+Press the button to follow along!`,
+        },
+        {
+          id: "s23-ch2-sorted-toolbox",
+          type: "explain",
+          title: "🗝️ Sorting is the launchpad — a toolbox that opens up after one sort",
+          content: `## 🚀 The big picture for this chapter
+
+> **🎯 Sorting makes search fast — that's the whole chapter in one line.**
+
+When you look up "Kim" in a phone book, you don't start from page 1. You **open to the middle** and decide front or back. That's possible because names are **sorted alphabetically**.
+
+Computers work the same way. Once data is sorted, **"check the middle, throw away half"** becomes possible — and search becomes drastically faster.
+
+---
+
+### 📊 Same task, before vs after sorting
+
+For 1,000,000 items:
+
+| What you want | Unsorted | After sorting |
+|---|---|---|
+| "is x there?" | 1,000,000 comparisons | **~20 comparisons** |
+| "how many of x?" | 1,000,000 comparisons | **~40 comparisons** |
+| "first ≥ x?" | 1,000,000 comparisons | **~20 comparisons** |
+| "dedupe" | write it yourself | **one line** |
+
+One sort unlocks all of that at once.
+
+---
+
+### 🔑 Why does this work?
+
+When data is sorted, **"check the middle: if it's X, the answer is only on one side"** is possible. Each comparison throws away half the data. (That's the binary search idea from the previous page.)
+
+The next pages introduce **the tools built on this idea**, one at a time. Each one will have a clear "what's it for" — so there's less to memorize.
+
+> 💡 **Student takeaway:** "Sorting isn't the end — it's the **start**. One sort = fast search."`
+        },
+        {
+          id: "s23-ch2-iter",
+          type: "explain",
+          title: "📌 Iterators — a 1-minute primer before the next page",
+          content: `The next page brings \`lower_bound\`, and instead of returning a number it returns an **iterator**. It looks scary the first time, so a quick 1-minute primer:
+
+---
+
+### Iterator = "a finger pointing to a position"
+
+The \`v.begin()\` / \`v.end()\` you've been writing with sort — those are iterators. **A finger pointing at a spot inside the vector.**
+
+\`\`\`
+   10    20    30    40    50
+    ↑                          ↑
+ begin()                      end() (one **past** the last spot)
+\`\`\`
+
+---
+
+### You've seen pointers? Almost the same thing
+
+For a vector, you can treat an iterator like a pointer. The values are laid out next to each other in memory, so \`++it\` just goes to the next slot. The syntax matches too:
+
+| | Pointer | Iterator |
+|---|---|---|
+| Read the value | \`*p\` | \`*it\` |
+| Next position | \`p++\` | \`it++\` |
+| Get the index | \`p - array\` | \`it - v.begin()\` |
+
+> ⚠️ The real difference shows up later — in containers like \`map\` / \`set\` / \`list\` whose memory isn't contiguous, pointers can't move through them but iterators can. We'll come back to that. For now, **"basically a pointer, for vectors"** is enough.
+
+---
+
+### 🎯 The two formulas to memorize
+
+When functions like \`lower_bound\` return an iterator, you'll be doing one of two things with it:
+
+\`\`\`
+   10    20    30    40    50
+    ↑                ↑
+ begin()             it  (points to 40)
+\`\`\`
+
+\`\`\`cpp
+cout << *it;             // 40   ← *it is the value
+cout << it - v.begin();  // 3    ← convert to index
+\`\`\`
+
+> 💡 \`*it\` = value, \`it - v.begin()\` = index. **Memorize these two lines** and the next page flows easily.`
+        },
+        {
+          id: "s23-ch2-lb",
+          type: "explain",
+          title: "🔍 binary_search / lower_bound / upper_bound — the binary search trio",
+          content: `Instead of writing binary search by hand every time, C++ provides **three functions** — same family:
+
+\`\`\`cpp
+binary_search(v.begin(), v.end(), x);  // is x in there? → true / false
+lower_bound (v.begin(), v.end(), x);   // where x starts
+upper_bound (v.begin(), v.end(), x);   // one past where x ends
+\`\`\`
+
+⚠️ **Sorted arrays only!** (it's binary search inside)
+
+---
+
+**Picture it — finding value 3**
+
+\`\`\`
+{1,  3,  3,  5,  7,  9}
+ 0   1   2   3   4   5
+     ↑       ↑
+lower_bound  upper_bound
+  (val=3)     (val=3)
+"3 starts"   "after 3 ends"
+\`\`\`
+
+- **binary_search(x)** → is \`x\` in the array? **true / false**
+- **lower_bound(x)** → first position where value **≥ x** = "where x starts"
+- **upper_bound(x)** → first position where value **> x** = "one past where x ends"
+
+> 💡 Don't dig deeper — the **picture + three-line description** is enough. Which one to use in which situation comes on the next page.`
+        },
+        {
+          id: "s23-ch2-trio-quiz",
+          type: "quiz" as const,
+          title: "Which of the trio do you reach for?",
+          content: "You have a sorted \`vector<int> v\`. If you only need to know **whether 7 is in the array (yes / no)**, which one is the cleanest pick?",
+          options: [
+            "`binary_search(v.begin(), v.end(), 7)`",
+            "`lower_bound(v.begin(), v.end(), 7)`",
+            "`upper_bound(v.begin(), v.end(), 7)`"
+          ],
+          answer: 0,
+          explanation: "**`binary_search`** is the one that asks exactly \"is it there?\" — it returns true/false, the most direct answer. lower_bound and upper_bound return **positions**, so checking existence with them takes one extra step (e.g. `lower_bound != upper_bound`)."
+        },
+        {
+          id: "s23-ch2-lb-missing",
+          type: "explain",
+          title: "🔍 What if the value isn't there? — the insertion slot",
+          content: `Even when the value **isn't in the array**, \`lower_bound\` doesn't error out — it returns a number. That number is **"the slot this value would go into if you wanted to keep the array sorted."**
+
+\`\`\`cpp
+vector<int> v = {1, 3, 5, 7, 9};
+
+// 4 isn't here — "where would 4 go?"
+lower_bound(v.begin(), v.end(), 4) - v.begin() →  2   ← right before 5 (where 4 belongs)
+upper_bound(v.begin(), v.end(), 4) - v.begin() →  2   ← same spot (when value's missing, start = end)
+
+// 10 is bigger than everything — "put it at the very end"
+lower_bound(v.begin(), v.end(), 10) - v.begin() →  5  ← v.end() position (= v.size())
+\`\`\`
+
+This is what makes lower_bound **stronger than just "return a position":** it gives you a **meaningful** position whether the value exists or not — "where it is, or where it would go."
+
+---
+
+**Putting it to use — "insert while staying sorted":**
+
+\`\`\`cpp
+vector<int> v = {1, 3, 5, 7, 9};
+int x = 4;
+v.insert(lower_bound(v.begin(), v.end(), x), x);
+// v = {1, 3, 4, 5, 7, 9}  ← still sorted!
+\`\`\`
+
+---
+
+> ⚠️ **Don't use the \`lower == upper\` trick just to check existence.** The intent is unclear. → **\`binary_search(v.begin(), v.end(), x)\`** is the right answer (from the earlier page). Those two iterators landing on the same spot is a **side effect** of lower_bound's design, not its purpose.`
+        },
+        {
+          id: "s23-ch2-lb-patterns",
+          type: "explain",
+          title: "🎯 3 usage patterns",
+          content: `\`\`\`cpp
+vector<int> v = {1, 3, 3, 5, 7, 9};
+
+// ① How many 3s are there?
+int count = upper_bound(v.begin(), v.end(), 3)
+          - lower_bound(v.begin(), v.end(), 3);
+// 3 - 1 = 2!
+
+// ② Does a value exist? — binary_search() is simpler!
+if (binary_search(v.begin(), v.end(), 3)) cout << "found";
+else cout << "not found";
+
+// ③ When you need the position — use lower_bound
+int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
+cout << idx;  // 1
+\`\`\`
+
+> 💡 The trio is one family but they **return different things**, so they're used differently. Next page covers a common trap.
+
+> 🎯 **USACO usage you'll see often with lower_bound:**
+> • **"First ≥ threshold"** — sorted prices → "cheapest item costing ≥ $50K" / sorted times → "first meeting after now."
+> • **"Largest ≤ threshold"** — <code>lower_bound(x+1) - 1</code> for "most expensive item within budget."
+> • **"How many in this range?"** — <code>upper_bound(b) - lower_bound(a)</code> = points in [a, b].
+> • **Coordinate compression** (Silver+) — relabel values as 0, 1, 2... using <code>lower_bound</code>.
+> Sorted data + boundary query = lower_bound. The default tool in USACO.`
+        },
+        {
+          id: "s23-ch2-patterns-fb",
+          type: "fillblank" as const,
+          title: "✋ Try it — how many 5s?",
+          content: "In the sorted \`vector<int> v = {1, 2, 5, 5, 5, 7}\`, find **how many 5s** there are in one line. (upper-lower pattern)",
+          code: "vector<int> v = {1, 2, 5, 5, 5, 7};\nint cnt = ___(v.begin(), v.end(), 5)\n        - ___(v.begin(), v.end(), 5);\ncout << cnt;  // 3",
+          fillBlanks: [
+            { id: 0, answer: "upper_bound", options: ["upper_bound", "lower_bound", "binary_search", "count"] },
+            { id: 1, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "count"] }
+          ],
+          explanation: "**\"one past end - start\" = count.** upper_bound points one past the last occurrence, lower_bound points to the first. Subtracting gives the number of times the value appears. 5 sits at indices 2, 3, 4 → 3 occurrences."
+        },
+        {
+          id: "s23-ch2-lb-vs-count",
+          type: "explain",
+          title: "🤔 Wait — doesn't \`count()\` also count occurrences?",
+          content: `Yes! \`std::count\` (the standard algorithm) also counts:
+
+\`\`\`cpp
+int cnt = count(v.begin(), v.end(), 3);   // works even on unsorted data
+\`\`\`
+
+**So what's the difference?**
+
+| | \`count()\` | \`upper - lower\` |
+|---|---|---|
+| Sorted required? | ❌ No | ✅ Must be sorted |
+| Speed | **O(n)** — scans everything | **O(log n)** — binary search |
+| Counting in 1M elements | 1,000,000 comparisons | ~20 comparisons |
+
+**Trap:** "So I'll just sort once and use upper-lower!" → ❌. \`sort\` itself is O(n log n) — for a **single** count, plain \`count()\` is faster.
+
+✅ **When upper-lower really shines:**
+- Data is **already** sorted
+- You need to count **many times** on the same data (sort once → each query is O(log n))
+
+Common in competitive programming; in everyday code \`count()\` is more typical.
+
+---
+
+### ⚠️ Heads up — \`count\` appears in **two places**
+
+In the next lesson (map) you'll see \`m.count(key)\`. Same name, **completely different function.**
+
+| | \`std::count(v.begin, v.end, x)\` | \`m.count(key)\` |
+|---|---|---|
+| Whose function? | algorithm (external) | **member** of map / set |
+| Used on | vector, plain ranges | map, set |
+| Speed | O(n) — scans the range | **O(log n)** — walks the tree directly |
+| Answer | how many equal to \`x\` | does the key exist (0/1 for map, real count for multiset) |
+
+> 💡 Same name, **different functions.** vector's \`std::count\` is slow, but map's \`m.count\` is fast because map keeps a tree inside — no sort needed. We'll revisit this in the next lesson.`
+        },
+        {
+          id: "s23-ch2-lb-vs-bs",
+          type: "explain",
+          title: "🆚 binary_search() vs lower_bound — when to use which?",
+          content: `| | binary_search() | lower_bound() |
+|---|---|---|
+| Returns | true / false | position (iterator) |
+| Use when | just checking existence | need position or count |
+| Code | short, intuitive | longer but more powerful |
+
+\`\`\`cpp
+// Just "is 5 there?" → binary_search
+binary_search(v.begin(), v.end(), 5)  // true
+
+// "What index is 5 at?" → lower_bound
+lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
+\`\`\`
+
+| Python 🐍 | C++ ⚡ |
+|---|---|
+| \`x in v\` | \`binary_search(v.begin(), v.end(), x)\` |
+| \`bisect.bisect_left(v, x)\` | \`lower_bound(v.begin(), v.end(), x) - v.begin()\` |
+| \`bisect.bisect_right(v, x)\` | \`upper_bound(v.begin(), v.end(), x) - v.begin()\` |`
+        },
+        {
+          id: "s23-ch2-quiz1",
+          type: "quiz",
+          title: "Binary search prerequisite!",
+          content: "Given an **unsorted** vector \`v = {3, 1, 4, 1, 5}\`, what does \`binary_search(v.begin(), v.end(), 4)\` return?",
+          options: [
+            "true (since 4 is in the vector)",
+            "false (auto-detects unsorted)",
+            "**Unpredictable** — binary search only works on sorted arrays. Result is implementation-defined / undefined behavior.",
+            "Compile error"
+          ],
+          answer: 2,
+          explanation: "**`binary_search`, `lower_bound`, and `upper_bound` only work correctly on sorted arrays.** Calling them on unsorted data compiles, but the result is **undefined behavior** — could be true, false, or anything. Always `sort()` first!"
+        },
+        {
+          id: "s23-ch2-lb3",
+          type: "explain",
+          title: "⚠️ Watch out — what if the value is bigger than everything?",
+          content: `\`\`\`cpp
+vector<int> v = {1, 3, 5, 7, 9};
+
+lower_bound(v.begin(), v.end(), 10) - v.begin();
+// → 5 (out of range, v[5] doesn't exist!)
+\`\`\`
+
+If nothing in the array is ≥ x, lower_bound returns the **\`v.end()\` position (= index \`v.size()\`)**. Reading \`v[5]\` here is reading invalid memory → crash territory.
+
+---
+
+**Safe usage pattern**
+
+\`\`\`cpp
+auto it = lower_bound(v.begin(), v.end(), x);
+
+if (it != v.end() && *it == x) {
+    int idx = it - v.begin();
+    cout << idx;       // only when x truly exists
+}
+\`\`\`
+
+> 💡 \`it != v.end()\` confirms **in range**, \`*it == x\` confirms **the exact value**. Both must hold before you access it.`
+        },
+        {
+          id: "s23-ch2-fb1",
+          type: "fillblank" as const,
+          title: "lower_bound Fill-in-the-Blank",
+          content: "Find the first index where 4 or greater appears in the sorted vector!",
+          code: "vector<int> v = {1, 2, 4, 4, 6};\nauto it = ___(v.begin(), v.end(), 4);\nint idx = it - v.___;\ncout << idx;  // 2",
+          fillBlanks: [
+            { id: 0, answer: "lower_bound", options: ["lower_bound", "upper_bound", "find", "binary_search"] },
+            { id: 1, answer: "begin()", options: ["begin()", "end()", "front()", "start()"] }
+          ],
+          explanation: "lower_bound returns an iterator to the first position ≥ the target value. Subtract v.begin() to get the index. 4 first appears at index 2!"
+        },
+        {
+          id: "s23-ch2-practice1",
+          type: "practice" as const,
+          title: "✋ From scratch — check existence with binary_search",
+          content: `**Problem**: An **already-sorted** vector of N ints is given, then a target value \`x\` on the next line. Print \`Yes\` if \`x\` is present, otherwise \`No\`.
+
+\`\`\`
+Input:  5
+        1 3 5 7 9
+        5
+Output: Yes
+
+Input:  5
+        1 3 5 7 9
+        4
+Output: No
+\`\`\`
+
+> 💡 \`binary_search(v.begin(), v.end(), x)\` returns **true / false**. The simplest function for "does it exist?" questions.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    // 👇 Use binary_search to check if x exists → print "Yes" or "No"
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    if (binary_search(v.begin(), v.end(), x)) cout << "Yes";
+    else cout << "No";
+    return 0;
+}`,
+          hint: "if (binary_search(v.begin(), v.end(), x)) cout << \"Yes\"; else cout << \"No\"; — for existence-only checks, binary_search is the cleanest.",
+          expectedOutput: `Yes`,
+          stdin: `5
+1 3 5 7 9
+5`,
+        },
+        {
+          id: "s23-ch2-pred1",
+          type: "predict" as const,
+          title: "Predict lower_bound & upper_bound Output!",
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main() {
+    vector<int> v = {2, 4, 4, 6, 8};
+    auto lo = lower_bound(v.begin(), v.end(), 4);
+    auto hi = upper_bound(v.begin(), v.end(), 4);
+    cout << (lo - v.begin()) << " " << (hi - lo);
+    return 0;
+}`,
+          options: ["1 2", "2 2", "1 1", "2 1"],
+          answer: 0,
+          explanation: "lower_bound(4) → index 1 (first 4). upper_bound(4) → index 3 (position of 6). hi - lo = 3 - 1 = 2 (4 appears twice). Output: 1 2"
+        },
+        {
+          id: "s23-ch2-practice2",
+          type: "practice" as const,
+          title: "✋ From scratch — count occurrences (upper - lower pattern)",
+          content: `**Problem**: An **already-sorted** vector of N ints is given, then a target value \`x\` on the next line. Print **how many times** \`x\` appears in the array.
+
+\`\`\`
+Input:  6
+        1 3 3 3 5 7
+        3
+Output: 3
+
+Input:  5
+        1 2 4 6 8
+        4
+Output: 1
+
+Input:  5
+        1 3 5 7 9
+        4
+Output: 0
+\`\`\`
+
+> 💡 \`upper_bound(...) - lower_bound(...)\` — the chapter's core application pattern. The difference between the two iterators **is** the count.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    // 👇 Print the count using upper_bound - lower_bound
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    auto lo = lower_bound(v.begin(), v.end(), x);
+    auto hi = upper_bound(v.begin(), v.end(), x);
+    cout << (hi - lo);
+    return 0;
+}`,
+          hint: "auto lo = lower_bound(v.begin(), v.end(), x); auto hi = upper_bound(v.begin(), v.end(), x); cout << (hi - lo); — the iterator difference is the count. Missing → hi == lo → 0.",
+          expectedOutput: `3`,
+          stdin: `6
+1 3 3 3 5 7
+3`,
+        }
+      ]
+    }
+  ]
+}
