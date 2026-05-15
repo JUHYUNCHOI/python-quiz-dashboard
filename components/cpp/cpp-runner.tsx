@@ -626,9 +626,10 @@ export function CppRunner({
           {error ? (() => {
             const hint = getErrorHint(error, isEn ? "en" : "ko")
             const errLn = parseErrorLine(error)
+            const showAmber = hint || errLn
             return (
               <div className="space-y-2">
-                {(hint || errLn) && (
+                {showAmber ? (
                   <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-amber-900 text-sm leading-relaxed">
                     {errLn && (
                       <span className="font-bold mr-1">
@@ -638,6 +639,12 @@ export function CppRunner({
                     {hint || (isEn
                       ? "Check the highlighted line — that's where the compiler stopped."
                       : "강조된 줄을 확인해보세요 — 거기서 컴파일러가 멈췄어요.")}
+                  </div>
+                ) : (
+                  <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-amber-900 text-sm leading-relaxed">
+                    {isEn
+                      ? "Couldn't auto-detect a line number from this error. Open the raw message below and look for \"file:line:\" — that's where the issue is."
+                      : "이 에러에서 줄 번호를 자동으로 못 찾았어요. 아래 원본 메시지를 열어서 \"파일:줄:\" 형식을 찾아보세요 — 거기가 문제 지점."}
                   </div>
                 )}
                 <details>
