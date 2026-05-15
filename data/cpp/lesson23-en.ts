@@ -851,7 +851,7 @@ banana hi apple ok cat`,
           title: "🎉 sort basics done! What's next?",
           content: `You've mastered **sort basics**:
 
-- \`sort(v.begin(), v.end())\` — sort in one line
+- **sort(v.begin(), v.end())** — sort in one line
 - **Custom criteria** with lambda (descending, by absolute value, multi-key)
 - **Pair sorting** — bundle two values, sort by one or both
 
@@ -859,17 +859,17 @@ That's enough for almost any "sorting" part of a USACO Bronze problem.
 
 ---
 
-### Next lesson — **Fast Search on Sorted Data** (cpp-25)
+### 🎯 Next lesson — Fast Search on Sorted Data (cpp-25)
 
-What sorting unlocks — \`binary_search\`, \`lower_bound\`, \`upper_bound\`. Answer questions like "is x in there?", "first ≥ x?", "how many of x?" in **O(log n)**.
+What sorting unlocks. Questions like "is x in there?", "first ≥ x?", "how many of x?" all answered in **O(log n)**. Tools: **binary_search**, **lower_bound**, **upper_bound**.
 
-### After that (optional, advanced) — **Sort Application Patterns** (cpp-26)
+### 📌 After that (optional, advanced) — Sort Application Patterns (cpp-26)
 
-\`sort + unique + erase\` for dedup, \`stable_sort\` for preserving tie order, plus general STL helpers like \`count_if\` / \`find_if\` / \`accumulate\`. **Not required for Bronze** — come back when you have time.
+Dedup (sort + unique + erase), preserving tie order (stable_sort), lambda + general STL (count_if, find_if, accumulate). **Not required for Bronze** — come back when you have time.
 
 ---
 
-> 💡 We split the original "sort master" lesson into three so each one stays focused. **It's the same flow underneath**: "sort it → search it fast → use the sort." Take them one at a time.`
+💡 We split the original "sort master" into three so each lesson stays focused. **Same flow underneath**: "sort it → search it fast → use the sort." Take them one at a time.`
         }
       ]
     }
