@@ -88,29 +88,35 @@ The **binary search** from the previous page (open the middle, drop half) — ev
           id: "s23-ch2-iter",
           type: "explain",
           title: "📌 Iterators — a finger pointing to a position",
-          content: `On the next page, \`lower_bound\` returns an **iterator** instead of a plain number. Let's get comfortable with it first.
+          content: `On the next page, \`lower_bound\` returns something unfamiliar — not a plain number, but an **iterator**. Let's get friendly with it first — it's really not a big deal!
 
 ---
 
-### Iterator = "a spot inside the vector"
+### Iterator = "a finger pointing into the vector" 🫵
 
-The \`v.begin()\` / \`v.end()\` you've been writing with \`sort\` — those *are* iterators.
+Imagine putting one finger down on the vector \`{10, 20, 30, 40, 50}\`. That finger is your **iterator**. Land on the first slot and it points at 10; slide it one over and it points at 20… that's it.
 
 \`\`\`
    10    20    30    40    50
-    ↑                          ↑
- begin()                      end() ← one *past* the last
-                                     (no value — just an "end" marker)
+    ☝️                       ☝️
+ begin()                    end() ← one *past* the last
+                                   ("end here!" marker — no value)
 \`\`\`
+
+Whenever you wrote \`sort(v.begin(), v.end())\`, you were already handing it two fingers — "sort everything from the first finger (\`begin()\`) up to the end marker (\`end()\`)."
+
+> 💡 \`end()\` being *one past* the last (instead of *at* the last) feels weird at first, but the whole STL agrees on "[begin, end) is the real data." You'll get used to it fast.
 
 ---
 
-### You only need two things
+### A finger can do exactly two things
 
-| Syntax | Meaning |
+| Syntax | What the finger does |
 |---|---|
-| \`*it\` | the **value** at that spot |
-| \`++it\` | move to the **next** spot |
+| \`*it\` | **read the value at the spot** the finger is pointing at (\`*\` = "what's here?") |
+| \`++it\` | **slide the finger one slot to the right** |
+
+So scanning the whole vector from start to end looks like this:
 
 \`\`\`cpp
 vector<int> v = {10, 20, 30, 40, 50};
@@ -120,16 +126,19 @@ for (auto it = v.begin(); it != v.end(); ++it) {
 }
 \`\`\`
 
-- \`it != v.end()\` — keep going *until* the end marker (don't read end itself)
-- \`++it\` for the next slot, \`*it\` for the value
+Line by line:
+- \`auto it = v.begin()\` → put the finger on the **first slot** (pointing at 10)
+- \`it != v.end()\` → keep going **until the finger touches the end marker** (don't read the marker — no value there)
+- \`++it\` → slide one slot right
+- \`*it\` → print whatever the finger is looking at
 
-> 💡 You'd usually write \`for (int x : v)\` (range-for) — shorter and more common. The pattern above is for **understanding what iterators do under the hood**.
+> 💡 In real code you'd usually write \`for (int x : v)\` (range-for) — shorter and more common. The pattern above is for **picturing how the iterator actually moves**, which you'll need on the next page when \`lower_bound\` puts the finger somewhere specific.
 
 ---
 
-### Heard of pointers?
+### If you've heard of pointers
 
-An iterator is basically a **cousin of a pointer**. Same syntax — \`*\` reads the value, \`++\` moves forward. The difference is iterators work the same way on vector / list / map (pointers only work on vector). **You'll see this with your own eyes on the next page.**`
+An iterator is the **smart cousin of a pointer**. Same \`*\` for reading and same \`++\` for moving. The difference: iterators work the same way on vector / list / map. **We'll show you the difference with your eyes on the next page** — so for now, "ah, it's a finger" is plenty!`
         },
         {
           id: "s23-ch2-iter-sim",
