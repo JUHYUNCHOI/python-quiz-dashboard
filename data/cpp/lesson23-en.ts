@@ -876,12 +876,51 @@ This is why we learn sort before binary search.
 Press the button to follow along!`,
         },
         {
+          id: "s23-ch2-sorted-toolbox",
+          type: "explain",
+          title: "🗝️ Sorting is the launchpad — a toolbox that opens up after one sort",
+          content: `This chapter throws a bunch of functions at you all at once (\`binary_search\`, \`lower_bound\`, \`upper_bound\`, \`unique\`...). Trying to memorize them one at a time will fry your brain. Big picture first:
+
+---
+
+### One-line big picture
+
+> 📌 **This chapter = "things that suddenly become possible once you sort."**
+> Operations that required scanning every element with \`find\` shrink to a **single line** once the data is sorted.
+
+---
+
+### What sorting unlocks (everything covered in this chapter)
+
+| Unsorted (before) | Sorted (this chapter) |
+|---|---|
+| \`find\` — scan O(N) | **\`binary_search\`** — halve each step O(log N) |
+| \`std::count\` — scan O(N) | **\`upper - lower\`** — two binary searches O(log N) |
+| ❌ "First student ≥ 70" impossible | **\`lower_bound(70)\`** — one line |
+| ❌ "Insert while staying sorted" painful | **\`insert(lower_bound(x), x)\`** — one line |
+| Hand-write deduplication | **\`sort + unique + erase\`** — one line |
+
+---
+
+### Why is sorting so powerful?
+
+When data is sorted, **"look at the middle: if it's X, the answer must be on this side"** becomes possible (the binary-search idea from before).
+
+Every tool below is built on that one idea. They're **all the same family** — the next pages introduce them one by one, but whenever "wait, why bother?" hits, come back to this table.
+
+> 💡 Student takeaway: "Sort isn't the end — it's the **start.** One sort = all these tools unlocked."`
+        },
+        {
           id: "s23-ch2-iter",
           type: "explain",
-          title: "📌 Quick checkpoint — one formula for the next page",
-          content: `Before turning binary search into C++ code, just one formula to lock in.
+          title: "📌 Iterators — a 1-minute primer before the next page",
+          content: `The next page brings \`lower_bound\`, and instead of returning a number it returns an **iterator**. It looks scary the first time, so a quick 1-minute primer:
 
-We've been using \`v.begin()\`, \`v.end()\` with sort — they're just **markers pointing to positions** in the vector. (Same pattern you saw in the previous lesson, **STL search functions**, with \`find\` and \`count\`.)
+---
+
+### Iterator = "a finger pointing to a position"
+
+The \`v.begin()\` / \`v.end()\` you've been writing with sort — those are iterators. **A finger pointing at a spot inside the vector.**
 
 \`\`\`
    10    20    30    40    50
@@ -891,24 +930,36 @@ We've been using \`v.begin()\`, \`v.end()\` with sort — they're just **markers
 
 ---
 
-### 🎯 The formula to memorize: \`it - v.begin()\` = index
+### You've seen pointers? Almost the same thing
 
-The next page's \`lower_bound\` returns a **position** (\`it\`), not an index number. To convert to an index, **one line**:
+For a vector, you can treat an iterator like a pointer. The values are laid out next to each other in memory, so \`++it\` just goes to the next slot. The syntax matches too:
+
+| | Pointer | Iterator |
+|---|---|---|
+| Read the value | \`*p\` | \`*it\` |
+| Next position | \`p++\` | \`it++\` |
+| Get the index | \`p - array\` | \`it - v.begin()\` |
+
+> ⚠️ The real difference shows up later — in containers like \`map\` / \`set\` / \`list\` whose memory isn't contiguous, pointers can't move through them but iterators can. We'll come back to that. For now, **"basically a pointer, for vectors"** is enough.
+
+---
+
+### 🎯 The two formulas to memorize
+
+When functions like \`lower_bound\` return an iterator, you'll be doing one of two things with it:
 
 \`\`\`
    10    20    30    40    50
     ↑                ↑
  begin()             it  (points to 40)
-
-it - v.begin() = 3   → index 3!
 \`\`\`
 
 \`\`\`cpp
 cout << *it;             // 40   ← *it is the value
-cout << it - v.begin();  // 3    ← convert to index!
+cout << it - v.begin();  // 3    ← convert to index
 \`\`\`
 
-> 💡 Don't try to deeply understand it — **just memorize the formula.** \`*it\` = value, \`it - v.begin()\` = index. Those two are all you need for lower_bound.`
+> 💡 \`*it\` = value, \`it - v.begin()\` = index. **Memorize these two lines** and the next page flows easily.`
         },
         {
           id: "s23-ch2-lb",
@@ -959,20 +1010,36 @@ lower_bound  upper_bound
         {
           id: "s23-ch2-lb-missing",
           type: "explain",
-          title: "🔍 What if the value isn't found?",
-          content: `\`\`\`cpp
+          title: "🔍 What if the value isn't there? — the insertion slot",
+          content: `Even when the value **isn't in the array**, \`lower_bound\` doesn't error out — it returns a number. That number is **"the slot this value would go into if you wanted to keep the array sorted."**
+
+\`\`\`cpp
 vector<int> v = {1, 3, 5, 7, 9};
 
-// 4 doesn't exist
-lower_bound(v.begin(), v.end(), 4) - v.begin() →  2  (first value ≥ 4 = 5)
-upper_bound(v.begin(), v.end(), 4) - v.begin() →  2  (first value > 4 = 5)
-// When value is missing: lower_bound == upper_bound !
+// 4 isn't here — "where would 4 go?"
+lower_bound(v.begin(), v.end(), 4) - v.begin() →  2   ← right before 5 (where 4 belongs)
+upper_bound(v.begin(), v.end(), 4) - v.begin() →  2   ← same spot (when value's missing, start = end)
 
-// 10 doesn't exist (bigger than everything)
-lower_bound(v.begin(), v.end(), 10) - v.begin() →  5  (past the end)
+// 10 is bigger than everything — "put it at the very end"
+lower_bound(v.begin(), v.end(), 10) - v.begin() →  5  ← v.end() position (= v.size())
 \`\`\`
 
-**→ lower_bound == upper_bound means the value isn't in the array!**`
+This is what makes lower_bound **stronger than just "return a position":** it gives you a **meaningful** position whether the value exists or not — "where it is, or where it would go."
+
+---
+
+**Putting it to use — "insert while staying sorted":**
+
+\`\`\`cpp
+vector<int> v = {1, 3, 5, 7, 9};
+int x = 4;
+v.insert(lower_bound(v.begin(), v.end(), x), x);
+// v = {1, 3, 4, 5, 7, 9}  ← still sorted!
+\`\`\`
+
+---
+
+> ⚠️ **Don't use the \`lower == upper\` trick just to check existence.** The intent is unclear. → **\`binary_search(v.begin(), v.end(), x)\`** is the right answer (from the earlier page). Those two iterators landing on the same spot is a **side effect** of lower_bound's design, not its purpose.`
         },
         {
           id: "s23-ch2-lb-patterns",
@@ -1013,7 +1080,7 @@ cout << idx;  // 1
           id: "s23-ch2-lb-vs-count",
           type: "explain",
           title: "🤔 Wait — doesn't \`count()\` also count occurrences?",
-          content: `Yes! The \`count()\` from the **STL search functions** lesson also counts:
+          content: `Yes! \`std::count\` (the standard algorithm) also counts:
 
 \`\`\`cpp
 int cnt = count(v.begin(), v.end(), 3);   // works even on unsorted data
@@ -1033,7 +1100,22 @@ int cnt = count(v.begin(), v.end(), 3);   // works even on unsorted data
 - Data is **already** sorted
 - You need to count **many times** on the same data (sort once → each query is O(log n))
 
-Common in competitive programming; in everyday code \`count()\` is more typical.`
+Common in competitive programming; in everyday code \`count()\` is more typical.
+
+---
+
+### ⚠️ Heads up — \`count\` appears in **two places**
+
+In the next lesson (map) you'll see \`m.count(key)\`. Same name, **completely different function.**
+
+| | \`std::count(v.begin, v.end, x)\` | \`m.count(key)\` |
+|---|---|---|
+| Whose function? | algorithm (external) | **member** of map / set |
+| Used on | vector, plain ranges | map, set |
+| Speed | O(n) — scans the range | **O(log n)** — walks the tree directly |
+| Answer | how many equal to \`x\` | does the key exist (0/1 for map, real count for multiset) |
+
+> 💡 Same name, **different functions.** vector's \`std::count\` is slow, but map's \`m.count\` is fast because map keeps a tree inside — no sort needed. We'll revisit this in the next lesson.`
         },
         {
           id: "s23-ch2-lb-vs-bs",

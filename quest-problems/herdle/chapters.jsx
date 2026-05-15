@@ -156,41 +156,6 @@ function HerdleSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "for _ in range(int(input())):",
-  "    answer = [[input().split() for _ in range(3)] for _ in range(2)]",
-  "    guess  = [[input().split() for _ in range(3)] for _ in range(2)]",
-  "    # Flatten to 3x3 grids",
-  "    ans = [input().split() for _ in range(3)]",
-  "    gue = [input().split() for _ in range(3)]",
-  "",
-  "    green = 0",
-  "    yellow = 0",
-  "    remaining_ans = {}",
-  "    remaining_gue = {}",
-  "",
-  "    # Count greens first",
-  "    for r in range(3):",
-  "        for c in range(3):",
-  "            if ans[r][c] == gue[r][c]:",
-  "                green += 1",
-  "            else:",
-  "                remaining_ans[ans[r][c]] = remaining_ans.get(ans[r][c], 0) + 1",
-  "                remaining_gue[gue[r][c]] = remaining_gue.get(gue[r][c], 0) + 1",
-  "",
-  "    # Count yellows from remaining",
-  "    for breed in remaining_gue:",
-  "        if breed in remaining_ans:",
-  "            yellow += min(remaining_gue[breed], remaining_ans[breed])",
-  "",
-  "    print(green)",
-  "    print(yellow)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

@@ -2,40 +2,6 @@ import { C, t } from "@/components/quest/theme";
 import { getPalindromeSections } from "./components";
 
 /* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "def is_palindrome(n):",
-  "    s = str(n)",
-  "    return s == s[::-1]",
-  "",
-  "data = sys.stdin.read().split()",
-  "T = int(data[0])         # number of test cases",
-  "",
-  "out = []",
-  "for k in range(T):",
-  "    S = int(data[1 + k])",
-  "    # Precompute palindromes up to S",
-  "    palindromes = [p for p in range(1, S + 1) if is_palindrome(p)]",
-  "",
-  "    # dp[s] = True if the player to move on a pile of size s WINS",
-  "    dp = [False] * (S + 1)",
-  "    for s in range(1, S + 1):",
-  "        for p in palindromes:",
-  "            if p > s:",
-  "                break",
-  "            if not dp[s - p]:   # leave opponent in a losing state",
-  "                dp[s] = True",
-  "                break",
-  "",
-  "    out.append('B' if dp[S] else 'E')",
-  "",
-  "print(chr(10).join(out))",
-];
-
-/* ================================================================
    Chapter 1: Problem Understanding (4 steps)
    ================================================================ */
 export function makePalindromeCh1(E) {

@@ -1,66 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getStampGridSections, StampSimulator } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "p = 0",
-  "T = int(data[p]); p += 1     # number of test cases",
-  "",
-  "def rotate90(grid):",
-  "    R, C = len(grid), len(grid[0])",
-  "    return [''.join(grid[R - 1 - r][c] for r in range(R)) for c in range(C)]",
-  "",
-  "def solve():",
-  "    global p",
-  "    # Per test: N + canvas, then K + stamp",
-  "    N = int(data[p])",
-  "    p += 1",
-  "    canvas = [data[p + i] for i in range(N)]",
-  "    p += N",
-  "    K = int(data[p])",
-  "    p += 1",
-  "    stamp = [data[p + i] for i in range(K)]",
-  "    p += K",
-  "",
-  "    # All 4 rotations of the stamp",
-  "    rotations = [stamp]",
-  "    for _ in range(3):",
-  "        rotations.append(rotate90(rotations[-1]))",
-  "",
-  "    # Mark canvas cells covered by SOME legal placement",
-  "    covered = [[False] * N for _ in range(N)]",
-  "    for rot in rotations:",
-  "        for r in range(N - K + 1):",
-  "            for c in range(N - K + 1):",
-  "                # legal: no '*' of stamp falls onto a non-'*' of canvas",
-  "                ok = True",
-  "                for dr in range(K):",
-  "                    if not ok: break",
-  "                    for dc in range(K):",
-  "                        if rot[dr][dc] == '*' and canvas[r + dr][c + dc] != '*':",
-  "                            ok = False",
-  "                            break",
-  "                if not ok: continue",
-  "                # legal -> mark its '*' cells covered",
-  "                for dr in range(K):",
-  "                    for dc in range(K):",
-  "                        if rot[dr][dc] == '*':",
-  "                            covered[r + dr][c + dc] = True",
-  "",
-  "    # Every '*' of the canvas must be covered",
-  "    return all(covered[r][c] or canvas[r][c] != '*' for r in range(N) for c in range(N))",
-  "",
-  "out = []",
-  "for _ in range(T):",
-  "    out.append('YES' if solve() else 'NO')",
-  "print(chr(10).join(out))",
-];
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem understanding
    ═══════════════════════════════════════════════════════════════ */

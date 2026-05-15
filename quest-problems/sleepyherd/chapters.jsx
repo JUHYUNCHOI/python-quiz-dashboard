@@ -1,38 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getSleepyHerdSections, SleepyHerdSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "positions = sorted([int(input()) for _ in range(3)])",
-  "a, b, c = positions",
-  "",
-  "# Gap between first two and last two",
-  "gap1 = b - a  # gap between a and b",
-  "gap2 = c - b  # gap between b and c",
-  "",
-  "# --- Maximum moves ---",
-  "# Move the closer endpoint one step at a time",
-  "# Max = (gap1 - 1) + (gap2 - 1) = total_span - 2",
-  "max_moves = (c - a) - 2",
-  "",
-  "# --- Minimum moves ---",
-  "if gap1 == 1 and gap2 == 1:",
-  "    # Already consecutive",
-  "    min_moves = 0",
-  "elif gap1 <= 2 or gap2 <= 2:",
-  "    # One gap is 1 or 2: can solve in 1 move",
-  "    min_moves = 1",
-  "else:",
-  "    # Both gaps > 2: need 2 moves",
-  "    min_moves = 2",
-  "",
-  "print(min_moves)",
-  "print(max_moves)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

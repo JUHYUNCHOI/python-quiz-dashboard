@@ -2,27 +2,6 @@ import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getMixMilkSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "cap = [0] * 3",
-  "milk = [0] * 3",
-  "for i in range(3):",
-  "    cap[i], milk[i] = map(int, input().split())",
-  "",
-  "for step in range(100):",
-  "    src = step % 3",
-  "    dst = (step + 1) % 3",
-  "    # pour src -> dst",
-  "    amount = min(milk[src], cap[dst] - milk[dst])",
-  "    milk[src] -= amount",
-  "    milk[dst] += amount",
-  "",
-  "for m in milk:",
-  "    print(m)",
-];
-
 /* Python syntax highlighter (shared across snippets) */
 const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
 const PY_BUILTIN = new Set(["print","input","range","len","sum","map","int","str","chr","ord","min","max","sorted","reversed","list","dict","set","tuple","enumerate","zip","abs","round","type","isinstance","open","filter","any","all","bool","float"]);
@@ -678,12 +657,14 @@ export function makeMixMilkCh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
+              "with open('mixmilk.in') as file:",
+              "    lines = file.readlines()",
               "cap = [0] * 3",
               "milk = [0] * 3",
               "for i in range(3):",
-              "    cap[i], milk[i] = map(int, input().split())",
+              "    cap[i], milk[i] = map(int, lines[i].split())",
             ]}
-            highlight={[0, 1, 2, 3]}
+            highlight={[0, 1, 4, 5]}
           />
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
             {t(E,
@@ -704,16 +685,18 @@ export function makeMixMilkCh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
+              "with open('mixmilk.in') as file:",
+              "    lines = file.readlines()",
               "cap = [0] * 3",
               "milk = [0] * 3",
               "for i in range(3):",
-              "    cap[i], milk[i] = map(int, input().split())",
+              "    cap[i], milk[i] = map(int, lines[i].split())",
               "",
               "for step in range(100):",
               "    src = step % 3",
               "    dst = (step + 1) % 3",
             ]}
-            highlight={[5, 6, 7]}
+            highlight={[7, 8, 9]}
           />
           <div style={{ marginTop: 8, display: "flex", gap: 8, justifyContent: "center" }}>
             {[

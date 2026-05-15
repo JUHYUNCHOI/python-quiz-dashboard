@@ -149,43 +149,6 @@ function CountLiarsSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "claims = []",
-  "for _ in range(N):",
-  "    parts = input().split()",
-  "    claims.append((parts[0], int(parts[1])))",
-  "",
-  "# Try every possible position for Bessie",
-  "# For each position p, count contradictions",
-  "positions = sorted(set(c[1] for c in claims))",
-  "",
-  "min_liars = N",
-  "for p in range(1, 1000001):",
-  "    liars = 0",
-  "    for typ, val in claims:",
-  "        if typ == 'G' and p < val:",
-  "            liars += 1",
-  "        elif typ == 'L' and p > val:",
-  "            liars += 1",
-  "    min_liars = min(min_liars, liars)",
-  "",
-  "# Optimized: sort and use prefix sums",
-  "# Try each claimed position as Bessie's position",
-  "ans = N",
-  "for p in [c[1] for c in claims]:",
-  "    liars = 0",
-  "    for typ, val in claims:",
-  "        if typ == 'G' and p < val: liars += 1",
-  "        elif typ == 'L' and p > val: liars += 1",
-  "    ans = min(ans, liars)",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

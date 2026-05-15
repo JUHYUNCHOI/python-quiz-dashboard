@@ -179,25 +179,6 @@ function TeleportRouteSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "a, b, x, y = map(int, input().split())",
-  "",
-  "# Direct distance",
-  "direct = abs(a - b)",
-  "",
-  "# Via teleporter: a->x, teleport to y, y->b",
-  "via1 = abs(a - x) + abs(y - b)",
-  "",
-  "# Via teleporter: a->y, teleport to x, x->b",
-  "via2 = abs(a - y) + abs(x - b)",
-  "",
-  "print(min(direct, via1, via2))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

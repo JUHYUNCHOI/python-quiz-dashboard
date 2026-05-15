@@ -1,42 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getStrangeFnSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "MOD = 10**9 + 7",
-  "INV2 = pow(2, MOD - 2, MOD)  # modular inverse of 2",
-  "",
-  "T = int(input())",
-  "for _ in range(T):",
-  "    s = input().strip()",
-  "",
-  "    # Step 1: if any digit is not 0/1, binarize (1 op),",
-  "    # producing a string of 0/1 of the same length.",
-  "    ops = 0",
-  "    if any(c not in '01' for c in s):",
-  "        s = ''.join('1' if int(c) % 2 else '0' for c in s)",
-  "        ops = 1",
-  "",
-  "    # Step 2: treat s as a binary number n.",
-  "    # Remaining ops to hit 0 = floor(3*n / 2).",
-  "    # Closed form: g(2k)=3k, g(2k+1)=3k+1.",
-  "    # Compute n mod MOD digit-by-digit.",
-  "    n = 0",
-  "    for c in s:",
-  "        n = (n * 2 + int(c)) % MOD",
-  "",
-  "    last = int(s[-1]) if s else 0  # parity of n equals last bit",
-  "    g = (3 * n - last) % MOD * INV2 % MOD",
-  "",
-  "    print((ops + g) % MOD)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeStrangeFnCh1
    ═══════════════════════════════════════════════════════════════ */

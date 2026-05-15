@@ -45,6 +45,7 @@ function _ancestorChain(name) {
 }
 
 function _classify(X, Y, E) {
+  // Matches FULL_PY exactly: NOT RELATED / SIBLINGS / ancestor / aunt / COUSINS.
   if (X === Y) return t(E, "same cow", "같은 소");
   const chX = _ancestorChain(X);
   const setX = new Map(chX.map(n => [n.name, n.depth]));
@@ -59,19 +60,33 @@ function _classify(X, Y, E) {
     }
   }
   if (!lca) return t(E, "NOT RELATED", "관계 없음");
-  if (dX === 0 && dY === 1) return t(E, `${X} is ${Y}'s mother`, `${X} 는 ${Y} 의 엄마`);
-  if (dY === 0 && dX === 1) return t(E, `${X} is ${Y}'s daughter`, `${X} 는 ${Y} 의 딸`);
-  if (dX === 0 && dY > 1) {
-    const greats = "great-".repeat(dY - 2);
-    return t(E, `${X} is ${Y}'s ${greats}grandmother`, `${X} 는 ${Y} 의 ${greats}할머니`);
-  }
-  if (dY === 0 && dX > 1) {
-    const greats = "great-".repeat(dX - 2);
-    return t(E, `${X} is ${Y}'s ${greats}granddaughter`, `${X} 는 ${Y} 의 ${greats}손녀`);
-  }
-  if (dX === 1 && dY === 1) return t(E, "siblings", "자매");
-  if (dX === dY) return t(E, "cousins", "사촌");
-  return t(E, `related (LCA=${lca})`, `친척 (공통조상=${lca})`);
+
+  // ancestor name: depth 1 = mother, 2 = grand-mother, 3+ = great-..-grand-mother
+  const ancestorWord = (depth) => {
+    if (depth === 1) return t(E, "mother", "엄마");
+    if (depth === 2) return t(E, "grand-mother", "할머니");
+    const greats = "great-".repeat(depth - 2);
+    return t(E, `${greats}grand-mother`, `${greats}할머니`);
+  };
+  const descendantWord = (depth) => {
+    if (depth === 1) return t(E, "daughter", "딸");
+    if (depth === 2) return t(E, "grand-daughter", "손녀");
+    const greats = "great-".repeat(depth - 2);
+    return t(E, `${greats}grand-daughter`, `${greats}손녀`);
+  };
+  const auntWord = (diff) => {
+    if (diff === 1) return t(E, "aunt", "이모");
+    const greats = "great-".repeat(diff - 1);
+    return t(E, `${greats}aunt`, `${greats}이모`);
+  };
+
+  if (dX === 0 && dY === 0) return t(E, "SIBLINGS", "자매");
+  if (dX === 0) return t(E, `${X} is the ${ancestorWord(dY)} of ${Y}`, `${X} 는 ${Y} 의 ${ancestorWord(dY)}`);
+  if (dY === 0) return t(E, `${X} is the ${descendantWord(dX)} of ${Y}`, `${X} 는 ${Y} 의 ${descendantWord(dX)}`);
+  if (dX === 1 && dY === 1) return t(E, "SIBLINGS", "자매");
+  if (dX === 1) return t(E, `${X} is the ${auntWord(dY - 1)} of ${Y}`, `${X} 는 ${Y} 의 ${auntWord(dY - 1)}`);
+  if (dY === 1) return t(E, `${Y} is the ${auntWord(dX - 1)} of ${X}`, `${Y} 는 ${X} 의 ${auntWord(dX - 1)}`);
+  return t(E, "COUSINS", "사촌");
 }
 
 function _pathTo(start, target) {

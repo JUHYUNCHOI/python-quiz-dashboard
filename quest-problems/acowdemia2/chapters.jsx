@@ -211,31 +211,6 @@ function DefinitelySeniorSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, M = map(int, input().split())",
-  "# order[a][b] = True if a always before b",
-  "before = [[False]*(N) for _ in range(N)]",
-  "",
-  "for _ in range(M):",
-  "    K = int(input())",
-  "    authors = list(map(int, input().split()))",
-  "    for i in range(K):",
-  "        for j in range(i+1, K):",
-  "            before[authors[i]][authors[j]] = True",
-  "",
-  "for a in range(N):",
-  "    for b in range(N):",
-  "        if a != b:",
-  "            if before[a][b] and not before[b][a]:",
-  "                print('YES')  # a more senior",
-  "            else:",
-  "                print('UNDETERMINED')",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

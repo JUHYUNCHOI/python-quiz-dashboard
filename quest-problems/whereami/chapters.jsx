@@ -133,21 +133,30 @@ function WhereAmISim({ E }) {
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N = int(input())",
-  "s = input().strip()",
+  "# USACO 이전 contest는 파일 입출력 사용",
+  "with open('whereami.in', 'r') as file:",
+  "    lines = file.readlines()",
   "",
+  "N = int(lines[0])",
+  "s = lines[1].strip()",
+  "",
+  "# K = 1, 2, ... 차례로 시도 — 모든 길이 K 부분문자열이 서로 다르면 그게 답",
+  "answer = N",
   "for K in range(1, N + 1):",
-  "    substrings = set()",
+  "    seen = set()",
   "    unique = True",
   "    for i in range(N - K + 1):",
   "        sub = s[i:i+K]",
-  "        if sub in substrings:",
+  "        if sub in seen:",
   "            unique = False",
   "            break",
-  "        substrings.add(sub)",
+  "        seen.add(sub)",
   "    if unique:",
-  "        print(K)",
+  "        answer = K",
   "        break",
+  "",
+  "with open('whereami.out', 'w') as file:",
+  "    file.write(str(answer) + '\\n')",
 ];
 
 
@@ -731,7 +740,7 @@ export function makeWhereAmICh3(E, lang = "py") {
               "First line: N (number of mailboxes). Second line: the string of labels.",
               "첫 줄: N (우편함 수). 둘째 줄: 라벨 문자열.")}
           </div>
-          <CodeSnippet lines={["N = int(input())", "s = input().strip()"]} highlight={[0, 1]} />
+          <CodeSnippet lines={["with open('whereami.in') as file:", "    lines = file.readlines()", "N = int(lines[0])", "s = lines[1].strip()"]} highlight={[0, 1, 2, 3]} />
           <div style={{
             marginTop: 10, background: C.carryBg, borderRadius: 8, padding: 8,
             border: `1.5px solid ${C.carryBd}`, fontSize: 12, color: C.text,
@@ -754,14 +763,16 @@ export function makeWhereAmICh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
-              "N = int(input())",
-              "s = input().strip()",
+              "with open('whereami.in') as file:",
+              "    lines = file.readlines()",
+              "N = int(lines[0])",
+              "s = lines[1].strip()",
               "",
               "for K in range(1, N + 1):",
               "    substrings = set()",
               "    unique = True",
             ]}
-            highlight={[3, 4, 5]}
+            highlight={[5, 6, 7]}
           />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E,
@@ -782,8 +793,10 @@ export function makeWhereAmICh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
-              "N = int(input())",
-              "s = input().strip()",
+              "with open('whereami.in') as file:",
+              "    lines = file.readlines()",
+              "N = int(lines[0])",
+              "s = lines[1].strip()",
               "",
               "for K in range(1, N + 1):",
               "    substrings = set()",
@@ -795,7 +808,7 @@ export function makeWhereAmICh3(E, lang = "py") {
               "            break",
               "        substrings.add(sub)",
             ]}
-            highlight={[6, 7, 8, 9, 10, 11]}
+            highlight={[8, 9, 10, 11, 12, 13]}
           />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E,

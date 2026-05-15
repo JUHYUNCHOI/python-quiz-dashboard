@@ -190,25 +190,6 @@ function SuffixSortSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "a = list(map(int, input().split()))",
-  "",
-  "# Find longest sorted suffix",
-  "# from the right, find where it stops being sorted",
-  "k = N - 1",
-  "while k > 0 and a[k - 1] < a[k]:",
-  "    k -= 1",
-  "",
-  "# k is the first index of the sorted suffix",
-  "# We need to move cows 0..k-1",
-  "print(k)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

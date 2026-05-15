@@ -1,42 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getSleepClassSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "T = int(input())",
-  "for _ in range(T):",
-  "    N = int(input())",
-  "    a = list(map(int, input().split()))",
-  "    total = sum(a)",
-  "",
-  "    best = N - 1  # worst case: merge all into one",
-  "",
-  "    # Try each divisor of total as target period length",
-  "    for d in range(1, total + 1):",
-  "        if total % d != 0:",
-  "            continue",
-  "        target = d",
-  "        # Try to partition into segments summing to target",
-  "        merges = 0",
-  "        curr = 0",
-  "        for x in a:",
-  "            curr += x",
-  "            if curr == target:",
-  "                curr = 0",
-  "            elif curr > target:",
-  "                break",
-  "        else:",
-  "            if curr == 0:",
-  "                # Number of merges = N - (total // target)",
-  "                merges = N - (total // target)",
-  "                best = min(best, merges)",
-  "",
-  "    print(best)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

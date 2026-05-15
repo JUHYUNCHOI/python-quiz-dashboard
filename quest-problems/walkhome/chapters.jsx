@@ -1,51 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getWalkHomeSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, K = map(int, input().split())",
-  "grid = []",
-  "for _ in range(N):",
-  "    grid.append(input().strip())",
-  "",
-  "# DP: dp[r][c][dir][changes] = number of paths",
-  "# dir: 0 = right, 1 = down, 2 = start (no direction yet)",
-  "# changes: number of direction changes so far",
-  "",
-  "from functools import lru_cache",
-  "",
-  "@lru_cache(maxsize=None)",
-  "def dp(r, c, direction, changes):",
-  "    if r == N-1 and c == N-1:",
-  "        return 1",
-  "    if changes > K:",
-  "        return 0",
-  "    total = 0",
-  "    # Move right",
-  "    if c + 1 < N and grid[r][c+1] != 'H':",
-  "        new_changes = changes",
-  "        if direction == 1:  # was going down",
-  "            new_changes += 1",
-  "        if new_changes <= K:",
-  "            total += dp(r, c+1, 0, new_changes)",
-  "    # Move down",
-  "    if r + 1 < N and grid[r+1][c] != 'H':",
-  "        new_changes = changes",
-  "        if direction == 0:  # was going right",
-  "            new_changes += 1",
-  "        if new_changes <= K:",
-  "            total += dp(r+1, c, 1, new_changes)",
-  "    return total",
-  "",
-  "if grid[0][0] == 'H':",
-  "    print(0)",
-  "else:",
-  "    print(dp(0, 0, 2, 0))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

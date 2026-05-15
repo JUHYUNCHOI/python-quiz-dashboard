@@ -1,42 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getNonTransSections, NonTransDeepAuditSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "T = int(input())",
-  "for _ in range(T):",
-  "    A = list(map(int, input().split()))",
-  "    B = list(map(int, input().split()))",
-  "",
-  "    def beats(X, Y):",
-  "        win = sum(1 for x in X for y in Y if x > y)",
-  "        lose = sum(1 for x in X for y in Y if x < y)",
-  "        return win > lose",
-  "",
-  "    if not beats(A, B):",
-  "        print('no')",
-  "        continue",
-  "",
-  "    found = False",
-  "    # Brute force all possible die C (4 sides, values 1-10)",
-  "    for c1 in range(1, 11):",
-  "        for c2 in range(c1, 11):",
-  "            for c3 in range(c2, 11):",
-  "                for c4 in range(c3, 11):",
-  "                    C_die = [c1, c2, c3, c4]",
-  "                    if beats(B, C_die) and beats(C_die, A):",
-  "                        found = True",
-  "                        break",
-  "                if found: break",
-  "            if found: break",
-  "        if found: break",
-  "",
-  "    print('yes' if found else 'no')",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (4 steps)
    ═══════════════════════════════════════════════════════════════ */

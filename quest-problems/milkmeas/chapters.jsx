@@ -1,40 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMilkMeasSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "",
-  "# 3 cows start at 7 gallons each",
-  "milk = {1: 7, 2: 7, 3: 7}",
-  "",
-  "changes = []",
-  "for _ in range(N):",
-  "    d, cow, delta = input().split()",
-  "    changes.append((int(d), int(cow), int(delta)))",
-  "",
-  "changes.sort()",
-  "",
-  "def get_leaders(m):",
-  "    mx = max(m.values())",
-  "    return frozenset(c for c, v in m.items() if v == mx)",
-  "",
-  "display_changes = 0",
-  "prev_leaders = get_leaders(milk)",
-  "",
-  "for day, cow, delta in changes:",
-  "    milk[cow] += delta",
-  "    cur_leaders = get_leaders(milk)",
-  "    if cur_leaders != prev_leaders:",
-  "        display_changes += 1",
-  "    prev_leaders = cur_leaders",
-  "",
-  "print(display_changes)",
-];
-
-
 /* ---------------------------------------------------------------
    Chapter 1: Problem (3 steps)
    --------------------------------------------------------------- */

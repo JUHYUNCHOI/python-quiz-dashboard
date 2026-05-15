@@ -1,41 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getBackForthSections, BackForthStateTreeSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "barn1 = list(map(int, input().split()))",
-  "barn2 = list(map(int, input().split()))",
-  "",
-  "# Day 1: barn1 -> barn2 (pick one of 10 buckets from barn1)",
-  "# Day 2: barn2 -> barn1 (pick one of 10 buckets from barn2)",
-  "# Day 3: barn1 -> barn2 (pick one of 10 buckets from barn1)",
-  "# Day 4: barn2 -> barn1 (pick one of 10 buckets from barn2)",
-  "",
-  "def solve(b1, b2):",
-  "    # Try all 10^4 combos with sets",
-  "    # After day1: move bucket from b1 to b2",
-  "    states = set()",
-  "    for i in range(10):            # day 1: b1[i] to barn2",
-  "        nb1 = list(b1); nb2 = list(b2)",
-  "        v = nb1.pop(i); nb2.append(v)",
-  "        for j in range(11):        # day 2: nb2[j] to barn1",
-  "            nb1b = list(nb1); nb2b = list(nb2)",
-  "            v2 = nb2b.pop(j); nb1b.append(v2)",
-  "            for k in range(11):    # day 3: nb1b[k] to barn2",
-  "                nb1c = list(nb1b); nb2c = list(nb2b)",
-  "                v3 = nb1c.pop(k); nb2c.append(v3)",
-  "                for l in range(11):  # day 4: nb2c[l] to barn1",
-  "                    nb1d = list(nb1c); nb2d = list(nb2c)",
-  "                    v4 = nb2d.pop(l); nb1d.append(v4)",
-  "                    states.add(sum(nb1d))",
-  "    return len(states)",
-  "",
-  "print(solve(barn1, barn2))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

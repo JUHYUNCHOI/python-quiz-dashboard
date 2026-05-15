@@ -1,37 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getTeamTttSections, TeamLineChecker } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "grid = []",
-  "for _ in range(3):",
-  "    grid.append(input())",
-  "",
-  "lines = []",
-  "for r in range(3):",
-  "    lines.append((grid[r][0], grid[r][1], grid[r][2]))",
-  "for c in range(3):",
-  "    lines.append((grid[0][c], grid[1][c], grid[2][c]))",
-  "lines.append((grid[0][0], grid[1][1], grid[2][2]))",
-  "lines.append((grid[0][2], grid[1][1], grid[2][0]))",
-  "",
-  "individual = set()",
-  "team = set()",
-  "",
-  "for a, b, c in lines:",
-  "    s = {a, b, c}",
-  "    if len(s) == 1:",
-  "        individual.add(a)",
-  "    elif len(s) == 2:",
-  "        team.add(frozenset(s))",
-  "",
-  "print(len(individual))",
-  "print(len(team))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (4 steps)
    ═══════════════════════════════════════════════════════════════ */

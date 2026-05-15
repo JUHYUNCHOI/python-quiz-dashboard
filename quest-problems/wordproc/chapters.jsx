@@ -1,33 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getWordProcSections, WordProcLineWrapSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, K = map(int, input().split())",
-  "words = input().split()",
-  "",
-  "lines = []",
-  "cur_line = []",
-  "cur_len = 0",
-  "",
-  "for w in words:",
-  "    wl = len(w)",
-  "    if cur_len + wl > K and cur_line:",
-  "        lines.append(' '.join(cur_line))",
-  "        cur_line = []",
-  "        cur_len = 0",
-  "    cur_line.append(w)",
-  "    cur_len += wl",
-  "",
-  "if cur_line:",
-  "    lines.append(' '.join(cur_line))",
-  "",
-  "for line in lines:",
-  "    print(line)",
-];
-
 /* Python syntax highlighter (shared across snippets) */
 const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
 const PY_BUILTIN = new Set(["print","input","range","len","sum","map","int","str","chr","ord","min","max","sorted","reversed","list","dict","set","tuple","enumerate","zip","abs","round","type","isinstance","open","filter","any","all","bool","float"]);
@@ -505,10 +478,12 @@ export function makeWordProcCh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
-              "N, K = map(int, input().split())",
-              "words = input().split()",
+              "with open('word.in') as file:",
+              "    file_lines = file.readlines()",
+              "N, K = map(int, file_lines[0].split())",
+              "words = file_lines[1].split()",
             ]}
-            highlight={[0, 1]}
+            highlight={[0, 1, 2, 3]}
           />
           <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
             {t(E,
@@ -529,14 +504,16 @@ export function makeWordProcCh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
-              "N, K = map(int, input().split())",
-              "words = input().split()",
+              "with open('word.in') as file:",
+              "    file_lines = file.readlines()",
+              "N, K = map(int, file_lines[0].split())",
+              "words = file_lines[1].split()",
               "",
               "lines = []",
               "cur_line = []",
               "cur_len = 0",
             ]}
-            highlight={[3, 4, 5]}
+            highlight={[5, 6, 7]}
           />
           <div style={{ marginTop: 8, background: "#fef2f2", borderRadius: 8, padding: 8, border: "1.5px solid #fca5a5", fontSize: 12, lineHeight: 1.8, color: C.text }}>
             <div><span style={{ fontWeight: 600, color: "#dc2626" }}>lines</span> = {t(E, "list of finished lines", "완성된 줄들의 리스트")}</div>

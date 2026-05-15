@@ -1,53 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getFamilyTreeSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N, A, B = input().split()",
-  "N = int(N)",
-  "",
-  "parent = {}",
-  "for _ in range(N):",
-  "    mom, child = input().split()",
-  "    parent[child] = mom",
-  "",
-  "# Build ancestor chain for A",
-  "ancestors_A = {}",
-  "cur, depth = A, 0",
-  "while cur:",
-  "    ancestors_A[cur] = depth",
-  "    cur = parent.get(cur)",
-  "    depth += 1",
-  "",
-  "# Walk up from B to find LCA",
-  "cur, depth_B = B, 0",
-  "while cur:",
-  "    if cur in ancestors_A:",
-  "        depth_A = ancestors_A[cur]",
-  "        if depth_A == 0 and depth_B > 0:",
-  "            rel = 'the mother' if depth_B == 1 else 'an ancestor'",
-  "            print(f'{A} is {rel} of {B}')",
-  "        elif depth_B == 0 and depth_A > 0:",
-  "            rel = 'the child' if depth_A == 1 else 'a descendant'",
-  "            print(f'{A} is {rel} of {B}')",
-  "        elif depth_A > 0 and depth_B > 0:",
-  "            print(f'{A} and {B} are related through a common ancestor')",
-  "            # could be siblings or cousins",
-  "        else:",
-  "            print(f'{A} and {B} are the same cow')",
-  "        break",
-  "    cur = parent.get(cur)",
-  "    depth_B += 1",
-  "else:",
-  "    print(f'{A} and {B} are not related')",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

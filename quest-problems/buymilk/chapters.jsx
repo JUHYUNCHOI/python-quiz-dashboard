@@ -1,43 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getBuyMilkSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE (Python)
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N, Q = map(int, input().split())",
-  "a = list(map(int, input().split()))",
-  "INF = float('inf')",
-  "",
-  "def solve(x, i):",
-  "    if x <= 0: return 0",
-  "    if i < 0: return INF",
-  "    size = 1 << i",
-  "    k = x // size",
-  "    r = x - k * size",
-  "    opt1 = a[i] * k + (solve(r, i - 1) if r > 0 else 0)",
-  "    opt2 = a[i] * (k + 1)",
-  "    opt3 = solve(x, i - 1)",
-  "    return min(opt1, opt2, opt3)",
-  "",
-  "out = []",
-  "for _ in range(Q):",
-  "    x = int(input())",
-  "    big = INF",
-  "    for i in range(N):",
-  "        if (1 << i) >= x:",
-  "            big = a[i]",
-  "            break",
-  "    top = min(N - 1, x.bit_length())",
-  "    out.append(min(big, solve(x, top)))",
-  "",
-  "print('\\n'.join(map(str, out)))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeBuyMilkCh1 (5 steps)
    ═══════════════════════════════════════════════════════════════ */

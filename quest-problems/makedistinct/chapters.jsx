@@ -1,38 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMakeDistinctSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "def solve():",
-  "    n, k = map(int, input().split())",
-  "    a = list(map(int, input().split()))",
-  "    m = abs(k)",
-  "    groups = {}",
-  "    for x in a:",
-  "        groups.setdefault(x % m, []).append(x)",
-  "    total = 0",
-  "    for vals in groups.values():",
-  "        vals.sort(reverse=(k < 0))",
-  "        cur = vals[0]",
-  "        for i in range(1, len(vals)):",
-  "            if (k > 0 and vals[i] > cur) or (k < 0 and vals[i] < cur):",
-  "                cur = vals[i]",
-  "            else:",
-  "                cur = cur + k",
-  "                total += (cur - vals[i]) // k",
-  "    print(total)",
-  "",
-  "T = int(input())",
-  "for _ in range(T):",
-  "    solve()",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMakeDistinctCh1 (5 steps: reveal / reveal / reveal / quiz / input)
    ═══════════════════════════════════════════════════════════════ */

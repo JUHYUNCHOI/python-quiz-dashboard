@@ -1,65 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getRevEngSections, RevEngDeepAuditSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "T = int(input())",
-  "for _ in range(T):",
-  "    N, M = map(int, input().split())",
-  "    inputs = []",
-  "    outputs = []",
-  "    for _ in range(M):",
-  "        line = input().split()",
-  "        arr = [int(x) for x in line[:N]]",
-  "        out = int(line[N])",
-  "        inputs.append(tuple(arr))",
-  "        outputs.append(out)",
-  "",
-  "    # Check: same input, different output => LIE",
-  "    ok = True",
-  "    for i in range(M):",
-  "        for j in range(i+1, M):",
-  "            if inputs[i] == inputs[j] and outputs[i] != outputs[j]:",
-  "                ok = False",
-  "                break",
-  "        if not ok: break",
-  "",
-  "    if not ok:",
-  "        print('LIE')",
-  "        continue",
-  "",
-  "    # Check: for inputs with different outputs,",
-  "    # there must exist a position where they differ",
-  "    # Try each position as the decision variable",
-  "    possible = False",
-  "    for pos in range(N):",
-  "        # Try: if arr[pos]==0 return A, else return B",
-  "        for A in [0, 1]:",
-  "            B = 1 - A",
-  "            valid = True",
-  "            for k in range(M):",
-  "                expected = A if inputs[k][pos] == 0 else B",
-  "                if expected != outputs[k]:",
-  "                    valid = False",
-  "                    break",
-  "            if valid:",
-  "                possible = True",
-  "                break",
-  "        if possible: break",
-  "",
-  "    # Also check: always return 0 or always return 1",
-  "    if not possible:",
-  "        if all(o == 0 for o in outputs):",
-  "            possible = True",
-  "        elif all(o == 1 for o in outputs):",
-  "            possible = True",
-  "",
-  "    print('OK' if possible else 'LIE')",
-];
-
-
 /* ===============================================================
    Chapter 1: Problem (3 steps)
    =============================================================== */

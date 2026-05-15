@@ -159,30 +159,6 @@ function PairwiseTraitSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "animals = []",
-  "for _ in range(N):",
-  "    name = input().strip()",
-  "    K = int(input())",
-  "    traits = set()",
-  "    for _ in range(K):",
-  "        traits.add(input().strip())",
-  "    animals.append(traits)",
-  "",
-  "best = 0",
-  "for i in range(N):",
-  "    for j in range(i + 1, N):",
-  "        shared = len(animals[i] & animals[j])",
-  "        best = max(best, shared)",
-  "",
-  "print(best)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

@@ -1,39 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getHps17Sections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N = int(input())",
-  "plays = [input().strip() for _ in range(N)]",
-  "",
-  "# beats[c] = the opponent gesture that c defeats",
-  "beats = {'H': 'S', 'P': 'H', 'S': 'P'}",
-  "idx = {'H': 0, 'P': 1, 'S': 2}",
-  "",
-  "# pre[i][c] = wins over rounds 0..i-1 if Bessie always plays c",
-  "pre = [[0, 0, 0] for _ in range(N + 1)]",
-  "for i, g in enumerate(plays):",
-  "    for c in 'HPS':",
-  "        pre[i + 1][idx[c]] = pre[i][idx[c]] + (1 if g == beats[c] else 0)",
-  "",
-  "# Try every split k and every (first, second) gesture pair",
-  "best = 0",
-  "for c1 in 'HPS':",
-  "    for c2 in 'HPS':",
-  "        for k in range(N + 1):",
-  "            wins = pre[k][idx[c1]] + (pre[N][idx[c2]] - pre[k][idx[c2]])",
-  "            if wins > best:",
-  "                best = wins",
-  "",
-  "print(best)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (4 steps)
    ═══════════════════════════════════════════════════════════════ */
@@ -43,12 +10,12 @@ export function makeHps17Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ plays Hoof-Paper-Scissors against Bessie for N rounds. Bessie's gesture each round is fixed and known in advance.\nFJ picks ONE gesture to start with, and is allowed to SWITCH to a different gesture at most ONCE during the game. Print the maximum number of rounds FJ can win.",
-        "FJ가 베시(Bessie)와 가위바위보를 N라운드 해요. 매 라운드 베시가 무엇을 낼지는 미리 정해져 있어 알아요.\nFJ는 처음에 한 가지 제스처를 골라요. 그리고 게임 도중 다른 제스처로 딱 한 번까지 바꿀 수 있어요. FJ가 이길 수 있는 최대 라운드 수를 출력해요."),
+        "Two cows play Hoof-Paper-Scissors for N rounds. Each round, both cows show a gesture labeled 1, 2, or 3 — but we DON'T know which number stands for Hoof, Paper, or Scissors. Try every assignment of {1, 2, 3} → (H, P, S) and find the one where cow 1 wins the most rounds.",
+        "두 소가 가위바위보를 N라운드 해요. 매 라운드 두 소 모두 1, 2, 3 중 하나로 라벨된 제스처를 내요 — 그런데 어느 숫자가 H, P, S 인지는 몰라요. {1, 2, 3} → (H, P, S) 의 모든 배정을 시도해서 cow 1 이 가장 많이 이기는 경우를 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u270a"}</div>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"✊"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Hoof, Paper, Scissors</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2017 Bronze #2</div>
           </div>
@@ -59,8 +26,8 @@ export function makeHps17Ch1(E) {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
-              {t(E, "Maximize FJ's wins given he can switch gestures at most ONCE.",
-                    "FJ가 제스처를 딱 한 번까지 바꿀 수 있다고 할 때, 이기는 라운드 수를 최대로 만들어요.")}
+              {t(E, "Try every assignment of numbers 1, 2, 3 to (H, P, S) and output the max wins for cow 1.",
+                    "숫자 1, 2, 3 을 (H, P, S) 에 배정하는 모든 경우를 시도해서 cow 1 의 최대 승수를 출력.")}
             </div>
           </div>
 
@@ -72,18 +39,19 @@ export function makeHps17Ch1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "FJ plays ", "FJ가 ")}
+                  {t(E, "Two cows play ", "두 소가 ")}
                   <b style={{ color: "#2563eb" }}>{t(E, "N rounds of Hoof-Paper-Scissors", "N라운드 가위바위보")}</b>
-                  {t(E, " against Bessie. Bessie's gestures are given as a list of H / P / S.",
-                        "를 베시와 해요. 베시의 제스처는 H / P / S 로 라운드별로 주어져요.")}
+                  {t(E, ". Each round both cows show a gesture labeled ",
+                        " 를 해요. 매 라운드 두 소 모두 라벨이 ")}
+                  <b>1, 2, 3</b>
+                  {t(E, ".", " 중 하나인 제스처를 내요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "FJ chooses one gesture, and may ", "FJ는 처음에 한 제스처를 고르고, 게임 도중 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "switch to a different gesture at most ONCE", "다른 제스처로 딱 한 번까지 바꿀 수 있어요")}</b>
-                  {t(E, " during the game.", ".")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "We don't know which number is Hoof, Paper, or Scissors", "어느 숫자가 H, P, S 인지 몰라요")}</b>
+                  {t(E, " — try every possible assignment.", " — 모든 배정을 시도.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -96,9 +64,9 @@ export function makeHps17Ch1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  <b style={{ color: "#15803d" }}>{t(E, "Print the maximum number of rounds FJ can win", "FJ가 이길 수 있는 최대 라운드 수")}</b>
-                  {t(E, " over the best choice of (first gesture, second gesture, switch round).",
-                        "를 출력해요 — (첫 제스처, 두 번째 제스처, 바꾸는 시점) 조합 중 최선.")}
+                  <b style={{ color: "#15803d" }}>{t(E, "Print the maximum wins cow 1 can get", "cow 1 의 최대 승수")}</b>
+                  {t(E, " over all 6 ways to assign {1,2,3} to (H, P, S).",
+                        "를 출력 — {1,2,3} → (H, P, S) 6 가지 배정 중 최선.")}
                 </div>
               </div>
             </div>
@@ -112,84 +80,131 @@ export function makeHps17Ch1(E) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, fontSize: 12, color: C.text }}>
               <div>
                 <div style={{ color: "#9a3412", fontWeight: 600, marginBottom: 4 }}>{t(E, "Input", "입력")}</div>
-                <pre style={{ background: "#1e293b", color: "#f1f5f9", padding: 8, borderRadius: 6, margin: 0, fontSize: 12 }}>{`5\nP\nP\nH\nP\nS`}</pre>
+                <pre style={{ background: "#1e293b", color: "#f1f5f9", padding: 8, borderRadius: 6, margin: 0, fontSize: 12 }}>{`5\n1 2\n2 3\n1 3\n3 1\n3 1`}</pre>
               </div>
               <div>
                 <div style={{ color: "#9a3412", fontWeight: 600, marginBottom: 4 }}>{t(E, "Output", "출력")}</div>
                 <pre style={{ background: "#1e293b", color: "#f1f5f9", padding: 8, borderRadius: 6, margin: 0, fontSize: 12 }}>{`4`}</pre>
               </div>
             </div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 6, lineHeight: 1.5 }}>
+              {t(E, "Each line: cow 1 gesture, cow 2 gesture. First line N = number of rounds.",
+                    "각 줄: cow 1 제스처, cow 2 제스처. 첫 줄 N = 라운드 수.")}
+            </div>
           </div>
         </div>),
     },
-    // 1-2: Walkthrough reveal
+    // 1-2: Walkthrough — one assignment example
     {
       type: "reveal",
       narr: t(E,
-        "Let's walk through the sample. Bessie plays P, P, H, P, S. If FJ plays S for rounds 1-4 (beating Bessie's P,P,H,P → wins on rounds 1, 2, 4) and then switches to H for round 5 (H beats S → win), FJ wins 4 rounds. That's the best he can do.",
-        "샘플을 따라가 봐요. 베시는 P, P, H, P, S를 내요. FJ가 라운드 1~4에서 S를 내면 (베시의 P, P, H, P 중 P에 이기는 1, 2, 4 라운드 승리), 그 다음 라운드 5에서 H로 바꾸면 (H는 S를 이김 → 승리) — 총 4라운드 승리. 이게 최선이에요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
-              🔍 {t(E, "Sample walkthrough", "샘플 풀이")}
-            </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-              <div style={{ marginBottom: 6 }}>
-                {t(E, "Bessie: ", "베시: ")}<b>P P H P S</b>
+        "Let's try one assignment. Suppose 1 = H, 2 = P, 3 = S. Then run through the rounds and count cow 1's wins. Repeat for all 6 assignments; the max is the answer.",
+        "한 배정을 시도해 봐요. 1 = H, 2 = P, 3 = S 라고 하자. 그 다음 라운드별로 cow 1 의 승수를 세요. 6 가지 배정 다 시도하고 최댓값이 답."),
+      content: (() => {
+        // Try assignment: 1=H, 2=P, 3=S on input rounds (1,2),(2,3),(1,3),(3,1),(3,1)
+        // Round 1: H vs P → H loses (P beats H)
+        // Round 2: P vs S → P loses (S beats P)
+        // Round 3: H vs S → H wins (H beats S) ✓
+        // Round 4: S vs H → S loses (H beats S)
+        // Round 5: S vs H → S loses (H beats S)
+        // wins = 1
+        // Try assignment: 1=S, 2=H, 3=P
+        // Round 1: S vs H → S loses
+        // Round 2: H vs P → H loses
+        // Round 3: S vs P → S wins ✓
+        // Round 4: P vs S → P loses
+        // Round 5: P vs S → P loses
+        // wins = 1
+        // Try assignment: 1=P, 2=S, 3=H
+        // Round 1: P vs S → P loses
+        // Round 2: S vs H → S loses
+        // Round 3: P vs H → P wins ✓
+        // Round 4: H vs P → H loses
+        // Round 5: H vs P → H loses
+        // wins = 1
+        // Try assignment: 1=H, 2=S, 3=P
+        // Round 1: H vs S → H wins ✓
+        // Round 2: S vs P → S wins ✓
+        // Round 3: H vs P → H loses
+        // Round 4: P vs H → P wins ✓
+        // Round 5: P vs H → P wins ✓
+        // wins = 4 ← this is the max
+        const trace = [
+          { r: 1, a: 1, b: 2, ag: "H", bg: "S", win: true },
+          { r: 2, a: 2, b: 3, ag: "S", bg: "P", win: true },
+          { r: 3, a: 1, b: 3, ag: "H", bg: "P", win: false },
+          { r: 4, a: 3, b: 1, ag: "P", bg: "H", win: true },
+          { r: 5, a: 3, b: 1, ag: "P", bg: "H", win: true },
+        ];
+        return (
+          <div style={{ padding: 16 }}>
+            <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 6 }}>
+                🔍 {t(E, "Try one of the 6 assignments — best case: 1=H, 2=S, 3=P", "6 가지 중 한 배정 시도 — 최선: 1=H, 2=S, 3=P")}
               </div>
-              <div style={{ marginBottom: 6 }}>
-                {t(E, "FJ chooses S first, then switches to H before round 5:",
-                      "FJ는 처음에 S, 라운드 5 직전에 H로 바꿔요:")}
+              <div style={{ fontSize: 12, color: C.dim, marginBottom: 8, lineHeight: 1.6 }}>
+                {t(E,
+                  "Translate each number to its gesture, then apply H>S, P>H, S>P.",
+                  "각 숫자를 제스처로 변환한 뒤 H>S, P>H, S>P 규칙 적용.")}
               </div>
-              <div style={{ marginBottom: 8 }}>
-                {t(E, "FJ:    ", "FJ:    ")}<b style={{ color: "#dc2626" }}>S S S S</b> | <b style={{ color: "#15803d" }}>H</b>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 12, color: C.dim, paddingLeft: 8 }}>
-                <div>{t(E, "Round 1: S vs P → S beats P ✓", "라운드 1: S vs P → S가 P 이김 ✓")}</div>
-                <div>{t(E, "Round 2: S vs P → S beats P ✓", "라운드 2: S vs P → S가 P 이김 ✓")}</div>
-                <div>{t(E, "Round 3: S vs H → S loses ✗", "라운드 3: S vs H → S가 짐 ✗")}</div>
-                <div>{t(E, "Round 4: S vs P → S beats P ✓", "라운드 4: S vs P → S가 P 이김 ✓")}</div>
-                <div>{t(E, "Round 5: H vs S → H beats S ✓", "라운드 5: H vs S → H가 S 이김 ✓")}</div>
+              <div style={{ display: "grid", gridTemplateColumns: "30px 1fr 1fr 70px", gap: "4px 8px", fontSize: 12, alignItems: "center" }}>
+                <div style={{ fontWeight: 600, color: "#1e3a8a" }}>r</div>
+                <div style={{ fontWeight: 600, color: "#1e3a8a" }}>{t(E, "input (a, b)", "입력 (a, b)")}</div>
+                <div style={{ fontWeight: 600, color: "#1e3a8a" }}>{t(E, "as gesture", "제스처 변환")}</div>
+                <div style={{ fontWeight: 600, color: "#1e3a8a", textAlign: "right" }}>{t(E, "cow1 win?", "cow1 승?")}</div>
+                {trace.map((row) => (
+                  <div key={row.r} style={{ display: "contents" }}>
+                    <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 600, color: "#7c3aed" }}>{row.r}</div>
+                    <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>{row.a}, {row.b}</div>
+                    <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
+                      <b style={{ color: "#2563eb" }}>{row.ag}</b> vs <b>{row.bg}</b>
+                    </div>
+                    <div style={{ textAlign: "right", fontWeight: 700, color: row.win ? "#15803d" : "#9ca3af" }}>
+                      {row.win ? "✓" : "—"}
+                    </div>
+                  </div>
+                ))}
               </div>
               <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #93c5fd", fontWeight: 600, color: "#15803d" }}>
-                {t(E, "Total wins = 4", "총 승수 = 4")}
+                {t(E, "Wins for this assignment = 4 → check other 5 assignments, max is the answer.",
+                      "이 배정의 승수 = 4 → 나머지 5 가지 배정도 확인, 최댓값이 답.")}
               </div>
             </div>
           </div>
-        </div>),
+        );
+      })(),
     },
-    // 1-3: Quiz — concept of 1-switch
+    // 1-3: Quiz — how many assignments
     {
       type: "quiz",
       narr: t(E,
-        "What if FJ never switches? He picks one gesture and uses it for all N rounds. How many gesture choices does he have?",
-        "FJ가 한 번도 바꾸지 않으면? 한 제스처를 골라 N라운드 내내 그것만 내요. 몇 가지 선택이 있어요?"),
+        "How many distinct ways can we assign {1, 2, 3} to (H, P, S)? Just one-to-one mappings.",
+        "{1, 2, 3} 을 (H, P, S) 에 일대일로 배정하는 방법은 몇 가지?"),
       question: t(E,
-        "If FJ never switches, how many possible gesture choices does he have?",
-        "FJ가 한 번도 안 바꾸면 가능한 제스처 선택은 몇 가지예요?"),
+        "Number of one-to-one assignments of {1, 2, 3} to (H, P, S)?",
+        "{1, 2, 3} → (H, P, S) 일대일 배정의 수?"),
       options: [
-        t(E, "1", "1"),
-        t(E, "3 (H, P, or S)", "3 (H, P, S)"),
-        t(E, "6", "6"),
+        t(E, "3", "3"),
+        t(E, "6 (3! permutations)", "6 (3! 순열)"),
+        t(E, "9 (3 × 3)", "9 (3 × 3)"),
       ],
       correct: 1,
       explain: t(E,
-        "Correct! Without switching, FJ just picks one of {H, P, S} — 3 choices. With one switch allowed, we add: pick first gesture (3) × second gesture (3) × switch point (N+1 places) — and we take the best.",
-        "맞아! 안 바꿀 때는 {H, P, S} 중 하나만 고르니까 3가지. 한 번 바꾸기까지 더하면: 첫 제스처 3 × 두 번째 제스처 3 × 바꾸는 시점 N+1 자리 — 그중 최선을 골라요."),
+        "Right! 3! = 6 permutations. Tiny enough to try them all and pick the best — that's brute force on the assignment.",
+        "정답! 3! = 6 가지 순열. 작아서 다 시도하고 최고를 고를 수 있어요 — 배정에 대해 brute force."),
     },
-    // 1-4: Input — manual computation
+    // 1-4: Input — single assignment computation
     {
       type: "input",
       narr: t(E,
-        "Let's compute by hand. Bessie plays H, S, S. If FJ plays P for round 1 (P beats H ✓), then switches to H for rounds 2-3 (H beats S ✓✓), how many wins does FJ get?",
-        "직접 계산해 봐요. 베시가 H, S, S를 내요. FJ가 라운드 1에 P (P가 H 이김 ✓), 그 다음 라운드 2~3에 H (H가 S 이김 ✓✓)를 내면, FJ는 몇 라운드 이겨요?"),
+        "Quick hand calc. Rounds (1,2), (2,3), (3,1). Try assignment 1=H, 2=S, 3=P. Walk through and count cow 1's wins.",
+        "직접: 라운드 (1,2), (2,3), (3,1). 배정 1=H, 2=S, 3=P 로 cow 1 의 승수 계산."),
       question: t(E,
-        "Bessie: H S S. FJ plays P then switches to H. How many wins?",
-        "베시: H S S. FJ가 P 내고 H로 바꿔요. 몇 승?"),
+        "Rounds (1,2),(2,3),(3,1) with 1=H, 2=S, 3=P. How many wins for cow 1?",
+        "라운드 (1,2),(2,3),(3,1), 배정 1=H, 2=S, 3=P. cow 1 의 승수?"),
       hint: t(E,
-        "Round 1: P vs H → P beats H. Rounds 2,3: H vs S → H beats S. Add them up.",
-        "라운드 1: P vs H → P가 H 이김. 라운드 2,3: H vs S → H가 S 이김. 다 더해요."),
+        "R1: H vs S → H wins. R2: S vs P → S wins. R3: P vs H → P wins. All three.",
+        "R1: H vs S → H 승. R2: S vs P → S 승. R3: P vs H → P 승. 세 라운드 다 승."),
       answer: 3,
     },
   ];
@@ -197,7 +212,7 @@ export function makeHps17Ch1(E) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: Code (2 steps)
+   Chapter 2: Code (1 step)
    ═══════════════════════════════════════════════════════════════ */
 export function makeHps17Ch2(E, lang = "py") {
   return [
@@ -205,8 +220,8 @@ export function makeHps17Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "FJ can switch ONCE. So we try every (first gesture c1, second gesture c2, switch point k) — 3 × 3 × (N+1) combos. To count wins fast, prefix sums pre[i][c] = wins over rounds 0..i-1 if FJ always plays c. Then wins for split k with (c1, c2) = pre[k][c1] + (pre[N][c2] - pre[k][c2]). Take the max. Sections build it one piece at a time.",
-        "FJ는 딱 한 번 바꿀 수 있어요. 그래서 (첫 제스처 c1, 두 번째 c2, 바꾸는 시점 k) 모두 시도 — 3 × 3 × (N+1)가지 조합. 빠르게 세려고 누적합 pre[i][c] = 라운드 0..i-1 동안 c만 냈을 때 승수를 미리 계산. 그러면 (c1, c2)로 k에서 바꾸는 승수 = pre[k][c1] + (pre[N][c2] - pre[k][c2]). 최댓값을 뽑아요. 아래 섹션이 한 단락씩 쌓아요."),
+        "Try every assignment of {1, 2, 3} to (H, P, S) — only 6 permutations. For each, walk through all rounds and count cow 1's wins via the rule (a beats b) ∈ {(H,S), (P,H), (S,P)}. Take the max. Sections build it one piece at a time.",
+        "{1, 2, 3} 을 (H, P, S) 에 배정하는 모든 경우를 시도 — 단 6 가지 순열. 각 배정마다 라운드를 돌며 (a 가 b 를 이김) ∈ {(H,S), (P,H), (S,P)} 규칙으로 cow 1 의 승수를 세어 최댓값을 뽑아요. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getHps17Sections(E),
     },
   ];

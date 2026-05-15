@@ -1,30 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCrossRoad1Sections, CrossRoad1Sim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "observations = []",
-  "for _ in range(N):",
-  "    cow, side = map(int, input().split())",
-  "    observations.append((cow, side))",
-  "",
-  "# Track last known side for each cow",
-  "last_side = {}",
-  "crossings = 0",
-  "",
-  "for cow, side in observations:",
-  "    if cow in last_side:",
-  "        if last_side[cow] != side:",
-  "            crossings += 1",
-  "    last_side[cow] = side",
-  "",
-  "print(crossings)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

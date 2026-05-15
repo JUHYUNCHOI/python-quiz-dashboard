@@ -135,31 +135,6 @@ function MismatchVisual({ E }) {
 
 export { MismatchVisual };
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "a = []",
-  "for _ in range(N):",
-  "    a.append(int(input()))",
-  "",
-  "b = sorted(a)",
-  "",
-  "# Count positions where a and sorted differ",
-  "diff = 0",
-  "for i in range(N):",
-  "    if a[i] != b[i]:",
-  "        diff += 1",
-  "",
-  "# One misplaced cow: swapping fixes 2 positions",
-  "# Answer = diff - 1 (number of adjacent swaps)",
-  "# But since exactly one cow is out of place,",
-  "# the answer is diff - 1",
-  "print(max(0, diff - 1))",
-];
-
-
 /* ---------------------------------------------------------------
    Chapter 1: Problem (3 steps)
    --------------------------------------------------------------- */

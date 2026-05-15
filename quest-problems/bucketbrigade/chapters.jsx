@@ -1,46 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getBucketBrigadeSections, BucketBrigadeGrid } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "from collections import deque",
-  "",
-  "grid = []",
-  "for i in range(10):",
-  "    grid.append(input().strip())",
-  "",
-  "# Find positions of B (barn), L (lake), R (rock)",
-  "barn = lake = rock = None",
-  "for r in range(10):",
-  "    for c in range(10):",
-  "        if grid[r][c] == 'B': barn = (r, c)",
-  "        elif grid[r][c] == 'L': lake = (r, c)",
-  "        elif grid[r][c] == 'R': rock = (r, c)",
-  "",
-  "# BFS from lake to barn, avoiding rock",
-  "visited = [[False]*10 for _ in range(10)]",
-  "visited[lake[0]][lake[1]] = True",
-  "q = deque([(lake[0], lake[1], 0)])",
-  "",
-  "while q:",
-  "    r, c, d = q.popleft()",
-  "    if (r, c) == barn:",
-  "        # path_length = d cells traversed",
-  "        # cows needed = d - 1 (lake and barn excluded)",
-  "        print(d - 1)",
-  "        break",
-  "    for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:",
-  "        nr, nc = r+dr, c+dc",
-  "        if 0<=nr<10 and 0<=nc<10 and not visited[nr][nc]:",
-  "            if (nr,nc) != rock:",
-  "                visited[nr][nc] = True",
-  "                q.append((nr, nc, d+1))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

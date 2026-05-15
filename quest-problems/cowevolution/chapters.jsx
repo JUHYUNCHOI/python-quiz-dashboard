@@ -1,48 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCowEvolutionSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "populations = []",
-  "for _ in range(N):",
-  "    K = int(input())",
-  "    chars = set()",
-  "    for _ in range(K):",
-  "        chars.add(input().strip())",
-  "    populations.append(chars)",
-  "",
-  "# Check if any two characteristics 'cross'",
-  "# Chars A and B cross if there exist populations with:",
-  "#   {A, not B}, {B, not A}, {A, B}",
-  "# If any pair crosses, no valid tree exists",
-  "",
-  "all_chars = set()",
-  "for p in populations:",
-  "    all_chars |= p",
-  "",
-  "valid = True",
-  "chars = list(all_chars)",
-  "for i in range(len(chars)):",
-  "    for j in range(i+1, len(chars)):",
-  "        a, b = chars[i], chars[j]",
-  "        has_a_only = has_b_only = has_both = False",
-  "        for p in populations:",
-  "            ha, hb = a in p, b in p",
-  "            if ha and not hb: has_a_only = True",
-  "            if hb and not ha: has_b_only = True",
-  "            if ha and hb: has_both = True",
-  "        if has_a_only and has_b_only and has_both:",
-  "            valid = False",
-  "            break",
-  "    if not valid: break",
-  "",
-  "print('yes' if valid else 'no')",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

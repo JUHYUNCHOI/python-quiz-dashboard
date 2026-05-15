@@ -1,40 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getHungryCowSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, T = map(int, input().split())",
-  "deliveries = []",
-  "for _ in range(N):",
-  "    d, b = map(int, input().split())",
-  "    deliveries.append((d, b))",
-  "",
-  "deliveries.sort()",
-  "",
-  "eaten = 0",
-  "stock = 0",
-  "prev_day = 0",
-  "",
-  "for day, bales in deliveries:",
-  "    # days between prev and this delivery",
-  "    gap = day - prev_day - 1",
-  "    # eat from stock during gap",
-  "    eat = min(stock, gap)",
-  "    eaten += eat",
-  "    stock -= eat",
-  "    # add new bales",
-  "    stock += bales",
-  "    prev_day = day - 1 + 0  # adjust for eating on delivery day",
-  "",
-  "# eat remaining after last delivery until day T",
-  "gap = T - prev_day",
-  "eaten += min(stock, gap)",
-  "",
-  "print(eaten)",
-];
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem understanding
    ═══════════════════════════════════════════════════════════════ */

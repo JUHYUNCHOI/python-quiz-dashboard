@@ -257,7 +257,7 @@ if (scores.count("Bob") > 0) {
 }
 \`\`\`
 
-> 💡 \`find\` 라는 함수도 있어요. 더 빠르고 강력하지만 **iterator** 라는 새 개념이 필요해서, **다음 레슨 (STL 탐색 함수) 에서** 본격적으로 배워요. 지금은 \`count\` 만 알아도 충분.
+> 💡 \`find\` 라는 함수도 있어요. 더 빠르고 강력한데 **iterator** 를 다뤄야 해요 (sort 마스터 레슨에서 본 그 \`lower_bound\` 처럼 — "위치를 가리키는 손가락"). 이 챕터 뒤쪽에서 \`count\` 와 비교해서 짚어요. 지금은 \`count\` 만 알아도 충분.
 
 ---
 
@@ -618,32 +618,30 @@ Dave 78`,
         {
           id: "ch4-func",
           type: "explain",
-          title: "🔧 map 주요 함수들 — 검색·확인·삭제",
-          content: `map 에서 자주 쓰는 함수들이에요.
+          title: "🔧 map 주요 함수들 — 4 가지만 알면 충분",
+          content: `map 에서 일단 이 네 가지만 알면 90% 의 문제는 해결돼요.
 
 \`\`\`cpp
 map<string, int> scores;
 scores["Alice"] = 95;
 scores["Bob"] = 87;
 
-// 키가 있는지 확인
+// ① 키가 있는지 확인
 if (scores.count("Alice") > 0) {
     cout << "Alice 있어요!" << endl;
 }
 
-// find 로 검색 (없으면 end() 반환)
-auto it = scores.find("Bob");
-if (it != scores.end()) {
-    cout << it->second << endl;  // 87
+// ② 값 읽기 — 있을 때만 (없으면 0이 자동 생성되니 주의)
+if (scores.count("Bob") > 0) {
+    cout << scores["Bob"] << endl;   // 87
 }
 
-// 크기 확인
-cout << scores.size() << endl;   // 2
-cout << scores.empty() << endl;  // 0 (false, 비어있지 않음)
-
-// 키-값 삭제
+// ③ 키-값 삭제
 scores.erase("Bob");
-cout << scores.size() << endl;   // 1
+
+// ④ 크기 확인
+cout << scores.size() << endl;       // 1
+cout << scores.empty() << endl;      // 0 (false, 비어있지 않음)
 \`\`\`
 
 ### 파이썬과 비교
@@ -651,45 +649,97 @@ cout << scores.size() << endl;   // 1
 | 파이썬 🐍 | C++ map ⚡ |
 |---|---|
 | \`"key" in d\` | \`m.count("key") > 0\` |
-| \`d.get("key")\` | \`m.find("key")\` |
+| \`d["key"]\` | \`m["key"]\` |
 | \`del d["key"]\` | \`m.erase("key")\` |
 | \`len(d)\` | \`m.size()\` |
 | \`not d\` | \`m.empty()\` |
 
-> 다음 페이지 — \`count\` 와 \`find\` 둘 다 "찾기" 같은데 **어떤 상황에 어느 거** 써야 깔끔한지 짚고 가요.`
+> 💡 \`find()\` 라는 함수도 있어요 — "값까지 한 번에 받고 싶을 때" 쓰는 도구. iterator 가 필요한데, 이건 **sort 마스터 레슨에서 \`lower_bound\` 와 함께 이미 배운 그 개념** 이에요. 이 챕터 뒤쪽에서 \`count\` 와 비교해 짚어요. 지금 단계에서는 \`count\` + \`m[key]\` 두 단계로 충분해요.`
+        },
+        {
+          id: "ch4-why-fast",
+          type: "explain",
+          title: "🌳 잠깐 — map 은 왜 \`sort\` 안 해도 빨라?",
+          content: `vector 에서는 "정렬 → \`binary_search\` / \`lower_bound\`" 패턴을 배웠죠 (sort 마스터 레슨). 근데 map 은 **\`sort\` 한 적이 없는데** \`m.count(key)\` 가 빨라요. 이상하지 않아요?
+
+---
+
+### 답: map 은 **속에 이미 정렬된 트리** 가 들어있음
+
+\`\`\`
+vector:       [12, 3, 8, 1, 9]                ← 그냥 줄지어 있음, 안 정렬됨
+            → sort 해야 이진탐색 가능
+
+map:                  "Bob"                    ← 처음부터 정렬된 트리 (BST)
+                     /      \\                    값 하나 넣을 때마다 알아서 자리 잡음
+                "Alice"    "Carol"
+\`\`\`
+
+값을 \`m["Carol"] = 92\` 로 넣을 때마다 map 이 **트리 안에서 알맞은 자리** 에 넣어줘요 (O(log N)). 그래서 나중에 찾을 때도 트리 따라 내려가면 끝 → **O(log N)**.
+
+---
+
+### 그래서 vector vs map — 같은 일을 다른 도구로
+
+| 질문 | vector (정렬됨) | map |
+|---|---|---|
+| "있나?" | \`binary_search(v, x)\` | **\`m.count(key)\`** |
+| "어디?" | \`lower_bound(v, x)\` | **\`m.find(key)\`** |
+| "key 이상 첫 거?" | \`lower_bound(v, x)\` | **\`m.lower_bound(key)\`** |
+
+map 은 자기 안에 트리 탐색 코드를 **이미 가지고 있어서** \`.count\` / \`.find\` / \`.lower_bound\` 다 자기 멤버 함수예요. 다 O(log N).
+
+> 📌 **한 줄 정리**: vector 는 "sort + algorithm 함수", map 은 "**자기 멤버 함수**". 둘 다 정렬된 데이터에서 O(log N) 으로 같은 속도. 도구가 다른 곳에서 올 뿐.
+
+> ⚠️ 헷갈림 주의 — vector 에서 쓰는 \`std::count(v.begin(), v.end(), x)\` 는 **O(N)** 으로 느려요. 같은 이름이지만 \`m.count(key)\` 와는 **완전히 다른 함수**. sort 마스터 레슨에서 봤던 그 경고예요.`
         },
         {
           id: "ch4-func-cf",
           type: "explain",
-          title: "🆚 count vs find — 어떤 상황에 어느 거?",
-          content: `둘 다 "찾기" 인데 돌려주는 게 달라서 쓰임이 달라요.
-
-| | \`m.count(key)\` | \`m.find(key)\` |
-|---|---|---|
-| 반환값 | 1 (있음) / 0 (없음) | iterator / \`m.end()\` (없음) |
-| 용도 | "있는지만" 확인 | "있으면 값도" 사용 |
+          title: "🔑 find 가 가끔 더 좋은 순간 — 값까지 한 번에",
+          content: `\`count\` 로 확인하고 \`m[key]\` 로 값 읽는 건 **2 단계** 예요. 사실 키를 두 번 탐색하니까 살짝 낭비.
 
 \`\`\`cpp
-// count — 있는지만 확인
-if (m.count("Alice") > 0) {
-    cout << "Alice 있어요!";
+if (m.count("Alice") > 0) {   // 탐색 1 번
+    cout << m["Alice"];        // 탐색 2 번 — 같은 키를 또 찾음
 }
+\`\`\`
 
-// find — 있으면 값까지 같이
-auto it = m.find("Alice");
+작은 map 에선 차이 없어요. **수십만 개 짜리 map** 에서 이걸 매 쿼리마다 하면 차이가 보이기 시작해요.
+
+C++ 에는 "한 번에 끝내는" 방법이 있어요 — \`find()\` 와 **iterator**.
+
+\`\`\`cpp
+auto it = m.find("Alice");    // 탐색 한 번에 위치까지 받음
 if (it != m.end()) {
-    cout << it->second;  // 값 접근
+    cout << it->second;        // 값 바로 사용 (재탐색 없음)
 }
 \`\`\`
 
 ---
 
+### iterator 는 어디서 배웠죠?
+
+🔁 **sort 마스터 레슨** ch2 에서 \`lower_bound\` 와 함께 처음 봤어요 — "포인터처럼 위치를 가리키는 손가락". map 에서도 **똑같이** 통해요:
+
+| | vector (sort 마스터) | map (지금) |
+|---|---|---|
+| 위치 얻기 | \`auto it = lower_bound(v.begin(), v.end(), 5)\` | \`auto it = m.find("Alice")\` |
+| 값 보기 | \`*it\` → 5 | \`it->second\` → 95 |
+| 못 찾으면 | \`it == v.end()\` | \`it == m.end()\` |
+
+map 만 \`*it\` 가 아닌 \`it->second\` 인 이유는 — map 의 원소가 **pair** (키, 값) 라서. \`it->first\` 는 키, \`it->second\` 는 값.
+
+> 💡 정리: **있는지만** → \`count\`. **값까지 같이** → \`find\` + iterator (sort 마스터 레슨 패턴 그대로).
+
+---
+
 ### 💡 순회 중 삭제 — 가장 쉬운 패턴
 
-이전에 본 \`it = m.erase(it)\` 이터레이터 방법은 정확하지만 복잡해요. **더 쉬운 대안**:
+map 을 \`for(auto& [k,v] : m)\` 로 돌면서 동시에 \`m.erase\` 하면 위험해요 (iterator 망가짐). 안전한 패턴:
 
 \`\`\`cpp
-// 1) 지울 키만 모아두고
+// 1) 지울 키만 따로 모아두고
 vector<string> toDelete;
 for (auto& [k, v] : m) {
     if (v < 0) toDelete.push_back(k);
@@ -701,7 +751,7 @@ for (auto& k : toDelete) {
 }
 \`\`\`
 
-순회와 삭제를 **분리** 하니까 이터레이터 무효화 걱정 없음. 코드도 읽기 쉬움. 일반적인 경우엔 이게 더 추천돼요.`
+순회와 삭제를 **분리** — 안전하고 읽기 쉬움.`
         },
         {
           id: "ch4-pred1",

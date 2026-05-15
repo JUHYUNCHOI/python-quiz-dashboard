@@ -1,52 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getLivestockSections, ChainSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "cows = ['Bessie','Buttercup','Belinda','Beatrice',",
-  "        'Bella','Blue','Betsy','Sue']",
-  "cows.sort()",
-  "",
-  "N = int(input())",
-  "adj = {c: [] for c in cows}",
-  "",
-  "for _ in range(N):",
-  "    line = input().split()",
-  "    # 'X must be milked beside Y'",
-  "    a, b = line[0], line[-1]",
-  "    adj[a].append(b)",
-  "    adj[b].append(a)",
-  "",
-  "# Build chains (each cow has degree ≤ 2)",
-  "used = set()",
-  "result = []",
-  "",
-  "for c in cows:  # alphabetical order",
-  "    if c not in used:",
-  "        # Find start of chain (degree 0 or 1)",
-  "        if len(adj[c]) <= 1:",
-  "            chain = []",
-  "            cur = c",
-  "            prev = None",
-  "            while cur:",
-  "                chain.append(cur)",
-  "                used.add(cur)",
-  "                nxt = None",
-  "                for nb in adj[cur]:",
-  "                    if nb != prev:",
-  "                        nxt = nb",
-  "                        break",
-  "                prev = cur",
-  "                cur = nxt",
-  "            result.extend(chain)",
-  "",
-  "for c in result:",
-  "    print(c)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (5 steps)
    ═══════════════════════════════════════════════════════════════ */

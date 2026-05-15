@@ -1,52 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getHoofballSections, HoofballPassSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "pos = sorted(list(map(int, input().split())))",
-  "",
-  "# For each cow, determine who it passes to",
-  "# (nearest neighbor; ties go left)",
-  "target = [0] * N",
-  "for i in range(N):",
-  "    if i == 0:",
-  "        target[i] = 1",
-  "    elif i == N - 1:",
-  "        target[i] = N - 2",
-  "    else:",
-  "        left_dist = pos[i] - pos[i-1]",
-  "        right_dist = pos[i+1] - pos[i]",
-  "        if left_dist <= right_dist:",
-  "            target[i] = i - 1",
-  "        else:",
-  "            target[i] = i + 1",
-  "",
-  "# Count how many cows pass to each cow",
-  "received = [0] * N",
-  "for i in range(N):",
-  "    received[target[i]] += 1",
-  "",
-  "# Sources = cows that nobody passes to",
-  "# But also handle 'sinks' (mutual passing)",
-  "ans = 0",
-  "for i in range(N):",
-  "    if received[i] == 0:",
-  "        ans += 1",
-  "",
-  "# Edge case: two adjacent cows passing to each other",
-  "# forms a sink; need at least 1 ball there",
-  "for i in range(N - 1):",
-  "    if target[i] == i + 1 and target[i+1] == i:",
-  "        if received[i] == 1 and received[i+1] == 1:",
-  "            ans += 1",
-  "",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (4 steps)
    ═══════════════════════════════════════════════════════════════ */

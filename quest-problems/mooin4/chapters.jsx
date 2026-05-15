@@ -1,34 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMooin4Sections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "T, k = map(int, input().split())",
-  "out = []",
-  "for _ in range(T):",
-  "    N = int(input())",
-  "    S = input().strip()",
-  "    typed = [''] * N",
-  "    flips = 0",
-  "    for i in range(N - 1, -1, -1):",
-  "        c = S[i]",
-  "        if flips % 2 == 1:",
-  "            c = 'O' if c == 'M' else 'M'",
-  "        typed[i] = c",
-  "        if c == 'O':",
-  "            flips += 1",
-  "    out.append('YES')",
-  "    if k == 1:",
-  "        out.append(''.join(typed))",
-  "print('\\n'.join(out))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooin4Ch1 (5 steps)
    ═══════════════════════════════════════════════════════════════ */

@@ -119,52 +119,6 @@ function tickStyle() {
   };
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "current = list(map(int, input().split()))",
-  "preferred = list(map(int, input().split()))",
-  "",
-  "# Compute difference array",
-  "d = [preferred[i] - current[i] for i in range(N)]",
-  "",
-  "# Answer = sum of positive increases + sum of negative decreases",
-  "# Think of it like painting: when diff goes up, new strokes needed",
-  "ans = 0",
-  "prev = 0",
-  "for i in range(N):",
-  "    if d[i] > prev:",
-  "        ans += d[i] - prev  # need more positive strokes",
-  "    elif d[i] < prev:",
-  "        ans += prev - d[i]  # need more negative strokes (if sign flips)",
-  "    prev = d[i]",
-  "",
-  "# Handle the boundary at the end",
-  "ans += abs(prev)",
-  "",
-  "# Simpler equivalent: ans = sum(max(0, d[i]-d[i-1]) for increases)",
-  "#                       + sum(max(0, d[i-1]-d[i]) for decreases)",
-  "# with d[-1] = d[N] = 0",
-  "",
-  "# Even simpler:",
-  "d2 = [preferred[i] - current[i] for i in range(N)]",
-  "ans2 = abs(d2[0])",
-  "for i in range(1, N):",
-  "    ans2 += max(0, d2[i] - d2[i-1])  # positive jumps",
-  "    ans2 += max(0, d2[i-1] - d2[i])  # handled by abs at end? No.",
-  "# Correct approach:",
-  "ans3 = 0",
-  "ext = [0] + d2 + [0]",
-  "for i in range(1, len(ext)):",
-  "    if ext[i] > ext[i-1]:",
-  "        ans3 += ext[i] - ext[i-1]",
-  "",
-  "print(ans3)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

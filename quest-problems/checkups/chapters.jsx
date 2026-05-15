@@ -80,43 +80,6 @@ function PositionRow({ n, size = 52 }) {
 }
 
 // Reference solution — full O(N²) version (matches `solution_py` in quest-meta).
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "data = sys.stdin.read().split()",
-  "p = 0",
-  "N = int(data[p])",
-  "p += 1",
-  "a = [0] + [int(data[p+i]) for i in range(N)]",
-  "p += N",
-  "b = [0] + [int(data[p+i]) for i in range(N)]",
-  "p += N",
-  "",
-  "# baseline prefix: P[i] = matches a[k]==b[k] in [1..i]",
-  "P = [0] * (N + 1)",
-  "for i in range(1, N + 1):",
-  "    P[i] = P[i-1] + (1 if a[i] == b[i] else 0)",
-  "",
-  "counts = [0] * (N + 1)",
-  "# diagonal s = l + r — for fixed s, all (l, r) pairs share Q",
-  "for s in range(2, 2*N + 1):",
-  "    Q = [0] * (N + 2)",
-  "    for k in range(1, N + 1):",
-  "        j = s - k",
-  "        inc = 1 if (1 <= j <= N and a[j] == b[k]) else 0",
-  "        Q[k] = Q[k-1] + inc",
-  "    l_min = max(1, s - N)",
-  "    l_max = s // 2",
-  "    for l in range(l_min, l_max + 1):",
-  "        r = s - l",
-  "        inside = Q[r] - Q[l-1]",
-  "        outside = P[l-1] + (P[N] - P[r])",
-  "        counts[inside + outside] += 1",
-  "",
-  "for c in counts:",
-  "    print(c)",
-];
-
 export function makeCheckupsCh1(E) {
   return [
     /* 1-1 — Problem rules straight from the official statement. */

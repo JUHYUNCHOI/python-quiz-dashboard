@@ -1,42 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getAlchemySections, RecipeSimulator } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "count = [0] * (N + 1)",
-  "for _ in range(int(input())):",
-  "    count[int(input())] += 1",
-  "",
-  "K = int(input())",
-  "recipes = {}",
-  "for _ in range(K):",
-  "    line = list(map(int, input().split()))",
-  "    target = line[0]",
-  "    ingredients = line[1:]",
-  "    recipes[target] = ingredients",
-  "",
-  "# Greedy: try to make metal N from top down",
-  "def make(metal):",
-  "    if count[metal] > 0:",
-  "        count[metal] -= 1",
-  "        return True",
-  "    if metal not in recipes:",
-  "        return False",
-  "    for ing in recipes[metal]:",
-  "        if not make(ing):",
-  "            return False",
-  "    return True",
-  "",
-  "ans = 0",
-  "while make(N):",
-  "    ans += 1",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

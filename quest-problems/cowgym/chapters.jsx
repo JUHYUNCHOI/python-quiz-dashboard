@@ -1,33 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCowGymSections, CowGymPairSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "K, N = map(int, input().split())",
-  "",
-  "# rank[s][c] = position of cow c in session s",
-  "rank = []",
-  "for _ in range(K):",
-  "    order = list(map(int, input().split()))",
-  "    r = [0] * (N + 1)",
-  "    for pos in range(N):",
-  "        r[order[pos]] = pos",
-  "    rank.append(r)",
-  "",
-  "ans = 0",
-  "for i in range(1, N + 1):",
-  "    for j in range(i + 1, N + 1):",
-  "        # Check if i always beats j or j always beats i",
-  "        i_wins = all(rank[s][i] < rank[s][j] for s in range(K))",
-  "        j_wins = all(rank[s][j] < rank[s][i] for s in range(K))",
-  "        if i_wins or j_wins:",
-  "            ans += 1",
-  "",
-  "print(ans)",
-];
-
 /* Python syntax highlighter (shared across snippets) */
 const PY_KW = new Set(["from","import","for","in","if","else","elif","def","return","and","or","not","while","break","continue","pass","class","with","as","try","except","finally","raise","yield","lambda","is","None","True","False","global","nonlocal"]);
 const PY_BUILTIN = new Set(["print","input","range","len","sum","map","int","str","chr","ord","min","max","sorted","reversed","list","dict","set","tuple","enumerate","zip","abs","round","type","isinstance","open","filter","any","all","bool","float"]);
@@ -502,17 +475,19 @@ export function makeCowGymCh3(E, lang = "py") {
           </div>
           <CodeSnippet
             lines={[
-              "K, N = map(int, input().split())",
+              "with open('cowgym.in') as file:",
+              "    lines = file.readlines()",
+              "K, N = map(int, lines[0].split())",
               "",
               "rank = []",
-              "for _ in range(K):",
-              "    order = list(map(int, input().split()))",
+              "for s in range(K):",
+              "    order = list(map(int, lines[1 + s].split()))",
               "    r = [0] * (N + 1)",
               "    for pos in range(N):",
               "        r[order[pos]] = pos",
               "    rank.append(r)",
             ]}
-            highlight={[5, 6, 7]}
+            highlight={[7, 8, 9]}
           />
           <div style={{ marginTop: 8, background: "#fffbeb", borderRadius: 8, padding: 8, border: "1.5px solid #fcd34d", fontSize: 12, lineHeight: 1.8, color: C.text }}>
             <div style={{ fontWeight: 600, color: "#d97706", marginBottom: 2 }}>

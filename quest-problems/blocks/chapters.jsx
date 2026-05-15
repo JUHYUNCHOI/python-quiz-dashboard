@@ -2,46 +2,6 @@ import { C, t } from "@/components/quest/theme";
 import { getBlocksSections } from "./components";
 import BlockLetterSim from "./BlockLetterSim";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "from itertools import permutations",
-  "",
-  "N = int(input())",
-  "blocks = []",
-  "for _ in range(4):",
-  "    blocks.append(input().strip())",
-  "",
-  "# Each block has 6 faces (characters)",
-  "# Try all assignments of blocks to positions",
-  "# and all face choices",
-  "",
-  "words = []",
-  "for _ in range(N):",
-  "    words.append(input().strip())",
-  "",
-  "ans = 0",
-  "for word in words:",
-  "    L = len(word)",
-  "    found = False",
-  "    # Try all permutations of L blocks from 4",
-  "    for perm in permutations(range(4), L):",
-  "        ok = True",
-  "        for i, bi in enumerate(perm):",
-  "            if word[i] not in blocks[bi]:",
-  "                ok = False",
-  "                break",
-  "        if ok:",
-  "            found = True",
-  "            break",
-  "    if found:",
-  "        ans += 1",
-  "",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (4 steps)
    ═══════════════════════════════════════════════════════════════ */

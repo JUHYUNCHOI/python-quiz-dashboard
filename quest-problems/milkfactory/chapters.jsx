@@ -1,43 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMilkFactorySections, MilkFactoryBeltSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "# adj[u] = list of nodes u can reach",
-  "# We want a node reachable FROM all others",
-  "# Reverse: find node that can reach all others",
-  "# Or: for each node, check if all others can reach it",
-  "",
-  "# Build reverse adjacency list",
-  "radj = [[] for _ in range(N+1)]",
-  "for _ in range(N-1):",
-  "    a, b = map(int, input().split())",
-  "    radj[b].append(a)  # edge a->b means b can be reached from a",
-  "",
-  "# For each candidate node, BFS/DFS on reverse graph",
-  "from collections import deque",
-  "",
-  "for candidate in range(1, N+1):",
-  "    visited = set()",
-  "    q = deque([candidate])",
-  "    visited.add(candidate)",
-  "    while q:",
-  "        u = q.popleft()",
-  "        for v in radj[u]:",
-  "            if v not in visited:",
-  "                visited.add(v)",
-  "                q.append(v)",
-  "    if len(visited) == N:",
-  "        print(candidate)",
-  "        break",
-  "else:",
-  "    print(-1)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

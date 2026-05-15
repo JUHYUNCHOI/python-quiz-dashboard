@@ -1,27 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCowntactSections, InfectionSim, RunsViz } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "s = input()",
-  "",
-  "count = 0",
-  "i = 0",
-  "while i < N:",
-  "    if s[i] == '1':",
-  "        count += 1",
-  "        while i < N and s[i] == '1':",
-  "            i += 1",
-  "    else:",
-  "        i += 1",
-  "",
-  "print(count)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */

@@ -166,55 +166,6 @@ function LifeguardsRemovalSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "shifts = []",
-  "for _ in range(N):",
-  "    a, b = map(int, input().split())",
-  "    shifts.append((a, b))",
-  "",
-  "# Compute total coverage using sweep line",
-  "events = []",
-  "for a, b in shifts:",
-  "    events.append((a, 1))",
-  "    events.append((b, -1))",
-  "events.sort()",
-  "",
-  "total = 0",
-  "active = 0",
-  "prev = 0",
-  "for time, delta in events:",
-  "    if active > 0:",
-  "        total += time - prev",
-  "    active += delta",
-  "    prev = time",
-  "",
-  "# For each guard, compute their unique coverage",
-  "best = 0",
-  "for skip in range(N):",
-  "    ev = []",
-  "    for i, (a, b) in enumerate(shifts):",
-  "        if i == skip: continue",
-  "        ev.append((a, 1))",
-  "        ev.append((b, -1))",
-  "    ev.sort()",
-  "    cov = 0",
-  "    act = 0",
-  "    prv = 0",
-  "    for time, delta in ev:",
-  "        if act > 0:",
-  "            cov += time - prv",
-  "        act += delta",
-  "        prv = time",
-  "    best = max(best, cov)",
-  "",
-  "print(best)",
-];
-
-
 /* ---------------------------------------------------------------
    Chapter 1: Problem (3 steps)
    --------------------------------------------------------------- */

@@ -1,33 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCowTipSections, CowTipSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "N = int(input())",
-  "grid = []",
-  "for _ in range(N):",
-  "    grid.append(list(map(int, list(input().strip()))))",
-  "",
-  "ans = 0",
-  "# Process from bottom-right to top-left",
-  "for i in range(N-1, -1, -1):",
-  "    for j in range(N-1, -1, -1):",
-  "        if grid[i][j] == 1:",
-  "            ans += 1",
-  "            # Toggle rectangle (0,0)-(i,j)",
-  "            for r in range(i+1):",
-  "                for c in range(j+1):",
-  "                    grid[r][c] ^= 1",
-  "",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

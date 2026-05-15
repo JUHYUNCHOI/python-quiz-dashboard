@@ -197,31 +197,6 @@ function PositionTableSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, M = map(int, input().split())",
-  "",
-  "spotted = []",
-  "for _ in range(N):",
-  "    spotted.append(input().strip())",
-  "",
-  "plain = []",
-  "for _ in range(N):",
-  "    plain.append(input().strip())",
-  "",
-  "ans = 0",
-  "for j in range(M):",
-  "    s_chars = set(spotted[i][j] for i in range(N))",
-  "    p_chars = set(plain[i][j] for i in range(N))",
-  "    if len(s_chars & p_chars) == 0:",
-  "        ans += 1",
-  "",
-  "print(ans)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (4 steps)
    ═══════════════════════════════════════════════════════════════ */

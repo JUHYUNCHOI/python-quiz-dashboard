@@ -1,56 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getSwapToWinSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE (Python, multi-test-case)
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "T = int(input())",
-  "for _ in range(T):",
-  "    N, M = map(int, input().split())",
-  "    target = input().strip()",
-  "    s = [list(input().strip()) for _ in range(N)]",
-  "",
-  "    ops = []",
-  "    for k in range(M):",
-  "        if s[0][k] == target[k]:",
-  "            continue",
-  "",
-  "        # Same-string swap (1 op)",
-  "        found = False",
-  "        for p in range(k + 1, M):",
-  "            if s[0][p] == target[k]:",
-  "                ops.append(f\"1 1 {k+1} {p+1}\")",
-  "                s[0][k], s[0][p] = s[0][p], s[0][k]",
-  "                found = True",
-  "                break",
-  "        if found:",
-  "            continue",
-  "",
-  "        # Borrow from another string (≤ 2 ops)",
-  "        for y in range(1, N):",
-  "            pos = -1",
-  "            for q in range(M):",
-  "                if s[y][q] == target[k]:",
-  "                    pos = q",
-  "                    break",
-  "            if pos == -1:",
-  "                continue",
-  "            if pos != k:",
-  "                ops.append(f\"1 {y+1} {pos+1} {k+1}\")",
-  "                s[y][pos], s[y][k] = s[y][k], s[y][pos]",
-  "            ops.append(f\"2 1 {y+1} {k+1}\")",
-  "            s[0][k], s[y][k] = s[y][k], s[0][k]",
-  "            break",
-  "",
-  "    print(len(ops))",
-  "    print(\"\\n\".join(ops))",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeSwapToWinCh1 (5 steps)
    ═══════════════════════════════════════════════════════════════ */

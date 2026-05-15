@@ -1,30 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCrossRoad3Sections, CrossRoad3Sim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "cows = []",
-  "for _ in range(N):",
-  "    a, d = map(int, input().split())",
-  "    cows.append((a, d))",
-  "",
-  "# Sort by arrival time",
-  "cows.sort()",
-  "",
-  "current_time = 0",
-  "for arrival, duration in cows:",
-  "    # If gate is free before cow arrives, wait for cow",
-  "    if current_time < arrival:",
-  "        current_time = arrival",
-  "    current_time += duration",
-  "",
-  "print(current_time)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

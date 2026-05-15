@@ -1,58 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getMeasTrafficSections, TrafficPropagateSim } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "segments = []",
-  "for _ in range(N):",
-  "    parts = input().split()",
-  "    typ = parts[0]        # 'none', 'on', 'off'",
-  "    lo = int(parts[1])",
-  "    hi = int(parts[2])",
-  "    segments.append((typ, lo, hi))",
-  "",
-  "# Forward pass: propagate flow from start to end",
-  "fwd_lo, fwd_hi = segments[0][1], segments[0][2]",
-  "for i in range(1, N):",
-  "    typ, lo, hi = segments[i]",
-  "    if typ == 'none':",
-  "        fwd_lo = max(fwd_lo, lo)",
-  "        fwd_hi = min(fwd_hi, hi)",
-  "    elif typ == 'on':",
-  "        fwd_lo += lo",
-  "        fwd_hi += hi",
-  "    elif typ == 'off':",
-  "        fwd_lo -= hi",
-  "        fwd_hi -= lo",
-  "    fwd_lo = max(fwd_lo, 0)",
-  "",
-  "# Backward pass: propagate flow from end to start",
-  "bwd_lo, bwd_hi = segments[-1][1], segments[-1][2]",
-  "for i in range(N-2, -1, -1):",
-  "    typ, lo, hi = segments[i+1]",
-  "    if typ == 'none':",
-  "        pass  # sensor doesn't change flow",
-  "    elif typ == 'on':",
-  "        # reverse: on-ramp added, so subtract going back",
-  "        bwd_lo -= hi",
-  "        bwd_hi -= lo",
-  "    elif typ == 'off':",
-  "        # reverse: off-ramp removed, so add going back",
-  "        bwd_lo += lo",
-  "        bwd_hi += hi",
-  "    bwd_lo = max(bwd_lo, 0)",
-  "    cur_lo, cur_hi = segments[i][1], segments[i][2]",
-  "    bwd_lo = max(bwd_lo, cur_lo)",
-  "    bwd_hi = min(bwd_hi, cur_hi)",
-  "",
-  "print(bwd_lo, bwd_hi)",
-  "print(fwd_lo, fwd_hi)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (3 steps)
    ═══════════════════════════════════════════════════════════════ */

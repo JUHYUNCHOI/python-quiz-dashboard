@@ -1,60 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getTameHerdSections } from "./components";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "log = list(map(int, input().split()))",
-  "",
-  "# log[i] = -1 means missing; otherwise it's the counter value on day i.",
-  "# Between two known days (i1, v1) and (i2, v2):",
-  "#   if v2 == v1 + (i2 - i1)  -> no breakout in between",
-  "#   else: there must have been a breakout at some day d in (i1, i2]",
-  "#         such that v2 == i2 - d.",
-  "# Validate consistency, then count MIN and MAX breakouts.",
-  "",
-  "MIN = 0",
-  "MAX = 0",
-  "prev_i = -1",
-  "prev_v = None",
-  "ok = True",
-  "",
-  "for i in range(N):",
-  "    v = log[i]",
-  "    if v == -1:",
-  "        continue",
-  "    if prev_v is None:",
-  "        if v > i:",
-  "            ok = False",
-  "            break",
-  "        MIN += 0 if v == i else 1",
-  "        MAX += i",
-  "    else:",
-  "        gap = i - prev_i",
-  "        if v == prev_v + gap:",
-  "            pass",
-  "        else:",
-  "            d = i - v",
-  "            if not (prev_i < d <= i):",
-  "                ok = False",
-  "                break",
-  "            MIN += 1",
-  "            MAX += 1",
-  "    prev_i, prev_v = i, v",
-  "",
-  "if not ok:",
-  "    print(-1)",
-  "else:",
-  "    if prev_i != -1:",
-  "        MAX += (N - 1 - prev_i)",
-  "    else:",
-  "        MIN, MAX = 0, N",
-  "    print(MIN, MAX)",
-];
-
-
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
    ═══════════════════════════════════════════════════════════════ */
