@@ -879,36 +879,51 @@ Press the button to follow along!`,
           id: "s23-ch2-sorted-toolbox",
           type: "explain",
           title: "🗝️ Sorting is the launchpad — a toolbox that opens up after one sort",
-          content: `This chapter throws a bunch of functions at you all at once (\`binary_search\`, \`lower_bound\`, \`upper_bound\`, \`unique\`...). Trying to memorize them one at a time will fry your brain. Big picture first:
+          content: `## 🚀 The big picture for this chapter
+
+<div style="font-size:18px; font-weight:800; color:#15803d; background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:14px 18px; margin:10px 0; text-align:center;">
+🎯 <b>"Things that suddenly become possible once you sort."</b>
+</div>
+
+This chapter throws a bunch of functions at you (\`binary_search\`, \`lower_bound\`, \`upper_bound\`, \`unique\`...). **Memorizing them one at a time will fry your brain.** They're really **all variations on one idea (the magic that sorting unlocks)**.
 
 ---
 
-### One-line big picture
+### 📊 Unsorted vs Sorted — same question, different tools
 
-> 📌 **This chapter = "things that suddenly become possible once you sort."**
-> Operations that required scanning every element with \`find\` shrink to a **single line** once the data is sorted.
+| What you want | Unsorted (before) | After sorting (this chapter) |
+|---|---|---|
+| "is x there?" | \`find\` — O(N) scan | **\`binary_search\`** — O(log N) |
+| "how many of x?" | \`std::count\` — O(N) | **\`upper - lower\`** — O(log N) |
+| **"first ≥ x?"** | \`find_if\` works but O(N) | **\`lower_bound(x)\`** — O(log N) |
+| **"insert while staying sorted"** | painful | **\`insert(lower_bound(x), x)\`** |
+| **"dedupe (keeping a vector)"** | write it by hand | **\`sort + unique + erase\`** one line |
 
----
-
-### What sorting unlocks (everything covered in this chapter)
-
-| Unsorted (before) | Sorted (this chapter) |
-|---|---|
-| \`find\` — scan O(N) | **\`binary_search\`** — halve each step O(log N) |
-| \`std::count\` — scan O(N) | **\`upper - lower\`** — two binary searches O(log N) |
-| ❌ "First student ≥ 70" impossible | **\`lower_bound(70)\`** — one line |
-| ❌ "Insert while staying sorted" painful | **\`insert(lower_bound(x), x)\`** — one line |
-| Hand-write deduplication | **\`sort + unique + erase\`** — one line |
+On a million elements: 1,000,000 comparisons vs ~20 comparisons. **One sort buys you that much.**
 
 ---
 
-### Why is sorting so powerful?
+### ❓ Common questions
 
-When data is sorted, **"look at the middle: if it's X, the answer must be on this side"** becomes possible (the binary-search idea from before).
+**Q1. Can't \`find\` already get "first student ≥ 70"?**
 
-Every tool below is built on that one idea. They're **all the same family** — the next pages introduce them one by one, but whenever "wait, why bother?" hits, come back to this table.
+\`find(v, 70)\` looks for elements **equal to 70**. It can't take a **condition** like "≥". \`find_if(v, [](int x){ return x >= 70; })\` *does* take a condition, but it **scans from the beginning** in O(N). Only \`lower_bound\` halves the range each step → **O(log N)** for the same answer.
 
-> 💡 Student takeaway: "Sort isn't the end — it's the **start.** One sort = all these tools unlocked."`
+**Q2. Why not just use \`set\` for dedupe?**
+
+\`set\` does dedupe automatically — but the result is a **set**, not a vector. \`set\` is a tree internally, so it **uses more memory and can't do \`v[i]\` index access.** When you want **a vector that stays a vector** while being deduped fast, \`sort + unique + erase\` is the standard pattern. (For simple cases, \`set\` is fine too.)
+
+---
+
+### 🔑 Why is sorting so powerful?
+
+When data is sorted, **"look at the middle: if it's X, the answer is only on one side"** becomes possible. Each comparison throws away half the data. That's binary search — and every tool below sits on top of that idea.
+
+<div style="background:#fef3c7; border:1.5px solid #f59e0b; border-radius:10px; padding:12px 16px; margin:12px 0;">
+💡 <b>Student takeaway:</b> "Sorting isn't the end — it's the <b>start</b>. One sort = all these tools unlocked at once."
+</div>
+
+The next pages introduce them one by one. Whenever "wait, why bother?" hits, come back to this table.`
         },
         {
           id: "s23-ch2-iter",
