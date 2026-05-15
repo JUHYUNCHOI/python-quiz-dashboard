@@ -131,15 +131,54 @@ In plain terms:
 
 ### 🤔 So do people still use pointers a lot?
 
-**Not really.** For STL containers, almost everything uses iterators (or \`range-for\`).
+**Almost never for containers.** Iterators (or \`range-for\`) are the standard.
 
 | Situation | What people use today |
 |---|---|
 | Iterating vector / map / set | \`for (auto x : v)\` ← uses iterators inside |
-| STL functions (\`sort\`, \`find\`, \`lower_bound\` …) | iterators — there's no other option |
-| C library calls / low-level memory | pointers |
+| STL functions (\`sort\`, \`find\`, \`lower_bound\` …) | iterator pairs — the standard interface |
+| C library calls / OS APIs | pointers (\`memcpy\`, \`fread\` …) |
+| Dynamic memory management | \`unique_ptr\`, \`shared_ptr\` (smart pointers) |
 
-Starting this chapter you'll keep seeing \`sort(v.begin(), v.end())\` — that \`v.begin()\` is an iterator. Pointers can't handle \`map\` or \`set\`, so iterators naturally became the default.
+---
+
+#### Why did iterators become the standard?
+
+**One interface works for every container.** Whether it's vector, list, or map:
+
+\`\`\`cpp
+for (auto it = c.begin(); it != c.end(); ++it) {
+    cout << *it << " ";   // works the same on any container
+}
+\`\`\`
+
+- \`*it\` → read the value (same as pointer's \`*p\`)
+- \`++it\` → next position (vector → +4, list → next node, map → next tree node)
+- \`it != c.end()\` → check if we're done
+
+**STL functions like \`sort\` take this exact shape:**
+
+\`\`\`cpp
+sort(v.begin(), v.end());                          // vector
+sort(arr, arr + 5);                                // C array (pointers work as iterators too)
+list<int> l = {...}; l.sort();                     // list uses its own member (non-contiguous memory)
+\`\`\`
+
+Give it **a start and an end** — the same call works across container types. That's the core STL design.
+
+---
+
+#### When do you still see pointers?
+
+In modern code, raw pointers (\`int*\` etc.) show up when:
+
+1. **Calling C functions** — \`memcpy(dst, src, n)\`, file I/O, OS APIs
+2. **Function args meaning "maybe-null reference"** — \`void log(const string* msg)\` (msg might be missing)
+3. **Low-level memory work** — embedded systems, game engine internals
+
+**Memory allocation** (the old \`new\`/\`delete\`) is mostly replaced by smart pointers (\`unique_ptr\`, \`shared_ptr\`) — using raw \`new\` directly is an anti-pattern in modern C++.
+
+> 💡 Recap: starting this chapter you'll keep seeing \`sort(v.begin(), v.end())\` — that \`v.begin()\` is an iterator. You're officially using STL now, so iterators will get familiar fast.
 
 ---
 
