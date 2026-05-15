@@ -63,34 +63,26 @@ Press the button to follow along!`,
 
 > **🎯 Sorting makes search fast — that's the whole chapter in one line.**
 
-When you look up "Kim" in a phone book, you don't start from page 1. You **open to the middle** and decide front or back. That's possible because names are **sorted alphabetically**.
-
-Computers work the same way. Once data is sorted, **"check the middle, throw away half"** becomes possible — and search becomes drastically faster.
+The **binary search** idea from the previous page (open the middle, throw half away) — that single idea is what every tool in this chapter is built on.
 
 ---
 
-### 📊 Same task, before vs after sorting
+### 📊 Same task, before vs after sorting — for 1,000,000 items
 
-For 1,000,000 items:
-
-| What you want | Unsorted | After sorting |
+| What you want | Unsorted | After sorting (this chapter) |
 |---|---|---|
-| "is x there?" | 1,000,000 comparisons | **~20 comparisons** |
-| "how many of x?" | 1,000,000 comparisons | **~40 comparisons** |
-| "first ≥ x?" | 1,000,000 comparisons | **~20 comparisons** |
-| "dedupe" | write it yourself | **one line** |
+| "is x there?" | 1,000,000 comparisons (\`find\` — full scan) | **~20** (\`binary_search\`) |
+| "how many of x?" | 1,000,000 (\`std::count\`) | **~40** (\`upper - lower\`) |
+| "first ≥ x?" | 1,000,000 (manual loop) | **~20** (\`lower_bound\`) |
+| "dedupe" | write it yourself | **one line** (\`sort + unique + erase\`) |
 
-One sort unlocks all of that at once.
+> 💡 The function names may be unfamiliar — **we meet each one on the next pages.** For now, just take away "sorting unlocks this much speed."
 
 ---
 
-### 🔑 Why does this work?
+### 🔑 Student takeaway
 
-When data is sorted, **"check the middle: if it's X, the answer is only on one side"** is possible. Each comparison throws away half the data. (That's the binary search idea from the previous page.)
-
-The next pages introduce **the tools built on this idea**, one at a time. Each one will have a clear "what's it for" — so there's less to memorize.
-
-> 💡 **Student takeaway:** "Sorting isn't the end — it's the **start**. One sort = fast search."`
+> "**Sorting isn't the end — it's the start.** One sort = explosively faster search. Each tool will have a clear 'what's it for,' so there's less to memorize."`
         },
         {
           id: "s23-ch2-iter",
