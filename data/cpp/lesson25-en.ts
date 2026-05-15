@@ -114,9 +114,11 @@ The \`v.begin()\` / \`v.end()\` you've already been writing with sort — those 
 | | Pointer | Iterator |
 |---|---|---|
 | What's inside | raw address only | address + "how to go to next" |
-| What \`++\` does | **always** address + 4 (next memory slot) | **depends on container** |
-| For vector? | address + 4 | address + 4 (same!) |
-| For list? | doesn't work | jumps to next node |
+| What \`++\` does | **always** address + \`sizeof(element)\` | **depends on container** |
+| For vector\\<int\\>? | address + 4 | address + 4 (same!) |
+| For list\\<int\\>? | doesn't work | jumps to next node |
+
+> 💡 \`+4\` is just for \`int\` (4 bytes). For \`double\` it's \`+8\`, for \`char\` it's \`+1\` — the compiler looks at the type and jumps \`sizeof\` bytes automatically.
 
 In plain terms:
 
