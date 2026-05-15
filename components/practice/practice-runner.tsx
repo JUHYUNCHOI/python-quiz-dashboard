@@ -12,6 +12,7 @@ import { useLanguage } from "@/contexts/language-context"
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 import { CodeEditorWithGutter, parseErrorLine } from "@/components/cpp/code-editor-with-gutter"
 import { getErrorHint } from "@/components/cpp/error-hint"
+import { createSmartKeyHandler } from "@/components/cpp/editor-key-handler"
 
 // ── Inline-style syntax highlighters (no external CSS needed) ──
 
@@ -329,6 +330,9 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
           highlight={c => highlightCode(c, lang)}
           errorLine={parseErrorLine(error)}
           padding={16}
+          tabSize={4}
+          insertSpaces={true}
+          onKeyDown={createSmartKeyHandler(setCode, { onCtrlEnter: runTests })}
           style={{ fontFamily: "monospace", fontSize: 14, minHeight: 260, color: "#cdd6f4", background: "transparent" }}
         />
       </div>
