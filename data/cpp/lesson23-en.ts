@@ -891,45 +891,36 @@ Press the button to follow along!`,
           title: "🗝️ Sorting is the launchpad — a toolbox that opens up after one sort",
           content: `## 🚀 The big picture for this chapter
 
-> 🎯 **"Things that suddenly become possible once you sort."**
+> **🎯 Sorting makes search fast — that's the whole chapter in one line.**
 
-This chapter throws a bunch of functions at you (\`binary_search\`, \`lower_bound\`, \`upper_bound\`, \`unique\`...). **Memorizing them one at a time will fry your brain.** They're really **all variations on one idea (the magic that sorting unlocks)**.
+When you look up "Kim" in a phone book, you don't start from page 1. You **open to the middle** and decide front or back. That's possible because names are **sorted alphabetically**.
+
+Computers work the same way. Once data is sorted, **"check the middle, throw away half"** becomes possible — and search becomes drastically faster.
 
 ---
 
-### 📊 Unsorted vs Sorted — same question, different tools
+### 📊 Same task, before vs after sorting
 
-| What you want | Unsorted (before) | After sorting (this chapter) |
+For 1,000,000 items:
+
+| What you want | Unsorted | After sorting |
 |---|---|---|
-| "is x there?" | \`find\` — O(N) scan | **\`binary_search\`** — O(log N) |
-| "how many of x?" | \`std::count\` — O(N) | **\`upper - lower\`** — O(log N) |
-| **"first ≥ x?"** | \`find_if\` works but O(N) | **\`lower_bound(x)\`** — O(log N) |
-| **"insert while staying sorted"** | painful | **\`insert(lower_bound(x), x)\`** |
-| **"dedupe (keeping a vector)"** | write it by hand | **\`sort + unique + erase\`** one line |
+| "is x there?" | 1,000,000 comparisons | **~20 comparisons** |
+| "how many of x?" | 1,000,000 comparisons | **~40 comparisons** |
+| "first ≥ x?" | 1,000,000 comparisons | **~20 comparisons** |
+| "dedupe" | write it yourself | **one line** |
 
-On a million elements: 1,000,000 comparisons vs ~20 comparisons. **One sort buys you that much.**
-
----
-
-### ❓ Common questions
-
-**Q1. Can't \`find\` already get "first student ≥ 70"?**
-
-\`find(v, 70)\` looks for elements **equal to 70**. It can't take a **condition** like "≥". \`find_if(v, [](int x){ return x >= 70; })\` *does* take a condition, but it **scans from the beginning** in O(N). Only \`lower_bound\` halves the range each step → **O(log N)** for the same answer.
-
-**Q2. Why not just use \`set\` for dedupe?**
-
-\`set\` does dedupe automatically — but the result is a **set**, not a vector. \`set\` is a tree internally, so it **uses more memory and can't do \`v[i]\` index access.** When you want **a vector that stays a vector** while being deduped fast, \`sort + unique + erase\` is the standard pattern. (For simple cases, \`set\` is fine too.)
+One sort unlocks all of that at once.
 
 ---
 
-### 🔑 Why is sorting so powerful?
+### 🔑 Why does this work?
 
-When data is sorted, **"look at the middle: if it's X, the answer is only on one side"** becomes possible. Each comparison throws away half the data. That's binary search — and every tool below sits on top of that idea.
+When data is sorted, **"check the middle: if it's X, the answer is only on one side"** is possible. Each comparison throws away half the data. (That's the binary search idea from the previous page.)
 
-> 💡 **Student takeaway:** "Sorting isn't the end — it's the **start**. One sort = all these tools unlocked at once."
+The next pages introduce **the tools built on this idea**, one at a time. Each one will have a clear "what's it for" — so there's less to memorize.
 
-The next pages introduce them one by one. Whenever "wait, why bother?" hits, come back to this table.`
+> 💡 **Student takeaway:** "Sorting isn't the end — it's the **start**. One sort = fast search."`
         },
         {
           id: "s23-ch2-iter",
