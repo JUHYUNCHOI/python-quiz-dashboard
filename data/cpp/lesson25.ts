@@ -155,6 +155,18 @@ for (auto it = v.begin(); it != v.end(); ++it) {
 > 💡 사실 \`for (int x : v)\` 같은 range-for 가 더 짧고 흔히 써요. 위 패턴은 **이터레이터 동작을 이해하는 용도**.`
         },
         {
+          id: "s23-ch2-iter-sim",
+          type: "animation" as const,
+          title: "🎮 직접 보기 — 포인터 vs 이터레이터",
+          component: "iteratorVsPointer",
+          content: `**\`++\` 했을 때** 포인터와 이터레이터가 어떻게 다르게 움직이는지 직접 봐요.
+
+- **vector 모드**: 둘이 똑같이 다음 칸으로 — 포인터로도, 이터레이터로도 OK
+- **list 모드**: 포인터는 ❌ 엉뚱한 주소로 가버림, 이터레이터만 ✅ 진짜 다음 노드로
+
+토글을 바꿔가며 \`++\` 버튼을 눌러봐요. **vector 와 list 에서 차이가 한 번에 보임.**`
+        },
+        {
           id: "s23-ch2-iter-formulas",
           type: "explain",
           title: "🎯 다음 페이지 들어가기 전 — 외울 공식 딱 두 줄",

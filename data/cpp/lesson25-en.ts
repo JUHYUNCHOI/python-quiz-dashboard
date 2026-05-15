@@ -155,6 +155,18 @@ for (auto it = v.begin(); it != v.end(); ++it) {
 > 💡 In practice you'd usually write \`for (int x : v)\` (range-for) — it's shorter and more common. The pattern above is for **understanding what iterators do under the hood**.`
         },
         {
+          id: "s23-ch2-iter-sim",
+          type: "animation" as const,
+          title: "🎮 See it live — Pointer vs Iterator",
+          component: "iteratorVsPointer",
+          content: `Watch what \`++\` actually does for a pointer vs an iterator.
+
+- **vector mode**: both move to the next slot identically — pointer or iterator, either works
+- **list mode**: pointer ❌ ends up at a garbage address; only iterator ✅ follows to the real next node
+
+Switch the toggle and press \`++\` to see the difference at a glance.`
+        },
+        {
           id: "s23-ch2-iter-formulas",
           type: "explain",
           title: "🎯 Before the next page — two formulas to memorize",
