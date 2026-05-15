@@ -344,7 +344,7 @@ int main() {
     {
       id: "sort-007",
       cluster: "sorting",
-      unlockAfter: "cpp-23",
+      unlockAfter: "cpp-26",
       difficulty: "보통",
       title: "중복 제거 후 정렬 (벡터)",
       description: `N개의 정수가 주어질 때, 중복을 제거하고 오름차순으로 정렬한 뒤, 서로 다른 수의 개수와 그 수들을 출력하세요.
@@ -413,7 +413,7 @@ int main() {
     {
       id: "sort-008",
       cluster: "sorting",
-      unlockAfter: "cpp-23",
+      unlockAfter: "cpp-26",
       difficulty: "보통",
       title: "나이 순 명단 정렬",
       description: `N명의 (이름, 나이) 정보가 주어질 때, 나이 오름차순으로 정렬하여 출력하세요.
@@ -769,7 +769,7 @@ int main() {
     {
       id: "sort-014",
       cluster: "sorting",
-      unlockAfter: "cpp-23",
+      unlockAfter: "cpp-26",
       difficulty: "어려움",
       title: "정렬 후 연속 구간 최대 길이",
       description: `N개의 정수가 주어질 때, 정렬 후 중복을 제거하면 연속된 정수로 이루어진 가장 긴 구간의 길이를 출력하세요.
