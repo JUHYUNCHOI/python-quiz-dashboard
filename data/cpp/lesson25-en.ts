@@ -76,19 +76,29 @@ The **binary search** from the previous page (open the middle, drop half) — ev
 | "first ≥ x?" | 1,000,000 (manual loop) | **~20** (\`lower_bound\`) |
 | "dedupe" | tricky to write | **one line** (\`sort + unique + erase\`) |
 
-> 💡 The function names may be new — **we'll cover each one on the next pages.** For now, just remember "sort first → search gets way faster."
+> 💡 The function names may be new — **we'll cover each one soon.** For now, just remember "sort first → search gets way faster."
 
 ---
 
 ### One line
 
-> **Sort once and search gets about 50,000× faster.** That's why USACO solutions almost always start with sort.`
+> **Sort once and search gets about 50,000× faster.** That's why USACO solutions almost always start with sort.
+
+---
+
+### 🪧 Heads-up for the next page
+
+The functions above (\`binary_search\`, \`lower_bound\` …) return their results in a slightly unfamiliar form — **not a number (index), but a "finger pointing to a position."** That finger is called an **iterator**.
+
+The name sounds scary but it's really nothing. We'll spend one minute getting friendly with it on the next page, then come back to the actual functions!`
         },
         {
           id: "s23-ch2-iter",
           type: "explain",
           title: "📌 Iterators — a finger pointing to a position",
-          content: `Iterator? **The name sounds scary, but it's really nothing.** It's what \`lower_bound\` returns on the next page — let's get friendly with it first. Just picture one finger and you're done!
+          content: `Remember how we said \`lower_bound\`, \`binary_search\`, \`upper_bound\` return **a position (a finger) instead of a number** in the table you just saw (👈)? That finger's real name is **iterator**.
+
+**The name sounds scary, but it's really nothing** — just picture one finger and you're done!
 
 ---
 
