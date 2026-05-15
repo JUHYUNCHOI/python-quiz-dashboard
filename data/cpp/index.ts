@@ -27,6 +27,10 @@ export { cppLesson21Data } from './lesson21'
 export { cppLesson22Data } from './lesson22'
 export { cppLesson23Data } from './lesson23'
 export { cppLesson23EnData } from './lesson23-en'
+export { cppLesson25Data } from './lesson25'
+export { cppLesson25EnData } from './lesson25-en'
+export { cppLesson26Data } from './lesson26'
+export { cppLesson26EnData } from './lesson26-en'
 
 // Checkpoint lessons (Korean)
 export { cppLessonCk1Data } from './lesson-ck1'

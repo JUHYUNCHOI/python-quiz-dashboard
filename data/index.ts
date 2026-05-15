@@ -404,6 +404,14 @@ const registry: Record<string, LessonEntry> = {
     load: () => import('./cpp/lesson24'), exportName: 'cppLesson24Data',
     enLoad: () => import('./cpp/lesson24-en'), enExportName: 'cppLesson24EnData',
   },
+  "cpp-25": {
+    load: () => import('./cpp/lesson25'), exportName: 'cppLesson25Data',
+    enLoad: () => import('./cpp/lesson25-en'), enExportName: 'cppLesson25EnData',
+  },
+  "cpp-26": {
+    load: () => import('./cpp/lesson26'), exportName: 'cppLesson26Data',
+    enLoad: () => import('./cpp/lesson26-en'), enExportName: 'cppLesson26EnData',
+  },
 
   // C++ 프로젝트 레슨
   "cpp-p1": {
@@ -749,6 +757,8 @@ export { cppLesson18Data } from './cpp/lesson18'
 export { cppLesson19Data } from './cpp/lesson19'
 export { cppLesson20Data } from './cpp/lesson20'
 export { cppLesson24Data } from './cpp/lesson24'
+export { cppLesson25Data } from './cpp/lesson25'
+export { cppLesson26Data } from './cpp/lesson26'
 export { cppLessonCk1Data } from './cpp/lesson-ck1'
 export { cppLessonCk2Data } from './cpp/lesson-ck2'
 export { cppLessonCk3Data } from './cpp/lesson-ck3'
@@ -797,6 +807,8 @@ export { cppLesson18EnData } from './cpp/lesson18-en'
 export { cppLesson19EnData } from './cpp/lesson19-en'
 export { cppLesson20EnData } from './cpp/lesson20-en'
 export { cppLesson24EnData } from './cpp/lesson24-en'
+export { cppLesson25EnData } from './cpp/lesson25-en'
+export { cppLesson26EnData } from './cpp/lesson26-en'
 export { cppLessonP1EnData } from './cpp/lessonP1-en'
 export { cppLessonP2EnData } from './cpp/lessonP2-en'
 export { cppLessonP3EnData } from './cpp/lessonP3-en'

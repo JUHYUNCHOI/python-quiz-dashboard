@@ -96,6 +96,9 @@ sort(v.begin(), v.end());
 
 C++ 에서 정렬은 항상 **원본을 직접 바꿔요.** "정렬된 새 벡터" 가 필요하면 미리 복사해두고 거기서 sort 해야 해요.
 
+> 🎯 **USACO 에서 이렇게 써요:**
+> 거의 **매 문제** 에 등장. 학생 점수 정렬, 좌표 정렬, 가격 정렬, 이름 알파벳 순 등. "데이터 받으면 일단 sort 해두고 시작" 패턴이 USACO Bronze 의 가장 흔한 첫 줄.
+
 ### 배열에도 똑같이
 
 \`\`\`cpp
@@ -213,7 +216,12 @@ sort()의 **세 번째 인자**로 "비교 기준"을 넣을 수 있어요.
 | 오름차순 | \`sort(v.begin(), v.end())\` | 1 2 5 8 9 |
 | 내림차순 | \`sort(v.begin(), v.end(), greater<int>())\` | 9 8 5 2 1 |
 
-💡 세 번째 인자 없으면 기본이 오름차순이에요!`
+💡 세 번째 인자 없으면 기본이 오름차순이에요!
+
+> 🎯 **USACO 에서 언제 내림차순이 필요해?**
+> • "상위 3 등 학생" 출력 → 점수 내림차순 후 앞 3 개
+> • "비싼 상품부터" 나열 → 가격 내림차순
+> • "가장 큰 수부터 적용" 같은 그리디 문제 — 정렬 방향이 답을 결정`
         },
         {
           id: "s23-ch0-fb2",
@@ -488,6 +496,39 @@ sort(v.begin(), v.end(), [](int a, int b) {
     return a > b;
 });
 // v = {9, 8, 5, 2, 1}  (내림차순)
+\`\`\`
+
+---
+
+### ⚠️ 자주 하는 실수 — 값을 반환하면 ❌
+
+람다는 **bool (true/false) 만** 반환해야 해요. **값 (a, b 같은 정수) 을 반환하면 컴파일 에러.**
+
+\`\`\`cpp
+// ❌ 잘못 — int 를 반환 (에러: inconsistent types 'bool' and 'int')
+sort(v.begin(), v.end(), [](int a, int b) {
+    if (a < b) return a;     // ← 값 자체를 반환 ❌
+    else return b;
+});
+
+// ✅ 맞음 — bool 비교 결과만 반환
+sort(v.begin(), v.end(), [](int a, int b) {
+    return a < b;             // ← "a 가 b 보다 앞인가?" true/false
+});
+\`\`\`
+
+**왜 그런가**: sort 는 "**a 가 b 앞이야?**" 라는 *질문* 에 **YES/NO** 만 받아요. 값 자체를 돌려주면 sort 가 알아듣지 못함.
+
+### 동률 처리도 같은 규칙
+
+절댓값 기준 정렬 + 동률이면 작은 값 먼저:
+
+\`\`\`cpp
+// ✅ 동률 처리도 bool 만 반환
+sort(v.begin(), v.end(), [](int a, int b) {
+    if (abs(a) != abs(b)) return abs(a) < abs(b);   // 절댓값 비교
+    return a < b;                                    // 동률 시: 작은 값이 앞
+});
 \`\`\``
         },
         {
@@ -496,13 +537,13 @@ sort(v.begin(), v.end(), [](int a, int b) {
           title: "📋 자주 보는 람다 형태들 — 치트시트",
           content: `정렬 람다는 결국 몇 가지 패턴의 변주예요. 외워두면 평생 써먹어요:
 
-| 람다 | 정렬 결과 |
-|---|---|
-| \`[](int a, int b){ return a < b; }\` | 오름차순 (sort 기본값) |
-| \`[](int a, int b){ return a > b; }\` | 내림차순 |
-| \`[](int a, int b){ return abs(a) < abs(b); }\` | 절댓값 오름차순 |
-| \`[](auto a, auto b){ return a.second < b.second; }\` | pair 의 second 기준 |
-| \`[](auto a, auto b){ return a.score > b.score; }\` | struct 의 \`score\` 멤버 내림차순 |
+| 람다 | 정렬 결과 | USACO 상황 |
+|---|---|---|
+| \`[](int a, int b){ return a < b; }\` | 오름차순 (기본) | 점수, 좌표, 가격 정렬의 기본 |
+| \`[](int a, int b){ return a > b; }\` | 내림차순 | "1 등부터 출력" / "상위 K 명" |
+| \`[](int a, int b){ return abs(a) < abs(b); }\` | 절댓값 오름차순 | "원점에서 가까운 순" / "변화량 작은 순" |
+| \`[](auto a, auto b){ return a.second < b.second; }\` | pair 의 second 기준 | (이름, 점수) → 점수순 / (시각, ID) → 시각순 |
+| \`[](auto a, auto b){ return a.score > b.score; }\` | struct 의 \`score\` 멤버 내림차순 | 캐릭터 (이름, HP, 점수) 를 점수 내림차순 |
 
 ### 💡 \`auto\` 매개변수 — pair/struct 정렬에 편함
 
@@ -622,7 +663,14 @@ sort(v.begin(), v.end(), [](auto a, auto b) {
         return a.second > b.second;  // 점수 큰 게 앞
     return a.first < b.first;        // 동점이면 이름 사전순
 });
-\`\`\``
+\`\`\`
+
+> 🎯 **USACO 에서 이렇게 써요:**
+> • **좌표 정렬** — \`pair<int, int>\` 가 (x, y) 점들. y 좌표 기준 정렬, 동점이면 x 기준.
+> • **이벤트 정렬** — (시작 시각, 이벤트 ID) 쌍. 시각 순서대로 처리.
+> • **순위표** — (이름, 점수) 쌍. 점수 내림차순, 동점이면 이름 알파벳 순.
+> • **거리 + 인덱스** — (거리, 원래 인덱스) 쌍. 거리 정렬 후 원래 인덱스 복원.
+> "두 값을 묶어서 정렬" 이 필요한 거의 모든 Bronze 문제에서 등장.`
         },
         {
           id: "s23-ch1-pred1",
@@ -842,988 +890,41 @@ banana hi apple ok cat`,
     },
 
     // ============================================
-    // Chapter 2: 정렬된 배열에서 탐색하기
+    // Chapter 2: 마무리 — 정렬 기본 끝!
     // ============================================
     {
-      id: "s23-ch2",
-      title: "정렬된 배열에서 탐색하기",
-      emoji: "🔍",
+      id: "s23-wrap",
+      title: "마무리",
+      emoji: "🎉",
       steps: [
         {
-          id: "s23-ch2-linear",
-          type: "animation" as const,
-          title: "🔎 선형 탐색 — 한 장씩 넘기기",
-          component: "linearSearch",
-          content: `여기까지 sort 로 정렬을 마스터했어요. 정렬해두면 좋은 또 하나의 큰 이유 — **탐색이 훨씬 빨라져요.** 그 이야기를 시작해요.
-
-먼저 정렬돼 있지 **않은** 경우부터 봐요. 전화번호부에서 **"Kim"** 을 찾는다고 해봐요.
-
-가장 단순한 방법: **1페이지부터 한 장씩** 넘기며 확인해요.
-
-1페이지... 아니네. 2페이지... 아니네. 3페이지...
-
-500페이지짜리 책이면 최악의 경우 **500번**을 봐야 해요. 배열도 똑같아요 — **100만 개면 최악 100만 번** 확인해야 해요.
-
-버튼을 눌러서 직접 따라가 봐요!`,
-        },
-        {
-          id: "s23-ch2-binary",
-          type: "animation" as const,
-          title: "⚡ 이진 탐색 — 가운데를 먼저 펼치기",
-          component: "binarySearch",
-          content: `전화번호부에서 "Kim"을 찾을 때, 1페이지부터 보나요?
-
-**아니죠.** K는 알파벳 중간쯤이니까 자연스럽게 **중간을 펼쳐요.**
-
-이게 가능한 이유가 딱 하나예요 — **전화번호부가 알파벳 순서로 정렬되어 있기 때문이에요.**
-정렬이 안 되어 있으면 어디에 있을지 감이 없으니까 1페이지부터 볼 수밖에 없어요.
-
-**이진 탐색은 이 직관을 알고리즘으로 만든 거예요:**
-
-가운데(250p)를 펼쳤더니 "Park" → Kim은 앞쪽! **뒤 250페이지는 볼 필요 없어요.**
-앞쪽 가운데(125p)를 펼쳤더니 "Lee" → Kim은 앞쪽! **또 절반을 버려요.**
-이렇게 계속 절반씩 줄이면 **500페이지도 9번이면 찾아요.**
-
-**정렬 → 이진 탐색 가능 → 훨씬 빠름!**
-이게 sort를 배운 다음 이진 탐색을 배우는 이유예요.
-
-버튼을 눌러서 직접 따라가 봐요!`,
-        },
-        {
-          id: "s23-ch2-sorted-toolbox",
+          id: "s23-wrap-done",
           type: "explain",
-          title: "🗝️ 정렬은 출발선 — 정렬 한 번으로 열리는 도구 묶음",
-          content: `이번 챕터에서 함수 여러 개가 한꺼번에 등장해요 (\`binary_search\`, \`lower_bound\`, \`upper_bound\`, \`unique\`...). 하나씩 외우려 하면 머리 터져요. 큰 그림 한 장 먼저:
+          title: "🎉 정렬 기본 끝! 다음은?",
+          content: `여기까지 **sort 기본** 마스터:
+
+- **sort(v.begin(), v.end())** — 한 줄로 정렬
+- 람다로 **커스텀 기준** 정렬 (내림차순, 절댓값, 다중 기준)
+- **pair 정렬** — 두 값을 묶어서 한 기준 또는 두 기준으로
+
+이만큼이면 USACO Bronze 문제의 "정렬" 부분은 거의 다 풀려요.
 
 ---
 
-### 한 줄 큰 그림
+### 🎯 다음 레슨 — 정렬된 데이터에서 빠른 검색 (cpp-25)
 
-> 📌 **이번 챕터 = "정렬해두면 갑자기 가능해지는 일들" 모음집.**
-> 정렬 안 됐을 땐 \`find\` 로 처음부터 다 훑어야 했던 일들이, 정렬 후엔 **한 줄로 끝남.**
+정렬 한 번 했더니 갑자기 가능해지는 일들. "x 가 있나?", "x 이상 첫 거는?", "x 가 몇 개?" 같은 검색 질문을 **O(log n)** 으로 한 줄에 풀어요. 도구는 **binary_search**, **lower_bound**, **upper_bound** 셋.
 
----
+### 📌 그 다음 (선택, 심화) — sort 응용 패턴 (cpp-26)
 
-### 정렬 후 가능해지는 일들 (이번 챕터에서 다 배움)
-
-| 정렬 안 됨 (기존) | 정렬 후 (이번 챕터) |
-|---|---|
-| \`find\` — 처음부터 훑기 O(N) | **\`binary_search\`** — 절반씩 줄이기 O(log N) |
-| \`std::count\` — 처음부터 훑기 O(N) | **\`upper - lower\`** — 두 번 이분탐색 O(log N) |
-| ❌ "70 점 이상 첫 학생" 못 함 | **\`lower_bound(70)\`** — 한 줄로 답 |
-| ❌ "정렬 유지하며 끼워넣기" 어려움 | **\`insert(lower_bound(x), x)\`** — 한 줄 |
-| 중복 제거 직접 짜야 함 | **\`sort + unique + erase\`** — 한 줄 |
+중복 제거 (sort + unique + erase), 동점 순서 보존 (stable_sort), 람다 + STL 일반 알고리즘 (count_if, find_if, accumulate). **Bronze 합격에 필수 아님** — 시간 여유 있을 때 봐도 OK.
 
 ---
 
-### 왜 정렬이 이렇게 강력해?
-
-정렬돼 있으면 **"중간을 봤더니 X 면 답은 어느 쪽에 있다"** 가 가능해져요 (앞에서 본 이진 탐색).
-
-이 한 가지 아이디어 위에 위 도구들이 다 얹혀 있어요. **다 같은 가족** — 다음 페이지부터 하나씩 보지만, "왜 굳이?" 가 들면 이 표로 돌아오면 돼요.
-
-> 💡 학생용 한 줄: "정렬은 끝이 아니라 **시작**. 정렬 한 번 = 이 도구들이 다 열림."`
-        },
-        {
-          id: "s23-ch2-iter",
-          type: "explain",
-          title: "📌 이터레이터 — 다음 페이지 들어가기 전 1 분 정리",
-          content: `다음 페이지에 \`lower_bound\` 가 나오는데, 결과로 숫자가 아니라 **이터레이터 (iterator)** 라는 게 나와요. 처음 보면 낯서니까 1 분만 정리하고 가요.
-
----
-
-### 이터레이터 = "위치를 가리키는 손가락"
-
-sort 할 때마다 쓰던 \`v.begin()\`, \`v.end()\` — 그게 이터레이터예요. **벡터 안의 한 자리를 가리키는 손가락.**
-
-\`\`\`
-   10    20    30    40    50
-    ↑                          ↑
- begin()                      end() (마지막 **다음** 자리)
-\`\`\`
-
----
-
-### 포인터 들어봤죠? 거의 똑같아요
-
-vector 에서는 이터레이터를 **포인터처럼** 생각해도 돼요. 메모리에 값들이 옆에 줄지어 있으니까 손가락 ++ 하면 다음 값. 문법까지 똑같아요:
-
-| | 포인터 | 이터레이터 |
-|---|---|---|
-| 값 보기 | \`*p\` | \`*it\` |
-| 다음 칸 | \`p++\` | \`it++\` |
-| 인덱스 | \`p - 배열\` | \`it - v.begin()\` |
-
-> ⚠️ 차이는 나중에 — map / set / list 같은 **메모리가 흩어진** 컨테이너에선 포인터는 못 쓰고 이터레이터만 통해요. 그건 그때 가서. 지금은 **"vector 에 쓰는 포인터 비슷한 거"** 면 충분.
-
----
-
-### 🎯 외울 공식 딱 두 줄
-
-다음 페이지부터 \`lower_bound\` 같은 함수가 이터레이터를 돌려줄 때, 학생이 다룰 일은 이 둘 뿐:
-
-\`\`\`
-   10    20    30    40    50
-    ↑                ↑
- begin()             it  (40 을 가리킴)
-\`\`\`
-
-\`\`\`cpp
-cout << *it;             // 40   ← *it 는 가리키는 값
-cout << it - v.begin();  // 3    ← 인덱스로 변환
-\`\`\`
-
-> 💡 \`*it\` = 값, \`it - v.begin()\` = 인덱스. **이 두 줄만 외우면** 다음 페이지부터 막힘 없음.`
-        },
-        {
-          id: "s23-ch2-lb",
-          type: "explain",
-          title: "🔍 binary_search / lower_bound / upper_bound — 이진탐색 3 형제",
-          content: `방금 본 이진 탐색을 매번 직접 짜진 않아요. C++ 이 **세 함수** 를 미리 만들어뒀어요 — 같은 가족이에요:
-
-\`\`\`cpp
-binary_search(v.begin(), v.end(), x);  // x 가 있나? → true / false
-lower_bound (v.begin(), v.end(), x);   // x 가 시작되는 위치
-upper_bound (v.begin(), v.end(), x);   // x 가 끝난 다음 위치
-\`\`\`
-
-⚠️ **반드시 정렬된 배열에서만!** (이진 탐색이라서)
-
----
-
-**그림으로 보기 — 값 3 찾기**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-     ↑       ↑
-lower_bound  upper_bound
-  (값=3)      (값=3)
-"3 시작"    "3 끝 다음"
-\`\`\`
-
-- **binary_search(x)** → \`x\` 가 배열 안에 있나? **true / false**
-- **lower_bound(x)** → \`x\` **이상(≥)** 의 첫 위치 = "x 가 시작되는 곳"
-- **upper_bound(x)** → \`x\` **초과(>)** 의 첫 위치 = "x 가 끝난 다음"
-
-> 💡 깊이 파지 말고 **그림 + 세 줄 설명** 만 기억해도 충분해요. 어떤 상황에 어느 걸 쓰는지는 다음 페이지에서.`
-        },
-        {
-          id: "s23-ch2-trio-quiz",
-          type: "quiz" as const,
-          title: "3 형제 중 누구를 쓰지?",
-          content: "정렬된 \`vector<int> v\` 가 있어요. \"숫자 7 이 배열에 있는지 **있다 / 없다** 만 알면 돼\" 라면 셋 중 어느 걸 쓰는 게 가장 깔끔할까요?",
-          options: [
-            "`binary_search(v.begin(), v.end(), 7)`",
-            "`lower_bound(v.begin(), v.end(), 7)`",
-            "`upper_bound(v.begin(), v.end(), 7)`"
-          ],
-          answer: 0,
-          explanation: "**`binary_search`** 는 정확히 \"있나 / 없나\" 만 묻는 함수 — true / false 반환이라 가장 직관적이에요. lower_bound / upper_bound 는 **위치** 를 돌려주니까 \"있는지만\" 확인하기엔 한 단계 더 필요해요 (`lower_bound != upper_bound` 같은 식)."
-        },
-        {
-          id: "s23-ch2-lb-missing",
-          type: "explain",
-          title: "🔍 없는 값을 찾으면? — 끼워넣을 자리",
-          content: `값이 배열에 **없어도** lower_bound 는 에러 없이 숫자를 돌려줘요. 뭘 돌려주냐면 — **"정렬을 유지한 채 그 값을 넣으면 어느 자리?"** 를 알려줘요.
-
-\`\`\`cpp
-vector<int> v = {1, 3, 5, 7, 9};
-
-// 4 는 없음 — "4 가 들어갈 자리?"
-lower_bound(v.begin(), v.end(), 4) - v.begin() →  2   ← 5 의 앞 (= 4 가 들어갈 자리)
-upper_bound(v.begin(), v.end(), 4) - v.begin() →  2   ← 같음 (없으니까 시작=끝)
-
-// 10 은 모든 값보다 큼 — "맨 뒤에 넣어야"
-lower_bound(v.begin(), v.end(), 10) - v.begin() →  5  ← v.end() 위치 (= v.size())
-\`\`\`
-
-이게 lower_bound 가 **그냥 위치를 돌려주는 것보다 더 강한** 이유예요. "있으면 그 자리 / 없으면 들어갈 자리" → **언제나** 의미 있는 위치를 줘요.
-
----
-
-**활용 — "정렬을 유지하면서 삽입":**
-
-\`\`\`cpp
-vector<int> v = {1, 3, 5, 7, 9};
-int x = 4;
-v.insert(lower_bound(v.begin(), v.end(), x), x);
-// v = {1, 3, 4, 5, 7, 9}  ← 정렬 유지!
-\`\`\`
-
----
-
-> ⚠️ **"있는지만 확인" 할 때는 \`lower == upper\` 트릭 쓰지 마세요.** 의도가 안 보여요. → **\`binary_search(v.begin(), v.end(), x)\`** 가 정답 (앞 페이지에서 배운 그거). lower / upper 가 같아지는 건 **부수효과** 일 뿐, 도구의 목적이 아니에요.`
-        },
-        {
-          id: "s23-ch2-lb-patterns",
-          type: "explain",
-          title: "🎯 활용 패턴 3 가지",
-          content: `\`\`\`cpp
-vector<int> v = {1, 3, 3, 5, 7, 9};
-
-// ① 3 이 몇 개인가?
-int count = upper_bound(v.begin(), v.end(), 3)
-          - lower_bound(v.begin(), v.end(), 3);
-// 3 - 1 = 2 개!
-
-// ② 값이 있는지 확인 — binary_search() 사용 (더 간단!)
-if (binary_search(v.begin(), v.end(), 3)) cout << "있음";
-else cout << "없음";
-
-// ③ 값의 위치가 필요할 때 — lower_bound 사용
-int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
-cout << idx;  // 1
-\`\`\`
-
-> 💡 셋이 한 가족이지만 **돌려주는 게 달라서** 쓰임도 달라요. 다음 페이지에서 흔한 함정 하나 짚고 가요.`
-        },
-        {
-          id: "s23-ch2-patterns-fb",
-          type: "fillblank" as const,
-          title: "✋ 직접 — 5 가 몇 개?",
-          content: "정렬된 \`vector<int> v = {1, 2, 5, 5, 5, 7}\` 에서 **5 가 몇 개** 있는지 한 줄로 구해봐요. (upper-lower 패턴)",
-          code: "vector<int> v = {1, 2, 5, 5, 5, 7};\nint cnt = ___(v.begin(), v.end(), 5)\n        - ___(v.begin(), v.end(), 5);\ncout << cnt;  // 3",
-          fillBlanks: [
-            { id: 0, answer: "upper_bound", options: ["upper_bound", "lower_bound", "binary_search", "count"] },
-            { id: 1, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "count"] }
-          ],
-          explanation: "**\"끝 다음 - 시작\" = 개수.** upper_bound 가 끝 다음을 가리키고 lower_bound 가 시작을 가리켜요. 둘을 빼면 그 값의 개수. 5 는 인덱스 2,3,4 에 3 개 있으니 결과 3."
-        },
-        {
-          id: "s23-ch2-lb-vs-count",
-          type: "explain",
-          title: "🤔 잠깐 — 개수 세기는 \`count()\` 도 있지 않아?",
-          content: `맞아요. \`std::count\` 도 개수를 세요 (algorithm 의 표준 함수):
-
-\`\`\`cpp
-int cnt = count(v.begin(), v.end(), 3);   // 정렬 안 되어 있어도 OK
-\`\`\`
-
-**그럼 둘이 뭐가 달라요?**
-
-| | \`count()\` | \`upper - lower\` |
-|---|---|---|
-| 정렬 필요? | ❌ 아니요 | ✅ 정렬돼 있어야 함 |
-| 속도 | **O(n)** — 처음부터 끝까지 훑음 | **O(log n)** — 이진 탐색 |
-| 100 만 개 중 세기 | 100 만 번 비교 | 약 20 번 비교 |
-
-**함정:** "그럼 sort 한 번 하고 upper-lower 쓰면 되겠네!" → ❌. sort 자체가 O(n log n) 이라 **한 번만** 셀 거면 그냥 \`count()\` 가 더 빠름.
-
-✅ **upper-lower 가 빛나는 순간:**
-- 데이터가 **이미** 정렬돼 있을 때
-- 같은 데이터에서 **여러 번** 세야 할 때 (한 번 sort → 매 질의마다 O(log n))
-
-알고리즘 대회에선 자주 쓰는 패턴, 일반 코딩에선 \`count()\` 가 더 흔해요.
-
----
-
-### ⚠️ 헷갈림 주의 — \`count\` 이름이 **두 곳** 에 나옴
-
-다음 레슨 (map) 에서 \`m.count(key)\` 가 나오는데 이름은 같지만 **완전히 다른 함수예요.**
-
-| | \`std::count(v.begin, v.end, x)\` | \`m.count(key)\` |
-|---|---|---|
-| 어디 거? | algorithm 함수 (외부) | map / set 의 **멤버** 함수 |
-| 어디서 씀? | vector 같은 일반 범위 | map, set |
-| 속도 | O(n) — 처음부터 훑음 | **O(log n)** — 트리 직접 탐색 |
-| 답 | 정확히 \`x\` 인 거 몇 개 | 키가 있나 (map 은 0/1, multiset 은 진짜 개수) |
-
-> 💡 같은 이름이지만 **다른 함수.** vector 의 \`std::count\` 는 느린데, map 의 \`m.count\` 는 자기 안에 트리가 있어서 빠름 — sort 안 해도 빠른 거. 이건 다음 레슨에서 다시 짚어요.`
-        },
-        {
-          id: "s23-ch2-lb-vs-bs",
-          type: "explain",
-          title: "🆚 binary_search() vs lower_bound — 언제 뭘 써?",
-          content: `| | binary_search() | lower_bound() |
-|---|---|---|
-| 반환값 | true / false | 위치(반복자) |
-| 용도 | 있는지만 확인 | 위치·개수 필요할 때 |
-| 코드 | 짧고 직관적 | 조금 길지만 강력 |
-
-\`\`\`cpp
-// 단순히 "5가 있나?" → binary_search
-binary_search(v.begin(), v.end(), 5)  // true
-
-// "5가 몇 번째야?" → lower_bound
-lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
-\`\`\`
-
-| 파이썬 🐍 | C++ ⚡ |
-|---|---|
-| \`x in v\` | \`binary_search(v.begin(), v.end(), x)\` |
-| \`bisect.bisect_left(v, x)\` | \`lower_bound(v.begin(), v.end(), x) - v.begin()\` |
-| \`bisect.bisect_right(v, x)\` | \`upper_bound(v.begin(), v.end(), x) - v.begin()\` |`
-        },
-        {
-          id: "s23-ch2-quiz1",
-          type: "quiz",
-          title: "이진탐색의 전제 조건!",
-          content: "정렬되지 않은 벡터 \`v = {3, 1, 4, 1, 5}\` 에 대해 \`binary_search(v.begin(), v.end(), 4)\` 를 호출하면?",
-          options: [
-            "true 반환 (4 가 있으니까)",
-            "false 반환 (정렬 안 된 걸 자동 감지해서)",
-            "**예측 불가** — 이진탐색은 정렬된 배열에서만 동작 보장. 결과는 컴파일러/구현마다 다름",
-            "컴파일 에러"
-          ],
-          answer: 2,
-          explanation: "**`binary_search`, `lower_bound`, `upper_bound` 는 모두 정렬된 배열에서만 정확히 동작해요.** 정렬 안 된 배열에서 호출하면 컴파일은 되지만 결과는 **undefined behavior** — true / false / 엉뚱한 인덱스 등 어떤 결과든 나올 수 있음. 그래서 사용 전 반드시 `sort()` 먼저!"
-        },
-        {
-          id: "s23-ch2-lb3",
-          type: "explain",
-          title: "⚠️ 주의 — 모든 값보다 큰 값을 찾으면?",
-          content: `\`\`\`cpp
-vector<int> v = {1, 3, 5, 7, 9};
-
-lower_bound(v.begin(), v.end(), 10) - v.begin();
-// → 5 (범위 **밖**, v[5] 는 존재 안 함!)
-\`\`\`
-
-찾는 값보다 큰 게 배열에 없으면 lower_bound 는 **\`v.end()\` 위치 (= 인덱스 \`v.size()\`)** 를 돌려줘요. 여길 그냥 \`v[5]\` 로 접근하면 잘못된 메모리 읽기 → 프로그램 폭발.
-
----
-
-**안전하게 쓰는 패턴**
-
-\`\`\`cpp
-auto it = lower_bound(v.begin(), v.end(), x);
-
-if (it != v.end() && *it == x) {
-    int idx = it - v.begin();
-    cout << idx;       // 진짜로 x 가 있을 때만
-}
-\`\`\`
-
-> 💡 \`it != v.end()\` 로 **범위 안인지 확인** + \`*it == x\` 로 **정확히 그 값인지 확인**. 두 조건 모두 OK 일 때만 접근.`
-        },
-        {
-          id: "s23-ch2-fb1",
-          type: "fillblank" as const,
-          title: "lower_bound 빈칸 채우기",
-          content: "정렬된 벡터에서 4 이상의 첫 번째 인덱스를 구해봐요!",
-          code: "vector<int> v = {1, 2, 4, 4, 6};\nauto it = ___(v.begin(), v.end(), 4);\nint idx = it - v.___;\ncout << idx;  // 2",
-          fillBlanks: [
-            { id: 0, answer: "lower_bound", options: ["lower_bound", "upper_bound", "find", "binary_search"] },
-            { id: 1, answer: "begin()", options: ["begin()", "end()", "front()", "start()"] }
-          ],
-          explanation: "lower_bound는 찾는 값 이상의 첫 위치를 반복자로 반환해요. - v.begin()으로 인덱스로 변환해요. 4는 인덱스 2에 처음 등장하므로 결과는 2!"
-        },
-        {
-          id: "s23-ch2-practice1",
-          type: "practice" as const,
-          title: "✋ 처음부터 — binary_search 로 존재 확인",
-          content: `**문제**: **이미 정렬된** N 개의 정수가 주어지고, 그 다음 줄에 찾을 값 \`x\` 가 주어져요. \`x\` 가 배열에 있으면 \`Yes\`, 없으면 \`No\` 출력.
-
-\`\`\`
-입력: 5
-      1 3 5 7 9
-      5
-출력: Yes
-
-입력: 5
-      1 3 5 7 9
-      4
-출력: No
-\`\`\`
-
-> 💡 \`binary_search(v.begin(), v.end(), x)\` 는 **true / false** 반환. "있는지만" 알면 될 때 가장 간단한 함수.`,
-          starterCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    int x;
-    cin >> x;
-    // 👇 binary_search 로 x 존재 여부 확인 → "Yes" 또는 "No" 출력
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    int x;
-    cin >> x;
-    if (binary_search(v.begin(), v.end(), x)) cout << "Yes";
-    else cout << "No";
-    return 0;
-}`,
-          hint: "if (binary_search(v.begin(), v.end(), x)) cout << \"Yes\"; else cout << \"No\"; — 존재 여부만 필요할 땐 binary_search 가 가장 간단.",
-          expectedOutput: `Yes`,
-          stdin: `5
-1 3 5 7 9
-5`,
-        },
-        {
-          id: "s23-ch2-pred1",
-          type: "predict" as const,
-          title: "lower_bound & upper_bound 출력 예측!",
-          code: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-int main() {
-    vector<int> v = {2, 4, 4, 6, 8};
-    auto lo = lower_bound(v.begin(), v.end(), 4);
-    auto hi = upper_bound(v.begin(), v.end(), 4);
-    cout << (lo - v.begin()) << " " << (hi - lo);
-    return 0;
-}`,
-          options: ["1 2", "2 2", "1 1", "2 1"],
-          answer: 0,
-          explanation: "lower_bound(4) → index 1 (첫 번째 4). upper_bound(4) → index 3 (6의 위치). hi - lo = 3 - 1 = 2 (4가 2개). 출력: 1 2"
-        },
-        {
-          id: "s23-ch2-practice2",
-          type: "practice" as const,
-          title: "✋ 처음부터 — X 가 몇 개인지 (upper - lower 패턴)",
-          content: `**문제**: **이미 정렬된** N 개의 정수가 주어지고, 그 다음 줄에 찾을 값 \`x\` 가 주어져요. \`x\` 가 배열에 **몇 개** 등장하는지 출력하세요.
-
-\`\`\`
-입력: 6
-      1 3 3 3 5 7
-      3
-출력: 3
-
-입력: 5
-      1 2 4 6 8
-      4
-출력: 1
-
-입력: 5
-      1 3 5 7 9
-      4
-출력: 0
-\`\`\`
-
-> 💡 \`upper_bound(...) - lower_bound(...)\` — chapter 의 핵심 응용 패턴. 두 반복자의 차이가 곧 개수.`,
-          starterCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    int x;
-    cin >> x;
-    // 👇 upper_bound - lower_bound 로 x 의 개수 출력
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    int x;
-    cin >> x;
-    auto lo = lower_bound(v.begin(), v.end(), x);
-    auto hi = upper_bound(v.begin(), v.end(), x);
-    cout << (hi - lo);
-    return 0;
-}`,
-          hint: "auto lo = lower_bound(v.begin(), v.end(), x); auto hi = upper_bound(v.begin(), v.end(), x); cout << (hi - lo); — 두 반복자의 차이가 개수. 없으면 hi == lo → 0.",
-          expectedOutput: `3`,
-          stdin: `6
-1 3 3 3 5 7
-3`,
-        }
-      ]
-    },
-
-    // ============================================
-    // Chapter 3: 심화 패턴
-    // ============================================
-    {
-      id: "s23-ch3",
-      title: "심화 패턴",
-      emoji: "🧹",
-      steps: [
-        {
-          id: "s23-ch3-unique",
-          type: "explain",
-          title: "🧹 sort + unique — 중복 제거 패턴!",
-          content: `정렬과 탐색을 봤어요. 마지막으로 sort 와 짝꿍처럼 자주 쓰는 패턴 하나 — 배열에서 **중복된 값을 제거**하는 C++ 의 표준 패턴이에요.
-
-\`\`\`cpp
-#include <algorithm>
-#include <vector>
-using namespace std;
-
-vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};
-
-// 1단계: 정렬 (unique는 인접 중복만 제거!)
-sort(v.begin(), v.end());
-// v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}
-
-// 2단계: unique + erase로 중복 제거
-v.erase(unique(v.begin(), v.end()), v.end());
-// v = {1, 2, 3, 4, 5, 6, 9}
-\`\`\`
-
-⚠️ **sort 먼저!** unique는 인접한 중복만 제거해요.
-정렬하지 않으면 {1, 3, 1}에서 3개 그대로예요.
-
-| 파이썬 🐍 | C++ ⚡ |
-|---|---|
-| \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
-
-💡 **sort → erase(unique(...), end())** 패턴을 세트로 외워두세요! 다음 페이지에서 **왜 erase 까지 필요한지** 한 번 짚고 가요.`
-        },
-        {
-          id: "s23-ch3-unique-detail",
-          type: "explain",
-          title: "🤔 잠깐 — 왜 \`erase\` 까지 필요해? \`unique\` 만 쓰면?",
-          content: `\`unique\` 의 **진짜** 동작을 알면 왜 \`erase\` 가 짝꿍인지 자연스럽게 이해돼요.
-
-### unique 의 진짜 동작
-
-\`unique\` 는 사실 **벡터 크기를 줄이지 않아요.** 앞쪽으로 중복 없는 값들을 모으고, "여기까지가 진짜 끝" 이라는 위치 (iterator) 만 돌려줘요.
-
-\`\`\`
-v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}   sort 직후 (size = 10)
-
-↓ auto it = unique(v.begin(), v.end());  ← erase 안 함
-
-v = {1, 2, 3, 4, 5, 6, 9, ?, ?, ?}   size 는 여전히 10!
-                          ↑
-                          it 가 가리키는 위치
-                          여기부터 뒤는 쓰레기 값 (의미 없음)
-\`\`\`
-
-\`v.size()\` 를 출력해보면 여전히 10. 앞 7 개만 진짜고 나머지 3 개는 메모리에 남은 **흔적**.
-
----
-
-### erase 문법 빠른 리마인더
-
-벡터에서 **구간 잘라내기** 는 \`erase(시작, 끝)\` 형태예요. 두 iterator 사이를 통째로 들어내는 거.
-
-\`\`\`cpp
-vector<int> v = {10, 20, 30, 40, 50};
-
-v.erase(v.begin() + 1, v.begin() + 4);
-//     ↑                ↑
-//   여기부터        여기 직전까지 (4 는 미포함)
-
-// 결과: v = {10, 50}   (20, 30, 40 제거)
-\`\`\`
-
-| 형태 | 의미 |
-|---|---|
-| \`v.erase(it)\` | iterator \`it\` 가 가리키는 **한 개** 제거 |
-| \`v.erase(시작, 끝)\` | \`[시작, 끝)\` **구간 통째로** 제거 |
-
----
-
-### 그래서 erase + unique 합치면
-
-\`\`\`cpp
-v.erase( unique(v.begin(), v.end()),  v.end() );
-//        ↑                            ↑
-//   "진짜 끝" 위치 (it)           벡터의 진짜 끝
-//          ───────  이 사이의 쓰레기를 잘라냄  ───────
-\`\`\`
-
-unique 가 알려준 **진짜 끝** 부터 \`v.end()\` 까지 erase — 이게 그 유명한 패턴.
-
-> 💡 외울 거: \`unique\` 는 **모으기만** 함, 크기는 그대로. 진짜 줄이려면 \`erase\` 한 세트.`
-        },
-        {
-          id: "s23-ch3-unique-practice",
-          type: "practice" as const,
-          title: "✋ 처음부터 — 중복 제거 후 개수 출력",
-          content: `**문제**: N 개의 정수가 주어질 때, **중복 제거 후 서로 다른 정수의 개수** 를 출력하세요.
-
-\`\`\`
-입력: 8
-      3 1 4 1 5 9 2 6
-출력: 7
-
-입력: 5
-      2 2 2 2 2
-출력: 1
-\`\`\`
-
-> 💡 \`sort\` → \`erase(unique(...), end())\` 패턴 후 \`v.size()\` 출력. 한 줄로 끝.`,
-          starterCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 👇 sort + unique + erase 후 v.size() 출력
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    sort(v.begin(), v.end());
-    v.erase(unique(v.begin(), v.end()), v.end());
-    cout << v.size();
-    return 0;
-}`,
-          hint: "sort(v.begin(), v.end()); v.erase(unique(v.begin(), v.end()), v.end()); cout << v.size(); — sort 먼저 (unique 는 인접 중복만 제거).",
-          expectedOutput: `7`,
-          stdin: `8
-3 1 4 1 5 9 2 6`,
-        },
-        {
-          id: "s23-ch3-stable",
-          type: "explain",
-          title: "📊 stable_sort — 동점 시 원래 순서 보존",
-          content: `\`sort()\` 는 **빠른** 정렬이지만 한 가지 단점 있어요: **같은 값일 때 원래 순서가 보장 안 돼요.** 학생 데이터에선 이게 문제될 수 있어요.
-
-\`\`\`cpp
-vector<pair<string, int>> students = {
-    {"Alice", 90}, {"Bob", 80}, {"Carol", 90}, {"Dave", 80}
-};
-
-sort(students.begin(), students.end(), [](auto a, auto b) {
-    return a.second > b.second;   // 점수 내림차순
-});
-\`\`\`
-
-여기서 Alice (90), Carol (90) 의 순서가 **입력 순서대로 (Alice 먼저)** 보장될까? **sort 는 보장 안 함.** 컴파일러/구현마다 다르게 나올 수 있어요.
-
-### \`stable_sort\` — 같은 값이면 원래 순서 유지
-
-\`\`\`cpp
-stable_sort(students.begin(), students.end(), [](auto a, auto b) {
-    return a.second > b.second;
-});
-// → 동점 시 항상 입력 순서 유지 (Alice → Carol, Bob → Dave)
-\`\`\`
-
-| | sort | stable_sort |
-|---|---|---|
-| 속도 | 더 빠름 (O(N log N)) | 약간 느림 (O(N log² N)) |
-| 동점 시 | 순서 보장 X | 입력 순서 유지 ✅ |
-| 언제 | 동점 신경 안 쓸 때 | 동점 순서가 의미 있을 때 |
-
-> 💡 **순위표 / 안정성 필요한 데이터** 는 stable_sort. 일반 정렬은 sort. 99% 는 sort 면 충분.`
-        },
-        {
-          id: "s23-ch3-stable-practice",
-          type: "practice" as const,
-          title: "✋ 처음부터 — stable_sort 직접 써보기",
-          content: `**문제**: 학생 4 명 (이름, 점수). 점수 내림차순 정렬, **동점이면 입력 순서 유지**.
-
-> 💡 \`stable_sort\` + lambda 로 점수 내림차순. 동점은 자동으로 입력 순서 유지됨. 입력/정답은 아래 박스 참고.`,
-          starterCode: `#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    // 👇 stable_sort 로 점수 내림차순 (동점은 입력 순서)
-
-    // 👇 한 줄에 한 명씩 "이름 점수" 출력
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    stable_sort(v.begin(), v.end(), [](auto a, auto b) {
-        return a.second > b.second;
-    });
-    for (auto& [name, score] : v) {
-        cout << name << " " << score << "\\n";
-    }
-    return 0;
-}`,
-          hint: "stable_sort(v.begin(), v.end(), [](auto a, auto b) { return a.second > b.second; }); — sort 자리에 stable_sort 만 바꾸면 됨.",
-          expectedOutput: `Alice 90
-Carol 90
-Bob 80
-Dave 80`,
-          stdin: `4
-Alice 90
-Bob 80
-Carol 90
-Dave 80`,
-        },
-      ]
-    },
-
-    // ============================================
-    // Chapter 4: 람다와 STL 일반 알고리즘
-    //   sort 에서 익힌 람다를 다른 algorithm 함수에도 적용.
-    //   count_if / find_if / accumulate — STL 의 단골들.
-    // ============================================
-    {
-      id: "s23-ch4",
-      title: "람다 + STL 일반 알고리즘",
-      emoji: "🔍",
-      steps: [
-        {
-          id: "s23-ch4-intro",
-          type: "explain",
-          title: "🤔 sort 의 람다, 다른 데서도 통할까?",
-          content: `\`sort\` 에 람다 비교 함수 넣었던 거 기억나죠?
-
-\`\`\`cpp
-sort(v.begin(), v.end(), [](int a, int b) { return a > b; });
-\`\`\`
-
-이 패턴 — \`(begin, end, 람다)\` — 사실 \`<algorithm>\` 의 거의 모든 함수에 통해요. 정렬 외에도:
-
-- "**조건을 만족하는 원소가 몇 개?**" → \`count_if\`
-- "**조건을 만족하는 첫 원소는?**" → \`find_if\`
-- "**모든 원소를 다 더하면?**" → \`accumulate\` (\`<numeric>\`)
-
-> 💡 **왜 알아둘 가치가 있나요?**
-> for 루프로 직접 짜도 되긴 하는데, 위 함수들은 **의도가 한 줄에 드러남**. \`count_if(..., 조건)\` 보면 "아, 조건 맞는 거 세는구나" 가 즉시 보임. 코드 리뷰/대회에서 가독성 큼.`
-        },
-        {
-          id: "s23-ch4-count-if",
-          type: "explain",
-          title: "🔢 count_if — 조건 맞는 원소 개수",
-          content: `**문제:** 점수 벡터에서 80 점 이상이 몇 명?
-
-### 옛날 방식 (for 루프)
-\`\`\`cpp
-int cnt = 0;
-for (int x : scores) {
-    if (x >= 80) cnt++;
-}
-\`\`\`
-
-### \`count_if\` 한 줄
-\`\`\`cpp
-int cnt = count_if(scores.begin(), scores.end(),
-                   [](int x){ return x >= 80; });
-\`\`\`
-
-### 인자 구조 (sort 와 똑같음)
-| 자리 | 의미 |
-|---|---|
-| 1 번째 | 시작 iterator (\`v.begin()\`) |
-| 2 번째 | 끝 iterator (\`v.end()\`) |
-| 3 번째 | **bool 리턴 람다** — true 면 카운트 |
-
-> 💡 **\`count\` 와 차이?**
-> - \`count(b, e, x)\` — **값 x 와 같은 것** 만 셈
-> - \`count_if(b, e, pred)\` — **조건 (람다)** 을 만족하는 것 셈 (훨씬 유연)`
-        },
-        {
-          id: "s23-ch4-count-if-predict",
-          type: "predict" as const,
-          title: "출력 예측",
-          content: `\`\`\`cpp
-vector<int> v = {10, 25, 30, 45, 50, 65};
-int cnt = count_if(v.begin(), v.end(),
-                   [](int x){ return x % 5 == 0 && x > 30; });
-cout << cnt;
-\`\`\`
-
-cnt 값은?`,
-          options: ["4", "3", "2", "5"],
-          answer: 1,
-          explanation: "5 의 배수이면서 30 보다 큰 것: 45, 50, 65 → 3 개. (10, 25, 30 은 30 초과 조건 X.)"
-        },
-        {
-          id: "s23-ch4-find-if",
-          type: "explain",
-          title: "🎯 find_if — 조건 맞는 첫 원소",
-          content: `**문제:** 벡터에서 첫 번째 짝수 찾기.
-
-\`\`\`cpp
-vector<int> v = {3, 7, 4, 9, 6};
-auto it = find_if(v.begin(), v.end(),
-                  [](int x){ return x % 2 == 0; });
-
-if (it != v.end()) {
-    cout << *it;        // 4
-} else {
-    cout << "없음";
-}
-\`\`\`
-
-### 핵심 패턴
-- \`find_if\` 는 **iterator** 를 돌려줘요 (값 X)
-- 못 찾으면 \`v.end()\` 반환 → \`!= v.end()\` 로 체크
-- 값을 쓰려면 \`*it\` (역참조)
-- 인덱스가 필요하면 \`it - v.begin()\`
-
-> 💡 **\`find\` 와 차이?**
-> - \`find(b, e, x)\` — **값 x 자체** 찾기
-> - \`find_if(b, e, pred)\` — **조건 (람다)** 만족 첫 원소 찾기`
-        },
-        {
-          id: "s23-ch4-accumulate",
-          type: "explain",
-          title: "➕ accumulate — 다 더하기 (또는 다 곱하기)",
-          content: `**문제:** 점수 합계, 평균 구하기.
-
-\`\`\`cpp
-#include <numeric>     // ⚠️ <algorithm> 아니라 <numeric>!
-
-vector<int> v = {10, 20, 30, 40};
-
-int sum = accumulate(v.begin(), v.end(), 0);
-//                                       ↑ 시작값 (sum 의 초깃값 0)
-cout << sum;     // 100
-\`\`\`
-
-### 시작값을 잘 설정하면 응용 가능
-\`\`\`cpp
-// 합계: 시작 0
-accumulate(v.begin(), v.end(), 0);          // 100
-
-// 곱: 시작 1, 4 번째 인자에 곱셈 함수
-#include <functional>
-accumulate(v.begin(), v.end(), 1, multiplies<int>());   // 10*20*30*40 = 240000
-
-// 람다로 커스텀: 제곱의 합
-accumulate(v.begin(), v.end(), 0,
-           [](int acc, int x){ return acc + x * x; });   // 100+400+900+1600 = 3000
-\`\`\`
-
-### 평균 한 줄
-\`\`\`cpp
-double avg = (double)accumulate(v.begin(), v.end(), 0) / v.size();
-\`\`\`
-
-> ⚠️ **\`<numeric>\` 헤더** 따로 \`#include\` 필요. 자주 까먹어서 컴파일 에러 일 위!`
-        },
-        {
-          id: "s23-ch4-practice",
-          type: "practice" as const,
-          title: "✋ 처음부터 — 80 점 이상 학생 수 + 합계",
-          content: `**문제:** 학생 5 명 점수를 입력받아:
-1. 80 점 이상인 학생 수
-2. 전체 합계
-
-를 한 줄에 공백으로 구분해 출력.
-
-> 💡 \`count_if\` 로 1 번, \`accumulate\` 로 2 번. 둘 다 한 줄로 해결 가능.
-> ⚠️ \`accumulate\` 는 \`<numeric>\` 필요!`,
-          starterCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <numeric>
-using namespace std;
-
-int main() {
-    vector<int> scores(5);
-    for (int i = 0; i < 5; i++) cin >> scores[i];
-    // 👇 80 점 이상 개수, 합계 구해서 한 줄에 출력
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <numeric>
-using namespace std;
-
-int main() {
-    vector<int> scores(5);
-    for (int i = 0; i < 5; i++) cin >> scores[i];
-    int high = count_if(scores.begin(), scores.end(),
-                        [](int x){ return x >= 80; });
-    int total = accumulate(scores.begin(), scores.end(), 0);
-    cout << high << " " << total << endl;
-    return 0;
-}`,
-          hint: "count_if(scores.begin(), scores.end(), [](int x){ return x >= 80; }); + accumulate(scores.begin(), scores.end(), 0); — 두 줄로 끝.",
-          expectedOutput: `3 380`,
-          stdin: `90 65 80 75 70`,
-        },
-        {
-          id: "s23-ch4-summary",
-          type: "explain",
-          title: "🎉 레슨 23 완료! sort + STL 알고리즘 마스터!",
-          content: `## 🏆 레슨 23 완료! 대단해요!
-
-### 📊 sort 기초
-- **sort(v.begin(), v.end())** → 오름차순 (기본)
-- **sort(v.begin(), v.end(), greater<int>())** → 내림차순
-- \`#include <algorithm>\` 필요!
-
-### 🔧 람다 (lambda)
-- **문법:** \`[](타입 a, 타입 b) { return a > b; }\`
-- **규칙:** true 리턴 → 첫 번째 인자(a)가 앞으로
-- pair, struct 등 커스텀 기준 정렬에 필수!
-- \`greater<int>()\`는 내림차순 람다를 미리 만든 것
-
-### 🔍 lower_bound & upper_bound
-- **반드시 정렬된 배열에서만 사용!** (이진 탐색 원리)
-- **lower_bound(begin, end, x)**: x **이상**의 첫 번째 위치
-- **upper_bound(begin, end, x)**: x **초과**의 첫 번째 위치
-- 인덱스로 변환: \`- v.begin()\`
-
-### 🧹 심화 패턴
-- **sort + erase(unique(...), end())**: 중복 제거 (세트로 외울 것!)
-- **stable_sort**: 동점 원래 순서 유지
-
-### 🔍 람다 + STL 일반 알고리즘 ⭐ 신규
-- **count_if(b, e, pred)** — 조건 맞는 원소 개수
-- **find_if(b, e, pred)** — 조건 맞는 첫 원소 (iterator)
-- **accumulate(b, e, init)** — 합계/곱/커스텀 누적 (\`<numeric>\` 필요)
-- 패턴이 sort 와 똑같음: \`(begin, end, 람다)\`
-
-### 🐍 파이썬과의 핵심 차이!
-| 기능 | 파이썬 🐍 | C++ ⚡ |
-|---|---|---|
-| 람다 문법 | \`lambda x: x*2\` | \`[](int x){ return x*2; }\` |
-| 정렬 기준 | \`key=\` (값 1개 변환) | 비교 함수 (두 값 직접 비교) |
-| 이진 탐색 | \`bisect_left/right\` | \`lower_bound/upper_bound\` |
-| 중복 제거 | \`sorted(set(v))\` | \`sort + erase(unique)\` |
-| 조건 카운트 | \`sum(1 for x in v if x>=80)\` | \`count_if(b, e, pred)\` |
-| 합계 | \`sum(v)\` | \`accumulate(b, e, 0)\` |
-
-🚀 다음은 **map & set** — 자동으로 정렬되는 마법의 컨테이너!
-   그 다음 바로 **🏆 USACO 모의전 (cpp-p3)** — 이제 진짜 실전!`
+💡 한 lesson 에 너무 많이 담지 않으려고 옛 "sort 마스터" 를 셋으로 나눴어요. 사실은 **같은 흐름** — "정렬한다 → 정렬된 걸로 빠르게 검색한다 → 정렬 응용한다." 차근차근 가도 충분해요.`
         }
       ]
     }
+
   ]
 }

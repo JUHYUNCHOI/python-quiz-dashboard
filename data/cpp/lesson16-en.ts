@@ -257,7 +257,7 @@ if (scores.count("Bob") > 0) {
 }
 \`\`\`
 
-> 💡 There's also a \`find\` function — faster and more powerful, but it uses the **iterator** concept (the same "finger pointing to a position" you saw with \`lower_bound\` in the sort master lesson). We'll come back to it later in this chapter alongside \`count\`. For now, \`count\` is enough.
+> 💡 There's also a \`find\` function but it's a bit more complex. For now, \`count\` is enough.
 
 ---
 
@@ -329,7 +329,12 @@ Python's \`dict\` is actually more similar to C++'s \`unordered_map\`!
 | Header | \`<map>\` | \`<unordered_map>\` |
 | Python Equivalent | — | **dict** |
 
-💡 In most cases, \`unordered_map\` is faster! Only use \`map\` when you need sorted keys.`
+💡 In most cases, \`unordered_map\` is faster! Only use \`map\` when you need sorted keys.
+
+> 🎯 **Which one in USACO?**
+> • **map** — when the output requires sorted-by-key order ("print names alphabetically" etc.).
+> • **unordered_map** — frequency counting (\`freq[word]++\`), "seen before" tracking, anywhere order doesn't matter. Most common in Bronze.
+> • If unsure, start with **map**. If you TLE, switch to \`unordered_map\` (same API).`
         },
         {
           id: "ch1-practice",
@@ -653,104 +658,71 @@ cout << scores.empty() << endl;       // 0 (false, not empty)
 | \`len(d)\` | \`m.size()\` |
 | \`not d\` | \`m.empty()\` |
 
-> 💡 There's also \`find()\` — used "when you want the value in one go." It needs an **iterator**, which is the same idea you saw in the sort master lesson with \`lower_bound\`. We cover it later in this chapter. At this stage \`count\` + \`m[key]\` (two steps) is plenty.`,
+> 💡 Master these 4 and you can solve almost any map problem. (There's also a \`find\` function but it's a bit more complex — we don't cover it at this stage.)
+
+> 🎯 **How USACO actually uses map:**
+> • **Frequency counting** — <code>map&lt;string, int&gt; freq; for (word w) freq[w]++;</code> — how many times did each input word/number appear?
+> • **Name → score mapping** — <code>map&lt;string, int&gt; scores;</code> look up a student's score by name.
+> • **Coordinate → index mapping** — relabel huge coordinates (10⁹) to small indices.
+> • **"First seen time" tracking** — <code>if (!m.count(k)) m[k] = time;</code>
+> More than half of Bronze problems can be solved with \`map\`. Essentially required.`,
         },
         {
           id: "ch4-why-fast",
           type: "explain",
-          title: "🌳 Wait — why is map fast without \`sort\`?",
-          content: `In vector land we learned "sort → \`binary_search\` / \`lower_bound\`" (sort master lesson). But here we **never called \`sort\`** and \`m.count(key)\` is already fast. What's going on?
+          title: "🤔 Wait — why is map fast?",
+          content: `One thing a student might wonder:
 
----
+> "We had to call \`sort\` on a **vector** before fast lookups worked.
+> But **map** was never sorted, and \`m.count(key)\` is fast already?"
 
-### Answer: map keeps a **sorted tree** inside
+Good question! Short answer:
 
+> 📌 **map organizes itself every time you insert.**
+> So you never need to call \`sort\` — it's always in fast-lookup shape.
+
+\`\`\`cpp
+map<string, int> scores;
+scores["Carol"] = 92;   // map puts it in the right spot
+scores["Alice"] = 95;   // and again, in the right spot
+scores.count("Alice");  // fast! (no manual sort needed)
 \`\`\`
-vector:       [12, 3, 8, 1, 9]                ← just lined up, unsorted
-            → must sort before binary search
 
-map:                  "Bob"                    ← already a sorted tree (BST)
-                     /      \\                    each insert finds its own spot
-                "Alice"    "Carol"
-\`\`\`
+**In short:**
+- \`vector\` = just a line of values. Call \`sort\` yourself for fast lookup.
+- \`map\` = a self-organizing box. No \`sort\` needed.
 
-Every time you write \`m["Carol"] = 92\`, the map places that key **in the right spot in the tree** (O(log N)). Later lookups just walk the tree down → **O(log N)** as well.
-
----
-
-### So vector vs map — same job, different tools
-
-| Question | vector (sorted) | map |
-|---|---|---|
-| "is it there?" | \`binary_search(v, x)\` | **\`m.count(key)\`** |
-| "where is it?" | \`lower_bound(v, x)\` | **\`m.find(key)\`** |
-| "first ≥ key?" | \`lower_bound(v, x)\` | **\`m.lower_bound(key)\`** |
-
-map already carries tree-search code inside, so \`.count\` / \`.find\` / \`.lower_bound\` are its **member** functions. All O(log N).
-
-> 📌 **One line summary**: vector = "sort + algorithm function", map = "**member function**". Both deliver O(log N) on sorted data — the tools just come from different places.
-
-> ⚠️ Same-name trap — \`std::count(v.begin(), v.end(), x)\` on a vector is **O(N)**, slow. Same name as \`m.count(key)\` but a **completely different function** — same warning we hit in the sort master lesson.`
+At this stage that's all you need. **How** map organizes itself comes later when we cover data structures. For now just remember: **map is fast — trust it and use \`m.count\`.**`
         },
         {
           id: "ch4-func-cf",
           type: "explain",
-          title: "🔑 When \`find\` is the better pick — value in one go",
-          content: `Checking with \`count\` then reading with \`m[key]\` is **two steps**. Behind the scenes it searches the same key twice — a tiny bit wasteful.
+          title: "💡 Deleting while iterating — the safe pattern",
+          content: `Iterating a map and calling \`erase\` **at the same time** is dangerous. The spot you were walking through disappears and the code breaks.
 
 \`\`\`cpp
-if (m.count("Emma") > 0) {   // search #1
-    cout << m["Emma"];        // search #2 — same key looked up again
+// ❌ Dangerous — erase while iterating
+for (auto& [k, v] : m) {
+    if (v < 0) m.erase(k);     // breaks!
 }
 \`\`\`
 
-On small maps this is invisible. On **maps with hundreds of thousands of entries**, doing this per query starts to add up.
-
-C++ has a "one-shot" way — \`find()\` + **iterator**.
+**Safe pattern: split into 2 steps.**
 
 \`\`\`cpp
-auto it = m.find("Emma");    // single search, returns the position
-if (it != m.end()) {
-    cout << it->second;       // use the value directly (no re-search)
-}
-\`\`\`
-
----
-
-### Where did we see iterator before?
-
-🔁 **Sort master lesson** ch2, alongside \`lower_bound\` — "a finger pointing to a position, like a pointer." The **same idea** works on map:
-
-| | vector (sort master) | map (now) |
-|---|---|---|
-| Get position | \`auto it = lower_bound(v.begin(), v.end(), 5)\` | \`auto it = m.find("Emma")\` |
-| Read value | \`*it\` → 5 | \`it->second\` → 95 |
-| Not found check | \`it == v.end()\` | \`it == m.end()\` |
-
-The reason map uses \`it->second\` instead of \`*it\` is that map's elements are **pairs** (key, value). \`it->first\` is the key, \`it->second\` is the value.
-
-> 💡 Summary: **just checking** → \`count\`. **value too** → \`find\` + iterator (the same pattern from the sort master lesson).
-
----
-
-### 💡 Deleting while iterating — the easiest pattern
-
-If you iterate \`for(auto& [k,v] : m)\` and call \`m.erase\` at the same time, the iterator gets invalidated. Safer pattern:
-
-\`\`\`cpp
-// 1) Collect the keys to delete
+// ✅ 1) Collect keys to delete first
 vector<string> toDelete;
 for (auto& [k, v] : m) {
     if (v < 0) toDelete.push_back(k);
 }
 
-// 2) Delete after the loop finishes
+// ✅ 2) Delete after the loop finishes
 for (auto& k : toDelete) {
     m.erase(k);
 }
 \`\`\`
 
-Iteration and deletion **separated** — safe and easy to read.`
+Never delete while iterating — **collect first, then delete.** That's the rule.`
         },
         {
           id: "ch4-pred1",
@@ -954,7 +926,14 @@ s.empty();         // true if empty
 | \`len(s)\` | \`s.size();\` |
 | \`not s\` | \`s.empty();\` |
 
-> 💡 Functions look almost identical to \`map\`'s. **The one difference** — set has only keys (no values), so set's find/count just tell you whether the value exists.`
+> 💡 Functions look almost identical to \`map\`'s. **The one difference** — set has only keys (no values), so set's find/count just tell you whether the value exists.
+
+> 🎯 **How USACO actually uses set:**
+> • **"Seen before?" tracking** — <code>set&lt;string&gt; seen;</code> quick check for repeated words/coordinates/IDs.
+> • **Count of distinct items** — drop everything into a \`set\`, then <code>s.size()</code> is the answer.
+> • **Visited positions** — in grid BFS/DFS, <code>set&lt;pair&lt;int,int&gt;&gt;</code> tracks visited coordinates.
+> • **Maintain sorted state while inserting** — streaming data that you always want sorted.
+> "Is it in?" + "no duplicates" + "sorted" — when those three are needed at once, almost always \`set\`.`
         },
         {
           id: "ch2-vs-sort-unique",

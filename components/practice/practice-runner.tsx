@@ -10,6 +10,8 @@ import { localizeProblem } from "@/data/practice/types"
 import { useLanguage } from "@/contexts/language-context"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
+import { CodeEditorWithGutter, parseErrorLine } from "@/components/cpp/code-editor-with-gutter"
+import { getErrorHint } from "@/components/cpp/error-hint"
 
 // ── Inline-style syntax highlighters (no external CSS needed) ──
 
@@ -321,10 +323,11 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
             <RotateCcw className="w-3 h-3" /> {t("초기화", "Reset")}
           </button>
         </div>
-        <SimpleEditor
+        <CodeEditorWithGutter
           value={code}
           onValueChange={c => setCode(c)}
           highlight={c => highlightCode(c, lang)}
+          errorLine={parseErrorLine(error)}
           padding={16}
           style={{ fontFamily: "monospace", fontSize: 14, minHeight: 260, color: "#cdd6f4", background: "transparent" }}
         />
@@ -357,8 +360,33 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
 
       {/* 컴파일 오류 */}
       {error && (
-        <div className="rounded-xl bg-red-50 border border-red-200 p-4">
-          <p className="text-red-600 text-sm font-mono whitespace-pre-wrap">{error}</p>
+        <div className="rounded-xl bg-red-50 border border-red-200 p-4 space-y-2">
+          {(() => {
+            const hint = getErrorHint(error, isEn ? "en" : "ko")
+            const errLn = parseErrorLine(error)
+            return (
+              <>
+                {(hint || errLn) && (
+                  <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-amber-900 text-sm leading-relaxed">
+                    {errLn && (
+                      <span className="font-bold mr-1">
+                        {isEn ? `Line ${errLn}: ` : `${errLn}번 줄: `}
+                      </span>
+                    )}
+                    {hint || (isEn
+                      ? "Check the highlighted line — that's where the compiler stopped."
+                      : "강조된 줄을 확인해보세요 — 거기서 컴파일러가 멈췄어요.")}
+                  </div>
+                )}
+                <details>
+                  <summary className="text-red-700 text-xs font-bold cursor-pointer select-none">
+                    {isEn ? "Show raw compiler output" : "원본 컴파일러 메시지 보기"}
+                  </summary>
+                  <p className="text-red-600 text-xs font-mono whitespace-pre-wrap mt-2">{error}</p>
+                </details>
+              </>
+            )
+          })()}
         </div>
       )}
 

@@ -257,7 +257,7 @@ if (scores.count("Bob") > 0) {
 }
 \`\`\`
 
-> 💡 \`find\` 라는 함수도 있어요. 더 빠르고 강력한데 **iterator** 를 다뤄야 해요 (sort 마스터 레슨에서 본 그 \`lower_bound\` 처럼 — "위치를 가리키는 손가락"). 이 챕터 뒤쪽에서 \`count\` 와 비교해서 짚어요. 지금은 \`count\` 만 알아도 충분.
+> 💡 \`find\` 라는 함수도 있는데 조금 더 복잡해요. 지금은 \`count\` 만 알면 충분.
 
 ---
 
@@ -329,7 +329,12 @@ scores["Bob"] = 87;
 | 헤더 | \`<map>\` | \`<unordered_map>\` |
 | 파이썬 유사 | 없음 | **dict** |
 
-💡 대부분의 경우 \`unordered_map\`이 더 빨라요! 키 정렬이 필요할 때만 \`map\`을 써요.`
+💡 대부분의 경우 \`unordered_map\`이 더 빨라요! 키 정렬이 필요할 때만 \`map\`을 써요.
+
+> 🎯 **USACO 에서 어느 거 써?**
+> • **map** — "키 순서대로 출력해야 함" 또는 "이름 알파벳순 결과" 같은 정렬 출력이 답에 필요할 때.
+> • **unordered_map** — 빈도 카운팅 (\`freq[word]++\`), 본 적 추적 등 **순서 상관없는 경우**. Bronze 에서 가장 흔함.
+> • 헷갈리면 우선 **map** 으로 짜고, 시간 초과 (TLE) 나면 \`unordered_map\` 으로 바꿈. 둘 다 사용법 동일.`
         },
         {
           id: "ch1-practice",
@@ -654,104 +659,71 @@ cout << scores.empty() << endl;      // 0 (false, 비어있지 않음)
 | \`len(d)\` | \`m.size()\` |
 | \`not d\` | \`m.empty()\` |
 
-> 💡 \`find()\` 라는 함수도 있어요 — "값까지 한 번에 받고 싶을 때" 쓰는 도구. iterator 가 필요한데, 이건 **sort 마스터 레슨에서 \`lower_bound\` 와 함께 이미 배운 그 개념** 이에요. 이 챕터 뒤쪽에서 \`count\` 와 비교해 짚어요. 지금 단계에서는 \`count\` + \`m[key]\` 두 단계로 충분해요.`
+> 💡 위 4 개만 익히면 map 으로 풀 수 있는 문제 거의 다 풀려요. (\`find\` 라는 함수도 있는데 조금 더 복잡해서 이 단계에선 안 다뤄요.)
+
+> 🎯 **USACO 에서 map 이 진짜 자주 쓰이는 상황:**
+> • **빈도 카운팅** — <code>map&lt;string, int&gt; freq; for (단어) freq[w]++;</code> — 입력에 나온 단어/숫자 각각 몇 번 등장?
+> • **이름 → 점수 매핑** — <code>map&lt;string, int&gt; scores;</code> 학생 이름으로 점수 조회.
+> • **좌표 → 인덱스 매핑** — 큰 좌표 (10⁹) 를 작은 번호로 재매김.
+> • **"이 키가 처음 등장한 시각"** 추적 — <code>if (!m.count(k)) m[k] = time;</code>
+> Bronze 문제의 절반 이상이 \`map\` 으로 풀려요. 사실상 필수.`
         },
         {
           id: "ch4-why-fast",
           type: "explain",
-          title: "🌳 잠깐 — map 은 왜 \`sort\` 안 해도 빨라?",
-          content: `vector 에서는 "정렬 → \`binary_search\` / \`lower_bound\`" 패턴을 배웠죠 (sort 마스터 레슨). 근데 map 은 **\`sort\` 한 적이 없는데** \`m.count(key)\` 가 빨라요. 이상하지 않아요?
+          title: "🤔 잠깐 — map 은 왜 빨라?",
+          content: `학생이 한 가지 궁금할 수 있어요:
 
----
+> "**vector** 는 \`sort\` 한 다음에야 빠른 검색이 됐잖아.
+> **map** 은 \`sort\` 한 적도 없는데 \`m.count(key)\` 가 왜 빠르지?"
 
-### 답: map 은 **속에 이미 정렬된 트리** 가 들어있음
+좋은 질문! 답은 간단해요:
 
+> 📌 **map 은 값을 넣을 때마다 알아서 정리해요.**
+> 그래서 굳이 \`sort\` 안 해도 항상 빠른 상태.
+
+\`\`\`cpp
+map<string, int> scores;
+scores["Carol"] = 92;   // map 이 알아서 적당한 자리에 넣음
+scores["Alice"] = 95;   // 또 적당한 자리에 넣음
+scores.count("Alice");  // 빨라요! (직접 정렬 안 했어도)
 \`\`\`
-vector:       [12, 3, 8, 1, 9]                ← 그냥 줄지어 있음, 안 정렬됨
-            → sort 해야 이진탐색 가능
 
-map:                  "Bob"                    ← 처음부터 정렬된 트리 (BST)
-                     /      \\                    값 하나 넣을 때마다 알아서 자리 잡음
-                "Alice"    "Carol"
-\`\`\`
+**정리하면:**
+- \`vector\` = 그냥 줄 세워 놓은 거. 빠른 검색 하려면 \`sort\` 직접 호출.
+- \`map\` = 알아서 정리되는 상자. \`sort\` 신경 쓸 필요 없음.
 
-값을 \`m["Carol"] = 92\` 로 넣을 때마다 map 이 **트리 안에서 알맞은 자리** 에 넣어줘요 (O(log N)). 그래서 나중에 찾을 때도 트리 따라 내려가면 끝 → **O(log N)**.
-
----
-
-### 그래서 vector vs map — 같은 일을 다른 도구로
-
-| 질문 | vector (정렬됨) | map |
-|---|---|---|
-| "있나?" | \`binary_search(v, x)\` | **\`m.count(key)\`** |
-| "어디?" | \`lower_bound(v, x)\` | **\`m.find(key)\`** |
-| "key 이상 첫 거?" | \`lower_bound(v, x)\` | **\`m.lower_bound(key)\`** |
-
-map 은 자기 안에 트리 탐색 코드를 **이미 가지고 있어서** \`.count\` / \`.find\` / \`.lower_bound\` 다 자기 멤버 함수예요. 다 O(log N).
-
-> 📌 **한 줄 정리**: vector 는 "sort + algorithm 함수", map 은 "**자기 멤버 함수**". 둘 다 정렬된 데이터에서 O(log N) 으로 같은 속도. 도구가 다른 곳에서 올 뿐.
-
-> ⚠️ 헷갈림 주의 — vector 에서 쓰는 \`std::count(v.begin(), v.end(), x)\` 는 **O(N)** 으로 느려요. 같은 이름이지만 \`m.count(key)\` 와는 **완전히 다른 함수**. sort 마스터 레슨에서 봤던 그 경고예요.`
+학생 수준에서는 **이 정도만 알면 충분.** "어떻게 알아서 정리하는지" 는 나중에 자료구조 배울 때 자세히. 지금은 그냥 **"map 은 빠르다"** 만 외워두면 OK.`
         },
         {
           id: "ch4-func-cf",
           type: "explain",
-          title: "🔑 find 가 가끔 더 좋은 순간 — 값까지 한 번에",
-          content: `\`count\` 로 확인하고 \`m[key]\` 로 값 읽는 건 **2 단계** 예요. 사실 키를 두 번 탐색하니까 살짝 낭비.
+          title: "💡 순회 중 삭제 — 안전한 패턴",
+          content: `map 을 돌면서 **동시에** \`erase\` 하면 위험해요. 한 칸씩 가던 자리가 사라져서 코드가 꼬여요.
 
 \`\`\`cpp
-if (m.count("Alice") > 0) {   // 탐색 1 번
-    cout << m["Alice"];        // 탐색 2 번 — 같은 키를 또 찾음
+// ❌ 위험 — 순회하면서 erase
+for (auto& [k, v] : m) {
+    if (v < 0) m.erase(k);     // 위험!
 }
 \`\`\`
 
-작은 map 에선 차이 없어요. **수십만 개 짜리 map** 에서 이걸 매 쿼리마다 하면 차이가 보이기 시작해요.
-
-C++ 에는 "한 번에 끝내는" 방법이 있어요 — \`find()\` 와 **iterator**.
+**안전한 패턴: 2 단계로 나누기.**
 
 \`\`\`cpp
-auto it = m.find("Alice");    // 탐색 한 번에 위치까지 받음
-if (it != m.end()) {
-    cout << it->second;        // 값 바로 사용 (재탐색 없음)
-}
-\`\`\`
-
----
-
-### iterator 는 어디서 배웠죠?
-
-🔁 **sort 마스터 레슨** ch2 에서 \`lower_bound\` 와 함께 처음 봤어요 — "포인터처럼 위치를 가리키는 손가락". map 에서도 **똑같이** 통해요:
-
-| | vector (sort 마스터) | map (지금) |
-|---|---|---|
-| 위치 얻기 | \`auto it = lower_bound(v.begin(), v.end(), 5)\` | \`auto it = m.find("Alice")\` |
-| 값 보기 | \`*it\` → 5 | \`it->second\` → 95 |
-| 못 찾으면 | \`it == v.end()\` | \`it == m.end()\` |
-
-map 만 \`*it\` 가 아닌 \`it->second\` 인 이유는 — map 의 원소가 **pair** (키, 값) 라서. \`it->first\` 는 키, \`it->second\` 는 값.
-
-> 💡 정리: **있는지만** → \`count\`. **값까지 같이** → \`find\` + iterator (sort 마스터 레슨 패턴 그대로).
-
----
-
-### 💡 순회 중 삭제 — 가장 쉬운 패턴
-
-map 을 \`for(auto& [k,v] : m)\` 로 돌면서 동시에 \`m.erase\` 하면 위험해요 (iterator 망가짐). 안전한 패턴:
-
-\`\`\`cpp
-// 1) 지울 키만 따로 모아두고
+// ✅ 1) 지울 키를 먼저 따로 모으기
 vector<string> toDelete;
 for (auto& [k, v] : m) {
     if (v < 0) toDelete.push_back(k);
 }
 
-// 2) 루프 끝난 다음 삭제
+// ✅ 2) 순회 끝난 다음 삭제
 for (auto& k : toDelete) {
     m.erase(k);
 }
 \`\`\`
 
-순회와 삭제를 **분리** — 안전하고 읽기 쉬움.`
+순회하면서 지우지 말고, **모은 다음** 지우기. 이게 핵심.`
         },
         {
           id: "ch4-pred1",
@@ -954,7 +926,14 @@ s.empty();         // 비어있으면 true
 | \`len(s)\` | \`s.size();\` |
 | \`not s\` | \`s.empty();\` |
 
-> 💡 거의 \`map\` 과 똑같은 함수 이름. **차이는 단 하나** — set 은 키만 (값 없음), map 은 키-값. 그래서 set 의 find/count 는 그 값이 있는지만 알려줘요.`
+> 💡 거의 \`map\` 과 똑같은 함수 이름. **차이는 단 하나** — set 은 키만 (값 없음), map 은 키-값. 그래서 set 의 find/count 는 그 값이 있는지만 알려줘요.
+
+> 🎯 **USACO 에서 set 이 진짜 자주 쓰이는 상황:**
+> • **"본 적 있나?" 추적** — <code>set&lt;string&gt; seen;</code> 단어/좌표/ID 가 이미 등장했는지 빠른 체크.
+> • **중복 제거된 종류 수** — 입력에 중복 섞여 있을 때 <code>set</code> 에 다 넣고 <code>s.size()</code> 가 답.
+> • **방문한 위치** — 격자 BFS/DFS 에서 <code>set&lt;pair&lt;int,int&gt;&gt;</code> 로 이미 방문한 좌표 추적.
+> • **정렬된 상태 유지하며 추가** — 데이터가 흘러 들어오는데 항상 정렬된 순서로 봐야 할 때.
+> "있나/없나" + "중복 안 됨" + "정렬" — 이 셋이 동시에 필요하면 거의 set.`
         },
         {
           id: "ch2-vs-sort-unique",

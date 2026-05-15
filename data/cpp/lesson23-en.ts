@@ -96,6 +96,9 @@ sort(v.begin(), v.end());
 
 In C++, sort always **modifies in place**. Need a sorted copy? Copy the vector first, then sort the copy.
 
+> 🎯 **How USACO uses it:**
+> Appears in **almost every problem**. Sorting student scores, coordinates, prices, names. "Read data → sort first → then solve" is the most common opening of a USACO Bronze solution.
+
 ### Same thing for arrays
 
 \`\`\`cpp
@@ -213,7 +216,12 @@ sort() accepts a **third argument** for the comparison rule.
 | Ascending | \`sort(v.begin(), v.end())\` | 1 2 5 8 9 |
 | Descending | \`sort(v.begin(), v.end(), greater<int>())\` | 9 8 5 2 1 |
 
-💡 No third argument = ascending by default!`
+💡 No third argument = ascending by default!
+
+> 🎯 **When do you need descending in USACO?**
+> • "Print top 3 students" → sort scores descending, take first 3
+> • "List most expensive first" → price descending
+> • Greedy problems like "apply largest first" — the sort direction decides the answer`
         },
         {
           id: "s23-ch0-fb2",
@@ -477,6 +485,39 @@ sort(v.begin(), v.end(), [](int a, int b) {
     return a > b;
 });
 // v = {9, 8, 5, 2, 1}  (descending)
+\`\`\`
+
+---
+
+### ⚠️ Common mistake — returning a value ❌
+
+The lambda must return **only bool (true/false)**. **Returning a value (an int like \`a\` or \`b\`) causes a compile error.**
+
+\`\`\`cpp
+// ❌ Wrong — returns an int (error: inconsistent types 'bool' and 'int')
+sort(v.begin(), v.end(), [](int a, int b) {
+    if (a < b) return a;     // ← returning the value itself ❌
+    else return b;
+});
+
+// ✅ Right — return a bool comparison only
+sort(v.begin(), v.end(), [](int a, int b) {
+    return a < b;             // ← "should a come before b?" true/false
+});
+\`\`\`
+
+**Why**: sort asks "**should a come before b?**" and expects **YES/NO** only. If you return the value itself, sort can't interpret it.
+
+### Tiebreaks follow the same rule
+
+Sort by absolute value, with smaller value first on ties:
+
+\`\`\`cpp
+// ✅ Tiebreak also returns bool only
+sort(v.begin(), v.end(), [](int a, int b) {
+    if (abs(a) != abs(b)) return abs(a) < abs(b);   // primary: abs comparison
+    return a < b;                                    // tiebreak: smaller value first
+});
 \`\`\``
         },
         {
@@ -485,12 +526,13 @@ sort(v.begin(), v.end(), [](int a, int b) {
           title: "📋 Common lambda forms — cheatsheet",
           content: `Sort lambdas boil down to a few patterns. Memorize these and you're set:
 
-| Lambda | Sort result |
-|---|---|
-| \`[](int a, int b){ return a < b; }\` | ascending (sort default) |
-| \`[](int a, int b){ return a > b; }\` | descending |
-| \`[](int a, int b){ return abs(a) < abs(b); }\` | absolute value ascending |
-| \`[](auto a, auto b){ return a.second < b.second; }\` | by pair's second |
+| Lambda | Sort result | USACO scenario |
+|---|---|---|
+| \`[](int a, int b){ return a < b; }\` | ascending (default) | basic sort for scores, coordinates, prices |
+| \`[](int a, int b){ return a > b; }\` | descending | "print rank 1 first" / "top K students" |
+| \`[](int a, int b){ return abs(a) < abs(b); }\` | absolute value ascending | "nearest to origin" / "smallest change first" |
+| \`[](auto a, auto b){ return a.second < b.second; }\` | by pair's second | (name, score) → by score / (time, id) → by time |
+| \`[](auto a, auto b){ return a.score > b.score; }\` | struct's \`score\` descending | character (name, hp, score) sorted by score |
 
 ### 💡 \`auto\` parameters — handy for pair/struct sorting
 
@@ -608,7 +650,14 @@ sort(v.begin(), v.end(), [](auto a, auto b) {
         return a.second > b.second;  // higher score first
     return a.first < b.first;        // tied score: alphabetical
 });
-\`\`\``
+\`\`\`
+
+> 🎯 **How USACO uses it:**
+> • **Coordinate sorting** — \`pair<int, int>\` as (x, y) points. Sort by y, ties by x.
+> • **Event sorting** — (start time, event id). Process in chronological order.
+> • **Leaderboards** — (name, score). Descending by score, ties alphabetical.
+> • **Distance + index** — (distance, original index). Sort by distance, recover original index.
+> Almost every Bronze problem that pairs two values uses this.`
         },
         {
           id: "s23-ch1-pred1",
@@ -828,986 +877,41 @@ banana hi apple ok cat`,
     },
 
     // ============================================
-    // Chapter 2: Searching in Sorted Arrays
+    // Chapter 2: Wrap-up — sort basics done!
     // ============================================
     {
-      id: "s23-ch2",
-      title: "Searching in Sorted Arrays",
-      emoji: "🔍",
+      id: "s23-wrap",
+      title: "Wrap-up",
+      emoji: "🎉",
       steps: [
         {
-          id: "s23-ch2-linear",
-          type: "animation" as const,
-          title: "🔎 Linear Search — Checking One by One",
-          component: "linearSearch",
-          content: `You've now mastered sort. There's another big reason sorted data matters — **search becomes much faster.** Let's get into that.
-
-First, see what happens when data is **not** sorted. Imagine finding **"Kim"** in a phone book.
-
-The simplest approach: flip through **one page at a time** from page 1.
-
-Page 1... nope. Page 2... nope. Page 3...
-
-A 500-page book could take **500 checks** in the worst case. Arrays are the same — **1 million elements = up to 1 million checks.**
-
-Press the button to follow along!`,
-        },
-        {
-          id: "s23-ch2-binary",
-          type: "animation" as const,
-          title: "⚡ Binary Search — Open the Middle First",
-          component: "binarySearch",
-          content: `When looking for "Kim" in a phone book, do you start at page 1?
-
-**No.** K is around the middle of the alphabet, so naturally you **open to the middle.**
-
-This only works for one reason — **the phone book is alphabetically sorted.**
-Without sorting, you'd have no idea where to look, so you'd have to start at page 1.
-
-**Binary search turns this intuition into an algorithm:**
-
-Open the middle (page 250): "Park" → Kim is before! **Skip the last 250 pages.**
-Open the new middle (page 125): "Lee" → Kim is before! **Cut in half again.**
-Keep halving — **500 pages found in just 9 checks.**
-
-**Sort → enables binary search → much faster!**
-This is why we learn sort before binary search.
-
-Press the button to follow along!`,
-        },
-        {
-          id: "s23-ch2-sorted-toolbox",
+          id: "s23-wrap-done",
           type: "explain",
-          title: "🗝️ Sorting is the launchpad — a toolbox that opens up after one sort",
-          content: `This chapter throws a bunch of functions at you all at once (\`binary_search\`, \`lower_bound\`, \`upper_bound\`, \`unique\`...). Trying to memorize them one at a time will fry your brain. Big picture first:
+          title: "🎉 sort basics done! What's next?",
+          content: `You've mastered **sort basics**:
+
+- **sort(v.begin(), v.end())** — sort in one line
+- **Custom criteria** with lambda (descending, by absolute value, multi-key)
+- **Pair sorting** — bundle two values, sort by one or both
+
+That's enough for almost any "sorting" part of a USACO Bronze problem.
 
 ---
 
-### One-line big picture
+### 🎯 Next lesson — Fast Search on Sorted Data (cpp-25)
 
-> 📌 **This chapter = "things that suddenly become possible once you sort."**
-> Operations that required scanning every element with \`find\` shrink to a **single line** once the data is sorted.
+What sorting unlocks. Questions like "is x in there?", "first ≥ x?", "how many of x?" all answered in **O(log n)**. Tools: **binary_search**, **lower_bound**, **upper_bound**.
 
----
+### 📌 After that (optional, advanced) — Sort Application Patterns (cpp-26)
 
-### What sorting unlocks (everything covered in this chapter)
-
-| Unsorted (before) | Sorted (this chapter) |
-|---|---|
-| \`find\` — scan O(N) | **\`binary_search\`** — halve each step O(log N) |
-| \`std::count\` — scan O(N) | **\`upper - lower\`** — two binary searches O(log N) |
-| ❌ "First student ≥ 70" impossible | **\`lower_bound(70)\`** — one line |
-| ❌ "Insert while staying sorted" painful | **\`insert(lower_bound(x), x)\`** — one line |
-| Hand-write deduplication | **\`sort + unique + erase\`** — one line |
+Dedup (sort + unique + erase), preserving tie order (stable_sort), lambda + general STL (count_if, find_if, accumulate). **Not required for Bronze** — come back when you have time.
 
 ---
 
-### Why is sorting so powerful?
-
-When data is sorted, **"look at the middle: if it's X, the answer must be on this side"** becomes possible (the binary-search idea from before).
-
-Every tool below is built on that one idea. They're **all the same family** — the next pages introduce them one by one, but whenever "wait, why bother?" hits, come back to this table.
-
-> 💡 Student takeaway: "Sort isn't the end — it's the **start.** One sort = all these tools unlocked."`
-        },
-        {
-          id: "s23-ch2-iter",
-          type: "explain",
-          title: "📌 Iterators — a 1-minute primer before the next page",
-          content: `The next page brings \`lower_bound\`, and instead of returning a number it returns an **iterator**. It looks scary the first time, so a quick 1-minute primer:
-
----
-
-### Iterator = "a finger pointing to a position"
-
-The \`v.begin()\` / \`v.end()\` you've been writing with sort — those are iterators. **A finger pointing at a spot inside the vector.**
-
-\`\`\`
-   10    20    30    40    50
-    ↑                          ↑
- begin()                      end() (one **past** the last spot)
-\`\`\`
-
----
-
-### You've seen pointers? Almost the same thing
-
-For a vector, you can treat an iterator like a pointer. The values are laid out next to each other in memory, so \`++it\` just goes to the next slot. The syntax matches too:
-
-| | Pointer | Iterator |
-|---|---|---|
-| Read the value | \`*p\` | \`*it\` |
-| Next position | \`p++\` | \`it++\` |
-| Get the index | \`p - array\` | \`it - v.begin()\` |
-
-> ⚠️ The real difference shows up later — in containers like \`map\` / \`set\` / \`list\` whose memory isn't contiguous, pointers can't move through them but iterators can. We'll come back to that. For now, **"basically a pointer, for vectors"** is enough.
-
----
-
-### 🎯 The two formulas to memorize
-
-When functions like \`lower_bound\` return an iterator, you'll be doing one of two things with it:
-
-\`\`\`
-   10    20    30    40    50
-    ↑                ↑
- begin()             it  (points to 40)
-\`\`\`
-
-\`\`\`cpp
-cout << *it;             // 40   ← *it is the value
-cout << it - v.begin();  // 3    ← convert to index
-\`\`\`
-
-> 💡 \`*it\` = value, \`it - v.begin()\` = index. **Memorize these two lines** and the next page flows easily.`
-        },
-        {
-          id: "s23-ch2-lb",
-          type: "explain",
-          title: "🔍 binary_search / lower_bound / upper_bound — the binary search trio",
-          content: `Instead of writing binary search by hand every time, C++ provides **three functions** — same family:
-
-\`\`\`cpp
-binary_search(v.begin(), v.end(), x);  // is x in there? → true / false
-lower_bound (v.begin(), v.end(), x);   // where x starts
-upper_bound (v.begin(), v.end(), x);   // one past where x ends
-\`\`\`
-
-⚠️ **Sorted arrays only!** (it's binary search inside)
-
----
-
-**Picture it — finding value 3**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-     ↑       ↑
-lower_bound  upper_bound
-  (val=3)     (val=3)
-"3 starts"   "after 3 ends"
-\`\`\`
-
-- **binary_search(x)** → is \`x\` in the array? **true / false**
-- **lower_bound(x)** → first position where value **≥ x** = "where x starts"
-- **upper_bound(x)** → first position where value **> x** = "one past where x ends"
-
-> 💡 Don't dig deeper — the **picture + three-line description** is enough. Which one to use in which situation comes on the next page.`
-        },
-        {
-          id: "s23-ch2-trio-quiz",
-          type: "quiz" as const,
-          title: "Which of the trio do you reach for?",
-          content: "You have a sorted \`vector<int> v\`. If you only need to know **whether 7 is in the array (yes / no)**, which one is the cleanest pick?",
-          options: [
-            "`binary_search(v.begin(), v.end(), 7)`",
-            "`lower_bound(v.begin(), v.end(), 7)`",
-            "`upper_bound(v.begin(), v.end(), 7)`"
-          ],
-          answer: 0,
-          explanation: "**`binary_search`** is the one that asks exactly \"is it there?\" — it returns true/false, the most direct answer. lower_bound and upper_bound return **positions**, so checking existence with them takes one extra step (e.g. `lower_bound != upper_bound`)."
-        },
-        {
-          id: "s23-ch2-lb-missing",
-          type: "explain",
-          title: "🔍 What if the value isn't there? — the insertion slot",
-          content: `Even when the value **isn't in the array**, \`lower_bound\` doesn't error out — it returns a number. That number is **"the slot this value would go into if you wanted to keep the array sorted."**
-
-\`\`\`cpp
-vector<int> v = {1, 3, 5, 7, 9};
-
-// 4 isn't here — "where would 4 go?"
-lower_bound(v.begin(), v.end(), 4) - v.begin() →  2   ← right before 5 (where 4 belongs)
-upper_bound(v.begin(), v.end(), 4) - v.begin() →  2   ← same spot (when value's missing, start = end)
-
-// 10 is bigger than everything — "put it at the very end"
-lower_bound(v.begin(), v.end(), 10) - v.begin() →  5  ← v.end() position (= v.size())
-\`\`\`
-
-This is what makes lower_bound **stronger than just "return a position":** it gives you a **meaningful** position whether the value exists or not — "where it is, or where it would go."
-
----
-
-**Putting it to use — "insert while staying sorted":**
-
-\`\`\`cpp
-vector<int> v = {1, 3, 5, 7, 9};
-int x = 4;
-v.insert(lower_bound(v.begin(), v.end(), x), x);
-// v = {1, 3, 4, 5, 7, 9}  ← still sorted!
-\`\`\`
-
----
-
-> ⚠️ **Don't use the \`lower == upper\` trick just to check existence.** The intent is unclear. → **\`binary_search(v.begin(), v.end(), x)\`** is the right answer (from the earlier page). Those two iterators landing on the same spot is a **side effect** of lower_bound's design, not its purpose.`
-        },
-        {
-          id: "s23-ch2-lb-patterns",
-          type: "explain",
-          title: "🎯 3 usage patterns",
-          content: `\`\`\`cpp
-vector<int> v = {1, 3, 3, 5, 7, 9};
-
-// ① How many 3s are there?
-int count = upper_bound(v.begin(), v.end(), 3)
-          - lower_bound(v.begin(), v.end(), 3);
-// 3 - 1 = 2!
-
-// ② Does a value exist? — binary_search() is simpler!
-if (binary_search(v.begin(), v.end(), 3)) cout << "found";
-else cout << "not found";
-
-// ③ When you need the position — use lower_bound
-int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
-cout << idx;  // 1
-\`\`\`
-
-> 💡 The trio is one family but they **return different things**, so they're used differently. Next page covers a common trap.`
-        },
-        {
-          id: "s23-ch2-patterns-fb",
-          type: "fillblank" as const,
-          title: "✋ Try it — how many 5s?",
-          content: "In the sorted \`vector<int> v = {1, 2, 5, 5, 5, 7}\`, find **how many 5s** there are in one line. (upper-lower pattern)",
-          code: "vector<int> v = {1, 2, 5, 5, 5, 7};\nint cnt = ___(v.begin(), v.end(), 5)\n        - ___(v.begin(), v.end(), 5);\ncout << cnt;  // 3",
-          fillBlanks: [
-            { id: 0, answer: "upper_bound", options: ["upper_bound", "lower_bound", "binary_search", "count"] },
-            { id: 1, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "count"] }
-          ],
-          explanation: "**\"one past end - start\" = count.** upper_bound points one past the last occurrence, lower_bound points to the first. Subtracting gives the number of times the value appears. 5 sits at indices 2, 3, 4 → 3 occurrences."
-        },
-        {
-          id: "s23-ch2-lb-vs-count",
-          type: "explain",
-          title: "🤔 Wait — doesn't \`count()\` also count occurrences?",
-          content: `Yes! \`std::count\` (the standard algorithm) also counts:
-
-\`\`\`cpp
-int cnt = count(v.begin(), v.end(), 3);   // works even on unsorted data
-\`\`\`
-
-**So what's the difference?**
-
-| | \`count()\` | \`upper - lower\` |
-|---|---|---|
-| Sorted required? | ❌ No | ✅ Must be sorted |
-| Speed | **O(n)** — scans everything | **O(log n)** — binary search |
-| Counting in 1M elements | 1,000,000 comparisons | ~20 comparisons |
-
-**Trap:** "So I'll just sort once and use upper-lower!" → ❌. \`sort\` itself is O(n log n) — for a **single** count, plain \`count()\` is faster.
-
-✅ **When upper-lower really shines:**
-- Data is **already** sorted
-- You need to count **many times** on the same data (sort once → each query is O(log n))
-
-Common in competitive programming; in everyday code \`count()\` is more typical.
-
----
-
-### ⚠️ Heads up — \`count\` appears in **two places**
-
-In the next lesson (map) you'll see \`m.count(key)\`. Same name, **completely different function.**
-
-| | \`std::count(v.begin, v.end, x)\` | \`m.count(key)\` |
-|---|---|---|
-| Whose function? | algorithm (external) | **member** of map / set |
-| Used on | vector, plain ranges | map, set |
-| Speed | O(n) — scans the range | **O(log n)** — walks the tree directly |
-| Answer | how many equal to \`x\` | does the key exist (0/1 for map, real count for multiset) |
-
-> 💡 Same name, **different functions.** vector's \`std::count\` is slow, but map's \`m.count\` is fast because map keeps a tree inside — no sort needed. We'll revisit this in the next lesson.`
-        },
-        {
-          id: "s23-ch2-lb-vs-bs",
-          type: "explain",
-          title: "🆚 binary_search() vs lower_bound — when to use which?",
-          content: `| | binary_search() | lower_bound() |
-|---|---|---|
-| Returns | true / false | position (iterator) |
-| Use when | just checking existence | need position or count |
-| Code | short, intuitive | longer but more powerful |
-
-\`\`\`cpp
-// Just "is 5 there?" → binary_search
-binary_search(v.begin(), v.end(), 5)  // true
-
-// "What index is 5 at?" → lower_bound
-lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
-\`\`\`
-
-| Python 🐍 | C++ ⚡ |
-|---|---|
-| \`x in v\` | \`binary_search(v.begin(), v.end(), x)\` |
-| \`bisect.bisect_left(v, x)\` | \`lower_bound(v.begin(), v.end(), x) - v.begin()\` |
-| \`bisect.bisect_right(v, x)\` | \`upper_bound(v.begin(), v.end(), x) - v.begin()\` |`
-        },
-        {
-          id: "s23-ch2-quiz1",
-          type: "quiz",
-          title: "Binary search prerequisite!",
-          content: "Given an **unsorted** vector \`v = {3, 1, 4, 1, 5}\`, what does \`binary_search(v.begin(), v.end(), 4)\` return?",
-          options: [
-            "true (since 4 is in the vector)",
-            "false (auto-detects unsorted)",
-            "**Unpredictable** — binary search only works on sorted arrays. Result is implementation-defined / undefined behavior.",
-            "Compile error"
-          ],
-          answer: 2,
-          explanation: "**`binary_search`, `lower_bound`, and `upper_bound` only work correctly on sorted arrays.** Calling them on unsorted data compiles, but the result is **undefined behavior** — could be true, false, or anything. Always `sort()` first!"
-        },
-        {
-          id: "s23-ch2-lb3",
-          type: "explain",
-          title: "⚠️ Watch out — what if the value is bigger than everything?",
-          content: `\`\`\`cpp
-vector<int> v = {1, 3, 5, 7, 9};
-
-lower_bound(v.begin(), v.end(), 10) - v.begin();
-// → 5 (out of range, v[5] doesn't exist!)
-\`\`\`
-
-If nothing in the array is ≥ x, lower_bound returns the **\`v.end()\` position (= index \`v.size()\`)**. Reading \`v[5]\` here is reading invalid memory → crash territory.
-
----
-
-**Safe usage pattern**
-
-\`\`\`cpp
-auto it = lower_bound(v.begin(), v.end(), x);
-
-if (it != v.end() && *it == x) {
-    int idx = it - v.begin();
-    cout << idx;       // only when x truly exists
-}
-\`\`\`
-
-> 💡 \`it != v.end()\` confirms **in range**, \`*it == x\` confirms **the exact value**. Both must hold before you access it.`
-        },
-        {
-          id: "s23-ch2-fb1",
-          type: "fillblank" as const,
-          title: "lower_bound Fill-in-the-Blank",
-          content: "Find the first index where 4 or greater appears in the sorted vector!",
-          code: "vector<int> v = {1, 2, 4, 4, 6};\nauto it = ___(v.begin(), v.end(), 4);\nint idx = it - v.___;\ncout << idx;  // 2",
-          fillBlanks: [
-            { id: 0, answer: "lower_bound", options: ["lower_bound", "upper_bound", "find", "binary_search"] },
-            { id: 1, answer: "begin()", options: ["begin()", "end()", "front()", "start()"] }
-          ],
-          explanation: "lower_bound returns an iterator to the first position ≥ the target value. Subtract v.begin() to get the index. 4 first appears at index 2!"
-        },
-        {
-          id: "s23-ch2-practice1",
-          type: "practice" as const,
-          title: "✋ From scratch — check existence with binary_search",
-          content: `**Problem**: An **already-sorted** vector of N ints is given, then a target value \`x\` on the next line. Print \`Yes\` if \`x\` is present, otherwise \`No\`.
-
-\`\`\`
-Input:  5
-        1 3 5 7 9
-        5
-Output: Yes
-
-Input:  5
-        1 3 5 7 9
-        4
-Output: No
-\`\`\`
-
-> 💡 \`binary_search(v.begin(), v.end(), x)\` returns **true / false**. The simplest function for "does it exist?" questions.`,
-          starterCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    int x;
-    cin >> x;
-    // 👇 Use binary_search to check if x exists → print "Yes" or "No"
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    int x;
-    cin >> x;
-    if (binary_search(v.begin(), v.end(), x)) cout << "Yes";
-    else cout << "No";
-    return 0;
-}`,
-          hint: "if (binary_search(v.begin(), v.end(), x)) cout << \"Yes\"; else cout << \"No\"; — for existence-only checks, binary_search is the cleanest.",
-          expectedOutput: `Yes`,
-          stdin: `5
-1 3 5 7 9
-5`,
-        },
-        {
-          id: "s23-ch2-pred1",
-          type: "predict" as const,
-          title: "Predict lower_bound & upper_bound Output!",
-          code: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-int main() {
-    vector<int> v = {2, 4, 4, 6, 8};
-    auto lo = lower_bound(v.begin(), v.end(), 4);
-    auto hi = upper_bound(v.begin(), v.end(), 4);
-    cout << (lo - v.begin()) << " " << (hi - lo);
-    return 0;
-}`,
-          options: ["1 2", "2 2", "1 1", "2 1"],
-          answer: 0,
-          explanation: "lower_bound(4) → index 1 (first 4). upper_bound(4) → index 3 (position of 6). hi - lo = 3 - 1 = 2 (4 appears twice). Output: 1 2"
-        },
-        {
-          id: "s23-ch2-practice2",
-          type: "practice" as const,
-          title: "✋ From scratch — count occurrences (upper - lower pattern)",
-          content: `**Problem**: An **already-sorted** vector of N ints is given, then a target value \`x\` on the next line. Print **how many times** \`x\` appears in the array.
-
-\`\`\`
-Input:  6
-        1 3 3 3 5 7
-        3
-Output: 3
-
-Input:  5
-        1 2 4 6 8
-        4
-Output: 1
-
-Input:  5
-        1 3 5 7 9
-        4
-Output: 0
-\`\`\`
-
-> 💡 \`upper_bound(...) - lower_bound(...)\` — the chapter's core application pattern. The difference between the two iterators **is** the count.`,
-          starterCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    int x;
-    cin >> x;
-    // 👇 Print the count using upper_bound - lower_bound
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    int x;
-    cin >> x;
-    auto lo = lower_bound(v.begin(), v.end(), x);
-    auto hi = upper_bound(v.begin(), v.end(), x);
-    cout << (hi - lo);
-    return 0;
-}`,
-          hint: "auto lo = lower_bound(v.begin(), v.end(), x); auto hi = upper_bound(v.begin(), v.end(), x); cout << (hi - lo); — the iterator difference is the count. Missing → hi == lo → 0.",
-          expectedOutput: `3`,
-          stdin: `6
-1 3 3 3 5 7
-3`,
-        }
-      ]
-    },
-
-    // ============================================
-    // Chapter 3: Advanced Patterns
-    // ============================================
-    {
-      id: "s23-ch3",
-      title: "Advanced Patterns",
-      emoji: "🧹",
-      steps: [
-        {
-          id: "s23-ch3-unique",
-          type: "explain",
-          title: "🧹 sort + unique — Removing Duplicates!",
-          content: `You've seen sorting and searching. One last pattern that comes paired with sort — the standard C++ idiom for **removing duplicate values** from an array.
-
-\`\`\`cpp
-#include <algorithm>
-#include <vector>
-using namespace std;
-
-vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};
-
-// Step 1: sort (unique only removes adjacent duplicates!)
-sort(v.begin(), v.end());
-// v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}
-
-// Step 2: remove duplicates with unique + erase
-v.erase(unique(v.begin(), v.end()), v.end());
-// v = {1, 2, 3, 4, 5, 6, 9}
-\`\`\`
-
-⚠️ **Sort first!** unique only removes adjacent duplicates.
-Without sorting, {1, 3, 1} stays as 3 elements.
-
-| Python 🐍 | C++ ⚡ |
-|---|---|
-| \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
-
-💡 Memorize **sort → erase(unique(...), end())** as a pair! Next page — **why** we need erase too.`
-        },
-        {
-          id: "s23-ch3-unique-detail",
-          type: "explain",
-          title: "🤔 Wait — why do we need \`erase\`? What if we only call \`unique\`?",
-          content: `Once you see what \`unique\` **actually** does, why \`erase\` is its partner becomes obvious.
-
-### What unique really does
-
-\`unique\` **doesn't shrink the vector.** It just moves unique values to the front and returns an iterator marking "this is where the real end is."
-
-\`\`\`
-v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}   right after sort (size = 10)
-
-↓ auto it = unique(v.begin(), v.end());  ← no erase
-
-v = {1, 2, 3, 4, 5, 6, 9, ?, ?, ?}   size is still 10!
-                          ↑
-                          it points here
-                          past this is leftover garbage (meaningless)
-\`\`\`
-
-\`v.size()\` would still print 10. The first 7 are real; the last 3 are **traces** left in memory.
-
----
-
-### Quick erase syntax refresher
-
-To **trim a range** from a vector, use \`erase(begin, end)\` — it cuts out everything between two iterators.
-
-\`\`\`cpp
-vector<int> v = {10, 20, 30, 40, 50};
-
-v.erase(v.begin() + 1, v.begin() + 4);
-//     ↑                ↑
-//   from here        up to (not including) here
-
-// Result: v = {10, 50}   (20, 30, 40 removed)
-\`\`\`
-
-| Form | Meaning |
-|---|---|
-| \`v.erase(it)\` | remove **the single element** at iterator \`it\` |
-| \`v.erase(start, end)\` | remove the **\`[start, end)\` range** entirely |
-
----
-
-### Putting unique + erase together
-
-\`\`\`cpp
-v.erase( unique(v.begin(), v.end()),  v.end() );
-//        ↑                            ↑
-//   "real end" position (it)     vector's real end
-//          ───────  trim the garbage between  ───────
-\`\`\`
-
-erase from the **real end** (returned by unique) up to \`v.end()\` — that's the famous pattern.
-
-> 💡 Remember: \`unique\` only **moves things**, size stays. To truly shrink it, pair with \`erase\`.`
-        },
-        {
-          id: "s23-ch3-unique-practice",
-          type: "practice" as const,
-          title: "✋ From scratch — print count after dedup",
-          content: `**Problem**: Given N integers, print **how many distinct values** remain after deduplication.
-
-\`\`\`
-Input:  8
-        3 1 4 1 5 9 2 6
-Output: 7
-
-Input:  5
-        2 2 2 2 2
-Output: 1
-\`\`\`
-
-> 💡 \`sort\` → \`erase(unique(...), end())\` pattern, then print \`v.size()\`. One-liner after the setup.`,
-          starterCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 👇 sort + unique + erase, then print v.size()
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    sort(v.begin(), v.end());
-    v.erase(unique(v.begin(), v.end()), v.end());
-    cout << v.size();
-    return 0;
-}`,
-          hint: "sort(v.begin(), v.end()); v.erase(unique(v.begin(), v.end()), v.end()); cout << v.size(); — sort first (unique only removes adjacent duplicates).",
-          expectedOutput: `7`,
-          stdin: `8
-3 1 4 1 5 9 2 6`,
-        },
-        {
-          id: "s23-ch3-stable",
-          type: "explain",
-          title: "📊 stable_sort — preserves original order on ties",
-          content: `\`sort()\` is **fast** but has one catch: **when values tie, the original order is not guaranteed.** For student-style data, that can be a problem.
-
-\`\`\`cpp
-vector<pair<string, int>> students = {
-    {"Alice", 90}, {"Bob", 80}, {"Carol", 90}, {"Dave", 80}
-};
-
-sort(students.begin(), students.end(), [](auto a, auto b) {
-    return a.second > b.second;   // score descending
-});
-\`\`\`
-
-Will Alice (90) and Carol (90) keep their **input order (Alice first)**? **sort doesn't guarantee it** — could vary by implementation.
-
-### \`stable_sort\` — keeps original order for equal elements
-
-\`\`\`cpp
-stable_sort(students.begin(), students.end(), [](auto a, auto b) {
-    return a.second > b.second;
-});
-// → ties always keep input order (Alice → Carol, Bob → Dave)
-\`\`\`
-
-| | sort | stable_sort |
-|---|---|---|
-| Speed | faster (O(N log N)) | slightly slower (O(N log² N)) |
-| On ties | order not guaranteed | input order preserved ✅ |
-| When | ties don't matter | tie order is meaningful |
-
-> 💡 Use stable_sort for **rankings or any data where stability matters**. Plain sort is enough 99% of the time.`
-        },
-        {
-          id: "s23-ch3-stable-practice",
-          type: "practice" as const,
-          title: "✋ From scratch — try stable_sort yourself",
-          content: `**Problem**: 4 students (name, score). Sort by score descending, **preserving input order on ties**.
-
-> 💡 Use \`stable_sort\` + lambda for descending score. Ties auto-preserve input order. Input / target output in the boxes below.`,
-          starterCode: `#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    // 👇 stable_sort with descending score (ties keep input order)
-
-    // 👇 Print one per line as "name score"
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    stable_sort(v.begin(), v.end(), [](auto a, auto b) {
-        return a.second > b.second;
-    });
-    for (auto& [name, score] : v) {
-        cout << name << " " << score << "\\n";
-    }
-    return 0;
-}`,
-          hint: "stable_sort(v.begin(), v.end(), [](auto a, auto b) { return a.second > b.second; }); — just swap sort for stable_sort.",
-          expectedOutput: `Alice 90
-Carol 90
-Bob 80
-Dave 80`,
-          stdin: `4
-Alice 90
-Bob 80
-Carol 90
-Dave 80`,
-        },
-      ]
-    },
-
-    // ============================================
-    // Chapter 4: Lambda + general STL algorithms
-    // ============================================
-    {
-      id: "s23-ch4",
-      title: "Lambda + General STL Algorithms",
-      emoji: "🔍",
-      steps: [
-        {
-          id: "s23-ch4-intro",
-          type: "explain",
-          title: "🤔 Does sort's lambda work elsewhere?",
-          content: `Remember the lambda comparator you passed to \`sort\`?
-
-\`\`\`cpp
-sort(v.begin(), v.end(), [](int a, int b) { return a > b; });
-\`\`\`
-
-That pattern — \`(begin, end, lambda)\` — works for almost every function in \`<algorithm>\`. Beyond sorting:
-
-- "**How many elements satisfy a condition?**" → \`count_if\`
-- "**First element that satisfies a condition?**" → \`find_if\`
-- "**Sum of all elements?**" → \`accumulate\` (in \`<numeric>\`)
-
-> 💡 **Why bother?**
-> You can always write a for loop, but these functions make the **intent clear in one line**. Seeing \`count_if(..., cond)\` immediately tells the reader "we're counting things matching a condition." Big readability win in code reviews and competitions.`
-        },
-        {
-          id: "s23-ch4-count-if",
-          type: "explain",
-          title: "🔢 count_if — count matches",
-          content: `**Problem:** How many students scored 80 or higher?
-
-### Old way (for loop)
-\`\`\`cpp
-int cnt = 0;
-for (int x : scores) {
-    if (x >= 80) cnt++;
-}
-\`\`\`
-
-### \`count_if\` one-liner
-\`\`\`cpp
-int cnt = count_if(scores.begin(), scores.end(),
-                   [](int x){ return x >= 80; });
-\`\`\`
-
-### Argument structure (same as sort)
-| Position | Meaning |
-|---|---|
-| 1st | Start iterator (\`v.begin()\`) |
-| 2nd | End iterator (\`v.end()\`) |
-| 3rd | **Predicate (lambda returning bool)** — true → counted |
-
-> 💡 **Difference from \`count\`?**
-> - \`count(b, e, x)\` — count elements **equal to x**
-> - \`count_if(b, e, pred)\` — count elements **matching the predicate** (much more flexible)`
-        },
-        {
-          id: "s23-ch4-count-if-predict",
-          type: "predict" as const,
-          title: "Predict the output",
-          content: `\`\`\`cpp
-vector<int> v = {10, 25, 30, 45, 50, 65};
-int cnt = count_if(v.begin(), v.end(),
-                   [](int x){ return x % 5 == 0 && x > 30; });
-cout << cnt;
-\`\`\`
-
-What is cnt?`,
-          options: ["4", "3", "2", "5"],
-          answer: 1,
-          explanation: "Multiples of 5 strictly greater than 30: 45, 50, 65 → 3. (10, 25, 30 fail the > 30 part.)"
-        },
-        {
-          id: "s23-ch4-find-if",
-          type: "explain",
-          title: "🎯 find_if — first match",
-          content: `**Problem:** Find the first even number in a vector.
-
-\`\`\`cpp
-vector<int> v = {3, 7, 4, 9, 6};
-auto it = find_if(v.begin(), v.end(),
-                  [](int x){ return x % 2 == 0; });
-
-if (it != v.end()) {
-    cout << *it;        // 4
-} else {
-    cout << "not found";
-}
-\`\`\`
-
-### Key pattern
-- \`find_if\` returns an **iterator** (not a value)
-- If not found, returns \`v.end()\` → check with \`!= v.end()\`
-- To use the value, dereference: \`*it\`
-- For an index: \`it - v.begin()\`
-
-> 💡 **Difference from \`find\`?**
-> - \`find(b, e, x)\` — find the **value x** itself
-> - \`find_if(b, e, pred)\` — find the **first element matching the predicate**`
-        },
-        {
-          id: "s23-ch4-accumulate",
-          type: "explain",
-          title: "➕ accumulate — sum (or product, or anything)",
-          content: `**Problem:** Score sum and average.
-
-\`\`\`cpp
-#include <numeric>     // ⚠️ Not <algorithm> — <numeric>!
-
-vector<int> v = {10, 20, 30, 40};
-
-int sum = accumulate(v.begin(), v.end(), 0);
-//                                       ↑ initial value (sum starts at 0)
-cout << sum;     // 100
-\`\`\`
-
-### Tweak the initial value to do more
-\`\`\`cpp
-// Sum: start at 0
-accumulate(v.begin(), v.end(), 0);          // 100
-
-// Product: start at 1, pass multiplies as the 4th arg
-#include <functional>
-accumulate(v.begin(), v.end(), 1, multiplies<int>());   // 10*20*30*40 = 240000
-
-// Custom via lambda: sum of squares
-accumulate(v.begin(), v.end(), 0,
-           [](int acc, int x){ return acc + x * x; });   // 100+400+900+1600 = 3000
-\`\`\`
-
-### Average in one line
-\`\`\`cpp
-double avg = (double)accumulate(v.begin(), v.end(), 0) / v.size();
-\`\`\`
-
-> ⚠️ Don't forget \`#include <numeric>\`. This catches a lot of people the first time.`
-        },
-        {
-          id: "s23-ch4-practice",
-          type: "practice" as const,
-          title: "✋ From scratch — count high scorers + total",
-          content: `**Problem:** Read 5 student scores, then print:
-1. How many scored 80 or higher
-2. The total sum
-
-on one line, separated by a single space.
-
-> 💡 \`count_if\` for #1, \`accumulate\` for #2 — each one line.
-> ⚠️ \`accumulate\` needs \`<numeric>\`!`,
-          starterCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <numeric>
-using namespace std;
-
-int main() {
-    vector<int> scores(5);
-    for (int i = 0; i < 5; i++) cin >> scores[i];
-    // 👇 count of scores >= 80, total sum, print on one line
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <numeric>
-using namespace std;
-
-int main() {
-    vector<int> scores(5);
-    for (int i = 0; i < 5; i++) cin >> scores[i];
-    int high = count_if(scores.begin(), scores.end(),
-                        [](int x){ return x >= 80; });
-    int total = accumulate(scores.begin(), scores.end(), 0);
-    cout << high << " " << total << endl;
-    return 0;
-}`,
-          hint: "count_if(scores.begin(), scores.end(), [](int x){ return x >= 80; }); + accumulate(scores.begin(), scores.end(), 0); — two lines, done.",
-          expectedOutput: `3 380`,
-          stdin: `90 65 80 75 70`,
-        },
-        {
-          id: "s23-ch4-summary",
-          type: "explain",
-          title: "🎉 Lesson 23 Complete! sort + STL algorithms!",
-          content: `## 🏆 Lesson 23 Done! Amazing work!
-
-### 📊 sort Basics
-- **sort(v.begin(), v.end())** → ascending (default)
-- **sort(v.begin(), v.end(), greater<int>())** → descending
-- Requires \`#include <algorithm>\`!
-
-### 🔧 Lambda
-- **Syntax:** \`[](type a, type b) { return a > b; }\`
-- **Rule:** return true → first argument (a) goes first
-- Essential for custom sort criteria (pair, struct, etc.)
-- \`greater<int>()\` is a pre-built descending lambda
-
-### 🔍 lower_bound & upper_bound
-- **Must use on sorted arrays only!** (binary search under the hood)
-- **lower_bound(begin, end, x)**: first position where value **≥ x**
-- **upper_bound(begin, end, x)**: first position where value **> x**
-- Convert to index: \`- v.begin()\`
-
-### 🧹 Advanced Pattern
-- **sort + erase(unique(...), end())**: remove duplicates (memorize as a set!)
-- **stable_sort**: preserve original order on ties
-
-### 🔍 Lambda + general STL algorithms ⭐ NEW
-- **count_if(b, e, pred)** — count elements matching a predicate
-- **find_if(b, e, pred)** — first iterator matching a predicate
-- **accumulate(b, e, init)** — sum / product / custom fold (\`<numeric>\` required)
-- Same shape as sort: \`(begin, end, lambda)\`
-
-### 🐍 Key Differences from Python!
-| Feature | Python 🐍 | C++ ⚡ |
-|---|---|---|
-| Lambda syntax | \`lambda x: x*2\` | \`[](int x){ return x*2; }\` |
-| Sort criterion | \`key=\` (transform 1 value) | comparison function (compare 2) |
-| Binary search | \`bisect_left/right\` | \`lower_bound/upper_bound\` |
-| Remove dups | \`sorted(set(v))\` | \`sort + erase(unique)\` |
-| Conditional count | \`sum(1 for x in v if x>=80)\` | \`count_if(b, e, pred)\` |
-| Sum | \`sum(v)\` | \`accumulate(b, e, 0)\` |
-
-🚀 Next up: **map & set** — containers that stay sorted like magic!
-   Then straight to **🏆 USACO Mock Contest (cpp-p3)** — the real deal!`
+💡 We split the original "sort master" into three so each lesson stays focused. **Same flow underneath**: "sort it → search it fast → use the sort." Take them one at a time.`
         }
       ]
     }
+
   ]
 }

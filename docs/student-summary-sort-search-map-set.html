@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>C++ STL 정리 — sort · 탐색 · map · set</title>
+<style>
+  @page { margin: 16mm; size: A4; }
+  body {
+    font-family: -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    color: #1f2937; line-height: 1.55;
+    max-width: 760px; margin: 0 auto; padding: 18px;
+    font-size: 13px;
+  }
+  h1 { font-size: 22px; color: #1e3a8a; margin: 0 0 4px; }
+  .sub { color: #6b7280; font-size: 12px; margin-bottom: 18px; }
+  h2 {
+    font-size: 16px; color: #fff; background: #2563eb;
+    padding: 6px 12px; border-radius: 6px;
+    margin: 22px 0 10px;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 14px; color: #1e3a8a;
+    margin: 14px 0 6px;
+    page-break-after: avoid;
+  }
+  p { margin: 6px 0; }
+  pre {
+    background: #0f172a; color: #e2e8f0;
+    padding: 10px 14px; border-radius: 8px;
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 11.5px; line-height: 1.55;
+    overflow-x: auto; margin: 6px 0 10px;
+    page-break-inside: avoid;
+  }
+  pre .c { color: #94a3b8; font-style: italic; }
+  pre .k { color: #c084fc; }
+  pre .s { color: #34d399; }
+  pre .n { color: #fbbf24; }
+  code {
+    background: #f1f5f9; padding: 1px 5px; border-radius: 4px;
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 11.5px;
+    color: #be185d;
+  }
+  .box {
+    border: 1px solid #cbd5e1; border-radius: 8px;
+    padding: 8px 14px; margin: 8px 0;
+    background: #f8fafc;
+    page-break-inside: avoid;
+  }
+  .tip { background: #fef3c7; border-color: #fcd34d; }
+  .warn { background: #fee2e2; border-color: #fca5a5; }
+  .ok   { background: #dcfce7; border-color: #86efac; }
+  table {
+    border-collapse: collapse; width: 100%;
+    font-size: 11.5px; margin: 8px 0; page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #cbd5e1; padding: 5px 8px; text-align: left;
+  }
+  th { background: #e0e7ff; color: #1e3a8a; }
+  .keypoint {
+    font-weight: 700; color: #be123c;
+  }
+  .hint {
+    background: #eff6ff; border: 1px dashed #93c5fd;
+    border-radius: 6px; padding: 8px 12px; margin: 8px 0;
+    font-size: 11.5px; color: #1e3a8a;
+  }
+  @media print {
+    body { padding: 0; font-size: 12px; }
+    h1 { font-size: 20px; }
+    h2 { font-size: 15px; }
+    pre { font-size: 11px; }
+    .no-print { display: none; }
+  }
+  .no-print {
+    background: #fef3c7; border: 1.5px solid #fbbf24;
+    border-radius: 8px; padding: 10px 14px; margin: 14px 0;
+    font-size: 12px; color: #92400e; text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="no-print">
+  📄 인쇄해서 PDF 로 저장: <b>Cmd+P (Mac) / Ctrl+P (Windows)</b> → "PDF 로 저장"
+</div>
+
+<h1>C++ STL 정리 — sort · 탐색 · map · set</h1>
+<div class="sub">한 장으로 정리. "이 도구 어디 쓰는 거였지?" 헷갈릴 때 펼쳐 봐요.</div>
+
+<!-- ===================== SORT ===================== -->
+<h2>1. sort — 줄 세우기</h2>
+
+<p><code>sort(v.begin(), v.end())</code> 한 줄이면 끝. 오름차순.</p>
+
+<pre><span class="c">// 오름차순 — 기본</span>
+vector&lt;<span class="k">int</span>&gt; v = {5, 2, 9, 1, 7};
+sort(v.begin(), v.end());
+<span class="c">// v = {1, 2, 5, 7, 9}</span>
+
+<span class="c">// 내림차순 — greater 한 번 더</span>
+sort(v.begin(), v.end(), greater&lt;<span class="k">int</span>&gt;());
+<span class="c">// v = {9, 7, 5, 2, 1}</span></pre>
+
+<div class="box tip">
+  💡 <b>정렬은 끝이 아니라 시작.</b> 정렬해두면 그 다음에 할 수 있는 일들이 폭발적으로 늘어요 — 다음 섹션부터 그게 뭔지 봐요.
+</div>
+
+<!-- ===================== SEARCH ===================== -->
+<h2>2. 정렬된 데이터에서 빠른 탐색 — 이진탐색 3 형제</h2>
+
+<p>정렬된 <code>vector</code> 에서만 동작. 안 정렬되어 있으면 <span class="keypoint">엉뚱한 답</span> 이 나와요.</p>
+
+<table>
+  <tr><th>함수</th><th>답하는 질문</th><th>돌려주는 것</th></tr>
+  <tr><td><code>binary_search(v.begin(), v.end(), x)</code></td><td>"x 가 있나?"</td><td><b>true / false</b></td></tr>
+  <tr><td><code>lower_bound(v.begin(), v.end(), x)</code></td><td>"x <b>이상</b> 의 첫 위치?"</td><td>위치 (iterator)</td></tr>
+  <tr><td><code>upper_bound(v.begin(), v.end(), x)</code></td><td>"x <b>초과</b> 의 첫 위치?"</td><td>위치 (iterator)</td></tr>
+</table>
+
+<h3>그림으로 — 값 3 찾기</h3>
+
+<pre>{1,  3,  3,  5,  7,  9}
+ 0   1   2   3   4   5
+     <span class="n">↑</span>       <span class="n">↑</span>
+lower_bound  upper_bound
+  (3 시작)   (3 끝 다음)</pre>
+
+<h3>이터레이터는 그냥 "위치 손가락"</h3>
+
+<p><code>lower_bound</code> 가 돌려주는 건 숫자가 아니라 <b>위치</b> 예요. 두 가지 공식만 외우면 끝:</p>
+
+<pre>auto it = lower_bound(v.begin(), v.end(), 3);
+
+cout &lt;&lt; *it;             <span class="c">// 그 위치의 값</span>
+cout &lt;&lt; it - v.begin();   <span class="c">// 인덱스 숫자</span></pre>
+
+<h3>활용 패턴 3 가지</h3>
+
+<pre>vector&lt;<span class="k">int</span>&gt; v = {1, 3, 3, 5, 7, 9};
+
+<span class="c">// ① 값이 몇 개?  (upper - lower)</span>
+<span class="k">int</span> cnt = upper_bound(v.begin(), v.end(), 3)
+        - lower_bound(v.begin(), v.end(), 3);
+<span class="c">// 3 가 몇 개? → 2 개</span>
+
+<span class="c">// ② 있는지만 확인 → binary_search 가 가장 깔끔</span>
+<span class="k">if</span> (binary_search(v.begin(), v.end(), 3)) cout &lt;&lt; <span class="s">"있음"</span>;
+
+<span class="c">// ③ 위치가 필요할 때 → lower_bound</span>
+<span class="k">int</span> idx = lower_bound(v.begin(), v.end(), 3) - v.begin();</pre>
+
+<div class="box warn">
+  ⚠️ <b>"있는지만" 확인이면 <code>binary_search</code> 만 써.</b><br>
+  <code>lower == upper</code> 같은 트릭은 헷갈리니까 쓰지 말 것. 의도가 안 보임.
+</div>
+
+<div class="box ok">
+  ✅ <b>"x 이상 첫 거" 같은 경계 질문은 <code>lower_bound</code> 가 유일한 도구.</b><br>
+  예: 정렬된 점수 배열에서 70 점 이상 첫 학생 → <code>lower_bound(v.begin(), v.end(), 70)</code>.
+</div>
+
+<!-- ===================== UNIQUE ===================== -->
+<h2>3. 중복 제거 — sort + unique + erase</h2>
+
+<p>중복 제거는 <b>3 단계가 아니라 한 줄 이디엄</b> 으로 외워요.</p>
+
+<pre>vector&lt;<span class="k">int</span>&gt; v = {3, 1, 3, 2, 1, 3};
+
+sort(v.begin(), v.end());                          <span class="c">// {1,1,2,3,3,3}</span>
+v.erase(unique(v.begin(), v.end()), v.end());     <span class="c">// {1,2,3}</span></pre>
+
+<p><code>unique</code> 는 <b>인접한 중복</b> 만 제거해요. 그래서 <code>sort</code> 가 반드시 먼저.</p>
+
+<div class="box tip">
+  💡 <code>unique</code> 가 직접 vector 크기를 못 줄여요 (이건 STL 규칙 — 알고리즘은 크기 못 바꿈). 그래서 <code>erase</code> 가 짝꿍. 이 한 줄을 통째로 외워두면 항상 같이 따라옴.
+</div>
+
+<!-- ===================== MAP ===================== -->
+<h2>4. map — "이름 → 값" 빠른 검색표</h2>
+
+<p>Python <code>dict</code> 와 거의 같아요. 이름 (key) 으로 값을 빠르게 찾고 싶을 때.</p>
+
+<pre><span class="c">// 만들기 + 값 넣기</span>
+map&lt;string, <span class="k">int</span>&gt; scores;
+scores[<span class="s">"Alice"</span>] = 95;
+scores[<span class="s">"Bob"</span>] = 87;</pre>
+
+<h3>이 4 가지만 알면 거의 다 풀림</h3>
+
+<pre><span class="c">// ① 있는지 확인</span>
+<span class="k">if</span> (scores.count(<span class="s">"Alice"</span>) &gt; 0) {
+    cout &lt;&lt; <span class="s">"있어요!"</span>;
+}
+
+<span class="c">// ② 값 읽기 — 있을 때만 (없으면 0 이 자동 생성됨!)</span>
+<span class="k">if</span> (scores.count(<span class="s">"Bob"</span>) &gt; 0) {
+    cout &lt;&lt; scores[<span class="s">"Bob"</span>];   <span class="c">// 87</span>
+}
+
+<span class="c">// ③ 삭제</span>
+scores.erase(<span class="s">"Bob"</span>);
+
+<span class="c">// ④ 크기 / 비었나</span>
+cout &lt;&lt; scores.size();    <span class="c">// 1</span>
+cout &lt;&lt; scores.empty();   <span class="c">// 0 (false, 안 비었음)</span></pre>
+
+<div class="box warn">
+  ⚠️ <b><code>m["없는키"]</code> 바로 접근하면 <span class="keypoint">0 이 자동 생성</span> 돼요.</b><br>
+  반드시 <code>count > 0</code> 로 먼저 확인 → 있을 때만 <code>m[key]</code>.
+</div>
+
+<h3>map 은 왜 sort 안 해도 빨라?</h3>
+
+<p>vector 는 <code>sort</code> 직접 호출해야 빠른 검색됐죠. map 은 다름:</p>
+
+<div class="box ok">
+  📌 <b>map 은 값을 넣을 때마다 알아서 정리해요.</b> 그래서 따로 <code>sort</code> 안 해도 항상 빠른 상태.<br>
+  → 그냥 <code>m.count(key)</code> 쓰면 <b>빠름</b>. 안심하고 쓰면 됨.
+</div>
+
+<h3>map 순회 — pair 로 (key, value) 같이</h3>
+
+<pre><span class="k">for</span> (<span class="k">auto</span>&amp; [name, score] : scores) {
+    cout &lt;&lt; name &lt;&lt; <span class="s">": "</span> &lt;&lt; score &lt;&lt; endl;
+}
+<span class="c">// map 은 자동 정렬되어 있어서 알파벳 순으로 나옴:</span>
+<span class="c">// Alice: 95</span>
+<span class="c">// Bob: 87</span></pre>
+
+<h3>순회 중 삭제 — <span class="keypoint">위험!</span> 안전한 패턴</h3>
+
+<pre><span class="c">// ❌ 위험 — 돌면서 동시에 지우면 코드 꼬임</span>
+<span class="k">for</span> (<span class="k">auto</span>&amp; [k, v] : m) {
+    <span class="k">if</span> (v &lt; 0) m.erase(k);    <span class="c">// 위험!</span>
+}
+
+<span class="c">// ✅ 안전 — 2 단계로 나누기</span>
+vector&lt;string&gt; toDelete;
+<span class="k">for</span> (<span class="k">auto</span>&amp; [k, v] : m) {
+    <span class="k">if</span> (v &lt; 0) toDelete.push_back(k);
+}
+<span class="k">for</span> (<span class="k">auto</span>&amp; k : toDelete) {
+    m.erase(k);
+}</pre>
+
+<div class="box tip">
+  💡 <b>모은 다음 지우기.</b> 이게 핵심.
+</div>
+
+<!-- ===================== SET ===================== -->
+<h2>5. set — 중복 없는 모음</h2>
+
+<p>map 에서 <b>value 가 없어진 것</b> 이 set. "있나/없나" 만 따지는 모음집.</p>
+
+<pre>set&lt;<span class="k">int</span>&gt; nums;
+
+nums.insert(5);          <span class="c">// 넣기 (중복은 자동 무시)</span>
+nums.insert(3);
+nums.insert(5);          <span class="c">// 이미 있음 → 그대로</span>
+
+<span class="k">if</span> (nums.count(5)) {     <span class="c">// 있나?</span>
+    cout &lt;&lt; <span class="s">"있어요!"</span>;
+}
+
+nums.erase(3);           <span class="c">// 지우기</span>
+cout &lt;&lt; nums.size();     <span class="c">// 원소 수</span></pre>
+
+<p>set 은 <b>자동 정렬</b> 되어 있어서 순회하면 작은 값부터 나와요.</p>
+
+<pre><span class="k">for</span> (<span class="k">int</span> x : nums) cout &lt;&lt; x &lt;&lt; <span class="s">" "</span>;
+<span class="c">// 5 만 남아있음 → 5</span></pre>
+
+<h3>set 의 진짜 쓸모 — 중복 제거 + "본 적 있나?" 추적</h3>
+
+<pre><span class="c">// 본 단어 추적</span>
+set&lt;string&gt; seen;
+
+<span class="k">for</span> (<span class="k">auto</span>&amp; w : words) {
+    <span class="k">if</span> (seen.count(w)) {
+        cout &lt;&lt; <span class="s">"중복!"</span>;
+    } <span class="k">else</span> {
+        seen.insert(w);
+    }
+}</pre>
+
+<!-- ===================== HEADGAME ===================== -->
+<h2>6. 헷갈리는 두 가지 <code>count</code></h2>
+
+<p>이게 진짜 헷갈려서 따로 정리. 같은 이름이지만 <span class="keypoint">완전히 다른 함수</span>.</p>
+
+<table>
+  <tr>
+    <th></th>
+    <th><code>std::count(v.begin, v.end, x)</code></th>
+    <th><code>m.count(key)</code></th>
+  </tr>
+  <tr>
+    <td>어디 거?</td>
+    <td>algorithm 함수 (외부 도구)</td>
+    <td>map / set 의 멤버 함수</td>
+  </tr>
+  <tr>
+    <td>어디서 씀?</td>
+    <td>vector 같은 일반 범위</td>
+    <td>map, set</td>
+  </tr>
+  <tr>
+    <td>속도</td>
+    <td><b>O(N)</b> — 처음부터 끝까지 훑음</td>
+    <td><b>O(log N)</b> — 내부 트리 따라 점프</td>
+  </tr>
+  <tr>
+    <td>답하는 것</td>
+    <td>정확히 <code>x</code> 인 거 몇 개</td>
+    <td>키가 있나 (있으면 1, 없으면 0)</td>
+  </tr>
+</table>
+
+<div class="box tip">
+  💡 <b>한 줄로:</b> <code>std::count</code> 는 vector 용 (느림). <code>m.count</code> 는 map/set 용 (빠름). 같은 이름인데 다른 함수.
+</div>
+
+<!-- ===================== CHEATSHEET ===================== -->
+<h2>📋 마지막 — 한 줄 치트시트</h2>
+
+<table>
+  <tr><th>하고 싶은 일</th><th>도구</th></tr>
+  <tr><td>줄 세우기 (오름차순)</td><td><code>sort(v.begin(), v.end())</code></td></tr>
+  <tr><td>줄 세우기 (내림차순)</td><td><code>sort(v.begin(), v.end(), greater&lt;int&gt;())</code></td></tr>
+  <tr><td>정렬된 vector — 있나?</td><td><code>binary_search(v.begin(), v.end(), x)</code></td></tr>
+  <tr><td>정렬된 vector — x 이상 첫 위치</td><td><code>lower_bound(v.begin(), v.end(), x)</code></td></tr>
+  <tr><td>정렬된 vector — x 가 몇 개?</td><td><code>upper_bound - lower_bound</code></td></tr>
+  <tr><td>중복 제거</td><td><code>sort 후 v.erase(unique(...), v.end())</code></td></tr>
+  <tr><td>map / set 에서 키 있나?</td><td><code>m.count(key) &gt; 0</code></td></tr>
+  <tr><td>map 에서 값 안전하게 읽기</td><td>count 확인 → <code>m[key]</code></td></tr>
+  <tr><td>map / set 삭제</td><td><code>m.erase(key)</code></td></tr>
+  <tr><td>map / set 크기</td><td><code>m.size()</code> / <code>m.empty()</code></td></tr>
+</table>
+
+<div class="box ok">
+  <b>🎯 큰 그림 한 줄로:</b><br>
+  <b>vector</b> = 직접 sort 한 다음 algorithm 함수 (<code>binary_search</code>, <code>lower_bound</code>) 로 빠른 탐색.<br>
+  <b>map / set</b> = 알아서 정리되는 컨테이너. 그냥 <code>.count</code>, <code>.erase</code> 만 호출하면 빠름.
+</div>
+
+<div style="margin-top:30px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e5e7eb;padding-top:8px;">
+  © Coderin · 코드린 — 학생용 STL 정리
+</div>
+
+</body>
+</html>

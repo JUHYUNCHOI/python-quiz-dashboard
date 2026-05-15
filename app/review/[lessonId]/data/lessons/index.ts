@@ -51,6 +51,8 @@ import { lessonCpp13 } from './lessonCpp13';
 import { lessonCpp14 } from './lessonCpp14';
 import { lessonCpp15 } from './lessonCpp15';
 import { lessonCpp23 } from './lessonCpp23';
+import { lessonCpp25 } from './lessonCpp25';
+import { lessonCpp26 } from './lessonCpp26';
 import { lessonCpp16 } from './lessonCpp16';
 import { lessonCpp17 } from './lessonCpp17';
 import { lessonCpp18 } from './lessonCpp18';
@@ -140,6 +142,8 @@ export const lessonsData: Record<string, LessonData> = {
   "cpp-14": lessonCpp14,
   "cpp-15": lessonCpp15,
   "cpp-23": lessonCpp23,
+  "cpp-25": lessonCpp25,
+  "cpp-26": lessonCpp26,
   "cpp-16": lessonCpp16,
   "cpp-17": lessonCpp17,
   "cpp-18": lessonCpp18,

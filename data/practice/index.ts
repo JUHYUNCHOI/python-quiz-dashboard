@@ -8,6 +8,7 @@ export { ioCluster } from "./cluster-io"
 export { stringsCluster } from "./cluster-strings"
 export { mapSetCluster } from "./cluster-map-set"
 export { sortingCluster } from "./cluster-sorting"
+export { searchCluster } from "./cluster-search"
 export { gridCluster } from "./cluster-grid"
 export { simulationCluster } from "./cluster-simulation"
 export { functionsCluster } from "./cluster-functions"
@@ -43,6 +44,7 @@ import { ioCluster } from "./cluster-io"
 import { stringsCluster } from "./cluster-strings"
 import { mapSetCluster } from "./cluster-map-set"
 import { sortingCluster } from "./cluster-sorting"
+import { searchCluster } from "./cluster-search"
 import { gridCluster } from "./cluster-grid"
 import { simulationCluster } from "./cluster-simulation"
 import { functionsCluster } from "./cluster-functions"
@@ -90,6 +92,7 @@ export const ALL_CLUSTERS: PracticeCluster[] = [
   stringsCluster,
   mapSetCluster,
   sortingCluster,
+  searchCluster,
   gridCluster,
   functionsCluster,
   refsPtrsCluster,
