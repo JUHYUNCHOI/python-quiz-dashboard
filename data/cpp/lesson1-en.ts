@@ -464,7 +464,7 @@ std::cout << "Hi" << std::endl
 - ✅ **Compiling** — C++ converts code to binary, then runs → fast!
 - ✅ **.cpp** — C++ file extension (Python uses .py)
 - ✅ **int main() { }** — Program entry point, { } for blocks
-- ✅ **#include <iostream>** — Import output tools
+- ✅ **\`#include <iostream>\`** — Import output tools
 - ✅ **std::cout <<** — Print to screen (= Python's print)
 - ✅ **std::endl** — Line break
 - ✅ **;** — Required at end of every statement!

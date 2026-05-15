@@ -605,7 +605,7 @@ int main() {
           id: "ch1-vec-iter",
           type: "explain",
           title: "🔄 vector<pair>를 반복문으로 순회하기",
-          content: `pair를 여러 개 다룰 때는 **vector<pair>**에 넣어서 관리해요.
+          content: `pair를 여러 개 다룰 때는 **\`vector<pair>\`** 에 넣어서 관리해요.
 
 \`\`\`cpp
 vector<pair<string, int>> students;
@@ -826,7 +826,7 @@ for (auto& [age, name] : people) {
 - \`p.first\` — 첫 번째 값, \`p.second\` — 두 번째 값
 - \`make_pair(a, b)\` 또는 \`{a, b}\` 로 만들기
 - **자동 비교 지원!** (first 먼저, 같으면 second 순서)
-- **vector<pair> sort 시 자동으로 first 기준 정렬!**
+- **\`vector<pair>\` sort 시 자동으로 first 기준 정렬!**
 
 ### 📦 tuple — 참고만!
 - **tuple<T1, T2, T3>**: 3개 이상 묶기

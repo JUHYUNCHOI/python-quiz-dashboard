@@ -297,7 +297,7 @@ Dave 80`,
           id: "s23-ch4-intro",
           type: "explain",
           title: "🤔 sort 의 람다, 다른 데서도 통할까?",
-          content: `> 📌 **심화 — Bronze 풀이엔 보통 <code>for</code> 루프 한 줄이 더 명확. "더 깔끔한 표현" 을 보여주는 챕터**
+          content: `> 📌 **심화 — Bronze 풀이엔 보통 \`for\` 루프 한 줄이 더 명확. "더 깔끔한 표현" 을 보여주는 챕터**
 
 \`sort\` 에 람다 비교 함수 넣었던 거 기억나죠?
 
@@ -397,7 +397,7 @@ cnt 값은?`,
           id: "s23-ch4-find-if",
           type: "explain",
           title: "🎯 find_if — 조건 맞는 첫 원소",
-          content: `> 📌 심화 — for 루프 + <code>break</code> 가 보통 더 직관적
+          content: `> 📌 심화 — \`for\` 루프 + \`break\` 가 보통 더 직관적
 
 **문제:** 벡터에서 첫 번째 짝수 찾기.
 
@@ -457,7 +457,7 @@ if (it != v.end()) {
           id: "s23-ch4-accumulate",
           type: "explain",
           title: "➕ accumulate — 다 더하기 (또는 다 곱하기)",
-          content: `> 📌 심화 — Bronze 에선 <code>for</code> 루프 합산이 더 직관적. accumulate 는 알아두기만
+          content: `> 📌 심화 — Bronze 에선 \`for\` 루프 합산이 더 직관적. accumulate 는 알아두기만
 
 **문제:** 점수 합계, 평균 구하기.
 
@@ -572,7 +572,7 @@ int main() {
 
 ### 📊 sort 기초
 - **sort(v.begin(), v.end())** → 오름차순 (기본)
-- **sort(v.begin(), v.end(), greater<int>())** → 내림차순
+- **\`sort(v.begin(), v.end(), greater<int>())\`** → 내림차순
 - \`#include <algorithm>\` 필요!
 
 ### 🔧 람다 (lambda)

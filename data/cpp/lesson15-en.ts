@@ -605,7 +605,7 @@ int main() {
           id: "ch1-vec-iter",
           type: "explain",
           title: "🔄 Iterating over vector<pair>",
-          content: `When you have multiple pairs, store them in a **vector<pair>**:
+          content: `When you have multiple pairs, store them in a **\`vector<pair>\`**:
 
 \`\`\`cpp
 vector<pair<string, int>> students;
@@ -826,7 +826,7 @@ for (auto& [age, name] : people) {
 - \`pair<string,int> p = {"Kim", 95};\` — declare and initialize
 - Access with \`.first\` and \`.second\`
 - Supports **automatic comparison**! (first → second)
-- **Sorting a vector<pair> automatically sorts by first value!**
+- **Sorting a \`vector<pair>\` automatically sorts by first value!**
 
 ### 🔗 tuple
 - **tuple<T1, T2, T3>**: Bundle 3 or more values

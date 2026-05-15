@@ -297,7 +297,7 @@ Dave 80`,
           id: "s23-ch4-intro",
           type: "explain",
           title: "🤔 Does sort's lambda work elsewhere?",
-          content: `> 📌 **Advanced — a plain <code>for</code> loop is usually clearer for Bronze. This chapter shows "cleaner expressions"**
+          content: `> 📌 **Advanced — a plain \`for\` loop is usually clearer for Bronze. This chapter shows "cleaner expressions"**
 
 Remember the lambda comparator you passed to \`sort\`?
 
@@ -397,7 +397,7 @@ What is cnt?`,
           id: "s23-ch4-find-if",
           type: "explain",
           title: "🎯 find_if — first match",
-          content: `> 📌 Advanced — for loop + <code>break</code> is usually more intuitive
+          content: `> 📌 Advanced — \`for\` loop + \`break\` is usually more intuitive
 
 **Problem:** Find the first even number in a vector.
 
@@ -571,7 +571,7 @@ int main() {
 
 ### 📊 sort Basics
 - **sort(v.begin(), v.end())** → ascending (default)
-- **sort(v.begin(), v.end(), greater<int>())** → descending
+- **\`sort(v.begin(), v.end(), greater<int>())\`** → descending
 - Requires \`#include <algorithm>\`!
 
 ### 🔧 Lambda

@@ -593,9 +593,9 @@ for (int i = 0; i < n; i++) {
 }
 \`\`\`
 
-> 💡 **USACO pattern:** N almost always comes from input → **vector<struct>** dominates.
+> 💡 **USACO pattern:** N almost always comes from input → **\`vector<struct>\`** dominates.
 >
-> ⚠️ **Watch out:** \`vector<int> students(n)\` has no \`.name\` or \`.score\` — must be **vector<Student>** for member access!`,
+> ⚠️ **Watch out:** \`vector<int> students(n)\` has no \`.name\` or \`.score\` — must be **\`vector<Student>\`** for member access!`,
         },
         {
           id: "ch2-vec-cin-anim",
