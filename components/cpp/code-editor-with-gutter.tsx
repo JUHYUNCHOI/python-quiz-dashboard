@@ -46,20 +46,29 @@ export function CodeEditorWithGutter({
   const fontSize = typeof style?.fontSize === "number" ? style.fontSize : DEFAULT_FONT_SIZE
   const lineHeight = typeof style?.lineHeight === "number" ? style.lineHeight : DEFAULT_LINE_HEIGHT
   const fontFamily = style?.fontFamily ?? "ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, monospace"
+  // Match gutter bg to editor bg so they look like one continuous surface.
+  const editorBg = (style?.background as string) ?? "#1e1e2e"
 
   const editorStyle: React.CSSProperties = {
     fontFamily,
     fontSize,
     lineHeight,
-    background: "transparent",
+    background: "transparent",   // gutter wrapper holds the bg
     color: "#e6edf3",
     ...(style || {}),
   }
 
-  // Mobile-friendly: small but readable gutter. ~3-digit width fits up to 999 lines.
+  // VSCode-like: gutter merges with editor (same bg), dim numbers, error line tinted.
   return (
-    <div className="cpp-editor-gutter-wrap" style={{ display: "flex", position: "relative", background: "transparent" }}>
-      {/* Line number gutter */}
+    <div
+      className="cpp-editor-gutter-wrap"
+      style={{
+        display: "flex",
+        position: "relative",
+        background: editorBg,
+      }}
+    >
+      {/* Line number gutter — visually merged with editor */}
       <div
         aria-hidden="true"
         style={{
@@ -68,12 +77,11 @@ export function CodeEditorWithGutter({
           fontFamily,
           fontSize: Math.max(11, fontSize - 2),
           lineHeight,
-          color: "#475569",
+          color: "rgba(230, 237, 243, 0.35)",   // dim foreground (≈ VSCode line-numbers)
           textAlign: "right",
           userSelect: "none",
-          background: "rgba(255,255,255,0.02)",
-          borderRight: "1px solid rgba(255,255,255,0.06)",
-          minWidth: 32,
+          background: editorBg,
+          minWidth: 40,
           flexShrink: 0,
         }}
       >
@@ -84,15 +92,17 @@ export function CodeEditorWithGutter({
             <div
               key={ln}
               style={{
-                paddingLeft: 6,
-                paddingRight: 8,
-                background: isError ? "rgba(239, 68, 68, 0.18)" : "transparent",
+                paddingLeft: 8,
+                paddingRight: 12,
+                background: isError ? "rgba(239, 68, 68, 0.15)" : "transparent",
                 color: isError ? "#fca5a5" : undefined,
                 fontWeight: isError ? 700 : 400,
                 height: `${fontSize * lineHeight}px`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "flex-end",
+                borderLeft: isError ? "2px solid #ef4444" : "2px solid transparent",
+                boxSizing: "border-box",
               }}
             >
               {ln}
