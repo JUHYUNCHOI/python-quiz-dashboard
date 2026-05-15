@@ -6,20 +6,20 @@ export const SOLUTION_CODE = [
   "from collections import defaultdict",
   "",
   "input = sys.stdin.readline",
-  "N = int(input())",
   "children = defaultdict(list)",
-  "",
-  "for _ in range(N):",
-  "    line = input().split()",
-  "    parent = line[0]",
-  "    child = line[1]",
-  "    children[parent].append(child)",
   "",
   "def count(node):",
   "    total = 1  # count self",
   "    for c in children[node]:",
   "        total += count(c)",
   "    return total",
+  "",
+  "N = int(input())",
+  "for _ in range(N):",
+  "    line = input().split()",
+  "    parent = line[0]",
+  "    child = line[1]",
+  "    children[parent].append(child)",
   "",
   "print(count('root'))",
 ];
@@ -82,6 +82,50 @@ export function makeMcc21MenuCh1(E) {
             </div>
           </div>
         </div>),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Here's what input actually looks like — 5 operations that build a tiny menu, with a tree drawing of what the children map ends up holding. The answer counts every node including 'root'.",
+        "실제 입력이 어떻게 생겼는지 봐요 — 5 개 연산이 작은 메뉴를 만들고, children 맵이 결국 어떤 트리를 가리키는지 그림으로 봐요. 답은 'root' 포함 모든 노드 수예요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10, textAlign: "center" }}>
+            📥 {t(E, "Sample Input → Output", "예시 입력 → 출력")}
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+            <div style={{ background: "#1e1e2e", borderRadius: 8, padding: "10px 12px", fontFamily: "JetBrains Mono, monospace", fontSize: 12, color: "#e6edf3", lineHeight: 1.7 }}>
+              <div style={{ color: "#8b5cf6", fontWeight: 700, marginBottom: 4 }}>{t(E, "Input", "입력")}</div>
+              5<br/>
+              root drinks<br/>
+              root food<br/>
+              drinks coffee<br/>
+              drinks tea<br/>
+              food pizza
+            </div>
+            <div style={{ background: "#f0fdf4", borderRadius: 8, padding: "10px 12px", fontSize: 12, lineHeight: 1.7 }}>
+              <div style={{ color: "#15803d", fontWeight: 700, marginBottom: 4 }}>{t(E, "Output", "출력")}</div>
+              <div style={{ fontSize: 28, fontWeight: 800, color: "#15803d", textAlign: "center", marginTop: 6 }}>6</div>
+              <div style={{ fontSize: 11, color: "#15803d", textAlign: "center" }}>{t(E, "(root + 5 items)", "(root + 5 항목)")}</div>
+            </div>
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontFamily: "JetBrains Mono, monospace", fontSize: 12, lineHeight: 1.8, color: "#5b21b6", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 700, marginBottom: 8, fontFamily: "inherit" }}>{t(E, "After applying the 5 operations:", "5 개 연산 적용 후:")}</div>
+            <div>root</div>
+            <div>├─ drinks</div>
+            <div>│&nbsp;&nbsp; ├─ coffee</div>
+            <div>│&nbsp;&nbsp; └─ tea</div>
+            <div>└─ food</div>
+            <div>&nbsp;&nbsp;&nbsp; └─ pizza</div>
+          </div>
+
+          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
+            {t(E, "Count: root(1) + drinks(1) + coffee(1) + tea(1) + food(1) + pizza(1) = ", "개수: root(1) + drinks(1) + coffee(1) + tea(1) + food(1) + pizza(1) = ")}<b style={{ color: "#15803d" }}>6</b>
+          </div>
+        </div>
+      ),
     },
     {
       type: "quiz",
