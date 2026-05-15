@@ -51,8 +51,10 @@ import {
   cppLesson19Data, cppLesson20Data, cppLesson21Data, cppLesson22Data, cppLesson23Data,
   // C++ cpp-24: Pre-algorithm setup (mini-lesson)
   cppLesson24Data,
-  // C++ lesson 23 English
-  cppLesson23EnData,
+  // C++ cpp-25 (정렬 후 빠른 검색), cpp-26 (sort 응용 심화) — cpp-23 분할로 신설
+  cppLesson25Data, cppLesson26Data,
+  // C++ lesson 23/25/26 English
+  cppLesson23EnData, cppLesson25EnData, cppLesson26EnData,
   // C++ checkpoint lessons (Korean)
   cppLessonCk1Data, cppLessonCk2Data, cppLessonCk3Data, cppLessonCk4Data, cppLessonCk5Data,
   cppLessonCk6Data, cppLessonCk7Data, cppLessonCk8Data, cppLessonCk9Data, cppLessonCk10Data,
@@ -69,7 +71,7 @@ import {
   // C++ English lessons 15-22
   cppLesson15EnData, cppLesson16EnData, cppLesson17EnData, cppLesson18EnData,
   cppLesson19EnData, cppLesson20EnData, cppLesson21EnData, cppLesson22EnData,
-  // C++ cpp-24 EN
+  // C++ cpp-24 EN (cpp-25/26 EN are imported above with KO version block)
   cppLesson24EnData,
   // C++ English project lessons
   cppLessonP1EnData, cppLessonP2EnData, cppLessonP3EnData,
@@ -128,6 +130,7 @@ export const lessonsData: Record<string, LessonData> = {
   "cpp-ck6": cppLessonCk6Data, "cpp-ck7": cppLessonCk7Data, "cpp-ck8": cppLessonCk8Data,
   "cpp-ck9": cppLessonCk9Data, "cpp-ck10": cppLessonCk10Data,
   "cpp-19": cppLesson19Data, "cpp-20": cppLesson20Data, "cpp-24": cppLesson24Data,
+  "cpp-25": cppLesson25Data, "cpp-26": cppLesson26Data,
   // C++ projects
   "cpp-p1": cppLessonP1Data, "cpp-p2": cppLessonP2Data, "cpp-p3": cppLessonP3Data,
   // Pseudocode Part 1
@@ -264,6 +267,8 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "cpp-19": { ko: cppLesson19Data, en: cppLesson19EnData },
   "cpp-20": { ko: cppLesson20Data, en: cppLesson20EnData },
   "cpp-24": { ko: cppLesson24Data, en: cppLesson24EnData },
+  "cpp-25": { ko: cppLesson25Data, en: cppLesson25EnData },
+  "cpp-26": { ko: cppLesson26Data, en: cppLesson26EnData },
   // C++ projects
   "cpp-p1": { ko: cppLessonP1Data, en: cppLessonP1EnData },
   "cpp-p2": { ko: cppLessonP2Data, en: cppLessonP2EnData },
