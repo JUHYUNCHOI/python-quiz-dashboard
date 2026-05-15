@@ -21,57 +21,75 @@ const _TH_PRESETS = [
 ];
 
 function _audit(log) {
-  // Returns array of step states with breakout flags + ok flag.
+  // DP on counter state — matches the verified FULL_PY algorithm.
+  // dp_min[c] / dp_max[c] = min / max breakouts on day i given counter = c.
+  // Transitions: c → c+1 (no break) OR any c → 0 (break, +1).
   const N = log.length;
+  const INF = 999999;
+  const C_MAX = N + 5;
+
+  // Day 0 constraint: log[0] must be 0 or -1 (counter starts at 0).
+  if (log[0] !== -1 && log[0] !== 0) {
+    return {
+      steps: [{ i: 0, v: log[0], note: "day0-bad", breakout: false, ok: false }],
+      ok: false, minB: 0, maxB: 0,
+    };
+  }
+
+  let dpMin = new Array(C_MAX).fill(INF);
+  let dpMax = new Array(C_MAX).fill(-1);
+  dpMin[0] = 1; dpMax[0] = 1;   // day 0 → counter 0, that initial reset itself counts as 1 breakout
+
   const steps = [];
-  let prevI = -1, prevV = null, ok = true, minB = 0, maxB = 0;
-  for (let i = 0; i < N; i++) {
-    const v = log[i];
-    const state = { i, v, note: "", breakout: false, ok: true };
-    if (v === -1) {
-      state.note = "skip";
-    } else if (prevV === null) {
-      if (v > i) {
-        state.note = "impossible";
-        state.ok = false;
-        ok = false;
-        steps.push(state);
-        break;
+  steps.push({
+    i: 0, v: log[0],
+    note: log[0] === -1 ? "day0-missing" : "day0-zero",
+    breakout: true, ok: true,
+  });
+
+  for (let i = 1; i < N; i++) {
+    const newMin = new Array(C_MAX).fill(INF);
+    const newMax = new Array(C_MAX).fill(-1);
+    for (let c = 0; c < C_MAX; c++) {
+      if (dpMin[c] >= INF) continue;
+      // no breakout: counter c → c+1
+      if (c + 1 < C_MAX) {
+        if (dpMin[c] < newMin[c + 1]) newMin[c + 1] = dpMin[c];
+        if (dpMax[c] > newMax[c + 1]) newMax[c + 1] = dpMax[c];
       }
-      state.breakout = v !== i;
-      state.note = state.breakout ? "first known: breakout" : "first known: ok";
-      minB += state.breakout ? 1 : 0;
-      maxB += i;
-      prevI = i; prevV = v;
-    } else {
-      const gap = i - prevI;
-      if (v === prevV + gap) {
-        state.note = "consistent";
-      } else {
-        const d = i - v;
-        if (!(prevI < d && d <= i)) {
-          state.note = "impossible";
-          state.ok = false;
-          ok = false;
-          steps.push(state);
-          break;
-        }
-        state.breakout = true;
-        state.note = "breakout!";
-        minB += 1; maxB += 1;
+      // breakout: any c → 0, +1 break
+      if (dpMin[c] + 1 < newMin[0]) newMin[0] = dpMin[c] + 1;
+      if (dpMax[c] + 1 > newMax[0]) newMax[0] = dpMax[c] + 1;
+    }
+    // Apply log[i] constraint
+    if (log[i] !== -1) {
+      for (let c = 0; c < C_MAX; c++) {
+        if (c !== log[i]) { newMin[c] = INF; newMax[c] = -1; }
       }
-      prevI = i; prevV = v;
     }
-    steps.push(state);
+    dpMin = newMin;
+    dpMax = newMax;
+
+    let anyValid = false;
+    for (let c = 0; c < C_MAX; c++) if (dpMin[c] < INF) { anyValid = true; break; }
+
+    let note;
+    if (!anyValid) note = "impossible";
+    else if (log[i] === -1) note = "missing";
+    else if (log[i] === 0) note = "force-zero";
+    else note = "force-counter";
+
+    steps.push({ i, v: log[i], note, breakout: log[i] === 0, ok: anyValid });
+    if (!anyValid) break;
   }
-  if (ok) {
-    if (prevI !== -1) {
-      maxB += (N - 1 - prevI);
-    } else {
-      minB = 0; maxB = N;
-    }
+
+  let ansMin = INF, ansMax = -1;
+  for (let c = 0; c < C_MAX; c++) {
+    if (dpMin[c] < ansMin) ansMin = dpMin[c];
+    if (dpMax[c] > ansMax) ansMax = dpMax[c];
   }
-  return { steps, ok, minB, maxB };
+  const ok = ansMin < INF;
+  return { steps, ok, minB: ok ? ansMin : 0, maxB: ok ? ansMax : 0 };
 }
 
 export function TameHerdSim({ E }) {
@@ -84,12 +102,13 @@ export function TameHerdSim({ E }) {
   const cell = audit.steps[cur] || { i: cur, v: log[cur], note: "", breakout: false, ok: true };
 
   const noteText = (s) => {
-    if (s.note === "skip") return t(E, "−1 — missing, skip", "−1 — 누락, 건너뜀");
-    if (s.note === "consistent") return t(E, "matches prev + gap — no breakout", "이전 + 간격과 일치 — 탈출 없음");
-    if (s.note === "breakout!") return t(E, "value breaks the chain — breakout!", "값이 체인을 끊음 — 탈출!");
-    if (s.note === "first known: breakout") return t(E, "first known value v < day → breakout in [0, day]", "첫 알려진 값 v < 날짜 → [0, 날짜] 안에 탈출");
-    if (s.note === "first known: ok") return t(E, "first known matches day index — possible no breakout yet", "첫 알려진 값이 날짜와 일치 — 탈출 없을 수도");
-    if (s.note === "impossible") return t(E, "inconsistent — answer is −1", "모순 — 답은 −1");
+    if (s.note === "day0-zero") return t(E, "day 1 starts after a breakout (counter=0)", "1일차는 탈출 직후 (counter=0)");
+    if (s.note === "day0-missing") return t(E, "day 1 unknown — counter=0 either way", "1일차 누락 — 어쨌든 counter=0");
+    if (s.note === "day0-bad") return t(E, "day 1 ≠ 0 — impossible, answer −1", "1일차가 0 아님 — 불가능, 답 −1");
+    if (s.note === "missing") return t(E, "−1 — both options allowed (continue or breakout)", "−1 — 두 가지 다 가능 (이어가기 / 탈출)");
+    if (s.note === "force-zero") return t(E, "log=0 → breakout happened today", "log=0 → 오늘 탈출");
+    if (s.note === "force-counter") return t(E, `log=${s.v} → counter must equal ${s.v}`, `log=${s.v} → counter 는 ${s.v} 이어야 함`);
+    if (s.note === "impossible") return t(E, "constraint not reachable from any prior state — answer −1", "어떤 이전 상태에서도 도달 불가 — 답 −1");
     return "";
   };
 
