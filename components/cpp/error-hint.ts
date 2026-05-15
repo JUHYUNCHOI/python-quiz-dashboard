@@ -27,7 +27,47 @@ const PATTERNS: Array<{ regex: RegExp; hint: ErrorHint }> = [
       en: "💡 The lambda has mixed return types. All `return` statements must return the **same type**.",
     },
   },
-  // Undeclared identifier (e.g. forgot include)
+  // Python-isms: len()
+  {
+    regex: /'len'\s+(?:was\s+not\s+declared|cannot\s+be\s+used)|use\s+of\s+undeclared\s+identifier\s+'len'/i,
+    hint: {
+      ko: "💡 \`len(x)\` 는 **파이썬 문법** 이에요. C++ 에서는 \`x.size()\` 또는 (문자열은) \`x.length()\` 를 써요.",
+      en: "💡 `len(x)` is **Python syntax**. In C++ use `x.size()` or (for strings) `x.length()`.",
+    },
+  },
+  // Python-isms: print
+  {
+    regex: /'print'\s+(?:was\s+not\s+declared|cannot\s+be\s+used)|use\s+of\s+undeclared\s+identifier\s+'print'/i,
+    hint: {
+      ko: "💡 \`print(...)\` 는 **파이썬 문법** 이에요. C++ 에서는 \`cout << ... << endl;\` 을 써요.",
+      en: "💡 `print(...)` is **Python syntax**. In C++ use `cout << ... << endl;`.",
+    },
+  },
+  // Python-isms: input
+  {
+    regex: /'input'\s+(?:was\s+not\s+declared|cannot\s+be\s+used)|use\s+of\s+undeclared\s+identifier\s+'input'/i,
+    hint: {
+      ko: "💡 \`input()\` 은 **파이썬 문법** 이에요. C++ 에서는 \`cin >> 변수;\` 로 읽어요.",
+      en: "💡 `input()` is **Python syntax**. In C++ use `cin >> variable;` to read input.",
+    },
+  },
+  // Python-isms: range
+  {
+    regex: /'range'\s+(?:was\s+not\s+declared|cannot\s+be\s+used)|use\s+of\s+undeclared\s+identifier\s+'range'/i,
+    hint: {
+      ko: "💡 \`range(n)\` 은 **파이썬 문법** 이에요. C++ 에서는 \`for (int i = 0; i < n; i++)\` 로 써요.",
+      en: "💡 `range(n)` is **Python syntax**. In C++ use `for (int i = 0; i < n; i++)`.",
+    },
+  },
+  // Python-isms: True/False capitalized
+  {
+    regex: /'True'\s+(?:was\s+not\s+declared|cannot\s+be\s+used)|use\s+of\s+undeclared\s+identifier\s+'True'|'False'\s+(?:was\s+not\s+declared|cannot\s+be\s+used)|use\s+of\s+undeclared\s+identifier\s+'False'/i,
+    hint: {
+      ko: "💡 파이썬은 \`True\` / \`False\` 대문자, C++ 는 **소문자** \`true\` / \`false\` 예요.",
+      en: "💡 Python uses `True`/`False` (capitalized), C++ uses **lowercase** `true`/`false`.",
+    },
+  },
+  // Undeclared identifier (e.g. forgot include) — generic catch-all (must come AFTER python-isms)
   {
     regex: /'(\w+)'\s+was\s+not\s+declared|use\s+of\s+undeclared\s+identifier\s+'(\w+)'/i,
     hint: {
