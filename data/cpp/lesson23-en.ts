@@ -96,6 +96,11 @@ sort(v.begin(), v.end());
 
 In C++, sort always **modifies in place**. Need a sorted copy? Copy the vector first, then sort the copy.
 
+<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
+🎯 <b>How USACO uses it:</b><br>
+Appears in <b>almost every problem</b>. Sorting student scores, coordinates, prices, names. "Read data → sort first → then solve" is the most common opening of a USACO Bronze solution.
+</div>
+
 ### Same thing for arrays
 
 \`\`\`cpp
@@ -608,7 +613,16 @@ sort(v.begin(), v.end(), [](auto a, auto b) {
         return a.second > b.second;  // higher score first
     return a.first < b.first;        // tied score: alphabetical
 });
-\`\`\``
+\`\`\`
+
+<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
+🎯 <b>How USACO uses it:</b><br>
+• <b>Coordinate sorting</b> — \`pair<int, int>\` as (x, y) points. Sort by y, ties by x.<br>
+• <b>Event sorting</b> — (start time, event id). Process in chronological order.<br>
+• <b>Leaderboards</b> — (name, score). Descending by score, ties alphabetical.<br>
+• <b>Distance + index</b> — (distance, original index). Sort by distance, recover original index.<br>
+Almost every Bronze problem that pairs two values uses this.
+</div>`
         },
         {
           id: "s23-ch1-pred1",
@@ -1077,7 +1091,16 @@ int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
 cout << idx;  // 1
 \`\`\`
 
-> 💡 The trio is one family but they **return different things**, so they're used differently. Next page covers a common trap.`
+> 💡 The trio is one family but they **return different things**, so they're used differently. Next page covers a common trap.
+
+<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
+🎯 <b>USACO usage you'll see often with lower_bound:</b><br>
+• <b>"First ≥ threshold"</b> — sorted prices → "cheapest item costing ≥ $50K" / sorted times → "first meeting after now."<br>
+• <b>"Largest ≤ threshold"</b> — <code>lower_bound(x+1) - 1</code> for "most expensive item within budget."<br>
+• <b>"How many in this range?"</b> — <code>upper_bound(b) - lower_bound(a)</code> = points in [a, b].<br>
+• <b>Coordinate compression</b> (Silver+) — relabel values as 0, 1, 2... using <code>lower_bound</code>.<br>
+Sorted data + boundary query = lower_bound. The default tool in USACO.
+</div>`
         },
         {
           id: "s23-ch2-patterns-fb",
@@ -1363,8 +1386,25 @@ int main() {
         {
           id: "s23-ch3-unique",
           type: "explain",
-          title: "🧹 sort + unique — Removing Duplicates!",
-          content: `You've seen sorting and searching. One last pattern that comes paired with sort — the standard C++ idiom for **removing duplicate values** from an array.
+          title: "🧹 sort + unique — Removing Duplicates",
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:10px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 <b>Advanced pattern — rarely needed in USACO Bronze, common from Silver onwards</b>
+</div>
+
+### When do you actually use this?
+
+Two situations where \`sort + unique\` show up in USACO:
+
+1. **"How many distinct values?"** — input has duplicates and you want the *count of unique values*
+   > Example: "How many *distinct* cow names entered the farm?"
+
+2. **Coordinate compression (Silver+)** — when coordinates can be up to 10⁹ but N is only 10⁵, you **renumber the values as 0, 1, 2, ...** so you can index arrays by them. The standard \`sort + unique + lower_bound\` combo.
+
+Outside those, \`set\` is usually cleaner. \`sort + unique + erase\` is for **keeping a vector** while deduping.
+
+---
+
+### The code itself is simple
 
 \`\`\`cpp
 #include <algorithm>
@@ -1373,23 +1413,24 @@ using namespace std;
 
 vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};
 
-// Step 1: sort (unique only removes adjacent duplicates!)
+// Step 1: sort (unique only removes "adjacent duplicates" → sort first)
 sort(v.begin(), v.end());
 // v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}
 
-// Step 2: remove duplicates with unique + erase
+// Step 2: unique + erase in one line
 v.erase(unique(v.begin(), v.end()), v.end());
 // v = {1, 2, 3, 4, 5, 6, 9}
 \`\`\`
 
-⚠️ **Sort first!** unique only removes adjacent duplicates.
-Without sorting, {1, 3, 1} stays as 3 elements.
+⚠️ **Sort first!** \`unique\` only looks at adjacent duplicates. Calling unique on unsorted \`{1, 3, 1}\` keeps all 3.
+
+---
 
 | Python 🐍 | C++ ⚡ |
 |---|---|
 | \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
 
-💡 Memorize **sort → erase(unique(...), end())** as a pair! Next page — **why** we need erase too.`
+💡 **Memorize**: \`sort\` → \`v.erase(unique(v.begin(), v.end()), v.end())\` — these two lines as **a set**. Then you can drop them into any coordinate compression / dedupe scenario. Next page — **why** we need erase.`
         },
         {
           id: "s23-ch3-unique-detail",
@@ -1505,7 +1546,13 @@ int main() {
           id: "s23-ch3-stable",
           type: "explain",
           title: "📊 stable_sort — preserves original order on ties",
-          content: `\`sort()\` is **fast** but has one catch: **when values tie, the original order is not guaranteed.** For student-style data, that can be a problem.
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:10px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 <b>Advanced — rare in USACO Bronze. Just knowing "this exists" is enough</b>
+</div>
+
+### What problem does stable_sort solve?
+
+\`sort()\` is fast but has **one downside**: when several elements have the same value, **their order among themselves is not guaranteed.**
 
 \`\`\`cpp
 vector<pair<string, int>> students = {
@@ -1517,9 +1564,11 @@ sort(students.begin(), students.end(), [](auto a, auto b) {
 });
 \`\`\`
 
-Will Alice (90) and Carol (90) keep their **input order (Alice first)**? **sort doesn't guarantee it** — could vary by implementation.
+Will Alice and Carol (both 90) stay in **input order (Alice first)**? **\`sort\` doesn't guarantee it.** Different compilers/implementations may give different results.
 
-### \`stable_sort\` — keeps original order for equal elements
+---
+
+### \`stable_sort\` — keeps input order on ties
 
 \`\`\`cpp
 stable_sort(students.begin(), students.end(), [](auto a, auto b) {
@@ -1528,13 +1577,31 @@ stable_sort(students.begin(), students.end(), [](auto a, auto b) {
 // → ties always keep input order (Alice → Carol, Bob → Dave)
 \`\`\`
 
-| | sort | stable_sort |
-|---|---|---|
-| Speed | faster (O(N log N)) | slightly slower (O(N log² N)) |
-| On ties | order not guaranteed | input order preserved ✅ |
-| When | ties don't matter | tie order is meaningful |
+Same arguments, just swap the function name.
 
-> 💡 Use stable_sort for **rankings or any data where stability matters**. Plain sort is enough 99% of the time.`
+---
+
+### Comparison
+
+| | \`sort\` | \`stable_sort\` |
+|---|---|---|
+| Speed | faster — O(N log N) | slightly slower — O(N log² N) |
+| Tie order | random (not guaranteed) | keeps input order ✅ |
+| When | 99% of cases | when tie order matters |
+
+---
+
+### When is it actually needed?
+
+Usually **not.** The real cases:
+
+1. **Ranking output** where tied students should appear in input order
+2. **Re-sorting already-sorted data** by a second key — keeping the first ordering for ties
+   > Example: sort students by name first, then sort by score. Same-score students stay in alphabetical order.
+
+USACO Bronze problems usually have a fixed expected output, so \`sort\` is enough. **Come back to \`stable_sort\` only when a problem says "tie order matters."**
+
+> 💡 **One-line takeaway**: \`sort\` 99% of the time. When a problem explicitly cares about tie order, change one word to \`stable_sort\`.`
         },
         {
           id: "s23-ch3-stable-practice",
@@ -1605,28 +1672,49 @@ Dave 80`,
           id: "s23-ch4-intro",
           type: "explain",
           title: "🤔 Does sort's lambda work elsewhere?",
-          content: `Remember the lambda comparator you passed to \`sort\`?
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:10px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 <b>Advanced — a plain <code>for</code> loop is usually clearer for Bronze. This chapter shows "cleaner expressions"</b>
+</div>
+
+Remember the lambda comparator you passed to \`sort\`?
 
 \`\`\`cpp
 sort(v.begin(), v.end(), [](int a, int b) { return a > b; });
 \`\`\`
 
-That pattern — \`(begin, end, lambda)\` — works for almost every function in \`<algorithm>\`. Beyond sorting:
+That \`(begin, end, lambda)\` pattern works in almost every function in \`<algorithm>\`:
 
-- "**How many elements satisfy a condition?**" → \`count_if\`
-- "**First element that satisfies a condition?**" → \`find_if\`
-- "**Sum of all elements?**" → \`accumulate\` (in \`<numeric>\`)
+- "**count matching a condition**" → \`count_if\`
+- "**first match of a condition**" → \`find_if\`
+- "**sum of everything**" → \`accumulate\` (\`<numeric>\` header)
 
-> 💡 **Why bother?**
-> You can always write a for loop, but these functions make the **intent clear in one line**. Seeing \`count_if(..., cond)\` immediately tells the reader "we're counting things matching a condition." Big readability win in code reviews and competitions.`
+---
+
+### Honest take for Bronze students
+
+These functions **shorten a \`for\` loop you could already write.** That doesn't mean for loops are bad — for Bronze, this is often clearer:
+
+\`\`\`cpp
+int cnt = 0;
+for (int x : scores) if (x >= 80) cnt++;
+\`\`\`
+
+You *can* compress that into one \`count_if\` line, but **you don't have to**. Going from 5 lines to 1 line matters for **experienced readers scanning code fast**. For students, the for loop is more intuitive.
+
+> 💡 **Goal of this chapter**: "be aware these exist" so when you read someone else's \`count_if\` code you can decode it. **You don't need to use these yourself.** for loops are fine.`
         },
         {
           id: "s23-ch4-count-if",
           type: "explain",
           title: "🔢 count_if — count matches",
-          content: `**Problem:** How many students scored 80 or higher?
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:8px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 Advanced — for loop is more intuitive. Knowing this "exists" is enough
+</div>
 
-### Old way (for loop)
+**Problem:** How many students scored 80 or higher?
+
+### Method A — for loop (clearer for Bronze)
+
 \`\`\`cpp
 int cnt = 0;
 for (int x : scores) {
@@ -1634,22 +1722,39 @@ for (int x : scores) {
 }
 \`\`\`
 
-### \`count_if\` one-liner
+### Method B — \`count_if\` one-liner
+
 \`\`\`cpp
 int cnt = count_if(scores.begin(), scores.end(),
                    [](int x){ return x >= 80; });
 \`\`\`
 
+---
+
 ### Argument structure (same as sort)
+
 | Position | Meaning |
 |---|---|
 | 1st | Start iterator (\`v.begin()\`) |
 | 2nd | End iterator (\`v.end()\`) |
 | 3rd | **Predicate (lambda returning bool)** — true → counted |
 
-> 💡 **Difference from \`count\`?**
-> - \`count(b, e, x)\` — count elements **equal to x**
-> - \`count_if(b, e, pred)\` — count elements **matching the predicate** (much more flexible)`
+---
+
+### \`count\` vs \`count_if\` — don't mix up
+
+- \`count(b, e, x)\` — count elements **equal to x**
+- \`count_if(b, e, pred)\` — count elements **matching a lambda condition** (much more flexible)
+
+---
+
+### When is it actually worth using?
+
+- When you want the **reader** to immediately see your intent — \`count_if(scores, x >= 80)\` reads as "count high scorers"
+- When the **condition is complex** (multiple captured variables, AND/OR combinations)
+- In **contests** when you want to shorten code
+
+> 💡 Bottom line: **for Bronze, a \`for\` loop is more readable.** \`count_if\` is just nice to recognize. Reading other people's code is the main use.`
         },
         {
           id: "s23-ch4-count-if-predict",
@@ -1671,7 +1776,25 @@ What is cnt?`,
           id: "s23-ch4-find-if",
           type: "explain",
           title: "🎯 find_if — first match",
-          content: `**Problem:** Find the first even number in a vector.
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:8px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 Advanced — for loop + <code>break</code> is usually more intuitive
+</div>
+
+**Problem:** Find the first even number in a vector.
+
+### Method A — for loop (most common in Bronze)
+
+\`\`\`cpp
+int answer = -1;   // -1 if not found
+for (int x : v) {
+    if (x % 2 == 0) {
+        answer = x;
+        break;
+    }
+}
+\`\`\`
+
+### Method B — \`find_if\` one-liner
 
 \`\`\`cpp
 vector<int> v = {3, 7, 4, 9, 6};
@@ -1685,37 +1808,69 @@ if (it != v.end()) {
 }
 \`\`\`
 
-### Key pattern
+---
+
+### Key pattern (for Method B)
+
 - \`find_if\` returns an **iterator** (not a value)
 - If not found, returns \`v.end()\` → check with \`!= v.end()\`
 - To use the value, dereference: \`*it\`
 - For an index: \`it - v.begin()\`
 
-> 💡 **Difference from \`find\`?**
-> - \`find(b, e, x)\` — find the **value x** itself
-> - \`find_if(b, e, pred)\` — find the **first element matching the predicate**`
+---
+
+### \`find\` vs \`find_if\` — don't mix up
+
+- \`find(b, e, x)\` — find the **value x** itself (e.g. "first position equal to 5")
+- \`find_if(b, e, pred)\` — find the **first element matching a lambda** (e.g. "first even number")
+
+---
+
+### If the vector is sorted, \`lower_bound\` is faster
+
+⚠️ For a question like "first student ≥ 70":
+- Unsorted vector → \`find_if\` is O(N)
+- Sorted vector → \`lower_bound\` is O(log N) ← **faster**
+
+> 💡 Bottom line: in Bronze, **for loop + break** is usually clearest. \`find_if\` is for shortening complex-lambda conditions. Sorted big data → use \`lower_bound\` instead.`
         },
         {
           id: "s23-ch4-accumulate",
           type: "explain",
           title: "➕ accumulate — sum (or product, or anything)",
-          content: `**Problem:** Score sum and average.
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:8px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 Advanced — for loop sum is more intuitive in Bronze. accumulate is good to recognize
+</div>
+
+**Problem:** Score sum and average.
+
+### Method A — for loop (most common in Bronze)
+
+\`\`\`cpp
+vector<int> v = {10, 20, 30, 40};
+
+int sum = 0;
+for (int x : v) sum += x;
+cout << sum;        // 100
+\`\`\`
+
+### Method B — \`accumulate\` one-liner
 
 \`\`\`cpp
 #include <numeric>     // ⚠️ Not <algorithm> — <numeric>!
-
-vector<int> v = {10, 20, 30, 40};
 
 int sum = accumulate(v.begin(), v.end(), 0);
 //                                       ↑ initial value (sum starts at 0)
 cout << sum;     // 100
 \`\`\`
 
-### Tweak the initial value to do more
-\`\`\`cpp
-// Sum: start at 0
-accumulate(v.begin(), v.end(), 0);          // 100
+---
 
+### \`accumulate\`'s real strength — initial value + custom op
+
+For plain sums, for loop and accumulate are equivalent. But for **products or custom accumulation**, accumulate shines:
+
+\`\`\`cpp
 // Product: start at 1, pass multiplies as the 4th arg
 #include <functional>
 accumulate(v.begin(), v.end(), 1, multiplies<int>());   // 10*20*30*40 = 240000
@@ -1726,17 +1881,34 @@ accumulate(v.begin(), v.end(), 0,
 \`\`\`
 
 ### Average in one line
+
 \`\`\`cpp
 double avg = (double)accumulate(v.begin(), v.end(), 0) / v.size();
 \`\`\`
 
-> ⚠️ Don't forget \`#include <numeric>\`. This catches a lot of people the first time.`
+---
+
+### Common pitfalls ⚠️
+
+- Don't forget \`#include <numeric>\`. Easy to miss → compile error.
+- If the initial value is \`int\`, the result is \`int\` — for large sums use \`0LL\` (long long):
+  \`\`\`cpp
+  long long bigSum = accumulate(v.begin(), v.end(), 0LL);   // ← 0LL matters
+  \`\`\`
+
+---
+
+> 💡 **When it really helps**: USACO problems where the sum can exceed 10⁹ — use \`accumulate(..., 0LL)\` to avoid overflow in one line. Otherwise, a for loop is fine.`
         },
         {
           id: "s23-ch4-practice",
           type: "practice" as const,
-          title: "✋ From scratch — count high scorers + total",
-          content: `**Problem:** Read 5 student scores, then print:
+          title: "✋ From scratch — count high scorers + total (advanced practice)",
+          content: `<div style="background:#fef3c7; border:1.5px solid #f59e0b; border-radius:8px; padding:8px 14px; margin:6px 0 10px; font-size:12px; color:#92400e;">
+📌 Advanced practice — a for loop solution is equally correct. The point is to try \`count_if\` / \`accumulate\` once.
+</div>
+
+**Problem:** Read 5 student scores, then print:
 1. How many scored 80 or higher
 2. The total sum
 

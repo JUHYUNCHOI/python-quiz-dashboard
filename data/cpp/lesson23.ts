@@ -96,6 +96,11 @@ sort(v.begin(), v.end());
 
 C++ 에서 정렬은 항상 **원본을 직접 바꿔요.** "정렬된 새 벡터" 가 필요하면 미리 복사해두고 거기서 sort 해야 해요.
 
+<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
+🎯 <b>USACO 에서 이렇게 써요:</b><br>
+거의 <b>매 문제</b> 에 등장. 학생 점수 정렬, 좌표 정렬, 가격 정렬, 이름 알파벳 순 등. "데이터 받으면 일단 sort 해두고 시작" 패턴이 USACO Bronze 의 가장 흔한 첫 줄.
+</div>
+
 ### 배열에도 똑같이
 
 \`\`\`cpp
@@ -622,7 +627,16 @@ sort(v.begin(), v.end(), [](auto a, auto b) {
         return a.second > b.second;  // 점수 큰 게 앞
     return a.first < b.first;        // 동점이면 이름 사전순
 });
-\`\`\``
+\`\`\`
+
+<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
+🎯 <b>USACO 에서 이렇게 써요:</b><br>
+• <b>좌표 정렬</b> — \`pair<int, int>\` 가 (x, y) 점들. y 좌표 기준 정렬, 동점이면 x 기준.<br>
+• <b>이벤트 정렬</b> — (시작 시각, 이벤트 ID) 쌍. 시각 순서대로 처리.<br>
+• <b>순위표</b> — (이름, 점수) 쌍. 점수 내림차순, 동점이면 이름 알파벳 순.<br>
+• <b>거리 + 인덱스</b> — (거리, 원래 인덱스) 쌍. 거리 정렬 후 원래 인덱스 복원.<br>
+"두 값을 묶어서 정렬" 이 필요한 거의 모든 Bronze 문제에서 등장.
+</div>`
         },
         {
           id: "s23-ch1-pred1",
@@ -1091,7 +1105,16 @@ int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
 cout << idx;  // 1
 \`\`\`
 
-> 💡 셋이 한 가족이지만 **돌려주는 게 달라서** 쓰임도 달라요. 다음 페이지에서 흔한 함정 하나 짚고 가요.`
+> 💡 셋이 한 가족이지만 **돌려주는 게 달라서** 쓰임도 달라요. 다음 페이지에서 흔한 함정 하나 짚고 가요.
+
+<div style="background:#dcfce7; border:2px solid #16a34a; border-radius:10px; padding:10px 14px; margin:12px 0;">
+🎯 <b>USACO 에서 진짜 자주 나오는 lower_bound 활용:</b><br>
+• <b>"기준 이상 첫 거"</b> — 정렬된 가격에서 "5만원 이상 가장 싼 상품" / 정렬된 시간에서 "지금 이후 첫 약속".<br>
+• <b>"기준 이하 가장 큰 거"</b> — <code>lower_bound(x+1) - 1</code> 로 "예산 안에서 가장 비싼 거" 찾기.<br>
+• <b>"이 구간에 몇 개?"</b> — <code>upper_bound(b) - lower_bound(a)</code> 로 "[a, b] 범위 안의 점 개수".<br>
+• <b>좌표 압축</b> (Silver+) — 값을 0, 1, 2 같은 작은 번호로 재매김할 때 <code>lower_bound</code> 가 핵심.<br>
+정렬된 데이터 + 경계 질문 = lower_bound. USACO 에서 사실상 표준 도구.
+</div>`
         },
         {
           id: "s23-ch2-patterns-fb",
@@ -1377,8 +1400,25 @@ int main() {
         {
           id: "s23-ch3-unique",
           type: "explain",
-          title: "🧹 sort + unique — 중복 제거 패턴!",
-          content: `정렬과 탐색을 봤어요. 마지막으로 sort 와 짝꿍처럼 자주 쓰는 패턴 하나 — 배열에서 **중복된 값을 제거**하는 C++ 의 표준 패턴이에요.
+          title: "🧹 sort + unique — 중복 제거 패턴",
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:10px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 <b>심화 패턴 — USACO Bronze 에서는 거의 안 쓰지만 Silver 부터 자주 등장</b>
+</div>
+
+### 언제 진짜 쓰나요?
+
+USACO 에서 \`sort + unique\` 가 등장하는 대표적 상황 2 개:
+
+1. **"서로 다른 값이 몇 개?"** — 입력에 중복 섞여 있는데 종류만 세고 싶을 때
+   > 예: "농장에 들어온 소들의 *서로 다른* 이름 개수"
+
+2. **좌표 압축 (Silver+)** — 좌표가 10⁹ 처럼 큰데 N 은 10⁵ 인 경우, **값들을 0, 1, 2, ... 같이 작은 번호로 다시 매김** 하는 표준 트릭. \`sort + unique + lower_bound\` 3 단 콤보.
+
+이 두 상황 외엔 사실 \`set\` 쓰는 게 더 깔끔해요. **vector 를 유지하면서** dedupe 하고 싶을 때만 이 패턴.
+
+---
+
+### 코드 자체는 단순
 
 \`\`\`cpp
 #include <algorithm>
@@ -1387,23 +1427,24 @@ using namespace std;
 
 vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};
 
-// 1단계: 정렬 (unique는 인접 중복만 제거!)
+// 1단계: 정렬 (unique 는 "인접 중복" 만 제거하니까 정렬 먼저)
 sort(v.begin(), v.end());
 // v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}
 
-// 2단계: unique + erase로 중복 제거
+// 2단계: unique + erase 한 줄
 v.erase(unique(v.begin(), v.end()), v.end());
 // v = {1, 2, 3, 4, 5, 6, 9}
 \`\`\`
 
-⚠️ **sort 먼저!** unique는 인접한 중복만 제거해요.
-정렬하지 않으면 {1, 3, 1}에서 3개 그대로예요.
+⚠️ **sort 먼저!** \`unique\` 는 인접한 중복만 본다. 정렬 안 된 \`{1, 3, 1}\` 에 그냥 unique 쓰면 3 개 그대로.
+
+---
 
 | 파이썬 🐍 | C++ ⚡ |
 |---|---|
 | \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
 
-💡 **sort → erase(unique(...), end())** 패턴을 세트로 외워두세요! 다음 페이지에서 **왜 erase 까지 필요한지** 한 번 짚고 가요.`
+💡 **외울 거**: \`sort\` → \`v.erase(unique(v.begin(), v.end()), v.end())\` 이 두 줄을 **세트로** 통째 외워두면 좌표 압축 / dedupe 어디서든 바로 갖다 씀. 다음 페이지에서 **왜 erase 까지 필요한지** 짚고 가요.`
         },
         {
           id: "s23-ch3-unique-detail",
@@ -1519,7 +1560,13 @@ int main() {
           id: "s23-ch3-stable",
           type: "explain",
           title: "📊 stable_sort — 동점 시 원래 순서 보존",
-          content: `\`sort()\` 는 **빠른** 정렬이지만 한 가지 단점 있어요: **같은 값일 때 원래 순서가 보장 안 돼요.** 학생 데이터에선 이게 문제될 수 있어요.
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:10px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 <b>심화 — USACO Bronze 에서는 거의 안 씀. "이런 게 있다" 만 알면 충분</b>
+</div>
+
+### 무슨 문제 때문에 stable_sort 가 있나?
+
+\`sort()\` 는 빠르지만 **단점 하나**: 같은 값이 여러 개 있을 때 **그들 사이 순서를 보장 안 해요.**
 
 \`\`\`cpp
 vector<pair<string, int>> students = {
@@ -1531,24 +1578,44 @@ sort(students.begin(), students.end(), [](auto a, auto b) {
 });
 \`\`\`
 
-여기서 Alice (90), Carol (90) 의 순서가 **입력 순서대로 (Alice 먼저)** 보장될까? **sort 는 보장 안 함.** 컴파일러/구현마다 다르게 나올 수 있어요.
+90 점인 Alice 와 Carol 의 순서가 **입력 순서대로 (Alice 먼저)** 일까? **\`sort\` 는 보장 안 함.** 컴파일러/구현마다 다르게 나옴.
 
-### \`stable_sort\` — 같은 값이면 원래 순서 유지
+---
+
+### \`stable_sort\` — 동점이면 입력 순서 유지
 
 \`\`\`cpp
 stable_sort(students.begin(), students.end(), [](auto a, auto b) {
     return a.second > b.second;
 });
-// → 동점 시 항상 입력 순서 유지 (Alice → Carol, Bob → Dave)
+// → 동점이면 항상 입력 순서 유지 (Alice → Carol, Bob → Dave)
 \`\`\`
 
-| | sort | stable_sort |
-|---|---|---|
-| 속도 | 더 빠름 (O(N log N)) | 약간 느림 (O(N log² N)) |
-| 동점 시 | 순서 보장 X | 입력 순서 유지 ✅ |
-| 언제 | 동점 신경 안 쓸 때 | 동점 순서가 의미 있을 때 |
+함수 이름만 바꾸면 끝. 인자 다 동일.
 
-> 💡 **순위표 / 안정성 필요한 데이터** 는 stable_sort. 일반 정렬은 sort. 99% 는 sort 면 충분.`
+---
+
+### 비교표
+
+| | \`sort\` | \`stable_sort\` |
+|---|---|---|
+| 속도 | 더 빠름 — O(N log N) | 약간 느림 — O(N log² N) |
+| 동점 순서 | 무작위 (보장 X) | 입력 순서 그대로 ✅ |
+| 언제 | 99% 의 경우 | 동점 순서가 답에 영향 줄 때 |
+
+---
+
+### 언제 진짜 필요한가?
+
+대부분 **필요 없어요.** 진짜 쓰는 상황은:
+
+1. **순위표 출력** 인데 동점인 학생은 입력 순서대로 보여줘야 할 때
+2. **이미 한 기준으로 정렬된 데이터** 를 다른 기준으로 다시 정렬할 때 — 첫 기준 순서 보존하려고
+   > 예: 학생을 이름순으로 정렬해둔 뒤 점수순으로 다시 정렬. 점수 같은 학생은 이름순 유지.
+
+USACO Bronze 문제에선 "정답 순서" 가 고정되어 있어 보통 \`sort\` 면 충분. **stable_sort 는 "동점 순서까지 신경 쓰는 출력 문제" 만나면 그때 다시 와서 보면 됨.**
+
+> 💡 **한 줄 결론**: 99% 는 \`sort\`. "동점 순서가 답이다" 라는 문제 만나면 \`stable_sort\` 로 한 글자만 바꾸면 끝.`
         },
         {
           id: "s23-ch3-stable-practice",
@@ -1621,28 +1688,49 @@ Dave 80`,
           id: "s23-ch4-intro",
           type: "explain",
           title: "🤔 sort 의 람다, 다른 데서도 통할까?",
-          content: `\`sort\` 에 람다 비교 함수 넣었던 거 기억나죠?
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:10px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 <b>심화 — Bronze 풀이엔 보통 <code>for</code> 루프 한 줄이 더 명확. "더 깔끔한 표현" 을 보여주는 챕터</b>
+</div>
+
+\`sort\` 에 람다 비교 함수 넣었던 거 기억나죠?
 
 \`\`\`cpp
 sort(v.begin(), v.end(), [](int a, int b) { return a > b; });
 \`\`\`
 
-이 패턴 — \`(begin, end, 람다)\` — 사실 \`<algorithm>\` 의 거의 모든 함수에 통해요. 정렬 외에도:
+이 \`(begin, end, 람다)\` 패턴이 사실 \`<algorithm>\` 의 거의 모든 함수에 통해요:
 
-- "**조건을 만족하는 원소가 몇 개?**" → \`count_if\`
-- "**조건을 만족하는 첫 원소는?**" → \`find_if\`
-- "**모든 원소를 다 더하면?**" → \`accumulate\` (\`<numeric>\`)
+- "**조건 만족 개수**" → \`count_if\`
+- "**조건 만족 첫 원소**" → \`find_if\`
+- "**다 더한 값**" → \`accumulate\` (\`<numeric>\` 헤더)
 
-> 💡 **왜 알아둘 가치가 있나요?**
-> for 루프로 직접 짜도 되긴 하는데, 위 함수들은 **의도가 한 줄에 드러남**. \`count_if(..., 조건)\` 보면 "아, 조건 맞는 거 세는구나" 가 즉시 보임. 코드 리뷰/대회에서 가독성 큼.`
+---
+
+### Bronze 학생에게는 솔직한 한 마디
+
+위 함수들은 **for 루프로 풀 수 있는 일을 한 줄로 줄여주는** 거예요. 즉 **\`for\` 루프 자체를 못 쓰겠다는 게 아니에요.** Bronze 합격에는 다음 \`for\` 패턴이 더 편할 수 있어요:
+
+\`\`\`cpp
+int cnt = 0;
+for (int x : scores) if (x >= 80) cnt++;
+\`\`\`
+
+이걸 \`count_if\` 한 줄로 쓸 수 있다는 거지, **꼭 써야 한다는 건 아님**. 코드 길이가 5 줄에서 1 줄로 줄어드는 게 의미 있는 건 **숙련된 사람이 코드 빨리 읽을 때**. 학생 수준에선 for 루프가 더 직관적.
+
+> 💡 **이 챕터의 진짜 목표**: "이런 게 있다" 만 알아두고, 나중에 다른 사람 코드 읽다가 \`count_if\` 보면 "아, for 루프로 세는 거구나" 알아챌 수 있는 정도. **꼭 외워 쓸 필요 없음.**`
         },
         {
           id: "s23-ch4-count-if",
           type: "explain",
           title: "🔢 count_if — 조건 맞는 원소 개수",
-          content: `**문제:** 점수 벡터에서 80 점 이상이 몇 명?
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:8px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 심화 — for 루프로 더 직관적. "있다는 것만" 알고 가도 OK
+</div>
 
-### 옛날 방식 (for 루프)
+**문제:** 점수 벡터에서 80 점 이상이 몇 명?
+
+### 방법 A — for 루프 (Bronze 에선 이게 더 명확)
+
 \`\`\`cpp
 int cnt = 0;
 for (int x : scores) {
@@ -1650,22 +1738,39 @@ for (int x : scores) {
 }
 \`\`\`
 
-### \`count_if\` 한 줄
+### 방법 B — \`count_if\` 한 줄
+
 \`\`\`cpp
 int cnt = count_if(scores.begin(), scores.end(),
                    [](int x){ return x >= 80; });
 \`\`\`
 
+---
+
 ### 인자 구조 (sort 와 똑같음)
+
 | 자리 | 의미 |
 |---|---|
 | 1 번째 | 시작 iterator (\`v.begin()\`) |
 | 2 번째 | 끝 iterator (\`v.end()\`) |
 | 3 번째 | **bool 리턴 람다** — true 면 카운트 |
 
-> 💡 **\`count\` 와 차이?**
-> - \`count(b, e, x)\` — **값 x 와 같은 것** 만 셈
-> - \`count_if(b, e, pred)\` — **조건 (람다)** 을 만족하는 것 셈 (훨씬 유연)`
+---
+
+### \`count\` vs \`count_if\` — 헷갈리지 말기
+
+- \`count(b, e, x)\` — **값 x 와 정확히 같은 것** 셈
+- \`count_if(b, e, pred)\` — **람다 조건** 을 만족하는 것 셈 (훨씬 유연)
+
+---
+
+### 진짜 언제 쓰면 좋을까
+
+- 코드를 **읽을 사람** 한테 의도를 빨리 보여주고 싶을 때 — \`count_if(scores, x>=80)\` 한 줄이 곧 "80 점 이상 세기" 의도
+- 람다 안에 **복잡한 조건** (여러 변수 캡처, AND/OR 결합) 이 들어갈 때
+- **알고리즘 대회** 에서 코드 길이 줄이고 싶을 때
+
+> 💡 결론: **Bronze 풀이에선 \`for\` 루프가 가독성 좋음.** \`count_if\` 는 알아두기만, 안 써도 됨. 코드 리뷰 시 다른 사람이 쓴 거 읽을 수 있으면 충분.`
         },
         {
           id: "s23-ch4-count-if-predict",
@@ -1687,7 +1792,25 @@ cnt 값은?`,
           id: "s23-ch4-find-if",
           type: "explain",
           title: "🎯 find_if — 조건 맞는 첫 원소",
-          content: `**문제:** 벡터에서 첫 번째 짝수 찾기.
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:8px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 심화 — for 루프 + <code>break</code> 가 보통 더 직관적
+</div>
+
+**문제:** 벡터에서 첫 번째 짝수 찾기.
+
+### 방법 A — for 루프 (Bronze 에선 이게 더 흔함)
+
+\`\`\`cpp
+int answer = -1;   // 못 찾은 경우 -1
+for (int x : v) {
+    if (x % 2 == 0) {
+        answer = x;
+        break;
+    }
+}
+\`\`\`
+
+### 방법 B — \`find_if\` 한 줄
 
 \`\`\`cpp
 vector<int> v = {3, 7, 4, 9, 6};
@@ -1701,37 +1824,69 @@ if (it != v.end()) {
 }
 \`\`\`
 
-### 핵심 패턴
+---
+
+### 핵심 패턴 (방법 B 의)
+
 - \`find_if\` 는 **iterator** 를 돌려줘요 (값 X)
 - 못 찾으면 \`v.end()\` 반환 → \`!= v.end()\` 로 체크
 - 값을 쓰려면 \`*it\` (역참조)
 - 인덱스가 필요하면 \`it - v.begin()\`
 
-> 💡 **\`find\` 와 차이?**
-> - \`find(b, e, x)\` — **값 x 자체** 찾기
-> - \`find_if(b, e, pred)\` — **조건 (람다)** 만족 첫 원소 찾기`
+---
+
+### \`find\` vs \`find_if\` — 헷갈리지 말기
+
+- \`find(b, e, x)\` — **값 x 자체** 찾기 (예: "정확히 5 인 첫 위치")
+- \`find_if(b, e, pred)\` — **조건 (람다)** 만족 첫 원소 (예: "짝수인 첫 원소")
+
+---
+
+### 정렬된 vector 면 \`lower_bound\` 가 더 빠름
+
+⚠️ "70 점 이상 첫 학생" 같은 질문에서:
+- 안 정렬된 vector → \`find_if\` O(N)
+- 정렬된 vector → \`lower_bound\` O(log N) ← **이게 더 빠름**
+
+> 💡 결론: Bronze 에선 보통 **for 루프 + break** 가 가장 명확. \`find_if\` 는 람다 조건이 복잡할 때 한 줄로 줄이고 싶을 때. 정렬되어 있고 큰 데이터면 \`lower_bound\` 가 정답.`
         },
         {
           id: "s23-ch4-accumulate",
           type: "explain",
           title: "➕ accumulate — 다 더하기 (또는 다 곱하기)",
-          content: `**문제:** 점수 합계, 평균 구하기.
+          content: `<div style="background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:8px 14px; margin:6px 0 12px; text-align:center; font-weight:700; color:#92400e;">
+📌 심화 — Bronze 에선 <code>for</code> 루프 합산이 더 직관적. accumulate 는 알아두기만
+</div>
+
+**문제:** 점수 합계, 평균 구하기.
+
+### 방법 A — for 루프 (Bronze 에선 이게 가장 흔함)
+
+\`\`\`cpp
+vector<int> v = {10, 20, 30, 40};
+
+int sum = 0;
+for (int x : v) sum += x;
+cout << sum;        // 100
+\`\`\`
+
+### 방법 B — \`accumulate\` 한 줄
 
 \`\`\`cpp
 #include <numeric>     // ⚠️ <algorithm> 아니라 <numeric>!
-
-vector<int> v = {10, 20, 30, 40};
 
 int sum = accumulate(v.begin(), v.end(), 0);
 //                                       ↑ 시작값 (sum 의 초깃값 0)
 cout << sum;     // 100
 \`\`\`
 
-### 시작값을 잘 설정하면 응용 가능
-\`\`\`cpp
-// 합계: 시작 0
-accumulate(v.begin(), v.end(), 0);          // 100
+---
 
+### \`accumulate\` 의 진짜 강점 — 시작값 + 커스텀 연산
+
+기본 합산은 for 루프나 accumulate 나 같은데, **곱셈이나 커스텀 누적** 이 필요할 때 accumulate 가 빛나요:
+
+\`\`\`cpp
 // 곱: 시작 1, 4 번째 인자에 곱셈 함수
 #include <functional>
 accumulate(v.begin(), v.end(), 1, multiplies<int>());   // 10*20*30*40 = 240000
@@ -1742,24 +1897,42 @@ accumulate(v.begin(), v.end(), 0,
 \`\`\`
 
 ### 평균 한 줄
+
 \`\`\`cpp
 double avg = (double)accumulate(v.begin(), v.end(), 0) / v.size();
 \`\`\`
 
-> ⚠️ **\`<numeric>\` 헤더** 따로 \`#include\` 필요. 자주 까먹어서 컴파일 에러 일 위!`
+---
+
+### 흔한 함정 ⚠️
+
+- **\`<numeric>\` 헤더** 따로 \`#include\` 필요. 자주 까먹어서 컴파일 에러.
+- 시작값이 \`int\` 면 결과도 \`int\` — 큰 수 합산엔 \`0LL\` (long long) 로 시작하기.
+  \`\`\`cpp
+  long long bigSum = accumulate(v.begin(), v.end(), 0LL);   // ← 0LL 주의
+  \`\`\`
+
+---
+
+> 💡 **언제 진짜 쓸까:** USACO 문제에서 합계가 큰 수 (10⁹ 넘는 경우) + long long 필요할 때 \`accumulate(..., 0LL)\` 로 한 줄 깔끔. 그 외엔 for 루프가 더 명확.`
         },
         {
           id: "s23-ch4-practice",
           type: "practice" as const,
-          title: "✋ 처음부터 — 80 점 이상 학생 수 + 합계",
-          content: `**문제:** 학생 5 명 점수를 입력받아:
+          title: "✋ 처음부터 — 80 점 이상 학생 수 + 합계 (심화 연습)",
+          content: `<div style="background:#fef3c7; border:1.5px solid #f59e0b; border-radius:8px; padding:8px 14px; margin:6px 0 10px; font-size:12px; color:#92400e;">
+📌 심화 연습 — for 루프로 풀어도 정답. \`count_if\` / \`accumulate\` 를 직접 한 번 써보는 게 이번 목적.
+</div>
+
+**문제:** 학생 5 명 점수를 입력받아:
 1. 80 점 이상인 학생 수
 2. 전체 합계
 
 를 한 줄에 공백으로 구분해 출력.
 
 > 💡 \`count_if\` 로 1 번, \`accumulate\` 로 2 번. 둘 다 한 줄로 해결 가능.
-> ⚠️ \`accumulate\` 는 \`<numeric>\` 필요!`,
+> ⚠️ \`accumulate\` 는 \`<numeric>\` 헤더 필요!
+> 🔁 **for 루프로도 같은 정답.** 둘 중 편한 방식으로.`,
           starterCode: `#include <iostream>
 #include <vector>
 #include <algorithm>
