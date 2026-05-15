@@ -59,30 +59,30 @@ Press the button to follow along!`,
           id: "s23-ch2-sorted-toolbox",
           type: "explain",
           title: "🗝️ Sorting is the launchpad — a toolbox that opens up after one sort",
-          content: `## 🚀 The big picture for this chapter
+          content: `## 🚀 This chapter at a glance
 
-> **🎯 Sorting makes search fast — that's the whole chapter in one line.**
+> **🎯 Sort the data once and search becomes way faster. That's this whole chapter.**
 
-The **binary search** idea from the previous page (open the middle, throw half away) — that single idea is what every tool in this chapter is built on.
+The **binary search** from the previous page (open the middle, drop half) — every function in this chapter uses that same trick.
 
 ---
 
-### 📊 Same task, before vs after sorting — for 1,000,000 items
+### 📊 1,000,000 items — before vs after sorting
 
 | What you want | Unsorted | After sorting (this chapter) |
 |---|---|---|
-| "is x there?" | 1,000,000 comparisons (\`find\` — full scan) | **~20** (\`binary_search\`) |
+| "is x there?" | 1,000,000 compares (\`find\` — full scan) | **~20** (\`binary_search\`) |
 | "how many of x?" | 1,000,000 (\`std::count\`) | **~40** (\`upper - lower\`) |
 | "first ≥ x?" | 1,000,000 (manual loop) | **~20** (\`lower_bound\`) |
-| "dedupe" | write it yourself | **one line** (\`sort + unique + erase\`) |
+| "dedupe" | tricky to write | **one line** (\`sort + unique + erase\`) |
 
-> 💡 The function names may be unfamiliar — **we meet each one on the next pages.** For now, just take away "sorting unlocks this much speed."
+> 💡 The function names may be new — **we'll cover each one on the next pages.** For now, just remember "sort first → search gets way faster."
 
 ---
 
-### 🔑 Student takeaway
+### One line
 
-> "**Sorting isn't the end — it's the start.** One sort = explosively faster search. Each tool will have a clear 'what's it for,' so there's less to memorize."`
+> **Sort once and search gets about 50,000× faster.** That's why USACO solutions almost always start with sort.`
         },
         {
           id: "s23-ch2-iter",
