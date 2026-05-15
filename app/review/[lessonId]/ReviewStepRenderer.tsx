@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, Fragment } from "react"
 import dynamic from "next/dynamic"
 import { highlightCppCode } from "@/components/cpp/cpp-runner"
+import { createSmartKeyHandler } from "@/components/cpp/editor-key-handler"
 
 // 동적 import — SSR 비활성화
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
@@ -789,78 +790,7 @@ function PracticeStep({
                   insertSpaces={true}
                   placeholder={t("// 여기에 코드를 작성하세요...", "// Write your code here...")}
                   textareaClassName="focus:outline-none"
-                  onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement & HTMLDivElement>) => {
-                    const ta = e.currentTarget as unknown as HTMLTextAreaElement
-                    const val = ta.value
-                    const start = ta.selectionStart
-                    const end = ta.selectionEnd
-
-                    // Enter — 이전 줄 들여쓰기 유지 + { 다음이면 4칸 추가, } 앞이면 줄바꿈 + 닫기
-                    if (e.key === "Enter") {
-                      e.preventDefault()
-                      const lineStart = val.lastIndexOf("\n", start - 1) + 1
-                      const currentLine = val.slice(lineStart, start)
-                      const indent = currentLine.match(/^(\s*)/)?.[1] ?? ""
-                      const charBefore = val[start - 1]
-                      const charAfter = val[start]
-
-                      // {  와 } 사이 → 새 줄 + 추가 들여쓰기 + 빈 줄 + 원래 들여쓰기 닫는 줄
-                      if (charBefore === "{" && charAfter === "}") {
-                        const insertion = "\n" + indent + "    " + "\n" + indent
-                        const newVal = val.slice(0, start) + insertion + val.slice(start)
-                        const newCursor = start + 1 + indent.length + 4
-                        setInputs([newVal])
-                        requestAnimationFrame(() => { ta.selectionStart = ta.selectionEnd = newCursor })
-                        return
-                      }
-
-                      // 일반 — 이전 줄 들여쓰기 유지 + { 로 끝나면 4칸 추가
-                      const extra = currentLine.trimEnd().endsWith("{") ? "    " : ""
-                      const insertion = "\n" + indent + extra
-                      const newVal = val.slice(0, start) + insertion + val.slice(start)
-                      const newCursor = start + insertion.length
-                      setInputs([newVal])
-                      requestAnimationFrame(() => { ta.selectionStart = ta.selectionEnd = newCursor })
-                      return
-                    }
-
-                    // 자동 닫기 — { ( [ "
-                    const pairs: Record<string, string> = { "{": "}", "(": ")", "[": "]", "\"": "\"" }
-                    if (pairs[e.key] && start === end) {
-                      e.preventDefault()
-                      const closing = pairs[e.key]
-                      const newVal = val.slice(0, start) + e.key + closing + val.slice(start)
-                      setInputs([newVal])
-                      requestAnimationFrame(() => { ta.selectionStart = ta.selectionEnd = start + 1 })
-                      return
-                    }
-
-                    // 닫는 괄호 자동 건너뛰기 — } ) ] " 가 이미 있으면 입력 안 하고 커서만 이동
-                    const closers = new Set(["}", ")", "]", "\""])
-                    if (closers.has(e.key) && val[start] === e.key && start === end) {
-                      e.preventDefault()
-                      requestAnimationFrame(() => { ta.selectionStart = ta.selectionEnd = start + 1 })
-                      return
-                    }
-
-                    // Backspace — 빈 괄호 쌍 사이에서 같이 삭제
-                    if (e.key === "Backspace" && start === end && start > 0) {
-                      const prev = val[start - 1]
-                      const next = val[start]
-                      if (
-                        (prev === "{" && next === "}") ||
-                        (prev === "(" && next === ")") ||
-                        (prev === "[" && next === "]") ||
-                        (prev === "\"" && next === "\"")
-                      ) {
-                        e.preventDefault()
-                        const newVal = val.slice(0, start - 1) + val.slice(start + 1)
-                        setInputs([newVal])
-                        requestAnimationFrame(() => { ta.selectionStart = ta.selectionEnd = start - 1 })
-                        return
-                      }
-                    }
-                  }}
+                  onKeyDown={createSmartKeyHandler((next) => setInputs([next]), { onCtrlEnter: check })}
                   style={{
                     fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
                     fontSize: 14,
@@ -873,7 +803,8 @@ function PracticeStep({
                 ref={firstInputRef as React.RefObject<HTMLTextAreaElement>}
                 value={inputs[0]}
                 onChange={e => setInputs([e.target.value])}
-                placeholder={t("// 여기에 코드를 작성하세요...", "// Write your code here...")}
+                onKeyDown={createSmartKeyHandler((next) => setInputs([next]), { onCtrlEnter: check })}
+                placeholder={t("# 여기에 코드를 작성하세요...", "# Write your code here...")}
                 rows={12}
                 className="w-full bg-[#1a1b2e] text-[#a9b1d6] px-4 py-3 font-mono text-sm focus:outline-none resize-y placeholder:text-gray-600 min-h-[280px]"
                 spellCheck={false}

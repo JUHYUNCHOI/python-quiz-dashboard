@@ -135,7 +135,7 @@ export function IteratorVsPointer() {
                   </div>
                 </div>
                 {/* list 면 화살표 */}
-                {mode === "list" && (node as { next: number }).next !== -1 && (
+                {mode === "list" && (node as unknown as { next: number }).next !== -1 && (
                   <div
                     style={{
                       position: "absolute",

@@ -20,16 +20,32 @@ export function createSmartKeyHandler(
   setCode: (next: string) => void,
   opts: SmartKeyHandlerOpts = {},
 ) {
-  return (e: React.KeyboardEvent<HTMLTextAreaElement & HTMLDivElement>) => {
-    const textarea = e.currentTarget
+  // SimpleEditor 는 HTMLTextAreaElement & HTMLDivElement 로 타입을 좁히고,
+  // 일반 <textarea> 는 HTMLTextAreaElement 로 좁혀. 런타임에 실제로 쓰는 건
+  // textarea 의 selection/value API 뿐이라 둘 다 안전하게 동작해.
+  return (e: React.KeyboardEvent<any>) => {
+    const textarea = e.currentTarget as HTMLTextAreaElement
     const start = textarea.selectionStart
     const end = textarea.selectionEnd
     const val = textarea.value
 
-    // Ctrl/Cmd + Enter → 옵션 콜백 (코드 실행 등)
-    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+    // Ctrl/Cmd + Enter 또는 Shift + Enter → 옵션 콜백 (코드 실행 등)
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey || e.shiftKey)) {
       e.preventDefault()
       opts.onCtrlEnter?.()
+      return
+    }
+
+    // Tab — 4 spaces 들여쓰기 (Python 처럼 indent-sensitive 언어에 필수)
+    // SimpleEditor 는 자체 Tab 처리가 있지만, 일반 <textarea> 는 없음.
+    // 우리 handler 가 먼저 실행되므로 여기서 처리해도 안전.
+    if (e.key === "Tab" && !e.shiftKey) {
+      e.preventDefault()
+      const newVal = val.slice(0, start) + "    " + val.slice(end)
+      setCode(newVal)
+      requestAnimationFrame(() => {
+        textarea.selectionStart = textarea.selectionEnd = start + 4
+      })
       return
     }
 
