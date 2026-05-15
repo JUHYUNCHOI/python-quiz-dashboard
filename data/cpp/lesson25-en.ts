@@ -95,26 +95,29 @@ The next pages introduce **the tools built on this idea**, one at a time. Each o
         {
           id: "s23-ch2-iter",
           type: "explain",
-          title: "📌 Iterators — a 1-minute primer before the next page",
-          content: `The next page brings \`lower_bound\`, and instead of returning a number it returns an **iterator**. It looks scary the first time, so a quick 1-minute primer:
+          title: "📌 Iterators — a finger pointing to a position",
+          content: `The next page brings \`lower_bound\`, which returns an **iterator** instead of a plain number. It looks scary the first time, so let's get comfortable with it.
 
 ---
 
-### Iterator = "a finger pointing to a position"
+### Iterator = "a finger pointing to a spot inside the vector"
 
-The \`v.begin()\` / \`v.end()\` you've been writing with sort — those are iterators. **A finger pointing at a spot inside the vector.**
+The \`v.begin()\` / \`v.end()\` you've already been writing with sort — those *are* iterators. \`begin()\` points to the first slot; \`end()\` points **one past the last** slot.
 
 \`\`\`
    10    20    30    40    50
     ↑                          ↑
- begin()                      end() (one **past** the last spot)
+ begin()                      end() ← one *past* the last
+                                     (no value — just an "end" marker)
 \`\`\`
+
+> 💡 The fact that **\`end()\` is one *past* the last** feels odd at first, but the convention "[begin, end) is the real data" runs through all of STL, so it's actually convenient.
 
 ---
 
 ### You've seen pointers? Almost the same thing
 
-For a vector, you can treat an iterator like a pointer. The values are laid out next to each other in memory, so \`++it\` just goes to the next slot. The syntax matches too:
+For a vector, you can treat an iterator like a pointer. Values are laid out next to each other in memory, so \`++it\` just moves to the next slot. The syntax matches:
 
 | | Pointer | Iterator |
 |---|---|---|
@@ -122,13 +125,32 @@ For a vector, you can treat an iterator like a pointer. The values are laid out 
 | Next position | \`p++\` | \`it++\` |
 | Get the index | \`p - array\` | \`it - v.begin()\` |
 
-> ⚠️ The real difference shows up later — in containers like \`map\` / \`set\` / \`list\` whose memory isn't contiguous, pointers can't move through them but iterators can. We'll come back to that. For now, **"basically a pointer, for vectors"** is enough.
+> ⚠️ The real difference shows up later — in \`map\` / \`set\` / \`list\` (memory not contiguous), pointers don't work but iterators do. We'll get there. For now, **"basically a pointer, for vectors"** is enough.
 
 ---
 
-### 🎯 The two formulas to memorize
+### How it's actually used — iterate a vector
 
-When functions like \`lower_bound\` return an iterator, you'll be doing one of two things with it:
+\`\`\`cpp
+vector<int> v = {10, 20, 30, 40, 50};
+
+for (auto it = v.begin(); it != v.end(); ++it) {
+    cout << *it << " ";   // 10 20 30 40 50
+}
+\`\`\`
+
+- \`auto it = v.begin()\` — start the finger at the first slot
+- \`it != v.end()\` — keep going *until* the end marker (don't read end itself — no value there)
+- \`++it\` — move to the next slot
+- \`*it\` — value at the current slot
+
+> 💡 In practice you'd usually write \`for (int x : v)\` (range-for) — it's shorter and more common. The pattern above is for **understanding what iterators do under the hood**.`
+        },
+        {
+          id: "s23-ch2-iter-formulas",
+          type: "explain",
+          title: "🎯 Before the next page — two formulas to memorize",
+          content: `When an iterator comes back from \`lower_bound\` (or \`find\`), you'll be doing **one of two things**:
 
 \`\`\`
    10    20    30    40    50
@@ -141,7 +163,52 @@ cout << *it;             // 40   ← *it is the value
 cout << it - v.begin();  // 3    ← convert to index
 \`\`\`
 
-> 💡 \`*it\` = value, \`it - v.begin()\` = index. **Memorize these two lines** and the next page flows easily.`
+---
+
+### 🛡️ Not found → returns \`v.end()\`
+
+\`lower_bound\` and \`find\` return \`v.end()\` when the value isn't there (= "the end marker"). Reading that slot with \`*it\` is **dangerous** — there's no value there.
+
+\`\`\`cpp
+auto it = lower_bound(v.begin(), v.end(), x);
+if (it != v.end()) {        // ← always check
+    cout << *it;             // safe
+} else {
+    cout << "not found";
+}
+\`\`\`
+
+> 💡 Memorize the pattern: \`auto it = ...; if (it != v.end()) { ... }\`. That one line keeps 90% of iterator code safe.
+
+---
+
+### Two formulas + one pattern, that's it
+
+| Memorize | Meaning |
+|---|---|
+| \`*it\` | **value** at that position |
+| \`it - v.begin()\` | **index** (0-based) |
+| \`it != v.end()\` | **was it found** (end means not found) |
+
+Know those three and the next pages flow easily. Let's try one 👇`
+        },
+        {
+          id: "s23-ch2-iter-try",
+          type: "predict" as const,
+          title: "✋ Try it — predict iterator output",
+          code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {10, 20, 30, 40, 50};
+    auto it = v.begin() + 2;
+    cout << *it << " ";
+    cout << (it - v.begin()) << endl;
+    return 0;
+}`,
+          options: ["30 2", "20 1", "30 3", "2 30"],
+          answer: 0,
+          explanation: "\\`v.begin() + 2\\` moves two slots from begin → index 2 → value **30**. \\`*it\\` = 30. \\`it - v.begin()\\` = 2 (the index). Output: **30 2**."
         },
         {
           id: "s23-ch2-lb",
