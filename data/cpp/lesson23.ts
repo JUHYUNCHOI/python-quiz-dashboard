@@ -496,6 +496,39 @@ sort(v.begin(), v.end(), [](int a, int b) {
     return a > b;
 });
 // v = {9, 8, 5, 2, 1}  (내림차순)
+\`\`\`
+
+---
+
+### ⚠️ 자주 하는 실수 — 값을 반환하면 ❌
+
+람다는 **bool (true/false) 만** 반환해야 해요. **값 (a, b 같은 정수) 을 반환하면 컴파일 에러.**
+
+\`\`\`cpp
+// ❌ 잘못 — int 를 반환 (에러: inconsistent types 'bool' and 'int')
+sort(v.begin(), v.end(), [](int a, int b) {
+    if (a < b) return a;     // ← 값 자체를 반환 ❌
+    else return b;
+});
+
+// ✅ 맞음 — bool 비교 결과만 반환
+sort(v.begin(), v.end(), [](int a, int b) {
+    return a < b;             // ← "a 가 b 보다 앞인가?" true/false
+});
+\`\`\`
+
+**왜 그런가**: sort 는 "**a 가 b 앞이야?**" 라는 *질문* 에 **YES/NO** 만 받아요. 값 자체를 돌려주면 sort 가 알아듣지 못함.
+
+### 동률 처리도 같은 규칙
+
+절댓값 기준 정렬 + 동률이면 작은 값 먼저:
+
+\`\`\`cpp
+// ✅ 동률 처리도 bool 만 반환
+sort(v.begin(), v.end(), [](int a, int b) {
+    if (abs(a) != abs(b)) return abs(a) < abs(b);   // 절댓값 비교
+    return a < b;                                    // 동률 시: 작은 값이 앞
+});
 \`\`\``
         },
         {

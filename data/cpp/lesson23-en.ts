@@ -485,6 +485,39 @@ sort(v.begin(), v.end(), [](int a, int b) {
     return a > b;
 });
 // v = {9, 8, 5, 2, 1}  (descending)
+\`\`\`
+
+---
+
+### ⚠️ Common mistake — returning a value ❌
+
+The lambda must return **only bool (true/false)**. **Returning a value (an int like \`a\` or \`b\`) causes a compile error.**
+
+\`\`\`cpp
+// ❌ Wrong — returns an int (error: inconsistent types 'bool' and 'int')
+sort(v.begin(), v.end(), [](int a, int b) {
+    if (a < b) return a;     // ← returning the value itself ❌
+    else return b;
+});
+
+// ✅ Right — return a bool comparison only
+sort(v.begin(), v.end(), [](int a, int b) {
+    return a < b;             // ← "should a come before b?" true/false
+});
+\`\`\`
+
+**Why**: sort asks "**should a come before b?**" and expects **YES/NO** only. If you return the value itself, sort can't interpret it.
+
+### Tiebreaks follow the same rule
+
+Sort by absolute value, with smaller value first on ties:
+
+\`\`\`cpp
+// ✅ Tiebreak also returns bool only
+sort(v.begin(), v.end(), [](int a, int b) {
+    if (abs(a) != abs(b)) return abs(a) < abs(b);   // primary: abs comparison
+    return a < b;                                    // tiebreak: smaller value first
+});
 \`\`\``
         },
         {
