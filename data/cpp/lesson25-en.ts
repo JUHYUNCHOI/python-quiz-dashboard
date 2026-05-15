@@ -107,9 +107,25 @@ The \`v.begin()\` / \`v.end()\` you've already been writing with sort — those 
 
 ---
 
-### You've seen pointers? Almost the same thing
+### You've seen pointers? Almost the same — just slightly smarter
 
-For a vector, you can treat an iterator like a pointer. Values are laid out next to each other in memory, so \`++it\` just moves to the next slot. The syntax matches:
+**Both hold an address** — that's how they point to something. The difference is **how "next" works**:
+
+| | Pointer | Iterator |
+|---|---|---|
+| What's inside | raw address only | address + "how to go to next" |
+| What \`++\` does | **always** address + 4 (next memory slot) | **depends on container** |
+| For vector? | address + 4 | address + 4 (same!) |
+| For list? | doesn't work | jumps to next node |
+
+In plain terms:
+
+> 🧭 **Pointer = address written on a slip of paper** ("ABC Apt #301"). Next house = #302 (just +1).
+> 🧭 **Iterator = GPS navigation**. Knows the address, and when you hit "next" it figures out the way.
+>   - Apartment (vector) → just #302 — same as pointer
+>   - Maze (list/map) → follows the actual route — pointers can't
+
+**For vectors, they really do look identical.** Internally, STL often defines vector's iterator as just a pointer (\`T*\`). So the syntax matches:
 
 | | Pointer | Iterator |
 |---|---|---|
@@ -117,7 +133,7 @@ For a vector, you can treat an iterator like a pointer. Values are laid out next
 | Next position | \`p++\` | \`it++\` |
 | Get the index | \`p - array\` | \`it - v.begin()\` |
 
-> ⚠️ The real difference shows up later — in \`map\` / \`set\` / \`list\` (memory not contiguous), pointers don't work but iterators do. We'll get there. For now, **"basically a pointer, for vectors"** is enough.
+> ⚠️ The real difference shows up in \`list\` / \`map\` / \`set\` (memory not contiguous), where pointers don't work but iterators do. For now, **"basically a pointer, for vectors"** is enough.
 
 ---
 
