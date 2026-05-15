@@ -72,7 +72,7 @@ export const cppLesson25Data: LessonData = {
 | 하고 싶은 일 | 정렬 안 됨 | 정렬 후 (이 챕터에서 배움) |
 |---|---|---|
 | "x 가 있나?" | 100 만 번 비교 (\`find\` — 다 훑어봄) | **~20 번** (\`binary_search\`) |
-| "x 가 몇 개?" | 100 만 번 (\`std::count\`) | **~40 번** (\`upper - lower\`) |
+| "x 가 몇 개?" | 100 만 번 (\`count\`) | **~40 번** (\`upper - lower\`) |
 | "x 이상 첫 거?" | 100 만 번 (직접 루프) | **~20 번** (\`lower_bound\`) |
 | "중복 제거" | 직접 짜기 어려움 | **한 줄** (\`sort + unique + erase\`) |
 
@@ -378,7 +378,7 @@ cout << idx;  // 1
           id: "s23-ch2-lb-vs-count",
           type: "explain",
           title: "🤔 잠깐 — 개수 세기는 \`count()\` 도 있지 않아?",
-          content: `맞아요. \`std::count\` 도 개수를 세요 (algorithm 의 표준 함수):
+          content: `맞아요. \`count()\` 도 개수를 세요 (algorithm 의 표준 함수):
 
 \`\`\`cpp
 int cnt = count(v.begin(), v.end(), 3);   // 정렬 안 되어 있어도 OK
@@ -406,14 +406,14 @@ int cnt = count(v.begin(), v.end(), 3);   // 정렬 안 되어 있어도 OK
 
 다음 레슨 (map) 에서 \`m.count(key)\` 가 나오는데 이름은 같지만 **완전히 다른 함수예요.**
 
-| | \`std::count(v.begin, v.end, x)\` | \`m.count(key)\` |
+| | \`count(v.begin, v.end, x)\` | \`m.count(key)\` |
 |---|---|---|
 | 어디 거? | algorithm 함수 (외부) | map / set 의 **멤버** 함수 |
 | 어디서 씀? | vector 같은 일반 범위 | map, set |
 | 속도 | O(n) — 처음부터 훑음 | **O(log n)** — 트리 직접 탐색 |
 | 답 | 정확히 \`x\` 인 거 몇 개 | 키가 있나 (map 은 0/1, multiset 은 진짜 개수) |
 
-> 💡 같은 이름이지만 **다른 함수.** vector 의 \`std::count\` 는 느린데, map 의 \`m.count\` 는 자기 안에 트리가 있어서 빠름 — sort 안 해도 빠른 거. 이건 다음 레슨에서 다시 짚어요.`
+> 💡 같은 이름이지만 **다른 함수.** vector 의 \`count()\` 는 느린데, map 의 \`m.count()\` 는 자기 안에 트리가 있어서 빠름 — sort 안 해도 빠른 거. 이건 다음 레슨에서 다시 짚어요.`
         },
         {
           id: "s23-ch2-lb-vs-bs",

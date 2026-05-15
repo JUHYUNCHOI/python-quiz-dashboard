@@ -72,7 +72,7 @@ The **binary search** from the previous page (open the middle, drop half) — ev
 | What you want | Unsorted | After sorting (this chapter) |
 |---|---|---|
 | "is x there?" | 1,000,000 compares (\`find\` — full scan) | **~20** (\`binary_search\`) |
-| "how many of x?" | 1,000,000 (\`std::count\`) | **~40** (\`upper - lower\`) |
+| "how many of x?" | 1,000,000 (\`count\`) | **~40** (\`upper - lower\`) |
 | "first ≥ x?" | 1,000,000 (manual loop) | **~20** (\`lower_bound\`) |
 | "dedupe" | tricky to write | **one line** (\`sort + unique + erase\`) |
 
@@ -378,7 +378,7 @@ cout << idx;  // 1
           id: "s23-ch2-lb-vs-count",
           type: "explain",
           title: "🤔 Wait — doesn't \`count()\` also count occurrences?",
-          content: `Yes! \`std::count\` (the standard algorithm) also counts:
+          content: `Yes! \`count()\` (the standard algorithm) also counts:
 
 \`\`\`cpp
 int cnt = count(v.begin(), v.end(), 3);   // works even on unsorted data
@@ -406,14 +406,14 @@ Common in competitive programming; in everyday code \`count()\` is more typical.
 
 In the next lesson (map) you'll see \`m.count(key)\`. Same name, **completely different function.**
 
-| | \`std::count(v.begin, v.end, x)\` | \`m.count(key)\` |
+| | \`count(v.begin, v.end, x)\` | \`m.count(key)\` |
 |---|---|---|
 | Whose function? | algorithm (external) | **member** of map / set |
 | Used on | vector, plain ranges | map, set |
 | Speed | O(n) — scans the range | **O(log n)** — walks the tree directly |
 | Answer | how many equal to \`x\` | does the key exist (0/1 for map, real count for multiset) |
 
-> 💡 Same name, **different functions.** vector's \`std::count\` is slow, but map's \`m.count\` is fast because map keeps a tree inside — no sort needed. We'll revisit this in the next lesson.`
+> 💡 Same name, **different functions.** vector's \`count()\` is slow, but map's \`m.count()\` is fast because map keeps a tree inside — no sort needed. We'll revisit this in the next lesson.`
         },
         {
           id: "s23-ch2-lb-vs-bs",
