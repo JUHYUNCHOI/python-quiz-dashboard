@@ -147,7 +147,7 @@ auto it = v.begin();   // place the finger on the first slot
 
 ### A finger can do exactly two things
 
-#### 1️⃣ "What's here?" → \`*it\`
+**1️⃣ "What's here?" → \`*it\`**
 
 Put \`*\` in front of the finger and you get *the value at that spot*:
 
@@ -156,7 +156,7 @@ auto it = v.begin();   // pointing at 10
 cout << *it;           // 10
 \`\`\`
 
-#### 2️⃣ "One slot over!" → \`++it\`
+**2️⃣ "One slot over!" → \`++it\`**
 
 Slide the finger one slot to the right:
 
