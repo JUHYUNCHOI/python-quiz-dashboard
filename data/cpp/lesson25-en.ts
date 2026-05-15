@@ -549,14 +549,14 @@ if (it != v.end() && *it == x) {
         {
           id: "s23-ch2-fb1",
           type: "fillblank" as const,
-          title: "lower_bound Fill-in-the-Blank",
-          content: "Find the first index where 4 or greater appears in the sorted vector!",
+          title: "✋ Your turn — find the first index where value ≥ 4",
+          content: "In the sorted vector, find the index of the **first spot where the value is 4 or greater**!",
           code: "vector<int> v = {1, 2, 4, 4, 6};\nauto it = ___(v.begin(), v.end(), 4);\nint idx = it - v.___;\ncout << idx;  // 2",
           fillBlanks: [
             { id: 0, answer: "lower_bound", options: ["lower_bound", "upper_bound", "find", "binary_search"] },
             { id: 1, answer: "begin()", options: ["begin()", "end()", "front()", "start()"] }
           ],
-          explanation: "lower_bound returns an iterator to the first position ≥ the target value. Subtract v.begin() to get the index. 4 first appears at index 2!"
+          explanation: "lower_bound hands you a finger to the 'first spot ≥ target'. Subtract v.begin() to turn it into an index.\n\nIn {1, 2, 4, 4, 6}, 4 first appears at index 2 → Answer: 2"
         },
         {
           id: "s23-ch2-practice1",
@@ -609,7 +609,7 @@ int main() {
     else cout << "No";
     return 0;
 }`,
-          hint: "if (binary_search(v.begin(), v.end(), x)) cout << \"Yes\"; else cout << \"No\"; — for existence-only checks, binary_search is the cleanest.",
+          hint: "binary_search returns just true or false. Drop it straight into an if-condition to branch Yes / No.",
           expectedOutput: `Yes`,
           stdin: `5
 1 3 5 7 9
@@ -618,7 +618,7 @@ int main() {
         {
           id: "s23-ch2-pred1",
           type: "predict" as const,
-          title: "Predict lower_bound & upper_bound Output!",
+          title: "✋ Your turn — predict lower_bound & upper_bound output",
           code: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -632,7 +632,7 @@ int main() {
 }`,
           options: ["1 2", "2 2", "1 1", "2 1"],
           answer: 0,
-          explanation: "lower_bound(4) → index 1 (first 4). upper_bound(4) → index 3 (position of 6). hi - lo = 3 - 1 = 2 (4 appears twice). Output: 1 2"
+          explanation: "v   = {2, 4, 4, 6, 8}\nidx    0  1  2  3  4\n          ↑     ↑\n          lo    hi\n\nlower_bound(4) → 'first spot where value ≥ 4' = index 1\nupper_bound(4) → 'first spot after the 4s' = index 3\n\nlo - v.begin() = 1\nhi - lo        = 3 - 1 = 2  (two 4s)\n\n→ Output: 1 2"
         },
         {
           id: "s23-ch2-practice2",

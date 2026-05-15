@@ -549,14 +549,14 @@ if (it != v.end() && *it == x) {
         {
           id: "s23-ch2-fb1",
           type: "fillblank" as const,
-          title: "lower_bound 빈칸 채우기",
-          content: "정렬된 벡터에서 4 이상의 첫 번째 인덱스를 구해봐요!",
+          title: "✋ 직접 — 4 이상 첫 인덱스 찾기",
+          content: "정렬된 벡터에서 **4 이상 첫 자리** 의 인덱스를 구해봐요!",
           code: "vector<int> v = {1, 2, 4, 4, 6};\nauto it = ___(v.begin(), v.end(), 4);\nint idx = it - v.___;\ncout << idx;  // 2",
           fillBlanks: [
             { id: 0, answer: "lower_bound", options: ["lower_bound", "upper_bound", "find", "binary_search"] },
             { id: 1, answer: "begin()", options: ["begin()", "end()", "front()", "start()"] }
           ],
-          explanation: "lower_bound는 찾는 값 이상의 첫 위치를 반복자로 반환해요. - v.begin()으로 인덱스로 변환해요. 4는 인덱스 2에 처음 등장하므로 결과는 2!"
+          explanation: "lower_bound 는 '값 이상 첫 자리' 손가락을 돌려줘요. 거기서 v.begin() 을 빼면 인덱스로 바뀜.\n\n배열 {1, 2, 4, 4, 6} 에서 4 는 인덱스 2 에 처음 등장 → 답: 2"
         },
         {
           id: "s23-ch2-practice1",
@@ -609,7 +609,7 @@ int main() {
     else cout << "No";
     return 0;
 }`,
-          hint: "if (binary_search(v.begin(), v.end(), x)) cout << \"Yes\"; else cout << \"No\"; — 존재 여부만 필요할 땐 binary_search 가 가장 간단.",
+          hint: "binary_search 는 true 나 false 만 돌려줘요. if 문 조건에 바로 넣어서 Yes / No 갈라보세요.",
           expectedOutput: `Yes`,
           stdin: `5
 1 3 5 7 9
@@ -618,7 +618,7 @@ int main() {
         {
           id: "s23-ch2-pred1",
           type: "predict" as const,
-          title: "lower_bound & upper_bound 출력 예측!",
+          title: "✋ 직접 — lower_bound & upper_bound 출력 예측",
           code: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -632,7 +632,7 @@ int main() {
 }`,
           options: ["1 2", "2 2", "1 1", "2 1"],
           answer: 0,
-          explanation: "lower_bound(4) → index 1 (첫 번째 4). upper_bound(4) → index 3 (6의 위치). hi - lo = 3 - 1 = 2 (4가 2개). 출력: 1 2"
+          explanation: "배열 {2, 4, 4, 6, 8}\n인덱스  0  1  2  3  4\n           ↑     ↑\n           lo    hi\n\nlower_bound(4) → '값 4 이상 첫 자리' = 인덱스 1\nupper_bound(4) → '값 4 끝난 다음' = 인덱스 3\n\nlo - v.begin() = 1\nhi - lo        = 3 - 1 = 2  (4 가 2 개)\n\n→ 출력: 1 2"
         },
         {
           id: "s23-ch2-practice2",
