@@ -273,14 +273,7 @@ int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
 cout << idx;  // 1
 \`\`\`
 
-> 💡 The trio is one family but they **return different things**, so they're used differently. Next page covers a common trap.
-
-> 🎯 **USACO usage you'll see often with lower_bound:**
-> • **"First ≥ threshold"** — sorted prices → "cheapest item costing ≥ $50K" / sorted times → "first meeting after now."
-> • **"Largest ≤ threshold"** — <code>lower_bound(x+1) - 1</code> for "most expensive item within budget."
-> • **"How many in this range?"** — <code>upper_bound(b) - lower_bound(a)</code> = points in [a, b].
-> • **Coordinate compression** (Silver+) — relabel values as 0, 1, 2... using <code>lower_bound</code>.
-> Sorted data + boundary query = lower_bound. The default tool in USACO.`
+> 💡 The trio is one family but they **return different things**, so they're used differently. Next page covers a common trap. (Concrete "where do I use this?" scenarios are summarized later in this chapter, in a comparison table.)`
         },
         {
           id: "s23-ch2-patterns-fb",
