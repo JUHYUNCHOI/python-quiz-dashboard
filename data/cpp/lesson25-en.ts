@@ -88,13 +88,13 @@ The **binary search** from the previous page (open the middle, drop half) — ev
           id: "s23-ch2-iter",
           type: "explain",
           title: "📌 Iterators — a finger pointing to a position",
-          content: `The next page brings \`lower_bound\`, which returns an **iterator** instead of a plain number. It looks scary the first time, so let's get comfortable with it.
+          content: `On the next page, \`lower_bound\` returns an **iterator** instead of a plain number. Let's get comfortable with it first.
 
 ---
 
-### Iterator = "a finger pointing to a spot inside the vector"
+### Iterator = "a spot inside the vector"
 
-The \`v.begin()\` / \`v.end()\` you've already been writing with sort — those *are* iterators. \`begin()\` points to the first slot; \`end()\` points **one past the last** slot.
+The \`v.begin()\` / \`v.end()\` you've been writing with \`sort\` — those *are* iterators.
 
 \`\`\`
    10    20    30    40    50
@@ -103,47 +103,14 @@ The \`v.begin()\` / \`v.end()\` you've already been writing with sort — those 
                                      (no value — just an "end" marker)
 \`\`\`
 
-> 💡 The fact that **\`end()\` is one *past* the last** feels odd at first, but the convention "[begin, end) is the real data" runs through all of STL, so it's actually convenient.
-
 ---
 
-### You've seen pointers? Almost the same — just slightly smarter
+### You only need two things
 
-**Both hold an address** — that's how they point to something. The difference is **how "next" works**:
-
-| | Pointer | Iterator |
-|---|---|---|
-| What's inside | raw address only | address + "how to go to next" |
-| What \`++\` does | **always** address + \`sizeof(element)\` | **depends on container** |
-| For \`vector<int>\`? | address + 4 | address + 4 (same!) |
-| For \`list<int>\`? | doesn't work | jumps to next node |
-
-> 💡 \`+4\` is just for \`int\` (4 bytes). For \`double\` it's \`+8\`, for \`char\` it's \`+1\` — the compiler looks at the type and jumps \`sizeof\` bytes automatically.
-
-In plain terms:
-
-> 🧭 **Pointer = address written on a slip of paper** ("ABC Apt #301"). Next house = #302 (just +1).
-> 🧭 **Iterator = GPS navigation**. Knows the address, and when you hit "next" it figures out the way.
->   - Apartment (vector) → just #302 — same as pointer
->   - Maze (list/map) → follows the actual route — pointers can't
-
----
-
-### 🤔 So do people still use pointers a lot?
-
-**Almost never for containers.** Iterators (or \`range-for\`) are the standard:
-
-| Situation | What people use today |
+| Syntax | Meaning |
 |---|---|
-| Iterating vector / map / set | \`for (auto x : v)\` (uses iterators) |
-| STL functions (\`sort\`, \`find\` …) | iterator pairs are the standard |
-| C functions / OS APIs / low-level memory | pointers |
-
-Starting this chapter you'll keep seeing \`sort(v.begin(), v.end())\` — that \`v.begin()\` is an iterator.
-
----
-
-### How it's actually used — iterate a vector
+| \`*it\` | the **value** at that spot |
+| \`++it\` | move to the **next** spot |
 
 \`\`\`cpp
 vector<int> v = {10, 20, 30, 40, 50};
@@ -153,12 +120,16 @@ for (auto it = v.begin(); it != v.end(); ++it) {
 }
 \`\`\`
 
-- \`auto it = v.begin()\` — start the finger at the first slot
-- \`it != v.end()\` — keep going *until* the end marker (don't read end itself — no value there)
-- \`++it\` — move to the next slot
-- \`*it\` — value at the current slot
+- \`it != v.end()\` — keep going *until* the end marker (don't read end itself)
+- \`++it\` for the next slot, \`*it\` for the value
 
-> 💡 In practice you'd usually write \`for (int x : v)\` (range-for) — it's shorter and more common. The pattern above is for **understanding what iterators do under the hood**.`
+> 💡 You'd usually write \`for (int x : v)\` (range-for) — shorter and more common. The pattern above is for **understanding what iterators do under the hood**.
+
+---
+
+### Heard of pointers?
+
+An iterator is basically a **cousin of a pointer**. Same syntax — \`*\` reads the value, \`++\` moves forward. The difference is iterators work the same way on vector / list / map (pointers only work on vector). **You'll see this with your own eyes on the next page.**`
         },
         {
           id: "s23-ch2-iter-sim",
