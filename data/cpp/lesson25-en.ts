@@ -59,38 +59,61 @@ Press the button to follow along!`,
           id: "s23-ch2-sorted-toolbox",
           type: "explain",
           title: "🗝️ Sorting is the launchpad — a toolbox that opens up after one sort",
-          content: `## 🚀 This chapter at a glance
+          content: `## 🚀 Sort is *the start, not the end*
 
-> **🎯 Sort the data once and search becomes way faster. That's this whole chapter.**
+> **🎯 The real value of \`sort\` is in *all the things that become possible* once your data is sorted.**
+> **That's what this whole chapter is about.**
 
-The **binary search** from the previous page (open the middle, drop half) — every function in this chapter uses that same trick.
+So far we've learned the \`sort\` function itself. But \`sort\`'s real power is somewhere else — **once data is sorted, operations that used to be slow suddenly get blazing fast.**
+
+Remember the **binary search** from the previous page? The only reason "open the middle" worked was *because the phone book was sorted*. **Every function in this chapter rides on that same idea.**
 
 ---
 
-### 📊 1,000,000 items — before vs after sorting
+### 📊 What sorting unlocks — 1,000,000 items
 
-| What you want | Unsorted | After sorting (this chapter) |
+| What you want | **Un**sorted | Sorted (this chapter) |
 |---|---|---|
 | "is x there?" | 1,000,000 compares (\`find\` — full scan) | **~20** (\`binary_search\`) |
 | "how many of x?" | 1,000,000 (\`count\`) | **~40** (\`upper - lower\`) |
 | "first ≥ x?" | 1,000,000 (manual loop) | **~20** (\`lower_bound\`) |
 | "dedupe" | tricky to write | **one line** (\`sort + unique + erase\`) |
+| "min / max?" | full scan | **instant** (\`v.front()\`, \`v.back()\`) |
 
-> 💡 The function names may be new — **we'll cover each one soon.** For now, just remember "sort first → search gets way faster."
+> 💡 The function names may be new — **we'll cover each one soon.** For now, just *feel* how much sorting unlocks.
 
 ---
 
-### One line
+### That's why competitive solutions reach for \`sort\` reflexively
 
-> **Sort once and search gets about 50,000× faster.** That's why USACO solutions almost always start with sort.
+A typical USACO solution starts like this:
+
+\`\`\`cpp
+cin >> n;
+for (int i = 0; i < n; i++) cin >> v[i];
+sort(v.begin(), v.end());   // ← sort first, almost reflexively
+// ↓ the real solution starts here
+\`\`\`
+
+Why? Because **once sorted, every tool in the table above unlocks** — no matter what the problem turns out to need, you've already started with a head start.
+
+> ✨ **One line: sorting once makes search about 50,000× faster.** That's why "sort first" is a habit.
+
+---
+
+### ⚠️ The chapter's promise — every function assumes *sorted input*
+
+The functions in this chapter — \`binary_search\`, \`lower_bound\`, \`upper_bound\` — **only work correctly on sorted arrays.**
+
+If you call them on an unsorted array, they *don't even error* — they quietly return wrong answers. That's actually more dangerous. So always run \`sort(v.begin(), v.end())\` first.
 
 ---
 
 ### 🪧 Heads-up for the next page
 
-The functions above (\`binary_search\`, \`lower_bound\` …) return their results in a slightly unfamiliar form — **not a number (index), but a "finger pointing to a position."** That finger is called an **iterator**.
+These functions return their results in a slightly unfamiliar form — **not a number (index), but a "finger pointing to a position."** That finger is called an **iterator**.
 
-The name sounds scary but it's really nothing. We'll spend one minute getting friendly with it on the next page, then come back to the actual functions!`
+The name sounds scary but it's really nothing. One minute on the next page and we're back to the actual functions!`
         },
         {
           id: "s23-ch2-iter",
