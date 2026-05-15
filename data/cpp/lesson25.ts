@@ -177,6 +177,24 @@ lower_bound  upper_bound
 > 💡 깊이 파지 말고 **그림 + 세 줄 설명** 만 기억해도 충분. 어떤 상황에 어느 걸 쓰는지 구체 예시는 다음 페이지들에서 봐요.`
         },
         {
+          id: "s23-ch2-binary-search-predict",
+          type: "predict" as const,
+          title: "✋ 직접 — binary_search 출력 예측",
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main() {
+    vector<int> v = {1, 3, 5, 7, 9};
+    cout << binary_search(v.begin(), v.end(), 5) << " ";
+    cout << binary_search(v.begin(), v.end(), 4) << endl;
+    return 0;
+}`,
+          options: ["1 0", "5 4", "true false", "0 1"],
+          answer: 0,
+          explanation: "binary_search 는 **bool** 을 돌려줘요 — \`cout\` 으로 출력하면 \`true → 1\`, \`false → 0\`. 5 는 배열에 있어서 1, 4 는 없어서 0. (\"true\"/\"false\" 가 아니라 \"1\"/\"0\" 으로 출력되는 게 핵심.)"
+        },
+        {
           id: "s23-ch2-trio-quiz",
           type: "quiz" as const,
           title: "3 형제 중 누구를 쓰지?",
@@ -222,6 +240,17 @@ v.insert(lower_bound(v.begin(), v.end(), x), x);
 ---
 
 > ⚠️ **"있는지만 확인" 할 때는 \`lower == upper\` 트릭 쓰지 마세요.** 의도가 안 보여요. → **\`binary_search(v.begin(), v.end(), x)\`** 가 정답 (앞 페이지에서 배운 그거). lower / upper 가 같아지는 건 **부수효과** 일 뿐, 도구의 목적이 아니에요.`
+        },
+        {
+          id: "s23-ch2-lb-firstge-fb",
+          type: "fillblank" as const,
+          title: "✋ 직접 — 70 점 이상 첫 학생 찾기",
+          content: "정렬된 점수 배열에서 **70 점 이상 첫 학생** 의 점수를 출력해봐요.",
+          code: "vector<int> scores = {45, 60, 72, 85, 91};\nauto it = ___(scores.begin(), scores.end(), 70);\ncout << *it;  // 72 출력",
+          fillBlanks: [
+            { id: 0, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "find"] }
+          ],
+          explanation: "**lower_bound(scores, 70)** 가 \"70 이상 첫 위치\" 를 돌려줘요. \\*it 로 그 자리의 값 (72) 을 봐요. \\`find\\` 는 정확히 70 만 찾으므로 ❌, \\`binary_search\\` 는 bool 만 돌려주므로 ❌."
         },
         {
           id: "s23-ch2-lb-patterns",

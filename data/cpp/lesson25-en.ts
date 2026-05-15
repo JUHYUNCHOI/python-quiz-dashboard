@@ -177,6 +177,24 @@ lower_bound  upper_bound
 > 💡 Don't dig deeper — the **picture + three-line description** is enough. Concrete scenarios for each tool are on the next pages.`
         },
         {
+          id: "s23-ch2-binary-search-predict",
+          type: "predict" as const,
+          title: "✋ Try it — predict binary_search output",
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main() {
+    vector<int> v = {1, 3, 5, 7, 9};
+    cout << binary_search(v.begin(), v.end(), 5) << " ";
+    cout << binary_search(v.begin(), v.end(), 4) << endl;
+    return 0;
+}`,
+          options: ["1 0", "5 4", "true false", "0 1"],
+          answer: 0,
+          explanation: "binary_search returns a **bool** — printed via \`cout\`, \`true → 1\` and \`false → 0\`. 5 is in the array → 1, 4 isn't → 0. (Key point: it prints as \"1\"/\"0\", not \"true\"/\"false\".)"
+        },
+        {
           id: "s23-ch2-trio-quiz",
           type: "quiz" as const,
           title: "Which of the trio do you reach for?",
@@ -222,6 +240,17 @@ v.insert(lower_bound(v.begin(), v.end(), x), x);
 ---
 
 > ⚠️ **Don't use the \`lower == upper\` trick just to check existence.** The intent is unclear. → **\`binary_search(v.begin(), v.end(), x)\`** is the right answer (from the earlier page). Those two iterators landing on the same spot is a **side effect** of lower_bound's design, not its purpose.`
+        },
+        {
+          id: "s23-ch2-lb-firstge-fb",
+          type: "fillblank" as const,
+          title: "✋ Try it — first student ≥ 70",
+          content: "From a sorted score array, print the **score of the first student with ≥ 70**.",
+          code: "vector<int> scores = {45, 60, 72, 85, 91};\nauto it = ___(scores.begin(), scores.end(), 70);\ncout << *it;  // prints 72",
+          fillBlanks: [
+            { id: 0, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "find"] }
+          ],
+          explanation: "**lower_bound(scores, 70)** returns the first position with value ≥ 70. \\*it reads the value at that position (72). \\`find\\` would only match exactly 70 ❌. \\`binary_search\\` only returns a bool ❌."
         },
         {
           id: "s23-ch2-lb-patterns",
