@@ -115,8 +115,8 @@ The \`v.begin()\` / \`v.end()\` you've already been writing with sort — those 
 |---|---|---|
 | What's inside | raw address only | address + "how to go to next" |
 | What \`++\` does | **always** address + \`sizeof(element)\` | **depends on container** |
-| For vector\\<int\\>? | address + 4 | address + 4 (same!) |
-| For list\\<int\\>? | doesn't work | jumps to next node |
+| For \`vector<int>\`? | address + 4 | address + 4 (same!) |
+| For \`list<int>\`? | doesn't work | jumps to next node |
 
 > 💡 \`+4\` is just for \`int\` (4 bytes). For \`double\` it's \`+8\`, for \`char\` it's \`+1\` — the compiler looks at the type and jumps \`sizeof\` bytes automatically.
 
@@ -127,15 +127,19 @@ In plain terms:
 >   - Apartment (vector) → just #302 — same as pointer
 >   - Maze (list/map) → follows the actual route — pointers can't
 
-**For vectors, they really do look identical.** Internally, STL often defines vector's iterator as just a pointer (\`T*\`). So the syntax matches:
+---
 
-| | Pointer | Iterator |
-|---|---|---|
-| Read the value | \`*p\` | \`*it\` |
-| Next position | \`p++\` | \`it++\` |
-| Get the index | \`p - array\` | \`it - v.begin()\` |
+### 🤔 So do people still use pointers a lot?
 
-> ⚠️ The real difference shows up in \`list\` / \`map\` / \`set\` (memory not contiguous), where pointers don't work but iterators do. For now, **"basically a pointer, for vectors"** is enough.
+**Not really.** For STL containers, almost everything uses iterators (or \`range-for\`).
+
+| Situation | What people use today |
+|---|---|
+| Iterating vector / map / set | \`for (auto x : v)\` ← uses iterators inside |
+| STL functions (\`sort\`, \`find\`, \`lower_bound\` …) | iterators — there's no other option |
+| C library calls / low-level memory | pointers |
+
+Starting this chapter you'll keep seeing \`sort(v.begin(), v.end())\` — that \`v.begin()\` is an iterator. Pointers can't handle \`map\` or \`set\`, so iterators naturally became the default.
 
 ---
 
