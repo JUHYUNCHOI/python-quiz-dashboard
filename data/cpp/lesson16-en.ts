@@ -257,7 +257,7 @@ if (scores.count("Bob") > 0) {
 }
 \`\`\`
 
-> 💡 There's also a \`find\` function — faster and more powerful, but it uses the **iterator** concept (the same "finger pointing to a position" you saw with \`lower_bound\` in the sort master lesson). We'll come back to it later in this chapter alongside \`count\`. For now, \`count\` is enough.
+> 💡 There's also a \`find\` function but it's a bit more complex. For now, \`count\` is enough.
 
 ---
 
@@ -653,104 +653,64 @@ cout << scores.empty() << endl;       // 0 (false, not empty)
 | \`len(d)\` | \`m.size()\` |
 | \`not d\` | \`m.empty()\` |
 
-> 💡 There's also \`find()\` — used "when you want the value in one go." It needs an **iterator**, which is the same idea you saw in the sort master lesson with \`lower_bound\`. We cover it later in this chapter. At this stage \`count\` + \`m[key]\` (two steps) is plenty.`,
+> 💡 Master these 4 and you can solve almost any map problem. (There's also a \`find\` function but it's a bit more complex — we don't cover it at this stage.)`,
         },
         {
           id: "ch4-why-fast",
           type: "explain",
-          title: "🌳 Wait — why is map fast without \`sort\`?",
-          content: `In vector land we learned "sort → \`binary_search\` / \`lower_bound\`" (sort master lesson). But here we **never called \`sort\`** and \`m.count(key)\` is already fast. What's going on?
+          title: "🤔 Wait — why is map fast?",
+          content: `One thing a student might wonder:
 
----
+> "We had to call \`sort\` on a **vector** before fast lookups worked.
+> But **map** was never sorted, and \`m.count(key)\` is fast already?"
 
-### Answer: map keeps a **sorted tree** inside
+Good question! Short answer:
 
+> 📌 **map organizes itself every time you insert.**
+> So you never need to call \`sort\` — it's always in fast-lookup shape.
+
+\`\`\`cpp
+map<string, int> scores;
+scores["Carol"] = 92;   // map puts it in the right spot
+scores["Alice"] = 95;   // and again, in the right spot
+scores.count("Alice");  // fast! (no manual sort needed)
 \`\`\`
-vector:       [12, 3, 8, 1, 9]                ← just lined up, unsorted
-            → must sort before binary search
 
-map:                  "Bob"                    ← already a sorted tree (BST)
-                     /      \\                    each insert finds its own spot
-                "Alice"    "Carol"
-\`\`\`
+**In short:**
+- \`vector\` = just a line of values. Call \`sort\` yourself for fast lookup.
+- \`map\` = a self-organizing box. No \`sort\` needed.
 
-Every time you write \`m["Carol"] = 92\`, the map places that key **in the right spot in the tree** (O(log N)). Later lookups just walk the tree down → **O(log N)** as well.
-
----
-
-### So vector vs map — same job, different tools
-
-| Question | vector (sorted) | map |
-|---|---|---|
-| "is it there?" | \`binary_search(v, x)\` | **\`m.count(key)\`** |
-| "where is it?" | \`lower_bound(v, x)\` | **\`m.find(key)\`** |
-| "first ≥ key?" | \`lower_bound(v, x)\` | **\`m.lower_bound(key)\`** |
-
-map already carries tree-search code inside, so \`.count\` / \`.find\` / \`.lower_bound\` are its **member** functions. All O(log N).
-
-> 📌 **One line summary**: vector = "sort + algorithm function", map = "**member function**". Both deliver O(log N) on sorted data — the tools just come from different places.
-
-> ⚠️ Same-name trap — \`std::count(v.begin(), v.end(), x)\` on a vector is **O(N)**, slow. Same name as \`m.count(key)\` but a **completely different function** — same warning we hit in the sort master lesson.`
+At this stage that's all you need. **How** map organizes itself comes later when we cover data structures. For now just remember: **map is fast — trust it and use \`m.count\`.**`
         },
         {
           id: "ch4-func-cf",
           type: "explain",
-          title: "🔑 When \`find\` is the better pick — value in one go",
-          content: `Checking with \`count\` then reading with \`m[key]\` is **two steps**. Behind the scenes it searches the same key twice — a tiny bit wasteful.
+          title: "💡 Deleting while iterating — the safe pattern",
+          content: `Iterating a map and calling \`erase\` **at the same time** is dangerous. The spot you were walking through disappears and the code breaks.
 
 \`\`\`cpp
-if (m.count("Emma") > 0) {   // search #1
-    cout << m["Emma"];        // search #2 — same key looked up again
+// ❌ Dangerous — erase while iterating
+for (auto& [k, v] : m) {
+    if (v < 0) m.erase(k);     // breaks!
 }
 \`\`\`
 
-On small maps this is invisible. On **maps with hundreds of thousands of entries**, doing this per query starts to add up.
-
-C++ has a "one-shot" way — \`find()\` + **iterator**.
+**Safe pattern: split into 2 steps.**
 
 \`\`\`cpp
-auto it = m.find("Emma");    // single search, returns the position
-if (it != m.end()) {
-    cout << it->second;       // use the value directly (no re-search)
-}
-\`\`\`
-
----
-
-### Where did we see iterator before?
-
-🔁 **Sort master lesson** ch2, alongside \`lower_bound\` — "a finger pointing to a position, like a pointer." The **same idea** works on map:
-
-| | vector (sort master) | map (now) |
-|---|---|---|
-| Get position | \`auto it = lower_bound(v.begin(), v.end(), 5)\` | \`auto it = m.find("Emma")\` |
-| Read value | \`*it\` → 5 | \`it->second\` → 95 |
-| Not found check | \`it == v.end()\` | \`it == m.end()\` |
-
-The reason map uses \`it->second\` instead of \`*it\` is that map's elements are **pairs** (key, value). \`it->first\` is the key, \`it->second\` is the value.
-
-> 💡 Summary: **just checking** → \`count\`. **value too** → \`find\` + iterator (the same pattern from the sort master lesson).
-
----
-
-### 💡 Deleting while iterating — the easiest pattern
-
-If you iterate \`for(auto& [k,v] : m)\` and call \`m.erase\` at the same time, the iterator gets invalidated. Safer pattern:
-
-\`\`\`cpp
-// 1) Collect the keys to delete
+// ✅ 1) Collect keys to delete first
 vector<string> toDelete;
 for (auto& [k, v] : m) {
     if (v < 0) toDelete.push_back(k);
 }
 
-// 2) Delete after the loop finishes
+// ✅ 2) Delete after the loop finishes
 for (auto& k : toDelete) {
     m.erase(k);
 }
 \`\`\`
 
-Iteration and deletion **separated** — safe and easy to read.`
+Never delete while iterating — **collect first, then delete.** That's the rule.`
         },
         {
           id: "ch4-pred1",
