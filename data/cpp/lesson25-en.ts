@@ -110,8 +110,8 @@ Imagine gently placing one finger on the vector:
 
 \`\`\`
    10    20    30    40    50
-    ☝️
-   here!
+   ↑
+  here!
 \`\`\`
 
 That finger is pointing at the first slot (10). **That's it — that's an iterator.** Done. Put it in a variable:
@@ -167,9 +167,9 @@ The only new thing here is **\`v.end()\`** — a marker saying "stop":
 
 \`\`\`
    10    20    30    40    50
-    ☝️                        ☝️
- begin()                    end()  ← one *past* the last
-                                    (no value — just "stop here!")
+   ↑                         ↑
+begin()                    end()  ← one "past" the last
+                                   (no value — just "stop here!")
 \`\`\`
 
 - \`it != v.end()\` → keep going **until the finger touches the stop marker**
