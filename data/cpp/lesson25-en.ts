@@ -137,51 +137,18 @@ cout << *it;           // 10
 
 **2️⃣ "One slot over!" → \`++it\`**
 
-Slide the finger one slot to the right:
-
 \`\`\`cpp
-auto it = v.begin();   // 10
 ++it;
 cout << *it;           // 20
 ++it;
 cout << *it;           // 30
 \`\`\`
 
-Every \`++\` slides the finger over by one. That's the whole story.
+Every \`++\` slides the finger over by one — that's the whole story.
 
 ---
 
-### Combine the two → scan the whole thing
-
-Read with \`*it\`, slide with \`++it\`, repeat — and you've scanned the entire vector:
-
-\`\`\`cpp
-vector<int> v = {10, 20, 30, 40, 50};
-
-for (auto it = v.begin(); it != v.end(); ++it) {
-    cout << *it << " ";   // 10 20 30 40 50
-}
-\`\`\`
-
-The only new thing here is **\`v.end()\`** — a marker saying "stop":
-
-\`\`\`
-   10    20    30    40    50
-   ↑                         ↑
-begin()                    end()  ← one "past" the last
-                                   (no value — just "stop here!")
-\`\`\`
-
-- \`it != v.end()\` → keep going **until the finger touches the stop marker**
-- Don't read the marker with \`*it\` — there's no value there
-
-> 💡 In real code you'd usually write \`for (int x : v)\` (range-for) — it's shorter. The fuller pattern above is for **picturing how the iterator actually moves**, which you'll need on the next page when \`lower_bound\` places the finger at a specific spot.
-
----
-
-### Heard of "pointers" before?
-
-An iterator is **basically the same as a pointer** — \`*\` to read, \`++\` to move, all the same. **We'll show you the difference with your own eyes on the next page** — for now, "ah, it's like a finger" is plenty!`
+> 💡 The stop marker (\`v.end()\`) and index conversion (\`it - v.begin()\`) come on the next page. For now, knowing *"it's a finger with two operations: \`*it\` and \`++it\`"* is enough.`
         },
         {
           id: "s23-ch2-iter-sim",
