@@ -25,8 +25,8 @@ export const cppLesson26EnData: LessonData = {
 
 Two situations where \`sort + unique\` show up in USACO:
 
-1. **"How many distinct values?"** — input has duplicates and you want the *count of unique values*
-   > Example: "How many *distinct* cow names entered the farm?"
+1. **"How many distinct values?"** — input has duplicates and you want the **count of unique values**
+   > Example: "How many **distinct** cow names entered the farm?"
 
 2. **Coordinate compression (Silver+)** — when coordinates can be up to 10⁹ but N is only 10⁵, you **renumber the values as 0, 1, 2, ...** so you can index arrays by them. The standard \`sort + unique + lower_bound\` combo.
 

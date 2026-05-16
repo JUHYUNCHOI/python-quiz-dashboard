@@ -107,7 +107,7 @@ cout << p.second;   // 95
 
 > 📌 **참고 — 모던 C++ (C++17) 의 한 줄 문법**
 >
-> 코드를 더 깔끔하게 쓰고 싶을 땐 \`auto [name, score] = p;\` 한 줄로도 가능해요. 이걸 *structured bindings* 라고 불러요. 다만 지금은 알 필요 X — \`.first/.second\` 만 손에 익혀도 충분합니다. 나중에 자연스럽게 다시 만나면 그때 익혀요.`
+> 코드를 더 깔끔하게 쓰고 싶을 땐 \`auto [name, score] = p;\` 한 줄로도 가능해요. 이걸 **structured bindings** 라고 불러요. 다만 지금은 알 필요 X — \`.first/.second\` 만 손에 익혀도 충분합니다. 나중에 자연스럽게 다시 만나면 그때 익혀요.`
         },
         {
           id: "ch1-pair-mini",
@@ -230,7 +230,7 @@ string name = get<2>(t);
 
 여러 값을 한 번에 리턴할 때, 이름 붙인 struct 만들기 귀찮으면 tuple 로 묶어 보내고 받는 쪽에서 \`get<N>\` 로 꺼내요.
 
-> 📌 모던 C++ 에선 \`auto [a, b, c] = getStudent();\` 한 줄로도 가능 — *structured bindings*. 지금은 알 필요 X.
+> 📌 모던 C++ 에선 \`auto [a, b, c] = getStudent();\` 한 줄로도 가능 — **structured bindings**. 지금은 알 필요 X.
 
 ### 2. \`tie()\` 로 사전식 비교 (정석 패턴)
 

@@ -59,7 +59,7 @@ Press the button to follow along!`,
           id: "s23-ch2-sorted-toolbox",
           type: "explain",
           title: "🗝️ Sorting is the launchpad — a toolbox that opens up after one sort",
-          content: `## 🚀 Sort is *the start, not the end*
+          content: `## 🚀 Sort is the start, not the end
 
 > **🎯 The real value of \`sort\` is in *all the things that become possible* once your data is sorted.**
 > **That's what this whole chapter is about.**
@@ -101,11 +101,11 @@ Why? Because **once sorted, every tool in the table above unlocks** — no matte
 
 ---
 
-### ⚠️ The chapter's promise — every function assumes *sorted input*
+### ⚠️ The chapter's promise — every function assumes **sorted input**
 
 The functions in this chapter — \`binary_search\`, \`lower_bound\`, \`upper_bound\` — **only work correctly on sorted arrays.**
 
-If you call them on an unsorted array, they *don't even error* — they quietly return wrong answers. That's actually more dangerous. So always run \`sort(v.begin(), v.end())\` first.
+If you call them on an unsorted array, they **don't even error** — they quietly return wrong answers. That's actually more dangerous. So always run \`sort(v.begin(), v.end())\` first.
 
 ---
 
@@ -149,7 +149,7 @@ auto it = v.begin();   // place the finger on the first slot
 
 **1️⃣ "What's here?" → \`*it\`**
 
-Put \`*\` in front of the finger and you get *the value at that spot*:
+Put \`*\` in front of the finger and you get **the value at that spot**:
 
 \`\`\`cpp
 auto it = v.begin();   // pointing at 10

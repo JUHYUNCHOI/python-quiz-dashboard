@@ -107,7 +107,7 @@ cout << p.second;   // 95
 
 > 📌 **Side note — modern C++ (C++17) one-liner**
 >
-> If you want even cleaner code, \`auto [name, score] = p;\` declares both variables in one line. This is called *structured bindings*. You don't need it now — \`.first/.second\` is enough. We'll naturally meet this syntax again later, no need to memorize it today.`
+> If you want even cleaner code, \`auto [name, score] = p;\` declares both variables in one line. This is called **structured bindings**. You don't need it now — \`.first/.second\` is enough. We'll naturally meet this syntax again later, no need to memorize it today.`
         },
         {
           id: "ch1-pair-mini",
@@ -207,7 +207,7 @@ The **index goes inside \`<>\`**, the **tuple inside \`()\`**. Looks weird at fi
 
 > 📌 **Side note — one-liner unpack (C++17)**
 >
-> Modern C++ also supports \`auto [name, age, gpa] = t;\` to declare all three variables in one line — same idea as Python's \`name, age, gpa = t\`. This is called *structured bindings*. You don't need it now — \`get<N>(t)\` is enough. We'll meet it naturally later.
+> Modern C++ also supports \`auto [name, age, gpa] = t;\` to declare all three variables in one line — same idea as Python's \`name, age, gpa = t\`. This is called **structured bindings**. You don't need it now — \`get<N>(t)\` is enough. We'll meet it naturally later.
 
 Next page — where tuple actually shows up, and how to choose between struct/pair/tuple 👇`,
         },
@@ -230,7 +230,7 @@ string name = get<2>(t);
 
 When a function needs to return several values and you don't want to define a whole struct, tuple is the quick path. Use \`get<N>\` to read each one out.
 
-> 📌 Modern C++ also lets you write \`auto [a, b, c] = getStudent();\` in one line — *structured bindings*. Don't worry about it now.
+> 📌 Modern C++ also lets you write \`auto [a, b, c] = getStudent();\` in one line — **structured bindings**. Don't worry about it now.
 
 ### 2. \`tie()\` for lexicographic comparison (idiomatic)
 
