@@ -323,10 +323,23 @@ export function buildSimSteps(x, E) {
 // ═══════════════════════════════════════════════
 export function makePatternSteps(E) {
   return [
+    { type: "reveal",
+      narr: t(E, "We saw all 6 cases. Let's find the pattern! ✅ = same answer, ❌ = different.",
+                "시뮬레이터에서 6 개 다 해봤죠. 이제 규칙을 찾아봐요! ✅ 는 답이 같은 것, ❌ 는 답이 다른 것."),
+      content: (
+        <div><div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14 }}>
+          {[[48,"❌"],[67,"✅"],[38,"✅"],[445,"❌"],[435,"✅"],[4459,"❌"]].map(([n,r],i) => (
+            <div key={i} style={{ display:"flex", justifyContent:"space-between", padding:"8px 12px", marginBottom:4,
+              background: r==="❌" ? C.noBg : C.okBg, borderRadius:8,
+              border: `1.5px solid ${r==="❌" ? C.noBd : C.okBd}` }}>
+              <span style={{ fontWeight:800 }}>{n}</span><span>{r}</span>
+            </div>))}
+        </div></div>),
+    },
     { type: "quiz",
       narr: t(E,
-        "From the simulator, we noticed 3 ❌s: 48, 445, 4459. Time to find what they have in common.",
-        "시뮬레이터에서 ❌ 인 수 3 개 (48, 445, 4459) 를 봤어요. 이 세 수의 공통점을 찾아봐요."),
+        "Look at only ❌: 48, 445, 4459. Time to find what these three have in common.",
+        "❌ 인 수만 모아봐요: 48, 445, 4459. 이 세 수의 공통점을 찾아봐요."),
       question: t(E, "What do these three have in common?", "이 세 수의 공통점은?"),
       hint: t(E, "Look at the first digit!", "첫째 자리를 봐요!"),
       options: t(E,
@@ -334,6 +347,16 @@ export function makePatternSteps(E) {
         ["첫째 자리가 짝수", "첫째 자리가 전부 4", "전부 8의 배수", "자릿수가 짝수"]),
       correct: 1,
       explain: t(E, "All start with 4! That's the key.", "전부 4로 시작해요! 이게 핵심이에요."),
+    },
+    { type: "quiz",
+      narr: t(E, "Why 4? Remember, Bessie only checks the first digit.",
+                "왜 4 일까요? Bessie 는 첫째 자리만 보잖아요."),
+      question: t(E, "First digit is 4 — Bessie rounds up or down?",
+                    "첫째 자리가 4 면, Bessie 는 올릴까 버릴까?"),
+      options: t(E, ["Up (4 ≥ 5)", "Down (4 < 5)"], ["올린다 (4 ≥ 5)", "버린다 (4 < 5)"]),
+      correct: 1,
+      explain: t(E, "4 < 5 → Bessie rounds down → result 0!",
+                    "4 < 5 → 버린다 → 결과 0!"),
     },
     { type: "reveal",
       narr: t(E, "But look at Elsie with 48:", "그런데 Elsie의 48을 봐:"),
