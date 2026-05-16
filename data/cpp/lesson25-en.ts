@@ -61,12 +61,10 @@ Press the button to follow along!`,
           title: "🗝️ Sorting is the launchpad — a toolbox that opens up after one sort",
           content: `## 🚀 Sort is the start, not the end
 
-> **🎯 The real value of \`sort\` is in *all the things that become possible* once your data is sorted.**
-> **That's what this whole chapter is about.**
+> **🎯 The real value of \`sort\` is in all the things that become possible once your data is sorted.**
+> That's what this whole chapter is about.
 
-So far we've learned the \`sort\` function itself. But \`sort\`'s real power is somewhere else — **once data is sorted, operations that used to be slow suddenly get blazing fast.**
-
-Remember the **binary search** from the previous page? The only reason "open the middle" worked was *because the phone book was sorted*. **Every function in this chapter rides on that same idea.**
+Remember the **binary search** from the previous page? "Open the middle" worked because the phone book was sorted. Every function in this chapter rides on that same idea.
 
 ---
 
@@ -74,46 +72,25 @@ Remember the **binary search** from the previous page? The only reason "open the
 
 | What you want | **Un**sorted | Sorted (this chapter) |
 |---|---|---|
-| "is x there?" | 1,000,000 compares (\`find\` — full scan) | **~20** (\`binary_search\`) |
+| "is x there?" | 1,000,000 (\`find\`) | **~20** (\`binary_search\`) |
 | "how many of x?" | 1,000,000 (\`count\`) | **~40** (\`upper - lower\`) |
-| "first ≥ x?" | 1,000,000 (manual loop) | **~20** (\`lower_bound\`) |
+| "first ≥ x?" | 1,000,000 | **~20** (\`lower_bound\`) |
 | "dedupe" | tricky to write | **one line** (\`sort + unique + erase\`) |
 | "min / max?" | full scan | **instant** (\`v.front()\`, \`v.back()\`) |
 
-> 💡 The function names may be new — **we'll cover each one soon.** For now, just *feel* how much sorting unlocks.
+> 💡 Function names may be new — we'll cover each one soon. **Sorting once makes search about 50,000× faster** — that's why USACO solutions almost always start with "sort first".
 
 ---
 
-### That's why competitive solutions reach for \`sort\` reflexively
+### ⚠️ The chapter's promise — sorted input required
 
-A typical USACO solution starts like this:
-
-\`\`\`cpp
-cin >> n;
-for (int i = 0; i < n; i++) cin >> v[i];
-sort(v.begin(), v.end());   // ← sort first, almost reflexively
-// ↓ the real solution starts here
-\`\`\`
-
-Why? Because **once sorted, every tool in the table above unlocks** — no matter what the problem turns out to need, you've already started with a head start.
-
-> ✨ **One line: sorting once makes search about 50,000× faster.** That's why "sort first" is a habit.
+\`binary_search\`, \`lower_bound\`, \`upper_bound\` — **all three only work correctly on sorted arrays.** On unsorted data they **don't even error** — they quietly return wrong answers. So always run \`sort(v.begin(), v.end())\` first.
 
 ---
 
-### ⚠️ The chapter's promise — every function assumes **sorted input**
+### 🪧 Next page
 
-The functions in this chapter — \`binary_search\`, \`lower_bound\`, \`upper_bound\` — **only work correctly on sorted arrays.**
-
-If you call them on an unsorted array, they **don't even error** — they quietly return wrong answers. That's actually more dangerous. So always run \`sort(v.begin(), v.end())\` first.
-
----
-
-### 🪧 Heads-up for the next page
-
-These functions return their results in a slightly unfamiliar form — **not a number (index), but a "finger pointing to a position."** That finger is called an **iterator**.
-
-The name sounds scary but it's really nothing. One minute on the next page and we're back to the actual functions!`
+These functions return **a "finger pointing to a position"** instead of a number. That finger is called an **iterator** — one minute on the next page and we're back to the actual functions!`
         },
         {
           id: "s23-ch2-iter",
@@ -125,7 +102,9 @@ The name sounds scary but it's really nothing. One minute on the next page and w
 
 ---
 
-### Iterator = a finger pointing to one spot in the vector 🫵
+### Iterator = a finger pointing to one spot in your data 🫵
+
+> 💡 Not just vectors — **maps, sets, lists, any container.** This chapter uses vectors for practice, but the same finger shows up again in the next lesson (map / set).
 
 Imagine gently placing one finger on the vector:
 
