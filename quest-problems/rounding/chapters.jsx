@@ -1554,8 +1554,8 @@ export function makeOptSteps(E) {
   return [
     { type: "reveal",
       narr: t(E,
-        "Recap: in each digit count d, the disagreeing x form ONE contiguous interval [s_d, e_d]. So we just sum interval lengths!",
-        "복습: 각 자릿수 d 에서 답이 다른 x 는 하나의 연속 구간 [s_d, e_d]. 그래서 구간 길이만 더하면 끝!"),
+        "Recap from the Pattern tab: for each digit count, the disagreeing numbers sit in ONE contiguous block. So we just count block lengths and add them up!",
+        "복습 (패턴 탭에서 봤죠): 각 자릿수마다 답이 다른 수가 하나의 연속 구간을 이뤘어요. 그래서 구간 길이만 세서 더하면 끝!"),
       content: (() => {
         // Digit-box helper
         const Box = ({ ch, kind }) => {
@@ -1584,13 +1584,13 @@ export function makeOptSteps(E) {
             {/* Concrete d=4 example with digit boxes */}
             <div style={{ background: "#f8f9fc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 10 }}>
-                {t(E, "Example: d=4", "예시: d=4 일 때")}
+                {t(E, "Example: 4-digit numbers", "예시: 4 자리 수일 때")}
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                {/* s_d */}
+                {/* smallest */}
                 <div style={{ background: "#fef2f2", borderRadius: 10, padding: "10px 8px", textAlign: "center" }}>
                   <div style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", marginBottom: 6 }}>
-                    {t(E, "smallest", "가장 작음")} (s<sub>d</sub>)
+                    {t(E, "smallest", "가장 작음")}
                   </div>
                   <div>
                     <Box ch="4" kind="small" />
@@ -1602,10 +1602,10 @@ export function makeOptSteps(E) {
                     4445
                   </div>
                 </div>
-                {/* e_d */}
+                {/* largest */}
                 <div style={{ background: "#ecfdf5", borderRadius: 10, padding: "10px 8px", textAlign: "center" }}>
                   <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-                    {t(E, "largest", "가장 큼")} (e<sub>d</sub>)
+                    {t(E, "largest", "가장 큼")}
                   </div>
                   <div>
                     <Box ch="4" kind="sSmall" />
@@ -1620,27 +1620,32 @@ export function makeOptSteps(E) {
               </div>
             </div>
 
-            {/* Pattern in plain words */}
-            <div style={{ background: C.accentBg, border: `1.5px dashed ${C.accentBd}`, borderRadius: 10, padding: "12px 14px", fontSize: 13, color: C.accent, fontWeight: 700, lineHeight: 1.8 }}>
-              {t(E, "Pattern: ", "패턴: ")}
-              <strong>s<sub>d</sub></strong>
-              {t(E, " = (d−1 fours) + (one 5) · ", " = (4 가 d−1 개) + (5 하나) · ")}
-              <strong>e<sub>d</sub></strong>
-              {t(E, " = (one 4) + (d−1 nines)", " = (4 하나) + (9 가 d−1 개)")}
+            {/* Concrete count for d=4 — plain language */}
+            <div style={{
+              padding: "12px 14px", background: C.accentBg,
+              border: `1.5px solid ${C.accentBd}`, borderRadius: 10,
+              fontSize: 14, color: C.accent, fontWeight: 800,
+              textAlign: "center", lineHeight: 1.8, fontFamily: "'JetBrains Mono',monospace",
+            }}>
+              <span style={{ color: "#15803d" }}>4999</span>
+              <span style={{ color: C.dim }}> − </span>
+              <span style={{ color: "#dc2626" }}>4445</span>
+              <span style={{ color: C.dim }}> + 1 = </span>
+              <span style={{ fontSize: 18 }}>555</span>
+              <span style={{ fontSize: 11, color: C.dim, fontWeight: 600, marginLeft: 8, fontFamily: "system-ui, sans-serif" }}>
+                {t(E, "(4-digit numbers in the block)", "(4 자리 답 다른 수)")}
+              </span>
             </div>
 
-            {/* Plain-language formula */}
-            <div style={{ marginTop: 10, padding: "10px 14px", background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 13, color: C.text, fontWeight: 700, textAlign: "center", lineHeight: 1.8 }}>
-              {t(E,
-                "Each d contributes ",
-                "각 d 가 더하는 개수 = ")}
-              <strong style={{ color: "#15803d" }}>e<sub>d</sub></strong>
-              {" − "}
-              <strong style={{ color: "#dc2626" }}>s<sub>d</sub></strong>
-              {" + 1"}
-              <span style={{ color: C.dim, fontWeight: 600 }}>
-                {t(E, " (capped at N if it exceeds)", " (N 보다 크면 N 으로 자름)")}
-              </span>
+            {/* Plain-language pattern recap */}
+            <div style={{
+              marginTop: 10, padding: "10px 14px",
+              background: "#fff", border: `1.5px dashed ${C.border}`, borderRadius: 10,
+              fontSize: 12, color: C.text, fontWeight: 600, lineHeight: 1.8,
+            }}>
+              💡 {t(E,
+                "Pattern (regardless of digit count): smallest = lots of 4's ending in 5 · largest = a 4 followed by lots of 9's. We just need (largest − smallest + 1) for each — and stop when smallest passes N.",
+                "패턴 (어떤 자릿수든): 가장 작음 = 4 가 잔뜩 + 끝에 5 · 가장 큼 = 4 하나 + 9 가 잔뜩. 자릿수마다 (가장 큼 − 가장 작음 + 1) 만 세고, 가장 작음이 N 넘어가면 멈춰요.")}
             </div>
           </div>
         );
