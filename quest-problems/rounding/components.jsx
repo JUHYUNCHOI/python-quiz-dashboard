@@ -597,7 +597,7 @@ export function IntervalSim({ E }) {
             color: C.dim, fontWeight: 700, fontSize: 12, textAlign: "center",
           }}>
             {t(E,
-              `▶ Next button to reveal more rows (${rows.length - stepIdx + 1} left, then total)`,
+              `Press ▶ Next to reveal more rows (${rows.length - stepIdx + 1} left, then the total)`,
               `▶ 다음 누르면 더 공개 (${rows.length - stepIdx + 1} 개 남음, 그 다음 합계)`)}
           </div>
         )}

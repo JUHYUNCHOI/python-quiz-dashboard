@@ -1307,7 +1307,7 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Wait — why does T queries each redo the work for 2 ~ N? If two queries share most of that range, we're recomputing the same thing.\nSo: build the answer array ONCE, then every query just reads from it. Idea = prefix sum.",
+        "Wait — why does each of the T queries redo the work for 2 ~ N from scratch? If two queries cover overlapping ranges, we're doing the same arithmetic twice.\nSo: build the answer array ONCE, then every query just reads from it. That's the prefix sum idea.",
         "잠깐 — T 번 쿼리마다 2 ~ N 까지 또 계산? 두 쿼리가 같은 구간을 공유하면 똑같은 일을 반복하는 거잖아요.\n그래서: 답을 *한 번만* 배열에 채워두고, 매 쿼리는 거기서 lookup. 이게 누적합 (prefix sum) 아이디어."),
       content: (
         <div style={{ padding: 16 }}>
