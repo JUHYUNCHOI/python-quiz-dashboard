@@ -125,23 +125,7 @@ export default function RoundingApp(props = {}) {
   // --- Render step content ---
   const renderContent = () => {
     if (tab === 0) return step.content;
-    if (step.type === "quiz") {
-      // step.recap (optional ReactNode) → 우측 슬라이드 drawer 로 이전 챕터 내용 다시 보기
-      return (
-        <>
-          {step.recap && (
-            <RecapDrawer
-              buttonLabel={step.recapLabel || t(E, "Recap", "이전 챕터 다시 보기")}
-              title={step.recapTitle || step.recapLabel}
-              E={E}
-            >
-              {step.recap}
-            </RecapDrawer>
-          )}
-          <Quiz {...step} onAnswer={handleAnswer} />
-        </>
-      );
-    }
+    if (step.type === "quiz")   return <Quiz {...step} onAnswer={handleAnswer} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "input")  return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "code")     return <CodeReveal label={step.label} lines={step.code} />;
@@ -214,6 +198,19 @@ export default function RoundingApp(props = {}) {
         />
 
         {step.narr && <Narration key={`roun-${tab}-${cur}-${lang}`} text={step.narr} />}
+
+        {/* Recap drawer — narration 의 '챕터 X 에서 ... 였더라?' 류 호출 옆에 자연스럽게 */}
+        {step.recap && (
+          <div style={{ marginTop: -4, marginBottom: 10 }}>
+            <RecapDrawer
+              buttonLabel={step.recapLabel || t(E, "Recap", "이전 챕터 다시 보기")}
+              title={step.recapTitle || step.recapLabel}
+              E={E}
+            >
+              {step.recap}
+            </RecapDrawer>
+          </div>
+        )}
 
         <div style={{
           background: C.card, borderRadius: 14, border: `2px solid ${C.border}`,
