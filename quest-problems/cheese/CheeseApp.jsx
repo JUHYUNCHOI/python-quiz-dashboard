@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import {
   CheeseSim2, CheeseBruteRunner, CheeseProgressiveCode,
   downloadCheesePDF, getCheeseSections,
@@ -137,7 +138,8 @@ export default function CheeseApp(props = {}) {
   };
 
   // Code controls visible only on the Code tab (4)
-  const showCodeControls = tab === 4;
+  // Tab 2 (Brute) 도 이제 code-section 페이지 있어서 Python/C++ 토글 필요
+  const showCodeControls = tab === 2 || tab === 4;
 
   const renderContent = () => {
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
@@ -148,6 +150,7 @@ export default function CheeseApp(props = {}) {
     if (step.type === "cheeseRunner") return <CheeseBruteRunner E={E} />;
     if (step.type === "rodFitSim") return <RodFitSim E={E} />;
     if (step.type === "progressive") return <CheeseProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={step.section} />;
     return null;
   };
 
@@ -159,7 +162,9 @@ export default function CheeseApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
     if (s.type === "cheeseSim2") return <CheeseSim2 E={E} />;
     if (s.type === "cheeseRunner") return <CheeseBruteRunner E={E} />;
+    if (s.type === "rodFitSim") return <RodFitSim E={E} />;
     if (s.type === "progressive") return <CheeseProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={s.section} />;
     return null;
   };
 
