@@ -198,7 +198,7 @@ export function makeCh1(E) {
 
           <div style={{ background: "#fef3c7", border: `2px solid #fcd34d`, borderRadius: 10, padding: 12, marginTop: 12 }}>
             <div style={{ fontSize: 13, color: "#a16207", fontWeight: 700, lineHeight: 1.7 }}>
-              💡 {t(E, "Discovery! Looking carefully, you'll notice ", "발견! 자세히 관찰하다 보면, ")}
+              💡 {t(E, "Look closely and you'll spot it: ", "발견! 자세히 관찰하다 보면, ")}
               <strong style={{ fontSize: 14 }}>P = {t(E, "the digit count of x", "x 의 자릿수")}</strong>
               {t(E, ".", " 라는 걸 알 수 있어요.")}
             </div>
@@ -232,7 +232,7 @@ export function makeCh1(E) {
               <div style={{ fontSize: 14, fontWeight: 800, color: C.no, textAlign: "center" }}>45, 46, 47, 48, 49</div>
             </div>
             <div style={{ marginTop: 10, fontSize: 11, color: C.dim, lineHeight: 1.6 }}>
-              {t(E, "Other 94 numbers (2~44, 50~100): both give same result, so not counted.", "나머지 94개 (2~44, 50~100): 두 사람 결과 같음 → 카운트 X")}
+              {t(E, "The other 94 (2–44, 50–100) give the same result for both cows, so they don't count.", "나머지 94개 (2~44, 50~100): 두 사람 결과 같음 → 카운트 X")}
             </div>
             <div style={{ marginTop: 12, padding: "8px 12px", background: "#fef3c7", border: `1.5px solid #fcd34d`, borderRadius: 8, fontSize: 12, color: "#a16207", fontWeight: 600, lineHeight: 1.6 }}>
               🤔 {t(E,
@@ -357,7 +357,7 @@ export function makePatternSteps(E) {
     { type: "quiz",
       narr: t(E, "Why 4? Remember, Bessie only checks the first digit.",
                 "왜 4 일까요? Bessie 는 첫째 자리만 보잖아요."),
-      question: t(E, "First digit is 4 — Bessie rounds up or down?",
+      question: t(E, "If the first digit is 4, does Bessie round up or down?",
                     "첫째 자리가 4 면, Bessie 는 올릴까 버릴까?"),
       options: t(E, ["Up (4 ≥ 5)", "Down (4 < 5)"], ["올린다 (4 ≥ 5)", "버린다 (4 < 5)"]),
       correct: 1,
@@ -374,7 +374,7 @@ export function makePatternSteps(E) {
             <div style={{ fontWeight:800, color:C.elsie, marginBottom:4 }}>{t(E, "🐮 Elsie rounding 48:", "🐮 Elsie의 48 반올림:")}</div>
             <div>{t(E, "Step 1: ones=", "1단계: 1의자리=")}<strong>8</strong> ≥ 5 → {t(E, "up!", "올림!")} → 50</div>
             <div>{t(E, "Step 2: tens=", "2단계: 10의자리=")}<strong>5</strong> ≥ 5 → {t(E, "up!", "올림!")} → 100</div>
-            <div style={{ marginTop:8, fontWeight:800, color:C.no }}>{t(E, "Tens was 4, but carry from 8 made it 5!", "4였던 10의자리가 carry 때문에 5가 됐어!")}</div>
+            <div style={{ marginTop:8, fontWeight:800, color:C.no }}>{t(E, "The tens digit started as 4, but the carry from 8 bumped it up to 5!", "4였던 10의자리가 carry 때문에 5가 됐어!")}</div>
           </div>
         </div>),
     },
@@ -413,7 +413,7 @@ export function makePatternSteps(E) {
             ))}
           </div>
           <div style={{ marginTop: 12, padding: "10px 12px", background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, fontSize: 13, color: C.accent, fontWeight: 800, textAlign: "center" }}>
-            💡 {t(E, "Only first digit = 4 makes the answers differ!", "첫째 자리 = 4 일 때만 답이 달라져요!")}
+            💡 {t(E, "Only when the first digit is 4 do the answers actually differ!", "첫째 자리 = 4 일 때만 답이 달라져요!")}
           </div>
         </div>
       ),
@@ -457,14 +457,14 @@ export function makePatternSteps(E) {
           </div>
 
           <div style={{ padding: "12px 14px", background: "#fef3c7", border: `2px solid #fcd34d`, borderRadius: 10, fontSize: 13, color: "#a16207", fontWeight: 700, lineHeight: 1.7, textAlign: "center" }}>
-            💡 {t(E, "Middle digit must be ≥4 — only then carry keeps going up to the first digit.",
+            💡 {t(E, "The middle digit has to be ≥ 4 — that's the only way the carry climbs all the way up to the first digit.",
                   "중간 자리가 ≥4 여야 carry 가 첫째까지 계속 올라가요.")}
           </div>
         </div>
       ),
     },
     { type: "reveal",
-      narr: t(E, "✅ Complete condition found!", "✅ 완전한 조건을 찾았어!"),
+      narr: t(E, "✅ Got the full condition!", "✅ 완전한 조건을 찾았어!"),
       content: (
         <div style={{ background:C.card, borderRadius:14, padding:16, border:`2px solid ${C.accent}`, boxShadow:"0 4px 16px rgba(79,70,229,.1)" }}>
           <div style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:14, lineHeight:2.4 }}>
@@ -1155,7 +1155,7 @@ export function makeBruteSteps(E, lang = "py") {
           <Label text={t(E, "Step 2: Compare and count", "2단계: 두 값 비교 → 카운트")} />
           <CodeBlock lines={pick(MAIN_SNIPPET_PY, MAIN_SNIPPET_CPP)} />
           <div style={{ marginTop: 10, padding: "8px 10px", background: C.carryBg, border: `1.5px solid ${C.carryBd}`, borderRadius: 8, fontSize: 12, color: C.carry, fontWeight: 700, lineHeight: 1.6 }}>
-            🤔 {t(E, "But Bessie() and Elsie() don't exist yet. Time to write them — but first…",
+            🤔 {t(E, "But Bessie() and Elsie() don't exist yet. Time to build them — though first…",
                   "근데 Bessie() 랑 Elsie() 가 아직 없어요. 만들기 전에 — 잠깐!")}
           </div>
         </div>
@@ -1171,7 +1171,7 @@ export function makeBruteSteps(E, lang = "py") {
         ["First digit of x", "Number of digits of x", "Last digit of x", "Sum of digits of x"],
         ["x 의 첫째 자리", "x 의 자릿수", "x 의 마지막 자리", "x 의 자릿수 합"]),
       correct: 1,
-      explain: t(E, "Right! P = number of digits = len(str(x)). Now both functions can use it.",
+      explain: t(E, "Yes! P = number of digits = len(str(x)). Both functions can use that.",
                     "맞아요! P = 자릿수 = len(str(x)). 이제 두 함수가 이걸 쓸 수 있어요."),
       // ── recap drawer ─────────────────────────────────
       // 우측 슬라이드 drawer 로 챕터 1 의 P 정의 다시 보기 — 위치 안 잃고 잠깐 확인 가능
@@ -1295,7 +1295,7 @@ export function makeBruteSteps(E, lang = "py") {
             ))}
           </div>
           <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
-            ❌ {t(E, "Cases 5~13: TLE.\nThe first 4 barely pass at 1.6s — way too close to the limit.", "케이스 5~13: 시간 초과 (TLE).\n통과한 4 개도 1.6 초로 제한 시간에 아슬아슬.")}
+            ❌ {t(E, "Cases 5–13: TLE.\nEven the first 4 squeak through at 1.6 s — uncomfortably close to the limit.", "케이스 5~13: 시간 초과 (TLE).\n통과한 4 개도 1.6 초로 제한 시간에 아슬아슬.")}
           </div>
           <div style={{ marginTop: 8, padding: "10px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 10, fontSize: 13, color: C.accent, fontWeight: 700, lineHeight: 1.7, textAlign: "center" }}>
             💡 {t(E, "So I thought: what if we save what we computed? → Prefix sum!",
@@ -1365,7 +1365,7 @@ export function makeBruteSteps(E, lang = "py") {
             ✅ {t(E, "Pass: 4 → 6.", "통과: 4 → 6 개.")}
           </div>
           <div style={{ marginTop: 8, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 12, color: C.no, fontWeight: 700, lineHeight: 1.6 }}>
-            ❌ {t(E, "Cases 7~13: still TLE.\nWhy? When N=10⁹ comes, even building the array takes too long.", "케이스 7~13: 여전히 TLE.\n왜? N=10⁹ 가 오면 배열 만드는 자체가 너무 오래 걸려요.")}
+            ❌ {t(E, "Cases 7–13: still TLE.\nWhy? When N hits 10⁹, just building the array takes too long.", "케이스 7~13: 여전히 TLE.\n왜? N=10⁹ 가 오면 배열 만드는 자체가 너무 오래 걸려요.")}
           </div>
         </div>
       ),
