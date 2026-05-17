@@ -565,7 +565,7 @@ export function makeCheeseCh4(E) {
       type: "code-section",
       narr: i === 0
         ? t(E,
-            `OK, so it's slow. What does the brute code look like? Let's walk through it ${arr.length} parts. Toggle Python ↔ C++ via the header.`,
+            `OK, so it's slow. What does the brute code actually look like? Let's walk through it in ${arr.length} parts. Toggle Python ↔ C++ via the header.`,
             `느리다는 건 알겠고. 그럼 브루트 코드 어떻게 생겼을까? ${arr.length} 부분으로 따라가요. 위 헤더로 Python ↔ C++ 토글.`)
         : "",
       section: sec,
