@@ -136,7 +136,7 @@ export function makeCh1(E) {
               <div style={{ fontSize: 32, textAlign: "center" }}>🐄</div>
               <div style={{ fontSize: 15, fontWeight: 900, color: C.bessie, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>Bessie</div>
               <div style={{ fontSize: 12, color: C.bessie, marginTop: 8, lineHeight: 1.8, fontWeight: 600 }}>
-                {E ? <>P-th digit only.<br /><strong>Just once!</strong></> : <>P번째 자리만 보고<br /><strong>딱 한 번</strong> 반올림!</>}
+                {E ? <>First digit only.<br /><strong>Just once!</strong></> : <>첫째 자리 (가장 왼쪽) 만<br /><strong>딱 한 번</strong> 반올림!</>}
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", fontSize: 18, fontWeight: 900, color: C.dimLight }}>VS</div>
@@ -144,7 +144,7 @@ export function makeCh1(E) {
               <div style={{ fontSize: 32, textAlign: "center" }}>🐮</div>
               <div style={{ fontSize: 15, fontWeight: 900, color: C.elsie, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>Elsie</div>
               <div style={{ fontSize: 12, color: C.elsie, marginTop: 8, lineHeight: 1.8, fontWeight: 600 }}>
-                {E ? <>1st → 2nd → … → P-th<br /><strong>Step by step!</strong></> : <>1번째 → P번째까지<br /><strong>순서대로</strong> 반올림!</>}
+                {E ? <>Right-to-left, one digit at a time<br /><strong>Step by step!</strong></> : <>오른쪽 끝부터 왼쪽 끝까지<br /><strong>한 자리씩 순서대로</strong> 반올림!</>}
               </div>
             </div>
           </div>
@@ -233,6 +233,11 @@ export function makeCh1(E) {
             </div>
             <div style={{ marginTop: 10, fontSize: 11, color: C.dim, lineHeight: 1.6 }}>
               {t(E, "Other 94 numbers (2~44, 50~100): both give same result, so not counted.", "나머지 94개 (2~44, 50~100): 두 사람 결과 같음 → 카운트 X")}
+            </div>
+            <div style={{ marginTop: 12, padding: "8px 12px", background: "#fef3c7", border: `1.5px solid #fcd34d`, borderRadius: 8, fontSize: 12, color: "#a16207", fontWeight: 600, lineHeight: 1.6 }}>
+              🤔 {t(E,
+                "Why these 5 (45–49) specifically, and not 5 other numbers? We'll figure out the pattern in the 💡 Pattern tab.",
+                "왜 하필 이 5 개 (45~49) 일까요? 다른 5 개가 아니라? 그 패턴은 💡 패턴 탭에서 찾아내요.")}
             </div>
           </div>
         </div>
@@ -360,7 +365,9 @@ export function makePatternSteps(E) {
                     "4 < 5 → 버린다 → 결과 0!"),
     },
     { type: "reveal",
-      narr: t(E, "But look at Elsie with 48:", "그런데 Elsie의 48을 봐:"),
+      narr: t(E,
+        "So Bessie rounds 4 down to 0. But wait — Elsie does it differently! Let's see what she gets for 48.",
+        "그러니까 Bessie 는 4 를 버려서 0. 근데 — Elsie 는 다른 방식이잖아요! Elsie 가 48 을 어떻게 계산하는지 봐요."),
       content: (
         <div style={{ padding: 4 }}>
           <div style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:13, lineHeight:2.2, padding:10, background:C.elsieBg, borderRadius:10, border:`1.5px solid ${C.elsieBd}` }}>
@@ -1185,7 +1192,8 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Step 4: Bessie just looks at the first digit. ≥5 → 10ᴾ. Else → 0.", "4단계: Bessie 는 첫째 자리 하나만 봐요. ≥5 면 10ᴾ, 아니면 0."),
+        "Step 4: Bessie just looks at the first digit. ≥5 → 10ᴾ. Else → 0.\n(Side note: 'first digit' = the leftmost one = the P-th digit from the right — same thing when x has P digits.)",
+        "4단계: Bessie 는 첫째 자리 하나만 봐요. ≥5 면 10ᴾ, 아니면 0.\n(참고: '첫째 자리' = 가장 왼쪽 = 1자리부터 세서 P번째 — x 가 P 자리니까 둘이 같은 거예요.)"),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 4: Bessie 🐄", "4단계: Bessie 구하기 🐄")} />
@@ -1246,12 +1254,14 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "runner",
       narr: t(E,
-        "Try various N — start small, go big. Notice anything?", "N 을 다양하게 키워가며 돌려보세요. 뭔가 느껴지나요?"),
+        "Below: enter a value for N (start with 100, then 10000, then 100000) and hit Run. Watch the time. What happens as N grows?",
+        "아래에서 N 값 입력 (100 → 10000 → 100000 순으로) 후 Run 누르세요. 걸리는 시간 봐요. N 이 커질수록 어떻게 되나요?"),
     },
 
     { type: "reveal",
       narr: t(E,
-        "Submit to USACO and you get this — first few cases pass (barely), rest time out.\nSo I thought of prefix sum.", "USACO 에 제출하면 이런 결과가 나와요. 앞 몇 개는 (간신히) 통과, 나머지는 다 시간 초과. 그래서 누적합을 떠올린 거예요."),
+        "When I submitted this code to USACO, here's what came back — first few cases pass (barely), rest time out.",
+        "이 코드를 USACO 채점기에 제출해봤더니 이렇게 나와요 — 앞 몇 개는 (간신히) 통과, 나머지는 다 시간 초과."),
       content: (
         <div style={{ padding: 16 }}>
           <Label text={t(E, "USACO submission — judge results", "USACO 제출 결과 — 채점 결과")} />
@@ -1297,7 +1307,8 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Build an array once, then every query reads it instantly.", "배열 한 번만 만들어놓으면 — 어떤 질문이 와도 즉답!"),
+        "Wait — why does T queries each redo the work for 2 ~ N? If two queries share most of that range, we're recomputing the same thing.\nSo: build the answer array ONCE, then every query just reads from it. Idea = prefix sum.",
+        "잠깐 — T 번 쿼리마다 2 ~ N 까지 또 계산? 두 쿼리가 같은 구간을 공유하면 똑같은 일을 반복하는 거잖아요.\n그래서: 답을 *한 번만* 배열에 채워두고, 매 쿼리는 거기서 lookup. 이게 누적합 (prefix sum) 아이디어."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, padding: 10, marginBottom: 14, textAlign: "center" }}>
@@ -1638,14 +1649,14 @@ export function makeOptSteps(E) {
 
     { type: "interval-sim",
       narr: t(E,
-        "Click d to see s_d and e_d for each digit count. Click N to see how the band gets clipped.",
-        "d 버튼을 눌러서 각 자릿수의 s_d, e_d 를 봐요. N 을 바꾸면 구간이 어떻게 잘리는지 보여줘요."),
+        "Click the d buttons (2, 3, 4, …) to see each digit count's interval [s_d, e_d]. Then drag the N slider — watch the rightmost interval get CLIPPED when N falls inside.",
+        "d 버튼 (2, 3, 4, …) 을 눌러서 각 자릿수의 구간 [s_d, e_d] 를 봐요. 그 다음 N 슬라이더 끌어보세요 — N 이 마지막 구간 안에 떨어지면 그 구간이 잘려요."),
     },
 
     { type: "scale",
       narr: t(E,
-        "Compare the three approaches at any N. Brute hits TLE early; formula stays instant.",
-        "세 풀이 속도 비교 — 브루트는 금방 TLE, 공식은 항상 즉시."),
+        "Drag the N slider all the way to 10⁹ (rightmost). Watch the brute bar HIT the time limit, while the formula stays a tiny dot. THIS is why we need the formula even though brute + cache exists.",
+        "N 슬라이더를 오른쪽 끝 (10⁹) 까지 끌어봐요. 브루트 막대는 시간 제한 *꽉 차고*, 공식은 작은 점 그대로. 브루트랑 캐시 있어도 *공식이 필요한 이유* — 이게 보이는 페이지예요."),
     },
 
     { type: "reveal",
