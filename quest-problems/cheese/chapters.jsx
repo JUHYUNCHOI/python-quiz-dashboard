@@ -128,73 +128,12 @@ export function makeCheeseCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: 막대 도입 + 관찰 (직접 보고 추론)
+    // 1-2: 막대 도입 + 인터랙티브 시뮬 (직접 클릭하며 발견)
     {
-      type: "reveal",
+      type: "rodFitSim",
       narr: t(E,
-        "We try to slide a 1×1×N rod through one row.\nLook at these 4 cases — which one does the rod fit?", "1×1×N 막대를 한 줄로 밀어 넣으려고 해요. 4 가지 경우를 봐요 — 어느 줄에 들어갈까요?"),
-      content: (
-        <div style={{ padding: 16 }}>
-          {/* 막대 정의 */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 14, fontSize: 13, color: C.text }}>
-            <span>{t(E, "Rod (N=3):", "막대 (N=3):")}</span>
-            <div style={{ display: "inline-block", width: 96, height: 14, background: "linear-gradient(180deg, #94a3b8, #64748b)", borderRadius: 3, border: "1px solid #475569" }} />
-          </div>
-
-          {/* 4 케이스 — 학생이 관찰 */}
-          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 8, textAlign: "center", letterSpacing: 0.3 }}>
-              {t(E, "👀 OBSERVE — which row lets the rod through?", "👀 관찰 — 어느 줄에 막대가 들어갈까?")}
-            </div>
-            {[
-              { cells: ["cheese", "cheese", "cheese"], works: false, lbl: t(E, "all 3 cheese blocks", "치즈 3 개 다 있음") },
-              { cells: ["empty",  "cheese", "cheese"], works: false, lbl: t(E, "1 empty, 2 cheese",   "1 칸 비어 있음") },
-              { cells: ["empty",  "empty",  "cheese"], works: false, lbl: t(E, "2 empty, 1 cheese",   "2 칸 비어 있음") },
-              { cells: ["empty",  "empty",  "empty" ], works: true,  lbl: t(E, "all 3 empty",         "3 칸 모두 비어 있음") },
-            ].map((row, i) => (
-              <div key={i} style={{
-                display: "flex", alignItems: "center", gap: 10, padding: "8px 6px",
-                borderBottom: i < 3 ? `1px solid #f1f5f9` : "none",
-                background: row.works ? "#ecfdf5" : "transparent",
-                borderRadius: 6,
-              }}>
-                {/* row of cells */}
-                <div style={{ display: "flex", gap: 2 }}>
-                  {row.cells.map((c, j) => (
-                    <div key={j} style={{
-                      width: 28, height: 28, borderRadius: 4,
-                      background: c === "cheese" ? "#fde047" : "#fff",
-                      border: `2px solid ${c === "cheese" ? "#ca8a04" : "#cbd5e1"}`,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 14,
-                    }}>
-                      {c === "cheese" ? "🧀" : ""}
-                    </div>
-                  ))}
-                </div>
-                {/* rod attempt — visually positioned */}
-                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                  <div style={{
-                    width: 30, height: 8,
-                    background: row.works ? "linear-gradient(180deg, #6ee7b7, #10b981)" : "linear-gradient(180deg, #94a3b8, #64748b)",
-                    borderRadius: 2,
-                  }} />
-                  <span style={{ fontSize: 16, fontWeight: 900, color: row.works ? "#10b981" : "#dc2626" }}>
-                    {row.works ? "✓" : "✗"}
-                  </span>
-                </div>
-                <span style={{ fontSize: 11, color: C.dim, flex: 1 }}>{row.lbl}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* 추론 유도 */}
-          <div style={{ padding: "10px 12px", background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 8, fontSize: 13, color: "#92400e", lineHeight: 1.7, textAlign: "center", fontWeight: 700 }}>
-            🤔 {t(E,
-              "Notice the pattern? Only the LAST one works. Next page: how many cells must be empty?",
-              "패턴 보였지? 마지막 줄만 들어가요. 다음 페이지: 몇 칸이 비어야 할까?")}
-          </div>
-        </div>),
+        "We try to slide a 1×1×N rod through one row of the cube.\nClick on the 🧀 cells to remove them — when does the rod fit through?",
+        "1×1×N 막대를 큐브의 한 줄로 밀어 넣어요. 🧀 셀을 눌러서 빼봐요 — 언제 막대가 통과할까요?"),
     },
     // 1-3: 막대 조건 퀴즈 — 직관적
     {
@@ -621,13 +560,16 @@ export function makeCheeseCh4(E) {
         </div>),
     },
 
-    // 4-3-code: brute 코드 자체 (progressive — 단계별)
-    {
-      type: "progressive",
-      narr: t(E,
-        "OK so it's slow. What does the code actually look like? Read it part by part.", "느리다는 건 알겠고. 그럼 코드는 어떻게 생겼을까? 부분별로 읽어봐요."),
-      sections: getCheeseBruteSections(E),
-    },
+    // 4-3-code: brute 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
+    ...getCheeseBruteSections(E).map((sec, i, arr) => ({
+      type: "code-section",
+      narr: i === 0
+        ? t(E,
+            `OK, so it's slow. What does the brute code actually look like? Let's walk through it in ${arr.length} parts. Toggle Python ↔ C++ via the header.`,
+            `느리다는 건 알겠고. 그럼 브루트 코드 어떻게 생겼을까? ${arr.length} 부분으로 따라가요. 위 헤더로 Python ↔ C++ 토글.`)
+        : "",
+      section: sec,
+    })),
 
     // 4-3a: 🔑 1차 개선 사고 디딤돌 — 학생이 자기 머리로 발견
     {
@@ -815,13 +757,16 @@ export function makeCheeseCh5(E, lang = "py") {
         "xy 쌍 → z-방향 줄! 쌍이 어떤 2축이 고정인지 알려줘요."),
     },
 
-    // 5-5: 인터랙티브 코드 위젯 (4 부분 + Python/C++ 토글 + PDF)
-    {
-      type: "progressive",
-      narr: t(E,
-        "Pick a part to see code + reasoning. Toggle Python ↔ C++. Save as PDF for later.", "버튼 눌러서 부분별 코드 + 이유 확인. Python ↔ C++ 토글. PDF 저장 가능."),
-      sections: getCheeseSections(E),
-    },
+    // 5-5: 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
+    ...getCheeseSections(E).map((sec, i, arr) => ({
+      type: "code-section",
+      narr: i === 0
+        ? t(E,
+            `Walk through the smart solution one part at a time (${arr.length} pages). Toggle Python ↔ C++ via the header. Save as PDF for later.`,
+            `최적 풀이를 한 부분씩 따라가요 (총 ${arr.length} 페이지). 위 헤더로 Python ↔ C++ 토글. PDF 저장 가능.`)
+        : "",
+      section: sec,
+    })),
 
     // 5-6: 샘플 입력 변수 trace — 시뮬에서 본 것과 코드 변수 연결
     {

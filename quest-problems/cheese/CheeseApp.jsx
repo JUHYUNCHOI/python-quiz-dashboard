@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import {
   CheeseSim2, CheeseBruteRunner, CheeseProgressiveCode,
   downloadCheesePDF, getCheeseSections,
+  RodFitSim,
 } from "./components";
 import {
   makeCheeseCh1, makeCheeseCh2, makeCheeseCh3, makeCheeseCh4, makeCheeseCh5,
@@ -102,6 +104,7 @@ export default function CheeseApp(props = {}) {
     (step.type === "input" && !step.solved);
 
   const canNext = cur < steps.length - 1 || tab < TABS.length - 1;
+  const canPrev = cur > 0 || tab > 0;
 
   const next = () => {
     if (cur < steps.length - 1) {
@@ -117,10 +120,26 @@ export default function CheeseApp(props = {}) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-  const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const prev = () => {
+    if (cur > 0) {
+      setSi(cur - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    // 첫 스텝에서 이전 탭의 마지막 스텝으로
+    if (tab > 0) {
+      const prevTab = tab - 1;
+      const prevSteps = states[prevTab];
+      setTab(prevTab);
+      setSi(prevSteps.length - 1);
+      setVisitedTabs(p => { const n = new Set(p); n.add(prevTab); return n; });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   // Code controls visible only on the Code tab (4)
-  const showCodeControls = tab === 4;
+  // Tab 2 (Brute) 도 이제 code-section 페이지 있어서 Python/C++ 토글 필요
+  const showCodeControls = tab === 2 || tab === 4;
 
   const renderContent = () => {
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
@@ -129,7 +148,9 @@ export default function CheeseApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "cheeseSim2") return <CheeseSim2 E={E} />;
     if (step.type === "cheeseRunner") return <CheeseBruteRunner E={E} />;
+    if (step.type === "rodFitSim") return <RodFitSim E={E} />;
     if (step.type === "progressive") return <CheeseProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={step.section} />;
     return null;
   };
 
@@ -141,7 +162,9 @@ export default function CheeseApp(props = {}) {
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
     if (s.type === "cheeseSim2") return <CheeseSim2 E={E} />;
     if (s.type === "cheeseRunner") return <CheeseBruteRunner E={E} />;
+    if (s.type === "rodFitSim") return <RodFitSim E={E} />;
     if (s.type === "progressive") return <CheeseProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={s.section} />;
     return null;
   };
 
@@ -201,6 +224,7 @@ export default function CheeseApp(props = {}) {
 
       <QuestBottomNav
         cur={cur}
+        canPrev={canPrev}
         canNext={canNext}
         accent={A}
         E={E}

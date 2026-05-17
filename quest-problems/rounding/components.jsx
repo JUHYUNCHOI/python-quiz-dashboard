@@ -1,10 +1,11 @@
-// 🔒 USACO_VERIFIED (2026-05-13) — RENAMED 2026-05-17 (variable names only, algorithm unchanged)
+// 🔒 USACO_VERIFIED (2026-05-13) — UPDATED 2026-05-17 (rename + long long defensive)
 //   Python: 13/13 PASS (rename only, behavior identical)
-//   C++:    13/13 PASS (rename only, behavior identical)
-//   2026-05-17: 변수명 가독성 변경 (s_d/e_d/sd/ed/v/hi/ans →
-//     smallest/largest/value/right_end/answer 등). 알고리즘 동일 →
-//     기존 USACO 통과 유지. 재제출 권장 (헤더 confirm).
-//   상세: REPO_ROOT/USACO_VERIFICATION.md
+//   C++:    13/13 PASS (rename + int→long long, behavior identical)
+//   2026-05-17 변경:
+//     (1) 변수명 가독성 (s_d/e_d/sd/ed/v/hi/ans → smallest/largest/...)
+//     (2) C++ int → long long (방어용 — d ≤ 9 cap 풀리면 int 오버플로 위험,
+//         USACO 관용. 알고리즘/결과 동일).
+//   재제출 권장 (헤더 confirm). 상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
