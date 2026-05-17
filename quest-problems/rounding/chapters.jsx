@@ -1097,6 +1097,7 @@ export function makeBruteSteps(E, lang = "py") {
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 5: Elsie 🐮 — full function", "5단계: Elsie 🐮 — 함수 완성")} />
           <CodeBlock lines={pick(BF_ELSIE, BF_ELSIE_CPP)} />
+          {lang !== "py" && <Pw10Explainer E={E} />}
         </div>
       ),
     },
@@ -1108,6 +1109,7 @@ export function makeBruteSteps(E, lang = "py") {
         <div style={{ padding: 16 }}>
           <Label text={t(E, "Step 6: Full code", "6단계: 전체 코드")} />
           <CodeBlock lines={pick(BF_FULL, BF_FULL_CPP)} />
+          {lang !== "py" && <Pw10Explainer E={E} />}
           <div style={{ marginTop: 10, padding: "8px 10px", background: C.okBg, border: `1.5px solid ${C.okBd}`, borderRadius: 8, fontSize: 12, color: C.ok, fontWeight: 700, lineHeight: 1.6 }}>
             ✅ {t(E, "Works! Next: run it.", "작동해요! 다음 페이지에서 직접 돌려봐요.")}
           </div>
@@ -1179,6 +1181,7 @@ export function makeBruteSteps(E, lang = "py") {
 
           <Label text={t(E, "Code (prefix sum)", "코드 (누적합)")} />
           <CodeBlock lines={pick(BF_DP, BF_DP_CPP)} />
+          {lang !== "py" && <Pw10Explainer E={E} />}
         </div>
       ),
     },
