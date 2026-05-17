@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
-import { Ch1PRecap } from "./components";
+import { Ch1PRecap, RecapDrawer } from "./components";
 
 /* ================================================================
    HELPERS
@@ -911,68 +911,104 @@ const BF_DP_CPP = (E) => [
 ];
 
 /* ================================================================
-   Pw10Explainer — click to reveal why pw10 helper exists
+   Pw10Explainer — uses RecapDrawer for right-side slide-out
    ================================================================ */
 function Pw10Explainer({ E }) {
-  const [open, setOpen] = useState(false);
   return (
-    <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: open ? "auto 1fr" : "auto", gap: 12, alignItems: "start" }}>
-      <button
-        onClick={() => setOpen(o => !o)}
-        style={{
-          padding: "8px 14px",
-          background: open ? C.accent : C.accentBg,
-          color: open ? "#fff" : C.accent,
-          border: `1.5px solid ${C.accentBd}`,
-          borderRadius: 8,
-          fontSize: 12,
-          fontWeight: 800,
-          cursor: "pointer",
-          whiteSpace: "nowrap",
-        }}
+    <div style={{ marginTop: 10 }}>
+      <RecapDrawer
+        buttonLabel={t(E, "Why pw10?", "pw10 왜 필요해?")}
+        title={t(E, "Why pw10?", "pw10 왜 필요해?")}
+        E={E}
       >
-        💡 {t(E, "Why pw10?", "pw10 왜 필요해?")}
-      </button>
-      {open && (
-        <div style={{
-          padding: "10px 14px",
-          background: C.accentBg,
-          border: `1.5px dashed ${C.accentBd}`,
-          borderRadius: 8,
-          fontSize: 12,
-          color: C.text,
-          lineHeight: 1.7,
-          fontWeight: 600,
-        }}>
+        <div style={{ padding: 16, fontSize: 13, color: C.text, lineHeight: 1.8, fontWeight: 500 }}>
           {E ? (
             <>
-              <strong style={{ color: C.accent }}>pw10(n) = 10ⁿ</strong> (e.g. <code>pw10(3) = 1000</code>).<br />
-              Python has <code>10**P</code> built in, but C++ has no integer power operator — so we write our own helper.<br />
-              <br />
-              <strong>Bessie</strong> returns <code>10ᴾ</code> when the first digit ≥ 5 (round up).<br />
-              <strong>Elsie</strong> uses <code>pw10(pos)</code> to add a carry at each position and zero out the digits below.<br />
-              <br />
-              <span style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 6, padding: "6px 10px", display: "inline-block", color: "#9a3412", fontWeight: 700, lineHeight: 1.6 }}>
-                🤔 <strong>"Isn't there <code>std::pow</code> in <code>&lt;cmath&gt;</code>?"</strong><br />
-                Yes — but it takes / returns <code>double</code>. Casting back like <code>(int)pow(10, 2)</code> can give <strong>99</strong> instead of 100 (floating-point rounding). Integer powers are safer with an integer-only helper.
-              </span>
+              <div style={{
+                background: C.accentBg, border: `2px solid ${C.accentBd}`,
+                borderRadius: 10, padding: 12, marginBottom: 12, textAlign: "center",
+              }}>
+                <div style={{ fontSize: 18, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>
+                  pw10(n) = 10<sup>n</sup>
+                </div>
+                <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
+                  e.g. <code>pw10(3) = 1000</code>
+                </div>
+              </div>
+
+              <p style={{ marginBottom: 12 }}>
+                Python has <code>10**P</code> built in, but C++ has no integer power operator — so we write our own helper.
+              </p>
+
+              <div style={{
+                background: C.bessieBg, border: `1.5px solid ${C.bessieBd}`,
+                borderRadius: 8, padding: "8px 12px", marginBottom: 8, fontSize: 12,
+              }}>
+                <strong style={{ color: C.bessie }}>🐄 Bessie</strong> returns <code>10ᴾ</code> when first digit ≥ 5 (round up).
+              </div>
+              <div style={{
+                background: C.elsieBg, border: `1.5px solid ${C.elsieBd}`,
+                borderRadius: 8, padding: "8px 12px", marginBottom: 14, fontSize: 12,
+              }}>
+                <strong style={{ color: C.elsie }}>🐮 Elsie</strong> uses <code>pw10(pos)</code> to add a carry at each position and zero digits below.
+              </div>
+
+              <div style={{
+                background: "#fff7ed", border: "1.5px solid #fdba74",
+                borderRadius: 8, padding: "10px 12px", fontSize: 12, color: "#9a3412", fontWeight: 600, lineHeight: 1.7,
+              }}>
+                🤔 <strong>"Isn't there <code>std::pow</code> in <code>&lt;cmath&gt;</code>?"</strong>
+                <br /><br />
+                Yes — but it takes / returns <code>double</code>. Casting back like <code>(int)pow(10, 2)</code> can give <strong>99</strong> instead of 100 (floating-point rounding error).
+                <br /><br />
+                Integer powers are safer with an integer-only helper.
+              </div>
             </>
           ) : (
             <>
-              <strong style={{ color: C.accent }}>pw10(n) = 10ⁿ</strong> (예: <code>pw10(3) = 1000</code>).<br />
-              Python 에는 <code>10**P</code> 가 있지만, C++ 에는 정수 거듭제곱 연산자가 없어서 직접 함수로 만들어요.<br />
-              <br />
-              <strong>Bessie</strong> 는 첫째 ≥ 5 일 때 <code>10ᴾ</code> 를 돌려줘요 (올림).<br />
-              <strong>Elsie</strong> 는 각 자리에서 <code>pw10(pos)</code> 만큼 carry 를 더하고, 그 자리 이하를 0 으로 만들어요.<br />
-              <br />
-              <span style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 6, padding: "6px 10px", display: "inline-block", color: "#9a3412", fontWeight: 700, lineHeight: 1.6 }}>
-                🤔 <strong>"<code>&lt;cmath&gt;</code> 의 <code>std::pow</code> 쓰면 안 돼?"</strong><br />
-                돼요 — 근데 <code>double</code> 을 받고 <code>double</code> 을 돌려줘요. <code>(int)pow(10, 2)</code> 처럼 캐스팅하면 <strong>100 대신 99</strong> 가 나올 수도 있어요 (floating-point 반올림 오차). 정수 거듭제곱은 정수 헬퍼가 안전.
-              </span>
+              <div style={{
+                background: C.accentBg, border: `2px solid ${C.accentBd}`,
+                borderRadius: 10, padding: 12, marginBottom: 12, textAlign: "center",
+              }}>
+                <div style={{ fontSize: 18, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>
+                  pw10(n) = 10<sup>n</sup>
+                </div>
+                <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
+                  예: <code>pw10(3) = 1000</code>
+                </div>
+              </div>
+
+              <p style={{ marginBottom: 12 }}>
+                Python 에는 <code>10**P</code> 가 있지만, C++ 에는 정수 거듭제곱 연산자가 없어서 직접 함수로 만들어요.
+              </p>
+
+              <div style={{
+                background: C.bessieBg, border: `1.5px solid ${C.bessieBd}`,
+                borderRadius: 8, padding: "8px 12px", marginBottom: 8, fontSize: 12,
+              }}>
+                <strong style={{ color: C.bessie }}>🐄 Bessie</strong> 는 첫째 ≥ 5 일 때 <code>10ᴾ</code> 를 돌려줘요 (올림).
+              </div>
+              <div style={{
+                background: C.elsieBg, border: `1.5px solid ${C.elsieBd}`,
+                borderRadius: 8, padding: "8px 12px", marginBottom: 14, fontSize: 12,
+              }}>
+                <strong style={{ color: C.elsie }}>🐮 Elsie</strong> 는 각 자리에서 <code>pw10(pos)</code> 만큼 carry 를 더하고, 그 자리 이하를 0 으로 만들어요.
+              </div>
+
+              <div style={{
+                background: "#fff7ed", border: "1.5px solid #fdba74",
+                borderRadius: 8, padding: "10px 12px", fontSize: 12, color: "#9a3412", fontWeight: 600, lineHeight: 1.7,
+              }}>
+                🤔 <strong>"<code>&lt;cmath&gt;</code> 의 <code>std::pow</code> 쓰면 안 돼?"</strong>
+                <br /><br />
+                돼요 — 근데 <code>double</code> 을 받고 <code>double</code> 을 돌려줘요. <code>(int)pow(10, 2)</code> 처럼 캐스팅하면 <strong>100 대신 99</strong> 가 나올 수도 있어요 (floating-point 반올림 오차).
+                <br /><br />
+                정수 거듭제곱은 정수 헬퍼가 안전.
+              </div>
             </>
           )}
         </div>
-      )}
+      </RecapDrawer>
     </div>
   );
 }
