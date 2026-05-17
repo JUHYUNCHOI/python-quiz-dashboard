@@ -198,7 +198,7 @@ export function makeCh1(E) {
 
           <div style={{ background: "#fef3c7", border: `2px solid #fcd34d`, borderRadius: 10, padding: 12, marginTop: 12 }}>
             <div style={{ fontSize: 13, color: "#a16207", fontWeight: 700, lineHeight: 1.7 }}>
-              💡 {t(E, "Look closely and you'll spot it: ", "발견! 자세히 관찰하다 보면, ")}
+              💡 {t(E, "Look closely and you'll notice: ", "발견! 자세히 관찰하다 보면, ")}
               <strong style={{ fontSize: 14 }}>P = {t(E, "the digit count of x", "x 의 자릿수")}</strong>
               {t(E, ".", " 라는 걸 알 수 있어요.")}
             </div>
@@ -236,7 +236,7 @@ export function makeCh1(E) {
             </div>
             <div style={{ marginTop: 12, padding: "8px 12px", background: "#fef3c7", border: `1.5px solid #fcd34d`, borderRadius: 8, fontSize: 12, color: "#a16207", fontWeight: 600, lineHeight: 1.6 }}>
               🤔 {t(E,
-                "Why exactly these 5 (45–49), and not some other 5? The 💡 Pattern tab cracks it open.",
+                "Why exactly these 5 (45–49), and not a different set of 5? The 💡 Pattern tab explains the rule.",
                 "왜 하필 이 5 개 (45~49) 일까요? 다른 5 개가 아니라? 그 패턴은 💡 패턴 탭에서 찾아내요.")}
             </div>
           </div>
@@ -374,7 +374,7 @@ export function makePatternSteps(E) {
             <div style={{ fontWeight:800, color:C.elsie, marginBottom:4 }}>{t(E, "🐮 Elsie rounding 48:", "🐮 Elsie의 48 반올림:")}</div>
             <div>{t(E, "Step 1: ones=", "1단계: 1의자리=")}<strong>8</strong> ≥ 5 → {t(E, "up!", "올림!")} → 50</div>
             <div>{t(E, "Step 2: tens=", "2단계: 10의자리=")}<strong>5</strong> ≥ 5 → {t(E, "up!", "올림!")} → 100</div>
-            <div style={{ marginTop:8, fontWeight:800, color:C.no }}>{t(E, "The tens digit started as 4, but the carry from 8 bumped it up to 5!", "4였던 10의자리가 carry 때문에 5가 됐어!")}</div>
+            <div style={{ marginTop:8, fontWeight:800, color:C.no }}>{t(E, "The tens digit started as 4, but the carry from 8 pushed it up to 5!", "4였던 10의자리가 carry 때문에 5가 됐어!")}</div>
           </div>
         </div>),
     },
@@ -464,7 +464,7 @@ export function makePatternSteps(E) {
       ),
     },
     { type: "reveal",
-      narr: t(E, "✅ Got the full condition!", "✅ 완전한 조건을 찾았어!"),
+      narr: t(E, "✅ The full condition!", "✅ 완전한 조건을 찾았어!"),
       content: (
         <div style={{ background:C.card, borderRadius:14, padding:16, border:`2px solid ${C.accent}`, boxShadow:"0 4px 16px rgba(79,70,229,.1)" }}>
           <div style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:14, lineHeight:2.4 }}>
@@ -1295,7 +1295,7 @@ export function makeBruteSteps(E, lang = "py") {
             ))}
           </div>
           <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
-            ❌ {t(E, "Cases 5–13: TLE.\nEven the first 4 squeak through at 1.6 s — uncomfortably close to the limit.", "케이스 5~13: 시간 초과 (TLE).\n통과한 4 개도 1.6 초로 제한 시간에 아슬아슬.")}
+            ❌ {t(E, "Cases 5–13: TLE.\nEven the first 4 barely pass at 1.6 s — way too close to the 2 s limit.", "케이스 5~13: 시간 초과 (TLE).\n통과한 4 개도 1.6 초로 제한 시간에 아슬아슬.")}
           </div>
           <div style={{ marginTop: 8, padding: "10px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 10, fontSize: 13, color: C.accent, fontWeight: 700, lineHeight: 1.7, textAlign: "center" }}>
             💡 {t(E, "So I thought: what if we save what we computed? → Prefix sum!",
@@ -1365,7 +1365,7 @@ export function makeBruteSteps(E, lang = "py") {
             ✅ {t(E, "Pass: 4 → 6.", "통과: 4 → 6 개.")}
           </div>
           <div style={{ marginTop: 8, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 12, color: C.no, fontWeight: 700, lineHeight: 1.6 }}>
-            ❌ {t(E, "Cases 7–13: still TLE.\nWhy? When N hits 10⁹, just building the array takes too long.", "케이스 7~13: 여전히 TLE.\n왜? N=10⁹ 가 오면 배열 만드는 자체가 너무 오래 걸려요.")}
+            ❌ {t(E, "Cases 7–13: still TLE.\nWhy? When N reaches 10⁹, just building the array takes too long.", "케이스 7~13: 여전히 TLE.\n왜? N=10⁹ 가 오면 배열 만드는 자체가 너무 오래 걸려요.")}
           </div>
         </div>
       ),
@@ -1661,7 +1661,7 @@ export function makeOptSteps(E) {
 
     { type: "scale",
       narr: t(E,
-        "Drag the N slider all the way to 10⁹ (the right edge). Watch the brute bar slam past the time limit while the formula stays a tiny dot. THIS is why we still need the formula, even with brute + cache already in hand.",
+        "Drag the N slider all the way to 10⁹ (the right edge). Watch the brute bar shoot past the time limit while the formula stays a tiny dot. THIS is why we still need the formula, even with brute + cache already in place.",
         "N 슬라이더를 오른쪽 끝 (10⁹) 까지 끌어봐요. 브루트 막대는 시간 제한 *꽉 차고*, 공식은 작은 점 그대로. 브루트랑 캐시 있어도 *공식이 필요한 이유* — 이게 보이는 페이지예요."),
     },
 

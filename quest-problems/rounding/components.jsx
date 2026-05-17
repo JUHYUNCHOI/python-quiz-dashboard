@@ -269,7 +269,7 @@ export function SpeedScale({ E }) {
       </div>
       <div style={{ marginTop: 8, padding: "8px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 8, fontSize: 11, color: C.accent, fontWeight: 700, lineHeight: 1.6, textAlign: "center" }}>
         💡 {t(E,
-              `Slide N from 10 up to 10⁹. Brute shoots past the red line almost right away — cache eventually does too — while the formula bar barely budges (still well left of the red line). That's the difference between O(N) and O(log N).`,
+              `Slide N from 10 up to 10⁹. Brute goes past the red line very quickly — cache eventually does too — while the formula bar barely grows (still well left of the red line). That's the difference between O(N) and O(log N).`,
               `N 을 10 부터 10⁹ 까지 끌어봐요: 브루트는 금방 빨간선 넘어가고 캐시도 결국 넘어가요. 공식은 막대가 살짝씩만 자라요 (빨간선 한참 못 미침). 이게 O(N) 과 O(log N) 차이.`)}
       </div>
     </div>
@@ -406,7 +406,7 @@ export function IntervalSim({ E }) {
         <strong style={{ fontFamily: "'JetBrains Mono',monospace" }}>2</strong>
         {t(E, " up to ", " 부터 ")}
         <strong style={{ color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>N={N.toLocaleString()}</strong>
-        {t(E, ". Each digit count contributes its share — until its interval shoots past N.",
+        {t(E, ". Each digit count adds its share — until its interval goes past N.",
               " 까지 답이 다른 수를 세요. 각 자릿수 d 가 자기 몫을 더해요 — 그 자릿수 구간이 N 을 넘어가기 전까지.")}
       </div>
 
