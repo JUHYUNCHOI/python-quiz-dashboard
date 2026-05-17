@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { MooSim, MooBruteRunner, MooRTRSim, MooProgressiveCode, downloadMooPDF, getMooSections } from "./components";
 import { makeMooCh1, makeMooCh2, makeMooCh3, makeMooCh4, makeMooCh5 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
@@ -90,6 +91,7 @@ export default function MooApp(props = {}) {
     (step.type === "input" && !step.solved);
 
   const canNext = cur < steps.length - 1 || tab < TABS.length - 1;
+  const canPrev = cur > 0 || tab > 0;
   const next = () => {
     if (cur < steps.length - 1) {
       setSi(cur + 1);
@@ -102,7 +104,21 @@ export default function MooApp(props = {}) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-  const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const prev = () => {
+    if (cur > 0) {
+      setSi(cur - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (tab > 0) {
+      const prevTab = tab - 1;
+      const prevSteps = states[prevTab];
+      setTab(prevTab);
+      setSi(prevSteps.length - 1);
+      setVisitedTabs(p => { const n = new Set(p); n.add(prevTab); return n; });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const showCodeControls = tab === 2 || tab === 4;
 
@@ -115,6 +131,7 @@ export default function MooApp(props = {}) {
     if (step.type === "mooRunner") return <MooBruteRunner E={E} />;
     if (step.type === "mooRTR") return <MooRTRSim E={E} />;
     if (step.type === "progressive") return <MooProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={step.section} />;
     return null;
   };
 
@@ -128,6 +145,7 @@ export default function MooApp(props = {}) {
     if (s.type === "mooRunner") return <MooBruteRunner E={E} />;
     if (s.type === "mooRTR") return <MooRTRSim E={E} />;
     if (s.type === "progressive") return <MooProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
+    if (s.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={s.section} />;
     return null;
   };
 
@@ -187,6 +205,7 @@ export default function MooApp(props = {}) {
 
       <QuestBottomNav
         cur={cur}
+        canPrev={canPrev}
         canNext={canNext}
         accent={A}
         E={E}

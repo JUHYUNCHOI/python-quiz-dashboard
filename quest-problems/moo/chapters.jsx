@@ -166,10 +166,16 @@ export function makeMooCh3(E) {
       hint: t(E, "10,400,000,000 ÷ 100,000,000 = ?", "10,400,000,000 ÷ 100,000,000 = ?"),
       answer: 104,
     },
-    { type: "progressive",
-      narr: t(E, "Brute force code — read it part by part.\nNotice how the inner loop calls count_all 26N times — that's the TLE.", "브루트포스 코드 — 부분별로 읽어봐요. 안쪽 루프가 count_all 을 26N 번 호출하는 게 TLE 원인."),
-      sections: getMooBruteSections(E),
-    },
+    // 브루트 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
+    ...getMooBruteSections(E).map((sec, i, arr) => ({
+      type: "code-section",
+      narr: i === 0
+        ? t(E,
+            `Brute force code — walk through ${arr.length} parts. Notice how the inner loop calls count_all 26N times — that's the TLE source.`,
+            `브루트포스 코드 — ${arr.length} 부분으로 따라가요. 안쪽 루프가 count_all 을 26N 번 호출하는 게 TLE 원인.`)
+        : "",
+      section: sec,
+    })),
     { type: "reveal",
       narr: t(E, "104 seconds!\n😱 But remember from the simulator — changing 1 letter only affects 3 windows, not N.\nThere MUST be a better way!", "104초! 😱 근데 시뮬레이터에서 봤잖아 — 1글자 바꾸면 3개 윈도우만 영향, N개가 아니라. 더 좋은 방법이 있을 거예요!"),
       content: (<div style={{ fontSize: 13, textAlign: "center", padding: 8 }}>
@@ -327,10 +333,16 @@ export function makeMooCh5(E, lang = "py") {
         <div style={{ marginTop: 8, fontSize: 12, color: C.accent, fontWeight: 700, textAlign: "center" }}>+1 → check → -1 = {t(E, "clean state for next trial!", "다음 시도를 위한 깨끗한 상태!")} ✨</div>
       </div>),
     },
-    { type: "progressive",
-      narr: t(E, "Pick a part to see code + reasoning. Toggle Python ↔ C++. Save as PDF for later.", "버튼 눌러서 부분별 코드 + 이유 확인. Python ↔ C++ 토글. PDF 저장 가능."),
-      sections: getMooSections(E),
-    },
+    // 메인 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
+    ...getMooSections(E).map((sec, i, arr) => ({
+      type: "code-section",
+      narr: i === 0
+        ? t(E,
+            `Walk through the smart solution one part at a time (${arr.length} pages). Toggle Python ↔ C++ via the header. Save as PDF for later.`,
+            `최적 풀이를 한 부분씩 따라가요 (총 ${arr.length} 페이지). 위 헤더로 Python ↔ C++ 토글. PDF 저장 가능.`)
+        : "",
+      section: sec,
+    })),
     { type: "reveal",
       narr: t(E, "That's it!\nThe whole insight: don't rescan everything — only update the 3 windows that actually changed.\nRemove → Try → Restore!\n🎉", "이게 전부예요! 핵심: 전부 다시 스캔하지 마 — 실제로 바뀐 3개 윈도우만 업데이트. 빼기 → 시도 → 복원! 🎉"),
       content: (<div style={{ textAlign: "center", padding: 8 }}>
