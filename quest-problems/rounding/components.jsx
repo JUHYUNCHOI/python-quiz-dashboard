@@ -343,6 +343,20 @@ export function IntervalSim({ E }) {
         </div>
       </div>
 
+      {/* Pre-table caption — frame the goal */}
+      <div style={{
+        background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10,
+        padding: "10px 14px", marginBottom: 10,
+        fontSize: 13, color: C.text, lineHeight: 1.7, fontWeight: 600,
+      }}>
+        {t(E, "Counting disagreeing numbers from ", "")}
+        <strong style={{ fontFamily: "'JetBrains Mono',monospace" }}>2</strong>
+        {t(E, " to ", " 부터 ")}
+        <strong style={{ color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>N={N.toLocaleString()}</strong>
+        {t(E, ". Each digit-count d adds its share — until the interval goes past N.",
+              " 까지 답이 다른 수를 세요. 각 자릿수 d 가 자기 몫을 더해요 — 그 자릿수 구간이 N 을 넘어가기 전까지.")}
+      </div>
+
       {/* All-d table */}
       <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", marginBottom: 12 }}>
         <div style={{
@@ -352,7 +366,8 @@ export function IntervalSim({ E }) {
           fontSize: 11, fontWeight: 800, color: C.dim,
         }}>
           <span>d</span>
-          <span>{t(E, "interval [s_d, e_d]", "구간 [s_d, e_d]")}</span>
+          <span>{t(E, "interval [s_d, e_d] — counted vs cut",
+                       "구간 [s_d, e_d] — 카운트 vs 잘림")}</span>
           <span style={{ textAlign: "center" }}>{t(E, "status", "상태")}</span>
           <span style={{ textAlign: "right" }}>+</span>
         </div>
@@ -369,16 +384,51 @@ export function IntervalSim({ E }) {
               fontFamily: "'JetBrains Mono',monospace",
             }}>
               <span style={{ fontWeight: 900, color: C.accent, fontSize: 14 }}>{r.d}</span>
-              <span style={{ fontSize: 13, fontWeight: 700 }}>
-                <span style={{ color: C.no }}>{r.s_d.toLocaleString()}</span>
-                <span style={{ color: C.dim }}>{" — "}</span>
-                <span style={{ color: C.ok }}>{r.e_d.toLocaleString()}</span>
-                {r.status === "clipped" && (
-                  <span style={{ marginLeft: 10, fontSize: 11, color: "#a16207", fontWeight: 800 }}>
-                    {t(E, "→ clip at N=", "→ N=")}
-                    {N.toLocaleString()}
-                    {t(E, "", " 에서 자름")}
-                  </span>
+              <span style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.6 }}>
+                {r.status === "clipped" ? (
+                  <>
+                    {/* Counted portion — bold + N highlighted */}
+                    <span style={{ color: C.no }}>{r.s_d.toLocaleString()}</span>
+                    <span style={{ color: C.dim }}>{" — "}</span>
+                    <span style={{
+                      color: "#a16207", fontWeight: 900,
+                      background: "#fef3c7", padding: "1px 7px", borderRadius: 4,
+                    }}>{t(E, "N=", "N=")}{N.toLocaleString()}</span>
+                    <span style={{ marginLeft: 6, fontSize: 10, color: "#a16207", fontWeight: 700, fontFamily: "system-ui, sans-serif" }}>
+                      ✓ {t(E, "counted", "카운트")}
+                    </span>
+                    <br />
+                    {/* Excluded portion — strikethrough + dimmed */}
+                    <span style={{
+                      color: "#94a3b8", textDecoration: "line-through",
+                      fontSize: 11, fontWeight: 600,
+                    }}>
+                      {(N + 1).toLocaleString()} — {r.e_d.toLocaleString()}
+                    </span>
+                    <span style={{ marginLeft: 6, fontSize: 10, color: "#94a3b8", fontWeight: 600, fontFamily: "system-ui, sans-serif" }}>
+                      ✗ {t(E, `${(r.e_d - N)} excluded`, `${(r.e_d - N)} 개 제외`)}
+                    </span>
+                  </>
+                ) : r.status === "stop" ? (
+                  <>
+                    <span style={{ color: C.no, opacity: 0.6 }}>{r.s_d.toLocaleString()}</span>
+                    <span style={{ color: C.dim, opacity: 0.6 }}>{" — "}</span>
+                    <span style={{ color: C.ok, opacity: 0.6 }}>{r.e_d.toLocaleString()}</span>
+                    <span style={{ marginLeft: 8, fontSize: 10, color: C.no, fontWeight: 700, fontFamily: "system-ui, sans-serif" }}>
+                      {t(E, `s_d > N → exit loop`, `s_d > N → 루프 종료`)}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ color: C.no }}>{r.s_d.toLocaleString()}</span>
+                    <span style={{ color: C.dim }}>{" — "}</span>
+                    <span style={{ color: C.ok }}>{r.e_d.toLocaleString()}</span>
+                    {r.status === "full" && (
+                      <span style={{ marginLeft: 8, fontSize: 10, color: C.ok, fontWeight: 700, fontFamily: "system-ui, sans-serif" }}>
+                        ✓ {t(E, "all in range", "전부 N 안")}
+                      </span>
+                    )}
+                  </>
                 )}
               </span>
               <span style={{
@@ -398,16 +448,26 @@ export function IntervalSim({ E }) {
             </div>
           );
         })}
-        {/* Total row */}
+        {/* Total row — show addition breakdown */}
         <div style={{
-          display: "grid", gridTemplateColumns: "1fr 80px",
           padding: "12px 14px",
           background: C.accentBg, borderTop: `2px solid ${C.accentBd}`,
           fontFamily: "'JetBrains Mono',monospace",
           color: C.accent, fontWeight: 900,
         }}>
-          <span style={{ fontSize: 13 }}>{t(E, "Total answer", "최종 답")}</span>
-          <span style={{ textAlign: "right", fontSize: 18 }}>{total.toLocaleString()}</span>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+            <span style={{ fontSize: 13 }}>{t(E, "Total answer", "최종 답")}</span>
+            <span style={{ fontSize: 20 }}>{total.toLocaleString()}</span>
+          </div>
+          {/* breakdown */}
+          <div style={{ fontSize: 11, color: C.accent, fontWeight: 700, opacity: 0.85, textAlign: "right" }}>
+            {rows.filter(r => r.count > 0).map((r, i, arr) => (
+              <span key={r.d}>
+                {r.count.toLocaleString()}
+                {i < arr.length - 1 ? " + " : " = " + total.toLocaleString()}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -418,8 +478,8 @@ export function IntervalSim({ E }) {
         fontSize: 12, color: C.accent, fontWeight: 700, lineHeight: 1.7,
       }}>
         💡 {t(E,
-          "Each row is one digit-count's contribution. Once a row hits STOP (s_d > N), the algorithm exits — that's why later rows are skipped.",
-          "각 줄은 한 자릿수의 기여분이에요. STOP (s_d > N) 이 한 번 뜨면 알고리즘이 거기서 끝나서 — 그 뒤는 다 건너뜀.")}
+          "Reading the table top-down: include FULL rows entirely, take only the CLIPPED row's left part (up to N), then STOP. That's the whole algorithm.",
+          "표를 위에서 아래로 읽어요: 전체 (FULL) 행은 통째로 더하고, 잘림 (CLIPPED) 행은 N 까지만, 그 다음은 멈춤 (STOP). 이게 알고리즘 전체예요.")}
       </div>
     </div>
   );
