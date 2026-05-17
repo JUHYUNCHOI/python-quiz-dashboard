@@ -236,7 +236,7 @@ export function makeCh1(E) {
             </div>
             <div style={{ marginTop: 12, padding: "8px 12px", background: "#fef3c7", border: `1.5px solid #fcd34d`, borderRadius: 8, fontSize: 12, color: "#a16207", fontWeight: 600, lineHeight: 1.6 }}>
               🤔 {t(E,
-                "Why these 5 (45–49) specifically, and not 5 other numbers? We'll figure out the pattern in the 💡 Pattern tab.",
+                "Why exactly these 5 (45–49), and not some other 5? The 💡 Pattern tab cracks it open.",
                 "왜 하필 이 5 개 (45~49) 일까요? 다른 5 개가 아니라? 그 패턴은 💡 패턴 탭에서 찾아내요.")}
             </div>
           </div>
@@ -585,7 +585,7 @@ export function makePatternSteps(E) {
               textAlign: "center", lineHeight: 1.7,
             }}>
               💡 {t(E,
-                "Each d's count is just (largest − smallest + 1). No exponentiation needed!",
+                "Each row's count is just (largest − smallest + 1). No exponentiation needed!",
                 "각 d 의 개수 = (가장 큰 수) − (가장 작은 수) + 1. 거듭제곱 필요 없음!")}
             </div>
           </div>
@@ -1192,7 +1192,7 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Step 4: Bessie just looks at the first digit. ≥5 → 10ᴾ. Else → 0.\n(Side note: 'first digit' = the leftmost one = the P-th digit from the right — same thing when x has P digits.)",
+        "Step 4: Bessie looks at just the first digit. If it's ≥ 5, round up to 10ᴾ; otherwise round down to 0.\n(Quick note: 'first digit' here means the leftmost one — which is also the P-th digit counting from the right, since x has P digits.)",
         "4단계: Bessie 는 첫째 자리 하나만 봐요. ≥5 면 10ᴾ, 아니면 0.\n(참고: '첫째 자리' = 가장 왼쪽 = 1자리부터 세서 P번째 — x 가 P 자리니까 둘이 같은 거예요.)"),
       content: (
         <div style={{ padding: 16 }}>
@@ -1661,7 +1661,7 @@ export function makeOptSteps(E) {
 
     { type: "scale",
       narr: t(E,
-        "Drag the N slider all the way to 10⁹ (rightmost). Watch the brute bar HIT the time limit, while the formula stays a tiny dot. THIS is why we need the formula even though brute + cache exists.",
+        "Drag the N slider all the way to 10⁹ (the right edge). Watch the brute bar slam past the time limit while the formula stays a tiny dot. THIS is why we still need the formula, even with brute + cache already in hand.",
         "N 슬라이더를 오른쪽 끝 (10⁹) 까지 끌어봐요. 브루트 막대는 시간 제한 *꽉 차고*, 공식은 작은 점 그대로. 브루트랑 캐시 있어도 *공식이 필요한 이유* — 이게 보이는 페이지예요."),
     },
 

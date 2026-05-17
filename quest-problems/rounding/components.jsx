@@ -269,7 +269,7 @@ export function SpeedScale({ E }) {
       </div>
       <div style={{ marginTop: 8, padding: "8px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 8, fontSize: 11, color: C.accent, fontWeight: 700, lineHeight: 1.6, textAlign: "center" }}>
         💡 {t(E,
-              `Slide N from 10 to 10⁹: watch brute jump way past the red line, cache eventually too, while the formula bar barely budges (still left of red line). That's O(N) vs O(log N).`,
+              `Slide N from 10 up to 10⁹. Brute shoots past the red line almost right away — cache eventually does too — while the formula bar barely budges (still well left of the red line). That's the difference between O(N) and O(log N).`,
               `N 을 10 부터 10⁹ 까지 끌어봐요: 브루트는 금방 빨간선 넘어가고 캐시도 결국 넘어가요. 공식은 막대가 살짝씩만 자라요 (빨간선 한참 못 미침). 이게 O(N) 과 O(log N) 차이.`)}
       </div>
     </div>
@@ -404,9 +404,9 @@ export function IntervalSim({ E }) {
       }}>
         {t(E, "Counting disagreeing numbers from ", "")}
         <strong style={{ fontFamily: "'JetBrains Mono',monospace" }}>2</strong>
-        {t(E, " to ", " 부터 ")}
+        {t(E, " up to ", " 부터 ")}
         <strong style={{ color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>N={N.toLocaleString()}</strong>
-        {t(E, ". Each digit-count d adds its share — until the interval goes past N.",
+        {t(E, ". Each digit count contributes its share — until its interval shoots past N.",
               " 까지 답이 다른 수를 세요. 각 자릿수 d 가 자기 몫을 더해요 — 그 자릿수 구간이 N 을 넘어가기 전까지.")}
       </div>
 
@@ -610,7 +610,7 @@ export function IntervalSim({ E }) {
         fontSize: 12, color: C.accent, fontWeight: 700, lineHeight: 1.7,
       }}>
         💡 {t(E,
-          "Reading the table top-down: include FULL rows entirely, take only the CLIPPED row's left part (up to N), then STOP. That's the whole algorithm.",
+          "Read top to bottom: count FULL rows whole, take just the left portion of the CLIPPED row (up to N), then STOP. That's the entire algorithm.",
           "표를 위에서 아래로 읽어요: 전체 (FULL) 행은 통째로 더하고, 잘림 (CLIPPED) 행은 N 까지만, 그 다음은 멈춤 (STOP). 이게 알고리즘 전체예요.")}
       </div>
     </div>
