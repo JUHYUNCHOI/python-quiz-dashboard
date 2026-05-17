@@ -268,6 +268,12 @@ export function SpeedScale({ E }) {
    ================================================================ */
 export function IntervalSim({ E }) {
   const [N, setN] = useState(4567);
+  // stepIdx: 1..rows.length = 그 번째 행까지 공개. rows.length+1 = 합계 공개.
+  // N 바뀌면 1 로 리셋 (사용자가 새 N 으로 처음부터 따라가게).
+  const [stepIdx, setStepIdx] = useState(1);
+
+  // N 변할 때 step 리셋
+  const handleSetN = (newN) => { setN(newN); setStepIdx(1); };
 
   // Build all d rows
   const rows = [2, 3, 4, 5, 6].map(d => {
@@ -300,6 +306,34 @@ export function IntervalSim({ E }) {
 
   const total = rows.reduce((s, r) => s + r.count, 0);
 
+  // 단계 제어
+  const showTotal = stepIdx > rows.length;
+  const currentRowIdx = Math.min(stepIdx - 1, rows.length - 1); // 방금 공개된 행
+  const canPrevStep = stepIdx > 1;
+  const canNextStep = stepIdx <= rows.length;
+
+  // 다음 버튼 라벨 — 무슨 일이 일어날지 미리 알려줌
+  let nextLabel;
+  if (stepIdx <= rows.length) {
+    const nextRow = rows[stepIdx - 1];   // ← 다음 클릭 시 강조될 행
+    if (stepIdx === rows.length + 0 && false) {
+      // unreachable; placeholder
+    }
+    if (stepIdx === 1) {
+      nextLabel = t(E, `▶ Start with d=${nextRow.d}`, `▶ d=${nextRow.d} 부터 시작`);
+    } else if (stepIdx === rows.length) {
+      nextLabel = t(E, "🎯 Show total", "🎯 합계 보기");
+    } else {
+      nextLabel = t(E, `▶ Next: d=${nextRow.d}`, `▶ 다음: d=${nextRow.d}`);
+    }
+  } else {
+    nextLabel = t(E, "🔄 Restart", "🔄 다시 처음부터");
+  }
+  const handleNext = () => {
+    if (stepIdx > rows.length) setStepIdx(1);   // restart
+    else setStepIdx(stepIdx + 1);
+  };
+
   const statusStyle = (status) => {
     if (status === "full")    return { bg: C.okBg, color: C.ok,   label: t(E, "FULL",   "전체") };
     if (status === "clipped") return { bg: "#fef3c7", color: "#a16207", label: t(E, "CLIPPED", "잘림") };
@@ -324,7 +358,7 @@ export function IntervalSim({ E }) {
             return (
               <button
                 key={v}
-                onClick={() => setN(v)}
+                onClick={() => handleSetN(v)}
                 title={hint}
                 style={{
                   padding: "6px 12px",
@@ -357,6 +391,42 @@ export function IntervalSim({ E }) {
               " 까지 답이 다른 수를 세요. 각 자릿수 d 가 자기 몫을 더해요 — 그 자릿수 구간이 N 을 넘어가기 전까지.")}
       </div>
 
+      {/* Step controls — 단계별 따라가기 */}
+      <div style={{
+        background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 10,
+        padding: "8px 12px", marginBottom: 10,
+        display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap",
+      }}>
+        <span style={{ fontSize: 12, fontWeight: 800, color: C.accent }}>
+          {t(E, `Step ${Math.min(stepIdx, rows.length + 1)} / ${rows.length + 1}`,
+                `${Math.min(stepIdx, rows.length + 1)} / ${rows.length + 1} 단계`)}
+        </span>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button
+            onClick={() => setStepIdx(Math.max(1, stepIdx - 1))}
+            disabled={!canPrevStep}
+            style={{
+              padding: "6px 12px",
+              background: canPrevStep ? "#fff" : "#f1f5f9",
+              color: canPrevStep ? C.accent : "#cbd5e1",
+              border: `1.5px solid ${canPrevStep ? C.accent : "#e2e8f0"}`,
+              borderRadius: 8, fontSize: 12, fontWeight: 800,
+              cursor: canPrevStep ? "pointer" : "default",
+            }}
+          >◀ {t(E, "Prev", "이전")}</button>
+          <button
+            onClick={handleNext}
+            style={{
+              padding: "6px 14px",
+              background: C.accent, color: "#fff",
+              border: `1.5px solid ${C.accent}`,
+              borderRadius: 8, fontSize: 12, fontWeight: 800,
+              cursor: "pointer",
+            }}
+          >{nextLabel}</button>
+        </div>
+      </div>
+
       {/* All-d table */}
       <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", marginBottom: 12 }}>
         <div style={{
@@ -373,17 +443,47 @@ export function IntervalSim({ E }) {
         </div>
         {rows.map((r, i) => {
           const st = statusStyle(r.status);
+          // 단계 게이팅: 아직 공개 안 된 행은 placeholder 로 (구조는 유지, 내용 가림)
+          const revealed = i < stepIdx;
+          const isCurrent = i === currentRowIdx && stepIdx <= rows.length;
+          if (!revealed) {
+            return (
+              <div key={r.d} style={{
+                display: "grid", gridTemplateColumns: "40px 1fr 90px 80px",
+                alignItems: "center",
+                padding: "10px 12px",
+                borderBottom: i < rows.length - 1 ? `1px solid ${C.border}` : "none",
+                background: "#fafbff",
+                opacity: 0.35,
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                <span style={{ fontWeight: 900, color: "#cbd5e1", fontSize: 14 }}>{r.d}</span>
+                <span style={{ fontSize: 12, color: "#cbd5e1", fontStyle: "italic", fontFamily: "system-ui, sans-serif" }}>
+                  {t(E, "— hidden, click Next ▶", "— 가려짐, 다음 ▶ 클릭")}
+                </span>
+                <span></span>
+                <span></span>
+              </div>
+            );
+          }
           return (
             <div key={r.d} style={{
               display: "grid", gridTemplateColumns: "40px 1fr 90px 80px",
               alignItems: "center",
               padding: "10px 12px",
               borderBottom: i < rows.length - 1 ? `1px solid ${C.border}` : "none",
-              background: i % 2 === 0 ? "#fff" : "#fafbff",
+              background: isCurrent ? "#fff7ed" : (i % 2 === 0 ? "#fff" : "#fafbff"),
               opacity: r.status === "skip" ? 0.45 : 1,
               fontFamily: "'JetBrains Mono',monospace",
+              ...(isCurrent ? {
+                boxShadow: "inset 4px 0 0 #f97316",
+                animation: "popIn .3s cubic-bezier(.34,1.56,.64,1)",
+              } : {}),
+              transition: "background .2s",
             }}>
-              <span style={{ fontWeight: 900, color: C.accent, fontSize: 14 }}>{r.d}</span>
+              <span style={{ fontWeight: 900, color: isCurrent ? "#f97316" : C.accent, fontSize: 14 }}>
+                {isCurrent && "👉 "}{r.d}
+              </span>
               <span style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.6 }}>
                 {r.status === "clipped" ? (
                   <>
@@ -448,27 +548,40 @@ export function IntervalSim({ E }) {
             </div>
           );
         })}
-        {/* Total row — show addition breakdown */}
-        <div style={{
-          padding: "12px 14px",
-          background: C.accentBg, borderTop: `2px solid ${C.accentBd}`,
-          fontFamily: "'JetBrains Mono',monospace",
-          color: C.accent, fontWeight: 900,
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-            <span style={{ fontSize: 13 }}>{t(E, "Total answer", "최종 답")}</span>
-            <span style={{ fontSize: 20 }}>{total.toLocaleString()}</span>
+        {/* Total row — show only when all rows revealed */}
+        {showTotal ? (
+          <div style={{
+            padding: "12px 14px",
+            background: C.accentBg, borderTop: `2px solid ${C.accentBd}`,
+            fontFamily: "'JetBrains Mono',monospace",
+            color: C.accent, fontWeight: 900,
+            animation: "popIn .3s cubic-bezier(.34,1.56,.64,1)",
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+              <span style={{ fontSize: 13 }}>🎯 {t(E, "Total answer", "최종 답")}</span>
+              <span style={{ fontSize: 20 }}>{total.toLocaleString()}</span>
+            </div>
+            <div style={{ fontSize: 11, color: C.accent, fontWeight: 700, opacity: 0.85, textAlign: "right" }}>
+              {rows.filter(r => r.count > 0).map((r, i, arr) => (
+                <span key={r.d}>
+                  {r.count.toLocaleString()}
+                  {i < arr.length - 1 ? " + " : " = " + total.toLocaleString()}
+                </span>
+              ))}
+            </div>
           </div>
-          {/* breakdown */}
-          <div style={{ fontSize: 11, color: C.accent, fontWeight: 700, opacity: 0.85, textAlign: "right" }}>
-            {rows.filter(r => r.count > 0).map((r, i, arr) => (
-              <span key={r.d}>
-                {r.count.toLocaleString()}
-                {i < arr.length - 1 ? " + " : " = " + total.toLocaleString()}
-              </span>
-            ))}
+        ) : (
+          <div style={{
+            padding: "10px 14px",
+            background: "#fafbff", borderTop: `2px solid ${C.border}`,
+            fontFamily: "system-ui, sans-serif",
+            color: C.dim, fontWeight: 700, fontSize: 12, textAlign: "center",
+          }}>
+            {t(E,
+              `▶ Next button to reveal more rows (${rows.length - stepIdx + 1} left, then total)`,
+              `▶ 다음 누르면 더 공개 (${rows.length - stepIdx + 1} 개 남음, 그 다음 합계)`)}
           </div>
-        </div>
+        )}
       </div>
 
       {/* Caption — explains why we show ALL d's */}
