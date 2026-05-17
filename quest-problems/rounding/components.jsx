@@ -1064,6 +1064,219 @@ export function ProgressiveCode({ E, lang = "py", sections }) {
 // Backwards-compat alias used by RoundingApp.jsx
 export const RoundingProgressiveCode = ProgressiveCode;
 
+/* ================================================================
+   RecapDrawer — right-side slide-out for "remind me what was X again?"
+   학생이 이전 챕터 내용 잠시 확인하고 싶을 때. 퀴즈 스텝에 recap 필드
+   넣어서 사용 (RoundingApp.jsx 가 step.recap 있으면 자동 렌더).
+   ================================================================ */
+export function RecapDrawer({ buttonLabel, title, children, E }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
+        <button
+          onClick={() => setOpen(true)}
+          style={{
+            padding: "6px 12px",
+            background: "#fff",
+            border: `1.5px solid ${C.accent}`,
+            color: C.accent,
+            borderRadius: 8,
+            fontSize: 12,
+            fontWeight: 700,
+            cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 4,
+          }}
+          title={t(E, "Open recap", "다시 보기 열기")}
+        >
+          📖 {buttonLabel}
+        </button>
+      </div>
+
+      {open && (
+        <>
+          {/* Backdrop */}
+          <div
+            onClick={() => setOpen(false)}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0, 0, 0, 0.35)",
+              zIndex: 999,
+              animation: "fadeIn .2s ease-out",
+            }}
+          />
+          {/* Drawer panel — slides in from right */}
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              width: "min(440px, 90vw)",
+              background: "#fff",
+              boxShadow: "-4px 0 24px rgba(0, 0, 0, 0.18)",
+              zIndex: 1000,
+              overflowY: "auto",
+              animation: "slideInRight .25s cubic-bezier(.34,1.56,.64,1)",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {/* Drawer header */}
+            <div
+              style={{
+                position: "sticky",
+                top: 0,
+                background: C.accentBg,
+                borderBottom: `1.5px solid ${C.accentBd}`,
+                padding: "12px 16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                zIndex: 1,
+              }}
+            >
+              <span style={{ fontSize: 13, fontWeight: 800, color: C.accent }}>
+                📖 {title || buttonLabel}
+              </span>
+              <button
+                onClick={() => setOpen(false)}
+                style={{
+                  width: 28,
+                  height: 28,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "#fff",
+                  border: `1.5px solid ${C.border}`,
+                  color: C.dim,
+                  borderRadius: 6,
+                  fontSize: 16,
+                  fontWeight: 800,
+                  cursor: "pointer",
+                  lineHeight: 1,
+                }}
+                title={t(E, "Close", "닫기")}
+              >
+                ×
+              </button>
+            </div>
+            {/* Drawer body */}
+            <div style={{ padding: 0, flex: 1 }}>{children}</div>
+          </div>
+
+          {/* Keyframes */}
+          <style>{`
+            @keyframes slideInRight {
+              from { transform: translateX(100%); }
+              to   { transform: translateX(0); }
+            }
+            @keyframes fadeIn {
+              from { opacity: 0; }
+              to   { opacity: 1; }
+            }
+          `}</style>
+        </>
+      )}
+    </>
+  );
+}
+
+/* ================================================================
+   Ch1PRecap — content shown when student opens "P 가 뭐였더라?" drawer
+   on the "What was P?" quiz in Try Solving tab.
+   Mirrors the Ch1 step that introduces P (10^P > x).
+   ================================================================ */
+export function Ch1PRecap({ E }) {
+  return (
+    <div style={{ padding: 16, fontSize: 14, lineHeight: 1.85 }}>
+      <div
+        style={{
+          background: C.accentBg,
+          border: `2px solid ${C.accentBd}`,
+          borderRadius: 12,
+          padding: 14,
+          marginBottom: 12,
+          textAlign: "center",
+        }}
+      >
+        <div style={{ fontSize: 13, fontWeight: 800, color: C.accent, marginBottom: 8 }}>
+          📐 {t(E, "P's condition", "P 의 조건")}
+        </div>
+        <div
+          style={{
+            fontSize: 18,
+            fontWeight: 900,
+            color: C.accent,
+            fontFamily: "'JetBrains Mono',monospace",
+          }}
+        >
+          10<sup>P</sup> &gt; x
+        </div>
+        <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
+          {t(E, "(smallest such P)", "(을 만족하는 가장 작은 P)")}
+        </div>
+      </div>
+
+      <div
+        style={{
+          fontSize: 12,
+          fontWeight: 800,
+          color: C.dim,
+          marginBottom: 4,
+        }}
+      >
+        🔍 {t(E, "Examples", "예시")}
+      </div>
+      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
+        {[
+          { x: 7, d: 1, calc: "10¹=10 > 7" },
+          { x: 48, d: 2, calc: "10²=100 > 48" },
+          { x: 445, d: 3, calc: "10³=1000 > 445" },
+          { x: 4459, d: 4, calc: "10⁴=10000 > 4459" },
+        ].map((row, i) => (
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "7px 14px",
+              marginBottom: 4,
+              borderRadius: 8,
+              background: "#f8f9fc",
+              border: `1.5px solid ${C.border}`,
+            }}
+          >
+            <span style={{ fontWeight: 800, color: C.text, minWidth: 50 }}>{row.x}</span>
+            <span style={{ color: C.dim, fontSize: 11 }}>{row.calc}</span>
+            <span style={{ fontWeight: 800, color: C.accent }}>P = {row.d}</span>
+          </div>
+        ))}
+      </div>
+
+      <div
+        style={{
+          background: "#fef3c7",
+          border: `2px solid #fcd34d`,
+          borderRadius: 10,
+          padding: 12,
+          marginTop: 12,
+        }}
+      >
+        <div style={{ fontSize: 13, color: "#a16207", fontWeight: 700, lineHeight: 1.7 }}>
+          💡 {t(E, "P = ", "")}
+          <strong style={{ fontSize: 14 }}>{t(E, "the digit count of x", "x 의 자릿수")}</strong>
+          {t(E, ".", " 예요.")}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Stubs kept for any other consumer of the old "thin" component API.
 // These aren't used by the new RoundingApp (which wires its own widgets via
 // step types like "compare3" / "runner" / "scale" / "progressive"), but

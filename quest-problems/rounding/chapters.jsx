@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
+import { Ch1PRecap } from "./components";
 
 /* ================================================================
    HELPERS
@@ -1038,6 +1039,10 @@ export function makeBruteSteps(E, lang = "py") {
       correct: 1,
       explain: t(E, "Right! P = number of digits = len(str(x)). Now both functions can use it.",
                     "맞아요! P = 자릿수 = len(str(x)). 이제 두 함수가 이걸 쓸 수 있어요."),
+      // ── recap drawer ─────────────────────────────────
+      // 우측 슬라이드 drawer 로 챕터 1 의 P 정의 다시 보기 — 위치 안 잃고 잠깐 확인 가능
+      recapLabel: t(E, "Ch 1 — What was P?", "챕터 1 — P 가 뭐였더라?"),
+      recap: <Ch1PRecap E={E} />,
     },
 
     { type: "reveal",
