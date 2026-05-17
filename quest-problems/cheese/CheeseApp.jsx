@@ -102,6 +102,7 @@ export default function CheeseApp(props = {}) {
     (step.type === "input" && !step.solved);
 
   const canNext = cur < steps.length - 1 || tab < TABS.length - 1;
+  const canPrev = cur > 0 || tab > 0;
 
   const next = () => {
     if (cur < steps.length - 1) {
@@ -117,7 +118,22 @@ export default function CheeseApp(props = {}) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-  const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const prev = () => {
+    if (cur > 0) {
+      setSi(cur - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    // 첫 스텝에서 이전 탭의 마지막 스텝으로
+    if (tab > 0) {
+      const prevTab = tab - 1;
+      const prevSteps = states[prevTab];
+      setTab(prevTab);
+      setSi(prevSteps.length - 1);
+      setVisitedTabs(p => { const n = new Set(p); n.add(prevTab); return n; });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   // Code controls visible only on the Code tab (4)
   const showCodeControls = tab === 4;
@@ -201,6 +217,7 @@ export default function CheeseApp(props = {}) {
 
       <QuestBottomNav
         cur={cur}
+        canPrev={canPrev}
         canNext={canNext}
         accent={A}
         E={E}
