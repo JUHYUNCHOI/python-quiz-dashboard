@@ -107,7 +107,7 @@ cout << p.second;   // 95
 
 > 📌 **참고 — 모던 C++ (C++17) 의 한 줄 문법**
 >
-> 코드를 더 깔끔하게 쓰고 싶을 땐 \`auto [name, score] = p;\` 한 줄로도 가능해요. 이걸 *structured bindings* 라고 불러요. 다만 지금은 알 필요 X — \`.first/.second\` 만 손에 익혀도 충분합니다. 나중에 자연스럽게 다시 만나면 그때 익혀요.`
+> 코드를 더 깔끔하게 쓰고 싶을 땐 \`auto [name, score] = p;\` 한 줄로도 가능해요. 이걸 **structured bindings** 라고 불러요. 다만 지금은 알 필요 X — \`.first/.second\` 만 손에 익혀도 충분합니다. 나중에 자연스럽게 다시 만나면 그때 익혀요.`
         },
         {
           id: "ch1-pair-mini",
@@ -230,7 +230,7 @@ string name = get<2>(t);
 
 여러 값을 한 번에 리턴할 때, 이름 붙인 struct 만들기 귀찮으면 tuple 로 묶어 보내고 받는 쪽에서 \`get<N>\` 로 꺼내요.
 
-> 📌 모던 C++ 에선 \`auto [a, b, c] = getStudent();\` 한 줄로도 가능 — *structured bindings*. 지금은 알 필요 X.
+> 📌 모던 C++ 에선 \`auto [a, b, c] = getStudent();\` 한 줄로도 가능 — **structured bindings**. 지금은 알 필요 X.
 
 ### 2. \`tie()\` 로 사전식 비교 (정석 패턴)
 
@@ -605,7 +605,7 @@ int main() {
           id: "ch1-vec-iter",
           type: "explain",
           title: "🔄 vector<pair>를 반복문으로 순회하기",
-          content: `pair를 여러 개 다룰 때는 **vector<pair>**에 넣어서 관리해요.
+          content: `pair를 여러 개 다룰 때는 **\`vector<pair>\`** 에 넣어서 관리해요.
 
 \`\`\`cpp
 vector<pair<string, int>> students;
@@ -637,7 +637,36 @@ for (pair<string, int>& s : students) {  // auto& 대신 직접 타입 명시
 }
 \`\`\`
 
-💡 \`auto&\`가 훨씬 편하죠? 타입이 길어질수록 auto의 가치가 커져요!`
+💡 \`auto&\`가 훨씬 편하죠? 타입이 길어질수록 auto의 가치가 커져요!
+
+---
+
+### ⭐ 더 깔끔한 방법 — structured binding (C++17)
+
+\`s.first\` / \`s.second\` 보다 더 직관적인 방법이 있어요:
+
+\`\`\`cpp
+for (auto& [name, score] : students) {
+    cout << name << ": " << score << endl;
+}
+// Kim: 95
+// Lee: 88
+// Park: 92
+\`\`\`
+
+\`auto& [name, score]\` — pair 의 두 값을 **그 자리에서 name, score 라는 이름으로 풀어요**:
+- \`s.first\` 대신 → \`name\` (이름)
+- \`s.second\` 대신 → \`score\` (점수)
+
+코드 보면 의미가 바로 보여요.
+
+| | 옛 방식 | structured binding |
+|---|---|---|
+| 접근 | \`s.first\`, \`s.second\` | \`name\`, \`score\` (직접 이름) |
+| 가독성 | 익혀야 됨 | 이름 보면 바로 의미 |
+| 버전 | 항상 됨 | C++17+ (USACO 환경 OK) |
+
+> 💡 **USACO 와 다음 레슨 (map & set) 에서 거의 매번 등장.** \`for (auto& [k, v] : map)\` 패턴이 표준. 지금 한 번 익혀두면 두고두고 써먹어요.`
         },
         {
           id: "ch1-practice",
@@ -797,7 +826,7 @@ for (auto& [age, name] : people) {
 - \`p.first\` — 첫 번째 값, \`p.second\` — 두 번째 값
 - \`make_pair(a, b)\` 또는 \`{a, b}\` 로 만들기
 - **자동 비교 지원!** (first 먼저, 같으면 second 순서)
-- **vector<pair> sort 시 자동으로 first 기준 정렬!**
+- **\`vector<pair>\` sort 시 자동으로 first 기준 정렬!**
 
 ### 📦 tuple — 참고만!
 - **tuple<T1, T2, T3>**: 3개 이상 묶기

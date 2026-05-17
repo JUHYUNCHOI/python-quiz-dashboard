@@ -582,9 +582,9 @@ for (int i = 0; i < n; i++) {
 }
 \`\`\`
 
-> 💡 **USACO 패턴:** N이 입력으로 주어지는 문제가 대부분 → **vector<구조체>**가 훨씬 자주 나와요!
+> 💡 **USACO 패턴:** N이 입력으로 주어지는 문제가 대부분 → **\`vector<구조체>\`** 가 훨씬 자주 나와요!
 >
-> ⚠️ **주의:** \`vector<int> students(n)\`처럼 타입을 잘못 쓰면 \`.name\`, \`.score\` 못 써요. **vector<Student>**여야 멤버 접근 가능!`,
+> ⚠️ **주의:** \`vector<int> students(n)\`처럼 타입을 잘못 쓰면 \`.name\`, \`.score\` 못 써요. **\`vector<Student>\`** 여야 멤버 접근 가능!`,
         },
         {
           id: "ch2-vec-cin-anim",

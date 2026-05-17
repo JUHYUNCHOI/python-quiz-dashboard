@@ -107,7 +107,7 @@ cout << p.second;   // 95
 
 > 📌 **Side note — modern C++ (C++17) one-liner**
 >
-> If you want even cleaner code, \`auto [name, score] = p;\` declares both variables in one line. This is called *structured bindings*. You don't need it now — \`.first/.second\` is enough. We'll naturally meet this syntax again later, no need to memorize it today.`
+> If you want even cleaner code, \`auto [name, score] = p;\` declares both variables in one line. This is called **structured bindings**. You don't need it now — \`.first/.second\` is enough. We'll naturally meet this syntax again later, no need to memorize it today.`
         },
         {
           id: "ch1-pair-mini",
@@ -207,7 +207,7 @@ The **index goes inside \`<>\`**, the **tuple inside \`()\`**. Looks weird at fi
 
 > 📌 **Side note — one-liner unpack (C++17)**
 >
-> Modern C++ also supports \`auto [name, age, gpa] = t;\` to declare all three variables in one line — same idea as Python's \`name, age, gpa = t\`. This is called *structured bindings*. You don't need it now — \`get<N>(t)\` is enough. We'll meet it naturally later.
+> Modern C++ also supports \`auto [name, age, gpa] = t;\` to declare all three variables in one line — same idea as Python's \`name, age, gpa = t\`. This is called **structured bindings**. You don't need it now — \`get<N>(t)\` is enough. We'll meet it naturally later.
 
 Next page — where tuple actually shows up, and how to choose between struct/pair/tuple 👇`,
         },
@@ -230,7 +230,7 @@ string name = get<2>(t);
 
 When a function needs to return several values and you don't want to define a whole struct, tuple is the quick path. Use \`get<N>\` to read each one out.
 
-> 📌 Modern C++ also lets you write \`auto [a, b, c] = getStudent();\` in one line — *structured bindings*. Don't worry about it now.
+> 📌 Modern C++ also lets you write \`auto [a, b, c] = getStudent();\` in one line — **structured bindings**. Don't worry about it now.
 
 ### 2. \`tie()\` for lexicographic comparison (idiomatic)
 
@@ -605,7 +605,7 @@ int main() {
           id: "ch1-vec-iter",
           type: "explain",
           title: "🔄 Iterating over vector<pair>",
-          content: `When you have multiple pairs, store them in a **vector<pair>**:
+          content: `When you have multiple pairs, store them in a **\`vector<pair>\`**:
 
 \`\`\`cpp
 vector<pair<string, int>> students;
@@ -637,7 +637,36 @@ for (pair<string, int>& s : students) {  // verbose!
 }
 \`\`\`
 
-💡 \`auto&\` is much more convenient! The longer the type, the more valuable auto becomes.`
+💡 \`auto&\` is much more convenient! The longer the type, the more valuable auto becomes.
+
+---
+
+### ⭐ A cleaner way — structured binding (C++17)
+
+There's a more readable alternative to \`s.first\` / \`s.second\`:
+
+\`\`\`cpp
+for (auto& [name, score] : students) {
+    cout << name << ": " << score << endl;
+}
+// Kim: 95
+// Lee: 88
+// Park: 92
+\`\`\`
+
+\`auto& [name, score]\` — **unpacks the pair right there** into two named variables:
+- \`s.first\` → just \`name\`
+- \`s.second\` → just \`score\`
+
+The code reads like English now.
+
+| | Old way | Structured binding |
+|---|---|---|
+| Access | \`s.first\`, \`s.second\` | \`name\`, \`score\` (named directly) |
+| Readability | Have to remember | Names make meaning obvious |
+| Version | Always works | C++17+ (USACO is fine) |
+
+> 💡 **USACO and the next lesson (map & set) use this every time.** \`for (auto& [k, v] : map)\` is the standard pattern. Get used to it here.`
         },
         {
           id: "ch1-practice",
@@ -797,7 +826,7 @@ for (auto& [age, name] : people) {
 - \`pair<string,int> p = {"Kim", 95};\` — declare and initialize
 - Access with \`.first\` and \`.second\`
 - Supports **automatic comparison**! (first → second)
-- **Sorting a vector<pair> automatically sorts by first value!**
+- **Sorting a \`vector<pair>\` automatically sorts by first value!**
 
 ### 🔗 tuple
 - **tuple<T1, T2, T3>**: Bundle 3 or more values

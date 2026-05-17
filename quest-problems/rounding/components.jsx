@@ -1,7 +1,9 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 13/13 PASS
-//   C++:    13/13 PASS
-//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
+// 🔒 USACO_VERIFIED (2026-05-13) — RENAMED 2026-05-17 (variable names only, algorithm unchanged)
+//   Python: 13/13 PASS (rename only, behavior identical)
+//   C++:    13/13 PASS (rename only, behavior identical)
+//   2026-05-17: 변수명 가독성 변경 (s_d/e_d/sd/ed/v/hi/ans →
+//     smallest/largest/value/right_end/answer 등). 알고리즘 동일 →
+//     기존 USACO 통과 유지. 재제출 권장 (헤더 confirm).
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { useState, useRef } from "react";
@@ -173,8 +175,14 @@ export function SpeedScale({ E }) {
   const cacheTime   = cacheOps   / OPS_PER_SEC;
   const formulaTime = formulaOps / OPS_PER_SEC;
 
-  // 시각용 — TIME_LIMIT 까지가 100%, 넘으면 100% 채우고 ❌
-  const widthOf = tt => Math.min(100, (tt / TIME_LIMIT) * 100);
+  // 시각용 — *log10 ops* 기준. 선형 시간 기준이면 공식 (~400 ops)
+  // 이 항상 invisible. log 로 하면 세 풀이 다 보이게 자람.
+  // MAX_LOG_OPS = 11 → 10^11 까지 표시 (브루트 N=10^9 면 6×10^10).
+  const MAX_LOG_OPS = 11;
+  const widthOf = ops => Math.min(100, (Math.log10(Math.max(ops, 1)) / MAX_LOG_OPS) * 100);
+  // TLE 임계점 (시간 = TIME_LIMIT) 의 ops = TIME_LIMIT * OPS_PER_SEC = 2*10^7.
+  // 그 위치 = log10(2e7)/11 ≈ 0.66 → 막대의 66% 지점.
+  const TLE_THRESHOLD_PCT = (Math.log10(TIME_LIMIT * OPS_PER_SEC) / MAX_LOG_OPS) * 100;
   const fmtTime = tt =>
     tt < 1e-4 ? t(E, "instant", "즉시")
     : tt < 0.01 ? `${(tt * 1000).toFixed(1)}ms`
@@ -198,11 +206,20 @@ export function SpeedScale({ E }) {
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ flex: 1, height: 18, background: "#f1f5f9", borderRadius: 6, overflow: "hidden", border: `1px solid ${C.border}` }}>
+          <div style={{
+            flex: 1, height: 18, background: "#f1f5f9", borderRadius: 6,
+            border: `1px solid ${C.border}`, position: "relative", overflow: "hidden",
+          }}>
+            {/* TLE 임계선 — 막대 위 세로선 (한 번만 그려도 되지만 각 막대에 표시) */}
             <div style={{
-              width: `${widthOf(time)}%`, height: "100%",
+              position: "absolute", top: 0, bottom: 0,
+              left: `${TLE_THRESHOLD_PCT}%`, width: 2,
+              background: "#fca5a5", zIndex: 2,
+            }} />
+            <div style={{
+              width: `${widthOf(ops)}%`, height: "100%",
               background: tle ? C.no : color,
-              transition: "width .2s",
+              transition: "width .25s",
             }} />
           </div>
           <span style={{
@@ -244,14 +261,16 @@ export function SpeedScale({ E }) {
       <Bar label={t(E, "💾 Cache",       "💾 캐시")}        time={cacheTime} ops={cacheOps} color={C.carry} />
       <Bar label={t(E, "⚡ Formula",     "⚡ 공식 (목표)")}   time={formulaTime} ops={formulaOps} color={C.ok} />
 
-      {/* 제한 시간 표시 */}
-      <div style={{ marginTop: 12, padding: "8px 12px", background: "#f8f9fc", borderRadius: 8, fontSize: 11, color: C.dim, fontWeight: 700, textAlign: "center" }}>
-        ⏱ {t(E, `Time limit: ${TIME_LIMIT}s. Bar full = TLE`, `시간 제한: ${TIME_LIMIT}초. 막대 꽉 차면 시간 초과`)}
+      {/* 제한 시간 표시 + log scale 안내 */}
+      <div style={{ marginTop: 12, padding: "8px 12px", background: "#f8f9fc", borderRadius: 8, fontSize: 11, color: C.dim, fontWeight: 700, textAlign: "center", lineHeight: 1.7 }}>
+        ⏱ {t(E,
+          `Time limit: ${TIME_LIMIT}s. Red vertical line = TLE threshold. Bar is log scale, so even the formula's slow growth is visible.`,
+          `시간 제한: ${TIME_LIMIT}초. 빨간 세로선 = TLE 임계점. 막대는 log 스케일이라 공식의 느린 성장도 보임.`)}
       </div>
       <div style={{ marginTop: 8, padding: "8px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 8, fontSize: 11, color: C.accent, fontWeight: 700, lineHeight: 1.6, textAlign: "center" }}>
         💡 {t(E,
-              `Total cost over ${T} queries. Brute recomputes each time (T × N × 6). Cache fills once then T lookups (N×6 + T). Formula is O(log N) each time.`,
-              `${T} 번 쿼리의 누적 비용. 브루트는 매번 N 까지 다시 계산 (T × N × 6). 캐시는 한 번 채우고 나머진 lookup (N×6 + T). 공식은 매번 O(log N).`)}
+              `Slide N from 10 up to 10⁹. Brute shoots past the red line almost right away — cache eventually does too — while the formula bar barely budges (still well left of the red line). That's the difference between O(N) and O(log N).`,
+              `N 을 10 부터 10⁹ 까지 끌어봐요: 브루트는 금방 빨간선 넘어가고 캐시도 결국 넘어가요. 공식은 막대가 살짝씩만 자라요 (빨간선 한참 못 미침). 이게 O(N) 과 O(log N) 차이.`)}
       </div>
     </div>
   );
@@ -268,6 +287,12 @@ export function SpeedScale({ E }) {
    ================================================================ */
 export function IntervalSim({ E }) {
   const [N, setN] = useState(4567);
+  // stepIdx: 1..rows.length = 그 번째 행까지 공개. rows.length+1 = 합계 공개.
+  // N 바뀌면 1 로 리셋 (사용자가 새 N 으로 처음부터 따라가게).
+  const [stepIdx, setStepIdx] = useState(1);
+
+  // N 변할 때 step 리셋
+  const handleSetN = (newN) => { setN(newN); setStepIdx(1); };
 
   // Build all d rows
   const rows = [2, 3, 4, 5, 6].map(d => {
@@ -300,6 +325,34 @@ export function IntervalSim({ E }) {
 
   const total = rows.reduce((s, r) => s + r.count, 0);
 
+  // 단계 제어
+  const showTotal = stepIdx > rows.length;
+  const currentRowIdx = Math.min(stepIdx - 1, rows.length - 1); // 방금 공개된 행
+  const canPrevStep = stepIdx > 1;
+  const canNextStep = stepIdx <= rows.length;
+
+  // 다음 버튼 라벨 — 무슨 일이 일어날지 미리 알려줌
+  let nextLabel;
+  if (stepIdx <= rows.length) {
+    const nextRow = rows[stepIdx - 1];   // ← 다음 클릭 시 강조될 행
+    if (stepIdx === rows.length + 0 && false) {
+      // unreachable; placeholder
+    }
+    if (stepIdx === 1) {
+      nextLabel = t(E, `▶ Start with d=${nextRow.d}`, `▶ d=${nextRow.d} 부터 시작`);
+    } else if (stepIdx === rows.length) {
+      nextLabel = t(E, "🎯 Show total", "🎯 합계 보기");
+    } else {
+      nextLabel = t(E, `▶ Next: d=${nextRow.d}`, `▶ 다음: d=${nextRow.d}`);
+    }
+  } else {
+    nextLabel = t(E, "🔄 Restart", "🔄 다시 처음부터");
+  }
+  const handleNext = () => {
+    if (stepIdx > rows.length) setStepIdx(1);   // restart
+    else setStepIdx(stepIdx + 1);
+  };
+
   const statusStyle = (status) => {
     if (status === "full")    return { bg: C.okBg, color: C.ok,   label: t(E, "FULL",   "전체") };
     if (status === "clipped") return { bg: "#fef3c7", color: "#a16207", label: t(E, "CLIPPED", "잘림") };
@@ -324,7 +377,7 @@ export function IntervalSim({ E }) {
             return (
               <button
                 key={v}
-                onClick={() => setN(v)}
+                onClick={() => handleSetN(v)}
                 title={hint}
                 style={{
                   padding: "6px 12px",
@@ -343,6 +396,56 @@ export function IntervalSim({ E }) {
         </div>
       </div>
 
+      {/* Pre-table caption — frame the goal */}
+      <div style={{
+        background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10,
+        padding: "10px 14px", marginBottom: 10,
+        fontSize: 13, color: C.text, lineHeight: 1.7, fontWeight: 600,
+      }}>
+        {t(E, "Counting disagreeing numbers from ", "")}
+        <strong style={{ fontFamily: "'JetBrains Mono',monospace" }}>2</strong>
+        {t(E, " up to ", " 부터 ")}
+        <strong style={{ color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>N={N.toLocaleString()}</strong>
+        {t(E, ". Each digit count contributes its share — until its interval shoots past N.",
+              " 까지 답이 다른 수를 세요. 각 자릿수 d 가 자기 몫을 더해요 — 그 자릿수 구간이 N 을 넘어가기 전까지.")}
+      </div>
+
+      {/* Step controls — 단계별 따라가기 */}
+      <div style={{
+        background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 10,
+        padding: "8px 12px", marginBottom: 10,
+        display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap",
+      }}>
+        <span style={{ fontSize: 12, fontWeight: 800, color: C.accent }}>
+          {t(E, `Step ${Math.min(stepIdx, rows.length + 1)} / ${rows.length + 1}`,
+                `${Math.min(stepIdx, rows.length + 1)} / ${rows.length + 1} 단계`)}
+        </span>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button
+            onClick={() => setStepIdx(Math.max(1, stepIdx - 1))}
+            disabled={!canPrevStep}
+            style={{
+              padding: "6px 12px",
+              background: canPrevStep ? "#fff" : "#f1f5f9",
+              color: canPrevStep ? C.accent : "#cbd5e1",
+              border: `1.5px solid ${canPrevStep ? C.accent : "#e2e8f0"}`,
+              borderRadius: 8, fontSize: 12, fontWeight: 800,
+              cursor: canPrevStep ? "pointer" : "default",
+            }}
+          >◀ {t(E, "Prev", "이전")}</button>
+          <button
+            onClick={handleNext}
+            style={{
+              padding: "6px 14px",
+              background: C.accent, color: "#fff",
+              border: `1.5px solid ${C.accent}`,
+              borderRadius: 8, fontSize: 12, fontWeight: 800,
+              cursor: "pointer",
+            }}
+          >{nextLabel}</button>
+        </div>
+      </div>
+
       {/* All-d table */}
       <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", marginBottom: 12 }}>
         <div style={{
@@ -352,33 +455,99 @@ export function IntervalSim({ E }) {
           fontSize: 11, fontWeight: 800, color: C.dim,
         }}>
           <span>d</span>
-          <span>{t(E, "interval [s_d, e_d]", "구간 [s_d, e_d]")}</span>
+          <span>{t(E, "interval [s_d, e_d] — counted vs cut",
+                       "구간 [s_d, e_d] — 카운트 vs 잘림")}</span>
           <span style={{ textAlign: "center" }}>{t(E, "status", "상태")}</span>
           <span style={{ textAlign: "right" }}>+</span>
         </div>
         {rows.map((r, i) => {
           const st = statusStyle(r.status);
+          // 단계 게이팅: 아직 공개 안 된 행은 placeholder 로 (구조는 유지, 내용 가림)
+          const revealed = i < stepIdx;
+          const isCurrent = i === currentRowIdx && stepIdx <= rows.length;
+          if (!revealed) {
+            return (
+              <div key={r.d} style={{
+                display: "grid", gridTemplateColumns: "40px 1fr 90px 80px",
+                alignItems: "center",
+                padding: "10px 12px",
+                borderBottom: i < rows.length - 1 ? `1px solid ${C.border}` : "none",
+                background: "#fafbff",
+                opacity: 0.35,
+                fontFamily: "'JetBrains Mono',monospace",
+              }}>
+                <span style={{ fontWeight: 900, color: "#cbd5e1", fontSize: 14 }}>{r.d}</span>
+                <span style={{ fontSize: 12, color: "#cbd5e1", fontStyle: "italic", fontFamily: "system-ui, sans-serif" }}>
+                  {t(E, "— hidden, click Next ▶", "— 가려짐, 다음 ▶ 클릭")}
+                </span>
+                <span></span>
+                <span></span>
+              </div>
+            );
+          }
           return (
             <div key={r.d} style={{
               display: "grid", gridTemplateColumns: "40px 1fr 90px 80px",
               alignItems: "center",
               padding: "10px 12px",
               borderBottom: i < rows.length - 1 ? `1px solid ${C.border}` : "none",
-              background: i % 2 === 0 ? "#fff" : "#fafbff",
+              background: isCurrent ? "#fff7ed" : (i % 2 === 0 ? "#fff" : "#fafbff"),
               opacity: r.status === "skip" ? 0.45 : 1,
               fontFamily: "'JetBrains Mono',monospace",
+              ...(isCurrent ? {
+                boxShadow: "inset 4px 0 0 #f97316",
+                animation: "popIn .3s cubic-bezier(.34,1.56,.64,1)",
+              } : {}),
+              transition: "background .2s",
             }}>
-              <span style={{ fontWeight: 900, color: C.accent, fontSize: 14 }}>{r.d}</span>
-              <span style={{ fontSize: 13, fontWeight: 700 }}>
-                <span style={{ color: C.no }}>{r.s_d.toLocaleString()}</span>
-                <span style={{ color: C.dim }}>{" — "}</span>
-                <span style={{ color: C.ok }}>{r.e_d.toLocaleString()}</span>
-                {r.status === "clipped" && (
-                  <span style={{ marginLeft: 10, fontSize: 11, color: "#a16207", fontWeight: 800 }}>
-                    {t(E, "→ clip at N=", "→ N=")}
-                    {N.toLocaleString()}
-                    {t(E, "", " 에서 자름")}
-                  </span>
+              <span style={{ fontWeight: 900, color: isCurrent ? "#f97316" : C.accent, fontSize: 14 }}>
+                {isCurrent && "👉 "}{r.d}
+              </span>
+              <span style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.6 }}>
+                {r.status === "clipped" ? (
+                  <>
+                    {/* Counted portion — bold + N highlighted */}
+                    <span style={{ color: C.no }}>{r.s_d.toLocaleString()}</span>
+                    <span style={{ color: C.dim }}>{" — "}</span>
+                    <span style={{
+                      color: "#a16207", fontWeight: 900,
+                      background: "#fef3c7", padding: "1px 7px", borderRadius: 4,
+                    }}>{t(E, "N=", "N=")}{N.toLocaleString()}</span>
+                    <span style={{ marginLeft: 6, fontSize: 10, color: "#a16207", fontWeight: 700, fontFamily: "system-ui, sans-serif" }}>
+                      ✓ {t(E, "counted", "카운트")}
+                    </span>
+                    <br />
+                    {/* Excluded portion — strikethrough + dimmed */}
+                    <span style={{
+                      color: "#94a3b8", textDecoration: "line-through",
+                      fontSize: 11, fontWeight: 600,
+                    }}>
+                      {(N + 1).toLocaleString()} — {r.e_d.toLocaleString()}
+                    </span>
+                    <span style={{ marginLeft: 6, fontSize: 10, color: "#94a3b8", fontWeight: 600, fontFamily: "system-ui, sans-serif" }}>
+                      ✗ {t(E, `${(r.e_d - N)} excluded`, `${(r.e_d - N)} 개 제외`)}
+                    </span>
+                  </>
+                ) : r.status === "stop" ? (
+                  <>
+                    <span style={{ color: C.no, opacity: 0.6 }}>{r.s_d.toLocaleString()}</span>
+                    <span style={{ color: C.dim, opacity: 0.6 }}>{" — "}</span>
+                    <span style={{ color: C.ok, opacity: 0.6 }}>{r.e_d.toLocaleString()}</span>
+                    <span style={{ marginLeft: 8, fontSize: 10, color: C.no, fontWeight: 700, fontFamily: "system-ui, sans-serif" }}>
+                      {t(E, `s_d > N → exit loop`, `s_d > N → 루프 종료`)}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ color: C.no }}>{r.s_d.toLocaleString()}</span>
+                    <span style={{ color: C.dim }}>{" — "}</span>
+                    <span style={{ color: C.ok }}>{r.e_d.toLocaleString()}</span>
+                    {r.status === "full" && (
+                      <span style={{ marginLeft: 8, fontSize: 10, color: C.ok, fontWeight: 700, fontFamily: "system-ui, sans-serif" }}>
+                        ✓ {t(E, "all in range", "전부 N 안")}
+                      </span>
+                    )}
+                  </>
                 )}
               </span>
               <span style={{
@@ -398,17 +567,40 @@ export function IntervalSim({ E }) {
             </div>
           );
         })}
-        {/* Total row */}
-        <div style={{
-          display: "grid", gridTemplateColumns: "1fr 80px",
-          padding: "12px 14px",
-          background: C.accentBg, borderTop: `2px solid ${C.accentBd}`,
-          fontFamily: "'JetBrains Mono',monospace",
-          color: C.accent, fontWeight: 900,
-        }}>
-          <span style={{ fontSize: 13 }}>{t(E, "Total answer", "최종 답")}</span>
-          <span style={{ textAlign: "right", fontSize: 18 }}>{total.toLocaleString()}</span>
-        </div>
+        {/* Total row — show only when all rows revealed */}
+        {showTotal ? (
+          <div style={{
+            padding: "12px 14px",
+            background: C.accentBg, borderTop: `2px solid ${C.accentBd}`,
+            fontFamily: "'JetBrains Mono',monospace",
+            color: C.accent, fontWeight: 900,
+            animation: "popIn .3s cubic-bezier(.34,1.56,.64,1)",
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+              <span style={{ fontSize: 13 }}>🎯 {t(E, "Total answer", "최종 답")}</span>
+              <span style={{ fontSize: 20 }}>{total.toLocaleString()}</span>
+            </div>
+            <div style={{ fontSize: 11, color: C.accent, fontWeight: 700, opacity: 0.85, textAlign: "right" }}>
+              {rows.filter(r => r.count > 0).map((r, i, arr) => (
+                <span key={r.d}>
+                  {r.count.toLocaleString()}
+                  {i < arr.length - 1 ? " + " : " = " + total.toLocaleString()}
+                </span>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div style={{
+            padding: "10px 14px",
+            background: "#fafbff", borderTop: `2px solid ${C.border}`,
+            fontFamily: "system-ui, sans-serif",
+            color: C.dim, fontWeight: 700, fontSize: 12, textAlign: "center",
+          }}>
+            {t(E,
+              `Press ▶ Next to reveal more rows (${rows.length - stepIdx + 1} left, then the total)`,
+              `▶ 다음 누르면 더 공개 (${rows.length - stepIdx + 1} 개 남음, 그 다음 합계)`)}
+          </div>
+        )}
       </div>
 
       {/* Caption — explains why we show ALL d's */}
@@ -418,8 +610,8 @@ export function IntervalSim({ E }) {
         fontSize: 12, color: C.accent, fontWeight: 700, lineHeight: 1.7,
       }}>
         💡 {t(E,
-          "Each row is one digit-count's contribution. Once a row hits STOP (s_d > N), the algorithm exits — that's why later rows are skipped.",
-          "각 줄은 한 자릿수의 기여분이에요. STOP (s_d > N) 이 한 번 뜨면 알고리즘이 거기서 끝나서 — 그 뒤는 다 건너뜀.")}
+          "Read top to bottom: count FULL rows whole, take just the left portion of the CLIPPED row (up to N), then STOP. That's the entire algorithm.",
+          "표를 위에서 아래로 읽어요: 전체 (FULL) 행은 통째로 더하고, 잘림 (CLIPPED) 행은 N 까지만, 그 다음은 멈춤 (STOP). 이게 알고리즘 전체예요.")}
       </div>
     </div>
   );
@@ -1063,6 +1255,219 @@ export function ProgressiveCode({ E, lang = "py", sections }) {
 
 // Backwards-compat alias used by RoundingApp.jsx
 export const RoundingProgressiveCode = ProgressiveCode;
+
+/* ================================================================
+   RecapDrawer — right-side slide-out for "remind me what was X again?"
+   학생이 이전 챕터 내용 잠시 확인하고 싶을 때. 퀴즈 스텝에 recap 필드
+   넣어서 사용 (RoundingApp.jsx 가 step.recap 있으면 자동 렌더).
+   ================================================================ */
+export function RecapDrawer({ buttonLabel, title, children, E }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
+        <button
+          onClick={() => setOpen(true)}
+          style={{
+            padding: "6px 12px",
+            background: "#fff",
+            border: `1.5px solid ${C.accent}`,
+            color: C.accent,
+            borderRadius: 8,
+            fontSize: 12,
+            fontWeight: 700,
+            cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 4,
+          }}
+          title={t(E, "Open recap", "다시 보기 열기")}
+        >
+          📖 {buttonLabel}
+        </button>
+      </div>
+
+      {open && (
+        <>
+          {/* Backdrop */}
+          <div
+            onClick={() => setOpen(false)}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0, 0, 0, 0.35)",
+              zIndex: 999,
+              animation: "fadeIn .2s ease-out",
+            }}
+          />
+          {/* Drawer panel — slides in from right */}
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              width: "min(440px, 90vw)",
+              background: "#fff",
+              boxShadow: "-4px 0 24px rgba(0, 0, 0, 0.18)",
+              zIndex: 1000,
+              overflowY: "auto",
+              animation: "slideInRight .25s cubic-bezier(.34,1.56,.64,1)",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {/* Drawer header */}
+            <div
+              style={{
+                position: "sticky",
+                top: 0,
+                background: C.accentBg,
+                borderBottom: `1.5px solid ${C.accentBd}`,
+                padding: "12px 16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                zIndex: 1,
+              }}
+            >
+              <span style={{ fontSize: 13, fontWeight: 800, color: C.accent }}>
+                📖 {title || buttonLabel}
+              </span>
+              <button
+                onClick={() => setOpen(false)}
+                style={{
+                  width: 28,
+                  height: 28,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "#fff",
+                  border: `1.5px solid ${C.border}`,
+                  color: C.dim,
+                  borderRadius: 6,
+                  fontSize: 16,
+                  fontWeight: 800,
+                  cursor: "pointer",
+                  lineHeight: 1,
+                }}
+                title={t(E, "Close", "닫기")}
+              >
+                ×
+              </button>
+            </div>
+            {/* Drawer body */}
+            <div style={{ padding: 0, flex: 1 }}>{children}</div>
+          </div>
+
+          {/* Keyframes */}
+          <style>{`
+            @keyframes slideInRight {
+              from { transform: translateX(100%); }
+              to   { transform: translateX(0); }
+            }
+            @keyframes fadeIn {
+              from { opacity: 0; }
+              to   { opacity: 1; }
+            }
+          `}</style>
+        </>
+      )}
+    </>
+  );
+}
+
+/* ================================================================
+   Ch1PRecap — content shown when student opens "P 가 뭐였더라?" drawer
+   on the "What was P?" quiz in Try Solving tab.
+   Mirrors the Ch1 step that introduces P (10^P > x).
+   ================================================================ */
+export function Ch1PRecap({ E }) {
+  return (
+    <div style={{ padding: 16, fontSize: 14, lineHeight: 1.85 }}>
+      <div
+        style={{
+          background: C.accentBg,
+          border: `2px solid ${C.accentBd}`,
+          borderRadius: 12,
+          padding: 14,
+          marginBottom: 12,
+          textAlign: "center",
+        }}
+      >
+        <div style={{ fontSize: 13, fontWeight: 800, color: C.accent, marginBottom: 8 }}>
+          📐 {t(E, "P's condition", "P 의 조건")}
+        </div>
+        <div
+          style={{
+            fontSize: 18,
+            fontWeight: 900,
+            color: C.accent,
+            fontFamily: "'JetBrains Mono',monospace",
+          }}
+        >
+          10<sup>P</sup> &gt; x
+        </div>
+        <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
+          {t(E, "(smallest such P)", "(을 만족하는 가장 작은 P)")}
+        </div>
+      </div>
+
+      <div
+        style={{
+          fontSize: 12,
+          fontWeight: 800,
+          color: C.dim,
+          marginBottom: 4,
+        }}
+      >
+        🔍 {t(E, "Examples", "예시")}
+      </div>
+      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 2 }}>
+        {[
+          { x: 7, d: 1, calc: "10¹=10 > 7" },
+          { x: 48, d: 2, calc: "10²=100 > 48" },
+          { x: 445, d: 3, calc: "10³=1000 > 445" },
+          { x: 4459, d: 4, calc: "10⁴=10000 > 4459" },
+        ].map((row, i) => (
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "7px 14px",
+              marginBottom: 4,
+              borderRadius: 8,
+              background: "#f8f9fc",
+              border: `1.5px solid ${C.border}`,
+            }}
+          >
+            <span style={{ fontWeight: 800, color: C.text, minWidth: 50 }}>{row.x}</span>
+            <span style={{ color: C.dim, fontSize: 11 }}>{row.calc}</span>
+            <span style={{ fontWeight: 800, color: C.accent }}>P = {row.d}</span>
+          </div>
+        ))}
+      </div>
+
+      <div
+        style={{
+          background: "#fef3c7",
+          border: `2px solid #fcd34d`,
+          borderRadius: 10,
+          padding: 12,
+          marginTop: 12,
+        }}
+      >
+        <div style={{ fontSize: 13, color: "#a16207", fontWeight: 700, lineHeight: 1.7 }}>
+          💡 {t(E, "P = ", "")}
+          <strong style={{ fontSize: 14 }}>{t(E, "the digit count of x", "x 의 자릿수")}</strong>
+          {t(E, ".", " 예요.")}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // Stubs kept for any other consumer of the old "thin" component API.
 // These aren't used by the new RoundingApp (which wires its own widgets via

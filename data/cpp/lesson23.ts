@@ -64,7 +64,7 @@ export const cppLesson23Data: LessonData = {
 
 ### 이번 sort 챕터에선?
 
-거의 다 \`vector<pair>\` 쓸 거예요 — N 명 학생 데이터 (vector) + 이름·점수 짝꿍 (pair). 위 표 보면서 "맞다, vector<pair>" 라고 자연스럽게 떠올리게 돼요.
+거의 다 \`vector<pair>\` 쓸 거예요 — N 명 학생 데이터 (vector) + 이름·점수 짝꿍 (pair). 위 표 보면서 "맞다, \`vector<pair>\`" 라고 자연스럽게 떠올리게 돼요.
 
 다음 페이지부터 — sort 가 어떻게 한 줄로 정렬하는지 봐요 👇`,
         },
@@ -201,7 +201,7 @@ int main() {
           title: "📊 내림차순 정렬!",
           content: `기본 sort()는 오름차순이에요. 내림차순으로 정렬하려면?
 
-**방법 1: greater<int>() 사용 (단순 int/string)**
+**방법 1: \`greater<int>()\` 사용 (단순 int/string)**
 \`\`\`cpp
 vector<int> v = {5, 2, 8, 1, 9};
 sort(v.begin(), v.end(), greater<int>());

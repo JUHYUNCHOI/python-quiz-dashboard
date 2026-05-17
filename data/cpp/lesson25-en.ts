@@ -59,100 +59,108 @@ Press the button to follow along!`,
           id: "s23-ch2-sorted-toolbox",
           type: "explain",
           title: "🗝️ Sorting is the launchpad — a toolbox that opens up after one sort",
-          content: `## 🚀 This chapter at a glance
+          content: `## 🚀 Sort is the start, not the end
 
-> **🎯 Sort the data once and search becomes way faster. That's this whole chapter.**
+> **🎯 The real value of \`sort\` is in all the things that become possible once your data is sorted.**
+> That's what this whole chapter is about.
 
-The **binary search** from the previous page (open the middle, drop half) — every function in this chapter uses that same trick.
+Remember the **binary search** from the previous page? "Open the middle" worked because the phone book was sorted. Every function in this chapter rides on that same idea.
 
 ---
 
-### 📊 1,000,000 items — before vs after sorting
+### 📊 What sorting unlocks — 1,000,000 items
 
-| What you want | Unsorted | After sorting (this chapter) |
+| What you want | **Un**sorted | Sorted (this chapter) |
 |---|---|---|
-| "is x there?" | 1,000,000 compares (\`find\` — full scan) | **~20** (\`binary_search\`) |
-| "how many of x?" | 1,000,000 (\`std::count\`) | **~40** (\`upper - lower\`) |
-| "first ≥ x?" | 1,000,000 (manual loop) | **~20** (\`lower_bound\`) |
+| "is x there?" | 1,000,000 (\`find\`) | **~20** (\`binary_search\`) |
+| "how many of x?" | 1,000,000 (\`count\`) | **~40** (\`upper - lower\`) |
+| "first ≥ x?" | 1,000,000 | **~20** (\`lower_bound\`) |
 | "dedupe" | tricky to write | **one line** (\`sort + unique + erase\`) |
+| "min / max?" | full scan | **instant** (\`v.front()\`, \`v.back()\`) |
 
-> 💡 The function names may be new — **we'll cover each one on the next pages.** For now, just remember "sort first → search gets way faster."
+> 💡 Function names may be new — we'll cover each one soon. **Sorting once makes search about 50,000× faster** — that's why USACO solutions almost always start with "sort first".
 
 ---
 
-### One line
+### ⚠️ The chapter's promise — sorted input required
 
-> **Sort once and search gets about 50,000× faster.** That's why USACO solutions almost always start with sort.`
+\`binary_search\`, \`lower_bound\`, \`upper_bound\` — **all three only work correctly on sorted arrays.** On unsorted data they **don't even error** — they quietly return wrong answers. So always run \`sort(v.begin(), v.end())\` first.
+
+---
+
+### 🪧 Next page
+
+These functions return **a "finger pointing to a position"** instead of a number. That finger is called an **iterator** — one minute on the next page and we're back to the actual functions!`
         },
         {
           id: "s23-ch2-iter",
           type: "explain",
           title: "📌 Iterators — a finger pointing to a position",
-          content: `The next page brings \`lower_bound\`, which returns an **iterator** instead of a plain number. It looks scary the first time, so let's get comfortable with it.
+          content: `Remember how we said \`lower_bound\`, \`binary_search\`, \`upper_bound\` return **a position (a finger) instead of a number** in the table you just saw (👈)? That finger's real name is **iterator**.
+
+**The name sounds scary, but it's really nothing** — just picture one finger and you're done!
 
 ---
 
-### Iterator = "a finger pointing to a spot inside the vector"
+### Iterator = a finger pointing to one spot in your data 🫵
 
-The \`v.begin()\` / \`v.end()\` you've already been writing with sort — those *are* iterators. \`begin()\` points to the first slot; \`end()\` points **one past the last** slot.
+> 💡 Not just vectors — **maps, sets, lists, any container.** This chapter uses vectors for practice, but the same finger shows up again in the next lesson (map / set).
+
+Imagine gently placing one finger on the vector:
 
 \`\`\`
    10    20    30    40    50
-    ↑                          ↑
- begin()                      end() ← one *past* the last
-                                     (no value — just an "end" marker)
+   ↑
+  here!
 \`\`\`
 
-> 💡 The fact that **\`end()\` is one *past* the last** feels odd at first, but the convention "[begin, end) is the real data" runs through all of STL, so it's actually convenient.
-
----
-
-### You've seen pointers? Almost the same — just slightly smarter
-
-**Both hold an address** — that's how they point to something. The difference is **how "next" works**:
-
-| | Pointer | Iterator |
-|---|---|---|
-| What's inside | raw address only | address + "how to go to next" |
-| What \`++\` does | **always** address + 4 (next memory slot) | **depends on container** |
-| For vector? | address + 4 | address + 4 (same!) |
-| For list? | doesn't work | jumps to next node |
-
-In plain terms:
-
-> 🧭 **Pointer = address written on a slip of paper** ("ABC Apt #301"). Next house = #302 (just +1).
-> 🧭 **Iterator = GPS navigation**. Knows the address, and when you hit "next" it figures out the way.
->   - Apartment (vector) → just #302 — same as pointer
->   - Maze (list/map) → follows the actual route — pointers can't
-
-**For vectors, they really do look identical.** Internally, STL often defines vector's iterator as just a pointer (\`T*\`). So the syntax matches:
-
-| | Pointer | Iterator |
-|---|---|---|
-| Read the value | \`*p\` | \`*it\` |
-| Next position | \`p++\` | \`it++\` |
-| Get the index | \`p - array\` | \`it - v.begin()\` |
-
-> ⚠️ The real difference shows up in \`list\` / \`map\` / \`set\` (memory not contiguous), where pointers don't work but iterators do. For now, **"basically a pointer, for vectors"** is enough.
-
----
-
-### How it's actually used — iterate a vector
+That finger is pointing at the first slot (10). **That's it — that's an iterator.** Done. Put it in a variable:
 
 \`\`\`cpp
-vector<int> v = {10, 20, 30, 40, 50};
-
-for (auto it = v.begin(); it != v.end(); ++it) {
-    cout << *it << " ";   // 10 20 30 40 50
-}
+auto it = v.begin();   // place the finger on the first slot
 \`\`\`
 
-- \`auto it = v.begin()\` — start the finger at the first slot
-- \`it != v.end()\` — keep going *until* the end marker (don't read end itself — no value there)
-- \`++it\` — move to the next slot
-- \`*it\` — value at the current slot
+\`v.begin()\` hands you "a finger pointing to the vector's first slot."
 
-> 💡 In practice you'd usually write \`for (int x : v)\` (range-for) — it's shorter and more common. The pattern above is for **understanding what iterators do under the hood**.`
+---
+
+### A finger can do exactly two things
+
+**1️⃣ "What's here?" → \`*it\`**
+
+Put \`*\` in front of the finger and you get **the value at that spot**:
+
+\`\`\`cpp
+auto it = v.begin();   // pointing at 10
+cout << *it;           // 10
+\`\`\`
+
+**2️⃣ "One slot over!" → \`++it\`**
+
+\`\`\`cpp
+++it;
+cout << *it;           // 20
+++it;
+cout << *it;           // 30
+\`\`\`
+
+Every \`++\` slides the finger over by one — that's the whole story.
+
+---
+
+> 💡 The stop marker (\`v.end()\`) and index conversion (\`it - v.begin()\`) come on the next page. For now, knowing *"it's a finger with two operations: \`*it\` and \`++it\`"* is enough.`
+        },
+        {
+          id: "s23-ch2-iter-sim",
+          type: "animation" as const,
+          title: "🎮 See it live — Pointer vs Iterator",
+          component: "iteratorVsPointer",
+          content: `Watch what \`++\` actually does for a pointer vs an iterator.
+
+- **vector mode**: both move to the next slot identically — pointer or iterator, either works
+- **list mode**: pointer ❌ ends up at a garbage address; only iterator ✅ follows to the real next node
+
+Switch the toggle and press \`++\` to see the difference at a glance.`
         },
         {
           id: "s23-ch2-iter-formulas",
@@ -366,7 +374,7 @@ cout << idx;  // 1
           id: "s23-ch2-lb-vs-count",
           type: "explain",
           title: "🤔 Wait — doesn't \`count()\` also count occurrences?",
-          content: `Yes! \`std::count\` (the standard algorithm) also counts:
+          content: `Yes! \`count()\` (the standard algorithm) also counts:
 
 \`\`\`cpp
 int cnt = count(v.begin(), v.end(), 3);   // works even on unsorted data
@@ -394,14 +402,14 @@ Common in competitive programming; in everyday code \`count()\` is more typical.
 
 In the next lesson (map) you'll see \`m.count(key)\`. Same name, **completely different function.**
 
-| | \`std::count(v.begin, v.end, x)\` | \`m.count(key)\` |
+| | \`count(v.begin, v.end, x)\` | \`m.count(key)\` |
 |---|---|---|
 | Whose function? | algorithm (external) | **member** of map / set |
 | Used on | vector, plain ranges | map, set |
 | Speed | O(n) — scans the range | **O(log n)** — walks the tree directly |
 | Answer | how many equal to \`x\` | does the key exist (0/1 for map, real count for multiset) |
 
-> 💡 Same name, **different functions.** vector's \`std::count\` is slow, but map's \`m.count\` is fast because map keeps a tree inside — no sort needed. We'll revisit this in the next lesson.`
+> 💡 Same name, **different functions.** vector's \`count()\` is slow, but map's \`m.count()\` is fast because map keeps a tree inside — no sort needed. We'll revisit this in the next lesson.`
         },
         {
           id: "s23-ch2-lb-vs-bs",
@@ -487,14 +495,14 @@ if (it != v.end() && *it == x) {
         {
           id: "s23-ch2-fb1",
           type: "fillblank" as const,
-          title: "lower_bound Fill-in-the-Blank",
-          content: "Find the first index where 4 or greater appears in the sorted vector!",
+          title: "✋ Your turn — find the first index where value ≥ 4",
+          content: "In the sorted vector, find the index of the **first spot where the value is 4 or greater**!",
           code: "vector<int> v = {1, 2, 4, 4, 6};\nauto it = ___(v.begin(), v.end(), 4);\nint idx = it - v.___;\ncout << idx;  // 2",
           fillBlanks: [
             { id: 0, answer: "lower_bound", options: ["lower_bound", "upper_bound", "find", "binary_search"] },
             { id: 1, answer: "begin()", options: ["begin()", "end()", "front()", "start()"] }
           ],
-          explanation: "lower_bound returns an iterator to the first position ≥ the target value. Subtract v.begin() to get the index. 4 first appears at index 2!"
+          explanation: "lower_bound hands you a finger to the 'first spot ≥ target'. Subtract v.begin() to turn it into an index.\n\nIn {1, 2, 4, 4, 6}, 4 first appears at index 2 → Answer: 2"
         },
         {
           id: "s23-ch2-practice1",
@@ -547,7 +555,7 @@ int main() {
     else cout << "No";
     return 0;
 }`,
-          hint: "if (binary_search(v.begin(), v.end(), x)) cout << \"Yes\"; else cout << \"No\"; — for existence-only checks, binary_search is the cleanest.",
+          hint: "binary_search returns just true or false. Drop it straight into an if-condition to branch Yes / No.",
           expectedOutput: `Yes`,
           stdin: `5
 1 3 5 7 9
@@ -556,7 +564,7 @@ int main() {
         {
           id: "s23-ch2-pred1",
           type: "predict" as const,
-          title: "Predict lower_bound & upper_bound Output!",
+          title: "✋ Your turn — predict lower_bound & upper_bound output",
           code: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -570,7 +578,7 @@ int main() {
 }`,
           options: ["1 2", "2 2", "1 1", "2 1"],
           answer: 0,
-          explanation: "lower_bound(4) → index 1 (first 4). upper_bound(4) → index 3 (position of 6). hi - lo = 3 - 1 = 2 (4 appears twice). Output: 1 2"
+          explanation: "v   = {2, 4, 4, 6, 8}\nidx    0  1  2  3  4\n          ↑     ↑\n          lo    hi\n\nlower_bound(4) → 'first spot where value ≥ 4' = index 1\nupper_bound(4) → 'first spot after the 4s' = index 3\n\nlo - v.begin() = 1\nhi - lo        = 3 - 1 = 2  (two 4s)\n\n→ Output: 1 2"
         },
         {
           id: "s23-ch2-practice2",

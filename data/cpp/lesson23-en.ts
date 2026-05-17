@@ -201,7 +201,7 @@ int main() {
           title: "📊 Descending Sort!",
           content: `Default sort() is ascending. How do you sort in descending order?
 
-**Method 1: Use greater<int>() (for simple int/string)**
+**Method 1: Use \`greater<int>()\` (for simple int/string)**
 \`\`\`cpp
 vector<int> v = {5, 2, 8, 1, 9};
 sort(v.begin(), v.end(), greater<int>());

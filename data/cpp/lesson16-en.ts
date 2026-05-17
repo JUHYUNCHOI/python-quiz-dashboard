@@ -129,7 +129,7 @@ To sort a map by score you'd end up copying it into a \`vector<pair>\` and sorti
 ### One-line rule
 
 > **"Look up by name fast"**? → **map**
-> **"Sort by score"** or **"deal with order"**? → **vector<pair>**
+> **"Sort by score"** or **"deal with order"**? → **\`vector<pair>\`**
 
 > 💡 Often you need both. Use map for fast lookup, then copy to vector<pair> at the end to sort — totally common.`
         },
@@ -661,10 +661,10 @@ cout << scores.empty() << endl;       // 0 (false, not empty)
 > 💡 Master these 4 and you can solve almost any map problem. (There's also a \`find\` function but it's a bit more complex — we don't cover it at this stage.)
 
 > 🎯 **How USACO actually uses map:**
-> • **Frequency counting** — <code>map&lt;string, int&gt; freq; for (word w) freq[w]++;</code> — how many times did each input word/number appear?
-> • **Name → score mapping** — <code>map&lt;string, int&gt; scores;</code> look up a student's score by name.
+> • **Frequency counting** — \`map<string, int> freq; for (word w) freq[w]++;\` — how many times did each input word/number appear?
+> • **Name → score mapping** — \`map<string, int> scores;\` look up a student's score by name.
 > • **Coordinate → index mapping** — relabel huge coordinates (10⁹) to small indices.
-> • **"First seen time" tracking** — <code>if (!m.count(k)) m[k] = time;</code>
+> • **"First seen time" tracking** — \`if (!m.count(k)) m[k] = time;\`
 > More than half of Bronze problems can be solved with \`map\`. Essentially required.`,
         },
         {
@@ -929,9 +929,9 @@ s.empty();         // true if empty
 > 💡 Functions look almost identical to \`map\`'s. **The one difference** — set has only keys (no values), so set's find/count just tell you whether the value exists.
 
 > 🎯 **How USACO actually uses set:**
-> • **"Seen before?" tracking** — <code>set&lt;string&gt; seen;</code> quick check for repeated words/coordinates/IDs.
-> • **Count of distinct items** — drop everything into a \`set\`, then <code>s.size()</code> is the answer.
-> • **Visited positions** — in grid BFS/DFS, <code>set&lt;pair&lt;int,int&gt;&gt;</code> tracks visited coordinates.
+> • **"Seen before?" tracking** — \`set<string> seen;\` quick check for repeated words/coordinates/IDs.
+> • **Count of distinct items** — drop everything into a \`set\`, then \`s.size()\` is the answer.
+> • **Visited positions** — in grid BFS/DFS, \`set<pair<int,int>>\` tracks visited coordinates.
 > • **Maintain sorted state while inserting** — streaming data that you always want sorted.
 > "Is it in?" + "no duplicates" + "sorted" — when those three are needed at once, almost always \`set\`.`
         },

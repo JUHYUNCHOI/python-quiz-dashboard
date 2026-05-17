@@ -277,6 +277,11 @@ const registry: Record<string, ComponentEntry> = {
     load: () => import("@/components/animations/binary-search"),
     exportName: "BinarySearchAnimation",
   },
+  // 포인터 vs 이터레이터 시뮬 (cpp-25 iterator 페이지)
+  iteratorVsPointer: {
+    load: () => import("@/components/animations/iterator-vs-pointer"),
+    exportName: "IteratorVsPointer",
+  },
   cppPointerBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppPointerBuilder",

@@ -12,6 +12,7 @@ import { useLanguage } from "@/contexts/language-context"
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 import { CodeEditorWithGutter, parseErrorLine } from "@/components/cpp/code-editor-with-gutter"
 import { getErrorHint } from "@/components/cpp/error-hint"
+import { createSmartKeyHandler } from "@/components/cpp/editor-key-handler"
 
 // ── Inline-style syntax highlighters (no external CSS needed) ──
 
@@ -329,6 +330,9 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
           highlight={c => highlightCode(c, lang)}
           errorLine={parseErrorLine(error)}
           padding={16}
+          tabSize={4}
+          insertSpaces={true}
+          onKeyDown={createSmartKeyHandler(setCode, { onCtrlEnter: runTests })}
           style={{ fontFamily: "monospace", fontSize: 14, minHeight: 260, color: "#cdd6f4", background: "transparent" }}
         />
       </div>
@@ -364,9 +368,10 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
           {(() => {
             const hint = getErrorHint(error, isEn ? "en" : "ko")
             const errLn = parseErrorLine(error)
+            const showAmber = hint || errLn
             return (
               <>
-                {(hint || errLn) && (
+                {showAmber ? (
                   <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-amber-900 text-sm leading-relaxed">
                     {errLn && (
                       <span className="font-bold mr-1">
@@ -376,6 +381,12 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
                     {hint || (isEn
                       ? "Check the highlighted line — that's where the compiler stopped."
                       : "강조된 줄을 확인해보세요 — 거기서 컴파일러가 멈췄어요.")}
+                  </div>
+                ) : (
+                  <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-amber-900 text-sm leading-relaxed">
+                    {isEn
+                      ? "Couldn't auto-detect a line number from this error. Open the raw message below and look for \"file:line:\" — that's where the issue is."
+                      : "이 에러에서 줄 번호를 자동으로 못 찾았어요. 아래 원본 메시지를 열어서 \"파일:줄:\" 형식을 찾아보세요 — 거기가 문제 지점."}
                   </div>
                 )}
                 <details>

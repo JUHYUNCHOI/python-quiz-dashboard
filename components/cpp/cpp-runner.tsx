@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/client"
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 import { CodeEditorWithGutter, parseErrorLine } from "@/components/cpp/code-editor-with-gutter"
 import { getErrorHint } from "@/components/cpp/error-hint"
+import { createSmartKeyHandler } from "@/components/cpp/editor-key-handler"
 
 const CPP_KEYWORDS = /\b(alignas|alignof|and|and_eq|asm|auto|bitand|bitor|bool|break|case|catch|char|char8_t|char16_t|char32_t|class|compl|concept|const|consteval|constexpr|constinit|const_cast|continue|co_await|co_return|co_yield|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|false|float|for|friend|goto|if|inline|int|long|mutable|namespace|new|noexcept|not|not_eq|nullptr|operator|or|or_eq|private|protected|public|register|reinterpret_cast|requires|return|short|signed|sizeof|static|static_assert|static_cast|struct|switch|template|this|thread_local|throw|true|try|typedef|typeid|typename|union|unsigned|using|virtual|void|volatile|wchar_t|while|xor|xor_eq|string|vector|map|set|pair|cout|cin|endl|std)\b/g
 const CPP_PREPROCESSOR = /^(#\s*(?:include|define|undef|if|ifdef|ifndef|elif|else|endif|error|pragma|line)\b.*)/gm
@@ -457,107 +458,7 @@ export function CppRunner({
             padding={16}
             tabSize={4}
             insertSpaces={true}
-            onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement & HTMLDivElement>) => {
-              const textarea = e.currentTarget
-              const start = textarea.selectionStart
-              const end = textarea.selectionEnd
-              const val = textarea.value
-
-              if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-                e.preventDefault()
-                runCode()
-                return
-              }
-              if (e.key === "Enter") {
-                e.preventDefault()
-                const lineStart = val.lastIndexOf("\n", start - 1) + 1
-                const currentLine = val.slice(lineStart, start)
-                const indent = currentLine.match(/^(\s*)/)?.[1] ?? ""
-                const trimmed = currentLine.trimEnd()
-                const justAfterBrace = trimmed.endsWith("{")
-                const justAfterColon = trimmed.endsWith(":")
-                const justBeforeClose = val[start] === "}"
-                const extraIndent = (justAfterBrace || justAfterColon) ? "    " : ""
-                if (justAfterBrace && justBeforeClose) {
-                  // {|}  →  {\n    |\n}  — 커서 가운데 줄
-                  const newVal = val.slice(0, start) + "\n" + indent + extraIndent + "\n" + indent + val.slice(start)
-                  const newCursor = start + 1 + indent.length + extraIndent.length
-                  setCode(newVal)
-                  requestAnimationFrame(() => {
-                    textarea.selectionStart = newCursor
-                    textarea.selectionEnd = newCursor
-                  })
-                  return
-                }
-                const newVal = val.slice(0, start) + "\n" + indent + extraIndent + val.slice(start)
-                const newCursor = start + 1 + indent.length + extraIndent.length
-                setCode(newVal)
-                requestAnimationFrame(() => {
-                  textarea.selectionStart = newCursor
-                  textarea.selectionEnd = newCursor
-                })
-                return
-              }
-
-              // 자동 괄호 닫기 — 여는 짝 입력 시 닫는 짝 자동 삽입
-              const pairs: Record<string, string> = { "{": "}", "(": ")", "[": "]", '"': '"', "'": "'" }
-              if (pairs[e.key]) {
-                // 따옴표는 바로 다음에 같은 따옴표면 그냥 건너뛰기
-                if ((e.key === '"' || e.key === "'") && val[start] === e.key) {
-                  e.preventDefault()
-                  requestAnimationFrame(() => {
-                    textarea.selectionStart = textarea.selectionEnd = start + 1
-                  })
-                  return
-                }
-                // 보수적 가드 — 다음 문자가 식별자(영문/숫자/_) 면 자동 닫기 비활성화
-                // (코드 중간 삽입 시 의도치 않게 닫는 짝 추가되는 거 방지)
-                const next = val[start]
-                if (next && /[A-Za-z0-9_]/.test(next)) {
-                  return  // 기본 동작 (그냥 한 글자만 입력)
-                }
-                e.preventDefault()
-                const open = e.key
-                const close = pairs[open]
-                const selected = val.slice(start, end)
-                const newVal = val.slice(0, start) + open + selected + close + val.slice(end)
-                setCode(newVal)
-                requestAnimationFrame(() => {
-                  if (selected) {
-                    textarea.selectionStart = start + 1
-                    textarea.selectionEnd = end + 1
-                  } else {
-                    textarea.selectionStart = textarea.selectionEnd = start + 1
-                  }
-                })
-                return
-              }
-
-              // 닫는 괄호 입력 — 바로 다음에 같은 닫는 괄호 있으면 그냥 건너뛰기
-              if ([")", "]", "}"].includes(e.key) && val[start] === e.key) {
-                e.preventDefault()
-                requestAnimationFrame(() => {
-                  textarea.selectionStart = textarea.selectionEnd = start + 1
-                })
-                return
-              }
-
-              // Backspace — 빈 짝 사이면 둘 다 지우기
-              if (e.key === "Backspace" && start === end && start > 0) {
-                const before = val[start - 1]
-                const after = val[start]
-                const matches: Record<string, string> = { "{": "}", "(": ")", "[": "]", '"': '"', "'": "'" }
-                if (matches[before] === after) {
-                  e.preventDefault()
-                  const newVal = val.slice(0, start - 1) + val.slice(start + 1)
-                  setCode(newVal)
-                  requestAnimationFrame(() => {
-                    textarea.selectionStart = textarea.selectionEnd = start - 1
-                  })
-                  return
-                }
-              }
-            }}
+            onKeyDown={createSmartKeyHandler(setCode, { onCtrlEnter: runCode })}
             style={{
               fontFamily: '"Fira Code", "Fira Mono", "Courier New", monospace',
               fontSize: 15,
@@ -626,9 +527,10 @@ export function CppRunner({
           {error ? (() => {
             const hint = getErrorHint(error, isEn ? "en" : "ko")
             const errLn = parseErrorLine(error)
+            const showAmber = hint || errLn
             return (
               <div className="space-y-2">
-                {(hint || errLn) && (
+                {showAmber ? (
                   <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-amber-900 text-sm leading-relaxed">
                     {errLn && (
                       <span className="font-bold mr-1">
@@ -638,6 +540,12 @@ export function CppRunner({
                     {hint || (isEn
                       ? "Check the highlighted line — that's where the compiler stopped."
                       : "강조된 줄을 확인해보세요 — 거기서 컴파일러가 멈췄어요.")}
+                  </div>
+                ) : (
+                  <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-amber-900 text-sm leading-relaxed">
+                    {isEn
+                      ? "Couldn't auto-detect a line number from this error. Open the raw message below and look for \"file:line:\" — that's where the issue is."
+                      : "이 에러에서 줄 번호를 자동으로 못 찾았어요. 아래 원본 메시지를 열어서 \"파일:줄:\" 형식을 찾아보세요 — 거기가 문제 지점."}
                   </div>
                 )}
                 <details>

@@ -799,7 +799,7 @@ while (!q.empty()) {
 
 ### Where they're used
 
-These structures are *the tools of algorithms*:
+These structures are **the tools of algorithms**:
 - **stack** → DFS (depth-first search), bracket matching, reverse processing
 - **queue** → BFS (breadth-first search), simulation
 - **priority_queue** → Dijkstra (shortest path), priority job ordering

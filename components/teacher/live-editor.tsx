@@ -5,6 +5,7 @@ import dynamic from "next/dynamic"
 import { X, Play, Loader2, RotateCcw, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { callPiston } from "@/lib/piston"
+import { createSmartKeyHandler } from "@/components/cpp/editor-key-handler"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 
@@ -301,6 +302,9 @@ builtins.input = _patched_input
           onValueChange={setCode}
           highlight={highlight}
           padding={16}
+          tabSize={4}
+          insertSpaces={true}
+          onKeyDown={createSmartKeyHandler(setCode, { onCtrlEnter: runCode })}
           style={{
             fontFamily: "'Fira Code', 'Cascadia Code', 'Consolas', monospace",
             fontSize: 13,
