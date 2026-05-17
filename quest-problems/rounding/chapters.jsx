@@ -236,7 +236,7 @@ export function makeCh1(E) {
             </div>
             <div style={{ marginTop: 12, padding: "8px 12px", background: "#fef3c7", border: `1.5px solid #fcd34d`, borderRadius: 8, fontSize: 12, color: "#a16207", fontWeight: 600, lineHeight: 1.6 }}>
               🤔 {t(E,
-                "Why exactly these 5 (45–49), and not a different set of 5? The 💡 Pattern tab explains the rule.",
+                "Why exactly these 5 (45–49), and not a different set of 5? You'll find out in the 💡 Pattern tab.",
                 "왜 하필 이 5 개 (45~49) 일까요? 다른 5 개가 아니라? 그 패턴은 💡 패턴 탭에서 찾아내요.")}
             </div>
           </div>
@@ -464,7 +464,7 @@ export function makePatternSteps(E) {
       ),
     },
     { type: "reveal",
-      narr: t(E, "✅ The full condition!", "✅ 완전한 조건을 찾았어!"),
+      narr: t(E, "✅ Now we have the complete condition!", "✅ 완전한 조건을 찾았어!"),
       content: (
         <div style={{ background:C.card, borderRadius:14, padding:16, border:`2px solid ${C.accent}`, boxShadow:"0 4px 16px rgba(79,70,229,.1)" }}>
           <div style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:14, lineHeight:2.4 }}>
