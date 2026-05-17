@@ -950,7 +950,12 @@ function Pw10Explainer({ E }) {
               Python has <code>10**P</code> built in, but C++ has no integer power operator — so we write our own helper.<br />
               <br />
               <strong>Bessie</strong> returns <code>10ᴾ</code> when the first digit ≥ 5 (round up).<br />
-              <strong>Elsie</strong> uses <code>pw10(pos)</code> to add a carry at each position and zero out the digits below.
+              <strong>Elsie</strong> uses <code>pw10(pos)</code> to add a carry at each position and zero out the digits below.<br />
+              <br />
+              <span style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 6, padding: "6px 10px", display: "inline-block", color: "#9a3412", fontWeight: 700, lineHeight: 1.6 }}>
+                🤔 <strong>"Isn't there <code>std::pow</code> in <code>&lt;cmath&gt;</code>?"</strong><br />
+                Yes — but it takes / returns <code>double</code>. Casting back like <code>(int)pow(10, 2)</code> can give <strong>99</strong> instead of 100 (floating-point rounding). Integer powers are safer with an integer-only helper.
+              </span>
             </>
           ) : (
             <>
@@ -958,7 +963,12 @@ function Pw10Explainer({ E }) {
               Python 에는 <code>10**P</code> 가 있지만, C++ 에는 정수 거듭제곱 연산자가 없어서 직접 함수로 만들어요.<br />
               <br />
               <strong>Bessie</strong> 는 첫째 ≥ 5 일 때 <code>10ᴾ</code> 를 돌려줘요 (올림).<br />
-              <strong>Elsie</strong> 는 각 자리에서 <code>pw10(pos)</code> 만큼 carry 를 더하고, 그 자리 이하를 0 으로 만들어요.
+              <strong>Elsie</strong> 는 각 자리에서 <code>pw10(pos)</code> 만큼 carry 를 더하고, 그 자리 이하를 0 으로 만들어요.<br />
+              <br />
+              <span style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 6, padding: "6px 10px", display: "inline-block", color: "#9a3412", fontWeight: 700, lineHeight: 1.6 }}>
+                🤔 <strong>"<code>&lt;cmath&gt;</code> 의 <code>std::pow</code> 쓰면 안 돼?"</strong><br />
+                돼요 — 근데 <code>double</code> 을 받고 <code>double</code> 을 돌려줘요. <code>(int)pow(10, 2)</code> 처럼 캐스팅하면 <strong>100 대신 99</strong> 가 나올 수도 있어요 (floating-point 반올림 오차). 정수 거듭제곱은 정수 헬퍼가 안전.
+              </span>
             </>
           )}
         </div>
