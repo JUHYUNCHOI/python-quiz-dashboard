@@ -103,6 +103,7 @@ export default function RoundingApp(props = {}) {
     ((tab >= 1) && step.type === "input" && !step.solved);
 
   const canNext = cur < steps.length - 1 || tab < TABS.length - 1;
+  const canPrev = cur > 0 || tab > 0;
 
   const next = () => {
     if (cur < steps.length - 1) {
@@ -118,8 +119,20 @@ export default function RoundingApp(props = {}) {
     }
   };
   const prev = () => {
-    setSi(Math.max(0, cur - 1));
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (cur > 0) {
+      setSi(cur - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    // 첫 스텝에서 이전 탭의 마지막 스텝으로
+    if (tab > 0) {
+      const prevTab = tab - 1;
+      const prevSteps = states[prevTab];
+      setTab(prevTab);
+      setSi(prevSteps.length - 1);
+      setVisitedTabs(p => { const n = new Set(p); n.add(prevTab); return n; });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   // --- Render step content ---
@@ -224,6 +237,7 @@ export default function RoundingApp(props = {}) {
 
       <QuestBottomNav
         cur={cur}
+        canPrev={canPrev}
         canNext={canNext}
         accent={A}
         E={E}

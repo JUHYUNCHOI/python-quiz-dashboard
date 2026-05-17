@@ -260,6 +260,7 @@ export function QuestProgressBar({
 
 export function QuestBottomNav({
   cur,
+  canPrev,        // optional — if undefined, falls back to legacy `cur === 0` check
   canNext,
   accent,
   E,
@@ -267,6 +268,9 @@ export function QuestBottomNav({
   onNext,
   showAnswerHint = false,
 }) {
+  // canPrev 를 명시적으로 받으면 (RoundingApp 처럼 cross-tab prev 지원)
+  // 그 값을 쓰고, 없으면 legacy behavior (첫 스텝 = disabled).
+  const prevDisabled = canPrev !== undefined ? !canPrev : cur === 0;
   return (
     <div style={{
       position: "fixed", bottom: 0, left: 0, right: 0,
@@ -285,12 +289,12 @@ export function QuestBottomNav({
           </div>
         )}
         <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center" }}>
-          <button onClick={onPrev} disabled={cur === 0} style={{
-            background: cur === 0 ? "#e5e7eb" : C.card,
-            border: `2px solid ${cur === 0 ? "#e5e7eb" : accent}`,
+          <button onClick={onPrev} disabled={prevDisabled} style={{
+            background: prevDisabled ? "#e5e7eb" : C.card,
+            border: `2px solid ${prevDisabled ? "#e5e7eb" : accent}`,
             borderRadius: 9, padding: "10px 24px", fontSize: 14, fontWeight: 800,
-            cursor: cur === 0 ? "default" : "pointer",
-            color: cur === 0 ? "#b0b5c3" : accent,
+            cursor: prevDisabled ? "default" : "pointer",
+            color: prevDisabled ? "#b0b5c3" : accent,
           }}>← {t(E, "Prev", "이전")}</button>
           <button onClick={onNext} disabled={!canNext} style={{
             background: !canNext ? "#e5e7eb" : accent,
