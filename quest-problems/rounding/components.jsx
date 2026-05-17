@@ -173,8 +173,14 @@ export function SpeedScale({ E }) {
   const cacheTime   = cacheOps   / OPS_PER_SEC;
   const formulaTime = formulaOps / OPS_PER_SEC;
 
-  // 시각용 — TIME_LIMIT 까지가 100%, 넘으면 100% 채우고 ❌
-  const widthOf = tt => Math.min(100, (tt / TIME_LIMIT) * 100);
+  // 시각용 — *log10 ops* 기준. 선형 시간 기준이면 공식 (~400 ops)
+  // 이 항상 invisible. log 로 하면 세 풀이 다 보이게 자람.
+  // MAX_LOG_OPS = 11 → 10^11 까지 표시 (브루트 N=10^9 면 6×10^10).
+  const MAX_LOG_OPS = 11;
+  const widthOf = ops => Math.min(100, (Math.log10(Math.max(ops, 1)) / MAX_LOG_OPS) * 100);
+  // TLE 임계점 (시간 = TIME_LIMIT) 의 ops = TIME_LIMIT * OPS_PER_SEC = 2*10^7.
+  // 그 위치 = log10(2e7)/11 ≈ 0.66 → 막대의 66% 지점.
+  const TLE_THRESHOLD_PCT = (Math.log10(TIME_LIMIT * OPS_PER_SEC) / MAX_LOG_OPS) * 100;
   const fmtTime = tt =>
     tt < 1e-4 ? t(E, "instant", "즉시")
     : tt < 0.01 ? `${(tt * 1000).toFixed(1)}ms`
@@ -198,11 +204,20 @@ export function SpeedScale({ E }) {
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ flex: 1, height: 18, background: "#f1f5f9", borderRadius: 6, overflow: "hidden", border: `1px solid ${C.border}` }}>
+          <div style={{
+            flex: 1, height: 18, background: "#f1f5f9", borderRadius: 6,
+            border: `1px solid ${C.border}`, position: "relative", overflow: "hidden",
+          }}>
+            {/* TLE 임계선 — 막대 위 세로선 (한 번만 그려도 되지만 각 막대에 표시) */}
             <div style={{
-              width: `${widthOf(time)}%`, height: "100%",
+              position: "absolute", top: 0, bottom: 0,
+              left: `${TLE_THRESHOLD_PCT}%`, width: 2,
+              background: "#fca5a5", zIndex: 2,
+            }} />
+            <div style={{
+              width: `${widthOf(ops)}%`, height: "100%",
               background: tle ? C.no : color,
-              transition: "width .2s",
+              transition: "width .25s",
             }} />
           </div>
           <span style={{
@@ -244,14 +259,16 @@ export function SpeedScale({ E }) {
       <Bar label={t(E, "💾 Cache",       "💾 캐시")}        time={cacheTime} ops={cacheOps} color={C.carry} />
       <Bar label={t(E, "⚡ Formula",     "⚡ 공식 (목표)")}   time={formulaTime} ops={formulaOps} color={C.ok} />
 
-      {/* 제한 시간 표시 */}
-      <div style={{ marginTop: 12, padding: "8px 12px", background: "#f8f9fc", borderRadius: 8, fontSize: 11, color: C.dim, fontWeight: 700, textAlign: "center" }}>
-        ⏱ {t(E, `Time limit: ${TIME_LIMIT}s. Bar full = TLE`, `시간 제한: ${TIME_LIMIT}초. 막대 꽉 차면 시간 초과`)}
+      {/* 제한 시간 표시 + log scale 안내 */}
+      <div style={{ marginTop: 12, padding: "8px 12px", background: "#f8f9fc", borderRadius: 8, fontSize: 11, color: C.dim, fontWeight: 700, textAlign: "center", lineHeight: 1.7 }}>
+        ⏱ {t(E,
+          `Time limit: ${TIME_LIMIT}s. Red vertical line = TLE threshold. Bar is log scale, so even the formula's slow growth is visible.`,
+          `시간 제한: ${TIME_LIMIT}초. 빨간 세로선 = TLE 임계점. 막대는 log 스케일이라 공식의 느린 성장도 보임.`)}
       </div>
       <div style={{ marginTop: 8, padding: "8px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 8, fontSize: 11, color: C.accent, fontWeight: 700, lineHeight: 1.6, textAlign: "center" }}>
         💡 {t(E,
-              `Total cost over ${T} queries. Brute recomputes each time (T × N × 6). Cache fills once then T lookups (N×6 + T). Formula is O(log N) each time.`,
-              `${T} 번 쿼리의 누적 비용. 브루트는 매번 N 까지 다시 계산 (T × N × 6). 캐시는 한 번 채우고 나머진 lookup (N×6 + T). 공식은 매번 O(log N).`)}
+              `Slide N from 10 to 10⁹: watch brute jump way past the red line, cache eventually too, while the formula bar barely budges (still left of red line). That's O(N) vs O(log N).`,
+              `N 을 10 부터 10⁹ 까지 끌어봐요: 브루트는 금방 빨간선 넘어가고 캐시도 결국 넘어가요. 공식은 막대가 살짝씩만 자라요 (빨간선 한참 못 미침). 이게 O(N) 과 O(log N) 차이.`)}
       </div>
     </div>
   );
