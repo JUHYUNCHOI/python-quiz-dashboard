@@ -9,6 +9,186 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
+/* ================================================================
+   RodFitSim — Ch1 의 '4 케이스 정적 표' 를 인터랙티브로 대체
+   학생이 직접 cheese 셀 클릭 → 빼고 → 막대 통과 시각 확인
+   ================================================================ */
+export function RodFitSim({ E }) {
+  const N = 3;
+  // cells[i] = true → cheese, false → empty
+  const [cells, setCells] = useState([true, true, true]);
+  // 매번 토글 시 막대 다시 슬라이드 (key 갱신용)
+  const [animKey, setAnimKey] = useState(0);
+
+  const toggle = (i) => {
+    setCells(prev => {
+      const next = [...prev];
+      next[i] = !next[i];
+      return next;
+    });
+    setAnimKey(k => k + 1);
+  };
+
+  const reset = (fill) => {
+    setCells(Array(N).fill(fill));
+    setAnimKey(k => k + 1);
+  };
+
+  const allEmpty = cells.every(c => !c);
+  const firstCheeseIdx = cells.findIndex(c => c);
+  const emptyCount = cells.filter(c => !c).length;
+
+  const CELL_SIZE = 52;
+  const CELL_GAP = 6;
+  const rowWidth = N * CELL_SIZE + (N - 1) * CELL_GAP;
+  // 막대 정지 위치 (% 단위): all empty 면 100%, 아니면 첫 cheese 직전까지
+  const rodEndPct = allEmpty
+    ? 100
+    : ((firstCheeseIdx * (CELL_SIZE + CELL_GAP)) / rowWidth) * 100;
+
+  return (
+    <div style={{ padding: 12 }}>
+      <div style={{
+        background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12,
+        padding: 16,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 10, letterSpacing: 0.3 }}>
+          {t(E, "👆 Click cells to toggle 🧀 ↔ empty. Watch the rod try to pass.",
+                "👆 셀을 눌러서 🧀 ↔ 빈 칸 토글. 막대가 통과하는지 봐요.")}
+        </div>
+
+        {/* Cell row + rod (stacked) */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+          {/* Cells */}
+          <div style={{ display: "flex", gap: CELL_GAP }}>
+            {cells.map((cheese, i) => (
+              <button
+                key={i}
+                onClick={() => toggle(i)}
+                style={{
+                  width: CELL_SIZE, height: CELL_SIZE,
+                  borderRadius: 8,
+                  background: cheese ? "#fde047" : "#fff",
+                  border: `2.5px solid ${cheese ? "#ca8a04" : "#cbd5e1"}`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 26, cursor: "pointer",
+                  transition: "all .15s",
+                }}
+                title={cheese ? t(E, "Click to carve out", "클릭해서 제거") : t(E, "Click to add cheese", "클릭해서 치즈 추가")}
+              >
+                {cheese ? "🧀" : ""}
+              </button>
+            ))}
+          </div>
+
+          {/* Rod track */}
+          <div style={{ position: "relative", width: rowWidth, height: 22 }}>
+            {/* track background */}
+            <div style={{
+              position: "absolute", inset: 0,
+              background: "#f1f5f9",
+              borderRadius: 4,
+              border: `1px dashed ${C.border}`,
+            }} />
+            {/* rod — width animated by key */}
+            <div
+              key={animKey}
+              style={{
+                position: "absolute", top: 4, bottom: 4, left: 0,
+                width: `${rodEndPct}%`,
+                background: allEmpty
+                  ? "linear-gradient(90deg, #6ee7b7, #10b981)"
+                  : "linear-gradient(90deg, #94a3b8, #64748b)",
+                borderRadius: 3,
+                animation: "rodSlide .4s cubic-bezier(.34,1.56,.64,1)",
+              }}
+            />
+          </div>
+
+          {/* Status badge */}
+          <div style={{
+            padding: "8px 16px", borderRadius: 10,
+            background: allEmpty ? "#ecfdf5" : "#fef2f2",
+            border: `2px solid ${allEmpty ? "#6ee7b7" : "#fca5a5"}`,
+            color: allEmpty ? "#065f46" : "#991b1b",
+            fontSize: 14, fontWeight: 800,
+            fontFamily: "system-ui, sans-serif",
+            display: "flex", alignItems: "center", gap: 8,
+            transition: "all .15s",
+          }}>
+            <span style={{ fontSize: 18 }}>{allEmpty ? "✓" : "✗"}</span>
+            <span>
+              {allEmpty
+                ? t(E, "Rod fits! Row is clear.", "막대 통과! 줄이 비어 있어요.")
+                : t(E, `Blocked at cell #${firstCheeseIdx + 1} (🧀 still there).`,
+                       `${firstCheeseIdx + 1}번 칸에서 막힘 (🧀 가 아직 있음).`)}
+            </span>
+          </div>
+
+          {/* Empty counter */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: 8,
+            fontSize: 12, color: C.dim, fontWeight: 700,
+            fontFamily: "system-ui, sans-serif",
+          }}>
+            <span>{t(E, "Empty:", "빈 칸:")}</span>
+            <span style={{
+              fontFamily: "'JetBrains Mono',monospace",
+              fontWeight: 900,
+              color: emptyCount === N ? "#10b981" : C.text,
+              fontSize: 14,
+            }}>{emptyCount} / {N}</span>
+            {emptyCount === N && (
+              <span style={{ color: "#10b981", fontWeight: 800 }}>
+                ← {t(E, "all clear!", "전부 빔!")}
+              </span>
+            )}
+          </div>
+
+          {/* Reset shortcuts */}
+          <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+            <button
+              onClick={() => reset(true)}
+              style={{
+                padding: "4px 10px",
+                background: "#fffbeb", color: "#92400e",
+                border: "1.5px solid #fde68a",
+                borderRadius: 6, fontSize: 11, fontWeight: 800, cursor: "pointer",
+              }}
+            >🧀 {t(E, "All cheese", "전부 치즈")}</button>
+            <button
+              onClick={() => reset(false)}
+              style={{
+                padding: "4px 10px",
+                background: "#ecfdf5", color: "#065f46",
+                border: "1.5px solid #6ee7b7",
+                borderRadius: 6, fontSize: 11, fontWeight: 800, cursor: "pointer",
+              }}
+            >⬜ {t(E, "All empty", "전부 빔")}</button>
+          </div>
+        </div>
+      </div>
+
+      {/* Hint after exploration */}
+      <div style={{
+        marginTop: 10, padding: "10px 12px",
+        background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 8,
+        fontSize: 13, color: "#92400e", lineHeight: 1.7, fontWeight: 700, textAlign: "center",
+      }}>
+        🤔 {t(E,
+          "Try removing 1 block, then 2. The rod still gets blocked! Only ALL N empty lets it through.",
+          "1 칸만 빼봐요, 2 칸 빼봐요. 막대는 여전히 막혀요! N 칸 *전부* 비어야 통과.")}
+      </div>
+
+      <style>{`
+        @keyframes rodSlide {
+          from { width: 0%; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export function Cube3D({ N, carved, E }) {
   const [rotX, setRotX] = useState(-30);
   const [rotY, setRotY] = useState(40);

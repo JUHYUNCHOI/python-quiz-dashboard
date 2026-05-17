@@ -5,6 +5,7 @@ import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar
 import {
   CheeseSim2, CheeseBruteRunner, CheeseProgressiveCode,
   downloadCheesePDF, getCheeseSections,
+  RodFitSim,
 } from "./components";
 import {
   makeCheeseCh1, makeCheeseCh2, makeCheeseCh3, makeCheeseCh4, makeCheeseCh5,
@@ -145,6 +146,7 @@ export default function CheeseApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "cheeseSim2") return <CheeseSim2 E={E} />;
     if (step.type === "cheeseRunner") return <CheeseBruteRunner E={E} />;
+    if (step.type === "rodFitSim") return <RodFitSim E={E} />;
     if (step.type === "progressive") return <CheeseProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     return null;
   };
