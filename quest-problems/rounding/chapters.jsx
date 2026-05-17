@@ -469,40 +469,121 @@ export function makePatternSteps(E) {
     },
     { type: "reveal",
       narr: t(E,
-        "Look at the SHAPE: smallest is 4…45 (d−1 fours + a 5), largest is 4 99…9 (a 4 + d−1 nines). All disagreeing d-digit numbers sit between these two — one contiguous block!",
-        "모양을 봐요: 가장 작은 건 4…45 (d−1 개의 4 + 5 하나), 가장 큰 건 4 99…9 (4 하나 + d−1 개의 9). 답이 다른 d 자리 수는 이 둘 사이의 연속 구간이에요!"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "40px 1fr 1fr 60px", padding: "8px 10px", background: "#f8f9fc", borderBottom: `1.5px solid ${C.border}`, fontSize: 11, fontWeight: 800, color: C.dim }}>
-              <span>d</span>
-              <span>s<sub>d</sub> {t(E, "(smallest)", "(최소)")}</span>
-              <span>e<sub>d</sub> {t(E, "(largest)", "(최대)")}</span>
-              <span style={{ textAlign: "right" }}>{t(E, "count", "개수")}</span>
-            </div>
-            {[
-              { d: 2, s: "45",     e: "49",      c: 5 },
-              { d: 3, s: "445",    e: "499",     c: 55 },
-              { d: 4, s: "4445",   e: "4999",    c: 555 },
-              { d: 5, s: "44445",  e: "49999",   c: 5555 },
-            ].map((row, i) => (
+        "Each digit count d has its own contiguous block of disagreeing numbers — from the SMALLEST (s_d) to the LARGEST (e_d). Look at the digit boxes — see the pattern?",
+        "각 자릿수 d 마다 답이 다른 수의 *연속 구간* 이 있어요 — 가장 작은 수 (s_d) 부터 가장 큰 수 (e_d) 까지. 아래 숫자 박스를 봐요. 패턴 보이나요?"),
+      content: (() => {
+        // Digit-box helper — Optimize 탭과 같은 색감
+        const SBox = ({ ch, kind }) => {
+          const map = {
+            smallFill:  { bg: "#fee2e2", color: "#dc2626", border: "#fca5a5" }, // 4 (small s_d)
+            smallTail:  { bg: "#dc2626", color: "#fff",   border: "#fca5a5" }, // 5 (small s_d tail)
+            largeHead:  { bg: "#15803d", color: "#fff",   border: "#86efac" }, // 4 (large e_d head)
+            largeFill:  { bg: "#dcfce7", color: "#15803d", border: "#86efac" }, // 9 (large e_d)
+          };
+          const s = map[kind];
+          return (
+            <div style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              width: 28, height: 32,
+              background: s.bg, color: s.color, border: `2px solid ${s.border}`,
+              borderRadius: 6, fontFamily: "'JetBrains Mono',monospace",
+              fontWeight: 900, fontSize: 15, margin: "0 1.5px",
+            }}>{ch}</div>
+          );
+        };
+
+        const rows = [2, 3, 4, 5].map(d => {
+          const sArr = Array(d - 1).fill("4").concat(["5"]);
+          const eArr = ["4"].concat(Array(d - 1).fill("9"));
+          const sVal = parseInt(sArr.join(""), 10);
+          const eVal = parseInt(eArr.join(""), 10);
+          return { d, sArr, eArr, sVal, eVal, count: eVal - sVal + 1 };
+        });
+
+        return (
+          <div style={{ padding: 16 }}>
+            {rows.map((row, i) => (
               <div key={i} style={{
-                display: "grid", gridTemplateColumns: "40px 1fr 1fr 60px",
-                padding: "8px 10px", borderBottom: i < 3 ? `1px solid ${C.border}` : "none",
+                background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12,
+                padding: 12, marginBottom: 10,
               }}>
-                <span style={{ fontWeight: 800, color: C.accent }}>{row.d}</span>
-                <span style={{ color: C.no, fontWeight: 700 }}>{row.s}</span>
-                <span style={{ color: C.ok, fontWeight: 700 }}>{row.e}</span>
-                <span style={{ textAlign: "right", fontWeight: 800, color: C.accent }}>{row.c}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                  <span style={{
+                    background: C.accentBg, color: C.accent, fontWeight: 900,
+                    borderRadius: 6, padding: "3px 10px", fontSize: 13,
+                    fontFamily: "'JetBrains Mono',monospace",
+                  }}>d = {row.d}</span>
+                  <span style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>
+                    {t(E, `${row.d}-digit numbers`, `${row.d} 자리 수`)}
+                  </span>
+                </div>
+
+                {/* digit boxes — smallest .... largest */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, flexWrap: "wrap", marginBottom: 10 }}>
+                  {/* s_d */}
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 10, fontWeight: 800, color: "#dc2626", marginBottom: 4 }}>
+                      {t(E, "smallest", "가장 작음")} (s<sub>{row.d}</sub>)
+                    </div>
+                    <div>
+                      {row.sArr.map((c, j) => (
+                        <SBox key={j} ch={c} kind={c === "5" ? "smallTail" : "smallFill"} />
+                      ))}
+                    </div>
+                    <div style={{ fontSize: 13, fontWeight: 900, color: "#dc2626", marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
+                      {row.sVal}
+                    </div>
+                  </div>
+
+                  <div style={{ fontSize: 18, fontWeight: 700, color: C.dim }}>—</div>
+
+                  {/* e_d */}
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 10, fontWeight: 800, color: "#15803d", marginBottom: 4 }}>
+                      {t(E, "largest", "가장 큼")} (e<sub>{row.d}</sub>)
+                    </div>
+                    <div>
+                      {row.eArr.map((c, j) => (
+                        <SBox key={j} ch={c} kind={c === "4" ? "largeHead" : "largeFill"} />
+                      ))}
+                    </div>
+                    <div style={{ fontSize: 13, fontWeight: 900, color: "#15803d", marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
+                      {row.eVal}
+                    </div>
+                  </div>
+                </div>
+
+                {/* concrete subtraction */}
+                <div style={{
+                  padding: "8px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`,
+                  borderRadius: 8, textAlign: "center", fontFamily: "'JetBrains Mono',monospace",
+                  fontSize: 13, fontWeight: 800, color: C.accent,
+                }}>
+                  <span style={{ color: "#15803d" }}>{row.eVal}</span>
+                  <span style={{ color: C.dim }}> − </span>
+                  <span style={{ color: "#dc2626" }}>{row.sVal}</span>
+                  <span style={{ color: C.dim }}> + 1 = </span>
+                  <span style={{ fontSize: 15 }}>{row.count}</span>
+                  <span style={{ fontSize: 11, color: C.dim, marginLeft: 8, fontFamily: "inherit", fontWeight: 600 }}>
+                    {t(E, `(${row.count} numbers)`, `(${row.count} 개)`)}
+                  </span>
+                </div>
               </div>
             ))}
+
+            <div style={{
+              marginTop: 12, padding: "10px 12px",
+              background: "#fef3c7", border: `2px solid #fcd34d`,
+              borderRadius: 10, fontSize: 13, color: "#a16207", fontWeight: 800,
+              textAlign: "center", lineHeight: 1.7,
+            }}>
+              💡 {t(E,
+                "Each d's count is just (largest − smallest + 1). No exponentiation needed!",
+                "각 d 의 개수 = (가장 큰 수) − (가장 작은 수) + 1. 거듭제곱 필요 없음!")}
+            </div>
           </div>
-          <div style={{ marginTop: 12, padding: "10px 12px", background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, fontSize: 13, color: C.accent, fontWeight: 800, textAlign: "center", lineHeight: 1.6 }}>
-            💡 {t(E, "Count for d-digit = e_d − s_d + 1. No exponentiation needed!",
-                  "d 자리 개수 = e_d − s_d + 1. 거듭제곱 필요 없음!")}
-          </div>
-        </div>
-      ),
+        );
+      })(),
     },
 
     { type: "input",
