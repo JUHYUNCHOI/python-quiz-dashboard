@@ -298,38 +298,95 @@ export function makeMooCh4(E) {
 
 export function makeMooCh5(E, lang = "py") {
   return [
+    // 5-1: 자료구조 비유 + 언어별 도구
     { type: "reveal",
-      narr: t(E, "We need to store moo counts — like a notebook.\n'moo' appears 3 times?\nWrite it down!\nPython has defaultdict(int) for this — it auto-starts at 0.", "moo 카운트를 저장해야 해 — 공책처럼. 'moo'가 3번? 적어둬! Python에 defaultdict(int)가 있어 — 자동으로 0에서 시작!"),
-      content: (<div style={{ padding: 12 }}><MiniCode lines={["from collections import defaultdict","","mydict = defaultdict(int)","# mydict['moo'] → auto 0!","mydict['moo'] += 1","# mydict['moo'] → now 1!"]} /></div>),
+      narr: lang === "cpp"
+        ? t(E,
+            "We need to store moo counts — like a notebook.\nC++ uses std::map<string, int> for this — clean syntax for keyed counters.",
+            "moo 카운트를 저장해야 해 — 공책처럼. C++ 은 std::map<string, int> 사용 — 키 별 카운터에 적합.")
+        : t(E,
+            "We need to store moo counts — like a notebook.\n'moo' appears 3 times?\nWrite it down!\nPython has defaultdict(int) for this — it auto-starts at 0.",
+            "moo 카운트를 저장해야 해 — 공책처럼. 'moo'가 3번? 적어둬! Python 에 defaultdict(int) 가 있어 — 자동으로 0 에서 시작!"),
+      content: (<div style={{ padding: 12 }}>
+        <MiniCode lang={lang} lines={lang === "cpp"
+          ? [
+              "#include <map>",
+              "#include <string>",
+              "using namespace std;",
+              "",
+              "map<string, int> mydict;",
+              "// mydict[\"moo\"] auto-inits to 0",
+              "mydict[\"moo\"] += 1;",
+              "// mydict[\"moo\"] is now 1",
+            ]
+          : [
+              "from collections import defaultdict",
+              "",
+              "mydict = defaultdict(int)",
+              "# mydict['moo'] → auto 0!",
+              "mydict['moo'] += 1",
+              "# mydict['moo'] → now 1!",
+            ]}
+        />
+      </div>),
     },
-    { type: "quiz",
-      narr: t(E, "The code uses `string = list(input())` instead of just `input()`.\nWhy not keep it as a string?", "코드에서 `string = list(input())`을 써요. 그냥 문자열로 쓰면 안 돼요?"),
+    // 5-2: Python-specific quiz — C++ 에선 생략 (C++ string 은 변경 가능해서 무의미)
+    ...(lang === "cpp" ? [] : [{ type: "quiz",
+      narr: t(E, "The code uses `string = list(input())` instead of just `input()`.\nWhy not keep it as a string?",
+                  "코드에서 `string = list(input())`을 써요. 그냥 문자열로 쓰면 안 돼요?"),
       question: t(E, "Why list(input())?", "왜 list(input())?"),
       options: [
-        t(E, "Python strings can't be changed! 'abc'[1]='x' gives an error. Lists allow it.", "Python 문자열은 변경 불가! 'abc'[1]='x'는 에러. 리스트는 가능."),
+        t(E, "Python strings can't be changed! 'abc'[1]='x' gives an error. Lists allow it.",
+              "Python 문자열은 변경 불가! 'abc'[1]='x' 는 에러. 리스트는 가능."),
         t(E, "It's faster", "빨라서"),
       ], correct: 0,
-      explain: t(E, "Try it: 'abc'[1]='x' → TypeError! But ['a','b','c'][1]='x' works perfectly. We need to swap characters, so we need a list.", "'abc'[1]='x' → TypeError! 하지만 ['a','b','c'][1]='x'는 잘 돼요. 글자를 바꿔야 하니까 리스트가 필요!"),
-    },
+      explain: t(E,
+        "Try it: 'abc'[1]='x' → TypeError! But ['a','b','c'][1]='x' works perfectly. We need to swap characters, so we need a list.",
+        "'abc'[1]='x' → TypeError! 하지만 ['a','b','c'][1]='x' 는 잘 돼요. 글자를 바꿔야 하니까 리스트가 필요!"),
+    }]),
+    // 5-3: window range — 언어 중립 (인덱스 산수)
     { type: "quiz",
-      narr: t(E, "The window range: minIndex = max(pos-2, 0), maxIndex = min(n-3, pos).\nFor pos=3, N=10: range(1, 4) = [1,2,3].\nLet's verify each window contains pos=3.", "윈도우 범위: minIndex = max(pos-2, 0), maxIndex = min(n-3, pos).\npos=3, N=10: range(1, 4) = [1,2,3].\n각 윈도우가 pos=3을 포함하는지 확인해보자."),
-      question: t(E, "idx=1→[1,2,3], idx=2→[2,3,4], idx=3→[3,4,5]. All contain pos=3?", "idx=1→[1,2,3], idx=2→[2,3,4], idx=3→[3,4,5]. 전부 pos=3 포함?"),
+      narr: t(E, "The window range: minIndex = max(pos-2, 0), maxIndex = min(n-3, pos).\nFor pos=3, N=10: indices [1, 2, 3].\nLet's verify each window contains pos=3.",
+                  "윈도우 범위: minIndex = max(pos-2, 0), maxIndex = min(n-3, pos).\npos=3, N=10: 인덱스 [1, 2, 3].\n각 윈도우가 pos=3 을 포함하는지 확인."),
+      question: t(E, "idx=1→[1,2,3], idx=2→[2,3,4], idx=3→[3,4,5]. All contain pos=3?",
+                      "idx=1→[1,2,3], idx=2→[2,3,4], idx=3→[3,4,5]. 전부 pos=3 포함?"),
       options: [
         t(E, "Yes! Each window covers pos=3 in a different position", "맞아! 각 윈도우가 다른 위치에서 pos=3 포함"),
-        t(E, "No, should be range(1,5)", "아니, range(1,5)여야 해"),
+        t(E, "No, should be indices [1, 4]", "아니, [1, 4] 범위여야 해"),
       ], correct: 0,
-      explain: t(E, "Correct! idx=1: pos=3 is 3rd letter. idx=2: pos=3 is 2nd. idx=3: pos=3 is 1st. All 3 covered!", "맞아! idx=1: pos=3이 3번째. idx=2: 2번째. idx=3: 1번째. 3개 전부!"),
+      explain: t(E,
+        "Correct! idx=1: pos=3 is the 3rd letter. idx=2: the 2nd. idx=3: the 1st. All 3 windows include pos=3.",
+        "맞아! idx=1: pos=3 이 3번째. idx=2: 2번째. idx=3: 1번째. 3 개 윈도우 모두 pos=3 포함."),
     },
-    { type: "quiz",
-      narr: t(E, "Tricky line: `t[pos - idx] = c`.\nWe sliced `t = string[idx:idx+3]`, which gives us a copy of 3 letters.\nIf idx=1 and pos=3, which position in t do we change?", "까다로운 줄: `t[pos - idx] = c`.\n`t = string[idx:idx+3]`으로 3글자 복사본을 만들었어.\nidx=1이고 pos=3이면, t에서 몇 번째를 바꿔?"),
+    // 5-4: Python slicing quiz — C++ 에선 생략 (slicing 개념 달라서 별도 설명 필요)
+    ...(lang === "cpp" ? [] : [{ type: "quiz",
+      narr: t(E, "Tricky line: `t[pos - idx] = c`.\nWe sliced `t = string[idx:idx+3]`, which gives us a copy of 3 letters.\nIf idx=1 and pos=3, which position in t do we change?",
+                  "까다로운 줄: `t[pos - idx] = c`.\n`t = string[idx:idx+3]` 으로 3 글자 복사본을 만들었어.\nidx=1 이고 pos=3 이면, t 에서 몇 번째를 바꿔?"),
       question: t(E, "idx=1, pos=3: t[pos-idx] = t[?]", "idx=1, pos=3: t[pos-idx] = t[?]"),
       options: ["t[2]", "t[3]", "t[1]"], correct: 0,
-      explain: t(E, "t[3-1] = t[2]! The window starts at idx=1, so pos=3 is at offset 2 (the 3rd letter of the window).", "t[3-1] = t[2]! 윈도우가 idx=1에서 시작하니까 pos=3은 오프셋 2 (윈도우의 3번째 글자)."),
-    },
+      explain: t(E,
+        "t[3-1] = t[2]! The window starts at idx=1, so pos=3 is at offset 2 (the 3rd letter of the window).",
+        "t[3-1] = t[2]! 윈도우가 idx=1 에서 시작하니까 pos=3 은 오프셋 2 (윈도우의 3 번째 글자)."),
+    }]),
+    // 5-5: +1 → check → -1 (언어별 코드)
     { type: "reveal",
-      narr: t(E, "The cleverest part of the code: +1 → check → -1.\nAdd the trial contribution, immediately check if it crosses the threshold, then undo it.\nThe counter stays clean for the next trial!", "코드에서 가장 영리한 부분: +1 → 확인 → -1. 시도 기여를 더하고, 바로 기준치 넘는지 확인하고, 되돌려. 다음 시도를 위해 카운터가 깨끗!"),
+      narr: t(E, "The cleverest part of the code: +1 → check → -1.\nAdd the trial contribution, immediately check if it crosses the threshold, then undo it.\nThe counter stays clean for the next trial!",
+                  "코드에서 가장 영리한 부분: +1 → 확인 → -1. 시도 기여를 더하고, 바로 기준치 넘는지 확인하고, 되돌려. 다음 시도를 위해 카운터가 깨끗!"),
       content: (<div style={{ padding: 12 }}>
-        <MiniCode lines={["mydict[key] += 1        # temporarily add","if mydict[key] >= f:    # crosses threshold?","  result.add(key)       # yes → save it!","mydict[key] -= 1        # immediately undo"]} />
+        <MiniCode lang={lang} lines={lang === "cpp"
+          ? [
+              "mydict[key] += 1;        // temporarily add",
+              "if (mydict[key] >= f) {  // crosses threshold?",
+              "    result.insert(key);  // yes → save it!",
+              "}",
+              "mydict[key] -= 1;        // immediately undo",
+            ]
+          : [
+              "mydict[key] += 1        # temporarily add",
+              "if mydict[key] >= f:    # crosses threshold?",
+              "  result.add(key)       # yes → save it!",
+              "mydict[key] -= 1        # immediately undo",
+            ]} />
         <div style={{ marginTop: 8, fontSize: 12, color: C.accent, fontWeight: 700, textAlign: "center" }}>+1 → check → -1 = {t(E, "clean state for next trial!", "다음 시도를 위한 깨끗한 상태!")} ✨</div>
       </div>),
     },

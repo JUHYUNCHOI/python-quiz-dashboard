@@ -396,15 +396,82 @@ export function makeCheeseCh3(E) {
         </div>),
     },
 
-    // 3-6: 손으로 해보기 — (0,0,0) 제거
+    // 3-5a: 첫 carve 시각화 — input 페이지 직전에 그림으로 (학생 이해 보조)
+    {
+      type: "reveal",
+      narr: t(E,
+        "First carve: remove the block at (0,0,0). Watch the 3 counters tick up by 1 each.",
+        "첫 제거: (0,0,0) 블록을 빼요. 3개 카운터가 각각 +1 되는 걸 봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* Block being removed */}
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 14,
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: C.dim }}>
+              {t(E, "Carving:", "제거:")}
+            </span>
+            <span style={{
+              background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 8,
+              padding: "6px 12px", fontFamily: "'JetBrains Mono',monospace",
+              fontSize: 16, fontWeight: 900, color: "#dc2626",
+            }}>(0, 0, 0)</span>
+          </div>
+
+          {/* 3 counters animating 0 → 1 */}
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 8, letterSpacing: 0.3 }}>
+            {t(E, "3 ROW COUNTERS UPDATE", "3 줄의 카운터가 업데이트")}
+          </div>
+          <div style={{
+            display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 14,
+          }}>
+            {[
+              { dir: t(E, "x-axis row", "x-방향 줄"), color: "#22c55e" },
+              { dir: t(E, "y-axis row", "y-방향 줄"), color: "#3b82f6" },
+              { dir: t(E, "z-axis row", "z-방향 줄"), color: "#ef4444" },
+            ].map((c, i) => (
+              <div key={i} style={{
+                background: "#fff", border: `2px solid ${c.color}`, borderRadius: 12,
+                padding: "10px 12px", minWidth: 110, textAlign: "center",
+              }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: c.color, marginBottom: 6 }}>
+                  {c.dir}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+                  <span style={{ fontSize: 22, fontWeight: 900, color: C.dim }}>0</span>
+                  <span style={{ fontSize: 16, color: C.dim }}>→</span>
+                  <span style={{ fontSize: 22, fontWeight: 900, color: c.color }}>1</span>
+                </div>
+                <div style={{ fontSize: 10, color: "#dc2626", fontWeight: 700, marginTop: 4 }}>
+                  {t(E, "still < N=2", "아직 < N=2")}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Verdict */}
+          <div style={{
+            padding: "10px 14px",
+            background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10,
+            fontSize: 13, color: C.no, fontWeight: 800, textAlign: "center", lineHeight: 1.6,
+          }}>
+            {t(E,
+              "None of the counters reached N=2 yet → the rod still can't fit through any row.",
+              "어떤 카운터도 N=2 도달 안 함 → 아직 막대 통과하는 줄 없음.")}
+          </div>
+        </div>),
+    },
+    // 3-6: 손으로 해보기 — (0,0,0) 제거 (이제 위 시각 보고 답함)
     {
       type: "input",
       narr: t(E,
-        "Let's try it by hand!\nN=2.\nWe remove (0,0,0).\nIts 3 counters each go from 0 to 1.\nBut we need 2 to open a row.\nHow many rows opened?", "직접 손으로 해보자! N=2. (0,0,0)을 빼. 3개 카운터가 각각 0→1. 근데 줄이 뚫리려면 2가 필요해요. 뚫린 줄은 몇 개?"),
+        "Now you tell me: after carving (0,0,0), how many rows opened?",
+        "이제 답해봐요: (0,0,0) 빼고 나서, 뚫린 줄은 몇 개?"),
       question: t(E,
-        "(0,0,0) removed. All 3 counters = 1. Need 2 to open. Rows opened?",
-        "(0,0,0) 제거. 카운터 3개 전부 1. 2가 되어야 뚫림. 뚫린 줄?"),
-      hint: t(E, "1 is less than 2, so none opened!", "1은 2보다 작으니까 아직 안 뚫렸어!"),
+        "Rows opened after carving (0,0,0)?",
+        "(0,0,0) 빼고 나서 뚫린 줄?"),
+      hint: t(E, "All 3 counters are at 1, but we need to reach 2 (= N) to open a row.",
+                 "카운터 3개 다 1인데, 줄이 뚫리려면 2 (= N) 에 도달해야 함."),
       answer: 0,
     },
 
@@ -427,14 +494,80 @@ export function makeCheeseCh3(E) {
         </div>),
     },
 
-    // 3-8: 마지막 제거 — 3개 동시!
+    // 3-7a: 마지막 carve 시각화 — 3 개 동시 도달!
+    {
+      type: "reveal",
+      narr: t(E,
+        "Last carve: remove (1,1,0). This block's 3 counters were all at 1 already — now they all hit N=2 at the same time!",
+        "마지막 제거: (1,1,0). 이 블록의 카운터 3 개가 모두 이미 1 이었어요 — 이번에 *동시에* N=2 도달!"),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* Block */}
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 14,
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: C.dim }}>
+              {t(E, "Carving:", "제거:")}
+            </span>
+            <span style={{
+              background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 8,
+              padding: "6px 12px", fontFamily: "'JetBrains Mono',monospace",
+              fontSize: 16, fontWeight: 900, color: "#dc2626",
+            }}>(1, 1, 0)</span>
+          </div>
+
+          {/* 3 counters all hitting N=2 */}
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 8, letterSpacing: 0.3 }}>
+            {t(E, "ALL 3 COUNTERS REACH N AT ONCE!", "3 개 카운터가 동시에 N 도달!")}
+          </div>
+          <div style={{
+            display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 14,
+          }}>
+            {[
+              { dir: t(E, "x-axis row", "x-방향 줄"), color: "#22c55e" },
+              { dir: t(E, "y-axis row", "y-방향 줄"), color: "#3b82f6" },
+              { dir: t(E, "z-axis row", "z-방향 줄"), color: "#ef4444" },
+            ].map((c, i) => (
+              <div key={i} style={{
+                background: "#ecfdf5", border: `2px solid ${c.color}`, borderRadius: 12,
+                padding: "10px 12px", minWidth: 110, textAlign: "center",
+              }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: c.color, marginBottom: 6 }}>
+                  {c.dir}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+                  <span style={{ fontSize: 22, fontWeight: 900, color: C.dim }}>1</span>
+                  <span style={{ fontSize: 16, color: C.dim }}>→</span>
+                  <span style={{ fontSize: 22, fontWeight: 900, color: c.color }}>2</span>
+                </div>
+                <div style={{ fontSize: 12, color: "#10b981", fontWeight: 800, marginTop: 4 }}>
+                  ✓ {t(E, "= N", "= N")}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Verdict */}
+          <div style={{
+            padding: "10px 14px",
+            background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10,
+            fontSize: 13, color: C.ok, fontWeight: 800, textAlign: "center", lineHeight: 1.7,
+          }}>
+            🎉 {t(E,
+              "All 3 rows open at this single carve → +3 new open rows in one shot!",
+              "이 한 번의 제거로 3 줄 동시 뚫림 → +3 새로 열림!")}
+          </div>
+        </div>),
+    },
+    // 3-8: 마지막 제거 — input
     {
       type: "input",
       narr: t(E,
-        "Last one!\nRemove (1,1,0).\nThis block sits on 3 rows, and all 3 counters hit 2 at the same time!\nPrevious answer was 2.\nNow?", "마지막! (1,1,0) 제거. 이 블록이 있는 3줄의 카운터가 동시에 2에 도달! 이전 답이 2였어. 이제는?"),
+        "We had 2 rows open before this carve. Now +3 more. Total?",
+        "이번 제거 직전에 2 줄 뚫려 있었어요. 이번에 +3 더. 총 몇 줄?"),
       question: t(E,
-        "Previous: 2 rows open. Now +3 more. Total: 2 + 3 = ?",
-        "이전: 2줄 뚫림. 이제 +3개 추가. 합계: 2 + 3 = ?"),
+        "Previous: 2 rows open. After this carve: 2 + 3 = ?",
+        "이전: 2 줄 뚫림. 이번 제거 후: 2 + 3 = ?"),
       answer: 5,
     },
 
@@ -673,7 +806,7 @@ export function makeCheeseCh4(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCheeseCh5(E, lang = "py") {
   return [
-    // 5-1: 자료구조 — 쉬운 비유
+    // 5-1: 자료구조 — 쉬운 비유 (언어별 도구 분기)
     {
       type: "reveal",
       narr: t(E,
@@ -690,33 +823,54 @@ export function makeCheeseCh5(E, lang = "py") {
               <div>📙 xz: <span style={{ color: C.dim }}>{t(E, "which (x,z) pair → y-direction row", "(x,z) 쌍 → y-방향 줄")}</span></div>
             </div>
             <div style={{ marginTop: 8, fontSize: 12, color: C.dim }}>
-              {t(E, "Python has a perfect tool: defaultdict(int) — auto-starts at 0!", "Python에 딱 맞는 도구: defaultdict(int) — 자동으로 0 시작!")}
+              {lang === "cpp"
+                ? t(E, "C++ uses a 2D vector pre-filled with 0 — clean indexing with [x][y].",
+                       "C++ 은 0 으로 미리 채운 2D vector — [x][y] 로 깔끔하게 접근.")
+                : t(E, "Python has a perfect tool: defaultdict(int) — auto-starts at 0!",
+                       "Python 에 딱 맞는 도구: defaultdict(int) — 자동으로 0 시작!")}
             </div>
           </div>
         </div>),
     },
 
-    // 5-2: defaultdict 예시
+    // 5-2: 자료구조 예시 (언어별 코드)
     {
       type: "reveal",
-      narr: t(E,
-        "defaultdict(int) works like magic — if you ask for a key that doesn't exist, it gives you 0!", "defaultdict(int)는 마법 같아 — 없는 키를 물어보면 자동으로 0을 줘요!"),
+      narr: lang === "cpp"
+        ? t(E,
+            "C++ trick: pre-fill a 2D vector with 0. Then xy[x][y]++ just works — no missing key worries.",
+            "C++ 트릭: 2D vector 를 0 으로 미리 채워둠. xy[x][y]++ 그대로 통함 — 없는 키 걱정 없음.")
+        : t(E,
+            "defaultdict(int) works like magic — if you ask for a key that doesn't exist, it gives you 0!",
+            "defaultdict(int) 는 마법 같아 — 없는 키를 물어보면 자동으로 0 을 줘요!"),
       content: (() => {
-        const lines = [
-          "from collections import defaultdict",
-          "",
-          "xy = defaultdict(int)",
-          t(E, "# xy[(3,5)] → auto 0!", "# xy[(3,5)] → 자동으로 0!"),
-          "xy[(3,5)] += 1",
-          t(E, "# xy[(3,5)] → now 1!", "# xy[(3,5)] → 이제 1!"),
-        ];
+        const lines = lang === "cpp"
+          ? [
+              "#include <vector>",
+              "using namespace std;",
+              "",
+              t(E, "// 2D vector pre-filled with 0", "// 0 으로 미리 채운 2D vector"),
+              "vector<vector<int>> xy(N, vector<int>(N, 0));",
+              "",
+              t(E, "// xy[3][5] is already 0", "// xy[3][5] 는 이미 0"),
+              "xy[3][5] += 1;",
+              t(E, "// xy[3][5] is now 1", "// xy[3][5] 는 이제 1"),
+            ]
+          : [
+              "from collections import defaultdict",
+              "",
+              "xy = defaultdict(int)",
+              t(E, "# xy[(3,5)] → auto 0!", "# xy[(3,5)] → 자동으로 0!"),
+              "xy[(3,5)] += 1",
+              t(E, "# xy[(3,5)] → now 1!", "# xy[(3,5)] → 이제 1!"),
+            ];
         return (
           <div style={{ padding: 12 }}>
             <div style={{ background: "#1e1b2e", borderRadius: 10, padding: "12px 10px", overflowX: "auto", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8 }}>
               {lines.map((l, i) => (
                 <div key={i} style={{ display: "flex", minHeight: 20 }}>
                   <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 8, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
-                  <span style={{ whiteSpace: "pre" }}>{highlight(l)}</span>
+                  <span style={{ whiteSpace: "pre" }}>{highlight(l, lang)}</span>
                 </div>
               ))}
             </div>
@@ -738,23 +892,29 @@ export function makeCheeseCh5(E, lang = "py") {
         "N! 그 줄의 블록이 전부 빠짐 → 완전히 빔 → 막대 들어감!"),
     },
 
-    // 5-4: 코드 읽기 퀴즈 — 변수 이름의 의미
+    // 5-4: 코드 읽기 퀴즈 — 변수 이름의 의미 (언어별 syntax)
     {
       type: "quiz",
-      narr: t(E,
-        "Quick check before code: xy[(x,y)] tracks removals for one specific row. Which direction?", "코드 보기 전 짧은 확인: xy[(x,y)]는 특정 줄의 제거 수를 세. 어떤 방향?"),
-      question: t(E,
-        "xy[(x,y)] counts removals on which row?",
-        "xy[(x,y)]는 어떤 방향의 줄?"),
-      hint: t(E, "If x and y are fixed, which axis is the row along?", "x와 y가 고정이면 줄이 뻗는 축은?"),
+      narr: lang === "cpp"
+        ? t(E,
+            "Quick check before the code: xy[x][y] tracks removals for one specific row. Which direction does that row run?",
+            "코드 보기 전 짧은 확인: xy[x][y] 는 특정 줄의 제거 수를 세요. 그 줄이 뻗는 방향은?")
+        : t(E,
+            "Quick check before the code: xy[(x,y)] tracks removals for one specific row. Which direction does that row run?",
+            "코드 보기 전 짧은 확인: xy[(x,y)] 는 특정 줄의 제거 수를 세요. 그 줄이 뻗는 방향은?"),
+      question: lang === "cpp"
+        ? t(E, "xy[x][y] counts removals on which row?", "xy[x][y] 는 어떤 방향의 줄?")
+        : t(E, "xy[(x,y)] counts removals on which row?", "xy[(x,y)] 는 어떤 방향의 줄?"),
+      hint: t(E, "If x and y are fixed, which axis is the row along?",
+                 "x 와 y 가 고정이면 줄이 뻗는 축은?"),
       options: [
-        t(E, "z-direction (x,y fixed → z varies)", "z-방향 (x,y 고정 → z가 변함)"),
+        t(E, "z-direction (x,y fixed → z varies)", "z-방향 (x,y 고정 → z 가 변함)"),
         t(E, "x-direction", "x-방향"),
         t(E, "y-direction", "y-방향"),
       ], correct: 0,
       explain: t(E,
-        "xy pair → z-direction row! The pair tells you which 2 axes are fixed.",
-        "xy 쌍 → z-방향 줄! 쌍이 어떤 2축이 고정인지 알려줘요."),
+        "The xy index → z-direction row! Fixing 2 axes means the row runs along the remaining one.",
+        "xy 인덱스 → z-방향 줄! 2 축이 고정되면 줄은 나머지 1 축으로 뻗어요."),
     },
 
     // 5-5: 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
