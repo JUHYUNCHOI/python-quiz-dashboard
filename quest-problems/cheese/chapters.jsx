@@ -806,7 +806,7 @@ export function makeCheeseCh4(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCheeseCh5(E, lang = "py") {
   return [
-    // 5-1: 자료구조 — 쉬운 비유
+    // 5-1: 자료구조 — 쉬운 비유 (언어별 도구 분기)
     {
       type: "reveal",
       narr: t(E,
@@ -823,33 +823,54 @@ export function makeCheeseCh5(E, lang = "py") {
               <div>📙 xz: <span style={{ color: C.dim }}>{t(E, "which (x,z) pair → y-direction row", "(x,z) 쌍 → y-방향 줄")}</span></div>
             </div>
             <div style={{ marginTop: 8, fontSize: 12, color: C.dim }}>
-              {t(E, "Python has a perfect tool: defaultdict(int) — auto-starts at 0!", "Python에 딱 맞는 도구: defaultdict(int) — 자동으로 0 시작!")}
+              {lang === "cpp"
+                ? t(E, "C++ uses a 2D vector pre-filled with 0 — clean indexing with [x][y].",
+                       "C++ 은 0 으로 미리 채운 2D vector — [x][y] 로 깔끔하게 접근.")
+                : t(E, "Python has a perfect tool: defaultdict(int) — auto-starts at 0!",
+                       "Python 에 딱 맞는 도구: defaultdict(int) — 자동으로 0 시작!")}
             </div>
           </div>
         </div>),
     },
 
-    // 5-2: defaultdict 예시
+    // 5-2: 자료구조 예시 (언어별 코드)
     {
       type: "reveal",
-      narr: t(E,
-        "defaultdict(int) works like magic — if you ask for a key that doesn't exist, it gives you 0!", "defaultdict(int)는 마법 같아 — 없는 키를 물어보면 자동으로 0을 줘요!"),
+      narr: lang === "cpp"
+        ? t(E,
+            "C++ trick: pre-fill a 2D vector with 0. Then xy[x][y]++ just works — no missing key worries.",
+            "C++ 트릭: 2D vector 를 0 으로 미리 채워둠. xy[x][y]++ 그대로 통함 — 없는 키 걱정 없음.")
+        : t(E,
+            "defaultdict(int) works like magic — if you ask for a key that doesn't exist, it gives you 0!",
+            "defaultdict(int) 는 마법 같아 — 없는 키를 물어보면 자동으로 0 을 줘요!"),
       content: (() => {
-        const lines = [
-          "from collections import defaultdict",
-          "",
-          "xy = defaultdict(int)",
-          t(E, "# xy[(3,5)] → auto 0!", "# xy[(3,5)] → 자동으로 0!"),
-          "xy[(3,5)] += 1",
-          t(E, "# xy[(3,5)] → now 1!", "# xy[(3,5)] → 이제 1!"),
-        ];
+        const lines = lang === "cpp"
+          ? [
+              "#include <vector>",
+              "using namespace std;",
+              "",
+              t(E, "// 2D vector pre-filled with 0", "// 0 으로 미리 채운 2D vector"),
+              "vector<vector<int>> xy(N, vector<int>(N, 0));",
+              "",
+              t(E, "// xy[3][5] is already 0", "// xy[3][5] 는 이미 0"),
+              "xy[3][5] += 1;",
+              t(E, "// xy[3][5] is now 1", "// xy[3][5] 는 이제 1"),
+            ]
+          : [
+              "from collections import defaultdict",
+              "",
+              "xy = defaultdict(int)",
+              t(E, "# xy[(3,5)] → auto 0!", "# xy[(3,5)] → 자동으로 0!"),
+              "xy[(3,5)] += 1",
+              t(E, "# xy[(3,5)] → now 1!", "# xy[(3,5)] → 이제 1!"),
+            ];
         return (
           <div style={{ padding: 12 }}>
             <div style={{ background: "#1e1b2e", borderRadius: 10, padding: "12px 10px", overflowX: "auto", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8 }}>
               {lines.map((l, i) => (
                 <div key={i} style={{ display: "flex", minHeight: 20 }}>
                   <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 8, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
-                  <span style={{ whiteSpace: "pre" }}>{highlight(l)}</span>
+                  <span style={{ whiteSpace: "pre" }}>{highlight(l, lang)}</span>
                 </div>
               ))}
             </div>
@@ -871,23 +892,29 @@ export function makeCheeseCh5(E, lang = "py") {
         "N! 그 줄의 블록이 전부 빠짐 → 완전히 빔 → 막대 들어감!"),
     },
 
-    // 5-4: 코드 읽기 퀴즈 — 변수 이름의 의미
+    // 5-4: 코드 읽기 퀴즈 — 변수 이름의 의미 (언어별 syntax)
     {
       type: "quiz",
-      narr: t(E,
-        "Quick check before code: xy[(x,y)] tracks removals for one specific row. Which direction?", "코드 보기 전 짧은 확인: xy[(x,y)]는 특정 줄의 제거 수를 세. 어떤 방향?"),
-      question: t(E,
-        "xy[(x,y)] counts removals on which row?",
-        "xy[(x,y)]는 어떤 방향의 줄?"),
-      hint: t(E, "If x and y are fixed, which axis is the row along?", "x와 y가 고정이면 줄이 뻗는 축은?"),
+      narr: lang === "cpp"
+        ? t(E,
+            "Quick check before the code: xy[x][y] tracks removals for one specific row. Which direction does that row run?",
+            "코드 보기 전 짧은 확인: xy[x][y] 는 특정 줄의 제거 수를 세요. 그 줄이 뻗는 방향은?")
+        : t(E,
+            "Quick check before the code: xy[(x,y)] tracks removals for one specific row. Which direction does that row run?",
+            "코드 보기 전 짧은 확인: xy[(x,y)] 는 특정 줄의 제거 수를 세요. 그 줄이 뻗는 방향은?"),
+      question: lang === "cpp"
+        ? t(E, "xy[x][y] counts removals on which row?", "xy[x][y] 는 어떤 방향의 줄?")
+        : t(E, "xy[(x,y)] counts removals on which row?", "xy[(x,y)] 는 어떤 방향의 줄?"),
+      hint: t(E, "If x and y are fixed, which axis is the row along?",
+                 "x 와 y 가 고정이면 줄이 뻗는 축은?"),
       options: [
-        t(E, "z-direction (x,y fixed → z varies)", "z-방향 (x,y 고정 → z가 변함)"),
+        t(E, "z-direction (x,y fixed → z varies)", "z-방향 (x,y 고정 → z 가 변함)"),
         t(E, "x-direction", "x-방향"),
         t(E, "y-direction", "y-방향"),
       ], correct: 0,
       explain: t(E,
-        "xy pair → z-direction row! The pair tells you which 2 axes are fixed.",
-        "xy 쌍 → z-방향 줄! 쌍이 어떤 2축이 고정인지 알려줘요."),
+        "The xy index → z-direction row! Fixing 2 axes means the row runs along the remaining one.",
+        "xy 인덱스 → z-방향 줄! 2 축이 고정되면 줄은 나머지 1 축으로 뻗어요."),
     },
 
     // 5-5: 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
