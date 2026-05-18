@@ -396,15 +396,82 @@ export function makeCheeseCh3(E) {
         </div>),
     },
 
-    // 3-6: 손으로 해보기 — (0,0,0) 제거
+    // 3-5a: 첫 carve 시각화 — input 페이지 직전에 그림으로 (학생 이해 보조)
+    {
+      type: "reveal",
+      narr: t(E,
+        "First carve: remove the block at (0,0,0). Watch the 3 counters tick up by 1 each.",
+        "첫 제거: (0,0,0) 블록을 빼요. 3개 카운터가 각각 +1 되는 걸 봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* Block being removed */}
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 14,
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: C.dim }}>
+              {t(E, "Carving:", "제거:")}
+            </span>
+            <span style={{
+              background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 8,
+              padding: "6px 12px", fontFamily: "'JetBrains Mono',monospace",
+              fontSize: 16, fontWeight: 900, color: "#dc2626",
+            }}>(0, 0, 0)</span>
+          </div>
+
+          {/* 3 counters animating 0 → 1 */}
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 8, letterSpacing: 0.3 }}>
+            {t(E, "3 ROW COUNTERS UPDATE", "3 줄의 카운터가 업데이트")}
+          </div>
+          <div style={{
+            display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 14,
+          }}>
+            {[
+              { dir: t(E, "x-axis row", "x-방향 줄"), color: "#22c55e" },
+              { dir: t(E, "y-axis row", "y-방향 줄"), color: "#3b82f6" },
+              { dir: t(E, "z-axis row", "z-방향 줄"), color: "#ef4444" },
+            ].map((c, i) => (
+              <div key={i} style={{
+                background: "#fff", border: `2px solid ${c.color}`, borderRadius: 12,
+                padding: "10px 12px", minWidth: 110, textAlign: "center",
+              }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: c.color, marginBottom: 6 }}>
+                  {c.dir}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+                  <span style={{ fontSize: 22, fontWeight: 900, color: C.dim }}>0</span>
+                  <span style={{ fontSize: 16, color: C.dim }}>→</span>
+                  <span style={{ fontSize: 22, fontWeight: 900, color: c.color }}>1</span>
+                </div>
+                <div style={{ fontSize: 10, color: "#dc2626", fontWeight: 700, marginTop: 4 }}>
+                  {t(E, "still < N=2", "아직 < N=2")}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Verdict */}
+          <div style={{
+            padding: "10px 14px",
+            background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10,
+            fontSize: 13, color: C.no, fontWeight: 800, textAlign: "center", lineHeight: 1.6,
+          }}>
+            {t(E,
+              "None of the counters reached N=2 yet → the rod still can't fit through any row.",
+              "어떤 카운터도 N=2 도달 안 함 → 아직 막대 통과하는 줄 없음.")}
+          </div>
+        </div>),
+    },
+    // 3-6: 손으로 해보기 — (0,0,0) 제거 (이제 위 시각 보고 답함)
     {
       type: "input",
       narr: t(E,
-        "Let's try it by hand!\nN=2.\nWe remove (0,0,0).\nIts 3 counters each go from 0 to 1.\nBut we need 2 to open a row.\nHow many rows opened?", "직접 손으로 해보자! N=2. (0,0,0)을 빼. 3개 카운터가 각각 0→1. 근데 줄이 뚫리려면 2가 필요해요. 뚫린 줄은 몇 개?"),
+        "Now you tell me: after carving (0,0,0), how many rows opened?",
+        "이제 답해봐요: (0,0,0) 빼고 나서, 뚫린 줄은 몇 개?"),
       question: t(E,
-        "(0,0,0) removed. All 3 counters = 1. Need 2 to open. Rows opened?",
-        "(0,0,0) 제거. 카운터 3개 전부 1. 2가 되어야 뚫림. 뚫린 줄?"),
-      hint: t(E, "1 is less than 2, so none opened!", "1은 2보다 작으니까 아직 안 뚫렸어!"),
+        "Rows opened after carving (0,0,0)?",
+        "(0,0,0) 빼고 나서 뚫린 줄?"),
+      hint: t(E, "All 3 counters are at 1, but we need to reach 2 (= N) to open a row.",
+                 "카운터 3개 다 1인데, 줄이 뚫리려면 2 (= N) 에 도달해야 함."),
       answer: 0,
     },
 
@@ -427,14 +494,80 @@ export function makeCheeseCh3(E) {
         </div>),
     },
 
-    // 3-8: 마지막 제거 — 3개 동시!
+    // 3-7a: 마지막 carve 시각화 — 3 개 동시 도달!
+    {
+      type: "reveal",
+      narr: t(E,
+        "Last carve: remove (1,1,0). This block's 3 counters were all at 1 already — now they all hit N=2 at the same time!",
+        "마지막 제거: (1,1,0). 이 블록의 카운터 3 개가 모두 이미 1 이었어요 — 이번에 *동시에* N=2 도달!"),
+      content: (
+        <div style={{ padding: 16 }}>
+          {/* Block */}
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 14,
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: C.dim }}>
+              {t(E, "Carving:", "제거:")}
+            </span>
+            <span style={{
+              background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 8,
+              padding: "6px 12px", fontFamily: "'JetBrains Mono',monospace",
+              fontSize: 16, fontWeight: 900, color: "#dc2626",
+            }}>(1, 1, 0)</span>
+          </div>
+
+          {/* 3 counters all hitting N=2 */}
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 8, letterSpacing: 0.3 }}>
+            {t(E, "ALL 3 COUNTERS REACH N AT ONCE!", "3 개 카운터가 동시에 N 도달!")}
+          </div>
+          <div style={{
+            display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 14,
+          }}>
+            {[
+              { dir: t(E, "x-axis row", "x-방향 줄"), color: "#22c55e" },
+              { dir: t(E, "y-axis row", "y-방향 줄"), color: "#3b82f6" },
+              { dir: t(E, "z-axis row", "z-방향 줄"), color: "#ef4444" },
+            ].map((c, i) => (
+              <div key={i} style={{
+                background: "#ecfdf5", border: `2px solid ${c.color}`, borderRadius: 12,
+                padding: "10px 12px", minWidth: 110, textAlign: "center",
+              }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: c.color, marginBottom: 6 }}>
+                  {c.dir}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+                  <span style={{ fontSize: 22, fontWeight: 900, color: C.dim }}>1</span>
+                  <span style={{ fontSize: 16, color: C.dim }}>→</span>
+                  <span style={{ fontSize: 22, fontWeight: 900, color: c.color }}>2</span>
+                </div>
+                <div style={{ fontSize: 12, color: "#10b981", fontWeight: 800, marginTop: 4 }}>
+                  ✓ {t(E, "= N", "= N")}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Verdict */}
+          <div style={{
+            padding: "10px 14px",
+            background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10,
+            fontSize: 13, color: C.ok, fontWeight: 800, textAlign: "center", lineHeight: 1.7,
+          }}>
+            🎉 {t(E,
+              "All 3 rows open at this single carve → +3 new open rows in one shot!",
+              "이 한 번의 제거로 3 줄 동시 뚫림 → +3 새로 열림!")}
+          </div>
+        </div>),
+    },
+    // 3-8: 마지막 제거 — input
     {
       type: "input",
       narr: t(E,
-        "Last one!\nRemove (1,1,0).\nThis block sits on 3 rows, and all 3 counters hit 2 at the same time!\nPrevious answer was 2.\nNow?", "마지막! (1,1,0) 제거. 이 블록이 있는 3줄의 카운터가 동시에 2에 도달! 이전 답이 2였어. 이제는?"),
+        "We had 2 rows open before this carve. Now +3 more. Total?",
+        "이번 제거 직전에 2 줄 뚫려 있었어요. 이번에 +3 더. 총 몇 줄?"),
       question: t(E,
-        "Previous: 2 rows open. Now +3 more. Total: 2 + 3 = ?",
-        "이전: 2줄 뚫림. 이제 +3개 추가. 합계: 2 + 3 = ?"),
+        "Previous: 2 rows open. After this carve: 2 + 3 = ?",
+        "이전: 2 줄 뚫림. 이번 제거 후: 2 + 3 = ?"),
       answer: 5,
     },
 
