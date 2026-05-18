@@ -114,13 +114,13 @@ export const OPT_CODE = [
   "print('\\n'.join(result))",
 ];
 
-export function MiniCode({ lines }) {
+export function MiniCode({ lines, lang = "py" }) {
   return (
     <div style={{ background: "#1e1b2e", borderRadius: 10, padding: "12px 10px", overflowX: "auto", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8 }}>
       {lines.map((l, i) => (
         <div key={i} style={{ display: "flex", minHeight: 20 }}>
           <span style={{ color: "#4b5563", width: 24, textAlign: "right", marginRight: 8, flexShrink: 0, userSelect: "none", fontSize: 10 }}>{i + 1}</span>
-          <span style={{ whiteSpace: "pre" }}>{highlight(l, "py")}</span>
+          <span style={{ whiteSpace: "pre" }}>{highlight(l, lang)}</span>
         </div>
       ))}
     </div>
