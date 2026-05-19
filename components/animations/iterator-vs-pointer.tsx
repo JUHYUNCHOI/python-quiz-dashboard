@@ -81,7 +81,7 @@ export function IteratorVsPointer() {
               fontFamily: "sans-serif",
             }}
           >
-            {m === "vector" ? "📦 vector (메모리 연속)" : "🕸️ list (메모리 흩어짐)"}
+            {m === "vector" ? "📦 vector / 배열 (int a[N])" : "🕸️ std::list (linked list — 노드 연결)"}
           </button>
         ))}
       </div>
@@ -303,17 +303,19 @@ export function IteratorVsPointer() {
       >
         {mode === "vector" ? (
           <>
-            👀 <b>지금은 같아 보여요</b> — vector 에선 메모리가 연속이라서 포인터와 이터레이터가 똑같이 동작.
+            👀 <b>지금은 같아 보여요</b> — <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>vector</code> 나 <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>int a[N]</code> 같은 *배열* 은 메모리가 *연속* 이라서 포인터·이터레이터 동작 동일.
             <br />
-            <b>🕸 list 모드로 바꿔보세요</b> — 거기서 차이가 *극명*하게 보여요.
+            <b>🕸 std::list 모드로 바꿔보세요</b> — 그게 진짜 차이가 나는 자료구조예요.
           </>
         ) : (
           <>
-            ⚠️ <b>이제 차이가 보이죠!</b> list 는 메모리가 흩어져 있어요.
+            ⚠️ <b>이제 차이가 보이죠!</b>
             <br />
-            포인터는 *주소 + 4* 만 알아 → 엉뚱한 자리로 감 (메모리 망가짐).
+            <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>std::list</code> = <b>linked list</b> 라는 자료구조. 노드 (값 1 개씩) 들이 메모리 여기저기 *흩어져* 있고, 각 노드가 다음 노드의 주소를 따로 들고 있어요. <i>int a[N] 같은 배열이랑 *다름*</i>.
             <br />
-            이터레이터는 <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>node-&gt;next</code> 따라가서 *진짜* 다음 자리로 감.
+            • 포인터는 *주소 + 4* 만 알아 → 엉뚱한 자리 (메모리 망가짐).
+            <br />
+            • 이터레이터는 <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>node-&gt;next</code> 따라가서 *진짜* 다음 자리로 감.
           </>
         )}
       </div>
