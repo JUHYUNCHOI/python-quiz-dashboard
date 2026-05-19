@@ -253,7 +253,7 @@ export function IteratorVsPointer() {
           }}
         >
           <div style={{ fontWeight: 800, color: "#991b1b", marginBottom: 4 }}>
-            🔻 Pointer (\`p\`)
+            🔻 Pointer <span style={{ fontFamily: "ui-monospace, monospace", background: "#fee2e2", padding: "1px 6px", borderRadius: 4, fontSize: 11 }}>p</span>
           </div>
           <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5 }}>
             현재 주소: <b>@{ptrAddr}</b>
@@ -272,7 +272,7 @@ export function IteratorVsPointer() {
           }}
         >
           <div style={{ fontWeight: 800, color: "#166534", marginBottom: 4 }}>
-            🟢 Iterator (`it`)
+            🟢 Iterator <span style={{ fontFamily: "ui-monospace, monospace", background: "#dcfce7", padding: "1px 6px", borderRadius: 4, fontSize: 11 }}>it</span>
           </div>
           <div style={{ fontSize: 12, color: "#14532d", lineHeight: 1.5 }}>
             현재 주소: <b>@{itAddr}</b>
@@ -284,6 +284,38 @@ export function IteratorVsPointer() {
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Context note — 두 박스 의미 안내 */}
+      <div
+        style={{
+          background: mode === "vector" ? "#fffbeb" : "#fef2f2",
+          border: `1.5px solid ${mode === "vector" ? "#fde68a" : "#fecaca"}`,
+          borderRadius: 8,
+          padding: "10px 14px",
+          marginBottom: 14,
+          fontFamily: "sans-serif",
+          fontSize: 13,
+          color: mode === "vector" ? "#92400e" : "#991b1b",
+          lineHeight: 1.7,
+          fontWeight: 600,
+        }}
+      >
+        {mode === "vector" ? (
+          <>
+            👀 <b>지금은 같아 보여요</b> — vector 에선 메모리가 연속이라서 포인터와 이터레이터가 똑같이 동작.
+            <br />
+            <b>🕸 list 모드로 바꿔보세요</b> — 거기서 차이가 *극명*하게 보여요.
+          </>
+        ) : (
+          <>
+            ⚠️ <b>이제 차이가 보이죠!</b> list 는 메모리가 흩어져 있어요.
+            <br />
+            포인터는 *주소 + 4* 만 알아 → 엉뚱한 자리로 감 (메모리 망가짐).
+            <br />
+            이터레이터는 <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>node-&gt;next</code> 따라가서 *진짜* 다음 자리로 감.
+          </>
+        )}
       </div>
 
       {/* 버튼 */}
