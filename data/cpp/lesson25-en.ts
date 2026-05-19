@@ -186,21 +186,17 @@ cout << it - v.begin();  // 3    ← convert to index
 \`lower_bound\` and \`find\` return \`v.end()\` when the value isn't there (= "the end marker"). Reading that slot with \`*it\` is **dangerous** — there's no value there.
 
 \`\`\`cpp
+// find / lower_bound / upper_bound — all return positions
 auto it = lower_bound(v.begin(), v.end(), x);
-if (it != v.end()) {        // ← always check
-    cout << *it;             // safe
+
+if (it != v.end()) {        // ← always check (v.end() = not found)
+    cout << *it;             // safe to read
 } else {
     cout << "not found";
 }
 \`\`\`
 
-> 💡 **Memorize this pattern** — every time you use \`find\`, \`lower_bound\`, or \`upper_bound\` (any function that returns a position), the shape is the same:
->
-> 1️⃣ \`auto it = lower_bound(...);\` ← call the function (\`find\` / \`upper_bound\` same shape)
-> 2️⃣ \`if (it != v.end())\` ← **always** check 'not found' first
-> 3️⃣ \`{ use *it safely }\` ← only read the value after the check passes
->
-> These 3 steps cover 90% of iterator code. (Using \`*it\` without the check corrupts memory when not found!)
+> 💡 **Memorize this shape.** Same pattern for \`find\` / \`lower_bound\` / \`upper_bound\`. Skipping the \`v.end()\` check before \`*it\` corrupts memory.
 
 ---
 

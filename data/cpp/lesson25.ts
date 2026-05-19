@@ -186,21 +186,17 @@ cout << it - v.begin();  // 3    ← 인덱스로 변환
 \`lower_bound\` 나 \`find\` 가 못 찾으면 \`v.end()\` 를 돌려줘요 (= "끝 표시"). 그 자리를 \`*it\` 로 읽으려 하면 **위험** — 값이 없는 자리니까.
 
 \`\`\`cpp
+// find / lower_bound / upper_bound — 위치를 돌려주는 함수들
 auto it = lower_bound(v.begin(), v.end(), x);
-if (it != v.end()) {        // ← 반드시 체크
-    cout << *it;             // 안전
+
+if (it != v.end()) {        // ← 반드시 체크 (못 찾았으면 v.end())
+    cout << *it;             // 안전하게 값 읽기
 } else {
     cout << "없음";
 }
 \`\`\`
 
-> 💡 **이 패턴, 반드시 외우기** — \`find\`, \`lower_bound\`, \`upper_bound\` 처럼 *위치를 돌려주는* 함수 쓸 때마다 같은 모양:
->
-> 1️⃣ \`auto it = lower_bound(...);\` ← 함수 호출 (find / upper_bound 도 같음)
-> 2️⃣ \`if (it != v.end())\` ← **반드시** 못 찾았는지 먼저 체크
-> 3️⃣ \`{ *it 안전하게 사용 }\` ← 체크 통과해야만 \`*it\` 으로 값 읽음
->
-> 이 3 단계가 90% 의 이터레이터 코드. (\`*it\` 을 그냥 쓰면 못 찾았을 때 메모리 망가짐!)
+> 💡 **이 모양 통째 외우기.** \`find\` / \`lower_bound\` / \`upper_bound\` 다 동일. \`*it\` 쓰기 전 \`v.end()\` 체크 안 하면 메모리 망가짐.
 
 ---
 
