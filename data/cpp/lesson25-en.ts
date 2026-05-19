@@ -194,7 +194,13 @@ if (it != v.end()) {        // ← always check
 }
 \`\`\`
 
-> 💡 Memorize the pattern: \`auto it = ...; if (it != v.end()) { ... }\`. That one line keeps 90% of iterator code safe.
+> 💡 **Memorize this pattern** — every time you use \`find\`, \`lower_bound\`, or \`upper_bound\` (any function that returns a position), the shape is the same:
+>
+> 1️⃣ \`auto it = lower_bound(...);\` ← call the function (\`find\` / \`upper_bound\` same shape)
+> 2️⃣ \`if (it != v.end())\` ← **always** check 'not found' first
+> 3️⃣ \`{ use *it safely }\` ← only read the value after the check passes
+>
+> These 3 steps cover 90% of iterator code. (Using \`*it\` without the check corrupts memory when not found!)
 
 ---
 
