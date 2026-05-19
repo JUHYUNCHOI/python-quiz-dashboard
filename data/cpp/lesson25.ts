@@ -333,9 +333,9 @@ v.insert(lower_bound(v.begin(), v.end(), x), x);
           content: "정렬된 점수 배열에서 **70 점 이상 첫 학생** 의 점수를 출력해봐요.",
           code: "vector<int> scores = {45, 60, 72, 85, 91};\nauto it = ___(scores.begin(), scores.end(), 70);\ncout << *it;  // 72 출력",
           fillBlanks: [
-            { id: 0, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "find"] }
+            { id: 0, answer: "lower_bound", acceptedAnswers: ["lower_bound", "upper_bound"], options: ["lower_bound", "upper_bound", "binary_search", "find"] }
           ],
-          explanation: "**lower_bound(scores, 70)** 가 \"70 이상 첫 위치\" 를 돌려줘요. \\*it 로 그 자리의 값 (72) 을 봐요. \\`find\\` 는 정확히 70 만 찾으므로 ❌, \\`binary_search\\` 는 bool 만 돌려주므로 ❌."
+          explanation: "**lower_bound** 는 \"70 이상 첫 위치\", **upper_bound** 는 \"70 초과 첫 위치\" 를 돌려줘요. 배열에 70 이 없으니 **둘 다 똑같이 72 자리** 를 가리켜서 정답이에요. `*it` 로 그 자리의 값 (72) 을 보면 됩니다. `find` 는 정확히 70 만 찾으므로 ❌, `binary_search` 는 bool 만 돌려주므로 ❌."
         },
         {
           id: "s23-ch2-lb-patterns",

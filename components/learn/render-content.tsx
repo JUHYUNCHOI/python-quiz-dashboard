@@ -73,7 +73,7 @@ const COLOR_BG_MAP: Record<string, string> = {
 // ============================================
 // 인라인 마크다운 헬퍼: `code` + **bold** + {color:text} 처리
 // ============================================
-function renderInlineMarkdown(text: string, keyPrefix: string = ""): React.ReactNode[] {
+export function renderInlineMarkdown(text: string, keyPrefix: string = ""): React.ReactNode[] {
   // 1단계: {color:text} 컬러 태그 + `code` + **bold** 통합 분리
   const colorTagPattern = /(\{(?:pink|red|blue|sky|green|teal|purple|orange|amber|indigo):[^}]+\})/g
   const segments = text.split(colorTagPattern)
