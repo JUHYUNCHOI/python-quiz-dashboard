@@ -323,9 +323,9 @@ export function PythonRunner({
 
   return (
     <div className="space-y-3">
-      {/* 문제 */}
+      {/* 문제 — sticky 로 코드 입력 중에도 항상 보임 (작은 화면 대응) */}
       {task && (
-        <div className="bg-indigo-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
+        <div className="sticky top-[110px] md:top-[120px] z-10 bg-indigo-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
           <p className="text-indigo-800 font-bold text-sm md:text-base">🎯 {task}</p>
         </div>
       )}

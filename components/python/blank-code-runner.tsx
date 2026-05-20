@@ -499,16 +499,16 @@ export function BlankCodeRunner({
 
   return (
     <div className="space-y-3">
-      {/* 문제 */}
+      {/* 문제 — sticky 로 코드 입력 중에도 항상 보임 (작은 iPad 화면 대응) */}
       {task && !expectedOutput && (
-        <div className="bg-indigo-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
+        <div className="sticky top-[110px] md:top-[120px] z-10 bg-indigo-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
           <p className="text-indigo-800 font-bold text-sm md:text-base">🎯 {task}</p>
         </div>
       )}
 
-      {/* 기대 출력 미리보기 — 빈칸에 뭘 넣어야 하는지 유추 가능 */}
+      {/* 기대 출력 미리보기 — 빈칸에 뭘 넣어야 하는지 유추 가능. sticky 로 항상 보임. */}
       {expectedOutput && (
-        <div className="bg-amber-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-amber-200">
+        <div className="sticky top-[110px] md:top-[120px] z-10 bg-amber-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-amber-200">
           <p className="text-amber-700 font-bold text-xs md:text-sm mb-1">{t("📋 이렇게 출력되도록 빈칸을 채우세요:", "📋 Fill in the blanks to get this output:")}</p>
           <pre className="font-mono text-xs md:text-sm text-amber-900 whitespace-pre-wrap bg-amber-100/50 rounded-md p-2 select-all cursor-text">{expectedOutput}</pre>
           {/[^\x00-\x7F]/.test(expectedOutput) && (

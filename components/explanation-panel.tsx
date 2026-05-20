@@ -9,6 +9,16 @@ import { CodeDisplay } from "./code-display"
 import { useLanguage } from "@/contexts/language-context"
 import registry from "./learn/component-registry"
 
+// DB 에 escape 된 채로 들어온 옵션 문자열을 학생이 읽기 쉽도록 변환.
+// 예: "line1\nline3" (2글자: \, n) → 진짜 개행. whitespace-pre-wrap 과 함께 사용.
+function unescapeOutput(s: string): string {
+  if (!s) return s
+  return s
+    .replace(/\\n/g, "\n")
+    .replace(/\\t/g, "\t")
+    .replace(/\\\\/g, "\\")
+}
+
 interface ExplanationPanelProps {
   show: boolean
   yourAnswer: string
@@ -100,9 +110,9 @@ export function ExplanationPanel({
               </div>
               <div className="flex-1">
                 <h4 className="font-bold text-red-900 mb-2 text-base md:text-lg">{t("선택한 답", "Your Answer")}</h4>
-                <p className="font-mono text-sm md:text-base text-red-800 mb-3 bg-white/70 rounded-lg p-3">
-                  {yourAnswer}
-                </p>
+                <pre className="font-mono text-sm md:text-base text-red-800 mb-3 bg-white/70 rounded-lg p-3 whitespace-pre-wrap break-words">
+                  {unescapeOutput(yourAnswer)}
+                </pre>
                 <p className="text-sm md:text-base text-red-700 leading-relaxed">{explanation}</p>
               </div>
             </div>
@@ -115,9 +125,9 @@ export function ExplanationPanel({
               </div>
               <div className="flex-1">
                 <h4 className="font-bold text-green-900 mb-2 text-base md:text-lg">{t("정답", "Correct Answer")}</h4>
-                <p className="font-mono text-sm md:text-base text-green-800 bg-white/70 rounded-lg p-3">
-                  {correctAnswer}
-                </p>
+                <pre className="font-mono text-sm md:text-base text-green-800 bg-white/70 rounded-lg p-3 whitespace-pre-wrap break-words">
+                  {unescapeOutput(correctAnswer)}
+                </pre>
               </div>
             </div>
           </Card>
