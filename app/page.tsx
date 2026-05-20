@@ -186,15 +186,24 @@ function LandingPage() {
               "A step-by-step coding roadmap for middle & high schoolers.\nAt your own pace, with your teacher."
             )}
           </p>
-          <Link
-            href="/login"
-            className="inline-block mt-1 px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
-          >
-            {t("무료로 시작하기 →", "Get Started Free →")}
-          </Link>
+          {/* 듀얼 CTA — 가입 / 비로그인 체험 (audit R1 + R2) */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center items-center pt-1">
+            <Link
+              href="/login"
+              className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+            >
+              {t("무료로 시작하기 →", "Get Started Free →")}
+            </Link>
+            <Link
+              href="/learn/1"
+              className="inline-block px-6 py-3 rounded-2xl bg-white text-gray-700 font-bold text-sm border-2 border-gray-300 hover:border-orange-400 hover:text-orange-600 transition-all"
+            >
+              {t("샘플 레슨 먼저 보기", "Try a sample lesson")}
+            </Link>
+          </div>
           {/* 무료 신뢰선 — 광고 유입자 "혹시 나중에 결제?" 불안 해소 (audit R2) */}
           <p className="text-[11px] font-medium text-gray-500 pt-1">
-            {t("✅ 100% 무료 · 결제 정보 안 받아요", "✅ 100% free · No payment info needed")}
+            {t("✅ 100% 무료 · 결제 정보 안 받아요 · 가입 없이 1강 체험 가능", "✅ 100% free · No payment info · Try Lesson 1 without signup")}
           </p>
         </div>
 

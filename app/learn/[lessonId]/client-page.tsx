@@ -63,9 +63,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const { user, profile, isAuthenticated, isLoading: authLoading } = useAuth()
   const isTeacher = profile?.role === "teacher"
 
+  // /learn/1 은 비로그인 체험 허용 (audit R1). 그 외 레슨은 로그인 필수.
+  const isPreviewLesson = lessonId === "1"
   useEffect(() => {
-    if (!authLoading && !user) router.replace("/login")
-  }, [user, authLoading, router])
+    if (!authLoading && !user && !isPreviewLesson) router.replace("/login")
+  }, [user, authLoading, router, isPreviewLesson])
 
 
   // Supabase 진도 동기화
@@ -1042,7 +1044,25 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     <CodeSubmissionProvider lessonId={lessonId}>
       <Confetti show={showConfetti} />
       <SuccessOverlay show={showSuccess} message={successMessage} onClose={closeSuccessOverlay} />
-      
+
+      {/* 비로그인 체험 배너 — /learn/1 에서만, 로그인 안 된 사용자에게 (audit R1) */}
+      {isPreviewLesson && !authLoading && !user && (
+        <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-wrap items-center justify-center sm:justify-between gap-2 text-xs sm:text-sm">
+            <p className="font-medium">
+              <span className="font-bold">{t("🎁 무료 샘플 레슨", "🎁 Free sample lesson")}</span>
+              <span className="opacity-90"> — {t("진도 저장 + 다음 레슨은 가입 후에", "Sign up to save progress and continue")}</span>
+            </p>
+            <a
+              href="/login?returnTo=%2Flearn%2F1"
+              className="px-3 py-1 rounded-full bg-white text-emerald-600 font-bold hover:bg-emerald-50 transition-colors whitespace-nowrap"
+            >
+              {t("무료 가입 →", "Sign up free →")}
+            </a>
+          </div>
+        </div>
+      )}
+
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-indigo-50/30">
         {/* 상단 헤더 */}
         <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm">
