@@ -197,6 +197,26 @@ print(text.count("a"))  # 3
           hint2: "text.count(\"a\")"
         },
         {
+          id: "try-count-scratch",
+          type: "tryit",
+          title: "✋ Type it yourself — count from scratch",
+          task: "Count how many times 'is' appears in the sentence. Write the whole print line yourself!",
+          initialCode: "text = \"This is fun and this is hard but this is mine\"\n# Write a print line here yourself\n",
+          expectedOutput: "3",
+          hint: "Write print( text.count(\"is\") )",
+          hint2: "print(text.count(\"is\"))"
+        },
+        {
+          id: "try-count-word",
+          type: "tryit",
+          title: "✋ Counting words too",
+          task: "count() works with full words too — count 'banana' in the sentence.",
+          initialCode: "text = \"banana smoothie with banana chips and banana bread\"\n# Print how many times 'banana' appears\n",
+          expectedOutput: "3",
+          hint: "Pass the full word: text.count(\"banana\")",
+          hint2: "print(text.count(\"banana\"))"
+        },
+        {
           id: "len-explain",
           type: "explain",
           title: "📏 len() - Get the Length",

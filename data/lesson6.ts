@@ -197,6 +197,26 @@ print(text.count("a"))  # 3
           hint2: "text.count(\"a\")"
         },
         {
+          id: "try-count-scratch",
+          type: "tryit",
+          title: "✋ 손으로 직접 — count 처음부터",
+          task: "문장에서 '는' 글자가 몇 번 나오는지 세서 출력해봐. print 한 줄을 직접 써보자!",
+          initialCode: "text = \"나는 코딩을 배우는 중이고 나는 멋지다\"\n# 여기에 print 한 줄을 직접 써봐\n",
+          expectedOutput: "3",
+          hint: "print( text.count(\"는\") ) 모양으로 써요",
+          hint2: "print(text.count(\"는\"))"
+        },
+        {
+          id: "try-count-word",
+          type: "tryit",
+          title: "✋ 단어도 셀 수 있어",
+          task: "한 글자 말고 '바나나' 같은 단어도 count 로 세지요. 'banana' 가 몇 번 나오는지 세서 출력해봐.",
+          initialCode: "text = \"banana smoothie with banana chips and banana bread\"\n# print 한 줄로 'banana' 횟수 출력!\n",
+          expectedOutput: "3",
+          hint: "글자 대신 단어를 넣어요: text.count(\"banana\")",
+          hint2: "print(text.count(\"banana\"))"
+        },
+        {
           id: "len-explain",
           type: "explain",
           title: "📏 len() - 길이 구하기",

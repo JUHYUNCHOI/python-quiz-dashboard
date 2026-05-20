@@ -1253,7 +1253,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
         {/* 메인 콘텐츠 */}
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
-          <div data-learn-content className="relative bg-white rounded-2xl p-6 pb-28 md:p-10 md:pb-28 shadow-sm">
+          <div data-learn-content className="relative bg-white rounded-2xl p-6 pb-40 md:p-10 md:pb-32 shadow-sm">
             {/* 선생님 전용 편집 버튼 */}
             {effectiveTeacher && mergedStep && (
               <button
@@ -1285,6 +1285,13 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             />
           </div>
         </div>
+
+        {/* 하단 광고 — 컨텐츠 흐름 안에. fixed 네비 위에 자연스럽게 보임. 비로그인 only. */}
+        {isPreviewLesson && (
+          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <AdSlot name="learnBottom" format="responsive" />
+          </div>
+        )}
 
         <div className="h-10" />
       </div>
@@ -1351,12 +1358,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             })()}
           </div>
         </div>
-        {/* 하단 광고 — 비로그인 사용자에게만 (AdSlot 자체가 user 체크). 모바일 bottom-nav 위. */}
-        {isPreviewLesson && (
-          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-4">
-            <AdSlot name="learnBottom" format="responsive" />
-          </div>
-        )}
       </div>
     {editingStep && (
       <StepEditor
