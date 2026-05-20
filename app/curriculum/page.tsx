@@ -930,7 +930,11 @@ export default function CurriculumPage() {
                         className="bg-green-500 text-white px-6 py-3 rounded-xl border-2 border-black font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                       >
                         <Sparkles className="h-5 w-5" />
-                        <span className="hidden sm:inline">{t("다음:", "Next:")}</span> {nextLessonInfo.lesson.title}
+                        <span className="hidden sm:inline">
+                          {completedCount === 0
+                            ? t("여기서 시작:", "Start here:")
+                            : t("다음:", "Next:")}
+                        </span> {nextLessonInfo.lesson.title}
                         <Play className="h-5 w-5" />
                       </Link>
                     )}
