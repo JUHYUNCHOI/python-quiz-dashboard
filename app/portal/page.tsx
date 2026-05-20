@@ -445,54 +445,32 @@ function PortalContent() {
           </button>
         </div>
 
-        {/* 첫 방문자 CTA — 완료한 레슨 0개일 때만 "여기서 시작" 큰 버튼 노출.
-            광고 유입 신규 사용자 막막함 해소 (audit R3). */}
-        {!loading && completedIds.size === 0 && !isTeacher && (
-          <button
-            onClick={() => router.push("/learn/1")}
-            className="w-full p-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-200 hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all text-left"
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-3xl">🚀</span>
-              <div className="flex-1">
-                <p className="text-xs font-bold opacity-90 mb-0.5">
-                  {t("처음이세요?", "First time?")}
-                </p>
-                <p className="text-base font-black leading-tight">
-                  {t("Python 1강부터 시작해보세요", "Start with Python Lesson 1")}
-                </p>
-                <p className="text-[11px] font-medium opacity-90 mt-1">
-                  {t("15분이면 첫 코딩 끝나요 →", "Your first code in 15 minutes →")}
-                </p>
-              </div>
-            </div>
-          </button>
+        {/* 빠른 이동 — 진도 있는 학생에게만 (신규는 학습 여정 카드의 큰 CTA 만 보임) */}
+        {completedIds.size > 0 && (
+          <div className="grid grid-cols-3 gap-2">
+            {([
+              { platform: "coderin",   emoji: "📚", labelKo: "배우기",  labelEn: "Learn"     },
+              { platform: "algorithm", emoji: "🧩", labelKo: "풀기",    labelEn: "Practice"  },
+              { platform: "codequest", emoji: "🏆", labelKo: "겨루기",  labelEn: "Compete"   },
+            ] as const).map(({ platform, emoji, labelKo, labelEn }) => {
+              const label = t(labelKo, labelEn)
+              const pStyle = PLATFORM_STYLES[platform]
+              return (
+                <button
+                  key={platform}
+                  onClick={() => navigateTo(platform, "")}
+                  className={cn(
+                    "rounded-xl p-3 text-center border transition-all hover:shadow-sm",
+                    pStyle.border, "bg-white"
+                  )}
+                >
+                  <span className="text-2xl block mb-1">{emoji}</span>
+                  <span className="text-[11px] font-bold text-gray-700">{label}</span>
+                </button>
+              )
+            })}
+          </div>
         )}
-
-        {/* 빠른 이동 */}
-        <div className="grid grid-cols-3 gap-2">
-          {([
-            { platform: "coderin",   emoji: "📚", labelKo: "배우기",  labelEn: "Learn"     },
-            { platform: "algorithm", emoji: "🧩", labelKo: "풀기",    labelEn: "Practice"  },
-            { platform: "codequest", emoji: "🏆", labelKo: "겨루기",  labelEn: "Compete"   },
-          ] as const).map(({ platform, emoji, labelKo, labelEn }) => {
-            const label = t(labelKo, labelEn)
-            const pStyle = PLATFORM_STYLES[platform]
-            return (
-              <button
-                key={platform}
-                onClick={() => navigateTo(platform, "")}
-                className={cn(
-                  "rounded-xl p-3 text-center border transition-all hover:shadow-sm",
-                  pStyle.border, "bg-white"
-                )}
-              >
-                <span className="text-2xl block mb-1">{emoji}</span>
-                <span className="text-[11px] font-bold text-gray-700">{label}</span>
-              </button>
-            )
-          })}
-        </div>
 
         {/* 부모님 리포트 공유 — 반 가입 학생 / 선생님에게만 노출 (solo 학생은 혼란 가능) */}
         {(inClass || isTeacher) && (
@@ -547,43 +525,45 @@ function PortalContent() {
               }
 
               if (status === "active") {
-                // ── 현재 진행 중 카드 (크게) ──────────────────────────────
+                // ── 현재 진행 중 카드 — 큰 CTA 가 카드 최상단, 그 아래 작은 진도 ──
+                const isFresh = done === 0
                 return (
                   <div key={stage.id} className="relative rounded-2xl border-2 border-orange-300 bg-white shadow-md p-4 transition-all">
                     {!isFirst && <div className="absolute -top-2 left-6 w-0.5 h-2 bg-gray-200" />}
-                    <div className="flex items-center gap-3">
-                      <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl flex-shrink-0">
-                        {stage.emoji}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <p className="text-base font-black text-gray-900">{lang === "en" ? stage.labelEn : stage.label}</p>
-                          <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded-full", pStyle.badge)}>
-                            {stage.platform === "coderin" ? "Coderin" :
-                             stage.platform === "algorithm" ? "Algorithm Lab" : "CodeQuest"}
-                          </span>
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-600">{t("진행 중", "In Progress")}</span>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-0.5">{lang === "en" ? stage.descEn : stage.desc}</p>
-                        {total > 0 && (
-                          <div className="flex items-center gap-2 mt-2">
-                            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                              <div className="h-full rounded-full bg-orange-400 transition-all" style={{ width: `${pct}%` }} />
-                            </div>
-                            <span className="text-xs font-bold text-orange-500 flex-shrink-0">{done}/{total}</span>
-                          </div>
-                        )}
-                        {stage.platform === "codequest" && cqCount > 0 && (
-                          <p className="text-xs text-purple-600 font-semibold mt-1">🏆 {t(`${cqCount}문제 완료`, `${cqCount} solved`)}</p>
-                        )}
-                      </div>
+                    {/* 헤더 — 한 줄 압축 (제목 + 진행중 배지) */}
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <span className="text-2xl">{stage.emoji}</span>
+                      <p className="text-base font-black text-gray-900 flex-1">
+                        {lang === "en" ? stage.labelEn : stage.label}
+                      </p>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-600 whitespace-nowrap">
+                        {isFresh ? t("시작 전", "Not started") : t("진행 중", "In progress")}
+                      </span>
                     </div>
+                    {/* primary CTA — 카드 위에 크게 */}
                     <button
                       onClick={() => navigateTo(stage.platform, stage.id)}
-                      className="mt-3 w-full py-2.5 rounded-xl text-sm font-black bg-orange-500 text-white hover:bg-orange-600 transition-all"
+                      className="w-full py-3.5 rounded-xl text-base font-black bg-orange-500 text-white hover:bg-orange-600 shadow-lg shadow-orange-200/60 hover:shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                     >
-                      {t("계속하기 →", "Continue →")}
+                      <span className="text-lg">▶</span>
+                      <span>
+                        {isFresh
+                          ? t("지금 시작하기", "Start now")
+                          : t("이어서 학습하기", "Continue learning")}
+                      </span>
                     </button>
+                    {/* 진도 + 설명 — 작게, CTA 아래 */}
+                    {total > 0 && (
+                      <div className="flex items-center gap-2 mt-3">
+                        <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                          <div className="h-full rounded-full bg-orange-400 transition-all" style={{ width: `${pct}%` }} />
+                        </div>
+                        <span className="text-xs font-bold text-orange-500 flex-shrink-0">{done}/{total}</span>
+                      </div>
+                    )}
+                    {stage.platform === "codequest" && cqCount > 0 && (
+                      <p className="text-xs text-purple-600 font-semibold mt-1.5">🏆 {t(`${cqCount}문제 완료`, `${cqCount} solved`)}</p>
+                    )}
                   </div>
                 )
               }
