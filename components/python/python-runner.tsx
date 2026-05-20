@@ -7,6 +7,7 @@ import { highlightPython } from "@/components/ui/code-block"
 import { useCodeSubmission } from "@/contexts/code-submission-context"
 import { useLanguage } from "@/contexts/language-context"
 import { createSmartKeyHandler } from "@/components/cpp/editor-key-handler"
+import { renderInlineMarkdown } from "@/components/learn/render-content"
 
 // Pyodide 타입 정의
 declare global {
@@ -492,7 +493,7 @@ export function PythonRunner({
             <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-600" />
             <span className="font-bold text-purple-700 text-xs md:text-sm">💡 {t("힌트!", "Hint!")}</span>
           </div>
-          <p className="text-purple-800 font-mono text-xs md:text-sm">{hint}</p>
+          <p className="text-purple-800 text-xs md:text-sm whitespace-pre-wrap">{renderInlineMarkdown(hint, "h1-")}</p>
         </div>
       )}
 

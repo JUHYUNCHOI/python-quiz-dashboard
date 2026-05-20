@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { CodeDisplay } from "./code-display"
 import { useLanguage } from "@/contexts/language-context"
+import { renderInlineMarkdown } from "./learn/render-content"
 import registry from "./learn/component-registry"
 
 // DB 에 escape 된 채로 들어온 옵션 문자열을 학생이 읽기 쉽도록 변환.
@@ -17,6 +18,13 @@ function unescapeOutput(s: string): string {
     .replace(/\\n/g, "\n")
     .replace(/\\t/g, "\t")
     .replace(/\\\\/g, "\\")
+}
+
+// 설명/힌트 텍스트는 inline markdown (`code`, **bold**) + escape 변환 둘 다 필요.
+// renderInlineMarkdown 은 React 노드 배열을 돌려주므로 부모는 React.ReactNode 받아야 함.
+function renderInlineText(s: string, keyPrefix = ""): React.ReactNode {
+  if (!s) return s
+  return renderInlineMarkdown(unescapeOutput(s), keyPrefix)
 }
 
 interface ExplanationPanelProps {
@@ -113,7 +121,7 @@ export function ExplanationPanel({
                 <pre className="font-mono text-sm md:text-base text-red-800 mb-3 bg-white/70 rounded-lg p-3 whitespace-pre-wrap break-words">
                   {unescapeOutput(yourAnswer)}
                 </pre>
-                <p className="text-sm md:text-base text-red-700 leading-relaxed">{explanation}</p>
+                <p className="text-sm md:text-base text-red-700 leading-relaxed whitespace-pre-wrap">{renderInlineText(explanation, "exp-")}</p>
               </div>
             </div>
           </Card>
@@ -170,8 +178,8 @@ export function ExplanationPanel({
               <div className="text-3xl md:text-4xl">💡</div>
               <div className="flex-1">
                 <h4 className="font-bold text-yellow-900 mb-2 text-base md:text-lg">{t("기억하세요!", "Remember!")}</h4>
-                <p className="font-semibold text-yellow-800 mb-2">{keyConceptTitle}</p>
-                <p className="text-sm md:text-base text-yellow-700 leading-relaxed">{keyConceptDescription}</p>
+                <p className="font-semibold text-yellow-800 mb-2">{renderInlineText(keyConceptTitle, "kct-")}</p>
+                <p className="text-sm md:text-base text-yellow-700 leading-relaxed whitespace-pre-wrap">{renderInlineText(keyConceptDescription, "kcd-")}</p>
               </div>
             </div>
           </Card>
