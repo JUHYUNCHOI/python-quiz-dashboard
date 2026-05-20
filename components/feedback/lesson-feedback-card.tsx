@@ -43,21 +43,6 @@ export function LessonFeedbackCard({ feedback, t }: Props) {
         </p>
       </div>
 
-      {/* 다음 레슨 추천 */}
-      {feedback.nextLesson && (
-        <button
-          onClick={() => router.push(`/learn/${feedback.nextLesson!.lessonId}`)}
-          className="w-full flex items-center gap-3 px-4 py-3 bg-green-50 hover:bg-green-100 rounded-2xl border border-green-200 transition-colors text-left"
-        >
-          <span className="text-xl">👉</span>
-          <div className="flex-1">
-            <p className="text-xs text-green-600 font-bold">{t("다음 레슨", "Next Lesson")}</p>
-            <p className="text-sm font-bold text-green-800">{feedback.nextLesson.name}</p>
-          </div>
-          <span className="text-green-400 text-lg">→</span>
-        </button>
-      )}
-
       {/* 복습 추천 */}
       {feedback.reviewSuggestions.length > 0 && (
         <div className="space-y-1.5">
