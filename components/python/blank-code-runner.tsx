@@ -19,7 +19,7 @@ interface PyodideInterface {
   runPython: (code: string) => any
   runPythonAsync: (code: string) => Promise<any>
   globals: any
-  setStdout: (options: { batched: (msg: string) => void }) => void
+  setStdout: (options: { batched?: (msg: string) => void; raw?: (charCode: number) => void; write?: (buf: Uint8Array) => number }) => void
 }
 
 interface BlankCodeRunnerProps {
@@ -281,15 +281,17 @@ export function BlankCodeRunner({
     setIsCorrect(null)
 
     try {
-      let capturedOutput = ""
+      // ⚠️ batched 는 줄바꿈 시에만 flush — 학생이 end="" / end="." 처럼
+      // 개행 없는 출력을 하면 batched 가 안 불려서 정답인데 틀린 것으로
+      // 처리되던 버그. raw 콜백은 바이트별로 호출되어 모든 출력 포착.
+      const capturedBytes: number[] = []
       pyodideInstance.setStdout({
-        batched: (msg: string) => {
-          capturedOutput += msg + "\n"
-        }
+        raw: (b: number) => { capturedBytes.push(b) }
       })
 
       await pyodideInstance.runPythonAsync(code)
 
+      const capturedOutput = new TextDecoder().decode(new Uint8Array(capturedBytes))
       const result = capturedOutput.trimEnd()
       setOutput(result)
 
