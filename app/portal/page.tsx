@@ -199,6 +199,7 @@ function PortalContent() {
   const [parentLinkCopied, setParentLinkCopied] = useState(false)
   const [parentLinkLoading, setParentLinkLoading] = useState(false)
   const [isTeacher, setIsTeacher] = useState(false)
+  const [inClass, setInClass] = useState(false)
 
   const handleRoleSelect = async (role: "student" | "teacher", joinCode?: string) => {
     setShowRoleModal(false)
@@ -241,6 +242,11 @@ function PortalContent() {
       const { data: gami } = await supabase
         .from("gamification_data").select("total_xp,daily_streak").eq("user_id", user.id).maybeSingle()
       if (gami) { setXp(gami.total_xp ?? 0); setStreak(gami.daily_streak ?? 0) }
+
+      // 반 가입 여부 — 부모 리포트 공유 같은 기능은 반 학생/선생님에게만 노출
+      const { data: classMem } = await supabase
+        .from("class_members").select("class_id").eq("student_id", user.id).limit(1)
+      if (classMem && classMem.length > 0) setInClass(true)
 
       // 진도
       const { data: progress } = await supabase
@@ -399,10 +405,11 @@ function PortalContent() {
             </button>
           </div>
         )}
-        <div className="lg:flex lg:gap-8 lg:items-start">
+        <div className="flex flex-col lg:flex-row lg:gap-8 lg:items-start">
 
-        {/* ── 왼쪽: 인사 + 빠른이동 + 부모 리포트 ── */}
-        <div className="lg:w-[380px] lg:flex-shrink-0 space-y-4">
+        {/* ── 왼쪽: 인사 + 빠른이동 + 부모 리포트 ──
+            모바일에서는 학습 여정 패널이 먼저 보이도록 order 조정 (lg 이상은 원래 순서). */}
+        <div className="lg:w-[380px] lg:flex-shrink-0 space-y-4 order-2 lg:order-1">
 
         {/* 인사 + 스탯 */}
         <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-5 text-white">
@@ -487,18 +494,20 @@ function PortalContent() {
           })}
         </div>
 
-        {/* 부모님 리포트 공유 */}
-        <button
-          onClick={handleShareParentReport}
-          disabled={parentLinkLoading}
-          className="w-full py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:border-orange-300 hover:text-orange-600 transition-all disabled:opacity-50"
-        >
-          {parentLinkLoading
-            ? t("⏳ 링크 생성 중...", "⏳ Generating link...")
-            : parentLinkCopied
-              ? t("✅ 링크가 복사됐어요!", "✅ Link copied!")
-              : t("👨‍👩‍👧 부모님께 학습 리포트 공유하기", "👨‍👩‍👧 Share Report with Parents")}
-        </button>
+        {/* 부모님 리포트 공유 — 반 가입 학생 / 선생님에게만 노출 (solo 학생은 혼란 가능) */}
+        {(inClass || isTeacher) && (
+          <button
+            onClick={handleShareParentReport}
+            disabled={parentLinkLoading}
+            className="w-full py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:border-orange-300 hover:text-orange-600 transition-all disabled:opacity-50"
+          >
+            {parentLinkLoading
+              ? t("⏳ 링크 생성 중...", "⏳ Generating link...")
+              : parentLinkCopied
+                ? t("✅ 링크가 복사됐어요!", "✅ Link copied!")
+                : t("👨‍👩‍👧 부모님께 학습 리포트 공유하기", "👨‍👩‍👧 Share Report with Parents")}
+          </button>
+        )}
 
         {/* 하단 안내 */}
         <p className="text-[11px] text-center text-gray-400">
@@ -507,8 +516,8 @@ function PortalContent() {
 
         </div>
 
-        {/* ── 오른쪽: 학습 여정 + 숙제 ── */}
-        <div className="lg:flex-1 space-y-5 mt-5 lg:mt-0">
+        {/* ── 오른쪽: 학습 여정 + 숙제 ── (모바일에서는 위로) */}
+        <div className="lg:flex-1 space-y-5 mt-0 lg:mt-0 order-1 lg:order-2 mb-5 lg:mb-0">
 
         {/* 학습 여정 */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
