@@ -68,6 +68,16 @@ count가 3에서 0까지 줄어드는 과정을 한 단계씩 봐요.
           hint2: "while num <= 5:"
         },
         {
+          id: "try1-scratch",
+          type: "tryit",
+          title: "✋ 손으로 처음부터 — 10부터 1까지",
+          task: "while 문을 처음부터 써서 10부터 1까지 줄여가며 출력해봐!",
+          initialCode: "# while 문을 직접 작성해봐\n# num 변수 만들기 → while 조건 → 출력 → 1씩 줄이기\n",
+          expectedOutput: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1",
+          hint: "num = 10 으로 시작, while num >= 1: 안에서 print 하고 num = num - 1",
+          hint2: "num = 10\nwhile num >= 1:\n    print(num)\n    num = num - 1"
+        },
+        {
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
@@ -153,6 +163,16 @@ for i in range(1, 6):
           hint2: "num == 3일 때 continue"
         },
         {
+          id: "try-break-continue",
+          type: "tryit",
+          title: "✋ break + continue 응용",
+          task: "1~10 중 짝수만 출력하다가, 8을 만나면 멈춰. 짝수면 출력, 홀수면 건너뛰기, 8이면 break.",
+          initialCode: "num = 0\nwhile num < 10:\n    num = num + 1\n    # 8 이면 break\n    # 홀수면 continue (다음 반복)\n    # 짝수면 print\n",
+          expectedOutput: "2\n4\n6",
+          hint: "if num == 8: break / if num % 2 == 1: continue / print(num)",
+          hint2: "num = 0\nwhile num < 10:\n    num = num + 1\n    if num == 8:\n        break\n    if num % 2 == 1:\n        continue\n    print(num)"
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
@@ -214,6 +234,16 @@ while money > 0:     # 돈이 있는 동안
           expectedOutput: "합계: 105\n마지막 숫자: 14",
           hint: "total이 100 이하인 조건을 쓰세요!",
           hint2: "while total <= 100:"
+        },
+        {
+          id: "try-while-scratch",
+          type: "tryit",
+          title: "✋ 손으로 처음부터 — 2배씩 키우기",
+          task: "1 에서 시작해서 2배씩 키워가다가, 1000 이상이 되면 멈추고 그때의 값을 출력해봐!",
+          initialCode: "# while 문을 직접 써봐\n# num = 1 에서 시작 → 1000 미만이면 2배씩 키우기 → 멈추면 출력\n",
+          expectedOutput: "1024",
+          hint: "while num < 1000: 안에서 num = num * 2 한 후, 끝나면 print(num)",
+          hint2: "num = 1\nwhile num < 1000:\n    num = num * 2\nprint(num)"
         }
       ]
     },

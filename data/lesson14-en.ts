@@ -68,6 +68,16 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
           hint2: "while num <= 5:"
         },
         {
+          id: "try1-scratch",
+          type: "tryit",
+          title: "✋ Type it from scratch — 10 down to 1",
+          task: "Write a while loop from scratch that counts down from 10 to 1.",
+          initialCode: "# Write the while loop yourself\n# Create num → set while condition → print → decrement by 1\n",
+          expectedOutput: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1",
+          hint: "Start with num = 10, then while num >= 1: print and num = num - 1",
+          hint2: "num = 10\nwhile num >= 1:\n    print(num)\n    num = num - 1"
+        },
+        {
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
@@ -153,6 +163,16 @@ for i in range(1, 6):
           hint2: "Use continue when num == 3"
         },
         {
+          id: "try-break-continue",
+          type: "tryit",
+          title: "✋ break + continue combo",
+          task: "From 1 to 10, print only even numbers, but stop when you reach 8. Even → print, odd → skip, 8 → break.",
+          initialCode: "num = 0\nwhile num < 10:\n    num = num + 1\n    # if 8 → break\n    # if odd → continue (next iteration)\n    # if even → print\n",
+          expectedOutput: "2\n4\n6",
+          hint: "if num == 8: break / if num % 2 == 1: continue / print(num)",
+          hint2: "num = 0\nwhile num < 10:\n    num = num + 1\n    if num == 8:\n        break\n    if num % 2 == 1:\n        continue\n    print(num)"
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
@@ -214,6 +234,16 @@ while money > 0:     # While there's money
           expectedOutput: "Total: 105\nLast number: 14",
           hint: "Write a condition where total is 100 or less!",
           hint2: "while total <= 100:"
+        },
+        {
+          id: "try-while-scratch",
+          type: "tryit",
+          title: "✋ Type it from scratch — Double until 1000",
+          task: "Start at 1 and keep doubling. Stop when the value reaches 1000 or more, then print it.",
+          initialCode: "# Write the while loop yourself\n# Start with num = 1 → while < 1000 double → after the loop, print\n",
+          expectedOutput: "1024",
+          hint: "while num < 1000: num = num * 2, then print(num) after the loop",
+          hint2: "num = 1\nwhile num < 1000:\n    num = num * 2\nprint(num)"
         }
       ]
     },

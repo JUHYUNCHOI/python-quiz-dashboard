@@ -8,6 +8,7 @@ import { useCodeSubmission } from "@/contexts/code-submission-context"
 import { useLanguage } from "@/contexts/language-context"
 import { createSmartKeyHandler } from "@/components/cpp/editor-key-handler"
 import { renderInlineMarkdown } from "@/components/learn/render-content"
+import { CodeSymbolToolbar } from "./code-symbol-toolbar"
 
 // Pyodide 타입 정의
 declare global {
@@ -401,6 +402,8 @@ export function PythonRunner({
             spellCheck={false}
           />
         </div>
+        {/* 모바일 심볼 툴바 — 터치 디바이스에서만 표시 */}
+        <CodeSymbolToolbar textareaRef={textareaRef} setCode={setCode} variant="python" />
       </div>
 
       {/* 버튼들 */}
