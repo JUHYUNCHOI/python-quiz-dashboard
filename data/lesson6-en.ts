@@ -141,6 +141,26 @@ All matching parts get replaced!`
           expectedOutput: "Grapes are delicious",
           hint: ".replace(\"Apples\", \"Grapes\")",
           hint2: "text.replace(\"Apples\", \"Grapes\")"
+        },
+        {
+          id: "try-replace-scratch",
+          type: "tryit",
+          title: "✋ Type it yourself — replace from scratch",
+          task: "Replace 'Hi' with 'Hello' and print the result. Write the whole print line yourself!",
+          initialCode: "text = \"Hi friend! Hi everyone!\"\n# Write the print line here yourself\n",
+          expectedOutput: "Hello friend! Hello everyone!",
+          hint: "Inside print( ... ), use text.replace(\"Hi\", \"Hello\")",
+          hint2: "print(text.replace(\"Hi\", \"Hello\"))"
+        },
+        {
+          id: "try-replace-chain",
+          type: "tryit",
+          title: "✋ Replace two things at once",
+          task: "Chain two replace() calls — turn 'cat'→'dog' and 'cow'→'rabbit'.",
+          initialCode: "text = \"cat and cow\"\n# You can chain replace like .replace(...).replace(...)\n",
+          expectedOutput: "dog and rabbit",
+          hint: "Chain replace twice: text.replace(...).replace(...)",
+          hint2: "print(text.replace(\"cat\", \"dog\").replace(\"cow\", \"rabbit\"))"
         }
       ]
     },
