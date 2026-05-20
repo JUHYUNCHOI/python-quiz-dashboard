@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { Fragment, useState, useEffect } from "react"
+import type React from "react"
 
 // ── Typing animation hook ─────────────────────────────────────────────────────
 
@@ -57,12 +58,45 @@ interface QuizProps {
   onAnswer: (i: number) => void
 }
 
+// 인라인 마크다운 — backtick 코드 + **bold** 처리. Quiz / NumInput
+// 등 plain text 만 받던 props 가 이제 `code` / **bold** 도 자연 렌더.
+function renderInline(text: string): React.ReactNode {
+  if (!text) return text
+  // 1단계: **bold** 로 분리
+  const boldParts = text.split(/(\*\*[^*]+\*\*)/g)
+  return boldParts.map((part, bi) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      const inner = part.slice(2, -2)
+      // bold 안 backtick 처리
+      return <strong key={bi}>{renderInlineCode(inner, `b${bi}-`)}</strong>
+    }
+    return <Fragment key={bi}>{renderInlineCode(part, `n${bi}-`)}</Fragment>
+  })
+}
+
+function renderInlineCode(text: string, keyPrefix: string): React.ReactNode {
+  const parts = text.split(/(`[^`]+`)/g)
+  return parts.map((p, j) => {
+    if (p.startsWith("`") && p.endsWith("`") && p.length >= 2) {
+      return (
+        <code
+          key={`${keyPrefix}${j}`}
+          className="bg-indigo-100 px-1.5 py-0.5 rounded-md font-mono text-indigo-700 text-[0.9em] font-semibold"
+        >
+          {p.slice(1, -1)}
+        </code>
+      )
+    }
+    return <Fragment key={`${keyPrefix}${j}`}>{p}</Fragment>
+  })
+}
+
 export function Quiz({ question, hint, options, correct, explain, answered, onAnswer }: QuizProps) {
   return (
     <div className="p-4">
-      <div className="text-sm font-bold mb-3 text-gray-800">{question}</div>
+      <div className="text-sm font-bold mb-3 text-gray-800">{renderInline(question)}</div>
       {hint && (
-        <div className="text-xs font-semibold mb-2 text-amber-600">💡 {hint}</div>
+        <div className="text-xs font-semibold mb-2 text-amber-600">💡 {renderInline(hint)}</div>
       )}
       <div className="flex flex-col gap-1.5">
         {options.map((o, i) => {
@@ -82,14 +116,14 @@ export function Quiz({ question, hint, options, correct, explain, answered, onAn
               className={`text-left px-3.5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all ${cls} ${!showResult ? "cursor-pointer hover:border-blue-300" : "cursor-default"}`}
             >
               {showResult && isCorrect ? "✅ " : showResult && picked ? "❌ " : ""}
-              {o}
+              {renderInline(o)}
             </button>
           )
         })}
       </div>
       {answered != null && explain && (
         <div className="mt-2.5 px-3 py-2 bg-green-50 rounded-lg border border-green-200 text-xs font-semibold text-green-600">
-          {explain}
+          {renderInline(explain)}
         </div>
       )}
     </div>

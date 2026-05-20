@@ -7,7 +7,7 @@ import { LessonStep } from "./types"
 import { highlightCppInline } from "@/components/ui/code-block"
 import { motion, AnimatePresence } from "framer-motion"
 import { useLanguage } from "@/contexts/language-context"
-import { renderContent } from "./render-content"
+import { renderContent, renderInlineMarkdown } from "./render-content"
 
 interface FillBlankStepProps {
   step: LessonStep
@@ -31,7 +31,7 @@ function seededShuffle<T>(arr: T[], seed: string): T[] {
 }
 
 export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, isReview }: FillBlankStepProps) {
-  const blanks: { id: number; answer: string; options: string[] }[] = step.fillBlanks || []
+  const blanks: { id: number; answer: string; options: string[]; acceptedAnswers?: string[] }[] = step.fillBlanks || []
   const { t } = useLanguage()
   // 보기 순서 shuffle (step.id + blank.id 기반으로 매번 동일하게 섞음)
   const shuffledBlanks = blanks.map(b => ({
@@ -126,7 +126,8 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
   const checkAnswers = (values: Record<number, string>) => {
     const wrong = new Set<number>()
     blanks.forEach(b => {
-      if (values[b.id] !== b.answer) wrong.add(b.id)
+      const accepted = b.acceptedAnswers && b.acceptedAnswers.length > 0 ? b.acceptedAnswers : [b.answer]
+      if (!accepted.includes(values[b.id])) wrong.add(b.id)
     })
     setWrongBlankIds(wrong)
     setIsSubmitted(true)
@@ -324,7 +325,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
               </span>
             </div>
             <p className={cn("text-sm whitespace-pre-line", isCorrect ? "text-green-800" : "text-amber-800")}>
-              {step.explanation}
+              {renderInlineMarkdown(step.explanation)}
             </p>
 
             {/* 오답 시 정답 표시 — 복습 모드에서는 숨김 */}

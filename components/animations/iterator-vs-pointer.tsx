@@ -233,6 +233,90 @@ export function IteratorVsPointer() {
         )}
       </div>
 
+      {/* "++ 했을 때 어디로 가나" — 핵심 비교 (학생이 차이 바로 보게) */}
+      {step > 0 && (
+        <div
+          style={{
+            background: "#fff",
+            border: `2px solid ${mode === "vector" ? "#86efac" : "#fca5a5"}`,
+            borderRadius: 10,
+            padding: "12px 14px",
+            marginBottom: 12,
+            fontFamily: "sans-serif",
+          }}
+        >
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#475569", marginBottom: 8, letterSpacing: 0.3, textAlign: "center" }}>
+            {step}{step === 1 ? "ST" : step === 2 ? "ND" : step === 3 ? "RD" : "TH"} ++ 후, 두 친구가 간 곳:
+          </div>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 12,
+            fontFamily: "ui-monospace, monospace",
+            fontSize: 14,
+          }}>
+            {/* Pointer's destination */}
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", marginBottom: 4, fontFamily: "sans-serif" }}>
+                🔻 포인터 도착지
+              </div>
+              <div style={{
+                background: mode === "vector" ? "#fef2f2" : "#fee2e2",
+                border: `2px solid ${mode === "vector" ? "#fca5a5" : "#dc2626"}`,
+                borderRadius: 8,
+                padding: "8px 6px",
+                fontWeight: 900,
+                fontSize: 18,
+                color: "#991b1b",
+              }}>
+                @{ptrAddr}
+              </div>
+              <div style={{ fontSize: 11, marginTop: 4, fontFamily: "sans-serif", color: mode === "vector" ? "#16a34a" : "#dc2626", fontWeight: 700 }}>
+                {mode === "vector" ? "✓ 실제 다음 노드" : "💥 빈 메모리 (노드 없음)"}
+              </div>
+            </div>
+            {/* Iterator's destination */}
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#16a34a", marginBottom: 4, fontFamily: "sans-serif" }}>
+                🟢 이터레이터 도착지
+              </div>
+              <div style={{
+                background: "#dcfce7",
+                border: "2px solid #16a34a",
+                borderRadius: 8,
+                padding: "8px 6px",
+                fontWeight: 900,
+                fontSize: 18,
+                color: "#166534",
+              }}>
+                @{itAddr}
+              </div>
+              <div style={{ fontSize: 11, marginTop: 4, fontFamily: "sans-serif", color: "#16a34a", fontWeight: 700 }}>
+                ✓ 실제 다음 노드 (값 {data[step].value})
+              </div>
+            </div>
+          </div>
+          {/* Verdict — 한 줄로 차이 강조 */}
+          <div style={{
+            marginTop: 10,
+            padding: "8px 10px",
+            background: mode === "vector" ? "#f0fdf4" : "#fef2f2",
+            border: `1px solid ${mode === "vector" ? "#86efac" : "#fca5a5"}`,
+            borderRadius: 6,
+            fontSize: 12,
+            color: mode === "vector" ? "#15803d" : "#991b1b",
+            fontWeight: 700,
+            textAlign: "center",
+            fontFamily: "sans-serif",
+            lineHeight: 1.6,
+          }}>
+            {mode === "vector"
+              ? "📦 메모리 연속 → 두 주소 같음. 둘 다 정답!"
+              : `🕸️ 메모리 흩어짐 → 포인터는 @${ptrAddr} (빈 자리), 이터레이터는 @${itAddr} (진짜 다음 노드). ${itAddr - ptrAddr > 0 ? "+" : ""}${itAddr - ptrAddr} 만큼 차이!`}
+          </div>
+        </div>
+      )}
+
       {/* 상태 표시 */}
       <div
         style={{

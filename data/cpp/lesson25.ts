@@ -186,15 +186,17 @@ cout << it - v.begin();  // 3    ← 인덱스로 변환
 \`lower_bound\` 나 \`find\` 가 못 찾으면 \`v.end()\` 를 돌려줘요 (= "끝 표시"). 그 자리를 \`*it\` 로 읽으려 하면 **위험** — 값이 없는 자리니까.
 
 \`\`\`cpp
+// find / lower_bound / upper_bound — 위치를 돌려주는 함수들
 auto it = lower_bound(v.begin(), v.end(), x);
-if (it != v.end()) {        // ← 반드시 체크
-    cout << *it;             // 안전
+
+if (it != v.end()) {        // ← 반드시 체크 (못 찾았으면 v.end())
+    cout << *it;             // 안전하게 값 읽기
 } else {
     cout << "없음";
 }
 \`\`\`
 
-> 💡 패턴 통째 외워두기 — \`auto it = ...; if (it != v.end()) { ... }\`. 이 한 줄이면 90% 의 이터레이터 코드는 안전.
+> 💡 **이 모양 통째 외우기.** \`find\` / \`lower_bound\` / \`upper_bound\` 다 동일. \`*it\` 쓰기 전 \`v.end()\` 체크 안 하면 메모리 망가짐.
 
 ---
 
@@ -331,9 +333,9 @@ v.insert(lower_bound(v.begin(), v.end(), x), x);
           content: "정렬된 점수 배열에서 **70 점 이상 첫 학생** 의 점수를 출력해봐요.",
           code: "vector<int> scores = {45, 60, 72, 85, 91};\nauto it = ___(scores.begin(), scores.end(), 70);\ncout << *it;  // 72 출력",
           fillBlanks: [
-            { id: 0, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "find"] }
+            { id: 0, answer: "lower_bound", acceptedAnswers: ["lower_bound", "upper_bound"], options: ["lower_bound", "upper_bound", "binary_search", "find"] }
           ],
-          explanation: "**lower_bound(scores, 70)** 가 \"70 이상 첫 위치\" 를 돌려줘요. \\*it 로 그 자리의 값 (72) 을 봐요. \\`find\\` 는 정확히 70 만 찾으므로 ❌, \\`binary_search\\` 는 bool 만 돌려주므로 ❌."
+          explanation: "**lower_bound** 는 \"70 이상 첫 위치\", **upper_bound** 는 \"70 초과 첫 위치\" 를 돌려줘요. 배열에 70 이 없으니 **둘 다 똑같이 72 자리** 를 가리켜서 정답이에요. `*it` 로 그 자리의 값 (72) 을 보면 됩니다. `find` 는 정확히 70 만 찾으므로 ❌, `binary_search` 는 bool 만 돌려주므로 ❌."
         },
         {
           id: "s23-ch2-lb-patterns",

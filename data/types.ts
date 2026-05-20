@@ -39,7 +39,7 @@ export interface LessonStep {
   blanks?: { id: string; answer: string; hint?: string }[]
   choices?: string[]
   // fillblank 타입용
-  fillBlanks?: { id: number; answer: string; options: string[] }[]
+  fillBlanks?: { id: number; answer: string; options: string[]; acceptedAnswers?: string[] }[]
   // coding 타입용
   starterCode?: string
   testCases?: TestCase[]

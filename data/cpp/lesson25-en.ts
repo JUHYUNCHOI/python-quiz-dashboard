@@ -186,15 +186,17 @@ cout << it - v.begin();  // 3    ← convert to index
 \`lower_bound\` and \`find\` return \`v.end()\` when the value isn't there (= "the end marker"). Reading that slot with \`*it\` is **dangerous** — there's no value there.
 
 \`\`\`cpp
+// find / lower_bound / upper_bound — all return positions
 auto it = lower_bound(v.begin(), v.end(), x);
-if (it != v.end()) {        // ← always check
-    cout << *it;             // safe
+
+if (it != v.end()) {        // ← always check (v.end() = not found)
+    cout << *it;             // safe to read
 } else {
     cout << "not found";
 }
 \`\`\`
 
-> 💡 Memorize the pattern: \`auto it = ...; if (it != v.end()) { ... }\`. That one line keeps 90% of iterator code safe.
+> 💡 **Memorize this shape.** Same pattern for \`find\` / \`lower_bound\` / \`upper_bound\`. Skipping the \`v.end()\` check before \`*it\` corrupts memory.
 
 ---
 
@@ -331,9 +333,9 @@ v.insert(lower_bound(v.begin(), v.end(), x), x);
           content: "From a sorted score array, print the **score of the first student with ≥ 70**.",
           code: "vector<int> scores = {45, 60, 72, 85, 91};\nauto it = ___(scores.begin(), scores.end(), 70);\ncout << *it;  // prints 72",
           fillBlanks: [
-            { id: 0, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "find"] }
+            { id: 0, answer: "lower_bound", acceptedAnswers: ["lower_bound", "upper_bound"], options: ["lower_bound", "upper_bound", "binary_search", "find"] }
           ],
-          explanation: "**lower_bound(scores, 70)** returns the first position with value ≥ 70. \\*it reads the value at that position (72). \\`find\\` would only match exactly 70 ❌. \\`binary_search\\` only returns a bool ❌."
+          explanation: "**lower_bound** returns the first position ≥ 70 and **upper_bound** returns the first position > 70. Since 70 isn't in the array, **both land on the same spot (72)** — either one works. `*it` reads the value at that position (72). `find` only matches exactly 70 ❌. `binary_search` only returns a bool ❌."
         },
         {
           id: "s23-ch2-lb-patterns",

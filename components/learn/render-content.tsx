@@ -73,7 +73,7 @@ const COLOR_BG_MAP: Record<string, string> = {
 // ============================================
 // 인라인 마크다운 헬퍼: `code` + **bold** + {color:text} 처리
 // ============================================
-function renderInlineMarkdown(text: string, keyPrefix: string = ""): React.ReactNode[] {
+export function renderInlineMarkdown(text: string, keyPrefix: string = ""): React.ReactNode[] {
   // 1단계: {color:text} 컬러 태그 + `code` + **bold** 통합 분리
   const colorTagPattern = /(\{(?:pink|red|blue|sky|green|teal|purple|orange|amber|indigo):[^}]+\})/g
   const segments = text.split(colorTagPattern)
@@ -578,14 +578,22 @@ export function renderContent(content: string) {
       continue
     }
 
-    // ── 헤더 ──
+    // ── 헤더 ── (inline markdown 적용 — `code` / **bold** 등 헤딩 안에서도 작동)
     if (line.startsWith('## ')) {
-      elements.push(<h2 key={key++} className="text-lg md:text-xl font-bold text-gray-900 mt-6 md:mt-8 mb-3 md:mb-4">{line.slice(3)}</h2>)
+      elements.push(
+        <h2 key={key++} className="text-lg md:text-xl font-bold text-gray-900 mt-6 md:mt-8 mb-3 md:mb-4">
+          {renderInlineMarkdown(line.slice(3), `h2-${key}-`)}
+        </h2>
+      )
       i++
       continue
     }
     if (line.startsWith('### ')) {
-      elements.push(<h3 key={key++} className="text-base md:text-lg font-bold text-gray-800 mt-5 md:mt-6 mb-2 md:mb-3">{line.slice(4)}</h3>)
+      elements.push(
+        <h3 key={key++} className="text-base md:text-lg font-bold text-gray-800 mt-5 md:mt-6 mb-2 md:mb-3">
+          {renderInlineMarkdown(line.slice(4), `h3-${key}-`)}
+        </h3>
+      )
       i++
       continue
     }
