@@ -22,10 +22,26 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('language') as Language
-      if (saved && (saved === 'ko' || saved === 'en')) {
-        setLangState(saved)
+      // 우선순위: URL ?lang=en > localStorage > 기본값(ko)
+      // 영어 광고로 유입된 사용자 대응 — 광고 URL 에 ?lang=en 붙여서 첫 화면부터 영어로 보여줌.
+      let resolved: Language | null = null
+
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search)
+        const fromUrl = params.get('lang')
+        if (fromUrl === 'ko' || fromUrl === 'en') {
+          resolved = fromUrl
+          // 한 번 받은 후엔 localStorage 에 박아둠 → 다음 페이지부터도 유지
+          try { localStorage.setItem('language', resolved) } catch {}
+        }
       }
+
+      if (!resolved) {
+        const saved = localStorage.getItem('language') as Language
+        if (saved === 'ko' || saved === 'en') resolved = saved
+      }
+
+      if (resolved) setLangState(resolved)
     } catch {
       // localStorage 접근 불가 시 기본값(ko) 유지
     }

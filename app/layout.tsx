@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/contexts/auth-context"
 import { LanguageProvider } from "@/contexts/language-context"
 import { GlobalEditorProvider } from "@/components/teacher/global-editor-provider"
+import { SiteFooter } from "@/components/site-footer"
 import "./globals.css"
 
 export const viewport: Viewport = {
@@ -49,6 +50,7 @@ export default function RootLayout({
           <LanguageProvider>
             <GlobalEditorProvider>
               {children}
+              <SiteFooter />
             </GlobalEditorProvider>
           </LanguageProvider>
         </AuthProvider>
