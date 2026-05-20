@@ -34,11 +34,16 @@ export async function updateSession(request: NextRequest) {
   // - /learn, /quiz, /review, /practice, /portal, /profile, /progress, /coding-bank: 학생 학습 화면
   // - /teacher, /admin, /analytics: 기존 보호 유지
   // - /curriculum, /quest, /algo: 비로그인도 볼 수 있게 둠 (마케팅용 preview)
-  // - /learn/1: Python 첫 레슨은 비로그인 체험용 미리보기 (audit R1)
+  // - /learn/[Python 레슨]: Python 52강 + 프로젝트 4개 비로그인 공개 — AdSense 수익 모델
+  //   - 숫자 ID: /learn/1 ~ /learn/52
+  //   - 프로젝트: /learn/p1 ~ /learn/p4
+  //   - cpp-*, pseudo-*, igcse-* 는 로그인 필요 (진지한 학습자 필터링)
   const path = request.nextUrl.pathname
 
-  // /learn/1 만 명시적 예외 — 비로그인 체험 가능. /learn/2, /learn/cpp-1 등은 막힘.
-  const isLearnPreview = path === "/learn/1" || path.startsWith("/learn/1/")
+  // /learn/<숫자> 또는 /learn/p<숫자> 는 비로그인 공개 (Python 레슨/프로젝트)
+  // /learn/cpp-1, /learn/pseudo-3 같은 건 매칭 안 됨 → 보호됨
+  const learnMatch = path.match(/^\/learn\/(\d+|p\d+)(\/.*)?$/)
+  const isLearnPreview = learnMatch !== null
 
   const isProtected =
     !isLearnPreview && (

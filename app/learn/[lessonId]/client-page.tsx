@@ -21,6 +21,7 @@ import { trackStepVisit } from "@/lib/track-step-visit"
 import { getCompletedLessons, pythonParts, cppParts, pseudoParts, getNextLessonId } from "@/lib/curriculum-data"
 import { useAuth } from "@/contexts/auth-context"
 import { useIsOwner } from "@/components/owner-only-guard"
+import { AdSlot } from "@/components/ad-slot"
 import { analyzeLessonComplete, analyzeStreak } from "@/lib/feedback-analyzer"
 import { LessonFeedbackCard } from "@/components/feedback/lesson-feedback-card"
 import { StreakWidget } from "@/components/feedback/streak-widget"
@@ -63,8 +64,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const { user, profile, isAuthenticated, isLoading: authLoading } = useAuth()
   const isTeacher = profile?.role === "teacher"
 
-  // /learn/1 은 비로그인 체험 허용 (audit R1). 그 외 레슨은 로그인 필수.
-  const isPreviewLesson = lessonId === "1"
+  // Python 레슨 (1-52) + 프로젝트 (p1-p4) 는 비로그인 무료 공개 — AdSense 수익 모델.
+  // cpp-*, pseudo-*, igcse-* 는 로그인 필요.
+  const isPreviewLesson = /^(\d+|p\d+)$/.test(lessonId)
   useEffect(() => {
     if (!authLoading && !user && !isPreviewLesson) router.replace("/login")
   }, [user, authLoading, router, isPreviewLesson])
@@ -1045,22 +1047,28 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       <Confetti show={showConfetti} />
       <SuccessOverlay show={showSuccess} message={successMessage} onClose={closeSuccessOverlay} />
 
-      {/* 비로그인 체험 배너 — /learn/1 에서만, 로그인 안 된 사용자에게 (audit R1) */}
+      {/* 비로그인 학습 배너 — Python 무료 공개 레슨에서, 로그인 안 된 사용자에게 (audit R1) */}
       {isPreviewLesson && !authLoading && !user && (
-        <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
-          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-wrap items-center justify-center sm:justify-between gap-2 text-xs sm:text-sm">
-            <p className="font-medium">
-              <span className="font-bold">{t("🎁 무료 샘플 레슨", "🎁 Free sample lesson")}</span>
-              <span className="opacity-90"> — {t("진도 저장 + 다음 레슨은 가입 후에", "Sign up to save progress and continue")}</span>
-            </p>
-            <a
-              href="/login?returnTo=%2Flearn%2F1"
-              className="px-3 py-1 rounded-full bg-white text-emerald-600 font-bold hover:bg-emerald-50 transition-colors whitespace-nowrap"
-            >
-              {t("무료 가입 →", "Sign up free →")}
-            </a>
+        <>
+          <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+            <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-wrap items-center justify-center sm:justify-between gap-2 text-xs sm:text-sm">
+              <p className="font-medium">
+                <span className="font-bold">{t("🎁 Python 무료 학습 중", "🎁 Free Python lessons")}</span>
+                <span className="opacity-90"> — {t("가입하면 진도 저장 + 광고 없이 학습", "Sign up to save progress + ad-free")}</span>
+              </p>
+              <a
+                href={`/login?returnTo=${encodeURIComponent("/learn/" + lessonId)}`}
+                className="px-3 py-1 rounded-full bg-white text-emerald-600 font-bold hover:bg-emerald-50 transition-colors whitespace-nowrap"
+              >
+                {t("무료 가입 →", "Sign up free →")}
+              </a>
+            </div>
           </div>
-        </div>
+          {/* 상단 광고 (비로그인 only — AdSlot 자체가 user 체크) */}
+          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pt-2">
+            <AdSlot name="learnTop" format="responsive" />
+          </div>
+        </>
       )}
 
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-indigo-50/30">
@@ -1343,6 +1351,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             })()}
           </div>
         </div>
+        {/* 하단 광고 — 비로그인 사용자에게만 (AdSlot 자체가 user 체크). 모바일 bottom-nav 위. */}
+        {isPreviewLesson && (
+          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-4">
+            <AdSlot name="learnBottom" format="responsive" />
+          </div>
+        )}
       </div>
     {editingStep && (
       <StepEditor

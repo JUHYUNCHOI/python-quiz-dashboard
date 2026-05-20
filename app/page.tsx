@@ -198,12 +198,12 @@ function LandingPage() {
               href="/learn/1"
               className="inline-block px-6 py-3 rounded-2xl bg-white text-gray-700 font-bold text-sm border-2 border-gray-300 hover:border-orange-400 hover:text-orange-600 transition-all"
             >
-              {t("샘플 레슨 먼저 보기", "Try a sample lesson")}
+              {t("바로 코딩 시작 →", "Start coding now →")}
             </Link>
           </div>
           {/* 무료 신뢰선 — 광고 유입자 "혹시 나중에 결제?" 불안 해소 (audit R2) */}
           <p className="text-[11px] font-medium text-gray-500 pt-1">
-            {t("✅ 100% 무료 · 결제 정보 안 받아요 · 가입 없이 1강 체험 가능", "✅ 100% free · No payment info · Try Lesson 1 without signup")}
+            {t("✅ 100% 무료 · 결제 정보 안 받아요 · Python 52강 가입 없이 학습 가능", "✅ 100% free · No payment info · All 52 Python lessons free, no signup needed")}
           </p>
         </div>
 
@@ -420,8 +420,8 @@ function LandingPage() {
               {
                 q: t("정말 무료인가요?", "Is it really free?"),
                 a: t(
-                  "네. 결제 정보를 받지 않아요. 모든 레슨, 퀴즈, 진도 관리를 무료로 쓸 수 있어요.",
-                  "Yes. We never ask for payment info. All lessons, quizzes, and progress tracking are free."
+                  "네. 결제 정보를 받지 않아요. Python 52강은 가입 없이도 학습할 수 있고, 가입하면 진도 저장 + 광고 없이 사용할 수 있어요.",
+                  "Yes. We never ask for payment info. Python 52 lessons are free without signup. Sign up to save progress and use the site ad-free."
                 ),
               },
               {
