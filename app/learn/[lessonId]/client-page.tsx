@@ -20,6 +20,8 @@ import { logActivity } from "@/lib/activity-log"
 import { trackStepVisit } from "@/lib/track-step-visit"
 import { getCompletedLessons, pythonParts, cppParts, pseudoParts, getNextLessonId } from "@/lib/curriculum-data"
 import { useAuth } from "@/contexts/auth-context"
+import { useIsOwner } from "@/components/owner-only-guard"
+import { AdSlot } from "@/components/ad-slot"
 import { analyzeLessonComplete, analyzeStreak } from "@/lib/feedback-analyzer"
 import { LessonFeedbackCard } from "@/components/feedback/lesson-feedback-card"
 import { StreakWidget } from "@/components/feedback/streak-widget"
@@ -43,6 +45,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const router = useRouter()
   const { lang, t } = useLanguage()
   const { play, isMuted, toggleMute } = useSoundEffect()
+  const isOwner = useIsOwner()
 
   const isBilingual = lessonId in bilingualLessons
   const hasVariants = lessonId in lessonVariants
@@ -61,9 +64,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const { user, profile, isAuthenticated, isLoading: authLoading } = useAuth()
   const isTeacher = profile?.role === "teacher"
 
+  // Python 레슨 (1-52) + 프로젝트 (p1-p4) 는 비로그인 무료 공개 — AdSense 수익 모델.
+  // cpp-*, pseudo-*, igcse-* 는 로그인 필요.
+  const isPreviewLesson = /^(\d+|p\d+)$/.test(lessonId)
   useEffect(() => {
-    if (!authLoading && !user) router.replace("/login")
-  }, [user, authLoading, router])
+    if (!authLoading && !user && !isPreviewLesson) router.replace("/login")
+  }, [user, authLoading, router, isPreviewLesson])
 
 
   // Supabase 진도 동기화
@@ -524,7 +530,26 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [showChapterComplete, showLessonComplete, showChapterList])
 
-  if (authLoading || !user) return null
+  // iPad/모바일 — 스크롤 끝나는 순간 fixed nav 버튼 위에서 손 떼면 의도치 않은
+  // 클릭 발생. 스크롤 중 + 멈춘 직후 짧은 grace 동안 nav 비활성화.
+  const [isScrollLocked, setIsScrollLocked] = useState(false)
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null
+    const onScroll = () => {
+      setIsScrollLocked(true)
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(() => setIsScrollLocked(false), 250)
+    }
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+      if (timer) clearTimeout(timer)
+    }
+  }, [])
+
+  if (authLoading) return null
+  // 비로그인 사용자: Python 프리뷰 레슨만 통과, 그 외는 차단 (useEffect 가 redirect)
+  if (!user && !isPreviewLesson) return null
 
   if (isLocked) {
     return (
@@ -789,34 +814,51 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       <>
         {!isIGCSE && <Confetti show={showConfetti} />}
         <div className="min-h-screen bg-gradient-to-b from-indigo-600 to-purple-700 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl">
-            <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
-              <span className="text-5xl">{lesson.emoji}</span>
+          <div className="bg-white rounded-3xl max-w-md w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+            {/* 스크롤 영역 — 셀러브레이션 + 통계 + 피드백 */}
+            <div className="overflow-y-auto p-6 sm:p-8 text-center flex-1">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 animate-bounce">
+              <span className="text-4xl sm:text-5xl">{lesson.emoji}</span>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("레슨 완료!", "Lesson Complete!")}</h1>
-            <p className="text-lg text-gray-600 mb-2">{lesson.title}</p>
-            <p className="text-gray-500 mb-6">{t("모든 챕터를 끝냈어요!", "All chapters finished!")}</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{t("레슨 완료!", "Lesson Complete!")}</h1>
+            <p className="text-base sm:text-lg text-gray-600 mb-2">{lesson.title}</p>
+            <p className="text-gray-500 mb-4 sm:mb-6 text-sm">{t("모든 챕터를 끝냈어요!", "All chapters finished!")}</p>
             {!isIGCSE && !isAlreadyDone && (
               <>
-                <div className="bg-amber-50 rounded-2xl p-4 mb-4">
-                  <p className="text-amber-800 font-bold text-lg">{t(`총 ${totalPoints}점 획득!`, `${totalPoints} points earned!`)}</p>
+                <div className="bg-amber-50 rounded-2xl p-3 mb-3">
+                  <p className="text-amber-800 font-bold">{t(`총 ${totalPoints}점 획득!`, `${totalPoints} points earned!`)}</p>
                 </div>
-                <div className="bg-orange-50 rounded-2xl p-4 mb-4">
-                  <p className="text-orange-600 font-bold text-lg">+30 XP {t("획득!", "earned!")}</p>
-                  <p className="text-orange-500 text-sm mt-1">Lv.{gamification.level} ({gamification.xpInCurrentLevel}/100)</p>
+                <div className="bg-orange-50 rounded-2xl p-3 mb-3">
+                  <p className="text-orange-600 font-bold">+30 XP {t("획득!", "earned!")}</p>
+                  <p className="text-orange-500 text-xs mt-1">Lv.{gamification.level} ({gamification.xpInCurrentLevel}/100)</p>
                 </div>
               </>
             )}
 
             {/* 스트릭 위젯 */}
-            <div className="mb-4">
+            <div className="mb-3">
               <StreakWidget streak={streakInfo} t={t} />
             </div>
 
-            {/* 맞춤 피드백: 진도, 다음 레슨, 복습 추천 */}
+            {/* 맞춤 피드백: 진도, 마일스톤, 복습 추천 (다음 레슨은 아래 큰 버튼으로 통합) */}
             <LessonFeedbackCard feedback={lessonFeedback} t={t} />
 
-            <div className="mt-4 space-y-3">
+            {!isAuthenticated && (
+              <div className="mt-4 bg-green-50 border border-green-200 rounded-2xl p-3 text-left">
+                <p className="text-xs font-bold text-green-800 mb-1">🦒 {t("로그인하면 진도가 안전하게 저장돼요!", "Login to save progress!")}</p>
+                <button
+                  onClick={() => { router.push(`/login?returnTo=${encodeURIComponent(`/learn/${lessonId}`)}`) }}
+                  className="w-full py-2 mt-1 bg-white border border-green-300 hover:bg-green-50 text-green-700 rounded-xl font-bold text-xs transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M19.6 10.23c0-.68-.06-1.36-.17-2.02H10v3.83h5.38a4.6 4.6 0 0 1-2 3.02v2.5h3.24c1.89-1.74 2.98-4.3 2.98-7.33Z" fill="#4285F4"/><path d="M10 20c2.7 0 4.96-.9 6.62-2.44l-3.24-2.5c-.9.6-2.04.95-3.38.95-2.6 0-4.8-1.76-5.58-4.12H1.08v2.58A9.99 9.99 0 0 0 10 20Z" fill="#34A853"/><path d="M4.42 11.89A6.01 6.01 0 0 1 4.1 10c0-.66.11-1.3.32-1.89V5.53H1.08A9.99 9.99 0 0 0 0 10c0 1.61.39 3.14 1.08 4.47l3.34-2.58Z" fill="#FBBC05"/><path d="M10 3.96c1.47 0 2.78.5 3.82 1.5l2.86-2.86C14.96.99 12.7 0 10 0A9.99 9.99 0 0 0 1.08 5.53l3.34 2.58C5.2 5.72 7.4 3.96 10 3.96Z" fill="#EA4335"/></svg>
+                  {t("Google로 로그인", "Login with Google")}
+                </button>
+              </div>
+            )}
+            </div>
+
+            {/* 고정 하단 액션 — iPad 에서 스크롤해도 항상 보임 */}
+            <div className="border-t border-gray-100 bg-white p-4 space-y-2 safe-area-inset-bottom">
               {/* 연습 클러스터 해금 CTA — 이 레슨이 연습 클러스터를 해금하면 주 버튼으로 */}
               {(() => {
                 const unlockedCluster = ALL_CLUSTERS.find(
@@ -873,12 +915,14 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                     >
                       🏆 {t("USACO 모의전 (cpp-p3)", "USACO Mock (cpp-p3)")} →
                     </button>
-                    <button
-                      onClick={() => router.push("/coding-bank")}
-                      className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5"
-                    >
-                      🌟 {t("코딩 뱅크 100 문제", "Coding Bank (100 problems)")} →
-                    </button>
+                    {isOwner && (
+                      <button
+                        onClick={() => router.push("/coding-bank")}
+                        className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5"
+                      >
+                        🌟 {t("코딩 뱅크 100 문제", "Coding Bank (100 problems)")} →
+                      </button>
+                    )}
                     <button
                       onClick={() => router.push("/algo")}
                       className="w-full py-2.5 bg-purple-500 hover:bg-purple-600 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5"
@@ -952,42 +996,34 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 }
                 return null
               })()}
-              {/* 레슨 집중 퀴즈 CTA — IGCSE 제외 */}
-              {!isIGCSE && (
-                <button
-                  onClick={() => {
-                    const course = currentProgrammingLang === "cpp" ? "cpp" : "python"
-                    sessionStorage.setItem("quizSettings", JSON.stringify({
-                      questionCount: 10,
-                      difficulty: "mixed",
-                      course,
-                      startTime: Date.now(),
-                      lessonFilter: isNaN(Number(lessonId)) ? lessonId : Number(lessonId),
-                      isReview: true,
-                    }))
-                    router.push("/quiz")
-                  }}
-                  className="w-full py-3 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white rounded-xl font-bold text-base transition-all"
-                >
-                  {t("이 레슨 퀴즈 풀기 🧠", "Quiz on this lesson 🧠")}
-                </button>
-              )}
-              {!isAuthenticated && (
-                <div className="bg-green-50 border border-green-200 rounded-2xl p-4 text-left">
-                  <p className="text-sm font-bold text-green-800 mb-1">🦒 {t("로그인하면 진도가 안전하게 저장돼요!", "Login to safely save your progress!")}</p>
-                  <p className="text-xs text-green-600 mb-3">{t("지금까지 푼 내용이 클라우드에 저장되고, 다른 기기에서도 이어할 수 있어요", "Your work will be saved to the cloud and synced across devices")}</p>
+              {/* 보조 액션: 퀴즈 / 돌아가기 — 작은 사이드 바이 사이드 */}
+              <div className="flex gap-2 pt-1">
+                {!isIGCSE && (
                   <button
-                    onClick={() => { router.push(`/login?returnTo=${encodeURIComponent(`/learn/${lessonId}`)}`) }}
-                    className="w-full py-2.5 bg-white border border-green-300 hover:bg-green-50 text-green-700 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2"
+                    onClick={() => {
+                      const course = currentProgrammingLang === "cpp" ? "cpp" : "python"
+                      sessionStorage.setItem("quizSettings", JSON.stringify({
+                        questionCount: 10,
+                        difficulty: "mixed",
+                        course,
+                        startTime: Date.now(),
+                        lessonFilter: isNaN(Number(lessonId)) ? lessonId : Number(lessonId),
+                        isReview: true,
+                      }))
+                      router.push("/quiz")
+                    }}
+                    className="flex-1 py-2.5 bg-orange-100 hover:bg-orange-200 text-orange-700 rounded-xl font-bold text-sm transition-all"
                   >
-                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M19.6 10.23c0-.68-.06-1.36-.17-2.02H10v3.83h5.38a4.6 4.6 0 0 1-2 3.02v2.5h3.24c1.89-1.74 2.98-4.3 2.98-7.33Z" fill="#4285F4"/><path d="M10 20c2.7 0 4.96-.9 6.62-2.44l-3.24-2.5c-.9.6-2.04.95-3.38.95-2.6 0-4.8-1.76-5.58-4.12H1.08v2.58A9.99 9.99 0 0 0 10 20Z" fill="#34A853"/><path d="M4.42 11.89A6.01 6.01 0 0 1 4.1 10c0-.66.11-1.3.32-1.89V5.53H1.08A9.99 9.99 0 0 0 0 10c0 1.61.39 3.14 1.08 4.47l3.34-2.58Z" fill="#FBBC05"/><path d="M10 3.96c1.47 0 2.78.5 3.82 1.5l2.86-2.86C14.96.99 12.7 0 10 0A9.99 9.99 0 0 0 1.08 5.53l3.34 2.58C5.2 5.72 7.4 3.96 10 3.96Z" fill="#EA4335"/></svg>
-                    {t("Google로 로그인", "Login with Google")}
+                    🧠 {t("이 레슨 퀴즈", "Quiz")}
                   </button>
-                </div>
-              )}
-              <button onClick={() => { localStorage.removeItem(progressKey); router.push(`/curriculum#lesson-${lessonId}`) }} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
-                {t("돌아가기", "Go Back")}
-              </button>
+                )}
+                <button
+                  onClick={() => { localStorage.removeItem(progressKey); router.push(`/curriculum#lesson-${lessonId}`) }}
+                  className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold text-sm transition-colors"
+                >
+                  {t("커리큘럼으로", "Curriculum")}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1038,7 +1074,31 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     <CodeSubmissionProvider lessonId={lessonId}>
       <Confetti show={showConfetti} />
       <SuccessOverlay show={showSuccess} message={successMessage} onClose={closeSuccessOverlay} />
-      
+
+      {/* 비로그인 학습 배너 — Python 무료 공개 레슨에서, 로그인 안 된 사용자에게 (audit R1) */}
+      {isPreviewLesson && !authLoading && !user && (
+        <>
+          <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+            <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-wrap items-center justify-center sm:justify-between gap-2 text-xs sm:text-sm">
+              <p className="font-medium">
+                <span className="font-bold">{t("🎁 Python 무료 학습 중", "🎁 Free Python lessons")}</span>
+                <span className="opacity-90"> — {t("가입하면 진도 저장 + 광고 없이 학습", "Sign up to save progress + ad-free")}</span>
+              </p>
+              <a
+                href={`/login?returnTo=${encodeURIComponent("/learn/" + lessonId)}`}
+                className="px-3 py-1 rounded-full bg-white text-emerald-600 font-bold hover:bg-emerald-50 transition-colors whitespace-nowrap"
+              >
+                {t("무료 가입 →", "Sign up free →")}
+              </a>
+            </div>
+          </div>
+          {/* 상단 광고 (비로그인 only — AdSlot 자체가 user 체크) */}
+          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pt-2">
+            <AdSlot name="learnTop" format="responsive" />
+          </div>
+        </>
+      )}
+
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-indigo-50/30">
         {/* 상단 헤더 */}
         <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm">
@@ -1221,7 +1281,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
         {/* 메인 콘텐츠 */}
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
-          <div data-learn-content className="relative bg-white rounded-2xl p-6 pb-28 md:p-10 md:pb-28 shadow-sm">
+          <div data-learn-content className="relative bg-white rounded-2xl p-6 pb-40 md:p-10 md:pb-32 shadow-sm">
             {/* 선생님 전용 편집 버튼 */}
             {effectiveTeacher && mergedStep && (
               <button
@@ -1254,11 +1314,23 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           </div>
         </div>
 
+        {/* 하단 광고 — 컨텐츠 흐름 안에. fixed 네비 위에 자연스럽게 보임. 비로그인 only. */}
+        {isPreviewLesson && (
+          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <AdSlot name="learnBottom" format="responsive" />
+          </div>
+        )}
+
         <div className="h-10" />
       </div>
 
-      {/* 네비게이션 버튼 */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20 safe-area-inset-bottom">
+      {/* 네비게이션 버튼 — 스크롤 중에는 클릭 차단 (iPad 우발 클릭 방지) */}
+      <div
+        className={cn(
+          "fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20 safe-area-inset-bottom transition-opacity",
+          isScrollLocked ? "pointer-events-none opacity-80" : "opacity-100"
+        )}
+      >
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
           {fromReview && (
             <div className="flex justify-center mb-2">

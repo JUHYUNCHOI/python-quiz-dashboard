@@ -7,6 +7,7 @@ import { highlightPython } from "@/components/ui/code-block"
 import { useCodeSubmission } from "@/contexts/code-submission-context"
 import { useLanguage } from "@/contexts/language-context"
 import { createSmartKeyHandler } from "@/components/cpp/editor-key-handler"
+import { renderInlineMarkdown } from "@/components/learn/render-content"
 
 // Pyodide 타입 정의
 declare global {
@@ -19,7 +20,7 @@ interface PyodideInterface {
   runPython: (code: string) => any
   runPythonAsync: (code: string) => Promise<any>
   globals: any
-  setStdout: (options: { batched: (msg: string) => void }) => void
+  setStdout: (options: { batched?: (msg: string) => void; raw?: (charCode: number) => void; write?: (buf: Uint8Array) => number }) => void
 }
 
 interface PythonRunnerProps {
@@ -228,15 +229,17 @@ export function PythonRunner({
     setIsCorrect(null)
 
     try {
-      let capturedOutput = ""
+      // ⚠️ batched 는 줄바꿈 시에만 flush — end="." 같은 개행 없는 출력에서
+      // batched 가 안 불려 정답인데 틀린 것으로 판정되던 버그.
+      // raw 콜백은 바이트별로 호출되어 개행 없어도 모든 출력 포착.
+      const capturedBytes: number[] = []
       pyodideInstance.setStdout({
-        batched: (msg: string) => {
-          capturedOutput += msg + "\n"
-        }
+        raw: (b: number) => { capturedBytes.push(b) }
       })
 
       await pyodideInstance.runPythonAsync(code)
-      
+
+      const capturedOutput = new TextDecoder().decode(new Uint8Array(capturedBytes))
       const result = capturedOutput.trimEnd()
       setOutput(result)
 
@@ -321,9 +324,9 @@ export function PythonRunner({
 
   return (
     <div className="space-y-3">
-      {/* 문제 */}
+      {/* 문제 — sticky 로 코드 입력 중에도 항상 보임 (작은 화면 대응) */}
       {task && (
-        <div className="bg-indigo-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
+        <div className="sticky top-[110px] md:top-[120px] z-10 bg-indigo-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
           <p className="text-indigo-800 font-bold text-sm md:text-base">🎯 {task}</p>
         </div>
       )}
@@ -490,7 +493,7 @@ export function PythonRunner({
             <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-600" />
             <span className="font-bold text-purple-700 text-xs md:text-sm">💡 {t("힌트!", "Hint!")}</span>
           </div>
-          <p className="text-purple-800 font-mono text-xs md:text-sm">{hint}</p>
+          <p className="text-purple-800 text-xs md:text-sm whitespace-pre-wrap">{renderInlineMarkdown(hint, "h1-")}</p>
         </div>
       )}
 

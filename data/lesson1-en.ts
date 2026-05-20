@@ -182,6 +182,37 @@ Third line
           hint2: "print('Age: 15')\nprint('Hobby: Gaming')"
         },
         {
+          id: "empty-print-explain",
+          type: "explain",
+          title: "✨ Making a Blank Line — print() with Nothing Inside",
+          content: `**print() with nothing inside the parentheses prints a single blank line.** Useful for spacing.
+
+\`\`\`python
+print('First line')
+print()        # one blank line
+print('Third line')
+\`\`\`
+
+Result:
+\`\`\`
+First line
+
+Third line
+\`\`\`
+
+> 💡 **print() can be called with no arguments — no error!** It just prints a single newline.`
+        },
+        {
+          id: "try-empty-print",
+          type: "tryit",
+          title: "🖥️ Make a blank line yourself",
+          task: "Print 'Hi', then a blank line, then 'Bye'.",
+          initialCode: "print('Hi')\n# Put an empty print() here for the blank line\nprint('Bye')",
+          expectedOutput: "Hi\n\nBye",
+          hint: "An empty print() (no arguments) gives you a blank line",
+          hint2: "print('Hi')\nprint()\nprint('Bye')"
+        },
+        {
           id: "comma-explain",
           type: "explain",
           title: "📎 Printing Multiple Values with Commas",

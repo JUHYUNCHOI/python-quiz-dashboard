@@ -186,12 +186,25 @@ function LandingPage() {
               "A step-by-step coding roadmap for middle & high schoolers.\nAt your own pace, with your teacher."
             )}
           </p>
-          <Link
-            href="/login"
-            className="inline-block mt-1 px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
-          >
-            {t("무료로 시작하기 →", "Get Started Free →")}
-          </Link>
+          {/* 듀얼 CTA — 가입 / 비로그인 체험 (audit R1 + R2) */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center items-center pt-1">
+            <Link
+              href="/login"
+              className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+            >
+              {t("무료로 시작하기 →", "Get Started Free →")}
+            </Link>
+            <Link
+              href="/learn/1"
+              className="inline-block px-6 py-3 rounded-2xl bg-white text-gray-700 font-bold text-sm border-2 border-gray-300 hover:border-orange-400 hover:text-orange-600 transition-all"
+            >
+              {t("바로 코딩 시작 →", "Start coding now →")}
+            </Link>
+          </div>
+          {/* 무료 신뢰선 — 광고 유입자 "혹시 나중에 결제?" 불안 해소 (audit R2) */}
+          <p className="text-[11px] font-medium text-gray-500 pt-1">
+            {t("✅ 100% 무료 · 결제 정보 안 받아요 · Python 52강 가입 없이 학습 가능", "✅ 100% free · No payment info · All 52 Python lessons free, no signup needed")}
+          </p>
         </div>
 
         {/* ── 학습 경로 ── */}
@@ -393,6 +406,56 @@ function LandingPage() {
                 <div className="text-lg">{item.icon}</div>
                 <p className="text-[11px] font-bold text-gray-700">{item.label}</p>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── 자주 묻는 질문 (광고 유입자 R2: "무료?" / "선생님 필수?" 불안 해소) ── */}
+        <div className="pt-8 space-y-3">
+          <h2 className="text-base font-black text-gray-800 text-center">
+            {t("자주 묻는 질문", "Frequently Asked")}
+          </h2>
+          <div className="space-y-2 max-w-xl mx-auto">
+            {([
+              {
+                q: t("정말 무료인가요?", "Is it really free?"),
+                a: t(
+                  "네. 결제 정보를 받지 않아요. Python 52강은 가입 없이도 학습할 수 있고, 가입하면 진도 저장 + 광고 없이 사용할 수 있어요.",
+                  "Yes. We never ask for payment info. Python 52 lessons are free without signup. Sign up to save progress and use the site ad-free."
+                ),
+              },
+              {
+                q: t("선생님이 꼭 있어야 하나요?", "Do I need a teacher?"),
+                a: t(
+                  "혼자서도 학습할 수 있어요. 선생님과 함께면 과제 채점과 피드백을 추가로 받을 수 있어요.",
+                  "You can learn on your own. With a teacher, you also get graded assignments and feedback."
+                ),
+              },
+              {
+                q: t("어느 학년부터 가능한가요?", "What grade levels?"),
+                a: t(
+                  "중학생부터 고등학생까지. 코딩 경험 없어도 Python 1강부터 시작하면 따라올 수 있어요.",
+                  "Middle and high schoolers. No coding experience needed — start with Python Lesson 1."
+                ),
+              },
+              {
+                q: t("어떤 언어를 배우나요?", "Which languages?"),
+                a: t(
+                  "Python (52강) → C++ (23강) → 알고리즘 → USACO·MCC 대회 문제. IGCSE 수도 코드도 별도로 있어요.",
+                  "Python (52 lessons) → C++ (23 lessons) → algorithms → USACO/MCC contests. IGCSE pseudocode is also available."
+                ),
+              },
+            ]).map(({ q, a }) => (
+              <details
+                key={q}
+                className="group bg-white rounded-xl border border-gray-200 p-3.5 open:border-orange-300 open:bg-orange-50/40"
+              >
+                <summary className="cursor-pointer text-sm font-bold text-gray-800 list-none flex items-center justify-between">
+                  <span>{q}</span>
+                  <span className="text-orange-500 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p className="text-xs text-gray-600 leading-relaxed mt-2.5">{a}</p>
+              </details>
             ))}
           </div>
         </div>

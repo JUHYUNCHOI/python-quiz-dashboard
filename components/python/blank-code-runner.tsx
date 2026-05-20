@@ -7,6 +7,7 @@ import { highlightPythonInline } from "@/components/ui/code-block"
 import { useCodeSubmission } from "@/contexts/code-submission-context"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
+import { renderInlineMarkdown } from "@/components/learn/render-content"
 
 // Pyodide 타입 정의
 declare global {
@@ -19,7 +20,7 @@ interface PyodideInterface {
   runPython: (code: string) => any
   runPythonAsync: (code: string) => Promise<any>
   globals: any
-  setStdout: (options: { batched: (msg: string) => void }) => void
+  setStdout: (options: { batched?: (msg: string) => void; raw?: (charCode: number) => void; write?: (buf: Uint8Array) => number }) => void
 }
 
 interface BlankCodeRunnerProps {
@@ -281,15 +282,17 @@ export function BlankCodeRunner({
     setIsCorrect(null)
 
     try {
-      let capturedOutput = ""
+      // ⚠️ batched 는 줄바꿈 시에만 flush — 학생이 end="" / end="." 처럼
+      // 개행 없는 출력을 하면 batched 가 안 불려서 정답인데 틀린 것으로
+      // 처리되던 버그. raw 콜백은 바이트별로 호출되어 모든 출력 포착.
+      const capturedBytes: number[] = []
       pyodideInstance.setStdout({
-        batched: (msg: string) => {
-          capturedOutput += msg + "\n"
-        }
+        raw: (b: number) => { capturedBytes.push(b) }
       })
 
       await pyodideInstance.runPythonAsync(code)
 
+      const capturedOutput = new TextDecoder().decode(new Uint8Array(capturedBytes))
       const result = capturedOutput.trimEnd()
       setOutput(result)
 
@@ -497,16 +500,16 @@ export function BlankCodeRunner({
 
   return (
     <div className="space-y-3">
-      {/* 문제 */}
+      {/* 문제 — sticky 로 코드 입력 중에도 항상 보임 (작은 iPad 화면 대응) */}
       {task && !expectedOutput && (
-        <div className="bg-indigo-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
+        <div className="sticky top-[110px] md:top-[120px] z-10 bg-indigo-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
           <p className="text-indigo-800 font-bold text-sm md:text-base">🎯 {task}</p>
         </div>
       )}
 
-      {/* 기대 출력 미리보기 — 빈칸에 뭘 넣어야 하는지 유추 가능 */}
+      {/* 기대 출력 미리보기 — 빈칸에 뭘 넣어야 하는지 유추 가능. sticky 로 항상 보임. */}
       {expectedOutput && (
-        <div className="bg-amber-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-amber-200">
+        <div className="sticky top-[110px] md:top-[120px] z-10 bg-amber-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-amber-200">
           <p className="text-amber-700 font-bold text-xs md:text-sm mb-1">{t("📋 이렇게 출력되도록 빈칸을 채우세요:", "📋 Fill in the blanks to get this output:")}</p>
           <pre className="font-mono text-xs md:text-sm text-amber-900 whitespace-pre-wrap bg-amber-100/50 rounded-md p-2 select-all cursor-text">{expectedOutput}</pre>
           {/[^\x00-\x7F]/.test(expectedOutput) && (
@@ -669,7 +672,7 @@ export function BlankCodeRunner({
             <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-600" />
             <span className="font-bold text-purple-700 text-xs md:text-sm">💡 {t("힌트!", "Hint!")}</span>
           </div>
-          <p className="text-purple-800 font-mono text-xs md:text-sm">{hint}</p>
+          <p className="text-purple-800 text-xs md:text-sm whitespace-pre-wrap">{renderInlineMarkdown(hint, "h1-")}</p>
         </div>
       )}
 
@@ -680,7 +683,7 @@ export function BlankCodeRunner({
             <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-orange-600" />
             <span className="font-bold text-orange-700 text-xs md:text-sm">🔑 {t("정답 힌트!", "Answer Hint!")}</span>
           </div>
-          <p className="text-orange-800 font-mono text-xs md:text-sm">{hint2}</p>
+          <p className="text-orange-800 font-mono text-xs md:text-sm whitespace-pre-wrap">{hint2}</p>
         </div>
       )}
 

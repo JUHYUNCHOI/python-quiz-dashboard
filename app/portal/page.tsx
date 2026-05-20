@@ -9,6 +9,7 @@ import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { useLanguage } from "@/contexts/language-context"
+import { useIsOwner } from "@/components/owner-only-guard"
 
 // ─── 플랫폼 URL 설정 ─────────────────────────────────────────────────
 const ALGORITHM_URL = process.env.NEXT_PUBLIC_ALGORITHM_URL || "http://localhost:8080"
@@ -186,6 +187,7 @@ function hwTimeAgo(iso: string, lang: "ko" | "en" = "ko") {
 function PortalContent() {
   const router = useRouter()
   const { t, lang } = useLanguage()
+  const isOwner = useIsOwner()
   const [name, setName] = useState("")
   const [xp, setXp] = useState(0)
   const [streak, setStreak] = useState(0)
@@ -286,8 +288,8 @@ function PortalContent() {
       return
     }
     if (platform === "algorithm") {
-      // 코드린 내부 알고리즘 페이지로 이동
-      router.push("/algorithm")
+      // 새 통합 /algorithm 화면은 owner 만. 일반 학생은 기존 /algo 토픽 리스트로.
+      router.push(isOwner ? "/algorithm" : "/algo")
       return
     }
 
@@ -435,6 +437,30 @@ function PortalContent() {
             📊 {t("학습 분석 자세히 보기 →", "View Learning Analytics →")}
           </button>
         </div>
+
+        {/* 첫 방문자 CTA — 완료한 레슨 0개일 때만 "여기서 시작" 큰 버튼 노출.
+            광고 유입 신규 사용자 막막함 해소 (audit R3). */}
+        {!loading && completedIds.size === 0 && !isTeacher && (
+          <button
+            onClick={() => router.push("/learn/1")}
+            className="w-full p-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-200 hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all text-left"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">🚀</span>
+              <div className="flex-1">
+                <p className="text-xs font-bold opacity-90 mb-0.5">
+                  {t("처음이세요?", "First time?")}
+                </p>
+                <p className="text-base font-black leading-tight">
+                  {t("Python 1강부터 시작해보세요", "Start with Python Lesson 1")}
+                </p>
+                <p className="text-[11px] font-medium opacity-90 mt-1">
+                  {t("15분이면 첫 코딩 끝나요 →", "Your first code in 15 minutes →")}
+                </p>
+              </div>
+            </div>
+          </button>
+        )}
 
         {/* 빠른 이동 */}
         <div className="grid grid-cols-3 gap-2">

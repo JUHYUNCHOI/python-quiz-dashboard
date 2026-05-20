@@ -5,6 +5,8 @@ import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/contexts/auth-context"
 import { LanguageProvider } from "@/contexts/language-context"
 import { GlobalEditorProvider } from "@/components/teacher/global-editor-provider"
+import { SiteFooter } from "@/components/site-footer"
+import { ADSENSE_ENABLED, ADSENSE_PUBLISHER_ID } from "@/lib/adsense-config"
 import "./globals.css"
 
 export const viewport: Viewport = {
@@ -43,12 +45,21 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        {/* Google AdSense — publisher ID 설정 시에만 로드 */}
+        {ADSENSE_ENABLED && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`}
+            crossOrigin="anonymous"
+          />
+        )}
       </head>
       <body className="font-sans antialiased notranslate" suppressHydrationWarning>
         <AuthProvider>
           <LanguageProvider>
             <GlobalEditorProvider>
               {children}
+              <SiteFooter />
             </GlobalEditorProvider>
           </LanguageProvider>
         </AuthProvider>

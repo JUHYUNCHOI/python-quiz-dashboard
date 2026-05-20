@@ -182,6 +182,37 @@ print('세 번째 줄')
           hint2: "print('나이: 15')\nprint('취미: 게임')"
         },
         {
+          id: "empty-print-explain",
+          type: "explain",
+          title: "✨ 빈 줄 만들기 — print() 만 쓰기",
+          content: `**print() 안을 비워두면 빈 줄 한 칸** 이 출력돼요. 줄 사이 간격을 줄 때 유용해요.
+
+\`\`\`python
+print('첫 번째 줄')
+print()        # 빈 줄 한 칸
+print('세 번째 줄')
+\`\`\`
+
+결과:
+\`\`\`
+첫 번째 줄
+
+세 번째 줄
+\`\`\`
+
+> 💡 **print() 는 인자(괄호 안 내용) 없이도 쓸 수 있어요.** 에러 안 나요! 그냥 줄바꿈만 하나 출력해요.`
+        },
+        {
+          id: "try-empty-print",
+          type: "tryit",
+          title: "🖥️ 빈 줄 직접 만들어보기",
+          task: "'안녕'을 출력한 뒤 빈 줄을 하나 두고, '반가워'를 출력해봐!",
+          initialCode: "print('안녕')\n# 여기에 빈 줄용 print() 한 줄 써봐\nprint('반가워')",
+          expectedOutput: "안녕\n\n반가워",
+          hint: "괄호 안을 비워둔 print() 한 줄을 넣으면 빈 줄이 생겨요",
+          hint2: "print('안녕')\nprint()\nprint('반가워')"
+        },
+        {
           id: "comma-explain",
           type: "explain",
           title: "📎 쉼표로 여러 값 출력",

@@ -141,6 +141,26 @@ print(text2.replace("바나나", "사과"))
           expectedOutput: "포도가 맛있다",
           hint: ".replace(\"사과\", \"포도\")",
           hint2: "text.replace(\"사과\", \"포도\")"
+        },
+        {
+          id: "try-replace-scratch",
+          type: "tryit",
+          title: "✋ 손으로 직접 — replace 처음부터",
+          task: "'안녕'을 '반가워'로 바꿔서 출력해봐. print 한 줄을 직접 써보자!",
+          initialCode: "text = \"안녕 친구! 안녕 모두!\"\n# 여기에 print 한 줄을 직접 써봐\n",
+          expectedOutput: "반가워 친구! 반가워 모두!",
+          hint: "print( ... ) 안에 text.replace(\"안녕\", \"반가워\") 모양으로 넣으면 돼요",
+          hint2: "print(text.replace(\"안녕\", \"반가워\"))"
+        },
+        {
+          id: "try-replace-chain",
+          type: "tryit",
+          title: "✋ 두 개 한꺼번에 바꾸기",
+          task: "replace 를 두 번 연결해서 '고양이'→'강아지', '소'→'토끼'로 바꿔봐.",
+          initialCode: "text = \"고양이와 소\"\n# replace 를 .replace(...).replace(...) 처럼 이어붙일 수 있어\n",
+          expectedOutput: "강아지와 토끼",
+          hint: "한 줄에 replace 를 두 번 연결: text.replace(...).replace(...)",
+          hint2: "print(text.replace(\"고양이\", \"강아지\").replace(\"소\", \"토끼\"))"
         }
       ]
     },
@@ -175,6 +195,26 @@ print(text.count("a"))  # 3
           expectedOutput: "5",
           hint: ".count(\"a\") 메서드 사용!",
           hint2: "text.count(\"a\")"
+        },
+        {
+          id: "try-count-scratch",
+          type: "tryit",
+          title: "✋ 손으로 직접 — count 처음부터",
+          task: "문장에서 '는' 글자가 몇 번 나오는지 세서 출력해봐. print 한 줄을 직접 써보자!",
+          initialCode: "text = \"나는 코딩을 배우는 중이고 나는 멋지다\"\n# 여기에 print 한 줄을 직접 써봐\n",
+          expectedOutput: "3",
+          hint: "print( text.count(\"는\") ) 모양으로 써요",
+          hint2: "print(text.count(\"는\"))"
+        },
+        {
+          id: "try-count-word",
+          type: "tryit",
+          title: "✋ 단어도 셀 수 있어",
+          task: "한 글자 말고 '바나나' 같은 단어도 count 로 세지요. 'banana' 가 몇 번 나오는지 세서 출력해봐.",
+          initialCode: "text = \"banana smoothie with banana chips and banana bread\"\n# print 한 줄로 'banana' 횟수 출력!\n",
+          expectedOutput: "3",
+          hint: "글자 대신 단어를 넣어요: text.count(\"banana\")",
+          hint2: "print(text.count(\"banana\"))"
         },
         {
           id: "len-explain",

@@ -141,6 +141,26 @@ All matching parts get replaced!`
           expectedOutput: "Grapes are delicious",
           hint: ".replace(\"Apples\", \"Grapes\")",
           hint2: "text.replace(\"Apples\", \"Grapes\")"
+        },
+        {
+          id: "try-replace-scratch",
+          type: "tryit",
+          title: "✋ Type it yourself — replace from scratch",
+          task: "Replace 'Hi' with 'Hello' and print the result. Write the whole print line yourself!",
+          initialCode: "text = \"Hi friend! Hi everyone!\"\n# Write the print line here yourself\n",
+          expectedOutput: "Hello friend! Hello everyone!",
+          hint: "Inside print( ... ), use text.replace(\"Hi\", \"Hello\")",
+          hint2: "print(text.replace(\"Hi\", \"Hello\"))"
+        },
+        {
+          id: "try-replace-chain",
+          type: "tryit",
+          title: "✋ Replace two things at once",
+          task: "Chain two replace() calls — turn 'cat'→'dog' and 'cow'→'rabbit'.",
+          initialCode: "text = \"cat and cow\"\n# You can chain replace like .replace(...).replace(...)\n",
+          expectedOutput: "dog and rabbit",
+          hint: "Chain replace twice: text.replace(...).replace(...)",
+          hint2: "print(text.replace(\"cat\", \"dog\").replace(\"cow\", \"rabbit\"))"
         }
       ]
     },
@@ -175,6 +195,26 @@ print(text.count("a"))  # 3
           expectedOutput: "5",
           hint: "Use the .count(\"a\") method!",
           hint2: "text.count(\"a\")"
+        },
+        {
+          id: "try-count-scratch",
+          type: "tryit",
+          title: "✋ Type it yourself — count from scratch",
+          task: "Count how many times 'is' appears in the sentence. Write the whole print line yourself!",
+          initialCode: "text = \"This is fun and this is hard but this is mine\"\n# Write a print line here yourself\n",
+          expectedOutput: "3",
+          hint: "Write print( text.count(\"is\") )",
+          hint2: "print(text.count(\"is\"))"
+        },
+        {
+          id: "try-count-word",
+          type: "tryit",
+          title: "✋ Counting words too",
+          task: "count() works with full words too — count 'banana' in the sentence.",
+          initialCode: "text = \"banana smoothie with banana chips and banana bread\"\n# Print how many times 'banana' appears\n",
+          expectedOutput: "3",
+          hint: "Pass the full word: text.count(\"banana\")",
+          hint2: "print(text.count(\"banana\"))"
         },
         {
           id: "len-explain",

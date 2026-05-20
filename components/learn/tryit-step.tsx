@@ -6,6 +6,7 @@ import { PythonRunner } from "@/components/python/python-runner"
 import { BlankCodeRunner } from "@/components/python/blank-code-runner"
 import { LessonStep } from "./types"
 import { useLanguage } from "@/contexts/language-context"
+import { renderInlineMarkdown } from "./render-content"
 
 interface TryItStepProps {
   step: LessonStep
@@ -40,7 +41,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             )}
             {hintLevel >= 1 && step.hint && (
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                <p className="text-sm text-amber-800"><Lightbulb className="w-4 h-4 inline mr-1 text-amber-600" /> {t("힌트 1: ", "Hint 1: ")}{step.hint}</p>
+                <p className="text-sm text-amber-800"><Lightbulb className="w-4 h-4 inline mr-1 text-amber-600" /> {t("힌트 1: ", "Hint 1: ")}{renderInlineMarkdown(step.hint, "h1-")}</p>
                 {hintLevel === 1 && step.hint2 && (
                   <button onClick={() => onHintLevelChange(2)} className="text-xs text-amber-600 hover:text-amber-700 mt-2 flex items-center gap-1">
                     <Eye className="w-3 h-3" /> {t("정답에 가까운 힌트 보기", "Show answer hint")}
@@ -50,7 +51,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             )}
             {hintLevel >= 2 && step.hint2 && (
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                <p className="text-sm text-orange-800 font-mono"><Eye className="w-4 h-4 inline mr-1 text-orange-600" /> {t("힌트 2: ", "Hint 2: ")}{step.hint2}</p>
+                <p className="text-sm text-orange-800 font-mono whitespace-pre-wrap"><Eye className="w-4 h-4 inline mr-1 text-orange-600" /> {t("힌트 2: ", "Hint 2: ")}{step.hint2}</p>
               </div>
             )}
           </div>
