@@ -20,6 +20,7 @@ import { logActivity } from "@/lib/activity-log"
 import { trackStepVisit } from "@/lib/track-step-visit"
 import { getCompletedLessons, pythonParts, cppParts, pseudoParts, getNextLessonId } from "@/lib/curriculum-data"
 import { useAuth } from "@/contexts/auth-context"
+import { useIsOwner } from "@/components/owner-only-guard"
 import { analyzeLessonComplete, analyzeStreak } from "@/lib/feedback-analyzer"
 import { LessonFeedbackCard } from "@/components/feedback/lesson-feedback-card"
 import { StreakWidget } from "@/components/feedback/streak-widget"
@@ -43,6 +44,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const router = useRouter()
   const { lang, t } = useLanguage()
   const { play, isMuted, toggleMute } = useSoundEffect()
+  const isOwner = useIsOwner()
 
   const isBilingual = lessonId in bilingualLessons
   const hasVariants = lessonId in lessonVariants
@@ -873,12 +875,14 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                     >
                       🏆 {t("USACO 모의전 (cpp-p3)", "USACO Mock (cpp-p3)")} →
                     </button>
-                    <button
-                      onClick={() => router.push("/coding-bank")}
-                      className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5"
-                    >
-                      🌟 {t("코딩 뱅크 100 문제", "Coding Bank (100 problems)")} →
-                    </button>
+                    {isOwner && (
+                      <button
+                        onClick={() => router.push("/coding-bank")}
+                        className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5"
+                      >
+                        🌟 {t("코딩 뱅크 100 문제", "Coding Bank (100 problems)")} →
+                      </button>
+                    )}
                     <button
                       onClick={() => router.push("/algo")}
                       className="w-full py-2.5 bg-purple-500 hover:bg-purple-600 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5"

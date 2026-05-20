@@ -10,6 +10,7 @@ import { AlgoSidebar } from "@/components/algorithm/AlgoSidebar"
 import { TopicPage } from "@/components/algorithm/TopicPage"
 import { ProblemPage } from "@/components/algorithm/ProblemPage"
 import { LanguageToggle } from "@/components/language-toggle"
+import { OwnerOnlyGuard } from "@/components/owner-only-guard"
 
 // Python 트랙에서 보여줄 토픽
 const PYTHON_TOPIC_IDS = new Set([
@@ -124,12 +125,20 @@ function AlgorithmContent() {
 
 export default function AlgorithmPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-5xl animate-bounce">🧩</div>
-      </div>
-    }>
-      <AlgorithmContent />
-    </Suspense>
+    <OwnerOnlyGuard
+      title={{ ko: "새 알고리즘 통합 화면은 준비 중이에요", en: "New Algorithm Lab is coming soon" }}
+      description={{
+        ko: "지금은 기존 알고리즘 페이지로 가주세요. 더 다듬어서 곧 공개할게요!",
+        en: "Please use our current Algorithm page. We're polishing the new one!",
+      }}
+    >
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-5xl animate-bounce">🧩</div>
+        </div>
+      }>
+        <AlgorithmContent />
+      </Suspense>
+    </OwnerOnlyGuard>
   )
 }

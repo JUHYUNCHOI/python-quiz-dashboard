@@ -9,6 +9,7 @@ import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { useLanguage } from "@/contexts/language-context"
+import { useIsOwner } from "@/components/owner-only-guard"
 
 // ─── 플랫폼 URL 설정 ─────────────────────────────────────────────────
 const ALGORITHM_URL = process.env.NEXT_PUBLIC_ALGORITHM_URL || "http://localhost:8080"
@@ -186,6 +187,7 @@ function hwTimeAgo(iso: string, lang: "ko" | "en" = "ko") {
 function PortalContent() {
   const router = useRouter()
   const { t, lang } = useLanguage()
+  const isOwner = useIsOwner()
   const [name, setName] = useState("")
   const [xp, setXp] = useState(0)
   const [streak, setStreak] = useState(0)
@@ -286,8 +288,8 @@ function PortalContent() {
       return
     }
     if (platform === "algorithm") {
-      // 코드린 내부 알고리즘 페이지로 이동
-      router.push("/algorithm")
+      // 새 통합 /algorithm 화면은 owner 만. 일반 학생은 기존 /algo 토픽 리스트로.
+      router.push(isOwner ? "/algorithm" : "/algo")
       return
     }
 
