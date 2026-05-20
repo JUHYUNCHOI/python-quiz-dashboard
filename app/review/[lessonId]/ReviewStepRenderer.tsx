@@ -373,7 +373,7 @@ function McqStep({
           <p className={cn("font-bold mb-1", isRight ? "text-emerald-700" : "text-red-600")}>
             {isRight ? t("✅ 정답!", "✅ Correct!") : t("❌ 오답!", "❌ Wrong!")}
           </p>
-          <p className="text-gray-600 leading-relaxed">{renderBold(explanation)}</p>
+          <p className="text-gray-600 leading-relaxed whitespace-pre-line">{renderBold(explanation)}</p>
         </div>
       )}
     </div>
@@ -872,9 +872,9 @@ function PracticeStep({
           </button>
           {showHint && (
             <div className="mt-1 text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2 border border-amber-200 space-y-2">
-              {guide && <p>{guide}</p>}
+              {guide && <p className="whitespace-pre-line">{guide}</p>}
               {hint && guide && <hr className="border-amber-200" />}
-              {hint && <p>{hint}</p>}
+              {hint && <p className="whitespace-pre-line">{hint}</p>}
               {/* 2단계: 수업 내용 참고 */}
               {lessonExplains && lessonExplains.length > 0 && (
                 <>
