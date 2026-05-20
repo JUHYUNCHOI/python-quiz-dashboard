@@ -530,7 +530,26 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [showChapterComplete, showLessonComplete, showChapterList])
 
-  if (authLoading || !user) return null
+  // iPad/모바일 — 스크롤 끝나는 순간 fixed nav 버튼 위에서 손 떼면 의도치 않은
+  // 클릭 발생. 스크롤 중 + 멈춘 직후 짧은 grace 동안 nav 비활성화.
+  const [isScrollLocked, setIsScrollLocked] = useState(false)
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null
+    const onScroll = () => {
+      setIsScrollLocked(true)
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(() => setIsScrollLocked(false), 250)
+    }
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+      if (timer) clearTimeout(timer)
+    }
+  }, [])
+
+  if (authLoading) return null
+  // 비로그인 사용자: Python 프리뷰 레슨만 통과, 그 외는 차단 (useEffect 가 redirect)
+  if (!user && !isPreviewLesson) return null
 
   if (isLocked) {
     return (
@@ -1296,8 +1315,13 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         <div className="h-10" />
       </div>
 
-      {/* 네비게이션 버튼 */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20 safe-area-inset-bottom">
+      {/* 네비게이션 버튼 — 스크롤 중에는 클릭 차단 (iPad 우발 클릭 방지) */}
+      <div
+        className={cn(
+          "fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20 safe-area-inset-bottom transition-opacity",
+          isScrollLocked ? "pointer-events-none opacity-80" : "opacity-100"
+        )}
+      >
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
           {fromReview && (
             <div className="flex justify-center mb-2">
