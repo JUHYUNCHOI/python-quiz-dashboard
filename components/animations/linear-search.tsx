@@ -38,7 +38,7 @@ export function LinearSearchAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const isCurrent = (i: number) => started && i === currentIdx
 
   return (
-    <div className="rounded-xl border-2 border-black bg-white p-5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+    <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div>
           <p className="text-sm font-bold text-gray-500">{isEn ? "Linear Search" : "선형 탐색 (Linear Search)"}</p>
@@ -66,7 +66,7 @@ export function LinearSearchAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
               scale: isCurrent(i) ? 1.15 : 1,
             }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col items-center justify-center w-10 h-12 rounded-lg border-2 border-black font-black text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+            className="flex flex-col items-center justify-center w-10 h-12 rounded-lg border border-gray-200 font-black text-sm shadow-sm"
             style={{ color: isChecked(i) ? "#9ca3af" : "#111" }}
           >
             <span>{val}</span>
@@ -91,14 +91,14 @@ export function LinearSearchAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
         {!started ? (
           <button
             onClick={start}
-            className="px-5 py-2 bg-orange-500 text-white font-black rounded-lg border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
+            className="px-5 py-2 bg-orange-500 text-white font-black rounded-lg border border-gray-200 shadow-sm active:translate-y-0.5"
           >
             ▶ {isEn ? "Start" : "시작"}
           </button>
         ) : found ? (
           <button
             onClick={reset}
-            className="px-5 py-2 bg-gray-200 text-gray-700 font-black rounded-lg border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
+            className="px-5 py-2 bg-gray-200 text-gray-700 font-black rounded-lg border border-gray-200 shadow-sm active:translate-y-0.5"
           >
             ↩ {isEn ? "Again" : "다시"}
           </button>
@@ -106,13 +106,13 @@ export function LinearSearchAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
           <>
             <button
               onClick={next}
-              className="px-5 py-2 bg-orange-500 text-white font-black rounded-lg border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
+              className="px-5 py-2 bg-orange-500 text-white font-black rounded-lg border border-gray-200 shadow-sm active:translate-y-0.5"
             >
               → {isEn ? "Next check" : "다음 확인"}
             </button>
             <button
               onClick={reset}
-              className="px-4 py-2 bg-gray-100 text-gray-600 font-bold rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
+              className="px-4 py-2 bg-gray-100 text-gray-600 font-bold rounded-lg border border-gray-200 shadow-sm active:translate-y-0.5"
             >
               ↩
             </button>

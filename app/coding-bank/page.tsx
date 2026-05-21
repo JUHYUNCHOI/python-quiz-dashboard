@@ -73,7 +73,7 @@ function markSolved(id: string) {
 function LockScreen({ t }: { t: (ko: string, en: string) => string }) {
   return (
     <div className="flex flex-col items-center justify-center gap-6 py-20 text-center">
-      <div className="w-20 h-20 rounded-2xl border-2 border-black bg-gray-100 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center">
+      <div className="w-20 h-20 rounded-2xl border border-gray-200 bg-gray-100 shadow-sm flex items-center justify-center">
         <Lock className="w-9 h-9 text-gray-500" />
       </div>
       <div>
@@ -87,7 +87,7 @@ function LockScreen({ t }: { t: (ko: string, en: string) => string }) {
           )}
         </p>
       </div>
-      <div className="rounded-xl border-2 border-black bg-yellow-50 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] px-5 py-3 text-sm font-semibold text-gray-800">
+      <div className="rounded-xl border border-gray-200 bg-yellow-50 shadow-sm px-5 py-3 text-sm font-semibold text-gray-800">
         🔒 cpp-16 {t("완료 후 해금", "required to unlock")}
       </div>
     </div>
@@ -144,7 +144,7 @@ function ProblemList({
 
       {/* 진도 바 */}
       {problems.length > 0 && (
-        <div className="rounded-xl border-2 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-4">
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-semibold text-gray-700">
               {t("전체 진도", "Overall Progress")}
@@ -174,7 +174,7 @@ function ProblemList({
 
       {/* 필터 패널 */}
       {showFilters && (
-        <div className="rounded-xl border-2 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-4 flex flex-col gap-3">
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4 flex flex-col gap-3">
           {/* 카테고리 필터 */}
           <div>
             <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
@@ -324,7 +324,7 @@ function ProblemList({
           <button
             key={problem.id}
             onClick={() => onSelect(problem)}
-            className="rounded-2xl border-2 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-4 text-left transition-all hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
+            className="rounded-2xl border border-gray-200 bg-white shadow-sm p-4 text-left transition-all hover:shadow-md hover:-translate-y-0.5  active:translate-y-0.5"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-3 min-w-0">
@@ -437,7 +437,7 @@ function ProblemDetail({
       <div className="flex items-center gap-3">
         <button
           onClick={onBack}
-          className="p-2 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+          className="p-2 rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-sm transition-all"
         >
           <ArrowLeft className="w-4 h-4 text-gray-700" />
         </button>
@@ -471,7 +471,7 @@ function ProblemDetail({
       </div>
 
       {/* 문제 설명 */}
-      <div className="rounded-2xl border-2 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-5">
+      <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
         <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
           {t("문제 설명", "Problem")}
         </p>
@@ -490,13 +490,13 @@ function ProblemDetail({
 
       {/* 입출력 형식 */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] p-3">
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-3">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
             {t("입력", "Input")}
           </p>
           <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-wrap">{localInputFormat}</p>
         </div>
-        <div className="rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] p-3">
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-3">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
             {t("출력", "Output")}
           </p>
@@ -515,7 +515,7 @@ function ProblemDetail({
           {problem.testCases.map((tc, i) => (
             <div
               key={i}
-              className="rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] p-3 text-xs font-mono"
+              className="rounded-xl border border-gray-200 bg-white shadow-sm p-3 text-xs font-mono"
             >
               {tc.label && (
                 <p className="text-gray-400 text-xs mb-2 font-sans">{tc.label}</p>
@@ -539,7 +539,7 @@ function ProblemDetail({
 
       {/* 힌트 섹션 */}
       {localHints.length > 0 && (
-        <div className="rounded-2xl border-2 border-black bg-amber-50 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-4">
+        <div className="rounded-2xl border border-gray-200 bg-amber-50 shadow-sm p-4">
           <p className="text-sm font-bold text-amber-800 mb-3">
             💡 {t("힌트", "Hints")} ({revealedHints}/{localHints.length})
           </p>
@@ -570,7 +570,7 @@ function ProblemDetail({
       )}
 
       {/* 코드 에디터 */}
-      <div className="rounded-2xl border-2 border-black bg-[#1e1e2e] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-4">
+      <div className="rounded-2xl border border-gray-200 bg-[#1e1e2e] shadow-sm p-4">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
           {t("코드 작성", "Write Code")}
         </p>
@@ -584,7 +584,7 @@ function ProblemDetail({
       </div>
 
       {/* 솔루션 섹션 */}
-      <div className="rounded-2xl border-2 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+      <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
         <button
           onClick={() => setShowSolution((v) => !v)}
           className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors"
@@ -628,7 +628,7 @@ function ProblemDetail({
       {!solved ? (
         <button
           onClick={handleMarkSolved}
-          className="w-full py-3.5 rounded-2xl border-2 border-black bg-emerald-500 text-white font-bold text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
+          className="w-full py-3.5 rounded-2xl border border-gray-200 bg-emerald-500 text-white font-bold text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all  active:translate-y-0.5"
         >
           ✓ {t("이 문제 완료로 표시", "Mark as Solved")}
         </button>
