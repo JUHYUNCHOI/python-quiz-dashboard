@@ -167,10 +167,12 @@ function RoleOnboardingModal({ onSelect }: { onSelect: (role: "student" | "teach
 interface HomeworkItem {
   id: string
   lesson_id: string
+  step_id?: string | null
   step_title: string | null
   submitted_at: string
   teacher_grade: string | null
   teacher_comment: string | null
+  attempt_count?: number  // 같은 step 재시도 합산용
 }
 
 function hwTimeAgo(iso: string, lang: "ko" | "en" = "ko") {
@@ -258,14 +260,26 @@ function PortalContent() {
         setCqCount([...ids].filter(id => id.startsWith("cq-")).length)
       }
 
-      // 최근 숙제 제출 (최신 5개)
+      // 최근 숙제 제출 — 같은 step 의 여러 시도는 한 줄로 묶고 재시도 횟수 표시
       const { data: hw } = await supabase
         .from("homework_submissions")
-        .select("id,lesson_id,step_title,submitted_at,teacher_grade,teacher_comment")
+        .select("id,lesson_id,step_id,step_title,submitted_at,teacher_grade,teacher_comment")
         .eq("student_id", user.id)
         .order("submitted_at", { ascending: false })
-        .limit(5)
-      if (hw) setHomeworks(hw)
+        .limit(40)  // 충분히 가져와서 dedupe 후 5건 확보
+      if (hw) {
+        const grouped = new Map<string, HomeworkItem>()
+        for (const h of hw) {
+          const key = `${h.lesson_id}::${h.step_id ?? h.step_title ?? "_"}`
+          const existing = grouped.get(key)
+          if (existing) {
+            existing.attempt_count = (existing.attempt_count ?? 1) + 1
+          } else {
+            grouped.set(key, { ...h, attempt_count: 1 })
+          }
+        }
+        setHomeworks(Array.from(grouped.values()).slice(0, 5))
+      }
 
       setLoading(false)
     }
@@ -652,15 +666,24 @@ function PortalContent() {
           </div>
         </div>
 
-        {/* 숙제 섹션 — 제출 내역 있을 때만 표시 */}
-        {homeworks.length > 0 && (
+        {/* 제출한 코드 섹션 — C++ practice step 제출 내역 (Python 학생 + Python 트랙은 안 보임).
+            A: '내 숙제' → '내가 제출한 코드' (더 정확)
+            B: track === 'python' 일 때 숨김 (Python 학생에게 무의미)
+            C: 같은 step 재시도는 그룹핑 (한 줄 + '재시도 N회' 배지)
+            D: auto 등급도 ✅ 통과로 표시 */}
+        {homeworks.length > 0 && track !== "python" && (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
-            <h2 className="text-sm font-black text-gray-700">📝 {t("내 숙제", "My Homework")}</h2>
+            <div>
+              <h2 className="text-sm font-black text-gray-700">📝 {t("내가 제출한 코드", "My Submissions")}</h2>
+              <p className="text-[11px] text-gray-400 mt-0.5">{t("C++ 연습 문제 제출 내역", "C++ practice problem submissions")}</p>
+            </div>
             <div className="space-y-2">
               {homeworks.map(hw => {
-                const isGraded = hw.teacher_grade !== null
-                const isPassed = hw.teacher_grade === "pass"
-                const isFailed = hw.teacher_grade === "fail"
+                const grade = hw.teacher_grade
+                const isPassed = grade === "pass" || grade === "auto"  // 자동 채점도 통과 처리
+                const isFailed = grade === "fail"
+                const isGraded = isPassed || isFailed
+                const attempts = hw.attempt_count ?? 1
                 return (
                   <div
                     key={hw.id}
@@ -679,9 +702,16 @@ function PortalContent() {
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-gray-800 truncate">
-                          {hw.step_title || t("과제", "Assignment")}
-                        </p>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <p className="text-xs font-bold text-gray-800 truncate">
+                            {hw.step_title || t("과제", "Assignment")}
+                          </p>
+                          {attempts > 1 && (
+                            <span className="flex-shrink-0 text-[10px] font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
+                              {t(`${attempts}회 시도`, `${attempts} attempts`)}
+                            </span>
+                          )}
+                        </div>
                         <p className="text-[11px] text-gray-400 mt-0.5">{hwTimeAgo(hw.submitted_at, lang)}</p>
                       </div>
                       <span className={cn(
@@ -692,7 +722,11 @@ function PortalContent() {
                             : "bg-red-100 text-red-700"
                           : "bg-amber-100 text-amber-700"
                       )}>
-                        {isGraded ? (isPassed ? t("✅ 통과", "✅ Pass") : t("❌ 재도전", "❌ Retry")) : t("⏳ 채점 대기", "⏳ Pending")}
+                        {isPassed
+                          ? t("✅ 통과", "✅ Pass")
+                          : isFailed
+                            ? t("❌ 재도전", "❌ Retry")
+                            : t("⏳ 선생님 확인 중", "⏳ Awaiting review")}
                       </span>
                     </div>
                     {hw.teacher_comment && (
