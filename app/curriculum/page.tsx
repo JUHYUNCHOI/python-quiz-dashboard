@@ -897,6 +897,16 @@ export default function CurriculumPage() {
                       <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-50 text-xs font-bold text-gray-600 border border-gray-200">
                         📌 {t("참고 트랙: cpp-17 ~ 20 (필요할 때)", "Reference: cpp-17 ~ 20 (as needed)")}
                       </span>
+                      {/* C++ 학생도 Python 수업 전부 자유롭게 볼 수 있음 — 명시적 안내 */}
+                      <button
+                        onClick={() => {
+                          setSelectedCourse("python")
+                          localStorage.setItem("selectedCourse", "python")
+                        }}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 hover:bg-orange-100 text-xs font-bold text-orange-700 border border-orange-200 transition-colors"
+                      >
+                        🐍 {t("Python 수업 보러가기 (52강 모두 자유 접근)", "Browse Python lessons (all 52 unlocked)")}
+                      </button>
                     </div>
                   )}
                 </div>
