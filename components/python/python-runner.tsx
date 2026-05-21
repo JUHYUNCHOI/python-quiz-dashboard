@@ -518,24 +518,37 @@ export function PythonRunner({
         </div>
       )}
 
-      {/* 힌트 */}
-      {showHint && hint && (
-        <div className="bg-purple-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-purple-300 animate-fadeIn">
-          <div className="flex items-center gap-1.5 md:gap-2 mb-1">
-            <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-600" />
-            <span className="font-bold text-purple-700 text-xs md:text-sm">💡 {t("힌트!", "Hint!")}</span>
-          </div>
-          <p className="text-purple-800 text-xs md:text-sm whitespace-pre-wrap">{renderInlineMarkdown(hint, "h1-")}</p>
-        </div>
+      {/* 힌트 시스템 — 자가학습 모드: 학생이 원할 때 도움 요청 */}
+      {hint && isCorrect !== true && (
+        <>
+          {!showHint ? (
+            <button
+              onClick={() => setShowHint(true)}
+              className="w-full text-left px-3 py-2.5 rounded-lg border-2 border-dashed border-purple-300 text-purple-600 text-xs md:text-sm font-bold hover:bg-purple-50 transition-colors flex items-center gap-2"
+            >
+              <Lightbulb className="w-4 h-4" />
+              <span>💡 {t("힌트 보기", "Show hint")}</span>
+              <span className="ml-auto text-[10px] text-purple-400 font-medium">{t("막혔으면 눌러봐", "Stuck? Try this")}</span>
+            </button>
+          ) : (
+            <div className="bg-purple-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-purple-300 animate-fadeIn">
+              <div className="flex items-center gap-1.5 md:gap-2 mb-1">
+                <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-600" />
+                <span className="font-bold text-purple-700 text-xs md:text-sm">💡 {t("힌트", "Hint")}</span>
+              </div>
+              <p className="text-purple-800 text-xs md:text-sm whitespace-pre-wrap">{renderInlineMarkdown(hint, "h1-")}</p>
+            </div>
+          )}
+        </>
       )}
 
-      {/* 건너뛰기 버튼 (3회 이상 실패 시) */}
-      {requireCorrect && attempts >= 3 && isCorrect !== true && (
+      {/* 건너뛰기 버튼 — 2회 이상 실패 시 (포기 안 하게 좀 더 시도 권유) */}
+      {requireCorrect && attempts >= 2 && isCorrect !== true && (
         <button
           onClick={() => { onSuccess?.() }}
-          className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 border border-gray-200 transition-all"
+          className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-all"
         >
-          {t("→ 다음으로 넘어갈게요", "→ Move on")}
+          {t("→ 너무 어려워요, 다음으로 넘어갈게요", "→ Too hard, move on")}
         </button>
       )}
 
