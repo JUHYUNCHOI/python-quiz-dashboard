@@ -1318,9 +1318,10 @@ export default function CurriculumPage() {
           </div>
         )}
 
-        {/* 커리큘럼 그리드 - 반응형 */}
+        {/* 커리큘럼 그리드 - 반응형. items-start: 접힌 카드가 펼친 카드 높이로
+            stretch 되지 않게 (이전엔 Part 2 가 텅 비어 보이는 시각 버그) */}
         <div className="max-w-[1600px] mx-auto">
-          <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4 sm:gap-6 items-start">
             {curriculumData.map((part) => {
               const partLessons = part.lessons
               const isComingSoon = part.comingSoon
