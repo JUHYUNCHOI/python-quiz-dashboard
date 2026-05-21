@@ -405,6 +405,42 @@ function PortalContent() {
             </button>
           </div>
         )}
+
+        {/* 🎯 최상단 거대 CTA — '뭘 해야할지' 1초 만에 명확.
+            활성 단계 찾아서 압도적 visibility 로 배치. */}
+        {!isTeacher && (() => {
+          const activeStage = stages.find(s => getStageStatus(s) === "active")
+          if (!activeStage) return null
+          const done = activeStage.lessonIds.filter(id => completedIds.has(id)).length
+          const total = activeStage.lessonIds.length
+          const isFresh = done === 0
+          return (
+            <button
+              onClick={() => navigateTo(activeStage.platform, activeStage.id)}
+              className="w-full mb-5 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-200 hover:shadow-2xl active:scale-[0.99] transition-all text-left group"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl shrink-0">
+                  {activeStage.emoji}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs sm:text-sm font-bold opacity-90 mb-0.5">
+                    {isFresh
+                      ? t("🚀 처음이세요? 여기서 시작", "🚀 First time? Start here")
+                      : t(`▶ 이어서 학습  ·  ${done}/${total} 완료`, `▶ Continue  ·  ${done}/${total} done`)}
+                  </p>
+                  <p className="text-xl sm:text-2xl font-black leading-tight">
+                    {lang === "en" ? activeStage.labelEn : activeStage.label}
+                  </p>
+                  <p className="text-xs sm:text-sm opacity-90 mt-1 truncate">
+                    {lang === "en" ? activeStage.descEn : activeStage.desc}
+                  </p>
+                </div>
+                <span className="text-3xl sm:text-4xl group-hover:translate-x-1 transition-transform shrink-0">→</span>
+              </div>
+            </button>
+          )
+        })()}
         <div className="flex flex-col lg:flex-row lg:gap-8 lg:items-start">
 
         {/* ── 왼쪽: 인사 + 빠른이동 + 부모 리포트 ──
