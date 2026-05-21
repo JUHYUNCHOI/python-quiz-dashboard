@@ -1017,10 +1017,14 @@ export default function CurriculumPage() {
           </div>
         </div>
 
-        {/* 🗺️ 학습 여정 맵 — C++ 전용 (데스크탑) */}
+        {/* 🗺️ 학습 여정 맵 — C++ 전용 (데스크탑). 기본 접힘 — 시각 부담 ↓ */}
         {isCpp && loaded && (
-          <div className="max-w-[1600px] mx-auto mb-6 hidden sm:block">
-            <div className="bg-white rounded-2xl border-4 border-black shadow-lg p-5">
+          <details className="max-w-[1600px] mx-auto mb-6 hidden sm:block group">
+            <summary className="cursor-pointer list-none flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors text-sm font-bold text-gray-600">
+              <span className="group-open:rotate-90 transition-transform text-xs">▶</span>
+              🗺️ {t("학습 로드맵 보기 (Bronze → Silver → Gold)", "View Learning Roadmap (Bronze → Silver → Gold)")}
+            </summary>
+            <div className="bg-white rounded-2xl border-4 border-black shadow-lg p-5 mt-3">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">{t("🗺️ 나의 학습 여정", "🗺️ My Learning Journey")}</p>
               <div className="grid grid-cols-4 gap-3">
 
@@ -1137,12 +1141,17 @@ export default function CurriculumPage() {
 
               </div>
             </div>
-          </div>
+          </details>
         )}
 
-        {/* 🗺️ 학습 여정 맵 — Python 전용 (데스크탑) */}
+        {/* 🗺️ 학습 여정 맵 — Python 전용 (데스크탑). 기본 접힘 */}
         {!isCpp && !isPseudo && loaded && (
-          <div className="max-w-[1600px] mx-auto mb-6 hidden sm:block">
+          <details className="max-w-[1600px] mx-auto mb-6 hidden sm:block group">
+            <summary className="cursor-pointer list-none flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors text-sm font-bold text-gray-600">
+              <span className="group-open:rotate-90 transition-transform text-xs">▶</span>
+              🗺️ {t("학습 로드맵 보기 (문법 → 연습 → 알고리즘 → 대회)", "View Learning Roadmap (syntax → practice → algo → contest)")}
+            </summary>
+            <div className="mt-3 hidden sm:block">
             <div className="bg-white rounded-2xl border-4 border-black shadow-lg p-5">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">{t("🗺️ 나의 학습 여정", "🗺️ My Learning Journey")}</p>
               <div className="grid grid-cols-4 gap-3">
@@ -1256,6 +1265,7 @@ export default function CurriculumPage() {
               </div>
             </div>
           </div>
+          </details>
         )}
 
         {/* 커리큘럼 완료 → 알고리즘 진입 배너 */}
