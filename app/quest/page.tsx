@@ -322,7 +322,7 @@ export default function QuestPage() {
       <div className="min-h-screen bg-gray-50">
         <Header />
         <main className="max-w-lg mx-auto px-4 pt-8 pb-24">
-          <div className="border-2 border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white p-8 text-center mt-8">
+          <div className="border border-gray-200 rounded-xl shadow-md bg-white p-8 text-center mt-8">
             <div className="text-6xl mb-4">🔒</div>
             <h1 className="text-2xl font-black mb-2">CodeQuest</h1>
             <p className="text-gray-600 font-semibold mb-6">
@@ -333,7 +333,7 @@ export default function QuestPage() {
             </p>
 
             {/* Algo progress bar */}
-            <div className="bg-gray-100 border-2 border-black rounded-lg p-4 text-left">
+            <div className="bg-gray-100 border border-gray-200 rounded-lg p-4 text-left">
               <div className="flex justify-between items-center mb-2">
                 <span className="font-bold text-sm">
                   {t("알고리즘 진도", "Algorithm Progress")}
@@ -342,7 +342,7 @@ export default function QuestPage() {
                   {algoTopicsDone} / {ALL_TOPICS.length}
                 </span>
               </div>
-              <div className="h-4 bg-gray-200 border-2 border-black rounded-full overflow-hidden">
+              <div className="h-4 bg-gray-200 border border-gray-200 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-amber-400 transition-all duration-500"
                   style={{ width: `${Math.min(100, (algoTopicsDone / ALGO_UNLOCK_THRESHOLD) * 100)}%` }}
@@ -358,7 +358,7 @@ export default function QuestPage() {
 
             <Link
               href="/algo"
-              className="mt-4 inline-block border-2 border-black rounded-lg px-5 py-2 font-bold bg-amber-400 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+              className="mt-4 inline-block border border-gray-200 rounded-lg px-5 py-2 font-bold bg-amber-400 shadow-sm  hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
             >
               {t("알고리즘 학습하러 가기", "Go to Algorithm Lab")}
             </Link>
@@ -465,7 +465,7 @@ export default function QuestPage() {
 
         {/* Overall progress bar */}
         {loaded && (
-          <div className="border-2 border-black rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] bg-white p-4 mb-6">
+          <div className="border border-gray-200 rounded-xl shadow-sm bg-white p-4 mb-6">
             <div className="flex justify-between items-center mb-2">
               <span className="font-bold text-sm">
                 {t("전체 진도", "Overall Progress")}
@@ -474,7 +474,7 @@ export default function QuestPage() {
                 {totalSolved} / {totalProblems} ({overallPct}%)
               </span>
             </div>
-            <div className="h-4 bg-gray-100 border-2 border-black rounded-full overflow-hidden">
+            <div className="h-4 bg-gray-100 border border-gray-200 rounded-full overflow-hidden">
               <div className="h-full bg-green-400 transition-all duration-500" style={{ width: `${overallPct}%` }} />
             </div>
           </div>
@@ -482,7 +482,7 @@ export default function QuestPage() {
 
         {/* Phase 7: study-next suggestion. Only renders when the student already has progress AND a clear high-leverage concept exists. */}
         {loaded && solvedSet.size >= 2 && studyHint && studyHint.unlocksCount >= 2 && (
-          <div className="border-2 border-indigo-400 rounded-xl shadow-[3px_3px_0px_0px_rgba(99,102,241,0.5)] bg-indigo-50 p-4 mb-6">
+          <div className="border-2 border-indigo-400 rounded-xl shadow-md bg-indigo-50 p-4 mb-6">
             <div className="text-xs font-black uppercase tracking-wider text-indigo-700 mb-1">
               📚 {t("다음에 배우면 좋은 개념", "Study this next")}
             </div>
@@ -510,7 +510,7 @@ export default function QuestPage() {
             const groups = groupByContest(section.problems)
 
             return (
-              <div key={section.label} className="border-2 border-black rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
+              <div key={section.label} className="border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden">
 
                 {/* Section header */}
                 <button

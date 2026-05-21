@@ -499,7 +499,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                     href={originalUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs font-semibold text-white bg-amber-500 hover:bg-amber-600 px-3 py-1.5 rounded-md flex items-center gap-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)]"
+                    className="text-xs font-semibold text-white bg-amber-500 hover:bg-amber-600 px-3 py-1.5 rounded-md flex items-center gap-1.5 shadow-sm"
                   >
                     <ExternalLink size={11} />
                     {isGoogleFallback ? t("Google 검색 열기", "Open Google search") : t("새 탭에서 열기", "Open in new tab")}

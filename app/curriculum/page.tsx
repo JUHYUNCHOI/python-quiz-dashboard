@@ -739,9 +739,9 @@ export default function CurriculumPage() {
         <main className="max-w-lg mx-auto px-4 pt-5 pb-44">
           {/* 코스 탭 미리보기 */}
           <div className="flex gap-2 mb-5 pointer-events-none opacity-60">
-            <div className="px-4 py-2.5 rounded-xl border-2 border-black bg-orange-500 text-white text-sm font-bold">🐍 Python</div>
-            <div className="px-4 py-2.5 rounded-xl border-2 border-black bg-white text-gray-700 text-sm font-bold">⚡ C++</div>
-            <div className="px-4 py-2.5 rounded-xl border-2 border-black bg-white text-gray-700 text-sm font-bold">📄 Pseudocode</div>
+            <div className="px-4 py-2.5 rounded-xl border border-gray-200 bg-orange-500 text-white text-sm font-bold">🐍 Python</div>
+            <div className="px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-700 text-sm font-bold">⚡ C++</div>
+            <div className="px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-700 text-sm font-bold">📄 Pseudocode</div>
           </div>
 
           {/* Part 1 미리보기 */}
@@ -777,7 +777,7 @@ export default function CurriculumPage() {
             <p className="text-center text-xs text-gray-500">{t("Python 52강 · C++ 20강 · 알고리즘 훈련", "Python 52 · C++ 20 · Algorithm Training")}</p>
             <Link
               href="/login"
-              className="block w-full text-center px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+              className="block w-full text-center px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border border-gray-200 shadow-sm hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
             >
               {t("무료로 시작하기 →", "Get Started Free →")}
             </Link>
@@ -802,9 +802,9 @@ export default function CurriculumPage() {
             {/* Python 탭 */}
             <button
               onClick={() => handleCourseChange("python")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black text-sm font-bold transition-all ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-bold transition-all ${
                 selectedCourse === "python"
-                  ? "bg-orange-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  ? "bg-orange-500 text-white shadow-sm"
                   : "bg-white text-gray-700 hover:bg-orange-50"
               }`}
             >
@@ -815,7 +815,7 @@ export default function CurriculumPage() {
             {/* C++ 탭 */}
             <button
               onClick={() => handleCourseChange("cpp")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black text-sm font-bold transition-all ${selectedCourse === "cpp" ? "bg-blue-600 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]" : hasPythonProgress ? "bg-white text-gray-700 hover:bg-blue-50" : "bg-white text-gray-400 border-gray-300 hover:bg-blue-50"}`}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-bold transition-all ${selectedCourse === "cpp" ? "bg-blue-600 text-white shadow-sm" : hasPythonProgress ? "bg-white text-gray-700 hover:bg-blue-50" : "bg-white text-gray-400 border-gray-300 hover:bg-blue-50"}`}
             >
               ⚡ C++
               <span className={`text-[10px] font-normal ${selectedCourse === "cpp" ? "text-white/70" : "text-gray-400"}`}>20강</span>
@@ -825,9 +825,9 @@ export default function CurriculumPage() {
             {(isTeacher || isIgcseStudent) && (
               <button
                 onClick={() => handleCourseChange("pseudo")}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black text-sm font-bold transition-all ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-bold transition-all ${
                   selectedCourse === "pseudo"
-                    ? "bg-green-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                    ? "bg-green-500 text-white shadow-sm"
                     : "bg-white text-green-700 hover:bg-green-50"
                 }`}
               >
@@ -840,7 +840,7 @@ export default function CurriculumPage() {
           {/* C++ 선택 모달 */}
           {showCppModal && (
             <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-2xl shadow-xl border-2 border-black p-6 max-w-sm w-full space-y-4">
+              <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 max-w-sm w-full space-y-4">
                 <div className="text-center">
                   <div className="text-4xl mb-2">⚡</div>
                   <h3 className="text-base font-black text-gray-800">{t("C++로 바로 시작할까요?", "Jump straight into C++?")}</h3>
@@ -870,10 +870,10 @@ export default function CurriculumPage() {
 
         {/* 상단 진도 바 */}
         <div className="max-w-[1600px] mx-auto">
-          <div className={`bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 border-4 border-black`}>
+          <div className={`bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 border border-gray-200`}>
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
               <div className="flex items-center gap-4">
-                <div className={`${isPseudo ? 'bg-green-100' : isCpp ? 'bg-blue-100' : 'bg-orange-100'} p-3 rounded-xl border-2 border-black`}>
+                <div className={`${isPseudo ? 'bg-green-100' : isCpp ? 'bg-blue-100' : 'bg-orange-100'} p-3 rounded-xl border border-gray-200`}>
                   <BookOpen className={`h-8 w-8 ${isPseudo ? 'text-green-500' : isCpp ? 'text-blue-500' : 'text-orange-500'}`} />
                 </div>
                 <div>
@@ -918,7 +918,7 @@ export default function CurriculumPage() {
                   <>
                     <Link
                       href={`/practice?cluster=${pendingPracticeClusters[0].id}&from=curriculum&session=1`}
-                      className="bg-green-500 text-white px-6 py-3 rounded-xl border-2 border-black font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                      className="bg-green-500 text-white px-6 py-3 rounded-xl border border-gray-200 font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-sm"
                     >
                       <span>{pendingPracticeClusters[0].emoji}</span>
                       {pendingPracticeClusters[0].title} {t("도전하기 💪", "Challenge 💪")}
@@ -937,7 +937,7 @@ export default function CurriculumPage() {
                     {nextLessonInfo && (
                       <Link
                         href={`/learn/${nextLessonInfo.lesson.id}`}
-                        className="bg-green-500 text-white px-6 py-3 rounded-xl border-2 border-black font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                        className="bg-green-500 text-white px-6 py-3 rounded-xl border border-gray-200 font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-sm"
                       >
                         <Sparkles className="h-5 w-5" />
                         <span className="hidden sm:inline">
@@ -951,7 +951,7 @@ export default function CurriculumPage() {
                     {completedCount > 0 && (
                       <Link
                         href="/algo"
-                        className="bg-purple-500 text-white px-5 py-3 rounded-xl border-2 border-black font-bold hover:bg-purple-600 transition-colors flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                        className="bg-purple-500 text-white px-5 py-3 rounded-xl border border-gray-200 font-bold hover:bg-purple-600 transition-colors flex items-center justify-center gap-2 shadow-sm"
                       >
                         🧠 {t("퀴즈 연습", "Quiz")}
                       </Link>
@@ -964,7 +964,7 @@ export default function CurriculumPage() {
             {/* 진도 바 */}
             <div className="flex items-center gap-4 sm:gap-6">
               <div className="flex-1">
-                <div className="h-4 sm:h-5 bg-gray-200 rounded-full border-2 border-black overflow-hidden">
+                <div className="h-4 sm:h-5 bg-gray-200 rounded-full border border-gray-200 overflow-hidden">
                   <div
                     className={`h-full transition-all duration-500 ${isPseudo ? 'bg-gradient-to-r from-green-400 to-green-500' : isCpp ? 'bg-gradient-to-r from-blue-400 to-blue-500' : 'bg-gradient-to-r from-orange-400 to-orange-500'}`}
                     style={{ width: `${progress}%` }}
@@ -1024,7 +1024,7 @@ export default function CurriculumPage() {
               <span className="group-open:rotate-90 transition-transform text-xs">▶</span>
               🗺️ {t("학습 로드맵 보기 (Bronze → Silver → Gold)", "View Learning Roadmap (Bronze → Silver → Gold)")}
             </summary>
-            <div className="bg-white rounded-2xl border-4 border-black shadow-lg p-5 mt-3">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-5 mt-3">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">{t("🗺️ 나의 학습 여정", "🗺️ My Learning Journey")}</p>
               <div className="grid grid-cols-4 gap-3">
 
@@ -1152,7 +1152,7 @@ export default function CurriculumPage() {
               🗺️ {t("학습 로드맵 보기 (문법 → 연습 → 알고리즘 → 대회)", "View Learning Roadmap (syntax → practice → algo → contest)")}
             </summary>
             <div className="mt-3 hidden sm:block">
-            <div className="bg-white rounded-2xl border-4 border-black shadow-lg p-5">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-5">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">{t("🗺️ 나의 학습 여정", "🗺️ My Learning Journey")}</p>
               <div className="grid grid-cols-4 gap-3">
 
@@ -1271,7 +1271,7 @@ export default function CurriculumPage() {
         {/* 커리큘럼 완료 → 알고리즘 진입 배너 */}
         {loaded && progress === 100 && !isPseudo && (
           <div className="max-w-[1600px] mx-auto mb-6">
-            <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl border-4 border-black p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-white">
+            <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl border border-gray-200 p-5 shadow-md text-white">
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="text-5xl shrink-0">🎓</div>
                 <div className="flex-1 text-center sm:text-left">
@@ -1286,7 +1286,7 @@ export default function CurriculumPage() {
                 </div>
                 <Link
                   href="/algo"
-                  className="shrink-0 bg-white text-purple-700 font-black px-6 py-3 rounded-xl border-2 border-black hover:bg-purple-50 transition-colors shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] whitespace-nowrap"
+                  className="shrink-0 bg-white text-purple-700 font-black px-6 py-3 rounded-xl border border-gray-200 hover:bg-purple-50 transition-colors shadow-sm whitespace-nowrap"
                 >
                   🧠 {t("알고리즘 시작하기", "Start Algorithms")}
                 </Link>
@@ -1362,7 +1362,7 @@ export default function CurriculumPage() {
               }).length : 0
 
               return (
-                <div key={part.id} className={`bg-white rounded-2xl border-3 border-black shadow-lg overflow-hidden ${isComingSoon ? 'opacity-60' : ''}`}>
+                <div key={part.id} className={`bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden ${isComingSoon ? 'opacity-60' : ''}`}>
                   {/* Part Header */}
                   <button
                     onClick={() => !isComingSoon && hasLessons && togglePart(part.id)}
@@ -1442,7 +1442,7 @@ export default function CurriculumPage() {
                           return (
                             <Fragment key={lesson.id}>
                               {showMainTrackMilestone && (
-                                <div className="rounded-2xl border-4 border-black bg-gradient-to-br from-emerald-50 via-amber-50 to-orange-50 p-4 sm:p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-emerald-50 via-amber-50 to-orange-50 p-4 sm:p-5 shadow-md">
                                   <div className="flex items-start gap-3">
                                     <div className="text-3xl shrink-0">{cpp16Done ? "🎉" : "🎯"}</div>
                                     <div className="flex-1 min-w-0">
@@ -1460,21 +1460,21 @@ export default function CurriculumPage() {
                                       <div className="flex flex-wrap gap-2">
                                         <Link
                                           href="/learn/cpp-p3"
-                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs sm:text-sm font-bold border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
                                         >
                                           🏆 {t("USACO 모의전 (cpp-p3)", "USACO Mock (cpp-p3)")}
                                         </Link>
                                         {isOwner && (
                                           <Link
                                             href="/coding-bank"
-                                            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-bold border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                                            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
                                           >
                                             🌟 {t("코딩 뱅크 (100 문제)", "Coding Bank (100 problems)")}
                                           </Link>
                                         )}
                                         <Link
                                           href="/algo"
-                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white text-xs sm:text-sm font-bold border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
                                         >
                                           🧠 {t("Algorithm Lab", "Algorithm Lab")}
                                         </Link>
@@ -1495,8 +1495,8 @@ export default function CurriculumPage() {
                                 isLocked
                                   ? 'bg-gray-100 border-gray-300 opacity-60'
                                   : isNextLesson
-                                    ? `bg-white border-orange-400 ring-2 ${isPseudo ? 'ring-green-400' : isCpp ? 'ring-blue-400' : 'ring-orange-400'} ring-offset-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]`
-                                    : 'bg-white border-black hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'
+                                    ? `bg-white border-orange-400 ring-2 ${isPseudo ? 'ring-green-400' : isCpp ? 'ring-blue-400' : 'ring-orange-400'} ring-offset-1 shadow-sm`
+                                    : 'bg-white border-black hover:shadow-sm'
                               }`}
                             >
                               <div className="flex items-start gap-2 sm:gap-3">
@@ -1632,7 +1632,7 @@ export default function CurriculumPage() {
                                           // 지금 해야 할 단계: 1=수업, 2=복습, 3=도전, 0=전부완료
                                           // 복습(2)과 도전(3)은 수업(1) 완료 후 독립적으로 접근 가능
                                           const cur = !step1Done ? 1 : (!step2Done && !step3Done) ? 2 : 0
-                                          const activeBtn = "w-full px-3 py-1.5 rounded-lg border-2 border-black font-bold text-sm text-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-colors"
+                                          const activeBtn = "w-full px-3 py-1.5 rounded-lg border border-gray-200 font-bold text-sm text-center shadow-sm transition-colors"
                                           const doneText = "text-xs text-gray-400"
                                           const lockedText = "text-xs text-gray-300"
 

@@ -43,7 +43,7 @@ export default function CppStlReferencePage() {
 
           <button
             onClick={handlePrint}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 text-white font-bold border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500 text-white font-bold border border-gray-200 shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-sm transition-all"
           >
             <Printer className="h-4 w-4" />
             {t("인쇄 / PDF 저장", "Print / Save PDF")}
@@ -70,7 +70,7 @@ export default function CppStlReferencePage() {
         </header>
 
         {/* 목차 — 인쇄 시 숨김 (긴 한 페이지 PDF 가 더 편함) */}
-        <nav className="print:hidden mb-8 p-4 bg-white rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+        <nav className="print:hidden mb-8 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
           <h2 className="text-sm font-bold text-gray-500 mb-2 uppercase tracking-wider">
             {t("목차", "Contents")}
           </h2>
@@ -103,7 +103,7 @@ export default function CppStlReferencePage() {
           {/* I/O 섹션 */}
           <section
             id="io"
-            className="bg-white rounded-2xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden print:shadow-none print:border print:rounded-md print:break-inside-avoid"
+            className="bg-white rounded-2xl border border-gray-200 shadow-md overflow-hidden print:shadow-none print:border print:rounded-md print:break-inside-avoid"
           >
             <header className="bg-blue-50 px-4 py-3 border-b-2 border-black print:py-2 print:border-b">
               <h2 className="text-xl font-black text-gray-900 print:text-base">
@@ -145,7 +145,7 @@ export default function CppStlReferencePage() {
       {showTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="print:hidden fixed bottom-24 right-6 w-12 h-12 rounded-full bg-orange-500 text-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center z-30 hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+          className="print:hidden fixed bottom-24 right-6 w-12 h-12 rounded-full bg-orange-500 text-white border border-gray-200 shadow-sm flex items-center justify-center z-30 hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-sm transition-all"
           aria-label={t("맨 위로", "To top")}
         >
           <ChevronUp className="h-6 w-6" />
@@ -190,7 +190,7 @@ function Section({ section: s, lang }: { section: CheatSection; lang: "ko" | "en
   return (
     <section
       id={s.id}
-      className="bg-white rounded-2xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden print:shadow-none print:border print:rounded-md print:break-inside-avoid"
+      className="bg-white rounded-2xl border border-gray-200 shadow-md overflow-hidden print:shadow-none print:border print:rounded-md print:break-inside-avoid"
     >
       {/* 헤더 */}
       <header className="bg-orange-50 px-4 py-3 border-b-2 border-black print:py-2 print:border-b print:bg-gray-50">

@@ -190,7 +190,7 @@ function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center items-center pt-1">
             <Link
               href="/login"
-              className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+              className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border border-gray-200 shadow-sm hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
             >
               {t("무료로 시작하기 →", "Get Started Free →")}
             </Link>
@@ -216,7 +216,7 @@ function LandingPage() {
           {/* STEP 1 */}
           <div className="flex gap-3 items-stretch">
             <div className="flex flex-col items-center">
-              <div className="w-8 h-8 rounded-full bg-orange-500 border-2 border-black flex items-center justify-center text-white font-black text-xs flex-shrink-0">1</div>
+              <div className="w-8 h-8 rounded-full bg-orange-500 border border-gray-200 flex items-center justify-center text-white font-black text-xs flex-shrink-0">1</div>
               <div className="w-0.5 bg-orange-200 flex-1 mt-1" />
             </div>
             <div className="flex-1 pb-4">
@@ -247,7 +247,7 @@ function LandingPage() {
           {/* STEP 2 — 갈림길 */}
           <div className="flex gap-3 items-stretch">
             <div className="flex flex-col items-center">
-              <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-black flex items-center justify-center text-white font-black text-xs flex-shrink-0">2</div>
+              <div className="w-8 h-8 rounded-full bg-blue-500 border border-gray-200 flex items-center justify-center text-white font-black text-xs flex-shrink-0">2</div>
               <div className="w-0.5 bg-gray-200 flex-1 mt-1" />
             </div>
             <div className="flex-1 pb-4">
@@ -290,7 +290,7 @@ function LandingPage() {
           {/* STEP 3 — 알고리즘 */}
           <div className="flex gap-3 items-stretch">
             <div className="flex flex-col items-center">
-              <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-black flex items-center justify-center text-white font-black text-xs flex-shrink-0">3</div>
+              <div className="w-8 h-8 rounded-full bg-purple-500 border border-gray-200 flex items-center justify-center text-white font-black text-xs flex-shrink-0">3</div>
               <div className="w-0.5 bg-purple-200 flex-1 mt-1" />
             </div>
             <div className="flex-1 pb-4">
@@ -320,7 +320,7 @@ function LandingPage() {
 
           {/* STEP 4 — 대회 */}
           <div className="flex gap-3">
-            <div className="w-8 h-8 rounded-full bg-yellow-400 border-2 border-black flex items-center justify-center text-lg flex-shrink-0">🏆</div>
+            <div className="w-8 h-8 rounded-full bg-yellow-400 border border-gray-200 flex items-center justify-center text-lg flex-shrink-0">🏆</div>
             <div className="flex-1">
               <div className="rounded-2xl border-2 border-yellow-300 bg-yellow-50 p-4 space-y-2">
                 <p className="font-black text-gray-900 text-sm">{t("대회 출전", "Competition")}</p>
@@ -464,7 +464,7 @@ function LandingPage() {
         <div className="text-center space-y-2 pt-8">
           <Link
             href="/login"
-            className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+            className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border border-gray-200 shadow-sm hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
           >
             {t("지금 시작하기 →", "Get Started →")}
           </Link>
