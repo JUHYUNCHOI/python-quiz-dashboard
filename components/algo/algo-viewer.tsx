@@ -281,22 +281,20 @@ export function AlgoViewer({ topicId, codeTrack }: AlgoViewerProps) {
         </div>
       )}
 
-      {/* ── 개념 설명 섹션 ── */}
-      <div
-        ref={conceptRef}
-        className="algo-content"
-        style={{ visibility: status === "ready" ? "visible" : "hidden" }}
-      />
-
-      {/* ── 문제 목록 섹션 ── */}
+      {/* ── 문제 목록 섹션 — 학생이 '뭘 풀어야 하지?' 답이 먼저 보이게 위로 ── */}
       {status === "ready" && stages.length > 0 && (
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-8 border-t border-gray-200">
-          <h2 className="text-lg font-bold text-gray-900 mb-5">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-1">
             {lang === "en" ? "🧪 Practice Problems" : "🧪 연습 문제"}
             <span className="ml-2 text-sm font-normal text-gray-400">
               {stages.reduce((n, s) => n + s.problems.length, 0)}{lang === "en" ? " problems" : "개"}
             </span>
           </h2>
+          <p className="text-xs text-gray-500 mb-5">
+            {lang === "en"
+              ? "Pick a problem to start. Concept reference is below — open if you need it."
+              : "풀어볼 문제를 골라요. 개념 설명은 아래에서 필요할 때 펼쳐봐요."}
+          </p>
 
           <div className="flex flex-col gap-4">
             {stages.map(stage => (
@@ -357,6 +355,17 @@ export function AlgoViewer({ topicId, codeTrack }: AlgoViewerProps) {
           </div>
         </div>
       )}
+
+      {/* ── 개념 설명 — 기본 접힘. 학생이 필요할 때만 펼쳐서 봄 ──
+          항상 마운트 (status 와 무관하게 conceptRef 가 같은 DOM 노드 가리키도록).
+          로딩 중에는 Tailwind hidden 으로 숨김. */}
+      <details className={cn("max-w-[1400px] mx-auto px-4 sm:px-6 my-4 group", status !== "ready" && "hidden")}>
+        <summary className="cursor-pointer list-none flex items-center gap-2 px-4 py-3 rounded-xl bg-amber-50 border-2 border-amber-200 hover:border-amber-300 transition-colors text-sm font-bold text-amber-800">
+          <span className="group-open:rotate-90 transition-transform text-xs">▶</span>
+          📖 {lang === "en" ? "Open concept reference (Bronze → Silver → Gold)" : "개념 설명 펼치기 (Bronze → Silver → Gold)"}
+        </summary>
+        <div ref={conceptRef} className="algo-content mt-3" />
+      </details>
 
       {/* ── 문제 상세 뷰 (탭 + 내용) ── */}
       {selectedId && (
