@@ -730,13 +730,8 @@ function PracticeContent() {
   const problem = cluster?.problems.find(p => p.id === problemId)
   const sessionMode = searchParams.get("session") === "1"
 
-  // cluster 없이 직접 /practice 접근하면 커리큘럼으로
-  useEffect(() => {
-    if (!clusterId) {
-      router.replace("/curriculum")
-    }
-  }, [clusterId, router])
-  if (!clusterId) return null
+  // cluster 없이 직접 /practice 접근하면 ClusterList 표시 (아래 fallback return).
+  // 이전엔 /curriculum 으로 redirect 했었음 — 하단 메뉴 '도전' 탭이 작동 안 함.
 
   const handleClusterBack = () => {
     if (fromParam === "lesson" || fromParam === "curriculum") {
