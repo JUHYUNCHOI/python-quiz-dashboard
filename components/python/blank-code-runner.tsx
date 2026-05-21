@@ -8,6 +8,7 @@ import { useCodeSubmission } from "@/contexts/code-submission-context"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { renderInlineMarkdown } from "@/components/learn/render-content"
+import { translatePythonError } from "@/lib/python-error-friendly"
 
 // Pyodide 타입 정의
 declare global {
@@ -656,12 +657,39 @@ export function BlankCodeRunner({
             </span>
           </div>
 
-          <pre className={cn(
-            "font-mono text-xs md:text-sm whitespace-pre-wrap",
-            error ? "text-red-700" : "text-gray-800"
-          )}>
-            {error || output}
-          </pre>
+          {error ? (
+            (() => {
+              const friendly = translatePythonError(error, lang)
+              return (
+                <div className="space-y-2">
+                  {friendly.title && (
+                    <p className="font-bold text-sm md:text-base text-red-800">
+                      {friendly.title}
+                    </p>
+                  )}
+                  {friendly.hints.length > 0 && (
+                    <ul className="space-y-1 text-xs md:text-sm text-red-700 list-disc list-inside">
+                      {friendly.hints.map((h, i) => (
+                        <li key={i}>{h}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <details className="mt-1">
+                    <summary className="text-[11px] text-red-600/70 cursor-pointer hover:text-red-700 select-none">
+                      {t("자세한 에러 메시지 보기", "Show technical details")}
+                    </summary>
+                    <pre className="font-mono text-[11px] md:text-xs whitespace-pre-wrap text-red-700/80 bg-red-100/50 rounded px-2 py-1.5 mt-1 overflow-x-auto">
+                      {friendly.original}
+                    </pre>
+                  </details>
+                </div>
+              )
+            })()
+          ) : (
+            <pre className="font-mono text-xs md:text-sm whitespace-pre-wrap text-gray-800">
+              {output}
+            </pre>
+          )}
         </div>
       )}
 
