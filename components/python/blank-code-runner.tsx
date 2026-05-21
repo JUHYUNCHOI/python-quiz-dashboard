@@ -8,6 +8,7 @@ import { useCodeSubmission } from "@/contexts/code-submission-context"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { renderInlineMarkdown } from "@/components/learn/render-content"
+import { translatePythonError } from "@/lib/python-error-friendly"
 
 // Pyodide 타입 정의
 declare global {
@@ -190,6 +191,7 @@ export function BlankCodeRunner({
   const [isPyodideReady, setIsPyodideReady] = useState(false)
   const [isCorrect, setIsCorrect] = useState<boolean | null>(savedCorrect)
   const [showHint, setShowHint] = useState(false)
+  const [showAnswerHint, setShowAnswerHint] = useState(false)
   const [attempts, setAttempts] = useState(0)
   const inputRefs = useRef<Record<number, HTMLInputElement | null>>({})
 
@@ -656,45 +658,99 @@ export function BlankCodeRunner({
             </span>
           </div>
 
-          <pre className={cn(
-            "font-mono text-xs md:text-sm whitespace-pre-wrap",
-            error ? "text-red-700" : "text-gray-800"
-          )}>
-            {error || output}
-          </pre>
+          {error ? (
+            (() => {
+              const friendly = translatePythonError(error, lang)
+              return (
+                <div className="space-y-2">
+                  {friendly.title && (
+                    <p className="font-bold text-sm md:text-base text-red-800">
+                      {friendly.title}
+                    </p>
+                  )}
+                  {friendly.hints.length > 0 && (
+                    <ul className="space-y-1 text-xs md:text-sm text-red-700 list-disc list-inside">
+                      {friendly.hints.map((h, i) => (
+                        <li key={i}>{h}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <details className="mt-1">
+                    <summary className="text-[11px] text-red-600/70 cursor-pointer hover:text-red-700 select-none">
+                      {t("자세한 에러 메시지 보기", "Show technical details")}
+                    </summary>
+                    <pre className="font-mono text-[11px] md:text-xs whitespace-pre-wrap text-red-700/80 bg-red-100/50 rounded px-2 py-1.5 mt-1 overflow-x-auto">
+                      {friendly.original}
+                    </pre>
+                  </details>
+                </div>
+              )
+            })()
+          ) : (
+            <pre className="font-mono text-xs md:text-sm whitespace-pre-wrap text-gray-800">
+              {output}
+            </pre>
+          )}
         </div>
       )}
 
-      {/* 힌트 */}
-      {showHint && hint && (
-        <div className="bg-purple-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-purple-300 animate-fadeIn">
-          <div className="flex items-center gap-1.5 md:gap-2 mb-1">
-            <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-600" />
-            <span className="font-bold text-purple-700 text-xs md:text-sm">💡 {t("힌트!", "Hint!")}</span>
-          </div>
-          <p className="text-purple-800 text-xs md:text-sm whitespace-pre-wrap">{renderInlineMarkdown(hint, "h1-")}</p>
-        </div>
-      )}
+      {/* 힌트 시스템 — 자가학습 모드: 학생이 원할 때 단계별 도움 요청 */}
+      {!isCorrect && (hint || hint2) && (
+        <div className="space-y-2">
+          {/* Lv1 힌트 — 항상 요청 가능 */}
+          {!showHint && hint && (
+            <button
+              onClick={() => setShowHint(true)}
+              className="w-full text-left px-3 py-2.5 rounded-lg border-2 border-dashed border-purple-300 text-purple-600 text-xs md:text-sm font-bold hover:bg-purple-50 transition-colors flex items-center gap-2"
+            >
+              <Lightbulb className="w-4 h-4" />
+              <span>💡 {t("힌트 보기 (1/2)", "Show hint (1/2)")}</span>
+              <span className="ml-auto text-[10px] text-purple-400 font-medium">{t("막혔으면 눌러봐", "Stuck? Try this")}</span>
+            </button>
+          )}
+          {showHint && hint && (
+            <div className="bg-purple-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-purple-300 animate-fadeIn">
+              <div className="flex items-center gap-1.5 md:gap-2 mb-1">
+                <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-600" />
+                <span className="font-bold text-purple-700 text-xs md:text-sm">💡 {t("힌트 1/2", "Hint 1/2")}</span>
+              </div>
+              <p className="text-purple-800 text-xs md:text-sm whitespace-pre-wrap">{renderInlineMarkdown(hint, "h1-")}</p>
+            </div>
+          )}
 
-      {/* 정답 힌트 (3회 실패 시) */}
-      {attempts >= 3 && hint2 && !isCorrect && (
-        <div className="bg-orange-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-orange-300">
-          <div className="flex items-center gap-1.5 md:gap-2 mb-1">
-            <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-orange-600" />
-            <span className="font-bold text-orange-700 text-xs md:text-sm">🔑 {t("정답 힌트!", "Answer Hint!")}</span>
-          </div>
-          <p className="text-orange-800 font-mono text-xs md:text-sm whitespace-pre-wrap">{hint2}</p>
-        </div>
-      )}
+          {/* Lv2 정답 힌트 — 1차 힌트 본 후 요청 가능 (또는 3회 실패 시 자동) */}
+          {hint2 && showHint && !showAnswerHint && (
+            <button
+              onClick={() => setShowAnswerHint(true)}
+              className="w-full text-left px-3 py-2.5 rounded-lg border-2 border-dashed border-orange-300 text-orange-600 text-xs md:text-sm font-bold hover:bg-orange-50 transition-colors flex items-center gap-2"
+            >
+              <Lightbulb className="w-4 h-4" />
+              <span>🔑 {t("정답에 더 가까운 힌트 보기 (2/2)", "Closer to answer (2/2)")}</span>
+              {attempts >= 2 && (
+                <span className="ml-auto text-[10px] text-orange-400 font-medium">{t("계속 막혀? 눌러봐", "Still stuck?")}</span>
+              )}
+            </button>
+          )}
+          {hint2 && (showAnswerHint || (attempts >= 3 && showHint)) && (
+            <div className="bg-orange-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-orange-300 animate-fadeIn">
+              <div className="flex items-center gap-1.5 md:gap-2 mb-1">
+                <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-orange-600" />
+                <span className="font-bold text-orange-700 text-xs md:text-sm">🔑 {t("정답에 가까운 힌트", "Answer hint")}</span>
+              </div>
+              <p className="text-orange-800 font-mono text-xs md:text-sm whitespace-pre-wrap">{hint2}</p>
+            </div>
+          )}
 
-      {/* 건너뛰기 버튼 (3회 이상 실패 시) */}
-      {attempts >= 3 && !isCorrect && (
-        <button
-          onClick={() => { onSuccess?.() }}
-          className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 border border-gray-200 transition-all"
-        >
-          {t("→ 정답 확인했어요, 다음으로 넘어갈게요", "→ I checked the answer, move on")}
-        </button>
+          {/* 건너뛰기 — 2번 이상 시도 후 노출 (포기 안 하게 좀 더 권유) */}
+          {attempts >= 2 && (
+            <button
+              onClick={() => { onSuccess?.() }}
+              className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-all"
+            >
+              {t("→ 너무 어려워요, 다음으로 (정답은 위 힌트 확인)", "→ Skip and move on (see hint above)")}
+            </button>
+          )}
+        </div>
       )}
 
       {/* 비로그인 학생 로그인 유도 (정답 맞췄을 때 한 번만 표시) */}
