@@ -373,6 +373,16 @@ export default function CurriculumPage() {
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
   const [completedQuizzes, setCompletedQuizzes] = useState<Set<number | string>>(new Set())
   const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "cpp-part1", "pseudo-part1"]))
+  // 데스크탑(lg+) 감지 — 데스크탑은 모든 Part 자동 펼침 + 2-컬럼 레이아웃 (공간 효율 + 스크롤 ↓)
+  const [isDesktop, setIsDesktop] = useState(false)
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const mq = window.matchMedia("(min-width: 1024px)")
+    const update = () => setIsDesktop(mq.matches)
+    update()
+    mq.addEventListener("change", update)
+    return () => mq.removeEventListener("change", update)
+  }, [])
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
   const [loaded, setLoaded] = useState(false)
   // P2 민준: 건너뛰기 확인 상태 (어떤 레슨 ID를 건너뛸지)
@@ -1337,16 +1347,20 @@ export default function CurriculumPage() {
           </div>
         )}
 
-        {/* 커리큘럼 — 단일 컬럼 세로 배치.
-            이전엔 multi-column grid 라 펼친 Part 옆에 닫힌 Part 들이
-            텅 비어 시각 imbalance. 세로로 쌓으면 자연스러움. */}
-        <div className="max-w-3xl mx-auto">
-          <div className="flex flex-col gap-4">
+        {/* 커리큘럼 — 디바이스별 다른 레이아웃.
+            • 모바일: 단일 컬럼 + 아코디언 (Part 클릭해 펼침)
+            • 데스크탑 (lg+): 2-컬럼 그리드 + 모든 Part 자동 펼침
+              → 가로 공간 활용 + 한눈에 비교 + 스크롤 절반
+            이전 imbalance 문제는 "한 쪽만 펼침" 때문이었음 — 둘 다 항상
+            펼치면 columns 가 자연스럽게 균형. */}
+        <div className="max-w-3xl lg:max-w-[1400px] mx-auto">
+          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-5 lg:items-start">
             {curriculumData.map((part) => {
               const partLessons = part.lessons
               const isComingSoon = part.comingSoon
               const partCompletedCount = partLessons.filter((l) => completedLessons.has(l.id)).length
-              const isExpanded = expandedParts.has(part.id)
+              // 데스크탑은 모든 Part 항상 펼침 (토글 무시) — 공간 효율 + 한눈에 보기
+              const isExpanded = isDesktop || expandedParts.has(part.id)
               const hasLessons = partLessons.length > 0
 
               // 3단계 기준 진도 계산 (수업 + 복습 + 도전)
@@ -1385,19 +1399,21 @@ export default function CurriculumPage() {
                 <div key={part.id} className={`bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden ${isComingSoon ? 'opacity-60' : ''}`}>
                   {/* Part Header */}
                   <button
-                    onClick={() => !isComingSoon && hasLessons && togglePart(part.id)}
-                    disabled={isComingSoon}
-                    className="w-full p-4 sm:p-5 flex items-center gap-3 sm:gap-4 hover:bg-gray-50 transition-colors disabled:cursor-not-allowed"
+                    onClick={() => !isComingSoon && hasLessons && !isDesktop && togglePart(part.id)}
+                    disabled={isComingSoon || isDesktop}
+                    className={cn(
+                      "w-full p-4 sm:p-5 flex items-center gap-3 sm:gap-4 transition-colors",
+                      isDesktop || isComingSoon ? "cursor-default" : "hover:bg-gray-50"
+                    )}
                   >
-                    {!isComingSoon && hasLessons ? (
+                    {/* 토글 chevron — 모바일만 (데스크탑은 항상 펼침이라 의미 없음) */}
+                    {!isComingSoon && hasLessons && !isDesktop ? (
                       isExpanded ? (
                         <ChevronDown className="h-6 w-6 text-gray-600 flex-shrink-0" />
                       ) : (
                         <ChevronRight className="h-6 w-6 text-gray-600 flex-shrink-0" />
                       )
-                    ) : (
-                      <div className="h-6 w-6 flex-shrink-0" />
-                    )}
+                    ) : null}
 
                     <div className="flex-1 text-left">
                       <div className="flex items-center gap-2 flex-wrap">
