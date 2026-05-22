@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, BookOpen, User, LayoutDashboard, Puzzle, Brain, ClipboardList } from "lucide-react"
+import { Home, BookOpen, User, LayoutDashboard, Puzzle, Brain, ClipboardList, Trophy } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -24,6 +24,7 @@ export function BottomNav() {
     { icon: BookOpen,label: t("수업", "Lessons"),    href: "/curriculum" },
     { icon: Brain,   label: t("도전", "Challenge"),  href: "/practice"   },
     { icon: Puzzle,  label: t("알고리즘", "Algo"),   href: "/algo"       },
+    { icon: Trophy,  label: t("실전", "Contest"),    href: "/quest"      },
     { icon: User,    label: t("내정보", "Profile"),  href: "/profile"    },
   ]
 
@@ -31,6 +32,7 @@ export function BottomNav() {
     { icon: LayoutDashboard, label: t("대시보드", "Dashboard"), href: "/teacher", exact: true },
     { icon: BookOpen, label: t("수업", "Lessons"), href: "/curriculum" },
     { icon: ClipboardList, label: t("숙제", "Homework"), href: "/teacher/homework" },
+    { icon: Trophy,   label: t("실전", "Contest"),  href: "/quest"      },
     { icon: User, label: t("내정보", "Profile"), href: "/profile" },
   ]
 
@@ -38,6 +40,7 @@ export function BottomNav() {
     { icon: Home,     label: t("홈", "Home"),      href: "/"           },
     { icon: BookOpen, label: t("수업", "Lessons"),  href: "/curriculum" },
     { icon: Puzzle,   label: t("알고리즘", "Algo"),  href: "/algo"  },
+    { icon: Trophy,   label: t("실전", "Contest"),  href: "/quest"      },
     { icon: User,     label: t("내정보", "Profile"), href: "/profile"    },
   ]
 
@@ -61,7 +64,7 @@ export function BottomNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center justify-center gap-1 transition-colors rounded-lg px-2 py-2 min-w-[52px] min-h-[56px]",
+                "flex flex-col items-center justify-center gap-1 transition-colors rounded-lg px-1.5 py-2 min-w-[44px] min-h-[56px]",
                 isActive ? "text-orange-600 bg-orange-50" : "text-gray-500 hover:text-orange-500 hover:bg-orange-50/50",
               )}
             >

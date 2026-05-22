@@ -97,6 +97,25 @@ export default function AlgoPage() {
           </Link>
         )}
 
+        {/* USACO 실전 문제로 바로 가는 링크 — 알고리즘 끝까지 안 가도 도전 가능 */}
+        <Link
+          href="/quest"
+          className="block bg-amber-500 rounded-2xl p-4 text-white shadow-md hover:shadow-lg active:scale-[0.99] transition-all"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl shrink-0">🏆</div>
+            <div className="flex-1 min-w-0">
+              <p className="text-base font-black leading-tight">
+                {t("USACO 실전 문제 도전하기", "Try USACO Contest Problems")}
+              </p>
+              <p className="text-[11px] opacity-90 mt-0.5">
+                {t("USACO Bronze / MCC 160+ 문제 — 알고리즘 익히면서 병행해도 OK", "USACO Bronze / MCC 160+ problems — try alongside algorithm topics")}
+              </p>
+            </div>
+            <span className="text-2xl shrink-0">→</span>
+          </div>
+        </Link>
+
         {/* 전체 토픽 보기 안내 */}
         <p className="text-xs text-gray-400 text-center -mt-3">
           {t("아래는 전체 토픽 목록 — 자유롭게 골라도 OK", "All topics below — feel free to pick any")}

@@ -544,9 +544,8 @@ function PortalContent() {
           )
         })()}
 
-        {/* 빠른 이동 — 진도 있는 학생에게만 (신규는 학습 여정 카드의 큰 CTA 만 보임) */}
-        {completedIds.size > 0 && (
-          <div className="grid grid-cols-3 gap-2">
+        {/* 빠른 이동 — 항상 표시 (USACO 접근성 ↑ 위해 진도 무관) */}
+        <div className="grid grid-cols-3 gap-2">
             {([
               { platform: "coderin",   emoji: "📚", labelKo: "배우기",  labelEn: "Learn"     },
               { platform: "algorithm", emoji: "🧩", labelKo: "풀기",    labelEn: "Practice"  },
@@ -568,8 +567,7 @@ function PortalContent() {
                 </button>
               )
             })}
-          </div>
-        )}
+        </div>
 
         {/* 부모님 리포트 공유 — 반 가입 학생 / 선생님에게만 노출 (solo 학생은 혼란 가능) */}
         {(inClass || isTeacher) && (
