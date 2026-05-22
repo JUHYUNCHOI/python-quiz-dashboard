@@ -18,7 +18,8 @@ import { analyzeQuizResult, analyzeStreak } from "@/lib/feedback-analyzer"
 import { QuizFeedbackCard } from "@/components/feedback/quiz-feedback-card"
 import { StreakWidget } from "@/components/feedback/streak-widget"
 import { BottomNav } from "@/components/bottom-nav"
-import { getLessonName } from "@/lib/curriculum-data"
+import { getLessonName, getCompletedLessons } from "@/lib/curriculum-data"
+import { getSmartNext, getPreferredTrack } from "@/lib/smart-next"
 import Link from "next/link"
 
 // -------- CountUp animation --------
@@ -574,29 +575,48 @@ function SessionCompletePage() {
         })()}
 
         {/* === Phase 7: Action buttons === */}
-        {phase >= 7 && (
-          <div className="space-y-3 animate-fade-in-delay">
-            {/* 홈/수업목록 - primary */}
-            <button
-              onClick={handleGoHome}
-              className="w-full py-4 rounded-2xl text-xl font-black text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95"
-            >
-              {sessionData?.lessonFilter != null
-                ? t("← 수업 목록으로", "← Back to curriculum")
-                : t("홈으로 🏠", "Home 🏠")}
-            </button>
-
-            {/* 틀린 문제 다시 풀기 - secondary, 틀린 게 있을 때만 표시 */}
-            {sessionData && sessionData.questionDetails.some(qr => !qr.is_correct && qr.selected_answer !== -1) ? (
+        {phase >= 7 && (() => {
+          // Smart-Next: 학생의 다음 활동 추천 (코스 기준)
+          const completedNow = getCompletedLessons()
+          const preferredTrack: "python" | "cpp" | "pseudo" =
+            sessionData?.course === "cpp" ? "cpp" : getPreferredTrack(completedNow)
+          const smart = getSmartNext(completedNow, preferredTrack)
+          const hasWrong = sessionData && sessionData.questionDetails.some(qr => !qr.is_correct && qr.selected_answer !== -1)
+          return (
+            <div className="space-y-3 animate-fade-in-delay">
+              {/* Smart-Next 추천 - primary */}
               <button
-                onClick={handleRetryWrong}
-                className="w-full py-3 rounded-2xl text-base font-bold text-orange-600 bg-orange-50 border-2 border-orange-200 hover:bg-orange-100 transition-all"
+                onClick={() => router.push(smart.href)}
+                className="w-full py-4 rounded-2xl text-xl font-black text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95 flex flex-col items-center gap-0.5"
               >
-                {t("틀린 문제 다시 풀기 🎯", "Retry wrong answers 🎯")}
+                <span>{smart.emoji ?? "▶"} {lang === "en" ? smart.titleEn : smart.title}</span>
+                {smart.subtitle && (
+                  <span className="text-xs font-medium text-orange-50/95">{smart.subtitle}</span>
+                )}
               </button>
-            ) : null}
-          </div>
-        )}
+
+              {/* 틀린 문제 다시 풀기 - secondary */}
+              {hasWrong ? (
+                <button
+                  onClick={handleRetryWrong}
+                  className="w-full py-3 rounded-2xl text-base font-bold text-orange-600 bg-orange-50 border-2 border-orange-200 hover:bg-orange-100 transition-all"
+                >
+                  {t("틀린 문제 다시 풀기 🎯", "Retry wrong answers 🎯")}
+                </button>
+              ) : null}
+
+              {/* 홈/커리큘럼 - 보조 */}
+              <button
+                onClick={handleGoHome}
+                className="w-full py-2.5 rounded-2xl text-sm font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 transition-all"
+              >
+                {sessionData?.lessonFilter != null
+                  ? t("← 수업 목록", "← Curriculum")
+                  : t("홈으로", "Home")}
+              </button>
+            </div>
+          )
+        })()}
 
         {/* Confetti for perfect score */}
         {accuracy === 100 && phase >= 4 && (
