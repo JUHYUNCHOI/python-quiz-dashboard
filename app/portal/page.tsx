@@ -8,6 +8,7 @@ import { RequireAuth } from "@/components/require-auth"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
+import { getSmartNext, getPreferredTrack } from "@/lib/smart-next"
 import { useLanguage } from "@/contexts/language-context"
 import { useIsOwner } from "@/components/owner-only-guard"
 
@@ -420,35 +421,36 @@ function PortalContent() {
           </div>
         )}
 
-        {/* 🎯 최상단 거대 CTA — '뭘 해야할지' 1초 만에 명확.
-            활성 단계 찾아서 압도적 visibility 로 배치. */}
+        {/* 🎯 최상단 거대 CTA — Smart-Next 엔진이 자동 결정.
+            학생 마음 속의 '뭐 해야 하지?' 답 = 한 클릭으로 다음 단계.
+            소프트 추천: 다른 영역도 다 클릭 가능, 이건 권장만. */}
         {!isTeacher && (() => {
-          const activeStage = stages.find(s => getStageStatus(s) === "active")
-          if (!activeStage) return null
-          const done = activeStage.lessonIds.filter(id => completedIds.has(id)).length
-          const total = activeStage.lessonIds.length
-          const isFresh = done === 0
+          const preferredTrack = getPreferredTrack(completedIds)
+          const next = getSmartNext(completedIds, preferredTrack)
+          const isFresh = completedIds.size === 0
           return (
             <button
-              onClick={() => navigateTo(activeStage.platform, activeStage.id)}
+              onClick={() => router.push(next.href)}
               className="w-full mb-5 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-200 hover:shadow-2xl active:scale-[0.99] transition-all text-left group"
             >
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl shrink-0">
-                  {activeStage.emoji}
+                  {next.emoji ?? "📚"}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs sm:text-sm font-bold opacity-90 mb-0.5">
                     {isFresh
                       ? t("🚀 처음이세요? 여기서 시작", "🚀 First time? Start here")
-                      : t(`▶ 이어서 학습  ·  ${done}/${total} 완료`, `▶ Continue  ·  ${done}/${total} done`)}
+                      : t("▶ 다음 추천", "▶ Up next")}
                   </p>
                   <p className="text-xl sm:text-2xl font-black leading-tight">
-                    {lang === "en" ? activeStage.labelEn : activeStage.label}
+                    {lang === "en" ? next.titleEn : next.title}
                   </p>
-                  <p className="text-xs sm:text-sm opacity-90 mt-1 truncate">
-                    {lang === "en" ? activeStage.descEn : activeStage.desc}
-                  </p>
+                  {next.subtitle && (
+                    <p className="text-xs sm:text-sm opacity-90 mt-1 truncate">
+                      {next.subtitle}
+                    </p>
+                  )}
                 </div>
                 <span className="text-3xl sm:text-4xl group-hover:translate-x-1 transition-transform shrink-0">→</span>
               </div>

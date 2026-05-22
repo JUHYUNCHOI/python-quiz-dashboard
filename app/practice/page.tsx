@@ -77,16 +77,13 @@ function ClusterList({
   const totalSolved = ALL_CLUSTERS.reduce((acc, c) => acc + c.problems.filter(p => solvedSet.has(p.id)).length, 0)
   const goalReached = totalSolved >= GOAL
 
-  // 해금됐지만 아직 덜 한 클러스터
-  const activeClusters = clusters.filter(c =>
-    (isTeacher || isClusterUnlocked(c)) && !isClusterDone(c, solvedSet)
-  )
+  // 소프트 진행 — 모든 클러스터 클릭 가능. unlockAfter 는 권장 순서만.
+  // 학생이 왔다갔다 자유롭게 가능 (이전엔 학생 isClusterUnlocked() = false 면 못 풀게 막았음).
+  const activeClusters = clusters.filter(c => !isClusterDone(c, solvedSet))
   // 충분히 완료한 클러스터
   const doneClusters = clusters.filter(c => isClusterDone(c, solvedSet))
-  // 아직 잠긴 클러스터 (다음 예고용 — 1개만)
-  const nextLockedCluster = !isTeacher
-    ? clusters.find(c => !isClusterUnlocked(c) && !isClusterDone(c, solvedSet))
-    : null
+  // '다음 예고' 섹션은 더 이상 필요 X — 모두 노출
+  const nextLockedCluster = null
 
   const nextCluster = activeClusters[0]
   const otherActive = activeClusters.slice(1)
@@ -266,21 +263,7 @@ function ClusterList({
         </div>
       )}
 
-      {/* 다음 예고 — 잠긴 클러스터 1개만 희미하게 */}
-      {nextLockedCluster && (() => {
-        const locNext = localizeCluster(nextLockedCluster, locale)
-        const lessonName = getLessonName(String(nextLockedCluster.unlockAfter))
-        return (
-          <div className="flex items-center gap-3 px-1 opacity-40">
-            <Lock className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-            <span className="text-base">{nextLockedCluster.emoji}</span>
-            <div className="min-w-0">
-              <span className="text-sm text-gray-500 font-medium">{locNext.title}</span>
-              <span className="text-xs text-gray-400 ml-2">{lessonName} {t("완료 후", "after")}</span>
-            </div>
-          </div>
-        )
-      })()}
+      {/* '다음 예고' 섹션 제거 — 소프트 진행으로 모든 클러스터 항상 보이고 클릭 가능 */}
 
       {/* 완료한 클러스터 — 기본 접힘 */}
       {doneClusters.length > 0 && (
