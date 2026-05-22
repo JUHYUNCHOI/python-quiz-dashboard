@@ -1349,12 +1349,14 @@ export default function CurriculumPage() {
 
         {/* 커리큘럼 — 디바이스별 다른 레이아웃.
             • 모바일: 단일 컬럼 + 아코디언 (Part 클릭해 펼침)
-            • 데스크탑 (lg+): 2-컬럼 그리드 + 모든 Part 자동 펼침
-              → 가로 공간 활용 + 한눈에 비교 + 스크롤 절반
-            이전 imbalance 문제는 "한 쪽만 펼침" 때문이었음 — 둘 다 항상
-            펼치면 columns 가 자연스럽게 균형. */}
-        <div className="max-w-3xl lg:max-w-[1400px] mx-auto">
-          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-5 lg:items-start">
+            • 데스크탑 (lg+): Part 개수에 따라 컬럼 수 결정 (모두 자동 펼침)
+              · 3개 이하 (C++): 단일 컬럼 — 짝수 짝 안 맞으면 어색해서
+              · 4개 이상 (Python 9개 / Pseudo 5+): 2-컬럼 grid */}
+        {(() => {
+          const useDesktopGrid = isDesktop && curriculumData.length >= 4
+          return (
+            <div className={useDesktopGrid ? "max-w-[1400px] mx-auto" : "max-w-3xl mx-auto"}>
+              <div className={useDesktopGrid ? "grid grid-cols-2 gap-5 items-start" : "flex flex-col gap-4"}>
             {curriculumData.map((part) => {
               const partLessons = part.lessons
               const isComingSoon = part.comingSoon
@@ -1681,7 +1683,8 @@ export default function CurriculumPage() {
                                           // 지금 해야 할 단계: 1=수업, 2=복습, 3=도전, 0=전부완료
                                           // 복습(2)과 도전(3)은 수업(1) 완료 후 독립적으로 접근 가능
                                           const cur = !step1Done ? 1 : (!step2Done && !step3Done) ? 2 : 0
-                                          const activeBtn = "w-full px-3 py-1.5 rounded-lg border border-gray-200 font-bold text-sm text-center shadow-sm transition-colors"
+                                          // 활성 버튼: 내용 폭만큼만 차지 (이전엔 w-full 이라 데스크탑 2-컬럼에서 카드 너비 좁아지면 비대해 보임)
+                                          const activeBtn = "inline-flex items-center justify-center px-3 py-1.5 rounded-lg border border-gray-200 font-bold text-sm shadow-sm transition-colors"
                                           const doneText = "text-xs text-gray-400"
                                           const lockedText = "text-xs text-gray-300"
 
@@ -1805,8 +1808,10 @@ export default function CurriculumPage() {
                 </div>
               )
             })}
-          </div>
-        </div>
+              </div>
+            </div>
+          )
+        })()}
       </main>
 
       <BottomNav />
