@@ -133,9 +133,9 @@ export function HeaderFilesAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
           {(step === "cpp" || stepIndex > 1) && (
             <span className={cn(
               "flex items-center gap-1 px-2 py-1 rounded-lg",
-              step === "cpp" ? "bg-indigo-900/60 text-indigo-300 font-bold" : "text-slate-500"
+              step === "cpp" ? "bg-purple-900/60 text-purple-300 font-bold" : "text-slate-500"
             )}>
-              <span className="text-indigo-400">math.h</span>
+              <span className="text-purple-400">math.h</span>
               <span className="text-slate-400">──▶</span>
               <span className="text-emerald-400">math.cpp</span>
             </span>
@@ -143,9 +143,9 @@ export function HeaderFilesAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
           {(step === "main" || stepIndex > 2) && (
             <span className={cn(
               "flex items-center gap-1 px-2 py-1 rounded-lg",
-              step === "main" ? "bg-indigo-900/60 text-indigo-300 font-bold" : "text-slate-500"
+              step === "main" ? "bg-purple-900/60 text-purple-300 font-bold" : "text-slate-500"
             )}>
-              <span className="text-indigo-400">math.h</span>
+              <span className="text-purple-400">math.h</span>
               <span className="text-slate-400">──▶</span>
               <span className="text-orange-400">main.cpp</span>
             </span>
@@ -192,8 +192,8 @@ export function HeaderFilesAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
             key={s.id}
             className={cn(
               "h-1 flex-1 rounded-full transition-all duration-300",
-              i < stepIndex ? "bg-indigo-500" :
-              i === stepIndex ? "bg-indigo-400 animate-pulse" :
+              i < stepIndex ? "bg-purple-500" :
+              i === stepIndex ? "bg-purple-400 animate-pulse" :
               "bg-slate-700"
             )}
           />
@@ -203,7 +203,7 @@ export function HeaderFilesAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
       {step !== "done" && (
         <button
           onClick={next}
-          className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition-colors"
+          className="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition-colors"
         >
           {step === "idle" ? (isEn ? "▶ Start" : "▶ 시작") : (isEn ? `▶ Next (${STEPS[stepIndex + 1]?.label ?? ""})` : `▶ 다음 (${STEPS[stepIndex + 1]?.label ?? ""})`)}
         </button>
@@ -223,13 +223,13 @@ interface FileCardProps {
 
 function FileCard({ name, color, state, lines, highlightInclude }: FileCardProps) {
   const borderColor = {
-    indigo: state === "active" ? "border-indigo-400 shadow-indigo-900/60" : state === "past" ? "border-indigo-700" : "border-slate-700",
+    indigo: state === "active" ? "border-purple-400 shadow-purple-900/60" : state === "past" ? "border-purple-700" : "border-slate-700",
     emerald: state === "active" ? "border-emerald-400 shadow-emerald-900/60" : state === "past" ? "border-emerald-800" : "border-slate-700",
     orange: state === "active" ? "border-orange-400 shadow-orange-900/60" : state === "past" ? "border-orange-800" : "border-slate-700",
   }[color]
 
   const titleColor = {
-    indigo: state === "active" ? "text-indigo-300" : state === "past" ? "text-indigo-500" : "text-slate-600",
+    indigo: state === "active" ? "text-purple-300" : state === "past" ? "text-purple-500" : "text-slate-600",
     emerald: state === "active" ? "text-emerald-300" : state === "past" ? "text-emerald-600" : "text-slate-600",
     orange: state === "active" ? "text-orange-300" : state === "past" ? "text-orange-600" : "text-slate-600",
   }[color]

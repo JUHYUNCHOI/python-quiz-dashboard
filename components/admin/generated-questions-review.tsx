@@ -71,7 +71,7 @@ export function GeneratedQuestionsReview({ questions, onComplete }: GeneratedQue
   return (
     <div className="space-y-6">
       {/* 헤더 */}
-      <Card className="p-5 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+      <Card className="p-5 bg-orange-500 text-white">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold mb-0.5">AI 생성 문제 검토</h2>

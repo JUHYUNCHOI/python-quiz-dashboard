@@ -291,12 +291,12 @@ export default function QuizPage() {
                           "h-2.5 flex-1 rounded-sm transition-all duration-300",
                           isAnswered
                             ? isCurrent
-                              ? "bg-green-500 ring-2 ring-indigo-400 ring-offset-1"
+                              ? "bg-green-500 ring-2 ring-purple-400 ring-offset-1"
                               : "bg-green-400 hover:bg-green-500 cursor-pointer"
                             : isCurrent
                             ? quiz.combo >= 5
-                              ? "bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 animate-pulse"
-                              : "bg-indigo-500"
+                              ? "bg-gradient-to-r from-purple-400 via-purple-400 to-purple-400 animate-pulse"
+                              : "bg-purple-500"
                             : "bg-gray-200 cursor-default",
                         )}
                         aria-label={`${t("문제", "Q")} ${i + 1}${isAnswered ? t(" (풀었음)", " (answered)") : ""}`}
@@ -531,7 +531,7 @@ export default function QuizPage() {
             <div className="text-5xl mb-6">🦒💪</div>
             <button
               onClick={quiz.confirmExit}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-400 to-orange-500 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+              className="w-full py-3 rounded-xl bg-orange-500 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all"
             >
               {t("결과 보기", "View Results")}
             </button>
@@ -728,7 +728,7 @@ export default function QuizPage() {
               className={cn(
                 "flex items-center justify-center gap-1 rounded-xl font-bold min-h-[44px] px-5 py-3 md:px-6 md:py-3 transition-colors",
                 quiz.selectedAnswer !== null && !quiz.isCheckingAnswer
-                  ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg"
+                  ? "bg-purple-600 hover:bg-purple-500 text-white shadow-lg"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               )}
             >
@@ -790,7 +790,7 @@ export default function QuizPage() {
             <div className="flex flex-col gap-3">
               <button
                 onClick={quiz.cancelExit}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-400 to-orange-500 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+                className="w-full py-3 rounded-xl bg-orange-500 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all"
               >
                 {t("계속 풀기", "Keep Going")}
               </button>

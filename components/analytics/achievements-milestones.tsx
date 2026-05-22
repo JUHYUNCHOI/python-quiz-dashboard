@@ -61,7 +61,7 @@ export function AchievementsMilestones() {
             className={`p-4 ${
               achievement.earned
                 ? achievement.rarity === "rare"
-                  ? "bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-300"
+                  ? "bg-orange-50 border-2 border-yellow-300"
                   : "bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200"
                 : "bg-gray-50 border-2 border-gray-200 opacity-60"
             }`}
@@ -93,7 +93,7 @@ export function AchievementsMilestones() {
       </div>
 
       {/* Next Milestone */}
-      <Card className="p-6 bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200">
+      <Card className="p-6 bg-orange-50 border-2 border-orange-200">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-slate-800">{t("다음 마일스톤", "Next Milestone")}</h3>
           <span className="text-3xl">🎯</span>

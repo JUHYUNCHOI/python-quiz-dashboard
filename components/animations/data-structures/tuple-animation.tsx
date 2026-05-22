@@ -167,7 +167,7 @@ export function TupleAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
             </div>
           )}
 
-          <div className="bg-gradient-to-b from-slate-100 to-slate-200 rounded-xl p-4 border-4 border-slate-300 shadow-inner relative">
+          <div className="bg-slate-100 rounded-xl p-4 border-4 border-slate-300 shadow-inner relative">
             {overlay && (
               <div className={cn(
                 "absolute inset-0 rounded-lg z-20 flex items-center justify-center",
@@ -198,7 +198,7 @@ export function TupleAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
                 >
                   <div className={cn(
                     "w-16 h-24 rounded-lg border-2 shadow-lg relative overflow-hidden",
-                    "bg-gradient-to-b from-purple-100 to-purple-200 border-purple-300",
+                    "bg-purple-200 border-purple-300",
                     openIndex === index && "ring-4 ring-green-500 scale-110",
                     scanIndex === index && foundIndex !== index && "ring-4 ring-yellow-400",
                     foundIndex === index && "ring-4 ring-green-500 scale-110"

@@ -315,7 +315,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
           <p className="text-gray-500">{t("먼저 수업을 완료해주세요!", "Complete the lesson first!")}</p>
           <button
             onClick={() => router.push(`/learn/${lessonId}`)}
-            className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-500"
+            className="px-6 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-500"
           >
             {t("수업으로 가기", "Go to Lesson")}
           </button>
@@ -367,7 +367,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                 <p className="text-sm text-gray-500">{t("틀림", "Wrong")}</p>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-indigo-500">{percentage}%</p>
+                <p className="text-4xl font-bold text-purple-500">{percentage}%</p>
                 <p className="text-sm text-gray-500">{t("정답률", "Accuracy")}</p>
               </div>
             </div>
@@ -412,7 +412,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   setResetCount(prev => prev + 1)
                   try { localStorage.removeItem(storageKey) } catch {}
                 }}
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold"
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold"
               >
                 <RotateCcw className="w-5 h-5" />
                 {t("다시 풀기", "Try Again")}
@@ -464,7 +464,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                     className={cn(
                       "w-full h-full transition-all duration-300 cursor-pointer",
                       isCurrent
-                        ? "bg-indigo-500 scale-y-125"
+                        ? "bg-purple-500 scale-y-125"
                         : isWrong
                           ? "bg-red-400 hover:bg-red-300"
                           : isCompleted
@@ -552,7 +552,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                     setWrongSteps(prev => prev.filter(i => i !== currentIndex))
                     setResetCount(prev => prev + 1)
                   }}
-                  className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   {t("다시 풀기", "Redo")}
@@ -597,7 +597,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
             </button>
             <button
               onClick={goNext}
-              className="flex items-center justify-center gap-1 rounded-xl font-bold transition-colors px-4 py-2.5 md:px-6 md:py-3 bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg"
+              className="flex items-center justify-center gap-1 rounded-xl font-bold transition-colors px-4 py-2.5 md:px-6 md:py-3 bg-purple-600 hover:bg-purple-500 text-white shadow-lg"
             >
               <span className="text-sm md:text-base">
                 {currentIndex === reviewSteps.length - 1 ? t("결과 보기", "See Results") : t("다음", "Next")}

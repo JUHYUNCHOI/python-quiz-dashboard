@@ -95,7 +95,7 @@ export function GiraffeHero() {
 
           {mounted && (
             <Link href={ctaHref}>
-              <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm md:text-base font-bold text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95">
+              <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm md:text-base font-bold text-white bg-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95">
                 <Sparkles className="w-4 h-4" />
                 {ctaText}
                 <ArrowRight className="w-4 h-4" />

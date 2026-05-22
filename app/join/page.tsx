@@ -23,7 +23,7 @@ export default function JoinClassPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center">
+      <div className="min-h-screen bg-orange-50 flex items-center justify-center">
         <div className="text-5xl animate-bounce">🦒</div>
       </div>
     )
@@ -31,7 +31,7 @@ export default function JoinClassPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-orange-50 flex items-center justify-center p-4">
         <Card className="p-6 max-w-sm w-full text-center">
           <Users className="w-12 h-12 text-orange-400 mx-auto mb-3" />
           <p className="text-gray-600 mb-4">{t("반에 참가하려면 먼저 로그인해주세요.", "Please login first to join a class.")}</p>
@@ -62,7 +62,7 @@ export default function JoinClassPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-orange-50 flex items-center justify-center p-4">
         <Card className="p-6 max-w-sm w-full text-center space-y-4">
           <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto">
             <Check className="w-8 h-8 text-green-500" />
@@ -88,7 +88,7 @@ export default function JoinClassPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50">
+    <div className="min-h-screen bg-orange-50">
       <Header />
       <div className="flex items-center justify-center p-4 pb-28 pt-8">
       <Card className="p-6 max-w-sm w-full">

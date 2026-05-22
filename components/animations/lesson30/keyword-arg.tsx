@@ -23,7 +23,7 @@ export function KeywordArgVisualizer({ lang = "ko" }: VisualizerProps) {
 
   return (
     <div className="my-6">
-      <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-5 space-y-4">
+      <div className="bg-slate-800 rounded-2xl p-5 space-y-4">
         <div className="font-mono text-sm md:text-base">
           <div className="flex items-center gap-1 flex-wrap">
             <span className="text-pink-400 font-bold">def</span>

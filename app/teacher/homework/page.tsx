@@ -371,7 +371,7 @@ export default function HomeworkPage() {
                       {title}
                     </p>
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                      <span className="text-[11px] text-indigo-600 font-medium">
+                      <span className="text-[11px] text-purple-600 font-medium">
                         {grp.lesson_id} · {getLessonName(grp.lesson_id, lang)}
                       </span>
                       <span className="text-[11px] text-gray-500">{grp.student_name}</span>

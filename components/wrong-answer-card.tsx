@@ -64,7 +64,7 @@ export function WrongAnswerCard({ answer, isExpanded, onToggle }: WrongAnswerCar
             </div>
 
             {/* Action button */}
-            <Button className="w-full rounded-full bg-gradient-to-r from-orange-400 to-orange-500 py-3 font-semibold text-white transition-all hover:shadow-lg">
+            <Button className="w-full rounded-full bg-orange-500 py-3 font-semibold text-white transition-all hover:shadow-lg">
               {t("유사 문제 풀기", "Practice Similar")}
             </Button>
           </div>

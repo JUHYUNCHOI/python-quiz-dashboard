@@ -35,7 +35,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
         {!hasBlanks && !isCompleted && (
           <div className="space-y-2">
             {hintLevel === 0 && (
-              <button onClick={() => onHintLevelChange(1)} className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
+              <button onClick={() => onHintLevelChange(1)} className="text-sm text-purple-600 hover:text-purple-700 flex items-center gap-1">
                 <Lightbulb className="w-4 h-4" /> {t("힌트 보기", "Show Hint")}
               </button>
             )}

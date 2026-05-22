@@ -105,7 +105,7 @@ function LevelBar({ level, xpInLevel, xpPerLevel, visible, isLevelUp, t }: {
             "h-full rounded-full transition-all duration-1000 ease-out",
             isLevelUp
               ? "bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400"
-              : "bg-gradient-to-r from-orange-400 to-orange-500",
+              : "bg-orange-500",
           )}
           style={{ width: `${barWidth}%` }}
         />
@@ -428,7 +428,7 @@ function SessionCompletePage() {
           {/* Phase 4: Perfect bonus */}
           {breakdown.perfectBonus > 0 && phase >= 4 && (
             <div
-              className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-xl animate-scale-in shadow-lg"
+              className="flex items-center justify-between px-4 py-3 bg-orange-50 border-2 border-yellow-300 rounded-xl animate-scale-in shadow-lg"
             >
               <div className="flex items-center gap-2">
                 <span className="text-xl">👑</span>
@@ -587,7 +587,7 @@ function SessionCompletePage() {
               {/* Smart-Next 추천 - primary */}
               <button
                 onClick={() => router.push(smart.href)}
-                className="w-full py-4 rounded-2xl text-xl font-black text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95 flex flex-col items-center gap-0.5"
+                className="w-full py-4 rounded-2xl text-xl font-black text-white bg-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95 flex flex-col items-center gap-0.5"
               >
                 <span>{smart.emoji ?? "▶"} {lang === "en" ? smart.titleEn : smart.title}</span>
                 {smart.subtitle && (

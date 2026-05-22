@@ -153,8 +153,8 @@ export function PracticeSessionOverview({ classId, lang = "ko" }: Props) {
                 className={cn(
                   "px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all",
                   selectedClusterId === c.id
-                    ? "bg-indigo-500 text-white border-indigo-500"
-                    : "bg-white text-gray-500 border-gray-200 hover:border-indigo-300"
+                    ? "bg-purple-500 text-white border-purple-500"
+                    : "bg-white text-gray-500 border-gray-200 hover:border-purple-300"
                 )}
               >
                 {c.emoji} {c.title}
@@ -290,7 +290,7 @@ export function PracticeSessionOverview({ classId, lang = "ko" }: Props) {
                         <button
                           onClick={e => { e.stopPropagation(); handleAssign(s.studentId) }}
                           disabled={assigning === s.studentId}
-                          className="flex items-center gap-1 text-[10px] font-semibold text-indigo-600 hover:text-indigo-800 px-2 py-1 rounded-lg hover:bg-indigo-50 transition-colors disabled:opacity-50 flex-shrink-0"
+                          className="flex items-center gap-1 text-[10px] font-semibold text-purple-600 hover:text-purple-800 px-2 py-1 rounded-lg hover:bg-purple-50 transition-colors disabled:opacity-50 flex-shrink-0"
                         >
                           <Plus className="w-3 h-3" />
                           {assigning === s.studentId ? "..." : "추가 배정"}
@@ -339,7 +339,7 @@ export function PracticeSessionOverview({ classId, lang = "ko" }: Props) {
                         <button
                           onClick={() => handleAssign(s.studentId)}
                           disabled={assigning === s.studentId}
-                          className="flex items-center gap-1 text-[10px] font-semibold text-indigo-500 hover:text-indigo-700 px-2 py-1 rounded-lg hover:bg-indigo-50 transition-colors disabled:opacity-50"
+                          className="flex items-center gap-1 text-[10px] font-semibold text-purple-500 hover:text-purple-700 px-2 py-1 rounded-lg hover:bg-purple-50 transition-colors disabled:opacity-50"
                         >
                           <Plus className="w-3 h-3" />
                           {assigning === s.studentId ? "..." : "추가 배정"}

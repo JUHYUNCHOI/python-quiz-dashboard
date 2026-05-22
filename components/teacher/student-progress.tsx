@@ -230,8 +230,8 @@ function LessonRow({ summary, name, lessonId, studentId, isHomework, stepVisit }
             className={cn(
               "flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border transition-all",
               showAnswers === "learn"
-                ? "bg-indigo-100 border-indigo-300 text-indigo-700 font-bold"
-                : "bg-white border-gray-200 text-gray-500 hover:border-indigo-300 hover:text-indigo-600"
+                ? "bg-purple-100 border-purple-300 text-purple-700 font-bold"
+                : "bg-white border-gray-200 text-gray-500 hover:border-purple-300 hover:text-purple-600"
             )}
           >
             {showAnswers === "learn" ? <ChevronUp className="w-2.5 h-2.5" /> : <ChevronDown className="w-2.5 h-2.5" />}
@@ -459,14 +459,14 @@ export function StudentProgress({ lessonProgress, studentId, homeworkLessonIds, 
 
       {/* 최근 활동 */}
       {lastRow && (
-        <div className="flex items-center gap-2 px-3 py-2 bg-indigo-50 rounded-lg border border-indigo-200">
+        <div className="flex items-center gap-2 px-3 py-2 bg-purple-50 rounded-lg border border-purple-200">
           <span className="text-xs">{lastRow.progress_type === "review" ? "🔄" : "📖"}</span>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1">
-              <span className="text-xs font-bold text-indigo-700">최근 활동:</span>
-              <span className="text-xs text-indigo-600 truncate">{getLessonName(lastRow.lesson_id, lang)}</span>
+              <span className="text-xs font-bold text-purple-700">최근 활동:</span>
+              <span className="text-xs text-purple-600 truncate">{getLessonName(lastRow.lesson_id, lang)}</span>
             </div>
-            <div className="text-[10px] text-indigo-400">
+            <div className="text-[10px] text-purple-400">
               {lastRow.progress_type === "learn" ? "학습" : "복습"} · {formatDate(lastRow.updated_at)}
               {lastRow.completed ? " · 완료" : lastRow.score ? ` · ${lastRow.score}% 진행` : " · 진행 중"}
             </div>

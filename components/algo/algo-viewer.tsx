@@ -277,7 +277,7 @@ export function AlgoViewer({ topicId, codeTrack }: AlgoViewerProps) {
     <div className="relative">
       {status === "loading" && (
         <div className="flex items-center justify-center py-20 z-10">
-          <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
         </div>
       )}
 
@@ -300,15 +300,15 @@ export function AlgoViewer({ topicId, codeTrack }: AlgoViewerProps) {
             {stages.map(stage => (
               <div key={stage.num} className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm">
                 {/* 스테이지 헤더 */}
-                <div className="flex items-center gap-3 px-4 py-2.5 bg-indigo-50 border-b border-indigo-100">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-500 text-white text-xs font-bold flex items-center justify-center">
+                <div className="flex items-center gap-3 px-4 py-2.5 bg-purple-50 border-b border-purple-100">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500 text-white text-xs font-bold flex items-center justify-center">
                     {stage.num}
                   </span>
-                  <span className="font-bold text-sm text-indigo-900">{stage.title}</span>
+                  <span className="font-bold text-sm text-purple-900">{stage.title}</span>
                   {stage.desc && (
-                    <span className="text-xs text-indigo-400 ml-1">{stage.desc}</span>
+                    <span className="text-xs text-purple-400 ml-1">{stage.desc}</span>
                   )}
-                  <span className="ml-auto text-xs text-indigo-300 font-medium">
+                  <span className="ml-auto text-xs text-purple-300 font-medium">
                     {stage.problems.length}{lang === "en" ? " prob" : "문제"}
                   </span>
                 </div>
@@ -325,14 +325,14 @@ export function AlgoViewer({ topicId, codeTrack }: AlgoViewerProps) {
                         className={cn(
                           "w-full flex items-center gap-3 px-4 py-3 text-left transition-all group",
                           isSelected
-                            ? "bg-indigo-50 border-l-4 border-indigo-500"
+                            ? "bg-purple-50 border-l-4 border-purple-500"
                             : "hover:bg-gray-50 border-l-4 border-transparent"
                         )}
                       >
                         <div className="flex-1 min-w-0">
                           <p className={cn(
                             "text-sm font-semibold truncate",
-                            isSelected ? "text-indigo-700" : "text-gray-800 group-hover:text-indigo-600"
+                            isSelected ? "text-purple-700" : "text-gray-800 group-hover:text-purple-600"
                           )}>
                             {prob.title}
                           </p>
@@ -343,8 +343,8 @@ export function AlgoViewer({ topicId, codeTrack }: AlgoViewerProps) {
                           </span>
                         )}
                         <span className={cn(
-                          "flex-shrink-0 text-gray-300 group-hover:text-indigo-400 transition-colors font-bold",
-                          isSelected && "text-indigo-500"
+                          "flex-shrink-0 text-gray-300 group-hover:text-purple-400 transition-colors font-bold",
+                          isSelected && "text-purple-500"
                         )}>→</span>
                       </button>
                     )
@@ -391,7 +391,7 @@ export function AlgoViewer({ topicId, codeTrack }: AlgoViewerProps) {
                 className={cn(
                   "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all",
                   activeTab === tab.id
-                    ? "bg-white text-indigo-700 shadow-sm"
+                    ? "bg-white text-purple-700 shadow-sm"
                     : "text-gray-500 hover:text-gray-700"
                 )}
               >

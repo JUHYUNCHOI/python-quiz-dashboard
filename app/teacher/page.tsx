@@ -282,11 +282,11 @@ export default function TeacherDashboardPage() {
         </div>
 
         {/* 숙제 검토 링크 */}
-        <Link href="/teacher/homework" className="flex items-center gap-3 p-4 rounded-xl border-2 border-indigo-100 bg-indigo-50 hover:bg-indigo-100 transition-colors mb-2">
+        <Link href="/teacher/homework" className="flex items-center gap-3 p-4 rounded-xl border-2 border-purple-100 bg-purple-50 hover:bg-purple-100 transition-colors mb-2">
           <span className="text-2xl">📋</span>
           <div className="flex-1">
-            <p className="font-bold text-indigo-800">{t("숙제 제출 현황 보기", "View Homework Submissions")}</p>
-            <p className="text-xs text-indigo-500">{t("학생들이 제출한 코드를 확인하세요", "Review code submitted by students")}</p>
+            <p className="font-bold text-purple-800">{t("숙제 제출 현황 보기", "View Homework Submissions")}</p>
+            <p className="text-xs text-purple-500">{t("학생들이 제출한 코드를 확인하세요", "Review code submitted by students")}</p>
           </div>
           {hwCount !== null && hwCount > 0 && (
             <span className="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0">
@@ -470,7 +470,7 @@ export default function TeacherDashboardPage() {
                             e.stopPropagation()
                             shareCode(cls)
                           }}
-                          className="flex items-center gap-1 text-indigo-500 hover:text-indigo-700 transition-colors font-semibold"
+                          className="flex items-center gap-1 text-purple-500 hover:text-purple-700 transition-colors font-semibold"
                         >
                           {copiedCode === cls.join_code + "-share" ? (
                             <><Check className="w-3.5 h-3.5 text-green-500" /> {t("복사됨", "Copied")}</>

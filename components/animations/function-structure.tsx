@@ -38,11 +38,11 @@ export function FunctionStructure({ lang = "ko" }: FunctionStructureProps) {
   return (
     <div className="my-6">
       {/* 함수 정의 박스 */}
-      <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-5 md:p-6 overflow-hidden">
+      <div className="bg-slate-800 rounded-2xl p-5 md:p-6 overflow-hidden">
         {/* 정의 영역 */}
         <div className="relative">
           {/* 왼쪽 브라켓 라인 */}
-          <div className="absolute left-0 top-2 bottom-2 w-1 bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500 rounded-full" />
+          <div className="absolute left-0 top-2 bottom-2 w-1 bg-gradient-to-b from-purple-500 via-purple-500 to-pink-500 rounded-full" />
           
           <div className="pl-5 space-y-3">
             {/* Line 1: def */}
@@ -94,14 +94,14 @@ export function FunctionStructure({ lang = "ko" }: FunctionStructureProps) {
             <span className="text-slate-400">)</span>
           </div>
           <span className="text-xs md:text-sm text-slate-400 flex items-center gap-1">
-            <span className="text-slate-500">←</span> {t.funcCall} <span className="text-indigo-400">{t.use}</span>
+            <span className="text-slate-500">←</span> {t.funcCall} <span className="text-purple-400">{t.use}</span>
           </span>
         </div>
       </div>
       
       {/* 팁 영역 */}
-      <div className="mt-4 p-4 bg-indigo-50 rounded-xl">
-        <p className="font-bold text-indigo-700 mb-2">💡 {t.tip}:</p>
+      <div className="mt-4 p-4 bg-purple-50 rounded-xl">
+        <p className="font-bold text-purple-700 mb-2">💡 {t.tip}:</p>
         <div className="space-y-1 text-sm md:text-base">
           <p className="flex items-center gap-2">
             <code className="px-2 py-0.5 bg-pink-100 text-pink-700 rounded font-mono font-bold">def</code>
@@ -140,10 +140,10 @@ export function ParameterStructure({ lang = "ko" }: FunctionStructureProps) {
 
   return (
     <div className="my-6">
-      <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-5 md:p-6 overflow-hidden">
+      <div className="bg-slate-800 rounded-2xl p-5 md:p-6 overflow-hidden">
         {/* 함수 정의 */}
         <div className="relative">
-          <div className="absolute left-0 top-2 bottom-2 w-1 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full" />
+          <div className="absolute left-0 top-2 bottom-2 w-1 bg-purple-500 rounded-full" />
           
           <div className="pl-5 space-y-3">
             <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -184,8 +184,8 @@ export function ParameterStructure({ lang = "ko" }: FunctionStructureProps) {
       </div>
       
       {/* 팁 */}
-      <div className="mt-4 p-4 bg-indigo-50 rounded-xl">
-        <p className="font-bold text-indigo-700 mb-2">💡 {t.tip}:</p>
+      <div className="mt-4 p-4 bg-purple-50 rounded-xl">
+        <p className="font-bold text-purple-700 mb-2">💡 {t.tip}:</p>
         <div className="space-y-2 text-sm md:text-base">
           <p className="flex items-center gap-2">
             <span className="px-2 py-0.5 bg-orange-100 text-orange-700 rounded font-bold">매개변수</span>
@@ -224,10 +224,10 @@ export function ReturnStructure({ lang = "ko" }: FunctionStructureProps) {
 
   return (
     <div className="my-6">
-      <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-5 md:p-6 overflow-hidden">
+      <div className="bg-slate-800 rounded-2xl p-5 md:p-6 overflow-hidden">
         {/* 함수 정의 */}
         <div className="relative">
-          <div className="absolute left-0 top-2 bottom-2 w-1 bg-gradient-to-b from-indigo-500 to-green-500 rounded-full" />
+          <div className="absolute left-0 top-2 bottom-2 w-1 bg-gradient-to-b from-purple-500 to-green-500 rounded-full" />
           
           <div className="pl-5 space-y-3">
             <div className="flex items-center gap-1 font-mono text-sm md:text-base">
@@ -266,8 +266,8 @@ export function ReturnStructure({ lang = "ko" }: FunctionStructureProps) {
       </div>
       
       {/* 팁 */}
-      <div className="mt-4 p-4 bg-indigo-50 rounded-xl">
-        <p className="font-bold text-indigo-700 mb-2">💡 {t.tip}:</p>
+      <div className="mt-4 p-4 bg-purple-50 rounded-xl">
+        <p className="font-bold text-purple-700 mb-2">💡 {t.tip}:</p>
         <div className="space-y-2 text-sm md:text-base">
           <p className="flex items-start gap-2">
             <code className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded font-mono shrink-0">print</code>

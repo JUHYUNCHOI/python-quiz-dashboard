@@ -19,7 +19,7 @@ export function SoundToggle({ isMuted, onToggle, className }: SoundToggleProps) 
         "p-1.5 rounded-full transition-all",
         isMuted
           ? "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
-          : "text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50",
+          : "text-purple-600 hover:text-purple-700 hover:bg-purple-50",
         className
       )}
       aria-label={isMuted ? t("소리 켜기", "Unmute") : t("소리 끄기", "Mute")}

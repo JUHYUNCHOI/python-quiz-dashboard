@@ -185,8 +185,8 @@ export function FillInBlank({
                 isWrong 
                   ? "bg-red-500 text-white border-2 border-red-400"
                   : isSelected
-                    ? "bg-indigo-500 text-white border-2 border-indigo-300 ring-2 ring-indigo-400 ring-offset-1 ring-offset-gray-900"
-                    : "bg-indigo-600 text-indigo-100 border-2 border-indigo-400 hover:border-indigo-300"
+                    ? "bg-purple-500 text-white border-2 border-purple-300 ring-2 ring-purple-400 ring-offset-1 ring-offset-gray-900"
+                    : "bg-purple-600 text-purple-100 border-2 border-purple-400 hover:border-purple-300"
               ) : (
                 isSelected
                   ? "bg-amber-500/30 border-2 border-amber-400 text-amber-300 animate-pulse"
@@ -243,11 +243,11 @@ export function FillInBlank({
   const currentHint = selectedBlank ? blanks.find(b => b.id === selectedBlank)?.hint : null
 
   return (
-    <div className="bg-white rounded-2xl border-4 border-indigo-200 overflow-hidden shadow-lg">
+    <div className="bg-white rounded-2xl border-4 border-purple-200 overflow-hidden shadow-lg">
       {/* 헤더 */}
-      <div className="bg-indigo-50 px-3 py-2 md:px-4 md:py-3 border-b-2 border-indigo-100">
-        <h3 className="font-bold text-indigo-700 text-base md:text-lg">{title}</h3>
-        <p className="text-indigo-600 text-xs md:text-sm">{description}</p>
+      <div className="bg-purple-50 px-3 py-2 md:px-4 md:py-3 border-b-2 border-purple-100">
+        <h3 className="font-bold text-purple-700 text-base md:text-lg">{title}</h3>
+        <p className="text-purple-600 text-xs md:text-sm">{description}</p>
       </div>
 
       <div className="p-3 md:p-4 space-y-4">
@@ -285,7 +285,7 @@ export function FillInBlank({
                         ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                         : isUsed
                           ? "bg-gray-200 text-gray-400 line-through cursor-not-allowed"
-                          : "bg-indigo-100 text-indigo-700 hover:bg-indigo-200 hover:scale-105 active:scale-95 shadow-sm"
+                          : "bg-purple-100 text-purple-700 hover:bg-purple-200 hover:scale-105 active:scale-95 shadow-sm"
                     )}
                   >
                     {choice}
@@ -329,9 +329,9 @@ export function FillInBlank({
 
         {/* 완료 메시지 */}
         {isComplete && (
-          <div className="bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl p-3 md:p-4 text-center">
-            <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-indigo-500 mx-auto mb-2" />
-            <p className="text-indigo-700 font-bold text-sm md:text-base">{isEn ? "Well done!" : "잘했어요!"}</p>
+          <div className="bg-purple-100 rounded-xl p-3 md:p-4 text-center">
+            <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-purple-500 mx-auto mb-2" />
+            <p className="text-purple-700 font-bold text-sm md:text-base">{isEn ? "Well done!" : "잘했어요!"}</p>
           </div>
         )}
 

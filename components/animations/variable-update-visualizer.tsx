@@ -290,7 +290,7 @@ export function VariableUpdateVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }
               </span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="font-mono font-bold text-indigo-500 shrink-0">x = x + 2</span>
+              <span className="font-mono font-bold text-purple-500 shrink-0">x = x + 2</span>
               <span className="text-slate-500">
                 {isEn ? "→ Calculates AND stores back in x. x changes!" : "→ 계산 후 결과를 x에 저장. x가 바뀜!"}
               </span>

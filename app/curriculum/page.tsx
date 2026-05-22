@@ -995,7 +995,7 @@ export default function CurriculumPage() {
               <div className="flex-1">
                 <div className="h-4 sm:h-5 bg-gray-200 rounded-full border border-gray-200 overflow-hidden">
                   <div
-                    className={`h-full transition-all duration-500 ${isPseudo ? 'bg-gradient-to-r from-green-400 to-green-500' : isCpp ? 'bg-gradient-to-r from-blue-400 to-blue-500' : 'bg-gradient-to-r from-orange-400 to-orange-500'}`}
+                    className={`h-full transition-all duration-500 ${isPseudo ? 'bg-green-500' : isCpp ? 'bg-blue-500' : 'bg-orange-500'}`}
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -1100,7 +1100,7 @@ export default function CurriculumPage() {
                         {practiceProblemsDone >= 40 ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("레슨에서 Try Challenge로 도전!", "Try Challenge in each lesson!")}
                       </span>
                       {completedLessons.has("cpp-p3") && isOwner && (
-                        <Link href="/coding-bank" className="text-xs text-center border border-teal-400 text-teal-600 rounded-lg py-1.5 font-bold hover:bg-teal-50 transition-colors">
+                        <Link href="/coding-bank" className="text-xs text-center border border-emerald-400 text-emerald-600 rounded-lg py-1.5 font-bold hover:bg-emerald-50 transition-colors">
                           🏦 {t("코딩 뱅크 →", "Coding Bank →")}
                         </Link>
                       )}
@@ -1300,7 +1300,7 @@ export default function CurriculumPage() {
         {/* 커리큘럼 완료 → 알고리즘 진입 배너 */}
         {loaded && progress === 100 && !isPseudo && (
           <div className="max-w-[1600px] mx-auto mb-6">
-            <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl border border-gray-200 p-5 shadow-md text-white">
+            <div className="bg-purple-600 rounded-2xl border border-gray-200 p-5 shadow-md text-white">
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="text-5xl shrink-0">🎓</div>
                 <div className="flex-1 text-center sm:text-left">
@@ -1327,7 +1327,7 @@ export default function CurriculumPage() {
         {/* P2 민준: 신규 학생 시작점 설정 배너 */}
         {loaded && completedCount === 0 && !isTeacher && !isPseudo && (
           <div className="max-w-[1600px] mx-auto mb-4">
-            <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl border-2 border-indigo-200 p-4 flex items-start gap-3">
+            <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl border-2 border-purple-200 p-4 flex items-start gap-3">
               <span className="text-2xl shrink-0">🎯</span>
               <div className="flex-1">
                 <p className="font-bold text-gray-800 text-sm">
@@ -1454,7 +1454,7 @@ export default function CurriculumPage() {
                           </div>
                           <div className="h-2 bg-gray-200 rounded-full border border-black overflow-hidden">
                             <div
-                              className={`h-full transition-all duration-300 ${isPseudo ? 'bg-gradient-to-r from-green-400 to-green-500' : isCpp ? 'bg-gradient-to-r from-blue-400 to-blue-500' : 'bg-gradient-to-r from-orange-400 to-orange-500'}`}
+                              className={`h-full transition-all duration-300 ${isPseudo ? 'bg-green-500' : isCpp ? 'bg-blue-500' : 'bg-orange-500'}`}
                               style={{ width: `${partProgress}%` }}
                             />
                           </div>

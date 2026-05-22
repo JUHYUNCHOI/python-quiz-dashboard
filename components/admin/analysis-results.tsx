@@ -101,7 +101,7 @@ export function AnalysisResults({ fileName, onGenerateQuestions }: AnalysisResul
         </div>
       </Card>
 
-      <Card className="p-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+      <Card className="p-6 bg-orange-500 text-white">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-bold mb-1">AI 문제 생성 준비 완료</h3>

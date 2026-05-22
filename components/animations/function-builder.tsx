@@ -99,8 +99,8 @@ export function FunctionBuilder({ onComplete, lang = "ko" }: FunctionBuilderProp
           <p className="text-gray-600 mb-6">{isEn ? "You've learned the full structure of a function!" : "함수의 구조를 모두 배웠어요!"}</p>
 
           {/* 요약 */}
-          <div className="bg-indigo-50 rounded-2xl p-5 text-left mb-6">
-            <h4 className="font-bold text-indigo-700 mb-4 text-center">{isEn ? "📚 Summary" : "📚 정리"}</h4>
+          <div className="bg-purple-50 rounded-2xl p-5 text-left mb-6">
+            <h4 className="font-bold text-purple-700 mb-4 text-center">{isEn ? "📚 Summary" : "📚 정리"}</h4>
             <div className="space-y-3 text-sm md:text-base">
               <div className="flex items-center gap-3">
                 <span className="w-6 h-6 rounded bg-pink-400 shrink-0"></span>
@@ -137,7 +137,7 @@ export function FunctionBuilder({ onComplete, lang = "ko" }: FunctionBuilderProp
 
           <button
             onClick={handleRestart}
-            className="px-6 py-3 bg-white border-4 border-indigo-200 rounded-xl font-bold text-indigo-600 hover:bg-indigo-50 transition-all"
+            className="px-6 py-3 bg-white border-4 border-purple-200 rounded-xl font-bold text-purple-600 hover:bg-purple-50 transition-all"
           >
             <RotateCcw className="w-5 h-5 inline mr-2" />
             {isEn ? "Learn again" : "다시 배우기"}
@@ -152,11 +152,11 @@ export function FunctionBuilder({ onComplete, lang = "ko" }: FunctionBuilderProp
       {/* 진행 바 */}
       <div className="bg-gray-200 rounded-full h-4 overflow-hidden">
         <div 
-          className="h-full bg-indigo-600 transition-all duration-500 rounded-full"
+          className="h-full bg-purple-600 transition-all duration-500 rounded-full"
           style={{ width: `${progress}%` }}
         />
       </div>
-      <p className="text-center text-indigo-600 font-bold">
+      <p className="text-center text-purple-600 font-bold">
         Step {currentStep} / {totalSteps}
       </p>
 
@@ -242,9 +242,9 @@ export function FunctionBuilder({ onComplete, lang = "ko" }: FunctionBuilderProp
       </div>
 
       {/* 설명 박스 */}
-      <div className="bg-white rounded-2xl p-5 border-4 border-indigo-200 shadow-lg">
+      <div className="bg-white rounded-2xl p-5 border-4 border-purple-200 shadow-lg">
         <div className="text-3xl mb-2">{step.emoji}</div>
-        <h3 className="text-xl font-bold text-indigo-700 mb-2">{step.title}</h3>
+        <h3 className="text-xl font-bold text-purple-700 mb-2">{step.title}</h3>
         <p 
           className="text-gray-700 leading-relaxed"
           dangerouslySetInnerHTML={{ __html: step.text }}
@@ -255,7 +255,7 @@ export function FunctionBuilder({ onComplete, lang = "ko" }: FunctionBuilderProp
       <div className="text-center">
         <button
           onClick={handleNext}
-          className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+          className="px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
         >
           {step.buttonText} <ChevronRight className="w-5 h-5 inline ml-1" />
         </button>

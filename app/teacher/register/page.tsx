@@ -19,7 +19,7 @@ export default function TeacherRegisterPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center">
+      <div className="min-h-screen bg-orange-50 flex items-center justify-center">
         <div className="text-5xl animate-bounce">🦒</div>
       </div>
     )
@@ -27,7 +27,7 @@ export default function TeacherRegisterPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-orange-50 flex items-center justify-center p-4">
         <Card className="p-6 max-w-sm w-full text-center">
           <p className="text-gray-600 mb-4">{t("선생님 전환을 위해 먼저 로그인해주세요.", "Please login first.")}</p>
           <Link href="/login" className="text-orange-600 font-bold hover:underline">
@@ -40,7 +40,7 @@ export default function TeacherRegisterPage() {
 
   if (profile?.role === "teacher") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-orange-50 flex items-center justify-center p-4">
         <Card className="p-6 max-w-sm w-full text-center">
           <ShieldCheck className="w-12 h-12 text-green-500 mx-auto mb-3" />
           <h2 className="text-lg font-bold mb-2">{t("이미 선생님으로 등록되어 있어요!", "You're already a teacher!")}</h2>
@@ -66,7 +66,7 @@ export default function TeacherRegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-orange-50 flex items-center justify-center p-4">
       <Card className="p-6 max-w-sm w-full">
         <Link href="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4">
           <ArrowLeft className="w-4 h-4" /> {t("홈으로", "Home")}

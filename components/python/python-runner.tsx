@@ -328,8 +328,8 @@ export function PythonRunner({
     <div className="space-y-3">
       {/* 문제 — sticky 로 코드 입력 중에도 항상 보임 (작은 화면 대응) */}
       {task && (
-        <div className="sticky top-[110px] md:top-[120px] z-10 bg-indigo-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
-          <p className="text-indigo-800 font-bold text-sm md:text-base">🎯 {task}</p>
+        <div className="sticky top-[110px] md:top-[120px] z-10 bg-purple-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-purple-200">
+          <p className="text-purple-800 font-bold text-sm md:text-base">🎯 {task}</p>
         </div>
       )}
 
@@ -501,7 +501,7 @@ export function PythonRunner({
       {isCorrect === true && !dbAuth && (
         <p className="text-center text-xs text-gray-400">
           {t("💾 이 기기에만 저장돼요.", "💾 Saved on this device only.")}{" "}
-          <a href="/login" className="text-indigo-500 hover:text-indigo-700 underline font-medium">
+          <a href="/login" className="text-purple-500 hover:text-purple-700 underline font-medium">
             {t("로그인", "Login")}
           </a>
           {t("하면 어디서든 코드가 저장돼요!", " to sync your code across devices!")}

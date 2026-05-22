@@ -25,15 +25,15 @@ export function SiteFooter() {
           <span>© {year}</span>
         </div>
         <nav className="flex items-center justify-center sm:justify-end gap-4 sm:gap-6">
-          <Link href="/privacy" className="hover:text-indigo-600 transition-colors">
+          <Link href="/privacy" className="hover:text-purple-600 transition-colors">
             {t("개인정보처리방침", "Privacy")}
           </Link>
-          <Link href="/terms" className="hover:text-indigo-600 transition-colors">
+          <Link href="/terms" className="hover:text-purple-600 transition-colors">
             {t("이용약관", "Terms")}
           </Link>
           <a
             href="mailto:julia.juhyun@gmail.com"
-            className="hover:text-indigo-600 transition-colors"
+            className="hover:text-purple-600 transition-colors"
           >
             {t("문의", "Contact")}
           </a>

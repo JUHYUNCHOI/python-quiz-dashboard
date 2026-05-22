@@ -217,7 +217,7 @@ export function ExplanationPanel({
           <div className="flex items-center gap-3">
             <Button
               onClick={onNext}
-              className="flex-1 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-bold py-6 md:py-7 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transition-all min-h-[56px]"
+              className="flex-1 bg-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-bold py-6 md:py-7 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transition-all min-h-[56px]"
             >
               {t("이해했어요, 다음 문제로", "Got it, next question")}
             </Button>

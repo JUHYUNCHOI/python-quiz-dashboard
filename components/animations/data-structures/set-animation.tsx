@@ -100,7 +100,7 @@ export function SetAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
             <p className="text-sm text-green-800">{isEn ? '✋ Attendance = no duplicates, instant "here?" check!' : '✋ 출석부 = 중복 없이, "왔나?" 바로 확인!'}</p>
           </div>
 
-          <div className="bg-gradient-to-b from-slate-100 to-slate-200 rounded-xl p-4 border-4 border-slate-300 shadow-inner relative overflow-hidden">
+          <div className="bg-slate-100 rounded-xl p-4 border-4 border-slate-300 shadow-inner relative overflow-hidden">
             {overlay && (
               <div className={cn(
                 "absolute inset-0 rounded-lg z-20 flex items-center justify-center",

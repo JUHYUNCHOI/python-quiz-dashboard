@@ -330,7 +330,7 @@ export function CinBufferVisualizer({ lang = "ko" }: CinBufferVisualizerProps) {
               className="flex items-center gap-2 justify-center"
             >
               <span className="text-lg">⌨️</span>
-              <span className="px-4 py-2 bg-indigo-500/20 border border-indigo-400/40 rounded-xl text-indigo-300 font-mono text-sm font-bold">
+              <span className="px-4 py-2 bg-purple-500/20 border border-purple-400/40 rounded-xl text-purple-300 font-mono text-sm font-bold">
                 {isEn ? current.userInput.en : current.userInput.ko}
               </span>
             </motion.div>

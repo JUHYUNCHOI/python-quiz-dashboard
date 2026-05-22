@@ -64,7 +64,7 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
 
             <button
               onClick={() => setStep("course")}
-              className="w-full py-4 rounded-2xl text-lg font-black text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 transition-all active:scale-95"
+              className="w-full py-4 rounded-2xl text-lg font-black text-white bg-orange-500 hover:from-orange-500 hover:to-orange-600 transition-all active:scale-95"
             >
               {t("시작하기 🚀", "Get Started 🚀")}
             </button>
@@ -132,7 +132,7 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
             <button
               onClick={handleStart}
               disabled={!selectedCourse}
-              className="w-full py-4 rounded-2xl text-lg font-black text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
+              className="w-full py-4 rounded-2xl text-lg font-black text-white bg-orange-500 hover:from-orange-500 hover:to-orange-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
             >
               {t("레슨 시작하기! 📚", "Start Learning! 📚")}
             </button>

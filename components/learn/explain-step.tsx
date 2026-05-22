@@ -107,7 +107,7 @@ export function ExplainStep({ step }: ExplainStepProps) {
               "w-full py-3 px-4 rounded-xl font-bold text-base transition-all flex items-center justify-center gap-2",
               showReveal
                 ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
-                : "bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg"
+                : "bg-orange-500 text-white hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg"
             )}
           >
             <Eye className="w-5 h-5" />

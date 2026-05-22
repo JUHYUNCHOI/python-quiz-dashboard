@@ -70,7 +70,7 @@ export function McqRunner({ problem, onSuccess }: McqRunnerProps) {
               className={cn(
                 "rounded-xl border px-4 py-3 text-left transition-all flex items-center gap-3",
                 // 미선택 상태
-                !answered && "border-gray-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/60 cursor-pointer shadow-sm active:scale-[0.99]",
+                !answered && "border-gray-200 bg-white hover:border-purple-400 hover:bg-purple-50/60 cursor-pointer shadow-sm active:scale-[0.99]",
                 // 정답 강조
                 answered && isCorrect && "border-emerald-400 bg-emerald-50",
                 // 틀린 선택
@@ -123,7 +123,7 @@ export function McqRunner({ problem, onSuccess }: McqRunnerProps) {
             {!isRight && (
               <button
                 onClick={reset}
-                className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-700 font-medium"
+                className="flex items-center gap-1 text-xs text-purple-500 hover:text-purple-700 font-medium"
               >
                 <RotateCcw className="w-3 h-3" /> {t("다시 풀기", "Try again")}
               </button>

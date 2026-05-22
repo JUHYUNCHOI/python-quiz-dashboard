@@ -56,7 +56,7 @@ export function OwnerOnlyGuard({ children, title, description }: OwnerOnlyGuardP
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-indigo-50 to-white">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-purple-50 to-white">
         <div className="text-5xl animate-bounce">🦒</div>
       </div>
     )
@@ -74,17 +74,17 @@ export function OwnerOnlyGuard({ children, title, description }: OwnerOnlyGuardP
         )
 
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-indigo-50 to-white p-6">
-        <div className="max-w-md w-full text-center bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-indigo-100">
-          <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-indigo-50 flex items-center justify-center">
-            <Construction className="w-8 h-8 text-indigo-500" />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-purple-50 to-white p-6">
+        <div className="max-w-md w-full text-center bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-purple-100">
+          <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-purple-50 flex items-center justify-center">
+            <Construction className="w-8 h-8 text-purple-500" />
           </div>
           <h1 className="text-xl font-bold text-gray-900 mb-2">{titleText}</h1>
           <p className="text-sm text-gray-600 leading-relaxed mb-6">{descText}</p>
           <div className="flex flex-col sm:flex-row gap-2 justify-center">
             <Link
               href="/curriculum"
-              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold transition-colors"
+              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold transition-colors"
             >
               <Home className="w-4 h-4" />
               {t("수업으로 가기", "Go to lessons")}

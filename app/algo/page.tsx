@@ -73,7 +73,7 @@ export default function AlgoPage() {
         {loaded && recommendedNext && (
           <Link
             href={`/algo/${recommendedNext.id}`}
-            className="block bg-gradient-to-r from-amber-400 to-orange-500 rounded-2xl p-5 text-white shadow-lg shadow-amber-200/60 hover:shadow-xl active:scale-[0.99] transition-all"
+            className="block bg-orange-500 rounded-2xl p-5 text-white shadow-lg shadow-amber-200/60 hover:shadow-xl active:scale-[0.99] transition-all"
           >
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl shrink-0">

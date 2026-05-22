@@ -554,11 +554,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   if (isLocked) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white flex items-center justify-center">
         <div className="text-center">
           <p className="text-5xl mb-4">🔒</p>
           <p className="text-gray-600 mb-4">{t("이전 수업을 먼저 완료해주세요!", "Please complete previous lessons first!")}</p>
-          <button onClick={() => router.push("/curriculum")} className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold">
+          <button onClick={() => router.push("/curriculum")} className="px-5 py-2.5 bg-purple-600 text-white rounded-xl font-bold">
             {t("수업 목록으로", "Go to Curriculum")}
           </button>
         </div>
@@ -568,11 +568,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   if (!lesson || !chapter || !step) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white flex items-center justify-center">
         <div className="text-center">
           <p className="text-5xl mb-4">🚧</p>
           <p className="text-gray-600 mb-4">{t("준비 중인 레슨이에요", "This lesson is coming soon")}</p>
-          <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold">
+          <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="px-5 py-2.5 bg-purple-600 text-white rounded-xl font-bold">
             {t("돌아가기", "Go Back")}
           </button>
         </div>
@@ -814,11 +814,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     return (
       <>
         {!isIGCSE && <Confetti show={showConfetti} />}
-        <div className="min-h-screen bg-gradient-to-b from-indigo-600 to-purple-700 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-purple-700 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl max-w-md w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
             {/* 스크롤 영역 — 셀러브레이션 + 통계 + 피드백 */}
             <div className="overflow-y-auto p-6 sm:p-8 text-center flex-1">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 animate-bounce">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 animate-bounce">
               <span className="text-4xl sm:text-5xl">{lesson.emoji}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{t("레슨 완료!", "Lesson Complete!")}</h1>
@@ -963,7 +963,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                         "w-full py-3 rounded-xl font-bold transition-all flex flex-col items-center gap-0.5",
                         isGraduationCTA
                           ? "bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300"
-                          : "bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white"
+                          : "bg-purple-600 hover:bg-purple-500 active:scale-95 text-white"
                       )}
                     >
                       <span className="text-base">
@@ -972,7 +972,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                           : label}
                       </span>
                       {subtitle && !isGraduationCTA && (
-                        <span className="text-[11px] font-medium text-indigo-100/90">{subtitle}</span>
+                        <span className="text-[11px] font-medium text-purple-100/90">{subtitle}</span>
                       )}
                     </button>
                   )
@@ -1052,9 +1052,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     return (
       <>
         {!isIGCSE && <Confetti show={showConfetti} />}
-        <div className="min-h-screen bg-gradient-to-b from-indigo-600 to-purple-700 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-purple-700 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl">
-            <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+            <div className="w-20 h-20 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
               <PartyPopper className="w-10 h-10 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">{t(`챕터 ${currentChapter + 1} 완료!`, `Chapter ${currentChapter + 1} Complete!`)}</h1>
@@ -1077,7 +1077,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 </button>
               </div>
             )}
-            <button onClick={goToNextChapter} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
+            <button onClick={goToNextChapter} className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold text-lg transition-colors">
               {t("다음 챕터로 →", "Next Chapter →")}
             </button>
           </div>
@@ -1094,7 +1094,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       {/* 비로그인 학습 배너 — Python 무료 공개 레슨에서, 로그인 안 된 사용자에게 (audit R1) */}
       {isPreviewLesson && !authLoading && !user && (
         <>
-          <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+          <div className="bg-gradient-to-r from-emerald-500 to-emerald-500 text-white">
             <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-wrap items-center justify-center sm:justify-between gap-2 text-xs sm:text-sm">
               <p className="font-medium">
                 <span className="font-bold">{t("🎁 Python 무료 학습 중", "🎁 Free Python lessons")}</span>
@@ -1115,7 +1115,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         </>
       )}
 
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-indigo-50/30">
+      <div className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-purple-50/30">
         {/* 상단 헤더 */}
         <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm">
           <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
@@ -1185,20 +1185,20 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col items-center pointer-events-none z-50">
                               <div className={cn(
                                 "text-white text-[10px] font-bold rounded px-1.5 py-0.5 whitespace-nowrap shadow leading-tight",
-                                effectiveTeacher && st.type === "practice" ? "bg-orange-500/90" : "bg-indigo-500/90"
+                                effectiveTeacher && st.type === "practice" ? "bg-orange-500/90" : "bg-purple-500/90"
                               )}>
                                 {globalIdx + 1}{effectiveTeacher ? ` · ${st.type}` : ""}
                               </div>
                               <div className={cn(
                                 "w-1.5 h-1.5 rotate-45 -mt-[3px]",
-                                effectiveTeacher && st.type === "practice" ? "bg-orange-500/90" : "bg-indigo-500/90"
+                                effectiveTeacher && st.type === "practice" ? "bg-orange-500/90" : "bg-purple-500/90"
                               )} />
                             </div>
                             <button
                               className={cn(
                                 "h-full w-full transition-all duration-150 origin-center group-hover:scale-y-[2.5] group-hover:rounded-sm",
                                 isCurrent && hasProgress
-                                  ? "bg-indigo-500 scale-y-125"
+                                  ? "bg-purple-500 scale-y-125"
                                   : effectiveTeacher && st.type === "practice"
                                     ? "bg-orange-400 hover:bg-orange-300 cursor-pointer"
                                     : (effectiveTeacher || isCompleted || isBeforeCurrent || isAlreadyDone)
@@ -1229,7 +1229,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             </div>
             {/* 2줄: 챕터 이름 + 토글들 */}
             <div className="flex items-center justify-between mt-1.5">
-              <button onClick={() => setShowChapterList(!showChapterList)} className="flex items-center gap-1.5 text-xs md:text-sm text-gray-500 hover:text-indigo-600 transition-colors">
+              <button onClick={() => setShowChapterList(!showChapterList)} className="flex items-center gap-1.5 text-xs md:text-sm text-gray-500 hover:text-purple-600 transition-colors">
                 <span>{chapter.emoji} {chapter.title}</span>
                 <ChevronRight className={cn("w-3.5 h-3.5 transition-transform", showChapterList && "rotate-90")} />
               </button>
@@ -1253,8 +1253,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                     className={cn(
                       "flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-colors border",
                       showLiveEditor
-                        ? "bg-indigo-600 text-white border-indigo-500"
-                        : "bg-gray-100 hover:bg-indigo-50 text-gray-600 hover:text-indigo-600 border-gray-200"
+                        ? "bg-purple-600 text-white border-purple-500"
+                        : "bg-gray-100 hover:bg-purple-50 text-gray-600 hover:text-purple-600 border-gray-200"
                     )}
                     title="라이브 에디터 열기"
                   >
@@ -1277,8 +1277,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                     <button key={ch.id} onClick={() => goToChapter(idx)}
                       className={cn("flex items-center gap-2 px-3 py-2.5 rounded-xl text-left text-sm font-medium transition-all",
                         idx === currentChapter
-                          ? "bg-indigo-100 text-indigo-700 ring-2 ring-indigo-300"
-                          : "bg-gray-50 hover:bg-indigo-50 text-gray-700 hover:text-indigo-600"
+                          ? "bg-purple-100 text-purple-700 ring-2 ring-purple-300"
+                          : "bg-gray-50 hover:bg-purple-50 text-gray-700 hover:text-purple-600"
                       )}>
                       <span className="text-lg">{ch.emoji}</span>
                       <span className="truncate">{ch.title}</span>
@@ -1390,7 +1390,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                     isLastStepOfLastChapter && canGoNext()
                       ? "px-6 py-3 md:px-8 md:py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg animate-pulse"
                       : cn("px-5 py-3 md:px-6 md:py-3",
-                          canGoNext() ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg" : "bg-gray-200 text-gray-400 cursor-not-allowed"))}>
+                          canGoNext() ? "bg-purple-600 hover:bg-purple-500 text-white shadow-lg" : "bg-gray-200 text-gray-400 cursor-not-allowed"))}>
                   {canGoNext() ? (
                     isLastStepOfLastChapter ? (
                       <><span className="text-sm md:text-base">🎉</span><span className="text-sm md:text-base">{t("레슨 완료!", "Finish!")}</span></>

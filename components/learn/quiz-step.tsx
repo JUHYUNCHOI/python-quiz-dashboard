@@ -89,14 +89,14 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
       {selectedAnswer === null && step.explanation && (
         <button
           onClick={() => setShowHint(!showHint)}
-          className="flex items-center gap-1.5 text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+          className="flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-800 font-medium transition-colors"
         >
           <Lightbulb className="w-4 h-4" />
           {showHint ? t("힌트 숨기기", "Hide hint") : t("힌트 보기", "Show hint")}
         </button>
       )}
       {showHint && selectedAnswer === null && (
-        <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-sm text-indigo-800">
+        <div className="p-3 rounded-xl bg-purple-50 border border-purple-200 text-sm text-purple-800">
           {step.explanation}
         </div>
       )}
@@ -109,7 +109,7 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
           return (
             <button key={`${idx}-${selectedAnswer}`} onClick={() => onAnswer(idx)} disabled={selectedAnswer !== null}
               className={cn("w-full p-4 rounded-xl text-left font-medium text-sm md:text-base transition-all border-2 flex items-center min-h-[48px] active:scale-[0.98]",
-                !showResult && "bg-white hover:bg-indigo-50 active:bg-indigo-100 border-gray-200 hover:border-indigo-400",
+                !showResult && "bg-white hover:bg-purple-50 active:bg-purple-100 border-gray-200 hover:border-purple-400",
                 showResult && isCorrect && "bg-green-100 border-green-500 text-green-800",
                 showResult && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800",
                 showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400",
@@ -149,7 +149,7 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
             )}
             {selectedAnswer !== step.answer && (
               showAckButton ? (
-                <button ref={ackButtonRef} onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md transition-all flex items-center justify-center gap-2 animate-fade-in">
+                <button ref={ackButtonRef} onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md transition-all flex items-center justify-center gap-2 animate-fade-in">
                   {t("확인했어요 →", "Got it →")}
                 </button>
               ) : (

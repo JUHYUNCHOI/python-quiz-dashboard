@@ -161,13 +161,13 @@ function NextTopicCTA({
       <div className="border-t border-gray-200 pt-6">
         <button
           onClick={() => router.push(smart.href)}
-          className="w-full max-w-md mx-auto py-3.5 px-4 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 shadow-lg"
+          className="w-full max-w-md mx-auto py-3.5 px-4 rounded-2xl bg-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 shadow-lg"
         >
           <span className="text-xl">{smart.emoji ?? "▶"}</span>
           <div className="flex flex-col items-center">
             <span className="text-base">{label}</span>
             {smart.subtitle && (
-              <span className="text-[11px] font-medium text-indigo-100/90">{smart.subtitle}</span>
+              <span className="text-[11px] font-medium text-purple-100/90">{smart.subtitle}</span>
             )}
           </div>
           <ArrowRight className="w-4 h-4" />

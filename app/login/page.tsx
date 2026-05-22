@@ -135,7 +135,7 @@ function LoginContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-orange-50 flex items-center justify-center p-4">
       <div className="w-full max-w-sm space-y-6">
         {/* 언어 선택 */}
         <div className="flex justify-center">
@@ -312,7 +312,7 @@ function LoginContent() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center">
+      <div className="min-h-screen bg-orange-50 flex items-center justify-center">
         <div className="text-[80px]">🦒</div>
       </div>
     }>

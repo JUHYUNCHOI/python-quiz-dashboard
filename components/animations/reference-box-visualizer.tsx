@@ -172,7 +172,7 @@ export function ReferenceBoxVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) 
               <div className="flex items-start gap-3">
                 <div className="w-16 text-right space-y-1 pt-2">
                   <div className="text-xs font-bold text-slate-400">x</div>
-                  <div className="text-xs font-bold text-indigo-500">ref</div>
+                  <div className="text-xs font-bold text-purple-500">ref</div>
                 </div>
                 <div className="relative">
                   <Box value={xVal} color="#6366f1" label="" highlight={modified} />
@@ -191,14 +191,14 @@ export function ReferenceBoxVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) 
                 </div>
                 {modified && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                    className="text-xs font-bold text-indigo-600 pt-2">
+                    className="text-xs font-bold text-purple-600 pt-2">
                     {isEn ? "Both x and ref are 99!" : "x도 ref도 둘 다 99!"}<br />
-                    <span className="font-normal text-indigo-400">{isEn ? "They're the same box" : "같은 상자니까요"}</span>
+                    <span className="font-normal text-purple-400">{isEn ? "They're the same box" : "같은 상자니까요"}</span>
                   </motion.div>
                 )}
               </div>
 
-              <div className="rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-2 text-xs text-indigo-700">
+              <div className="rounded-xl bg-purple-50 border border-purple-100 px-3 py-2 text-xs text-purple-700">
                 {isEn
                   ? <>🏷️ <strong>Reference</strong> — ref has no new box! Just another name tag on x's box. One box, two names.</>
                   : <>🏷️ <strong>참조</strong> — ref는 새 상자가 없어요! x 상자에 이름표만 하나 더 붙은 거예요. 상자는 하나, 이름은 두 개.</>

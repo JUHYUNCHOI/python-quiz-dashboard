@@ -410,8 +410,8 @@ export function CppRunner({
   return (
     <div className="space-y-3">
       {task && (
-        <div className="bg-teal-50 rounded-lg p-2.5 border border-teal-200">
-          <p className="text-teal-800 font-bold text-sm">🎯 {task}</p>
+        <div className="bg-emerald-50 rounded-lg p-2.5 border border-emerald-200">
+          <p className="text-emerald-800 font-bold text-sm">🎯 {task}</p>
         </div>
       )}
 
@@ -480,7 +480,7 @@ export function CppRunner({
             className={cn(
               "flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm transition-all",
               code.trim() && !isLoading
-                ? "bg-teal-600 hover:bg-teal-500 text-white shadow-md"
+                ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-md"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
             )}
           >

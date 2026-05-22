@@ -84,7 +84,7 @@ function getTrack(completedIds: Set<string>): Track {
 // ─── 플랫폼 카드 색상 ────────────────────────────────────────────────
 const PLATFORM_STYLES = {
   coderin:   { bg: "from-orange-500 to-amber-500", border: "border-orange-200", badge: "bg-orange-100 text-orange-700" },
-  algorithm: { bg: "from-blue-500 to-indigo-500",  border: "border-blue-200",   badge: "bg-blue-100 text-blue-700"     },
+  algorithm: { bg: "from-blue-500 to-purple-500",  border: "border-blue-200",   badge: "bg-blue-100 text-blue-700"     },
   codequest: { bg: "from-purple-500 to-pink-500",  border: "border-purple-200", badge: "bg-purple-100 text-purple-700" },
 }
 
@@ -122,7 +122,7 @@ function RoleOnboardingModal({ onSelect }: { onSelect: (role: "student" | "teach
               </button>
               <button
                 onClick={() => onSelect("teacher")}
-                className="flex flex-col items-center gap-2 p-4 rounded-2xl border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all"
+                className="flex flex-col items-center gap-2 p-4 rounded-2xl border-2 border-gray-200 hover:border-purple-400 hover:bg-purple-50 transition-all"
               >
                 <span className="text-3xl">📋</span>
                 <span className="font-black text-gray-800">{t("선생님", "Teacher")}</span>
@@ -410,13 +410,13 @@ function PortalContent() {
       <main className="max-w-[1200px] mx-auto px-4 py-6">
         {/* 선생님 배너 */}
         {isTeacher && (
-          <div className="mb-4 rounded-2xl bg-indigo-50 border border-indigo-200 px-4 py-3 flex items-center justify-between gap-3">
-            <p className="text-sm text-indigo-700 font-medium">
+          <div className="mb-4 rounded-2xl bg-purple-50 border border-purple-200 px-4 py-3 flex items-center justify-between gap-3">
+            <p className="text-sm text-purple-700 font-medium">
               📋 {t("선생님 계정 — 모든 단계가 잠금 해제됩니다", "Teacher account — all stages unlocked")}
             </p>
             <button
               onClick={() => router.push("/teacher")}
-              className="shrink-0 text-xs font-bold text-indigo-600 hover:text-indigo-800 underline"
+              className="shrink-0 text-xs font-bold text-purple-600 hover:text-purple-800 underline"
             >
               {t("대시보드 →", "Dashboard →")}
             </button>
@@ -433,7 +433,7 @@ function PortalContent() {
           return (
             <button
               onClick={() => router.push(next.href)}
-              className="w-full mb-5 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-200 hover:shadow-2xl active:scale-[0.99] transition-all text-left group"
+              className="w-full mb-5 p-5 sm:p-6 rounded-2xl bg-orange-500 text-white shadow-xl shadow-orange-200 hover:shadow-2xl active:scale-[0.99] transition-all text-left group"
             >
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl shrink-0">
@@ -475,7 +475,7 @@ function PortalContent() {
           const trackParts = localTrack === "cpp" ? cppParts : localTrack === "pseudo" ? pseudoParts : pythonParts
           const trackRank = getStudentTrackRank(completedIds, trackParts)
           return (
-            <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-5 text-white">
+            <div className="bg-orange-500 rounded-2xl p-5 text-white">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-2xl">🦒</span>
                 <span className="text-sm font-semibold opacity-80">{t("코드린 포털", "Coderin Portal")}</span>

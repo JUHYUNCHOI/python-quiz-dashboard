@@ -24,7 +24,7 @@ export function MultipleReturnVisualizer({ lang = "ko" }: VisualizerProps) {
 
   return (
     <div className="my-6">
-      <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-5 space-y-4">
+      <div className="bg-slate-800 rounded-2xl p-5 space-y-4">
         <div className="font-mono text-sm md:text-base">
           <div className="flex items-center gap-1">
             <span className="text-pink-400 font-bold">def</span>
@@ -74,7 +74,7 @@ export function MultipleReturnVisualizer({ lang = "ko" }: VisualizerProps) {
 
           {step === 1 && (
             <div className="flex justify-center">
-              <button onClick={next} className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold flex items-center gap-2 transition-all">
+              <button onClick={next} className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold flex items-center gap-2 transition-all">
                 <Zap className="w-4 h-4" /> {lang === "ko" ? "변수에 저장!" : "Store in variables!"}
               </button>
             </div>

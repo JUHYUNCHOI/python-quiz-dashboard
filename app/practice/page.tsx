@@ -102,7 +102,7 @@ function ClusterList({
           "w-full rounded-2xl border p-3 text-left transition-all flex items-center gap-3",
           accent
             ? "bg-white border-amber-200 hover:border-amber-400 shadow-sm"
-            : "bg-white border-gray-200 hover:border-indigo-300 shadow-sm"
+            : "bg-white border-gray-200 hover:border-purple-300 shadow-sm"
         )}
       >
         <span className="text-xl shrink-0">{cluster.emoji}</span>
@@ -213,9 +213,9 @@ function ClusterList({
         return (
           <button
             onClick={() => onSelect(nextCluster)}
-            className="w-full rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] transition-all text-left p-5 shadow-md"
+            className="w-full rounded-2xl bg-purple-600 hover:bg-purple-700 active:scale-[0.99] transition-all text-left p-5 shadow-md"
           >
-            <p className="text-xs font-bold text-indigo-300 uppercase tracking-wide mb-2">
+            <p className="text-xs font-bold text-purple-300 uppercase tracking-wide mb-2">
               {inProgress ? t("👈 계속하기", "👈 Continue") : t("👉 지금 여기서 시작하세요", "👉 Start here")}
             </p>
             <div className="flex items-center justify-between gap-3">
@@ -223,7 +223,7 @@ function ClusterList({
                 <p className="text-xl font-black text-white">
                   {nextCluster.emoji} {locCluster.title}
                 </p>
-                <p className="text-sm text-indigo-200 mt-1">{locCluster.description}</p>
+                <p className="text-sm text-purple-200 mt-1">{locCluster.description}</p>
               </div>
               <span className="text-white text-2xl shrink-0 animate-bounce">→</span>
             </div>
@@ -254,7 +254,7 @@ function ClusterList({
           {otherActive.length > 2 && (
             <button
               onClick={() => setShowAllActive(v => !v)}
-              className="text-xs text-indigo-500 font-semibold py-1 text-center hover:text-indigo-700 transition-colors"
+              className="text-xs text-purple-500 font-semibold py-1 text-center hover:text-purple-700 transition-colors"
             >
               {showAllActive
                 ? t("접기 ▲", "Show less ▲")
@@ -358,10 +358,10 @@ function ProblemList({
       {/* 연속 풀기 버튼 */}
       <button
         onClick={onStartSession}
-        className="w-full py-3.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-all shadow-sm flex items-center justify-center gap-2"
+        className="w-full py-3.5 rounded-2xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-sm transition-all shadow-sm flex items-center justify-center gap-2"
       >
         ▶ {isAllMcq ? t("연속으로 풀기", "Play all") : t("순서대로 풀기", "Start in order")}
-        <span className="text-indigo-200 font-normal text-xs">({cluster.problems.length} {t("문제 고정 순서", "problems · fixed order")})</span>
+        <span className="text-purple-200 font-normal text-xs">({cluster.problems.length} {t("문제 고정 순서", "problems · fixed order")})</span>
       </button>
       {(() => {
         const mcqProblems = cluster.problems.filter(p => p.type === "mcq")
@@ -376,7 +376,7 @@ function ProblemList({
             <button
               key={problem.id}
               onClick={() => onSelect(problem)}
-              className="rounded-2xl border border-gray-200 bg-white hover:border-indigo-300 hover:shadow-md shadow-sm p-4 text-left transition-all"
+              className="rounded-2xl border border-gray-200 bg-white hover:border-purple-300 hover:shadow-md shadow-sm p-4 text-left transition-all"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -418,13 +418,13 @@ function ProblemList({
 
             {/* 코드 섹션 구분선 */}
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-xs font-bold text-indigo-500 uppercase tracking-wide">
+              <span className="text-xs font-bold text-purple-500 uppercase tracking-wide">
                 {t("💪 직접 구현하기", "💪 Write the Code")}
               </span>
-              <div className="flex-1 h-px bg-indigo-100" />
-              <span className="text-xs text-indigo-300">{codeProblems.length}{t("문제", " problems")}</span>
+              <div className="flex-1 h-px bg-purple-100" />
+              <span className="text-xs text-purple-300">{codeProblems.length}{t("문제", " problems")}</span>
             </div>
-            <div className="rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-2 text-xs text-indigo-600">
+            <div className="rounded-xl bg-purple-50 border border-purple-100 px-3 py-2 text-xs text-purple-600">
               {t(
                 "위에서 눈으로 익힌 개념을 이제 직접 코드로 써보세요!",
                 "You've seen how it works — now write the code yourself!"
@@ -595,7 +595,7 @@ function ProblemDetail({
             <ArrowLeft className="w-4 h-4 text-gray-600" />
           </button>
           <div className="flex items-center gap-2 min-w-0">
-            <HelpCircle className="w-4 h-4 text-indigo-400 shrink-0" />
+            <HelpCircle className="w-4 h-4 text-purple-400 shrink-0" />
             <h1 className="text-base font-bold text-gray-900 truncate">{locProblem.title}</h1>
             <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium shrink-0", DIFFICULTY_COLOR[problem.difficulty])}>
               {diffLabel(problem.difficulty)}
@@ -816,7 +816,7 @@ function PracticeContent() {
 export default function PracticePage() {
   return (
     <RequireAuth>
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
+      <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
         <Header />
         <Suspense fallback={<div className="text-gray-400 text-sm p-4">Loading...</div>}>
           <PracticeContent />

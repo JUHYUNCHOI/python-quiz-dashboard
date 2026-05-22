@@ -60,7 +60,7 @@ export function DailyChallenges() {
 
       {/* All done celebration */}
       {allDone && (
-        <div className="mt-3 text-center py-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-100">
+        <div className="mt-3 text-center py-2 bg-emerald-50 rounded-xl border border-green-100">
           <p className="text-xs font-bold text-green-700">
             {t(
               "🏆 오늘 도전 과제 모두 완료! 내일도 도전해봐요!",

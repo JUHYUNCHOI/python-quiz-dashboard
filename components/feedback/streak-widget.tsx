@@ -29,7 +29,7 @@ export function StreakWidget({ streak, t, compact = false }: Props) {
       streak.currentStreak >= 7
         ? "bg-gradient-to-r from-orange-50 to-amber-50 border-orange-300"
         : streak.currentStreak >= 3
-          ? "bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200"
+          ? "bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200"
           : "bg-gray-50 border-gray-200"
     )}>
       <div className="flex items-center gap-3">
@@ -71,7 +71,7 @@ export function StreakWidget({ streak, t, compact = false }: Props) {
               className={cn(
                 "h-full rounded-full transition-all duration-500",
                 streak.currentStreak >= 7 ? "bg-gradient-to-r from-orange-400 to-amber-400" :
-                streak.currentStreak >= 3 ? "bg-gradient-to-r from-blue-400 to-indigo-400" :
+                streak.currentStreak >= 3 ? "bg-gradient-to-r from-blue-400 to-purple-400" :
                 "bg-gray-400"
               )}
               style={{ width: `${Math.min((streak.currentStreak / streak.milestone) * 100, 100)}%` }}

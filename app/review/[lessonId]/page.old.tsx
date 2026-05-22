@@ -1207,9 +1207,9 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
 
   const getLevelBadge = (level: number) => {
     if (level === 1) return { label: "⭐ 쉬움", color: "bg-green-600 text-white" }
-    if (level === 1.5) return { label: "⭐ 쉬움+", color: "bg-teal-600 text-white" }
+    if (level === 1.5) return { label: "⭐ 쉬움+", color: "bg-emerald-600 text-white" }
     if (level === 2) return { label: "⭐⭐ 보통", color: "bg-blue-600 text-white" }
-    if (level === 2.5) return { label: "⭐⭐ 보통+", color: "bg-indigo-600 text-white" }
+    if (level === 2.5) return { label: "⭐⭐ 보통+", color: "bg-purple-600 text-white" }
     if (level === 3) return { label: "⭐⭐⭐ 도전", color: "bg-purple-600 text-white" }
     if (level === 4) return { label: "🔥 혼자!", color: "bg-rose-600 text-white" }
     return { label: "", color: "" }
@@ -1272,7 +1272,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         <button
           key={symbol}
           onClick={() => insertSymbol(symbol)}
-          className="w-12 h-12 md:w-14 md:h-14 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 rounded-xl font-mono text-white text-xl md:text-2xl transition-all shadow-lg font-bold"
+          className="w-12 h-12 md:w-14 md:h-14 bg-purple-600 hover:bg-purple-500 active:bg-purple-700 rounded-xl font-mono text-white text-xl md:text-2xl transition-all shadow-lg font-bold"
         >
           {symbol}
         </button>
@@ -1362,7 +1362,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
 
             <SymbolButtons />
 
-            <div className="bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-indigo-200">
+            <div className="bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-purple-200">
               <textarea
                 ref={textareaRef}
                 value={input}
@@ -1370,7 +1370,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 disabled={phase === "correct"}
                 placeholder="여기에 코드 입력!"
                 className={cn(
-                  "w-full h-24 md:h-28 bg-indigo-50 text-indigo-900 font-mono font-bold p-4 md:p-5 rounded-2xl text-xl md:text-2xl focus:outline-none focus:ring-4 focus:ring-orange-400 resize-none placeholder:text-indigo-300 border-4 border-indigo-200",
+                  "w-full h-24 md:h-28 bg-purple-50 text-purple-900 font-mono font-bold p-4 md:p-5 rounded-2xl text-xl md:text-2xl focus:outline-none focus:ring-4 focus:ring-orange-400 resize-none placeholder:text-purple-300 border-4 border-purple-200",
                   phase === "wrong" && "ring-4 ring-red-500 border-red-500"
                 )}
                 spellCheck={false}
@@ -1432,7 +1432,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       "min-h-screen flex flex-col transition-all duration-300",
       phase === "correct" ? "bg-green-100" :
       phase === "wrong" ? "bg-red-100" :
-      "bg-indigo-50",
+      "bg-purple-50",
       isTransitioning && "opacity-50"
     )}>
       <StreakBonus />
@@ -1449,7 +1449,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         
         <div className="flex-1 h-5 md:h-6 bg-gray-300 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-indigo-600 transition-all duration-500"
+            className="h-full bg-purple-600 transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -1471,7 +1471,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         {/* 챕터 시작 */}
         {current.type === "chapter" && (
           <div className="text-center space-y-6 md:space-y-8 animate-fadeIn">
-            <div className="inline-block px-6 py-3 bg-indigo-600 rounded-full shadow-xl">
+            <div className="inline-block px-6 py-3 bg-purple-600 rounded-full shadow-xl">
               <span className="text-white font-bold text-xl md:text-2xl">📚 Chapter {current.content.num}</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
@@ -1482,7 +1482,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             </p>
             <Button 
               onClick={next}
-              className="px-12 py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+              className="px-12 py-8 md:py-10 text-2xl md:text-3xl bg-purple-600 hover:bg-purple-500 rounded-2xl border-0 font-bold text-white shadow-xl"
             >
               시작! <ChevronRight className="w-8 h-8 ml-2" />
             </Button>
@@ -1506,7 +1506,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             <div className="pt-4">
               <Button 
                 onClick={next}
-                className="w-full max-w-md mx-auto px-12 py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+                className="w-full max-w-md mx-auto px-12 py-8 md:py-10 text-2xl md:text-3xl bg-purple-600 hover:bg-purple-500 rounded-2xl border-0 font-bold text-white shadow-xl"
               >
                 계속하기 <ChevronRight className="w-8 h-8 ml-2" />
               </Button>
@@ -1521,14 +1521,14 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               {current.content.emoji}
             </div>
             <div className="space-y-2">
-              <p className="text-indigo-600 font-bold text-xl md:text-2xl">Chapter {current.content.num} 완료!</p>
+              <p className="text-purple-600 font-bold text-xl md:text-2xl">Chapter {current.content.num} 완료!</p>
               <h2 className="text-3xl md:text-5xl font-bold text-gray-900">
                 {current.content.title} 마스터!
               </h2>
             </div>
             
-            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-indigo-200 text-left">
-              <p className="text-indigo-600 font-bold text-lg md:text-xl mb-4">📝 오늘 배운 것</p>
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-purple-200 text-left">
+              <p className="text-purple-600 font-bold text-lg md:text-xl mb-4">📝 오늘 배운 것</p>
               <ul className="space-y-3">
                 {current.content.learned.map((item: string, i: number) => (
                   <li key={i} className="flex items-start gap-3">
@@ -1573,7 +1573,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             ) : (
               <Button 
                 onClick={next}
-                className="px-12 py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+                className="px-12 py-8 md:py-10 text-2xl md:text-3xl bg-purple-600 hover:bg-purple-500 rounded-2xl border-0 font-bold text-white shadow-xl"
               >
                 다음으로 <ChevronRight className="w-8 h-8 ml-2" />
               </Button>
@@ -1606,7 +1606,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               
               {/* 코드 박스 */}
               {showingCode && (
-                <div className="bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-indigo-200">
+                <div className="bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-purple-200">
                   <div className="p-6 md:p-8 bg-gray-900">
                     <pre className={cn(
                       "font-mono text-xl md:text-3xl text-center whitespace-pre-wrap font-bold leading-loose",
@@ -1622,7 +1622,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               {/* 결과 */}
               {showingResult && (
                 <div className="space-y-4">
-                  <div className="bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-indigo-200">
+                  <div className="bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-purple-200">
                     <div className="p-6 md:p-8 bg-gray-900">
                       <pre className={cn(
                         "font-mono text-xl md:text-3xl text-center whitespace-pre-wrap font-bold leading-loose",
@@ -1654,7 +1654,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               {/* 다음 버튼 */}
               <Button 
                 onClick={nextExplainPhase}
-                className="w-full max-w-md mx-auto py-7 md:py-8 text-xl md:text-2xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+                className="w-full max-w-md mx-auto py-7 md:py-8 text-xl md:text-2xl bg-purple-600 hover:bg-purple-500 rounded-2xl border-0 font-bold text-white shadow-xl"
               >
                 다음 <ChevronRight className="w-6 h-6 md:w-7 md:h-7 ml-2" />
               </Button>
@@ -1809,7 +1809,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             </p>
 
             {current.content.guide && (
-              <p className="text-indigo-600 text-lg md:text-xl text-center font-bold">
+              <p className="text-purple-600 text-lg md:text-xl text-center font-bold">
                 💡 {current.content.guide}
               </p>
             )}
@@ -1817,7 +1817,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             {!current.content.template && <SymbolButtons />}
 
             {current.content.template ? (
-              <div className="bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-indigo-200">
+              <div className="bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-purple-200">
                 <div className="flex items-center justify-center gap-1 font-mono text-xl md:text-3xl flex-wrap">
                   <span className="text-gray-500 font-bold">{current.content.template.before}</span>
                   <input
@@ -1827,7 +1827,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                     onKeyDown={(e) => e.key === "Enter" && input && check()}
                     disabled={phase === "correct"}
                     className={cn(
-                      "bg-indigo-100 text-indigo-900 font-mono font-bold px-4 py-3 md:px-6 md:py-4 rounded-xl text-center focus:outline-none focus:ring-4 focus:ring-indigo-400 transition-all border-4 border-indigo-300",
+                      "bg-purple-100 text-purple-900 font-mono font-bold px-4 py-3 md:px-6 md:py-4 rounded-xl text-center focus:outline-none focus:ring-4 focus:ring-purple-400 transition-all border-4 border-purple-300",
                       phase === "wrong" && "ring-4 ring-red-500 border-red-500 animate-shake",
                       phase === "input" && !input && "animate-pulse-border"
                     )}
@@ -1840,7 +1840,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               </div>
             ) : (
               <div className={cn(
-                "bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-indigo-200",
+                "bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-purple-200",
                 phase === "input" && !input && "animate-glow"
               )}>
                 <textarea
@@ -1850,7 +1850,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                   disabled={phase === "correct"}
                   placeholder="여기에 코드 입력!"
                   className={cn(
-                    "w-full h-24 md:h-28 bg-indigo-50 text-indigo-900 font-mono font-bold p-4 md:p-5 rounded-2xl text-xl md:text-2xl focus:outline-none focus:ring-4 focus:ring-indigo-400 resize-none placeholder:text-indigo-300 border-4 border-indigo-200",
+                    "w-full h-24 md:h-28 bg-purple-50 text-purple-900 font-mono font-bold p-4 md:p-5 rounded-2xl text-xl md:text-2xl focus:outline-none focus:ring-4 focus:ring-purple-400 resize-none placeholder:text-purple-300 border-4 border-purple-200",
                     phase === "wrong" && "ring-4 ring-red-500 border-red-500"
                   )}
                   spellCheck={false}
@@ -1877,7 +1877,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 className={cn(
                   "w-full py-7 md:py-8 text-xl md:text-2xl rounded-2xl transition-all font-bold shadow-xl",
                   input.trim() 
-                    ? "bg-indigo-600 hover:bg-indigo-500 text-white" 
+                    ? "bg-purple-600 hover:bg-purple-500 text-white" 
                     : "bg-gray-300 text-gray-500"
                 )}
               >
@@ -1907,7 +1907,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                     disabled={selected !== null}
                     className={cn(
                       "w-full p-5 md:p-6 rounded-2xl font-mono text-left text-lg md:text-xl transition-all font-bold shadow-lg border-4",
-                      !showResult && "bg-white hover:bg-indigo-50 text-gray-800 border-indigo-200 hover:border-indigo-400",
+                      !showResult && "bg-white hover:bg-purple-50 text-gray-800 border-purple-200 hover:border-purple-400",
                       showResult && isAnswer && "bg-green-600 text-white border-green-600",
                       showResult && isSelected && !isAnswer && "bg-red-600 text-white border-red-600",
                       showResult && !isSelected && !isAnswer && "bg-gray-200 text-gray-400 border-gray-200"
@@ -1920,7 +1920,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             </div>
 
             {showExplanation && current.content.explanation && (
-              <div className="bg-indigo-600 rounded-2xl p-4 animate-fadeIn">
+              <div className="bg-purple-600 rounded-2xl p-4 animate-fadeIn">
                 <p className="text-white text-lg md:text-xl font-bold">
                   💡 {current.content.explanation}
                 </p>
@@ -1938,7 +1938,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                   key={i}
                   className={cn(
                     "h-4 md:h-5 rounded-full transition-all",
-                    i < current.content.step ? "w-12 md:w-16 bg-indigo-600" : "w-6 md:w-8 bg-gray-300"
+                    i < current.content.step ? "w-12 md:w-16 bg-purple-600" : "w-6 md:w-8 bg-gray-300"
                   )}
                 />
               ))}
@@ -1959,7 +1959,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               <p className="text-gray-900 text-xl md:text-3xl font-bold">
                 🎯 {current.content.task}
               </p>
-              <p className="text-indigo-600 font-mono text-lg md:text-xl font-bold">
+              <p className="text-purple-600 font-mono text-lg md:text-xl font-bold">
                 → {current.content.target}
               </p>
             </div>
@@ -1967,7 +1967,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             <SymbolButtons />
 
             <div className={cn(
-              "bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-indigo-200",
+              "bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-purple-200",
               phase === "input" && !input && "animate-glow"
             )}>
               <input
@@ -1978,7 +1978,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 disabled={phase === "correct"}
                 placeholder="여기에 코드 입력!"
                 className={cn(
-                  "w-full bg-indigo-50 text-indigo-900 font-mono font-bold px-5 py-5 md:px-6 md:py-6 rounded-2xl text-center text-lg md:text-xl focus:outline-none focus:ring-4 focus:ring-indigo-400 placeholder:text-indigo-300 border-4 border-indigo-200",
+                  "w-full bg-purple-50 text-purple-900 font-mono font-bold px-5 py-5 md:px-6 md:py-6 rounded-2xl text-center text-lg md:text-xl focus:outline-none focus:ring-4 focus:ring-purple-400 placeholder:text-purple-300 border-4 border-purple-200",
                   phase === "wrong" && "ring-4 ring-red-500 border-red-500 animate-shake"
                 )}
                 autoComplete="off"
@@ -2005,7 +2005,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 className={cn(
                   "w-full py-7 md:py-8 text-xl md:text-2xl rounded-2xl font-bold shadow-xl",
                   input.trim() 
-                    ? "bg-indigo-600 hover:bg-indigo-500 text-white" 
+                    ? "bg-purple-600 hover:bg-purple-500 text-white" 
                     : "bg-gray-300 text-gray-500"
                 )}
               >
@@ -2020,14 +2020,14 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
           <div className="space-y-8 md:space-y-10 animate-fadeIn">
             <div className="text-center">
               <div className="text-8xl md:text-[10rem] mb-6">🏆</div>
-              <p className="text-indigo-600 font-bold mb-2 text-2xl md:text-3xl">레슨 완료!</p>
+              <p className="text-purple-600 font-bold mb-2 text-2xl md:text-3xl">레슨 완료!</p>
               <p className="text-gray-500 text-lg md:text-xl mb-2">최종 점수</p>
               <p className="text-7xl md:text-9xl font-bold text-amber-500">
                 {score}
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-indigo-200">
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-purple-200">
               <p className="text-gray-600 text-lg md:text-xl mb-4 font-bold">🍗 내가 만든 것</p>
               <pre className="text-green-700 font-mono text-lg md:text-xl whitespace-pre-wrap font-bold bg-green-100 p-5 rounded-xl">
 {`=== 치킨 계산기 ===
@@ -2037,8 +2037,8 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               </pre>
             </div>
             
-            <div className="bg-indigo-100 rounded-2xl p-5 md:p-6 border-4 border-indigo-300">
-              <p className="text-indigo-700 text-lg md:text-xl font-bold text-center">
+            <div className="bg-purple-100 rounded-2xl p-5 md:p-6 border-4 border-purple-300">
+              <p className="text-purple-700 text-lg md:text-xl font-bold text-center">
                 🎯 print()로 원하는 것을 출력하고 계산할 수 있어!
               </p>
             </div>
@@ -2048,7 +2048,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 localStorage.removeItem(`lesson-${lessonId}`)
                 router.push("/curriculum")
               }}
-              className="w-full py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+              className="w-full py-8 md:py-10 text-2xl md:text-3xl bg-purple-600 hover:bg-purple-500 rounded-2xl border-0 font-bold text-white shadow-xl"
             >
               완료! <ChevronRight className="w-8 h-8 ml-2" />
             </Button>

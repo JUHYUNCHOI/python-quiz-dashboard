@@ -187,7 +187,7 @@ export function MultiExceptFlow({ lang = "ko" }: { lang?: "ko" | "en" }) {
         <button
           onClick={nextStep}
           disabled={!selected || step >= currentSteps.length - 1}
-          className="flex-1 px-5 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-xl font-bold text-lg transition-colors"
+          className="flex-1 px-5 py-3 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-xl font-bold text-lg transition-colors"
         >
           {!selected ? (isEn ? 'Select input!' : '입력값 선택!') : step >= currentSteps.length - 1 ? (isEn ? '✅ Done!' : '✅ 완료!') : (isEn ? 'Next ▶️' : '다음 ▶️')}
         </button>

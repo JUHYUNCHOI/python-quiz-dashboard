@@ -81,7 +81,7 @@ function renderInlineCode(text: string, keyPrefix: string): React.ReactNode {
       return (
         <code
           key={`${keyPrefix}${j}`}
-          className="bg-indigo-100 px-1.5 py-0.5 rounded-md font-mono text-indigo-700 text-[0.9em] font-semibold"
+          className="bg-purple-100 px-1.5 py-0.5 rounded-md font-mono text-purple-700 text-[0.9em] font-semibold"
         >
           {p.slice(1, -1)}
         </code>

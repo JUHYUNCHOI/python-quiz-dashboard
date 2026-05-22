@@ -103,9 +103,9 @@ export function GridLoopVisualizer({
     : "bg-slate-100 text-slate-500 border border-slate-300"
 
   return (
-    <div className="bg-indigo-50/60 rounded-2xl overflow-hidden border border-indigo-200 shadow-md">
+    <div className="bg-purple-50/60 rounded-2xl overflow-hidden border border-purple-200 shadow-md">
       {/* 상단 헤더 바 */}
-      <div className="flex items-center justify-between px-4 py-3 bg-indigo-100/60 border-b border-indigo-200">
+      <div className="flex items-center justify-between px-4 py-3 bg-purple-100/60 border-b border-purple-200">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <div className="w-3 h-3 rounded-full bg-red-500/70" />
@@ -358,7 +358,7 @@ export function GridLoopVisualizer({
         {/* 진행 바 */}
         {(visited.length > 0 || isDone) && (
           <div className="flex-1 ml-2">
-            <div className="h-1.5 bg-indigo-200 rounded-full overflow-hidden">
+            <div className="h-1.5 bg-purple-200 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full transition-all duration-300"
                 style={{ width: `${Math.round((visited.length / (rows * cols)) * 100)}%` }}

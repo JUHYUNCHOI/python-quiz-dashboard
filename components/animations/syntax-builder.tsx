@@ -2036,7 +2036,7 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
               key={i}
               onClick={() => { setIsAutoPlaying(false); setCurrentStep(i) }}
               className={`h-1.5 flex-1 rounded-full transition-all duration-300 cursor-pointer hover:opacity-80 ${
-                i <= currentStep ? "bg-indigo-500" : "bg-slate-300"
+                i <= currentStep ? "bg-purple-500" : "bg-slate-300"
               }`}
             />
           ))}
@@ -2045,14 +2045,14 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
         {isComplete ? (
           <button
             onClick={() => { setCurrentStep(0); setIsAutoPlaying(false) }}
-            className="px-3 py-1.5 text-xs font-bold rounded-lg bg-indigo-100 text-indigo-600 hover:bg-indigo-200 transition-colors flex-shrink-0"
+            className="px-3 py-1.5 text-xs font-bold rounded-lg bg-purple-100 text-purple-600 hover:bg-purple-200 transition-colors flex-shrink-0"
           >
             🔄 {lang === "ko" ? "다시" : "Again"}
           </button>
         ) : (
           <button
             onClick={() => { setIsAutoPlaying(false); setCurrentStep(Math.min(data.steps.length, currentStep + 1)) }}
-            className="px-4 py-1.5 text-xs font-bold rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition-colors shadow-sm flex-shrink-0"
+            className="px-4 py-1.5 text-xs font-bold rounded-lg bg-purple-500 text-white hover:bg-purple-600 transition-colors shadow-sm flex-shrink-0"
           >
             {lang === "ko" ? "다음 →" : "Next →"}
           </button>
@@ -2063,7 +2063,7 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
     </div>
     {data.sidebar && (
       <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white md:sticky md:top-4">
-        <div className="px-4 py-2.5 bg-indigo-50 border-b border-indigo-100 text-xs font-bold text-indigo-700">
+        <div className="px-4 py-2.5 bg-purple-50 border-b border-purple-100 text-xs font-bold text-purple-700">
           📐 {lang === "ko" ? data.sidebar.title.ko : data.sidebar.title.en}
         </div>
         <pre className="bg-slate-900 text-slate-300 text-xs md:text-sm font-mono p-4 overflow-x-auto whitespace-pre">{data.sidebar.code}</pre>

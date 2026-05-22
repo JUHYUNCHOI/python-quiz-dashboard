@@ -67,7 +67,7 @@ export function SafetyNetAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
         </div>
       </div>
       
-      <button onClick={play} disabled={phase !== 'ready'} className="w-full mt-4 px-5 py-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-xl font-black text-lg transition-colors">
+      <button onClick={play} disabled={phase !== 'ready'} className="w-full mt-4 px-5 py-4 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-xl font-black text-lg transition-colors">
         {phase === 'ready' ? (isEn ? '▶️ Start animation!' : '▶️ 애니메이션 시작!') : phase === 'falling' ? (isEn ? '😱 Falling...' : '😱 떨어지는 중...') : phase === 'caught' ? (isEn ? '🛡️ Caught!' : '🛡️ 잡았다!') : (isEn ? '🎉 Safe!' : '🎉 안전!')}
       </button>
     </div>

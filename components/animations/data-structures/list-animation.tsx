@@ -369,7 +369,7 @@ export function ListAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
             </div>
           )}
 
-          <div className="bg-gradient-to-b from-slate-100 to-slate-200 rounded-xl p-4 border-4 border-slate-300 shadow-inner relative">
+          <div className="bg-slate-100 rounded-xl p-4 border-4 border-slate-300 shadow-inner relative">
             {overlay && (
               <div className={cn(
                 "absolute inset-0 rounded-lg z-30 flex items-center justify-center",
@@ -396,7 +396,7 @@ export function ListAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
                     className="absolute z-20 animate-drop-in"
                     style={{ left: `calc(1 * (80px + 8px))` }}
                   >
-                    <div className="w-20 h-28 rounded-lg border-2 shadow-lg relative bg-gradient-to-b from-slate-600 to-slate-700 border-slate-500 ring-4 ring-green-500">
+                    <div className="w-20 h-28 rounded-lg border-2 shadow-lg relative bg-slate-700 border-slate-500 ring-4 ring-green-500">
                       <div className="absolute top-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded text-xs font-bold text-white bg-green-500 z-10">
                         ✨
                       </div>
@@ -446,7 +446,7 @@ export function ListAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
                           <div className="relative w-full h-full" style={{ perspective: "800px" }}>
                             <div className={cn(
                               "w-full h-full rounded-lg border-2 shadow-lg relative",
-                              "bg-gradient-to-b from-slate-600 to-slate-700 border-slate-500",
+                              "bg-slate-700 border-slate-500",
                               highlightIndex === index && "ring-4 ring-blue-500 scale-110 shadow-2xl",
                               displayLabel === "✨" && "ring-4 ring-green-500"
                             )}>

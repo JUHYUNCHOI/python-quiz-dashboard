@@ -24,8 +24,8 @@ export function PatternDiscovery({ onComplete, lang = "ko" }: PatternDiscoveryPr
   return (
     <div className="space-y-4">
       {/* Step 0: 질문 */}
-      <div className="bg-indigo-50 rounded-2xl p-5 border-4 border-indigo-200">
-        <p className="text-indigo-700 font-bold text-lg md:text-xl text-center">
+      <div className="bg-purple-50 rounded-2xl p-5 border-4 border-purple-200">
+        <p className="text-purple-700 font-bold text-lg md:text-xl text-center">
           {isEn ? "🔍 Let's find the repeated part in this code!" : "🔍 방금 코드에서 반복되는 부분을 찾아볼까요?"}
         </p>
       </div>
@@ -135,12 +135,12 @@ export function PatternDiscovery({ onComplete, lang = "ko" }: PatternDiscoveryPr
         )}
 
         {step === 3 && (
-          <div className="bg-indigo-100 rounded-2xl p-5 border-4 border-indigo-300 animate-fadeIn">
+          <div className="bg-purple-100 rounded-2xl p-5 border-4 border-purple-300 animate-fadeIn">
             <div className="flex items-center gap-3">
-              <Sparkles className="w-8 h-8 text-indigo-500" />
+              <Sparkles className="w-8 h-8 text-purple-500" />
               <div>
-                <p className="text-indigo-700 font-bold text-lg">{isEn ? "So then!" : "그렇다면!"}</p>
-                <p className="text-indigo-600">
+                <p className="text-purple-700 font-bold text-lg">{isEn ? "So then!" : "그렇다면!"}</p>
+                <p className="text-purple-600">
                   {isEn ? <>Write the repeated part <strong>just once</strong>,<br />and only swap in the different <strong>name</strong>?</> : <>반복되는 부분은 <strong>한 번만</strong> 쓰고,<br />달라지는 <strong>이름</strong>만 바꿔 넣을 수 있다면?</>}
                 </p>
               </div>
@@ -153,7 +153,7 @@ export function PatternDiscovery({ onComplete, lang = "ko" }: PatternDiscoveryPr
       <div className="text-center">
         <button
           onClick={handleNext}
-          className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+          className="px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
         >
           {step === 0 && (isEn ? "Find repeats 👀" : "반복 찾기 👀")}
           {step === 1 && (isEn ? "What's different? 🤔" : "달라지는 건? 🤔")}

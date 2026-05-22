@@ -353,7 +353,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
                       setIsCorrect(false)
                       setShowAckButton(false)
                     }}
-                    className="mt-2 flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors animate-fade-in"
+                    className="mt-2 flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors animate-fade-in"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     {t("다시 풀기", "Try Again")}
@@ -363,7 +363,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
                     <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>
                     <button
                       onClick={handleAcknowledge}
-                      className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
+                      className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
                     >
                       {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
                     </button>

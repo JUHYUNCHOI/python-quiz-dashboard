@@ -98,7 +98,7 @@ export default function PointerRefVisualizer({ lang = "ko" }: { lang?: "ko" | "e
       <div className="rounded-2xl bg-slate-50 border border-slate-100 p-3 text-xs space-y-2">
         <p className="font-bold text-slate-600 mb-1">{isEn ? "Side-by-side comparison" : "한눈에 비교"}</p>
         <div className="flex items-start gap-2">
-          <span className="font-mono font-bold text-indigo-500 shrink-0 pt-0.5">{isEn ? "Reference" : "참조"}</span>
+          <span className="font-mono font-bold text-purple-500 shrink-0 pt-0.5">{isEn ? "Reference" : "참조"}</span>
           <span className="text-slate-500">{isEn ? "No new memory. Just adds a name tag to x. ref = 99 immediately changes x." : "새 메모리 없음. x에 이름표만 추가. ref = 99 하면 바로 x가 바뀜."}</span>
         </div>
         <div className="flex items-start gap-2">
@@ -215,7 +215,7 @@ function RefViz({ xVal, modified, isEn }: { xVal: number; modified: boolean; isE
           </div>
         </div>
       </div>
-      <div className="rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-2 text-xs text-indigo-700">
+      <div className="rounded-xl bg-purple-50 border border-purple-100 px-3 py-2 text-xs text-purple-700">
         {isEn
           ? <>🏷️ ref has no new memory. Just adds a name tag to the same box (0x1000).
             {modified && <span className="font-bold"> ref = 99 is exactly the same as x = 99!</span>}</>
