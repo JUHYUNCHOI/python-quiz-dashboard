@@ -53,7 +53,7 @@ export function FunctionVisualizer({
   const argsStr = callArgs.map(a => `"${a}"`).join(", ")
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white overflow-hidden">
+    <div className="bg-slate-800 rounded-2xl p-6 text-white overflow-hidden">
       {/* 함수 정의 영역 */}
       <div className="mb-6">
         <p className="text-xs text-slate-400 mb-2">{isEn ? "📦 Function definition" : "📦 함수 정의"}</p>
@@ -180,7 +180,7 @@ export function FunctionVisualizer({
             "flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all",
             isPlaying 
               ? "bg-slate-700 text-slate-500 cursor-not-allowed"
-              : "bg-indigo-600 hover:bg-indigo-500 text-white"
+              : "bg-purple-600 hover:bg-purple-500 text-white"
           )}
         >
           <Play className="w-4 h-4" />

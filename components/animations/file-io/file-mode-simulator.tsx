@@ -70,7 +70,7 @@ export function FileModeSimulator({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const selectedMode = modes.find(m => m.key === mode)
 
   return (
-    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-4 md:p-6 border-2 border-amber-200">
+    <div className="bg-orange-50 rounded-2xl p-4 md:p-6 border-2 border-amber-200">
       {/* 파일 현재 상태 */}
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-2">

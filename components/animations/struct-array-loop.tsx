@@ -119,7 +119,7 @@ export function StructArrayLoop({
   })()
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-4 sm:p-5 text-white overflow-hidden">
+    <div className="bg-slate-800 rounded-2xl p-4 sm:p-5 text-white overflow-hidden">
 
       {/* ── 헤더 ── */}
       <div className="flex items-center justify-between mb-5">

@@ -125,7 +125,7 @@ export default function AdminQuestsPage() {
             .filter(n => n.taughtBy.length > 0)
             .sort((a, b) => b.taughtBy.length - a.taughtBy.length)
           return (
-            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 mb-6 text-sm text-indigo-900">
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-6 text-sm text-purple-900">
               <div className="flex items-baseline justify-between mb-2">
                 <div className="font-bold">🕸️ Concept graph (Phase 6)</div>
                 <div className="text-xs">
@@ -139,9 +139,9 @@ export default function AdminQuestsPage() {
                 </summary>
                 <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
                   {sortedTaught.map(n => (
-                    <div key={n.id} className="flex items-center gap-2 px-2 py-1 rounded bg-white border border-indigo-100">
-                      <code className="font-mono font-bold text-indigo-900 truncate flex-1">{n.id}</code>
-                      <span className="text-[10px] text-indigo-600" title="taught by">→ {n.taughtBy.length}</span>
+                    <div key={n.id} className="flex items-center gap-2 px-2 py-1 rounded bg-white border border-purple-100">
+                      <code className="font-mono font-bold text-purple-900 truncate flex-1">{n.id}</code>
+                      <span className="text-[10px] text-purple-600" title="taught by">→ {n.taughtBy.length}</span>
                       <span className="text-[10px] text-rose-600" title="required by">← {n.requiredBy.length}</span>
                     </div>
                   ))}

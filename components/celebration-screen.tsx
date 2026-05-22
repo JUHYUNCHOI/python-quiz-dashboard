@@ -49,7 +49,7 @@ export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, co
 
   const confettiColors: Record<string, string[]> = {
     base: ["bg-orange-400", "bg-mint-400", "bg-lavender-400", "bg-yellow-400", "bg-pink-400"],
-    good: ["bg-blue-400", "bg-cyan-400", "bg-mint-400", "bg-indigo-300", "bg-blue-300"],
+    good: ["bg-blue-400", "bg-cyan-400", "bg-mint-400", "bg-purple-300", "bg-blue-300"],
     fire: ["bg-red-400", "bg-orange-400", "bg-yellow-400", "bg-amber-400", "bg-orange-300"],
     insane: ["bg-yellow-400", "bg-amber-300", "bg-orange-300", "bg-yellow-300", "bg-amber-400"],
     legend: ["bg-red-400", "bg-orange-400", "bg-yellow-400", "bg-green-400", "bg-blue-400", "bg-purple-400", "bg-pink-400"],

@@ -15,7 +15,7 @@ export default function PrivacyPage() {
       <div className="max-w-2xl mx-auto px-5 py-10">
         {/* 헤더 */}
         <div className="mb-8">
-          <Link href="/" className="text-sm text-indigo-600 hover:underline mb-4 inline-block">
+          <Link href="/" className="text-sm text-purple-600 hover:underline mb-4 inline-block">
             ← 코드린 홈
           </Link>
           <div className="flex items-center gap-3 mb-2">
@@ -137,10 +137,10 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="font-bold text-base text-gray-900 mb-3">8. 개인정보 보호책임자</h2>
-            <div className="bg-indigo-50 rounded-xl p-4">
-              <p className="font-semibold text-indigo-900 mb-1">코드린 개인정보 보호팀</p>
-              <p className="text-indigo-700">이메일: <a href={`mailto:${CONTACT_EMAIL}`} className="underline">{CONTACT_EMAIL}</a></p>
-              <p className="text-xs text-indigo-500 mt-2">개인정보 관련 불만 및 권리 행사 요청을 접수합니다.</p>
+            <div className="bg-purple-50 rounded-xl p-4">
+              <p className="font-semibold text-purple-900 mb-1">코드린 개인정보 보호팀</p>
+              <p className="text-purple-700">이메일: <a href={`mailto:${CONTACT_EMAIL}`} className="underline">{CONTACT_EMAIL}</a></p>
+              <p className="text-xs text-purple-500 mt-2">개인정보 관련 불만 및 권리 행사 요청을 접수합니다.</p>
             </div>
           </section>
 

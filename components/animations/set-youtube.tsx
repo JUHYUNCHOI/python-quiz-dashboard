@@ -90,7 +90,7 @@ export function SetAnimationYoutube({ lang = "ko" }: { lang?: "ko" | "en" }) {
       {showProblem ? (
         <div className="space-y-4">
           {/* 문제 상황 */}
-          <div className="bg-gradient-to-r from-red-500 to-red-600 rounded-2xl p-5 text-white shadow-lg">
+          <div className="bg-red-500 rounded-2xl p-5 text-white shadow-lg">
             <div className="flex items-center gap-3 mb-3">
               <span className="text-5xl animate-bounce">😱</span>
               <div>
@@ -106,7 +106,7 @@ export function SetAnimationYoutube({ lang = "ko" }: { lang?: "ko" | "en" }) {
           </div>
 
           {/* 해결책 */}
-          <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-5 text-white shadow-lg">
+          <div className="bg-green-500 rounded-2xl p-5 text-white shadow-lg">
             <div className="flex items-center gap-3 mb-3">
               <span className="text-5xl">👍</span>
               <div>

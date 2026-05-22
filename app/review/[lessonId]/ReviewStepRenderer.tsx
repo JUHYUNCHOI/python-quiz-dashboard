@@ -337,7 +337,7 @@ function McqStep({
               disabled={answered}
               className={cn(
                 "rounded-xl border px-4 py-3 text-left transition-all flex items-center gap-3",
-                !answered && "border-gray-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/60 cursor-pointer shadow-sm",
+                !answered && "border-gray-200 bg-white hover:border-purple-400 hover:bg-purple-50/60 cursor-pointer shadow-sm",
                 answered && isCorrect && "border-emerald-400 bg-emerald-50",
                 answered && isSelected && !isCorrect && "border-red-400 bg-red-50",
                 answered && !isSelected && !isCorrect && "border-gray-100 bg-gray-50/80 opacity-40 cursor-not-allowed",
@@ -671,11 +671,11 @@ function PracticeStep({
           const msg = (isEn && content.en && "message" in content.en && content.en.message)
             ? (content.en as { message?: string }).message
             : (content as any).message
-          return msg ? <p className="text-xs text-indigo-500 font-semibold bg-indigo-50 rounded-lg px-3 py-2">{msg}</p> : null
+          return msg ? <p className="text-xs text-purple-500 font-semibold bg-purple-50 rounded-lg px-3 py-2">{msg}</p> : null
         })()
       )}
       {"level" in content && content.level !== undefined && (
-        <span className="text-xs font-bold text-indigo-400">Lv.{content.level}</span>
+        <span className="text-xs font-bold text-purple-400">Lv.{content.level}</span>
       )}
       <p className="text-gray-800 whitespace-pre-line leading-relaxed">
         {(task || "").split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
@@ -738,7 +738,7 @@ function PracticeStep({
                       setInputs(prev => { const next = [...prev]; next[i] = val; return next })
                     }}
                     onKeyDown={e => { if (e.key === "Enter" && i === blankCount - 1) check() }}
-                    className="inline-block bg-[#2a2b3e] border-2 border-indigo-400 text-indigo-200 font-mono text-sm px-1.5 py-0.5 mx-0.5 focus:outline-none focus:border-indigo-300 focus:bg-[#32345a] rounded transition-colors align-baseline"
+                    className="inline-block bg-[#2a2b3e] border-2 border-purple-400 text-purple-200 font-mono text-sm px-1.5 py-0.5 mx-0.5 focus:outline-none focus:border-purple-300 focus:bg-[#32345a] rounded transition-colors align-baseline"
                     style={{ width: `${Math.max(getChWidth(inputs[i] ?? "") + 2, 7)}ch`, minWidth: "7ch" }}
                   />
                 ) : (
@@ -814,7 +814,7 @@ function PracticeStep({
           <button
             onClick={check}
             disabled={!inputs[0].trim() || isRunning}
-            className="self-end px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
+            className="self-end px-4 py-2 rounded-xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
           >
             {isRunning
               ? <span className="flex items-center gap-1.5">{t("실행 중", "Running")}<span className="animate-pulse">...</span></span>
@@ -828,7 +828,7 @@ function PracticeStep({
         <button
           onClick={check}
           disabled={inputs.some((v, i) => i < blankCount && !v.trim())}
-          className="self-end px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
+          className="self-end px-4 py-2 rounded-xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
         >
           {t("확인", "Check")}
         </button>
@@ -983,7 +983,7 @@ function PredictStep({
               disabled={answered}
               className={cn(
                 "rounded-xl border px-4 py-2.5 text-left transition-all flex items-center gap-3 text-sm",
-                !answered && "border-gray-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/60 cursor-pointer",
+                !answered && "border-gray-200 bg-white hover:border-purple-400 hover:bg-purple-50/60 cursor-pointer",
                 answered && isCorrect && "border-emerald-400 bg-emerald-50",
                 answered && isSelected && !isCorrect && "border-red-400 bg-red-50",
                 answered && !isSelected && !isCorrect && "opacity-40 cursor-not-allowed border-gray-100 bg-gray-50",

@@ -71,7 +71,7 @@ export function ForLoopVisualizer({
   const currentValue = currentIndex >= 0 ? rangeValues[currentIndex] : null
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-4 sm:p-6 text-white overflow-hidden">
+    <div className="bg-slate-800 rounded-2xl p-4 sm:p-6 text-white overflow-hidden">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm sm:text-base font-medium text-slate-300">{resolvedTitle}</h3>
         <div className="flex items-center gap-2 text-xs text-slate-500">
@@ -100,7 +100,7 @@ export function ForLoopVisualizer({
             {rangeValues.map((val, idx) => (
               <div key={idx} className={cn("w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center font-mono text-lg font-bold transition-all duration-300",
                 idx < currentIndex ? "bg-slate-600/50 text-slate-500 scale-90" :
-                idx === currentIndex ? "bg-gradient-to-br from-purple-500 to-indigo-500 text-white scale-110 shadow-lg shadow-purple-500/30" :
+                idx === currentIndex ? "bg-purple-500 text-white scale-110 shadow-lg shadow-purple-500/30" :
                 "bg-slate-700/50 text-slate-400"
               )}>{val}</div>
             ))}
@@ -136,14 +136,14 @@ export function ForLoopVisualizer({
           <span className="text-slate-600">→</span>
           <div className={cn("flex-shrink-0 px-3 py-2 rounded-lg transition-all duration-300", phase === "executing" ? "bg-green-500/30 text-green-300 animate-pulse" : "bg-slate-700/50 text-slate-500")}>{isEn ? "run code" : "코드 실행"}</div>
           <span className="text-slate-600">→</span>
-          <div className={cn("flex-shrink-0 px-3 py-2 rounded-lg transition-all duration-300", phase === "done" ? "bg-red-500/30 text-red-300" : currentIndex >= 0 && phase !== "idle" ? "bg-indigo-500/30 text-indigo-300" : "bg-slate-700/50 text-slate-500")}>
+          <div className={cn("flex-shrink-0 px-3 py-2 rounded-lg transition-all duration-300", phase === "done" ? "bg-red-500/30 text-red-300" : currentIndex >= 0 && phase !== "idle" ? "bg-purple-500/30 text-purple-300" : "bg-slate-700/50 text-slate-500")}>
             {phase === "done" ? (isEn ? "done ✓" : "종료 ✓") : (isEn ? "next loop" : "다음 반복")}
           </div>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <button onClick={togglePlay} className={cn("flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all", isPlaying ? "bg-yellow-600 hover:bg-yellow-500 text-white" : "bg-indigo-600 hover:bg-indigo-500 text-white")}>
+        <button onClick={togglePlay} className={cn("flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all", isPlaying ? "bg-yellow-600 hover:bg-yellow-500 text-white" : "bg-purple-600 hover:bg-purple-500 text-white")}>
           {isPlaying ? (<><Pause className="w-4 h-4" />{isEn ? "Pause" : "일시정지"}</>) : (<><Play className="w-4 h-4" />{phase === "done" ? (isEn ? "Run again" : "다시 실행") : currentIndex === -1 ? (isEn ? "Run" : "실행하기") : (isEn ? "Continue" : "계속")}</>)}
         </button>
         <button onClick={stepForward} disabled={isPlaying || phase === "done"} className={cn("flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all", isPlaying || phase === "done" ? "bg-slate-700 text-slate-500 cursor-not-allowed" : "bg-slate-700 hover:bg-slate-600 text-slate-300")}>

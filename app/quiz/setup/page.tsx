@@ -487,7 +487,7 @@ function QuizSetupPage() {
         <Button
           onClick={handleStart}
           disabled={questionCount < 5}
-          className="w-full py-8 text-xl font-bold bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed group"
+          className="w-full py-8 text-xl font-bold bg-orange-500 hover:from-orange-500 hover:to-orange-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed group"
         >
           <span className="flex items-center justify-center gap-2">
             {t("시작하기", "Start")}

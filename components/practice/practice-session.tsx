@@ -58,7 +58,7 @@ function renderInline(text: string): React.ReactNode[] {
     if (seg.startsWith("**") && seg.endsWith("**"))
       return <strong key={j} className="font-semibold text-gray-900">{seg.slice(2, -2)}</strong>
     if (seg.startsWith("`") && seg.endsWith("`"))
-      return <code key={j} className="bg-gray-100 text-indigo-600 rounded px-1 py-0.5 font-mono text-[13px]">{seg.slice(1, -1)}</code>
+      return <code key={j} className="bg-gray-100 text-purple-600 rounded px-1 py-0.5 font-mono text-[13px]">{seg.slice(1, -1)}</code>
     return <span key={j}>{seg}</span>
   })
 }
@@ -181,13 +181,13 @@ function RoundResult({
         <div className={cn(
           "rounded-2xl px-5 py-3 w-full text-left space-y-1",
           nextLessonHref
-            ? "bg-indigo-50 border border-indigo-200"
+            ? "bg-purple-50 border border-purple-200"
             : "bg-emerald-50 border border-emerald-200"
         )}>
-          <p className={cn("text-sm font-bold", nextLessonHref ? "text-indigo-800" : "text-emerald-800")}>
+          <p className={cn("text-sm font-bold", nextLessonHref ? "text-purple-800" : "text-emerald-800")}>
             🌟 {t("세트 1 완료!", "Set 1 complete!")}
           </p>
-          <p className={cn("text-xs", nextLessonHref ? "text-indigo-600" : "text-emerald-600")}>
+          <p className={cn("text-xs", nextLessonHref ? "text-purple-600" : "text-emerald-600")}>
             {nextLessonHref
               ? t("기본 연습은 충분해요. 다음 레슨으로 가도 좋아요!", "Good enough! You can move on to the next lesson.")
               : t("더 풀고 싶으면 세트 2로 계속하세요.", "Feel free to continue with Set 2 for more practice.")}
@@ -208,7 +208,7 @@ function RoundResult({
         {!isGood && wrongNums.length > 0 && (
           <button
             onClick={onRetryWrong}
-            className="w-full py-3.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors"
+            className="w-full py-3.5 rounded-2xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-sm transition-colors"
           >
             {t(`틀린 ${wrongNums.length}문제 다시 풀기 →`, `Retry ${wrongNums.length} wrong →`)}
           </button>
@@ -218,11 +218,11 @@ function RoundResult({
         {setNum === 1 && isGood && nextLessonHref && (
           <a
             href={nextLessonHref}
-            className="w-full py-3.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors text-center flex flex-col items-center gap-0.5"
+            className="w-full py-3.5 rounded-2xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-sm transition-colors text-center flex flex-col items-center gap-0.5"
           >
             <span>{nextLessonLabel ?? t("다음 레슨으로 →", "Next Lesson →")}</span>
             {nextLessonSubtitle && (
-              <span className="text-[11px] font-medium text-indigo-100/90">{nextLessonSubtitle}</span>
+              <span className="text-[11px] font-medium text-purple-100/90">{nextLessonSubtitle}</span>
             )}
           </a>
         )}
@@ -234,7 +234,7 @@ function RoundResult({
             setNum === 1 && isGood && nextLessonHref
               ? "bg-gray-100 hover:bg-gray-200 text-gray-500"
               : isGood
-                ? "bg-indigo-500 hover:bg-indigo-600 text-white"
+                ? "bg-purple-500 hover:bg-purple-600 text-white"
                 : "bg-gray-100 hover:bg-gray-200 text-gray-600"
           )}
         >
@@ -520,7 +520,7 @@ export function PracticeSession({
   if (phase === "loading") {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -543,11 +543,11 @@ export function PracticeSession({
           <div className="flex flex-col gap-3 w-full">
             <button
               onClick={() => { setCurrentSet(1); setPhase("intro") }}
-              className="w-full py-3.5 rounded-2xl border-2 border-indigo-200 text-indigo-600 font-bold text-sm hover:bg-indigo-50 transition-colors"
+              className="w-full py-3.5 rounded-2xl border-2 border-purple-200 text-purple-600 font-bold text-sm hover:bg-purple-50 transition-colors"
             >
               {t("🔄 처음부터 다시 하기", "🔄 Start over")}
             </button>
-            <button onClick={onExit} className="w-full py-3.5 rounded-2xl bg-indigo-500 text-white font-bold text-sm hover:bg-indigo-600 transition-colors">
+            <button onClick={onExit} className="w-full py-3.5 rounded-2xl bg-purple-500 text-white font-bold text-sm hover:bg-purple-600 transition-colors">
               {t("목록으로", "Back to list")}
             </button>
           </div>
@@ -585,15 +585,15 @@ export function PracticeSession({
                 <button
                   key={setNum}
                   onClick={() => startSet(setNum)}
-                  className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-purple-50 hover:bg-purple-100 border border-purple-200 transition-colors"
                 >
                   <div className="text-left">
-                    <p className="text-sm font-bold text-indigo-800">
+                    <p className="text-sm font-bold text-purple-800">
                       {setNum === 1 ? `SET 1 — ${t("기본", "Base")} (${sp.length}${t("문제", "q")})` : `SET ${setNum} (${sp.length}${t("문제", "q")})`}
                     </p>
-                    <p className="text-xs text-indigo-400">{rangeLabel}</p>
+                    <p className="text-xs text-purple-400">{rangeLabel}</p>
                   </div>
-                  <span className="text-indigo-400 text-sm">→</span>
+                  <span className="text-purple-400 text-sm">→</span>
                 </button>
               )
             })}
@@ -625,11 +625,11 @@ export function PracticeSession({
           </div>
         )}
 
-        <div className="bg-indigo-50 border border-indigo-100 rounded-2xl px-5 py-4 w-full text-left space-y-1">
-          <p className="text-sm font-bold text-indigo-800">
+        <div className="bg-purple-50 border border-purple-100 rounded-2xl px-5 py-4 w-full text-left space-y-1">
+          <p className="text-sm font-bold text-purple-800">
             {t("세트", "Set")} {currentSet} — {setProblems.length} {t("문제", "problems")}
           </p>
-          <p className="text-xs text-indigo-400">
+          <p className="text-xs text-purple-400">
             {currentSet === 1
               ? `#1 – #${SET1_SIZE}`
               : `#${SET1_SIZE + (currentSet - 2) * SET_N_SIZE + 1} – #${SET1_SIZE + (currentSet - 1) * SET_N_SIZE}`}
@@ -637,7 +637,7 @@ export function PracticeSession({
         </div>
 
         <div className="flex flex-col gap-3 w-full">
-          <button onClick={() => startSet(currentSet)} className="w-full py-4 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors">
+          <button onClick={() => startSet(currentSet)} className="w-full py-4 rounded-2xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-sm transition-colors">
             {t("시작하기 →", "Start →")}
           </button>
           <button onClick={onExit} className="w-full py-3 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-500 font-medium text-sm transition-colors">
@@ -710,11 +710,11 @@ export function PracticeSession({
                   className={cn(
                     "rounded-full transition-all duration-200",
                     isCurrent
-                      ? "w-4 h-2.5 bg-indigo-500"
+                      ? "w-4 h-2.5 bg-purple-500"
                       : isPassed
                         ? "w-2.5 h-2.5 bg-emerald-400 hover:bg-emerald-500 cursor-pointer"
                         : isTeacher
-                          ? "w-2.5 h-2.5 bg-gray-200 hover:bg-indigo-300 cursor-pointer"
+                          ? "w-2.5 h-2.5 bg-gray-200 hover:bg-purple-300 cursor-pointer"
                           : "w-2.5 h-2.5 bg-gray-200 cursor-default"
                   )}
                 />
@@ -812,7 +812,7 @@ export function PracticeSession({
           <button
             onClick={handleNext}
             disabled={isSaving}
-            className="flex-1 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors disabled:opacity-50"
+            className="flex-1 py-3 rounded-xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-sm transition-colors disabled:opacity-50"
           >
             {index + 1 >= roundProblems.length
               ? (isSaving ? t("저장 중...", "Saving...") : t("🏁 결과 보기", "🏁 See results"))

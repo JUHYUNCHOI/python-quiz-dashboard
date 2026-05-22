@@ -282,9 +282,9 @@ export function CopyRefMemory({ lang = "ko" }: { lang?: "ko" | "en" }) {
       </div>
 
       {/* 결론 카드 */}
-      <div className="rounded-2xl bg-indigo-50 border border-indigo-100 p-4 text-sm text-indigo-800">
+      <div className="rounded-2xl bg-purple-50 border border-purple-100 p-4 text-sm text-purple-800">
         <p className="font-bold mb-1">💡 {isEn ? "Why & is faster" : "왜 &가 빠른가?"}</p>
-        <p className="text-indigo-700 text-xs leading-relaxed">
+        <p className="text-purple-700 text-xs leading-relaxed">
           {isEn
             ? "Without &, every iteration allocates new memory and copies the value. With &, x is just an alias (another name) for the original — no allocation, no copy. For large objects (strings, structs), the difference is huge."
             : "& 없이는 반복마다 새 메모리를 잡고 값을 복사해요. &를 쓰면 x는 원본의 또 다른 이름일 뿐 — 메모리 할당도, 복사도 없어요. 큰 데이터(string, 구조체 등)에서는 차이가 크게 납니다."

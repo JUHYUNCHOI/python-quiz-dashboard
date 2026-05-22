@@ -76,7 +76,7 @@ export function ReadMethodDemo({ lang = "ko" }: { lang?: "ko" | "en" }) {
   }
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-4 md:p-6 border-2 border-purple-200">
+    <div className="bg-purple-50 rounded-2xl p-4 md:p-6 border-2 border-purple-200">
       {/* 파일 내용 */}
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-2">

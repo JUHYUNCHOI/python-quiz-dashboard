@@ -71,12 +71,12 @@ export default function ProgressPage() {
         )}
         <button
           onClick={handleContinue}
-          className="mt-4 w-full flex items-center justify-between bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-2xl px-5 py-4 shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all"
+          className="mt-4 w-full flex items-center justify-between bg-purple-600 text-white rounded-2xl px-5 py-4 shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all"
         >
           <div className="flex items-center gap-3">
-            <BookOpen className="h-5 w-5 text-indigo-200" />
+            <BookOpen className="h-5 w-5 text-purple-200" />
             <div className="text-left">
-              <p className="text-xs text-indigo-200 font-medium">{t("이어서 학습하기", "Continue Learning")}</p>
+              <p className="text-xs text-purple-200 font-medium">{t("이어서 학습하기", "Continue Learning")}</p>
               <p className="text-sm font-bold">
                 {nextLesson
                   ? nextLesson.label
@@ -84,7 +84,7 @@ export default function ProgressPage() {
               </p>
             </div>
           </div>
-          <ChevronRight className="h-5 w-5 text-indigo-300" />
+          <ChevronRight className="h-5 w-5 text-purple-300" />
         </button>
 
         {/* Mastery + Charts 2-column */}

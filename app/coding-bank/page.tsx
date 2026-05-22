@@ -42,7 +42,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   sort: "bg-blue-100 text-blue-700 border-blue-200",
   simulation: "bg-purple-100 text-purple-700 border-purple-200",
   "brute-force": "bg-orange-100 text-orange-700 border-orange-200",
-  "map-set": "bg-teal-100 text-teal-700 border-teal-200",
+  "map-set": "bg-emerald-100 text-emerald-700 border-emerald-200",
   string: "bg-pink-100 text-pink-700 border-pink-200",
 }
 
@@ -262,7 +262,7 @@ function ProblemList({
         const starterSolvedCount = starterProblems.filter((p) => solvedSet.has(p.id)).length
 
         return (
-          <div className="rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50 p-4 mb-2">
+          <div className="rounded-2xl border-2 border-amber-300 bg-orange-50 p-4 mb-2">
             <div className="flex items-baseline justify-between gap-2 mb-2">
               <h2 className="text-base font-bold text-amber-900">
                 🌟 {t("처음 풀어볼 만한 문제", "Good first problems")}
@@ -670,7 +670,7 @@ function BankNextCTA({ onBack }: { onBack: () => void }) {
       {smart && smart.type !== "complete" && (
         <button
           onClick={() => router.push(smart.href)}
-          className="flex-1 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs transition-all flex items-center justify-center gap-1.5"
+          className="flex-1 py-2.5 rounded-2xl bg-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold text-xs transition-all flex items-center justify-center gap-1.5"
         >
           <span>{smart.emoji ?? "▶"}</span>
           <span className="truncate">{label}</span>
@@ -759,7 +759,7 @@ export default function CodingBankPage() {
           en: "We're finalizing 100 coding problems. Stay tuned!",
         }}
       >
-        <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
+        <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
           <Header />
           <CodingBankContent />
           <BottomNav />

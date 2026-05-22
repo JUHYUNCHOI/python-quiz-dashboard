@@ -16,7 +16,7 @@ export function QuizFeedbackCard({ feedback, t, visible, nextActionHref }: Props
 
   const toneColors = {
     celebrate: "from-green-50 to-emerald-50 border-green-200",
-    encourage: "from-blue-50 to-indigo-50 border-blue-200",
+    encourage: "from-blue-50 to-purple-50 border-blue-200",
     guide: "from-amber-50 to-orange-50 border-amber-200",
   }
 
@@ -89,7 +89,7 @@ export function QuizFeedbackCard({ feedback, t, visible, nextActionHref }: Props
       {nextActionHref ? (
         <Link href={nextActionHref} className={cn(
           "flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-sm font-bold transition-opacity hover:opacity-80",
-          feedback.nextAction.type === "advance" ? "bg-indigo-100 text-indigo-700" :
+          feedback.nextAction.type === "advance" ? "bg-purple-100 text-purple-700" :
           feedback.nextAction.type === "review" ? "bg-amber-100 text-amber-700" :
           "bg-blue-100 text-blue-700"
         )}>
@@ -102,7 +102,7 @@ export function QuizFeedbackCard({ feedback, t, visible, nextActionHref }: Props
       ) : (
         <div className={cn(
           "flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold",
-          feedback.nextAction.type === "advance" ? "bg-indigo-100 text-indigo-700" :
+          feedback.nextAction.type === "advance" ? "bg-purple-100 text-purple-700" :
           feedback.nextAction.type === "review" ? "bg-amber-100 text-amber-700" :
           "bg-blue-100 text-blue-700"
         )}>

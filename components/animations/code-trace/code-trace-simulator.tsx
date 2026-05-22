@@ -283,7 +283,7 @@ export function CodeTraceSimulator({
   }
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-3 sm:p-5 text-white overflow-hidden">
+    <div className="bg-slate-800 rounded-2xl p-3 sm:p-5 text-white overflow-hidden">
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <h3 className="text-sm sm:text-base font-bold text-slate-200">
@@ -311,7 +311,7 @@ export function CodeTraceSimulator({
             else if (currentStep === -1) { goToStep(0) }
             else { goToStep(currentStep + 1) }
           }}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm bg-purple-600 hover:bg-purple-500 text-white shadow-lg"
         >
           <Play className="w-4 h-4" />
           {currentStep >= totalSteps - 1 ? t("처음부터", "Restart") : currentStep === -1 ? t("▶ 실행하기", "▶ Run") : t("▶ 한 단계", "▶ Next")}
@@ -565,7 +565,7 @@ export function CodeTraceSimulator({
               goToStep(currentStep + 1)
             }
           }}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-500/20"
         >
           <Play className="w-4 h-4" />
           {currentStep >= totalSteps - 1

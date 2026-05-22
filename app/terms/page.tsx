@@ -15,7 +15,7 @@ export default function TermsPage() {
       <div className="max-w-2xl mx-auto px-5 py-10">
         {/* 헤더 */}
         <div className="mb-8">
-          <Link href="/" className="text-sm text-indigo-600 hover:underline mb-4 inline-block">
+          <Link href="/" className="text-sm text-purple-600 hover:underline mb-4 inline-block">
             ← 코드린 홈
           </Link>
           <div className="flex items-center gap-3 mb-2">
@@ -113,9 +113,9 @@ export default function TermsPage() {
 
           <section>
             <h2 className="font-bold text-base text-gray-900 mb-3">문의</h2>
-            <div className="bg-indigo-50 rounded-xl p-4">
-              <p className="font-semibold text-indigo-900 mb-1">코드린 운영팀</p>
-              <p className="text-indigo-700">이메일: <a href={`mailto:${CONTACT_EMAIL}`} className="underline">{CONTACT_EMAIL}</a></p>
+            <div className="bg-purple-50 rounded-xl p-4">
+              <p className="font-semibold text-purple-900 mb-1">코드린 운영팀</p>
+              <p className="text-purple-700">이메일: <a href={`mailto:${CONTACT_EMAIL}`} className="underline">{CONTACT_EMAIL}</a></p>
             </div>
           </section>
 

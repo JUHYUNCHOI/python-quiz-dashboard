@@ -247,7 +247,7 @@ export function HelloWorldBuilder({ lang = "ko" }: HelloWorldBuilderProps) {
                         ? "bg-red-50 border-2 border-red-400 text-red-700 cursor-pointer hover:bg-red-100 animate-[shake_0.3s_ease-in-out]"
                         : phase === "success"
                         ? "bg-emerald-50 border-2 border-emerald-400 text-slate-800"
-                        : "bg-indigo-50 border-2 border-indigo-300 text-slate-800 cursor-pointer hover:bg-indigo-100"
+                        : "bg-purple-50 border-2 border-purple-300 text-slate-800 cursor-pointer hover:bg-purple-100"
                       : nextEmptySlot === i
                       ? "border-2 border-dashed border-amber-400 bg-amber-50/50"
                       : "border-2 border-dashed border-slate-300 bg-white"
@@ -296,7 +296,7 @@ export function HelloWorldBuilder({ lang = "ko" }: HelloWorldBuilderProps) {
                   <button
                     key={id}
                     onClick={() => handleBlockClick(id)}
-                    className="px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-700 font-mono text-xs hover:bg-indigo-50 hover:border-indigo-400 hover:text-indigo-700 transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm"
+                    className="px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-700 font-mono text-xs hover:bg-purple-50 hover:border-purple-400 hover:text-purple-700 transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm"
                   >
                     {block.code.trim()}
                   </button>

@@ -73,7 +73,7 @@ export function TryExceptFlow({ lang = "ko" }: { lang?: "ko" | "en" }) {
       
       <div className="flex gap-3">
         <button onClick={reset} className="px-5 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold text-gray-700 transition-colors border-2 border-gray-200">{isEn ? "🔄 Start over" : "🔄 처음"}</button>
-        <button onClick={nextStep} disabled={step >= steps.length - 1} className="flex-1 px-5 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-xl font-bold text-lg transition-colors">
+        <button onClick={nextStep} disabled={step >= steps.length - 1} className="flex-1 px-5 py-3 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-xl font-bold text-lg transition-colors">
           {step >= steps.length - 1 ? (isEn ? '✅ Done!' : '✅ 완료!') : (isEn ? 'Next ▶️' : '다음 ▶️')}
         </button>
       </div>

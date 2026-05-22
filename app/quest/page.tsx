@@ -420,7 +420,7 @@ export default function QuestPage() {
 
   // Badge color per problem number within contest
   const NUM_COLORS = ["bg-amber-100 text-amber-800", "bg-sky-100 text-sky-800", "bg-purple-100 text-purple-800",
-    "bg-green-100 text-green-800", "bg-rose-100 text-rose-800", "bg-teal-100 text-teal-800", "bg-indigo-100 text-indigo-800"]
+    "bg-green-100 text-green-800", "bg-rose-100 text-rose-800", "bg-emerald-100 text-emerald-800", "bg-purple-100 text-purple-800"]
 
   // ── Main page ────────────────────────────────
   return (
@@ -482,17 +482,17 @@ export default function QuestPage() {
 
         {/* Phase 7: study-next suggestion. Only renders when the student already has progress AND a clear high-leverage concept exists. */}
         {loaded && solvedSet.size >= 2 && studyHint && studyHint.unlocksCount >= 2 && (
-          <div className="border-2 border-indigo-400 rounded-xl shadow-md bg-indigo-50 p-4 mb-6">
-            <div className="text-xs font-black uppercase tracking-wider text-indigo-700 mb-1">
+          <div className="border-2 border-purple-400 rounded-xl shadow-md bg-purple-50 p-4 mb-6">
+            <div className="text-xs font-black uppercase tracking-wider text-purple-700 mb-1">
               📚 {t("다음에 배우면 좋은 개념", "Study this next")}
             </div>
-            <div className="font-bold text-base text-indigo-900 mb-1">
-              <code className="font-mono text-sm bg-white px-1.5 py-0.5 rounded border border-indigo-200">{studyHint.concept}</code>
+            <div className="font-bold text-base text-purple-900 mb-1">
+              <code className="font-mono text-sm bg-white px-1.5 py-0.5 rounded border border-purple-200">{studyHint.concept}</code>
               <span className="text-gray-700 text-sm font-semibold ml-2">
                 — {CONCEPT_ONTOLOGY[studyHint.concept as ConceptId] ?? studyHint.concept}
               </span>
             </div>
-            <div className="text-xs text-indigo-800">
+            <div className="text-xs text-purple-800">
               {t(
                 `이거 하나만 더 배우면 ${studyHint.unlocksCount} 개 quest 가 풀려요`,
                 `Mastering this unlocks ${studyHint.unlocksCount} more quest${studyHint.unlocksCount > 1 ? "s" : ""}`
@@ -618,7 +618,7 @@ export default function QuestPage() {
                                             </span>
                                           )}
                                           {ready && (
-                                            <span className="text-[9px] font-black px-1 py-px rounded bg-indigo-100 text-indigo-700 border border-indigo-300 flex-shrink-0" title={t("준비된 quest — 필요한 개념 다 배웠어요", "Ready — prereqs satisfied")}>
+                                            <span className="text-[9px] font-black px-1 py-px rounded bg-purple-100 text-purple-700 border border-purple-300 flex-shrink-0" title={t("준비된 quest — 필요한 개념 다 배웠어요", "Ready — prereqs satisfied")}>
                                               🎯
                                             </span>
                                           )}

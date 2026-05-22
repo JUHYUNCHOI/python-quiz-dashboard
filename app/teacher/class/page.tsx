@@ -620,7 +620,7 @@ export default function ClassDetailPage() {
         {classId && classInfo && (
           <>
             {/* 반 정보 카드 */}
-            <Card className="p-5 mb-6 border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-yellow-50">
+            <Card className="p-5 mb-6 border-2 border-orange-200 bg-orange-50">
               <h1 className="text-xl font-bold text-gray-800 mb-3">{classInfo.name}</h1>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-orange-200">
@@ -754,7 +754,7 @@ export default function ClassDetailPage() {
                         {(() => {
                           const current = getCurrentLesson(student.lessonProgress, lang)
                           return current ? (
-                            <p className="text-xs text-indigo-500 font-medium truncate">
+                            <p className="text-xs text-purple-500 font-medium truncate">
                               📖 {current.name} {current.completed ? "✅" : "🔄"}
                             </p>
                           ) : (
@@ -787,7 +787,7 @@ export default function ClassDetailPage() {
                           "px-2 py-1 rounded-lg text-[10px] font-medium transition-all flex items-center gap-1 flex-shrink-0",
                           parentLinkCopied === student.id
                             ? "bg-green-100 text-green-700"
-                            : "bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
+                            : "bg-purple-100 text-purple-600 hover:bg-purple-200"
                         )}
                         title="학부모 리포트 링크 복사"
                       >

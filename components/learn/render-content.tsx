@@ -51,11 +51,11 @@ const COLOR_MAP: Record<string, string> = {
   blue: "text-blue-600",
   sky: "text-sky-600",
   green: "text-emerald-600",
-  teal: "text-teal-600",
+  teal: "text-emerald-600",
   purple: "text-violet-600",
   orange: "text-orange-600",
   amber: "text-amber-600",
-  indigo: "text-indigo-600",
+  indigo: "text-purple-600",
 }
 const COLOR_BG_MAP: Record<string, string> = {
   pink: "bg-pink-50 border-pink-200 text-pink-700",
@@ -63,11 +63,11 @@ const COLOR_BG_MAP: Record<string, string> = {
   blue: "bg-blue-50 border-blue-200 text-blue-700",
   sky: "bg-sky-50 border-sky-200 text-sky-700",
   green: "bg-emerald-50 border-emerald-200 text-emerald-700",
-  teal: "bg-teal-50 border-teal-200 text-teal-700",
+  teal: "bg-emerald-50 border-emerald-200 text-emerald-700",
   purple: "bg-violet-50 border-violet-200 text-violet-700",
   orange: "bg-orange-50 border-orange-200 text-orange-700",
   amber: "bg-amber-50 border-amber-200 text-amber-700",
-  indigo: "bg-indigo-50 border-indigo-200 text-indigo-700",
+  indigo: "bg-purple-50 border-purple-200 text-purple-700",
 }
 
 // ============================================
@@ -104,10 +104,10 @@ function renderBasicInline(text: string, keyPrefix: string = ""): React.ReactNod
       // bold 내부의 `code` 처리
       const codeParts = inner.split(/(`[^`]+`)/g)
       return [
-        <strong key={`${keyPrefix}${j}`} className="font-bold text-indigo-600">
+        <strong key={`${keyPrefix}${j}`} className="font-bold text-purple-600">
           {codeParts.map((cp, k) => {
             if (cp.startsWith('`') && cp.endsWith('`')) {
-              return <code key={`${keyPrefix}${j}-${k}`} className="bg-indigo-100 px-1.5 py-0.5 rounded-md font-mono text-indigo-700 text-sm font-semibold">{cp.slice(1, -1)}</code>
+              return <code key={`${keyPrefix}${j}-${k}`} className="bg-purple-100 px-1.5 py-0.5 rounded-md font-mono text-purple-700 text-sm font-semibold">{cp.slice(1, -1)}</code>
             }
             return cp
           })}
@@ -118,7 +118,7 @@ function renderBasicInline(text: string, keyPrefix: string = ""): React.ReactNod
     const codeParts = part.split(/(`[^`]+`)/g)
     return codeParts.map((cp, k) => {
       if (cp.startsWith('`') && cp.endsWith('`')) {
-        return <code key={`${keyPrefix}${j}-${k}`} className="bg-indigo-100 px-1.5 py-0.5 rounded-md font-mono text-indigo-700 text-sm font-semibold">{cp.slice(1, -1)}</code>
+        return <code key={`${keyPrefix}${j}-${k}`} className="bg-purple-100 px-1.5 py-0.5 rounded-md font-mono text-purple-700 text-sm font-semibold">{cp.slice(1, -1)}</code>
       }
       return cp
     })
@@ -178,7 +178,7 @@ function CollapsibleCode({ label, code, language }: { label: string; code: strin
     <div className="my-3">
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium hover:bg-indigo-100 transition-colors"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-purple-50 border border-purple-200 text-purple-700 text-sm font-medium hover:bg-purple-100 transition-colors"
       >
         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -238,7 +238,7 @@ function CollapsibleContent({ label, children }: { label: string; children: Reac
     <div className="my-3">
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium hover:bg-indigo-100 transition-colors"
+        className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-purple-50 border border-purple-200 text-purple-700 text-sm font-medium hover:bg-purple-100 transition-colors"
       >
         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -254,7 +254,7 @@ function CollapsibleContent({ label, children }: { label: string; children: Reac
           />
           <div className="w-full max-w-3xl h-full bg-white shadow-2xl flex flex-col animate-slide-in-right">
             {/* Header */}
-            <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100 bg-gradient-to-b from-indigo-50/60 to-white">
+            <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100 bg-gradient-to-b from-purple-50/60 to-white">
               <h2 className="font-bold text-gray-900 text-lg md:text-xl leading-tight">{label}</h2>
               <button
                 onClick={() => setOpen(false)}
@@ -441,13 +441,13 @@ export function renderContent(content: string) {
           : tableLines.filter(r => !isSeparator(r)).map(parseRow)
 
         elements.push(
-          <div key={key++} className="my-4 overflow-x-auto rounded-xl border border-indigo-200 shadow-sm">
+          <div key={key++} className="my-4 overflow-x-auto rounded-xl border border-purple-200 shadow-sm">
             <table className="w-full text-sm">
               {headerRow && (
                 <thead>
-                  <tr className="bg-indigo-50 border-b-2 border-indigo-200">
+                  <tr className="bg-purple-50 border-b-2 border-purple-200">
                     {headerRow.map((cell, j) => (
-                      <th key={j} className="px-3 py-2.5 text-left font-bold text-indigo-900 text-sm whitespace-nowrap">
+                      <th key={j} className="px-3 py-2.5 text-left font-bold text-purple-900 text-sm whitespace-nowrap">
                         {renderInlineMarkdown(cell, `th-${j}-`)}
                       </th>
                     ))}
@@ -456,9 +456,9 @@ export function renderContent(content: string) {
               )}
               <tbody>
                 {bodyRows.map((row, ri) => (
-                  <tr key={ri} className={ri % 2 === 0 ? "bg-white" : "bg-indigo-50/30"}>
+                  <tr key={ri} className={ri % 2 === 0 ? "bg-white" : "bg-purple-50/30"}>
                     {row.map((cell, ci) => (
-                      <td key={ci} className={`px-3 py-2 text-gray-700 border-t border-indigo-100${ci === 0 ? " whitespace-nowrap font-medium" : ""}`}>
+                      <td key={ci} className={`px-3 py-2 text-gray-700 border-t border-purple-100${ci === 0 ? " whitespace-nowrap font-medium" : ""}`}>
                         {renderInlineMarkdown(cell, `td-${ri}-${ci}-`)}
                       </td>
                     ))}
@@ -526,16 +526,16 @@ export function renderContent(content: string) {
         )
       } else if (role === '따라해보세요' || role === 'TryIt') {
         elements.push(
-          <div key={key++} className="my-4 bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-300 rounded-2xl px-4 py-3 md:px-5 md:py-4">
+          <div key={key++} className="my-4 bg-purple-50 border-2 border-purple-300 rounded-2xl px-4 py-3 md:px-5 md:py-4">
             <div className="flex items-center gap-2 mb-1.5">
-              <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-100">
-                <svg className="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-purple-100">
+                <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
                 </svg>
               </span>
-              <span className="font-bold text-indigo-700 text-sm">{role === 'TryIt' ? "Try It!" : "따라해보세요!"}</span>
+              <span className="font-bold text-purple-700 text-sm">{role === 'TryIt' ? "Try It!" : "따라해보세요!"}</span>
             </div>
-            <p className="text-sm md:text-base text-indigo-800 leading-relaxed pl-9">
+            <p className="text-sm md:text-base text-purple-800 leading-relaxed pl-9">
               {renderInlineMarkdown(text)}
             </p>
           </div>
@@ -567,8 +567,8 @@ export function renderContent(content: string) {
     if (line.startsWith('💭 ')) {
       const text = line.slice(2).trim()
       elements.push(
-        <div key={key++} className="my-4 bg-indigo-50 border-2 border-indigo-200 rounded-2xl px-4 py-3 md:px-5 md:py-4">
-          <p className="text-sm md:text-base text-indigo-800 leading-relaxed">
+        <div key={key++} className="my-4 bg-purple-50 border-2 border-purple-200 rounded-2xl px-4 py-3 md:px-5 md:py-4">
+          <p className="text-sm md:text-base text-purple-800 leading-relaxed">
             <span className="text-lg md:text-xl mr-1">🤔</span>
             {renderInlineMarkdown(text)}
           </p>
@@ -623,12 +623,12 @@ export function renderContent(content: string) {
       elements.push(
         <div
           key={key++}
-          className="my-3 border-l-4 border-indigo-300 bg-indigo-50/60 rounded-r-lg px-3 py-2 md:px-4 md:py-2.5"
+          className="my-3 border-l-4 border-purple-300 bg-purple-50/60 rounded-r-lg px-3 py-2 md:px-4 md:py-2.5"
         >
           {quoteLines.map((ql, qi) => (
             <p
               key={`q-${key}-${qi}`}
-              className="text-xs md:text-sm text-indigo-900/80 leading-relaxed"
+              className="text-xs md:text-sm text-purple-900/80 leading-relaxed"
             >
               {ql ? renderInlineMarkdown(ql) : '\u00A0'}
             </p>

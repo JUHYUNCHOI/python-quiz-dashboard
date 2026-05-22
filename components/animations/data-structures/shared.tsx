@@ -91,7 +91,7 @@ export function ProblemCard({ problem, solution, buttonColor, onContinue, lang =
   const isEn = lang === "en"
   return (
     <div className="space-y-4">
-      <div className="bg-gradient-to-r from-red-500 to-red-600 rounded-2xl p-5 text-white shadow-lg">
+      <div className="bg-red-500 rounded-2xl p-5 text-white shadow-lg">
         <div className="flex items-center gap-3 mb-3">
           <span className="text-5xl animate-bounce">{problem.emoji}</span>
           <div>
@@ -108,7 +108,7 @@ export function ProblemCard({ problem, solution, buttonColor, onContinue, lang =
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-5 text-white shadow-lg">
+      <div className="bg-green-500 rounded-2xl p-5 text-white shadow-lg">
         <div className="flex items-center gap-3 mb-3">
           <span className="text-5xl">{solution.emoji}</span>
           <div>
@@ -181,7 +181,7 @@ export function FridgeSlot({
     >
       <div className={cn(
         "w-20 h-28 rounded-lg border-2 shadow-lg relative",
-        "bg-gradient-to-b from-slate-600 to-slate-700 border-slate-500",
+        "bg-slate-700 border-slate-500",
         isHighlighted && "ring-4 ring-blue-500 scale-110 shadow-2xl",
         isFound && "ring-4 ring-green-500 scale-110 shadow-2xl",
         isScanning && "ring-4 ring-yellow-400",

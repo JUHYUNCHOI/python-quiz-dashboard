@@ -149,12 +149,12 @@ export function RepetitiveTyping({ onComplete, lang = "ko" }: RepetitiveTypingPr
           {/* 두 번째 메시지: 질문 */}
           {messageStep >= 1 && (
             <div className="px-4 pb-4 animate-fadeIn">
-              <div className="bg-indigo-600/30 rounded-xl p-4 border-2 border-indigo-400/50">
-                <p className="text-indigo-200 font-bold text-base md:text-lg text-center">
+              <div className="bg-purple-600/30 rounded-xl p-4 border-2 border-purple-400/50">
+                <p className="text-purple-200 font-bold text-base md:text-lg text-center">
                   {isEn ? "🤔 Do we really have to do it this way?" : "🤔 정말 이렇게만 해야 할까요?"}
                 </p>
                 {messageStep >= 2 && (
-                  <p className="text-indigo-300 text-sm md:text-base text-center mt-2 animate-fadeIn">
+                  <p className="text-purple-300 text-sm md:text-base text-center mt-2 animate-fadeIn">
                     {isEn ? <>Isn&apos;t there a way to <strong className="text-white">write less</strong> of the repeated part?</> : <>반복되는 부분을 <strong className="text-white">덜 쓰는 방법</strong>이 있지 않을까요?</>}
                   </p>
                 )}

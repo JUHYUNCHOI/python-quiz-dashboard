@@ -12,6 +12,8 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { ALL_CLUSTERS } from "@/data/practice"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
+import { getRankForPart, getStudentTrackRank, RANKS, type RankInfo } from "@/lib/curriculum-ranks"
+import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import {
   CheckCircle2,
   Circle,
@@ -449,30 +451,15 @@ export default function CurriculumPage() {
     setLoaded(true)
   }, [])
 
-  // 진도에 따라 파트 열기
-  // 모바일: 수업 미완료인 첫 파트만 (스크롤 최소화)
-  // 데스크탑(xl+): 도전 미완료 파트 전부 + 수업 미완료 첫 파트
+  // 진도에 따라 현재 Part 한 개만 자동 펼침 — 학생이 자기 위치 한눈에.
+  // 다른 Part 는 접어 두어 정보 과부하 방지 (필요하면 클릭해서 펼침).
   useEffect(() => {
     if (!loaded) return
     const allData = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
     const active = new Set<string>()
-    const isMobile = typeof window !== "undefined" && window.innerWidth < 1280 // xl breakpoint
 
     for (const part of allData) {
       const ids = part.lessons.map(l => l.id)
-
-      // 데스크탑: 도전 미완료 파트도 펼침
-      if (!isMobile) {
-        const hasPendingDojeon = ids.some(lessonId => {
-          const cluster = ALL_CLUSTERS.find(c => String(c.unlockAfter) === String(lessonId))
-          if (!cluster) return false
-          if (!completedLessons.has(cluster.unlockAfter)) return false
-          return !isClusterSet1Done(cluster)
-        })
-        if (hasPendingDojeon) active.add(part.id)
-      }
-
-      // 수업 미완료 파트: 첫 번째만 펼침
       const hasIncompleteLesson = ids.some(id => !completedLessons.has(id))
       if (hasIncompleteLesson) {
         active.add(part.id)
@@ -880,6 +867,23 @@ export default function CurriculumPage() {
                   <h1 className="text-2xl sm:text-3xl font-bold">
                     {isPseudo ? t("IGCSE 0478 마스터", "IGCSE 0478 Master") : isCpp ? t("C++ 기초 (파이썬 → C++)", "C++ Basics (Python → C++)") : t("파이썬 기초 마스터", "Python Basics Master")}
                   </h1>
+                  {/* 현재 트랙 랭크 — Bronze/Silver/Gold/Master */}
+                  {(() => {
+                    const trackParts = isPseudo ? pseudoParts : isCpp ? cppParts : pythonParts
+                    const rank = getStudentTrackRank(completedLessons, trackParts)
+                    if (!rank) return null
+                    return (
+                      <div className="mt-1.5 mb-1">
+                        <span className={cn(
+                          "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold border",
+                          rank.bg, rank.color, rank.border
+                        )}>
+                          <span className="text-base">{rank.emoji}</span>
+                          <span>{t(`${rank.label} 랭크`, `${rank.labelEn} Rank`)}</span>
+                        </span>
+                      </div>
+                    )
+                  })()}
                   <p className="text-gray-600 text-sm sm:text-base">
                     {isPseudo ? t("수도코드, SQL, Logic Gates까지! 📄", "Pseudocode, SQL, Logic Gates & more! 📄") : isCpp ? t("파이썬을 아는 학생을 위한 C++ 입문! ⚡", "C++ for Python students! ⚡") : t("웹에서 바로 배우는 파이썬! 🚀", "Learn Python on the web! 🚀")}
                   </p>
@@ -966,7 +970,7 @@ export default function CurriculumPage() {
               <div className="flex-1">
                 <div className="h-4 sm:h-5 bg-gray-200 rounded-full border border-gray-200 overflow-hidden">
                   <div
-                    className={`h-full transition-all duration-500 ${isPseudo ? 'bg-gradient-to-r from-green-400 to-green-500' : isCpp ? 'bg-gradient-to-r from-blue-400 to-blue-500' : 'bg-gradient-to-r from-orange-400 to-orange-500'}`}
+                    className={`h-full transition-all duration-500 ${isPseudo ? 'bg-green-500' : isCpp ? 'bg-blue-500' : 'bg-orange-500'}`}
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -1071,7 +1075,7 @@ export default function CurriculumPage() {
                         {practiceProblemsDone >= 40 ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("레슨에서 Try Challenge로 도전!", "Try Challenge in each lesson!")}
                       </span>
                       {completedLessons.has("cpp-p3") && isOwner && (
-                        <Link href="/coding-bank" className="text-xs text-center border border-teal-400 text-teal-600 rounded-lg py-1.5 font-bold hover:bg-teal-50 transition-colors">
+                        <Link href="/coding-bank" className="text-xs text-center border border-emerald-400 text-emerald-600 rounded-lg py-1.5 font-bold hover:bg-emerald-50 transition-colors">
                           🏦 {t("코딩 뱅크 →", "Coding Bank →")}
                         </Link>
                       )}
@@ -1271,7 +1275,7 @@ export default function CurriculumPage() {
         {/* 커리큘럼 완료 → 알고리즘 진입 배너 */}
         {loaded && progress === 100 && !isPseudo && (
           <div className="max-w-[1600px] mx-auto mb-6">
-            <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl border border-gray-200 p-5 shadow-md text-white">
+            <div className="bg-purple-600 rounded-2xl border border-gray-200 p-5 shadow-md text-white">
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="text-5xl shrink-0">🎓</div>
                 <div className="flex-1 text-center sm:text-left">
@@ -1298,7 +1302,7 @@ export default function CurriculumPage() {
         {/* P2 민준: 신규 학생 시작점 설정 배너 */}
         {loaded && completedCount === 0 && !isTeacher && !isPseudo && (
           <div className="max-w-[1600px] mx-auto mb-4">
-            <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl border-2 border-indigo-200 p-4 flex items-start gap-3">
+            <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl border-2 border-purple-200 p-4 flex items-start gap-3">
               <span className="text-2xl shrink-0">🎯</span>
               <div className="flex-1">
                 <p className="font-bold text-gray-800 text-sm">
@@ -1318,9 +1322,10 @@ export default function CurriculumPage() {
           </div>
         )}
 
-        {/* 커리큘럼 — 단일 컬럼 세로 배치.
-            이전엔 multi-column grid 라 펼친 Part 옆에 닫힌 Part 들이
-            텅 비어 시각 imbalance. 세로로 쌓으면 자연스러움. */}
+        {/* 커리큘럼 — 단일 컬럼 아코디언.
+            Portal 의 Smart-Next 가 이미 "다음에 뭐 해야?" 답을 줘서
+            커리큘럼 페이지는 참고 지도 역할. 현재 Part 만 펼치고
+            다른 건 접어 두면 한 번에 보는 정보량이 적당. */}
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col gap-4">
             {curriculumData.map((part) => {
@@ -1364,7 +1369,7 @@ export default function CurriculumPage() {
 
               return (
                 <div key={part.id} className={`bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden ${isComingSoon ? 'opacity-60' : ''}`}>
-                  {/* Part Header */}
+                  {/* Part Header — 항상 토글 가능 (단일 컬럼 아코디언) */}
                   <button
                     onClick={() => !isComingSoon && hasLessons && togglePart(part.id)}
                     disabled={isComingSoon}
@@ -1383,6 +1388,19 @@ export default function CurriculumPage() {
                     <div className="flex-1 text-left">
                       <div className="flex items-center gap-2 flex-wrap">
                         <h2 className="text-lg sm:text-xl font-bold text-gray-900">{part.title}</h2>
+                        {(() => {
+                          const rank = getRankForPart(part.id)
+                          if (!rank) return null
+                          return (
+                            <span className={cn(
+                              "px-2 py-0.5 rounded-full text-[11px] font-bold border inline-flex items-center gap-1",
+                              rank.bg, rank.color, rank.border
+                            )}>
+                              <span>{rank.emoji}</span>
+                              <span>{t(rank.label, rank.labelEn)}</span>
+                            </span>
+                          )
+                        })()}
                         {isComingSoon && (
                           <span className="px-2 py-0.5 bg-gray-200 text-gray-600 rounded-full text-xs font-bold">
                             {t("준비중", "Coming Soon")}
@@ -1406,7 +1424,7 @@ export default function CurriculumPage() {
                           </div>
                           <div className="h-2 bg-gray-200 rounded-full border border-black overflow-hidden">
                             <div
-                              className={`h-full transition-all duration-300 ${isPseudo ? 'bg-gradient-to-r from-green-400 to-green-500' : isCpp ? 'bg-gradient-to-r from-blue-400 to-blue-500' : 'bg-gradient-to-r from-orange-400 to-orange-500'}`}
+                              className={`h-full transition-all duration-300 ${isPseudo ? 'bg-green-500' : isCpp ? 'bg-blue-500' : 'bg-orange-500'}`}
                               style={{ width: `${partProgress}%` }}
                             />
                           </div>
@@ -1633,7 +1651,8 @@ export default function CurriculumPage() {
                                           // 지금 해야 할 단계: 1=수업, 2=복습, 3=도전, 0=전부완료
                                           // 복습(2)과 도전(3)은 수업(1) 완료 후 독립적으로 접근 가능
                                           const cur = !step1Done ? 1 : (!step2Done && !step3Done) ? 2 : 0
-                                          const activeBtn = "w-full px-3 py-1.5 rounded-lg border border-gray-200 font-bold text-sm text-center shadow-sm transition-colors"
+                                          // 활성 버튼: 내용 폭만큼만 차지 (이전엔 w-full 이라 데스크탑 2-컬럼에서 카드 너비 좁아지면 비대해 보임)
+                                          const activeBtn = "inline-flex items-center justify-center px-3 py-1.5 rounded-lg border border-gray-200 font-bold text-sm shadow-sm transition-colors"
                                           const doneText = "text-xs text-gray-400"
                                           const lockedText = "text-xs text-gray-300"
 

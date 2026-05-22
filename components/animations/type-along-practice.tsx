@@ -229,11 +229,11 @@ export function TypeAlongPractice({
     : ""
 
   return (
-    <div className="bg-white rounded-2xl border-4 border-indigo-200 overflow-hidden shadow-lg">
+    <div className="bg-white rounded-2xl border-4 border-purple-200 overflow-hidden shadow-lg">
       {/* 헤더 */}
-      <div className="bg-indigo-50 px-3 py-2 md:px-4 md:py-3 border-b-2 border-indigo-100">
-        <h3 className="font-bold text-indigo-700 text-base md:text-lg">{title}</h3>
-        <p className="text-indigo-600 text-xs md:text-sm">{description}</p>
+      <div className="bg-purple-50 px-3 py-2 md:px-4 md:py-3 border-b-2 border-purple-100">
+        <h3 className="font-bold text-purple-700 text-base md:text-lg">{title}</h3>
+        <p className="text-purple-600 text-xs md:text-sm">{description}</p>
       </div>
 
       {/* 진행 바 */}
@@ -241,7 +241,7 @@ export function TypeAlongPractice({
         <div 
           className={cn(
             "h-full transition-all duration-300",
-            isFullMatch ? "bg-green-500" : isPartialMatch ? "bg-indigo-500" : "bg-red-400"
+            isFullMatch ? "bg-green-500" : isPartialMatch ? "bg-purple-500" : "bg-red-400"
           )}
           style={{ width: `${progress}%` }}
         />
@@ -258,7 +258,7 @@ export function TypeAlongPractice({
             className={cn(
               "w-full py-2 px-3 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all",
               showGuide 
-                ? "bg-indigo-100 text-indigo-700" 
+                ? "bg-purple-100 text-purple-700" 
                 : "bg-gray-100 text-gray-600"
             )}
           >
@@ -328,7 +328,7 @@ export function TypeAlongPractice({
               isFullMatch 
                 ? "border-green-400 bg-green-900" 
                 : isPartialMatch 
-                  ? "border-indigo-300 bg-gray-900"
+                  ? "border-purple-300 bg-gray-900"
                   : userCode.length > 0 
                     ? "border-red-300 bg-gray-900"
                     : "border-gray-300 bg-gray-900"
@@ -372,7 +372,7 @@ export function TypeAlongPractice({
             isFullMatch 
               ? "border-green-400 bg-green-900" 
               : isPartialMatch 
-                ? "border-indigo-300 bg-gray-900"
+                ? "border-purple-300 bg-gray-900"
                 : userCode.length > 0 
                   ? "border-red-300 bg-gray-900"
                   : "border-gray-300 bg-gray-900"
@@ -437,10 +437,10 @@ export function TypeAlongPractice({
 
         {/* 완료 메시지 */}
         {phase === "complete" && (
-          <div className="bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl p-3 md:p-4 text-center animate-fadeIn">
-            <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-indigo-500 mx-auto mb-2" />
-            <p className="text-indigo-700 font-bold text-sm md:text-base">{isEn ? "🎉 Well done!" : "🎉 잘했어요!"}</p>
-            <p className="text-indigo-600 text-xs md:text-sm">{isEn ? "You typed the code perfectly!" : "코드를 완벽하게 따라 썼어요!"}</p>
+          <div className="bg-purple-100 rounded-xl p-3 md:p-4 text-center animate-fadeIn">
+            <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-purple-500 mx-auto mb-2" />
+            <p className="text-purple-700 font-bold text-sm md:text-base">{isEn ? "🎉 Well done!" : "🎉 잘했어요!"}</p>
+            <p className="text-purple-600 text-xs md:text-sm">{isEn ? "You typed the code perfectly!" : "코드를 완벽하게 따라 썼어요!"}</p>
           </div>
         )}
 
@@ -462,7 +462,7 @@ export function TypeAlongPractice({
             <button
               onClick={reset}
               type="button"
-              className="px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-medium text-sm rounded-xl transition-all flex items-center gap-2"
+              className="px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium text-sm rounded-xl transition-all flex items-center gap-2"
             >
               <RotateCcw className="w-4 h-4" />
               {isEn ? "Try again" : "다시 하기"}

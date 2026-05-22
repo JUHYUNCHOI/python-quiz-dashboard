@@ -76,7 +76,7 @@ export function FunctionOrderAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) 
               key={i}
               className={cn(
                 "relative flex items-center gap-2 rounded px-2 py-0.5 transition-all duration-200",
-                isActive && !isErrorLine && "bg-indigo-600/40",
+                isActive && !isErrorLine && "bg-purple-600/40",
                 isErrorLine && "bg-red-500/30",
                 isPast && !isErrorLine && "opacity-50",
                 isUnread && "opacity-30",
@@ -127,7 +127,7 @@ export function FunctionOrderAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) 
       {!isFinished && (
         <button
           onClick={handleStep}
-          className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition-colors"
+          className="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition-colors"
         >
           {!isStarted ? (isEn ? "▶ Start" : "▶ 시작") : (isEn ? "▶ Next line" : "▶ 다음 줄")}
         </button>

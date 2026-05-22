@@ -11,6 +11,8 @@ import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { getSmartNext, getPreferredTrack } from "@/lib/smart-next"
 import { useLanguage } from "@/contexts/language-context"
 import { useIsOwner } from "@/components/owner-only-guard"
+import { getLevelTitle } from "@/hooks/use-gamification"
+import { getStudentTrackRank } from "@/lib/curriculum-ranks"
 
 // ─── 플랫폼 URL 설정 ─────────────────────────────────────────────────
 const ALGORITHM_URL = process.env.NEXT_PUBLIC_ALGORITHM_URL || "http://localhost:8080"
@@ -82,7 +84,7 @@ function getTrack(completedIds: Set<string>): Track {
 // ─── 플랫폼 카드 색상 ────────────────────────────────────────────────
 const PLATFORM_STYLES = {
   coderin:   { bg: "from-orange-500 to-amber-500", border: "border-orange-200", badge: "bg-orange-100 text-orange-700" },
-  algorithm: { bg: "from-blue-500 to-indigo-500",  border: "border-blue-200",   badge: "bg-blue-100 text-blue-700"     },
+  algorithm: { bg: "from-blue-500 to-purple-500",  border: "border-blue-200",   badge: "bg-blue-100 text-blue-700"     },
   codequest: { bg: "from-purple-500 to-pink-500",  border: "border-purple-200", badge: "bg-purple-100 text-purple-700" },
 }
 
@@ -120,7 +122,7 @@ function RoleOnboardingModal({ onSelect }: { onSelect: (role: "student" | "teach
               </button>
               <button
                 onClick={() => onSelect("teacher")}
-                className="flex flex-col items-center gap-2 p-4 rounded-2xl border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all"
+                className="flex flex-col items-center gap-2 p-4 rounded-2xl border-2 border-gray-200 hover:border-purple-400 hover:bg-purple-50 transition-all"
               >
                 <span className="text-3xl">📋</span>
                 <span className="font-black text-gray-800">{t("선생님", "Teacher")}</span>
@@ -408,13 +410,13 @@ function PortalContent() {
       <main className="max-w-[1200px] mx-auto px-4 py-6">
         {/* 선생님 배너 */}
         {isTeacher && (
-          <div className="mb-4 rounded-2xl bg-indigo-50 border border-indigo-200 px-4 py-3 flex items-center justify-between gap-3">
-            <p className="text-sm text-indigo-700 font-medium">
+          <div className="mb-4 rounded-2xl bg-purple-50 border border-purple-200 px-4 py-3 flex items-center justify-between gap-3">
+            <p className="text-sm text-purple-700 font-medium">
               📋 {t("선생님 계정 — 모든 단계가 잠금 해제됩니다", "Teacher account — all stages unlocked")}
             </p>
             <button
               onClick={() => router.push("/teacher")}
-              className="shrink-0 text-xs font-bold text-indigo-600 hover:text-indigo-800 underline"
+              className="shrink-0 text-xs font-bold text-purple-600 hover:text-purple-800 underline"
             >
               {t("대시보드 →", "Dashboard →")}
             </button>
@@ -431,7 +433,7 @@ function PortalContent() {
           return (
             <button
               onClick={() => router.push(next.href)}
-              className="w-full mb-5 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-200 hover:shadow-2xl active:scale-[0.99] transition-all text-left group"
+              className="w-full mb-5 p-5 sm:p-6 rounded-2xl bg-orange-500 text-white shadow-xl shadow-orange-200 hover:shadow-2xl active:scale-[0.99] transition-all text-left group"
             >
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl shrink-0">
@@ -463,43 +465,102 @@ function PortalContent() {
             모바일에서는 학습 여정 패널이 먼저 보이도록 order 조정 (lg 이상은 원래 순서). */}
         <div className="lg:w-[380px] lg:flex-shrink-0 space-y-4 order-2 lg:order-1">
 
-        {/* 인사 + 스탯 */}
-        <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-5 text-white">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-2xl">🦒</span>
-            <span className="text-sm font-semibold opacity-80">{t("코드린 포털", "Coderin Portal")}</span>
-          </div>
-          <h1 className="text-2xl font-black">
-            {name ? t(`안녕하세요, ${name}님!`, `Hello, ${name}!`) : t("안녕하세요!", "Hello!")}
-          </h1>
-          <p className="text-sm opacity-75 mt-0.5">{trackLabel}</p>
-          <div className="flex gap-4 mt-4">
-            <div className="bg-white/20 rounded-xl px-3 py-2 text-center">
-              <p className="text-xl font-black">{xp.toLocaleString()}</p>
-              <p className="text-[11px] opacity-75">XP</p>
-            </div>
-            <div className="bg-white/20 rounded-xl px-3 py-2 text-center">
-              <p className="text-xl font-black">🔥 {streak}</p>
-              <p className="text-[11px] opacity-75">{t("연속 학습", "Streak")}</p>
-            </div>
-            {cqCount > 0 && (
-              <div className="bg-white/20 rounded-xl px-3 py-2 text-center">
-                <p className="text-xl font-black">🏆 {cqCount}</p>
-                <p className="text-[11px] opacity-75">{t("대회 문제", "Contest")}</p>
+        {/* 인사 + 스탯 + 레벨/칭호 + 트랙 랭크 */}
+        {(() => {
+          const level = Math.floor(xp / 100) + 1
+          const xpInLevel = xp % 100
+          const titleInfo = getLevelTitle(level)
+          // 학생의 주력 트랙 랭크 (Bronze/Silver/Gold/Master)
+          const localTrack = getPreferredTrack(completedIds)
+          const trackParts = localTrack === "cpp" ? cppParts : localTrack === "pseudo" ? pseudoParts : pythonParts
+          const trackRank = getStudentTrackRank(completedIds, trackParts)
+          return (
+            <div className="bg-orange-500 rounded-2xl p-5 text-white">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-2xl">🦒</span>
+                <span className="text-sm font-semibold opacity-80">{t("코드린 포털", "Coderin Portal")}</span>
               </div>
-            )}
-          </div>
-          <button
-            onClick={() => router.push("/analytics")}
-            className="mt-3 text-[11px] font-semibold text-white/70 hover:text-white transition-colors underline underline-offset-2"
-          >
-            📊 {t("학습 분석 자세히 보기 →", "View Learning Analytics →")}
-          </button>
-        </div>
+              <h1 className="text-2xl font-black">
+                {name ? t(`안녕하세요, ${name}님!`, `Hello, ${name}!`) : t("안녕하세요!", "Hello!")}
+              </h1>
 
-        {/* 빠른 이동 — 진도 있는 학생에게만 (신규는 학습 여정 카드의 큰 CTA 만 보임) */}
-        {completedIds.size > 0 && (
-          <div className="grid grid-cols-3 gap-2">
+              {/* 큰 레벨/칭호 표시 — 학생들이 좋아하는 핵심 위젯 */}
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-2 bg-white/25 rounded-2xl px-3 py-2">
+                  <span className="text-2xl">{titleInfo.emoji}</span>
+                  <div className="flex flex-col leading-tight">
+                    <span className="text-[10px] opacity-80 font-semibold">Lv. {level}</span>
+                    <span className="text-base font-black">{titleInfo.title}</span>
+                  </div>
+                </div>
+                {trackRank && (
+                  <div className="flex items-center gap-1.5 bg-white/25 rounded-2xl px-3 py-2">
+                    <span className="text-xl">{trackRank.emoji}</span>
+                    <div className="flex flex-col leading-tight">
+                      <span className="text-[10px] opacity-80 font-semibold">{t("커리큘럼", "Curriculum")}</span>
+                      <span className="text-sm font-black">{t(trackRank.label, trackRank.labelEn)}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 레벨 진행 바 */}
+              <div className="mt-2.5">
+                <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-white/80 transition-all duration-500"
+                    style={{ width: `${xpInLevel}%` }}
+                  />
+                </div>
+                <p className="text-[10px] opacity-75 mt-1">
+                  {xpInLevel} / 100 XP {t("다음 레벨까지", "to next level")}
+                </p>
+              </div>
+
+              <p className="text-sm opacity-75 mt-3">{trackLabel}</p>
+              <div className="flex gap-2 mt-3 flex-wrap">
+                <div className="bg-white/20 rounded-xl px-3 py-2 text-center flex-1 min-w-[68px]">
+                  <p className="text-lg font-black">{xp.toLocaleString()}</p>
+                  <p className="text-[10px] opacity-75">XP</p>
+                </div>
+                <div className="bg-white/20 rounded-xl px-3 py-2 text-center flex-1 min-w-[68px]">
+                  <p className="text-lg font-black">🔥 {streak}</p>
+                  <p className="text-[10px] opacity-75">{t("연속", "Streak")}</p>
+                </div>
+                {cqCount > 0 && (
+                  <div className="bg-white/20 rounded-xl px-3 py-2 text-center flex-1 min-w-[68px]">
+                    <p className="text-lg font-black">🏆 {cqCount}</p>
+                    <p className="text-[10px] opacity-75">{t("대회", "Contest")}</p>
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => router.push("/analytics")}
+                className="mt-3 text-[11px] font-semibold text-white/70 hover:text-white transition-colors underline underline-offset-2"
+              >
+                📊 {t("학습 분석 자세히 보기 →", "View Learning Analytics →")}
+              </button>
+            </div>
+          )
+        })()}
+
+        {/* 🗺️ 학습 여정 맵 — 게임 스타일 로드맵 (메인 + 가지) */}
+        <button
+          onClick={() => router.push("/journey")}
+          className="w-full rounded-2xl bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4 hover:shadow-lg active:scale-[0.99] transition-all flex items-center gap-3 text-left"
+        >
+          <span className="text-3xl shrink-0">🗺️</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-base font-black">{t("학습 여정 맵", "Learning Journey Map")}</p>
+            <p className="text-[11px] opacity-90 mt-0.5">
+              {t("문법 → 알고리즘 → USACO — 전체 길 한눈에", "Syntax → Algorithm → USACO at a glance")}
+            </p>
+          </div>
+          <span className="text-2xl shrink-0">→</span>
+        </button>
+
+        {/* 빠른 이동 — 항상 표시 (USACO 접근성 ↑ 위해 진도 무관) */}
+        <div className="grid grid-cols-3 gap-2">
             {([
               { platform: "coderin",   emoji: "📚", labelKo: "배우기",  labelEn: "Learn"     },
               { platform: "algorithm", emoji: "🧩", labelKo: "풀기",    labelEn: "Practice"  },
@@ -521,8 +582,7 @@ function PortalContent() {
                 </button>
               )
             })}
-          </div>
-        )}
+        </div>
 
         {/* 부모님 리포트 공유 — 반 가입 학생 / 선생님에게만 노출 (solo 학생은 혼란 가능) */}
         {(inClass || isTeacher) && (

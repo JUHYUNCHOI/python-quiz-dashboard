@@ -107,7 +107,7 @@ export function PairVsTwoVectorsAnimation({ lang = "ko" }: { lang?: "ko" | "en" 
           initial={{ opacity: 0, y: -4 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="px-3 py-2 rounded-xl bg-indigo-50 border border-indigo-200 text-sm text-indigo-900 leading-relaxed"
+          className="px-3 py-2 rounded-xl bg-purple-50 border border-purple-200 text-sm text-purple-900 leading-relaxed"
         >
           {stepCaption}
         </motion.div>
@@ -364,7 +364,7 @@ export function PairVsTwoVectorsAnimation({ lang = "ko" }: { lang?: "ko" | "en" 
         <button
           onClick={() => setStep((s) => Math.min(TOTAL_STEPS - 1, s + 1))}
           disabled={step === TOTAL_STEPS - 1}
-          className="flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-30 transition-all"
+          className="flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-bold text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-30 transition-all"
         >
           {isEn ? "Next" : "다음"}
           <ChevronRight className="w-4 h-4" />

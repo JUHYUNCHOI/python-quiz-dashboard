@@ -462,7 +462,7 @@ function ParentReportPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 헤더 */}
-      <div className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-5 py-6">
+      <div className="bg-orange-500 text-white px-5 py-6">
         <div className="max-w-lg mx-auto flex items-start justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 mb-1">

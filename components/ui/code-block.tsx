@@ -14,7 +14,7 @@ const patterns: { regex: RegExp; className: string }[] = [
   { regex: /'[^']*'|"[^"]*"/g, className: 'text-emerald-700' },
   { regex: /\b\d+\.?\d*\b/g, className: 'text-orange-600' },
   { regex: /\b(print|type|if|else|elif|for|while|def|class|return|import|from|as|try|except|finally|with|True|False|None|and|or|not|in|is)\b/g, className: 'text-pink-600 font-semibold' },
-  { regex: /\b(len|range|str|int|float|bool|list|dict|set|tuple|input|open|abs|max|min|sum|round)\b/g, className: 'text-teal-600' },
+  { regex: /\b(len|range|str|int|float|bool|list|dict|set|tuple|input|open|abs|max|min|sum|round)\b/g, className: 'text-emerald-600' },
   { regex: /[+\-*/%=<>!&|^~]+/g, className: 'text-blue-600' },
   { regex: /[()[\]{}]/g, className: 'text-slate-700' },
   { regex: /[,:]/g, className: 'text-slate-600' },
@@ -141,7 +141,7 @@ export function highlightPython(code: string, dark: boolean = false, highlightLi
     const tokens = tokenizeLine(line, `L${lineIndex}-`, dark)
     const marginClass = hasHighlights ? '-mx-4 px-4 md:-mx-5 md:px-5' : ''
     const accentClass = isHighlighted
-      ? 'bg-white border-l-[3px] border-indigo-400 pl-[13px] md:pl-[17px]'
+      ? 'bg-white border-l-[3px] border-purple-400 pl-[13px] md:pl-[17px]'
       : isDimmed
         ? 'opacity-30'
         : ''
@@ -166,7 +166,7 @@ const cppPatterns: { regex: RegExp; className: string }[] = [
   { regex: /'[^']*'|"[^"]*"/g, className: 'text-emerald-700' },
   { regex: /\b\d+\.?\d*[fFL]?\b/g, className: 'text-orange-600' },
   { regex: /\b(if|else|for|while|do|switch|case|break|continue|return|class|struct|public|private|protected|virtual|override|const|static|void|int|double|float|char|bool|long|short|unsigned|signed|auto|string|true|false|nullptr|new|delete|namespace|using|template|typename|typedef|enum|sizeof|this|throw|try|catch|include|iostream|std)\b/g, className: 'text-pink-600 font-semibold' },
-  { regex: /\b(cout|cin|endl|cerr|vector|map|set|pair|array|getline|push_back|size|begin|end|sort|find|swap|to_string|stoi|stod|printf|scanf|main)\b/g, className: 'text-teal-600' },
+  { regex: /\b(cout|cin|endl|cerr|vector|map|set|pair|array|getline|push_back|size|begin|end|sort|find|swap|to_string|stoi|stod|printf|scanf|main)\b/g, className: 'text-emerald-600' },
   { regex: /<<|>>|[+\-*/%=<>!&|^~]+/g, className: 'text-blue-600' },
   { regex: /[()[\]{}]/g, className: 'text-slate-700' },
   { regex: /[,:;]/g, className: 'text-slate-600' },
@@ -273,7 +273,7 @@ export function highlightCpp(code: string, dark: boolean = false, highlightLines
     const tokens = tokenizeCppLine(line, `L${lineIndex}-`, dark)
     const marginClass = hasHighlights ? '-mx-4 px-4 md:-mx-5 md:px-5' : ''
     const accentClass = isHighlighted
-      ? 'bg-white border-l-[3px] border-indigo-400 pl-[13px] md:pl-[17px]'
+      ? 'bg-white border-l-[3px] border-purple-400 pl-[13px] md:pl-[17px]'
       : isDimmed
         ? 'opacity-30'
         : ''

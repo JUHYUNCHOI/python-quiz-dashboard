@@ -39,7 +39,7 @@ export function AchievementsPanel() {
               className={cn(
                 "group relative flex flex-col items-center gap-2 rounded-xl p-4 transition-all duration-300",
                 achievement.unlocked
-                  ? "bg-gradient-to-br from-yellow-50 to-orange-50 hover:scale-105 hover:shadow-md"
+                  ? "bg-orange-50 hover:scale-105 hover:shadow-md"
                   : "bg-gray-100 opacity-50",
               )}
             >

@@ -385,7 +385,7 @@ export function StudentDetailPanel({
                 "w-full py-2 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-1.5",
                 parentLinkCopied === student.id
                   ? "bg-green-100 text-green-700"
-                  : "bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
+                  : "bg-purple-100 text-purple-600 hover:bg-purple-200"
               )}
             >
               {parentLinkCopied === student.id ? (

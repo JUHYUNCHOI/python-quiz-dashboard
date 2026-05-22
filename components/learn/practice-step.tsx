@@ -126,7 +126,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
         {/* 배지 + 제목 */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="px-3 py-1 rounded-full text-sm font-bold bg-teal-100 text-teal-700">
+            <span className="px-3 py-1 rounded-full text-sm font-bold bg-emerald-100 text-emerald-700">
               <Keyboard className="w-4 h-4 inline mr-1" />
               {isEn ? "Try It Yourself" : "직접 해보기"}
             </span>
@@ -157,7 +157,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
               setStarterInjected(true)
               setStarterKey(k => k + 1)
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-teal-300 bg-teal-50 text-teal-700 hover:bg-teal-100 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors"
           >
             <span>📝</span>
             <span>{isEn ? "Fill in the template" : "틀 채워서 풀기"}</span>
@@ -190,7 +190,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => { setDone(true); onSuccess?.() }}
-            className="w-full py-4 rounded-xl text-base font-bold text-white bg-gradient-to-r from-teal-400 to-cyan-500 shadow-md"
+            className="w-full py-4 rounded-xl text-base font-bold text-white bg-gradient-to-r from-emerald-400 to-cyan-500 shadow-md"
           >
             {isEn ? "✅ Done!" : "✅ 다했어요!"}
           </motion.button>
@@ -209,7 +209,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
         {/* 완료 상태 */}
         {done && (
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
-            <div className="w-full py-4 rounded-xl text-base font-bold text-center text-teal-700 bg-teal-50 border-2 border-teal-200">
+            <div className="w-full py-4 rounded-xl text-base font-bold text-center text-emerald-700 bg-emerald-50 border-2 border-emerald-200">
               {isEn ? "✅ Great job! Move on →" : "✅ 잘했어요! 다음으로 넘어가세요 →"}
             </div>
           </motion.div>
@@ -319,7 +319,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
                   {hintLevel <= 2 && (
                     <button
                       onClick={() => setHintOpen(false)}
-                      className="w-full py-3.5 rounded-xl text-base font-bold bg-teal-600 text-white hover:bg-teal-500"
+                      className="w-full py-3.5 rounded-xl text-base font-bold bg-emerald-600 text-white hover:bg-emerald-500"
                     >
                       {isEn ? "Got it — try again!" : "알겠어요, 다시 해볼게요!"}
                     </button>
@@ -329,7 +329,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
                     <>
                       <button
                         onClick={() => setHintOpen(false)}
-                        className="w-full py-3.5 rounded-xl text-base font-bold bg-teal-600 text-white hover:bg-teal-500"
+                        className="w-full py-3.5 rounded-xl text-base font-bold bg-emerald-600 text-white hover:bg-emerald-500"
                       >
                         {isEn ? "Got it — try again!" : "이해했어요, 다시 써볼게요!"}
                       </button>

@@ -151,7 +151,7 @@ function TabWithConstructor({ lang }: { lang: string }) {
             className={cn(
               "flex-1 px-2 py-1.5 rounded-lg text-xs font-bold transition-all",
               step === i
-                ? "bg-indigo-500 text-white shadow shadow-indigo-500/30"
+                ? "bg-purple-500 text-white shadow shadow-purple-500/30"
                 : "bg-slate-700 text-slate-400 hover:bg-slate-600"
             )}
           >
@@ -248,7 +248,7 @@ function TabMethodCalls({ lang }: { lang: string }) {
       code: 'BankAccount acc("김철수", 1000)',
       balance: 1000,
       note: isEn ? "Init" : "초기화",
-      noteColor: "text-indigo-300",
+      noteColor: "text-purple-300",
       balanceState: "done" as const,
     },
     {
@@ -294,7 +294,7 @@ function TabMethodCalls({ lang }: { lang: string }) {
             onClick={() => setCurrent(i)}
             className={cn(
               "flex-1 h-1.5 rounded-full transition-all",
-              i <= current ? "bg-indigo-400" : "bg-slate-700"
+              i <= current ? "bg-purple-400" : "bg-slate-700"
             )}
           />
         ))}
@@ -311,7 +311,7 @@ function TabMethodCalls({ lang }: { lang: string }) {
       <div className="flex items-center gap-4">
         <ObjectBox
           label="acc"
-          borderColor="border-indigo-400/50"
+          borderColor="border-purple-400/50"
           fields={[
             { name: "owner",   value: '"김철수"', state: "normal" },
             { name: "balance", value: String(s.balance), state: s.balanceState },
@@ -339,7 +339,7 @@ function TabMethodCalls({ lang }: { lang: string }) {
         <button
           onClick={() => setCurrent(Math.min(steps.length - 1, current + 1))}
           disabled={current === steps.length - 1}
-          className="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-30 transition-colors"
+          className="px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-500 text-white hover:bg-purple-600 disabled:opacity-30 transition-colors"
         >
           {isEn ? "Next" : "다음"} →
         </button>
@@ -360,7 +360,7 @@ export function ConstructorVisualizer({ lang }: Props) {
   ]
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl overflow-hidden border border-slate-700/60 shadow-lg">
+    <div className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700/60 shadow-lg">
       {/* Mac-style 헤더 */}
       <div className="flex items-center justify-between px-4 py-3 bg-slate-800/60 border-b border-slate-700/60">
         <div className="flex items-center gap-2">
@@ -383,7 +383,7 @@ export function ConstructorVisualizer({ lang }: Props) {
               className={cn(
                 "px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
                 tab === i
-                  ? "bg-indigo-500 text-white shadow shadow-indigo-500/30"
+                  ? "bg-purple-500 text-white shadow shadow-purple-500/30"
                   : "bg-slate-700 text-slate-400 hover:bg-slate-600"
               )}
             >

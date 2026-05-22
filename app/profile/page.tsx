@@ -240,9 +240,9 @@ export default function ProfilePage() {
                 </Link>
               )}
               <Link href="/teacher/register">
-                <Card className="p-4 border border-gray-100 hover:border-indigo-200 transition-all cursor-pointer">
+                <Card className="p-4 border border-gray-100 hover:border-purple-200 transition-all cursor-pointer">
                   <div className="flex items-center gap-3">
-                    <ShieldCheck className="w-5 h-5 text-indigo-400" />
+                    <ShieldCheck className="w-5 h-5 text-purple-400" />
                     <span className="font-medium text-gray-700">{t("선생님으로 전환하기", "Switch to Teacher")}</span>
                   </div>
                 </Card>

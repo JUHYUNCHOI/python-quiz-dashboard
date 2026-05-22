@@ -71,7 +71,7 @@ export function ProcedureFlow({
   const callLine = isProcedure ? callCode : callAssign
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-4 md:p-6 text-white overflow-hidden">
+    <div className="bg-slate-800 rounded-2xl p-4 md:p-6 text-white overflow-hidden">
       {/* Step labels */}
       <div className="flex items-center gap-2 mb-4">
         {Array.from({ length: maxStep }, (_, i) => (
@@ -267,7 +267,7 @@ function CompareMode({ step, isPlaying, run, reset, t }: {
   t: (ko: string, en: string) => string
 }) {
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-4 md:p-6 text-white overflow-hidden">
+    <div className="bg-slate-800 rounded-2xl p-4 md:p-6 text-white overflow-hidden">
       <div className="grid grid-cols-2 gap-3 md:gap-4">
         {/* PROCEDURE side */}
         <div className={cn("rounded-xl p-3 border-2 transition-all duration-500",
@@ -389,7 +389,7 @@ function CompareMode({ step, isPlaying, run, reset, t }: {
       <div className="flex justify-center gap-3 mt-4">
         {step === 0 ? (
           <button onClick={run}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition-all">
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition-all">
             <Play className="w-4 h-4" />
             {t("비교 실행!", "Compare!")}
           </button>

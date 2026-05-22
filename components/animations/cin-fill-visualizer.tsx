@@ -99,7 +99,7 @@ export function CinFillVisualizer({
   const displayI       = current?.kind === "cin_field" ? current.i : null
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl overflow-hidden border border-slate-700/60 shadow-lg">
+    <div className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700/60 shadow-lg">
       {/* Mac-style 헤더 */}
       <div className="flex items-center justify-between px-4 py-3 bg-slate-800/60 border-b border-slate-700/60">
         <div className="flex items-center gap-2">

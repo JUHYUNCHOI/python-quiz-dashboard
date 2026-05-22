@@ -46,7 +46,7 @@ export function MapFactoryVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   }
   
   return (
-    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border-2 border-indigo-200">
+    <div className="bg-purple-50 rounded-2xl p-6 border-2 border-purple-200">
       <div className="text-center mb-6">
         <h3 className="text-xl font-bold text-gray-800 mb-2">{isEn ? "🏭 map() factory" : "🏭 map() 공장"}</h3>
         <p className="text-gray-600">{isEn ? "string → integer conversion!" : "문자열 → 정수 변환!"}</p>
@@ -83,11 +83,11 @@ export function MapFactoryVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               scale: step > 0 && step <= inputItems.length ? [1, 1.1, 1] : 1,
             }}
             transition={{ duration: 0.3 }}
-            className="w-32 h-32 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex flex-col items-center justify-center shadow-xl"
+            className="w-32 h-32 bg-purple-600 rounded-2xl flex flex-col items-center justify-center shadow-xl"
           >
             <Factory className="w-10 h-10 text-white mb-1" />
             <span className="text-white font-bold text-lg">int()</span>
-            <span className="text-indigo-200 text-xs">{isEn ? "Converting..." : "변환 중..."}</span>
+            <span className="text-purple-200 text-xs">{isEn ? "Converting..." : "변환 중..."}</span>
           </motion.div>
           
           {/* 처리 중인 아이템 */}
@@ -157,7 +157,7 @@ export function MapFactoryVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
         <button
           onClick={start}
           disabled={isPlaying}
-          className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-400 text-white font-bold rounded-xl transition-colors"
+          className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-400 text-white font-bold rounded-xl transition-colors"
         >
           <Play className="w-5 h-5" />
           {step === 0 ? (isEn ? "Start!" : "시작!") : (isEn ? "Watch again" : "다시 보기")}
@@ -172,8 +172,8 @@ export function MapFactoryVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
       </div>
       
       {/* 설명 */}
-      <div className="mt-4 bg-indigo-100 rounded-xl p-4">
-        <p className="text-indigo-800 text-sm">
+      <div className="mt-4 bg-purple-100 rounded-xl p-4">
+        <p className="text-purple-800 text-sm">
           <strong>{isEn ? "💡 How map() works:" : "💡 map() 작동 원리:"}</strong><br />
           {isEn ? "1. Takes each element from the list one by one" : "1. 리스트의 각 요소를 하나씩 꺼냄"}<br />
           {isEn ? "2. Converts it with int()" : "2. int() 함수로 변환"}<br />

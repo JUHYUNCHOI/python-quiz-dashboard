@@ -15,28 +15,28 @@ export function LessonFeedbackCard({ feedback, t }: Props) {
   return (
     <div className="space-y-3 animate-fade-in-delay">
       {/* 진도 요약 */}
-      <div className="bg-indigo-50 rounded-2xl p-4">
+      <div className="bg-purple-50 rounded-2xl p-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-bold text-indigo-700">
+          <span className="text-sm font-bold text-purple-700">
             {t("전체 진도", "Overall Progress")}
           </span>
-          <span className="text-xs font-bold text-indigo-500">
+          <span className="text-xs font-bold text-purple-500">
             {feedback.progressSummary.completed}/{feedback.progressSummary.total}
           </span>
         </div>
-        <div className="h-2.5 bg-indigo-200 rounded-full overflow-hidden">
+        <div className="h-2.5 bg-purple-200 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-1000"
+            className="h-full bg-purple-500 rounded-full transition-all duration-1000"
             style={{ width: `${feedback.progressSummary.percentage}%` }}
           />
         </div>
-        <p className="text-xs text-indigo-500 mt-1.5 text-right font-bold">
+        <p className="text-xs text-purple-500 mt-1.5 text-right font-bold">
           {feedback.progressSummary.percentage}%
         </p>
       </div>
 
       {/* 마일스톤 메시지 */}
-      <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl border border-amber-200">
+      <div className="flex items-center gap-3 px-4 py-3 bg-orange-50 rounded-2xl border border-amber-200">
         <span className="text-2xl">{feedback.emoji}</span>
         <p className="text-sm font-bold text-amber-700">
           {t(feedback.headline.ko, feedback.headline.en)}

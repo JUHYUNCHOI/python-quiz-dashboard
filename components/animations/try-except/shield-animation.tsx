@@ -88,7 +88,7 @@ export function ShieldAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
         {phase === 'ready' ? (isEn ? 'Press the button to launch an error!' : '버튼을 눌러 에러를 보내보세요!') : phase === 'attacking' ? (isEn ? '🚀 Error charging!' : '🚀 에러가 돌진해요!') : phase === 'impact' || phase === 'shatter' ? (isEn ? '💥 Bang! except blocked it!' : '💥 쾅! except가 막았어요!') : (isEn ? '🎉 Program continues safely!' : '🎉 프로그램은 안전하게 계속 실행!')}
       </motion.div>
       
-      <button onClick={play} disabled={phase !== 'ready'} className="w-full mt-4 px-5 py-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-300 disabled:text-gray-500 text-white rounded-xl font-black text-lg transition-colors shadow-lg">
+      <button onClick={play} disabled={phase !== 'ready'} className="w-full mt-4 px-5 py-4 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-300 disabled:text-gray-500 text-white rounded-xl font-black text-lg transition-colors shadow-lg">
         {phase === 'ready' ? (isEn ? '💥 Launch error!' : '💥 에러 발사!') : (isEn ? 'In progress...' : '진행 중...')}
       </button>
     </div>

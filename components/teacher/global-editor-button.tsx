@@ -26,7 +26,7 @@ export function GlobalTeacherEditorButton() {
       {/* 플로팅 버튼 — 하단 내비바(bottom-0 ~56px) 위에 오도록 bottom-20 사용 */}
       <button
         onClick={() => setOpen(o => !o)}
-        className="fixed bottom-20 right-4 z-50 flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xl hover:bg-indigo-500 active:scale-95 transition-all"
+        className="fixed bottom-20 right-4 z-50 flex items-center gap-2 rounded-full bg-purple-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xl hover:bg-purple-500 active:scale-95 transition-all"
         title="코딩 에디터 열기"
       >
         {open ? <X size={16} /> : <Code2 size={16} />}

@@ -82,7 +82,7 @@ export function GameCrashDemo({ lang = "ko" }: { lang?: "ko" | "en" }) {
 
       {/* 게임 화면 */}
       <div className={`relative rounded-xl border-2 overflow-hidden transition-all ${
-        phase === 'crash' ? 'border-red-400 bg-gray-900' : 'border-gray-200 bg-gradient-to-b from-indigo-50 to-white'
+        phase === 'crash' ? 'border-red-400 bg-gray-900' : 'border-gray-200 bg-gradient-to-b from-purple-50 to-white'
       }`} style={{ minHeight: 240 }}>
         
         {/* 스코어 */}
@@ -105,7 +105,7 @@ export function GameCrashDemo({ lang = "ko" }: { lang?: "ko" | "en" }) {
             <div className="text-xl font-black text-gray-800">{isEn ? "Number Guessing Game" : "숫자 맞추기 게임"}</div>
             <button
               onClick={startGame}
-              className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors shadow-lg"
+              className="px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold text-lg transition-colors shadow-lg"
             >
               {isEn ? "▶️ Start game!" : "▶️ 게임 시작!"}
             </button>
@@ -220,7 +220,7 @@ export function GameCrashDemo({ lang = "ko" }: { lang?: "ko" | "en" }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 2 }}
           onClick={reset}
-          className="w-full mt-4 px-5 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-lg transition-colors"
+          className="w-full mt-4 px-5 py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-black text-lg transition-colors"
         >
           {isEn ? "🔄 Try again (turn on try-except!)" : "🔄 다시 시도 (try-except 켜보세요!)"}
         </motion.button>

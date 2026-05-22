@@ -395,7 +395,7 @@ export function BlankCodeRunner({
                 focusedBlank === currentBlankId
                   ? "border-amber-400 bg-amber-900/30 text-amber-300 ring-1 ring-amber-400/50"
                   : value
-                    ? "border-indigo-400 bg-indigo-900/30 text-indigo-300"
+                    ? "border-purple-400 bg-purple-900/30 text-purple-300"
                     : "border-gray-500 bg-gray-800 text-gray-500"
               )}
               style={{ minWidth: `${Math.max(answerLength, value.length, 3) + 2}ch` }}
@@ -463,7 +463,7 @@ export function BlankCodeRunner({
                 focusedBlank === currentBlankId
                   ? "border-amber-400 text-amber-300 ring-1 ring-amber-400/50"
                   : value
-                    ? "border-indigo-400 text-indigo-300"
+                    ? "border-purple-400 text-purple-300"
                     : "border-gray-500 text-gray-400"
               )}
               style={{ width: `${Math.max(answerLength, value.length, 3) + 2}ch` }}
@@ -504,8 +504,8 @@ export function BlankCodeRunner({
     <div className="space-y-3">
       {/* 문제 — sticky 로 코드 입력 중에도 항상 보임 (작은 iPad 화면 대응) */}
       {task && !expectedOutput && (
-        <div className="sticky top-[110px] md:top-[120px] z-10 bg-indigo-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
-          <p className="text-indigo-800 font-bold text-sm md:text-base">🎯 {task}</p>
+        <div className="sticky top-[110px] md:top-[120px] z-10 bg-purple-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-purple-200">
+          <p className="text-purple-800 font-bold text-sm md:text-base">🎯 {task}</p>
         </div>
       )}
 
@@ -757,9 +757,9 @@ export function BlankCodeRunner({
       {isCorrect === true && !user && (
         <p className="text-center text-xs text-gray-400">
           {lang === 'ko' ? (
-            <>💾 이 기기에만 저장돼요.{" "}<a href="/login" className="text-indigo-500 hover:text-indigo-700 underline font-medium">로그인</a>하면 어디서든 코드가 저장돼요!</>
+            <>💾 이 기기에만 저장돼요.{" "}<a href="/login" className="text-purple-500 hover:text-purple-700 underline font-medium">로그인</a>하면 어디서든 코드가 저장돼요!</>
           ) : (
-            <>💾 Saved on this device only.{" "}<a href="/login" className="text-indigo-500 hover:text-indigo-700 underline font-medium">Log in</a> to save everywhere!</>
+            <>💾 Saved on this device only.{" "}<a href="/login" className="text-purple-500 hover:text-purple-700 underline font-medium">Log in</a> to save everywhere!</>
           )}
         </p>
       )}

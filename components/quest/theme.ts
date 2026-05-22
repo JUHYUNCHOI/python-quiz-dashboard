@@ -35,7 +35,7 @@ export const C = {
   bessieBg: "#fdf2f8",
   bessieBd: "#fbcfe8",
 
-  // Elsie (teal-green)
+  // Elsie (emerald-green)
   elsie: "#0d9488",
   elsieBg: "#f0fdfa",
   elsieBd: "#99f6e4",

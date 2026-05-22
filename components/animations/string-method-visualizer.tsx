@@ -120,7 +120,7 @@ export default function StringMethodVisualizer({ lang = "ko" }: { lang?: "ko" | 
               className={cn(
                 "flex-1 flex items-center justify-center gap-1.5 py-3.5 text-sm font-bold transition-all",
                 active
-                  ? "bg-indigo-600 text-white"
+                  ? "bg-purple-600 text-white"
                   : "bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
               )}
             >
@@ -163,11 +163,11 @@ export default function StringMethodVisualizer({ lang = "ko" }: { lang?: "ko" | 
                 <div key={i} className="flex flex-col items-center">
                   <div className={cn(
                     "w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl text-base md:text-lg font-bold transition-all",
-                    on ? "bg-indigo-600 text-white shadow-md shadow-indigo-300/50" : "bg-slate-100 text-slate-500"
+                    on ? "bg-purple-600 text-white shadow-md shadow-purple-300/50" : "bg-slate-100 text-slate-500"
                   )}>
                     {ch === " " ? <span className="text-[9px] md:text-[10px] text-slate-400">SPC</span> : ch}
                   </div>
-                  <span className={cn("text-[10px] mt-1 font-mono", on ? "text-indigo-600 font-bold" : "text-slate-400")}>
+                  <span className={cn("text-[10px] mt-1 font-mono", on ? "text-purple-600 font-bold" : "text-slate-400")}>
                     {i}
                   </span>
                 </div>
@@ -206,7 +206,7 @@ export default function StringMethodVisualizer({ lang = "ko" }: { lang?: "ko" | 
               <input
                 type="text" value={findStr} onChange={e => setFindStr(e.target.value)}
                 maxLength={11}
-                className="w-full md:w-40 h-12 md:h-14 text-center text-xl font-mono font-bold rounded-xl border-2 border-slate-200 focus:border-indigo-500 focus:outline-none mx-auto block"
+                className="w-full md:w-40 h-12 md:h-14 text-center text-xl font-mono font-bold rounded-xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none mx-auto block"
               />
             </div>
           )}
@@ -221,7 +221,7 @@ export default function StringMethodVisualizer({ lang = "ko" }: { lang?: "ko" | 
                 <input
                   type="text" value={replaceNewStr} onChange={e => setReplaceNewStr(e.target.value)}
                   maxLength={15}
-                  className="w-24 h-11 text-center text-lg font-mono font-bold rounded-xl border-2 border-slate-200 focus:border-indigo-500 focus:outline-none"
+                  className="w-24 h-11 text-center text-lg font-mono font-bold rounded-xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -291,14 +291,14 @@ function ControlGroup({ label, value, onChange, min, max }: {
       <div className="flex items-center gap-2 md:gap-3">
         <button
           onClick={() => onChange(Math.max(min, value - 1))} disabled={value <= min}
-          className="w-8 h-8 md:w-9 md:h-9 rounded-full border-2 border-slate-300 flex items-center justify-center text-slate-400 hover:border-indigo-400 hover:text-indigo-500 disabled:opacity-30 transition-colors"
+          className="w-8 h-8 md:w-9 md:h-9 rounded-full border-2 border-slate-300 flex items-center justify-center text-slate-400 hover:border-purple-400 hover:text-purple-500 disabled:opacity-30 transition-colors"
         >
           <Minus className="w-3.5 h-3.5 md:w-4 md:h-4" strokeWidth={3} />
         </button>
         <span className="w-7 md:w-8 text-2xl md:text-3xl font-black text-slate-900 tabular-nums text-center">{value}</span>
         <button
           onClick={() => onChange(Math.min(max, value + 1))} disabled={value >= max}
-          className="w-8 h-8 md:w-9 md:h-9 rounded-full border-2 border-slate-300 flex items-center justify-center text-slate-400 hover:border-indigo-400 hover:text-indigo-500 disabled:opacity-30 transition-colors"
+          className="w-8 h-8 md:w-9 md:h-9 rounded-full border-2 border-slate-300 flex items-center justify-center text-slate-400 hover:border-purple-400 hover:text-purple-500 disabled:opacity-30 transition-colors"
         >
           <Plus className="w-3.5 h-3.5 md:w-4 md:h-4" strokeWidth={3} />
         </button>
