@@ -544,6 +544,21 @@ function PortalContent() {
           )
         })()}
 
+        {/* 🗺️ 학습 여정 맵 — 게임 스타일 로드맵 (메인 + 가지) */}
+        <button
+          onClick={() => router.push("/journey")}
+          className="w-full rounded-2xl bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4 hover:shadow-lg active:scale-[0.99] transition-all flex items-center gap-3 text-left"
+        >
+          <span className="text-3xl shrink-0">🗺️</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-base font-black">{t("학습 여정 맵", "Learning Journey Map")}</p>
+            <p className="text-[11px] opacity-90 mt-0.5">
+              {t("문법 → 알고리즘 → USACO — 전체 길 한눈에", "Syntax → Algorithm → USACO at a glance")}
+            </p>
+          </div>
+          <span className="text-2xl shrink-0">→</span>
+        </button>
+
         {/* 빠른 이동 — 항상 표시 (USACO 접근성 ↑ 위해 진도 무관) */}
         <div className="grid grid-cols-3 gap-2">
             {([
