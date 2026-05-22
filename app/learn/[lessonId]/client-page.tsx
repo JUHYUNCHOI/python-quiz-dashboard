@@ -19,6 +19,7 @@ import { useGamification } from "@/hooks/use-gamification"
 import { logActivity } from "@/lib/activity-log"
 import { trackStepVisit } from "@/lib/track-step-visit"
 import { getCompletedLessons, pythonParts, cppParts, pseudoParts, getNextLessonId } from "@/lib/curriculum-data"
+import { getSmartNext } from "@/lib/smart-next"
 import { useAuth } from "@/contexts/auth-context"
 import { useIsOwner } from "@/components/owner-only-guard"
 import { AdSlot } from "@/components/ad-slot"
@@ -942,22 +943,37 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               {/* 다음 레슨 바로 가기 / 트랙 완주 안내 (연습 클러스터 없는 경우) */}
               {!ALL_CLUSTERS.find(c => String(c.unlockAfter) === String(lessonId)) && (() => {
                 const nextId = getNextLessonId(lessonId)
-                // 다음 레슨 있으면 바로 이동 버튼
+                // 다음 레슨 있으면 Smart-Next 정보 (제목/이모지/Part) 노출
                 if (nextId) {
+                  // Smart-Next 로 풍부한 라벨 (예: "📚 8강 f-string · Python · 입력과 출력")
+                  // 완료셋에 현재 레슨도 포함해 다음 추천 계산
+                  const completedNow = getCompletedLessons()
+                  completedNow.add(lessonId)
+                  const smart = getSmartNext(completedNow, currentProgrammingLang)
+                  const isGraduationCTA = (lessonId === "cpp-16" || lessonId === "cpp-ck5")
+                  const isLessonRec = smart.type === "lesson"
+                  const label = isLessonRec
+                    ? `${smart.emoji ?? "▶"} ${lang === "en" ? smart.titleEn : smart.title}`
+                    : t("다음 레슨으로 →", "Next Lesson →")
+                  const subtitle = isLessonRec && smart.subtitle
                   return (
                     <button
-                      onClick={() => { localStorage.removeItem(progressKey); router.push(`/learn/${nextId}`) }}
+                      onClick={() => { localStorage.removeItem(progressKey); router.push(isLessonRec ? smart.href : `/learn/${nextId}`) }}
                       className={cn(
-                        "w-full py-3 rounded-xl font-bold text-base transition-all",
-                        // 메인 트랙 졸업 CTA 가 위에 있으면 다음 레슨 버튼은 secondary 스타일
-                        (lessonId === "cpp-16" || lessonId === "cpp-ck5")
+                        "w-full py-3 rounded-xl font-bold transition-all flex flex-col items-center gap-0.5",
+                        isGraduationCTA
                           ? "bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300"
                           : "bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white"
                       )}
                     >
-                      {(lessonId === "cpp-16" || lessonId === "cpp-ck5")
-                        ? t("그래도 다음 레슨 보기 →", "Or continue to next lesson →")
-                        : t("다음 레슨으로 →", "Next Lesson →")}
+                      <span className="text-base">
+                        {isGraduationCTA
+                          ? t("그래도 다음 레슨 보기 →", "Or continue to next lesson →")
+                          : label}
+                      </span>
+                      {subtitle && !isGraduationCTA && (
+                        <span className="text-[11px] font-medium text-indigo-100/90">{subtitle}</span>
+                      )}
                     </button>
                   )
                 }

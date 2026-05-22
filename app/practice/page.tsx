@@ -9,7 +9,8 @@ import { PracticeRunner } from "@/components/practice/practice-runner"
 import { McqRunner } from "@/components/practice/mcq-runner"
 import { PracticeSession } from "@/components/practice/practice-session"
 import { ALL_CLUSTERS, BANK_CLUSTERS } from "@/data/practice"
-import { getNextLessonId, getLessonName } from "@/lib/curriculum-data"
+import { getNextLessonId, getLessonName, getCompletedLessons } from "@/lib/curriculum-data"
+import { getSmartNext } from "@/lib/smart-next"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
 import { localizeCluster, localizeProblem } from "@/data/practice/types"
 import { getContestLinks, codeQuestUrl, type ContestProblem } from "@/data/practice/contest-links"
@@ -688,6 +689,7 @@ function PracticeContent() {
   const { solvedSet, starredSet, markSolved, markStarred } = usePracticeProgress()
   const { user, profile } = useAuth()
   const isTeacher = profile?.role === "teacher"
+  const { lang: uiLang } = useLanguage()
   const [lang, setLang] = useState<Lang>((searchParams.get("lang") as Lang) || "cpp")
 
   const clusterId = searchParams.get("cluster") || ""
@@ -736,9 +738,24 @@ function PracticeContent() {
 
   // 세션 모드: 클러스터 내 문제를 연속으로 풀기
   if (sessionMode && cluster) {
-    // 이 클러스터 다음 레슨 링크 — 어디서 진입했든 항상 계산
-    const nextLessonId = getNextLessonId(cluster.unlockAfter)
-    const nextLessonHref = nextLessonId ? `/learn/${nextLessonId}` : undefined
+    // Smart-Next 기반 다음 활동 — 단순히 "다음 레슨" 보다 풍부 (Part / 이모지 / 트랙 졸업)
+    const completedNow = getCompletedLessons()
+    // 이 클러스터를 푼 직후 추천이라고 가정 → unlockAfter 레슨까지는 완료 처리
+    completedNow.add(cluster.unlockAfter)
+    const clusterLang: "python" | "cpp" | "pseudo" =
+      String(cluster.unlockAfter).startsWith("cpp") ? "cpp"
+      : String(cluster.unlockAfter).startsWith("pseudo") || String(cluster.unlockAfter).startsWith("igcse") ? "pseudo"
+      : "python"
+    const smart = getSmartNext(completedNow, clusterLang)
+    // 레슨 추천일 때만 풍부 라벨 사용 (algo / complete 는 폴백)
+    const isLessonRec = smart.type === "lesson"
+    const nextLessonHref = isLessonRec
+      ? smart.href
+      : (getNextLessonId(cluster.unlockAfter) ? `/learn/${getNextLessonId(cluster.unlockAfter)}` : undefined)
+    const nextLessonLabel = isLessonRec
+      ? `${smart.emoji ?? "▶"} ${uiLang === "en" ? smart.titleEn : smart.title}`
+      : undefined
+    const nextLessonSubtitle = isLessonRec ? smart.subtitle : undefined
 
     return (
       <PracticeSession
@@ -750,6 +767,8 @@ function PracticeContent() {
         userId={user?.id}
         isTeacher={isTeacher}
         nextLessonHref={nextLessonHref}
+        nextLessonLabel={nextLessonLabel}
+        nextLessonSubtitle={nextLessonSubtitle}
       />
     )
   }

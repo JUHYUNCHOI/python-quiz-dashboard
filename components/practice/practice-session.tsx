@@ -107,6 +107,8 @@ function RoundResult({
   wrongNums,
   teacherAssigned,
   nextLessonHref,
+  nextLessonLabel,
+  nextLessonSubtitle,
   onRetryWrong,
   onDone,
 }: {
@@ -116,6 +118,10 @@ function RoundResult({
   wrongNums: number[]
   teacherAssigned: boolean
   nextLessonHref?: string
+  /** Smart-Next 가 제공한 풍부한 라벨 (예: "📚 8강 f-string"). 없으면 "다음 레슨으로 →" 폴백. */
+  nextLessonLabel?: string
+  /** 부제 (예: "Python · 입력과 출력") */
+  nextLessonSubtitle?: string
   onRetryWrong: () => void
   onDone: () => void
 }) {
@@ -212,9 +218,12 @@ function RoundResult({
         {setNum === 1 && isGood && nextLessonHref && (
           <a
             href={nextLessonHref}
-            className="w-full py-3.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors text-center block"
+            className="w-full py-3.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors text-center flex flex-col items-center gap-0.5"
           >
-            {t("다음 레슨으로 →", "Next Lesson →")}
+            <span>{nextLessonLabel ?? t("다음 레슨으로 →", "Next Lesson →")}</span>
+            {nextLessonSubtitle && (
+              <span className="text-[11px] font-medium text-indigo-100/90">{nextLessonSubtitle}</span>
+            )}
           </a>
         )}
 
@@ -259,6 +268,10 @@ interface PracticeSessionProps {
   isTeacher?: boolean
   /** 레슨 완료 직후 진입한 경우 — SET 1 완료 시 "다음 레슨으로" 버튼 표시 */
   nextLessonHref?: string
+  /** Smart-Next 추천 라벨 (예: "📚 8강 f-string"). 없으면 폴백. */
+  nextLessonLabel?: string
+  /** Smart-Next 추천 부제 (예: "Python · Part 2") */
+  nextLessonSubtitle?: string
 }
 
 type Phase = "loading" | "intro" | "solving" | "round_complete" | "done"
@@ -272,6 +285,8 @@ export function PracticeSession({
   userId,
   isTeacher = false,
   nextLessonHref,
+  nextLessonLabel,
+  nextLessonSubtitle,
 }: PracticeSessionProps) {
   const { t, lang } = useLanguage()
   const [phase, setPhase] = useState<Phase>("loading")
@@ -644,6 +659,8 @@ export function PracticeSession({
           wrongNums={wrongNums}
           teacherAssigned={!!teacherAssignedId}
           nextLessonHref={nextLessonHref}
+          nextLessonLabel={nextLessonLabel}
+          nextLessonSubtitle={nextLessonSubtitle}
           onRetryWrong={handleRetryWrong}
           onDone={handleOptOut}
         />
