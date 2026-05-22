@@ -13,35 +13,156 @@ import {
   getStageProgress,
   hasCppTrackProgress,
   type JourneyStage,
-  type StageStatus,
 } from "@/lib/journey-stages"
-import { CheckCircle2, ChevronRight, Lock, Sparkles } from "lucide-react"
 
-const RANK_COLORS: Record<string, { bg: string; border: string; text: string; ring: string }> = {
-  bronze: { bg: "bg-amber-50",   border: "border-amber-300",  text: "text-amber-700",   ring: "ring-amber-300" },
-  silver: { bg: "bg-slate-50",   border: "border-slate-300",  text: "text-slate-600",   ring: "ring-slate-300" },
-  gold:   { bg: "bg-yellow-50",  border: "border-yellow-300", text: "text-yellow-700",  ring: "ring-yellow-300" },
-  master: { bg: "bg-purple-50",  border: "border-purple-300", text: "text-purple-700",  ring: "ring-purple-300" },
-  bridge: { bg: "bg-emerald-50", border: "border-emerald-300",text: "text-emerald-700", ring: "ring-emerald-300" },
+// ── 노드 시각 스타일 (테마별) ───────────────────────────────────────
+const RANK_THEME: Record<string, { ring: string; bg: string; shadow: string; text: string }> = {
+  bronze: { ring: "ring-amber-400",  bg: "bg-gradient-to-br from-amber-300 to-amber-500",   shadow: "shadow-amber-300/60",  text: "text-amber-900"  },
+  silver: { ring: "ring-slate-400",  bg: "bg-gradient-to-br from-slate-300 to-slate-500",   shadow: "shadow-slate-300/60",  text: "text-slate-900"  },
+  gold:   { ring: "ring-yellow-400", bg: "bg-gradient-to-br from-yellow-300 to-yellow-500", shadow: "shadow-yellow-300/60", text: "text-yellow-900" },
+  master: { ring: "ring-purple-400", bg: "bg-gradient-to-br from-purple-400 to-purple-600", shadow: "shadow-purple-300/60", text: "text-purple-50"  },
+  bridge: { ring: "ring-emerald-400",bg: "bg-gradient-to-br from-emerald-300 to-emerald-500",shadow: "shadow-emerald-300/60",text: "text-emerald-900"},
 }
 
-const STATUS_BADGE: Record<StageStatus, { label: string; labelEn: string; color: string }> = {
-  "locked":      { label: "잠김",     labelEn: "Locked",     color: "bg-gray-200 text-gray-500" },
-  "available":   { label: "시작",     labelEn: "Start",      color: "bg-orange-500 text-white" },
-  "in-progress": { label: "진행 중",  labelEn: "In Progress",color: "bg-blue-500 text-white animate-pulse" },
-  "completed":   { label: "완료",     labelEn: "Done",       color: "bg-green-500 text-white" },
+// ── 큰 원형 노드 (메달리온) ──────────────────────────────────────
+function StageMedallion({
+  stage,
+  progress,
+  isActive,
+  isMain,
+}: {
+  stage: JourneyStage
+  progress: { done: number; total: number; pct: number; status: string }
+  isActive: boolean
+  isMain: boolean
+}) {
+  const { t, lang } = useLanguage()
+  const theme = RANK_THEME[stage.rank]
+  const isDone = progress.status === "completed"
+  const size = isMain ? "w-32 h-32 sm:w-36 sm:h-36" : "w-20 h-20"  // 가지는 작게
+
+  return (
+    <Link
+      href={stage.href}
+      className={cn("group relative inline-block transition-transform duration-200 hover:scale-110 active:scale-95")}
+    >
+      {/* "여기!" 말풍선 + 학생 아바타 — 현재 진행 중 노드 */}
+      {isActive && (
+        <div className="absolute -top-16 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-0.5 pointer-events-none">
+          <div className="bg-white rounded-2xl px-2.5 py-1 shadow-lg border border-orange-300 text-[10px] font-black text-orange-600 whitespace-nowrap animate-bounce">
+            ▶ {t("너 여기!", "You're here!")}
+          </div>
+          <span className="text-4xl drop-shadow-md">🦒</span>
+        </div>
+      )}
+
+      {/* 펄스 링 — 활성 노드만 */}
+      {isActive && (
+        <span className={cn(
+          "absolute inset-0 rounded-full ring-4 ring-offset-4 animate-pulse",
+          theme.ring,
+        )} aria-hidden />
+      )}
+
+      {/* 메달리온 본체 */}
+      <div className={cn(
+        "relative rounded-full flex items-center justify-center shadow-2xl border-4 border-white",
+        size,
+        theme.bg, theme.shadow,
+        isDone && "ring-4 ring-yellow-400 ring-offset-2",
+      )}>
+        {/* 이모지 */}
+        <span className={cn(
+          isMain ? "text-5xl sm:text-6xl" : "text-3xl",
+          "drop-shadow-md filter",
+        )}>
+          {isDone ? "✅" : stage.emoji}
+        </span>
+
+        {/* 완료 별 — 메달리온 오른쪽 위 */}
+        {isDone && (
+          <span className="absolute -top-1 -right-1 text-2xl drop-shadow-md">⭐</span>
+        )}
+
+        {/* 진도 — 메달리온 아래 작은 배지 */}
+        {!isDone && progress.total > 0 && progress.done > 0 && (
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-white rounded-full shadow-md border border-gray-200">
+            <span className="text-[9px] font-black text-gray-700 tabular-nums">
+              {progress.done}/{progress.total}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* 노드 아래 제목 */}
+      <div className="mt-3 text-center max-w-[140px] mx-auto">
+        <p className="text-xs sm:text-sm font-black text-gray-900 leading-tight">
+          {lang === "en" ? stage.titleEn : stage.title}
+        </p>
+        <p className={cn(
+          "text-[10px] font-bold mt-0.5 uppercase tracking-wider",
+          stage.rank === "bronze" ? "text-amber-700" :
+          stage.rank === "silver" ? "text-slate-600" :
+          stage.rank === "gold" ? "text-yellow-700" :
+          stage.rank === "master" ? "text-purple-700" :
+          "text-emerald-700",
+        )}>
+          {stage.rank === "bridge" ? t("다리", "Bridge") : stage.rank}
+        </p>
+      </div>
+    </Link>
+  )
+}
+
+// ── 곡선 path SVG 조각 (지그재그 연결) ────────────────────────────
+function CurvedConnector({ direction }: { direction: "left-to-right" | "right-to-left" }) {
+  // 두 노드 사이를 잇는 곡선 — 한쪽에서 다른 쪽으로 zigzag
+  const path = direction === "left-to-right"
+    ? "M 30 0 Q 30 60, 50 70 Q 70 80, 70 120"
+    : "M 70 0 Q 70 60, 50 70 Q 30 80, 30 120"
+  return (
+    <svg className="w-full h-20 sm:h-24" viewBox="0 0 100 120" preserveAspectRatio="none" aria-hidden>
+      <path d={path} stroke="#d1d5db" strokeWidth="3" strokeDasharray="6 6" fill="none" strokeLinecap="round" />
+      {/* 작은 발자국 (별) 따라 */}
+      <circle cx="50" cy="70" r="3" fill="#fbbf24" />
+    </svg>
+  )
+}
+
+// ── 가지 path (메인 노드 → 가지 노드) ──────────────────────────────
+function BranchConnector() {
+  return (
+    <svg className="w-16 h-1 inline-block" viewBox="0 0 64 4" preserveAspectRatio="none" aria-hidden>
+      <line x1="0" y1="2" x2="64" y2="2" stroke="#d1d5db" strokeWidth="2" strokeDasharray="4 4" />
+    </svg>
+  )
+}
+
+// ── 데코레이션 배경 (별, 구름 등) ───────────────────────────────────
+function BackgroundDecorations() {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      <span className="absolute top-10 left-4 text-2xl opacity-30">⭐</span>
+      <span className="absolute top-32 right-8 text-3xl opacity-25">☁️</span>
+      <span className="absolute top-60 left-8 text-xl opacity-30">✨</span>
+      <span className="absolute top-96 right-4 text-2xl opacity-25">⭐</span>
+      <span className="absolute top-[700px] left-6 text-3xl opacity-25">☁️</span>
+      <span className="absolute top-[900px] right-10 text-2xl opacity-30">✨</span>
+      <span className="absolute top-[1200px] left-4 text-3xl opacity-25">⭐</span>
+      <span className="absolute top-[1500px] right-8 text-2xl opacity-30">☁️</span>
+      <span className="absolute top-[1800px] left-8 text-2xl opacity-25">✨</span>
+    </div>
+  )
 }
 
 export default function JourneyPage() {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const { user, isAuthenticated } = useAuth()
   const [completedIds, setCompletedIds] = useState<Set<string | number>>(new Set())
-  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     let cancelled = false
     async function load() {
-      // localStorage 즉시 로드
       try {
         const raw = localStorage.getItem("completedLessons")
         if (raw) {
@@ -49,8 +170,6 @@ export default function JourneyPage() {
           if (Array.isArray(arr)) setCompletedIds(new Set(arr))
         }
       } catch {}
-
-      // Supabase 백그라운드 로드
       if (isAuthenticated && user) {
         const supabase = createClient()
         const { data } = await supabase
@@ -67,15 +186,12 @@ export default function JourneyPage() {
           })
         }
       }
-      if (!cancelled) setLoaded(true)
     }
     load()
     return () => { cancelled = true }
   }, [isAuthenticated, user])
 
   const hasCpp = hasCppTrackProgress(completedIds)
-
-  // 메인 / 가지 분리
   const mainStages = JOURNEY_STAGES.filter(s => s.type === "main")
   const branchesByMain: Record<string, JourneyStage[]> = {}
   for (const s of JOURNEY_STAGES.filter(s => s.type === "branch")) {
@@ -84,7 +200,7 @@ export default function JourneyPage() {
     branchesByMain[s.branchOf].push(s)
   }
 
-  // 현재 활성 스테이지 — 첫 번째 in-progress 또는 available
+  // 현재 활성 스테이지
   let activeStageId: string | null = null
   for (const s of mainStages) {
     const p = getStageProgress(s, completedIds, hasCpp)
@@ -92,210 +208,116 @@ export default function JourneyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-purple-50 pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-sky-100 via-amber-50 to-purple-100 pb-32 relative overflow-hidden">
+      <BackgroundDecorations />
       <Header />
 
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 pt-6">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 pt-6 relative">
         {/* 헤더 */}
-        <div className="text-center mb-8">
-          <div className="text-5xl mb-2">🗺️</div>
-          <h1 className="text-3xl font-black text-gray-900">{t("나의 학습 여정", "My Journey")}</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            {t("문법 → 알고리즘 → USACO 까지 가는 길", "From syntax to algorithms to USACO")}
+        <div className="text-center mb-8 relative z-10">
+          <div className="inline-block px-4 py-1.5 bg-white rounded-full shadow-md border-2 border-amber-300 mb-3">
+            <span className="text-sm font-black text-amber-700">🗺️ {t("학습 여정 맵", "Journey Map")}</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-black text-gray-900 leading-tight">
+            {t("문법부터 USACO 정상까지", "From Syntax to USACO Summit")}
+          </h1>
+          <p className="text-xs sm:text-sm text-gray-600 mt-1">
+            {t("아래로 내려가며 모험을 완성하세요", "Adventure begins — scroll down")}
           </p>
           {hasCpp && (
-            <p className="text-xs text-emerald-600 font-semibold mt-2">
-              ✅ {t("C++ 트랙 학생 — Python 단계 자동 완료", "C++ track — Python stages auto-completed")}
+            <p className="text-[11px] text-emerald-700 font-bold mt-2 inline-block px-2.5 py-0.5 bg-emerald-50 rounded-full border border-emerald-300">
+              ✅ {t("C++ 트랙 — Python 단계 자동 완료", "C++ track — Python auto-completed")}
             </p>
           )}
         </div>
 
-        {/* 로드맵 */}
-        <div className="relative">
-          {/* 메인 spine — 노드 사이 세로 점선 */}
-          <div className="flex flex-col items-center gap-4">
-            {mainStages.map((stage, idx) => {
-              const progress = getStageProgress(stage, completedIds, hasCpp)
-              const isActive = stage.id === activeStageId
-              const branches = branchesByMain[stage.id] ?? []
-              const isLast = idx === mainStages.length - 1
-              const rank = RANK_COLORS[stage.rank]
-              const status = STATUS_BADGE[progress.status]
+        {/* 지그재그 로드맵 */}
+        <div className="relative z-10">
+          {mainStages.map((stage, idx) => {
+            const progress = getStageProgress(stage, completedIds, hasCpp)
+            const isActive = stage.id === activeStageId
+            const branches = branchesByMain[stage.id] ?? []
+            const isLeftSide = idx % 2 === 0
+            const isLast = idx === mainStages.length - 1
 
-              return (
-                <div key={stage.id} className="w-full flex flex-col items-center">
-                  {/* 메인 노드 + 가지 (가로 정렬) */}
-                  <div className="w-full flex items-center justify-center gap-3 relative">
-                    {/* 메인 스테이지 카드 */}
-                    <Link
-                      href={stage.href}
-                      className={cn(
-                        "flex-1 max-w-md block rounded-2xl border-2 p-4 sm:p-5 transition-all relative",
-                        rank.bg, rank.border,
-                        "hover:shadow-lg hover:scale-[1.02] active:scale-[0.99]",
-                        isActive && "ring-4 ring-offset-2 shadow-xl",
-                        isActive && rank.ring,
-                        progress.status === "completed" && "opacity-90",
-                      )}
-                    >
-                      {/* "여기!" 인디케이터 */}
-                      {isActive && progress.status !== "completed" && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-orange-500 text-white text-[10px] font-black rounded-full shadow-md whitespace-nowrap">
-                          ▶ {t("여기!", "You are here!")}
-                        </div>
-                      )}
-
-                      <div className="flex items-start gap-3">
-                        {/* 큰 이모지 — 게임 노드 느낌 */}
-                        <div className={cn(
-                          "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl shrink-0 border-2",
-                          progress.status === "completed" ? "bg-green-100 border-green-300" : `bg-white ${rank.border}`,
-                        )}>
-                          {progress.status === "completed" ? "✅" : stage.emoji}
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          {/* 제목 + 상태 배지 */}
-                          <div className="flex items-center gap-2 flex-wrap mb-1">
-                            <h3 className="text-base sm:text-lg font-black text-gray-900">
-                              {lang === "en" ? stage.titleEn : stage.title}
-                            </h3>
-                            <span className={cn(
-                              "text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide",
-                              rank.bg, rank.text, "border", rank.border,
-                            )}>
-                              {stage.rank}
-                            </span>
-                            <span className={cn(
-                              "text-[10px] font-bold px-2 py-0.5 rounded-full",
-                              status.color,
-                            )}>
-                              {t(status.label, status.labelEn)}
-                            </span>
+            return (
+              <div key={stage.id}>
+                {/* 메인 노드 줄 — 좌/우 alternating */}
+                <div className={cn(
+                  "flex items-start gap-2 sm:gap-4 my-4",
+                  isLeftSide ? "justify-start pl-2 sm:pl-8" : "justify-end pr-2 sm:pr-8",
+                )}>
+                  {/* 좌측 정렬일 때: [노드] [가지들] */}
+                  {isLeftSide ? (
+                    <>
+                      <StageMedallion stage={stage} progress={progress} isActive={isActive} isMain />
+                      {branches.length > 0 && (
+                        <div className="flex items-start pt-12 sm:pt-14">
+                          <BranchConnector />
+                          <div className="flex flex-col gap-3 items-start">
+                            {branches.map(br => {
+                              const bp = getStageProgress(br, completedIds, hasCpp)
+                              return (
+                                <StageMedallion key={br.id} stage={br} progress={bp} isActive={false} isMain={false} />
+                              )
+                            })}
                           </div>
-                          <p className="text-xs text-gray-600 mb-2">
-                            {lang === "en" ? stage.descriptionEn : stage.description}
-                          </p>
-
-                          {/* 진도 바 */}
-                          {progress.total > 0 && (
-                            <div className="flex items-center gap-2">
-                              <div className="flex-1 h-1.5 bg-white/80 rounded-full overflow-hidden border border-gray-200">
-                                <div
-                                  className={cn(
-                                    "h-full transition-all duration-500",
-                                    progress.status === "completed" ? "bg-green-500" : "bg-orange-500",
-                                  )}
-                                  style={{ width: `${progress.pct}%` }}
-                                />
-                              </div>
-                              <span className="text-[10px] font-bold text-gray-500 tabular-nums shrink-0">
-                                {progress.done}/{progress.total}
-                              </span>
-                            </div>
-                          )}
                         </div>
-
-                        <ChevronRight className="w-5 h-5 text-gray-400 shrink-0 self-center" />
-                      </div>
-                    </Link>
-
-                    {/* 가지 (오른쪽에 작게) */}
-                    {branches.length > 0 && (
-                      <div className="hidden md:flex flex-col gap-2 absolute left-full top-1/2 -translate-y-1/2 ml-4 w-[200px]">
-                        {/* 분기 라벨 */}
-                        <span className="text-[10px] font-bold text-gray-400 -mb-1 ml-1">
-                          ↳ {t("가지", "Branch")}
-                        </span>
-                        {branches.map(br => {
-                          const bp = getStageProgress(br, completedIds, hasCpp)
-                          const bRank = RANK_COLORS[br.rank]
-                          return (
-                            <Link
-                              key={br.id}
-                              href={br.href}
-                              className={cn(
-                                "block rounded-xl border-2 border-dashed p-2.5 text-xs transition-all hover:scale-105 hover:shadow-md",
-                                bRank.bg, bRank.border,
-                              )}
-                            >
-                              <div className="flex items-center gap-1.5 mb-0.5">
-                                <span className="text-lg">{br.emoji}</span>
-                                <span className="font-bold text-gray-900 text-xs">
-                                  {lang === "en" ? br.titleEn : br.title}
-                                </span>
-                              </div>
-                              <p className="text-[10px] text-gray-500 leading-tight">
-                                {lang === "en" ? br.descriptionEn : br.description}
-                              </p>
-                              {bp.total > 0 && (
-                                <p className="text-[9px] text-gray-400 mt-1 tabular-nums">
-                                  {bp.done}/{bp.total} ({bp.pct}%)
-                                </p>
-                              )}
-                            </Link>
-                          )
-                        })}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 모바일용 가지 — 메인 아래 inline */}
-                  {branches.length > 0 && (
-                    <div className="md:hidden w-full max-w-md mt-2 pl-8 space-y-2 relative">
-                      <span className="text-[10px] font-bold text-gray-400">↳ {t("가지", "Branch")}</span>
-                      {branches.map(br => {
-                        const bp = getStageProgress(br, completedIds, hasCpp)
-                        const bRank = RANK_COLORS[br.rank]
-                        return (
-                          <Link
-                            key={br.id}
-                            href={br.href}
-                            className={cn(
-                              "block rounded-xl border-2 border-dashed p-2.5 transition-all",
-                              bRank.bg, bRank.border,
-                            )}
-                          >
-                            <div className="flex items-center gap-2">
-                              <span className="text-2xl">{br.emoji}</span>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-xs font-bold text-gray-900">
-                                  {lang === "en" ? br.titleEn : br.title}
-                                </p>
-                                <p className="text-[10px] text-gray-500 leading-tight">
-                                  {lang === "en" ? br.descriptionEn : br.description}
-                                </p>
-                              </div>
-                              {bp.total > 0 && (
-                                <span className="text-[10px] font-bold text-gray-400 tabular-nums">
-                                  {bp.done}/{bp.total}
-                                </span>
-                              )}
-                            </div>
-                          </Link>
-                        )
-                      })}
-                    </div>
-                  )}
-
-                  {/* 메인 노드 사이 점선 */}
-                  {!isLast && (
-                    <div className="h-6 w-0.5 border-l-2 border-dashed border-gray-300 my-1" />
+                      )}
+                    </>
+                  ) : (
+                    /* 우측 정렬일 때: [가지들] [노드] */
+                    <>
+                      {branches.length > 0 && (
+                        <div className="flex items-start pt-12 sm:pt-14 flex-row-reverse">
+                          <BranchConnector />
+                          <div className="flex flex-col gap-3 items-end">
+                            {branches.map(br => {
+                              const bp = getStageProgress(br, completedIds, hasCpp)
+                              return (
+                                <StageMedallion key={br.id} stage={br} progress={bp} isActive={false} isMain={false} />
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )}
+                      <StageMedallion stage={stage} progress={progress} isActive={isActive} isMain />
+                    </>
                   )}
                 </div>
-              )
-            })}
+
+                {/* 노드 사이 곡선 path */}
+                {!isLast && (
+                  <div className="flex justify-center">
+                    <CurvedConnector direction={isLeftSide ? "left-to-right" : "right-to-left"} />
+                  </div>
+                )}
+              </div>
+            )
+          })}
+
+          {/* 마지막 정상 깃발 */}
+          <div className="text-center mt-8 relative z-10">
+            <div className="inline-block">
+              <span className="text-6xl drop-shadow-lg">🏔️</span>
+              <p className="text-sm font-black text-gray-900 mt-1">{t("USACO 정상!", "USACO Summit!")}</p>
+            </div>
           </div>
         </div>
 
-        {/* 안내 */}
-        <div className="mt-12 text-center">
-          <p className="text-xs text-gray-400 leading-relaxed">
-            {t(
-              "💡 모든 단계 자유롭게 클릭 가능 — 추천 순서일 뿐이에요",
-              "💡 All stages are clickable — this is just the recommended path",
-            )}
-          </p>
+        {/* 푯말 안내 */}
+        <div className="mt-12 mx-auto max-w-md relative z-10">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 border-2 border-amber-200 shadow-md text-center">
+            <p className="text-xs font-bold text-gray-700">
+              💡 {t("모든 단계 자유롭게 클릭 가능", "All stages clickable freely")}
+            </p>
+            <p className="text-[11px] text-gray-500 mt-1">
+              {t(
+                "메인은 추천 순서. 가지 (점선 노드) 는 사이드 퀘스트 — 필요할 때 들러도 OK",
+                "Main is recommended order. Branches are side quests — visit when needed",
+              )}
+            </p>
+          </div>
         </div>
       </main>
 
