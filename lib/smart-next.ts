@@ -16,6 +16,7 @@ import { ALGO_TOPICS } from "@/data/algo/topics"
 export type SmartNextType =
   | "lesson"           // 다음 레슨 학습
   | "practice"         // Part 도전 클러스터
+  | "coding-bank"      // 코딩 뱅크 (문법 → 알고리즘 다리)
   | "algo-topic"       // 알고리즘 토픽
   | "quest"            // USACO quest
   | "complete"         // 다 끝남 (마스터)
@@ -53,11 +54,50 @@ const TRACKS: Record<"python" | "cpp" | "pseudo", Track> = {
  *   4. 모든 Python Part 완료 → 알고리즘 추천
  *   5. 알고리즘 어느 정도 완료 → quest 추천
  */
+/**
+ * 클라이언트에서만 호출되는 코딩 뱅크 진행도 조회. 서버 SSR 에선 0 반환.
+ */
+function getCodingBankSolvedCount(): number {
+  if (typeof window === "undefined") return 0
+  try {
+    const raw = localStorage.getItem("coding-bank-solved")
+    if (!raw) return 0
+    const arr = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.length : 0
+  } catch {
+    return 0
+  }
+}
+
+const CODING_BANK_THRESHOLD = 5  // 5개 풀면 코딩 뱅크 "충분히 했음" 으로 보고 알고리즘 추천
+
 export function getSmartNext(
   completedIds: Set<string | number>,
   preferredTrack: "python" | "cpp" | "pseudo" = "python"
 ): SmartNextResult {
   const track = TRACKS[preferredTrack]
+
+  // 🌉 다리 1: C++ 메인 트랙 (cpp-16) 완료 → 코딩 뱅크 추천
+  // cpp-17/18/19/20 은 참고용이라 Smart-Next 가 강제 추천하지 않음.
+  // 코딩 뱅크 5문제 풀면 다음 단계 (알고리즘) 로 넘어감.
+  if (preferredTrack === "cpp" && (completedIds.has("cpp-16") || completedIds.has("cpp-p3"))) {
+    const bankSolved = getCodingBankSolvedCount()
+    if (bankSolved < CODING_BANK_THRESHOLD) {
+      return {
+        type: "coding-bank",
+        title: bankSolved > 0
+          ? `코딩 뱅크 (${bankSolved}/${CODING_BANK_THRESHOLD})`
+          : "코딩 뱅크 — 알고리즘 가기 전",
+        titleEn: bankSolved > 0
+          ? `Coding Bank (${bankSolved}/${CODING_BANK_THRESHOLD})`
+          : "Coding Bank — Before Algorithm",
+        href: "/coding-bank",
+        subtitle: "문법 → 실전 감각 — 알고리즘 가기 전 워밍업",
+        emoji: "🌟",
+        reason: "cpp-16 완료, 알고리즘 입문 전 코딩 뱅크 다리",
+      }
+    }
+  }
 
   // 1. 트랙 안에서 첫 미완료 Part 찾기
   for (const part of track.parts) {
