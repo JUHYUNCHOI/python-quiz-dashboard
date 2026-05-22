@@ -12,6 +12,8 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { ALL_CLUSTERS } from "@/data/practice"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
+import { getRankForPart, getStudentTrackRank, RANKS, type RankInfo } from "@/lib/curriculum-ranks"
+import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import {
   CheckCircle2,
   Circle,
@@ -880,6 +882,23 @@ export default function CurriculumPage() {
                   <h1 className="text-2xl sm:text-3xl font-bold">
                     {isPseudo ? t("IGCSE 0478 마스터", "IGCSE 0478 Master") : isCpp ? t("C++ 기초 (파이썬 → C++)", "C++ Basics (Python → C++)") : t("파이썬 기초 마스터", "Python Basics Master")}
                   </h1>
+                  {/* 현재 트랙 랭크 — Bronze/Silver/Gold/Master */}
+                  {(() => {
+                    const trackParts = isPseudo ? pseudoParts : isCpp ? cppParts : pythonParts
+                    const rank = getStudentTrackRank(completedLessons, trackParts)
+                    if (!rank) return null
+                    return (
+                      <div className="mt-1.5 mb-1">
+                        <span className={cn(
+                          "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold border",
+                          rank.bg, rank.color, rank.border
+                        )}>
+                          <span className="text-base">{rank.emoji}</span>
+                          <span>{t(`${rank.label} 랭크`, `${rank.labelEn} Rank`)}</span>
+                        </span>
+                      </div>
+                    )
+                  })()}
                   <p className="text-gray-600 text-sm sm:text-base">
                     {isPseudo ? t("수도코드, SQL, Logic Gates까지! 📄", "Pseudocode, SQL, Logic Gates & more! 📄") : isCpp ? t("파이썬을 아는 학생을 위한 C++ 입문! ⚡", "C++ for Python students! ⚡") : t("웹에서 바로 배우는 파이썬! 🚀", "Learn Python on the web! 🚀")}
                   </p>
@@ -1383,6 +1402,19 @@ export default function CurriculumPage() {
                     <div className="flex-1 text-left">
                       <div className="flex items-center gap-2 flex-wrap">
                         <h2 className="text-lg sm:text-xl font-bold text-gray-900">{part.title}</h2>
+                        {(() => {
+                          const rank = getRankForPart(part.id)
+                          if (!rank) return null
+                          return (
+                            <span className={cn(
+                              "px-2 py-0.5 rounded-full text-[11px] font-bold border inline-flex items-center gap-1",
+                              rank.bg, rank.color, rank.border
+                            )}>
+                              <span>{rank.emoji}</span>
+                              <span>{t(rank.label, rank.labelEn)}</span>
+                            </span>
+                          )
+                        })()}
                         {isComingSoon && (
                           <span className="px-2 py-0.5 bg-gray-200 text-gray-600 rounded-full text-xs font-bold">
                             {t("준비중", "Coming Soon")}

@@ -11,6 +11,8 @@ import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { getSmartNext, getPreferredTrack } from "@/lib/smart-next"
 import { useLanguage } from "@/contexts/language-context"
 import { useIsOwner } from "@/components/owner-only-guard"
+import { getLevelTitle } from "@/hooks/use-gamification"
+import { getStudentTrackRank } from "@/lib/curriculum-ranks"
 
 // ─── 플랫폼 URL 설정 ─────────────────────────────────────────────────
 const ALGORITHM_URL = process.env.NEXT_PUBLIC_ALGORITHM_URL || "http://localhost:8080"
@@ -463,39 +465,84 @@ function PortalContent() {
             모바일에서는 학습 여정 패널이 먼저 보이도록 order 조정 (lg 이상은 원래 순서). */}
         <div className="lg:w-[380px] lg:flex-shrink-0 space-y-4 order-2 lg:order-1">
 
-        {/* 인사 + 스탯 */}
-        <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-5 text-white">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-2xl">🦒</span>
-            <span className="text-sm font-semibold opacity-80">{t("코드린 포털", "Coderin Portal")}</span>
-          </div>
-          <h1 className="text-2xl font-black">
-            {name ? t(`안녕하세요, ${name}님!`, `Hello, ${name}!`) : t("안녕하세요!", "Hello!")}
-          </h1>
-          <p className="text-sm opacity-75 mt-0.5">{trackLabel}</p>
-          <div className="flex gap-4 mt-4">
-            <div className="bg-white/20 rounded-xl px-3 py-2 text-center">
-              <p className="text-xl font-black">{xp.toLocaleString()}</p>
-              <p className="text-[11px] opacity-75">XP</p>
-            </div>
-            <div className="bg-white/20 rounded-xl px-3 py-2 text-center">
-              <p className="text-xl font-black">🔥 {streak}</p>
-              <p className="text-[11px] opacity-75">{t("연속 학습", "Streak")}</p>
-            </div>
-            {cqCount > 0 && (
-              <div className="bg-white/20 rounded-xl px-3 py-2 text-center">
-                <p className="text-xl font-black">🏆 {cqCount}</p>
-                <p className="text-[11px] opacity-75">{t("대회 문제", "Contest")}</p>
+        {/* 인사 + 스탯 + 레벨/칭호 + 트랙 랭크 */}
+        {(() => {
+          const level = Math.floor(xp / 100) + 1
+          const xpInLevel = xp % 100
+          const titleInfo = getLevelTitle(level)
+          // 학생의 주력 트랙 랭크 (Bronze/Silver/Gold/Master)
+          const localTrack = getPreferredTrack(completedIds)
+          const trackParts = localTrack === "cpp" ? cppParts : localTrack === "pseudo" ? pseudoParts : pythonParts
+          const trackRank = getStudentTrackRank(completedIds, trackParts)
+          return (
+            <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-5 text-white">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-2xl">🦒</span>
+                <span className="text-sm font-semibold opacity-80">{t("코드린 포털", "Coderin Portal")}</span>
               </div>
-            )}
-          </div>
-          <button
-            onClick={() => router.push("/analytics")}
-            className="mt-3 text-[11px] font-semibold text-white/70 hover:text-white transition-colors underline underline-offset-2"
-          >
-            📊 {t("학습 분석 자세히 보기 →", "View Learning Analytics →")}
-          </button>
-        </div>
+              <h1 className="text-2xl font-black">
+                {name ? t(`안녕하세요, ${name}님!`, `Hello, ${name}!`) : t("안녕하세요!", "Hello!")}
+              </h1>
+
+              {/* 큰 레벨/칭호 표시 — 학생들이 좋아하는 핵심 위젯 */}
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-2 bg-white/25 rounded-2xl px-3 py-2">
+                  <span className="text-2xl">{titleInfo.emoji}</span>
+                  <div className="flex flex-col leading-tight">
+                    <span className="text-[10px] opacity-80 font-semibold">Lv. {level}</span>
+                    <span className="text-base font-black">{titleInfo.title}</span>
+                  </div>
+                </div>
+                {trackRank && (
+                  <div className="flex items-center gap-1.5 bg-white/25 rounded-2xl px-3 py-2">
+                    <span className="text-xl">{trackRank.emoji}</span>
+                    <div className="flex flex-col leading-tight">
+                      <span className="text-[10px] opacity-80 font-semibold">{t("커리큘럼", "Curriculum")}</span>
+                      <span className="text-sm font-black">{t(trackRank.label, trackRank.labelEn)}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 레벨 진행 바 */}
+              <div className="mt-2.5">
+                <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-white/80 transition-all duration-500"
+                    style={{ width: `${xpInLevel}%` }}
+                  />
+                </div>
+                <p className="text-[10px] opacity-75 mt-1">
+                  {xpInLevel} / 100 XP {t("다음 레벨까지", "to next level")}
+                </p>
+              </div>
+
+              <p className="text-sm opacity-75 mt-3">{trackLabel}</p>
+              <div className="flex gap-2 mt-3 flex-wrap">
+                <div className="bg-white/20 rounded-xl px-3 py-2 text-center flex-1 min-w-[68px]">
+                  <p className="text-lg font-black">{xp.toLocaleString()}</p>
+                  <p className="text-[10px] opacity-75">XP</p>
+                </div>
+                <div className="bg-white/20 rounded-xl px-3 py-2 text-center flex-1 min-w-[68px]">
+                  <p className="text-lg font-black">🔥 {streak}</p>
+                  <p className="text-[10px] opacity-75">{t("연속", "Streak")}</p>
+                </div>
+                {cqCount > 0 && (
+                  <div className="bg-white/20 rounded-xl px-3 py-2 text-center flex-1 min-w-[68px]">
+                    <p className="text-lg font-black">🏆 {cqCount}</p>
+                    <p className="text-[10px] opacity-75">{t("대회", "Contest")}</p>
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => router.push("/analytics")}
+                className="mt-3 text-[11px] font-semibold text-white/70 hover:text-white transition-colors underline underline-offset-2"
+              >
+                📊 {t("학습 분석 자세히 보기 →", "View Learning Analytics →")}
+              </button>
+            </div>
+          )
+        })()}
 
         {/* 빠른 이동 — 진도 있는 학생에게만 (신규는 학습 여정 카드의 큰 CTA 만 보임) */}
         {completedIds.size > 0 && (
