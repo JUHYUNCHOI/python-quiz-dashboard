@@ -90,18 +90,21 @@ export function getSmartNext(
     }
   }
 
-  // 2. 트랙 모든 레슨 완료 → 알고리즘 추천 (Python 트랙 한정)
-  if (preferredTrack === "python") {
-    const firstAlgo = ALGO_TOPICS.find(tp => tp.wave === 1)
-    if (firstAlgo) {
+  // 2. 트랙 모든 레슨 완료 → 알고리즘 추천 (Python / C++ 트랙)
+  // Wave 1 → 2 → 3 순서로 첫 미완료 토픽
+  if (preferredTrack === "python" || preferredTrack === "cpp") {
+    const sortedAlgo = [...ALGO_TOPICS].sort((a, b) => a.wave - b.wave)
+    const nextAlgo = sortedAlgo.find(tp => !completedIds.has(tp.lessonId))
+    if (nextAlgo) {
+      const waveLabel = nextAlgo.wave === 1 ? "Bronze" : nextAlgo.wave === 2 ? "Silver" : "Gold+"
       return {
         type: "algo-topic",
-        title: `알고리즘 — ${firstAlgo.title}`,
-        titleEn: `Algorithm — ${firstAlgo.titleEn}`,
-        href: `/algo/${firstAlgo.id}`,
-        subtitle: "Python 마스터 ! 이제 알고리즘",
-        emoji: firstAlgo.icon,
-        reason: "Python 전체 완료 → 알고리즘 첫 토픽 추천",
+        title: `${nextAlgo.title}`,
+        titleEn: `${nextAlgo.titleEn}`,
+        href: `/algo/${nextAlgo.id}`,
+        subtitle: `알고리즘 · Wave ${nextAlgo.wave} (${waveLabel})`,
+        emoji: nextAlgo.icon,
+        reason: `다음 알고리즘 토픽 (wave ${nextAlgo.wave})`,
       }
     }
   }

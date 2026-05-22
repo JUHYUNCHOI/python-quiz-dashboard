@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronUp,
   ArrowLeft,
+  ArrowRight,
   Eye,
   EyeOff,
   Filter,
@@ -23,6 +24,9 @@ import type { CodingBankProblem } from "@/data/coding-bank"
 import { CODING_BANK_PROBLEMS, STARTER_PICKS } from "@/data/coding-bank"
 import { PracticeRunner } from "@/components/practice/practice-runner"
 import type { PracticeProblem } from "@/data/practice/types"
+import { useRouter } from "next/navigation"
+import { getCompletedLessons } from "@/lib/curriculum-data"
+import { getSmartNext } from "@/lib/smart-next"
 
 // ── 상수 ────────────────────────────────────────────────────────────
 
@@ -633,10 +637,45 @@ function ProblemDetail({
           ✓ {t("이 문제 완료로 표시", "Mark as Solved")}
         </button>
       ) : (
-        <div className="w-full py-3.5 rounded-2xl border-2 border-emerald-400 bg-emerald-50 text-emerald-700 font-bold text-sm text-center flex items-center justify-center gap-2">
-          <CheckCircle2 className="w-4 h-4" />
-          {t("완료한 문제입니다", "Already solved")}
+        <div className="space-y-2">
+          <div className="w-full py-3.5 rounded-2xl border-2 border-emerald-400 bg-emerald-50 text-emerald-700 font-bold text-sm text-center flex items-center justify-center gap-2">
+            <CheckCircle2 className="w-4 h-4" />
+            {t("완료한 문제입니다", "Already solved")}
+          </div>
+          <BankNextCTA onBack={onBack} />
         </div>
+      )}
+    </div>
+  )
+}
+
+// ── Smart-Next: 다음 추천 (코딩 뱅크 풀고 난 후) ─────────────────────
+function BankNextCTA({ onBack }: { onBack: () => void }) {
+  const router = useRouter()
+  const { t, lang } = useLanguage()
+  const [smart, setSmart] = useState<ReturnType<typeof getSmartNext> | null>(null)
+  useEffect(() => {
+    setSmart(getSmartNext(getCompletedLessons(), "cpp"))
+  }, [])
+  // 코딩 뱅크에서 추천하는 다음 활동 — 보통 알고리즘 토픽
+  const label = smart ? (lang === "en" ? smart.titleEn : smart.title) : ""
+  return (
+    <div className="flex flex-col sm:flex-row gap-2">
+      <button
+        onClick={onBack}
+        className="flex-1 py-2.5 rounded-2xl border border-gray-200 bg-white text-gray-600 font-bold text-xs hover:bg-gray-50 transition-all"
+      >
+        {t("← 뱅크 목록", "← Bank list")}
+      </button>
+      {smart && smart.type !== "complete" && (
+        <button
+          onClick={() => router.push(smart.href)}
+          className="flex-1 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs transition-all flex items-center justify-center gap-1.5"
+        >
+          <span>{smart.emoji ?? "▶"}</span>
+          <span className="truncate">{label}</span>
+          <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+        </button>
       )}
     </div>
   )

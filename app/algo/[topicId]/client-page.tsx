@@ -1,14 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Trophy, ExternalLink } from "lucide-react"
+import { ArrowLeft, Trophy, ExternalLink, ArrowRight } from "lucide-react"
 import { AlgoViewer } from "@/components/algo/algo-viewer"
 import { useLanguage } from "@/contexts/language-context"
 import type { AlgoTopic } from "@/data/algo/topics"
 import { getAlgoContestLinks, codeQuestUrl } from "@/data/algo/contest-links"
 import type { ContestProblem } from "@/data/algo/contest-links"
 import { cn } from "@/lib/utils"
+import { getCompletedLessons } from "@/lib/curriculum-data"
+import { getSmartNext } from "@/lib/smart-next"
 
 interface AlgoTopicPageProps {
   topic: AlgoTopic
@@ -125,6 +127,52 @@ export function AlgoTopicPage({ topic }: AlgoTopicPageProps) {
 
       {/* 실전 대회 문제 섹션 */}
       <AlgoContestSection topicId={topic.id} lang={lang} />
+
+      {/* Smart-Next: 다음 알고리즘 토픽 추천 */}
+      <NextTopicCTA currentTopic={topic} lang={lang} router={router} />
+    </div>
+  )
+}
+
+// ── 다음 토픽 추천 (Smart-Next) ─────────────────────────────────────
+function NextTopicCTA({
+  currentTopic,
+  lang,
+  router,
+}: {
+  currentTopic: AlgoTopic
+  lang: "ko" | "en"
+  router: ReturnType<typeof useRouter>
+}) {
+  const [smart, setSmart] = useState<ReturnType<typeof getSmartNext> | null>(null)
+  useEffect(() => {
+    // 현재 토픽을 완료한 것으로 가정해 다음 추천 계산
+    const completedNow = getCompletedLessons()
+    completedNow.add(currentTopic.lessonId)
+    setSmart(getSmartNext(completedNow, "cpp")) // 알고리즘은 cpp 트랙 기준
+  }, [currentTopic.lessonId])
+
+  if (!smart || smart.type === "complete") return null
+  if (smart.type === "algo-topic" && smart.href === `/algo/${currentTopic.id}`) return null
+
+  const label = lang === "en" ? smart.titleEn : smart.title
+  return (
+    <div className="max-w-[1400px] mx-auto px-4 pb-12">
+      <div className="border-t border-gray-200 pt-6">
+        <button
+          onClick={() => router.push(smart.href)}
+          className="w-full max-w-md mx-auto py-3.5 px-4 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 shadow-lg"
+        >
+          <span className="text-xl">{smart.emoji ?? "▶"}</span>
+          <div className="flex flex-col items-center">
+            <span className="text-base">{label}</span>
+            {smart.subtitle && (
+              <span className="text-[11px] font-medium text-indigo-100/90">{smart.subtitle}</span>
+            )}
+          </div>
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   )
 }
