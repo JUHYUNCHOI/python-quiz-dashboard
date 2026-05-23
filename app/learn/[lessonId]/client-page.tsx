@@ -21,7 +21,6 @@ import { trackStepVisit } from "@/lib/track-step-visit"
 import { getCompletedLessons, pythonParts, cppParts, pseudoParts, getNextLessonId } from "@/lib/curriculum-data"
 import { getSmartNext } from "@/lib/smart-next"
 import { useAuth } from "@/contexts/auth-context"
-import { useIsOwner } from "@/components/owner-only-guard"
 import { AdSlot } from "@/components/ad-slot"
 import { analyzeLessonComplete, analyzeStreak } from "@/lib/feedback-analyzer"
 import { LessonFeedbackCard } from "@/components/feedback/lesson-feedback-card"
@@ -46,7 +45,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const router = useRouter()
   const { lang, t } = useLanguage()
   const { play, isMuted, toggleMute } = useSoundEffect()
-  const isOwner = useIsOwner()
 
   const isBilingual = lessonId in bilingualLessons
   const hasVariants = lessonId in lessonVariants

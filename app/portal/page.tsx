@@ -10,7 +10,6 @@ import { BottomNav } from "@/components/bottom-nav"
 import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { getSmartNext, getPreferredTrack } from "@/lib/smart-next"
 import { useLanguage } from "@/contexts/language-context"
-import { useIsOwner } from "@/components/owner-only-guard"
 import { getLevelTitle } from "@/hooks/use-gamification"
 import { getStudentTrackRank } from "@/lib/curriculum-ranks"
 
@@ -192,7 +191,6 @@ function hwTimeAgo(iso: string, lang: "ko" | "en" = "ko") {
 function PortalContent() {
   const router = useRouter()
   const { t, lang } = useLanguage()
-  const isOwner = useIsOwner()
   const [name, setName] = useState("")
   const [xp, setXp] = useState(0)
   const [streak, setStreak] = useState(0)
@@ -311,8 +309,7 @@ function PortalContent() {
       return
     }
     if (platform === "algorithm") {
-      // 새 통합 /algorithm 화면은 owner 만. 일반 학생은 기존 /algo 토픽 리스트로.
-      router.push(isOwner ? "/algorithm" : "/algo")
+      router.push("/algo")
       return
     }
 

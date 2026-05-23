@@ -7,7 +7,6 @@ import { useState, useEffect, useCallback, Fragment } from "react"
 import { useSearchParams } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
-import { useIsOwner } from "@/components/owner-only-guard"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { ALL_CLUSTERS } from "@/data/practice"
@@ -71,7 +70,6 @@ type PartData = {
 
 export default function CurriculumPage() {
   const { t } = useLanguage()
-  const isOwner = useIsOwner()
 
   const pythonCurriculumData: PartData[] = [
     {
@@ -1074,7 +1072,7 @@ export default function CurriculumPage() {
                       <span className="mt-1 text-xs text-center rounded-lg py-1.5 font-bold text-green-700">
                         {practiceProblemsDone >= 40 ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("레슨에서 Try Challenge로 도전!", "Try Challenge in each lesson!")}
                       </span>
-                      {completedLessons.has("cpp-p3") && isOwner && (
+                      {completedLessons.has("cpp-p3") && (
                         <Link href="/coding-bank" className="text-xs text-center border border-emerald-400 text-emerald-600 rounded-lg py-1.5 font-bold hover:bg-emerald-50 transition-colors">
                           🏦 {t("코딩 뱅크 →", "Coding Bank →")}
                         </Link>
@@ -1483,14 +1481,12 @@ export default function CurriculumPage() {
                                         >
                                           🏆 {t("USACO 모의전 (cpp-p3)", "USACO Mock (cpp-p3)")}
                                         </Link>
-                                        {isOwner && (
-                                          <Link
-                                            href="/coding-bank"
-                                            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
-                                          >
-                                            🌟 {t("코딩 뱅크 (100 문제)", "Coding Bank (100 problems)")}
-                                          </Link>
-                                        )}
+                                        <Link
+                                          href="/coding-bank"
+                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
+                                        >
+                                          🌟 {t("코딩 뱅크 (100 문제)", "Coding Bank (100 problems)")}
+                                        </Link>
                                         <Link
                                           href="/algo"
                                           className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
