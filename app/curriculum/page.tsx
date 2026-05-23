@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback, Fragment } from "react"
 import { useSearchParams } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { ALL_CLUSTERS } from "@/data/practice"
@@ -356,7 +357,7 @@ export default function CurriculumPage() {
 
   const { profile, isAuthenticated, isLoading: authLoading } = useAuth()
   const searchParams = useSearchParams()
-  const isTeacher = profile?.role === "teacher"
+  const isTeacher = useEffectiveIsTeacher()
   // IGCSE 트랙 학생 감지: pseudo-*/igcse-* 레슨 완료 OR ?track=igcse URL 파라미터
   const isIgcseStudent = !isTeacher && (() => {
     if (searchParams.get("track") === "igcse") return true

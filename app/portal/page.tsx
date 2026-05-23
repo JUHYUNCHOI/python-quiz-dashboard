@@ -231,7 +231,9 @@ function PortalContent() {
       // 역할 체크: null이면 온보딩 모달, teacher면 포털에서 전체 unlock 상태로 표시
       const { data: profileData } = await supabase
         .from("profiles").select("role").eq("id", user.id).maybeSingle()
-      if (profileData?.role === "teacher") {
+      // owner (julia.juhyun) 는 학생 view 가 default — teacher 분기 안 탐
+      const { OWNER_EMAIL } = await import("@/components/owner-only-guard")
+      if (profileData?.role === "teacher" && user.email !== OWNER_EMAIL) {
         setIsTeacher(true)
       }
       if (!profileData?.role) setShowRoleModal(true)

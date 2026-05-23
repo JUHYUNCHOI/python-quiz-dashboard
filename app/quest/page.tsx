@@ -7,6 +7,7 @@ import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
 import { useAuth } from "@/contexts/auth-context"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
 import { isVisibleInCatalog, getReleaseStage, getQuestMeta } from "@/lib/quest-meta"
 import { masteredConcepts, suggestNextConcepts } from "@/lib/concept-graph"
@@ -238,7 +239,7 @@ const ALGO_UNLOCK_THRESHOLD = 8
 export default function QuestPage() {
   const { t } = useLanguage()
   const { profile } = useAuth()
-  const isTeacher = profile?.role === "teacher"
+  const isTeacher = useEffectiveIsTeacher()
 
   const [loaded, setLoaded] = useState(false)
   const [algoTopicsDone, setAlgoTopicsDone] = useState(0)

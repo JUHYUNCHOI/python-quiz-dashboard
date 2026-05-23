@@ -16,6 +16,7 @@ import { localizeCluster, localizeProblem } from "@/data/practice/types"
 import { getContestLinks, codeQuestUrl, type ContestProblem } from "@/data/practice/contest-links"
 import { usePracticeProgress } from "@/hooks/use-practice-progress"
 import { useAuth } from "@/contexts/auth-context"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { ArrowLeft, Lock, CheckCircle2, Star, FileText, Code2, HelpCircle, ExternalLink, Trophy } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
@@ -688,7 +689,7 @@ function PracticeContent() {
 
   const { solvedSet, starredSet, markSolved, markStarred } = usePracticeProgress()
   const { user, profile } = useAuth()
-  const isTeacher = profile?.role === "teacher"
+  const isTeacher = useEffectiveIsTeacher()
   const { lang: uiLang } = useLanguage()
   const [lang, setLang] = useState<Lang>((searchParams.get("lang") as Lang) || "cpp")
 
