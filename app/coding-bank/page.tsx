@@ -4,8 +4,8 @@ import { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { RequireAuth } from "@/components/require-auth"
-import { OwnerOnlyGuard } from "@/components/owner-only-guard"
 import { useAuth } from "@/contexts/auth-context"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
 import { cn } from "@/lib/utils"
@@ -690,7 +690,7 @@ function CodingBankContent() {
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
   const [selectedProblem, setSelectedProblem] = useState<CodingBankProblem | null>(null)
 
-  const isTeacher = profile?.role === "teacher"
+  const isTeacher = useEffectiveIsTeacher()
 
   useEffect(() => {
     // 잠금 해제 여부 확인
@@ -752,19 +752,11 @@ function CodingBankContent() {
 export default function CodingBankPage() {
   return (
     <RequireAuth>
-      <OwnerOnlyGuard
-        title={{ ko: "코딩 뱅크는 준비 중이에요", en: "Coding Bank is coming soon" }}
-        description={{
-          ko: "100문제 코딩 뱅크를 마무리하고 있어요. 곧 공개할게요!",
-          en: "We're finalizing 100 coding problems. Stay tuned!",
-        }}
-      >
-        <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
-          <Header />
-          <CodingBankContent />
-          <BottomNav />
-        </div>
-      </OwnerOnlyGuard>
+      <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
+        <Header />
+        <CodingBankContent />
+        <BottomNav />
+      </div>
     </RequireAuth>
   )
 }

@@ -21,7 +21,7 @@ import { trackStepVisit } from "@/lib/track-step-visit"
 import { getCompletedLessons, pythonParts, cppParts, pseudoParts, getNextLessonId } from "@/lib/curriculum-data"
 import { getSmartNext } from "@/lib/smart-next"
 import { useAuth } from "@/contexts/auth-context"
-import { useIsOwner } from "@/components/owner-only-guard"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { AdSlot } from "@/components/ad-slot"
 import { analyzeLessonComplete, analyzeStreak } from "@/lib/feedback-analyzer"
 import { LessonFeedbackCard } from "@/components/feedback/lesson-feedback-card"
@@ -46,7 +46,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const router = useRouter()
   const { lang, t } = useLanguage()
   const { play, isMuted, toggleMute } = useSoundEffect()
-  const isOwner = useIsOwner()
 
   const isBilingual = lessonId in bilingualLessons
   const hasVariants = lessonId in lessonVariants
@@ -63,7 +62,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const gamification = useGamification()
   const xpAwardedRef = useRef(false) // 레슨 완료 XP 중복 지급 방지
   const { user, profile, isAuthenticated, isLoading: authLoading } = useAuth()
-  const isTeacher = profile?.role === "teacher"
+  const isTeacher = useEffectiveIsTeacher()
 
   // Python 레슨 (1-52) + 프로젝트 (p1-p4) 는 비로그인 무료 공개 — AdSense 수익 모델.
   // cpp-*, pseudo-*, igcse-* 는 로그인 필요.

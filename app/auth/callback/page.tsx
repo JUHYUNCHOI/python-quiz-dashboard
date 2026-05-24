@@ -72,7 +72,9 @@ export default function AuthCallbackPage() {
           .select("role")
           .eq("id", session.user.id)
           .single()
-        if (profile?.role === "teacher") defaultDest = "/teacher"
+        // owner (julia.juhyun) 는 학생 view 가 default → /portal 그대로
+        const { shouldRouteAsTeacher } = await import("@/lib/effective-role")
+        if (shouldRouteAsTeacher(session.user.email, profile?.role)) defaultDest = "/teacher"
       }
 
       const returnTo = raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : defaultDest

@@ -1,26 +1,25 @@
 /**
- * 게임형 학습 로드맵 — 스테이지 정의 + 진도 계산.
+ * 게임형 학습 로드맵 — 6 스테이지 모델.
  *
- * 메인 라인 (스토리 진행):
- *   1. 🐍 Python 기초    (Part 1-4)
- *   2. 🐍 Python 심화    (Part 5-9 + p4)
- *   3. ⚡ C++ 기초        (cpp-1~8, p1, ck1, ck7)
- *   4. ⚡ C++ STL         (cpp-9~14, 21, 22, p2 + ck2/3/6/9)
- *   5. ⚡ C++ USACO 메인  (cpp-15, 23, 16 — Bronze 80% 달성)
- *   6. 🌟 코딩 뱅크 다리  (5문제)
- *   7. 🧠 알고리즘 Lab    (21 토픽)
- *   8. 🏆 USACO 실전     (USACO Bronze / MCC)
+ * 학생 멘탈 모델 (정확히):
+ *   Path 1 (Python 만):  🐍 → 💪Py연습 → 🧠 → 🏆
+ *   Path 2 (풀 코스):    🐍 → 💪Py연습 → ⚡ → 💪Cpp연습 → 🧠 → 🏆
+ *   Path 3 (C++ 부터):   ⚡ → 💪Cpp연습 → 🧠 → 🏆
+ *                        (Python + Py연습 자동 ✅ — 이미 안다고 가정)
  *
- * 가지 (사이드 퀘스트, 메인에서 분기):
- *   - 📌 C++ 심화 참고 (cpp-17~20) — Stage 5 에서 분기
- *   - 🏆 cpp-p3 USACO 모의전     — Stage 5 에서 분기
+ * 스테이지 6 개:
+ *   1. 🐍 Python         (52 레슨 + 4 프로젝트)
+ *   2. 💪 Python 연습    (12 PY 클러스터)
+ *   3. ⚡ C++            (23 레슨 + 3 프로젝트)  ← 가지 (선택)
+ *   4. 💪 C++ 연습       (CPP 클러스터 + 코딩 뱅크)  ← 가지
+ *   5. 🧠 알고리즘       (21 토픽)
+ *   6. 🏆 USACO          (USACO/MCC 실전)
  *
- * 규칙:
- *   - C++ 진도 있는 학생 → Python 스테이지 자동 ✅ 완료 표시
- *     (C++ 까지 왔으면 Python 은 안다고 가정)
+ * C++ 진도 있는 학생 → Python + Python 연습 자동 ✅ (Path 3)
  */
 
 import { ALGO_TOPICS } from "@/data/algo/topics"
+import { ALL_CLUSTERS } from "@/data/practice"
 
 export type StageType = "main" | "branch"
 export type StageStatus = "locked" | "available" | "in-progress" | "completed"
@@ -36,128 +35,136 @@ export interface JourneyStage {
   descriptionEn: string
   href: string
   rank: StageRank
-  /** 메인 스테이지 ID (가지일 때만) */
   branchOf?: string
-  /** 진도 계산용 lesson IDs */
   lessonIds?: (string | number)[]
-  /** 특수 진도 계산 (algo/bank 등) */
   computeProgress?: (completedIds: Set<string | number>) => { done: number; total: number }
 }
 
 const range = (s: number, e: number): number[] => Array.from({ length: e - s + 1 }, (_, i) => s + i)
 
-/** Python 기초 — Part 1-4 (1~31 + p1~p3) */
-const PY_BASIC_IDS: (string | number)[] = [...range(1, 31), "p1", "p2", "p3"]
-/** Python 심화 — Part 5-9 (32~52 + p4) */
-const PY_ADVANCED_IDS: (string | number)[] = [...range(32, 52), "p4"]
+/** Python 전 레슨 (1-52) + 프로젝트 (p1-p4) */
+const PYTHON_IDS: (string | number)[] = [...range(1, 52), "p1", "p2", "p3", "p4"]
 
-/** C++ 기초 — Part 1 */
-const CPP_BASIC_IDS = ["cpp-1", "cpp-2", "cpp-3", "cpp-4", "cpp-5", "cpp-6", "cpp-7", "cpp-ck1", "cpp-8", "cpp-ck7", "cpp-p1"]
-/** C++ STL — Part 2 */
-const CPP_STL_IDS = ["cpp-9", "cpp-ck2", "cpp-21", "cpp-ck6", "cpp-10", "cpp-11", "cpp-12", "cpp-13", "cpp-ck9", "cpp-14", "cpp-ck3", "cpp-22", "cpp-p2"]
-/** C++ USACO 메인 (cpp-15, 23, 16) — Bronze 80% ready */
-const CPP_MAIN_IDS = ["cpp-15", "cpp-23", "cpp-ck4", "cpp-16", "cpp-ck5"]
-/** C++ 심화 참고 (cpp-17~20) — 가지 */
-const CPP_ADVANCED_IDS = ["cpp-17", "cpp-ck10", "cpp-18", "cpp-ck8", "cpp-19", "cpp-20"]
+/** C++ 전 레슨 + 프로젝트 */
+const CPP_IDS = [
+  "cpp-1", "cpp-2", "cpp-3", "cpp-4", "cpp-5", "cpp-6", "cpp-7", "cpp-8", "cpp-p1",
+  "cpp-9", "cpp-10", "cpp-11", "cpp-12", "cpp-13", "cpp-14", "cpp-21", "cpp-22", "cpp-p2",
+  "cpp-15", "cpp-16", "cpp-17", "cpp-18", "cpp-19", "cpp-20", "cpp-23", "cpp-p3",
+]
 
-const CODING_BANK_THRESHOLD = 5
+/** Python 연습 — 5 클러스터 완료 = 충분 (전체 12 중) */
+const PY_PRACTICE_GOAL_CLUSTERS = 5
+/** C++ 연습 — 5 클러스터 (CPP practice + 코딩 뱅크) = 충분 */
+const CPP_PRACTICE_GOAL = 5
+
+function getPyClusters() {
+  return ALL_CLUSTERS.filter(c => c.id.startsWith("py-"))
+}
+
+function getCppPracticeClusters() {
+  // cpp-ck* 만 (cpp-* 레슨 ID 와 구분)
+  return ALL_CLUSTERS.filter(c => c.id.startsWith("cpp-ck"))
+}
+
+const SET1_SIZE = 7
+function clusterDoneCount(completedIds: Set<string | number>, cluster: any): boolean {
+  // /practice 의 SET 1 (7문제) 풀었으면 cluster done — solvedSet 정보 없으면 false
+  // 여기선 localStorage 의 practice-solved 로 추정
+  if (typeof window === "undefined") return false
+  try {
+    const solved = JSON.parse(localStorage.getItem("practice-solved") || "[]") as string[]
+    const solvedSet = new Set(solved)
+    const count = cluster.problems.filter((p: any) => solvedSet.has(p.id)).length
+    return count >= Math.min(SET1_SIZE, cluster.problems.length)
+  } catch {
+    return false
+  }
+}
+
+function getCodingBankSolvedCount(): number {
+  if (typeof window === "undefined") return 0
+  try {
+    const raw = localStorage.getItem("coding-bank-solved")
+    if (!raw) return 0
+    const arr = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.length : 0
+  } catch {
+    return 0
+  }
+}
 
 export const JOURNEY_STAGES: JourneyStage[] = [
-  // ── 메인 라인 ─────────────────────────────────────────────
   {
-    id: "py-basic",
+    id: "python",
     type: "main",
     emoji: "🐍",
-    title: "Python 기초",
-    titleEn: "Python Basics",
-    description: "변수 · 조건 · 반복 · 자료구조 — 코딩 첫 발걸음",
-    descriptionEn: "Variables · conditionals · loops · data structures",
+    title: "Python",
+    titleEn: "Python",
+    description: "52 레슨 — 기초 → 자료구조 → 함수 → 클래스 → 프로젝트",
+    descriptionEn: "52 lessons — basics → data structures → functions → classes → projects",
     href: "/curriculum?course=python",
     rank: "bronze",
-    lessonIds: PY_BASIC_IDS,
+    lessonIds: PYTHON_IDS,
   },
   {
-    id: "py-advanced",
+    id: "python-practice",
     type: "main",
-    emoji: "🐍",
-    title: "Python 심화",
-    titleEn: "Python Advanced",
-    description: "함수 · 클래스 · 모듈 · RPG 프로젝트",
-    descriptionEn: "Functions · classes · modules · RPG project",
-    href: "/curriculum?course=python",
+    emoji: "💪",
+    title: "Python 연습",
+    titleEn: "Python Practice",
+    description: "12 클러스터 — 코드 직접 짜기, 실력 다지기",
+    descriptionEn: "12 clusters — hands-on coding practice",
+    href: "/practice?lang=python",
     rank: "silver",
-    lessonIds: PY_ADVANCED_IDS,
-  },
-  {
-    id: "cpp-basic",
-    type: "main",
-    emoji: "⚡",
-    title: "C++ 기초",
-    titleEn: "C++ Basics",
-    description: "파이썬 → C++ 전환 — 컴파일러 · cin/cout · 함수",
-    descriptionEn: "Python → C++ — compiler · cin/cout · functions",
-    href: "/curriculum?course=cpp",
-    rank: "bronze",
-    lessonIds: CPP_BASIC_IDS,
-  },
-  {
-    id: "cpp-stl",
-    type: "main",
-    emoji: "⚡",
-    title: "C++ STL",
-    titleEn: "C++ STL",
-    description: "벡터 · 포인터 · 구조체 · 클래스",
-    descriptionEn: "Vectors · pointers · structs · classes",
-    href: "/curriculum?course=cpp",
-    rank: "silver",
-    lessonIds: CPP_STL_IDS,
-  },
-  {
-    id: "cpp-usaco-main",
-    type: "main",
-    emoji: "⚡",
-    title: "C++ USACO 메인",
-    titleEn: "C++ USACO Core",
-    description: "pair · sort · map/set — USACO Bronze 80% 클리어",
-    descriptionEn: "pair · sort · map/set — USACO Bronze 80% ready",
-    href: "/curriculum?course=cpp",
-    rank: "gold",
-    lessonIds: CPP_MAIN_IDS,
-  },
-  {
-    id: "coding-bank",
-    type: "main",
-    emoji: "🌟",
-    title: "코딩 뱅크",
-    titleEn: "Coding Bank",
-    description: "문법 → 실전 다리 — 알고리즘 가기 전 워밍업",
-    descriptionEn: "Bridge from syntax to real problems",
-    href: "/coding-bank",
-    rank: "bridge",
     computeProgress: () => {
-      // localStorage 에서 풀어본 문제 수 확인
-      if (typeof window === "undefined") return { done: 0, total: CODING_BANK_THRESHOLD }
-      try {
-        const raw = localStorage.getItem("coding-bank-solved")
-        if (!raw) return { done: 0, total: CODING_BANK_THRESHOLD }
-        const arr = JSON.parse(raw)
-        const done = Array.isArray(arr) ? Math.min(arr.length, CODING_BANK_THRESHOLD) : 0
-        return { done, total: CODING_BANK_THRESHOLD }
-      } catch {
-        return { done: 0, total: CODING_BANK_THRESHOLD }
-      }
+      const clusters = getPyClusters()
+      const done = clusters.filter(c => clusterDoneCount(new Set(), c)).length
+      return { done: Math.min(done, PY_PRACTICE_GOAL_CLUSTERS), total: PY_PRACTICE_GOAL_CLUSTERS }
+    },
+  },
+  {
+    id: "cpp",
+    type: "branch",
+    branchOf: "python-practice",
+    emoji: "⚡",
+    title: "C++",
+    titleEn: "C++",
+    description: "23 레슨 — Python → C++ 전환, STL, USACO 준비",
+    descriptionEn: "23 lessons — Python → C++, STL, USACO prep",
+    href: "/curriculum?course=cpp",
+    rank: "bronze",
+    lessonIds: CPP_IDS,
+  },
+  {
+    id: "cpp-practice",
+    type: "branch",
+    branchOf: "cpp",
+    emoji: "💪",
+    title: "C++ 연습",
+    titleEn: "C++ Practice",
+    description: "CPP 클러스터 + 코딩 뱅크 — 알고리즘 가기 전 워밍업",
+    descriptionEn: "C++ clusters + Coding Bank — warm up before algo",
+    href: "/practice?lang=cpp",
+    rank: "silver",
+    computeProgress: () => {
+      const clusters = getCppPracticeClusters()
+      const clusterDone = clusters.filter(c => clusterDoneCount(new Set(), c)).length
+      const bankSolved = getCodingBankSolvedCount()
+      // 클러스터 1개 = 1점, 코딩뱅크 5문제 = 1점
+      const score = clusterDone + Math.min(Math.floor(bankSolved / 5), 3)
+      return { done: Math.min(score, CPP_PRACTICE_GOAL), total: CPP_PRACTICE_GOAL }
     },
   },
   {
     id: "algo",
     type: "main",
     emoji: "🧠",
-    title: "알고리즘 Lab",
-    titleEn: "Algorithm Lab",
+    title: "알고리즘",
+    titleEn: "Algorithm",
     description: `BFS/DFS · DP · 그리디 — ${ALGO_TOPICS.length}개 토픽`,
     descriptionEn: `BFS/DFS · DP · Greedy — ${ALGO_TOPICS.length} topics`,
     href: "/algo",
-    rank: "silver",
+    rank: "gold",
     computeProgress: (completedIds) => {
       const done = ALGO_TOPICS.filter(tp => completedIds.has(tp.lessonId)).length
       return { done, total: ALGO_TOPICS.length }
@@ -167,64 +174,32 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     id: "usaco",
     type: "main",
     emoji: "🏆",
-    title: "USACO / MCC 실전",
-    titleEn: "USACO / MCC Contest",
-    description: "실전 대회 문제 — Bronze / Silver / MCC",
-    descriptionEn: "Real contest problems",
+    title: "USACO 실전",
+    titleEn: "USACO Contest",
+    description: "USACO Bronze / MCC — 실전 대회 문제",
+    descriptionEn: "USACO Bronze / MCC contest problems",
     href: "/quest",
     rank: "master",
     computeProgress: (completedIds) => {
-      // cq-* 진도 카운트
       const done = [...completedIds].filter(id => String(id).startsWith("cq-")).length
-      // 임의 목표: 5문제 시작점
       return { done: Math.min(done, 5), total: 5 }
     },
-  },
-
-  // ── 가지 (사이드 퀘스트) ──────────────────────────────────
-  {
-    id: "cpp-advanced-ref",
-    type: "branch",
-    branchOf: "cpp-usaco-main",
-    emoji: "📌",
-    title: "C++ 심화 참고",
-    titleEn: "C++ Advanced (Ref)",
-    description: "cpp-17~20 — 알고리즘 진행 중 필요할 때",
-    descriptionEn: "cpp-17~20 — reference when needed",
-    href: "/learn/cpp-17",
-    rank: "silver",
-    lessonIds: CPP_ADVANCED_IDS,
-  },
-  {
-    id: "cpp-p3-mock",
-    type: "branch",
-    branchOf: "cpp-usaco-main",
-    emoji: "🏆",
-    title: "USACO 모의전",
-    titleEn: "USACO Mock",
-    description: "cpp-p3 — 메인 트랙 졸업 후 실전 감각",
-    descriptionEn: "cpp-p3 — real USACO experience after main track",
-    href: "/learn/cpp-p3",
-    rank: "gold",
-    lessonIds: ["cpp-p3"],
   },
 ]
 
 /**
- * 스테이지 진도 + 상태 계산.
- *
- * @param completedIds 완료한 lesson IDs
- * @param hasCppProgress C++ 진도 있는지 (Python 자동 완료 처리용)
+ * 스테이지 진도 + 상태.
+ * C++ 진도 있는 학생 → Python + Python 연습 자동 ✅
  */
 export function getStageProgress(
   stage: JourneyStage,
   completedIds: Set<string | number>,
   hasCppProgress: boolean,
 ): { done: number; total: number; pct: number; status: StageStatus } {
-  // C++ 학생은 Python 스테이지 자동 완료 (이미 안다고 가정)
-  const isPythonStage = stage.id === "py-basic" || stage.id === "py-advanced"
+  // C++ 학생 → Python 관련 스테이지 자동 완료
+  const isPythonStage = stage.id === "python" || stage.id === "python-practice"
   if (isPythonStage && hasCppProgress) {
-    const total = stage.lessonIds?.length ?? 1
+    const total = stage.lessonIds?.length ?? 5
     return { done: total, total, pct: 100, status: "completed" }
   }
 
@@ -242,7 +217,7 @@ export function getStageProgress(
   let status: StageStatus
   if (pct >= 100) status = "completed"
   else if (pct > 0) status = "in-progress"
-  else status = "available"  // 소프트 진행: 잠금 없음
+  else status = "available"
   return { done, total, pct, status }
 }
 

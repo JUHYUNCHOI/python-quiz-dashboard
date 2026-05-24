@@ -6,6 +6,7 @@ import { ChevronRight, ChevronLeft, X, BookOpen, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { markQuizComplete } from "@/lib/mark-lesson-complete"
 import { saveReviewProgressToSupabase, loadReviewProgressFromSupabase } from "@/lib/review-progress-sync"
@@ -95,7 +96,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const { t, lang } = useLanguage()
   const isEn = lang === "en"
   const { user, profile, isLoading: authLoading } = useAuth()
-  const isTeacher = profile?.role === "teacher"
+  const isTeacher = useEffectiveIsTeacher()
 
   useEffect(() => {
     if (!authLoading && !user) router.replace("/login")

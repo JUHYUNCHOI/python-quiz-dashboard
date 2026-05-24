@@ -15,6 +15,7 @@ import { DailyChallenges } from "@/components/daily-challenges"
 import { AchievementsShelf } from "@/components/achievements-shelf"
 import { PythonToCppBridge } from "@/components/python-to-cpp-bridge"
 import { useAuth } from "@/contexts/auth-context"
+import { shouldRouteAsTeacher } from "@/lib/effective-role"
 
 // -------- 레슨 ID 순서 --------
 const PYTHON_LESSON_IDS: (number | string)[] = [
@@ -482,7 +483,7 @@ function LandingPage() {
 
 export default function DashboardPage() {
   const { t, lang } = useLanguage()
-  const { isAuthenticated, isLoading: authLoading, profile } = useAuth()
+  const { isAuthenticated, isLoading: authLoading, profile, user } = useAuth()
   const router = useRouter()
   const { level, totalXp, xpInCurrentLevel, dailyStreak, xpToday } = useGamification()
   const levelInfo = getLevelTitle(level)
@@ -499,10 +500,10 @@ export default function DashboardPage() {
   // 로그인 상태면 역할별 페이지로 리디렉트
   useEffect(() => {
     if (!isAuthenticated || !profile) return
-    if (profile.role === "teacher") router.replace("/teacher")
+    if (shouldRouteAsTeacher(user?.email, profile.role)) router.replace("/teacher")
     else if (profile.role === "parent") router.replace("/parent")
     else router.replace("/portal")
-  }, [isAuthenticated, profile, router])
+  }, [isAuthenticated, profile, user, router])
 
   useEffect(() => {
     const course = readSelectedCourse()

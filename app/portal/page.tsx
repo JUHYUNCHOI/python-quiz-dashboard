@@ -10,7 +10,6 @@ import { BottomNav } from "@/components/bottom-nav"
 import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { getSmartNext, getPreferredTrack } from "@/lib/smart-next"
 import { useLanguage } from "@/contexts/language-context"
-import { useIsOwner } from "@/components/owner-only-guard"
 import { getLevelTitle } from "@/hooks/use-gamification"
 import { getStudentTrackRank } from "@/lib/curriculum-ranks"
 
@@ -192,7 +191,6 @@ function hwTimeAgo(iso: string, lang: "ko" | "en" = "ko") {
 function PortalContent() {
   const router = useRouter()
   const { t, lang } = useLanguage()
-  const isOwner = useIsOwner()
   const [name, setName] = useState("")
   const [xp, setXp] = useState(0)
   const [streak, setStreak] = useState(0)
@@ -233,7 +231,9 @@ function PortalContent() {
       // 역할 체크: null이면 온보딩 모달, teacher면 포털에서 전체 unlock 상태로 표시
       const { data: profileData } = await supabase
         .from("profiles").select("role").eq("id", user.id).maybeSingle()
-      if (profileData?.role === "teacher") {
+      // owner (julia.juhyun) 는 학생 view 가 default — teacher 분기 안 탐
+      const { OWNER_EMAIL } = await import("@/components/owner-only-guard")
+      if (profileData?.role === "teacher" && user.email !== OWNER_EMAIL) {
         setIsTeacher(true)
       }
       if (!profileData?.role) setShowRoleModal(true)
@@ -311,8 +311,7 @@ function PortalContent() {
       return
     }
     if (platform === "algorithm") {
-      // 새 통합 /algorithm 화면은 owner 만. 일반 학생은 기존 /algo 토픽 리스트로.
-      router.push(isOwner ? "/algorithm" : "/algo")
+      router.push("/algo")
       return
     }
 

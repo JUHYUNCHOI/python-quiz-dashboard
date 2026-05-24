@@ -14,6 +14,7 @@ import { QuestionEditor } from "@/components/admin/question-editor"
 import { cn } from "@/lib/utils"
 import { useQuizState, getComboTier } from "@/hooks/use-quiz-state"
 import { useAuth } from "@/contexts/auth-context"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { getGradeInfo } from "@/lib/spaced-repetition"
 import { createSmartSession } from "@/lib/quiz-question-selector"
 import { useQuizTimer } from "@/hooks/use-quiz-timer"
@@ -40,7 +41,7 @@ function shuffleArray<T>(arr: T[]): T[] {
 export default function QuizPage() {
   const router = useRouter()
   const { profile } = useAuth()
-  const isTeacher = profile?.role === "teacher"
+  const isTeacher = useEffectiveIsTeacher()
   // useLanguage는 최상단에서 — lang이 fetch에 필요하므로 먼저 선언
   const { t, lang } = useLanguage()
 
