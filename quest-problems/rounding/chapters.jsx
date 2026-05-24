@@ -1260,20 +1260,26 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "When I submitted this code to USACO, here's what came back — first few cases pass (barely), rest time out.",
-        "이 코드를 USACO 채점기에 제출해봤더니 이렇게 나와요 — 앞 몇 개는 (간신히) 통과, 나머지는 다 시간 초과."),
+        "If you submit this brute code to USACO, the typical pattern: first few small cases pass (slowly), rest time out.",
+        "이 brute 코드를 USACO 에 제출하면 보통 이런 패턴: 앞쪽 작은 케이스 몇 개는 (느리게) 통과, 나머지는 시간 초과."),
       content: (
         <div style={{ padding: 16 }}>
-          <Label text={t(E, "USACO submission — judge results", "USACO 제출 결과 — 채점 결과")} />
+          <Label text={t(E, "USACO submission — illustrative example", "USACO 제출 결과 — 예시 도식")} />
+          {/* ⚠️ 예시 — 실제 제출 결과는 코드/언어/USACO 테스트에 따라 다름 */}
+          <div style={{ fontSize: 10, color: C.dim, marginBottom: 8, textAlign: "center", fontStyle: "italic" }}>
+            ⚠️ {t(E,
+              "Your actual submission may pass 2-5 cases (depends on code, language, USACO testdata).",
+              "실제 제출은 2-5 케이스 통과 가능 (코드 / 언어 / USACO 테스트에 따라 다름).")}
+          </div>
           <div style={{
             background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14,
             display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center",
           }}>
             {[
-              { n: 1,  pass: true,  label: "100ms" },
-              { n: 2,  pass: true,  label: "1674ms" },
-              { n: 3,  pass: true,  label: "1676ms" },
-              { n: 4,  pass: true,  label: "1661ms" },
+              { n: 1,  pass: true,  label: "fast" },
+              { n: 2,  pass: true,  label: "slow" },
+              { n: 3,  pass: true,  label: "slow" },
+              { n: 4,  pass: true,  label: "slow" },
               { n: 5,  pass: false }, { n: 6,  pass: false }, { n: 7,  pass: false },
               { n: 8,  pass: false }, { n: 9,  pass: false }, { n: 10, pass: false },
               { n: 11, pass: false }, { n: 12, pass: false }, { n: 13, pass: false },
@@ -1295,7 +1301,7 @@ export function makeBruteSteps(E, lang = "py") {
             ))}
           </div>
           <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
-            ❌ {t(E, "Cases 5–13: TLE.\nEven the first 4 barely pass at 1.6 s — way too close to the 2 s limit.", "케이스 5~13: 시간 초과 (TLE).\n통과한 4 개도 1.6 초로 제한 시간에 아슬아슬.")}
+            ❌ {t(E, "Pattern: small N pass (barely), large N TLE.\nBrute scans all numbers up to N → can't handle N=10⁹.", "패턴: N 작으면 (간신히) 통과, N 크면 TLE.\nbrute 는 N 까지 다 훑어서 N=10⁹ 못 감당.")}
           </div>
           <div style={{ marginTop: 8, padding: "10px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 10, fontSize: 13, color: C.accent, fontWeight: 700, lineHeight: 1.7, textAlign: "center" }}>
             💡 {t(E, "So I thought: what if we save what we computed? → Prefix sum!",
@@ -1326,21 +1332,27 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Submit prefix sum and… 6 cases pass instead of 4. Better, but still TLE on the rest.", "누적합으로 제출하면 — 4 개 → 6 개로 늘어요. 좋아졌지만 나머지는 여전히 시간 초과."),
+        "Submit prefix sum and… more cases pass than brute. Better, but still TLE on large ones.", "누적합으로 제출하면 — brute 보다 더 많은 케이스 통과. 좋아졌지만 큰 케이스는 여전히 TLE."),
       content: (
         <div style={{ padding: 16 }}>
-          <Label text={t(E, "Prefix sum submission", "누적합 제출 결과")} />
+          <Label text={t(E, "Prefix sum submission — illustrative example", "누적합 제출 결과 — 예시 도식")} />
+          {/* ⚠️ 예시 — 실제 제출 결과는 코드/언어/USACO 테스트에 따라 다름 */}
+          <div style={{ fontSize: 10, color: C.dim, marginBottom: 8, textAlign: "center", fontStyle: "italic" }}>
+            ⚠️ {t(E,
+              "Your actual submission may pass 4-8 cases (depends on code, language, USACO testdata).",
+              "실제 제출은 4-8 케이스 통과 가능 (코드 / 언어 / USACO 테스트에 따라 다름).")}
+          </div>
           <div style={{
             background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14,
             display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center",
           }}>
             {[
-              { n: 1,  pass: true,  label: "87ms" },
-              { n: 2,  pass: true,  label: "75ms" },
-              { n: 3,  pass: true,  label: "75ms" },
-              { n: 4,  pass: true,  label: "74ms" },
-              { n: 5,  pass: true,  label: "920ms" },
-              { n: 6,  pass: true,  label: "3719ms" },
+              { n: 1,  pass: true,  label: "fast" },
+              { n: 2,  pass: true,  label: "fast" },
+              { n: 3,  pass: true,  label: "fast" },
+              { n: 4,  pass: true,  label: "fast" },
+              { n: 5,  pass: true,  label: "slow" },
+              { n: 6,  pass: true,  label: "slow" },
               { n: 7,  pass: false }, { n: 8,  pass: false }, { n: 9,  pass: false },
               { n: 10, pass: false }, { n: 11, pass: false }, { n: 12, pass: false },
               { n: 13, pass: false },
@@ -1362,10 +1374,10 @@ export function makeBruteSteps(E, lang = "py") {
             ))}
           </div>
           <div style={{ marginTop: 10, padding: "10px 12px", background: C.okBg, border: `1.5px solid ${C.okBd}`, borderRadius: 10, fontSize: 12, color: C.ok, fontWeight: 700, lineHeight: 1.6 }}>
-            ✅ {t(E, "Pass: 4 → 6.", "통과: 4 → 6 개.")}
+            ✅ {t(E, "More cases pass than brute.", "brute 보다 통과 케이스 늘어남.")}
           </div>
           <div style={{ marginTop: 8, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 12, color: C.no, fontWeight: 700, lineHeight: 1.6 }}>
-            ❌ {t(E, "Cases 7–13: still TLE.\nWhy? When N reaches 10⁹, just building the array takes too long.", "케이스 7~13: 여전히 TLE.\n왜? N=10⁹ 가 오면 배열 만드는 자체가 너무 오래 걸려요.")}
+            ❌ {t(E, "Large N cases: still TLE.\nWhy? When N reaches 10⁹, just building the array takes too long.", "N 큰 케이스: 여전히 TLE.\n왜? N=10⁹ 가 오면 배열 만드는 자체가 너무 오래 걸려요.")}
           </div>
         </div>
       ),
