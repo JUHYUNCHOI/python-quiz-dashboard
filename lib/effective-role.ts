@@ -20,12 +20,34 @@
 import { useAuth } from "@/contexts/auth-context"
 import { OWNER_EMAIL } from "@/components/owner-only-guard"
 
+/**
+ * 학생 UI 에서 사용할 effective isTeacher 값.
+ *
+ * 동작:
+ * - 학생 (profile.role !== "teacher") → 항상 false
+ * - 일반 선생님 → default true (선생님 뷰), `teacher-as-student=true` 토글 시 false
+ * - Owner (julia) → default false (학생 뷰), `teacher-as-student=false` 토글 시 true
+ *
+ * 즉 owner 는 *반대* default 를 가짐. 같은 토글로 양쪽 다 전환 가능.
+ *
+ * 이렇게 하면:
+ * - julia 가 기본 학생 뷰 (디자인 통일)
+ * - julia 가 선생님 작업 필요할 땐 profile 에서 토글 → 선생님 뷰
+ * - /teacher, /admin 등 라우트는 profile.role 검사로 모두 통과 (어디든 접근 가능)
+ */
 export function useEffectiveIsTeacher(): boolean {
   const { user, profile } = useAuth()
   const rawTeacher = profile?.role === "teacher"
+  if (!rawTeacher) return false
+
   const isOwner = user?.email === OWNER_EMAIL
-  // owner 는 학생 view 우선
-  return rawTeacher && !isOwner
+  if (typeof window === "undefined") return !isOwner
+
+  const flag = localStorage.getItem("teacher-as-student")
+  if (flag === "true") return false   // 강제 학생 뷰
+  if (flag === "false") return true   // 강제 선생님 뷰
+  // 미설정: owner = 학생 뷰 default, 일반 선생님 = 선생님 뷰 default
+  return !isOwner
 }
 
 /**
