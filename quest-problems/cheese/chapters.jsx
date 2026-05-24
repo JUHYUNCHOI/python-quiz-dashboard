@@ -690,6 +690,22 @@ export function makeCheeseCh4(E) {
             {t(E,
               "N=1000, Q=200K: per query = 3M rows × 1000 cells = 3B ops.\nAt 100M ops/sec → 30s/query × 200K = ~70 days. 😱", "N=1000, Q=20만: 쿼리당 = 300만 줄 × 1000칸 = 30억 연산.\n1억 ops/sec → 쿼리당 30초 × 20만 = ~70 일. 😱")}
           </div>
+
+          {/* 🎓 메타 안내 — "Bronze 가 다 brute 로 풀리는 거 아니에요" */}
+          <div style={{ marginTop: 10, padding: "12px 14px", background: "linear-gradient(135deg,#eff6ff,#dbeafe)", border: "2px solid #93c5fd", borderRadius: 10, fontSize: 12, color: "#1e3a8a", lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 6 }}>
+              💡 {t(E, "Wait — Bronze should be brute-solvable, right?", "잠깐 — Bronze 는 brute 로 풀려야 하는 거 아니에요?")}
+            </div>
+            <div style={{ whiteSpace: "pre-line" }}>
+              {t(E,
+                "Most Bronze problems ARE brute-solvable.\nBut some Bronze (~20-30%) need a small insight — and Cheese Block is one of them.\n\nUSACO scores partial credit: small test cases pass even with brute → 3/12 above.\nFor full credit, we need ONE clever observation. That's our next step.",
+                "대부분의 Bronze 는 brute 로 풀려요.\n근데 일부 Bronze (약 20-30%) 는 작은 통찰이 필요해요 — Cheese Block 이 그런 문제.\n\nUSACO 채점은 부분 점수 줘요: 작은 테스트는 brute 도 통과 → 위에 3/12.\n만점 받으려면 한 가지 영리한 관찰이 필요해요. 그게 다음 단계.")}
+            </div>
+            <div style={{ marginTop: 8, padding: "6px 10px", background: "#fff", borderRadius: 6, fontSize: 11, color: "#1e40af", fontWeight: 700 }}>
+              🔍 {t(E, "Pattern to remember: \"N=1000, Q=200K → brute = TLE\" → look for O(Q) or O(N+Q) trick.",
+                       "기억할 패턴: \"N=1000, Q=20만 → brute = TLE\" → O(Q) 또는 O(N+Q) 트릭 찾기.")}
+            </div>
+          </div>
         </div>),
     },
 
@@ -722,8 +738,8 @@ export function makeCheeseCh4(E) {
         t(E, "Just 1 row", "1 줄만"),
       ], correct: 2,
       explain: t(E,
-        "EXACTLY 3 rows. So we're wasting time re-checking 3N² − 3 rows that didn't change. Big idea: only check those 3.",
-        "정확히 3 줄. 그러면 안 변한 3N² − 3 줄을 다시 검사하는 게 시간 낭비. 핵심 아이디어: 그 3 줄만 검사."),
+        "EXACTLY 3 rows. So 3N² − 3 rows don't change — wasted work to re-check them. Idea: only check those 3.\n\n⚠ But scanning each of those 3 rows still takes N cells → O(QN) total. For N=1000, Q=200K: 2×10⁸ — still borderline TLE. Need ONE more idea (next question).",
+        "정확히 3 줄. 그러면 안 변한 3N² − 3 줄을 다시 검사하는 게 시간 낭비. 핵심 아이디어: 그 3 줄만 검사.\n\n⚠ 근데 그 3 줄도 N 칸씩 다 봐야 빈 거 확인 가능 → 총 O(QN). N=1000, Q=20만이면 2×10⁸ — 여전히 한계 근처라 TLE. 한 가지 더 필요 (다음 질문)."),
     },
 
     // 4-3b: 두 번째 디딤돌 — "이전 답을 어떻게 기억?"
