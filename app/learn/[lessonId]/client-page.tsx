@@ -428,32 +428,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }, [currentChapter, currentStep, progressLoaded])
   // ──────────────────────────────────────────────────────────────────────────
 
-  // 잠금 체크: 같은 트랙(Python/C++) 내에서 이전 수업 완료해야 접근 가능 (선생님은 전부 열림)
-  const isLocked = (() => {
-    if (typeof window === "undefined") return false
-    if (isTeacher) return false
-    const completed = getCompletedLessons()
-    const idNormalized: (number | string) = /^\d+$/.test(lessonId) ? Number(lessonId) : lessonId
-    // Python과 C++ 트랙을 분리하여 잠금 체크
-    const isCpp = String(lessonId).startsWith("cpp-")
-    const isPseudo = String(lessonId).startsWith("pseudo-")
-    const isIgcse = String(lessonId).startsWith("igcse-")
-    if (isPseudo || isIgcse) return false // 수도코드/IGCSE는 자유롭게 이동 가능
-    const trackParts = isCpp ? cppParts : pythonParts
-    const trackIds = trackParts.flatMap(p => p.lessonIds)
-    const idx = trackIds.indexOf(idNormalized)
-    if (idx <= 0) return false // 첫 수업 또는 알 수 없는 ID → 열림
-    // 체크포인트(cpp-ck*) + 프로젝트(cpp-p1/p2/p3 등)는 건너뛰고 직전 *일반 레슨* 이
-    // 완료됐는지 확인. 프로젝트는 isProject 로 마크된 선택사항이라 잠금 판정에서 빼야 함.
-    const isCheckpointOrProject = (id: string | number) => {
-      const s = String(id)
-      return /-ck/.test(s) || /-p\d+$/.test(s)
-    }
-    let prevIdx = idx - 1
-    while (prevIdx >= 0 && isCheckpointOrProject(trackIds[prevIdx])) prevIdx--
-    if (prevIdx < 0) return false
-    return !completed.has(trackIds[prevIdx])
-  })()
+  // 소프트 진행: 모든 수업 자유 접근 (선생님 + 학생 동일).
+  // 추천 순서는 커리큘럼/Smart-Next 가 시각적으로 안내하지만 잠금은 없음.
+  // (Duolingo / Khan Academy 패턴 — 학생 자율성 우선)
+  const isLocked = false
 
   // ── 훅은 반드시 early return 앞에 선언해야 함 (Rules of Hooks) ──
   const resetStepState = () => {
