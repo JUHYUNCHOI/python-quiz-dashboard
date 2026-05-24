@@ -647,20 +647,26 @@ export function makeCheeseCh4(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Submit this brute solution to USACO: first few cases pass slowly, rest all time out:", "이 브루트 코드를 USACO 에 제출하면: 앞 몇 개는 간신히 통과, 나머지는 다 시간초과:"),
+        "Submit this brute solution to USACO: first few small cases pass, rest time out:", "이 브루트 코드를 USACO 에 제출하면: 앞 작은 케이스 몇 개는 통과, 나머지는 시간초과:"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 8, textAlign: "center" }}>
-            {t(E, "USACO submission — judge results", "USACO 제출 결과 — 채점")}
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>
+            {t(E, "USACO submission — illustrative example", "USACO 제출 결과 — 예시 도식")}
+          </div>
+          {/* ⚠️ 예시 — 실제 제출 결과는 코드/언어/USACO 테스트 케이스에 따라 다름 */}
+          <div style={{ fontSize: 10, color: C.dim, marginBottom: 8, textAlign: "center", fontStyle: "italic" }}>
+            ⚠️ {t(E,
+              "Your actual submission may pass 1-4 cases (depends on code, language, USACO testdata).",
+              "실제 제출은 1-4 케이스 통과 가능 (코드 / 언어 / USACO 테스트에 따라 다름).")}
           </div>
           <div style={{
             background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14,
             display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center",
           }}>
             {[
-              { n: 1,  pass: true,  label: "12ms" },
-              { n: 2,  pass: true,  label: "98ms" },
-              { n: 3,  pass: true,  label: "1.2s" },
+              { n: 1,  pass: true,  label: "fast" },
+              { n: 2,  pass: true,  label: "ok" },
+              { n: 3,  pass: true,  label: "slow" },
               { n: 4,  pass: false }, { n: 5,  pass: false }, { n: 6,  pass: false },
               { n: 7,  pass: false }, { n: 8,  pass: false }, { n: 9,  pass: false },
               { n: 10, pass: false }, { n: 11, pass: false }, { n: 12, pass: false },
@@ -683,8 +689,8 @@ export function makeCheeseCh4(E) {
           </div>
           <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
             ❌ {t(E,
-              "9 out of 12 cases TLE. Even passing ones at 1.2s are near the limit.",
-              "12 개 중 9 개 TLE. 통과한 것들도 1.2초로 한계 근처.")}
+              "Pattern: small N cases pass quickly, large N cases TLE. Most of the score is on large cases → partial credit only.",
+              "패턴: N 작은 케이스 빨리 통과, N 큰 케이스 TLE. 점수는 대부분 큰 케이스에 있음 → 부분 점수만.")}
           </div>
           <div style={{ marginTop: 8, padding: "8px 12px", background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 11, color: C.dim, lineHeight: 1.6, whiteSpace: "pre-line" }}>
             {t(E,
