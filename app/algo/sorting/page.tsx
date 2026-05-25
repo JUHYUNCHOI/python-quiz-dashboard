@@ -593,6 +593,24 @@ export default function SortingPage() {
             {isMastered && <span className="text-2xl">⭐</span>}
           </div>
 
+          {/* 📚 첫 방문 안내 — 학습 흐름 명확히 (완료한 챕터 0개 이고 첫 챕터일 때만) */}
+          {completedChapters.size === 0 && current === 1 && !isMastered && (
+            <div className="mb-3 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 p-3">
+              <p className="text-sm font-black text-blue-900 mb-1.5">
+                📚 {t("이 토픽 학습 흐름", "How this works")}
+              </p>
+              <div className="space-y-1 text-xs text-blue-800">
+                <p><b>1.</b> {t("5 챕터를 순서대로 읽어요 (총 ~25 분)", "Read 5 chapters in order (~25 min total)")}</p>
+                <p><b>2.</b> {t("각 챕터 끝에 미니 퀴즈 — 맞히면 '이해했어요' 버튼", "Mini quiz at chapter end — get it right → 'Got it' button")}</p>
+                <p><b>3.</b> {t("'이해했어요' 누르면 다음 챕터로", "'Got it' → next chapter")}</p>
+                <p><b>4.</b> {t("마지막 챕터에 실전 문제 (BOJ) 링크", "Last chapter: real practice problems (BOJ) links")}</p>
+              </div>
+              <p className="mt-2 text-[11px] text-blue-600 font-bold">
+                ↓ {t("바로 아래 챕터 1 부터 시작!", "Start with Chapter 1 below!")}
+              </p>
+            </div>
+          )}
+
           <div className="flex flex-wrap gap-1.5 mb-2">
             {CHAPTERS.map(ch => {
               const isDone = completedChapters.has(ch.id)
