@@ -9,7 +9,7 @@
  * 교육 원칙: 한 챕터 = 한 가지 + 한 인터랙션 + 한 미니 퀴즈.
  */
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Header } from "@/components/header"
@@ -95,21 +95,25 @@ function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
 function Chapter1({ onComplete }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
   const { t } = useLanguage()
   const [step, setStep] = useState(0)
+  const rootRef = useRef<HTMLDivElement>(null)
   // 0: 인사 → 1: 도서관 비유 → 2: 결론
 
   const totalSteps = 3
-  const next = () => {
-    if (step < totalSteps - 1) {
-      setStep(step + 1)
-      window.scrollTo({ top: 0, behavior: "smooth" })
-    } else {
-      onComplete()
+  // step 변하면 카드로 직접 스크롤 (페이지 상단 X) — 학생이 새 내용 바로 보임
+  useEffect(() => {
+    if (step > 0) {  // 첫 진입 시는 스크롤 X
+      setTimeout(() => rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 30)
     }
+  }, [step])
+
+  const next = () => {
+    if (step < totalSteps - 1) setStep(step + 1)
+    else onComplete()
   }
   const prev = () => step > 0 && setStep(step - 1)
 
   return (
-    <div className="space-y-4 min-h-[300px] flex flex-col">
+    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       {/* 슬라이드 진도 — 작은 점 */}
       <div className="flex items-center justify-center gap-2">
         {Array.from({ length: totalSteps }).map((_, i) => (
@@ -596,7 +600,10 @@ export default function SortingPage() {
     setCompletedChapters(prev => new Set(prev).add(n))
     if (n < CHAPTERS.length) {
       setCurrent(n + 1)
-      window.scrollTo({ top: 0, behavior: "smooth" })
+      // 챕터 본문 카드로 스크롤 (페이지 상단 X)
+      setTimeout(() => {
+        document.getElementById("chapter-content")?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }, 50)
     } else {
       setIsMastered(true)
       if (isAuthenticated && user) {
@@ -619,7 +626,9 @@ export default function SortingPage() {
   const goToChapter = (n: number) => {
     if (n <= current || completedChapters.has(n)) {
       setCurrent(n)
-      window.scrollTo({ top: 0, behavior: "smooth" })
+      setTimeout(() => {
+        document.getElementById("chapter-content")?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }, 50)
     }
   }
 
@@ -685,7 +694,7 @@ export default function SortingPage() {
           })()}
         </div>
 
-        <div className="bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-5 shadow-sm">
+        <div id="chapter-content" className="bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-5 shadow-sm scroll-mt-4">
           {current === 1 && <Chapter1 onComplete={() => completeChapter(1)} codeLang={codeLang} setCodeLang={setCodeLang} />}
           {current === 2 && <Chapter2 onComplete={() => completeChapter(2)} codeLang={codeLang} setCodeLang={setCodeLang} />}
           {current === 3 && <Chapter3 onComplete={() => completeChapter(3)} codeLang={codeLang} setCodeLang={setCodeLang} />}
