@@ -91,69 +91,76 @@ function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
   )
 }
 
-// ── Chapter 1: 왜 정렬? ───────────────────────────────────────────
-function Chapter1({ onComplete, codeLang, setCodeLang }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
+// ── Chapter 1: 왜 정렬? — 인트로 (읽고 다음 클릭) ───────────────────
+function Chapter1({ onComplete }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
   const { t } = useLanguage()
-  const [revealed, setRevealed] = useState(false)
   return (
     <div className="space-y-4">
+      {/* 한 줄 가이드 — 학생이 뭘 해야 하는지 즉시 알게 */}
+      <div className="bg-orange-100 border-l-4 border-orange-500 rounded-r-lg px-3 py-2 text-sm font-bold text-orange-900">
+        👇 {t("아래 읽고 맨 아래 '다음' 버튼 누르세요", "Read below, then hit 'Next' at the bottom")}
+      </div>
+
+      {/* 핵심: 정렬 = 검색 빠르게 */}
       <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-5 border-2 border-amber-200">
-        <p className="text-base text-gray-800 leading-relaxed">
-          {t("도서관에 책 100,000 권이 있어요. 'Harry Potter' 찾으려면?", "100,000 books in a library. Need to find 'Harry Potter'?")}
+        <p className="text-base font-bold text-gray-900 mb-3">
+          🏛 {t("도서관 비유", "Library analogy")}
         </p>
-        <div className="mt-3 space-y-2">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-            <p className="text-sm font-bold text-red-700">❌ {t("정렬 안 된 상태", "Unsorted")}</p>
-            <p className="text-xs text-gray-700 mt-1">{t("최악 10만 권을 다 살펴봐야 함 — O(N)", "Worst case: check all 100K — O(N)")}</p>
+        <p className="text-sm text-gray-800 mb-3">
+          {t("책 10만 권 중 'Harry Potter' 찾기:", "Find 'Harry Potter' among 100,000 books:")}
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="bg-red-50 border-2 border-red-200 rounded-lg p-3 text-center">
+            <p className="text-2xl mb-1">📚🌀</p>
+            <p className="text-sm font-black text-red-700">{t("정렬 안 됨", "Unsorted")}</p>
+            <p className="text-xs text-gray-700 mt-1">{t("최악 10만 번 확인", "Worst: 100,000 checks")}</p>
           </div>
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-            <p className="text-sm font-bold text-green-700">✅ {t("정렬된 상태 (알파벳 순)", "Sorted (alphabetical)")}</p>
-            <p className="text-xs text-gray-700 mt-1">{t("이분 탐색으로 17 번만 확인 — O(log N)", "Binary search: only ~17 checks — O(log N)")}</p>
+          <div className="bg-green-50 border-2 border-green-200 rounded-lg p-3 text-center">
+            <p className="text-2xl mb-1">📚📖</p>
+            <p className="text-sm font-black text-green-700">{t("정렬됨 (알파벳)", "Sorted (alphabet)")}</p>
+            <p className="text-xs text-gray-700 mt-1">{t("17 번만 확인 ⚡", "Only ~17 checks ⚡")}</p>
           </div>
         </div>
       </div>
 
+      {/* 정렬의 5 가지 이유 — 한 번에 다 보임 */}
       <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4">
-        <p className="text-sm font-bold text-blue-900 mb-2">💭 {t("정렬을 쓰는 진짜 이유?", "Real reasons to sort?")}</p>
-        {!revealed ? (
-          <button onClick={() => setRevealed(true)} className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold text-sm">
-            🤔 {t("답 보기", "Reveal")}
-          </button>
-        ) : (
-          <div className="bg-white rounded-lg p-3 border border-blue-300 text-sm text-gray-800 space-y-1">
-            <p>1️⃣ <b>{t("검색 빨라짐", "Faster search")}</b> — {t("이분 탐색 가능", "binary search possible")}</p>
-            <p>2️⃣ <b>{t("최솟값/최댓값", "Min/max")}</b> — {t("정렬 후 첫/마지막 = O(1)", "first/last = O(1) after sort")}</p>
-            <p>3️⃣ <b>{t("중복 처리", "Dedup")}</b> — {t("같은 값들이 옆에 모임", "duplicates land adjacent")}</p>
-            <p>4️⃣ <b>{t("그룹화", "Grouping")}</b> — {t("같은 종류 묶기", "group same kind")}</p>
-            <p>5️⃣ <b>{t("최적화 ('가장 작은 것 먼저')", "Optimization ('smallest first')")}</b></p>
+        <p className="text-sm font-black text-blue-900 mb-2">
+          ✨ {t("정렬을 쓰는 5 가지 이유", "5 reasons to sort")}
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-sm text-gray-800">
+          <div className="bg-white rounded-lg px-3 py-2 border border-blue-100">
+            <b className="text-blue-700">1️⃣ {t("검색 빨라짐", "Faster search")}</b>
+            <p className="text-xs text-gray-600">{t("이분 탐색 가능", "binary search")}</p>
           </div>
-        )}
+          <div className="bg-white rounded-lg px-3 py-2 border border-blue-100">
+            <b className="text-blue-700">2️⃣ {t("최솟값/최댓값", "Min/max")}</b>
+            <p className="text-xs text-gray-600">{t("O(1) 즉시", "O(1) instant")}</p>
+          </div>
+          <div className="bg-white rounded-lg px-3 py-2 border border-blue-100">
+            <b className="text-blue-700">3️⃣ {t("중복 처리", "Dedup")}</b>
+            <p className="text-xs text-gray-600">{t("같은 값 옆에 모임", "duplicates adjacent")}</p>
+          </div>
+          <div className="bg-white rounded-lg px-3 py-2 border border-blue-100">
+            <b className="text-blue-700">4️⃣ {t("그룹화", "Grouping")}</b>
+            <p className="text-xs text-gray-600">{t("같은 종류 묶기", "group same kind")}</p>
+          </div>
+          <div className="bg-white rounded-lg px-3 py-2 border border-blue-100 sm:col-span-2">
+            <b className="text-blue-700">5️⃣ {t("최적화 ('가장 작은 것 먼저')", "Optimization ('smallest first')")}</b>
+          </div>
+        </div>
       </div>
 
-      <CodeBlock lang={codeLang} setLang={setCodeLang}
-        py={`# 정렬 한 줄 (Python)
-arr = [3, 1, 4, 1, 5, 9, 2, 6]
-arr.sort()              # 원본 변경
-# 또는
-sorted_arr = sorted(arr)  # 새 리스트 반환
-
-print(arr)  # [1, 1, 2, 3, 4, 5, 6, 9]`}
-        cpp={`// 정렬 한 줄 (C++)
-#include <algorithm>
-#include <vector>
-using namespace std;
-
-vector<int> arr = {3, 1, 4, 1, 5, 9, 2, 6};
-sort(arr.begin(), arr.end());
-
-// arr = {1, 1, 2, 3, 4, 5, 6, 9}`}
-      />
-
-      {revealed && (
-        <button onClick={onComplete} className="w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold flex items-center justify-center gap-2">
-          ✅ {t("이해했어요 — 다음", "Got it — Next")} <ArrowRight className="w-4 h-4" />
-        </button>
-      )}
+      {/* 다음 챕터로 — 항상 보임, 클릭만 하면 됨 */}
+      <button
+        onClick={onComplete}
+        className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all"
+      >
+        {t("다음: 정렬 코드 보기", "Next: See sort code")} <ArrowRight className="w-5 h-5" />
+      </button>
+      <p className="text-[11px] text-gray-400 text-center">
+        {t("다음 챕터 (2/5): sort() 한 줄로 정렬해보기", "Next chapter (2/5): sort with one line")}
+      </p>
     </div>
   )
 }
@@ -593,23 +600,6 @@ export default function SortingPage() {
             {isMastered && <span className="text-2xl">⭐</span>}
           </div>
 
-          {/* 📚 첫 방문 안내 — 학습 흐름 명확히 (완료한 챕터 0개 이고 첫 챕터일 때만) */}
-          {completedChapters.size === 0 && current === 1 && !isMastered && (
-            <div className="mb-3 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 p-3">
-              <p className="text-sm font-black text-blue-900 mb-1.5">
-                📚 {t("이 토픽 학습 흐름", "How this works")}
-              </p>
-              <div className="space-y-1 text-xs text-blue-800">
-                <p><b>1.</b> {t("5 챕터를 순서대로 읽어요 (총 ~25 분)", "Read 5 chapters in order (~25 min total)")}</p>
-                <p><b>2.</b> {t("각 챕터 끝에 미니 퀴즈 — 맞히면 '이해했어요' 버튼", "Mini quiz at chapter end — get it right → 'Got it' button")}</p>
-                <p><b>3.</b> {t("'이해했어요' 누르면 다음 챕터로", "'Got it' → next chapter")}</p>
-                <p><b>4.</b> {t("마지막 챕터에 실전 문제 (BOJ) 링크", "Last chapter: real practice problems (BOJ) links")}</p>
-              </div>
-              <p className="mt-2 text-[11px] text-blue-600 font-bold">
-                ↓ {t("바로 아래 챕터 1 부터 시작!", "Start with Chapter 1 below!")}
-              </p>
-            </div>
-          )}
 
           <div className="flex flex-wrap gap-1.5 mb-2">
             {CHAPTERS.map(ch => {

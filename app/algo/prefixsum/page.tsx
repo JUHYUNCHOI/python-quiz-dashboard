@@ -136,80 +136,59 @@ function MiniQuiz({
 }
 
 // ── 챕터 1: 비유 (저금통) ───────────────────────────────────────────
-function Chapter1({ onComplete, codeLang, setCodeLang }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
+function Chapter1({ onComplete }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
   const { t } = useLanguage()
-  const [revealed, setRevealed] = useState(false)
   return (
     <div className="space-y-4">
+      {/* 한 줄 가이드 */}
+      <div className="bg-orange-100 border-l-4 border-orange-500 rounded-r-lg px-3 py-2 text-sm font-bold text-orange-900">
+        👇 {t("아래 읽고 맨 아래 '다음' 버튼 누르세요", "Read below, then hit 'Next' at the bottom")}
+      </div>
+
+      {/* 저금통 비유 */}
       <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-5 border-2 border-amber-200">
-        <p className="text-base text-gray-800 leading-relaxed">
-          {t("매일 용돈을 저금통에 넣는다고 생각해 보세요.", "Imagine putting daily allowance into a piggy bank.")}
+        <p className="text-base font-bold text-gray-900 mb-3">
+          🏦 {t("저금통 비유", "Piggy bank analogy")}
         </p>
-        <p className="mt-3 text-sm text-gray-700">
-          <b>{t("월 3원, 화 1원, 수 4원, 목 1원, 금 5원", "Mon 3, Tue 1, Wed 4, Thu 1, Fri 5")}</b>
+        <p className="text-sm text-gray-800 mb-3">
+          {t("매일 돈을 저금통에 넣음: 월 3원, 화 1원, 수 4원, 목 1원, 금 5원", "Daily deposits: Mon 3, Tue 1, Wed 4, Thu 1, Fri 5")}
         </p>
-        <p className="mt-3 text-sm text-gray-700">
-          {t("저금통에 매일 ", "Each day the bank shows the ")}<b>{t("누적 총액", "running total")}</b>{t("이 적혀 있어요:", ":")}
+        <p className="text-sm text-gray-800 mb-2">
+          {t("저금통에는", "The bank shows the")} <b>{t("매일 누적 총액", "running total")}</b>{t(":", ":")}
         </p>
-        <div className="mt-2 px-3 py-2 bg-white rounded-lg font-mono text-sm text-orange-700 font-bold">
+        <div className="px-3 py-2 bg-white rounded-lg font-mono text-base text-orange-700 font-bold text-center">
           0 → 3 → 4 → 8 → 9 → 14
         </div>
       </div>
 
+      {/* 핵심 마법 */}
       <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4">
-        <p className="text-sm font-bold text-blue-900 mb-2">
-          💭 {t("질문: 화요일부터 목요일까지 모은 돈은?", "Q: Total saved from Tue to Thu?")}
+        <p className="text-sm font-black text-blue-900 mb-2">
+          ✨ {t("핵심: 화~목 합?", "Magic: Tue~Thu total?")}
         </p>
-        {!revealed ? (
-          <button
-            onClick={() => setRevealed(true)}
-            className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold text-sm transition-colors"
-          >
-            🤔 {t("생각해보고 → 답 보기", "Think then reveal answer")}
-          </button>
-        ) : (
-          <div className="bg-white rounded-lg p-3 border border-blue-300">
-            <p className="text-base font-black text-blue-700">
-              {t("목요일까지 총액", "Thu total")} <span className="font-mono">9</span> − {t("월요일까지 총액", "Mon total")} <span className="font-mono">3</span> = <span className="text-2xl text-orange-600">6</span>
-            </p>
-            <p className="mt-1.5 text-xs text-gray-600">
-              {t("실제로 1 + 4 + 1 = 6 ✓", "Check: 1 + 4 + 1 = 6 ✓")}
-            </p>
-            <p className="mt-2 text-sm font-bold text-emerald-700">
-              ✨ {t("이게 바로 누적합이에요!", "This is prefix sum!")}
-            </p>
-          </div>
-        )}
+        <div className="bg-white rounded-lg p-3 border border-blue-300">
+          <p className="text-base font-black text-blue-700 text-center">
+            {t("목요일 총액", "Thu total")} <span className="font-mono bg-emerald-100 px-1.5 py-0.5 rounded">9</span> − {t("월요일 총액", "Mon total")} <span className="font-mono bg-red-100 px-1.5 py-0.5 rounded">3</span> = <span className="text-2xl text-orange-600">6</span>
+          </p>
+          <p className="mt-2 text-xs text-gray-600 text-center">
+            {t("실제: 1 + 4 + 1 = 6 ✓ — 한 번에 뺄셈으로!", "Check: 1 + 4 + 1 = 6 ✓ — one subtraction!")}
+          </p>
+        </div>
+        <p className="mt-3 text-sm font-bold text-emerald-700 text-center">
+          {t("이게 바로 누적합이에요!", "That's prefix sum!")}
+        </p>
       </div>
 
-      <CodeBlock
-        lang={codeLang}
-        setLang={setCodeLang}
-        py={`# 원래 배열
-arr    = [3, 1, 4, 1, 5]
-
-# 누적합 배열 (맨 앞에 0 추가)
-prefix = [0, 3, 4, 8, 9, 14]
-
-# 화~목 합 = prefix[4] - prefix[1] = 9 - 3 = 6`}
-        cpp={`// 원래 배열
-vector<int> arr = {3, 1, 4, 1, 5};
-
-// 누적합 배열 (맨 앞에 0 추가)
-vector<int> prefix = {0, 3, 4, 8, 9, 14};
-
-// 화~목 합 = prefix[4] - prefix[1] = 9 - 3 = 6`}
-      />
-
-      {revealed && (
-        <button
-          onClick={onComplete}
-          className="w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
-        >
-          ✅ {t("이해했어요 — 다음 챕터", "Got it — Next chapter")}
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      )}
+      {/* 다음 버튼 — 항상 보임 */}
+      <button
+        onClick={onComplete}
+        className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all"
+      >
+        {t("다음: 누적합 만드는 법", "Next: How to build prefix sum")} <ArrowRight className="w-5 h-5" />
+      </button>
+      <p className="text-[11px] text-gray-400 text-center">
+        {t("다음 챕터 (2/5): 단계별 시각화로 만들어보기", "Next chapter (2/5): build step-by-step")}
+      </p>
     </div>
   )
 }
@@ -787,23 +766,6 @@ export default function PrefixSumPage() {
             {isMastered && <span className="text-2xl">⭐</span>}
           </div>
 
-          {/* 📚 첫 방문 안내 — 학습 흐름 명확히 */}
-          {completedChapters.size === 0 && current === 1 && !isMastered && (
-            <div className="mb-3 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 p-3">
-              <p className="text-sm font-black text-blue-900 mb-1.5">
-                📚 {t("이 토픽 학습 흐름", "How this works")}
-              </p>
-              <div className="space-y-1 text-xs text-blue-800">
-                <p><b>1.</b> {t("5 챕터를 순서대로 읽어요 (총 ~25 분)", "Read 5 chapters in order (~25 min total)")}</p>
-                <p><b>2.</b> {t("각 챕터 끝에 미니 퀴즈 — 맞히면 '이해했어요' 버튼", "Mini quiz at chapter end — get it right → 'Got it' button")}</p>
-                <p><b>3.</b> {t("'이해했어요' 누르면 다음 챕터로", "'Got it' → next chapter")}</p>
-                <p><b>4.</b> {t("마지막 챕터에 실전 문제 (BOJ) 링크", "Last chapter: real practice problems (BOJ) links")}</p>
-              </div>
-              <p className="mt-2 text-[11px] text-blue-600 font-bold">
-                ↓ {t("바로 아래 챕터 1 부터 시작!", "Start with Chapter 1 below!")}
-              </p>
-            </div>
-          )}
 
           {/* 챕터 칩 (탐색) */}
           <div className="flex flex-wrap gap-1.5 mb-2">
