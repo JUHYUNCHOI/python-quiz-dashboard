@@ -124,18 +124,36 @@ function Chapter1({ onComplete }: { onComplete: () => void; codeLang: CodeLang; 
         ))}
       </div>
 
-      {/* 카드 — step 별 1 개씩 */}
+      {/* 카드 — step 별 1 개씩 (친절한 튜터 톤) */}
       <div className="flex-1">
         {step === 0 && (
-          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border-2 border-amber-200 text-center min-h-[240px] flex flex-col justify-center">
-            <p className="text-5xl mb-3">👋</p>
-            <h3 className="text-xl font-black text-gray-900 mb-3">
-              {t("정렬, 같이 배워봐요!", "Let's learn sorting together!")}
+          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border-2 border-amber-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-4">👋</p>
+            <h3 className="text-xl font-black text-gray-900 mb-3 text-center">
+              {t("안녕! 만나서 반가워요 😊", "Hi! Nice to meet you 😊")}
             </h3>
-            <p className="text-sm text-gray-700 leading-relaxed max-w-sm mx-auto">
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "USACO Bronze 문제의 60% 가 정렬을 써요. 정말 기초 도구예요. 5 챕터, 약 25 분이면 끝나요.",
-                "60% of USACO Bronze uses sorting. A true essential. 5 chapters, ~25 min.",
+                "오늘 같이 배울 거는 — 정렬 (sorting) 이에요.",
+                "Today we're learning — sorting.",
+              )}
+            </p>
+            <p className="text-sm text-gray-700 leading-relaxed mb-3">
+              {t(
+                "들어본 적 있어요? '가나다 순', '키 작은 순', '나이 많은 순'... 일상에서 늘 쓰는 거예요. 컴퓨터한테 이걸 시키는 방법, 그게 정렬이에요.",
+                "Heard of it? Sorting things alphabetically, by height, by age... we do it daily. Now we'll teach computers to do it.",
+              )}
+            </p>
+            <p className="text-sm text-gray-700 leading-relaxed mb-3">
+              {t(
+                "걱정 마요 — 진짜 한 줄로 끝나는 것부터 시작할 거니까. 어렵지 않아요.",
+                "Don't worry — we start with literally one line of code. It's not hard.",
+              )}
+            </p>
+            <p className="text-sm font-bold text-orange-700 text-center mt-4">
+              {t(
+                "준비됐어요? 아래 '다음' 눌러 가요 ↓",
+                "Ready? Hit 'Next' below ↓",
               )}
             </p>
           </div>
@@ -143,43 +161,83 @@ function Chapter1({ onComplete }: { onComplete: () => void; codeLang: CodeLang; 
 
         {step === 1 && (
           <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-5 border-2 border-amber-200">
-            <p className="text-base font-black text-gray-900 mb-3 text-center">
-              🏛 {t("도서관에서 'Harry Potter' 찾기", "Finding 'Harry Potter' in a library")}
+            <p className="text-sm text-gray-700 mb-2">
+              {t("짧은 이야기로 시작해볼게요 —", "Let's start with a quick story —")}
             </p>
-            <p className="text-sm text-gray-700 mb-4 text-center">
-              {t("책 10만 권 중에서:", "Among 100,000 books:")}
+            <p className="text-base font-black text-gray-900 mb-4">
+              🏛 {t("도서관에서 책 한 권 찾기", "Finding one book in a library")}
             </p>
-            <div className="space-y-2">
+            <p className="text-sm text-gray-700 mb-3 leading-relaxed">
+              {t(
+                "상상해 봐요. 도서관에 책이 100,000 권 있어요. 그 중 '해리포터' 한 권을 찾아야 해요. 자, 두 가지 도서관이 있다고 해요:",
+                "Imagine: 100,000 books in a library. You need to find 'Harry Potter'. Two libraries exist:",
+              )}
+            </p>
+            <div className="space-y-3 mt-4">
               <div className="bg-red-50 border-2 border-red-200 rounded-lg p-3">
-                <p className="text-sm font-black text-red-700">📚🌀 {t("정렬 안 됨", "Unsorted")}</p>
-                <p className="text-xs text-gray-700 mt-1">
-                  {t("운 나쁘면 10만 번 확인. 그 사이 졸업할 듯 😅", "Worst: 100,000 checks. You'd graduate first 😅")}
+                <p className="text-sm font-black text-red-700 mb-1">📚🌀 {t("도서관 A — 책이 마구잡이", "Library A — random order")}</p>
+                <p className="text-xs text-gray-700 leading-relaxed">
+                  {t(
+                    "어떻게 찾을까? 한 권씩 다 봐야겠죠... 운 나쁘면 10만 번 확인해요. 졸업할 때까지 못 찾을 수도? 😅",
+                    "How? One by one... worst case 100,000 checks. You might not find it before graduating 😅",
+                  )}
                 </p>
               </div>
               <div className="bg-green-50 border-2 border-green-200 rounded-lg p-3">
-                <p className="text-sm font-black text-green-700">📚📖 {t("정렬됨 (알파벳)", "Sorted (alphabetical)")}</p>
-                <p className="text-xs text-gray-700 mt-1">
-                  {t("17 번만 확인 — 6,000 배 빠름! ⚡", "Only 17 checks — 6,000× faster! ⚡")}
+                <p className="text-sm font-black text-green-700 mb-1">📖 {t("도서관 B — 알파벳 순으로 정리됨", "Library B — alphabetically sorted")}</p>
+                <p className="text-xs text-gray-700 leading-relaxed">
+                  {t(
+                    "'해리포터'는 H 로 시작! 중간 펼쳐서 'M' 보이면 → H 는 앞쪽이지! 다시 절반 줄이고... 17 번이면 끝나요. ⚡",
+                    "'Harry' starts with H! Open middle → see 'M' → H is earlier! Halve again... 17 checks done. ⚡",
+                  )}
                 </p>
               </div>
             </div>
+            <p className="text-sm text-amber-800 font-bold text-center mt-4">
+              {t(
+                "같은 책인데 6,000 배 차이! 😲",
+                "Same books — 6,000× faster! 😲",
+              )}
+            </p>
+            <p className="text-xs text-gray-600 text-center mt-2 leading-relaxed">
+              {t(
+                "→ 정렬은 '나중에 찾기 쉽게' 미리 정리해두는 도구예요.",
+                "→ Sorting = pre-organize so future lookups are easy.",
+              )}
+            </p>
           </div>
         )}
 
         {step === 2 && (
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[240px] flex flex-col justify-center">
-            <p className="text-5xl text-center mb-3">✨</p>
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-4">✨</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("정렬이 왜 강력한지 — 한 줄 요약", "Why sorting is powerful — one line")}
+              {t("그래서 정렬을 왜 배우냐면 —", "So why learn sorting? Because —")}
             </h3>
-            <p className="text-sm text-gray-800 text-center leading-relaxed">
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "정렬해두면 검색·최솟값·중복 처리·그룹화·최적화 — 거의 모든 게 빨라져요.",
-                "Once sorted: search, min/max, dedup, grouping, optimization — everything gets faster.",
+                "한 번 정렬해두면 이런 게 갑자기 다 쉬워져요:",
+                "Once sorted, all of this suddenly becomes easy:",
               )}
             </p>
-            <p className="text-xs text-blue-700 mt-4 text-center font-bold">
-              {t("다음 챕터에서 한 줄 코드로 직접 정렬해 봐요 →", "Next: sort with one line of code →")}
+            <div className="space-y-1.5 text-sm text-gray-800 mb-4">
+              <p>🔍 <b>{t("무언가 찾기", "Finding something")}</b> — {t("이분 탐색으로 100만 개에서 20 번만", "binary search: 20 checks among 1M")}</p>
+              <p>🥇 <b>{t("최댓값/최솟값", "Max/min")}</b> — {t("정렬된 배열의 첫/마지막 = 답", "first/last of sorted array = answer")}</p>
+              <p>👯 <b>{t("중복 처리", "Dedup")}</b> — {t("같은 값들이 옆에 모임", "duplicates land next to each other")}</p>
+              <p>🎒 <b>{t("같은 종류 묶기", "Grouping")}</b> — {t("학년별 학생 묶기 등", "e.g. students by grade")}</p>
+              <p>💡 <b>{t("'작은 거 먼저' 전략", "Greedy 'smallest first'")}</b></p>
+            </div>
+            <p className="text-xs text-blue-700 text-center font-bold leading-relaxed">
+              {t(
+                "USACO Bronze 문제 거의 다 어딘가에서 정렬을 한 번씩 써요. 그래서 진짜 기초 도구.",
+                "Almost all USACO Bronze problems use sorting somewhere. That's why it's foundational.",
+              )}
+            </p>
+            <p className="text-sm font-bold text-blue-800 text-center mt-4">
+              {t(
+                "자, 다음 챕터에서 직접 정렬해 볼까요? 진짜 한 줄로 끝나요 →",
+                "Now let's actually sort? Really takes one line →",
+              )}
             </p>
           </div>
         )}
