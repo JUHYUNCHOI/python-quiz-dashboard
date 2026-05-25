@@ -642,58 +642,48 @@ export function makeCheeseCh4(E) {
         "제거당 N³! N=20: 8,000번. N=1000: 10억 번! 12만 5천 배 느려!"),
     },
 
-    // 4-3: 구체적 숫자 체감
-    // 4-3: USACO 제출 결과 시각화 (추상 숫자 대신 그림으로 체감)
+    // 4-3: 시간복잡도 분석 (수학만 — 검증된 사실만, 추측 없음)
     {
       type: "reveal",
       narr: t(E,
-        "Submit this brute solution to USACO: first few cases pass slowly, rest all time out:", "이 브루트 코드를 USACO 에 제출하면: 앞 몇 개는 간신히 통과, 나머지는 다 시간초과:"),
+        "Let's compute the time cost — pure math, no guesses.",
+        "시간 비용을 계산해봐요 — 순수 수학, 추측 없음."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 8, textAlign: "center" }}>
-            {t(E, "USACO submission — judge results", "USACO 제출 결과 — 채점")}
+          {/* 검증된 수학 계산만 */}
+          <div style={{ padding: "12px 14px", background: "#fff", border: `2px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 8, color: C.no }}>
+              ⏱ {t(E, "Time complexity (math)", "시간 복잡도 (수학)")}
+            </div>
+            <div style={{ whiteSpace: "pre-line", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+              {t(E,
+                "Per query: 3 directions × N² rows × N cells = 3N³ ops\nTotal:     Q queries × 3N³ = 3QN³ ops\n\nMax case (N=1000, Q=200K):\n  3 × 200,000 × 1000³ = 6 × 10¹⁴ ops\n\nAt 10⁸ ops/sec (typical C++):\n  6 × 10¹⁴ / 10⁸ = 6 × 10⁶ seconds ≈ 70 days",
+                "쿼리당: 3 방향 × N² 줄 × N 칸 = 3N³ 연산\n전체:    Q 쿼리 × 3N³ = 3QN³ 연산\n\n최악 (N=1000, Q=20만):\n  3 × 200,000 × 1000³ = 6 × 10¹⁴ 연산\n\n10⁸ ops/sec 기준 (보통 C++):\n  6 × 10¹⁴ / 10⁸ = 6 × 10⁶ 초 ≈ 70 일")}
+            </div>
           </div>
-          <div style={{
-            background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14,
-            display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center",
-          }}>
-            {[
-              { n: 1,  pass: true,  label: "12ms" },
-              { n: 2,  pass: true,  label: "98ms" },
-              { n: 3,  pass: true,  label: "1.2s" },
-              { n: 4,  pass: false }, { n: 5,  pass: false }, { n: 6,  pass: false },
-              { n: 7,  pass: false }, { n: 8,  pass: false }, { n: 9,  pass: false },
-              { n: 10, pass: false }, { n: 11, pass: false }, { n: 12, pass: false },
-            ].map(c => (
-              <div key={c.n} style={{
-                width: 56, padding: "8px 4px", borderRadius: 8, textAlign: "center",
-                background: c.pass ? C.okBg : C.noBg,
-                border: `1.5px solid ${c.pass ? C.okBd : C.noBd}`,
-                fontFamily: "'JetBrains Mono',monospace",
-              }}>
-                <div style={{ fontSize: 20, fontWeight: 900, color: c.pass ? C.ok : C.no, lineHeight: 1 }}>
-                  {c.pass ? "✓" : "t"}
-                </div>
-                {c.label && (
-                  <div style={{ fontSize: 9, color: C.dim, marginTop: 4 }}>{c.label}</div>
-                )}
-                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>#{c.n}</div>
-              </div>
-            ))}
-          </div>
+
+          {/* USACO 시간 제한 (검증된 사실) */}
           <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
             ❌ {t(E,
-              "9 out of 12 cases TLE. Even passing ones at 1.2s are near the limit.",
-              "12 개 중 9 개 TLE. 통과한 것들도 1.2초로 한계 근처.")}
+              "USACO time limit: 2 seconds. Brute needs ~70 days → cannot fit large test cases.",
+              "USACO 시간 제한: 2 초. Brute 는 약 70 일 필요 → 큰 테스트 케이스 통과 불가.")}
           </div>
-          <div style={{ marginTop: 8, padding: "8px 12px", background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 11, color: C.dim, lineHeight: 1.6, whiteSpace: "pre-line" }}>
-            {t(E,
-              "N=1000, Q=200K: per query = 3M rows × 1000 cells = 3B ops.\nAt 100M ops/sec → 30s/query × 200K = ~70 days. 😱", "N=1000, Q=20만: 쿼리당 = 300만 줄 × 1000칸 = 30억 연산.\n1억 ops/sec → 쿼리당 30초 × 20만 = ~70 일. 😱")}
+
+          {/* 직접 확인 CTA */}
+          <div style={{ marginTop: 10, padding: "12px 14px", background: "linear-gradient(135deg,#fef3c7,#fde68a)", border: "2px solid #f59e0b", borderRadius: 10, fontSize: 13, color: "#78350f", lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>
+              👉 {t(E, "Try it yourself", "직접 해봐")}
+            </div>
+            <div>
+              {t(E,
+                "Submit the brute code below to USACO and see your real result. That's the only way to know exactly what passes.",
+                "아래 brute 코드를 USACO 에 제출해서 실제 결과를 확인해봐. 정확히 뭐가 통과하는지는 직접 해봐야 알 수 있음.")}
+            </div>
           </div>
         </div>),
     },
 
-    // 4-3-code: brute 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
+        // 4-3-code: brute 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
     ...getCheeseBruteSections(E).map((sec, i, arr) => ({
       type: "code-section",
       narr: i === 0
@@ -722,8 +712,8 @@ export function makeCheeseCh4(E) {
         t(E, "Just 1 row", "1 줄만"),
       ], correct: 2,
       explain: t(E,
-        "EXACTLY 3 rows. So we're wasting time re-checking 3N² − 3 rows that didn't change. Big idea: only check those 3.",
-        "정확히 3 줄. 그러면 안 변한 3N² − 3 줄을 다시 검사하는 게 시간 낭비. 핵심 아이디어: 그 3 줄만 검사."),
+        "EXACTLY 3 rows. So 3N² − 3 rows don't change — wasted work to re-check them. Idea: only check those 3.\n\n⚠ But scanning each of those 3 rows still takes N cells → O(QN) total. For N=1000, Q=200K: 2×10⁸ — still borderline TLE. Need ONE more idea (next question).",
+        "정확히 3 줄. 그러면 안 변한 3N² − 3 줄을 다시 검사하는 게 시간 낭비. 핵심 아이디어: 그 3 줄만 검사.\n\n⚠ 근데 그 3 줄도 N 칸씩 다 봐야 빈 거 확인 가능 → 총 O(QN). N=1000, Q=20만이면 2×10⁸ — 여전히 한계 근처라 TLE. 한 가지 더 필요 (다음 질문)."),
     },
 
     // 4-3b: 두 번째 디딤돌 — "이전 답을 어떻게 기억?"
