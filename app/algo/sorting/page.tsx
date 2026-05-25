@@ -32,6 +32,57 @@ const CHAPTERS = [
 const STORAGE_KEY = "algo-sorting-chapter"
 
 type CodeLang = "py" | "cpp"
+
+// ── 슬라이드 챕터 헬퍼 ───────────────────────────────────────────
+// 한 챕터 안에 여러 슬라이드. step 변경 시 카드로 직접 스크롤.
+function useSlideChapter() {
+  const [step, setStep] = useState(0)
+  const rootRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (step > 0) {
+      setTimeout(() => rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 30)
+    }
+  }, [step])
+  return { step, setStep, rootRef }
+}
+
+// 슬라이드 진도 점 + 이전/다음 버튼 (공통)
+function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
+  step: number; total: number; setStep: (n: number) => void
+  onFinish: () => void; nextLabel?: string; finishLabel?: string
+}) {
+  const { t } = useLanguage()
+  const isLast = step === total - 1
+  return (
+    <>
+      <div className="flex items-center justify-center gap-2 mb-4">
+        {Array.from({ length: total }).map((_, i) => (
+          <div key={i} className={cn(
+            "h-2 rounded-full transition-all",
+            i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300",
+          )} />
+        ))}
+      </div>
+      <div className="flex gap-2 sticky bottom-0 pt-2">
+        <button
+          onClick={() => step > 0 && setStep(step - 1)}
+          disabled={step === 0}
+          className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm"
+        >
+          ← {t("이전", "Prev")}
+        </button>
+        <button
+          onClick={() => isLast ? onFinish() : setStep(step + 1)}
+          className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95"
+        >
+          {isLast ? (finishLabel ?? t("다음 챕터로", "Next chapter")) : (nextLabel ?? t("다음", "Next"))}
+          <ArrowRight className="w-5 h-5" />
+        </button>
+      </div>
+    </>
+  )
+}
+
 function CodeBlock({ py, cpp, lang, setLang }: { py: string; cpp: string; lang: CodeLang; setLang: (l: CodeLang) => void }) {
   return (
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
@@ -91,39 +142,14 @@ function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
   )
 }
 
-// ── Chapter 1: 왜 정렬? — 슬라이드 식 (한 화면 = 한 카드 + 한 버튼) ─
+// ── Chapter 1: 왜 정렬? — 슬라이드 식 ───────────────────────────
 function Chapter1({ onComplete }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
   const { t } = useLanguage()
-  const [step, setStep] = useState(0)
-  const rootRef = useRef<HTMLDivElement>(null)
-  // 0: 인사 → 1: 도서관 비유 → 2: 결론
-
+  const { step, setStep, rootRef } = useSlideChapter()
   const totalSteps = 3
-  // step 변하면 카드로 직접 스크롤 (페이지 상단 X) — 학생이 새 내용 바로 보임
-  useEffect(() => {
-    if (step > 0) {  // 첫 진입 시는 스크롤 X
-      setTimeout(() => rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 30)
-    }
-  }, [step])
-
-  const next = () => {
-    if (step < totalSteps - 1) setStep(step + 1)
-    else onComplete()
-  }
-  const prev = () => step > 0 && setStep(step - 1)
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
-      {/* 슬라이드 진도 — 작은 점 */}
-      <div className="flex items-center justify-center gap-2">
-        {Array.from({ length: totalSteps }).map((_, i) => (
-          <div key={i} className={cn(
-            "h-2 rounded-full transition-all",
-            i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300",
-          )} />
-        ))}
-      </div>
-
       {/* 카드 — step 별 1 개씩 (친절한 튜터 톤) */}
       <div className="flex-1">
         {step === 0 && (
@@ -243,106 +269,108 @@ function Chapter1({ onComplete }: { onComplete: () => void; codeLang: CodeLang; 
         )}
       </div>
 
-      {/* 이전/다음 — 항상 한 곳에만 */}
-      <div className="flex gap-2 sticky bottom-0 pt-2">
-        <button
-          onClick={prev}
-          disabled={step === 0}
-          className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm"
-        >
-          ← {t("이전", "Prev")}
-        </button>
-        <button
-          onClick={next}
-          className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95"
-        >
-          {step === totalSteps - 1
-            ? <>{t("다음 챕터로", "Next chapter")} <ArrowRight className="w-5 h-5" /></>
-            : <>{t("다음", "Next")} <ArrowRight className="w-5 h-5" /></>}
-        </button>
-      </div>
+      <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
     </div>
   )
 }
 
-// ── Chapter 2: sort() 한 줄 ──────────────────────────────────────
+// ── Chapter 2: sort() 한 줄 — 슬라이드식 ─────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
   const { t } = useLanguage()
-  const [arr, setArr] = useState([3, 1, 4, 1, 5, 9, 2, 6])
+  const { step, setStep, rootRef } = useSlideChapter()
+  const totalSteps = 4
+  const [arr] = useState([3, 1, 4, 1, 5, 9, 2, 6])
   const [sorted, setSorted] = useState<number[] | null>(null)
   const [quizPassed, setQuizPassed] = useState(false)
-
   const handleSort = () => setSorted([...arr].sort((a, b) => a - b))
   const handleSortDesc = () => setSorted([...arr].sort((a, b) => b - a))
-  const handleReset = () => { setSorted(null); setArr([3, 1, 4, 1, 5, 9, 2, 6]) }
+  const handleReset = () => setSorted(null)
 
   return (
-    <div className="space-y-4">
-      <div className="bg-emerald-50 rounded-2xl p-4 border-2 border-emerald-200">
-        <p className="text-sm font-bold text-emerald-900 mb-2">{t("Python 과 C++ 둘 다 한 줄로 정렬", "Sort in one line — both Python & C++")}:</p>
-        <div className="bg-white rounded-lg p-3 font-mono text-sm space-y-1 text-emerald-700">
-          <p>Python: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">arr.sort()</code> {t("또는", "or")} <code className="bg-emerald-50 px-1.5 py-0.5 rounded">sorted(arr)</code></p>
-          <p>C++: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">sort(arr.begin(), arr.end())</code></p>
-        </div>
-      </div>
-
-      {/* 인터랙티브 — 정렬 직접 해보기 */}
-      <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-        <p className="text-xs font-black text-amber-900 mb-3">🎮 {t("직접 정렬해 보기", "Try sorting")}</p>
-
-        <div className="mb-3">
-          <p className="text-[11px] text-gray-500 mb-1">{t("원본", "Original")} arr</p>
-          <div className="flex gap-1 flex-wrap">
-            {arr.map((v, i) => (
-              <div key={i} className="w-10 h-10 rounded-lg bg-gray-100 border-2 border-gray-300 flex items-center justify-center font-mono font-bold text-gray-700">
-                {v}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {sorted && (
-          <div className="mb-3">
-            <p className="text-[11px] text-gray-500 mb-1">{t("정렬 후", "Sorted")} arr</p>
-            <div className="flex gap-1 flex-wrap">
-              {sorted.map((v, i) => (
-                <div key={i} className="w-10 h-10 rounded-lg bg-emerald-100 border-2 border-emerald-400 flex items-center justify-center font-mono font-bold text-emerald-700">
-                  {v}
-                </div>
-              ))}
+    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
+      <div className="flex-1">
+        {step === 0 && (
+          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🎯</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("자, 진짜로 정렬해 볼까요?", "OK, let's actually sort?")}
+            </h3>
+            <p className="text-sm text-gray-700 leading-relaxed mb-3">
+              {t(
+                "Python 도 C++ 도 — 정렬은 진짜 한 줄로 끝나요. 직접 짜는 거 아니에요. 라이브러리가 해줘요.",
+                "Python and C++ — sorting really is one line. You don't write it yourself. The library does.",
+              )}
+            </p>
+            <div className="bg-white rounded-lg p-3 font-mono text-sm space-y-1 text-emerald-700 border border-emerald-200">
+              <p>Python: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">arr.sort()</code></p>
+              <p>C++: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">sort(arr.begin(), arr.end())</code></p>
             </div>
+            <p className="text-xs text-emerald-700 mt-3 text-center">
+              {t("그게 끝! 다음 슬라이드에서 진짜 정렬되는 거 봐요 →", "That's it! See it sort on the next slide →")}
+            </p>
           </div>
         )}
 
-        <div className="flex gap-2">
-          <button onClick={handleSort} className="flex-1 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm">
-            ↑ {t("오름차순", "Ascending")}
-          </button>
-          <button onClick={handleSortDesc} className="flex-1 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold text-sm">
-            ↓ {t("내림차순", "Descending")}
-          </button>
-          {sorted && (
-            <button onClick={handleReset} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">
-              ↺ {t("리셋", "Reset")}
-            </button>
-          )}
-        </div>
-      </div>
+        {step === 1 && (
+          <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("직접 눌러보세요", "Click to try")}</p>
+            <p className="text-xs text-gray-600 text-center mb-4">
+              {t("아래 배열을 직접 정렬해 봐요. 원래 모습은 위, 정렬 후는 아래.", "Sort the array below. Original on top, sorted below.")}
+            </p>
+            <div className="mb-3">
+              <p className="text-[11px] text-gray-500 mb-1">{t("원본 배열", "Original")}</p>
+              <div className="flex gap-1 flex-wrap">
+                {arr.map((v, i) => (
+                  <div key={i} className="w-10 h-10 rounded-lg bg-gray-100 border-2 border-gray-300 flex items-center justify-center font-mono font-bold text-gray-700">{v}</div>
+                ))}
+              </div>
+            </div>
+            {sorted ? (
+              <div className="mb-3">
+                <p className="text-[11px] text-emerald-600 mb-1 font-bold">✨ {t("정렬 후", "Sorted")}</p>
+                <div className="flex gap-1 flex-wrap">
+                  {sorted.map((v, i) => (
+                    <div key={i} className="w-10 h-10 rounded-lg bg-emerald-100 border-2 border-emerald-400 flex items-center justify-center font-mono font-bold text-emerald-700">{v}</div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-gray-400 text-center my-4">↓ {t("아래 버튼 눌러 정렬해 보세요", "Press a button below to sort")}</p>
+            )}
+            <div className="flex gap-2">
+              <button onClick={handleSort} className="flex-1 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm">↑ {t("오름차순", "Ascending")}</button>
+              <button onClick={handleSortDesc} className="flex-1 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold text-sm">↓ {t("내림차순", "Descending")}</button>
+              {sorted && <button onClick={handleReset} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">↺ {t("리셋", "Reset")}</button>}
+            </div>
+            {sorted && (
+              <p className="text-xs text-emerald-700 text-center mt-3 font-bold">
+                {t("✨ 한 줄로 정렬 끝! 진짜 빠르고 쉬워요.", "✨ One line — done! Really fast and easy.")}
+              </p>
+            )}
+          </div>
+        )}
 
-      <CodeBlock lang={codeLang} setLang={setCodeLang}
-        py={`arr = [3, 1, 4, 1, 5, 9, 2, 6]
+        {step === 2 && (
+          <div className="space-y-3">
+            <div className="bg-blue-50 rounded-2xl p-4 border-2 border-blue-200">
+              <p className="text-sm font-black text-blue-900 mb-2">📝 {t("실제 코드는 이렇게 생겼어요", "Here's the actual code")}</p>
+              <p className="text-xs text-gray-700">
+                {t("Python / C++ 둘 다 비슷한 모양. 위에서 언어 토글 해보세요:", "Python / C++ look similar. Toggle above:")}
+              </p>
+            </div>
+            <CodeBlock lang={codeLang} setLang={setCodeLang}
+              py={`arr = [3, 1, 4, 1, 5, 9, 2, 6]
 
-# 오름차순 (기본)
+# 오름차순 (기본값)
 arr.sort()
-# → [1, 1, 2, 3, 4, 5, 6, 9]
+# 이제 arr = [1, 1, 2, 3, 4, 5, 6, 9]
 
-# 내림차순
+# 내림차순 — 옵션 하나만 추가
 arr.sort(reverse=True)
-# → [9, 6, 5, 4, 3, 2, 1, 1]
 
-# 원본 안 바꾸고 새 리스트
-new_arr = sorted(arr)`}
-        cpp={`#include <algorithm>
+# 원본 안 바꾸고 새 리스트 만들기
+new_arr = sorted(arr)   # arr 는 그대로`}
+              cpp={`#include <algorithm>
 #include <vector>
 using namespace std;
 
@@ -351,22 +379,37 @@ vector<int> arr = {3, 1, 4, 1, 5, 9, 2, 6};
 // 오름차순 (기본)
 sort(arr.begin(), arr.end());
 
-// 내림차순 — greater<int>() 비교자
+// 내림차순 — greater 비교자 추가
 sort(arr.begin(), arr.end(), greater<int>());`}
-      />
+            />
+            <p className="text-xs text-gray-600 text-center">
+              {t("어렵지 않죠? 다음 슬라이드에서 짧은 퀴즈로 확인해봐요 →", "Easy, right? Quick quiz on the next slide →")}
+            </p>
+          </div>
+        )}
 
-      <MiniQuiz
-        question={t("arr = [5, 2, 8, 1] 에 arr.sort() 후 첫 원소는?", "After arr.sort() on [5, 2, 8, 1], first element?")}
-        options={["1", "2", "5", "8"]}
-        answerIdx={0}
-        hint={t("기본 = 오름차순 — 가장 작은 게 맨 앞", "Default = ascending — smallest first")}
-        onCorrect={() => setQuizPassed(true)}
-      />
+        {step === 3 && (
+          <MiniQuiz
+            question={t("arr = [5, 2, 8, 1] 에 arr.sort() 부른 뒤, 첫 원소는 뭘까요?", "After arr.sort() on [5, 2, 8, 1], what's the first element?")}
+            options={["1", "2", "5", "8"]}
+            answerIdx={0}
+            hint={t("기본 정렬은 오름차순 — 가장 작은 게 맨 앞으로", "Default = ascending → smallest first")}
+            onCorrect={() => setQuizPassed(true)}
+          />
+        )}
+      </div>
 
-      {quizPassed && (
-        <button onClick={onComplete} className="w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold flex items-center justify-center gap-2">
-          ✅ {t("이해했어요 — 다음", "Got it — Next")} <ArrowRight className="w-4 h-4" />
-        </button>
+      {/* step 3 (마지막) 은 퀴즈 통과해야만 '다음' 활성화 */}
+      {step < 3 ? (
+        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
+      ) : quizPassed ? (
+        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
+      ) : (
+        <div className="flex items-center justify-center gap-2 pt-2">
+          {Array.from({ length: totalSteps }).map((_, i) => (
+            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
+          ))}
+        </div>
       )}
     </div>
   )
@@ -375,81 +418,130 @@ sort(arr.begin(), arr.end(), greater<int>());`}
 // ── Chapter 3: 시간복잡도 ────────────────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
   const { t } = useLanguage()
+  const { step, setStep, rootRef } = useSlideChapter()
+  const totalSteps = 4
   const [quizPassed, setQuizPassed] = useState(false)
   return (
-    <div className="space-y-4">
-      <div className="bg-purple-50 rounded-2xl p-5 border-2 border-purple-200">
-        <p className="text-sm font-bold text-purple-900 mb-3">
-          {t("정렬의 시간복잡도는", "Sort time complexity:")} <b className="text-purple-700 text-base">O(N log N)</b>
-        </p>
-        <p className="text-xs text-gray-700">
-          {t("Python sort, C++ sort 둘 다 O(N log N) — 매우 빠름.", "Python sort & C++ sort: both O(N log N) — very fast.")}
-        </p>
-      </div>
+    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
+      <div className="flex-1">
+        {step === 0 && (
+          <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border-2 border-purple-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">⚡</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("그런데... 정렬이 왜 빠를까요?", "But... why is sort fast?")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
+              {t(
+                "라이브러리 sort 는 ", "Library sort is ",
+              )}<b className="text-purple-700">O(N log N)</b>{t(
+                " 라는 속도예요. 어려운 말 같지만 그냥 '엄청 빠르다' 라고 기억하면 돼요.",
+                ". Sounds fancy, but just remember: 'really fast'.",
+              )}
+            </p>
+            <p className="text-sm text-gray-700 leading-relaxed mb-3">
+              {t(
+                "직접 정렬을 만들면 보통 O(N²) — 데이터 N 만 개 정도까지는 OK, 100 만 개 넘으면 시간초과예요.",
+                "If you write sort yourself, usually O(N²) — fine up to ~10K items, dies past 1M.",
+              )}
+            </p>
+            <p className="text-sm text-gray-700 leading-relaxed">
+              {t(
+                "다음 슬라이드에서 두 속도가 얼마나 차이 나는지 표로 봐요.",
+                "Next slide: a table showing the speed gap.",
+              )}
+            </p>
+          </div>
+        )}
 
-      <div className="bg-white rounded-2xl border-2 border-gray-200 p-4">
-        <p className="text-sm font-bold text-gray-900 mb-3">📊 {t("실제 연산 횟수 (대략)", "Operation count (approx)")}</p>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b-2 border-gray-200">
-              <th className="text-left py-1.5 font-bold text-gray-700">N</th>
-              <th className="text-right py-1.5 font-bold text-gray-700">N²</th>
-              <th className="text-right py-1.5 font-bold text-purple-700">N log N ✨</th>
-            </tr>
-          </thead>
-          <tbody className="font-mono text-xs">
-            <tr className="border-b border-gray-100"><td className="py-1.5">100</td><td className="text-right text-gray-600">10,000</td><td className="text-right text-purple-700 font-bold">~700</td></tr>
-            <tr className="border-b border-gray-100"><td className="py-1.5">10,000</td><td className="text-right text-gray-600">100,000,000</td><td className="text-right text-purple-700 font-bold">~130,000</td></tr>
-            <tr className="border-b border-gray-100"><td className="py-1.5">1,000,000</td><td className="text-right text-red-600">10¹² (TLE)</td><td className="text-right text-purple-700 font-bold">~20,000,000</td></tr>
-          </tbody>
-        </table>
-        <p className="text-[11px] text-gray-500 mt-2 italic">
-          {t("N=100만 이라도 sort 는 0.02 초. 직접 만든 O(N²) 정렬은 시간초과.", "Even at N=1M, sort takes ~0.02s. Hand-rolled O(N²) sort = TLE.")}
-        </p>
-      </div>
+        {step === 1 && (
+          <div className="bg-white rounded-2xl border-2 border-gray-200 p-4">
+            <p className="text-base font-black text-gray-900 mb-3">📊 {t("N 이 커질수록...", "As N grows...")}</p>
+            <p className="text-xs text-gray-600 mb-3">
+              {t("같은 일을 하는데 연산 횟수가 얼마나 차이 나는지 봐요:", "Number of operations for the same job:")}
+            </p>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b-2 border-gray-200">
+                  <th className="text-left py-1.5 font-bold text-gray-700">N</th>
+                  <th className="text-right py-1.5 font-bold text-red-700">{t("직접 (N²)", "DIY (N²)")}</th>
+                  <th className="text-right py-1.5 font-bold text-purple-700">{t("라이브러리 (N log N)", "Library (N log N)")}</th>
+                </tr>
+              </thead>
+              <tbody className="font-mono text-xs">
+                <tr className="border-b border-gray-100"><td className="py-1.5">100</td><td className="text-right text-gray-600">10,000</td><td className="text-right text-purple-700 font-bold">~700</td></tr>
+                <tr className="border-b border-gray-100"><td className="py-1.5">10,000</td><td className="text-right text-amber-700">100,000,000</td><td className="text-right text-purple-700 font-bold">~130,000</td></tr>
+                <tr className="border-b border-gray-100"><td className="py-1.5">1,000,000</td><td className="text-right text-red-600 font-bold">10¹² (TLE 🚫)</td><td className="text-right text-purple-700 font-bold">~20,000,000</td></tr>
+              </tbody>
+            </table>
+            <p className="text-xs text-purple-700 mt-3 text-center font-bold leading-relaxed">
+              {t(
+                "N=100 만 이어도 라이브러리 sort 는 0.02 초. 직접 짠 건 30 분. 차이 어마어마하죠?",
+                "At N=1M, library sort = 0.02s. DIY sort = 30 min. Massive gap!",
+              )}
+            </p>
+          </div>
+        )}
 
-      <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
-        <p className="text-sm font-bold text-amber-900">
-          🎯 {t("결론", "Conclusion")}: {t("직접 정렬 알고리즘 짜지 말고 라이브러리 sort 써요!", "Don't write your own sort — use the library!")}
-        </p>
-      </div>
-
-      <CodeBlock lang={codeLang} setLang={setCodeLang}
-        py={`# ❌ 직접 짠 O(N²) 정렬 — N=10⁶ 면 시간초과
+        {step === 2 && (
+          <div className="space-y-3">
+            <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
+              <p className="text-sm font-black text-amber-900 mb-2">
+                🎯 {t("기억할 한 가지", "One thing to remember")}
+              </p>
+              <p className="text-sm text-gray-800 leading-relaxed">
+                {t(
+                  "USACO 문제 풀 때 — 절대 직접 정렬 알고리즘 짜지 말아요. 라이브러리 한 줄이면 끝나고, 비교도 안 되게 빨라요.",
+                  "When solving USACO — never write your own sort. One library line is enough, and unbeatably fast.",
+                )}
+              </p>
+            </div>
+            <CodeBlock lang={codeLang} setLang={setCodeLang}
+              py={`# ❌ 이렇게 직접 짜지 말아요 — 너무 느려요
 def slow_sort(arr):
     for i in range(len(arr)):
         for j in range(i+1, len(arr)):
             if arr[i] > arr[j]:
                 arr[i], arr[j] = arr[j], arr[i]
 
-# ✅ 라이브러리 sort — O(N log N), 빠름
+# ✅ 이렇게 — 한 줄
 arr.sort()`}
-        cpp={`// ❌ 직접 짠 O(N²) 정렬 — N=10⁶ 면 시간초과
+              cpp={`// ❌ 이렇게 직접 짜지 말아요 — 너무 느려요
 for (int i = 0; i < n; i++)
     for (int j = i + 1; j < n; j++)
         if (arr[i] > arr[j]) swap(arr[i], arr[j]);
 
-// ✅ 라이브러리 sort — O(N log N), 빠름
+// ✅ 이렇게 — 한 줄
 sort(arr.begin(), arr.end());`}
-      />
+            />
+          </div>
+        )}
 
-      <MiniQuiz
-        question={t("N = 10⁵ 일 때 O(N²) 와 O(N log N) 의 연산 차이는 대략?", "At N = 10⁵, ratio of O(N²) to O(N log N)?")}
-        options={[
-          t("같음", "About the same"),
-          t("100 배 정도 느림", "~100× slower"),
-          t("6,000 배 정도 느림 (10¹⁰ vs 1.7×10⁶)", "~6,000× slower (10¹⁰ vs 1.7×10⁶)"),
-          t("10 배 정도", "~10× slower"),
-        ]}
-        answerIdx={2}
-        hint={t("10⁵ × 10⁵ = 10¹⁰. 10⁵ × log(10⁵) ≈ 10⁵ × 17 = 1.7×10⁶", "10⁵ × 10⁵ = 10¹⁰. 10⁵ × log(10⁵) ≈ 1.7×10⁶")}
-        onCorrect={() => setQuizPassed(true)}
-      />
+        {step === 3 && (
+          <MiniQuiz
+            question={t("N = 10⁵ 일 때 직접 짠 O(N²) 와 라이브러리 O(N log N) 의 차이는 대략?", "At N = 10⁵, how much slower is DIY O(N²) vs library?")}
+            options={[
+              t("거의 같음 — 차이 없음", "About the same"),
+              t("100 배 정도", "~100× slower"),
+              t("약 6,000 배 — 10¹⁰ vs 1.7×10⁶", "~6,000× — 10¹⁰ vs 1.7×10⁶"),
+              t("10 배 정도", "~10× slower"),
+            ]}
+            answerIdx={2}
+            hint={t("10⁵ × 10⁵ = 10¹⁰ vs 10⁵ × log(10⁵) ≈ 10⁵ × 17 = 1.7×10⁶", "10⁵ × 10⁵ = 10¹⁰ vs 10⁵ × log(10⁵) ≈ 1.7×10⁶")}
+            onCorrect={() => setQuizPassed(true)}
+          />
+        )}
+      </div>
 
-      {quizPassed && (
-        <button onClick={onComplete} className="w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold flex items-center justify-center gap-2">
-          ✅ {t("이해했어요 — 다음", "Got it — Next")} <ArrowRight className="w-4 h-4" />
-        </button>
+      {step < 3 ? (
+        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
+      ) : quizPassed ? (
+        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
+      ) : (
+        <div className="flex items-center justify-center gap-2 pt-2">
+          {Array.from({ length: totalSteps }).map((_, i) => (
+            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
+          ))}
+        </div>
       )}
     </div>
   )
@@ -458,6 +550,8 @@ sort(arr.begin(), arr.end());`}
 // ── Chapter 4: 커스텀 정렬 (key) ──────────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
   const { t } = useLanguage()
+  const { step, setStep, rootRef } = useSlideChapter()
+  const totalSteps = 4
   const [quizPassed, setQuizPassed] = useState(false)
   const people = [
     { name: "Alice", age: 25 },
@@ -465,53 +559,87 @@ function Chapter4({ onComplete, codeLang, setCodeLang }: { onComplete: () => voi
     { name: "Carol", age: 22 },
   ]
   const [sortBy, setSortBy] = useState<"name" | "age">("name")
-  const sorted = useMemo(() => {
-    return [...people].sort((a, b) => sortBy === "name"
-      ? a.name.localeCompare(b.name)
-      : a.age - b.age)
-  }, [sortBy])
+  const sorted = useMemo(() => [...people].sort((a, b) =>
+    sortBy === "name" ? a.name.localeCompare(b.name) : a.age - b.age
+  ), [sortBy])
 
   return (
-    <div className="space-y-4">
-      <div className="bg-blue-50 rounded-2xl p-4 border-2 border-blue-200">
-        <p className="text-sm font-bold text-blue-900 mb-2">
-          {t("기본 sort 는 숫자/문자열 비교만. 더 복잡한 정렬은", "Default sort = number/string. For more:")} <code className="bg-white px-1.5 py-0.5 rounded text-purple-700">key</code>{t("/", "/")}<code className="bg-white px-1.5 py-0.5 rounded text-purple-700">comparator</code>
-        </p>
-        <p className="text-xs text-gray-700">
-          {t("예: 이름 알파벳 순? 나이 작은 순? 좌표 거리 순?", "E.g., by name? by age? by distance?")}
-        </p>
-      </div>
+    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
+      <div className="flex-1">
+        {step === 0 && (
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🔧</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("숫자말고 다른 걸로 정렬하려면?", "What if you want to sort by something else?")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
+              {t(
+                "지금까지는 숫자만 정렬했죠. 근데 실제 문제는 보통 더 복잡해요:",
+                "So far just numbers. But real problems are often more complex:",
+              )}
+            </p>
+            <ul className="space-y-1.5 text-sm text-gray-700 mb-3 pl-2">
+              <li>👥 {t("학생 리스트를 '나이순' 으로 정렬", "Sort students by age")}</li>
+              <li>📍 {t("좌표를 'X축' 기준으로 정렬", "Sort coordinates by x-axis")}</li>
+              <li>📝 {t("단어를 '길이순' 으로 정렬", "Sort words by length")}</li>
+            </ul>
+            <p className="text-sm text-blue-700 font-bold leading-relaxed">
+              {t(
+                "이럴 때 ", "For this, you use ",
+              )}<code className="bg-white px-1.5 py-0.5 rounded text-purple-700">key</code>{t(
+                " (Python) 나 비교자 lambda (C++) 를 써요. 다음 슬라이드에서 직접 해보세요!",
+                " (Python) or a comparator lambda (C++). Try it on the next slide!",
+              )}
+            </p>
+          </div>
+        )}
 
-      {/* 인터랙티브 — 정렬 기준 토글 */}
-      <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-        <p className="text-xs font-black text-amber-900 mb-3">🎮 {t("정렬 기준 바꿔보기", "Change sort key")}</p>
-
-        <div className="flex gap-2 mb-3">
-          <button onClick={() => setSortBy("name")}
-            className={cn("flex-1 py-2 rounded-lg font-bold text-sm transition-all",
-              sortBy === "name" ? "bg-purple-500 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700")}>
-            {t("이름 순", "By name")}
-          </button>
-          <button onClick={() => setSortBy("age")}
-            className={cn("flex-1 py-2 rounded-lg font-bold text-sm transition-all",
-              sortBy === "age" ? "bg-purple-500 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700")}>
-            {t("나이 순", "By age")}
-          </button>
-        </div>
-
-        <div className="space-y-1.5">
-          {sorted.map((p, i) => (
-            <div key={p.name} className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
-              <span className="text-xs font-mono text-emerald-500">#{i + 1}</span>
-              <span className="font-bold text-gray-900">{p.name}</span>
-              <span className="text-xs text-gray-500 font-mono">{p.age}{t("세", "yr")}</span>
+        {step === 1 && (
+          <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("정렬 기준 바꿔보기", "Try different keys")}</p>
+            <p className="text-xs text-gray-600 text-center mb-4">
+              {t("아래 사람 3명을 '이름 순' 또는 '나이 순' 으로 정렬해 봐요:", "Sort these 3 people by name or by age:")}
+            </p>
+            <div className="flex gap-2 mb-3">
+              <button onClick={() => setSortBy("name")}
+                className={cn("flex-1 py-2 rounded-lg font-bold text-sm transition-all",
+                  sortBy === "name" ? "bg-purple-500 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700")}>
+                A-Z {t("이름 순", "By name")}
+              </button>
+              <button onClick={() => setSortBy("age")}
+                className={cn("flex-1 py-2 rounded-lg font-bold text-sm transition-all",
+                  sortBy === "age" ? "bg-purple-500 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700")}>
+                ↑ {t("나이 순", "By age")}
+              </button>
             </div>
-          ))}
-        </div>
-      </div>
+            <div className="space-y-1.5">
+              {sorted.map((p, i) => (
+                <div key={p.name} className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
+                  <span className="text-xs font-mono text-emerald-500">#{i + 1}</span>
+                  <span className="font-bold text-gray-900">{p.name}</span>
+                  <span className="text-xs text-gray-500 font-mono">{p.age}{t("세", "yr")}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-gray-500 text-center mt-3 italic">
+              {t("버튼 바꿔 눌러보세요. 순서가 어떻게 달라지는지 봐요.", "Toggle buttons — watch the order change.")}
+            </p>
+          </div>
+        )}
 
-      <CodeBlock lang={codeLang} setLang={setCodeLang}
-        py={`people = [
+        {step === 2 && (
+          <div className="space-y-3">
+            <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
+              <p className="text-sm font-black text-blue-900">📝 {t("이거 코드로는 어떻게?", "How does it look in code?")}</p>
+              <p className="text-xs text-gray-700 mt-1">
+                {t("Python 의 ", "Python's ")}<code className="bg-white px-1 rounded">key=lambda</code>{t(
+                  " 와 C++ 의 lambda 비교자 — 위 토글로 비교해 보세요:",
+                  " and C++ lambda comparator — toggle above to compare:",
+                )}
+              </p>
+            </div>
+            <CodeBlock lang={codeLang} setLang={setCodeLang}
+              py={`people = [
     {"name": "Alice", "age": 25},
     {"name": "Bob",   "age": 30},
     {"name": "Carol", "age": 22},
@@ -526,12 +654,9 @@ people.sort(key=lambda p: p["age"])
 # 나이 많은 순 (역순)
 people.sort(key=lambda p: p["age"], reverse=True)
 
-# 여러 기준: 나이 → 이름
+# 여러 기준: 나이 먼저 → 이름
 people.sort(key=lambda p: (p["age"], p["name"]))`}
-        cpp={`struct Person {
-    string name;
-    int age;
-};
+              cpp={`struct Person { string name; int age; };
 vector<Person> people = {{"Alice",25},{"Bob",30},{"Carol",22}};
 
 // 이름 알파벳 순 (lambda 비교자)
@@ -544,76 +669,132 @@ sort(people.begin(), people.end(),
 sort(people.begin(), people.end(),
      [](const Person& a, const Person& b) {
          return a.age < b.age;
-     });
-
-// 여러 기준: 나이 → 이름
-sort(people.begin(), people.end(),
-     [](const Person& a, const Person& b) {
-         if (a.age != b.age) return a.age < b.age;
-         return a.name < b.name;
      });`}
-      />
+            />
+            <p className="text-xs text-gray-600 text-center">
+              {t("핵심: key (Python) 나 비교자 (C++) 에 '뭘 기준으로?' 만 알려주면 끝.", "Key idea: tell sort 'what to compare by' via key (Python) or comparator (C++).")}
+            </p>
+          </div>
+        )}
 
-      <MiniQuiz
-        question={t("Python 에서 길이가 짧은 순으로 단어 리스트 정렬하려면?", "Sort words by length in Python?")}
-        options={[
-          "words.sort()",
-          "words.sort(key=lambda w: len(w))",
-          "words.sort(reverse=True)",
-          "sorted(words, key='length')",
-        ]}
-        answerIdx={1}
-        hint={t("key= 에 함수를 넘기면 그 함수가 반환한 값으로 정렬", "Pass a function to key= — sort uses that function's output")}
-        onCorrect={() => setQuizPassed(true)}
-      />
+        {step === 3 && (
+          <MiniQuiz
+            question={t("Python 에서 단어 리스트를 '길이가 짧은 것부터' 정렬하려면?", "Sort word list 'shortest first' in Python?")}
+            options={[
+              "words.sort()",
+              "words.sort(key=lambda w: len(w))",
+              "words.sort(reverse=True)",
+              "sorted(words, key='length')",
+            ]}
+            answerIdx={1}
+            hint={t("key= 에 함수를 넘기면 그 함수가 반환한 값 기준으로 정렬. len(w) 가 길이를 알려줘요.", "key= takes a function; sort uses its output. len(w) gives the length.")}
+            onCorrect={() => setQuizPassed(true)}
+          />
+        )}
+      </div>
 
-      {quizPassed && (
-        <button onClick={onComplete} className="w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold flex items-center justify-center gap-2">
-          ✅ {t("이해했어요 — 다음", "Got it — Next")} <ArrowRight className="w-4 h-4" />
-        </button>
+      {step < 3 ? (
+        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
+      ) : quizPassed ? (
+        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
+      ) : (
+        <div className="flex items-center justify-center gap-2 pt-2">
+          {Array.from({ length: totalSteps }).map((_, i) => (
+            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
+          ))}
+        </div>
       )}
     </div>
   )
 }
 
-// ── Chapter 5: 정리 + 실전 ──────────────────────────────────────
+// ── Chapter 5: 정리 + 실전 — 슬라이드식 ─────────────────────────
 function Chapter5({ onComplete }: { onComplete: () => void }) {
   const { t } = useLanguage()
+  const { step, setStep, rootRef } = useSlideChapter()
+  const totalSteps = 3
   return (
-    <div className="space-y-4">
-      <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-5 border-2 border-amber-300">
-        <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
-        <ol className="space-y-2 text-sm text-gray-800">
-          <li><b>1.</b> {t("정렬 = 검색·최솟값·중복·그룹화의 기초", "Sort = foundation for search/min/dedup/grouping")}</li>
-          <li><b>2.</b> Python: <code className="bg-white px-1.5 py-0.5 rounded">arr.sort()</code> {t("또는", "or")} <code className="bg-white px-1.5 py-0.5 rounded">sorted(arr)</code></li>
-          <li><b>3.</b> C++: <code className="bg-white px-1.5 py-0.5 rounded">sort(arr.begin(), arr.end())</code></li>
-          <li><b>4.</b> {t("복잡도", "Complexity")}: <b>O(N log N)</b> — N=10⁶ 도 0.02 초</li>
-          <li><b>5.</b> {t("커스텀", "Custom")}: Python <code className="bg-white px-1.5 py-0.5 rounded">key=lambda</code>, C++ comparator lambda</li>
-          <li><b>6.</b> {t("절대 직접 O(N²) 짜지 말기 — 라이브러리 써요", "Never write O(N²) sort — use library")}</li>
-        </ol>
+    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
+      <div className="flex-1">
+        {step === 0 && (
+          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-6 border-2 border-amber-300 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🎉</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("우와, 정렬 끝까지 다 봤어요!", "Wow, you finished all 5 chapters!")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed text-center">
+              {t(
+                "정말 잘 했어요 👏 이제 USACO Bronze 문제에서 정렬이 나와도 당황 안 할 거예요. 기억해야 할 핵심들 한 번만 더 짚고 넘어가요.",
+                "Really nice work 👏 You won't panic when sorting shows up in USACO Bronze. Let me wrap up the key points.",
+              )}
+            </p>
+          </div>
+        )}
+
+        {step === 1 && (
+          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-5 border-2 border-amber-300">
+            <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
+            <ol className="space-y-2 text-sm text-gray-800">
+              <li><b>1.</b> {t("정렬 = 검색·최솟값·중복·그룹화의 기초", "Sort = foundation for search/min/dedup/grouping")}</li>
+              <li><b>2.</b> Python: <code className="bg-white px-1.5 py-0.5 rounded">arr.sort()</code> {t("또는", "or")} <code className="bg-white px-1.5 py-0.5 rounded">sorted(arr)</code></li>
+              <li><b>3.</b> C++: <code className="bg-white px-1.5 py-0.5 rounded">sort(arr.begin(), arr.end())</code></li>
+              <li><b>4.</b> {t("복잡도", "Speed")}: <b>O(N log N)</b> — {t("N=10⁶ 도 0.02 초", "N=10⁶ in ~0.02s")}</li>
+              <li><b>5.</b> {t("커스텀: Python ", "Custom: Python ")}<code className="bg-white px-1.5 py-0.5 rounded">key=lambda</code>, C++ {t("비교자 lambda", "comparator lambda")}</li>
+              <li><b>6.</b> {t("절대 직접 O(N²) 짜지 말기 — 라이브러리 써요", "Never write O(N²) sort — use library")}</li>
+            </ol>
+            <p className="text-xs text-amber-700 mt-3 text-center italic">
+              {t("이 정도면 정렬이 나오는 문제 거의 다 풀 수 있어요!", "This is enough to handle almost any sorting problem!")}
+            </p>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="space-y-3">
+            <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
+              <p className="text-sm font-black text-amber-900 mb-2">🏆 {t("이제 실전 문제 — 직접 풀어 보기!", "Now real problems — try it!")}</p>
+              <p className="text-xs text-gray-700 mb-3">
+                {t("백준 (BOJ) 에서 정렬 연습 문제 3 개 추천. 쉬운 거부터 →", "Recommended BOJ problems — easy first →")}
+              </p>
+              <div className="space-y-1.5">
+                <a href="https://www.acmicpc.net/problem/2750" target="_blank" rel="noopener noreferrer"
+                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
+                  <b>BOJ 2750</b> — {t("수 정렬하기 (정렬 한 줄로 끝)", "Sort numbers (one-line sort)")} ↗
+                </a>
+                <a href="https://www.acmicpc.net/problem/10814" target="_blank" rel="noopener noreferrer"
+                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
+                  <b>BOJ 10814</b> — {t("나이순 정렬 (key 활용)", "Sort by age (use key)")} ↗
+                </a>
+                <a href="https://www.acmicpc.net/problem/11650" target="_blank" rel="noopener noreferrer"
+                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
+                  <b>BOJ 11650</b> — {t("좌표 정렬 (튜플 key)", "Sort coordinates (tuple key)")} ↗
+                </a>
+              </div>
+            </div>
+            <p className="text-xs text-gray-600 text-center">
+              {t("👇 아래 '정렬 마스터' 누르면 끝! 다음 토픽으로 가요.", "👇 Hit 'Sorting Master' to finish! Onwards.")}
+            </p>
+          </div>
+        )}
       </div>
 
-      <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
-        <p className="text-sm font-black text-amber-900 mb-2">🏆 {t("실전 문제 추천", "Recommended Practice")}</p>
-        <div className="space-y-1.5">
-          <a href="https://www.acmicpc.net/problem/2750" target="_blank" rel="noopener noreferrer"
-            className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-            <b>BOJ 2750</b> — {t("수 정렬하기 (기초)", "Sort numbers (basic)")} ↗
-          </a>
-          <a href="https://www.acmicpc.net/problem/10814" target="_blank" rel="noopener noreferrer"
-            className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-            <b>BOJ 10814</b> — {t("나이순 정렬 (key 사용)", "Sort by age (uses key)")} ↗
-          </a>
-          <a href="https://www.acmicpc.net/problem/11650" target="_blank" rel="noopener noreferrer"
-            className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-            <b>BOJ 11650</b> — {t("좌표 정렬 (튜플 key)", "Sort coordinates (tuple key)")} ↗
-          </a>
-        </div>
+      <div className="flex items-center justify-center gap-2 mb-4">
+        {Array.from({ length: totalSteps }).map((_, i) => (
+          <div key={i} className={cn("h-2 rounded-full transition-all",
+            i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
+        ))}
       </div>
-
-      <button onClick={onComplete} className="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-xl font-black text-lg flex items-center justify-center gap-2 shadow-lg">
-        🎉 {t("정렬 마스터!", "Sorting Master!")} <Sparkles className="w-5 h-5" />
-      </button>
+      <div className="flex gap-2 sticky bottom-0 pt-2">
+        <button onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0}
+          className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm">
+          ← {t("이전", "Prev")}
+        </button>
+        <button onClick={() => step < totalSteps - 1 ? setStep(step + 1) : onComplete()}
+          className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95">
+          {step === totalSteps - 1
+            ? <>🎉 {t("정렬 마스터!", "Sorting Master!")} <Sparkles className="w-5 h-5" /></>
+            : <>{t("다음", "Next")} <ArrowRight className="w-5 h-5" /></>}
+        </button>
+      </div>
     </div>
   )
 }
