@@ -1260,48 +1260,32 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "If you submit this brute code to USACO, the typical pattern: first few small cases pass (slowly), rest time out.",
-        "이 brute 코드를 USACO 에 제출하면 보통 이런 패턴: 앞쪽 작은 케이스 몇 개는 (느리게) 통과, 나머지는 시간 초과."),
+        "Let's compute the time cost — pure math, no guesses.",
+        "시간 비용을 계산해봐요 — 순수 수학, 추측 없음."),
       content: (
         <div style={{ padding: 16 }}>
-          <Label text={t(E, "USACO submission — illustrative example", "USACO 제출 결과 — 예시 도식")} />
-          {/* ⚠️ 예시 — 실제 제출 결과는 코드/언어/USACO 테스트에 따라 다름 */}
-          <div style={{ fontSize: 10, color: C.dim, marginBottom: 8, textAlign: "center", fontStyle: "italic" }}>
-            ⚠️ {t(E,
-              "Your actual submission may pass 2-5 cases (depends on code, language, USACO testdata).",
-              "실제 제출은 2-5 케이스 통과 가능 (코드 / 언어 / USACO 테스트에 따라 다름).")}
-          </div>
-          <div style={{
-            background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14,
-            display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center",
-          }}>
-            {[
-              { n: 1,  pass: true,  label: "fast" },
-              { n: 2,  pass: true,  label: "slow" },
-              { n: 3,  pass: true,  label: "slow" },
-              { n: 4,  pass: true,  label: "slow" },
-              { n: 5,  pass: false }, { n: 6,  pass: false }, { n: 7,  pass: false },
-              { n: 8,  pass: false }, { n: 9,  pass: false }, { n: 10, pass: false },
-              { n: 11, pass: false }, { n: 12, pass: false }, { n: 13, pass: false },
-            ].map(c => (
-              <div key={c.n} style={{
-                width: 56, padding: "8px 4px", borderRadius: 8, textAlign: "center",
-                background: c.pass ? C.okBg : C.noBg,
-                border: `1.5px solid ${c.pass ? C.okBd : C.noBd}`,
-                fontFamily: "'JetBrains Mono',monospace",
-              }}>
-                <div style={{ fontSize: 20, fontWeight: 900, color: c.pass ? C.ok : C.no, lineHeight: 1 }}>
-                  {c.pass ? "✓" : "t"}
-                </div>
-                {c.label && (
-                  <div style={{ fontSize: 9, color: C.dim, marginTop: 4 }}>{c.label}</div>
-                )}
-                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>#{c.n}</div>
-              </div>
-            ))}
+          <div style={{ padding: "12px 14px", background: "#fff", border: `2px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 8, color: C.no }}>
+              ⏱ {t(E, "Brute time complexity (math)", "Brute 시간 복잡도 (수학)")}
+            </div>
+            <div style={{ whiteSpace: "pre-line", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+              {t(E,
+                "Per query: O(N) — scan numbers 2..N\nTotal:     T queries × N = O(T·N)\n\nMax case (T up to 10⁴, N up to 10⁹):\n  10⁴ × 10⁹ = 10¹³ ops\n\nAt 10⁸ ops/sec → 10⁵ seconds ≈ 28 hours",
+                "쿼리당: O(N) — 2..N 스캔\n전체:    T 쿼리 × N = O(T·N)\n\n최악 (T 최대 10⁴, N 최대 10⁹):\n  10⁴ × 10⁹ = 10¹³ 연산\n\n10⁸ ops/sec 기준 → 10⁵ 초 ≈ 28 시간")}
+            </div>
           </div>
           <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
-            ❌ {t(E, "Pattern: small N pass (barely), large N TLE.\nBrute scans all numbers up to N → can't handle N=10⁹.", "패턴: N 작으면 (간신히) 통과, N 크면 TLE.\nbrute 는 N 까지 다 훑어서 N=10⁹ 못 감당.")}
+            ❌ {t(E, "USACO time limit: 2 seconds. Brute needs ~28 hours for max case.", "USACO 시간 제한: 2 초. Brute 는 최악 약 28 시간 필요.")}
+          </div>
+          <div style={{ marginTop: 10, padding: "12px 14px", background: "linear-gradient(135deg,#fef3c7,#fde68a)", border: "2px solid #f59e0b", borderRadius: 10, fontSize: 13, color: "#78350f", lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>
+              👉 {t(E, "Try it yourself", "직접 해봐")}
+            </div>
+            <div>
+              {t(E,
+                "Submit this brute code to USACO and see your real result.",
+                "이 brute 코드를 USACO 에 제출해서 실제 결과를 확인해봐.")}
+            </div>
           </div>
           <div style={{ marginTop: 8, padding: "10px 12px", background: C.accentBg, border: `1.5px solid ${C.accentBd}`, borderRadius: 10, fontSize: 13, color: C.accent, fontWeight: 700, lineHeight: 1.7, textAlign: "center" }}>
             💡 {t(E, "So I thought: what if we save what we computed? → Prefix sum!",
@@ -1332,52 +1316,32 @@ export function makeBruteSteps(E, lang = "py") {
 
     { type: "reveal",
       narr: t(E,
-        "Submit prefix sum and… more cases pass than brute. Better, but still TLE on large ones.", "누적합으로 제출하면 — brute 보다 더 많은 케이스 통과. 좋아졌지만 큰 케이스는 여전히 TLE."),
+        "Prefix sum reduces query cost — but does it fit within time?",
+        "누적합으로 쿼리 비용 줄음 — 근데 시간 안에 들어갈까?"),
       content: (
         <div style={{ padding: 16 }}>
-          <Label text={t(E, "Prefix sum submission — illustrative example", "누적합 제출 결과 — 예시 도식")} />
-          {/* ⚠️ 예시 — 실제 제출 결과는 코드/언어/USACO 테스트에 따라 다름 */}
-          <div style={{ fontSize: 10, color: C.dim, marginBottom: 8, textAlign: "center", fontStyle: "italic" }}>
-            ⚠️ {t(E,
-              "Your actual submission may pass 4-8 cases (depends on code, language, USACO testdata).",
-              "실제 제출은 4-8 케이스 통과 가능 (코드 / 언어 / USACO 테스트에 따라 다름).")}
+          <div style={{ padding: "12px 14px", background: "#fff", border: `2px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 8, color: C.no }}>
+              ⏱ {t(E, "Prefix sum complexity (math)", "누적합 시간 복잡도 (수학)")}
+            </div>
+            <div style={{ whiteSpace: "pre-line", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+              {t(E,
+                "Preprocess: O(N) — build prefix array\nQuery:      O(1) — single lookup\nTotal:      O(N + T)\n\nMax case (N up to 10⁹):\n  Building array of size 10⁹ takes ~10⁹ ops + 4 GB memory\n\nProblem: even O(N) is too slow when N = 10⁹",
+                "전처리: O(N) — prefix 배열 만들기\n쿼리:   O(1) — lookup 1 번\n전체:   O(N + T)\n\n최악 (N 최대 10⁹):\n  크기 10⁹ 배열 만드는 데 약 10⁹ 연산 + 4 GB 메모리\n\n문제: N = 10⁹ 면 O(N) 도 너무 느림")}
+            </div>
           </div>
-          <div style={{
-            background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14,
-            display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center",
-          }}>
-            {[
-              { n: 1,  pass: true,  label: "fast" },
-              { n: 2,  pass: true,  label: "fast" },
-              { n: 3,  pass: true,  label: "fast" },
-              { n: 4,  pass: true,  label: "fast" },
-              { n: 5,  pass: true,  label: "slow" },
-              { n: 6,  pass: true,  label: "slow" },
-              { n: 7,  pass: false }, { n: 8,  pass: false }, { n: 9,  pass: false },
-              { n: 10, pass: false }, { n: 11, pass: false }, { n: 12, pass: false },
-              { n: 13, pass: false },
-            ].map(c => (
-              <div key={c.n} style={{
-                width: 56, padding: "8px 4px", borderRadius: 8, textAlign: "center",
-                background: c.pass ? C.okBg : C.noBg,
-                border: `1.5px solid ${c.pass ? C.okBd : C.noBd}`,
-                fontFamily: "'JetBrains Mono',monospace",
-              }}>
-                <div style={{ fontSize: 20, fontWeight: 900, color: c.pass ? C.ok : C.no, lineHeight: 1 }}>
-                  {c.pass ? "✓" : "t"}
-                </div>
-                {c.label && (
-                  <div style={{ fontSize: 9, color: C.dim, marginTop: 4 }}>{c.label}</div>
-                )}
-                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>#{c.n}</div>
-              </div>
-            ))}
+          <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
+            ❌ {t(E, "Even prefix sum can't handle N = 10⁹. Need a math approach that doesn't iterate 1..N.", "누적합도 N = 10⁹ 못 다룸. 1..N 안 도는 수학적 접근 필요.")}
           </div>
-          <div style={{ marginTop: 10, padding: "10px 12px", background: C.okBg, border: `1.5px solid ${C.okBd}`, borderRadius: 10, fontSize: 12, color: C.ok, fontWeight: 700, lineHeight: 1.6 }}>
-            ✅ {t(E, "More cases pass than brute.", "brute 보다 통과 케이스 늘어남.")}
-          </div>
-          <div style={{ marginTop: 8, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 12, color: C.no, fontWeight: 700, lineHeight: 1.6 }}>
-            ❌ {t(E, "Large N cases: still TLE.\nWhy? When N reaches 10⁹, just building the array takes too long.", "N 큰 케이스: 여전히 TLE.\n왜? N=10⁹ 가 오면 배열 만드는 자체가 너무 오래 걸려요.")}
+          <div style={{ marginTop: 10, padding: "12px 14px", background: "linear-gradient(135deg,#fef3c7,#fde68a)", border: "2px solid #f59e0b", borderRadius: 10, fontSize: 13, color: "#78350f", lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>
+              👉 {t(E, "Try it yourself", "직접 해봐")}
+            </div>
+            <div>
+              {t(E,
+                "Submit the prefix sum code to USACO and see how many cases pass.",
+                "누적합 코드를 USACO 에 제출해서 몇 개 통과하는지 확인해봐.")}
+            </div>
           </div>
         </div>
       ),
