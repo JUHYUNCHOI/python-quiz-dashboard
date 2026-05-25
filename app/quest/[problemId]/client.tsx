@@ -13,6 +13,7 @@ import { ALL_TOPICS } from "@/data/algorithm/topics"
 import { QuestHealthBanner } from "@/components/quest/QuestHealthBanner"
 import { ReleaseStageBanner } from "@/components/quest/ReleaseStageBanner"
 import { QuestCompletionCard } from "@/components/quest/QuestCompletionCard"
+import { UsacoVerifiedBadge } from "@/components/quest/UsacoVerifiedBadge"
 import { useCodeLang } from "@/components/quest/use-code-lang"
 
 const ALGO_UNLOCK_THRESHOLD = 8
@@ -288,6 +289,8 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           <ExternalLink size={11} />
           <span className="md:hidden">{t("원래 문제", "Original")}</span>
         </a>
+        {/* 🏆 USACO 검증 결과 (실제 제출, 추측 아님) — 데이터 있는 quest 만 */}
+        <UsacoVerifiedBadge questId={problemId} E={lang === "en"} compact />
         {solved ? (
           <div className="flex items-center gap-1 bg-green-50 border border-green-300 rounded-full px-2 py-0.5 flex-shrink-0">
             <CheckCircle size={12} className="text-green-600" />
