@@ -432,8 +432,8 @@ export function makeMooin3Ch2(E, lang = "py") {
       label: sec.label,
       preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       narr: t(E,
-        "Submit the brute code — small inputs pass.  But the bigger ones time out.  Why?",
-        "brute 코드 제출 — 작은 입력은 통과. 큰 입력에선 시간 초과. 왜 그럴까?"),
+        "Brute solves the problem correctly — but how big can N actually get?  Let's count operations.",
+        "Brute 는 문제를 *정확히* 풀어요 — 근데 N 이 얼마나 커질 수 있지? 연산량을 세어 봐요."),
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
 
