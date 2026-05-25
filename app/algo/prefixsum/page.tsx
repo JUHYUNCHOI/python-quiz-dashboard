@@ -15,7 +15,7 @@
  * 21 토픽 중 첫 실험 — 학생 반응 보고 패턴 확장.
  */
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Header } from "@/components/header"
@@ -39,6 +39,47 @@ const STORAGE_KEY = "algo-prefixsum-chapter"
 
 // ── 코드 토글 (Python / C++) ─────────────────────────────────────
 type CodeLang = "py" | "cpp"
+
+// ── 슬라이드 챕터 헬퍼 (sorting 과 동일 패턴) ──────────────────────
+function useSlideChapter() {
+  const [step, setStep] = useState(0)
+  const rootRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (step > 0) {
+      setTimeout(() => rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 30)
+    }
+  }, [step])
+  return { step, setStep, rootRef }
+}
+
+function SlideNav({ step, total, setStep, onFinish, finishLabel }: {
+  step: number; total: number; setStep: (n: number) => void
+  onFinish: () => void; finishLabel?: string
+}) {
+  const { t } = useLanguage()
+  const isLast = step === total - 1
+  return (
+    <>
+      <div className="flex items-center justify-center gap-2 mb-4">
+        {Array.from({ length: total }).map((_, i) => (
+          <div key={i} className={cn("h-2 rounded-full transition-all",
+            i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
+        ))}
+      </div>
+      <div className="flex gap-2 sticky bottom-0 pt-2">
+        <button onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0}
+          className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm">
+          ← {t("이전", "Prev")}
+        </button>
+        <button onClick={() => isLast ? onFinish() : setStep(step + 1)}
+          className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95">
+          {isLast ? (finishLabel ?? t("다음 챕터로", "Next chapter")) : t("다음", "Next")} <ArrowRight className="w-5 h-5" />
+        </button>
+      </div>
+    </>
+  )
+}
+
 function CodeBlock({ py, cpp, lang, setLang }: { py: string; cpp: string; lang: CodeLang; setLang: (l: CodeLang) => void }) {
   return (
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
@@ -138,67 +179,108 @@ function MiniQuiz({
 // ── 챕터 1: 비유 (저금통) ───────────────────────────────────────────
 function Chapter1({ onComplete }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
   const { t } = useLanguage()
+  const { step, setStep, rootRef } = useSlideChapter()
+  const totalSteps = 3
   return (
-    <div className="space-y-4">
-      {/* 한 줄 가이드 */}
-      <div className="bg-orange-100 border-l-4 border-orange-500 rounded-r-lg px-3 py-2 text-sm font-bold text-orange-900">
-        👇 {t("아래 읽고 맨 아래 '다음' 버튼 누르세요", "Read below, then hit 'Next' at the bottom")}
-      </div>
+    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
+      <div className="flex-1">
+        {step === 0 && (
+          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border-2 border-amber-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-4">👋</p>
+            <h3 className="text-xl font-black text-gray-900 mb-3 text-center">
+              {t("안녕! 누적합 같이 배워봐요 😊", "Hi! Let's learn prefix sum 😊")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
+              {t(
+                "오늘 배울 거 — '누적합' (Prefix Sum) 이에요. 이름 어려워 보이지만 진짜 간단해요.",
+                "Today's topic — 'Prefix Sum'. The name sounds tricky but it's really simple.",
+              )}
+            </p>
+            <p className="text-sm text-gray-700 leading-relaxed mb-3">
+              {t(
+                "한 줄 요약하면 — '구간의 합을 뺄셈 한 번으로 빠르게 구하는 방법'. 친숙한 비유로 시작해 봐요.",
+                "TL;DR — 'a way to get range sums with one subtraction'. Let's start with a familiar analogy.",
+              )}
+            </p>
+            <p className="text-sm font-bold text-orange-700 text-center mt-4">
+              {t("준비됐어요? 아래 '다음' 눌러 가요 ↓", "Ready? Hit 'Next' below ↓")}
+            </p>
+          </div>
+        )}
 
-      {/* 저금통 비유 */}
-      <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-5 border-2 border-amber-200">
-        <p className="text-base font-bold text-gray-900 mb-3">
-          🏦 {t("저금통 비유", "Piggy bank analogy")}
-        </p>
-        <p className="text-sm text-gray-800 mb-3">
-          {t("매일 돈을 저금통에 넣음: 월 3원, 화 1원, 수 4원, 목 1원, 금 5원", "Daily deposits: Mon 3, Tue 1, Wed 4, Thu 1, Fri 5")}
-        </p>
-        <p className="text-sm text-gray-800 mb-2">
-          {t("저금통에는", "The bank shows the")} <b>{t("매일 누적 총액", "running total")}</b>{t(":", ":")}
-        </p>
-        <div className="px-3 py-2 bg-white rounded-lg font-mono text-base text-orange-700 font-bold text-center">
-          0 → 3 → 4 → 8 → 9 → 14
-        </div>
-      </div>
+        {step === 1 && (
+          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-5 border-2 border-amber-200">
+            <p className="text-sm text-gray-700 mb-2">
+              {t("저금통 이야기로 시작해볼게요 —", "Let's start with a piggy bank story —")}
+            </p>
+            <p className="text-base font-black text-gray-900 mb-3">
+              🏦 {t("매일 저금통에 돈을 넣어요", "Saving every day")}
+            </p>
+            <p className="text-sm text-gray-700 mb-3 leading-relaxed">
+              {t(
+                "월요일 3원, 화요일 1원, 수요일 4원, 목요일 1원, 금요일 5원 — 매일 다른 금액을 넣어요.",
+                "Mon 3, Tue 1, Wed 4, Thu 1, Fri 5 — different amount each day.",
+              )}
+            </p>
+            <p className="text-sm text-gray-700 mb-2">
+              {t("그런데 똑똑한 저금통이라서 매일 ", "But it's a smart piggy bank — every day it shows the ")}<b>{t("그날까지 모은 총액", "running total")}</b>{t(" 이 표시돼요:", ":")}
+            </p>
+            <div className="px-3 py-3 bg-white rounded-lg font-mono text-base text-orange-700 font-bold text-center border border-orange-200">
+              0 → 3 → 4 → 8 → 9 → 14
+            </div>
+            <p className="text-xs text-gray-500 mt-2 text-center italic">
+              {t("(시작 0 / 월 후 3 / 화 후 4 / 수 후 8 / 목 후 9 / 금 후 14)", "(start 0 / after Mon 3 / Tue 4 / Wed 8 / Thu 9 / Fri 14)")}
+            </p>
+            <p className="text-sm text-amber-700 mt-3 font-bold text-center">
+              {t("이 '누적 총액' 줄이 핵심이에요!", "This 'running total' is the key!")}
+            </p>
+          </div>
+        )}
 
-      {/* 핵심 마법 */}
-      <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4">
-        <p className="text-sm font-black text-blue-900 mb-2">
-          ✨ {t("핵심: 화~목 합?", "Magic: Tue~Thu total?")}
-        </p>
-        <div className="bg-white rounded-lg p-3 border border-blue-300">
-          <p className="text-base font-black text-blue-700 text-center">
-            {t("목요일 총액", "Thu total")} <span className="font-mono bg-emerald-100 px-1.5 py-0.5 rounded">9</span> − {t("월요일 총액", "Mon total")} <span className="font-mono bg-red-100 px-1.5 py-0.5 rounded">3</span> = <span className="text-2xl text-orange-600">6</span>
-          </p>
-          <p className="mt-2 text-xs text-gray-600 text-center">
-            {t("실제: 1 + 4 + 1 = 6 ✓ — 한 번에 뺄셈으로!", "Check: 1 + 4 + 1 = 6 ✓ — one subtraction!")}
-          </p>
-        </div>
-        <p className="mt-3 text-sm font-bold text-emerald-700 text-center">
-          {t("이게 바로 누적합이에요!", "That's prefix sum!")}
-        </p>
+        {step === 2 && (
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">✨</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("이제 마법 — 화~목 합?", "Now the magic — Tue~Thu total?")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed mb-4 text-center">
+              {t(
+                "직접 더하지 않고도 한 줄 뺄셈으로 알 수 있어요:",
+                "You can get it with ONE subtraction — no adding needed:",
+              )}
+            </p>
+            <div className="bg-white rounded-lg p-3 border-2 border-blue-300 mb-3">
+              <p className="text-base font-black text-blue-700 text-center">
+                {t("목요일 총액", "Thu total")} <span className="font-mono bg-emerald-100 px-1.5 py-0.5 rounded">9</span> − {t("월요일 총액", "Mon total")} <span className="font-mono bg-red-100 px-1.5 py-0.5 rounded">3</span> = <span className="text-2xl text-orange-600">6</span>
+              </p>
+            </div>
+            <p className="text-xs text-gray-700 text-center mb-3 leading-relaxed">
+              {t(
+                "확인: 화 1 + 수 4 + 목 1 = 6 ✓ 진짜 맞아요!",
+                "Check: Tue 1 + Wed 4 + Thu 1 = 6 ✓ Yep, matches!",
+              )}
+            </p>
+            <p className="text-sm font-bold text-blue-800 text-center">
+              {t(
+                "이게 바로 '누적합'! 다음 챕터에서 직접 만들어 봐요 →",
+                "That's 'prefix sum'! Build it yourself in the next chapter →",
+              )}
+            </p>
+          </div>
+        )}
       </div>
-
-      {/* 다음 버튼 — 항상 보임 */}
-      <button
-        onClick={onComplete}
-        className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all"
-      >
-        {t("다음: 누적합 만드는 법", "Next: How to build prefix sum")} <ArrowRight className="w-5 h-5" />
-      </button>
-      <p className="text-[11px] text-gray-400 text-center">
-        {t("다음 챕터 (2/5): 단계별 시각화로 만들어보기", "Next chapter (2/5): build step-by-step")}
-      </p>
+      <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
     </div>
   )
 }
 
-// ── 챕터 2: 누적합 만들기 ────────────────────────────────────────────
+// ── 챕터 2: 누적합 만들기 — 슬라이드식 ─────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
   const { t } = useLanguage()
+  const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter()
+  const totalSteps = 4
   const arr = [3, 1, 4, 1, 5]
-  const [step, setStep] = useState(0)
-  // step 0 = 시작, step 1~5 = arr[i-1] 더하기, step 6 = 완성
+  const [vizStep, setVizStep] = useState(0)  // 시각화 내부 단계 (0~5)
   const prefix = useMemo(() => {
     const p = [0]
     for (let i = 0; i < arr.length; i++) p.push(p[i] + arr[i])
@@ -207,125 +289,141 @@ function Chapter2({ onComplete, codeLang, setCodeLang }: { onComplete: () => voi
   const [quizPassed, setQuizPassed] = useState(false)
 
   return (
-    <div className="space-y-4">
-      <div className="bg-emerald-50 rounded-2xl p-4 border-2 border-emerald-200">
-        <p className="text-sm font-bold text-emerald-900 mb-2">
-          {t("핵심 공식", "Key formula")}:
-        </p>
-        <div className="bg-white rounded-lg p-3 font-mono text-center text-base font-black text-emerald-700">
-          prefix[0] = 0<br/>
-          prefix[i] = prefix[i-1] + arr[i-1]
-        </div>
-        <p className="mt-2 text-xs text-gray-600">
-          {t("이전까지의 합 + 현재 값. 끝.", "Previous sum + current value. Done.")}
-        </p>
-      </div>
-
-      {/* 시각화 */}
-      <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-        <p className="text-xs font-black text-amber-900 mb-3">🎮 {t("한 단계씩 만들어 보기", "Build step by step")}</p>
-
-        {/* arr 시각화 */}
-        <div className="mb-3">
-          <p className="text-[11px] text-gray-500 mb-1">arr</p>
-          <div className="flex gap-1">
-            {arr.map((v, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "w-12 h-12 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
-                  step === i + 1
-                    ? "bg-orange-200 border-orange-500 scale-110"
-                    : "bg-gray-50 border-gray-300 text-gray-700",
-                )}
-              >
-                {v}
-              </div>
-            ))}
+    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
+      <div className="flex-1">
+        {slideStep === 0 && (
+          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🧮</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("이제 누적합을 직접 만들어봐요", "Let's build prefix sum ourselves")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
+              {t(
+                "규칙 딱 두 개만 기억하면 끝나요:",
+                "Just remember two rules:",
+              )}
+            </p>
+            <div className="bg-white rounded-lg p-3 font-mono text-center text-base font-black text-emerald-700 border border-emerald-200">
+              prefix[0] = 0<br/>
+              prefix[i] = prefix[i-1] + arr[i-1]
+            </div>
+            <p className="text-sm text-gray-700 leading-relaxed mt-3">
+              {t(
+                "쉽게 말해 — '이전까지의 합 + 지금 값'. 그게 다예요. 다음 슬라이드에서 한 단계씩 직접 만들어 봐요.",
+                "Plain English — 'previous sum + current value'. That's it. Build it step by step on the next slide.",
+              )}
+            </p>
           </div>
-        </div>
+        )}
 
-        {/* prefix 시각화 */}
-        <div className="mb-3">
-          <p className="text-[11px] text-gray-500 mb-1">prefix</p>
-          <div className="flex gap-1">
-            {prefix.map((v, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "w-12 h-12 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
-                  i <= step
-                    ? i === step
-                      ? "bg-emerald-400 border-emerald-600 text-white scale-110 shadow-lg"
-                      : "bg-emerald-100 border-emerald-300 text-emerald-800"
-                    : "bg-gray-50 border-gray-300 border-dashed text-gray-300",
-                )}
-              >
-                {i <= step ? v : "?"}
+        {slideStep === 1 && (
+          <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("한 단계씩 만들어 보기", "Build step-by-step")}</p>
+            <p className="text-xs text-gray-600 text-center mb-4">
+              {t("아래 '다음' 눌러서 한 칸씩 채워봐요:", "Hit 'Next' below to fill one cell at a time:")}
+            </p>
+            {/* arr */}
+            <div className="mb-3">
+              <p className="text-[11px] text-gray-500 mb-1">arr</p>
+              <div className="flex gap-1">
+                {arr.map((v, i) => (
+                  <div key={i} className={cn(
+                    "w-12 h-12 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
+                    vizStep === i + 1 ? "bg-orange-200 border-orange-500 scale-110" : "bg-gray-50 border-gray-300 text-gray-700",
+                  )}>{v}</div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* 현재 단계 설명 */}
-        <div className="bg-amber-50 rounded-lg p-2.5 mb-3 min-h-[60px]">
-          <p className="text-xs text-amber-900 font-bold">
-            {step === 0 && t("Step 0: prefix[0] = 0 (시작)", "Step 0: prefix[0] = 0 (start)")}
-            {step >= 1 && step <= 5 && (
-              <>Step {step}: prefix[{step}] = prefix[{step-1}] + arr[{step-1}] = {prefix[step-1]} + {arr[step-1]} = <b className="text-emerald-700 text-base">{prefix[step]}</b></>
+            </div>
+            {/* prefix */}
+            <div className="mb-3">
+              <p className="text-[11px] text-gray-500 mb-1">prefix</p>
+              <div className="flex gap-1">
+                {prefix.map((v, i) => (
+                  <div key={i} className={cn(
+                    "w-12 h-12 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
+                    i <= vizStep
+                      ? i === vizStep ? "bg-emerald-400 border-emerald-600 text-white scale-110 shadow-lg" : "bg-emerald-100 border-emerald-300 text-emerald-800"
+                      : "bg-gray-50 border-gray-300 border-dashed text-gray-300",
+                  )}>{i <= vizStep ? v : "?"}</div>
+                ))}
+              </div>
+            </div>
+            {/* 현재 단계 */}
+            <div className="bg-amber-50 rounded-lg p-2.5 mb-3 min-h-[60px]">
+              <p className="text-xs text-amber-900 font-bold">
+                {vizStep === 0 && t("Step 0: prefix[0] = 0 (시작값 — 0 으로)", "Step 0: prefix[0] = 0 (start with 0)")}
+                {vizStep >= 1 && vizStep <= 5 && (
+                  <>Step {vizStep}: prefix[{vizStep}] = prefix[{vizStep-1}] + arr[{vizStep-1}] = {prefix[vizStep-1]} + {arr[vizStep-1]} = <b className="text-emerald-700 text-base">{prefix[vizStep]}</b></>
+                )}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => setVizStep(Math.max(0, vizStep - 1))} disabled={vizStep === 0}
+                className="flex-1 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed text-gray-700 rounded-lg font-bold text-sm">
+                ← {t("이전 단계", "Prev step")}
+              </button>
+              <button onClick={() => setVizStep(Math.min(5, vizStep + 1))} disabled={vizStep === 5}
+                className="flex-1 py-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-40 text-white rounded-lg font-bold text-sm">
+                {vizStep === 5 ? "✓ " + t("완성!", "Done!") : t("다음 단계", "Next step") + " →"}
+              </button>
+            </div>
+            {vizStep === 5 && (
+              <p className="text-xs text-emerald-700 text-center mt-3 font-bold">
+                {t("✨ 다 만들었어요! 다음 슬라이드에서 코드 봐요.", "✨ All built! See the code on next slide.")}
+              </p>
             )}
-          </p>
-        </div>
+          </div>
+        )}
 
-        {/* 네비 */}
-        <div className="flex gap-2">
-          <button
-            onClick={() => setStep(Math.max(0, step - 1))}
-            disabled={step === 0}
-            className="flex-1 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed text-gray-700 rounded-lg font-bold text-sm"
-          >← {t("이전", "Prev")}</button>
-          <button
-            onClick={() => setStep(Math.min(5, step + 1))}
-            disabled={step === 5}
-            className="flex-1 py-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-40 text-white rounded-lg font-bold text-sm"
-          >
-            {step === 5 ? "✓ " + t("완성!", "Done!") : t("다음", "Next") + " →"}
-          </button>
-        </div>
-      </div>
-
-      <CodeBlock
-        lang={codeLang}
-        setLang={setCodeLang}
-        py={`arr = [3, 1, 4, 1, 5]
-prefix = [0]                       # 시작값
+        {slideStep === 2 && (
+          <div className="space-y-3">
+            <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
+              <p className="text-sm font-black text-blue-900">📝 {t("이거 코드로 적으면 정말 짧아요", "In code, it's really short")}</p>
+              <p className="text-xs text-gray-700 mt-1">
+                {t("for 한 번이면 끝. 위 토글로 Python ↔ C++ 비교해 봐요:", "One for-loop. Toggle Py ↔ C++ above:")}
+              </p>
+            </div>
+            <CodeBlock lang={codeLang} setLang={setCodeLang}
+              py={`arr = [3, 1, 4, 1, 5]
+prefix = [0]                       # 시작값 0
 for i in range(len(arr)):
     prefix.append(prefix[i] + arr[i])
-# prefix = [0, 3, 4, 8, 9, 14]`}
-        cpp={`vector<int> arr = {3, 1, 4, 1, 5};
+
+# 결과: prefix = [0, 3, 4, 8, 9, 14]`}
+              cpp={`vector<int> arr = {3, 1, 4, 1, 5};
 vector<int> prefix(arr.size() + 1, 0);
 for (int i = 0; i < arr.size(); i++)
     prefix[i + 1] = prefix[i] + arr[i];
-// prefix = {0, 3, 4, 8, 9, 14}`}
-      />
 
-      {step === 5 && (
-        <MiniQuiz
-          question={t("arr = [2, 4, 6] 일 때 prefix[3] 은?", "If arr = [2, 4, 6], what is prefix[3]?")}
-          options={["10", "12", "6", "8"]}
-          answerIdx={1}
-          hint={t("prefix[3] = 0 + 2 + 4 + 6", "prefix[3] = 0 + 2 + 4 + 6")}
-          onCorrect={() => setQuizPassed(true)}
-        />
-      )}
+// 결과: prefix = {0, 3, 4, 8, 9, 14}`}
+            />
+            <p className="text-xs text-gray-600 text-center">
+              {t("진짜 단순하죠? 마지막 슬라이드에서 한 번 확인해봐요 →", "Really simple, right? Quick check on the last slide →")}
+            </p>
+          </div>
+        )}
 
-      {quizPassed && (
-        <button
-          onClick={onComplete}
-          className="w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold flex items-center justify-center gap-2"
-        >
-          ✅ {t("이해했어요 — 다음 챕터", "Got it — Next")} <ArrowRight className="w-4 h-4" />
-        </button>
+        {slideStep === 3 && (
+          <MiniQuiz
+            question={t("arr = [2, 4, 6] 일 때 prefix[3] 은 뭐예요?", "If arr = [2, 4, 6], what is prefix[3]?")}
+            options={["10", "12", "6", "8"]}
+            answerIdx={1}
+            hint={t("prefix[3] = 0 + 2 + 4 + 6 = ?", "prefix[3] = 0 + 2 + 4 + 6 = ?")}
+            onCorrect={() => setQuizPassed(true)}
+          />
+        )}
+      </div>
+
+      {slideStep < 3 ? (
+        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
+      ) : quizPassed ? (
+        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
+      ) : (
+        <div className="flex items-center justify-center gap-2 pt-2">
+          {Array.from({ length: totalSteps }).map((_, i) => (
+            <div key={i} className={cn("h-2 rounded-full transition-all", i === slideStep ? "w-8 bg-orange-500" : i < slideStep ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
+          ))}
+        </div>
       )}
     </div>
   )
@@ -334,151 +432,162 @@ for (int i = 0; i < arr.size(); i++)
 // ── 챕터 3: 구간 합 ─────────────────────────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
   const { t } = useLanguage()
+  const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter()
+  const totalSteps = 4
   const arr = [3, 1, 4, 1, 5]
   const prefix = [0, 3, 4, 8, 9, 14]
   const [L, setL] = useState(2)
   const [R, setR] = useState(4)
   const [quizPassed, setQuizPassed] = useState(false)
-
   const directSum = arr.slice(L - 1, R).reduce((s, v) => s + v, 0)
   const prefixDiff = prefix[R] - prefix[L - 1]
 
   return (
-    <div className="space-y-4">
-      <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-5 border-2 border-purple-200">
-        <p className="text-sm text-gray-800 leading-relaxed">
-          {t("이제 진짜 마법 — 어떤 구간의 합이든", "Now the magic — any range sum, in")} <b className="text-purple-700">{t("뺄셈 한 번", "ONE subtraction")}</b>:
-        </p>
-        <div className="mt-3 bg-white rounded-lg p-3 font-mono text-center text-lg font-black text-purple-700">
-          arr[L]~arr[R] = prefix[R] − prefix[L−1]
-        </div>
-      </div>
-
-      {/* 인터랙티브 — L, R 슬라이더 */}
-      <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-        <p className="text-xs font-black text-amber-900 mb-3">🎮 {t("L, R 골라 보기", "Pick L, R")}</p>
-
-        {/* arr (1-indexed) */}
-        <div className="mb-3">
-          <p className="text-[11px] text-gray-500 mb-1">arr (1-indexed)</p>
-          <div className="flex gap-1">
-            {arr.map((v, i) => {
-              const idx = i + 1
-              const inRange = idx >= L && idx <= R
-              return (
-                <div key={i} className="flex flex-col items-center">
-                  <div
-                    className={cn(
-                      "w-12 h-12 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
-                      inRange
-                        ? "bg-purple-300 border-purple-600 text-purple-900 scale-105"
-                        : "bg-gray-50 border-gray-300 text-gray-400",
-                    )}
-                  >
-                    {v}
-                  </div>
-                  <span className="text-[9px] text-gray-400 mt-0.5">{idx}</span>
-                </div>
-              )
-            })}
+    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
+      <div className="flex-1">
+        {slideStep === 0 && (
+          <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border-2 border-purple-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🎯</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("이제 진짜 마법 — 구간 합 구하기!", "Now the real magic — range sums!")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
+              {t(
+                "지금까지 누적합 만들었으면 — 이제 어떤 구간이든 ", "Now that we have prefix sum — for any range, ",
+              )}<b className="text-purple-700">{t("뺄셈 한 번", "ONE subtraction")}</b>{t(
+                " 으로 합 구할 수 있어요.",
+                " gets you the sum.",
+              )}
+            </p>
+            <div className="bg-white rounded-lg p-3 font-mono text-center text-lg font-black text-purple-700 border border-purple-200 mb-3">
+              arr[L]~arr[R] = prefix[R] − prefix[L−1]
+            </div>
+            <p className="text-sm text-gray-700 leading-relaxed">
+              {t(
+                "왜 L−1 인지 헷갈리죠? 다음 슬라이드에서 슬라이더로 직접 움직여보면 바로 감 잡혀요.",
+                "Confused about L−1? Move sliders on the next slide — it'll click.",
+              )}
+            </p>
           </div>
-        </div>
+        )}
 
-        {/* prefix */}
-        <div className="mb-3">
-          <p className="text-[11px] text-gray-500 mb-1">prefix</p>
-          <div className="flex gap-1">
-            {prefix.map((v, i) => {
-              const isR = i === R
-              const isLm1 = i === L - 1
-              return (
-                <div key={i} className="flex flex-col items-center">
-                  <div
-                    className={cn(
-                      "w-12 h-12 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
-                      isR && "bg-emerald-300 border-emerald-600 text-emerald-900 scale-110 shadow-md",
-                      isLm1 && "bg-red-200 border-red-500 text-red-800 scale-110 shadow-md",
-                      !isR && !isLm1 && "bg-gray-50 border-gray-300 text-gray-500",
-                    )}
-                  >
-                    {v}
-                  </div>
-                  <span className="text-[9px] text-gray-400 mt-0.5">{i}</span>
-                </div>
-              )
-            })}
+        {slideStep === 1 && (
+          <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("L, R 슬라이더 움직여 보기", "Move the L, R sliders")}</p>
+            <p className="text-xs text-gray-600 text-center mb-4">
+              {t("L (시작), R (끝) 을 바꾸면 어떻게 답이 바뀌는지 봐요:", "Change L (start), R (end) — see how the answer changes:")}
+            </p>
+            {/* arr */}
+            <div className="mb-3">
+              <p className="text-[11px] text-gray-500 mb-1">arr (1-indexed)</p>
+              <div className="flex gap-1">
+                {arr.map((v, i) => {
+                  const idx = i + 1
+                  const inRange = idx >= L && idx <= R
+                  return (
+                    <div key={i} className="flex flex-col items-center">
+                      <div className={cn("w-12 h-12 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
+                        inRange ? "bg-purple-300 border-purple-600 text-purple-900 scale-105" : "bg-gray-50 border-gray-300 text-gray-400")}>{v}</div>
+                      <span className="text-[9px] text-gray-400 mt-0.5">{idx}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+            <div className="mb-3">
+              <p className="text-[11px] text-gray-500 mb-1">prefix</p>
+              <div className="flex gap-1">
+                {prefix.map((v, i) => {
+                  const isR = i === R
+                  const isLm1 = i === L - 1
+                  return (
+                    <div key={i} className="flex flex-col items-center">
+                      <div className={cn("w-12 h-12 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
+                        isR && "bg-emerald-300 border-emerald-600 text-emerald-900 scale-110 shadow-md",
+                        isLm1 && "bg-red-200 border-red-500 text-red-800 scale-110 shadow-md",
+                        !isR && !isLm1 && "bg-gray-50 border-gray-300 text-gray-500")}>{v}</div>
+                      <span className="text-[9px] text-gray-400 mt-0.5">{i}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <div>
+                <label className="text-xs font-bold text-red-700">L ({t("시작", "start")})</label>
+                <input type="range" min={1} max={5} value={L} onChange={e => setL(Math.min(Number(e.target.value), R))} className="w-full" />
+                <div className="text-center font-mono font-black text-red-700">L = {L}</div>
+              </div>
+              <div>
+                <label className="text-xs font-bold text-emerald-700">R ({t("끝", "end")})</label>
+                <input type="range" min={1} max={5} value={R} onChange={e => setR(Math.max(Number(e.target.value), L))} className="w-full" />
+                <div className="text-center font-mono font-black text-emerald-700">R = {R}</div>
+              </div>
+            </div>
+            <div className="bg-purple-50 rounded-lg p-3 text-center">
+              <p className="text-sm font-mono text-gray-700">
+                prefix[{R}] − prefix[{L - 1}] = <b className="text-emerald-700">{prefix[R]}</b> − <b className="text-red-700">{prefix[L - 1]}</b>
+              </p>
+              <p className="text-2xl font-black text-purple-700 mt-1">= {prefixDiff}</p>
+              <p className="text-[11px] text-gray-500 mt-1">
+                {t("직접 더해도", "Direct sum")}: {arr.slice(L - 1, R).join(" + ")} = {directSum} ✓
+              </p>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* L, R 선택 */}
-        <div className="grid grid-cols-2 gap-3 mb-3">
-          <div>
-            <label className="text-xs font-bold text-red-700">L (시작)</label>
-            <input
-              type="range" min={1} max={5} value={L}
-              onChange={e => setL(Math.min(Number(e.target.value), R))}
-              className="w-full"
-            />
-            <div className="text-center font-mono font-black text-red-700">L = {L}</div>
-          </div>
-          <div>
-            <label className="text-xs font-bold text-emerald-700">R (끝)</label>
-            <input
-              type="range" min={1} max={5} value={R}
-              onChange={e => setR(Math.max(Number(e.target.value), L))}
-              className="w-full"
-            />
-            <div className="text-center font-mono font-black text-emerald-700">R = {R}</div>
-          </div>
-        </div>
-
-        {/* 결과 */}
-        <div className="bg-purple-50 rounded-lg p-3 text-center">
-          <p className="text-sm font-mono text-gray-700">
-            prefix[{R}] − prefix[{L - 1}] = <b className="text-emerald-700">{prefix[R]}</b> − <b className="text-red-700">{prefix[L - 1]}</b>
-          </p>
-          <p className="text-2xl font-black text-purple-700 mt-1">= {prefixDiff}</p>
-          <p className="text-[11px] text-gray-500 mt-1">
-            {t("직접 더해도", "Direct sum")}: {arr.slice(L - 1, R).join(" + ")} = {directSum} ✓
-          </p>
-        </div>
-      </div>
-
-      <CodeBlock
-        lang={codeLang}
-        setLang={setCodeLang}
-        py={`def range_sum(prefix, L, R):
+        {slideStep === 2 && (
+          <div className="space-y-3">
+            <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
+              <p className="text-sm font-black text-blue-900">📝 {t("코드는 진짜 한 줄", "Code = literally one line")}</p>
+              <p className="text-xs text-gray-700 mt-1">
+                {t("range_sum 함수 한 번 만들면 어디서든 O(1) 답 나와요:", "Define range_sum once — O(1) answer everywhere:")}
+              </p>
+            </div>
+            <CodeBlock lang={codeLang} setLang={setCodeLang}
+              py={`def range_sum(prefix, L, R):
     """arr[L]~arr[R] 의 합 (1-indexed)"""
     return prefix[R] - prefix[L - 1]
 
-# 사용
+# 사용 예시
 prefix = [0, 3, 4, 8, 9, 14]
 print(range_sum(prefix, 2, 4))   # → 6`}
-        cpp={`int rangeSum(vector<int>& prefix, int L, int R) {
+              cpp={`int rangeSum(vector<int>& prefix, int L, int R) {
     // arr[L]~arr[R] 의 합 (1-indexed)
     return prefix[R] - prefix[L - 1];
 }
 
-// 사용
+// 사용 예시
 vector<int> prefix = {0, 3, 4, 8, 9, 14};
 cout << rangeSum(prefix, 2, 4) << endl;  // → 6`}
-      />
+            />
+            <p className="text-xs text-gray-600 text-center">
+              {t("이게 누적합의 진짜 가치 — 한 번 만들고, 평생 O(1) 로 답 →", "This is prefix sum's real value — build once, O(1) forever →")}
+            </p>
+          </div>
+        )}
 
-      <MiniQuiz
-        question={t("arr = [5, 2, 8, 1, 6], prefix = [0, 5, 7, 15, 16, 22] 일 때 arr[2]~arr[4] 합은?", "arr = [5, 2, 8, 1, 6], prefix = [0, 5, 7, 15, 16, 22]. Sum of arr[2]~arr[4]?")}
-        options={["11", "15", "17", "23"]}
-        answerIdx={0}
-        hint={t("prefix[4] - prefix[1] = 16 - 5", "prefix[4] - prefix[1] = 16 - 5")}
-        onCorrect={() => setQuizPassed(true)}
-      />
+        {slideStep === 3 && (
+          <MiniQuiz
+            question={t("arr = [5, 2, 8, 1, 6], prefix = [0, 5, 7, 15, 16, 22]. arr[2]~arr[4] 합은?", "arr = [5, 2, 8, 1, 6], prefix = [0, 5, 7, 15, 16, 22]. Sum of arr[2]~arr[4]?")}
+            options={["11", "15", "17", "23"]}
+            answerIdx={0}
+            hint={t("prefix[R] − prefix[L−1] = prefix[4] − prefix[1] = 16 − 5", "prefix[R] − prefix[L−1] = prefix[4] − prefix[1] = 16 − 5")}
+            onCorrect={() => setQuizPassed(true)}
+          />
+        )}
+      </div>
 
-      {quizPassed && (
-        <button
-          onClick={onComplete}
-          className="w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold flex items-center justify-center gap-2"
-        >
-          ✅ {t("이해했어요 — 다음 챕터", "Got it — Next")} <ArrowRight className="w-4 h-4" />
-        </button>
+      {slideStep < 3 ? (
+        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
+      ) : quizPassed ? (
+        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
+      ) : (
+        <div className="flex items-center justify-center gap-2 pt-2">
+          {Array.from({ length: totalSteps }).map((_, i) => (
+            <div key={i} className={cn("h-2 rounded-full transition-all", i === slideStep ? "w-8 bg-orange-500" : i < slideStep ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
+          ))}
+        </div>
       )}
     </div>
   )
@@ -487,49 +596,76 @@ cout << rangeSum(prefix, 2, 4) << endl;  // → 6`}
 // ── 챕터 4: 첫 문제 풀기 ────────────────────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
   const { t } = useLanguage()
+  const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter()
+  const totalSteps = 4
   const [quizPassed, setQuizPassed] = useState(false)
-
   return (
-    <div className="space-y-4">
-      <div className="bg-blue-50 rounded-2xl p-4 border-2 border-blue-200">
-        <p className="text-xs font-black text-blue-900 mb-2 uppercase">📋 {t("실전 문제 — BOJ 11659 스타일", "Real problem — BOJ 11659 style")}</p>
-        <p className="text-sm text-gray-800 leading-relaxed">
-          {t("배열에 N 개의 숫자가 있어요. M 개의 질문이 들어와요 — 각 질문은 \"i 번째부터 j 번째까지의 합?\".", "Array of N numbers. M queries — each asks \"sum from i to j?\"")}
-        </p>
-        <p className="text-sm text-gray-800 mt-2">
-          <b>N, M ≤ 100,000</b>
-        </p>
-      </div>
+    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
+      <div className="flex-1">
+        {slideStep === 0 && (
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">⚡</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("진짜 USACO 문제로 가요!", "Onto a real USACO-style problem!")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
+              {t(
+                "BOJ 11659 비슷한 문제예요 — 배열에 숫자 N 개 있고, M 개의 질문이 들어와요:",
+                "Similar to BOJ 11659 — array of N numbers, M queries:",
+              )}
+            </p>
+            <div className="bg-white rounded-lg p-3 border border-blue-300 text-sm text-gray-800">
+              {t(
+                "\"i 번째부터 j 번째까지 합이 얼마야?\" — 이런 질문이 M 번 와요.",
+                "\"What's the sum from i to j?\" — M such questions.",
+              )}
+            </div>
+            <p className="text-sm text-gray-700 leading-relaxed mt-3">
+              <b>{t("제약", "Constraints")}:</b> N, M ≤ 100,000 ({t("최대 10만", "up to 100K")})
+            </p>
+            <p className="text-sm text-blue-700 font-bold text-center mt-4">
+              {t("어떻게 풀까요? 다음 슬라이드에서 두 방법 비교 →", "How to solve? Compare two approaches →")}
+            </p>
+          </div>
+        )}
 
-      {/* 단계별 사고 */}
-      <div className="bg-white rounded-2xl border-2 border-gray-200 p-4 space-y-3">
-        <p className="text-sm font-bold text-gray-900">💭 {t("어떻게 풀까?", "How to solve?")}</p>
+        {slideStep === 1 && (
+          <div className="bg-white rounded-2xl border-2 border-gray-200 p-4 space-y-3">
+            <p className="text-base font-black text-gray-900 text-center">💭 {t("두 가지 방법 비교", "Compare two approaches")}</p>
+            <div className="rounded-lg bg-red-50 border-2 border-red-200 p-3">
+              <p className="text-sm font-black text-red-800 mb-1">❌ {t("나이브 방법", "Naive way")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t("각 질문마다 i~j 까지 직접 다 더해요. 한 질문당 ", "Sum i~j directly for each query. ")}<b className="font-mono">O(N)</b>{t(", 그게 M 번 = ", " per query × M = ")}<b className="font-mono">O(N × M)</b>
+              </p>
+              <p className="text-[11px] text-red-700 mt-1 font-bold">
+                {t("최악 10⁵ × 10⁵ = 10¹⁰ → 시간초과 ⏰", "Worst: 10⁵ × 10⁵ = 10¹⁰ → TLE ⏰")}
+              </p>
+            </div>
+            <div className="rounded-lg bg-emerald-50 border-2 border-emerald-200 p-3">
+              <p className="text-sm font-black text-emerald-800 mb-1">✅ {t("누적합 방법", "Prefix sum")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t("미리 prefix 한 번 만들고 — ", "Build prefix once: ")}<b className="font-mono">O(N)</b>{t(". 그 다음 각 질문은 뺄셈 한 번 — ", ". Then each query: ")}<b className="font-mono">O(1)</b>
+              </p>
+              <p className="text-[11px] text-emerald-700 mt-1 font-bold">
+                {t("총 O(N + M) = 2 × 10⁵ → 초고속 ⚡", "Total O(N + M) = 2 × 10⁵ → blazing fast ⚡")}
+              </p>
+            </div>
+            <p className="text-xs text-gray-600 text-center italic">
+              {t("같은 문제, 5,000 만 배 차이! 다음 슬라이드에서 코드 봐요 →", "Same problem, 50,000,000× faster! Code on next slide →")}
+            </p>
+          </div>
+        )}
 
-        <div className="rounded-lg bg-red-50 border border-red-200 p-3">
-          <p className="text-xs font-bold text-red-800 mb-1">❌ {t("나이브 방법", "Naive")}</p>
-          <p className="text-xs text-gray-700">
-            {t("각 질문마다 i~j 직접 더하기 → O(N) × M = ", "Sum directly for each query → O(N) × M = ")}<b className="font-mono">O(N × M)</b>
-          </p>
-          <p className="text-[11px] text-red-700 mt-1">
-            {t("최악 10⁵ × 10⁵ = 10¹⁰ → 시간 초과!", "Worst case 10⁵ × 10⁵ = 10¹⁰ → TLE!")}
-          </p>
-        </div>
-
-        <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-3">
-          <p className="text-xs font-bold text-emerald-800 mb-1">✅ {t("누적합 방법", "Prefix sum")}</p>
-          <p className="text-xs text-gray-700">
-            {t("미리 prefix 한 번 만들기 ", "Build prefix once: ")}<b className="font-mono">O(N)</b>{t(" → 각 질문은 뺄셈 한 번 ", " → each query: ")}<b className="font-mono">O(1)</b>
-          </p>
-          <p className="text-[11px] text-emerald-700 mt-1">
-            {t("총 O(N + M) → 2 × 10⁵ → 초고속!", "Total O(N + M) → 2 × 10⁵ → fast!")}
-          </p>
-        </div>
-      </div>
-
-      <CodeBlock
-        lang={codeLang}
-        setLang={setCodeLang}
-        py={`import sys
+        {slideStep === 2 && (
+          <div className="space-y-3">
+            <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
+              <p className="text-sm font-black text-blue-900">📝 {t("실제 제출 코드", "Real submission code")}</p>
+              <p className="text-xs text-gray-700 mt-1">
+                {t("이 코드 그대로 BOJ 11659 에 제출하면 통과해요:", "Submit this to BOJ 11659 — it passes:")}
+              </p>
+            </div>
+            <CodeBlock lang={codeLang} setLang={setCodeLang}
+              py={`import sys
 input = sys.stdin.readline
 
 N, M = map(int, input().split())
@@ -544,7 +680,7 @@ for v in arr:
 for _ in range(M):
     i, j = map(int, input().split())
     print(prefix[j] - prefix[i - 1])`}
-        cpp={`#include <bits/stdc++.h>
+              cpp={`#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
@@ -562,23 +698,34 @@ int main() {
         cout << prefix[j] - prefix[i - 1] << "\\n";
     }
 }`}
-      />
+            />
+            <p className="text-xs text-gray-600 text-center">
+              {t("Python 은 빠른 입출력 (sys.stdin) 필수. C++ 는 ios::sync_with_stdio(false).", "Python needs fast I/O (sys.stdin). C++ uses ios::sync_with_stdio(false).")}
+            </p>
+          </div>
+        )}
 
-      <MiniQuiz
-        question={t("N = 100,000, M = 100,000 일 때 나이브 방법은 약 몇 번 연산?", "If N = M = 100,000, naive does ~how many ops?")}
-        options={["100,000", "200,000", "10,000,000,000 (시간 초과)", "1,000,000"]}
-        answerIdx={2}
-        hint={t("각 질문이 평균 N 번 더함 → N × M", "Each query sums ~N → N × M")}
-        onCorrect={() => setQuizPassed(true)}
-      />
+        {slideStep === 3 && (
+          <MiniQuiz
+            question={t("N = 100,000, M = 100,000 일 때 나이브 방법은 약 몇 번 연산?", "If N = M = 100,000, naive needs ~how many ops?")}
+            options={["100,000", "200,000", "10,000,000,000 (시간초과)", "1,000,000"]}
+            answerIdx={2}
+            hint={t("각 질문이 평균 N 번 더하기 → N × M = 10⁵ × 10⁵ = 10¹⁰", "Each query ~N adds → N × M = 10⁵ × 10⁵ = 10¹⁰")}
+            onCorrect={() => setQuizPassed(true)}
+          />
+        )}
+      </div>
 
-      {quizPassed && (
-        <button
-          onClick={onComplete}
-          className="w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold flex items-center justify-center gap-2"
-        >
-          ✅ {t("이해했어요 — 다음 챕터", "Got it — Next")} <ArrowRight className="w-4 h-4" />
-        </button>
+      {slideStep < 3 ? (
+        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
+      ) : quizPassed ? (
+        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
+      ) : (
+        <div className="flex items-center justify-center gap-2 pt-2">
+          {Array.from({ length: totalSteps }).map((_, i) => (
+            <div key={i} className={cn("h-2 rounded-full transition-all", i === slideStep ? "w-8 bg-orange-500" : i < slideStep ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
+          ))}
+        </div>
       )}
     </div>
   )
@@ -587,85 +734,118 @@ int main() {
 // ── 챕터 5: 응용 + 정리 ────────────────────────────────────────────
 function Chapter5({ onComplete }: { onComplete: () => void }) {
   const { t } = useLanguage()
-  const [showAdvanced, setShowAdvanced] = useState(false)
-
+  const { step, setStep, rootRef } = useSlideChapter()
+  const totalSteps = 4
   return (
-    <div className="space-y-4">
-      {/* 핵심 정리 */}
-      <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-5 border-2 border-amber-300">
-        <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
-        <ol className="space-y-2 text-sm text-gray-800">
-          <li><b>1.</b> prefix[0] = 0 {t("(시작값)", "(start)")}</li>
-          <li><b>2.</b> <code className="bg-white px-1.5 py-0.5 rounded">prefix[i] = prefix[i-1] + arr[i-1]</code></li>
-          <li><b>3.</b> {t("구간 합", "Range sum")}: <code className="bg-white px-1.5 py-0.5 rounded">prefix[R] - prefix[L-1]</code></li>
-          <li><b>4.</b> {t("전처리 O(N) + 쿼리 O(1)", "Preprocess O(N) + query O(1)")}</li>
-          <li><b>5.</b> {t("써야 할 때: 같은 배열에 여러 구간 합 질문", "Use when: many range queries on same array")}</li>
-        </ol>
-      </div>
+    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
+      <div className="flex-1">
+        {step === 0 && (
+          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-6 border-2 border-amber-300 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🎉</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("우와, 누적합 끝까지 다 봤어요!", "You finished all of prefix sum!")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed text-center">
+              {t(
+                "정말 잘 했어요 👏 이제 USACO 에서 '구간 합' 질문 나와도 당황 안 할 거예요. 핵심들 한 번만 더 짚고 넘어가요.",
+                "Awesome work 👏 You'll be ready when 'range sum' shows up in USACO. Let me recap.",
+              )}
+            </p>
+          </div>
+        )}
 
-      {/* 응용 (선택) */}
-      <div className="bg-white rounded-2xl border-2 border-purple-200 p-4">
-        <button
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="w-full flex items-center justify-between text-left"
-        >
-          <span className="text-sm font-black text-purple-900">
-            🚀 {t("응용 (실력 더 키우고 싶으면)", "Advanced (optional)")}
-          </span>
-          <span className="text-purple-600">{showAdvanced ? "▼" : "▶"}</span>
-        </button>
-        {showAdvanced && (
-          <div className="mt-4 space-y-3 text-sm text-gray-800">
-            <div className="rounded-lg bg-purple-50 p-3">
-              <p className="font-bold text-purple-800 mb-1">📊 2D 누적합</p>
-              <p className="text-xs">
-                {t("격자에서도 가능. 직사각형 영역 합 = 포함-배제로 4 항 뺄셈.", "Works in 2D grids too. Rectangle sum = inclusion-exclusion of 4 corners.")}
-              </p>
-              <code className="block mt-1 bg-white px-2 py-1 rounded text-[11px] font-mono">
-                sum = p[r2][c2] − p[r1-1][c2] − p[r2][c1-1] + p[r1-1][c1-1]
-              </code>
+        {step === 1 && (
+          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-5 border-2 border-amber-300">
+            <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
+            <ol className="space-y-2 text-sm text-gray-800">
+              <li><b>1.</b> prefix[0] = 0 {t("(시작값)", "(start)")}</li>
+              <li><b>2.</b> <code className="bg-white px-1.5 py-0.5 rounded">prefix[i] = prefix[i-1] + arr[i-1]</code></li>
+              <li><b>3.</b> {t("구간 합", "Range sum")}: <code className="bg-white px-1.5 py-0.5 rounded">prefix[R] - prefix[L-1]</code></li>
+              <li><b>4.</b> {t("전처리 O(N) + 쿼리 O(1)", "Preprocess O(N) + each query O(1)")}</li>
+              <li><b>5.</b> {t("써야 할 때: 같은 배열에 구간 합 질문 여러 번", "Use when: many range sum queries on same array")}</li>
+            </ol>
+            <p className="text-xs text-amber-700 mt-3 text-center italic">
+              {t("이 5 가지면 누적합 거의 다 풀어요!", "These 5 cover almost any prefix sum problem!")}
+            </p>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="bg-white rounded-2xl border-2 border-purple-200 p-5 min-h-[280px]">
+            <p className="text-sm font-black text-purple-900 mb-3">🚀 {t("응용 — 더 깊이 가고 싶으면", "Advanced — if you want more")}</p>
+            <p className="text-xs text-gray-600 mb-3">
+              {t("Bronze 학생은 여기까지 안 봐도 OK. 호기심에 한 번만 훑어보세요:", "Bronze students can skip. Skim if curious:")}
+            </p>
+            <div className="space-y-3">
+              <div className="rounded-lg bg-purple-50 border border-purple-200 p-3">
+                <p className="font-bold text-purple-800 text-sm mb-1">📊 2D 누적합</p>
+                <p className="text-xs text-gray-700">
+                  {t("격자에서도 가능. 직사각형 영역 합 = '포함-배제' 로 4 항 뺄셈.", "Works in 2D grids. Rectangle sum = inclusion-exclusion of 4 corners.")}
+                </p>
+              </div>
+              <div className="rounded-lg bg-purple-50 border border-purple-200 p-3">
+                <p className="font-bold text-purple-800 text-sm mb-1">🔤 문자별 누적합</p>
+                <p className="text-xs text-gray-700">
+                  {t("각 알파벳마다 누적합 26 개 → \"구간에 'a' 몇 개?\" O(1).", "26 prefix arrays per letter → \"count of 'a' in [L,R]?\" in O(1)")}
+                </p>
+              </div>
+              <div className="rounded-lg bg-purple-50 border border-purple-200 p-3">
+                <p className="font-bold text-purple-800 text-sm mb-1">➗ 나머지 합</p>
+                <p className="text-xs text-gray-700">
+                  {t("prefix[j] % M == prefix[i] % M 이면 그 구간 합은 M 의 배수.", "If prefix[j] % M == prefix[i] % M, range sum is divisible by M.")}
+                </p>
+              </div>
             </div>
-            <div className="rounded-lg bg-purple-50 p-3">
-              <p className="font-bold text-purple-800 mb-1">🔤 문자별 누적합</p>
-              <p className="text-xs">
-                {t("각 알파벳마다 누적합 배열 26 개 → \"구간에 'a' 가 몇 개?\" O(1) 답.", "26 prefix arrays (one per letter) → \"count of 'a' in [L,R]?\" in O(1)")}
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="space-y-3">
+            <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
+              <p className="text-sm font-black text-amber-900 mb-2">🏆 {t("실전 문제 — 직접 풀어 보기!", "Real problems — try them!")}</p>
+              <p className="text-xs text-gray-700 mb-3">
+                {t("백준 추천 3 개 — 쉬운 거부터 →", "3 BOJ problems, easy first →")}
               </p>
+              <div className="space-y-1.5">
+                <a href="https://www.acmicpc.net/problem/11659" target="_blank" rel="noopener noreferrer"
+                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
+                  <b>BOJ 11659</b> — {t("구간 합 구하기 4 (기본)", "Sum in Range 4 (basic)")} ↗
+                </a>
+                <a href="https://www.acmicpc.net/problem/2559" target="_blank" rel="noopener noreferrer"
+                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
+                  <b>BOJ 2559</b> — {t("수열 (고정 길이 윈도우)", "Sequence (fixed window)")} ↗
+                </a>
+                <a href="https://www.acmicpc.net/problem/11660" target="_blank" rel="noopener noreferrer"
+                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
+                  <b>BOJ 11660</b> — {t("2D 누적합", "2D Prefix Sum")} ↗
+                </a>
+              </div>
             </div>
-            <div className="rounded-lg bg-purple-50 p-3">
-              <p className="font-bold text-purple-800 mb-1">➗ 나머지 합</p>
-              <p className="text-xs">
-                {t("prefix[j] % M == prefix[i] % M 이면 구간 합이 M 의 배수.", "If prefix[j] % M == prefix[i] % M, the range sum is divisible by M.")}
-              </p>
-            </div>
+            <p className="text-xs text-gray-600 text-center">
+              {t("👇 아래 '누적합 마스터' 누르면 끝!", "👇 Hit 'Prefix Sum Master' to finish!")}
+            </p>
           </div>
         )}
       </div>
 
-      {/* 실전 문제 링크 */}
-      <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
-        <p className="text-sm font-black text-amber-900 mb-2">🏆 {t("실전 문제 추천", "Recommended Practice")}</p>
-        <div className="space-y-1.5">
-          <a href="https://www.acmicpc.net/problem/11659" target="_blank" rel="noopener noreferrer"
-            className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-            <b>BOJ 11659</b> — {t("구간 합 구하기 4", "Sum in Range 4")} <span className="text-[11px] text-gray-400 ml-1">↗</span>
-          </a>
-          <a href="https://www.acmicpc.net/problem/2559" target="_blank" rel="noopener noreferrer"
-            className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-            <b>BOJ 2559</b> — {t("수열 (고정 길이)", "Sequence (fixed window)")} <span className="text-[11px] text-gray-400 ml-1">↗</span>
-          </a>
-          <a href="https://www.acmicpc.net/problem/11660" target="_blank" rel="noopener noreferrer"
-            className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-            <b>BOJ 11660</b> — {t("2D 누적합", "2D Prefix Sum")} <span className="text-[11px] text-gray-400 ml-1">↗</span>
-          </a>
-        </div>
+      <div className="flex items-center justify-center gap-2 mb-4">
+        {Array.from({ length: totalSteps }).map((_, i) => (
+          <div key={i} className={cn("h-2 rounded-full transition-all",
+            i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
+        ))}
       </div>
-
-      <button
-        onClick={onComplete}
-        className="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-xl font-black text-lg flex items-center justify-center gap-2 shadow-lg"
-      >
-        🎉 {t("누적합 마스터!", "Prefix Sum Master!")} <Sparkles className="w-5 h-5" />
-      </button>
+      <div className="flex gap-2 sticky bottom-0 pt-2">
+        <button onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0}
+          className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm">
+          ← {t("이전", "Prev")}
+        </button>
+        <button onClick={() => step < totalSteps - 1 ? setStep(step + 1) : onComplete()}
+          className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95">
+          {step === totalSteps - 1
+            ? <>🎉 {t("누적합 마스터!", "Prefix Sum Master!")} <Sparkles className="w-5 h-5" /></>
+            : <>{t("다음", "Next")} <ArrowRight className="w-5 h-5" /></>}
+        </button>
+      </div>
     </div>
   )
 }
@@ -714,7 +894,9 @@ export default function PrefixSumPage() {
     setCompletedChapters(prev => new Set(prev).add(n))
     if (n < CHAPTERS.length) {
       setCurrent(n + 1)
-      window.scrollTo({ top: 0, behavior: "smooth" })
+      setTimeout(() => {
+        document.getElementById("chapter-content")?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }, 50)
     } else {
       // 마지막 챕터 완료 → 마스터
       setIsMastered(true)
@@ -745,7 +927,9 @@ export default function PrefixSumPage() {
     // 완료한 챕터 + 현재 = 자유 이동
     if (n <= current || completedChapters.has(n)) {
       setCurrent(n)
-      window.scrollTo({ top: 0, behavior: "smooth" })
+      setTimeout(() => {
+        document.getElementById("chapter-content")?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }, 50)
     }
   }
 
@@ -825,7 +1009,7 @@ export default function PrefixSumPage() {
         </div>
 
         {/* 챕터 본문 */}
-        <div className="bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-5 shadow-sm">
+        <div id="chapter-content" className="bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-5 shadow-sm scroll-mt-4">
           {current === 1 && <Chapter1 onComplete={() => completeChapter(1)} codeLang={codeLang} setCodeLang={setCodeLang} />}
           {current === 2 && <Chapter2 onComplete={() => completeChapter(2)} codeLang={codeLang} setCodeLang={setCodeLang} />}
           {current === 3 && <Chapter3 onComplete={() => completeChapter(3)} codeLang={codeLang} setCodeLang={setCodeLang} />}
