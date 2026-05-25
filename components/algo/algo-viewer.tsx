@@ -62,6 +62,9 @@ export function AlgoViewer({ topicId, codeTrack }: AlgoViewerProps) {
   const [selectedId, setSelectedId]   = useState<string | null>(null)
   const [activeTab, setActiveTab]     = useState("problem")
   const [problemTabs, setProblemTabs] = useState<ProblemTab[]>([])
+  // 📚 개념 섹션 페이지네이션 — 4000줄 HTML 덤프를 .concept-section 단위로 잘라서 한 번에 하나만 보여줌
+  const [conceptSections, setConceptSections] = useState<{ idx: number; title: string }[]>([])
+  const [conceptIdx, setConceptIdx] = useState(0)
 
   const { lang } = useLanguage()
 
@@ -179,6 +182,18 @@ export function AlgoViewer({ topicId, codeTrack }: AlgoViewerProps) {
         hljs()
         // 문제 목록 추출
         setStages(buildStages(window.AlgoTopics[topicId]))
+
+        // 📚 개념 섹션 추출 — .concept-section 단위로 페이지네이션
+        const sectionEls = conceptRef.current.querySelectorAll<HTMLElement>(".concept-section")
+        const sections = Array.from(sectionEls).map((el, i) => {
+          // 섹션 제목 추출 (.concept-section-title 텍스트, 없으면 "Section N")
+          const titleEl = el.querySelector(".concept-section-title")
+          const title = titleEl?.textContent?.replace(/^\d+\s*/, "").trim() || `Section ${i + 1}`
+          return { idx: i, title }
+        })
+        setConceptSections(sections)
+        setConceptIdx(0)  // 펼쳤을 때 첫 섹션부터
+
         setStatus("ready")
       } catch (e) {
         setErrorMsg(`렌더링 오류: ${e}`)
@@ -187,6 +202,15 @@ export function AlgoViewer({ topicId, codeTrack }: AlgoViewerProps) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topicId, lang])
+
+  // ── 📚 개념 섹션 전환 — display:none 토글 (이벤트 핸들러 유지 위해 DOM 그대로) ──
+  useEffect(() => {
+    if (!conceptRef.current || conceptSections.length === 0) return
+    const sectionEls = conceptRef.current.querySelectorAll<HTMLElement>(".concept-section")
+    sectionEls.forEach((el, i) => {
+      el.style.display = i === conceptIdx ? "" : "none"
+    })
+  }, [conceptIdx, conceptSections])
 
   // ── 문제 탭 내용 렌더링 ─────────────────────────────────────────
   useEffect(() => {
@@ -356,15 +380,98 @@ export function AlgoViewer({ topicId, codeTrack }: AlgoViewerProps) {
         </div>
       )}
 
-      {/* ── 개념 설명 — 기본 접힘. 학생이 필요할 때만 펼쳐서 봄 ──
+      {/* ── 개념 설명 — 페이지네이션. 한 번에 한 섹션만 노출.
           항상 마운트 (status 와 무관하게 conceptRef 가 같은 DOM 노드 가리키도록).
           로딩 중에는 Tailwind hidden 으로 숨김. */}
       <details className={cn("max-w-[1400px] mx-auto px-4 sm:px-6 my-4 group", status !== "ready" && "hidden")}>
         <summary className="cursor-pointer list-none flex items-center gap-2 px-4 py-3 rounded-xl bg-amber-50 border-2 border-amber-200 hover:border-amber-300 transition-colors text-sm font-bold text-amber-800">
           <span className="group-open:rotate-90 transition-transform text-xs">▶</span>
-          📖 {lang === "en" ? "Open concept reference (Bronze → Silver → Gold)" : "개념 설명 펼치기 (Bronze → Silver → Gold)"}
+          📖 {lang === "en" ? "Concept reference" : "개념 설명"}
+          {conceptSections.length > 0 && (
+            <span className="ml-auto text-xs font-normal text-amber-600">
+              {conceptSections.length}{lang === "en" ? " sections" : "개 섹션"}
+            </span>
+          )}
         </summary>
+
+        {/* 섹션 네비게이션 — 칩 + 진도 + 이전/다음 */}
+        {conceptSections.length > 1 && (
+          <div className="mt-3 mb-2 px-1 space-y-2">
+            {/* 섹션 칩 리스트 — 클릭으로 점프 */}
+            <div className="flex flex-wrap gap-1">
+              {conceptSections.map(s => (
+                <button
+                  key={s.idx}
+                  onClick={() => setConceptIdx(s.idx)}
+                  className={cn(
+                    "px-2 py-1 rounded-md text-[11px] font-bold border transition-colors text-left max-w-[200px] truncate",
+                    s.idx === conceptIdx
+                      ? "bg-purple-500 text-white border-purple-600"
+                      : "bg-white text-gray-700 border-gray-200 hover:border-purple-300 hover:bg-purple-50"
+                  )}
+                  title={s.title}
+                >
+                  {s.idx + 1}. {s.title}
+                </button>
+              ))}
+            </div>
+            {/* 진도 바 */}
+            <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-purple-500 transition-all duration-300"
+                style={{ width: `${((conceptIdx + 1) / conceptSections.length) * 100}%` }}
+              />
+            </div>
+            {/* 이전/다음 + 위치 표시 */}
+            <div className="flex items-center justify-between gap-2 text-xs">
+              <button
+                onClick={() => setConceptIdx(Math.max(0, conceptIdx - 1))}
+                disabled={conceptIdx === 0}
+                className="px-2.5 py-1 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed font-bold text-gray-700"
+              >
+                ← {lang === "en" ? "Prev" : "이전"}
+              </button>
+              <span className="text-gray-500 font-bold tabular-nums">
+                {conceptIdx + 1} / {conceptSections.length}
+              </span>
+              <button
+                onClick={() => setConceptIdx(Math.min(conceptSections.length - 1, conceptIdx + 1))}
+                disabled={conceptIdx === conceptSections.length - 1}
+                className="px-2.5 py-1 rounded-md bg-purple-500 hover:bg-purple-600 text-white disabled:opacity-40 disabled:cursor-not-allowed font-bold"
+              >
+                {lang === "en" ? "Next" : "다음"} →
+              </button>
+            </div>
+          </div>
+        )}
+
         <div ref={conceptRef} className="algo-content mt-3" />
+
+        {/* 섹션 끝 → 이전/다음 (콘텐츠 아래에도) */}
+        {conceptSections.length > 1 && (
+          <div className="mt-4 flex items-center justify-between gap-2 px-1 pb-2">
+            <button
+              onClick={() => setConceptIdx(Math.max(0, conceptIdx - 1))}
+              disabled={conceptIdx === 0}
+              className="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-sm font-bold text-gray-700"
+            >
+              ← {lang === "en" ? "Prev section" : "이전 섹션"}
+            </button>
+            <span className="text-sm text-gray-500 font-bold">
+              {conceptIdx + 1} / {conceptSections.length}
+            </span>
+            <button
+              onClick={() => {
+                setConceptIdx(Math.min(conceptSections.length - 1, conceptIdx + 1))
+                setTimeout(() => conceptRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50)
+              }}
+              disabled={conceptIdx === conceptSections.length - 1}
+              className="px-3 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white disabled:opacity-40 text-sm font-bold"
+            >
+              {lang === "en" ? "Next section" : "다음 섹션"} →
+            </button>
+          </div>
+        )}
       </details>
 
       {/* ── 문제 상세 뷰 (탭 + 내용) ── */}
