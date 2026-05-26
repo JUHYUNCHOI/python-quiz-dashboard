@@ -1279,8 +1279,8 @@ export function getMooin3Sections(E) {
             "바깥 j 루프가 쿼리당 O(N) 번 → 쿼리당 O(N²)."),
         t(E, "Q queries → total O(Q · N²). At N = 10⁵ and Q = 3·10⁴ that's ~3·10¹⁴ — way too slow.",
             "Q 쿼리 → 총 O(Q · N²). N = 10⁵, Q = 3·10⁴ 면 ~3·10¹⁴ — 너무 느려요."),
-        t(E, "Inputs 2–3 (N, Q ≤ 50) still pass for partial credit. We'll fix the rest next.",
-            "Inputs 2–3 (N, Q ≤ 50) 는 통과 → 부분점수. 나머지는 다음 단계에서."),
+        t(E, "Verified actual USACO submission: Python brute (O(N) per query) → 3/11 PASS. C++ brute (O(N²)) → 4/11 PASS. Small-N test cases pass; large-N cases TLE. We'll fix the rest next.",
+            "USACO 실제 제출 검증: Python brute (쿼리당 O(N)) → 3/11 통과. C++ brute (O(N²)) → 4/11 통과. N 작은 테스트는 통과, N 큰 테스트는 TLE. 나머지는 다음 단계에서."),
       ],
     },
     /* ── 6️⃣ Stage A: 외곽 루프를 j → c (26 개) 로 ── */
@@ -1359,6 +1359,12 @@ const M3PerfAside = ({ E }) => (
       <div>{t(E, "10¹⁰ — TLE 🚫", "10¹⁰ — TLE 🚫")}</div>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>full N, Q</code>
       <div>{t(E, "3·10¹⁴ — TLE 🚫", "3·10¹⁴ — TLE 🚫")}</div>
+    </div>
+    {/* 실제 검증된 USACO 제출 결과 */}
+    <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fca5a5", fontSize: 11 }}>
+      <b>{t(E, "Actual USACO submission (verified)", "실제 USACO 제출 (검증됨)")}</b>:{" "}
+      {t(E, "Python brute → 3/11 PASS · C++ brute → 4/11 PASS",
+            "Python brute → 3/11 통과 · C++ brute → 4/11 통과")}
     </div>
   </div>
 );

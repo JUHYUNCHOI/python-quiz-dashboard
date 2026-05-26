@@ -429,9 +429,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   // ──────────────────────────────────────────────────────────────────────────
 
   // 소프트 진행: 모든 수업 자유 접근 (선생님 + 학생 동일).
-  // 추천 순서는 커리큘럼/Smart-Next 가 시각적으로 안내하지만 잠금은 없음.
+  // 추천 순서는 커리큘럼/Smart-Next 가 시각적으로 안내. 잠금은 없음.
   // (Duolingo / Khan Academy 패턴 — 학생 자율성 우선)
-  const isLocked = false
 
   // ── 훅은 반드시 early return 앞에 선언해야 함 (Rules of Hooks) ──
   const resetStepState = () => {
@@ -528,20 +527,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   if (authLoading) return null
   // 비로그인 사용자: Python 프리뷰 레슨만 통과, 그 외는 차단 (useEffect 가 redirect)
   if (!user && !isPreviewLesson) return null
-
-  if (isLocked) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-5xl mb-4">🔒</p>
-          <p className="text-gray-600 mb-4">{t("이전 수업을 먼저 완료해주세요!", "Please complete previous lessons first!")}</p>
-          <button onClick={() => router.push("/curriculum")} className="px-5 py-2.5 bg-purple-600 text-white rounded-xl font-bold">
-            {t("수업 목록으로", "Go to Curriculum")}
-          </button>
-        </div>
-      </div>
-    )
-  }
 
   if (!lesson || !chapter || !step) {
     return (

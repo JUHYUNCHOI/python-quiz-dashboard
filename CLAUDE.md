@@ -1,5 +1,29 @@
 # CLAUDE.md — 코드린 프로젝트 컨텍스트
 
+## 🚀 병렬 작업 — 기본 규칙 (사용자 명시 요청)
+
+**여러 파일에 같은 작업이 반복될 때 = 자동으로 서브에이전트 병렬 호출.** 사용자가 매번 "에이전트 N 개 돌려" 요청 안 하게.
+
+한 메시지에 여러 Agent tool 호출 = 동시 실행. 적극 활용.
+
+`.claude/agents/` 에 4 개 커스텀 에이전트 정의됨:
+- **quest-auditor** — quest 정직성 감사 (5-10 동시 권장)
+- **algo-chapter-builder** — vanilla JS algo 토픽 → React 챕터식 (1 토픽당 1 에이전트, 2-3 병렬)
+- **lesson-content-reviewer** — 레슨 콘텐츠 품질 감사 (5+ 동시)
+- **ui-pattern-applier** — 확립된 UX 패턴을 여러 파일에 적용 (N 병렬)
+
+**자동 병렬화 트리거:**
+- "47 quest 다 검토" → quest-auditor × 8-10 병렬
+- "다른 algo 토픽도 챕터식으로" → algo-chapter-builder × 2-3 병렬
+- "Python 레슨 다 감사" → lesson-content-reviewer × 5 병렬
+- "이 패턴 다른 페이지에도 적용" → ui-pattern-applier × N 병렬
+- 일반: 5+ 동등한 파일 작업 = 병렬 검토
+
+**병렬 안 해도 되는 것 (혼자 처리):**
+- 단일 파일 작업
+- 사용자 피드백 반영 (UX 결정 — 깊은 컨텍스트 필요)
+- 디자인 결정 / 톤 조정
+
 ## 프로젝트 개요
 코드린(Coderin): 중학생/고등학생을 위한 코딩 학습 대시보드. Python, C++, Pseudocode(IGCSE) 커리큘럼 제공.
 

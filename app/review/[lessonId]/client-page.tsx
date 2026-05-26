@@ -310,15 +310,21 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   // ──────────────────────────────────────────────
   if (!lesson || reviewSteps.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center space-y-4">
-          <p className="text-2xl font-bold text-gray-900">{t("복습할 문제가 없어요", "No review questions found")}</p>
-          <p className="text-gray-500">{t("먼저 수업을 완료해주세요!", "Complete the lesson first!")}</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="text-center space-y-4 max-w-md">
+          <p className="text-4xl">🚧</p>
+          <p className="text-2xl font-bold text-gray-900">{t("이 레슨의 복습 문제 준비 중", "Review for this lesson — coming soon")}</p>
+          <p className="text-gray-500 leading-relaxed">
+            {t(
+              "아직 복습 콘텐츠가 만들어지지 않았어요. 잠긴 게 아니라 그냥 준비 중이에요!\n수업으로 바로 가서 학습할 수 있어요.",
+              "Review content isn't ready yet — not locked, just not built yet!\nYou can go straight to the lesson.",
+            )}
+          </p>
           <button
             onClick={() => router.push(`/learn/${lessonId}`)}
             className="px-6 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-500"
           >
-            {t("수업으로 가기", "Go to Lesson")}
+            {t("📖 수업으로 가기", "📖 Go to Lesson")}
           </button>
         </div>
       </div>
