@@ -454,11 +454,23 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               )}
             </p>
             <div className="bg-white rounded-lg p-3 border border-purple-200 space-y-1.5 text-sm">
-              <p>🔼 <code className="bg-purple-50 px-1 rounded">upper()</code> — {t("전부 대문자", "all uppercase")}</p>
-              <p>🔽 <code className="bg-purple-50 px-1 rounded">lower()</code> — {t("전부 소문자", "all lowercase")}</p>
-              <p>🔍 <code className="bg-purple-50 px-1 rounded">find()</code> — {t("어디서 처음 나오는지", "first index where")}</p>
-              <p>🔄 <code className="bg-purple-50 px-1 rounded">replace()</code> — {t("바꿔치기", "swap parts")}</p>
-              <p>✂️ <code className="bg-purple-50 px-1 rounded">split()</code> — {t("기준대로 자르기 (Python 만)", "cut by delimiter (Python only)")}</p>
+              {codeLang === "py" ? (
+                <>
+                  <p>🔼 <code className="bg-purple-50 px-1 rounded">s.upper()</code> — {t("전부 대문자", "all uppercase")}</p>
+                  <p>🔽 <code className="bg-purple-50 px-1 rounded">s.lower()</code> — {t("전부 소문자", "all lowercase")}</p>
+                  <p>🔍 <code className="bg-purple-50 px-1 rounded">s.find(...)</code> — {t("어디서 처음 나오는지 (없으면 -1)", "first index (or -1)")}</p>
+                  <p>🔄 <code className="bg-purple-50 px-1 rounded">s.replace(a, b)</code> — {t("a 를 전부 b 로", "swap all a → b")}</p>
+                  <p>✂️ <code className="bg-purple-50 px-1 rounded">s.split(...)</code> — {t("기준대로 자르기 → 리스트", "cut by delimiter → list")}</p>
+                </>
+              ) : (
+                <>
+                  <p>🔼 <code className="bg-purple-50 px-1 rounded">transform + ::toupper</code> — {t("전부 대문자 (글자 단위 변환)", "all uppercase (per-char transform)")}</p>
+                  <p>🔽 <code className="bg-purple-50 px-1 rounded">transform + ::tolower</code> — {t("전부 소문자", "all lowercase")}</p>
+                  <p>🔍 <code className="bg-purple-50 px-1 rounded">s.find(...)</code> — {t("어디서 처음 나오는지 (없으면 string::npos)", "first index (or string::npos)")}</p>
+                  <p>🔄 <code className="bg-purple-50 px-1 rounded">s.replace(pos, len, ...)</code> — {t("위치+길이로 바꾸기 (Python 과 의미 다름!)", "replace by position+length (different from Python!)")}</p>
+                  <p>✂️ <code className="bg-purple-50 px-1 rounded">stringstream + getline</code> — {t("split 이 없어서 직접 처리", "no built-in split — use stringstream")}</p>
+                </>
+              )}
             </div>
             <p className="text-xs text-purple-700 mt-3 text-center">
               {t("다음 슬라이드에서 직접 골라봐요 →", "Pick one on next slide →")}
@@ -667,7 +679,9 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
               <p className="text-sm font-black text-blue-900">📝 {t("알파벳 카운팅 — 진짜 자주 나옴!", "Alphabet counting — super common!")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("문자열에서 각 알파벳 몇 번 나오는지 세는 패턴. ord(c) - ord('a') 가 인덱스가 돼요.", "Pattern: count each letter's occurrences. ord(c) - ord('a') becomes the index.")}
+                {codeLang === "py"
+                  ? t("문자열에서 각 알파벳 몇 번 나오는지 세는 패턴. Python 은 ord(c) - ord('a') 가 인덱스가 돼요.", "Pattern: count each letter's occurrences. In Python, ord(c) - ord('a') becomes the index.")
+                  : t("문자열에서 각 알파벳 몇 번 나오는지 세는 패턴. C++ 는 c - 'a' 로 바로 빼면 인덱스가 돼요 (char 끼리 빼기 = int).", "Pattern: count each letter's occurrences. In C++, c - 'a' directly gives the index (char minus char = int).")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
