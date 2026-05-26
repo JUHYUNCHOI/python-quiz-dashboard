@@ -1,10 +1,10 @@
 "use client"
 
 /**
- * 정렬 (Sorting) — 챕터식 학습 페이지 v1.
+ * 해시테이블 (Hash Table) — 챕터식 학습 페이지.
  *
- * 기존 vanilla JS 2965줄 한 페이지 → 5 챕터 React 구조.
- * Bronze 학생에 필수인 것만: sorted() 사용법, 복잡도 직관, 커스텀 key.
+ * 기존 vanilla JS 해시테이블 토픽 → 5 챕터 React 구조.
+ * Bronze~Silver 학생에 필수인 것만: dict/map 사용법, 빈도수 카운팅, set 활용.
  *
  * 교육 원칙: 한 챕터 = 한 가지 + 한 인터랙션 + 한 미니 퀴즈.
  */
@@ -23,19 +23,18 @@ import { HighlightedCode } from "@/components/algo/highlighted-code"
 
 // ── 챕터 메타 ────────────────────────────────────────────────────
 const CHAPTERS = [
-  { id: 1, emoji: "🤔", title: "왜 정렬?",        titleEn: "Why Sort?",          mins: 3 },
-  { id: 2, emoji: "🎯", title: "sort() 한 줄",    titleEn: "sort() in One Line", mins: 5 },
-  { id: 3, emoji: "⚡", title: "시간복잡도",      titleEn: "Time Complexity",    mins: 6 },
-  { id: 4, emoji: "🔧", title: "커스텀 정렬 (key)", titleEn: "Custom Sort (key)",  mins: 7 },
-  { id: 5, emoji: "🏆", title: "정리 + 실전",      titleEn: "Recap & Practice",    mins: 5 },
+  { id: 1, emoji: "🤔", title: "왜 해시테이블?",     titleEn: "Why Hash Table?",       mins: 4 },
+  { id: 2, emoji: "🗂️", title: "dict / map 사용법",  titleEn: "dict / map Basics",     mins: 6 },
+  { id: 3, emoji: "📊", title: "빈도수 카운팅",       titleEn: "Frequency Counting",    mins: 6 },
+  { id: 4, emoji: "🎯", title: "set — 중복/존재 확인", titleEn: "set — Dedup / Lookup", mins: 5 },
+  { id: 5, emoji: "🏆", title: "정리 + 실전",         titleEn: "Recap & Practice",      mins: 4 },
 ]
 
-const STORAGE_KEY = "algo-sorting-chapter"
+const STORAGE_KEY = "algo-hashtable-chapter"
 
 type CodeLang = "py" | "cpp"
 
 // ── 슬라이드 챕터 헬퍼 ───────────────────────────────────────────
-// 한 챕터 안에 여러 슬라이드. step 변경 시 카드로 직접 스크롤.
 function useSlideChapter(initialStep: number = 0) {
   const [step, setStep] = useState(initialStep)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -47,8 +46,6 @@ function useSlideChapter(initialStep: number = 0) {
   return { step, setStep, rootRef }
 }
 
-// 슬라이드 진도 점 + 이전/다음 버튼 (공통)
-// 진도 점: 카드 안에 표시. 이전/다음 버튼: viewport 하단에 fixed.
 function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
   step: number; total: number; setStep: (n: number) => void
   onFinish: () => void; nextLabel?: string; finishLabel?: string
@@ -65,7 +62,6 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
           )} />
         ))}
       </div>
-      {/* 이전/다음 — viewport 하단 fixed. BottomNav 위 zoom 안 보이게 z-50 */}
       <div className="fixed bottom-[76px] sm:bottom-[80px] left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg p-3">
         <div className="max-w-2xl mx-auto flex gap-2">
           <button
@@ -142,7 +138,7 @@ function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
   )
 }
 
-// ── Chapter 1: 왜 정렬? — 슬라이드 식 ───────────────────────────
+// ── Chapter 1: 왜 해시테이블? ────────────────────────────────────
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 3
@@ -150,37 +146,33 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
-      {/* 카드 — step 별 1 개씩 (친절한 튜터 톤) */}
       <div className="flex-1">
         {step === 0 && (
           <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border-2 border-amber-200 min-h-[280px]">
             <p className="text-5xl text-center mb-4">👋</p>
             <h3 className="text-xl font-black text-gray-900 mb-3 text-center">
-              {t("안녕! 만나서 반가워요 😊", "Hi! Nice to meet you 😊")}
+              {t("안녕! 😊", "Hi! 😊")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "오늘 같이 배울 거는 — 정렬 (sorting) 이에요.",
-                "Today we're learning — sorting.",
+                "오늘 배울 거는 — 해시테이블 (Hash Table) 이에요. 좀 어려운 이름인데, 사실 너무너무 익숙한 거예요.",
+                "Today we're learning — hash tables. Fancy name, but really it's something you already use daily.",
               )}
             </p>
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
               {t(
-                "들어본 적 있어요? '가나다 순', '키 작은 순', '나이 많은 순'... 일상에서 늘 쓰는 거예요. 컴퓨터한테 이걸 시키는 방법, 그게 정렬이에요.",
-                "Heard of it? Sorting things alphabetically, by height, by age... we do it daily. Now we'll teach computers to do it.",
+                "📞 전화번호부 떠올려 봐요. '엄마' 검색하면 → 010-1234-5678 이 바로 뜨죠? 1,000 명 있어도 한 번에. 그게 해시테이블이에요.",
+                "📞 Think phonebook. Search 'Mom' → 010-1234-5678 pops up instantly. Even with 1,000 contacts. That's a hash table.",
               )}
             </p>
-            <p className="text-sm text-gray-700 leading-relaxed mb-3">
+            <p className="text-sm text-gray-700 leading-relaxed">
               {t(
-                "걱정 마요 — 진짜 한 줄로 끝나는 것부터 시작할 거니까. 어렵지 않아요.",
-                "Don't worry — we start with literally one line of code. It's not hard.",
+                "Python 의 dict, C++ 의 unordered_map — 다 같은 거예요. 이름만 다를 뿐.",
+                "Python's dict, C++'s unordered_map — all the same thing. Different names only.",
               )}
             </p>
             <p className="text-sm font-bold text-orange-700 text-center mt-4">
-              {t(
-                "준비됐어요? 아래 '다음' 눌러 가요 ↓",
-                "Ready? Hit 'Next' below ↓",
-              )}
+              {t("준비됐어요? 아래 '다음' 눌러 가요 ↓", "Ready? Hit 'Next' below ↓")}
             </p>
           </div>
         )}
@@ -188,47 +180,38 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
         {step === 1 && (
           <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-5 border-2 border-amber-200">
             <p className="text-sm text-gray-700 mb-2">
-              {t("짧은 이야기로 시작해볼게요 —", "Let's start with a quick story —")}
+              {t("짧은 비교 — 왜 해시가 필요할까?", "Quick compare — why hash tables?")}
             </p>
             <p className="text-base font-black text-gray-900 mb-4">
-              🏛 {t("도서관에서 책 한 권 찾기", "Finding one book in a library")}
-            </p>
-            <p className="text-sm text-gray-700 mb-3 leading-relaxed">
-              {t(
-                "상상해 봐요. 도서관에 책이 100,000 권 있어요. 그 중 '해리포터' 한 권을 찾아야 해요. 자, 두 가지 도서관이 있다고 해요:",
-                "Imagine: 100,000 books in a library. You need to find 'Harry Potter'. Two libraries exist:",
-              )}
+              🏫 {t("학생 1만 명 중 'Alice' 찾기", "Find 'Alice' among 10,000 students")}
             </p>
             <div className="space-y-3 mt-4">
               <div className="bg-red-50 border-2 border-red-200 rounded-lg p-3">
-                <p className="text-sm font-black text-red-700 mb-1">📚🌀 {t("도서관 A — 책이 마구잡이", "Library A — random order")}</p>
+                <p className="text-sm font-black text-red-700 mb-1">📋 {t("배열로 찾기 — 한 명씩 비교", "Array — check each one")}</p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "어떻게 찾을까? 한 권씩 다 봐야겠죠... 운 나쁘면 10만 번 확인해요. 졸업할 때까지 못 찾을 수도? 😅",
-                    "How? One by one... worst case 100,000 checks. You might not find it before graduating 😅",
+                    "names[0] 부터 names[9999] 까지 다 봐야 해요. 운 나쁘면 1 만 번 비교. O(N) 이에요. 답답 😤",
+                    "Walk through names[0]..names[9999]. Worst case: 10,000 comparisons. O(N). Slow 😤",
                   )}
                 </p>
               </div>
               <div className="bg-green-50 border-2 border-green-200 rounded-lg p-3">
-                <p className="text-sm font-black text-green-700 mb-1">📖 {t("도서관 B — 알파벳 순으로 정리됨", "Library B — alphabetically sorted")}</p>
+                <p className="text-sm font-black text-green-700 mb-1">🗂️ {t("해시테이블 — 이름표로 바로!", "Hash table — find by name tag!")}</p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "'해리포터'는 H 로 시작! 중간 펼쳐서 'M' 보이면 → H 는 앞쪽이지! 다시 절반 줄이고... 17 번이면 끝나요. ⚡",
-                    "'Harry' starts with H! Open middle → see 'M' → H is earlier! Halve again... 17 checks done. ⚡",
+                    "table['Alice'] → 바로 정보 튀어나옴. 1 번. O(1) 이에요. ⚡",
+                    "table['Alice'] → info pops up instantly. 1 step. O(1). ⚡",
                   )}
                 </p>
               </div>
             </div>
             <p className="text-sm text-amber-800 font-bold text-center mt-4">
-              {t(
-                "같은 책인데 6,000 배 차이! 😲",
-                "Same books — 6,000× faster! 😲",
-              )}
+              {t("1 만 번 vs 1 번 = 1 만 배 차이! 😲", "10,000 vs 1 = 10,000× faster! 😲")}
             </p>
             <p className="text-xs text-gray-600 text-center mt-2 leading-relaxed">
               {t(
-                "→ 정렬은 '나중에 찾기 쉽게' 미리 정리해두는 도구예요.",
-                "→ Sorting = pre-organize so future lookups are easy.",
+                "→ 해시테이블은 '이름 → 정보' 를 1 번에 찾는 도구.",
+                "→ Hash table = 'name → info' lookup in one step.",
               )}
             </p>
           </div>
@@ -238,31 +221,28 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
             <p className="text-5xl text-center mb-4">✨</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("그래서 정렬을 왜 배우냐면 —", "So why learn sorting? Because —")}
+              {t("해시테이블이 잘 하는 일들", "What hash tables are great at")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
-              {t(
-                "한 번 정렬해두면 이런 게 갑자기 다 쉬워져요:",
-                "Once sorted, all of this suddenly becomes easy:",
-              )}
+              {t("이런 문제는 해시테이블이면 너무 쉬워져요:", "These problems become super easy with hash tables:")}
             </p>
             <div className="space-y-1.5 text-sm text-gray-800 mb-4">
-              <p>🔍 <b>{t("무언가 찾기", "Finding something")}</b> — {t("이분 탐색으로 100만 개에서 20 번만", "binary search: 20 checks among 1M")}</p>
-              <p>🥇 <b>{t("최댓값/최솟값", "Max/min")}</b> — {t("정렬된 배열의 첫/마지막 = 답", "first/last of sorted array = answer")}</p>
-              <p>👯 <b>{t("중복 처리", "Dedup")}</b> — {t("같은 값들이 옆에 모임", "duplicates land next to each other")}</p>
-              <p>🎒 <b>{t("같은 종류 묶기", "Grouping")}</b> — {t("학년별 학생 묶기 등", "e.g. students by grade")}</p>
-              <p>💡 <b>{t("'작은 거 먼저' 전략", "Greedy 'smallest first'")}</b></p>
+              <p>🔎 <b>{t("있는지 확인", "Existence check")}</b> — {t("'이 단어 사전에 있어?' 한 번에", "'Is this word in the dict?' in one step")}</p>
+              <p>📊 <b>{t("빈도수 세기", "Frequency count")}</b> — {t("각 글자가 몇 번 나왔나", "how many times each letter appears")}</p>
+              <p>👯 <b>{t("중복 제거", "Dedup")}</b> — {t("set 으로 한 번에", "set handles it instantly")}</p>
+              <p>🔗 <b>{t("연결하기", "Mapping")}</b> — {t("이름 → 점수, 번호 → 이름 등", "name → score, ID → name, etc.")}</p>
+              <p>⚡ <b>{t("정렬 없이 O(1) 탐색", "O(1) lookup without sorting")}</b></p>
             </div>
             <p className="text-xs text-blue-700 text-center font-bold leading-relaxed">
               {t(
-                "USACO Bronze 문제 거의 다 어딘가에서 정렬을 한 번씩 써요. 그래서 진짜 기초 도구.",
-                "Almost all USACO Bronze problems use sorting somewhere. That's why it's foundational.",
+                "USACO Bronze~Silver 에서 정렬만큼이나 자주 나오는 도구.",
+                "Just as common as sorting in USACO Bronze~Silver.",
               )}
             </p>
             <p className="text-sm font-bold text-blue-800 text-center mt-4">
               {t(
-                "자, 다음 챕터에서 직접 정렬해 볼까요? 진짜 한 줄로 끝나요 →",
-                "Now let's actually sort? Really takes one line →",
+                "자, 다음 챕터에서 진짜로 써 볼까요? →",
+                "Now let's actually use one →",
               )}
             </p>
           </div>
@@ -274,80 +254,100 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
   )
 }
 
-// ── Chapter 2: sort() 한 줄 — 슬라이드식 ─────────────────────────
+// ── Chapter 2: dict / map 사용법 ─────────────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? 3 : 0)
   const totalSteps = 4
-  const [arr] = useState([3, 1, 4, 1, 5, 9, 2, 6])
-  const [sorted, setSorted] = useState<number[] | null>(null)
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
+  const [lockerInput, setLockerInput] = useState("")
+  const [lockers, setLockers] = useState<Record<string, string>>({ "Alice": "수학책", "Bob": "도시락" })
+  const [lookupKey, setLookupKey] = useState("Alice")
   const [quizPassed, setQuizPassed] = useState(false)
-  const handleSort = () => setSorted([...arr].sort((a, b) => a - b))
-  const handleSortDesc = () => setSorted([...arr].sort((a, b) => b - a))
-  const handleReset = () => setSorted(null)
+
+  const addLocker = () => {
+    const name = lockerInput.trim()
+    if (!name) return
+    setLockers({ ...lockers, [name]: "📦" })
+    setLockerInput("")
+  }
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
           <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🎯</p>
+            <p className="text-5xl text-center mb-3">🗂️</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("자, 진짜로 정렬해 볼까요?", "OK, let's actually sort?")}
+              {t("dict / map — 사물함 같아요", "dict / map — it's like lockers")}
             </h3>
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
               {t(
-                "Python 도 C++ 도 — 정렬은 진짜 한 줄로 끝나요. 직접 짜는 거 아니에요. 라이브러리가 해줘요.",
-                "Python and C++ — sorting really is one line. You don't write it yourself. The library does.",
+                "사물함마다 이름표 (key) 가 붙어 있고, 안에 물건 (value) 이 들어 있어요.",
+                "Each locker has a name tag (key), and stuff (value) inside.",
               )}
             </p>
-            <div className="bg-white rounded-lg p-3 font-mono text-sm space-y-1 text-emerald-700 border border-emerald-200">
-              {codeLang === "py" ? (
-                <p>Python: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">arr.sort()</code></p>
-              ) : (
-                <p>C++: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">sort(arr.begin(), arr.end())</code></p>
-              )}
+            <p className="text-sm text-gray-700 leading-relaxed mb-3">
+              {t("핵심 동작 3 가지:", "3 core operations:")}
+            </p>
+            <div className="bg-white rounded-lg p-3 font-mono text-xs space-y-1 text-emerald-700 border border-emerald-200">
+              <p>📥 {t("넣기", "Put")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">d[&quot;Alice&quot;] = 90</code></p>
+              <p>📤 {t("꺼내기", "Get")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">d[&quot;Alice&quot;]</code> → 90</p>
+              <p>🔎 {t("있는지 확인", "Check")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">&quot;Alice&quot; in d</code> → True</p>
             </div>
             <p className="text-xs text-emerald-700 mt-3 text-center">
-              {t("그게 끝! 다음 슬라이드에서 진짜 정렬되는 거 봐요 →", "That's it! See it sort on the next slide →")}
+              {t("다음 슬라이드에서 직접 사물함을 만들어 봐요 →", "Next slide: build a locker yourself →")}
             </p>
           </div>
         )}
 
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("직접 눌러보세요", "Click to try")}</p>
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("사물함 직접 추가/조회", "Add/look up lockers")}</p>
             <p className="text-xs text-gray-600 text-center mb-4">
-              {t("아래 배열을 직접 정렬해 봐요. 원래 모습은 위, 정렬 후는 아래.", "Sort the array below. Original on top, sorted below.")}
+              {t("이름을 넣어 사물함을 추가하고, 이름표로 바로 찾아봐요.", "Add a locker by name, then look it up by name tag.")}
             </p>
+
             <div className="mb-3">
-              <p className="text-[11px] text-gray-500 mb-1">{t("원본 배열", "Original")}</p>
-              <div className="flex gap-1 flex-wrap">
-                {arr.map((v, i) => (
-                  <div key={i} className="w-10 h-10 rounded-lg bg-gray-100 border-2 border-gray-300 flex items-center justify-center font-mono font-bold text-gray-700">{v}</div>
+              <p className="text-[11px] text-gray-500 mb-1">{t("현재 사물함", "Current lockers")}</p>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(lockers).map(([k, v]) => (
+                  <div key={k} className={cn("rounded-lg border-2 px-2 py-1.5 text-xs",
+                    k === lookupKey ? "bg-emerald-100 border-emerald-500" : "bg-gray-50 border-gray-300")}>
+                    <span className="font-bold text-gray-700">{k}</span>
+                    <span className="text-gray-500 ml-1">→ {v}</span>
+                  </div>
                 ))}
               </div>
             </div>
-            {sorted ? (
-              <div className="mb-3">
-                <p className="text-[11px] text-emerald-600 mb-1 font-bold">✨ {t("정렬 후", "Sorted")}</p>
-                <div className="flex gap-1 flex-wrap">
-                  {sorted.map((v, i) => (
-                    <div key={i} className="w-10 h-10 rounded-lg bg-emerald-100 border-2 border-emerald-400 flex items-center justify-center font-mono font-bold text-emerald-700">{v}</div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <p className="text-xs text-gray-400 text-center my-4">↓ {t("아래 버튼 눌러 정렬해 보세요", "Press a button below to sort")}</p>
-            )}
-            <div className="flex gap-2">
-              <button onClick={handleSort} className="flex-1 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm">↑ {t("오름차순", "Ascending")}</button>
-              <button onClick={handleSortDesc} className="flex-1 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold text-sm">↓ {t("내림차순", "Descending")}</button>
-              {sorted && <button onClick={handleReset} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">↺ {t("리셋", "Reset")}</button>}
+
+            <div className="flex gap-2 mb-3">
+              <input
+                value={lockerInput}
+                onChange={(e) => setLockerInput(e.target.value)}
+                placeholder={t("새 이름 (예: Carol)", "New name (e.g. Carol)")}
+                className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:border-emerald-400 outline-none"
+              />
+              <button onClick={addLocker} className="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm">
+                + {t("추가", "Add")}
+              </button>
             </div>
-            {sorted && (
-              <p className="text-xs text-emerald-700 text-center mt-3 font-bold">
-                {t("✨ 한 줄로 정렬 끝! 진짜 빠르고 쉬워요.", "✨ One line — done! Really fast and easy.")}
+
+            <div className="mb-2">
+              <p className="text-[11px] text-gray-500 mb-1">{t("이름표로 조회", "Look up by name tag")}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {Object.keys(lockers).map((k) => (
+                  <button key={k} onClick={() => setLookupKey(k)}
+                    className={cn("px-2 py-1 rounded text-xs font-bold border transition-all",
+                      lookupKey === k ? "bg-emerald-500 border-emerald-600 text-white" : "bg-white border-gray-300 text-gray-700 hover:border-emerald-400")}>
+                    {k}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {lookupKey && lockers[lookupKey] !== undefined && (
+              <p className="text-sm text-center mt-3 text-emerald-700 font-bold">
+                ⚡ <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-xs">d[&quot;{lookupKey}&quot;]</code> → {lockers[lookupKey]} {t("— 한 번에!", "— one step!")}
               </p>
             )}
           </div>
@@ -356,37 +356,54 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-4 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900 mb-2">📝 {t("실제 코드는 이렇게 생겼어요", "Here's the actual code")}</p>
+              <p className="text-sm font-black text-blue-900 mb-2">📝 {t("실제 코드 — 똑같이 생겼어요", "Real code — looks similar")}</p>
               <p className="text-xs text-gray-700">
-                {t("Python / C++ 둘 다 비슷한 모양. 위에서 언어 토글 해보세요:", "Python / C++ look similar. Toggle above:")}
+                {t("위에서 언어 토글로 비교해 보세요:", "Toggle language above to compare:")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`arr = [3, 1, 4, 1, 5, 9, 2, 6]
+              py={`# Python — dict
+scores = {}
 
-# 오름차순 (기본값)
-arr.sort()
-# 이제 arr = [1, 1, 2, 3, 4, 5, 6, 9]
+# 넣기
+scores["Alice"] = 90
+scores["Bob"]   = 85
 
-# 내림차순 — 옵션 하나만 추가
-arr.sort(reverse=True)
+# 꺼내기 (없으면 에러!)
+print(scores["Alice"])    # 90
 
-# 원본 안 바꾸고 새 리스트 만들기
-new_arr = sorted(arr)   # arr 는 그대로`}
-              cpp={`#include <algorithm>
-#include <vector>
+# 있는지 확인 — in 사용
+if "Alice" in scores:
+    print("있어요!")
+
+# 안전하게 꺼내기 — get
+print(scores.get("Carol", 0))  # 없으면 0
+
+# 지우기
+del scores["Bob"]`}
+              cpp={`#include <unordered_map>
+#include <string>
 using namespace std;
 
-vector<int> arr = {3, 1, 4, 1, 5, 9, 2, 6};
+unordered_map<string, int> scores;
 
-// 오름차순 (기본)
-sort(arr.begin(), arr.end());
+// 넣기
+scores["Alice"] = 90;
+scores["Bob"]   = 85;
 
-// 내림차순 — greater 비교자 추가
-sort(arr.begin(), arr.end(), greater<int>());`}
+// 꺼내기
+cout << scores["Alice"];  // 90
+
+// 있는지 확인 — count() 또는 find()
+if (scores.count("Alice")) {
+    cout << "있어요!";
+}
+
+// 지우기
+scores.erase("Bob");`}
             />
             <p className="text-xs text-gray-600 text-center">
-              {t("어렵지 않죠? 다음 슬라이드에서 짧은 퀴즈로 확인해봐요 →", "Easy, right? Quick quiz on the next slide →")}
+              {t("Python: in, get / C++: count(), find(). 거의 같은 기능, 이름만 달라요.", "Python: in, get / C++: count(), find(). Same idea, different names.")}
             </p>
           </div>
         )}
@@ -394,18 +411,23 @@ sort(arr.begin(), arr.end(), greater<int>());`}
         {step === 3 && (
           <MiniQuiz
             question={codeLang === "py"
-              ? t("arr = [5, 2, 8, 1] 에 arr.sort() 부른 뒤, 첫 원소는?", "Python: After arr.sort() on [5, 2, 8, 1], first element?")
-              : t("vector<int> arr = {5, 2, 8, 1}; 에 sort(arr.begin(), arr.end()) 부른 뒤, arr[0] 은?", "C++: After sort(arr.begin(), arr.end()) on {5, 2, 8, 1}, arr[0]?")
+              ? t("Python: scores = {\"Alice\": 90} 일 때 \"Bob\" in scores 의 결과는?", "Python: With scores = {\"Alice\": 90}, what is \"Bob\" in scores ?")
+              : t("C++: unordered_map<string,int> m; m[\"Alice\"]=90; 일 때 m.count(\"Bob\") 은?", "C++: m[\"Alice\"]=90; what is m.count(\"Bob\") ?")
             }
-            options={["1", "2", "5", "8"]}
-            answerIdx={0}
-            hint={t("기본 정렬은 오름차순 — 가장 작은 게 맨 앞으로", "Default = ascending → smallest first")}
+            options={codeLang === "py"
+              ? ["True", "False", "에러 발생 (Error)", "None"]
+              : ["1", "0", "에러 (compile error)", "-1"]
+            }
+            answerIdx={1}
+            hint={codeLang === "py"
+              ? t("Bob 은 dict 안에 없어요. in 은 있으면 True, 없으면 False.", "Bob isn't in the dict. in returns True if present, False if not.")
+              : t("count() 는 키가 있으면 1, 없으면 0 을 돌려줘요. Bob 은 없으니까 0.", "count() returns 1 if key exists, 0 otherwise. Bob doesn't exist, so 0.")
+            }
             onCorrect={() => setQuizPassed(true)}
           />
         )}
       </div>
 
-      {/* step 3 (마지막) 은 퀴즈 통과해야만 '다음' 활성화 */}
       {step < 3 ? (
         <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
       ) : quizPassed ? (
@@ -421,69 +443,80 @@ sort(arr.begin(), arr.end(), greater<int>());`}
   )
 }
 
-// ── Chapter 3: 시간복잡도 ────────────────────────────────────────
+// ── Chapter 3: 빈도수 카운팅 ─────────────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
+  const [text, setText] = useState("banana")
+  const counts = useMemo(() => {
+    const c: Record<string, number> = {}
+    for (const ch of text) {
+      c[ch] = (c[ch] ?? 0) + 1
+    }
+    return c
+  }, [text])
+  const sortedCounts = useMemo(() => Object.entries(counts).sort((a, b) => b[1] - a[1]), [counts])
+
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
           <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border-2 border-purple-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">⚡</p>
+            <p className="text-5xl text-center mb-3">📊</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("그런데... 정렬이 왜 빠를까요?", "But... why is sort fast?")}
+              {t("빈도수 세기 — 해시테이블 1 등 사용법", "Frequency counting — the #1 use")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "라이브러리 sort 는 ", "Library sort is ",
-              )}<b className="text-purple-700">O(N log N)</b>{t(
-                " 라는 속도예요. 어려운 말 같지만 그냥 '엄청 빠르다' 라고 기억하면 돼요.",
-                ". Sounds fancy, but just remember: 'really fast'.",
+                "'각 항목이 몇 번 나왔나' 를 세는 게 해시테이블의 가장 흔한 용도예요. 도서관 카드 목록 떠올려 봐요 — 책 제목마다 빌린 횟수가 적혀있죠.",
+                "Counting 'how many times each item appears' is the most common use. Think library cards — each book has a checkout count.",
               )}
             </p>
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
-              {t(
-                "직접 정렬을 만들면 보통 O(N²) — 데이터 N 만 개 정도까지는 OK, 100 만 개 넘으면 시간초과예요.",
-                "If you write sort yourself, usually O(N²) — fine up to ~10K items, dies past 1M.",
-              )}
+              {t("기본 패턴 — 진짜 짧아요:", "Basic pattern — really short:")}
             </p>
-            <p className="text-sm text-gray-700 leading-relaxed">
-              {t(
-                "다음 슬라이드에서 두 속도가 얼마나 차이 나는지 표로 봐요.",
-                "Next slide: a table showing the speed gap.",
-              )}
+            <div className="bg-white rounded-lg p-3 font-mono text-xs space-y-1 text-purple-700 border border-purple-200">
+              <p>{t("# 각 글자 몇 번 나왔나?", "# How many times each char?")}</p>
+              <p>for ch in &quot;banana&quot;:</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;c[ch] = c.get(ch, 0) + 1</p>
+            </div>
+            <p className="text-xs text-purple-700 mt-3 text-center">
+              {t("다음 슬라이드 — 글자 직접 세보기 →", "Next slide — count letters yourself →")}
             </p>
           </div>
         )}
 
         {step === 1 && (
-          <div className="bg-white rounded-2xl border-2 border-gray-200 p-4">
-            <p className="text-base font-black text-gray-900 mb-3">📊 {t("N 이 커질수록...", "As N grows...")}</p>
-            <p className="text-xs text-gray-600 mb-3">
-              {t("같은 일을 하는데 연산 횟수가 얼마나 차이 나는지 봐요:", "Number of operations for the same job:")}
+          <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("글자 빈도수 — 실시간", "Letter frequency — live")}</p>
+            <p className="text-xs text-gray-600 text-center mb-4">
+              {t("아래 단어를 바꿔보세요. 글자별 등장 횟수가 자동으로 계산돼요.", "Change the word — frequency updates automatically.")}
             </p>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b-2 border-gray-200">
-                  <th className="text-left py-1.5 font-bold text-gray-700">N</th>
-                  <th className="text-right py-1.5 font-bold text-red-700">{t("직접 (N²)", "DIY (N²)")}</th>
-                  <th className="text-right py-1.5 font-bold text-purple-700">{t("라이브러리 (N log N)", "Library (N log N)")}</th>
-                </tr>
-              </thead>
-              <tbody className="font-mono text-xs">
-                <tr className="border-b border-gray-100"><td className="py-1.5">100</td><td className="text-right text-gray-600">10,000</td><td className="text-right text-purple-700 font-bold">~700</td></tr>
-                <tr className="border-b border-gray-100"><td className="py-1.5">10,000</td><td className="text-right text-amber-700">100,000,000</td><td className="text-right text-purple-700 font-bold">~130,000</td></tr>
-                <tr className="border-b border-gray-100"><td className="py-1.5">1,000,000</td><td className="text-right text-red-600 font-bold">10¹² (TLE 🚫)</td><td className="text-right text-purple-700 font-bold">~20,000,000</td></tr>
-              </tbody>
-            </table>
-            <p className="text-xs text-purple-700 mt-3 text-center font-bold leading-relaxed">
-              {t(
-                "N=100 만 이어도 라이브러리 sort 는 0.02 초. 직접 짠 건 30 분. 차이 어마어마하죠?",
-                "At N=1M, library sort = 0.02s. DIY sort = 30 min. Massive gap!",
+            <input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder={t("예: banana", "e.g. banana")}
+              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-mono mb-3 focus:border-amber-400 outline-none"
+            />
+            <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+              <p className="text-[11px] font-bold text-purple-700 mb-2 uppercase">{t("빈도수 (많은 순)", "Counts (descending)")}</p>
+              {sortedCounts.length === 0 ? (
+                <p className="text-xs text-gray-400 italic">{t("뭐든 입력해 보세요...", "Type something...")}</p>
+              ) : (
+                <div className="flex flex-wrap gap-1.5">
+                  {sortedCounts.map(([ch, n]) => (
+                    <div key={ch} className="bg-white rounded-lg border-2 border-purple-300 px-2 py-1 text-xs">
+                      <span className="font-mono font-bold text-purple-700">&apos;{ch === " " ? "·" : ch}&apos;</span>
+                      <span className="text-gray-500 ml-1">×{n}</span>
+                    </div>
+                  ))}
+                </div>
               )}
+            </div>
+            <p className="text-xs text-amber-700 text-center mt-3 italic">
+              {t("✨ 단 한 번의 순회로 — O(N) 에 빈도수 끝!", "✨ One pass — O(N) frequency done!")}
             </p>
           </div>
         )}
@@ -492,47 +525,59 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
           <div className="space-y-3">
             <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
               <p className="text-sm font-black text-amber-900 mb-2">
-                🎯 {t("기억할 한 가지", "One thing to remember")}
+                🎯 {t("코드로 — 패턴 외워두기", "In code — memorize this pattern")}
               </p>
               <p className="text-sm text-gray-800 leading-relaxed">
                 {t(
-                  "USACO 문제 풀 때 — 절대 직접 정렬 알고리즘 짜지 말아요. 라이브러리 한 줄이면 끝나고, 비교도 안 되게 빨라요.",
-                  "When solving USACO — never write your own sort. One library line is enough, and unbeatably fast.",
+                  "Python 은 Counter 라는 편한 클래스도 있어요. C++ 은 map 에 그냥 ++ 하면 끝.",
+                  "Python has a handy Counter class. C++ just ++ on the map.",
                 )}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# ❌ 이렇게 직접 짜지 말아요 — 너무 느려요
-def slow_sort(arr):
-    for i in range(len(arr)):
-        for j in range(i+1, len(arr)):
-            if arr[i] > arr[j]:
-                arr[i], arr[j] = arr[j], arr[i]
+              py={`# 방법 1 — dict 직접
+counts = {}
+for ch in "banana":
+    counts[ch] = counts.get(ch, 0) + 1
+# {'b': 1, 'a': 3, 'n': 2}
 
-# ✅ 이렇게 — 한 줄
-arr.sort()`}
-              cpp={`// ❌ 이렇게 직접 짜지 말아요 — 너무 느려요
-for (int i = 0; i < n; i++)
-    for (int j = i + 1; j < n; j++)
-        if (arr[i] > arr[j]) swap(arr[i], arr[j]);
+# 방법 2 — Counter (더 짧음)
+from collections import Counter
+counts = Counter("banana")
+# Counter({'a': 3, 'n': 2, 'b': 1})
 
-// ✅ 이렇게 — 한 줄
-sort(arr.begin(), arr.end());`}
+# 가장 많이 나온 거 1 개
+top = counts.most_common(1)
+# [('a', 3)]`}
+              cpp={`#include <unordered_map>
+#include <string>
+using namespace std;
+
+string s = "banana";
+unordered_map<char, int> counts;
+
+// 핵심 패턴 — 한 줄!
+for (char ch : s) {
+    counts[ch]++;
+    // 없으면 0 으로 시작 → ++ → 1
+}
+// counts: {'b':1, 'a':3, 'n':2}
+
+// 'a' 가 몇 번?
+cout << counts['a'];  // 3`}
             />
+            <p className="text-xs text-gray-600 text-center">
+              {t("핵심: counts[키]++ 또는 counts.get(키, 0) + 1. 이거 하나만 외우면 끝.", "Key: counts[key]++ or counts.get(key, 0) + 1. Memorize this one.")}
+            </p>
           </div>
         )}
 
         {step === 3 && (
           <MiniQuiz
-            question={t("N = 10⁵ 일 때 직접 짠 O(N²) 와 라이브러리 O(N log N) 의 차이는 대략?", "At N = 10⁵, how much slower is DIY O(N²) vs library?")}
-            options={[
-              t("거의 같음 — 차이 없음", "About the same"),
-              t("100 배 정도", "~100× slower"),
-              t("약 6,000 배 — 10¹⁰ vs 1.7×10⁶", "~6,000× — 10¹⁰ vs 1.7×10⁶"),
-              t("10 배 정도", "~10× slower"),
-            ]}
+            question={t("문자열 \"mississippi\" 에서 's' 는 몇 번 나올까요?", "In \"mississippi\", how many times does 's' appear?")}
+            options={["2", "3", "4", "5"]}
             answerIdx={2}
-            hint={t("10⁵ × 10⁵ = 10¹⁰ vs 10⁵ × log(10⁵) ≈ 10⁵ × 17 = 1.7×10⁶", "10⁵ × 10⁵ = 10¹⁰ vs 10⁵ × log(10⁵) ≈ 1.7×10⁶")}
+            hint={t("m-i-s-s-i-s-s-i-p-p-i → 's' 위치를 세어 봐요.", "m-i-s-s-i-s-s-i-p-p-i → count the s's.")}
             onCorrect={() => setQuizPassed(true)}
           />
         )}
@@ -553,59 +598,43 @@ sort(arr.begin(), arr.end());`}
   )
 }
 
-// ── Chapter 4: 커스텀 정렬 (key) ──────────────────────────────────
+// ── Chapter 4: set — 중복/존재 확인 ──────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
-  const people = [
-    { name: "Alice", age: 25 },
-    { name: "Bob",   age: 30 },
-    { name: "Carol", age: 22 },
-  ]
-  const [sortBy, setSortBy] = useState<"name" | "age">("name")
-  const sorted = useMemo(() => [...people].sort((a, b) =>
-    sortBy === "name" ? a.name.localeCompare(b.name) : a.age - b.age
-  ), [sortBy])
+  const [input, setInput] = useState("3 1 4 1 5 9 2 6 5 3")
+  const nums = useMemo(() => input.split(/\s+/).filter(Boolean).map(Number).filter(n => !Number.isNaN(n)), [input])
+  const unique = useMemo(() => Array.from(new Set(nums)), [nums])
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🔧</p>
+            <p className="text-5xl text-center mb-3">🎯</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("숫자말고 다른 걸로 정렬하려면?", "What if you want to sort by something else?")}
+              {t("set — 값만 있고 '한 개씩만'", "set — values only, no duplicates")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "지금까지는 숫자만 정렬했죠. 근데 실제 문제는 보통 더 복잡해요:",
-                "So far just numbers. But real problems are often more complex:",
+                "dict 가 '이름 → 값' 이라면, set 은 '값만' 모아두는 가방이에요. 그리고 같은 값은 자동으로 1 개만!",
+                "If dict is 'name → value', set is just 'values' in a bag. And duplicates auto-merge to 1!",
               )}
             </p>
+            <p className="text-sm text-gray-700 leading-relaxed mb-3">
+              {t("주로 쓰는 곳:", "Main uses:")}
+            </p>
             <ul className="space-y-1.5 text-sm text-gray-700 mb-3 pl-2">
-              <li>👥 {codeLang === "py"
-                ? t("학생 리스트를 '나이순' 으로 정렬", "Sort student list by age")
-                : t("학생 vector 를 '나이순' 으로 정렬", "Sort student vector by age")}</li>
-              <li>📍 {t("좌표를 'X축' 기준으로 정렬", "Sort coordinates by x-axis")}</li>
-              <li>📝 {codeLang === "py"
-                ? t("단어 리스트를 '길이순' 으로 정렬", "Sort word list by length")
-                : t("단어 vector 를 '길이순' 으로 정렬", "Sort word vector by length")}</li>
+              <li>👯 {t("중복 제거 — set 에 넣었다 빼면 끝", "Dedup — toss into set, done")}</li>
+              <li>🔎 {t("'본 적 있나?' 확인 — O(1)", "'Seen before?' check — O(1)")}</li>
+              <li>📋 {t("두 그룹 비교 — 교집합/합집합", "Compare groups — intersection/union")}</li>
             </ul>
             <p className="text-sm text-blue-700 font-bold leading-relaxed">
-              {codeLang === "py" ? (
-                <>
-                  {t("이럴 때 ", "For this, you use ")}
-                  <code className="bg-white px-1.5 py-0.5 rounded text-purple-700">key=lambda</code>
-                  {t(" 를 써요. 다음 슬라이드에서 직접 해보세요!", ". Try it on the next slide!")}
-                </>
-              ) : (
-                <>
-                  {t("이럴 때 ", "For this, you use a ")}
-                  <code className="bg-white px-1.5 py-0.5 rounded text-purple-700">{t("비교자 lambda", "comparator lambda")}</code>
-                  {t(" 를 써요. 다음 슬라이드에서 직접 해보세요!", ". Try it on the next slide!")}
-                </>
+              {t(
+                "Python: set / C++: unordered_set. 다음 슬라이드에서 직접 중복 제거 해보세요!",
+                "Python: set / C++: unordered_set. Try dedup on the next slide!",
               )}
             </p>
           </div>
@@ -613,33 +642,35 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("정렬 기준 바꿔보기", "Try different keys")}</p>
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("중복 제거 직접 해보기", "Dedup it yourself")}</p>
             <p className="text-xs text-gray-600 text-center mb-4">
-              {t("아래 사람 3명을 '이름 순' 또는 '나이 순' 으로 정렬해 봐요:", "Sort these 3 people by name or by age:")}
+              {t("숫자를 공백으로 구분해서 입력. set 을 통과시키면 중복이 자동으로 제거돼요.", "Enter space-separated numbers. set removes duplicates automatically.")}
             </p>
-            <div className="flex gap-2 mb-3">
-              <button onClick={() => setSortBy("name")}
-                className={cn("flex-1 py-2 rounded-lg font-bold text-sm transition-all",
-                  sortBy === "name" ? "bg-purple-500 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700")}>
-                A-Z {t("이름 순", "By name")}
-              </button>
-              <button onClick={() => setSortBy("age")}
-                className={cn("flex-1 py-2 rounded-lg font-bold text-sm transition-all",
-                  sortBy === "age" ? "bg-purple-500 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700")}>
-                ↑ {t("나이 순", "By age")}
-              </button>
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="3 1 4 1 5 9 2 6 5 3"
+              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-mono mb-3 focus:border-amber-400 outline-none"
+            />
+            <div className="mb-3">
+              <p className="text-[11px] text-gray-500 mb-1">{t("원본", "Original")} ({nums.length} {t("개", "items")})</p>
+              <div className="flex gap-1 flex-wrap">
+                {nums.map((v, i) => (
+                  <div key={i} className="w-8 h-8 rounded-lg bg-gray-100 border-2 border-gray-300 flex items-center justify-center font-mono font-bold text-gray-700 text-xs">{v}</div>
+                ))}
+              </div>
             </div>
-            <div className="space-y-1.5">
-              {sorted.map((p, i) => (
-                <div key={p.name} className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
-                  <span className="text-xs font-mono text-emerald-500">#{i + 1}</span>
-                  <span className="font-bold text-gray-900">{p.name}</span>
-                  <span className="text-xs text-gray-500 font-mono">{p.age}{t("세", "yr")}</span>
-                </div>
-              ))}
+            <p className="text-center text-2xl text-purple-500">↓ set() ↓</p>
+            <div className="mt-3">
+              <p className="text-[11px] text-emerald-600 mb-1 font-bold">✨ {t("중복 제거 후", "After dedup")} ({unique.length} {t("개", "items")})</p>
+              <div className="flex gap-1 flex-wrap">
+                {unique.map((v, i) => (
+                  <div key={i} className="w-8 h-8 rounded-lg bg-emerald-100 border-2 border-emerald-400 flex items-center justify-center font-mono font-bold text-emerald-700 text-xs">{v}</div>
+                ))}
+              </div>
             </div>
-            <p className="text-xs text-gray-500 text-center mt-3 italic">
-              {t("버튼 바꿔 눌러보세요. 순서가 어떻게 달라지는지 봐요.", "Toggle buttons — watch the order change.")}
+            <p className="text-xs text-emerald-700 text-center mt-3 font-bold">
+              {t("✨ set 에 넣는 것만으로 중복 끝! 그것도 O(N) 으로.", "✨ Just put in a set — dedup done! In O(N).")}
             </p>
           </div>
         )}
@@ -647,91 +678,67 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900">📝 {t("이거 코드로는 어떻게?", "How does it look in code?")}</p>
+              <p className="text-sm font-black text-blue-900">📝 {t("set 코드 — 두 가지 용도", "set in code — two main uses")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {codeLang === "py" ? (
-                  <>
-                    {t("Python 의 ", "Python's ")}
-                    <code className="bg-white px-1 rounded">key=lambda</code>
-                    {t(" 로 정렬 기준을 정해줘요:", " sets the sort key:")}
-                  </>
-                ) : (
-                  <>
-                    {t("C++ 의 ", "C++'s ")}
-                    <code className="bg-white px-1 rounded">{t("비교자 lambda", "comparator lambda")}</code>
-                    {t(" 로 정렬 기준을 정해줘요:", " sets the sort key:")}
-                  </>
-                )}
+                {t("(1) 중복 제거 (2) 빠른 '있나?' 확인. 둘 다 진짜 짧아요.", "(1) Dedup (2) fast 'is it there?'. Both very short.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`people = [
-    {"name": "Alice", "age": 25},
-    {"name": "Bob",   "age": 30},
-    {"name": "Carol", "age": 22},
-]
+              py={`# 1. 중복 제거 — list → set → list
+nums = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3]
+unique = list(set(nums))
+# [1, 2, 3, 4, 5, 6, 9]  (순서는 보장 X)
 
-# 이름 알파벳 순
-people.sort(key=lambda p: p["name"])
+# 2. 빠른 존재 확인
+seen = set()
+for x in nums:
+    if x in seen:    # O(1) — 진짜 빠름
+        print(f"{x} 본 적 있어요!")
+    seen.add(x)
 
-# 나이 어린 순
-people.sort(key=lambda p: p["age"])
+# 3. 두 그룹 비교
+a = {1, 2, 3}
+b = {2, 3, 4}
+print(a & b)  # 교집합 {2, 3}
+print(a | b)  # 합집합 {1, 2, 3, 4}`}
+              cpp={`#include <unordered_set>
+#include <vector>
+using namespace std;
 
-# 나이 많은 순 (역순)
-people.sort(key=lambda p: p["age"], reverse=True)
+// 1. 중복 제거
+vector<int> nums = {3,1,4,1,5,9,2,6,5,3};
+unordered_set<int> s(nums.begin(), nums.end());
+// s 에는 중복 없이 들어감
 
-# 여러 기준: 나이 먼저 → 이름
-people.sort(key=lambda p: (p["age"], p["name"]))`}
-              cpp={`struct Person { string name; int age; };
-vector<Person> people = {{"Alice",25},{"Bob",30},{"Carol",22}};
-
-// 이름 알파벳 순 (lambda 비교자)
-sort(people.begin(), people.end(),
-     [](const Person& a, const Person& b) {
-         return a.name < b.name;
-     });
-
-// 나이 어린 순
-sort(people.begin(), people.end(),
-     [](const Person& a, const Person& b) {
-         return a.age < b.age;
-     });`}
+// 2. 빠른 존재 확인
+unordered_set<int> seen;
+for (int x : nums) {
+    if (seen.count(x)) {     // O(1)
+        cout << x << " 본 적 있어요!\\n";
+    }
+    seen.insert(x);
+}`}
             />
             <p className="text-xs text-gray-600 text-center">
-              {codeLang === "py"
-                ? t("핵심: key= 에 '뭘 기준으로?' 만 알려주면 끝.", "Key idea: tell sort 'what to compare by' via key=.")
-                : t("핵심: 비교자 lambda 에 'a 가 b 보다 먼저?' 조건을 적으면 끝.", "Key idea: write 'is a before b?' in the comparator lambda.")}
+              {t("핵심: 'in' (Python) 또는 count() (C++) 가 O(1) — 배열은 O(N) 인데 비교 안 되게 빨라요.", "Key: 'in' (Python) / count() (C++) is O(1) — arrays are O(N), so this is massively faster.")}
             </p>
           </div>
         )}
 
-        {step === 3 && (codeLang === "py" ? (
+        {step === 3 && (
           <MiniQuiz
-            question={t("Python: 단어 리스트를 '길이가 짧은 것부터' 정렬하려면?", "Python: Sort word list 'shortest first'?")}
+            question={t("리스트에 중복이 있는지 가장 빠르게 확인하려면?", "Fastest way to check if a list has duplicates?")}
             options={[
-              "words.sort()",
-              "words.sort(key=lambda w: len(w))",
-              "words.sort(reverse=True)",
-              "sorted(words, key='length')",
+              t("이중 for 로 모든 쌍 비교 — O(N²)", "Double for loop — O(N²)"),
+              t("정렬한 뒤 옆 원소 비교 — O(N log N)", "Sort then compare neighbors — O(N log N)"),
+              t("set 에 하나씩 넣으며 'in' 확인 — O(N)", "Add to set one by one, check 'in' — O(N)"),
+              t("배열 두 번 순회 — O(2N) 도 O(N)", "Two passes over array — O(2N) = O(N)"),
             ]}
-            answerIdx={1}
-            hint={t("key= 에 함수를 넘기면 그 함수가 반환한 값 기준으로 정렬. len(w) 가 길이를 알려줘요.", "key= takes a function; sort uses its output. len(w) gives the length.")}
+            answerIdx={2}
+            hint={t("set 의 'in' / count() 는 평균 O(1). N 개 원소를 처리해도 전체 O(N) 이에요.", "set 'in' / count() is avg O(1). N elements → overall O(N).")}
             onCorrect={() => setQuizPassed(true)}
           />
-        ) : (
-          <MiniQuiz
-            question={t("C++: 단어 vector<string> 를 '길이가 짧은 것부터' 정렬하려면?", "C++: Sort vector<string> 'shortest first'?")}
-            options={[
-              "sort(words.begin(), words.end());",
-              "sort(words.begin(), words.end(), [](auto& a, auto& b){ return a.size() < b.size(); });",
-              "sort(words.begin(), words.end(), greater<>());",
-              "sort(words);",
-            ]}
-            answerIdx={1}
-            hint={t("lambda 비교자에서 a.size() < b.size() 로 길이 작은 게 먼저 오게.", "Lambda comparator: a.size() < b.size() puts shorter first.")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        ))}
+        )}
       </div>
 
       {step < 3 ? (
@@ -749,8 +756,8 @@ sort(people.begin(), people.end(),
   )
 }
 
-// ── Chapter 5: 정리 + 실전 — 슬라이드식 ─────────────────────────
-function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; alreadyDone?: boolean }) {
+// ── Chapter 5: 정리 + 실전 ───────────────────────────────────────
+function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 3
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
@@ -761,12 +768,12 @@ function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
           <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-6 border-2 border-amber-300 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🎉</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("우와, 정렬 끝까지 다 봤어요!", "Wow, you finished all 5 chapters!")}
+              {t("해시테이블 5 챕터 끝! 짝짝짝", "All 5 hash-table chapters done! 👏")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed text-center">
               {t(
-                "정말 잘 했어요 👏 이제 USACO Bronze 문제에서 정렬이 나와도 당황 안 할 거예요. 기억해야 할 핵심들 한 번만 더 짚고 넘어가요.",
-                "Really nice work 👏 You won't panic when sorting shows up in USACO Bronze. Let me wrap up the key points.",
+                "정말 잘 했어요. 이제 dict, map, set — 셋 다 친구가 됐어요. USACO 에서 '빠르게 찾기/세기' 필요할 때 바로 떠올릴 수 있을 거예요.",
+                "Great job! dict, map, set — all friends now. When USACO calls for fast lookups/counting, these come to mind.",
               )}
             </p>
           </div>
@@ -776,22 +783,15 @@ function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
           <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-5 border-2 border-amber-300">
             <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
             <ol className="space-y-2 text-sm text-gray-800">
-              <li><b>1.</b> {t("정렬 = 검색·최솟값·중복·그룹화의 기초", "Sort = foundation for search/min/dedup/grouping")}</li>
-              {codeLang === "py" ? (
-                <li><b>2.</b> Python: <code className="bg-white px-1.5 py-0.5 rounded">arr.sort()</code> {t("또는", "or")} <code className="bg-white px-1.5 py-0.5 rounded">sorted(arr)</code></li>
-              ) : (
-                <li><b>2.</b> C++: <code className="bg-white px-1.5 py-0.5 rounded">sort(arr.begin(), arr.end())</code></li>
-              )}
-              <li><b>3.</b> {t("복잡도", "Speed")}: <b>O(N log N)</b> — {t("N=10⁶ 도 0.02 초", "N=10⁶ in ~0.02s")}</li>
-              {codeLang === "py" ? (
-                <li><b>4.</b> {t("커스텀 정렬: ", "Custom sort: ")}<code className="bg-white px-1.5 py-0.5 rounded">key=lambda</code></li>
-              ) : (
-                <li><b>4.</b> {t("커스텀 정렬: ", "Custom sort: ")}<code className="bg-white px-1.5 py-0.5 rounded">{t("비교자 lambda", "comparator lambda")}</code></li>
-              )}
-              <li><b>5.</b> {t("절대 직접 O(N²) 짜지 말기 — 라이브러리 써요", "Never write O(N²) sort — use library")}</li>
+              <li><b>1.</b> {t("해시테이블 = 키로 값을 O(1) 에 찾는 도구", "Hash table = O(1) key-to-value lookup")}</li>
+              <li><b>2.</b> Python: <code className="bg-white px-1.5 py-0.5 rounded">dict</code>, <code className="bg-white px-1.5 py-0.5 rounded">set</code></li>
+              <li><b>3.</b> C++: <code className="bg-white px-1.5 py-0.5 rounded">unordered_map</code>, <code className="bg-white px-1.5 py-0.5 rounded">unordered_set</code></li>
+              <li><b>4.</b> {t("빈도수 패턴", "Count pattern")}: <code className="bg-white px-1.5 py-0.5 rounded">counts[x]++</code> {t("또는", "or")} <code className="bg-white px-1.5 py-0.5 rounded">get(x, 0) + 1</code></li>
+              <li><b>5.</b> {t("중복 제거", "Dedup")}: <code className="bg-white px-1.5 py-0.5 rounded">set(arr)</code> {t("한 줄로 끝", "in one line")}</li>
+              <li><b>6.</b> {t("존재 확인", "Existence")}: <code className="bg-white px-1.5 py-0.5 rounded">x in s</code> / <code className="bg-white px-1.5 py-0.5 rounded">s.count(x)</code> — O(1)</li>
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
-              {t("이 정도면 정렬이 나오는 문제 거의 다 풀 수 있어요!", "This is enough to handle almost any sorting problem!")}
+              {t("이 정도면 해시 나오는 문제 거의 다 풀 수 있어요!", "This is enough for almost any hash-table problem!")}
             </p>
           </div>
         )}
@@ -799,27 +799,27 @@ function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
-              <p className="text-sm font-black text-amber-900 mb-2">🏆 {t("이제 실전 문제 — 직접 풀어 보기!", "Now real problems — try it!")}</p>
+              <p className="text-sm font-black text-amber-900 mb-2">🏆 {t("실전 문제 — 백준에서 풀어 보기!", "Real problems — try BOJ!")}</p>
               <p className="text-xs text-gray-700 mb-3">
-                {t("백준 (BOJ) 에서 정렬 연습 문제 3 개 추천. 쉬운 거부터 →", "Recommended BOJ problems — easy first →")}
+                {t("해시 활용 추천 문제 3 개. 쉬운 거부터 →", "3 recommended hash problems. Easy first →")}
               </p>
               <div className="space-y-1.5">
-                <a href="https://www.acmicpc.net/problem/2750" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.acmicpc.net/problem/10816" target="_blank" rel="noopener noreferrer"
                   className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 2750</b> — {t("수 정렬하기 (정렬 한 줄로 끝)", "Sort numbers (one-line sort)")} ↗
+                  <b>BOJ 10816</b> — {t("숫자 카드 2 (빈도수 카운팅)", "Number Cards 2 (frequency)")} ↗
                 </a>
-                <a href="https://www.acmicpc.net/problem/10814" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.acmicpc.net/problem/1620" target="_blank" rel="noopener noreferrer"
                   className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10814</b> — {t("나이순 정렬 (key 활용)", "Sort by age (use key)")} ↗
+                  <b>BOJ 1620</b> — {t("나는야 포켓몬 마스터 (양방향 dict)", "Pokémon Master (two-way dict)")} ↗
                 </a>
-                <a href="https://www.acmicpc.net/problem/11650" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.acmicpc.net/problem/1764" target="_blank" rel="noopener noreferrer"
                   className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 11650</b> — {t("좌표 정렬 (튜플 key)", "Sort coordinates (tuple key)")} ↗
+                  <b>BOJ 1764</b> — {t("듣보잡 (set 교집합)", "Listen-watch-nobody (set intersection)")} ↗
                 </a>
               </div>
             </div>
             <p className="text-xs text-gray-600 text-center">
-              {t("👇 아래 '정렬 마스터' 누르면 끝! 다음 토픽으로 가요.", "👇 Hit 'Sorting Master' to finish! Onwards.")}
+              {t("👇 아래 '해시테이블 마스터' 누르면 끝! 다음 토픽으로 가요.", "👇 Hit 'Hash Master' to finish! Onwards.")}
             </p>
           </div>
         )}
@@ -840,7 +840,7 @@ function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
           <button onClick={() => step < totalSteps - 1 ? setStep(step + 1) : onComplete()}
             className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95">
             {step === totalSteps - 1
-              ? <>🎉 {t("정렬 마스터!", "Sorting Master!")} <Sparkles className="w-5 h-5" /></>
+              ? <>🎉 {t("해시테이블 마스터!", "Hash Master!")} <Sparkles className="w-5 h-5" /></>
               : <>{t("다음", "Next")} <ArrowRight className="w-5 h-5" /></>}
           </button>
         </div>
@@ -850,7 +850,7 @@ function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
 }
 
 // ── 메인 페이지 ──────────────────────────────────────────────────
-export default function SortingPage() {
+export default function HashTablePage() {
   const { t } = useLanguage()
   const router = useRouter()
   const { user, isAuthenticated } = useAuth()
@@ -892,7 +892,6 @@ export default function SortingPage() {
     setCompletedChapters(prev => new Set(prev).add(n))
     if (n < CHAPTERS.length) {
       setCurrent(n + 1)
-      // 챕터 본문 카드로 스크롤 (페이지 상단 X)
       setTimeout(() => {
         document.getElementById("chapter-content")?.scrollIntoView({ behavior: "smooth", block: "start" })
       }, 50)
@@ -901,14 +900,14 @@ export default function SortingPage() {
       if (isAuthenticated && user) {
         const supabase = createClient()
         supabase.from("lesson_progress").upsert({
-          user_id: user.id, lesson_id: "algo-sorting", variant: "", progress_type: "complete", completed: true,
+          user_id: user.id, lesson_id: "algo-hashtable", variant: "", progress_type: "complete", completed: true,
         }).then(() => {})
       }
       try {
         const raw = localStorage.getItem("completedLessons")
         const arr = raw ? JSON.parse(raw) : []
-        if (!arr.includes("algo-sorting")) {
-          arr.push("algo-sorting")
+        if (!arr.includes("algo-hashtable")) {
+          arr.push("algo-hashtable")
           localStorage.setItem("completedLessons", JSON.stringify(arr))
         }
       } catch {}
@@ -933,9 +932,9 @@ export default function SortingPage() {
             <ArrowLeft className="w-4 h-4" /> {t("알고리즘 토픽", "Algorithm Topics")}
           </button>
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-3xl">🔢</span>
-            <h1 className="text-xl sm:text-2xl font-black text-gray-900">{t("정렬", "Sorting")}</h1>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300">Bronze</span>
+            <span className="text-3xl">🗂️</span>
+            <h1 className="text-xl sm:text-2xl font-black text-gray-900">{t("해시테이블", "Hash Table")}</h1>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300">Bronze~Silver</span>
             {isMastered && <span className="text-2xl">⭐</span>}
           </div>
 
@@ -959,7 +958,7 @@ export default function SortingPage() {
             {/* 🎯 목적지 칩 — 학생이 어디로 가는지 1 챕터부터 보임 */}
             <span className="text-gray-300 text-xs px-0.5">→</span>
             {isMastered ? (
-              <Link href="/coding-bank?category=sort"
+              <Link href="/coding-bank?category=map-set"
                 className="text-[11px] font-bold px-2 py-1 rounded-full border bg-emerald-500 border-emerald-600 text-white shadow-md hover:bg-emerald-600 transition-all">
                 🎯 {t("연습 문제 풀러 가기", "Practice problems")}
               </Link>
@@ -975,7 +974,7 @@ export default function SortingPage() {
           </div>
           {showDestinationTip && !isMastered && (
             <div className="mb-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 flex items-center justify-between">
-              <span>💡 {t("5 챕터 다 끝나면 정렬 연습 문제로 안내해 줄게요!", "Finish all 5 chapters and I'll guide you to sorting practice problems!")}</span>
+              <span>💡 {t("5 챕터 다 끝나면 해시테이블 연습 문제로 안내해 줄게요!", "Finish all 5 chapters and I'll guide you to hash-table practice problems!")}</span>
               <button onClick={() => setShowDestinationTip(false)} className="text-amber-600 hover:text-amber-800 font-bold ml-2">✕</button>
             </div>
           )}
@@ -1028,14 +1027,14 @@ export default function SortingPage() {
           {current === 2 && <Chapter2 onComplete={() => completeChapter(2)} codeLang={codeLang} setCodeLang={setCodeLang} alreadyDone={completedChapters.has(2)} />}
           {current === 3 && <Chapter3 onComplete={() => completeChapter(3)} codeLang={codeLang} setCodeLang={setCodeLang} alreadyDone={completedChapters.has(3)} />}
           {current === 4 && <Chapter4 onComplete={() => completeChapter(4)} codeLang={codeLang} setCodeLang={setCodeLang} alreadyDone={completedChapters.has(4)} />}
-          {current === 5 && <Chapter5 onComplete={() => completeChapter(5)} codeLang={codeLang} alreadyDone={completedChapters.has(5)} />}
+          {current === 5 && <Chapter5 onComplete={() => completeChapter(5)} alreadyDone={completedChapters.has(5)} />}
         </div>
 
         {isMastered && current === CHAPTERS.length && (
           <div className="mt-4 bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl border-4 border-emerald-300 p-5 shadow-lg">
             <div className="text-center mb-4">
               <div className="text-5xl mb-2">🏆</div>
-              <h3 className="text-xl font-black text-emerald-900">{t("정렬 마스터!", "Sorting Master!")}</h3>
+              <h3 className="text-xl font-black text-emerald-900">{t("해시테이블 마스터!", "Hash Table Master!")}</h3>
               <p className="text-sm text-emerald-700 mt-1">
                 {t("설명은 끝났어요. 이제 직접 풀어볼 시간! 👇", "Lesson done. Now solve some real problems! 👇")}
               </p>
@@ -1044,11 +1043,11 @@ export default function SortingPage() {
             {/* 📝 연습 문제 — in-app */}
             <div className="bg-white rounded-xl border-2 border-emerald-200 p-4 mb-3">
               <p className="text-sm font-black text-emerald-900 mb-2">📝 {t("코드린 안에서 풀기", "Practice inside Coderin")}</p>
-              <Link href="/coding-bank?category=sort" className="block px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm text-center transition-all active:scale-95">
-                💪 {t("코딩 뱅크 — 정렬 활용 문제", "Coding Bank — Sort Problems")} <ArrowRight className="inline w-4 h-4" />
+              <Link href="/coding-bank?category=map-set" className="block px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm text-center transition-all active:scale-95">
+                💪 {t("코딩 뱅크 — 해시 활용 문제", "Coding Bank — Hash Problems")} <ArrowRight className="inline w-4 h-4" />
               </Link>
               <p className="text-[11px] text-gray-500 mt-2 text-center">
-                {t("'정렬 활용' 카테고리 필터 골라서 풀어 보세요", "Filter by 'Sorting' category")}
+                {t("'해시/맵' 카테고리 필터 골라서 풀어 보세요", "Filter by 'Hash/Map' category")}
               </p>
             </div>
 
@@ -1056,17 +1055,17 @@ export default function SortingPage() {
             <div className="bg-white rounded-xl border-2 border-amber-200 p-4 mb-3">
               <p className="text-sm font-black text-amber-900 mb-2">🌐 {t("백준 (BOJ) 외부 연습", "BOJ external practice")}</p>
               <div className="space-y-1.5">
-                <a href="https://www.acmicpc.net/problem/2750" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.acmicpc.net/problem/10816" target="_blank" rel="noopener noreferrer"
                   className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 2750</b> — {t("수 정렬하기", "Sort numbers")} ↗
+                  <b>BOJ 10816</b> — {t("숫자 카드 2", "Number Cards 2")} ↗
                 </a>
-                <a href="https://www.acmicpc.net/problem/10814" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.acmicpc.net/problem/1620" target="_blank" rel="noopener noreferrer"
                   className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10814</b> — {t("나이순 정렬 (key 활용)", "Sort by age")} ↗
+                  <b>BOJ 1620</b> — {t("나는야 포켓몬 마스터", "Pokémon Master")} ↗
                 </a>
-                <a href="https://www.acmicpc.net/problem/11650" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.acmicpc.net/problem/1764" target="_blank" rel="noopener noreferrer"
                   className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 11650</b> — {t("좌표 정렬", "Sort coordinates")} ↗
+                  <b>BOJ 1764</b> — {t("듣보잡 (set 교집합)", "Listen-watch-nobody (set intersection)")} ↗
                 </a>
               </div>
             </div>
@@ -1076,8 +1075,6 @@ export default function SortingPage() {
             </Link>
           </div>
         )}
-
-        {/* 페이지 레벨 이전/다음 챕터 버튼 제거 — 위 챕터 칩 + 슬라이드 nav 가 충분 */}
       </main>
       <BottomNav />
     </div>

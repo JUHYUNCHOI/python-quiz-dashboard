@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { RequireAuth } from "@/components/require-auth"
@@ -113,9 +114,24 @@ function ProblemList({
   onSelect: (p: CodingBankProblem) => void
 }) {
   const { t, lang } = useLanguage()
+  const searchParams = useSearchParams()
   const [categoryFilter, setCategoryFilter] = useState<Category>("all")
   const [diffFilter, setDiffFilter] = useState<Difficulty>("all")
   const [showFilters, setShowFilters] = useState(false)
+
+  // URL ?category=sort / ?difficulty=쉬움 등 딥링크 지원 (알고리즘 토픽 → 코딩 뱅크 카테고리 점프)
+  useEffect(() => {
+    const cat = searchParams.get("category")
+    const diff = searchParams.get("difficulty")
+    if (cat && (cat === "sort" || cat === "simulation" || cat === "brute-force" || cat === "map-set" || cat === "string")) {
+      setCategoryFilter(cat as Category)
+      setShowFilters(true)
+    }
+    if (diff && (diff === "쉬움" || diff === "보통" || diff === "어려움")) {
+      setDiffFilter(diff as Difficulty)
+      setShowFilters(true)
+    }
+  }, [searchParams])
 
   const categories = Array.from(new Set(problems.map((p) => p.category)))
   const difficulties: CodingBankProblem["difficulty"][] = ["쉬움", "보통", "어려움"]

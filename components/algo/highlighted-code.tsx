@@ -73,7 +73,8 @@ function tokenizeLine(line: string, lang: "py" | "cpp", lineKey: string): React.
     }
   }
   if (commentPart) {
-    out.push(<span key={`${lineKey}-c`} className="text-gray-500 italic">{commentPart}</span>)
+    // 주석 — 검정 배경에서 잘 보이게 밝은 회색-청록 톤
+    out.push(<span key={`${lineKey}-c`} className="text-slate-400 italic">{commentPart}</span>)
   }
   return out
 }

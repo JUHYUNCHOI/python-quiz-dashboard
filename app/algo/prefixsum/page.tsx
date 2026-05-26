@@ -42,8 +42,8 @@ const STORAGE_KEY = "algo-prefixsum-chapter"
 type CodeLang = "py" | "cpp"
 
 // ── 슬라이드 챕터 헬퍼 (sorting 과 동일 패턴) ──────────────────────
-function useSlideChapter() {
-  const [step, setStep] = useState(0)
+function useSlideChapter(initialStep: number = 0) {
+  const [step, setStep] = useState(initialStep)
   const rootRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (step > 0) {
@@ -169,10 +169,10 @@ function MiniQuiz({
 }
 
 // ── 챕터 1: 비유 (저금통) ───────────────────────────────────────────
-function Chapter1({ onComplete }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
+function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const { step, setStep, rootRef } = useSlideChapter()
   const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
@@ -267,10 +267,10 @@ function Chapter1({ onComplete }: { onComplete: () => void; codeLang: CodeLang; 
 }
 
 // ── 챕터 2: 누적합 만들기 — 슬라이드식 ─────────────────────────
-function Chapter2({ onComplete, codeLang, setCodeLang }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
+function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter()
   const totalSteps = 4
+  const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const arr = [3, 1, 4, 1, 5]
   const [vizStep, setVizStep] = useState(0)  // 시각화 내부 단계 (0~5)
   const prefix = useMemo(() => {
@@ -422,10 +422,10 @@ for (int i = 0; i < arr.size(); i++)
 }
 
 // ── 챕터 3: 구간 합 ─────────────────────────────────────────────────
-function Chapter3({ onComplete, codeLang, setCodeLang }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
+function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter()
   const totalSteps = 4
+  const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const arr = [3, 1, 4, 1, 5]
   const prefix = [0, 3, 4, 8, 9, 14]
   const [L, setL] = useState(2)
@@ -533,7 +533,10 @@ function Chapter3({ onComplete, codeLang, setCodeLang }: { onComplete: () => voi
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
               <p className="text-sm font-black text-blue-900">📝 {t("코드는 진짜 한 줄", "Code = literally one line")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("range_sum 함수 한 번 만들면 어디서든 O(1) 답 나와요:", "Define range_sum once — O(1) answer everywhere:")}
+                {t(
+                  codeLang === "py" ? "range_sum 함수 한 번 만들면 어디서든 O(1) 답 나와요:" : "rangeSum 함수 한 번 만들면 어디서든 O(1) 답 나와요:",
+                  codeLang === "py" ? "Define range_sum once — O(1) answer everywhere:" : "Define rangeSum once — O(1) answer everywhere:",
+                )}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
@@ -586,10 +589,10 @@ cout << rangeSum(prefix, 2, 4) << endl;  // → 6`}
 }
 
 // ── 챕터 4: 첫 문제 풀기 ────────────────────────────────────────────
-function Chapter4({ onComplete, codeLang, setCodeLang }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void }) {
+function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter()
   const totalSteps = 4
+  const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
@@ -724,10 +727,10 @@ int main() {
 }
 
 // ── 챕터 5: 응용 + 정리 ────────────────────────────────────────────
-function Chapter5({ onComplete }: { onComplete: () => void }) {
+function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const { step, setStep, rootRef } = useSlideChapter()
   const totalSteps = 4
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
@@ -853,6 +856,7 @@ export default function PrefixSumPage() {
   const [completedChapters, setCompletedChapters] = useState<Set<number>>(new Set())
   const [codeLang, setCodeLang] = useState<CodeLang>("py")
   const [isMastered, setIsMastered] = useState(false)
+  const [showDestinationTip, setShowDestinationTip] = useState(false)
 
   // localStorage 에서 진도 복원
   useEffect(() => {
@@ -861,8 +865,10 @@ export default function PrefixSumPage() {
       if (raw) {
         const data = JSON.parse(raw)
         if (typeof data.current === "number") setCurrent(data.current)
-        if (Array.isArray(data.completed)) setCompletedChapters(new Set(data.completed))
-        if (data.mastered) setIsMastered(true)
+        const completedArr = Array.isArray(data.completed) ? data.completed : []
+        if (completedArr.length) setCompletedChapters(new Set(completedArr))
+        // mastered 는 실제로 모든 챕터가 완료된 경우에만 인정 (구버전 stale 데이터 방지)
+        if (data.mastered && completedArr.length >= CHAPTERS.length) setIsMastered(true)
       }
       const langRaw = localStorage.getItem("algo-code-lang")
       if (langRaw === "py" || langRaw === "cpp") setCodeLang(langRaw)
@@ -945,8 +951,8 @@ export default function PrefixSumPage() {
           </div>
 
 
-          {/* 챕터 칩 (탐색) */}
-          <div className="flex flex-wrap gap-1.5 mb-2">
+          {/* 챕터 칩 (탐색) + 목적지 칩 */}
+          <div className="flex flex-wrap items-center gap-1.5 mb-2">
             {CHAPTERS.map(ch => {
               const isDone = completedChapters.has(ch.id)
               const isCurrent = ch.id === current
@@ -968,7 +974,29 @@ export default function PrefixSumPage() {
                 </button>
               )
             })}
+            {/* 🎯 목적지 칩 */}
+            <span className="text-gray-300 text-xs px-0.5">→</span>
+            {isMastered ? (
+              <Link href="/coding-bank"
+                className="text-[11px] font-bold px-2 py-1 rounded-full border bg-emerald-500 border-emerald-600 text-white shadow-md hover:bg-emerald-600 transition-all">
+                🎯 {t("연습 문제 풀러 가기", "Practice problems")}
+              </Link>
+            ) : (
+              <button
+                onClick={() => setShowDestinationTip(true)}
+                className="text-[11px] font-bold px-2 py-1 rounded-full border border-dashed border-amber-400 bg-amber-50 text-amber-700 hover:bg-amber-100 transition-all"
+                title={t("5 챕터 끝나면 풀러 가요", "After 5 chapters, come back!")}
+              >
+                🔒 {t("끝나면 연습 문제", "Practice after lesson")}
+              </button>
+            )}
           </div>
+          {showDestinationTip && !isMastered && (
+            <div className="mb-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 flex items-center justify-between">
+              <span>💡 {t("5 챕터 다 끝나면 누적합 연습 문제로 안내해 줄게요!", "Finish all 5 chapters and I'll guide you to prefix sum practice problems!")}</span>
+              <button onClick={() => setShowDestinationTip(false)} className="text-amber-600 hover:text-amber-800 font-bold ml-2">✕</button>
+            </div>
+          )}
 
           {/* 진도 바 */}
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -982,41 +1010,31 @@ export default function PrefixSumPage() {
           </p>
         </div>
 
-        {/* 언어 선택 — 페이지 상단에 한 번만. 모든 코드 블록이 이 선택을 따름. */}
-        <div className="mb-4 bg-white rounded-2xl border-2 border-gray-200 p-3 shadow-sm">
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-bold text-gray-600">
-              {t("💻 코드 언어 선택", "💻 Code language")}
-            </span>
-            <div className="flex bg-gray-100 rounded-lg p-1 gap-1">
-              <button
-                onClick={() => setCodeLang("py")}
-                className={cn("px-3 py-1.5 rounded-md font-bold text-xs transition-all",
-                  codeLang === "py" ? "bg-emerald-500 text-white shadow-sm" : "text-gray-600 hover:bg-white hover:text-emerald-600")}
-              >
-                🐍 Python
-              </button>
-              <button
-                onClick={() => setCodeLang("cpp")}
-                className={cn("px-3 py-1.5 rounded-md font-bold text-xs transition-all",
-                  codeLang === "cpp" ? "bg-blue-500 text-white shadow-sm" : "text-gray-600 hover:bg-white hover:text-blue-600")}
-              >
-                ⚡ C++
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* 챕터 헤더 */}
+        {/* 챕터 헤더 — 우측 inline 언어 토글 */}
         <div className="mb-4 bg-white rounded-2xl border-2 border-gray-200 p-4 shadow-sm">
           {(() => {
             const ch = CHAPTERS[current - 1]
             return (
               <>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                    {t(`챕터 ${current}/${CHAPTERS.length}`, `Chapter ${current}/${CHAPTERS.length}`)} · ⏱ {ch.mins}{t("분", "min")}
+                <div className="flex items-center justify-between mb-1 gap-2">
+                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider truncate">
+                    {t(`챕터 ${current}/${CHAPTERS.length}`, `Ch ${current}/${CHAPTERS.length}`)} · ⏱ {ch.mins}{t("분", "min")}
                   </span>
+                  {/* 작은 언어 토글 — 챕터 헤더 우측에 inline */}
+                  <div className="flex bg-gray-100 rounded-md p-0.5 gap-0.5 shrink-0">
+                    <button
+                      onClick={() => setCodeLang("py")}
+                      className={cn("px-2 py-0.5 rounded text-[10px] font-bold transition-all",
+                        codeLang === "py" ? "bg-emerald-500 text-white" : "text-gray-500 hover:text-emerald-600")}
+                      title="Python"
+                    >🐍 Py</button>
+                    <button
+                      onClick={() => setCodeLang("cpp")}
+                      className={cn("px-2 py-0.5 rounded text-[10px] font-bold transition-all",
+                        codeLang === "cpp" ? "bg-blue-500 text-white" : "text-gray-500 hover:text-blue-600")}
+                      title="C++"
+                    >⚡ C++</button>
+                  </div>
                 </div>
                 <h2 className="text-lg sm:text-xl font-black text-gray-900 flex items-center gap-2">
                   <span className="text-2xl">{ch.emoji}</span>
@@ -1029,24 +1047,53 @@ export default function PrefixSumPage() {
 
         {/* 챕터 본문 */}
         <div id="chapter-content" className="bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-5 shadow-sm scroll-mt-4">
-          {current === 1 && <Chapter1 onComplete={() => completeChapter(1)} codeLang={codeLang} setCodeLang={setCodeLang} />}
-          {current === 2 && <Chapter2 onComplete={() => completeChapter(2)} codeLang={codeLang} setCodeLang={setCodeLang} />}
-          {current === 3 && <Chapter3 onComplete={() => completeChapter(3)} codeLang={codeLang} setCodeLang={setCodeLang} />}
-          {current === 4 && <Chapter4 onComplete={() => completeChapter(4)} codeLang={codeLang} setCodeLang={setCodeLang} />}
-          {current === 5 && <Chapter5 onComplete={() => completeChapter(5)} />}
+          {current === 1 && <Chapter1 onComplete={() => completeChapter(1)} codeLang={codeLang} setCodeLang={setCodeLang} alreadyDone={completedChapters.has(1)} />}
+          {current === 2 && <Chapter2 onComplete={() => completeChapter(2)} codeLang={codeLang} setCodeLang={setCodeLang} alreadyDone={completedChapters.has(2)} />}
+          {current === 3 && <Chapter3 onComplete={() => completeChapter(3)} codeLang={codeLang} setCodeLang={setCodeLang} alreadyDone={completedChapters.has(3)} />}
+          {current === 4 && <Chapter4 onComplete={() => completeChapter(4)} codeLang={codeLang} setCodeLang={setCodeLang} alreadyDone={completedChapters.has(4)} />}
+          {current === 5 && <Chapter5 onComplete={() => completeChapter(5)} alreadyDone={completedChapters.has(5)} />}
         </div>
 
-        {/* 마스터 셀러브레이션 */}
-        {isMastered && (
-          <div className="mt-4 bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl border-4 border-yellow-300 p-5 text-center shadow-lg">
-            <div className="text-5xl mb-2">🏆</div>
-            <h3 className="text-xl font-black text-amber-900">{t("누적합 마스터!", "Prefix Sum Master!")}</h3>
-            <p className="text-sm text-amber-700 mt-1">{t("다음 알고리즘 토픽으로 가서 모험을 이어가세요", "Continue your adventure with the next topic")}</p>
-            <Link
-              href="/algo"
-              className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold text-sm"
-            >
-              🗺️ {t("토픽 목록으로", "Back to Topics")} <ArrowRight className="w-4 h-4" />
+        {/* 마스터 셀러브레이션 + 연습 문제 안내 — 마지막 챕터에서만 노출 */}
+        {isMastered && current === CHAPTERS.length && (
+          <div className="mt-4 bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl border-4 border-emerald-300 p-5 shadow-lg">
+            <div className="text-center mb-4">
+              <div className="text-5xl mb-2">🏆</div>
+              <h3 className="text-xl font-black text-emerald-900">{t("누적합 마스터!", "Prefix Sum Master!")}</h3>
+              <p className="text-sm text-emerald-700 mt-1">
+                {t("설명은 끝났어요. 이제 직접 풀어볼 시간! 👇", "Lesson done. Now solve some real problems! 👇")}
+              </p>
+            </div>
+
+            {/* 📝 코딩 뱅크 */}
+            <div className="bg-white rounded-xl border-2 border-emerald-200 p-4 mb-3">
+              <p className="text-sm font-black text-emerald-900 mb-2">📝 {t("코드린 안에서 풀기", "Practice inside Coderin")}</p>
+              <Link href="/coding-bank" className="block px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm text-center transition-all active:scale-95">
+                💪 {t("코딩 뱅크 — 누적합 활용 문제", "Coding Bank — Prefix Sum Problems")} <ArrowRight className="inline w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* 🌐 백준 외부 문제 */}
+            <div className="bg-white rounded-xl border-2 border-amber-200 p-4 mb-3">
+              <p className="text-sm font-black text-amber-900 mb-2">🌐 {t("백준 (BOJ) 외부 연습", "BOJ external practice")}</p>
+              <div className="space-y-1.5">
+                <a href="https://www.acmicpc.net/problem/11659" target="_blank" rel="noopener noreferrer"
+                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
+                  <b>BOJ 11659</b> — {t("구간 합 구하기 4 (기본)", "Range Sum Basic")} ↗
+                </a>
+                <a href="https://www.acmicpc.net/problem/2559" target="_blank" rel="noopener noreferrer"
+                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
+                  <b>BOJ 2559</b> — {t("수열 (K일간 최대 합)", "Sequence (max K-day sum)")} ↗
+                </a>
+                <a href="https://www.acmicpc.net/problem/16139" target="_blank" rel="noopener noreferrer"
+                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
+                  <b>BOJ 16139</b> — {t("인간-컴퓨터 상호작용 (문자 누적)", "Character count prefix")} ↗
+                </a>
+              </div>
+            </div>
+
+            <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
+              🗺️ {t("다음 알고리즘 토픽 보기", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />
             </Link>
           </div>
         )}
