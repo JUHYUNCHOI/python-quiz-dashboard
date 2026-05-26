@@ -88,17 +88,14 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
   )
 }
 
-function CodeBlock({ py, cpp, lang, setLang }: { py: string; cpp: string; lang: CodeLang; setLang: (l: CodeLang) => void }) {
+function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang; setLang?: (l: CodeLang) => void }) {
   return (
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
-        <span className="text-[10px] text-gray-400 font-mono">{lang === "py" ? "Python" : "C++"}</span>
-        <div className="flex gap-1">
-          <button onClick={() => setLang("py")} className={cn("text-[10px] px-2 py-0.5 rounded font-bold",
-            lang === "py" ? "bg-emerald-500 text-white" : "bg-gray-700 text-gray-300 hover:bg-gray-600")}>Py</button>
-          <button onClick={() => setLang("cpp")} className={cn("text-[10px] px-2 py-0.5 rounded font-bold",
-            lang === "cpp" ? "bg-blue-500 text-white" : "bg-gray-700 text-gray-300 hover:bg-gray-600")}>C++</button>
-        </div>
+        <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
+        </span>
+        <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Python / C++' 버튼" : "Toggle above"}</span>
       </div>
       <HighlightedCode code={lang === "py" ? py : cpp} lang={lang} />
     </div>
@@ -919,6 +916,37 @@ export default function SortingPage() {
           </p>
         </div>
 
+        {/* 언어 선택 — 페이지 상단에 한 번만. 모든 코드 블록이 이 선택을 따름. */}
+        <div className="mb-4 bg-white rounded-2xl border-2 border-gray-200 p-3 shadow-sm">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-xs font-bold text-gray-600">
+              {t("💻 코드 언어 선택", "💻 Code language")}
+            </span>
+            <div className="flex bg-gray-100 rounded-lg p-1 gap-1">
+              <button
+                onClick={() => setCodeLang("py")}
+                className={cn("px-3 py-1.5 rounded-md font-bold text-xs transition-all",
+                  codeLang === "py"
+                    ? "bg-emerald-500 text-white shadow-sm"
+                    : "text-gray-600 hover:bg-white hover:text-emerald-600",
+                )}
+              >
+                🐍 Python
+              </button>
+              <button
+                onClick={() => setCodeLang("cpp")}
+                className={cn("px-3 py-1.5 rounded-md font-bold text-xs transition-all",
+                  codeLang === "cpp"
+                    ? "bg-blue-500 text-white shadow-sm"
+                    : "text-gray-600 hover:bg-white hover:text-blue-600",
+                )}
+              >
+                ⚡ C++
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div className="mb-4 bg-white rounded-2xl border-2 border-gray-200 p-4 shadow-sm">
           {(() => {
             const ch = CHAPTERS[current - 1]
@@ -957,18 +985,7 @@ export default function SortingPage() {
           </div>
         )}
 
-        <div className="flex gap-2 mt-4">
-          <button onClick={() => goToChapter(current - 1)} disabled={current === 1}
-            className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-gray-700 rounded-xl font-bold text-sm flex items-center justify-center gap-1.5">
-            <ArrowLeft className="w-4 h-4" /> {t("이전 챕터", "Prev")}
-          </button>
-          {completedChapters.has(current) && current < CHAPTERS.length && (
-            <button onClick={() => goToChapter(current + 1)}
-              className="flex-1 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-1.5">
-              {t("다음 챕터", "Next")} <ArrowRight className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+        {/* 페이지 레벨 이전/다음 챕터 버튼 제거 — 위 챕터 칩 + 슬라이드 nav 가 충분 */}
       </main>
       <BottomNav />
     </div>
