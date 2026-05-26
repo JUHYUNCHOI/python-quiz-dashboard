@@ -65,7 +65,7 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
         ))}
       </div>
       {/* 이전/다음 — viewport 하단 fixed. BottomNav 위 zoom 안 보이게 z-50 */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg p-3 safe-area-inset-bottom">
+      <div className="fixed bottom-[76px] sm:bottom-[80px] left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg p-3">
         <div className="max-w-2xl mx-auto flex gap-2">
           <button
             onClick={() => step > 0 && setStep(step - 1)}
@@ -787,7 +787,7 @@ function Chapter5({ onComplete }: { onComplete: () => void }) {
             i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
         ))}
       </div>
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg p-3 safe-area-inset-bottom">
+      <div className="fixed bottom-[76px] sm:bottom-[80px] left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg p-3">
         <div className="max-w-2xl mx-auto flex gap-2">
           <button onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0}
             className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm">
@@ -878,7 +878,7 @@ export default function SortingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-purple-50 pb-32">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-purple-50 pb-48">
       <Header />
       <main className="max-w-2xl mx-auto px-4 pt-4">
         <div className="mb-4">
