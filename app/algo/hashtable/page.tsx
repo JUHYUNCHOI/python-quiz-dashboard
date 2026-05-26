@@ -138,8 +138,8 @@ function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
   )
 }
 
-// ── Chapter 1: 왜 해시테이블? ────────────────────────────────────
-function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
+// ── Chapter 1: 복습 + 알고리즘 관점 ────────────────────────────────
+function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 3
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
@@ -151,28 +151,28 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
           <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border-2 border-amber-200 min-h-[280px]">
             <p className="text-5xl text-center mb-4">👋</p>
             <h3 className="text-xl font-black text-gray-900 mb-3 text-center">
-              {t("안녕! 😊", "Hi! 😊")}
+              {t("오랜만! 다시 만났어요", "Welcome back!")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "오늘 배울 거는 — 해시테이블 (Hash Table) 이에요. 좀 어려운 이름인데, 사실 너무너무 익숙한 거예요.",
-                "Today we're learning — hash tables. Fancy name, but really it's something you already use daily.",
+                "해시 자료구조는 이미 알죠? — Python 의 dict / set, C++ 의 unordered_map / unordered_set. 수업에서 다 다뤘던 거예요.",
+                "You've met hash structures before — Python's dict/set, C++'s unordered_map/unordered_set. We've covered them in class.",
               )}
             </p>
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
               {t(
-                "📞 전화번호부 떠올려 봐요. '엄마' 검색하면 → 010-1234-5678 이 바로 뜨죠? 1,000 명 있어도 한 번에. 그게 해시테이블이에요.",
-                "📞 Think phonebook. Search 'Mom' → 010-1234-5678 pops up instantly. Even with 1,000 contacts. That's a hash table.",
+                "그러면 이 토픽에서는 뭘 새로 배울까요? — 해시를 *문법* 이 아니라 *알고리즘 패턴* 으로 보는 거예요.",
+                "So what's new here? — viewing hash *as an algorithmic pattern*, not just syntax.",
               )}
             </p>
             <p className="text-sm text-gray-700 leading-relaxed">
               {t(
-                "Python 의 dict, C++ 의 unordered_map — 다 같은 거예요. 이름만 다를 뿐.",
-                "Python's dict, C++'s unordered_map — all the same thing. Different names only.",
+                "\"여기 dict 쓰면 O(N) → O(1) 되겠다\" 같은 *판단* 을 배우는 챕터예요. 사용법 복습은 가볍게, 활용에 집중해요.",
+                "\"Hmm, using a dict here cuts O(N) → O(1)\" — that kind of *judgment* is what we're after. Light review, focus on application.",
               )}
             </p>
             <p className="text-sm font-bold text-orange-700 text-center mt-4">
-              {t("준비됐어요? 아래 '다음' 눌러 가요 ↓", "Ready? Hit 'Next' below ↓")}
+              {t("아래 '다음' 으로 가벼운 복습 ↓", "Hit 'Next' for a quick refresher ↓")}
             </p>
           </div>
         )}
@@ -180,58 +180,70 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
         {step === 1 && (
           <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-5 border-2 border-amber-200">
             <p className="text-sm text-gray-700 mb-2">
-              {t("짧은 비교 — 왜 해시가 필요할까?", "Quick compare — why hash tables?")}
+              {t("⚡ 30초 복습 — 이거 기억나죠?", "⚡ 30-sec refresher — remember this?")}
             </p>
             <p className="text-base font-black text-gray-900 mb-4">
-              🏫 {t("학생 1만 명 중 'Alice' 찾기", "Find 'Alice' among 10,000 students")}
+              {t("해시는 두 가지를 O(1) 에 해결해요", "Hash gives you O(1) on two things")}
             </p>
             <div className="space-y-3 mt-4">
-              <div className="bg-red-50 border-2 border-red-200 rounded-lg p-3">
-                <p className="text-sm font-black text-red-700 mb-1">📋 {t("배열로 찾기 — 한 명씩 비교", "Array — check each one")}</p>
+              <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-3">
+                <p className="text-sm font-black text-emerald-800 mb-1">🔑 {t("키 → 값 저장/조회 — O(1)", "Key → value store/lookup — O(1)")}</p>
                 <p className="text-xs text-gray-700 leading-relaxed">
-                  {t(
-                    "names[0] 부터 names[9999] 까지 다 봐야 해요. 운 나쁘면 1 만 번 비교. O(N) 이에요. 답답 😤",
-                    "Walk through names[0]..names[9999]. Worst case: 10,000 comparisons. O(N). Slow 😤",
-                  )}
+                  {codeLang === "py"
+                    ? t("scores[\"Alice\"] = 90 / scores[\"Alice\"] → 한 번에.",
+                        "scores[\"Alice\"] = 90 / scores[\"Alice\"] → one step.")
+                    : t("scores[\"Alice\"] = 90; / scores[\"Alice\"] → 한 번에.",
+                        "scores[\"Alice\"] = 90; / scores[\"Alice\"] → one step.")}
                 </p>
               </div>
-              <div className="bg-green-50 border-2 border-green-200 rounded-lg p-3">
-                <p className="text-sm font-black text-green-700 mb-1">🗂️ {t("해시테이블 — 이름표로 바로!", "Hash table — find by name tag!")}</p>
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-3">
+                <p className="text-sm font-black text-blue-800 mb-1">🔎 {t("존재 확인 — O(1)", "Existence check — O(1)")}</p>
+                <p className="text-xs text-gray-700 leading-relaxed">
+                  {codeLang === "py"
+                    ? t("\"Alice\" in scores → True/False 즉시.",
+                        "\"Alice\" in scores → True/False instantly.")
+                    : t("scores.count(\"Alice\") → 1 또는 0 즉시.",
+                        "scores.count(\"Alice\") → 1 or 0 instantly.")}
+                </p>
+              </div>
+              <div className="bg-red-50 border-2 border-red-200 rounded-lg p-3">
+                <p className="text-sm font-black text-red-700 mb-1">📋 {t("vs 일반 배열/리스트 검색 — O(N)", "vs plain array/list scan — O(N)")}</p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "table['Alice'] → 바로 정보 튀어나옴. 1 번. O(1) 이에요. ⚡",
-                    "table['Alice'] → info pops up instantly. 1 step. O(1). ⚡",
+                    "처음부터 끝까지 다 비교해야 해요. N 이 10만, 100만 되면 답답 😤 — 이때 해시로 갈아타는 거예요.",
+                    "Compare every element. When N hits 100k+, it gets painful 😤 — that's when you switch to hash.",
                   )}
                 </p>
               </div>
             </div>
-            <p className="text-sm text-amber-800 font-bold text-center mt-4">
-              {t("1 만 번 vs 1 번 = 1 만 배 차이! 😲", "10,000 vs 1 = 10,000× faster! 😲")}
-            </p>
-            <p className="text-xs text-gray-600 text-center mt-2 leading-relaxed">
-              {t(
-                "→ 해시테이블은 '이름 → 정보' 를 1 번에 찾는 도구.",
-                "→ Hash table = 'name → info' lookup in one step.",
-              )}
+            <p className="text-xs text-amber-800 font-bold text-center mt-4">
+              {t("→ 이게 우리가 이 토픽에서 쓰려는 \"무기\" 의 본질.", "→ This is the core \"weapon\" we use in this topic.")}
             </p>
           </div>
         )}
 
         {step === 2 && (
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-4">✨</p>
+            <p className="text-5xl text-center mb-4">🗺️</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("해시테이블이 잘 하는 일들", "What hash tables are great at")}
+              {t("이 토픽에서 다룰 3 가지 패턴", "3 patterns we'll learn in this topic")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
-              {t("이런 문제는 해시테이블이면 너무 쉬워져요:", "These problems become super easy with hash tables:")}
+              {t("문법은 알지만 — *언제 꺼낼지* 가 진짜 실력. 이런 상황들이에요:", "You know the syntax — *when to reach for it* is the real skill. Situations like:")}
             </p>
-            <div className="space-y-1.5 text-sm text-gray-800 mb-4">
-              <p>🔎 <b>{t("있는지 확인", "Existence check")}</b> — {t("'이 단어 사전에 있어?' 한 번에", "'Is this word in the dict?' in one step")}</p>
-              <p>📊 <b>{t("빈도수 세기", "Frequency count")}</b> — {t("각 글자가 몇 번 나왔나", "how many times each letter appears")}</p>
-              <p>👯 <b>{t("중복 제거", "Dedup")}</b> — {t("set 으로 한 번에", "set handles it instantly")}</p>
-              <p>🔗 <b>{t("연결하기", "Mapping")}</b> — {t("이름 → 점수, 번호 → 이름 등", "name → score, ID → name, etc.")}</p>
-              <p>⚡ <b>{t("정렬 없이 O(1) 탐색", "O(1) lookup without sorting")}</b></p>
+            <div className="space-y-2 text-sm text-gray-800 mb-4">
+              <div className="bg-white rounded-lg border border-blue-200 p-2.5">
+                <p className="font-black text-blue-800 text-sm">📊 {t("빈도수 카운팅", "Frequency counting")}</p>
+                <p className="text-xs text-gray-600 mt-0.5">{t("\"각 글자/숫자가 몇 번 나왔나?\" — 한 번 순회로 끝", "\"How many times does each item appear?\" — one pass, done")}</p>
+              </div>
+              <div className="bg-white rounded-lg border border-blue-200 p-2.5">
+                <p className="font-black text-blue-800 text-sm">👯 {t("중복 체크 / dedup", "Duplicate check / dedup")}</p>
+                <p className="text-xs text-gray-600 mt-0.5">{t("\"본 적 있나?\" 를 O(1) 로 — 이중 for 루프 탈출", "\"Have I seen this?\" in O(1) — escape from double for-loops")}</p>
+              </div>
+              <div className="bg-white rounded-lg border border-blue-200 p-2.5">
+                <p className="font-black text-blue-800 text-sm">🎯 {t("Two-sum 스타일 매칭", "Two-sum style matching")}</p>
+                <p className="text-xs text-gray-600 mt-0.5">{t("\"x 와 더해서 target 이 되는 짝이 있나?\" — 저장해두고 O(1) 로 조회", "\"Is there a pair that sums to target?\" — store first, look up in O(1)")}</p>
+              </div>
             </div>
             <p className="text-xs text-blue-700 text-center font-bold leading-relaxed">
               {t(
@@ -240,10 +252,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               )}
             </p>
             <p className="text-sm font-bold text-blue-800 text-center mt-4">
-              {t(
-                "자, 다음 챕터에서 진짜로 써 볼까요? →",
-                "Now let's actually use one →",
-              )}
+              {t("자, 챕터 2 에서 첫 패턴부터 →", "Now to Chapter 2 for the first pattern →")}
             </p>
           </div>
         )}
@@ -290,9 +299,19 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               {t("핵심 동작 3 가지:", "3 core operations:")}
             </p>
             <div className="bg-white rounded-lg p-3 font-mono text-xs space-y-1 text-emerald-700 border border-emerald-200">
-              <p>📥 {t("넣기", "Put")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">d[&quot;Alice&quot;] = 90</code></p>
-              <p>📤 {t("꺼내기", "Get")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">d[&quot;Alice&quot;]</code> → 90</p>
-              <p>🔎 {t("있는지 확인", "Check")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">&quot;Alice&quot; in d</code> → True</p>
+              {codeLang === "py" ? (
+                <>
+                  <p>📥 {t("넣기", "Put")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">d[&quot;Alice&quot;] = 90</code></p>
+                  <p>📤 {t("꺼내기", "Get")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">d[&quot;Alice&quot;]</code> → 90</p>
+                  <p>🔎 {t("있는지 확인", "Check")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">&quot;Alice&quot; in d</code> → True</p>
+                </>
+              ) : (
+                <>
+                  <p>📥 {t("넣기", "Put")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">m[&quot;Alice&quot;] = 90;</code></p>
+                  <p>📤 {t("꺼내기", "Get")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">m[&quot;Alice&quot;]</code> → 90</p>
+                  <p>🔎 {t("있는지 확인", "Check")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">m.count(&quot;Alice&quot;)</code> → 1</p>
+                </>
+              )}
             </div>
             <p className="text-xs text-emerald-700 mt-3 text-center">
               {t("다음 슬라이드에서 직접 사물함을 만들어 봐요 →", "Next slide: build a locker yourself →")}
@@ -347,7 +366,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 
             {lookupKey && lockers[lookupKey] !== undefined && (
               <p className="text-sm text-center mt-3 text-emerald-700 font-bold">
-                ⚡ <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-xs">d[&quot;{lookupKey}&quot;]</code> → {lockers[lookupKey]} {t("— 한 번에!", "— one step!")}
+                ⚡ <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-xs">{codeLang === "py" ? `d["${lookupKey}"]` : `m["${lookupKey}"]`}</code> → {lockers[lookupKey]} {t("— 한 번에!", "— one step!")}
               </p>
             )}
           </div>
@@ -478,9 +497,20 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               {t("기본 패턴 — 진짜 짧아요:", "Basic pattern — really short:")}
             </p>
             <div className="bg-white rounded-lg p-3 font-mono text-xs space-y-1 text-purple-700 border border-purple-200">
-              <p>{t("# 각 글자 몇 번 나왔나?", "# How many times each char?")}</p>
-              <p>for ch in &quot;banana&quot;:</p>
-              <p>&nbsp;&nbsp;&nbsp;&nbsp;c[ch] = c.get(ch, 0) + 1</p>
+              {codeLang === "py" ? (
+                <>
+                  <p>{t("# 각 글자 몇 번 나왔나?", "# How many times each char?")}</p>
+                  <p>for ch in &quot;banana&quot;:</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;c[ch] = c.get(ch, 0) + 1</p>
+                </>
+              ) : (
+                <>
+                  <p>{t("// 각 글자 몇 번 나왔나?", "// How many times each char?")}</p>
+                  <p>for (char ch : s) {`{`}</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;c[ch]++;{t("  // 없으면 0 에서 ++", "  // 0 if missing, then ++")}</p>
+                  <p>{`}`}</p>
+                </>
+              )}
             </div>
             <p className="text-xs text-purple-700 mt-3 text-center">
               {t("다음 슬라이드 — 글자 직접 세보기 →", "Next slide — count letters yourself →")}
@@ -618,10 +648,15 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               {t("set — 값만 있고 '한 개씩만'", "set — values only, no duplicates")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
-              {t(
-                "dict 가 '이름 → 값' 이라면, set 은 '값만' 모아두는 가방이에요. 그리고 같은 값은 자동으로 1 개만!",
-                "If dict is 'name → value', set is just 'values' in a bag. And duplicates auto-merge to 1!",
-              )}
+              {codeLang === "py"
+                ? t(
+                    "dict 가 '이름 → 값' 이라면, set 은 '값만' 모아두는 가방이에요. 그리고 같은 값은 자동으로 1 개만!",
+                    "If dict is 'name → value', set is just 'values' in a bag. And duplicates auto-merge to 1!",
+                  )
+                : t(
+                    "unordered_map 이 '키 → 값' 이라면, unordered_set 은 '값만' 모아두는 가방이에요. 같은 값은 자동으로 1 개만!",
+                    "If unordered_map is 'key → value', unordered_set is just 'values' in a bag. Duplicates auto-merge to 1!",
+                  )}
             </p>
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
               {t("주로 쓰는 곳:", "Main uses:")}
@@ -727,15 +762,26 @@ for (int x : nums) {
 
         {step === 3 && (
           <MiniQuiz
-            question={t("리스트에 중복이 있는지 가장 빠르게 확인하려면?", "Fastest way to check if a list has duplicates?")}
-            options={[
+            question={codeLang === "py"
+              ? t("리스트에 중복이 있는지 가장 빠르게 확인하려면?", "Fastest way to check if a list has duplicates?")
+              : t("vector 에 중복이 있는지 가장 빠르게 확인하려면?", "Fastest way to check if a vector has duplicates?")
+            }
+            options={codeLang === "py" ? [
               t("이중 for 로 모든 쌍 비교 — O(N²)", "Double for loop — O(N²)"),
               t("정렬한 뒤 옆 원소 비교 — O(N log N)", "Sort then compare neighbors — O(N log N)"),
               t("set 에 하나씩 넣으며 'in' 확인 — O(N)", "Add to set one by one, check 'in' — O(N)"),
-              t("배열 두 번 순회 — O(2N) 도 O(N)", "Two passes over array — O(2N) = O(N)"),
+              t("리스트 두 번 순회 — O(2N) 도 O(N)", "Two passes over list — O(2N) = O(N)"),
+            ] : [
+              t("이중 for 로 모든 쌍 비교 — O(N²)", "Double for loop — O(N²)"),
+              t("sort() 후 옆 원소 비교 — O(N log N)", "sort() then compare neighbors — O(N log N)"),
+              t("unordered_set 에 넣으며 count() 확인 — O(N)", "Insert into unordered_set, check count() — O(N)"),
+              t("vector 두 번 순회 — O(2N) 도 O(N)", "Two passes over vector — O(2N) = O(N)"),
             ]}
             answerIdx={2}
-            hint={t("set 의 'in' / count() 는 평균 O(1). N 개 원소를 처리해도 전체 O(N) 이에요.", "set 'in' / count() is avg O(1). N elements → overall O(N).")}
+            hint={codeLang === "py"
+              ? t("set 의 'in' 은 평균 O(1). N 개 원소를 처리해도 전체 O(N) 이에요.", "set 'in' is avg O(1). N elements → overall O(N).")
+              : t("unordered_set 의 count() 는 평균 O(1). N 개 원소를 처리해도 전체 O(N) 이에요.", "unordered_set count() is avg O(1). N elements → overall O(N).")
+            }
             onCorrect={() => setQuizPassed(true)}
           />
         )}
