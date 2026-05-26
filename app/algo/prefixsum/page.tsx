@@ -25,6 +25,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase/client"
 import { cn } from "@/lib/utils"
 import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles } from "lucide-react"
+import { HighlightedCode } from "@/components/algo/highlighted-code"
 
 // ── 챕터 메타 ────────────────────────────────────────────────────
 const CHAPTERS = [
@@ -100,9 +101,7 @@ function CodeBlock({ py, cpp, lang, setLang }: { py: string; cpp: string; lang: 
           >C++</button>
         </div>
       </div>
-      <pre className="px-4 py-3 text-[13px] text-emerald-300 font-mono overflow-x-auto leading-relaxed">
-        <code>{lang === "py" ? py : cpp}</code>
-      </pre>
+      <HighlightedCode code={lang === "py" ? py : cpp} lang={lang} />
     </div>
   )
 }
