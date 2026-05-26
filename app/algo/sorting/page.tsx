@@ -959,9 +959,9 @@ export default function SortingPage() {
             {/* 🎯 목적지 칩 — 학생이 어디로 가는지 1 챕터부터 보임 */}
             <span className="text-gray-300 text-xs px-0.5">→</span>
             {isMastered ? (
-              <Link href="/coding-bank?category=sort"
+              <Link href="/algo/sorting/practice"
                 className="text-[11px] font-bold px-2 py-1 rounded-full border bg-emerald-500 border-emerald-600 text-white shadow-md hover:bg-emerald-600 transition-all">
-                🎯 {t("연습 문제 풀러 가기", "Practice problems")}
+                🎯 {t("도전 문제 풀러 가기", "Challenge problems")}
               </Link>
             ) : (
               <button
@@ -1041,15 +1041,23 @@ export default function SortingPage() {
               </p>
             </div>
 
-            {/* 📝 연습 문제 — in-app */}
+            {/* 🏆 도전 문제 — in-app 핵심 CTA */}
             <div className="bg-white rounded-xl border-2 border-emerald-200 p-4 mb-3">
-              <p className="text-sm font-black text-emerald-900 mb-2">📝 {t("코드린 안에서 풀기", "Practice inside Coderin")}</p>
-              <Link href="/coding-bank?category=sort" className="block px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm text-center transition-all active:scale-95">
-                💪 {t("코딩 뱅크 — 정렬 활용 문제", "Coding Bank — Sort Problems")} <ArrowRight className="inline w-4 h-4" />
+              <p className="text-sm font-black text-emerald-900 mb-2">🏆 {t("정렬 도전 문제 12 개", "12 Sorting Challenges")}</p>
+              <Link href="/algo/sorting/practice" className="block px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm text-center transition-all active:scale-95">
+                💪 {t("바로 풀어 보기 (BOJ Silver / LC Medium 급)", "Solve now (BOJ Silver / LC Medium)")} <ArrowRight className="inline w-4 h-4" />
               </Link>
               <p className="text-[11px] text-gray-500 mt-2 text-center">
-                {t("'정렬 활용' 카테고리 필터 골라서 풀어 보세요", "Filter by 'Sorting' category")}
+                {t("단순 sort() 한 줄 넘어 사고력 필요 — 출처: BOJ / LC / CF / 원본 (paraphrased)", "Beyond one-line sort — paraphrased from BOJ / LC / CF")}
               </p>
+            </div>
+
+            {/* 📝 코딩 뱅크 (보너스) */}
+            <div className="bg-white rounded-xl border-2 border-gray-200 p-3 mb-3">
+              <Link href="/coding-bank?category=sort" className="flex items-center justify-between text-xs text-gray-600 hover:text-emerald-700">
+                <span>📝 {t("코딩 뱅크에서 더 풀기 (정렬 카테고리)", "More in Coding Bank (sort)")}</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
             </div>
 
             {/* 🌐 백준 외부 문제 */}
