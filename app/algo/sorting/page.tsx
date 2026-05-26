@@ -47,6 +47,7 @@ function useSlideChapter() {
 }
 
 // 슬라이드 진도 점 + 이전/다음 버튼 (공통)
+// 진도 점: 카드 안에 표시. 이전/다음 버튼: viewport 하단에 fixed.
 function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
   step: number; total: number; setStep: (n: number) => void
   onFinish: () => void; nextLabel?: string; finishLabel?: string
@@ -63,21 +64,24 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
           )} />
         ))}
       </div>
-      <div className="flex gap-2 sticky bottom-0 pt-2">
-        <button
-          onClick={() => step > 0 && setStep(step - 1)}
-          disabled={step === 0}
-          className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm"
-        >
-          ← {t("이전", "Prev")}
-        </button>
-        <button
-          onClick={() => isLast ? onFinish() : setStep(step + 1)}
-          className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95"
-        >
-          {isLast ? (finishLabel ?? t("다음 챕터로", "Next chapter")) : (nextLabel ?? t("다음", "Next"))}
-          <ArrowRight className="w-5 h-5" />
-        </button>
+      {/* 이전/다음 — viewport 하단 fixed. BottomNav 위 zoom 안 보이게 z-50 */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg p-3 safe-area-inset-bottom">
+        <div className="max-w-2xl mx-auto flex gap-2">
+          <button
+            onClick={() => step > 0 && setStep(step - 1)}
+            disabled={step === 0}
+            className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm"
+          >
+            ← {t("이전", "Prev")}
+          </button>
+          <button
+            onClick={() => isLast ? onFinish() : setStep(step + 1)}
+            className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95"
+          >
+            {isLast ? (finishLabel ?? t("다음 챕터로", "Next chapter")) : (nextLabel ?? t("다음", "Next"))}
+            <ArrowRight className="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </>
   )
@@ -783,17 +787,19 @@ function Chapter5({ onComplete }: { onComplete: () => void }) {
             i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
         ))}
       </div>
-      <div className="flex gap-2 sticky bottom-0 pt-2">
-        <button onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0}
-          className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm">
-          ← {t("이전", "Prev")}
-        </button>
-        <button onClick={() => step < totalSteps - 1 ? setStep(step + 1) : onComplete()}
-          className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95">
-          {step === totalSteps - 1
-            ? <>🎉 {t("정렬 마스터!", "Sorting Master!")} <Sparkles className="w-5 h-5" /></>
-            : <>{t("다음", "Next")} <ArrowRight className="w-5 h-5" /></>}
-        </button>
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg p-3 safe-area-inset-bottom">
+        <div className="max-w-2xl mx-auto flex gap-2">
+          <button onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0}
+            className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm">
+            ← {t("이전", "Prev")}
+          </button>
+          <button onClick={() => step < totalSteps - 1 ? setStep(step + 1) : onComplete()}
+            className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95">
+            {step === totalSteps - 1
+              ? <>🎉 {t("정렬 마스터!", "Sorting Master!")} <Sparkles className="w-5 h-5" /></>
+              : <>{t("다음", "Next")} <ArrowRight className="w-5 h-5" /></>}
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -872,7 +878,7 @@ export default function SortingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-purple-50 pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-purple-50 pb-32">
       <Header />
       <main className="max-w-2xl mx-auto px-4 pt-4">
         <div className="mb-4">
