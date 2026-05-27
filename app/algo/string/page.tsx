@@ -23,11 +23,11 @@ import { HighlightedCode } from "@/components/algo/highlighted-code"
 
 // ── 챕터 메타 ────────────────────────────────────────────────────
 const CHAPTERS = [
-  { id: 1, emoji: "🔤", title: "복습 + 알고리즘 관점",   titleEn: "Recap & Algo View",     mins: 2 },
-  { id: 2, emoji: "📏", title: "인덱스·길이·슬라이싱",   titleEn: "Index, Length, Slice",  mins: 5 },
-  { id: 3, emoji: "🛠", title: "자주 쓰는 메서드",        titleEn: "Common Methods",        mins: 6 },
-  { id: 4, emoji: "🔢", title: "문자 ↔ 숫자 (ASCII)",   titleEn: "Char ↔ Number (ASCII)", mins: 6 },
-  { id: 5, emoji: "🏆", title: "정리 + 실전",            titleEn: "Recap & Practice",       mins: 4 },
+  { id: 1, emoji: "🔤", title: "복습 + 알고리즘 관점",   titleEn: "Recap & Algo View",       mins: 2 },
+  { id: 2, emoji: "🪞", title: "회문 — 두 포인터",       titleEn: "Palindrome — Two Pointers", mins: 7 },
+  { id: 3, emoji: "🪟", title: "글자 슬라이딩 윈도우",   titleEn: "Char Sliding Window",     mins: 7 },
+  { id: 4, emoji: "🔢", title: "ASCII 카운팅 패턴",      titleEn: "ASCII Counting Pattern",  mins: 6 },
+  { id: 5, emoji: "🏆", title: "정리 + 실전",            titleEn: "Recap & Practice",        mins: 4 },
 ]
 
 const STORAGE_KEY = "algo-string-chapter"
@@ -246,160 +246,204 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
   )
 }
 
-// ── Chapter 2: 인덱스 · 길이 · 슬라이싱 ─────────────────────────
+// ── Chapter 2: 회문 — 두 포인터 ──────────────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
-  const word = "PROGRAM"
-  const [mode, setMode] = useState<"none" | "idx" | "slice" | "reverse">("none")
-  const result = useMemo(() => {
-    if (mode === "idx") return word[2]            // 'O'
-    if (mode === "slice") return word.slice(1, 5) // "ROGR"
-    if (mode === "reverse") return [...word].reverse().join("")
-    return ""
-  }, [mode])
-  const highlighted: Set<number> = useMemo(() => {
-    if (mode === "idx") return new Set([2])
-    if (mode === "slice") return new Set([1, 2, 3, 4])
-    if (mode === "reverse") return new Set([0, 1, 2, 3, 4, 5, 6])
-    return new Set()
-  }, [mode])
+  const word = "racecar"
+  // L/R 두 포인터 step: 0(시작) → 1(L=0,R=6) → 2(L=1,R=5) → 3(L=2,R=4) → 4(L=R=3, 회문!)
+  const [twoP, setTwoP] = useState(0)
+  const maxStep = 4
+  const L = twoP === 0 ? -1 : twoP - 1
+  const R = twoP === 0 ? -1 : word.length - twoP
+  const isMatch = L >= 0 && L <= R && word[L] === word[R]
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
+        {/* Slide 0 — Why */}
         {step === 0 && (
           <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">📏</p>
+            <p className="text-5xl text-center mb-3">🪞</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("문자열을 다루는 3 가지 기본", "3 basics for handling strings")}
+              {t("회문 — 거울처럼 좌우 대칭", "Palindrome — mirror-symmetric")}
             </h3>
-            <div className="space-y-2 text-sm text-gray-800">
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
+              {t(
+                "racecar, level, abba — 앞에서 읽으나 뒤에서 읽으나 똑같은 문자열. 알고리즘 문제에서 진짜 자주 나와요.",
+                "racecar, level, abba — same forwards and backwards. Shows up a LOT in problems.",
+              )}
+            </p>
+            <div className="space-y-2 text-sm text-gray-800 mb-3">
               <div className="bg-white rounded-lg p-3 border border-emerald-200">
-                <b className="text-emerald-700">1) {t("인덱스", "Index")}</b> — <code className="bg-emerald-50 px-1 rounded">s[i]</code>
-                <p className="text-xs text-gray-600 mt-1">{t("i 번째 글자 하나 꺼내기 (0 부터!)", "Get the i-th character (0-based!)")}</p>
+                <b className="text-emerald-700">1) {t("회문 검사", "Is it palindrome?")}</b>
+                <p className="text-xs text-gray-600 mt-1">{t("두 포인터 — 양 끝에서 가운데로. O(N)", "Two pointers — both ends toward middle. O(N)")}</p>
               </div>
               <div className="bg-white rounded-lg p-3 border border-emerald-200">
-                <b className="text-emerald-700">2) {t("길이", "Length")}</b> — Python <code className="bg-emerald-50 px-1 rounded">len(s)</code> / C++ <code className="bg-emerald-50 px-1 rounded">s.size()</code>
-                <p className="text-xs text-gray-600 mt-1">{t("글자가 몇 개인지", "How many characters")}</p>
-              </div>
-              <div className="bg-white rounded-lg p-3 border border-emerald-200">
-                <b className="text-emerald-700">3) {t("슬라이싱 / 부분문자열", "Slicing / substring")}</b> — Python <code className="bg-emerald-50 px-1 rounded">s[a:b]</code> / C++ <code className="bg-emerald-50 px-1 rounded">s.substr(a, len)</code>
-                <p className="text-xs text-gray-600 mt-1">{t("일부분만 잘라내기", "Cut out part of the string")}</p>
+                <b className="text-emerald-700">2) {t("가장 긴 회문 부분문자열", "Longest palindromic substring")}</b>
+                <p className="text-xs text-gray-600 mt-1">{t("각 인덱스에서 가운데처럼 보고 양쪽으로 늘리기 (expand around center). O(N²)", "Treat each index as a center, expand outward. O(N²)")}</p>
               </div>
             </div>
-            <p className="text-xs text-emerald-700 mt-3 text-center">
-              {t("다음 슬라이드에서 직접 눌러봐요 →", "Click around next slide →")}
+            <p className="text-xs text-emerald-700 text-center font-bold">
+              {t("→ 다음 슬라이드에서 양 끝 포인터 직접 움직여봐요 →", "→ Next: move the two pointers yourself →")}
             </p>
           </div>
         )}
 
+        {/* Slide 1 — Interactive two-pointer */}
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("직접 눌러보세요", "Click to try")}</p>
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("두 포인터로 racecar 검사", "Two pointers on racecar")}</p>
             <p className="text-xs text-gray-600 text-center mb-3">
-              {t(`"${word}" 에 인덱스 / 슬라이싱 / 뒤집기 — 결과가 노란색으로 표시돼요`, `On "${word}", try index / slice / reverse — result highlighted yellow`)}
+              {t("L 과 R 이 양 끝에서 시작 → 한 칸씩 안쪽으로. 매번 같은 글자인지 확인.", "L and R start at both ends → move inward one step. Each step, check if chars match.")}
             </p>
             <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-3 mb-3">
-              <div className="flex gap-1 justify-center mb-1 flex-wrap">
-                {word.split("").map((c, i) => (
-                  <div key={i} className={cn(
-                    "w-10 h-10 rounded-lg border-2 flex items-center justify-center font-mono font-black text-lg transition-all",
-                    highlighted.has(i)
-                      ? "bg-yellow-200 border-yellow-500 text-yellow-900 scale-110"
-                      : "bg-white border-gray-300 text-gray-700",
-                  )}>{c}</div>
-                ))}
+              <div className="flex gap-1 justify-center mb-1">
+                {word.split("").map((c, i) => {
+                  const isL = i === L
+                  const isR = i === R
+                  const isHi = (i === L || i === R) && twoP > 0
+                  return (
+                    <div key={i} className={cn(
+                      "w-10 h-10 rounded-lg border-2 flex items-center justify-center font-mono font-black text-lg transition-all",
+                      isHi && isMatch && "bg-green-200 border-green-500 text-green-900 scale-110",
+                      isHi && !isMatch && "bg-red-200 border-red-500 text-red-900",
+                      !isHi && "bg-white border-gray-300 text-gray-700",
+                    )}>{c}</div>
+                  )
+                })}
               </div>
-              <div className="flex gap-1 justify-center flex-wrap">
+              <div className="flex gap-1 justify-center mb-2">
                 {word.split("").map((_, i) => (
                   <div key={i} className="w-10 text-center text-[10px] text-gray-500 font-mono">[{i}]</div>
                 ))}
               </div>
-            </div>
-            {result && (
-              <div className="mb-3 bg-emerald-50 border-2 border-emerald-300 rounded-lg p-2 text-center">
-                <p className="text-[11px] text-emerald-600 font-bold">{t("결과", "Result")}</p>
-                <p className="font-mono text-lg font-black text-emerald-700">&quot;{result}&quot;</p>
+              <div className="flex gap-1 justify-center">
+                {word.split("").map((_, i) => (
+                  <div key={i} className="w-10 text-center text-[10px] font-black h-4">
+                    {i === L && i === R ? <span className="text-purple-600">L=R</span> : i === L ? <span className="text-blue-600">L</span> : i === R ? <span className="text-orange-600">R</span> : ""}
+                  </div>
+                ))}
               </div>
-            )}
+            </div>
+            <div className="mb-3 bg-gray-50 border border-gray-200 rounded-lg p-2 text-center min-h-[44px] flex items-center justify-center">
+              {twoP === 0 && <p className="text-xs text-gray-500">{t("'다음 스텝' 을 눌러 시작 →", "Press 'Next step' to start →")}</p>}
+              {twoP > 0 && L < R && (
+                <p className="text-xs">
+                  <span className="font-mono font-bold">s[{L}]='{word[L]}'</span> {isMatch ? "==" : "!="} <span className="font-mono font-bold">s[{R}]='{word[R]}'</span> {isMatch ? <span className="text-green-700 font-black">✓ {t("일치", "match")}</span> : <span className="text-red-700 font-black">✗</span>}
+                </p>
+              )}
+              {twoP > 0 && L === R && (
+                <p className="text-xs text-purple-700 font-black">🎉 {t("L 과 R 이 가운데 만남 → 회문!", "L meets R at center → palindrome!")}</p>
+              )}
+              {twoP > 0 && L > R && (
+                <p className="text-xs text-purple-700 font-black">🎉 {t("L 이 R 을 지나감 → 회문!", "L passed R → palindrome!")}</p>
+              )}
+            </div>
             <div className="grid grid-cols-2 gap-1.5">
-              <button onClick={() => setMode("idx")} className="py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-xs">
-                s[2] {t("→ 한 글자", "→ one char")}
-              </button>
-              <button onClick={() => setMode("slice")} className="py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold text-xs">
-                s[1:5] {t("→ 부분", "→ slice")}
-              </button>
-              <button onClick={() => setMode("reverse")} className="py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-bold text-xs">
-                {t("뒤집기", "Reverse")}
-              </button>
-              <button onClick={() => setMode("none")} className="py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-xs">
+              <button onClick={() => setTwoP(0)} className="py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-xs">
                 ↺ {t("리셋", "Reset")}
               </button>
+              <button onClick={() => setTwoP(p => Math.min(p + 1, maxStep))} disabled={twoP >= maxStep}
+                className="py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white rounded-lg font-bold text-xs">
+                {t("다음 스텝 →", "Next step →")}
+              </button>
             </div>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="space-y-3">
-            <div className="bg-blue-50 rounded-2xl p-4 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900 mb-2">📝 {t("실제 코드로 보면 —", "In real code —")}</p>
-              <p className="text-xs text-gray-700">
-                {t("Python 슬라이싱은 [a:b], C++ 는 substr(a, 길이) — 시작 인덱스는 같지만 두 번째 인자가 달라요!", "Python slicing is [a:b], C++ is substr(a, length) — same start, but second arg differs!")}
-              </p>
-            </div>
-            <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`s = "PROGRAM"
-
-# 한 글자
-s[0]           # 'P'
-s[2]           # 'O'
-s[-1]          # 'M'  (뒤에서 첫 번째)
-
-# 길이
-len(s)         # 7
-
-# 슬라이싱 — [시작 : 끝] (끝은 포함 X)
-s[1:5]         # "ROGR"
-s[:3]          # "PRO"
-s[4:]          # "RAM"
-s[::-1]        # "MARGORP"  (뒤집기)`}
-              cpp={`#include <string>
-string s = "PROGRAM";
-
-// 한 글자
-s[0];          // 'P'
-s[2];          // 'O'
-s.back();      // 'M'  (마지막 글자)
-
-// 길이
-s.size();      // 7  (또는 s.length())
-
-// 부분문자열 — substr(시작, 길이)
-s.substr(1, 4);   // "ROGR"
-s.substr(0, 3);   // "PRO"
-s.substr(4);      // "RAM"  (끝까지)`}
-            />
-            <p className="text-xs text-gray-600 text-center">
-              {t("⚠️ C++ substr(1, 4) 의 '4' 는 길이! Python [1:5] 의 '5' 는 끝 인덱스. 헷갈리지 마세요.", "⚠️ C++ substr(1, 4) — '4' is length! Python [1:5] — '5' is end index. Don't confuse them.")}
+            <p className="text-xs text-amber-700 text-center mt-3 italic">
+              {t("💡 가장 긴 회문 찾기는 — 각 인덱스를 가운데로 보고 같은 식으로 양쪽 확장!", "💡 Longest palindrome — treat each index as a center, expand outward the same way!")}
             </p>
           </div>
         )}
 
+        {/* Slide 2 — Code */}
+        {step === 2 && (
+          <div className="space-y-3">
+            <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
+              <p className="text-sm font-black text-blue-900">📝 {t("두 함수 — 검사 + 가장 긴 회문", "Two functions — check + longest")}</p>
+              <p className="text-xs text-gray-700 mt-1">
+                {t("isPalindrome 은 두 포인터로 O(N). longestPalindrome 은 각 인덱스에서 양쪽으로 확장 O(N²).", "isPalindrome uses two pointers O(N). longestPalindrome expands around each center O(N²).")}
+              </p>
+            </div>
+            <CodeBlock lang={codeLang} setLang={setCodeLang}
+              py={`def is_palindrome(s):
+    L, R = 0, len(s) - 1
+    while L < R:
+        if s[L] != s[R]:
+            return False
+        L += 1
+        R -= 1
+    return True
+
+# 가장 긴 회문 부분문자열 — 각 인덱스를 중심으로
+def longest_palindrome(s):
+    best = ""
+    for i in range(len(s)):
+        # 홀수 길이 (중심 = i)
+        a = expand(s, i, i)
+        # 짝수 길이 (중심 = i, i+1)
+        b = expand(s, i, i + 1)
+        if len(a) > len(best): best = a
+        if len(b) > len(best): best = b
+    return best
+
+def expand(s, L, R):
+    while L >= 0 and R < len(s) and s[L] == s[R]:
+        L -= 1
+        R += 1
+    return s[L+1:R]   # 마지막으로 일치했던 구간`}
+              cpp={`#include <string>
+using namespace std;
+
+bool isPalindrome(const string& s) {
+    int L = 0, R = s.size() - 1;
+    while (L < R) {
+        if (s[L] != s[R]) return false;
+        L++;
+        R--;
+    }
+    return true;
+}
+
+// 각 인덱스를 중심으로 양쪽 확장
+string expand(const string& s, int L, int R) {
+    while (L >= 0 && R < (int)s.size() && s[L] == s[R]) {
+        L--;
+        R++;
+    }
+    return s.substr(L + 1, R - L - 1);
+}
+
+string longestPalindrome(const string& s) {
+    string best = "";
+    for (int i = 0; i < (int)s.size(); i++) {
+        string a = expand(s, i, i);       // 홀수
+        string b = expand(s, i, i + 1);   // 짝수
+        if (a.size() > best.size()) best = a;
+        if (b.size() > best.size()) best = b;
+    }
+    return best;
+}`}
+            />
+            <p className="text-xs text-gray-600 text-center">
+              {t("핵심: 각 인덱스마다 '홀수 중심' + '짝수 중심' 두 번 시도. 둘 다 안 하면 절반을 놓침.", "Key: at each index try BOTH odd-center and even-center expansion. Skip one → miss half the cases.")}
+            </p>
+          </div>
+        )}
+
+        {/* Slide 3 — Quiz */}
         {step === 3 && (
           <MiniQuiz
-            question={codeLang === "py"
-              ? t('Python: s = "HELLO" 일 때, s[1:4] 는?', 'Python: s = "HELLO", what is s[1:4]?')
-              : t('C++: string s = "HELLO" 일 때, s.substr(1, 3) 은?', 'C++: string s = "HELLO", what is s.substr(1, 3)?')
-            }
-            options={['"ELL"', '"ELLO"', '"HEL"', '"HELL"']}
-            answerIdx={0}
-            hint={codeLang === "py"
-              ? t("[1:4] = 인덱스 1, 2, 3 만 (4 는 미포함). H[0] E[1] L[2] L[3] O[4]", "[1:4] = indices 1, 2, 3 only (4 excluded). H[0] E[1] L[2] L[3] O[4]")
-              : t("substr(1, 3) = 인덱스 1 부터 3 개 글자. H[0] E[1] L[2] L[3] O[4]", "substr(1, 3) = 3 chars from index 1. H[0] E[1] L[2] L[3] O[4]")
-            }
+            question={t("가장 긴 회문 부분문자열에서 'expand around center' 가 잡지 못하는 케이스는?", "Which case does 'expand around center' miss?")}
+            options={[
+              t("홀수 길이 회문 (예: aba)", "Odd-length palindromes (e.g. aba)"),
+              t("짝수 길이 회문 (예: abba)", "Even-length palindromes (e.g. abba)"),
+              t("둘 다 잡으려면 각 인덱스마다 두 가지 (홀수 + 짝수) 시도", "To catch both, try BOTH odd and even at each index"),
+              t("잡지 못함", "Cannot catch them"),
+            ]}
+            answerIdx={2}
+            hint={t('"babad" 와 "abba" 둘 다 처리하려면 — 한 인덱스에서 (i, i) 와 (i, i+1) 두 번 expand 해야 해요.', 'To handle both "babad" and "abba" — at each index, expand TWICE: (i, i) and (i, i+1).')}
             onCorrect={() => setQuizPassed(true)}
           />
         )}
@@ -420,174 +464,191 @@ s.substr(4);      // "RAM"  (끝까지)`}
   )
 }
 
-// ── Chapter 3: 자주 쓰는 메서드 ─────────────────────────────────
+// ── Chapter 3: 글자 슬라이딩 윈도우 ─────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
-  const [input, setInput] = useState("Hello World")
-  const [method, setMethod] = useState<"upper" | "lower" | "find" | "replace" | "split">("upper")
-  const output = useMemo(() => {
-    switch (method) {
-      case "upper":   return input.toUpperCase()
-      case "lower":   return input.toLowerCase()
-      case "find":    return String(input.indexOf("o"))
-      case "replace": return input.replace(/o/g, "0")
-      case "split":   return JSON.stringify(input.split(" "))
-    }
-  }, [input, method])
+  const word = "abcba"
+  const K = 2
+  // window step. 각 step: [L, R] (inclusive)
+  // 시작 — 0(없음) 그 후 right 가 한 칸씩 확장, distinct > K 면 shrink
+  // 단계: 0(idle) → R=0(a) → R=1(ab) → R=2(abc:shrink to bc) → R=3(bcb) → R=4(cba:shrink to ba)
+  const windowSteps: { L: number; R: number; note: string; noteEn: string }[] = useMemo(() => [
+    { L: 0, R: 0, note: "R 확장: 'a' (distinct 1 ≤ 2 ✓)", noteEn: "R extend: 'a' (distinct 1 ≤ 2 ✓)" },
+    { L: 0, R: 1, note: "R 확장: 'ab' (distinct 2 ≤ 2 ✓)", noteEn: "R extend: 'ab' (distinct 2 ≤ 2 ✓)" },
+    { L: 1, R: 2, note: "R 확장 'abc' → distinct 3 > 2 → L 이동해서 'bc'", noteEn: "R extend 'abc' → distinct 3 > 2 → shrink L → 'bc'" },
+    { L: 1, R: 3, note: "R 확장: 'bcb' (distinct 2 ≤ 2 ✓)", noteEn: "R extend: 'bcb' (distinct 2 ≤ 2 ✓)" },
+    { L: 2, R: 4, note: "R 확장 'bcba' → distinct 3 > 2 → L 이동해서 'cba' → 여전히 3 → L 또 이동 → 'ba'", noteEn: "R extend 'bcba' → distinct 3 > 2 → shrink → eventually 'ba'" },
+  ], [])
+  const [winStep, setWinStep] = useState(-1)
+  const cur = winStep >= 0 && winStep < windowSteps.length ? windowSteps[winStep] : null
+  const inWindow = (i: number) => cur !== null && i >= cur.L && i <= cur.R
+  const bestLen = winStep >= 0 ? Math.max(...windowSteps.slice(0, winStep + 1).map(s => s.R - s.L + 1)) : 0
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
+        {/* Slide 0 — Why */}
         {step === 0 && (
           <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border-2 border-purple-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🛠</p>
+            <p className="text-5xl text-center mb-3">🪟</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("문자열은 도구가 진짜 많아요", "Strings have lots of tools")}
+              {t("글자 슬라이딩 윈도우", "Sliding window on characters")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "이 챕터에서는 가장 자주 쓰는 5 가지만 봐요. 외울 필요 없어요 — '이런 게 있다' 만 기억!",
-                "Just the 5 most useful ones in this chapter. No need to memorize — just remember 'these exist'!",
+                "'서로 다른 글자가 K 개 이하인 가장 긴 부분문자열' / '중복 없는 가장 긴 부분문자열' 같은 문제 — naive 로 모든 부분문자열 만들면 O(N·M). 윈도우 하나만 미끄러뜨리면 O(N).",
+                "Problems like 'longest substring with ≤ K distinct chars' or 'longest without repeat' — naive checks every substring O(N·M). Slide one window → O(N).",
               )}
             </p>
-            <div className="bg-white rounded-lg p-3 border border-purple-200 space-y-1.5 text-sm">
-              {codeLang === "py" ? (
-                <>
-                  <p>🔼 <code className="bg-purple-50 px-1 rounded">s.upper()</code> — {t("전부 대문자", "all uppercase")}</p>
-                  <p>🔽 <code className="bg-purple-50 px-1 rounded">s.lower()</code> — {t("전부 소문자", "all lowercase")}</p>
-                  <p>🔍 <code className="bg-purple-50 px-1 rounded">s.find(...)</code> — {t("어디서 처음 나오는지 (없으면 -1)", "first index (or -1)")}</p>
-                  <p>🔄 <code className="bg-purple-50 px-1 rounded">s.replace(a, b)</code> — {t("a 를 전부 b 로", "swap all a → b")}</p>
-                  <p>✂️ <code className="bg-purple-50 px-1 rounded">s.split(...)</code> — {t("기준대로 자르기 → 리스트", "cut by delimiter → list")}</p>
-                </>
-              ) : (
-                <>
-                  <p>🔼 <code className="bg-purple-50 px-1 rounded">transform + ::toupper</code> — {t("전부 대문자 (글자 단위 변환)", "all uppercase (per-char transform)")}</p>
-                  <p>🔽 <code className="bg-purple-50 px-1 rounded">transform + ::tolower</code> — {t("전부 소문자", "all lowercase")}</p>
-                  <p>🔍 <code className="bg-purple-50 px-1 rounded">s.find(...)</code> — {t("어디서 처음 나오는지 (없으면 string::npos)", "first index (or string::npos)")}</p>
-                  <p>🔄 <code className="bg-purple-50 px-1 rounded">s.replace(pos, len, ...)</code> — {t("위치+길이로 바꾸기 (Python 과 의미 다름!)", "replace by position+length (different from Python!)")}</p>
-                  <p>✂️ <code className="bg-purple-50 px-1 rounded">stringstream + getline</code> — {t("split 이 없어서 직접 처리", "no built-in split — use stringstream")}</p>
-                </>
-              )}
+            <div className="bg-white rounded-lg p-3 border border-purple-200 mb-3">
+              <p className="text-xs font-bold text-purple-700 mb-2">{t("핵심 아이디어", "Core idea")}:</p>
+              <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                <li>{t("두 포인터 L, R — R 은 항상 한 칸씩 확장", "Two pointers L, R — R extends one step at a time")}</li>
+                <li>{t("조건 어기면 (예: distinct > K) → L 을 옮겨 윈도우 줄임", "If condition breaks (e.g. distinct > K) → move L to shrink")}</li>
+                <li>{t("각 글자는 윈도우에 한 번씩만 들어오고 나감 → O(N)", "Each char enters and leaves window once → O(N)")}</li>
+              </ul>
             </div>
-            <p className="text-xs text-purple-700 mt-3 text-center">
-              {t("다음 슬라이드에서 직접 골라봐요 →", "Pick one on next slide →")}
+            <p className="text-xs text-purple-700 text-center font-bold">
+              {t("→ 다음 슬라이드에서 윈도우 직접 미끄러뜨려봐요 →", "→ Next: slide the window yourself →")}
             </p>
           </div>
         )}
 
+        {/* Slide 1 — Interactive */}
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("메서드 골라 보기", "Try each method")}</p>
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("\"abcba\" 에서 distinct ≤ 2", "On \"abcba\" with distinct ≤ 2")}</p>
             <p className="text-xs text-gray-600 text-center mb-3">
-              {t("아래 문자열에 메서드 5 가지 — 결과가 어떻게 달라지는지!", "5 methods on the string — see how it changes!")}
+              {t("K = 2 (서로 다른 글자 2 개까지 허용). R 을 확장하고, 조건 어기면 L 을 줄여요.", "K = 2 (up to 2 distinct chars). Extend R, shrink L when condition breaks.")}
             </p>
-            <div className="mb-3">
-              <label className="text-[11px] text-gray-500 mb-1 block">{t("문자열 (수정 가능)", "String (editable)")}</label>
-              <input value={input} onChange={e => setInput(e.target.value)}
-                className="w-full px-3 py-2 border-2 border-amber-200 rounded-lg font-mono text-sm focus:outline-none focus:border-amber-400" />
+            <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-3 mb-3">
+              <div className="flex gap-1 justify-center mb-1">
+                {word.split("").map((c, i) => (
+                  <div key={i} className={cn(
+                    "w-12 h-12 rounded-lg border-2 flex items-center justify-center font-mono font-black text-lg transition-all",
+                    inWindow(i) ? "bg-blue-200 border-blue-500 text-blue-900 scale-110" : "bg-white border-gray-300 text-gray-400",
+                  )}>{c}</div>
+                ))}
+              </div>
+              <div className="flex gap-1 justify-center mb-2">
+                {word.split("").map((_, i) => (
+                  <div key={i} className="w-12 text-center text-[10px] text-gray-500 font-mono">[{i}]</div>
+                ))}
+              </div>
+              <div className="flex gap-1 justify-center">
+                {word.split("").map((_, i) => (
+                  <div key={i} className="w-12 text-center text-[10px] font-black h-4">
+                    {cur && i === cur.L && i === cur.R ? <span className="text-purple-600">L=R</span> : cur && i === cur.L ? <span className="text-blue-600">L</span> : cur && i === cur.R ? <span className="text-orange-600">R</span> : ""}
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-3 gap-1.5 mb-3">
-              {[
-                { key: "upper" as const, label: "upper()" },
-                { key: "lower" as const, label: "lower()" },
-                { key: "find" as const, label: `find("o")` },
-                { key: "replace" as const, label: `o → 0` },
-                { key: "split" as const, label: `split(" ")` },
-              ].map(b => (
-                <button key={b.key} onClick={() => setMethod(b.key)}
-                  className={cn("py-2 rounded-lg font-bold text-xs transition-all",
-                    method === b.key ? "bg-purple-500 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700")}>
-                  {b.label}
-                </button>
-              ))}
+            <div className="mb-3 bg-gray-50 border border-gray-200 rounded-lg p-2 min-h-[60px] flex flex-col items-center justify-center">
+              {winStep < 0 && <p className="text-xs text-gray-500">{t("'다음 스텝' 으로 R 을 확장 →", "Press 'Next step' to extend R →")}</p>}
+              {cur && (
+                <>
+                  <p className="text-xs text-gray-700 mb-1">{t(cur.note, cur.noteEn)}</p>
+                  <p className="text-xs">
+                    <span className="font-bold">{t("현재 윈도우", "Window")}: </span>
+                    <span className="font-mono font-black text-blue-700">&quot;{word.slice(cur.L, cur.R + 1)}&quot;</span>
+                    <span className="ml-2 text-gray-500">({t("길이", "len")} {cur.R - cur.L + 1})</span>
+                  </p>
+                </>
+              )}
+              {winStep >= windowSteps.length - 1 && (
+                <p className="text-xs text-emerald-700 font-black mt-1">
+                  🎉 {t(`가장 긴 윈도우 길이 = ${bestLen}`, `Longest window = ${bestLen}`)}
+                </p>
+              )}
             </div>
-            <div className="bg-emerald-50 border-2 border-emerald-300 rounded-lg p-3 text-center">
-              <p className="text-[11px] text-emerald-600 font-bold mb-1">{t("결과", "Result")}</p>
-              <p className="font-mono text-base font-black text-emerald-700 break-all">{output}</p>
+            <div className="grid grid-cols-2 gap-1.5">
+              <button onClick={() => setWinStep(-1)} className="py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-xs">
+                ↺ {t("리셋", "Reset")}
+              </button>
+              <button onClick={() => setWinStep(s => Math.min(s + 1, windowSteps.length - 1))}
+                disabled={winStep >= windowSteps.length - 1}
+                className="py-2 bg-purple-500 hover:bg-purple-600 disabled:opacity-40 text-white rounded-lg font-bold text-xs">
+                {t("다음 스텝 →", "Next step →")}
+              </button>
             </div>
-            <p className="text-xs text-gray-500 text-center mt-3 italic">
-              {t("위 문자열 바꿔보면서 메서드 골라봐요!", "Change the string above and try each method!")}
-            </p>
           </div>
         )}
 
+        {/* Slide 2 — Code */}
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900">📝 {t("실제 코드", "Real code")}</p>
+              <p className="text-sm font-black text-blue-900">📝 {t("distinct ≤ K 윈도우 — 코드", "distinct ≤ K window — code")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("Python 은 메서드가 풍부, C++ 는 약간 다르지만 비슷한 게 다 있어요:", "Python has rich methods, C++ is a bit different but has similar tools:")}
+                {t("count 맵으로 윈도우 안 글자 개수 추적. distinct > K 가 되면 L 을 옮겨가며 줄임.", "Use a count map for chars in window. When distinct > K, shrink L until distinct ≤ K.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`s = "Hello World"
+              py={`def longest_with_k_distinct(s, K):
+    count = {}            # 글자 → 개수
+    L = 0
+    best = 0
+    for R in range(len(s)):
+        count[s[R]] = count.get(s[R], 0) + 1
+        # 조건 어기면 L 을 옮겨 줄임
+        while len(count) > K:
+            count[s[L]] -= 1
+            if count[s[L]] == 0:
+                del count[s[L]]
+            L += 1
+        # 이 시점에 윈도우 [L..R] 은 distinct ≤ K
+        best = max(best, R - L + 1)
+    return best
 
-# 대소문자
-s.upper()              # "HELLO WORLD"
-s.lower()              # "hello world"
-
-# 찾기 — 없으면 -1
-s.find("World")        # 6
-s.find("zzz")          # -1
-
-# 바꾸기 — 모두 바꿈
-s.replace("o", "0")    # "Hell0 W0rld"
-
-# 자르기 — 리스트 반환
-s.split(" ")           # ["Hello", "World"]
-"a,b,c".split(",")     # ["a", "b", "c"]
-
-# 합치기
-",".join(["a", "b"])   # "a,b"`}
+longest_with_k_distinct("abcba", 2)   # 3 ("bcb")`}
               cpp={`#include <string>
+#include <unordered_map>
 #include <algorithm>
-string s = "Hello World";
+using namespace std;
 
-// 대소문자 — 글자 단위로 변환
-string upper = s;
-transform(upper.begin(), upper.end(),
-          upper.begin(), ::toupper);
-// "HELLO WORLD"
+int longestWithKDistinct(const string& s, int K) {
+    unordered_map<char, int> count;
+    int L = 0, best = 0;
+    for (int R = 0; R < (int)s.size(); R++) {
+        count[s[R]]++;
+        // 조건 어기면 L 을 옮겨 줄임
+        while ((int)count.size() > K) {
+            count[s[L]]--;
+            if (count[s[L]] == 0) count.erase(s[L]);
+            L++;
+        }
+        // 이 시점에 윈도우 [L..R] 은 distinct ≤ K
+        best = max(best, R - L + 1);
+    }
+    return best;
+}
 
-// 찾기 — 없으면 string::npos
-size_t pos = s.find("World");   // 6
-if (pos == string::npos) { /* 못 찾음 */ }
-
-// 부분문자열
-s.substr(0, 5);                 // "Hello"
-
-// 바꾸기 (한 군데)
-s.replace(6, 5, "C++");         // "Hello C++"
-
-// 길이
-s.size();   // 11`}
+// longestWithKDistinct("abcba", 2) == 3 ("bcb")`}
             />
             <p className="text-xs text-gray-600 text-center">
-              {t("💡 C++ 는 split 이 없어요. 보통 stringstream 으로 직접 처리.", "💡 C++ has no split — usually done via stringstream.")}
+              {t("R 은 N 번, L 도 최대 N 번 → 합쳐서 O(N). 글자 하나가 들어왔다가 나가는 비용만!", "R runs N times, L at most N times → total O(N). Each char enters and leaves once.")}
             </p>
           </div>
         )}
 
-        {step === 3 && (codeLang === "py" ? (
+        {/* Slide 3 — Quiz */}
+        {step === 3 && (
           <MiniQuiz
-            question={t('Python: "banana".replace("a", "o") 의 결과는?', 'Python: "banana".replace("a", "o") returns?')}
-            options={['"banana"', '"bonono"', '"banono"', '"bonana"']}
+            question={t("글자 distinct ≤ K 윈도우 알고리즘에서 left 를 언제 옮기나?", "When do we move left in the distinct ≤ K window?")}
+            options={[
+              t("한 번에 1 칸", "Always exactly 1 step"),
+              t("distinct > K 일 때 distinct ≤ K 가 될 때까지", "While distinct > K, until distinct ≤ K"),
+              t("윈도우 크기 = K 일 때", "When window size = K"),
+              t("절대 안 옮김", "Never"),
+            ]}
             answerIdx={1}
-            hint={t("replace 는 모든 'a' 를 'o' 로 바꿔요. b-a-n-a-n-a → b-o-n-o-n-o", "replace swaps every 'a' for 'o'. b-a-n-a-n-a → b-o-n-o-n-o")}
+            hint={t("조건 어기면 줄여요 — distinct 가 K 를 넘는 순간 L 을 한 칸씩 옮기며 다시 ≤ K 가 될 때까지.", "Break the rule → shrink. While distinct > K, move L one step at a time until distinct ≤ K again.")}
             onCorrect={() => setQuizPassed(true)}
           />
-        ) : (
-          <MiniQuiz
-            question={t('C++: string s = "Hello"; s.find("ll") 의 반환값은?', 'C++: string s = "Hello"; s.find("ll") returns?')}
-            options={["0", "2", "3", "string::npos"]}
-            answerIdx={1}
-            hint={t("'ll' 은 인덱스 2 에서 시작 — H[0] e[1] l[2] l[3] o[4]", "'ll' starts at index 2 — H[0] e[1] l[2] l[3] o[4]")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        ))}
+        )}
       </div>
 
       {step < 3 ? (
@@ -605,132 +666,188 @@ s.size();   // 11`}
   )
 }
 
-// ── Chapter 4: 문자 ↔ 숫자 (ASCII) ───────────────────────────────
+// ── Chapter 4: ASCII 카운팅 패턴 ─────────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
-  const [charInput, setCharInput] = useState("A")
-  const code = charInput.length > 0 ? charInput.charCodeAt(0) : 0
+  const s1 = "listen"
+  const s2 = "silent"
+  const [revealed, setRevealed] = useState(false)
+  const countOf = (s: string) => {
+    const c = new Array(26).fill(0)
+    for (const ch of s.toLowerCase()) {
+      const idx = ch.charCodeAt(0) - 97
+      if (idx >= 0 && idx < 26) c[idx]++
+    }
+    return c
+  }
+  const c1 = countOf(s1)
+  const c2 = countOf(s2)
+  const usedIdx = Array.from(new Set([...s1, ...s2].map(c => c.toLowerCase().charCodeAt(0) - 97))).filter(i => i >= 0 && i < 26).sort((a, b) => a - b)
+  const isAnagram = c1.every((v, i) => v === c2[i])
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
+        {/* Slide 0 — Why */}
         {step === 0 && (
           <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-6 border-2 border-pink-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🔢</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("문자는 사실 — 숫자예요", "Characters are actually — numbers")}
+              {t("ASCII 카운팅 — 알파벳 26 칸 배열", "ASCII counting — array of 26 slots")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "컴퓨터는 글자를 모르고 숫자만 알아요. 그래서 'A' = 65, 'B' = 66, ... 이렇게 약속해 놨어요. 이게 ASCII 코드예요.",
-                "Computers only know numbers, not letters. So 'A' = 65, 'B' = 66, ... that's the ASCII code agreement.",
+                "아나그램 검사, 빈도 비교, 가장 많이 나온 글자 — 전부 같은 패턴. int count[26] 배열 하나면 끝나요. 가장 빠른 방법.",
+                "Anagram check, frequency comparison, most-common letter — same pattern. One int count[26] array. Fastest approach.",
               )}
             </p>
             <div className="bg-white rounded-lg p-3 border border-pink-200 mb-3">
-              <p className="text-xs font-bold text-pink-700 mb-2">{t("외울 필요는 없어요. 그냥 이 3 가지만 기억:", "No need to memorize. Just remember these 3 ranges:")}</p>
-              <div className="space-y-1 text-sm font-mono">
-                <div className="flex justify-between"><span className="font-bold">A-Z</span><span className="text-pink-700">65 ~ 90</span></div>
-                <div className="flex justify-between"><span className="font-bold">a-z</span><span className="text-pink-700">97 ~ 122</span></div>
-                <div className="flex justify-between"><span className="font-bold">0-9</span><span className="text-pink-700">48 ~ 57</span></div>
-              </div>
-              <p className="text-xs text-gray-600 mt-2">
-                {t("→ 대문자랑 소문자는 정확히 32 차이! ('A' + 32 = 'a')", "→ Upper and lower differ by exactly 32! ('A' + 32 = 'a')")}
+              <p className="text-xs font-bold text-pink-700 mb-2">{t("핵심 트릭", "Core trick")}:</p>
+              <p className="text-sm font-mono text-gray-800 mb-2 text-center bg-pink-50 rounded p-2">
+                idx = c - 'a'
+              </p>
+              <p className="text-xs text-gray-700">
+                {t("글자 c 를 'a' 와 빼면 0-25 의 인덱스가 나와요. 'a' → 0, 'b' → 1, ... 'z' → 25.", "Subtract 'a' from c → index 0-25. 'a' → 0, 'b' → 1, ... 'z' → 25.")}
+              </p>
+              <p className="text-xs text-gray-700 mt-1">
+                {t("(Python 은 ord(c) - ord('a'), C++ 는 그냥 c - 'a')", "(Python: ord(c) - ord('a'), C++: just c - 'a')")}
               </p>
             </div>
-            <p className="text-xs text-pink-700 text-center">
-              {t("다음 슬라이드에서 직접 변환해 봐요 →", "Try the conversion next slide →")}
+            <p className="text-xs text-pink-700 text-center font-bold">
+              {t("→ 다음 슬라이드에서 \"listen\" vs \"silent\" 아나그램 검사 →", "→ Next: anagram check on \"listen\" vs \"silent\" →")}
             </p>
           </div>
         )}
 
+        {/* Slide 1 — Interactive */}
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("문자 ↔ 숫자 변환기", "Char ↔ Number converter")}</p>
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("아나그램 검사", "Anagram check")}</p>
             <p className="text-xs text-gray-600 text-center mb-3">
-              {t("글자 하나 입력 → ASCII 코드. 입력 바꿔보면서 숫자 어떻게 변하는지!", "Type one char → see ASCII code. Try different chars!")}
+              {t("두 문자열의 글자 빈도가 똑같으면 아나그램. count[26] 배열로 비교해요.", "Two strings are anagrams if letter counts match. Compare via count[26] arrays.")}
             </p>
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <input value={charInput} onChange={e => setCharInput(e.target.value.slice(0, 1))} maxLength={1}
-                className="w-16 h-16 text-center text-3xl font-mono font-black border-2 border-amber-300 rounded-lg focus:outline-none focus:border-amber-500" />
-              <span className="text-2xl text-gray-400">→</span>
-              <div className="w-20 h-16 flex items-center justify-center bg-emerald-50 border-2 border-emerald-300 rounded-lg font-mono text-2xl font-black text-emerald-700">
-                {code}
+            <div className="space-y-2 mb-3">
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-xs font-bold text-gray-600 w-12">s1:</span>
+                {s1.split("").map((c, i) => (
+                  <div key={i} className="w-8 h-8 rounded bg-blue-100 border border-blue-400 flex items-center justify-center font-mono font-bold text-sm">{c}</div>
+                ))}
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-xs font-bold text-gray-600 w-12">s2:</span>
+                {s2.split("").map((c, i) => (
+                  <div key={i} className="w-8 h-8 rounded bg-purple-100 border border-purple-400 flex items-center justify-center font-mono font-bold text-sm">{c}</div>
+                ))}
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-1.5 mb-3">
-              <button onClick={() => setCharInput("A")} className="py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-xs font-bold">'A' → 65</button>
-              <button onClick={() => setCharInput("a")} className="py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-xs font-bold">'a' → 97</button>
-              <button onClick={() => setCharInput("0")} className="py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-xs font-bold">'0' → 48</button>
-            </div>
-            <p className="text-xs text-amber-700 text-center font-bold leading-relaxed">
-              {t(
-                "💡 'C' - 'A' = 2 → 알파벳 카운팅의 핵심! C 는 A 로부터 2 칸.",
-                "💡 'C' - 'A' = 2 → key trick for alphabet counting! C is 2 slots from A.",
-              )}
-            </p>
+            {!revealed && (
+              <button onClick={() => setRevealed(true)}
+                className="w-full py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold text-sm mb-2">
+                {t("count[26] 배열 만들고 비교 →", "Build count[26] and compare →")}
+              </button>
+            )}
+            {revealed && (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-2">
+                <p className="text-xs font-bold text-amber-800 mb-2">{t("등장한 글자만 보여줘요:", "Showing only chars that appear:")}</p>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-gray-500 w-16">{t("글자", "char")}</span>
+                    {usedIdx.map(i => (
+                      <div key={i} className="w-8 h-6 rounded bg-gray-100 border border-gray-300 flex items-center justify-center font-mono font-bold text-xs">{String.fromCharCode(97 + i)}</div>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-blue-600 font-bold w-16">count1</span>
+                    {usedIdx.map(i => (
+                      <div key={i} className={cn("w-8 h-6 rounded flex items-center justify-center font-mono font-black text-xs",
+                        c1[i] === c2[i] ? "bg-green-100 border border-green-500 text-green-800" : "bg-red-100 border border-red-500 text-red-800")}>{c1[i]}</div>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-purple-600 font-bold w-16">count2</span>
+                    {usedIdx.map(i => (
+                      <div key={i} className={cn("w-8 h-6 rounded flex items-center justify-center font-mono font-black text-xs",
+                        c1[i] === c2[i] ? "bg-green-100 border border-green-500 text-green-800" : "bg-red-100 border border-red-500 text-red-800")}>{c2[i]}</div>
+                    ))}
+                  </div>
+                </div>
+                <p className={cn("text-center font-black mt-3 text-sm",
+                  isAnagram ? "text-green-700" : "text-red-700")}>
+                  {isAnagram
+                    ? <>✅ {t("모든 칸 일치 → 아나그램!", "All slots match → anagram!")}</>
+                    : <>❌ {t("불일치", "mismatch")}</>}
+                </p>
+              </div>
+            )}
+            <button onClick={() => setRevealed(false)} disabled={!revealed}
+              className="w-full py-1.5 bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-gray-700 rounded text-xs font-bold">
+              ↺ {t("리셋", "Reset")}
+            </button>
           </div>
         )}
 
+        {/* Slide 2 — Code */}
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900">📝 {t("알파벳 카운팅 — 진짜 자주 나옴!", "Alphabet counting — super common!")}</p>
+              <p className="text-sm font-black text-blue-900">📝 {t("아나그램 검사 — count[26] 패턴", "Anagram check — count[26] pattern")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {codeLang === "py"
-                  ? t("문자열에서 각 알파벳 몇 번 나오는지 세는 패턴. Python 은 ord(c) - ord('a') 가 인덱스가 돼요.", "Pattern: count each letter's occurrences. In Python, ord(c) - ord('a') becomes the index.")
-                  : t("문자열에서 각 알파벳 몇 번 나오는지 세는 패턴. C++ 는 c - 'a' 로 바로 빼면 인덱스가 돼요 (char 끼리 빼기 = int).", "Pattern: count each letter's occurrences. In C++, c - 'a' directly gives the index (char minus char = int).")}
+                {t("길이 다르면 false. 같으면 count 배열 둘 채우고 한 번에 비교.", "Different lengths → false. Otherwise fill both count arrays and compare.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# 'apple' 에서 알파벳 빈도수 세기
-s = "apple"
-count = [0] * 26   # a-z = 26 칸
+              py={`def is_anagram(a, b):
+    if len(a) != len(b):
+        return False
+    cnt = [0] * 26
+    for c in a:
+        cnt[ord(c) - ord('a')] += 1
+    for c in b:
+        cnt[ord(c) - ord('a')] -= 1
+    # 모두 0 이어야 아나그램
+    return all(v == 0 for v in cnt)
 
-for c in s:
-    idx = ord(c) - ord('a')   # 'a'→0, 'b'→1, ...
-    count[idx] += 1
+is_anagram("listen", "silent")   # True
+is_anagram("hello",  "world")    # False`}
+              cpp={`#include <string>
+using namespace std;
 
-# count[0]=1 ('a'), count[15]=2 ('p'), ...
-
-# 문자 ↔ 숫자
-ord('A')   # 65
-chr(65)    # 'A'
-ord('a') - ord('A')   # 32`}
-              cpp={`// 'apple' 에서 알파벳 빈도수 세기
-#include <string>
-string s = "apple";
-int count[26] = {0};
-
-for (char c : s) {
-    int idx = c - 'a';   // 'a'→0, 'b'→1, ...
-    count[idx]++;
+bool isAnagram(const string& a, const string& b) {
+    if (a.size() != b.size()) return false;
+    int cnt[26] = {0};
+    for (char c : a) cnt[c - 'a']++;
+    for (char c : b) cnt[c - 'a']--;
+    // 모두 0 이어야 아나그램
+    for (int i = 0; i < 26; i++) {
+        if (cnt[i] != 0) return false;
+    }
+    return true;
 }
 
-// count[0]=1 ('a'), count[15]=2 ('p'), ...
-
-// 문자 ↔ 숫자 — C++ 는 캐스팅
-int code = (int)'A';     // 65
-char ch  = (char)65;     // 'A'
-'a' - 'A';               // 32`}
+// isAnagram("listen", "silent") == true
+// isAnagram("hello",  "world")  == false`}
             />
             <p className="text-xs text-gray-600 text-center">
-              {t("이 패턴 하나로 BOJ 10809, 1157 같은 알파벳 문제 다 풀려요.", "This one pattern solves BOJ 10809, 1157 and many alphabet problems.")}
+              {t("💡 트릭: 두 배열 만들 필요 없어요. 하나만 + - 로 더하고 빼면 끝!", "💡 Trick: no need for two arrays. Increment for a, decrement for b — done!")}
             </p>
           </div>
         )}
 
+        {/* Slide 3 — Quiz */}
         {step === 3 && (
           <MiniQuiz
-            question={codeLang === "py"
-              ? t("Python: ord('e') - ord('a') 의 값은? ('a' 부터 'e' 까지 몇 칸?)", "Python: ord('e') - ord('a')? (how far is 'e' from 'a'?)")
-              : t("C++: 'e' - 'a' 의 값은? ('a' 부터 'e' 까지 몇 칸?)", "C++: 'e' - 'a'? (how far is 'e' from 'a'?)")
-            }
-            options={["1", "4", "5", "97"]}
+            question={t("anagram 검사 가장 빠른 방법은? (lowercase a-z 만)", "Fastest anagram check? (lowercase a-z only)")}
+            options={[
+              t("정렬 후 비교 O(N log N)", "Sort both then compare O(N log N)"),
+              t("count[26] 배열 둘 비교 O(N)", "Two count[26] arrays compared O(N)"),
+              t("set 둘 비교 (중복 무시)", "Compare two sets (ignores duplicates)"),
+              t("map<char,int> 둘 비교 O(N)", "Compare two map<char,int> O(N)"),
+            ]}
             answerIdx={1}
-            hint={t("a=0, b=1, c=2, d=3, e=4. ord('a')=97, ord('e')=101 → 차이 4.", "a=0, b=1, c=2, d=3, e=4. ord('a')=97, ord('e')=101 → diff 4.")}
+            hint={t("고정 크기 배열 (26 칸) 이 해시 맵보다 빠르고 정렬보다 빠르며, set 은 중복을 무시해서 틀린 답.", "Fixed-size array (26 slots) beats hash maps and sort. Set ignores duplicates so it's wrong.")}
             onCorrect={() => setQuizPassed(true)}
           />
         )}

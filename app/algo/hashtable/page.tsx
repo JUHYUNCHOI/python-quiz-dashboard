@@ -24,9 +24,9 @@ import { HighlightedCode } from "@/components/algo/highlighted-code"
 // ── 챕터 메타 ────────────────────────────────────────────────────
 const CHAPTERS = [
   { id: 1, emoji: "🤔", title: "왜 해시테이블?",     titleEn: "Why Hash Table?",       mins: 4 },
-  { id: 2, emoji: "🗂️", title: "dict / map 사용법",  titleEn: "dict / map Basics",     mins: 6 },
-  { id: 3, emoji: "📊", title: "빈도수 카운팅",       titleEn: "Frequency Counting",    mins: 6 },
-  { id: 4, emoji: "🎯", title: "set — 중복/존재 확인", titleEn: "set — Dedup / Lookup", mins: 5 },
+  { id: 2, emoji: "🎯", title: "Two Sum — 짝 찾기",   titleEn: "Two Sum — Pair Match",  mins: 6 },
+  { id: 3, emoji: "🧮", title: "부분 합 = K (Prefix + Hash)", titleEn: "Subarray Sum = K (Prefix + Hash)", mins: 8 },
+  { id: 4, emoji: "🪟", title: "슬라이딩 윈도우 + Set", titleEn: "Sliding Window + Set", mins: 7 },
   { id: 5, emoji: "🏆", title: "정리 + 실전",         titleEn: "Recap & Practice",      mins: 4 },
 ]
 
@@ -263,185 +263,199 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
   )
 }
 
-// ── Chapter 2: dict / map 사용법 ─────────────────────────────────
+// ── Chapter 2: Two Sum — 짝 찾기 (Complement Hash) ───────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [lockerInput, setLockerInput] = useState("")
-  const [lockers, setLockers] = useState<Record<string, string>>({ "Alice": "수학책", "Bob": "도시락" })
-  const [lookupKey, setLookupKey] = useState("Alice")
   const [quizPassed, setQuizPassed] = useState(false)
 
-  const addLocker = () => {
-    const name = lockerInput.trim()
-    if (!name) return
-    setLockers({ ...lockers, [name]: "📦" })
-    setLockerInput("")
-  }
+  // Two Sum 시각화 — arr=[2,7,11,15], target=9
+  const TWO_SUM_ARR = [2, 7, 11, 15]
+  const TWO_SUM_TARGET = 9
+  type TwoSumStep = { i: number; need: number; foundAt: number | null; mapSnapshot: { val: number; idx: number }[] }
+  const twoSumSteps: TwoSumStep[] = useMemo(() => {
+    const out: TwoSumStep[] = []
+    const seen = new Map<number, number>()
+    for (let i = 0; i < TWO_SUM_ARR.length; i++) {
+      const x = TWO_SUM_ARR[i]
+      const need = TWO_SUM_TARGET - x
+      const foundAt = seen.has(need) ? seen.get(need)! : null
+      out.push({
+        i, need, foundAt,
+        mapSnapshot: Array.from(seen.entries()).map(([val, idx]) => ({ val, idx })),
+      })
+      if (foundAt !== null) break
+      seen.set(x, i)
+    }
+    return out
+  }, [])
+  const [vizStep, setVizStep] = useState(0)
+  const curStep = twoSumSteps[Math.min(vizStep, twoSumSteps.length - 1)]
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
-          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🗂️</p>
+          <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-2xl p-6 border-2 border-rose-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🎯</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("dict / map — 사물함 같아요", "dict / map — it's like lockers")}
+              {t("Two Sum — \"짝꿍\" 찾기", "Two Sum — find the \"partner\"")}
             </h3>
-            <p className="text-sm text-gray-700 leading-relaxed mb-3">
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "사물함마다 이름표 (key) 가 붙어 있고, 안에 물건 (value) 이 들어 있어요.",
-                "Each locker has a name tag (key), and stuff (value) inside.",
+                "문제: 배열에서 a + b = target 인 쌍을 찾기. 들어본 적 있죠? — 해시의 *고전 응용* 이에요.",
+                "Problem: find a pair where a + b = target. Heard of it? — the *classic* hash application.",
               )}
             </p>
-            <p className="text-sm text-gray-700 leading-relaxed mb-3">
-              {t("핵심 동작 3 가지:", "3 core operations:")}
-            </p>
-            <div className="bg-white rounded-lg p-3 font-mono text-xs space-y-1 text-emerald-700 border border-emerald-200">
-              {codeLang === "py" ? (
-                <>
-                  <p>📥 {t("넣기", "Put")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">d[&quot;Alice&quot;] = 90</code></p>
-                  <p>📤 {t("꺼내기", "Get")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">d[&quot;Alice&quot;]</code> → 90</p>
-                  <p>🔎 {t("있는지 확인", "Check")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">&quot;Alice&quot; in d</code> → True</p>
-                </>
-              ) : (
-                <>
-                  <p>📥 {t("넣기", "Put")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">m[&quot;Alice&quot;] = 90;</code></p>
-                  <p>📤 {t("꺼내기", "Get")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">m[&quot;Alice&quot;]</code> → 90</p>
-                  <p>🔎 {t("있는지 확인", "Check")}: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">m.count(&quot;Alice&quot;)</code> → 1</p>
-                </>
-              )}
+            <div className="bg-white rounded-lg p-3 border-2 border-rose-200 mb-3">
+              <p className="text-xs font-bold text-rose-700 mb-1">🐢 {t("순진한 방법 — 이중 for", "Naive — double for")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t("모든 쌍 (i, j) 다 비교 → O(N²). N=10만 이면 100억 번 → 시간 초과 💥", "Compare every pair (i, j) → O(N²). N=100k means 10 billion ops → TLE 💥")}
+              </p>
             </div>
-            <p className="text-xs text-emerald-700 mt-3 text-center">
-              {t("다음 슬라이드에서 직접 사물함을 만들어 봐요 →", "Next slide: build a locker yourself →")}
+            <div className="bg-white rounded-lg p-3 border-2 border-emerald-300 mb-3">
+              <p className="text-xs font-bold text-emerald-700 mb-1">⚡ {t("해시 한 번 순회 — O(N)", "Hash one-pass — O(N)")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t("각 x 를 보면서 \"target − x 가 이미 봤었나?\" 만 확인. 봤으면 짝! 못 봤으면 x 를 저장.", "For each x, check \"have I seen target − x already?\" If yes → pair! If no → store x.")}
+              </p>
+            </div>
+            <p className="text-sm font-bold text-rose-700 text-center">
+              {t("핵심 아이디어: complement = target − x. 다음 슬라이드에서 직접 봐요 →", "Key idea: complement = target − x. Next slide shows it →")}
             </p>
           </div>
         )}
 
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("사물함 직접 추가/조회", "Add/look up lockers")}</p>
-            <p className="text-xs text-gray-600 text-center mb-4">
-              {t("이름을 넣어 사물함을 추가하고, 이름표로 바로 찾아봐요.", "Add a locker by name, then look it up by name tag.")}
+            <p className="text-base font-black text-amber-900 mb-1 text-center">🎮 {t("Two Sum 한 발씩 걸어보기", "Walk Two Sum step-by-step")}</p>
+            <p className="text-xs text-gray-600 text-center mb-3">
+              arr = [2, 7, 11, 15], target = {TWO_SUM_TARGET}
             </p>
 
             <div className="mb-3">
-              <p className="text-[11px] text-gray-500 mb-1">{t("현재 사물함", "Current lockers")}</p>
-              <div className="flex flex-wrap gap-2">
-                {Object.entries(lockers).map(([k, v]) => (
-                  <div key={k} className={cn("rounded-lg border-2 px-2 py-1.5 text-xs",
-                    k === lookupKey ? "bg-emerald-100 border-emerald-500" : "bg-gray-50 border-gray-300")}>
-                    <span className="font-bold text-gray-700">{k}</span>
-                    <span className="text-gray-500 ml-1">→ {v}</span>
+              <p className="text-[11px] text-gray-500 mb-1">{t("배열", "Array")}</p>
+              <div className="flex gap-1.5 justify-center">
+                {TWO_SUM_ARR.map((v, i) => (
+                  <div key={i} className={cn("w-12 h-12 rounded-lg border-2 flex flex-col items-center justify-center font-mono",
+                    i === curStep.i && "bg-rose-100 border-rose-500 shadow-md",
+                    curStep.foundAt === i && "bg-emerald-100 border-emerald-500 shadow-md",
+                    i !== curStep.i && curStep.foundAt !== i && i < curStep.i && "bg-gray-50 border-gray-300 opacity-60",
+                    i !== curStep.i && curStep.foundAt !== i && i > curStep.i && "bg-white border-gray-200")}>
+                    <span className="font-bold text-sm text-gray-800">{v}</span>
+                    <span className="text-[9px] text-gray-400">i={i}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="flex gap-2 mb-3">
-              <input
-                value={lockerInput}
-                onChange={(e) => setLockerInput(e.target.value)}
-                placeholder={t("새 이름 (예: Carol)", "New name (e.g. Carol)")}
-                className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:border-emerald-400 outline-none"
-              />
-              <button onClick={addLocker} className="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm">
-                + {t("추가", "Add")}
+            <div className="bg-rose-50 rounded-lg p-3 border border-rose-200 mb-3 text-xs">
+              <p className="text-gray-700">
+                <b>i = {curStep.i}</b>, x = <b>{TWO_SUM_ARR[curStep.i]}</b> →
+                {" "}{t("need", "need")} = {TWO_SUM_TARGET} − {TWO_SUM_ARR[curStep.i]} = <b className="text-rose-700">{curStep.need}</b>
+              </p>
+              {curStep.foundAt !== null ? (
+                <p className="text-emerald-700 font-bold mt-1">
+                  ✅ {curStep.need} {t("이미 봤음! (idx", "already seen! (idx")} {curStep.foundAt}) → {t("정답:", "answer:")} ({curStep.foundAt}, {curStep.i})
+                </p>
+              ) : (
+                <p className="text-gray-600 mt-1">
+                  {t("아직 못 봤음 →", "Not seen yet →")} {TWO_SUM_ARR[curStep.i]} {t("을(를) seen 에 저장 후 다음 i 로", "→ store in seen, move on")}
+                </p>
+              )}
+            </div>
+
+            <div className="bg-blue-50 rounded-lg p-3 border border-blue-200 mb-3">
+              <p className="text-[11px] font-bold text-blue-700 mb-1">{t("seen 맵 상태", "seen map state")}</p>
+              {curStep.mapSnapshot.length === 0 ? (
+                <p className="text-xs text-gray-400 italic">{t("(비어있음)", "(empty)")}</p>
+              ) : (
+                <div className="flex flex-wrap gap-1.5">
+                  {curStep.mapSnapshot.map((e) => (
+                    <div key={e.val} className={cn("rounded px-2 py-1 text-xs font-mono border",
+                      e.val === curStep.need ? "bg-emerald-100 border-emerald-500 text-emerald-800 font-bold" : "bg-white border-blue-300 text-gray-700")}>
+                      {e.val} → idx {e.idx}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-2">
+              <button onClick={() => setVizStep(Math.max(0, vizStep - 1))} disabled={vizStep === 0}
+                className="flex-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 text-gray-700 rounded-lg font-bold text-xs">
+                ← {t("이전 i", "Prev i")}
+              </button>
+              <button onClick={() => setVizStep(Math.min(twoSumSteps.length - 1, vizStep + 1))} disabled={vizStep >= twoSumSteps.length - 1}
+                className="flex-1 px-3 py-2 bg-rose-500 hover:bg-rose-600 disabled:opacity-30 text-white rounded-lg font-bold text-xs">
+                {t("다음 i", "Next i")} →
               </button>
             </div>
-
-            <div className="mb-2">
-              <p className="text-[11px] text-gray-500 mb-1">{t("이름표로 조회", "Look up by name tag")}</p>
-              <div className="flex flex-wrap gap-1.5">
-                {Object.keys(lockers).map((k) => (
-                  <button key={k} onClick={() => setLookupKey(k)}
-                    className={cn("px-2 py-1 rounded text-xs font-bold border transition-all",
-                      lookupKey === k ? "bg-emerald-500 border-emerald-600 text-white" : "bg-white border-gray-300 text-gray-700 hover:border-emerald-400")}>
-                    {k}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {lookupKey && lockers[lookupKey] !== undefined && (
-              <p className="text-sm text-center mt-3 text-emerald-700 font-bold">
-                ⚡ <code className="bg-emerald-50 px-1.5 py-0.5 rounded text-xs">{codeLang === "py" ? `d["${lookupKey}"]` : `m["${lookupKey}"]`}</code> → {lockers[lookupKey]} {t("— 한 번에!", "— one step!")}
-              </p>
-            )}
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-3">
-            <div className="bg-blue-50 rounded-2xl p-4 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900 mb-2">📝 {t("실제 코드 — 똑같이 생겼어요", "Real code — looks similar")}</p>
+            <div className="bg-rose-50 rounded-2xl p-4 border-2 border-rose-200">
+              <p className="text-sm font-black text-rose-900 mb-2">📝 {t("Two Sum 코드 — 한 번 순회", "Two Sum code — one pass")}</p>
               <p className="text-xs text-gray-700">
-                {t("위에서 언어 토글로 비교해 보세요:", "Toggle language above to compare:")}
+                {t("핵심: seen 에 (값 → 인덱스). x 보면 target − x 가 seen 에 있나만 확인.", "Core: seen has (value → index). For each x, check if target − x is in seen.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# Python — dict
-scores = {}
+              py={`# Two Sum — O(N) one-pass
+def two_sum(arr, target):
+    seen = {}                  # value -> index
+    for i, x in enumerate(arr):
+        need = target - x
+        if need in seen:
+            return (seen[need], i)
+        seen[x] = i
+    return None
 
-# 넣기
-scores["Alice"] = 90
-scores["Bob"]   = 85
-
-# 꺼내기 (없으면 에러!)
-print(scores["Alice"])    # 90
-
-# 있는지 확인 — in 사용
-if "Alice" in scores:
-    print("있어요!")
-
-# 안전하게 꺼내기 — get
-print(scores.get("Carol", 0))  # 없으면 0
-
-# 지우기
-del scores["Bob"]`}
+# arr = [2, 7, 11, 15], target = 9
+# i=0: x=2, need=7, not in seen → store {2:0}
+# i=1: x=7, need=2, found at 0! → return (0, 1)
+print(two_sum([2,7,11,15], 9))  # (0, 1)`}
               cpp={`#include <unordered_map>
-#include <string>
+#include <vector>
 using namespace std;
 
-unordered_map<string, int> scores;
-
-// 넣기
-scores["Alice"] = 90;
-scores["Bob"]   = 85;
-
-// 꺼내기
-cout << scores["Alice"];  // 90
-
-// 있는지 확인 — count() 또는 find()
-if (scores.count("Alice")) {
-    cout << "있어요!";
+// Two Sum — O(N) one-pass
+pair<int,int> two_sum(vector<int>& arr, int target) {
+    unordered_map<int,int> seen;  // value -> index
+    for (int i = 0; i < (int)arr.size(); i++) {
+        int need = target - arr[i];
+        auto it = seen.find(need);
+        if (it != seen.end()) {
+            return {it->second, i};
+        }
+        seen[arr[i]] = i;
+    }
+    return {-1, -1};
 }
 
-// 지우기
-scores.erase("Bob");`}
+// arr = {2,7,11,15}, target = 9
+// i=0: x=2, need=7, miss → store
+// i=1: x=7, need=2, hit! → (0,1)`}
             />
             <p className="text-xs text-gray-600 text-center">
-              {t("Python: in, get / C++: count(), find(). 거의 같은 기능, 이름만 달라요.", "Python: in, get / C++: count(), find(). Same idea, different names.")}
+              {t("주의: x 를 \"먼저 저장하고\" 검색하면 자기 자신과 매칭될 수 있음. 항상 검색 → 저장 순서.", "Watch: if you store x *before* checking, you might match yourself. Always check first, then store.")}
             </p>
           </div>
         )}
 
         {step === 3 && (
           <MiniQuiz
-            question={codeLang === "py"
-              ? t("Python: scores = {\"Alice\": 90} 일 때 \"Bob\" in scores 의 결과는?", "Python: With scores = {\"Alice\": 90}, what is \"Bob\" in scores ?")
-              : t("C++: unordered_map<string,int> m; m[\"Alice\"]=90; 일 때 m.count(\"Bob\") 은?", "C++: m[\"Alice\"]=90; what is m.count(\"Bob\") ?")
-            }
-            options={codeLang === "py"
-              ? ["True", "False", "에러 발생 (Error)", "None"]
-              : ["1", "0", "에러 (compile error)", "-1"]
-            }
+            question={t("two sum hash 패턴의 핵심 아이디어는?", "What's the core idea of the Two Sum hash pattern?")}
+            options={[
+              t("정렬 후 두 포인터", "Sort then two pointers"),
+              t("각 원소의 complement = target − x 를 hash 로 확인", "Check each element's complement = target − x via hash"),
+              t("모든 쌍 다 비교", "Compare every pair"),
+              t("DP 사용", "Use DP"),
+            ]}
             answerIdx={1}
-            hint={codeLang === "py"
-              ? t("Bob 은 dict 안에 없어요. in 은 있으면 True, 없으면 False.", "Bob isn't in the dict. in returns True if present, False if not.")
-              : t("count() 는 키가 있으면 1, 없으면 0 을 돌려줘요. Bob 은 없으니까 0.", "count() returns 1 if key exists, 0 otherwise. Bob doesn't exist, so 0.")
-            }
+            hint={t("x 더하기 뭐 = target ? 그 \"뭐\" 가 이미 봤었나 한 번에 확인.", "x plus what = target ? Check if that \"what\" was already seen in O(1).")}
             onCorrect={() => setQuizPassed(true)}
           />
         )}
@@ -462,152 +476,200 @@ scores.erase("Bob");`}
   )
 }
 
-// ── Chapter 3: 빈도수 카운팅 ─────────────────────────────────────
+// ── Chapter 3: 부분 합 = K (Prefix Sum + Hash) ───────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
-  const [text, setText] = useState("banana")
-  const counts = useMemo(() => {
-    const c: Record<string, number> = {}
-    for (const ch of text) {
-      c[ch] = (c[ch] ?? 0) + 1
+
+  // arr=[1,2,1,2,1], K=3. prefix=[0,1,3,4,6,7]
+  const SUB_ARR = [1, 2, 1, 2, 1]
+  const SUB_K = 3
+  const prefix = useMemo(() => {
+    const p = [0]
+    for (const v of SUB_ARR) p.push(p[p.length - 1] + v)
+    return p
+  }, [])
+  // steps: at each i (1..N), prefix[i] computed, check prefix[i]-K in cnt, then add prefix[i] to cnt.
+  type SubStep = { i: number; prefVal: number; need: number; added: number; cntSnapshot: { val: number; n: number }[]; totalSoFar: number }
+  const subSteps: SubStep[] = useMemo(() => {
+    const out: SubStep[] = []
+    const cnt = new Map<number, number>()
+    cnt.set(0, 1)
+    let total = 0
+    for (let i = 1; i <= SUB_ARR.length; i++) {
+      const prefVal = prefix[i]
+      const need = prefVal - SUB_K
+      const added = cnt.get(need) ?? 0
+      total += added
+      // snapshot BEFORE we add current prefVal — that's what's checked against
+      const snapshot = Array.from(cnt.entries()).map(([val, n]) => ({ val, n }))
+      out.push({ i, prefVal, need, added, cntSnapshot: snapshot, totalSoFar: total })
+      cnt.set(prefVal, (cnt.get(prefVal) ?? 0) + 1)
     }
-    return c
-  }, [text])
-  const sortedCounts = useMemo(() => Object.entries(counts).sort((a, b) => b[1] - a[1]), [counts])
+    return out
+  }, [prefix])
+  const [vizStep, setVizStep] = useState(0)
+  const curStep = subSteps[Math.min(vizStep, subSteps.length - 1)]
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
           <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border-2 border-purple-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">📊</p>
+            <p className="text-5xl text-center mb-3">🧮</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("빈도수 세기 — 해시테이블 1 등 사용법", "Frequency counting — the #1 use")}
+              {t("부분 합 = K — Prefix + Hash 조합기술", "Subarray Sum = K — Prefix + Hash combo")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "'각 항목이 몇 번 나왔나' 를 세는 게 해시테이블의 가장 흔한 용도예요. 도서관 카드 목록 떠올려 봐요 — 책 제목마다 빌린 횟수가 적혀있죠.",
-                "Counting 'how many times each item appears' is the most common use. Think library cards — each book has a checkout count.",
+                "문제: 연속된 부분 배열 중 합이 K 인 것의 *개수*. 예) [1,2,1,2,1], K=3 → 4 개.",
+                "Problem: count contiguous subarrays whose sum equals K. e.g. [1,2,1,2,1], K=3 → 4.",
               )}
             </p>
-            <p className="text-sm text-gray-700 leading-relaxed mb-3">
-              {t("기본 패턴 — 진짜 짧아요:", "Basic pattern — really short:")}
-            </p>
-            <div className="bg-white rounded-lg p-3 font-mono text-xs space-y-1 text-purple-700 border border-purple-200">
-              {codeLang === "py" ? (
-                <>
-                  <p>{t("# 각 글자 몇 번 나왔나?", "# How many times each char?")}</p>
-                  <p>for ch in &quot;banana&quot;:</p>
-                  <p>&nbsp;&nbsp;&nbsp;&nbsp;c[ch] = c.get(ch, 0) + 1</p>
-                </>
-              ) : (
-                <>
-                  <p>{t("// 각 글자 몇 번 나왔나?", "// How many times each char?")}</p>
-                  <p>for (char ch : s) {`{`}</p>
-                  <p>&nbsp;&nbsp;&nbsp;&nbsp;c[ch]++;{t("  // 없으면 0 에서 ++", "  // 0 if missing, then ++")}</p>
-                  <p>{`}`}</p>
-                </>
-              )}
+            <div className="bg-white rounded-lg p-3 border-2 border-rose-200 mb-3">
+              <p className="text-xs font-bold text-rose-700 mb-1">🐢 {t("순진한 방법 — 이중 for", "Naive — double for")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t("모든 (l, r) 시도 → O(N²). N=10만 이면 또 100억 💥", "Try every (l, r) → O(N²). N=100k → 10 billion ops 💥")}
+              </p>
             </div>
-            <p className="text-xs text-purple-700 mt-3 text-center">
-              {t("다음 슬라이드 — 글자 직접 세보기 →", "Next slide — count letters yourself →")}
+            <div className="bg-white rounded-lg p-3 border-2 border-emerald-300 mb-3">
+              <p className="text-xs font-bold text-emerald-700 mb-1">⚡ {t("Prefix sum + Hash — O(N)", "Prefix sum + Hash — O(N)")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "prefix[r] − prefix[l−1] = K 면 부분합이 K. → 각 r 에서 \"prefix[r] − K 인 prefix 가 이전에 몇 개 있었나?\" 만 묻는다.",
+                  "If prefix[r] − prefix[l−1] = K, subarray sums to K. → at each r, ask \"how many earlier prefixes equal prefix[r] − K?\"",
+                )}
+              </p>
+            </div>
+            <p className="text-sm font-bold text-purple-700 text-center">
+              {t("Two Sum 패턴이랑 비슷하죠? complement 가 \"prefix − K\" 로 바뀐 거예요.", "Like Two Sum — complement is just \"prefix − K\" now.")}
             </p>
           </div>
         )}
 
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("글자 빈도수 — 실시간", "Letter frequency — live")}</p>
-            <p className="text-xs text-gray-600 text-center mb-4">
-              {t("아래 단어를 바꿔보세요. 글자별 등장 횟수가 자동으로 계산돼요.", "Change the word — frequency updates automatically.")}
+            <p className="text-base font-black text-amber-900 mb-1 text-center">🎮 {t("Prefix 한 발씩 — 합이 K 인 부분 세기", "Walk prefix step-by-step — count subarrays = K")}</p>
+            <p className="text-xs text-gray-600 text-center mb-3">
+              arr = [1, 2, 1, 2, 1], K = {SUB_K}
             </p>
-            <input
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder={t("예: banana", "e.g. banana")}
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-mono mb-3 focus:border-amber-400 outline-none"
-            />
-            <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
-              <p className="text-[11px] font-bold text-purple-700 mb-2 uppercase">{t("빈도수 (많은 순)", "Counts (descending)")}</p>
-              {sortedCounts.length === 0 ? (
-                <p className="text-xs text-gray-400 italic">{t("뭐든 입력해 보세요...", "Type something...")}</p>
-              ) : (
-                <div className="flex flex-wrap gap-1.5">
-                  {sortedCounts.map(([ch, n]) => (
-                    <div key={ch} className="bg-white rounded-lg border-2 border-purple-300 px-2 py-1 text-xs">
-                      <span className="font-mono font-bold text-purple-700">&apos;{ch === " " ? "·" : ch}&apos;</span>
-                      <span className="text-gray-500 ml-1">×{n}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+
+            <div className="mb-3">
+              <p className="text-[11px] text-gray-500 mb-1">{t("배열 + prefix", "Array + prefix")}</p>
+              <div className="flex gap-1 justify-center">
+                {prefix.map((p, i) => (
+                  <div key={i} className={cn("w-11 h-14 rounded-lg border-2 flex flex-col items-center justify-center",
+                    i === curStep.i && "bg-purple-100 border-purple-500 shadow-md",
+                    i < curStep.i && "bg-gray-50 border-gray-300 opacity-70",
+                    i > curStep.i && "bg-white border-gray-200 opacity-50")}>
+                    <span className="text-[9px] text-gray-400">p[{i}]</span>
+                    <span className="font-mono font-bold text-sm text-gray-800">{p}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <p className="text-xs text-amber-700 text-center mt-3 italic">
-              {t("✨ 단 한 번의 순회로 — O(N) 에 빈도수 끝!", "✨ One pass — O(N) frequency done!")}
-            </p>
+
+            <div className="bg-purple-50 rounded-lg p-3 border border-purple-200 mb-3 text-xs">
+              <p className="text-gray-700">
+                <b>i = {curStep.i}</b>, prefix = <b>{curStep.prefVal}</b> →
+                {" "}{t("need", "need")} = {curStep.prefVal} − {SUB_K} = <b className="text-purple-700">{curStep.need}</b>
+              </p>
+              <p className="text-gray-700 mt-1">
+                {t("cnt 에 ", "cnt has ")}<b className="text-emerald-700">{curStep.need}</b>{t(" 가 ", " ×")}<b className="text-emerald-700">{curStep.added}</b>{t(" 개 있음 → 부분합 K 짜리 ", " → ")}<b>+{curStep.added}</b>{" "}{t("개 추가", "added")}
+              </p>
+              <p className="text-purple-700 font-bold mt-1">
+                {t("지금까지 누적 답:", "Total so far:")} {curStep.totalSoFar}
+              </p>
+            </div>
+
+            <div className="bg-blue-50 rounded-lg p-3 border border-blue-200 mb-3">
+              <p className="text-[11px] font-bold text-blue-700 mb-1">{t("cnt (prefix → 등장 횟수) — 이 단계 시작 시점", "cnt (prefix → count) — at start of this step")}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {curStep.cntSnapshot.map((e) => (
+                  <div key={e.val} className={cn("rounded px-2 py-1 text-xs font-mono border",
+                    e.val === curStep.need && curStep.added > 0
+                      ? "bg-emerald-100 border-emerald-500 text-emerald-800 font-bold"
+                      : "bg-white border-blue-300 text-gray-700")}>
+                    {e.val} ×{e.n}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <button onClick={() => setVizStep(Math.max(0, vizStep - 1))} disabled={vizStep === 0}
+                className="flex-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 text-gray-700 rounded-lg font-bold text-xs">
+                ← {t("이전 i", "Prev i")}
+              </button>
+              <button onClick={() => setVizStep(Math.min(subSteps.length - 1, vizStep + 1))} disabled={vizStep >= subSteps.length - 1}
+                className="flex-1 px-3 py-2 bg-purple-500 hover:bg-purple-600 disabled:opacity-30 text-white rounded-lg font-bold text-xs">
+                {t("다음 i", "Next i")} →
+              </button>
+            </div>
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-3">
-            <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
-              <p className="text-sm font-black text-amber-900 mb-2">
-                🎯 {t("코드로 — 패턴 외워두기", "In code — memorize this pattern")}
-              </p>
-              <p className="text-sm text-gray-800 leading-relaxed">
-                {t(
-                  "Python 은 Counter 라는 편한 클래스도 있어요. C++ 은 map 에 그냥 ++ 하면 끝.",
-                  "Python has a handy Counter class. C++ just ++ on the map.",
-                )}
+            <div className="bg-purple-50 rounded-2xl border-2 border-purple-200 p-4">
+              <p className="text-sm font-black text-purple-900 mb-2">📝 {t("Subarray Sum = K — running prefix + hash", "Subarray Sum = K — running prefix + hash")}</p>
+              <p className="text-xs text-gray-700">
+                {t("prefix 배열을 따로 만들 필요 없음 — running sum 으로 충분.", "No need to build prefix array — running sum is enough.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# 방법 1 — dict 직접
-counts = {}
-for ch in "banana":
-    counts[ch] = counts.get(ch, 0) + 1
-# {'b': 1, 'a': 3, 'n': 2}
+              py={`# 부분 배열 합 = K 개수 — O(N)
+def subarray_sum(arr, K):
+    cnt = {0: 1}        # ← 핵심! prefix=0 (배열 시작 전) 1 회
+    prefix = 0
+    answer = 0
+    for x in arr:
+        prefix += x
+        # prefix - K 인 prefix 가 이전에 몇 번?
+        answer += cnt.get(prefix - K, 0)
+        cnt[prefix] = cnt.get(prefix, 0) + 1
+    return answer
 
-# 방법 2 — Counter (더 짧음)
-from collections import Counter
-counts = Counter("banana")
-# Counter({'a': 3, 'n': 2, 'b': 1})
-
-# 가장 많이 나온 거 1 개
-top = counts.most_common(1)
-# [('a', 3)]`}
+# [1,2,1,2,1], K=3 → 4
+print(subarray_sum([1,2,1,2,1], 3))`}
               cpp={`#include <unordered_map>
-#include <string>
+#include <vector>
 using namespace std;
 
-string s = "banana";
-unordered_map<char, int> counts;
-
-// 핵심 패턴 — 한 줄!
-for (char ch : s) {
-    counts[ch]++;
-    // 없으면 0 으로 시작 → ++ → 1
+// 부분 배열 합 = K 개수 — O(N)
+long long subarray_sum(vector<int>& arr, int K) {
+    unordered_map<long long, int> cnt;
+    cnt[0] = 1;            // ← 핵심! 시작 전 prefix=0
+    long long prefix = 0, answer = 0;
+    for (int x : arr) {
+        prefix += x;
+        auto it = cnt.find(prefix - K);
+        if (it != cnt.end()) answer += it->second;
+        cnt[prefix]++;
+    }
+    return answer;
 }
-// counts: {'b':1, 'a':3, 'n':2}
-
-// 'a' 가 몇 번?
-cout << counts['a'];  // 3`}
+// arr={1,2,1,2,1}, K=3 → 4`}
             />
             <p className="text-xs text-gray-600 text-center">
-              {t("핵심: counts[키]++ 또는 counts.get(키, 0) + 1. 이거 하나만 외우면 끝.", "Key: counts[key]++ or counts.get(key, 0) + 1. Memorize this one.")}
+              {t("cnt[0] = 1 빠뜨리면 \"배열 처음부터 시작\" 인 부분합을 놓침. 외워두기!", "Forgetting cnt[0] = 1 misses subarrays starting at index 0. Memorize!")}
             </p>
           </div>
         )}
 
         {step === 3 && (
           <MiniQuiz
-            question={t("문자열 \"mississippi\" 에서 's' 는 몇 번 나올까요?", "In \"mississippi\", how many times does 's' appear?")}
-            options={["2", "3", "4", "5"]}
-            answerIdx={2}
-            hint={t("m-i-s-s-i-s-s-i-p-p-i → 's' 위치를 세어 봐요.", "m-i-s-s-i-s-s-i-p-p-i → count the s's.")}
+            question={t("부분 배열 합 = K 알고리즘에서 cnt[0] = 1 로 초기화하는 이유는?", "Why initialize cnt[0] = 1 in the subarray-sum-equals-K algorithm?")}
+            options={[
+              t("원소 1 개짜리 배열 처리", "To handle single-element arrays"),
+              t("배열 처음부터 시작하는 부분 배열의 prefix sum 0 도 카운트", "To count subarrays starting from index 0 (whose prior prefix is 0)"),
+              t("오버플로우 방지", "To prevent overflow"),
+              t("디버그용", "For debugging"),
+            ]}
+            answerIdx={1}
+            hint={t("prefix[0] = 0 인 경우 — 배열 시작 전부터 ~ i 까지 합이 K 면, prefix[i] − 0 = K. 즉 prefix[i] = K. 이걸 잡으려면 0 이 cnt 에 1 개 있어야 해요.", "When prefix[0] = 0 — if sum from start to i equals K, then prefix[i] − 0 = K. To catch that, 0 must already be in cnt with count 1.")}
             onCorrect={() => setQuizPassed(true)}
           />
         )}
@@ -628,160 +690,212 @@ cout << counts['a'];  // 3`}
   )
 }
 
-// ── Chapter 4: set — 중복/존재 확인 ──────────────────────────────
+// ── Chapter 4: 슬라이딩 윈도우 + Set (중복 없는 부분 문자열) ─────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
-  const [input, setInput] = useState("3 1 4 1 5 9 2 6 5 3")
-  const nums = useMemo(() => input.split(/\s+/).filter(Boolean).map(Number).filter(n => !Number.isNaN(n)), [input])
-  const unique = useMemo(() => Array.from(new Set(nums)), [nums])
+
+  // 시각화: "abcabcbb" 에서 중복 없는 가장 긴 부분 문자열
+  const WIN_STR = "abcabcbb"
+  type WinStep = { left: number; right: number; setSnapshot: string[]; best: number; action: string }
+  const winSteps: WinStep[] = useMemo(() => {
+    const out: WinStep[] = []
+    const seen = new Set<string>()
+    let left = 0
+    let best = 0
+    let right = 0
+    while (right < WIN_STR.length) {
+      const ch = WIN_STR[right]
+      if (!seen.has(ch)) {
+        seen.add(ch)
+        if (right - left + 1 > best) best = right - left + 1
+        out.push({
+          left, right, setSnapshot: Array.from(seen), best,
+          action: `'${ch}' 추가 → window [${left}..${right}], len ${right - left + 1}`,
+        })
+        right++
+      } else {
+        // shrink one step from left
+        const leftCh = WIN_STR[left]
+        seen.delete(leftCh)
+        out.push({
+          left, right, setSnapshot: Array.from(seen), best,
+          action: `'${ch}' 이미 있음 → left='${leftCh}' 제거, left++`,
+        })
+        left++
+      }
+    }
+    return out
+  }, [])
+  const [vizStep, setVizStep] = useState(0)
+  const curStep = winSteps[Math.min(vizStep, winSteps.length - 1)]
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🎯</p>
+          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🪟</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("set — 값만 있고 '한 개씩만'", "set — values only, no duplicates")}
+              {t("슬라이딩 윈도우 + Set", "Sliding Window + Set")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
-              {codeLang === "py"
-                ? t(
-                    "dict 가 '이름 → 값' 이라면, set 은 '값만' 모아두는 가방이에요. 그리고 같은 값은 자동으로 1 개만!",
-                    "If dict is 'name → value', set is just 'values' in a bag. And duplicates auto-merge to 1!",
-                  )
-                : t(
-                    "unordered_map 이 '키 → 값' 이라면, unordered_set 은 '값만' 모아두는 가방이에요. 같은 값은 자동으로 1 개만!",
-                    "If unordered_map is 'key → value', unordered_set is just 'values' in a bag. Duplicates auto-merge to 1!",
-                  )}
-            </p>
-            <p className="text-sm text-gray-700 leading-relaxed mb-3">
-              {t("주로 쓰는 곳:", "Main uses:")}
-            </p>
-            <ul className="space-y-1.5 text-sm text-gray-700 mb-3 pl-2">
-              <li>👯 {t("중복 제거 — set 에 넣었다 빼면 끝", "Dedup — toss into set, done")}</li>
-              <li>🔎 {t("'본 적 있나?' 확인 — O(1)", "'Seen before?' check — O(1)")}</li>
-              <li>📋 {t("두 그룹 비교 — 교집합/합집합", "Compare groups — intersection/union")}</li>
-            </ul>
-            <p className="text-sm text-blue-700 font-bold leading-relaxed">
               {t(
-                "Python: set / C++: unordered_set. 다음 슬라이드에서 직접 중복 제거 해보세요!",
-                "Python: set / C++: unordered_set. Try dedup on the next slide!",
+                "문제: 중복 없는 가장 긴 부분 문자열 길이. 예) \"abcabcbb\" → \"abc\" 길이 3.",
+                "Problem: longest substring with no repeating chars. e.g. \"abcabcbb\" → \"abc\" length 3.",
               )}
+            </p>
+            <div className="bg-white rounded-lg p-3 border-2 border-rose-200 mb-3">
+              <p className="text-xs font-bold text-rose-700 mb-1">🐢 {t("순진한 방법 — 모든 부분 문자열", "Naive — every substring")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t("시작, 끝 (l, r) 다 시도 + 중복 체크 → O(N²) 이상.", "Try every (l, r) plus dup check → O(N²)+.")}
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-3 border-2 border-emerald-300 mb-3">
+              <p className="text-xs font-bold text-emerald-700 mb-1">⚡ {t("Two pointer + Set — O(N)", "Two pointer + Set — O(N)")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "left, right 두 포인터로 \"창문\" 을 만듬. right 한 칸 넓혀가다 중복 만나면 left 를 dup 다음 칸까지 한 칸씩 좁힘. set 으로 창문 안 원소 추적.",
+                  "Two pointers (left, right) form a window. Expand right; when you hit a dup, shrink left one step at a time until past it. Track window contents with a set.",
+                )}
+              </p>
+            </div>
+            <p className="text-sm font-bold text-blue-700 text-center">
+              {t("핵심: 각 원소는 추가 한 번, 제거 한 번 → 전체 O(N). 다음 슬라이드에서 보세요 →", "Each char added once, removed once → O(N) total. Next slide →")}
             </p>
           </div>
         )}
 
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("중복 제거 직접 해보기", "Dedup it yourself")}</p>
-            <p className="text-xs text-gray-600 text-center mb-4">
-              {t("숫자를 공백으로 구분해서 입력. set 을 통과시키면 중복이 자동으로 제거돼요.", "Enter space-separated numbers. set removes duplicates automatically.")}
-            </p>
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="3 1 4 1 5 9 2 6 5 3"
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-mono mb-3 focus:border-amber-400 outline-none"
-            />
-            <div className="mb-3">
-              <p className="text-[11px] text-gray-500 mb-1">{t("원본", "Original")} ({nums.length} {t("개", "items")})</p>
-              <div className="flex gap-1 flex-wrap">
-                {nums.map((v, i) => (
-                  <div key={i} className="w-8 h-8 rounded-lg bg-gray-100 border-2 border-gray-300 flex items-center justify-center font-mono font-bold text-gray-700 text-xs">{v}</div>
-                ))}
+            <p className="text-base font-black text-amber-900 mb-1 text-center">🎮 {t("\"abcabcbb\" 윈도우 슬라이딩", "Slide window on \"abcabcbb\"")}</p>
+
+            <div className="mb-3 mt-3">
+              <p className="text-[11px] text-gray-500 mb-1">{t("문자열", "String")}</p>
+              <div className="flex gap-1 justify-center">
+                {WIN_STR.split("").map((ch, i) => {
+                  const inWindow = i >= curStep.left && i <= curStep.right
+                  const isLeft = i === curStep.left
+                  const isRight = i === curStep.right
+                  return (
+                    <div key={i} className={cn("w-9 h-12 rounded-lg border-2 flex flex-col items-center justify-center",
+                      inWindow && "bg-blue-100 border-blue-500",
+                      !inWindow && "bg-gray-50 border-gray-200 opacity-50",
+                      isLeft && "ring-2 ring-rose-400",
+                      isRight && "ring-2 ring-emerald-400")}>
+                      <span className="text-[9px] text-gray-400">{isLeft ? "L" : isRight ? "R" : ""}{isLeft && isRight ? "" : ""}</span>
+                      <span className="font-mono font-bold text-sm text-gray-800">{ch}</span>
+                      <span className="text-[9px] text-gray-400">{i}</span>
+                    </div>
+                  )
+                })}
               </div>
             </div>
-            <p className="text-center text-2xl text-purple-500">↓ set() ↓</p>
-            <div className="mt-3">
-              <p className="text-[11px] text-emerald-600 mb-1 font-bold">✨ {t("중복 제거 후", "After dedup")} ({unique.length} {t("개", "items")})</p>
-              <div className="flex gap-1 flex-wrap">
-                {unique.map((v, i) => (
-                  <div key={i} className="w-8 h-8 rounded-lg bg-emerald-100 border-2 border-emerald-400 flex items-center justify-center font-mono font-bold text-emerald-700 text-xs">{v}</div>
-                ))}
-              </div>
+
+            <div className="bg-blue-50 rounded-lg p-3 border border-blue-200 mb-3 text-xs">
+              <p className="text-gray-700">
+                <b>left = {curStep.left}, right = {curStep.right}</b>
+              </p>
+              <p className="text-gray-600 mt-1">{t("동작:", "Action:")} {curStep.action}</p>
+              <p className="text-emerald-700 font-bold mt-1">
+                {t("현재 best 길이:", "Best length so far:")} {curStep.best}
+              </p>
             </div>
-            <p className="text-xs text-emerald-700 text-center mt-3 font-bold">
-              {t("✨ set 에 넣는 것만으로 중복 끝! 그것도 O(N) 으로.", "✨ Just put in a set — dedup done! In O(N).")}
-            </p>
+
+            <div className="bg-purple-50 rounded-lg p-3 border border-purple-200 mb-3">
+              <p className="text-[11px] font-bold text-purple-700 mb-1">{t("set (window 안 원소)", "set (chars in window)")}</p>
+              {curStep.setSnapshot.length === 0 ? (
+                <p className="text-xs text-gray-400 italic">{t("(비어있음)", "(empty)")}</p>
+              ) : (
+                <div className="flex flex-wrap gap-1.5">
+                  {curStep.setSnapshot.map((c) => (
+                    <div key={c} className="rounded px-2 py-1 text-xs font-mono bg-white border-2 border-purple-300 text-purple-800 font-bold">
+                      &apos;{c}&apos;
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-2">
+              <button onClick={() => setVizStep(Math.max(0, vizStep - 1))} disabled={vizStep === 0}
+                className="flex-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 text-gray-700 rounded-lg font-bold text-xs">
+                ← {t("이전", "Prev")}
+              </button>
+              <button onClick={() => setVizStep(Math.min(winSteps.length - 1, vizStep + 1))} disabled={vizStep >= winSteps.length - 1}
+                className="flex-1 px-3 py-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-30 text-white rounded-lg font-bold text-xs">
+                {t("다음", "Next")} →
+              </button>
+            </div>
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900">📝 {t("set 코드 — 두 가지 용도", "set in code — two main uses")}</p>
+              <p className="text-sm font-black text-blue-900">📝 {t("Two pointer + set — 패턴 외워두기", "Two pointer + set — memorize")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("(1) 중복 제거 (2) 빠른 '있나?' 확인. 둘 다 진짜 짧아요.", "(1) Dedup (2) fast 'is it there?'. Both very short.")}
+                {t("dup 발견 시: window 다 비우는 게 *아니라* left 를 한 칸씩 옮기며 set 에서 제거.", "On dup: don't clear the window — move left one step at a time, removing from set.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# 1. 중복 제거 — list → set → list
-nums = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3]
-unique = list(set(nums))
-# [1, 2, 3, 4, 5, 6, 9]  (순서는 보장 X)
+              py={`# 중복 없는 가장 긴 부분 문자열 — O(N)
+def longest_unique(s):
+    seen = set()
+    left = 0
+    best = 0
+    for right in range(len(s)):
+        # dup 이면 left 가 dup 다음으로 갈 때까지 줄임
+        while s[right] in seen:
+            seen.remove(s[left])
+            left += 1
+        seen.add(s[right])
+        best = max(best, right - left + 1)
+    return best
 
-# 2. 빠른 존재 확인
-seen = set()
-for x in nums:
-    if x in seen:    # O(1) — 진짜 빠름
-        print(f"{x} 본 적 있어요!")
-    seen.add(x)
-
-# 3. 두 그룹 비교
-a = {1, 2, 3}
-b = {2, 3, 4}
-print(a & b)  # 교집합 {2, 3}
-print(a | b)  # 합집합 {1, 2, 3, 4}`}
+print(longest_unique("abcabcbb"))  # 3
+print(longest_unique("bbbbb"))     # 1
+print(longest_unique("pwwkew"))    # 3 ("wke")`}
               cpp={`#include <unordered_set>
-#include <vector>
+#include <string>
 using namespace std;
 
-// 1. 중복 제거
-vector<int> nums = {3,1,4,1,5,9,2,6,5,3};
-unordered_set<int> s(nums.begin(), nums.end());
-// s 에는 중복 없이 들어감
-
-// 2. 빠른 존재 확인
-unordered_set<int> seen;
-for (int x : nums) {
-    if (seen.count(x)) {     // O(1)
-        cout << x << " 본 적 있어요!\\n";
+// 중복 없는 가장 긴 부분 문자열 — O(N)
+int longest_unique(const string& s) {
+    unordered_set<char> seen;
+    int left = 0, best = 0;
+    for (int right = 0; right < (int)s.size(); right++) {
+        // dup 이면 한 칸씩 left 이동
+        while (seen.count(s[right])) {
+            seen.erase(s[left]);
+            left++;
+        }
+        seen.insert(s[right]);
+        best = max(best, right - left + 1);
     }
-    seen.insert(x);
-}`}
+    return best;
+}
+// "abcabcbb" → 3, "pwwkew" → 3 ("wke")`}
             />
             <p className="text-xs text-gray-600 text-center">
-              {t("핵심: 'in' (Python) 또는 count() (C++) 가 O(1) — 배열은 O(N) 인데 비교 안 되게 빨라요.", "Key: 'in' (Python) / count() (C++) is O(1) — arrays are O(N), so this is massively faster.")}
+              {t("각 문자는 set 에 들어왔다 나갈 뿐 → 총 작업 2N → O(N).", "Each char enters/leaves set once → ~2N ops → O(N).")}
             </p>
           </div>
         )}
 
         {step === 3 && (
           <MiniQuiz
-            question={codeLang === "py"
-              ? t("리스트에 중복이 있는지 가장 빠르게 확인하려면?", "Fastest way to check if a list has duplicates?")
-              : t("vector 에 중복이 있는지 가장 빠르게 확인하려면?", "Fastest way to check if a vector has duplicates?")
-            }
-            options={codeLang === "py" ? [
-              t("이중 for 로 모든 쌍 비교 — O(N²)", "Double for loop — O(N²)"),
-              t("정렬한 뒤 옆 원소 비교 — O(N log N)", "Sort then compare neighbors — O(N log N)"),
-              t("set 에 하나씩 넣으며 'in' 확인 — O(N)", "Add to set one by one, check 'in' — O(N)"),
-              t("리스트 두 번 순회 — O(2N) 도 O(N)", "Two passes over list — O(2N) = O(N)"),
-            ] : [
-              t("이중 for 로 모든 쌍 비교 — O(N²)", "Double for loop — O(N²)"),
-              t("sort() 후 옆 원소 비교 — O(N log N)", "sort() then compare neighbors — O(N log N)"),
-              t("unordered_set 에 넣으며 count() 확인 — O(N)", "Insert into unordered_set, check count() — O(N)"),
-              t("vector 두 번 순회 — O(2N) 도 O(N)", "Two passes over vector — O(2N) = O(N)"),
+            question={t("중복 없는 가장 긴 부분 문자열 알고리즘에서 dup 발견 시 무엇을 하나?", "On finding a dup in the longest-unique-substring algorithm, what do you do?")}
+            options={[
+              t("window 다 초기화", "Clear the entire window"),
+              t("left 포인터 한 칸 증가 + set 에서 left 문자 제거 (dup 사라질 때까지 반복)", "Increment left by 1 + remove s[left] from set (repeat until dup gone)"),
+              t("right 다시 시작", "Restart right from 0"),
+              t("set 비우기", "Empty the set"),
             ]}
-            answerIdx={2}
-            hint={codeLang === "py"
-              ? t("set 의 'in' 은 평균 O(1). N 개 원소를 처리해도 전체 O(N) 이에요.", "set 'in' is avg O(1). N elements → overall O(N).")
-              : t("unordered_set 의 count() 는 평균 O(1). N 개 원소를 처리해도 전체 O(N) 이에요.", "unordered_set count() is avg O(1). N elements → overall O(N).")
-            }
+            answerIdx={1}
+            hint={t("left 를 dup 다음 위치까지 옮길 때까지 한 칸씩. 한꺼번에 점프하면 중간 정보 잃음.", "Move left one step at a time until past the dup. Don't jump — you'd lose intermediate state.")}
             onCorrect={() => setQuizPassed(true)}
           />
         )}
