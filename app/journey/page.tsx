@@ -353,7 +353,13 @@ export default function JourneyPage() {
       return raw ? (JSON.parse(raw) as string[]).length : 0
     } catch { return 0 }
   })()
-  const ALGO_MASTERED = ["sorting","prefixsum","array","stackqueue","hashtable","string"].filter(t => {
+  // 20 알고리즘 토픽 — Wave 1 (Bronze 6) + Wave 2 (Silver 6) + Wave 3 (Gold+ 8)
+  const ALL_ALGO_TOPICS = [
+    "sorting","prefixsum","array","stackqueue","hashtable","string",      // Wave 1
+    "recursion","binarysearch","greedy","graph","unionfind","dp",          // Wave 2
+    "backtracking","tree","priorityqueue","topologicalsort","shortestpath","divideconquer","bitmanipulation","trie",  // Wave 3
+  ]
+  const ALGO_MASTERED = ALL_ALGO_TOPICS.filter(t => {
     try {
       const raw = typeof window !== "undefined" ? localStorage.getItem(`algo-${t}-chapter`) : null
       if (!raw) return false
@@ -366,21 +372,21 @@ export default function JourneyPage() {
     ? [
         { emoji: "🐍", label: "Python 수업+연습", done: PY_DONE, total: 52 },
         { emoji: "💪", label: "코딩 뱅크 (도전)", done: BANK_SOLVED, total: 5 },
-        { emoji: "🧩", label: "알고리즘 (Py)", done: ALGO_MASTERED, total: 6 },
+        { emoji: "🧩", label: "알고리즘 (Py)", done: ALGO_MASTERED, total: 20 },
         { emoji: "🏆", label: "대회", done: 0, total: 1 },
       ]
     : trackId === "C"
     ? [
         { emoji: "⚡", label: "C++ 수업+연습", done: CPP_DONE, total: CPP_LIST.length },
         { emoji: "💪", label: "코딩 뱅크 (도전)", done: BANK_SOLVED, total: 5 },
-        { emoji: "🧩", label: "알고리즘", done: ALGO_MASTERED, total: 6 },
+        { emoji: "🧩", label: "알고리즘", done: ALGO_MASTERED, total: 20 },
         { emoji: "🏆", label: "대회", done: 0, total: 1 },
       ]
     : [
         { emoji: "🐍", label: "Python 수업+연습", done: PY_DONE, total: 52 },
         { emoji: "⚡", label: "C++ 수업+연습", done: CPP_DONE, total: CPP_LIST.length },
         { emoji: "💪", label: "코딩 뱅크 (도전)", done: BANK_SOLVED, total: 5 },
-        { emoji: "🧩", label: "알고리즘", done: ALGO_MASTERED, total: 6 },
+        { emoji: "🧩", label: "알고리즘", done: ALGO_MASTERED, total: 20 },
         { emoji: "🏆", label: "대회", done: 0, total: 1 },
       ]
 
