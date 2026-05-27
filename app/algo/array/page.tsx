@@ -896,6 +896,12 @@ function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("이 6 개만 머리에 박혀 있으면 Bronze 배열 문제 거의 다 풀어요!", "These 6 cover most Bronze array problems!")}
             </p>
+            <div className="mt-3 pt-3 border-t border-amber-200">
+              <p className="text-[11px] text-blue-700 leading-relaxed">
+                💡 {t("아직 부족해요? 코딩 뱅크에서 종합 도전 (STL 만). ", "Need more? Try Coding Bank — STL-only multi-concept. ")}
+                <Link href="/coding-bank" className="font-bold underline hover:text-blue-900">{t("바로 가기 →", "Go →")}</Link>
+              </p>
+            </div>
           </div>
         )}
       </div>
