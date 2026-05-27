@@ -309,8 +309,6 @@ export default function JourneyPage() {
   }, [isAuthenticated, user])
 
   const hasCpp = hasCppTrackProgress(completedIds)
-  const preferredTrack = getPreferredTrack(completedIds)
-  const nextAction = getSmartNext(completedIds, preferredTrack)
   const isFresh = completedIds.size === 0
 
   // 트랙 판별 — 사용자 명시 선택 우선, 없으면 자동 추정 + 첫 진입 시 모달
@@ -334,6 +332,17 @@ export default function JourneyPage() {
     : "B"
   const trackId: "A" | "B" | "C" = explicitTrack ?? autoTrackId
 
+  // Smart-next 의 preferredTrack 을 user track 에 맞춰 결정:
+  // - Track A (신입): Python 진도 < 50 → python, 그 이후 → cpp
+  // - Track B (Python only): 항상 python
+  // - Track C (C++ only): 항상 cpp
+  const PY_DONE_LOCAL = Array.from({ length: 52 }, (_, i) => String(i + 1)).filter(id => completedIds.has(id)).length
+  const preferredTrack: "python" | "cpp" | "pseudo" =
+    trackId === "B" ? "python"
+    : trackId === "C" ? "cpp"
+    : (PY_DONE_LOCAL < 50 ? "python" : "cpp")  // Track A — Python 거의 끝났을 때 cpp 전환
+  const nextAction = getSmartNext(completedIds, preferredTrack)
+
   const saveTrack = (t: "A" | "B" | "C") => {
     setExplicitTrack(t)
     try { localStorage.setItem("coderin-track", t) } catch {}
@@ -345,8 +354,8 @@ export default function JourneyPage() {
     C: { title: "Python 사전지식 (바로 C++)", titleEn: "Has Python (straight to C++)", emoji: "⚡" },
   }
 
-  // 4-5 단계 진도 (트랙별)
-  const PY_DONE = Array.from({ length: 52 }, (_, i) => String(i + 1)).filter(id => completedIds.has(id)).length
+  // 4-5 단계 진도 (트랙별) — PY_DONE 은 위에서 이미 계산 (PY_DONE_LOCAL)
+  const PY_DONE = PY_DONE_LOCAL
   const CPP_LIST = ["cpp-1","cpp-2","cpp-3","cpp-4","cpp-5","cpp-6","cpp-7","cpp-8","cpp-p1","cpp-9","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-21","cpp-22","cpp-p2","cpp-15","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20","cpp-23","cpp-p3"]
   const CPP_DONE = CPP_LIST.filter(id => completedIds.has(id)).length
   const BANK_SOLVED = (() => {
