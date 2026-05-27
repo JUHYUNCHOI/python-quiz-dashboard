@@ -752,7 +752,7 @@ sort(people.begin(), people.end(),
 // ── Chapter 5: 정리 + 실전 — 슬라이드식 ─────────────────────────
 function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 3
+  const totalSteps = 2
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
@@ -792,34 +792,6 @@ function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("이 정도면 정렬이 나오는 문제 거의 다 풀 수 있어요!", "This is enough to handle almost any sorting problem!")}
-            </p>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="space-y-3">
-            <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
-              <p className="text-sm font-black text-amber-900 mb-2">🏆 {t("이제 실전 문제 — 직접 풀어 보기!", "Now real problems — try it!")}</p>
-              <p className="text-xs text-gray-700 mb-3">
-                {t("백준 (BOJ) 에서 정렬 연습 문제 3 개 추천. 쉬운 거부터 →", "Recommended BOJ problems — easy first →")}
-              </p>
-              <div className="space-y-1.5">
-                <a href="https://www.acmicpc.net/problem/2750" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 2750</b> — {t("수 정렬하기 (정렬 한 줄로 끝)", "Sort numbers (one-line sort)")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/10814" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10814</b> — {t("나이순 정렬 (key 활용)", "Sort by age (use key)")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/11650" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 11650</b> — {t("좌표 정렬 (튜플 key)", "Sort coordinates (tuple key)")} ↗
-                </a>
-              </div>
-            </div>
-            <p className="text-xs text-gray-600 text-center">
-              {t("👇 아래 '정렬 마스터' 누르면 끝! 다음 토픽으로 가요.", "👇 Hit 'Sorting Master' to finish! Onwards.")}
             </p>
           </div>
         )}
@@ -939,7 +911,19 @@ export default function SortingPage() {
             {isMastered && <span className="text-2xl">⭐</span>}
           </div>
 
-
+          {isMastered && (
+            <Link href="/algo/sorting/practice"
+              className="mb-3 flex items-center justify-between bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl px-4 py-3 shadow-md active:scale-[0.99] transition-all">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🏆</span>
+                <div>
+                  <p className="font-black text-sm leading-tight">{t("도전 문제 풀러 가기", "Challenge problems")}</p>
+                  <p className="text-[11px] text-emerald-50">{t("정렬 도전 문제 12 개 — 한 번 봤다면 바로!", "12 Sorting challenges — jump right in!")}</p>
+                </div>
+              </div>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          )}
           <div className="flex flex-wrap items-center gap-1.5 mb-2">
             {CHAPTERS.map(ch => {
               const isDone = completedChapters.has(ch.id)
@@ -956,29 +940,8 @@ export default function SortingPage() {
                 </button>
               )
             })}
-            {/* 🎯 목적지 칩 — 학생이 어디로 가는지 1 챕터부터 보임 */}
-            <span className="text-gray-300 text-xs px-0.5">→</span>
-            {isMastered ? (
-              <Link href="/algo/sorting/practice"
-                className="text-[11px] font-bold px-2 py-1 rounded-full border bg-emerald-500 border-emerald-600 text-white shadow-md hover:bg-emerald-600 transition-all">
-                🎯 {t("도전 문제 풀러 가기", "Challenge problems")}
-              </Link>
-            ) : (
-              <button
-                onClick={() => setShowDestinationTip(true)}
-                className="text-[11px] font-bold px-2 py-1 rounded-full border border-dashed border-amber-400 bg-amber-50 text-amber-700 hover:bg-amber-100 transition-all"
-                title={t("5 챕터 끝나면 풀러 가요", "After 5 chapters, come back!")}
-              >
-                🔒 {t("끝나면 연습 문제", "Practice after lesson")}
-              </button>
-            )}
           </div>
-          {showDestinationTip && !isMastered && (
-            <div className="mb-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 flex items-center justify-between">
-              <span>💡 {t("5 챕터 다 끝나면 정렬 연습 문제로 안내해 줄게요!", "Finish all 5 chapters and I'll guide you to sorting practice problems!")}</span>
-              <button onClick={() => setShowDestinationTip(false)} className="text-amber-600 hover:text-amber-800 font-bold ml-2">✕</button>
-            </div>
-          )}
+          
 
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-orange-400 to-amber-500 transition-all duration-500"
@@ -1042,42 +1005,6 @@ export default function SortingPage() {
             </div>
 
             {/* 🏆 도전 문제 — in-app 핵심 CTA */}
-            <div className="bg-white rounded-xl border-2 border-emerald-200 p-4 mb-3">
-              <p className="text-sm font-black text-emerald-900 mb-2">🏆 {t("정렬 도전 문제 12 개", "12 Sorting Challenges")}</p>
-              <Link href="/algo/sorting/practice" className="block px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm text-center transition-all active:scale-95">
-                💪 {t("바로 풀어 보기 (BOJ Silver / LC Medium 급)", "Solve now (BOJ Silver / LC Medium)")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
-              <p className="text-[11px] text-gray-500 mt-2 text-center">
-                {t("단순 sort() 한 줄 넘어 사고력 필요 — 출처: BOJ / LC / CF / 원본 (paraphrased)", "Beyond one-line sort — paraphrased from BOJ / LC / CF")}
-              </p>
-            </div>
-
-            {/* 📝 코딩 뱅크 (보너스) */}
-            <div className="bg-white rounded-xl border-2 border-gray-200 p-3 mb-3">
-              <Link href="/coding-bank?category=sort" className="flex items-center justify-between text-xs text-gray-600 hover:text-emerald-700">
-                <span>📝 {t("코딩 뱅크에서 더 풀기 (정렬 카테고리)", "More in Coding Bank (sort)")}</span>
-                <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-
-            {/* 🌐 백준 외부 문제 */}
-            <div className="bg-white rounded-xl border-2 border-amber-200 p-4 mb-3">
-              <p className="text-sm font-black text-amber-900 mb-2">🌐 {t("백준 (BOJ) 외부 연습", "BOJ external practice")}</p>
-              <div className="space-y-1.5">
-                <a href="https://www.acmicpc.net/problem/2750" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 2750</b> — {t("수 정렬하기", "Sort numbers")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/10814" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10814</b> — {t("나이순 정렬 (key 활용)", "Sort by age")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/11650" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 11650</b> — {t("좌표 정렬", "Sort coordinates")} ↗
-                </a>
-              </div>
-            </div>
 
             <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
               🗺️ {t("다음 알고리즘 토픽 보기", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />
