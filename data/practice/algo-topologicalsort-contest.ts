@@ -1414,7 +1414,7 @@ int main() {
         { stdin: "3 2\n3 1\n3 2", expectedOutput: "3 1 2", label: "3 이 모두의 선행" },
         { stdin: "5 3\n1 4\n2 4\n3 4", expectedOutput: "1 2 3 4 5", label: "1,2,3 → 4 합류, 5 독립" },
         { stdin: "6 4\n6 5\n5 4\n4 3\n3 2", expectedOutput: "1 6 5 4 3 2", label: "1 독립, 역 체인" },
-        { stdin: "7 6\n2 1\n3 1\n4 2\n4 3\n5 4\n6 5", expectedOutput: "6 7 5 4 2 3 1", label: "복잡한 분기" },
+        { stdin: "7 6\n2 1\n3 1\n4 2\n4 3\n5 4\n6 5", expectedOutput: "6 5 4 2 3 1 7", label: "복잡한 분기" },
       ],
       hints: [
         "큐 대신 *min-heap* (priority_queue + greater).",

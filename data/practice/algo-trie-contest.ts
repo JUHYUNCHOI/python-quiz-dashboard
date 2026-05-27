@@ -770,7 +770,7 @@ int main() {
       testCases: [
         { stdin: "3\na\nab\nabc", expectedOutput: "2", label: "a, ab 가 다른 것의 prefix" },
         { stdin: "3\ncat\ndog\nfish", expectedOutput: "0", label: "공통 prefix 없음" },
-        { stdin: "4\ncat\ncar\ncard\ncards", expectedOutput: "1", label: "card 만 cards 의 prefix" },
+        { stdin: "4\ncat\ncar\ncard\ncards", expectedOutput: "2", label: "car 와 card 가 prefix" },
         { stdin: "1\nhello", expectedOutput: "0", label: "단어 1개" },
         { stdin: "2\nab\nabc", expectedOutput: "1", label: "ab 만" },
         { stdin: "5\na\nb\nc\nab\nbc", expectedOutput: "2", label: "a (→ab), b (→bc)" },

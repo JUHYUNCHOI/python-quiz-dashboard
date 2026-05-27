@@ -901,7 +901,7 @@ input = sys.stdin.readline
 input = sys.stdin.readline
 
 k, n = map(int, input().split())
-L = [int(input()) for _ in range(k)]
+L = list(map(int, input().split()))
 
 lo, hi = 1, max(L)
 ans = 0
@@ -1093,10 +1093,10 @@ int main() {
       testCases: [
         { stdin: "4 6\n1 2 5 9", expectedOutput: "5", label: "예시 — divisor=5: 1+1+1+2=5 <= 6. divisor=4: 1+1+2+3=7 > 6." },
         { stdin: "5 44\n44 22 33 11 1", expectedOutput: "3", label: "d=3 → 15+8+11+4+1=39 ≤ 44. d=2 → 57 > 44" },
-        { stdin: "3 6\n21 36 9", expectedOutput: "13", label: "divisor=13 → 2+3+1=6" },
+        { stdin: "3 6\n21 36 9", expectedOutput: "12", label: "d=12: ceil(21/12)+ceil(36/12)+ceil(9/12)=2+3+1=6 ≤6; d=11: 2+4+1=7>6" },
         { stdin: "1 1\n1", expectedOutput: "1", label: "N=1, ceil(1/1)=1 <= 1" },
         { stdin: "3 3\n1 2 3", expectedOutput: "3", label: "d=2 → 1+1+2=4 > 3; d=3 → 1+1+1=3 ≤ 3" },
-        { stdin: "4 5\n1 2 5 9", expectedOutput: "7", label: "더 빡빡한 m → 더 큰 divisor 필요" },
+        { stdin: "3 5\n10 20 30", expectedOutput: "15", label: "더 빡빡한 m — d=15: 1+2+2=5; d=14: 1+2+3=6>5" },
       ],
       hints: [
         "이분탐색 대상은 divisor (답). \`lo = 1\`, \`hi = max(a_i)\` (또는 10^6).",

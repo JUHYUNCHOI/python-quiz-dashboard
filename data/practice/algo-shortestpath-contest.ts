@@ -542,8 +542,8 @@ int main() {
         },
         {
           stdin: "3 4 2\n1 2 1\n1 2 3\n2 3 5\n1 3 100",
-          expectedOutput: "0\n3\n8",
-          label: "1→2 두 경로, 2번째 거리",
+          expectedOutput: "-1\n3\n8",
+          label: "1→2 두 경로, 2번째 거리 (1 은 자기 경로 1 개뿐 → -1)",
         },
       ],
       hints: [
@@ -1055,8 +1055,8 @@ int main() {
       testCases: [
         {
           stdin: "3 4\n1 2 4\n1 3 3\n2 3 -1\n3 1 -2",
-          expectedOutput: "-1",
-          label: "음수 사이클 1→3→1 (3 + -2 = 1, 다시 돌면 음수 됨? 사실 1→2→3→1 = 4-1-2 = 1 양수, 1→3→1 = 3-2 = 1 양수. 음수 사이클 없음)",
+          expectedOutput: "4\n3",
+          label: "음수 간선 있지만 음수 사이클 없음 (1→3→1 = 1, 1→2→3→1 = 1)",
         },
         {
           stdin: "3 4\n1 2 4\n1 3 3\n2 3 -4\n3 1 -2",
@@ -1412,8 +1412,8 @@ int main() {
         },
         {
           stdin: "4 4\n1 2 1\n2 3 1\n3 4 1\n1 4 10\n3 2",
-          expectedOutput: "4",
-          label: "1→2 (1) + 2→3 (1) + 3→4 (1) = 3? 아니야: 1→3→2→3→4 도 OK. min(1→2→3→4=3, 1→3→2→3→4=4)? v1=3, v2=2 둘 다 통과 필요. 답: 1→2→3→4=3? 사실 두 노드 다 통과 → 3 만 답.",
+          expectedOutput: "3",
+          label: "1→2→3→4 가 v1=3, v2=2 둘 다 통과 → 3",
         },
       ],
       hints: [
@@ -1734,13 +1734,13 @@ int main() {
         },
         {
           stdin: "4 0\n0 0\n0 3\n4 0\n4 3",
-          expectedOutput: "9.00",
-          label: "정사각형 — MST = 3변",
+          expectedOutput: "10.00",
+          label: "직사각형 4 점 — MST = 3+3+4 = 10",
         },
         {
           stdin: "4 1\n0 0\n0 3\n4 0\n4 3\n1 2",
-          expectedOutput: "6.00",
-          label: "1-2 (0 비용) + 2 변",
+          expectedOutput: "7.00",
+          label: "직사각형 + 1-2 통로 — MST = 3 (3-4) + 4 (1-3 or 2-4) = 7",
         },
         {
           stdin: "1 0\n5 5",

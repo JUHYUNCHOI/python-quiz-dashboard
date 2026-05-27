@@ -1257,7 +1257,7 @@ int main() {
           label: "미로 같은 통로",
         },
         {
-          stdin: "1 2\n1 0",
+          stdin: "2 1\n1 0",
           expectedOutput: "1",
           label: "1x2 — 하루",
         },
@@ -2007,9 +2007,9 @@ int main() {
 }`,
       testCases: [
         {
-          stdin: "8\n11100110\n11010010\n10011010\n11101100\n01000111\n00110001\n11011000\n10010100",
-          expectedOutput: "4",
-          label: "BOJ 예제 — 4 번 바꿈",
+          stdin: "8\n11100110\n11010010\n10011010\n11101100\n01000111\n00110001\n11011000\n10010101",
+          expectedOutput: "2",
+          label: "BOJ 예제 — 검은 방 2 개 통과",
         },
         {
           stdin: "1\n1",
@@ -2022,7 +2022,7 @@ int main() {
           label: "모두 흰 방 — 비용 0",
         },
         {
-          stdin: "3\n101\n101\n101",
+          stdin: "3\n111\n101\n111",
           expectedOutput: "0",
           label: "양쪽 길로 우회 — 비용 0",
         },

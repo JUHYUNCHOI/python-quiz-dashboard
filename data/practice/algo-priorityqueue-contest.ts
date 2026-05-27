@@ -1274,7 +1274,7 @@ int main() {
         { stdin: "1\n100", expectedOutput: "0", label: "N=1 — 합칠 게 없음" },
         { stdin: "2\n7 3", expectedOutput: "10", label: "두 그룹" },
         { stdin: "5\n1000000000 1000000000 1000000000 1000000000 1000000000", expectedOutput: "12000000000", label: "큰 값 — long long 필수" },
-        { stdin: "6\n5 4 8 2 3 9", expectedOutput: "78", label: "여러 그룹 (Huffman)" },
+        { stdin: "6\n5 4 8 2 3 9", expectedOutput: "76", label: "여러 그룹 (Huffman)" },
         { stdin: "3\n1000000000 1000000000 1000000000", expectedOutput: "5000000000", label: "10억 × 3 → 50억 (int overflow!)" },
       ],
       hints: [
