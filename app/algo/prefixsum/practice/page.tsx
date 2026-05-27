@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * 누적합 도전 문제 — /algo/prefixsum/practice
+ * 누적합문제 풀이 — /algo/prefixsum/practice
  *
  * URL ?p=<problemId> 가 있으면 해당 문제의 PracticeRunner 표시.
  * 없으면 12 문제 리스트 표시.
@@ -209,11 +209,13 @@ export default function SortingPracticePage() {
           </div>
         </div>
 
-        {/* 문제 리스트 */}
-        <div className="space-y-2">
-          {prefixSumContestCluster.problems.map((p, idx) => {
+        {/* 🌱 패턴 적용 (보통) + 🏆 응용 도전 (어려움) — 2 섹션 */}
+        {(() => {
+          const easy = prefixSumContestCluster.problems.filter(p => p.difficulty === "보통")
+          const hard = prefixSumContestCluster.problems.filter(p => p.difficulty === "어려움")
+          const renderItem = (p: any) => {
             const isSolved = solvedSet.has(p.id)
-            const diffKo = p.difficulty
+            const globalIdx = prefixSumContestCluster.problems.findIndex(pp => pp.id === p.id) + 1
             return (
               <Link
                 key={p.id}
@@ -228,7 +230,7 @@ export default function SortingPracticePage() {
                     "w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm shrink-0",
                     isSolved ? "bg-emerald-500 text-white" : "bg-gray-100 text-gray-500"
                   )}>
-                    {isSolved ? <CheckCircle2 className="w-5 h-5" /> : (idx + 1)}
+                    {isSolved ? <CheckCircle2 className="w-5 h-5" /> : globalIdx}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-sm text-gray-900 truncate">
@@ -237,9 +239,9 @@ export default function SortingPracticePage() {
                     <div className="flex items-center gap-1.5 mt-0.5">
                       <span className={cn(
                         "text-[10px] px-1.5 py-0.5 rounded font-bold border",
-                        DIFFICULTY_COLORS[diffKo] ?? DIFFICULTY_COLORS["보통"]
+                        DIFFICULTY_COLORS[p.difficulty] ?? DIFFICULTY_COLORS["보통"]
                       )}>
-                        {diffKo}
+                        {p.difficulty}
                       </span>
                     </div>
                   </div>
@@ -247,8 +249,34 @@ export default function SortingPracticePage() {
                 </div>
               </Link>
             )
-          })}
-        </div>
+          }
+          return (
+            <>
+              {easy.length > 0 && (
+                <div className="mb-5">
+                  <div className="flex items-center gap-2 mb-2 px-1">
+                    <span className="text-sm font-black text-emerald-700">🌱 {t("패턴 적용", "Pattern Application")}</span>
+                    <span className="text-[11px] text-gray-500">{t("— 방금 배운 거 따라 한 번 더 (보통)", "— apply what you learned (medium)")}</span>
+                  </div>
+                  <div className="space-y-2">
+                    {easy.map(renderItem)}
+                  </div>
+                </div>
+              )}
+              {hard.length > 0 && (
+                <div className="mb-3">
+                  <div className="flex items-center gap-2 mb-2 px-1">
+                    <span className="text-sm font-black text-amber-700">🏆 {t("응용 도전", "Challenge")}</span>
+                    <span className="text-[11px] text-gray-500">{t("— Bronze/Silver 급 응용 (어려움)", "— Bronze/Silver level (hard)")}</span>
+                  </div>
+                  <div className="space-y-2">
+                    {hard.map(renderItem)}
+                  </div>
+                </div>
+              )}
+            </>
+          )
+        })()}
 
         <p className="text-[11px] text-gray-400 text-center mt-6">
           {t(

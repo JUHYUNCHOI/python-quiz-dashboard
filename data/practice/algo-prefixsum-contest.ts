@@ -2,12 +2,12 @@ import type { PracticeCluster } from "./types"
 
 export const prefixSumContestCluster: PracticeCluster = {
   id: "algo-prefixsum-contest",
-  title: "누적합 도전 문제",
+  title: "누적합 문제 풀이",
   emoji: "🏆",
   description: "구간 합, 2D 누적합, 빈도 누적, 부분 합 = K — 기법 활용",
   unlockAfter: "algo-prefixsum",
   en: {
-    title: "Prefix Sum Challenge",
+    title: "Prefix Sum Practice",
     description: "Range sums, 2D prefix, frequency prefix, subarray sum = K",
   },
   problems: [

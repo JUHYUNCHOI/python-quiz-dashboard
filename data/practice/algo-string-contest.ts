@@ -2,12 +2,12 @@ import type { PracticeCluster } from "./types"
 
 export const stringContestCluster: PracticeCluster = {
   id: "algo-string-contest",
-  title: "문자열 도전 문제",
+  title: "문자열 문제 풀이",
   emoji: "🏆",
   description: "회문, 아나그램, 부분 문자열 패턴 — 단순 메서드 호출 넘어",
   unlockAfter: "algo-string",
   en: {
-    title: "String Challenge",
+    title: "String Practice",
     description: "Palindromes, anagrams, substring patterns — beyond methods",
   },
   problems: [

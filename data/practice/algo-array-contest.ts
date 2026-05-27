@@ -2,12 +2,12 @@ import type { PracticeCluster } from "./types"
 
 export const arrayContestCluster: PracticeCluster = {
   id: "algo-array-contest",
-  title: "배열 도전 문제",
+  title: "배열 문제 풀이",
   emoji: "🏆",
   description: "기본 배열 넘어 — 두 포인터, 슬라이딩 윈도우, 부분 배열 패턴",
   unlockAfter: "algo-array",
   en: {
-    title: "Array Challenge",
+    title: "Array Practice",
     description: "Beyond basics — two-pointer, sliding window, subarray patterns",
   },
   problems: [

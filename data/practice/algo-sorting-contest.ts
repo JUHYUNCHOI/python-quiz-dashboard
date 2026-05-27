@@ -2,12 +2,12 @@ import type { PracticeCluster } from "./types"
 
 export const sortingContestCluster: PracticeCluster = {
   id: "algo-sorting-contest",
-  title: "정렬 도전 문제",
+  title: "정렬 문제 풀이",
   emoji: "🏆",
   description: "백준 Silver / LeetCode Medium 급 — 단순 sort() 한 줄 넘어 사고력 필요",
   unlockAfter: "algo-sorting",
   en: {
-    title: "Sorting Challenge",
+    title: "Sorting Practice",
     description: "BOJ Silver / LeetCode Medium — beyond one-line sort()",
   },
   problems: [
