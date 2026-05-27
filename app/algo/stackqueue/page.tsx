@@ -767,7 +767,7 @@ bool isValid(string s) {
 // ── Chapter 5: 정리 + 실전 ────────────────────────────────────────
 function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 3
+  const totalSteps = 2
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
@@ -800,34 +800,6 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; already
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("이 정도면 Bronze 의 스택/큐 문제 대부분 풀어요!", "Enough to crack most Bronze stack/queue problems!")}
-            </p>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="space-y-3">
-            <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
-              <p className="text-sm font-black text-amber-900 mb-2">🏆 {t("이제 실전 문제 풀어 봐요!", "Now real problems!")}</p>
-              <p className="text-xs text-gray-700 mb-3">
-                {t("백준 (BOJ) 에서 스택/큐 연습 문제 3 개 추천. 쉬운 거부터 →", "Recommended BOJ problems — easy first →")}
-              </p>
-              <div className="space-y-1.5">
-                <a href="https://www.acmicpc.net/problem/10828" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10828</b> — {t("스택 (push/pop/top/size/empty 직접 구현)", "Stack (implement push/pop/top/size/empty)")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/10845" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10845</b> — {t("큐 (똑같은 명령들을 큐 버전으로)", "Queue (same commands, queue version)")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/10773" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10773</b> — {t("제로 (0 나오면 pop, 아니면 push)", "Zero (0 → pop, else push)")} ↗
-                </a>
-              </div>
-            </div>
-            <p className="text-xs text-gray-600 text-center">
-              {t("👇 아래 '스택/큐 마스터' 누르면 끝!", "👇 Hit 'Stack/Queue Master' to finish!")}
             </p>
           </div>
         )}
@@ -946,6 +918,19 @@ export default function StackQueuePage() {
             {isMastered && <span className="text-2xl">⭐</span>}
           </div>
 
+          {isMastered && (
+            <Link href="/algo/stackqueue/practice"
+              className="mb-3 flex items-center justify-between bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl px-4 py-3 shadow-md active:scale-[0.99] transition-all">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🏆</span>
+                <div>
+                  <p className="font-black text-sm leading-tight">{t("도전 문제 풀러 가기", "Challenge problems")}</p>
+                  <p className="text-[11px] text-emerald-50">{t("스택/큐 도전 문제 12 개 — 한 번 봤다면 바로!", "12 Stack/Queue challenges — jump right in!")}</p>
+                </div>
+              </div>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          )}
           <div className="flex flex-wrap items-center gap-1.5 mb-2">
             {CHAPTERS.map(ch => {
               const isDone = completedChapters.has(ch.id)
@@ -962,29 +947,8 @@ export default function StackQueuePage() {
                 </button>
               )
             })}
-            {/* 🎯 목적지 칩 */}
-            <span className="text-gray-300 text-xs px-0.5">→</span>
-            {isMastered ? (
-              <Link href="/coding-bank"
-                className="text-[11px] font-bold px-2 py-1 rounded-full border bg-emerald-500 border-emerald-600 text-white shadow-md hover:bg-emerald-600 transition-all">
-                🎯 {t("연습 문제 풀러 가기", "Practice problems")}
-              </Link>
-            ) : (
-              <button
-                onClick={() => setShowDestinationTip(true)}
-                className="text-[11px] font-bold px-2 py-1 rounded-full border border-dashed border-amber-400 bg-amber-50 text-amber-700 hover:bg-amber-100 transition-all"
-                title={t("5 챕터 끝나면 풀러 가요", "After 5 chapters, come back!")}
-              >
-                🔒 {t("끝나면 연습 문제", "Practice after lesson")}
-              </button>
-            )}
           </div>
-          {showDestinationTip && !isMastered && (
-            <div className="mb-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 flex items-center justify-between">
-              <span>💡 {t("5 챕터 다 끝나면 스택/큐 연습 문제로 안내해 줄게요!", "Finish all 5 chapters and I'll guide you to stack/queue practice problems!")}</span>
-              <button onClick={() => setShowDestinationTip(false)} className="text-amber-600 hover:text-amber-800 font-bold ml-2">✕</button>
-            </div>
-          )}
+          
 
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-orange-400 to-amber-500 transition-all duration-500"
@@ -1045,36 +1009,6 @@ export default function StackQueuePage() {
               <p className="text-sm text-emerald-700 mt-1">
                 {t("설명은 끝났어요. 이제 직접 풀어볼 시간! 👇", "Lesson done. Now solve some real problems! 👇")}
               </p>
-            </div>
-
-            {/* 📝 연습 문제 — in-app */}
-            <div className="bg-white rounded-xl border-2 border-emerald-200 p-4 mb-3">
-              <p className="text-sm font-black text-emerald-900 mb-2">📝 {t("코드린 안에서 풀기", "Practice inside Coderin")}</p>
-              <Link href="/coding-bank" className="block px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm text-center transition-all active:scale-95">
-                💪 {t("코딩 뱅크 — 스택/큐 활용 문제", "Coding Bank — Stack/Queue Problems")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
-              <p className="text-[11px] text-gray-500 mt-2 text-center">
-                {t("'스택/큐' 카테고리 필터 골라서 풀어 보세요", "Filter by 'Stack/Queue' category")}
-              </p>
-            </div>
-
-            {/* 🌐 백준 외부 문제 */}
-            <div className="bg-white rounded-xl border-2 border-amber-200 p-4 mb-3">
-              <p className="text-sm font-black text-amber-900 mb-2">🌐 {t("백준 (BOJ) 외부 연습", "BOJ external practice")}</p>
-              <div className="space-y-1.5">
-                <a href="https://www.acmicpc.net/problem/10828" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10828</b> — {t("스택 (기본)", "Stack (basic)")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/10845" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10845</b> — {t("큐 (기본)", "Queue (basic)")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/10773" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10773</b> — {t("제로 (스택 활용)", "Zero (stack use)")} ↗
-                </a>
-              </div>
             </div>
 
             <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">

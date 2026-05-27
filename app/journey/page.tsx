@@ -23,6 +23,7 @@ import {
   hasCppTrackProgress,
   type JourneyStage,
 } from "@/lib/journey-stages"
+import { getSmartNext, getPreferredTrack } from "@/lib/smart-next"
 
 // ── 6 스테이지 좌표 (viewBox 100×180) ────────────────────────────
 interface MapPlacement {
@@ -307,12 +308,39 @@ export default function JourneyPage() {
   }, [isAuthenticated, user])
 
   const hasCpp = hasCppTrackProgress(completedIds)
+  const preferredTrack = getPreferredTrack(completedIds)
+  const nextAction = getSmartNext(completedIds, preferredTrack)
+  const isFresh = completedIds.size === 0
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-100 via-amber-50 to-amber-100 pb-32">
       <Header />
 
       <main className="max-w-3xl mx-auto px-3 sm:px-6 pt-6">
+        {/* 📍 지금 할 일 — 결정 피로 0 */}
+        <Link
+          href={nextAction.href}
+          className="block mb-5 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-200/50 hover:shadow-2xl active:scale-[0.99] transition-all"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/25 rounded-xl flex items-center justify-center text-2xl sm:text-3xl shrink-0">
+              {nextAction.emoji ?? "📍"}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-bold opacity-90 mb-0.5">
+                {isFresh ? t("🚀 여기서 시작", "🚀 Start here") : t("📍 지금 할 일", "📍 Up next")}
+              </p>
+              <p className="text-lg sm:text-xl font-black leading-tight">
+                {t(nextAction.title, nextAction.titleEn)}
+              </p>
+              {nextAction.subtitle && (
+                <p className="text-[11px] sm:text-xs opacity-90 mt-0.5 truncate">{nextAction.subtitle}</p>
+              )}
+            </div>
+            <span className="text-2xl sm:text-3xl shrink-0">→</span>
+          </div>
+        </Link>
+
         <div className="text-center mb-6">
           <div className="inline-block px-4 py-1.5 bg-amber-200 rounded-full shadow-md border-2 border-amber-400 mb-3 transform -rotate-2">
             <span className="text-sm font-black text-amber-900">🗺️ {t("학습 모험 지도", "Adventure Map")}</span>
@@ -321,7 +349,7 @@ export default function JourneyPage() {
             {t("Python 부터 USACO 정상까지", "From Python to USACO Peak")}
           </h1>
           <p className="text-xs sm:text-sm text-amber-700 mt-1 italic">
-            {t("각 랜드마크를 클릭해 모험을 시작하세요", "Click any landmark to begin")}
+            {t("위 큰 버튼만 누르면 자동 — 또는 랜드마크 클릭", "Hit the big button — or click a landmark")}
           </p>
           {hasCpp && (
             <p className="text-[11px] text-emerald-700 font-bold mt-2 inline-block px-2.5 py-0.5 bg-emerald-100 rounded-full border border-emerald-400">

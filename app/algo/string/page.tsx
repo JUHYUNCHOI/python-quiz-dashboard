@@ -754,7 +754,7 @@ char ch  = (char)65;     // 'A'
 // ── Chapter 5: 정리 + 실전 ──────────────────────────────────────
 function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 3
+  const totalSteps = 2
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
@@ -787,34 +787,6 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; already
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("이거면 Bronze 문자열 문제 80% 는 풀어요!", "That's enough for ~80% of Bronze string problems!")}
-            </p>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="space-y-3">
-            <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
-              <p className="text-sm font-black text-amber-900 mb-2">🏆 {t("이제 실전 문제 — 직접 풀어 보기!", "Now real problems — try it!")}</p>
-              <p className="text-xs text-gray-700 mb-3">
-                {t("백준 (BOJ) 문자열 입문 문제 3 개. 쉬운 것부터 →", "3 BOJ string starter problems — easy first →")}
-              </p>
-              <div className="space-y-1.5">
-                <a href="https://www.acmicpc.net/problem/11720" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 11720</b> — {t("숫자의 합 (각 글자 → 숫자)", "Sum of digits (each char → number)")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/10809" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10809</b> — {t("알파벳 찾기 (count[26] 패턴)", "Find alphabet (count[26] pattern)")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/2675" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-white rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 2675</b> — {t("문자열 반복 (각 글자 R 번)", "String repeat (each char R times)")} ↗
-                </a>
-              </div>
-            </div>
-            <p className="text-xs text-gray-600 text-center">
-              {t("👇 아래 '문자열 마스터' 누르면 끝!", "👇 Hit 'String Master' to finish!")}
             </p>
           </div>
         )}
@@ -933,7 +905,19 @@ export default function StringPage() {
             {isMastered && <span className="text-2xl">⭐</span>}
           </div>
 
-
+          {isMastered && (
+            <Link href="/algo/string/practice"
+              className="mb-3 flex items-center justify-between bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl px-4 py-3 shadow-md active:scale-[0.99] transition-all">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🏆</span>
+                <div>
+                  <p className="font-black text-sm leading-tight">{t("도전 문제 풀러 가기", "Challenge problems")}</p>
+                  <p className="text-[11px] text-emerald-50">{t("문자열 도전 문제 12 개 — 한 번 봤다면 바로!", "12 String challenges — jump right in!")}</p>
+                </div>
+              </div>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          )}
           <div className="flex flex-wrap items-center gap-1.5 mb-2">
             {CHAPTERS.map(ch => {
               const isDone = completedChapters.has(ch.id)
@@ -950,29 +934,8 @@ export default function StringPage() {
                 </button>
               )
             })}
-            {/* 🎯 목적지 칩 */}
-            <span className="text-gray-300 text-xs px-0.5">→</span>
-            {isMastered ? (
-              <Link href="/coding-bank?category=string"
-                className="text-[11px] font-bold px-2 py-1 rounded-full border bg-emerald-500 border-emerald-600 text-white shadow-md hover:bg-emerald-600 transition-all">
-                🎯 {t("연습 문제 풀러 가기", "Practice problems")}
-              </Link>
-            ) : (
-              <button
-                onClick={() => setShowDestinationTip(true)}
-                className="text-[11px] font-bold px-2 py-1 rounded-full border border-dashed border-amber-400 bg-amber-50 text-amber-700 hover:bg-amber-100 transition-all"
-                title={t("5 챕터 끝나면 풀러 가요", "After 5 chapters, come back!")}
-              >
-                🔒 {t("끝나면 연습 문제", "Practice after lesson")}
-              </button>
-            )}
           </div>
-          {showDestinationTip && !isMastered && (
-            <div className="mb-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 flex items-center justify-between">
-              <span>💡 {t("5 챕터 다 끝나면 문자열 연습 문제로 안내해 줄게요!", "Finish all 5 chapters and I'll guide you to string practice problems!")}</span>
-              <button onClick={() => setShowDestinationTip(false)} className="text-amber-600 hover:text-amber-800 font-bold ml-2">✕</button>
-            </div>
-          )}
+          
 
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-orange-400 to-amber-500 transition-all duration-500"
@@ -1033,36 +996,6 @@ export default function StringPage() {
               <p className="text-sm text-emerald-700 mt-1">
                 {t("설명은 끝났어요. 이제 직접 풀어볼 시간! 👇", "Lesson done. Now solve some real problems! 👇")}
               </p>
-            </div>
-
-            {/* 📝 코딩 뱅크 */}
-            <div className="bg-white rounded-xl border-2 border-emerald-200 p-4 mb-3">
-              <p className="text-sm font-black text-emerald-900 mb-2">📝 {t("코드린 안에서 풀기", "Practice inside Coderin")}</p>
-              <Link href="/coding-bank?category=string" className="block px-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm text-center transition-all active:scale-95">
-                💪 {t("코딩 뱅크 — 문자열 활용 문제", "Coding Bank — String Problems")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
-              <p className="text-[11px] text-gray-500 mt-2 text-center">
-                {t("'문자열' 카테고리 필터 골라서 풀어 보세요", "Filter by 'String' category")}
-              </p>
-            </div>
-
-            {/* 🌐 백준 외부 */}
-            <div className="bg-white rounded-xl border-2 border-amber-200 p-4 mb-3">
-              <p className="text-sm font-black text-amber-900 mb-2">🌐 {t("백준 (BOJ) 외부 연습", "BOJ external practice")}</p>
-              <div className="space-y-1.5">
-                <a href="https://www.acmicpc.net/problem/11720" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 11720</b> — {t("숫자의 합", "Sum of digits")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/10809" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 10809</b> — {t("알파벳 찾기", "Find alphabet")} ↗
-                </a>
-                <a href="https://www.acmicpc.net/problem/2675" target="_blank" rel="noopener noreferrer"
-                  className="block px-3 py-2 bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 text-sm">
-                  <b>BOJ 2675</b> — {t("문자열 반복", "String repeat")} ↗
-                </a>
-              </div>
             </div>
 
             <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">

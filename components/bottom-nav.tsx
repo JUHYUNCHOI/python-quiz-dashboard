@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, BookOpen, User, LayoutDashboard, Puzzle, Brain, ClipboardList, Trophy } from "lucide-react"
+import { Home, BookOpen, User, LayoutDashboard, Puzzle, Brain, ClipboardList, Trophy, Map } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -20,7 +20,7 @@ export function BottomNav() {
   const { t } = useLanguage()
 
   const studentNav: NavItem[] = [
-    { icon: Home,    label: t("홈", "Home"),         href: "/portal"     },
+    { icon: Map,     label: t("지도", "Map"),        href: "/journey"    },
     { icon: BookOpen,label: t("수업", "Lessons"),    href: "/curriculum" },
     { icon: Brain,   label: t("도전", "Challenge"),  href: "/practice"   },
     { icon: Puzzle,  label: t("알고리즘", "Algo"),   href: "/algo"       },
