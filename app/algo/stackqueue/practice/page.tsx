@@ -17,6 +17,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react"
 import { PracticeRunner } from "@/components/practice/practice-runner"
+import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 import { stackQueueContestCluster } from "@/data/practice/algo-stackqueue-contest"
 import React from "react"
 
@@ -174,12 +175,11 @@ export default function SortingPracticePage() {
       <Header />
       <main className="max-w-2xl mx-auto px-4 pt-4">
         <div className="mb-4">
-          <button
-            onClick={() => router.push("/algo/stackqueue")}
-            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-2"
-          >
-            <ArrowLeft className="w-4 h-4" /> {t("스택/큐 토픽으로", "Back to Stack/Queue")}
-          </button>
+          <JourneyBreadcrumb items={[
+            { label: "알고리즘", labelEn: "Algorithms", href: "/algo", emoji: "🧩" },
+            { label: "스택/큐", labelEn: "Stack/Queue", href: "/algo/stackqueue", emoji: "📊" },
+            { label: "문제 풀이", labelEn: "Practice" },
+          ]} />
           <div className="flex items-center gap-2 mb-2">
             <span className="text-3xl">{stackQueueContestCluster.emoji}</span>
             <h1 className="text-xl sm:text-2xl font-black text-gray-900">

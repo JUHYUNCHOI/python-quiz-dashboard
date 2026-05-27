@@ -20,6 +20,7 @@ import { createClient } from "@/lib/supabase/client"
 import { cn } from "@/lib/utils"
 import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react"
 import { HighlightedCode } from "@/components/algo/highlighted-code"
+import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 
 // ── 챕터 메타 ────────────────────────────────────────────────────
 const CHAPTERS = [
@@ -1012,9 +1013,10 @@ export default function StringPage() {
       <Header />
       <main className="max-w-2xl mx-auto px-4 pt-4">
         <div className="mb-4">
-          <button onClick={() => router.push("/algo")} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-2">
-            <ArrowLeft className="w-4 h-4" /> {t("알고리즘 토픽", "Algorithm Topics")}
-          </button>
+          <JourneyBreadcrumb items={[
+              { label: "알고리즘", labelEn: "Algorithms", href: "/algo", emoji: "🧩" },
+              { label: "문자열", labelEn: "String", emoji: "📊" },
+            ]} />
           <div className="flex items-center gap-2 mb-3">
             <span className="text-3xl">🔤</span>
             <h1 className="text-xl sm:text-2xl font-black text-gray-900">{t("문자열", "Strings")}</h1>
