@@ -312,12 +312,31 @@ export default function JourneyPage() {
   const nextAction = getSmartNext(completedIds, preferredTrack)
   const isFresh = completedIds.size === 0
 
-  // 트랙 판별 (사용자 선택 우선, 없으면 진도 기반 자동 추정)
-  // 임시 자동 추정: cpp 진도 있으면 A 또는 C, 없으면 B (Python 만)
-  // TODO 사용자 명시 선택 모달 — 다음 Phase
-  const trackId: "A" | "B" | "C" = hasCpp
-    ? (completedIds.size > 30 ? "A" : "C")  // 진도 많으면 A (Python 도 했음), 아니면 C
+  // 트랙 판별 — 사용자 명시 선택 우선, 없으면 자동 추정 + 첫 진입 시 모달
+  const [explicitTrack, setExplicitTrack] = useState<"A" | "B" | "C" | null>(null)
+  const [showTrackModal, setShowTrackModal] = useState(false)
+  useEffect(() => {
+    try {
+      const saved = typeof window !== "undefined" ? localStorage.getItem("coderin-track") : null
+      if (saved === "A" || saved === "B" || saved === "C") {
+        setExplicitTrack(saved)
+      } else if (isFresh) {
+        // 첫 진입 (진도 0) — 트랙 선택 모달
+        setShowTrackModal(true)
+      }
+    } catch {}
+  }, [isFresh])
+
+  const autoTrackId: "A" | "B" | "C" = hasCpp
+    ? (completedIds.size > 30 ? "A" : "C")
     : "B"
+  const trackId: "A" | "B" | "C" = explicitTrack ?? autoTrackId
+
+  const saveTrack = (t: "A" | "B" | "C") => {
+    setExplicitTrack(t)
+    try { localStorage.setItem("coderin-track", t) } catch {}
+    setShowTrackModal(false)
+  }
   const trackLabels: Record<"A" | "B" | "C", { title: string; titleEn: string; emoji: string }> = {
     A: { title: "신입 (Python → C++ → 대회)", titleEn: "Beginner (Python → C++ → Contest)", emoji: "🌱" },
     B: { title: "Python 끝까지", titleEn: "Python all the way", emoji: "🐍" },
@@ -374,6 +393,49 @@ export default function JourneyPage() {
       <Header />
 
       <main className="max-w-3xl mx-auto px-3 sm:px-6 pt-6">
+        {/* 트랙 선택 모달 — 첫 진입 또는 변경 시 */}
+        {showTrackModal && (
+          <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl">
+              <h2 className="text-xl font-black text-amber-900 mb-1">
+                🛤️ {t("나의 학습 트랙 선택", "Pick your track")}
+              </h2>
+              <p className="text-xs text-gray-600 mb-4">
+                {t("나중에 언제든 바꿀 수 있어요.", "Changeable anytime later.")}
+              </p>
+              <div className="space-y-2">
+                {(["A", "B", "C"] as const).map(k => (
+                  <button
+                    key={k}
+                    onClick={() => saveTrack(k)}
+                    className="w-full text-left p-3 rounded-xl border-2 border-amber-200 hover:border-orange-400 hover:bg-orange-50 transition-all"
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xl">{trackLabels[k].emoji}</span>
+                      <span className="font-black text-sm text-amber-900">
+                        Track {k} — {t(trackLabels[k].title, trackLabels[k].titleEn)}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-gray-600 ml-7">
+                      {k === "A" && t("처음 코딩 — Python 부터 차근차근", "First time — start from Python")}
+                      {k === "B" && t("Python 만으로 USACO 까지 (Python 제출 가능)", "Python only, all the way to USACO (Python accepted)")}
+                      {k === "C" && t("Python 이미 알아요 — 바로 C++ 부터", "Already know Python — start with C++")}
+                    </p>
+                  </button>
+                ))}
+              </div>
+              {explicitTrack && (
+                <button
+                  onClick={() => setShowTrackModal(false)}
+                  className="w-full mt-3 text-xs text-gray-500 hover:text-gray-700"
+                >
+                  {t("취소", "Cancel")}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* 트랙 표시 — "어디 있는지" 항상 명확 */}
         <div className="mb-3 flex items-center justify-between gap-2 bg-white/70 backdrop-blur-sm rounded-xl border border-amber-200 px-3 py-2">
           <div className="flex items-center gap-2 min-w-0">
@@ -387,6 +449,12 @@ export default function JourneyPage() {
               </p>
             </div>
           </div>
+          <button
+            onClick={() => setShowTrackModal(true)}
+            className="shrink-0 text-[11px] font-bold text-amber-700 hover:text-amber-900 underline decoration-dotted"
+          >
+            {t("변경", "Change")}
+          </button>
         </div>
 
         {/* 📍 지금 할 일 — 결정 피로 0 */}
