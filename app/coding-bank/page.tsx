@@ -432,6 +432,8 @@ function ProblemDetail({
     testCases: problem.testCases.map(tc => ({ stdin: tc.input, expectedOutput: tc.output })),
     hints: [],
     solutionCode: problem.solutionCode,
+    pyInitialCode: problem.pyInitialCode,
+    pySolutionCode: problem.pySolutionCode,
     solutionExplanation: localSolutionExplanation,
   }
 

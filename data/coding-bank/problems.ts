@@ -14,6 +14,9 @@ export interface CodingBankProblem {
   }[]
   hints: string[]
   solutionCode: string
+  /** Python 풀이 — 있으면 PracticeRunner 가 🐍 Py / ⚡ C++ 토글 표시 */
+  pyInitialCode?: string
+  pySolutionCode?: string
   solutionExplanation: string
   en: {
     title: string
@@ -64,6 +67,19 @@ int main() {
     }
     cout << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+scores = list(map(int, input().split()))
+scores.sort(reverse=True)
+print(" ".join(map(str, scores)))
+`,
     solutionExplanation: "vector에 점수를 저장하고 greater<int>() 비교자로 내림차순 정렬한 뒤 출력합니다. 공백 출력 시 첫 원소 앞에는 공백이 오지 않도록 인덱스를 확인합니다.",
     en: {
       title: "Grade Ranking",
@@ -131,6 +147,29 @@ int main() {
     }
     cout << count << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+meetings = []
+for _ in range(n):
+    s, e = map(int, input().split())
+    meetings.append((s, e))
+# 끝 시간 기준 정렬, 끝 시간 같으면 시작 시간 기준
+meetings.sort(key=lambda m: (m[1], m[0]))
+count = 0
+last_end = 0
+for s, e in meetings:
+    if s >= last_end:
+        count += 1
+        last_end = e
+print(count)
+`,
     solutionExplanation: "끝 시간이 빠른 회의를 먼저 선택하는 그리디 전략입니다. 끝 시간 기준으로 정렬한 뒤, 현재 끝 시간 이후에 시작하는 회의를 순서대로 선택합니다. 알고리즘 이론 없이 정렬만으로 해결할 수 있습니다.",
     en: {
       title: "Meeting Room Scheduling",
@@ -182,6 +221,22 @@ int main() {
     for (auto& [x, y] : pts)
         cout << x << " " << y << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+pts = []
+for _ in range(n):
+    x, y = map(int, input().split())
+    pts.append((x, y))
+pts.sort()  # 튜플 기본 비교: x 우선, 같으면 y
+print("\\n".join(f"{x} {y}" for x, y in pts))
+`,
     solutionExplanation: "pair<int,int>의 기본 비교 연산자는 첫 번째 원소 우선, 같으면 두 번째 원소를 비교합니다. 별도 comparator 없이 sort()만으로 정렬 완료입니다.",
     en: {
       title: "Coordinate Sort",
@@ -237,6 +292,26 @@ int main() {
     });
     for (int i = 0; i < k; i++) cout << v[i].name << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+students = []
+for _ in range(n):
+    parts = input().split()
+    name = parts[0]
+    time = int(parts[1])
+    grade = int(parts[2])
+    students.append((name, time, grade))
+# 학년 내림차순, 시각 오름차순, 이름 사전순
+students.sort(key=lambda s: (-s[2], s[1], s[0]))
+print("\\n".join(s[0] for s in students[:k]))
+`,
     solutionExplanation: "struct로 학생 정보를 묶고, 람다 comparator에서 학년(내림차순) → 시각(오름차순) → 이름(사전순) 세 단계 비교를 구현합니다. 각 조건이 같을 때만 다음 조건으로 넘어가는 구조입니다.",
     en: {
       title: "Course Registration Priority",
@@ -299,6 +374,29 @@ int main() {
     for (auto& s : v) cout << s;
     cout << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+from functools import cmp_to_key
+input = sys.stdin.readline
+
+n = int(input())
+nums = input().split()  # 문자열 그대로 사용
+
+def compare(a, b):
+    # ab > ba 이면 a 가 앞 → 음수 반환
+    if a + b > b + a:
+        return -1
+    elif a + b < b + a:
+        return 1
+    return 0
+
+nums.sort(key=cmp_to_key(compare))
+print("".join(nums))
+`,
     solutionExplanation: "핵심 아이디어: 두 수 a, b의 순서는 ab(이어붙임)와 ba를 문자열 비교로 결정합니다. ab > ba이면 a가 앞. to_string()으로 변환 후 이 커스텀 comparator로 정렬하면 됩니다. DP나 BFS 없이 정렬만으로 해결됩니다.",
     en: {
       title: "Largest Number",
@@ -351,6 +449,25 @@ int main() {
     }
     cout << day << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, a, b = map(int, input().split())
+pos = 0
+day = 0
+while True:
+    day += 1
+    pos += a
+    if pos >= n:
+        break  # 낮에 꼭대기 도달
+    pos -= b   # 밤에 미끄러짐
+print(day)
+`,
     solutionExplanation: "매일 낮에 A칸 올라 꼭대기(N) 도달 여부를 먼저 확인합니다. 도달하지 못했다면 밤에 B칸 내려갑니다. 이 순서가 중요합니다.",
     en: {
       title: "Snail Staircase",
@@ -379,7 +496,7 @@ int main() {
     testCases: [
       {
         input: "500\n100\n50\n200\n100\n100\n0",
-        output: "4",
+        output: "5",
         label: "기본",
       },
       {
@@ -406,6 +523,27 @@ int main() {
         }
     }
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+t = int(input())
+total = 0
+cnt = 0
+while True:
+    coin = int(input())
+    if coin == 0:
+        break
+    cnt += 1
+    total += coin
+    if total >= t:
+        print(cnt)
+        break
+`,
     solutionExplanation: "동전을 하나씩 읽으며 합계를 누적합니다. 합계가 목표 금액 이상이 되면 즉시 현재 카운트를 출력하고 종료합니다.",
     en: {
       title: "Vending Machine",
@@ -433,7 +571,7 @@ int main() {
     testCases: [
       {
         input: "4 4\n1 1\nRRDDLLUU",
-        output: "7",
+        output: "8",
         label: "기본",
       },
       {
@@ -476,6 +614,38 @@ int main() {
             if (visited[i][j]) cnt++;
     cout << cnt << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+r, c = map(int, input().split())
+cmds = input().strip()
+
+visited = [[False] * m for _ in range(n)]
+visited[r][c] = True
+
+for cmd in cmds:
+    nr, nc = r, c
+    if cmd == "U":
+        nr -= 1
+    elif cmd == "D":
+        nr += 1
+    elif cmd == "L":
+        nc -= 1
+    elif cmd == "R":
+        nc += 1
+    if 0 <= nr < n and 0 <= nc < m:
+        r, c = nr, nc
+        visited[r][c] = True
+
+cnt = sum(1 for row in visited for v in row if v)
+print(cnt)
+`,
     solutionExplanation: "2D bool 배열로 방문을 추적합니다. 각 명령에 대해 새 위치를 계산하고, 격자 범위 안이면 이동 및 방문 표시합니다. 마지막에 true인 칸 수를 셉니다.",
     en: {
       title: "Robot Vacuum",
@@ -530,6 +700,23 @@ int main() {
         time += t[i];
     }
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+t = list(map(int, input().split()))
+time = 0
+out = []
+for i in range(n):
+    out.append(str(time))
+    time += t[i]
+print("\\n".join(out))
+`,
     solutionExplanation: "각 고객의 시작 시각은 이전 고객들의 처리 시간 누적 합입니다. 변수 time에 현재까지의 합을 유지하며 출력합니다.",
     en: {
       title: "Bank Queue",
@@ -558,7 +745,7 @@ int main() {
     testCases: [
       {
         input: "10 4\n3\n7\n2\n8",
-        output: "18",
+        output: "17",
         label: "기본",
       },
       {
@@ -583,6 +770,23 @@ int main() {
     }
     cout << total << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, q = map(int, input().split())
+cur = 1
+total = 0
+for _ in range(q):
+    dest = int(input())
+    total += abs(dest - cur)
+    cur = dest
+print(total)
+`,
     solutionExplanation: "각 요청마다 현재 층과 목표층의 절댓값 차이를 더합니다. abs()를 이용해 방향에 관계없이 이동 거리를 구합니다.",
     en: {
       title: "Elevator",
@@ -610,7 +814,7 @@ int main() {
     testCases: [
       {
         input: "5 3\n1 3\n2 4\n3 5",
-        output: "1 4",
+        output: "2 4",
         label: "기본",
       },
       {
@@ -650,6 +854,27 @@ int main() {
         cout << "\\n";
     }
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+
+n, q = map(int, input().split())
+# TODO: 카드 상태 리스트 초기화 후 Q번 [l, r] 구간 토글
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, q = map(int, input().split())
+face = [True] * (n + 1)  # 1-indexed
+for _ in range(q):
+    l, r = map(int, input().split())
+    for j in range(l, r + 1):
+        face[j] = not face[j]
+result = [i for i in range(1, n + 1) if face[i]]
+if not result:
+    print("none")
+else:
+    print(" ".join(map(str, result)))
+`,
     solutionExplanation: "bool 배열로 카드 상태를 추적합니다. 각 연산에서 [l,r] 구간을 순회하며 !로 상태를 토글합니다. 마지막에 앞면(true)인 카드 번호를 수집해 출력합니다.",
     en: {
       title: "Card Flipping",
@@ -713,6 +938,40 @@ int main() {
         }
     }
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+
+c, n = map(int, input().split())
+# TODO: 자리 배열로 ENTER/EXIT 이벤트 처리
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+c, n = map(int, input().split())
+slot = [0] * (c + 1)  # 1-indexed, 0이면 빈 자리
+out = []
+for _ in range(n):
+    parts = input().split()
+    op = parts[0]
+    car_id = int(parts[1])
+    if op == "ENTER":
+        found = -1
+        for j in range(1, c + 1):
+            if slot[j] == 0:
+                found = j
+                break
+        if found == -1:
+            out.append("FULL")
+        else:
+            slot[found] = car_id
+            out.append(str(found))
+    else:  # EXIT
+        for j in range(1, c + 1):
+            if slot[j] == car_id:
+                slot[j] = 0
+                break
+print("\\n".join(out))
+`,
     solutionExplanation: "자리 배열에 차량 id(0=빈 자리)를 저장합니다. ENTER 시 1번부터 순서대로 빈 자리를 탐색합니다. EXIT 시 해당 id를 가진 자리를 0으로 초기화합니다.",
     en: {
       title: "Parking Lot Management",
@@ -792,6 +1051,40 @@ int main() {
     }
     cout << "YES\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+
+board = [list(map(int, input().split())) for _ in range(9)]
+# TODO: 행, 열, 3x3 박스마다 1-9가 한 번씩 등장하는지 검사
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+board = [list(map(int, input().split())) for _ in range(9)]
+
+def check(nums):
+    return len(set(nums)) == 9
+
+# 행 검사
+for i in range(9):
+    if not check(board[i]):
+        print("NO")
+        sys.exit(0)
+# 열 검사
+for j in range(9):
+    col = [board[i][j] for i in range(9)]
+    if not check(col):
+        print("NO")
+        sys.exit(0)
+# 3x3 박스 검사
+for br in range(3):
+    for bc in range(3):
+        box = [board[br*3+i][bc*3+j] for i in range(3) for j in range(3)]
+        if not check(box):
+            print("NO")
+            sys.exit(0)
+print("YES")
+`,
     solutionExplanation: "행, 열, 3×3 박스 각각을 vector로 수집 후 set에 넣어 크기가 9인지 확인합니다. 중복이 없으면 1-9가 한 번씩 등장한 것입니다. 3×3 박스는 (br*3, bc*3) 기준으로 3×3 구간을 순회합니다.",
     en: {
       title: "Sudoku Validator",
@@ -842,6 +1135,25 @@ int main() {
             if (v[i] + v[j] == k) cnt++;
     cout << cnt << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+v = list(map(int, input().split()))
+# TODO: 이중 루프로 합이 k인 (i, j) 쌍 (i < j) 개수 세기
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+v = list(map(int, input().split()))
+cnt = 0
+for i in range(n):
+    for j in range(i + 1, n):
+        if v[i] + v[j] == k:
+            cnt += 1
+print(cnt)
+`,
     solutionExplanation: "이중 루프로 가능한 모든 두 수 조합을 확인합니다. j는 i+1부터 시작하여 중복 쌍을 방지합니다. O(N²)이지만 N ≤ 100이므로 충분합니다.",
     en: {
       title: "Two Sum Count",
@@ -890,6 +1202,32 @@ int main() {
         if (isPrime(i)) cnt++;
     cout << cnt << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+# TODO: 2부터 n까지 소수 판별 후 개수 세기
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def is_prime(x):
+    if x < 2:
+        return False
+    i = 2
+    while i * i <= x:
+        if x % i == 0:
+            return False
+        i += 1
+    return True
+
+n = int(input())
+cnt = 0
+for i in range(2, n + 1):
+    if is_prime(i):
+        cnt += 1
+print(cnt)
+`,
     solutionExplanation: "각 수에 대해 2부터 √n까지 나누어 떨어지는지 확인합니다. n ≤ 1000이므로 O(N√N) = O(1000 × 32) ≈ 32000번 연산으로 충분합니다.",
     en: {
       title: "Count Primes",
@@ -944,6 +1282,28 @@ int main() {
         }
     cout << minDist << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+pts = [tuple(map(int, input().split())) for _ in range(n)]
+# TODO: 모든 쌍의 거리 제곱 중 최솟값 찾기
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+pts = [tuple(map(int, input().split())) for _ in range(n)]
+best = float('inf')
+for i in range(n):
+    for j in range(i + 1, n):
+        dx = pts[i][0] - pts[j][0]
+        dy = pts[i][1] - pts[j][1]
+        d = dx * dx + dy * dy
+        if d < best:
+            best = d
+print(best)
+`,
     solutionExplanation: "모든 점 쌍을 이중 루프로 확인하며 거리 제곱의 최솟값을 추적합니다. 제곱근 계산 없이 정수 연산만으로 해결됩니다.",
     en: {
       title: "Closest Pair of Points",
@@ -1005,6 +1365,30 @@ int main() {
     }
     cout << best << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+
+n, W = map(int, input().split())
+items = [tuple(map(int, input().split())) for _ in range(n)]  # (w, v)
+# TODO: 2^n 개의 부분집합을 비트마스크로 시도해 최대 가치 찾기
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, W = map(int, input().split())
+items = [tuple(map(int, input().split())) for _ in range(n)]  # (w, v)
+best = 0
+for mask in range(1 << n):
+    total_w = 0
+    total_v = 0
+    for i in range(n):
+        if mask & (1 << i):
+            total_w += items[i][0]
+            total_v += items[i][1]
+    if total_w <= W and total_v > best:
+        best = total_v
+print(best)
+`,
     solutionExplanation: "N ≤ 15이므로 2^15 = 32768개의 부분집합을 모두 시도합니다. 비트마스크로 각 부분집합을 표현하고, 무게 합이 W 이하인 것 중 가치 합의 최대를 구합니다. DP 없이 완전탐색으로 해결됩니다.",
     en: {
       title: "0/1 Knapsack (Brute Force)",
@@ -1092,6 +1476,50 @@ int main() {
         cout << "\\n";
     }
 }`,
+    pyInitialCode: `import sys
+from itertools import permutations
+input = sys.stdin.readline
+
+board = [list(map(int, input().split())) for _ in range(3)]
+# TODO: 빈칸 위치와 남은 숫자들을 찾아 모든 순열을 시도해 마법진 조건 검사
+`,
+    pySolutionCode: `import sys
+from itertools import permutations
+input = sys.stdin.readline
+
+board = [list(map(int, input().split())) for _ in range(3)]
+used = set()
+blanks = []
+for i in range(3):
+    for j in range(3):
+        if board[i][j] != 0:
+            used.add(board[i][j])
+        else:
+            blanks.append((i, j))
+remaining = sorted([x for x in range(1, 10) if x not in used])
+
+def is_magic():
+    target = 15
+    for i in range(3):
+        if sum(board[i]) != target:
+            return False
+        if board[0][i] + board[1][i] + board[2][i] != target:
+            return False
+    if board[0][0] + board[1][1] + board[2][2] != target:
+        return False
+    if board[0][2] + board[1][1] + board[2][0] != target:
+        return False
+    return True
+
+for perm in permutations(remaining):
+    for k, (i, j) in enumerate(blanks):
+        board[i][j] = perm[k]
+    if is_magic():
+        break
+
+for i in range(3):
+    print(" ".join(str(board[i][j]) for j in range(3)))
+`,
     solutionExplanation: "남은 숫자들의 모든 순열을 next_permutation으로 시도합니다. 각 순열을 빈칸에 배치 후 마법진 조건(행/열/대각선 합 = 15)을 검사합니다. DP/백트래킹 없이 순열 완전탐색으로 해결됩니다.",
     en: {
       title: "Magic Square",
@@ -1154,6 +1582,30 @@ int main() {
             }
     cout << bestSum << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+
+n, t = map(int, input().split())
+v = list(map(int, input().split()))
+# TODO: 삼중 루프로 i<j<k 모든 세 수 합 중 |s-t| 최소, 같으면 더 큰 합 선택
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, t = map(int, input().split())
+v = list(map(int, input().split()))
+best_sum = None
+best_diff = None
+for i in range(n):
+    for j in range(i + 1, n):
+        for k in range(j + 1, n):
+            s = v[i] + v[j] + v[k]
+            d = abs(s - t)
+            if best_diff is None or d < best_diff or (d == best_diff and s > best_sum):
+                best_diff = d
+                best_sum = s
+print(best_sum)
+`,
     solutionExplanation: "삼중 루프로 N C 3 = 모든 세 수 조합을 시도합니다. N ≤ 100이므로 최대 100³/6 ≈ 167,000번 연산입니다. 차이가 최소이고, 같을 때는 합이 큰 것을 선택합니다.",
     en: {
       title: "Three Sum Closest",
@@ -1182,7 +1634,7 @@ int main() {
     testCases: [
       {
         input: "3 3\n1 -2 3\n4 5 -6\n-7 8 9",
-        output: "22",
+        output: "17",
         label: "기본 — 오른쪽 2×2: 5-6+8+9=16? 아니면 4+5-7+8=10? 전체 → 4+5+8+9=26? 확인: 행1: 4 5 -6 / 행2: -7 8 9. 오른쪽 3행3열의 일부합 최대.",
       },
       {
@@ -1217,6 +1669,31 @@ int main() {
                 }
     cout << best << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+g = [list(map(int, input().split())) for _ in range(n)]
+# TODO: 모든 직사각형 (r1,c1)~(r2,c2) 합의 최댓값 찾기
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+g = [list(map(int, input().split())) for _ in range(n)]
+best = None
+for r1 in range(n):
+    for r2 in range(r1, n):
+        for c1 in range(m):
+            for c2 in range(c1, m):
+                s = 0
+                for i in range(r1, r2 + 1):
+                    for j in range(c1, c2 + 1):
+                        s += g[i][j]
+                if best is None or s > best:
+                    best = s
+print(best)
+`,
     solutionExplanation: "직사각형을 (r1, c1)~(r2, c2)로 정의하고 4중 루프로 모든 직사각형을 시도합니다. 내부 이중 루프로 합을 계산합니다. N,M ≤ 20이면 총 연산 수는 O(N²M²) × O(NM) = O(N³M³)이 될 수 있지만 실제로는 20⁴ × 400 = 64,000,000정도입니다. 시간 내에 충분히 통과합니다.",
     en: {
       title: "Maximum Rectangle Sum in Grid",
@@ -1274,6 +1751,23 @@ int main() {
     for (auto& [word, cnt] : freq)
         cout << word << " " << cnt << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+freq = {}
+for _ in range(n):
+    w = input().strip()
+    freq[w] = freq.get(w, 0) + 1
+
+for word in sorted(freq):
+    print(f"{word} {freq[word]}")
+`,
     solutionExplanation: "map<string,int>에 단어를 키로 카운트를 증가시킵니다. map은 키를 사전순으로 자동 정렬하므로 별도 정렬 없이 순서대로 출력할 수 있습니다.",
     en: {
       title: "Word Frequency",
@@ -1335,6 +1829,26 @@ int main() {
     cout << absent.size() << "\\n";
     for (auto& s : absent) cout << s << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+roster = [input().strip() for _ in range(n)]
+
+m = int(input())
+present = set(input().strip() for _ in range(m))
+
+absent = [s for s in roster if s not in present]
+
+out = [str(len(absent))]
+out.extend(absent)
+print("\\n".join(out))
+`,
     solutionExplanation: "출석자를 set<string>에 저장합니다. 명단을 순서대로 순회하며 set에 없는 학생을 결석 목록에 추가합니다. set.count()로 O(log N) 조회가 가능합니다.",
     en: {
       title: "Attendance Check",
@@ -1362,7 +1876,7 @@ int main() {
     testCases: [
       {
         input: "4\nalice 90\nbob 85\ncharlie 90\ndave 70",
-        output: "alice\n83.75\n2",
+        output: "alice\n83.75\n1",
         label: "동점 최고점",
       },
       {
@@ -1405,6 +1919,30 @@ int main() {
     cout << fixed << setprecision(2) << avg << "\\n";
     cout << below << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+students = []
+for _ in range(n):
+    name, score = input().split()
+    students.append((name, int(score)))
+
+max_score = max(s for _, s in students)
+top_name = min(name for name, s in students if s == max_score)
+
+avg = sum(s for _, s in students) / n
+below = sum(1 for _, s in students if s < avg)
+
+print(top_name)
+print(f"{avg:.2f}")
+print(below)
+`,
     solutionExplanation: "max_element로 최고 점수를 찾고, 동점자 중 사전순 최소 이름을 선택합니다. 평균은 double 합산 후 n으로 나눕니다. fixed/setprecision(2)로 소수 둘째 자리까지 출력합니다.",
     en: {
       title: "Grade Statistics",
@@ -1477,6 +2015,31 @@ int main() {
         cout << "\\n";
     }
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+from collections import defaultdict
+input = sys.stdin.readline
+
+n = int(input())
+groups = defaultdict(list)
+for _ in range(n):
+    w = input().strip()
+    key = "".join(sorted(w))
+    groups[key].append(w)
+
+result = []
+for words in groups.values():
+    words.sort()
+    result.append(words)
+result.sort(key=lambda g: g[0])
+
+for grp in result:
+    print(" ".join(grp))
+`,
     solutionExplanation: "단어를 정렬하면 아나그램끼리 동일한 키를 가집니다. map<string, vector<string>>으로 키별 그룹화 후, 각 그룹 내 단어 정렬, 전체 그룹을 첫 단어 기준으로 정렬합니다.",
     en: {
       title: "Anagram Groups",
@@ -1505,12 +2068,12 @@ int main() {
     testCases: [
       {
         input: "3 2\nalice 90 80\nbob 85 85\ncharlie 90 70",
-        output: "1 alice 170\n1 bob 170\n3 charlie 160",
+        output: "1 bob 170\n2 alice 170\n3 charlie 160",
         label: "동점 처리",
       },
       {
         input: "4 3\ndan 70 80 90\neve 80 80 80\nfay 90 70 80\ngus 75 75 90",
-        output: "1 dan 240\n1 eve 240\n1 fay 240\n4 gus 240",
+        output: "1 dan 240\n1 gus 240\n3 eve 240\n3 fay 240",
         label: "전원 동점",
       },
     ],
@@ -1557,6 +2120,36 @@ int main() {
         cout << rank << " " << v[i].name << " " << v[i].total << "\\n";
     }
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+students = []
+for _ in range(n):
+    parts = input().split()
+    name = parts[0]
+    scores = list(map(int, parts[1:1+m]))
+    total = sum(scores)
+    students.append((name, scores, total))
+
+# 정렬: 총점 내림차순 → 마지막 시험 내림차순 → 이름 오름차순
+students.sort(key=lambda s: (-s[2], -s[1][m-1], s[0]))
+
+rank = 1
+for i, (name, scores, total) in enumerate(students):
+    if i > 0:
+        prev = students[i-1]
+        if total == prev[2] and scores[m-1] == prev[1][m-1]:
+            pass  # 같은 순위 유지
+        else:
+            rank = i + 1
+    print(f"{rank} {name} {total}")
+`,
     solutionExplanation: "총점 → 마지막 시험 점수 → 이름 순으로 정렬합니다. 순위는 앞 학생과 총점/마지막 점수가 같으면 동일 순위를 유지하고, 다르면 현재 인덱스+1로 업데이트합니다.",
     en: {
       title: "Student Leaderboard",
@@ -1611,6 +2204,18 @@ int main() {
     }
     cout << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+line = input().strip()
+words = line.split()
+print(" ".join(w[::-1] for w in words))
+`,
     solutionExplanation: "getline으로 한 줄을 읽고 stringstream으로 단어별로 분리합니다. 각 단어에 reverse()를 적용하고 공백으로 이어 출력합니다.",
     en: {
       title: "Reverse Each Word",
@@ -1658,6 +2263,28 @@ int main() {
     }
     cout << (cnt == 0 ? "YES" : "NO") << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+s = input().strip()
+cnt = 0
+valid = True
+for c in s:
+    if c == '(':
+        cnt += 1
+    else:
+        cnt -= 1
+    if cnt < 0:
+        valid = False
+        break
+
+print("YES" if valid and cnt == 0 else "NO")
+`,
     solutionExplanation: "카운터로 열린 괄호 수를 추적합니다. '('에 +1, ')'에 -1. 도중에 음수가 되면 즉시 NO. 마지막에 0이면 YES입니다.",
     en: {
       title: "Bracket Validation",
@@ -1719,6 +2346,23 @@ int main() {
 
     cout << enc << "\\n" << decOfEnc << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+s = input().strip()
+k = int(input())
+
+enc = "".join(chr((ord(c) - ord('a') + k) % 26 + ord('a')) for c in s)
+dec = "".join(chr((ord(c) - ord('a') - k + 26) % 26 + ord('a')) for c in enc)
+
+print(enc)
+print(dec)
+`,
     solutionExplanation: "암호화: 각 문자에 K를 더하고 % 26으로 a-z 범위를 유지합니다. 복호화: K를 빼되 음수 방지를 위해 +26 후 % 26. 암호화된 문자열을 다시 복호화하면 원문이 됩니다.",
     en: {
       title: "Caesar Cipher",
@@ -1769,6 +2413,30 @@ int main() {
     }
     cout << (compressed.size() < s.size() ? compressed : s) << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+s = input().strip()
+compressed = []
+i = 0
+while i < len(s):
+    c = s[i]
+    cnt = 0
+    while i < len(s) and s[i] == c:
+        cnt += 1
+        i += 1
+    compressed.append(c)
+    if cnt > 1:
+        compressed.append(str(cnt))
+
+result = "".join(compressed)
+print(result if len(result) < len(s) else s)
+`,
     solutionExplanation: "while 루프로 연속된 같은 문자를 세고, 문자(+개수)를 압축 문자열에 추가합니다. 최종적으로 압축 결과가 더 짧을 때만 압축 문자열을 출력합니다.",
     en: {
       title: "Run-Length Encoding",
@@ -1823,6 +2491,30 @@ int main() {
     string a, b; cin >> a >> b;
     cout << editDist(a, b, 0, 0) << "\\n";
 }`,
+    pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+
+`,
+    pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def edit_dist(a, b, i, j):
+    if i == len(a):
+        return len(b) - j  # b의 남은 문자 삽입
+    if j == len(b):
+        return len(a) - i  # a의 남은 문자 삭제
+    if a[i] == b[j]:
+        return edit_dist(a, b, i+1, j+1)
+    replace_ = 1 + edit_dist(a, b, i+1, j+1)
+    insert_ = 1 + edit_dist(a, b, i, j+1)
+    delete_ = 1 + edit_dist(a, b, i+1, j)
+    return min(replace_, insert_, delete_)
+
+a = input().strip()
+b = input().strip()
+print(edit_dist(a, b, 0, 0))
+`,
     solutionExplanation: "순수 재귀로 편집 거리를 계산합니다. 두 문자가 같으면 그냥 진행, 다르면 교체/삽입/삭제 세 선택의 최솟값에 1을 더합니다. |A|, |B| ≤ 8이므로 재귀 깊이가 최대 16, 분기가 3으로 3^16 ≈ 43,046,721이지만 실제로는 겹치는 경로가 많아 훨씬 적습니다. DP를 쓰면 O(|A|×|B|)이지만 이 제약에서는 재귀만으로도 통과합니다.",
     en: {
       title: "Edit Distance",
