@@ -1076,8 +1076,8 @@ export default function HashTablePage() {
               <div className="flex items-center gap-2">
                 <span className="text-2xl">🏆</span>
                 <div>
-                  <p className="font-black text-sm leading-tight">{t("도전 문제 풀러 가기", "Challenge problems")}</p>
-                  <p className="text-[11px] text-emerald-50">{t("해시테이블 도전 문제 12 개 — 한 번 봤다면 바로!", "12 Hash Table challenges — jump right in!")}</p>
+                  <p className="font-black text-sm leading-tight">{t("문제 풀러 가기", "Practice problems")}</p>
+                  <p className="text-[11px] text-emerald-50">{t("해시테이블 문제 12 개 — 한 번 봤다면 바로!", "12 Hash Table challenges — jump right in!")}</p>
                 </div>
               </div>
               <ArrowRight className="w-5 h-5" />

@@ -2,12 +2,12 @@ import type { PracticeCluster } from "./types"
 
 export const stackQueueContestCluster: PracticeCluster = {
   id: "algo-stackqueue-contest",
-  title: "스택/큐 도전 문제",
+  title: "스택/큐 문제 풀이",
   emoji: "🏆",
   description: "monotonic stack, 괄호 매칭, 슬라이딩 윈도우 최대값 — 도구로 쓰는 패턴",
   unlockAfter: "algo-stackqueue",
   en: {
-    title: "Stack/Queue Challenge",
+    title: "Stack/Queue Practice",
     description: "Monotonic stack, bracket matching, sliding window max — using as a tool",
   },
   problems: [

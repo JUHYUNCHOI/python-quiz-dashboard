@@ -2,12 +2,12 @@ import type { PracticeCluster } from "./types"
 
 export const hashTableContestCluster: PracticeCluster = {
   id: "algo-hashtable-contest",
-  title: "해시테이블 도전 문제",
+  title: "해시테이블 문제 풀이",
   emoji: "🏆",
   description: "two-sum 변형, 부분 합 = K, 아나그램 그룹 — map/set 활용 패턴",
   unlockAfter: "algo-hashtable",
   en: {
-    title: "Hash Table Challenge",
+    title: "Hash Table Practice",
     description: "two-sum variants, subarray sum = K, anagram groups",
   },
   problems: [

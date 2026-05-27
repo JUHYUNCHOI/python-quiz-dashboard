@@ -917,8 +917,8 @@ export default function SortingPage() {
               <div className="flex items-center gap-2">
                 <span className="text-2xl">🏆</span>
                 <div>
-                  <p className="font-black text-sm leading-tight">{t("도전 문제 풀러 가기", "Challenge problems")}</p>
-                  <p className="text-[11px] text-emerald-50">{t("정렬 도전 문제 12 개 — 한 번 봤다면 바로!", "12 Sorting challenges — jump right in!")}</p>
+                  <p className="font-black text-sm leading-tight">{t("문제 풀러 가기", "Practice problems")}</p>
+                  <p className="text-[11px] text-emerald-50">{t("정렬 문제 12 개 — 한 번 봤다면 바로!", "12 Sorting challenges — jump right in!")}</p>
                 </div>
               </div>
               <ArrowRight className="w-5 h-5" />
@@ -1004,7 +1004,7 @@ export default function SortingPage() {
               </p>
             </div>
 
-            {/* 🏆 도전 문제 — in-app 핵심 CTA */}
+            {/* 🏆문제 풀이 — in-app 핵심 CTA */}
 
             <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
               🗺️ {t("다음 알고리즘 토픽 보기", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />
