@@ -22,7 +22,7 @@ export const hashTableContestCluster: PracticeCluster = {
       title: "두 수의 합",
       description: `N개의 정수와 목표값 T가 주어진다. 두 원소의 합이 정확히 T가 되는 **서로 다른 인덱스 쌍** \`(i, j)\` (0-based, \`i < j\`) 를 찾아 한 줄에 \`i j\` 형식으로 출력하라.
 
-답이 여러 개면 **i가 가장 작은 쌍**, i가 같으면 j가 가장 작은 쌍을 출력. 답은 항상 존재한다고 가정.
+답이 여러 개면 **왼쪽부터 훑을 때 가장 먼저 짝이 완성되는 쌍** (즉, j 가 가장 작은 쌍) 을 출력. 답은 항상 존재한다고 가정.
 
 핵심: O(N²) 이중 루프 대신 \`unordered_map\` 으로 **한 번 훑으면서** "T - 현재값" 이 이미 본 적 있는지 조회 — O(N).
 
@@ -42,7 +42,7 @@ int main() {
         { stdin: "3 6\n3 2 4", expectedOutput: "1 2", label: "첫 원소는 답 아님" },
         { stdin: "2 6\n3 3", expectedOutput: "0 1", label: "같은 값 두 개" },
         { stdin: "5 0\n-3 4 3 90 1", expectedOutput: "0 2", label: "음수 + 양수" },
-        { stdin: "5 10\n1 5 5 5 9", expectedOutput: "0 4", label: "여러 답 중 i 가장 작은 것" },
+        { stdin: "5 10\n1 5 5 5 9", expectedOutput: "1 2", label: "여러 답 중 j 가장 먼저 완성되는 쌍" },
         { stdin: "4 -8\n-5 -3 -10 2", expectedOutput: "0 1", label: "음수 합" },
       ],
       hints: [
@@ -76,13 +76,31 @@ int main() {
     }
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, t = map(int, input().split())
+arr = list(map(int, input().split()))
+seen = {}  # 값 → 인덱스
+for i, x in enumerate(arr):
+    need = t - x
+    if need in seen:
+        print(seen[need], i)
+        break
+    if x not in seen:
+        seen[x] = i
+`,
       solutionExplanation:
-        "two-sum 의 정석: 짝꿍 (T-x) 을 map 에 미리 저장한 인덱스에서 찾는다. 현재 원소를 map 에 넣기 **전** 에 조회 — 자기 자신을 짝꿍 삼는 실수 방지. 'i 가장 작은 쌍' 조건은 처음 만나는 값만 저장하면 자동 충족.",
+        "two-sum 의 정석: 짝꿍 (T-x) 을 map 에 미리 저장한 인덱스에서 찾는다. 현재 원소를 map 에 넣기 **전** 에 조회 — 자기 자신을 짝꿍 삼는 실수 방지. 왼쪽부터 훑으며 처음 만나는 짝이 'j 가장 작은 쌍' 이라 자동으로 조건 만족.",
       en: {
         title: "Two Sum",
         description: `Given N integers and a target T, find a pair of **distinct indices** \`(i, j)\` (0-based, \`i < j\`) whose values sum to T. Print as \`i j\`.
 
-If multiple pairs exist, print the one with the **smallest i**, breaking ties by smallest j. A solution is guaranteed.
+If multiple pairs exist, print the one **whose second index j is smallest** (i.e., the first pair completed while scanning left to right). A solution is guaranteed.
 
 Key: instead of O(N²) double loop, use \`unordered_map\` and look up "T - current" in one pass — O(N).
 
@@ -95,7 +113,7 @@ Source: LeetCode 1 (Two Sum) paraphrased`,
           "Important: query the map **before** inserting x, so you can't pair x with itself.",
         ],
         solutionExplanation:
-          "Classic two-sum: look up the complement (T-x) in a map of values seen so far. Query before insert so an element can't pair with itself. Inserting only the first occurrence keeps i minimal automatically.",
+          "Classic two-sum: look up the complement (T-x) in a map of values seen so far. Query before insert so an element can't pair with itself. Scanning left to right naturally yields the pair with smallest j.",
       },
     },
 
@@ -166,6 +184,26 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+from collections import defaultdict
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+arr = list(map(int, input().split()))
+cnt = defaultdict(int)
+cnt[0] = 1  # 빈 prefix
+pre = 0
+ans = 0
+for x in arr:
+    pre += x
+    ans += cnt[pre - k]
+    cnt[pre] += 1
+print(ans)
+`,
       solutionExplanation:
         "prefix sum + hash map 의 정석. 누적합 pre 의 등장 횟수를 추적. 현재 위치 j 에서 답이 늘어나는 건 'pre[j] - K' 와 같은 prefix 가 이전에 몇 번 있었는지. \`cnt[0]=1\` 초기화는 '0번째 prefix(빈 배열)' 처리 — 부분 배열이 0번부터 시작하는 경우.",
       en: {
@@ -286,6 +324,30 @@ int main() {
     }
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+from collections import defaultdict
+input = sys.stdin.readline
+
+n = int(input())
+groups = defaultdict(list)
+for _ in range(n):
+    w = input().strip()
+    key = ''.join(sorted(w))  # 글자 정렬한 문자열이 그룹 키
+    groups[key].append(w)
+
+gs = [sorted(words) for words in groups.values()]
+# 그룹 간 정렬: 그룹 내 첫 단어 사전순
+gs.sort(key=lambda g: g[0])
+
+out = [str(len(gs))]
+for g in gs:
+    out.append(' '.join(g))
+sys.stdout.write('\\n'.join(out) + '\\n')
+`,
       solutionExplanation:
         "단어의 글자를 정렬한 문자열이 **아나그램 식별자(키)**. 같은 키 = 같은 그룹. 그 다음 두 단계 정렬: 그룹 내부 사전순, 그룹들 사이는 첫 단어 사전순. \`unordered_map\` 으로 그룹 만든 뒤 vector 로 옮겨 정렬.",
       en: {
@@ -368,6 +430,22 @@ int main() {
     cout << -1 << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+s = input().rstrip('\\n')
+cnt = {}
+for i, c in enumerate(s):
+    cnt[c] = cnt.get(c, 0) + 1
+    if cnt[c] == 2:
+        print(i)
+        sys.exit()
+print(-1)
+`,
       solutionExplanation:
         "각 글자의 누적 등장 횟수를 추적. 어떤 글자의 카운트가 처음으로 2 가 되는 순간의 인덱스가 답. 영문 소문자 26 종이므로 길이 26 배열로 충분 — `unordered_map` 도 똑같이 OK.",
       en: {
@@ -454,6 +532,26 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+s = input().rstrip('\\n')
+seen = set()
+left = 0
+ans = 0
+for right, ch in enumerate(s):
+    while ch in seen:
+        seen.discard(s[left])
+        left += 1
+    seen.add(ch)
+    if right - left + 1 > ans:
+        ans = right - left + 1
+print(ans)
+`,
       solutionExplanation:
         "슬라이딩 윈도우의 정석. 윈도우 내용을 \`unordered_set\` 으로 추적. 새로 들어오는 글자가 이미 있으면 왼쪽에서 한 칸씩 빼며 중복이 없어질 때까지 줄임. left, right 각각 최대 N 번씩만 움직이므로 O(N).",
       en: {
@@ -540,6 +638,19 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+from collections import Counter
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+arr = list(map(int, input().split()))
+freq = Counter(arr)
+print(sum(1 for v in freq.values() if v == k))
+`,
       solutionExplanation:
         "전형적인 두 단계 패턴: (1) hash map 으로 빈도수 집계, (2) 조건을 만족하는 키 개수 카운트. \`unordered_map\` 이 \`map\` 보다 약간 빠르지만 N=10만 정도면 둘 다 OK.",
       en: {
@@ -651,6 +762,28 @@ int main() {
     cout << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+from collections import Counter
+input = sys.stdin.readline
+
+n = int(input())
+A = list(map(int, input().split()))
+m = int(input())
+B = list(map(int, input().split()))
+
+cnt = Counter(A)  # 한 쪽을 빈도수 집계
+result = []
+for x in B:
+    if cnt[x] > 0:
+        result.append(x)
+        cnt[x] -= 1  # 재사용 방지
+result.sort()
+print(' '.join(map(str, result)))
+`,
       solutionExplanation:
         "multiset 교집합 패턴: 한 쪽을 hash map 으로 빈도 집계, 다른 쪽을 훑으며 cnt 가 양수일 때만 매칭 + cnt-- (재사용 방지). 양쪽 다 정렬 후 two-pointer 로도 가능하지만 hash 가 더 직관적.",
       en: {
@@ -751,6 +884,37 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+from collections import defaultdict
+input = sys.stdin.readline
+
+s = input().strip()
+L = int(input())
+n = len(s)
+if L > n:
+    print(0)
+    sys.exit()
+
+freq = [0] * 26
+for i in range(L):
+    freq[ord(s[i]) - 97] += 1
+
+cnt = defaultdict(int)
+cnt[tuple(freq)] += 1  # tuple 을 dict 키로 사용 (26 길이 시그니처)
+for i in range(L, n):
+    freq[ord(s[i]) - 97] += 1
+    freq[ord(s[i - L]) - 97] -= 1
+    cnt[tuple(freq)] += 1
+
+ans = 0
+for v in cnt.values():
+    ans += v * (v - 1) // 2
+print(ans)
+`,
       solutionExplanation:
         "슬라이딩 윈도우 + signature hash 패턴. (1) 길이 L 첫 윈도우의 글자 빈도 26-array 구성. (2) 한 칸씩 밀며 양 끝만 갱신 — O(N). (3) 매 윈도우의 빈도 배열을 26 글자 string 으로 직렬화해 hash key 로 사용. 같은 시그니처 그룹 k 개 → \`k(k-1)/2\` 쌍. \`signature()\` 마다 string 새로 만드는 비용은 O(26) 상수.",
       en: {
@@ -873,6 +1037,32 @@ int main() {
     cout << "YES\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+board = [input().rstrip('\\n') for _ in range(9)]
+rows = [set() for _ in range(9)]
+cols = [set() for _ in range(9)]
+boxes = [set() for _ in range(9)]
+
+for r in range(9):
+    for c in range(9):
+        d = board[r][c]
+        if d == '.':
+            continue
+        b = (r // 3) * 3 + (c // 3)
+        if d in rows[r] or d in cols[c] or d in boxes[b]:
+            print("NO")
+            sys.exit()
+        rows[r].add(d)
+        cols[c].add(d)
+        boxes[b].add(d)
+print("YES")
+`,
       solutionExplanation:
         "각 행/열/박스에 들어간 숫자를 27 개의 hash set 으로 추적. 어느 set 에 이미 있는 숫자가 또 들어오면 모순 → NO. 박스 인덱스는 `(r/3)*3 + (c/3)` 정수 공식. 빈칸 `.` 은 그냥 skip.",
       en: {
@@ -977,6 +1167,22 @@ int main() {
     cout << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+from collections import Counter
+input = sys.stdin.readline
+
+n = int(input())
+cards = list(map(int, input().split()))
+m = int(input())
+queries = list(map(int, input().split()))
+
+cnt = Counter(cards)  # 빈도수 먼저 집계
+print(' '.join(str(cnt.get(q, 0)) for q in queries))
+`,
       solutionExplanation:
         "정석적인 hash map 활용: 한 번 빈도수 집계 후 각 질문 O(1) 조회. N*M = 2.5×10^11 짜리 이중 루프를 N+M 으로 줄이는 게 hash map 의 진가.",
       en: {
@@ -1082,6 +1288,30 @@ int main() {
     }
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+idx_to_name = []
+name_to_idx = {}
+for i in range(n):
+    name = input().strip()
+    idx_to_name.append(name)
+    name_to_idx[name] = i + 1  # 1-based
+
+out = []
+for _ in range(m):
+    q = input().strip()
+    if q[0].isdigit():
+        out.append(idx_to_name[int(q) - 1])
+    else:
+        out.append(str(name_to_idx[q]))
+sys.stdout.write('\\n'.join(out) + '\\n')
+`,
       solutionExplanation:
         "양방향 조회는 **두 개의 자료구조** — vector (번호→이름) 와 map (이름→번호) — 를 함께 유지하는 게 정석. \`isdigit\` 한 글자로 질문 유형 분기. 두 자료구조 모두 O(1) 조회.",
       en: {
@@ -1187,6 +1417,31 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+from collections import Counter
+input = sys.stdin.readline
+
+n = int(input())
+arr = list(map(int, input().split()))
+cnt = Counter(arr)
+
+ans = 0
+# 0 끼리는 C(k, 2) — Python int 는 자동 big int, 오버플로우 걱정 없음
+if 0 in cnt:
+    k = cnt[0]
+    ans += k * (k - 1) // 2
+# 양수 v 와 -v 는 v>0 쪽만 훑어 곱셈 (중복 카운트 방지)
+for v, c in cnt.items():
+    if v <= 0:
+        continue
+    if -v in cnt:
+        ans += c * cnt[-v]
+print(ans)
+`,
       solutionExplanation:
         "two-sum 의 **카운팅** 변형: 인덱스 쌍이 아니라 개수를 구함. 핵심 트릭은 (1) 0 은 자기 자신과 짝이므로 C(k,2), (2) 양수 v 와 음수 -v 는 곱셈 한 번씩만 — \`v>0\` 만 훑어서 중복 카운트 방지. long long 잊으면 5×10^9 에서 오버플로우.",
       en: {

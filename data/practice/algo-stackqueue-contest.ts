@@ -89,6 +89,36 @@ int main() {
     }
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+t = int(input())
+for _ in range(t):
+    s = input().strip()
+    # TODO: 카운터로 짝 검사
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+t = int(input())
+out = []
+for _ in range(t):
+    s = input().strip()
+    cnt = 0
+    ok = True
+    for c in s:
+        if c == '(':
+            cnt += 1
+        else:
+            cnt -= 1
+        if cnt < 0:
+            ok = False
+            break
+    if cnt != 0:
+        ok = False
+    out.append("YES" if ok else "NO")
+print('\\n'.join(out))
+`,
       solutionExplanation:
         "괄호 종류가 하나면 스택 대신 카운터 정수 하나로 시뮬레이션 가능 — 사실상 '스택의 크기' 만 추적하는 셈. 핵심은 중간에 음수가 되면 즉시 실패 처리. 그렇지 않으면 `)(` 같이 합은 0 인데 잘못된 케이스를 놓친다.",
       en: {
@@ -190,6 +220,29 @@ int main() {
     cout << (ok ? "YES" : "NO") << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+s = sys.stdin.readline().strip()
+# TODO: 여는 괄호 push, 닫는 괄호는 top 과 짝 확인 후 pop
+`,
+      pySolutionCode: `import sys
+
+s = sys.stdin.readline().strip()
+st = []
+pair = {')': '(', ']': '[', '}': '{'}
+ok = True
+for c in s:
+    if c in '([{':
+        st.append(c)
+    else:
+        if not st or st[-1] != pair[c]:
+            ok = False
+            break
+        st.pop()
+if st:
+    ok = False
+print("YES" if ok else "NO")
+`,
       solutionExplanation:
         "여러 종류 괄호 매칭은 정수 카운터로는 불가능 — 가장 마지막에 연 종류가 무엇이었는지 기억해야 한다. 그래서 스택. 닫을 때마다 top 과 짝 비교 후 pop. 마지막 스택이 비어 있어야 모두 짝 맞춰진 것.",
       en: {
@@ -283,6 +336,30 @@ int main() {
     cout << (ok ? "YES" : "NO") << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+from collections import deque
+
+s = sys.stdin.readline().strip()
+# TODO: 스택 (list) 과 큐 (deque) 양쪽에 push, 동시에 pop 하며 비교
+`,
+      pySolutionCode: `import sys
+from collections import deque
+
+s = sys.stdin.readline().strip()
+st = []          # 스택: 뒤에서 꺼냄 (list.pop)
+q = deque()      # 큐: 앞에서 꺼냄 (popleft)
+for c in s:
+    st.append(c)
+    q.append(c)
+ok = True
+while st:
+    if st[-1] != q[0]:
+        ok = False
+        break
+    st.pop()
+    q.popleft()
+print("YES" if ok else "NO")
+`,
       solutionExplanation:
         "스택과 큐는 같은 데이터를 넣어도 꺼내는 방향이 정반대. 둘에서 동시에 꺼내며 비교하면 자연스럽게 '앞 vs 뒤' 비교가 된다. 회문 = 앞에서 읽으나 뒤에서 읽으나 같다 = 큐 front vs 스택 top 이 끝까지 일치.",
       en: {
@@ -400,8 +477,35 @@ int main() {
     cout << best << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+data = sys.stdin.read().split()
+n = int(data[0])
+h = [int(x) for x in data[1:1+n]]
+# TODO: 단조 증가 스택으로 각 막대의 좌우 경계 찾기
+`,
+      pySolutionCode: `import sys
+
+data = sys.stdin.read().split()
+n = int(data[0])
+h = [int(x) for x in data[1:1+n]]
+
+st = []  # 인덱스 저장, h[st] 가 단조 증가
+best = 0
+for i in range(n + 1):
+    cur = -1 if i == n else h[i]
+    while st and h[st[-1]] > cur:
+        height = h[st.pop()]
+        left = st[-1] if st else -1
+        width = i - left - 1
+        if height * width > best:
+            best = height * width
+    if i < n:
+        st.append(i)
+print(best)
+`,
       solutionExplanation:
-        "**Monotonic increasing stack 의 표준 패턴**. 스택은 '아직 오른쪽 경계가 안 정해진 막대들의 인덱스' 를 키 오름차순으로 보관. 새 막대가 들어올 때 스택 top 이 그보다 크면 → top 의 오른쪽 경계가 결정됨 → 면적 계산 후 pop. 끝까지 가면 가상의 높이 -1 막대를 둬서 남은 스택을 비운다. 각 인덱스가 정확히 한 번 push, 한 번 pop → O(N).",
+        "**Monotonic increasing stack 의 표준 패턴**. 스택은 '아직 오른쪽 경계가 안 정해진 막대들의 인덱스' 를 키 오름차순으로 보관. 새 막대가 들어올 때 스택 top 이 그보다 크면 → top 의 오른쪽 경계가 결정됨 → 면적 계산 후 pop. 끝까지 가면 가상의 높이 -1 막대를 둬서 남은 스택을 비운다. 각 인덱스가 정확히 한 번 push, 한 번 pop → O(N). 파이썬은 임의 정수 → overflow 걱정 없음.",
       en: {
         title: "Largest Rectangle in Histogram",
         description: `N bars of width 1 and height \`h[i]\` stand side by side. Find the **largest axis-aligned rectangle** that fits inside the histogram.
@@ -519,6 +623,27 @@ int main() {
     cout << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+data = sys.stdin.read().split()
+n = int(data[0])
+a = [int(x) for x in data[1:1+n]]
+# TODO: 단조 감소 스택으로 각 인덱스의 오큰수 채우기
+`,
+      pySolutionCode: `import sys
+
+data = sys.stdin.read().split()
+n = int(data[0])
+a = [int(x) for x in data[1:1+n]]
+
+ans = [-1] * n
+st = []  # 아직 답을 못 찾은 인덱스들 (값 내림차순)
+for i in range(n):
+    while st and a[st[-1]] < a[i]:
+        ans[st.pop()] = a[i]
+    st.append(i)
+print(' '.join(str(x) for x in ans))
+`,
       solutionExplanation:
         "오큰수의 표준 monotonic stack 풀이. '스택에는 답 아직 못 찾은 인덱스만 보관' 이라고 생각하면 명확. 새 원소가 들어올 때 그보다 작은 스택 원소들의 답이 한꺼번에 결정되고 pop. 각 원소 1번씩 push/pop → O(N).",
       en: {
@@ -654,6 +779,30 @@ int main() {
     cout << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+data = sys.stdin.read().split()
+n = int(data[0])
+prices = [int(x) for x in data[1:1+n]]
+# TODO: (가격, span) 스택으로 작은 값들 흡수
+`,
+      pySolutionCode: `import sys
+
+data = sys.stdin.read().split()
+n = int(data[0])
+prices = [int(x) for x in data[1:1+n]]
+
+st = []  # (price, span) 단조 감소
+out = []
+for p in prices:
+    span = 1
+    while st and st[-1][0] <= p:
+        span += st[-1][1]
+        st.pop()
+    st.append((p, span))
+    out.append(str(span))
+print(' '.join(out))
+`,
       solutionExplanation:
         "Monotonic 감소 스택. 스택 top 이 현재 가격 이하면 'top 은 미래에도 항상 현재 이하' 라는 사실이 영원히 유지되므로 그 span 을 흡수하고 pop. 흡수가 끝난 시점의 누적이 답. 각 원소 push/pop 1 회씩 → O(N).",
       en: {
@@ -755,8 +904,39 @@ int main() {
     cout << st.top() << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+tokens = sys.stdin.read().split()
+# TODO: 숫자는 push, 연산자는 두 개 pop 해서 계산 후 push
+# 주의: 파이썬 // 는 floor division. C++ 처럼 0 쪽으로 자르려면 부호 처리 필요.
+`,
+      pySolutionCode: `import sys
+
+tokens = sys.stdin.read().split()
+st = []
+for tok in tokens:
+    if tok in ('+', '-', '*', '/'):
+        b = st.pop()
+        a = st.pop()
+        if tok == '+':
+            r = a + b
+        elif tok == '-':
+            r = a - b
+        elif tok == '*':
+            r = a * b
+        else:
+            # C++ 정수 나눗셈은 0 쪽으로 자르기. 파이썬 // 는 floor 라 음수에서 차이 남.
+            q = abs(a) // abs(b)
+            if (a < 0) ^ (b < 0):
+                q = -q
+            r = q
+        st.append(r)
+    else:
+        st.append(int(tok))
+print(st[-1])
+`,
       solutionExplanation:
-        "RPN 평가는 스택의 교과서 사용 사례. 숫자는 push, 연산자는 두 개 pop 해서 계산 후 push. **순서 주의** — 먼저 pop 된 게 b (오른쪽 피연산자), 나중에 pop 된 게 a (왼쪽). 마지막 스택의 유일한 원소가 결과.",
+        "RPN 평가는 스택의 교과서 사용 사례. 숫자는 push, 연산자는 두 개 pop 해서 계산 후 push. **순서 주의** — 먼저 pop 된 게 b (오른쪽 피연산자), 나중에 pop 된 게 a (왼쪽). 마지막 스택의 유일한 원소가 결과. 파이썬은 `//` 가 floor 라 음수 나눗셈이 C++ 와 달라서 부호 분리 처리.",
       en: {
         title: "Evaluate Postfix Expression (RPN)",
         description: `One line of space-separated tokens in postfix (Reverse Polish) notation. Tokens are integers or operators \`+\`, \`-\`, \`*\`, \`/\` (integer division, truncates toward 0 like C++ int division).
@@ -819,7 +999,7 @@ int main() {
         { stdin: "4 2", expectedOutput: "<2, 4, 3, 1>", label: "N=4, K=2" },
         {
           stdin: "5 5",
-          expectedOutput: "<5, 1, 2, 4, 3>",
+          expectedOutput: "<5, 1, 3, 4, 2>",
           label: "N=K=5",
         },
         {
@@ -861,8 +1041,27 @@ int main() {
     cout << '>' << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+from collections import deque
+
+n, k = map(int, sys.stdin.read().split())
+q = deque(range(1, n + 1))
+# TODO: K-1 명을 뒤로 보내고 K 번째 제거, 결과를 <...> 형식으로 출력
+`,
+      pySolutionCode: `import sys
+from collections import deque
+
+n, k = map(int, sys.stdin.read().split())
+q = deque(range(1, n + 1))
+out = []
+while q:
+    for _ in range(k - 1):
+        q.append(q.popleft())
+    out.append(str(q.popleft()))
+print('<' + ', '.join(out) + '>')
+`,
       solutionExplanation:
-        "원형 시뮬레이션을 큐로 직선화. K-1 명을 뒤로 보내고 K 번째를 제거하는 게 한 라운드. 큐가 자연스럽게 '회전' 을 표현한다 — 앞에서 빼서 뒤에 넣으면 원이 한 칸 도는 것과 동치.",
+        "원형 시뮬레이션을 큐로 직선화. K-1 명을 뒤로 보내고 K 번째를 제거하는 게 한 라운드. 큐가 자연스럽게 '회전' 을 표현한다 — 앞에서 빼서 뒤에 넣으면 원이 한 칸 도는 것과 동치. 파이썬은 `collections.deque` 가 양 끝 O(1).",
       en: {
         title: "Josephus Problem (with a Queue)",
         description: `N people numbered 1..N sit in a circle. Starting at person 1, count \`K\` clockwise and remove that person. Continue from the next position. Repeat until everyone is removed.
@@ -986,6 +1185,36 @@ int main() {
     cout << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+from collections import deque
+
+data = sys.stdin.read().split()
+n, k = int(data[0]), int(data[1])
+a = [int(x) for x in data[2:2+n]]
+# TODO: 인덱스를 담는 단조 감소 deque 로 각 윈도우 최댓값 출력
+`,
+      pySolutionCode: `import sys
+from collections import deque
+
+data = sys.stdin.read().split()
+n, k = int(data[0]), int(data[1])
+a = [int(x) for x in data[2:2+n]]
+
+dq = deque()  # 인덱스 저장, a[dq] 가 단조 감소
+out = []
+for i in range(n):
+    # 뒤에서 자기 이하인 것들 제거
+    while dq and a[dq[-1]] <= a[i]:
+        dq.pop()
+    dq.append(i)
+    # 윈도우 밖 인덱스 제거
+    while dq and dq[0] < i - k + 1:
+        dq.popleft()
+    # 윈도우 완성 시 출력
+    if i >= k - 1:
+        out.append(str(a[dq[0]]))
+print(' '.join(out))
+`,
       solutionExplanation:
         "Monotonic decreasing deque 패턴. deque 안의 인덱스들이 가리키는 값이 항상 감소하도록 유지하면 front 가 자동으로 현재 윈도우의 최댓값. 뒤에서 자기 이하 제거 (작은 값은 더 이상 답 후보 아님) + 앞에서 윈도우 벗어난 인덱스 제거. 각 인덱스 1회 push + 최대 1회 pop → O(N).",
       en: {
@@ -1049,7 +1278,7 @@ int main() {
           label: "BOJ 1966 원본 예제 3개",
         },
         {
-          stdin: "1\n3 2\n3 1 2",
+          stdin: "1\n3 2\n1 2 3",
           expectedOutput: "1",
           label: "관심 문서가 가장 중요 — 1번째",
         },
@@ -1116,6 +1345,52 @@ int main() {
     }
     return 0;
 }`,
+      pyInitialCode: `import sys
+from collections import deque
+
+data = sys.stdin.read().split()
+idx = 0
+t = int(data[idx]); idx += 1
+for _ in range(t):
+    n = int(data[idx]); idx += 1
+    m = int(data[idx]); idx += 1
+    pris = [int(data[idx + i]) for i in range(n)]
+    idx += n
+    # TODO: 큐에 (중요도, 원래 인덱스) 넣고 시뮬레이션
+`,
+      pySolutionCode: `import sys
+from collections import deque
+
+data = sys.stdin.read().split()
+idx = 0
+t = int(data[idx]); idx += 1
+out = []
+for _ in range(t):
+    n = int(data[idx]); idx += 1
+    m = int(data[idx]); idx += 1
+    pris = [int(data[idx + i]) for i in range(n)]
+    idx += n
+    q = deque()
+    cnt = [0] * 10  # 중요도 1-9 카운트
+    for i, p in enumerate(pris):
+        q.append((p, i))
+        cnt[p] += 1
+    hi = 9
+    order = 0
+    while q:
+        while hi > 0 and cnt[hi] == 0:
+            hi -= 1
+        p, i = q.popleft()
+        if p < hi:
+            q.append((p, i))
+        else:
+            order += 1
+            cnt[p] -= 1
+            if i == m:
+                out.append(str(order))
+                break
+print('\\n'.join(out))
+`,
       solutionExplanation:
         "큐 + 카운팅 풀이. 중요도별 카운트로 '큐 안에 자기보다 큰 게 있는지' 를 O(1) 에 판정 (가장 큰 중요도 hi 만 추적). 추적 대상은 원래 인덱스로 식별. 각 문서가 큐를 돌 수 있지만 한 번 인쇄되면 끝이라 총 작업이 충분히 빠르다 (N ≤ 100).",
       en: {
@@ -1217,6 +1492,26 @@ int main() {
     cout << (open + unmatchedClose) << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+s = sys.stdin.readline().strip()
+# TODO: open / unmatched_close 두 카운터로 한 번 훑기
+`,
+      pySolutionCode: `import sys
+
+s = sys.stdin.readline().strip()
+open_cnt = 0          # 짝 없는 ( 개수 (앞으로 ) 가 필요)
+unmatched_close = 0   # 짝 없는 ) 개수 (앞에 ( 가 부족했음)
+for c in s:
+    if c == '(':
+        open_cnt += 1
+    else:  # ')'
+        if open_cnt > 0:
+            open_cnt -= 1
+        else:
+            unmatched_close += 1
+print(open_cnt + unmatched_close)
+`,
       solutionExplanation:
         "한 번 훑기로 '짝 못 찾은 \`(\` 카운트' 와 '짝 못 찾은 \`)\` 카운트' 를 분리해서 센다. 정답은 단순히 두 값의 합 — 각 짝 없는 괄호마다 반대 종류 1 개를 적당한 위치에 추가하면 되기 때문. 정수 카운터 두 개로 스택을 압축한 형태.",
       en: {
@@ -1342,6 +1637,32 @@ int main() {
     cout << (ok ? "YES" : "NO") << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+data = sys.stdin.read().split()
+n = int(data[0])
+b = [int(x) for x in data[1:1+n]]
+# TODO: 스택 시뮬레이션 — top 이 목표 값이 될 때까지 1..N 을 push
+`,
+      pySolutionCode: `import sys
+
+data = sys.stdin.read().split()
+n = int(data[0])
+b = [int(x) for x in data[1:1+n]]
+
+st = []
+nxt = 1  # 다음에 push 할 수
+ok = True
+for target in b:
+    while (not st or st[-1] != target) and nxt <= n:
+        st.append(nxt)
+        nxt += 1
+    if not st or st[-1] != target:
+        ok = False
+        break
+    st.pop()
+print("YES" if ok else "NO")
+`,
       solutionExplanation:
         "스택 시뮬레이션의 표준 패턴. 각 단계에서 다음 출력 목표 b[i] 가 스택 top 에 오도록 1..N 을 차례로 push. 만약 push 를 다 했는데도 top 이 b[i] 가 아니면 그 순서는 불가능. 각 값은 한 번 push, 한 번 pop → O(N).",
       en: {

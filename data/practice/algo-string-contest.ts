@@ -70,6 +70,29 @@ int main() {
 }`,
       solutionExplanation:
         "two-pointer 패턴의 기본형. l, r 이 가운데에서 만날 때까지 양 끝 글자를 비교. 한 번이라도 다르면 회문이 아님. 길이가 홀수일 때 가운데 글자는 자기 자신과 비교할 필요 없으므로 `l < r` 조건이 정확.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    s = input().strip()
+    l, r = 0, len(s) - 1
+    ok = True
+    while l < r:
+        if s[l] != s[r]:
+            ok = False
+            break
+        l += 1
+        r -= 1
+    print("YES" if ok else "NO")
+
+main()`,
       en: {
         title: "Palindrome Check",
         description: `Read a string S on one line. Print \`YES\` if S is a **palindrome** (reads the same forwards and backwards), otherwise \`NO\`.
@@ -155,6 +178,39 @@ int main() {
 }`,
       solutionExplanation:
         "expand-around-center: 각 위치를 중심으로 양옆으로 확장. 홀수/짝수 두 경우 모두 시도해야 한다. 길이 갱신을 strict `>` 로 해서 '먼저 발견된 것' 을 자동 유지 (인덱스 i 가 증가하는 순서로 돌므로). O(N²) 이지만 N ≤ 1000 이라 충분.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    s = input().strip()
+    n = len(s)
+    best_l, best_len = 0, 1
+
+    def expand(l, r):
+        nonlocal best_l, best_len
+        while l >= 0 and r < n and s[l] == s[r]:
+            l -= 1
+            r += 1
+        # 실제 회문 범위 [l+1, r-1], 길이 = r - l - 1
+        length = r - l - 1
+        if length > best_len:
+            best_len = length
+            best_l = l + 1
+
+    for i in range(n):
+        expand(i, i)      # 홀수 길이
+        expand(i, i + 1)  # 짝수 길이
+
+    print(s[best_l:best_l + best_len])
+
+main()`,
       en: {
         title: "Longest Palindromic Substring",
         description: `Given a string S, print the **longest palindromic substring** of S (a substring is a contiguous slice).
@@ -235,6 +291,26 @@ int main() {
 }`,
       solutionExplanation:
         "두 가지 표준 접근: (1) 빈도수 배열 — A 는 +1, B 는 -1 후 모두 0 인지 확인. O(N). (2) 둘 다 정렬 후 비교. O(N log N). 길이 다르면 무조건 NO 인 점을 먼저 체크하면 빠르게 종료할 수 있다.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+from collections import Counter
+input = sys.stdin.readline
+
+def main():
+    a = input().strip()
+    b = input().strip()
+    if len(a) != len(b):
+        print("NO")
+        return
+    print("YES" if Counter(a) == Counter(b) else "NO")
+
+main()`,
       en: {
         title: "Anagram Check",
         description: `Two strings A, B are given on separate lines. Print \`YES\` if they are **anagrams** (same multiset of characters), otherwise \`NO\`.
@@ -328,6 +404,34 @@ int main() {
 }`,
       solutionExplanation:
         "스택의 교과서적 응용. 여는 괄호는 모두 push, 닫는 괄호가 나오면 가장 최근에 열린 것(top)과 짝이 맞아야 함. 두 가지 실패 케이스: (1) 닫는데 스택 비어있음, (2) 짝이 안 맞음. 끝나고 스택 비어있는지도 확인 — 여는 게 남으면 짝이 안 된 것.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    s = input().strip()
+    stack = []
+    pair = {')': '(', ']': '[', '}': '{'}
+    ok = True
+    for c in s:
+        if c in '([{':
+            stack.append(c)
+        else:
+            if not stack or stack[-1] != pair[c]:
+                ok = False
+                break
+            stack.pop()
+    if stack:
+        ok = False
+    print("YES" if ok else "NO")
+
+main()`,
       en: {
         title: "Valid Parentheses",
         description: `Given a string S containing only \`()\`, \`[]\`, \`{}\`, decide if it is a **valid** parenthesis string. Print \`YES\` or \`NO\`.
@@ -419,6 +523,30 @@ int main() {
 }`,
       solutionExplanation:
         "그룹화 패턴: 외부 인덱스 i, 같은 글자가 끝나는 위치 j 를 내부에서 찾아 한 번에 그룹 한 개 처리. 이렇게 하면 '마지막 그룹 빠뜨리기' 실수가 자연스럽게 사라진다. `i = j` 로 다음 그룹의 시작으로 이동.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    s = input().strip()
+    out = []
+    i, n = 0, len(s)
+    while i < n:
+        j = i
+        while j < n and s[j] == s[i]:
+            j += 1
+        out.append(s[i])
+        out.append(str(j - i))
+        i = j
+    print(''.join(out))
+
+main()`,
       en: {
         title: "String Compression (RLE)",
         description: `Given string S, compress consecutive runs of the same character into \`char count\` form.
@@ -504,6 +632,32 @@ int main() {
 }`,
       solutionExplanation:
         "단순(naive) 부분 문자열 검색 — O(N·M). 외부 루프는 시작 위치 i, 내부 루프는 needle 글자별 비교. `i <= N - M` 으로 제한해야 인덱스 범위를 안 벗어남. KMP/보이어-무어 같은 고급 알고리즘도 있지만, 이 규모에서는 단순 구현이 충분히 빠르다.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    h = input().strip()
+    n = input().strip()
+    N, M = len(h), len(n)
+    ans = -1
+    # str.find 금지 — 직접 이중 루프
+    for i in range(N - M + 1):
+        j = 0
+        while j < M and h[i + j] == n[j]:
+            j += 1
+        if j == M:
+            ans = i
+            break
+    print(ans)
+
+main()`,
       en: {
         title: "Find Substring (Naive Search)",
         description: `Given two strings \`haystack\` and \`needle\` on separate lines, print the **first 0-based starting index** of \`needle\` inside \`haystack\`, or \`-1\` if not found.
@@ -589,6 +743,35 @@ int main() {
 }`,
       solutionExplanation:
         "세로 비교 (vertical scan): 인덱스 i 를 키워가며 모든 문자열의 같은 위치 글자를 비교. 두 가지 종료 조건 — 어떤 문자열이 짧아져서 인덱스가 범위를 벗어남, 또는 글자가 다름. 어느 쪽이든 i 가 답의 길이.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    n = int(input())
+    v = [input().strip() for _ in range(n)]
+    i = 0
+    while True:
+        if i >= len(v[0]):
+            break
+        c = v[0][i]
+        ok = True
+        for k in range(1, n):
+            if i >= len(v[k]) or v[k][i] != c:
+                ok = False
+                break
+        if not ok:
+            break
+        i += 1
+    print(v[0][:i])
+
+main()`,
       en: {
         title: "Longest Common Prefix",
         description: `First line N, then N lines of lowercase English strings. Print the **longest common prefix** of all of them. If none, output an empty line (newline only).
@@ -646,7 +829,7 @@ int main() {
         { stdin: "a", expectedOutput: "0", label: "분할 불가능" },
         { stdin: "ab", expectedOutput: "1", label: "a|b → 1 vs 1" },
         { stdin: "acbadbaada", expectedOutput: "2", label: "LC 다른 예시" },
-        { stdin: "abcdef", expectedOutput: "0", label: "전부 다른 글자 — 균형 불가" },
+        { stdin: "abcdef", expectedOutput: "1", label: "전부 다른 글자 — 가운데 'abc'|'def' 만 3 vs 3" },
       ],
       hints: [
         "단순 방법: 각 split point 마다 좌/우 distinct 를 매번 새로 세면 O(N²) — 너무 느리다.",
@@ -689,6 +872,47 @@ int main() {
 }`,
       solutionExplanation:
         "Prefix/Suffix distinct 패턴. 왼쪽 → 오른쪽 으로 한 번 훑어 \`leftDist[i]\` = s[0..i] 의 distinct 저장, 오른쪽 → 왼쪽으로 한 번 더 훑어 \`rightDist[i]\` = s[i..n-1] 의 distinct 저장. 그 다음 split point i (0..n-2) 마다 \`leftDist[i] == rightDist[i+1]\` 검사. O(N).",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    s = input().strip()
+    n = len(s)
+    if n < 2:
+        print(0)
+        return
+    left_dist = [0] * n
+    seen = [False] * 26
+    cnt = 0
+    for i in range(n):
+        idx = ord(s[i]) - ord('a')
+        if not seen[idx]:
+            seen[idx] = True
+            cnt += 1
+        left_dist[i] = cnt
+    right_dist = [0] * n
+    seen2 = [False] * 26
+    cnt = 0
+    for i in range(n - 1, -1, -1):
+        idx = ord(s[i]) - ord('a')
+        if not seen2[idx]:
+            seen2[idx] = True
+            cnt += 1
+        right_dist[i] = cnt
+    ans = 0
+    for i in range(n - 1):
+        if left_dist[i] == right_dist[i + 1]:
+            ans += 1
+    print(ans)
+
+main()`,
       en: {
         title: "Number of Good Splits",
         description: `Given a lowercase string S, count the number of ways to split it into **two non-empty parts** such that the **number of distinct characters is the same** on both sides ("good split").
@@ -802,6 +1026,44 @@ int main() {
 }`,
       solutionExplanation:
         "3 가지 케이스 분기. 길이 차 ≥ 2 면 즉시 NO. 길이 같으면 단순 mismatch 카운트 = 1 검사. 길이 차 1 이면 긴 쪽 포인터 i, 짧은 쪽 j 로 동기화 — mismatch 가 나면 긴 쪽만 한 칸 전진(삽입 처리), 두 번째 mismatch 면 NO. used 플래그 한 번만 허용. getline 으로 빈 줄도 입력으로 받음.",
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.read().split('\\n')
+    # 빈 줄도 유효한 입력
+    a = data[0] if len(data) > 0 else ''
+    b = data[1] if len(data) > 1 else ''
+    n, m = len(a), len(b)
+    if abs(n - m) > 1:
+        print("NO")
+        return
+    if n == m:
+        diff = sum(1 for i in range(n) if a[i] != b[i])
+        print("YES" if diff == 1 else "NO")
+        return
+    L = a if n > m else b
+    S = b if n > m else a
+    i = j = 0
+    used = False
+    while i < len(L) and j < len(S):
+        if L[i] == S[j]:
+            i += 1
+            j += 1
+        else:
+            if used:
+                print("NO")
+                return
+            used = True
+            i += 1
+    print("YES")
+
+main()`,
       en: {
         title: "One Edit Distance",
         description: `Two lowercase strings A, B on separate lines. Print \`YES\` if A can be turned into B with **exactly one** edit, otherwise \`NO\`.
@@ -902,6 +1164,40 @@ int main() {
 }`,
       solutionExplanation:
         "전형적인 슬라이딩 윈도우. 오른쪽 r 을 늘리면서 새 글자는 distinct +1. distinct > K 가 되면 왼쪽 l 을 줄여 윈도우 축소 — 빈도가 0 으로 떨어진 글자는 distinct -1. 두 포인터 모두 N 번까지만 움직이므로 O(N).",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    s = input().strip()
+    k = int(input())
+    n = len(s)
+    cnt = [0] * 26
+    distinct = 0
+    l = 0
+    ans = 0
+    for r in range(n):
+        idx = ord(s[r]) - ord('a')
+        if cnt[idx] == 0:
+            distinct += 1
+        cnt[idx] += 1
+        while distinct > k:
+            lidx = ord(s[l]) - ord('a')
+            cnt[lidx] -= 1
+            if cnt[lidx] == 0:
+                distinct -= 1
+            l += 1
+        if r - l + 1 > ans:
+            ans = r - l + 1
+    print(ans)
+
+main()`,
       en: {
         title: "Longest Substring with At Most K Distinct Characters",
         description: `Given a lowercase string S (line 1) and integer K (line 2), find the length of the longest substring (contiguous slice) of S with **at most K distinct characters**.
@@ -998,6 +1294,36 @@ int main() {
 }`,
       solutionExplanation:
         "포맷 검증은 '먼저 길이/구조, 그 다음 각 자리 내용' 순서가 깔끔하다. 짧고 단계적으로: 길이 → 구분자 위치 → 각 자리 문자 종류. ASCII 비교(`'A'<=c<='Z'`)는 표준 c-style 검증 패턴 — `<cctype>` 의 `isupper`, `isdigit` 도 같은 역할.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    s = input().strip()
+    ok = True
+    if len(s) != 8:
+        ok = False
+    if ok and s[3] != '-':
+        ok = False
+    if ok:
+        for i in range(3):
+            if not ('A' <= s[i] <= 'Z'):
+                ok = False
+                break
+    if ok:
+        for i in range(4, 8):
+            if not ('0' <= s[i] <= '9'):
+                ok = False
+                break
+    print("VALID" if ok else "INVALID")
+
+main()`,
       en: {
         title: "License Plate Validator",
         description: `Given a string S on one line, print \`VALID\` if it matches the pattern \`XXX-NNNN\` exactly, else \`INVALID\`.
@@ -1104,6 +1430,35 @@ int main() {
 }`,
       solutionExplanation:
         "총 1 개수를 미리 알면 오른쪽 1 개수 = ones - 왼쪽 1 개수 로 O(1) 계산 가능. 왼쪽에서 오른쪽으로 한 번 훑으며 분할 점 i (왼쪽이 i+1 글자) 마다 점수 계산. for 의 범위가 i < n-1 인 이유: 마지막 글자 전에서 분할해야 양쪽이 비어있지 않음.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    s = input().strip()
+    n = len(s)
+    ones = s.count('1')
+    zeros_left = 0
+    ones_left = 0
+    best = -1
+    # 분할 점 i: 왼쪽 = s[0..i], 오른쪽 = s[i+1..n-1]. i 는 0 .. n-2.
+    for i in range(n - 1):
+        if s[i] == '0':
+            zeros_left += 1
+        else:
+            ones_left += 1
+        score = zeros_left + (ones - ones_left)
+        if score > best:
+            best = score
+    print(best)
+
+main()`,
       en: {
         title: "Maximum Score After Splitting a Binary String",
         description: `Given a string S of \`0\`s and \`1\`s, split it into **two non-empty parts**. The score is:
