@@ -24,6 +24,7 @@ import {
   type JourneyStage,
 } from "@/lib/journey-stages"
 import { getSmartNext, getPreferredTrack } from "@/lib/smart-next"
+import { PythonDiagnosticQuiz } from "@/components/python-diagnostic-quiz"
 
 // ── 6 스테이지 좌표 (viewBox 100×180) ────────────────────────────
 interface MapPlacement {
@@ -315,6 +316,7 @@ export default function JourneyPage() {
   // 트랙 판별 — 사용자 명시 선택 우선, 없으면 자동 추정 + 첫 진입 시 모달
   const [explicitTrack, setExplicitTrack] = useState<"A" | "B" | "C" | null>(null)
   const [showTrackModal, setShowTrackModal] = useState(false)
+  const [showDiagnostic, setShowDiagnostic] = useState(false)
   useEffect(() => {
     try {
       const saved = typeof window !== "undefined" ? localStorage.getItem("coderin-track") : null
@@ -402,41 +404,67 @@ export default function JourneyPage() {
         {/* 트랙 선택 모달 — 첫 진입 또는 변경 시 */}
         {showTrackModal && (
           <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl">
-              <h2 className="text-xl font-black text-amber-900 mb-1">
-                🛤️ {t("나의 학습 트랙 선택", "Pick your track")}
-              </h2>
-              <p className="text-xs text-gray-600 mb-4">
-                {t("나중에 언제든 바꿀 수 있어요.", "Changeable anytime later.")}
-              </p>
-              <div className="space-y-2">
-                {(["A", "B", "C"] as const).map(k => (
+            <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+              {showDiagnostic ? (
+                <PythonDiagnosticQuiz
+                  onResult={(track) => { saveTrack(track); setShowDiagnostic(false) }}
+                  onCancel={() => setShowDiagnostic(false)}
+                />
+              ) : (
+                <>
+                  <h2 className="text-xl font-black text-amber-900 mb-1">
+                    🛤️ {t("나의 학습 트랙 선택", "Pick your track")}
+                  </h2>
+                  <p className="text-xs text-gray-600 mb-4">
+                    {t("나중에 언제든 바꿀 수 있어요.", "Changeable anytime later.")}
+                  </p>
+                  <div className="space-y-2">
+                    {(["A", "B", "C"] as const).map(k => (
+                      <button
+                        key={k}
+                        onClick={() => saveTrack(k)}
+                        className="w-full text-left p-3 rounded-xl border-2 border-amber-200 hover:border-orange-400 hover:bg-orange-50 transition-all"
+                      >
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-xl">{trackLabels[k].emoji}</span>
+                          <span className="font-black text-sm text-amber-900">
+                            Track {k} — {t(trackLabels[k].title, trackLabels[k].titleEn)}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-gray-600 ml-7">
+                          {k === "A" && t("처음 코딩 — Python 부터 차근차근", "First time — start from Python")}
+                          {k === "B" && t("Python 만으로 USACO 까지 (Python 제출 가능)", "Python only, all the way to USACO (Python accepted)")}
+                          {k === "C" && t("Python 이미 알아요 — 바로 C++ 부터", "Already know Python — start with C++")}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* 진단 퀴즈 — Python 안다고 자신 있는지 체크 */}
                   <button
-                    key={k}
-                    onClick={() => saveTrack(k)}
-                    className="w-full text-left p-3 rounded-xl border-2 border-amber-200 hover:border-orange-400 hover:bg-orange-50 transition-all"
+                    onClick={() => setShowDiagnostic(true)}
+                    className="w-full mt-3 p-3 rounded-xl border-2 border-dashed border-blue-300 hover:border-blue-500 hover:bg-blue-50 transition-all text-left"
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xl">{trackLabels[k].emoji}</span>
-                      <span className="font-black text-sm text-amber-900">
-                        Track {k} — {t(trackLabels[k].title, trackLabels[k].titleEn)}
+                      <span className="text-xl">🎯</span>
+                      <span className="font-black text-sm text-blue-900">
+                        {t("Python 진단 퀴즈 풀기 (5 문제)", "Take Python diagnostic (5 questions)")}
                       </span>
                     </div>
-                    <p className="text-[11px] text-gray-600 ml-7">
-                      {k === "A" && t("처음 코딩 — Python 부터 차근차근", "First time — start from Python")}
-                      {k === "B" && t("Python 만으로 USACO 까지 (Python 제출 가능)", "Python only, all the way to USACO (Python accepted)")}
-                      {k === "C" && t("Python 이미 알아요 — 바로 C++ 부터", "Already know Python — start with C++")}
+                    <p className="text-[11px] text-blue-700 ml-7">
+                      {t("자동으로 Track A 또는 C 추천", "Auto-recommend Track A or C")}
                     </p>
                   </button>
-                ))}
-              </div>
-              {explicitTrack && (
-                <button
-                  onClick={() => setShowTrackModal(false)}
-                  className="w-full mt-3 text-xs text-gray-500 hover:text-gray-700"
-                >
-                  {t("취소", "Cancel")}
-                </button>
+
+                  {explicitTrack && (
+                    <button
+                      onClick={() => setShowTrackModal(false)}
+                      className="w-full mt-3 text-xs text-gray-500 hover:text-gray-700"
+                    >
+                      {t("취소", "Cancel")}
+                    </button>
+                  )}
+                </>
               )}
             </div>
           </div>
