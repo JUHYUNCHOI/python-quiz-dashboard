@@ -312,15 +312,87 @@ export default function JourneyPage() {
   const nextAction = getSmartNext(completedIds, preferredTrack)
   const isFresh = completedIds.size === 0
 
+  // 트랙 판별 (사용자 선택 우선, 없으면 진도 기반 자동 추정)
+  // 임시 자동 추정: cpp 진도 있으면 A 또는 C, 없으면 B (Python 만)
+  // TODO 사용자 명시 선택 모달 — 다음 Phase
+  const trackId: "A" | "B" | "C" = hasCpp
+    ? (completedIds.size > 30 ? "A" : "C")  // 진도 많으면 A (Python 도 했음), 아니면 C
+    : "B"
+  const trackLabels: Record<"A" | "B" | "C", { title: string; titleEn: string; emoji: string }> = {
+    A: { title: "신입 (Python → C++ → 대회)", titleEn: "Beginner (Python → C++ → Contest)", emoji: "🌱" },
+    B: { title: "Python 끝까지", titleEn: "Python all the way", emoji: "🐍" },
+    C: { title: "Python 사전지식 (바로 C++)", titleEn: "Has Python (straight to C++)", emoji: "⚡" },
+  }
+
+  // 4-5 단계 진도 (트랙별)
+  const PY_DONE = Array.from({ length: 52 }, (_, i) => String(i + 1)).filter(id => completedIds.has(id)).length
+  const CPP_LIST = ["cpp-1","cpp-2","cpp-3","cpp-4","cpp-5","cpp-6","cpp-7","cpp-8","cpp-p1","cpp-9","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-21","cpp-22","cpp-p2","cpp-15","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20","cpp-23","cpp-p3"]
+  const CPP_DONE = CPP_LIST.filter(id => completedIds.has(id)).length
+  const BANK_SOLVED = (() => {
+    try {
+      const raw = typeof window !== "undefined" ? localStorage.getItem("coding-bank-solved") : null
+      return raw ? (JSON.parse(raw) as string[]).length : 0
+    } catch { return 0 }
+  })()
+  const ALGO_MASTERED = ["sorting","prefixsum","array","stackqueue","hashtable","string"].filter(t => {
+    try {
+      const raw = typeof window !== "undefined" ? localStorage.getItem(`algo-${t}-chapter`) : null
+      if (!raw) return false
+      const d = JSON.parse(raw)
+      return d.mastered && Array.isArray(d.completed) && d.completed.length >= 5
+    } catch { return false }
+  }).length
+
+  const stages = trackId === "B"
+    ? [
+        { emoji: "🐍", label: "Python 수업+연습", done: PY_DONE, total: 52 },
+        { emoji: "💪", label: "코딩 뱅크 (도전)", done: BANK_SOLVED, total: 5 },
+        { emoji: "🧩", label: "알고리즘 (Py)", done: ALGO_MASTERED, total: 6 },
+        { emoji: "🏆", label: "대회", done: 0, total: 1 },
+      ]
+    : trackId === "C"
+    ? [
+        { emoji: "⚡", label: "C++ 수업+연습", done: CPP_DONE, total: CPP_LIST.length },
+        { emoji: "💪", label: "코딩 뱅크 (도전)", done: BANK_SOLVED, total: 5 },
+        { emoji: "🧩", label: "알고리즘", done: ALGO_MASTERED, total: 6 },
+        { emoji: "🏆", label: "대회", done: 0, total: 1 },
+      ]
+    : [
+        { emoji: "🐍", label: "Python 수업+연습", done: PY_DONE, total: 52 },
+        { emoji: "⚡", label: "C++ 수업+연습", done: CPP_DONE, total: CPP_LIST.length },
+        { emoji: "💪", label: "코딩 뱅크 (도전)", done: BANK_SOLVED, total: 5 },
+        { emoji: "🧩", label: "알고리즘", done: ALGO_MASTERED, total: 6 },
+        { emoji: "🏆", label: "대회", done: 0, total: 1 },
+      ]
+
+  // 현재 단계 idx (첫 미완료 stage)
+  const currentStageIdx = stages.findIndex(s => s.done < s.total)
+  const trackInfo = trackLabels[trackId]
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-100 via-amber-50 to-amber-100 pb-32">
       <Header />
 
       <main className="max-w-3xl mx-auto px-3 sm:px-6 pt-6">
+        {/* 트랙 표시 — "어디 있는지" 항상 명확 */}
+        <div className="mb-3 flex items-center justify-between gap-2 bg-white/70 backdrop-blur-sm rounded-xl border border-amber-200 px-3 py-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-xl shrink-0">{trackInfo.emoji}</span>
+            <div className="min-w-0">
+              <p className="text-[9px] font-bold text-amber-700 uppercase tracking-wider">
+                {t("나의 학습 트랙", "My Track")}
+              </p>
+              <p className="text-sm font-black text-amber-900 truncate">
+                {t(trackInfo.title, trackInfo.titleEn)}
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* 📍 지금 할 일 — 결정 피로 0 */}
         <Link
           href={nextAction.href}
-          className="block mb-5 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-200/50 hover:shadow-2xl active:scale-[0.99] transition-all"
+          className="block mb-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-xl shadow-orange-200/50 hover:shadow-2xl active:scale-[0.99] transition-all"
         >
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/25 rounded-xl flex items-center justify-center text-2xl sm:text-3xl shrink-0">
@@ -341,6 +413,55 @@ export default function JourneyPage() {
           </div>
         </Link>
 
+        {/* 5 단계 선형 진도 — "전체 여정 어디" 한눈에 */}
+        <div className="mb-5 bg-white/80 backdrop-blur-sm rounded-2xl border-2 border-amber-200 p-3 sm:p-4">
+          <p className="text-[10px] font-bold text-amber-700 uppercase tracking-wider mb-2 px-1">
+            {t("전체 여정 — 단계별", "Full journey — by stage")}
+          </p>
+          <div className="space-y-2">
+            {stages.map((s, idx) => {
+              const pct = Math.round((s.done / s.total) * 100)
+              const isDone = s.done >= s.total
+              const isCurrent = idx === currentStageIdx
+              const isLocked = currentStageIdx >= 0 && idx > currentStageIdx
+              return (
+                <div key={s.label} className={cn(
+                  "flex items-center gap-2 px-2 py-1.5 rounded-lg",
+                  isCurrent && "bg-orange-100 border border-orange-300",
+                  isDone && "opacity-80",
+                )}>
+                  <span className="text-lg shrink-0">{s.emoji}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className={cn(
+                        "text-xs font-black truncate",
+                        isCurrent ? "text-orange-800" : isDone ? "text-emerald-700" : "text-gray-500",
+                      )}>{idx + 1}. {s.label}</span>
+                      {isCurrent && (
+                        <span className="text-[8px] font-black px-1 py-0.5 bg-orange-500 text-white rounded">NOW</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+                        <div className={cn(
+                          "h-full transition-all duration-500",
+                          isDone ? "bg-emerald-400" : isCurrent ? "bg-orange-400" : "bg-gray-200",
+                        )} style={{ width: `${pct}%` }} />
+                      </div>
+                      <span className={cn(
+                        "text-[10px] font-bold tabular-nums shrink-0",
+                        isCurrent ? "text-orange-700" : isDone ? "text-emerald-700" : "text-gray-400",
+                      )}>
+                        {isDone ? "✓" : isLocked ? "🔒" : `${s.done}/${s.total}`}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
         <div className="text-center mb-6">
           <div className="inline-block px-4 py-1.5 bg-amber-200 rounded-full shadow-md border-2 border-amber-400 mb-3 transform -rotate-2">
             <span className="text-sm font-black text-amber-900">🗺️ {t("학습 모험 지도", "Adventure Map")}</span>
@@ -360,16 +481,34 @@ export default function JourneyPage() {
 
         <GameMap completedIds={completedIds} hasCpp={hasCpp} />
 
-        {/* 3 경로 설명 */}
+        {/* 💡 옆길 — 부족하면 더 풀 곳 (선택) */}
         <div className="mt-6 mx-auto max-w-md space-y-2">
+          <div className="bg-blue-50 rounded-xl p-3 border-2 border-blue-200">
+            <p className="text-xs font-black text-blue-900 mb-2">
+              💡 {t("부족하면 옆길로 더 연습 (선택)", "Need more? Side paths (optional)")}
+            </p>
+            <div className="space-y-1.5">
+              <Link href="/practice" className="block text-[11px] text-blue-800 hover:text-blue-900 hover:underline">
+                → {t("수업별 연습 문제 더 풀기 (클러스터)", "More lesson practice (clusters)")}
+              </Link>
+              <Link href="/coding-bank" className="block text-[11px] text-blue-800 hover:text-blue-900 hover:underline">
+                → {t("코딩 뱅크 — 종합 도전 문제", "Coding Bank — challenge problems")}
+              </Link>
+              <Link href="/algo" className="block text-[11px] text-blue-800 hover:text-blue-900 hover:underline">
+                → {t("알고리즘 토픽 — 자유롭게 골라 풀기", "Algorithm topics — pick freely")}
+              </Link>
+            </div>
+          </div>
+
+          {/* 3 경로 설명 */}
           <div className="bg-amber-50 rounded-xl p-3 border-2 border-amber-300">
             <p className="text-xs font-black text-amber-900 mb-1.5 text-center">
               ⭐ {t("3가지 경로 (자유 선택)", "3 Paths (Free Choice)")}
             </p>
             <div className="space-y-1 text-[11px] text-amber-800">
-              <p><b>1.</b> 🐍 → 💪 → 🧠 → 🏆 {t("(Python 만)", "(Python only)")}</p>
-              <p><b>2.</b> 🐍 → 💪 → ⚡ → 💪 → 🧠 → 🏆 {t("(풀 코스)", "(Full)")}</p>
-              <p><b>3.</b> ⚡ → 💪 → 🧠 → 🏆 {t("(C++ 부터 — Python 자동)", "(C++ start — Python auto)")}</p>
+              <p><b>A.</b> 🐍 → ⚡ → 💪 → 🧠 → 🏆 {t("(신입 — Python 부터 종합)", "(Beginner — Python first)")}</p>
+              <p><b>B.</b> 🐍 → 💪 → 🧠 → 🏆 {t("(Python 만 — USACO Py 제출)", "(Python only)")}</p>
+              <p><b>C.</b> ⚡ → 💪 → 🧠 → 🏆 {t("(Python 사전지식 — 바로 C++)", "(Has Python — straight to C++)")}</p>
             </div>
           </div>
         </div>
