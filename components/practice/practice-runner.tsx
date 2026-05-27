@@ -200,15 +200,63 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
   const { t, lang: locale } = useLanguage()
   const isEn = locale === "en"
   const problem = localizeProblem(rawProblem, locale)
-  const lang = problem.language ?? "cpp"
-  // 언어별 분리 → KO/EN 캐시가 서로 안 섞이도록 (학생이 언어 바꿨을 때 옛 starter 가 표시되는 문제 방지)
-  const storageKey = `practice-code-${problem.id}-${isEn ? "en" : "ko"}`
+
+  // 이중 언어 지원: pyInitialCode + pySolutionCode 가 둘 다 있으면 토글 가능.
+  // 기본값: 문제의 language (없으면 cpp).
+  const hasPython = !!(rawProblem.pyInitialCode && rawProblem.pySolutionCode)
+  const defaultLang = problem.language ?? "cpp"
+  const [runtimeLang, setRuntimeLang] = useState<"cpp" | "python">(() => {
+    if (typeof window === "undefined") return defaultLang
+    if (!hasPython) return defaultLang
+    try {
+      const saved = localStorage.getItem(`practice-lang-${problem.id}`)
+      if (saved === "python" || saved === "cpp") return saved
+    } catch {}
+    // 페이지 전역 알고 lang 도 참고 (예: /algo 챕터에서 cpp 선택했다면 풀이도 cpp)
+    try {
+      const algoLang = localStorage.getItem("algo-code-lang")
+      if (algoLang === "py") return "python"
+      if (algoLang === "cpp") return "cpp"
+    } catch {}
+    return defaultLang
+  })
+  const lang = runtimeLang
+  // 언어별 분리 → KO/EN 캐시가 서로 안 섞이도록 + cpp/py 캐시도 분리
+  const storageKey = `practice-code-${problem.id}-${isEn ? "en" : "ko"}-${lang}`
+
+  // 현재 lang 에 맞는 initialCode + solutionCode 선택
+  const currentInitialCode = lang === "python"
+    ? (rawProblem.pyInitialCode ?? problem.initialCode ?? "")
+    : (problem.initialCode ?? "")
+  const currentSolutionCode = lang === "python"
+    ? (rawProblem.pySolutionCode ?? problem.solutionCode ?? "")
+    : (problem.solutionCode ?? "")
 
   const [code, setCode] = useState(() => {
-    const initial = localizeInitialCode(problem.initialCode ?? "", isEn)
+    const initial = localizeInitialCode(currentInitialCode, isEn)
     if (typeof window === "undefined") return initial
     try { return localStorage.getItem(storageKey) || initial } catch { return initial }
   })
+
+  // 언어 바뀌면 storageKey 따라 코드 다시 로드
+  useEffect(() => {
+    const initial = localizeInitialCode(currentInitialCode, isEn)
+    try {
+      const saved = localStorage.getItem(storageKey)
+      setCode(saved || initial)
+    } catch {
+      setCode(initial)
+    }
+    // 결과 / 에러 리셋
+    setResults([])
+    setError("")
+    setAllPassed(false)
+    // lang 저장
+    if (hasPython) {
+      try { localStorage.setItem(`practice-lang-${problem.id}`, lang) } catch {}
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang])
   const [results, setResults] = useState<TestResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [testsCompleted, setTestsCompleted] = useState(0)
@@ -303,7 +351,7 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
   }
 
   const reset = () => {
-    setCode(localizeInitialCode(problem.initialCode ?? "", isEn))
+    setCode(localizeInitialCode(currentInitialCode, isEn))
     setResults([])
     setError("")
     setAllPassed(false)
@@ -320,9 +368,31 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
       <div className="cpp-editor-dark relative rounded-xl overflow-hidden border border-white/10 bg-[#1e1e2e]">
         <div className="flex items-center justify-between px-4 py-2 bg-[#181825] border-b border-white/10">
           <span className="text-xs text-white/40 font-mono">{lang === "python" ? "main.py" : "main.cpp"}</span>
-          <button onClick={reset} className="flex items-center gap-1 text-xs text-white/40 hover:text-white/70 transition-colors">
-            <RotateCcw className="w-3 h-3" /> {t("초기화", "Reset")}
-          </button>
+          <div className="flex items-center gap-2">
+            {hasPython && (
+              <div className="flex bg-white/5 rounded-md p-0.5 gap-0.5">
+                <button
+                  onClick={() => setRuntimeLang("cpp")}
+                  className={cn(
+                    "px-2 py-0.5 rounded text-[10px] font-bold transition-all",
+                    lang === "cpp" ? "bg-blue-500 text-white" : "text-white/40 hover:text-white/70"
+                  )}
+                  title="C++"
+                >⚡ C++</button>
+                <button
+                  onClick={() => setRuntimeLang("python")}
+                  className={cn(
+                    "px-2 py-0.5 rounded text-[10px] font-bold transition-all",
+                    lang === "python" ? "bg-emerald-500 text-white" : "text-white/40 hover:text-white/70"
+                  )}
+                  title="Python"
+                >🐍 Py</button>
+              </div>
+            )}
+            <button onClick={reset} className="flex items-center gap-1 text-xs text-white/40 hover:text-white/70 transition-colors">
+              <RotateCcw className="w-3 h-3" /> {t("초기화", "Reset")}
+            </button>
+          </div>
         </div>
         <CodeEditorWithGutter
           value={code}
@@ -515,7 +585,7 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
       </button>
       {showSolution && (
         <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
-          <pre className="font-mono text-sm text-gray-700 whitespace-pre-wrap overflow-x-auto">{problem.solutionCode}</pre>
+          <pre className="font-mono text-sm text-gray-700 whitespace-pre-wrap overflow-x-auto">{currentSolutionCode}</pre>
           <p className="mt-3 text-sm text-gray-500">{problem.solutionExplanation}</p>
         </div>
       )}

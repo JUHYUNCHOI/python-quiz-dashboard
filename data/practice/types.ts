@@ -48,6 +48,13 @@ export interface PracticeProblem {
   solutionCode?: string
   solutionExplanation?: string
 
+  /** 이중 언어 지원 — Python 풀이도 제공할 때.
+   *  존재하면 PracticeRunner 가 언어 토글 (C++/Python) 표시.
+   *  test cases 는 언어 무관 (stdin/expectedOutput 만 비교).
+   */
+  pyInitialCode?: string
+  pySolutionCode?: string
+
   // mcq 전용 필드
   codeSnippet?: string                    // 읽기 전용으로 표시할 코드
   options?: string[]                      // 선택지

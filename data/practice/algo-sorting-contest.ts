@@ -65,6 +65,18 @@ int main() {
 }`,
       solutionExplanation:
         "오름차순 정렬 후 v[K-1] 이 K번째 작은 값. nth_element 로 O(N) 도 가능하지만 sort 가 더 직관적이고 N≤10만이면 충분히 빠르다.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+v = list(map(int, input().split()))
+v.sort()
+print(v[k - 1])
+`,
       en: {
         title: "K-th Smallest Element",
         description: `Given N integers and K, print the K-th smallest value (1-based) after sorting.
@@ -164,6 +176,20 @@ int main() {
 }`,
       solutionExplanation:
         "comparator 로 (길이, 사전순) 두 키 정렬. 정렬된 상태에서 `unique` + `erase` 로 중복 제거 (정렬된 인접 중복만 제거하므로 sort 가 먼저).",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+words = set()
+for _ in range(n):
+    words.add(input().strip())
+result = sorted(words, key=lambda s: (len(s), s))
+sys.stdout.write("\\n".join(result) + "\\n")
+`,
       en: {
         title: "Word Sort",
         description: `Sort N words by:
@@ -254,6 +280,19 @@ int main() {
 }`,
       solutionExplanation:
         "정렬 + two-pointer 패턴. 양쪽에서 같은 값을 만나면 카운트 후 양쪽에서 그 값 전체를 건너뛴다 — 중복 카운트 방지. 크기가 다를 때도 한 쪽이 끝나면 자동 종료.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+a = set(map(int, input().split()))
+m = int(input())
+b = set(map(int, input().split()))
+print(len(a & b))
+`,
       en: {
         title: "Common Elements of Two Arrays",
         description: `Given two arrays A (size N) and B (size M), print the number of **distinct values** that appear in both.
@@ -327,6 +366,17 @@ int main() {
 }`,
       solutionExplanation:
         "정렬 후 양쪽 K개씩 잘라내고 가운데만 합산. 인덱스 [K, N-K-1] 범위가 살아남는 원소이고, for 루프 시작과 종료 조건만 잘 맞추면 끝.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+v = sorted(map(int, input().split()))
+print(sum(v[k:n - k]))
+`,
       en: {
         title: "Trimmed Sum (Drop K from Each End)",
         description: `Given N integers and K, sort them, **drop the K smallest and K largest**, and print the sum of the remaining elements.
@@ -421,6 +471,24 @@ int main() {
 }`,
       solutionExplanation:
         "두 단계 패턴: (1) `map` 으로 빈도수 집계, (2) entries 를 vector 로 옮겨 custom comparator 정렬. 다중 기준 정렬은 'A 다르면 A 기준, 같으면 B 기준' 분기로 깔끔하게 작성.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+from collections import Counter
+input = sys.stdin.readline
+
+n = int(input())
+nums = list(map(int, input().split()))
+freq = Counter(nums)
+# (빈도수 내림차순, 값 오름차순)
+items = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
+out = []
+for val, cnt in items:
+    out.append(f"{val} {cnt}")
+sys.stdout.write("\\n".join(out) + "\\n")
+`,
       en: {
         title: "Frequency Sort",
         description: `Given N integers, print each **distinct value** in this order:
@@ -527,6 +595,22 @@ int main() {
 }`,
       solutionExplanation:
         "3 단계: (1) map 으로 빈도수, (2) 빈도수 내림/값 오름 정렬 후 상위 K 개 추출, (3) 추출한 값을 다시 오름차순 정렬해 출력. **두 번 정렬** 이 핵심 — 동률 처리는 첫 정렬에서, 출력 순서는 두 번째 정렬에서.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+from collections import Counter
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+nums = list(map(int, input().split()))
+freq = Counter(nums)
+# (빈도수 내림차순, 값 오름차순) 으로 정렬 후 상위 K 개
+items = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
+top = sorted([val for val, _ in items[:k]])
+print(" ".join(map(str, top)))
+`,
       en: {
         title: "Top K Frequent Elements",
         description: `Given N integers and K, find the K most frequent **distinct** values and print them in **ascending order of value**.
@@ -625,6 +709,26 @@ int main() {
 }`,
       solutionExplanation:
         "분수 비교에서 부동소수점은 1/3 = 2/6 같은 동등 분수를 다르게 볼 위험이 있다. 교차 곱셈 `a*d vs c*b` 로 정수 비교. b, d 가 양수라 부호 뒤집힘 걱정 없음. 곱이 최대 10^6 이므로 long long 으로 안전.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+from fractions import Fraction
+input = sys.stdin.readline
+
+n = int(input())
+v = []
+for _ in range(n):
+    a, b = map(int, input().split())
+    v.append((a, b))
+# 값(Fraction) 으로 정확 비교, 동률은 분자 오름차순
+v.sort(key=lambda p: (Fraction(p[0], p[1]), p[0]))
+out = []
+for a, b in v:
+    out.append(f"{a} {b}")
+sys.stdout.write("\\n".join(out) + "\\n")
+`,
       en: {
         title: "Fraction Sort (No Division)",
         description: `Given N fractions \`a/b\` (a = numerator, b = denominator), sort by value ascending and print as \`a b\` one per line.
@@ -723,6 +827,25 @@ int main() {
 }`,
       solutionExplanation:
         "허프만 코딩 원리: 가장 작은 두 개를 먼저 합치면 총 비용 최소. min-heap 으로 매번 작은 두 개를 O(log N) 에 꺼낸다. **단순 정렬 한 번으로는 안 됨** — 합친 결과가 중간에 끼어들 수 있어서.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+import heapq
+input = sys.stdin.readline
+
+n = int(input())
+sticks = list(map(int, input().split()))
+heapq.heapify(sticks)
+cost = 0
+while len(sticks) > 1:
+    a = heapq.heappop(sticks)
+    b = heapq.heappop(sticks)
+    cost += a + b
+    heapq.heappush(sticks, a + b)
+print(cost)
+`,
       en: {
         title: "Combine Sticks — Minimum Cost",
         description: `Given N stick lengths, merging two sticks costs **the sum of their lengths** and produces a new stick of that combined length. Merge until one stick remains (N-1 merges). Print the **minimum total cost**.
@@ -832,6 +955,26 @@ int main() {
 }`,
       solutionExplanation:
         "포인트는 '동률 다음 순위 건너뛰기'. 정렬 후 새 등수는 항상 (현재 위치+1) 로 매기면 건너뛰기가 자동 처리된다 — 동률 그룹이 N 명이면 다음 등수는 자동으로 +N 만큼 점프.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+scores = list(map(int, input().split()))
+# (점수 내림차순, 원래 인덱스 오름차순)
+order = sorted(range(n), key=lambda i: (-scores[i], i))
+rank = [0] * n
+rank[order[0]] = 1
+for i in range(1, n):
+    if scores[order[i]] == scores[order[i - 1]]:
+        rank[order[i]] = rank[order[i - 1]]
+    else:
+        rank[order[i]] = i + 1
+print(" ".join(map(str, rank)))
+`,
       en: {
         title: "Rank Assignment (Ties Share, Next Rank Skips)",
         description: `N student scores are given in input order. Print each student's **rank** in input order, space-separated.
@@ -935,6 +1078,29 @@ int main() {
 }`,
       solutionExplanation:
         "line sweep / event-based 패턴. 시작=+1, 끝=-1 이벤트로 분해하고 시간순 정렬. 같은 시각이면 -1 먼저 처리해서 '회의 끝나자마자 같은 시각 시작' 시 회의실 재사용. cur 의 최댓값이 답.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+events = []
+for _ in range(n):
+    s, e = map(int, input().split())
+    events.append((s, 1))
+    events.append((e, -1))
+# 시각 오름차순, 같은 시각이면 -1(끝) 먼저
+events.sort(key=lambda x: (x[0], x[1]))
+cur = 0
+ans = 0
+for _, d in events:
+    cur += d
+    if cur > ans:
+        ans = cur
+print(ans)
+`,
       en: {
         title: "Minimum Meeting Rooms",
         description: `Given N meetings with (start, end) times, find the **minimum number of rooms** needed to host all of them.
@@ -1019,6 +1185,17 @@ int main() {
 }`,
       solutionExplanation:
         "벡터에서 중복 제거의 관용적 방법: sort → unique → erase. unique 는 인접한 중복만 제거하므로 반드시 sort 가 먼저여야 한다.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+v = sorted(set(map(int, input().split())))
+print(v[k - 1])
+`,
       en: {
         title: "K-th Smallest After Dedup",
         description: `Given N integers and K, **remove duplicates** then print the K-th smallest (1-based) value.
@@ -1140,6 +1317,29 @@ int main() {
 }`,
       solutionExplanation:
         "아나그램 그룹화의 표준 패턴: 단어의 글자를 정렬한 문자열을 키로 사용. 그 다음 두 단계 정렬 — 각 그룹 내부를 사전순으로, 그룹들을 (크기 내림, 첫 단어 사전순) 으로. 정렬을 **여러 층** 으로 쓰는 게 핵심.",
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+# 여기에 풀이 작성
+`,
+      pySolutionCode: `import sys
+from collections import defaultdict
+input = sys.stdin.readline
+
+n = int(input())
+groups = defaultdict(list)
+for _ in range(n):
+    w = input().strip()
+    key = "".join(sorted(w))
+    groups[key].append(w)
+# 그룹 내부 사전순 정렬
+gs = [sorted(words) for words in groups.values()]
+# 그룹 간: 크기 내림차순, 동률은 첫 단어 사전순
+gs.sort(key=lambda g: (-len(g), g[0]))
+out = [str(len(gs))]
+for g in gs:
+    out.append(" ".join(g))
+sys.stdout.write("\\n".join(out) + "\\n")
+`,
       en: {
         title: "Anagram Groups — Sorted Output",
         description: `Given N lowercase English words, group **anagrams** (same letter multiset) together and print them:

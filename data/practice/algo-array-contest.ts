@@ -79,6 +79,20 @@ int main() {
     cout << best << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+a = list(map(int, input().split()))
+cur = best = a[0]
+for i in range(1, n):
+    cur = max(a[i], cur + a[i])
+    best = max(best, cur)
+print(best)`,
       solutionExplanation:
         "Kadane 알고리즘. cur = max(a[i], cur + a[i]) — 이전 합이 음수면 버리고 새로 시작. 한 번 순회 O(N). 빈 배열 금지이므로 초기값을 0 이 아닌 a[0] 로 두는 게 핵심 (전부 음수일 때 0 을 답으로 내지 않도록).",
       en: {
@@ -177,6 +191,29 @@ int main() {
     cout << "NO\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, target = map(int, input().split())
+a = sorted(map(int, input().split()))
+i, j = 0, n - 1
+found = False
+while i < j:
+    s = a[i] + a[j]
+    if s == target:
+        print(a[i], a[j])
+        found = True
+        break
+    elif s < target:
+        i += 1
+    else:
+        j -= 1
+if not found:
+    print("NO")`,
       solutionExplanation:
         "정렬 + 두 포인터. 합이 target 보다 작으면 작은 쪽을 키우고, 크면 큰 쪽을 줄인다. 정렬 상태에서 첫 매칭 = 작은 값이 가장 작은 쌍. 시간 O(N log N).",
       en: {
@@ -262,6 +299,24 @@ int main() {
     cout << best << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+a = list(map(int, input().split()))
+cur = best = 1
+for i in range(1, n):
+    if a[i] > a[i-1]:
+        cur += 1
+    else:
+        cur = 1
+    if cur > best:
+        best = cur
+print(best)`,
       solutionExplanation:
         "한 번 순회로 충분. 증가가 이어지면 cur 증가, 끊기면 1 로 리셋. best 는 cur 의 최댓값. 첫 원소는 자기 자신만으로 길이 1.",
       en: {
@@ -352,6 +407,24 @@ int main() {
     cout << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+a = list(map(int, input().split()))
+write = 0
+for read in range(n):
+    if a[read] != 0:
+        a[write] = a[read]
+        write += 1
+while write < n:
+    a[write] = 0
+    write += 1
+print(*a)`,
       solutionExplanation:
         "두 포인터 in-place 패턴. read 가 모든 원소를 훑고 0 이 아닌 것만 write 위치에 복사 후 write++. 끝나면 write 부터 N-1 까지 0 으로 채우면 끝. O(N), 추가 공간 O(1).",
       en: {
@@ -452,6 +525,18 @@ int main() {
     cout << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+a = list(map(int, input().split()))
+k %= n
+a = a[-k:] + a[:-k] if k else a
+print(*a)`,
       solutionExplanation:
         "Reverse 3 번 트릭: 전체 reverse → 앞 K 개 reverse → 뒤 N-K 개 reverse. K %= N 으로 큰 K 정규화 필수. 시간 O(N), 공간 O(1).",
       en: {
@@ -552,6 +637,26 @@ int main() {
     cout << cand << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+a = list(map(int, input().split()))
+cand = 0
+cnt = 0
+for x in a:
+    if cnt == 0:
+        cand = x
+        cnt = 1
+    elif x == cand:
+        cnt += 1
+    else:
+        cnt -= 1
+print(cand)`,
       solutionExplanation:
         "Boyer-Moore 투표. 다수 원소는 절반보다 많으므로 다른 값과 1:1 상쇄해도 반드시 살아남는다. O(N) 시간, O(1) 공간. map 풀이도 가능하지만 메모리 오버헤드 큼.",
       en: {
@@ -663,6 +768,24 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+a = list(map(int, input().split()))
+cnt = {0: 1}
+pref = 0
+ans = 0
+for x in a:
+    pref += x
+    if pref - k in cnt:
+        ans += cnt[pref - k]
+    cnt[pref] = cnt.get(pref, 0) + 1
+print(ans)`,
       solutionExplanation:
         "누적합 prefix + 해시맵 패턴. 합이 K 인 부분 배열 [l..r] ⇔ prefix[r] - prefix[l-1] = K. 오른쪽 끝 r 을 고정하고, 필요한 왼쪽 prefix 값을 map 으로 즉시 조회 O(1). 시작 시 cnt[0]=1 (빈 prefix) 가 핵심 — 시작점부터의 부분 배열도 카운트.",
       en: {
@@ -766,6 +889,26 @@ int main() {
     cout << best << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+h = list(map(int, input().split()))
+l, r = 0, n - 1
+best = 0
+while l < r:
+    area = min(h[l], h[r]) * (r - l)
+    if area > best:
+        best = area
+    if h[l] < h[r]:
+        l += 1
+    else:
+        r -= 1
+print(best)`,
       solutionExplanation:
         "두 포인터 패턴. 낮은 쪽이 bottleneck 이므로 그쪽을 옮겨야 한다 — 높은 쪽을 옮기면 너비만 줄고 min 은 그대로거나 감소. 매 단계 O(1), 전체 O(N).",
       en: {
@@ -864,6 +1007,22 @@ int main() {
     cout << best << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n, k = map(int, input().split())
+a = list(map(int, input().split()))
+cur = sum(a[:k])
+best = cur
+for i in range(k, n):
+    cur += a[i] - a[i - k]
+    if cur > best:
+        best = cur
+print(best)`,
       solutionExplanation:
         "고정 길이 슬라이딩 윈도우. 매 단계 나가는 원소만 빼고 들어오는 원소만 더해 합을 O(1) 로 갱신. 첫 윈도우 합을 미리 구하는 게 시작점. 전체 O(N).",
       en: {
@@ -974,6 +1133,22 @@ int main() {
     cout << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+a = list(map(int, input().split()))
+ans = [-1] * n
+stack = []
+for i in range(n):
+    while stack and a[stack[-1]] < a[i]:
+        ans[stack.pop()] = a[i]
+    stack.append(i)
+print(*ans)`,
       solutionExplanation:
         "단조 감소 스택 패턴. 스택에는 '아직 다음 큰 수를 못 찾은' 인덱스만 있고 값은 단조 감소. 새 원소가 들어올 때 자기보다 작은 top 들을 모두 처리하므로 각 원소는 정확히 1번 push, 1번 pop — 총 O(N).",
       en: {
@@ -1073,6 +1248,18 @@ int main() {
     cout << (expected - actual) << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+a = list(map(int, input().split()))
+expected = n * (n + 1) // 2
+actual = sum(a)
+print(expected - actual)`,
       solutionExplanation:
         "합 트릭: 0..N 의 합은 N(N+1)/2 (공식). 실제 합을 빼면 빠진 값 한 번에. O(N) 시간, O(1) 공간. N=10^6 이면 합이 약 5×10^11 이므로 long long 필요. XOR 풀이도 동일 시간/공간이며 오버플로우 걱정이 아예 없다.",
       en: {
@@ -1171,6 +1358,23 @@ int main() {
     cout << best << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+p = list(map(int, input().split()))
+min_so_far = float('inf')
+best = 0
+for x in p:
+    if x < min_so_far:
+        min_so_far = x
+    elif x - min_so_far > best:
+        best = x - min_so_far
+print(best)`,
       solutionExplanation:
         "러닝 최솟값 패턴. 각 i 에 팔았을 때 최대 이익 = p[i] - (지금까지 본 최솟값). minSoFar 와 best 를 동시에 갱신하며 한 번 순회. 이익 불가능하면 best 는 초기값 0 유지. O(N) 시간, O(1) 공간.",
       en: {

@@ -90,6 +90,31 @@ int main() {
     }
     return 0;
 }`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    idx = 0
+    n = int(data[idx]); idx += 1
+    m = int(data[idx]); idx += 1
+    s = [0] * (n + 1)
+    for k in range(1, n + 1):
+        s[k] = s[k - 1] + int(data[idx]); idx += 1
+    out = []
+    for _ in range(m):
+        i = int(data[idx]); idx += 1
+        j = int(data[idx]); idx += 1
+        out.append(str(s[j] - s[i - 1]))
+    sys.stdout.write("\\n".join(out) + "\\n")
+
+main()`,
       solutionExplanation:
         "누적합 패턴의 가장 순수한 형태. `s[k]` 가 첫 k 개의 합이면 [i, j] 구간 합은 `s[j] - s[i-1]`. 합이 -10^8 까지 갈 수 있으니 long long 안전.",
       en: {
@@ -189,6 +214,28 @@ int main() {
     cout << best << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    n = int(data[0]); k = int(data[1])
+    a = [int(x) for x in data[2:2 + n]]
+    s = [0] * (n + 1)
+    for i in range(1, n + 1):
+        s[i] = s[i - 1] + a[i - 1]
+    best = -10 ** 18
+    for i in range(n - k + 1):
+        v = s[i + k] - s[i]
+        if v > best: best = v
+    sys.stdout.write(str(best) + "\\n")
+
+main()`,
       solutionExplanation:
         "누적합으로 길이 K 윈도우 합을 O(1). i 를 0 부터 N-K 까지 돌리며 `s[i+K] - s[i]` 의 최댓값. 음수만 있을 수 있으니 초기값은 LLONG_MIN.",
       en: {
@@ -292,6 +339,37 @@ int main() {
     }
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    s = data[0].decode()
+    n = len(s)
+    # 26 prefix-count arrays
+    cnt = [[0] * (n + 1) for _ in range(26)]
+    for i in range(n):
+        ci = ord(s[i]) - ord('a')
+        for c in range(26):
+            cnt[c][i + 1] = cnt[c][i]
+        cnt[ci][i + 1] += 1
+    q = int(data[1])
+    out = []
+    idx = 2
+    for _ in range(q):
+        c = data[idx].decode(); idx += 1
+        l = int(data[idx]); idx += 1
+        r = int(data[idx]); idx += 1
+        ci = ord(c) - ord('a')
+        out.append(str(cnt[ci][r + 1] - cnt[ci][l]))
+    sys.stdout.write("\\n".join(out) + "\\n")
+
+main()`,
       solutionExplanation:
         "1D 누적합을 알파벳별로 26개 만든다. 각 위치 i 마다 모든 26개를 복사한 뒤 현재 글자만 +1. 질의는 표준 `cnt[c][r+1] - cnt[c][l]` 패턴.",
       en: {
@@ -399,6 +477,35 @@ int main() {
     }
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    idx = 0
+    n = int(data[idx]); idx += 1
+    q = int(data[idx]); idx += 1
+    s = [0] * (n + 1)
+    for k in range(1, n + 1):
+        s[k] = s[k - 1] + int(data[idx]); idx += 1
+    out = []
+    for _ in range(q):
+        t = int(data[idx]); idx += 1
+        if t == 1:
+            i = int(data[idx]); idx += 1
+            out.append(str(s[i]))
+        else:
+            i = int(data[idx]); idx += 1
+            j = int(data[idx]); idx += 1
+            out.append(str(s[j] - s[i - 1]))
+    sys.stdout.write("\\n".join(out) + "\\n")
+
+main()`,
       solutionExplanation:
         "두 가지 질의 모두 같은 누적합 배열로 답할 수 있다. 누적 매출은 `s[i]` 자체, 구간 매출은 `s[j] - s[i-1]`. 배열은 한 번만 만든다.",
       en: {
@@ -477,6 +584,26 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    n = int(data[0])
+    s = 0
+    ans = -1
+    for k in range(1, n + 1):
+        s += int(data[k])
+        if s == 0 and ans == -1:
+            ans = k
+    sys.stdout.write(str(ans) + "\\n")
+
+main()`,
       solutionExplanation:
         "전체 배열을 만들 필요 없이 누적합을 흘려가면서 처음 0 이 되는 k 만 기억. 이후 입력은 계속 읽어야 stdin 이 깔끔하지만 답은 안 갱신.",
       en: {
@@ -583,6 +710,31 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    n = int(data[0])
+    a = [int(x) for x in data[1:1 + n]]
+    T = sum(a)
+    ans = -1
+    if T % 2 == 0:
+        half = T // 2
+        s = 0
+        for i in range(1, n):  # i < N
+            s += a[i - 1]
+            if s == half:
+                ans = i
+                break
+    sys.stdout.write(str(ans) + "\\n")
+
+main()`,
       solutionExplanation:
         "전체 합 T 가 짝수일 때만 답이 있을 수 있다. 그 경우 s[i] = T/2 가 되는 첫 i (1 ≤ i < N) 가 답. 한 번의 패스로 끝.",
       en: {
@@ -637,8 +789,8 @@ int main() {
         },
         {
           stdin: "5 3\n1 2 3 -3 3",
-          expectedOutput: "4",
-          label: "음수 포함 — [3], [1,2], [1,2,3,-3], [3,-3,3]",
+          expectedOutput: "5",
+          label: "음수 포함 — [3](가운데), [1,2], [1,2,3,-3], [3,-3,3], [3](마지막)",
         },
         {
           stdin: "1 5\n5",
@@ -689,6 +841,27 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    n = int(data[0]); K = int(data[1])
+    seen = {0: 1}  # 빈 prefix
+    s = 0
+    ans = 0
+    for i in range(n):
+        s += int(data[2 + i])
+        ans += seen.get(s - K, 0)
+        seen[s] = seen.get(s, 0) + 1
+    sys.stdout.write(str(ans) + "\\n")
+
+main()`,
       solutionExplanation:
         "고전 패턴. 누적합을 흘리며 `s - K` 가 지금까지 몇 번 나왔는지 해시맵으로 조회 → 그 만큼이 j 에서 끝나는 답 부분배열 수. `mp[0]=1` 초기화로 [1..j] 자체가 K 인 경우 포함. O(N) 평균.",
       en: {
@@ -794,6 +967,30 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    n = int(data[0]); K = int(data[1])
+    cnt = [0] * K
+    cnt[0] = 1  # 빈 prefix
+    s = 0
+    ans = 0
+    for i in range(n):
+        s += int(data[2 + i])
+        # 파이썬 % 는 항상 양수 (K>0) — 별도 보정 불필요
+        r = s % K
+        ans += cnt[r]
+        cnt[r] += 1
+    sys.stdout.write(str(ans) + "\\n")
+
+main()`,
       solutionExplanation:
         "두 prefix 의 mod 가 같으면 그 사이 구간 합이 K 의 배수. 각 나머지의 등장 횟수를 세면서 매번 '지금까지 같은 나머지였던 prefix 의 수' 를 답에 더한다. 음수 mod 보정이 핵심.",
       en: {
@@ -896,6 +1093,37 @@ int main() {
     }
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    idx = 0
+    n = int(data[idx]); idx += 1
+    m = int(data[idx]); idx += 1
+    # 2D prefix S[0..n][0..n], 1-based
+    S = [[0] * (n + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        row_prev = S[i - 1]
+        row = S[i]
+        for j in range(1, n + 1):
+            v = int(data[idx]); idx += 1
+            row[j] = row_prev[j] + row[j - 1] - row_prev[j - 1] + v
+    out = []
+    for _ in range(m):
+        x1 = int(data[idx]); idx += 1
+        y1 = int(data[idx]); idx += 1
+        x2 = int(data[idx]); idx += 1
+        y2 = int(data[idx]); idx += 1
+        out.append(str(S[x2][y2] - S[x1 - 1][y2] - S[x2][y1 - 1] + S[x1 - 1][y1 - 1]))
+    sys.stdout.write("\\n".join(out) + "\\n")
+
+main()`,
       solutionExplanation:
         "포함-배제: 큰 직사각형 빼기 두 옆/위 직사각형 더하기 좌상단 겹친 사각형. 1-based 로 두면 경계 처리 깔끔. 총 시간 O(N² + M).",
       en: {
@@ -1002,6 +1230,31 @@ int main() {
     cout << best << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    n = int(data[0])
+    first = {0: 0}
+    s = 0
+    best = 0
+    for i in range(1, n + 1):
+        x = int(data[i])
+        s += 1 if x == 1 else -1
+        if s in first:
+            cand = i - first[s]
+            if cand > best: best = cand
+        else:
+            first[s] = i
+    sys.stdout.write(str(best) + "\\n")
+
+main()`,
       solutionExplanation:
         "0↔-1 치환 트릭으로 prefix 합이 같은 두 지점 사이가 균형 구간. **첫 등장 인덱스만** 기록해야 최대 길이가 나온다 — 이후 같은 값이 나오면 항상 i - first[s] 가 더 길다.",
       en: {
@@ -1108,6 +1361,37 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    n = int(data[0])
+    if n == 0:
+        sys.stdout.write("0\\n")
+        return
+    h = [int(x) for x in data[1:1 + n]]
+    L = [0] * n
+    R = [0] * n
+    L[0] = h[0]
+    for i in range(1, n):
+        L[i] = L[i - 1] if L[i - 1] > h[i] else h[i]
+    R[n - 1] = h[n - 1]
+    for i in range(n - 2, -1, -1):
+        R[i] = R[i + 1] if R[i + 1] > h[i] else h[i]
+    ans = 0
+    for i in range(n):
+        lvl = L[i] if L[i] < R[i] else R[i]
+        if lvl > h[i]:
+            ans += lvl - h[i]
+    sys.stdout.write(str(ans) + "\\n")
+
+main()`,
       solutionExplanation:
         "각 위치의 물 높이는 양쪽 최댓값 중 작은 쪽까지. 좌측 prefix max 와 우측 suffix max 두 패스로 만들어두면 메인 루프는 O(1) 조회. 한쪽 max 만으로는 부족 — 양쪽 모두 필요.",
       en: {
@@ -1227,6 +1511,43 @@ int main() {
     cout << ans << "\\n";
     return 0;
 }`,
+      pyInitialCode: `import sys
+
+def main():
+    pass
+
+main()`,
+      pySolutionCode: `import sys
+
+def main():
+    data = sys.stdin.buffer.read().split()
+    n = int(data[0]); k = int(data[1])
+    a = [int(x) for x in data[2:2 + n]]
+
+    def check(X):
+        # b[i] = a[i] - X, prefix P. Some j in [k..n] with P[j] - min(P[0..j-k]) >= 0?
+        P = [0] * (n + 1)
+        for i in range(1, n + 1):
+            P[i] = P[i - 1] + (a[i - 1] - X)
+        mn = P[0]
+        for j in range(k, n + 1):
+            if P[j] - mn >= 0:
+                return True
+            mn = min(mn, P[j - k + 1])
+        return False
+
+    lo, hi = -10000, 10000
+    ans = lo
+    while lo <= hi:
+        mid = lo + (hi - lo) // 2  # 양수 폭 → // 가 C++ 의 / 와 같음
+        if check(mid):
+            ans = mid
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    sys.stdout.write(str(ans) + "\\n")
+
+main()`,
       solutionExplanation:
         "평균이 X 이상인 부분 배열 존재 여부는 `a[i] - X` 의 누적합에서 길이 ≥ K 양수 부분합 존재 여부와 동치. 이를 O(N) 체크로 만들고 정수 X 를 이분 탐색 → O(N log V). 핵심은 'min(P[0..j-K]) 를 j 가 늘면서 P[j-K+1] 만 새로 후보로 추가'.",
       en: {
