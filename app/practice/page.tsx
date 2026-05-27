@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
+import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 import { RequireAuth } from "@/components/require-auth"
 import { PracticeRunner } from "@/components/practice/practice-runner"
 import { McqRunner } from "@/components/practice/mcq-runner"
@@ -788,7 +789,10 @@ function PracticeContent() {
   }
 
   return (
-    <main className="max-w-2xl mx-auto px-4 pt-6">
+    <main className="max-w-2xl mx-auto px-4 pt-4">
+      <JourneyBreadcrumb items={[
+        { label: "연습 (수업별 클러스터)", labelEn: "Practice (per-lesson clusters)", emoji: "💪" },
+      ]} />
       <ClusterList
         onSelect={c => {
           // 클러스터 클릭 → 바로 세션 모드 진입
