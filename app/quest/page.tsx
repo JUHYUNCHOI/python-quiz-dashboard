@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
+import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
 import { useAuth } from "@/contexts/auth-context"
@@ -427,7 +428,10 @@ export default function QuestPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <main className="max-w-6xl mx-auto px-4 pt-6 pb-28">
+      <main className="max-w-6xl mx-auto px-4 pt-4 pb-28">
+        <JourneyBreadcrumb items={[
+          { label: "대회 문제", labelEn: "Contest Problems", emoji: "🏆" },
+        ]} />
 
         {/* Page header */}
         <div className="mb-6 flex items-start justify-between gap-3">
@@ -437,7 +441,7 @@ export default function QuestPage() {
               <h1 className="text-3xl font-black">CodeQuest</h1>
             </div>
             <p className="text-gray-600 font-semibold text-sm">
-              {t("인터랙티브 알고리즘 풀이", "Interactive algorithm problem walkthroughs")}
+              {t("USACO + MCC + MCO — 인터랙티브 대회 풀이", "USACO + MCC + MCO — interactive contest walkthroughs")}
             </p>
           </div>
           <div className="flex flex-col items-end gap-1.5">
