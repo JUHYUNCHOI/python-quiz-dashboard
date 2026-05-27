@@ -503,12 +503,12 @@ export const pyLogicCluster: PracticeCluster = {
       language: "python",
       codeSnippet: `(not 2 > 4 or (7 == 7 and 3 <= 3)) and (6 > 5 and not 8 != 8)`,
       options: ["True", "False"],
-      correctOption: 1,
-      explanation: "왼쪽: (not False or (True and True)) = (True or True) = True\nnot 8!=8 = not True = False\n오른쪽: (6>5 and False) = False\nTrue and False = False",
+      correctOption: 0,
+      explanation: "왼쪽: (not False or (True and True)) = (True or True) = True\n8!=8 → False, not False = True\n오른쪽: (6>5 and True) = True\nTrue and True = True",
       en: {
         title: "Complex not 7",
         description: "What is the result of the following expression?",
-        explanation: "Left: (not False or (True and True)) = (True or True) = True\nnot 8!=8 = not True = False\nRight: (6>5 and False) = False\nTrue and False = False",
+        explanation: "Left: (not False or (True and True)) = (True or True) = True\n8!=8 → False, not False = True\nRight: (6>5 and True) = True\nTrue and True = True",
       },
     },
     {
