@@ -17,13 +17,13 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Language>('ko')
+  const [lang, setLangState] = useState<Language>('en')
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     try {
-      // 우선순위: URL ?lang=en > localStorage > 기본값(ko)
-      // 영어 광고로 유입된 사용자 대응 — 광고 URL 에 ?lang=en 붙여서 첫 화면부터 영어로 보여줌.
+      // 우선순위: URL ?lang=ko|en > localStorage > 기본값(en)
+      // 기본 영어 — 글로벌 학습자 대상. 한국 학생은 localStorage 한 번 'ko' 토글하면 유지.
       let resolved: Language | null = null
 
       if (typeof window !== 'undefined') {
@@ -43,7 +43,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
       if (resolved) setLangState(resolved)
     } catch {
-      // localStorage 접근 불가 시 기본값(ko) 유지
+      // localStorage 접근 불가 시 기본값(en) 유지
     }
     setIsLoaded(true)
   }, [])
