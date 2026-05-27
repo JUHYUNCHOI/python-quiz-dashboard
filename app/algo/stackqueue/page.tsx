@@ -25,11 +25,11 @@ import { HighlightedCode } from "@/components/algo/highlighted-code"
 
 // ── 챕터 메타 ────────────────────────────────────────────────────
 const CHAPTERS = [
-  { id: 1, emoji: "🤔", title: "왜 스택? 왜 큐?",   titleEn: "Why Stack? Why Queue?", mins: 4 },
-  { id: 2, emoji: "📚", title: "스택 사용법",        titleEn: "Using a Stack",          mins: 5 },
-  { id: 3, emoji: "🚶", title: "큐 사용법",          titleEn: "Using a Queue",          mins: 5 },
-  { id: 4, emoji: "🔧", title: "둘 비교 + 실전 패턴", titleEn: "Compare + Patterns",    mins: 6 },
-  { id: 5, emoji: "🏆", title: "정리 + 실전",        titleEn: "Recap & Practice",      mins: 4 },
+  { id: 1, emoji: "🤔", title: "왜 스택? 왜 큐?",         titleEn: "Why Stack? Why Queue?",    mins: 4 },
+  { id: 2, emoji: "📈", title: "Monotonic Stack — 다음 큰 수", titleEn: "Monotonic Stack — Next Greater", mins: 7 },
+  { id: 3, emoji: "🌊", title: "BFS 의 도구 — 큐",         titleEn: "Queue as BFS Tool",        mins: 7 },
+  { id: 4, emoji: "🔧", title: "시뮬레이션 + 괄호 매칭",     titleEn: "Simulation + Bracket Matching", mins: 6 },
+  { id: 5, emoji: "🏆", title: "정리 + 실전",              titleEn: "Recap & Practice",         mins: 4 },
 ]
 
 const STORAGE_KEY = "algo-stackqueue-chapter"
@@ -247,147 +247,189 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
   )
 }
 
-// ── Chapter 2: 스택 사용법 ────────────────────────────────────────
+// ── Chapter 2: Monotonic Stack — 다음 큰 수 ───────────────────────
 function Chapter2({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
-  const [stack, setStack] = useState<number[]>([])
-  const [nextVal, setNextVal] = useState(1)
-  const [lastPop, setLastPop] = useState<number | null>(null)
-  const handlePush = () => {
-    setStack([...stack, nextVal])
-    setNextVal(nextVal + 1)
-    setLastPop(null)
-  }
-  const handlePop = () => {
-    if (stack.length === 0) return
-    setLastPop(stack[stack.length - 1])
-    setStack(stack.slice(0, -1))
-  }
-  const handleReset = () => { setStack([]); setNextVal(1); setLastPop(null) }
+
+  // Monotonic stack visualization — [2, 5, 3, 1, 4]
+  const arr = [2, 5, 3, 1, 4]
+  const [vizStep, setVizStep] = useState(0)
+  // Pre-computed step states. Each state: { i, stack (indices), ans (length n) }
+  // Algorithm: iterate i, while stack not empty and arr[stack.top()] < arr[i], pop & set ans[popped] = arr[i]; push i.
+  const vizStates: { i: number; stack: number[]; ans: (number | null)[]; note: string }[] = [
+    { i: 0, stack: [0],       ans: [null, null, null, null, null], note: "i=0: 빈 스택 → 0 push" },
+    { i: 1, stack: [1],       ans: [5,    null, null, null, null], note: "i=1: arr[1]=5 > arr[0]=2 → pop 0, ans[0]=5. 1 push" },
+    { i: 2, stack: [1, 2],    ans: [5,    null, null, null, null], note: "i=2: arr[2]=3 < arr[1]=5 → 그냥 2 push" },
+    { i: 3, stack: [1, 2, 3], ans: [5,    null, null, null, null], note: "i=3: arr[3]=1 < arr[2]=3 → 그냥 3 push" },
+    { i: 4, stack: [1, 4],    ans: [5,    null, 4,    4,    null], note: "i=4: arr[4]=4 > 1, 3 → pop 3 (ans[3]=4), pop 2 (ans[2]=4). 4 push" },
+    { i: 5, stack: [1, 4],    ans: [5,    null, 4,    4,    null], note: "끝. 남은 인덱스 1, 4 는 다음 큰 수 없음 → -1" },
+  ]
+  const state = vizStates[vizStep]
+  const isEnd = vizStep === vizStates.length - 1
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
           <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">📚</p>
+            <p className="text-5xl text-center mb-3">📈</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("스택은 연산 3개만 알면 끝!", "Stack — just 3 operations to know!")}
+              {t("다음으로 큰 수 찾기 — naive 는 너무 느려요", "Next Greater Element — naive is too slow")}
             </h3>
-            <ul className="space-y-2 text-sm text-gray-800 mb-3">
-              <li><b className="text-emerald-700">push(x)</b> — {t("맨 위에 x 올리기", "put x on top")}</li>
-              <li><b className="text-emerald-700">pop()</b> — {t("맨 위 꺼내서 빼기", "remove the top")}</li>
-              <li><b className="text-emerald-700">top()</b> {t("또는", "or")} <b className="text-emerald-700">peek()</b> — {t("맨 위만 확인 (안 빼고)", "just peek at top")}</li>
-            </ul>
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
+              {t(
+                "배열의 각 원소마다 '오른쪽에서 처음으로 자기보다 큰 수' 를 찾는 문제. 단순하게 짜면 이중 루프 → O(N²) 인데, N=10⁵ 이면 답 안 나와요.",
+                "For each element, find 'the first greater number to its right'. The naive double loop is O(N²) — at N=10⁵ it times out.",
+              )}
+            </p>
+            <div className="bg-white rounded-lg p-3 border border-emerald-200 mb-3">
+              <p className="text-xs font-bold text-emerald-800 mb-1">💡 {t("Monotonic Stack 패턴", "Monotonic stack pattern")}</p>
+              <p className="text-[11px] text-gray-700 leading-relaxed">
+                {t(
+                  "스택에 '아직 답을 못 찾은 인덱스' 를 쌓아둬요. 새 원소가 들어올 때, 그게 스택 top 보다 크면 — top 의 답이 *바로 이 새 원소* 라는 뜻. 그래서 pop 하면서 답 기록. 각 인덱스가 최대 1번 push, 1번 pop → O(N).",
+                  "Stack holds 'indices waiting for an answer'. When a new element arrives, if it's bigger than stack top — that's the answer for top. Pop and record. Each index pushed/popped at most once → O(N).",
+                )}
+              </p>
+            </div>
             <p className="text-xs text-emerald-700 text-center font-bold leading-relaxed">
-              {t("다음 슬라이드에서 직접 눌러 봐요 →", "Try it yourself on the next slide →")}
+              {t("다음 슬라이드에서 직접 step by step 으로 봐요 →", "Walk through it step by step next →")}
             </p>
           </div>
         )}
 
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("직접 push / pop 해보기", "Try push / pop")}</p>
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("step by step — arr = [2, 5, 3, 1, 4]", "Step by step — arr = [2, 5, 3, 1, 4]")}</p>
             <p className="text-xs text-gray-600 text-center mb-3">
-              {t("아래 '+ Push' 누르면 새 숫자가 맨 위에 쌓여요. 'Pop' 은 맨 위만 빠져요.", "Click '+ Push' to add to top. 'Pop' removes the top one.")}
+              {t("'다음 단계' 누르면서 스택과 ans 가 어떻게 변하는지 봐요.", "Press 'Next step' and watch the stack & ans change.")}
             </p>
-            {/* 시각화 — 스택은 수직, 맨 위가 위 */}
-            <div className="flex justify-center my-3">
-              <div className="flex flex-col-reverse gap-1 min-h-[120px] justify-end items-center">
-                {stack.length === 0 ? (
-                  <p className="text-xs text-gray-400 italic">{t("(비어 있음)", "(empty)")}</p>
+
+            {/* 배열 — 현재 i 강조 */}
+            <div className="flex justify-center gap-1 mb-3">
+              {arr.map((v, i) => {
+                const isCurrent = !isEnd && i === state.i
+                const inStack = state.stack.includes(i)
+                return (
+                  <div key={i} className="flex flex-col items-center">
+                    <div className="text-[9px] text-gray-400 mb-0.5">i={i}</div>
+                    <div className={cn(
+                      "w-10 h-10 rounded-lg border-2 flex items-center justify-center font-mono font-bold text-sm transition-all",
+                      isCurrent ? "bg-orange-100 border-orange-500 text-orange-700 scale-110" :
+                      inStack ? "bg-emerald-50 border-emerald-300 text-emerald-700" :
+                      "bg-gray-50 border-gray-200 text-gray-500",
+                    )}>{v}</div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* 스택 시각화 */}
+            <div className="bg-gray-50 rounded-lg p-3 mb-3">
+              <p className="text-[10px] font-bold text-gray-600 mb-1.5">📚 {t("스택 (top → 오른쪽)", "Stack (top → right)")}</p>
+              <div className="flex gap-1 min-h-[36px] items-center flex-wrap">
+                {state.stack.length === 0 ? (
+                  <span className="text-[11px] text-gray-400 italic">{t("(비어 있음)", "(empty)")}</span>
                 ) : (
-                  stack.map((v, i) => (
-                    <div key={i} className={cn(
-                      "w-16 h-10 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
-                      i === stack.length - 1 ? "bg-emerald-100 border-emerald-400 text-emerald-700" : "bg-gray-100 border-gray-300 text-gray-700",
+                  state.stack.map((idx, k) => (
+                    <div key={k} className={cn(
+                      "px-2 py-1 rounded border-2 font-mono text-xs",
+                      k === state.stack.length - 1 ? "bg-emerald-100 border-emerald-400 text-emerald-700" : "bg-white border-emerald-200 text-emerald-600",
                     )}>
-                      {v}{i === stack.length - 1 && <span className="ml-1 text-[9px] text-emerald-600">← top</span>}
+                      i={idx} (v={arr[idx]})
                     </div>
                   ))
                 )}
               </div>
             </div>
-            {lastPop !== null && (
-              <p className="text-xs text-center text-amber-700 font-bold mb-2">
-                ↑ {t("방금 꺼낸 값:", "Just popped:")} <span className="font-mono">{lastPop}</span>
-              </p>
-            )}
-            <div className="flex gap-2">
-              <button onClick={handlePush} className="flex-1 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm">
-                + Push {nextVal}
-              </button>
-              <button onClick={handlePop} disabled={stack.length === 0}
-                className="flex-1 py-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-40 text-white rounded-lg font-bold text-sm">
-                Pop {t("(맨 위)", "(top)")}
-              </button>
-              <button onClick={handleReset} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">↺</button>
+
+            {/* ans 배열 */}
+            <div className="bg-gray-50 rounded-lg p-3 mb-3">
+              <p className="text-[10px] font-bold text-gray-600 mb-1.5">📝 ans</p>
+              <div className="flex gap-1">
+                {state.ans.map((v, i) => (
+                  <div key={i} className="w-10 h-8 rounded border border-gray-300 bg-white flex items-center justify-center font-mono text-xs">
+                    {v === null ? <span className="text-gray-300">·</span> : <span className="text-blue-700 font-bold">{v}</span>}
+                  </div>
+                ))}
+              </div>
             </div>
-            <p className="text-[11px] text-gray-500 text-center mt-3 italic">
-              {t("여러 번 push 하고 pop 해보세요. 마지막에 넣은 게 먼저 나와요.", "Try multiple pushes then pops — last in, first out.")}
+
+            <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded p-2 mb-3 leading-relaxed">
+              {state.note}
             </p>
+
+            <div className="flex gap-2">
+              <button onClick={() => setVizStep(Math.max(0, vizStep - 1))} disabled={vizStep === 0}
+                className="flex-1 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-gray-700 rounded-lg font-bold text-sm">
+                ← {t("이전", "Prev")}
+              </button>
+              <button onClick={() => setVizStep(Math.min(vizStates.length - 1, vizStep + 1))} disabled={isEnd}
+                className="flex-1 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-40 text-white rounded-lg font-bold text-sm">
+                {t("다음 단계", "Next step")} →
+              </button>
+              <button onClick={() => setVizStep(0)} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">↺</button>
+            </div>
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-4 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900 mb-2">📝 {t("코드는 이렇게 생겼어요", "Here's the actual code")}</p>
-              <p className="text-xs text-gray-700">
+              <p className="text-sm font-black text-blue-900 mb-2">📝 {t("코드 — 핵심은 while 루프 안의 pop", "Code — the key is the while-pop loop")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  codeLang === "py"
-                    ? "Python 은 그냥 리스트 (list) 에 append / pop 으로 스택을 써요. 따로 import 도 필요 없어요."
-                    : "C++ 은 std::stack 을 쓰거나, vector 의 push_back / pop_back 으로도 스택처럼 쓸 수 있어요.",
-                  codeLang === "py"
-                    ? "Python uses a plain list with append / pop as a stack. No import needed."
-                    : "C++ uses std::stack, or you can use vector's push_back / pop_back as a stack too.",
+                  "스택에 '인덱스' 를 넣는 게 포인트. 값만 넣으면 답 배열의 어디에 기록할지 모르거든요.",
+                  "Push *indices* (not values) — otherwise you don't know where to write the answer.",
                 )}
               </p>
             </div>
             <CodeBlock lang={codeLang}
-              py={`# Python — 리스트로 스택 사용
-stack = []
+              py={`# Next Greater Element — O(N)
+def next_greater(arr):
+    n = len(arr)
+    ans = [-1] * n
+    stack = []                       # 인덱스만 저장
 
-stack.append(10)   # push 10
-stack.append(20)   # push 20
-stack.append(30)   # push 30
-# stack = [10, 20, 30],  맨 뒤 (30) = top
+    for i in range(n):
+        # 스택 top 의 값보다 현재가 더 크면 — top 의 답 = arr[i]
+        while stack and arr[stack[-1]] < arr[i]:
+            j = stack.pop()
+            ans[j] = arr[i]
+        stack.append(i)
+    # 남은 인덱스는 답이 없음 → -1 그대로
+    return ans
 
-print(stack[-1])   # 30  ← top 확인
-print(stack.pop()) # 30  ← 꺼내서 반환 (LIFO)
-print(stack.pop()) # 20
-
-print(len(stack))  # 1
-print(not stack)   # False (안 비었음)`}
-              cpp={`// C++ — std::stack
+print(next_greater([2, 5, 3, 1, 4]))
+# [5, -1, 4, 4, -1]`}
+              cpp={`// Next Greater Element — O(N)
+#include <vector>
 #include <stack>
 using namespace std;
 
-stack<int> st;
+vector<int> nextGreater(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n, -1);
+    stack<int> st;                   // 인덱스 저장
 
-st.push(10);     // push 10
-st.push(20);
-st.push(30);
-// 맨 위 = 30
-
-cout << st.top() << endl;  // 30 ← 확인만
-st.pop();                   // 30 제거 (반환값 없음!)
-cout << st.top() << endl;  // 20
-
-cout << st.size() << endl;   // 1
-cout << st.empty() << endl;  // false`}
+    for (int i = 0; i < n; i++) {
+        while (!st.empty() && arr[st.top()] < arr[i]) {
+            int j = st.top(); st.pop();
+            ans[j] = arr[i];
+        }
+        st.push(i);
+    }
+    // 남은 인덱스는 -1 그대로
+    return ans;
+}
+// nextGreater({2,5,3,1,4}) → {5,-1,4,4,-1}`}
             />
-            <p className="text-xs text-gray-600 text-center">
+            <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                codeLang === "py"
-                  ? "💡 Python 의 list.pop () 은 꺼낸 값을 *반환* 해줘서 변수에 받아 쓸 수 있어요. 편하죠."
-                  : "⚠️ C++ stack 의 pop () 은 값을 반환하지 않아요 — top () 으로 먼저 보고 pop () 으로 빼야 해요.",
-                codeLang === "py"
-                  ? "💡 Python's list.pop() *returns* the removed value, so you can save it to a variable."
-                  : "⚠️ C++ stack pop() does NOT return — read top() first, then pop().",
+                "💡 각 인덱스가 최대 1번 push / 1번 pop → 총 연산 2N → O(N). 겉으로는 이중 루프 같지만 실제는 선형.",
+                "💡 Each index pushed/popped at most once → 2N total ops → O(N). Looks nested but is actually linear.",
               )}
             </p>
           </div>
@@ -395,16 +437,18 @@ cout << st.empty() << endl;  // false`}
 
         {step === 3 && (
           <MiniQuiz
-            question={codeLang === "py"
-              ? t("Python: stack = [], 그 다음 stack.append(1), append(2), append(3), pop(), pop() 하면 stack 은?", "Python: stack=[], append 1, 2, 3, pop, pop — what's stack?")
-              : t("C++: st.push(1); st.push(2); st.push(3); st.pop(); st.pop(); 후 st.top() 은?", "C++: push 1, 2, 3, pop, pop — what's st.top()?")
-            }
-            options={codeLang === "py"
-              ? ["[1]", "[3]", "[1, 2]", "[]"]
-              : ["1", "2", "3", t("비어 있음", "empty")]
-            }
-            answerIdx={0}
-            hint={t("스택은 LIFO — 마지막에 넣은 3 이 먼저 나오고, 그 다음 2 가 나와요. 1 만 남음.", "LIFO — last 3 comes out first, then 2. Only 1 left.")}
+            question={t(
+              "monotonic stack 의 핵심 invariant 는?",
+              "What's the key invariant of a monotonic stack?",
+            )}
+            options={[
+              t("스택은 항상 정렬됨", "The stack is always sorted"),
+              t("스택 안의 원소 (값) 는 강(엄)감소 — top 으로 갈수록 작아짐", "Stack values are strictly decreasing — smaller toward top"),
+              t("스택은 항상 비어 있음", "The stack is always empty"),
+              t("스택에는 한 원소만 들어 있음", "The stack holds only one element"),
+            ]}
+            answerIdx={1}
+            hint={t("왜 pop 하는지 생각해 봐요 — 현재가 더 크면 이전 작은 것들이 답을 찾았어요. 그래서 스택에 남아 있는 건 항상 '내려가는' 순서.", "Think about *why* we pop — when current is bigger, the smaller ones below have their answer. So what remains is always 'going down'.")}
             onCorrect={() => setQuizPassed(true)}
           />
         )}
@@ -425,157 +469,233 @@ cout << st.empty() << endl;  // false`}
   )
 }
 
-// ── Chapter 3: 큐 사용법 ──────────────────────────────────────────
+// ── Chapter 3: BFS 의 도구 — 큐 ───────────────────────────────────
 function Chapter3({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
-  const [queue, setQueue] = useState<number[]>([])
-  const [nextVal, setNextVal] = useState(1)
-  const [lastPop, setLastPop] = useState<number | null>(null)
-  const handleEnq = () => {
-    setQueue([...queue, nextVal])
-    setNextVal(nextVal + 1)
-    setLastPop(null)
-  }
-  const handleDeq = () => {
-    if (queue.length === 0) return
-    setLastPop(queue[0])
-    setQueue(queue.slice(1))
-  }
-  const handleReset = () => { setQueue([]); setNextVal(1); setLastPop(null) }
+
+  // BFS 3x3 grid viz — start (0,0) target (2,2)
+  // dist[r][c] = step distance from start, -1 if unvisited
+  // We pre-compute the sequence of states (popping from queue + pushing neighbors).
+  type Cell = [number, number]
+  const N = 3
+  // Each viz state shows: current dist grid, current queue contents
+  const bfsStates: { dist: number[][]; queue: Cell[]; note: string }[] = [
+    {
+      dist: [[0,-1,-1],[-1,-1,-1],[-1,-1,-1]],
+      queue: [[0,0]],
+      note: t("시작: (0,0) 을 큐에 넣고 거리 0", "Start: push (0,0), distance 0"),
+    },
+    {
+      dist: [[0,1,-1],[1,-1,-1],[-1,-1,-1]],
+      queue: [[0,1],[1,0]],
+      note: t("(0,0) pop → 이웃 (0,1), (1,0) push, 거리 1", "Pop (0,0) → push neighbors (0,1), (1,0), dist 1"),
+    },
+    {
+      dist: [[0,1,2],[1,2,-1],[-1,-1,-1]],
+      queue: [[1,0],[0,2],[1,1]],
+      note: t("(0,1) pop → (0,2), (1,1) push, 거리 2", "Pop (0,1) → push (0,2), (1,1), dist 2"),
+    },
+    {
+      dist: [[0,1,2],[1,2,-1],[2,-1,-1]],
+      queue: [[0,2],[1,1],[2,0]],
+      note: t("(1,0) pop → (2,0) push, 거리 2 (이미 본 (0,0), (1,1) 은 skip)", "Pop (1,0) → push (2,0), dist 2 (skip visited)"),
+    },
+    {
+      dist: [[0,1,2],[1,2,3],[2,-1,-1]],
+      queue: [[1,1],[2,0],[1,2]],
+      note: t("(0,2) pop → (1,2) push, 거리 3", "Pop (0,2) → push (1,2), dist 3"),
+    },
+    {
+      dist: [[0,1,2],[1,2,3],[2,3,-1]],
+      queue: [[2,0],[1,2],[2,1]],
+      note: t("(1,1) pop → (2,1) push, 거리 3", "Pop (1,1) → push (2,1), dist 3"),
+    },
+    {
+      dist: [[0,1,2],[1,2,3],[2,3,4]],
+      queue: [[1,2],[2,1],[2,2]],
+      note: t("(2,0) pop → (2,2) 도달! 거리 4", "Pop (2,0) → reached (2,2)! distance 4"),
+    },
+  ]
+  const [vizStep, setVizStep] = useState(0)
+  const bfsState = bfsStates[vizStep]
+  const isEnd = vizStep === bfsStates.length - 1
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🚶</p>
+            <p className="text-5xl text-center mb-3">🌊</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("큐도 연산 3개만 알면 끝!", "Queue — also just 3 operations!")}
+              {t("큐 = BFS 의 핵심 도구", "Queue = the core of BFS")}
             </h3>
-            <ul className="space-y-2 text-sm text-gray-800 mb-3">
-              <li><b className="text-blue-700">push(x)</b> {t("또는", "or")} <b className="text-blue-700">enqueue</b> — {t("뒤에 x 추가", "add x to back")}</li>
-              <li><b className="text-blue-700">pop()</b> {t("또는", "or")} <b className="text-blue-700">dequeue</b> — {t("앞에서 꺼내기", "remove from front")}</li>
-              <li><b className="text-blue-700">front()</b> — {t("앞 사람만 보기 (안 빼고)", "peek at front")}</li>
-            </ul>
-            <p className="text-xs text-blue-700 leading-relaxed text-center">
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "스택과 똑같은데 — '꺼내는 위치' 만 달라요. 스택은 맨 위, 큐는 맨 앞.",
-                "Same as stack — but different end. Stack: top. Queue: front.",
+                "BFS (너비 우선 탐색) 는 '시작점에서 몇 스텝?' 같은 *최단 거리* 문제의 기본기. 한 칸씩 동심원처럼 퍼져나가요.",
+                "BFS (breadth-first search) is the bread-and-butter of *shortest-step* problems. It expands in concentric rings, one step at a time.",
               )}
             </p>
-            <p className="text-xs text-blue-700 text-center font-bold mt-3">
-              {t("다음 슬라이드에서 직접 해봐요 →", "Try it on the next slide →")}
+            <div className="bg-white rounded-lg p-3 border border-blue-200 mb-3">
+              <p className="text-xs font-bold text-blue-800 mb-1.5">{t("왜 큐?", "Why queue?")}</p>
+              <p className="text-[11px] text-gray-700 leading-relaxed mb-2">
+                {t(
+                  "FIFO 라서 '먼저 큐에 들어간 = 거리가 더 짧음' 이 항상 보장돼요. 거리 1 짜리 노드를 다 처리한 다음에야 거리 2 노드가 나옴 → level by level.",
+                  "FIFO guarantees 'enqueued earlier = closer to start'. All distance-1 nodes finish before any distance-2 starts → level by level.",
+                )}
+              </p>
+              <p className="text-[11px] text-gray-600 italic">
+                {t(
+                  "스택 (DFS) 쓰면 어디로 *깊이* 빠질지 몰라서 최단 보장 안 됨.",
+                  "Stack (DFS) dives deep wherever — no shortest-path guarantee.",
+                )}
+              </p>
+            </div>
+            <p className="text-xs text-blue-700 text-center font-bold leading-relaxed">
+              {t("다음 슬라이드에서 3x3 격자에서 BFS 가 어떻게 퍼지는지 봐요 →", "See BFS expand on a 3×3 grid next →")}
             </p>
           </div>
         )}
 
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("직접 enqueue / dequeue", "Try enqueue / dequeue")}</p>
-            <p className="text-xs text-gray-600 text-center mb-3">
-              {t("'+ 뒤에 추가' 누르면 줄 뒤에 붙고, '앞에서 빼기' 는 맨 앞 사람이 빠져요.", "'+ Add to back' joins the line. 'Remove from front' takes the first person.")}
+            <p className="text-base font-black text-amber-900 mb-2 text-center">
+              🎮 {t("3×3 격자 BFS — (0,0) → (2,2)", "3×3 grid BFS — (0,0) → (2,2)")}
             </p>
-            {/* 시각화 — 큐는 수평, 왼쪽이 앞 */}
-            <div className="my-3">
-              <div className="flex items-center gap-1 justify-center min-h-[60px] flex-wrap">
-                <span className="text-[10px] text-gray-500 mr-1">← {t("앞", "front")}</span>
-                {queue.length === 0 ? (
-                  <p className="text-xs text-gray-400 italic mx-2">{t("(비어 있음)", "(empty)")}</p>
-                ) : (
-                  queue.map((v, i) => (
-                    <div key={i} className={cn(
-                      "w-12 h-10 rounded-lg border-2 flex items-center justify-center font-mono font-bold text-sm transition-all",
-                      i === 0 ? "bg-blue-100 border-blue-400 text-blue-700" : "bg-gray-100 border-gray-300 text-gray-700",
-                    )}>{v}</div>
-                  ))
+            <p className="text-xs text-gray-600 text-center mb-3">
+              {t("각 칸의 숫자 = 시작점에서의 거리. 큐는 거리 순서대로 처리돼요.", "Each cell = distance from start. Queue processes in distance order.")}
+            </p>
+
+            {/* 격자 */}
+            <div className="flex justify-center mb-3">
+              <div className="inline-grid grid-cols-3 gap-1 bg-gray-100 p-2 rounded-lg">
+                {bfsState.dist.map((row, r) =>
+                  row.map((d, c) => {
+                    const isStart = r === 0 && c === 0
+                    const isTarget = r === 2 && c === 2
+                    const inQueue = bfsState.queue.some(([qr, qc]) => qr === r && qc === c)
+                    const visited = d >= 0
+                    return (
+                      <div key={`${r}-${c}`} className={cn(
+                        "w-14 h-14 rounded-lg border-2 flex flex-col items-center justify-center font-mono font-bold transition-all",
+                        isStart ? "bg-emerald-100 border-emerald-500 text-emerald-700" :
+                        isTarget && visited ? "bg-orange-100 border-orange-500 text-orange-700" :
+                        inQueue ? "bg-blue-100 border-blue-400 text-blue-700" :
+                        visited ? "bg-indigo-50 border-indigo-300 text-indigo-700" :
+                        "bg-white border-gray-300 text-gray-300",
+                      )}>
+                        <span className="text-[8px] text-gray-400">({r},{c})</span>
+                        <span className="text-sm">{visited ? d : "·"}</span>
+                      </div>
+                    )
+                  })
                 )}
-                <span className="text-[10px] text-gray-500 ml-1">{t("뒤", "back")} →</span>
               </div>
             </div>
-            {lastPop !== null && (
-              <p className="text-xs text-center text-amber-700 font-bold mb-2">
-                ← {t("방금 빠진 사람:", "Just removed:")} <span className="font-mono">{lastPop}</span>
-              </p>
-            )}
-            <div className="flex gap-2">
-              <button onClick={handleEnq} className="flex-1 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold text-sm">
-                + {t("뒤에 추가", "Add to back")} {nextVal}
-              </button>
-              <button onClick={handleDeq} disabled={queue.length === 0}
-                className="flex-1 py-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-40 text-white rounded-lg font-bold text-sm">
-                {t("앞에서 빼기", "Remove front")}
-              </button>
-              <button onClick={handleReset} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">↺</button>
+
+            {/* 큐 시각화 */}
+            <div className="bg-gray-50 rounded-lg p-3 mb-3">
+              <p className="text-[10px] font-bold text-gray-600 mb-1.5">🚶 {t("큐 (front → 왼쪽)", "Queue (front → left)")}</p>
+              <div className="flex gap-1 min-h-[36px] items-center flex-wrap">
+                <span className="text-[9px] text-gray-400 mr-1">← front</span>
+                {bfsState.queue.length === 0 ? (
+                  <span className="text-[11px] text-gray-400 italic">{t("(비어 있음)", "(empty)")}</span>
+                ) : (
+                  bfsState.queue.map(([r, c], k) => (
+                    <div key={k} className={cn(
+                      "px-2 py-1 rounded border-2 font-mono text-xs",
+                      k === 0 ? "bg-blue-100 border-blue-400 text-blue-700" : "bg-white border-blue-200 text-blue-600",
+                    )}>
+                      ({r},{c})
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
-            <p className="text-[11px] text-gray-500 text-center mt-3 italic">
-              {t("먼저 들어온 사람이 먼저 나가요 — FIFO.", "First in, first out — FIFO.")}
+
+            <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded p-2 mb-3 leading-relaxed">
+              {bfsState.note}
             </p>
+
+            <div className="flex gap-2">
+              <button onClick={() => setVizStep(Math.max(0, vizStep - 1))} disabled={vizStep === 0}
+                className="flex-1 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-gray-700 rounded-lg font-bold text-sm">
+                ← {t("이전", "Prev")}
+              </button>
+              <button onClick={() => setVizStep(Math.min(bfsStates.length - 1, vizStep + 1))} disabled={isEnd}
+                className="flex-1 py-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-40 text-white rounded-lg font-bold text-sm">
+                {t("다음 단계", "Next step")} →
+              </button>
+              <button onClick={() => setVizStep(0)} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">↺</button>
+            </div>
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-4 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900 mb-2">📝 {t("코드는 이렇게 생겼어요", "Here's the code")}</p>
-              <p className="text-xs text-gray-700">
+              <p className="text-sm font-black text-blue-900 mb-2">📝 {t("BFS 골격 — 어떤 그래프든 거의 같음", "BFS skeleton — almost identical across graphs")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  codeLang === "py"
-                    ? "Python 은 collections.deque 를 큐로 써요. 일반 list 의 pop (0) 은 O(N) 으로 느리거든요 — 매번 전체를 한 칸씩 밀어야 해서."
-                    : "C++ 은 std::queue 가 그대로 있어요. push / pop / front 세 가지로 끝.",
-                  codeLang === "py"
-                    ? "Python uses collections.deque as the queue — plain list pop(0) is O(N) because it shifts everything."
-                    : "C++ has std::queue ready to go. Just push / pop / front — done.",
+                  "방문한 칸은 다시 큐에 넣지 않게 visited (또는 dist != -1) 체크 필수. 안 하면 무한 루프나 폭발.",
+                  "Mark visited (or dist != -1) before pushing — otherwise you re-queue forever and explode.",
                 )}
               </p>
             </div>
             <CodeBlock lang={codeLang}
-              py={`# Python — deque (collections.deque) 를 큐로 사용
+              py={`# BFS — 격자에서 최단 거리
 from collections import deque
 
-q = deque()
+def bfs(grid, sr, sc):
+    R, C = len(grid), len(grid[0])
+    dist = [[-1] * C for _ in range(R)]
+    dist[sr][sc] = 0
+    q = deque([(sr, sc)])
 
-q.append(10)        # 뒤에 10 추가
-q.append(20)
-q.append(30)
-# q = deque([10, 20, 30]),  앞 = 10
+    dr = [-1, 1, 0, 0]
+    dc = [0, 0, -1, 1]
 
-print(q[0])         # 10  ← 앞 사람 확인
-print(q.popleft())  # 10  ← 앞에서 빼기 (FIFO)
-print(q.popleft())  # 20
-
-print(len(q))       # 1
-print(not q)        # False
-
-# ⚠️ list 의 pop(0) 은 느림 (O(N)) — 큐에는 deque 사용!`}
-              cpp={`// C++ — std::queue
+    while q:
+        r, c = q.popleft()         # 앞에서 꺼냄 (FIFO!)
+        for d in range(4):
+            nr, nc = r + dr[d], c + dc[d]
+            if 0 <= nr < R and 0 <= nc < C and dist[nr][nc] == -1:
+                dist[nr][nc] = dist[r][c] + 1
+                q.append((nr, nc))     # 뒤에 추가
+    return dist`}
+              cpp={`// BFS — grid 최단 거리
 #include <queue>
+#include <vector>
 using namespace std;
 
-queue<int> q;
+vector<vector<int>> bfs(vector<vector<int>>& grid, int sr, int sc) {
+    int R = grid.size(), C = grid[0].size();
+    vector<vector<int>> dist(R, vector<int>(C, -1));
+    queue<pair<int,int>> q;
 
-q.push(10);        // 뒤에 추가
-q.push(20);
-q.push(30);
-// 앞 = 10
+    dist[sr][sc] = 0;
+    q.push({sr, sc});
+    int dr[] = {-1, 1, 0, 0}, dc[] = {0, 0, -1, 1};
 
-cout << q.front() << endl;  // 10 ← 앞만 확인
-q.pop();                     // 10 제거 (반환 X)
-cout << q.front() << endl;  // 20
-
-cout << q.size() << endl;    // 1
-cout << q.empty() << endl;   // false`}
+    while (!q.empty()) {
+        auto [r, c] = q.front(); q.pop();   // 앞에서!
+        for (int d = 0; d < 4; d++) {
+            int nr = r + dr[d], nc = c + dc[d];
+            if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
+            if (dist[nr][nc] != -1) continue;       // 이미 본 칸 skip
+            dist[nr][nc] = dist[r][c] + 1;
+            q.push({nr, nc});
+        }
+    }
+    return dist;
+}`}
             />
-            <p className="text-xs text-gray-600 text-center">
+            <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                codeLang === "py"
-                  ? "⚠️ Python 큐는 list 가 아니라 deque 써요. list 의 pop (0) 은 매번 전체를 한 칸씩 밀어야 해서 느려요."
-                  : "⚠️ C++ queue 의 pop () 은 stack 처럼 값을 반환 안 해요 — front () 로 먼저 보고 pop () 으로 빼요.",
-                codeLang === "py"
-                  ? "⚠️ Use deque, not list, in Python. list.pop(0) shifts everything — too slow."
-                  : "⚠️ C++ queue pop() doesn't return, just like stack — read front() first, then pop().",
+                "💡 핵심: popleft / q.front () + q.pop () 로 *앞에서* 꺼내고, *뒤에* push. 거리 갱신은 push 직전에 (재방문 방지).",
+                "💡 Key: pull from *front*, push to *back*. Set dist *before* pushing — prevents re-queueing.",
               )}
             </p>
           </div>
@@ -583,13 +703,18 @@ cout << q.empty() << endl;   // false`}
 
         {step === 3 && (
           <MiniQuiz
-            question={codeLang === "py"
-              ? t("Python: q = deque(), append 로 10, 20, 30 넣고 popleft() 두 번 하면 q[0] 은?", "Python: deque, append 10, 20, 30, popleft twice — q[0]?")
-              : t("C++: q.push(10), push(20), push(30), pop(), pop() 후 q.front() 는?", "C++: push 10, 20, 30, pop twice — q.front()?")
-            }
-            options={["10", "20", "30", t("비어 있음", "empty")]}
-            answerIdx={2}
-            hint={t("FIFO — 먼저 들어온 10, 20 이 먼저 나가요. 30 만 남음.", "FIFO — 10 and 20 leave first. Only 30 left.")}
+            question={t(
+              "BFS 가 항상 최단 거리 (스텝 수) 를 보장하는 이유는?",
+              "Why does BFS always give shortest distance (in steps)?",
+            )}
+            options={[
+              t("큐는 FIFO 라서 — 같은 거리에 있는 노드들이 함께 처리되고, 더 먼 거리 노드는 그 뒤에야 처리됨 (level by level)", "Queue is FIFO — same-distance nodes process together, farther ones strictly after (level by level)"),
+              t("큐가 항상 정렬돼서", "Because the queue is always sorted"),
+              t("DFS 보다 메모리를 적게 써서", "Because it uses less memory than DFS"),
+              t("코드가 짧아서", "Because the code is short"),
+            ]}
+            answerIdx={0}
+            hint={t("level 단위 탐색 — 큐 안에는 거리 d 와 d+1 인 노드만 섞여 있고, d 가 항상 앞쪽에 있어요.", "Level-by-level — the queue holds only distance d and d+1, with d always at the front.")}
             onCorrect={() => setQuizPassed(true)}
           />
         )}
@@ -610,78 +735,134 @@ cout << q.empty() << endl;   // false`}
   )
 }
 
-// ── Chapter 4: 둘 비교 + 실전 패턴 ────────────────────────────────
+// ── Chapter 4: 시뮬레이션 + 괄호 매칭 ─────────────────────────────
 function Chapter4({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
 
+  // Bracket matching visualization — "([{}])"
+  const input = "([{}])"
+  // Each state: stack at this point, pointer index, status note
+  const bracketStates: { ptr: number; stack: string[]; note: string; valid: boolean | null }[] = [
+    { ptr: 0, stack: [],            note: t("시작 — 스택 비어 있음", "Start — empty stack"), valid: null },
+    { ptr: 1, stack: ["("],         note: t("'(' — 여는 괄호 → push", "'(' — opening → push"), valid: null },
+    { ptr: 2, stack: ["(", "["],    note: t("'[' — 여는 괄호 → push", "'[' — opening → push"), valid: null },
+    { ptr: 3, stack: ["(", "[", "{"], note: t("'{' — 여는 괄호 → push", "'{' — opening → push"), valid: null },
+    { ptr: 4, stack: ["(", "["],    note: t("'}' — top '{' 와 짝! → pop", "'}' — matches top '{' → pop"), valid: null },
+    { ptr: 5, stack: ["("],         note: t("']' — top '[' 와 짝! → pop", "']' — matches top '[' → pop"), valid: null },
+    { ptr: 6, stack: [],            note: t("')' — top '(' 와 짝! → pop. 끝에 스택 비어 있음 → 유효!", "')' — matches top '(' → pop. Stack empty at end → valid!"), valid: true },
+  ]
+  const [vizStep, setVizStep] = useState(0)
+  const brState = bracketStates[vizStep]
+  const isEnd = vizStep === bracketStates.length - 1
+
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
           <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border-2 border-purple-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🤷</p>
+            <p className="text-5xl text-center mb-3">🔧</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("그래서 — 언제 스택? 언제 큐?", "So — when stack? when queue?")}
+              {t("괄호/짝 맞추기 — 스택의 고전", "Bracket / pair matching — the classic stack problem")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "문제 읽을 때 한 가지만 물어보세요: '나중에 들어온 게 먼저 나와야 하나? 아니면 먼저 들어온 게 먼저 나와야 하나?'",
-                "When reading a problem, ask one thing: 'Does the LAST one need to come out first? Or the FIRST one?'",
+                "'()[]{}' 같이 짝이 맞는지 검사. 여는 괄호는 push, 닫는 괄호가 오면 top 과 짝 맞는지 확인 후 pop. 마지막에 스택이 비어 있어야 OK.",
+                "Validate '()[]{}'. Push openings; on a closing, check it matches top and pop. Stack must be empty at the end.",
               )}
             </p>
-            <div className="bg-white rounded-lg p-3 text-sm space-y-1.5 border border-purple-200">
-              <p>📚 <b className="text-emerald-700">{t("나중 거 먼저", "Last out first")}</b> → 스택 (LIFO)</p>
-              <p>🚶 <b className="text-blue-700">{t("먼저 거 먼저", "First out first")}</b> → 큐 (FIFO)</p>
+            <div className="bg-white rounded-lg p-3 border border-purple-200 mb-3">
+              <p className="text-xs font-bold text-purple-800 mb-1.5">{t("왜 스택?", "Why stack?")}</p>
+              <p className="text-[11px] text-gray-700 leading-relaxed">
+                {t(
+                  "닫는 괄호는 *가장 최근에 열린* 여는 괄호와 짝이 돼야 해요. '가장 최근' = 스택의 top. 그래서 LIFO 가 정확히 맞아 들어요.",
+                  "A closing bracket pairs with the *most recently opened* one. 'Most recent' = top of stack. LIFO fits exactly.",
+                )}
+              </p>
             </div>
-            <p className="text-xs text-purple-700 text-center mt-3 leading-relaxed">
-              {t("다음 슬라이드에서 실제 문제 키워드를 같이 봐요 →", "Next slide: keywords from real problems →")}
+            <p className="text-xs text-purple-700 text-center font-bold leading-relaxed">
+              {t("다음 슬라이드에서 '([{}])' 가 어떻게 검증되는지 봐요 →", "See '([{}])' validated step by step →")}
             </p>
           </div>
         )}
 
         {step === 1 && (
-          <div className="bg-white rounded-2xl border-2 border-gray-200 p-4">
-            <p className="text-base font-black text-gray-900 mb-3">🔍 {t("문제에서 보이는 단서", "Clues in problem statements")}</p>
-            <div className="space-y-3">
-              <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-3">
-                <p className="text-sm font-black text-emerald-700 mb-2">📚 {t("스택 신호", "Stack signals")}</p>
-                <ul className="text-xs text-gray-700 space-y-1 leading-relaxed">
-                  <li>• {t("'괄호 짝맞추기' / valid parentheses", "'matching brackets' / valid parentheses")}</li>
-                  <li>• {t("'되돌리기' / undo", "'undo'")}</li>
-                  <li>• {t("'가장 가까운 큰 수' (Next Greater Element)", "'next greater element'")}</li>
-                  <li>• {t("'마지막에 본 거', '직전 거'", "'last seen', 'most recent'")}</li>
-                  <li>• {t("재귀를 직접 풀어서 시뮬레이션", "simulating recursion manually")}</li>
-                </ul>
-              </div>
-              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-3">
-                <p className="text-sm font-black text-blue-700 mb-2">🚶 {t("큐 신호", "Queue signals")}</p>
-                <ul className="text-xs text-gray-700 space-y-1 leading-relaxed">
-                  <li>• {t("'먼저 온 순서대로 처리' / 줄서기 시뮬레이션", "'process in arrival order' / line simulation")}</li>
-                  <li>• {t("'한 단계 / 두 단계씩 퍼져나간다' (BFS)", "'spread step by step' (BFS)")}</li>
-                  <li>• {t("'요세푸스' / 카드 돌리기", "'Josephus' / card rotation")}</li>
-                  <li>• {t("프린터 인쇄 대기, 버퍼", "print queue, buffer")}</li>
-                </ul>
+          <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
+            <p className="text-base font-black text-amber-900 mb-2 text-center">
+              🎮 {t("step by step — '([{}])'", "Step by step — '([{}])'")}
+            </p>
+            <p className="text-xs text-gray-600 text-center mb-3">
+              {t("각 문자를 차례로 보면서 스택 변화를 추적해요.", "Walk through each char and track the stack.")}
+            </p>
+
+            {/* 입력 문자열 — pointer */}
+            <div className="flex justify-center gap-1 mb-3">
+              {input.split("").map((c, i) => {
+                const isCurrent = i === brState.ptr - 1 && brState.ptr > 0
+                const isProcessed = i < brState.ptr
+                return (
+                  <div key={i} className="flex flex-col items-center">
+                    <div className="text-[9px] text-gray-400 mb-0.5">{i}</div>
+                    <div className={cn(
+                      "w-10 h-10 rounded-lg border-2 flex items-center justify-center font-mono font-bold text-base transition-all",
+                      isCurrent ? "bg-orange-100 border-orange-500 text-orange-700 scale-110" :
+                      isProcessed ? "bg-indigo-50 border-indigo-300 text-indigo-600" :
+                      "bg-gray-50 border-gray-200 text-gray-500",
+                    )}>{c}</div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* 스택 */}
+            <div className="bg-gray-50 rounded-lg p-3 mb-3">
+              <p className="text-[10px] font-bold text-gray-600 mb-1.5">📚 {t("스택 (top → 오른쪽)", "Stack (top → right)")}</p>
+              <div className="flex gap-1 min-h-[36px] items-center">
+                {brState.stack.length === 0 ? (
+                  <span className="text-[11px] text-gray-400 italic">{t("(비어 있음)", "(empty)")}</span>
+                ) : (
+                  brState.stack.map((c, k) => (
+                    <div key={k} className={cn(
+                      "w-9 h-9 rounded border-2 flex items-center justify-center font-mono font-bold",
+                      k === brState.stack.length - 1 ? "bg-purple-100 border-purple-400 text-purple-700" : "bg-white border-purple-200 text-purple-600",
+                    )}>{c}</div>
+                  ))
+                )}
               </div>
             </div>
-            <p className="text-xs text-purple-700 text-center mt-3 font-bold leading-relaxed">
-              {t("Bronze 에선 '괄호 짝맞추기 = 스택', '줄서기 시뮬 = 큐' 이 두 패턴이 제일 자주 나와요.", "In Bronze: 'matching brackets = stack', 'line simulation = queue' are most common.")}
+
+            <p className={cn(
+              "text-[11px] rounded p-2 mb-3 leading-relaxed border",
+              brState.valid === true ? "bg-emerald-50 border-emerald-200 text-emerald-800 font-bold" :
+              "bg-amber-50 border-amber-200 text-amber-800",
+            )}>
+              {brState.note}
             </p>
+
+            <div className="flex gap-2">
+              <button onClick={() => setVizStep(Math.max(0, vizStep - 1))} disabled={vizStep === 0}
+                className="flex-1 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-40 text-gray-700 rounded-lg font-bold text-sm">
+                ← {t("이전", "Prev")}
+              </button>
+              <button onClick={() => setVizStep(Math.min(bracketStates.length - 1, vizStep + 1))} disabled={isEnd}
+                className="flex-1 py-2 bg-purple-500 hover:bg-purple-600 disabled:opacity-40 text-white rounded-lg font-bold text-sm">
+                {t("다음 단계", "Next step")} →
+              </button>
+              <button onClick={() => setVizStep(0)} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">↺</button>
+            </div>
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
-              <p className="text-sm font-black text-amber-900 mb-2">
-                💡 {t("실전 패턴 — 괄호 짝맞추기 (스택의 대표 문제)", "Pattern — bracket matching (the classic stack problem)")}
-              </p>
+              <p className="text-sm font-black text-amber-900 mb-2">📝 {t("코드 — pair map 으로 짝 확인", "Code — use a pair map to match")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "'()[]{}' 같이 짝이 맞는지 검사. 여는 괄호는 스택에 push, 닫는 괄호가 나오면 top 과 짝 맞는지 확인 후 pop.",
-                  "Check if '()[]{}' is balanced. Push opening brackets; on closing, check top matches and pop.",
+                  "실패 케이스는 3 가지: (1) 닫는 괄호인데 스택이 비어 있음, (2) top 이 짝 안 맞음, (3) 끝났는데 스택에 여는 괄호 남음.",
+                  "Three failure modes: (1) closing but stack empty, (2) top doesn't match, (3) leftover openings at the end.",
                 )}
               </p>
             </div>
@@ -692,40 +873,46 @@ def is_valid(s):
     pairs = {')': '(', ']': '[', '}': '{'}
     for ch in s:
         if ch in '([{':
-            stack.append(ch)              # 여는 괄호 → push
+            stack.append(ch)                  # 여는 → push
         else:
+            # 닫는 괄호
             if not stack or stack[-1] != pairs[ch]:
-                return False              # 짝 안 맞음
-            stack.pop()                   # 짝 맞으면 pop
-    return not stack                      # 다 짝 맞으면 비어 있음
+                return False                  # 비었거나 짝 안 맞음
+            stack.pop()
+    return not stack                          # 남은 여는 괄호 없어야 OK
 
-print(is_valid("()[]{}"))  # True
-print(is_valid("(]"))       # False
-print(is_valid("([)]"))     # False — 중간에 짝 깨짐`}
+print(is_valid("([{}])"))   # True
+print(is_valid("(]"))        # False — 짝 안 맞음
+print(is_valid("([)]"))      # False — 중간에 깨짐
+print(is_valid("((("))       # False — 끝에 남음`}
               cpp={`// 괄호 짝맞추기 — 스택 활용
 #include <stack>
 #include <string>
+#include <unordered_map>
 using namespace std;
 
 bool isValid(string s) {
     stack<char> st;
+    unordered_map<char, char> pairs = {
+        {')', '('}, {']', '['}, {'}', '{'}
+    };
     for (char c : s) {
         if (c == '(' || c == '[' || c == '{') {
-            st.push(c);                    // 여는 괄호
+            st.push(c);                       // 여는 → push
         } else {
-            if (st.empty()) return false;
-            char top = st.top();
-            if ((c == ')' && top != '(') ||
-                (c == ']' && top != '[') ||
-                (c == '}' && top != '{')) return false;
+            // 닫는 괄호
+            if (st.empty() || st.top() != pairs[c]) return false;
             st.pop();
         }
     }
-    return st.empty();
+    return st.empty();                        // 남은 여는 괄호 없어야
 }`}
             />
-            <p className="text-xs text-gray-600 text-center">
-              {t("핵심: 마지막에 본 여는 괄호가 가장 가까운 닫는 괄호와 짝 — 그래서 '마지막 거' 가 중요한 스택이 맞아요.", "Key: most recent opening bracket pairs with the closest closing — that's why 'last' matters → stack.")}
+            <p className="text-xs text-gray-600 text-center leading-relaxed">
+              {t(
+                "💡 이 패턴은 '되돌리기 (undo)', '히스토리 한 단계 뒤로', '재귀 호출 시뮬레이션' 등 — '가장 최근 거 꺼내기' 가 핵심인 모든 문제에 같은 골격.",
+                "💡 Same skeleton for undo, history back, simulating recursion — anything that pulls 'the most recent thing'.",
+              )}
             </p>
           </div>
         )}
@@ -733,17 +920,17 @@ bool isValid(string s) {
         {step === 3 && (
           <MiniQuiz
             question={t(
-              "다음 중 큐 (FIFO) 를 쓰는 게 자연스러운 상황은?",
-              "Which situation naturally calls for a queue (FIFO)?",
+              "괄호 문자열 '(]' 가 유효하지 않은 이유는?",
+              "Why is the bracket string '(]' invalid?",
             )}
             options={[
-              t("괄호 '({[]})' 가 짝이 맞는지 검사", "Check if '({[]})' is balanced"),
-              t("실행 취소 (Ctrl+Z) 기능 구현", "Implement undo (Ctrl+Z)"),
-              t("매표소 줄에서 먼저 온 사람부터 표 발급 시뮬레이션", "Simulate ticket booth — first arrival served first"),
-              t("문자열을 뒤집기 (reverse)", "Reverse a string"),
+              t("스택이 비어 있어서", "Because the stack is empty"),
+              t("닫는 괄호 ']' 가 스택 top '(' 와 짝이 안 맞아서", "Because closing ']' doesn't match top '(' on the stack"),
+              t("길이가 짝수라서", "Because the length is even"),
+              t("처음 문자가 '(' 라서", "Because it starts with '('"),
             ]}
-            answerIdx={2}
-            hint={t("나머지는 다 '마지막에 본 거' 가 중요 = 스택. 매표소 줄만 '먼저 온 거 먼저' = 큐.", "Others care about 'last seen' = stack. Only the ticket line is 'first in, first out' = queue.")}
+            answerIdx={1}
+            hint={t("')' 를 만나면 top 이 '(' 인지 확인. ']' 를 만나면 top 이 '[' 인지 확인. 짝이 안 맞으면 그 자리에서 false.", "On ')', check top is '('. On ']', check top is '['. Mismatch → false immediately.")}
             onCorrect={() => setQuizPassed(true)}
           />
         )}

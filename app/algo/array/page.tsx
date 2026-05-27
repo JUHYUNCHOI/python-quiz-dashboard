@@ -23,9 +23,9 @@ import { HighlightedCode } from "@/components/algo/highlighted-code"
 // ── 챕터 메타 ────────────────────────────────────────────────────
 const CHAPTERS = [
   { id: 1, emoji: "🤔", title: "왜 배열?",          titleEn: "Why Array?",          mins: 3 },
-  { id: 2, emoji: "📦", title: "만들기 + 인덱싱",   titleEn: "Create & Index",      mins: 5 },
-  { id: 3, emoji: "🔁", title: "순회 (for + 누적)", titleEn: "Traversal (for + accumulate)", mins: 6 },
-  { id: 4, emoji: "⚠️", title: "흔한 실수 + 경계",   titleEn: "Common Bugs & Edges", mins: 5 },
+  { id: 2, emoji: "🎯", title: "두 포인터",         titleEn: "Two Pointers",        mins: 6 },
+  { id: 3, emoji: "🪟", title: "슬라이딩 윈도우",   titleEn: "Sliding Window",      mins: 7 },
+  { id: 4, emoji: "📈", title: "부분 배열 최대 합 (Kadane)", titleEn: "Max Subarray (Kadane)", mins: 7 },
   { id: 5, emoji: "🏆", title: "정리 + 실전",        titleEn: "Recap & Practice",    mins: 4 },
 ]
 
@@ -271,308 +271,121 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
   )
 }
 
-// ── Chapter 2: 만들기 + 인덱싱 ───────────────────────────────────
+// ── Chapter 2: 두 포인터 (Two Pointers) ──────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [arr] = useState([10, 20, 30, 40, 50])
-  const [idxInput, setIdxInput] = useState("2")
-  const [pickedMsg, setPickedMsg] = useState<string | null>(null)
   const [quizPassed, setQuizPassed] = useState(false)
 
-  const handlePick = () => {
-    const i = parseInt(idxInput, 10)
-    if (isNaN(i) || i < 0 || i >= arr.length) {
-      setPickedMsg(t(
-        `유효한 인덱스는 0 ~ ${arr.length - 1} 사이예요!`,
-        `Valid index is 0 ~ ${arr.length - 1}!`,
+  // 시뮬레이션: 정렬된 배열에서 두 포인터로 합 = target 찾기
+  const tpArr = [1, 3, 5, 7, 9, 11]
+  const tpTarget = 14
+  const [tpL, setTpL] = useState(0)
+  const [tpR, setTpR] = useState(tpArr.length - 1)
+  const [tpDone, setTpDone] = useState(false)
+  const [tpMsg, setTpMsg] = useState<string | null>(null)
+  const tpStep = () => {
+    if (tpDone || tpL >= tpR) return
+    const s = tpArr[tpL] + tpArr[tpR]
+    if (s === tpTarget) {
+      setTpMsg(t(
+        `arr[${tpL}] + arr[${tpR}] = ${tpArr[tpL]} + ${tpArr[tpR]} = ${tpTarget} ✓ 찾음!`,
+        `arr[${tpL}] + arr[${tpR}] = ${tpArr[tpL]} + ${tpArr[tpR]} = ${tpTarget} ✓ Found!`,
       ))
-      return
+      setTpDone(true)
+    } else if (s < tpTarget) {
+      setTpMsg(t(
+        `합 ${s} < ${tpTarget} → 더 키워야 함 → L++`,
+        `Sum ${s} < ${tpTarget} → need larger → L++`,
+      ))
+      setTpL(tpL + 1)
+    } else {
+      setTpMsg(t(
+        `합 ${s} > ${tpTarget} → 더 줄여야 함 → R--`,
+        `Sum ${s} > ${tpTarget} → need smaller → R--`,
+      ))
+      setTpR(tpR - 1)
     }
-    setPickedMsg(t(
-      `arr[${i}] = ${arr[i]} — 즉시 꺼냄! O(1)`,
-      `arr[${i}] = ${arr[i]} — instant! O(1)`,
-    ))
   }
+  const tpReset = () => { setTpL(0); setTpR(tpArr.length - 1); setTpDone(false); setTpMsg(null) }
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
-          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">📦</p>
+          <div className="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl p-6 border-2 border-cyan-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🎯</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("배열은 어떻게 만들어요?", "How do I make an array?")}
-            </h3>
-            <p className="text-sm text-gray-700 leading-relaxed mb-3">
-              {t(
-                "Python 도 C++ 도 — 한 줄로 끝나요. 대괄호 [ ] 안에 값 콤마로 쭉.",
-                "Python and C++ — both one line. Put values in [ ] separated by commas.",
-              )}
-            </p>
-            <div className="bg-white rounded-lg p-3 font-mono text-sm space-y-1 text-emerald-700 border border-emerald-200">
-              <p>Python: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">arr = [10, 20, 30]</code></p>
-              <p>C++: <code className="bg-emerald-50 px-1.5 py-0.5 rounded">vector&lt;int&gt; arr = {`{10, 20, 30}`};</code></p>
-            </div>
-            <p className="text-xs text-emerald-700 mt-3 leading-relaxed">
-              <b>{t("기억할 한 가지", "One thing to remember")}:</b> {t(
-                "인덱스는 0 부터 시작해요. 첫 원소 = arr[0]. 두 번째 = arr[1]. 사람 셈하고 한 칸 차이!",
-                "Indices start at 0. First item = arr[0]. Second = arr[1]. One off from human counting!",
-              )}
-            </p>
-          </div>
-        )}
-
-        {step === 1 && (
-          <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("직접 꺼내보세요", "Try indexing")}</p>
-            <p className="text-xs text-gray-600 text-center mb-4">
-              {t("아래 배열에서 인덱스를 입력하고 '꺼내기' 눌러봐요:", "Type an index and press 'Pick':")}
-            </p>
-            <div className="mb-3">
-              <p className="text-[11px] text-gray-500 mb-1">{t("배열", "Array")} — arr = [10, 20, 30, 40, 50]</p>
-              <div className="flex gap-1 flex-wrap justify-center">
-                {arr.map((v, i) => (
-                  <div key={i} className="flex flex-col items-center">
-                    <div className="text-[10px] text-gray-400 font-mono">{i}</div>
-                    <div className={cn(
-                      "w-12 h-12 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
-                      pickedMsg && idxInput === String(i) && i >= 0 && i < arr.length
-                        ? "bg-emerald-100 border-emerald-500 text-emerald-700 scale-110"
-                        : "bg-gray-100 border-gray-300 text-gray-700",
-                    )}>{v}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex gap-2 items-center mb-3">
-              <label className="text-xs font-bold text-gray-700">{t("인덱스:", "Index:")}</label>
-              <input
-                type="number"
-                value={idxInput}
-                onChange={(e) => setIdxInput(e.target.value)}
-                min={0}
-                max={arr.length - 1}
-                className="w-16 px-2 py-1 border-2 border-gray-300 rounded-lg font-mono text-sm"
-              />
-              <button onClick={handlePick} className="flex-1 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm">
-                ⚡ {t("꺼내기", "Pick")}
-              </button>
-            </div>
-            {pickedMsg && (
-              <p className="text-xs text-emerald-700 text-center font-bold bg-emerald-50 rounded-lg p-2">
-                {pickedMsg}
-              </p>
-            )}
-            <p className="text-[11px] text-gray-500 text-center mt-2 italic">
-              {t("팁: 0, 4 같은 끝값도 넣어보세요. 5 넣으면? (범위 밖!)", "Tip: try 0 or 4. What if you put 5? (out of range!)")}
-            </p>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="space-y-3">
-            <div className="bg-blue-50 rounded-2xl p-4 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900 mb-2">📝 {t("코드로 보면 — 만들기 + 길이 + 접근", "In code — create + length + access")}</p>
-              <p className="text-xs text-gray-700">
-                {t("위에서 언어 토글 해보세요:", "Toggle the language above:")}
-              </p>
-            </div>
-            <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# 만들기
-scores = [88, 92, 75, 60, 100]
-
-# 길이 (몇 개 있는지)
-n = len(scores)           # 5
-
-# 인덱스로 꺼내기 — 0 부터 시작!
-print(scores[0])          # 88  (첫 번째)
-print(scores[4])          # 100 (마지막)
-print(scores[n - 1])      # 100 (마지막, 길이-1)
-
-# 값 바꾸기
-scores[2] = 80            # 75 → 80`}
-              cpp={`#include <vector>
-#include <iostream>
-using namespace std;
-
-// 만들기
-vector<int> scores = {88, 92, 75, 60, 100};
-
-// 길이
-int n = scores.size();        // 5
-
-// 인덱스로 꺼내기 — 0 부터!
-cout << scores[0] << endl;    // 88
-cout << scores[4] << endl;    // 100
-cout << scores[n - 1] << endl;// 100
-
-// 값 바꾸기
-scores[2] = 80;`}
-            />
-            <p className="text-xs text-gray-600 text-center leading-relaxed">
-              {codeLang === "py"
-                ? t(
-                    "핵심: 첫 = arr[0], 마지막 = arr[len(arr) - 1]. 한 칸 차이만 잊지 말기!",
-                    "Key: first = arr[0], last = arr[len(arr) - 1]. Just remember the off-by-one!",
-                  )
-                : t(
-                    "핵심: 첫 = arr[0], 마지막 = arr[arr.size() - 1]. 한 칸 차이만 잊지 말기!",
-                    "Key: first = arr[0], last = arr[arr.size() - 1]. Just remember the off-by-one!",
-                  )
-              }
-            </p>
-          </div>
-        )}
-
-        {step === 3 && (
-          <MiniQuiz
-            question={codeLang === "py"
-              ? t("Python: arr = [5, 8, 13, 21, 34] 일 때, arr[2] 는?", "Python: For arr = [5, 8, 13, 21, 34], what is arr[2]?")
-              : t("C++: vector<int> arr = {5, 8, 13, 21, 34}; 일 때, arr[2] 는?", "C++: For vector<int> arr = {5, 8, 13, 21, 34};, arr[2]?")
-            }
-            options={["5", "8", "13", "21"]}
-            answerIdx={2}
-            hint={t("0부터 셈: arr[0]=5, arr[1]=8, arr[2]=?", "Count from 0: arr[0]=5, arr[1]=8, arr[2]=?")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
-      </div>
-
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// ── Chapter 3: 순회 (for + 누적) ─────────────────────────────────
-function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
-  const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
-
-  const demoArr = [4, 7, 2, 9, 5]
-  const [traversedIdx, setTraversedIdx] = useState(-1)
-  const [runningSum, setRunningSum] = useState(0)
-  const [runningMax, setRunningMax] = useState<number | null>(null)
-  const [mode, setMode] = useState<"sum" | "max">("sum")
-
-  const stepOnce = () => {
-    if (traversedIdx + 1 >= demoArr.length) return
-    const next = traversedIdx + 1
-    const v = demoArr[next]
-    setTraversedIdx(next)
-    if (mode === "sum") setRunningSum(s => s + v)
-    else setRunningMax(m => m === null ? v : Math.max(m, v))
-  }
-  const reset = () => {
-    setTraversedIdx(-1)
-    setRunningSum(0)
-    setRunningMax(null)
-  }
-  const switchMode = (m: "sum" | "max") => {
-    setMode(m)
-    reset()
-  }
-
-  return (
-    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
-      <div className="flex-1">
-        {step === 0 && (
-          <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border-2 border-purple-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🔁</p>
-            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("배열 전체를 한 번씩 보고 싶을 때 — 순회", "Walking through every element — traversal")}
+              {t("정렬된 배열에서 — 양 끝에서 좁혀가기", "Sorted array — squeeze from both ends")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "사물함 100 개를 다 열어보고 싶다고 해요. 1 번부터 100 번까지 한 번씩 — 이게 ",
-                "Imagine opening all 100 lockers, one by one — we call this ",
-              )}<b className="text-purple-700">{t("순회 (traversal)", "traversal")}</b>{t(
-                ". 배열 문제의 기본이에요.",
-                ". It's the fundamental array operation.",
+                "문제: 정렬된 배열에서 '두 수 합이 target' 인 쌍 찾기. 모든 쌍 다 시도하면 O(N²) — 10만 짜리면 100억 번. 답답하죠.",
+                "Problem: in a sorted array, find a pair summing to target. Trying every pair is O(N²) — for N=100k that's 10 billion. Way too slow.",
               )}
             </p>
-            <p className="text-sm text-gray-700 leading-relaxed mb-3">
-              {t(
-                "방법: for 루프. 0 부터 길이-1 까지 인덱스를 하나씩 올리면서 arr[i] 를 봐요.",
-                "How: for loop. Increment i from 0 to length-1, look at arr[i] each time.",
-              )}
-            </p>
-            <p className="text-sm text-purple-700 leading-relaxed">
-              {t(
-                "순회하면서 변수에 '지금까지의 합' 같은 걸 추적해두면 합/최댓값/카운트 같은 답을 다 얻을 수 있어요.",
-                "While traversing, track 'running sum' (or max, or count) in a variable to get sum/max/count answers.",
-              )}
+            <div className="bg-white/70 rounded-lg p-3 border border-cyan-200 mb-3">
+              <p className="text-xs font-bold text-cyan-800 mb-1">💡 {t("두 포인터의 아이디어", "Two-pointer idea")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "L = 0 (왼쪽 끝), R = N-1 (오른쪽 끝). 합이 target 보다 작으면 L++ (더 큰 값으로), 크면 R-- (더 작은 값으로). 만나면 끝.",
+                  "L = 0 (left end), R = N-1 (right end). If sum < target → L++ (bigger). If sum > target → R-- (smaller). Stop when they meet.",
+                )}
+              </p>
+            </div>
+            <p className="text-sm font-bold text-cyan-700 text-center">
+              {t("시간: O(N²) → O(N). N=100k 면 ~100배 빠름!", "Time: O(N²) → O(N). For N=100k that's ~100× faster!")}
             </p>
           </div>
         )}
 
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("한 칸씩 순회해 보기", "Step through the array")}</p>
-            <div className="flex gap-2 mb-3">
-              <button onClick={() => switchMode("sum")}
-                className={cn("flex-1 py-2 rounded-lg font-bold text-xs transition-all",
-                  mode === "sum" ? "bg-purple-500 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700")}>
-                Σ {t("합 구하기", "Sum")}
-              </button>
-              <button onClick={() => switchMode("max")}
-                className={cn("flex-1 py-2 rounded-lg font-bold text-xs transition-all",
-                  mode === "max" ? "bg-purple-500 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700")}>
-                🥇 {t("최댓값 찾기", "Find max")}
-              </button>
-            </div>
-            <p className="text-xs text-gray-500 mb-1">{t("배열", "Array")} — arr = [4, 7, 2, 9, 5]</p>
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("직접 좁혀보기", "Squeeze it yourself")}</p>
+            <p className="text-xs text-gray-600 text-center mb-3">
+              {t(`정렬된 배열에서 합 = ${tpTarget} 인 쌍 찾기`, `Find a pair summing to ${tpTarget} in this sorted array`)}
+            </p>
+            <p className="text-[11px] text-gray-500 mb-1">arr = [1, 3, 5, 7, 9, 11]</p>
             <div className="flex gap-1 flex-wrap justify-center mb-3">
-              {demoArr.map((v, i) => (
-                <div key={i} className="flex flex-col items-center">
-                  <div className="text-[10px] text-gray-400 font-mono">{i}</div>
-                  <div className={cn(
-                    "w-11 h-11 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
-                    i === traversedIdx && "bg-purple-200 border-purple-500 text-purple-800 scale-110",
-                    i < traversedIdx && "bg-emerald-50 border-emerald-300 text-emerald-700",
-                    i > traversedIdx && "bg-gray-100 border-gray-300 text-gray-500",
-                  )}>{v}</div>
-                </div>
-              ))}
+              {tpArr.map((v, i) => {
+                const isL = i === tpL
+                const isR = i === tpR
+                const isOut = i < tpL || i > tpR
+                return (
+                  <div key={i} className="flex flex-col items-center">
+                    <div className="text-[10px] font-mono h-3">
+                      {isL && isR ? <span className="text-purple-700 font-black">L=R</span>
+                        : isL ? <span className="text-blue-700 font-black">L</span>
+                        : isR ? <span className="text-pink-700 font-black">R</span>
+                        : <span className="text-gray-300">{i}</span>}
+                    </div>
+                    <div className={cn(
+                      "w-11 h-11 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
+                      tpDone && (isL || isR) && "bg-emerald-100 border-emerald-500 text-emerald-700 scale-110",
+                      !tpDone && isL && "bg-blue-100 border-blue-500 text-blue-700 scale-105",
+                      !tpDone && isR && "bg-pink-100 border-pink-500 text-pink-700 scale-105",
+                      isOut && "bg-gray-50 border-gray-200 text-gray-400",
+                      !isL && !isR && !isOut && "bg-gray-100 border-gray-300 text-gray-700",
+                    )}>{v}</div>
+                  </div>
+                )
+              })}
             </div>
-            <div className="bg-purple-50 rounded-lg p-3 mb-3 text-center">
-              {mode === "sum" ? (
-                <p className="text-sm font-mono text-purple-800">
-                  {t("지금까지 합", "Running sum")}: <b className="text-lg">{runningSum}</b>
-                </p>
-              ) : (
-                <p className="text-sm font-mono text-purple-800">
-                  {t("지금까지 최댓값", "Running max")}: <b className="text-lg">{runningMax === null ? "—" : runningMax}</b>
-                </p>
-              )}
-              <p className="text-[11px] text-purple-600 mt-1">
-                {traversedIdx === -1
-                  ? t("아직 한 칸도 안 봄. ▶ 눌러 시작!", "Haven't started. ▶ to begin!")
-                  : traversedIdx === demoArr.length - 1
-                    ? t("끝! 전부 봤어요 ✅", "Done! Looked at all ✅")
-                    : t(`방금 arr[${traversedIdx}] = ${demoArr[traversedIdx]} 봄`, `Just saw arr[${traversedIdx}] = ${demoArr[traversedIdx]}`)}
+            <div className="bg-cyan-50 rounded-lg p-3 mb-3 text-center min-h-[3.5rem]">
+              <p className="text-sm font-mono text-cyan-800">
+                {tpDone
+                  ? <b className="text-emerald-700">✅ {tpMsg}</b>
+                  : tpMsg ?? t("▶ 스텝을 눌러 시작!", "▶ Press step to start!")}
               </p>
             </div>
             <div className="flex gap-2">
-              <button onClick={stepOnce}
-                disabled={traversedIdx + 1 >= demoArr.length}
-                className="flex-1 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white rounded-lg font-bold text-sm">
-                ▶ {t("다음 칸", "Next cell")}
+              <button onClick={tpStep}
+                disabled={tpDone || tpL >= tpR}
+                className="flex-1 py-2 bg-cyan-500 hover:bg-cyan-600 disabled:opacity-40 text-white rounded-lg font-bold text-sm">
+                ▶ {t("스텝", "Step")}
               </button>
-              <button onClick={reset} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">
+              <button onClick={tpReset} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">
                 ↺ {t("리셋", "Reset")}
               </button>
             </div>
@@ -582,60 +395,53 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900">📝 {t("코드 — 합, 최댓값, 카운트", "Code — sum, max, count")}</p>
+              <p className="text-sm font-black text-blue-900">📝 {t("코드 — 두 포인터로 합=target 찾기", "Code — two-pointer pair sum")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("세 가지 다 똑같이 생겼어요. for 안에 변수 하나 추적만 다름.", "All three look the same. Only what you track inside the for differs.")}
+                {t("정렬된 배열이라는 가정 — 안 되어 있으면 sort 먼저.", "Assumes sorted input — sort first if not.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`arr = [4, 7, 2, 9, 5]
+              py={`def find_pair(arr, target):
+    L, R = 0, len(arr) - 1
+    while L < R:
+        s = arr[L] + arr[R]
+        if s == target:
+            return (arr[L], arr[R])
+        elif s < target:
+            L += 1          # 합 더 키우기
+        else:
+            R -= 1          # 합 더 줄이기
+    return None             # 못 찾음
 
-# 1) 합
-total = 0
-for x in arr:
-    total += x          # 누적
-print(total)            # 27
+arr = [1, 3, 5, 7, 9, 11]
+print(find_pair(arr, 14))   # (3, 11)
+print(find_pair(arr, 100))  # None`}
+              cpp={`#include <vector>
+#include <iostream>
+using namespace std;
 
-# 2) 최댓값
-biggest = arr[0]        # 첫 값으로 시작
-for x in arr:
-    if x > biggest:
-        biggest = x
-print(biggest)          # 9
-
-# 3) 5 이상인 거 몇 개?
-cnt = 0
-for x in arr:
-    if x >= 5:
-        cnt += 1
-print(cnt)              # 3`}
-              cpp={`vector<int> arr = {4, 7, 2, 9, 5};
-
-// 1) 합
-int total = 0;
-for (int x : arr) {
-    total += x;
+pair<int,int> findPair(vector<int>& arr, int target) {
+    int L = 0, R = arr.size() - 1;
+    while (L < R) {
+        int s = arr[L] + arr[R];
+        if (s == target) return {arr[L], arr[R]};
+        else if (s < target) L++;   // 합 더 키우기
+        else R--;                   // 합 더 줄이기
+    }
+    return {-1, -1};                // 못 찾음
 }
-cout << total << endl;     // 27
 
-// 2) 최댓값
-int biggest = arr[0];
-for (int x : arr) {
-    if (x > biggest) biggest = x;
-}
-cout << biggest << endl;   // 9
-
-// 3) 5 이상인 거 몇 개?
-int cnt = 0;
-for (int x : arr) {
-    if (x >= 5) cnt++;
-}
-cout << cnt << endl;       // 3`}
+int main() {
+    vector<int> arr = {1, 3, 5, 7, 9, 11};
+    auto p = findPair(arr, 14);
+    cout << p.first << " " << p.second << endl;  // 3 11
+    return 0;
+}`}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "패턴: 변수 초기화 → for 로 한 번씩 → 조건 보고 변수 갱신. 익숙해질 거예요!",
-                "Pattern: init var → walk once → check & update. You'll get used to it!",
+                "핵심: 한 번 통과하며 L 과 R 이 만날 때까지 → O(N). 정렬되어 있어야 함!",
+                "Key: one pass until L meets R → O(N). Must be sorted!",
               )}
             </p>
           </div>
@@ -643,10 +449,16 @@ cout << cnt << endl;       // 3`}
 
         {step === 3 && (
           <MiniQuiz
-            question={t("arr = [3, 1, 4, 1, 5] 를 for 로 순회하면서 합을 구해요. 결과는?", "Walk through arr = [3, 1, 4, 1, 5] and compute sum. Result?")}
-            options={["10", "14", "12", "5"]}
+            question={t(
+              "정렬된 arr = [1, 4, 5, 8, 10] 에서 합 = 12 인 쌍을 두 포인터로 찾으면? L=0, R=4 부터 시작.",
+              "Sorted arr = [1, 4, 5, 8, 10], find pair sum = 12 with two pointers. Start L=0, R=4.",
+            )}
+            options={["(1, 10)", "(4, 8)", "(5, 8)", t("없음", "None")]}
             answerIdx={1}
-            hint={t("3 + 1 + 4 + 1 + 5 = ?", "3 + 1 + 4 + 1 + 5 = ?")}
+            hint={t(
+              "L=0,R=4: 1+10=11 < 12 → L++. L=1,R=4: 4+10=14 > 12 → R--. L=1,R=3: 4+8=12 ✓",
+              "L=0,R=4: 1+10=11 < 12 → L++. L=1,R=4: 4+10=14 > 12 → R--. L=1,R=3: 4+8=12 ✓",
+            )}
             onCorrect={() => setQuizPassed(true)}
           />
         )}
@@ -667,118 +479,161 @@ cout << cnt << endl;       // 3`}
   )
 }
 
-// ── Chapter 4: 흔한 실수 + 경계 ──────────────────────────────────
-function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
+// ── Chapter 3: 슬라이딩 윈도우 ───────────────────────────────────
+function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
 
+  // 시뮬레이션: 슬라이딩 윈도우 — K=3, max 합 찾기
+  const swArr = [2, 1, 5, 1, 3, 2]
+  const K = 3
+  // start: -1 = 아직 시작 안 함, 0~N-K = 윈도우 시작 인덱스
+  const [swStart, setSwStart] = useState(-1)
+  const swSums = [
+    swArr.slice(0, K).reduce((a, b) => a + b, 0),
+    swArr.slice(1, 1 + K).reduce((a, b) => a + b, 0),
+    swArr.slice(2, 2 + K).reduce((a, b) => a + b, 0),
+    swArr.slice(3, 3 + K).reduce((a, b) => a + b, 0),
+  ]
+  const swCurSum = swStart >= 0 ? swSums[swStart] : 0
+  const swBest = swStart >= 0 ? Math.max(...swSums.slice(0, swStart + 1)) : 0
+  const swMaxStart = swArr.length - K
+  const swStepFn = () => {
+    if (swStart < swMaxStart) setSwStart(swStart + 1)
+  }
+  const swReset = () => setSwStart(-1)
+
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
-          <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-6 border-2 border-red-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">⚠️</p>
+          <div className="bg-gradient-to-br from-sky-50 to-indigo-50 rounded-2xl p-6 border-2 border-sky-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🪟</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("배열에서 가장 흔한 실수 3 가지", "The 3 most common array bugs")}
+              {t("연속 K 개를 빠르게 — 슬라이딩 윈도우", "K consecutive items fast — sliding window")}
             </h3>
-            <p className="text-sm text-gray-700 leading-relaxed mb-3">
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "USACO 문제에서 '거의 다 됐는데 한 케이스 틀려요' 하는 경우 — 거의 다 이 셋 중 하나예요. 미리 알아두면 디버그 시간 확 줄어요.",
-                "When a USACO solution fails just one case — almost always one of these three. Knowing them saves debug time.",
+                "문제: 배열에서 '연속 K 개' 부분 배열의 합/최대/평균. 매번 K 칸 다시 더하면 O(N·K) — 둘 다 10만이면 100억. 망함.",
+                "Problem: 'K-in-a-row' subarray sum/max/avg. Re-summing K items each time is O(N·K) — for N=K=100k that's 10 billion. Dead.",
               )}
             </p>
-            <ol className="space-y-2 text-sm text-gray-800 list-decimal pl-5">
-              <li><b>{t("off-by-one (한 칸 차이)", "Off-by-one")}</b> — {codeLang === "py" ? "arr[len(arr)]" : "arr[arr.size()]"} {t("로 접근하면 에러", "is out of range")}</li>
-              <li><b>{t("빈 배열 처리 안 함", "Empty array")}</b> — arr[0] {t("이 없을 수도", "may not exist")}</li>
-              <li><b>{t("음수/너무 큰 인덱스", "Negative / too-large index")}</b></li>
-            </ol>
-            <p className="text-sm text-red-700 font-bold text-center mt-4">
-              {t("다음 슬라이드에서 하나씩 봐요 →", "Let's see each on the next slide →")}
+            <div className="bg-white/70 rounded-lg p-3 border border-sky-200 mb-3">
+              <p className="text-xs font-bold text-sky-800 mb-1">💡 {t("윈도우를 미끄러뜨려요", "Slide the window")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "첫 K 개 합 한 번 구해놓고, 한 칸 옮길 때마다: + 새 오른쪽, - 빠지는 왼쪽. 매번 두 번의 연산만!",
+                  "Compute first K-sum once. Each slide: + new right, - old left. Just two operations per slide!",
+                )}
+              </p>
+            </div>
+            <p className="text-sm font-bold text-sky-700 text-center">
+              {t("시간: O(N·K) → O(N). 윈도우는 미는 거지 다시 짓는 게 아님.", "Time: O(N·K) → O(N). Slide it, don't rebuild it.")}
             </p>
           </div>
         )}
 
         {step === 1 && (
-          <div className="bg-white rounded-2xl border-2 border-red-200 p-4">
-            <p className="text-base font-black text-red-900 mb-3">🚧 {t("off-by-one — 가장 흔한 한 칸 실수", "Off-by-one — the classic one-step bug")}</p>
-            <p className="text-sm text-gray-700 mb-3 leading-relaxed">
-              {t(
-                "사물함 5 개라면 — 0, 1, 2, 3, 4 번. 5 번은 없어요. 그런데 사람은 자꾸 5 번 찾으려고 해요 😅",
-                "5 lockers → numbered 0, 1, 2, 3, 4. There is no #5. But people keep trying to access #5 😅",
+          <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("윈도우 밀어보기", "Slide the window")}</p>
+            <p className="text-xs text-gray-600 text-center mb-3">
+              {t(`K = ${K} 짜리 윈도우 — 최대 합 찾기`, `Window size K = ${K} — find max sum`)}
+            </p>
+            <p className="text-[11px] text-gray-500 mb-1">arr = [2, 1, 5, 1, 3, 2]</p>
+            <div className="flex gap-1 flex-wrap justify-center mb-3">
+              {swArr.map((v, i) => {
+                const inWindow = swStart >= 0 && i >= swStart && i < swStart + K
+                return (
+                  <div key={i} className="flex flex-col items-center">
+                    <div className="text-[10px] text-gray-400 font-mono">{i}</div>
+                    <div className={cn(
+                      "w-11 h-11 rounded-lg border-2 flex items-center justify-center font-mono font-bold transition-all",
+                      inWindow ? "bg-sky-100 border-sky-500 text-sky-800 scale-105" : "bg-gray-100 border-gray-300 text-gray-500",
+                    )}>{v}</div>
+                  </div>
+                )
+              })}
+            </div>
+            <div className="bg-sky-50 rounded-lg p-3 mb-3 text-center">
+              <p className="text-sm font-mono text-sky-800">
+                {swStart === -1
+                  ? t("▶ 시작 눌러서 첫 윈도우 보기", "▶ Start to see first window")
+                  : <>
+                      {t("윈도우", "Window")} [{swStart}, {swStart + K - 1}] = {swArr.slice(swStart, swStart + K).join(" + ")} = <b>{swCurSum}</b>
+                    </>}
+              </p>
+              {swStart >= 0 && (
+                <p className="text-[11px] text-sky-700 mt-1">
+                  {t("지금까지 최대 합", "Best so far")}: <b>{swBest}</b>
+                </p>
               )}
-            </p>
-            <div className="bg-red-50 border-2 border-red-200 rounded-lg p-3 mb-3">
-              <p className="text-xs font-bold text-red-700 mb-1">❌ {t("자주 보는 버그", "Common bug")}</p>
-              <pre className="text-xs font-mono text-gray-800 leading-relaxed whitespace-pre-wrap">{codeLang === "py"
-                ? `arr = [10, 20, 30, 40, 50]
-print(arr[5])   # 💥 IndexError!
-                # 길이=5 → 마지막은 arr[4]`
-                : `vector<int> arr = {10, 20, 30, 40, 50};
-cout << arr[5];   // 💥 out_of_range (또는 UB!)
-                  // size=5 → 마지막은 arr[4]`
-              }</pre>
             </div>
-            <div className="bg-green-50 border-2 border-green-200 rounded-lg p-3">
-              <p className="text-xs font-bold text-green-700 mb-1">✅ {t("올바른 마지막 원소 접근", "Correct way to access last")}</p>
-              <pre className="text-xs font-mono text-gray-800 leading-relaxed whitespace-pre-wrap">{codeLang === "py"
-                ? `print(arr[len(arr) - 1])   # 50
-# Python 한정 — 음수 인덱스도 OK
-print(arr[-1])             # 50`
-                : `cout << arr[arr.size() - 1];   // 50
-// C++ — back() 도 가능
-cout << arr.back();           // 50`
-              }</pre>
+            <div className="flex gap-2">
+              <button onClick={swStepFn}
+                disabled={swStart >= swMaxStart}
+                className="flex-1 py-2 bg-sky-500 hover:bg-sky-600 disabled:opacity-40 text-white rounded-lg font-bold text-sm">
+                ▶ {swStart === -1 ? t("시작", "Start") : t("한 칸 밀기", "Slide one")}
+              </button>
+              <button onClick={swReset} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">
+                ↺ {t("리셋", "Reset")}
+              </button>
             </div>
-            <p className="text-xs text-amber-700 mt-3 text-center font-bold">
-              {t("규칙: 마지막 인덱스 = 길이 - 1. 외우기!", "Rule: last index = length - 1. Memorize!")}
-            </p>
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-3">
-            <div className="bg-amber-50 rounded-2xl border-2 border-amber-300 p-4">
-              <p className="text-sm font-black text-amber-900 mb-2">🪤 {t("두 번째 함정 — 빈 배열", "Trap #2 — empty array")}</p>
-              <p className="text-xs text-gray-700 leading-relaxed">
-                {t(
-                  "USACO 문제는 'N = 0 일 수도 있다' 가 자주 나와요. 빈 배열에서 arr[0] 하면 끝!",
-                  "USACO problems often say 'N could be 0'. arr[0] on empty array = boom.",
-                )}
+            <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
+              <p className="text-sm font-black text-blue-900">📝 {t("코드 — 슬라이딩 윈도우 최대 합", "Code — sliding window max sum")}</p>
+              <p className="text-xs text-gray-700 mt-1">
+                {t("첫 K 합 만들고 → 한 칸씩 밀면서 갱신.", "Build first K-sum → slide, updating in O(1) per step.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# ❌ 최댓값 — N=0 이면 터짐
-biggest = arr[0]            # IndexError when arr=[]
-for x in arr:
-    if x > biggest: biggest = x
+              py={`def max_window_sum(arr, K):
+    # 첫 윈도우 합
+    cur = sum(arr[:K])
+    best = cur
 
-# ✅ 미리 체크 + 안전한 초기값
-if len(arr) == 0:
-    print("배열이 비어있음")
-else:
-    biggest = arr[0]
-    for x in arr:
-        if x > biggest: biggest = x
-    print(biggest)`}
-              cpp={`// ❌ N=0 이면 arr[0] 이 정의 안 됨 (UB)
-int biggest = arr[0];
-for (int x : arr) if (x > biggest) biggest = x;
+    # 한 칸씩 밀기
+    for i in range(K, len(arr)):
+        cur += arr[i]            # 새 오른쪽 추가
+        cur -= arr[i - K]        # 빠지는 왼쪽 빼기
+        if cur > best:
+            best = cur
+    return best
 
-// ✅ 미리 체크
-if (arr.empty()) {
-    cout << "배열이 비어있음";
-} else {
-    int biggest = arr[0];
-    for (int x : arr) if (x > biggest) biggest = x;
-    cout << biggest;
+arr = [2, 1, 5, 1, 3, 2]
+print(max_window_sum(arr, 3))   # 9`}
+              cpp={`#include <vector>
+#include <iostream>
+using namespace std;
+
+int maxWindowSum(vector<int>& arr, int K) {
+    int cur = 0;
+    for (int i = 0; i < K; i++) cur += arr[i];   // 첫 윈도우
+    int best = cur;
+
+    for (int i = K; i < (int)arr.size(); i++) {
+        cur += arr[i];          // 새 오른쪽 추가
+        cur -= arr[i - K];      // 빠지는 왼쪽 빼기
+        if (cur > best) best = cur;
+    }
+    return best;
+}
+
+int main() {
+    vector<int> arr = {2, 1, 5, 1, 3, 2};
+    cout << maxWindowSum(arr, 3) << endl;   // 9
+    return 0;
 }`}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "체크 한 줄로 끝. 'N 이 0 일 수 있는가?' 항상 물어봐요.",
-                "One check line, done. Always ask: 'Can N be 0?'",
+                "핵심: 윈도우는 다시 더하지 마라. + 들어오는 거, - 나가는 거 두 번이면 끝.",
+                "Key: never re-sum the window. Just + the new and - the leaving — two ops, done.",
               )}
             </p>
           </div>
@@ -786,13 +641,203 @@ if (arr.empty()) {
 
         {step === 3 && (
           <MiniQuiz
-            question={t("arr = [7, 4, 9, 2] 일 때, 마지막 원소를 안전하게 꺼내려면?", "For arr = [7, 4, 9, 2], how do you safely get the last element?")}
-            options={codeLang === "py"
-              ? ["arr[4]", "arr[len(arr)]", "arr[len(arr) - 1]", "arr[5]"]
-              : ["arr[4]", "arr[arr.size()]", "arr[arr.size() - 1]", "arr.back_value()"]
-            }
+            question={t(
+              "arr = [1, 4, 2, 10, 2, 3, 1, 0, 20] 에서 K=4 윈도우의 최대 합은?",
+              "For arr = [1, 4, 2, 10, 2, 3, 1, 0, 20] with K=4, max window sum?",
+            )}
+            options={["16", "24", "26", "30"]}
+            answerIdx={1}
+            hint={t(
+              "윈도우 합: [1,4,2,10]=17 → [4,2,10,2]=18 → [2,10,2,3]=17 → [10,2,3,1]=16 → [2,3,1,0]=6 → [3,1,0,20]=24",
+              "Windows: [1,4,2,10]=17 → [4,2,10,2]=18 → [2,10,2,3]=17 → [10,2,3,1]=16 → [2,3,1,0]=6 → [3,1,0,20]=24",
+            )}
+            onCorrect={() => setQuizPassed(true)}
+          />
+        )}
+      </div>
+
+      {step < totalSteps - 1 ? (
+        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
+      ) : quizPassed ? (
+        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
+      ) : (
+        <div className="flex items-center justify-center gap-2 pt-2">
+          {Array.from({ length: totalSteps }).map((_, i) => (
+            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Chapter 4: 부분 배열 최대 합 (Kadane) ───────────────────────
+function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
+  const { t } = useLanguage()
+  const totalSteps = 4
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
+  const [quizPassed, setQuizPassed] = useState(false)
+
+  // 시뮬레이션: Kadane 한 칸씩 진행
+  const kArr = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+  // 미리 계산
+  const kTrace: { cur: number; best: number; choice: string }[] = []
+  {
+    let cur = kArr[0], best = kArr[0]
+    kTrace.push({ cur, best, choice: t("시작", "start") })
+    for (let i = 1; i < kArr.length; i++) {
+      const restart = kArr[i]
+      const extend = cur + kArr[i]
+      const choice = restart > extend ? t("새 시작", "restart") : t("이어가기", "extend")
+      cur = Math.max(restart, extend)
+      best = Math.max(best, cur)
+      kTrace.push({ cur, best, choice })
+    }
+  }
+  const [kIdx, setKIdx] = useState(0)
+  const kStepFn = () => { if (kIdx < kArr.length - 1) setKIdx(kIdx + 1) }
+  const kReset = () => setKIdx(0)
+
+  return (
+    <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
+      <div className="flex-1">
+        {step === 0 && (
+          <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-2xl p-6 border-2 border-rose-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">📈</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("연속 부분 배열의 최대 합 — Kadane", "Max contiguous subarray sum — Kadane")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
+              {t(
+                "문제: 배열 중 '연속된' 일부를 뽑아 합을 최대로. 모든 (i, j) 다 시도하면 O(N²) — 너무 느림.",
+                "Problem: pick any contiguous slice, maximize its sum. Trying every (i, j) is O(N²) — too slow.",
+              )}
+            </p>
+            <div className="bg-white/70 rounded-lg p-3 border border-rose-200 mb-3">
+              <p className="text-xs font-bold text-rose-800 mb-1">💡 {t("Kadane 의 한 줄 아이디어", "Kadane's one-line idea")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "각 위치마다 결정: '지금 원소부터 새로 시작?' vs '이전 합에 이어가?' 둘 중 큰 쪽 선택. 누적이 음수가 되면 버리는 게 이득.",
+                  "At each position decide: 'restart fresh here' vs 'extend previous'. Pick the bigger. Once running sum goes negative, dropping it pays off.",
+                )}
+              </p>
+            </div>
+            <p className="text-sm font-bold text-rose-700 text-center">
+              {t("시간: O(N²) → O(N). 한 번 통과로 끝.", "Time: O(N²) → O(N). One pass, done.")}
+            </p>
+          </div>
+        )}
+
+        {step === 1 && (
+          <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("Kadane 한 칸씩", "Kadane step-by-step")}</p>
+            <p className="text-xs text-gray-600 text-center mb-3">
+              {t("매 칸: cur = max(arr[i], cur + arr[i]), best = max(best, cur)", "Each step: cur = max(arr[i], cur + arr[i]), best = max(best, cur)")}
+            </p>
+            <p className="text-[11px] text-gray-500 mb-1">arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4]</p>
+            <div className="flex gap-1 flex-wrap justify-center mb-3">
+              {kArr.map((v, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <div className="text-[10px] text-gray-400 font-mono">{i}</div>
+                  <div className={cn(
+                    "w-10 h-10 rounded-lg border-2 flex items-center justify-center font-mono text-xs font-bold transition-all",
+                    i === kIdx && "bg-rose-200 border-rose-500 text-rose-800 scale-110",
+                    i < kIdx && "bg-emerald-50 border-emerald-300 text-emerald-700",
+                    i > kIdx && "bg-gray-100 border-gray-300 text-gray-500",
+                  )}>{v}</div>
+                </div>
+              ))}
+            </div>
+            <div className="bg-rose-50 rounded-lg p-3 mb-3 text-center">
+              <p className="text-sm font-mono text-rose-800">
+                i={kIdx}, arr[i]={kArr[kIdx]} — <span className="font-black">{kTrace[kIdx].choice}</span>
+              </p>
+              <p className="text-sm font-mono text-rose-700 mt-1">
+                cur = <b>{kTrace[kIdx].cur}</b> &nbsp; best = <b className="text-emerald-700">{kTrace[kIdx].best}</b>
+              </p>
+              {kIdx === kArr.length - 1 && (
+                <p className="text-[11px] text-emerald-700 font-bold mt-1">
+                  ✅ {t("끝! 답 = 6 (= [4,-1,2,1])", "Done! Answer = 6 (= [4,-1,2,1])")}
+                </p>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <button onClick={kStepFn}
+                disabled={kIdx >= kArr.length - 1}
+                className="flex-1 py-2 bg-rose-500 hover:bg-rose-600 disabled:opacity-40 text-white rounded-lg font-bold text-sm">
+                ▶ {t("다음", "Next")}
+              </button>
+              <button onClick={kReset} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold text-sm">
+                ↺ {t("리셋", "Reset")}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="space-y-3">
+            <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
+              <p className="text-sm font-black text-blue-900">📝 {t("코드 — Kadane", "Code — Kadane")}</p>
+              <p className="text-xs text-gray-700 mt-1">
+                {t("한 번 순회, 변수 두 개 (cur, best) 만 추적.", "One pass, only two variables (cur, best).")}
+              </p>
+            </div>
+            <CodeBlock lang={codeLang} setLang={setCodeLang}
+              py={`def max_subarray(arr):
+    cur = best = arr[0]
+    for i in range(1, len(arr)):
+        cur = max(arr[i], cur + arr[i])
+        best = max(best, cur)
+    return best
+
+arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+print(max_subarray(arr))   # 6  (= [4, -1, 2, 1])`}
+              cpp={`#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+int maxSubarray(vector<int>& arr) {
+    int cur = arr[0], best = arr[0];
+    for (int i = 1; i < (int)arr.size(); i++) {
+        cur = max(arr[i], cur + arr[i]);
+        best = max(best, cur);
+    }
+    return best;
+}
+
+int main() {
+    vector<int> arr = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+    cout << maxSubarray(arr) << endl;   // 6
+    return 0;
+}`}
+            />
+            <p className="text-xs text-gray-600 text-center leading-relaxed">
+              {t(
+                "함정: cur 초기값은 0 이 아닌 arr[0]. 전부 음수면 0 이 답이 되면 안 됨.",
+                "Pitfall: init cur to arr[0], not 0. For all-negative arrays, 0 must not be the answer.",
+              )}
+            </p>
+          </div>
+        )}
+
+        {step === 3 && (
+          <MiniQuiz
+            question={t(
+              "Kadane 의 핵심 점화식은? (i 번째 위치에서 끝나는 최대 부분 합 cur)",
+              "Kadane's recurrence? (cur = max subarray sum ending at position i)",
+            )}
+            options={[
+              "cur = arr[i]",
+              "cur = cur + arr[i]",
+              "cur = max(arr[i], cur + arr[i])",
+              "cur = min(arr[i], cur + arr[i])",
+            ]}
             answerIdx={2}
-            hint={t("길이가 4 → 인덱스는 0, 1, 2, 3 까지만. 마지막 = 길이 - 1.", "Length 4 → valid indices 0, 1, 2, 3. Last = length - 1.")}
+            hint={t(
+              "두 선택: (1) 지금부터 새로 시작 = arr[i] (2) 이전 합에 이어가 = cur + arr[i]. 더 큰 쪽 선택!",
+              "Two choices: (1) restart = arr[i] (2) extend = cur + arr[i]. Pick the bigger!",
+            )}
             onCorrect={() => setQuizPassed(true)}
           />
         )}
