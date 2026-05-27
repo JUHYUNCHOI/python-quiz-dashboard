@@ -26,7 +26,7 @@ const QUESTIONS: Question[] = [
     q: "이 코드의 출력은?",
     qEn: "What does this print?",
     code: `print(2 + 3 * 4)`,
-    options: ["20", "14", "9", "에러 / Error"],
+    options: ["20", "14", "9", "Error"],
     answer: 1,  // 14 — 곱셈 먼저
   },
   {
