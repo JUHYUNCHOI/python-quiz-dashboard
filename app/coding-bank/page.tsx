@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { Header } from "@/components/header"
+import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 import { BottomNav } from "@/components/bottom-nav"
 import { RequireAuth } from "@/components/require-auth"
 import { useAuth } from "@/contexts/auth-context"
@@ -741,7 +742,10 @@ function CodingBankContent() {
   }
 
   return (
-    <main className="max-w-2xl mx-auto px-4 pt-6">
+    <main className="max-w-2xl mx-auto px-4 pt-4">
+      <JourneyBreadcrumb items={[
+        { label: "코딩 뱅크 (도전 문제)", labelEn: "Coding Bank (Challenges)", emoji: "💪" },
+      ]} />
       {!isUnlocked ? (
         <LockScreen t={t} />
       ) : selectedProblem ? (
