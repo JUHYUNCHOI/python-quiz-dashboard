@@ -163,7 +163,7 @@ function LandingPage() {
       <div className="flex items-center justify-between px-5 py-4 max-w-[1200px] mx-auto">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🦒</span>
-          <span className="font-black text-xl text-gray-800">코드린</span>
+          <span className="font-black text-xl text-gray-800">{t("코드린", "Coderin")}</span>
         </div>
         <Link
           href="/login"
@@ -225,7 +225,7 @@ function LandingPage() {
                 <div className="flex items-center gap-2">
                   <span className="text-lg">🐍</span>
                   <div>
-                    <p className="font-black text-gray-900 text-sm">Python 기초 <span className="text-[11px] font-normal text-gray-400">52강</span></p>
+                    <p className="font-black text-gray-900 text-sm">{t("Python 기초", "Python Basics")} <span className="text-[11px] font-normal text-gray-400">{t("52강", "52 lessons")}</span></p>
                     <p className="text-[11px] text-gray-500">{t("코딩 경험 없어도 시작 가능", "No prior coding experience needed")}</p>
                   </div>
                 </div>
@@ -257,7 +257,7 @@ function LandingPage() {
                 <div className="rounded-2xl border-2 border-blue-300 bg-blue-50 p-3 space-y-2">
                   <div className="flex items-center gap-1.5">
                     <span className="text-base">⚡</span>
-                    <p className="font-black text-gray-900 text-sm">C++ 전환</p>
+                    <p className="font-black text-gray-900 text-sm">{t("C++ 전환", "Switch to C++")}</p>
                   </div>
                   <p className="text-[11px] text-gray-500">{t("20강", "20 lessons")}</p>
                   <div className="bg-white rounded-lg border border-blue-100 p-2 space-y-1">
@@ -272,7 +272,7 @@ function LandingPage() {
                 <div className="rounded-2xl border-2 border-orange-200 bg-orange-50/60 p-3 space-y-2">
                   <div className="flex items-center gap-1.5">
                     <span className="text-base">🐍</span>
-                    <p className="font-black text-gray-900 text-sm">Python 유지</p>
+                    <p className="font-black text-gray-900 text-sm">{t("Python 유지", "Stay with Python")}</p>
                   </div>
                   <p className="text-[11px] text-gray-500">{t("바로 알고리즘으로", "Jump to algorithms")}</p>
                   <div className="bg-white rounded-lg border border-orange-100 p-2 space-y-1">
