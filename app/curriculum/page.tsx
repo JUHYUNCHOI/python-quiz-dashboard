@@ -399,12 +399,19 @@ export default function CurriculumPage() {
       const arr: (string | number)[] = JSON.parse(savedQuizzes)
       setCompletedQuizzes(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
     }
-    const savedCourse = localStorage.getItem("selectedCourse") as CourseType
-    if (savedCourse === "python" || savedCourse === "cpp" || savedCourse === "pseudo") {
-      setSelectedCourse(savedCourse)
-    } else if (savedCourse === "igcse") {
-      setSelectedCourse("pseudo")
-      localStorage.setItem("selectedCourse", "pseudo")
+    // URL ?course=cpp/python/pseudo 가 localStorage 보다 우선 (journey 등에서 명시 보낼 때)
+    const urlCourse = searchParams.get("course") as CourseType | null
+    if (urlCourse === "python" || urlCourse === "cpp" || urlCourse === "pseudo") {
+      setSelectedCourse(urlCourse)
+      localStorage.setItem("selectedCourse", urlCourse)
+    } else {
+      const savedCourse = localStorage.getItem("selectedCourse") as CourseType
+      if (savedCourse === "python" || savedCourse === "cpp" || savedCourse === "pseudo") {
+        setSelectedCourse(savedCourse)
+      } else if (savedCourse === "igcse") {
+        setSelectedCourse("pseudo")
+        localStorage.setItem("selectedCourse", "pseudo")
+      }
     }
     // 연습 문제 진도 계산
     try {

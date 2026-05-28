@@ -33,28 +33,17 @@ interface MapPlacement {
   landmark: string
 }
 
+// 좌표는 일러스트 배경 (public/journey-map.png) 위 % 위치
+// 그림이 그려진 노드 스탬프 *정중앙* 에 맞춰 조정. 그림 교체 시 좌표만 갱신.
+// 현재 그림: "코딩 성장 로드맵" (ChatGPT 생성, 2026-05-28)
 const PLACEMENTS: Record<string, MapPlacement> = {
-  // 메인 spine — 가운데 살짝 왼쪽, 위에서 아래로
-  "python":          { x: 30, y: 12,  landmark: "🌱" },
-  "python-practice": { x: 30, y: 38,  landmark: "💪" },
-  "algo":            { x: 30, y: 110, landmark: "🏰" },
-  "usaco":           { x: 30, y: 148, landmark: "👑" },
-
-  // C++ 가지 — 오른쪽으로 분기 후 다시 합류
-  "cpp":             { x: 75, y: 60,  landmark: "⛰️" },
-  "cpp-practice":    { x: 75, y: 88,  landmark: "🌉" },
+  "python":          { x: 15, y: 24, landmark: "🌱" },
+  "python-practice": { x: 34, y: 43, landmark: "💪" },
+  "cpp":             { x: 64, y: 24, landmark: "⛰️" },
+  "cpp-practice":    { x: 78, y: 50, landmark: "🌉" },
+  "algo":            { x: 38, y: 65, landmark: "🏰" },
+  "usaco":           { x: 72, y: 87, landmark: "👑" },
 }
-
-// 메인 spine path — 굵은 실선
-const MAIN_PATH = "M 30 12 L 30 38 L 30 110 L 30 148"
-
-// C++ 가지 path — Py연습 에서 분기 → cpp → cpp-practice → 알고리즘 합류
-const CPP_BRANCH_PATH = [
-  "M 30 38",
-  "Q 50 42, 75 60",     // → C++
-  "L 75 88",            // → C++ 연습
-  "Q 55 100, 30 110",   // → 알고리즘 합류
-].join(" ")
 
 // ── 랜드마크 노드 ─────────────────────────────────────────────────
 function LandmarkNode({
@@ -68,77 +57,42 @@ function LandmarkNode({
   progress: { done: number; total: number; pct: number; status: string }
   isActive: boolean
 }) {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const isDone = progress.status === "completed"
-  const isMain = stage.type === "main"
 
-  // 사이즈
-  const circleClass = isMain ? "w-20 h-20 sm:w-24 sm:h-24" : "w-16 h-16 sm:w-20 sm:h-20"
-  const emojiClass = isMain ? "text-4xl sm:text-5xl" : "text-3xl sm:text-4xl"
-  const borderClass = isMain
-    ? "border-amber-500"
-    : "border-blue-400 border-dashed"
-
+  // 일러스트 위 *투명* 클릭 타겟. 그림 스탬프 위에 정확히 정렬.
+  // ⭐ 완료 표시 + 활성 ring + hover 만 추가.
   return (
     <div
       className="absolute"
       style={{
         left: `${placement.x}%`,
-        top: `${placement.y / 180 * 100}%`,
+        top: `${placement.y}%`,
         transform: "translate(-50%, -50%)",
       }}
     >
-      <div className="relative inline-block">
-        {/* 학생 아바타 — 활성 */}
+      <Link
+        href={stage.href}
+        aria-label={stage.title}
+        title={t(stage.title, stage.titleEn)}
+        className="group relative block rounded-full transition-transform hover:scale-110 active:scale-95"
+        style={{ width: "clamp(48px, 11vw, 88px)", height: "clamp(48px, 11vw, 88px)" }}
+      >
+        {/* 활성 — 펄스 ring */}
         {isActive && (
-          <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-0.5 pointer-events-none whitespace-nowrap">
-            <div className="bg-white rounded-full px-2 py-0.5 shadow-md border-2 border-orange-400 text-[9px] font-black text-orange-600 animate-bounce">
-              ▶ {t("너 여기!", "You!")}
-            </div>
-            <span className="text-3xl drop-shadow-lg">🦒</span>
-          </div>
+          <span className="absolute inset-0 rounded-full ring-4 ring-orange-400 ring-offset-2 animate-pulse pointer-events-none" />
         )}
 
-        <Link href={stage.href} className="group relative inline-block">
-          {isActive && (
-            <span className="absolute inset-0 rounded-full ring-4 ring-orange-400 ring-offset-2 animate-pulse pointer-events-none" />
-          )}
-          <div className="relative flex flex-col items-center transition-transform group-hover:scale-110 group-active:scale-95">
-            <div className={cn(
-              "relative flex items-center justify-center rounded-full bg-white border-4 shadow-xl",
-              circleClass, borderClass,
-              isDone && "border-green-500 border-solid",
-              !isDone && isActive && "border-orange-400 border-solid",
-            )}>
-              <span className={cn(emojiClass, "drop-shadow")}>{placement.landmark}</span>
-              {isDone && (
-                <span className="absolute -top-2 -right-2 text-2xl drop-shadow-md">⭐</span>
-              )}
-              {(stage.id === "usaco") && !isDone && (
-                <span className="absolute -top-1.5 -left-1.5 text-base drop-shadow">⚔️</span>
-              )}
-            </div>
-            <div className={cn(
-              "mt-1.5 px-2 py-0.5 rounded-md text-center shadow-md border whitespace-nowrap",
-              isMain
-                ? "bg-amber-50 border-amber-300"
-                : "bg-blue-50 border-blue-300 border-dashed",
-            )}>
-              <p className={cn("font-black text-gray-900 leading-tight", isMain ? "text-[11px] sm:text-xs" : "text-[10px]")}>
-                {lang === "en" ? stage.titleEn : stage.title}
-              </p>
-              {progress.total > 0 && (
-                <p className={cn(
-                  "text-[9px] font-bold tabular-nums leading-tight",
-                  isDone ? "text-green-600" : "text-orange-600",
-                )}>
-                  {progress.done}/{progress.total}
-                </p>
-              )}
-            </div>
-          </div>
-        </Link>
-      </div>
+        {/* hover halo */}
+        <span className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white/20 group-hover:shadow-2xl transition-all pointer-events-none" />
+
+        {/* ⭐ 완료 배지 — 우상단 */}
+        {isDone && (
+          <span className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 text-lg sm:text-2xl drop-shadow-md z-10 pointer-events-none">
+            ⭐
+          </span>
+        )}
+      </Link>
     </div>
   )
 }
@@ -174,83 +128,19 @@ function GameMap({
 
   return (
     <div
-      className="relative w-full max-w-2xl mx-auto rounded-3xl shadow-2xl border-4 border-amber-800/30 overflow-hidden"
-      style={{ aspectRatio: "100 / 180" }}
+      className="relative w-full mx-auto rounded-3xl shadow-2xl border-4 border-amber-800/40 overflow-hidden bg-amber-100"
+      style={{ aspectRatio: "1371 / 1147" }}
     >
-      <svg
-        viewBox="0 0 100 180"
-        preserveAspectRatio="none"
-        className="absolute inset-0 w-full h-full"
-      >
-        <defs>
-          <linearGradient id="j-bg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#fef3c7" />
-            <stop offset="50%" stopColor="#fef9c3" />
-            <stop offset="100%" stopColor="#fef3c7" />
-          </linearGradient>
-        </defs>
+      {/* 일러스트 배경 — public/journey-map.png 에 그림 저장 */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/journey-map.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+        draggable={false}
+      />
 
-        <rect x="0" y="0" width="100" height="180" fill="url(#j-bg)" />
-
-        {/* C++ 가지 영역 — 오른쪽 산악 (반투명) */}
-        <path
-          d="M 50 30 L 100 30 L 100 100 Q 75 102, 50 100 Z"
-          fill="#dbeafe"
-          opacity="0.4"
-        />
-
-        {/* 알고리즘 영역 */}
-        <rect x="0" y="100" width="100" height="28" fill="#e9d5ff" opacity="0.35" />
-
-        {/* USACO 정상 영역 */}
-        <rect x="0" y="128" width="100" height="52" fill="#fcd34d" opacity="0.4" />
-
-        {/* 메인 spine — 굵은 실선 */}
-        <path
-          d={MAIN_PATH}
-          stroke="#92400e"
-          strokeWidth="2.5"
-          fill="none"
-          strokeLinecap="round"
-          opacity="0.8"
-        />
-
-        {/* C++ 가지 — 굵은 점선 (다른 길) */}
-        <path
-          d={CPP_BRANCH_PATH}
-          stroke="#1e40af"
-          strokeWidth="1.8"
-          strokeDasharray="3 2"
-          fill="none"
-          strokeLinecap="round"
-          opacity="0.65"
-        />
-      </svg>
-
-      {/* 영역 라벨 */}
-      <div className="absolute pointer-events-none" style={{ left: "2%", top: "2%" }}>
-        <span className="text-[8px] sm:text-[9px] font-black text-amber-900/70 tracking-wider">⭐ 메인 LINE</span>
-      </div>
-      <div className="absolute pointer-events-none" style={{ left: "55%", top: "32%" }}>
-        <span className="text-[8px] sm:text-[9px] font-black text-blue-800/70 tracking-wider">⛰️ C++ DETOUR (선택)</span>
-      </div>
-      <div className="absolute pointer-events-none" style={{ left: "2%", top: `${108/180*100}%` }}>
-        <span className="text-[8px] sm:text-[9px] font-black text-purple-800/70 tracking-wider">✨ ALGO</span>
-      </div>
-      <div className="absolute pointer-events-none" style={{ left: "2%", top: `${135/180*100}%` }}>
-        <span className="text-[8px] sm:text-[9px] font-black text-yellow-800/70 tracking-wider">🏆 USACO</span>
-      </div>
-
-      {/* 데코 */}
-      <span className="absolute text-xl opacity-30 pointer-events-none" style={{ left: "85%", top: "5%" }}>☁️</span>
-      <span className="absolute text-2xl opacity-30 pointer-events-none" style={{ left: "92%", top: "20%" }}>⛰️</span>
-      <span className="absolute text-lg opacity-30 pointer-events-none" style={{ left: "10%", top: "60%" }}>🌲</span>
-      <span className="absolute text-xl opacity-30 pointer-events-none" style={{ left: "55%", top: "55%" }}>🏔️</span>
-      <span className="absolute text-xl opacity-30 pointer-events-none" style={{ left: "85%", top: "110%" }}>✨</span>
-      <span className="absolute text-2xl opacity-30 pointer-events-none" style={{ left: "75%", top: "150%" }}>⭐</span>
-      <span className="absolute text-xl opacity-30 pointer-events-none" style={{ left: "10%", top: "160%" }}>⭐</span>
-
-      {/* 노드들 */}
+      {/* 노드들 — 일러스트 위 % 좌표로 배치 */}
       {JOURNEY_STAGES.map(stage => {
         const placement = PLACEMENTS[stage.id]
         if (!placement) return null
@@ -266,8 +156,6 @@ function GameMap({
         )
       })}
 
-      <div className="absolute top-2 right-2 text-[10px] text-amber-800/40 font-black pointer-events-none">N ↑</div>
-      <div className="absolute bottom-2 left-2 text-[9px] text-amber-800/40 font-mono pointer-events-none">⚓ {new Date().getFullYear()}</div>
     </div>
   )
 }
@@ -413,7 +301,16 @@ export default function JourneyPage() {
         {/* 트랙 선택 모달 — 4 정사각형 박스 가로 배치 */}
         {showTrackModal && (
           <div className="fixed inset-0 z-50 bg-black/70 overflow-y-auto p-3 sm:p-4">
-            <div className="bg-white rounded-3xl max-w-5xl w-full mx-auto my-4 p-5 sm:p-8 shadow-2xl">
+            <div className="relative bg-white rounded-3xl max-w-5xl w-full mx-auto my-4 p-5 sm:p-8 shadow-2xl">
+              {/* X 닫기 — 항상 위, 스크롤 무관 */}
+              <button
+                onClick={() => setShowTrackModal(false)}
+                aria-label={t("닫기", "Close")}
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 flex items-center justify-center text-lg font-black shadow-sm active:scale-90 transition-all"
+              >
+                ✕
+              </button>
+
               {showDiagnostic ? (
                 <PythonDiagnosticQuiz
                   onResult={(track) => { saveTrack(track); setShowDiagnostic(false) }}
@@ -421,7 +318,7 @@ export default function JourneyPage() {
                 />
               ) : (
                 <>
-                  <div className="text-center mb-5 sm:mb-8">
+                  <div className="text-center mb-5 sm:mb-8 pr-8">
                     <h2 className="text-2xl sm:text-4xl font-black text-amber-900 mb-2 sm:mb-3">
                       {t("어떤 길로 갈래요?", "How do you want to learn?")}
                     </h2>
@@ -430,132 +327,162 @@ export default function JourneyPage() {
                     </p>
                   </div>
 
-                  {/* 4 박스 — 학습 흐름 시각이 메인 */}
+                  {/* 4 박스 — 학습 흐름 시각이 메인 (세로 흐름, 큰 아이콘) */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     {/* Track A — 처음 */}
                     <button
                       onClick={() => saveTrack("A")}
-                      className="flex flex-col p-3 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-left"
+                      className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-center"
                     >
-                      <p className="font-black text-2xl text-amber-900 leading-snug mb-1">
+                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1">
                         {t("처음이에요", "I'm new")}
                       </p>
-                      <p className="text-sm text-gray-600 mb-4">
-                        {t("코딩 처음 — 차근차근", "First time — step by step")}
+                      <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
+                        {t("Python 부터 모두 배워요", "Start from Python — full course")}
                       </p>
 
-                      {/* 학습 흐름 — 가로 컴팩트 */}
-                      <div className="flex items-center justify-center gap-1 flex-wrap my-3">
-                        <span className="text-xl">🐍</span>
-                        <span className="text-amber-400 text-xs">→</span>
-                        <span className="text-xl">⚡</span>
-                        <span className="text-amber-400 text-xs">→</span>
-                        <span className="text-xl">🧩</span>
-                        <span className="text-amber-400 text-xs">→</span>
-                        <span className="text-xl">🏆</span>
+                      <p className="text-[10px] sm:text-xs font-black text-amber-700 uppercase tracking-wider mb-2">
+                        {t("학습 순서", "Order")}
+                      </p>
+                      {/* 학습 흐름 — 세로 큰 아이콘 */}
+                      <div className="flex flex-col items-center gap-1 flex-1 justify-center">
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">🐍</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">Python 52강</span>
+                        </div>
+                        <span className="text-amber-400 text-lg">↓</span>
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">⚡</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">C++ 23강</span>
+                        </div>
+                        <span className="text-amber-400 text-lg">↓</span>
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">🧩</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("알고리즘", "Algos")}</span>
+                        </div>
+                        <span className="text-amber-400 text-lg">↓</span>
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">🏆</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("대회 도전", "Contest")}</span>
+                        </div>
                       </div>
-                      <p className="text-[11px] text-gray-600 text-center leading-snug">
-                        {t("Python 52강 → C++ 23강 → 알고리즘 → 대회", "Python 52 → C++ 23 → Algos → Contest")}
-                      </p>
 
-                      <p className="text-sm text-orange-600 font-black mt-4 text-center">
-                        {t("Track A 선택", "Choose Track A")} →
+                      <p className="text-sm sm:text-base text-orange-600 font-black mt-4">
+                        {t("Track A 선택", "Choose A")} →
                       </p>
                     </button>
 
                     {/* Track B — Python 만 */}
                     <button
                       onClick={() => saveTrack("B")}
-                      className="flex flex-col p-3 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-left"
+                      className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-center"
                     >
-                      <p className="font-black text-2xl text-amber-900 leading-snug mb-1">
+                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1">
                         {t("Python 만 할래요", "Python only")}
                       </p>
-                      <p className="text-sm text-gray-600 mb-4">
-                        {t("Python 만으로 대회까지", "Python all the way")}
+                      <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
+                        {t("Python 만으로 대회까지", "Python only — to contests")}
                       </p>
 
-                      <div className="flex items-center justify-center gap-1 flex-wrap my-3">
-                        <span className="text-xl">🐍</span>
-                        <span className="text-amber-400 text-xs">→</span>
-                        <span className="text-xl">🧩</span>
-                        <span className="text-amber-400 text-xs">→</span>
-                        <span className="text-xl">🏆</span>
+                      <p className="text-[10px] sm:text-xs font-black text-amber-700 uppercase tracking-wider mb-2">
+                        {t("학습 순서", "Order")}
+                      </p>
+                      <div className="flex flex-col items-center gap-1 flex-1 justify-center">
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">🐍</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">Python 52강</span>
+                        </div>
+                        <span className="text-amber-400 text-lg">↓</span>
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">🧩</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("알고리즘 (Py)", "Algos (Py)")}</span>
+                        </div>
+                        <span className="text-amber-400 text-lg">↓</span>
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">🏆</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("대회 (Py)", "Contest (Py)")}</span>
+                        </div>
                       </div>
-                      <p className="text-[11px] text-gray-600 text-center leading-snug">
-                        {t("Python 52강 → 알고리즘 (Py) → 대회 (Py)", "Python 52 → Algos (Py) → Contest (Py)")}
-                      </p>
 
-                      <p className="text-sm text-orange-600 font-black mt-4 text-center">
-                        {t("Track B 선택", "Choose Track B")} →
+                      <p className="text-sm sm:text-base text-orange-600 font-black mt-4">
+                        {t("Track B 선택", "Choose B")} →
                       </p>
                     </button>
 
                     {/* Track C — Python 알고 있음 */}
                     <button
                       onClick={() => saveTrack("C")}
-                      className="flex flex-col p-3 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-left"
+                      className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-center"
                     >
-                      <p className="font-black text-2xl text-amber-900 leading-snug mb-1">
+                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1">
                         {t("Python 알아요", "I know Python")}
                       </p>
-                      <p className="text-sm text-gray-600 mb-4">
-                        {t("바로 C++ — 가장 빠름", "Straight to C++ — fastest")}
+                      <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
+                        {t("Python 건너뛰고 C++ 부터", "Skip Python, start with C++")}
                       </p>
 
-                      <div className="flex items-center justify-center gap-1 flex-wrap my-3">
-                        <span className="text-xl">⚡</span>
-                        <span className="text-amber-400 text-xs">→</span>
-                        <span className="text-xl">🧩</span>
-                        <span className="text-amber-400 text-xs">→</span>
-                        <span className="text-xl">🏆</span>
+                      <p className="text-[10px] sm:text-xs font-black text-amber-700 uppercase tracking-wider mb-2">
+                        {t("학습 순서", "Order")}
+                      </p>
+                      <div className="flex flex-col items-center gap-1 flex-1 justify-center">
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">⚡</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">C++ 23강</span>
+                        </div>
+                        <span className="text-amber-400 text-lg">↓</span>
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">🧩</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("알고리즘", "Algos")}</span>
+                        </div>
+                        <span className="text-amber-400 text-lg">↓</span>
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">🏆</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("대회 도전", "Contest")}</span>
+                        </div>
                       </div>
-                      <p className="text-[11px] text-gray-600 text-center leading-snug">
-                        {t("C++ 23강 → 알고리즘 → 대회", "C++ 23 → Algos → Contest")}
-                      </p>
 
-                      <p className="text-sm text-orange-600 font-black mt-4 text-center">
-                        {t("Track C 선택", "Choose Track C")} →
+                      <p className="text-sm sm:text-base text-orange-600 font-black mt-4">
+                        {t("Track C 선택", "Choose C")} →
                       </p>
                     </button>
 
                     {/* 진단 퀴즈 */}
                     <button
                       onClick={() => setShowDiagnostic(true)}
-                      className="flex flex-col p-3 sm:p-5 rounded-2xl border-2 border-dashed border-blue-300 hover:border-blue-500 hover:bg-blue-50 hover:shadow-lg active:scale-95 transition-all text-left"
+                      className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-dashed border-blue-300 hover:border-blue-500 hover:bg-blue-50 hover:shadow-lg active:scale-95 transition-all text-center"
                     >
-                      <p className="font-black text-2xl text-blue-900 leading-snug mb-1">
+                      <p className="font-black text-xl sm:text-2xl text-blue-900 leading-snug mb-1">
                         {t("잘 모르겠어요", "Not sure?")}
                       </p>
-                      <p className="text-sm text-gray-600 mb-4">
-                        {t("Track A 또는 C 추천", "We'll pick A or C")}
+                      <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
+                        {t("5 문제 풀고 자동 추천 받기", "Take 5 Qs — get auto-pick")}
                       </p>
 
-                      <div className="flex items-center justify-center gap-1 flex-wrap my-3">
-                        <span className="text-xl">📝</span>
-                        <span className="text-blue-400 text-xs">→</span>
-                        <span className="text-xl">🎯</span>
-                        <span className="text-blue-400 text-xs">→</span>
-                        <span className="text-xl">✅</span>
+                      <p className="text-[10px] sm:text-xs font-black text-blue-700 uppercase tracking-wider mb-2">
+                        {t("진행", "Steps")}
+                      </p>
+                      <div className="flex flex-col items-center gap-1 flex-1 justify-center">
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">📝</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("5 문제", "5 Qs")}</span>
+                        </div>
+                        <span className="text-blue-400 text-lg">↓</span>
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">🎯</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("자동 추천", "Auto-pick")}</span>
+                        </div>
+                        <span className="text-blue-400 text-lg">↓</span>
+                        <div className="flex flex-col items-center">
+                          <span className="text-3xl sm:text-4xl">✅</span>
+                          <span className="text-[10px] sm:text-xs font-bold text-gray-600 mt-0.5">{t("내 트랙", "Your track")}</span>
+                        </div>
                       </div>
-                      <p className="text-[11px] text-gray-600 text-center leading-snug">
-                        {t("5 문제 → 자동 추천 → 내 트랙", "5 Qs → Auto-pick → Your track")}
-                      </p>
 
-                      <p className="text-sm text-blue-600 font-black mt-4 text-center">
+                      <p className="text-sm sm:text-base text-blue-600 font-black mt-4">
                         {t("퀴즈 시작", "Take quiz")} →
                       </p>
                     </button>
                   </div>
-
-                  <button
-                    onClick={() => setShowTrackModal(false)}
-                    className="block mx-auto mt-6 text-sm text-gray-500 hover:text-gray-700 underline decoration-dotted"
-                  >
-                    {explicitTrack
-                      ? t("취소", "Cancel")
-                      : t("나중에 정할게요 — 일단 둘러보기 →", "Decide later — just browse →")}
-                  </button>
                 </>
               )}
             </div>
@@ -583,6 +510,11 @@ export default function JourneyPage() {
           </button>
         </div>
 
+        {/* 🗺️ 보물지도 — 학생이 한눈에 "내 여정" 본다 */}
+        <div className="mb-5">
+          <GameMap completedIds={completedIds} hasCpp={hasCpp} />
+        </div>
+
         {/* 📍 지금 할 일 — 결정 피로 0 */}
         <Link
           href={nextAction.href}
@@ -607,55 +539,6 @@ export default function JourneyPage() {
           </div>
         </Link>
 
-        {/* 5 단계 선형 진도 — "전체 여정 어디" 한눈에 */}
-        <div className="mb-5 bg-white/80 backdrop-blur-sm rounded-2xl border-2 border-amber-200 p-3 sm:p-4">
-          <p className="text-[10px] font-bold text-amber-700 uppercase tracking-wider mb-2 px-1">
-            {t("전체 여정 — 단계별", "Full journey — by stage")}
-          </p>
-          <div className="space-y-2">
-            {stages.map((s, idx) => {
-              const pct = Math.round((s.done / s.total) * 100)
-              const isDone = s.done >= s.total
-              const isCurrent = idx === currentStageIdx
-              const isLocked = currentStageIdx >= 0 && idx > currentStageIdx
-              return (
-                <div key={s.label} className={cn(
-                  "flex items-center gap-2 px-2 py-1.5 rounded-lg",
-                  isCurrent && "bg-orange-100 border border-orange-300",
-                  isDone && "opacity-80",
-                )}>
-                  <span className="text-lg shrink-0">{s.emoji}</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className={cn(
-                        "text-xs font-black truncate",
-                        isCurrent ? "text-orange-800" : isDone ? "text-emerald-700" : "text-gray-500",
-                      )}>{idx + 1}. {s.label}</span>
-                      {isCurrent && (
-                        <span className="text-[8px] font-black px-1 py-0.5 bg-orange-500 text-white rounded">NOW</span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-1.5 mt-0.5">
-                      <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
-                        <div className={cn(
-                          "h-full transition-all duration-500",
-                          isDone ? "bg-emerald-400" : isCurrent ? "bg-orange-400" : "bg-gray-200",
-                        )} style={{ width: `${pct}%` }} />
-                      </div>
-                      <span className={cn(
-                        "text-[10px] font-bold tabular-nums shrink-0",
-                        isCurrent ? "text-orange-700" : isDone ? "text-emerald-700" : "text-gray-400",
-                      )}>
-                        {isDone ? "✓" : isLocked ? "🔒" : `${s.done}/${s.total}`}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-
         {hasCpp && (
           <div className="mb-4 text-center">
             <p className="text-[11px] text-emerald-700 font-bold inline-block px-2.5 py-0.5 bg-emerald-100 rounded-full border border-emerald-400">
@@ -664,37 +547,62 @@ export default function JourneyPage() {
           </div>
         )}
 
-        {/* 💡 옆길 — 부족하면 더 풀 곳 (선택) */}
-        <div className="mt-6 mx-auto max-w-md space-y-2">
-          <div className="bg-blue-50 rounded-xl p-3 border-2 border-blue-200">
-            <p className="text-xs font-black text-blue-900 mb-2">
-              💡 {t("부족하면 옆길로 더 연습 (선택)", "Need more? Side paths (optional)")}
-            </p>
-            <div className="space-y-1.5">
-              <Link href="/practice" className="block text-[11px] text-blue-800 hover:text-blue-900 hover:underline">
-                → {t("수업별 연습 문제 더 풀기 (클러스터)", "More lesson practice (clusters)")}
-              </Link>
-              <Link href="/coding-bank" className="block text-[11px] text-blue-800 hover:text-blue-900 hover:underline">
-                → {t("코딩 뱅크 — 종합 도전 문제", "Coding Bank — challenge problems")}
-              </Link>
-              <Link href="/algo" className="block text-[11px] text-blue-800 hover:text-blue-900 hover:underline">
-                → {t("알고리즘 토픽 — 자유롭게 골라 풀기", "Algorithm topics — pick freely")}
-              </Link>
-            </div>
-          </div>
+        {/* 더 연습할 곳 — 접힘 (선택). 학생이 *원할 때만* 펼침. */}
+        <details className="mt-6 group">
+          <summary className="cursor-pointer select-none text-xs sm:text-sm font-bold text-gray-500 hover:text-gray-700 text-center list-none flex items-center justify-center gap-1.5">
+            <span className="group-open:rotate-90 transition-transform inline-block">▶</span>
+            {t("다 풀고 더 도전하고 싶을 때", "Done? Want more challenge")}
+          </summary>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-3">
+            <Link
+              href="/practice"
+              className="group flex items-center gap-3 p-3 sm:p-4 bg-white rounded-xl border-2 border-blue-200 hover:border-blue-400 hover:shadow-md active:scale-95 transition-all"
+            >
+              <span className="text-2xl sm:text-3xl shrink-0">📚</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] sm:text-xs font-bold text-blue-600 leading-tight">
+                  {t("수업이 어려우면", "Lesson too hard?")}
+                </p>
+                <p className="text-sm sm:text-base font-black text-gray-900 leading-tight mt-0.5">
+                  {t("수업별 클러스터", "Lesson Clusters")}
+                </p>
+              </div>
+              <span className="text-gray-400 group-hover:text-blue-600 shrink-0">→</span>
+            </Link>
 
-          {/* 3 경로 설명 */}
-          <div className="bg-amber-50 rounded-xl p-3 border-2 border-amber-300">
-            <p className="text-xs font-black text-amber-900 mb-1.5 text-center">
-              ⭐ {t("3가지 경로 (자유 선택)", "3 Paths (Free Choice)")}
-            </p>
-            <div className="space-y-1 text-[11px] text-amber-800">
-              <p><b>A.</b> 🐍 → ⚡ → 💪 → 🧠 → 🏆 {t("(신입 — Python 부터 종합)", "(Beginner — Python first)")}</p>
-              <p><b>B.</b> 🐍 → 💪 → 🧠 → 🏆 {t("(Python 만 — USACO Py 제출)", "(Python only)")}</p>
-              <p><b>C.</b> ⚡ → 💪 → 🧠 → 🏆 {t("(Python 사전지식 — 바로 C++)", "(Has Python — straight to C++)")}</p>
-            </div>
+            <Link
+              href="/coding-bank"
+              className="group flex items-center gap-3 p-3 sm:p-4 bg-white rounded-xl border-2 border-amber-200 hover:border-amber-400 hover:shadow-md active:scale-95 transition-all"
+            >
+              <span className="text-2xl sm:text-3xl shrink-0">🏦</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] sm:text-xs font-bold text-amber-600 leading-tight">
+                  {t("기본 끝내고 더 도전", "Done basics? Push more")}
+                </p>
+                <p className="text-sm sm:text-base font-black text-gray-900 leading-tight mt-0.5">
+                  {t("코딩 뱅크", "Coding Bank")}
+                </p>
+              </div>
+              <span className="text-gray-400 group-hover:text-amber-600 shrink-0">→</span>
+            </Link>
+
+            <Link
+              href="/algo"
+              className="group flex items-center gap-3 p-3 sm:p-4 bg-white rounded-xl border-2 border-purple-200 hover:border-purple-400 hover:shadow-md active:scale-95 transition-all"
+            >
+              <span className="text-2xl sm:text-3xl shrink-0">🧩</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] sm:text-xs font-bold text-purple-600 leading-tight">
+                  {t("궁금한 알고리즘만", "Curious about algos?")}
+                </p>
+                <p className="text-sm sm:text-base font-black text-gray-900 leading-tight mt-0.5">
+                  {t("알고리즘 토픽", "Algo Topics")}
+                </p>
+              </div>
+              <span className="text-gray-400 group-hover:text-purple-600 shrink-0">→</span>
+            </Link>
           </div>
-        </div>
+        </details>
       </main>
 
       <BottomNav />
