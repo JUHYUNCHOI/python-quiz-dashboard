@@ -502,7 +502,7 @@ export default function DashboardPage() {
     if (!isAuthenticated || !profile) return
     if (shouldRouteAsTeacher(user?.email, profile.role)) router.replace("/teacher")
     else if (profile.role === "parent") router.replace("/parent")
-    else router.replace("/portal")
+    else router.replace("/journey")
   }, [isAuthenticated, profile, user, router])
 
   useEffect(() => {

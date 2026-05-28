@@ -45,7 +45,7 @@ export function BottomNav() {
   ]
 
   // 네비: profile.role 그대로 — julia (선생님 역할) 는 teacher 네비 그대로 접근 가능.
-  // 학생 디자인 통일은 학생 페이지 (portal/curriculum/learn 등) 에서만, 네비/admin 도구는 줄지 않음.
+  // 학생 디자인 통일은 학생 페이지 (journey/curriculum/learn 등) 에서만, 네비/admin 도구는 줄지 않음.
   const navItems = !isAuthenticated
     ? guestNav
     : profile?.role === "teacher"

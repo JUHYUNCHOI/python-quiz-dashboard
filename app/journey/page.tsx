@@ -541,68 +541,30 @@ export default function JourneyPage() {
 
         {hasCpp && (
           <div className="mb-4 text-center">
-            <p className="text-[11px] text-emerald-700 font-bold inline-block px-2.5 py-0.5 bg-emerald-100 rounded-full border border-emerald-400">
-              ✅ {t("C++ 트랙 — Python 단계 자동 완료", "C++ track — Python auto-completed")}
+            <p className="text-xs sm:text-sm text-emerald-700 font-bold inline-block px-3 py-1 bg-emerald-100 rounded-full border border-emerald-400 break-keep">
+              🐍 {t("Python 이미 안다고 선택했어요 — Python 수업은 건너뛰기 OK", "You said you know Python — Python lessons skipped")}
             </p>
           </div>
         )}
 
-        {/* 더 연습할 곳 — 접힘 (선택). 학생이 *원할 때만* 펼침. */}
-        <details className="mt-6 group">
-          <summary className="cursor-pointer select-none text-xs sm:text-sm font-bold text-gray-500 hover:text-gray-700 text-center list-none flex items-center justify-center gap-1.5">
-            <span className="group-open:rotate-90 transition-transform inline-block">▶</span>
-            {t("다 풀고 더 도전하고 싶을 때", "Done? Want more challenge")}
-          </summary>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-3">
-            <Link
-              href="/practice"
-              className="group flex items-center gap-3 p-3 sm:p-4 bg-white rounded-xl border-2 border-blue-200 hover:border-blue-400 hover:shadow-md active:scale-95 transition-all"
-            >
-              <span className="text-2xl sm:text-3xl shrink-0">📚</span>
-              <div className="flex-1 min-w-0">
-                <p className="text-[11px] sm:text-xs font-bold text-blue-600 leading-tight">
-                  {t("수업이 어려우면", "Lesson too hard?")}
-                </p>
-                <p className="text-sm sm:text-base font-black text-gray-900 leading-tight mt-0.5">
-                  {t("수업별 클러스터", "Lesson Clusters")}
-                </p>
-              </div>
-              <span className="text-gray-400 group-hover:text-blue-600 shrink-0">→</span>
+        {/* 막힐 때 / 더 풀고 싶을 때 안내 — 작은 한 줄 링크 (분산 효과 최소) */}
+        <div className="mt-6 text-center text-xs sm:text-sm text-gray-500 break-keep px-2">
+          <span className="block sm:inline">💡 {t("더 풀고 싶으면:", "Want more practice?")} </span>
+          <span className="inline-block mt-1 sm:mt-0">
+            <Link href="/practice" className="text-blue-600 hover:underline font-bold">
+              {t("수업별 연습", "Lesson Clusters")}
             </Link>
+            <span className="mx-1.5 text-gray-300">·</span>
+            <Link href="/coding-bank" className="text-amber-600 hover:underline font-bold">
+              {t("코딩 뱅크", "Coding Bank")}
+            </Link>
+            <span className="mx-1.5 text-gray-300">·</span>
+            <Link href="/algo" className="text-purple-600 hover:underline font-bold">
+              {t("알고리즘 토픽", "Algo Topics")}
+            </Link>
+          </span>
+        </div>
 
-            <Link
-              href="/coding-bank"
-              className="group flex items-center gap-3 p-3 sm:p-4 bg-white rounded-xl border-2 border-amber-200 hover:border-amber-400 hover:shadow-md active:scale-95 transition-all"
-            >
-              <span className="text-2xl sm:text-3xl shrink-0">🏦</span>
-              <div className="flex-1 min-w-0">
-                <p className="text-[11px] sm:text-xs font-bold text-amber-600 leading-tight">
-                  {t("기본 끝내고 더 도전", "Done basics? Push more")}
-                </p>
-                <p className="text-sm sm:text-base font-black text-gray-900 leading-tight mt-0.5">
-                  {t("코딩 뱅크", "Coding Bank")}
-                </p>
-              </div>
-              <span className="text-gray-400 group-hover:text-amber-600 shrink-0">→</span>
-            </Link>
-
-            <Link
-              href="/algo"
-              className="group flex items-center gap-3 p-3 sm:p-4 bg-white rounded-xl border-2 border-purple-200 hover:border-purple-400 hover:shadow-md active:scale-95 transition-all"
-            >
-              <span className="text-2xl sm:text-3xl shrink-0">🧩</span>
-              <div className="flex-1 min-w-0">
-                <p className="text-[11px] sm:text-xs font-bold text-purple-600 leading-tight">
-                  {t("궁금한 알고리즘만", "Curious about algos?")}
-                </p>
-                <p className="text-sm sm:text-base font-black text-gray-900 leading-tight mt-0.5">
-                  {t("알고리즘 토픽", "Algo Topics")}
-                </p>
-              </div>
-              <span className="text-gray-400 group-hover:text-purple-600 shrink-0">→</span>
-            </Link>
-          </div>
-        </details>
       </main>
 
       <BottomNav />
