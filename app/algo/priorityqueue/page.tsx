@@ -475,7 +475,7 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
+        {step === 3 && (codeLang === "py" ? (
           <MiniQuiz
             question={t(
               "Python heapq 에 [5, 3, 8, 1, 7] 을 차례로 push 한 뒤 heappop 을 두 번 호출하면? (반환된 값 순서)",
@@ -494,7 +494,26 @@ int main() {
             )}
             onCorrect={() => setQuizPassed(true)}
           />
-        )}
+        ) : (
+          <MiniQuiz
+            question={t(
+              "C++ priority_queue<int> 에 5, 3, 8, 1, 7 을 push 한 뒤 top() / pop() 을 두 번 하면? (반환된 값 순서)",
+              "Push 5, 3, 8, 1, 7 into C++ priority_queue<int>, then top()+pop() twice. What's returned?",
+            )}
+            options={[
+              t("5, 3 (넣은 순서)", "5, 3 (insertion order)"),
+              "1, 3",
+              "8, 7",
+              "3, 5",
+            ]}
+            answerIdx={2}
+            hint={t(
+              "priority_queue<int> 는 기본 max-heap. 매번 *최댓값* 반환. 최댓값 = 8, 다음 = 7.",
+              "Default priority_queue<int> is a max-heap. Each pop returns the *largest*. Max = 8, next = 7.",
+            )}
+            onCorrect={() => setQuizPassed(true)}
+          />
+        ))}
       </div>
 
       {step < totalSteps - 1 ? (

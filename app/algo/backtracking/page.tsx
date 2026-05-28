@@ -895,17 +895,17 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
+        {step === 3 && (codeLang === "py" ? (
           <MiniQuiz
             question={t(
               "위 부분집합 합 코드에서 '양수만' 전제를 빼면 어떤 줄이 안전하지 않을까요?",
               "If we drop the 'positives only' assumption, which line becomes unsafe?",
             )}
             options={[
-              t("if cur_sum == K: return True", "if cur_sum == K: return True"),
-              t("if idx == n: return False", "if idx == n: return False"),
-              t("if cur_sum > K: return False (가지치기)", "if cur_sum > K: return False (pruning)"),
-              t("backtrack(idx + 1, cur_sum + arr[idx])", "backtrack(idx + 1, cur_sum + arr[idx])"),
+              "if cur_sum == K: return True",
+              "if idx == n: return False",
+              t("if cur_sum > K: return False  (가지치기)", "if cur_sum > K: return False  (pruning)"),
+              "backtrack(idx + 1, cur_sum + arr[idx])",
             ]}
             answerIdx={2}
             hint={t(
@@ -914,7 +914,26 @@ int main() {
             )}
             onCorrect={() => setQuizPassed(true)}
           />
-        )}
+        ) : (
+          <MiniQuiz
+            question={t(
+              "위 부분집합 합 코드에서 '양수만' 전제를 빼면 어떤 줄이 안전하지 않을까요?",
+              "If we drop the 'positives only' assumption, which line becomes unsafe?",
+            )}
+            options={[
+              "if (curSum == K) return true;",
+              "if (idx == N) return false;",
+              t("if (curSum > K) return false;  (가지치기)", "if (curSum > K) return false;  (pruning)"),
+              "backtrack(idx + 1, curSum + arr[idx])",
+            ]}
+            answerIdx={2}
+            hint={t(
+              "음수가 있으면 sum 이 K 를 초과해도 *다시 작아질 수 있어요* — 그러니 '컷' 하면 정답을 놓침. 가지치기는 양수 전제가 핵심.",
+              "With negatives, sum can *go back down* after exceeding K — cutting kills valid answers. Pruning relies on positives-only.",
+            )}
+            onCorrect={() => setQuizPassed(true)}
+          />
+        ))}
       </div>
 
       {step < totalSteps - 1 ? (

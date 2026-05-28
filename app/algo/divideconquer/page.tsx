@@ -493,7 +493,7 @@ int main() {
               t("입력이 거의 정렬되어 있어서", "Because input is nearly sorted"),
               t("log N 단계 × 각 단계 N 작업 — 입력 모양과 무관", "log N levels × N work per level — independent of input"),
               t("merge 가 O(log N) 이라서", "Because merge is O(log N)"),
-              t("Python 의 sort 가 내부에서 도와줘서", "Because Python's sort helps internally"),
+              t("내장 sort 함수가 내부에서 도와줘서", "Because the built-in sort helps internally"),
             ]}
             answerIdx={1}
             hint={t(
