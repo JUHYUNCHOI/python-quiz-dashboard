@@ -465,14 +465,14 @@ export default function JourneyPage() {
                     </p>
                   </button>
 
-                  {explicitTrack && (
-                    <button
-                      onClick={() => setShowTrackModal(false)}
-                      className="w-full mt-3 text-xs text-gray-500 hover:text-gray-700"
-                    >
-                      {t("취소", "Cancel")}
-                    </button>
-                  )}
+                  <button
+                    onClick={() => setShowTrackModal(false)}
+                    className="w-full mt-3 text-xs text-gray-500 hover:text-gray-700"
+                  >
+                    {explicitTrack
+                      ? t("취소", "Cancel")
+                      : t("나중에 정할게요 — 일단 둘러보기 →", "Decide later — just browse →")}
+                  </button>
                 </>
               )}
             </div>
