@@ -95,26 +95,26 @@ export function PythonDiagnosticQuiz({ onResult, onCancel }: Props) {
     const finalScore = score
     const recommended: "A" | "C" = finalScore >= 4 ? "C" : "A"
     return (
-      <div className="bg-white rounded-2xl p-6 text-center">
-        <div className="text-5xl mb-3">{finalScore >= 4 ? "🎯" : "🌱"}</div>
-        <h3 className="text-lg font-black text-gray-900 mb-1">
+      <div className="bg-white rounded-2xl p-8 text-center max-w-2xl mx-auto">
+        <div className="text-7xl mb-4">{finalScore >= 4 ? "🎯" : "🌱"}</div>
+        <h3 className="text-3xl font-black text-gray-900 mb-2">
           {t(`결과: ${finalScore} / 5`, `Score: ${finalScore} / 5`)}
         </h3>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-base sm:text-lg text-gray-600 mb-6 leading-relaxed">
           {finalScore >= 4
-            ? t("Python 기본 충분해요. Track C (바로 C++) 추천.", "You know Python basics. Track C (straight to C++) recommended.")
+            ? t("Python 기본 충분해요. Track C (바로 C++) 추천!", "You know Python basics. Track C (straight to C++) recommended!")
             : t("Python 기본 더 익히면 좋아요. Track A (Python 부터) 추천.", "Sharpen Python basics first. Track A (Python first) recommended.")}
         </p>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-bold"
+            className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-base font-bold"
           >
             {t("취소", "Cancel")}
           </button>
           <button
             onClick={() => onResult(recommended, finalScore)}
-            className="flex-1 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-sm font-black"
+            className="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-base font-black shadow-md active:scale-95 transition-all"
           >
             {t(`Track ${recommended} 선택`, `Choose Track ${recommended}`)} →
           </button>
@@ -127,41 +127,41 @@ export function PythonDiagnosticQuiz({ onResult, onCancel }: Props) {
   const isWrong = selected !== null && selected !== q.answer
 
   return (
-    <div className="bg-white rounded-2xl p-5">
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-bold text-gray-500">
-          {t(`문제 ${idx + 1} / ${QUESTIONS.length}`, `Q ${idx + 1} / ${QUESTIONS.length}`)}
+    <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-2xl mx-auto">
+      <div className="flex items-center justify-between mb-5">
+        <span className="text-base font-bold text-gray-500">
+          {t(`문제 ${idx + 1} / ${QUESTIONS.length}`, `Question ${idx + 1} / ${QUESTIONS.length}`)}
         </span>
-        <button onClick={onCancel} className="text-xs text-gray-400 hover:text-gray-600">
+        <button onClick={onCancel} className="text-sm text-gray-400 hover:text-gray-600">
           ✕ {t("닫기", "Close")}
         </button>
       </div>
-      <p className="text-sm font-bold text-gray-900 mb-3">{t(q.q, q.qEn)}</p>
+      <p className="text-xl sm:text-2xl font-black text-gray-900 mb-4">{t(q.q, q.qEn)}</p>
       {q.code && (
-        <pre className="bg-gray-900 text-emerald-300 rounded-lg px-3 py-2 font-mono text-xs mb-3 overflow-x-auto whitespace-pre">
+        <pre className="bg-gray-900 text-emerald-300 rounded-xl px-4 py-3 font-mono text-base sm:text-lg mb-5 overflow-x-auto whitespace-pre">
           {q.code}
         </pre>
       )}
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-2.5">
         {q.options.map((opt, i) => (
           <button
             key={i}
             onClick={() => handleSelect(i)}
             disabled={selected !== null}
             className={cn(
-              "text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
+              "text-left px-5 py-4 rounded-xl border-2 text-lg font-medium transition-all",
               selected === i && i === q.answer && "bg-green-100 border-green-500 text-green-800",
               selected === i && i !== q.answer && "bg-red-100 border-red-400 text-red-800",
               selected !== i && selected !== null && i === q.answer && "bg-green-50 border-green-300 text-green-700",
-              selected === null && "bg-white border-gray-200 hover:border-orange-300",
+              selected === null && "bg-white border-gray-200 hover:border-orange-300 hover:shadow-md",
             )}
           >
-            {String.fromCharCode(65 + i)}. {opt}
+            <span className="font-black mr-2">{String.fromCharCode(65 + i)}.</span> {opt}
           </button>
         ))}
       </div>
-      {isCorrect && <p className="mt-2 text-xs font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && <p className="mt-2 text-xs font-bold text-red-700">❌ {t("틀렸어요", "Wrong")}</p>}
+      {isCorrect && <p className="mt-4 text-base font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
+      {isWrong && <p className="mt-4 text-base font-bold text-red-700">❌ {t("틀렸어요", "Wrong")}</p>}
     </div>
   )
 }

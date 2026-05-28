@@ -410,10 +410,10 @@ export default function JourneyPage() {
       <Header />
 
       <main className="max-w-3xl mx-auto px-3 sm:px-6 pt-6">
-        {/* 트랙 선택 모달 — 첫 진입 또는 변경 시 */}
+        {/* 트랙 선택 모달 — 4 정사각형 박스 가로 배치 */}
         {showTrackModal && (
-          <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 z-50 bg-black/70 overflow-y-auto p-3 sm:p-4">
+            <div className="bg-white rounded-3xl max-w-5xl w-full mx-auto my-4 p-5 sm:p-8 shadow-2xl">
               {showDiagnostic ? (
                 <PythonDiagnosticQuiz
                   onResult={(track) => { saveTrack(track); setShowDiagnostic(false) }}
@@ -421,53 +421,136 @@ export default function JourneyPage() {
                 />
               ) : (
                 <>
-                  <h2 className="text-xl font-black text-amber-900 mb-1">
-                    🛤️ {t("나의 학습 트랙 선택", "Pick your track")}
-                  </h2>
-                  <p className="text-xs text-gray-600 mb-4">
-                    {t("나중에 언제든 바꿀 수 있어요.", "Changeable anytime later.")}
-                  </p>
-                  <div className="space-y-2">
-                    {(["A", "B", "C"] as const).map(k => (
-                      <button
-                        key={k}
-                        onClick={() => saveTrack(k)}
-                        className="w-full text-left p-3 rounded-xl border-2 border-amber-200 hover:border-orange-400 hover:bg-orange-50 transition-all"
-                      >
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xl">{trackLabels[k].emoji}</span>
-                          <span className="font-black text-sm text-amber-900">
-                            Track {k} — {t(trackLabels[k].title, trackLabels[k].titleEn)}
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-gray-600 ml-7">
-                          {k === "A" && t("처음 코딩 — Python 부터 차근차근", "First time — start from Python")}
-                          {k === "B" && t("Python 만으로 USACO 까지 (Python 제출 가능)", "Python only, all the way to USACO (Python accepted)")}
-                          {k === "C" && t("Python 이미 알아요 — 바로 C++ 부터", "Already know Python — start with C++")}
-                        </p>
-                      </button>
-                    ))}
+                  <div className="text-center mb-5 sm:mb-8">
+                    <h2 className="text-2xl sm:text-4xl font-black text-amber-900 mb-2 sm:mb-3">
+                      {t("어떤 길로 갈래요?", "How do you want to learn?")}
+                    </h2>
+                    <p className="text-sm sm:text-base text-gray-600">
+                      {t("나에게 맞는 거 하나 고르면 끝. 나중에 바꿔도 OK.", "Pick what fits. Changeable later.")}
+                    </p>
                   </div>
 
-                  {/* 진단 퀴즈 — Python 안다고 자신 있는지 체크 */}
-                  <button
-                    onClick={() => setShowDiagnostic(true)}
-                    className="w-full mt-3 p-3 rounded-xl border-2 border-dashed border-blue-300 hover:border-blue-500 hover:bg-blue-50 transition-all text-left"
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xl">🎯</span>
-                      <span className="font-black text-sm text-blue-900">
-                        {t("Python 진단 퀴즈 풀기 (5 문제)", "Take Python diagnostic (5 questions)")}
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-blue-700 ml-7">
-                      {t("자동으로 Track A 또는 C 추천", "Auto-recommend Track A or C")}
-                    </p>
-                  </button>
+                  {/* 4 박스 — 학습 흐름 시각이 메인 */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    {/* Track A — 처음 */}
+                    <button
+                      onClick={() => saveTrack("A")}
+                      className="flex flex-col p-3 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-left"
+                    >
+                      <p className="font-black text-2xl text-amber-900 leading-snug mb-1">
+                        {t("처음이에요", "I'm new")}
+                      </p>
+                      <p className="text-sm text-gray-600 mb-4">
+                        {t("코딩 처음 — 차근차근", "First time — step by step")}
+                      </p>
+
+                      {/* 학습 흐름 — 가로 컴팩트 */}
+                      <div className="flex items-center justify-center gap-1 flex-wrap my-3">
+                        <span className="text-xl">🐍</span>
+                        <span className="text-amber-400 text-xs">→</span>
+                        <span className="text-xl">⚡</span>
+                        <span className="text-amber-400 text-xs">→</span>
+                        <span className="text-xl">🧩</span>
+                        <span className="text-amber-400 text-xs">→</span>
+                        <span className="text-xl">🏆</span>
+                      </div>
+                      <p className="text-[11px] text-gray-600 text-center leading-snug">
+                        {t("Python 52강 → C++ 23강 → 알고리즘 → 대회", "Python 52 → C++ 23 → Algos → Contest")}
+                      </p>
+
+                      <p className="text-sm text-orange-600 font-black mt-4 text-center">
+                        {t("Track A 선택", "Choose Track A")} →
+                      </p>
+                    </button>
+
+                    {/* Track B — Python 만 */}
+                    <button
+                      onClick={() => saveTrack("B")}
+                      className="flex flex-col p-3 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-left"
+                    >
+                      <p className="font-black text-2xl text-amber-900 leading-snug mb-1">
+                        {t("Python 만 할래요", "Python only")}
+                      </p>
+                      <p className="text-sm text-gray-600 mb-4">
+                        {t("Python 만으로 대회까지", "Python all the way")}
+                      </p>
+
+                      <div className="flex items-center justify-center gap-1 flex-wrap my-3">
+                        <span className="text-xl">🐍</span>
+                        <span className="text-amber-400 text-xs">→</span>
+                        <span className="text-xl">🧩</span>
+                        <span className="text-amber-400 text-xs">→</span>
+                        <span className="text-xl">🏆</span>
+                      </div>
+                      <p className="text-[11px] text-gray-600 text-center leading-snug">
+                        {t("Python 52강 → 알고리즘 (Py) → 대회 (Py)", "Python 52 → Algos (Py) → Contest (Py)")}
+                      </p>
+
+                      <p className="text-sm text-orange-600 font-black mt-4 text-center">
+                        {t("Track B 선택", "Choose Track B")} →
+                      </p>
+                    </button>
+
+                    {/* Track C — Python 알고 있음 */}
+                    <button
+                      onClick={() => saveTrack("C")}
+                      className="flex flex-col p-3 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-left"
+                    >
+                      <p className="font-black text-2xl text-amber-900 leading-snug mb-1">
+                        {t("Python 알아요", "I know Python")}
+                      </p>
+                      <p className="text-sm text-gray-600 mb-4">
+                        {t("바로 C++ — 가장 빠름", "Straight to C++ — fastest")}
+                      </p>
+
+                      <div className="flex items-center justify-center gap-1 flex-wrap my-3">
+                        <span className="text-xl">⚡</span>
+                        <span className="text-amber-400 text-xs">→</span>
+                        <span className="text-xl">🧩</span>
+                        <span className="text-amber-400 text-xs">→</span>
+                        <span className="text-xl">🏆</span>
+                      </div>
+                      <p className="text-[11px] text-gray-600 text-center leading-snug">
+                        {t("C++ 23강 → 알고리즘 → 대회", "C++ 23 → Algos → Contest")}
+                      </p>
+
+                      <p className="text-sm text-orange-600 font-black mt-4 text-center">
+                        {t("Track C 선택", "Choose Track C")} →
+                      </p>
+                    </button>
+
+                    {/* 진단 퀴즈 */}
+                    <button
+                      onClick={() => setShowDiagnostic(true)}
+                      className="flex flex-col p-3 sm:p-5 rounded-2xl border-2 border-dashed border-blue-300 hover:border-blue-500 hover:bg-blue-50 hover:shadow-lg active:scale-95 transition-all text-left"
+                    >
+                      <p className="font-black text-2xl text-blue-900 leading-snug mb-1">
+                        {t("잘 모르겠어요", "Not sure?")}
+                      </p>
+                      <p className="text-sm text-gray-600 mb-4">
+                        {t("Track A 또는 C 추천", "We'll pick A or C")}
+                      </p>
+
+                      <div className="flex items-center justify-center gap-1 flex-wrap my-3">
+                        <span className="text-xl">📝</span>
+                        <span className="text-blue-400 text-xs">→</span>
+                        <span className="text-xl">🎯</span>
+                        <span className="text-blue-400 text-xs">→</span>
+                        <span className="text-xl">✅</span>
+                      </div>
+                      <p className="text-[11px] text-gray-600 text-center leading-snug">
+                        {t("5 문제 → 자동 추천 → 내 트랙", "5 Qs → Auto-pick → Your track")}
+                      </p>
+
+                      <p className="text-sm text-blue-600 font-black mt-4 text-center">
+                        {t("퀴즈 시작", "Take quiz")} →
+                      </p>
+                    </button>
+                  </div>
 
                   <button
                     onClick={() => setShowTrackModal(false)}
-                    className="w-full mt-3 text-xs text-gray-500 hover:text-gray-700"
+                    className="block mx-auto mt-6 text-sm text-gray-500 hover:text-gray-700 underline decoration-dotted"
                   >
                     {explicitTrack
                       ? t("취소", "Cancel")
@@ -573,24 +656,13 @@ export default function JourneyPage() {
           </div>
         </div>
 
-        <div className="text-center mb-6">
-          <div className="inline-block px-4 py-1.5 bg-amber-200 rounded-full shadow-md border-2 border-amber-400 mb-3 transform -rotate-2">
-            <span className="text-sm font-black text-amber-900">🗺️ {t("학습 모험 지도", "Adventure Map")}</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-amber-900 leading-tight" style={{ fontFamily: "serif" }}>
-            {t("Python 부터 USACO 정상까지", "From Python to USACO Peak")}
-          </h1>
-          <p className="text-xs sm:text-sm text-amber-700 mt-1 italic">
-            {t("위 큰 버튼만 누르면 자동 — 또는 랜드마크 클릭", "Hit the big button — or click a landmark")}
-          </p>
-          {hasCpp && (
-            <p className="text-[11px] text-emerald-700 font-bold mt-2 inline-block px-2.5 py-0.5 bg-emerald-100 rounded-full border border-emerald-400">
+        {hasCpp && (
+          <div className="mb-4 text-center">
+            <p className="text-[11px] text-emerald-700 font-bold inline-block px-2.5 py-0.5 bg-emerald-100 rounded-full border border-emerald-400">
               ✅ {t("C++ 트랙 — Python 단계 자동 완료", "C++ track — Python auto-completed")}
             </p>
-          )}
-        </div>
-
-        <GameMap completedIds={completedIds} hasCpp={hasCpp} />
+          </div>
+        )}
 
         {/* 💡 옆길 — 부족하면 더 풀 곳 (선택) */}
         <div className="mt-6 mx-auto max-w-md space-y-2">
