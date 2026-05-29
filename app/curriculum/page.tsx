@@ -70,7 +70,11 @@ type PartData = {
 }
 
 export default function CurriculumPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  // 영어는 한글보다 시각적으로 작아 보임 → lang 조건부 size 보정
+  const isEn = lang === "en"
+  // 두 클래스 중 lang 에 맞는 것 선택 — Korean 안 키우고 English 만 한 단계 ↑
+  const sz = (kr: string, en: string) => isEn ? en : kr
 
   const pythonCurriculumData: PartData[] = [
     {
@@ -1773,7 +1777,7 @@ export default function CurriculumPage() {
                                               <div className="flex-1 rounded-xl border-2 border-purple-200 bg-purple-50/60 px-3 py-2.5">
                                                 <div className="flex items-center gap-1.5">
                                                   <span className="text-base">{myScore === 100 ? "🎉" : myScore >= 70 ? "👍" : "💪"}</span>
-                                                  <span className="text-base font-black text-purple-700">{t("복습완료", "Done")}</span>
+                                                  <span className={cn("font-black text-purple-700", sz("text-base", "text-lg"))}>{t("복습완료", "Done")}</span>
                                                 </div>
                                                 <div className="mt-1.5 flex items-baseline gap-1">
                                                   <span className={cn("text-2xl font-black tabular-nums leading-none", scoreColor)}>{myScore}</span>
@@ -1790,9 +1794,9 @@ export default function CurriculumPage() {
                                               <Link href={getReviewPath(lesson.id)} className="flex-1 group flex flex-col rounded-xl bg-purple-500 hover:bg-purple-600 active:scale-[0.98] text-white px-3 py-2.5 shadow-sm transition-all">
                                                 <div className="flex items-center gap-1.5">
                                                   <span className="text-lg">📝</span>
-                                                  <span className="text-base font-black">{t("복습", "Review")}</span>
+                                                  <span className={cn("font-black", sz("text-base", "text-lg"))}>{t("복습", "Review")}</span>
                                                 </div>
-                                                <span className="text-sm font-bold opacity-95 mt-0.5">{t("문제 풀어보기", "Practice")}</span>
+                                                <span className={cn("font-bold opacity-95 mt-0.5", sz("text-sm", "text-base"))}>{t("문제 풀어보기", "Practice")}</span>
                                               </Link>
                                             )
                                           }
@@ -1800,9 +1804,9 @@ export default function CurriculumPage() {
                                             <div className="flex-1 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 px-3 py-2.5 opacity-70">
                                               <div className="flex items-center gap-1.5">
                                                 <span className="text-base grayscale opacity-60">📝</span>
-                                                <span className="text-sm font-bold text-gray-400">{t("복습", "Review")}</span>
+                                                <span className={cn("font-bold text-gray-400", sz("text-sm", "text-base"))}>{t("복습", "Review")}</span>
                                               </div>
-                                              <span className="text-xs text-gray-400 mt-0.5 inline-block font-bold">{t("수업 후 열림", "After lesson")}</span>
+                                              <span className={cn("text-gray-400 mt-0.5 inline-block font-bold", sz("text-xs", "text-sm"))}>{t("수업 후 열림", "After lesson")}</span>
                                             </div>
                                           )
                                         })()}
@@ -1824,7 +1828,7 @@ export default function CurriculumPage() {
                                               <div className="flex-1 rounded-xl border-2 border-amber-200 bg-amber-50/60 px-3 py-2.5">
                                                 <div className="flex items-center gap-1.5">
                                                   <span className="text-base">{step3FullyDone ? "🌟" : "⭐"}</span>
-                                                  <span className="text-base font-black text-amber-700">{t("도전 완료!", "Set 1 done!")}</span>
+                                                  <span className={cn("font-black text-amber-700", sz("text-base", "text-lg"))}>{t("도전 완료!", "Set 1 done!")}</span>
                                                 </div>
                                                 <div className="mt-1.5 flex items-baseline gap-1">
                                                   <span className="text-2xl font-black tabular-nums leading-none text-emerald-600">{set1Total}</span>
@@ -1851,7 +1855,7 @@ export default function CurriculumPage() {
                                                 <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className="group flex flex-col rounded-xl bg-amber-400 hover:bg-amber-500 active:scale-[0.98] text-white px-3 py-2.5 shadow-sm transition-all">
                                                   <div className="flex items-center gap-1.5">
                                                     <span className="text-lg">{cluster.emoji}</span>
-                                                    <span className="text-base font-black">{t("도전", "Challenge")}</span>
+                                                    <span className={cn("font-black", sz("text-base", "text-lg"))}>{t("도전", "Challenge")}</span>
                                                   </div>
                                                   {isStarted ? (
                                                     <div className="mt-1.5 flex items-baseline gap-1">
@@ -1875,9 +1879,9 @@ export default function CurriculumPage() {
                                             <div className="flex-1 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 px-3 py-2.5 opacity-70">
                                               <div className="flex items-center gap-1.5">
                                                 <span className="text-base grayscale opacity-60">{cluster.emoji}</span>
-                                                <span className="text-sm font-bold text-gray-400">{t("도전", "Challenge")}</span>
+                                                <span className={cn("font-bold text-gray-400", sz("text-sm", "text-base"))}>{t("도전", "Challenge")}</span>
                                               </div>
-                                              <span className="text-xs text-gray-400 mt-0.5 inline-block font-bold">{t("수업 후 열림", "After lesson")}</span>
+                                              <span className={cn("text-gray-400 mt-0.5 inline-block font-bold", sz("text-xs", "text-sm"))}>{t("수업 후 열림", "After lesson")}</span>
                                             </div>
                                           )
                                         })()}

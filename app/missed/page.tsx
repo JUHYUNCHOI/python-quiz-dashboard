@@ -51,6 +51,8 @@ interface GroupedEntries {
 
 export default function MissedPage() {
   const { t, lang } = useLanguage()
+  const isEn = lang === "en"
+  const sz = (kr: string, en: string) => isEn ? en : kr
   const [bank, setBank] = useState<WrongQuestionEntry[]>([])
   const [loaded, setLoaded] = useState(false)
 
@@ -106,11 +108,11 @@ export default function MissedPage() {
           <div className="grid grid-cols-2 gap-3 mb-5">
             <div className="rounded-xl border-2 border-rose-200 bg-rose-50 p-3 text-center">
               <p className="text-3xl font-black text-rose-700 tabular-nums">{totalUnmastered}</p>
-              <p className="text-xs font-bold text-rose-600 mt-1">{t("남은 문제", "To master")}</p>
+              <p className={cn("font-bold text-rose-600 mt-1", sz("text-xs", "text-sm"))}>{t("남은 문제", "To master")}</p>
             </div>
             <div className="rounded-xl border-2 border-emerald-200 bg-emerald-50 p-3 text-center">
               <p className="text-3xl font-black text-emerald-700 tabular-nums">{totalMastered}</p>
-              <p className="text-xs font-bold text-emerald-600 mt-1">{t("마스터 ✓", "Mastered ✓")}</p>
+              <p className={cn("font-bold text-emerald-600 mt-1", sz("text-xs", "text-sm"))}>{t("마스터 ✓", "Mastered ✓")}</p>
             </div>
           </div>
         )}
@@ -148,7 +150,7 @@ export default function MissedPage() {
               >
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <div className="min-w-0">
-                    <p className="text-xs font-bold text-rose-500 uppercase tracking-widest">
+                    <p className={cn("font-bold text-rose-500 uppercase tracking-widest", sz("text-xs", "text-sm"))}>
                       {t("레슨", "Lesson")} {lessonId}
                     </p>
                     {(() => {
