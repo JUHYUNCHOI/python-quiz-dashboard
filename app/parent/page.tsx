@@ -558,6 +558,47 @@ function ParentReportPage() {
           </div>
         )}
 
+        {/* 📊 점수 차트 — 자녀 최근 복습 막대 그래프 (시간선) */}
+        {reviewScores.length >= 3 && (() => {
+          const allReviews = progress
+            .filter(p => p.progress_type === "review" && p.completed && typeof p.score === "number" && p.score > 0)
+            .sort((a, b) => a.updated_at.localeCompare(b.updated_at))
+            .slice(-10)
+          if (allReviews.length < 3) return null
+          return (
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-sm font-black text-gray-700">📊 {t("최근 복습 점수 변화", "Recent Score Trend")}</h2>
+                <span className="text-xs text-gray-500">
+                  {t("평균", "Avg")} <span className="font-black text-purple-600">{reviewAvg}{t("점", "pt")}</span>
+                </span>
+              </div>
+              <div className="flex items-end gap-1 h-20 mb-1.5 relative">
+                <div
+                  className="absolute left-0 right-0 border-t-2 border-dashed border-gray-200 pointer-events-none"
+                  style={{ bottom: "70%" }}
+                />
+                {allReviews.map((r, i) => {
+                  const barColor = r.score === 100 ? "bg-emerald-400"
+                    : r.score >= 70 ? "bg-purple-400"
+                    : "bg-amber-400"
+                  return (
+                    <div key={i} className="flex-1 flex flex-col items-center justify-end" title={`${r.score}${t("점", "pt")}`}>
+                      <div
+                        className={cn("w-full rounded-t", barColor)}
+                        style={{ height: `${r.score}%` }}
+                      />
+                    </div>
+                  )
+                })}
+              </div>
+              <p className="text-[10px] text-gray-400 text-center">
+                {t("← 오래된 ~ 최신 → · 점선 = 70점 (이해 충분)", "← older ~ newest → · dashed = 70pt (good)")}
+              </p>
+            </div>
+          )
+        })()}
+
         {/* ③ 최근 완료한 레슨 + 다음 레슨 */}
         {(recentLessons.length > 0 || nextLesson) && (
           <Section title={t("📖 최근 학습 내역", "📖 Recent Learning")}>

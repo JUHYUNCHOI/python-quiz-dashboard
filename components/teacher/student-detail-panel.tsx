@@ -431,6 +431,33 @@ export function StudentDetailPanel({
                   {perfectCount > 0 && <span className="text-emerald-700 font-bold">🎉 {perfectCount}× 100{lang === "en" ? "pt" : "점"}</span>}
                   {lowScoreCount > 0 && <span className="text-amber-700 font-bold">💪 {lowScoreCount}× &lt;70</span>}
                 </div>
+                {/* 점수 막대 차트 — 시간 순 (최근 10개) */}
+                {reviewScores.length >= 3 && (() => {
+                  const chartScores = student.lessonProgress
+                    .filter(p => p.progress_type === "review" && p.completed && typeof p.score === "number" && p.score > 0)
+                    .sort((a, b) => a.updated_at.localeCompare(b.updated_at))
+                    .slice(-10)
+                  return (
+                    <div className="mt-3 pt-3 border-t border-gray-200/60">
+                      <div className="flex items-end gap-1 h-16 relative">
+                        <div className="absolute left-0 right-0 border-t border-dashed border-gray-300 pointer-events-none" style={{ bottom: "70%" }} />
+                        {chartScores.map((r, i) => {
+                          const barColor = r.score === 100 ? "bg-emerald-400"
+                            : r.score >= 70 ? "bg-purple-400"
+                            : "bg-amber-400"
+                          return (
+                            <div key={i} className="flex-1 flex flex-col items-center justify-end" title={`${r.score}${lang === "en" ? "pt" : "점"}`}>
+                              <div className={cn("w-full rounded-t", barColor)} style={{ height: `${r.score}%` }} />
+                            </div>
+                          )
+                        })}
+                      </div>
+                      <p className="text-[9px] text-gray-400 text-center mt-1">
+                        {lang === "en" ? "← older ~ newest →" : "← 오래된 ~ 최신 →"}
+                      </p>
+                    </div>
+                  )
+                })()}
               </div>
             )
           })()}
