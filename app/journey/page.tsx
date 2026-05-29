@@ -671,6 +671,40 @@ export default function JourneyPage() {
           </div>
         )}
 
+        {/* 🔥 Streak 유지 — 양수일 때 + 끊김 X */}
+        {!isStreakAtRisk && dailyStreak > 0 && (() => {
+          const milestones = [7, 30, 100, 365]
+          const isMilestone = milestones.includes(dailyStreak)
+          const nextMilestone = milestones.find(m => m > dailyStreak)
+          const daysToNext = nextMilestone ? nextMilestone - dailyStreak : null
+          return (
+            <div className={cn(
+              "mb-3 rounded-xl px-3 py-2 flex items-center gap-2",
+              isMilestone
+                ? "bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-400 shadow-md"
+                : "bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200"
+            )}>
+              <span className={cn("shrink-0", isMilestone ? "text-2xl animate-bounce" : "text-lg")}>🔥</span>
+              <div className="flex-1 min-w-0">
+                {isMilestone ? (
+                  <p className={cn("font-black text-orange-700 break-keep", lang === "en" ? "text-sm" : "text-xs")}>
+                    🎉 {t(`${dailyStreak}일 연속 달성! 대단해요!`, `${dailyStreak}-day streak! Amazing!`)}
+                  </p>
+                ) : (
+                  <p className={cn("font-black text-orange-700", lang === "en" ? "text-sm" : "text-xs")}>
+                    {t(`${dailyStreak}일 연속 학습 중`, `${dailyStreak}-day streak`)}
+                    {daysToNext !== null && (
+                      <span className="ml-1 font-normal text-orange-500/80 text-[11px]">
+                        · {t(`${nextMilestone}일까지 ${daysToNext}일`, `${daysToNext}d to ${nextMilestone}`)}
+                      </span>
+                    )}
+                  </p>
+                )}
+              </div>
+            </div>
+          )
+        })()}
+
         {/* 트랙 표시 — "어디 있는지" 항상 명확 */}
         <div className="mb-3 flex items-center justify-between gap-2 bg-white/70 backdrop-blur-sm rounded-xl border border-amber-200 px-3 py-2">
           <div className="flex items-center gap-2 min-w-0">

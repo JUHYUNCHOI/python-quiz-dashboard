@@ -41,6 +41,7 @@ export default function ProfilePage() {
     score: number
     updated_at: string
   }>>([])
+  const [recentReviewsLoading, setRecentReviewsLoading] = useState(true)
 
   useEffect(() => {
     try {
@@ -83,6 +84,7 @@ export default function ProfilePage() {
         }
       })
     // 최근 복습 내역 (lesson_progress.score) — 차트용 더 많이 (15 개), list 는 5 개만 표시
+    setRecentReviewsLoading(true)
     supabase
       .from("lesson_progress")
       .select("lesson_id, score, updated_at")
@@ -94,6 +96,7 @@ export default function ProfilePage() {
       .limit(15)
       .then(({ data }) => {
         if (data) setRecentReviews(data)
+        setRecentReviewsLoading(false)
       })
   }, [user])
 
@@ -326,8 +329,23 @@ export default function ProfilePage() {
           </div>
         </Card>
 
+        {/* 📊 점수 차트 + 최근 복습 — 로딩 스켈레톤 */}
+        {recentReviewsLoading && (
+          <Card className="p-4 border-2 border-gray-100">
+            <div className="flex items-center justify-between mb-3">
+              <div className="h-5 bg-gray-100 rounded w-24 animate-pulse" />
+              <div className="h-4 bg-gray-100 rounded w-16 animate-pulse" />
+            </div>
+            <div className="flex items-end gap-1 h-24">
+              {[...Array(10)].map((_, i) => (
+                <div key={i} className="flex-1 bg-gray-100 rounded-t animate-pulse" style={{ height: `${30 + Math.random() * 60}%` }} />
+              ))}
+            </div>
+          </Card>
+        )}
+
         {/* 📊 점수 차트 — 최근 복습 막대 그래프 (시간 ←→ 오른쪽이 최신) */}
-        {recentReviews.length >= 3 && (() => {
+        {!recentReviewsLoading && recentReviews.length >= 3 && (() => {
           // 오래된 → 최신 순서로 표시 (chart 흐름)
           const chartData = [...recentReviews].slice(0, 10).reverse()
           const avg = Math.round(chartData.reduce((a, r) => a + r.score, 0) / chartData.length)
