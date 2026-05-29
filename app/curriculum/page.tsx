@@ -1825,9 +1825,14 @@ export default function CurriculumPage() {
                                                   <span className="text-base">{step3FullyDone ? "🌟" : "⭐"}</span>
                                                   <span className={cn("font-black text-amber-700", sz("text-base", "text-lg"))}>{t("도전 완료!", "Set 1 done!")}</span>
                                                 </div>
-                                                <div className="mt-1.5 flex items-baseline gap-1">
-                                                  <span className="text-2xl font-black tabular-nums leading-none text-emerald-600">{set1Total}</span>
-                                                  <span className="text-sm font-bold text-emerald-600">/{set1Total}{t("점", " pt")}</span>
+                                                <div className="mt-1.5">
+                                                  <div className="flex items-baseline gap-1">
+                                                    <span className="text-2xl font-black tabular-nums leading-none text-emerald-600">100</span>
+                                                    <span className="text-sm font-bold text-emerald-600">{t("점", " pt")}</span>
+                                                  </div>
+                                                  <p className="text-[11px] font-bold text-emerald-700/80 mt-0.5">
+                                                    {set1Total}/{set1Total} {t("문제", "questions")}
+                                                  </p>
                                                 </div>
                                                 {bonusTotal > 0 && (
                                                   <div className="mt-1.5">
@@ -1853,9 +1858,14 @@ export default function CurriculumPage() {
                                                     <span className={cn("font-black", sz("text-base", "text-lg"))}>{t("도전", "Challenge")}</span>
                                                   </div>
                                                   {isStarted ? (
-                                                    <div className="mt-1.5 flex items-baseline gap-1">
-                                                      <span className="text-2xl font-black tabular-nums leading-none">{solvedInSet1}</span>
-                                                      <span className="text-sm font-bold opacity-95">/{set1Total}{t("점", " pt")}</span>
+                                                    <div className="mt-1.5">
+                                                      <div className="flex items-baseline gap-1">
+                                                        <span className="text-2xl font-black tabular-nums leading-none">{Math.round((solvedInSet1 / set1Total) * 100)}</span>
+                                                        <span className="text-sm font-bold opacity-95">{t("점", " pt")}</span>
+                                                      </div>
+                                                      <p className="text-[11px] font-bold opacity-90 mt-0.5">
+                                                        {solvedInSet1}/{set1Total} {t("문제", "questions")}
+                                                      </p>
                                                     </div>
                                                   ) : (
                                                     <span className="text-xs font-bold opacity-95 mt-0.5">{t(`처음 풀기 (${set1Total}문제)`, `Start (${set1Total} problems)`)}</span>
