@@ -411,6 +411,15 @@ function ParentReportPage() {
     ? Math.round(quizzes.reduce((s, q) => s + (q.correct_answers / q.total_questions) * 100, 0) / quizzes.length)
     : null
 
+  // 복습 평균 점수 (Phase 1 에서 lesson_progress.score 에 저장됨)
+  const reviewScores = progress
+    .filter(p => p.progress_type === "review" && p.completed && typeof p.score === "number" && p.score > 0)
+    .map(p => p.score)
+  const reviewAvg = reviewScores.length > 0
+    ? Math.round(reviewScores.reduce((a, b) => a + b, 0) / reviewScores.length)
+    : null
+  const reviewPerfectCount = reviewScores.filter(s => s === 100).length
+
   const currentPart   = getCurrentPart(completedIds, inProgressIds)
   const capability    = getCapabilityStatement(completedIds, lang)
   const understanding = getUnderstandingInfo(avgAccuracy, lang)
@@ -486,8 +495,8 @@ function ParentReportPage() {
 
       <main className="max-w-lg mx-auto px-4 py-5 space-y-4">
 
-        {/* ① 핵심 3가지 한눈에 */}
-        <div className="grid grid-cols-3 gap-2">
+        {/* ① 핵심 stats — 모바일 2x2, 데스크탑 1x4 */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 text-center">
             <p className="text-2xl font-black text-gray-800">
               {lastActiveDays === 0 ? t("오늘", "Today") : lastActiveDays === 1 ? t("어제", "Yesterday") : lastActiveDays < 999 ? t(`${lastActiveDays}일 전`, `${lastActiveDays}d ago`) : "—"}
@@ -502,7 +511,28 @@ function ParentReportPage() {
             <p className={cn("text-2xl font-black", understanding.color)}>
               {avgAccuracy !== null ? `${avgAccuracy}%` : "—"}
             </p>
-            <p className="text-[11px] text-gray-400 mt-0.5">{t("문제 정확도", "Accuracy")}</p>
+            <p className="text-[11px] text-gray-400 mt-0.5">{t("퀴즈 정확도", "Quiz accuracy")}</p>
+          </div>
+          {/* 복습 평균 점수 — Phase 1 lesson_progress.score */}
+          <div className={cn(
+            "rounded-2xl border shadow-sm p-3 text-center",
+            reviewAvg === null ? "bg-gray-50 border-gray-200"
+              : reviewAvg === 100 ? "bg-emerald-50 border-emerald-200"
+              : reviewAvg >= 70 ? "bg-purple-50 border-purple-200"
+              : "bg-amber-50 border-amber-200"
+          )}>
+            <p className={cn(
+              "text-2xl font-black",
+              reviewAvg === null ? "text-gray-400"
+                : reviewAvg === 100 ? "text-emerald-600"
+                : reviewAvg >= 70 ? "text-purple-600"
+                : "text-amber-600"
+            )}>
+              {reviewAvg !== null ? `${reviewAvg}${t("점", "pt")}` : "—"}
+            </p>
+            <p className="text-[11px] text-gray-400 mt-0.5">
+              {t(`복습 평균 (${reviewScores.length}개${reviewPerfectCount > 0 ? `·${reviewPerfectCount}🎉` : ""})`, `Review avg (${reviewScores.length}${reviewPerfectCount > 0 ? `·${reviewPerfectCount}🎉` : ""})`)}
+            </p>
           </div>
         </div>
 
