@@ -98,7 +98,12 @@ function LandmarkNode({
           {placement.landmark}
         </span>
       </div>
-      <span className={cn("mt-2 text-xs sm:text-sm font-black whitespace-nowrap leading-tight", labelColor)}>
+      <span className={cn(
+        "mt-2 font-black whitespace-nowrap leading-tight",
+        labelColor,
+        // 영어는 시각적으로 작아 보임 → 한 단계 ↑
+        lang === "en" ? "text-sm sm:text-base" : "text-xs sm:text-sm"
+      )}>
         {lang === "en" ? stage.titleEn : stage.title}
       </span>
     </Link>
@@ -321,7 +326,7 @@ function GameMap({
 }
 
 export default function JourneyPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const { user, isAuthenticated } = useAuth()
   const [completedIds, setCompletedIds] = useState<Set<string | number>>(new Set())
 
@@ -654,10 +659,16 @@ export default function JourneyPage() {
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-xl shrink-0">{trackInfo.emoji}</span>
             <div className="min-w-0">
-              <p className="text-[9px] font-bold text-amber-700 uppercase tracking-wider">
+              <p className={cn(
+                "font-bold text-amber-700 uppercase tracking-wider",
+                lang === "en" ? "text-[11px]" : "text-[9px]"
+              )}>
                 {t("나의 학습 트랙", "My Track")}
               </p>
-              <p className="text-sm font-black text-amber-900 truncate">
+              <p className={cn(
+                "font-black text-amber-900 truncate",
+                lang === "en" ? "text-base" : "text-sm"
+              )}>
                 {t(trackInfo.title, trackInfo.titleEn)}
               </p>
             </div>
