@@ -1316,28 +1316,44 @@ export default function CurriculumPage() {
           </div>
         )}
 
-        {/* P2 민준: 신규 학생 시작점 설정 배너 */}
-        {loaded && completedCount === 0 && !isTeacher && !isPseudo && (
-          <div className="max-w-[1600px] mx-auto mb-4">
-            <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl border-2 border-purple-200 p-4 flex items-start gap-3">
-              <span className="text-2xl shrink-0">🎯</span>
-              <div className="flex-1">
-                <p className="font-bold text-gray-800 text-sm">
+        {/* 🚀 신규 학생 큰 시작 CTA + 건너뛰기 안내 */}
+        {loaded && completedCount === 0 && !isTeacher && !isPseudo && (() => {
+          const firstLessonId = curriculumData.find(p => !p.comingSoon)?.lessons[0]?.id
+          return (
+            <div className="max-w-[1600px] mx-auto mb-4 space-y-3">
+              {/* 메인 시작 CTA */}
+              {firstLessonId && (
+                <Link
+                  href={`/learn/${firstLessonId}`}
+                  className="block bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl p-5 sm:p-6 shadow-xl shadow-orange-200 hover:shadow-2xl active:scale-[0.99] transition-all text-white"
+                >
+                  <div className="flex items-center gap-4">
+                    <span className="text-4xl sm:text-5xl shrink-0">🚀</span>
+                    <div className="flex-1 min-w-0">
+                      <p className={cn("font-black", sz("text-lg sm:text-xl", "text-xl sm:text-2xl"))}>
+                        {t("여기서 시작!", "Start here!")}
+                      </p>
+                      <p className={cn("opacity-95 mt-0.5", sz("text-sm", "text-base"))}>
+                        {t("첫 수업: 1강부터", "First lesson — Chapter 1")}
+                      </p>
+                    </div>
+                    <span className="text-3xl sm:text-4xl shrink-0">→</span>
+                  </div>
+                </Link>
+              )}
+              {/* 건너뛰기 안내 — 이미 배운 학생용 */}
+              <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border-2 border-purple-200 p-3 flex items-start gap-3">
+                <span className="text-xl shrink-0">💡</span>
+                <p className={cn("text-gray-600 leading-relaxed break-keep", sz("text-xs", "text-sm"))}>
                   {t(
-                    "이미 Python을 배운 적 있나요?",
-                    "Have you learned Python before?",
-                  )}
-                </p>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  {t(
-                    "처음부터 할 필요 없어요! 모든 레슨이 열려 있으니 원하는 곳부터 시작하세요.",
-                    "No need to start from scratch! All lessons are open — start wherever you'd like.",
+                    "이미 배운 적 있다면? 원하는 레슨에서 🔓 '건너뛰기' 눌러서 거기부터 시작 가능해요.",
+                    "Already learned this? Click 🔓 'Skip' on any lesson to start from there.",
                   )}
                 </p>
               </div>
             </div>
-          </div>
-        )}
+          )
+        })()}
 
         {/* 커리큘럼 — 단일 컬럼 아코디언.
             Portal 의 Smart-Next 가 이미 "다음에 뭐 해야?" 답을 줘서
