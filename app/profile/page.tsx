@@ -82,7 +82,7 @@ export default function ProfilePage() {
           setMyClass(null)
         }
       })
-    // 최근 복습 내역 (lesson_progress.score)
+    // 최근 복습 내역 (lesson_progress.score) — 차트용 더 많이 (15 개), list 는 5 개만 표시
     supabase
       .from("lesson_progress")
       .select("lesson_id, score, updated_at")
@@ -91,7 +91,7 @@ export default function ProfilePage() {
       .eq("completed", true)
       .gt("score", 0)
       .order("updated_at", { ascending: false })
-      .limit(5)
+      .limit(15)
       .then(({ data }) => {
         if (data) setRecentReviews(data)
       })
@@ -326,12 +326,59 @@ export default function ProfilePage() {
           </div>
         </Card>
 
+        {/* 📊 점수 차트 — 최근 복습 막대 그래프 (시간 ←→ 오른쪽이 최신) */}
+        {recentReviews.length >= 3 && (() => {
+          // 오래된 → 최신 순서로 표시 (chart 흐름)
+          const chartData = [...recentReviews].slice(0, 10).reverse()
+          const avg = Math.round(chartData.reduce((a, r) => a + r.score, 0) / chartData.length)
+          return (
+            <Card className="p-4 border-2 border-gray-100">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-bold text-gray-700">📊 {t("점수 차트", "Score Trend")}</h3>
+                <span className="text-xs text-gray-500">
+                  {t("평균", "Avg")} <span className="font-black text-purple-600">{avg}{t("점", "pt")}</span>
+                </span>
+              </div>
+              <div className="flex items-end gap-1 h-24 mb-1.5 relative">
+                {/* 70 점 가이드 라인 (passing 기준) */}
+                <div
+                  className="absolute left-0 right-0 border-t-2 border-dashed border-gray-200 pointer-events-none"
+                  style={{ bottom: "70%" }}
+                  title="70점"
+                />
+                {chartData.map((r, i) => {
+                  const barColor = r.score === 100 ? "bg-emerald-400 hover:bg-emerald-500"
+                    : r.score >= 70 ? "bg-purple-400 hover:bg-purple-500"
+                    : "bg-amber-400 hover:bg-amber-500"
+                  return (
+                    <div key={i} className="flex-1 flex flex-col items-center justify-end gap-0.5 group" title={`${r.score}${t("점", "pt")} · ${getLessonName(r.lesson_id, lang === "en" ? "en" : "ko")}`}>
+                      <div className="flex-1 w-full flex items-end relative">
+                        <div
+                          className={cn("w-full rounded-t transition-colors", barColor)}
+                          style={{ height: `${r.score}%` }}
+                        />
+                        {/* hover 시 점수 popup */}
+                        <span className="absolute left-1/2 -translate-x-1/2 -top-5 hidden group-hover:block text-[10px] font-black text-gray-700 bg-white border border-gray-200 rounded px-1 shadow whitespace-nowrap">
+                          {r.score}{t("점", "pt")}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+              <p className="text-[10px] text-gray-400 text-center">
+                {t("← 오래된 ~ 최신 →", "← older ~ newest →")} · {t("점선 = 70점", "dashed = 70pt")}
+              </p>
+            </Card>
+          )
+        })()}
+
         {/* 📝 최근 복습 점수 5 개 — 시간 순 */}
         {recentReviews.length > 0 && (
           <Card className="p-4 border-2 border-gray-100">
             <h3 className="font-bold text-gray-700 mb-3">📝 {t("최근 복습", "Recent Reviews")}</h3>
             <div className="space-y-1.5">
-              {recentReviews.map((r, i) => {
+              {recentReviews.slice(0, 5).map((r, i) => {
                 const scoreColor = r.score === 100 ? "text-emerald-600"
                   : r.score >= 70 ? "text-purple-600"
                   : "text-amber-600"
