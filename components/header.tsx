@@ -1,9 +1,11 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Trophy, Flame, LogIn } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
+import { getWrongBank } from "@/lib/mark-lesson-complete"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -12,6 +14,18 @@ export function Header() {
   const { level, dailyStreak } = useGamification()
   const { lang, setLang, t } = useLanguage()
   const pathname = usePathname()
+
+  // 창고 카운트 — 어디서든 자기 틀린 문제 빠른 접근
+  const [bankRemaining, setBankRemaining] = useState(0)
+  useEffect(() => {
+    if (!isAuthenticated) return
+    const update = () => {
+      const bank = getWrongBank()
+      setBankRemaining(bank.filter(e => !e.mastered).length)
+    }
+    update()
+    // pathname 변경 시 (페이지 이동 마다) 다시 read
+  }, [isAuthenticated, pathname])
 
   const displayName = profile?.display_name || t("학습자", "Learner")
 
@@ -69,6 +83,18 @@ export function Header() {
                 <Flame className="h-4 w-4 text-red-600" />
                 <span className="text-sm font-semibold text-red-700">{dailyStreak}{t("일", "d")}</span>
               </div>
+
+              {/* 창고 카운트 — 0 이면 안 보임 */}
+              {bankRemaining > 0 && (
+                <Link
+                  href="/missed"
+                  title={t(`틀린 문제 ${bankRemaining}개 — 클릭해서 풀기`, `${bankRemaining} wrong — click to practice`)}
+                  className="flex items-center gap-1.5 rounded-full bg-rose-100 hover:bg-rose-200 px-3 py-2 min-h-[44px] transition-colors"
+                >
+                  <span className="text-base">📚</span>
+                  <span className="text-sm font-semibold text-rose-700">{bankRemaining}</span>
+                </Link>
+              )}
             </>
           )}
         </div>
