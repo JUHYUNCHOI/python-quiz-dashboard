@@ -106,49 +106,39 @@ export default function MissedPage() {
         {/* lesson 별 group */}
         {loaded && grouped.length > 0 && (
           <div className="flex flex-col gap-3">
-            {grouped.map(({ lessonId, entries }) => {
-              const reviewHref = lessonId.startsWith("cpp-")
-                ? `/review/${lessonId}`
-                : lessonId.startsWith("pseudo-") || lessonId.startsWith("igcse-")
-                  ? `/review/${lessonId}`
-                  : `/review/${lessonId}`
-              return (
-                <div
-                  key={lessonId}
-                  className="rounded-2xl border-2 border-rose-200 bg-white shadow-sm p-4"
-                >
-                  <div className="flex items-center justify-between gap-3 mb-2">
-                    <div className="min-w-0">
-                      <p className="text-xs font-bold text-rose-500 uppercase tracking-widest">
-                        {t("레슨", "Lesson")} {lessonId}
-                      </p>
-                      <p className="text-base sm:text-lg font-black text-gray-900 mt-0.5">
-                        {entries.length}{t("문제", " questions")}
-                      </p>
-                    </div>
-                    <Link
-                      href={reviewHref}
-                      className="inline-flex items-center gap-1.5 px-3 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-sm font-black shadow-sm transition-colors whitespace-nowrap shrink-0"
-                    >
-                      {t("다시 풀러 가기", "Practice")} →
-                    </Link>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {entries.map((e, i) => (
-                      <span
-                        key={`${e.lessonId}-${e.stepIndex}-${i}`}
-                        className={cn(
-                          "inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-bold",
-                          "bg-rose-50 text-rose-700 border border-rose-200"
-                        )}
-                      >
-                        Q{e.stepIndex + 1}
-                      </span>
-                    ))}
+            {grouped.map(({ lessonId, entries }) => (
+              <div
+                key={lessonId}
+                className="rounded-2xl border-2 border-rose-200 bg-white shadow-sm p-4"
+              >
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-rose-500 uppercase tracking-widest">
+                      {t("레슨", "Lesson")} {lessonId}
+                    </p>
+                    <p className="text-base sm:text-lg font-black text-gray-900 mt-0.5">
+                      {entries.length}{t("문제 남음", " left")}
+                    </p>
                   </div>
                 </div>
-              )
-            })}
+                {/* 각 문제 chip — 클릭 시 단일 문제 풀이 페이지로 */}
+                <div className="flex flex-wrap gap-2">
+                  {entries.map((e, i) => (
+                    <Link
+                      key={`${e.lessonId}-${e.stepIndex}-${i}`}
+                      href={`/missed/practice?lesson=${encodeURIComponent(e.lessonId)}&q=${e.stepIndex}`}
+                      className={cn(
+                        "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black shadow-sm transition-all",
+                        "bg-rose-500 hover:bg-rose-600 text-white active:scale-95"
+                      )}
+                    >
+                      <span>Q{e.stepIndex + 1}</span>
+                      <span className="opacity-80">→</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
@@ -156,7 +146,7 @@ export default function MissedPage() {
         {loaded && grouped.length > 0 && (
           <div className="mt-6 rounded-xl bg-amber-50 border border-amber-200 p-3">
             <p className="text-xs text-amber-700 leading-relaxed break-keep">
-              💡 {t("팁: '다시 풀러 가기' 누르면 해당 레슨의 복습 페이지로 이동해서 모든 문제를 다시 볼 수 있어요. (개별 문제만 푸는 모드는 곧 추가)", "Tip: 'Practice' opens the lesson's review page where you can retry all questions. (Single-question mode coming soon)")}
+              💡 {t("팁: 각 문제 (Q1, Q2 …) 누르면 그 문제 하나만 풀 수 있어요. 맞히면 창고에서 빠져요.", "Tip: Click each question (Q1, Q2 …) to practice it alone. Master to remove.")}
             </p>
           </div>
         )}
