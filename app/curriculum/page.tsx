@@ -1773,7 +1773,7 @@ export default function CurriculumPage() {
                                               <div className="flex-1 rounded-xl border-2 border-purple-200 bg-purple-50/60 px-3 py-2.5">
                                                 <div className="flex items-center gap-1.5">
                                                   <span className="text-base">{myScore === 100 ? "🎉" : myScore >= 70 ? "👍" : "💪"}</span>
-                                                  <span className="text-sm font-black text-purple-700">{t("복습완료", "Done")}</span>
+                                                  <span className="text-base font-black text-purple-700">{t("복습완료", "Done")}</span>
                                                 </div>
                                                 <div className="mt-1.5 flex items-baseline gap-1">
                                                   <span className={cn("text-2xl font-black tabular-nums leading-none", scoreColor)}>{myScore}</span>
@@ -1789,10 +1789,10 @@ export default function CurriculumPage() {
                                             return (
                                               <Link href={getReviewPath(lesson.id)} className="flex-1 group flex flex-col rounded-xl bg-purple-500 hover:bg-purple-600 active:scale-[0.98] text-white px-3 py-2.5 shadow-sm transition-all">
                                                 <div className="flex items-center gap-1.5">
-                                                  <span className="text-base">📝</span>
-                                                  <span className="text-sm font-black">{t("복습", "Review")}</span>
+                                                  <span className="text-lg">📝</span>
+                                                  <span className="text-base font-black">{t("복습", "Review")}</span>
                                                 </div>
-                                                <span className="text-xs font-bold opacity-95 mt-0.5">{t("문제 풀어보기", "Practice")}</span>
+                                                <span className="text-sm font-bold opacity-95 mt-0.5">{t("문제 풀어보기", "Practice")}</span>
                                               </Link>
                                             )
                                           }
@@ -1800,7 +1800,7 @@ export default function CurriculumPage() {
                                             <div className="flex-1 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 px-3 py-2.5 opacity-70">
                                               <div className="flex items-center gap-1.5">
                                                 <span className="text-base grayscale opacity-60">📝</span>
-                                                <span className="text-xs font-bold text-gray-400">{t("복습", "Review")}</span>
+                                                <span className="text-sm font-bold text-gray-400">{t("복습", "Review")}</span>
                                               </div>
                                               <span className="text-xs text-gray-400 mt-0.5 inline-block font-bold">{t("수업 후 열림", "After lesson")}</span>
                                             </div>
@@ -1824,7 +1824,7 @@ export default function CurriculumPage() {
                                               <div className="flex-1 rounded-xl border-2 border-amber-200 bg-amber-50/60 px-3 py-2.5">
                                                 <div className="flex items-center gap-1.5">
                                                   <span className="text-base">{step3FullyDone ? "🌟" : "⭐"}</span>
-                                                  <span className="text-sm font-black text-amber-700">{t("도전 완료!", "Set 1 done!")}</span>
+                                                  <span className="text-base font-black text-amber-700">{t("도전 완료!", "Set 1 done!")}</span>
                                                 </div>
                                                 <div className="mt-1.5 flex items-baseline gap-1">
                                                   <span className="text-2xl font-black tabular-nums leading-none text-emerald-600">{set1Total}</span>
@@ -1850,8 +1850,8 @@ export default function CurriculumPage() {
                                               <div className="flex-1 flex flex-col gap-1">
                                                 <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className="group flex flex-col rounded-xl bg-amber-400 hover:bg-amber-500 active:scale-[0.98] text-white px-3 py-2.5 shadow-sm transition-all">
                                                   <div className="flex items-center gap-1.5">
-                                                    <span className="text-base">{cluster.emoji}</span>
-                                                    <span className="text-sm font-black">{t("도전", "Challenge")}</span>
+                                                    <span className="text-lg">{cluster.emoji}</span>
+                                                    <span className="text-base font-black">{t("도전", "Challenge")}</span>
                                                   </div>
                                                   {isStarted ? (
                                                     <div className="mt-1.5 flex items-baseline gap-1">
@@ -1875,7 +1875,7 @@ export default function CurriculumPage() {
                                             <div className="flex-1 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 px-3 py-2.5 opacity-70">
                                               <div className="flex items-center gap-1.5">
                                                 <span className="text-base grayscale opacity-60">{cluster.emoji}</span>
-                                                <span className="text-xs font-bold text-gray-400">{t("도전", "Challenge")}</span>
+                                                <span className="text-sm font-bold text-gray-400">{t("도전", "Challenge")}</span>
                                               </div>
                                               <span className="text-xs text-gray-400 mt-0.5 inline-block font-bold">{t("수업 후 열림", "After lesson")}</span>
                                             </div>
