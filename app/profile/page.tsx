@@ -331,13 +331,30 @@ export default function ProfilePage() {
           // 오래된 → 최신 순서로 표시 (chart 흐름)
           const chartData = [...recentReviews].slice(0, 10).reverse()
           const avg = Math.round(chartData.reduce((a, r) => a + r.score, 0) / chartData.length)
+          // 추세 — 후반 절반 평균 vs 전반 절반 평균 (개선/하락 명시)
+          const halfIdx = Math.floor(chartData.length / 2)
+          const earlyAvg = chartData.slice(0, halfIdx).length > 0
+            ? Math.round(chartData.slice(0, halfIdx).reduce((a, r) => a + r.score, 0) / chartData.slice(0, halfIdx).length)
+            : 0
+          const lateAvg = chartData.slice(halfIdx).length > 0
+            ? Math.round(chartData.slice(halfIdx).reduce((a, r) => a + r.score, 0) / chartData.slice(halfIdx).length)
+            : 0
+          const trendDelta = lateAvg - earlyAvg
           return (
             <Card className="p-4 border-2 border-gray-100">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-bold text-gray-700">📊 {t("점수 차트", "Score Trend")}</h3>
-                <span className="text-xs text-gray-500">
-                  {t("평균", "Avg")} <span className="font-black text-purple-600">{avg}{t("점", "pt")}</span>
-                </span>
+                <div className="flex items-baseline gap-2 text-xs">
+                  <span className="text-gray-500">{t("평균", "Avg")} <span className="font-black text-purple-600">{avg}{t("점", "pt")}</span></span>
+                  {chartData.length >= 4 && trendDelta !== 0 && (
+                    <span className={cn(
+                      "font-black",
+                      trendDelta > 0 ? "text-emerald-600" : "text-amber-600"
+                    )}>
+                      {trendDelta > 0 ? "↑" : "↓"} {Math.abs(trendDelta)}
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="flex items-end gap-1 h-24 mb-1.5 relative">
                 {/* 70 점 가이드 라인 (passing 기준) */}
