@@ -1727,8 +1727,8 @@ export default function CurriculumPage() {
                                               </Link>
                                             ) : step1Done ? (
                                               <div className="flex items-center gap-2 flex-wrap">
-                                                <span className="text-sm font-bold text-emerald-600">✅ {t("수업완료", "Done")}</span>
-                                                <Link href={`/learn/${lesson.id}`} className="text-xs font-bold text-blue-500 hover:text-blue-700 underline underline-offset-2 decoration-dotted transition-colors">
+                                                <span className={cn("font-black text-emerald-600", sz("text-sm", "text-base"))}>✅ {t("수업완료", "Done")}</span>
+                                                <Link href={`/learn/${lesson.id}`} className={cn("font-bold text-blue-500 hover:text-blue-700 underline underline-offset-2 decoration-dotted transition-colors", sz("text-sm", "text-base"))}>
                                                   {t("다시보기 →", "Re-watch →")}
                                                 </Link>
                                               </div>
