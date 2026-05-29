@@ -1787,7 +1787,7 @@ export default function CurriculumPage() {
                                           }
                                           if (step1Done) {
                                             return (
-                                              <Link href={getReviewPath(lesson.id)} className="flex-1 group flex flex-col rounded-xl bg-purple-500 hover:bg-purple-600 text-white px-3 py-2.5 shadow-sm transition-colors">
+                                              <Link href={getReviewPath(lesson.id)} className="flex-1 group flex flex-col rounded-xl bg-purple-500 hover:bg-purple-600 active:scale-[0.98] text-white px-3 py-2.5 shadow-sm transition-all">
                                                 <div className="flex items-center gap-1.5">
                                                   <span className="text-base">📝</span>
                                                   <span className="text-sm font-black">{t("복습", "Review")}</span>
@@ -1848,7 +1848,7 @@ export default function CurriculumPage() {
                                             const isStarted = solvedInSet1 > 0
                                             return (
                                               <div className="flex-1 flex flex-col gap-1">
-                                                <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className="group flex flex-col rounded-xl bg-amber-400 hover:bg-amber-500 text-white px-3 py-2.5 shadow-sm transition-colors">
+                                                <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className="group flex flex-col rounded-xl bg-amber-400 hover:bg-amber-500 active:scale-[0.98] text-white px-3 py-2.5 shadow-sm transition-all">
                                                   <div className="flex items-center gap-1.5">
                                                     <span className="text-base">{cluster.emoji}</span>
                                                     <span className="text-sm font-black">{t("도전", "Challenge")}</span>

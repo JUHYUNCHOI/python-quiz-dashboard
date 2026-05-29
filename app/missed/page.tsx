@@ -128,8 +128,8 @@ export default function MissedPage() {
                       key={`${e.lessonId}-${e.stepIndex}-${i}`}
                       href={`/missed/practice?lesson=${encodeURIComponent(e.lessonId)}&q=${e.stepIndex}`}
                       className={cn(
-                        "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black shadow-sm transition-all",
-                        "bg-rose-500 hover:bg-rose-600 text-white active:scale-95"
+                        "inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-sm font-black shadow-sm transition-all",
+                        "bg-rose-500 hover:bg-rose-600 text-white active:scale-95 min-w-[60px] justify-center"
                       )}
                     >
                       <span>Q{e.stepIndex + 1}</span>
