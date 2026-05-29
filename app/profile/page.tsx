@@ -17,7 +17,9 @@ import { cn } from "@/lib/utils"
 export default function ProfilePage() {
   const { user, profile, isAuthenticated, isLoading, refreshProfile } = useAuth()
   const { level, totalXp, dailyStreak, xpInCurrentLevel } = useGamification()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const isEn = lang === "en"
+  const sz = (kr: string, en: string) => isEn ? en : kr
   // undefined = 로딩, null = 반 없음
   const [myClass, setMyClass] = useState<{ id: string; name: string } | null | undefined>(undefined)
   const [leavingClass, setLeavingClass] = useState(false)
@@ -258,7 +260,7 @@ export default function ProfilePage() {
             {/* 수업 완료 */}
             <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100">
               <p className="text-2xl font-black text-emerald-600 tabular-nums">{studySummary.completedLessons}</p>
-              <p className="text-xs font-bold text-emerald-700 mt-0.5">📖 {t("수업 완료", "Lessons done")}</p>
+              <p className={cn("font-bold text-emerald-700 mt-0.5", sz("text-xs", "text-sm"))}>📖 {t("수업 완료", "Lessons done")}</p>
             </div>
             {/* 복습 평균 점수 */}
             <div className="p-3 rounded-xl bg-purple-50 border border-purple-100">
@@ -266,12 +268,12 @@ export default function ProfilePage() {
                 {studySummary.avgQuizScore !== null ? studySummary.avgQuizScore : "—"}
                 {studySummary.avgQuizScore !== null && <span className="text-sm font-bold">{t("점", "pt")}</span>}
               </p>
-              <p className="text-xs font-bold text-purple-700 mt-0.5">📝 {t(`복습 평균 (${studySummary.completedQuizzes}개)`, `Quiz avg (${studySummary.completedQuizzes})`)}</p>
+              <p className={cn("font-bold text-purple-700 mt-0.5", sz("text-xs", "text-sm"))}>📝 {t(`복습 평균 (${studySummary.completedQuizzes}개)`, `Quiz avg (${studySummary.completedQuizzes})`)}</p>
             </div>
             {/* 도전 풀이 */}
             <div className="p-3 rounded-xl bg-amber-50 border border-amber-100">
               <p className="text-2xl font-black text-amber-600 tabular-nums">{studySummary.practiceSolved}</p>
-              <p className="text-xs font-bold text-amber-700 mt-0.5">🎯 {t("도전 푼 수", "Challenges solved")}</p>
+              <p className={cn("font-bold text-amber-700 mt-0.5", sz("text-xs", "text-sm"))}>🎯 {t("도전 푼 수", "Challenges solved")}</p>
             </div>
             {/* 문제 창고 — 클릭 가능 */}
             <Link
@@ -284,7 +286,7 @@ export default function ProfilePage() {
                   <span className="text-sm font-bold text-emerald-600 ml-1">+{studySummary.bankMastered}🌟</span>
                 )}
               </p>
-              <p className="text-xs font-bold text-rose-700 mt-0.5">📚 {t("창고 (남은+마스터)", "Bank (left+mastered)")}</p>
+              <p className={cn("font-bold text-rose-700 mt-0.5", sz("text-xs", "text-sm"))}>📚 {t("창고 (남은+마스터)", "Bank (left+mastered)")}</p>
             </Link>
           </div>
         </Card>
