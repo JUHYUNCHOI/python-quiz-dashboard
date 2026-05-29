@@ -24,6 +24,7 @@ import {
   type JourneyStage,
 } from "@/lib/journey-stages"
 import { getSmartNext, getPreferredTrack } from "@/lib/smart-next"
+import { useGamification } from "@/hooks/use-gamification"
 import { PythonDiagnosticQuiz } from "@/components/python-diagnostic-quiz"
 
 // ── 6 스테이지 좌표 (viewBox 100×180) ────────────────────────────
@@ -328,6 +329,7 @@ function GameMap({
 export default function JourneyPage() {
   const { t, lang } = useLanguage()
   const { user, isAuthenticated } = useAuth()
+  const { isStreakAtRisk, dailyStreak } = useGamification()
   const [completedIds, setCompletedIds] = useState<Set<string | number>>(new Set())
 
   useEffect(() => {
@@ -650,6 +652,21 @@ export default function JourneyPage() {
                   </div>
                 </>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* 🔥 Streak 끊김 알림 — 어제 안 들어왔으면 부드러운 격려 */}
+        {isStreakAtRisk && dailyStreak > 0 && (
+          <div className="mb-3 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 px-3 py-2.5 flex items-center gap-2">
+            <span className="text-2xl shrink-0">🔥</span>
+            <div className="flex-1 min-w-0">
+              <p className={cn("font-black text-red-700", lang === "en" ? "text-sm" : "text-xs")}>
+                {t(`${dailyStreak}일 연속 학습 — 어제 끊겼어요!`, `${dailyStreak}-day streak — broken yesterday!`)}
+              </p>
+              <p className={cn("text-red-600/80 mt-0.5 leading-snug break-keep", lang === "en" ? "text-xs" : "text-[11px]")}>
+                {t("오늘 한 강만 들어도 다시 1일 시작 — 천천히 다시 쌓아봐요.", "1 lesson today restarts your streak — take it slow!")}
+              </p>
             </div>
           </div>
         )}
