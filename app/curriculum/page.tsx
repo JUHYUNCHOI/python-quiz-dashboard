@@ -1482,15 +1482,15 @@ export default function CurriculumPage() {
                           </span>
                         )}
                       </div>
-                      <p className="text-xs sm:text-sm text-gray-600 mt-1">{part.description}</p>
+                      <p className={cn("text-gray-600 mt-1 break-keep", sz("text-xs sm:text-sm", "text-sm sm:text-base"))}>{part.description}</p>
 
                       {hasLessons && (
                         <div className="mt-3">
                           <div className="flex justify-between items-center mb-1">
-                            <span className="text-xs font-semibold text-gray-500">
+                            <span className={cn("font-bold text-gray-600", sz("text-xs", "text-sm"))}>
                               {partDoneSteps}/{partTotalSteps} {t("단계 완료", "steps done")}
                             </span>
-                            <span className={`text-xs font-bold ${isPseudo ? 'text-green-500' : isCpp ? 'text-blue-500' : 'text-orange-500'}`}>{partProgress}%</span>
+                            <span className={cn("font-black", sz("text-xs", "text-sm"), isPseudo ? "text-green-500" : isCpp ? "text-blue-500" : "text-orange-500")}>{partProgress}%</span>
                           </div>
                           <div className="h-2 bg-gray-200 rounded-full border border-black overflow-hidden">
                             <div
