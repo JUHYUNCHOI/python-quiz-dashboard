@@ -10,6 +10,7 @@ import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { markQuizComplete, addToWrongBank } from "@/lib/mark-lesson-complete"
 import { useGamification } from "@/hooks/use-gamification"
+import { Confetti } from "@/components/learn/confetti"
 import { saveReviewProgressToSupabase, loadReviewProgressFromSupabase } from "@/lib/review-progress-sync"
 import type { ReviewProgressData } from "@/lib/review-progress-sync"
 import { saveStepAnswer } from "@/lib/save-step-answer"
@@ -368,6 +369,9 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
 
     return (
       <div className="min-h-screen bg-gray-50">
+        {/* 100점 시 confetti — 이번 세션에서 풀었을 때만 (이전 결과 다시 보기에선 X) */}
+        <Confetti show={isPerfect && sessionAttempts > 0} />
+
         <div className="border-b border-orange-100 bg-white/95 backdrop-blur-lg sticky top-0 z-10">
           <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3 flex items-center gap-3">
             <button onClick={() => router.push("/curriculum")} className="rounded-full p-2 hover:bg-gray-100">

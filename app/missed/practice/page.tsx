@@ -10,6 +10,7 @@ import { lessonsData } from "../../review/[lessonId]/data/lessons"
 import type { StepContent, LessonData } from "../../review/[lessonId]/data/types"
 import { markWrongQuestionMastered, getWrongBank } from "@/lib/mark-lesson-complete"
 import { useGamification } from "@/hooks/use-gamification"
+import { Confetti } from "@/components/learn/confetti"
 import { ArrowLeft } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -83,11 +84,20 @@ function PracticeInner() {
     }
   }, [status, lessonId, stepIndex])
 
+  const [milestoneCount, setMilestoneCount] = useState<number | null>(null)
+
   const handleCorrect = useCallback(() => {
     setStatus("correct")
     // 창고에서 마스터 처리 + XP 보상 (+15 XP per master)
     markWrongQuestionMastered(lessonId, stepIndex)
     addDirectXp(15)
+    // milestone 축하 — 5/10/25/50/100 마스터 시
+    const bank = getWrongBank()
+    const newMasteredCount = bank.filter(e => e.mastered).length + 1  // +1 for this one
+    const milestones = [5, 10, 25, 50, 100]
+    if (milestones.includes(newMasteredCount)) {
+      setMilestoneCount(newMasteredCount)
+    }
   }, [lessonId, stepIndex, addDirectXp])
 
   const handleWrong = useCallback(() => {
@@ -125,6 +135,18 @@ function PracticeInner() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50/30 via-white to-amber-50/20">
+      {/* 마스터 시 confetti */}
+      <Confetti show={status === "correct"} />
+
+      {/* milestone 축하 toast — 5/10/25/50/100 마스터 */}
+      {milestoneCount !== null && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-amber-400 to-emerald-500 text-white px-5 py-3 rounded-2xl shadow-2xl border-2 border-white animate-bounce">
+          <p className="font-black text-sm sm:text-base whitespace-nowrap">
+            🏆 {t(`${milestoneCount}개 마스터 달성!`, `${milestoneCount} masters!`)}
+          </p>
+        </div>
+      )}
+
       <Header />
 
       <main className="max-w-2xl mx-auto px-4 pt-3 pb-32">
