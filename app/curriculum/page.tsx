@@ -1661,7 +1661,7 @@ export default function CurriculumPage() {
                                               <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                                 <div className="h-full bg-purple-400 rounded-full transition-all" style={{ width: `${progressPct}%` }} />
                                               </div>
-                                              <span className="text-[10px] text-purple-500 font-bold whitespace-nowrap">{progressPct}%</span>
+                                              <span className="text-xs text-purple-500 font-bold whitespace-nowrap">{progressPct}%</span>
                                             </div>
                                           )}
 
@@ -1707,8 +1707,8 @@ export default function CurriculumPage() {
                                                     const targetIdx = allIds.findIndex(id => String(id) === String(lesson.id))
                                                     const skipCount = allIds.slice(0, targetIdx + 1).filter(id => !completedLessons.has(String(id))).length
                                                     return (
-                                                      <button onClick={() => setSkipConfirmId(lesson.id)} className="px-2 py-1.5 rounded-lg border-2 border-gray-300 text-gray-400 text-xs font-bold hover:border-orange-300 hover:text-orange-500 hover:bg-orange-50 transition-colors" title={t("이미 아는 내용이라면 건너뛰기", "Skip if you already know this")}>
-                                                        🔓 {t("건너뛰기", "Skip")}{skipCount > 1 ? <span className="ml-1 text-[9px] opacity-60">(이전 {skipCount}개 포함)</span> : ""}
+                                                      <button onClick={() => setSkipConfirmId(lesson.id)} className="px-3 py-2 rounded-lg border-2 border-gray-300 text-gray-500 text-sm font-bold hover:border-orange-300 hover:text-orange-500 hover:bg-orange-50 transition-colors" title={t("이미 아는 내용이라면 건너뛰기", "Skip if you already know this")}>
+                                                        🔓 {t("건너뛰기", "Skip")}{skipCount > 1 ? <span className="ml-1 text-[10px] opacity-70">(이전 {skipCount}개 포함)</span> : ""}
                                                       </button>
                                                     )
                                                   })()
@@ -1722,10 +1722,10 @@ export default function CurriculumPage() {
                                                 📖 {t("레슨 보기", "View Lesson")}
                                               </Link>
                                             ) : step1Done ? (
-                                              <div className="flex items-center gap-2">
-                                                <span className="text-xs text-gray-400">✅ {t("수업완료", "Done")}</span>
-                                                <Link href={`/learn/${lesson.id}`} className="text-[11px] text-gray-400 hover:text-blue-500 underline underline-offset-2 decoration-dotted transition-colors">
-                                                  {t("다시보기", "Re-watch")}
+                                              <div className="flex items-center gap-2 flex-wrap">
+                                                <span className="text-sm font-bold text-emerald-600">✅ {t("수업완료", "Done")}</span>
+                                                <Link href={`/learn/${lesson.id}`} className="text-xs font-bold text-blue-500 hover:text-blue-700 underline underline-offset-2 decoration-dotted transition-colors">
+                                                  {t("다시보기 →", "Re-watch →")}
                                                 </Link>
                                               </div>
                                             ) : (
@@ -1802,7 +1802,7 @@ export default function CurriculumPage() {
                                                 <span className="text-base grayscale opacity-60">📝</span>
                                                 <span className="text-xs font-bold text-gray-400">{t("복습", "Review")}</span>
                                               </div>
-                                              <span className="text-[10px] text-gray-400 mt-0.5 inline-block">{t("수업 후 열림", "After lesson")}</span>
+                                              <span className="text-xs text-gray-400 mt-0.5 inline-block font-bold">{t("수업 후 열림", "After lesson")}</span>
                                             </div>
                                           )
                                         })()}
@@ -1877,7 +1877,7 @@ export default function CurriculumPage() {
                                                 <span className="text-base grayscale opacity-60">{cluster.emoji}</span>
                                                 <span className="text-xs font-bold text-gray-400">{t("도전", "Challenge")}</span>
                                               </div>
-                                              <span className="text-[10px] text-gray-400 mt-0.5 inline-block">{t("수업 후 열림", "After lesson")}</span>
+                                              <span className="text-xs text-gray-400 mt-0.5 inline-block font-bold">{t("수업 후 열림", "After lesson")}</span>
                                             </div>
                                           )
                                         })()}
