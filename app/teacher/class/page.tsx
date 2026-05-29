@@ -100,6 +100,16 @@ function StudentStatusGrid({ students, onStudentClick, lang, hwStudentIds, hwPen
           const avgAcc = recent.length >= 2
             ? Math.round(recent.reduce((sum, q) => sum + (q.correct_answers / q.total_questions) * 100, 0) / recent.length)
             : null
+          // 복습 평균 점수 (Phase 1 lesson_progress.score) — 우선 표시
+          const reviewScores = s.lessonProgress
+            .filter(r => r.progress_type === "review" && r.completed && typeof r.score === "number" && r.score > 0)
+            .map(r => r.score)
+          const reviewAvg = reviewScores.length > 0
+            ? Math.round(reviewScores.reduce((a, b) => a + b, 0) / reviewScores.length)
+            : null
+          // 복습 점수 우선, 없으면 quiz 정확도 fallback
+          const displayScore = reviewAvg ?? avgAcc
+          const displayCount = reviewScores.length
           const lastLesson = s.lessonProgress
             .filter(r => r.progress_type === "learn" && r.completed)
             .sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0]
@@ -123,11 +133,27 @@ function StudentStatusGrid({ students, onStudentClick, lang, hwStudentIds, hwPen
               <span className="text-xs text-gray-400 flex-1 truncate">
                 {lastLesson ? getLessonName(lastLesson.lesson_id, lang) : "—"}
               </span>
-              <span className={cn(
-                "text-xs font-black w-10 text-right flex-shrink-0",
-                avgAcc === null ? "text-gray-300" : avgAcc >= 70 ? "text-green-600" : avgAcc >= 55 ? "text-amber-500" : "text-red-500"
-              )}>
-                {avgAcc !== null ? `${avgAcc}%` : "—"}
+              {/* 복습 평균 점수 우선, fallback = quiz 정확도. 호버 시 출처 표시. */}
+              <span
+                className={cn(
+                  "text-xs font-black w-14 text-right flex-shrink-0",
+                  displayScore === null ? "text-gray-300"
+                    : displayScore === 100 ? "text-emerald-600"
+                    : displayScore >= 70 ? "text-purple-600"
+                    : displayScore >= 55 ? "text-amber-500"
+                    : "text-red-500"
+                )}
+                title={
+                  reviewAvg !== null
+                    ? (lang === "en" ? `Review avg (${displayCount} reviews)` : `복습 평균 (${displayCount}개)`)
+                    : avgAcc !== null
+                      ? (lang === "en" ? "Quiz accuracy (no reviews yet)" : "퀴즈 정확도 (복습 X)")
+                      : ""
+                }
+              >
+                {displayScore !== null
+                  ? `${displayScore}${reviewAvg !== null ? (lang === "en" ? "pt" : "점") : "%"}`
+                  : "—"}
               </span>
               {hwStudentIds && (
                 <span className="w-12 flex-shrink-0 text-right text-[10px] font-bold">
