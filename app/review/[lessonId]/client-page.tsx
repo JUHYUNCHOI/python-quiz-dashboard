@@ -401,6 +401,16 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               <p className="text-sm text-gray-500">
                 {correctCount} / {totalAttempted} {t("문제 맞음", "correct")}
               </p>
+              {/* XP 보상 표시 — 이번 세션에서 풀었을 때만 */}
+              {sessionAttempts > 0 && (() => {
+                const xpReward = percentage === 100 ? 50 : percentage >= 90 ? 40 : percentage >= 70 ? 25 : 10
+                return (
+                  <div className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-full bg-amber-100 border-2 border-amber-300 shadow-sm">
+                    <span className="text-base">⚡</span>
+                    <span className="text-sm font-black text-amber-700">+{xpReward} XP</span>
+                  </div>
+                )
+              })()}
             </div>
 
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">

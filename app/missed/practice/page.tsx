@@ -169,6 +169,11 @@ function PracticeInner() {
             <p className="text-xl font-black text-emerald-700 mb-1">
               {t("마스터!", "Mastered!")}
             </p>
+            {/* XP 보상 표시 */}
+            <div className="inline-flex items-center gap-1.5 mb-3 px-3 py-1.5 rounded-full bg-amber-100 border-2 border-amber-300 shadow-sm">
+              <span className="text-base">⚡</span>
+              <span className="text-sm font-black text-amber-700">+15 XP</span>
+            </div>
             <p className="text-xs text-emerald-600 mb-4 break-keep">
               {nextEntry
                 ? t("이 문제 끝! 다음 문제 계속할까요?", "Done! Try the next one?")
