@@ -8,7 +8,7 @@ import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
-import { markQuizComplete } from "@/lib/mark-lesson-complete"
+import { markQuizComplete, addToWrongBank } from "@/lib/mark-lesson-complete"
 import { saveReviewProgressToSupabase, loadReviewProgressFromSupabase } from "@/lib/review-progress-sync"
 import type { ReviewProgressData } from "@/lib/review-progress-sync"
 import { saveStepAnswer } from "@/lib/save-step-answer"
@@ -136,7 +136,15 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const [scoredSteps, setScoredSteps] = useState<Set<number>>(
     new Set(saved?.scoredSteps ?? saved?.completedSteps ?? [])
   )
-  const [showResults, setShowResults] = useState(false)
+  // 이미 모든 step 점수 매겨졌으면 (= 이전에 한 번 풀어 끝낸 상태) 자동으로 결과 화면
+  // 학생 모드: 한 번만 풀 수 있어요. 선생님은 자유 탐색 OK.
+  const [showResults, setShowResults] = useState(() => {
+    if (effectiveTeacher) return false
+    const allScored = (saved?.scoredSteps?.length ?? 0) > 0
+    const allCompleted = (saved?.completedSteps?.length ?? 0) > 0
+    return allScored && allCompleted && reviewSteps.length > 0 &&
+           (saved?.completedSteps?.length ?? 0) >= reviewSteps.length
+  })
   const [showLesson, setShowLesson] = useState(false)
   // 각 스텝의 답 보존 (인덱스 → 답 데이터)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -295,13 +303,27 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     return () => window.removeEventListener("keydown", handleKey)
   }, [router])
 
-  // 결과 화면 표시 시 완료 저장 (세션에서 실제로 답변한 경우에만)
+  // 결과 화면 표시 시 완료 저장
+  // 1) 이번 세션에서 풀었으면 → 점수 + 창고 저장
+  // 2) 이전에 풀어서 자동 결과 뜬 경우 → 저장된 데이터로 점수만 채워주기 (기존 학생 호환)
   useEffect(() => {
-    if (showResults && sessionAttempts > 0) {
-      const pct = totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0
-      if (pct >= 70) markQuizComplete(lessonId)
+    if (!showResults) return
+    const pct = totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0
+    if (sessionAttempts > 0) {
+      // 이번에 풀었음 — 점수 + 창고 저장
+      markQuizComplete(lessonId, pct)
+      if (wrongSteps.length > 0) addToWrongBank(lessonId, wrongSteps)
+    } else if (totalAttempted > 0) {
+      // 이전 풀이 — 점수가 아직 저장 안 됐다면 채워줌 (호환)
+      try {
+        const scoresRaw = localStorage.getItem("quiz-scores")
+        const scores: Record<string, number> = scoresRaw ? JSON.parse(scoresRaw) : {}
+        if (scores[String(lessonId)] === undefined) {
+          markQuizComplete(lessonId, pct)
+        }
+      } catch {}
     }
-  }, [showResults, totalAttempted, correctCount, lessonId, sessionAttempts])
+  }, [showResults, totalAttempted, correctCount, lessonId, sessionAttempts, wrongSteps])
 
   if (authLoading || !user) return null
 
@@ -352,11 +374,30 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         </div>
 
         <div className="max-w-[600px] mx-auto px-4 py-8 md:py-12">
-          <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm text-center space-y-6">
+          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm text-center space-y-5">
             <div className="text-6xl md:text-7xl">
               {isPerfect ? "🎉" : percentage >= 70 ? "👍" : "💪"}
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+
+            {/* 큰 점수 표시 — 학생이 한 눈에 */}
+            <div className="space-y-1">
+              <p className="text-xs sm:text-sm font-bold text-gray-500 uppercase tracking-widest">
+                {t("내 점수", "My Score")}
+              </p>
+              <p className={cn(
+                "text-6xl md:text-7xl font-black tabular-nums",
+                isPerfect ? "text-emerald-500"
+                  : percentage >= 70 ? "text-purple-500"
+                  : "text-amber-500"
+              )}>
+                {percentage}<span className="text-3xl md:text-4xl">{t("점", " pt")}</span>
+              </p>
+              <p className="text-sm text-gray-500">
+                {correctCount} / {totalAttempted} {t("문제 맞음", "correct")}
+              </p>
+            </div>
+
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
               {isPerfect
                 ? t("완벽해요!", "Perfect!")
                 : percentage >= 70
@@ -364,38 +405,35 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   : t("더 연습해봐요!", "Keep practicing!")}
             </h2>
 
-            <div className="flex justify-center gap-6">
-              <div className="text-center">
-                <p className="text-4xl font-bold text-emerald-500">{correctCount}</p>
-                <p className="text-sm text-gray-500">{t("맞음", "Correct")}</p>
-              </div>
-              <div className="text-center">
-                <p className="text-4xl font-bold text-red-400">{wrongSteps.length}</p>
-                <p className="text-sm text-gray-500">{t("틀림", "Wrong")}</p>
-              </div>
-              <div className="text-center">
-                <p className="text-4xl font-bold text-purple-500">{percentage}%</p>
-                <p className="text-sm text-gray-500">{t("정답률", "Accuracy")}</p>
-              </div>
-            </div>
-
             {wrongSteps.length > 0 && (
-              <div className="bg-orange-50 rounded-xl p-4 text-left space-y-2">
-                <p className="font-bold text-orange-700 text-sm">{t("틀린 문제:", "Wrong answers:")}</p>
-                {wrongSteps.map((idx, i) => {
-                  const r = reviewSteps[idx]
-                  if (!r) return null
-                  const preview = getStepPreview(r.step, isEn)
-                  return (
-                    <p key={i} className="text-sm text-orange-600 truncate">
-                      {i + 1}. {r.chapterTitle ? `[${isEn && r.chapterTitleEn ? r.chapterTitleEn : r.chapterTitle}] ` : ""}{preview}
-                    </p>
-                  )
-                })}
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-left space-y-2">
+                <p className="font-black text-amber-800 text-sm">
+                  📚 {t(`틀린 ${wrongSteps.length}문제 → 문제 창고로 들어갔어요`, `${wrongSteps.length} wrong → saved to Question Bank`)}
+                </p>
+                <p className="text-xs text-amber-700 leading-relaxed">
+                  {t("나중에 창고에서 다시 풀어볼 수 있어요. 복습은 한 번만 풀 수 있어요.", "You can practice them later in the bank. Review is one-shot.")}
+                </p>
+                <details className="text-xs text-amber-600 mt-1">
+                  <summary className="cursor-pointer font-bold hover:text-amber-700">
+                    {t("틀린 문제 미리 보기", "Preview wrong questions")}
+                  </summary>
+                  <div className="mt-2 space-y-1">
+                    {wrongSteps.map((idx, i) => {
+                      const r = reviewSteps[idx]
+                      if (!r) return null
+                      const preview = getStepPreview(r.step, isEn)
+                      return (
+                        <p key={i} className="truncate">
+                          {i + 1}. {r.chapterTitle ? `[${isEn && r.chapterTitleEn ? r.chapterTitleEn : r.chapterTitle}] ` : ""}{preview}
+                        </p>
+                      )
+                    })}
+                  </div>
+                </details>
               </div>
             )}
 
-            <div className="flex flex-col gap-3 pt-2">
+            <div className="flex flex-col gap-3 pt-1">
               {wrongSteps.length > 0 && (
                 <button
                   onClick={() => router.push(`/learn/${lessonId}`)}
@@ -405,25 +443,6 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   {t("수업 다시 보기", "Review Lesson")}
                 </button>
               )}
-              <button
-                onClick={() => {
-                  setShowResults(false)
-                  setCurrentIndex(0)
-                  setScore(0)
-                  setTotalAttempted(0)
-                  setCorrectCount(0)
-                  setSessionAttempts(0)
-                  setCompletedSteps(new Set())
-                  setWrongSteps([])
-                  setScoredSteps(new Set())
-                  setResetCount(prev => prev + 1)
-                  try { localStorage.removeItem(storageKey) } catch {}
-                }}
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold"
-              >
-                <RotateCcw className="w-5 h-5" />
-                {t("다시 풀기", "Try Again")}
-              </button>
               <button
                 onClick={() => router.push("/curriculum")}
                 className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold"
