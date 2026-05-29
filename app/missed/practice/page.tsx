@@ -9,6 +9,7 @@ import { ReviewStepRenderer } from "../../review/[lessonId]/ReviewStepRenderer"
 import { lessonsData } from "../../review/[lessonId]/data/lessons"
 import type { StepContent, LessonData } from "../../review/[lessonId]/data/types"
 import { markWrongQuestionMastered, getWrongBank } from "@/lib/mark-lesson-complete"
+import { useGamification } from "@/hooks/use-gamification"
 import { ArrowLeft } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -55,6 +56,7 @@ function PracticeInner() {
   const [resetCount, setResetCount] = useState(0)
   const [nextEntry, setNextEntry] = useState<{ lessonId: string; stepIndex: number } | null>(null)
   const autoCheckRef = useRef<(() => boolean) | null>(null)
+  const { addDirectXp } = useGamification()
 
   const lesson = lessonsData[lessonId]
   const reviewSteps = lesson ? extractReviewSteps(lesson) : []
@@ -82,9 +84,10 @@ function PracticeInner() {
 
   const handleCorrect = useCallback(() => {
     setStatus("correct")
-    // 창고에서 마스터 처리
+    // 창고에서 마스터 처리 + XP 보상 (+15 XP per master)
     markWrongQuestionMastered(lessonId, stepIndex)
-  }, [lessonId, stepIndex])
+    addDirectXp(15)
+  }, [lessonId, stepIndex, addDirectXp])
 
   const handleWrong = useCallback(() => {
     setStatus("wrong")

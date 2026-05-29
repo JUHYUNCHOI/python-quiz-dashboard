@@ -12,6 +12,7 @@ import { LanguageToggle } from "@/components/language-toggle"
 import { useLanguage } from "@/contexts/language-context"
 import { createClient } from "@/lib/supabase/client"
 import { getQuizScores, getWrongBank } from "@/lib/mark-lesson-complete"
+import { cn } from "@/lib/utils"
 
 export default function ProfilePage() {
   const { user, profile, isAuthenticated, isLoading, refreshProfile } = useAuth()
@@ -207,6 +208,48 @@ export default function ProfilePage() {
             </div>
           </div>
         </Card>
+
+        {/* 🏆 뱃지 카드 — 달성한 마일스톤 */}
+        {(() => {
+          const badges = [
+            { id: "first-lesson", emoji: "🎯", title: t("첫 수업 완료", "First lesson"), unlocked: studySummary.completedLessons >= 1 },
+            { id: "ten-lessons", emoji: "📚", title: t("10 수업 완료", "10 lessons"), unlocked: studySummary.completedLessons >= 10 },
+            { id: "thirty-lessons", emoji: "🏆", title: t("30 수업 완료", "30 lessons"), unlocked: studySummary.completedLessons >= 30 },
+            { id: "first-perfect", emoji: "🌟", title: t("첫 100점", "First 100"), unlocked: studySummary.avgQuizScore === 100 || (studySummary.completedQuizzes > 0 && studySummary.avgQuizScore !== null && studySummary.avgQuizScore >= 100) },
+            { id: "first-master", emoji: "✨", title: t("첫 마스터", "First master"), unlocked: studySummary.bankMastered >= 1 },
+            { id: "ten-masters", emoji: "👑", title: t("10 마스터", "10 masters"), unlocked: studySummary.bankMastered >= 10 },
+            { id: "streak-7", emoji: "🔥", title: t("7일 연속", "7-day streak"), unlocked: dailyStreak >= 7 },
+            { id: "streak-30", emoji: "🌋", title: t("30일 연속", "30-day streak"), unlocked: dailyStreak >= 30 },
+          ]
+          const unlockedCount = badges.filter(b => b.unlocked).length
+          return (
+            <Card className="p-4 border-2 border-gray-100">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-bold text-gray-700">🏆 {t("뱃지", "Badges")}</h3>
+                <span className="text-xs font-bold text-gray-500">{unlockedCount} / {badges.length}</span>
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                {badges.map(b => (
+                  <div
+                    key={b.id}
+                    title={b.title}
+                    className={cn(
+                      "aspect-square flex flex-col items-center justify-center rounded-xl text-center p-1 transition-all",
+                      b.unlocked
+                        ? "bg-gradient-to-br from-amber-50 to-orange-100 border-2 border-amber-300 shadow-sm"
+                        : "bg-gray-50 border-2 border-dashed border-gray-200 opacity-50"
+                    )}
+                  >
+                    <span className={cn("text-2xl", !b.unlocked && "grayscale")}>{b.emoji}</span>
+                    <span className={cn("text-[9px] font-bold leading-tight mt-0.5 line-clamp-1", b.unlocked ? "text-amber-700" : "text-gray-400")}>
+                      {b.title}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )
+        })()}
 
         {/* 📚 학습 요약 카드 — 수업/복습/도전/창고 한 눈에 */}
         <Card className="p-4 border-2 border-gray-100">

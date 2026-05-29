@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { markQuizComplete, addToWrongBank } from "@/lib/mark-lesson-complete"
+import { useGamification } from "@/hooks/use-gamification"
 import { saveReviewProgressToSupabase, loadReviewProgressFromSupabase } from "@/lib/review-progress-sync"
 import type { ReviewProgressData } from "@/lib/review-progress-sync"
 import { saveStepAnswer } from "@/lib/save-step-answer"
@@ -97,6 +98,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const isEn = lang === "en"
   const { user, profile, isLoading: authLoading } = useAuth()
   const isTeacher = useEffectiveIsTeacher()
+  const { addDirectXp } = useGamification()
 
   useEffect(() => {
     if (!authLoading && !user) router.replace("/login")
@@ -304,7 +306,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   }, [router])
 
   // 결과 화면 표시 시 완료 저장
-  // 1) 이번 세션에서 풀었으면 → 점수 + 창고 저장
+  // 1) 이번 세션에서 풀었으면 → 점수 + 창고 저장 + XP 보상
   // 2) 이전에 풀어서 자동 결과 뜬 경우 → 저장된 데이터로 점수만 채워주기 (기존 학생 호환)
   useEffect(() => {
     if (!showResults) return
@@ -313,6 +315,10 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       // 이번에 풀었음 — 점수 + 창고 저장
       markQuizComplete(lessonId, pct)
       if (wrongSteps.length > 0) addToWrongBank(lessonId, wrongSteps)
+      // XP 보상 — 점수에 따라 차등 (한 번만 — sessionAttempts > 0 조건이 보장)
+      // 100점 +50, 90+ +40, 70+ +25, 그 외 +10 (완료 자체 보상)
+      const xpReward = pct === 100 ? 50 : pct >= 90 ? 40 : pct >= 70 ? 25 : 10
+      addDirectXp(xpReward)
     } else if (totalAttempted > 0) {
       // 이전 풀이 — 점수가 아직 저장 안 됐다면 채워줌 (호환)
       try {
@@ -323,7 +329,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         }
       } catch {}
     }
-  }, [showResults, totalAttempted, correctCount, lessonId, sessionAttempts, wrongSteps])
+  }, [showResults, totalAttempted, correctCount, lessonId, sessionAttempts, wrongSteps, addDirectXp])
 
   if (authLoading || !user) return null
 
