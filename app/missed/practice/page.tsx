@@ -51,6 +51,7 @@ function PracticeInner() {
 
   const lessonId = searchParams.get("lesson") || ""
   const stepIndex = parseInt(searchParams.get("q") || "0", 10)
+  const sz = (kr: string, en: string) => lang === "en" ? en : kr
 
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle")
   const [resetCount, setResetCount] = useState(0)
@@ -133,10 +134,10 @@ function PracticeInner() {
             <ArrowLeft className="w-5 h-5 text-rose-600" />
           </Link>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold text-rose-500 uppercase tracking-widest">
+            <p className={cn("font-bold text-rose-500 uppercase tracking-widest", sz("text-xs", "text-sm"))}>
               📚 {t("문제 창고", "Wrong Bank")}
             </p>
-            <p className="text-sm font-black text-gray-900 truncate">
+            <p className={cn("font-black text-gray-900 truncate", sz("text-sm", "text-base"))}>
               {lessonTitle} · Q{stepIndex + 1}{chapterTitle ? ` · ${chapterTitle}` : ""}
             </p>
           </div>
@@ -144,7 +145,7 @@ function PracticeInner() {
 
         {/* 안내 */}
         <div className="mb-4 rounded-xl bg-rose-50 border border-rose-200 px-3 py-2">
-          <p className="text-xs text-rose-700 leading-relaxed break-keep">
+          <p className={cn("text-rose-700 leading-relaxed break-keep", sz("text-xs", "text-sm"))}>
             💡 {t("이 문제를 맞히면 창고에서 빠져요. 틀려도 다시 시도 가능!", "Get this right to remove from bank. Wrong = retry OK!")}
           </p>
         </div>
@@ -174,7 +175,7 @@ function PracticeInner() {
               <span className="text-base">⚡</span>
               <span className="text-sm font-black text-amber-700">+15 XP</span>
             </div>
-            <p className="text-xs text-emerald-600 mb-4 break-keep">
+            <p className={cn("text-emerald-600 mb-4 break-keep", sz("text-xs", "text-sm"))}>
               {nextEntry
                 ? t("이 문제 끝! 다음 문제 계속할까요?", "Done! Try the next one?")
                 : t("이 문제는 창고에서 빠졌어요. 모든 문제 마스터!", "Bank cleared. All mastered!")}
@@ -209,7 +210,7 @@ function PracticeInner() {
             <p className="text-base font-black text-amber-800 mb-1">
               {t("다시 한 번!", "Try again!")}
             </p>
-            <p className="text-xs text-amber-700 mb-3 break-keep">
+            <p className={cn("text-amber-700 mb-3 break-keep", sz("text-xs", "text-sm"))}>
               {t("창고에선 다시 풀 수 있어요. 맞히면 마스터.", "Retry OK. Master to remove.")}
             </p>
             <button
