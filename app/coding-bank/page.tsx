@@ -712,14 +712,44 @@ function CodingBankContent() {
   const isTeacher = useEffectiveIsTeacher()
 
   useEffect(() => {
-    // 잠금 해제 여부 확인
+    // 잠금 해제 여부 확인 — localStorage 우선 + Supabase fallback (다른 기기에서 완료한 경우)
+    let localUnlocked = false
     try {
       const completed = JSON.parse(
         localStorage.getItem("completedLessons") || "[]"
       ) as string[]
-      setIsUnlocked(completed.includes("cpp-16") || completed.includes("cpp-p3") || isTeacher)
+      localUnlocked = completed.includes("cpp-16") || completed.includes("cpp-p3")
+      setIsUnlocked(localUnlocked || isTeacher)
     } catch {
       setIsUnlocked(isTeacher)
+    }
+    // Supabase 도 확인 — localStorage 비어있어도 DB 에 진도 있으면 unlock
+    if (!localUnlocked && !isTeacher) {
+      import("@/lib/supabase/client").then(({ createClient }) => {
+        const supabase = createClient()
+        supabase.auth.getUser().then(({ data: { user } }) => {
+          if (!user) return
+          supabase
+            .from("lesson_progress")
+            .select("lesson_id")
+            .eq("user_id", user.id)
+            .eq("completed", true)
+            .in("lesson_id", ["cpp-16", "cpp-p3"])
+            .limit(1)
+            .then(({ data }) => {
+              if (data && data.length > 0) {
+                setIsUnlocked(true)
+                // localStorage 도 보강 — 다음부터 즉시 인식
+                try {
+                  const completed = JSON.parse(localStorage.getItem("completedLessons") || "[]") as string[]
+                  const set = new Set(completed)
+                  data.forEach(r => set.add(r.lesson_id))
+                  localStorage.setItem("completedLessons", JSON.stringify([...set]))
+                } catch {}
+              }
+            })
+        })
+      }).catch(() => {})
     }
 
     // localStorage 즉시 로드
