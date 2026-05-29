@@ -7,8 +7,42 @@ import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
 import { getWrongBank, type WrongQuestionEntry } from "@/lib/mark-lesson-complete"
 import { lessonsData } from "../review/[lessonId]/data/lessons"
+import type { StepContent, LessonData } from "../review/[lessonId]/data/types"
 import { ArrowLeft } from "lucide-react"
 import { cn } from "@/lib/utils"
+
+// review client-page 의 extractReviewSteps + getStepPreview 재사용용 (간소화 버전)
+function extractStepsForLesson(lesson: LessonData): StepContent[] {
+  const out: StepContent[] = []
+  for (const step of lesson.steps) {
+    if (step.type === "chapter") continue
+    if (
+      step.type === "quiz" ||
+      step.type === "errorQuiz" ||
+      step.type === "practice" ||
+      step.type === "interleaving" ||
+      (step.type === "explain" && step.content.predict)
+    ) out.push(step)
+  }
+  return out
+}
+function previewOfStep(step: StepContent | undefined, isEn: boolean): string {
+  if (!step) return ""
+  switch (step.type) {
+    case "quiz":
+    case "errorQuiz":
+      return (isEn && step.content.en?.question) ? step.content.en.question : step.content.question
+    case "practice":
+    case "interleaving":
+      return (isEn && step.content.en?.task) ? step.content.en.task : step.content.task
+    case "explain":
+      return (isEn && step.content.en?.predict?.question)
+        ? step.content.en.predict.question
+        : (step.content.predict?.question ?? "")
+    default:
+      return ""
+  }
+}
 
 interface GroupedEntries {
   lessonId: string
@@ -135,22 +169,33 @@ export default function MissedPage() {
                     })()}
                   </div>
                 </div>
-                {/* 각 문제 chip — 클릭 시 단일 문제 풀이 페이지로 */}
-                <div className="flex flex-wrap gap-2">
-                  {entries.map((e, i) => (
-                    <Link
-                      key={`${e.lessonId}-${e.stepIndex}-${i}`}
-                      href={`/missed/practice?lesson=${encodeURIComponent(e.lessonId)}&q=${e.stepIndex}`}
-                      className={cn(
-                        "inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-sm font-black shadow-sm transition-all",
-                        "bg-rose-500 hover:bg-rose-600 text-white active:scale-95 min-w-[60px] justify-center"
-                      )}
-                    >
-                      <span>Q{e.stepIndex + 1}</span>
-                      <span className="opacity-80">→</span>
-                    </Link>
-                  ))}
-                </div>
+                {/* 각 문제 chip — 클릭 시 단일 문제 풀이 페이지로. title 에 문제 미리보기. */}
+                {(() => {
+                  const lesson = lessonsData[lessonId]
+                  const steps = lesson ? extractStepsForLesson(lesson) : []
+                  return (
+                    <div className="flex flex-wrap gap-2">
+                      {entries.map((e, i) => {
+                        const preview = previewOfStep(steps[e.stepIndex], lang === "en")
+                        const previewShort = preview.length > 80 ? preview.slice(0, 80) + "…" : preview
+                        return (
+                          <Link
+                            key={`${e.lessonId}-${e.stepIndex}-${i}`}
+                            href={`/missed/practice?lesson=${encodeURIComponent(e.lessonId)}&q=${e.stepIndex}`}
+                            title={previewShort || `Q${e.stepIndex + 1}`}
+                            className={cn(
+                              "inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-sm font-black shadow-sm transition-all",
+                              "bg-rose-500 hover:bg-rose-600 text-white active:scale-95 min-w-[60px] justify-center"
+                            )}
+                          >
+                            <span>Q{e.stepIndex + 1}</span>
+                            <span className="opacity-80">→</span>
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  )
+                })()}
               </div>
             ))}
           </div>

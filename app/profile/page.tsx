@@ -11,6 +11,7 @@ import Link from "next/link"
 import { LanguageToggle } from "@/components/language-toggle"
 import { useLanguage } from "@/contexts/language-context"
 import { createClient } from "@/lib/supabase/client"
+import { getQuizScores, getWrongBank } from "@/lib/mark-lesson-complete"
 
 export default function ProfilePage() {
   const { user, profile, isAuthenticated, isLoading, refreshProfile } = useAuth()
@@ -19,6 +20,39 @@ export default function ProfilePage() {
   // undefined = 로딩, null = 반 없음
   const [myClass, setMyClass] = useState<{ id: string; name: string } | null | undefined>(undefined)
   const [leavingClass, setLeavingClass] = useState(false)
+
+  // 학습 요약 통계 (localStorage 기반)
+  const [studySummary, setStudySummary] = useState<{
+    completedLessons: number
+    completedQuizzes: number
+    avgQuizScore: number | null
+    practiceSolved: number
+    bankRemaining: number
+    bankMastered: number
+  }>({ completedLessons: 0, completedQuizzes: 0, avgQuizScore: null, practiceSolved: 0, bankRemaining: 0, bankMastered: 0 })
+
+  useEffect(() => {
+    try {
+      const lessonsRaw = localStorage.getItem("completedLessons")
+      const lessons: (string | number)[] = lessonsRaw ? JSON.parse(lessonsRaw) : []
+      const quizzesRaw = localStorage.getItem("completedQuizzes")
+      const quizzes: (string | number)[] = quizzesRaw ? JSON.parse(quizzesRaw) : []
+      const scores = getQuizScores()
+      const scoreValues = Object.values(scores).filter(s => typeof s === "number")
+      const avg = scoreValues.length > 0 ? Math.round(scoreValues.reduce((a, b) => a + b, 0) / scoreValues.length) : null
+      const solvedRaw = localStorage.getItem("practice-solved")
+      const solved: string[] = solvedRaw ? JSON.parse(solvedRaw) : []
+      const bank = getWrongBank()
+      setStudySummary({
+        completedLessons: lessons.length,
+        completedQuizzes: quizzes.length,
+        avgQuizScore: avg,
+        practiceSolved: solved.length,
+        bankRemaining: bank.filter(e => !e.mastered).length,
+        bankMastered: bank.filter(e => e.mastered).length,
+      })
+    } catch {}
+  }, [user])
 
   useEffect(() => {
     if (!user) return
@@ -171,6 +205,44 @@ export default function ProfilePage() {
               <p className="text-lg font-bold text-red-600">{t(`${dailyStreak}일`, `${dailyStreak}d`)}</p>
               <p className="text-xs text-gray-500">{t("연속 학습", "Streak")}</p>
             </div>
+          </div>
+        </Card>
+
+        {/* 📚 학습 요약 카드 — 수업/복습/도전/창고 한 눈에 */}
+        <Card className="p-4 border-2 border-gray-100">
+          <h3 className="font-bold text-gray-700 mb-3">📚 {t("학습 요약", "Learning Summary")}</h3>
+          <div className="grid grid-cols-2 gap-3">
+            {/* 수업 완료 */}
+            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100">
+              <p className="text-2xl font-black text-emerald-600 tabular-nums">{studySummary.completedLessons}</p>
+              <p className="text-xs font-bold text-emerald-700 mt-0.5">📖 {t("수업 완료", "Lessons done")}</p>
+            </div>
+            {/* 복습 평균 점수 */}
+            <div className="p-3 rounded-xl bg-purple-50 border border-purple-100">
+              <p className="text-2xl font-black text-purple-600 tabular-nums">
+                {studySummary.avgQuizScore !== null ? studySummary.avgQuizScore : "—"}
+                {studySummary.avgQuizScore !== null && <span className="text-sm font-bold">{t("점", "pt")}</span>}
+              </p>
+              <p className="text-xs font-bold text-purple-700 mt-0.5">📝 {t(`복습 평균 (${studySummary.completedQuizzes}개)`, `Quiz avg (${studySummary.completedQuizzes})`)}</p>
+            </div>
+            {/* 도전 풀이 */}
+            <div className="p-3 rounded-xl bg-amber-50 border border-amber-100">
+              <p className="text-2xl font-black text-amber-600 tabular-nums">{studySummary.practiceSolved}</p>
+              <p className="text-xs font-bold text-amber-700 mt-0.5">🎯 {t("도전 푼 수", "Challenges solved")}</p>
+            </div>
+            {/* 문제 창고 — 클릭 가능 */}
+            <Link
+              href="/missed"
+              className="block p-3 rounded-xl bg-rose-50 border border-rose-100 hover:bg-rose-100 hover:border-rose-200 active:scale-[0.98] transition-all"
+            >
+              <p className="text-2xl font-black text-rose-600 tabular-nums">
+                {studySummary.bankRemaining}
+                {studySummary.bankMastered > 0 && (
+                  <span className="text-sm font-bold text-emerald-600 ml-1">+{studySummary.bankMastered}🌟</span>
+                )}
+              </p>
+              <p className="text-xs font-bold text-rose-700 mt-0.5">📚 {t("창고 (남은+마스터)", "Bank (left+mastered)")}</p>
+            </Link>
           </div>
         </Card>
 
