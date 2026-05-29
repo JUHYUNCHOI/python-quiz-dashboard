@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Trophy, ExternalLink, ArrowRight } from "lucide-react"
 import { AlgoViewer } from "@/components/algo/algo-viewer"
+import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
 import type { AlgoTopic } from "@/data/algo/topics"
 import { getAlgoContestLinks, codeQuestUrl } from "@/data/algo/contest-links"
@@ -130,6 +131,8 @@ export function AlgoTopicPage({ topic }: AlgoTopicPageProps) {
 
       {/* Smart-Next: 다음 알고리즘 토픽 추천 */}
       <NextTopicCTA currentTopic={topic} lang={lang} router={router} />
+
+      <BottomNav />
     </div>
   )
 }

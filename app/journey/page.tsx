@@ -33,19 +33,20 @@ interface MapPlacement {
   landmark: string
 }
 
-// 좌표는 일러스트 배경 (public/journey-map.png) 위 % 위치
-// 그림이 그려진 노드 스탬프 *정중앙* 에 맞춰 조정. 그림 교체 시 좌표만 갱신.
-// 현재 그림: "코딩 성장 로드맵" (ChatGPT 생성, 2026-05-28)
+// 그래프 노드 위치 — 깨끗한 vertical flow + C++ 가지 오른쪽
+// 일러스트 의존 X. 좌표 자유롭게 조정 가능.
 const PLACEMENTS: Record<string, MapPlacement> = {
-  "python":          { x: 15, y: 24, landmark: "🌱" },
-  "python-practice": { x: 34, y: 43, landmark: "💪" },
-  "cpp":             { x: 64, y: 24, landmark: "⛰️" },
-  "cpp-practice":    { x: 78, y: 50, landmark: "🌉" },
-  "algo":            { x: 38, y: 65, landmark: "🏰" },
-  "usaco":           { x: 72, y: 87, landmark: "👑" },
+  "python":          { x: 28, y: 12, landmark: "🌱" },
+  "python-practice": { x: 28, y: 35, landmark: "💪" },
+  "cpp":             { x: 72, y: 35, landmark: "⚡" },
+  "cpp-practice":    { x: 72, y: 55, landmark: "🌉" },
+  "algo":            { x: 28, y: 65, landmark: "🧩" },
+  "usaco":           { x: 28, y: 88, landmark: "🏆" },
 }
 
-// ── 랜드마크 노드 ─────────────────────────────────────────────────
+// (이전 graph edges 는 트랙별 세로 한 줄 구조로 대체됨 — STAGES_BY_TRACK 참고)
+
+// ── 노드 — 세로 흐름 안 단일 항목 (모달 카드 스타일) ─────────────
 function LandmarkNode({
   stage,
   placement,
@@ -57,105 +58,264 @@ function LandmarkNode({
   progress: { done: number; total: number; pct: number; status: string }
   isActive: boolean
 }) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const isDone = progress.status === "completed"
+  const isInProgress = progress.status === "in-progress"
+  const isUntraveled = !isDone && !isInProgress && !isActive
 
-  // 일러스트 위 *투명* 클릭 타겟. 그림 스탬프 위에 정확히 정렬.
-  // ⭐ 완료 표시 + 활성 ring + hover 만 추가.
+  // 박스 배경 — *반드시 불투명* (뒤에 SVG 라인 가리기 위해 — 사용자 지적)
+  const boxColor = isDone
+    ? "border-emerald-500 bg-emerald-50"
+    : isActive
+      ? "border-orange-500 bg-orange-50"
+      : isInProgress
+        ? "border-amber-400 bg-amber-50"
+        : "border-gray-300 bg-white"
+
+  const labelColor = isDone ? "text-emerald-700"
+    : isActive ? "text-orange-700"
+    : isInProgress ? "text-amber-700"
+    : isUntraveled ? "text-gray-400"
+    : "text-gray-500"
+
   return (
-    <div
-      className="absolute"
-      style={{
-        left: `${placement.x}%`,
-        top: `${placement.y}%`,
-        transform: "translate(-50%, -50%)",
-      }}
+    <Link
+      href={stage.href}
+      aria-label={stage.title}
+      title={t(stage.title, stage.titleEn)}
+      className="group relative flex flex-col items-center transition-transform hover:scale-105 active:scale-95"
     >
-      <Link
-        href={stage.href}
-        aria-label={stage.title}
-        title={t(stage.title, stage.titleEn)}
-        className="group relative block rounded-full transition-transform hover:scale-110 active:scale-95"
-        style={{ width: "clamp(48px, 11vw, 88px)", height: "clamp(48px, 11vw, 88px)" }}
+      <div
+        className={cn(
+          "relative flex items-center justify-center rounded-xl border-2 shadow-md w-16 h-16 sm:w-20 sm:h-20 transition-all group-hover:shadow-lg",
+          boxColor
+        )}
       >
-        {/* 활성 — 펄스 ring */}
         {isActive && (
-          <span className="absolute inset-0 rounded-full ring-4 ring-orange-400 ring-offset-2 animate-pulse pointer-events-none" />
+          <span className="absolute inset-0 rounded-xl ring-4 ring-orange-400 ring-offset-2 animate-pulse pointer-events-none" />
         )}
-
-        {/* hover halo */}
-        <span className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white/20 group-hover:shadow-2xl transition-all pointer-events-none" />
-
-        {/* ⭐ 완료 배지 — 우상단 */}
-        {isDone && (
-          <span className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 text-lg sm:text-2xl drop-shadow-md z-10 pointer-events-none">
-            ⭐
-          </span>
-        )}
-      </Link>
-    </div>
+        <span className={cn("text-3xl sm:text-4xl drop-shadow-sm", isUntraveled && "grayscale opacity-50")}>
+          {placement.landmark}
+        </span>
+      </div>
+      <span className={cn("mt-2 text-xs sm:text-sm font-black whitespace-nowrap leading-tight", labelColor)}>
+        {lang === "en" ? stage.titleEn : stage.title}
+      </span>
+    </Link>
   )
+}
+
+// ── 트랙별 스테이지 순서 — 자기 길만 보여줌 ─────────────────
+const STAGES_BY_TRACK: Record<"A" | "B" | "C", string[]> = {
+  A: ["python", "python-practice", "cpp", "cpp-practice", "algo", "usaco"],
+  B: ["python", "python-practice", "algo", "usaco"],
+  C: ["cpp", "cpp-practice", "algo", "usaco"],
+}
+
+// ── 노드별 좌표 (Track A Y-자 layout) ─────────
+// Track A: 위 = Python 가로 한 줄, 아래 = C++ 가로 한 줄, 오른쪽 = 알고+USACO 합류
+// viewBox 100 × 60
+const POS_TRACK_A: Record<string, { x: number; y: number }> = {
+  "python":          { x: 9,  y: 15 },
+  "python-practice": { x: 28, y: 15 },
+  "cpp":             { x: 9,  y: 45 },
+  "cpp-practice":    { x: 28, y: 45 },
+  "algo":            { x: 60, y: 30 },
+  "usaco":           { x: 87, y: 30 },
+}
+// Track A 연결선 path (둥근 각, 통과여부는 양 끝 노드 둘 다 완료 시 컬러)
+// 각 path: [from-id, to-id, "M..L..L.."]
+const CONNECTIONS_TRACK_A: Array<[string, string, string]> = [
+  ["python",          "python-practice", "M 9 15 L 28 15"],
+  ["cpp",             "cpp-practice",    "M 9 45 L 28 45"],
+  ["python-practice", "algo",            "M 28 15 L 50 15 L 50 30 L 60 30"],
+  ["cpp-practice",    "algo",            "M 28 45 L 50 45 L 50 30 L 60 30"],
+  ["algo",            "usaco",           "M 60 30 L 87 30"],
+]
+
+// Track B / C: 가로 한 줄 (viewBox 100 × 25)
+const POS_HORIZONTAL: Record<"B" | "C", Record<string, { x: number; y: number }>> = {
+  B: {
+    "python":          { x: 8,  y: 12 },
+    "python-practice": { x: 35, y: 12 },
+    "algo":            { x: 62, y: 12 },
+    "usaco":           { x: 88, y: 12 },
+  },
+  C: {
+    "cpp":             { x: 8,  y: 12 },
+    "cpp-practice":    { x: 35, y: 12 },
+    "algo":            { x: 62, y: 12 },
+    "usaco":           { x: 88, y: 12 },
+  },
 }
 
 function GameMap({
   completedIds,
   hasCpp,
+  trackId,
 }: {
   completedIds: Set<string | number>
   hasCpp: boolean
+  trackId: "A" | "B" | "C"
 }) {
-  // 활성 스테이지 = 메인 spine 의 첫 미완료 (혹은 C++ 가지 진행 중이면 그쪽)
-  const mainStages = JOURNEY_STAGES.filter(s => s.type === "main")
+  const { t } = useLanguage()
+
+  // 트랙별 자기 경로만
+  const stageIds = STAGES_BY_TRACK[trackId] ?? STAGES_BY_TRACK["A"]
+  const stages = stageIds
+    .map(id => JOURNEY_STAGES.find(s => s.id === id))
+    .filter((s): s is JourneyStage => !!s)
+
+  // 활성 = 트랙 안 첫 미완료
   let activeStageId: string | null = null
-
-  // C++ 가지 진행 중인지 먼저 체크
-  const cppStage = JOURNEY_STAGES.find(s => s.id === "cpp")
-  const cppPractice = JOURNEY_STAGES.find(s => s.id === "cpp-practice")
-  if (cppStage && cppPractice) {
-    const cppP = getStageProgress(cppStage, completedIds, hasCpp)
-    const cppPP = getStageProgress(cppPractice, completedIds, hasCpp)
-    if (cppP.status === "in-progress") activeStageId = "cpp"
-    else if (cppP.status === "completed" && cppPP.status !== "completed") activeStageId = "cpp-practice"
+  for (const s of stages) {
+    const p = getStageProgress(s, completedIds, hasCpp)
+    if (p.status !== "completed") { activeStageId = s.id; break }
   }
 
-  // C++ 가지 활성 안이면 메인 spine 에서 첫 미완료
-  if (!activeStageId) {
-    for (const s of mainStages) {
-      const p = getStageProgress(s, completedIds, hasCpp)
-      if (p.status !== "completed") { activeStageId = s.id; break }
-    }
+  // 상태 헬퍼
+  const isStageDone = (id: string) => {
+    const s = JOURNEY_STAGES.find(x => x.id === id)
+    if (!s) return false
+    return getStageProgress(s, completedIds, hasCpp).status === "completed"
   }
+
+  // Track A: Y-자, B/C: 가로 한 줄
+  const layout = trackId === "A"
+    ? { positions: POS_TRACK_A, connections: CONNECTIONS_TRACK_A, viewH: 60, aspect: "5 / 3" }
+    : (() => {
+        const pos = POS_HORIZONTAL[trackId]
+        const orderedIds = STAGES_BY_TRACK[trackId]
+        // 가로 연결: 인접 노드 두 개 잇는 직선
+        const conns: Array<[string, string, string]> = []
+        for (let i = 0; i < orderedIds.length - 1; i++) {
+          const a = orderedIds[i], b = orderedIds[i + 1]
+          const pa = pos[a], pb = pos[b]
+          if (pa && pb) conns.push([a, b, `M ${pa.x} ${pa.y} L ${pb.x} ${pb.y}`])
+        }
+        return { positions: pos, connections: conns, viewH: 25, aspect: "4 / 1" }
+      })()
+
+  const activePos = activeStageId ? layout.positions[activeStageId] : null
 
   return (
-    <div
-      className="relative w-full mx-auto rounded-3xl shadow-2xl border-4 border-amber-800/40 overflow-hidden bg-amber-100"
-      style={{ aspectRatio: "1371 / 1147" }}
-    >
-      {/* 일러스트 배경 — public/journey-map.png 에 그림 저장 */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/journey-map.png"
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
-        draggable={false}
-      />
+    <div className="w-full mx-auto rounded-3xl shadow-md border-2 border-amber-200/70 bg-gradient-to-br from-amber-50 via-white to-amber-50/40 p-4 sm:p-6">
+      <p className="text-center text-[11px] sm:text-xs font-black text-amber-700 uppercase tracking-widest mb-4">
+        🗺️ {t("나의 학습 여정", "My Journey")}
+      </p>
 
-      {/* 노드들 — 일러스트 위 % 좌표로 배치 */}
-      {JOURNEY_STAGES.map(stage => {
-        const placement = PLACEMENTS[stage.id]
-        if (!placement) return null
-        const progress = getStageProgress(stage, completedIds, hasCpp)
-        return (
-          <LandmarkNode
-            key={stage.id}
-            stage={stage}
-            placement={placement}
-            progress={progress}
-            isActive={stage.id === activeStageId}
-          />
-        )
-      })}
+      {/* ── 모바일 (sm 미만) — 세로 스택 ────────────────────────── */}
+      <div className="sm:hidden flex flex-col items-center gap-1">
+        {stages.map((stage, idx) => {
+          const placement = PLACEMENTS[stage.id]
+          if (!placement) return null
+          const progress = getStageProgress(stage, completedIds, hasCpp)
+          const isActive = stage.id === activeStageId
+          const isLast = idx === stages.length - 1
+          const arrowTraveled = !isLast && isStageDone(stage.id) && isStageDone(stages[idx + 1].id)
+          return (
+            <div key={stage.id} className="flex flex-col items-center">
+              <div className="relative">
+                {isActive && (
+                  <div className="absolute left-1/2 -translate-x-1/2 -top-12 pointer-events-none z-10 flex flex-col items-center gap-0.5 animate-bounce whitespace-nowrap">
+                    <div className="bg-orange-500 rounded-full px-2 py-0.5 shadow-md border-2 border-white text-[10px] font-black text-white">
+                      ▶ {t("여기!", "You!")}
+                    </div>
+                    <span className="text-lg drop-shadow">🦒</span>
+                  </div>
+                )}
+                <LandmarkNode
+                  stage={stage}
+                  placement={placement}
+                  progress={progress}
+                  isActive={isActive}
+                />
+              </div>
+              {!isLast && (
+                <span className={cn(
+                  "text-2xl my-0.5 leading-none",
+                  arrowTraveled ? "text-amber-500" : "text-gray-300"
+                )}>↓</span>
+              )}
+            </div>
+          )
+        })}
+      </div>
 
+      {/* ── 데스크탑 (sm 이상) — Y-자 (A) / 가로 한 줄 (B,C) ──── */}
+      <div className="hidden sm:block relative w-full" style={{ aspectRatio: layout.aspect }}>
+        {/* SVG 연결선 — 각이 둥근 직선 */}
+        <svg
+          viewBox={`0 0 100 ${layout.viewH}`}
+          preserveAspectRatio="none"
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          aria-hidden="true"
+        >
+          {layout.connections.map(([a, b, d], i) => {
+            const traveled = isStageDone(a) && isStageDone(b)
+            return (
+              <path
+                key={i}
+                d={d}
+                stroke={traveled ? "#f59e0b" : "#d1d5db"}
+                strokeWidth={traveled ? 1.6 : 1.1}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+                strokeDasharray={traveled ? undefined : "1.8 1.6"}
+                opacity={traveled ? 0.95 : 0.7}
+              />
+            )
+          })}
+        </svg>
+
+        {/* 노드들 — 절대 위치 */}
+        {stages.map(stage => {
+          const pos = layout.positions[stage.id]
+          if (!pos) return null
+          const placement = PLACEMENTS[stage.id]
+          if (!placement) return null
+          const progress = getStageProgress(stage, completedIds, hasCpp)
+          const isActive = stage.id === activeStageId
+          return (
+            <div
+              key={stage.id}
+              className="absolute"
+              style={{
+                left: `${pos.x}%`,
+                top: `${pos.y / layout.viewH * 100}%`,
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              <LandmarkNode
+                stage={stage}
+                placement={placement}
+                progress={progress}
+                isActive={isActive}
+              />
+            </div>
+          )
+        })}
+
+        {/* 🦒 아바타 — 활성 노드 위 */}
+        {activePos && (
+          <div
+            className="absolute pointer-events-none z-20"
+            style={{
+              left: `${activePos.x}%`,
+              top: `${activePos.y / layout.viewH * 100}%`,
+              transform: "translate(-50%, -180%)",
+            }}
+          >
+            <div className="flex flex-col items-center gap-0.5 animate-bounce">
+              <div className="bg-orange-500 rounded-full px-2 py-0.5 shadow-md border-2 border-white text-[11px] font-black text-white whitespace-nowrap">
+                ▶ {t("여기!", "You!")}
+              </div>
+              <span className="text-xl drop-shadow">🦒</span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -334,8 +494,8 @@ export default function JourneyPage() {
                       onClick={() => saveTrack("A")}
                       className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-center"
                     >
-                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1">
-                        {t("처음이에요", "I'm new")}
+                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1 break-keep">
+                        {t("코딩이 처음이에요", "New to coding")}
                       </p>
                       <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
                         {t("Python 부터 모두 배워요", "Start from Python — full course")}
@@ -377,11 +537,11 @@ export default function JourneyPage() {
                       onClick={() => saveTrack("B")}
                       className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-center"
                     >
-                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1">
+                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1 break-keep">
                         {t("Python 만 할래요", "Python only")}
                       </p>
                       <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
-                        {t("Python 만으로 대회까지", "Python only — to contests")}
+                        {t("C++ 없이 Python 으로만", "No C++ — Python only")}
                       </p>
 
                       <p className="text-[10px] sm:text-xs font-black text-amber-700 uppercase tracking-wider mb-2">
@@ -414,11 +574,11 @@ export default function JourneyPage() {
                       onClick={() => saveTrack("C")}
                       className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-amber-200 hover:border-orange-500 hover:bg-orange-50 hover:shadow-lg active:scale-95 transition-all text-center"
                     >
-                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1">
-                        {t("Python 알아요", "I know Python")}
+                      <p className="font-black text-xl sm:text-2xl text-amber-900 leading-snug mb-1 break-keep">
+                        {t("C++ 부터", "Start with C++")}
                       </p>
                       <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
-                        {t("Python 건너뛰고 C++ 부터", "Skip Python, start with C++")}
+                        {t("Python 알아야 해요", "Must know Python")}
                       </p>
 
                       <p className="text-[10px] sm:text-xs font-black text-amber-700 uppercase tracking-wider mb-2">
@@ -451,11 +611,11 @@ export default function JourneyPage() {
                       onClick={() => setShowDiagnostic(true)}
                       className="flex flex-col p-4 sm:p-5 rounded-2xl border-2 border-dashed border-blue-300 hover:border-blue-500 hover:bg-blue-50 hover:shadow-lg active:scale-95 transition-all text-center"
                     >
-                      <p className="font-black text-xl sm:text-2xl text-blue-900 leading-snug mb-1">
+                      <p className="font-black text-xl sm:text-2xl text-blue-900 leading-snug mb-1 break-keep">
                         {t("잘 모르겠어요", "Not sure?")}
                       </p>
                       <p className="text-sm sm:text-base text-gray-700 font-bold mb-3 sm:mb-4 leading-snug break-keep">
-                        {t("5 문제 풀고 자동 추천 받기", "Take 5 Qs — get auto-pick")}
+                        {t("5 문제 풀어보고 — 내 트랙 자동 추천", "Take 5 Qs — auto-recommend my track")}
                       </p>
 
                       <p className="text-[10px] sm:text-xs font-black text-blue-700 uppercase tracking-wider mb-2">
@@ -512,7 +672,7 @@ export default function JourneyPage() {
 
         {/* 🗺️ 보물지도 — 학생이 한눈에 "내 여정" 본다 */}
         <div className="mb-5">
-          <GameMap completedIds={completedIds} hasCpp={hasCpp} />
+          <GameMap completedIds={completedIds} hasCpp={hasCpp} trackId={trackId} />
         </div>
 
         {/* 📍 지금 할 일 — 결정 피로 0 */}

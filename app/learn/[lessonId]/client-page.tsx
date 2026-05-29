@@ -1077,6 +1077,36 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       )}
 
       <div className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-purple-50/30">
+        {/* 🗺️ Journey 컨텍스트 배너 — "어디서 왔는지" 연속성. 스크롤하면 사라짐. */}
+        {(() => {
+          const id = String(lessonId)
+          const stage = id.startsWith("cpp-") ? { emoji: "⚡", track: "C++" }
+            : id.startsWith("pseudo-") || id.startsWith("igcse-") ? { emoji: "📄", track: "IGCSE" }
+            : id.startsWith("algo-") ? { emoji: "🧩", track: t("알고리즘", "Algorithms") }
+            : { emoji: "🌱", track: "Python" }
+          return (
+            <Link
+              href="/journey"
+              className="block bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-b-2 border-amber-300/70 hover:from-amber-200 hover:via-orange-200 hover:to-amber-200 transition-colors"
+            >
+              <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-1.5 sm:py-2 flex items-center justify-between gap-2 text-xs sm:text-sm">
+                <div className="flex items-center gap-1.5 text-amber-900 font-bold min-w-0">
+                  <span className="text-base sm:text-lg shrink-0">🗺️</span>
+                  <span className="truncate">{t("코딩 성장 로드맵", "Coding Roadmap")}</span>
+                  <span className="text-amber-400 shrink-0">›</span>
+                  <span className="font-black truncate">
+                    <span className="mr-0.5">{stage.emoji}</span>
+                    {stage.track}
+                  </span>
+                </div>
+                <span className="text-amber-700 font-bold whitespace-nowrap shrink-0">
+                  {t("지도로", "Map")} →
+                </span>
+              </div>
+            </Link>
+          )
+        })()}
+
         {/* 상단 헤더 */}
         <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm">
           <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
