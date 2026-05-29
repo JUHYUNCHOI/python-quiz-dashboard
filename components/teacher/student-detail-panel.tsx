@@ -398,6 +398,43 @@ export function StudentDetailPanel({
             </button>
           </div>
 
+          {/* 📝 복습 점수 요약 — Phase 1 데이터 */}
+          {(() => {
+            const reviewScores = student.lessonProgress
+              .filter(p => p.progress_type === "review" && p.completed && typeof p.score === "number" && p.score > 0)
+              .map(p => p.score)
+            const reviewAvg = reviewScores.length > 0
+              ? Math.round(reviewScores.reduce((a, b) => a + b, 0) / reviewScores.length)
+              : null
+            const perfectCount = reviewScores.filter(s => s === 100).length
+            const lowScoreCount = reviewScores.filter(s => s < 70).length
+            if (reviewAvg === null) return null
+            const avgColor = reviewAvg === 100 ? "text-emerald-600"
+              : reviewAvg >= 70 ? "text-purple-600"
+              : "text-amber-600"
+            const avgBg = reviewAvg === 100 ? "bg-emerald-50 border-emerald-200"
+              : reviewAvg >= 70 ? "bg-purple-50 border-purple-200"
+              : "bg-amber-50 border-amber-200"
+            return (
+              <div className={cn("mx-4 mt-4 rounded-2xl border-2 p-3", avgBg)}>
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-[11px] font-black text-gray-500 uppercase tracking-wider">
+                    📝 {lang === "en" ? "Review Avg" : "복습 평균"}
+                  </span>
+                  <div className="flex items-baseline gap-1">
+                    <span className={cn("text-2xl font-black tabular-nums", avgColor)}>{reviewAvg}</span>
+                    <span className={cn("text-sm font-bold", avgColor)}>{lang === "en" ? "pt" : "점"}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 mt-1.5 text-[11px] text-gray-600">
+                  <span>📊 {lang === "en" ? `${reviewScores.length} reviews` : `${reviewScores.length}개 복습`}</span>
+                  {perfectCount > 0 && <span className="text-emerald-700 font-bold">🎉 {perfectCount}× 100{lang === "en" ? "pt" : "점"}</span>}
+                  {lowScoreCount > 0 && <span className="text-amber-700 font-bold">💪 {lowScoreCount}× &lt;70</span>}
+                </div>
+              </div>
+            )
+          })()}
+
           {/* Collapsible sections */}
           <div className="px-4 mt-4 space-y-2">
 
