@@ -12,6 +12,7 @@ import { LanguageToggle } from "@/components/language-toggle"
 import { useLanguage } from "@/contexts/language-context"
 import { createClient } from "@/lib/supabase/client"
 import { getQuizScores, getWrongBank } from "@/lib/mark-lesson-complete"
+import { getLessonName } from "@/lib/curriculum-data"
 import { cn } from "@/lib/utils"
 
 export default function ProfilePage() {
@@ -351,7 +352,7 @@ export default function ProfilePage() {
                   >
                     <span className="text-base shrink-0">{emoji}</span>
                     <span className={cn("font-bold text-gray-700 text-sm flex-1 truncate")}>
-                      {t(`레슨 ${r.lesson_id}`, `Lesson ${r.lesson_id}`)}
+                      {getLessonName(r.lesson_id, lang === "en" ? "en" : "ko")}
                     </span>
                     <span className={cn("text-base font-black tabular-nums shrink-0", scoreColor)}>
                       {r.score}<span className="text-xs">{t("점", "pt")}</span>
