@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils"
 
 export default function ProfilePage() {
   const { user, profile, isAuthenticated, isLoading, refreshProfile } = useAuth()
-  const { level, totalXp, dailyStreak, xpInCurrentLevel } = useGamification()
+  const { level, totalXp, dailyStreak, xpInCurrentLevel, isStreakAtRisk } = useGamification()
   const { t, lang } = useLanguage()
   const isEn = lang === "en"
   const sz = (kr: string, en: string) => isEn ? en : kr
@@ -164,6 +164,20 @@ export default function ProfilePage() {
       <Header />
 
       <main className="w-full px-4 sm:px-6 pb-24 pt-6 max-w-[1000px] mx-auto">
+        {/* 🔥 Streak 끊김 알림 — 어제 안 들어왔으면 격려 */}
+        {isStreakAtRisk && dailyStreak > 0 && (
+          <div className="mb-4 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 px-3 py-2.5 flex items-center gap-2">
+            <span className="text-2xl shrink-0">🔥</span>
+            <div className="flex-1 min-w-0">
+              <p className={cn("font-black text-red-700", sz("text-xs", "text-sm"))}>
+                {t(`${dailyStreak}일 연속 학습 — 어제 끊겼어요!`, `${dailyStreak}-day streak — broken yesterday!`)}
+              </p>
+              <p className={cn("text-red-600/80 mt-0.5 leading-snug break-keep", sz("text-[11px]", "text-xs"))}>
+                {t("오늘 한 강만 들어도 다시 1일 시작 — 천천히 다시 쌓아봐요.", "1 lesson today restarts your streak — take it slow!")}
+              </p>
+            </div>
+          </div>
+        )}
         <div className="lg:flex lg:gap-8 lg:items-start">
         {/* ── 왼쪽: 프로필 + 통계 ── */}
         <div className="lg:w-72 lg:flex-shrink-0 space-y-4 mb-4 lg:mb-0">
