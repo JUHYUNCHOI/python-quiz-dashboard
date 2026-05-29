@@ -8,8 +8,8 @@ import { useLanguage } from "@/contexts/language-context"
 import { ReviewStepRenderer } from "../../review/[lessonId]/ReviewStepRenderer"
 import { lessonsData } from "../../review/[lessonId]/data/lessons"
 import type { StepContent, LessonData } from "../../review/[lessonId]/data/types"
-import { markWrongQuestionMastered } from "@/lib/mark-lesson-complete"
-import { ArrowLeft, Check, X } from "lucide-react"
+import { markWrongQuestionMastered, getWrongBank } from "@/lib/mark-lesson-complete"
+import { ArrowLeft } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface ReviewStep {
@@ -53,12 +53,32 @@ function PracticeInner() {
 
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle")
   const [resetCount, setResetCount] = useState(0)
+  const [nextEntry, setNextEntry] = useState<{ lessonId: string; stepIndex: number } | null>(null)
   const autoCheckRef = useRef<(() => boolean) | null>(null)
 
   const lesson = lessonsData[lessonId]
   const reviewSteps = lesson ? extractReviewSteps(lesson) : []
   const targetStep = reviewSteps[stepIndex]
   const language: "python" | "cpp" = lesson?.language ?? (/^\d+$/.test(lessonId) ? "python" : "cpp")
+
+  // 다음 unmastered 문제 찾기 (현재 마스터 직후 호출용)
+  useEffect(() => {
+    if (status !== "correct") return
+    const bank = getWrongBank()
+    const remaining = bank.filter(e =>
+      !e.mastered && !(e.lessonId === lessonId && e.stepIndex === stepIndex)
+    )
+    if (remaining.length > 0) {
+      // 같은 lesson 안에 다음 문제 우선, 없으면 다른 lesson 의 첫 문제
+      const sameLesson = remaining
+        .filter(e => e.lessonId === lessonId)
+        .sort((a, b) => a.stepIndex - b.stepIndex)[0]
+      const other = remaining[0]
+      setNextEntry(sameLesson ?? other)
+    } else {
+      setNextEntry(null)
+    }
+  }, [status, lessonId, stepIndex])
 
   const handleCorrect = useCallback(() => {
     setStatus("correct")
@@ -147,14 +167,29 @@ function PracticeInner() {
               {t("마스터!", "Mastered!")}
             </p>
             <p className="text-xs text-emerald-600 mb-4 break-keep">
-              {t("이 문제는 창고에서 빠졌어요.", "Removed from bank.")}
+              {nextEntry
+                ? t("이 문제 끝! 다음 문제 계속할까요?", "Done! Try the next one?")
+                : t("이 문제는 창고에서 빠졌어요. 모든 문제 마스터!", "Bank cleared. All mastered!")}
             </p>
             <div className="flex flex-col gap-2">
+              {nextEntry && (
+                <Link
+                  href={`/missed/practice?lesson=${encodeURIComponent(nextEntry.lessonId)}&q=${nextEntry.stepIndex}`}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] text-white rounded-xl font-bold text-sm transition-all"
+                >
+                  ▶ {t("다음 문제 풀기", "Next question")}
+                </Link>
+              )}
               <Link
                 href="/missed"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-colors"
+                className={cn(
+                  "inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all active:scale-[0.98]",
+                  nextEntry
+                    ? "bg-white border-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                    : "bg-emerald-500 hover:bg-emerald-600 text-white"
+                )}
               >
-                {t("창고로 돌아가기 →", "Back to Bank →")}
+                {nextEntry ? t("창고로 (나중에)", "Back to Bank") : t("창고로 돌아가기 →", "Back to Bank →")}
               </Link>
             </div>
           </div>

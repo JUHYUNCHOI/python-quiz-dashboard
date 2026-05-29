@@ -6,6 +6,7 @@ import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
 import { getWrongBank, type WrongQuestionEntry } from "@/lib/mark-lesson-complete"
+import { lessonsData } from "../review/[lessonId]/data/lessons"
 import { ArrowLeft } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -15,7 +16,7 @@ interface GroupedEntries {
 }
 
 export default function MissedPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const [bank, setBank] = useState<WrongQuestionEntry[]>([])
   const [loaded, setLoaded] = useState(false)
 
@@ -116,9 +117,22 @@ export default function MissedPage() {
                     <p className="text-xs font-bold text-rose-500 uppercase tracking-widest">
                       {t("레슨", "Lesson")} {lessonId}
                     </p>
-                    <p className="text-base sm:text-lg font-black text-gray-900 mt-0.5">
-                      {entries.length}{t("문제 남음", " left")}
-                    </p>
+                    {(() => {
+                      const lesson = lessonsData[lessonId]
+                      const title = lesson ? (lang === "en" && lesson.titleEn ? lesson.titleEn : lesson.title) : null
+                      return (
+                        <>
+                          {title && (
+                            <p className="text-sm sm:text-base font-black text-gray-900 mt-0.5 break-keep">
+                              {title}
+                            </p>
+                          )}
+                          <p className="text-xs sm:text-sm font-bold text-rose-700 mt-0.5">
+                            {entries.length}{t("문제 남음", " left")}
+                          </p>
+                        </>
+                      )
+                    })()}
                   </div>
                 </div>
                 {/* 각 문제 chip — 클릭 시 단일 문제 풀이 페이지로 */}
