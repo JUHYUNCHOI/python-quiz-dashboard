@@ -1630,11 +1630,6 @@ export default function CurriculumPage() {
                                             {lesson.title}
                                           </h3>
                                           <div className="flex items-center gap-2 mt-1 flex-wrap">
-                                            {isNextLesson && !isLocked && (
-                                              <span className={`whitespace-nowrap px-2 py-0.5 rounded-full text-xs font-bold text-white animate-pulse ${isPseudo ? "bg-green-500" : isCpp ? "bg-blue-500" : "bg-orange-500"}`}>
-                                                ▶ {t("다음", "Next")}
-                                              </span>
-                                            )}
                                             {isLocked ? (
                                               <span className="text-xs text-gray-400 italic">
                                                 {t("이전 수업을 완료하면 열려요", "Complete the previous lesson to unlock")}
