@@ -34,6 +34,13 @@ export default function ProfilePage() {
     bankMastered: number
   }>({ completedLessons: 0, completedQuizzes: 0, avgQuizScore: null, practiceSolved: 0, bankRemaining: 0, bankMastered: 0 })
 
+  // 최근 복습 내역 (Supabase lesson_progress.score)
+  const [recentReviews, setRecentReviews] = useState<Array<{
+    lesson_id: string
+    score: number
+    updated_at: string
+  }>>([])
+
   useEffect(() => {
     try {
       const lessonsRaw = localStorage.getItem("completedLessons")
@@ -73,6 +80,19 @@ export default function ProfilePage() {
         } else {
           setMyClass(null)
         }
+      })
+    // 최근 복습 내역 (lesson_progress.score)
+    supabase
+      .from("lesson_progress")
+      .select("lesson_id, score, updated_at")
+      .eq("user_id", user.id)
+      .eq("progress_type", "quiz")
+      .eq("completed", true)
+      .gt("score", 0)
+      .order("updated_at", { ascending: false })
+      .limit(5)
+      .then(({ data }) => {
+        if (data) setRecentReviews(data)
       })
   }, [user])
 
@@ -304,6 +324,45 @@ export default function ProfilePage() {
             </Link>
           </div>
         </Card>
+
+        {/* 📝 최근 복습 점수 5 개 — 시간 순 */}
+        {recentReviews.length > 0 && (
+          <Card className="p-4 border-2 border-gray-100">
+            <h3 className="font-bold text-gray-700 mb-3">📝 {t("최근 복습", "Recent Reviews")}</h3>
+            <div className="space-y-1.5">
+              {recentReviews.map((r, i) => {
+                const scoreColor = r.score === 100 ? "text-emerald-600"
+                  : r.score >= 70 ? "text-purple-600"
+                  : "text-amber-600"
+                const emoji = r.score === 100 ? "🎉" : r.score >= 70 ? "👍" : "💪"
+                const daysAgo = (() => {
+                  const d = new Date(r.updated_at)
+                  const now = new Date()
+                  const diff = Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24))
+                  if (diff === 0) return t("오늘", "Today")
+                  if (diff === 1) return t("어제", "Yesterday")
+                  return t(`${diff}일 전`, `${diff}d ago`)
+                })()
+                return (
+                  <Link
+                    key={i}
+                    href={`/review/${r.lesson_id}`}
+                    className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    <span className="text-base shrink-0">{emoji}</span>
+                    <span className={cn("font-bold text-gray-700 text-sm flex-1 truncate")}>
+                      {t(`레슨 ${r.lesson_id}`, `Lesson ${r.lesson_id}`)}
+                    </span>
+                    <span className={cn("text-base font-black tabular-nums shrink-0", scoreColor)}>
+                      {r.score}<span className="text-xs">{t("점", "pt")}</span>
+                    </span>
+                    <span className="text-[10px] text-gray-400 w-12 text-right shrink-0">{daysAgo}</span>
+                  </Link>
+                )
+              })}
+            </div>
+          </Card>
+        )}
 
         {/* 언어 설정 */}
         <Card className="p-4 border-2 border-gray-100">
