@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
 import { getWrongBank, syncWrongBankFromSupabase } from "@/lib/mark-lesson-complete"
+import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -90,17 +91,26 @@ export function Header() {
                 <span className="text-sm font-semibold text-red-700">{dailyStreak}{t("일", "d")}</span>
               </div>
 
-              {/* 창고 카운트 — 0 이면 안 보임 */}
-              {bankRemaining > 0 && (
-                <Link
-                  href="/missed"
-                  title={t(`틀린 문제 ${bankRemaining}개 — 클릭해서 풀기`, `${bankRemaining} wrong — click to practice`)}
-                  className="flex items-center gap-1.5 rounded-full bg-rose-100 hover:bg-rose-200 px-3 py-2 min-h-[44px] transition-colors"
-                >
-                  <span className="text-base">📚</span>
+              {/* 창고 — 0 이면 회색 (발견용), 있으면 빨강 + 카운트 */}
+              <Link
+                href="/missed"
+                title={bankRemaining > 0
+                  ? t(`틀린 문제 ${bankRemaining}개 — 클릭해서 풀기`, `${bankRemaining} wrong — click to practice`)
+                  : t("틀린 문제 창고 (지금은 비어있어요)", "Wrong question bank (empty)")}
+                className={cn(
+                  "flex items-center gap-1.5 rounded-full px-3 py-2 min-h-[44px] transition-colors",
+                  bankRemaining > 0
+                    ? "bg-rose-100 hover:bg-rose-200"
+                    : "bg-gray-100 hover:bg-gray-200"
+                )}
+              >
+                <span className="text-base">📚</span>
+                {bankRemaining > 0 ? (
                   <span className="text-sm font-semibold text-rose-700">{bankRemaining}</span>
-                </Link>
-              )}
+                ) : (
+                  <span className="text-xs font-medium text-gray-500 hidden sm:inline">{t("창고", "Bank")}</span>
+                )}
+              </Link>
             </>
           )}
         </div>

@@ -912,11 +912,23 @@ export default function CurriculumPage() {
                       >
                         📋 {t("STL 치트시트 / PDF 다운로드", "STL Cheatsheet / Download PDF")}
                       </Link>
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 text-xs font-bold text-amber-800 border border-amber-200">
-                        🎯 {t("메인 트랙: cpp-1 ~ cpp-16 + 정렬", "Main track: cpp-1 ~ cpp-16 + sort")}
+                      <span
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 text-xs font-bold text-amber-800 border border-amber-200"
+                        title={t("USACO 진입에 필요한 핵심 트랙 — 문법(1~16) + 정렬·검색 + Fast I/O 셋업", "Core track — basics(1~16) + sort/search + Fast I/O setup")}
+                      >
+                        🎯 {t("메인 트랙: cpp-1 ~ 16 + 정렬·검색 + 셋업", "Main: cpp-1 ~ 16 + sort/search + setup")}
                       </span>
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-50 text-xs font-bold text-gray-600 border border-gray-200">
-                        📌 {t("참고 트랙: cpp-17 ~ 20 (필요할 때)", "Reference: cpp-17 ~ 20 (as needed)")}
+                      <span
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-50 text-xs font-bold text-gray-600 border border-gray-200"
+                        title={t("Algorithm Lab BFS/DFS 들어갈 때 돌아와서 보기", "Visit when entering Algorithm Lab BFS/DFS")}
+                      >
+                        📌 {t("참고: cpp-17 (탐색 정리) · cpp-18 (stack/queue)", "Reference: cpp-17 (search recap) · cpp-18 (stack/queue)")}
+                      </span>
+                      <span
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 text-xs font-bold text-slate-600 border border-slate-200"
+                        title={t("파일 I/O 심화 · 비트연산 · typedef 등 필요할 때만", "File I/O deep dive · bit ops · typedef etc — as needed")}
+                      >
+                        🧰 {t("도구상자: cpp-19 (파일 I/O 심화) · cpp-20 (CP 팁)", "Toolbox: cpp-19 (File I/O+) · cpp-20 (CP tips)")}
                       </span>
                       {/* C++ 학생도 Python 수업 전부 자유롭게 볼 수 있음 — 명시적 안내 */}
                       <button
@@ -1770,17 +1782,18 @@ export default function CurriculumPage() {
                                               : myScore >= 70 ? "text-purple-700"
                                               : "text-rose-600"
                                             return (
-                                              <div className="flex-1 rounded-xl border-2 border-purple-200 bg-purple-50/60 px-3 py-2 flex items-center gap-2 flex-wrap">
+                                              <Link
+                                                href={getReviewPath(lesson.id)}
+                                                title={t("다시 보기 (선택)", "Re-open (optional)")}
+                                                className="flex-1 rounded-xl border-2 border-purple-200 bg-purple-50/60 hover:bg-purple-100/70 hover:border-purple-300 transition-colors px-3 py-2 flex items-center gap-2 flex-wrap"
+                                              >
                                                 <span className="text-base shrink-0">{myScore === 100 ? "🎉" : myScore >= 70 ? "👍" : "💪"}</span>
                                                 <span className={cn("font-black text-purple-700 shrink-0", sz("text-sm", "text-base"))}>{t("복습완료", "Done")}</span>
                                                 <div className="flex items-baseline gap-0.5 shrink-0">
                                                   <span className={cn("text-xl font-black tabular-nums leading-none", scoreColor)}>{myScore}</span>
                                                   <span className={cn("text-xs font-bold", scoreColor)}>{t("점", "pt")}</span>
                                                 </div>
-                                                <Link href={getReviewPath(lesson.id)} className="ml-auto text-xs font-bold text-purple-500 hover:text-purple-700 underline underline-offset-2 decoration-dotted transition-colors shrink-0">
-                                                  {t("결과 →", "Results →")}
-                                                </Link>
-                                              </div>
+                                              </Link>
                                             )
                                           }
                                           if (step1Done) {
