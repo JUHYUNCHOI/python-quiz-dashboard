@@ -606,5 +606,343 @@ Print N-K+1 values total. Break ties by choosing the smaller number.`,
       },
       language: "python",
     },
+    {
+      id: "pydict-013",
+      cluster: "py-dicts",
+      unlockAfter: "21",
+      difficulty: "쉬움",
+      title: "글자 빈도 세기",
+      description: `한 줄에 영소문자로만 이루어진 문자열이 주어집니다.
+각 글자가 몇 번 나오는지 "글자: 횟수" 형식으로 알파벳 오름차순으로 출력하세요.`,
+      constraints: "1 ≤ 문자열 길이 ≤ 1000, 영소문자만",
+      initialCode: `s = input()
+
+# 각 글자의 빈도를 딕셔너리로 집계해 알파벳 순으로 출력하세요
+# 출력 형식: "a: 3"
+`,
+      testCases: [
+        { stdin: "banana", expectedOutput: "a: 3\nb: 1\nn: 2", label: "기본" },
+        { stdin: "aaa", expectedOutput: "a: 3", label: "한 글자만" },
+        { stdin: "abcabc", expectedOutput: "a: 2\nb: 2\nc: 2", label: "고르게 분포" },
+        { stdin: "z", expectedOutput: "z: 1", label: "길이 1" },
+      ],
+      hints: [
+        "문자열을 for문으로 순회하면 한 글자씩 꺼낼 수 있습니다.",
+        "freq[ch] = freq.get(ch, 0) + 1 으로 빈도를 누적하고 sorted(freq)로 출력하세요.",
+      ],
+      solutionCode: `s = input()
+freq = {}
+for ch in s:
+    freq[ch] = freq.get(ch, 0) + 1
+for ch in sorted(freq):
+    print(f"{ch}: {freq[ch]}")`,
+      solutionExplanation: "문자열을 한 글자씩 순회하며 딕셔너리에 빈도를 누적하고, sorted()로 키를 알파벳 순 정렬해 출력합니다.",
+      en: {
+        title: "Character Frequency",
+        description: `Given a single line of lowercase English letters,
+print each character's frequency in the format "char: count", sorted alphabetically.`,
+        constraints: "1 ≤ length ≤ 1000, lowercase English letters only",
+        hints: [
+          "Iterate over the string character by character with a for loop.",
+          "Use freq[ch] = freq.get(ch, 0) + 1 to count, then sorted(freq) to iterate keys.",
+        ],
+        solutionExplanation: "Iterate over each character, accumulating counts in a dictionary, and print keys sorted alphabetically.",
+      },
+      language: "python",
+    },
+    {
+      id: "pydict-014",
+      cluster: "py-dicts",
+      unlockAfter: "21",
+      difficulty: "쉬움",
+      title: "두 딕셔너리 합치기",
+      description: `첫 줄에 정수 N이 주어지고, 이어서 N줄에 걸쳐 "키 값" 형식의 첫 번째 딕셔너리 데이터가 주어집니다.
+그 다음 정수 M이 주어지고, M줄에 걸쳐 두 번째 딕셔너리 데이터가 같은 형식으로 주어집니다.
+두 딕셔너리를 합쳐 출력하세요. 같은 키가 두 곳에 있으면 두 번째 딕셔너리의 값으로 덮어씁니다.
+출력은 키의 알파벳 오름차순, 형식은 "키: 값" 입니다.`,
+      constraints: "1 ≤ N, M ≤ 1000, 키는 영소문자, 값은 정수",
+      initialCode: `n = int(input())
+d1 = {}
+for _ in range(n):
+    k, v = input().split()
+    d1[k] = int(v)
+
+m = int(input())
+d2 = {}
+for _ in range(m):
+    k, v = input().split()
+    d2[k] = int(v)
+
+# 두 딕셔너리를 합치되, 겹치는 키는 d2 값 우선
+`,
+      testCases: [
+        { stdin: "2\napple 1\nbanana 2\n2\nbanana 99\ncherry 3", expectedOutput: "apple: 1\nbanana: 99\ncherry: 3", label: "겹침 1개" },
+        { stdin: "1\nx 10\n1\ny 20", expectedOutput: "x: 10\ny: 20", label: "겹침 없음" },
+        { stdin: "2\na 1\nb 2\n2\na 100\nb 200", expectedOutput: "a: 100\nb: 200", label: "모두 덮어쓰기" },
+      ],
+      hints: [
+        "merged = {} 를 만든 뒤 d1의 항목을 모두 넣고, 그 다음 d2의 항목을 넣으면 d2 값이 자동으로 덮어씁니다.",
+        "for k in sorted(merged): print(f'{k}: {merged[k]}')",
+      ],
+      solutionCode: `n = int(input())
+d1 = {}
+for _ in range(n):
+    k, v = input().split()
+    d1[k] = int(v)
+
+m = int(input())
+d2 = {}
+for _ in range(m):
+    k, v = input().split()
+    d2[k] = int(v)
+
+merged = {}
+for k in d1:
+    merged[k] = d1[k]
+for k in d2:
+    merged[k] = d2[k]
+for k in sorted(merged):
+    print(f"{k}: {merged[k]}")`,
+      solutionExplanation: "d1을 먼저 복사한 뒤 d2 항목을 같은 딕셔너리에 넣으면, 같은 키가 있을 때 자동으로 d2 값으로 덮어쓰여집니다.",
+      en: {
+        title: "Merge Two Dictionaries",
+        description: `Given two dictionaries (the first with N entries, the second with M entries) in the format "key value",
+merge them and print the result. When the same key appears in both, the second dictionary's value wins.
+Output sorted by key in alphabetical order, formatted as "key: value".`,
+        constraints: "1 ≤ N, M ≤ 1000, keys are lowercase English letters, values are integers",
+        hints: [
+          "Start with an empty merged dict, copy d1 in first, then copy d2 in — d2's values automatically overwrite.",
+          "for k in sorted(merged): print(f'{k}: {merged[k]}')",
+        ],
+        solutionExplanation: "Copy d1 first, then d2. Since dict assignment overwrites existing keys, d2's values take precedence on collisions.",
+      },
+      language: "python",
+    },
+    {
+      id: "pydict-015",
+      cluster: "py-dicts",
+      unlockAfter: "21",
+      difficulty: "보통",
+      title: "학생별 평균 점수",
+      description: `첫 줄에 정수 N이 주어집니다. 이어서 N줄에 걸쳐 "이름 점수" 형식으로 시험 점수가 주어집니다.
+같은 학생이 여러 번 나올 수 있습니다. 각 학생의 평균 점수를 출력하세요.
+출력은 이름의 알파벳 오름차순, 형식은 "이름: 평균(소수점 2자리)" 입니다.`,
+      constraints: "1 ≤ N ≤ 1000, 0 ≤ 점수 ≤ 100, 이름은 영소문자",
+      initialCode: `n = int(input())
+scores = {}
+for _ in range(n):
+    name, score = input().split()
+    # scores[name]에 점수 리스트를 누적하세요
+
+# 각 학생의 평균을 알파벳 순으로 출력하세요
+`,
+      testCases: [
+        { stdin: "5\nalice 80\nbob 70\nalice 100\nbob 90\nalice 60", expectedOutput: "alice: 80.00\nbob: 80.00", label: "기본" },
+        { stdin: "3\ncat 100\ndog 50\ncat 50", expectedOutput: "cat: 75.00\ndog: 50.00", label: "이름 2개" },
+        { stdin: "1\nzara 95", expectedOutput: "zara: 95.00", label: "학생 1명" },
+        { stdin: "4\nann 100\nann 100\nann 100\nann 100", expectedOutput: "ann: 100.00", label: "모두 만점" },
+      ],
+      hints: [
+        "scores 딕셔너리에 이름을 키, 점수 리스트를 값으로 모으세요. 키가 없으면 빈 리스트로 시작합니다.",
+        "for name in sorted(scores): avg = sum(scores[name]) / len(scores[name]); print(f'{name}: {avg:.2f}')",
+      ],
+      solutionCode: `n = int(input())
+scores = {}
+for _ in range(n):
+    name, score = input().split()
+    if name not in scores:
+        scores[name] = []
+    scores[name].append(int(score))
+for name in sorted(scores):
+    avg = sum(scores[name]) / len(scores[name])
+    print(f"{name}: {avg:.2f}")`,
+      solutionExplanation: "이름을 키로 점수 리스트를 모은 뒤, 각 리스트의 sum/len 으로 평균을 계산해 알파벳 순으로 출력합니다.",
+      en: {
+        title: "Average Score per Student",
+        description: `Given N exam entries in the format "name score", the same student may appear multiple times.
+Print each student's average score, sorted alphabetically by name, formatted as "name: average (2 decimal places)".`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ score ≤ 100, names are lowercase English letters",
+        hints: [
+          "Collect scores into a dict mapping name -> list of scores. Initialize an empty list when a name first appears.",
+          "for name in sorted(scores): avg = sum(scores[name]) / len(scores[name]); print(f'{name}: {avg:.2f}')",
+        ],
+        solutionExplanation: "Group scores into per-name lists, then compute sum/len for each student's average and print in alphabetical order.",
+      },
+      language: "python",
+    },
+    {
+      id: "pydict-016",
+      cluster: "py-dicts",
+      unlockAfter: "21",
+      difficulty: "보통",
+      title: "딕셔너리 뒤집기",
+      description: `첫 줄에 정수 N이 주어지고, 이어서 N줄에 걸쳐 "키 값" 형식의 데이터가 주어집니다.
+키와 값을 뒤집어 출력하세요 — 즉, 값이 새로운 키, 키 리스트가 새로운 값이 됩니다.
+같은 값을 가진 키가 여러 개일 수 있습니다. 그 경우 키들을 알파벳 오름차순으로 공백 구분해 출력합니다.
+출력은 값(새 키)의 알파벳 오름차순, 형식은 "값: 키1 키2 ..." 입니다.`,
+      constraints: "1 ≤ N ≤ 1000, 키와 값 모두 영소문자",
+      initialCode: `n = int(input())
+d = {}
+for _ in range(n):
+    k, v = input().split()
+    d[k] = v
+
+# d를 뒤집어 value -> [keys] 딕셔너리를 만든 뒤 출력하세요
+`,
+      testCases: [
+        { stdin: "4\nalice red\nbob blue\ncharlie red\ndave blue", expectedOutput: "blue: bob dave\nred: alice charlie", label: "기본" },
+        { stdin: "3\na x\nb y\nc z", expectedOutput: "x: a\ny: b\nz: c", label: "1:1 매핑" },
+        { stdin: "3\nann same\nbob same\ncat same", expectedOutput: "same: ann bob cat", label: "모두 같은 값" },
+      ],
+      hints: [
+        "inverted = {} 를 만들고 d의 (k, v)를 순회하면서 inverted[v].append(k) 패턴을 사용하세요.",
+        "출력 시 sorted(inverted) 로 값을 정렬하고, 각 키 리스트는 sorted() 후 ' '.join 으로 합치세요.",
+      ],
+      solutionCode: `n = int(input())
+d = {}
+for _ in range(n):
+    k, v = input().split()
+    d[k] = v
+
+inverted = {}
+for k, v in d.items():
+    if v not in inverted:
+        inverted[v] = []
+    inverted[v].append(k)
+
+for v in sorted(inverted):
+    keys = sorted(inverted[v])
+    print(f"{v}: {' '.join(keys)}")`,
+      solutionExplanation: "값을 새 키로 사용해 키 리스트를 모읍니다. 한 값이 여러 키를 가질 수 있으므로 리스트로 저장한 뒤 정렬해 출력합니다.",
+      en: {
+        title: "Invert a Dictionary",
+        description: `Given N entries in the format "key value", invert the dictionary — values become new keys, keys become the new values.
+Because multiple keys can share the same value, group them into lists.
+Output sorted by value (the new key) alphabetically, formatted as "value: key1 key2 ..." with the keys also sorted alphabetically.`,
+        constraints: "1 ≤ N ≤ 1000, both keys and values are lowercase English letters",
+        hints: [
+          "Build inverted = {} and append each k to inverted[v], initializing an empty list when needed.",
+          "Print with sorted(inverted) for the outer keys, and sort each key list before joining with spaces.",
+        ],
+        solutionExplanation: "Group original keys under their values. Since one value may map to many keys, store them in a list and sort before printing.",
+      },
+      language: "python",
+    },
+    {
+      id: "pydict-017",
+      cluster: "py-dicts",
+      unlockAfter: "21",
+      difficulty: "어려움",
+      title: "카테고리별 합계",
+      description: `첫 줄에 정수 N이 주어집니다. 이어서 N줄에 걸쳐 "카테고리 금액" 형식의 거래 내역이 주어집니다.
+같은 카테고리가 여러 번 나올 수 있습니다.
+각 카테고리의 합계 금액을 출력하세요. 출력은 합계가 큰 순서대로, 합계가 같으면 카테고리 이름의 알파벳 오름차순입니다.
+형식은 "카테고리: 합계" 입니다.`,
+      constraints: "1 ≤ N ≤ 100000, 0 ≤ 금액 ≤ 10^6, 카테고리는 영소문자",
+      initialCode: `n = int(input())
+totals = {}
+for _ in range(n):
+    cat, amount = input().split()
+    # totals[cat]에 금액을 누적하세요
+
+# 합계 내림차순, 동수면 이름 오름차순으로 출력하세요
+`,
+      testCases: [
+        { stdin: "5\nfood 1000\ngas 500\nfood 2000\ngas 1500\nfood 500", expectedOutput: "food: 3500\ngas: 2000", label: "기본" },
+        { stdin: "4\na 100\nb 100\nc 100\nd 100", expectedOutput: "a: 100\nb: 100\nc: 100\nd: 100", label: "모두 동수, 알파벳 순" },
+        { stdin: "3\nbook 50\nbook 50\npen 200", expectedOutput: "pen: 200\nbook: 100", label: "합계 내림차순" },
+        { stdin: "1\nsolo 999", expectedOutput: "solo: 999", label: "한 항목" },
+      ],
+      hints: [
+        "totals[cat] = totals.get(cat, 0) + int(amount) 패턴으로 합계를 누적합니다.",
+        "(-합계, 이름) 튜플 리스트를 sorted() 하면 합계 내림차순 + 이름 오름차순이 동시에 처리됩니다.",
+      ],
+      solutionCode: `n = int(input())
+totals = {}
+for _ in range(n):
+    cat, amount = input().split()
+    totals[cat] = totals.get(cat, 0) + int(amount)
+
+# (-합계, 이름) 튜플로 정렬: 합계 큰 것이 앞, 동수면 이름 작은 것이 앞
+pairs = sorted([(-v, k) for k, v in totals.items()])
+for neg_total, name in pairs:
+    print(f"{name}: {-neg_total}")`,
+      solutionExplanation: "카테고리별로 금액을 누적한 후, (-합계, 이름) 튜플 정렬로 합계 내림차순 + 이름 오름차순을 한 번에 처리합니다. -합계를 다시 -로 부호 변경해 원래 합계로 출력합니다.",
+      en: {
+        title: "Sum by Category",
+        description: `Given N transactions in the format "category amount", the same category may appear multiple times.
+Print the total amount per category, sorted by total in descending order; ties broken by category name in ascending alphabetical order.
+Output format: "category: total".`,
+        constraints: "1 ≤ N ≤ 100000, 0 ≤ amount ≤ 10^6, categories are lowercase English letters",
+        hints: [
+          "Use totals[cat] = totals.get(cat, 0) + int(amount) to accumulate.",
+          "Sort a list of (-total, name) tuples — descending total and ascending name happen in one sort.",
+        ],
+        solutionExplanation: "Accumulate per-category totals, then sort (-total, name) tuples to get the desired descending-then-ascending order in a single sort. Flip the sign back when printing.",
+      },
+      language: "python",
+    },
+    {
+      id: "pydict-018",
+      cluster: "py-dicts",
+      unlockAfter: "21",
+      difficulty: "어려움",
+      title: "세 집합 연산 — 합·교·차",
+      description: `첫 줄에 정수 N이 주어지고 둘째 줄에 N개의 정수가 공백으로 구분된 집합 A.
+셋째 줄에 정수 M이 주어지고 넷째 줄에 M개의 정수가 공백으로 구분된 집합 B.
+세 줄을 출력하세요:
+1) A ∪ B (합집합) 원소를 오름차순 공백 구분
+2) A ∩ B (교집합) 원소를 오름차순 공백 구분
+3) A - B (A에만 있는 원소) 오름차순 공백 구분
+각 줄이 비어 있으면 빈 줄을 출력합니다.`,
+      constraints: "1 ≤ N, M ≤ 100000",
+      initialCode: `n = int(input())
+a = set(map(int, input().split()))
+m = int(input())
+b = set(map(int, input().split()))
+
+# 합집합 / 교집합 / 차집합을 각각 한 줄씩 오름차순으로 출력하세요
+`,
+      testCases: [
+        { stdin: "3\n1 2 3\n3\n2 3 4", expectedOutput: "1 2 3 4\n2 3\n1", label: "기본" },
+        { stdin: "3\n1 2 3\n3\n1 2 3", expectedOutput: "1 2 3\n1 2 3\n", label: "A == B (차집합 비어 있음)" },
+        { stdin: "2\n1 2\n2\n3 4", expectedOutput: "1 2 3 4\n\n1 2", label: "교집합 비어 있음" },
+        { stdin: "4\n5 5 3 1\n2\n5 2", expectedOutput: "1 2 3 5\n5\n1 3", label: "A에 중복 포함" },
+      ],
+      hints: [
+        "| 합집합, & 교집합, - 차집합 — set 연산자 세 개를 사용하세요.",
+        "정렬된 결과를 print(*sorted(...)) 로 공백 구분 출력합니다. 비어 있으면 print() 만 호출하세요.",
+      ],
+      solutionCode: `n = int(input())
+a = set(map(int, input().split()))
+m = int(input())
+b = set(map(int, input().split()))
+
+union = sorted(a | b)
+inter = sorted(a & b)
+diff = sorted(a - b)
+
+for result in [union, inter, diff]:
+    if result:
+        print(*result)
+    else:
+        print()`,
+      solutionExplanation: "파이썬 set의 | & - 연산자로 합·교·차를 각각 구한 뒤 정렬해 한 줄씩 출력합니다. 결과가 비어 있을 때는 print()로 빈 줄을 출력합니다.",
+      en: {
+        title: "Three Set Operations — Union, Intersection, Difference",
+        description: `Given set A (N integers) and set B (M integers), print three lines:
+1) A ∪ B (union) sorted ascending, space-separated
+2) A ∩ B (intersection) sorted ascending, space-separated
+3) A - B (only in A) sorted ascending, space-separated
+If any line has no elements, print an empty line.`,
+        constraints: "1 ≤ N, M ≤ 100000",
+        hints: [
+          "Use the three set operators: | for union, & for intersection, - for difference.",
+          "Print sorted results with print(*sorted(...)). For empty results, just call print() to emit a blank line.",
+        ],
+        solutionExplanation: "Use Python's set operators (|, &, -) to compute each result, sort, and print on its own line. Empty results print as blank lines.",
+      },
+      language: "python",
+    },
   ],
 }

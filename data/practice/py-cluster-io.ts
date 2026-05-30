@@ -569,5 +569,252 @@ print(f"{'Total':<13}{total:>6}")`,
       },
       language: "python",
     },
+    {
+      id: "pyio-009",
+      cluster: "py-io",
+      unlockAfter: "10",
+      difficulty: "쉬움",
+      title: "두 수의 평균",
+      description: `두 정수가 한 줄에 공백으로 주어질 때, 평균을 소수점 첫째 자리까지 출력하세요.`,
+      constraints: "-1000 ≤ A, B ≤ 1000",
+      initialCode: `# 두 정수를 한 줄에서 공백으로 입력받아 평균을 출력하세요
+# 소수점 1자리까지 출력 (예: 3.5)
+a, b = map(int, input().split())
+# 여기에 코드를 작성하세요`,
+      testCases: [
+        { stdin: "2 4", expectedOutput: "3.0", label: "정수 평균" },
+        { stdin: "3 4", expectedOutput: "3.5", label: "소수 평균" },
+        { stdin: "-10 10", expectedOutput: "0.0", label: "음수 포함" },
+        { stdin: "1000 -1000", expectedOutput: "0.0", label: "최대/최소" },
+      ],
+      hints: [
+        "평균 = (a + b) / 2",
+        "print(f'{avg:.1f}')로 소수점 1자리까지 출력하세요.",
+      ],
+      solutionCode: `a, b = map(int, input().split())
+avg = (a + b) / 2
+print(f'{avg:.1f}')`,
+      solutionExplanation: "두 수를 더한 뒤 2로 나누면 평균입니다. Python의 / 는 항상 실수 나눗셈이라 정수끼리 나눠도 소수가 나옵니다. :.1f 로 소수점 1자리까지 출력합니다.",
+      en: {
+        title: "Average of Two Numbers",
+        description: `Given two integers separated by a space, print their average to 1 decimal place.`,
+        constraints: "-1000 ≤ A, B ≤ 1000",
+        hints: [
+          "average = (a + b) / 2",
+          "Use print(f'{avg:.1f}') to print to 1 decimal place.",
+        ],
+        solutionExplanation: "Add the two numbers and divide by 2. In Python, / always performs float division, so even two integers produce a decimal. :.1f prints to 1 decimal place.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyio-010",
+      cluster: "py-io",
+      unlockAfter: "10",
+      difficulty: "쉬움",
+      title: "직사각형 둘레와 넓이",
+      description: `직사각형의 가로와 세로 길이가 공백으로 주어집니다.
+둘레와 넓이를 한 줄에 공백으로 구분하여 출력하세요.
+
+둘레 = 2 × (가로 + 세로)
+넓이 = 가로 × 세로`,
+      constraints: "1 ≤ 가로, 세로 ≤ 1000 (정수)",
+      initialCode: `# 가로 w, 세로 h를 한 줄에 공백으로 입력받아
+# "둘레 넓이" 형식으로 출력하세요
+w, h = map(int, input().split())
+# 여기에 코드를 작성하세요`,
+      testCases: [
+        { stdin: "3 4", expectedOutput: "14 12", label: "기본" },
+        { stdin: "1 1", expectedOutput: "4 1", label: "정사각형" },
+        { stdin: "10 5", expectedOutput: "30 50", label: "가로가 더 김" },
+        { stdin: "100 200", expectedOutput: "600 20000", label: "큰 수" },
+      ],
+      hints: [
+        "둘레: 2 * (w + h), 넓이: w * h",
+        "print(둘레, 넓이) 로 출력하면 자동으로 공백으로 구분됩니다.",
+      ],
+      solutionCode: `w, h = map(int, input().split())
+perimeter = 2 * (w + h)
+area = w * h
+print(perimeter, area)`,
+      solutionExplanation: "둘레 공식은 2×(가로+세로), 넓이 공식은 가로×세로 입니다. print() 에 여러 값을 콤마로 넘기면 기본 구분자(공백)로 한 줄에 출력됩니다.",
+      en: {
+        title: "Rectangle Perimeter and Area",
+        description: `Given the width and height of a rectangle separated by a space, print the perimeter and area on one line, separated by a space.\n\nperimeter = 2 × (width + height)\narea = width × height`,
+        constraints: "1 ≤ width, height ≤ 1000 (integer)",
+        hints: [
+          "perimeter = 2 * (w + h), area = w * h",
+          "print(perimeter, area) automatically separates values with a space.",
+        ],
+        solutionExplanation: "Perimeter is 2×(w+h) and area is w×h. Passing multiple values to print() with commas prints them on one line separated by the default separator (a space).",
+      },
+      language: "python",
+    },
+    {
+      id: "pyio-011",
+      cluster: "py-io",
+      unlockAfter: "10",
+      difficulty: "쉬움",
+      title: "거스름돈 계산",
+      description: `손님이 낸 돈과 물건 가격이 공백으로 주어질 때, 거스름돈을 출력하세요.
+거스름돈 = 낸 돈 - 가격`,
+      constraints: "1 ≤ 가격 ≤ 낸 돈 ≤ 100000 (정수)",
+      initialCode: `# 낸 돈과 가격을 공백으로 입력받아 거스름돈을 출력하세요
+paid, price = map(int, input().split())
+# 여기에 코드를 작성하세요`,
+      testCases: [
+        { stdin: "1000 700", expectedOutput: "300", label: "기본" },
+        { stdin: "5000 5000", expectedOutput: "0", label: "딱 맞음" },
+        { stdin: "10000 3500", expectedOutput: "6500", label: "만원" },
+        { stdin: "50000 12345", expectedOutput: "37655", label: "큰 거스름돈" },
+      ],
+      hints: [
+        "거스름돈 = 낸 돈 - 가격 이에요.",
+        "두 수 모두 정수니까 결과도 정수입니다. print() 로 그대로 출력하세요.",
+      ],
+      solutionCode: `paid, price = map(int, input().split())
+change = paid - price
+print(change)`,
+      solutionExplanation: "낸 돈에서 가격을 빼면 거스름돈입니다. 두 값 모두 정수라서 빼기 결과도 정수로 깔끔하게 나옵니다.",
+      en: {
+        title: "Calculate Change",
+        description: `Given the amount paid and the price separated by a space, print the change.\nchange = paid - price`,
+        constraints: "1 ≤ price ≤ paid ≤ 100000 (integer)",
+        hints: [
+          "change = paid - price",
+          "Both values are integers, so the result is an integer. Print it directly.",
+        ],
+        solutionExplanation: "Subtract the price from the amount paid to get the change. Both inputs are integers, so the result is a clean integer.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyio-012",
+      cluster: "py-io",
+      unlockAfter: "10",
+      difficulty: "보통",
+      title: "시간을 분으로",
+      description: `시간과 분이 공백으로 주어집니다. 총 몇 분인지 출력하세요.
+총 분 = 시간 × 60 + 분`,
+      constraints: "0 ≤ 시간 ≤ 23, 0 ≤ 분 ≤ 59",
+      initialCode: `# 시간 h, 분 m을 공백으로 입력받아 총 몇 분인지 출력하세요
+h, m = map(int, input().split())
+# 여기에 코드를 작성하세요`,
+      testCases: [
+        { stdin: "1 30", expectedOutput: "90", label: "1시간 30분" },
+        { stdin: "0 0", expectedOutput: "0", label: "0분" },
+        { stdin: "2 0", expectedOutput: "120", label: "정확히 2시간" },
+        { stdin: "23 59", expectedOutput: "1439", label: "최대" },
+        { stdin: "0 45", expectedOutput: "45", label: "시간 없음" },
+      ],
+      hints: [
+        "1시간은 60분이에요. 시간을 60으로 곱해서 분으로 바꿉니다.",
+        "총 분 = h * 60 + m",
+      ],
+      solutionCode: `h, m = map(int, input().split())
+total = h * 60 + m
+print(total)`,
+      solutionExplanation: "시간 단위를 분 단위로 통일하려면 60을 곱합니다. 거기에 남은 분을 더하면 총 분이 됩니다.",
+      en: {
+        title: "Hours and Minutes to Minutes",
+        description: `Given hours and minutes separated by a space, print the total number of minutes.\ntotal = hours × 60 + minutes`,
+        constraints: "0 ≤ hours ≤ 23, 0 ≤ minutes ≤ 59",
+        hints: [
+          "1 hour = 60 minutes. Multiply hours by 60 to convert.",
+          "total = h * 60 + m",
+        ],
+        solutionExplanation: "To convert hours into the same unit as minutes, multiply by 60. Add the remaining minutes to get the total.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyio-013",
+      cluster: "py-io",
+      unlockAfter: "10",
+      difficulty: "보통",
+      title: "분을 시간과 분으로",
+      description: `총 분(minutes)이 한 개의 정수로 주어집니다.
+"H시간 M분" 형식으로 출력하세요.
+
+힌트: 시간 = 총분 // 60, 분 = 총분 % 60`,
+      constraints: "0 ≤ 총분 ≤ 1439",
+      initialCode: `# 총 분을 입력받아 "H시간 M분" 형식으로 출력하세요
+total = int(input())
+# 여기에 코드를 작성하세요`,
+      testCases: [
+        { stdin: "90", expectedOutput: "1시간 30분", label: "1시간 30분" },
+        { stdin: "0", expectedOutput: "0시간 0분", label: "0분" },
+        { stdin: "60", expectedOutput: "1시간 0분", label: "정확히 1시간" },
+        { stdin: "125", expectedOutput: "2시간 5분", label: "2시간 5분" },
+        { stdin: "1439", expectedOutput: "23시간 59분", label: "최대" },
+      ],
+      hints: [
+        "// 는 정수 나눗셈(몫), % 는 나머지를 구합니다.",
+        "시간 = total // 60, 분 = total % 60",
+        "print(f'{h}시간 {m}분') 로 출력하세요.",
+      ],
+      solutionCode: `total = int(input())
+h = total // 60
+m = total % 60
+print(f'{h}시간 {m}분')`,
+      solutionExplanation: "총 분을 60으로 나눈 몫이 시간, 나머지가 분입니다. // 는 정수 나눗셈, % 는 나머지 연산자입니다. f-string으로 두 값을 한 문장에 끼워 넣어 출력합니다.",
+      en: {
+        title: "Minutes to Hours and Minutes",
+        description: `Given a total number of minutes, print it in the format "H시간 M분".\n\nHint: hours = total // 60, minutes = total % 60`,
+        constraints: "0 ≤ total ≤ 1439",
+        hints: [
+          "// is integer division (quotient), % is the remainder.",
+          "hours = total // 60, minutes = total % 60",
+          "Use print(f'{h}시간 {m}분').",
+        ],
+        solutionExplanation: "Divide the total by 60: the quotient is hours and the remainder is minutes. // is integer division and % gives the remainder. Use an f-string to compose the output.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyio-014",
+      cluster: "py-io",
+      unlockAfter: "10",
+      difficulty: "어려움",
+      title: "BMI 계산",
+      description: `몸무게(kg)와 키(m)가 공백으로 주어집니다 (실수 입력 가능).
+BMI 를 계산하여 소수점 둘째 자리까지 출력하세요.
+
+BMI = 몸무게(kg) / (키(m) × 키(m))`,
+      constraints: "1.0 ≤ 몸무게 ≤ 200.0, 0.5 ≤ 키 ≤ 2.5",
+      initialCode: `# 몸무게(kg)와 키(m)를 공백으로 입력받아 BMI를 출력하세요
+# BMI = 몸무게 / (키 * 키)
+# 소수점 2자리까지 (:.2f)
+weight, height = map(float, input().split())
+# 여기에 코드를 작성하세요`,
+      testCases: [
+        { stdin: "60 1.7", expectedOutput: "20.76", label: "정상 체중" },
+        { stdin: "70 1.75", expectedOutput: "22.86", label: "기본" },
+        { stdin: "50 1.6", expectedOutput: "19.53", label: "마름" },
+        { stdin: "80 1.8", expectedOutput: "24.69", label: "큰 사람" },
+        { stdin: "100 2.0", expectedOutput: "25.00", label: "정확히 25" },
+      ],
+      hints: [
+        "map(float, input().split()) 으로 두 실수를 한 번에 받을 수 있어요.",
+        "키의 제곱: height * height (또는 height ** 2)",
+        "print(f'{bmi:.2f}') 로 소수점 2자리까지 출력하세요.",
+      ],
+      solutionCode: `weight, height = map(float, input().split())
+bmi = weight / (height * height)
+print(f'{bmi:.2f}')`,
+      solutionExplanation: "BMI 는 몸무게를 키의 제곱으로 나눈 값입니다. 키와 몸무게가 실수일 수 있으니 float() 로 변환합니다. f-string 의 :.2f 로 소수점 둘째 자리에서 반올림하여 출력합니다.",
+      en: {
+        title: "BMI Calculation",
+        description: `Given weight in kg and height in meters separated by a space (decimals allowed), compute BMI and print to 2 decimal places.\n\nBMI = weight / (height × height)`,
+        constraints: "1.0 ≤ weight ≤ 200.0, 0.5 ≤ height ≤ 2.5",
+        hints: [
+          "Use map(float, input().split()) to read two floats at once.",
+          "height squared: height * height (or height ** 2)",
+          "Use print(f'{bmi:.2f}') for 2 decimal places.",
+        ],
+        solutionExplanation: "BMI is weight divided by the square of height. Use float() because the inputs can be decimals. The :.2f format specifier rounds and prints to 2 decimal places.",
+      },
+      language: "python",
+    },
   ],
 }
