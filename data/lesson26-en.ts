@@ -17,18 +17,18 @@ export const lesson26EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "⏱️ Why Does Choosing a Data Structure Matter?",
-          content: `**Same problem, different performance!**
+          title: "⏱️ Why Picking the Right Structure Matters",
+          content: `**Same task, very different speed!**
 
-Searching through 100,000 items:
+Looking up 'is X in here?' across 100,000 items:
 - List: up to 100,000 comparisons 😰
-- Set: done in just 1! 😎
+- Set: 1 lookup 😎
 
-**Your choice of data structure determines performance!**
+**The wrong structure can make your code 100,000× slower.**
 
-In coding interviews:
-- Time limit exceeded = wrong data structure
-- Passed = right data structure`
+In coding contests:
+- Time limit exceeded = wrong structure
+- Passed = right structure`
         },
         {
           id: "bigO",
@@ -186,12 +186,12 @@ b = [4, 5, 6, 7, 8]
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Find Common Elements!",
-          task: "Compare the two approaches!",
-          initialCode: "# Method 1: Nested for loops - O(n²)\ndef common_slow(a, b):\n    result = []\n    for x in a:\n        if x in b:  # O(n)\n            result.append(x)\n    return result\n\n# Method 2: Set - O(n)\ndef common_fast(a, b):\n    return list(set(a) & set(b))\n\na = [1, 2, 3, 4, 5]\nb = [4, 5, 6, 7, 8]\n\nprint(\"Slow method:\", common_slow(a, b))\nprint(\"Fast method:\", sorted(common_fast(a, b)))",
+          title: "🖥️ Try it — common elements of two lists",
+          task: "Find the common elements of two lists in two ways: (1) nested for loop, (2) set intersection!",
+          initialCode: "a = [1, 2, 3, 4, 5]\nb = [4, 5, 6, 7, 8]\n\n# Method 1: Nested for loop — O(n²), slow\nslow = []\nfor x in a:\n    if x in b:\n        slow.append(x)\nprint(\"Slow method:\", slow)\n\n# Method 2: Set intersection — O(n), fast\nfast = list(set(a) ___ set(b))    # intersection operator\nprint(\"Fast method:\", sorted(fast))",
           expectedOutput: "Slow method: [4, 5]\nFast method: [4, 5]",
-          hint: "The & operator on sets runs in O(n)!",
-          hint2: "The difference is huge with large data"
+          hint: "Set intersection operator is `&`. With large data, set wins by a lot.",
+          hint2: "&"
         },
         {
           id: "problem2",

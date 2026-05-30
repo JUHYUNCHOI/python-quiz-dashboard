@@ -139,7 +139,7 @@ print('=== 치명타 테스트 (5번 공격) ===')
 for i in range(5):
     hero.attack_target(goblin)
     print(f'    고블린 HP: {goblin.hp}')`,
-      expectedOutput: `=== 치명타 테스트 (5번 공격) ===\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 85\n  ★ 크리티컬! 용사 -> 고블린 (25 데미지!)\n    고블린 HP: 60\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 45\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 30\n  ★ 크리티컬! 용사 -> 고블린 (25 데미지!)\n    고블린 HP: 5`,
+      expectedOutput: `=== 치명타 테스트 (5번 공격) ===\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 85\n  ★ 크리티컬! 용사 -> 고블린 (25 데미지!)\n    고블린 HP: 60\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 45\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 30\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 15`,
       hint: "random.random() < 0.2 면 치명타! 데미지 1.5배!",
       hint2: "코드를 그대로 실행하세요!"
     },
@@ -169,7 +169,7 @@ class Fighter:
 hero = Fighter('용사', 10)
 for i in range(4):
     hero.attack()`,
-      expectedOutput: `용사: 10 데미지\n★ 크리티컬! 용사: 20 데미지!\n용사: 10 데미지\n★ 크리티컬! 용사: 20 데미지!`,
+      expectedOutput: `용사: 10 데미지\n용사: 10 데미지\n용사: 10 데미지\n★ 크리티컬! 용사: 20 데미지!`,
       hint: "random.random()으로 확률, is_crit 조건, damage 출력!",
       hint2: "random / is_crit / damage"
     },

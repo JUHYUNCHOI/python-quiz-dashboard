@@ -26,6 +26,8 @@ level = 5
 
 **Save it to a file?** -> It stays even after the program closes!
 
+📓 **Think of it like a notebook!** A variable is like a memory in your head (gone when you sleep). A file is like a note in your notebook (still there whenever you look back).
+
 @Key point: Variables disappear when the program closes! Save to a **file** and it lasts forever!`
         },
         {

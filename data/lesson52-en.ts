@@ -145,7 +145,7 @@ print('=== Critical Hit Test (5 attacks) ===')
 for i in range(5):
     hero.attack_target(goblin)
     print(f'    Goblin HP: {goblin.hp}')`,
-          expectedOutput: `=== Critical Hit Test (5 attacks) ===\n  Hero -> Goblin (15 damage)\n    Goblin HP: 85\n  ★ Critical! Hero -> Goblin (25 damage!)\n    Goblin HP: 60\n  Hero -> Goblin (15 damage)\n    Goblin HP: 45\n  Hero -> Goblin (15 damage)\n    Goblin HP: 30\n  ★ Critical! Hero -> Goblin (25 damage!)\n    Goblin HP: 5`,
+          expectedOutput: `=== Critical Hit Test (5 attacks) ===\n  Hero -> Goblin (15 damage)\n    Goblin HP: 85\n  ★ Critical! Hero -> Goblin (25 damage!)\n    Goblin HP: 60\n  Hero -> Goblin (15 damage)\n    Goblin HP: 45\n  Hero -> Goblin (15 damage)\n    Goblin HP: 30\n  Hero -> Goblin (15 damage)\n    Goblin HP: 15`,
           hint: "If random.random() < 0.2, it's a critical hit! 1.5x damage!",
           hint2: "Just run the code as is!"
         },
@@ -175,7 +175,7 @@ class Fighter:
 hero = Fighter('Hero', 10)
 for i in range(4):
     hero.attack()`,
-          expectedOutput: `Hero: 10 damage\n★ Critical! Hero: 20 damage!\nHero: 10 damage\n★ Critical! Hero: 20 damage!`,
+          expectedOutput: `Hero: 10 damage\nHero: 10 damage\nHero: 10 damage\n★ Critical! Hero: 20 damage!`,
           hint: "random.random() for probability, is_crit condition, damage output!",
           hint2: "random / is_crit / damage"
         },
@@ -683,7 +683,7 @@ for i in range(5):
             print(f'  #{i+1}: {item.name} [{types[item.item_type]} +{item.value}] dropped!')
     else:
         print(f'  #{i+1}: (No drop)')`,
-          expectedOutput: `=== Defeated 5 Slimes! ===\n  #1: (No drop)\n  #2: Sticky Jelly [Heal +10] dropped!\n  #3: (No drop)\n  #4: Sticky Jelly [Heal +10] dropped!\n  #5: Sticky Jelly [Heal +10] dropped!\n\n=== Defeated 5 Goblins! ===\n  #1: Potion [Heal +30] dropped!\n  #2: Potion [Heal +30] dropped!\n  #3: Potion [Heal +30] dropped!\nRusty Sword [ATK +5] dropped!\n  #4: Potion [Heal +30] dropped!\nRusty Sword [ATK +5] dropped!\n  #5: (No drop)`,
+          expectedOutput: `=== Defeated 5 Slimes! ===\n  #1: Slime Core [ATK +2] dropped!\n  #2: Sticky Jelly [Heal +10] dropped!\n  #3: (No drop)\n  #4: Slime Core [ATK +2] dropped!\n  #5: Sticky Jelly [Heal +10] dropped!\n  #5: Slime Core [ATK +2] dropped!\n\n=== Defeated 5 Goblins! ===\n  #1: Potion [Heal +30] dropped!\n  #1: Goblin Crown [DEF +8] dropped!\n  #2: Potion [Heal +30] dropped!\n  #3: Potion [Heal +30] dropped!\n  #4: Potion [Heal +30] dropped!\n  #5: Potion [Heal +30] dropped!\n  #5: Rusty Sword [ATK +5] dropped!`,
           hint: "random.random() < chance for drop check!",
           hint2: "Just run the code as is!"
         },

@@ -15,16 +15,16 @@ export const lesson45EnData: LessonData = {
           id: "ch1-0",
           type: "explain",
           title: "💭 Square roots... do I have to code it myself?",
-          content: `💭 Square roots, ceiling, floor... do you have to **code these complex calculations** from scratch every time? What if there was a pre-built **toolbox**?
+          content: `💭 Square roots, ceiling, floor... do you have to **code these complex calculations** from scratch every time? What if there was a pre-built **toolbox** and you could just grab the hammer you need?
 
 \`\`\`python
 # Calculate square roots yourself? Too hard!
-# → With the math module, it's just one line!
+# → Open the math module (= math toolbox), grab sqrt, done in one line!
 import math
 print(math.sqrt(16))  # 4.0
 \`\`\`
 
-@Key point: A **module** = a .py file containing functions and variables! Use import to bring them in!
+@Key point: A **module** = a **toolbox** of functions (a .py file)! Use \`import\` (= bring in) to borrow the whole box!
 
 | Module | Description | Key Features |
 |--------|-------------|--------------|
@@ -40,7 +40,7 @@ print(math.sqrt(16))  # 4.0
           id: "ch1-1",
           type: "explain",
           title: "💭 Is there only one way to import?",
-          content: `💭 When importing a module, do you always have to write **module.function()** every time? Isn't there a **shorter, more convenient** way?
+          content: `💭 \`math.sqrt(16)\` — do you have to type the **toolbox name** every single time? Can't we just keep the hammer in our hand?
 
 \`\`\`python
 # 1. Full import
@@ -59,7 +59,7 @@ import math as m
 print(m.sqrt(16))  # alias.function()
 \`\`\`
 
-@Key point: **import** has 4 methods = full, from...import, multiple, as alias! Pick the right one for the situation!`
+@Key point: \`import\` has 4 ways! Borrow the whole box / \`from\` (= from where) to grab one tool / grab several / \`as\` to give it a short nickname!`
         },
         {
           id: "ch1-2",
@@ -243,7 +243,7 @@ print(f'Rounded down: {math.___(avg)}')`,
           id: "ch3-0",
           type: "explain",
           title: "💭 How do you make dice rolling in code?",
-          content: `💭 **Rolling dice** in a game, **random rock-paper-scissors**... how do you code these? How do you get a different value each time?
+          content: `💭 **Rolling dice** in a game, **random rock-paper-scissors**, **gacha draws**... how do you code these? How do you get a different value each time?
 
 \`\`\`python
 import random

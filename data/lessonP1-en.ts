@@ -17,12 +17,12 @@ export const lessonP1EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🧮 What We're Building!",
-          content: `Let's use everything we learned in Part 1
-to build a **Mini Calculator**!
+          title: "🧮 Today: Mini Calculator!",
+          content: `Use everything from Part 1
+to build **your own calculator**!
 
-Since we can't use input() in the web environment,
-we'll assign values directly to variables!
+Since we can't use input() in the web,
+we put numbers in variables ahead of time!
 
 \`\`\`
 === 🧮 Mini Calculator ===
@@ -32,13 +32,13 @@ Result: 10 + 3 = 13
 **Concepts we'll use:**
 - print() output
 - Storing values in variables
-- Operators
-- Data type conversion`
+- +, -, *, / operators
+- f-string to format the result`
         },
         {
           id: "review",
           type: "explain",
-          title: "📚 Review!",
+          title: "📚 30-Second Review!",
           content: `**1. Storing values in variables**
 \`\`\`python
 num1 = 10
@@ -70,8 +70,8 @@ print(f'Result: {result}')
         {
           id: "step1",
           type: "tryit",
-          title: "1️⃣ Get Two Numbers",
-          task: "Get two numbers and print them!",
+          title: "1️⃣ Show Two Numbers",
+          task: "Put two numbers in variables and print them!",
           initialCode: "# Instead of input(), we assign values directly\nnum1 = 10\nnum2 = 3\n# Print both numbers using f-string\nprint(f'Input: {___}, {___}')",
           expectedOutput: "Input: 10, 3",
           hint: "Put the variable names inside the f-string!",
@@ -80,8 +80,8 @@ print(f'Result: {result}')
         {
           id: "step2",
           type: "tryit",
-          title: "2️⃣ Addition Calculator",
-          task: "Calculate the sum of two numbers!",
+          title: "2️⃣ Addition First!",
+          task: "Add the two numbers and store in result!",
           initialCode: "# Instead of input(), we assign values directly\nnum1 = 10\nnum2 = 3\n# Add the two numbers\nresult = ___\nprint(f'{num1} + {num2} = {result}')",
           expectedOutput: "10 + 3 = 13",
           hint: "Add the two variables and store in result!",
@@ -90,8 +90,8 @@ print(f'Result: {result}')
         {
           id: "step2-5",
           type: "explain",
-          title: "💡 Preview of if-elif!",
-          content: `A calculator needs to **choose which operation** to perform: +, -, *, or /.
+          title: "💡 Quick Taste of if-elif!",
+          content: `A calculator needs to **pick which one** to do: +, -, *, or /.
 That's where \`if\` and \`elif\` come in!
 
 \`\`\`python
@@ -113,12 +113,12 @@ For now, just understand that "different code runs based on conditions" and you'
         {
           id: "step3",
           type: "tryit",
-          title: "3️⃣ Choose an Operator",
-          task: "Choose an operator and perform the calculation!",
+          title: "3️⃣ Add Multiply and Divide!",
+          task: "Fill in * and / handlers!",
           initialCode: "# Instead of input(), we assign values directly\nnum1 = 10\nnum2 = 3\nop = '+'\n\nif op == '+':\n    result = num1 + num2\nelif op == '-':\n    result = num1 - num2\n# Add the remaining operators\nelif op == '*':\n    result = ___\nelif op == '/':\n    result = ___\n\nprint(f'{num1} {op} {num2} = {result}')",
           expectedOutput: "10 + 3 = 13",
-          hint: "Multiply is num1 * num2, divide is num1 / num2",
-          hint2: "result = num1 * num2"
+          hint: "Multiply is num1 * num2, divide is num1 / num2!",
+          hint2: "num1 * num2 / num1 / num2"
         }
       ]
     },
@@ -130,8 +130,8 @@ For now, just understand that "different code runs based on conditions" and you'
         {
           id: "mission",
           type: "mission",
-          title: "🏆 Complete Calculator!",
-          task: "Build a complete calculator with a title!",
+          title: "🏆 Build the Complete Calculator!",
+          task: "Fill in title, all operators, and result output!",
           initialCode: "print('=== 🧮 Mini Calculator ===')\n\n# Instead of input(), we assign values directly\nnum1 = 10\nnum2 = 3\nop = '+'\n\nif op == '+':\n    result = ___\nelif op == '-':\n    result = ___\nelif op == '*':\n    result = ___\nelif op == '/':\n    result = ___\nelse:\n    result = 'Error'\n\nprint(f'Result: {num1} {op} {num2} = {result}')",
           expectedOutput: "=== 🧮 Mini Calculator ===\nResult: 10 + 3 = 13",
           hint: "Fill in the correct calculation for each operator!",
@@ -145,21 +145,20 @@ For now, just understand that "different code runs based on conditions" and you'
 
 You completed the **Mini Calculator**!
 
-### Concepts Used:
+### Concepts You Used:
 ✅ print() - Output
-✅ input() - Input
-✅ int() - Type conversion
-✅ Variables - Data storage
-✅ Operators - Calculations
-✅ if-elif-else - Conditionals
-✅ f-string - Formatting
+✅ Variables - Storing values
+✅ +, -, *, / - Operators
+✅ if-elif-else - Conditionals (a taste!)
+✅ f-string - Formatting the result
 
-### Challenge Tasks 💪
+### Challenge Tasks 💪 (After Part 2!)
 - Prevent division by zero
-- Add decimal calculations (float)
-- Repeat calculations (while)
+- Get numbers with real input()
+- Repeat calculations many times (while)
+- Try your own favorite numbers in num1, num2!
 
-Learn more about conditionals and loops in **Part 2**! 🚀`
+Learn conditionals and loops in detail in **Part 2**! 🚀`
         }
       ]
     }

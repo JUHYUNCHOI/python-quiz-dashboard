@@ -53,14 +53,26 @@ Pictured:
 
 - The box labeled \`name\` holds \`'Hero'\`
 - The box labeled \`hp\` holds \`100\`
-- The box labeled \`gold\` holds \`5000\``
+- The box labeled \`gold\` holds \`5000\`
+
+> 💡 \`=\` is **NOT math's "equals"!** It means **put** the right-side value into the left-side box. We'll dig into this next in \`What Does = Actually Mean?\`.`
         },
         {
           id: "concept-builder",
           type: "interactive",
-          title: "🎬 Build a Variable — Syntax Assembly",
-          description: "Click through to see how \`variable = value\` is put together.",
+          title: "🎬 Build a Variable — Click Through!",
+          description: "Click through to see how \`variable = value\` comes together, one piece at a time.",
           component: "pyVariableBuilder",
+        },
+        {
+          id: "try-builder-followup",
+          type: "tryit",
+          title: "🖥️ Try It — Build the age Box",
+          task: "Follow the syntax you just assembled — store 15 in age and print it!",
+          initialCode: "age = 15\nprint(___)",
+          expectedOutput: "15",
+          hint: "To get the value out, just write the variable name (no quotes).",
+          hint2: "age"
         },
         {
           id: "concept-why",
@@ -91,18 +103,24 @@ print(name, 'has 5000 gold')
           id: "concept-equals",
           type: "explain",
           title: "🧮 What Does \`=\` Actually Mean?",
-          content: `In math class, \`=\` meant "is equal to" — but in Python it's different.
+          content: `> 📌 **Remember just one line!**
+> \`=\` doesn't mean "equals" — it means **"put into the box on the left!"**
 
-| Math | Python |
-|---|---|
-| \`x = 10\` → "x equals 10" | \`x = 10\` → "**store** 10 into x" |
+\`\`\`
+x = 10
+   ↑
+   "put 10 into the box named x!"
+\`\`\`
 
-> 🎯 Read it as an arrow: \`x = 10\` → \`10 → x\` ("put 10 into the box named x!")`
+- Math: \`x = 10\` → "x equals 10"
+- Python: \`x = 10\` → **"put 10 into x"**
+
+Picture it as an arrow: \`10 → x\` 📥`
         },
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Try It — Store 15 in age and print",
           task: "Store 15 in the variable age and print it!",
           initialCode: "age = ___\nprint(age)",
           expectedOutput: "15",
@@ -112,7 +130,7 @@ print(name, 'has 5000 gold')
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — What does `=` mean in `x = 10`?",
           content: "What does `=` mean in `x = 10`?",
           options: [
             "x and 10 are equal",
@@ -166,7 +184,7 @@ print(price + 2000)
         {
           id: "use-explain-mistake",
           type: "explain",
-          title: "⚠️ Common Mistake — Quotes",
+          title: "🤔 What's the Difference — With or Without Quotes?",
           content: `\`\`\`python
 print('price')   # → price (literally the letters!)
 print(price)     # → 19000 (the value in the box!)
@@ -179,7 +197,7 @@ With quotes \`'\` → literal text. Variable name only (no quotes) → value in 
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Try It — Print chicken + 2000",
           task: "Store 19000 in chicken, then print chicken + 2000!",
           initialCode: "chicken = ___\nprint(chicken + 2000)",
           expectedOutput: "21000",
@@ -189,7 +207,7 @@ With quotes \`'\` → literal text. Variable name only (no quotes) → value in 
         {
           id: "label-explain",
           type: "explain",
-          title: "🏷️ Printing Text and Variables Together",
+          title: "🏷️ Printing Words and Variables Together",
           content: `Just printing a variable value can be confusing — what does it mean?
 
 > 💡 Remember **lesson 1** where \`print('Result:', 100)\` printed multiple values with **commas (,)**? The same trick works for variables.
@@ -209,7 +227,7 @@ Comma-separated values automatically get a **space** between them (same as in le
         {
           id: "try_label1",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Try It — Print 'Name: Alice'",
           task: "Use a comma to print 'Name: Alice'!",
           initialCode: "name = 'Alice'\nprint(___, name)",
           expectedOutput: "Name: Alice",
@@ -231,8 +249,10 @@ Comma-separated values automatically get a **space** between them (same as in le
         {
           id: "change-explain",
           type: "explain",
-          title: "🔄 Changing the Value (Reassignment)",
+          title: "🔄 Putting a New Value in the Same Box",
           content: `The value in the box can **change anytime**. Assign a new value to the same variable → the old value **disappears** and is overwritten.
+
+> 💡 Grown-up books call this **"reassignment"**. Just remembering it as **"putting in a new value"** is plenty.
 
 \`\`\`python
 hp = 100
@@ -257,7 +277,7 @@ hp = 80         →   [ 80 ]      ← 100 is overwritten and gone
         {
           id: "change-explain-self",
           type: "explain",
-          title: "♻️ Using a Variable to Update Itself",
+          title: "♻️ Adding to Yourself — `x = x + 3`",
           content: `\`x = x + 3\` looks weird (in math, \`x = x + 3\` → \`0 = 3\`?), but in Python it's natural.
 
 \`\`\`python
@@ -311,21 +331,33 @@ print(money)
         {
           id: "change-explain-error",
           type: "explain",
-          title: "⚠️ Doesn't Work — Using a Variable You Never Made",
-          content: `Right — you get a \`NameError\`.
+          title: "💬 What Does Python Actually Say?",
+          content: `As expected, you get an error.
 
 \`\`\`python
-print(money)   # ❌ NameError — no box named money was ever created
+print(money)   # ❌ no box named money was ever created
 \`\`\`
 
-You have to **create** it first with \`money = 1000\`, then use it.
+### 💁 What Python is really saying (in plain English)
 
-> 💡 Variables: **store first → then read.** Break that order → NameError.`
+> "Wait — I can't find a box called \`money\`! You haven't made one yet?" 😵
+
+The actual red text on screen:
+
+\`\`\`
+NameError: name 'money' is not defined
+\`\`\`
+
+→ \`NameError\` literally means "name error" = "no box with that name!"
+
+> 🚨 See this red text? → **you used a variable you never created.** Make it first with \`money = 1000\`, then use it.
+
+> 💡 Variables: **store first → then read.**`
         },
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Try It — Change score from 0 to 100",
           task: "Start score at 0, change it to 100, and print it!",
           initialCode: "score = 0\nscore = ___\nprint(score)",
           expectedOutput: "100",
@@ -340,9 +372,19 @@ You have to **create** it first with \`money = 1000\`, then use it.
           component: "variableUpdateVisualizer",
         },
         {
+          id: "try-self-update",
+          type: "tryit",
+          title: "🖥️ Try It — Add 3 to x and store back",
+          task: "Same pattern you just saw! Start x at 5, add 3, store back into x, then print.",
+          initialCode: "x = 5\nx = ___ + 3\nprint(x)",
+          expectedOutput: "8",
+          hint: "Right side first: 5 + 3 = 8. The blank takes a variable name (no quotes).",
+          hint2: "x"
+        },
+        {
           id: "quiz2",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — What is x after `x = x + 3`?",
           content: "What is the value of x after `x = 5`, `x = x + 3`?",
           options: ["5", "3", "8", "Error"],
           answer: 2,
@@ -358,17 +400,28 @@ You have to **create** it first with \`money = 1000\`, then use it.
         {
           id: "rules-explain",
           type: "explain",
-          title: "📋 Variable Naming Rules — At a Glance",
-          content: `### 4-row summary (memorize just this!)
+          title: "📋 Variable Naming Rules — Just 4!",
+          content: `### 1️⃣ **Letters, digits, \`_\` only**
 
-| | Rule | OK | NG |
-|---|---|---|---|
-| 1 | **Letters, digits, \`_\`** only | \`player_hp\`, \`name1\` | \`my-name\` (hyphen) / \`my name\` (space) |
-| 2 | **First char must be letter or \`_\`** | \`_temp\`, \`score\` | \`2score\` (digit first) |
-| 3 | **No reserved keywords** | \`my_if\` | \`if\`, \`for\`, \`print\` |
-| 4 | **Case-sensitive** | \`age\` ≠ \`Age\` | (mistake → different var) |
+- ✅ \`age\`, \`score_1\`, \`my_hp\`
+- ❌ \`이름\` (non-English) / \`my hp\` (space) / \`my-hp\` (hyphen)
 
-> 🎯 One-liner: **letters/digits/_, first char a letter or _, no keywords.**`
+### 2️⃣ **First char must be a letter or \`_\`**
+
+- ✅ \`name\`, \`_temp\`
+- ❌ \`1name\` (starts with a digit)
+
+### 3️⃣ **Python's special words are off-limits**
+
+- ✅ \`my_if\`
+- ❌ \`if\`, \`for\`, \`print\` (more on this next step)
+
+### 4️⃣ **UPPER and lower are different letters**
+
+- \`age\` and \`Age\` are **completely different boxes**
+- Mix up the case by accident → different variable!
+
+> 🎯 One-liner: **letters/digits/\`_\`, first char a letter or \`_\`.**`
         },
         {
           id: "rules-explain-chars",
@@ -383,14 +436,14 @@ player_hp = 100
 score2 = 50
 
 # ❌ NG
-my-name = 'Lee'   # hyphen looks like minus operator
+my-name = 'Lee'   # hyphen looks like the minus (-) sign you'll learn later
 my name = 'Lee'   # space splits into two words
 my@name = 'Lee'   # special chars like @ not allowed
 \`\`\`
 
 ### Rule 2: first character
 
-A digit can't lead. The interpreter would be confused: "is this a variable or a number?"
+A digit can't lead. Python would be confused: "is this a variable or a number?"
 
 \`\`\`python
 2score = 50    # ❌
@@ -399,43 +452,73 @@ _temp = 0      # ✅ leading _ is fine
 \`\`\``
         },
         {
-          id: "rules-explain-keywords",
-          type: "explain",
-          title: "🚫 Detail — Rules 3·4: Keywords + Case",
-          content: `### Rule 3: no reserved keywords
-
-Words Python already uses for syntax. Can't be variable names.
+          id: "predict-bad-name",
+          type: "predict",
+          title: "💭 Which One is NOT a Valid Variable Name?",
+          content: `They look similar, but Python will refuse one of them. Which?
 
 \`\`\`python
-if = 10        # ❌ if is a conditional keyword
-for = 5        # ❌ for is a loop keyword
-print = 3      # ❌ built-in function — possible but never do this
+score2 = 100     # A
+2score = 100     # B
+\`\`\``,
+          options: [
+            "Only A is bad",
+            "Only B is bad",
+            "Both are fine",
+            "Both are bad"
+          ],
+          answer: 1,
+          explanation: "B is bad! Variable names **can't start with a digit**. \`score2\` (digit at the end) is totally fine."
+        },
+        {
+          id: "rules-explain-keywords",
+          type: "explain",
+          title: "🚫 Words Python Already Took + Case Matters",
+          content: `### Words Python already grabbed for itself
+
+A few words **Python keeps for its own jobs**. You can't use them as variable names.
+
+\`\`\`python
+if = 10        # ❌ if is one of Python's own words
+for = 5        # ❌ so is for
 \`\`\`
 
-**Common keywords**: \`if\`, \`else\`, \`for\`, \`while\`, \`and\`, \`or\`, \`not\`, \`True\`, \`False\`, \`None\`, \`return\`, \`def\`, \`class\`, \`import\`
+> 💡 There are only a few of these. **Don't memorize them** — you'll meet \`if\`, \`for\`, etc. naturally in later lessons by actually using them.
 
-### Rule 4: case sensitive
+**For now:**
+- Plain English words like \`print\` → OK as variable names
+- Python's own words like \`if\` → ❌
+- If you hit an error, that's when you'll learn "ah, can't use that one"
+
+### UPPER / lower case
 
 \`\`\`python
 age = 15
-print(Age)   # ❌ NameError — Age was never created (capital A!)
+print(Age)   # ❌ Error! Age was never created (capital A!)
 \`\`\`
 
-→ \`age\` and \`Age\` are **completely different variables**. A typo in case creates a different variable.`
+\`age\`, \`Age\`, \`AGE\` → to Python they're **all different boxes**. One capital letter changes the variable.`
         },
         {
           id: "rules-explain-style",
           type: "explain",
-          title: "🐍 Convention — snake_case + Meaningful Names",
-          content: `The rules are met, but for **readability** there's a Python style guide.
+          title: "🐍 Joining Two Words Together",
+          content: `Want to combine \`player\` and \`hp\` into one variable name? There are two shapes.
+
+### 🐍 Underscore — \`player_hp\`
+
+Connect words with \`_\`. **Python recommends this one!**
+(Grown-ups call it *snake_case* — letters stretched out by \`_\` look like a snake.)
+
+### 🐪 Middle Capital — \`playerHp\`
+
+Capitalize the first letter of later words. **Common in other languages.**
+(Grown-ups call it *camelCase* — the middle capital sticks up like a camel's hump.)
 
 \`\`\`python
-player_name = 'Alice'   # ✅ snake_case — Python style
-playerName = 'Alice'    # △ camelCase — works, but not Pythonic
-PLAYERNAME = 'Alice'    # △ ALL CAPS = "constant, never changes"
+player_hp = 100   # ✅ underscore — Python style
+playerHp = 100    # △ camel — works, but not common in Python
 \`\`\`
-
-For multi-word names, use **lowercase + \`_\`**.
 
 ### 💡 Use Meaningful Names
 
@@ -447,12 +530,12 @@ a = 5500
 latte_price = 5500   # ✅ Still understandable a month later
 \`\`\`
 
-> 🎯 The computer treats \`x\` and \`player_hp\` the same. The convention is **for the human (you, a month from now) reading it**.`
+> 🎯 The computer treats \`x\` and \`player_hp\` the same. The convention is **for the human (you, a month from now)**.`
         },
         {
           id: "quiz3",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — Which is a valid variable name?",
           content: "Which is a valid variable name?",
           options: ["1st_place", "my-score", "player_name", "my name"],
           answer: 2,
@@ -461,7 +544,7 @@ latte_price = 5500   # ✅ Still understandable a month later
         {
           id: "quiz_naming",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — Which is the best variable name?",
           content: "Which is the best variable name?",
           options: ["a", "n1", "student_score", "XVALUE"],
           answer: 2,
@@ -619,7 +702,7 @@ A \`#\` inside quotes is **just a character**. Only \`#\` outside string quotes 
         {
           id: "comment-quiz",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — What's the comment symbol?",
           content: "Which symbol is used for comments in Python?",
           options: ["//", "#", "/* */", "--"],
           answer: 1,
@@ -628,7 +711,7 @@ A \`#\` inside quotes is **just a character**. Only \`#\` outside string quotes 
         {
           id: "comment-tryit",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Try It — Add the comment symbol",
           task: "Fill in the blank with the comment symbol!\nComments don't affect how the code runs.",
           initialCode: "___ code to print name and age\nname = 'Alice'\nage = 15\nprint(name)\nprint(age)",
           expectedOutput: "Alice\n15",
@@ -646,7 +729,7 @@ A \`#\` inside quotes is **just a character**. Only \`#\` outside string quotes 
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission!",
+          title: "🏆 Final Mission — Build an About-Me Card",
           task: "Use 3 variables to build an introduction card! (Name: Alice, Age: 15, Hobby: gaming)",
           initialCode: "name = 'Alice'\nage = ___\nhobby = 'gaming'\n\n# Use a comma to chain text and variables in print\nprint('=== About Me ===')\nprint('Name:', name)\nprint('Age:', ___)\nprint('Hobby:', hobby)",
           expectedOutput: "=== About Me ===\nName: Alice\nAge: 15\nHobby: gaming",
@@ -662,8 +745,8 @@ A \`#\` inside quotes is **just a character**. Only \`#\` outside string quotes 
 ✅ **Variable** = a **labeled box** that holds data
 ✅ Store with \`variable = value\` (\`=\` means "put into")
 ✅ Retrieve by using the variable name (no quotes!)
-✅ **Reassignment** — assigning a new value overwrites the old (\`x = x + 3\` works)
-✅ **Naming rules** — letters/digits/_, first char letter or _, no keywords, snake_case, meaningful names
+✅ **Putting a new value in** (reassignment) — assigning a new value overwrites the old (\`x = x + 3\` works)
+✅ **Naming rules** — letters/digits/_, first char letter or _, no Python special words, underscore style (snake_case), meaningful names
 ✅ **Comments (\`#\`)** — notes Python ignores, also handy for debugging
 ✅ Print variables chained with \`,\` (auto space)
 

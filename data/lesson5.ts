@@ -40,7 +40,7 @@ print(first + second)  # 안녕하세요
         {
           id: "concat-explain",
           type: "explain",
-          title: "📝 문자열 연결 (Concatenation)",
+          title: "📝 문자열 연결 — + 로 이어붙이기",
           content: `**+** 연산자로 문자열을 이어붙여요!
 
 \`\`\`python
@@ -75,12 +75,6 @@ print("Hello" + " " + "World")  # Hello World
 
 \`+\` 는 **두 문자열을 글자 그대로** 이어붙여요. 공백이 필요하면 \`" "\` 를 직접 끼워넣어요.
 
-### 어디서 자주 써요?
-
-- **인사 만들기** — \`"안녕, " + name + "!"\`
-- **파일명 조합** — \`folder + "/" + filename\`
-- **HTML / 경로 조합** — 조각조각 이어붙이기
-
 ### ❌ 안 되는 것
 
 \`\`\`python
@@ -92,7 +86,7 @@ print("나이: " + 15)   # TypeError — 문자열 + 숫자는 불가!
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
+          title: "🖥️ 변수 이어붙여 인사 만들기",
           task: "빈칸에 변수 이름을 넣어 \"반가워, 민수!\" 가 출력되게 하세요!",
           initialCode: "name = \"민수\"\n# 빈칸에 변수 이름을 넣으세요 (값 X)\ngreeting = \"반가워, \" + ___ + \"!\"\nprint(greeting)",
           expectedOutput: "반가워, 민수!",
@@ -102,7 +96,7 @@ print("나이: " + 15)   # TypeError — 문자열 + 숫자는 불가!
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — \"Hello\" + \"World\" 결과는?",
           content: "\"Hello\" + \"World\"의 결과는?",
           options: ["Hello World", "HelloWorld", "Hello + World", "에러"],
           answer: 1,
@@ -125,13 +119,7 @@ print(len("안녕"))   # 한글 한 글자도 1개로 셈
 
 ### 왜 필요해요?
 
-"이 입력이 너무 길지 않은가?" "비밀번호 8자 이상인가?" "메시지가 비어있나?" — 글자 수를 알면 답할 수 있는 질문이 많아요.
-
-### 자주 쓰는 곳
-
-- **비밀번호 길이 체크** — 8 자 이상인가?
-- **빈 입력 확인** — \`len(text) == 0\` 이면 비었음
-- **글자 수 제한** — 트위터 280 자, SMS 90 자`
+"닉네임 너무 길지 않은가?" "이름 칸이 비었나?" — 글자 수를 알면 답할 수 있는 질문이 많아요.`
         },
         {
           id: "predict-len-hello",
@@ -199,7 +187,7 @@ print(text[3])    # h
 
 \`\`\`python
 text = "Python"
-#        P  y  t  h  o  n
+#        P   y   t   h   o   n
 #      [-6][-5][-4][-3][-2][-1]   ← 뒤에서부터
 
 print(text[-1])   # n (마지막)
@@ -234,6 +222,16 @@ print(text[5])   # IndexError
           componentProps: { initialText: "Python" },
         },
         {
+          id: "try-index-after-viz",
+          type: "tryit",
+          title: "🖥️ 인덱싱 바로 손에 익히기",
+          task: "Hello 의 첫 글자와 마지막 글자를 출력하세요! (빈칸: 인덱스 숫자)",
+          initialCode: "text = \"Hello\"\n# 빈칸: 첫 글자 인덱스\nprint(text[___])\n# 빈칸: 마지막 글자 인덱스 (음수로 한 번에!)\nprint(text[___])",
+          expectedOutput: "H\no",
+          hint: "첫 글자는 0번, 마지막은 -1.",
+          hint2: "0 / -1"
+        },
+        {
           id: "predict-neg-index",
           type: "predict",
           title: "💭 어떤 글자가 나올까?",
@@ -250,9 +248,9 @@ print(word[-2])
         {
           id: "try-len-index",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 길이와 인덱스",
-          task: "이름의 첫 글자, 마지막 글자, 길이를 출력하세요!",
-          initialCode: "name = \"Python\"\n\n# 첫 글자\nfirst = name[___]\n# 마지막 글자 (음수 인덱스)\nlast = name[___]\n# 길이\nlength = ___(name)\n\nprint(\"첫:\", first)\nprint(\"끝:\", last)\nprint(\"길이:\", length)",
+          title: "🖥️ 첫 글자 / 끝 글자 / 길이 출력",
+          task: "이름의 첫 글자, 마지막 글자, 길이를 빈칸 3개 채워서 출력하세요!",
+          initialCode: "name = \"Python\"\n\n# 첫 글자\nfirst = name[___]\n# 마지막 글자 (음수 인덱스)\nlast = name[___]\n# 길이\nlength = ___(name)\n\n# (콤마는 Ch3 에서 — 지금은 그대로 두고 빈칸만!)\nprint(\"첫:\", first)\nprint(\"끝:\", last)\nprint(\"길이:\", length)",
           expectedOutput: "첫: P\n끝: n\n길이: 6",
           hint: "첫 글자는 0번. 마지막 글자는 음수 인덱스로 한 번에. 길이 구하는 내장함수도 기억나죠?",
           hint2: "0 / -1 / len"
@@ -324,7 +322,7 @@ print("하" * 2.5)    # TypeError — 소수는 불가, 정수만!
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
+          title: "🖥️ 별 5개 출력하기",
           task: "별(*)을 5개 출력하세요! (빈칸엔 반복 횟수 = 숫자)",
           initialCode: "# 빈칸에 반복할 횟수 (숫자) 를 넣으세요\nprint(\"*\" * ___)",
           expectedOutput: "*****",
@@ -344,7 +342,7 @@ print("하" * 2.5)    # TypeError — 소수는 불가, 정수만!
         {
           id: "quiz2",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — \"AB\" * 3 결과는?",
           content: "\"AB\" * 3의 결과는?",
           options: ["AB3", "ABABAB", "AB AB AB", "에러"],
           answer: 1,
@@ -369,13 +367,7 @@ print("LOVE" in text)
 
 ### 왜 필요해요?
 
-"이 메시지에 욕설이 들어있나?" "검색어가 제목에 있나?" "이메일에 @ 가 들어있나?" — 우리가 매일 하는 질문이에요. 그걸 코드로 옮긴 게 \`in\`.
-
-### 자주 쓰는 곳
-
-- **검색** — \`"파이썬" in title\` (제목에 검색어 있나?)
-- **필터** — \`"@" in email\` (이메일 형식인가?)
-- **확장자 확인** — \`".jpg" in filename\``
+"이 댓글에 욕 있나?" "내 닉네임 안에 'a' 들어있나?" — 그걸 한 줄로 물어보는 게 \`in\` 이에요.`
         },
         {
           id: "predict-in-case",
@@ -389,7 +381,7 @@ print("LOVE" in text)
 \`\`\``,
           options: ["True", "False", "에러", "love"],
           answer: 1,
-          explanation: "\`in\` 은 대소문자를 구분해요. text 안에는 소문자 \`love\` 만 있고 \`LOVE\` 는 없어요 → False.\n\n대소문자 무시 검사는 lesson 6 에서 \`.lower()\` 같은 메서드로 배워요."
+          explanation: "\`in\` 은 대소문자를 구분해요. text 안에는 소문자 \`love\` 만 있고 \`LOVE\` 는 없어요 → False."
         },
         {
           id: "in-explain-detail",
@@ -414,7 +406,7 @@ print("h" not in "hello")     # False (h 가 있으므로)
 
 ### ⚠️ 대소문자 구분
 
-\`"LOVE" in "I love Python"\` 은 \`False\`. \`love\` 와 \`LOVE\` 는 다른 글자예요. 대소문자 무시 검사는 lesson 6 메서드에서 다뤄요.`
+\`"LOVE" in "I love Python"\` 은 \`False\`. \`love\` 와 \`LOVE\` 는 다른 글자예요.`
         },
         {
           id: "compare-explain",
@@ -436,14 +428,7 @@ print(a != c)
 
 ### 왜 필요해요?
 
-"비밀번호가 맞나?" "사용자가 'yes' 라고 답했나?" "이름이 일치하나?" — 두 문자열이 같은지 확인하는 건 어디서나 필요해요. \`==\` 가 그 일을 해줘요.
-
-### 자주 쓰는 곳
-
-- **로그인 검사** — \`input_pw == saved_pw\`
-- **답 확인** — \`answer == "y"\`
-- **상태 비교** — \`status == "OK"\`
-- **명령어 매칭** — \`cmd == "quit"\``
+"내가 입력한 답이 정답인가?" "사용자가 'y' 라고 답했나?" — 두 문자열이 같은지 확인하는 일은 자주 나와요.`
         },
         {
           id: "predict-compare-case",
@@ -458,7 +443,7 @@ print(a == c)
 \`\`\``,
           options: ["True", "False", "에러", "hello"],
           answer: 1,
-          explanation: "\`==\` 는 글자가 **완전히 같아야** True. \`a\` (소문자 h) 와 \`c\` (대문자 H) 는 다른 글자라 False.\n\n대소문자 무시하고 비교하려면 lesson 6 에서 배울 \`.lower()\` 가 필요해요."
+          explanation: "\`==\` 는 글자가 **완전히 같아야** True. \`a\` (소문자 h) 와 \`c\` (대문자 H) 는 다른 글자라 False."
         },
         {
           id: "compare-explain-order",
@@ -468,13 +453,18 @@ print(a == c)
 
 \`\`\`python
 print("apple" < "banana")   # True — a 가 b 보다 사전에서 앞
-print("apple" < "Apple")    # False — 대문자가 소문자보다 작음
 print("kiwi" < "apple")     # False — k 가 a 보다 뒤
 \`\`\`
 
-**왜 그래요?** 컴퓨터는 글자마다 숫자 코드 (ASCII) 를 매겨두고, 그 숫자로 비교해요. 대문자 \`A\` (65) < 소문자 \`a\` (97). 그래서 \`"Apple" < "apple"\` 이 \`True\`.
-
 사전 순서 = 첫 글자부터 한 글자씩 비교. 첫 글자가 같으면 다음 글자로 넘어가요. 사전 찾는 방법과 똑같아요.
+
+### 대문자 vs 소문자
+
+\`\`\`python
+print("apple" < "Apple")    # False
+\`\`\`
+
+규칙 하나만 기억: **대문자 < 소문자**. (정확한 원리는 lesson 9 에서.)
 
 ### 활용 — 답 검사
 
@@ -482,23 +472,15 @@ print("kiwi" < "apple")     # False — k 가 a 보다 뒤
 answer = "y"
 print("y 인가?:", answer == "y")
 print("n 인가?:", answer == "n")
-\`\`\`
-
-> 💡 \`print(..., ...)\` 콤마 출력 — \`True/False\` 같은 결과를 글자 사이에 끼워 넣기에 딱이에요. \`+\` 로는 문자열+불린이 안 되거든요!`
+\`\`\``
         },
         {
           id: "compare-explain-trap",
           type: "explain",
-          title: "🪤 숫자처럼 보이지만 문자열이면…",
-          content: `### ❌ 헷갈리기 쉬운 것
+          title: "📌 한 줄 주의 — 따옴표 안 숫자는 사전 순",
+          content: `\`"10" < "9"\` 의 결과는 \`True\` — 첫 글자 \`'1'\` 이 \`'9'\` 보다 사전상 앞이라서.
 
-\`\`\`python
-print("10" < "9")    # True (?!) — 첫 글자 '1' < '9' 라서
-\`\`\`
-
-문자열은 **글자 단위 비교**. \`"10"\` 의 첫 글자는 \`'1'\`, \`"9"\` 는 \`'9'\` — 사전상 \`'1'\` 이 \`'9'\` 보다 앞이라 결과는 \`True\`.
-
-숫자처럼 비교하고 싶다면 lesson 9 에서 배울 **타입 변환** 이 필요해요. \`int("10") < int("9")\` 처럼.`
+> 따옴표 안에 있으면 **글자**. 진짜 숫자로 비교하는 법은 lesson 9 에서!`
         },
         {
           id: "try-in-compare",
@@ -561,16 +543,12 @@ print(name, "의 점수는", score, "점")
 # 민수 의 점수는 95 점
 \`\`\`
 
-### 💡 더 우아한 방법은 곧 배워요
-
-\`+\` 로 직접 합치고 싶다면 숫자를 문자열로 **변환** 해야 해요. 그 변환 도구는 **lesson 9 (타입 변환)** 에서.
-
-더 깔끔하게 끼워 넣는 \`f-string\` 은 **lesson 8** 에서 배울 거예요. 지금은 콤마만으로 충분!`
+지금은 콤마만 알면 충분해요!`
         },
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
+          title: "🖥️ 변수와 숫자 같이 출력하기",
           task: "빈칸에 변수 이름을 넣어 \"점수: 100\" 을 출력하세요! (값 100 X)",
           initialCode: "score = 100\n# 빈칸엔 변수 이름 (값 100 직접 X)\nprint(\"점수:\", ___)",
           expectedOutput: "점수: 100",
@@ -603,6 +581,8 @@ text = "He said "hi""   # ❌ SyntaxError
 
 ### 해결 — 백슬래시 \`\\\\\` 로 "이건 글자야" 표시
 
+> 💡 백슬래시 (\`\\\\\`) 는 한국 키보드 **Enter 키 위에 있는 \`₩\` 키** 에 있어요. 그냥 누르면 \`₩\` 가 나오기도 하지만, 파이썬 코드에서는 \`\\\\\` 로 보여요 (같은 키!).
+
 백슬래시는 "다음 한 글자는 특별하게 다뤄줘" 라는 신호예요.
 
 \`\`\`python
@@ -615,23 +595,29 @@ print(text)   # He said "hi"
         {
           id: "escape-explain-table",
           type: "explain",
-          title: "📋 자주 쓰는 이스케이프",
-          content: `| 표기 | 의미 | 결과 |
-|---|---|---|
-| \`\\n\` | 줄바꿈 (new line) | 다음 줄로 |
-| \`\\t\` | 탭 (tab) | 공백 여러 칸 |
-| \`\\"\` | 큰따옴표 글자 | \`"\` |
-| \`\\'\` | 작은따옴표 글자 | \`'\` |
-| \`\\\\\` | 백슬래시 자체 | \`\\\` |
+          title: "📋 줄바꿈 \\n 과 탭 \\t — 제일 많이 써요",
+          content: `### 두 가지만 외우면 끝
 
-### 어디서 자주 써요?
+\`\`\`python
+print("첫 줄\\n둘째 줄")   # \\n = 줄바꿈
+print("이름\\t점수")        # \\t = 탭 (공백 여러 칸)
+\`\`\`
+
+결과:
+\`\`\`
+첫 줄
+둘째 줄
+\`\`\`
+\`\`\`
+이름    점수
+\`\`\`
+
+### 어디서 써요?
 
 - **줄바꿈** \`\\n\` — 출력을 여러 줄로 (제일 자주!)
 - **탭** \`\\t\` — 표/리스트 들여쓰기
-- **파일 경로** — 윈도우 경로의 \`\\\` 표시
-- **인용문** — 따옴표 안에 따옴표
 
-> 💡 외울 건 \`\\n\` 과 \`\\t\` 정도. 나머지는 따옴표 종류로 해결 가능!`
+> 💡 \`\\"\`, \`\\'\` 같은 다른 표기도 있지만, 다음 스텝에서 더 깔끔한 방법을 배워요!`
         },
         {
           id: "escape-explain-tricks",
@@ -659,26 +645,17 @@ text = """첫 줄
 print(text)
 \`\`\`
 
-엔터키 그대로 들어가요. 시 / 메뉴판 / 긴 메시지에 딱.
-
-### ❌ 헷갈리지 마세요
-
-\`\`\`python
-print("a\\nb")    # 두 줄로 출력
-print("a\\\\nb")   # 글자 그대로: a\\nb (백슬래시 자체를 표현)
-\`\`\`
-
-\`\\\\\` 두 개를 써야 백슬래시 한 글자가 나와요.`
+엔터키 그대로 들어가요. 시 / 메뉴판 / 긴 메시지에 딱.`
         },
         {
           id: "try-escape",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 이스케이프와 줄바꿈",
-          task: "코드를 그대로 실행해 \\n 과 \\t 가 실제로 어떻게 보이는지 확인하세요!",
-          initialCode: "# 빈칸 없음 — 그대로 실행 버튼 누르기\nprint(\"제목\\n\\t항목 1\\n\\t항목 2\")",
-          expectedOutput: "제목\n\t항목 1\n\t항목 2",
-          hint: "그대로 실행 — \\n 은 줄바꿈, \\t 는 탭 으로 바뀝니다.",
-          hint2: ""
+          title: "🖥️ 줄바꿈 \\n 끼워넣기",
+          task: "빈칸에 \\n (줄바꿈) 을 넣어서 \"제목\" 다음에 줄을 바꿔보세요!",
+          initialCode: "# 빈칸: 제목과 항목 사이 — 줄바꿈 (\\n)\nprint(\"제목___항목 1\")",
+          expectedOutput: "제목\n항목 1",
+          hint: "줄바꿈은 \\\\n. 두 글자, 백슬래시 + n.",
+          hint2: "\\n"
         }
       ]
     },
@@ -722,13 +699,13 @@ score = 100
 print("점수:", score)   # 점수: 100
 \`\`\`
 
-> 💡 \`+\` 로 문자열에 숫자를 붙이려면 변환이 필요해요 — **lesson 9 (타입 변환)** 에서 \`str()\` 같은 도구를 배워요. 더 깔끔한 \`f-string\` 은 **lesson 8** 에서!`
+> 💡 이번 레슨에서 미뤘던 것들 (대소문자 무시 비교, \`+\` 로 숫자 합치기, \`int("10")\` 같은 변환) 은 다음 레슨들에서 차근차근 배워요. 지금은 위 도구들 손에 익히는 데 집중!`
         },
         {
           id: "mission2",
           type: "mission",
           title: "🏆 미션 1 — 예쁜 메뉴판",
-          task: "빈칸 4개 채우기: 위 2개는 구분선 반복 횟수 (=8개), 아래 2개는 가격 숫자 (18000, 19000).",
+          task: "빈칸 4개 채우기:\n• 위 2개 = 구분선 반복 횟수 (둘 다 같은 숫자!)\n• 아래 2개 = 가격 (18000, 19000)\n\n📋 이런 모양으로 나와야 해요:\n========\n  🍗 치킨집  \n========\n후라이드: 18000\n양념: 19000",
           initialCode: "# 빈칸 1,2: = 반복 횟수 (숫자)\nprint(\"=\" * ___)\nprint(\"  🍗 치킨집  \")\nprint(\"=\" * ___)\n# 빈칸 3,4: 가격 (숫자)\nprint(\"후라이드:\", ___)\nprint(\"양념:\", ___)",
           expectedOutput: "========\n  🍗 치킨집  \n========\n후라이드: 18000\n양념: 19000",
           hint: "구분선은 = 가 8개. 후라이드 18000원, 양념 19000원.",
@@ -737,20 +714,20 @@ print("점수:", score)   # 점수: 100
         {
           id: "mission3",
           type: "mission",
-          title: "🏆 미션 2 — 비밀번호 정보 카드",
-          task: "비밀번호와 그 길이를 두 줄로 출력하세요!\n출력 예:\n비밀번호: abc12\n길이: 5",
-          initialCode: "pwd = \"abc12\"\n\n# 1 줄: 비밀번호 그대로 출력 (문자열끼리는 + OK)\nprint(\"비밀번호: \" + ___)\n\n# 2 줄: 길이는 숫자 → print() 콤마로 출력\nprint(\"길이:\", ___(pwd))",
-          expectedOutput: "비밀번호: abc12\n길이: 5",
-          hint: "1 줄 빈칸: pwd. 2 줄 빈칸: 길이 구하는 내장함수!",
-          hint2: "pwd / len"
+          title: "🏆 미션 2 — 게임 캐릭터 카드",
+          task: "캐릭터 이름과 이름 길이를 두 줄로 출력하세요!\n출력 예:\n캐릭터: 불꽃왕\n길이: 3",
+          initialCode: "character = \"불꽃왕\"\n\n# 1 줄: 캐릭터 이름 그대로 출력 (문자열끼리는 + OK)\nprint(\"캐릭터: \" + ___)\n\n# 2 줄: 길이는 숫자 → print() 콤마로 출력\nprint(\"길이:\", ___(character))",
+          expectedOutput: "캐릭터: 불꽃왕\n길이: 3",
+          hint: "1 줄 빈칸: character. 2 줄 빈칸: 길이 구하는 내장함수!",
+          hint2: "character / len"
         },
         {
           id: "mission4",
           type: "mission",
-          title: "🏆 미션 3 — 이름 이니셜 카드",
-          task: "두 빈칸 모두 인덱스 번호 (숫자) — 첫 글자를 가리키는 번호를 넣으세요!",
-          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# 빈칸: 첫 글자를 가리키는 인덱스 (숫자)\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
-          expectedOutput: "========\n  AC\nAlice Choi\n========",
+          title: "🏆 미션 3 — 내 이니셜 카드",
+          task: "빈칸 2개에 인덱스 (숫자) 를 넣어 first / last 의 첫 글자를 뽑으세요. (둘 다 같은 숫자!)\n\n💡 first / last 값은 자기 이름으로 바꿔도 OK (첫 글자가 대문자여야 깔끔).",
+          initialCode: "first = \"Minsu\"\nlast = \"Kim\"\n\n# 빈칸: 첫 글자를 가리키는 인덱스 (숫자)\n# (이름이 이미 대문자로 시작하니 그대로 이니셜이 됨)\ninitials = first[___] + last[___]\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
+          expectedOutput: "========\n  MK\nMinsu Kim\n========",
           hint: "첫 글자의 인덱스는? (0부터 셈)",
           hint2: "0 / 0"
         },

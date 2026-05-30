@@ -26,7 +26,7 @@ second = " there"
 print(first + second)  # Hello there
 \`\`\`
 
-String + String = **Concatenation!**
+String + String = **glued together!**
 
 ### Where do you use this?
 
@@ -40,7 +40,7 @@ The first tool for string handling. Master this and the next chapters get easier
         {
           id: "concat-explain",
           type: "explain",
-          title: "📝 String Concatenation",
+          title: "📝 Joining Strings — using +",
           content: `Use the **+** operator to glue strings together!
 
 ### Why does this work?
@@ -75,12 +75,6 @@ print("Hello" + " " + "World")   # Hello World
 
 If you want a space, you have to add \`" "\` yourself. Python won't guess.
 
-### Common uses
-
-- **Greetings** — \`"Hi, " + name\`
-- **File paths** — \`folder + "/" + filename\`
-- **Sentences from variables** — title + " by " + author
-
 ### ❌ What doesn't work
 
 \`\`\`python
@@ -92,7 +86,7 @@ We'll see how to handle this in Chapter 3!`
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Build a greeting with a variable",
           task: "Fill the blank with a variable NAME (not the value) so it prints \"Hey, Mike!\"",
           initialCode: "name = \"Mike\"\n# Put the variable name in the blank (NOT the value)\ngreeting = \"Hey, \" + ___ + \"!\"\nprint(greeting)",
           expectedOutput: "Hey, Mike!",
@@ -102,7 +96,7 @@ We'll see how to handle this in Chapter 3!`
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — what does \"Hello\" + \"World\" produce?",
           content: "What is the result of \"Hello\" + \"World\"?",
           options: ["Hello World", "HelloWorld", "Hello + World", "Error"],
           answer: 1,
@@ -128,11 +122,9 @@ print(len("hi!"))  # the ! counts too
 print(len("a b"))  # the space counts too
 \`\`\`
 
-### Common uses
+### Why is this useful?
 
-- **Password length check** — is it at least 8?
-- **Detect empty input** — is \`len(name) == 0\`?
-- **Last index** — \`len(s) - 1\` is the last position`
+"Is the nickname too long?" "Is the name box empty?" — questions you can answer once you know the length.`
         },
         {
           id: "predict-len-hello",
@@ -203,7 +195,7 @@ print(text[3])    # h
 
 \`\`\`python
 text = "Python"
-#        P  y  t  h  o  n
+#        P   y   t   h   o   n
 #      [-6][-5][-4][-3][-2][-1]   ← from the back
 
 print(text[-1])   # n (last)
@@ -238,6 +230,16 @@ Safe range: \`0 ~ len(text)-1\` (from front), \`-len(text) ~ -1\` (from back).`
           componentProps: { initialText: "Python" },
         },
         {
+          id: "try-index-after-viz",
+          type: "tryit",
+          title: "🖥️ Lock in indexing — your turn",
+          task: "Print the first and last character of \"Hello\"! (Blanks: index numbers.)",
+          initialCode: "text = \"Hello\"\n# Blank: first-character index\nprint(text[___])\n# Blank: last-character index (use a negative one!)\nprint(text[___])",
+          expectedOutput: "H\no",
+          hint: "First is index 0, last is -1.",
+          hint2: "0 / -1"
+        },
+        {
           id: "predict-neg-index",
           type: "predict",
           title: "💭 What character will appear?",
@@ -254,9 +256,9 @@ print(word[-2])
         {
           id: "try-len-index",
           type: "tryit",
-          title: "🖥️ Try It — Length and Index",
-          task: "Print the first character, last character, and length of a name!",
-          initialCode: "name = \"Python\"\n\n# First character\nfirst = name[___]\n# Last character (negative index)\nlast = name[___]\n# Length\nlength = ___(name)\n\nprint(\"first:\", first)\nprint(\"last:\", last)\nprint(\"length:\", length)",
+          title: "🖥️ Print first / last / length",
+          task: "Fill 3 blanks to print the first character, last character, and length of the name!",
+          initialCode: "name = \"Python\"\n\n# First character\nfirst = name[___]\n# Last character (negative index)\nlast = name[___]\n# Length\nlength = ___(name)\n\n# (commas — Ch3 explains; just leave them and fill the blanks!)\nprint(\"first:\", first)\nprint(\"last:\", last)\nprint(\"length:\", length)",
           expectedOutput: "first: P\nlast: n\nlength: 6",
           hint: "First character is index 0. Use a negative index for the last one. There's a built-in for length too.",
           hint2: "0 / -1 / len"
@@ -328,7 +330,7 @@ print("Ha" * 2.5)    # TypeError — no floats, integers only!
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Print 5 stars",
           task: "Print 5 asterisks (*)! Fill the blank with a NUMBER (repeat count).",
           initialCode: "# Put the repeat count (a number) in the blank\nprint(\"*\" * ___)",
           expectedOutput: "*****",
@@ -348,7 +350,7 @@ print("Ha" * 2.5)    # TypeError — no floats, integers only!
         {
           id: "quiz2",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — what does \"AB\" * 3 produce?",
           content: "What is the result of \"AB\" * 3?",
           options: ["AB3", "ABABAB", "AB AB AB", "Error"],
           answer: 1,
@@ -371,13 +373,7 @@ print("love" in text)
 print("Java" in text)
 \`\`\`
 
-> Try to predict: which line prints True, which prints False?
-
-### Common uses
-
-- **Search** — does this comment contain a keyword?
-- **Validation** — does the email contain \`"@"\`?
-- **Tag check** — is "python" in the post tags?`
+> Try to predict: which line prints True, which prints False?`
         },
         {
           id: "predict-in-case",
@@ -391,7 +387,7 @@ print("python" in text)
 \`\`\``,
           options: ["True", "False", "Error", "love"],
           answer: 1,
-          explanation: "\`in\` is **case-sensitive**. The text has \`Python\` (capital P) but not lowercase \`python\` → False.\n\nFor case-insensitive checks, you'll learn \`.lower()\` in lesson 6."
+          explanation: "\`in\` is **case-sensitive**. The text has \`Python\` (capital P) but not lowercase \`python\` → False."
         },
         {
           id: "in-explain-detail",
@@ -421,9 +417,7 @@ print("Python" in "I love Python")   # True
 print("python" in "I love Python")   # False — capital P matters!
 \`\`\`
 
-\`P\` and \`p\` are different characters to Python.
-
-> 💡 Want to ignore case? You'll learn \`text.lower()\` in lesson 6.`
+\`P\` and \`p\` are different characters to Python.`
         },
         {
           id: "compare-explain",
@@ -447,12 +441,9 @@ print(a != c)
 
 > Predict: which print True, which False? (Hint: H and h are different.)
 
-### Common uses
+### Why is this useful?
 
-- **Password check** — \`entered == real\`
-- **Yes/no answers** — \`answer == "y"\`
-- **Menu choices** — \`choice == "1"\`
-- **State check** — \`status == "done"\``
+"Is my answer the right one?" "Did the user type 'y'?" — checking if two strings match comes up a lot.`
         },
         {
           id: "predict-compare-case",
@@ -467,7 +458,7 @@ print(a == c)
 \`\`\``,
           options: ["True", "False", "Error", "hello"],
           answer: 1,
-          explanation: "\`==\` requires an **exact match**. \`a\` starts with lowercase \`h\`, \`c\` with uppercase \`H\` — different characters, so False.\n\nFor case-insensitive comparison, you'll learn \`.lower()\` in lesson 6."
+          explanation: "\`==\` requires an **exact match**. \`a\` starts with lowercase \`h\`, \`c\` with uppercase \`H\` — different characters, so False."
         },
         {
           id: "compare-explain-order",
@@ -477,19 +468,18 @@ print(a == c)
 
 \`\`\`python
 print("apple" < "banana")   # True — 'a' comes before 'b'
-print("a" < "b")            # True
 print("kiwi" < "apple")     # False — 'k' comes after 'a'
 \`\`\`
 
 Useful for sorting names later!
 
-### ⚠️ Uppercase vs lowercase — surprise
+### Uppercase vs lowercase
 
 \`\`\`python
-print("apple" < "Apple")    # False — uppercase is "smaller"!
+print("apple" < "Apple")    # False
 \`\`\`
 
-Python uses character codes (ASCII) where every uppercase letter is smaller than every lowercase letter. \`"Z" < "a"\` is \`True\` — weird but true. Mix cases carefully when sorting.
+One rule to remember: **uppercase < lowercase**. (The exact why comes later in lesson 9.)
 
 ### Use case — show answer comparison
 
@@ -497,23 +487,15 @@ Python uses character codes (ASCII) where every uppercase letter is smaller than
 answer = "y"
 print("is y?:", answer == "y")
 print("is n?:", answer == "n")
-\`\`\`
-
-Comma-print again — handy for showing a label next to a True/False result.`
+\`\`\``
         },
         {
           id: "compare-explain-trap",
           type: "explain",
-          title: "🪤 Looks like numbers, but it's a string…",
-          content: `### ❌ Easy to misread
+          title: "📌 Heads-up — quoted digits compare like text",
+          content: `\`"10" < "9"\` returns \`True\` — because the first character \`'1'\` comes before \`'9'\` in dictionary order.
 
-\`\`\`python
-print("10" < "9")    # True (?!) — first char '1' < '9'
-\`\`\`
-
-Strings are compared **character by character**. The first char of \`"10"\` is \`'1'\`, the first char of \`"9"\` is \`'9'\` — and \`'1'\` comes before \`'9'\` in the dictionary, so the result is \`True\`.
-
-If you want to compare as numbers, you need **type conversion** (lesson 9) — like \`int("10") < int("9")\`.`
+> If it's inside quotes, it's **text**. Real number comparison comes later in lesson 9!`
         },
         {
           id: "try-in-compare",
@@ -581,18 +563,12 @@ Age: 15
 - **Mix labels and numbers** — \`print("count:", n, "items")\`
 - **Print True/False results** — \`print("found:", "love" in text)\`
 
-### What about combining into one string?
-
-Sometimes you really need **one combined string** (not just printing). For that, you'll learn:
-- **lesson 8** — f-strings: \`f"Age: {age}"\` (the cleanest way!)
-- **lesson 9** — \`str()\` to convert numbers into strings on purpose
-
 For now, **comma-print** is all you need. 🎯`
         },
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Print a variable next to a label",
           task: "Fill the blank with a VARIABLE NAME (not the value 100) to print \"Score: 100\".",
           initialCode: "score = 100\n# Variable NAME in the blank (NOT the value 100)\nprint(\"Score:\", ___)",
           expectedOutput: "Score: 100",
@@ -625,6 +601,8 @@ Python sees the second \`"\` as the end of the string, then gets confused by \`h
 
 ### The solution — backslash \\
 
+> 💡 The backslash key (\`\\\\\`) sits **above the Enter key** on most keyboards (on Korean layouts it's the \`₩\` key — same key!). It often gets confused with the regular slash \`/\`.
+
 A backslash tells Python "**treat the next character specially**":
 
 \`\`\`python
@@ -637,23 +615,29 @@ The \`\\"\` is "an actual quote character, not the end of the string."`
         {
           id: "escape-explain-table",
           type: "explain",
-          title: "📋 Common escapes",
-          content: `| Notation | Meaning | Example |
-|---|---|---|
-| \`\\n\` | newline | \`"a\\nb"\` → \`a\` then \`b\` on next line |
-| \`\\t\` | tab | \`"a\\tb"\` → \`a    b\` |
-| \`\\"\` | double quote | inside \`"..."\` |
-| \`\\'\` | single quote | inside \`'...'\` |
-| \`\\\\\` | backslash itself | \`"C:\\\\folder"\` → \`C:\\folder\` |
+          title: "📋 \\n and \\t — the two you'll actually use",
+          content: `### Just two to remember
 
-### Common uses
+\`\`\`python
+print("first line\\nsecond line")   # \\n = newline
+print("name\\tscore")                # \\t = tab (multi-space)
+\`\`\`
 
-- **Multi-line output** — one \`print\` with \`\\n\` between sections
-- **Tab-aligned columns** — \`"name\\tscore"\`
-- **Quoted text inside strings** — \`"\\"hello\\""\`
-- **Windows file paths** — \`"C:\\\\Users\\\\..."\`
+Output:
+\`\`\`
+first line
+second line
+\`\`\`
+\`\`\`
+name    score
+\`\`\`
 
-> 💡 Memorize **\`\\n\`** and **\`\\t\`** — those are the ones you'll really use.`
+### Where you'll use them
+
+- **\`\\n\`** — split output into multiple lines (most common!)
+- **\`\\t\`** — line up columns / indent items
+
+> 💡 Other escapes like \`\\"\` and \`\\'\` exist, but the next step shows a cleaner way!`
         },
         {
           id: "escape-explain-tricks",
@@ -679,24 +663,17 @@ Third line"""
 print(text)
 \`\`\`
 
-### ❌ Don't get confused
-
-\`\`\`python
-print("a\\nb")    # two lines
-print("a\\\\nb")   # literal: a\\nb (showing the backslash itself)
-\`\`\`
-
-You need two \`\\\\\` to print one backslash.`
+Perfect for poems, menus, long messages.`
         },
         {
           id: "try-escape",
           type: "tryit",
-          title: "🖥️ Try It — Escape and newline",
-          task: "No blanks — just run it to see how \\n and \\t render!",
-          initialCode: "# No blanks — just press Run\nprint(\"Title\\n\\titem 1\\n\\titem 2\")",
-          expectedOutput: "Title\n\titem 1\n\titem 2",
-          hint: "Press Run — \\n becomes a newline, \\t becomes a tab.",
-          hint2: ""
+          title: "🖥️ Insert \\n to break a line",
+          task: "Fill the blank with \\n (newline) so \"Title\" appears on its own line above the item!",
+          initialCode: "# Blank: between Title and item 1 — newline (\\n)\nprint(\"Title___item 1\")",
+          expectedOutput: "Title\nitem 1",
+          hint: "Newline is \\\\n. Two characters: backslash + n.",
+          hint2: "\\n"
         }
       ]
     },
@@ -711,7 +688,7 @@ You need two \`\\\\\` to print one backslash.`
           title: "📝 Summary",
           content: `## String Operations Summary
 
-**Addition (+)** — Concatenation
+**Addition (+)** — Glue strings together
 \`\`\`python
 "Hello" + "World"   # HelloWorld
 \`\`\`
@@ -727,13 +704,13 @@ score = 100
 print("Score:", score)   # Score: 100
 \`\`\`
 
-> 💡 Combining a number into one string (like \`"Score: 100"\` as one value)? That comes later — **f-strings in lesson 8**, **str() in lesson 9**.`
+> 💡 Things we postponed this lesson (case-insensitive compare, joining \`+\` a number into one string, \`int("10")\`-style conversion) come up in the next lessons. For now, focus on getting today's tools into your hands.`
         },
         {
           id: "mission2",
           type: "mission",
           title: "🏆 Mission 1 — Menu board",
-          task: "Fill 4 blanks: top 2 = divider repeat count (8 each), bottom 2 = prices (18000, 19000).",
+          task: "Fill 4 blanks:\n• Top 2 = divider repeat count (both the same number!)\n• Bottom 2 = prices (18000, 19000)\n\n📋 Output should look like this:\n========\n  🍗 Chicken Shop  \n========\nFried: 18000\nSpicy: 19000",
           initialCode: "# Blanks 1,2: = repeat count (number)\nprint(\"=\" * ___)\nprint(\"  🍗 Chicken Shop  \")\nprint(\"=\" * ___)\n# Blanks 3,4: prices (numbers)\nprint(\"Fried:\", ___)\nprint(\"Spicy:\", ___)",
           expectedOutput: "========\n  🍗 Chicken Shop  \n========\nFried: 18000\nSpicy: 19000",
           hint: "Divider needs 8 of =. Fried 18000, Spicy 19000.",
@@ -742,20 +719,20 @@ print("Score:", score)   # Score: 100
         {
           id: "mission3",
           type: "mission",
-          title: "🏆 Mission 2 — Password info card",
-          task: "Print the password and its length on two lines!\nExample output:\npassword: abc12\nlength: 5",
-          initialCode: "pwd = \"abc12\"\n\n# Line 1: print the password\nprint(\"password:\", ___)\n\n# Line 2: print the length (use len() with print() comma)\nprint(\"length:\", ___(pwd))",
-          expectedOutput: "password: abc12\nlength: 5",
-          hint: "Blank 1: the pwd variable. Blank 2: the function that returns string length.",
-          hint2: "pwd / len"
+          title: "🏆 Mission 2 — Game character card",
+          task: "Print the character name and the length of the name on two lines!\nExample output:\ncharacter: FireKing\nlength: 8",
+          initialCode: "character = \"FireKing\"\n\n# Line 1: print the character name (string + string is OK)\nprint(\"character: \" + ___)\n\n# Line 2: print the length (use len() with print() comma)\nprint(\"length:\", ___(character))",
+          expectedOutput: "character: FireKing\nlength: 8",
+          hint: "Blank 1: the character variable. Blank 2: the function that returns string length.",
+          hint2: "character / len"
         },
         {
           id: "mission4",
           type: "mission",
-          title: "🏆 Mission 3 — Initial card",
-          task: "Both blanks are INDEX NUMBERS — the index pointing to the first character.",
-          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# Blanks: index (number) pointing to the first character\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
-          expectedOutput: "========\n  AC\nAlice Choi\n========",
+          title: "🏆 Mission 3 — My initial card",
+          task: "Fill both blanks with the INDEX (number) that grabs the first character of first / last. (Both blanks are the same number!)\n\n💡 Feel free to change first / last to your own name (first letter uppercase for a clean initial).",
+          initialCode: "first = \"Minsu\"\nlast = \"Kim\"\n\n# Blanks: index (number) pointing to the first character\n# (Names already start with capitals, so the initials come out right)\ninitials = first[___] + last[___]\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
+          expectedOutput: "========\n  MK\nMinsu Kim\n========",
           hint: "What's the index of the first character? (counting from 0)",
           hint2: "0 / 0"
         },
@@ -765,7 +742,7 @@ print("Score:", score)   # Score: 100
           title: "🎉 Complete!",
           content: `## What We Learned Today
 
-✅ **+** for string concatenation
+✅ **+** for joining strings
 ✅ **\\*** for string repetition (separators)
 ✅ **len()** for string length
 ✅ **Indexing \`s[0]\`, \`s[-1]\`** — single character

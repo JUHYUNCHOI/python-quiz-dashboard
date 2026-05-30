@@ -479,8 +479,6 @@ while True:
           title: "💻 Run the full game!",
           task: "Run the completed text RPG!",
           initialCode: `import json
-import random
-random.seed(42)
 
 class Character:
     def __init__(s, name, job):
@@ -548,13 +546,16 @@ class Monster:
             s.alive = False
         return actual
 
+# Monster spawn order (deterministic!)
+monster_queue = [
+    ('Goblin', 30, 15, 5, 60, 40),  # HP 30 = dies in 3 hits
+    ('Slime', 40, 8, 2, 30, 20),
+]
+m_idx = 0
 def create_monster():
-    monsters = [
-        ('Slime', 30, 8, 2, 30, 20),
-        ('Goblin', 50, 15, 5, 60, 40),
-        ('Orc', 70, 18, 8, 80, 60),
-    ]
-    m = random.choice(monsters)
+    global m_idx
+    m = monster_queue[m_idx % len(monster_queue)]
+    m_idx += 1
     return Monster(m[0], m[1], m[2], m[3], m[4], m[5])
 
 # === Game Start! ===
@@ -642,7 +643,7 @@ print('\\n=== Final Results ===')
 hero.status()
 if save_data:
     print(f'\\nSave: {save_data}')`,
-          expectedOutput: `=== Warrior is born! ===\n  [Warrior] Player Lv.1\n  HP: 120/120 | ATK: 15 | DEF: 12\n  EXP: 0/100 | Gold: 0\n\n--- Goblin appeared! (HP:50) ---\n  Player -> Goblin (10)\n  Goblin -> Player (3)\n  Player -> Goblin (10)\n  Goblin -> Player (3)\n  Player -> Goblin (10)\n  Goblin -> Player (3)\n  Victory! +60EXP, +40G\n\n--- Slime appeared! (HP:30) ---\n  Player -> Slime (13)\n  Slime -> Player (1)\n  Player -> Slime (13)\n  Slime -> Player (1)\n  Player healed! HP: 120/120\n  Slime -> Player (1)\n  Player -> Slime (13)\n  Victory! +30EXP, +20G\n\n--- Status ---\n  [Warrior] Player Lv.1\n  HP: 119/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | Gold: 60\n\n--- Shop (Have: 60G) ---\n  Potion: 30G\n  Bought Potion! (Balance: 30)\n\n--- Save Complete! ---\n\nGame Over!\n\n=== Final Results ===\n  [Warrior] Player Lv.1\n  HP: 119/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | Gold: 30\n\nSave: {"name": "Player", "job": "warrior", "level": 1, "hp": 119, "max_hp": 120, "atk": 15, "defense": 12, "exp": 90, "gold": 30}`,
+          expectedOutput: `=== Warrior is born! ===\n  [Warrior] Player Lv.1\n  HP: 120/120 | ATK: 15 | DEF: 12\n  EXP: 0/100 | Gold: 0\n\n--- Goblin appeared! (HP:30) ---\n  Player -> Goblin (10)\n  Goblin -> Player (3)\n  Player -> Goblin (10)\n  Goblin -> Player (3)\n  Player -> Goblin (10)\n  Victory! +60EXP, +40G\n\n--- Slime appeared! (HP:40) ---\n  Player -> Slime (13)\n  Slime -> Player (1)\n  Player -> Slime (13)\n  Slime -> Player (1)\n  Player healed! HP: 120/120\n  Slime -> Player (1)\n  Player -> Slime (13)\n  Slime -> Player (1)\n  Player -> Slime (13)\n  Victory! +30EXP, +20G\n\n--- Status ---\n  [Warrior] Player Lv.1\n  HP: 118/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | Gold: 60\n\n--- Shop (Have: 60G) ---\n  Potion: 30G\n  Bought Potion! (Balance: 30)\n\n--- Save Complete! ---\n\nGame Over!\n\n=== Final Results ===\n  [Warrior] Player Lv.1\n  HP: 118/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | Gold: 30\n\nSave: {"name": "Player", "job": "warrior", "level": 1, "hp": 118, "max_hp": 120, "atk": 15, "defense": 12, "exp": 90, "gold": 30}`,
           hint: "The actions list is the game scenario! Repeat with while!",
           hint2: "Just run the code as is!"
         },
@@ -742,7 +743,7 @@ for job in ['warrior', 'mage', 'archer']:
             hero.take_damage(goblin.atk)
 
     print(f'{jobs[job]}: Won in {turns} turns! (Remaining HP: {hero.hp}/{hero.max_hp})')`,
-          expectedOutput: `=== Class Battle Comparison (vs Goblin HP:50 ATK:15 DEF:5) ===\nWarrior: Won in 5 turns! (Remaining HP: 108/120)\nMage: Won in 3 turns! (Remaining HP: 60/80)\nArcher: Won in 4 turns! (Remaining HP: 72/100)`,
+          expectedOutput: `=== Class Battle Comparison (vs Goblin HP:50 ATK:15 DEF:5) ===\nWarrior: Won in 5 turns! (Remaining HP: 108/120)\nMage: Won in 3 turns! (Remaining HP: 60/80)\nArcher: Won in 4 turns! (Remaining HP: 79/100)`,
           hint: "Mage wins faster but has less HP remaining!",
           hint2: "Just run the code as is!"
         },

@@ -312,6 +312,64 @@ const PATTERNS: ErrorPattern[] = [
       ],
     }),
   },
+  // ── FileNotFoundError ────────────────────────────────────────
+  {
+    match: /FileNotFoundError:\s*\[Errno \d+\]\s*[^:]*:\s*['"]?([^'"\n]+)['"]?/,
+    ko: (m) => ({
+      title: `'${m[1]}' 라는 파일을 못 찾았어요`,
+      hints: [
+        `파일 이름을 정확히 적었는지 확인 — 대소문자도 똑같아야 해`,
+        `파일이 정말 같은 폴더에 있는지 확인 (브라우저 Pyodide 는 가상 파일만 가능)`,
+        `확장자도 빠뜨리지 말기 — 예: 'data' (X) → 'data.txt' (O)`,
+      ],
+    }),
+    en: (m) => ({
+      title: `Can't find a file called '${m[1]}'`,
+      hints: [
+        "Check the filename exactly — case matters",
+        "Make sure the file is in the same folder",
+        "Don't forget the extension — e.g. 'data' (X) → 'data.txt' (O)",
+      ],
+    }),
+  },
+  // FileNotFoundError fallback (Pyodide 환경에 파일 이름 못 잡을 수도)
+  {
+    match: /FileNotFoundError/,
+    ko: () => ({
+      title: "파일을 못 찾았어요",
+      hints: [
+        "파일 이름을 정확히 적었는지 확인 — 대소문자, 확장자까지 똑같아야 해",
+        "브라우저 Pyodide 에서는 진짜 PC 파일을 읽을 수 없어. 코드 안에 데이터를 넣어봐.",
+      ],
+    }),
+    en: () => ({
+      title: "File not found",
+      hints: [
+        "Check the filename exactly — case and extension matter",
+        "Browser Pyodide can't read real disk files",
+      ],
+    }),
+  },
+  // ── ValueError (generic fallback — invalid literal 위쪽에 더 구체적인 게 있음) ─
+  {
+    match: /ValueError:\s*(.+)/,
+    ko: (m) => ({
+      title: "값 에러 — 그 값으로는 그 동작이 안 돼요",
+      hints: [
+        `Python 메시지: ${m[1]}`,
+        "함수에 넘긴 값의 형태/범위가 잘못됐을 수 있어 — 예: int('abc')",
+        "input() 으로 받은 값을 변환할 땐 사용자가 잘못 입력했을 가능성 체크",
+      ],
+    }),
+    en: (m) => ({
+      title: "Value error — that value won't work here",
+      hints: [
+        `Python says: ${m[1]}`,
+        "The shape/range of the value passed to the function may be wrong",
+        "If converting input(), the user may have entered something unexpected",
+      ],
+    }),
+  },
   // ── ModuleNotFoundError ──────────────────────────────────────
   {
     match: /ModuleNotFoundError:\s*No module named ['"]?(\w+)['"]?/,

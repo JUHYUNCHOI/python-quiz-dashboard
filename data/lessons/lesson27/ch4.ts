@@ -59,14 +59,16 @@ for s in students:
 💭 학생별 성적은 봤는데... **과목별 평균**은 어떻게 구하지? 국어 점수만 쏙쏙 뽑아서 평균을 내야 하는데!
 
 \`\`\`python
-# 리스트 컴프리헨션으로 한 과목만 뽑기!
-kor_scores = [s['kor'] for s in students]
+# 방법 1: for문으로 뽑기 (익숙한 방법!)
+kor_scores = []
+for s in students:
+    kor_scores.append(s['kor'])
 # [85, 95, 72, 88]
 
 avg = sum(kor_scores) / len(kor_scores)
 \`\`\`
 
-@핵심: **리스트 컴프리헨션**으로 특정 과목 점수만 뽑아서 평균!`
+@핵심: \`for\`문으로 한 과목 점수만 모아서 \`sum()\` / \`len()\` 으로 평균!`
     },
     {
       id: "ch4-3",

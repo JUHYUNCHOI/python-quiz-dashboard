@@ -17,8 +17,10 @@ export const lesson18EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "✂️ Turn a String into a List!",
-          content: `Sometimes you want to process multiple values at once!
+          title: "✂️ split (cut apart) — string into a list",
+          content: `**split = cut apart**. Turn a single string into smaller pieces, packaged as a list.
+
+🍫 Picture: snapping a chocolate bar into squares and lining them up on a plate.
 
 \`\`\`python
 text = "apple banana strawberry"
@@ -26,16 +28,13 @@ fruits = text.split()
 print(fruits)  # ['apple', 'banana', 'strawberry']
 \`\`\`
 
-**split()** = string → list!
+### Where you'll meet it
 
-### Where do you meet this?
+- One \`input()\` line carrying multiple values
+- Dates like \`"2024-01-15"\` split by \`-\`
+- Coding-test inputs like \`"3 5 7"\`
 
-- User input — splitting multiple values from one \`input()\` line
-- CSV data — parsing comma-separated rows
-- Date / time — values like \`"2024-01-15"\` separated by a delimiter
-- Coding tests — input formats like \`"3 5 7"\`
-
-Splitting is the first step of almost every input-handling pipeline.`
+Splitting is the **first step** of almost every input pipeline.`
         },
         {
           id: "split-explain",
@@ -195,20 +194,13 @@ print(nums)  # [10, 20, 30] (integers!)
           id: "input-pattern",
           type: "explain",
           title: "⌨️ Coding-test classic — input().split()",
-          content: `Coding tests (Codeforces, BOJ, etc.) often give input as **multiple numbers on one line**.
-
-\`\`\`
-Sample input:
-3 5 7
-\`\`\`
-
-Read into a list of integers:
+          content: `Coding test inputs often pack **multiple numbers** into one line. Example: \`3 5 7\`.
 
 \`\`\`python
-# Standard form
+# All numbers into a list of ints
 nums = list(map(int, input().split()))
 
-# Receive into known variables
+# When you know how many — unpack directly
 a, b, c = map(int, input().split())
 print(a + b + c)
 \`\`\`
@@ -216,21 +208,14 @@ print(a + b + c)
 ### Common patterns
 
 \`\`\`python
-# 1) N on first line, N numbers on next
-n = int(input())
-nums = list(map(int, input().split()))
-
-# 2) Two integers
+# Two ints
 a, b = map(int, input().split())
 
-# 3) Floats
-xs = list(map(float, input().split()))
-
-# 4) Strings as-is
+# Keep as strings (no int convert)
 words = input().split()
 \`\`\`
 
-> 💡 Wrap \`map\` with \`list()\` to actually get a list. Otherwise it's a map object (less useful).`
+> 💡 Always wrap \`map\` with \`list()\` to get an actual list.`
         },
         {
           id: "try-input-pattern",
@@ -262,22 +247,24 @@ words = input().split()
         {
           id: "join-explain",
           type: "explain",
-          title: "🔗 Turn a List into a String!",
-          content: `**join()** = list → string (the opposite of split!)
+          title: "🔗 join (stitch back) — list into a string",
+          content: `**join = stitch together**. The exact opposite of \`split\`! Glue the box values into one string.
+
+🪡 Picture: threading beads (list items) onto a string (separator), one by one.
 
 \`\`\`python
 fruits = ['apple', 'banana', 'strawberry']
 
-# Join with spaces
+# Join with a space
 result = ' '.join(fruits)
 print(result)  # "apple banana strawberry"
 
-# Join with commas
+# Join with a comma
 result = ','.join(fruits)
 print(result)  # "apple,banana,strawberry"
 \`\`\`
 
-The format is **'separator'.join(list)**!`
+Format: **\`'separator'.join(list)\`** — separator in front, list as the argument!`
         },
         {
           id: "try4",

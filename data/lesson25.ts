@@ -17,10 +17,9 @@ export const lesson25Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "↔️ 양쪽이 열린 통!",
-          content: `**덱(Deque)** = Double-Ended Queue
-
-양쪽 끝에서 추가/삭제가 가능해요!
+          title: "↔️ 덱은 양쪽 다 가능!",
+          content: `**덱(Deque)** = Double-Ended Queue.
+양쪽 끝에서 다 넣고 뺄 수 있어요!
 
 \`\`\`
       ←  [A] [B] [C]  →
@@ -28,10 +27,10 @@ export const lesson25Data: LessonData = {
     넣기/빼기        넣기/빼기
 \`\`\`
 
-**스택 + 큐 = 덱!**
-- 스택처럼 사용 가능
-- 큐처럼 사용 가능
-- 둘 다 O(1)!`
+**비유: 양쪽이 뚫린 터널.**
+- 스택처럼도 쓸 수 있고
+- 큐처럼도 쓸 수 있고
+- 둘 다 O(1) 빠름!`
         },
         {
           id: "compare",
@@ -201,12 +200,12 @@ print(d)  # [3, 4, 5] 최근 3개만!
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ 회문 검사!",
-          task: "덱으로 회문을 검사하세요!",
-          initialCode: "from collections import deque\n\ndef is_palindrome(s):\n    d = deque(s.lower().replace(\" \", \"\"))\n    \n    while len(d) > 1:\n        if d.popleft() != d.pop():\n            return False\n    return True\n\n# 테스트\nwords = [\"level\", \"hello\", \"A man a plan a canal Panama\", \"기러기\"]\nfor word in words:\n    result = \"✅ 회문\" if is_palindrome(word) else \"❌ 회문 아님\"\n    print(f\"{word}: {result}\")",
-          expectedOutput: "level: ✅ 회문\nhello: ❌ 회문 아님\nA man a plan a canal Panama: ✅ 회문\n기러기: ✅ 회문",
-          hint: "앞에서 popleft(), 뒤에서 pop()으로 비교!",
-          hint2: "공백 제거, 소문자 변환 후 비교"
+          title: "🖥️ 직접 — 'level' 회문 검사",
+          task: "'level' 을 덱에 넣고 앞뒤 한 글자씩 빼서 비교해 보세요. 회문이면 True!",
+          initialCode: "from collections import deque\n\nword = \"level\"\nd = deque(word)\nresult = True\n\nwhile len(d) > 1:\n    front = d.___()   # 앞에서 빼기\n    back  = d.___()   # 뒤에서 빼기\n    if front != back:\n        result = False\n        break\n\nprint(result)",
+          expectedOutput: "True",
+          hint: "앞에서 빼기 = popleft, 뒤에서 빼기 = pop. 두 값이 다르면 회문 아님.",
+          hint2: "popleft / pop"
         },
         {
           id: "problem2-explain",
@@ -230,12 +229,12 @@ print(d)  # [3, 4, 5] 최근 3개만!
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ 간단한 슬라이딩 윈도우!",
-          task: "슬라이딩 윈도우의 최댓값을 구하세요!",
-          initialCode: "from collections import deque\n\ndef sliding_max(nums, k):\n    result = []\n    d = deque()  # 인덱스 저장\n    \n    for i in range(len(nums)):\n        # 윈도우 벗어난 인덱스 제거\n        if d and d[0] < i - k + 1:\n            d.popleft()\n        \n        # 현재 값보다 작은 값들 제거\n        while d and nums[d[-1]] < nums[i]:\n            d.pop()\n        \n        d.append(i)\n        \n        # 윈도우 완성되면 최댓값 추가\n        if i >= k - 1:\n            result.append(nums[d[0]])\n    \n    return result\n\nnums = [1, 3, -1, -3, 5, 3, 6, 7]\nprint(\"배열:\", nums)\nprint(\"K=3 최댓값:\", sliding_max(nums, 3))",
+          title: "🖥️ 직접 — 윈도우 K=3 슬라이딩 최댓값",
+          task: "배열 [1, 3, -1, -3, 5, 3, 6, 7] 에서 크기 3 윈도우의 최댓값을 차례로 출력해 보세요!",
+          initialCode: "from collections import deque\n\nnums = [1, 3, -1, -3, 5, 3, 6, 7]\nk = 3\nresult = []\nd = deque()   # 후보 인덱스 저장\n\nfor i in range(len(nums)):\n    # 윈도우 벗어난 앞 인덱스 제거\n    if d and d[0] < i - k + 1:\n        d.___()\n    \n    # 현재 값보다 작은 뒤쪽 인덱스 제거\n    while d and nums[d[-1]] < nums[i]:\n        d.___()\n    \n    d.append(i)\n    \n    # 윈도우 완성 시 맨 앞 = 최댓값\n    if i >= k - 1:\n        result.append(nums[d[0]])\n\nprint(\"배열:\", nums)\nprint(\"K=3 최댓값:\", result)",
           expectedOutput: "배열: [1, 3, -1, -3, 5, 3, 6, 7]\nK=3 최댓값: [3, 3, 5, 5, 6, 7]",
-          hint: "덱에 최댓값 후보 인덱스만 유지!",
-          hint2: "O(n) 시간에 해결 가능"
+          hint: "오래된 앞 인덱스 = popleft, 작은 뒤 인덱스 = pop 으로 정리!",
+          hint2: "popleft / pop"
         }
       ]
     },
@@ -247,12 +246,12 @@ print(d)  # [3, 4, 5] 최근 3개만!
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 최종 미션: 최근 검색어!",
-          task: "최근 검색어 기능을 덱으로 구현하세요!",
-          initialCode: "from collections import deque\n\nclass RecentSearches:\n    def __init__(self, max_size=5):\n        self.searches = deque(___=max_size)\n    \n    def add(self, query):\n        # 이미 있으면 제거 후 맨 앞에 추가\n        if query in self.searches:\n            self.searches.remove(query)\n        self.searches.___(query)\n        print(f\"검색: '{query}'\")\n    \n    def show(self):\n        print(\"최근 검색어:\", list(self.searches))\n    \n    def clear(self):\n        self.searches.clear()\n        print(\"검색 기록 삭제됨\")\n\n# 테스트\nrecent = RecentSearches(max_size=5)\nrecent.add(\"파이썬\")\nrecent.add(\"자료구조\")\nrecent.add(\"알고리즘\")\nrecent.add(\"덱\")\nrecent.add(\"스택\")\nrecent.show()\n\nrecent.add(\"큐\")  # 오래된 '파이썬' 삭제됨\nrecent.show()\n\nrecent.add(\"자료구조\")  # 중복! 맨 앞으로\nrecent.show()",
+          title: "🏆 최종 미션: 최근 검색어 (최대 5 개)",
+          task: "deque maxlen 으로 최근 검색어 5 개만 유지! 새 검색은 **앞**에 추가, 중복 검색은 제거 후 다시 앞에 추가.",
+          initialCode: "from collections import deque\n\n# 최대 5 개만 유지하는 deque (오래된 건 자동 탈락)\nsearches = deque(___=5)\n\n# 검색 5 개 — 새 검색은 앞에 추가\nfor q in [\"파이썬\", \"자료구조\", \"알고리즘\", \"덱\", \"스택\"]:\n    if q in searches:\n        searches.remove(q)\n    searches.___(q)             # 앞에 추가\n    print(f\"검색: '{q}'\")\nprint(\"최근 검색어:\", list(searches))\n\n# 새 검색 '큐' — 가장 오래된 '파이썬' 자동 탈락\nq = \"큐\"\nif q in searches:\n    searches.remove(q)\nsearches.appendleft(q)\nprint(f\"검색: '{q}'\")\nprint(\"최근 검색어:\", list(searches))\n\n# 중복 검색 — '자료구조' 가 맨 앞으로 이동\nq = \"자료구조\"\nif q in searches:\n    searches.remove(q)\nsearches.appendleft(q)\nprint(f\"검색: '{q}'\")\nprint(\"최근 검색어:\", list(searches))",
           expectedOutput: "검색: '파이썬'\n검색: '자료구조'\n검색: '알고리즘'\n검색: '덱'\n검색: '스택'\n최근 검색어: ['스택', '덱', '알고리즘', '자료구조', '파이썬']\n검색: '큐'\n최근 검색어: ['큐', '스택', '덱', '알고리즘', '자료구조']\n검색: '자료구조'\n최근 검색어: ['자료구조', '큐', '스택', '덱', '알고리즘']",
-          hint: "deque의 최대 길이 제한과 앞에 추가하는 메서드를 사용해요!",
-          hint2: "maxlen과 appendleft를 넣으세요!"
+          hint: "최대 길이는 maxlen, 앞에 추가는 appendleft.",
+          hint2: "maxlen / appendleft"
         },
         {
           id: "complete",

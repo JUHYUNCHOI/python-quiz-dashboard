@@ -34,7 +34,9 @@ print(10 * 3)   # 30
 print(10 / 3)   # 3.3333333333333335
 \`\`\`
 
-곱하기는 반드시 **별표 \`*\`** — \`×\` 나 \`x\` 가 아니에요.`
+곱하기는 반드시 **별표 \`*\`** — \`×\` 나 \`x\` 가 아니에요.
+
+> 💡 \`10 / 3\` 결과 끝에 \`...5\` 가 살짝 이상하게 붙어있죠? 컴퓨터가 소수를 저장하는 방식 때문이에요. **곧 Ch2 (소수 함정)** 에서 자세히 설명할게요 — 지금은 "원래 그런가보다" 하고 넘어가도 OK!`
         },
         {
           id: "intro-warnings",
@@ -99,7 +101,9 @@ print(10 % 3)    # 1           ← 나머지만! (퍼센트)
 |---|---|---|---|
 | \`/\` | 나누기 | \`10 / 3\` → 3.33... | 소수까지 나눔 |
 | \`//\` | 몫 | \`10 // 3\` → 3 | 한 명당 받는 수 |
-| \`%\` | 나머지 | \`10 % 3\` → 1 | 남는 수 |`
+| \`%\` | 나머지 | \`10 % 3\` → 1 | 남는 수 |
+
+> 💡 **왜 \`/\` 와 \`//\` 둘 다 필요해?** 케이크는 잘라 나눌 수 있으니까 \`/\` (소수 OK). 사람·개수처럼 쪼갤 수 없는 건 \`//\` (정수만). 상황에 따라 골라 써요.`
         },
         {
           id: "predict-slash-vs-doubleslash",
@@ -170,6 +174,10 @@ print(7 % 2)    # 1 — 홀수면 1
 print(8 % 2)    # 0 — 짝수면 0
 \`\`\`
 
+> 👀 **눈으로 보기 — 2 명씩 짝지을 때:**
+> - 짝수 (8): \`■■  ■■  ■■  ■■\` → 다 짝지음, 남는 거 0
+> - 홀수 (7): \`■■  ■■  ■■  ■\` → 한 개 외톨이, 남는 거 1
+
 → 어떤 수든 \`% 2\` 결과는 **0 (짝수) 또는 1 (홀수)** 둘 중 하나. 나중에 조건문 (lesson 11) 배우면 이걸로 짝/홀 분기 가능.
 
 ### 또 다른 활용 — 마지막 자릿수
@@ -198,6 +206,18 @@ print(20 % 5)   # 0 — 20 은 5 의 배수
 ### 🕒 시계처럼 순환
 
 지금 3 시인데 5 시간이 지나면? 8 시. 지금 22 시인데 5 시간 지나면? **3 시 (24 시간 시계라 순환)**.
+
+> 👀 **눈으로 보기 — 24 시간 동그란 시계:**
+> \`\`\`
+>          0
+>    23         1
+>  22             2
+>  ...     →   ...
+>  19             5
+>    18         6
+>          ...
+> \`\`\`
+> 22 시에서 시침을 5 칸 돌리면 24 를 넘어서 다시 0 → 1 → 2 → **3 시** 도착!
 
 \`\`\`python
 print((3 + 5) % 24)    # 8
@@ -306,14 +326,14 @@ print((10 - 6) / 2)   # 2.0
 
 ### 우선순위 표 (높음 → 낮음)
 
+> 💡 **지금은 이 4 개만 외우면 끝!**
+
 1. \`( )\` — 괄호 (가장 우선)
 2. \`**\` — 거듭제곱
 3. \`*\`, \`/\`, \`//\`, \`%\` — 곱셈/나눗셈류
 4. \`+\`, \`-\` — 덧셈/뺄셈
-5. \`<\`, \`>\`, \`==\` 등 — 비교
-6. \`not\`
-7. \`and\`
-8. \`or\` — 가장 늦게
+
+> 📌 **곧 배워요 (자리만 봐둬요)** — \`<\`, \`>\`, \`==\` 같은 비교 (Ch2) → \`not\` (아닌) → \`and\` (그리고) → \`or\` (또는) (Ch3). 산술보다 *뒤* 에서 계산돼요.
 
 > 💡 **헷갈리면 괄호 친절히 써요.** 컴퓨터한테도 사람한테도 명확.
 
@@ -324,6 +344,16 @@ x = a + b * c < 100
 # 명확 ✅
 x = (a + (b * c)) < 100
 \`\`\``
+        },
+        {
+          id: "predict-priority",
+          type: "predict",
+          title: "💭 결과 예측 — 우선순위 적용",
+          content: "괄호 없으면 누가 먼저 계산될까요?",
+          code: "print(2 + 3 ** 2)",
+          options: ["11", "25", "13", "에러"],
+          answer: 0,
+          explanation: "거듭제곱 ** 이 덧셈 + 보다 먼저. 3 ** 2 = 9 → 2 + 9 = 11. 우선순위 2 번 (**) 이 4 번 (+) 보다 위라서."
         }
       ]
     },
@@ -447,7 +477,7 @@ print("hi" != "bye")       # True — 다름
           code: "print(0.1 + 0.2 == 0.3)",
           options: ["False", "True", "에러", "0.3"],
           answer: 0,
-          explanation: "컴퓨터가 0.1 + 0.2 를 저장할 때 살짝 오차가 생겨서 0.30000000000000004. 그래서 0.3 과 != → False. 소수 == 비교는 조심!"
+          explanation: "컴퓨터가 0.1 + 0.2 를 저장할 때 살짝 오차가 생겨서 0.30000000000000004. 그래서 0.3 과 != → False. 소수 == 비교는 조심! (기억나? Ch1 첫 step \`10 / 3 = 3.3333333333333335\` 끝의 5 도 같은 이유)"
         },
         {
           id: "try-equal",
@@ -510,40 +540,46 @@ print(0 < x < 10)   # True — 수학 부등식 그대로
         {
           id: "logic-explain",
           type: "explain",
-          title: "🔴 and — 둘 다 해야",
+          title: "🔴 and (그리고) — 둘 다 해야",
           content: `엄마 말씀 들어보세요. 두 사람 이름이 같이 나와도 의미가 달라요.
 
 > 👫 "민수 **그리고** 영희, 손 닦고 와!" → 둘 다 닦아야 끝.
+
+파이썬에서 "그리고" 는 영어로 \`and\` 라고 써요.
 
 \`\`\`python
 print(True  and True)    # True   ← 둘 다 ✅
 print(True  and False)   # False  ← 한 명 빠짐
 \`\`\`
 
-> 💡 **and 는 까다로워요** — 둘 다 True 여야 True.`
+> 💡 **and (그리고) 는 까다로워요** — 둘 다 True 여야 True.`
         },
         {
           id: "logic-explain-or-not",
           type: "explain",
-          title: "🔵 or 와 🟢 not",
-          content: `### 🔵 or — 한 명만 해도
+          title: "🔵 or (또는) 와 🟢 not (아닌)",
+          content: `### 🔵 or (또는) — 한 명만 해도
 
 > 👬 "민수 **또는** 영희, 문 닫아줘!" → 한 명만 닫으면 끝.
+
+"또는" 은 영어로 \`or\`.
 
 \`\`\`python
 print(True  or False)   # True   ← 한 명만 해도 OK
 print(False or False)   # False  ← 둘 다 안 했을 때만 X
 \`\`\`
 
-> 💡 **or 는 너그러워요** — 둘 다 False 일 때만 False.
+> 💡 **or (또는) 는 너그러워요** — 둘 다 False 일 때만 False.
 
-### 🟢 not — 반대로
+### 🟢 not (아닌) — 반대로
 
 > 🌙 "어둡지 **않으면** 산책!"
 
+"아닌 / 반대" 는 영어로 \`not\`.
+
 \`\`\`python
-print(not True)    # False
-print(not False)   # True
+print(not True)    # False   ← True 의 반대
+print(not False)   # True    ← False 의 반대
 \`\`\``
         },
         {
@@ -583,10 +619,12 @@ print(not False)   # True
         {
           id: "is-not-explain",
           type: "explain",
-          title: "🔎 is / is not — None 검사",
-          content: `\`==\` 가 **값이 같은지** 묻는다면, \`is\` 는 **완전히 같은 것인지** 검사해요.
+          title: "📌 참고용 (스킵 OK) — is / is not / None 검사",
+          content: `> 💡 이 부분은 lesson 11 (조건문) 에서 자연스럽게 다시 나와요. **지금은 살짝만 알아두고 넘어가도 OK!**
 
-가장 자주 쓰는 곳: **\`None\` 인지 확인할 때**.
+\`==\` 가 **값이 같은지** 묻는다면, \`is\` 는 **완전히 같은 것인지** 검사해요.
+
+가장 자주 쓰는 곳: **비어있음** 인지 확인할 때 (영어: \`None\` — "아무것도 없음" 이라는 뜻의 특별한 값).
 
 \`\`\`python
 x = None
@@ -600,8 +638,8 @@ print(x is not None)    # 반대 — 'x 가 None 이 아니다'
         {
           id: "predict-is-none",
           type: "predict",
-          title: "💭 결과 예측 — is None",
-          content: "x 가 None 일 때, 두 검사의 결과는?",
+          title: "📌 참고용 (스킵 OK) — 결과 예측: is None",
+          content: "💡 이 문제는 lesson 11 (조건문) 에서 자연스럽게 다시 나와요. 지금은 살짝만 알아두고 넘어가도 OK!\n\nx 가 None 일 때, 두 검사의 결과는?",
           code: "x = None\nprint(x is None)\nprint(x is not None)",
           options: ["True\nFalse", "False\nTrue", "True\nTrue", "False\nFalse"],
           answer: 0,
@@ -610,7 +648,7 @@ print(x is not None)    # 반대 — 'x 가 None 이 아니다'
         {
           id: "is-not-explain-rest",
           type: "explain",
-          title: "🔁 not 단독 + not in 미리보기",
+          title: "🔁 not 단독 (+ 📌 참고용 (스킵 OK) not in)",
           content: `### not — 앞에 붙여서 뒤집기
 
 \`not\` 은 한 값 **앞에** 붙어서 True/False 를 뒤집어요.
@@ -621,7 +659,9 @@ print(not False)        # True
 print(not (5 > 3))      # False  ← 5 > 3 = True 의 반대
 \`\`\`
 
-### not in — 살짝 미리보기 (lesson 5 에서 자세히)
+### 📌 참고용 — not in (lesson 5 에서 자세히)
+
+> 💡 이 부분은 lesson 5 (문자열 연산) 에서 자연스럽게 다시 나와요. 지금은 살짝만 알아두고 넘어가도 OK!
 
 문자열 안에 어떤 글자가 **없는지** 검사. (\`in\` 의 반대 — \`in\` 은 다음 레슨에서 정식 소개)
 
@@ -635,8 +675,8 @@ print('e' not in 'hello')   # False  ← 'hello' 안에 'e' 있음
         {
           id: "try-is-not",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — None 검사 + 뒤집기",
-          task: "name 이 None 인지 검사하고, 그 결과를 뒤집어 출력하세요!",
+          title: "📌 참고용 (스킵 OK) — 직접 해보기: None 검사 + 뒤집기",
+          task: "💡 이 문제는 lesson 11 (조건문) 에서 자연스럽게 다시 나와요. 지금은 살짝만 알아두고 넘어가도 OK!\n\nname 이 None 인지 검사하고, 그 결과를 뒤집어 출력하세요!",
           initialCode: "name = None\ncheck = name ___ None\nopposite = ___ check\nprint('None?', check)\nprint('아님?', opposite)",
           expectedOutput: "None? True\n아님? False",
           hint: "첫 빈칸은 None 검사용 두 글자, 둘째는 뒤집는 한 단어.",
@@ -714,6 +754,17 @@ score += 10          # 짧은 방법 — 같은 뜻!
           component: "variableUpdateVisualizer",
         },
         {
+          id: "try-compound-after-visual",
+          type: "tryit",
+          title: "🖥️ 직접 해보기 — += 따라치기",
+          task: "방금 본 동작 그대로 — x 를 5 로 시작해서 3 을 더해 다시 저장 후 출력!",
+          initialCode: "x = 5\nx ___ 3\nprint(x)",
+          expectedOutput: "8",
+          hint: "더해서 다시 저장하는 짧은 표기!",
+          hint2: "+=",
+          choices: ["+=", "-=", "*=", "=", "=="]
+        },
+        {
           id: "compound-explain-table",
           type: "explain",
           title: "📋 복합 대입 — 전체 변형",
@@ -777,8 +828,8 @@ score += 10   # 점수 획득 → score 가 늘어요
           id: "mission2",
           type: "mission",
           title: "🏆 미션 2 — BMI 계산",
-          task: "몸무게 60kg, 키 1.65m 의 BMI 를 거듭제곱 연산자로 계산하세요. (BMI = 몸무게 / 키²)",
-          initialCode: "weight = 60      # kg\nheight = 1.65    # m\n\n# 거듭제곱 (별표 두 개) 으로 키² 계산\nbmi = weight / (height ___ 2)\n\nprint(\"BMI:\", round(bmi, 1))",
+          task: "몸무게 60kg, 키 1.65m 의 BMI 를 거듭제곱 연산자로 계산하세요. (BMI = 몸무게 / 키²)\n\n💡 `round(값, 1)` = 소수점 1 자리까지 반올림 (22.038... → 22.0). 새 함수예요 — 그냥 따라쓰면 OK.",
+          initialCode: "weight = 60      # kg\nheight = 1.65    # m\n\n# 거듭제곱 (별표 두 개) 으로 키² 계산\nbmi = weight / (height ___ 2)\n\nprint(\"BMI:\", round(bmi, 1))   # round(값, 1) = 소수점 1 자리까지",
           expectedOutput: "BMI: 22.0",
           hint: "height ** 2 거듭제곱.",
           hint2: "bmi = weight / (height ** 2)"
@@ -788,10 +839,10 @@ score += 10   # 점수 획득 → score 가 늘어요
           type: "mission",
           title: "🏆 미션 3 — 초를 시간/분/초로 분해",
           task: "5425 초를 시간/분/초 단위로 분해해 각각 출력하세요. (// 와 % 활용)",
-          initialCode: "total_sec = 5425\n\n# // 와 % 사용\nhours = total_sec ___ 3600        # 시간 (몫)\nminutes = (total_sec % 3600) ___ 60   # 남은 초 → 분 (몫)\nseconds = total_sec ___ 60        # 마지막 초 (나머지)\n\nprint(\"시:\", hours)\nprint(\"분:\", minutes)\nprint(\"초:\", seconds)",
+          initialCode: "total_sec = 5425\n\n# 한 줄에 한 연산자씩 — 천천히!\nhours = total_sec // 3600         # 시 = 몫 (이미 채워뒀어요)\nremaining = total_sec ___ 3600    # 남은 초 = 나머지\nminutes = remaining // 60         # 분 = 몫 (이미 채워뒀어요)\nseconds = remaining ___ 60        # 초 = 나머지\n\nprint(\"시:\", hours)\nprint(\"분:\", minutes)\nprint(\"초:\", seconds)",
           expectedOutput: "시: 1\n분: 30\n초: 25",
-          hint: "1 시간 = 3600 초. // 로 몫, % 로 나머지.",
-          hint2: "hours = total_sec // 3600\nminutes = (total_sec % 3600) // 60\nseconds = total_sec % 60"
+          hint: "두 빈칸 모두 '나머지' 연산자.",
+          hint2: "remaining = total_sec % 3600\nseconds = remaining % 60"
         },
         {
           id: "complete",

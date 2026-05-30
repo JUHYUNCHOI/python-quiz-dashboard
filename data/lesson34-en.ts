@@ -22,49 +22,53 @@ export const lesson34EnData: LessonData = {
         {
           id: "ch1-1",
           type: "explain",
-          title: "Variable Scope",
-          content: `## 🤔 Think About It
-
-Can you use a variable created inside a function outside of it?
+          title: "💭 Can I use a function's variable outside?",
+          content: `💭 If you write \`x = 10\` inside a function, can you use that \`x\` **outside** too? Or only inside?
 
 **Think of it as:**
-- **Global variable** = Item in the living room (everyone can use)
-- **Local variable** = Item in my room (only I can use)`
+- **Global variable** = Item in the living room (everyone can use) 🏠
+- **Local variable** = Item in my room (only I can use) 🚪
+
+@key: Where a variable can be used = its **scope**! It works differently inside vs outside a function.`
         },
         {
           id: "ch1-2",
           type: "explain",
-          title: "Local Variables",
-          content: `## 🚪 Local: Only inside the function!
+          title: "🚪 Local Variables — only inside!",
+          content: `💭 A variable made inside a function is like a **room item** — only usable inside that function. What if we try to use it outside?
 
 \`\`\`python
 def func():
-    x = 10    # Local variable
-    print(x)  # 10 - OK inside function
+    x = 10    # Local variable (inside-the-room item)
+    print(x)  # 10 - OK inside ✅
 
 func()
-print(x)      # ❌ Error! Can't use outside
+print(x)      # ❌ Error! Outside doesn't know x
 \`\`\`
 
-Local variables disappear when the function ends!`
+When the function ends, local variables **disappear!** Next call, they're made fresh.
+
+@key: Variables made **inside** a function = **local** = only usable inside! Outside = error.`
         },
         {
           id: "ch1-3",
           type: "explain",
-          title: "Global Variables",
-          content: `## 🌍 Global: Can read anywhere!
+          title: "🌍 Global Variables — readable anywhere!",
+          content: `💭 What about the opposite — variables made **outside** the function? Can functions read those?
 
 \`\`\`python
-x = 10        # Global variable
+x = 10        # Global variable (living-room item)
 
 def func():
-    print(x)  # 10 - Can read inside function
+    print(x)  # 10 - readable inside ✅
 
 func()
-print(x)      # 10 - Can use outside too
+print(x)      # 10 - OK outside too ✅
 \`\`\`
 
-Global variables can be **read** anywhere in the program!`
+Global variables can be **read anywhere** in the program!
+
+@key: Variables made **outside** = **global** = every function can read them!`
         },
         {
           id: "ch1-4",
@@ -109,22 +113,25 @@ print(f'Outside: {x}')`,
         {
           id: "ch1-6",
           type: "explain",
-          title: "Modifying Global with global",
-          content: `## ⚠️ Modifying global variables inside function
+          title: "💭 Can I change a global from inside a function?",
+          content: `💭 What if you want to **change** a global variable inside a function? Just writing \`x = 20\` doesn't work — what does?
 
 \`\`\`python
 x = 10
 
 def func():
-    global x    # I'll modify the global!
+    global x    # 👈 "I'll use the global x!"
     x = 20
 
 func()
-print(x)    # 20
+print(x)    # 20 (changed!)
 \`\`\`
 
-🚨 **Warning!** Avoid using \`global\` when possible!
-It makes code complex. Use \`return\` instead.`
+Use the \`global\` keyword to say "this is the global one!"
+
+🚨 **Warning!** Avoid \`global\` when possible! It makes code complex. Use \`return\` to get values back instead.
+
+@key: To **modify** a global inside a function, declare \`global x\`. But \`return\` is cleaner!`
         }
       ]
     },
@@ -139,39 +146,38 @@ It makes code complex. Use \`return\` instead.`
         {
           id: "ch2-1",
           type: "explain",
-          title: "What is Lambda?",
-          content: `## ⚡ One-line functions!
+          title: "💭 Writing def for 3 lines feels long... any shortcut?",
+          content: `💭 The function is simple, but \`def\` plus \`return\` makes it 3 lines. **Can I write a one-line function?**
 
-Want to make a simple function but writing 3 lines with def is tedious.
-Can we make it in one line?
-
-**Lambda = One-line function!**
+**Lambda = one-line function!** ⚡
 
 \`\`\`python
 # Regular function (3 lines)
 def add(a, b):
     return a + b
 
-# Lambda function (1 line)
+# Lambda function (1 line!)
 add2 = lambda a, b: a + b
 
 # Both give same result!
 print(add(3, 5))     # 8
 print(add2(3, 5))    # 8
-\`\`\``
+\`\`\`
+
+@key: Lambda is a **named one-line function!** No def, no return — handy for short cases.`
         },
         {
           id: "ch2-2",
           type: "explain",
-          title: "Lambda Syntax",
-          content: `## 📝 Lambda Format
+          title: "📝 Lambda shape — memorize this!",
+          content: `💭 What does a lambda look like? Just memorize this shape!
 
 \`\`\`python
 lambda parameters: return_value
 \`\`\`
 
-- No \`def\` or \`return\` needed, just one line!
-- Useful for simple calculations
+- \`lambda\` = "one-line function starts here!"
+- After the colon (\`:\`) is the **value returned** (no \`return\` keyword needed!)
 
 **Examples:**
 \`\`\`python
@@ -180,7 +186,9 @@ print(square(5))    # 25
 
 is_odd = lambda x: x % 2 == 1
 print(is_odd(7))    # True
-\`\`\``
+\`\`\`
+
+@key: \`lambda params: value\` — the part after \`:\` is the result! No \`return\` needed, it returns automatically.`
         },
         {
           id: "ch2-3",
@@ -242,21 +250,21 @@ print(triple(10))`,
         {
           id: "ch3-1",
           type: "explain",
-          title: "Lambda's Real Power!",
-          content: `## ⭐ sorted() + Lambda combo!
-
-Lambda shines when used with \`sorted()\`!
+          title: "💭 How do I sort students by score?",
+          content: `💭 Students = \`[('Tom', 85), ('Jane', 92), ('Mike', 78)]\`. Plain \`sorted()\` sorts by name. How do I sort by **score**?
 
 \`\`\`python
 students = [('Tom', 85), ('Jane', 92), ('Mike', 78)]
 
-# Sort by score
+# Sort by score (the second value)
 sorted_list = sorted(students, key=lambda x: x[1])
 print(sorted_list)
 # [('Mike', 78), ('Tom', 85), ('Jane', 92)]
 \`\`\`
 
-💡 **Exam tip!** \`sorted()\` with \`lambda\` appears frequently!`
+**\`key=lambda x: x[1]\`** = "compare by each tuple's second value (score)!"
+
+@key: \`sorted(... key=lambda)\` lets you sort by **any rule**! Common exam combo.`
         },
         {
           id: "ch3-2",
@@ -331,8 +339,8 @@ print(result)`,
         {
           id: "ch4-1",
           type: "explain",
-          title: "Functions Can Call Other Functions!",
-          content: `## 🔗 Functions can call other functions!
+          title: "💭 Can a function call other functions?",
+          content: `💭 You made add and multiply functions. What if a new function **calls both of them** inside?
 
 \`\`\`python
 def add(a, b):
@@ -351,7 +359,7 @@ print(f'Sum: {total}, Product: {product}')
 # Sum: 8, Product: 15
 \`\`\`
 
-Break big problems into small functions!`
+@key: A function can **call other functions!** Break big problems into smaller function pieces.`
         },
         {
           id: "ch4-2",

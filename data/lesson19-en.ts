@@ -17,26 +17,28 @@ export const lesson19EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "📦 Tuple = Immutable List",
-          content: `**Tuple** = A list that cannot be modified once created
+          title: "📦 Tuple — A Bundle That Doesn't Change",
+          content: `**Tuple** = a list that **doesn't change** once you make it.
+
+🎒 Think: your birthday \`(2014, 3, 15)\`. The date never changes after you're born — that's a tuple.
 
 \`\`\`python
-# List - can be modified
+# List — can be modified
 fruits = ["apple", "banana"]
 fruits[0] = "grape"  # OK!
 
-# Tuple - cannot be modified
+# Tuple — cannot be modified
 colors = ("red", "blue")
 colors[0] = "green"  # ❌ Error!
 \`\`\`
 
-Use **parentheses ( )** or just commas to create them!
+Use **parentheses \`( )\`** or just commas to create them.
 
 ### Why force "no modification"?
 
-Think about it — coordinate \`(x, y)\`, RGB \`(255, 128, 0)\`, student \`(name, score)\`. These are **bundles**. Changing one part breaks the meaning. (What's "a student with only their score replaced"?)
+Coordinate \`(x, y)\`, RGB \`(255, 128, 0)\`, student \`(name, score)\` — these are **one bundle**. Changing one piece breaks the meaning. (What's "a student with only their score replaced"?)
 
-→ "This is a bundle that shouldn't be modified" → tuple makes that explicit.`
+→ "This bundle shouldn't be touched" → tuple makes that explicit.`
         },
         {
           id: "creation-ways",
@@ -94,7 +96,7 @@ print((1))       # 1 — not a tuple!
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ Try It Yourself — Coordinate Tuple",
+          title: "🖥️ Coordinate Tuple — Build & Read x, y",
           task: "Create a coordinate as a tuple and access it by index!",
           initialCode: "point = (100, 200)\nprint(point)\nprint(f\"x: {point[0]}, y: {point[1]}\")",
           expectedOutput: "(100, 200)\nx: 100, y: 200",
@@ -104,7 +106,7 @@ print((1))       # 1 — not a tuple!
         {
           id: "try-creation",
           type: "tryit",
-          title: "🖥️ Try It — Different Ways to Create",
+          title: "🖥️ Different Ways — tuple() / (x,) / commas only",
           task: "Convert a string to a tuple with tuple(), and create a single-element tuple!",
           initialCode: "# 1) String → tuple\nt1 = tuple(\"hello\")\nprint(t1)\n\n# 2) Single-element tuple (don't forget the comma!)\nsingle = (42,)\nprint(single, type(single).__name__)\n\n# 3) Just commas, no parens\nt2 = 10, 20, 30\nprint(t2)",
           expectedOutput: "('h', 'e', 'l', 'l', 'o')\n(42,) tuple\n(10, 20, 30)",
@@ -114,7 +116,7 @@ print((1))       # 1 — not a tuple!
         {
           id: "try1b",
           type: "tryit",
-          title: "🖥️ List vs Tuple!",
+          title: "🖥️ List vs Tuple — Direct Comparison",
           task: "See the difference between lists and tuples for yourself!",
           initialCode: "# List - can be modified!\nfruits = ['apple', 'banana', 'grape']\nfruits[0] = 'strawberry'\nfruits.append('mango')\nprint(f'List: {fruits}')\n\n# Tuple - cannot be modified! (but safe!)\ncolors = ('red', 'blue', 'green')\nprint(f'Tuple: {colors}')\nprint(f'Length: {len(colors)}')\nprint(f'Contains? {\"blue\" in colors}')\n\n# Multiple types are OK!\nmixed = ('Alice', 15, True, 3.14)\nfor item in mixed:\n    print(f'  {item} ({type(item).__name__})')",
           expectedOutput: "List: ['strawberry', 'banana', 'grape', 'mango']\nTuple: ('red', 'blue', 'green')\nLength: 3\nContains? True\n  Alice (str)\n  15 (int)\n  True (bool)\n  3.14 (float)",
@@ -178,7 +180,7 @@ else:
         {
           id: "try-methods",
           type: "tryit",
-          title: "🖥️ Try It — count / index",
+          title: "🖥️ count / index — How many 90s? Where's 80?",
           task: "From a tuple of scores, print how many times 90 appears and the position of the first 80!",
           initialCode: "scores = (75, 80, 90, 85, 90, 80, 95, 90, 70)\n\n# 1) Count of 90 → print 'count: ___'\n\n\n# 2) Position of first 80 → print 'index: ___'\n",
           expectedOutput: "count: 3\nindex: 1",
@@ -204,21 +206,25 @@ else:
         {
           id: "unpack-explain",
           type: "explain",
-          title: "📤 Unpacking",
-          content: `Assign tuple values to multiple variables at once!
+          title: "📤 Unpacking — open the bundle",
+          content: `**Unpacking = opening the bundle**. Distribute a tuple's values into multiple variables **at once**.
+
+🎒 Think: opening a lunchbox (tuple) and placing rice, side dish, and kimchi onto separate plates.
 
 \`\`\`python
 point = (10, 20)
 x, y = point  # Unpacking!
 print(x)  # 10
 print(y)  # 20
-\`\`\``
+\`\`\`
+
+Variables on the left = elements on the right. Mismatch → error.`
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Try Unpacking!",
-          task: "Unpack the RGB values!",
+          title: "🖥️ Try Unpacking — RGB into r, g, b",
+          task: "Unpack the RGB tuple into r, g, b!",
           initialCode: "rgb = (255, 128, 0)\nr, g, b = rgb\nprint(f\"R: {r}, G: {g}, B: {b}\")",
           expectedOutput: "R: 255, G: 128, B: 0",
           hint: "The number of variables must match the number of elements",
@@ -227,8 +233,10 @@ print(y)  # 20
         {
           id: "swap-explain",
           type: "explain",
-          title: "🔄 Value Swapping",
-          content: `Swapping values is easy with tuples!
+          title: "🔄 Swap — one-line value trade",
+          content: `Thanks to tuples, **swapping two variables** fits in one line.
+
+🎒 Think: items in two hands switching at once — no need to put one down first.
 
 \`\`\`python
 a = 10
@@ -236,13 +244,15 @@ b = 20
 a, b = b, a  # Swap in one line!
 print(a)  # 20
 print(b)  # 10
-\`\`\``
+\`\`\`
+
+> 💡 Python builds the tuple \`(b, a)\` on the right first, then unpacks into the left side. That's why it doesn't tangle.`
         },
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Swap Values!",
-          task: "Swap the values of x and y!",
+          title: "🖥️ Swap — x ↔ y in one line",
+          task: "Swap x and y in a single line!",
           initialCode: "x = 100\ny = 200\nprint(f\"Before swap: x={x}, y={y}\")\nx, y = y, x\nprint(f\"After swap: x={x}, y={y}\")",
           expectedOutput: "Before swap: x=100, y=200\nAfter swap: x=200, y=100",
           hint: "Swap without a temporary variable!",
@@ -281,7 +291,7 @@ print(last)    # 5
         {
           id: "try-star",
           type: "tryit",
-          title: "🖥️ Try It — Star Unpacking",
+          title: "🖥️ Star Unpacking — top/mid/bot split",
           task: "From 5 scores, separate the top + middle + bottom. Print 'top: ___, mid: ___, bot: ___'!",
           initialCode: "scores = (98, 85, 76, 90, 62)\n\n# Unpack as top, *mid, bot\n\n\n# Print 'top: 98, mid: [85, 76, 90], bot: 62'\n",
           expectedOutput: "top: 98, mid: [85, 76, 90], bot: 62",
@@ -328,7 +338,7 @@ for i, fruit in enumerate(fruits):
         {
           id: "try-iter-unpack",
           type: "tryit",
-          title: "🖥️ Try It — Unpacking in for loop",
+          title: "🖥️ For-loop Unpacking — city name + pop",
           task: "Iterate (city, population) tuples while unpacking inline!",
           initialCode: "cities = [\n    (\"Seoul\", 950),\n    (\"Busan\", 340),\n    (\"Incheon\", 295),\n]\n\n# Unpack (name, pop) inside the for\nfor ___, ___ in cities:\n    print(f\"{name}: {pop}M\")",
           expectedOutput: "Seoul: 950M\nBusan: 340M\nIncheon: 295M",
@@ -380,7 +390,7 @@ s1 = ("Alice", 85)
         {
           id: "try-two-values",
           type: "tryit",
-          title: "🖥️ Try It — Bundle two values",
+          title: "🖥️ Bundle Two Values — circle perimeter + area",
           task: "For a circle of radius 5, bundle the circumference and area into one tuple and print both. (use π = 3.14)",
           initialCode: "r = 5\n# circumference = 2 * π * r\n# area = π * r * r\n# Bundle them into a tuple\ncircle = (___, ___)\n\nperi, area = circle\nprint(f\"circumference: {peri}, area: {area}\")",
           expectedOutput: "circumference: 31.400000000000002, area: 78.5",
@@ -435,7 +445,7 @@ print(board[(0, 0)])  # "X"
         {
           id: "try-coord",
           type: "tryit",
-          title: "🖥️ Try It — Coordinate distance",
+          title: "🖥️ Coordinate Distance — Manhattan between 2 points",
           task: "Compute the Manhattan distance |x1-x2| + |y1-y2| between two points!",
           initialCode: "p1 = (1, 2)\np2 = (4, 6)\n\n# Unpack and calculate\nx1, y1 = p1\nx2, y2 = p2\n\ndist = ___\nprint(f\"distance: {dist}\")",
           expectedOutput: "distance: 7",
@@ -484,8 +494,8 @@ for name, age in zip(names, ages):
         {
           id: "try-enumerate",
           type: "tryit",
-          title: "🖥️ Try It — enumerate unpacking",
-          task: "Number a menu list starting from 1. (enumerate has a start argument!)",
+          title: "🖥️ enumerate Unpacking — number menu from 1",
+          task: "Number a menu list starting from 1. (use enumerate's start argument)",
           initialCode: "menu = [\"Latte\", \"Americano\", \"Cappuccino\"]\n\nfor i, name in enumerate(menu, start=1):\n    print(f\"{i}. {name}\")",
           expectedOutput: "1. Latte\n2. Americano\n3. Cappuccino",
           hint: "Run as-is — enumerate(menu, start=1) makes index begin at 1.",
@@ -494,8 +504,8 @@ for name, age in zip(names, ages):
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission!",
-          task: "Manage student info using tuples!",
+          title: "🏆 Student Info — for-loop with unpacking",
+          task: "Iterate a roster of (name, score) tuples using for-loop unpacking!",
           initialCode: "students = [\n    (\"Alice\", 85),\n    (\"Bob\", 92),\n    (\"Charlie\", 78)\n]\n\nfor ___, ___ in students:\n    print(f\"{name}: {score} points\")",
           expectedOutput: "Alice: 85 points\nBob: 92 points\nCharlie: 78 points",
           hint: "Unpack directly in the for loop!",
@@ -504,7 +514,7 @@ for name, age in zip(names, ages):
         {
           id: "mission2",
           type: "mission",
-          title: "🏆 Mission 2 — Average and top from a roster",
+          title: "🏆 Mission — Average + top student name",
           task: "From 4 students of (name, score) tuples, find the **average score** and **top student's name**. Use only for-unpacking.",
           initialCode: "students = [\n    (\"Alice\", 75),\n    (\"Bob\", 92),\n    (\"Charlie\", 80),\n    (\"Dora\", 88),\n]\n\n# 1) Average score — sum of scores / number of people\ntotal = 0\nfor name, score in students:\n    total += ___\navg = total / len(students)\n\n# 2) Top name — name of the student with the highest score\ntop_name = \"\"\ntop_score = -1\nfor name, score in students:\n    if score > ___:\n        top_score = score\n        top_name = name\n\nprint(f\"avg: {avg}\")\nprint(f\"top: {top_name}\")",
           expectedOutput: "avg: 83.75\ntop: Bob",

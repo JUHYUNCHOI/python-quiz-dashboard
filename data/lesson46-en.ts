@@ -15,7 +15,7 @@ export const lesson46EnData: LessonData = {
           id: "ch1-0",
           type: "explain",
           title: "💭 What's the difference between a module and a package?",
-          content: `💭 Some things like math are just **a single file**, while others like requests are an **entire folder**! What's the difference between the two?
+          content: `💭 math is **one toolbox** (a single .py file). But big jobs need more — so something like requests is a **toolbox set** (a folder with multiple files inside)! What's the difference?
 
 \`\`\`python
 # Module = a single .py file
@@ -45,7 +45,7 @@ Python has **built-in modules** (included by default) and **external packages** 
           id: "ch1-1",
           type: "explain",
           title: "💭 How do you install external packages?",
-          content: `💭 I want to use awesome packages made by developers worldwide! But they're not on my computer... is there a **way to install** them?
+          content: `💭 I want to use awesome toolboxes (= packages) built by developers worldwide! But they're not on my computer... is there a way to **borrow** them, like borrowing a tool from a friend?
 
 \`\`\`bash
 # Install a package
@@ -268,7 +268,7 @@ check_password('hello')`,
           id: "ch3-0",
           type: "explain",
           title: "💭 You can do web scraping and game dev with Python?",
-          content: `💭 They say Python can do **web requests**, **game development**, and even **data analysis**! But these features aren't built-in... where can you get them?
+          content: `💭 They say Python can do **web requests**, **game development**, even **data analysis**! But these big toolboxes aren't built in... where can you borrow them from?
 
 \`\`\`bash
 # Usage flow

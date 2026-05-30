@@ -17,77 +17,114 @@ export const lesson9EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🔄 Why Do We Need Type Conversion?",
-          content: `Every value in Python has a **type**.
+          title: "🔄 Why Change a Type?",
+          content: `Remember from lesson 5 that \`"3" + "5"\` gave you \`"35"\`?
 
 \`\`\`python
-"123"   # string — + concatenates
-123     # integer — + adds
+"3" + "5"     # "35"  ← glues the letters
+3 + 5         # 8     ← real addition
 \`\`\`
 
-What if you want to do math with the string \`"123"\`?
+Quotes around it → **string (str)**. No quotes → **integer (int)**. They look similar, but Python treats them completely differently.
+
+The catch — sometimes you get **a string that looks like a number**.
 
 \`\`\`python
-x = "123"
-print(x + 1)   # ❌ Error! Can't add a number to a string
+score = "85"          # came from somewhere as text
+print(score + 10)     # ❌ TypeError!
 \`\`\`
 
-You need a **type conversion function** to change it:
-
-| Function | Converts to | Example |
-|----------|-------------|---------|
-| \`int()\` | Integer | \`int("123")\` → 123 |
-| \`float()\` | Float | \`float("3.14")\` → 3.14 |
-| \`str()\` | String | \`str(42)\` → "42" |
-| \`bool()\` | True/False | \`bool(0)\` → False |`
+Python: "Is this \`"85"\` text or a number? I can't add them!"`
         },
         {
-          id: "int-explain",
+          id: "intro-clothes",
           type: "explain",
-          title: "🔢 int() - Convert to Integer",
-          content: `**int()** = convert to integer
+          title: "👕 Think of it as changing clothes",
+          content: `Type conversion = a value **changing its outfit**.
 
-\`\`\`python
-# String → Integer
-num = int("123")
-print(num + 1)  # 124
+| Function | Into what outfit? | Example |
+|----------|-------------------|---------|
+| \`int()\` | int (integer) | \`int("85")\` → \`85\` |
+| \`float()\` | float (decimal number) | \`float("3.14")\` → \`3.14\` |
+| \`str()\` | str (text — adds quotes) | \`str(42)\` → \`"42"\` |
+| \`bool()\` | bool (True / False) | \`bool(0)\` → \`False\` |
 
-# Float → Integer (decimals are truncated!)
-num = int(3.7)
-print(num)  # 3
+> 💡 **int** = whole number / **float** = number with a decimal point / **str** = text / **bool** = True or False.
 
-# With input
-age = int(input("Age: "))
-\`\`\``
+The *meaning* of the value stays the same — \`"85"\` and \`85\` both mean "eighty-five". Only the *outfit* changes, which decides what Python lets you do with it.`
+        },
+        {
+          id: "intro-viz",
+          type: "interactive",
+          title: "🎬 Visualize the conversion — click around",
+          description: "Pick a preset and press ▷ Step. Watch how a value changes its outfit.",
+          component: "typeConversionVisualizer",
         },
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "Convert a string to an integer!",
-          initialCode: "text = \"100\"\n# Convert the string to an integer\nnum = ___(text)\nprint(num + 50)",
-          expectedOutput: "150",
-          hint: "Use int(text) to convert!",
-          hint2: "int(\"100\")"
+          title: "🖥️ Now your turn — convert before adding!",
+          task: "Use int(\"85\") like you saw in the visualizer. Print the score plus 10.",
+          initialCode: "score = \"85\"\n# convert score to an integer and add 10\nprint(___(score) + 10)",
+          expectedOutput: "95",
+          hint: "Put score inside int().",
+          hint2: "int(score)"
+        },
+        {
+          id: "int-explain",
+          type: "explain",
+          title: "🔢 int() — to integer",
+          content: `\`int()\` takes two kinds of input:
+
+**1) A number-looking string → integer**
+
+\`\`\`python
+int("123")    # 123
+int("0")      # 0
+int("-7")     # -7
+\`\`\`
+
+**2) A float → integer (decimals are *cut off*, NOT rounded!)**
+
+\`\`\`python
+int(3.7)      # 3   ← NOT 4!
+int(3.9)      # 3   ← still 3!
+int(-2.8)     # -2  ← cut toward zero
+\`\`\`
+
+> 💡 Rounding is \`round()\`. \`int()\` just **chops**. (round comes later.)`
+        },
+        {
+          id: "predict-truncate",
+          type: "predict",
+          title: "💭 Predict — int(3.9)",
+          content: `What does this print?
+
+\`\`\`python
+print(int(3.9))
+\`\`\``,
+          options: ["3", "4", "3.9", "Error"],
+          answer: 0,
+          explanation: "int() **chops, doesn't round!** 3.9 → 3. To get 4 you'd need round(3.9)."
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Float to Integer!",
-          task: "Convert a float to an integer!",
+          title: "🖥️ Float to integer!",
+          task: "Convert pi to an integer and print it.",
           initialCode: "pi = 3.14159\nprint(___(pi))",
           expectedOutput: "3",
-          hint: "int() truncates the decimal part!",
-          hint2: "int(3.14159) = 3"
+          hint: "int() chops off the decimal part.",
+          hint2: "int(pi)"
         },
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ Quiz!",
-          content: "What is the result of `int(\"3.14\")`?",
-          options: ["3", "3.14", "Error", "\"3\""],
+          title: "❓ Trick Quiz!",
+          content: "What does `int(\"3.14\")` give?",
+          options: ["3", "3.14", "Error (ValueError)", "\"3\""],
           answer: 2,
-          explanation: "The string \"3.14\" can't be directly converted to int! You need to convert it to float first."
+          explanation: "Careful! `int(3.14)` is fine (gives 3). But `int(\"3.14\")` — a string with a dot — is **rejected**! Safe path: `int(float(\"3.14\"))` — go through float first."
         }
       ]
     },
@@ -99,59 +136,80 @@ age = int(input("Age: "))
         {
           id: "float-explain",
           type: "explain",
-          title: "🔢 float() - Convert to Float",
-          content: `**float()** = convert to floating point number
+          title: "🔢 float() — to decimal",
+          content: `\`float()\` = convert to a decimal number.
 
 \`\`\`python
-# String → Float
-num = float("3.14")
-print(num)  # 3.14
+# string → float
+float("3.14")     # 3.14
+float("100")      # 100.0   ← .0 attaches!
 
-# Integer → Float
-num = float(10)
-print(num)  # 10.0
+# integer → float
+float(10)         # 10.0
+\`\`\`
 
-# With input
-height = float(input("Height(cm): "))
-\`\`\``
+**When to use it:**
+- Prices, heights, averages — anything that *can have a decimal*.
+- To turn the result of \`input()\` (always a string — coming next lesson) into a real number.
+
+> 💡 Difference from \`int\`: \`float("3.14")\` ✅ works! The dot is fine.`
         },
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "Convert a string to a float!",
+          title: "🖥️ Try It — float()",
+          task: "Convert \"3.14\" to a float and print it doubled.",
           initialCode: "text = \"3.14\"\nnum = ___(text)\nprint(num * 2)",
           expectedOutput: "6.28",
-          hint: "Use float(text) to convert!",
-          hint2: "float(\"3.14\")"
+          hint: "Use float() to convert.",
+          hint2: "float(text)"
         },
         {
           id: "str-explain",
           type: "explain",
-          title: "📝 str() - Convert to String",
-          content: `**str()** = convert to string
+          title: "📝 str() — to text",
+          content: `\`str()\` = turn a number (or other value) into a **string** by wrapping it in quotes.
 
 \`\`\`python
-# Number → String
-text = str(123)
-print("Score: " + text)  # Score: 123
-
-# Float → String
-text = str(3.14)
-print("Pi: " + text)  # Pi: 3.14
+str(123)          # "123"
+str(3.14)         # "3.14"
+str(True)         # "True"
 \`\`\`
 
-⚠️ If you use f-strings, you don't need str()!`
+**When?** — When you want to glue with text using \`+\`.
+
+\`\`\`python
+score = 95
+print("Score: " + str(score) + " points")
+# Score: 95 points
+\`\`\`
+
+Without str()? — \`"Score: " + 95\` ❌ TypeError!
+
+> 💡 With **f-strings** from lesson 8 you don't need \`str()\`: \`f"Score: {score} points"\` — it converts automatically.`
         },
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "Convert a number to a string!",
+          title: "🖥️ Try It — str()",
+          task: "Convert score to a string and print \"Score: 95 points\".",
           initialCode: "score = 95\ntext = ___(score)\nprint(\"Score: \" + text + \" points\")",
           expectedOutput: "Score: 95 points",
-          hint: "Use str(score) to convert!",
-          hint2: "str(95)"
+          hint: "str() wraps the number in a string outfit.",
+          hint2: "str(score)"
+        },
+        {
+          id: "predict-str-concat",
+          type: "predict",
+          title: "💭 Predict — str(7) + str(3)",
+          content: `What does this print?
+
+\`\`\`python
+print(str(7) + str(3))
+\`\`\``,
+          options: ["10", "73", "\"7\"\"3\"", "Error"],
+          answer: 1,
+          explanation: "str(7) → \"7\", str(3) → \"3\". String + string = **glue them together** → \"73\". For real addition: 7 + 3 = 10 (no quotes)."
         }
       ]
     },
@@ -163,64 +221,88 @@ print("Pi: " + text)  # Pi: 3.14
         {
           id: "bool-explain",
           type: "explain",
-          title: "✅ bool() - Convert to Boolean",
-          content: `**bool()** = convert to True/False
+          title: "✅ bool() — to True/False",
+          content: `\`bool()\` = turn a value into **True** or **False**.
 
-**Values that become False:**
+**Values that become False (memorize these!):**
 \`\`\`python
 bool(0)       # False
 bool(0.0)     # False
-bool("")      # False (empty string)
-bool(None)    # False
+bool("")      # False   ← empty string
 \`\`\`
 
-**Everything else is True!**
+**Everything else is True:**
 \`\`\`python
 bool(1)       # True
-bool(-1)      # True
-bool("hello") # True
+bool(-1)      # True    ← negatives too!
+bool("hi")    # True
+bool("0")     # True    ← "0" in quotes is NOT empty!
 \`\`\`
 
-💡 An empty list \`[]\` is also False! We'll learn about lists later.`
+> 💡 Tricky one: \`bool("0")\` is **True**. Anything with at least one character inside quotes is a "non-empty string" → True.
+>
+> An empty list \`[]\` is also False — lists come in lesson 16.`
         },
         {
           id: "try5",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "Check the bool values of 0 and an empty string!",
-          initialCode: "# Predict the bool result of each value\nprint(bool(___))\nprint(bool(___))\nprint(bool(___))\nprint(bool(___))",
+          title: "🖥️ Try It — bool of each",
+          task: "Put 0, 1, \"\" (empty string), and \"hi\" into the blanks in order.",
+          initialCode: "print(bool(___))\nprint(bool(___))\nprint(bool(___))\nprint(bool(___))",
           expectedOutput: "False\nTrue\nFalse\nTrue",
-          hint: "0 and empty string are False!",
-          hint2: "bool(0) = False"
+          hint: "In order: 0 / 1 / \"\" / \"hi\". Empty string is two double-quotes touching.",
+          hint2: "bool(0) / bool(1) / bool(\"\") / bool(\"hi\")"
         },
         {
           id: "error-explain",
           type: "explain",
-          title: "⚠️ Watch Out for Conversion Errors!",
-          content: `Invalid conversions cause errors:
+          title: "⚠️ Two kinds of conversion error",
+          content: `Bad conversions raise errors. Knowing the **error name** makes them less scary.
 
 \`\`\`python
-int("abc")      # ❌ Error! Not a number
-int("3.14")     # ❌ Error! Has a decimal point
-float("hello")  # ❌ Error! Not a number
+int("abc")        # ❌ ValueError: not digits
+int("3.14")       # ❌ ValueError: string has a dot
+float("hello")    # ❌ ValueError: not a number
 \`\`\`
 
-**Safe conversion:**
+> 💡 **ValueError** means "the value doesn't fit the conversion rule."
+
+**Safe detour — dot-string? use float first!**
+
 \`\`\`python
-# String with decimal → Integer
 text = "3.14"
-num = int(float(text))  # Convert to float first!
-print(num)  # 3
-\`\`\``
+num = int(float(text))    # float first, then int
+print(num)                # 3
+\`\`\`
+
+(Mind the order: inner = float, outer = int.)`
+        },
+        {
+          id: "predict-error",
+          type: "predict",
+          title: "💭 Predict — int(\"abc\")",
+          content: `What happens?
+
+\`\`\`python
+print(int("abc"))
+\`\`\``,
+          options: [
+            "0",
+            "\"abc\"",
+            "ValueError",
+            "None"
+          ],
+          answer: 2,
+          explanation: "\"abc\" has no digits at all, so int() gives up → ValueError. If users might type garbage you need try-except — that comes in lesson 37!"
         },
         {
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the result of bool(\"\")?",
+          content: "What is `bool(\"\")`?",
           options: ["True", "False", "\"\"", "Error"],
           answer: 1,
-          explanation: "An empty string \"\" is False! If it's empty, it's falsy."
+          explanation: "Empty string \"\" is False. Remember: \"empty → falsy.\" (Watch out: \"0\" has 1 character inside, so it's True!)"
         }
       ]
     },
@@ -233,42 +315,43 @@ print(num)  # 3
           id: "summary",
           type: "explain",
           title: "📝 Summary",
-          content: `## Type Conversion Functions
+          content: `## The four conversion functions
 
-| Function | Description | Example |
-|----------|-------------|---------|
-| **int()** | To integer | int("123") → 123 |
-| **float()** | To float | float("3.14") → 3.14 |
-| **str()** | To string | str(123) → "123" |
-| **bool()** | To boolean | bool(1) → True |
+| Function | Meaning | Example |
+|----------|---------|---------|
+| **int()** | to integer | int("123") → 123 |
+| **float()** | to decimal | float("3.14") → 3.14 |
+| **str()** | to string | str(123) → "123" |
+| **bool()** | to True/False | bool(0) → False |
 
-**Remember!**
-- input() always returns a string!
-- Use int() or float() for calculations!
-- 0, "", [] etc. are False!`
+**Remember:**
+- \`int()\` **chops** floats (not rounded)
+- \`int("3.14")\` ❌ → use \`int(float("3.14"))\` ✅
+- f-strings remove the need for \`str()\`
+- bool is False only for 0, 0.0, "" — everything else True`
         },
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission!",
-          task: "Build a simple calculator!",
+          title: "🏆 Final Mission — Score Calculator",
+          task: "Two scores are stored as strings. Convert them, then print sum and product in the given format.",
           initialCode: "a = '25'\nb = '17'\n\n# Convert strings to numbers\nnum_a = ___(a)\nnum_b = ___(b)\n\nprint(f'{num_a} + {num_b} = {num_a + num_b}')\nprint(f'{num_a} × {num_b} = {num_a * num_b}')\nprint(f'Type of sum: {type(num_a + num_b)}')",
           expectedOutput: "25 + 17 = 42\n25 × 17 = 425\nType of sum: <class 'int'>",
-          hint: "Use int() to convert strings to integers!",
-          hint2: "int(a)"
+          hint: "Both blanks: int().",
+          hint2: "int(a) / int(b)"
         },
         {
           id: "complete",
           type: "explain",
           title: "🎉 Complete!",
-          content: `## What We Learned Today
+          content: `## What you learned
 
-✅ **int()** - Convert to integer
-✅ **float()** - Convert to float
-✅ **str()** - Convert to string
-✅ **bool()** - Convert to boolean
+✅ **int()** — to integer (decimals get chopped)
+✅ **float()** — to decimal (gets a .0)
+✅ **str()** — to string (puts on quote outfit)
+✅ **bool()** — to True/False (only 0 and "" are False)
 
-Next lesson, we'll learn about **input()** for user input! 🚀`
+Next lesson, finally — **input()** to get values from the user. Since input() always returns a string, today's \`int()\` / \`float()\` will show up over and over! 🚀`
         }
       ]
     }

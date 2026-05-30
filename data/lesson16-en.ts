@@ -17,66 +17,52 @@ export const lesson16EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "📋 What is a List?",
-          content: `**List** = a data structure that stores multiple values in order
+          title: "📋 What is a list? — A row of boxes",
+          content: `**list** = several values stored in **a row, in order**.
+
+🎒 Picture: school lockers numbered 1, 2, 3... each holding one thing.
 
 \`\`\`python
 fruits = ["apple", "banana", "strawberry"]
 numbers = [1, 2, 3, 4, 5]
-mixed = [1, "hello", True, 3.14]
 \`\`\`
 
-- Use **square brackets [ ]**
-- Separate items with **commas (,)**
-- You can mix **different types** together!
+- **Square brackets \`[ ]\`** mark the start and end
+- **Commas \`,\`** separate the boxes
+- Numbers, words, mixed — all OK
 
-### Where do you use lists?
+### Where you'll see lists
 
-- Student rosters, score logs — **ordered** lineup
-- Shopping carts, comments — **frequent add/remove**
-- Game inventory — items in / out
-- Multi-value input — \`input().split()\` results
-- The most basic unit of data processing
+- Class rosters, score logs — ordered
+- Shopping carts, game inventory — add / remove
+- \`input().split()\` results
 
-> 🎯 Among the 4 data structures, **list is the most-used**. Learn it well — you'll use it forever.`
+> 🎯 The **most-used** data structure. Learn it once — use it forever.`
+        },
+        {
+          id: "viz-builder",
+          type: "interactive",
+          title: "🎬 Watch: how a list is built",
+          component: "pyListBuilder",
+          description: "Watch a list get built step by step. Click each button to advance!"
         },
         {
           id: "creation-ways",
           type: "explain",
-          title: "🛠️ Many ways to create a list",
+          title: "🛠️ 3 ways to create a list",
           content: `\`\`\`python
 # 1) Square brackets — most common
 fruits = ["apple", "banana"]
 empty = []
 
-# 2) list() function — convert from another iterable
-chars = list("hello")        # ['h', 'e', 'l', 'l', 'o']
-nums  = list(range(5))       # [0, 1, 2, 3, 4]
-empty = list()               # []
-
-# 3) Same value repeated — *
+# 2) [0] * n — filled with the same value
 zeros = [0] * 5              # [0, 0, 0, 0, 0]
-hello = ["hi"] * 3           # ['hi', 'hi', 'hi']
 
-# 4) List comprehension (covered later)
-squares = [n * n for n in range(1, 6)]
-# [1, 4, 9, 16, 25]
+# 3) list(range(...)) — number lineup
+nums = list(range(1, 6))     # [1, 2, 3, 4, 5]
 \`\`\`
 
-### With range — common patterns
-
-\`\`\`python
-# 0 to 9
-list(range(10))         # [0, 1, ..., 9]
-
-# 1 to 10
-list(range(1, 11))      # [1, 2, ..., 10]
-
-# Even numbers (2-20)
-list(range(2, 21, 2))   # [2, 4, 6, ..., 20]
-\`\`\`
-
-> 💡 **\`[0] * n\`** is great for initializing score boards / counters. **\`list(range(...))\`** is common in coding tests.`
+> 💡 \`[0] * n\` initializes a score board (5 zeros for 5 students). \`list(range(...))\` builds number rosters like 1~100.`
         },
         {
           id: "try1",
@@ -189,42 +175,29 @@ fruits.pop(0)  # remove first
         {
           id: "insert-explain",
           type: "explain",
-          title: "📍 insert — Slot in at a specific position",
-          content: `\`append\` adds at the end. **insert(index, value)** lets you slot in anywhere.
+          title: "📍 insert — slot into the middle of the row",
+          content: `\`append\` only adds **at the end**. To slot into the middle, use **\`insert(position, value)\`**.
 
 \`\`\`python
 fruits = ["apple", "strawberry", "grape"]
 
-# Insert 'banana' at index 1 (everything else shifts right)
+# Slot 'banana' at position 1 (later boxes shift right)
 fruits.insert(1, "banana")
 print(fruits)
 # ['apple', 'banana', 'strawberry', 'grape']
-
-# Add to the front (index 0)
-fruits.insert(0, "orange")
-print(fruits)
-# ['orange', 'apple', 'banana', 'strawberry', 'grape']
 \`\`\`
 
-### remove vs pop revisited
+### pop (take out) vs remove (erase)
 
 \`\`\`python
-nums = [10, 20, 30, 20, 40]
+nums = [10, 20, 30]
 
-# remove(value) — deletes first occurrence by value
-nums.remove(20)
-print(nums)   # [10, 30, 20, 40] ← only first 20
-
-# pop(index) — deletes by position + returns value
-val = nums.pop(0)
-print(val, nums)   # 10 [30, 20, 40]
-
-# pop() — last item (no index)
-last = nums.pop()
-print(last, nums)  # 40 [30, 20]
+last = nums.pop()        # take the last → last = 30
+nums.remove(10)          # erase the value 10
+print(nums)              # [20]
 \`\`\`
 
-> 🎯 One-liner: **append=back, insert=anywhere, remove=by value, pop=by position + take it.**`
+> 🎯 **append=back, insert=anywhere, pop=take out, remove=erase by value.**`
         },
         {
           id: "try-insert",
@@ -347,44 +320,28 @@ print(fruits[-2])  # banana (second from last)
         {
           id: "sort-explain",
           type: "explain",
-          title: "🔢 Sort and reverse — sort / sorted / reverse",
-          content: `**sort()** — sorts the list itself (in-place)
+          title: "🔢 sort — line them up in order",
+          content: `**sort()** — sorts the list **itself** (original changes!)
 **sorted()** — returns a **new sorted list** (original unchanged)
-**reverse()** — reverses the order
 
 \`\`\`python
-nums = [3, 1, 4, 1, 5, 9, 2, 6]
+nums = [3, 1, 4, 1, 5]
 
-# sort() — in place
 nums.sort()
-print(nums)    # [1, 1, 2, 3, 4, 5, 6, 9]
+print(nums)         # [1, 1, 3, 4, 5]
 
-# Descending
+# Descending (biggest first)
 nums.sort(reverse=True)
-print(nums)    # [9, 6, 5, 4, 3, 2, 1, 1]
+print(nums)         # [5, 4, 3, 1, 1]
 
-# sorted() — original preserved
+# sorted() — doesn't touch original
 original = [3, 1, 4]
 new_list = sorted(original)
-print(new_list)   # [1, 3, 4]
-print(original)   # [3, 1, 4] — unchanged!
-
-# reverse() — just flips order, no sort
-fruits = ["apple", "pear", "kiwi"]
-fruits.reverse()
-print(fruits)  # ['kiwi', 'pear', 'apple']
+print(new_list)     # [1, 3, 4]
+print(original)     # [3, 1, 4] — unchanged!
 \`\`\`
 
-### key function — sort by length / custom
-
-\`\`\`python
-words = ["apple", "kiwi", "banana"]
-
-words.sort(key=len)        # by length
-print(words)               # ['kiwi', 'apple', 'banana']
-\`\`\`
-
-> 🎯 **In-place vs new list** — biggest sort vs sorted distinction.`
+> 🎯 **sort = in-place, sorted = new list.** The biggest distinction.`
         },
         {
           id: "try-sort",
@@ -426,44 +383,31 @@ print(winner)   # 'A'
         {
           id: "comprehension",
           type: "explain",
-          title: "✨ List comprehension — one-liner",
-          content: `Build lists in **one line** instead of for loops.
+          title: "✨ List comprehension — one-line magic",
+          content: `Build a list in **one line** instead of a for loop.
 
 \`\`\`python
-# Old way — 4 lines
+# 4-line version
 squares = []
 for n in range(1, 6):
     squares.append(n * n)
 # [1, 4, 9, 16, 25]
 
-# Comprehension — 1 line
+# One-line version (same result!)
 squares = [n * n for n in range(1, 6)]
-# [1, 4, 9, 16, 25]
 \`\`\`
 
-### With condition (if filter)
+### Filter with if
 
 \`\`\`python
-nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+nums = [1, 2, 3, 4, 5, 6]
 
-# Only evens
+# Evens only
 even = [n for n in nums if n % 2 == 0]
-# [2, 4, 6, 8, 10]
-
-# Squares of evens
-even_sq = [n*n for n in nums if n % 2 == 0]
-# [4, 16, 36, 64, 100]
+# [2, 4, 6]
 \`\`\`
 
-### Student scores → passing list
-
-\`\`\`python
-scores = [("Alice", 85), ("Bob", 55), ("Charlie", 70)]
-passed = [name for name, s in scores if s >= 60]
-# ['Alice', 'Charlie']
-\`\`\`
-
-> 🎯 Powerful once you're used to it. If hard at first, regular for loops are fine — comprehension comes naturally over time.`
+> 🎯 If hard at first, plain for loops are fine. It comes up again in L17.`
         },
         {
           id: "try-comprehension",

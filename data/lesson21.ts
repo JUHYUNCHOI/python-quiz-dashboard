@@ -17,33 +17,35 @@ export const lesson21Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🎯 중복을 없애고 싶다면?",
-          content: `**집합(set)** = 중복이 없고, 순서가 없는 자료구조
+          title: "🎯 집합 (set) — 중복 없는 모임",
+          content: `**집합 (set)** = **중복 없고, 순서 없는** 모임.
+
+🎒 비유: 학생회 모임 명단. 같은 사람 두 번 적으면 안 되고, 자리 순서는 상관없음.
 
 \`\`\`python
 numbers = {1, 2, 2, 3, 3, 3}
-print(numbers)  # {1, 2, 3} - 중복 제거!
+print(numbers)  # {1, 2, 3} — 중복 자동 제거!
 
 names = {"철수", "영희", "철수"}
-print(names)  # {'철수', '영희'}
+print(names)    # {'철수', '영희'}
 \`\`\`
 
-**특징:**
-- ❌ 중복 없음 — 같은 값 두 번 안 들어감
-- ❌ 순서 없음 — 인덱스 \`s[0]\` 같은 거 못 함
-- ⭕ 빠른 검색 — \`in\` 연산이 리스트보다 훨씬 빠름
+**3 가지 특징:**
+- ❌ **중복 없음** — 같은 값 두 번 안 들어감
+- ❌ **순서 없음** — \`s[0]\` 같은 인덱스 불가
+- ⭕ **빠른 검색** — \`in\` 이 리스트보다 훨씬 빠름
 
 ### 어디서 자주 만나요?
 
-- **중복 제거**: 사용자 ID 목록에서 한 번 이상 접속한 사람만
-- **태그 관리**: 게시물에 달린 태그 (같은 태그 여러 번 X)
-- **빠른 회원 확인**: "이 사용자가 가입했나?" 즉시 답
-- **두 그룹 비교**: 공통 친구, A 반에만 있는 학생 등 (다음 챕터)`
+- **중복 제거**: 방문자 명단 → 고유 방문자
+- **태그**: 게시물 태그 (같은 거 여러 번 X)
+- **빠른 회원 확인**: "이 사람 가입했나?" 즉시
+- **두 그룹 비교**: 공통 친구, A 반에만 있는 학생 (다음 챕터)`
         },
         {
           id: "creation-ways",
           type: "explain",
-          title: "🛠️ 집합 만드는 법 + 빈 set 트랩",
+          title: "🛠️ 집합 만드는 법 + 빈 set 함정",
           content: `\`\`\`python
 # 1) 중괄호 — 가장 흔함
 s1 = {1, 2, 3}
@@ -54,7 +56,7 @@ s3 = set("hello")           # 문자열 → {'h', 'e', 'l', 'o'}
 s4 = set((1, 2, 3))         # 튜플 → {1, 2, 3}
 \`\`\`
 
-### ⚠️ 빈 집합 트랩
+### ⚠️ 빈 집합 함정
 
 \`\`\`python
 empty1 = {}        # ❌ 이건 빈 딕셔너리!
@@ -113,8 +115,8 @@ empty2 = set()     # ✅ 진짜 빈 집합
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
-          task: "중복을 제거하고 개수를 세보세요!",
+          title: "🖥️ 중복 제거 — set 으로 고유 개수 세기",
+          task: "중복 있는 리스트를 set 으로 변환하고 고유 개수를 세보세요!",
           initialCode: "numbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = set(numbers)\nprint(f\"중복 제거 후 개수: {len(unique)}개\")",
           expectedOutput: "중복 제거 후 개수: 4개",
           hint: "set()으로 리스트를 집합으로!",
@@ -123,8 +125,8 @@ empty2 = set()     # ✅ 진짜 빈 집합
         {
           id: "try-dedupe-list",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 중복 제거하고 다시 리스트로",
-          task: "방문자 명단에서 중복을 제거한 정렬된 리스트를 만들어 보세요. (중복 제거 → 정렬)",
+          title: "🖥️ 중복 제거 + 정렬 — 방문자 명단 정리",
+          task: "방문자 명단에서 중복을 제거하고 정렬된 리스트로 바꿔보세요!",
           initialCode: "visitors = [\"철수\", \"영희\", \"철수\", \"민수\", \"영희\", \"수지\", \"철수\"]\n\n# 1) set 으로 변환 → 중복 제거\n# 2) sorted() 로 정렬해 리스트로 다시\nunique_sorted = ___\n\nprint(unique_sorted)",
           expectedOutput: "['민수', '수지', '영희', '철수']",
           hint: "sorted(set(visitors)) — set 거치면서 중복 제거, sorted 가 자동 list 반환.",
@@ -149,26 +151,35 @@ empty2 = set()     # ✅ 진짜 빈 집합
         {
           id: "add-remove",
           type: "explain",
-          title: "➕➖ 추가와 삭제",
-          content: `**add()** - 추가
-**remove()** - 삭제 (없으면 에러)
-**discard()** - 삭제 (없어도 OK)
+          title: "➕➖ 넣기 / 빼기 — add / remove / discard",
+          content: `세 가지만 외워두면 충분.
 
 \`\`\`python
 fruits = {"사과", "바나나"}
 
-fruits.add("딸기")
+fruits.add("딸기")        # 넣기
 print(fruits)  # {'사과', '바나나', '딸기'}
 
-fruits.remove("바나나")
+fruits.remove("바나나")    # 빼기 — 없으면 에러!
 print(fruits)  # {'사과', '딸기'}
-\`\`\``
+
+fruits.discard("포도")     # 빼기 — 없어도 조용히
+print(fruits)  # {'사과', '딸기'}
+\`\`\`
+
+| 메서드 | 뭐 함 | 없는 값이면? |
+|---|---|---|
+| \`add(x)\` | x 를 넣어요 | 이미 있어도 조용 |
+| \`remove(x)\` | x 를 빼요 | ❌ \`KeyError\` |
+| \`discard(x)\` | x 를 빼요 | ✅ 조용히 무시 |
+
+> 🎯 **확실히 있을 때만 remove, 헷갈리면 discard.**`
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ 요소 추가하기!",
-          task: "집합에 '오렌지'를 추가하고 개수를 확인하세요!",
+          title: "🖥️ 넣기 — '오렌지' add",
+          task: "집합에 '오렌지' 를 추가하고 개수를 확인하세요!",
           initialCode: "fruits = {\"사과\", \"바나나\"}\nfruits.add(\"오렌지\")\nprint(f\"과일 개수: {len(fruits)}개\")",
           expectedOutput: "과일 개수: 3개",
           hint: "add()로 추가!",
@@ -177,8 +188,8 @@ print(fruits)  # {'사과', '딸기'}
         {
           id: "in-explain",
           type: "explain",
-          title: "🔍 포함 여부 확인",
-          content: `**in** 연산자로 빠르게 확인!
+          title: "🔍 in — 모임 안에 있나? (빠른 검색)",
+          content: `\`in\` 연산자로 모임에 있는지 즉시 확인.
 
 \`\`\`python
 fruits = {"사과", "바나나", "딸기"}
@@ -187,13 +198,15 @@ print("사과" in fruits)   # True
 print("포도" in fruits)   # False
 \`\`\`
 
-💡 집합은 리스트보다 **훨씬 빠르게** 검색해요!`
+🎒 비유: 큰 동아리 명단에서 "이 사람 있나?" 찾을 때 — 리스트는 한 명씩 위에서부터 보지만, set 은 **거의 즉시** 답해요.
+
+> 💡 백 명에서 천 명 단위로 갈수록 차이가 커져요. "있는지만 빠르게 확인" 이 목적이면 set.`
         },
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ 포함 확인!",
-          task: "'바나나'가 있는지 확인하세요!",
+          title: "🖥️ 포함 확인 — '바나나' in fruits",
+          task: "'바나나' 가 집합에 있는지 in 으로 확인하세요!",
           initialCode: "fruits = {\"사과\", \"바나나\", \"딸기\"}\nprint(\"바나나\" in fruits)",
           expectedOutput: "True",
           hint: "in 연산자 사용!",
@@ -238,8 +251,8 @@ s.discard(99)   # ✅ 조용히 무시
         {
           id: "try-update",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — update 로 한꺼번에 추가",
-          task: "기존 학생 모음에 신입생 리스트를 update 로 한 번에 합치세요!",
+          title: "🖥️ update — 신입생 한꺼번에 합치기",
+          task: "기존 학생 모임에 신입생 리스트를 update 로 한꺼번에 합치세요!",
           initialCode: "current = {\"철수\", \"영희\", \"민수\"}\nnew_students = [\"수지\", \"준호\", \"영희\"]   # 영희는 이미 있음\n\n# update 로 한꺼번에\ncurrent.___(new_students)\nprint(f\"전체 인원: {len(current)}명\")",
           expectedOutput: "전체 인원: 5명",
           hint: "current.update(new_students) — 영희는 자동 중복 제거.",
@@ -273,8 +286,8 @@ print(grades)  # {'A', 'B', 'C'} — 등장한 등급들
         {
           id: "try-comprehension",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — set comprehension",
-          task: "단어 리스트에서 **3 글자 이상** 인 단어들의 집합을 만드세요!",
+          title: "🖥️ set comprehension — 3 글자 이상 단어 집합",
+          task: "단어 리스트에서 **3 글자 이상** 만 set 컴프리헨션으로 모으세요!",
           initialCode: "words = [\"사과\", \"바나나\", \"키위\", \"파인애플\", \"감\", \"오렌지\"]\n\n# set comprehension 으로 길이 3 이상\nlong_words = ___\n\nprint(sorted(long_words))  # 정렬해서 출력 (재현 가능)",
           expectedOutput: "['바나나', '오렌지', '파인애플']",
           hint: "{w for w in words if len(w) >= 3}",
@@ -290,26 +303,33 @@ print(grades)  # {'A', 'B', 'C'} — 등장한 등급들
         {
           id: "set-ops",
           type: "explain",
-          title: "🧮 수학의 집합 연산!",
-          content: `\`\`\`python
+          title: "🧮 합집합 / 교집합 / 차집합 — 모임 비교",
+          content: `두 모임을 비교하는 3 가지 도구. 수학 시간에 본 그것!
+
+\`\`\`python
 A = {1, 2, 3, 4}
 B = {3, 4, 5, 6}
 
-# 합집합 (A 또는 B)
+# 합집합 (A 또는 B) — 둘 다 합쳐서
 print(A | B)  # {1, 2, 3, 4, 5, 6}
 
-# 교집합 (A 그리고 B)
+# 교집합 (A 그리고 B) — 둘 다 있는 것
 print(A & B)  # {3, 4}
 
-# 차집합 (A에만 있는 것)
+# 차집합 (A 에만 있는 것)
 print(A - B)  # {1, 2}
-\`\`\``
+\`\`\`
+
+🎒 비유:
+- \`|\` = 두 반 학생 **다 모아 운동회**
+- \`&\` = 두 반 **공통 친구** 찾기
+- \`-\` = A 반에만 있는 학생 (B 반엔 없음)`
         },
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ 교집합 구하기!",
-          task: "두 집합의 공통 요소 개수를 구하세요!",
+          title: "🖥️ 교집합 (&) — 공통 요소 개수",
+          task: "두 집합의 공통 요소 개수를 & 로 구하세요!",
           initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\ncommon = A & B\nprint(f\"공통 요소 개수: {len(common)}개\")",
           expectedOutput: "공통 요소 개수: 2개",
           hint: "& 연산자로 교집합!",
@@ -318,8 +338,8 @@ print(A - B)  # {1, 2}
         {
           id: "try5",
           type: "tryit",
-          title: "🖥️ 차집합 구하기!",
-          task: "A에만 있는 요소 개수를 구하세요!",
+          title: "🖥️ 차집합 (-) — A 에만 있는 요소 개수",
+          task: "A 에만 있고 B 엔 없는 요소 개수를 - 로 구하세요!",
           initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\nonly_A = A - B\nprint(f\"A에만 있는 요소 개수: {len(only_A)}개\")",
           expectedOutput: "A에만 있는 요소 개수: 3개",
           hint: "- 연산자로 차집합!",
@@ -328,8 +348,8 @@ print(A - B)  # {1, 2}
         {
           id: "mission-ops",
           type: "mission",
-          title: "🎯 미션: 집합 연산 마스터!",
-          task: "빈칸 3개를 채워서 집합 연산을 완성하세요!",
+          title: "🎯 두 가게 과일 비교 — &, -, | 채우기",
+          task: "빈칸 3 개를 채워 두 가게 과일 비교를 완성하세요!",
           initialCode: "fruits_a = {'사과', '바나나', '포도', '딸기'}\nfruits_b = {'바나나', '딸기', '망고', '키위'}\n\n# 두 가게 모두 파는 과일 (교집합)\nboth = fruits_a ___ fruits_b\nprint(f'둘 다: {both}')\n\n# A가게만 파는 과일 (차집합)\nonly_a = fruits_a ___ fruits_b\nprint(f'A만: {only_a}')\n\n# 전체 과일 (합집합)\nall_fruits = fruits_a ___ fruits_b\nprint(f'전체: {len(all_fruits)}종류')",
           expectedOutput: "둘 다: {'바나나', '딸기'}\nA만: {'사과', '포도'}\n전체: 6종류",
           hint: "교집합 &, 차집합 -, 합집합 |",
@@ -382,8 +402,8 @@ print(다른)
         {
           id: "try-symmetric",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 대칭차",
-          task: "두 동아리 멤버 중 **한 동아리만** 가입한 학생 모음을 ^ 로 구하세요!",
+          title: "🖥️ 대칭차 (^) — 한 동아리만 가입한 학생",
+          task: "두 동아리 멤버 중 **한 곳만** 가입한 학생 집합을 ^ 로 구하세요!",
           initialCode: "축구 = {\"철수\", \"영희\", \"민수\", \"준호\"}\n농구 = {\"민수\", \"준호\", \"수지\", \"지영\"}\n\n# 한 동아리만 가입한 사람\n한쪽만 = ___\n\nprint(sorted(한쪽만))",
           expectedOutput: "['수지', '영희', '지영', '철수']",
           hint: "축구 ^ 농구",
@@ -428,8 +448,8 @@ else:
         {
           id: "try-subset",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 부분집합",
-          task: "내가 가진 재료로 레시피를 만들 수 있는지 확인하세요! (필요 재료 ⊆ 내 재료)",
+          title: "🖥️ 부분집합 — 레시피 재료 다 있나?",
+          task: "내가 가진 재료로 레시피를 만들 수 있는지 부분집합 (<=) 으로 확인하세요!",
           initialCode: "내_재료 = {\"밀가루\", \"설탕\", \"버터\", \"계란\", \"우유\", \"바닐라\"}\n팬케이크_레시피 = {\"밀가루\", \"계란\", \"우유\"}\n\n# 만들 수 있나?\n가능 = ___\n\nif 가능:\n    print(\"만들 수 있어요!\")\nelse:\n    print(\"재료가 부족해요\")",
           expectedOutput: "만들 수 있어요!",
           hint: "팬케이크_레시피 <= 내_재료",
@@ -445,8 +465,8 @@ else:
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 미션 1 — 두 반 공통/전체 학생",
-          task: "두 반의 공통 학생 수와 전체 학생 수를 구하세요!",
+          title: "🏆 미션 1 — 두 반 공통/전체 학생 수",
+          task: "두 반의 공통 학생 수와 전체 학생 수를 & 와 | 로 구하세요!",
           initialCode: "class_a = {\"철수\", \"영희\", \"민수\", \"지영\"}\nclass_b = {\"영희\", \"민수\", \"준호\", \"수진\"}\n\n# 공통 학생 (교집합)\ncommon = class_a ___ class_b\n\n# 전체 학생 (합집합)\nall_students = class_a ___ class_b\n\nprint(f\"A반 학생 수: {len(class_a)}명\")\nprint(f\"B반 학생 수: {len(class_b)}명\")\nprint(f\"공통 학생 수: {len(common)}명\")\nprint(f\"전체 학생 수: {len(all_students)}명\")",
           expectedOutput: "A반 학생 수: 4명\nB반 학생 수: 4명\n공통 학생 수: 2명\n전체 학생 수: 6명",
           hint: "& 는 교집합, | 는 합집합!",
@@ -455,8 +475,8 @@ else:
         {
           id: "mission2",
           type: "mission",
-          title: "🏆 미션 2 — 친구 추천 (공통 친구 기반)",
-          task: "내 친구의 친구 중 **나는 모르는 사람** 을 추천 후보로 뽑으세요. (다른 동아리 친구로 응용)",
+          title: "🏆 미션 2 — 친구 추천 (영희의 친구 - 내 친구)",
+          task: "영희가 아는 사람 중 **내가 모르는 사람** 을 추천 후보로 차집합으로 뽑으세요!",
           initialCode: "내_친구 = {\"철수\", \"영희\", \"민수\"}\n영희의_친구 = {\"철수\", \"민수\", \"수지\", \"준호\", \"지영\"}\n\n# 영희가 알고 있는 친구 중 내가 모르는 사람 = 추천 후보\n추천 = ___\n\nprint(sorted(추천))",
           expectedOutput: "['수지', '준호', '지영']",
           hint: "영희의_친구 - 내_친구 (영희만 알고 나는 모르는). 자기 자신은 자동 제외 안 되지만 여기선 OK.",
@@ -465,8 +485,8 @@ else:
         {
           id: "mission3",
           type: "mission",
-          title: "🏆 미션 3 — 입력 받은 단어 중복 개수",
-          task: "공백으로 구분된 단어들을 입력받아 **고유 단어 수** 와 **중복 단어 수** 를 출력하세요.",
+          title: "🏆 미션 3 — 입력 단어 고유/중복 개수",
+          task: "공백으로 구분된 단어들을 입력받아 **고유 단어 수** 와 **중복 단어 수** 를 출력하세요!",
           initialCode: "words = input().split()\n\n# 1) 고유 단어 수 = set 의 길이\n# 2) 중복 단어 수 = 전체 - 고유\n\nunique = ___\nduplicates = ___\n\nprint(f\"전체: {len(words)}개\")\nprint(f\"고유: {unique}개\")\nprint(f\"중복: {duplicates}개\")",
           expectedOutput: "전체: 8개\n고유: 5개\n중복: 3개",
           stdin: "사과 배 사과 감 배 키위 사과 감",

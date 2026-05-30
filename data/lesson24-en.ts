@@ -17,20 +17,19 @@ export const lesson24EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🚶‍♂️ Think About Standing in Line!",
-          content: `What happens when you stand in line at a bank?
+          title: "🚶‍♂️ A Queue Is a Line!",
+          content: `Picture the line at a checkout:
 
 \`\`\`
 Entrance → [#1] [#2] [#3] → Exit
-           First    Last
-           arrival  arrival
+           First           Last
 \`\`\`
 
-**The first person, #1, gets served first!**
+**Person #1 (the earliest) is served first.** No cutting!
 
-This is exactly what a **Queue** is!
-- **FIFO**: First In, First Out
-- The first item added is the first one removed`
+This is a **Queue**!
+- **FIFO** = First In, First Out
+- The first item in is the first one out`
         },
         {
           id: "compare",
@@ -170,43 +169,38 @@ queue.popleft()     # dequeue - O(1) fast!
         {
           id: "class-queue",
           type: "explain",
-          title: "🏗️ Queue Class",
-          content: `Building a clean class:
+          title: "🖨️ Printer Queue Simulation",
+          content: `A printer queue is a classic queue!
+Files print in the **order they were requested**.
 
 \`\`\`python
 from collections import deque
 
-class Queue:
-    def __init__(self):
-        self.items = deque()
+printer = deque()
 
-    def enqueue(self, item):
-        self.items.append(item)
+# Request print jobs (enqueue at the back)
+printer.append("document1.pdf")
+printer.append("photo.jpg")
+printer.append("report.docx")
 
-    def dequeue(self):
-        if not self.is_empty():
-            return self.items.popleft()
+print("Jobs waiting:", len(printer))
 
-    def front(self):
-        if not self.is_empty():
-            return self.items[0]
+# Print one at a time until empty (dequeue from the front)
+while printer:
+    print("Printing:", printer.popleft())
+\`\`\`
 
-    def is_empty(self):
-        return len(self.items) == 0
-
-    def size(self):
-        return len(self.items)
-\`\`\``
+**document1.pdf came in first, so it prints first.**`
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Using the Queue Class!",
-          task: "Test the Queue class!",
-          initialCode: "from collections import deque\n\nclass Queue:\n    def __init__(self):\n        self.items = deque()\n    def enqueue(self, item):\n        self.items.append(item)\n    def dequeue(self):\n        return self.items.popleft() if self.items else None\n    def front(self):\n        return self.items[0] if self.items else None\n    def is_empty(self):\n        return len(self.items) == 0\n\n# Printer queue simulation\nprinter = Queue()\nprinter.enqueue(\"document1.pdf\")\nprinter.enqueue(\"photo.jpg\")\nprinter.enqueue(\"report.docx\")\n\nprint(\"Jobs waiting:\", printer.size())\nwhile not printer.is_empty():\n    print(\"Printing:\", printer.dequeue())",
+          title: "🖥️ Try it — process a printer queue",
+          task: "Build the print queue with deque and print every job until the queue is empty!",
+          initialCode: "from collections import deque\n\nprinter = deque()\n\n# Submit 3 jobs (add to the back)\nprinter.___(\"document1.pdf\")\nprinter.___(\"photo.jpg\")\nprinter.___(\"report.docx\")\n\nprint(\"Jobs waiting:\", len(printer))\n\n# Print one at a time until empty (remove from the front)\nwhile printer:\n    print(\"Printing:\", printer.___())",
           expectedOutput: "Jobs waiting: 3\nPrinting: document1.pdf\nPrinting: photo.jpg\nPrinting: report.docx",
-          hint: "The first added file, document1.pdf, gets printed first!",
-          hint2: "Loop with is_empty() until the queue is empty"
+          hint: "Add to the back with .append, take from the front with .popleft.",
+          hint2: "append / append / append / popleft"
         }
       ]
     },
@@ -237,12 +231,12 @@ N=7, K=3:
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Solve the Josephus Problem!",
-          task: "Solve the Josephus Problem using a queue!",
-          initialCode: "from collections import deque\n\ndef josephus(n, k):\n    queue = deque(range(1, n + 1))\n    result = []\n    \n    while queue:\n        # Send k-1 people to the back\n        for _ in range(k - 1):\n            queue.append(queue.popleft())\n        # Eliminate the k-th person\n        result.append(queue.popleft())\n    \n    return result\n\nprint(\"Elimination order:\", josephus(7, 3))",
+          title: "🖥️ Try it — Josephus with N=7, K=3",
+          task: "Simulate 7 people in a circle, eliminating every 3rd person using a queue!",
+          initialCode: "from collections import deque\n\nn, k = 7, 3\nqueue = deque(range(1, n + 1))\nresult = []\n\nwhile queue:\n    # Send k-1 people to the back (popleft then append)\n    for _ in range(k - 1):\n        queue.___(queue.___())\n    # Eliminate the k-th person\n    result.append(queue.___())\n\nprint(\"Elimination order:\", result)",
           expectedOutput: "Elimination order: [3, 6, 2, 7, 5, 1, 4]",
-          hint: "Send k-1 people to the back, then eliminate the k-th!",
-          hint2: "Simulate the circular structure with a queue"
+          hint: "Cycle: popleft the value, then append it. Eliminate by popleft.",
+          hint2: "append / popleft / popleft"
         },
         {
           id: "problem2-explain",
@@ -261,12 +255,12 @@ Last card: 4
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Card Shuffle!",
-          task: "Find the last remaining card!",
-          initialCode: "from collections import deque\n\ndef last_card(n):\n    cards = deque(range(1, n + 1))\n    \n    while len(cards) > 1:\n        # Discard the top card\n        discarded = cards.popleft()\n        print(f\"Discarded: {discarded}\")\n        # Move the next card to the bottom\n        cards.append(cards.popleft())\n    \n    return cards[0]\n\nprint(f\"Last card: {last_card(6)}\")",
+          title: "🖥️ Try it — find the last card from 6",
+          task: "Start with cards [1, 2, 3, 4, 5, 6]. Discard the top, then move the next to the bottom. Which card is left?",
+          initialCode: "from collections import deque\n\ncards = deque(range(1, 7))   # [1, 2, 3, 4, 5, 6]\n\nwhile len(cards) > 1:\n    # Discard the top card (front)\n    discarded = cards.___()\n    print(\"Discarded:\", discarded)\n    # Move the next card to the bottom (popleft, then append)\n    cards.___(cards.___())\n\nprint(\"Last card:\", cards[0])",
           expectedOutput: "Discarded: 1\nDiscarded: 3\nDiscarded: 5\nDiscarded: 2\nDiscarded: 6\nLast card: 4",
-          hint: "Use popleft() to discard, then popleft() + append() to move to the bottom!",
-          hint2: "Loop while len(cards) > 1"
+          hint: "Discard = popleft. Move to bottom = popleft value, then append.",
+          hint2: "popleft / append / popleft"
         }
       ]
     },
@@ -278,12 +272,12 @@ Last card: 4
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission: Call Center Simulation!",
-          task: "Simulate a call center queue!",
-          initialCode: "from collections import deque\n\nclass CallCenter:\n    def __init__(self):\n        self.queue = ___()\n        self.call_id = 0\n    \n    def receive_call(self, caller):\n        self.call_id += 1\n        self.queue.___(( self.call_id, caller))\n        print(f\"📞 Call received from {caller} (Ticket #{self.call_id})\")\n    \n    def handle_call(self):\n        if self.queue:\n            call_id, caller = self.queue.___()\n            print(f\"✅ Now assisting {caller} (Ticket #{call_id})\")\n        else:\n            print(\"No calls waiting\")\n    \n    def waiting_count(self):\n        return len(self.queue)\n\n# Simulation\ncall_center = CallCenter()\ncall_center.receive_call(\"Alice\")\ncall_center.receive_call(\"Bob\")\ncall_center.receive_call(\"Charlie\")\nprint(f\"\\nCallers waiting: {call_center.waiting_count()}\\n\")\ncall_center.handle_call()\ncall_center.handle_call()\nprint(f\"\\nCallers waiting: {call_center.waiting_count()}\")",
+          title: "🏆 Final Mission: Call Center Queue Sim",
+          task: "Simulate a call center where 3 calls come in and the first 2 are handled, using deque!",
+          initialCode: "from collections import deque\n\nqueue = ___()       # call queue\ncall_id = 0\n\n# Alice calls\ncall_id += 1\nqueue.___((call_id, \"Alice\"))\nprint(f\"📞 Call received from Alice (Ticket #{call_id})\")\n\n# Bob calls\ncall_id += 1\nqueue.___((call_id, \"Bob\"))\nprint(f\"📞 Call received from Bob (Ticket #{call_id})\")\n\n# Charlie calls\ncall_id += 1\nqueue.___((call_id, \"Charlie\"))\nprint(f\"📞 Call received from Charlie (Ticket #{call_id})\")\n\nprint(f\"\\nCallers waiting: {len(queue)}\\n\")\n\n# Handle the first two callers (front of queue)\nfor _ in range(2):\n    cid, caller = queue.___()\n    print(f\"✅ Now assisting {caller} (Ticket #{cid})\")\n\nprint(f\"\\nCallers waiting: {len(queue)}\")",
           expectedOutput: "📞 Call received from Alice (Ticket #1)\n📞 Call received from Bob (Ticket #2)\n📞 Call received from Charlie (Ticket #3)\n\nCallers waiting: 3\n\n✅ Now assisting Alice (Ticket #1)\n✅ Now assisting Bob (Ticket #2)\n\nCallers waiting: 1",
-          hint: "Create the queue with deque(), add to the back and remove from the front!",
-          hint2: "Fill in the blanks with: deque, append, popleft!"
+          hint: "Queue = deque(). Receive call = .append, handle call = .popleft (first-come, first-served).",
+          hint2: "deque / append / append / append / popleft"
         },
         {
           id: "complete",

@@ -17,8 +17,8 @@ export const lesson13Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🔄 반복이 필요해!",
-          content: `"안녕하세요"를 5번 출력하고 싶어요.
+          title: "🔄 같은 걸 5 번? 100 번? — 복붙은 너무 힘들어",
+          content: `"안녕하세요"를 5 번 찍어야 해요.
 
 \`\`\`python
 print("안녕하세요")
@@ -28,54 +28,74 @@ print("안녕하세요")
 print("안녕하세요")
 \`\`\`
 
-100번이면? 😱 **반복문**으로 해결!`
+5 번이면 어떻게든 되는데... **100 번**이면? 😱
+
+손가락 아프죠. 그래서 만든 게 **반복문** = "for 문".`
         },
         {
           id: "for-explain",
           type: "explain",
-          title: "🔁 for문 기본",
+          title: "🔁 for 문 = \"이만큼 반복해!\"",
           content: `\`\`\`python
 for i in range(5):
     print("안녕하세요")
 \`\`\`
 
-이 코드가 "안녕하세요"를 **5번** 출력해요!
+이 4 줄이 "안녕하세요"를 **5 번** 찍어요!
 
-- \`for\`: 반복해!
-- \`i\`: 반복할 때마다 바뀌는 변수
-- \`range(5)\`: 0, 1, 2, 3, 4 (5번)
-- \`:\`: 콜론 필수!
-- 들여쓰기: 반복할 코드`
+각 부품 뜻:
+- \`for\` = "반복해"
+- \`i\` = 반복할 때마다 0, 1, 2, 3, 4 로 바뀌는 변수
+- \`range(5)\` = **range = 범위**, 0 부터 5 직전까지 (= 0, 1, 2, 3, 4 → 5 개)
+- \`:\` 콜론 + 들여쓰기 → if 문 때 배운 그 규칙!
+
+> 💡 \`i\` 는 그냥 변수 이름. \`x\` 든 \`count\` 든 마음대로 — 보통 \`i\` (index = 차례).`
+        },
+        {
+          id: "syntax-builder",
+          type: "interactive",
+          title: "🧱 for 문 조립해보기",
+          content: `for 문이 어떻게 한 조각씩 쌓이는지 봐요. **▶ 재생** 누르고 따라가요!`,
+          component: "pyForBuilder",
         },
         {
           id: "for-sim",
           type: "explain",
-          title: "🔍 실행 추적: for 반복문이 실제로 어떻게 돌아갈까?",
-          content: `for문이 한 줄씩 실행되면서 변수가 어떻게 바뀌는지 봐요!
+          title: "🔍 실행 추적 — for 가 한 줄씩 도는 모습",
+          content: `for 문이 진짜로 어떻게 돌아가는지 한 줄씩 봐요!
 
-total에 1, 2, 3이 차례로 더해지는 과정을 추적합니다.
+total 에 1, 2, 3 이 차례로 더해지면서 i 와 total 이 어떻게 바뀌는지 눈으로 확인.
 
-**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+**▶ 실행하기** 또는 **▷ 한 단계** 눌러보세요.`,
           component: "codeTracePyForSum",
         },
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
-          task: "'Hello!'를 3번 출력하세요!",
+          title: "🖥️ 빈칸 채우기 — \"Hello!\" 3 번 찍기",
+          task: "\"Hello!\" 를 정확히 3 번 출력하세요!",
           initialCode: "for i in range(___):\n    print(\"Hello!\")",
           expectedOutput: "Hello!\nHello!\nHello!",
-          hint: "range(3)은 3번 반복!",
-          hint2: "for i in range(3):"
+          hint: "3 번 반복하려면 range(?) 안에 뭐가 들어가야 할까?",
+          hint2: "3"
+        },
+        {
+          id: "predict1",
+          type: "predict",
+          title: "💭 range(4) 면 몇 번 돌까?",
+          content: "이 코드를 돌리면?\n\n```python\nfor i in range(4):\n    print(\"안녕\")\n```",
+          options: ["3 번", "4 번", "5 번", "에러"],
+          answer: 1,
+          explanation: "range(4) = 0, 1, 2, 3 → 숫자 4 개 → 4 번 반복!\n\n핵심: range(n) 은 **0 부터 n 직전까지** = **n 개** 의 숫자."
         },
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ 퀴즈!",
-          content: "`for i in range(4):`의 반복 횟수는?",
-          options: ["3번", "4번", "5번", "에러"],
+          title: "❓ 퀴즈 — for 문에 꼭 필요한 것",
+          content: "for 문 다음 줄을 **들여쓰기** 안 하면?",
+          options: ["그냥 잘 돌아감", "에러: IndentationError", "한 번만 반복", "무한 반복"],
           answer: 1,
-          explanation: "range(4)는 0, 1, 2, 3으로 4번 반복해요!"
+          explanation: "if 문이랑 똑같아요! 콜론(:) + 들여쓰기 = 반복할 코드의 표시.\n안 하면 \"들여쓰기 잘못됐어요\" (IndentationError)."
         }
       ]
     },
@@ -87,53 +107,57 @@ total에 1, 2, 3이 차례로 더해지는 과정을 추적합니다.
         {
           id: "range-explain",
           type: "explain",
-          title: "🔢 range() 자세히",
-          content: `**range(끝)** - 0부터 끝-1까지
+          title: "🔢 range() = \"어디부터 어디까지\" 정하기",
+          content: `range 안에 숫자를 **1 개 / 2 개 / 3 개** 넣을 수 있어요. 각각 뜻이 달라요.
+
+**① range(끝)** — 0 부터 끝 직전까지
 \`\`\`python
 for i in range(5):
     print(i)  # 0, 1, 2, 3, 4
 \`\`\`
 
-**range(시작, 끝)** - 시작부터 끝-1까지
+**② range(시작, 끝)** — 시작부터 끝 직전까지
 \`\`\`python
 for i in range(1, 6):
     print(i)  # 1, 2, 3, 4, 5
 \`\`\`
 
-**range(시작, 끝, 간격)**
+**③ range(시작, 끝, 간격)** — 간격만큼 뛰면서
 \`\`\`python
 for i in range(0, 10, 2):
     print(i)  # 0, 2, 4, 6, 8
-\`\`\``
+\`\`\`
+
+> 💡 \`끝\` 은 **항상 안 포함**. 1 ~ 5 까지 찍고 싶으면 \`range(1, 6)\`!`
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ 1부터 5까지 출력!",
-          task: "1, 2, 3, 4, 5를 출력하세요!",
-          initialCode: "# 1부터 5까지 출력하세요\nfor i in range(___, ___):\n    print(i)",
+          title: "🖥️ 빈칸 채우기 — 1 부터 5 까지",
+          task: "1, 2, 3, 4, 5 를 한 줄씩 출력하세요!",
+          initialCode: "# 1 부터 5 까지 출력\nfor i in range(___, ___):\n    print(i)",
           expectedOutput: "1\n2\n3\n4\n5",
-          hint: "range(1, 6)은 1부터 5까지!",
-          hint2: "for i in range(1, 6):"
+          hint: "끝은 안 포함이에요. 5 까지 찍으려면 끝에 뭐를 써야 할까?",
+          hint2: "1 / 6"
         },
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ 짝수만 출력!",
-          task: "2, 4, 6, 8, 10을 출력하세요!",
-          initialCode: "# 2부터 10까지 2씩 증가\nfor i in range(___, ___, ___):\n    print(i)",
+          title: "🖥️ 빈칸 채우기 — 짝수만 (2, 4, 6, 8, 10)",
+          task: "2, 4, 6, 8, 10 — 2 씩 뛰면서 출력!",
+          initialCode: "# 2 부터 10 까지 2 씩 증가\nfor i in range(___, ___, ___):\n    print(i)",
           expectedOutput: "2\n4\n6\n8\n10",
-          hint: "range(시작, 끝, 간격) 사용!",
-          hint2: "range(2, 11, 2)"
+          hint: "range(시작, 끝, 간격) — 10 까지 포함하려면 끝은 11!",
+          hint2: "2 / 11 / 2"
         },
         {
-          id: "quiz2",
-          type: "quiz",
-          title: "❓ 퀴즈!",
-          content: "`range(1, 10, 3)`이 생성하는 숫자들은?",
+          id: "predict2",
+          type: "predict",
+          title: "💭 range(1, 10, 3) 은 뭘 만들까?",
+          content: "이 코드의 결과는?\n\n```python\nfor i in range(1, 10, 3):\n    print(i)\n```",
           options: ["1, 2, 3", "1, 4, 7", "1, 4, 7, 10", "3, 6, 9"],
           answer: 1,
-          explanation: "1부터 시작해서 3씩 증가! 1, 4, 7 (10 미포함)"
+          explanation: "1 부터 시작 → 3 씩 더해요. 1 → 4 → 7 → (다음은 10 인데 끝이 10 이라 **안 포함**) → 멈춤!\n\n결과: 1, 4, 7"
         }
       ]
     },
@@ -145,15 +169,15 @@ for i in range(0, 10, 2):
         {
           id: "list-explain",
           type: "explain",
-          title: "📋 리스트 순회하기",
-          content: `**리스트** \`[]\`는 여러 값을 한곳에 담는 상자예요!
+          title: "📋 리스트의 각 알맹이를 하나씩 꺼내기",
+          content: `**리스트** \`[]\` 는 여러 값을 한 줄에 담는 상자예요!
 \`\`\`python
 fruits = ["사과", "바나나", "딸기"]
 \`\`\`
 
-💡 리스트는 **Part 3에서 자세히** 배워요! 지금은 for문과 함께 쓰는 법만 봐요.
+💡 리스트는 **Part 3 에서 자세히** 배워요. 지금은 \"for 문이랑 함께 쓰면 편하다\" 만 알면 충분.
 
-for문으로 리스트의 각 요소를 하나씩 꺼낼 수 있어요:
+range 대신 **리스트** 를 넣으면, 리스트 안의 알맹이가 하나씩 꺼내져요:
 
 \`\`\`python
 for fruit in fruits:
@@ -163,59 +187,62 @@ for fruit in fruits:
 # 딸기
 \`\`\`
 
-**for 변수 in 리스트:** 형태!`
+문법: **for 변수 in 리스트:**
+\`fruit\` 라는 변수에 **사과 → 바나나 → 딸기** 가 차례로 들어가요.`
         },
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
-          task: "이름들을 하나씩 인사하세요!",
+          title: "🖥️ 빈칸 채우기 — 친구들에게 한 명씩 인사",
+          task: "리스트 안의 이름들에게 \"안녕, ○○!\" 하고 인사하세요!",
           initialCode: "names = [\"철수\", \"영희\", \"민수\"]\n\nfor ___ in names:\n    print(f\"안녕, {___}!\")",
           expectedOutput: "안녕, 철수!\n안녕, 영희!\n안녕, 민수!",
-          hint: "리스트의 각 요소가 변수에 들어가요!",
-          hint2: "for name in names: / {name}"
+          hint: "두 빈칸은 **같은 변수 이름** 이어야 해요. (변수 이름은 마음대로 — name 추천)",
+          hint2: "name / name"
         },
         {
           id: "sum-explain",
           type: "explain",
-          title: "🧮 합계 구하기",
-          content: `for문으로 합계를 구할 수 있어요:
+          title: "🧮 점수 합계 구하기 — 변수 더하기 패턴",
+          content: `for 문 + 변수 = **합계 구하기**!
 
 \`\`\`python
 numbers = [10, 20, 30, 40, 50]
-total = 0
+total = 0   # 시작은 0 부터
 
 for num in numbers:
-    total = total + num
+    total = total + num   # 매번 total 에 num 을 더해 다시 저장
 
 print(f"합계: {total}")  # 합계: 150
 \`\`\`
 
-또는 더 짧게:
-\`\`\`python
-total = sum(numbers)  # 150
-\`\`\``
+흐름:
+- 첫 번째: total = 0 + 10 = 10
+- 두 번째: total = 10 + 20 = 30
+- ... 계속 누적 → 마지막: 150
+
+> 💡 \`total = total + num\` 은 \`total += num\` 으로 짧게 쓸 수도 있어요.
+>
+> ⚡ 그냥 다 더하고 싶을 땐 \`sum(numbers)\` 한 줄로 끝!`
         },
         {
           id: "forif-sim",
           type: "explain",
-          title: "🔍 실행 추적: for + if 짝수/홀수 판별",
-          content: `반복문 안에서 if로 짝수/홀수를 구분하는 과정을 추적해 보세요!
+          title: "🔍 실행 추적 — for + if 짝수/홀수 가르기",
+          content: `반복문 안에서 **if** 로 짝수만 골라낼 수 있어요. 한 단계씩 따라가 보세요!
 
-매 반복마다 조건이 참/거짓으로 바뀌는 걸 눈으로 확인할 수 있어요.
-
-**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+**▶ 실행하기** 또는 **▷ 한 단계** 눌러보세요.`,
           component: "codeTracePyForIf",
         },
         {
           id: "try5",
           type: "tryit",
-          title: "🖥️ 합계 구하기!",
-          task: "점수들의 합계를 구하세요!",
-          initialCode: "scores = [85, 90, 78, 92, 88]\ntotal = 0\n\nfor score in scores:\n    # total에 score를 더하세요\n    total = ___\n\nprint(f\"총점: {total}\")",
+          title: "🖥️ 빈칸 채우기 — 5 명의 시험 점수 합치기",
+          task: "scores 리스트의 모든 점수를 더해 총점을 구하세요!",
+          initialCode: "scores = [85, 90, 78, 92, 88]\ntotal = 0\n\nfor score in scores:\n    # total 에 score 를 더해 다시 total 에 넣으세요\n    total = ___\n\nprint(f\"총점: {total}\")",
           expectedOutput: "총점: 433",
-          hint: "현재 total에 score를 더해서 다시 total에 저장!",
-          hint2: "또는 total += score"
+          hint: "지금 total 에 이번 score 를 더한 값을, 다시 total 에 넣어요.",
+          hint2: "total + score"
         }
       ]
     },
@@ -227,25 +254,25 @@ total = sum(numbers)  # 150
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 최종 미션!",
-          task: "구구단 5단을 출력하세요!",
+          title: "🏆 최종 미션 — 구구단 5 단 출력기",
+          task: "구구단 **5 단** 을 출력하세요!\n\n```\n5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n...\n5 x 9 = 45\n```\n\n빈칸 3 개:\n- range 의 시작과 끝 — 1 부터 9 까지 (끝은 안 포함 기억!)\n- result — 5 와 i 를 어떻게 합쳐야 결과가 나올까?",
           initialCode: "dan = 5\n\nfor i in range(___, ___):\n    result = ___\n    print(f\"{dan} x {i} = {result}\")",
           expectedOutput: "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45",
-          hint: "range(1, 10)으로 1~9, result = dan * i",
-          hint2: "range(1, 10) / dan * i"
+          hint: "1 ~ 9 까지 = range(1, 10). 곱셈은 * 기호!",
+          hint2: "1 / 10 / dan * i"
         },
         {
           id: "complete",
           type: "explain",
-          title: "🎉 완료!",
+          title: "🎉 오늘 배운 것",
           content: `## 오늘 배운 것
 
-✅ **for i in range(n):** - n번 반복
-✅ **range(시작, 끝, 간격)** - 범위 지정
-✅ **for item in list:** - 리스트 순회
-✅ **합계 구하기** - total += num
+✅ \`for i in range(n):\` — n 번 반복
+✅ \`range(시작, 끝, 간격)\` — 범위 정하기 (끝은 안 포함!)
+✅ \`for item in 리스트:\` — 리스트 순회
+✅ **합계 패턴** — \`total = total + num\` (또는 \`total += num\`)
 
-다음 시간에는 **while 반복문**을 배워요! 🚀`
+다음 시간엔 **while 반복문** — "조건이 참인 동안 반복" 을 배워요! 🚀`
         }
       ]
     }

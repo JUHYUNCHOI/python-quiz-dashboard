@@ -40,8 +40,6 @@ while True:
       title: "💻 전체 게임 실행!",
       task: "완성된 텍스트 RPG를 실행해보세요!",
       initialCode: `import json
-import random
-random.seed(42)
 
 class Character:
     def __init__(self, name, job):
@@ -109,13 +107,16 @@ class Monster:
             self.alive = False
         return actual
 
+# 등장할 몬스터 순서 (예측 가능!)
+monster_queue = [
+    ('고블린', 30, 15, 5, 60, 40),  # HP 30 = 3대 맞으면 죽음
+    ('슬라임', 40, 8, 2, 30, 20),
+]
+m_idx = 0
 def create_monster():
-    monsters = [
-        ('슬라임', 30, 8, 2, 30, 20),
-        ('고블린', 50, 15, 5, 60, 40),
-        ('오크', 70, 18, 8, 80, 60),
-    ]
-    m = random.choice(monsters)
+    global m_idx
+    m = monster_queue[m_idx % len(monster_queue)]
+    m_idx += 1
     return Monster(m[0], m[1], m[2], m[3], m[4], m[5])
 
 # === 게임 시작! ===
@@ -203,7 +204,7 @@ print('\\n=== 최종 결과 ===')
 hero.status()
 if save_data:
     print(f'\\n세이브: {save_data}')`,
-      expectedOutput: `=== 용사 탄생! ===\n  [용사] 플레이어 Lv.1\n  HP: 120/120 | ATK: 15 | DEF: 12\n  EXP: 0/100 | 골드: 0\n\n--- 고블린 등장! (HP:50) ---\n  플레이어 -> 고블린 (10)\n  고블린 -> 플레이어 (3)\n  플레이어 -> 고블린 (10)\n  고블린 -> 플레이어 (3)\n  플레이어 -> 고블린 (10)\n  고블린 -> 플레이어 (3)\n  승리! +60EXP, +40골드\n\n--- 슬라임 등장! (HP:30) ---\n  플레이어 -> 슬라임 (13)\n  슬라임 -> 플레이어 (1)\n  플레이어 -> 슬라임 (13)\n  슬라임 -> 플레이어 (1)\n  플레이어 회복! HP: 120/120\n  슬라임 -> 플레이어 (1)\n  플레이어 -> 슬라임 (13)\n  승리! +30EXP, +20골드\n\n--- 상태 ---\n  [용사] 플레이어 Lv.1\n  HP: 119/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | 골드: 60\n\n--- 상점 (보유: 60골드) ---\n  물약: 30골드\n  물약 구매! (잔액: 30)\n\n--- 세이브 완료! ---\n\n게임 종료!\n\n=== 최종 결과 ===\n  [용사] 플레이어 Lv.1\n  HP: 119/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | 골드: 30\n\n세이브: {"name": "플레이어", "job": "warrior", "level": 1, "hp": 119, "max_hp": 120, "atk": 15, "defense": 12, "exp": 90, "gold": 30}`,
+      expectedOutput: `=== 용사 탄생! ===\n  [용사] 플레이어 Lv.1\n  HP: 120/120 | ATK: 15 | DEF: 12\n  EXP: 0/100 | 골드: 0\n\n--- 고블린 등장! (HP:30) ---\n  플레이어 -> 고블린 (10)\n  고블린 -> 플레이어 (3)\n  플레이어 -> 고블린 (10)\n  고블린 -> 플레이어 (3)\n  플레이어 -> 고블린 (10)\n  승리! +60EXP, +40골드\n\n--- 슬라임 등장! (HP:40) ---\n  플레이어 -> 슬라임 (13)\n  슬라임 -> 플레이어 (1)\n  플레이어 -> 슬라임 (13)\n  슬라임 -> 플레이어 (1)\n  플레이어 회복! HP: 120/120\n  슬라임 -> 플레이어 (1)\n  플레이어 -> 슬라임 (13)\n  슬라임 -> 플레이어 (1)\n  플레이어 -> 슬라임 (13)\n  승리! +30EXP, +20골드\n\n--- 상태 ---\n  [용사] 플레이어 Lv.1\n  HP: 118/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | 골드: 60\n\n--- 상점 (보유: 60골드) ---\n  물약: 30골드\n  물약 구매! (잔액: 30)\n\n--- 세이브 완료! ---\n\n게임 종료!\n\n=== 최종 결과 ===\n  [용사] 플레이어 Lv.1\n  HP: 118/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | 골드: 30\n\n세이브: {"name": "플레이어", "job": "warrior", "level": 1, "hp": 118, "max_hp": 120, "atk": 15, "defense": 12, "exp": 90, "gold": 30}`,
       hint: "actions 리스트가 게임 시나리오! while로 반복!",
       hint2: "코드를 그대로 실행하세요!"
     },
@@ -303,7 +304,7 @@ for job in ['warrior', 'mage', 'archer']:
             hero.take_damage(goblin.atk)
 
     print(f'{jobs[job]}: {turns}턴 만에 승리! (남은 HP: {hero.hp}/{hero.max_hp})')`,
-      expectedOutput: `=== 직업별 전투 비교 (vs 고블린 HP:50 ATK:15 DEF:5) ===\n용사: 5턴 만에 승리! (남은 HP: 108/120)\n마법사: 3턴 만에 승리! (남은 HP: 60/80)\n궁수: 4턴 만에 승리! (남은 HP: 72/100)`,
+      expectedOutput: `=== 직업별 전투 비교 (vs 고블린 HP:50 ATK:15 DEF:5) ===\n용사: 5턴 만에 승리! (남은 HP: 108/120)\n마법사: 3턴 만에 승리! (남은 HP: 60/80)\n궁수: 4턴 만에 승리! (남은 HP: 79/100)`,
       hint: "마법사는 빨리 이기지만 HP가 적게 남아요!",
       hint2: "코드를 그대로 실행하세요!"
     },

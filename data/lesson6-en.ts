@@ -27,6 +27,8 @@ print(text.upper())  # HELLO
 
 What this says: "Hey text, turn yourself into uppercase (upper)."
 
+> 🎒 **Everyday picture —** A **function** like \`len()\` is like a **ruler** — anyone can grab it and measure something. A **method** like \`text.upper()\` is like a **handle stuck on the string itself** — only that string can use it. That's why they look different — the ruler stays outside (\`len(text)\`), the handle attaches with a dot (\`text.upper()\`).
+
 ### Remember the shape
 
 \`\`\`
@@ -115,18 +117,30 @@ text.upper()         # gives back HELLO — but where to?
 print(text)          # Hello (unchanged!)
 \`\`\`
 
-upper() returns a new string, but we didn't catch it anywhere. So it just disappears.
+upper() returned a new string, but we didn't catch it anywhere.
+
+> 🎒 **Everyday picture —** Imagine asking a friend "say Hello in caps." They reply "HELLO" — but if you *don't write it down on a notepad*, it just floats away. You **heard it, then forgot.** To keep it for later, you have to save it (into a variable).
 
 **To keep it, save it to a variable:**
 
 \`\`\`python
 text = "Hello"
-big = text.upper()   # save the new string into big
-print(text)          # Hello
+big = text.upper()   # save the new string into big (= write on notepad)
+print(text)          # Hello (original didn't change)
 print(big)           # HELLO
 \`\`\`
 
-> 💡 Strings can't be changed once made (**immutable**). Methods always return a **new string**.`
+> 💡 The **original string doesn't change** once made. Methods always return a **new string**. (The fancy word for this is "immutable" — don't memorize it, just feel it.)`
+        },
+        {
+          id: "try-immutable-trap",
+          type: "tryit",
+          title: "✋ See the trap yourself — does the original really stay?",
+          task: "Test the immutability you just learned. If you call `text.upper()` but then just print `text`, what do you get? Run it and see.",
+          initialCode: "text = \"Hello\"\ntext.upper()\nprint(text)   # what do you expect?",
+          expectedOutput: "Hello",
+          hint: "If you don't catch the result in a variable, it just disappears!",
+          hint2: "upper() made a new string but nothing caught it. So text is still the same."
         },
         {
           id: "try1",
@@ -378,7 +392,7 @@ text = "Hello"
 print(text.find("Python"))  # -1
 \`\`\`
 
-\`-1\` is the agreed-upon "not found" signal. (Once you learn if-statements, this is great for "exists?" checks.)`
+**If it's not found, you get \`-1\`. That's just the rule.**`
         },
         {
           id: "predict-find-position",
@@ -516,7 +530,7 @@ len(text)    # ✅ function — string goes inside parens
 text.len()   # ❌ AttributeError — strings don't have .len()
 \`\`\`
 
-Why the difference? — \`len()\` is an all-purpose function that works on **strings, lists, dictionaries**, and more. You'll meet it again when you learn those.`
+Why the difference? — \`len()\` is an all-purpose tool that works on several kinds of values, so it doesn't attach with a dot. You'll meet it again later with other kinds of values.`
         },
         {
           id: "try6",
@@ -547,8 +561,10 @@ Why the difference? — \`len()\` is an all-purpose function that works on **str
         {
           id: "more-methods",
           type: "explain",
-          title: "📝 startswith / endswith / isdigit",
-          content: `A few more useful ones. Notice some return **True / False** — they'll shine once you learn if-statements.
+          title: "📌 Bonus — startswith / endswith / isdigit",
+          content: `> 💡 **The core methods (upper / lower / strip / replace / find / count) are enough!** From here on is *bonus material* — read it if you want more, but don't try to memorize it now.
+
+A few more useful ones. Notice some return **True / False** — they'll shine once you learn if-statements (lesson 11).
 
 ### startswith() / endswith() — "does it start/end with this?"
 
@@ -576,10 +592,43 @@ print("3.14".isdigit())  # False (a dot is not a digit)
 Handy for checking whether input is really numeric. (You'll use it more with lesson 9's type conversions.)`
         },
         {
+          id: "predict-endswith-png",
+          type: "predict",
+          title: "📌 (Bonus) Predict — endswith() file check",
+          content: `What does this print?
+
+\`\`\`python
+print("hello.png".endswith(".png"))
+\`\`\`
+
+Hint: it asks "does it end with this?" Answer is True or False.`,
+          options: ["True", "False", ".png", "Error"],
+          answer: 0,
+          explanation: "\"hello.png\" really does end with \".png\". → True."
+        },
+        {
+          id: "predict-isdigit-mixed",
+          type: "predict",
+          title: "📌 (Bonus) Predict — isdigit() check",
+          content: `What does this print (two lines)?
+
+\`\`\`python
+print("123".isdigit())
+print("12a".isdigit())
+\`\`\`
+
+Hint: needs to be **only digits** to be True.`,
+          options: ["True / True", "True / False", "False / True", "False / False"],
+          answer: 1,
+          explanation: "\"123\" is all digits → True. \"12a\" has an 'a' mixed in → False."
+        },
+        {
           id: "more-methods-case",
           type: "explain",
-          title: "🅰️ capitalize / title + summary",
-          content: `### capitalize() — "uppercase the first letter"
+          title: "📌 Bonus — capitalize / title + summary",
+          content: `> 💡 Also *bonus*. capitalize / title are "look-it-up-when-you-need-it" methods — no need to memorize. Just glance at the summary table at the bottom.
+
+### capitalize() — "uppercase the first letter"
 
 \`\`\`python
 print("hello world".capitalize())  # Hello world
@@ -601,12 +650,12 @@ print("hello world".title())  # Hello World
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission!",
-          task: "Complete the ID validator!",
-          initialCode: "user_id = \"  PyThOn_User  \"\n\n# 1. Remove whitespace\nclean_id = user_id.___()\n# 2. Convert to lowercase\nlower_id = clean_id.___()\n# 3. Check length\nlength = ___(lower_id)\n\nprint(\"Original:\", user_id)\nprint(\"Cleaned:\", lower_id)\nprint(\"Length:\", length)",
-          expectedOutput: "Original:   PyThOn_User  \nCleaned: python_user\nLength: 11",
-          hint: "Use strip() → lower() → len() in order!",
-          hint2: "strip(), lower(), len()"
+          title: "🏆 Final Mission — Clean up a friend's nickname!",
+          task: "Your friend sent you their nickname in chat, but it has weird spaces and mixed-up capitals. ① trim the spaces on both ends, ② make everything lowercase, ③ count how many characters are in it, and print like below. Figure out which is a dotted method and which is a function on your own.",
+          initialCode: "nickname = \"  MinSu_Kim  \"   # ← swap in your own nickname if you want!\n\n# 1. trim spaces on both ends\nclean = nickname.___\n# 2. lowercase everything\nlower = clean.___\n# 3. how many characters?\nlength = ___\n\nprint(\"Original:\", nickname)\nprint(\"Cleaned:\", lower)\nprint(\"Length:\", length)",
+          expectedOutput: "Original:   MinSu_Kim  \nCleaned: minsu_kim\nLength: 9",
+          hint: "1 trims spaces (strip), 2 lowercases (lower), 3 counts characters — which ones attach with a dot, and which one is a function?",
+          hint2: "nickname.strip(), clean.lower(), len(lower)"
         },
         {
           id: "complete",
@@ -614,11 +663,21 @@ print("hello world".title())  # Hello World
           title: "🎉 Complete!",
           content: `## What We Learned Today
 
-✅ **upper(), lower()** - Case conversion
-✅ **strip()** - Remove whitespace
-✅ **replace()** - Replace characters
-✅ **find(), count()** - Searching
-✅ **len()** - Get length
+### Transformers (return a new string)
+✅ **upper(), lower()** — case conversion
+✅ **capitalize(), title()** — first letter / each word's first letter uppercase
+✅ **strip()** — trim whitespace
+✅ **replace()** — swap text
+
+### Searchers (return a number)
+✅ **find()** — position (or -1 if missing)
+✅ **count()** — how many times
+
+### Checkers (return True/False)
+✅ **startswith(), endswith(), isdigit()** — starts/ends with / all digits
+
+### Function (no dot)
+✅ **len()** — get length
 
 Next time, we'll learn about **print() options** to make our output look even better! 🚀`
         }

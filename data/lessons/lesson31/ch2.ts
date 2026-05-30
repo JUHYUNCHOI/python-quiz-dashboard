@@ -74,11 +74,11 @@ print(f'원본 {len(nums)}개 → {len(unique)}개')`,
     {
       id: "ch2-6",
       type: "quiz",
-      title: "문제 17",
+      title: "문제 17 (함정 주의!)",
       content: "출력 결과는?\n\n```python\na = [1, 2, 3]\nb = a\nb.append(4)\nprint(a)\n```",
       options: ["[1, 2, 3]", "[1, 2, 3, 4]", "[4]", "에러"],
       answer: 1,
-      explanation: "b = a는 같은 리스트를 가리켜요! b에 추가하면 a도 변해요!"
+      explanation: "함정! `b = a` 는 *같은 리스트*에 이름표를 하나 더 붙인 거야 (복사 X). 그래서 `b` 에 append 하면 `a` 도 같이 바뀜! 진짜 복사하려면 `b = a.copy()` 또는 `b = a[:]`."
     },
     {
       id: "ch2-7",

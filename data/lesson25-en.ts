@@ -17,10 +17,9 @@ export const lesson25EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "\u21d4\ufe0f A Container Open on Both Sides!",
-          content: `**Deque** = Double-Ended Queue
-
-You can add/remove from both ends!
+          title: "\u21d4\ufe0f A Deque Works on Both Ends!",
+          content: `**Deque** = Double-Ended Queue.
+You can add and remove from **both** ends!
 
 \`\`\`
       <-  [A] [B] [C]  ->
@@ -28,9 +27,9 @@ You can add/remove from both ends!
     add/remove       add/remove
 \`\`\`
 
-**Stack + Queue = Deque!**
-- Can be used like a stack
-- Can be used like a queue
+**Analogy: a tunnel open at both ends.**
+- Use it like a stack
+- Use it like a queue
 - Both in O(1)!`
         },
         {
@@ -201,12 +200,12 @@ Middle: v (remains if odd length)
         {
           id: "try3",
           type: "tryit",
-          title: "\ud83d\udda5\ufe0f Palindrome Check!",
-          task: "Check for palindromes using a deque!",
-          initialCode: "from collections import deque\n\ndef is_palindrome(s):\n    d = deque(s.lower().replace(\" \", \"\"))\n    \n    while len(d) > 1:\n        if d.popleft() != d.pop():\n            return False\n    return True\n\n# Test\nwords = [\"level\", \"hello\", \"A man a plan a canal Panama\", \"racecar\"]\nfor word in words:\n    result = \"Palindrome\" if is_palindrome(word) else \"Not a palindrome\"\n    print(f\"{word}: {result}\")",
-          expectedOutput: "level: Palindrome\nhello: Not a palindrome\nA man a plan a canal Panama: Palindrome\nracecar: Palindrome",
-          hint: "Compare using popleft() from the front and pop() from the back!",
-          hint2: "Remove spaces and convert to lowercase before comparing"
+          title: "\ud83d\udda5\ufe0f Try it \u2014 palindrome check for 'level'",
+          task: "Put 'level' into a deque, pop one from each end and compare. True if it's a palindrome!",
+          initialCode: "from collections import deque\n\nword = \"level\"\nd = deque(word)\nresult = True\n\nwhile len(d) > 1:\n    front = d.___()   # take from the front\n    back  = d.___()   # take from the back\n    if front != back:\n        result = False\n        break\n\nprint(result)",
+          expectedOutput: "True",
+          hint: "Front = popleft, back = pop. If the pair doesn't match, it's not a palindrome.",
+          hint2: "popleft / pop"
         },
         {
           id: "problem2-explain",
@@ -230,12 +229,12 @@ Window [-1, -3, 5] -> Max: 5
         {
           id: "try4",
           type: "tryit",
-          title: "\ud83d\udda5\ufe0f Simple Sliding Window!",
-          task: "Find the sliding window maximum!",
-          initialCode: "from collections import deque\n\ndef sliding_max(nums, k):\n    result = []\n    d = deque()  # Store indices\n    \n    for i in range(len(nums)):\n        # Remove indices outside the window\n        if d and d[0] < i - k + 1:\n            d.popleft()\n        \n        # Remove values smaller than current\n        while d and nums[d[-1]] < nums[i]:\n            d.pop()\n        \n        d.append(i)\n        \n        # Add maximum once window is complete\n        if i >= k - 1:\n            result.append(nums[d[0]])\n    \n    return result\n\nnums = [1, 3, -1, -3, 5, 3, 6, 7]\nprint(\"Array:\", nums)\nprint(\"K=3 Max:\", sliding_max(nums, 3))",
+          title: "\ud83d\udda5\ufe0f Try it \u2014 sliding window max (K=3)",
+          task: "For [1, 3, -1, -3, 5, 3, 6, 7], print the max of every length-3 window!",
+          initialCode: "from collections import deque\n\nnums = [1, 3, -1, -3, 5, 3, 6, 7]\nk = 3\nresult = []\nd = deque()   # store candidate indices\n\nfor i in range(len(nums)):\n    # Drop indices that fell out of the window (front)\n    if d and d[0] < i - k + 1:\n        d.___()\n    \n    # Drop smaller values from the back\n    while d and nums[d[-1]] < nums[i]:\n        d.___()\n    \n    d.append(i)\n    \n    # Once window is full, front = max\n    if i >= k - 1:\n        result.append(nums[d[0]])\n\nprint(\"Array:\", nums)\nprint(\"K=3 Max:\", result)",
           expectedOutput: "Array: [1, 3, -1, -3, 5, 3, 6, 7]\nK=3 Max: [3, 3, 5, 5, 6, 7]",
-          hint: "Keep only candidate maximum indices in the deque!",
-          hint2: "Solvable in O(n) time"
+          hint: "Stale front index = popleft, smaller back index = pop.",
+          hint2: "popleft / pop"
         }
       ]
     },
@@ -247,12 +246,12 @@ Window [-1, -3, 5] -> Max: 5
         {
           id: "mission1",
           type: "mission",
-          title: "\ud83c\udfc6 Final Mission: Recent Searches!",
-          task: "Implement a recent searches feature using a deque!",
-          initialCode: "from collections import deque\n\nclass RecentSearches:\n    def __init__(self, max_size=5):\n        self.searches = deque(___=max_size)\n    \n    def add(self, query):\n        # If already exists, remove then add to front\n        if query in self.searches:\n            self.searches.remove(query)\n        self.searches.___(query)\n        print(f\"Search: '{query}'\")\n    \n    def show(self):\n        print(\"Recent searches:\", list(self.searches))\n    \n    def clear(self):\n        self.searches.clear()\n        print(\"Search history cleared\")\n\n# Test\nrecent = RecentSearches(max_size=5)\nrecent.add(\"python\")\nrecent.add(\"data structures\")\nrecent.add(\"algorithms\")\nrecent.add(\"deque\")\nrecent.add(\"stack\")\nrecent.show()\n\nrecent.add(\"queue\")  # Oldest 'python' gets removed\nrecent.show()\n\nrecent.add(\"data structures\")  # Duplicate! Moves to front\nrecent.show()",
+          title: "\ud83c\udfc6 Final Mission: Recent Searches (max 5)",
+          task: "Use deque maxlen to keep only the 5 most recent searches. New search = add to the front. Duplicate = remove first, then re-add to the front.",
+          initialCode: "from collections import deque\n\n# A deque that only keeps the 5 most recent\nsearches = deque(___=5)\n\n# 5 fresh searches \u2014 newest goes to the front\nfor q in [\"python\", \"data structures\", \"algorithms\", \"deque\", \"stack\"]:\n    if q in searches:\n        searches.remove(q)\n    searches.___(q)             # add to the front\n    print(f\"Search: '{q}'\")\nprint(\"Recent searches:\", list(searches))\n\n# New search 'queue' \u2014 oldest 'python' falls out automatically\nq = \"queue\"\nif q in searches:\n    searches.remove(q)\nsearches.appendleft(q)\nprint(f\"Search: '{q}'\")\nprint(\"Recent searches:\", list(searches))\n\n# Duplicate \u2014 'data structures' moves to the front\nq = \"data structures\"\nif q in searches:\n    searches.remove(q)\nsearches.appendleft(q)\nprint(f\"Search: '{q}'\")\nprint(\"Recent searches:\", list(searches))",
           expectedOutput: "Search: 'python'\nSearch: 'data structures'\nSearch: 'algorithms'\nSearch: 'deque'\nSearch: 'stack'\nRecent searches: ['stack', 'deque', 'algorithms', 'data structures', 'python']\nSearch: 'queue'\nRecent searches: ['queue', 'stack', 'deque', 'algorithms', 'data structures']\nSearch: 'data structures'\nRecent searches: ['data structures', 'queue', 'stack', 'deque', 'algorithms']",
-          hint: "Use deque's max length limit and the method that adds to the front!",
-          hint2: "Fill in maxlen and appendleft!"
+          hint: "Max length = maxlen. Add to the front = appendleft.",
+          hint2: "maxlen / appendleft"
         },
         {
           id: "complete",

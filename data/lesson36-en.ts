@@ -85,6 +85,35 @@ print(result)
           explanation: "Code after return doesn't run!"
         },
         {
+          id: "ch1-4b",
+          type: "tryit",
+          title: "Try it: Run different functions!",
+          task: "Make and call different functions!",
+          initialCode: `# Greet function
+def greet(name):
+    return f'Hi {name}!'
+
+# Calculator functions
+def add(a, b):
+    return a + b
+
+def multiply(a, b):
+    return a * b
+
+# Call them!
+print(greet('Tom'))
+print(greet('Jane'))
+print(f'3 + 5 = {add(3, 5)}')
+print(f'4 x 6 = {multiply(4, 6)}')
+
+# Combine functions!
+result = add(multiply(2, 3), multiply(4, 5))
+print(f'2*3 + 4*5 = {result}')`,
+          expectedOutput: `Hi Tom!\nHi Jane!\n3 + 5 = 8\n4 x 6 = 24\n2*3 + 4*5 = 26`,
+          hint: "Basic pattern: define a function, then call it!",
+          hint2: "Just run the code as is!"
+        },
+        {
           id: "ch1-5",
           type: "mission",
           title: "Problem 5: Square Function",
@@ -96,8 +125,8 @@ print(result)
 print(square(5))
 print(square(3))`,
           expectedOutput: "25\n9",
-          hint: "return n ** 2",
-          hint2: "return n ** 2"
+          hint: "Squaring means multiplying a number by itself",
+          hint2: "Use the ** operator"
         },
         {
           id: "ch1-6",
@@ -111,8 +140,8 @@ print(square(3))`,
 print(average(10, 20))
 print(average(3, 7))`,
           expectedOutput: "15.0\n5.0",
-          hint: "return (a + b) / 2",
-          hint2: "return (a + b) / 2"
+          hint: "Average = add the two numbers, then divide by 2",
+          hint2: "Use + and /"
         },
         {
           id: "ch1-7",
@@ -172,8 +201,8 @@ print(x, y)
 print(is_even(4))
 print(is_even(7))`,
           expectedOutput: "True\nFalse",
-          hint: "n % 2 == 0",
-          hint2: "return n % 2 == 0"
+          hint: "Even numbers leave 0 when divided by 2",
+          hint2: "Use the % operator to check the remainder"
         }
       ]
     },
@@ -203,6 +232,33 @@ print(x)
           options: ["10\\n10", "5\\n5", "10\\n5", "5\\n10"],
           answer: 2,
           explanation: "Inside x(10) and outside x(5) are different variables!"
+        },
+        {
+          id: "ch2-1b",
+          type: "tryit",
+          title: "Try it: Local vs Global!",
+          task: "See the difference between local and global variables yourself!",
+          initialCode: `score = 100  # global variable
+
+def add_bonus():
+    bonus = 50  # local variable (only inside the function!)
+    print(f'Bonus: {bonus}')
+    # score is read-only here (need 'global' to change it!)
+    print(f'Current score: {score}')
+
+def reset_score():
+    global score  # declare we want to change the global!
+    score = 0
+    print(f'Score reset! -> {score}')
+
+print(f'Start: {score}')
+add_bonus()
+print(f'After add_bonus: {score}')  # unchanged!
+reset_score()
+print(f'After reset: {score}')`,
+          expectedOutput: `Start: 100\nBonus: 50\nCurrent score: 100\nAfter add_bonus: 100\nScore reset! -> 0\nAfter reset: 0`,
+          hint: "Without 'global', you can't change a global variable!",
+          hint2: "Just run the code as is!"
         },
         {
           id: "ch2-2",
@@ -300,6 +356,38 @@ print(square(5))
           explanation: "5² = 25"
         },
         {
+          id: "ch3-1b",
+          type: "tryit",
+          title: "Try it: lambda + sorted!",
+          task: "Use lambda and sorted in different ways!",
+          initialCode: `# lambda = a one-line function!
+double = lambda x: x * 2
+add = lambda a, b: a + b
+
+print(f'double(5) = {double(5)}')
+print(f'add(3, 7) = {add(3, 7)}')
+
+# sorted + key = pick the sort key!
+fruits = ['banana', 'apple', 'cherry', 'grape']
+print(f'\\nby name: {sorted(fruits)}')
+print(f'by length: {sorted(fruits, key=lambda x: len(x))}')
+
+# Sort dictionaries!
+students = [
+    {'name': 'Tom', 'score': 85},
+    {'name': 'Jane', 'score': 92},
+    {'name': 'Mike', 'score': 78},
+]
+
+by_score = sorted(students, key=lambda s: s['score'], reverse=True)
+print(f'\\nby score:')
+for s in by_score:
+    print(f'  {s["name"]}: {s["score"]}')`,
+          expectedOutput: `double(5) = 10\nadd(3, 7) = 10\n\nby name: ['apple', 'banana', 'cherry', 'grape']\nby length: ['apple', 'grape', 'banana', 'cherry']\n\nby score:\n  Jane: 92\n  Tom: 85\n  Mike: 78`,
+          hint: "lambda = one-line function, key in sorted = how to sort!",
+          hint2: "Just run the code as is!"
+        },
+        {
           id: "ch3-2",
           type: "quiz",
           title: "Problem 17",
@@ -386,8 +474,8 @@ result = # Write code here
 
 print(result)`,
           expectedOutput: "[('a', 3), ('c', 2), ('b', 1)]",
-          hint: "sorted(data, key=lambda x: x[1], reverse=True)",
-          hint2: "sorted(data, key=lambda x: x[1], reverse=True)"
+          hint: "Use key=lambda that returns the second element",
+          hint2: "Add reverse=True for descending order"
         }
       ]
     },
@@ -399,6 +487,36 @@ print(result)`,
       title: "Built-in Functions (23-30)",
       emoji: "🏆",
       steps: [
+        {
+          id: "ch4-0",
+          type: "tryit",
+          title: "Try it: Built-in toolbox!",
+          task: "Try lots of built-in functions at once!",
+          initialCode: `scores = [85, 92, 78, 95, 88, 72, 90]
+
+# Basic built-ins
+print(f'sum: {sum(scores)}')
+print(f'max: {max(scores)}')
+print(f'min: {min(scores)}')
+print(f'count: {len(scores)}')
+print(f'avg: {sum(scores)/len(scores):.1f}')
+
+# map: apply a function to every item
+doubled = list(map(lambda x: x * 2, scores))
+print(f'\\ndoubled: {doubled}')
+
+# filter: keep items that match a condition
+high = list(filter(lambda x: x >= 90, scores))
+print(f'>=90: {high}')
+
+# enumerate: get index + item
+print(f'\\nranking:')
+for i, s in enumerate(sorted(scores, reverse=True)):
+    print(f'  #{i+1}: {s}')`,
+          expectedOutput: `sum: 600\nmax: 95\nmin: 72\ncount: 7\navg: 85.7\n\ndoubled: [170, 184, 156, 190, 176, 144, 180]\n>=90: [92, 95, 90]\n\nranking:\n  #1: 95\n  #2: 92\n  #3: 90\n  #4: 88\n  #5: 85\n  #6: 78\n  #7: 72`,
+          hint: "sum, max, min, len, map, filter, enumerate!",
+          hint2: "Just run the code as is!"
+        },
         {
           id: "ch4-1",
           type: "quiz",
@@ -461,7 +579,7 @@ print(sum(result))
 average = sum(scores) / len(scores)
 print(average)`,
           expectedOutput: "84.0",
-          hint: "Just run it!"
+          hint: "Just run the code as is!"
         },
         {
           id: "ch4-6",

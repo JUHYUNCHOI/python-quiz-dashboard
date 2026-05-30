@@ -17,10 +17,10 @@ export const lesson20Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "📖 사전처럼 찾기!",
-          content: `영어사전에서 단어를 찾듯이!
+          title: "📖 딕셔너리 (dict = 사전) — 이름표로 찾기",
+          content: `**딕셔너리 (dict = 사전)** = **키 (key = 이름표)** 로 **값 (value)** 을 찾는 자료구조.
 
-**딕셔너리** = 키(key)로 값(value)을 찾는 자료구조
+🎒 비유: 영어사전 = "apple" 단어 찾으면 → "사과" 뜻. 키가 단어, 값이 뜻.
 
 \`\`\`python
 person = {
@@ -33,22 +33,39 @@ print(person["이름"])  # 철수
 print(person["나이"])  # 15
 \`\`\`
 
-**{키: 값, 키: 값, ...}** 형태!
+**\`{키: 값, 키: 값, ...}\`** 형태로 만들어요.
 
 ### 어디서 자주 만나요?
 
 - **이름 → 정보**: 학생 이름 → 점수, 사용자 ID → 프로필
-- **빈도 카운트**: 단어 → 등장 횟수, 점수 → 학생 수
+- **빈도 세기**: 단어 → 등장 횟수
 - **JSON 데이터**: 웹에서 받는 데이터의 기본 형태
-- **설정값**: 옵션 이름 → 값 ("음량": 50, "다크모드": True)
-- **그룹화**: 반 → 학생 명단, 카테고리 → 상품 목록
+- **설정값**: \`"음량": 50, "다크모드": True\`
+- **그룹화**: 반 → 학생 명단
 
-리스트가 "순서대로 줄 세우기" 라면, 딕셔너리는 "이름표 붙여서 정리".`
+리스트가 "줄 세우기" 라면, 딕셔너리는 "**이름표 붙여서 정리**".`
+        },
+        {
+          id: "viz-builder",
+          type: "interactive",
+          title: "🎬 시뮬: 딕셔너리 만드는 모습 보기",
+          component: "pyDictBuilder",
+          description: "딕셔너리가 한 단계씩 만들어지는 모습을 봐요. 각 버튼을 눌러서 진행!"
+        },
+        {
+          id: "viz-tryit",
+          type: "tryit",
+          title: "🖥️ 시뮬 본 후 — 학생 사전 만들기",
+          task: "학생 정보 딕셔너리를 직접 만들고, 이름과 점수를 꺼내 출력하세요!",
+          initialCode: "student = {\n    \"이름\": \"민지\",\n    \"점수\": 88\n}\n\nprint(student[\"이름\"])\nprint(student[\"점수\"])",
+          expectedOutput: "민지\n88",
+          hint: "student[\"이름\"] / student[\"점수\"] 로 값을 꺼내요!",
+          hint2: "위 코드 그대로 실행 → '민지' / 88 출력."
         },
         {
           id: "creation-ways",
           type: "explain",
-          title: "🛠️ 만드는 법 + 키 규칙",
+          title: "🛠️ 만드는 법 + 키 (이름표) 규칙",
           content: `\`\`\`python
 # 1) 중괄호 — 가장 흔함
 person = {"이름": "철수", "나이": 15}
@@ -87,8 +104,8 @@ d = dict.fromkeys(["A", "B", "C"], 0)
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
-          task: "딕셔너리에서 값을 찾아보세요!",
+          title: "🖥️ 사전에서 값 찾기 — 이름/점수",
+          task: "딕셔너리에서 이름과 점수를 꺼내 출력하세요!",
           initialCode: "student = {\n    \"이름\": \"영희\",\n    \"점수\": 95,\n    \"반\": \"A\"\n}\n\nprint(student[\"이름\"])\nprint(student[\"점수\"])",
           expectedOutput: "영희\n95",
           hint: "딕셔너리[키]로 값을 찾아요!",
@@ -113,28 +130,31 @@ d = dict.fromkeys(["A", "B", "C"], 0)
         {
           id: "modify-explain",
           type: "explain",
-          title: "✏️ 추가와 수정",
-          content: `**값 추가/수정:**
+          title: "✏️ 값 끼워넣기 + 바꿔치기",
+          content: `**\`dict[키] = 값\`** 한 줄로 추가/수정 둘 다 돼요.
+
 \`\`\`python
 person = {"이름": "철수"}
 
-# 추가
+# 새 이름표 → 추가
 person["나이"] = 15
 
-# 수정
+# 있는 이름표 → 값 바꿔치기
 person["이름"] = "영희"
 
 print(person)
 # {'이름': '영희', '나이': 15}
 \`\`\`
 
-없는 키면 **추가**, 있는 키면 **수정**!`
+🎒 비유: 사전에 새 단어 적기 (추가) vs 이미 있는 단어 뜻만 고치기 (수정). 둘 다 같은 동작 \`dict[키] = 값\`.
+
+> 🎯 한 줄: **없는 키 → 추가, 있는 키 → 덮어쓰기.**`
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ 값 추가하기!",
-          task: "딕셔너리에 '취미'를 추가하세요!",
+          title: "🖥️ 값 추가하기 — 취미 끼워넣기",
+          task: "딕셔너리에 새 이름표 '취미' 를 추가하세요!",
           initialCode: "person = {\"이름\": \"철수\", \"나이\": 15}\nperson[\"취미\"] = \"게임\"\nprint(person)",
           expectedOutput: "{'이름': '철수', '나이': 15, '취미': '게임'}",
           hint: "새 키를 넣으면 추가돼요!",
@@ -143,24 +163,27 @@ print(person)
         {
           id: "del-explain",
           type: "explain",
-          title: "🗑️ 삭제하기",
-          content: `**del** 또는 **pop()**으로 삭제:
+          title: "🗑️ 지우기 — del / pop",
+          content: `\`del\` 또는 \`pop()\` 으로 이름표 + 값을 한꺼번에 빼요.
 
 \`\`\`python
 person = {"이름": "철수", "나이": 15}
 
-# del로 삭제
+# del — 그냥 지우기
 del person["나이"]
 
-# pop()으로 삭제 (값 반환)
+# pop() — 지우면서 값도 받기
 name = person.pop("이름")
-\`\`\``
+print(name)   # 철수
+\`\`\`
+
+> 💡 \`pop\` 은 "지우는 김에 값 챙겨오기". 그냥 지우기만 하면 \`del\` 로 충분.`
         },
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ 값 삭제하기!",
-          task: "'나이' 키를 삭제하세요!",
+          title: "🖥️ 값 지우기 — '나이' 빼기",
+          task: "딕셔너리에서 '나이' 이름표를 지우세요!",
           initialCode: "person = {\"이름\": \"철수\", \"나이\": 15, \"학교\": \"중학교\"}\ndel person[\"나이\"]\nprint(person)",
           expectedOutput: "{'이름': '철수', '학교': '중학교'}",
           hint: "del 딕셔너리[키] 형태로 삭제!",
@@ -243,8 +266,8 @@ person.update(나이=15, 학교="중학교")
         {
           id: "try-update",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — update 로 두 딕셔너리 합치기",
-          task: "기존 학생 정보에 추가 정보를 update 로 합치세요!",
+          title: "🖥️ update — 두 딕셔너리 합치기",
+          task: "기존 학생 정보에 추가 정보를 update 로 합쳐 하나로 만드세요!",
           initialCode: "student = {\"이름\": \"영희\", \"나이\": 14}\nextra = {\"학교\": \"중학교\", \"학년\": 2, \"나이\": 15}   # 나이는 새 값으로\n\n# update 로 합치기\nstudent.___(extra)\nprint(student)",
           expectedOutput: "{'이름': '영희', '나이': 15, '학교': '중학교', '학년': 2}",
           hint: "student.update(extra) — 같은 키는 덮어씀.",
@@ -260,30 +283,36 @@ person.update(나이=15, 학교="중학교")
         {
           id: "method-explain",
           type: "explain",
-          title: "🔧 유용한 메서드들",
-          content: `**keys()** - 모든 키
-**values()** - 모든 값
-**items()** - 키-값 쌍
+          title: "🔧 keys / values / items / get — 자주 쓰는 4 개",
+          content: `네 가지만 외워두면 딕셔너리 90% 끝나요.
 
 \`\`\`python
 person = {"이름": "철수", "나이": 15}
 
 print(person.keys())    # dict_keys(['이름', '나이'])
 print(person.values())  # dict_values(['철수', 15])
-print(person.items())   # dict_items([('이름', '철수'), ...])
+print(person.items())   # dict_items([('이름', '철수'), ('나이', 15)])
 \`\`\`
 
-**get()** - 안전하게 값 가져오기
+- **keys()** — 모든 **이름표**
+- **values()** — 모든 **값**
+- **items()** — **(이름표, 값) 묶음** — for 안에서 많이 써요
+
+### get() — 안전하게 찾기
+
 \`\`\`python
-print(person.get("이름"))  # 철수
-print(person.get("직업"))  # None (에러 안 남!)
-\`\`\``
+print(person.get("이름"))         # 철수
+print(person.get("직업"))         # None — 에러 안 남
+print(person.get("직업", "없음")) # "없음" — 기본값
+\`\`\`
+
+\`dict["없는 키"]\` 는 에러나지만, \`dict.get(...)\` 은 **조용히 None 또는 기본값** 을 돌려줘요.`
         },
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ 딕셔너리 순회!",
-          task: "모든 키-값 쌍을 출력하세요!",
+          title: "🖥️ 딕셔너리 순회 — items 로 과목/점수",
+          task: "items() 로 모든 (과목, 점수) 쌍을 출력하세요!",
           initialCode: "scores = {\"국어\": 90, \"영어\": 85, \"수학\": 95}\n\nfor subject, score in scores.items():\n    print(f\"{subject}: {score}점\")",
           expectedOutput: "국어: 90점\n영어: 85점\n수학: 95점",
           hint: "items()로 키-값 쌍을 순회!",
@@ -292,8 +321,8 @@ print(person.get("직업"))  # None (에러 안 남!)
         {
           id: "try5",
           type: "tryit",
-          title: "🖥️ keys, values, get!",
-          task: "딕셔너리 메서드를 다양하게 사용해보세요!",
+          title: "🖥️ keys / values / get — 메뉴 분석",
+          task: "메뉴 딕셔너리에서 keys/values/get 을 함께 써보세요!",
           initialCode: "menu = {'치킨': 18000, '피자': 20000, '햄버거': 7000, '떡볶이': 4000}\n\n# 메뉴 이름만 (keys)\nprint('=== 메뉴 목록 ===')\nfor name in menu.keys():\n    print(f'  {name}')\n\n# 가격만 (values)\nprices = list(menu.values())\nprint(f'\\n평균 가격: {sum(prices)//len(prices)}원')\n\n# 안전하게 찾기 (get)\nprint(f'\\n치킨: {menu.get(\"치킨\")}원')\nprint(f'초밥: {menu.get(\"초밥\", \"없는 메뉴\")}')",
           expectedOutput: "=== 메뉴 목록 ===\n  치킨\n  피자\n  햄버거\n  떡볶이\n\n평균 가격: 12250원\n\n치킨: 18000원\n초밥: 없는 메뉴",
           hint: "keys()는 키들, values()는 값들, get()은 없어도 에러 안 나요!",
@@ -302,7 +331,7 @@ print(person.get("직업"))  # None (에러 안 남!)
         {
           id: "mission-method",
           type: "mission",
-          title: "🎯 미션: 딕셔너리 메서드!",
+          title: "🎯 성적 분석 — keys/values/get 메서드 채우기",
           task: "빈칸 3개를 채워서 성적 분석을 완성하세요!",
           initialCode: "grades = {'철수': 85, '영희': 92, '민수': 78, '지연': 96}\n\n# 모든 학생 이름 출력\nfor name in grades.___():\n    print(f'학생: {name}')\n\n# 모든 점수로 평균 계산\nscores = list(grades.___())\navg = sum(scores) // len(scores)\nprint(f'\\n평균: {avg}점')\n\n# 없는 학생 안전하게 찾기\nresult = grades.___(\"동수\", \"없는 학생\")\nprint(f'동수: {result}')",
           expectedOutput: "학생: 철수\n학생: 영희\n학생: 민수\n학생: 지연\n\n평균: 87점\n\n동수: 없는 학생",
@@ -312,8 +341,8 @@ print(person.get("직업"))  # None (에러 안 남!)
         {
           id: "in-check",
           type: "explain",
-          title: "🔍 in — 키 존재 검사",
-          content: `\`in\` 은 **키** 가 있는지 확인. 값(value) 검사 아니에요.
+          title: "🔍 in — 이름표 있는지 확인",
+          content: `\`in\` 은 **키 (이름표)** 가 있는지만 확인해요. 값은 안 봐요.
 
 \`\`\`python
 person = {"이름": "철수", "나이": 15}
@@ -343,8 +372,8 @@ print(person.get("이름", "이름 없음"))
         {
           id: "counter-pattern",
           type: "explain",
-          title: "📊 빈도 카운트 — 딕셔너리의 단골 패턴",
-          content: `"이 단어가 몇 번 나왔지?" 같은 빈도 세기는 딕셔너리의 가장 흔한 사용처.
+          title: "📊 빈도 세기 — 딕셔너리의 단골 패턴",
+          content: `"이 단어 몇 번 나왔지?" 같은 **빈도 세기** 는 딕셔너리가 가장 빛나는 곳.
 
 \`\`\`python
 words = ["사과", "배", "사과", "감", "배", "사과"]
@@ -387,8 +416,8 @@ for w in words:
         {
           id: "try-counter",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 단어 빈도 카운트",
-          task: "글자 빈도수를 세는 딕셔너리를 만들어 보세요. (가장 자주 나오는 글자 1 개도)",
+          title: "🖥️ 빈도 세기 — 글자별 등장 횟수",
+          task: "단어의 글자별 등장 횟수를 세고, 가장 자주 나온 글자를 찾으세요!",
           initialCode: "text = \"banana\"\n\n# 글자 빈도 카운트\ncount = {}\nfor ch in text:\n    count[ch] = count.___(ch, ___) + 1\n\nprint(count)\n\n# 가장 많이 나온 글자 (가장 큰 value 의 key)\ntop_ch = \"\"\ntop_n = 0\nfor ch, n in count.items():\n    if n > top_n:\n        top_n = n\n        top_ch = ch\nprint(f\"top: {top_ch} ({top_n} 번)\")",
           expectedOutput: "{'b': 1, 'a': 3, 'n': 2}\ntop: a (3 번)",
           hint: "count.get(ch, 0) + 1 — 없으면 0, 있으면 그 값에 +1.",
@@ -425,8 +454,8 @@ print(flipped)
         {
           id: "try-comprehension",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — dict comprehension",
-          task: "이름 리스트와 점수 리스트를 묶어서 학생-점수 딕셔너리로 만드세요!",
+          title: "🖥️ dict comprehension — zip 으로 학생-점수",
+          task: "이름 리스트와 점수 리스트를 zip 으로 묶어 dict 컴프리헨션으로 만드세요!",
           initialCode: "names = [\"철수\", \"영희\", \"민수\"]\nscores = [85, 92, 78]\n\n# zip 으로 묶고 dict comp 로\nresult = {___ for name, score in zip(names, scores)}\n\nprint(result)",
           expectedOutput: "{'철수': 85, '영희': 92, '민수': 78}",
           hint: "{name: score for name, score in zip(names, scores)}",
@@ -442,8 +471,8 @@ print(flipped)
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 미션 1 — 단어장 검색",
-          task: "단어장에서 단어를 찾아보세요!",
+          title: "🏆 미션 1 — 단어장 검색 (in + 값 꺼내기)",
+          task: "영어 단어를 단어장에서 찾아 한글 뜻을 출력하세요!",
           initialCode: "dictionary = {\n    \"apple\": \"사과\",\n    \"banana\": \"바나나\",\n    \"cherry\": \"체리\"\n}\n\nword = \"apple\"\nif word ___ dictionary:\n    print(f\"{word} = {dictionary[___]}\")\nelse:\n    print(\"단어를 찾을 수 없습니다\")",
           expectedOutput: "apple = 사과",
           hint: "in으로 키 존재 여부 확인!",
@@ -452,8 +481,8 @@ print(flipped)
         {
           id: "mission2",
           type: "mission",
-          title: "🏆 미션 2 — 학생 성적 분석",
-          task: "학생-점수 딕셔너리에서 **평균, 최고점 학생, 합격자 (60 이상) 명단** 을 출력하세요.",
+          title: "🏆 미션 2 — 평균/최고점/합격자 분석",
+          task: "학생-점수 딕셔너리에서 **평균, 최고점 학생, 합격자 (60 이상)** 를 출력하세요.",
           initialCode: "grades = {\"철수\": 85, \"영희\": 92, \"민수\": 55, \"수지\": 78, \"준호\": 60}\n\n# 평균 (소수 첫째 자리)\nscores = list(grades.values())\navg = sum(scores) / len(scores)\nprint(f\"평균: {avg:.1f}\")\n\n# 최고점 학생 — for 로 1 등 추적\ntop_name = \"\"\ntop_score = -1\nfor name, score in grades.items():\n    if score > ___:\n        top_score = score\n        top_name = name\nprint(f\"최고: {top_name} ({top_score}점)\")\n\n# 합격자 (60 이상) 명단 — for 로 모으기\npassed = []\nfor name, s in grades.items():\n    if s >= ___:\n        passed.append(name)\nprint(f\"합격자: {sorted(passed)}\")",
           expectedOutput: "평균: 74.0\n최고: 영희 (92점)\n합격자: ['수지', '영희', '준호', '철수']",
           hint: "최고: 지금까지 top_score 보다 크면 갱신. 합격선 60.",
@@ -462,8 +491,8 @@ print(flipped)
         {
           id: "mission3",
           type: "mission",
-          title: "🏆 미션 3 — 입력 단어 빈도 분석",
-          task: "공백으로 구분된 단어를 입력받아 **각 단어의 등장 횟수** + **가장 자주 나온 단어** 를 출력하세요.",
+          title: "🏆 미션 3 — 입력 단어 빈도 + 최다 단어",
+          task: "공백으로 구분된 단어를 입력받아 **각 단어 등장 횟수** + **가장 자주 나온 단어** 를 출력하세요.",
           initialCode: "words = input().split()\n\n# 빈도 카운트\ncount = {}\nfor w in words:\n    count[w] = count.___(w, 0) + 1\n\nprint(\"=== 빈도 ===\")\nfor w in sorted(count):   # 알파벳/한글 정렬\n    print(f\"{w}: {count[w]}\")\n\n# 가장 많이 나온 단어 — for 로 1 등 추적\ntop_word = \"\"\ntop_n = 0\nfor w, n in count.items():\n    if n > top_n:\n        top_n = n\n        top_word = w\nprint(f\"\\n최다: {top_word} ({top_n}회)\")",
           expectedOutput: "=== 빈도 ===\n감: 1\n배: 2\n사과: 3\n\n최다: 사과 (3회)",
           stdin: "사과 배 사과 감 배 사과",

@@ -17,15 +17,9 @@ export const lesson1EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🎉 Welcome to the World of Python!",
-          content: `Programming is basically **"telling a computer what to do."**
+          title: "🎉 Your First Code — Showing Text on Screen",
+          content: `Programming starts with **"showing text on the screen."**
 
-But how do we know the computer actually did what we asked?
-→ It **shows us the result on the screen.**
-
-That's why almost every programming class starts with **"display text on the screen."** It's the most basic, and one of the most-used, things you'll do.
-
-The famous first code that every programmer writes:
 \`\`\`python
 print('Hello, World!')
 \`\`\`
@@ -35,26 +29,21 @@ When you run it, the screen shows:
 Hello, World!
 \`\`\`
 
-On the next page we'll break this single line down piece by piece. ✨`
+Press ▶ to run it yourself, then we'll break this single line down piece by piece on the next page. ✨`
         },
         {
           id: "print-explain",
           type: "explain",
-          title: "🖨️ The print() Function",
-          content: `**\`print()\`** is how you tell the computer **"please show this on the screen."**
-
-\`\`\`python
+          title: "🖨️ print() — The Display Command",
+          content: `\`\`\`python
 print('Hello!')
 \`\`\`
 
-Let's break it down piece by piece:
+- **\`print\`** — the command name ("print it out")
+- **\`( )\`** — put the **content to display** inside the parentheses
+- **\`' '\`** — wrap text in quotes
 
-- **\`print\`** — the command name. Literally means "print it out."
-- **\`( )\`** — parentheses. **Whatever you put inside them gets displayed.**
-- **\`' '\`** — quotes. Text (called a "string") must be wrapped in quotes so the computer knows "ah, this is text."
-
-> 💡 **Single quotes \`'\`** and **double quotes \`"\`** both work the same way. Pick whichever you like!
-> \`print('Hi')\` = \`print("Hi")\``
+> 💡 \`'\` and \`"\` both work. Pick whichever you like!`
         },
         {
           id: "print-builder-interactive",
@@ -63,36 +52,47 @@ Let's break it down piece by piece:
           component: "pyPrintBuilder"
         },
         {
+          id: "try-print-builder",
+          type: "tryit",
+          title: "🖥️ Type What You Just Saw",
+          task: "Type out `print('Hi')` exactly as you saw it in the visualization!",
+          initialCode: "print(___)",
+          expectedOutput: "Hi",
+          hint: "The blank takes 'Hi' wrapped in quotes.",
+          hint2: "'Hi'"
+        },
+        {
           id: "print-explain-uses",
           type: "explain",
-          title: "🖨️ print() — More Examples & Pitfalls",
-          content: `### More examples
-
-\`\`\`python
-print('hi')            # hi
-print("Python is fun") # Python is fun
-print('🍕🍕🍕')        # 🍕🍕🍕 (emojis work too)
+          title: "🖨️ More Examples",
+          content: `\`\`\`python
+print('hi')             # hi
+print("Python is fun")  # Python is fun
+print('🍕🍕🍕')         # 🍕🍕🍕  (emojis work too!)
 \`\`\`
 
-### Where it's useful
-
-- Check your work — "did my code do what I expected?"
-- Greet the user — "Welcome!", "Game start!"
-- Debug — print intermediate values to see what's happening
-
-### ❌ Things that go wrong
-
-\`\`\`python
-print(Hello)         # NameError — without quotes the computer gets confused
-Print('Hello')       # NameError — capital P doesn't work. All lowercase!
+Anything inside the quotes shows up exactly on screen.`
+        },
+        {
+          id: "print-explain-pitfalls",
+          type: "explain",
+          title: "🤔 What happens if you forget?",
+          content: `\`\`\`python
+print(Hello)         # 🚨 NameError
+Print('Hello')       # 🚨 NameError
 \`\`\`
 
-\`print\` must be **all lowercase**, and text must be **wrapped in quotes**.`
+Python: *"I don't know that name!"* 😵
+
+- \`Hello\` — without quotes, Python thinks it's a "name" and can't find it
+- \`Print\` — capital P doesn't work. **All lowercase!**
+
+✅ Two things to remember: **lowercase \`print\`** + **text inside quotes**`
         },
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Print Hello, World!",
           task: "Print Hello, World!",
           initialCode: "print(___)",
           expectedOutput: "Hello, World!",
@@ -102,7 +102,7 @@ Print('Hello')       # NameError — capital P doesn't work. All lowercase!
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Other languages too!",
+          title: "🖥️ Print 'Bonjour!' — French for hello!",
           task: "Print 'Bonjour!' (French for hello!).",
           initialCode: "print(___)",
           expectedOutput: "Bonjour!",
@@ -112,7 +112,7 @@ Print('Hello')       # NameError — capital P doesn't work. All lowercase!
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ What does `print('Python')` show?",
           content: "What is the output of `print('Python')`?",
           options: ["print('Python')", "'Python'", "Python", "Error"],
           answer: 2,
@@ -144,7 +144,9 @@ Result:
 
 Why do strings need quotes but numbers don't?
 → The computer **recognizes numbers directly.** When it sees \`123\`, it instantly knows "that's one hundred twenty-three."
-→ But \`Hello\` without quotes? The computer can't tell if you mean text or some name you defined.`
+→ But \`Hello\` without quotes? The computer can't tell if you mean **text** or **some name** you defined.
+
+> 💡 What "some name" means — you'll learn that **later** (variables). For now, just remember: "text needs quotes, numbers don't."`
         },
         {
           id: "number-explain-math",
@@ -196,7 +198,7 @@ For now, just notice this difference. Next lesson covers it in detail!`
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Print the number 2024!",
           task: "Print the number 2024!",
           initialCode: "print(___)",
           expectedOutput: "2024",
@@ -206,7 +208,7 @@ For now, just notice this difference. Next lesson covers it in detail!`
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Let's Do Some Math!",
+          title: "🖥️ Calculate 100 + 200!",
           task: "Print the result of 100 + 200!",
           initialCode: "# Calculate and print 100 + 200\nprint(___)",
           expectedOutput: "300",
@@ -216,40 +218,46 @@ For now, just notice this difference. Next lesson covers it in detail!`
         {
           id: "comment-explain",
           type: "explain",
-          title: "💬 What is that # symbol?",
-          content: `Did you spot the **\`#\`** symbol in the code? That's called a **comment**.
+          title: "💬 # is a note for humans",
+          content: `Did you notice the \`#\` symbol in the code? That's a **comment**.
 
 \`\`\`python
-# Calculate and print 100 + 200
-print(100 + 200)   # Result: 300
+# Start of a line — the whole line is a comment
+print(10)
+print(20)   # Mid-line — from # to end of line is a comment
 \`\`\`
 
-### Comments = notes for humans
+**Anything after \`#\` is completely ignored by Python.** It doesn't run and doesn't show on screen.
 
-- **Anything after \`#\` is completely ignored by Python.** It doesn't run, doesn't show on screen.
-- **They help you remember "what was this code for?"** when you come back later 📝
-- They also help other people read your code.`
+📝 It's just a note for you (and other readers) — "what was this code for?"`
         },
         {
           id: "comment-explain-where",
           type: "explain",
-          title: "💬 Two places you'll see #",
+          title: "💬 # placement — start vs middle of line",
           content: `\`\`\`python
-# At the start of a line — the whole line is a comment
+# Start of a line → whole line is a comment. Describes the next line.
 print(10)
 
-print(20)   # Mid-line — everything from # to end of line is a comment
+print(20)   # Middle of a line → short note attached to that line.
 \`\`\`
 
-- **Start of a line** — the whole line is a comment. Usually used to describe the next line of code.
-- **Mid-line** — everything from \`#\` to the end of the line is a comment. Good for short notes attached to that code line.
-
-> 💡 You'll see \`#\` a lot in lesson code. **When you see \`#\`, just read it as "ah, this is a note"** and move on.`
+> 💡 You'll see \`#\` a lot. Just read it as **"ah, this is a note"** and move on.`
+        },
+        {
+          id: "predict-comment-output",
+          type: "predict",
+          title: "💭 Predict — Code with Comments",
+          content: "We said anything after `#` is ignored by the computer. So what does this code print?",
+          code: "# Hello there\nprint(10)   # print the number 10",
+          options: ["10", "Hello there\n10", "10\nprint the number 10", "Error"],
+          answer: 0,
+          explanation: "Everything from `#` to the end of the line is ignored. The first line disappears entirely; on the second line, `# print the number 10` is ignored. Only `print(10)` actually runs, so the screen shows just `10`."
         },
         {
           id: "quiz2",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ `print('100')` vs `print(100)` — difference?",
           content: "What is the difference between `print('100')` and `print(100)`?",
           options: [
             "No difference",
@@ -332,7 +340,7 @@ Job: Coder
         {
           id: "try5",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Print 'Age: 15' and 'Hobby: Gaming'!",
           task: "Print 'Age: 15' and 'Hobby: Gaming'!",
           initialCode: "print('Name: John')\n# Print age and hobby too\nprint(___)\nprint(___)",
           expectedOutput: "Name: John\nAge: 15\nHobby: Gaming",
@@ -389,19 +397,15 @@ Third line
         {
           id: "comma-explain",
           type: "explain",
-          title: "📎 Printing Multiple Values with Commas",
-          content: `Sometimes you want **several things on the same line** in one \`print()\`.
-For example: "Name is Alice" — putting **text + another value** together on one line.
-
-The way: **commas (\`,\`)** between the values.
+          title: "📎 Commas — multiple values on one line",
+          content: `Put **commas (\`,\`)** between values inside one \`print()\` and they all appear on the same line.
 
 \`\`\`python
 print('Name:', 'Alice')
-print('Age:', 15, 'years old')
 print('Score:', 100)
 \`\`\`
 
-Each line shows two or more things side by side. On the next page we'll look at **how the spacing works**.`
+Next page: **how does the spacing look?** 🤔`
         },
         {
           id: "predict-comma-space",
@@ -416,23 +420,15 @@ Each line shows two or more things side by side. On the next page we'll look at 
         {
           id: "comma-explain-space",
           type: "explain",
-          title: "💡 The comma's magic — automatic space",
-          content: `As you just saw, **when you separate values with commas, a space is added between them automatically.** You don't have to add it!
-
-### You can mix text and numbers
-
-With commas you can put **text + numbers** on one line — this is the really handy part!
+          title: "💡 The comma's magic — mix text + numbers",
+          content: `Commas add a **space between values automatically**. Plus you can mix **text + numbers** on one line!
 
 \`\`\`python
 print('Age:', 15)
 print('Total:', 100 + 50)
 \`\`\`
 
-### Where it's useful
-
-- **Label + value** — \`print('Score:', 95)\`
-- **Several values at once** — \`print('a', 'b', 'c')\`
-- **Text + a calculation result** — \`print('Sum:', 10 + 20)\``
+That's the really handy part — clean label-and-value pairs in one line.`
         },
         {
           id: "predict-comma-mix",
@@ -459,7 +455,7 @@ print('b')         # b         ← split into two lines
         {
           id: "try6",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Use a comma to print 'Result:' and 100!",
           task: "Use a comma to print 'Result:' and 100!",
           initialCode: "# Use a comma to print 'Result:' and 100\nprint('Result:', ___)",
           expectedOutput: "Result: 100",
@@ -476,12 +472,11 @@ print('b')         # b         ← split into two lines
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission!",
-          task: "Complete the game character info!",
-          initialCode: "print('=== 🎮 Character Info ===')\nprint('Name: ___')\nprint('Level: ___')\nprint('HP: ___')\nprint('Attack: 25')\nprint('=== Let the adventure begin! ===')",
-          expectedOutput: "=== 🎮 Character Info ===\nName: Hero\nLevel: 5\nHP: 100\nAttack: 25\n=== Let the adventure begin! ===",
-          hint: "Each blank takes one thing — the name, the level number, the HP number.",
-          hint2: "Hero / 5 / 100"
+          title: "🏆 Final Mission — Build Your Character!",
+          task: "Fill in your character info — name, level, HP are up to you! 🎮",
+          initialCode: "print('=== 🎮 Character Info ===')\nprint('Name:', 'Your name here!')\nprint('Level:', 1)\nprint('HP:', 100)\nprint('Attack:', 25)\nprint('=== Let the adventure begin! ===')",
+          hint: "Commas connect labels and values. Change just the text in quotes and the numbers — anything you want!",
+          hint2: "Example: print('Name:', 'FireMage')   /   print('Level:', 7)"
         },
         {
           id: "complete",
