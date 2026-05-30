@@ -13,7 +13,7 @@ import { LibraryToggle, type LibraryVariant } from "@/components/library-toggle"
 import { SoundToggle } from "@/components/sound-toggle"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useLessonSync } from "@/hooks/use-lesson-sync"
-import { markLessonComplete } from "@/lib/mark-lesson-complete"
+import { markLessonComplete, addLearnWrongQuestion } from "@/lib/mark-lesson-complete"
 import { saveStepAnswer } from "@/lib/save-step-answer"
 import { useGamification } from "@/hooks/use-gamification"
 import { logActivity } from "@/lib/activity-log"
@@ -119,6 +119,25 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   // 선생님이 학생 시점으로 전환 (프로필에서 설정, localStorage 저장)
   // 복습 페이지에서 진입했는지 확인
   const fromReview = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("from") === "review"
+
+  // /missed 에서 stepId 로 deep link 진입 — 해당 step 으로 자동 jump
+  // (localStorage progress 복원 후 오버라이드)
+  useEffect(() => {
+    if (!lesson || !progressLoaded) return
+    if (typeof window === "undefined") return
+    const stepIdParam = new URLSearchParams(window.location.search).get("stepId")
+    if (!stepIdParam) return
+    for (let ci = 0; ci < lesson.chapters.length; ci++) {
+      const steps = lesson.chapters[ci].steps
+      for (let si = 0; si < steps.length; si++) {
+        if (steps[si].id === stepIdParam) {
+          setCurrentChapter(ci)
+          setCurrentStep(si)
+          return
+        }
+      }
+    }
+  }, [lesson, progressLoaded]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 선생님이 학생 시점으로 전환 (프로필에서 설정, localStorage 저장).
   const teacherAsStudent = typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
@@ -700,6 +719,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       }
     } else {
       play("wrong")
+      // 수업 중 오답 → 틀린 문제 창고에 저장 (선생님 제외)
+      if (!effectiveTeacher && step?.id) {
+        addLearnWrongQuestion(lessonId, step.id)
+      }
     }
   }
 
@@ -732,6 +755,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       }
     } else {
       play("wrong")
+      // 수업 중 오답 (fillblank 등) → 틀린 문제 창고에 저장
+      if (!effectiveTeacher && step?.id) {
+        addLearnWrongQuestion(lessonId, step.id)
+      }
     }
   }
 

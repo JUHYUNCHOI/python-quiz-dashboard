@@ -90,11 +90,13 @@ export function getQuizScores(): Record<string, number> {
 
 export interface WrongQuestionEntry {
   lessonId: string
-  stepIndex: number
+  stepIndex: number           // review-source 인 경우: review 의 flat step index. learn-source 면 -1 (의미 없음)
+  stepId?: string             // learn-source 인 경우: lesson step.id (예: "ch1-quiz1")
+  source?: "review" | "learn" // 기본 "review" (생략 시 review 로 간주)
   addedAt: number
-  mastered?: boolean        // 마스터 (자동 또는 수동) 시 true
-  correctStreak?: number    // 연속 정답 수 (오답 시 0 리셋)
-  lastCorrectAt?: number    // 마지막 정답 시각 (24h gap 체크용)
+  mastered?: boolean          // 마스터 (자동 또는 수동) 시 true
+  correctStreak?: number      // 연속 정답 수 (오답 시 0 리셋)
+  lastCorrectAt?: number      // 마지막 정답 시각 (24h gap 체크용)
 }
 
 // 마스터 기준 — spaced repetition
@@ -255,6 +257,50 @@ export function addToWrongBank(lessonId: string | number, stepIndices: number[])
         })
     })
   }).catch(() => {})
+}
+
+/**
+ * 수업 (/learn) 안에서 quiz/predict/fillblank 등 오답 시 호출.
+ * source="learn" 로 마킹. stepId (lesson step.id) 로 식별.
+ * Phase 1 MVP: localStorage 만 (Supabase 동기화는 schema 마이그레이션 후 Phase 2).
+ */
+export function addLearnWrongQuestion(lessonId: string | number, stepId: string) {
+  if (!stepId) return
+  const normalizedId = String(lessonId)
+  const now = Date.now()
+  try {
+    const raw = localStorage.getItem(WRONG_BANK_KEY)
+    const bank: WrongQuestionEntry[] = raw ? JSON.parse(raw) : []
+    // dedup: 같은 lessonId + stepId + source="learn" 이면 추가 X (이미 있음)
+    const exists = bank.some(e => e.source === "learn" && e.lessonId === normalizedId && e.stepId === stepId)
+    if (exists) return
+    bank.push({
+      lessonId: normalizedId,
+      stepIndex: -1, // sentinel (learn-source 에서는 의미 없음)
+      stepId,
+      source: "learn",
+      addedAt: now,
+    })
+    localStorage.setItem(WRONG_BANK_KEY, JSON.stringify(bank))
+  } catch {}
+}
+
+/**
+ * learn-source 항목을 마스터 처리 (✕ 또는 다시 풀어서 정답).
+ * Phase 1 MVP: localStorage 만.
+ */
+export function markLearnWrongMastered(lessonId: string | number, stepId: string) {
+  if (!stepId) return
+  const normalizedId = String(lessonId)
+  try {
+    const raw = localStorage.getItem(WRONG_BANK_KEY)
+    const bank: WrongQuestionEntry[] = raw ? JSON.parse(raw) : []
+    const idx = bank.findIndex(e => e.source === "learn" && e.lessonId === normalizedId && e.stepId === stepId)
+    if (idx >= 0) {
+      bank[idx] = { ...bank[idx], mastered: true }
+      localStorage.setItem(WRONG_BANK_KEY, JSON.stringify(bank))
+    }
+  } catch {}
 }
 
 export function getWrongBank(): WrongQuestionEntry[] {
