@@ -34,9 +34,13 @@ print(10 * 3)   # 30
 print(10 / 3)   # 3.3333333333333335
 \`\`\`
 
-### 💡 Two small heads-ups
-
-**1. \`/\` always returns a float (decimal)**
+Multiplication is the **asterisk \`*\`** — not \`×\` and not the letter \`x\`.`
+        },
+        {
+          id: "intro-warnings",
+          type: "explain",
+          title: "💡 Two heads-ups about division",
+          content: `**1. \`/\` always returns a float (decimal)**
 
 \`\`\`python
 print(10 / 2)   # 5.0   ← Even when it divides evenly, you get 5.0 not 5!
@@ -53,14 +57,12 @@ print(10 / 0)    # ❌ ZeroDivisionError
 
 Just like in math — you can't divide by zero. Python raises an error.
 
-### ❌ What doesn't work
+### ❌ Other things that don't work
 
 \`\`\`python
 print(10 + "3")   # ❌ TypeError — number + string is not allowed
 print(10 × 3)     # ❌ SyntaxError — × is not a Python symbol (use \`*\`)
-\`\`\`
-
-Multiplication is the **asterisk \`*\`** — not \`×\` and not the letter \`x\`.`
+\`\`\``
         },
         {
           id: "try1",
@@ -93,17 +95,17 @@ print(10 // 3)   # 3           ← quotient only (double slash)
 print(10 % 3)    # 1           ← remainder only (percent)
 \`\`\`
 
-### Summary
-
 | Operator | Name | Example | Meaning |
 |---|---|---|---|
 | \`/\` | division | \`10 / 3\` → 3.33... | full decimal |
 | \`//\` | quotient | \`10 // 3\` → 3 | how many each |
-| \`%\` | remainder | \`10 % 3\` → 1 | how many left |
-
-### More examples
-
-\`\`\`python
+| \`%\` | remainder | \`10 % 3\` → 1 | how many left |`
+        },
+        {
+          id: "special-explain-examples",
+          type: "explain",
+          title: "🍬 More // and % examples",
+          content: `\`\`\`python
 # 7 candies for 2 people
 print(7 // 2)    # 3 — 3 each
 print(7 % 2)     # 1 — 1 left
@@ -144,7 +146,7 @@ print(100 % 7)   # 2 — 2 pages left
         {
           id: "modulo-uses",
           type: "explain",
-          title: "🎯 The real charm of % — parity signal",
+          title: "🎯 Real charm of % — parity + last digit",
           content: `\`%\` (modulo) shines beyond simple division — it's the classic **parity signal**.
 
 \`\`\`python
@@ -161,9 +163,13 @@ print(1234 % 10)   # 4 — ones-digit of 1234
 print(567 % 10)    # 7 — ones-digit of 567
 \`\`\`
 
-\`% 10\` = "remainder when divided by 10" = "the ones digit".
-
-### Multiple-of-N signal
+\`% 10\` = "remainder when divided by 10" = "the ones digit".`
+        },
+        {
+          id: "modulo-uses-more",
+          type: "explain",
+          title: "🕒 More % charm — multiples + wraparound",
+          content: `### Multiple-of-N signal
 
 \`\`\`python
 print(15 % 3)   # 0 — 15 is a multiple of 3
@@ -173,7 +179,7 @@ print(20 % 5)   # 0 — 20 is a multiple of 5
 
 \`% N == 0\` means "multiple of N"; non-zero means "not a multiple".
 
-### 🕒 Clock-style wraparound — another % charm
+### 🕒 Clock-style wraparound
 
 3 o'clock + 5 hours = 8. But 22 o'clock + 5 hours = **3 (24-hour clock wraps around)**.
 
@@ -184,7 +190,7 @@ print((22 + 5) % 24)   # 3  ← remainder of 27 divided by 24
 
 \`% N\` says "when a number goes past N, start back at 0" — clocks, days-of-week, circular seating all use this.
 
-> 🎯 One-liner: **% 2 = parity signal, % N = multiple-of-N signal (0 = yes), or wraps around every N.**`
+> 🎯 One-liner: **% 2 = parity, % N = multiple-of-N (0 = yes), or wraps around every N.**`
         },
         {
           id: "try-modulo",
@@ -216,7 +222,13 @@ print(2 ** 3)   # 8     ← 2 × 2 × 2 (three times)
 print(2 ** 10)  # 1024  ← 2 multiplied 10 times!
 \`\`\`
 
-### Other numbers
+How to read: \`a ** b\` is "a multiplied by itself b times". Same as math's \`a^b\`.`
+        },
+        {
+          id: "power-explain-warning",
+          type: "explain",
+          title: "⚠️ One star vs two stars",
+          content: `### Other numbers
 
 \`\`\`python
 print(5 ** 2)    # 25    ← 5 × 5
@@ -224,16 +236,14 @@ print(3 ** 4)    # 81    ← 3 × 3 × 3 × 3
 print(10 ** 3)   # 1000  ← 10 × 10 × 10 (10 cubed)
 \`\`\`
 
-How to read: \`a ** b\` is "a multiplied by itself b times". Same as math's \`a^b\`.
-
-### ⚠️ One star vs two stars
+### One star vs two stars — totally different
 
 \`\`\`python
 print(2 * 4)    # 8   ← multiply (once)
 print(2 ** 4)   # 16  ← exponent (4 times)
 \`\`\`
 
-One star = multiply. Two stars = exponent. Totally different meanings!`
+One star = multiply. Two stars = exponent.`
         },
         {
           id: "try-power",
@@ -315,18 +325,20 @@ Every comparison gives one of **two answers — True (yes) or False (no).**
 | \`>\` | greater than | \`10 > 5\` → True |
 | \`<\` | less than | \`10 < 5\` → False |
 | \`>=\` | greater or equal | \`10 >= 10\` → True |
-| \`<=\` | less or equal | \`10 <= 5\` → False |
-
-### Try them out
-
-\`\`\`python
+| \`<=\` | less or equal | \`10 <= 5\` → False |`
+        },
+        {
+          id: "compare-explain-diff",
+          type: "explain",
+          title: "💡 Try them + > vs >= difference",
+          content: `\`\`\`python
 print(10 > 5)     # True   ← 10 is greater than 5
 print(3 > 7)      # False  ← 3 is less than 7
 print(10 >= 10)   # True   ← "or equal" counts equal too
 print(10 > 10)    # False  ← "greater than" excludes equal
 \`\`\`
 
-### 💡 \`>=\` vs \`>\` — the subtle difference
+### \`>=\` vs \`>\` — the subtle difference
 
 - \`>=\` (greater or equal): "**equal OR** larger" — equal is OK
 - \`>\` (greater than): "**strictly larger**" — equal is NOT OK
@@ -347,7 +359,7 @@ They look similar but flip the answer when the two values are equal.`
         {
           id: "equal-explain",
           type: "explain",
-          title: "🟰 Equal and Not Equal",
+          title: "🟰 Equal and Not Equal — == and !=",
           content: `Often we check whether two values are **equal** / **not equal**:
 
 > 🔑 "Is the password equal to 1234?"
@@ -359,11 +371,13 @@ print(10 == 10)   # True   ← equal
 print(10 == 5)    # False  ← not equal
 print(10 != 5)    # True   ← different
 print(10 != 10)   # False  ← not different (equal)
-\`\`\`
-
-### ⚠️ Most confusing trap — \\= one vs \\=\\= two
-
-| Symbol | Meaning |
+\`\`\``
+        },
+        {
+          id: "equal-explain-trap",
+          type: "explain",
+          title: "⚠️ The biggest trap — = one vs == two",
+          content: `| Symbol | Meaning |
 |---|---|
 | \`=\` | **Assignment** — store a value (\`x = 10\`) |
 | \`==\` | **Comparison** — ask if equal (\`x == 10\`) |
@@ -373,9 +387,13 @@ x = 10            # assign — put 10 in x
 print(x == 10)    # compare — is x equal to 10? → True
 \`\`\`
 
-**Rule: one equals = "put", two equals = "ask".** Easy mnemonic!
-
-### String comparison too
+**Rule: one equals = "put", two equals = "ask".** Easy mnemonic!`
+        },
+        {
+          id: "equal-explain-string-float",
+          type: "explain",
+          title: "🔤 String comparison + float gotcha",
+          content: `### String comparison too
 
 \`\`\`python
 print("apple" == "apple")  # True
@@ -453,10 +471,8 @@ print(0 < x < 10)   # True — math inequality directly
         {
           id: "logic-explain",
           type: "explain",
-          title: "🔗 Combining conditions — and, or, not",
-          content: `Listen carefully to instructions. Two names can sound similar but **mean different things**:
-
-### 🔴 and — "Both must do it"
+          title: "🔴 and — Both must be True",
+          content: `Listen to everyday instructions. Two names together can **mean very different things** depending on the connector.
 
 > 👫 "Alice **and** Bob, go wash your hands!"
 
@@ -469,7 +485,13 @@ bob_washed = False
 print(alice_washed and bob_washed)   # False ← Bob didn't wash
 \`\`\`
 
-### 🔵 or — "Either one is enough"
+> 💡 **and is strict** — needs **both True** to be True.`
+        },
+        {
+          id: "logic-explain-or-not",
+          type: "explain",
+          title: "🔵 or and 🟢 not",
+          content: `### 🔵 or — "Either one is enough"
 
 > 👬 "Alice **or** Bob, please close the door!"
 
@@ -482,6 +504,8 @@ bob_closed = True
 print(alice_closed or bob_closed)    # True ← Bob did it, OK
 \`\`\`
 
+> 💡 **or is generous** — only False if **both False**.
+
 ### 🟢 not — Flip the value
 
 > 🌙 "If it's **not** dark, let's go for a walk!"
@@ -489,50 +513,27 @@ print(alice_closed or bob_closed)    # True ← Bob did it, OK
 \`\`\`python
 print(not True)    # False  ← opposite of True
 print(not False)   # True   ← opposite of False
-
-is_dark = False
-print(not is_dark)   # True ← opposite of "is dark"
-\`\`\`
-
----
-
-### 🎯 The easy way to remember — don't memorize 4 cases
-
-**and** (both): result is True ONLY when **True and True**. Everything else is False.
-
-| Case | Result |
-|---|---|
-| ✅ True **and** True | **True** ← only this one |
-| True and False | False |
-| False and True | False |
-| False and False | False |
-
-**or** (either): result is False ONLY when **False or False**. Everything else is True.
-
-| Case | Result |
-|---|---|
-| True or True | True |
-| True or False | True |
-| False or True | True |
-| ❌ False **or** False | **False** ← only this one |
-
-> 🎯 One-line memory hooks:
-> - **and** is strict — needs **both True** to be True
-> - **or** is generous — only False if **both False**
-
-### More everyday examples
-
-\`\`\`python
-age = 15
-height = 140
-
-# Ride: 13 or older AND 130cm or taller (both)
-print(age >= 13 and height >= 130)   # True
-
-# Holiday: Saturday OR Sunday (either one)
-day = "Sat"
-print(day == "Sat" or day == "Sun")  # True
 \`\`\``
+        },
+        {
+          id: "logic-explain-table",
+          type: "explain",
+          title: "🎯 Memorize one cell, not four",
+          content: `**and** is True ONLY when both are True. Everything else is False.
+
+| and | True | False |
+|---|---|---|
+| **True** | ✅ True | False |
+| **False** | False | False |
+
+**or** is False ONLY when both are False. Everything else is True.
+
+| or | True | False |
+|---|---|---|
+| **True** | True | True |
+| **False** | True | ❌ False |
+
+> 🎯 Just remember the highlighted cell in each table.`
         },
         {
           id: "try4",
@@ -548,10 +549,8 @@ print(day == "Sat" or day == "Sun")  # True
         {
           id: "is-not-explain",
           type: "explain",
-          title: "🔎 is, is not, not — More comparisons",
-          content: `### is / is not — "is it the same one?"
-
-While \`==\` checks if **values are equal**, \`is\` checks if it's **the very same object**.
+          title: "🔎 is / is not — None check",
+          content: `While \`==\` checks if **values are equal**, \`is\` checks if it's **the very same object**.
 
 The most common use: **checking for \`None\`**.
 
@@ -564,9 +563,13 @@ print(x is not None)    # False  ← opposite — "x is not None"
 print(x == None)        # True too — but 'is' is more precise
 \`\`\`
 
-> 💡 \`x is None\` is the Pythonic style. \`== None\` works but \`is None\` is clearer.
-
-### not — flip in front
+> 💡 \`x is None\` is the Pythonic style. \`== None\` works but \`is None\` is clearer.`
+        },
+        {
+          id: "is-not-explain-rest",
+          type: "explain",
+          title: "🔁 not alone + not in preview",
+          content: `### not — flip in front
 
 Put \`not\` **in front** of a value to flip True/False.
 
@@ -650,7 +653,7 @@ Each comparison gives True/False, then \`and\` / \`or\` combines them into a sin
         {
           id: "compound-explain",
           type: "explain",
-          title: "📝 Compound assignment operators",
+          title: "📝 Compound assignment — meet +=",
           content: `When you re-use the same variable, there's a shorthand. It's such a common pattern that Python gave it a shorter name.
 
 \`\`\`python
@@ -659,9 +662,20 @@ score = score + 10   # Long way — "set score to score+10"
 score += 10          # Short way — same meaning!
 \`\`\`
 
-Read \`+=\` as: "**add 10 to the current value and store it back**".
-
-### All variants — any arithmetic operator + \`=\`
+Read \`+=\` as: "**add 10 to the current value and store it back**".`
+        },
+        {
+          id: "compound-update-visual",
+          type: "interactive",
+          title: "🎬 See how += actually works",
+          description: "Step through a variable update like x = x + 2 visually. += is doing the same thing under the hood.",
+          component: "variableUpdateVisualizer",
+        },
+        {
+          id: "compound-explain-table",
+          type: "explain",
+          title: "📋 All compound variants",
+          content: `Any arithmetic operator + \`=\` works the same way.
 
 | Short | Long | Meaning |
 |---|---|---|
@@ -671,11 +685,13 @@ Read \`+=\` as: "**add 10 to the current value and store it back**".
 | \`x /= 2\` | \`x = x / 2\` | halve |
 | \`x //= 2\` | \`x = x // 2\` | halve (quotient) |
 | \`x %= 10\` | \`x = x % 10\` | remainder by 10 |
-| \`x **= 2\` | \`x = x ** 2\` | square |
-
-### Common in games
-
-\`\`\`python
+| \`x **= 2\` | \`x = x ** 2\` | square |`
+        },
+        {
+          id: "compound-explain-game",
+          type: "explain",
+          title: "🎮 Common in games — += / -=",
+          content: `\`\`\`python
 hp = 100
 hp -= 20      # took 20 damage → hp = 80
 score = 0

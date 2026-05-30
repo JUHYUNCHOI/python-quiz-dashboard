@@ -37,9 +37,13 @@ string . methodname ( )
 
 - **dot \`.\`** — "I'm telling this string to..."
 - **name** — \`upper\`, \`lower\`, \`strip\`, etc.
-- **parens \`()\`** — without them, the method doesn't run. Always required!
-
-### How is this different from a function?
+- **parens \`()\`** — without them, the method doesn't run. Always required!`
+        },
+        {
+          id: "intro-vs-function",
+          type: "explain",
+          title: "🆚 Method vs. Function",
+          content: `Methods attach with a dot. Functions take input in parens.
 
 - \`len(text)\` — **function**. The string goes inside the parens.
 - \`text.upper()\` — **method**. Attached to the string with a dot.
@@ -76,7 +80,20 @@ print(text.lower())  # hello world
 - **Usernames / emails** — usually stored in lowercase for consistency.
 - **Emphasis** — make important words all caps.
 
-### ⚠️ The original doesn't change! (really important)
+### What about non-letters?
+
+\`\`\`python
+print("123 abc".upper())   # 123 ABC  (digits unchanged)
+print("héllo".upper())     # HÉLLO    (accents handled)
+\`\`\`
+
+Only letters change. Digits, symbols, spaces — all stay the same.`
+        },
+        {
+          id: "upper-lower-immutable",
+          type: "explain",
+          title: "⚠️ The original doesn't change",
+          content: `Calling a method gives you a **new string** — the original is untouched!
 
 \`\`\`python
 text = "Hello"
@@ -84,7 +101,7 @@ text.upper()         # gives back HELLO — but where to?
 print(text)          # Hello (unchanged!)
 \`\`\`
 
-upper() returns a **new string**, but we didn't catch it anywhere. So it just disappears.
+upper() returns a new string, but we didn't catch it anywhere. So it just disappears.
 
 **To keep it, save it to a variable:**
 
@@ -95,16 +112,7 @@ print(text)          # Hello
 print(big)           # HELLO
 \`\`\`
 
-> 💡 Strings can't be changed once made (**immutable**). Methods always return a **new string**.
-
-### What about non-letters?
-
-\`\`\`python
-print("123 abc".upper())   # 123 ABC  (digits unchanged)
-print("héllo".upper())     # HÉLLO    (accents handled)
-\`\`\`
-
-Only letters change. Digits, symbols, spaces — all stay the same.`
+> 💡 Strings can't be changed once made (**immutable**). Methods always return a **new string**.`
         },
         {
           id: "try1",
@@ -166,9 +174,13 @@ People's input often comes with accidental spaces.
 \`\`\`python
 text = "   Hello friend   "
 print(text.strip())  # "Hello friend"  (middle space kept!)
-\`\`\`
-
-### Trimming only one side
+\`\`\``
+        },
+        {
+          id: "strip-variants",
+          type: "explain",
+          title: "↔️ lstrip / rstrip + invisible chars",
+          content: `### Trimming only one side
 
 - **lstrip()** — left only
 - **rstrip()** — right only
@@ -222,14 +234,6 @@ print(text.replace("banana", "apple"))
 
 It doesn't stop at the first one — every match is replaced.
 
-### Single characters work too
-
-\`\`\`python
-text = "ABCABC"
-print(text.replace("A", "Z"))
-# ZBCZBC
-\`\`\`
-
 ### Use it as an eraser
 
 Pass \`""\` (empty string) as the new value to **delete** the matches.
@@ -237,9 +241,13 @@ Pass \`""\` (empty string) as the new value to **delete** the matches.
 \`\`\`python
 text = "H e l l o"
 print(text.replace(" ", ""))  # Hello  (all spaces removed)
-\`\`\`
-
-### Chain it (very useful!)
+\`\`\``
+        },
+        {
+          id: "replace-chain",
+          type: "explain",
+          title: "⛓️ Chaining replace + case-sensitivity",
+          content: `### Chain it (very useful!)
 
 The result is still a string, so you can call another method right on it.
 
@@ -299,12 +307,8 @@ print("Hello".replace("hello", "Hi"))  # Hello  (no change!)
         {
           id: "find-explain",
           type: "explain",
-          title: "🔍 find() and count()",
-          content: `Two methods that peek into a string.
-
-### find() — "where is it?"
-
-Tells you the **position** (index) of a character or word. Positions start at **0** (same as lesson 5 indexing).
+          title: "🔍 find() — \"where is it?\"",
+          content: `Tells you the **position** (index) of a character or word. Positions start at **0** (same as lesson 5 indexing).
 
 \`\`\`python
 text = "Hello World"
@@ -328,11 +332,13 @@ text = "Hello"
 print(text.find("Python"))  # -1
 \`\`\`
 
-\`-1\` is the agreed-upon "not found" signal. (Once you learn if-statements, this is great for "exists?" checks.)
-
-### count() — "how many?"
-
-Returns **how many times** something shows up.
+\`-1\` is the agreed-upon "not found" signal. (Once you learn if-statements, this is great for "exists?" checks.)`
+        },
+        {
+          id: "find-count",
+          type: "explain",
+          title: "🔢 count() — \"how many?\"",
+          content: `Returns **how many times** something shows up.
 
 \`\`\`python
 text = "banana"
@@ -415,11 +421,13 @@ print(len("12"))    # 2
 print(len("👋!"))   # 2 (in most setups)
 \`\`\`
 
-> 💡 "One character = 1." Easy.
-
-### len() is a **function**, not a method!
-
-Other names (\`text.upper()\`, \`text.strip()\`) attach to the string with a dot. But len() goes the **outside-in** way.
+> 💡 "One character = 1." Easy.`
+        },
+        {
+          id: "len-is-function",
+          type: "explain",
+          title: "⚠️ len() is a function, not a method!",
+          content: `Other names (\`text.upper()\`, \`text.strip()\`) attach to the string with a dot. But len() goes the **outside-in** way.
 
 \`\`\`python
 len(text)    # ✅ function — string goes inside parens
@@ -457,7 +465,7 @@ Why the difference? — \`len()\` is an all-purpose function that works on **str
         {
           id: "more-methods",
           type: "explain",
-          title: "📝 Handy methods to know",
+          title: "📝 startswith / endswith / isdigit",
           content: `A few more useful ones. Notice some return **True / False** — they'll shine once you learn if-statements.
 
 ### startswith() / endswith() — "does it start/end with this?"
@@ -483,9 +491,13 @@ print("".isdigit())      # False
 print("3.14".isdigit())  # False (a dot is not a digit)
 \`\`\`
 
-Handy for checking whether input is really numeric. (You'll use it more with lesson 9's type conversions.)
-
-### capitalize() — "uppercase the first letter"
+Handy for checking whether input is really numeric. (You'll use it more with lesson 9's type conversions.)`
+        },
+        {
+          id: "more-methods-case",
+          type: "explain",
+          title: "🅰️ capitalize / title + summary",
+          content: `### capitalize() — "uppercase the first letter"
 
 \`\`\`python
 print("hello world".capitalize())  # Hello world

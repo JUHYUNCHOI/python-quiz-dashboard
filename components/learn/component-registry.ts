@@ -257,6 +257,16 @@ const registry: Record<string, ComponentEntry> = {
     props: (_step: any, lang: string) => ({ lang }),
   },
 
+  // Python 문자열 인덱싱 시뮬레이터 (양수/음수 인덱스 동시 시각화)
+  pyStringIndexVisualizer: {
+    load: () => import("@/components/animations/py-string-index-visualizer"),
+    exportName: "PyStringIndexVisualizer",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
   // pair vs 두 vector 비교 시각화 (cpp-15 lesson)
   pairVsTwoVectors: {
     load: () => import("@/components/animations/pair-vs-vectors"),

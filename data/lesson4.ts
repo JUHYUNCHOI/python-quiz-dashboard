@@ -34,9 +34,13 @@ print(10 * 3)   # 30
 print(10 / 3)   # 3.3333333333333335
 \`\`\`
 
-### 💡 두 가지 작은 주의
-
-**1. \`/\` 결과는 항상 소수 (float)**
+곱하기는 반드시 **별표 \`*\`** — \`×\` 나 \`x\` 가 아니에요.`
+        },
+        {
+          id: "intro-warnings",
+          type: "explain",
+          title: "💡 나누기의 두 가지 주의",
+          content: `**1. \`/\` 결과는 항상 소수 (float)**
 
 \`\`\`python
 print(10 / 2)   # 5.0   ← 딱 나눠 떨어져도 5 가 아니라 5.0!
@@ -53,14 +57,12 @@ print(10 / 0)    # ❌ ZeroDivisionError
 
 수학에서 "0 으로 못 나눈다" 와 똑같아요. 파이썬도 에러를 내요.
 
-### ❌ 안 되는 것
+### ❌ 또 안 되는 것
 
 \`\`\`python
 print(10 + "3")   # ❌ TypeError — 숫자 + 문자열은 불가
 print(10 × 3)     # ❌ SyntaxError — × 는 파이썬 기호 아님 (\`*\` 사용)
-\`\`\`
-
-곱하기는 반드시 **별표 \`*\`** — \`×\` 나 \`x\` 가 아니에요.`
+\`\`\``
         },
         {
           id: "try1",
@@ -93,17 +95,17 @@ print(10 // 3)   # 3           ← 몫만! (슬래시 두 번)
 print(10 % 3)    # 1           ← 나머지만! (퍼센트)
 \`\`\`
 
-### 정리
-
 | 연산자 | 이름 | 예시 | 뜻 |
 |---|---|---|---|
 | \`/\` | 나누기 | \`10 / 3\` → 3.33... | 소수까지 나눔 |
 | \`//\` | 몫 | \`10 // 3\` → 3 | 한 명당 받는 수 |
-| \`%\` | 나머지 | \`10 % 3\` → 1 | 남는 수 |
-
-### 더 많은 예시
-
-\`\`\`python
+| \`%\` | 나머지 | \`10 % 3\` → 1 | 남는 수 |`
+        },
+        {
+          id: "special-explain-examples",
+          type: "explain",
+          title: "🍬 // 와 % 더 많은 예시",
+          content: `\`\`\`python
 # 사탕 7 개를 2 명에게
 print(7 // 2)    # 3 — 한 명당 3 개씩
 print(7 % 2)     # 1 — 한 개 남음
@@ -144,7 +146,7 @@ print(100 % 7)   # 2 — 2 페이지 남음
         {
           id: "modulo-uses",
           type: "explain",
-          title: "🎯 % 의 진짜 매력 — 홀짝 신호",
+          title: "🎯 % 의 진짜 매력 — 홀짝 / 일의 자리",
           content: `\`%\` (나머지) 가 단순 계산보다 더 중요한 이유는 **홀짝 신호** 로 자주 쓰이기 때문이에요.
 
 \`\`\`python
@@ -161,9 +163,13 @@ print(1234 % 10)   # 4 — 1234 의 일의 자리
 print(567 % 10)    # 7 — 567 의 일의 자리
 \`\`\`
 
-\`% 10\` = "10 으로 나눈 나머지" = "일의 자리 숫자" 가 돼요.
-
-### N 의 배수 신호
+\`% 10\` = "10 으로 나눈 나머지" = "일의 자리 숫자" 가 돼요.`
+        },
+        {
+          id: "modulo-uses-more",
+          type: "explain",
+          title: "🕒 % 또 다른 매력 — 배수와 순환",
+          content: `### N 의 배수 신호
 
 \`\`\`python
 print(15 % 3)   # 0 — 15 는 3 의 배수
@@ -173,7 +179,7 @@ print(20 % 5)   # 0 — 20 은 5 의 배수
 
 \`% N\` 결과가 \`0\` 이면 **N 의 배수**, \`0\` 이 아니면 **배수 아님**.
 
-### 🕒 시계처럼 순환 — % 의 또 한 가지 매력
+### 🕒 시계처럼 순환
 
 지금 3 시인데 5 시간이 지나면? 8 시. 지금 22 시인데 5 시간 지나면? **3 시 (24 시간 시계라 순환)**.
 
@@ -216,7 +222,13 @@ print(2 ** 3)   # 8     ← 2 × 2 × 2 (세 번)
 print(2 ** 10)  # 1024  ← 2 를 10 번 곱한 값!
 \`\`\`
 
-### 다른 숫자도
+읽는 법: \`a ** b\` 는 "a 를 b 번 곱한 값". 수학의 \`a^b\` 와 같아요.`
+        },
+        {
+          id: "power-explain-warning",
+          type: "explain",
+          title: "⚠️ 별표 한 개 vs 두 개",
+          content: `### 다른 숫자도
 
 \`\`\`python
 print(5 ** 2)    # 25    ← 5 × 5
@@ -224,16 +236,14 @@ print(3 ** 4)    # 81    ← 3 × 3 × 3 × 3
 print(10 ** 3)   # 1000  ← 10 × 10 × 10 (1000 = 10의 세제곱)
 \`\`\`
 
-읽는 법: \`a ** b\` 는 "a 를 b 번 곱한 값". 수학의 \`a^b\` 와 같아요.
-
-### ⚠️ 별표 한 개 vs 두 개
+### 별표 한 개 vs 두 개 — 의미가 완전 달라요
 
 \`\`\`python
 print(2 * 4)    # 8   ← 곱하기 (한 번만)
 print(2 ** 4)   # 16  ← 거듭제곱 (네 번 곱)
 \`\`\`
 
-별 **한 개** 는 보통 곱하기. **두 개** 가 붙으면 거듭제곱. 의미 완전히 달라요!`
+별 **한 개** 는 보통 곱하기. **두 개** 가 붙으면 거듭제곱.`
         },
         {
           id: "try-power",
@@ -315,18 +325,20 @@ x = (a + (b * c)) < 100
 | \`>\` | 크다 | \`10 > 5\` → True |
 | \`<\` | 작다 | \`10 < 5\` → False |
 | \`>=\` | 크거나 같다 (이상) | \`10 >= 10\` → True |
-| \`<=\` | 작거나 같다 (이하) | \`10 <= 5\` → False |
-
-### 직접 봐요
-
-\`\`\`python
+| \`<=\` | 작거나 같다 (이하) | \`10 <= 5\` → False |`
+        },
+        {
+          id: "compare-explain-diff",
+          type: "explain",
+          title: "💡 직접 보기 + > 와 >= 차이",
+          content: `\`\`\`python
 print(10 > 5)     # True   ← 10 이 5 보다 크니까
 print(3 > 7)      # False  ← 3 은 7 보다 작으니까
 print(10 >= 10)   # True   ← 같은 것도 '이상' 에 들어감
 print(10 > 10)    # False  ← '크다' 는 같은 건 안 됨
 \`\`\`
 
-### 💡 \`>=\` 와 \`>\` 차이
+### \`>=\` 와 \`>\` 차이
 
 - \`>=\` (이상): "**같거나** 더 큰" — 같은 것 OK
 - \`>\` (초과): "**더 큰**" — 같은 것 X
@@ -347,7 +359,7 @@ print(10 > 10)    # False  ← '크다' 는 같은 건 안 됨
         {
           id: "equal-explain",
           type: "explain",
-          title: "🟰 같다와 다르다",
+          title: "🟰 같다와 다르다 — == 와 !=",
           content: `"두 값이 **같은지** / **다른지**" 도 자주 검사해요:
 
 > 🔑 "비밀번호가 1234 와 같은가?"
@@ -359,23 +371,29 @@ print(10 == 10)   # True   ← 같다
 print(10 == 5)    # False  ← 같지 않다
 print(10 != 5)    # True   ← 다르다
 print(10 != 10)   # False  ← 다르지 않다 (같음)
-\`\`\`
-
-### ⚠️ 가장 헷갈리는 함정 — \\= 한 개 vs \\=\\= 두 개
-
-| 기호 | 뜻 |
+\`\`\``
+        },
+        {
+          id: "equal-explain-trap",
+          type: "explain",
+          title: "⚠️ 가장 헷갈리는 함정 — = 한 개 vs == 두 개",
+          content: `| 기호 | 뜻 |
 |---|---|
 | \`=\` | **저장** — 변수에 값 넣기 (\`x = 10\`) |
 | \`==\` | **비교** — 두 값이 같은지 묻기 (\`x == 10\`) |
 
 \`\`\`python
-x = 10        # 저장 — x 라는 상자에 10 을 넣어요
+x = 10           # 저장 — x 라는 상자에 10 을 넣어요
 print(x == 10)   # 비교 — x 가 10 과 같은가? → True
 \`\`\`
 
-**규칙: 등호 한 개는 "넣기", 두 개는 "묻기".** 외워두면 편해요!
-
-### 문자열도 비교 가능
+**규칙: 등호 한 개는 "넣기", 두 개는 "묻기".** 외워두면 편해요!`
+        },
+        {
+          id: "equal-explain-string-float",
+          type: "explain",
+          title: "🔤 문자열 비교 + 소수 함정",
+          content: `### 문자열도 비교 가능
 
 \`\`\`python
 print("apple" == "apple")  # True
@@ -453,10 +471,8 @@ print(0 < x < 10)   # True — 수학 부등식 그대로
         {
           id: "logic-explain",
           type: "explain",
-          title: "🔗 조건 합치기 — and, or, not",
+          title: "🔴 and — 둘 다 해야",
           content: `엄마 말씀 들어보세요. 두 사람 이름이 같이 나와도 의미가 달라요.
-
-### 🔴 and — 둘 다 해야
 
 > 👫 "민수 **그리고** 영희, 손 닦고 와!" → 둘 다 닦아야 끝.
 
@@ -465,7 +481,13 @@ print(True  and True)    # True   ← 둘 다 ✅
 print(True  and False)   # False  ← 한 명 빠짐
 \`\`\`
 
-### 🔵 or — 한 명만 해도
+> 💡 **and 는 까다로워요** — 둘 다 True 여야 True.`
+        },
+        {
+          id: "logic-explain-or-not",
+          type: "explain",
+          title: "🔵 or 와 🟢 not",
+          content: `### 🔵 or — 한 명만 해도
 
 > 👬 "민수 **또는** 영희, 문 닫아줘!" → 한 명만 닫으면 끝.
 
@@ -474,6 +496,8 @@ print(True  or False)   # True   ← 한 명만 해도 OK
 print(False or False)   # False  ← 둘 다 안 했을 때만 X
 \`\`\`
 
+> 💡 **or 는 너그러워요** — 둘 다 False 일 때만 False.
+
 ### 🟢 not — 반대로
 
 > 🌙 "어둡지 **않으면** 산책!"
@@ -481,21 +505,20 @@ print(False or False)   # False  ← 둘 다 안 했을 때만 X
 \`\`\`python
 print(not True)    # False
 print(not False)   # True
-\`\`\`
-
----
-
-### 🎯 외우는 한 줄
-
-- **and 는 까다로워요** — 둘 다 True 여야 True
-- **or 는 너그러워요** — 둘 다 False 일 때만 False
-
-| 입력 | True / True | True / False | False / True | False / False |
+\`\`\``
+        },
+        {
+          id: "logic-explain-table",
+          type: "explain",
+          title: "🎯 한 표로 정리",
+          content: `| 입력 | True / True | True / False | False / True | False / False |
 |---|---|---|---|---|
 | 🔴 **and** | **True** | False | False | False |
 | 🔵 **or**  | True | True | True | **False** |
 
-\`and\` 줄에 True 는 딱 하나, \`or\` 줄에 False 는 딱 하나. 그 한 칸만 기억하면 끝.`
+\`and\` 줄에 True 는 딱 하나, \`or\` 줄에 False 는 딱 하나.
+
+**그 한 칸만 기억하면 끝.**`
         },
         {
           id: "try4",
@@ -511,10 +534,8 @@ print(not False)   # True
         {
           id: "is-not-explain",
           type: "explain",
-          title: "🔎 is, is not, not — 또 다른 비교",
-          content: `### is / is not — "같은 것인가?" 검사
-
-\`==\` 가 **값이 같은지** 묻는다면, \`is\` 는 **완전히 같은 것인지** 검사해요.
+          title: "🔎 is / is not — None 검사",
+          content: `\`==\` 가 **값이 같은지** 묻는다면, \`is\` 는 **완전히 같은 것인지** 검사해요.
 
 가장 자주 쓰는 곳: **\`None\` 인지 확인할 때**.
 
@@ -527,9 +548,13 @@ print(x is not None)    # False  ← 반대 — 'x 가 None 이 아니다'
 print(x == None)        # True 도 됨 — 다만 is 가 더 정확
 \`\`\`
 
-> 💡 \`x is None\` 가 파이썬 권장 스타일. \`== None\` 도 동작은 하지만 \`is None\` 이 더 명확.
-
-### not — 앞에 붙여서 뒤집기
+> 💡 \`x is None\` 가 파이썬 권장 스타일. \`== None\` 도 동작은 하지만 \`is None\` 이 더 명확.`
+        },
+        {
+          id: "is-not-explain-rest",
+          type: "explain",
+          title: "🔁 not 단독 + not in 미리보기",
+          content: `### not — 앞에 붙여서 뒤집기
 
 \`not\` 은 한 값 **앞에** 붙어서 True/False 를 뒤집어요.
 
@@ -613,7 +638,7 @@ print(day == "토" or day == "일")      # True
         {
           id: "compound-explain",
           type: "explain",
-          title: "📝 복합 대입 연산자",
+          title: "📝 복합 대입 연산자 — += 의 등장",
           content: `같은 변수를 다시 쓰는 코드는 줄여 쓸 수 있어요. 자주 나오는 패턴이라 파이썬이 짧은 이름을 줘요.
 
 \`\`\`python
@@ -622,9 +647,20 @@ score = score + 10   # 긴 방법 — 'score 를 score+10 으로 바꿔라'
 score += 10          # 짧은 방법 — 같은 뜻!
 \`\`\`
 
-\`+=\` 를 읽는 법: "현재 값에 10 을 **더해서 다시 저장**".
-
-### 전체 변형 — 산술 연산자에 \`=\` 를 붙이면 모두 사용 가능
+\`+=\` 를 읽는 법: "현재 값에 10 을 **더해서 다시 저장**".`
+        },
+        {
+          id: "compound-update-visual",
+          type: "interactive",
+          title: "🎬 += 가 실제로 어떻게 동작하는지 보기",
+          description: "x = x + 2 와 같은 변수 업데이트를 단계별로 시각화해봐요. += 도 똑같은 동작이에요.",
+          component: "variableUpdateVisualizer",
+        },
+        {
+          id: "compound-explain-table",
+          type: "explain",
+          title: "📋 복합 대입 — 전체 변형",
+          content: `산술 연산자에 \`=\` 를 붙이면 모두 사용 가능.
 
 | 짧은 표기 | 긴 표기 | 뜻 |
 |---|---|---|
@@ -634,11 +670,13 @@ score += 10          # 짧은 방법 — 같은 뜻!
 | \`x /= 2\` | \`x = x / 2\` | 반 |
 | \`x //= 2\` | \`x = x // 2\` | 반 (몫만) |
 | \`x %= 10\` | \`x = x % 10\` | 10 으로 나눈 나머지 |
-| \`x **= 2\` | \`x = x ** 2\` | 제곱 |
-
-### 게임에서 자주
-
-\`\`\`python
+| \`x **= 2\` | \`x = x ** 2\` | 제곱 |`
+        },
+        {
+          id: "compound-explain-game",
+          type: "explain",
+          title: "🎮 게임에서 자주 만나는 += / -=",
+          content: `\`\`\`python
 hp = 100
 hp -= 20      # 데미지 20 → hp = 80
 score = 0

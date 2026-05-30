@@ -37,9 +37,13 @@ print(text.upper())  # HELLO
 
 - **점 \`.\`** — "이 문자열한테 시킨다" 라는 신호
 - **이름** — \`upper\`, \`lower\`, \`strip\` 등 메서드 이름
-- **괄호 \`()\`** — 빼먹으면 메서드가 실행 안 돼요. 꼭!
-
-### 함수랑 뭐가 달라?
+- **괄호 \`()\`** — 빼먹으면 메서드가 실행 안 돼요. 꼭!`
+        },
+        {
+          id: "intro-vs-function",
+          type: "explain",
+          title: "🆚 함수랑 뭐가 달라?",
+          content: `점 찍고 부르는 게 메서드, 괄호 안에 넣는 게 함수.
 
 - \`len(text)\` — **함수**. 괄호 안에 문자열을 넣어요.
 - \`text.upper()\` — **메서드**. 문자열 뒤에 붙여요.
@@ -76,7 +80,19 @@ print(text.lower())  # hello world
 - **아이디 / 이메일** — 보통 소문자로 통일해서 저장.
 - **강조 표시** — 중요한 단어를 대문자로 변환.
 
-### ⚠️ 원본은 안 바뀌어요 (정말 중요!)
+### 한글에는 어떻게?
+
+\`\`\`python
+print("안녕".upper())   # 안녕 (한글은 대소문자가 없음)
+\`\`\`
+
+한글, 숫자, 기호 같은 건 그대로. 영문 글자만 바뀌어요.`
+        },
+        {
+          id: "upper-lower-immutable",
+          type: "explain",
+          title: "⚠️ 원본은 안 바뀌어요",
+          content: `메서드를 부르면 **새 문자열** 이 나와요. 원본은 그대로!
 
 \`\`\`python
 text = "Hello"
@@ -84,7 +100,7 @@ text.upper()         # 결과는 HELLO 지만 어디로?
 print(text)          # Hello (그대로!)
 \`\`\`
 
-upper() 가 **새 문자열** 을 돌려주는데, 우리가 그걸 어디에도 안 받았어요. 그래서 그냥 사라짐.
+upper() 가 새 문자열을 돌려주는데, 우리가 그걸 어디에도 안 받았어요. 그래서 그냥 사라짐.
 
 **받아두려면 변수에 저장:**
 
@@ -95,15 +111,7 @@ print(text)          # Hello
 print(big)           # HELLO
 \`\`\`
 
-> 💡 문자열은 한번 만들면 못 바꿔요 (**불변**). 메서드는 항상 **새 문자열을 돌려줘요.**
-
-### 한글에는 어떻게?
-
-\`\`\`python
-print("안녕".upper())   # 안녕 (한글은 대소문자가 없음)
-\`\`\`
-
-한글, 숫자, 기호 같은 건 그대로. 영문 글자만 바뀌어요.`
+> 💡 문자열은 한번 만들면 못 바꿔요 (**불변**). 메서드는 항상 **새 문자열을 돌려줘요.**`
         },
         {
           id: "try1",
@@ -165,9 +173,13 @@ print(text.strip())  # "안녕하세요"
 \`\`\`python
 text = "   안녕 친구   "
 print(text.strip())  # "안녕 친구"  (가운데 공백은 그대로!)
-\`\`\`
-
-### 한쪽만 자르고 싶을 때
+\`\`\``
+        },
+        {
+          id: "strip-variants",
+          type: "explain",
+          title: "↔️ lstrip / rstrip + 보이지 않는 글자",
+          content: `### 한쪽만 자르고 싶을 때
 
 - **lstrip()** — left, 왼쪽만
 - **rstrip()** — right, 오른쪽만
@@ -221,14 +233,6 @@ print(text.replace("바나나", "사과"))
 
 하나만 보고 멈추는 게 아니라 **다 찾아서 다 바꿔요.**
 
-### 한 글자만 바꾸기도 가능
-
-\`\`\`python
-text = "ABCABC"
-print(text.replace("A", "Z"))
-# ZBCZBC
-\`\`\`
-
 ### 지우개로도 써요
 
 바꿀 것에 \`""\` (빈 문자열) 을 주면 **삭제** 효과!
@@ -236,9 +240,13 @@ print(text.replace("A", "Z"))
 \`\`\`python
 text = "안 녕 하 세 요"
 print(text.replace(" ", ""))  # 안녕하세요  (공백 다 지움)
-\`\`\`
-
-### 연속해서 여러 번 (chain)
+\`\`\``
+        },
+        {
+          id: "replace-chain",
+          type: "explain",
+          title: "⛓️ replace 체이닝 & 대소문자",
+          content: `### 연속해서 여러 번 (chain)
 
 메서드 결과가 또 문자열이니까 뒤에 점 찍고 또 메서드 부를 수 있어요.
 
@@ -298,12 +306,8 @@ print("Hello".replace("hello", "안녕"))  # Hello  (안 바뀜!)
         {
           id: "find-explain",
           type: "explain",
-          title: "🔍 find() 와 count()",
-          content: `문자열 안을 들여다보는 두 메서드.
-
-### find() — "어디에 있어?"
-
-찾는 글자/단어가 **몇 번째 자리** 에 있는지 알려줘요. 자리는 **0부터** 세요 (lesson 5 인덱스랑 같음).
+          title: "🔍 find() — \"어디에 있어?\"",
+          content: `찾는 글자/단어가 **몇 번째 자리** 에 있는지 알려줘요. 자리는 **0부터** 세요 (lesson 5 인덱스랑 같음).
 
 \`\`\`python
 text = "Hello World"
@@ -327,11 +331,13 @@ text = "Hello"
 print(text.find("Python"))  # -1
 \`\`\`
 
-\`-1\` 은 "못 찾았다" 라는 약속된 신호. (조건문 배우면 "있나 없나" 검사에 쓸 거예요.)
-
-### count() — "몇 번 나와?"
-
-찾는 글자/단어가 **몇 번** 나오는지 세줘요.
+\`-1\` 은 "못 찾았다" 라는 약속된 신호. (조건문 배우면 "있나 없나" 검사에 쓸 거예요.)`
+        },
+        {
+          id: "find-count",
+          type: "explain",
+          title: "🔢 count() — \"몇 번 나와?\"",
+          content: `찾는 글자/단어가 **몇 번** 나오는지 세줘요.
 
 \`\`\`python
 text = "banana"
@@ -414,11 +420,13 @@ print(len("hi"))    # 2
 print(len("12"))    # 2
 \`\`\`
 
-> 💡 "글자 하나당 1" 이라고 외우면 끝. 한글이 더 크게 보여도 1.
-
-### len 은 **함수**, 메서드 아니에요!
-
-다른 애들 (\`text.upper()\`, \`text.strip()\`) 은 점을 찍고 부르는데, len 만 **밖에서 괄호 안에 넣어요.**
+> 💡 "글자 하나당 1" 이라고 외우면 끝. 한글이 더 크게 보여도 1.`
+        },
+        {
+          id: "len-is-function",
+          type: "explain",
+          title: "⚠️ len 은 함수, 메서드 아니에요!",
+          content: `다른 애들 (\`text.upper()\`, \`text.strip()\`) 은 점을 찍고 부르는데, len 만 **밖에서 괄호 안에 넣어요.**
 
 \`\`\`python
 len(text)    # ✅ 함수 — 괄호 안에 문자열을 넣음
@@ -456,7 +464,7 @@ text.len()   # ❌ AttributeError — 문자열엔 .len() 없음!
         {
           id: "more-methods",
           type: "explain",
-          title: "📝 알아두면 좋은 메서드들",
+          title: "📝 startswith / endswith / isdigit",
           content: `자주 쓰는 친구들 몇 개 더. 결과가 **True / False** 인 것에 주목하세요 — 나중에 조건문에서 진가가 나와요.
 
 ### startswith() / endswith() — "이걸로 시작/끝나?"
@@ -482,9 +490,13 @@ print("".isdigit())      # False
 print("3.14".isdigit())  # False (점이 끼어서)
 \`\`\`
 
-입력값이 진짜 숫자인지 검사할 때 유용. (lesson 9 에서 타입 변환 배우면 더 자주 써요.)
-
-### capitalize() — "첫 글자만 대문자"
+입력값이 진짜 숫자인지 검사할 때 유용. (lesson 9 에서 타입 변환 배우면 더 자주 써요.)`
+        },
+        {
+          id: "more-methods-case",
+          type: "explain",
+          title: "🅰️ capitalize / title + 메서드 정리",
+          content: `### capitalize() — "첫 글자만 대문자"
 
 \`\`\`python
 print("hello world".capitalize())  # Hello world
