@@ -4,12 +4,35 @@ import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 export function makeAstralCh1(E) {
   return [
+    /* 1-0 — Hook: visual story first (before any formal text). */
+    {
+      type: "reveal",
+      narr: t(E,
+        "First, watch ONE star move between two photos. Bessie the cow took a night-sky photo, waited, then took another. Stars either disappear OR slide by (A right, B down). Try the toggles — see what the COMPOSITE looks like.",
+        "먼저 그림으로 봐요. 별 한 개가 두 사진 사이에서 어떻게 움직이는지. Bessie 라는 소가 밤하늘을 두 번 찍었어요. 별은 사라지거나 (A 오른쪽, B 아래) 로 슬쩍 이동. 아래 토글 눌러보면서 합성이 어떻게 만들어지는지 봐요."),
+      content: (
+        <div>
+          <div style={{ padding: "12px 16px 0", textAlign: "center" }}>
+            <div style={{ fontSize: 28, marginBottom: 2 }}>🔭🐄</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "#4f46e5" }}>
+              {t(E, "Bessie's two telescope photos", "Bessie 의 두 망원경 사진")}
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
+              {t(E, "Click ★ moves / disappears, change (A,B) presets",
+                    "★ 이동/사라짐 토글, (A,B) 프리셋 변경 가능")}
+            </div>
+          </div>
+          <AstralChainDiscovery E={E} />
+        </div>
+      ),
+    },
+
     /* 1-1 — Problem statement. */
     {
       type: "reveal",
       narr: t(E,
-        "Two telescope photos taken back-to-back. Between them, every star EITHER disappeared OR shifted by (A right, B down). We see the COMPOSITE: W (empty in both), G (in exactly one), B (in both). Find the minimum stars in the original photo, or -1 if impossible.",
-        "두 망원경 사진을 연달아 찍음. 사이에 별마다 사라지거나 (A 오른쪽, B 아래) 로 이동. 합쳐진 결과: W (둘 다 없음), G (한 곳만), B (둘 다). 처음 사진의 최소 별 수, 불가능하면 -1."),
+        "Now the formal rules. We see the COMPOSITE (the merged picture): W (empty in both photos), G (star in exactly one), B (star in both). Find the minimum stars in the original photo, or -1 if impossible.",
+        "이제 정식 규칙. 합성 (두 사진 합친 그림) 의 각 칸: W (둘 다 없음), G (한 사진에만), B (둘 다). 처음 사진의 *최소* 별 수를 출력, 불가능하면 -1."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -130,15 +153,6 @@ GGG`}
         "Drag (A, B) shift to see how stars travel between the two photos. Try different presets including the impossible case.",
         "이동량 (A, B) 을 바꾸면서 별이 두 사진 사이를 어떻게 옮겨가는지 봐요. 불가능 케이스도 포함된 preset 시도."),
       content: (<AstralComposite E={E} />),
-    },
-
-    /* 1-3.5 — Chain discovery: from single-star demo to chain insight. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Why does the A=B=0 trick (#G + #B) fail when (A, B) ≠ (0, 0)? Because cells get LINKED — a star at (r, c) lands at (r+B, c+A) in photo 2, so those two cells share the same star. Follow the link repeatedly → CHAIN.",
-        "A=B=0 일 땐 #G + #B 가 답인데 (A, B) ≠ (0, 0) 면 왜 안 될까? 칸들이 연결되거든. (r, c) 의 별이 사진 2 의 (r+B, c+A) 로 가니까 두 칸이 같은 별을 공유. 계속 따라가면 → 체인."),
-      content: (<AstralChainDiscovery E={E} />),
     },
 
     /* 1-4 — Quiz: when is -1? */
