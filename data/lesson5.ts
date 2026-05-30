@@ -97,8 +97,8 @@ print(len(""))     # 0 — 빈 문자열
 
 \`\`\`python
 pwd = "secret12"
-print("길이: " + str(len(pwd)) + "자")
-# 길이: 8자
+print("길이:", len(pwd))
+# 길이: 8
 \`\`\`
 
 > 💡 \`len\` 은 문자열, 리스트, 튜플, 딕셔너리, 집합 다 가능. 여기저기 쓰여요.`
@@ -109,41 +109,78 @@ print("길이: " + str(len(pwd)) + "자")
           title: "🔢 인덱싱 — 한 글자만 꺼내기",
           content: `문자열도 리스트처럼 \`[인덱스]\` 로 한 글자씩 접근할 수 있어요.
 
+### 앞에서부터 — 0, 1, 2, ...
+
 \`\`\`python
 text = "Python"
-#       P y t h o n
+#       P  y  t  h  o  n
 #      [0][1][2][3][4][5]
 
 print(text[0])    # P (첫 글자)
 print(text[3])    # h
+\`\`\`
+
+> 첫 글자가 \`[1]\` 이 아니라 \`[0]\` 인 거 잊지 말기! 컴퓨터는 0부터 세요.
+
+### 뒤에서부터 — -1, -2, ...
+
+마지막 글자가 자주 필요해요. 근데 \`text[5]\` 처럼 길이를 알아야 쓰기 귀찮죠?
+
+**음수 인덱스** 를 쓰면 **뒤에서부터** 셀 수 있어요!
+
+\`\`\`python
+text = "Python"
+#        P  y  t  h  o  n
+#      [-6][-5][-4][-3][-2][-1]   ← 뒤에서부터
+
 print(text[-1])   # n (마지막)
 print(text[-2])   # o (뒤에서 두 번째)
 \`\`\`
+
+\`text[-1]\` 은 **항상 마지막 글자** — 문자열 길이를 몰라도 됨! 매우 자주 쓰여요.
 
 ### 첫 글자 / 끝 글자 빠른 추출
 
 \`\`\`python
 name = "Alice"
 initial = name[0]      # 'A' — 이니셜
-print(f"{name} 의 이니셜: {initial}")
+last = name[-1]        # 'e' — 마지막 글자
+print(name, "의 이니셜:", initial)
+# Alice 의 이니셜: A
 \`\`\`
 
-> ⚠️ **인덱스가 범위 밖이면 에러!**
-> \`\`\`python
-> text = "hi"
-> print(text[5])   # IndexError
-> \`\`\`
-> \`len(text)\` 보다 작은 인덱스만 안전.`
+### ⚠️ 인덱스가 범위 밖이면 에러!
+
+\`\`\`python
+text = "hi"
+print(text[5])   # IndexError
+\`\`\`
+
+안전한 범위: \`0 ~ len(text)-1\` (앞에서), \`-len(text) ~ -1\` (뒤에서).`
+        },
+        {
+          id: "predict-neg-index",
+          type: "predict",
+          title: "💭 어떤 글자가 나올까?",
+          content: `이 코드를 실행하면 어떤 결과가 나올까요?
+
+\`\`\`python
+word = "MONKEY"
+print(word[-2])
+\`\`\``,
+          options: ["M", "K", "E", "Y"],
+          answer: 2,
+          explanation: "MONKEY 의 마지막 글자는 Y (인덱스 -1). 그 앞은 E (인덱스 -2). 그래서 word[-2] = E.\n\nM(0/-6) O(1/-5) N(2/-4) K(3/-3) E(4/-2) Y(5/-1) — 앞 인덱스와 뒤 인덱스가 같은 글자를 가리켜요."
         },
         {
           id: "try-len-index",
           type: "tryit",
           title: "🖥️ 직접 해보기 — 길이와 인덱스",
           task: "이름의 첫 글자, 마지막 글자, 길이를 출력하세요!",
-          initialCode: "name = \"Python\"\n\n# 첫 글자\nfirst = name[___]\n# 마지막 글자 (음수 인덱스)\nlast = name[___]\n# 길이\nlength = ___(name)\n\nprint(f\"첫: {first}, 끝: {last}, 길이: {length}\")",
-          expectedOutput: "첫: P, 끝: n, 길이: 6",
-          hint: "name[0], name[-1], len(name)",
-          hint2: "first = name[0]\nlast = name[-1]\nlength = len(name)"
+          initialCode: "name = \"Python\"\n\n# 첫 글자\nfirst = name[___]\n# 마지막 글자 (음수 인덱스)\nlast = name[___]\n# 길이\nlength = ___(name)\n\nprint(\"첫:\", first)\nprint(\"끝:\", last)\nprint(\"길이:\", length)",
+          expectedOutput: "첫: P\n끝: n\n길이: 6",
+          hint: "첫 글자는 0번. 마지막 글자는 음수 인덱스로 한 번에. 길이 구하는 내장함수도 기억나죠?",
+          hint2: "0 / -1 / len"
         }
       ]
     },
