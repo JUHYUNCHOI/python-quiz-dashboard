@@ -460,59 +460,36 @@ export default function ProfilePage() {
         <div className="lg:flex-1 space-y-4">
         {/* 메뉴 */}
         <div className="space-y-2">
-          {profile?.role !== "teacher" && (
-            <>
-              <Link href="/analytics">
-                <Card className="p-4 border border-gray-100 hover:border-blue-200 transition-all cursor-pointer">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl">📊</span>
-                    <span className="font-medium text-gray-700">{t("학습 분석", "Learning Analytics")}</span>
+          {/* 현재 반 표시 / 반 참가 — 반 기능만 유지 (2026-05 단순화) */}
+          {myClass ? (
+            <Card className="p-4 border border-orange-200 bg-orange-50/40">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Users className="w-5 h-5 text-orange-500" />
+                  <div>
+                    <p className="text-xs text-gray-400">{t("현재 반", "Current Class")}</p>
+                    <p className="font-bold text-gray-800">{myClass.name}</p>
                   </div>
-                </Card>
-              </Link>
-              <Link href="/progress">
-                <Card className="p-4 border border-gray-100 hover:border-green-200 transition-all cursor-pointer">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl">📈</span>
-                    <span className="font-medium text-gray-700">{t("학습 진도", "Learning Progress")}</span>
-                  </div>
-                </Card>
-              </Link>
-              {/* 현재 반 + 탈퇴 */}
-              {myClass ? (
-                <Card className="p-4 border border-orange-200 bg-orange-50/40">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Users className="w-5 h-5 text-orange-500" />
-                      <div>
-                        <p className="text-xs text-gray-400">{t("현재 반", "Current Class")}</p>
-                        <p className="font-bold text-gray-800">{myClass.name}</p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={handleLeaveClass}
-                      disabled={leavingClass}
-                      className="text-xs font-bold text-red-400 hover:text-red-600 transition-colors disabled:opacity-50"
-                    >
-                      {leavingClass ? t("처리 중...", "Leaving...") : t("탈퇴", "Leave")}
-                    </button>
-                  </div>
-                </Card>
-              ) : (
-                <Link href="/join">
-                  <Card className="p-4 border border-gray-100 hover:border-orange-200 transition-all cursor-pointer">
-                    <div className="flex items-center gap-3">
-                      <Users className="w-5 h-5 text-orange-500" />
-                      <span className="font-medium text-gray-700">{t("반 참가하기", "Join Class")}</span>
-                    </div>
-                  </Card>
-                </Link>
-              )}
-              {/* 선생님 전환 link 제거 (2026-05 단순화) */}
-            </>
+                </div>
+                <button
+                  onClick={handleLeaveClass}
+                  disabled={leavingClass}
+                  className="text-xs font-bold text-red-400 hover:text-red-600 transition-colors disabled:opacity-50"
+                >
+                  {leavingClass ? t("처리 중...", "Leaving...") : t("탈퇴", "Leave")}
+                </button>
+              </div>
+            </Card>
+          ) : (
+            <Link href="/join">
+              <Card className="p-4 border border-gray-100 hover:border-orange-200 transition-all cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <Users className="w-5 h-5 text-orange-500" />
+                  <span className="font-medium text-gray-700">{t("반 참가하기", "Join Class")}</span>
+                </div>
+              </Card>
+            </Link>
           )}
-
-          {/* 선생님 전용 UI 제거 (2026-05 단순화) — 모두 학생 view */}
 
         </div>
         </div>
