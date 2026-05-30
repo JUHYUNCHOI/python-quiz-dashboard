@@ -1038,8 +1038,8 @@ export default function CurriculumPage() {
           </div>
         </div>
 
-        {/* 🗺️ 학습 여정 맵 — C++ 전용 (데스크탑). 기본 접힘 — 시각 부담 ↓ */}
-        {isCpp && loaded && (
+        {/* 🗺️ 학습 여정 맵 (C++/Python) 제거됨 — /journey 페이지가 진짜 지도 (2026-05) */}
+        {false && isCpp && loaded && (
           <details className="max-w-[1600px] mx-auto mb-6 hidden sm:block group">
             <summary className="cursor-pointer list-none flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors text-sm font-bold text-gray-600">
               <span className="group-open:rotate-90 transition-transform text-xs">▶</span>
@@ -1165,8 +1165,8 @@ export default function CurriculumPage() {
           </details>
         )}
 
-        {/* 🗺️ 학습 여정 맵 — Python 전용 (데스크탑). 기본 접힘 */}
-        {!isCpp && !isPseudo && loaded && (
+        {/* 🗺️ 학습 여정 맵 (Python) 제거됨 — /journey 페이지가 진짜 지도 (2026-05) */}
+        {false && !isCpp && !isPseudo && loaded && (
           <details className="max-w-[1600px] mx-auto mb-6 hidden sm:block group">
             <summary className="cursor-pointer list-none flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors text-sm font-bold text-gray-600">
               <span className="group-open:rotate-90 transition-transform text-xs">▶</span>
