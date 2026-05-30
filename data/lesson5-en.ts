@@ -203,7 +203,7 @@ print(text[3])    # h
 
 \`\`\`python
 text = "Python"
-#        P  y  t  h  o  n
+#        P   y   t   h   o   n
 #      [-6][-5][-4][-3][-2][-1]   ← from the back
 
 print(text[-1])   # n (last)

@@ -199,7 +199,7 @@ print(text[3])    # h
 
 \`\`\`python
 text = "Python"
-#        P  y  t  h  o  n
+#        P   y   t   h   o   n
 #      [-6][-5][-4][-3][-2][-1]   ← 뒤에서부터
 
 print(text[-1])   # n (마지막)
