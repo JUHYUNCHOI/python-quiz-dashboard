@@ -41,12 +41,13 @@ print(type(hero))
 
 \`\`\`python
 class Character:
-    def __init__(self, char_name):
-        self.char_name = char_name
+    def __init__(s, char_name):
+        s.char_name = char_name
         print(f'{char_name} 생성!')
 \`\`\`
 
 💡 \`__init__\`은 객체를 만들 때 **자동 실행**되는 초기화 함수예요!
+💡 \`s\`는 "자기 자신" — 지금 만들어지고 있는 그 객체예요. (보통 \`self\`라고 쓰지만 이 교재는 짧게 \`s\`)
 
 @핵심: \`__init__\`에 이름을 넣으면 빈 붕어빵에 속이 들어간다!`
     },
@@ -58,9 +59,9 @@ class Character:
 
 \`\`\`python
 class Character:
-    def __init__(self, char_name, char_hp):
-        self.char_name = char_name
-        self.char_hp = char_hp
+    def __init__(s, char_name, char_hp):
+        s.char_name = char_name
+        s.char_hp = char_hp
 
 hero = Character('용사', 100)
 print(f'이름: {hero.char_name}')
@@ -89,13 +90,13 @@ print(f'HP: {hero.char_hp}')
       id: "ch2-3",
       type: "explain",
       title: "💭 __init__의 s는 대체 누구일까?",
-      content: `💭 \`def __init__(self, char_name)\`에서 **s**는 뭘까? 어디서 온 거지?
+      content: `💭 \`def __init__(s, char_name)\`에서 **s**는 뭘까? 어디서 온 거지?
 
 \`\`\`python
 class Character:
-    def __init__(self, char_name):
+    def __init__(s, char_name):
         print(f's는 누구? {s}')
-        self.char_name = char_name
+        s.char_name = char_name
 
 hero = Character('용사')
 print(f'hero는 누구? {hero}')
@@ -110,10 +111,10 @@ hero는 누구? <__main__.Character object at 0x123abc>
 → **주소가 같아요!** s와 hero는 같은 객체!
 
 🍩 붕어빵 틀에서 붕어빵이 찍힐 때:
-- \`s\` = "지금 만들어지고 있는 이 붕어빵"
+- \`s\` = "지금 만들어지고 있는 이 붕어빵" (자기 자신)
 - \`hero\` = "완성된 붕어빵의 이름표"
 
-⚠️ 보통 \`self\`라고 쓰지만, 이 교재에서는 \`s\`를 써요!
+⚠️ 보통 \`self\`라고 쓰지만, 이 교재에서는 짧게 \`s\`를 써요! (둘 다 똑같이 동작)
 
 @핵심: **s(self)는 "나 자신"** — 만들어지고 있는 그 객체를 가리킨다!`
     },
@@ -125,7 +126,7 @@ hero는 누구? <__main__.Character object at 0x123abc>
       component: "typeAlong",
       targetTitle: "캐릭터 클래스 만들기",
       targetDescription: "class와 __init__으로 캐릭터 생성",
-      targetCode: "class Character:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\nhero = Character('용사', 100)\nprint(f'{hero.name}: HP {hero.hp}')",
+      targetCode: "class Character:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\nhero = Character('용사', 100)\nprint(f'{hero.name}: HP {hero.hp}')",
       expectedOutput: "용사: HP 100"
     },
     {
@@ -134,7 +135,7 @@ hero는 누구? <__main__.Character object at 0x123abc>
       title: "빈칸 채우기: 클래스 기본",
       description: "클래스를 완성하세요!",
       component: "fillInBlank",
-      codeTemplate: "___1___ Dog:\n    def ___2___(self, name):\n        ___3___.name = name\n\ndog = Dog('멍멍이')\nprint(dog.name)",
+      codeTemplate: "___1___ Dog:\n    def ___2___(s, name):\n        ___3___.name = name\n\ndog = Dog('멍멍이')\nprint(dog.name)",
       blanks: [
         { id: "1", answer: "class", hint: "클래스 정의!" },
         { id: "2", answer: "__init__", hint: "초기화 함수!" },

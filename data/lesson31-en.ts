@@ -22,16 +22,18 @@ export const lesson31EnData: LessonData = {
         {
           id: "ch1-0",
           type: "explain",
-          title: "🏆 Comprehensive Challenge!",
-          content: `## Parts 1~3 Full Review!
+          title: "🏆 30-Problem Challenge!",
+          content: `## Time to use everything you've learned!
 
-| Part | # of Problems |
-|------|---------------|
-| ⭐ Basics | 10 problems |
-| ⭐⭐ Data Structures | 10 problems |
-| ⭐⭐⭐ Comprehensive | 10 problems |
+| Part | Topics | # of Problems |
+|------|--------|---------------|
+| ⭐ Basics | operators / if / loops / strings | 10 problems |
+| ⭐⭐ Data Structures | list / dict / set / slicing | 10 problems |
+| ⭐⭐⭐ Mixed | combine many ideas at once! | 10 problems |
 
-30 problems total! Get 24 or more correct to pass! 🎯`
+💪 **30 problems total!** Get 24+ correct to pass! 🎯
+
+@Key point: If you're stuck — check hint, then hint2. Even if you miss it, the explanation teaches you!`
         },
         {
           id: "ch1-1",
@@ -210,11 +212,11 @@ print(f'Original {len(nums)} items -> {len(unique)} items')`,
         {
           id: "ch2-6",
           type: "quiz",
-          title: "Problem 17",
+          title: "Problem 17 (gotcha!)",
           content: "What is the output?\n\n```python\na = [1, 2, 3]\nb = a\nb.append(4)\nprint(a)\n```",
           options: ["[1, 2, 3]", "[1, 2, 3, 4]", "[4]", "Error"],
           answer: 1,
-          explanation: "b = a points to the same list! Appending to b also changes a!"
+          explanation: "Gotcha! `b = a` adds a *second name tag* to the same list (not a copy). Appending to `b` changes `a` too! To really copy: `b = a.copy()` or `b = a[:]`."
         },
         {
           id: "ch2-7",
@@ -323,8 +325,8 @@ print(f'Count: {len(primes)}')`,
         {
           id: "ch3-3",
           type: "tryit",
-          title: "Problem 24: Sort Students",
-          task: "Sort students by their scores!",
+          title: "Problem 24: Sort Students (lambda preview)",
+          task: "Run the code to sort students by score! (lambda is taught properly in L34)",
           initialCode: `students = [
     ('Tom', 85), ('Jane', 92),
     ('Mike', 78), ('Sara', 95),
@@ -332,28 +334,30 @@ print(f'Count: {len(primes)}')`,
 ]
 
 # Sort by score (descending)
+# lambda x: x[1] -> use the tuple's second item (score) as the key!
 ranked = sorted(students, key=lambda x: x[1], reverse=True)
 
+# enumerate(list, 1) -> gives (index starting at 1, value) pairs!
 print('=== Score Rankings ===')
 for i, (name, score) in enumerate(ranked, 1):
     print(f'#{i}: {name} ({score} pts)')`,
           expectedOutput: `=== Score Rankings ===\n#1: Sara (95 pts)\n#2: Jane (92 pts)\n#3: Alex (88 pts)\n#4: Tom (85 pts)\n#5: Mike (78 pts)`,
-          hint: "The key parameter in sorted sets the sort criteria!",
-          hint2: "lambda x: x[1] sorts by the second element (score) in the tuple!"
+          hint: "sorted's key parameter tells it what to sort by!",
+          hint2: "lambda x: x[1] = sort by tuple's second item (score)! reverse=True = descending (largest first)!"
         },
         {
           id: "ch3-4",
           type: "mission",
           title: "Problem 25: Star Pyramid",
-          task: "Fill in the 2 blanks to complete the star pyramid!",
+          task: "Fill in the 2 blanks to complete the star pyramid! (i=1 -> 1 star, i=2 -> 3 stars...)",
           initialCode: `n = 5
 for i in range(1, n+1):
     spaces = ' ' * (n - ___)
     stars = '*' * (2 * i ___ 1)
     print(spaces + stars)`,
           expectedOutput: `    *\n   ***\n  *****\n *******\n*********`,
-          hint: "Spaces decrease while stars increase by odd numbers!",
-          hint2: "i / -"
+          hint: "Spaces shrink by (n-i), stars grow by odd numbers (2*i-1)!",
+          hint2: "i / - (spaces = n-i, stars = 2*i-1)"
         },
         {
           id: "ch3-5",
@@ -425,8 +429,8 @@ for num, count in counter.items():
         {
           id: "ch3-9",
           type: "tryit",
-          title: "Problem 30: Final Mission!",
-          task: "Run the comprehensive data processing code!",
+          title: "Problem 30: Final Mission! (shopping data)",
+          task: "Run the code! Use a dictionary to total each item, then sort. (lambda again - taught properly in L34!)",
           initialCode: `# Shopping data
 purchases = [
     {'item': 'Apple', 'price': 1500, 'qty': 3},

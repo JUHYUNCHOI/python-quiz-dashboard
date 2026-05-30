@@ -15,7 +15,7 @@ export const lesson47EnData: LessonData = {
           id: "ch1-0",
           type: "explain",
           title: "💭 Can I build a real app with the modules I learned?",
-          content: `💭 math, json, dictionaries, functions... can we **combine** everything we've learned to build a real usable app? Let's try making a **weather app**!
+          content: `💭 math, json, dictionaries, functions... can we **pull every tool out of the toolbox** and build a real **weather app**? Today's challenge!
 
 \`\`\`python
 # What we're building: a weather info app!

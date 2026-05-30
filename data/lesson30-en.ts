@@ -68,14 +68,16 @@ for s in students:
 💭 We've seen grades by student... but how do we get the **average by subject**? We need to extract just the Korean scores and compute the average!
 
 \`\`\`python
-# Use list comprehension to extract one subject!
-kor_scores = [s['kor'] for s in students]
+# Method 1: collect with a for loop (familiar!)
+kor_scores = []
+for s in students:
+    kor_scores.append(s['kor'])
 # [85, 95, 72, 88]
 
 avg = sum(kor_scores) / len(kor_scores)
 \`\`\`
 
-@Key idea: Use **list comprehension** to extract scores for a specific subject and average them!`
+@Key idea: Use a \`for\` loop to collect scores for one subject, then average with \`sum()\` / \`len()\`!`
         },
         {
           id: "ch1-3",

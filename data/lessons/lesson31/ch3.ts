@@ -52,8 +52,8 @@ print(f'개수: {len(primes)}개')`,
     {
       id: "ch3-3",
       type: "tryit",
-      title: "문제 24: 학생 정렬",
-      task: "학생을 점수순으로 정렬하세요!",
+      title: "문제 24: 학생 정렬 (lambda 맛보기)",
+      task: "코드를 실행해서 학생을 점수순으로 정렬해 봐! (lambda는 L34에서 본격적으로 배워)",
       initialCode: `students = [
     ('철수', 85), ('영희', 92),
     ('민수', 78), ('지영', 95),
@@ -61,28 +61,30 @@ print(f'개수: {len(primes)}개')`,
 ]
 
 # 점수순 정렬 (내림차순)
+# lambda x: x[1] → 튜플의 두 번째(점수)를 기준으로!
 ranked = sorted(students, key=lambda x: x[1], reverse=True)
 
+# enumerate(리스트, 1) → 1번부터 번호+값을 같이 줘!
 print('=== 성적 순위 ===')
 for i, (name, score) in enumerate(ranked, 1):
     print(f'{i}등: {name} ({score}점)')`,
       expectedOutput: `=== 성적 순위 ===\n1등: 지영 (95점)\n2등: 영희 (92점)\n3등: 현우 (88점)\n4등: 철수 (85점)\n5등: 민수 (78점)`,
-      hint: "sorted의 key 매개변수로 정렬 기준을 정해요!",
-      hint2: "lambda x: x[1]은 튜플의 두 번째(점수)를 기준으로!"
+      hint: "sorted의 key 매개변수로 '뭘 기준으로 정렬할지' 정해!",
+      hint2: "lambda x: x[1] = 튜플의 두 번째(점수)로 정렬! reverse=True 는 내림차순(큰 순서)!"
     },
     {
       id: "ch3-4",
       type: "mission",
       title: "문제 25: 별 피라미드",
-      task: "빈칸 2개를 채워서 별 피라미드를 완성하세요!",
+      task: "빈칸 2개를 채워서 별 피라미드를 완성하세요! (i=1일 때 별 1개, i=2일 때 별 3개...)",
       initialCode: `n = 5
 for i in range(1, n+1):
     spaces = ' ' * (n - ___)
     stars = '*' * (2 * i ___ 1)
     print(spaces + stars)`,
       expectedOutput: `    *\n   ***\n  *****\n *******\n*********`,
-      hint: "공백은 줄어들고, 별은 홀수개씩 늘어나요!",
-      hint2: "i / -"
+      hint: "공백은 (n-i)개씩 줄어들고, 별은 (2*i-1)개씩 홀수로 늘어나!",
+      hint2: "i / - (공백 = n-i, 별 = 2*i-1)"
     },
     {
       id: "ch3-5",
@@ -154,8 +156,8 @@ for num, count in counter.items():
     {
       id: "ch3-9",
       type: "tryit",
-      title: "문제 30: 최종 미션!",
-      task: "종합 데이터 처리를 실행하세요!",
+      title: "문제 30: 최종 미션! (쇼핑 데이터 처리)",
+      task: "코드 실행! 딕셔너리로 아이템별 총 금액을 모아 정렬해 봐. (lambda 다시 등장 — L34에서 본격적으로!)",
       initialCode: `# 쇼핑 데이터
 purchases = [
     {'item': '사과', 'price': 1500, 'qty': 3},
