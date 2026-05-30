@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { X, BookOpen, Trophy, Flame, ChevronDown, ExternalLink, Check, AlertTriangle, Dumbbell } from "lucide-react"
 import { StudentProgress } from "@/components/teacher/student-progress"
 import { StudentQuizReport } from "@/components/teacher/student-quiz-report"
@@ -241,6 +241,29 @@ export function StudentDetailPanel({
 }: Props) {
   const [expandedQ, setExpandedQ] = useState<number | null>(null)
   const [fetchedQuestions, setFetchedQuestions] = useState<Map<number, any>>(new Map())
+  // 학생 틀린 문제 창고 통계 (남은 / 마스터)
+  const [wrongBankStats, setWrongBankStats] = useState<{ remaining: number; mastered: number } | null>(null)
+
+  // 학생 변경 시 창고 stats fetch
+  useEffect(() => {
+    if (!student?.id) { setWrongBankStats(null); return }
+    let cancelled = false
+    import("@/lib/supabase/client").then(({ createClient }) => {
+      const supabase = createClient()
+      supabase
+        .from("wrong_question_bank")
+        .select("mastered")
+        .eq("user_id", student.id)
+        .then(({ data }) => {
+          if (cancelled || !data) return
+          setWrongBankStats({
+            remaining: data.filter(b => !b.mastered).length,
+            mastered: data.filter(b => b.mastered).length,
+          })
+        })
+    }).catch(() => {})
+    return () => { cancelled = true }
+  }, [student?.id])
 
   const handleExpandQuestion = async (id: number) => {
     if (expandedQ === id) { setExpandedQ(null); return }
@@ -461,6 +484,26 @@ export function StudentDetailPanel({
               </div>
             )
           })()}
+
+          {/* 📚 틀린 문제 창고 stats — DB sync */}
+          {wrongBankStats && (wrongBankStats.remaining > 0 || wrongBankStats.mastered > 0) && (
+            <div className="mx-4 mt-3 rounded-2xl border-2 border-rose-200 bg-rose-50/60 p-3">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[11px] font-black text-gray-500 uppercase tracking-wider">
+                  📚 {lang === "en" ? "Wrong Bank" : "틀린 문제 창고"}
+                </span>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-rose-700 font-bold">
+                    {lang === "en" ? "Left" : "남은"} <span className="text-base font-black tabular-nums">{wrongBankStats.remaining}</span>
+                  </span>
+                  <span className="text-gray-300">·</span>
+                  <span className="text-emerald-700 font-bold">
+                    {lang === "en" ? "Master" : "마스터"} <span className="text-base font-black tabular-nums">{wrongBankStats.mastered}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Collapsible sections */}
           <div className="px-4 mt-4 space-y-2">

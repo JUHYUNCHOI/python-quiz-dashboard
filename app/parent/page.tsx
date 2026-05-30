@@ -324,6 +324,7 @@ function ParentReportPage() {
   const token = searchParams.get("t") || ""
   const [data, setData] = useState<ParentReportData | null>(null)
   const [homework, setHomework] = useState<HomeworkItem[]>([])
+  const [wrongBankStats, setWrongBankStats] = useState<{ remaining: number; mastered: number } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
@@ -343,7 +344,7 @@ function ParentReportPage() {
         }
         setData(result as ParentReportData)
 
-        // 과제 제출 내역 조회 (token으로 student_id 매핑)
+        // 과제 제출 내역 + 틀린 문제 창고 (token으로 student_id 매핑)
         if (result?.student_id) {
           const { data: hw } = await supabase
             .from("homework_submissions")
@@ -352,6 +353,17 @@ function ParentReportPage() {
             .order("submitted_at", { ascending: false })
             .limit(10)
           if (hw) setHomework(hw as HomeworkItem[])
+          // 틀린 문제 창고 — 남은 + 마스터 카운트
+          const { data: bank } = await supabase
+            .from("wrong_question_bank")
+            .select("mastered")
+            .eq("user_id", result.student_id)
+          if (bank) {
+            setWrongBankStats({
+              remaining: bank.filter(b => !b.mastered).length,
+              mastered: bank.filter(b => b.mastered).length,
+            })
+          }
         }
       } catch { setError(t("오류가 발생했습니다", "An error occurred")) }
       setLoading(false)
@@ -555,6 +567,26 @@ function ParentReportPage() {
         ) : (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
             <p className="text-sm text-gray-500">{t("아직 학습을 시작하지 않았어요. 첫 레슨을 시작하면 여기에 능력 설명이 나타나요.", "Learning hasn't started yet. Complete the first lesson to see a skill summary here.")}</p>
+          </div>
+        )}
+
+        {/* 📚 틀린 문제 창고 — 자녀가 풀어야 할 / 마스터한 문제 */}
+        {wrongBankStats && (wrongBankStats.remaining > 0 || wrongBankStats.mastered > 0) && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+            <h2 className="text-sm font-black text-gray-700 mb-3">📚 {t("틀린 문제 창고", "Wrong Question Bank")}</h2>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-xl border-2 border-rose-200 bg-rose-50 p-3 text-center">
+                <p className="text-3xl font-black text-rose-700 tabular-nums">{wrongBankStats.remaining}</p>
+                <p className="text-xs font-bold text-rose-600 mt-1">{t("아직 풀어야 할 문제", "To master")}</p>
+              </div>
+              <div className="rounded-xl border-2 border-emerald-200 bg-emerald-50 p-3 text-center">
+                <p className="text-3xl font-black text-emerald-700 tabular-nums">{wrongBankStats.mastered}</p>
+                <p className="text-xs font-bold text-emerald-600 mt-1">{t("마스터 ✓", "Mastered ✓")}</p>
+              </div>
+            </div>
+            <p className="text-[11px] text-gray-500 mt-3 leading-relaxed">
+              {t("복습에서 틀린 문제 자동 저장. 자녀가 다시 풀어 마스터하면 ✓ 됨.", "Wrong answers auto-saved. ✓ when child re-solves correctly.")}
+            </p>
           </div>
         )}
 
