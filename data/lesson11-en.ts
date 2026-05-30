@@ -18,35 +18,25 @@ export const lesson11EnData: LessonData = {
           id: "intro",
           type: "explain",
           title: "🎮 Building a Fork in the Road",
-          content: `Seen these in games?
+          content: `In games, when your HP hits 0 you see a Game Over screen, right?
 
-- If HP is 0 → Game Over!
-- If score ≥ 100 → Level Up!
-- If you have an item → You can use it!
+"If HP is 0 → Game Over" is an **"if ~ then ~"** — that's a **fork in your code**.
 
-All of them follow the **"if ~ then ~"** shape. They're **forks in your code**.
-
-\`\`\`
-       ┌── (condition true)  → run this code
-─ if ──┤
-       └── (condition false) → skip
-\`\`\`
-
-The thing that builds this fork is the **conditional (if statement)**.`
+The thing that builds this fork is what we'll learn today: the **conditional (if statement)**.`
         },
         {
           id: "syntax-explain",
           type: "explain",
-          title: "📝 if Syntax — Two Rules",
+          title: "📝 if Syntax",
           content: `\`\`\`python
 if condition:
     code to run
 \`\`\`
 
-Python's \`if\` only needs **two rules**:
+Only two things to remember!
 
-1. A **colon \`:\`** after the condition (miss it → SyntaxError)
-2. The next line must be **indented 4 spaces**
+1. A **colon \`:\`** after the condition — miss it and you get a red squiggle!
+2. Next line **indented 4 spaces**
 
 \`\`\`python
 score = 100
@@ -54,7 +44,7 @@ if score >= 100:
     print('Level up!')   ← indented 4 spaces
 \`\`\`
 
-> 💡 No indent? **\`IndentationError\`**! Other languages group blocks with \`{}\`, but in Python the indent itself IS the group.`
+> 💡 No indent? Python tells you "the indentation is wrong" (\`IndentationError\`).`
         },
         {
           id: "syntax-builder",
@@ -66,7 +56,7 @@ if score >= 100:
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Fill the if Statement — Game Over if hp is 0",
           task: "If hp is 0, print 'Game Over!'!",
           initialCode: "hp = 0\n# If hp is 0, print 'Game Over!'\nif ___:\n    print('Game Over!')",
           expectedOutput: "Game Over!",
@@ -76,7 +66,7 @@ if score >= 100:
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — 2 Things an if Needs",
           content: "What are the 2 essential things in an if statement?",
           options: ["Parentheses and semicolons", "Colon (:) and indentation", "Curly braces and colon", "Parentheses and indentation"],
           answer: 1,
@@ -109,7 +99,7 @@ else:
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Fill the if-else — Pass / Fail",
           task: "If score is 60 or above, print 'Pass'; otherwise print 'Fail'!",
           initialCode: "score = 75\n# Write the condition that decides Pass vs Fail\nif ___:\n    print('Pass')\nelse:\n    print('Fail')",
           expectedOutput: "Pass",
@@ -119,7 +109,7 @@ else:
         {
           id: "nested-sim",
           type: "explain",
-          title: "🔍 Trace: Nested if (True path)",
+          title: "🔍 Trace — When Both Are True",
           content: `See how nested if statements execute when **both conditions are True**!
 
 Press **▶ Run** or **▷ Step** to trace the execution.`,
@@ -128,16 +118,26 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
         {
           id: "nested-sim-false",
           type: "explain",
-          title: "🔍 Trace: Nested if (False path)",
-          content: `Now has_id is **False**! The outer if is True but the inner if is False — where does it go?
+          title: "🔍 Trace — When the Inner Condition Fails",
+          content: `Now has_id is **False**! The outer if passed but the inner if doesn't — where does it go?
 
 Press **▶ Run** or **▷ Step** to trace the execution.`,
           component: "codeTracePyNestedIfFalse",
         },
         {
+          id: "try-nested-outer",
+          type: "tryit",
+          title: "🖥️ Nested if Ladder 1 — Fill the Outer if Only",
+          task: "The inner if is already filled in. Complete the outer if so we only reach the inner if when logged_in is True!",
+          initialCode: "logged_in = True\nis_admin = True\n# Only fill the outer if\nif ___:\n    if is_admin:\n        print('Admin Menu')",
+          expectedOutput: "Admin Menu",
+          hint: "Just check if logged_in is True!",
+          hint2: "if logged_in:"
+        },
+        {
           id: "try-nested",
           type: "tryit",
-          title: "🖥️ Try It Yourself — Nested if",
+          title: "🖥️ Nested if Ladder 2 — Fill Both",
           task: "Print 'Admin Menu' only when both logged_in and is_admin are True!",
           initialCode: "logged_in = True\nis_admin = True\n# Both conditions must be True\nif ___:\n    if ___:\n        print('Admin Menu')",
           expectedOutput: "Admin Menu",
@@ -147,7 +147,7 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
         {
           id: "quiz2",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — Predict the if-else Output",
           content: "What is the output?\n\n```python\nx = 5\nif x > 10:\n    print('A')\nelse:\n    print('B')\n```",
           options: ["A", "B", "AB", "Nothing is printed"],
           answer: 1,
@@ -163,31 +163,37 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
         {
           id: "elif-explain",
           type: "explain",
-          title: "🔢 elif: Multiple Forks",
-          content: `Got 3+ forks? Use **elif**!
+          title: "🔢 elif — When You Have 3+ Forks",
+          content: `With just if / else, you have 2 forks. For **3 or more**, you need **elif**.
 
-> 💡 \`elif\` is short for \`else if\` — "if not that, then maybe this"
+\`elif\` is short for \`else if\` — "if not that, then maybe this".
 
 \`\`\`python
-score = 85
 if score >= 90:
     print('A')
-elif score >= 80:   ← not 90? then 80?
+elif score >= 80:
     print('B')
 elif score >= 70:
     print('C')
 else:
     print('F')
-\`\`\`
+\`\`\``
+        },
+        {
+          id: "elif-flow",
+          type: "explain",
+          title: "📐 How elif Runs",
+          content: `Python checks **top to bottom** and runs **only the first True branch**, then skips the rest.
 
-**Rule: top to bottom** check → run **only the first True branch** → skip the rest.
-
-→ 85 isn't ≥ 90 but IS ≥ 80, so **'B'** prints and we're done!`
+Example: \`score = 85\`
+- \`score >= 90\` ? → no, skip
+- \`score >= 80\` ? → yes! → **print 'B' and stop**
+- The remaining elif / else are never even checked`
         },
         {
           id: "elif-sim",
           type: "explain",
-          title: "🔍 Trace: score=85 → B (elif path)",
+          title: "🔍 Trace — When score is 85",
           content: `Follow the code line by line to see which branch gets executed when score=85!
 
 Press **▶ Run** or **▷ Step** to trace the execution.`,
@@ -196,8 +202,8 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
         {
           id: "elif-sim-false",
           type: "explain",
-          title: "🔍 Trace: score=65 → C (else path)",
-          content: `Now score=65! When ALL conditions are False, watch how the code falls through to else!
+          title: "🔍 Trace — When score is 65",
+          content: `Now score=65! When all earlier conditions are false, watch how the code falls through to else!
 
 Press **▶ Run** or **▷ Step** to trace the execution.`,
           component: "codeTracePyIfElseLow",
@@ -214,7 +220,7 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Fill in elif — Print the Grade",
           task: "Print the grade based on the score! (95 → A)",
           initialCode: "score = 95\nif score >= 90:\n    print('A')\n___:\n    print('B')\nelse:\n    print('C')",
           expectedOutput: "A",
@@ -224,7 +230,7 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
         {
           id: "quiz3",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — How Many elif Can You Use?",
           content: "How many elif statements can you use?",
           options: ["Only 1", "Up to 2", "Up to 5", "Unlimited"],
           answer: 3,
@@ -241,11 +247,11 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
           id: "mission1",
           type: "mission",
           title: "🏆 Final Mission — RPG Health System!",
-          task: "Print a status message based on the hero's HP! (hp=30 should show '⚠️ Danger!')\n\n• 0 or below → '💀 Game Over!'\n• 1~30 → '⚠️ Danger! Heal up!'\n• 31~70 → '🟢 OK'\n• Otherwise → '💪 Full health!'",
+          task: "Print a status message based on hp. When hp=30, it should show '⚠️ Danger!'.\n\n| HP range | Output |\n|---|---|\n| 0 or below | 💀 Game Over! |\n| 1~30 | ⚠️ Danger! |\n| 31~70 | 🟢 OK |\n| 71 or more | 💪 Full health! |\n\nFill in the two elif blanks!",
           initialCode: "hp = 30\nif hp <= 0:\n    print('💀 Game Over!')\nelif ___:\n    print('⚠️ Danger! Heal up!')\nelif ___:\n    print('🟢 OK')\nelse:\n    print('💪 Full health!')",
           expectedOutput: "⚠️ Danger! Heal up!",
-          hint: "elif checks top-down — after hp <= 0, where does 'Danger' end?",
-          hint2: "hp <= 30 / hp <= 70"
+          hint: "Remember it checks top-down. hp <= 0 already got filtered, so the next elif only needs to cover up to 30.",
+          hint2: "First blank: hp <= 30\nSecond blank: hp <= 70"
         },
         {
           id: "complete",

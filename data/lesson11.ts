@@ -18,35 +18,25 @@ export const lesson11Data: LessonData = {
           id: "intro",
           type: "explain",
           title: "🎮 갈림길 만들기",
-          content: `게임에서 이런 상황 본 적 있죠?
+          content: `게임에서 HP 가 0 이 되면 게임 오버 화면이 뜨죠?
 
-- HP 가 0 이면 → 게임 오버!
-- 점수가 100 점 이상이면 → 레벨업!
-- 아이템이 있으면 → 사용 가능!
+"HP 가 0 이면 → 게임 오버" 같은 **"~ 면 ~ 한다"** 가 바로 코드의 **갈림길**.
 
-전부 **"~ 면 ~ 한다"** 모양. 코드의 **갈림길** 이에요.
-
-\`\`\`
-       ┌── (조건 참) → 이쪽 코드 실행
-─ if ──┤
-       └── (조건 거짓) → 건너뜀
-\`\`\`
-
-이 갈림길을 만드는 게 **조건문 (if 문)**.`
+이걸 만드는 게 오늘 배울 **조건문 (if 문)** 이에요.`
         },
         {
           id: "syntax-explain",
           type: "explain",
-          title: "📝 if 문 문법 — 두 가지 약속",
+          title: "📝 if 문 문법",
           content: `\`\`\`python
 if 조건:
     실행할 코드
 \`\`\`
 
-파이썬 if 는 **두 가지 약속** 만 지키면 끝!
+기억할 건 딱 두 개!
 
-1. 조건 뒤에 **콜론 \`:\`** (잊으면 SyntaxError)
-2. 실행할 줄은 **4 칸 들여쓰기** (스페이스 4 번)
+1. 조건 뒤에 **콜론 \`:\`** — 빠지면 빨간 줄!
+2. 다음 줄은 **4 칸 들여쓰기**
 
 \`\`\`python
 score = 100
@@ -54,7 +44,7 @@ if score >= 100:
     print('레벨업!')   ← 4 칸 들여쓰기
 \`\`\`
 
-> 💡 들여쓰기 안 하면? **\`IndentationError\`** 발생! 다른 언어는 \`{}\` 로 묶지만 파이썬은 들여쓰기 자체가 묶음이에요.`
+> 💡 들여쓰기 안 하면 "들여쓰기가 잘못됐어요" 라고 알려줘요 (\`IndentationError\`).`
         },
         {
           id: "syntax-builder",
@@ -66,7 +56,7 @@ if score >= 100:
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
+          title: "🖥️ if 문 빈칸 채우기 — hp 가 0 이면 게임 오버",
           task: "hp가 0이면 '게임 오버!'를 출력하세요!",
           initialCode: "hp = 0\n# hp가 0이면 '게임 오버!' 출력\nif ___:\n    print('게임 오버!')",
           expectedOutput: "게임 오버!",
@@ -76,7 +66,7 @@ if score >= 100:
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — if 문에 꼭 필요한 2 가지",
           content: "if문에서 꼭 필요한 것 2가지는?",
           options: ["괄호와 세미콜론", "콜론(:)과 들여쓰기", "중괄호와 콜론", "괄호와 들여쓰기"],
           answer: 1,
@@ -109,7 +99,7 @@ else:
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
+          title: "🖥️ if-else 빈칸 — 합격 / 불합격",
           task: "점수가 60점 이상이면 '합격', 아니면 '불합격' 출력!",
           initialCode: "score = 75\n# 합격 / 불합격을 가르는 조건을 적어보세요\nif ___:\n    print('합격')\nelse:\n    print('불합격')",
           expectedOutput: "합격",
@@ -119,7 +109,7 @@ else:
         {
           id: "nested-sim",
           type: "explain",
-          title: "🔍 실행 추적: if 안에 if가 있다면? (True 경로)",
+          title: "🔍 실행 추적 — 둘 다 참일 때",
           content: `if 안에 또 if가 있을 때, **둘 다 참**이면 어떻게 되는지 봐요!
 
 **▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
@@ -128,16 +118,26 @@ else:
         {
           id: "nested-sim-false",
           type: "explain",
-          title: "🔍 실행 추적: 안쪽 if가 거짓이면? (False 경로)",
-          content: `이번엔 has_id가 **False**! 바깥 if는 참이지만 안쪽 if가 거짓이면 어디로 갈까요?
+          title: "🔍 실행 추적 — 안쪽 조건이 안 맞을 때",
+          content: `이번엔 has_id가 **거짓**! 바깥 if는 통과했지만 안쪽 if가 안 맞으면 어디로 갈까요?
 
 **▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
           component: "codeTracePyNestedIfFalse",
         },
         {
+          id: "try-nested-outer",
+          type: "tryit",
+          title: "🖥️ 중첩 if 사다리 1 — 바깥 if 만 채우기",
+          task: "안쪽 if 는 이미 채워져 있어요. logged_in 이 참일 때만 안쪽 if 까지 들어가도록 바깥 if 를 완성하세요!",
+          initialCode: "logged_in = True\nis_admin = True\n# 바깥 if 만 채우면 돼요\nif ___:\n    if is_admin:\n        print('관리자 메뉴')",
+          expectedOutput: "관리자 메뉴",
+          hint: "logged_in 이 참인지 확인하면 끝!",
+          hint2: "if logged_in:"
+        },
+        {
           id: "try-nested",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 중첩 if",
+          title: "🖥️ 중첩 if 사다리 2 — 양쪽 다 채우기",
           task: "logged_in 과 is_admin 둘 다 참일 때만 '관리자 메뉴' 출력!",
           initialCode: "logged_in = True\nis_admin = True\n# 두 조건이 모두 참이어야 해요\nif ___:\n    if ___:\n        print('관리자 메뉴')",
           expectedOutput: "관리자 메뉴",
@@ -147,7 +147,7 @@ else:
         {
           id: "quiz2",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — if-else 출력 예측",
           content: "출력 결과는?\n\n```python\nx = 5\nif x > 10:\n    print('A')\nelse:\n    print('B')\n```",
           options: ["A", "B", "AB", "아무것도 안 나옴"],
           answer: 1,
@@ -163,31 +163,37 @@ else:
         {
           id: "elif-explain",
           type: "explain",
-          title: "🔢 elif: 조건이 여러 개일 때",
-          content: `갈림길이 3 개 이상이면 **elif**!
+          title: "🔢 elif — 갈림길이 3 개 이상일 때",
+          content: `if / else 만 있으면 갈림길은 2 개. **3 개 이상**이면 **elif** 가 필요해요.
 
-> 💡 \`elif\` 는 \`else if\` 의 줄임말 — "그게 아니라면 또 다른 if"
+\`elif\` 는 \`else if\` 의 줄임말 — "그게 아니라면 또 다른 if".
 
 \`\`\`python
-score = 85
 if score >= 90:
     print('A')
-elif score >= 80:   ← 90 아니야? 그럼 80 이상?
+elif score >= 80:
     print('B')
 elif score >= 70:
     print('C')
 else:
     print('F')
-\`\`\`
+\`\`\``
+        },
+        {
+          id: "elif-flow",
+          type: "explain",
+          title: "📐 elif 실행 규칙",
+          content: `**위에서 아래로** 검사하다가 **처음 참인 가지** 하나만 실행하고 나머지는 건너뛰어요.
 
-**규칙: 위에서 아래로** 검사 → **처음 참인 가지만** 실행 → 나머지는 건너뜀.
-
-→ 85 점은 90 미만이지만 80 이상이니까 **'B'** 출력 후 끝!`
+예: \`score = 85\`
+- \`score >= 90\` ? → 아니요, 건너뜀
+- \`score >= 80\` ? → 네! → **'B' 출력하고 끝**
+- 나머지 elif / else 는 검사도 안 함`
         },
         {
           id: "elif-sim",
           type: "explain",
-          title: "🔍 실행 추적: score=85 → B학점 (elif 경로)",
+          title: "🔍 실행 추적 — 점수가 85 일 때",
           content: `score=85일 때, if → elif → else 중 어디로 가는지 추적해 보세요!
 
 **▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
@@ -196,7 +202,7 @@ else:
         {
           id: "elif-sim-false",
           type: "explain",
-          title: "🔍 실행 추적: score=65 → C학점 (else 경로)",
+          title: "🔍 실행 추적 — 점수가 65 일 때",
           content: `이번엔 score=65! 모든 조건이 거짓이면 else로 가는 과정을 봐요!
 
 **▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
@@ -214,7 +220,7 @@ else:
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
+          title: "🖥️ elif 빈칸 채우기 — 등급 출력",
           task: "점수에 따른 등급을 출력하세요! (95점 → A)",
           initialCode: "score = 95\nif score >= 90:\n    print('A')\n___:\n    print('B')\nelse:\n    print('C')",
           expectedOutput: "A",
@@ -224,7 +230,7 @@ else:
         {
           id: "quiz3",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — elif 는 몇 개까지?",
           content: "elif는 몇 개까지 쓸 수 있을까요?",
           options: ["1개만", "2개까지", "5개까지", "무제한"],
           answer: 3,
@@ -241,11 +247,11 @@ else:
           id: "mission1",
           type: "mission",
           title: "🏆 최종 미션 — RPG 체력 시스템!",
-          task: "주인공 체력에 따라 상태 메시지를 출력하세요! (hp=30 일 때 '⚠️ 위험!' 이 떠야 해요)\n\n• 0 이하 → '💀 게임 오버!'\n• 1~30 → '⚠️ 위험! 회복 필요!'\n• 31~70 → '🟢 양호'\n• 그 외 → '💪 풀 컨디션!'",
+          task: "hp 값에 따라 상태 메시지를 출력해요. hp=30 일 때 '⚠️ 위험!' 이 떠야 해요.\n\n| HP 범위 | 출력 |\n|---|---|\n| 0 이하 | 💀 게임 오버! |\n| 1~30 | ⚠️ 위험! |\n| 31~70 | 🟢 양호 |\n| 71 이상 | 💪 풀 컨디션! |\n\nelif 두 칸을 채우세요!",
           initialCode: "hp = 30\nif hp <= 0:\n    print('💀 게임 오버!')\nelif ___:\n    print('⚠️ 위험! 회복 필요!')\nelif ___:\n    print('🟢 양호')\nelse:\n    print('💪 풀 컨디션!')",
           expectedOutput: "⚠️ 위험! 회복 필요!",
-          hint: "elif 는 위에서부터 검사 — hp <= 0 다음은 어디까지가 '위험' 일까요?",
-          hint2: "hp <= 30 / hp <= 70"
+          hint: "위에서부터 검사하는 거 기억! hp <= 0 이 이미 걸러졌으니, 다음 elif 는 30 까지만 보면 돼요.",
+          hint2: "첫 번째 빈칸: hp <= 30\n두 번째 빈칸: hp <= 70"
         },
         {
           id: "complete",
