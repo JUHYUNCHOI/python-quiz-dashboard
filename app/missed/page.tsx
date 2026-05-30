@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
-import { getWrongBank, markWrongQuestionMastered, syncWrongBankFromSupabase, type WrongQuestionEntry } from "@/lib/mark-lesson-complete"
+import { getWrongBank, markWrongQuestionMastered, markLearnWrongMastered, syncWrongBankFromSupabase, type WrongQuestionEntry } from "@/lib/mark-lesson-complete"
 import { lessonsData } from "../review/[lessonId]/data/lessons"
 import type { StepContent, LessonData } from "../review/[lessonId]/data/types"
 import { ArrowLeft } from "lucide-react"
@@ -182,29 +182,48 @@ export default function MissedPage() {
                   const steps = lesson ? extractStepsForLesson(lesson) : []
                   const handleDismiss = (e: WrongQuestionEntry) => {
                     if (window.confirm(t("이 문제를 창고에서 제거할까요?", "Remove this question from the bank?"))) {
-                      markWrongQuestionMastered(e.lessonId, e.stepIndex)
-                      // re-read
+                      if (e.source === "learn" && e.stepId) {
+                        markLearnWrongMastered(e.lessonId, e.stepId)
+                      } else {
+                        markWrongQuestionMastered(e.lessonId, e.stepIndex)
+                      }
                       setBank(getWrongBank())
                     }
                   }
                   return (
                     <div className="flex flex-wrap gap-2">
                       {entries.map((e, i) => {
-                        const preview = previewOfStep(steps[e.stepIndex], lang === "en")
+                        const isLearn = e.source === "learn"
+                        // learn-source: 수업 페이지로 deep link (stepId 전달). review-source: /missed/practice
+                        const href = isLearn
+                          ? `/learn/${encodeURIComponent(e.lessonId)}?stepId=${encodeURIComponent(e.stepId ?? "")}`
+                          : `/missed/practice?lesson=${encodeURIComponent(e.lessonId)}&q=${e.stepIndex}`
+                        const preview = isLearn
+                          ? (e.stepId ?? "")
+                          : previewOfStep(steps[e.stepIndex], lang === "en")
                         const previewShort = preview.length > 80 ? preview.slice(0, 80) + "…" : preview
+                        const label = isLearn
+                          ? `📝 ${t("수업", "Lesson")}`
+                          : `Q${e.stepIndex + 1}`
+                        // learn-source 는 살짝 다른 색 (보라) — 수업 문제 구분
+                        const bg = isLearn
+                          ? "bg-purple-500 hover:bg-purple-600"
+                          : "bg-rose-500 hover:bg-rose-600"
+                        const bgDim = isLearn ? "bg-purple-400 hover:bg-purple-600 border-purple-300" : "bg-rose-400 hover:bg-rose-600 border-rose-300"
                         return (
-                          <div key={`${e.lessonId}-${e.stepIndex}-${i}`} className="inline-flex items-stretch rounded-lg overflow-hidden shadow-sm">
+                          <div key={`${e.lessonId}-${e.stepId ?? e.stepIndex}-${i}`} className="inline-flex items-stretch rounded-lg overflow-hidden shadow-sm">
                             <Link
-                              href={`/missed/practice?lesson=${encodeURIComponent(e.lessonId)}&q=${e.stepIndex}`}
-                              title={previewShort || `Q${e.stepIndex + 1}`}
+                              href={href}
+                              title={previewShort || label}
                               className={cn(
                                 "inline-flex items-center gap-1.5 px-3.5 py-2.5 text-sm font-black transition-all",
-                                "bg-rose-500 hover:bg-rose-600 text-white active:scale-95 min-w-[60px] justify-center"
+                                bg,
+                                "text-white active:scale-95 min-w-[60px] justify-center"
                               )}
                             >
-                              <span>Q{e.stepIndex + 1}</span>
+                              <span>{label}</span>
                               {/* streak 진행 표시 — 1번 맞은 상태 (마스터 직전) */}
-                              {(e.correctStreak ?? 0) >= 1 && (
+                              {!isLearn && (e.correctStreak ?? 0) >= 1 && (
                                 <span className="text-[10px] bg-white/30 rounded px-1 font-bold">
                                   {e.correctStreak}/2
                                 </span>
@@ -215,7 +234,7 @@ export default function MissedPage() {
                               type="button"
                               onClick={() => handleDismiss(e)}
                               title={t("창고서 제거 (안 풀고)", "Remove (without solving)")}
-                              className="px-2.5 py-2.5 bg-rose-400 hover:bg-rose-600 text-white border-l border-rose-300 active:scale-95 transition-all text-xs font-black"
+                              className={cn("px-2.5 py-2.5 text-white border-l active:scale-95 transition-all text-xs font-black", bgDim)}
                             >
                               ✕
                             </button>
